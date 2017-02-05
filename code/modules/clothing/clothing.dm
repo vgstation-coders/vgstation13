@@ -515,10 +515,6 @@ BLIND     // can't see anything
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
 
-/obj/item/clothing/under/ui_action_click()
-	for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
-		HC.togglemap()
-
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
 		return

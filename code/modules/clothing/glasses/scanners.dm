@@ -98,7 +98,7 @@
 	origin_tech = Tc_MAGNETS + "=2"
 	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 	see_in_dark = 8
-	action_button_name = "Toggle Night Vision Goggles"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
 	color_matrix = list(0.33,0.33,0.33,0,

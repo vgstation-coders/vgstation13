@@ -10,7 +10,7 @@ var/list/holomap_cache = list()
 	item_state = null
 	accessory_exclusion = HOLOMAP
 	w_class = W_CLASS_TINY
-
+	actions_types = list(/datum/action/item_action/toggle_minimap)
 	var/destroyed = 0
 
 	//Holomap stuff
@@ -107,20 +107,16 @@ var/list/holomap_cache = list()
 
 
 /obj/item/clothing/accessory/holomap_chip/can_attach_to(obj/item/clothing/C)
-	return (istype(C, /obj/item/clothing/under) && !C.action_button_name)
-
-
-/obj/item/clothing/accessory/holomap_chip/on_attached(obj/item/clothing/C)
-	..()
-	attached_to.action_button_name = "Toggle Holomap"
+	return (istype(C, /obj/item/clothing/under) && !(/datum/action/item_action/toggle_minimap in C.actions_types))
 
 
 /obj/item/clothing/accessory/holomap_chip/on_removed(mob/user as mob)
-	attached_to.action_button_name = null
 	deactivate_holomap()
 	..()
 
-
+/obj/item/clothing/accessory/holomap_chip/attack_self()
+	togglemap()
+	
 /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
 	if(usr.isUnconscious())
 		return
