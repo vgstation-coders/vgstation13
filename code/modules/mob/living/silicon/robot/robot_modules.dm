@@ -276,7 +276,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 
 /obj/item/weapon/robot_module/security
-	name = "security robot module"
+	name = "peacekeeper robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()
