@@ -143,3 +143,4 @@
 	mag_type = ""
 	max_shells = 0
 	load_method = 2
+	clumsy_check = 0
