@@ -134,3 +134,12 @@
 /obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
 	icon_state = "secgunfancy[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/potassiumgun
+	name = "\improper potassium gun"
+	desc = "It's a plastic banana with a flimsy trigger. Freeze!"
+	icon_state = "potassiumgun"
+	ammo_type = ""
+	mag_type = ""
+	max_shells = 0
+	load_method = 2
