@@ -864,12 +864,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie
 
-/datum/recipe/nofruitpie
-	reagents = list(FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
-	result = /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
-
-
 /datum/recipe/mincepie
 	reagents = list(FLOUR = 10)
 	items = list(

@@ -378,7 +378,7 @@
 	name = "packet of cinnamomum seeds"
 	seed_type = "cinnamomum"
 	vending_cat = "trees"
-	
+
 /obj/item/seeds/test
 	name = "packet of testing data seed"
 	seed_type = "test"
@@ -388,11 +388,6 @@
 	name = "packet of clown pod seeds"
 	seed_type = "clown"
 	vending_cat = "non-sentient"
-
-/obj/item/seeds/nofruitseed
-	name = "packet of no-fruit seeds"
-	seed_type = "nofruit"
-	vending_cat = "fruits"
 
 /obj/item/seeds/breadfruit
 	name = "packet of breadfruit seeds"
@@ -1560,25 +1555,6 @@
 	production = 1
 	yield = 1
 	potency = 1
-
-/datum/seed/nofruit
-	name = "nofruit"
-	seed_name = "no-fruit"
-	display_name = "no-fruit vine"
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
-	plant_dmi = 'icons/obj/hydroponics2.dmi'
-	packet_icon = "seed-nofruit"
-	plant_icon = "nofruit"
-	chems = list(NOTHING = list(1,20))
-
-	lifespan = 30
-	maturation = 5
-	production = 5
-	yield = 1
-	potency = 10
-	water_consumption = 6
-	nutrient_consumption = 0.10
-	growth_stages = 4
 
 // Vox Food
 
