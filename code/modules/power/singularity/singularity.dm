@@ -516,7 +516,7 @@
 	var/radiation = 15
 	var/radiationmin = 3
 	if(src.energy > 200)
-		radiation = round(((src.energy-150)/50)*5,1)
+		radiation = round(((src.energy-150)/50)*9,1)
 		radiationmin = round((radiation/5),1)
 		radiation = rand(radiationmin, radiation)
 	for(var/mob/living/M in view(radrange, src.loc))
