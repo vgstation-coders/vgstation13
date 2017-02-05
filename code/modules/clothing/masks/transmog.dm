@@ -18,6 +18,11 @@
 		/obj/item/stack/sheet/animalhide/xeno	=	/obj/item/clothing/mask/morphing/xeno,
 		/obj/item/stack/sheet/animalhide/human	=	/obj/item/clothing/mask/morphing/human)
 
+/obj/item/clothing/mask/morphing/New()
+	..()
+	if(cursed)
+		name = "cursed [name]"
+
 /obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
 		if(C.get_item_by_slot(wear_mask) == src)
@@ -46,6 +51,13 @@
 				user.drop_item(src, force_drop = 1)
 				user.put_in_hands(T)
 			qdel(src)
+
+/obj/item/clothing/mask/morphing/proc/toggle_cursed()
+	cursed = !cursed
+	if(cursed)
+		name = "cursed [initial(name)]"
+	else
+		name = initial(name)
 
 /obj/item/clothing/mask/morphing/spider
 	name = "mask of the spider"
