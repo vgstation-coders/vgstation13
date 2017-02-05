@@ -863,8 +863,8 @@
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
-	name = "no-fruit"
-	desc = "Any plant you want, at your fingertips."
+	name = "half-plant"
+	desc = "A plant is a plant, you can't say it's only a half plant."
 	icon_state = "nofruit"
 	potency = 15
 	filling_color = "#FFFCCC"
