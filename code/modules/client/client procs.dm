@@ -141,9 +141,10 @@
 		holder.owner = src
 
 	var/localhost_addresses = list("127.0.0.1","::1")
-	if((!address && !world.port) || (address in localhost_addresses))
-		var/datum/admins/D = new /datum/admins("Host", R_HOST, src.ckey)
-		D.associate(src)
+	if(config.localhost_autoadmin)
+		if((!address && !world.port) || (address in localhost_addresses))
+			var/datum/admins/D = new /datum/admins("Host", R_HOST, src.ckey)
+			D.associate(src)
 
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")
