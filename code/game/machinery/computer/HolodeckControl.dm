@@ -407,7 +407,7 @@
 					FF.update_icon() //so siding get updated properly
 
 /turf/simulated/floor/holofloor/light
-	name = "Light floor"
+	name = "light floor"
 	luminosity = 5
 	icon_state = "light_on"
 	floor_tile
@@ -450,7 +450,7 @@
 /obj/structure/window/holo/spawnBrokenPieces()
 	return
 
-/obj/structure/window/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)
 	if(isscrewdriver(W))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
