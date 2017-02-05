@@ -92,7 +92,6 @@ byond!(utf8_find: haystack, needle, start, end; {
 
 /// Function to get the byte bounds for copytext, findtext and replacetext.
 /// Goes by one-indexing and correctly handles negatives.
-#[allow(dead_code)]
 fn byte_bounds(text: &str, start: &str, end: &str) -> Option<(usize, usize)> {
     // BYOND uses 1-indexing because of course it does...
     // I would've made sick one liners out of this if the negative index stuff weren't a thing.
@@ -218,5 +217,6 @@ fn test_byte_bounds() {
 
 #[test]
 fn test_utf8_find() {
-    panic!("For fucks sake write the damn test already and stop fucking with RPDs.")
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(), );
 }
