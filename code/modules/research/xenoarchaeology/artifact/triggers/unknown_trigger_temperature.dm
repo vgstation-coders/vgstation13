@@ -2,6 +2,7 @@
 	triggertype = "temperature"
 	var/heat_triggered = 0
 	var/context = ""
+	var/key1
 
 /datum/artifact_trigger/temperature/New()
 	..()
@@ -12,7 +13,7 @@
 		context = "COLDAIR"
 
 	spawn(0)
-		my_artifact.on_attackby.Add(src, "owner_attackby")
+		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
 
 /datum/artifact_trigger/temperature/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
@@ -41,3 +42,7 @@
 	var/context = event_args[2]
 	Triggered(0, context, 0)
 	my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]).")
+
+/datum/artifact_trigger/temperature/Destroy()
+	my_artifact.on_attackhand.Remove(key0)
+	my_artifact.on_attackby.Remove(key1)

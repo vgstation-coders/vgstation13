@@ -30,3 +30,6 @@
 				Triggered(0, trigger_gas, 0)
 			if(trigger_gas == "OXYGEN" && env.oxygen < 10)
 				Triggered(0, trigger_gas, 0)
+
+/datum/artifact_trigger/gas/Destroy()
+	my_artifact.on_attackhand.Remove(key0)

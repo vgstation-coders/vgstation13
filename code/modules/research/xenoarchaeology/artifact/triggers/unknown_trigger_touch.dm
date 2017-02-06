@@ -13,3 +13,6 @@
 	else if(!my_effect.IsPrimary())
 		Triggered(toucher, context, 0)
 	..()
+
+/datum/artifact_trigger/touch/Destroy()
+	my_artifact.on_attackhand.Remove(key0)

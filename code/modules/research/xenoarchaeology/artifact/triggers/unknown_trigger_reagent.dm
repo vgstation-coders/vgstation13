@@ -1,12 +1,13 @@
 /datum/artifact_trigger/reagent
 	triggertype = "reagent"
 	var/reagent_group = 0
+	var/key1
 
 /datum/artifact_trigger/reagent/New()
 	..()
 	reagent_group = pick("water", "acid", "volatile", "toxin")
 	spawn(0)
-		my_artifact.on_attackby.Add(src, "owner_attackby")
+		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
 
 /datum/artifact_trigger/reagent/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -23,3 +24,6 @@
 		else if(reagent_group == "toxin" && (item.reagents.has_reagent(TOXIN, 1) || item.reagents.has_reagent(CYANIDE, 1) || item.reagents.has_reagent(AMATOXIN, 1) || item.reagents.has_reagent(NEUROTOXIN, 1)))
 			Triggered(toucher, reagent_group, item)
 
+/datum/artifact_trigger/reagent/Destroy()
+	my_artifact.on_attackhand.Remove(key0)
+	my_artifact.on_attackby.Remove(key1)

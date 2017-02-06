@@ -2,13 +2,16 @@
 
 /datum/artifact_trigger/force
 	triggertype = "force"
+	var/key1
+	var/key2
+	var/key3
 
 /datum/artifact_trigger/force/New()
 	..()
 	spawn(0)
-		my_artifact.on_attackby.Add(src, "owner_attackby")
-		my_artifact.on_explode.Add(src, "owner_explode")
-		my_artifact.on_projectile.Add(src, "owner_projectile")
+		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
+		key2 = my_artifact.on_explode.Add(src, "owner_explode")
+		key3 = my_artifact.on_projectile.Add(src, "owner_projectile")
 
 /datum/artifact_trigger/force/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -32,3 +35,9 @@
 	if(istype(item,/obj/item/projectile/bullet) ||\
 		istype(item,/obj/item/projectile/hivebotbullet))
 		Triggered(toucher, context, item)
+
+/datum/artifact_trigger/force/Destroy()
+	my_artifact.on_attackhand.Remove(key0)
+	my_artifact.on_attackby.Remove(key1)
+	my_artifact.on_explode.Remove(key2)
+	my_artifact.on_projectile.Remove(key3)

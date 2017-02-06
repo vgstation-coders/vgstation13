@@ -1,11 +1,13 @@
 /datum/artifact_trigger/energy
 	triggertype = "energy"
+	var/key1
+	var/key2
 
 /datum/artifact_trigger/energy/New()
 	..()
 	spawn(0)
-		my_artifact.on_attackby.Add(src, "owner_attackby")
-		my_artifact.on_projectile.Add(src, "owner_projectile")
+		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
+		key2 = my_artifact.on_projectile.Add(src, "owner_projectile")
 
 /datum/artifact_trigger/energy/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -28,3 +30,8 @@
 		istype(item,/obj/item/projectile/ion) ||\
 		istype(item,/obj/item/projectile/energy))
 		Triggered(toucher, context, item)
+
+/datum/artifact_trigger/energy/Destroy()
+	my_artifact.on_attackhand.Remove(key0)
+	my_artifact.on_attackby.Remove(key1)
+	my_artifact.on_projectile.Remove(key2)

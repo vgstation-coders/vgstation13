@@ -131,7 +131,7 @@
 	..()
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
-	on_attackby.Invoke(list(P.firer, "PROJECTILE",P))
+	on_projectile.Invoke(list(P.firer, "PROJECTILE",P))
 
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)

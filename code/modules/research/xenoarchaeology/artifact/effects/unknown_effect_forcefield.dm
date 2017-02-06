@@ -8,6 +8,7 @@
 	..()
 	var/trigger_override = /datum/artifact_trigger/touch
 	trigger = new trigger_override(src)
+	trigger.my_artifact = holder
 
 /datum/artifact_effect/forcefield/ToggleActivate()
 	..()
