@@ -847,7 +847,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/fourtyfive
-	name = ".45 pistols"
+	name = "NT USP pack"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
 					/obj/item/weapon/gun/projectile/sec)
 	cost = 200
