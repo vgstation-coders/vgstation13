@@ -240,9 +240,12 @@ fn test_byte_bounds() {
 #[test]
 fn test_utf8_find() {
     use byond::call::test_byond_call_args;
-    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "c", "1", "0"]), "3");
-    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "g", "1", "3"]), "0");
-    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "z", "1", "3"]), "0");
+    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "c", "1", "0"]),
+               "3");
+    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "g", "1", "3"]),
+               "0");
+    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "z", "1", "3"]),
+               "0");
 }
 
 #[test]
@@ -250,7 +253,8 @@ fn test_utf8_len() {
     use byond::call::test_byond_call_args;
     assert_eq!(test_byond_call_args(utf8_len, &["abc"]), "3");
     assert_eq!(test_byond_call_args(utf8_len, &[""]), "0");
-    assert_eq!(test_byond_call_args(utf8_len, &["👏àbç👏défgh"]), "10");
+    assert_eq!(test_byond_call_args(utf8_len, &["👏àbç👏défgh"]),
+               "10");
 }
 
 #[test]
@@ -258,7 +262,8 @@ fn test_utf8_byte_len() {
     use byond::call::test_byond_call_args;
     assert_eq!(test_byond_call_args(utf8_len_bytes, &["abc"]), "3");
     assert_eq!(test_byond_call_args(utf8_len_bytes, &[""]), "0");
-    assert_eq!(test_byond_call_args(utf8_len_bytes, &["👏àbç👏défgh"]), "19");
+    assert_eq!(test_byond_call_args(utf8_len_bytes, &["👏àbç👏défgh"]),
+               "19");
 }
 
 #[test]
