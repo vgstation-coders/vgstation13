@@ -1489,15 +1489,15 @@ Thanks.
 		eye_blurry = rand(0,100)
 	if(prob(5))
 		ear_deaf = rand(0,100)
-	brute_damage_modifier += rand(-5,10)/10
-	burn_damage_modifier += rand(-5,10)/10
-	tox_damage_modifier += rand(-5,10)/10
-	oxy_damage_modifier += rand(-5,10)/10
-	clone_damage_modifier += rand(-5,10)/10
-	brain_damage_modifier += rand(-5,10)/10
-	hal_damage_modifier += rand(-5,10)/10
+	brute_damage_modifier += rand(-5,5)/10
+	burn_damage_modifier += rand(-5,5)/10
+	tox_damage_modifier += rand(-5,5)/10
+	oxy_damage_modifier += rand(-5,5)/10
+	clone_damage_modifier += rand(-5,5)/10
+	brain_damage_modifier += rand(-5,5)/10
+	hal_damage_modifier += rand(-5,5)/10
 
-	movement_speed_modifier += rand(-9,10)/10
+	movement_speed_modifier += rand(-9,9)/10
 	if(prob(1))
 		universal_speak = !universal_speak
 	if(prob(1))
@@ -1508,6 +1508,6 @@ Thanks.
 	if(prob(5))
 		cap_calorie_burning_bodytemp = !cap_calorie_burning_bodytemp
 	if(prob(10))
-		calorie_burning_heat_multiplier += rand(-5,10)/10
+		calorie_burning_heat_multiplier += rand(-5,5)/10
 	if(prob(10))
-		thermal_loss_multiplier += rand(-5,10)/10
+		thermal_loss_multiplier += rand(-5,5)/10
