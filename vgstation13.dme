@@ -1907,6 +1907,8 @@
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_heal.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_heat.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_hurt.dm"
+#include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_planthelper.dm"
+#include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_plantkiller.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_projectiles.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_radiate.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_reagentblock.dm"
