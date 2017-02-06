@@ -69,11 +69,6 @@
 		name = "sealed alien pod"
 		desc = "A strange alien device."
 
-#define TRIGGER_PLASMA 9
-#define TRIGGER_OXY 10
-#define TRIGGER_CO2 11
-#define TRIGGER_NITRO 12
-
 /obj/machinery/artifact/process()
 
 	var/turf/L = loc
