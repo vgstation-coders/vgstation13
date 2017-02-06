@@ -500,8 +500,8 @@
 	switch(numb)
 		if(1) //EMP.
 			emp_area()
-		if(2, 3) //Tox damage all carbon mobs in area.
-			toxmob()
+		if(2, 3) //RADIATION damage all carbon mobs in area.
+			radmob()
 		if(4) //Stun mobs who lack optic scanners.
 			mezzer()
 		else
@@ -511,21 +511,16 @@
 	return 1
 
 
-/obj/machinery/singularity/proc/toxmob()
-	var/toxrange = 10
-	var/toxdamage = 4
+/obj/machinery/singularity/proc/radmob()
+	var/radrange = 10
 	var/radiation = 15
 	var/radiationmin = 3
 	if(src.energy > 200)
-		toxdamage = round(((src.energy-150)/50)*4,1)
-		radiation = round(((src.energy-150)/50)*5,1)
+		radiation = round(((src.energy-150)/50)*9,1)
 		radiationmin = round((radiation/5),1)
-	for(var/mob/living/M in view(toxrange, src.loc))
-		if(M.flags & INVULNERABLE)
-			continue
-		M.apply_effect(rand(radiationmin,radiation), IRRADIATE)
-		toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
-		M.apply_effect(toxdamage, TOX)
+		radiation = rand(radiationmin, radiation)
+	for(var/mob/living/M in view(radrange, src.loc))
+		M.apply_effect(radiation, IRRADIATE)
 	return
 
 
