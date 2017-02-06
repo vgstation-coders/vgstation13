@@ -1093,3 +1093,9 @@ var/global/list/image/blood_overlays = list()
 		return new shrapnel_type(src)
 	else
 		return 0
+
+
+// IMPORTANT DISTINCTION FROM MouseWheel:
+//   This one gets called when the player scrolls his mouse while this is in their active hand!
+/obj/item/proc/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
+	return

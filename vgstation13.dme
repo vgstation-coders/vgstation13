@@ -25,6 +25,7 @@
 #include "__DEFINES\MC.dm"
 #include "__DEFINES\pipes.dm"
 #include "__DEFINES\planes+layers.dm"
+#include "__DEFINES\rcd.dm"
 #include "__DEFINES\reagents.dm"
 #include "__DEFINES\research_levels.dm"
 #include "__DEFINES\security.dm"

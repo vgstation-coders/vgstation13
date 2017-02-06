@@ -62,10 +62,12 @@
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
+	qdel(on_clickon)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
+	on_clickon = null
 
 	..()
 
@@ -238,6 +240,7 @@
 	on_uattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
+	on_clickon = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
