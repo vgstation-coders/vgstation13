@@ -6,7 +6,8 @@
 
 /datum/artifact_effect/forcefield/New()
 	..()
-	trigger = TRIGGER_TOUCH
+	var/trigger_override = /datum/artifact_trigger/touch
+	trigger = new trigger_override(src)
 
 /datum/artifact_effect/forcefield/ToggleActivate()
 	..()
