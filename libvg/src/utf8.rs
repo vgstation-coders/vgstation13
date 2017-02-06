@@ -26,7 +26,7 @@ pub extern "C" fn to_utf8(n: libc::c_int, v: *const *const libc::c_char) -> *con
 
 /// Encodes a byte string with a windows encoding, filters bad characters and limits message length.
 ///
-/// Operations like message length are done on UTF-8!
+/// Operations like message length are done on Unicode code points!
 /// Arguments are in the order of encoding, bytes, cap.
 #[no_mangle]
 pub extern "C" fn utf8_sanitize(n: libc::c_int,
@@ -62,15 +62,15 @@ byond!(utf8_len_bytes: text; {
 byond!(utf8_find: haystack, needle, start, end; {
     // This happens often enough for a special case, probably.
     if start == "1" && end == "0" {
-        match haystack.find(needle) {
+        return match haystack.find(needle) {
             Some(index) => {
                 // Determine true offset based on byte offset returned by find.
-                return format!("{}",
+                format!("{}",
                     haystack.char_indices()
                     .position(|x| x.0 == index)
-                    .unwrap());
+                    .unwrap() + 1)
             },
-            None => return "0".to_string()
+            None => "0".to_string()
         }
     }
 
@@ -82,12 +82,35 @@ byond!(utf8_find: haystack, needle, start, end; {
                     haystack
                     .char_indices()
                     .position(|x| x.0 == index)
-                    .unwrap()),
-                None => "".to_string()
+                    .unwrap() + 1),
+                None => "0".to_string()
             }
         }
         None => "0".to_string()
     }
+});
+
+byond!(utf8_index: text, index; {
+    let index = index.parse::<isize>().unwrap_or(1);
+
+    // 0-indexed index for the string, by code points.
+    let index = match index.cmp(&0) {
+        Ordering::Greater => index - 1,
+        // Invalid index.
+        Ordering::Equal => return "",
+        Ordering::Less => {
+            let char_count = text.chars().count() as isize;
+            char_count + index
+        }
+    } as usize;
+
+    // Get the byte bound.
+    let byte = match text.char_indices().nth(index) {
+        Some((i, _)) => i,
+        None => return ""
+    };
+
+    &text[byte .. byte+1]
 });
 
 /// Function to get the byte bounds for copytext, findtext and replacetext.
@@ -118,7 +141,6 @@ fn byte_bounds(text: &str, start: &str, end: &str) -> Option<(usize, usize)> {
     let end = max(end, 0) as usize;
 
     if end <= start {
-        // Signal "NOPE"
         return None;
     }
 
@@ -218,5 +240,35 @@ fn test_byte_bounds() {
 #[test]
 fn test_utf8_find() {
     use byond::call::test_byond_call_args;
-    assert_eq!(test_byond_call_args(), );
+    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "c", "1", "0"]), "3");
+    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "g", "1", "3"]), "0");
+    assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "z", "1", "3"]), "0");
+}
+
+#[test]
+fn test_utf8_len() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_len, &["abc"]), "3");
+    assert_eq!(test_byond_call_args(utf8_len, &[""]), "0");
+    assert_eq!(test_byond_call_args(utf8_len, &["👏àbç👏défgh"]), "10");
+}
+
+#[test]
+fn test_utf8_byte_len() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_len_bytes, &["abc"]), "3");
+    assert_eq!(test_byond_call_args(utf8_len_bytes, &[""]), "0");
+    assert_eq!(test_byond_call_args(utf8_len_bytes, &["👏àbç👏défgh"]), "19");
+}
+
+#[test]
+fn test_utf8_index() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "1"]), "a");
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "3"]), "c");
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "-2"]), "b");
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "-1"]), "c");
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "5"]), "");
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "0"]), "");
+    assert_eq!(test_byond_call_args(utf8_index, &["abc", "-10"]), "");
 }
