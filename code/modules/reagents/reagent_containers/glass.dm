@@ -289,6 +289,14 @@
 		..()
 		reagents.add_reagent(SLIMEJELLY, 50)
 
+/obj/item/weapon/reagent_containers/glass/beaker/mednanobots
+	name = "beaker 'nanobots'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/mednanobots/New()
+	..()
+	reagents.add_reagent("mednanobots", 25)
+	update_icon()
+
 /obj/item/weapon/reagent_containers/glass/bucket
 	desc = "It's a bucket."
 	name = "bucket"

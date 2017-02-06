@@ -22,15 +22,15 @@
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "You put a coin into [src] and turn the knob.</span>")
 				src.visible_message("<span class='notice'>[src] rattles ominously!</span>")
 				sleep(rand(10,15))
-				src.visible_message("<span class='notice'>[src] dispenses a strange sweet!</span>")
-				new /obj/item/weapon/reagent_containers/food/snacks/sweet/strange(src.loc)
+				src.visible_message("<span class='notice'>[src] dispenses a bag of strange sweets!</span>")
+				new /obj/item/weapon/storage/pill_bottle/sweets/strange(src.loc)
 		else
 			if(user.drop_item(O, src))
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
 				src.visible_message("<span class='notice'>[src] clicks softly.</span>")
 				sleep(rand(10,15))
-				src.visible_message("<span class='notice'>[src] dispenses a sweet!</span>")
-				new /obj/item/weapon/reagent_containers/food/snacks/sweet(src.loc)
+				src.visible_message("<span class='notice'>[src] dispenses a bag of sweets!</span>")
+				new/obj/item/weapon/storage/pill_bottle/sweets(src.loc)
 
 		if(istype(O, /obj/item/weapon/coin/))
 			var/obj/item/weapon/coin/real_coin = O

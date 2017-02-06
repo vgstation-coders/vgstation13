@@ -95,6 +95,7 @@ var/list/beam_master = list()
 	var/first = 1
 	var/tS = 0
 	while(src && src.loc)// only stop when we've hit something, or hit the end of the map
+		bumped = 0
 		if(first && timestopped)
 			tS = 1
 			timestopped = 0
@@ -578,7 +579,18 @@ var/list/beam_master = list()
 	name = "xray beam"
 	icon_state = "xray"
 	damage = 30
+	kill_count = 500
+	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
+	penetration = -1
 	fire_sound = 'sound/weapons/laser3.ogg'
+
+/obj/item/projectile/beam/xray/Bump(atom/A)
+	if(..())
+		damage -= 3
+		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
+			bullet_die()
+		if(damage <= 0)
+			bullet_die()
 
 /obj/item/projectile/beam/pulse
 	name = "pulse"
@@ -934,3 +946,55 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/bullwhip/OnDeath()
 	if(!has_played_sound && get_turf(src))
 		playsound(get_turf(src), bounce_sound, 30, 1)
+		user.delayNextAttack(2)
+
+/obj/item/projectile/beam/liquid_stream
+	name = "stream of liquid"
+	icon_state = "liquid_stream"
+	damage = 0
+	fire_sound = null
+	custom_impact = 1
+	penetration = 0
+	pass_flags = PASSTABLE
+	var/has_splashed = FALSE
+
+/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
+	..(A)
+	create_reagents(10)
+	if(t_range)
+		travel_range = t_range
+	else
+		travel_range = 0
+
+/obj/item/projectile/beam/liquid_stream/OnFired()
+	beam_color = mix_color_from_reagents(reagents.reagent_list)
+	alpha = mix_alpha_from_reagents(reagents.reagent_list)
+	..()
+
+/obj/item/projectile/beam/liquid_stream/Bump(atom/A)
+	if(!A)
+		return
+	..()
+	if(reagents.total_volume)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
+		if(istype(A, /mob))
+			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+								"<span class='warning'>\The [src] [splash_verb] you!</span>")
+			splash_sub(reagents, get_turf(A), reagents.total_volume/2)
+		else
+			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
+		splash_sub(reagents, A, reagents.total_volume)
+		has_splashed = TRUE
+		return 1
+
+/obj/item/projectile/beam/liquid_stream/OnDeath()
+	if(!has_splashed && get_turf(src))
+		splash_sub(reagents, get_turf(src), reagents.total_volume)
+
+/obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)
+	if(t_range)
+		travel_range = t_range
+	else
+		travel_range = 0

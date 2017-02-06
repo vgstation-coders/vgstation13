@@ -1793,7 +1793,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	return 1
 
 /datum/preferences/Topic(href, href_list)
-	if(!usr || !client)
+	if(!client)
+		return
+	if(!usr)
+		WARNING("No usr on Topic for [client] with href [href]!")
 		return
 	if(client.mob!=usr)
 		to_chat(usr, "YOU AREN'T ME GO AWAY")

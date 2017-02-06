@@ -6,6 +6,7 @@
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
 	var/intact = 1
+	var/turf_flags = 0
 
 	//properties for open tiles (/floor)
 	var/oxygen = 0
@@ -273,6 +274,9 @@
 		qdel (L)
 		L = null
 
+/turf/proc/add_dust()
+	return
+
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	if(loc)
@@ -315,6 +319,10 @@
 
 	if(connections)
 		connections.erase_all()
+
+	if(N == /turf/space)
+		for(var/obj/effect/decal/cleanable/C in src)
+			qdel(C)//enough with footprints floating in space
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
@@ -482,7 +490,7 @@
 			M.take_damage(100, "brute")
 
 /turf/proc/Bless()
-	flags |= NOJAUNT
+	turf_flags |= NOJAUNT
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs

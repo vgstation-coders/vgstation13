@@ -1,5 +1,21 @@
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.column1{
+	width: 100%;
+	overflow: hidden;
+}
+.column2{
+	white-space: nowrap;
+}
+
 .li{
 	padding: 0px 0px 4px;
+}
+
+.pillIconsContainer {
+	text-align: center
 }
 
 .pillIconWrapper{

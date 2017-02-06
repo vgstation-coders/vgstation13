@@ -16,14 +16,19 @@
 
 /obj/map/spawner/perform_spawn()
 
-	var/obj/spawned
 	for(amount, amount, amount--)
 		if(prob(chance))
-			spawned = pick(to_spawn)
-			spawned = new spawned(loc)
-			if(jiggle)
-				spawned.pixel_x = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
-				spawned.pixel_y = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
+			CreateItem(pick(to_spawn))
+	qdel(src)
+
+/obj/map/spawner/proc/CreateItem(new_item_type)
+	var/obj/spawned = new new_item_type(loc)
+
+	if(jiggle)
+		spawned.pixel_x = rand(-jiggle, jiggle)
+		spawned.pixel_y = rand(-jiggle, jiggle)
+
+	return spawned
 
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////
@@ -896,8 +901,16 @@
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
 
-
-
+/obj/map/spawner/mobs/medivault
+	name = "medivault spawner"
+	icon_state = "mob_medivault"
+	chance = 50
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/monster/cyber_horror/Tajaran,
+		/mob/living/simple_animal/hostile/monster/cyber_horror,
+		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/zombie,
+		)
 
 // Robutts /////////////////////////////////////////////////////
 

@@ -28,6 +28,7 @@ var/list/fracture_sound = list('sound/effects/bonebreak1.ogg','sound/effects/bon
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
+	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
 
 	var/frequency = get_rand_frequency() // Same frequency for everybody
 

@@ -73,12 +73,14 @@ emp_act
 				protection += C.armor[type]
 	return protection
 
-/mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0)
+/mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags
 	for(var/obj/item/clothing/C in get_clothing_items())
 		if(!C)
+			continue
+		if(ignored && C == ignored)
 			continue
 		if((C.body_parts_covered & body_part_flags) == body_part_flags)
 			return 1
@@ -290,6 +292,10 @@ emp_act
 	var/mob/living/L = user
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
 	if(!istype(T) || T.amount == 0)
+		return
+
+	var/datum/organ/external/head/head = get_organ(LIMB_HEAD)
+	if(!head || head.status & ORGAN_DESTROYED) //if they don't have a head then there's no teeth
 		return
 
 	var/amount = rand(1,3)

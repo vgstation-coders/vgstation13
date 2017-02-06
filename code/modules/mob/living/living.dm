@@ -420,8 +420,14 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	  return 0 // only carbon liveforms have this proc
-				// now with silicons
+	var/damage = shock_damage * siemens_coeff
+
+	if(damage <= 0)
+		damage = 0
+
+	adjustFireLoss(damage)
+
+	return damage
 
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -1472,3 +1478,38 @@ Thanks.
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
 		return 1
+
+/mob/living/proc/advanced_mutate()
+	color = list(rand(),rand(),rand(),0,
+				rand(),rand(),rand(),0,
+				rand(),rand(),rand(),0,
+				0,0,0,1,
+				0,0,0,0)
+	if(prob(5))
+		eye_blind = rand(0,100)
+	if(prob(10))
+		eye_blurry = rand(0,100)
+	if(prob(5))
+		ear_deaf = rand(0,100)
+	brute_damage_modifier += rand(-5,10)/10
+	burn_damage_modifier += rand(-5,10)/10
+	tox_damage_modifier += rand(-5,10)/10
+	oxy_damage_modifier += rand(-5,10)/10
+	clone_damage_modifier += rand(-5,10)/10
+	brain_damage_modifier += rand(-5,10)/10
+	hal_damage_modifier += rand(-5,10)/10
+
+	movement_speed_modifier += rand(-9,10)/10
+	if(prob(1))
+		universal_speak = !universal_speak
+	if(prob(1))
+		universal_understand = !universal_understand
+
+	maxHealth = rand(50,200)
+	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
+	if(prob(5))
+		cap_calorie_burning_bodytemp = !cap_calorie_burning_bodytemp
+	if(prob(10))
+		calorie_burning_heat_multiplier += rand(-5,10)/10
+	if(prob(10))
+		thermal_loss_multiplier += rand(-5,10)/10

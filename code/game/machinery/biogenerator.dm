@@ -173,26 +173,28 @@
 	result=/obj/item/weapon/clipboard
 
 /datum/biogen_recipe/paper/cardboard
-	cost=100
+	cost=25
 	id="cardboard"
 	name="Cardboard Sheet"
-	other_amounts=list(5,10)
+	other_amounts=list(5,10,50)
 	result=/obj/item/stack/sheet/cardboard
 
 /datum/biogen_recipe/paper/giftwrap
-	cost=300
+	cost=25
 	id="giftwrap"
 	name="Gift Wrap"
+	other_amounts=list(5,10)
 	result=/obj/item/stack/package_wrap/gift
 
 /datum/biogen_recipe/paper/packagewrap
-	cost=350
+	cost=30
 	id="packagewrap"
 	name="Package Wrap"
+	other_amounts=list(5,10)
 	result=/obj/item/stack/package_wrap
 
 /datum/biogen_recipe/paper/paperbin
-	cost=550 //100 from the cardboard, 30*15=450 from the paper
+	cost=475 //25 from the cardboard, 30*15=450 from the paper
 	id="paperbin"
 	name="Paper Bin (30 sheets)"
 	result=/obj/item/weapon/paper_bin

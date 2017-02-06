@@ -52,12 +52,12 @@
         x: { x: true, y: false },
         y: { x: false, y: true }
     };
- 
+
     var settings = {
         duration: "fast",
         direction: "both"
     };
- 
+
     var rootrx = /^(?:html)$/i;
 
     // gets border dimensions
@@ -79,7 +79,7 @@
             horizontal: b.left + b.right
         };
     };
- 
+
     var dimensions = function ($element) {
         var win = $(window);
         var isRoot = rootrx.test($element[0].nodeName);
@@ -104,7 +104,7 @@
             })()
         };
     };
- 
+
     $.fn.extend({
         scrollintoview: function (options) {
             /// <summary>Scrolls the first element in the set into view by scrolling its closest scrollable parent.</summary>
@@ -114,36 +114,36 @@
             ///        complete (default: none) - a function to call when scrolling completes (called in context of the DOM element being scrolled)
             /// </param>
             /// <return type="jQuery">Returns the same jQuery set that this function was run on.</return>
- 
+
             options = $.extend({}, settings, options);
             options.direction = converter[typeof (options.direction) === "string" && options.direction.toLowerCase()] || converter.both;
- 
+
             var dirStr = "";
             if (options.direction.x === true) dirStr = "horizontal";
             if (options.direction.y === true) dirStr = dirStr ? "both" : "vertical";
- 
+
             var el = this.eq(0);
             var scroller = el.closest(":scrollable(" + dirStr + ")");
- 
+
             // check if there's anything to scroll in the first place
             if (scroller.length > 0)
             {
                 scroller = scroller.eq(0);
- 
+
                 var dim = {
                     e: dimensions(el),
                     s: dimensions(scroller)
                 };
- 
+
                 var rel = {
                     top: dim.e.rect.top - (dim.s.rect.top + dim.s.border.top),
                     bottom: dim.s.rect.bottom - dim.s.border.bottom - dim.s.scrollbar.bottom - dim.e.rect.bottom,
                     left: dim.e.rect.left - (dim.s.rect.left + dim.s.border.left),
                     right: dim.s.rect.right - dim.s.border.right - dim.s.scrollbar.right - dim.e.rect.right
                 };
- 
+
                 var animOptions = {};
- 
+
                 // vertical scroll
                 if (options.direction.y === true)
                 {
@@ -156,7 +156,7 @@
                         animOptions.scrollTop = dim.s.scroll.top + Math.min(rel.top, -rel.bottom);
                     }
                 }
- 
+
                 // horizontal scroll
                 if (options.direction.x === true)
                 {
@@ -169,7 +169,7 @@
                         animOptions.scrollLeft = dim.s.scroll.left + Math.min(rel.left, -rel.right);
                     }
                 }
- 
+
                 // scroll if needed
                 if (!$.isEmptyObject(animOptions))
                 {
@@ -191,19 +191,19 @@
                     $.isFunction(options.complete) && options.complete.call(scroller[0]);
                 }
             }
- 
+
             // return set back
             return this;
         }
     });
- 
+
     var scrollValue = {
         auto: true,
         scroll: true,
         visible: false,
         hidden: false
     };
- 
+
     $.extend($.expr[":"], {
         scrollable: function (element, index, meta, stack) {
             var direction = converter[typeof (meta[3]) === "string" && meta[3].toLowerCase()] || converter.both;
@@ -213,13 +213,13 @@
                 y: scrollValue[styles.overflowY.toLowerCase()] || false,
                 isRoot: rootrx.test(element.nodeName)
             };
- 
+
             // check if completely unscrollable (exclude HTML element because it's special)
             if (!overflow.x && !overflow.y && !overflow.isRoot)
             {
                 return false;
             }
- 
+
             var size = {
                 height: {
                     scroll: element.scrollHeight,
@@ -394,11 +394,11 @@ function add(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, 
 			else					{ i = 0; }
 		}
 
-		healthHTML = "<div class=\"health health-" + i + " tt\"><div><span>(<span class=\"oxygen\">" + dam1 + "</span>/<span class=\"toxin\">" + dam2 + "</span>/<span class=\"fire\">" + dam3 + "</span>/<span class=\"brute\">" + dam4 + "</span>)</span></div></div>";
+		healthHTML = "<span class=\"health health-" + i + " tt\"></span><span>(<span class=\"oxygen\">" + dam1 + "</span>/<span class=\"toxin\">" + dam2 + "</span>/<span class=\"fire\">" + dam3 + "</span>/<span class=\"brute\">" + dam4 + "</span>)</span>";
 	}
 	else
 	{
-		healthHTML = "<div class=\"health health-" + (life_status == "" ? -1 : (life_status == "true" ? 4 : 0)) + " tt\"><div><span>Not Available</span></div></div>";
+		healthHTML = "<span class=\"health health-" + (life_status == "" ? -1 : (life_status == "true" ? 4 : 0)) + " tt\"></span><span>Not Available</span>";
 	}
 
 	var trElem					= $("<tr></tr>").attr("data-ijob", ijob);
@@ -416,16 +416,16 @@ function add(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, 
 	}
 
 	spanElem					= $("<span></span>").text(name);
-	
+
 	if (italics)
 	{
 		spanElem.css("font-style", "italic");
 	}
 
 	if (isHead(ijob))			{ spanElem.css("font-weight", "bold"); }
-	
+
 	var color					= getColor(ijob);
-	
+
 	if (color)					{ spanElem.css("color", color); }
 
 	tdElem.append(spanElem);
@@ -441,7 +441,7 @@ function add(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, 
 
 	tdElem						= $("<td style=\"cursor: default;\"></td>");
 
-	if (area && pos_x && pos_y)	{ tdElem.append($("<div></div>").text(area).addClass("tt").append($("<div></div>").append($("<span></span>").text("(" + see_pos_x + ", " + see_pos_y + ")")))); }
+	if (area && pos_x && pos_y)	{ tdElem.append($("<div></div>").text(area).addClass("tt").append($("<span></span>").text(" (" + see_pos_x + ", " + see_pos_y + ")"))); }
 	else						{ tdElem.text("Not Available"); }
 
 	trElem.append(tdElem);
@@ -463,7 +463,7 @@ function add(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, 
 		//alert($("#uiMap").html());
 		//$("#textbased").html(dotElem);
 
-		
+
 		function enable()
 		{
 			dotElem.addClass("active").css({ "border-color": color });
@@ -509,4 +509,3 @@ function add(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, 
 		}).on("click", click);
 	}
 }
-

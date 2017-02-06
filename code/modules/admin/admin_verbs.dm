@@ -164,7 +164,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/qdel_toggle,              // /vg/
 	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
@@ -201,8 +200,7 @@ var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
 	)
 var/list/admin_verbs_polling = list(
-	/client/proc/create_poll,
-	/client/proc/remove_broken_polls
+	/client/proc/create_poll
 	)
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
@@ -364,8 +362,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/client/proc/nanomapgen_DumpImage,
-		/client/proc/nanomapgen_DumpImageAll,
+		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
 

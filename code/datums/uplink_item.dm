@@ -160,11 +160,32 @@ var/list/uplink_items = list()
 	cost = 8
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/banannon
+	name = "Banannon"
+	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard."
+	item = /obj/item/weapon/gun/banannon
+	cost = 18
+	job = list("Clown")
+
+/datum/uplink_item/jobspecific/livingballoons
+	name = "Box of Living Long Balloons"
+	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them."
+	item = /obj/item/weapon/storage/box/balloons/long/living
+	cost = 6
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
 	item = /obj/item/weapon/glue
 	cost = 6
+	job = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/invisible_spray
+	name = "Can of Invisible Spray"
+	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/invisible_spray/permanent
+	cost = 5
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
@@ -203,6 +224,13 @@ var/list/uplink_items = list()
 	desc = "Part of the notorious Ambrosia family, this species is nearly indistinguishable from Ambrosia Vulgaris. However, its branches contain a revolting toxin. Eight units are enough to drive victims insane after a three-minute delay."
 	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 2
+	job = list("Botanist")
+
+/datum/uplink_item/jobspecific/beecase
+	name = "Briefcase Full of Bees"
+	desc = "A briefcase containing twenty angry bees."
+	item = /obj/item/weapon/storage/briefcase/bees
+	cost = 4
 	job = list("Botanist")
 
 //Chef
@@ -477,11 +505,17 @@ var/list/uplink_items = list()
 	item = /obj/item/device/chameleon
 	cost = 6
 
-/datum/uplink_item/stealthy_tools/chameleon_proj
+/datum/uplink_item/stealthy_tools/smoke_bombs
 	name = "Instant Smoke Bombs"
 	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 3
+
+/datum/uplink_item/stealthy_tools/decoy_balloon
+	name = "Decoy Balloon"
+	desc = "A balloon that looks just like you when inflated."
+	item = /obj/item/toy/balloon/decoy
+	cost = 1
 
 
 // DEVICE AND TOOLS

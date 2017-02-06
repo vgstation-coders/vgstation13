@@ -1,11 +1,19 @@
+//#define BLUESPACELEAK_FLAT if you touch this I'll cut your fingers
+
 // QUALITY COPYPASTA
 /turf/unsimulated/wall/supermatter
 	name = "Supermatter Sea"
 	desc = "THE END IS right now actually."
-	icon_state = "supermatter"
+	icon='icons/turf/space.dmi'
+#ifdef BLUESPACELEAK_FLAT
+	icon_state = "bluespace"
+#else
+	icon_state = "bluespacecrystal1"
+#endif
 
-	//luminosity = 5
-	//light_color="#0066FF"
+	light_range = 5
+	light_power = 2
+	light_color="#0066FF"
 	layer = SUPERMATTER_WALL_LAYER
 	plane = LIGHTING_PLANE
 
@@ -16,6 +24,14 @@
 
 /turf/unsimulated/wall/supermatter/New()
 	processing_objects |= src
+#ifndef BLUESPACELEAK_FLAT
+	icon_state = "bluespacecrystal[rand(1,3)]"
+	var/nturns=pick(0,3)
+	if(nturns)
+		var/matrix/M = matrix()
+		M.Turn(90*nturns)
+		transform = M
+#endif
 	return ..()
 
 /turf/unsimulated/wall/supermatter/Destroy()
@@ -46,7 +62,9 @@
 	// EXPAND DONG
 	if(isturf(T))
 		// This is normally where a growth animation would occur
-//		new /obj/effect/overlay/bluespacify(T)
+#ifdef BLUESPACELEAK_FLAT
+		new /obj/effect/overlay/bluespacify(T)
+#endif
 		spawn(10)
 			// Nom.
 			for(var/atom/movable/A in T)

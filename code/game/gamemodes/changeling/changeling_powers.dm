@@ -925,7 +925,11 @@ var/list/datum/dna/hivemind_bank = list()
 	var/list/victims = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
 		victims += C
-	var/mob/living/carbon/T = input(src, "Who will we sting?") as null|anything in victims
+	var/mob/living/carbon/T
+	if (victims)
+		T = victims[1]
+		if (victims.len > 1)
+			T = input(src, "Who will we sting?") as null|anything in victims
 
 	if(!T)
 		return

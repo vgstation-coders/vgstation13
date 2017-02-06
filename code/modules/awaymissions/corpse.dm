@@ -71,6 +71,9 @@
 
 	M.iscorpse = 1
 
+	M.pixel_x = src.pixel_x
+	M.pixel_y = src.pixel_y
+
 	if(generate_random_appearance)
 		M.dna.ResetSE()
 		M.dna.ResetUI()
@@ -199,6 +202,7 @@
 				W.access = list()
 		if(corpseidjob)
 			W.assignment = corpseidjob
+			W.name = "[W.name] ([W.assignment])"
 		W.registered_name = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
 
@@ -329,6 +333,23 @@
 	corpseback = /obj/item/weapon/storage/backpack
 	corpseshoes = /obj/item/clothing/shoes/white
 	corpseid = 0
+
+/obj/effect/landmark/corpse/roboticist
+	name = "Roboticist"
+	corpseradio = /obj/item/device/radio/headset/headset_rob
+	corpseuniform = /obj/item/clothing/under/rank/roboticist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Roboticist"
+	corpseidaccess = "Roboticist"
+
+/obj/effect/landmark/corpse/roboticist/spessmart
+	corpseidjob = "Spessmart Roboticist"
+	generate_random_mob_name = 1
+	generate_random_appearance = 1
+	brute_dmg = 100
+	toxin_dmg = 6
 
 /obj/effect/landmark/corpse/miner
 	corpseradio = /obj/item/device/radio/headset/headset_mining
@@ -546,6 +567,25 @@
 	husk = 1
 	brute_dmg = 250
 	burn_dmg = 100
+
+/obj/effect/landmark/corpse/catbeast //only good catbeast is a dead one
+	name = "Test Subject"
+	generate_random_mob_name = 0
+	generate_random_appearance = 1
+	corpsegender = G_BOTH
+
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpsesuit = /obj/item/clothing/suit/straight_jacket
+	corpsemask = /obj/item/clothing/mask/muzzle
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/blindfold
+
+/obj/effect/landmark/corpse/catbeast/createCorpse()
+	if(prob(50))
+		corpsemask = null
+	if(prob(50))
+		corpsesuit = null
+	if(prob(50))
+		corpseglasses = null
 
 #undef G_MALE
 #undef G_FEMALE

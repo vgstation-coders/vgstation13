@@ -520,6 +520,7 @@
 		if(occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
+			occupant.resting = 0
 		src.on = 0
 		if(auto_eject_after)
 			src.go_out()

@@ -166,7 +166,7 @@
 
 	if(istype(M,/mob/living/carbon))
 //		log_debug("No gloves, [M] is truing to infect [src]")
-		M.spread_disease_to(src, "Contact")
+		spread_disease_to(M, src, "Contact")
 
 
 	switch(M.a_intent)
