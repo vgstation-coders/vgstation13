@@ -346,6 +346,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "emergency floodlight crate"
 	group = "Supplies"
 
+/datum/supply_packs/airbags
+	name = "Personal airbags"
+	contains = list(/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "airbag crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume
