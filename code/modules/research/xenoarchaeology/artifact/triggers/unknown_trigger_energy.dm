@@ -17,8 +17,7 @@
 			istype(item,/obj/item/weapon/melee/cultblade) ||\
 			istype(item,/obj/item/weapon/card/emag) ||\
 			istype(item,/obj/item/device/multitool))
-		Triggered()
-		my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]) || [item] || attacked by [key_name(toucher)].")
+		Triggered(toucher, context, item)
 
 /datum/artifact_trigger/energy/proc/owner_projectile(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -28,5 +27,4 @@
 	if(istype(item,/obj/item/projectile/beam) ||\
 		istype(item,/obj/item/projectile/ion) ||\
 		istype(item,/obj/item/projectile/energy))
-		Triggered()
-		my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]) || [item] || attacked by [key_name(toucher)].")
+		Triggered(toucher, context, item)

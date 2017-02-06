@@ -16,16 +16,13 @@
 	var/obj/item/weapon/item = event_args[3]
 
 	if(context == "THROW" && item:throwforce >= FORCE_THRESHOLD)
-		Triggered()
-		my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]) || [item] || attacked by [key_name(toucher)].")
+		Triggered(toucher, context, item)
 	else if(item.force >= FORCE_THRESHOLD)
-		Triggered()
-		my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]) || [item] || attacked by [key_name(toucher)].")
+		Triggered(toucher, context, item)
 
 /datum/artifact_trigger/force/proc/owner_explode(var/list/event_args, var/source)
 	var/context = event_args[2]
-	Triggered()
-	my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]).")
+	Triggered(0, context,0)
 
 /datum/artifact_trigger/force/proc/owner_projectile(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -34,5 +31,4 @@
 
 	if(istype(item,/obj/item/projectile/bullet) ||\
 		istype(item,/obj/item/projectile/hivebotbullet))
-		Triggered()
-		my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]) || [item] || attacked by [key_name(toucher)].")
+		Triggered(toucher, context, item)
