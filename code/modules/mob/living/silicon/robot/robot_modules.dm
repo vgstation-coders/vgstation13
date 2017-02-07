@@ -91,7 +91,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
-	
+
 #define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
@@ -276,7 +276,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 
 /obj/item/weapon/robot_module/security
-	name = "peacekeeper robot module"
+	name = "security robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -433,6 +433,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for(var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0
-	
+
 #undef STANDARD_MAX_KIT
 #undef MEDBORG_MAX_KIT
