@@ -318,12 +318,12 @@
 			module_sprites["Basic"] = "secborg"
 			module_sprites["Blue Knight 2.0"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
-			module_sprites["Bloodhound"] = "bloodhound"
+			module_sprites["Hound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
-			module_sprites["Marina-SC"] = "marinaSC"
+			module_sprites["Marina-PK"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
-			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			to_chat(src, "<span class='warning'><big><b>Under ASIMOV, you are an enforcer of the PEACE and preventer of HUMAN HARM.You are expected to follow orders and prevent harm above all else. Space law means nothing to you.</b></big></span>")
 			speed = 0
 
 		if("Engineering")
