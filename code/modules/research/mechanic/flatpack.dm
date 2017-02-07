@@ -145,7 +145,7 @@
 			to_chat(user, "You can't stack opened flatpacks.")
 			return */
 		if((stacked.len + stacking.stacked.len + 2) >= MAX_FLATPACK_STACKS) //how many flatpacks we can in a stack (including the bases)
-			to_chat(user, "You can't stack flatpacks that high.")
+			to_chat(user, "You can't stack flatpacks that high.") // tells you that you cant stack flatpacks that high
 			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
