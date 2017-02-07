@@ -90,7 +90,7 @@ Class Procs:
 	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
 	for(var/atom/movable/M in movable)
-		if(!M.AirflowCanPush())
+		if(M.AirflowCanPush())
 			continue
 		//If they're already being tossed, don't do it again.
 		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))

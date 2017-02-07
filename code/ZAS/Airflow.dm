@@ -263,6 +263,7 @@ proc/AirflowSpace(zone/A)
 /atom/movable/var/tmp/last_airflow = 0
 
 // Mainly for bustanuts.
+
 /atom/movable/proc/AirflowCanPush()
 	return 1
 
