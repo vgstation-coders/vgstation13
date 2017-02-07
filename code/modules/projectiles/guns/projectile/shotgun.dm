@@ -3,7 +3,7 @@
 	desc = "Useful for sweeping alleys."
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	icon_state = "shotgun"
-	item_state = "shotgun0"
+	item_state = "dshotgun0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 4
 	w_class = W_CLASS_LARGE
@@ -87,7 +87,7 @@
 
 /obj/item/weapon/gun/projectile/shotgun/pump/combat/update_wield(mob/user)
 	..()
-	item_state = "cshotgun[wielded ? 1 : 0]"
+	item_state = "[initial(icon_state)][wielded ? 1 : 0]"
 	if(user)
 		user.update_inv_hands()
 
@@ -96,7 +96,7 @@
 	name = "double-barreled shotgun"
 	desc = "A true classic."
 	icon_state = "dshotgun"
-	item_state = "shotgun0"
+	item_state = "dshotgun0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 2
 	w_class = W_CLASS_LARGE
@@ -129,19 +129,9 @@
 	if(!wielded)
 		wield(user)
 		src.update_wield(user)
-	else
-		unwield(user)
-
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/update_wield(mob/user)
-	..()
-	item_state = "dshotgun[wielded ? 1 : 0]"
-	if(user)
-		user.update_inv_hands()
-
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/AltClick()
-	if(!broke)
+	else if(!broke)
 		var/i = 0
-		if(clumsy_check(usr))
+		if(clumsy_check && clumsy_check(usr))
 			usr.visible_message("<span class='danger'>[usr] literally breaks \the [src.name]!.</span>", "<span class='danger'>You literally break the [src.name].</span>")
 			playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 50, 1)
 			icon_state = "literallybroken"
@@ -169,6 +159,12 @@
 		to_chat(usr, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/update_wield(mob/user)
+	..()
+	item_state = "[initial(icon_state)][wielded ? 1 : 0]"
+	if(user)
+		user.update_inv_hands()
+
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	var/atom/newtarget = target
 	if(!wielded)
@@ -178,8 +174,6 @@
 	..(newtarget,user,params,reflex,struggle)
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(!broke)
-		return
 	..()
 	A.update_icon()
 	update_icon()
@@ -192,17 +186,12 @@
 			user.visible_message("<span class='danger'>The shotgun goes off!</span>", "<span class='danger'>The shotgun goes off in your face!</span>")
 			return
 		if(do_after(user, src, 30))	//SHIT IS STEALTHY EYYYYY
-			icon_state = "sawnshotgun"
-			w_class = W_CLASS_MEDIUM
-			item_state = "sawnshotgun"
-			slot_flags &= ~SLOT_BACK	//you can't sling it on your back
-			slot_flags |= SLOT_BELT		//but you can wear it on your belt (poorly concealed under a trenchcoat, ideally)
-			name = "sawn-off shotgun"
-			desc = "Omar's coming!"
+			qdel(src)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
-			if(istype(user, /mob/living/carbon/human) && src.loc == user)
-				var/mob/living/carbon/human/H = user
-				H.update_inv_hands()
+			var/sawn = new /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
+			user.put_in_hands(sawn)
+	if(!broke)
+		return
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
 	name = "sawn-off shotgun"
@@ -212,10 +201,37 @@
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/attack_self(mob/living/user as mob)
-	return
+	if(!broke)
+		var/i = 0
+		if(clumsy_check && clumsy_check(usr))
+			usr.visible_message("<span class='danger'>[usr] literally breaks \the [src.name]!.</span>", "<span class='danger'>You literally break the [src.name].</span>")
+			playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 50, 1)
+			icon_state = "literallybroken"
+			src.become_defective()
+			return
+		for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
+			loaded_shell.forceMove(get_turf(src))
+			loaded_shell.pixel_x = min(-3 + (i*4),15) * PIXEL_MULTIPLIER
+			loaded_shell.pixel_y = min( 3 - (i*4),15) * PIXEL_MULTIPLIER
+			if(loaded_shell in loaded)
+				loaded -= loaded_shell
+			i++
+		to_chat(usr, "<span class='notice'>You break \the [src].</span>")
+		playsound(get_turf(src), 'sound/weapons/shotgun_break.ogg', 50, 1)
+		broke = 1
+		icon_state = "[initial(icon_state)]broke"
+		update_icon()
+	else if(broke)
+		to_chat(usr, "<span class='notice'>You put \the [src] back to its original position.</span>")
+		playsound(get_turf(src), 'sound/weapons/shotgun_unbreak.ogg', 50, 1)
+		broke = 0
+		icon_state = "[initial(icon_state)]"
+		update_icon()
+	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
+		to_chat(usr, "<span class='notice'>\The [src] is empty.</span>")
+		return
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(broke)
