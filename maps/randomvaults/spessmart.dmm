@@ -180,7 +180,7 @@
 "dx" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
 "dy" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor,/area/vault/supermarket/entrance)
 "dz" = (/turf/simulated/floor{dir = 5; icon_state = "stage_stairs"; tag = "icon-whitegreen (NORTHEAST)"},/area/vault/supermarket/entrance)
-"dA" = (/obj/machinery/atm{step_x = -32},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"dA" = (/obj/machinery/atm{pixel_x = -32},/turf/simulated/floor,/area/vault/supermarket/entrance)
 "dB" = (/obj/machinery/atm{pixel_x = 32},/turf/simulated/floor,/area/vault/supermarket/entrance)
 "dC" = (/obj/machinery/newscaster{pixel_x = 32; pixel_y = 0},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
 "dD" = (/obj/structure/crematorium,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
