@@ -92,7 +92,7 @@ var/global/sent_strike_team = 0
 	for (var/obj/effect/landmark/L in landmarks_list)
 		if (L.name == "Commando-Bomb")
 			new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
-			del(L)
+			qdel(L)
 
 	message_admins("<span class='notice'>[key_name_admin(usr)] has spawned a CentCom strike squad.</span>", 1)
 	log_admin("[key_name(usr)] used Spawn Death Squad.")

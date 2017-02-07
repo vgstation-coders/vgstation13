@@ -118,7 +118,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	// 		if(stat != DEAD)
 	// 			carr << "You pick up a facehugger"
 	// 			carr.facehuggers += 1
-	// 			del(src)
+	// 			qdel(src)
 	//
 	// 		else
 	// 			user << "This facehugger is dead."

@@ -517,10 +517,6 @@
 		src.OCCUPANT = usr
 		src.isopen = 0 //Close the thing after the guy gets inside
 		src.update_icon()
-
-//		for(var/obj/O in src)
-//			del(O)
-
 		src.add_fingerprint(usr)
 		src.updateUsrDialog()
 		return
