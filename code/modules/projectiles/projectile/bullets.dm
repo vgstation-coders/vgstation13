@@ -155,6 +155,36 @@
 	stun = 10
 	weaken = 10
 	stutter = 10
+	rotate = 0
+	var/is_child = 0
+
+/obj/item/projectile/bullet/stunshot/New(atom/T, var/C = 0)
+	..(T)
+	is_child = C
+
+/obj/item/projectile/bullet/stunshot/OnFired()
+	if(!is_child)
+		var/list/turf/possible_turfs = list()
+		for(var/turf/T in orange(original,1))
+			possible_turfs += T
+		for(var/I = 1; I <=4; I++)
+			var/obj/item/projectile/bullet/stunshot/B = new (src.loc, 1)
+			var/turf/targloc = pick(possible_turfs)
+			B.original = targloc
+			var/turf/curloc = get_turf(src)
+			B.forceMove(get_turf(src))
+			B.starting = starting
+			B.shot_from = shot_from
+			B.silenced = silenced
+			B.current = curloc
+			B.OnFired()
+			B.yo = targloc.y - curloc.y
+			B.xo = targloc.x - curloc.x
+			B.inaccurate = inaccurate
+			spawn()
+				B.process()
+	..()
+
 
 /obj/item/projectile/bullet/a762
 	damage = 25
