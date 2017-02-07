@@ -9,12 +9,14 @@
 /datum/artifact_effect/planthelper/DoEffectAura()
 	if(holder)
 		for (var/obj/machinery/portable_atmospherics/hydroponics/H in range(src.effectrange,holder))
-			if(H.seed && !H.dead && prob(rand(6,12)))
+			if(H.seed && !H.dead)
 				switch(rand(1,4))
 					if(1)
-						H.waterlevel += rand(2,8)
+						if(H.waterlevel <= 75)
+							H.waterlevel += rand(5,15)
 					if(2)
-						H.nutrilevel++
+						if(H.nutrilevel <= 5)
+							H.nutrilevel += rand(1,5)
 					if(3)
 						H.weedlevel--
 					if(4)
@@ -24,18 +26,16 @@
 /datum/artifact_effect/planthelper/DoEffectPulse()
 	if(holder)
 		for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(src.effectrange,holder))
-			if(H.seed && !H.dead && prob(rand(8,36)))
-				switch(rand(1,4))
+			if(H.seed && !H.dead)
+				switch(rand(1,3))
 					if(1)
-						H.waterlevel += rand(5,15)
-						H.nutrilevel += rand(1,10)
-					if(2) // This will totally end fine.
-						H.mutation_level++
-						H.mutation_mod++
-						H.yield_mod++
-					if(3)
+						if(H.waterlevel <= 90)
+							H.waterlevel += 10
+						if(H.nutrilevel <= 9)
+							H.nutrilevel++
+					if(2)
 						H.age--
-					if(4)
+					if(3)
 						H.weedlevel--
 						H.pestlevel--
 						H.toxins--
