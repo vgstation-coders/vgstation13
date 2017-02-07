@@ -60,20 +60,6 @@ byond!(utf8_len_bytes: text; {
 
 
 byond!(utf8_find: haystack, needle, start, end; {
-    // This happens often enough for a special case, probably.
-    if start == "1" && end == "0" {
-        return match haystack.find(needle) {
-            Some(index) => {
-                // Determine true offset based on byte offset returned by find.
-                format!("{}",
-                    haystack.char_indices()
-                    .position(|x| x.0 == index)
-                    .unwrap() + 1)
-            },
-            None => "0".to_string()
-        }
-    }
-
     match byte_bounds(haystack, start, end) {
         Some((start, end)) => {
             let ref sub = haystack[start .. end];
@@ -105,12 +91,33 @@ byond!(utf8_index: text, index; {
     } as usize;
 
     // Get the byte bound.
-    let byte = match text.char_indices().nth(index) {
+    let mut iter = text.char_indices();
+    let byte = match iter.nth(index) {
         Some((i, _)) => i,
         None => return ""
     };
 
-    &text[byte .. byte+1]
+    &text[byte .. iter.next().map(|(i, _)| i).unwrap_or(text.len())]
+});
+
+byond!(utf8_copytext: text, start, end; {
+    match byte_bounds(text, start, end) {
+        Some((start, end)) => &text[start .. end],
+        None => ""
+    }
+});
+
+byond!(utf8_replacetext: text, to, from, start, end; {
+    match byte_bounds(text, start, end) {
+        Some((start, end)) => {
+            let sub = &text[start .. end];
+            let mut out = text[.. start].to_owned();
+            out.push_str(&sub.replace(to, from));
+            out.push_str(&text[end ..]);
+            out
+        },
+        None => text.to_string()
+    }
 });
 
 /// Function to get the byte bounds for copytext, findtext and replacetext.
@@ -276,4 +283,47 @@ fn test_utf8_index() {
     assert_eq!(test_byond_call_args(utf8_index, &["abc", "5"]), "");
     assert_eq!(test_byond_call_args(utf8_index, &["abc", "0"]), "");
     assert_eq!(test_byond_call_args(utf8_index, &["abc", "-10"]), "");
+    assert_eq!(test_byond_call_args(utf8_index, &["a👏bc", "3"]), "b");
+    assert_eq!(test_byond_call_args(utf8_index, &["a👏bc", "2"]), "👏");
+}
+
+#[test]
+fn test_utf8_copytext() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "1", "5"]),
+               "abcd");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["a👏cdefgh", "1", "5"]),
+               "a👏cd");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "-5", "-1"]),
+               "defg");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "120", "200"]),
+               "");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "1", "2000"]),
+               "abcdefgh");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "5", "1"]),
+               "");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "5", "0"]),
+               "efgh");
+    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "5", "-2"]),
+               "ef")
+}
+
+#[test]
+fn test_utf8_replacetext() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "z", "1", "0"]),
+               "Hellz wzrld!");
+    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "👏", "1", "0"]),
+               "Hell👏 w👏rld!");
+    assert_eq!(test_byond_call_args(utf8_replacetext,
+                                    &["Hell👏 w👏rld!", "👏", "a", "1", "0"]),
+               "Hella warld!");
+    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "👏", "a", "1", "0"]),
+               "Hello world!");
+    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "a", "7", "0"]),
+               "Hello warld!");
+    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "aAa", "7", "0"]),
+               "Hello waAarld!");
+    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "ll", "aAa", "1", "0"]),
+               "HeaAao world!");
 }
