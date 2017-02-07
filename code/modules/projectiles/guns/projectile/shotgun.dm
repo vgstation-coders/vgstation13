@@ -3,7 +3,7 @@
 	desc = "Useful for sweeping alleys."
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	icon_state = "shotgun"
-	item_state = "dshotgun0"
+	item_state = "shotgun0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 4
 	w_class = W_CLASS_LARGE
@@ -167,13 +167,15 @@
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	var/atom/newtarget = target
-	if(!wielded)
+	if(!wielded && w_class > W_CLASS_MEDIUM)
 		newtarget = get_inaccuracy(target,1+recoil)
 	if(broke)
 		return
 	..(newtarget,user,params,reflex,struggle)
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A as obj, mob/user as mob)
+	if(!broke)
+		return
 	..()
 	A.update_icon()
 	update_icon()
@@ -232,8 +234,3 @@
 	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 		to_chat(usr, "<span class='notice'>\The [src] is empty.</span>")
 		return
-
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
-	if(broke)
-		return
-	..(target,user,params,reflex,struggle)
