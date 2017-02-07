@@ -560,3 +560,11 @@ a {
 		forceMove(current_loc)
 	else
 		forceMove(current_turf)
+
+/obj/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"sharpness",
+		"integratedpai")
+
+	reset_vars_after_duration(resettable_vars, duration)

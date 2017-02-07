@@ -760,3 +760,13 @@
 		qdel(A)
 	for(var/i = 1 to 7)
 		new /obj/item/toy/balloon/long/living(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/past
+	icon_state = "past_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/past/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/past(src)

@@ -130,6 +130,9 @@ world/loop_checks = 0
 	if(isnull(D))
 		return
 
+	if(D.being_sent_to_past())
+		return
+
 	if(isnull(garbageCollector))
 		del(D)
 		return
@@ -152,6 +155,24 @@ world/loop_checks = 0
 			D.Destroy()
 
 		garbageCollector.addTrash(D)
+
+/datum/proc/being_sent_to_past()
+	if(being_sent_to_past)
+		return 1
+
+/atom/movable/being_sent_to_past()
+	if(..())
+		invisibility = 101
+		density = 0
+		anchored = 1
+		timestopped = 1
+		flags |= INVULNERABLE | TIMELESS
+		if(loc)
+			if(ismob(loc))
+				var/mob/M = loc
+				M.drop_item(src, force_drop = 1)
+		forceMove(null)
+		return 1
 /*
 /datum/controller
 	var/processing = 0

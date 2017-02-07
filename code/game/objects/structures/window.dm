@@ -569,6 +569,14 @@
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
 
+/obj/structure/window/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"health",
+		"d_state")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME
 #undef WINDOWUNSECUREFRAME

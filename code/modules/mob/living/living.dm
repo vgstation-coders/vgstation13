@@ -1511,3 +1511,25 @@ Thanks.
 		calorie_burning_heat_multiplier += rand(-5,5)/10
 	if(prob(10))
 		thermal_loss_multiplier += rand(-5,5)/10
+
+/mob/living/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"maxHealth",
+		"health",
+		"bruteloss",
+		"oxyloss",
+		"toxloss",
+		"fireloss",
+		"cloneloss",
+		"brainloss",
+		"halloss",
+		"hallucination",
+		"meat_taken",
+		"on_fire",
+		"fire_stacks",
+		"specialsauce",
+		"silent",
+		"is_ventcrawling")
+
+	reset_vars_after_duration(resettable_vars, duration)

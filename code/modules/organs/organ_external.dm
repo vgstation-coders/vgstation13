@@ -1542,3 +1542,27 @@ obj/item/weapon/organ/head/Destroy()
 		if(OE.grasp_id == index && OE.can_grasp)
 			return OE
 	return null
+
+/datum/organ/external/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"damage_state",
+		"brute_dam",
+		"burn_dam",
+		"last_dam",
+		"wounds",
+		"number_wounds",
+		"perma_injury",
+		"parent",
+		"children",
+		"internal_organs",
+		"open",
+		"stage",
+		"cavity",
+		"sabotaged",
+		"encased",
+		"implants")
+
+	reset_vars_after_duration(resettable_vars, duration)
+	for(var/datum/wound/W in wounds)
+		W.send_to_past(duration)

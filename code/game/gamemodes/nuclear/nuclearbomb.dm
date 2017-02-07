@@ -336,6 +336,17 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 	return
 
+/obj/machinery/nuclearbomb/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"deployable",
+		"extended",
+		"timeleft",
+		"timing",
+		"safety")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
