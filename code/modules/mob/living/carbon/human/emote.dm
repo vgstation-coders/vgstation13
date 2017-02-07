@@ -775,10 +775,3 @@
 			visible_message(msg)
 		else if (m_type & HEARABLE)
 			visible_message(message = msg, blind_message = msg, ignore_self = (stat==UNCONSCIOUS)?1:0) // stop spamming ourselves with our own emotes when unconscious
-
-/mob/living/carbon/human/verb/pose()
-	set name = "Set Pose"
-	set desc = "Sets a description which will be shown when someone examines you."
-	set category = "IC"
-
-	pose =  copytext(sanitize(input(usr, "This is [src]. \He is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
