@@ -268,9 +268,7 @@ proc/AirflowSpace(zone/A)
 	return 1
 
 /mob/AirflowCanPush()
-	if (M_HARDCORE in mutations)
-		return 1
-	return 0
+	return 1
 
 /atom/movable/proc/GotoAirflowDest(n)
 	last_airflow = world.time
@@ -480,7 +478,7 @@ mob/living/carbon/human/airflow_hit(atom/A)
 		T.add_blood(src)
 		bloody_body(src)
 
-	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
+	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		if(airflow_speed > 10)
 			paralysis += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun))
 			stunned = max(stunned,paralysis + 3)
