@@ -323,7 +323,7 @@
 			module_sprites["Marina-SC"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
-			to_chat(src, "<font size='15' color='red'>Remember that you do not follow space law, you follow your lawset.</b></font></span>")
+			to_chat(src, "<font size='15' color='red'>Under ASIMOV, you are an enforcer of the PEACE and preventer of HUMAN HARM. You are meant to aid security, not replace them. You are expected to follow orders and prevent harm above all else. Space law means nothing to you.</b></font></span>")
 			speed = 0
 
 		if("Engineering")
