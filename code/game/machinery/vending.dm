@@ -2398,6 +2398,10 @@ var/global/num_vending_terminals = 1
 	icon_state = "voxseed"
 	products = list (
 		/obj/item/weapon/storage/fancy/donut_box = 2,
+		/obj/item/clothing/suit/storage/trader = 3,
+		)
+	prices = list(
+		/obj/item/clothing/suit/storage/trader = 100
 		)
 
 /obj/machinery/vending/trader/New()
@@ -2416,7 +2420,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
 		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
-		/obj/item/clothing/suit/storage/trader,
 		)
 
 	for(var/random_items = 1 to premium.len - 4)
