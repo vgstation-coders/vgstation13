@@ -268,8 +268,8 @@ proc/AirflowSpace(zone/A)
 
 /mob/AirflowCanPush()
 	if (M_HARDCORE in mutations)
-		return 0
-	return 1
+		return 1
+	return 0
 
 /atom/movable/proc/GotoAirflowDest(n)
 	last_airflow = world.time
