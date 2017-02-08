@@ -41,5 +41,7 @@
 /proc/utf8_lowercase(var/text)
 	return LIBVG("utf8_lowercase", text)
 
+// Stricts non-ASCII characters.
+// Useful for things which BYOND touches itself like object names.
 /proc/strict_ascii(var/text)
 	return LIBVG("strict_ascii", text)
