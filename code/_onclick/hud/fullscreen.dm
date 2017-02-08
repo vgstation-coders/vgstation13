@@ -22,9 +22,7 @@
 			client.screen += screen
 		if(screen.clear_after_length)
 			spawn(screen.clear_after_length)
-				if(client)
-					client.screen -= screen
-				qdel(screen)
+				clear_fullscreen(category, animate = 0)
 	else
 		screen.icon_state = "[initial(screen.icon_state)][severity]"
 	if(screen.clear_after_length)
