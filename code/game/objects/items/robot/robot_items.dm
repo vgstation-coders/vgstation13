@@ -172,7 +172,9 @@
 		R.cell.charge -= 1000
 		if(R.emagged)
 			safety = FALSE
-
+		if(R.connected_ai)
+			to_chat(R.connected_ai,"<br><span class='notice'>NOTICE - Peacekeeping 'HARM ALARM' used by: [user]</span><br>")
+			
 	if(safety == TRUE)
 		user.visible_message("<font color='red' size='2'>[user] blares out a near-deafening siren from its speakers!</font>", \
 			"<span class='userdanger'>The siren pierces your hearing and confuses you!</span>", \
@@ -184,10 +186,6 @@
 		playsound(get_turf(src), 'sound/AI/harmalarm.ogg', 70, 3)
 		cooldown = world.time + 200
 		log_game("[user.ckey]([user]) used a Cyborg Harm Alarm in ([user.x],[user.y],[user.z])")
-		if(isrobot(user))
-			var/mob/living/silicon/robot/R = user
-			to_chat(R.connected_ai,"<br><span class='notice'>NOTICE - Peacekeeping 'HARM ALARM' used by: [user]</span><br>")
-
 		return
 
 	if(safety == FALSE)

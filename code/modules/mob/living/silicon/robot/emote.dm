@@ -188,7 +188,7 @@
 				message = "<B>[src]</B> buzzes."
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 			m_type = VISIBLE
-
+/*
 		if("law")
 			if (istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B> shows its legal authorization barcode."
@@ -207,7 +207,7 @@
 			else
 				to_chat(src, "You are not security.")
 
-		/*
+
 		if ("fart")
 			var/list/robotfarts = list("makes a farting noise","vents excess methane","shakes violently, then vents methane.")
 			var/robofart = pick(robotfarts)

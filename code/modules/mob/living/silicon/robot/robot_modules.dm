@@ -275,19 +275,20 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 					O.amount = 50
 
 
-/obj/item/weapon/robot_module/security
+/obj/item/weapon/robot_module/peacekeeper
 	name = "peacekeeper robot module"
 
-/obj/item/weapon/robot_module/security/New()
+/obj/item/weapon/robot_module/peacekeeper/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
-	src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
-	src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
-	src.modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
+	src.modules += new /obj/item/weapon/cookiesynth(src)
+	src.modules += new /obj/item/weapon/inflatable_dispenser(src)
+	src.modules += new /obj/item/device/harmalarm(src)
+	src.modules += new /obj/item/weapon/extinguisher(src)
+	src.modules += new /obj/item/borg/cyborghug(src)
 	src.modules += new /obj/item/taperoll/police(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
 	src.emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
-	sensor_augs = list("Security", "Medical", "Disable")
+	sensor_augs = list("Medical", "Disable")
 	fix_modules()
 
 /obj/item/weapon/robot_module/janitor
