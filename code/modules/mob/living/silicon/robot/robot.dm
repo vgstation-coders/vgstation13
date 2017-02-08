@@ -323,7 +323,7 @@
 			module_sprites["Marina-PK"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
-			to_chat(src, "<span class='warning'><big><b>You are expected to follow your laws above all else. You are not a Security Officer.</b></big></span>")
+			to_chat(src, "<font size='12' color='red'><b><b>You are expected to follow your laws above all else. You are not a Security Officer.</b></font>")
 			speed = 0
 
 		if("Engineering")
