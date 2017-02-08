@@ -919,6 +919,7 @@
 #include "code\game\shuttles\voxresearch_shuttle.dm"
 #include "code\game\striketeams\emergency_response_team.dm"
 #include "code\game\striketeams\nanotrasen_deathsquad.dm"
+#include "code\game\striketeams\striketeam_datums.dm"
 #include "code\game\striketeams\syndicate_elite_squad.dm"
 #include "code\game\turfs\simulated.dm"
 #include "code\game\turfs\turf.dm"
