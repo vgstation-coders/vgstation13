@@ -416,7 +416,8 @@
 
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
-				del(G)
+				qdel(G)
+				mob.grabbed_by.Remove(G)
 			if(G.state == GRAB_AGGRESSIVE)
 				mob.delayNextMove(10)
 				if(!prob(25))

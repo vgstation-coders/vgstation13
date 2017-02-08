@@ -256,11 +256,11 @@
 /datum/construction/flatpack_unpack/spawn_result(mob/user as mob)
 	var/obj/structure/closet/crate/flatpack/FP = holder
 	if(!istype(FP))
-		del(src)
+		qdel(src)
 		return
 	else
 		FP.Finalize()
-		del(src)
+		qdel(src)
 		return 1
 
 #undef Fl_ACTION
