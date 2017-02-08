@@ -120,7 +120,7 @@
 	var/dat
 	dat += "<TT><B>Automatic Medical Unit v1.0</B></TT><BR><BR>"
 	dat += "Status: <A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A><BR>"
-	dat += "Maintenance panel panel is [src.open ? "opened" : "closed"]<BR>"
+	dat += "Maintenance panel panel is [src.panel_open ? "panel_opened" : "closed"]<BR>"
 	dat += "Beaker: "
 	if (src.reagent_glass)
 		dat += "<A href='?src=\ref[src];eject=1'>Loaded \[[src.reagent_glass.reagents.total_volume]/[src.reagent_glass.reagents.maximum_volume]\]</a>"
@@ -206,14 +206,14 @@
 
 /obj/machinery/bot/medbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (src.allowed(user) && !open && !emagged)
+		if (src.allowed(user) && !panel_open && !emagged)
 			src.locked = !src.locked
 			to_chat(user, "<span class='notice'>Controls are now [src.locked ? "locked." : "unlocked."]</span>")
 			src.updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			if(panel_open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
@@ -241,9 +241,9 @@
 		if (health < maxhealth && !isscrewdriver(W) && W.force)
 			step_to(src, (get_step_away(src,user)))
 
-/obj/machinery/bot/medbot/Emag(mob/user as mob)
+/obj/machinery/bot/medbot/emag(mob/user as mob)
 	..()
-	if(open && !locked)
+	if(panel_open && !locked)
 		declare_crit = 0
 		if(user)
 			to_chat(user, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
@@ -265,6 +265,9 @@
 	//set background = 1
 
 	if(integratedpai)
+		return
+
+	if(brain)
 		return
 
 	if(!src.on)
@@ -403,7 +406,7 @@
 	return 0
 
 /obj/machinery/bot/medbot/proc/medicate_patient(mob/living/carbon/C as mob)
-	if(!src.on)
+	if(!src.on && !src.brain)
 		return
 
 	if(!istype(C))
@@ -454,7 +457,7 @@
 			reagent_id = src.treatment_tox
 
 	if(!reagent_id) //If they don't need any of that they're probably cured!
-		oldpatient = src.patient
+		oldpatient = C
 		patient = null
 		currently_healing = 0
 		last_found = world.time
@@ -463,31 +466,37 @@
 		return
 	else
 		src.icon_state = "[src.icon_initial]s"
-		visible_message("<span class='danger'>[src] is trying to inject [patient]!</span>")
+		visible_message("<span class='danger'>[src] is trying to inject [C]!</span>")
 
 		if(integratedpai)
 			if(do_after(integratedpai.pai, src, INJECTION_TIME))
-				inject_patient()
+				inject_patient(C)
 		else
 			spawn(INJECTION_TIME)
-				inject_patient()
+				inject_patient(C)
 
 //	src.speak(reagent_id)
 	reagent_id = null
 	return
 
-/obj/machinery/bot/medbot/proc/inject_patient()
-	if ((get_dist(src, src.patient) <= 1) && (src.on))
+/obj/machinery/bot/medbot/proc/inject_patient(mob/living/carbon/C as mob)
+	if (src.Adjacent(C) && (src.on || src.brain))
 		if((reagent_id == "internal_beaker") && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
-			src.reagent_glass.reagents.trans_to(src.patient,src.injection_amount) //Inject from beaker instead.
-			src.reagent_glass.reagents.reaction(src.patient, 2)
+			src.reagent_glass.reagents.trans_to(C,src.injection_amount) //Inject from beaker instead.
+			src.reagent_glass.reagents.reaction(C, 2)
 		else
-			src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
-		visible_message("<span class='danger'>[src] injects [src.patient] with the syringe!</span>")
+			C.reagents.add_reagent(reagent_id,src.injection_amount)
+		visible_message("<span class='danger'>[src] injects [C] with the syringe!</span>")
 
 	src.icon_state = "[src.icon_initial][src.on]"
 	src.currently_healing = 0
 	return
+
+/obj/machinery/bot/medbot/click_action(var/atom/target, mob/user)
+	if(istype(target, /mob/living/carbon))
+		if(assess_patient(target))
+			medicate_patient(target)
+	return 1
 
 /obj/machinery/bot/medbot/proc/speak(var/message)
 	if((!src.on) || (!message))
@@ -521,19 +530,13 @@
 	s.set_up(3, 1, src)
 	s.start()
 	eject_integratedpai_if_present()
-	qdel(src)
+	..()
 	return
 
-/obj/machinery/bot/medbot/Bump(M as mob|obj) //Leave no door unopened!
-	if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-		var/obj/machinery/door/D = M
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
-			D.open()
-			src.frustration = 0
-	else if ((istype(M, /mob/living/)) && (!src.anchored))
-		src.forceMove(M:loc)
-		src.frustration = 0
-	return
+/obj/machinery/bot/medbot/Bump(M as mob|obj)
+	. = ..()
+	if(.)
+		frustration = 0
 
 /* terrible
 /obj/machinery/bot/medbot/Bumped(atom/movable/M as mob|obj)
@@ -558,7 +561,7 @@
 	return L
 
 
-//It isn't blocked if we can open it, man.
+//It isn't blocked if we can panel_open it, man.
 /proc/TurfBlockedNonWindowNonDoor(turf/loc, var/list/access)
 	for(var/obj/O in loc)
 		if(O.density && !istype(O, /obj/structure/window) && !istype(O, /obj/machinery/door))

@@ -4,6 +4,10 @@
 	if(!gibbed && container && istype(container, /obj/item/device/mmi))//If not gibbed but in a container.
 		container.OnMobDeath(src)
 
+	if(connected_to && istype(connected_to, /obj/machinery/controller_pod))
+		var/obj/machinery/controller_pod/pod = connected_to
+		pod.mob_death(src)
+
 	stat = DEAD
 
 	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)

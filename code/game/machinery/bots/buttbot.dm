@@ -79,11 +79,13 @@ Here it is: Buttbot.
 	s.start()
 
 	new /obj/effect/decal/cleanable/blood/oil(src.loc)
-	qdel(src)
+	..()
 
 
 /obj/item/clothing/head/butt/attackby(var/obj/item/W, mob/user as mob)
-	..()
+	. = ..()
+	if(.)
+		return .
 	if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
 		qdel(W)
 		var/turf/T = get_turf(user.loc)

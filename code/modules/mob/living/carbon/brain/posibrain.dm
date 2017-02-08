@@ -12,7 +12,6 @@
 	var/list/ghost_volunteers[0]
 	req_access = list(access_robotics)
 	locked = 2
-	mecha = null//This does not appear to be used outside of reference in mecha.dm.
 	var/last_ping_time = 0
 	var/ping_cooldown = 50
 

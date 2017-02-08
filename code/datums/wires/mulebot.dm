@@ -31,7 +31,7 @@ var/const/WIRE_BEACON_RX = 256	// beacon ping recv
 	if(!..())
 		return 0
 	var/obj/machinery/bot/mulebot/M = holder
-	if(M.open)
+	if(M.panel_open)
 		return 1
 	return 0
 

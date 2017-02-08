@@ -636,13 +636,13 @@ Thanks.
 
 	return
 
-/mob/living/Move(atom/newloc, direct)
-	if (locked_to && locked_to.loc != newloc)
+/mob/living/Move(atom/NewLoc, Dir)
+	if (locked_to && locked_to.loc != NewLoc)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)
 			return 0
 		else
-			return locked_to.Move(newloc, direct)
+			return locked_to.Move(NewLoc, Dir)
 
 	if (restrained())
 		stop_pulling()
@@ -718,7 +718,7 @@ Thanks.
 			M.UpdateFeed(src)
 
 	if(T != loc)
-		handle_hookchain(direct)
+		handle_hookchain(Dir)
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.

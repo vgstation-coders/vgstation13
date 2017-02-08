@@ -35,14 +35,15 @@
 	// Add the MoMMI eyes
 	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = LIGHTING_PLANE
+	//var/overlay_plane = LIGHTING_PLANE
 	if(plane == HIDING_MOB_PLANE)	// ie it's hiding
-		overlay_plane = FLOAT_PLANE
+	//	overlay_plane = FLOAT_PLANE
 		overlay_layer = FLOAT_LAYER
 
-	var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
-	eyes.plane = overlay_plane
-	overlays += eyes
+	var/icon/eye_icon = icon(icon, "eyes-[subtype][emagged?"-emagged":""]")
+	if(!emagged && mmi && mmi.brainmob && mmi.brainmob.connected_to)
+		eye_icon.ColorTone(CONTROLLED_ROBOT_EYE)
+	overlays += image(eye_icon, layer = overlay_layer)
 
 	if(anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)

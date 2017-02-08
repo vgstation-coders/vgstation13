@@ -22,8 +22,10 @@
 
 	var/locked = 0
 	var/mob/living/carbon/brain/brainmob = null//The current occupant.
-	var/mob/living/silicon/robot = null//Appears unused.
-	var/obj/mecha = null//This does not appear to be used outside of reference in mecha.dm.
+
+//If the MMI can be put in things
+/obj/item/device/mmi/proc/usable_brain()
+	return brainmob && brainmob.client
 
 obj/item/device/mmi/Destroy()
 	if(brainmob)
@@ -49,7 +51,7 @@ obj/item/device/mmi/Destroy()
 		if(!brainmob)
 			to_chat(user, "<span class='warning'>What are you doing oh god put the brain back in.</span>")
 			return TRUE
-		if(!brainmob.key)
+		if(!usable_brain())
 			if(!mind_can_reenter(brainmob.mind))
 				to_chat(user, "<span class='notice'>\The [src] indicates that their mind is completely unresponsive; there's no point.</span>")
 				return TRUE
@@ -72,7 +74,8 @@ obj/item/device/mmi/Destroy()
 		//M.custom_name = created_name
 		M.Namepick()
 		M.updatename()
-		brainmob.mind.transfer_to(M)
+		if(brainmob.mind)
+			brainmob.mind.transfer_to(M)
 
 		if(M.mind && M.mind.special_role)
 			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
@@ -83,6 +86,7 @@ obj/item/device/mmi/Destroy()
 		M.cell.forceMove(M)
 		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
+		src.brainmob.controlling = M
 		return TRUE
 	for(var/t in mommi_assembly_parts)
 		if(istype(O,t))
