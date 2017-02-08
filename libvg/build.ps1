@@ -1,6 +1,6 @@
 #!/usr/bin/env powershell
 # Assume that if IsWindows doesn't exist, we're on Windows.
-# This assumption is because outdated Powershell versions odn't have the variable.
+# This assumption is because outdated Powershell versions don't have the variable.
 if ($IsWindows -Or !(Test-Path variable:global:IsWindows))
 {
 	$target = "i686-pc-windows-msvc"
