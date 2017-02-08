@@ -511,6 +511,9 @@
 			var/mob/living/L = touched
 			if(istype(L) && !istype(L, /mob/living/silicon))
 				L.apply_damage(5)
+		var/mob/M = touched
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been damaged by being bumped into by [mob.name] ([mob.ckey]) with spiky skin.</font>")
+		mob.attack_log += text("\[[time_stamp()]\] <font color='red'>Has damaged [M.name] ([M.ckey]) by bumping into them with spiky skin.</font>")
 	else
 		if(E)
 			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \his [E.display_name]!</span>")
@@ -522,6 +525,9 @@
 			var/mob/living/L = toucher
 			if(istype(L) && !istype(L, /mob/living/silicon))
 				L.apply_damage(5)
+		var/mob/M = touched
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been damaged by bumping into [mob.name] ([mob.ckey]), who had spiky skin.</font>")
+		mob.attack_log += text("\[[time_stamp()]\] <font color='red'>Has damaged [M.name] ([M.ckey]) by being bumped into by them while having spiky skin.</font>")
 
 
 ////////////////////////STAGE 3/////////////////////////////////
