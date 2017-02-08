@@ -151,3 +151,55 @@
 					crush_cooldown = TRUE
 					spawn(10)
 					crush_cooldown = FALSE
+					
+/obj/item/device/harmalarm
+	name = "Sonic Harm Prevention Tool"
+	desc = "Releases a harmless blast that confuses most organics. For when the harm is JUST TOO MUCH"
+	icon_state = "megaphone"
+	var/cooldown = 0
+	
+/obj/item/device/harmalarm/attack_self(mob/user)
+	var/safety = TRUE
+	if(cooldown > world.time)
+		to_chat(user,"<font color='red'>The device is still recharging!</font>")
+		return
+
+	if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(R.cell.charge < 1200)
+			to_chat(user, "<font color='red'>You don't have enough charge to do this!</font>")
+			return
+		R.cell.charge -= 1000
+		if(R.emagged)
+			safety = FALSE
+
+	if(safety == TRUE)
+		user.visible_message("<font color='red' size='2'>[user] blares out a near-deafening siren from its speakers!</font>", \
+			"<span class='userdanger'>The siren pierces your hearing and confuses you!</span>", \
+			"<span class='danger'>The siren pierces your hearing!</span>")
+		for(var/mob/living/carbon/M in get_hearers_in_view(9, user))
+			if(!M.earprot())
+				M.confused += 6
+		user.visible_message("<font color='red' size='7'>HUMAN HARM</font>")
+		playsound(get_turf(src), 'sound/AI/harmalarm.ogg', 70, 3)
+		cooldown = world.time + 200
+		log_game("[user.ckey]([user]) used a Cyborg Harm Alarm in ([user.x],[user.y],[user.z])")
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			to_chat(R.connected_ai,"<br><span class='notice'>NOTICE - Peacekeeping 'HARM ALARM' used by: [user]</span><br>")
+
+		return
+
+	if(safety == FALSE)
+		user.visible_message("<font color='red' size='7'>BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT</font>")
+		playsound(get_turf(src), 'sound/machines/warning-buzzer.ogg', 130, 3)
+		for(var/mob/living/carbon/C in get_hearers_in_view(9, user))
+			if(!C.earprot())
+				C.sleeping = 0
+				C.Knockdown(3)
+				C.confused += rand(5,10)
+				C.stuttering += rand(10,15)
+				C.Jitter(rand(10,25))
+				C.ear_deaf += 30
+		cooldown = world.time + 600
+		log_game("[user.ckey]([user]) used an emagged Cyborg Harm Alarm in ([user.x],[user.y],[user.z])")
