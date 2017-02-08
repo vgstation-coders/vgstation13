@@ -49,7 +49,9 @@ pub extern "C" fn utf8_sanitize(n: libc::c_int,
 
 /// Removes non-ASCII characters from the input string.
 #[no_mangle]
-pub extern "C" fn strict_ascii(n: libc::c_int, v: *const *const libc::c_char) -> *const libc::c_char {
+pub extern "C" fn strict_ascii(n: libc::c_int,
+                               v: *const *const libc::c_char)
+                               -> *const libc::c_char {
     let bytes = unsafe {
         let slice = slice::from_raw_parts(v, n as usize);
         CStr::from_ptr(slice[0]).to_bytes()
@@ -118,12 +120,12 @@ byond!(utf8_copy: text, start, end; {
     }
 });
 
-byond!(utf8_replace: text, to, from, start, end; {
+byond!(utf8_replace: text, from, to, start, end; {
     match byte_bounds(text, start, end) {
         Some((start, end)) => {
             let sub = &text[start .. end];
             let mut out = text[.. start].to_owned();
-            out.push_str(&sub.replace(to, from));
+            out.push_str(&sub.replace(from, to));
             out.push_str(&text[end ..]);
             out
         },
@@ -139,6 +141,9 @@ byond!(utf8_lowercase: text; {
     text.to_lowercase()
 });
 
+byond!(utf8_reverse: text; {
+    text.chars().rev().collect::<String>()
+});
 
 /// Function to get the byte bounds for copytext, findtext and replacetext.
 /// Goes by one-indexing and correctly handles negatives.
@@ -355,4 +360,12 @@ fn test_strict_ascii() {
     assert_eq!(test_byond_call_args(strict_ascii, &["Hello"]), "Hello");
     assert_eq!(test_byond_call_args(strict_ascii, &["Hell👏"]), "Hell");
     assert_eq!(test_byond_call_args(strict_ascii, &["Héllö"]), "Hll");
+}
+
+#[test]
+fn test_utf8_reverse() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_reverse, &["Hello!"]), "!olleH");
+    assert_eq!(test_byond_call_args(utf8_reverse, &["Hello!👏"]),
+               "👏!olleH");
 }

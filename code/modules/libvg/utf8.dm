@@ -29,8 +29,8 @@
 /proc/utf8_copy(var/text, var/start=1, var/end=0)
 	return LIBVG("utf8_copy", text, "[start]", "[end]")
 
-/proc/utf8_replace(var/text, var/to, var/from, var/start=1, var/end=0)
-	return LIBVG("utf8_replace", text, to, from, "[start]", "[end]")
+/proc/utf8_replace(var/text, var/from, var/to_, var/start=1, var/end=0)
+	return LIBVG("utf8_replace", text, from, to_, "[start]", "[end]")
 
 /proc/utf8_index(var/text, var/index)
 	return LIBVG("utf8_index", text, "[index]")
@@ -45,3 +45,9 @@
 // Useful for things which BYOND touches itself like object names.
 /proc/strict_ascii(var/text)
 	return LIBVG("strict_ascii", text)
+
+/proc/utf8_capitalize(var/text)
+	return utf8_uppercase(utf8_index(text, 1)) + utf8_copy(text, 2)
+
+/proc/utf8_reverse(var/text)
+	return LIBVG("utf8_reverse", text)
