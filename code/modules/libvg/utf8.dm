@@ -21,5 +21,16 @@
 /proc/utf8_len(var/message)
 	return text2num(LIBVG("utf8_len", message))
 
-/proc/utf8_find(var/message)
-	return text2num(LIBVG("utf8_len", message))
+#define utf8_byte_len(a) (length(a))
+
+/proc/utf8_find(var/haystack, var/needle, var/start=1, var/end=0)
+	return text2num(LIBVG("utf8_find", haystack, needle, "[start]", "[end]"))
+
+/proc/utf8_copy(var/text, var/start=1, var/end=0)
+	return LIBVG("utf8_copy", text, "[start]", "[end]")
+
+/proc/utf8_replace(var/text, var/to, var/from, var/start=1, var/end=0)
+	return LIBVG("utf8_replace", text, to, from, "[start]", "[end]")
+
+/proc/utf8_index(var/text, var/index)
+	return LIBVG("utf8_index", text, "[index]")

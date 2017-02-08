@@ -48,16 +48,15 @@ pub extern "C" fn utf8_sanitize(n: libc::c_int,
 
 /// Returns the length of a UTF-8 string.
 byond!(utf8_len: text; {
-    // Count an iterator over characters.
     format!("{}", text.chars().count())
 });
 
+/* You saw nothing.
 /// Returns the BYTE length of a UTF-8 string.
 byond!(utf8_len_bytes: text; {
-    // Count an iterator over characters.
     format!("{}", text.len())
 });
-
+*/
 
 byond!(utf8_find: haystack, needle, start, end; {
     match byte_bounds(haystack, start, end) {
@@ -100,14 +99,14 @@ byond!(utf8_index: text, index; {
     &text[byte .. iter.next().map(|(i, _)| i).unwrap_or(text.len())]
 });
 
-byond!(utf8_copytext: text, start, end; {
+byond!(utf8_copy: text, start, end; {
     match byte_bounds(text, start, end) {
         Some((start, end)) => &text[start .. end],
         None => ""
     }
 });
 
-byond!(utf8_replacetext: text, to, from, start, end; {
+byond!(utf8_replace: text, to, from, start, end; {
     match byte_bounds(text, start, end) {
         Some((start, end)) => {
             let sub = &text[start .. end];
@@ -265,15 +264,6 @@ fn test_utf8_len() {
 }
 
 #[test]
-fn test_utf8_byte_len() {
-    use byond::call::test_byond_call_args;
-    assert_eq!(test_byond_call_args(utf8_len_bytes, &["abc"]), "3");
-    assert_eq!(test_byond_call_args(utf8_len_bytes, &[""]), "0");
-    assert_eq!(test_byond_call_args(utf8_len_bytes, &["👏àbç👏défgh"]),
-               "19");
-}
-
-#[test]
 fn test_utf8_index() {
     use byond::call::test_byond_call_args;
     assert_eq!(test_byond_call_args(utf8_index, &["abc", "1"]), "a");
@@ -288,42 +278,40 @@ fn test_utf8_index() {
 }
 
 #[test]
-fn test_utf8_copytext() {
+fn test_utf8_copy() {
     use byond::call::test_byond_call_args;
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "1", "5"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "1", "5"]),
                "abcd");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["a👏cdefgh", "1", "5"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["a👏cdefgh", "1", "5"]),
                "a👏cd");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "-5", "-1"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "-5", "-1"]),
                "defg");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "120", "200"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "120", "200"]),
                "");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "1", "2000"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "1", "2000"]),
                "abcdefgh");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "5", "1"]),
-               "");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "5", "0"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "5", "1"]), "");
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "5", "0"]),
                "efgh");
-    assert_eq!(test_byond_call_args(utf8_copytext, &["abcdefgh", "5", "-2"]),
+    assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "5", "-2"]),
                "ef")
 }
 
 #[test]
-fn test_utf8_replacetext() {
+fn test_utf8_replace() {
     use byond::call::test_byond_call_args;
-    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "z", "1", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "z", "1", "0"]),
                "Hellz wzrld!");
-    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "👏", "1", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "👏", "1", "0"]),
                "Hell👏 w👏rld!");
-    assert_eq!(test_byond_call_args(utf8_replacetext,
-                                    &["Hell👏 w👏rld!", "👏", "a", "1", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hell👏 w👏rld!", "👏", "a", "1", "0"]),
                "Hella warld!");
-    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "👏", "a", "1", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "👏", "a", "1", "0"]),
                "Hello world!");
-    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "a", "7", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "a", "7", "0"]),
                "Hello warld!");
-    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "o", "aAa", "7", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "aAa", "7", "0"]),
                "Hello waAarld!");
-    assert_eq!(test_byond_call_args(utf8_replacetext, &["Hello world!", "ll", "aAa", "1", "0"]),
+    assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "ll", "aAa", "1", "0"]),
                "HeaAao world!");
 }
