@@ -1855,6 +1855,10 @@ mob/proc/on_foot()
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+	spawn(duration - 1)
+		for(var/atom/movable/AM in contents)
+			drop_item(AM, force_drop = 1)
+
 	spawn(duration + 1)
 		regenerate_icons()
 

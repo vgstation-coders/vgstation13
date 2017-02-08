@@ -178,6 +178,24 @@
 
 	screen_loc = ui_alien_master
 
+/obj/screen/movable/spell_master/racial
+	name = "Racial Abilities"
+	icon_state = "racial_spell_ready"
+
+	open_state = "genetics_open"
+	closed_state = "genetics_closed"
+
+	screen_loc = ui_racial_master
+
+/obj/screen/movable/spell_master/time
+	name = "Time Powers"
+	icon_state = "time_spell_ready"
+
+	open_state = "time_open"
+	closed_state = "time_closed"
+
+	screen_loc = ui_alien_master
+
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////
