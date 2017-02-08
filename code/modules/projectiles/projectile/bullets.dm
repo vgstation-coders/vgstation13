@@ -9,6 +9,7 @@
 	flag = "bullet"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	var/embed = 1
+	var/embed_message = TRUE
 
 /obj/item/projectile/bullet/on_hit(var/atom/target, var/blocked = 0)
 	if (..(target, blocked))
@@ -756,33 +757,27 @@
 	damage = 10
 	penetration = 0
 	rotate = 0
+	var/total_amount_to_fire = 9
+	var/type_to_fire = /obj/item/projectile/bullet/buckshot
 	var/is_child = 0
 
 /obj/item/projectile/bullet/buckshot/New(atom/T, var/C = 0)
 	..(T)
 	is_child = C
 
+/obj/item/projectile/bullet/buckshot/proc/get_radius_turfs(turf/T)
+	return orange(T,1)
+
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
 		var/list/turf/possible_turfs = list()
-		for(var/turf/T in orange(original,1))
+		for(var/turf/T in get_radius_turfs(original))
 			possible_turfs += T
-		for(var/I = 1; I <=8; I++)
-			var/obj/item/projectile/bullet/buckshot/B = new (src.loc, 1)
+		for(var/I = 1; I <=total_amount_to_fire-1; I++)
+			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
 			var/turf/targloc = pick(possible_turfs)
-			B.original = targloc
-			var/turf/curloc = get_turf(src)
 			B.forceMove(get_turf(src))
-			B.starting = starting
-			B.shot_from = shot_from
-			B.silenced = silenced
-			B.current = curloc
-			B.OnFired()
-			B.yo = targloc.y - curloc.y
-			B.xo = targloc.x - curloc.x
-			B.inaccurate = inaccurate
-			spawn()
-				B.process()
+			B.launch_at(targloc,from = shot_from)
 	..()
 
 /obj/item/projectile/bullet/invisible
@@ -820,3 +815,13 @@
 	icon_state = "sabonana"
 	damage *= 2
 	peel_dropped = TRUE
+
+/obj/item/projectile/bullet/buckshot/bullet_storm
+	name = "tiny pellet"
+	total_amount_to_fire = 100
+	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
+	custom_impact = 1
+	embed_message = FALSE
+
+/obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
+	return circlerangeturfs(original,5)
