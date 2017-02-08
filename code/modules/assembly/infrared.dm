@@ -23,7 +23,8 @@
 		"On" = "on;number"
 	)
 
-	New() qdel(src) // Why is this even
+	New()
+		qdel(src) // Why is this even
 
 
 ///obj/item/device/assembly/infra/describe()

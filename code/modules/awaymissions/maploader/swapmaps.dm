@@ -296,7 +296,8 @@ swapmap
 					else
 						defarea.contents+=T
 					// clear the turf
-					for(var/obj/O in T) qdel(O)
+					for(var/obj/O in T)
+						qdel(O)
 					for(var/mob/M in T)
 						if(!M.key)
 							qdel(M)
