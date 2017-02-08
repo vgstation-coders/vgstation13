@@ -14,7 +14,7 @@
 					if(1)
 						if(H.waterlevel >= 5)
 							H.waterlevel -= rand(1,5)
-							H.nutrilevel--
+						H.nutrilevel--
 					if(2)
 						H.weed_coefficient++
 						H.weedlevel++
