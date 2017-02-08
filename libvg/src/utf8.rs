@@ -1,5 +1,6 @@
 use byond::call::return_to_byond;
-use encoding::all::WINDOWS_1252;
+use encoding::all::{WINDOWS_1252, ASCII};
+use encoding::Encoding;
 use encoding::label::encoding_from_windows_code_page;
 use encoding::types::DecoderTrap;
 use libc;
@@ -44,6 +45,17 @@ pub extern "C" fn utf8_sanitize(n: libc::c_int,
     };
 
     return_to_byond(&text).unwrap_or(null())
+}
+
+/// Removes non-ASCII characters from the input string.
+#[no_mangle]
+pub extern "C" fn strict_ascii(n: libc::c_int, v: *const *const libc::c_char) -> *const libc::c_char {
+    let bytes = unsafe {
+        let slice = slice::from_raw_parts(v, n as usize);
+        CStr::from_ptr(slice[0]).to_bytes()
+    };
+
+    return_to_byond(ASCII.decode(bytes, DecoderTrap::Ignore).unwrap()).unwrap_or(null())
 }
 
 /// Returns the length of a UTF-8 string.
@@ -118,6 +130,15 @@ byond!(utf8_replace: text, to, from, start, end; {
         None => text.to_string()
     }
 });
+
+byond!(utf8_uppercase: text; {
+    text.to_uppercase()
+});
+
+byond!(utf8_lowercase: text; {
+    text.to_lowercase()
+});
+
 
 /// Function to get the byte bounds for copytext, findtext and replacetext.
 /// Goes by one-indexing and correctly handles negatives.
@@ -314,4 +335,24 @@ fn test_utf8_replace() {
                "Hello waAarld!");
     assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "ll", "aAa", "1", "0"]),
                "HeaAao world!");
+}
+
+#[test]
+fn test_utf8_uppercase() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_uppercase, &["Hello"]), "HELLO");
+}
+
+#[test]
+fn test_utf8_lowercase() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(utf8_lowercase, &["Hello"]), "hello");
+}
+
+#[test]
+fn test_strict_ascii() {
+    use byond::call::test_byond_call_args;
+    assert_eq!(test_byond_call_args(strict_ascii, &["Hello"]), "Hello");
+    assert_eq!(test_byond_call_args(strict_ascii, &["Hell👏"]), "Hell");
+    assert_eq!(test_byond_call_args(strict_ascii, &["Héllö"]), "Hll");
 }

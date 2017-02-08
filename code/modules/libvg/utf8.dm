@@ -34,3 +34,12 @@
 
 /proc/utf8_index(var/text, var/index)
 	return LIBVG("utf8_index", text, "[index]")
+
+/proc/utf8_uppercase(var/text)
+	return LIBVG("utf8_uppercase", text)
+
+/proc/utf8_lowercase(var/text)
+	return LIBVG("utf8_lowercase", text)
+
+/proc/strict_ascii(var/text)
+	return LIBVG("strict_ascii", text)

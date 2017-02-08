@@ -1,5 +1,8 @@
 # What's this?
-This is a [Rust](https://www.rust-lang.org)-based library that is invoked throughout the /vg/station code.
+This is a [Rust](https://www.rust-lang.org)-based library that is invoked throughout the /vg/station13 code.
+
+# Uses:
+* UTF-8 handling.
 
 # Building
 First of all, you're gonna need to install Rust. The website (linked above) has the Rustup installer which you can use to easily install the Rust toolchain. If you are on a 64-bit system it'll probably install `x86_64` for you, though because BYOND is stuck in the stone age you need to compile for `i686` instead. To install the `i686` version of the toolchain, simple run:
