@@ -504,13 +504,13 @@
 		return
 	B.taste_blood()
 
-/datum/unlockable/borer/head/verb_unlock/xray
-	id = "xray"
-	name = "High-Energy Vision"
-	desc = "Learn how to expend chemicals constantly in order to convert visual data from your host's eyes into the X-ray spectrum."
+/datum/unlockable/borer/head/verb_unlock/night_vision
+	id = "night_vision"
+	name = "Night Vision"
+	desc = "Learn how to expend chemicals constantly in order to convert visual data from your host's eyes into the infrared spectrum."
 	cost = 200
 	time = 2 MINUTES
-	verb_type = /obj/item/verbs/borer/attached_head/xray_vision
+	verb_type = /obj/item/verbs/borer/attached_head/night_vision
 	give_when_attached=1
 	prerequisites=list("farsight")
 
