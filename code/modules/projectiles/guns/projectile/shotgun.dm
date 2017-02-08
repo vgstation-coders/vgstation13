@@ -21,7 +21,7 @@
 
 	gun_flags = 0
 
-/obj/item/weapon/gun/projectile/shotgun/pump/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/shotgun/pump/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
 	var/atom/newtarget = target
 	if(!wielded)
 		newtarget = get_inaccuracy(target,1+recoil) //Inaccurate when not wielded
@@ -165,7 +165,7 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
 	var/atom/newtarget = target
 	if(!wielded && w_class > W_CLASS_MEDIUM)
 		newtarget = get_inaccuracy(target,1+recoil)
