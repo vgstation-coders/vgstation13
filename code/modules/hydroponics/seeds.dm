@@ -9,7 +9,6 @@
 	var/seed_type
 	var/datum/seed/seed
 	var/modified = 0
-	var/hydroflags = 0 // HYDRO_*, used for no-fruit exclusion lists, at the moment.
 
 /obj/item/seeds/New()
 	while(!plant_controller)
@@ -379,7 +378,7 @@
 	name = "packet of cinnamomum seeds"
 	seed_type = "cinnamomum"
 	vending_cat = "trees"
-
+	
 /obj/item/seeds/test
 	name = "packet of testing data seed"
 	seed_type = "test"
@@ -399,43 +398,36 @@
 	name = "packet of breadfruit seeds"
 	seed_type = "breadfruit"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 /obj/item/seeds/woodapple
 	name = "packet of woodapple seeds"
 	seed_type = "woodapple"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 /obj/item/seeds/chickenshroom
 	name = "packet of chicken-of-the-stars spores"
 	seed_type = "chickenshroom"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 /obj/item/seeds/garlic
 	name = "packet of garlic growths"
 	seed_type = "garlic"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 /obj/item/seeds/pitcher
 	name = "tissue culture of slipping pitchers"
 	seed_type = "pitcher"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 /obj/item/seeds/aloe
 	name = "packet of aloe vera seeds"
 	seed_type = "aloe"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 /obj/item/seeds/vaporsac
 	name = "packet of vapor sac spores"
 	seed_type = "vaporsac"
 	vending_cat = "Vox hydroponics"
-	hydroflags = HYDRO_VOX
 
 // Chili plants/variants.
 /datum/seed/chili
