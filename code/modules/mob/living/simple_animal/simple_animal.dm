@@ -92,7 +92,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	universal_understand = 1
 
 	// Whether or not this animal, when controlled by players, can open doors.
-	var/can_open_doors = 0
+	var/can_force_doors = 0
 
 	var/life_tick = 0
 	var/list/colourmatrix = list()

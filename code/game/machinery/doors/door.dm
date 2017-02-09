@@ -111,7 +111,7 @@ var/list/all_doors = list()
 		open()
 	else if(isanimal(user))
 		var/mob/living/simple_animal/SA = user
-		if(SA.can_open_doors)
+		if(SA.can_force_doors)
 			open()
 	else if(!operating)
 		denied()
@@ -179,7 +179,7 @@ var/list/all_doors = list()
 			return open()
 	else if(isanimal(user))
 		var/mob/living/simple_animal/SA = user
-		if(SA.can_open_doors)
+		if(SA.can_force_doors)
 			open()
 
 	if(horror_force(user))
