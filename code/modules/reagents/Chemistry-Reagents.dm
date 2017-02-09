@@ -5349,3 +5349,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		holder.isolate_reagent(BLOCKIZINE)
 		volume = holder.maximum_volume
 		holder.update_total()
+
+datum/reagent/fishbleach
+	name = "Fish Bleach"
+	id = FISHBLEACH
+	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
+	reagent_state = LIQUID
+	color = "#12A7C9"
+
+/datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	H.color = "#12A7C9"
+	return
