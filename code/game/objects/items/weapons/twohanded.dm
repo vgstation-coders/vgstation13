@@ -316,3 +316,49 @@
 			user.regenerate_icons()
 			var/client/C = user.client
 			C.changeView(C.view - 7)
+
+/obj/item/weapon/bloodlust
+	icon_state = "bloodlust0"
+	name = "high-frequency pincer blade \"bloodlust\""
+	desc = "A scissor-like weapon made using two high-frequency machetes. Don't run with it in your hands."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 17
+	throwforce = 3
+	throw_speed = 1
+	throw_range = 5
+	attack_delay = 25 // Heavy.
+	w_class = W_CLASS_LARGE
+	flags = FPRINT | TWOHANDABLE
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
+	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+
+/obj/item/weapon/bloodlust/update_wield(mob/user)
+	..()
+	icon_state = "bloodlust[wielded ? 1 : 0]"
+	item_state = icon_state
+	force = wielded ? 34 : initial(force)
+	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE : initial(sharpness_flags)
+	sharpness = wielded ? 2 : initial(sharpness)
+	playsound(user, wielded ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
+	if(user)
+		user.update_inv_hands()
+
+/obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
+	if(wielded && istype(target, /obj/effect/plantsegment)) // Scissors are good at cutting plants.
+		var/obj/effect/plantsegment/P = istype(target, /obj/effect/plantsegment)
+		P.die_off()
+	if(isliving(target))
+		playsound(target, get_sfx("machete_hit"),50, 0)
+	if(clumsy_check(user) && prob(50))
+		to_chat(user, "<span class='warning'>Son of a bitch... You... got yourself.</span>")
+		playsound(target, get_sfx("machete_hit"),50, 0)
+		user.take_organ_damage(wielded ? 34 : 17)
+		return
+	..()
+
+/obj/item/weapon/bloodlust/IsShield()
+	if(wielded)
+		return 1
+	else
+		return 0
