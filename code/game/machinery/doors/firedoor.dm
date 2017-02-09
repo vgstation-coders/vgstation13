@@ -217,7 +217,7 @@ var/global/list/alert_overlays_global = list()
 	return attackby(null, user)
 
 /obj/machinery/door/firedoor/attack_animal(mob/user as mob)
-	if(istype(user, /mob/living/simple_animal)
+	if(istype(user, /mob/living/simple_animal))
 		var/mob/living/simple_animal/SA = user
 		if(SA.can_force_doors)
 			force_open(user)

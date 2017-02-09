@@ -7,8 +7,7 @@
     icon_state = "black"
     density = 1
 
-    var/ticks_not_whispered = 0
-    var/next_whisper = 300
+    var/next_whisper = 30 SECONDS
     var/whispers = list("...bring us flesh...", "...make us whole...", "...we must be whole...", "...join us in unity...", "...one mind, one soul, one flesh...", "...MAKE US WHOLE...")
     var/list/mob/dead/observer/candidates = list()
 
@@ -82,12 +81,10 @@
 
 
 /obj/machinery/necromarker/process()
-    if(ticks_not_whispered > next_whisper)
-        ticks_not_whispered = 0
+    if(next_whisper >= world.time)
         visible_message("[pick(whispers)]")
         next_whisper = rand(NECROMARKER_MIN_WHISPER_INTERVAL, NECROMARKER_MAX_WHISPER_INTERVAL)
-    else
-        ticks_not_whispered++
+        next_whisper += world.time
 
 /obj/machinery/necromarker/Destroy()
     candidates = null
