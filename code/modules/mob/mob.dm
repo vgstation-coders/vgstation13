@@ -1760,6 +1760,12 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/apply_vision_overrides()
+	if(see_in_dark_override)
+		see_in_dark = see_in_dark_override
+	if(see_invisible_override)
+		see_invisible = see_invisible_override
+
 /mob/actual_send_to_future(var/duration)
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
