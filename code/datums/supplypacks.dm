@@ -861,7 +861,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/fourtyfive
 	name = "NT USP pack"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
-					/obj/item/weapon/gun/projectile/sec)
+					/obj/item/weapon/gun/projectile/sec,
+					/obj/item/voucher/free_item/hot_drink,
+					/obj/item/voucher/free_item/snack)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = ".45 pistols crate"
