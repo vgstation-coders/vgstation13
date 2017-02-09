@@ -484,6 +484,71 @@
 	..()
 
 
+/datum/disease2/effect/spiky_skin
+	name = "Porokeratosis Acanthus"
+	stage = 2
+	max_count = 1
+	var/skip = FALSE
+
+/datum/disease2/effect/spiky_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have spiky skin if you don't have skin at all.
+			skip = TRUE
+			return
+	to_chat(mob, "<span class='warning'>Your skin feels a little prickly.</span>")
+
+/datum/disease2/effect/spiky_skin/deactivate(var/mob/living/carbon/mob)
+	if(!skip)
+		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
+	..()
+
+/datum/disease2/effect/spiky_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+	if(!count || skip)
+		return
+	var/datum/organ/external/E
+	var/mob/living/carbon/human/H
+	if(toucher == mob)	//we bumped into someone else
+		if(ishuman(touched))
+			H = touched
+	else	//someone else bumped into us
+		if(ishuman(toucher))
+			H = toucher
+	if(H)
+		var/list/have_checked = list()
+		while(!E || (E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
+			E = pick(H.organs)
+			if(!(E in have_checked))
+				have_checked.Add(E)
+			if(have_checked.len == H.organs.len)
+				E = null
+				break
+	if(toucher == mob)
+		if(E)
+			to_chat(mob, "<span class='warning'>As you bump into \the [touched], your spines dig into \his [E.display_name]!</span>")
+			E.take_damage(5)
+		else
+			to_chat(mob, "<span class='warning'>As you bump into \the [touched], your spines dig into \him!</span>")
+			var/mob/living/L = touched
+			if(istype(L) && !istype(L, /mob/living/silicon))
+				L.apply_damage(5)
+		var/mob/M = touched
+		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([mob] bumped into [M])", admin_warn = FALSE)
+	else
+		if(E)
+			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \his [E.display_name]!</span>")
+			to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], \his spines dig into your [E.display_name]!</span>")
+			E.take_damage(5)
+		else
+			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \him!</span>")
+			to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], \his spines dig into you!</span>")
+			var/mob/living/L = toucher
+			if(istype(L) && !istype(L, /mob/living/silicon))
+				L.apply_damage(5)
+		var/mob/M = touched
+		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([M] bumped into [mob])", admin_warn = FALSE)
+
+
 ////////////////////////STAGE 3/////////////////////////////////
 
 
