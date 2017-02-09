@@ -92,6 +92,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	universal_understand = 1
 
 	// Whether or not this animal, when controlled by players, can open doors.
+	// 0 = can't
+	// 1 = can open unbolted doors after a time
+	// 2 = can open bolted, welded doors after a time
 	var/can_force_doors = 0
 
 	var/life_tick = 0

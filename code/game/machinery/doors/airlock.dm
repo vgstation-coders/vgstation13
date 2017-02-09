@@ -1063,6 +1063,24 @@ About the new airlock wires panel:
 		visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
 		density ? open(1) : close(1)
 
+/obj/machinery/door/airlock/attack_animal(mob/user as mob)
+	if(isElectrified() && Adjacent(user))
+		shock(user, 100)
+	if(istype(user, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = user
+		if(locked || welded || jammed || SA.can_force_doors != 2)
+			to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
+		else if (SA.can_force_doors > 0)
+			to_chat(user, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
+			visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
+							"<span class='notice'>You hear groaning metal and overworked motors.</span>")
+			if(do_after(user,src,100))
+				if(locked || welded || jammed || SA.can_force_doors != 2)) //if it got welded/bolted during the do_after
+					to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
+					return
+				visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
+				density ? open(1) : close(1)
+
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
@@ -1233,11 +1251,12 @@ About the new airlock wires panel:
 	..()
 
 /obj/machinery/door/airlock/open(var/forced=0)
-	if((operating && !forced) || locked || welded)
-		return 0
-	if(!forced)
-		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
+	if(forced != 2)
+		if((operating && !forced) || locked || welded)
 			return 0
+		if(!forced)
+			if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
+				return 0
 	use_power(50)
 	playsound(get_turf(src), soundeffect, pitch, 1)
 	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)

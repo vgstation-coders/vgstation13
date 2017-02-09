@@ -41,11 +41,11 @@
         visible_message("<span class='warning'>[src] spins the flesh and bone of [M] into a hellish monstrosity!</span>")
         M.gib()
         if(user)
-            message_admins("[user]/[user.ckey] forcefully turned [M]/[M.ckey] into a necromorph. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc.x];Y=[loc.y];Z=[loc.z]'>JMP</A>)")
-            log_game("[user]/[user.ckey] forcefully turned [M]/[M.ckey] into a necromorph.")
+            message_admins("[key_user(user)] forcefully turned [key_user(M)] into a necromorph. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc.x];Y=[loc.y];Z=[loc.z]'>JMP</A>)")
+            log_game("[key_user(user)] forcefully turned [key_user(M)] into a necromorph.")
         else
-            message_admins("[M]/[M.ckey] turned into a necromorph via a marker. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc.x];Y=[loc.y];Z=[loc.z]'>JMP</A>)")
-            log_game("[M]/[M.ckey] turned into a necromorph.")
+            message_admins("[key_user(M)] turned into a necromorph via a marker. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc.x];Y=[loc.y];Z=[loc.z]'>JMP</A>)")
+            log_game("[key_user(M)] turned into a necromorph.")
 
 /obj/machinery/necromarker/wrenchAnchor(var/mob/user)
     var/wasanchored = anchored
@@ -60,7 +60,7 @@
         visible_message("<span class='info'>[src]'s glow slowly diminishes.'</span>")
 
 /obj/machinery/necromarker/attack_hand(mob/user)
-    if(!isobserver(user) && !issilicon(user))
+    if(!isobserver(user))
         if(Adjacent(user))
             Consume(user)
     else
