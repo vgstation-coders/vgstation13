@@ -108,6 +108,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/broke = 0 //To check if it's been broken or not
+	var/canwield = 1
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
@@ -126,7 +127,7 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attack_self(mob/living/user as mob)
-	if(!wielded)
+	if(!wielded && canwield)
 		wield(user)
 		src.update_wield(user)
 	else if(!broke)
@@ -203,7 +204,8 @@
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-
+	canwield = 0
+/*
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/attack_self(mob/living/user as mob)
 	if(!broke)
 		var/i = 0
@@ -234,3 +236,4 @@
 	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 		to_chat(usr, "<span class='notice'>\The [src] is empty.</span>")
 		return
+*/
