@@ -1047,7 +1047,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("s_tone")
 					s_tone = random_skin_tone(species)
 				if("bag")
-					backbag = rand(1,4)
+					backbag = rand(1,5)
 				/*if("skin_style")
 					h_style = random_skin_style(gender)*/
 				if("all")
@@ -1627,7 +1627,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		underwear = 0 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me. //HAH NOW NO MORE MAGIC CLONING UNDIES
 	character.underwear = underwear
 
-	if(backbag > 4 || backbag < 1)
+	if(backbag > 5 || backbag < 1)
 		backbag = 1 //Same as above
 	character.backbag = backbag
 
