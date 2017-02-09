@@ -205,35 +205,3 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	canwield = 0
-/*
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/attack_self(mob/living/user as mob)
-	if(!broke)
-		var/i = 0
-		if(clumsy_check && clumsy_check(usr))
-			usr.visible_message("<span class='danger'>[usr] literally breaks \the [src.name]!.</span>", "<span class='danger'>You literally break the [src.name].</span>")
-			playsound(get_turf(src), 'sound/effects/meteorimpact.ogg', 50, 1)
-			icon_state = "literallybroken"
-			src.become_defective()
-			return
-		for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
-			loaded_shell.forceMove(get_turf(src))
-			loaded_shell.pixel_x = min(-3 + (i*4),15) * PIXEL_MULTIPLIER
-			loaded_shell.pixel_y = min( 3 - (i*4),15) * PIXEL_MULTIPLIER
-			if(loaded_shell in loaded)
-				loaded -= loaded_shell
-			i++
-		to_chat(usr, "<span class='notice'>You break \the [src].</span>")
-		playsound(get_turf(src), 'sound/weapons/shotgun_break.ogg', 50, 1)
-		broke = 1
-		icon_state = "[initial(icon_state)]broke"
-		update_icon()
-	else if(broke)
-		to_chat(usr, "<span class='notice'>You put \the [src] back to its original position.</span>")
-		playsound(get_turf(src), 'sound/weapons/shotgun_unbreak.ogg', 50, 1)
-		broke = 0
-		icon_state = "[initial(icon_state)]"
-		update_icon()
-	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
-		to_chat(usr, "<span class='notice'>\The [src] is empty.</span>")
-		return
-*/
