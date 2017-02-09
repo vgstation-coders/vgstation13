@@ -369,4 +369,4 @@ var/const/MAX_ACTIVE_TIME = 400
 	return 1
 
 /obj/item/clothing/mask/facehugger/acidable()
-	return 0
+	return sterile
