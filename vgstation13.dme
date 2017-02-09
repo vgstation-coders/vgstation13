@@ -622,6 +622,7 @@
 #include "code\game\objects\items\bodybag.dm"
 #include "code\game\objects\items\candle.dm"
 #include "code\game\objects\items\changeling_vial.dm"
+#include "code\game\objects\items\constructionpermit.dm"
 #include "code\game\objects\items\contraband.dm"
 #include "code\game\objects\items\crayons.dm"
 #include "code\game\objects\items\debug.dm"

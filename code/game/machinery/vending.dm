@@ -98,7 +98,7 @@ var/global/num_vending_terminals = 1
 	accepted_coins = list(
 			/obj/item/weapon/coin,
 			/obj/item/weapon/reagent_containers/food/snacks/chococoin
-			) 
+			)
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
@@ -991,7 +991,6 @@ var/global/num_vending_terminals = 1
  */
 
 /*
-
 /obj/machinery/vending/[vendors name here]   // --vending machine template   :)
 	name = ""
 	desc = ""
@@ -1001,7 +1000,6 @@ var/global/num_vending_terminals = 1
 	products = list()
 	contraband = list()
 	premium = list()
-
 */
 
 /*
@@ -1795,6 +1793,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stock_parts/capacitor = 10,
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
+		/obj/item/blueprints/construction_permit = 4
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2393,7 +2392,7 @@ var/global/num_vending_terminals = 1
 	name = "Trader Supply"
 	desc = "Its coin groove has been modified."
 	product_slogans = "Profits."
-	product_ads = "When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma â€” should you tell your partner?"
+	product_ads = "When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
 	products = list (
