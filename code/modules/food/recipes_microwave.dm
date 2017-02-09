@@ -1673,6 +1673,16 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
 
+/datum/recipe/bleachkipper
+	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/robot_parts/head,
+		/obj/item/weapon/handcuffs,
+		/obj/item/toy/crayon/blue
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bleachkipper
+
 /datum/recipe/poissoncru
 	reagents = list(LIMEJUICE = 10)
 	items = list(
@@ -2178,5 +2188,4 @@
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
-
 
