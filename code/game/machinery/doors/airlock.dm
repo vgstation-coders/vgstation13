@@ -1075,7 +1075,7 @@ About the new airlock wires panel:
 			visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
 							"<span class='notice'>You hear groaning metal and overworked motors.</span>")
 			if(do_after(user,src,100))
-				if(locked || welded || jammed || SA.can_force_doors != 2)) //if it got welded/bolted during the do_after
+				if(locked || welded || jammed || SA.can_force_doors != 2) //if it got welded/bolted during the do_after
 					to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
 					return
 				visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
