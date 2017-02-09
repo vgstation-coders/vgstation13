@@ -295,7 +295,7 @@
 				user.visible_message("[user] starts to shave their facial hair with [src].", \
 									 "<span class='notice'>You take a moment to shave your facial hair with [src]...</span>")
 				if(do_after(user, H, 5))
-					user.visible_message("[user] shaves his facial hair clean with [src].", \
+					user.visible_message("[user] shaves \his facial hair clean with [src].", \
 										 "<span class='notice'>You finish shaving with [src]. Fast and clean!</span>")
 					shave(H, location)
 			else
@@ -310,7 +310,7 @@
 			if(H.check_body_part_coverage(HEAD))
 				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
 				return
-			if(H.h_style == "Bald" || H.h_style == "Balding Hair" || H.h_style == "Skinhead")
+			if(H.h_style == "Bald" || H.h_style == "Skinhead")
 				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
 				return
 
@@ -318,7 +318,7 @@
 				user.visible_message("[user] starts to shave their head with [src].", \
 									 "<span class='notice'>You start to shave your head with [src]...</span>")
 				if(do_after(user, H, 5))
-					user.visible_message("[user] shaves his head with [src].", \
+					user.visible_message("[user] shaves \his head with [src].", \
 										 "<span class='notice'>You finish shaving with [src].</span>")
 					shave(H, location)
 			else
