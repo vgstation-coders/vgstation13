@@ -694,9 +694,11 @@
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
 			var/obj/item/I = locate(href_list["listitems"])
-			if(istype(I, /obj/item/clothing/suit/storage/trader))
-				for(var/J in I.contents)
-					to_chat(usr, "<span class='info'>[bicon(src)] \A [J].</span>")
+			var/obj/item/weapon/storage/internal/S = I
+			if(istype(S))
+				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
+					for(var/J in I.contents)
+						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
