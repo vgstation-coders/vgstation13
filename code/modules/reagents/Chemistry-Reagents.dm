@@ -1620,6 +1620,7 @@
 	description = "The properties of this rare metal are not well-known."
 	reagent_state = SOLID
 	color = "#5E02F8" //rgb: 94, 2, 248
+	dupeable = FALSE
 
 /datum/reagent/phazon/on_mob_life(var/mob/living/M)
 	if(..())
