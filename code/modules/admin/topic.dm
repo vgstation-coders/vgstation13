@@ -2932,7 +2932,7 @@
 				message_admins("[key_name_admin(usr)] made the floor LAVA! It'll last [length] seconds and it will deal [damage] damage to everyone.", 1)
 				var/count = 0
 				var/list/lavaturfs = list()
-				for(var/turf/simulated/floor/F in turfs)
+				for(var/turf/simulated/floor/F in world)
 					count++
 					if(!(count % 50000))
 						sleep(world.tick_lag)

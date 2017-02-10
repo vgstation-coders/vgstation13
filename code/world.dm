@@ -141,13 +141,8 @@ var/savefile/panicfile
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	spawn(1)
-		turfs = new/list(maxx*maxy*maxz)
-		world.log << "DEBUG: TURFS LIST LENGTH [turfs.len]"
-		build_turfs_list()
-
-		spawn(9)
-			Master.Setup()
+	spawn(10)
+		Master.Setup()
 
 	for(var/plugin_type in typesof(/plugin))
 		var/plugin/P = new plugin_type()
@@ -502,12 +497,3 @@ proc/establish_old_db_connection()
 		return 1
 
 #undef FAILED_DB_CONNECTION_CUTOFF
-/world/proc/build_turfs_list()
-	var/count = 0
-	for(var/Z = 1 to world.maxz)
-		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000))
-				sleep(world.tick_lag)
-			count++
-			T.initialize()
-			turfs[count] = T
