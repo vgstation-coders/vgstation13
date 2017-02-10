@@ -477,9 +477,9 @@
 		H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/red(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/librarian(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
-		var/obj/item/weapon/storage/bag/plasticbag/shitterbag = new /obj/item/weapon/storage/bag/plasticbag(H)
-		H.put_in_hands(shitterbag)
-		new /obj/item/weapon/barcodescanner(shitterbag)
+		var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
+		H.put_in_hands(P)
+		new /obj/item/weapon/barcodescanner(P)
 		if(H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
