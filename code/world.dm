@@ -146,7 +146,7 @@ var/savefile/panicfile
 			turfs = new/list(maxx*maxy*maxz)
 			world.log << "DEBUG: TURFS LIST LENGTH [turfs.len]"
 		catch
-			to_chat(world, "<span class='danger'>HAHAHAHA REMEMBER TO FUCK BYOND! TIME FOR A REBOOT BECAUSE THE SERVER FAILED TO INITIALIZE!</span>")
+			to_chat(world, "<span class='danger big'>HAHAHAHA REMEMBER TO FUCK BYOND! TIME FOR A REBOOT BECAUSE THE SERVER FAILED TO INITIALIZE!</span>")
 			world.Reboot()
 			return
 			
