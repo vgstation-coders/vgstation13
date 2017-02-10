@@ -39,7 +39,7 @@
 		//this is largely copypasted from there.
 
 		//handle facial hair (if necessary)
-		var/list/species_facial_hair = valid_sprite_accessories(H.gender, (H.species.name || null), facial_hair_styles_list)
+		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
 		if(species_facial_hair.len)
 			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
 			if(userloc != H.loc)
@@ -49,7 +49,7 @@
 				H.update_hair()
 
 		//handle normal hair
-		var/list/species_hair = valid_sprite_accessories(null, (H.species.name || null), hair_styles_list) //gender intentionally left null so speshul snowflakes can cross-hairdress
+		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null)) //gender intentionally left null so speshul snowflakes can cross-hairdress
 		if(species_hair.len)
 			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
 			if(userloc != H.loc)

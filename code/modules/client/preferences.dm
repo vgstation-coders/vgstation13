@@ -1061,13 +1061,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					else
 						to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
 				if("next_hair_style")
-					h_style = next_list_item(h_style, valid_sprite_accessories(gender, species, hair_styles_list))
+					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
 				if("previous_hair_style")
-					h_style = previous_list_item(h_style, valid_sprite_accessories(gender, species, hair_styles_list))
+					h_style = previous_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
 				if("next_facehair_style")
-					f_style = next_list_item(f_style, valid_sprite_accessories(gender, species, facial_hair_styles_list))
+					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
-					f_style = previous_list_item(f_style, valid_sprite_accessories(gender, species, facial_hair_styles_list))
+					f_style = previous_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("age")
 					var/new_age = input(user, "Choose your character's age:\n([AGE_MIN]-[AGE_MAX])", "Character Preference") as num|null
 					if(new_age)
@@ -1092,7 +1092,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					if(prev_species != species)
 						//grab one of the valid hair styles for the newly chosen species
-						var/list/valid_hairstyles = valid_sprite_accessories(gender, species, hair_styles_list)
+						var/list/valid_hairstyles = valid_sprite_accessories(hair_styles_list, gender, species, HAIRSTYLE_CANTRIP)
 						if(valid_hairstyles.len)
 							h_style = pick(valid_hairstyles)
 						else
@@ -1100,7 +1100,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							h_style = hair_styles_list["Bald"]
 
 						//grab one of the valid facial hair styles for the newly chosen species
-						var/list/valid_facialhairstyles = valid_sprite_accessories(gender, species, facial_hair_styles_list)
+						var/list/valid_facialhairstyles = valid_sprite_accessories(facial_hair_styles_list, gender, species)
 						if(valid_facialhairstyles.len)
 							f_style = pick(valid_facialhairstyles)
 						else
@@ -1171,7 +1171,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							b_hair = hex2num(copytext(new_hair, 6, 8))
 
 				if("h_style")
-					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(null, species, hair_styles_list) //gender intentionally left null so speshul snowflakes can cross-hairdress
+					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
 						h_style = new_h_style
 
@@ -1184,7 +1184,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							b_facial = hex2num(copytext(new_facial, 6, 8))
 
 				if("f_style")
-					var/new_f_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(gender, species, facial_hair_styles_list)
+					var/new_f_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(facial_hair_styles_list, gender, species)
 					if(new_f_style)
 						f_style = new_f_style
 
