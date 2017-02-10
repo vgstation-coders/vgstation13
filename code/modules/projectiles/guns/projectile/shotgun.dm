@@ -193,8 +193,6 @@
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
 			var/sawn = new /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
 			user.put_in_hands(sawn)
-	if(!broke)
-		return
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
 	name = "sawn-off shotgun"
