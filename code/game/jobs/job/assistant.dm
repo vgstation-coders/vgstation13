@@ -28,7 +28,7 @@
 	H.equip_or_collect(new /obj/item/clothing/under/color/grey(H), slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	if(prob(1))
+	if(prob(1) && H.player_age >= 15)
 		H.equip_or_collect(new /obj/item/weapon/storage/bag/plasticbag(H), slot_head)
 	else
 		H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
