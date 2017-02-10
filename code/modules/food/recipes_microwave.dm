@@ -1682,11 +1682,13 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
 
 /datum/recipe/bleachkipper
-	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 10)
+	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 1)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
 		/obj/item/robot_parts/head,
 		/obj/item/weapon/handcuffs,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue,
 		/obj/item/toy/crayon/blue
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bleachkipper
