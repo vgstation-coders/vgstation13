@@ -53,6 +53,7 @@
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"
+#define PHAZON 			"phazon"
 #define ALUMINUM 			"aluminum"
 #define SILICON 			"silicon"
 #define FUEL 			"fuel"

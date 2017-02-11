@@ -346,6 +346,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "emergency floodlight crate"
 	group = "Supplies"
 
+/datum/supply_packs/airbags
+	name = "Personal airbags"
+	contains = list(/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "airbag crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume
@@ -562,8 +574,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/plasmaman_supply
 	name = "Plasmaman supplies"
-	contains = list(/obj/item/clothing/suit/space/plasmaman/assistant,
-					/obj/item/clothing/head/helmet/space/plasmaman/assistant,
+	contains = list(/obj/item/clothing/suit/space/plasmaman,
+					/obj/item/clothing/head/helmet/space/plasmaman,
 					/obj/item/weapon/tank/plasma/plasmaman,
 					/obj/item/clothing/mask/breath)
 	cost = 100
@@ -847,9 +859,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/fourtyfive
-	name = ".45 pistols"
+	name = "NT USP pack"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
-					/obj/item/weapon/gun/projectile/sec)
+					/obj/item/weapon/gun/projectile/sec,
+					/obj/item/voucher/free_item/hot_drink,
+					/obj/item/voucher/free_item/snack)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = ".45 pistols crate"

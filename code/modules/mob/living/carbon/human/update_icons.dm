@@ -1024,6 +1024,7 @@ var/global/list/damage_icon_parts = list()
 	if(client)
 		client.screen |= contents
 		if(hud_used)
+			update_internals()
 			hud_used.hidden_inventory_update() 	//Updates the screenloc of the items on the 'other' inventory bar
 
 
@@ -1165,7 +1166,7 @@ var/global/list/damage_icon_parts = list()
 
 //lower cost way of updating the necessary human icons on equip and unequip
 /mob/living/carbon/human/proc/update_hidden_item_icons(var/obj/item/W)
-	if(!W)
+	if(!W || gcDestroyed)
 		return
 
 	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))

@@ -1,7 +1,7 @@
 /obj/item/clothing/gloves/boxing
 	name = "boxing gloves"
 	desc = "Because you really needed another excuse to punch your crewmates."
-	icon_state = "boxing"
+	icon_state = "boxingred"
 	item_state = "boxingred"
 	species_fit = list(VOX_SHAPED)
 	bonus_knockout = 12

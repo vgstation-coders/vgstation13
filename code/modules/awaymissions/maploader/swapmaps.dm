@@ -178,7 +178,8 @@ swapmap
 					for(var/obj/O in A) del(O)
 					for(var/mob/M in A)
 						if(!M.key)
-							del(M)
+							qdel(M)
+							continue
 						else
 							M.forceMove(null)
 					areas[A.loc]=null
@@ -295,10 +296,12 @@ swapmap
 					else
 						defarea.contents+=T
 					// clear the turf
-					for(var/obj/O in T) del(O)
+					for(var/obj/O in T)
+						qdel(O)
 					for(var/mob/M in T)
 						if(!M.key)
-							del(M)
+							qdel(M)
+							continue
 						else
 							M.forceMove(null)
 					// finish the read

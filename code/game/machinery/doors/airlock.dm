@@ -679,8 +679,8 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (isElectrified())
 		if (istype(mover, /obj/item))
-			var/obj/item/i = mover
-			if (i.materials && (i.materials.getAmount(MAT_IRON) > 0))
+			var/obj/item/I = mover
+			if (I.siemens_coefficient > 0)
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(5, 1, src)
 				s.start()

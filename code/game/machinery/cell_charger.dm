@@ -144,3 +144,114 @@
 		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
 
 	updateicon()
+	
+//Emergency Charger
+//craftable by combining an APC frame, metal rod, cables, and wirecutter
+/datum/construction/reversible/crank_charger
+	result = /obj/item/device/crank_charger
+	steps = list(	
+					//1
+					list(Co_DESC="The cabling is messily strewn throughout.",
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+							Co_START_MSG = "{USER} begin{s} adjusting the wiring in {HOLDER}...",
+							Co_VIS_MSG = "{USER} adjust{s} the wiring in {HOLDER}.",
+							Co_DELAY = 50),
+						Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
+					 		Co_VIS_MSG = "{USER} remove{s} the cables from {HOLDER}.")
+						),
+					//2
+					list(Co_DESC="The metal rod is attached.",
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
+							Co_VIS_MSG = "{USER} add{s} the cables to {HOLDER}.",
+							Co_AMOUNT = 5),
+						Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
+					 		Co_VIS_MSG = "{USER} remove{s} the rod from {HOLDER}.",
+							Co_AMOUNT = 3,
+					 		Co_START_MSG = "{USER} begin{s} slicing through {HOLDER}'s metal rod...",
+					 		Co_DELAY = 30)
+						),
+					//3
+					list(Co_DESC="The frame is ready to use.",
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
+							Co_VIS_MSG = "{USER} add{s} the rod onto {HOLDER}.",
+							Co_AMOUNT = 1)
+						)
+					)
+/datum/construction/reversible/crank_charger/action(atom/used_atom,mob/user)
+	return check_step(used_atom,user)
+
+/datum/construction/reversible/crank_charger/spawn_result(mob/user as mob)
+	if(result)
+		testing("[user] finished a [result]!")
+
+		new result(get_turf(holder))
+
+		qdel (holder)
+		holder = null
+
+	feedback_inc("crank_charger_created",1)
+
+/obj/item/device/crank_charger
+	name = "crank charger"
+	desc = "A device which employs mechanical energy (i.e.: spinning the crank) to restore electrical energy to a power cell."
+	icon = 'icons/obj/power.dmi'
+	icon_state = "crankcharger"
+	flags = FPRINT
+	siemens_coefficient = 1
+	force = 5.0
+	w_class = 2.0
+	throwforce = 5.0
+	throw_range = 15
+	throw_speed = 3
+	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_SILICON
+	origin_tech = Tc_POWERSTORAGE + "=2"
+	var/obj/item/weapon/cell/stored = null
+	var/state = 0 //0 if up, 1 if down; only used for icons
+
+/obj/item/device/crank_charger/update_icon()
+	if(stored)
+		icon_state = "crankcharger[state ? "-1" : "-0"]"
+	else
+		icon_state = "crankcharger"
+
+/obj/item/device/crank_charger/examine(mob/user)
+	..()
+	if(stored)
+		to_chat(user,"<span class='info'>The readout displays: [round(stored.charge/stored.maxcharge*100)]%.</span>")
+	else
+		to_chat(user,"<span class='info'>There is no cell loaded.</span>")
+
+/obj/item/device/crank_charger/attackby(obj/item/W, mob/user)
+	if(!stored && istype(W,/obj/item/weapon/cell) && user.drop_item(W,src))
+		stored = W
+		update_icon()
+	else
+		..()
+
+/obj/item/device/crank_charger/attack_self(mob/user)
+	if(stored)
+		if(stored.charge<stored.maxcharge)
+			user.delayNextAttack(1)
+			stored.charge += 10
+			state = !state
+			update_icon()
+			playsound(get_turf(src), 'sound/items/crank.ogg',50,1)
+			if(stored.charge>stored.maxcharge)
+				stored.charge = stored.maxcharge
+	else
+		to_chat(user,"<span class='warning'>There is no cell loaded!</span>")
+
+/obj/item/device/crank_charger/attack_hand(mob/user)
+	if(stored && user.get_inactive_hand() == src)
+		user.put_in_hands(stored)
+		stored = null
+		update_icon()
+	else
+		..()
+		
+/obj/item/device/crank_charger/Destroy()
+	if(stored)
+		qdel(stored)
+		stored = null
+	..()

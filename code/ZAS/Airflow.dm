@@ -458,6 +458,13 @@ mob/living/carbon/human/airflow_hit(atom/A)
 
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
 
+	for(var/i in contents)
+		if(istype(i, /obj/item/airbag))
+			var/obj/item/airbag/airbag = i
+			airbag.deploy(src)
+			b_loss = 0
+			break
+
 	var/head_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_HEAD,"melee"))
 	apply_damage(head_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
 

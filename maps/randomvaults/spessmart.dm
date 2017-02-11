@@ -178,6 +178,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	for(var/obj/item/I in items)
 		if(isnull(I.loc) || I.gcDestroyed)
 			items.Remove(I)
+			message_admins("Spessmart has entered lockdown due to the destruction of \a [I]!")
 
 	on_theft()
 

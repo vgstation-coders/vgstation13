@@ -416,7 +416,8 @@
 
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
-				del(G)
+				qdel(G)
+				mob.grabbed_by.Remove(G)
 			if(G.state == GRAB_AGGRESSIVE)
 				mob.delayNextMove(10)
 				if(!prob(25))
@@ -503,7 +504,7 @@
 			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
-			if(!(newLoc.flags & NOJAUNT))
+			if(!(newLoc.turf_flags & NOJAUNT))
 				mob.forceEnter(newLoc)
 				mob.dir = direct
 			else

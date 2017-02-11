@@ -525,6 +525,14 @@
 /obj/structure/table/flipped
 	flipped = 1
 
+/obj/structure/table/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"flipped",
+		"health")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 /*
  * Wooden tables
  */

@@ -5,11 +5,13 @@
 // Data from the seeds carry over to these grown foods
 // ***********************************************************
 
+var/list/special_fruits = list()
 //Grown foods
 //Subclass so we can pass on values
 /obj/item/weapon/reagent_containers/food/snacks/grown/
 	var/plantname
 	var/potency = -1
+	var/hydroflags = 0
 	var/datum/seed/seed
 	icon = 'icons/obj/harvest.dmi'
 	New(newloc, newpotency)
@@ -18,6 +20,13 @@
 		..()
 		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+
+/proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
+	. = list()
+	for(var/T in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = T
+		if(initial(G.hydroflags) & filter)
+			. += T
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
@@ -612,7 +621,7 @@
 	desc = "Its juices lubricate so well, you might slip through space-time."
 	icon_state = "bluespacetomato"
 	potency = 20
-	origin_tech = "bluespace = 3"
+	origin_tech = Tc_BLUESPACE + "=3"
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
 
@@ -791,6 +800,7 @@
 	icon_state = "chickenshroom"
 	filling_color = "F2E33A"
 	plantname = "chickenshroom"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/garlic
 	name = "garlic"
@@ -798,6 +808,7 @@
 	icon_state = "garlic"
 	filling_color = "EDEDE1"
 	plantname = "garlic"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
 	name = "breadfruit"
@@ -805,6 +816,7 @@
 	icon_state = "breadfruit"
 	filling_color = "EDEDE1"
 	plantname = "breadfruit"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/woodapple
 	name = "woodapple"
@@ -814,6 +826,7 @@
 	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
 	name = "pitcher plant" //results in "slippery pitcher plant"
@@ -821,6 +834,7 @@
 	icon_state = "pitcher"
 	filling_color = "7E8507"
 	plantname = "pitcher"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/aloe
 	name = "aloe vera"
@@ -828,6 +842,7 @@
 	icon_state = "aloe"
 	filling_color = "77BA9F"
 	plantname = "aloe"
+	hydroflags = HYDRO_VOX
 
 // *************************************
 // Complex Grown Object Defines -
@@ -876,7 +891,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
 	..()
-	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)
+	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
@@ -924,9 +939,8 @@
 			current_path = available_fruits[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
 			icon_state = initial(G.icon_state)
-			if(get_turf(src))
-				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
-			sleep(1)
+			sleep(4)
 			if(counter == available_fruits.len)
 				counter = 0
+				available_fruits = shuffle(available_fruits)
 			counter++

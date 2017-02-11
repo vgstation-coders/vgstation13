@@ -302,3 +302,157 @@ obj/item/weapon/banhammer/admin
 	sharpness = 1.2	//a whip can only cut things when it is actually whipping
 	..()
 	sharpness = 0
+
+/obj/item/weapon/macuahuitl
+	name = "wooden paddle"
+	desc = "This doesn't look like it's capable of much damage."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "macuahuitl"
+	item_state = "macuahuitl"
+	hitsound = "sound/weapons/smash.ogg"
+	flags = FPRINT
+	slot_flags = SLOT_BELT
+	force = 2
+	sharpness = 0
+	siemens_coefficient = 1
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("smacks")
+	var/list/blades = list(
+		"blade_1" = null,
+		"blade_2" = null,
+		"blade_3" = null,
+		"blade_4" = null,
+		"blade_5" = null,
+		"blade_6" = null,
+		"blade_7" = null,
+		"blade_8" = null,
+		"blade_9" = null,
+		"blade_10" = null)
+	var/image/base_overlay		//This is a workaround for underlays somehow not showing up when the item is on the UI
+
+/obj/item/weapon/macuahuitl/New()
+	..()
+	base_overlay = new
+	base_overlay.appearance = appearance
+	base_overlay.plane = FLOAT_PLANE
+	overlays += base_overlay
+
+/obj/item/weapon/macuahuitl/Destroy()
+	if(blades.len)
+		for(var/i in blades)
+			blades.Remove(i)
+			qdel(i)
+	..()
+
+/obj/item/weapon/macuahuitl/proc/get_current_blade_count()
+	var/blades_left = 0
+	for(var/i in blades)
+		if(blades[i])
+			blades_left++
+	return blades_left
+
+/obj/item/weapon/macuahuitl/examine(mob/user)
+	..()
+	var/blades_left = get_current_blade_count()
+	if(blades_left)
+		to_chat(user, "<span class='info'>It has [blades_left] blade\s left.</span>")
+
+/obj/item/weapon/macuahuitl/proc/update_blades()
+	if(blades.len)
+		name = "macuahuitl"
+		desc = "Though the blades are sharp, they are also fragile."
+		hitsound = "sound/weapons/bloodyslice.ogg"
+		force = get_current_blade_count() * 2
+		sharpness = 2
+		attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
+		sharpness_flags = SHARP_BLADE | INSULATED_EDGE
+	else
+		name = initial(name)
+		desc = initial(desc)
+		hitsound = initial(hitsound)
+		force = initial(force)
+		sharpness = initial(sharpness)
+		attack_verb = list("smacks")
+		sharpness_flags = 0
+
+/obj/item/weapon/macuahuitl/attack(mob/M, mob/user)
+	..()
+	if(blades.len)
+		for(var/i in blades)
+			var/obj/item/weapon/shard/S = blades[i]
+			var/break_chance = 15
+			if(istype(S, /obj/item/weapon/shard/plasma))
+				break_chance = round(break_chance * 0.66)
+			if(prob(break_chance))
+				break_shard(S, i)
+	update_blades()
+
+/obj/item/weapon/macuahuitl/proc/break_shard(var/obj/item/weapon/shard/to_break, var/slot_index)
+	if(!to_break || !slot_index)
+		return
+	blades[slot_index] = null
+	underlays -= to_break.appearance
+	visible_message("<span class='warning'>One of \the [src]'s blades shatters!</span>")
+	playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 50, 1)
+	qdel(to_break)
+
+/obj/item/weapon/macuahuitl/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/shard))
+		var/slot_index
+		for(var/i in blades)
+			if(!blades[i])
+				slot_index = i
+				break
+		if(!slot_index)
+			to_chat(user, "<span class='notice'>You can't seem to fit another [W.name] into \the [src].</span>")
+			return
+		if(user.drop_item(W, src))
+			to_chat(user, "You press \the [W] into the side of \the [src].")
+			add_shard(W, slot_index)
+
+/obj/item/weapon/macuahuitl/proc/add_shard(var/obj/item/weapon/shard/to_add, var/slot_index)
+	if(!to_add || !slot_index)
+		return
+	blades[slot_index] = to_add
+	playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
+	update_blades()
+	to_add.transform *= 0.5
+	to_add.pixel_x += 5 * PIXEL_MULTIPLIER
+	to_add.pixel_y -= 5 * PIXEL_MULTIPLIER
+	switch(slot_index)
+		if("blade_1")
+			to_add.pixel_x -= 5 * PIXEL_MULTIPLIER
+		if("blade_2")
+			to_add.pixel_y += 5 * PIXEL_MULTIPLIER
+		if("blade_3")
+			to_add.pixel_x -= 8 * PIXEL_MULTIPLIER
+			to_add.pixel_y += 3 * PIXEL_MULTIPLIER
+		if("blade_4")
+			to_add.pixel_y += 8 * PIXEL_MULTIPLIER
+			to_add.pixel_x -= 3 * PIXEL_MULTIPLIER
+		if("blade_5")
+			to_add.pixel_x -= 11 * PIXEL_MULTIPLIER
+			to_add.pixel_y += 6 * PIXEL_MULTIPLIER
+		if("blade_6")
+			to_add.pixel_y += 11 * PIXEL_MULTIPLIER
+			to_add.pixel_x -= 6 * PIXEL_MULTIPLIER
+		if("blade_7")
+			to_add.pixel_x -= 14 * PIXEL_MULTIPLIER
+			to_add.pixel_y += 9 * PIXEL_MULTIPLIER
+		if("blade_8")
+			to_add.pixel_y += 14 * PIXEL_MULTIPLIER
+			to_add.pixel_x -= 9 * PIXEL_MULTIPLIER
+		if("blade_9")
+			to_add.pixel_x -= 17 * PIXEL_MULTIPLIER
+			to_add.pixel_y += 12 * PIXEL_MULTIPLIER
+		else
+			to_add.pixel_y += 17 * PIXEL_MULTIPLIER
+			to_add.pixel_x -= 12 * PIXEL_MULTIPLIER
+	to_add.plane = FLOAT_PLANE
+	underlays += to_add.appearance
+//	if(!base_overlay)
+//		base_overlay = new
+//		base_overlay.appearance = appearance
+//		base_overlay.plane = FLOAT_PLANE
+//		overlays += base_overlay

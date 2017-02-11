@@ -184,6 +184,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.selected.action(src)
 
+	else if(istype(AM,/obj/structure/bed/chair/vehicle/gigadrill))
+		var/obj/structure/bed/chair/vehicle/gigadrill/G = AM
+		G.drill(src)
+
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
 		for(var/trydir in cardinal)
@@ -303,7 +307,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						B = getFromPool(/obj/structure/boulder, src)
 						if(artifact_find)
 							B.artifact_find = artifact_find
-							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] found by [key_name(user)].")
+							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
 					else
 						artifact_debris(1)
 

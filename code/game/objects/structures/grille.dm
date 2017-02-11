@@ -241,6 +241,14 @@
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
 
+/obj/structure/grille/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"health",
+		"broken")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 //Mapping entities and alternatives !
 
 /obj/structure/grille/broken //THIS IS ONLY TO BE USED FOR MAPPING, THANK YOU FOR YOUR UNDERSTANDING

@@ -75,7 +75,6 @@
 	var/speed = 0 //Cause sec borgs gotta go fast //No they dont!
 	var/scrambledcodes = 0 // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
-	var/pose
 	var/lawcheck[1]
 	var/ioncheck[1]
 
@@ -229,7 +228,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -312,11 +311,11 @@
 			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
-		if("Security")
+		if("Peacekeeper")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight 2.0"] = "sleeksecurity"
+			module_sprites["Blue Knight 2.0"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
@@ -848,9 +847,6 @@
 					C.r_arm = new/obj/item/robot_parts/r_arm(C)
 					C.updateicon()
 					new/obj/item/robot_parts/chest(loc)
-					// This doesn't work.  Don't use it.
-					//src.Destroy()
-					// del() because it's infrequent and mobs act weird in qdel.
 					qdel(src)
 			else
 				// Okay we're not removing the cell or an MMI, but maybe something else?
@@ -1402,13 +1398,6 @@
 		state = 1
 	lockcharge = state
 	update_canmove()
-
-/mob/living/silicon/robot/verb/pose()
-	set name = "Set Pose"
-	set desc = "Sets a description which will be shown when someone examines you."
-	set category = "IC"
-
-	pose =  copytext(sanitize(input(usr, "This is [src]. It is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
 	if(triesleft == 0 || !module_sprites.len)

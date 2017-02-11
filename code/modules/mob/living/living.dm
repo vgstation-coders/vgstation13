@@ -1476,3 +1476,60 @@ Thanks.
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
 		return 1
+
+/mob/living/proc/advanced_mutate()
+	color = list(rand(),rand(),rand(),0,
+				rand(),rand(),rand(),0,
+				rand(),rand(),rand(),0,
+				0,0,0,1,
+				0,0,0,0)
+	if(prob(5))
+		eye_blind = rand(0,100)
+	if(prob(10))
+		eye_blurry = rand(0,100)
+	if(prob(5))
+		ear_deaf = rand(0,100)
+	brute_damage_modifier += rand(-5,5)/10
+	burn_damage_modifier += rand(-5,5)/10
+	tox_damage_modifier += rand(-5,5)/10
+	oxy_damage_modifier += rand(-5,5)/10
+	clone_damage_modifier += rand(-5,5)/10
+	brain_damage_modifier += rand(-5,5)/10
+	hal_damage_modifier += rand(-5,5)/10
+
+	movement_speed_modifier += rand(-9,9)/10
+	if(prob(1))
+		universal_speak = !universal_speak
+	if(prob(1))
+		universal_understand = !universal_understand
+
+	maxHealth = rand(50,200)
+	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
+	if(prob(5))
+		cap_calorie_burning_bodytemp = !cap_calorie_burning_bodytemp
+	if(prob(10))
+		calorie_burning_heat_multiplier += rand(-5,5)/10
+	if(prob(10))
+		thermal_loss_multiplier += rand(-5,5)/10
+
+/mob/living/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"maxHealth",
+		"health",
+		"bruteloss",
+		"oxyloss",
+		"toxloss",
+		"fireloss",
+		"cloneloss",
+		"brainloss",
+		"halloss",
+		"hallucination",
+		"meat_taken",
+		"on_fire",
+		"fire_stacks",
+		"specialsauce",
+		"silent",
+		"is_ventcrawling")
+
+	reset_vars_after_duration(resettable_vars, duration)

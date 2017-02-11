@@ -62,10 +62,12 @@
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
+	qdel(on_clickon)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
+	on_clickon = null
 
 	..()
 
@@ -238,6 +240,7 @@
 	on_uattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
+	on_clickon = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -1757,6 +1760,12 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/apply_vision_overrides()
+	if(see_in_dark_override)
+		see_in_dark = see_in_dark_override
+	if(see_invisible_override)
+		see_invisible = see_invisible_override
+
 /mob/actual_send_to_future(var/duration)
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
@@ -1772,6 +1781,60 @@ mob/proc/on_foot()
 	eye_blind = init_eye_blind
 	ear_deaf = init_deaf
 	clear_fullscreen("blind")
+
+/mob/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"lastattacker",
+		"lastattacked",
+		"attack_log",
+		"memory",
+		"sdisabilities",
+		"disabilities",
+		"eye_blind",
+		"eye_blurry",
+		"ear_deaf",
+		"ear_damage",
+		"stuttering",
+		"slurring",
+		"real_name",
+		"blinded",
+		"bhunger",
+		"druggy",
+		"confused",
+		"antitoxs",
+		"sleeping",
+		"resting",
+		"lying",
+		"lying_prev",
+		"canmove",
+		"candrop",
+		"lastpuke",
+		"cpr_time",
+		"bodytemperature",
+		"drowsyness",
+		"dizziness",
+		"jitteriness",
+		"nutrition",
+		"overeatduration",
+		"paralysis",
+		"stunned",
+		"knockdown",
+		"losebreath",
+		"nobreath",
+		"held_items",
+		"back",
+		"internal",
+		"s_active",
+		"wear_mask",
+		"radiation",
+		"stat",
+		"suiciding")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration + 1)
+		regenerate_icons()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

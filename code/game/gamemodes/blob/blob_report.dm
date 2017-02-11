@@ -71,7 +71,7 @@ Message ends."}
 
 
 	proc/count()
-		for(var/turf/T in turfs)
+		for(var/turf/T in world)
 			if(T.z != map.zMainStation)
 				continue
 

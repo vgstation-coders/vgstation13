@@ -690,6 +690,15 @@
 	else if (href_list["lookitem"])
 		var/obj/item/I = locate(href_list["lookitem"])
 		usr.examination(I)
+	else if (href_list["listitems"])
+		var/mob/M = usr
+		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
+			var/obj/item/I = locate(href_list["listitems"])
+			var/obj/item/weapon/storage/internal/S = I
+			if(istype(S))
+				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
+					for(var/J in I.contents)
+						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
@@ -1669,3 +1678,92 @@
 	if(pain_numb)
 		return FALSE
 	return TRUE
+
+/mob/living/carbon/human/advanced_mutate()
+	..()
+	if(prob(10))
+		species.punch_damage = rand(1,5)
+	species.max_hurt_damage = rand(1,10)
+	if(prob(10))
+		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
+
+	species.heat_level_3 = rand(800, 1200)
+	species.heat_level_2 = round(species.heat_level_3 / 2.5)
+	species.heat_level_1 = round(species.heat_level_2 / 1.11)
+	species.cold_level_1 = rand(160, 360)
+	species.cold_level_2 = round(species.cold_level_1 / 1.3)
+	species.cold_level_3 = round(species.cold_level_2 / 1.66)
+
+	if(prob(30))
+		species.darksight = rand(0,8)
+	species.hazard_high_pressure *= rand(5,20)/10
+	species.warning_high_pressure = round(species.hazard_high_pressure / 1.69)
+	species.hazard_low_pressure *= rand(5,20)/10
+	species.warning_low_pressure = round(species.hazard_low_pressure * 2.5)
+	if(prob(5))
+		species.warning_low_pressure = -1
+		species.hazard_low_pressure = -1
+
+	species.brute_mod *= rand(5,20)/10
+	species.burn_mod *= rand(5,20)/10
+
+	if(prob(5))
+		species.flags = rand(0,65535)
+	if(prob(5))
+		species.anatomy_flags = rand(0,65535)
+	if(prob(5))
+		species.chem_flags = rand(0,65535)
+
+/mob/living/carbon/human/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"r_hair",
+		"g_hair",
+		"b_hair",
+		"h_style",
+		"r_facial",
+		"g_facial",
+		"b_facial",
+		"f_style",
+		"r_eyes",
+		"g_eyes",
+		"b_eyes",
+		"s_tone",
+		"lip_style",
+		"wear_suit",
+		"w_uniform",
+		"shoes",
+		"belt",
+		"gloves",
+		"glasses",
+		"head",
+		"ears",
+		"wear_id",
+		"r_store",
+		"l_store",
+		"s_store",
+		"l_ear",
+		"r_ear",
+		"said_last_words",
+		"failed_last_breath",
+		"last_dam",
+		"bad_external_organs",
+		"xylophone",
+		"meatleft",
+		"check_mutations",
+		"lastFart",
+		"last_emote_sound",
+		"decapitated",
+		"organs",
+		"organs_by_name",
+		"internal_organs",
+		"internal_organs_by_name")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+	for(var/datum/organ/internal/O in internal_organs)
+		O.send_to_past(duration)
+	for(var/datum/organ/external/O in organs)
+		O.send_to_past(duration)
+
+	updatehealth()

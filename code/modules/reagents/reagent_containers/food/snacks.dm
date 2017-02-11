@@ -342,6 +342,16 @@
 			if(bitecount >= ANIMALBITECOUNT)
 				qdel(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"bitecount",
+		"eatverb",
+		"wrapped",
+		"deepfried")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /// FOOD END
@@ -4219,7 +4229,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange/New()
 	..()
-	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, "tricordazine"=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1)
+	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, TRICORDRAZINE=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1,
+	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
 
@@ -4358,10 +4369,10 @@
 			current_path = available_snacks[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
 			icon_state = initial(S.icon_state)
-			playsound(src, 'sound/misc/click.ogg', 50, 1)
-			sleep(1)
+			sleep(4)
 			if(counter == available_snacks.len)
 				counter = 0
+				available_snacks = shuffle(available_snacks)
 			counter++
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast

@@ -98,7 +98,7 @@ var/global/num_vending_terminals = 1
 	accepted_coins = list(
 			/obj/item/weapon/coin,
 			/obj/item/weapon/reagent_containers/food/snacks/chococoin
-			) 
+			)
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
@@ -2398,6 +2398,10 @@ var/global/num_vending_terminals = 1
 	icon_state = "voxseed"
 	products = list (
 		/obj/item/weapon/storage/fancy/donut_box = 2,
+		/obj/item/clothing/suit/storage/trader = 3,
+		)
+	prices = list(
+		/obj/item/clothing/suit/storage/trader = 100
 		)
 
 /obj/machinery/vending/trader/New()

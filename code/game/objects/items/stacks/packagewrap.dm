@@ -150,6 +150,9 @@
 		var/obj/item/device/destTagger/O = W
 
 		if(src.sortTag != O.currTag)
+			if(!O.currTag)
+				to_chat(user, "<span class='notice'>Select a destination first!</span>")
+				return
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag

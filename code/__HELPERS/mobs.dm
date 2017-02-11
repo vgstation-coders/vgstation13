@@ -1,7 +1,7 @@
 /proc/random_hair_style(gender, species = "Human")
 	var/h_style = "Bald"
 
-	var/list/valid_hairstyles = valid_sprite_accessories(gender, species, hair_styles_list)
+	var/list/valid_hairstyles = valid_sprite_accessories(hair_styles_list, gender, species, HAIRSTYLE_CANTRIP)
 
 	if(valid_hairstyles.len)
 		h_style = pick(valid_hairstyles)
@@ -31,7 +31,7 @@
 /proc/random_facial_hair_style(gender, species = "Human")
 	var/f_style = "Shaved"
 
-	var/list/valid_facialhairstyles = valid_sprite_accessories(gender, species, facial_hair_styles_list)
+	var/list/valid_facialhairstyles = valid_sprite_accessories(facial_hair_styles_list, gender, species)
 
 	if(valid_facialhairstyles.len)
 		f_style = pick(valid_facialhairstyles)
