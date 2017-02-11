@@ -32,13 +32,15 @@
 	if(on)
 		if(iscarbon(M))
 			apply_color(M)
-
+	..()
+	
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
 			if(iscarbon(user))
 				remove_color(user)
-
+	..()
+	
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
 
