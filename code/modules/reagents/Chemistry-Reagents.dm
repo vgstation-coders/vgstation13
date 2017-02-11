@@ -2558,39 +2558,17 @@
 		return 1
 
 	switch(volume)
-		if(1 to 5)
+		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					var/datum/organ/external/affecting = H.get_organ()
-					for(var/datum/wound/W in affecting.wounds)
-						spawn(1)
-							affecting.wounds -= W
-							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
-					if(H.getOxyLoss()>0 && prob(90))
+					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-4)
-							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
-						else
-					if(H.getBruteLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(5, 0)
-							holder.remove_reagent("mednanobots", 5/40)
-						else
-					if(H.getFireLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(0, 5)
-							holder.remove_reagent("mednanobots", 5/40)
-						else
-					if(H.getToxLoss()>0 && prob(50))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustToxLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
-						else
-					if(H.getCloneLoss()>0 && prob(60))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustCloneLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
+							H.adjustOxyLoss(-5)
+							H.heal_organ_damage(5, 5)
+							H.adjustToxLoss(-5)
+							H.adjustCloneLoss(-5)
+							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
 					if(percent_machine>5)
 						if(holder.has_reagent("mednanobots"))
 							percent_machine-=1
@@ -2609,56 +2587,17 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					var/datum/organ/external/affecting = H.get_organ()
-					for(var/datum/wound/W in affecting.wounds)
-						spawn(1)
-							affecting.wounds -= W
-							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
-					if(H.getOxyLoss()>0 && prob(90))
+					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-4)
-							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+							H.adjustOxyLoss(-5)
+							H.heal_organ_damage(5, 5)
+							H.adjustToxLoss(-5)
+							H.adjustCloneLoss(-5)
+							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
 							percent_machine +=1/2
 							if(prob(20))
 								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
 							else
-						else
-					if(H.getBruteLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(5, 0)
-							holder.remove_reagent("mednanobots", 5/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
-					if(H.getFireLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(0, 5)
-							holder.remove_reagent("mednanobots", 5/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
-					if(H.getToxLoss()>0 && prob(50))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustToxLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
-					if(H.getCloneLoss()>0 && prob(60))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustCloneLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
 					if(H.dizziness != 0)
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
