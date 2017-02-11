@@ -21,9 +21,10 @@
 	icon_state = "wizmobile"
 	//nick = "TRUE POWER"
 	keytype = /obj/item/key/wizmobile
-	can_spacemove=1
+	can_spacemove = 1
+	can_have_carts = FALSE
 	//ethereal=1 // NERF
-	var/can_move=1
+	var/can_move = 1
 	layer = FLY_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR

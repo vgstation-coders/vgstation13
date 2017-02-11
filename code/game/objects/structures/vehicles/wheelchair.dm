@@ -13,6 +13,8 @@
 	health = 50
 	max_health = 50
 
+	can_have_carts = FALSE
+
 	var/image/wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
