@@ -69,7 +69,7 @@
 		return
 	return ..()
 
-/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory)
+/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
 	accessories += accessory
 	accessory.forceMove(src)
 	accessory.on_attached(src)
@@ -565,6 +565,11 @@ BLIND     // can't see anything
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
 
+/obj/item/clothing/under/ui_action_click(mob/user, actiontype)
+	if(actiontype == /datum/action/item_action/toggle_minimap)
+		for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
+			HC.togglemap()
+		
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)

@@ -194,6 +194,9 @@
 /datum/action/item_action/tip_fedora
 	name = "Tip Fedora"
 	
+/datum/action/item_action/show_wares
+	name = "Show Wares"
+	
 /datum/action/item_action/jetpack_stabilization/IsAvailable()
 	var/obj/item/weapon/tank/jetpack/J = target
 	if(!istype(J) || !J.on)

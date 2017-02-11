@@ -40,9 +40,6 @@
 /obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/C)
 	if(!istype(C))
 		return
-	if(actions_types)
-		for(var/path in actions_types)
-			new path(C)
 	attached_to = C
 	attached_to.overlays += inv_overlay
 
@@ -50,11 +47,6 @@
 	if(!attached_to)
 		return
 	attached_to.overlays -= inv_overlay
-	if(actions)
-		for(var/datum/action/A in actions)
-			for(var/datum/action/remove in attached_to.actions)
-				if(istype(remove, A.type))
-					attached_to.actions.Remove(remove)
 	attached_to = null
 	forceMove(get_turf(user || src))
 	if(user)

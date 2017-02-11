@@ -503,7 +503,7 @@
 	species_fit = list(VOX_SHAPED)
 	max_combined_w_class = 28
 	storage_slots = 14
-	action_button_name = "Show Wares"
+	actions_types = list(/datum/action/item_action/show_wares)
 
 /obj/item/clothing/suit/storage/trader/ui_action_click()
 	var/mob/M = loc
