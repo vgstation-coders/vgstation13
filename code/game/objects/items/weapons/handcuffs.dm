@@ -83,8 +83,6 @@
 /obj/item/weapon/handcuffs/cyborg
 //This space intentionally left blank
 
-/obj/item/weapon/handcuffs/cyborg/on_remove(var/mob/living/carbon/C)
-	qdel(src)
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate
