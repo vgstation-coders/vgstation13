@@ -246,13 +246,13 @@
 					else
 						out += " interspersed throughout substructure and shell."
 
-				if(A.secondary_effect.trigger >= 0 && A.secondary_effect.trigger <= 4)
+				if(A.secondary_effect.trigger.triggertype == TRIGGER_TOUCH || A.secondary_effect.trigger.triggertype == TRIGGER_REAGENT)
 					out += " Activation index involves physical interaction with artifact surface, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger >= 5 && A.secondary_effect.trigger <= 8)
+				else if(A.secondary_effect.trigger.triggertype == TRIGGER_FORCE || A.secondary_effect.trigger.triggertype == TRIGGER_ENERGY || A.secondary_effect.trigger.triggertype == TRIGGER_TEMPERATURE)
 					out += " Activation index involves energetic interaction with artifact surface, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger >= 9 && A.secondary_effect.trigger <= 12)
+				else if(A.secondary_effect.trigger.triggertype == TRIGGER_GAS)
 					out += " Activation index involves precise local atmospheric conditions, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
 				else
