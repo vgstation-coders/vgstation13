@@ -1,5 +1,8 @@
+#define COLD_TRIGGER 225
+#define HOT_TRIGGER 375
+
 /datum/artifact_trigger/temperature
-	triggertype = "temperature"
+	triggertype = TRIGGER_TEMPERATURE
 	var/heat_triggered = 0
 	var/key_attackby
 
@@ -15,14 +18,14 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env)
 		if(!my_effect.activated)
-			if(!heat_triggered && env.temperature < 225)
+			if(!heat_triggered && env.temperature < COLD_TRIGGER)
 				Triggered(0, "COLDAIR", 0)
-			else if(heat_triggered && env.temperature > 375)
+			else if(heat_triggered && env.temperature > HOT_TRIGGER)
 				Triggered(0, "HOTAIR", 0)
 		else
-			if(!heat_triggered && env.temperature > 225)
+			if(!heat_triggered && env.temperature > COLD_TRIGGER)
 				Triggered(0, "COLDAIR", 0)
-			else if(heat_triggered && env.temperature < 375)
+			else if(heat_triggered && env.temperature < HOT_TRIGGER)
 				Triggered(0, "HOTAIR", 0)
 
 /datum/artifact_trigger/temperature/proc/owner_attackby(var/list/event_args, var/source)

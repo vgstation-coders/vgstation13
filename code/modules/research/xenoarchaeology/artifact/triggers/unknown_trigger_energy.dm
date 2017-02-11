@@ -1,5 +1,5 @@
 /datum/artifact_trigger/energy
-	triggertype = "energy"
+	triggertype = TRIGGER_ENERGY
 	var/key_attackby
 	var/key_projectile
 

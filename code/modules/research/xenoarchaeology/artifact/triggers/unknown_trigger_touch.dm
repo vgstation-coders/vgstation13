@@ -1,5 +1,5 @@
 /datum/artifact_trigger/touch
-	triggertype = "touch"
+	triggertype = TRIGGER_TOUCH
 
 /datum/artifact_trigger/touch/New()
 	..()

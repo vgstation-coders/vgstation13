@@ -1,7 +1,7 @@
 #define FORCE_THRESHOLD 10
 
 /datum/artifact_trigger/force
-	triggertype = "force"
+	triggertype = TRIGGER_FORCE
 	var/key_attackby
 	var/key_explode
 	var/key_projectile

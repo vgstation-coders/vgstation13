@@ -1,5 +1,5 @@
 /datum/artifact_trigger/reagent
-	triggertype = "reagent"
+	triggertype = TRIGGER_REAGENT
 	var/reagent_group = 0
 	var/key_attackby
 

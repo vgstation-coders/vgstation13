@@ -1,3 +1,10 @@
+#define TRIGGER_TOUCH 0
+#define TRIGGER_ENERGY 1
+#define TRIGGER_FORCE 2
+#define TRIGGER_REAGENT 3
+#define TRIGGER_GAS 4
+#define TRIGGER_TEMPERATURE 5
+
 /datum/artifact_trigger
 	var/triggertype = ""
 	var/obj/machinery/artifact/my_artifact
@@ -47,6 +54,5 @@
 /datum/artifact_trigger/Destroy()
 	my_artifact.on_attackhand.Remove(key_attackhand)
 	qdel(key_attackhand); key_attackhand = null
-	qdel(triggertype); triggertype = null
 	my_artifact = null
 	my_effect = null
