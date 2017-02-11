@@ -327,6 +327,7 @@
 	throw_speed = 1
 	throw_range = 5
 	attack_delay = 25 // Heavy.
+	cant_drop = 1
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
