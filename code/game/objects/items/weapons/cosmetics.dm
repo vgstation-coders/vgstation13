@@ -203,6 +203,9 @@
 	var/permanent = 0
 	var/invisible_time = 5 MINUTES
 	var/sprays_left = 1
+	var/list/prohibited_objects = list( //For fun removal
+		/obj/machinery/power/supermatter
+		)
 
 /obj/item/weapon/invisible_spray/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
@@ -215,6 +218,10 @@
 	if(target.invisibility || target.alpha <= 1)
 		to_chat(user, "\The [target] is already invisible!")
 		return
+	for(var/i in prohibited_objects)
+		if(istype(target, i))
+			to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
+			return 1
 	if(istype(target, /mob))
 		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
 			var/mob/living/carbon/C = target
