@@ -203,11 +203,11 @@
 					else
 						out += " interspersed throughout substructure and shell."
 
-				if(A.my_effect.trigger.triggertype == "touch" || A.my_effect.trigger.triggertype == "reagent")
+				if(A.my_effect.trigger.triggertype == TRIGGER_TOUCH || A.my_effect.trigger.triggertype == TRIGGER_REAGENT)
 					out += " Activation index involves physical interaction with artifact surface."
-				else if(A.my_effect.trigger.triggertype == "force" || A.my_effect.trigger.triggertype == "energy" || A.my_effect.trigger.triggertype == "temperature")
+				else if(A.my_effect.trigger.triggertype == TRIGGER_FORCE || A.my_effect.trigger.triggertype == TRIGGER_ENERGY || A.my_effect.trigger.triggertype == TRIGGER_TEMPERATURE)
 					out += " Activation index involves energetic interaction with artifact surface."
-				else if(A.my_effect.trigger.triggertype == "gas")
+				else if(A.my_effect.trigger.triggertype == TRIGGER_GAS)
 					out += " Activation index involves precise local atmospheric conditions."
 				else
 					out += " Unable to determine any data about activation trigger."
