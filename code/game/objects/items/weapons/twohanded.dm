@@ -363,7 +363,7 @@
 
 /obj/item/weapon/bloodlust/proc/mob_moved(var/list/event_args, var/mob/holder)
 	if(iscarbon(holder) && wielded)
-		for(var/obj/effect/plantsegment/B in range(holder,0))
+		for(var/obj/effect/plantsegment/P in range(holder,0))
 			qdel(P)
 
 /obj/item/weapon/bloodlust/IsShield()
