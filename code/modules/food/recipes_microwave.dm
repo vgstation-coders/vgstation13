@@ -1350,6 +1350,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
 
+/datum/recipe/nofruitsalad
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+
 /datum/recipe/chickensalad
 	reagents = list (VINEGAR = 5)
 	items = list(
