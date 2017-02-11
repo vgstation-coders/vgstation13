@@ -40,7 +40,4 @@
 	my_artifact.on_attackby.Remove(key_attackby)
 	my_artifact.on_explode.Remove(key_explode)
 	my_artifact.on_projectile.Remove(key_projectile)
-	key_attackby = null
-	key_explode = null
-	key_projectile = null
 	..()

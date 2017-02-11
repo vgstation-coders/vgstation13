@@ -26,5 +26,4 @@
 
 /datum/artifact_trigger/reagent/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
-	key_attackby = null
 	..()

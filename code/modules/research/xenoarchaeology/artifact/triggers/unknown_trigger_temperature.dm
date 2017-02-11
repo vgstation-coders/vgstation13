@@ -43,5 +43,4 @@
 
 /datum/artifact_trigger/temperature/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
-	key_attackby = null
 	..()

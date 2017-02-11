@@ -26,5 +26,4 @@
 
 /datum/artifact_trigger/touch/Destroy()
 	my_artifact.on_attackhand.Remove(key_attackhand)
-	key_attackhand = null
 	..()

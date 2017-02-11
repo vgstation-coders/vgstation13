@@ -34,6 +34,4 @@
 /datum/artifact_trigger/energy/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
 	my_artifact.on_projectile.Remove(key_projectile)
-	key_attackby = null
-	key_projectile = null
 	..()
