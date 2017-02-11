@@ -75,7 +75,7 @@
 
 		var/obj/item/weapon/handcuffs/cuffs = src
 		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
-			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(user))
+			cuffs = new(get_turf(user))
 		else
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
