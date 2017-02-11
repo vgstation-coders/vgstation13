@@ -201,6 +201,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
+	var/event_key
 
 /obj/item/weapon/melee/energy/hfmachete/update_icon()
 	icon_state = "[base_state][active]"
@@ -225,6 +226,7 @@
 		sharpness_flags += HOT_EDGE
 		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
+		event_key = user.on_moved.Add(src, "mob_moved")
 	else
 		force = initial(force)
 		throwforce = initial(throwforce)
@@ -233,6 +235,8 @@
 		sharpness_flags = initial(sharpness_flags)
 		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
+		user.on_moved.Remove(event_key)
+		event_key = null
 	update_icon()
 
 /obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
@@ -258,9 +262,6 @@
 	..()
 
 /obj/item/weapon/melee/energy/hfmachete/attack(target as mob, mob/living/user as mob)
-	if(active && istype(target, /obj/effect/plantsegment)) // really useful in a jungle..
-		var/obj/effect/plantsegment/P = istype(target, /obj/effect/plantsegment)
-		P.die_off()
 	if(isliving(target))
 		playsound(target, get_sfx("machete_hit"),50, 0)
 	if(clumsy_check(user) && prob(50))
@@ -269,6 +270,11 @@
 		user.take_organ_damage(active ? 25 : 13)
 		return
 	..()
+
+/obj/item/weapon/melee/energy/hfmachete/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(iscarbon(holder) && active)
+		for(var/obj/effect/plantsegment/P in range(holder,0))
+			qdel(P)
 
 /obj/item/weapon/melee/energy/hfmachete/attackby(obj/item/weapon/W, mob/living/user)
 	..()
