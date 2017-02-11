@@ -685,6 +685,33 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/console_screen" = 2)
 
+
+
+/obj/item/weapon/circuitboard/smartfridge/attackby(var/obj/item/weapon/G, var/mob/user)
+	if(issolder(G))
+		var/obj/item/weapon/solder/S = G
+		var/list/static/smartfridge_choices = list("Food smartfridge" = /obj/item/weapon/circuitboard/smartfridge/,
+											"Secure chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/medbay,
+											"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
+											"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
+											"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
+											"Drinks smartfridge" = /obj/item/weapon/circuitboard/smartfridge/drinks,)
+
+		var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
+		if(choice)
+			var/to_spawn = smartfridge_choices[choice]
+			if(istype(src, to_spawn))
+				to_chat(user, "<span class = 'notice'>This board is already this type</span>")
+				return
+			if(do_after(user, src, 25))
+				if(S.remove_fuel(1,user))
+					playsound(user.loc, 'sound/items/Welder.ogg', 25, 1)
+					visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [choice]</span>")
+					new to_spawn(get_turf(src))
+					qdel(src)
+					return
+
+	..()
 /obj/item/weapon/circuitboard/smartfridge/medbay
 	name = "Circuit Board (Medbay SmartFridge)"
 	build_path = "/obj/machinery/smartfridge/secure/medbay"
