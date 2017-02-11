@@ -5,7 +5,7 @@
 
 /datum/artifact_trigger/reagent/New()
 	..()
-	reagent_group = pick("water", "acid", "volatile", "toxin")
+	reagent_group = pick("WATER", "ACID", "VOLATILE", "TOXIN")
 	spawn(0)
 		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 
@@ -15,13 +15,13 @@
 
 	if (istype(item, /obj/item/weapon/reagent_containers/glass) && item.is_open_container() ||\
 		istype(item, /obj/item/weapon/reagent_containers/dropper))
-		if(reagent_group == "water" && (item.reagents.has_reagent(HYDROGEN, 1) || item.reagents.has_reagent(WATER, 1)))
+		if(reagent_group == "WATER" && (item.reagents.has_reagent(HYDROGEN, 1) || item.reagents.has_reagent(WATER, 1)))
 			Triggered(toucher, reagent_group, item)
-		else if(reagent_group == "acid" && (item.reagents.has_reagent(SACID, 1) || item.reagents.has_reagent(PACID, 1) || item.reagents.has_reagent(DIETHYLAMINE, 1)))
+		else if(reagent_group == "ACID" && (item.reagents.has_reagent(SACID, 1) || item.reagents.has_reagent(PACID, 1) || item.reagents.has_reagent(DIETHYLAMINE, 1)))
 			Triggered(toucher, reagent_group, item)
-		else if(reagent_group == "volatile" && (item.reagents.has_reagent(PLASMA, 1) || item.reagents.has_reagent(THERMITE, 1)))
+		else if(reagent_group == "VOLATILE" && (item.reagents.has_reagent(PLASMA, 1) || item.reagents.has_reagent(THERMITE, 1)))
 			Triggered(toucher, reagent_group, item)
-		else if(reagent_group == "toxin" && (item.reagents.has_reagent(TOXIN, 1) || item.reagents.has_reagent(CYANIDE, 1) || item.reagents.has_reagent(AMATOXIN, 1) || item.reagents.has_reagent(NEUROTOXIN, 1)))
+		else if(reagent_group == "TOXIN" && (item.reagents.has_reagent(TOXIN, 1) || item.reagents.has_reagent(CYANIDE, 1) || item.reagents.has_reagent(AMATOXIN, 1) || item.reagents.has_reagent(NEUROTOXIN, 1)))
 			Triggered(toucher, reagent_group, item)
 
 /datum/artifact_trigger/reagent/Destroy()
