@@ -332,6 +332,7 @@
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	var/event_key
 
 /obj/item/weapon/bloodlust/update_wield(mob/user)
 	..()
@@ -340,14 +341,17 @@
 	force = wielded ? 34 : initial(force)
 	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE : initial(sharpness_flags)
 	sharpness = wielded ? 2 : initial(sharpness)
+	to_chat(user, wielded ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
 	playsound(user, wielded ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
 	if(user)
 		user.update_inv_hands()
+	if(wielded)
+		event_key = user.on_moved.Add(src, "mob_moved")
+	else
+		user.on_moved.Remove(event_key)
+		event_key = null
 
 /obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
-	if(wielded && istype(target, /obj/effect/plantsegment)) // Scissors are good at cutting plants.
-		var/obj/effect/plantsegment/P = istype(target, /obj/effect/plantsegment)
-		P.die_off()
 	if(isliving(target))
 		playsound(target, get_sfx("machete_hit"),50, 0)
 	if(clumsy_check(user) && prob(50))
@@ -356,6 +360,11 @@
 		user.take_organ_damage(wielded ? 34 : 17)
 		return
 	..()
+
+/obj/item/weapon/bloodlust/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(iscarbon(holder) && wielded)
+		for(var/obj/effect/plantsegment/B in range(holder,0))
+			qdel(P)
 
 /obj/item/weapon/bloodlust/IsShield()
 	if(wielded)
