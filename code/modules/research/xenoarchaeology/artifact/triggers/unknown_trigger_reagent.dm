@@ -1,13 +1,13 @@
 /datum/artifact_trigger/reagent
 	triggertype = "reagent"
 	var/reagent_group = 0
-	var/key1
+	var/key_attackby
 
 /datum/artifact_trigger/reagent/New()
 	..()
 	reagent_group = pick("water", "acid", "volatile", "toxin")
 	spawn(0)
-		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
+		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 
 /datum/artifact_trigger/reagent/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -25,5 +25,7 @@
 			Triggered(toucher, reagent_group, item)
 
 /datum/artifact_trigger/reagent/Destroy()
-	my_artifact.on_attackhand.Remove(key0)
-	my_artifact.on_attackby.Remove(key1)
+	my_artifact.on_attackby.Remove(key_attackby)
+	qdel(key_attackby); key_attackby = null
+	qdel(reagent_group); reagent_group = null
+	..()

@@ -15,4 +15,4 @@
 	..()
 
 /datum/artifact_trigger/touch/Destroy()
-	my_artifact.on_attackhand.Remove(key0)
+	..()

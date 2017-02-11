@@ -156,6 +156,8 @@
 		secondary_effect.UpdateMove()
 
 /obj/machinery/artifact/Destroy()
+	qdel(my_effect); my_effect = null
+	qdel(secondary_effect); secondary_effect = null
 	qdel(on_attackhand); on_attackhand = null
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null

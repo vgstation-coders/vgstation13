@@ -1,15 +1,14 @@
 /datum/artifact_trigger
-	var/atom/holder
 	var/triggertype = ""
 	var/obj/machinery/artifact/my_artifact
 	var/datum/artifact_effect/my_effect
-	var/key0
+	var/key_attackhand
 
 /datum/artifact_trigger/New(var/atom/location)
 	..()
 	my_effect = location
 	spawn(0)
-		key0 = my_artifact.on_attackhand.Add(src, "owner_attackhand")
+		key_attackhand = my_artifact.on_attackhand.Add(src, "owner_attackhand")
 
 /datum/artifact_trigger/proc/CheckTrigger()
 
@@ -44,3 +43,10 @@
 		else
 			my_effect.DoEffectTouch(toucher)
 			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context] ([my_effect.trigger]) || touched by [key_name(toucher)].")
+
+/datum/artifact_trigger/Destroy()
+	my_artifact.on_attackhand.Remove(key_attackhand)
+	qdel(key_attackhand); key_attackhand = null
+	qdel(triggertype); triggertype = null
+	my_artifact = null
+	my_effect = null

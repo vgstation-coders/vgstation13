@@ -2,16 +2,16 @@
 
 /datum/artifact_trigger/force
 	triggertype = "force"
-	var/key1
-	var/key2
-	var/key3
+	var/key_attackby
+	var/key_explode
+	var/key_projectile
 
 /datum/artifact_trigger/force/New()
 	..()
 	spawn(0)
-		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
-		key2 = my_artifact.on_explode.Add(src, "owner_explode")
-		key3 = my_artifact.on_projectile.Add(src, "owner_projectile")
+		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
+		key_explode = my_artifact.on_explode.Add(src, "owner_explode")
+		key_projectile = my_artifact.on_projectile.Add(src, "owner_projectile")
 
 /datum/artifact_trigger/force/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -25,7 +25,7 @@
 
 /datum/artifact_trigger/force/proc/owner_explode(var/list/event_args, var/source)
 	var/context = event_args[2]
-	Triggered(0, context,0)
+	Triggered(0, context, 0)
 
 /datum/artifact_trigger/force/proc/owner_projectile(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -37,7 +37,10 @@
 		Triggered(toucher, context, item)
 
 /datum/artifact_trigger/force/Destroy()
-	my_artifact.on_attackhand.Remove(key0)
-	my_artifact.on_attackby.Remove(key1)
-	my_artifact.on_explode.Remove(key2)
-	my_artifact.on_projectile.Remove(key3)
+	my_artifact.on_attackby.Remove(key_attackby)
+	my_artifact.on_explode.Remove(key_explode)
+	my_artifact.on_projectile.Remove(key_projectile)
+	qdel(key_attackby); key_attackby = null
+	qdel(key_explode); key_explode = null
+	qdel(key_projectile); key_projectile = null
+	..()

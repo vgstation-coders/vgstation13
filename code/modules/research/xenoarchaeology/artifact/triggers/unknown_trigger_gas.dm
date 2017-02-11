@@ -32,4 +32,5 @@
 				Triggered(0, trigger_gas, 0)
 
 /datum/artifact_trigger/gas/Destroy()
-	my_artifact.on_attackhand.Remove(key0)
+	qdel(trigger_gas); trigger_gas = null
+	..()

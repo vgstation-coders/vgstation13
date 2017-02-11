@@ -1,19 +1,14 @@
 /datum/artifact_trigger/temperature
 	triggertype = "temperature"
 	var/heat_triggered = 0
-	var/context = ""
-	var/key1
+	var/key_attackby
 
 /datum/artifact_trigger/temperature/New()
 	..()
 	heat_triggered = prob(50)
-	if(heat_triggered)
-		context = "HOTAIR"
-	else
-		context = "COLDAIR"
 
 	spawn(0)
-		key1 = my_artifact.on_attackby.Add(src, "owner_attackby")
+		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 
 /datum/artifact_trigger/temperature/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
@@ -21,14 +16,14 @@
 	if(env)
 		if(!my_effect.activated)
 			if(!heat_triggered && env.temperature < 225)
-				Triggered(0, context, 0)
+				Triggered(0, "COLDAIR", 0)
 			else if(heat_triggered && env.temperature > 375)
-				Triggered(0, context, 0)
+				Triggered(0, "HOTAIR", 0)
 		else
 			if(!heat_triggered && env.temperature > 225)
-				Triggered(0, context, 0)
+				Triggered(0, "COLDAIR", 0)
 			else if(heat_triggered && env.temperature < 375)
-				Triggered(0, context, 0)
+				Triggered(0, "HOTAIR", 0)
 
 /datum/artifact_trigger/temperature/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -44,5 +39,7 @@
 	my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]).")
 
 /datum/artifact_trigger/temperature/Destroy()
-	my_artifact.on_attackhand.Remove(key0)
-	my_artifact.on_attackby.Remove(key1)
+	my_artifact.on_attackby.Remove(key_attackby)
+	qdel(key_attackby); key_attackby = null
+	qdel(heat_triggered); heat_triggered = null
+	..()
