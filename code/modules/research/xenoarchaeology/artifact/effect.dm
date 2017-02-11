@@ -13,6 +13,7 @@
 	var/list/copy_for_battery  //add any effect-specific variables you need copied for anomaly batteries as a list of strings
 	var/effect_type = 0
 	var/isolated = 0
+	var/triggertype
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -27,7 +28,11 @@
 	..()
 	holder = location
 	effect = rand(0,MAX_EFFECT)
-	var/triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+	if(effect == EFFECT_TOUCH)
+		triggertype = /datum/artifact_trigger/touch
+	else
+		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+
 	trigger = new triggertype(src)
 	trigger.my_artifact = holder
 
