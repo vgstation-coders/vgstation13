@@ -175,14 +175,13 @@
 	..(newtarget,user,params,reflex,struggle)
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(!broke)
-		return
-	..()
-	A.update_icon()
-	update_icon()
+	if(broke)
+		..()
+		A.update_icon()
+		update_icon()
 	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
-		if(getAmmo())
+		if(getAmmo() && !broke)
 			afterattack(user, user)	//will this work?
 			afterattack(user, user)	//it will. we call it twice, for twice the FUN
 			playsound(user, fire_sound, 50, 1)
