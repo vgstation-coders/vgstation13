@@ -43,6 +43,5 @@
 
 /datum/artifact_trigger/temperature/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
-	qdel(key_attackby); key_attackby = null
-	qdel(heat_triggered); heat_triggered = null
+	key_attackby = null
 	..()

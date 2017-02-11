@@ -148,5 +148,5 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 
 /datum/artifact_effect/Destroy()
 	qdel(trigger); trigger = null
-	qdel(copy_for_battery); copy_for_battery = null
+	copy_for_battery = null
 	holder = null

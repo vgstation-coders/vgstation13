@@ -34,5 +34,4 @@
 				Triggered(0, trigger_gas, 0)
 
 /datum/artifact_trigger/gas/Destroy()
-	qdel(trigger_gas); trigger_gas = null
 	..()

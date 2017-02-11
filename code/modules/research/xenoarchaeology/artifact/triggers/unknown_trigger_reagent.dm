@@ -26,6 +26,5 @@
 
 /datum/artifact_trigger/reagent/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
-	qdel(key_attackby); key_attackby = null
-	qdel(reagent_group); reagent_group = null
+	key_attackby = null
 	..()
