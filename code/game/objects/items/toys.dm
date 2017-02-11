@@ -1596,12 +1596,13 @@ var/list/living_balloons = list()
 /obj/item/toy/figure/chaplain
 	name = "Chaplain action figure"
 	icon_state = "chaplain"
-	toysay = "Praise Space Jesus!"
+	toysay = "God, please grant me power!"
+	toysound = "sound/effects/prayer.ogg"
 
 /obj/item/toy/figure/chef
 	name = "Chef action figure"
 	icon_state = "chef"
-	toysay = " I'll make you into a burger!"
+	toysay = "I'll make you into a burger!"
 
 /obj/item/toy/figure/chemist
 	name = "Chemist action figure"
@@ -1658,6 +1659,7 @@ var/list/living_balloons = list()
 	name = "Janitor action figure"
 	icon_state = "janitor"
 	toysay = "Look at the signs, you idiot."
+	toysound ="sound/misc/slip.ogg"
 
 /obj/item/toy/figure/lawyer
 	name = "Lawyer action figure"
