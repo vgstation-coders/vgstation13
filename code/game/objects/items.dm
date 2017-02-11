@@ -819,12 +819,6 @@
 		src.attack_paw(user)
 	return
 
-//This proc is executed when someone clicks the on-screen UI button. To make the UI button show, add to the object's actions_type list
-//The default action is attack_self().
-//Checks before we get to here are: mob is alive, mob is not restrained, paralyzed, asleep, resting, laying, item is on the mob.
-/obj/item/proc/ui_action_click(mob/user, actiontype)
- 	attack_self(user)
-
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = 0)
 	if(!user.can_wield())

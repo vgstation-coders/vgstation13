@@ -7,7 +7,7 @@
 	clothing_flags = NOSLIP
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/list/clothing_choices = list()
-	actions_types = list(/datum/action/item_action/change_appearance)
+	actions_types = list(/datum/action/item_action/change_appearance_shoes)
 	siemens_coefficient = 0.8
 	species_fit = list(VOX_SHAPED)
 
@@ -31,6 +31,15 @@
 		return 1
 	return 0
 
+/datum/action/item_action/change_appearance_shoes
+	name = "Change Shoes Appearance"
+	
+/datum/action/item_action/change_appearance_shoes/Trigger()
+	var/obj/item/clothing/shoes/syndigaloshes/T = target
+	if(!istype(T))
+		return
+	T.change()
+	
 /obj/item/clothing/shoes/syndigaloshes/proc/change()
 	var/obj/item/clothing/shoes/A
 	A = input("Select Colour to change it to", "BOOYEA", A) as null|anything in clothing_choices
@@ -48,10 +57,6 @@
 	_color = A._color
 	step_sound = A.step_sound
 	usr.update_inv_w_uniform()	//so our overlays update.
-	
-/obj/item/clothing/shoes/syndigaloshes/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/change_appearance)
-		change()
 	
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"

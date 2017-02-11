@@ -126,7 +126,7 @@
 		return 0
 	if(target)
 		var/obj/item/I = target
-		I.ui_action_click(owner, src.type)
+		I.attack_self(owner)
 	return 1
 
 /datum/action/item_action/ApplyIcon(obj/screen/movable/action_button/current_button)
@@ -142,13 +142,8 @@
 		I.layer = FLOAT_LAYER //AAAH
 		current_button.overlays += I
 		I.layer = old
-	
-/datum/action/item_action/toggle_jetpack
-	name = "Toggle Jetpack"
-	
-/datum/action/item_action/jetpack_stabilization
-	name = "Toggle Jetpack Stabilization"
-	
+		
+//Mostly attack self procs renamed
 /datum/action/item_action/set_internals
 	name = "Set Internals"
 	
@@ -182,23 +177,6 @@
 /datum/action/item_action/toggle_firemode
 	name = "Toggle Firemode"
 	
-/datum/action/item_action/change_appearance
-	name = "Change Appearance"
-	
 /datum/action/item_action/toggle_voicechanger
 	name = "Toggle Voice Changer"
 	
-/datum/action/item_action/toggle_minimap
-	name = "Toggle Minimap"
-	
-/datum/action/item_action/tip_fedora
-	name = "Tip Fedora"
-	
-/datum/action/item_action/show_wares
-	name = "Show Wares"
-	
-/datum/action/item_action/jetpack_stabilization/IsAvailable()
-	var/obj/item/weapon/tank/jetpack/J = target
-	if(!istype(J) || !J.on)
-		return 0
-	return ..()

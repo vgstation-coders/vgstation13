@@ -343,7 +343,16 @@ BLIND     // can't see anything
 	var/ignore_flip = 0
 	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
-
+	
+/datum/action/item_action/toggle_mask
+	name = "Toggle Mask"
+	
+/datum/action/item_action/toggle_mask/Trigger()
+	var/obj/item/clothing/mask/T = target
+	if(!istype(T))
+		return
+	T.togglemask()
+	
 /obj/item/clothing/mask/proc/togglemask()
 	if(ignore_flip)
 		return
@@ -564,11 +573,16 @@ BLIND     // can't see anything
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
+		
+/datum/action/item_action/toggle_minimap
+	name = "Toggle Minimap"
 
-/obj/item/clothing/under/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/toggle_minimap)
-		for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
-			HC.togglemap()
+/datum/action/item_action/toggle_minimap/Trigger()
+	var/obj/item/clothing/under/T = target
+	if(!istype(T))
+		return
+	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
+		HC.togglemap()
 		
 /obj/item/clothing/under/rank/New()
 	. = ..()

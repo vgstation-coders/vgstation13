@@ -5,7 +5,6 @@
 	clothing_flags = BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
 	w_class = W_CLASS_MEDIUM
 	can_flip = 1
-	actions_types = list(/datum/action/item_action/toggle_mask)
 	item_state = "gas_alt"
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -98,7 +97,7 @@
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance, /datum/action/item_action/toggle_voicechanger)
+	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
 
@@ -107,7 +106,7 @@
 	for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
 		clothing_choices += new Type
 	return
-
+	
 /obj/item/clothing/mask/gas/voice/attackby(obj/item/I, mob/user)
 	..()
 	if(!istype(I, /obj/item/clothing/mask) || istype(I, src.type))
@@ -121,7 +120,16 @@
 		to_chat(user, "<span class='notice'>[M.name]'s pattern absorbed by \the [src].</span>")
 		return 1
 	return 0
-
+	
+/datum/action/item_action/change_appearance_mask
+	name = "Change Mask Appearance"
+	
+/datum/action/item_action/change_appearance_mask/Trigger()
+	var/obj/item/clothing/mask/gas/voice/T = target
+	if(!istype(T))
+		return
+	T.change()
+	
 /obj/item/clothing/mask/gas/voice/proc/change()
 
 	var/obj/item/clothing/mask/A
@@ -145,14 +153,6 @@
 /obj/item/clothing/mask/gas/voice/attack_self(mob/user)
 	vchange = !vchange
 	to_chat(user, "<span class='notice'>The voice changer is now [vchange ? "on" : "off"]!</span>")
-
-/obj/item/clothing/mask/gas/voice/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/change_appearance)
-		change()
-	else if(actiontype == /datum/action/item_action/toggle_mask)
-		togglemask()
-	else if(actiontype == /datum/action/item_action/toggle_voicechanger)
-		attack_self(user)
 		
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"

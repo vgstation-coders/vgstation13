@@ -206,9 +206,14 @@
 /obj/item/clothing/head/fedora/proc/tip_fedora()
 	usr.visible_message("[usr] tips \his fedora.", "You tip your fedora.")
 
-/obj/item/clothing/head/fedora/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/tip_fedora)
-		tip_fedora()
+/datum/action/item_action/tip_fedora
+	name = "Tip Fedora"
+	
+/datum/action/item_action/tip_fedora/Trigger()
+	var/obj/item/clothing/head/fedora/T = target
+	if(!istype(T))
+		return
+	T.tip_fedora()
 		
 /obj/item/clothing/head/fedora/white
 	name = "white fedora"

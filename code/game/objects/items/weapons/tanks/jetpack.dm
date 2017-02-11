@@ -48,14 +48,30 @@
 	qdel(G)
 	G = null
 	return
+		
+/datum/action/item_action/toggle_jetpack
+	name = "Toggle Jetpack"
+	
+/datum/action/item_action/toggle_jetpack/Trigger()
+	var/obj/item/weapon/tank/jetpack/T = target
+	if(!istype(T))
+		return
+	T.toggle()
+	
+/datum/action/item_action/jetpack_stabilization
+	name = "Toggle Jetpack Stabilization"
 
-/obj/item/weapon/tank/jetpack/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/jetpack_stabilization)
-		toggle_rockets()
-	else if(actiontype == /datum/action/item_action/toggle_jetpack)
-		toggle()
-	else
-		attack_self(user)
+/datum/action/item_action/jetpack_stabilization/IsAvailable()
+	var/obj/item/weapon/tank/jetpack/J = target
+	if(!istype(J) || !J.on)
+		return 0
+	return ..()
+	
+/datum/action/item_action/jetpack_stabilization/Trigger()
+	var/obj/item/weapon/tank/jetpack/T = target
+	if(!istype(T))
+		return
+	T.toggle_rockets()
 
 /obj/item/weapon/tank/jetpack/New()
 	. = ..()
