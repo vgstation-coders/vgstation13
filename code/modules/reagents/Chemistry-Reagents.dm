@@ -2501,7 +2501,7 @@
 	name = "Nanites"
 	id = NANITES
 	description = "Microscopic construction robots."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#535E66" //rgb: 83, 94, 102
 	var/diseasetype = /datum/disease/robotic_transformation
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2536,7 +2536,7 @@
 	name = "Nanobots"
 	id = NANOBOTS
 	description = "Microscopic robots intended for use in humans. Must be loaded with further chemicals to be useful."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#3E3959" //rgb: 62, 57, 89
 
 
@@ -2546,7 +2546,7 @@
 	name = "Medical Nanobots"
 	id = MEDNANOBOTS
 	description = "Microscopic robots intended for use in humans. Configured for rapid healing upon infiltration into the body."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#593948" //rgb: 89, 57, 72
 	custom_metabolism = 0.005
 	var/spawning_horror = 0
@@ -2633,7 +2633,7 @@
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
 	description = "Microscopic robots intended for use in humans. Configured to grant great resistance to damage."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#343F42" //rgb: 52, 63, 66
 	custom_metabolism = 0.01
 	var/has_been_armstrong = 0

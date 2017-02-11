@@ -728,7 +728,7 @@
 	name = "Nanobots2"
 	id = "nanobots2"
 	result = NANOBOTS
-	required_reagents = list(MEDNANOBOTS = 1, CRYOXADONE = 2)
+	required_reagents = list(MEDNANOBOTS = 2.5, CRYOXADONE = 2) //2.5 here since otherwise you could just dupe again with this return recipe.
 	result_amount = 1
 
 /datum/chemical_reaction/mednanobots
@@ -736,14 +736,14 @@
 	id = MEDNANOBOTS
 	result = MEDNANOBOTS
 	required_reagents = list(NANOBOTS = 1, DOCTORSDELIGHT = 5)
-	result_amount = 1
+	result_amount = 2.5
 
 /datum/chemical_reaction/comnanobots
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
 	result = COMNANOBOTS
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
-	result_amount = 1
+	result_amount = 2.5
 
 ///////////////////////////////////////////////////////////////////////////////////
 
