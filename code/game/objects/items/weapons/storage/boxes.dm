@@ -155,8 +155,9 @@
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/syringe(src)
+	new /obj/item/weapon/reagent_containers/syringe/giant(src)
 
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
