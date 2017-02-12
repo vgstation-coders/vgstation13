@@ -52,8 +52,8 @@
 	var/turf/T = get_turf(src)
 	qdel(H)
 	qdel(src)
-	new /obj/machinery/singularity (T)
-	user.throw_at(T, 10, 5) //if they moved away from the turf before getting knockdown, they end up back in the singulo's grasp anyway.
+	var/obj/machinery/singularity/S = new (T)
+	S.Bumped(user)
 
 /obj/item/weapon/storage/backpack/holding/singularity_act(var/current_size,var/obj/machinery/singularity/S)
 	var/dist = max(current_size, 1)
