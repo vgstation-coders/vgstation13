@@ -327,7 +327,6 @@
 	throw_speed = 1
 	throw_range = 5
 	attack_delay = 25 // Heavy.
-	cant_drop = 1
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
@@ -372,3 +371,15 @@
 		return 1
 	else
 		return 0
+
+/obj/item/weapon/bloodlust/pickup(mob/user)
+	playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
+	to_chat(user, "<span class='notice'>You attach [src] to your arm.</span>")
+	cant_drop = 1
+
+/obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
+	..()
+	if(istype(W, /obj/item/weapon/screwdriver) && user.is_holding_item(src))
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
+		user.drop_item(src, force_drop=1)
