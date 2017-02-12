@@ -19,7 +19,8 @@
 				var/turf/T = get_turf(new_mob)
 				if(T)
 					playsound(T, 'sound/effects/phasein.ogg', 50, 1)
-				spawn(5 MINUTES)
+				var/transmog_time = rand(1 MINUTES, 5 MINUTES)
+				spawn(transmog_time)
 					var/mob/top_level = new_mob
 					if(top_level.transmogged_to)
 						while(top_level.transmogged_to)
