@@ -9,6 +9,19 @@
 
 /proc/robogibs(atom/location, var/list/viruses)
 	new /obj/effect/gibspawner/robot(get_turf(location),viruses)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//The following procs were thought to be used in correlation with the amount of blood available, example:
+//a loop in [bloodpack.dm] that spawns      _______________________________________
+//1 blood splatter per 60u of blood     >>>|this means that 6drips = 1splatter    |
+//and 1 blood drip per 10u                |same behaviour as proc/blood_splatter|
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Apparently no one has ever needed to do a blood mess, so I didn't bother making a generic proc.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/proc/bloodmess_splatter(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
+	new /obj/effect/gibspawner/blood(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor)
+
+/proc/bloodmess_drip(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
+	new /obj/effect/gibspawner/blood_drip(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor)
 
 /obj/effect/gibspawner
 	var/sparks = 0 //whether sparks spread on Gib()
@@ -61,6 +74,10 @@
 					gib.basecolor = bloodcolor
 
 				gib.update_icon()
+
+				//new virus2 lines, nothing from the old virus code is currently working I believe.
+				if(viruses)
+					gib.virus2 |= virus_copylist(viruses)
 
 				if(viruses.len > 0)
 					for(var/datum/disease/D in viruses)
