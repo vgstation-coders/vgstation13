@@ -75,8 +75,8 @@
 	speak_chance = 20
 	turns_per_move = 5
 	see_in_dark = 6
-	maxHealth = 150
-	health = 150
+	maxHealth = 175
+	health = 175
 	melee_damage_lower = 5
 	melee_damage_upper = 15
 	attacktext = "flails around and hits"
@@ -91,7 +91,7 @@
 	..()
 
 	if(prob(90) && health+emp_damage<maxHealth)
-		health+=4                                                                        //Created by misuse of medical nanobots, so it heals
+		health+=6                                                                        //Created by misuse of medical nanobots, so it heals
 		if(prob(15))
 			visible_message("<span class='warning'>[src]'s wounds heal slightly!</span>")
 

@@ -1018,8 +1018,8 @@
 						selectedbuf=buf.dna.SE
 					else
 						selectedbuf=buf.dna.UI
-					var/blk = input(usr,"Select Block","Block") in all_dna_blocks(selectedbuf)
-					if(injector_ready)
+					var/blk = input(usr,"Select Block","Block") as null|anything in all_dna_blocks(selectedbuf)
+					if(!isnull(blk) && injector_ready)
 						success = setInjectorBlock(I,blk,buf)
 					else
 						qdel(I)
