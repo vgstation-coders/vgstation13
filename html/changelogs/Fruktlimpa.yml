@@ -1,0 +1,4 @@
+author: Fruktlimpa
+delete-after: True
+changes:
+ - rscadd: "Buffed Medical Nanobots to be more reliable and consistent, now heals all damage types simultaneously"
