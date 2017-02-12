@@ -14,7 +14,6 @@
 
 /obj/item/weapon/reagent_containers/blood/New()
 	..()
-	processing_objects.Add(src)
 	if(blood_type != null)
 		name = "\improper[blood_type] bloodpack"
 	reagents.add_reagent(BLOOD, 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list()))
@@ -26,7 +25,7 @@
 	if (mode == BLOODPACK_CUT)
 		return
 
-	if(reagents.total_volume == 0 && name != "\improper empty bloodback")
+	if(reagents.total_volume == 0 && name != "\improper empty bloodpack")
 		name = "\improper empty bloodpack"
 		desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	else if (reagents.reagent_list.len > 0)
@@ -161,7 +160,10 @@
 			virus |= virus_copylist(S.data["virus2"])
 		return //stops from punching holes
 
-	if (W.sharpness_flags & (SHARP_BLADE|SHARP_TIP))
+	if (W.sharpness_flags & (SHARP_BLADE|SHARP_TIP|HOT_EDGE))
+
+		if(!holes)
+			processing_objects.Add(src)
 
 		if (user.a_intent == I_HELP)
 			holes += 1
@@ -224,3 +226,7 @@
 				else
 					R.reaction_turf(T, A)
 					reagents.remove_reagent(R.id, A)
+
+/obj/item/weapon/reagent_containers/blood/Destroy()
+	processing_objects.Remove(src)
+	..()

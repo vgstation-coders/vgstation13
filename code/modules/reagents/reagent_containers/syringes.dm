@@ -182,8 +182,8 @@
 
 		if (istype(target, /obj/item/weapon/reagent_containers/blood))
 			var/obj/item/weapon/reagent_containers/blood/L = target
-			if (L.mode==2)
-				to_chat(user, "<span class='warning'>With so many cuts in it...not a good idea.</span>")
+			if (L.mode == BLOODPACK_CUT)
+				to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
 				return
 
 		var/tx_amount = 0
@@ -224,8 +224,8 @@
 
 	if (istype(target, /obj/item/weapon/reagent_containers/blood))
 		var/obj/item/weapon/reagent_containers/blood/L = target
-		if (L.mode==2)
-			to_chat(user, "<span class='warning'>With so many cuts in it...not a good idea.</span>")
+		if (L.mode == BLOODPACK_CUT)
+			to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
 			return
 
 	// Attempting to inject someone else takes time
