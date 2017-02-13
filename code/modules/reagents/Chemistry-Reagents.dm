@@ -1774,7 +1774,7 @@
 
 	switch(data)
 		if(1 to 10)
-			M.adjustBruteLoss(1 * REM) //soft tissue damage
+			M.adjustBruteLoss(3 * REM) //soft tissue damage
 		if(10 to INFINITY)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
@@ -1785,7 +1785,30 @@
 					H.vomit()
 	data++
 
-	M.adjustToxLoss(2 * REM)
+	M.adjustToxLoss(4 * REM)
+
+/datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+			if(eyes_covered)
+				H << "<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>"
+				return
+			else //This stuff is a little more corrosive but less irritative than pepperspray
+				H.emote("scream", , , 1)
+				H << "<span class='danger'>You are sprayed directly in the eyes with bleach!</span>"
+				H.eye_blurry = max(M.eye_blurry, 15)
+				H.eye_blind = max(M.eye_blind, 5)
+				H.adjustBruteLoss(2)
+				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				E.take_damage(5, 1)
+				H.custom_pain("Your [E] burn horribly!", 1)
+				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
 //Reagents used for plant fertilizers.
 //WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?

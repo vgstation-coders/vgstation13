@@ -849,8 +849,8 @@
 	name = "Bleach"
 	id = BLEACH
 	result = BLEACH
-	required_reagents = list(SODIUM = 2, CHLORINE = 2, CLEANER = 2)
-	result_amount = 3
+	required_reagents = list(SODIUM = 2, CHLORINE = 2, OXYGEN = 2, CLEANER = 4)
+	result_amount = 2
 
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
