@@ -172,6 +172,7 @@
 		next_run.setDelay(5 SECONDS)
 		for(var/datum/automation/A in automations)
 			A.process()
+		to_chat(usr, "<span class='info'>Execution complete.</span>")
 		return 1
 
 	if(href_list["add"])

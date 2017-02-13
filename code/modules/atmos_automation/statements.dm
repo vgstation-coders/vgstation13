@@ -144,7 +144,7 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 
 /datum/automation/Topic(var/href, var/list/href_list)
 	if(!canWriteState(usr, href))
-		return 0
+		return 1
 	if(href_list["add"])
 		var/new_child = selectValidChildFor(usr)
 		if(!new_child)
@@ -341,7 +341,8 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 		. += "<blockquote><i>(No statements to run)</i></blockquote>"
 
 /datum/automation/if_statement/Topic(var/href, var/list/href_list)
-	. = ..(href, href_list - list("add", "remove", "reset")) // So we can do sanity but not make it trigger on these specific hrefs overriden with shitcode here.
+	if(..(href, href_list - list("add", "remove", "reset"))) // So we can do sanity but not make it trigger on these specific hrefs overriden with shitcode here.
+		return 1
 	if(href_list["add"])
 		var/new_child = selectValidChildFor(usr)
 		if(!new_child)
