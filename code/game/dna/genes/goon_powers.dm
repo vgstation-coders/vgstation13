@@ -708,3 +708,11 @@
 	New()
 		..()
 		block=STRONGBLOCK
+
+/datum/dna/gene/basic/strong/activate(var/mob/M)
+	..()
+	M.species.muscle_mass = 2000
+
+/datum/dna/gene/basic/strong/deactivate(var/mob/M,var/connected,var/flags)
+	if(..())
+		M.species.muscle_mass = 50
