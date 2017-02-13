@@ -522,7 +522,8 @@
 			anomaly_factor = 4
 			apply_material_decorations = 0
 			var/list/possible_spawns = list()
-			possible_spawns += /obj/item/clothing/mask/happy
+			possible_spawns += /obj/item/clothing/mask/necklace/xeno_claw
+			//possible_spawns += /obj/item/clothing/mask/happy WHO THOUGHT THIS WAS A GOOD IDEA
 			//possible_spawns += /obj/item/clothing/mask/stone WHEN I CODE IT
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
