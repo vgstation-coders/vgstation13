@@ -8,7 +8,7 @@
 
 	var/sight_mode = 0
 	var/custom_name = ""
-	var/forced_name = FALSE // Namepick AUTOBORGER IN TELES won't work.
+	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	//var/crisis //Admin-settable for combat module use.
@@ -432,8 +432,10 @@
 
 /mob/living/silicon/robot/verb/Namepick()
 	set category = "Robot Commands"
-	if(custom_name || forced_name)
+	if(namepick_uses <= 0)
+		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
+	namepick_uses--
 	var/newname
 	for(var/i = 1 to 3)
 		newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)

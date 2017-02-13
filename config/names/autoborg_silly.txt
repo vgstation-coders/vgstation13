@@ -1,0 +1,19 @@
+# Names used for autoborger silly names.
+#<-- This means a comment.  Won't be included.
+# Random numbers are appended to the end automatically.
+# Variables:
+# {AINAME} = Connected AI's name
+# {###} = Robot's ID number (disables automatic append)
+#
+Autoburger Helper
+Bob
+Joe
+MY BODY IS ON THE ASTEROI
+MY BODY IS IN THE AI CORE
+Rogue Cyborg
+IT'S MALF
+{AINAME} Minion
+Terminator
+Robocop
+Johnny
+TARS

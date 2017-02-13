@@ -1,3 +1,6 @@
+#define NAMETYPE_NORMAL  0
+#define NAMETYPE_SILLY   1
+
 /obj/machinery/transformer
 	name = "Automatic Robotic Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
@@ -12,13 +15,14 @@
 	var/cooldown_time = 0
 	var/cooldown_state = 0 // Just for icons.
 	var/robot_cell_charge = 5000
-	var/force_default_names = TRUE
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 5000
 
 	// /vg/
 	var/force_borg_module=null
+	var/name_type=NAMETYPE_NORMAL
+	var/enable_namepick=TRUE
 
 /obj/machinery/transformer/New()
 	// On us
@@ -85,14 +89,25 @@
 		R.SetKnockdown(5)
 
 		// /vg/: Force borg module, if needed.
-		R.pick_module(force_borg_module, force_default_names)
+		// Last var disables namepick on New().  Later on, we enable or disable namepick.
+		R.pick_module(force_borg_module, FALSE)
 
-		// /vg/: Force name.
-		R.forced_name=force_default_names
-		// I considered allowing silly names like these, but then that throws stealthmalf out the window.
-		// Here in case I change my mind.
-		//R.custom_name = pick("AUTOBORGER IN TELE", "Rogue Cyborg-[num2text(ident)]", "PLASMA IN SCI", "IT'S MALF")
+		// /vg/: Select from various name lists.
+		if(name_type == NAMETYPE_SILLY)
+			R.custom_name = pick(autoborg_silly_names)
+			R.custom_name = replacetext(R.custom_name, "{AINAME}", R.connected_ai.name)
+			if(findtext(R.custom_name, "{###}"))
+				R.custom_name = replacetext(R.custom_name, "{###}", num2text(R.ident))
+			else
+				R.custom_name += "-[num2text(R.ident)]"
 
+
+		// /vg/: Allow AI to disable namepick.
+		R.namepick_uses=enable_namepick
+		if(enable_namepick)
+			to_chat(R, "<span class='info'><b>The AI has chosen to let you choose your name via the <em>Namepick</em> command.</b></span>")
+		else
+			to_chat(R, "<span class='danger'><b>The AI has chosen to disable your access to the <em>Namepick</em> command.</b></span>")
 		R.updateicon()
 		R.updatename()
 
@@ -147,6 +162,15 @@
 				<b>Next Borg's Module:</b>
 				<a href="?src=\ref[src];act=force_class">[isnull(force_borg_module)?"Not Forced":force_borg_module]</a>
 			</li>
+			<li>
+				<b>Borg Names:</b>
+				<a href="?src=\ref[src];act=names;nametype=[NAMETYPE_NORMAL]">Default</a>
+				<a href="?src=\ref[src];act=names;nametype=[NAMETYPE_SILLY]">Silly (OBVIOUS)</a>
+			</li>
+			<li>
+				<b>Permit Name Picking:</b>
+				<a href="?src=\ref[src];act=enable_namepick">[enable_namepick ? "On":"Off"]</a>
+			</li>
 		</ul>
 	"}
 
@@ -162,6 +186,14 @@
 	if(!("act" in href_list))
 		return 0
 	switch(href_list["act"])
+		if("names")
+			var/newnametype = text2num(href_list["nametype"])
+			if(!(newnametype in list(NAMETYPE_NORMAL, NAMETYPE_SILLY)))
+				to_chat(usr, "<span class='warning'>Invalid newnametype. Stop trying to make href exploits happen.</span>")
+				return 0
+			name_type=newnametype
+		if("enable_namepick")
+			enable_namepick=!enable_namepick
 		if("force_class")
 			var/list/modules = list("(Robot's Choice)")
 			modules += getAvailableRobotModules()
