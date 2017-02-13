@@ -1,6 +1,15 @@
+//todo:
+//ghost flickering + sprite
+//ghosts spooking near happiest mask causing an immediate flickering
+//the special stuff that happens when you get above 75 happiness
+
+#define VERYHAPPY 75
+#define HAPPIER 2
+#define UNHAPPIER 10
+
 /obj/item/clothing/mask/happy
 	name = "Happiest Mask"
-	desc = "<span class=warning>\"I'm happy! I'M HAPPY! SEE! I SAID I'M HAPPY PLEASE DON'T\"<span>"
+	desc = "<span class='sinister'>\"We're so happy AHA.\"<span>"
 	icon_state = "happiest"
 	item_state = "happiest"
 	clothing_flags = MASKINTERNALS
@@ -8,6 +17,8 @@
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0
 	gas_transfer_coefficient = 0.90
+	var/happiness = 0
+	var/canemote
 
 /obj/item/clothing/mask/happy/equipped(M as mob, wear_mask)
 	var/mob/living/carbon/human/H = M
@@ -15,35 +26,56 @@
 		return
 	if(H.wear_mask == src)
 		flick("happiest_flash", src)
-		to_chat(H, "<span class='sinister'>Your thoughts are bombarded by incessant laughter.</span>")
+		to_chat(H, "<span class='warning'>Your thoughts are bombarded by incessant laughter.</span>\n<span class='sinister'>\"Oh joy! [M.real_name]'s decided to join the party!\"</span>")
 		H << sound('sound/effects/hellclown.ogg')
 		canremove = 0
+		happiness += HAPPIER
 
 /obj/item/clothing/mask/happy/attack_hand(mob/user as mob)
 	if(user.wear_mask == src)
-		to_chat(user, "<span class='sinister'>It won't come off.</span>")
 		flick("happiest_flash", src)
+		to_chat(user, "<span class='sinister'>Why would you want to get rid of us, aren't you having fun?</span>")
+		happiness -= UNHAPPIER
 	else
 		..()
 
 /obj/item/clothing/mask/happy/pickup(mob/user as mob)
 	flick("happiest_flash", src)
-	to_chat(user, "<span class=warning><B>The mask's eyesockets briefly flash with a foreboding red glare.</span></B>")
+	to_chat(user, "<span class='warning'><B>The mask's eyesockets briefly flash with a foreboding red glare.</span></B>")
 
 /obj/item/clothing/mask/happy/OnMobLife(var/mob/living/carbon/human/wearer)
 	var/mob/living/carbon/human/W = wearer
 	if(W.wear_mask == src)
-		RaiseShade(W)
-		if(prob(5))
-			switch(pick(1,2,3))
-				if(1)
-					W.say(pick("I'M SO HAPPY!", "SMILE!", "ISN'T EVERYTHING SO WONDERFUL?", "EVERYONE SHOULD SMILE!"))
-				if(2)
-					var/list/laughtypes = list("funny", "disturbing", "creepy", "horrid", "bloodcurdling", "freaky", "scary", "childish", "deranged", "airy", "snorting")
-					var/laughtype = pick(laughtypes)
-					W.visible_message("[W] makes \a [laughtype] laugh.")
-				if(3)
-					W.emote(pick("laugh", "chuckle", "giggle", "grin", "smile"))
+		if(happiness <= 0)
+			flick("happiest_flash", src)
+			to_chat(W, "<span class='sinister'>It seems you're not a very good friend to us. We definitely need to fire up this relationship!</span>")
+			var/datum/organ/external/affecting = W.get_organ(LIMB_HEAD)
+			if(affecting.take_damage(0, 10))
+				W.UpdateDamageIcon(1)
+			laugh(W)
+			happiness = 0
+
+		else if(happiness >= VERYHAPPY)
+			//todo :)
+
+		else
+			happiness += HAPPIER
+			if(prob(happiness/2))
+				flick("happiest_flash", src)
+				W.say(pick("I'M SO HAPPY!", "SMILE!", "ISN'T EVERYTHING SO WONDERFUL?", "EVERYONE SHOULD SMILE!"))
+				laugh(W)
+				//need to add the ghost flickering
+
+/obj/item/clothing/mask/happy/proc/laugh(var/mob/living/carbon/human/W)
+	if(!canemote)
+		return
+	var/laughdesc = pick("funny", "disturbing", "creepy", "horrid", "bloodcurdling", "freaky", "scary", "childish", "deranged", "airy", "snorting")
+	var/laughtype = pick("laugh", "giggle", "chuckle", "grin", "smile")
+	W.visible_message("[W]'s mask makes \a [laughdesc] [laughtype].")
+
+	canemote = 0
+	spawn(5 SECONDS)
+		canemote = 1
 
 /obj/item/clothing/mask/happy/OnMobDeath(var/mob/living/carbon/human/wearer)
 	var/mob/living/carbon/human/W = wearer
@@ -51,25 +83,19 @@
 	W.drop_from_inventory(src)
 	flick("happiest_flash", src)
 	canremove = 1
-
-/obj/item/clothing/mask/happy/proc/RaiseShade(var/mob/living/carbon/human/H)
-	for(var/mob/living/carbon/human/M in view(4, H))
-		if(!M)
-			return
-		if(M.stat != 2)
-			continue
-		if(M.client == null)
-			continue
-		flick("happiest_flash", src)
-		var/mob/living/simple_animal/shade/S = new /mob/living/simple_animal/shade( M.loc )
-		S.name = "Shade of [M.real_name]"
-		S.real_name = "Shade of [M.real_name]"
-		if (M.client)
-			M.client.mob = S
-		S.cancel_camera()
-		flick("happiest_flash", src)
-		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")
-		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and cause joyful chaos for [H.real_name]!</span>")
+	happiness = 0
 
 /obj/item/clothing/mask/happy/acidable()
+	var/mob/living/carbon/human/W = loc
+	if(istype(W) && W.wear_mask == src)
+		happiness = happiness - UNHAPPIER
+		to_chat(W, "<span class='sinister'>Someone is trying to melt our face! We'll have to borrow some of yours.</span>")
+		var/datum/organ/external/affecting = W.get_organ(LIMB_HEAD)
+			if(affecting.take_damage(10, 0))
+				W.UpdateDamageIcon(1)
+			laugh(W)
 	return 0
+
+#undef VERYHAPPY
+#undef HAPPIER
+#undef UNHAPPIER
