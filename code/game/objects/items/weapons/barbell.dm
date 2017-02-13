@@ -11,6 +11,7 @@
 /obj/item/weapon/barbell/attack_self(mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
+		user.delayNextAttack(5)
 		user.visible_message("<span class='rose'>You see [user] pumping out reps with \the [src]</span>", \
 		"<span class='rose'>You start pumping out reps with \the [src].</span>")
 		if(do_after(user, H, 50))
