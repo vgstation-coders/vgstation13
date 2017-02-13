@@ -3,7 +3,8 @@
 //////////////////////////////////
 
 #define MAX_BOMB_POWER 16	//How far will the largest explosions reach.
-#define MAX_SPEED_BONUS 10	//How fast can a player get by cumulating skates (his tally cannot exceed -1 anyway, but additional skates will allow him to stay fast while starving for example)
+#define MAX_SPEED_BONUS 3	//How fast can a player get by cumulating skates (as a multiplier over his base speed)
+#define SPEED_BONUS_PER_SKATE 0.25
 
 /*
 ////content://///
@@ -42,8 +43,8 @@ var/global/list/bombermangear = list()
 	var/can_kick = 0	//allows its holder to kick bombs. kicked bombs roll until their reach an obstacle or detonate
 	var/can_line = 0	//allows its user to deploy all his bombs in a line at once
 	var/has_power = 0	//if this dispenser currently has no bombs in the world, its next bomb will have maximum power
-	var/skate = 0
-	var/speed_bonus = 0	//each skate power-up will speed-up its user. whoever holds the dispenser has the bonus.
+	var/skate = 1
+	var/speed_bonus = 1	//each skate power-up will speed-up its user. whoever holds the dispenser has the bonus. Effectively a multiplier over your speed.
 
 	//griff modifiers, can be changed globaly with admin commands
 	var/destroy_environnement = 0	//does it break wall/tables/closets
@@ -116,9 +117,9 @@ var/global/list/bombermangear = list()
 	for(var/turf/T in range(loc,1))
 		if(!T.density)
 			turfs += T
-	while(skate > 0)
+	while(skate > 1)
 		new/obj/structure/powerup/skate(pick(turfs))
-		skate--
+		skate -= SPEED_BONUS_PER_SKATE
 	while(bombtotal > 1)
 		new/obj/structure/powerup/bombup(pick(turfs))
 		bombtotal--
@@ -585,9 +586,9 @@ obj/structure/bomberflame/Destroy()
 	return
 
 /obj/structure/powerup/skate/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	dispenser.skate = min(MAX_SPEED_BONUS, dispenser.skate + 1)
+	dispenser.skate = min(MAX_SPEED_BONUS, dispenser.skate + SPEED_BONUS_PER_SKATE)
 	if(!dispenser.slow)
-		dispenser.speed_bonus = min(MAX_SPEED_BONUS, dispenser.speed_bonus + 1)
+		dispenser.speed_bonus = min(MAX_SPEED_BONUS, dispenser.speed_bonus + SPEED_BONUS_PER_SKATE)
 	..()
 	return
 

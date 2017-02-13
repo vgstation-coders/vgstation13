@@ -336,30 +336,12 @@
 			to_chat(src, "<span class='notice'>You're pinned to a wall by [mob.pinned[1]]!</span>")
 			return 0
 
-		// COMPLEX MOVE DELAY SHIT
-		////////////////////////////
-		var/move_delay=0 // set move delay
-		mob.last_move_intent = world.time + 10
-		switch(mob.m_intent)
-			if("run")
-				if(mob.drowsyness > 0)
-					move_delay += 6
-				move_delay += 1+config.run_speed
-			if("walk")
-				move_delay += 7+config.walk_speed
-		move_delay += mob.movement_delay()
-
-		var/obj/item/weapon/grab/Findgrab = locate() in mob
-		if(Findgrab)
-			move_delay += 7
-
 		//We are now going to move
 		var/old_dir = mob.dir
-		move_delay = max(move_delay,1)
-		if(mob.movement_speed_modifier)
-			move_delay *= (1/mob.movement_speed_modifier)
-		mob.delayNextMove(move_delay)
+		mob.delayNextMove(mob.movement_delay())
+		mob.last_move_intent = world.time + 10
 		//Something with pulling things
+		var/obj/item/weapon/grab/Findgrab = locate() in src
 		if(Findgrab)
 			var/list/L = mob.ret_grab()
 			if(istype(L, /list))
@@ -395,7 +377,7 @@
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
-			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
+			if (prefs.stumble && ((world.time - mob.last_movement) > 5 /*&& move_delay < 2*/)) //HITLERS
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
 			step(mob, dir)
@@ -576,3 +558,30 @@
 	else
 		step(pulling, get_dir(pulling.loc, A))
 	return
+
+/mob/proc/movement_delay()
+	return (base_movement_tally() * movement_tally_multiplier())
+
+/mob/proc/base_movement_tally()
+	switch(m_intent)
+		if("run")
+			if(drowsyness > 0)
+				. += 6
+			. += MOB_RUN_TALLY+config.run_speed
+		if("walk")
+			. += MOB_WALK_TALLY+config.walk_speed
+
+	var/obj/item/weapon/grab/Findgrab = locate() in src
+	if(Findgrab)
+		. += 7
+
+	//move_delay = max(move_delay,1)
+
+/mob/proc/movement_tally_multiplier()
+	. = 1
+	if(!flying)
+		var/turf/T = loc
+		if(istype(T))
+			. = T.adjust_slowdown(src, .)
+	if(movement_speed_modifier)
+		. *= (1/movement_speed_modifier)

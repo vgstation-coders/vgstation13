@@ -198,3 +198,7 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		handle_strip_pocket(usr, href_list["pockets"])
+
+/mob/living/carbon/alien/humanoid/base_movement_tally()
+	. = ..()
+	. += move_delay_add
