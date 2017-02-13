@@ -12,6 +12,7 @@
 	var/cooldown_time = 0
 	var/cooldown_state = 0 // Just for icons.
 	var/robot_cell_charge = 5000
+	var/force_default_names = TRUE
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 5000
@@ -84,8 +85,16 @@
 		R.SetKnockdown(5)
 
 		// /vg/: Force borg module, if needed.
-		R.pick_module(force_borg_module)
+		R.pick_module(force_borg_module, force_default_names)
+
+		// /vg/: Force name.
+		R.forced_name=force_default_names
+		// I considered allowing silly names like these, but then that throws stealthmalf out the window.
+		// Here in case I change my mind.
+		//R.custom_name = pick("AUTOBORGER IN TELE", "Rogue Cyborg-[num2text(ident)]", "PLASMA IN SCI", "IT'S MALF")
+
 		R.updateicon()
+		R.updatename()
 
 	spawn(50)
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
