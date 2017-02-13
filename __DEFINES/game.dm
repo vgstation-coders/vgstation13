@@ -12,7 +12,7 @@
 
 #define NO_SHOES_SLOWDOWN 1.4
 #define MISC_SHOE_SLOWDOWN 1.2
-#define MAGBOOTS_SLOWDOWN_LOW 1.2 //CE's magboots - could possibly be changed to NO_SLOWDOWN
+#define MAGBOOTS_SLOWDOWN_LOW NO_SLOWDOWN //CE's magboots are magic yo
 #define MAGBOOTS_SLOWDOWN_HIGH 2
 #define SHACKLE_SHOES_SLOWDOWN 15
 
