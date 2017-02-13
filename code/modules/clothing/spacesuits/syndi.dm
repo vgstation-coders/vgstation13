@@ -17,7 +17,7 @@
 	w_class = W_CLASS_MEDIUM
 	species_restricted = list("exclude",VOX_SHAPED)
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/jetpack,/obj/item/weapon/tank/jetpack/void,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/tank/jetpack/nitrogen,/obj/item/weapon/tank/jetpack/carbondioxide,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/air)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.8
 

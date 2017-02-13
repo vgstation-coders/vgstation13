@@ -4,7 +4,7 @@
 	icon_state = "magboots0"
 	var/base_state = "magboots"
 	var/magpulse = 0
-	var/mag_slow = 2
+	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH
 //	clothing_flags = NOSLIP //disabled by default
 	action_button_name = "Toggle Magboots"
 	species_fit = list(VOX_SHAPED)
@@ -52,7 +52,7 @@
 		return
 	if(src.magpulse)
 		src.clothing_flags &= ~NOSLIP
-		src.slowdown = SHOES_SLOWDOWN
+		src.slowdown = NO_SLOWDOWN
 		src.magpulse = 0
 		icon_state = "[base_state]0"
 		to_chat(usr, "You disable the mag-pulse traction system.")
@@ -82,7 +82,7 @@
 	name = "advanced magboots"
 	icon_state = "CE-magboots0"
 	base_state = "CE-magboots"
-	mag_slow = 1
+	mag_slow = MAGBOOTS_SLOWDOWN_LOW
 
 //Atmos techies die angry
 /obj/item/clothing/shoes/magboots/atmos
@@ -97,7 +97,7 @@
 	name = "deathsquad magboots"
 	icon_state = "DS-magboots0"
 	base_state = "DS-magboots"
-	mag_slow = 0
+	mag_slow = NO_SLOWDOWN
 
 //Syndicate
 /obj/item/clothing/shoes/magboots/syndie

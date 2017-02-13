@@ -15,4 +15,4 @@
 	item_state = "void"
 	species_restricted = list("exclude",VOX_SHAPED)
 	desc = "A high tech, NASA Centcom branch designed, dark red Space suit. Used for AI satellite maintenance."
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
