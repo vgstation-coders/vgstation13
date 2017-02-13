@@ -709,10 +709,10 @@
 		..()
 		block=STRONGBLOCK
 
-/datum/dna/gene/basic/strong/activate(var/mob/M)
+/datum/dna/gene/basic/strong/activate(var/mob/living/carbon/human/M)
 	..()
 	M.species.muscle_mass = 2000
 
-/datum/dna/gene/basic/strong/deactivate(var/mob/M,var/connected,var/flags)
+/datum/dna/gene/basic/strong/deactivate(var/mob/living/carbon/human/M,var/connected,var/flags)
 	if(..())
 		M.species.muscle_mass = 50
