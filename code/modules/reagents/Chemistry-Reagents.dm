@@ -356,6 +356,8 @@
 			else
 				if(D.type == self.data)
 					D.cure()
+		if(prob(1))
+			M.adjustBrainLoss(100)
 
 		M.resistances += self.data
 
