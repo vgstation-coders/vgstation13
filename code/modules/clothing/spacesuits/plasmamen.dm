@@ -70,7 +70,7 @@
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	slowdown = HARDSUIT_SLOWDOWN_MED
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
 /obj/item/clothing/head/helmet/space/plasmaman/atmostech
 	name = "plasmaman atmospheric helmet"
@@ -84,7 +84,7 @@
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
-	slowdown = HARDSUIT_SLOWDOWN_MED
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
 /obj/item/clothing/head/helmet/space/plasmaman/engineer
 	name = "plasmaman engineer helmet"
@@ -195,7 +195,7 @@
 	name = "plasmaman miner suit"
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
-	slowdown = HARDSUIT_SLOWDOWN_MED
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner

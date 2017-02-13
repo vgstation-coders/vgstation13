@@ -53,7 +53,7 @@
 	//icon_state = "thermal"
 	item_state = "ro_suit"
 	w_class = W_CLASS_LARGE//bulky item
-	slowdown = HARDSUIT_SLOWDOWN_LOWMED
+	slowdown = HARDSUIT_SLOWDOWN_MED
 
 /*
  * Bomb protection
@@ -77,7 +77,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
-	slowdown = HARDSUIT_SLOWDOWN_MED
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
@@ -143,6 +143,6 @@
 	permeability_coefficient = 0.50
 	body_parts_covered = FULL_BODY
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = HARDSUIT_SLOWDOWN_LOWMED
+	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)
 	species_fit = list(VOX_SHAPED)

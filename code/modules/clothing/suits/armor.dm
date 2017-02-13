@@ -232,7 +232,7 @@
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	slowdown = HARDSUIT_SLOWDOWN_HIGH
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/armor/tdome
