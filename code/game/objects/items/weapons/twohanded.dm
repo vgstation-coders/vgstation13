@@ -383,3 +383,17 @@
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
 		user.drop_item(src, force_drop=1)
+
+/obj/item/weapon/bloodlust/suicide_act(mob/user)
+	. = (OXYLOSS)
+	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
+	spawn(2 SECONDS) //Adds drama.
+	if(ishuman(user))
+		var/mob/living/carbon/human/U = user
+		if(U.organs_by_name)
+			var/datum/organ/external/head/H = U.get_organ(LIMB_HEAD)
+			if(istype(H) && ~H.status & ORGAN_DESTROYED)
+				H.droplimb(1)
+				playsound(U, get_sfx("machete_hit"),50, 0)
+				blood_splatter(get_turf(src),U,1)
+	return .
