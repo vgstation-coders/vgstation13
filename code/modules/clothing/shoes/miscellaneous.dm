@@ -125,7 +125,6 @@
 	name = "clown shoes"
 	icon_state = "clown"
 	item_state = "clown_shoes"
-	slowdown = MISC_SHOE_SLOWDOWN
 	_color = "clown"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 

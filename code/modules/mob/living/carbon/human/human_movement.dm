@@ -42,11 +42,11 @@
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
 
-	if(!reagents.has_reagent(HYPERZINE)) //Up until this movement speed redo, hyperzine effectively used to ignore this stuff, so whatever
+	if(!reagents.has_reagent(HYPERZINE))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
-		if(M_FAT in mutations)
-			. *= 1.5
+	if(M_FAT in mutations) //hyperzine can't save you, fatty!
+		. *= 1.5
 	if(M_RUN in mutations)
 		. *= 0.8
 
