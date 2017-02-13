@@ -581,6 +581,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return 0
 
 /obj/machinery/chem_master/kick_act(mob/living/H)
+	..()
 	if(beaker)
 		detach()
 

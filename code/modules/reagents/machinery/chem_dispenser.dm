@@ -237,6 +237,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	return 1 // update UIs attached to this object
 
 /obj/machinery/chem_dispenser/kick_act(mob/living/H)
+	..()
 	if(container)
 		detach()
 
