@@ -17,6 +17,8 @@
 	var/list/linked_assemblies = list() //Can have up to 5 assemblies connected. AAC scripts can pulse them
 	var/const/max_linked_assembly_amount = 5
 
+	var/datum/delay_controller/next_run= new (10, 50)
+
 /obj/machinery/computer/general_air_control/atmos_automation/New()
 	..()
 	for(var/i = 1, i <= register_amount, i++)//Fill the registers
@@ -160,10 +162,14 @@
 		return 1
 
 	if(href_list["runonce"])
+		if(next_run.blocked())
+			to_chat(usr, "<span class='warning'>You cannot Run Once too quickly, only once every 5 seconds.</span>")
+			return 0
 		on=FALSE
 		updateUsrDialog()
 		update_icon()
 		investigation_log(I_ATMOS,"was run once by [key_name(usr)]")
+		next_run.setDelay(5 SECONDS)
 		for(var/datum/automation/A in automations)
 			A.process()
 		return 1
