@@ -87,6 +87,14 @@
 		var/obj/item/clothing/gloves/G = gloves
 		damage += G.damage_added //Increase damage by the gloves' damage modifier
 
+	if (species.muscle_mass <= 200)
+		damage += 3
+	else if (species.muscle_mass <= 300)
+		damage += 6
+	else if (species.muscle_mass <= 500)
+		damage += 9
+	else if (species.muscle_mass >= 1500)
+		damage += 15
 	return damage
 
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
@@ -97,6 +105,15 @@
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		base_chance += G.bonus_knockout
+
+	if (species.muscle_mass <= 200)
+		base_chance += 5
+	else if (species.muscle_mass <= 300)
+		base_chance += 10
+	else if (species.muscle_mass <= 500)
+		base_chance += 15
+	else if (species.muscle_mass > 1500)
+		base_chance += 30
 
 	base_chance *= victim.knockout_chance_modifier()
 

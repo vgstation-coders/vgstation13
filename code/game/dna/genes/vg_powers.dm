@@ -40,6 +40,7 @@ Obviously, requires DNA2.
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
+			M.species.muscle_mass = 150
 			M.Knockdown(3)
 			M.emote("collapse")
 
@@ -73,6 +74,7 @@ Obviously, requires DNA2.
 		M.mutations.Add(M_HULK)
 		M.update_mutations()		//update our mutation overlays
 		M.update_body()
+		M.species.muscle_mass = 500
 		//M.say(pick("",";")+pick("HULK MAD","YOU MADE HULK ANGRY")) // Just a note to security.
 		log_admin("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
 		message_admins("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
