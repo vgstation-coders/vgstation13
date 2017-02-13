@@ -59,6 +59,7 @@
 #define FUEL 			"fuel"
 #define VOMIT 			"vomit"
 #define CLEANER 			"cleaner"
+#define BLEACH 				"bleach"
 #define FERTILIZER 			"fertilizer"
 #define EZNUTRIENT 			"eznutrient"
 #define ROBUSTHARVEST 			"robustharvest"

@@ -839,11 +839,18 @@
 	result_amount = 2
 
 /datum/chemical_reaction/space_cleaner
-	name = "Space cleaner"
+	name = "Space Cleaner"
 	id = CLEANER
 	result = CLEANER
 	required_reagents = list(AMMONIA = 1, WATER = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/space_cleaner/bleach
+	name = "Bleach"
+	id = BLEACH
+	result = BLEACH
+	required_reagents = list(SODIUM = 2, CHLORINE = 2, CLEANER = 2)
+	result_amount = 3
 
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"

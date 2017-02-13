@@ -1696,7 +1696,7 @@
 			getFromPool(/obj/effect/decal/cleanable/vomit, T)
 
 /datum/reagent/space_cleaner
-	name = "Space cleaner"
+	name = "Space Cleaner"
 	id = CLEANER
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
 	reagent_state = LIQUID
@@ -1759,6 +1759,34 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+
+/datum/reagent/space_cleaner/bleach
+	name = "Bleach"
+	id = BLEACH
+	description = "A strong cleaning compound. Do not swallow."
+	reagent_state = LIQUID
+	color = "#FBFCFF" //rgb: 251, 252, 255
+
+/datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	switch(data)
+		if(1)
+			H << "<span class='warning'>Your throat feels like it's on fire!</span>"
+			M.adjustBruteLoss(10)
+		if(2 to 10)
+			if(prob(10))
+				owner.emote("me", 1, "coughs up blood!")
+				owner.drip(10)
+		if(10 to INFINITY)
+			if(prob(8))
+				M.vomit()
+				M.adjustBruteLoss(5) //it's going through and burning your throat AGAIN
+		data++
+
+	M.adjustToxLoss(6 * REM)
 
 //Reagents used for plant fertilizers.
 //WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
