@@ -687,8 +687,6 @@
 // This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY. Return a high number to make the mob move slower. Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
-/turf/space/adjust_slowdown(mob/living/L, base_slowdown)
-	return 1
 
 /turf/proc/has_gravity(mob/M)
 	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough

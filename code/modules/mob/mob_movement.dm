@@ -576,8 +576,6 @@
 	if(Findgrab)
 		. += 7
 
-	//move_delay = max(move_delay,1)
-
 /mob/proc/movement_tally_multiplier()
 	. = 1
 	if(!flying)

@@ -162,6 +162,10 @@
 
 /mob/living/carbon/monkey/base_movement_tally()
 	. = ..()
+	if(reagents.has_reagent(HYPERZINE))
+		return //Up until this movement speed redo, hyperzine effectively used to ignore this stuff, so whatever
+	if(istype(loc, /turf/space))
+		return //Same as above.
 	if (bodytemperature < 283.222)
 		. += (283.222 - bodytemperature) / 10 * 1.75
 

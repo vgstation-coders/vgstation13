@@ -11,6 +11,8 @@
 		return //Calculate none of the following because, well, we're technically on a vehicle!
 	if(reagents.has_reagent(HYPERZINE))
 		return //Up until this movement speed redo, hyperzine effectively used to ignore this stuff, so whatever
+	if(istype(loc, /turf/space))
+		return //Same as above.
 
 	if(species && species.move_speed_mod)
 		. += species.move_speed_mod
