@@ -116,15 +116,16 @@
 
 /obj/item/projectile/bullet/fourtyfive //secgun ammo!
 	damage = 15
-	stun = 2 //stopping power
-	weaken = 2
+	drowsy = 1 //stopping power
+	agony = 3
 	penetration = 2
 
 /obj/item/projectile/bullet/fourtyfive/practice
 	damage = 2
-	stun = 1
-	weaken = 1
+	drowsy = 0
+	agony = 0
 	embed = 0
+	penetration = 0
 
 /obj/item/projectile/bullet/fourtyfive/rubber
 	damage = 8
