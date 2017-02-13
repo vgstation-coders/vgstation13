@@ -115,9 +115,9 @@
 	weaken = 0
 
 /obj/item/projectile/bullet/fourtyfive //secgun ammo!
-	damage = 15
-	drowsy = 1 //stopping power
-	agony = 3
+	damage = 13
+	drowsy = 0.25 //stopping power
+	agony = 0.25
 	penetration = 2
 
 /obj/item/projectile/bullet/fourtyfive/practice
