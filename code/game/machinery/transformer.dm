@@ -80,7 +80,9 @@
 	// Sleep for a couple of ticks to allow the human to see the pain
 	sleep(5)
 
-	var/mob/living/silicon/robot/R = H.Robotize(1) // Delete the items or they'll all pile up in a single tile and lag
+	// Delete the items or they'll all pile up in a single tile and lag
+	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
+	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE)
 	if(R)
 		R.cell.maxcharge = robot_cell_charge
 		R.cell.charge = robot_cell_charge
@@ -89,13 +91,12 @@
 		R.SetKnockdown(5)
 
 		// /vg/: Force borg module, if needed.
-		// Last var disables namepick on New().  Later on, we enable or disable namepick.
-		R.pick_module(force_borg_module, FALSE)
+		R.pick_module(force_borg_module)
 
 		// /vg/: Select from various name lists.
 		if(name_type == NAMETYPE_SILLY)
 			R.custom_name = pick(autoborg_silly_names)
-			R.custom_name = replacetext(R.custom_name, "{AINAME}", R.connected_ai.name)
+			R.custom_name = replacetext(R.custom_name, "{AINAME}", (!isnull(R.connected_ai) ? R.connected_ai.name : "AI"))
 			if(findtext(R.custom_name, "{###}"))
 				R.custom_name = replacetext(R.custom_name, "{###}", num2text(R.ident))
 			else
@@ -164,8 +165,8 @@
 			</li>
 			<li>
 				<b>Borg Names:</b>
-				<a href="?src=\ref[src];act=names;nametype=[NAMETYPE_NORMAL]">Default</a>
-				<a href="?src=\ref[src];act=names;nametype=[NAMETYPE_SILLY]">Silly (OBVIOUS)</a>
+				<a class="link[name_type==NAMETYPE_NORMAL ? "On" : "Off"]" href="?src=\ref[src];act=names;nametype=[NAMETYPE_NORMAL]">Default</a>
+				<a class="link[name_type==NAMETYPE_SILLY ? "On" : "Off"]" href="?src=\ref[src];act=names;nametype=[NAMETYPE_SILLY]">Silly (OBVIOUS)</a>
 			</li>
 			<li>
 				<b>Permit Name Picking:</b>
