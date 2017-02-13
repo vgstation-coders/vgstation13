@@ -336,9 +336,10 @@
 			to_chat(src, "<span class='notice'>You're pinned to a wall by [mob.pinned[1]]!</span>")
 			return 0
 
+		var/move_delay = mob.movement_delay()
 		//We are now going to move
 		var/old_dir = mob.dir
-		mob.delayNextMove(mob.movement_delay())
+		mob.delayNextMove(move_delay)
 		mob.last_move_intent = world.time + 10
 		//Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in src
@@ -377,7 +378,7 @@
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
-			if (prefs.stumble && ((world.time - mob.last_movement) > 5 /*&& move_delay < 2*/)) //HITLERS
+			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
 			step(mob, dir)
