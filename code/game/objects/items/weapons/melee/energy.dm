@@ -89,7 +89,7 @@
 
 /obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
 	if (clumsy_check(user) && prob(50) && active) //only an on blade can cut
-		to_chat(user, "<span class='danger'>You accidentally cut yourself with [src].</span>")
+		to_chat(user, "<span class='danger'>You accidentally cut yourself with [src]!</span>")
 		user.take_organ_damage(5,5)
 		return
 	toggleActive(user)
@@ -108,7 +108,7 @@
 		force = 30
 		w_class = W_CLASS_LARGE
 		sharpness = sharpness_on
-		sharpness_flags = initial(sharpness_flags)
+		sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
 		hitsound = "sound/weapons/blade1.ogg"
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")

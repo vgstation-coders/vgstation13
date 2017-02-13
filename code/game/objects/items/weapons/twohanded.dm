@@ -122,6 +122,8 @@
 	item_state = "dualsaber[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness = wielded ? 1.5 : 0
 	if(user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
