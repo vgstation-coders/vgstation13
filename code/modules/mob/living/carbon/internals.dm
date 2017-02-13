@@ -55,6 +55,8 @@
 					to_chat(user, "<span class='warning'>\The [src] does not have \an [breathes] tank.</span>")
 				else
 					to_chat(user, "<span class='warning'>You don't have \an [breathes] tank.</span>")
+		internal = T
+		T.add_fingerprint(user)
 		if(internals)
 			internals.icon_state = "internal1"
 		if(user != src)
