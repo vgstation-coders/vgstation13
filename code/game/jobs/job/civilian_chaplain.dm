@@ -14,7 +14,15 @@
 	pdatype = /obj/item/device/pda/chaplain
 
 /datum/job/chaplain/equip(var/mob/living/carbon/human/H)
-
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 	H.add_language("Spooky") //SPOOK
 	var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(H) //BS12 EDIT
 	H.put_in_hands(B)

@@ -69,6 +69,10 @@
 	on_damaged = null
 	on_clickon = null
 
+	if(transmogged_from)
+		qdel(transmogged_from)
+		transmogged_from = null
+
 	..()
 
 /mob/projectile_check()
@@ -1835,6 +1839,49 @@ mob/proc/on_foot()
 
 	spawn(duration + 1)
 		regenerate_icons()
+
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
+	if(!target_type)
+		if(transmogged_from)
+			transmogged_from.forceMove(loc)
+			if(key)
+				transmogged_from.key = key
+			transmogged_from.timestopped = 0
+			if(istype(transmogged_from, /mob/living/carbon))
+				var/mob/living/carbon/C = transmogged_from
+				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+					C.drop_item(C.wear_mask, force_drop = 1)
+			transmogged_from = null
+			for(var/atom/movable/AM in contents)
+				AM.forceMove(get_turf(src))
+			qdel(src)
+		return
+	if(!ispath(target_type, /mob))
+		EXCEPTION(target_type)
+		return
+	var/mob/M = new target_type(loc)
+	M.transmogged_from = src
+	if(key)
+		M.key = key
+	if(offer_revert_spell)
+		var/spell/change_back = new /spell/aoe_turf/revert_form
+		M.add_spell(change_back)
+	src.forceMove(null)
+	timestopped = 1
+
+/spell/aoe_turf/revert_form
+	name = "Revert Form"
+	desc = "Morph back into your previous form."
+	abbreviation = "RF"
+	charge_max = 1
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 0
+	hud_state = "wiz_mindswap"
+
+/spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
+	user.transmogrify()
+	user.remove_spell(src)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

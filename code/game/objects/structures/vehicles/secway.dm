@@ -3,6 +3,7 @@
 	desc = "A brave security cyborg gave its life to help you look like a complete tool."
 	icon_state = "secway"
 	keytype = /obj/item/key/security
+	can_have_carts = FALSE
 	var/clumsy_check = 1
 
 /obj/item/key/security
@@ -63,4 +64,3 @@
 		var/mob/living/idiot = obstacle
 		idiot.Knockdown(2)
 		idiot.Stun(2)
-

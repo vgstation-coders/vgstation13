@@ -10,6 +10,7 @@
 	//nick = "TRUE POWER"
 	keytype = /obj/item/key/gokart
 	noghostspin = 0
+	can_have_carts = FALSE
 
 /obj/structure/bed/chair/vehicle/gokart/unlock_atom(var/atom/movable/AM)
 	. = ..()

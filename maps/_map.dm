@@ -202,7 +202,7 @@ proc/get_base_turf(var/z)
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	if(update_old_base)
 		var/count = 0
-		for(var/turf/T in turfs)
+		for(var/turf/T in world)
 			count++
 			if(!(count % 50000))
 				sleep(world.tick_lag)
