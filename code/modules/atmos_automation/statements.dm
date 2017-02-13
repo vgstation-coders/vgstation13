@@ -105,31 +105,46 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 /datum/automation/proc/fmtString(var/str)
 	return str || "-----"
 
+// TODO: Standardize this somewhere.
+// This determines if a mob can send hrefs or other commands.
+/datum/automation/proc/canWriteState(var/mob/user, var/href)
+	if(isobserver(user))
+		var/mob/dead/observer/O = user
+		var/ghost_flags = 0
+		if(parent.ghost_write)
+			ghost_flags |= PERMIT_ALL
+		if(canGhostWrite(O,parent,"",ghost_flags) || isAdminGhost(O))
+			if(!parent.custom_aghost_alerts)
+				log_adminghost("[key_name(user)] screwed with [parent] ([href])!")
+			return TRUE // Ghost is admin or otherwise allowed to dick with things.
+		return FALSE // Ghost is NOT admin? Bail.
+
+	if(user.restrained() || user.lying || user.stat)
+		return FALSE // Lying down, incapacitated, or restrained.
+
+	if (!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
+
+	// Silicons can access shit from out of range.
+	if(istype(user, /mob/living/silicon))
+		return TRUE
+
+	// RAAAANGE CHEEEECK
+	var/norange = 0
+	if(user.mutations && user.mutations.len)
+		if(M_TK in user.mutations)
+			norange = 1
+
+	if(!norange)
+		if ((!in_range(parent, user) || !istype(parent.loc, /turf)))
+			return FALSE // Out of range or inside of something.
+
+	return TRUE // HREF away!
+
 /datum/automation/Topic(var/href, var/list/href_list)
-	var/ghost_flags = 0
-	if(parent.ghost_write)
-		ghost_flags |= PERMIT_ALL
-
-	if(!canGhostWrite(usr, parent, "", ghost_flags))
-		if(usr.restrained() || usr.lying || usr.stat)
-			return 1
-
-		if (!usr.dexterity_check())
-			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-			return 1
-
-		var/norange = 0
-		if(usr.mutations && usr.mutations.len)
-			if(M_TK in usr.mutations)
-				norange = 1
-
-		if(!norange)
-			if ((!in_range(parent, usr) || !istype(parent.loc, /turf)) && !istype(usr, /mob/living/silicon))
-				return 1
-
-	else if(!parent.custom_aghost_alerts)
-		log_adminghost("[key_name(usr)] screwed with [parent] ([href])!")
-
+	if(!canWriteState(usr, href))
+		return 0
 	if(href_list["add"])
 		var/new_child = selectValidChildFor(usr)
 		if(!new_child)
