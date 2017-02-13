@@ -17,10 +17,10 @@
 		Triggered(toucher, context, 0)
 	..()
 
-	if (my_effect.effect == EFFECT_TOUCH)
+	if(my_effect.effect == EFFECT_TOUCH)
 		if (my_effect.IsContained())
 			my_effect.Blocked()
-		else
+		else if(my_effect.IsPrimary() || prob(25))
 			my_effect.DoEffectTouch(toucher)
 			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context] ([my_effect.trigger]) || touched by [key_name(toucher)].")
 

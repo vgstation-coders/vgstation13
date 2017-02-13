@@ -11,7 +11,7 @@
 	icon_state = "ano00"
 	var/icon_num = 0
 	density = 1
-	var/datum/artifact_effect/my_effect
+	var/datum/artifact_effect/primary_effect
 	var/datum/artifact_effect/secondary_effect
 	var/being_used = 0
 	var/contained = 0
@@ -37,15 +37,17 @@
 
 	//setup primary effect - these are the main ones (mixed)
 	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-	my_effect = new effecttype(src)
-	my_effect.artifact_id = "[artifact_id]a"
-	src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [my_effect.artifact_id]: [my_effect] || range: [my_effect.effectrange] || charge time: [my_effect.chargelevelmax] || trigger: [my_effect.trigger].")
+	primary_effect = new effecttype(src)
+	primary_effect.artifact_id = "[artifact_id]a"
+	primary_effect.GenerateTrigger()
+	src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
 
 	//75% chance to have a secondary stealthy (and mostly bad) effect
 	if(prob(75))
 		effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
 		secondary_effect = new effecttype(src)
 		secondary_effect.artifact_id = "[artifact_id]b"
+		secondary_effect.GenerateTrigger()
 		src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
 		if(prob(75) && secondary_effect.effect != EFFECT_TOUCH)
 			src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
@@ -75,10 +77,10 @@
 	if(isnull(L) || !istype(L)) 	// We're inside a container or on null turf, either way stop processing effects
 		return
 
-	if(my_effect)
-		my_effect.trigger.CheckTrigger(src)
+	if(primary_effect)
+		primary_effect.trigger.CheckTrigger(src)
 		if(!contained)
-			my_effect.process()
+			primary_effect.process()
 	if(secondary_effect)
 		secondary_effect.trigger.CheckTrigger(src)
 		if(!contained)
@@ -150,13 +152,13 @@
 
 /obj/machinery/artifact/Move()
 	..()
-	if(my_effect)
-		my_effect.UpdateMove()
+	if(primary_effect)
+		primary_effect.UpdateMove()
 	if(secondary_effect)
 		secondary_effect.UpdateMove()
 
 /obj/machinery/artifact/Destroy()
-	qdel(my_effect); my_effect = null
+	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null
 	qdel(on_attackhand); on_attackhand = null
 	qdel(on_attackby); on_attackby = null

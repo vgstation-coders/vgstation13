@@ -3,14 +3,16 @@
 	effecttype = "forcefield"
 	var/list/created_field = list()
 	effect_type = 4
-	effect = EFFECT_AURA
 
 /datum/artifact_effect/forcefield/New()
 	..()
-	if(!istype(trigger,/datum/artifact_trigger/touch/))
-		var/trigger_override = /datum/artifact_trigger/touch
-		trigger = new trigger_override(src)
-		trigger.my_artifact = holder
+	effect = EFFECT_AURA
+	spawn(0)
+		if(trigger && !istype(trigger,/datum/artifact_trigger/touch/))
+			var/trigger_override = /datum/artifact_trigger/touch
+			qdel(trigger);trigger = null
+			trigger = new trigger_override(src)
+			trigger.my_artifact = holder
 
 /datum/artifact_effect/forcefield/ToggleActivate()
 	..()

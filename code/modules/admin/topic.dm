@@ -3041,10 +3041,15 @@
 					if(answer1 == "Primary and Secondary")
 						secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
 					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr))
-					custom.my_effect = new primary_effect(custom)
-					if(secondary_effect)
-						custom.secondary_effect = new secondary_effect(custom)
-					message_admins("[key_name_admin(usr)] has created a custom artifact")
+					spawn(1)//delay so that the artifact effects can setup their triggers before being deleted, else we runtime
+						qdel(custom.primary_effect); custom.primary_effect = null
+						custom.primary_effect = new primary_effect(custom)
+						custom.primary_effect.GenerateTrigger()
+						qdel(custom.secondary_effect); custom.secondary_effect = null
+						if(secondary_effect)
+							custom.secondary_effect = new secondary_effect(custom)
+							custom.secondary_effect.GenerateTrigger()
+						message_admins("[key_name_admin(usr)] has created a custom artifact")
 
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)

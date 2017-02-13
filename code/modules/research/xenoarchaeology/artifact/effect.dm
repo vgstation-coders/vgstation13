@@ -28,15 +28,6 @@
 	holder = location
 	effect = rand(0,MAX_EFFECT)
 
-	var/triggertype
-	if(effect == EFFECT_TOUCH)
-		triggertype = /datum/artifact_trigger/touch
-	else
-		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
-
-	trigger = new triggertype(src)
-	trigger.my_artifact = holder
-
 	//this will be replaced by the excavation code later, but it's here just in case
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
 
@@ -136,7 +127,7 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 /datum/artifact_effect/proc/IsPrimary()
 	if(istype(holder, /obj/machinery/artifact))
 		var/obj/machinery/artifact/A = holder
-		if(A.my_effect == src)
+		if(A.primary_effect == src)
 			return 1
 	return 0
 
@@ -147,7 +138,18 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 			return 1
 	return 0
 
+/datum/artifact_effect/proc/GenerateTrigger()
+	var/triggertype
+	if(effect == EFFECT_TOUCH)
+		triggertype = /datum/artifact_trigger/touch
+	else
+		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+
+	trigger = new triggertype(src)
+	trigger.my_artifact = holder
+
 /datum/artifact_effect/Destroy()
-	qdel(trigger); trigger = null
+	if(trigger)
+		qdel(trigger); trigger = null
 	copy_for_battery = null
 	holder = null
