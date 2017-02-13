@@ -3,8 +3,8 @@
 //////////////////////////////////
 
 #define MAX_BOMB_POWER 16	//How far will the largest explosions reach.
-#define MAX_SPEED_BONUS 3	//How fast can a player get by cumulating skates (as a multiplier over his base speed)
-#define SPEED_BONUS_PER_SKATE 0.25
+#define MAX_SPEED_BONUS 2	//How fast can a player get by cumulating skates (as a multiplier over his base speed)
+#define SPEED_BONUS_PER_SKATE 0.1
 
 /*
 ////content://///

@@ -65,7 +65,7 @@
 		skate_bonus = max(skate_bonus, dispenser.speed_bonus)//if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
 	if(skate_bonus > 1)
 		. *= 1/skate_bonus
-	if(disease_slow > 1)
+	if(disease_slow > 0)
 		. *= disease_slow * 6
 
 
