@@ -93,6 +93,7 @@
 		out += "<a href=\"?src=\ref[src];on=1\" style=\"font-size:large;font-weight:bold;color:red;\">RUNNING</a>"
 	else
 		out += "<a href=\"?src=\ref[src];on=1\" style=\"font-size:large;font-weight:bold;color:green;\">STOPPED</a>"
+	out += " | <a href=\"?src=\ref[src];runonce=1\" style=\"font-size:large;font-weight:bold;color:green;\">RUN ONCE</a>"
 
 	out += "<p><a href=\"?src=\ref[src];view_assemblies=1\">View connected assemblies</a></p>"
 
@@ -156,6 +157,15 @@
 		updateUsrDialog()
 		update_icon()
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
+		return 1
+
+	if(href_list["runonce"])
+		on=FALSE
+		updateUsrDialog()
+		update_icon()
+		investigation_log(I_ATMOS,"was run once by [key_name(usr)]")
+		for(var/datum/automation/A in automations)
+			A.process()
 		return 1
 
 	if(href_list["add"])
