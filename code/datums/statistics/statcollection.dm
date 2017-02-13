@@ -281,7 +281,7 @@
 	for(var/mob/M in player_list)
 		if(M.client)
 			playercount += 1
-	stat_collection.population_polls.Add(new /datum/stat/population_stat(playercount))
+	stat_collection.population_polls += (new /datum/stat/population_stat(playercount))
 
 /proc/population_poll_loop()
 	while(1)
