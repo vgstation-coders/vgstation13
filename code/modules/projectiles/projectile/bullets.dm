@@ -132,6 +132,7 @@
 	stun = 5
 	weaken = 5
 	embed = 0
+	penetration = 0
 
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
