@@ -661,7 +661,7 @@ obj/structure/bomberflame/Destroy()
 	desc = "Doesn't actually make you immune to bombs!"
 	icon_state = "bomberman"
 	item_state = "bomberman"
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	clothing_flags = ONESIZEFITSALL
@@ -1005,7 +1005,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		B.hurt_players = 0
 	B.destroy_environnement = 0
 	M.equip_to_slot_or_del(B, slot_s_store)
-	bombsuit.slowdown = 1
+	bombsuit.slowdown = HARDSUIT_SLOWDOWN_LOW
 	for(var/obj/item/clothing/C in M)
 		C.canremove = 0
 		if(violence)

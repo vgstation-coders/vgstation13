@@ -41,7 +41,7 @@
 	icon_state = "riot"
 	item_state = "swat_suit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.5
 
@@ -52,7 +52,7 @@
  	icon_state = "knight_green"
  	item_state = "knight_green"
  	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
- 	slowdown = 1
+ 	slowdown = HARDSUIT_SLOWDOWN_LOW
  	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
 
 
@@ -98,7 +98,7 @@
 	item_state = "xcomarmor1"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 50, bullet = 10, laser = 10, energy = 0, bomb = 0, bio = 0, rad = 0)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
 
@@ -157,7 +157,7 @@
 	icon_state = "reactiveoff"
 	item_state = "reactiveoff"
 	blood_overlay_type = "armor"
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
@@ -232,7 +232,7 @@
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	slowdown = 3
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/armor/tdome
@@ -266,7 +266,7 @@
 	item_state = "volnutt"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	armor = list(melee = 50, bullet = 40, laser = 40, energy = 40, bomb = 40, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/doomguy
@@ -276,7 +276,7 @@
 	item_state = "doom"
 	body_parts_covered = FULL_TORSO
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	armor = list(melee = 50, bullet = 30, laser = 20, energy = 20, bomb = 30, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/ice

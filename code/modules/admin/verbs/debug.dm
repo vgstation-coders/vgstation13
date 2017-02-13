@@ -1082,7 +1082,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(bombsuit, slot_wear_suit)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/purple(M), slot_gloves)
 			M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
-			bombsuit.slowdown = 1
+			bombsuit.slowdown = HARDSUIT_SLOWDOWN_LOW
 			var/list/randomhexes = list(
 				"7",
 				"8",
