@@ -38,6 +38,8 @@
 			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 		if(4)
 			H.equip_or_collect(new/obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
