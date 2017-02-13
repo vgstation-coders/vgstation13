@@ -91,9 +91,9 @@
 		damage += 3
 	else if (species.muscle_mass <= 300)
 		damage += 6
-	else if (species.muscle_mass <= 500)
+	else if (species.muscle_mass <= 1500)
 		damage += 9
-	else if (species.muscle_mass >= 1500)
+	else if (species.muscle_mass > 1500)
 		damage += 15
 	return damage
 
@@ -110,7 +110,7 @@
 		base_chance += 5
 	else if (species.muscle_mass <= 300)
 		base_chance += 10
-	else if (species.muscle_mass <= 500)
+	else if (species.muscle_mass <= 1500)
 		base_chance += 15
 	else if (species.muscle_mass > 1500)
 		base_chance += 30

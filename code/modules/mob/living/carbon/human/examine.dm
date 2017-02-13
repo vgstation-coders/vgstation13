@@ -205,7 +205,7 @@
 		msg += "[t_He] [t_is] of an above average physique. \n"
 	else if (species.muscle_mass <= 300)
 		msg += "[t_He] [t_is] extremely buff. Wow. \n"
-	else if (species.muscle_mass <= 500)
+	else if (species.muscle_mass <= 1500)
 		msg += "[t_He] [t_has] huge, pulsating muscles. \n"
 	else if (species.muscle_mass > 1500)
 		msg += "[t_He] [t_has] enormous, veiny muscles. Roids? \n"
