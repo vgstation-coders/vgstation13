@@ -12,7 +12,7 @@
 	attacktext = "chomps"
 	attack_sound = 'sound/weapons/bite.ogg'
 	faction = "creature"
-	speed = 4
+	speed = 5
 	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/creature/cult

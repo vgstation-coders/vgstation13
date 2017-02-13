@@ -177,7 +177,7 @@
 	health = 500
 	melee_damage_lower = 30
 	melee_damage_upper = 40
-	speed = 5
+	speed = 6
 	projectiletype = /obj/item/projectile/web
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1

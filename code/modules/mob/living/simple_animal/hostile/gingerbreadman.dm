@@ -30,4 +30,4 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	speed = 4
+	speed = 5
