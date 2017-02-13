@@ -225,7 +225,7 @@ var/datum/controller/gameticker/ticker
 
 	stat_collection.round_start_time = world.realtime
 	spawn(5 MINUTES) // poll every 5 minutes
-
+		population_poll_loop()
 
 	wageSetup()
 
