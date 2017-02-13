@@ -119,8 +119,8 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 			return TRUE // Ghost is admin or otherwise allowed to dick with things.
 		return FALSE // Ghost is NOT admin? Bail.
 
-	if(user.restrained() || user.lying || user.stat)
-		return FALSE // Lying down, incapacitated, or restrained.
+	if(user.incapacitated() || user.lying)
+		return FALSE // Lying down, or incapacitated.
 
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
@@ -131,16 +131,7 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 		return TRUE
 
 	// RAAAANGE CHEEEECK
-	var/norange = 0
-	if(user.mutations && user.mutations.len)
-		if(M_TK in user.mutations)
-			norange = 1
-
-	if(!norange)
-		if ((!in_range(parent, user) || !istype(parent.loc, /turf)))
-			return FALSE // Out of range or inside of something.
-
-	return TRUE // HREF away!
+	return in_range(parent, user) && isturf(parent.loc)
 
 /datum/automation/Topic(var/href, var/list/href_list)
 	if(!canWriteState(usr, href))
