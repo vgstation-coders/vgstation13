@@ -456,8 +456,6 @@
 	..()
 	if(stopped)
 		start_processing_queue()
-	else
-		stop_processing_queue()
 
 // Tell the machine to start processing the queue on the next process().
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
