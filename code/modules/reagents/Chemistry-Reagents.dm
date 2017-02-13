@@ -1763,7 +1763,7 @@
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
 	id = BLEACH
-	description = "A strong cleaning compound. Do not swallow."
+	description = "A strong cleaning compound. Corrosive and toxic when applied to soft tissue. Do not swallow."
 	reagent_state = LIQUID
 	color = "#FBFCFF" //rgb: 251, 252, 255
 
@@ -1773,20 +1773,19 @@
 		return 1
 
 	switch(data)
-		if(1)
-			H << "<span class='warning'>Your throat feels like it's on fire!</span>"
-			M.adjustBruteLoss(10)
-		if(2 to 10)
-			if(prob(10))
-				owner.emote("me", 1, "coughs up blood!")
-				owner.drip(10)
+		if(1 to 10)
+			M.adjustBruteLoss(1 * REM) //soft tissue damage
 		if(10 to INFINITY)
-			if(prob(8))
-				M.vomit()
-				M.adjustBruteLoss(5) //it's going through and burning your throat AGAIN
-		data++
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(prob(5))
+					H.emote("me", 1, "coughs up blood!")
+					H.drip(10)
+				else if(prob(5))
+					H.vomit()
+	data++
 
-	M.adjustToxLoss(6 * REM)
+	M.adjustToxLoss(2 * REM)
 
 //Reagents used for plant fertilizers.
 //WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
