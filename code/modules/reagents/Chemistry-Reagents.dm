@@ -1802,7 +1802,7 @@
 
 	if(..())
 		return 1
-1
+
 	if(method == TOUCH)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
