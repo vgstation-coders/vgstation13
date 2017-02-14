@@ -117,3 +117,12 @@
 	desc = "A random painting from Centcom's museum. For those with good taste in art."
 	typepath = /obj/item/mounted/frame/painting
 	cost = 700
+
+/////////////////////////////
+// Holiday Special Items!
+/////////////////////////////
+/datum/storeitem/valentinechocolatebar
+	name = "Valentine's Day chocolate bar"
+	desc = "Show your loved ones how you feel on this special occasion!"
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	cost = 80

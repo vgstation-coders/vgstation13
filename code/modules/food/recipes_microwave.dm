@@ -247,6 +247,13 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 
+/datum/recipe/valentinebar
+	items = list(
+		/obj/item/organ/heart,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+
 // Human ///////////////////////////////////////////////////////
 
 /datum/recipe/human //Parent datum only
