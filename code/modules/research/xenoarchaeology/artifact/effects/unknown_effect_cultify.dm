@@ -15,6 +15,8 @@
 /datum/artifact_effect/cultify/proc/make_culty(var/range)
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
+			if(!istype(T, /turf/simulated))
+				continue
 			T.cultify()
 			for(var/obj/structure/grille/G in T)
 				G.cultify()
