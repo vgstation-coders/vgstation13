@@ -505,6 +505,12 @@
 	icon_state = "chocolatebar"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	name = "Valentine's Day chocolate bar"
+	desc = "Made (or bought) with love!"
+	icon_state = "valentinebar"
+	wrapped = 1
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."
