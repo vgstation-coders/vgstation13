@@ -1767,6 +1767,17 @@
 	reagent_state = LIQUID
 	color = "#FBFCFF" //rgb: 251, 252, 255
 
+/datum/reagent/space_cleaner/bleach/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	for(var/atom/A in T)
+		A.clean_blood()
+
+	for(var/obj/item/I in T)
+		I.decontaminate()
+
 /datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -1791,17 +1802,17 @@
 
 	if(..())
 		return 1
-
+1
 	if(method == TOUCH)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
-				H << "<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>"
+				to_chat(H,"<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>")
 				return
 			else //This stuff is a little more corrosive but less irritative than pepperspray
 				H.emote("scream", , , 1)
-				H << "<span class='danger'>You are sprayed directly in the eyes with bleach!</span>"
+				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
 				H.eye_blind = max(M.eye_blind, 5)
 				H.adjustBruteLoss(2)
