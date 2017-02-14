@@ -1643,11 +1643,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/anomaly_container
 	name = "Anomaly container"
-	contains = list (/obj/structure/anomaly_container)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure/scisec
+	containertype = /obj/structure/largecrate/anomaly_container
 	containername = "anomaly container crate"
-	access = access_science
 	group = "Science"
 
 
