@@ -37,21 +37,22 @@
 
 	//setup primary effect - these are the main ones (mixed)
 	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-	primary_effect = new effecttype(src)
+	primary_effect = new effecttype(src, 1)
 	primary_effect.artifact_id = "[artifact_id]a"
-	primary_effect.GenerateTrigger()
-	src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
+	spawn(1)
+		src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
 
 	//75% chance to have a secondary stealthy (and mostly bad) effect
 	if(prob(75))
 		effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-		secondary_effect = new effecttype(src)
+		secondary_effect = new effecttype(src, 1)
 		secondary_effect.artifact_id = "[artifact_id]b"
-		secondary_effect.GenerateTrigger()
-		src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
-		if(prob(75) && secondary_effect.effect != EFFECT_TOUCH)
-			src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
-			secondary_effect.ToggleActivate(2)
+		spawn(1)
+			if(secondary_effect) //incase admin tools or something deleted the secondary
+				src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
+				if(prob(75) && secondary_effect.effect != EFFECT_TOUCH)
+					src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
+					secondary_effect.ToggleActivate(2)
 
 	icon_num = rand(0,11)
 	icon_state = "ano[icon_num]0"

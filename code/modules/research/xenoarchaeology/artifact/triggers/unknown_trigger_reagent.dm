@@ -6,8 +6,7 @@
 /datum/artifact_trigger/reagent/New()
 	..()
 	reagent_group = pick("WATER", "ACID", "VOLATILE", "TOXIN")
-	spawn(0)
-		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
+	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 
 /datum/artifact_trigger/reagent/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]

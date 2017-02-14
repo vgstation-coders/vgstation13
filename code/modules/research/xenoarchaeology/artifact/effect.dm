@@ -23,7 +23,8 @@
 //6 = Interdimensional/bluespace? phasing
 //7 = Atomic synthesis
 
-/datum/artifact_effect/New(var/atom/location)
+//send 1 after location to generate a trigger for the effect, only do this on objects that have the required events!
+/datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0)
 	..()
 	holder = location
 	effect = rand(0,MAX_EFFECT)
@@ -45,6 +46,9 @@
 			//large range, long charge time
 			chargelevelmax = rand(20, 120)
 			effectrange = rand(20, 200)
+
+	if(generate_trigger)
+		GenerateTrigger()
 
 /datum/artifact_effect/proc/ToggleActivate(var/reveal_toggle = 1)
 	//so that other stuff happens first
@@ -146,7 +150,6 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
 
 	trigger = new triggertype(src)
-	trigger.my_artifact = holder
 
 /datum/artifact_effect/Destroy()
 	if(trigger)

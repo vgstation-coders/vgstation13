@@ -8,10 +8,9 @@
 
 /datum/artifact_trigger/force/New()
 	..()
-	spawn(0)
-		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
-		key_explode = my_artifact.on_explode.Add(src, "owner_explode")
-		key_projectile = my_artifact.on_projectile.Add(src, "owner_projectile")
+	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
+	key_explode = my_artifact.on_explode.Add(src, "owner_explode")
+	key_projectile = my_artifact.on_projectile.Add(src, "owner_projectile")
 
 /datum/artifact_trigger/force/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]

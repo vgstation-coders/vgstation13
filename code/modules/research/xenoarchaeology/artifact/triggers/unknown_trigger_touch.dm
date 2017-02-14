@@ -4,8 +4,7 @@
 
 /datum/artifact_trigger/touch/New()
 	..()
-	spawn(0)
-		key_attackhand = my_artifact.on_attackhand.Add(src, "owner_attackhand")
+	key_attackhand = my_artifact.on_attackhand.Add(src, "owner_attackhand")
 
 /datum/artifact_trigger/touch/proc/owner_attackhand(var/list/event_args, var/source)
 	var/toucher = event_args[1]

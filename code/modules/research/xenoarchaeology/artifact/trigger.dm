@@ -12,7 +12,11 @@
 
 /datum/artifact_trigger/New(var/atom/location)
 	..()
-	my_effect = location
+	if(location)
+		my_effect = location
+		my_artifact = my_effect.holder
+	else
+		return
 
 /datum/artifact_trigger/proc/CheckTrigger()
 

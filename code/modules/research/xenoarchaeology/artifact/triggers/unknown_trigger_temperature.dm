@@ -10,8 +10,7 @@
 	..()
 	heat_triggered = prob(50)
 
-	spawn(0)
-		key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
+	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 
 /datum/artifact_trigger/temperature/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
