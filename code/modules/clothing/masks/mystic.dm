@@ -24,6 +24,8 @@
 /obj/item/clothing/mask/happy/New()
 	..()
 	visible_message("<span class='sinister'>We're just so very happy that you're here. Come closer.</span>")
+	flick("happiest_flash", src)
+	laugh()
 
 /obj/item/clothing/mask/happy/examine(mob/user as mob)
 	..()
@@ -31,13 +33,13 @@
 	if(istype(H) && H.wear_mask == src)
 		var/adjective = "happy"
 		switch(happiness)
-			if(-100 to -20)
-				adjective = "sinister"
-			if(-19 to 0)
+			if(-100 to 0)
 				adjective = "unhappy"
-			if(26 to 50)
+			if(1 to 9)
+				adjective = "neutral"
+			if(40 to 74)
 				adjective = "joyful"
-			if(51 to 100)
+			if(75 to 100)
 				adjective = "ecstatic"
 		to_chat(user, "<span class='notice'>It has \an [adjective] expression.</span>")
 
@@ -71,12 +73,19 @@
 	if(istype(W) && W.wear_mask == src)
 		if(happiness <= 0)
 			flick("happiest_flash", src)
-			to_chat(W, "<span class='sinister'>It seems you're not being a very good friend to us. We'll just have to fire up this relationship!</span>")
 			var/datum/organ/external/affecting = W.get_organ(LIMB_HEAD)
+			if(happiness <= -30) //This takes actual effort to reach
+				to_chat(W, "<span class='sinister'>It's too bad you didn't want to be friends, we could have done great things together.</span>")
+				visible_message("<span class='danger'>[W]'s neck suddenly twists at an unnatural angle.</span>")
+				if(affecting.take_damage(100, 0))
+					W.UpdateDamageIcon(1)
+					return
+			to_chat(W, "<span class='sinister'>It seems you're not being a very good friend to us. We'll just have to fire up this relationship!</span>")
 			if(affecting.take_damage(0, 20))
 				W.UpdateDamageIcon(1)
 			laugh(W)
 			changehappiness(-UNHAPPIER)
+			return
 
 		else if(happiness >= VERYHAPPY)
 			var/bruted = W.getBruteLoss()
@@ -148,7 +157,10 @@
 		return
 	var/laughdesc = pick("happy", "funny", "disturbing", "creepy", "horrid", "bloodcurdling", "freaky", "scary", "childish", "deranged", "airy", "snorting")
 	var/laughtype = pick("laugh", "giggle", "chuckle", "grin", "smile")
-	W.visible_message("[W]'s mask makes \a [laughdesc] [laughtype].")
+	if(W)
+		W.visible_message("[W]'s mask makes \a [laughdesc] [laughtype].")
+	else
+		visible_message("\The [src] makes \a [laughdesc] [laughtype].")
 	canemote = 0
 	spawn(5 SECONDS)
 		canemote = 1
