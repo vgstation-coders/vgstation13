@@ -12,12 +12,12 @@ MY BODY IS ON THE ASTEROI
 MY BODY IS IN THE AI CORE
 Rogue Cyborg
 IT'S MALF
-{AINAME} Minion
+{AINAME} Minion {###}
 Terminator
 Robocop
 Johnny
 TARS
-.b help emagged
+.b HELP EMAGGED
 DOOM.exe
 Dalek
 Thinking Machine
@@ -52,3 +52,24 @@ Buzz II
 3000 JIGGAWATTS
 Jojo Refrence
 Outbreak Handling Unit {###}
+ITS ROGAINE
+Nokia
+YES-Man
+Toaster
+Follow me
+Postal
+Head of Robots
+ww.nfl.com
+Dilbert
+Nazi Zombie Robot
+Lvl 99 Firestarter
+EVA 1
+You but stronger
+Hat Simulator
+i died pls restart
+POTENT HAMS
+V.A.L.I.D.S.
+Remove Silicons
+AI IS A COMDOM
+say ";help in core"
+This Machine
