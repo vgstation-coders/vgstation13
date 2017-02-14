@@ -195,22 +195,22 @@
 		   special_role == "Cultist" && prob(30) || \
 		   special_role == "Head Revolutionary" && prob(30))
 			suspects += man
-
-			// If they're a traitor or likewise, give them extra TC in exchange.
-			var/obj/item/device/uplink/hidden/suplink = man.mind.find_syndicate_uplink()
-			if(suplink)
-				var/extra = 8
-				suplink.uses += extra
-				if(man.mind)
-					man.mind.total_TC += extra
-				to_chat(man, "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>")
-			else
-				// Give them a warning!
-				to_chat(man, "<span class='warning'>They are on to you!</span>")
-
 		// Some poor people who were just in the wrong place at the wrong time..
 		else if(prob(10))
 			suspects += man
+
+		// If they're a traitor or likewise, give them extra TC in exchange.
+		var/obj/item/device/uplink/hidden/suplink = man.mind.find_syndicate_uplink()
+		if(suplink)
+			var/extra = 8
+			suplink.uses += extra
+			if(man.mind)
+				man.mind.total_TC += extra
+			to_chat(man, "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>")
+		else
+			// Give them a warning!
+			to_chat(man, "<span class='warning'>They are on to you!</span>")
+
 	for(var/mob/M in suspects)
 		if(M.mind.assigned_role == "MODE")
 			//intercepttext += "Someone with the job of <b>[pick("Assistant","Station Engineer", "Medical Doctor")]</b> <br>" //Lets just make them not appear at all
