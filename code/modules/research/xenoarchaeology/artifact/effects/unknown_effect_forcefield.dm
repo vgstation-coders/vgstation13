@@ -8,7 +8,7 @@
 	..()
 	effect = EFFECT_AURA
 	spawn(0)
-		if(!istype(trigger,/datum/artifact_trigger/touch/))
+		if(trigger && !istype(trigger,/datum/artifact_trigger/touch/))
 			var/trigger_override = /datum/artifact_trigger/touch
 			qdel(trigger)
 			trigger = null
