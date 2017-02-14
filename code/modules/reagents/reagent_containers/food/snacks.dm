@@ -511,6 +511,13 @@
 	icon_state = "valentinebar"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	desc = "Bought (or made) with love!"
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
+	..()
+	reagents.add_reagent(BICARODYNE, 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."

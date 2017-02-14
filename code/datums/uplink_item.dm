@@ -113,6 +113,15 @@ var/list/uplink_items = list()
 */
 //Work in Progress, job specific antag tools
 
+/datum/uplink_item/valentine
+	category = "Valentine's Day Special!"
+
+/datum/uplink_item/valentine/explosivechocolate
+	name = "Explosive Chocolate Bar"
+	desc = "A special Valentine's Day chocolate bar chock-full of Bicarodyne. For adding that little extra oompf to your hugs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	cost = 8
+
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
 
