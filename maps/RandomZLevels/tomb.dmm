@@ -483,7 +483,7 @@
 "jo" = (/obj/item/stack/sheet/mineral/sandstone,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
 "jp" = (/obj/effect/decal/cleanable/liquid_fuel,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
 "jq" = (/obj/item/stack/sheet/mineral/diamond{amount = 50},/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
-"jr" = (/obj/structure/cage/autoclose,/obj/effect/landmark/corpse/mummy/rafid,/obj/item/weapon/melee/cultblade{name = "Rafid's Blade"},/obj/item/weapon/staff/necro{name = "Rafid's staff"},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
+"jr" = (/obj/structure/cage/autoclose,/obj/effect/landmark/corpse/mummy/rafid,/obj/item/weapon/melee/cultblade{name = "Rafid's Blade"},/obj/item/weapon/gun/energy/staff/necro{name = "Rafid's staff"},/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
 "js" = (/obj/structure/window/barricade{dir = 8},/obj/structure/ladder{height = 1; id = "1-0"; name = "Tower of Madness entrance"},/turf/simulated/floor,/area/awaymission/tomb/tower_of_madness)
 "jt" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/mineral,/area/awaymission/tomb/tomb_of_rafid)
 "ju" = (/obj/item/stack/sheet/mineral/plastic{amount = 50},/mob/living/simple_animal/hostile/humanoid/mummy,/turf/simulated/floor/mineral/gold,/area/awaymission/tomb/tomb_of_rafid)
