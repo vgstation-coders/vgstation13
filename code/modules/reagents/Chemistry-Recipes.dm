@@ -866,7 +866,7 @@
 	required_reagents = list(AMMONIA = 1, WATER = 1)
 	result_amount = 2
 
-/datum/chemical_reaction/space_cleaner/bleach
+/datum/chemical_reaction/bleach
 	name = "Bleach"
 	id = BLEACH
 	result = BLEACH
