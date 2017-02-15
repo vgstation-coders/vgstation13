@@ -8,13 +8,11 @@
 	var/obj/machinery/artifact/contained
 
 /obj/structure/anomaly_container/attack_hand(var/mob/user)
-	if(!contained || user.incapacitated() || user.lying)
-		return
-	if(alert(user, "Do you wish release \the [contained] from \the [src]?", "Confirm", "Yes", "No") != "Yes")
-		return
-	if(Adjacent(user))
-		src.investigation_log(I_ARTIFACT, "|| [contained] released by [key_name(user)].")
-		release()
+	if(contained)
+		if(alert(user, "Do you wish release \the [contained] from \the [src]?", "Confirm", "Yes", "No") = "Yes")
+			if(Adjacent(user) && !user.incapacitated() && !user.lying)
+				src.investigation_log(I_ARTIFACT, "|| [contained] released by [key_name(user)].")
+				release()
 
 /obj/structure/anomaly_container/attack_robot(var/mob/user)
 	return attack_hand(user)
