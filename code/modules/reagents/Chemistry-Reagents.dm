@@ -1089,8 +1089,7 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.has_organ["lungs"])
-			var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
+		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
 
 /datum/reagent/sodium
