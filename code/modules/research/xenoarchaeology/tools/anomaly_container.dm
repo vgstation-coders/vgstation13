@@ -37,4 +37,4 @@
 	if(istype(over_object) && Adjacent(over_object) && can_MouseDrop(over_object, usr))
 		Bumped(usr)
 		over_object.contain(src)
-		src.investigation_log(I_ARTIFACT, "|| stored inside [over_object] by [key_name(user)].")
+		src.investigation_log(I_ARTIFACT, "|| stored inside [over_object] by [key_name(usr)].")
