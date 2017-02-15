@@ -8,20 +8,16 @@
 	var/obj/machinery/artifact/contained
 
 /obj/structure/anomaly_container/attack_hand(var/mob/user)
-	if(!contained)
+	if(!contained || user.incapacitated() || user.lying)
 		return
 	if(alert(user, "Do you wish release \the [contained] from \the [src]?", "Confirm", "Yes", "No") != "Yes")
 		return
 	if(Adjacent(user))
+		src.investigation_log(I_ARTIFACT, "|| [contained] released by [key_name(user)].")
 		release()
 
 /obj/structure/anomaly_container/attack_robot(var/mob/user)
-	if(!contained)
-		return
-	if(alert(user, "Do you wish release \the [contained] from \the [src]?", "Confirm", "Yes", "No") != "Yes")
-		return
-	if(Adjacent(user))
-		release()
+	return attack_hand(user)
 
 /obj/structure/anomaly_container/proc/contain(var/obj/machinery/artifact/artifact)
 	if(contained)
@@ -41,3 +37,4 @@
 	if(istype(over_object) && Adjacent(over_object) && can_MouseDrop(over_object, usr))
 		Bumped(usr)
 		over_object.contain(src)
+		src.investigation_log(I_ARTIFACT, "|| stored inside [over_object] by [key_name(user)].")
