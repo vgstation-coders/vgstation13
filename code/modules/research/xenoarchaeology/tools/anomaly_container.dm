@@ -9,7 +9,7 @@
 
 /obj/structure/anomaly_container/attack_hand(var/mob/user)
 	if(contained)
-		if(alert(user, "Do you wish release \the [contained] from \the [src]?", "Confirm", "Yes", "No") = "Yes")
+		if(alert(user, "Do you wish release \the [contained] from \the [src]?", "Confirm", "Yes", "No") != "No")
 			if(Adjacent(user) && !user.incapacitated() && !user.lying)
 				src.investigation_log(I_ARTIFACT, "|| [contained] released by [key_name(user)].")
 				release()
