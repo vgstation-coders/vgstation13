@@ -1068,6 +1068,30 @@
 
 	M.adjustToxLoss(REM)
 
+/datum/reagent/chloramine
+	name = "Chloramine"
+	id = CHLORAMINE
+	description = "A chemical compound consisting of chlorine and ammonia. Very dangerous when inhaled."
+	reagent_state = GAS
+	color = "#808080" //rgb: 128, 128, 128
+	overdose = REAGENTS_OVERDOSE
+
+/datum/reagent/chloramine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.take_organ_damage(REM, 0)
+
+/datum/reagent/chloramine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
+		L.take_damage(REM, 1)
+
 /datum/reagent/sodium
 	name = "Sodium"
 	id = SODIUM

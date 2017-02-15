@@ -31,6 +31,7 @@
 #define CARBON 			"carbon"
 #define CHLORINE 			"chlorine"
 #define FLUORINE 			"fluorine"
+#define CHLORAMINE			"chloramine"
 #define SODIUM 			"sodium"
 #define PHOSPHORUS 			"phosphorus"
 #define LITHIUM 			"lithium"

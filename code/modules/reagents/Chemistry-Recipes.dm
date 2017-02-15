@@ -515,6 +515,17 @@
 			S.start()
 	holder.clear_reagents()
 
+/datum/chemical_reaction/chemsmoke/bleach
+	name = "Bleach Fumes"
+	id = "bleachfumes"
+	result = CHLORAMINE
+	required_reagents = list(BLEACH = 1, AMMONIA = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/chemsmoke/bleach/on_reaction(var/datum/reagents/holder, var/created_volume)
+	holder.isolate_reagent(CHLORAMINE)
+	..()
+
 /datum/chemical_reaction/chloralhydrate
 	name = "Chloral Hydrate"
 	id = CHLORALHYDRATE
