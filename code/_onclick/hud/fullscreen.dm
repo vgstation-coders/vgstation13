@@ -1,8 +1,9 @@
 /mob
 	var/list/screens = list()
 
-/mob/proc/overlay_fullscreen(category, type, severity)
+/mob/proc/overlay_fullscreen(category, atype, severity)
 	var/obj/screen/fullscreen/screen
+	var/type = "[atype]"
 	if(screens[category])
 		screen = screens[category]
 		if(screen.type != type)
