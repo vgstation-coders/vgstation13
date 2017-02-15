@@ -35,9 +35,6 @@
 			/datum/storeitem/photo_album,
 			/datum/storeitem/painting,
 			),
-		"Valentine's Day" = list(
-			/datum/storeitem/valentinechocolatebar,
-			),
 		)
 
 /obj/machinery/computer/merch/New()
