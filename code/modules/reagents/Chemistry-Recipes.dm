@@ -522,9 +522,19 @@
 	required_reagents = list(BLEACH = 1, AMMONIA = 1)
 	result_amount = 2
 
-/datum/chemical_reaction/chemsmoke/bleach/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/chemsmoke/bleach/on_reaction(var/datum/reagents/holder, var/created_volume) //I hate to copypasta this to change one argument but it appears I have little choice
 	holder.isolate_reagent(CHLORAMINE)
-	..()
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+		var/location = get_turf(holder.my_atom)
+		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		S.attach(location)
+		S.set_up(holder, 5, 0, location)
+		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+		spawn(0)
+			S.start()
+			sleep(10)
+			S.start()
+	holder.clear_reagents()
 
 /datum/chemical_reaction/chloralhydrate
 	name = "Chloral Hydrate"
