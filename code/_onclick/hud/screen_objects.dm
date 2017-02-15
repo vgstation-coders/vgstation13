@@ -267,6 +267,7 @@
 	mouse_opacity = 2
 	globalscreen = 1
 	screen_loc = ui_entire_screen
+	plane = -10
 
 /obj/screen/clicker/Click(location, control, params)
 	var/list/modifiers = params2list(params)
