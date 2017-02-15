@@ -19,5 +19,14 @@
 			for(var/obj/structure/grille/G in T)
 				G.cultify()
 			for(var/obj/structure/window/W in T)
-				W.cultify()
+				if(istype(W,/obj/structure/window/full))
+					W.cultify()
+				else
+					W.color = "red"
+			for(var/obj/structure/table/TB in T)
+				if(TB.type == /obj/structure/table)
+					TB.cultify()
+			for(var/obj/structure/bed/chair/C in T)
+				if(C.type == /obj/structure/bed/chair)
+					C.cultify()
 			sleep(1)
