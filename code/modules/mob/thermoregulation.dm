@@ -1,10 +1,10 @@
 /mob/living/proc/handle_body_temperature()
-	var/body_temperature_difference = abs(310.15 - bodytemperature)
+	var/body_temperature_difference = abs(T37C - bodytemperature)
 	if(body_temperature_difference < 0.5)
 		return //fuck this precision
 	if(undergoing_hypothermia())
 		handle_hypothermia()
-	if(bodytemperature > 310.15)
+	if(bodytemperature > T37C)
 		var/recovery_amt = min((body_temperature_difference / BODYTEMP_AUTORECOVERY_DIVISOR),BODYTEMP_AUTORECOVERY_MAXIMUM)
 		sweat(recovery_amt,1)
 

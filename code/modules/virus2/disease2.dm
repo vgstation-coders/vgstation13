@@ -151,7 +151,7 @@ var/global/list/disease2_list = list()
 				infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
 
 	//fever
-	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
+	mob.bodytemperature = max(mob.bodytemperature, min(T37C+5*stage ,mob.bodytemperature+5*stage))
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)

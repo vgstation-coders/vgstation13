@@ -79,7 +79,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
 
-	var/body_temperature = 310.15
+	var/body_temperature = T37C
 
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint the species leaves if they are not wearing shoes. If we ever get any other than human and vox, maybe this should be explicitly defined for each species.
 
