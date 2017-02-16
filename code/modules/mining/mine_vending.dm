@@ -27,7 +27,6 @@
 		/obj/item/weapon/lazarus_injector/advanced = 4,
 		)
 	contraband = list(
-		/obj/item/weapon/pickaxe/hand = 2,
 		/obj/item/weapon/storage/bag/money = 2,
 		)
 	premium = list(
