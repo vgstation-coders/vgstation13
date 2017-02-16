@@ -4899,3 +4899,16 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bleachkipper
+	name = "bleach kipper"
+	desc = "Baby blue and very fishy."
+	icon_state = "bleachkipper"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
+	volume = 1
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bleachkipper/New()
+	..()
+	reagents.add_reagent(FISHBLEACH, 1)
