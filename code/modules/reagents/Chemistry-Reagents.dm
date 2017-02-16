@@ -3556,7 +3556,7 @@
 	id = DISCOUNT
 	description = "You can almost feel your liver failing, just by looking at it."
 	reagent_state = LIQUID
-	color = "#6F884F" //rgb: 255, 255, 255
+	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
@@ -3569,20 +3569,20 @@
 		switch(volume)
 			if(1 to 20)
 				if(prob(5))
-					H << "<span class='warning'>You don't feel very good.</span>"
+					to_chat(H,"<span class='warning'>You don't feel very good.</span>")
 					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
 			if(20 to 35)
 				if(prob(10))
-					H << "<span class='warning'>You really don't feel very good.</span>"
+					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 				if(prob(5))
 					H.adjustToxLoss(0.1)
 					H.visible_message("[H] groans.")
 					holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
 			if(35 to INFINITY)
 				if(prob(10))
-					H << "<span class='warning'>Your stomach grumbles unsettlingly.</span>"
+					to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
 				if(prob(5))
-					H << "<span class='warning'>Something feels wrong with your body.</span>"
+					to_chat(H,"<span class='warning'>Something feels wrong with your body.</span>")
 					var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
 					if(istype(L))
 						L.take_damage(0.1, 1)
@@ -5092,6 +5092,41 @@
 	else if(data >= 115 && prob(33))
 		M.confused = max(M.confused + 15, 15)
 	data++
+
+/datum/reagent/ethanol/deadrum/danswhiskey
+	name = "Discount Dan's 'Malt' Whiskey"
+	id = DANS_WHISKEY
+	description = "A terrible combination of two things you should never ingest."
+	reagent_state = LIQUID
+	color = "#6F884F" //rgb: 181, 199, 158
+
+/datum/reagent/ethanol/deadrum/danswhiskey/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		switch(volume)
+			if(1 to 15)
+				if(prob(5))
+					H << "<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>"
+					H.adjustToxLoss(REM)
+			if(15 to 25)
+				if(prob(10))
+					H << "<span class='warning'>Something in your abdomen definitely doesn't feel right.</span>"
+					H.adjustToxLoss(REM * 2)
+				if(prob(5))
+					H.adjustToxLoss(REM * 2)
+					H.vomit()
+			if(25 to INFINITY)
+				if(prob(10))
+					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
+					var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+					if(istype(L))
+						L.take_damage(1, 1)
+				if(prob(5))
+					H.vomit()
+					H.adjustToxLoss(REM * 4)
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar

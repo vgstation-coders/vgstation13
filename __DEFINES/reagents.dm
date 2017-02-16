@@ -310,6 +310,7 @@
 #define BAHAMA_MAMA		"bahama_mama"
 #define RED_MEAD		"red_mead"
 #define ICED_BEER		"iced_beer"
+#define DANS_WHISKEY		"dans_whiskey"
 #define CHARCOAL		"charcoal"
 #define SANGRIA			"sangria"
 #define BLOCKIZINE		"blockizine"

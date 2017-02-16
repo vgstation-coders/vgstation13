@@ -2476,6 +2476,14 @@
 	required_reagents = list(BERRYJUICE = 1, CREAM = 1, VERMOUTH = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/dans_whiskey
+	name = "Discount Dan's 'Malt' Whiskey"
+	id = DANS_WHISKEY
+	result = DANS_WHISKEY
+	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
+	result_amount = 2
+
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten
