@@ -5109,11 +5109,11 @@
 		switch(volume)
 			if(1 to 15)
 				if(prob(5))
-					H << "<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>"
+				to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
 					H.adjustToxLoss(REM)
 			if(15 to 25)
 				if(prob(10))
-					H << "<span class='warning'>Something in your abdomen definitely doesn't feel right.</span>"
+					to_chat(H,"<span class='warning'>Something in your abdomen definitely doesn't feel right.</span>")
 					H.adjustToxLoss(REM * 2)
 				if(prob(5))
 					H.adjustToxLoss(REM * 2)
