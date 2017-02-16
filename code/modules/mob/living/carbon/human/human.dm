@@ -704,7 +704,7 @@
 		usr.examination(M)*/
 
 /**
- * Returns a number between -1 to 2.
+ * Returns a number between -2 to 2.
  * TODO: What's the default return value?
  */
 /mob/living/carbon/human/eyecheck()
@@ -722,7 +722,7 @@
 	if(E)
 		. += E.eyeprot
 
-	return Clamp(., -1, 2)
+	return Clamp(., -2, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
