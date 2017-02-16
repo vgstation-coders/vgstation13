@@ -5,7 +5,6 @@
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "gigadrill"
 	var/active = 0
-	var/drill_time = 10
 	var/turf/drilling_turf
 	density = 1
 	layer = ABOVE_OBJ_LAYER
@@ -29,6 +28,7 @@
 			anchored = 1
 			spawn(drill_time)
 				if(get_turf(src) == drilling_turf && active)
+				if(get_dir(src,M)&src.dir)
 					M.GetDrilled()
 					src.forceMove(M)
 				drilling_turf = null
