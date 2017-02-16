@@ -386,9 +386,5 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 		respawned = 1
 
 /obj/item/weapon/disk/nuclear/process()
-	if(loc == null)
+	if(!get_turf(src))
 		qdel(src)
-	else
-		var/atom/A = get_holder_at_turf_level(src)
-		if(!A || A.loc == null)
-			qdel(src)
