@@ -98,7 +98,7 @@
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else
 			if(Subject.eyecheck() <= 0)
-				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +5)
+				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
 			if(user.mind && isrevhead(user)) // alien revhead when?
 				if(ishuman(Subject))
 					if(Subject.stat != DEAD)
