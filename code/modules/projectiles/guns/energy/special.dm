@@ -54,7 +54,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/staff
 	name = "staff of change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself"
-	icon = 'icons/obj/gun.dmi'
+	icon = 'icons/obj/wizard.dmi'
 	icon_state = "staffofchange"
 	item_state = "staffofchange"
 	fire_sound = 'sound/weapons/radgun.ogg'
@@ -125,15 +125,85 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/staff/animate
 	name = "staff of animation"
 	desc = "An artefact that spits bolts of life-force which causes objects which are hit by it to animate and come to life! This magic doesn't affect machines."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "staffofanimation"
+	item_state = "staffofanimation"
 	projectile_type = "/obj/item/projectile/animate"
 	charge_cost = 100
+
+#define ZOMBIE 0
+#define SKELETON 1
+//#define FAITHLESS 2
+/obj/item/weapon/gun/energy/staff/necro
+	name = "staff of necromancy"
+	desc = "A wicked looking staff that pulses with evil energy."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "necrostaff"
+	item_state = "necrostaff"
+	charge_tick = 0
+	var/charges = 3
+	var/raisetype = 0
+	var/next_change = 0
+/obj/item/weapon/gun/energy/staff/necro/New()
+	..()
+	processing_objects.Add(src)
+
+
+/obj/item/weapon/gun/energy/staff/necro/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+
+/obj/item/weapon/gun/energy/staff/necro/process()
+	charge_tick++
+	if(charge_tick < 4)
+		return 0
+	charge_tick = 0
+	charges++
+	return 1
+
+/obj/item/weapon/gun/energy/staff/necro/attack_self(mob/user)
+	if(next_change > world.timeofday)
+		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
+		return
+	/*if(raisetype < FAITHLESS)
+		raisetype = !raisetype
+	else
+		raisetype = ZOMBIE*/
+	raisetype = !raisetype
+
+	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
+	next_change = world.timeofday + 30
+
+/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/user, proximity)
+	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
+		return 0
+	var/mob/living/carbon/human/H = target
+	if(!H.stat || H.health > config.health_threshold_crit)
+		return 0
+	switch(raisetype)
+		if(ZOMBIE)
+			new /mob/living/simple_animal/hostile/necro/zombie(get_turf(target), user, H.mind)
+		if(SKELETON)
+			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
+
+	H.gib()
+	charges--
+
+
+
+/obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
+	afterattack(target,user,1)
+
+#undef ZOMBIE
+#undef SKELETON
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
 	desc = "A wand imbued with raw destructive force, capable of erasing nearly anything from existence."
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "nullrod"
-	item_state = "nullrod"
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "deathwand"
+	item_state = "deathwand"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 15
