@@ -771,3 +771,16 @@
 		qdel(A)
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/chronogrenade/past(src)
+
+// Who organizes this shit?
+
+/obj/item/weapon/storage/box/actionfigure
+	name = "box of action figures"
+	desc = "The latest set of collectable action figures."
+	icon_state = "box"
+
+/obj/item/weapon/storage/box/actionfigure/New()
+	..()
+	for(var/i in 1 to 4)
+		var/randomFigure = pick(subtypesof(/obj/item/toy/figure))
+		new randomFigure(src)
