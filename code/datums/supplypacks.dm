@@ -1197,6 +1197,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
 	group = "Engineering"
+	
+/datum/supply_packs/engine/prism
+	name = "Optical prisms"
+	contains = list(/obj/machinery/prism,
+					/obj/machinery/prism)
+	containername = "prism crate"
+	group = "Engineering"
 
 /datum/supply_packs/engine/PA
 	name = "Particle accelerator parts"
