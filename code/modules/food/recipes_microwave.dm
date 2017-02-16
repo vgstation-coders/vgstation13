@@ -2188,3 +2188,94 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
 
 
+/datum/recipe/salmonsteak
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/salmonsteak
+
+/datum/recipe/boiled_shrimp
+	reagents = list(WATER = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/shrimp)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp
+
+/datum/recipe/sushi_Ebi
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+
+/datum/recipe/sushi_Ikura
+	items = list(/obj/item/fish_eggs/salmon,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+
+/datum/recipe/sushi_Sake     // 100000 TIMES FOLDED SUSHI CAN CUT THROUGH DIAMONDS
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+
+/datum/recipe/sushi_SmokedSalmon
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonsteak,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon // this shit sounds fucking delicous IRL
+
+/datum/recipe/sushi_Tamago
+	reagents = list(SAKE = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
+	/obj/item/weapon/reagent_containers/food/snacks/egg
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+
+/datum/recipe/sushi_Inari
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
+	/obj/item/weapon/reagent_containers/food/snacks/tofu
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+
+/datum/recipe/sushi_Masago
+	items = list(/obj/item/fish_eggs/goldfish,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago
+
+/datum/recipe/sushi_Tobiko
+	items = list(/obj/item/fish_eggs/shark,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+
+/datum/recipe/sushi_TobikoEgg
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko,
+	/obj/item/weapon/reagent_containers/food/snacks/egg
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg
+
+/datum/recipe/sushi_Tai
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/boiledrice)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+// this is a lot of fucking fish
+
+/datum/recipe/sushi_Unagi
+	reagents = list(SAKE = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
+	/obj/item/weapon/fish/electric_eel
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi
+
