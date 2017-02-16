@@ -9,7 +9,7 @@
 	name = "Doctor Acula"
 	desc = "A blood donation medibot. If wearing a cape, notify security immediately."
 	icon = 'icons/obj/aibots.dmi'
-	icon_state = "bloodbot0"
+	icon_state = "bloodbot00"
 	density = 0
 	anchored = 0
 	health = 20
@@ -20,11 +20,26 @@
 	var/quiet = 0
 	var/since_last_reward = 0 //Once every 55u, dispense reward
 	var/list/possible_rewards = list(/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje) //Could add more later or adminbus
-	var/reserve_bags = 3 //How many empty bags do we have?
-	bot_type = MED_BOT //This handles which HUD the bot talks to.
+	var/list/contained_bags = list()
+	var/obj/item/weapon/reagent_containers/blood/last_bag
+
+/obj/machinery/bot/bloodbot/New()
+	..()
+	for(var/i = 1 to 8)
+		contained_bags += new /obj/item/weapon/reagent_containers/blood/empty(src)
+
+/obj/machinery/bot/bloodbot/Destroy()
+	..()
+	for(var/obj/O in contained_bags)
+		O.forceMove(get_turf(src))
+	contained_bags = null
+	last_bag = null
 
 /obj/machinery/bot/bloodbot/update_icon()
-	icon_state = "bloodbot[emagged][currently_drawing_blood]"
+	if(contained_bags.len || emagged)
+		icon_state = "bloodbot[emagged][currently_drawing_blood]"
+	else
+		icon_state = "bloodbot-e"
 
 /obj/machinery/bot/bloodbot/turn_on()
 	..()
@@ -43,24 +58,24 @@
 	if(..())
 		return
 	var/dat
-	dat += "<TT><B>Acula-class Blood Donation Bot v0.1</B></TT><BR><BR>"
+	dat += "<TT><B>Acula-class Blood Donation Bot v0.5</B></TT><BR><BR>"
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/reagent/blood/B = H.get_blood(H.vessel)
 		if(B.data["virus2"])
-			dat += "<span class='danger'>WARNING: Viral agent detected. Ineligable for blood donation.</span><BR>"
+			dat += "<span class='danger'>WARNING: Viral agent detected. Ineligible for blood donation.</span><BR>"
 		else
 			dat += {"Welcome [H]! Your blood level is [round(B.volume/560*100)]%, and your blood type is [B.data["blood_type"]].<BR>
 				You must have at least [round(509/560*100)]% to donate blood. <a href='?src=\ref[src];donate=[1]'>Donate now!</a><BR>
 				The next reward will be dispensed after [55 - since_last_reward] units of blood are donated.<BR>"}
-	dat += {"Status: <A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A><BR>"
-		Maintenance panel panel is [src.open ? "opened" : "closed"]<BR>"}
+	dat += {"Status: <A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A><BR>
+			The maintenance panel is [src.open ? "opened" : "closed"]<BR>"}
 	if(!src.locked || issilicon(user))
-		dat += "<TT>Blood Storage: "
+		dat += "<TT>Blood Storage:<BR>"
 		var/counter = 0
 		if(!contents.len)
-			dat += "There are no blood packs available."
-		for (var/obj/item/weapon/reagent_containers/blood/E in contents)
+			dat += "There are no blood packs available.<BR>"
+		for (var/obj/item/weapon/reagent_containers/blood/E in contained_bags)
 			counter++
 			dat += "Slot [counter]: [E] <A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
 		dat += "The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
@@ -79,12 +94,14 @@
 		else
 			turn_on()
 
-	else if(href_list["slot"] && contents.len && allowed(usr))
+	else if(href_list["slot"] && contained_bags.len && allowed(usr))
 		var/obj/item/weapon/reagent_containers/blood/E = locate(href_list["slot"])
 		if(E.loc != src)
 			return //No fishing items with href exploits
 		usr.put_in_hands(E) //Try to put it in the user's hands if available.
+		contained_bags -= E
 		updateUsrDialog()
+		update_icon()
 
 	else if(href_list["donate"])
 		if(currently_drawing_blood)
@@ -97,7 +114,7 @@
 	else if(href_list["togglevoice"] && (!src.locked || issilicon(usr)))
 		quiet = !quiet
 
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/bot/bloodbot/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
@@ -113,27 +130,29 @@
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 
-	else
-		..()
-		if(istype(W,/obj/item/weapon/reagent_containers/blood))
-			var/obj/item/weapon/reagent_containers/blood/B = W
-			if(!B.reagents.is_empty())
-				speak("Sorry, nurse. I only take empty bags. Don't want to mix up the blood, right?")
-			else
-				speak("Thanks, nurse! Now I've got [reserve_bags+1]!")
-				user.drop_from_inventory(B)
-				qdel(B)
-				reserve_bags++
-		if(health < maxhealth && !isscrewdriver(W) && W.force && !emagged) //Retreat if we're not hostile and we're under attack
-			step_to(src, get_step_away(src,user))
+	if(istype(W,/obj/item/weapon/reagent_containers/blood))
+		var/obj/item/weapon/reagent_containers/blood/B = W
+		if(B.reagents.is_full())
+			speak("Sorry, nurse. There's no room for more blood in that one.")
+		else
+			user.drop_from_inventory(B)
+			B.forceMove(src)
+			contained_bags += B
+			speak("Thanks, nurse! Now I've got [contained_bags.len]!")
+			update_icon()
+	if(health < maxhealth && !isscrewdriver(W) && W.force && !emagged) //Retreat if we're not hostile and we're under attack
+		step_to(src, get_step_away(src,user))
+	..()
 
 /obj/machinery/bot/bloodbot/Emag(mob/user as mob)
-	..()
-	if(open && !locked)
+	if(!locked)
 		visible_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		emagged = 1
 		on = 1
 		update_icon()
+	else
+		locked = 0
+		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
 
 /obj/machinery/bot/bloodbot/process()
 	if(!on)
@@ -178,24 +197,21 @@
 			currently_drawing_blood = 0
 			update_icon()
 			return
-		//First, look for our last used bag and see if it's still valid.
-		var/obj/item/weapon/reagent_containers/blood/B = contents[contents.len]
+		//look for our last used bag and see if it's still valid.
+		var/obj/item/weapon/reagent_containers/blood/B = null
+		var/datum/reagent/blood/target_blood = H.get_blood(H.vessel)
+		if(last_bag && !last_bag.reagents.is_full() && last_bag.blood_type == target_blood.data["blood_type"])
+			B = last_bag
+		else
+			B = get_matching_bag(target_blood.data["blood_type"])
 		if(!istype(B))
-			speak("ERROR. Invalid object inserted.")
 			turn_off()
 			return
-		if(B.reagents.is_full())
-			if(reserve_bags)
-				reserve_bags--
-				B = new /obj/item/weapon/reagent_containers/blood/empty(src) //Create a new empty bloodbag inside
-			else
-				speak("ERROR. Ran out of reserve bloodpacks. Please insert new packs.")
-				turn_off()
-				return
-		//Okay, we definitely have a bag to spare.
+		//Okay, we definitely have a bag.
 		currently_drawing_blood = 1
 		update_icon()
 		H.vessel.trans_id_to(B,BLOOD,DEFAULT_DRINK_RATE)
+		since_last_reward += DEFAULT_DRINK_RATE
 		spawn(1 SECONDS)
 			drink(H)
 
@@ -208,6 +224,26 @@
 		spawn(1 SECONDS)
 			drink(H)
 
+/obj/machinery/bot/bloodbot/proc/get_matching_bag(existing_type)
+	if(!existing_type)
+		speak("Error: Blood type unknown.")
+		return null
+	if(!contained_bags.len)
+		speak("Error: No bags inserted.")
+		return null
+	for(var/obj/item/weapon/reagent_containers/blood/B in contained_bags)
+		if(B.reagents.is_full() || B.blood_type != existing_type)
+			continue
+		last_bag = B
+		return B
+	//We don't have a matching bag, but what about an empty bag?
+	for(var/obj/item/weapon/reagent_containers/blood/B in contained_bags)
+		if(B.reagents.is_empty())
+			last_bag = B
+			return B
+	speak("Error: No valid bags.")
+	return null
+
 /obj/machinery/bot/bloodbot/proc/dispense_reward()
 	speak(pick("Enjoy!","Come again!","Donate often!"))
 	var/path = pick(possible_rewards)
@@ -216,8 +252,7 @@
 /obj/machinery/bot/bloodbot/proc/speak(var/message)
 	if(!src.on || !message)
 		return
-	visible_message("[src] beeps, \"[message]\"",\
-		drugged_message="[src] beeps, \"[pick("FEED ME HUMANS","LET THE BLOOD FLOW","BLOOD FOR THE BLOOD GOD","I SPREAD DEATH AND DESTRUCTION","EXTERMINATE","I HATE YOU!","SURRENDER TO YOUR MACHINE OVERLORDS","FEED ME SHITTERS")]\"")
+	say(message)
 
 /obj/machinery/bot/bloodbot/explode()
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
