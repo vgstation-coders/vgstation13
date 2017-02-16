@@ -265,6 +265,7 @@
 
 // this should probably use dump_contents()
 /obj/structure/closet/blob_act()
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)

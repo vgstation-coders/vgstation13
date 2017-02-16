@@ -128,7 +128,7 @@
 			return
 
 /obj/structure/window/blob_act()
-	..()
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	health -= rand(30, 50)
 	healthcheck()
 
