@@ -183,15 +183,21 @@
 	user.visible_message("<span class='danger'>\The [user] begins untying the rope holding \the [src]'s blade!</span>",\
 							"You begin untying the rope holding \the [src]'s blade.")
 	if(do_after(user, src, 100))
-		if(victim)
-			if(victim.organs_by_name)
-				var/datum/organ/external/head/H = victim.get_organ(LIMB_HEAD)
-				if(istype(H) && ~H.status & ORGAN_DESTROYED)
-					H.droplimb(1)
-					playsound(get_turf(src), 'sound/weapons/bloodyslice.ogg', 100, 1)
-					blood_splatter(get_turf(src),victim,1)
-		bladedown = TRUE
 		update_icon()
+		var/current_icon_state = icon_state
+		icon_state = "[icon_state]_bladedown"
+		flick("[current_icon_state]_dropping_1", src)
+		spawn(4)
+			if(victim)
+				if(victim.organs_by_name)
+					var/datum/organ/external/head/H = victim.get_organ(LIMB_HEAD)
+					if(istype(H) && ~H.status & ORGAN_DESTROYED)
+						H.droplimb(1)
+						playsound(get_turf(src), 'sound/weapons/bloodyslice.ogg', 100, 1)
+						blood_splatter(get_turf(src),victim,1)
+			bladedown = TRUE
+			update_icon()
+			flick("[current_icon_state]_dropping_2", src)
 
 /obj/structure/bed/guillotine/verb/close_stocks()
 	set name = "Close stocks"
