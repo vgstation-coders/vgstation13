@@ -632,10 +632,10 @@
 				occupant_message("Reagent analyzed, identified as [R.name] and added to database.")
 				send_byjax(chassis.occupant,"msyringegun.browser","reagents_form",get_reagents_form())
 				any_success = TRUE
-		else
-			occupant_message("<span class=\"alert\">Analysis of [R.name] failed, unit not equipped for synthesis of this reagent.</span>")
+				continue
+		occupant_message("<span class=\"alert\">Analysis of [R.name] failed, unit not equipped for synthesis of this reagent.</span>")
 	if(any_success)
-		occupant_message("Analyzis complete.")
+		occupant_message("Analysis complete.")
 		return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/proc/add_known_reagent(r_id,r_name)
