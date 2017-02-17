@@ -316,6 +316,7 @@
 	if(!(cell && cell.charge > 0) && nocell != 2)
 		new /obj/effect/decal/cleanable/campfire(get_turf(src))
 		qdel(src)
+		return
 	lastcharge = Floor(cell.charge/10)
 	if(on)
 		playsound(get_turf(src), pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
