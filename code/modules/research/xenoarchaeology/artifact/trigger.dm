@@ -31,7 +31,7 @@
 				log += " attacked by [key_name(toucher)]."
 			my_artifact.investigation_log(I_ARTIFACT, log)
 
-	else if(!my_effect.IsPrimary() && prob(25))
+	else if(!my_effect.IsPrimary() && prob(25))	//secondary effects only have a 1/4 chance to trigger
 		if(my_effect.effect != EFFECT_TOUCH)
 			my_effect.ToggleActivate(2)
 			var/log = "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]) ||"

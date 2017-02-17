@@ -121,6 +121,7 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 
 	return 1 - protected
 
+//effect does not fire and outputs a message
 /datum/artifact_effect/proc/Blocked()
 	var/atom/toplevelholder = get_holder_at_turf_level(holder)
 	toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] expells energy which is blocked by the containment field!</span>")
@@ -143,6 +144,8 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	return 0
 
 /datum/artifact_effect/proc/GenerateTrigger()
+	if(trigger)
+		qdel(trigger); trigger = null
 	var/triggertype
 	if(effect == EFFECT_TOUCH)
 		triggertype = /datum/artifact_trigger/touch
