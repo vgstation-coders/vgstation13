@@ -221,6 +221,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		if(theclient)
 			alert(theclient, "For some reason you've failed to load your save slot 5 times now, so you've been generated a random character. Don't worry, it didn't overwrite your old one.","Randomized Character", "OK")
 	saveloaded = 1
+	theclient << 'sound/misc/prefsready.wav'
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
 
