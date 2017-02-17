@@ -1868,6 +1868,8 @@ mob/proc/on_foot()
 		M.add_spell(change_back)
 	var/static/list/drop_on_transmog = list(
 		/obj/item/weapon/disk/nuclear,
+		/obj/item/weapon/holder,
+		/obj/item/device/paicard,
 		)
 	for(var/i in drop_on_transmog)
 		var/list/L = search_contents_for(i)
