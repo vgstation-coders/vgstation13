@@ -117,7 +117,7 @@
 		return
 
 	if(!holder)
-		if(!looc_allowed)
+		if(!ooc_allowed)
 			to_chat(src, "<span class='warning'>LOOC is globally muted</span>")
 			return
 		if(!dooc_allowed && (mob.stat == DEAD))
