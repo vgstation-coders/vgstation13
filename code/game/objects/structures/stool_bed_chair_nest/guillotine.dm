@@ -86,7 +86,7 @@
 
 	add_fingerprint(user)
 
-/obj/structure/bed/guillotine/buckle_mob(mob/M, mob/user)
+/obj/structure/bed/guillotine/buckle_mob(mob/M, mob/user, var/do_after_done = FALSE)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai) || user == victim)
 		return
 
@@ -127,8 +127,19 @@
 		M.visible_message("<span class='notice'>\The [M] climbs into \the [src]!</span>",\
 							"You climb into \the [src].")
 	else
-		M.visible_message("<span class='warning'>\The [M] is placed in \the [src] by \the [user]!</span>",\
-							"<span class='danger'>You are placed in \the [src] by \the [user].</span>")
+		if(do_after_done)
+			M.visible_message("<span class='warning'>\The [M] is placed in \the [src] by \the [user]!</span>",\
+								"<span class='danger'>You are placed in \the [src] by \the [user].</span>")
+		else
+			M.visible_message("<span class='warning'>\The [user] begins placing \the [M] into \the [src]...</span>",\
+								"<span class='danger'>\The [user] begins placing you into \the [src]...</span>")
+			if(do_after(user, M, 50))
+				if(user.Adjacent(src))
+					return .(M, user, TRUE)
+				else
+					return
+			else
+				return
 	add_fingerprint(user)
 
 	lock_atom(M, lock_type)
