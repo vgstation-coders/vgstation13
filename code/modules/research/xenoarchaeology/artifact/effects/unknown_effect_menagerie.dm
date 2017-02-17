@@ -14,12 +14,16 @@
 			if(istype(M, /mob/living/silicon))
 				continue
 			if(!M.transmogged_from)
+				var/multiplier = GetAnomalySusceptibility(M)
+				if(multiplier == 0)
+					continue
 				var/target_type = pick(possible_types)
 				var/mob/new_mob = M.transmogrify(target_type)
 				var/turf/T = get_turf(new_mob)
 				if(T)
 					playsound(T, 'sound/effects/phasein.ogg', 50, 1)
 				var/transmog_time = rand(1 MINUTES, 5 MINUTES)
+				transmog_time *= multiplier
 				spawn(transmog_time)
 					var/mob/top_level = new_mob
 					if(top_level.transmogged_to)
