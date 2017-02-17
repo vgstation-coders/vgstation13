@@ -1854,6 +1854,7 @@ mob/proc/on_foot()
 			transmogged_from = null
 			for(var/atom/movable/AM in contents)
 				AM.forceMove(get_turf(src))
+			forceMove(null)
 			qdel(src)
 		return
 	if(!ispath(target_type, /mob))
