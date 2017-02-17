@@ -29,6 +29,7 @@
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
+	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -1619,6 +1620,7 @@
 	description = "The properties of this rare metal are not well-known."
 	reagent_state = SOLID
 	color = "#5E02F8" //rgb: 94, 2, 248
+	dupeable = FALSE
 
 /datum/reagent/phazon/on_mob_life(var/mob/living/M)
 	if(..())

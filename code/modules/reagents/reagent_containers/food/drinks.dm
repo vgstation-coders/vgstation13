@@ -212,12 +212,13 @@
 	// Attempt to transfer from our glass
 	var/refill_id = reagents.get_master_reagent_id()
 	var/refill_name = reagents.get_master_reagent_name()
+	var/datum/reagent/R = reagents.get_reagent(refill_id)
 
 	var/sent_amount = transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 	// Service borgs regenerate the amount transferred after a while
 	// TODO Why doesn't the borg module handle this nonsense?
-	if (sent_amount > 0 && isrobot(user))
+	if (sent_amount > 0 && isrobot(user) && R.dupeable)
 		var/mob/living/silicon/robot/borg = user
 		if (!istype(borg.module, /obj/item/weapon/robot_module/butler) || !borg.cell)
 			return
