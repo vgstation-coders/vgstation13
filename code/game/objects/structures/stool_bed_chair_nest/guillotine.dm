@@ -74,24 +74,14 @@
 			to_chat(user, "<span class='warning'>You can't pull \the [M] out of \the [src] while its stocks are closed.</span>")
 			return
 		else
-			M.visible_message(\
-				"<span class='notice'>\The [user] pulls [M] out of \the [src]!</span>",\
-				"[user] pulls you out of \the [src].")
+			M.visible_message("<span class='notice'>\The [user] pulls [M] out of \the [src]!</span>",\
+								"[user] pulls you out of \the [src].")
 	else
-		if(!open)
-			M.visible_message(\
-				"<span class='warning'>\The [M] attempts to dislodge \the [src]'s stocks!</span>",\
-				"You attempt to dislodge \the [src]'s stocks.")
-			if(do_after(M, src, 300))
-				M.visible_message(\
-					"<span class='warning'>\The [M] dislodges \the [src]'s stocks and climbs out of \the [src]!</span>",\
-					"You dislodge \the [src]'s stocks and climb out of \the [src].")
-			else
-				return
+		if(open)
+			M.visible_message("<span class='notice'>\The [M] climbs out of \the [src].</span>",\
+								"You climb out of \the [src].")
 		else
-			M.visible_message(\
-				"<span class='notice'>\The [M] climbs out of \the [src].</span>",\
-				"You climb out of \the [src].")
+			return
 	unlock_atom(M)
 
 	add_fingerprint(user)
@@ -107,10 +97,16 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be anchored first.</span>")
 		return
 	if(bladedown)
-		to_chat(user, "<span class='warning'>You can't fit \the [M] into \the [src] while the blade is down.</span>")
+		if(M == user)
+			to_chat(user, "<span class='warning'>You can't fit into \the [src] while the blade is down.</span>")
+		else
+			to_chat(user, "<span class='warning'>You can't fit \the [M] into \the [src] while the blade is down.</span>")
 		return
 	if(!open)
-		to_chat(user, "<span class='warning'>You can't place \the [M] into \the [src] while its stocks are closed.</span>")
+		if(M == user)
+			to_chat(user, "<span class='warning'>You can't climb into \the [src] while its stocks are closed.</span>")
+		else
+			to_chat(user, "<span class='warning'>You can't place \the [M] into \the [src] while its stocks are closed.</span>")
 		return
 
 	for(var/mob/living/L in get_locked(lock_type))
@@ -128,13 +124,11 @@
 		return
 
 	if(M == user)
-		M.visible_message(\
-			"<span class='notice'>\The [M] climbs into \the [src]!</span>",\
-			"You climb into \the [src].")
+		M.visible_message("<span class='notice'>\The [M] climbs into \the [src]!</span>",\
+							"You climb into \the [src].")
 	else
-		M.visible_message(\
-			"<span class='warning'>\The [M] is placed in \the [src] by \the [user]!</span>",\
-			"<span class='danger'>You are placed in \the [src] by \the [user].</span>")
+		M.visible_message("<span class='warning'>\The [M] is placed in \the [src] by \the [user]!</span>",\
+							"<span class='danger'>You are placed in \the [src] by \the [user].</span>")
 	add_fingerprint(user)
 
 	lock_atom(M, lock_type)
@@ -166,15 +160,10 @@
 	if(user == victim)
 		return
 	if(iswrench(W))
-		if(anchored)
-			if(victim)
-				to_chat(user, "<span class='warning'>You can't unsecure \the [src] from the floor while someone's inside it!</span>")
-				return
-			to_chat(user, "You unsecure \the [src] from the floor.")
-		else
-			to_chat(user, "You secure \the [src] to the floor.")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		anchored = !anchored
+		if(victim)
+			to_chat(user, "<span class='warning'>You can't unsecure \the [src] from the floor while someone's inside it!</span>")
+			return
+		wrenchAnchor(user)
 
 /obj/structure/bed/guillotine/AltClick(var/mob/user)
 	if(user == victim)
@@ -185,16 +174,14 @@
 		untie_blade(user)
 
 /obj/structure/bed/guillotine/proc/tie_blade(mob/user)
-	user.visible_message(\
-			"<span class='notice'>\The [user] ties \the [src]'s blade back into place.</span>",\
-			"You tie \the [src]'s blade back into place.")
+	user.visible_message("<span class='notice'>\The [user] ties \the [src]'s blade back into place.</span>",\
+							"You tie \the [src]'s blade back into place.")
 	bladedown = FALSE
 	update_icon()
 
 /obj/structure/bed/guillotine/proc/untie_blade(mob/user)
-	user.visible_message(\
-			"<span class='danger'>\The [user] begins untying the rope holding \the [src]'s blade!</span>",\
-			"You begin untying the rope holding \the [src]'s blade.")
+	user.visible_message("<span class='danger'>\The [user] begins untying the rope holding \the [src]'s blade!</span>",\
+							"You begin untying the rope holding \the [src]'s blade.")
 	if(do_after(user, src, 100))
 		if(victim)
 			if(victim.organs_by_name)
@@ -221,9 +208,8 @@
 		to_chat(M, "You can't do that while you're incapacitated!")
 		return
 
-	M.visible_message(\
-			"<span class='warning'>\The [M] closes \the [src]'s stocks.</span>",\
-			"You close \the [src]'s stocks.")
+	M.visible_message("<span class='warning'>\The [M] closes \the [src]'s stocks.</span>",\
+						"You close \the [src]'s stocks.")
 	open = FALSE
 	update_icon()
 	verbs -= /obj/structure/bed/guillotine/verb/close_stocks
@@ -247,9 +233,8 @@
 		to_chat(M, "You can't open \the [src]'s stocks while you're inside them!")
 		return
 
-	M.visible_message(\
-			"<span class='notice'>\The [M] opens \the [src]'s stocks.</span>",\
-			"You open \the [src]'s stocks.")
+	M.visible_message("<span class='notice'>\The [M] opens \the [src]'s stocks.</span>",\
+						"You open \the [src]'s stocks.")
 	open = TRUE
 	update_icon()
 	verbs -= /obj/structure/bed/guillotine/verb/open_stocks
