@@ -24,7 +24,7 @@
 	if(iswrench(W))
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
-		to_chat(user, "<span class='caution'>\the [src] [anchored ? "can now be moved" : "is now secured"] .</span>")
+		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
 	if(isscrewdriver(W))
 		if(stage == 0)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
