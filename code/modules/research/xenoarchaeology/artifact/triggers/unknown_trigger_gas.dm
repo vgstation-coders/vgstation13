@@ -24,13 +24,13 @@
 				Triggered(0, trigger_gas, 0)
 
 		else
-			if(trigger_gas == "TOXINS" && env.toxins <= MOLE_TRIGGER)
+			if(trigger_gas == "TOXINS" && env.toxins < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "CARBON_DIOXIDE" && env.carbon_dioxide <= MOLE_TRIGGER)
+			if(trigger_gas == "CARBON_DIOXIDE" && env.carbon_dioxide < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "NITROGEN" && env.nitrogen <= MOLE_TRIGGER)
+			if(trigger_gas == "NITROGEN" && env.nitrogen < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "OXYGEN" && env.oxygen <= MOLE_TRIGGER)
+			if(trigger_gas == "OXYGEN" && env.oxygen < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
 
 /datum/artifact_trigger/gas/Destroy()
