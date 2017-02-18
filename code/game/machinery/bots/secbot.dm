@@ -1044,7 +1044,7 @@ Auto Patrol: []"},
 		qdel(src)
 
 /obj/item/weapon/secbot_assembly/cheapsky/attackby(obj/item/weapon/W, mob/user)
-	if(iswirecutter(W) && (!src.build_step))
+	if(W.sharpness && W.sharpness_flags & SHARP_BLADE && (!src.build_step))
 		src.build_step++
 		src.overlays += image('icons/obj/aibots.dmi', "bs_hole")
 		to_chat(user, "You cut a hole in \the [src]!")
