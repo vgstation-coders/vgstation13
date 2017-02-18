@@ -10,15 +10,15 @@
 	var/target_type = null
 	var/cursed = FALSE
 	var/list/skin_to_mask = list(
-		/obj/item/asteroid/goliath_hide			=	/obj/item/clothing/mask/morphing/goliath,
-		/obj/item/clothing/head/bearpelt/real	=	/obj/item/clothing/mask/morphing/bear,
-		/obj/item/stack/sheet/animalhide/corgi	=	/obj/item/clothing/mask/morphing/corgi,
-		/obj/item/stack/sheet/animalhide/cat	=	/obj/item/clothing/mask/morphing/cat,
-		/obj/item/stack/sheet/animalhide/monkey	=	/obj/item/clothing/mask/morphing/monkey,
-		/obj/item/stack/sheet/animalhide/lizard	=	/obj/item/clothing/mask/morphing/lizard,
-		/obj/item/stack/sheet/animalhide/xeno	=	/obj/item/clothing/mask/morphing/xeno,
-		/obj/item/stack/sheet/animalhide/human	=	/obj/item/clothing/mask/morphing/human,
-		/obj/item/weapon/ectoplasm				=	/obj/item/clothing/mask/morphing/ghost)
+		/obj/item/asteroid/goliath_hide         =   /obj/item/clothing/mask/morphing/goliath,
+		/obj/item/clothing/head/bearpelt/real   =   /obj/item/clothing/mask/morphing/bear,
+		/obj/item/stack/sheet/animalhide/corgi  =   /obj/item/clothing/mask/morphing/corgi,
+		/obj/item/stack/sheet/animalhide/cat    =   /obj/item/clothing/mask/morphing/cat,
+		/obj/item/stack/sheet/animalhide/monkey =   /obj/item/clothing/mask/morphing/monkey,
+		/obj/item/stack/sheet/animalhide/lizard =   /obj/item/clothing/mask/morphing/lizard,
+		/obj/item/stack/sheet/animalhide/xeno   =   /obj/item/clothing/mask/morphing/xeno,
+		/obj/item/stack/sheet/animalhide/human  =   /obj/item/clothing/mask/morphing/human,
+		/obj/item/weapon/ectoplasm              =   /obj/item/clothing/mask/morphing/ghost)
 
 /obj/item/clothing/mask/morphing/New()
 	..()
