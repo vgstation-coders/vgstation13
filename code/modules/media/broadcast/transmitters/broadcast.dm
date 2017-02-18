@@ -288,6 +288,12 @@
 /obj/machinery/media/transmitter/broadcast/isLinkedWith(var/obj/O)
 	return O in sources
 
+/obj/machinery/media/transmitter/broadcast/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)
+
 /obj/machinery/media/transmitter/broadcast/dj
 	id_tag = "dj"
 	media_frequency=1015

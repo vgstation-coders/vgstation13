@@ -969,3 +969,9 @@ var/global/mulebot_count = 0
 	if(load)
 		to_chat(user, "You unload \the [load].")
 		unload()
+
+/obj/machinery/bot/mulebot/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)

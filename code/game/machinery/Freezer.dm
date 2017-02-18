@@ -169,6 +169,10 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/exposed()
 	return TRUE
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/npc_tamper_act(mob/living/L)
+	current_temperature = rand(T0C - 200 + temp_offset, T20C)
+	src.on = rand(0,1)
+	update_icon()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "Heater"
@@ -338,3 +342,8 @@
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/exposed()
 	return TRUE
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/npc_tamper_act(mob/living/L)
+	current_temperature = rand(T20C, T20C+280+temp_offset)
+	src.on = rand(0,1)
+	update_icon()

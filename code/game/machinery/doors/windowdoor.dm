@@ -268,6 +268,9 @@
 	open()
 	return 1
 
+/obj/machinery/door/window/npc_tamper_act(mob/living/L)
+	hackOpen(null, L)
+
 /**
  * Returns whether the door opens to the left. This is counter-clockwise
  * w.r.t. the tile it is on.

@@ -1000,6 +1000,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
 	onclose(user, "rdconsole")
 
+/obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Build a random item
+	if(linked_lathe)
+		var/design_to_build = pick(files.known_designs)
+
+		linked_lathe.queue += design_to_build
+		linked_lathe.stopped = 0
+
 /obj/machinery/computer/rdconsole/mommi
 	name = "MoMMI R&D Console"
 	id = 3

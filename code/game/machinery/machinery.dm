@@ -615,7 +615,7 @@ Class Procs:
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
-	if(!user.Adjacent(src))
+	if(!user || !user.Adjacent(src))
 		return 0
 	if(!prob(prb))
 		return 0

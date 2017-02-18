@@ -126,3 +126,6 @@
 		return
 	power_change()
 	..(severity)
+
+/obj/machinery/light_switch/npc_tamper_act(mob/living/L)
+	attack_hand(L)

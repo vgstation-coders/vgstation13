@@ -608,7 +608,16 @@
 		ui_interact(usr)
 		return 1
 
+/obj/machinery/r_n_d/fabricator/npc_tamper_act(mob/living/L)
+	if(!part_sets || !part_sets.len)
+		return
 
+	var/list/part_set = part_sets[pick(part_sets)]
+	if(!part_set || !part_set.len)
+		return
+
+	var/new_design = pick(part_set)
+	build_part(new_design)
 
 /obj/machinery/r_n_d/fabricator/attack_hand(mob/user as mob)
 	if(user.stat || user.restrained()) //allowed is later on, so we don't check it
