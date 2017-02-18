@@ -1576,6 +1576,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Firing Range"
 	icon_state = "firingrange"
 
+/area/security/EVA
+	name = "\improper Security E.V.A"
+	icon_state = "sec_EVA"
+
 /*
 	New()
 		..()

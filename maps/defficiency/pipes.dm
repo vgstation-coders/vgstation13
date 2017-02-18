@@ -80,3 +80,8 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden
 	level = 1
 	alpha=128
+
+/obj/machinery/atmospherics/unary/vent_pump/layered
+	piping_layer=DEF_PIPELAYER_SUPPLY
+	pixel_x=DEF_PIXELX_SUPPLY
+	pixel_y=DEF_PIXELY_SUPPLY
