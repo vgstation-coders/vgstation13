@@ -881,8 +881,8 @@ Auto Patrol: []"},
 	name = "Officer Cheapsky"
 	desc = "The budget cuts have hit Security the hardest."
 	icon = 'icons/obj/aibots.dmi'
-	icon_state = "secbot0"
-	icon_initial = "secbot"
+	icon_state = "cheapsky0"
+	icon_initial = "cheapsky"
 	health = 15
 	maxhealth = 15
 
@@ -966,7 +966,8 @@ Auto Patrol: []"},
 				"When in doubt, talk it out.",
 				"The weed of crime bears bitter fruit.",
 				"Just say \"No!\" to space drugs!",
-				"Violence is never the answer.")
+				"Violence is never the answer.",
+				"I'm not an officer, I'm a Security <em>monitor</em>.")
 			src.speak(arrest_message)
 
 			mode = SECBOT_IDLE
@@ -1017,3 +1018,50 @@ Auto Patrol: []"},
 					patrol_step()
 
 	return
+
+//Cheapsky Construction
+
+/obj/item/weapon/secbot_assembly/cheapsky
+	name = "box/signaler assembly"
+	desc = "Some sort of bizarre assembly."
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "box_signaler"
+	item_state = "syringe_kit"
+	build_step = 0
+	created_name = "Officer Cheapsky"
+
+/obj/item/clothing/head/cardborg/attackby(var/obj/item/device/assembly/signaler/S, mob/user)
+	..()
+	if(!issignaler(S))
+		return
+
+	if(S.secured)
+		qdel(S)
+		var/obj/item/weapon/secbot_assembly/cheapsky/A = new /obj/item/weapon/secbot_assembly/cheapsky
+		user.put_in_hands(A)
+		to_chat(user, "You add the signaler to \the [src].")
+		user.drop_from_inventory(src)
+		qdel(src)
+
+/obj/item/weapon/secbot_assembly/cheapsky/attackby(obj/item/weapon/W, mob/user)
+	if(iswirecutter(W) && (!src.build_step))
+		src.build_step++
+		src.overlays += image('icons/obj/aibots.dmi', "bs_hole")
+		to_chat(user, "You cut a hole in \the [src]!")
+
+	else if(isprox(W) && (src.build_step == 1))
+		if(user.drop_item(W))
+			to_chat(user, "You complete the Securitron! Beep boop.")
+			var/obj/machinery/bot/secbot/beepsky/cheapsky/S = new /obj/machinery/bot/secbot/beepsky/cheapsky
+			S.forceMove(get_turf(src))
+			S.name = src.created_name
+			qdel(W)
+			qdel(src)
+
+	else if(istype(W, /obj/item/weapon/pen))
+		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
+		src.created_name = t
