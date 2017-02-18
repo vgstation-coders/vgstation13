@@ -159,3 +159,14 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/power_change()
 	..()
 	update_icon()
+
+/obj/machinery/atmospherics/binary/volume_pump/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Turn on/off
+		on = !on
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [L] ([key_name(L)])")
+	else //Change pressure
+		transfer_rate = rand(0, 200)
+		investigation_log(I_ATMOS,"was set to [transfer_rate] L/s by [L] ([key_name(usr)])")
+
+	src.update_icon()
+	src.updateUsrDialog()

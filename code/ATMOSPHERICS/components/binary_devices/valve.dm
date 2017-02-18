@@ -216,3 +216,10 @@
 			state_changed=1
 	if(state_changed)
 		investigation_log(I_ATMOS,"was [(state ? "opened (side)" : "closed (straight) ")] by a signal")
+
+/obj/machinery/atmospherics/binary/valve/npc_tamper_act(mob/living/L)
+	if(open)
+		close()
+	else
+		open()
+	investigation_log(I_ATMOS,"was [(state ? "opened (side)" : "closed (straight) ")] by [L] ([key_name(L)])")

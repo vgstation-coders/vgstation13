@@ -303,3 +303,14 @@ var/const/POWER = 8
 	if(wires_status == (1 << wire_count) - 1)
 		return 1
 	return 0
+
+/datum/wires/proc/npc_tamper(mob/living/L)
+	var/wire_to_screw = pick(wires)
+
+	if(IsColourCut(wire_to_screw) || prob(50)) //CutWireColour() proc handles both cutting and mending wires. If the wire is already cut, always mend it back. Otherwise, 50% to cut it and 50% to pulse it
+		CutWireColour(wire_to_screw)
+		message_admins("[L] has [IsColourCut(wire_to_screw) ? "cut" : "mended"] the [wire_to_screw] wire on \the [holder] ([formatJumpTo(holder)])")
+	else
+		PulseColour(wire_to_screw)
+		message_admins("[L] has pulsed the [wire_to_screw] wire on \the [holder] ([formatJumpTo(holder)])")
+

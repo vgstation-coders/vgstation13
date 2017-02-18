@@ -234,3 +234,7 @@ Manual Tracking Direction:"}
 	if(prob(75))
 		broken()
 		density = 0
+
+/obj/machinery/power/solar/control/npc_tamper_act(mob/living/L)
+	track = rand(0,2)
+	trackdir = pick(1, -1)

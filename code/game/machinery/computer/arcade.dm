@@ -128,49 +128,58 @@
 	onclose(user, "arcade")
 	return
 
+/obj/machinery/computer/arcade/proc/action_attack()
+	src.blocked = 1
+	var/attackamt = rand(2,6)
+	src.temp = "You attack for [attackamt] damage!"
+	src.updateUsrDialog()
+	if(turtle > 0)
+		turtle--
+
+	sleep(10)
+	src.enemy_hp -= attackamt
+	src.arcade_action()
+
+/obj/machinery/computer/arcade/proc/action_heal()
+	src.blocked = 1
+	var/pointamt = rand(1,3)
+	var/healamt = rand(6,8)
+	src.temp = "You use [pointamt] magic to heal for [healamt] damage!"
+	src.updateUsrDialog()
+	turtle++
+
+	sleep(10)
+	src.player_mp -= pointamt
+	src.player_hp += healamt
+	src.blocked = 1
+	src.updateUsrDialog()
+	src.arcade_action()
+
+/obj/machinery/computer/arcade/proc/action_charge()
+	src.blocked = 1
+	var/chargeamt = rand(4,7)
+	src.temp = "You regain [chargeamt] points"
+	src.player_mp += chargeamt
+	if(turtle > 0)
+		turtle--
+
+	src.updateUsrDialog()
+	sleep(10)
+	src.arcade_action()
+
 /obj/machinery/computer/arcade/Topic(href, href_list)
 	if(..())
 		return
 
 	if (!src.blocked && !src.gameover)
 		if (href_list["attack"])
-			src.blocked = 1
-			var/attackamt = rand(2,6)
-			src.temp = "You attack for [attackamt] damage!"
-			src.updateUsrDialog()
-			if(turtle > 0)
-				turtle--
-
-			sleep(10)
-			src.enemy_hp -= attackamt
-			src.arcade_action()
+			action_attack()
 
 		else if (href_list["heal"])
-			src.blocked = 1
-			var/pointamt = rand(1,3)
-			var/healamt = rand(6,8)
-			src.temp = "You use [pointamt] magic to heal for [healamt] damage!"
-			src.updateUsrDialog()
-			turtle++
-
-			sleep(10)
-			src.player_mp -= pointamt
-			src.player_hp += healamt
-			src.blocked = 1
-			src.updateUsrDialog()
-			src.arcade_action()
+			action_heal()
 
 		else if (href_list["charge"])
-			src.blocked = 1
-			var/chargeamt = rand(4,7)
-			src.temp = "You regain [chargeamt] points"
-			src.player_mp += chargeamt
-			if(turtle > 0)
-				turtle--
-
-			src.updateUsrDialog()
-			sleep(10)
-			src.arcade_action()
+			action_charge()
 
 	if (href_list["close"])
 		usr.unset_machine()
@@ -351,3 +360,12 @@
 			cheaters += user
 			cheater = 1
 	return cheater
+
+/obj/machinery/computer/arcade/npc_tamper_act(mob/living/L)
+	switch(rand(0,2))
+		if(0)
+			action_attack()
+		if(1)
+			action_heal()
+		if(2)
+			action_charge()

@@ -155,3 +155,14 @@
 /obj/machinery/atmospherics/binary/passive_gate/power_change()
 	..()
 	update_icon()
+
+/obj/machinery/atmospherics/binary/passive_gate/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Turn on/off
+		on = !on
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [L] ([key_name(L)])")
+	else //Change pressure
+		src.target_pressure = rand(0, 4500)
+		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [L] ([key_name(usr)])")
+
+	src.update_icon()
+	src.updateUsrDialog()

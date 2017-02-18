@@ -1344,4 +1344,11 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		return FALSE
 	return ..()
 
+/obj/machinery/power/apc/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)
+
+
 #undef APC_UPDATE_ICON_COOLDOWN

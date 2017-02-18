@@ -721,3 +721,9 @@ Class Procs:
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity
+
+//Proc that handles NPCs (gremlins) "tampering" with this machine.
+//The results of this don't have to be negative!
+//Return TRUE if there's no interaction
+/obj/machinery/proc/npc_tamper_act(mob/living/L)
+	return TRUE

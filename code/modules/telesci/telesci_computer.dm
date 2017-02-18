@@ -358,6 +358,27 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		return
 	return
 
+/obj/machinery/computer/telescience/npc_tamper_act(mob/living/L)
+	x_player_off = rand(-10, 10)
+	y_player_off = rand(-10, 10)
+
+	x_co = rand(-49, world.maxx+50)
+	y_co = rand(-49, world.maxy+50)
+	var/new_z = rand(1,6)
+	if(!(new_z == map.zCentcomm || new_z < 1 || new_z > map.zLevels.len))
+		z_co = new_z
+
+	if(prob(50)) //Send
+		if(cell && cell.charge>=teleport_cell_usage)
+			sending = 1
+			teleport(usr)
+		src.updateUsrDialog()
+	else //Receive
+		if(cell && cell.charge>=teleport_cell_usage)
+			sending = 0
+			teleport(usr)
+		src.updateUsrDialog()
+
 /obj/machinery/computer/telescience/Topic(href, href_list)
 	if(href_list["close"])
 		if(usr.machine == src)

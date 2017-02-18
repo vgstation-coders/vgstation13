@@ -315,6 +315,10 @@ display round(lastgen) and plasmatank amount
 			usr << browse(null, "window=port_gen")
 			usr.unset_machine()
 
+/obj/machinery/power/port_gen/npc_tamper_act(mob/living/L)
+	active = !active
+	icon_state = "portgen[active]"
+
 /obj/machinery/power/port_gen/pacman/super
 	name = "S.U.P.E.R.P.A.C.M.A.N.-type Portable Generator"
 	icon_state = "portgen1"

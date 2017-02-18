@@ -301,3 +301,9 @@
 		if(get_dist(src,T) == field_radius)
 			out.Add(T)
 	return out
+
+/obj/machinery/shield_gen/npc_tamper_act(mob/living/L)
+	field_radius = rand(0,200)
+	if(prob(50))
+		toggle()
+s

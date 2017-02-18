@@ -304,6 +304,14 @@ var/global/list/battery_online =	list(
 		stat &= ~EMPED
 	..()
 
+/obj/machinery/power/battery/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Toggle on/off
+		online = !online
+		update_icon()
+	else //Screw up power input/output
+		chargelevel = rand(0, smes_input_max)
+		output = rand(0, smes_output_max)
+
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
 	var/href = "<A href='?src=\ref[S];rate control=1;[V]"
 	var/rate = "[href]=-[Max]'>-</A>[href]=-[Min]'>-</A> [(C?C : 0)] [href]=[Min]'>+</A>[href]=[Max]'>+</A>"

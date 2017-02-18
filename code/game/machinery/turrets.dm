@@ -430,10 +430,6 @@
 			src.die()
 	else
 		to_chat(M, "<span class='warning'>That object is useless to you.</span>")
-	return
-
-
-
 
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
@@ -444,9 +440,12 @@
 			src.die()
 	else
 		to_chat(M, "<span class='good'>That object is useless to you.</span>")
-	return
 
 
+/obj/machinery/turretid/npc_tamper_act(mob/living/L)
+	enabled = rand(0, 1)
+	lethal = rand(0, 1)
+	src.updateTurrets()
 
 /obj/machinery/turretid/Topic(href, href_list)
 	if(..())
