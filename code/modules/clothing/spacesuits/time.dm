@@ -66,6 +66,7 @@
 	suit_active = TRUE
 	H.flags |= TIMELESS
 	refresh_spells(H)
+	playsound(src, 'sound/misc/timesuit_activate.ogg', 50)
 
 /obj/item/clothing/suit/space/time/proc/deactivate_suit(mob/living/carbon/human/H)
 	if(!istype(H))
@@ -75,6 +76,7 @@
 	H.remove_spell(timestop)
 	H.remove_spell(futurejump)
 	H.remove_spell(pastjump)
+	playsound(src, 'sound/misc/timesuit_deactivate.ogg', 50)
 
 /obj/item/clothing/suit/space/time/equipped(mob/living/carbon/human/H, wear_suit)
 	..()
