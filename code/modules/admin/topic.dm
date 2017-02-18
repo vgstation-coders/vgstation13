@@ -1247,11 +1247,11 @@
 						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0, M.lastKnownIP)
 					if("No")
 						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0)
-				var/sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
+				/*var/sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
 				if(sticky)
 					world.SetConfig("SYSTEM/keyban",M.ckey,"type=sticky&reason=[reason]&message=[reason]&admin=[ckey(usr.key)]")
 					message_admins("[key_name_admin(usr)] has sticky banned [key_name(M)].")
-					log_admin("[key_name(usr)] has sticky banned [key_name(M)].")
+					log_admin("[key_name(usr)] has sticky banned [key_name(M)].")*/
 				to_chat(M, "<span class='warning'><BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 				to_chat(M, "<span class='warning'>This is a permanent ban.</span>")
 				if(config.banappeals)
