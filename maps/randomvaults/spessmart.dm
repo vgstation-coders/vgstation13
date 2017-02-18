@@ -118,6 +118,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/list/items = list()
 	var/lockdown = 0
 	var/destination_disks = 1	//number of complimentary Spessmart destination disks left to give
+	var/customer_has_entered = FALSE
 
 /area/vault/supermarket/restricted
 	name = "Spessmart Maintenance"
@@ -180,7 +181,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			items.Remove(I)
 			message_admins("Spessmart has entered lockdown due to the destruction of \a [I]!")
 
-	on_theft()
+	if(customer_has_entered)
+		on_theft()
 
 /area/vault/supermarket/shop/proc/on_theft()
 	if(lockdown)
@@ -241,6 +243,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 /obj/effect/spessmart_entrance/Crossed(atom/movable/AM)
 	if(isliving(AM))
+		var/area/vault/supermarket/shop/A = get_area(src)
+		A.customer_has_entered = TRUE
 		spawn(1)
 			for(var/cdir in alldirs)
 				for(var/mob/living/simple_animal/robot/robot_greeter/G in get_step(src, cdir))

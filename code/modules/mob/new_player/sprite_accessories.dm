@@ -289,7 +289,12 @@
 		icon_state = "hair_braid"
 		gender = FEMALE
 		flags = HAIRSTYLE_CANTRIP
-
+	
+	kanade
+		name = "Kanade"
+		icon_state = "hair_kanade"
+		gender = FEMALE
+		
 	odango
 		name = "Odango"
 		icon_state = "hair_odango"

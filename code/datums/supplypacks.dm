@@ -1641,6 +1641,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_xenobiology
 	group = "Science"
 
+/datum/supply_packs/anomaly_container
+	name = "Anomaly container"
+	cost = 50
+	containertype = /obj/structure/largecrate/anomaly_container
+	containername = "anomaly container crate"
+	group = "Science"
+
 
 //////HYDROPONICS//////
 

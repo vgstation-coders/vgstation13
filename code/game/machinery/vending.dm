@@ -2290,11 +2290,12 @@ var/global/num_vending_terminals = 1
 	icon_state = DISCOUNT
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/discountchocolate = 6,
-		/obj/item/weapon/reagent_containers/food/snacks/danitos =6,
+		/obj/item/weapon/reagent_containers/food/snacks/danitos = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburger = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 12
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/antitox = 10
@@ -2306,7 +2307,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 8,
-		/obj/item/weapon/reagent_containers/pill/antitox = 10
+		/obj/item/weapon/reagent_containers/pill/antitox = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 1
 		)
 
 	pack = /obj/structure/vendomatpack/discount

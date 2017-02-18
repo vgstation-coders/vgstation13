@@ -1495,7 +1495,7 @@ client/proc/delete_all_bomberman()
 	for(var/obj/structure/softwall/O in bombermangear)
 		qdel(O)
 
-	for(var/turf/unsimulated/wall/bomberman/T in turfs)
+	for(var/turf/unsimulated/wall/bomberman/T in world)
 		T.ChangeTurf(/turf/simulated/wall)
 
 

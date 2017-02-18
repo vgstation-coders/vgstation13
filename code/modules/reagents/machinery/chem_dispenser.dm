@@ -236,6 +236,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
 
+/obj/machinery/chem_dispenser/kick_act(mob/living/H)
+	..()
+	if(container)
+		detach()
+
 /obj/machinery/chem_dispenser/proc/detach()
 	targetMoveKey=null
 

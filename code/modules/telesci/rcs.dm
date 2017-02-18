@@ -22,14 +22,9 @@
 
 /obj/machinery/telepad_cargo/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W))
-		anchored = 0
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-		if(anchored)
-			anchored = 0
-			to_chat(user, "<span class = 'caution'> The [src] can now be moved.</span>")
-		else if(!anchored)
-			anchored = 1
-			to_chat(user, "<span class = 'caution'> The [src] is now secured.</span>")
+		anchored = !anchored
+		to_chat(user, "<span class='caution'>\the [src] [anchored ? "is now secured" : "can now be moved"] .</span>")
 	if(isscrewdriver(W))
 		if(stage == 0)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)

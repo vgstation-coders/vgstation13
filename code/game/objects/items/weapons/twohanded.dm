@@ -122,6 +122,9 @@
 	item_state = "dualsaber[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness = wielded ? 1.5 : 0
+	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
@@ -166,6 +169,9 @@
 	item_state = "bananabunch[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness = wielded ? 1.5 : 0
+	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
@@ -395,5 +401,5 @@
 			if(istype(H) && ~H.status & ORGAN_DESTROYED)
 				H.droplimb(1)
 				playsound(U, get_sfx("machete_hit"),50, 0)
-				blood_splatter(get_turf(src),U,1)
+				blood_splatter(get_turf(user),U,1)
 	return .

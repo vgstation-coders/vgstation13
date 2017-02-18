@@ -302,7 +302,7 @@ var/intercom_range_display_status = 0
 		/obj/machinery/door
 	)
 
-	for(var/turf/T in turfs)
+	for(var/turf/T in world)
 		for(var/basetype in acceptable_types)
 			var/list/badtiles[0]
 			if(istype(T,basetype))

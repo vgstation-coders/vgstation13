@@ -140,11 +140,13 @@
 			clothes_s.Blend(new /icon('icons/mob/back.dmi', messenger_bag), ICON_OVERLAY)
 	return clothes_s
 
-/proc/valid_sprite_accessories(var/gender_restriction, var/species_restriction, var/from_list)
+/proc/valid_sprite_accessories(var/from_list, var/gender_restriction, var/species_restriction, var/flag_restriction)
 	. = list()
 	for(var/key in from_list)
 		var/datum/sprite_accessory/S = from_list[key]
 		if(species_restriction && !(species_restriction in S.species_allowed))
+			continue
+		if(flag_restriction && (S.flags & flag_restriction))
 			continue
 		if(gender_restriction)
 			if(gender_restriction == MALE && S.gender == FEMALE)

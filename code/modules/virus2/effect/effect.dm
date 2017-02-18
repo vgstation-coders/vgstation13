@@ -506,6 +506,8 @@
 /datum/disease2/effect/spiky_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
 	if(!count || skip)
 		return
+	if(!istype(toucher, /mob) || !istype(touched, /mob))
+		return
 	var/datum/organ/external/E
 	var/mob/living/carbon/human/H
 	if(toucher == mob)	//we bumped into someone else
