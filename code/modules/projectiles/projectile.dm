@@ -687,6 +687,10 @@ var/list/impact_master = list()
 	if(timestopped)
 		..()
 
+/obj/item/projectile/verb_pickup(mob/user)
+	if(timestopped)
+		..()
+
 /obj/item/projectile/friendlyCheck
 	invisibility = 101
 	rotate = 0
