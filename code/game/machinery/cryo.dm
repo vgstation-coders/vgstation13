@@ -395,7 +395,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(occupant)
 		var/image/pickle = image(occupant.icon, occupant.icon_state)
 		pickle.overlays = occupant.overlays
-		pickle.pixel_y = 22
+		pickle.pixel_y = 20
 
 		overlays += pickle
 		overlays += "lid[on]"
@@ -403,25 +403,25 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			var/up = 0 //used to see if we are going up or down, 1 is down, 2 is up
 			spawn(0) // Without this, the icon update will block. The new thread will die once the occupant leaves.
 				running_bob_animation = 1
-				while(occupant)
+				while(src.on && occupant) // Just to make sure bobing stops if cryo goes off with a patient inside.
 					overlays.len = 0 //have to remove the overlays first
 
 					switch(pickle.pixel_y) //this looks messy as fuck but it works, switch won't call itself twice
 
-						if(23) //inbetween state, for smoothness
+						if(21) //inbetween state, for smoothness
 							switch(up) //this is set later in the switch, to keep track of where the mob is supposed to go
 								if(2) //2 is up
-									pickle.pixel_y = 24 //set to highest
+									pickle.pixel_y = 22 //set to highest
 
 								if(1) //1 is down
-									pickle.pixel_y = 22 //set to lowest
+									pickle.pixel_y = 20 //set to lowest
 
-						if(22) //mob is at it's lowest
-							pickle.pixel_y = 23 //set to inbetween
+						if(20) //mob is at it's lowest
+							pickle.pixel_y = 21 //set to inbetween
 							up = 2 //have to go up
 
-						if(24) //mob is at it's highest
-							pickle.pixel_y = 23 //set to inbetween
+						if(22) //mob is at it's highest
+							pickle.pixel_y = 21 //set to inbetween
 							up = 1 //have to go down
 
 					pickle.overlays = occupant.overlays // We sync
