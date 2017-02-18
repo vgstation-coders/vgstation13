@@ -168,30 +168,14 @@
 	if(loc != newLoc)
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
-		else //Diagonal move, split it into cardinal moves
-			if (Dir & NORTH)
-				if (Dir & EAST) //Northeast
-					if (step(src, NORTH))
-						. = step(src, EAST)
-					else if (step(src, EAST))
-						. = step(src, NORTH)
-				else if (Dir & WEST) //Northwest
-					if (step(src, NORTH))
-						. = step(src, WEST)
-					else if (step(src, WEST))
-						. = step(src, NORTH)
-			else if (Dir & SOUTH)
-				if (Dir & EAST) //Southeast
-					if (step(src, SOUTH))
-						. = step(src, EAST)
-					else if (step(src, EAST))
-						. = step(src, SOUTH)
-				else if (Dir & WEST) //Southwest
-					if (step(src, SOUTH))
-						. = step(src, WEST)
-					else if (step(src, WEST))
-						. = step(src, SOUTH)
-
+		else //Diagonal move, check cardinal directions for dense objects
+			var/blocked = 0
+			for(var/direction in cardinal)
+				if(Dir & direction)
+					if(is_blocked_turf(get_step(src, direction)))
+						blocked++
+			if(blocked < 2) // path is open to the diagonal
+				. = ..()
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
