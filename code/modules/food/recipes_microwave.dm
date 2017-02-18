@@ -2195,7 +2195,7 @@
 	reagents = list(GRAVY = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
 
