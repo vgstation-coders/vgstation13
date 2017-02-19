@@ -1024,7 +1024,7 @@ Auto Patrol: []"},
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	var/list/parts = (/obj/item/clothing/head/cardborg, /obj/item/device/assembly/signaler, /obj/item/device/assembly/prox_sensor)
+	var/list/parts = list(/obj/item/clothing/head/cardborg, /obj/item/device/assembly/signaler, /obj/item/device/assembly/prox_sensor)
 	parts.Remove(pick(parts))
 	for(var/i in parts)
 		new i(Tsec)
