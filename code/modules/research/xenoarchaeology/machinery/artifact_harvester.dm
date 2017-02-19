@@ -168,7 +168,7 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type"))
 							E.vars[varname] = isolated_primary.vars[varname]
 
 						//duplicate any effect-specific settings
@@ -215,7 +215,7 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type"))
 							E.vars[varname] = isolated_secondary.vars[varname]
 
 						//duplicate any effect-specific settings
@@ -293,9 +293,9 @@
 		if (artifact_field && cur_artifact)
 			isolated_primary = null
 			isolated_secondary = null
-			if (cur_artifact.my_effect.activated || cur_artifact.my_effect.isolated)
-				isolated_primary = cur_artifact.my_effect
-				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
+			if (cur_artifact.primary_effect.activated || cur_artifact.primary_effect.isolated)
+				isolated_primary = cur_artifact.primary_effect
+				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.primary_effect.artifact_id] successfully isolated.\""
 				src.visible_message(message)
 			if (cur_artifact.secondary_effect)
 				if (cur_artifact.secondary_effect.activated || cur_artifact.secondary_effect.isolated)
