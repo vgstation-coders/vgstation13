@@ -85,6 +85,7 @@
 	var/turf/T = get_turf(src.loc)
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>\The [src] chimes quietly.</span>")
+	playsound(src, 'sound/misc/notice2.ogg', 50, 1)
 	icon_state = "posibrain-occupied"
 
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
