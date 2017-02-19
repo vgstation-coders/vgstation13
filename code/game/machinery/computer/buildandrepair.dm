@@ -34,7 +34,6 @@
 	var/list/req_components = null
 	var/powernet = null
 	var/list/records = null
-	var/frame_desc = null
 	var/contain_parts = 1
 
 /obj/item/weapon/circuitboard/message_monitor
