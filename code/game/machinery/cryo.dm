@@ -541,7 +541,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	for (var/atom/movable/x in src.contents)
 		if((x in component_parts) || (x == src.beaker))
 			continue
-		x.forceMove(src.loc)
+		x.forceMove(get_step(loc, SOUTH))//to avoid PLAAAAANES issues with our cryo cell
 	if(occupant)
 		if(exit == src.loc)
 			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
@@ -579,6 +579,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
 	occupant = M
+	for(var/obj/item/I in M.held_items)
+		M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
 	//M.metabslow = 1
 	add_fingerprint(usr)
 	update_icon()
