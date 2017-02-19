@@ -20,7 +20,7 @@ var/list/bad_gremlin_items = list()
 
 	//Tampering is handled by the 'npc_tamper()' obj proc
 	wanted_objects = list(
-		/obj/machinery
+		/obj/machinery,
 	)
 
 	//List of objects that we don't even want to try to tamper with
@@ -47,7 +47,8 @@ var/list/bad_gremlin_items = list()
 			"<span class='danger'>\The [src]'s eyes light up as \he tampers with \the [M].</span>",
 			"<span class='danger'>\The [src] twists some knobs around on \the [M] and bursts into laughter!</span>",
 			"<span class='danger'>\The [src] presses a few buttons on \the [M] and giggles mischievously.</span>",
-			"<span class='danger'>\The [src] rubs its hands devilishly and starts messing with \the [M].</span>"))
+			"<span class='danger'>\The [src] rubs its hands devilishly and starts messing with \the [M].</span>",
+			"<span class='danger'>\The [src] turns a small valve on \the [M].</span>"))
 
 		LoseTarget() //Find something new to screw up
 
@@ -60,6 +61,7 @@ var/list/bad_gremlin_items = list()
 	return ..()
 
 /mob/living/simple_animal/hostile/gremlin/Life()
+	//Don't try to path to one target for too long. If it takes longer than a certain amount of time, assume it can't be reached and find a new one
 	if(!target)
 		time_chasing_target = 0
 	else
