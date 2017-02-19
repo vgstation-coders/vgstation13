@@ -2125,6 +2125,7 @@
 #include "code\ZAS\Turf.dm"
 #include "code\ZAS\Zone.dm"
 #include "goon\code\datums\browserOutput.dm"
+#include "goon\code\obj\machinery\bot\chefbot.dm"
 #include "interface\interface.dm"
 #include "interface\skin.dmf"
 #include "interface\web\info.dms"
