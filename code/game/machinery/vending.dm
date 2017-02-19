@@ -197,6 +197,7 @@ var/global/num_vending_terminals = 1
 					newmachine.product_records = P.product_records
 					newmachine.hidden_records = P.hidden_records
 					newmachine.coin_records = P.coin_records
+					newmachine.initialize()
 				qdel(P)
 				if(user.machine==src)
 					newmachine.attack_hand(user)
@@ -868,8 +869,14 @@ var/global/num_vending_terminals = 1
 	use_power(5)
 	if (src.icon_vend) //Show the vending animation if needed
 		flick(src.icon_vend,src)
-	spawn(src.vend_delay)
-		new R.product_path(get_turf(src))
+	spawn(vend_delay)
+
+		if(ispath(R.product_path))
+			new R.product_path(get_turf(src))
+		else
+			if(istype(R.product_path, /obj))
+				var/obj/A = R.product_path
+				A.forceMove(get_turf(src))
 		src.vend_ready = 1
 		return
 

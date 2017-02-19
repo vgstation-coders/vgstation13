@@ -13,6 +13,18 @@
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
 
+//////CUSTOM PACKS///////
+
+/obj/structure/vendomatpack/custom
+	name = "empty recharge pack"
+	targetvendomat = /obj/machinery/vending/assist
+	icon_state = "generic"
+
+/obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
+	if(istype(O, /obj))
+		if(user.drop_item(O, src))
+			stock.Add(O)
+
 /obj/structure/vendomatpack/undefined
 	//a placeholder for vending machines that don't have their own recharge packs
 
