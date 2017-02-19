@@ -1024,10 +1024,6 @@ Auto Patrol: []"},
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	var/obj/item/weapon/secbot_assembly/Sa = new /obj/item/weapon/secbot_assembly(Tsec)
-	Sa.build_step = 1
-	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
-	Sa.created_name = src.name
 	var/list/parts = (/obj/item/clothing/head/cardborg, /obj/item/device/assembly/signaler, /obj/item/device/assembly/prox_sensor)
 	parts.Remove(pick(parts))
 	for(var/i in parts)
