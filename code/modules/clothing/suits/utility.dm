@@ -43,7 +43,7 @@
 			return
 		to_chat(user,"<span class='notice'>you tie up \the [src] with some of \the [C]</span>")
 		C.use(4)
-		var/obj/ghetto = new /obj/item/clothing/suit/space/rig/ghettorig (src.loc)
+		var/obj/ghetto = new /obj/item/clothing/suit/space/ghettorig (src.loc)
 		qdel(src)
 		user.put_in_hands(ghetto)
 
