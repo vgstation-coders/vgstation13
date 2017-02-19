@@ -203,6 +203,8 @@
 	var/permanent = 0
 	var/invisible_time = 5 MINUTES
 	var/sprays_left = 1
+	var/static/list/prohibited_objects = list( //For fun removal
+		)
 
 /obj/item/weapon/invisible_spray/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
@@ -215,6 +217,9 @@
 	if(target.invisibility || target.alpha <= 1)
 		to_chat(user, "\The [target] is already invisible!")
 		return
+	if(is_type_in_list(target,prohibited_objects))
+		to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
+		return 1
 	if(istype(target, /mob))
 		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
 			var/mob/living/carbon/C = target
@@ -255,6 +260,8 @@
 		to_chat(user, "You spray \the [target] with \the [src].")
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
+	if(istype(target, /obj/machinery/power/supermatter))
+		return 0
 	return 1
 
 /obj/item/weapon/invisible_spray/permanent
