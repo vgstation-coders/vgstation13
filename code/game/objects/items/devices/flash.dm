@@ -93,13 +93,12 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
-		if(!flashfail && Subject.eyecheck())
-			flashfail = TRUE
-
-		if(flashfail)
+		
+		if(Subject.eyecheck() > 0)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else
-			Subject.Knockdown(10)
+			if(Subject.eyecheck() <= 0)
+				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
 			if(user.mind && isrevhead(user)) // alien revhead when?
 				if(ishuman(Subject))
 					if(Subject.stat != DEAD)

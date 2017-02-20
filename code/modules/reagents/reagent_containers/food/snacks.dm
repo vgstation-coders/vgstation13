@@ -342,6 +342,16 @@
 			if(bitecount >= ANIMALBITECOUNT)
 				qdel(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"bitecount",
+		"eatverb",
+		"wrapped",
+		"deepfried")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /// FOOD END
@@ -4032,6 +4042,7 @@
 	name = "Potato Salad"
 	desc = "With 21st century technology, it could take as long as three days to make this."
 	icon_state = "potato_salad"
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad/New()
 	..()
@@ -4359,10 +4370,10 @@
 			current_path = available_snacks[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
 			icon_state = initial(S.icon_state)
-			playsound(src, 'sound/misc/click.ogg', 50, 1)
-			sleep(1)
+			sleep(4)
 			if(counter == available_snacks.len)
 				counter = 0
+				available_snacks = shuffle(available_snacks)
 			counter++
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
@@ -4587,6 +4598,7 @@
 	desc = "Perfect for those occasions when engineering doesn't set up power."
 	icon_state = "midnightsnack"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack/New()
 	..()
@@ -4608,6 +4620,7 @@
 	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
 	icon_state = "starrynight"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad/New()
 	..()
@@ -4619,10 +4632,22 @@
 	desc = "Popular among cargo technicians who break into fruit crates."
 	icon_state = "fruitsalad"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+	name = "no-fruit salad"
+	desc = "Attempting to make this meal cycle through other types of salad was prohibited by special council decision after six weeks of intensive debate at the central hub for Galatic International Trade."
+	icon_state = "nofruitsalad"
+	bitesize = 4
+	trash = /obj/item/trash/snack_bowl
+
+/obj/item/weapon/reagent_containers/food/snacks/nofruitsalad/New()
+	..()
+	reagents.add_reagent(NOTHING,20)
 
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
 	name = "spicy cold noodles"
@@ -4874,3 +4899,16 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bleachkipper
+	name = "bleach kipper"
+	desc = "Baby blue and very fishy."
+	icon_state = "bleachkipper"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
+	volume = 1
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bleachkipper/New()
+	..()
+	reagents.add_reagent(FISHBLEACH, 1)

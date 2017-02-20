@@ -21,7 +21,7 @@
 	10;/obj/structure/constructshell,\
 	25;/obj/machinery/power/supermatter,\
 	100;/obj/machinery/auto_cloner,\
-	100;/obj/machinery/giga_drill,\
+	100;/obj/structure/bed/chair/vehicle/gigadrill,\
 	100;/obj/mecha/working/hoverpod,\
 	100;/obj/machinery/replicator,\
 	100;/obj/machinery/communication,\

@@ -39,8 +39,7 @@
 	mineral_turfs += src
 	. = ..()
 	MineralSpread()
-	if(ticker)
-		initialize()
+	initialize()
 
 turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	mineral_turfs -= src
@@ -183,6 +182,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/obj/mecha/M = AM
 		if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.selected.action(src)
+
+	else if(istype(AM,/obj/structure/bed/chair/vehicle/gigadrill))
+		var/obj/structure/bed/chair/vehicle/gigadrill/G = AM
+		G.drill(src)
 
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
@@ -521,8 +524,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
-	if(ticker)
-		initialize()
+	initialize()
 
 /turf/unsimulated/floor/asteroid/initialize()
 	updateMineralOverlays()

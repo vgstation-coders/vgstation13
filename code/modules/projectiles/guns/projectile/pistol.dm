@@ -111,8 +111,9 @@
 			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))
 
 /obj/item/weapon/gun/projectile/sec
-	name = "\improper NT Mk58 .45 pistol"
-	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
+	name = "\improper NT USP"
+	desc = "The NT USP is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
+	icon = 'icons/obj/biggun.dmi' //for silencer compatibility
 	icon_state = "secguncomp"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
@@ -121,16 +122,17 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
+	gun_flags = SILENCECOMP
 
 /obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
-	icon_state = "secguncomp[chambered ? "" : "-e"]"
+	icon_state = "secguncomp[silenced ? "-s" : ""][chambered ? "" : "-e"]"
 
 /obj/item/weapon/gun/projectile/sec/fancy
-	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet pearl finish. Uses .45 rounds."
-	name = "\improper NT Mk58 .45 Custom"
+	desc = "The NT USP is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet pearl finish. Uses .45 rounds."
+	name = "\improper NT USP Custom"
 	icon_state = "secgunfancy"
 
 /obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
-	icon_state = "secgunfancy[chambered ? "" : "-e"]"
+	icon_state = "secguncompfancy[silenced ? "-s" : ""][chambered ? "" : "-e"]"

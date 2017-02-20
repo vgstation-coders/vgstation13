@@ -134,6 +134,8 @@
 		else if(!seer)
 			see_invisible = SEE_INVISIBLE_LIVING
 
+		apply_vision_overrides()
+
 
 		if(healths)
 			healths.overlays.len = 0

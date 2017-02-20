@@ -82,6 +82,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/channeling_bone_shield = 0
 	var/channeling_bone_hammer = 0
 	var/channeling_bone_cocoon = 0
+	var/channeling_night_vision = 0
 
 	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0

@@ -198,16 +198,22 @@
 			"<span class='notice'>You place \a [WD] on \the [src].</span>")
 		return
 
+	var/dam = 0
 	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
-		health = 0
-		healthcheck()
+		dam = health
+	else if(istype(W, /obj/item/weapon/shard))
+		dam = W.force * 0.1 //Turns the base shard into a .5 damage item. If you want to break an electrified grille with that, you're going to EARN IT, ROD. BY. ROD.
+	else
+		switch(W.damtype)
+			if("fire")
+				dam = W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
+			if("brute")
+				dam = W.force * 0.5 //Rod matrices have an innate resistance to brute damage
 
-	switch(W.damtype)
-		if("fire")
-			health -= W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
-		if("brute")
-			health -= W.force * 0.5 //Rod matrices have an innate resistance to brute damage
-	shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
+	if(!(W.sharpness_flags & INSULATED_EDGE))
+		shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
+
+	health -= dam
 	healthcheck(hitsound = 1)
 	..()
 	return
@@ -240,6 +246,14 @@
 		health -= 1
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
+
+/obj/structure/grille/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"health",
+		"broken")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 //Mapping entities and alternatives !
 

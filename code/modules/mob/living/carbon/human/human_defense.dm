@@ -73,12 +73,14 @@ emp_act
 				protection += C.armor[type]
 	return protection
 
-/mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0)
+/mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
 	if(!body_part_flags)
 		return 0
 	var/parts_to_check = body_part_flags
 	for(var/obj/item/clothing/C in get_clothing_items())
 		if(!C)
+			continue
+		if(ignored && C == ignored)
 			continue
 		if((C.body_parts_covered & body_part_flags) == body_part_flags)
 			return 1

@@ -690,12 +690,21 @@
 	else if (href_list["lookitem"])
 		var/obj/item/I = locate(href_list["lookitem"])
 		usr.examination(I)
+	else if (href_list["listitems"])
+		var/mob/M = usr
+		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
+			var/obj/item/I = locate(href_list["listitems"])
+			var/obj/item/weapon/storage/internal/S = I
+			if(istype(S))
+				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
+					for(var/J in I.contents)
+						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
 
 /**
- * Returns a number between -1 to 2.
+ * Returns a number between -2 to 2.
  * TODO: What's the default return value?
  */
 /mob/living/carbon/human/eyecheck()
@@ -713,7 +722,7 @@
 	if(E)
 		. += E.eyeprot
 
-	return Clamp(., -1, 2)
+	return Clamp(., -2, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
@@ -1704,3 +1713,57 @@
 		species.anatomy_flags = rand(0,65535)
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
+
+/mob/living/carbon/human/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"r_hair",
+		"g_hair",
+		"b_hair",
+		"h_style",
+		"r_facial",
+		"g_facial",
+		"b_facial",
+		"f_style",
+		"r_eyes",
+		"g_eyes",
+		"b_eyes",
+		"s_tone",
+		"lip_style",
+		"wear_suit",
+		"w_uniform",
+		"shoes",
+		"belt",
+		"gloves",
+		"glasses",
+		"head",
+		"ears",
+		"wear_id",
+		"r_store",
+		"l_store",
+		"s_store",
+		"l_ear",
+		"r_ear",
+		"said_last_words",
+		"failed_last_breath",
+		"last_dam",
+		"bad_external_organs",
+		"xylophone",
+		"meatleft",
+		"check_mutations",
+		"lastFart",
+		"last_emote_sound",
+		"decapitated",
+		"organs",
+		"organs_by_name",
+		"internal_organs",
+		"internal_organs_by_name")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+	for(var/datum/organ/internal/O in internal_organs)
+		O.send_to_past(duration)
+	for(var/datum/organ/external/O in organs)
+		O.send_to_past(duration)
+
+	updatehealth()

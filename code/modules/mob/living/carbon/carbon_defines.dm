@@ -13,8 +13,6 @@
 	var/obj/item/legcuffed = null  //Same as handcuffs but for legs. Bear traps use this.
 	//Surgery info
 	var/datum/surgery_status/op_stage = new/datum/surgery_status
-	//Active emote/pose
-	var/pose = null
 
 	var/pulse = PULSE_NORM	//current pulse level
 

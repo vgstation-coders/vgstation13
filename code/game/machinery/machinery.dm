@@ -151,6 +151,7 @@ Class Procs:
 	var/emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
+	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
@@ -721,3 +722,8 @@ Class Procs:
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity
+	if(scan)
+		if(prob(50))
+			scan.forceMove(get_turf(src))
+			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
+			scan = null

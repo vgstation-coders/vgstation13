@@ -60,6 +60,8 @@
 		50;/obj/item/device/flashlight/flare)
 	new lighting(src)
 	new /obj/item/device/radio(src)
+	if(prob(5))
+		new /obj/item/airbag(src)
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"

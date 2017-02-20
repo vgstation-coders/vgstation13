@@ -7,11 +7,12 @@
  *		Toy crossbow
  *		Toy swords
  *		Foam armblade
- *      Bomb clock
+ *		Bomb clock
  *		Crayons
  *		Snap pops
  *		Water flower
  *		Cards
+ *		Action figures
  */
 
 
@@ -88,7 +89,7 @@
 
 /obj/item/toy/syndicateballoon
 	name = "syndicate balloon"
-	desc = "It's just a balloon. There is a tag on the back that reads \"FUK NT!11!\"."
+	desc = "There is a tag on the back that reads \"FUK NT!11!\"."
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -1248,6 +1249,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "latexballoon"
 	item_state = "lgloves"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/glove
 
@@ -1257,6 +1259,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "latexballoon_blow"
 	item_state = "latexballon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	col = null
 	can_be_strung = FALSE
 
@@ -1522,3 +1525,220 @@ var/list/living_balloons = list()
 	B.name = name
 	B.air_contents = air_contents
 	qdel(src)
+
+/*
+ * Action Figures
+ */
+
+/obj/item/toy/figure
+	name = "\improper Non-Specific Action Figure action figure"
+	desc = null
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "nuketoy"
+	w_class = W_CLASS_SMALL
+	var/cooldown = 0
+	var/toysay = "What the fuck did you do?"
+	var/toysound = 'sound/machines/click.ogg'
+
+/obj/item/toy/figure/New()
+    desc = "A \"Space Life\" brand [name]."
+
+/obj/item/toy/figure/attack_self(mob/user)
+	if(cooldown <= world.time)
+		cooldown = world.time + 50
+		src.say("[toysay]")
+		playsound(user, toysound, 20, 1)
+
+/obj/item/toy/figure/cmo
+	name = "\improper Chief Medical Officer action figure"
+	icon_state = "cmo"
+	toysay = "Suit sensors!"
+
+/obj/item/toy/figure/assistant
+	name = "\improper Assistant action figure"
+	icon_state = "assistant"
+	toysay = "Grey tide world wide!"
+
+/obj/item/toy/figure/atmos
+	name = "\improper Atmospheric Technician action figure"
+	icon_state = "atmo"
+	toysay = "Glory to Atmosia!"
+
+/obj/item/toy/figure/bartender
+	name = "\improper Bartender action figure"
+	icon_state = "bartender"
+	toysay = "Where is Pun Pun?"
+
+/obj/item/toy/figure/borg
+	name = "\improper Cyborg action figure"
+	icon_state = "borg"
+	toysay = "I. LIVE. AGAIN."
+	toysound = 'sound/voice/liveagain.ogg'
+
+/obj/item/toy/figure/botanist
+	name = "\improper Botanist action figure"
+	icon_state = "botanist"
+	toysay = "Blaze it!"
+
+/obj/item/toy/figure/captain
+	name = "\improper Captain action figure"
+	icon_state = "captain"
+	toysay = "Any heads of staff?"
+
+/obj/item/toy/figure/cargotech
+	name = "\improper Cargo Technician action figure"
+	icon_state = "cargotech"
+	toysay = "For Cargonia!"
+
+/obj/item/toy/figure/ce
+	name = "\improper Chief Engineer action figure"
+	icon_state = "ce"
+	toysay = "Wire the solars!"
+
+/obj/item/toy/figure/chaplain
+	name = "\improper Chaplain action figure"
+	icon_state = "chaplain"
+	toysay = "God, please grant me power!"
+	toysound = "sound/effects/prayer.ogg"
+
+/obj/item/toy/figure/chef
+	name = "\improper Chef action figure"
+	icon_state = "chef"
+	toysay = "I'll make you into a burger!"
+
+/obj/item/toy/figure/chemist
+	name = "\improper Chemist action figure"
+	icon_state = "chemist"
+	toysay = "Free creatine and hyperzine!"
+
+/obj/item/toy/figure/clown
+	name = "\improper Clown action figure"
+	icon_state = "clown"
+	toysay = "Honk!"
+	toysound = 'sound/items/bikehorn.ogg'
+
+/obj/item/toy/figure/ian
+	name = "\improper Ian action figure"
+	icon_state = "ian"
+	toysay = "Arf!"
+
+/obj/item/toy/figure/detective
+	name = "\improper Detective action figure"
+	icon_state = "detective"
+	toysay = "This airlock has grey jumpsuit and insulated glove fibers on it."
+
+/obj/item/toy/figure/dsquad
+	name = "\improper Death Squad Officer action figure"
+	icon_state = "dsquad"
+	toysay = "Kill 'em all!"
+
+/obj/item/toy/figure/engineer
+	name = "\improper Engineer action figure"
+	icon_state = "engineer"
+	toysay = "Oh god, the singularity is loose!"
+
+/obj/item/toy/figure/geneticist
+	name = "\improper Geneticist action figure"
+	icon_state = "geneticist"
+	toysay = "Smash!"
+
+/obj/item/toy/figure/hop
+	name = "\improper Head of Personel action figure"
+	icon_state = "hop"
+	toysay = "Giving out all access!"
+
+/obj/item/toy/figure/hos
+	name = "\improper Head of Security action figure"
+	icon_state = "hos"
+	toysay = "Go ahead, make my day."
+
+/obj/item/toy/figure/qm
+	name = "\improper Quartermaster action figure"
+	icon_state = "qm"
+	toysay = "Please sign this form in triplicate and we will see about geting you a welding mask within 3 business days."
+
+/obj/item/toy/figure/janitor
+	name = "\improper Janitor action figure"
+	icon_state = "janitor"
+	toysay = "Look at the signs, you idiot."
+	toysound ="sound/misc/slip.ogg"
+
+/obj/item/toy/figure/lawyer
+	name = "\improper Lawyer action figure"
+	icon_state = "lawyer"
+	toysay = "My client is a dirty traitor!"
+
+/obj/item/toy/figure/librarian
+	name = "\improper Librarian action figure"
+	icon_state = "librarian"
+	toysay = "One day while Andy..."
+
+/obj/item/toy/figure/md
+	name = "\improper Medical Doctor action figure"
+	icon_state = "md"
+	toysay = "Just clone them."
+
+/obj/item/toy/figure/mime
+	name = "\improper Mime action figure"
+	icon_state = "mime"
+	toysay = "..."
+	toysound = null
+
+/obj/item/toy/figure/miner
+	name = "\improper Shaft Miner action figure"
+	icon_state = "miner"
+	toysay = "H-H-HEL-L-PP-P G-GOLIATH-H!"
+
+/obj/item/toy/figure/ninja
+	name = "\improper Ninja action figure"
+	icon_state = "ninja"
+	toysay = "Oh god! Stop shooting, I'm friendly!"
+
+/obj/item/toy/figure/wizard
+	name = "\improper Wizard action figure"
+	icon_state = "wizard"
+	toysay = "EI NATH!"
+	toysound = 'sound/effects/bamf.ogg'
+
+/obj/item/toy/figure/rd
+	name = "\improper Research Director action figure"
+	icon_state = "rd"
+	toysay = "BLOWING THE BORGS!"
+
+/obj/item/toy/figure/roboticist
+	name = "\improper Roboticist action figure"
+	icon_state = "roboticist"
+	toysay = "Big stompy mechs!"
+	toysound = 'sound/mecha/mechstep.ogg'
+
+/obj/item/toy/figure/scientist
+	name = "\improper Scientist action figure"
+	icon_state = "scientist"
+	toysay = "I'm not doing research."
+	toysound = 'sound/effects/explosionfar.ogg'
+
+/obj/item/toy/figure/syndie
+	name = "\improper Nuclear Operative action figure"
+	icon_state = "syndie"
+	toysay = "Get that fukken disk!"
+
+/obj/item/toy/figure/secofficer
+	name = "\improper Security Officer action figure"
+	icon_state = "secofficer"
+	toysay = "I am the LAW!"
+	toysound = 'sound/voice/biamthelaw.ogg'
+
+/obj/item/toy/figure/virologist
+	name = "\improper Virologist action figure"
+	icon_state = "virologist"
+	toysay = "The cure is radium!"
+
+/obj/item/toy/figure/warden
+	name = "\improper Warden action figure"
+	icon_state = "warden"
+	toysay = "Seventeen minutes for coughing at an officer!"
+
+/obj/item/toy/figure/trader
+	name = "\improper Trader action figure"
+	icon_state = "trader"
+	toysay = "Shiny rock for nuke, good trade yes?"

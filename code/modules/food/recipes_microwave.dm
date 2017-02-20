@@ -1350,6 +1350,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
 
+/datum/recipe/nofruitsalad
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+
 /datum/recipe/chickensalad
 	reagents = list (VINEGAR = 5)
 	items = list(
@@ -1672,6 +1680,18 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
+
+/datum/recipe/bleachkipper
+	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/robot_parts/head,
+		/obj/item/weapon/handcuffs,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bleachkipper
 
 /datum/recipe/poissoncru
 	reagents = list(LIMEJUICE = 10)
@@ -2175,7 +2195,7 @@
 	reagents = list(GRAVY = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
 

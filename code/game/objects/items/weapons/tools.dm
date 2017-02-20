@@ -508,6 +508,14 @@
 	..()
 	icon_state = "[initial(icon_state)][welding ? "1" : ""]" //Ternary operator.
 
+/obj/item/weapon/weldingtool/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"welding",
+		"status")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0

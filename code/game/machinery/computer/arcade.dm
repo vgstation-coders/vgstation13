@@ -45,6 +45,7 @@
 							/obj/item/toy/prize/phazon						= 1,
 							/obj/item/weapon/boomerang/toy					= 1,
 							/obj/item/toy/foamblade							= 1,
+							/obj/item/weapon/storage/box/actionfigure				= 1,
 							)
 
 /obj/machinery/computer/arcade

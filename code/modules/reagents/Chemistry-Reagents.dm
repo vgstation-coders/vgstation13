@@ -29,6 +29,7 @@
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
+	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -147,6 +148,24 @@
 
 /datum/reagent/proc/on_removal(var/data)
 	return 1
+
+/datum/reagent/send_to_past(var/duration)
+	var/static/list/resettable_vars = list(
+		"being_sent_to_past",
+		"name",
+		"id",
+		"description",
+		"holder",
+		"reagent_state",
+		"data",
+		"volume",
+		"gcDestroyed")
+
+	reset_vars_after_duration(resettable_vars, duration, TRUE)
+
+	spawn(duration + 1)
+		var/datum/reagents/R = holder
+		R.reagent_list.Add(src)
 
 /datum/reagent/Destroy()
 	if(istype(holder))
@@ -1050,6 +1069,30 @@
 
 	M.adjustToxLoss(REM)
 
+/datum/reagent/chloramine
+	name = "Chloramine"
+	id = CHLORAMINE
+	description = "A chemical compound consisting of chlorine and ammonia. Very dangerous when inhaled."
+	reagent_state = GAS
+	color = "#808080" //rgb: 128, 128, 128
+	overdose = REAGENTS_OVERDOSE
+
+/datum/reagent/chloramine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.take_organ_damage(REM, 0)
+
+/datum/reagent/chloramine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/internal/lungs/L in H.internal_organs)
+			L.take_damage(REM, 1)
+
 /datum/reagent/sodium
 	name = "Sodium"
 	id = SODIUM
@@ -1601,6 +1644,7 @@
 	description = "The properties of this rare metal are not well-known."
 	reagent_state = SOLID
 	color = "#5E02F8" //rgb: 94, 2, 248
+	dupeable = FALSE
 
 /datum/reagent/phazon/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1678,7 +1722,7 @@
 			getFromPool(/obj/effect/decal/cleanable/vomit, T)
 
 /datum/reagent/space_cleaner
-	name = "Space cleaner"
+	name = "Space Cleaner"
 	id = CLEANER
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
 	reagent_state = LIQUID
@@ -1741,6 +1785,67 @@
 				if(H.shoes.clean_blood())
 					H.update_inv_shoes(0)
 		M.clean_blood()
+
+/datum/reagent/space_cleaner/bleach
+	name = "Bleach"
+	id = BLEACH
+	description = "A strong cleaning compound. Corrosive and toxic when applied to soft tissue. Do not swallow."
+	reagent_state = LIQUID
+	color = "#FBFCFF" //rgb: 251, 252, 255
+
+/datum/reagent/space_cleaner/bleach/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	for(var/atom/A in T)
+		A.clean_blood()
+
+	for(var/obj/item/I in T)
+		I.decontaminate()
+
+/datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	switch(data)
+		if(1 to 10)
+			M.adjustBruteLoss(3 * REM) //soft tissue damage
+		if(10 to INFINITY)
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(prob(5))
+					H.emote("me", 1, "coughs up blood!")
+					H.drip(10)
+				else if(prob(5))
+					H.vomit()
+	data++
+
+	M.adjustToxLoss(4 * REM)
+
+/datum/reagent/space_cleaner/bleach/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+			if(eyes_covered)
+				to_chat(H,"<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>")
+				return
+			else //This stuff is a little more corrosive but less irritative than pepperspray
+				H.emote("scream", , , 1)
+				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
+				H.eye_blurry = max(M.eye_blurry, 15)
+				H.eye_blind = max(M.eye_blind, 5)
+				H.adjustBruteLoss(2)
+				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				E.take_damage(5, 1)
+				H.custom_pain("Your [E] burn horribly!", 1)
+				H.apply_damage(2, BRUTE, LIMB_HEAD)
 
 //Reagents used for plant fertilizers.
 //WHY, just WHY, were fertilizers declared as a child of toxin and later snowflaked to work differently in the hydrotray's process_reagents()?
@@ -2483,7 +2588,7 @@
 	name = "Nanites"
 	id = NANITES
 	description = "Microscopic construction robots."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#535E66" //rgb: 83, 94, 102
 	var/diseasetype = /datum/disease/robotic_transformation
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2518,7 +2623,7 @@
 	name = "Nanobots"
 	id = NANOBOTS
 	description = "Microscopic robots intended for use in humans. Must be loaded with further chemicals to be useful."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#3E3959" //rgb: 62, 57, 89
 
 
@@ -2528,7 +2633,7 @@
 	name = "Medical Nanobots"
 	id = MEDNANOBOTS
 	description = "Microscopic robots intended for use in humans. Configured for rapid healing upon infiltration into the body."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#593948" //rgb: 89, 57, 72
 	custom_metabolism = 0.005
 	var/spawning_horror = 0
@@ -2540,39 +2645,17 @@
 		return 1
 
 	switch(volume)
-		if(1 to 5)
+		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					var/datum/organ/external/affecting = H.get_organ()
-					for(var/datum/wound/W in affecting.wounds)
-						spawn(1)
-							affecting.wounds -= W
-							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
-					if(H.getOxyLoss()>0 && prob(90))
+					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-4)
-							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
-						else
-					if(H.getBruteLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(5, 0)
-							holder.remove_reagent("mednanobots", 5/40)
-						else
-					if(H.getFireLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(0, 5)
-							holder.remove_reagent("mednanobots", 5/40)
-						else
-					if(H.getToxLoss()>0 && prob(50))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustToxLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
-						else
-					if(H.getCloneLoss()>0 && prob(60))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustCloneLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
+							H.adjustOxyLoss(-5)
+							H.heal_organ_damage(5, 5)
+							H.adjustToxLoss(-5)
+							H.adjustCloneLoss(-5)
+							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
 					if(percent_machine>5)
 						if(holder.has_reagent("mednanobots"))
 							percent_machine-=1
@@ -2591,56 +2674,17 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					var/datum/organ/external/affecting = H.get_organ()
-					for(var/datum/wound/W in affecting.wounds)
-						spawn(1)
-							affecting.wounds -= W
-							H.visible_message("<span class='warning'>[H]'s wounds close up in the blink of an eye!</span>")
-					if(H.getOxyLoss()>0 && prob(90))
+					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-4)
-							holder.remove_reagent("mednanobots", 4/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+							H.adjustOxyLoss(-5)
+							H.heal_organ_damage(5, 5)
+							H.adjustToxLoss(-5)
+							H.adjustCloneLoss(-5)
+							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
 							percent_machine +=1/2
 							if(prob(20))
 								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
 							else
-						else
-					if(H.getBruteLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(5, 0)
-							holder.remove_reagent("mednanobots", 5/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
-					if(H.getFireLoss()>0 && prob(90))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(0, 5)
-							holder.remove_reagent("mednanobots", 5/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
-					if(H.getToxLoss()>0 && prob(50))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustToxLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
-					if(H.getCloneLoss()>0 && prob(60))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustCloneLoss(-2)
-							holder.remove_reagent("mednanobots", 2/40)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-						else
 					if(H.dizziness != 0)
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
@@ -2676,7 +2720,7 @@
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
 	description = "Microscopic robots intended for use in humans. Configured to grant great resistance to damage."
-	reagent_state = LIQUID
+	reagent_state = SOLID
 	color = "#343F42" //rgb: 52, 63, 66
 	custom_metabolism = 0.01
 	var/has_been_armstrong = 0
@@ -3514,7 +3558,7 @@
 	id = DISCOUNT
 	description = "You can almost feel your liver failing, just by looking at it."
 	reagent_state = LIQUID
-	color = "#6F884F" //rgb: 255, 255, 255
+	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
@@ -3527,20 +3571,20 @@
 		switch(volume)
 			if(1 to 20)
 				if(prob(5))
-					H << "<span class='warning'>You don't feel very good.</span>"
+					to_chat(H,"<span class='warning'>You don't feel very good.</span>")
 					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
 			if(20 to 35)
 				if(prob(10))
-					H << "<span class='warning'>You really don't feel very good.</span>"
+					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 				if(prob(5))
 					H.adjustToxLoss(0.1)
 					H.visible_message("[H] groans.")
 					holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
 			if(35 to INFINITY)
 				if(prob(10))
-					H << "<span class='warning'>Your stomach grumbles unsettlingly.</span>"
+					to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
 				if(prob(5))
-					H << "<span class='warning'>Something feels wrong with your body.</span>"
+					to_chat(H,"<span class='warning'>Something feels wrong with your body.</span>")
 					var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
 					if(istype(L))
 						L.take_damage(0.1, 1)
@@ -5051,6 +5095,46 @@
 		M.confused = max(M.confused + 15, 15)
 	data++
 
+/datum/reagent/ethanol/deadrum/danswhiskey
+	name = "Discount Dan's 'Malt' Whiskey"
+	id = DANS_WHISKEY
+	description = "A terrible combination of two things you should never ingest."
+	reagent_state = LIQUID
+	color = "#6F884F" //rgb: 181, 199, 158
+
+/datum/reagent/ethanol/deadrum/danswhiskey/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		switch(volume)
+			if(1 to 15)
+				if(prob(5))
+					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
+					H.adjustToxLoss(0.5)
+				H.adjustToxLoss(0.1)
+			if(15 to 25)
+				if(prob(10))
+					to_chat(H,"<span class='warning'>Something in your abdomen definitely doesn't feel right.</span>")
+					H.adjustToxLoss(1)
+				if(prob(5))
+					H.adjustToxLoss(2)
+					H.vomit()
+				H.adjustToxLoss(0.2)
+			if(25 to INFINITY)
+				if(prob(10))
+					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
+					var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+					if(istype(L))
+						L.take_damage(1, 1)
+					H.adjustToxLoss(2)
+				if(prob(5))
+					H.vomit()
+					H.adjustToxLoss(3)
+				H.adjustToxLoss(0.3)
+
+
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
 	name = "Vinegar"
@@ -5392,3 +5476,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		holder.isolate_reagent(BLOCKIZINE)
 		volume = holder.maximum_volume
 		holder.update_total()
+
+datum/reagent/fishbleach
+	name = "Fish Bleach"
+	id = FISHBLEACH
+	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
+	reagent_state = LIQUID
+	color = "#12A7C9"
+
+/datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	H.color = "#12A7C9"
+	return

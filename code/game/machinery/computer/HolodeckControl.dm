@@ -41,12 +41,22 @@
 		<A href='?src=\ref[src];picnicarea=1'>((Picnic Area)</font>)</A><BR>
 		<A href='?src=\ref[src];snowfield=1'>((Snow Field)</font>)</A><BR>
 		<A href='?src=\ref[src];theatre=1'>((Theatre)</font>)</A><BR>
+		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=\ref[src];wildride=1'>((Wild Ride)</font>)</A><BR>
+		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
+		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
+		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
+		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
+		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>
 		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>"}
 //	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
 	if(emagged)
 		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
+			Ensure the holodeck is empty before testing.<BR>
+			<BR>
+			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Begin Combat Arena Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
 			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
@@ -126,6 +136,41 @@
 			if(target)
 				loadProgram(target)
 
+		else if(href_list["firingrange"])
+			target = locate(/area/holodeck/source_firingrange)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["wildride"])
+			target = locate(/area/holodeck/source_wildride)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["chess"])
+			target = locate(/area/holodeck/source_chess)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["maze"])
+			target = locate(/area/holodeck/source_maze)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["dining"])
+			target = locate(/area/holodeck/source_dining)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["lasertag"])
+			target = locate(/area/holodeck/source_lasertag)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["zoo"])
+			target = locate(/area/holodeck/source_zoo)
+			if(target)
+				loadProgram(target)
+
 		else if(href_list["turnoff"])
 			target = locate(/area/holodeck/source_plating)
 			if(target)
@@ -135,6 +180,13 @@
 			if(!emagged)
 				return
 			target = locate(/area/holodeck/source_burntest)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["ragecage"])
+			if(!emagged)
+				return
+			target = locate(/area/holodeck/source_ragecage)
 			if(target)
 				loadProgram(target)
 
@@ -339,7 +391,7 @@
 	thermal_conductivity = 0
 
 /turf/simulated/floor/holofloor/grass
-	name = "Lush Grass"
+	name = "lush Grass"
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
 
@@ -354,11 +406,15 @@
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
 
+/turf/simulated/floor/holofloor/light
+	name = "light floor"
+	luminosity = 5
+	icon_state = "light_on"
+	floor_tile
+
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
-
-
 
 /obj/structure/table/holotable
 	parts = null
@@ -375,8 +431,8 @@
 /obj/item/clothing/gloves/boxing/hologlove
 	name = "boxing gloves"
 	desc = "Because you really needed another excuse to punch your crewmates."
-	icon_state = "boxing"
-	item_state = "boxing"
+	icon_state = "boxingred"
+	item_state = "boxingred"
 
 /obj/structure/window/reinforced/holo/spawnBrokenPieces()
 	return
@@ -389,6 +445,19 @@
 	return ..()
 
 /obj/structure/window/reinforced/holo/spawnBrokenPieces()
+	return
+
+/obj/structure/window/holo/spawnBrokenPieces()
+	return
+
+/obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)
+	if(isscrewdriver(W))
+		to_chat(user, "It's a holowindow! It has no frame!")
+		return
+
+	return ..()
+
+/obj/structure/window/holo/spawnBrokenPieces()
 	return
 
 /obj/structure/rack/holo

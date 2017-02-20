@@ -515,6 +515,27 @@
 			S.start()
 	holder.clear_reagents()
 
+/datum/chemical_reaction/chemsmoke/bleach
+	name = "Bleach Fumes"
+	id = "bleachfumes"
+	result = CHLORAMINE
+	required_reagents = list(BLEACH = 1, AMMONIA = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/chemsmoke/bleach/on_reaction(var/datum/reagents/holder, var/created_volume) //I hate to copypasta this to change one argument but it appears I have little choice
+	holder.isolate_reagent(CHLORAMINE)
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+		var/location = get_turf(holder.my_atom)
+		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		S.attach(location)
+		S.set_up(holder, 5, 0, location)
+		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+		spawn(0)
+			S.start()
+			sleep(10)
+			S.start()
+	holder.clear_reagents()
+
 /datum/chemical_reaction/chloralhydrate
 	name = "Chloral Hydrate"
 	id = CHLORALHYDRATE
@@ -728,7 +749,7 @@
 	name = "Nanobots2"
 	id = "nanobots2"
 	result = NANOBOTS
-	required_reagents = list(MEDNANOBOTS = 1, CRYOXADONE = 2)
+	required_reagents = list(MEDNANOBOTS = 2.5, CRYOXADONE = 2) //2.5 here since otherwise you could just dupe again with this return recipe.
 	result_amount = 1
 
 /datum/chemical_reaction/mednanobots
@@ -736,14 +757,14 @@
 	id = MEDNANOBOTS
 	result = MEDNANOBOTS
 	required_reagents = list(NANOBOTS = 1, DOCTORSDELIGHT = 5)
-	result_amount = 1
+	result_amount = 2.5
 
 /datum/chemical_reaction/comnanobots
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
 	result = COMNANOBOTS
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
-	result_amount = 1
+	result_amount = 2.5
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -839,10 +860,17 @@
 	result_amount = 2
 
 /datum/chemical_reaction/space_cleaner
-	name = "Space cleaner"
+	name = "Space Cleaner"
 	id = CLEANER
 	result = CLEANER
 	required_reagents = list(AMMONIA = 1, WATER = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/bleach
+	name = "Bleach"
+	id = BLEACH
+	result = BLEACH
+	required_reagents = list(SODIUMCHLORIDE = 4, CLEANER = 4, OXYGEN = 2)
 	result_amount = 2
 
 /datum/chemical_reaction/plantbgone
@@ -2447,6 +2475,14 @@
 	result = BAREFOOT
 	required_reagents = list(BERRYJUICE = 1, CREAM = 1, VERMOUTH = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/dans_whiskey
+	name = "Discount Dan's 'Malt' Whiskey"
+	id = DANS_WHISKEY
+	result = DANS_WHISKEY
+	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
+	result_amount = 2
+
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 

@@ -676,3 +676,17 @@
 	..()
 	if(prob(5))
 		hasmouth = !hasmouth
+
+/mob/living/carbon/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"gender",
+		"antibodies",
+		"last_eating",
+		"life_tick",
+		"number_wounds",
+		"handcuffed",
+		"legcuffed",
+		"pulse")
+
+	reset_vars_after_duration(resettable_vars, duration)

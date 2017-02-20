@@ -346,6 +346,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "emergency floodlight crate"
 	group = "Supplies"
 
+/datum/supply_packs/airbags
+	name = "Personal airbags"
+	contains = list(/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag,
+					/obj/item/airbag)
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	containername = "airbag crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume
@@ -847,9 +859,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/fourtyfive
-	name = ".45 pistols"
+	name = "NT USP pack"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
-					/obj/item/weapon/gun/projectile/sec)
+					/obj/item/weapon/gun/projectile/sec,
+					/obj/item/voucher/free_item/hot_drink,
+					/obj/item/voucher/free_item/snack)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = ".45 pistols crate"
@@ -1182,6 +1196,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector,
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
+	group = "Engineering"
+	
+/datum/supply_packs/engine/prism
+	name = "Optical prisms"
+	contains = list(/obj/machinery/prism,
+					/obj/machinery/prism)
+	containername = "prism crate"
 	group = "Engineering"
 
 /datum/supply_packs/engine/PA
@@ -1625,6 +1646,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "borer egg crate"
 	access = access_xenobiology
+	group = "Science"
+
+/datum/supply_packs/anomaly_container
+	name = "Anomaly container"
+	cost = 50
+	containertype = /obj/structure/largecrate/anomaly_container
+	containername = "anomaly container crate"
 	group = "Science"
 
 

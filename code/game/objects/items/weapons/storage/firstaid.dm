@@ -23,6 +23,9 @@
 	icon_state = "ointment"
 	item_state = "firstaid-ointment"
 
+/obj/item/weapon/storage/firstaid/fire/empty
+	empty = 1
+
 /obj/item/weapon/storage/firstaid/fire/New()
 	..()
 	if (empty)
@@ -62,6 +65,9 @@
 	icon_state = "antitoxin"
 	item_state = "firstaid-toxin"
 
+/obj/item/weapon/storage/firstaid/toxin/empty
+	empty = 1
+
 /obj/item/weapon/storage/firstaid/toxin/New()
 	..()
 	if (empty)
@@ -83,6 +89,9 @@
 	desc = "A box full of oxygen goodies."
 	icon_state = "o2"
 	item_state = "firstaid-oxy"
+
+/obj/item/weapon/storage/firstaid/o2/empty
+	empty = 1
 
 /obj/item/weapon/storage/firstaid/o2/New()
 	..()

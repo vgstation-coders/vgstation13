@@ -223,6 +223,7 @@
 
 /mob/living/carbon/monkey/update_hud()
 	if(client)
+		update_internals()
 		client.screen |= contents
 
 //Call when target overlay should be added/removed

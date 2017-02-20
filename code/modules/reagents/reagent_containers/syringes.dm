@@ -35,7 +35,8 @@
 	                            /obj/item/weapon/implantcase/chem,
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
 	                            /obj/item/clothing/mask/facehugger/lamarr,
-	                            /obj/item/asteroid/hivelord_core)
+	                            /obj/item/asteroid/hivelord_core,
+										 /obj/item/weapon/reagent_containers/blood)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -175,9 +176,15 @@
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
 	// Drawing from objects draws their contents
 	else if (isobj(target))
-		if (!target.is_open_container() && !istype(target, /obj/structure/reagent_dispensers) && !istype(target, /obj/item/slime_extract))
+		if (!target.is_open_container() && !istype(target, /obj/structure/reagent_dispensers) && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from this object.")
 			return
+
+		if (istype(target, /obj/item/weapon/reagent_containers/blood))
+			var/obj/item/weapon/reagent_containers/blood/L = target
+			if (L.mode == BLOODPACK_CUT)
+				to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
+				return
 
 		var/tx_amount = 0
 		if (istype(target, /obj/item/weapon/reagent_containers) || istype(target, /obj/structure/reagent_dispensers))
@@ -214,6 +221,12 @@
 	if (target.reagents.total_volume >= target.reagents.maximum_volume)
 		to_chat(user, "<span class='warning'>\The [target] is full.</span>")
 		return
+
+	if (istype(target, /obj/item/weapon/reagent_containers/blood))
+		var/obj/item/weapon/reagent_containers/blood/L = target
+		if (L.mode == BLOODPACK_CUT)
+			to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
+			return
 
 	// Attempting to inject someone else takes time
 	if (ismob(target) && target != user)
@@ -313,7 +326,7 @@
 
 /obj/item/weapon/reagent_containers/syringe/giant
 	name = "giant syringe"
-	desc = "A syringe used for lethal injections."
+	desc = "A syringe commonly used for lethal injections."
 	amount_per_transfer_from_this = 50
 	possible_transfer_amounts = null
 	volume = 50

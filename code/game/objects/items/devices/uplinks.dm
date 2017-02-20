@@ -22,8 +22,12 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		return
 
 /obj/item/device/uplink/initialize()
-	welcome = ticker.mode.uplink_welcome
-	uses = ticker.mode.uplink_uses
+	if(ticker.mode)
+		welcome = ticker.mode.uplink_welcome
+		uses = ticker.mode.uplink_uses
+	else
+		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
+		uses = 90 // Because this is only happening on centcomm's snowflake uplink
 
 //Let's build a menu!
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
@@ -61,7 +65,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			if(item.cost > 0)
 				cost_text = "([item.cost])"
 			if(item.cost <= uses)
-				dat += "<A href='byond://?src=\ref[src];buy_item=[category]:[i];'>[item.name]</A> [cost_text] "
+				dat += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
 				dat += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(item.desc)

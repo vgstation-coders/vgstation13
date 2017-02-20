@@ -29,7 +29,6 @@ log transactions
 	var/ticks_left_locked_down = 0
 	var/ticks_left_timeout = 0
 	var/machine_id = ""
-	var/obj/item/weapon/card/id/held_card
 	var/view_screen = NO_SCREEN
 	var/lastprint = 0 // Printer needs time to cooldown
 
@@ -88,10 +87,10 @@ log transactions
 			return
 	if(istype(I, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/idcard = I
-		if(!held_card)
+		if(!scan)
 			if(usr.drop_item(idcard, src))
-				held_card = idcard
-				if(authenticated_account && held_card.associated_account_number != authenticated_account.account_number)
+				scan = idcard
+				if(authenticated_account && scan.associated_account_number != authenticated_account.account_number)
 					authenticated_account = null
 				src.attack_hand(user)
 	else if(authenticated_account)
@@ -136,7 +135,7 @@ log transactions
 		var/dat = {"<h1>Nanotrasen Automatic Teller Machine</h1>
 			For all your monetary needs!<br>
 			<i>This terminal is</i> [machine_id]. <i>Report this code when contacting Nanotrasen IT Support</i><br/>
-			Card: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card.name : "------"]</a><br><br><hr>"}
+			Card: <a href='?src=\ref[src];choice=insert_card'>[scan ? scan.name : "------"]</a><br><br><hr>"}
 
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
@@ -199,9 +198,9 @@ log transactions
 						<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw funds'><br>
 						</form><hr>
 						"}
-					if(held_card)
+					if(scan)
 						dat += {"
-							<b>Virtual Wallet balance:</b> $[held_card.virtual_wallet.money]<br>
+							<b>Virtual Wallet balance:</b> $[scan.virtual_wallet.money]<br>
 							<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
 							<input type='hidden' name='src' value='\ref[src]'>
 							<input type='hidden' name='choice' value='withdraw_to_wallet'>
@@ -282,10 +281,10 @@ log transactions
 				if(linked_db && !ticks_left_locked_down)
 					var/tried_account_num = text2num(href_list["account_num"])
 					if(!tried_account_num)
-						tried_account_num = held_card.associated_account_number
+						tried_account_num = scan.associated_account_number
 					var/tried_pin = text2num(href_list["account_pin"])
 
-					authenticated_account = linked_db.attempt_account_access(tried_account_num, tried_pin, held_card && held_card.associated_account_number == tried_account_num ? 2 : 1)
+					authenticated_account = linked_db.attempt_account_access(tried_account_num, tried_pin, scan && scan.associated_account_number == tried_account_num ? 2 : 1)
 					if(!authenticated_account)
 						number_incorrect_tries++
 						if(previous_account_number == tried_account_num)
@@ -356,7 +355,7 @@ log transactions
 						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("withdraw_to_wallet")
 				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(!held_card)
+				if(!scan)
 					to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
 					return
 				if(amount <= 0)
@@ -364,11 +363,11 @@ log transactions
 				else if(authenticated_account && amount > 0)
 					if(amount <= authenticated_account.money)
 						authenticated_account.money -= amount
-						held_card.virtual_wallet.money += amount
+						scan.virtual_wallet.money += amount
 
 						//create an entry in the account transaction log
 						var/datum/transaction/T = new()
-						T.target_name = held_card.virtual_wallet.owner_name
+						T.target_name = scan.virtual_wallet.owner_name
 						T.purpose = "Credit transfer to wallet"
 						T.amount = "-[amount]"
 						T.source_terminal = machine_id
@@ -383,24 +382,24 @@ log transactions
 						T.source_terminal = machine_id
 						T.date = current_date_string
 						T.time = worldtime2text()
-						held_card.virtual_wallet.transaction_log.Add(T)
+						scan.virtual_wallet.transaction_log.Add(T)
 					else
 						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("deposit_from_wallet")
 				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(!held_card)
+				if(!scan)
 					to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
 					return
 				if(amount <= 0)
 					alert("That is not a valid amount.")
 				else if(authenticated_account && amount > 0)
-					if(amount <= held_card.virtual_wallet.money)
+					if(amount <= scan.virtual_wallet.money)
 						authenticated_account.money += amount
-						held_card.virtual_wallet.money -= amount
+						scan.virtual_wallet.money -= amount
 
 						//create an entry in the account transaction log
 						var/datum/transaction/T = new()
-						T.target_name = held_card.virtual_wallet.owner_name
+						T.target_name = scan.virtual_wallet.owner_name
 						T.purpose = "Credit transfer from wallet"
 						T.amount = "[amount]"
 						T.source_terminal = machine_id
@@ -415,7 +414,7 @@ log transactions
 						T.source_terminal = machine_id
 						T.date = current_date_string
 						T.time = worldtime2text()
-						held_card.virtual_wallet.transaction_log.Add(T)
+						scan.virtual_wallet.transaction_log.Add(T)
 					else
 						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("balance_statement")
@@ -447,19 +446,19 @@ log transactions
 				else
 					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 			if("insert_card")
-				if(held_card)
-					held_card.forceMove(src.loc)
+				if(scan)
+					scan.forceMove(src.loc)
 					authenticated_account = null
 
 					if(ishuman(usr) && !usr.get_active_hand())
-						usr.put_in_hands(held_card)
-					held_card = null
+						usr.put_in_hands(scan)
+					scan = null
 
 				else
 					var/obj/item/I = usr.get_active_hand()
 					if (istype(I, /obj/item/weapon/card/id))
 						if(usr.drop_item(I, src))
-							held_card = I
+							scan = I
 			if("logout")
 				authenticated_account = null
 				failsafe = 1

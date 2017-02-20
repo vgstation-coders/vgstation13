@@ -226,6 +226,13 @@ var/list/uplink_items = list()
 	cost = 2
 	job = list("Botanist")
 
+/datum/uplink_item/jobspecific/beecase
+	name = "Briefcase Full of Bees"
+	desc = "A briefcase containing twenty angry bees."
+	item = /obj/item/weapon/storage/briefcase/bees
+	cost = 4
+	job = list("Botanist")
+
 //Chef
 /datum/uplink_item/jobspecific/specialsauce
 	name = "Chef Excellence's Special Sauce"

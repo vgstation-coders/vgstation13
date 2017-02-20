@@ -231,7 +231,7 @@
 			a_right.forceMove(T)
 			a_right.disconnected(a_left)
 		spawn(0)
-			del(src)
+			qdel(src)
 	return
 
 

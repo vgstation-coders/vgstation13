@@ -100,7 +100,7 @@ In short:
 
 /datum/universal_state/hell/OverlayAndAmbientSet()
 	set waitfor = FALSE
-	for(var/turf/T in turfs)
+	for(var/turf/T in world)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else

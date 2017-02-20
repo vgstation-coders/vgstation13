@@ -917,18 +917,26 @@ var/list/datum/dna/hivemind_bank = list()
 	return 0
 
 //Handles the general sting code to reduce on copypasta (seeming as somebody decided to make SO MANY dumb abilities)
-/mob/proc/changeling_sting(var/required_chems=0, var/verb_path)
+// allow_self=TRUE lets you sting yourself.
+/mob/proc/changeling_sting(var/required_chems=0, var/verb_path, var/allow_self=FALSE)
 	var/datum/changeling/changeling = changeling_power(required_chems)
 	if(!changeling)
 		return
 
 	var/list/victims = list()
+	if(allow_self)
+		victims += "(YOU)"
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
 		victims += C
-	var/mob/living/carbon/T = input(src, "Who will we sting?") as null|anything in victims
-
+	var/mob/living/carbon/T
+	if (victims)
+		T = victims[1]
+		if (victims.len > 1)
+			T = input(src, "Who will we sting?") as null|anything in victims
 	if(!T)
 		return
+	if(T=="(YOU)")
+		T = src
 	if(!(T in view(changeling.sting_range)))
 		return
 	if(!sting_can_reach(T, changeling.sting_range))
@@ -943,7 +951,7 @@ var/list/datum/dna/hivemind_bank = list()
 		add_changeling_verb(verb_path)
 
 	to_chat(src, "<span class='notice'>We stealthily sting [T].</span>")
-	if(!T.mind || !T.mind.changeling)
+	if(!T.mind || !T.mind.changeling || (allow_self && T == src))
 		return T	//T will be affected by the sting
 	to_chat(T, "<span class='warning'>You feel a tiny prick.</span>")
 	return
@@ -1108,7 +1116,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!istype(M))
 		return
 
-	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting)
+	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting, allow_self=TRUE)
 	if(!target)
 		return
 
@@ -1121,6 +1129,30 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers", "US")
 	return 1
+
+/obj/item/verbs/changeling/proc/changeling_fat_sting()
+	set category = "Changeling"
+	set name = "Fat Sting"
+	set desc = "Adds fat quickly."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/carbon/target = M.changeling_sting(0, /obj/item/verbs/changeling/proc/changeling_unfat_sting, allow_self=TRUE)
+	if(!target)
+		return
+
+	if(target.overeatduration < 100)
+		to_chat(target, "<span class='danger'>You feel a tiny prick as your stomach churns violently. You begin to feel bloated.</span>")
+		target.overeatduration += 600 // 500 is minimum fat threshold.
+	else
+		to_chat(target, "<span class='notice'>You feel a tiny prick. Nothing happens.</span>")
+
+	feedback_add_details("changeling_powers", "FS")
+	return 1
+
+
 
 /obj/item/verbs/changeling/proc/changeling_DEATHsting()
 	set category = "Changeling"

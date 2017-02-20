@@ -62,10 +62,16 @@
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
+	qdel(on_clickon)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
+	on_clickon = null
+
+	if(transmogged_from)
+		qdel(transmogged_from)
+		transmogged_from = null
 
 	..()
 
@@ -238,6 +244,7 @@
 	on_uattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
+	on_clickon = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -1757,6 +1764,12 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/apply_vision_overrides()
+	if(see_in_dark_override)
+		see_in_dark = see_in_dark_override
+	if(see_invisible_override)
+		see_invisible = see_invisible_override
+
 /mob/actual_send_to_future(var/duration)
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
@@ -1772,6 +1785,114 @@ mob/proc/on_foot()
 	eye_blind = init_eye_blind
 	ear_deaf = init_deaf
 	clear_fullscreen("blind")
+
+/mob/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"lastattacker",
+		"lastattacked",
+		"attack_log",
+		"memory",
+		"sdisabilities",
+		"disabilities",
+		"eye_blind",
+		"eye_blurry",
+		"ear_deaf",
+		"ear_damage",
+		"stuttering",
+		"slurring",
+		"real_name",
+		"blinded",
+		"bhunger",
+		"druggy",
+		"confused",
+		"antitoxs",
+		"sleeping",
+		"resting",
+		"lying",
+		"lying_prev",
+		"canmove",
+		"candrop",
+		"lastpuke",
+		"cpr_time",
+		"bodytemperature",
+		"drowsyness",
+		"dizziness",
+		"jitteriness",
+		"nutrition",
+		"overeatduration",
+		"paralysis",
+		"stunned",
+		"knockdown",
+		"losebreath",
+		"nobreath",
+		"held_items",
+		"back",
+		"internal",
+		"s_active",
+		"wear_mask",
+		"radiation",
+		"stat",
+		"suiciding")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration + 1)
+		regenerate_icons()
+
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
+	if(!target_type)
+		if(transmogged_from)
+			transmogged_from.forceMove(loc)
+			if(key)
+				transmogged_from.key = key
+			transmogged_from.timestopped = 0
+			if(istype(transmogged_from, /mob/living/carbon))
+				var/mob/living/carbon/C = transmogged_from
+				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+					C.drop_item(C.wear_mask, force_drop = 1)
+			transmogged_from = null
+			for(var/atom/movable/AM in contents)
+				AM.forceMove(get_turf(src))
+			forceMove(null)
+			qdel(src)
+		return
+	if(!ispath(target_type, /mob))
+		EXCEPTION(target_type)
+		return
+	var/mob/M = new target_type(loc)
+	M.transmogged_from = src
+	if(key)
+		M.key = key
+	if(offer_revert_spell)
+		var/spell/change_back = new /spell/aoe_turf/revert_form
+		M.add_spell(change_back)
+	var/static/list/drop_on_transmog = list(
+		/obj/item/weapon/disk/nuclear,
+		/obj/item/weapon/holder,
+		/obj/item/device/paicard,
+		)
+	for(var/i in drop_on_transmog)
+		var/list/L = search_contents_for(i)
+		if(L.len)
+			for(var/A in L)
+				drop_item(A, force_drop = 1)
+	src.forceMove(null)
+	timestopped = 1
+
+/spell/aoe_turf/revert_form
+	name = "Revert Form"
+	desc = "Morph back into your previous form."
+	abbreviation = "RF"
+	charge_max = 1
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 0
+	hud_state = "wiz_mindswap"
+
+/spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
+	user.transmogrify()
+	user.remove_spell(src)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

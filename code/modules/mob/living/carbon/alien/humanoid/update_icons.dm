@@ -58,6 +58,7 @@
 	if (client)
 //		if(other)	client.screen |= hud_used.other		//Not used
 //		else		client.screen -= hud_used.other		//Not used
+		update_internals()
 		client.screen |= contents
 
 //These update icons are essentially derelict and unused

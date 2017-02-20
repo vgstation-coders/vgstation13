@@ -1,6 +1,7 @@
 /obj/machinery/vending/mining
 	name = "Dwarven Mining Equipment"
 	desc = "Get your mining equipment here, and above all keep digging!"
+	req_access = list(access_cargo)
 	product_slogans = "This asteroid isn't going to dig itself!;Stay safe in the tunnels, bring two Kinetic Accelerators!;Jetpacks, anyone?"
 	product_ads = "Hungry, thirsty or unequipped? We have your fix!"
 	vend_reply = "What a glorious time to mine!"
@@ -25,6 +26,14 @@
 		/obj/item/weapon/gun/hookshot = 3,
 		/obj/item/weapon/lazarus_injector/advanced = 4,
 		)
+	contraband = list(
+		/obj/item/weapon/storage/bag/money = 2,
+		)
+	premium = list(
+		/obj/item/weapon/pickaxe/silver = 1,
+		/obj/item/weapon/pickaxe/gold = 1,
+		/obj/item/weapon/pickaxe/diamond = 1,
+		)
 	prices = list(
 		/obj/item/toy/canary = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 100,
@@ -36,14 +45,19 @@
 		/obj/item/weapon/storage/belt/lazarus = 500,
 		/obj/item/device/mobcapsule = 250,
 		/obj/item/weapon/lazarus_injector = 1000,
+		/obj/item/weapon/pickaxe/hand = 500,
 		/obj/item/weapon/pickaxe/jackhammer = 500,
 		/obj/item/weapon/mining_drone_cube = 500,
 		/obj/item/device/wormhole_jaunter = 250,
 		/obj/item/weapon/resonator = 750,
+		/obj/item/weapon/storage/bag/money = 1000,
 		/obj/item/weapon/gun/energy/kinetic_accelerator = 1000,
+		/obj/item/weapon/pickaxe/silver = 1000,
+		/obj/item/weapon/pickaxe/gold = 2000,
 		/obj/item/weapon/tank/jetpack/carbondioxide = 2000,
 		/obj/item/weapon/gun/hookshot = 3000,
 		/obj/item/weapon/lazarus_injector/advanced = 3000,
+		/obj/item/weapon/pickaxe/diamond = 3000,
 		)
 
 	pack = /obj/structure/vendomatpack/mining

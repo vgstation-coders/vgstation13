@@ -439,3 +439,13 @@
 		plane = LYING_MOB_PLANE
 	else
 		plane = MOB_PLANE
+
+/mob/living/carbon/monkey/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"uniform",
+		"hat",
+		"glasses",
+		"wear_id")
+
+	reset_vars_after_duration(resettable_vars, duration)
