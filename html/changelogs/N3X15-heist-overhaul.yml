@@ -3,5 +3,5 @@ delete-after: True
 changes: 
 - rscdel: Vox Pirates no longer need to worry about not killing the crew.
 - rscdel: Removed singularity generator and emitter theft objectives from heist.
-- rscadd: Added shard, eye, and lung theft objectives to heist.
+- rscadd: "Added shard, eye, and lung theft objectives to heist. Printed organs do not count!"
 - rscadd: "Added Organics Extractor tool for Vox Pirates, enabling swift (15s) removal of desired organs from incapacitated victims."
