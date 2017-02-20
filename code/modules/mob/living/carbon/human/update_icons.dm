@@ -362,6 +362,16 @@ var/global/list/damage_icon_parts = list()
 
 	var/add_image = 0
 	// DNA2 - Drawing underlays.
+	var/g = gender == FEMALE ? "f" : "m"
+	for(var/gene_type in active_genes)
+		var/datum/dna/gene/gene = dna_genes[gene_type]
+		if(!gene.block)
+			continue
+		var/underlay=gene.OnDrawUnderlays(src,g,fat)
+		if(underlay)
+			//standing.underlays += underlay
+			O.underlays += underlay
+			add_image = 1
 	for(var/mut in mutations)
 		switch(mut)
 			/*if(M_RESIST_COLD)
