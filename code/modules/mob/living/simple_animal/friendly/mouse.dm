@@ -74,9 +74,10 @@
 		is_fat = 0
 		speed = initial(speed)
 		meat_amount = initial(meat_amount)
-	if(nutrition <= MOUSESTARVE && prob(10) && client)
-		to_chat(src, "<span class = 'warning'>You are starving!</span>")
-		health -= 1
+	if(hardcore_mode_on)
+		if(nutrition <= MOUSESTARVE && prob(10) && client)
+			to_chat(src, "<span class = 'warning'>You are starving!</span>")
+			health -= 1
 
 
 
