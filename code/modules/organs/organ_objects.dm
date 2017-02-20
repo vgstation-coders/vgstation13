@@ -14,6 +14,7 @@
 	var/datum/organ/internal/organ_data       // Stores info when removed.
 	var/prosthetic_name = "prosthetic organ"  // Flavour string for robotic organ.
 	var/prosthetic_icon                       // Icon for robotic organ.
+	var/is_printed = FALSE                    // Used for heist.
 
 /obj/item/organ/attack_self(mob/user as mob)
 
