@@ -32,7 +32,7 @@
 	var/target_type="eyes"
 
 /obj/item/weapon/organ_remover/examine(var/mob/user)
-	// Everyone except vox knows what these are.
+	// Only vox know what these are.
 	if(ishuman(user))
 		var/mob/living/carbon/human/H
 		if(isvox(H))
