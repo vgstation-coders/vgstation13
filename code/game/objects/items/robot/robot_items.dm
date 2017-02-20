@@ -4,6 +4,11 @@
 						Cyborg Spec Items
 ***********************************************************************/
 //Might want to move this into several files later but for now it works here
+#define HUGS 0
+#define BEAR 1
+#define SHOCK 2
+#define CRUSH 3
+
 /obj/item/borg/stun
 	name = "electrified arm"
 	icon = 'icons/obj/decals.dmi'
