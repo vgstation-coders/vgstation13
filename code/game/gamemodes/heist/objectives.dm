@@ -174,13 +174,13 @@
 				valid_organs++
 	return (valid_organs >= required_amount)
 
-/datum/theft_objective/number/heist/lungs
+/datum/theft_objective/number/heist/organs/lungs
 	name = "lungs"
 	typepath = /obj/item/organ/lungs
 	min = 3
 	max = 6
 
-/datum/theft_objective/number/heist/eyes
+/datum/theft_objective/number/heist/organs/eyes
 	name = "eyes"
 	typepath = /obj/item/organ/eyes
 	min = 3
