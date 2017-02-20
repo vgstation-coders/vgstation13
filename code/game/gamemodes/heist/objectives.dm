@@ -123,6 +123,7 @@
 			return FALSE //It didn't, fail the object
 	return TRUE
 
+/* LAME
 /datum/theft_objective/number/heist/singulogen
 	name = "gravitational generator"
 	typepath = /obj/machinery/the_singularitygen
@@ -140,6 +141,7 @@
 	typepath = /obj/machinery/power/emitter
 	min = 4
 	max = 4
+*/
 
 /datum/theft_objective/number/heist/nuke
 	name = "thermonuclear device"
@@ -151,6 +153,24 @@
 	name = "guns"
 	typepath = /obj/item/weapon/gun
 	min = 6
+	max = 6
+
+/datum/theft_objective/number/heist/supermatter
+	name = "supermatter shard"
+	typepath = /obj/machinery/power/supermatter/shard
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist/lungs
+	name = "lungs"
+	typepath = /obj/item/organ/lungs
+	min = 3
+	max = 6
+
+/datum/theft_objective/number/heist/eyes
+	name = "eyes"
+	typepath = /obj/item/organ/eyes
+	min = 3
 	max = 6
 
 /*
