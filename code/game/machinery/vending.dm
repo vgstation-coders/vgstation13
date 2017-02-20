@@ -176,13 +176,7 @@ var/global/num_vending_terminals = 1
 			return
 		if(!pack)
 			to_chat(user, "<span class='notice'>You start filling the vending machine with the recharge pack's materials.</span>")
-			var/user_loc = user.loc
-			var/pack_loc = P.loc
-			var/self_loc = src.loc
-			sleep(30)
-			if(!user || !P || !src)
-				return
-			if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
+			if(do_after(user, src, 30))
 				var/obj/machinery/vending/newmachine = new P.targetvendomat(loc)
 				to_chat(user, "<span class='notice'>[bicon(newmachine)] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -191,6 +185,10 @@ var/global/num_vending_terminals = 1
 				emptypack.icon_state = P.icon_state
 				emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
 				if(P.stock.len)
+					for(var/v_item in P.stock)
+						if(istype(v_item, /obj/item))
+							var/obj/item/I = v_item
+							I.forceMove(src)
 					newmachine.products = P.stock
 					newmachine.contraband = P.secretstock
 					newmachine.premium = P.preciousstock
@@ -207,27 +205,58 @@ var/global/num_vending_terminals = 1
 		else
 			if(istype(P,pack))
 				to_chat(user, "<span class='notice'>You start refilling the vending machine with the recharge pack's materials.</span>")
-				var/user_loc = user.loc
-				var/pack_loc = P.loc
-				var/self_loc = src.loc
-				sleep(30)
-				if(!user || !P || !src)
-					return
-				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
+				if(do_after(user, src, 30))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
-					for (var/datum/data/vending_product/D in product_records)
-						D.amount = D.original_amount
-					for (var/datum/data/vending_product/D in hidden_records)
-						D.amount = D.original_amount
-					var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
-					emptypack.icon_state = P.icon_state
-					emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
-					qdel(P)
-					if(user.machine==src)
-						src.attack_hand(user)
+					if(check_for_custom_vendor())
+						custom_refill(P)
+					else
+						normal_refill(P, user)
 			else
 				to_chat(user, "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>")
+
+/obj/machinery/vending/proc/check_for_custom_vendor()
+	//We check if there's an in-game object instead of a typepath inside the vending machine.
+	for(var/item in products)
+		if(!ispath(item))
+			return TRUE
+		return FALSE
+	/*for(var/item in contraband) //We only support the default list for the moment. Anyways, this was shitcode
+		if(!ispath(item))
+			return true
+		return false
+	for(var/item in premium)
+		if(!ispath(item))
+			return true
+		return false*/
+
+/obj/machinery/vending/proc/normal_refill(obj/structure/vendomatpack/P, mob/user)
+	for (var/datum/data/vending_product/D in product_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in hidden_records)
+		D.amount = D.original_amount
+	var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
+	emptypack.icon_state = P.icon_state
+	emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
+	qdel(P)
+	if(user.machine==src)
+		src.attack_hand(user)
+
+/obj/machinery/vending/proc/custom_refill(obj/structure/vendomatpack/P)
+	for (var/datum/data/vending_product/D in product_records)
+		if (!D.amount)
+			products.Remove(D.product_path) //For the moment custom machines only supports product lists
+			product_records.Remove(D)
+			del(D)
+
+	if(P.stock.len)
+		for(var/v_item in P.stock)
+			if(istype(v_item, /obj/item))
+				var/obj/item/I = v_item
+				I.forceMove(src)
+		products += P.stock
+		product_records += P.product_records
+		initialize()
 
 /obj/machinery/vending/ex_act(severity)
 	switch(severity)
@@ -262,13 +291,22 @@ var/global/num_vending_terminals = 1
 			if(prob(25))
 				malfunction()
 
+//obj/machinery/vending/proc/build_ingame_object(var/obj/item/I, hidden = 0, req_coin = 0)
+
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
+	to_chat(world, "BUILDING INVENTORY")
 	for(var/typepath in productlist)
+		/*if(!ispath(typepath))
+			handle_ingame_objects(typepath, hidden, req_coin)
+			return*/
+		to_chat(world, "typepath is [typepath]")
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
 
 		if (isnull(amount))
 			amount = 1
+
+		to_chat(world, "amount is [amount]")
 
 		var/datum/data/vending_product/R = new()
 		R.product_path = typepath
@@ -871,7 +909,7 @@ var/global/num_vending_terminals = 1
 		flick(src.icon_vend,src)
 	spawn(vend_delay)
 
-		if(ispath(R.product_path))
+		if(ispath(R.product_path)) //this if else clause is a little hack to detect if the item is a typepath or an in-game object with references and shit
 			new R.product_path(get_turf(src))
 		else
 			if(istype(R.product_path, /obj))
@@ -2434,3 +2472,28 @@ var/global/num_vending_terminals = 1
 	for(var/random_items = 1 to premium.len - 4)
 		premium.Remove(pick(premium))
 	src.initialize()
+
+
+/obj/machinery/vending/sale
+	name = "Sales vend"
+	desc = "Insert joke here"
+	icon_state = "sale"
+	vend_reply = "Insert another joke here"
+	product_ads = "Another joke here"
+	product_slogans = "Jokes"
+	products = list(
+		/obj/item/clothing/shoes/black = 10,
+		/obj/item/clothing/shoes/brown = 10,
+		/obj/item/clothing/shoes/blue = 10,
+		/obj/item/clothing/shoes/green = 10,
+		/obj/item/clothing/shoes/yellow = 10,
+		)
+	contraband = list(
+		/obj/item/clothing/shoes/jackboots = 5,
+		/obj/item/clothing/shoes/orange = 5,
+		)
+	premium = list(
+		/obj/item/clothing/shoes/rainbow = 1,
+		)
+
+	pack = /obj/structure/vendomatpack/custom

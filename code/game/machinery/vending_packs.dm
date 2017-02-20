@@ -17,11 +17,11 @@
 
 /obj/structure/vendomatpack/custom
 	name = "empty recharge pack"
-	targetvendomat = /obj/machinery/vending/assist
+	targetvendomat = /obj/machinery/vending/sale
 	icon_state = "generic"
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
-	if(istype(O, /obj))
+	if(istype(O, /obj/item))
 		if(user.drop_item(O, src))
 			stock.Add(O)
 
