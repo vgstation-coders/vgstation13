@@ -91,7 +91,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
-	
+
 #define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
@@ -424,6 +424,20 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 	fix_modules()
 
+/obj/item/weapon/robot_module/tg17355
+	name = "tg17355 robot module"
+
+/obj/item/weapon/robot_module/tg17355/New()
+	src.modules += new /obj/item/borg/cyborghug(src)
+	src.modules += new /obj/item/device/harmalarm(src)
+	src.modules += new /obj/item/weapon/cookiesynth(src)
+	src.modules += new /obj/item/weapon/gun/siren/supersoaker/pistol(src)
+	src.modules += new /obj/item/weapon/inflatable_dispenser(src)
+	src.modules += new /obj/item/weapon/extinguisher(src)
+	src.modules += new /obj/item/weapon/crowbar(src)
+	sensor_augs = list("Medical", "Light Amplification", "Disable")
+	fix_modules()
+
 /obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
 	for(var/language in languages)
 		if(R.add_language(language, languages[language]))
@@ -433,6 +447,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for(var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0
-	
+
 #undef STANDARD_MAX_KIT
 #undef MEDBORG_MAX_KIT
