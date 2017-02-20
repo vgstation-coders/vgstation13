@@ -11,15 +11,22 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bloodbot00"
 	density = 0
+	on = 0
 	anchored = 0
-	health = 20
+	health = 40
 	maxhealth = 20
 	req_access = list(access_medical)
 	var/mob/living/carbon/human/target //Only used if emagged
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
 	var/since_last_reward = 0 //Once every 55u, dispense reward
-	var/list/possible_rewards = list(/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje) //Could add more later or adminbus
+	var/list/possible_rewards = list(/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
+								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
+								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
+								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
 	var/list/contained_bags = list()
 	var/obj/item/weapon/reagent_containers/blood/last_bag
 
@@ -29,11 +36,11 @@
 		contained_bags += new /obj/item/weapon/reagent_containers/blood/empty(src)
 
 /obj/machinery/bot/bloodbot/Destroy()
-	..()
 	for(var/obj/O in contained_bags)
 		O.forceMove(get_turf(src))
 	contained_bags = null
 	last_bag = null
+	..()
 
 /obj/machinery/bot/bloodbot/update_icon()
 	if(contained_bags.len || emagged)
@@ -47,6 +54,8 @@
 	updateUsrDialog()
 
 /obj/machinery/bot/bloodbot/turn_off()
+	if(emagged)
+		return
 	..()
 	currently_drawing_blood = 0
 	update_icon()
@@ -58,7 +67,7 @@
 	if(..())
 		return
 	var/dat
-	dat += "<TT><B>Acula-class Blood Donation Bot v0.5</B></TT><BR><BR>"
+	dat += "<TT><B>Acula-class Blood Donation Bot v1.0</B></TT><BR><BR>"
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/reagent/blood/B = H.get_blood(H.vessel)
@@ -77,11 +86,15 @@
 			dat += "There are no blood packs available.<BR>"
 		for (var/obj/item/weapon/reagent_containers/blood/E in contained_bags)
 			counter++
-			dat += "Slot [counter]: [E] <A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
-		dat += "The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
+			dat += "Slot [counter]: [E] ([100 * E.reagents.total_volume / E.reagents.maximum_volume]% filled)<A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
+		dat += "</TT>The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
 
-	user << browse("<HEAD><TITLE>Dr. Acula Controls</TITLE></HEAD>[dat]", "window=autoblood")
-	onclose(user, "autoblood")
+	dat = jointext(dat,"")
+	var/datum/browser/popup = new(usr, "bloodbot", "[name]", 575, 400, src)
+	popup.set_content(dat)
+	popup.open()
+	onclose(user, "bloodbot")
+	//user << browse("<HEAD><TITLE>Dr. Acula Controls</TITLE></HEAD>[dat]", "window=autoblood")
 
 /obj/machinery/bot/bloodbot/Topic(href, href_list)
 	if(..())
@@ -118,15 +131,13 @@
 
 /obj/machinery/bot/bloodbot/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (allowed(user) && !open && !emagged)
+		if (allowed(user) && !emagged)
 			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [locked ? "locked" : "unlocked"].</span>")
 			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
-				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 
@@ -140,6 +151,7 @@
 			contained_bags += B
 			speak("Thanks, nurse! Now I've got [contained_bags.len]!")
 			update_icon()
+			updateUsrDialog()
 	if(health < maxhealth && !isscrewdriver(W) && W.force && !emagged) //Retreat if we're not hostile and we're under attack
 		step_to(src, get_step_away(src,user))
 	..()
@@ -165,20 +177,23 @@
 	else //First priority: drink an adjacent target. Otherwise, pick a target and move toward it if we have none.
 		if(prob(5))
 			speak(pick("Blaah!","I vant to suck your blood!","I never drink... wine.","The blood is the life.","I must hunt soon!","I hunger!","Death rages.","The night beckons.","Mwa ha ha!"))
-		for(var/mob/living/carbon/human/H in oview(1))
-			if(H.vessel.get_reagent_amount(BLOOD))
+		for(var/mob/living/carbon/human/H in view(1,src))
+			if(H.vessel.has_reagent(BLOOD))
 				drink(H)
 				return //Dr. Acula is easily distracted. If he finds anything to drink en route to his target he will stop and drain it first.
-		if(!target.vessel.get_reagent_amount(BLOOD))
+		if(target && !target.vessel.get_reagent_amount(BLOOD))
 			target = null
 		if(!target)
 			var/list/possible_targets = list()
-			for(var/mob/living/carbon/human/H in oview(7))
+			for(var/mob/living/carbon/human/H in view(7,src))
 				if(H.vessel.get_reagent_amount(BLOOD))
 					possible_targets += H
-			target = pick(possible_targets)
-			if(target)
-				walk_to(src,target,2,1)
+			if(possible_targets)
+				target = pick(possible_targets)
+			else
+				return
+		if(target)
+			walk_to(src,get_turf(target),1,0,1)
 
 /obj/machinery/bot/bloodbot/proc/drink(mob/living/carbon/human/H)
 	if(!on || !istype(H))
@@ -212,6 +227,7 @@
 		update_icon()
 		H.vessel.trans_id_to(B,BLOOD,DEFAULT_DRINK_RATE)
 		since_last_reward += DEFAULT_DRINK_RATE
+		updateUsrDialog()
 		spawn(1 SECONDS)
 			drink(H)
 

@@ -1513,6 +1513,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_medical
 	group = "Medical"
 
+/datum/supply_packs/bloodbot
+	name = "Blood Donation Drive Crate"
+	contains = list(/obj/machinery/bot/bloodbot,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje)
+	cost = 1000
+	containertype = /obj/structure/largecrate
+	group = "Medical"
+
 /datum/supply_packs/wheelchair
 	name = "Wheelchair"
 	contains = list(/obj/structure/bed/chair/vehicle/wheelchair)
