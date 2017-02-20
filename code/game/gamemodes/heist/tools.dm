@@ -38,6 +38,7 @@
 		if(isvox(H))
 			to_chat(user, "A sophisticated device used by vox raiding parties to remove organs without time-consuming surgical procedures.")
 			to_chat(user, "Subject must be still and incapacitated. Remember to set target organs before use!")
+			return
 	to_chat(user, "Some weird alien thing, doesn't look like it'd even fit in human hands.")
 
 /obj/item/weapon/organ_remover/attack(var/mob/living/M, var/mob/living/user)
@@ -55,13 +56,13 @@
 		to_chat(user, "<span class='warning'>The extractor is busy!</span>")
 		return
 	if(clumsy_check(user) && prob(50))
-		M=user
-		H=M
+		M = user
+		H = M
 	var/datum/organ/internal/O = H.internal_organs_by_name[target_type]
 	if(!O || !istype(O) || !O.CanRemove(H, user, quiet=TRUE))
 		to_chat(user, "<span class='warning'>The extractor can't find the desired organ!</span>")
 		return
-	in_use=TRUE
+	in_use = TRUE
 	user.visible_message("<span class='danger'>[user] activates \the [src]!</span>", "You level the extractor at [H] and hold down the trigger.")
 	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 	if(do_after(user, src, delay, needhand=TRUE))
@@ -89,7 +90,7 @@
 				OO.removed(H,user)
 				OO.forceMove(get_turf(H))
 			playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
-	in_use=FALSE
+	in_use = FALSE
 
 /obj/item/weapon/organ_remover/proc/can_use(var/mob/user)
 	// Something something vox bioelectric fields something nanites.
