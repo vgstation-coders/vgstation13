@@ -10,10 +10,11 @@
 	               // list("dir"=NORTH)
 				if("loc" in args)
 					//walk_to(src, target, minimum_distance, delay)
-					walk_to(holder, args["loc"], 1, walk_delay)
+					testing("Walking towards [args["loc"]] with walk_delay=[walk_delay]")
+					walk_to(M, args["loc"], 1, walk_delay)
 				if("dir" in args)
 					// walk(M, get_dir(src,M), MISSILE_SPEED)
-					walk(holder, args["dir"], walk_delay)
+					walk(M, args["dir"], walk_delay)
 
 			if("add body temp") // list("temp"=TEMP_IN_KELVIN)
 				M.bodytemperature += args["temp"]

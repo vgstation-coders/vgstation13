@@ -1124,7 +1124,7 @@
 #include "code\modules\components\ai\atmos.dm"
 #include "code\modules\components\ai\controller.dm"
 #include "code\modules\components\ai\door_opener.dm"
-#include "code\modules\components\ai\mob_controller.dm"
+#include "code\modules\components\ai\controllers\mob_controller.dm"
 #include "code\modules\components\ai\controllers\simple_animal.dm"
 #include "code\modules\components\ai\hostile\escape_confinement.dm"
 #include "code\modules\components\ai\hostile\hunt.dm"
