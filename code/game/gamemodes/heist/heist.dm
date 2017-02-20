@@ -146,8 +146,8 @@
 		raid_objectives += new/datum/objective/heist/kidnap
 	raid_objectives += new/datum/objective/steal/heist
 	//raid_objectives += new/datum/objective/steal/salvage
-	//raid_objectives += new/datum/objective/heist/inviolate_crew // No tears
-	raid_objectives += new/datum/objective/heist/inviolate_death
+	raid_objectives += new/datum/objective/heist/inviolate_crew
+	//raid_objectives += new/datum/objective/heist/inviolate_death // Crew death permitted. No tears.
 
 	for(var/datum/objective/heist/O in raid_objectives)
 		O.choose_target()
