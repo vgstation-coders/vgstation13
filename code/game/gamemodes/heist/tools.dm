@@ -19,8 +19,9 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1" // TODO: figure out appropriate values
 
-	var/delay=15 SECONDS // Adminbus purposes.
-	var/vox_only=TRUE    // Same
+	var/delay=15 SECONDS     // Adminbus purposes.
+	var/vox_only=TRUE        // Same
+	var/target_monkeys=FALSE // Testing purposes.
 	var/list/valid_targets=list(
 		// "brain", Brains have special snowflake shit so this won't work.
 		"eyes",
@@ -54,6 +55,9 @@
 		return
 	if(in_use)
 		to_chat(user, "<span class='warning'>The extractor is busy!</span>")
+		return
+	if(isnull(H.mind))
+		to_chat(user, "<span class='warning'>This subject's organs have undergone degradation due to lack of fundamental sustaining brain processes!</span>")
 		return
 	if(clumsy_check(user) && prob(50))
 		M = user

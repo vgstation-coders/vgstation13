@@ -170,7 +170,7 @@
 	for(var/atom/A in search)
 		if(!istype(A,/obj/item/organ))
 			var/obj/item/organ/O = A
-			if(O && istype(O, typepath) && !O.is_printed)
+			if(O && istype(O, typepath) && !O.is_printed && O.had_mind)
 				valid_organs++
 	return (valid_organs >= required_amount)
 
