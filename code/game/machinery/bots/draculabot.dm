@@ -72,7 +72,7 @@
 		var/mob/living/carbon/human/H = user
 		var/datum/reagent/blood/B = H.get_blood(H.vessel)
 		if(B.data["virus2"])
-			dat += "<span class='danger'>WARNING: Viral agent detected. Ineligible for blood donation.</span><BR>"
+			dat += "WARNING: Viral agent detected. Ineligible for blood donation.<BR>"
 		else
 			dat += {"Welcome [H]! Your blood level is [round(B.volume/560*100)]%, and your blood type is [B.data["blood_type"]].<BR>
 				You must have at least [round(509/560*100)]% to donate blood. <a href='?src=\ref[src];donate=[1]'>Donate now!</a><BR>
@@ -90,11 +90,9 @@
 		dat += "</TT>The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
 
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(usr, "bloodbot", "[name]", 575, 400, src)
+	var/datum/browser/popup = new(usr, "\ref[src]", "[name]", 575, 400, src)
 	popup.set_content(dat)
 	popup.open()
-	onclose(user, "bloodbot")
-	//user << browse("<HEAD><TITLE>Dr. Acula Controls</TITLE></HEAD>[dat]", "window=autoblood")
 
 /obj/machinery/bot/bloodbot/Topic(href, href_list)
 	if(..())
