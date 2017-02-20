@@ -104,10 +104,7 @@
 						for(var/A in req_components)
 							var/atom/path = text2path(A)
 							req_component_names[A] = initial(path.name)
-						if(circuit.frame_desc)
-							desc = circuit.frame_desc
-						else
-							update_desc()
+						update_desc() // sets the description based on req_components
 						to_chat(user, desc)
 					else
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
@@ -296,7 +293,6 @@ to destroy them and players will be able to make replacements.
 	build_path = "/obj/machinery/r_n_d/destructive_analyzer"
 	board_type = MACHINE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 1 Scanning Module, 1 Manipulator, and 1 Micro-Laser."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -307,7 +303,6 @@ to destroy them and players will be able to make replacements.
 	build_path = "/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
-	frame_desc = "Requires 3 Matter Bins, 1 Manipulator, and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 3,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -318,7 +313,6 @@ to destroy them and players will be able to make replacements.
 	build_path = "/obj/machinery/r_n_d/fabricator/protolathe"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 2 Matter Bins, 2 Manipulators, and 2 Beakers."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 2)
@@ -328,7 +322,6 @@ to destroy them and players will be able to make replacements.
 	build_path = "/obj/machinery/r_n_d/fabricator/circuit_imprinter"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
-	frame_desc = "Requires 1 Matter Bin, 1 Manipulator, and 2 Beakers."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -339,7 +332,6 @@ to destroy them and players will be able to make replacements.
 	build_path = "/obj/machinery/power/port_gen/pacman"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=3;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
-	frame_desc = "Requires 1 Matter Bin, 1 Micro-Laser, and 1 Capacitor."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser" = 1,
@@ -381,7 +373,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/server"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 2 Capacitors and 1 Scanning Module."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/capacitor" = 2,
 							"/obj/item/weapon/stock_parts/scanning_module" = 1)
@@ -391,7 +382,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/fabricator/mech"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3"
-	frame_desc = "Requires 2 Matter Bins, 1 Manipulator, 1 Micro-Laser and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
@@ -403,7 +393,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/fabricator/pod"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3"
-	frame_desc = "Requires 3 Matter Bins, 2 Manipulators, and 2 Micro-Lasers."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 3,
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
@@ -414,7 +403,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/recharger/defibcharger/wallcharger"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 1 micro-laser, 2 matter bins, 2 manipulator, 1 console screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
@@ -426,7 +414,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/power/battery/smes"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
-	frame_desc = "Requires 4 capacitors, 4 micro-lasers, and 2 console screens."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/capacitor" = 4,
 							"/obj/item/weapon/stock_parts/micro_laser" = 4,
@@ -437,7 +424,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/power/battery/portable"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
-	frame_desc = "Requires 4 capacitors, 4 micro-lasers, and 2 console screens."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/capacitor" = 4,
 							"/obj/item/weapon/stock_parts/micro_laser" = 4,
@@ -448,7 +434,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/power/battery_port"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
-	frame_desc = "Requires 3 capacitors and 1 console screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/capacitor" = 3,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
@@ -458,7 +443,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/power/treadmill"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=4"
-	frame_desc = "Requires 4 capacitors and 1 console screen."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/capacitor" = 4,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
@@ -468,7 +452,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/chem_dispenser"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
-	frame_desc = "Requires 2 manipulators, 2 scanning modules, 3 micro-lasers, and 1 console screen."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
@@ -492,7 +475,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/chem_master"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
-	frame_desc = "Requires 1 manipulator, 2 scanning modules, 2 micro-lasers, and 2 console screens."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
@@ -504,7 +486,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/chem_master/condimaster"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
-	frame_desc = "Requires 1 manipulator, 3 scanning modules, 2 micro-lasers, and 2 console screens."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 3,
@@ -516,7 +497,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/chem_master/snackbar_machine"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
-	frame_desc = "Requires 2 manipulator, 2 scanning modules, 2 micro-lasers, and 2 console screens."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
@@ -528,7 +508,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/recharge_station"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 2 capacitors, 1 manipulator, and 1 matter bin."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/capacitor" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -539,7 +518,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/atmospherics/unary/heat_reservoir/heater"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=5;" + Tc_BIOTECH + "=4"
-	frame_desc = "Requires 3 micro-lasers and 1 console screen."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/micro_laser" = 3,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
@@ -549,7 +527,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/atmospherics/unary/cold_sink/freezer"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=4;" + Tc_BIOTECH + "=4"
-	frame_desc = "Requires 3 micro-lasers and 1 console screen."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/micro_laser" = 3,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
@@ -559,7 +536,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/photocopier"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
-	frame_desc = "Requires 2 manipulators, 2 scanning modules, 1 micro-laser, and 2 console screens."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
@@ -571,7 +547,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/atmospherics/unary/cryo_cell"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=3;" + Tc_ENGINEERING + "=2"
-	frame_desc = "Requires 3 Manipulators, 2 Scanning Modules, and 1 Console Screen."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 3,
@@ -582,7 +557,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/cloning/clonepod"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=3"
-	frame_desc = "Requires 2 Manipulator, 2 Scanning Module, and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
@@ -593,7 +567,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/dna_scannernew"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2"
-	frame_desc = "Requires 1 Scanning Module, 1 Manipulator, 1 Micro-Laser, and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -605,7 +578,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/bodyscanner"
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=2"
-	frame_desc = "Requires 3 Scanning Module."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 3)
 
@@ -614,7 +586,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/sleeper"
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=2"
-	frame_desc = "Requires 1 Scanning Module, 2 Manipulator."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 2)
@@ -628,7 +599,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/biogenerator"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3"
-	frame_desc = "Requires 2 Manipulators, 2 Matter Bins, 3 Micro-Lasers, 2 Scanning Modules,2 Console Screens, and 1 Large Beaker.   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
@@ -642,7 +612,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/seed_extractor"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
-	frame_desc = "Requires 2 Manipulators, 1 Matter Bins, 1 Micro-Lasers, 1 Scanning Modules, and 1 Console Screens.   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
@@ -655,7 +624,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/microwave"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2;" + Tc_MAGNETS + "=3"
-	frame_desc = "Requires 1 Micro-Laser, 1 Scanning Module, and 1 Console Screens.   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/micro_laser" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
@@ -666,7 +634,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/reagentgrinder"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
-	frame_desc = "Requires 2 Matter Bins, 1 Micro-Lasers, 1 Scanning Modules, and 1 Large Beaker.   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser" = 1,
@@ -678,7 +645,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/smartfridge"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
-	frame_desc = "Requires 2 Manipulators, 4 Matter Bins, ,1 Scanning Module, and 2 Console Screens.   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/matter_bin" = 4,
@@ -738,7 +704,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/portable_atmospherics/hydroponics"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 2 Matter Bins, 1 Scanning Module, 2 Beakers, 1 Capacitor, and 1 Console Screen.   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
@@ -751,7 +716,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/gibber"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 2 Matter Bins, 2 Capacitors, 2 Scanning Module, 4 Manipulator and 4 High Powered Micro-Lasers   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/capacitor" = 2,
@@ -764,7 +728,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/processor"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 1 Scanning Module and 2 Manipulators   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 2)
@@ -774,7 +737,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/egg_incubator"
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
-	frame_desc = "Requires 1 Matter Bin and 2 Capacitors   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/capacitor" = 2)
@@ -784,7 +746,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/egg_incubator/box_cloner"
 	origin_tech = Tc_SYNDICATE + "=3"
 	board_type = MACHINE
-	frame_desc = "Requires 1 Matter Bin and 2 Capacitors   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/capacitor" = 2)
@@ -794,7 +755,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/monkey_recycler"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 1 Matter Bin, 2 Manipulators and 1 Micro-Laser   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
@@ -806,7 +766,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/vending/hydroseeds"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 2 Scanning Module, and 2 Manipulators   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/capacitor" = 1,
@@ -818,7 +777,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/vending/hydronutrients"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 2 Scanning Module, and 2 Manipulators   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/capacitor" = 1,
@@ -831,7 +789,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/pipedispenser"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 2 Scanning Module, and 2 Manipulators   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/capacitor" = 1,
@@ -843,7 +800,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/pipedispenser/disposal"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
-	frame_desc = "Requires 2 Matter Bins, 1 Capacitors, 2 Scanning Module, and 2 Manipulators   "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/capacitor" = 1,
@@ -859,7 +815,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/teleport/hub"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
-	frame_desc = "Requires 2 Phasic Scanning Modules, 3 Super Capacitors, 2 Subspace Ansibles, 2 Hyperwave filters, 1 Subspace Treatment Disc, 2 Ansible Crystals, and 4 Subspace Transmitters."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 2,
 							"/obj/item/weapon/stock_parts/capacitor/adv/super" = 3,
@@ -874,7 +829,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/teleport/station"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
-	frame_desc = "Requires 2 Phasic Scanning Modules, 2 Super Capacitors, 2 Subspace Ansibles, and 4 Subspace Wavelength Analyzers."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 2,
 							"/obj/item/weapon/stock_parts/capacitor/adv/super" = 2,
@@ -888,7 +842,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/receiver"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
-	frame_desc = "Requires 1 Subspace Ansible, 1 Hyperwave Filter, 2 Manipulators, and 1 Micro-Laser."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/subspace/ansible" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
@@ -900,7 +853,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/hub"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
-	frame_desc = "Requires 2 Manipulators, 2 Cable Coil and 2 Hyperwave Filter."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/stack/cable_coil" = 2,
@@ -911,7 +863,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/relay"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=3"
-	frame_desc = "Requires 2 Manipulators, 2 Cable Coil and 2 Hyperwave Filters."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/stack/cable_coil" = 2,
@@ -922,7 +873,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/bus"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
-	frame_desc = "Requires 2 Manipulators, 1 Cable Coil and 1 Hyperwave Filter."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/stack/cable_coil" = 1,
@@ -933,7 +883,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/processor"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
-	frame_desc = "Requires 3 Manipulators, 1 Hyperwave Filter, 2 Treatment Disks, 1 Wavelength Analyzer, 2 Cable Coils and 1 Subspace Amplifier."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 3,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
@@ -947,7 +896,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/server"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
-	frame_desc = "Requires 2 Manipulators, 1 Cable Coil and 1 Hyperwave Filter."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/stack/cable_coil" = 1,
@@ -958,7 +906,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/telecomms/broadcaster"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=2"
-	frame_desc = "Requires 2 Manipulators, 1 Cable Coil, 1 Hyperwave Filter, 1 Ansible Crystal and 2 High-Powered Micro-Lasers. "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/stack/cable_coil" = 1,
@@ -971,7 +918,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/bioprinter"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3"
-	frame_desc = "Requires 2 Manipulators, 2 Matter Bins, 3 Micro-Lasers, 2 Scanning Modules, 1 Console Screen. "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
@@ -984,7 +930,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/reverse_engine"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=6;" + Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3;" + Tc_POWERSTORAGE + "=4"
-	frame_desc = "Requires 2 Scanning Modules, 2 Capacitors, 1 Manipulator, and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
 							"/obj/item/weapon/stock_parts/capacitor" = 2,
@@ -996,7 +941,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/fabricator/mechanic_fab"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 2 Manipulators, 2 Matter Bins, and 2 Micro-Lasers."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser" = 2,
@@ -1007,7 +951,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_ENGINEERING + "=4;" + Tc_POWERSTORAGE + "=3;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 2 Manipulators, 2 Matter Bins, 2 Micro-Lasers, 2 Scanning Modules, and 1 Beaker."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser" = 2,
@@ -1020,7 +963,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/r_n_d/blueprinter"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 2 Matter Bins, 1 Scanning Module, and 1 Manipulator."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -1031,7 +973,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/vending"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=1"
-	frame_desc = "Requires 1 Matter Bins, 1 Scanning Module, and 1 Manipulator."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
@@ -1042,7 +983,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/pdapainter"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2"
-	frame_desc = "Requires 1 Manipulator, 2 Micro-Lasers, 2 Scanning Modules, and 1 Console Screen. "
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser" = 2,
@@ -1054,7 +994,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/disease2/incubator"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BIOTECH + "=5;" + Tc_MAGNETS + "=3"
-	frame_desc = "Requires 1 Matter Bin, 2 Scanning Modules, 2 Micro-Lasers, and 1 Beaker."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser" = 2,
@@ -1066,7 +1005,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/disease2/diseaseanalyser"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 1 Micro-Laser, 1 Manipulator, and 3 Scanning Modules."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser" = 1,
@@ -1077,7 +1015,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/centrifuge"
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
-	frame_desc = "Requires 2 Manipulators"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2)
 
@@ -1086,7 +1023,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/mech_bay_recharge_port"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
-	frame_desc = "Requires 2 Micro-Lasers, and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/micro_laser" = 2,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
@@ -1096,7 +1032,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/mech_bay_recharge_floor"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_POWERSTORAGE + "=3"
-	frame_desc = "Requires 1 Scanning Module and 2 Capacitors."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/capacitor" = 2)
@@ -1106,7 +1041,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/prism"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=3"
-	frame_desc = "Requires 3 High-powered Micro-Lasers, and 6 Capacitors."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/micro_laser/high" = 3,
 							"/obj/item/weapon/stock_parts/capacitor" = 6)
@@ -1116,7 +1050,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/cell_charger"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
-	frame_desc = "Requires 1 Scanning Module and 2 Capacitors."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/capacitor" = 2)
@@ -1134,8 +1067,7 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Sorting Machine)"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
-	frame_desc = "Requires 3 Matter Bins and 1 Capacitor" //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
-	req_components = list(
+	req_components = list(  //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
 							"/obj/item/weapon/stock_parts/matter_bin" = 3,
 							"/obj/item/weapon/stock_parts/capacitor" = 1)
 
@@ -1152,7 +1084,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/mineral/processing_unit"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
-	frame_desc = "Requires 2 Matter Bins and 2 Micro-lasers"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser" = 2)
@@ -1166,8 +1097,7 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/mineral/stacking_machine"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
-	frame_desc = "Requires 3 Matter Bins and 1 Capacitor" //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
-	req_components = list(
+	req_components = list(  //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
 							"/obj/item/weapon/stock_parts/matter_bin" = 3,
 							"/obj/item/weapon/stock_parts/capacitor" = 1)
 
@@ -1176,7 +1106,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/faxmachine"
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BLUESPACE + "=2"
-	frame_desc = "Requires 1 ansible and 1 scanning module."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/subspace/ansible" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 1)
@@ -1190,7 +1119,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/botany/extractor"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3"
-	frame_desc = "Requires 1 manipulator, 2 scanning modules, 2 micro-lasers, 1 matter bin, and 2 console screens."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
@@ -1203,7 +1131,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/botany/editor"
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3"
-	frame_desc = "Requires 1 manipulator, 2 scanning modules, 2 micro-lasers, and 1 console screen."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/manipulator" = 1,
 							"/obj/item/weapon/stock_parts/scanning_module" = 2,
@@ -1218,7 +1145,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = "/obj/machinery/anomaly/fourier_transform"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4"
-	frame_desc = "Requires 3 scanning modules."
 	req_components = list (
 							"/obj/item/weapon/stock_parts/scanning_module" = 3)
 
