@@ -97,7 +97,7 @@
 					say("WHO COOKED THIS SHIT?")
 				sleep(2 SECONDS)
 				if(shitfood) // fix for cannot read null.name (the food sometimes no longer exists after a sleep (because people eat it I assume)) - haine
-					say("THIS [uppertext(shitfood.name)] [why_is_it_bad()][dork? ", DID YOU BUY YOUR FUCING COOKING LICENSE, [uppertext(dork)]?" : "!"]")
+					say("THIS [uppertext(shitfood.name)] [why_is_it_bad()][dork? ", DID YOU BUY YOUR FUCKING COOKING LICENSE, [uppertext(dork)]?" : "!"]")
 				var/is_in_kitchen = 0
 				if(thechef && is_thechef_the_chef)
 					var/area/area = get_area(thechef)
