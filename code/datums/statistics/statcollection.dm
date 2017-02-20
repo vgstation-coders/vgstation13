@@ -17,6 +17,8 @@
 
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
+#define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
 #define STAT_OUTPUT_VERSION "1.1"
 #define STAT_OUTPUT_DIR "data/statfiles/"
 
@@ -28,6 +30,7 @@
 	var/explosion_stats = list()
 	var/uplink_purchases = list()
 	var/badass_bundles = list()
+	var/population_polls = list()
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
@@ -47,6 +50,14 @@
 	var/gamemode = "UNSET"
 	var/mixed_gamemodes = null
 	var/round_start_time = null
+
+/datum/stat/population_stat
+	var/time
+	var/popcount = 0
+
+/datum/stat/population_stat/New(pop as num)
+	time = time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+	popcount = pop
 
 /datum/stat/death_stat
 	var/mob_typepath = "null"
@@ -83,7 +94,7 @@
 		for(var/obj/O in B.contents)
 			BAD.contains += O.type
 		BAD.purchaser_key = ckey(user.mind.key)
-		BAD.purchaser_name = user.mind.name
+		BAD.purchaser_name = STRIP_NEWLINE(user.mind.name)
 		BAD.purchaser_is_traitor = was_traitor
 		badass_bundles += BAD
 	else
@@ -175,15 +186,19 @@
 		tech_level_total += KT.level
 	return tech_level_total
 
+/datum/stat_collector/proc/writePopulationStats(statfile)
+	for(var/datum/stat/population_stat/PS in population_polls)
+		statfile << "POPCOUNT|[PS.time]|[PS.popcount]"
+
 /datum/stat_collector/proc/antagCheck(statfile)
 	for(var/datum/mind/Mind in ticker.minds)
 		for(var/datum/objective/objective in Mind.objectives)
 			if(objective.explanation_text == "Free Objective")
-				statfile << "ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|FREE_OBJ"
+				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|FREE_OBJ")
 			else if (objective.target)
-				statfile << "ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.target]|[objective.target.assigned_role]|[objective.target.name]|[objective.check_completion()]|[objective.explanation_text]"
+				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.target]|[objective.target.assigned_role]|[objective.target.name]|[objective.check_completion()]|[objective.explanation_text]")
 			else
-				statfile << "ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.check_completion()]|[objective.explanation_text]"
+				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.check_completion()]|[objective.explanation_text]")
 
 
 // This guy writes the first line(s) of the stat file! Woo!
@@ -212,7 +227,7 @@
 		uniquefilename = "[uniquefilename].dupe"
 	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt")
 
-	world << "Writing statistics to file"
+	to_chat(world, "Writing statistics to file")
 
 	var/start_time = world.realtime
 	Write_Header(statfile)
@@ -225,13 +240,13 @@
 	statfile << "NUKED|[nuked]"
 
 	for(var/datum/stat/death_stat/D in death_stats)
-		statfile << "MOB_DEATH|[D.mob_typepath]|[D.special_role]|[num2text(D.time_of_death, 30)]|[D.last_attacked_by]|[D.death_x]|[D.death_y]|[D.death_z]|[D.key]|[D.realname]"
+		statfile << STRIP_NEWLINE("MOB_DEATH|[D.mob_typepath]|[D.special_role]|[num2text(D.time_of_death, 30)]|[D.last_attacked_by]|[D.death_x]|[D.death_y]|[D.death_z]|[D.key]|[D.realname]")
 	for(var/datum/stat/explosion_stat/E in explosion_stats)
 		statfile << "EXPLOSION|[E.epicenter_x]|[E.epicenter_y]|[E.epicenter_z]|[E.devastation_range]|[E.heavy_impact_range]|[E.light_impact_range]|[E.max_range]"
 	for(var/datum/stat/uplink_purchase_stat/U in uplink_purchases)
-		statfile << "UPLINK_ITEM|[U.purchaser_key]|[U.purchaser_name]|[U.purchaser_is_traitor]|[U.bundle]|[U.itemtype]"
+		statfile << STRIP_NEWLINE("UPLINK_ITEM|[U.purchaser_key]|[U.purchaser_name]|[U.purchaser_is_traitor]|[U.bundle]|[U.itemtype]")
 	for(var/datum/stat/uplink_badass_bundle_stat/B in badass_bundles)
-		var/o 	= 	"BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]"
+		var/o 	= 	STRIP_NEWLINE("BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]")
 		for(var/S in B.contains)
 			o += "|[S]"
 		statfile << "[o]"
@@ -252,9 +267,24 @@
 	revsquad.writeStats(statfile)
 
 	antagCheck(statfile)
+	writePopulationStats(statfile)
 
 	Write_Footer(statfile)
 	world << "Statistics written to file in [(start_time - world.realtime)/10] seconds." // I think that's right?
 
 
 // TODO write all living mobs to DB
+
+
+// Global stuff
+/proc/population_poll()
+	var/playercount = 0
+	for(var/mob/M in player_list)
+		if(M.client)
+			playercount += 1
+	stat_collection.population_polls += (new /datum/stat/population_stat(playercount))
+
+/proc/population_poll_loop()
+	while(1)
+		population_poll()
+		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine

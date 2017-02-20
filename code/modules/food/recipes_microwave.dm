@@ -143,6 +143,11 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
+/datum/recipe/veggieburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
+	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -499,6 +504,11 @@
 /datum/recipe/baguette
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, FLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/baguette
+
+/datum/recipe/croissant
+	reagents = list(FLOUR = 5, WATER = 5, MILK = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/croissant
 
 // Asian ///////////////////////////////////////////////////////
 
@@ -1340,6 +1350,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
 
+/datum/recipe/nofruitsalad
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+
 /datum/recipe/chickensalad
 	reagents = list (VINEGAR = 5)
 	items = list(
@@ -1662,6 +1680,18 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
+
+/datum/recipe/bleachkipper
+	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/robot_parts/head,
+		/obj/item/weapon/handcuffs,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bleachkipper
 
 /datum/recipe/poissoncru
 	reagents = list(LIMEJUICE = 10)
@@ -2160,3 +2190,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/vanishingstew
+
+/datum/recipe/poutine
+	reagents = list(GRAVY = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/fries,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
+
+

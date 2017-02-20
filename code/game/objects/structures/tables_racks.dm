@@ -21,7 +21,7 @@
 	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
-	var/icon/clicked
+	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 	var/flipped = 0
 	var/health = 100
 
@@ -524,6 +524,14 @@
 
 /obj/structure/table/flipped
 	flipped = 1
+
+/obj/structure/table/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"flipped",
+		"health")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 /*
  * Wooden tables

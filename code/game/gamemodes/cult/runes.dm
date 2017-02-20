@@ -268,7 +268,7 @@
 
 	else
 		for(var/mob/M in active_cultists)
-			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this world.</span>")//narsie won't appear if a supermatter cascade has started
+			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this universe.</span>")//narsie won't appear if a supermatter cascade has started
 
 		return
 
@@ -1172,7 +1172,7 @@
 		if(nullblock)
 			continue
 		C.ear_deaf += 50
-		C.show_message("<span class='warning'>The world around you suddenly becomes quiet.</span>")
+		C.show_message("<span class='notice'>The world around you suddenly becomes quiet.</span>")
 		affected++
 		if(prob(1))
 			C.sdisabilities |= DEAF

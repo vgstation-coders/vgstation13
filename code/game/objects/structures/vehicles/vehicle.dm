@@ -42,6 +42,9 @@
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
+	var/obj/machinery/cart/next_cart = null
+	var/can_have_carts = TRUE
+
 	var/mob/occupant
 	lock_type = /datum/locking_category/buckle/chair/vehicle
 
@@ -113,7 +116,9 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = loc
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
@@ -177,6 +182,28 @@
 	else
 		plane = OBJ_PLANE
 		layer = ABOVE_OBJ_LAYER
+
+/obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+	..()
+
+	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+		return
+
+	if (istype(C, /obj/machinery/cart))
+
+		if (!next_cart)
+			next_cart = C
+			next_cart.previous_cart = src
+			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
+			playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
+			return
+
+		else if (next_cart == C)
+			next_cart.previous_cart = null
+			next_cart = null
+			user.visible_message("[user] disconnects [C] to [src].", "You disconnect [C] to [src]")
+			playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
+			return
 
 /obj/structure/bed/chair/vehicle/update_dir()
 	. = ..()
@@ -295,5 +322,13 @@
 	occupant = AM
 
 	update_mob()
+
+/obj/structure/bed/chair/vehicle/Move()
+	var/oldloc = loc
+	..()
+	if (loc == oldloc)
+		return
+	if(next_cart)
+		next_cart.Move(oldloc)
 
 /datum/locking_category/buckle/chair/vehicle

@@ -233,7 +233,7 @@ For the main html chat area
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
-	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || target == world))
+	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
 		target << message
 		if (!isatom(target)) // Really easy to mix these up, and not having to make sure things are mobs makes the code cleaner.
 			CRASH("DEBUG: Boutput called with invalid message")
@@ -269,7 +269,15 @@ For the main html chat area
 				C.chatOutput.messageQueue.Add(message)
 				return
 
+		if(istype(target, /datum/log))
+			var/datum/log/L = target
+			L.log += (message + "\n")
+			return
+
 		message = replacetext(message, "\n", "<br>")
 
 		// url_encode it TWICE, this way any UTF-8 characters are able to be decoded by the Javascript.
 		target << output(url_encode(url_encode(message)), "browseroutput:output")
+
+/datum/log	//exists purely to capture to_chat() output
+	var/log = ""

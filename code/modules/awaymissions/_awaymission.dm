@@ -44,9 +44,6 @@ Example of the second method:
 
 	var/z = location ? location.z : world.maxz //z coordinate
 
-	for(var/turf/T in block(locate(1,1,z), locate(world.maxx, world.maxy, z)))
-		turfs.Add(T)
-
 	if(accessable_z_levels.len >= z)
 		zLevel = accessable_z_levels[z]
 

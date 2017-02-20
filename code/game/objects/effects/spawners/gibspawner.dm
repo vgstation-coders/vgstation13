@@ -35,3 +35,19 @@
 	gibdirections = list(list(NORTH, NORTHEAST, NORTHWEST),list(SOUTH, SOUTHEAST, SOUTHWEST),list(WEST, NORTHWEST, SOUTHWEST),list(EAST, NORTHEAST, SOUTHEAST), alldirs, alldirs)
 	gibamounts[6] = pick(0,1,2)
 	..()
+
+/obj/effect/gibspawner/blood
+	gibtypes = list(/obj/effect/decal/cleanable/blood/gibs/blood,/obj/effect/decal/cleanable/blood/gibs/blood,/obj/effect/decal/cleanable/blood/gibs/drips,/obj/effect/decal/cleanable/blood/gibs/drips)
+	gibamounts = list(1,1,1,1)
+
+/obj/effect/gibspawner/blood/New()
+	gibdirections = list(alldirs, list(), list(WEST, NORTHWEST, SOUTHWEST, NORTH),list(EAST, NORTHEAST, SOUTHEAST, SOUTH))
+	..()
+
+/obj/effect/gibspawner/blood_drip
+	gibtypes = list(/obj/effect/decal/cleanable/blood/gibs/drips,/obj/effect/decal/cleanable/blood/gibs/drips,/obj/effect/decal/cleanable/blood/gibs/drips)
+	gibamounts = list(1,1,1)
+
+/obj/effect/gibspawner/blood_drip/New()
+	gibdirections = list(list(WEST, NORTHWEST, SOUTHWEST, NORTH),list(EAST, NORTHEAST, SOUTHEAST, SOUTH),list())
+	..()

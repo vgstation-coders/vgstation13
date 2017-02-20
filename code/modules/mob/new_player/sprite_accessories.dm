@@ -289,7 +289,12 @@
 		icon_state = "hair_braid"
 		gender = FEMALE
 		flags = HAIRSTYLE_CANTRIP
-
+	
+	kanade
+		name = "Kanade"
+		icon_state = "hair_kanade"
+		gender = FEMALE
+		
 	odango
 		name = "Odango"
 		icon_state = "hair_odango"
@@ -332,6 +337,11 @@
 	poofy
 		name = "Poofy"
 		icon_state = "hair_poofy"
+		gender = FEMALE
+
+	poofy2
+		name = "Poofy 2"
+		icon_state = "hair_poofy2"
 		gender = FEMALE
 
 	crono

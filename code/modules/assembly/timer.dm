@@ -122,6 +122,14 @@
 
 	return
 
+/obj/item/device/assembly/timer/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"timing",
+		"time")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 #undef VALUE_REMAINING_TIME
 #undef VALUE_DEFAULT_TIME
 #undef VALUE_TIMING

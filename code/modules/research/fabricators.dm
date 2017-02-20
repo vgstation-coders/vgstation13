@@ -452,6 +452,11 @@
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
 
+/obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
+	..()
+	if(stopped)
+		start_processing_queue()
+
 // Tell the machine to start processing the queue on the next process().
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
 	stopped=0

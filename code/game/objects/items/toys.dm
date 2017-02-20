@@ -7,11 +7,12 @@
  *		Toy crossbow
  *		Toy swords
  *		Foam armblade
- *      Bomb clock
+ *		Bomb clock
  *		Crayons
  *		Snap pops
  *		Water flower
  *		Cards
+ *		Action figures
  */
 
 
@@ -25,21 +26,22 @@
 /*
  * Balloons
  */
-/obj/item/toy/balloon
+
+/obj/item/toy/waterballoon
 	name = "water balloon"
 	desc = "A translucent balloon. There's nothing in it."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "waterballoon-e"
 	item_state = "balloon-empty"
 
-/obj/item/toy/balloon/New()
+/obj/item/toy/waterballoon/New()
 	. = ..()
 	create_reagents(10)
 
-/obj/item/toy/balloon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
+/obj/item/toy/waterballoon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user as mob)
+/obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
 	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
@@ -47,7 +49,7 @@
 		src.update_icon()
 	return
 
-/obj/item/toy/balloon/attackby(obj/O as obj, mob/user as mob)
+/obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(O.reagents)
 			if(O.reagents.total_volume < 1)
@@ -65,7 +67,7 @@
 	src.update_icon()
 	return
 
-/obj/item/toy/balloon/throw_impact(atom/hit_atom)
+/obj/item/toy/waterballoon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
 		src.visible_message("<span class = 'danger'>\The [src] bursts!</span>","You hear a pop and a splash.")
 		src.reagents.reaction(get_turf(hit_atom))
@@ -77,7 +79,7 @@
 				qdel(src)
 	return
 
-/obj/item/toy/balloon/update_icon()
+/obj/item/toy/waterballoon/update_icon()
 	if(src.reagents.total_volume >= 1)
 		icon_state = "waterballoon"
 		item_state = "balloon"
@@ -87,7 +89,7 @@
 
 /obj/item/toy/syndicateballoon
 	name = "syndicate balloon"
-	desc = "It's just a balloon. There is a tag on the back that reads \"FUK NT!11!\"."
+	desc = "There is a tag on the back that reads \"FUK NT!11!\"."
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
@@ -1086,3 +1088,657 @@
 	desc = "Small mechanical canary in a cage, does absolutely nothing of any importance!"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "canary"
+
+/obj/item/toy/balloon
+	name = "balloon"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "balloon_deflated"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_TINY
+	force = 0
+	throwforce = 0
+	var/col = "#FFFFFF"
+	var/inflated_type = /obj/item/toy/balloon/inflated
+	var/volume = 12	//liters
+
+/obj/item/toy/balloon/New(atom/A, var/chosen_col)
+	..(A)
+	if(col)
+		if(chosen_col)
+			col = chosen_col
+		else
+			col = rgb(rand(0,255),rand(0,255),rand(0,255))
+		color = col
+		update_icon()
+
+/obj/item/toy/balloon/update_icon()
+	overlays.len = 0
+	var/image/shine_overlay = image('icons/obj/toy.dmi', src, "[icon_state]_shine")
+	shine_overlay.appearance_flags = RESET_COLOR
+	overlays += shine_overlay
+
+/obj/item/toy/balloon/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/haslungs = FALSE
+		for(var/I in H.internal_organs)
+			if(istype(I, /datum/organ/internal/lungs))
+				haslungs = TRUE
+		if((H.species && H.species.flags & NO_BREATHE) || !haslungs)
+			to_chat(user, "You can't blow up \the [src] without lungs!")
+			return
+	inflate(user)
+
+/obj/item/toy/balloon/proc/inflate(mob/user, datum/gas_mixture/G)
+	var/obj/item/toy/balloon/inflated/B = new inflated_type(get_turf(src), col)
+	if(user)
+		user.drop_item(src, force_drop = 1)
+		user.put_in_hands(B)
+		to_chat(user, "You blow up \the [src].")
+	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
+	if(!G)
+		B.air_contents = new /datum/gas_mixture()
+		B.air_contents.volume = volume //liters
+		B.air_contents.temperature = T20C
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
+			if(!L)
+				return
+			for(var/i in L.gasses)
+				if(istype(i, /datum/lung_gas/waste))
+					var/datum/lung_gas/waste/W = i
+					switch(W.id)
+						if("oxygen")
+							B.air_contents.adjust(o2 = 0.5)
+						if("carbon_dioxide")
+							B.air_contents.adjust(co2 = 0.5)
+						if("nitrogen")
+							B.air_contents.adjust(n2 = 0.5)
+						if("toxins")
+							B.air_contents.adjust(tx = 0.5)
+						if("/datum/gas/sleeping_agent")
+							var/datum/gas/sleeping_agent/S = new()
+							S.moles = 0.5
+							B.air_contents.adjust(traces = list(S))
+		else
+			B.air_contents.adjust(co2 = 0.5)
+		B.air_contents.update_values()
+	else
+		var/moles = ONE_ATMOSPHERE*volume/(R_IDEAL_GAS_EQUATION*G.temperature)
+		B.air_contents = G.remove(moles)
+		B.air_contents.volume = volume
+		B.air_contents.update_values()
+		B.air_contents.react()
+	qdel(src)
+	return B
+
+/obj/item/toy/balloon/inflated
+	desc = "An inflated balloon. You have an urge to pop it."
+	icon_state = "balloon"
+	w_class = W_CLASS_MEDIUM
+	var/datum/gas_mixture/air_contents = null
+	var/can_be_strung = TRUE
+
+/obj/item/toy/balloon/inflated/attack_self(mob/user)
+	return
+
+/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+	if(W.sharpness_flags & (SHARP_TIP|HOT_EDGE))
+		user.visible_message("<span class='warning'>\The [user] pops \the [src]!</span>","You pop \the [src].")
+		pop()
+		return
+	if(istype(W, /obj/item/stack/cable_coil) && can_be_strung)
+		var/obj/item/stack/cable_coil/C = W
+		C.use(1)
+		to_chat(user, "You tie some of \the [C] around the end of \the [src].")
+		var/obj/item/toy/balloon/inflated/string/S = new (get_turf(src), col)
+		S.air_contents = air_contents
+		qdel(src)
+
+/obj/item/toy/balloon/inflated/proc/pop()
+	playsound(src, 'sound/misc/balloon_pop.ogg', 100, 1)
+	if(air_contents)
+		loc.assume_air(air_contents)
+	if(living_balloons.len)
+		for(var/obj/item/toy/balloon/inflated/long/shaped/B in living_balloons)
+			if(get_turf(src) in view(B))
+				B.live()
+	qdel(src)
+
+/obj/item/toy/balloon/inflated/bullet_act()
+	pop()
+
+/obj/item/toy/balloon/inflated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > T0C+100)
+		pop()
+
+/obj/item/toy/balloon/inflated/string
+	desc = "An inflated balloon with a string hanging from it. You have an urge to pop it."
+	icon_state = "balloon_with_string"
+	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/string/update_icon()
+	..()
+	var/image/string_overlay = image('icons/obj/toy.dmi', src, "balloon_string")
+	string_overlay.appearance_flags = RESET_COLOR
+	overlays += string_overlay
+	var/image/balleft = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]")
+	var/image/balleftshine = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shine")
+	var/image/balleftstring = image('icons/mob/in-hand/left/toys.dmi', src, "balloon_string")
+	var/image/balright = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]")
+	var/image/balrightshine = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shine")
+	var/image/balrightstring = image('icons/mob/in-hand/right/toys.dmi', src, "balloon_string")
+	balleftshine.appearance_flags = RESET_COLOR
+	balleftstring.appearance_flags = RESET_COLOR
+	balrightshine.appearance_flags = RESET_COLOR
+	balrightstring.appearance_flags = RESET_COLOR
+	balleft.color = col
+	balright.color = col
+	balleft.overlays += balleftshine
+	balleft.overlays += balleftstring
+	balright.overlays += balrightshine
+	balright.overlays += balrightstring
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
+
+/obj/item/toy/balloon/glove
+	name = "latex glove"
+	desc = "A latex glove."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "latexballoon"
+	item_state = "lgloves"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	col = null
+	inflated_type = /obj/item/toy/balloon/inflated/glove
+
+/obj/item/toy/balloon/inflated/glove
+	name = "latex glove balloon"
+	desc = "An inflated latex glove."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "latexballoon_blow"
+	item_state = "latexballon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	col = null
+	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/glove/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/balloon/inflated/glove) && !istype(src, /obj/item/toy/balloon/inflated/glove/pair))
+		var/obj/item/toy/balloon/inflated/glove/B = W
+		if(!air_contents || !B.air_contents)
+			return
+		to_chat(user, "You tie \the [src]s together.")
+		if(W.loc == user)
+			user.drop_item(W, force_drop = 1)
+		var/obj/item/toy/balloon/inflated/glove/pair/BB = new (get_turf(src))
+		BB.air_contents = air_contents
+		BB.air_contents.volume += B.air_contents.volume
+		BB.air_contents.merge(B.air_contents.remove_ratio(1))
+		BB.air_contents.update_values()
+		BB.air_contents.react()
+		if(loc == user)
+			user.drop_item(src, force_drop = 1)
+			user.put_in_hands(BB)
+		qdel(W)
+		qdel(src)
+
+/obj/item/toy/balloon/inflated/glove/pair
+	name = "pair of latex glove balloons"
+	desc = "A pair of inflated latex gloves."
+	icon_state = "latexballoon_pair"
+	item_state = "latexballon"
+
+/obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/crayon/red))
+		to_chat(user, "You color \the [src] light red using \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
+			user.put_in_hands(A)
+		else
+			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
+		qdel(src)
+
+/obj/item/toy/balloon/decoy
+	name = "inflatable decoy"
+	desc = "Use this to fool your enemies into thinking you're a balloon!"
+	icon_state = "decoy_balloon_deflated"
+	w_class = W_CLASS_TINY
+	col = null
+	inflated_type = /obj/item/toy/balloon/inflated/decoy
+	volume = 120	//liters
+	var/decoy_phrase = null
+
+/obj/item/toy/balloon/decoy/verb/record_phrase()
+	set name = "Record Decoy Phrase"
+	set category = "Object"
+	set src in usr
+
+	var/mob/M = usr
+	if(M.incapacitated())
+		return
+
+	var/N = input("Enter a stock phrase for your decoy to say:","[src]") as null|text
+	if(N)
+		decoy_phrase = N
+
+/obj/item/toy/balloon/decoy/inflate(mob/user, datum/gas_mixture/G)
+	var/obj/item/toy/balloon/inflated/decoy/D = ..()
+	if(!istype(D))
+		return
+	user.drop_item(D, force_drop = 1)
+	D.appearance = user.appearance
+	var/datum/log/L = new
+	user.examine(L)
+	D.desc = L.log
+	qdel(L)
+	if(decoy_phrase)
+		D.decoy_phrase = decoy_phrase
+
+/obj/item/toy/balloon/inflated/decoy
+	desc = "An inflated decoy balloon."
+	icon_state = "decoy_balloon_deflated"
+	w_class = W_CLASS_GIANT
+	density = 1
+	can_be_strung = FALSE
+	var/decoy_phrase = null
+	var/list/hit_sounds = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg',\
+	'sound/weapons/punch1.ogg', 'sound/weapons/punch2.ogg', 'sound/weapons/punch3.ogg', 'sound/weapons/punch4.ogg')
+
+/obj/item/toy/balloon/inflated/decoy/examine(mob/user, var/size = "")
+	if(desc)
+		to_chat(user, desc)
+
+/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(!src.gcDestroyed)
+		attack_hand(user)
+
+/obj/item/toy/balloon/inflated/decoy/attack_hand(mob/user)
+	playsound(loc, pick(hit_sounds), 25, 1, -1)
+	if(decoy_phrase)
+		say(decoy_phrase)
+	animate(src, transform = turn(matrix(), -40), pixel_x = -9 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = turn(matrix(), 30), pixel_x = 6 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = turn(matrix(), -20), pixel_x = -4 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = turn(matrix(), 10), pixel_x = 2 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = null, pixel_x = 0, time = 2)
+
+/obj/item/toy/balloon/inflated/decoy/attack_paw(mob/user)
+	return attack_hand(user)
+
+/obj/item/toy/balloon/long
+	name = "long balloon"
+	desc = "A simple long balloon."
+	icon_state = "long_balloon_deflated"
+	inflated_type = /obj/item/toy/balloon/inflated/long
+
+/obj/item/toy/balloon/inflated/long
+	name = "long balloon"
+	desc = "An inflated long balloon. Can be twisted into a variety of shapes."
+	icon_state = "long_balloon"
+	can_be_strung = FALSE
+	var/living = 0
+	var/list/available_shapes = list(
+								"balloon dog"			= /obj/item/toy/balloon/inflated/long/shaped/animal/dog,
+								"balloon giraffe"		= /obj/item/toy/balloon/inflated/long/shaped/animal/giraffe,
+								"balloon stegosaurus"	= /obj/item/toy/balloon/inflated/long/shaped/animal/stegosaurus,
+								"balloon bear"			= /obj/item/toy/balloon/inflated/long/shaped/animal/bear,
+								"balloon sword"			= /obj/item/toy/balloon/inflated/long/shaped/sword,
+								"balloon hat"			= /obj/item/toy/balloon/inflated/long/shaped/hat)
+
+/obj/item/toy/balloon/inflated/long/attack_self(mob/user)
+	var/product = input("What would you like to try to make?","[src]") as null|anything in available_shapes
+	if(product)
+		var/is_clumsy = clumsy_check(user)
+		var/twist_time = 5 SECONDS
+		if(is_clumsy)
+			to_chat(user, "You begin deftly shaping \the [src]...")
+			twist_time /= 2
+			playsound(user, 'sound/misc/balloon_twist_short.ogg', 75, 1, channel = CHANNEL_BALLOON)
+		else
+			to_chat(user, "You begin squeezing and twisting \the [src]...")
+			playsound(user, 'sound/misc/balloon_twist_long.ogg', 75, 1,  channel = CHANNEL_BALLOON)
+		if(do_after(user, src, twist_time))
+			if(!is_clumsy && prob(25))
+				to_chat(user, "<span class='warning>You fumble \the [src] and pop it!</span>")
+				pop()
+				return
+			to_chat(user, "You tie \the [src] into \a [product].")
+			var/product_type = available_shapes[product]
+			var/obj/item/toy/balloon/inflated/long/shaped/S = new product_type(get_turf(loc), col)
+			if(loc == user)
+				user.drop_item(src, force_drop = 1)
+				user.put_in_hands(S)
+			S.air_contents = air_contents
+			S.living = living
+			if(S.living)
+				living_balloons.Add(S)
+			qdel(src)
+		else
+			playsound(user, null, 75, 1, channel = CHANNEL_BALLOON)
+
+/obj/item/toy/balloon/inflated/long/shaped
+	name = "balloon shape"
+	desc = "What IS this?"
+	var/show_in_hand = FALSE
+	var/on_body_layer = null
+
+/obj/item/toy/balloon/inflated/long/shaped/Destroy()
+	if(src in living_balloons)
+		living_balloons.Remove(src)
+	..()
+
+/obj/item/toy/balloon/inflated/long/shaped/update_icon()
+	..()
+	if(show_in_hand)
+		var/image/balleft = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]")
+		var/image/balleftshine = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shine")
+		var/image/balright = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]")
+		var/image/balrightshine = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shine")
+		balleftshine.appearance_flags = RESET_COLOR
+		balrightshine.appearance_flags = RESET_COLOR
+		balleft.color = col
+		balright.color = col
+		balleft.overlays += balleftshine
+		balright.overlays += balrightshine
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
+	if(on_body_layer)
+		var/target_dmi = null
+		switch(on_body_layer)
+			if(HEAD_LAYER)
+				target_dmi = 'icons/mob/head.dmi'
+		if(target_dmi)
+			var/image/body_overlay = image(target_dmi, src, "[icon_state]")
+			var/image/body_overlay_shine = image(target_dmi, src, "[icon_state]_shine")
+			body_overlay_shine.appearance_flags = RESET_COLOR
+			body_overlay.color = col
+			body_overlay.overlays += body_overlay_shine
+			dynamic_overlay["[on_body_layer]"] = body_overlay
+
+/obj/item/toy/balloon/inflated/long/shaped/sword
+	name = "balloon sword"
+	desc = "If you were a real swordsman, you'd be able to win with this!"
+	icon_state = "sword_balloon"
+	show_in_hand = TRUE
+
+/obj/item/toy/balloon/inflated/long/shaped/hat
+	name = "balloon hat"
+	desc = "Just like the ones made in the sweatshops of the clown planet."
+	icon_state = "hat_balloon"
+	slot_flags = SLOT_HEAD
+	on_body_layer = HEAD_LAYER
+
+/obj/item/toy/balloon/inflated/long/shaped/sword/update_icon()
+	..()
+	var/image/balleft = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]")
+	var/image/balleftshine = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shine")
+	var/image/balright = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]")
+	var/image/balrightshine = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shine")
+	balleftshine.appearance_flags = RESET_COLOR
+	balrightshine.appearance_flags = RESET_COLOR
+	balleft.color = col
+	balright.color = col
+	balleft.overlays += balleftshine
+	balright.overlays += balrightshine
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
+
+/obj/item/toy/balloon/inflated/long/shaped/animal
+	name = "balloon snake"
+	desc = "How cute!"
+
+/obj/item/toy/balloon/inflated/long/shaped/animal/dog
+	name = "balloon dog"
+	icon_state = "dog_balloon"
+
+/obj/item/toy/balloon/inflated/long/shaped/animal/giraffe
+	name = "balloon giraffe"
+	icon_state = "giraffe_balloon"
+
+/obj/item/toy/balloon/inflated/long/shaped/animal/stegosaurus
+	name = "balloon stegosaurus"
+	icon_state = "stegosaurus_balloon"
+
+/obj/item/toy/balloon/inflated/long/shaped/animal/bear
+	name = "balloon bear"
+	icon_state = "bear_balloon"
+
+/obj/item/toy/balloon/long/living
+	inflated_type = /obj/item/toy/balloon/inflated/long/living
+
+/obj/item/toy/balloon/inflated/long/living
+	living = 1
+
+var/list/living_balloons = list()
+
+/obj/item/toy/balloon/inflated/long/shaped/proc/live()
+	living_balloons.Remove(src)
+
+/obj/item/toy/balloon/inflated/long/shaped/animal/live()
+	..()
+	var/mob/living/simple_animal/hostile/balloon/B = new(get_turf(src), col, icon_state)
+	B.name = name
+	B.air_contents = air_contents
+	qdel(src)
+
+/*
+ * Action Figures
+ */
+
+/obj/item/toy/figure
+	name = "\improper Non-Specific Action Figure action figure"
+	desc = null
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "nuketoy"
+	w_class = W_CLASS_SMALL
+	var/cooldown = 0
+	var/toysay = "What the fuck did you do?"
+	var/toysound = 'sound/machines/click.ogg'
+
+/obj/item/toy/figure/New()
+    desc = "A \"Space Life\" brand [name]."
+
+/obj/item/toy/figure/attack_self(mob/user)
+	if(cooldown <= world.time)
+		cooldown = world.time + 50
+		src.say("[toysay]")
+		playsound(user, toysound, 20, 1)
+
+/obj/item/toy/figure/cmo
+	name = "\improper Chief Medical Officer action figure"
+	icon_state = "cmo"
+	toysay = "Suit sensors!"
+
+/obj/item/toy/figure/assistant
+	name = "\improper Assistant action figure"
+	icon_state = "assistant"
+	toysay = "Grey tide world wide!"
+
+/obj/item/toy/figure/atmos
+	name = "\improper Atmospheric Technician action figure"
+	icon_state = "atmo"
+	toysay = "Glory to Atmosia!"
+
+/obj/item/toy/figure/bartender
+	name = "\improper Bartender action figure"
+	icon_state = "bartender"
+	toysay = "Where is Pun Pun?"
+
+/obj/item/toy/figure/borg
+	name = "\improper Cyborg action figure"
+	icon_state = "borg"
+	toysay = "I. LIVE. AGAIN."
+	toysound = 'sound/voice/liveagain.ogg'
+
+/obj/item/toy/figure/botanist
+	name = "\improper Botanist action figure"
+	icon_state = "botanist"
+	toysay = "Blaze it!"
+
+/obj/item/toy/figure/captain
+	name = "\improper Captain action figure"
+	icon_state = "captain"
+	toysay = "Any heads of staff?"
+
+/obj/item/toy/figure/cargotech
+	name = "\improper Cargo Technician action figure"
+	icon_state = "cargotech"
+	toysay = "For Cargonia!"
+
+/obj/item/toy/figure/ce
+	name = "\improper Chief Engineer action figure"
+	icon_state = "ce"
+	toysay = "Wire the solars!"
+
+/obj/item/toy/figure/chaplain
+	name = "\improper Chaplain action figure"
+	icon_state = "chaplain"
+	toysay = "God, please grant me power!"
+	toysound = "sound/effects/prayer.ogg"
+
+/obj/item/toy/figure/chef
+	name = "\improper Chef action figure"
+	icon_state = "chef"
+	toysay = "I'll make you into a burger!"
+
+/obj/item/toy/figure/chemist
+	name = "\improper Chemist action figure"
+	icon_state = "chemist"
+	toysay = "Free creatine and hyperzine!"
+
+/obj/item/toy/figure/clown
+	name = "\improper Clown action figure"
+	icon_state = "clown"
+	toysay = "Honk!"
+	toysound = 'sound/items/bikehorn.ogg'
+
+/obj/item/toy/figure/ian
+	name = "\improper Ian action figure"
+	icon_state = "ian"
+	toysay = "Arf!"
+
+/obj/item/toy/figure/detective
+	name = "\improper Detective action figure"
+	icon_state = "detective"
+	toysay = "This airlock has grey jumpsuit and insulated glove fibers on it."
+
+/obj/item/toy/figure/dsquad
+	name = "\improper Death Squad Officer action figure"
+	icon_state = "dsquad"
+	toysay = "Kill 'em all!"
+
+/obj/item/toy/figure/engineer
+	name = "\improper Engineer action figure"
+	icon_state = "engineer"
+	toysay = "Oh god, the singularity is loose!"
+
+/obj/item/toy/figure/geneticist
+	name = "\improper Geneticist action figure"
+	icon_state = "geneticist"
+	toysay = "Smash!"
+
+/obj/item/toy/figure/hop
+	name = "\improper Head of Personel action figure"
+	icon_state = "hop"
+	toysay = "Giving out all access!"
+
+/obj/item/toy/figure/hos
+	name = "\improper Head of Security action figure"
+	icon_state = "hos"
+	toysay = "Go ahead, make my day."
+
+/obj/item/toy/figure/qm
+	name = "\improper Quartermaster action figure"
+	icon_state = "qm"
+	toysay = "Please sign this form in triplicate and we will see about geting you a welding mask within 3 business days."
+
+/obj/item/toy/figure/janitor
+	name = "\improper Janitor action figure"
+	icon_state = "janitor"
+	toysay = "Look at the signs, you idiot."
+	toysound ="sound/misc/slip.ogg"
+
+/obj/item/toy/figure/lawyer
+	name = "\improper Lawyer action figure"
+	icon_state = "lawyer"
+	toysay = "My client is a dirty traitor!"
+
+/obj/item/toy/figure/librarian
+	name = "\improper Librarian action figure"
+	icon_state = "librarian"
+	toysay = "One day while Andy..."
+
+/obj/item/toy/figure/md
+	name = "\improper Medical Doctor action figure"
+	icon_state = "md"
+	toysay = "Just clone them."
+
+/obj/item/toy/figure/mime
+	name = "\improper Mime action figure"
+	icon_state = "mime"
+	toysay = "..."
+	toysound = null
+
+/obj/item/toy/figure/miner
+	name = "\improper Shaft Miner action figure"
+	icon_state = "miner"
+	toysay = "H-H-HEL-L-PP-P G-GOLIATH-H!"
+
+/obj/item/toy/figure/ninja
+	name = "\improper Ninja action figure"
+	icon_state = "ninja"
+	toysay = "Oh god! Stop shooting, I'm friendly!"
+
+/obj/item/toy/figure/wizard
+	name = "\improper Wizard action figure"
+	icon_state = "wizard"
+	toysay = "EI NATH!"
+	toysound = 'sound/effects/bamf.ogg'
+
+/obj/item/toy/figure/rd
+	name = "\improper Research Director action figure"
+	icon_state = "rd"
+	toysay = "BLOWING THE BORGS!"
+
+/obj/item/toy/figure/roboticist
+	name = "\improper Roboticist action figure"
+	icon_state = "roboticist"
+	toysay = "Big stompy mechs!"
+	toysound = 'sound/mecha/mechstep.ogg'
+
+/obj/item/toy/figure/scientist
+	name = "\improper Scientist action figure"
+	icon_state = "scientist"
+	toysay = "I'm not doing research."
+	toysound = 'sound/effects/explosionfar.ogg'
+
+/obj/item/toy/figure/syndie
+	name = "\improper Nuclear Operative action figure"
+	icon_state = "syndie"
+	toysay = "Get that fukken disk!"
+
+/obj/item/toy/figure/secofficer
+	name = "\improper Security Officer action figure"
+	icon_state = "secofficer"
+	toysay = "I am the LAW!"
+	toysound = 'sound/voice/biamthelaw.ogg'
+
+/obj/item/toy/figure/virologist
+	name = "\improper Virologist action figure"
+	icon_state = "virologist"
+	toysay = "The cure is radium!"
+
+/obj/item/toy/figure/warden
+	name = "\improper Warden action figure"
+	icon_state = "warden"
+	toysay = "Seventeen minutes for coughing at an officer!"
+
+/obj/item/toy/figure/trader
+	name = "\improper Trader action figure"
+	icon_state = "trader"
+	toysay = "Shiny rock for nuke, good trade yes?"

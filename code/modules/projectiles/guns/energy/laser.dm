@@ -371,3 +371,53 @@
 	desc = "An upgraded model of the basic laser gun. There seems to be some sort of slot in the handle."
 	can_take_pai = TRUE
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=4"
+
+/obj/item/weapon/gun/energy/laser/smart/state_controls_pai(obj/item/device/paicard/P)
+	if(P.pai)
+		to_chat(P.pai, "<span class='info'><b>You have been connected to \a [src].</b></span>")
+		to_chat(P.pai, "<span class='info'>Your controls are:</span>")
+		to_chat(P.pai, "<span class='info'>- (Z) Use hotkey: Connect or disconnect from \the [src]'s firing mechanism.</span>")
+		to_chat(P.pai, "<span class='info'>- Click on a target: Fire \the [src] at the target.</span>")
+
+/obj/item/weapon/gun/energy/laser/smart/attack_integrated_pai(mob/living/silicon/pai/user)
+	if(!pai_safety)
+		to_chat(user, "<span class='notice'>You connect to \the [src]'s firing mechanism.</span>")
+	else
+		to_chat(user, "<span class='notice'>You disconnect from \the [src]'s firing mechanism.</span>")
+	pai_safety = !pai_safety
+
+/obj/item/weapon/gun/energy/laser/rainbow
+
+	name = "rainbow laser"
+	desc = "A fearsome gun used by clown special forces. Its design is flawed however as clumsy users find it hard to operate."
+	projectile_type = "/obj/item/projectile/beam/white"
+	var/current_color = 1
+	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
+	var/fire_mode = 1 // 1 = laser, 0 = braindamage.
+	icon_state = "rainbow_laser"
+/obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/living/user)
+
+	switch(fire_mode)
+		if(0)
+			fire_mode = 1
+			to_chat(user, "<span class='warning'>\The [src.name] is now set to kill.</span>")
+			projectile_type = "/obj/item/projectile/beam/white"
+			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
+			fire_sound = 'sound/weapons/Laser.ogg'
+		if(1)
+			fire_mode = 0
+			to_chat(user, "<span class='warning'>\The [src.name] is now set to mindflay.</span>")
+			projectile_type = "/obj/item/projectile/beam/rainbow/braindamage"
+			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
+			fire_sound = 'sound/items/quack.ogg'
+
+
+
+/obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+
+	projectile_color = color_list[current_color]
+	if(current_color < color_list.len )
+		current_color+=1
+	else
+		current_color = 1
+	..()

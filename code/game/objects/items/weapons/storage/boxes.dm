@@ -22,6 +22,7 @@
 /obj/item/weapon/storage/box
 	name = "box"
 	desc = "It's just an ordinary box."
+	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box"
 	item_state = "syringe_kit"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
@@ -75,7 +76,7 @@
 
 /obj/item/weapon/storage/box/survival/vox
 	icon_state = "box_vox"
-	
+
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
 	for(var/atom/A in src)
@@ -84,9 +85,9 @@
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
-/obj/item/weapon/storage/box/survival/engineer	
+/obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
-	
+
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
 	for(var/atom/A in src)
@@ -95,9 +96,9 @@
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
-/obj/item/weapon/storage/box/survival/ert	
-	icon_state = "box_ERT"	
-	
+/obj/item/weapon/storage/box/survival/ert
+	icon_state = "box_ERT"
+
 /obj/item/weapon/storage/box/survival/ert/New()
 	..()
 	for(var/atom/A in src)
@@ -154,8 +155,9 @@
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/syringe(src)
+	new /obj/item/weapon/reagent_containers/syringe/giant(src)
 
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
@@ -169,6 +171,7 @@
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
 	desc = "This box contains injectors it seems."
+	icon_state = "box_injector"
 
 /obj/item/weapon/storage/box/injectors/New()
 	..()
@@ -563,7 +566,7 @@
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
 	desc = "It's a box of mugs."
-	icon_state = "box"
+	icon_state = "box_mug"
 
 /obj/item/weapon/storage/box/mugs/New()
 	..()
@@ -573,7 +576,6 @@
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
 	name = "replacement bulbs"
-	icon = 'icons/obj/storage.dmi'
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
 	item_state = "syringe_kit"
@@ -668,3 +670,117 @@
 		qdel(A)
 	for(var/i = 1 to 7)
 		new /obj/item/ornament/teardrop(src)
+
+/obj/item/weapon/storage/box/botanydisk
+	name = "flora disk box"
+	desc = "A box of flora data disks."
+	icon_state = "botanydisk"
+
+/obj/item/weapon/storage/box/botanydisk/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/disk/botany(src)
+
+/obj/item/weapon/storage/box/holobadge
+	name = "holobadge box"
+	desc = "A box containing holobadges."
+	icon_state = "box_badge"
+
+/obj/item/weapon/storage/box/holobadge/New()
+	..()
+	for(var/i = 1 to 4)
+		new /obj/item/clothing/accessory/holobadge(src)
+	new /obj/item/clothing/accessory/holobadge/cord(src)
+	new /obj/item/clothing/accessory/holobadge/cord(src)
+
+/obj/item/weapon/storage/box/spellbook
+	name = "Spellbook Bundle"
+	desc = "High quality discount spells! This bundle is non-refundable. The end user is solely liable for any damages arising from misuse of these products."
+
+/obj/item/weapon/storage/box/spellbook/New()
+	..()
+	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
+	possible_books -= /obj/item/weapon/spellbook/oneuse
+	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	for(var/i =1; i <= 7; i++)
+		var/randombook = pick(possible_books)
+		var/book = new randombook(src)
+		src.contents += book
+		possible_books -= randombook
+
+/obj/item/weapon/storage/box/spellbook/random/New()
+	..()
+	var/randomsprite = pick("a","b")
+	icon_state = "wizbox-[randomsprite]"
+
+/obj/item/weapon/storage/box/chrono_grenades
+	name = "box of chrono grenades"
+	desc = "A box of seven experimental chrono grenades."
+	icon_state = "chrono_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade(src)
+
+/obj/item/weapon/storage/box/balloons
+	name = "box of balloons"
+	desc = "A box containing seven balloons of various colors."
+	icon_state = "balloon_box"
+
+/obj/item/weapon/storage/box/balloons/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/future
+	icon_state = "future_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/future/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/future(src)
+
+/obj/item/weapon/storage/box/balloons/long
+	name = "box of long balloons"
+	desc = "A box containing seven long balloons of various colors."
+	icon_state = "long_balloon_box"
+
+/obj/item/weapon/storage/box/balloons/long/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long(src)
+
+/obj/item/weapon/storage/box/balloons/long/living/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long/living(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/past
+	icon_state = "past_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/past/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/past(src)
+
+// Who organizes this shit?
+
+/obj/item/weapon/storage/box/actionfigure
+	name = "box of action figures"
+	desc = "The latest set of collectable action figures."
+	icon_state = "box"
+
+/obj/item/weapon/storage/box/actionfigure/New()
+	..()
+	for(var/i in 1 to 4)
+		var/randomFigure = pick(subtypesof(/obj/item/toy/figure))
+		new randomFigure(src)

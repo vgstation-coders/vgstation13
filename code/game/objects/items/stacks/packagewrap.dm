@@ -123,7 +123,7 @@
 /obj/item/delivery
 	desc = "A small wrapped package."
 	name = "small parcel"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "deliverycrateSmall"
 	var/sortTag
 	flags = FPRINT
@@ -150,6 +150,9 @@
 		var/obj/item/device/destTagger/O = W
 
 		if(src.sortTag != O.currTag)
+			if(!O.currTag)
+				to_chat(user, "<span class='notice'>Select a destination first!</span>")
+				return
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag

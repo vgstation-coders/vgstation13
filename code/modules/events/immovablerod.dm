@@ -12,8 +12,12 @@
 
 /datum/event/immovable_rod/start()
 	immovablerod()
+/datum/event/immovable_rod/big/start()
+	immovablerod(1)
+/datum/event/immovable_rod/hyper/start()
+	immovablerod(2)
 
-/proc/immovablerod()
+/proc/immovablerod(var/hyperRod = 0)
 	var/startx = 0
 	var/starty = 0
 	var/endy = 0
@@ -39,7 +43,13 @@
 	endx = rand((world.maxx/2)-30,(world.maxx/2)+30)
 	endy = rand((world.maxy/2)-30,(world.maxy/2)+30)
 
-	new /obj/item/projectile/immovablerod(locate(startx, starty, 1), locate(endx, endy, 1))
+	switch(hyperRod)
+		if(0)
+			new /obj/item/projectile/immovablerod(locate(startx, starty, 1), locate(endx, endy, 1))
+		if(1)
+			new /obj/item/projectile/immovablerod/big(locate(startx, starty, 1), locate(endx, endy, 1))
+		if(2)
+			new /obj/item/projectile/immovablerod/hyper(locate(startx, starty, 1), locate(endx, endy, 1))
 
 /obj/item/projectile/immovablerod
 	name = "\improper Immovable Rod"
@@ -51,6 +61,7 @@
 	anchored = 1
 	grillepasschance = 0
 	mouse_opacity = 1
+	var/clongSound = 'sound/effects/bang.ogg'
 
 /obj/item/projectile/immovablerod/New(atom/start, atom/end)
 	..()
@@ -58,9 +69,31 @@
 	if(end)
 		throw_at(end)
 
+/obj/item/projectile/immovablerod/big
+	name = "\improper Immovable Pillar"
+	icon = 'icons/obj/objects_64x64.dmi'
+	pixel_x = -16
+	pixel_y = -16
+	clongSound = 'sound/effects/immovablerod_clong.ogg'
+
+/obj/item/projectile/immovablerod/hyper
+	name = "\improper Immovable Monolith"
+	icon = 'icons/obj/objects_96x96.dmi'
+	pixel_x = -32
+	pixel_y = -32
+	lock_angle = 1
+	clongSound = 'sound/effects/immovablerod_clong.ogg'
+
+/obj/item/projectile/immovablerod/hyper/New()
+	..()
+	var/image/I = image('icons/obj/objects_96x96.dmi',"immrod_bottom")
+	I.layer = layer-1
+	I.plane = -1
+	overlays += I
+
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>Immovable rod has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
 	original = end
 	starting = loc
 	current = loc
@@ -94,16 +127,57 @@
 		error -= distB
 		return 1
 
+/obj/item/projectile/immovablerod/proc/break_stuff()
+	if(loc.density)
+		loc.ex_act(2)
+		if(prob(25))
+			clong()
+
+/obj/item/projectile/immovablerod/big/break_stuff()
+	if(loc && !istype(loc,/turf/space))
+		if(loc.density)
+			loc.ex_act(2)
+		else
+			loc.ex_act(3)
+			if(istype(loc,/turf/simulated/floor))
+				var/turf/simulated/floor/under = loc
+				under.break_tile_to_plating()
+
+		for(var/turf/T in orange(loc,1))
+			T.ex_act(3)
+
+		if(prob(50))
+			clong()
+
+/obj/item/projectile/immovablerod/hyper/break_stuff()
+	if(loc && !istype(loc,/turf/space))
+		loc.ex_act(1)
+		for(var/turf/T in orange(loc,1))
+			if(prob(50))
+				if(istype(T,/turf/simulated/floor))
+					var/turf/simulated/floor/under = T
+					under.break_tile_to_plating()
+				else
+					T.ex_act(3)
+			else
+				T.ex_act(3)
+
+		for(var/turf/T in orange(loc,2))
+			if(prob(50))
+				T.ex_act(3)
+			else
+				T.add_dust()
+
+		if(prob(50))
+			clong()
+
 /obj/item/projectile/immovablerod/forceMove(atom/destination,var/no_tp=0)
 	..()
 	if(z != starting.z)
 		qdel(src)
 		return
 
-	if(loc.density)
-		loc.ex_act(2)
-		if(prob(25))
-			clong()
+	break_stuff()
 
 	for(var/atom/clong in loc)
 		if(!clong.density)
@@ -126,5 +200,6 @@
 			clong()
 
 /obj/item/projectile/immovablerod/proc/clong()
-	playsound(src, 'sound/effects/bang.ogg', 50, 1)
-	visible_message("CLANG")
+	for (var/mob/M in range(loc,20))
+		to_chat(M,"<FONT size=[max(0, 5 - round(get_dist(src, M)/4))]>CLANG!</FONT>")
+		M.playsound_local(loc, clongSound, 100 - (get_dist(src,M)*5), 1)

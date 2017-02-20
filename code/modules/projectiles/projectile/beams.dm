@@ -27,6 +27,8 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/Laser.ogg'
 	var/frequency = 1
 	var/wait = 0
+	var/beam_color= null
+
 
 /obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(original)
@@ -93,6 +95,7 @@ var/list/beam_master = list()
 	var/first = 1
 	var/tS = 0
 	while(src && src.loc)// only stop when we've hit something, or hit the end of the map
+		bumped = 0
 		if(first && timestopped)
 			tS = 1
 			timestopped = 0
@@ -119,8 +122,12 @@ var/list/beam_master = list()
 			kill_count = 0
 		lastposition = loc
 		if(kill_count < 1)
-			returnToPool(src)
+			bullet_die()
 			return reference
+		if(travel_range)
+			if(get_exact_dist(starting, get_turf(src)) > travel_range)
+				bullet_die()
+				return reference
 		kill_count--
 		if(bump_original_check())
 			return reference
@@ -129,34 +136,36 @@ var/list/beam_master = list()
 			update_pixel()
 
 			//If the icon has not been added yet
-			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]" in beam_master) )
+			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in beam_master))
 				var/image/I = image(icon,"[icon_state]_pixel",13,target_dir) //Generate it.
+				if(beam_color)
+					I.color = beam_color
 				I.transform = turn(I.transform, target_angle+45)
 				I.pixel_x = PixelX
 				I.pixel_y = PixelY
 				I.plane = EFFECTS_PLANE
 				I.layer = PROJECTILE_LAYER
-				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = I //And cache it!
+				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = I //And cache it!
 
 			//Finally add the overlay
 			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
 
 				//Add the turf to a list in the beam master so they can be cleaned up easily.
 				if(reference in beam_master)
 					var/list/turf_master = beam_master[reference]
-					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]" in turf_master)
-						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in turf_master)
+						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
 						turfs += loc
 					else
-						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = list(loc)
+						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
 				else
 					var/list/turfs = list()
-					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = list(loc)
+					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
 					beam_master[reference] = turfs
 		else
 			//If the icon has not been added yet
-			if( !("[icon_state][target_dir]" in beam_master) )
+			if( !("[icon_state][target_dir]" in beam_master))
 				var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
 				I.plane = EFFECTS_PLANE
 				I.layer = PROJECTILE_LAYER
@@ -285,10 +294,12 @@ var/list/beam_master = list()
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
 	name = "captain laser"
+	icon_state = "laser_old"
 	damage = 40
 	linear_movement = 0
 
 /obj/item/projectile/beam/retro
+	icon_state = "laser_old"
 	linear_movement = 0
 
 /obj/item/projectile/beam/lightning
@@ -568,7 +579,18 @@ var/list/beam_master = list()
 	name = "xray beam"
 	icon_state = "xray"
 	damage = 30
+	kill_count = 500
+	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
+	penetration = -1
 	fire_sound = 'sound/weapons/laser3.ogg'
+
+/obj/item/projectile/beam/xray/Bump(atom/A)
+	if(..())
+		damage -= 3
+		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
+			bullet_die()
+		if(damage <= 0)
+			bullet_die()
 
 /obj/item/projectile/beam/pulse
 	name = "pulse"
@@ -872,9 +894,107 @@ var/list/beam_master = list()
 	else
 		return ..()
 
+/obj/item/projectile/beam/apply_projectile_color(var/color)
+	beam_color = color
+
 //Used by the pain mirror spell
 //Damage type and damage done varies
 /obj/item/projectile/beam/pain
 	name = "bolt of pain"
 	pass_flags = PASSALL //Go through everything
 	icon_state = "pain"
+
+/obj/item/projectile/beam/white
+	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/rainbow/braindamage
+	damage = 5
+	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
+	if(ishuman(target))
+		var/mob/living/carbon/human/victim = target
+		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
+			victim.adjustBrainLoss(20)
+			victim.hallucination += 20
+
+/obj/item/projectile/beam/bullwhip
+	name = "bullwhip"
+	icon_state = "whip"
+	damage = 0
+	fire_sound = null
+	travel_range = 3
+	bounce_sound = "sound/weapons/whip_crack.ogg"
+	pass_flags = PASSTABLE
+	var/obj/item/weapon/bullwhip/whip = null
+	var/mob/user = null
+	var/has_played_sound = FALSE
+
+/obj/item/projectile/beam/bullwhip/New(atom/A, dir, var/spawning_whip, var/whipper)
+	..(A,dir)
+	whip = spawning_whip
+	user = whipper
+	if(!istype(whip) || !istype(user))
+		spawn()
+			returnToPool(src)
+
+/obj/item/projectile/beam/bullwhip/on_hit(var/atom/atarget)
+	whip.attack(atarget, user)
+	user.delayNextAttack(10)
+	has_played_sound = TRUE
+
+/obj/item/projectile/beam/bullwhip/OnDeath()
+	if(!has_played_sound && get_turf(src))
+		playsound(get_turf(src), bounce_sound, 30, 1)
+		user.delayNextAttack(2)
+
+/obj/item/projectile/beam/liquid_stream
+	name = "stream of liquid"
+	icon_state = "liquid_stream"
+	damage = 0
+	fire_sound = null
+	custom_impact = 1
+	penetration = 0
+	pass_flags = PASSTABLE
+	var/has_splashed = FALSE
+
+/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
+	..(A)
+	create_reagents(10)
+	if(t_range)
+		travel_range = t_range
+	else
+		travel_range = 0
+
+/obj/item/projectile/beam/liquid_stream/OnFired()
+	beam_color = mix_color_from_reagents(reagents.reagent_list)
+	alpha = mix_alpha_from_reagents(reagents.reagent_list)
+	..()
+
+/obj/item/projectile/beam/liquid_stream/Bump(atom/A)
+	if(!A)
+		return
+	..()
+	if(reagents.total_volume)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
+		if(istype(A, /mob))
+			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+								"<span class='warning'>\The [src] [splash_verb] you!</span>")
+			splash_sub(reagents, get_turf(A), reagents.total_volume/2)
+		else
+			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
+		splash_sub(reagents, A, reagents.total_volume)
+		has_splashed = TRUE
+		return 1
+
+/obj/item/projectile/beam/liquid_stream/OnDeath()
+	if(!has_splashed && get_turf(src))
+		splash_sub(reagents, get_turf(src), reagents.total_volume)
+
+/obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)
+	if(t_range)
+		travel_range = t_range
+	else
+		travel_range = 0

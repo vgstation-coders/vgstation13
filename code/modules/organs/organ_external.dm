@@ -489,20 +489,13 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Updating wounds. Handles wound natural healing, internal bleedings and infections
 /datum/organ/external/proc/update_wounds()
 
-
 	if(!is_organic()) //Non-organic limbs don't heal or get worse
 		return
 
 	for(var/datum/wound/W in wounds)
-		//Wounds can disappear after 10 minutes at the earliest
-		if(W.damage <= 0 && W.created + 10 * 10 * 60 <= world.time)
-			wounds -= W
-			continue
-			//Let the GC handle the deletion of the wound
-
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
-			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
+			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
@@ -538,6 +531,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(W.germ_level > 0 && W.salved && prob(2))
 			W.germ_level = 0
 			W.disinfected = 1
+
+		if(W.damage <= 0)
+			//Since we're a HIGH ARRPEE codebase and we want LOTS OF FLAVORR we like to keep all the completely healed wounds sticking around for 10 minutes minimum, so they show up as bruises and scars in examine.
+			if(W.internal || W.created + 10 MINUTES <= world.time) //The exception to this is internal wounds, which are more of a special status and not really a wound at all in practice.
+				wounds -= W
+				continue //Let the GC handle the deletion of the wound
 
 	//Sync the organ's damage with its wounds
 	src.update_damages()
@@ -778,6 +777,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(owner.feels_pain())
 		owner.emote("scream", , , 1)
 
+	playsound(owner.loc, "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN
 	broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
@@ -1405,7 +1405,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 		qdel(src)
 		return
 	//Add (facial) hair.
-	if(H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
+	if(H && H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
 		if(facial_hair_style)
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -1414,7 +1414,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 
 			overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
 
-	if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+	if(H && H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 		if(hair_style)
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
@@ -1437,23 +1437,25 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 	//	if(H.gender == FEMALE)
 	//		H.icon_state = "head_f"
 	//	H.overlays += H.generate_head_icon()
-	transfer_identity(H)
+	if(H)
+		transfer_identity(H)
 
-	name = "[H.real_name]'s head"
+		name = "[H.real_name]'s head"
 
-	H.regenerate_icons()
+		H.regenerate_icons()
 
-	brainmob.stat = 2
-	brainmob.death()
+	if(brainmob)
+		brainmob.stat = 2
+		brainmob.death()
 
-	if(brainmob.mind && brainmob.mind.special_role == HIGHLANDER)
-		if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
-			var/mob/living/carbon/human/L = H.lastattacker
-			if(L.mind && L.mind.special_role == HIGHLANDER)
-				L.revive(0)
-				to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
-				var/turf/T1 = get_turf(H)
-				make_tracker_effects(T1, L)
+		if(brainmob.mind && brainmob.mind.special_role == HIGHLANDER)
+			if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
+				var/mob/living/carbon/human/L = H.lastattacker
+				if(L.mind && L.mind.special_role == HIGHLANDER)
+					L.revive(0)
+					to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
+					var/turf/T1 = get_turf(H)
+					make_tracker_effects(T1, L)
 
 obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
 	brainmob = new(src)
@@ -1540,3 +1542,27 @@ obj/item/weapon/organ/head/Destroy()
 		if(OE.grasp_id == index && OE.can_grasp)
 			return OE
 	return null
+
+/datum/organ/external/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"damage_state",
+		"brute_dam",
+		"burn_dam",
+		"last_dam",
+		"wounds",
+		"number_wounds",
+		"perma_injury",
+		"parent",
+		"children",
+		"internal_organs",
+		"open",
+		"stage",
+		"cavity",
+		"sabotaged",
+		"encased",
+		"implants")
+
+	reset_vars_after_duration(resettable_vars, duration)
+	for(var/datum/wound/W in wounds)
+		W.send_to_past(duration)

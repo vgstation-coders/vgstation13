@@ -490,3 +490,23 @@
 	heat_conductivity = 0
 	slowdown = 5
 	bearpelt = 1
+
+/obj/item/clothing/suit/storage/trader
+	name = "trader's coat"
+	desc = "A long trenchcoat with many pockets sewn into the lining."
+	icon_state = "tradercoat"
+	item_state = "tradercoat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	blood_overlay_type = "coat"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED)
+	max_combined_w_class = 28
+	storage_slots = 14
+	action_button_name = "Show Wares"
+
+/obj/item/clothing/suit/storage/trader/ui_action_click()
+	var/mob/M = loc
+	if(!istype(M) || M.incapacitated())
+		return
+	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")

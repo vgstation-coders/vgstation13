@@ -113,7 +113,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 		user.visible_message("<span class='danger'>[user] feeds [M] \the [src].</span>", "<span class='danger'>You feed [M] \the [src].</span>")
 
-		add_attacklogs(user, M, "force-fed", src, "amount:[amount_per_imbibe], container containing [reagentlist(src)]", adminwarn = FALSE)
+		add_attacklogs(user, M, "force-fed", src, "amount:[amount_per_imbibe], container containing [reagentlist(src)]", admin_warn = FALSE)
 		/*M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")*/
@@ -286,7 +286,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				if(!src.is_empty())
 					for (var/reagent_id in LOGGED_SPLASH_REAGENTS)
 						if (reagents.has_reagent(reagent_id))
-							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, span_class = "danger")
+							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 
 					// Splash the thing
 					splash_sub(reagents, target, splashable_units, user)

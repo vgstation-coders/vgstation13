@@ -16,14 +16,19 @@
 
 /obj/map/spawner/perform_spawn()
 
-	var/obj/spawned
 	for(amount, amount, amount--)
 		if(prob(chance))
-			spawned = pick(to_spawn)
-			spawned = new spawned(loc)
-			if(jiggle)
-				spawned.pixel_x = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
-				spawned.pixel_y = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
+			CreateItem(pick(to_spawn))
+	qdel(src)
+
+/obj/map/spawner/proc/CreateItem(new_item_type)
+	var/obj/spawned = new new_item_type(loc)
+
+	if(jiggle)
+		spawned.pixel_x = rand(-jiggle, jiggle)
+		spawned.pixel_y = rand(-jiggle, jiggle)
+
+	return spawned
 
 //**************************************************************
 // Subtypes ////////////////////////////////////////////////////
@@ -320,7 +325,7 @@
 		/obj/item/device/mmi/radio_enabled,
 		/obj/item/device/reagent_scanner,
 		/obj/item/device/soundsynth,
-		/obj/item/latexballon,
+		/obj/item/toy/balloon/glove,
 		/obj/item/weapon/storage/toolbox/electrical,
 		/obj/item/ammo_storage/magazine/a12mm,
 		/obj/item/ammo_storage/box/c45,
@@ -473,7 +478,7 @@
 		/obj/item/taperoll/engineering,
 		/obj/item/taperoll/police,
 		/obj/item/toy/ammo/gun,
-		/obj/item/toy/balloon,
+		/obj/item/toy/waterballoon,
 		/obj/item/toy/crayon/red,
 		/obj/item/toy/crayon/yellow,
 		/obj/item/toy/crayon/blue,
@@ -814,6 +819,27 @@
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
+/obj/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
+ 	name = "trader spacesuit spawner"
+ 	icon_state = "space_supply"
+
+/obj/map/spawner/space/vox/trader/spacesuit/perform_spawn()
+	var/i = rand(1, 4) // 1 in 4 chance of spawning a single of listed below
+	switch (i)
+		if (1)
+			new /obj/item/clothing/suit/space/vox/civ/trader(src.loc) // standard brownsuit and helmet
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader(src.loc)
+
+		if (2)
+			new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src.loc) // carapace
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src.loc)
+		if (3)
+			new /obj/item/clothing/suit/space/vox/civ/trader/medic(src.loc) // aqua coloured hardsuit
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src.loc)
+		if (4)
+			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/map/spawner/mobs/carp
@@ -875,8 +901,16 @@
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
 
-
-
+/obj/map/spawner/mobs/medivault
+	name = "medivault spawner"
+	icon_state = "mob_medivault"
+	chance = 50
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/monster/cyber_horror/Tajaran,
+		/mob/living/simple_animal/hostile/monster/cyber_horror,
+		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/zombie,
+		)
 
 // Robutts /////////////////////////////////////////////////////
 
@@ -1192,3 +1226,5 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
+
+

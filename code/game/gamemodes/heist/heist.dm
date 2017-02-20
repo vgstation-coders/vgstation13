@@ -143,7 +143,7 @@
 
 /datum/game_mode/heist/proc/forge_vox_objectives()
 	raid_objectives += new/datum/objective/steal/heist
-	raid_objectives += new/datum/objective/steal/salvage
+	//raid_objectives += new/datum/objective/steal/salvage
 	//raid_objectives += new/datum/objective/heist/inviolate_crew // No tears
 	raid_objectives += new/datum/objective/heist/inviolate_death
 
@@ -155,7 +155,6 @@
 
 /datum/game_mode/heist/proc/greet_vox(const/datum/mind/raider)
 	to_chat(raider.current, {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>
-The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to Tau Ceti and much of the unexplored galaxy. You and the crew have come to [station_name()] for plunder, trade or both.
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
 Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</span>"})
 

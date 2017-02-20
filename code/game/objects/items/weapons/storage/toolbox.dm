@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/toolbox
 	name = "toolbox"
 	desc = "Danger. Very robust."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "red"
 	item_state = "toolbox_red"
 	flags = FPRINT
@@ -60,6 +60,8 @@
 		50;/obj/item/device/flashlight/flare)
 	new lighting(src)
 	new /obj/item/device/radio(src)
+	if(prob(5))
+		new /obj/item/airbag(src)
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"

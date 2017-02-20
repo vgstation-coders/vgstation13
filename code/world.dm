@@ -40,6 +40,7 @@ var/savefile/panicfile
 	investigations[I_CHEMS] = new /datum/log_controller(I_CHEMS, filename="data/logs/[date_string] chemistry.htm", persist=TRUE)
 	investigations[I_WIRES] = new /datum/log_controller(I_WIRES, filename="data/logs/[date_string] wires.htm", persist=TRUE)
 	investigations[I_GHOST] = new /datum/log_controller(I_GHOST, filename="data/logs/[date_string] poltergeist.htm", persist=TRUE)
+	investigations[I_ARTIFACT] = new /datum/log_controller(I_ARTIFACT, filename="data/logs/[date_string] artifact.htm", persist=TRUE)
 
 	diary = file("data/logs/[date_string].log")
 	panicfile = new/savefile("data/logs/profiling/proclogs/[date_string].sav")
@@ -140,23 +141,8 @@ var/savefile/panicfile
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	processScheduler = new
-	master_controller = new /datum/controller/game_controller()
-
-	spawn(1)
-		turfs = new/list(maxx*maxy*maxz)
-		world.log << "DEBUG: TURFS LIST LENGTH [turfs.len]"
-		build_turfs_list()
-
-		processScheduler.deferSetupFor(/datum/controller/process/ticker)
-		processScheduler.setup()
-
-		master_controller.setup()
-
-		setup_species()
-		setup_shuttles()
-
-		stat_collection.artifacts_discovered = 0 // Because artifacts during generation get counted otherwise!
+	spawn(10)
+		Master.Setup()
 
 	for(var/plugin_type in typesof(/plugin))
 		var/plugin/P = new plugin_type()
@@ -275,7 +261,7 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
-	processScheduler.stop()
+	Master.Shutdown()
 	paperwork_stop()
 
 	spawn()
@@ -511,12 +497,3 @@ proc/establish_old_db_connection()
 		return 1
 
 #undef FAILED_DB_CONNECTION_CUTOFF
-/world/proc/build_turfs_list()
-	var/count = 0
-	for(var/Z = 1 to world.maxz)
-		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000))
-				sleep(world.tick_lag)
-			count++
-			T.initialize()
-			turfs[count] = T

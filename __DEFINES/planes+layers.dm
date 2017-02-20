@@ -87,7 +87,7 @@ What is the naming convention for planes or layers?
 
 #define TURF_PLANE				-19
 
-	#define TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD	-999
+	#define TURF_LAYER	-999
 
 #define ABOVE_TURF_PLANE 		-18			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 

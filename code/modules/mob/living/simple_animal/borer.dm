@@ -82,6 +82,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/channeling_bone_shield = 0
 	var/channeling_bone_hammer = 0
 	var/channeling_bone_cocoon = 0
+	var/channeling_night_vision = 0
 
 	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0
@@ -92,6 +93,18 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
 	held_items = list()
+
+/mob/living/simple_animal/borer/defected_borer
+	name = "special borer"
+	real_name = "special borer"
+	desc = "A slightly defected, yet incredibly happy little brainslug"
+	speak_emote = list("borks")
+	emote_hear = list("barks")
+	attacktext = "barks at"
+	friendly = "barks at"
+	icon_state = "bestborer"
+	icon_living = "bestborer"
+	icon_dead = "bestborer"
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)

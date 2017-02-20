@@ -8,6 +8,7 @@
 
 	var/sight_mode = 0
 	var/custom_name = ""
+	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	//var/crisis //Admin-settable for combat module use.
@@ -75,7 +76,6 @@
 	var/speed = 0 //Cause sec borgs gotta go fast //No they dont!
 	var/scrambledcodes = 0 // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
-	var/pose
 	var/lawcheck[1]
 	var/ioncheck[1]
 
@@ -148,6 +148,7 @@
 		cell_component.installed = 1
 
 	playsound(loc, startup_sound, 75, 1)
+	// This should just grab from a list of all languages.
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	add_language(LANGUAGE_TRADEBAND)
 	add_language(LANGUAGE_VOX, 0)
@@ -229,7 +230,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -312,11 +313,11 @@
 			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
-		if("Security")
+		if("Peacekeeper")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight 2.0"] = "sleeksecurity"
+			module_sprites["Blue Knight 2.0"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
@@ -431,22 +432,22 @@
 
 /mob/living/silicon/robot/verb/Namepick()
 	set category = "Robot Commands"
-	if(custom_name)
+	if(namepick_uses <= 0)
+		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
+	namepick_uses--
+	var/newname
+	for(var/i = 1 to 3)
+		newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
+		if(newname == "")
+			continue
+		if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+			break
 
-	spawn(0)
-		var/newname
-		for(var/i = 1 to 3)
-			newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
-			if(newname == "")
-				continue
-			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
-				break
-
-		if (newname != "")
-			custom_name = newname
-		updatename()
-		updateicon()
+	if (newname != "")
+		custom_name = newname
+	updatename()
+	updateicon()
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
@@ -848,9 +849,6 @@
 					C.r_arm = new/obj/item/robot_parts/r_arm(C)
 					C.updateicon()
 					new/obj/item/robot_parts/chest(loc)
-					// This doesn't work.  Don't use it.
-					//src.Destroy()
-					// del() because it's infrequent and mobs act weird in qdel.
 					qdel(src)
 			else
 				// Okay we're not removing the cell or an MMI, but maybe something else?
@@ -1402,13 +1400,6 @@
 		state = 1
 	lockcharge = state
 	update_canmove()
-
-/mob/living/silicon/robot/verb/pose()
-	set name = "Set Pose"
-	set desc = "Sets a description which will be shown when someone examines you."
-	set category = "IC"
-
-	pose =  copytext(sanitize(input(usr, "This is [src]. It is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
 	if(triesleft == 0 || !module_sprites.len)

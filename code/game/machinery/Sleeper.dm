@@ -520,6 +520,7 @@
 		if(occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
+			occupant.resting = 0
 		src.on = 0
 		if(auto_eject_after)
 			src.go_out()
@@ -532,8 +533,9 @@
 		if(x in component_parts)
 			continue
 		x.forceMove(src.loc)
-	occupant.forceMove(exit)
-	occupant.reset_view()
+	if(!occupant.gcDestroyed)
+		occupant.forceMove(exit)
+		occupant.reset_view()
 	occupant = null
 	update_icon()
 	return 1
@@ -771,7 +773,7 @@
 	if(connected.automatic && connected.occupant && !connected.on)
 		connected.cook("Thermoregulate")
 	if(!connected.on)
-	else if(!src || !connected || !connected.occupant || connected.occupant.loc != connected) //Check if someone's released/replaced/bombed him already
+	else if(!src || !connected || !connected.occupant || connected.occupant.loc != connected || connected.occupant.gcDestroyed) //Check if someone's released/replaced/bombed him already
 		connected.occupant = null
 		connected.on = 0
 		connected.update_icon()

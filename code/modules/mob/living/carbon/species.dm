@@ -134,6 +134,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
 
+	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+
 
 /datum/species/New()
 	..()
@@ -572,6 +574,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 
 	anatomy_flags = HAS_SWEAT_GLANDS
 
@@ -766,6 +769,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_plant.dmi'
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
 	known_languages = list(LANGUAGE_ROOTSPEAK)
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	attack_verb = "slashes"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
@@ -797,6 +801,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_golem.dmi'
 	deform = 'icons/mob/human_races/r_def_golem.dmi'
 	known_languages = list(LANGUAGE_GOLEM)
+	meat_type = /obj/item/weapon/ore/diamond
 	attack_verb = "punches"
 
 	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
@@ -868,6 +873,7 @@ var/global/list/whitelisted_species = list("Human")
 	icon = 'icons/mob/human_races/r_golem.dmi'
 	icon_state = "golem_dust"
 	density = 0
+	meat_type = /obj/item/weapon/ore/diamond
 
 /mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/slime_extract/adamantine))

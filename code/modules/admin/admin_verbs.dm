@@ -58,6 +58,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/secrets,
 	/client/proc/shuttle_magic,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/togglelooc, /*toggles looc on/off for everyone*/
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
@@ -148,7 +149,6 @@ var/list/admin_verbs_server = list(
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
 	/client/proc/debug_pooling,
-	/client/proc/getSchedulerContext,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
@@ -165,7 +165,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/qdel_toggle,              // /vg/
 	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
@@ -187,9 +186,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
-#ifdef PROFILE_MACHINES
-	/client/proc/cmd_admin_dump_macprofile,
-#endif
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,
 	/client/proc/view_runtimes
@@ -205,8 +201,7 @@ var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
 	)
 var/list/admin_verbs_polling = list(
-	/client/proc/create_poll,
-	/client/proc/remove_broken_polls
+	/client/proc/create_poll
 	)
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
@@ -368,8 +363,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/client/proc/nanomapgen_DumpImage,
-		/client/proc/nanomapgen_DumpImageAll,
+		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
 
@@ -1285,4 +1279,3 @@ var/list/admin_verbs_mod = list(
 	else
 		alert(src, "An external server error has occurred. Please report this.")
 		return 0
-

@@ -50,10 +50,6 @@
 		if ("delete")
 			qdel(src)
 			return
-		/*if ("fire")
-			new /obj/structure/closet/firecloset(src.loc)
-			del(src)
-			return*/
 
 /obj/structure/closet/emcloset/legacy/New()
 	..()
@@ -64,6 +60,9 @@
 /obj/structure/closet/emcloset/vox
 	name = "vox emergency closet"
 	desc = "It's full of life-saving equipment.  Assuming, that is, that you breathe nitrogen."
+	icon_state = "emergencyvox"
+	icon_closed = "emergencyvox"
+	icon_opened = "emergencyvoxopen"
 
 /obj/structure/closet/emcloset/vox/New()
 	AddToProfiler()

@@ -96,10 +96,11 @@
 	hitsound = 'sound/items/bikehorn.ogg'
 	var/honk_delay = 20
 	var/last_honk_time = 0
+	var/vary_pitch = 1
 
 /obj/item/weapon/bikehorn/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
-	playsound(get_turf(user), hitsound, 100, 1)
+	playsound(get_turf(user), hitsound, 100, vary_pitch)
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
@@ -131,7 +132,7 @@
 /obj/item/weapon/bikehorn/proc/honk()
 	if(world.time - last_honk_time >= honk_delay)
 		last_honk_time = world.time
-		playsound(get_turf(src), hitsound, 50, 1)
+		playsound(get_turf(src), hitsound, 50, vary_pitch)
 		return 1
 	return 0
 
@@ -196,13 +197,13 @@
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			cant_drop--
-			
+
 /obj/item/clothing/glue_act()
 	canremove--
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			canremove++
-			
+
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
 	src = null
 	target.glue_act()

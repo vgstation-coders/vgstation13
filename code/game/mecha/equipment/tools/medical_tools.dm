@@ -625,12 +625,18 @@
 		occupant_message("<span class=\"alert\">No reagent info gained from [A].</span>")
 		return 0
 	occupant_message("Analyzing reagents...")
+	var/any_success = FALSE
 	for(var/datum/reagent/R in A.reagents.reagent_list)
-		if(R.reagent_state == 2 && add_known_reagent(R.id,R.name))
-			occupant_message("Reagent analyzed, identified as [R.name] and added to database.")
-			send_byjax(chassis.occupant,"msyringegun.browser","reagents_form",get_reagents_form())
-	occupant_message("Analyzis complete.")
-	return 1
+		if(R.dupeable)
+			if(R.reagent_state == 2 && add_known_reagent(R.id,R.name))
+				occupant_message("Reagent analyzed, identified as [R.name] and added to database.")
+				send_byjax(chassis.occupant,"msyringegun.browser","reagents_form",get_reagents_form())
+				any_success = TRUE
+				continue
+		occupant_message("<span class=\"alert\">Analysis of [R.name] failed, unit not equipped for synthesis of this reagent.</span>")
+	if(any_success)
+		occupant_message("Analysis complete.")
+		return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/proc/add_known_reagent(r_id,r_name)
 	set_ready_state(0)

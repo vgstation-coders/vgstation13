@@ -515,6 +515,27 @@
 			S.start()
 	holder.clear_reagents()
 
+/datum/chemical_reaction/chemsmoke/bleach
+	name = "Bleach Fumes"
+	id = "bleachfumes"
+	result = CHLORAMINE
+	required_reagents = list(BLEACH = 1, AMMONIA = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/chemsmoke/bleach/on_reaction(var/datum/reagents/holder, var/created_volume) //I hate to copypasta this to change one argument but it appears I have little choice
+	holder.isolate_reagent(CHLORAMINE)
+	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
+		var/location = get_turf(holder.my_atom)
+		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		S.attach(location)
+		S.set_up(holder, 5, 0, location)
+		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+		spawn(0)
+			S.start()
+			sleep(10)
+			S.start()
+	holder.clear_reagents()
+
 /datum/chemical_reaction/chloralhydrate
 	name = "Chloral Hydrate"
 	id = CHLORALHYDRATE
@@ -602,26 +623,94 @@
 	G.adjust(0,0,0,vol)
 	..()
 
-/datum/chemical_reaction/plasmasolidification
+/datum/chemical_reaction/solidification
+	name = "Metal solidification"
+	id = "metalsolid"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	var/location = get_turf(holder.my_atom)
+	new to_spawn(location, result_amount)
+
+/datum/chemical_reaction/solidification/plasma
 	name = "Solid Plasma"
 	id = "solidplasma"
 	result = null
-	required_reagents = list(IRON = 5, FROSTOIL = 5, PLASMA = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = 20)
 	result_amount = 1
 
-/datum/chemical_reaction/plasmasolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/location = get_turf(holder.my_atom)
-	new /obj/item/stack/sheet/mineral/plasma(location)
+/datum/chemical_reaction/solidification/plasma/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/mineral/plasma
+	..()
 
-/datum/chemical_reaction/plastication
+
+/datum/chemical_reaction/solidification/iron
+	name = "Solid Metal"
+	id = "solidmetal"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/iron/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/metal
+	..()
+
+/datum/chemical_reaction/solidification/silver
+	name = "Solid Silver"
+	id = "solidsilver"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/silver/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/mineral/silver
+	..()
+
+/datum/chemical_reaction/solidification/gold
+	name = "Solid Gold"
+	id = "solidgold"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/gold/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/mineral/gold
+	..()
+
+/datum/chemical_reaction/solidification/uranium
+	name = "Solid Uranium"
+	id = "soliduranium"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/uranium/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/mineral/uranium
+	..()
+
+/datum/chemical_reaction/solidification/plasteel
+	name = "Solid Plasteel"
+	id = "solidplasteel"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 5, CAPSAICIN = 5, PLASMA = 10, IRON = 10)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/plasteel/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/plasteel
+	..()
+
+/datum/chemical_reaction/solidification/plastic
 	name = "Plastic"
 	id = "solidplastic"
 	result = null
 	required_reagents = list(PACID = 10, PLASTICIDE = 20)
-	result_amount = 1
+	result_amount = 10
 
-/datum/chemical_reaction/plastication/on_reaction(var/datum/reagents/holder)
-	new /obj/item/stack/sheet/mineral/plastic(get_turf(holder.my_atom), 10)
+/datum/chemical_reaction/solidification/plastic/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+	to_spawn = /obj/item/stack/sheet/mineral/plastic
+	..()
 
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"
@@ -660,7 +749,7 @@
 	name = "Nanobots2"
 	id = "nanobots2"
 	result = NANOBOTS
-	required_reagents = list(MEDNANOBOTS = 1, CRYOXADONE = 2)
+	required_reagents = list(MEDNANOBOTS = 2.5, CRYOXADONE = 2) //2.5 here since otherwise you could just dupe again with this return recipe.
 	result_amount = 1
 
 /datum/chemical_reaction/mednanobots
@@ -668,14 +757,14 @@
 	id = MEDNANOBOTS
 	result = MEDNANOBOTS
 	required_reagents = list(NANOBOTS = 1, DOCTORSDELIGHT = 5)
-	result_amount = 1
+	result_amount = 2.5
 
 /datum/chemical_reaction/comnanobots
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
 	result = COMNANOBOTS
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
-	result_amount = 1
+	result_amount = 2.5
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -771,10 +860,17 @@
 	result_amount = 2
 
 /datum/chemical_reaction/space_cleaner
-	name = "Space cleaner"
+	name = "Space Cleaner"
 	id = CLEANER
 	result = CLEANER
 	required_reagents = list(AMMONIA = 1, WATER = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/bleach
+	name = "Bleach"
+	id = BLEACH
+	result = BLEACH
+	required_reagents = list(SODIUMCHLORIDE = 4, CLEANER = 4, OXYGEN = 2)
 	result_amount = 2
 
 /datum/chemical_reaction/plantbgone
@@ -2007,6 +2103,14 @@
 	required_reagents = list(CAPSAICIN = 1, HOT_RAMEN = 6)
 	result_amount = 6
 
+/datum/chemical_reaction/ice
+	name = "Ice"
+	id = ICE
+	result = ICE
+	required_reagents = list(WATER = 10)
+	required_catalysts = list(FROSTOIL = 5)
+	result_amount = 11
+
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
 /datum/chemical_reaction/goldschlager
@@ -2371,6 +2475,14 @@
 	result = BAREFOOT
 	required_reagents = list(BERRYJUICE = 1, CREAM = 1, VERMOUTH = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/dans_whiskey
+	name = "Discount Dan's 'Malt' Whiskey"
+	id = DANS_WHISKEY
+	result = DANS_WHISKEY
+	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
+	result_amount = 2
+
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 

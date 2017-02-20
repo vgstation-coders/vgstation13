@@ -876,3 +876,210 @@ Auto Patrol: []"},
 		if(!(slot_item.type in safe_weapons))
 			return 1
 	return 0
+
+/obj/machinery/bot/secbot/beepsky/cheapsky
+	name = "Officer Cheapsky"
+	desc = "The budget cuts have hit Security the hardest."
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "cheapsky0"
+	icon_initial = "cheapsky"
+	health = 15
+	maxhealth = 15
+
+/obj/machinery/bot/secbot/beepsky/cheapsky/look_for_perp()
+	..()
+	if(target)
+		var/area/location = get_area(src)
+		broadcast_security_hud_message("[src.name] has spotted level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
+
+/obj/machinery/bot/secbot/beepsky/cheapsky/process()
+	//set background = 1
+
+	if(!src.on)
+		return
+
+	switch(mode)
+
+		if(SECBOT_IDLE)		// idle
+
+			frustration = 0
+			walk_to(src,0)
+			look_for_perp()	// see if any criminals are in range
+			if(!mode && auto_patrol)	// still idle, and set to patrol
+				mode = SECBOT_START_PATROL	// switch to patrol mode
+
+		if(SECBOT_HUNT)		// hunting for perp
+
+			// if can't reach perp for long enough, go idle
+			if(src.frustration >= 8)
+				src.target = null
+				src.last_found = world.time
+				src.frustration = 0
+				src.mode = SECBOT_IDLE
+				walk_to(src,0)
+
+			if(target)		// make sure target exists
+				if(!istype(target.loc, /turf))
+					return
+				if(get_dist(src, src.target) <= 1)		// if right next to perp
+					if(declare_arrests)
+						var/area/location = get_area(src)
+						broadcast_security_hud_message("[src.name] is scolding level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
+					//visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
+
+					mode = SECBOT_PREP_ARREST
+					src.anchored = 1
+					src.target_lastloc = target.loc
+					return
+
+				else								// not next to perp
+					if(prob(20))
+						visible_message("<b>[src]</b> points at \the [target]!")
+						var/chase_message = pick(
+							"What would your mother think if she saw you now?",
+							"You should be ashamed of yourself!",
+							"Don't you know that crime hurts everyone?",
+							"People like you are why this station can't have nice things!",
+							"Running from Security is a crime, you know!",
+							"Stop right there, criminal scum!",
+							"Nobody breaks the law on my watch!")
+						speak(chase_message)
+					var/turf/olddist = get_dist(src, src.target)
+					walk_to(src, src.target,1,4)
+					if((get_dist(src, src.target)) >= (olddist))
+						src.frustration++
+					else
+						src.frustration = 0
+			else
+				src.frustration = 8
+
+		if(SECBOT_PREP_ARREST)		// preparing to arrest target
+
+			// see if he got away
+			if(get_dist(src, src.target) > 1)
+				src.anchored = 0
+				mode = SECBOT_HUNT
+				return
+			var/arrest_message = pick(
+				"Remember, crime doesn't pay!",
+				"Use your words, not your fists!",
+				"When in doubt, talk it out.",
+				"The weed of crime bears bitter fruit.",
+				"Just say \"No!\" to space drugs!",
+				"Violence is never the answer.",
+				"I'm not an officer, I'm a Security <em>monitor</em>.")
+			src.speak(arrest_message)
+
+			mode = SECBOT_IDLE
+			src.target = null
+			src.anchored = 0
+			src.last_found = world.time
+			src.frustration = 0
+
+		if(SECBOT_ARREST)		// arresting
+
+			src.anchored = 0
+			mode = SECBOT_IDLE
+			return
+
+
+		if(SECBOT_START_PATROL)	// start a patrol
+			if(path != null)
+				if(path.len > 0 && patrol_target)	// have a valid path, so just resume
+					mode = SECBOT_PATROL
+					return
+
+				else if(patrol_target)		// has patrol target already
+					spawn(0)
+						calc_path()		// so just find a route to it
+						if(path.len == 0)
+							patrol_target = 0
+							return
+						mode = SECBOT_PATROL
+
+
+				else					// no patrol target, so need a new one
+					find_patrol_target()
+					speak("Engaging patrol mode.")
+
+
+		if(SECBOT_PATROL)		// patrol mode
+			patrol_step()
+			spawn(5)
+				if(mode == SECBOT_PATROL)
+					patrol_step()
+
+		if(SECBOT_SUMMON)		// summoned to PDA
+			patrol_step()
+			spawn(4)
+				if(mode == SECBOT_SUMMON)
+					patrol_step()
+					sleep(4)
+					patrol_step()
+
+	return
+
+/obj/machinery/bot/secbot/beepsky/cheapsky/explode()
+	walk_to(src,0)
+	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	var/turf/Tsec = get_turf(src)
+
+	var/list/parts = list(/obj/item/clothing/head/cardborg, /obj/item/device/assembly/signaler, /obj/item/device/assembly/prox_sensor)
+	parts.Remove(pick(parts))
+	for(var/i in parts)
+		new i(Tsec)
+
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(3, 1, src)
+	s.start()
+
+	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+	O.New(O.loc)
+	qdel(src)
+
+//Cheapsky Construction
+
+/obj/item/weapon/secbot_assembly/cheapsky
+	name = "box/signaler assembly"
+	desc = "Some sort of bizarre assembly."
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "box_signaler"
+	item_state = "syringe_kit"
+	build_step = 0
+	created_name = "Officer Cheapsky"
+
+/obj/item/clothing/head/cardborg/attackby(var/obj/item/device/assembly/signaler/S, mob/user)
+	..()
+	if(!issignaler(S))
+		return
+
+	if(S.secured)
+		qdel(S)
+		var/obj/item/weapon/secbot_assembly/cheapsky/A = new /obj/item/weapon/secbot_assembly/cheapsky
+		user.put_in_hands(A)
+		to_chat(user, "You add the signaler to \the [src].")
+		user.drop_from_inventory(src)
+		qdel(src)
+
+/obj/item/weapon/secbot_assembly/cheapsky/attackby(obj/item/weapon/W, mob/user)
+	if(W.sharpness && W.sharpness_flags & SHARP_BLADE && (!src.build_step))
+		src.build_step++
+		src.overlays += image('icons/obj/aibots.dmi', "bs_hole")
+		to_chat(user, "You cut a hole in \the [src]!")
+
+	else if(isprox(W) && (src.build_step == 1))
+		if(user.drop_item(W))
+			to_chat(user, "You complete the Securitron! Beep boop.")
+			var/obj/machinery/bot/secbot/beepsky/cheapsky/S = new /obj/machinery/bot/secbot/beepsky/cheapsky
+			S.forceMove(get_turf(src))
+			S.name = src.created_name
+			qdel(W)
+			qdel(src)
+
+	else if(istype(W, /obj/item/weapon/pen))
+		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
+		src.created_name = t

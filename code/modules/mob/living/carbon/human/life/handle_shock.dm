@@ -13,8 +13,7 @@
 	else if(health < config.health_threshold_softcrit)
 		pain_shock_stage = max(pain_shock_stage, 61)
 	else
-		pain_shock_stage = min(pain_shock_stage, 160)
-		pain_shock_stage = max(pain_shock_stage - 1, 0)
+		pain_shock_stage = Clamp(pain_shock_stage - 1, 0, 160)
 		return
 
 	if(pain_shock_stage == 10)

@@ -719,3 +719,125 @@
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
+
+/atom/movable/proc/send_to_future(var/duration)	//don't override this, only call it
+	spawn()
+		actual_send_to_future(duration)
+
+/atom/movable/proc/actual_send_to_future(var/duration)	//don't call this, only override it
+	var/init_invisibility = invisibility
+	var/init_invuln = flags & INVULNERABLE
+	var/init_density = density
+	var/init_anchored = anchored
+	var/init_timeless = flags & TIMELESS
+
+	invisibility = INVISIBILITY_MAXIMUM
+	flags |= INVULNERABLE
+	density = 0
+	anchored = 1
+	flags |= TIMELESS
+	if(!ignoreinvert)
+		invertcolor(src)
+	timestopped = 1
+
+	for(var/atom/movable/AM in contents)
+		AM.send_to_future(duration)
+
+	sleep(duration)
+	timestopped = 0
+	if(!init_invuln)
+		flags &= ~INVULNERABLE
+	density = init_density
+	anchored = init_anchored
+	if(!init_timeless)
+		flags &= ~TIMELESS
+	appearance = falltempoverlays[src]
+	falltempoverlays -= src
+	ignoreinvert = initial(ignoreinvert)
+	invisibility = init_invisibility
+
+/datum/proc/send_to_past(var/duration)
+	return
+
+/datum/var/being_sent_to_past
+
+/atom/movable/send_to_past(var/duration)
+	var/current_loc = loc
+	var/static/list/resettable_vars = list(
+		"being_sent_to_past",
+		"invisibility",
+		"alpha",
+		"name",
+		"desc",
+		"dir",
+		"pixel_x",
+		"pixel_y",
+		"layer",
+		"transform",
+		"density",
+		"last_move",
+		"last_moved",
+		"anchored",
+		"move_speed",
+		"throw_speed",
+		"throw_range",
+		"timestopped",
+		"flags",
+		"gcDestroyed")
+	var/list/stored_vars = list()
+	for(var/x in resettable_vars)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	for(var/atom/movable/AM in contents)
+		AM.send_to_past(duration)
+	if(reagents)
+		reagents.send_to_past(duration)
+
+	being_sent_to_past = TRUE
+	spawn(duration)
+		if(istype(loc, /mob))
+			var/mob/M = loc
+			M.drop_item(src, force_drop = 1)
+		forceMove(current_loc)
+		for(var/x in stored_vars)
+			if(istype(stored_vars[x], /list))
+				var/list/L = stored_vars[x]
+				if(!L)
+					vars[x] = null
+					continue
+				else if(!L.len)
+					vars[x] = list()
+					continue
+			vars[x] = stored_vars[x]
+		update_icon()
+
+/datum/proc/reset_vars_after_duration(var/list/to_reset, var/duration, var/sending_to_past = FALSE)
+	if(!to_reset || !to_reset.len || !duration)
+		return
+	if(sending_to_past)
+		to_reset.Add("being_sent_to_past")
+	var/list/stored_vars = list()
+	for(var/x in to_reset)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	if(sending_to_past)
+		being_sent_to_past = TRUE
+	spawn(duration)
+		for(var/x in stored_vars)
+			if(istype(stored_vars[x], /list))
+				var/list/L = stored_vars[x]
+				if(!L)
+					vars[x] = null
+					continue
+				else if(!L.len)
+					vars[x] = list()
+					continue
+			vars[x] = stored_vars[x]

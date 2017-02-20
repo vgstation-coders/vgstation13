@@ -173,6 +173,7 @@
 	icon_state = "black_suit"
 	item_state = "bl_suit"
 	_color = "black_suit"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/really_black
@@ -699,3 +700,11 @@
 	_color = "vox-skelesuit"
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/under/rottensuit
+	name = "rotten suit"
+	desc = "This suit seems perfect for wearing underneath a disguise."
+	icon_state = "rottensuit"
+	item_state = "rottensuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	_color = "rottensuit"

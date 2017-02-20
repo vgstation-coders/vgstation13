@@ -35,8 +35,6 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_P_Y		-5*PIXEL_MULTIPLIER //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
-#define PI 3.1415
-
 #define R_IDEAL_GAS_EQUATION	8.314 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
 #define MARS_ATMOSPHERE		0.6 //kPa
@@ -281,6 +279,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define OPENCONTAINER	8192  // is an open container for chemistry purposes
 #define	NOREACT 		16384 // Reagents don't react inside this container.
+
+#define TIMELESS		32768 // Immune to time manipulation.
 
 #define ALL ~0
 #define NONE 0
@@ -568,6 +568,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define POWEROFF	4		// tbd
 #define MAINT		8			// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
+#define FORCEDISABLE 32 //forced to be off, such as by a random event
 
 //bitflags for door switches.
 #define OPEN	1
@@ -1179,6 +1180,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_CHEMS	   "chems"
 #define I_WIRES    "wires"
 #define I_GHOST    "poltergeist"
+#define I_ARTIFACT "artifacts"
+
 
 // delayNext() flags.
 #define DELAY_MOVE    1
@@ -1364,6 +1367,7 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
+#define CHANNEL_BALLOON				1020
 #define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
@@ -1379,12 +1383,6 @@ var/proccalls = 1
 //MALFUNCTION FLAGS
 #define COREFIRERESIST 1
 #define HIGHRESCAMS 2
-
-//RCD schematic bitflags.
-#define RCD_SELF_SANE	1	//Check proximity ourselves.
-#define RCD_GET_TURF	2	//If used on objs/mobs, get the turf instead.
-#define RCD_RANGE		4	//Use range() instead of adjacency. (old RPD behaviour.) (overriden by RCD_SELF_SANE)
-#define RCD_SELF_COST	8	//Handle energy usage ourselves. (energy availability still checked).
 
 //Mob sizes
 #define SIZE_TINY	1 //Mice, lizards, borers, kittens - mostly things that can fit into a man's palm

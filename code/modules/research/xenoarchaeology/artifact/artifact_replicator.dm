@@ -103,6 +103,7 @@
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
 			explosion(get_turf(src), -1, 2, 3, 3)
+			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
 /obj/machinery/replicator/attackby(var/obj/O, var/mob/user)
@@ -113,6 +114,7 @@
 		src.visible_message("<span class='warning'>\The [user] damages \the [src] with \the [O].</span>")
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [O] || attacked by [key_name(user)].")
 			explosion(get_turf(src), -1, 2, 3, 3)
 			qdel(src)
 	else
@@ -142,6 +144,7 @@
 		if(index > 0 && index <= construction.len)
 			src.visible_message("<span class='notice'>[bicon(src)] a [pick("light","dial","display","meter","pad")] on [src]'s front [pick("blinks","flashes")] [pick("red","yellow","blue","orange","purple","green","white")].[isobserver(usr) ? " Spooky." : ""]</span>")
 			spawning_types.Add(construction[construction[index]])
+			src.investigation_log(I_ARTIFACT, "|| [spawning_types[1]] || added to replication queue by [key_name(usr)][isobserver(usr) ? "'s ghostly hands" : ""].")
 			spawn_progress = 0
 			use_power = 2
 			icon_state = "borgcharger1(old)"

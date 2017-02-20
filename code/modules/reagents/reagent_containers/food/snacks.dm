@@ -1,4 +1,6 @@
 //Food items that are eaten normally and don't leave anything behind.
+#define ANIMALBITECOUNT 4
+
 
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
@@ -314,7 +316,7 @@
 	if(isanimal(M))
 		if(iscorgi(M)) //Feeding food to a corgi
 			M.delayNextAttack(10)
-			if(bitecount >= 4) //This really, really shouldn't be hardcoded like this, but sure I guess
+			if(bitecount >= ANIMALBITECOUNT) //This really, really shouldn't be hardcoded like this, but sure I guess
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
 				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 				var/mob/living/simple_animal/corgi/C = M
@@ -335,6 +337,20 @@
 			else
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
+			bitecount += 0.25
+			N.nutrition += 5
+			if(bitecount >= ANIMALBITECOUNT)
+				qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"bitecount",
+		"eatverb",
+		"wrapped",
+		"deepfried")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -864,6 +880,17 @@
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/chickenburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/veggieburger
+	name = "veggie burger"
+	desc = "Technically vegetarian."
+	icon_state = "veggieburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/veggieburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
@@ -4015,6 +4042,7 @@
 	name = "Potato Salad"
 	desc = "With 21st century technology, it could take as long as three days to make this."
 	icon_state = "potato_salad"
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad/New()
 	..()
@@ -4202,7 +4230,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange/New()
 	..()
-	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, "tricordazine"=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1)
+	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, TRICORDRAZINE=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1,
+	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
 
@@ -4295,6 +4324,7 @@
 	reagents.add_reagent(NOTHING, 20)
 	bitesize = 10
 	available_snacks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
+	available_snacks = shuffle(available_snacks)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf()
 	set name = "Pick no-fruit pie leaf"
@@ -4334,15 +4364,16 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
 	switching = 1
+	mouse_opacity = 2
 	spawn()
 		while(switching)
 			current_path = available_snacks[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
 			icon_state = initial(S.icon_state)
-			playsound(src, 'sound/misc/click.ogg', 50, 1)
-			sleep(1)
+			sleep(4)
 			if(counter == available_snacks.len)
 				counter = 0
+				available_snacks = shuffle(available_snacks)
 			counter++
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
@@ -4567,6 +4598,7 @@
 	desc = "Perfect for those occasions when engineering doesn't set up power."
 	icon_state = "midnightsnack"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack/New()
 	..()
@@ -4588,6 +4620,7 @@
 	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
 	icon_state = "starrynight"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad/New()
 	..()
@@ -4599,10 +4632,22 @@
 	desc = "Popular among cargo technicians who break into fruit crates."
 	icon_state = "fruitsalad"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+	name = "no-fruit salad"
+	desc = "Attempting to make this meal cycle through other types of salad was prohibited by special council decision after six weeks of intensive debate at the central hub for Galatic International Trade."
+	icon_state = "nofruitsalad"
+	bitesize = 4
+	trash = /obj/item/trash/snack_bowl
+
+/obj/item/weapon/reagent_containers/food/snacks/nofruitsalad/New()
+	..()
+	reagents.add_reagent(NOTHING,20)
 
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
 	name = "spicy cold noodles"
@@ -4832,3 +4877,38 @@
 	visible_message("<span class='warning'>\The [src] rattles maliciously!</span>")
 	if(loc.Adjacent(get_turf(O))) //Two reasons. First, prevent distance spooking. Second, don't move through border objects (windows)
 		Move(get_turf(O))
+
+/obj/item/weapon/reagent_containers/food/snacks/croissant
+	name = "croissant"
+	desc = "True French cuisine."
+	icon_state = "croissant"
+
+/obj/item/weapon/reagent_containers/food/snacks/croissant/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/poutine
+	name = "poutine"
+	desc = "Fries, cheese & gravy. Your arteries will hate you for this."
+	icon_state = "poutine"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutine/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bleachkipper
+	name = "bleach kipper"
+	desc = "Baby blue and very fishy."
+	icon_state = "bleachkipper"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
+	volume = 1
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bleachkipper/New()
+	..()
+	reagents.add_reagent(FISHBLEACH, 1)

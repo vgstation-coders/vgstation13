@@ -1,3 +1,7 @@
+#define MOUSEFAT 500
+#define MOUSESTARVE 200
+#define MOVECOST 1
+#define STANDCOST 0.5
 /mob/living/simple_animal/mouse
 	name = "mouse"
 	real_name = "mouse"
@@ -30,6 +34,14 @@
 	size = SIZE_TINY
 	holder_type = /obj/item/weapon/holder/animal/mouse
 	held_items = list()
+	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
+	var/is_fat = 0
+	var/can_chew_wires = 0
+	var/disease_carrier = 0
+
+	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
+	var/antibodies = 0
+
 
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
@@ -50,8 +62,69 @@
 			stat = CONSCIOUS
 			icon_state = "mouse_[_color]"
 			wander = 1
+			speak_chance = initial(speak_chance)
 		else if(prob(5))
 			emote("snuffles")
+
+	if(nutrition >= MOUSEFAT && is_fat == 0)
+		is_fat = 1
+		speed = 5
+		meat_amount = initial(meat_amount) + 1
+	else if (nutrition <= 400 && is_fat == 1) //400 = default nutrition value
+		is_fat = 0
+		speed = initial(speed)
+		meat_amount = initial(meat_amount)
+	if(nutrition <= MOUSESTARVE && prob(10) && client)
+		to_chat(src, "<span class = 'warning'>You are starving!</span>")
+		health -= 1
+
+
+
+	if(!isUnconscious())
+		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
+
+		if(!food_target)
+			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
+				food_target = C
+				break
+		if(!(food_target in can_see))
+			food_target = null
+		if(food_target)
+			step_towards(src, food_target)
+			if(Adjacent(food_target))
+				food_target.attack_animal(src)
+
+		if(prob(10))
+
+			if(!client)
+				if(can_chew_wires)
+					for(var/obj/structure/cable/C in can_see)
+						if(Adjacent(C))
+							C.attack_animal(src)
+							break
+						else
+							step_towards(src, C)
+							break
+				if(disease_carrier && virus2.len)
+					for(var/mob/living/carbon/human/H in can_see)
+						if(Adjacent(H))
+//							visible_message("[src] bites [H]")
+							H.attack_animal(src)
+							break
+						else
+							step_towards(src, H)
+							break
+			if(disease_carrier && virus2.len)
+				for(var/mob/living/M in view(1,src))
+//					visible_message("[src] breaths on [M]")
+					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
+
+
+		nutrition = max(0, nutrition - STANDCOST)
+
+/mob/living/simple_animal/mouse/Move()
+	..()
+	nutrition = max(0, nutrition - MOVECOST)
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -70,6 +143,28 @@
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
 
+/mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
+	..()
+	if(can_be_infected(target))
+		spread_disease_to(src, target, "Contact")
+
+/mob/living/simple_animal/mouse/proc/nutrstats()
+	stat(null, "Nutrition level - [nutrition]")
+
+/mob/living/simple_animal/mouse/Stat()
+	..()
+	if(statpanel("Status"))
+		nutrstats()
+
+/mob/living/simple_animal/mouse/examine(mob/user)
+	..()
+	if(!isDead())
+		if(is_fat)
+			to_chat(user, "<span class='info'>It seems well fed.</span>")
+		if(can_chew_wires)
+			to_chat(user, "<span class='notice'>It seems a bit frazzled.</span>")
+		if(disease_carrier && virus2.len)
+			to_chat(user, "<span class='blob'>It seems unwell.</span>") //Blob class is snot green
 
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0
@@ -87,6 +182,7 @@
 	var/pipe = start_ventcrawl()
 	if(pipe)
 		handle_ventcrawl(pipe)
+
 
 //copy paste from alien/larva, if that func is updated please update this one also
 /mob/living/simple_animal/mouse/verb/hide()
@@ -136,7 +232,6 @@
 
 ///mob/living/simple_animal/mouse/restrained() //Hotfix to stop mice from doing things with MouseDrop
 //	return 1
-
 
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
@@ -198,3 +293,9 @@
 		investigation_log(I_SINGULO,"has been consumed by a singularity")
 		gib()
 		return 0
+
+/mob/living/simple_animal/mouse/wire_biter
+	can_chew_wires = 1
+
+/mob/living/simple_animal/mouse/plague
+	disease_carrier = 1

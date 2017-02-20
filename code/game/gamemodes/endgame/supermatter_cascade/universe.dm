@@ -5,6 +5,9 @@
 
   decay_rate = 5 // 5% chance of a turf decaying on lighting update (there's no actual tick for turfs). Code that triggers this is lighting_overlays.dm, line #62.
 
+	// RGB, [0,1]
+	//var/list/LUMCOUNT_CASCADE=list(0.5,0,0)
+
 /datum/universal_state/supermatter_cascade/OnShuttleCall(var/mob/user)
 	if(user)
 		if(user.hallucinating())
@@ -56,25 +59,23 @@
 	suspend_alert = 1
 
 	AreaSet()
-	tcheck(80,1)
 	MiscSet()
-	tcheck(80,1)
 	APCSet()
-	tcheck(80,1)
 	OverlayAndAmbientSet()
-	tcheck(80,1)
 
 	// Disable Nar-Sie.
 	ticker.mode.eldergod=0
+	// TODO: If Nar-Sie is present, have it say "Well fuck this" and leave, for shits and giggles.
 
 	ticker.StartThematic("endgame")
 
 	PlayerSet()
-	tcheck(80,1)
+	CHECK_TICK
 	if(!endgame_exits.len)
 		message_admins("<span class='warning'><font size=7>SOMEBODY DIDNT PUT ENDGAME EXITS FOR THIS FUCKING MAP: [map.nameLong]</span></font>")
 	else
 		new /obj/machinery/singularity/narsie/large/exit(pick(endgame_exits))
+
 	spawn(rand(30,60) SECONDS)
 		command_alert(/datum/command_alert/supermatter_cascade)
 
@@ -133,38 +134,49 @@
 					A.party=1
 
 		A.updateicon()
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/OverlayAndAmbientSet()
 	set waitfor = FALSE
-	var/count = 0
-	for(var/turf/T in turfs)
-		count++
-		if(!(count % 50000))
-			sleep(world.tick_lag)
+	convert_all_parallax()
+	for(var/turf/T in world)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "end01")
 		else
 			if(T.z != map.zCentcomm)
 				T.underlays += "end01"
-		tcheck(80,1)
+		CHECK_TICK
 
+	// This ends up looking like shit.  - N3X
+	/*
 	for(var/datum/lighting_corner/C in global.all_lighting_corners)
 		if (!C.active)
 			continue
-			count++
-		if(!(count % 200000))
-			sleep(world.tick_lag)
 
 		if(C.z != map.zCentcomm)
-			C.update_lumcount(0.15, 0.5, 0)
-		tcheck(80,1)
+			C.update_lumcount(LUMCOUNT_CASCADE[1], LUMCOUNT_CASCADE[2], LUMCOUNT_CASCADE[3])
+		CHECK_TICK
+	*/
+
+/datum/universal_state/supermatter_cascade/proc/convert_all_parallax()
+	for(var/client/C in clients)
+		var/obj/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
+		if(PS)
+			convert_parallax(PS)
+		CHECK_TICK
+
+/datum/universal_state/supermatter_cascade/convert_parallax(obj/screen/plane_master/parallax_spacemaster/PS)
+	PS.color = list(
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	0,0.4,1,1) // Looks like RGBA? Currently #0066FF
 
 /datum/universal_state/supermatter_cascade/proc/MiscSet()
 	for (var/obj/machinery/firealarm/alm in machines)
 		if (!(alm.stat & BROKEN))
 			alm.ex_act(2)
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in power_machines)
@@ -174,7 +186,7 @@
 				APC.cell.charge = 0
 			APC.emagged = 1
 			APC.queue_icon_update()
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/proc/PlayerSet()
 	for(var/datum/mind/M in player_list)
@@ -183,14 +195,14 @@
 		if(M.current.stat!=2)
 			M.current.Knockdown(10)
 			M.current.flash_eyes(visual = 1)
-		tcheck(80,1)
+		CHECK_TICK
 
 		var/failed_objectives=0
 		for(var/datum/objective/O in M.objectives)
 			O.blocked=O.type != /datum/objective/survive
 			if(O.blocked)
 				failed_objectives=1
-			tcheck(80,1)
+			CHECK_TICK
 
 		if(!locate(/datum/objective/survive) in M.objectives)
 			var/datum/objective/survive/live = new("Escape collapsing universe through the rift on the research output.")
@@ -291,4 +303,4 @@
 			A.icon_state = "ai"
 
 			to_chat(A, "<span class='danger'><FONT size = 3>The massive blast of energy has fried the systems that were malfunctioning.  You are no longer malfunctioning.</FONT></span>")
-		tcheck(80,1)
+		CHECK_TICK

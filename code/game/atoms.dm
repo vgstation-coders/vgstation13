@@ -804,3 +804,13 @@ its easier to just keep the beam vertical.
 //Called when loaded by the map loader
 /atom/proc/spawned_by_map_element(datum/map_element/ME, list/objects)
 	return
+
+/atom/proc/toggle_timeless()
+	flags ^= TIMELESS
+	return flags & TIMELESS
+
+/atom/proc/is_visible()
+	if(invisibility || alpha <= 1)
+		return FALSE
+	else
+		return TRUE

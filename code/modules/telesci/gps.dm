@@ -99,9 +99,12 @@ var/list/SPS_list = list()
 			return
 
 		else
-			gpstag = a
-			name = "global positioning system ([gpstag])"
+			update_name(a)
 			return
+
+/obj/item/device/gps/proc/update_name(var/new_name)
+	gpstag = new_name
+	name = "global positioning system ([gpstag])"
 
 /obj/item/device/gps/science
 	icon_state = "gps-s"
@@ -134,6 +137,9 @@ var/global/secure_GPS_count = 0
 	secure_GPS_count++
 	name = "secure positioning system ([gpstag])"
 
+/obj/item/device/gps/secure/update_name(var/new_name)
+	gpstag = new_name
+	name = "secure positioning system ([gpstag])"
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer as mob)
 	if(emped)

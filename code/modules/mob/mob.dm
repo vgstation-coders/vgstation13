@@ -4,19 +4,6 @@
 /mob
 	plane = MOB_PLANE
 
-/obj/screen/fuckstat
-	name = "Toggle Stat"
-	desc = "Fuck It"
-	icon = 'icons/fuckstat.dmi'
-	icon_state = "fuckstat"
-
-/obj/screen/fuckstat/Click()
-	var/mob/M = usr
-	if(!istype(M))
-		return
-	M.stat_fucked = !M.stat_fucked
-
-var/global/obj/screen/fuckstat/FUCK = new
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
@@ -75,10 +62,16 @@ var/global/obj/screen/fuckstat/FUCK = new
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
+	qdel(on_clickon)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
+	on_clickon = null
+
+	if(transmogged_from)
+		qdel(transmogged_from)
+		transmogged_from = null
 
 	..()
 
@@ -251,6 +244,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	on_uattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
+	on_clickon = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -423,6 +417,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return 0
 
 /mob/proc/Life()
+	set waitfor = FALSE
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
@@ -1338,78 +1333,26 @@ var/list/slot_equipment_priority = list( \
 /mob/Stat()
 	..()
 
-	if(client && client.holder && client.inactivity < (1200))
+	if(client && client.holder && client.inactivity < 1200)
+		if(statpanel("MC"))
+			stat("Location:", "([x], [y], [z])")
+			stat("CPU:", "[world.cpu]")
+			stat("Instances:", "[world.contents.len]")
 
-		if (statpanel("Status"))	//not looking at that panel
-			stat(null, "Location:\t([x], [y], [z])")
-			stat(null, "CPU:\t[world.cpu]")
-			stat(null, "Instances:\t[world.contents.len]")
-			stat(null, FUCK)
-			if(!src.stat_fucked)
-				if (garbageCollector)
-					stat(null, "\tqdel - [garbageCollector.del_everything ? "off" : "on"]")
-					stat(null, "\ton queue - [garbageCollector.queue.len]")
-					stat(null, "\ttotal delete - [garbageCollector.dels_count]")
-					stat(null, "\tsoft delete - [soft_dels]")
-					stat(null, "\thard delete - [garbageCollector.hard_dels]")
-				else
-					stat(null, "Garbage Controller is not running.")
+			stat(null)
+			if(Master)
+				Master.stat_entry()
+			else
+				stat("Master Controller:", "ERROR")
+			if(Failsafe)
+				Failsafe.stat_entry()
+			else
+				stat("Failsafe Controller:", "ERROR")
+			if(Master)
+				stat(null)
+				for(var/datum/subsystem/SS in Master.subsystems)
+					SS.stat_entry()
 
-				if(processScheduler && processScheduler.getIsRunning())
-					var/datum/controller/process/process
-
-					process = processScheduler.getProcess("vote")
-					stat(null, "VOT\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("air")
-					stat(null, "AIR\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("sun")
-					stat(null, "SUN\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("ticker")
-					stat(null, "TIC\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("garbage")
-					stat(null, "GAR\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("lighting")
-					stat(null, "LIG\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("supply shuttle")
-					stat(null, "SUP\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("emergency shuttle")
-					stat(null, "EME\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("inactivity")
-					stat(null, "IAC\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("mob")
-					stat(null, "MOB([mob_list.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("disease")
-					stat(null, "DIS([active_diseases.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("machinery")
-					stat(null, "MAC([machines.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("power")
-					stat(null, "POM([power_machines.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("obj")
-					stat(null, "OBJ([processing_objects.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("pipenet")
-					stat(null, "PIP([pipe_networks.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("nanoui")
-					stat(null, "NAN([nanomanager.processing_uis.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("event")
-					stat(null, "EVE([events.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-				else
-					stat(null, "processScheduler is not running.")
 	if(client && client.inactivity < (1200))
 		if(listed_turf)
 			if(get_dist(listed_turf,src) > 1)
@@ -1820,6 +1763,136 @@ mob/proc/on_foot()
 
 /mob/acidable()
 	return 1
+
+/mob/proc/apply_vision_overrides()
+	if(see_in_dark_override)
+		see_in_dark = see_in_dark_override
+	if(see_invisible_override)
+		see_invisible = see_invisible_override
+
+/mob/actual_send_to_future(var/duration)
+	var/init_blinded = blinded
+	var/init_eye_blind = eye_blind
+	var/init_deaf = ear_deaf
+	overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+	blinded = 1
+	eye_blind = 1
+	ear_deaf = 1
+
+	..()
+
+	blinded = init_blinded
+	eye_blind = init_eye_blind
+	ear_deaf = init_deaf
+	clear_fullscreen("blind")
+
+/mob/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"lastattacker",
+		"lastattacked",
+		"attack_log",
+		"memory",
+		"sdisabilities",
+		"disabilities",
+		"eye_blind",
+		"eye_blurry",
+		"ear_deaf",
+		"ear_damage",
+		"stuttering",
+		"slurring",
+		"real_name",
+		"blinded",
+		"bhunger",
+		"druggy",
+		"confused",
+		"antitoxs",
+		"sleeping",
+		"resting",
+		"lying",
+		"lying_prev",
+		"canmove",
+		"candrop",
+		"lastpuke",
+		"cpr_time",
+		"bodytemperature",
+		"drowsyness",
+		"dizziness",
+		"jitteriness",
+		"nutrition",
+		"overeatduration",
+		"paralysis",
+		"stunned",
+		"knockdown",
+		"losebreath",
+		"nobreath",
+		"held_items",
+		"back",
+		"internal",
+		"s_active",
+		"wear_mask",
+		"radiation",
+		"stat",
+		"suiciding")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration + 1)
+		regenerate_icons()
+
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
+	if(!target_type)
+		if(transmogged_from)
+			transmogged_from.forceMove(loc)
+			if(key)
+				transmogged_from.key = key
+			transmogged_from.timestopped = 0
+			if(istype(transmogged_from, /mob/living/carbon))
+				var/mob/living/carbon/C = transmogged_from
+				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+					C.drop_item(C.wear_mask, force_drop = 1)
+			transmogged_from = null
+			for(var/atom/movable/AM in contents)
+				AM.forceMove(get_turf(src))
+			forceMove(null)
+			qdel(src)
+		return
+	if(!ispath(target_type, /mob))
+		EXCEPTION(target_type)
+		return
+	var/mob/M = new target_type(loc)
+	M.transmogged_from = src
+	if(key)
+		M.key = key
+	if(offer_revert_spell)
+		var/spell/change_back = new /spell/aoe_turf/revert_form
+		M.add_spell(change_back)
+	var/static/list/drop_on_transmog = list(
+		/obj/item/weapon/disk/nuclear,
+		/obj/item/weapon/holder,
+		/obj/item/device/paicard,
+		)
+	for(var/i in drop_on_transmog)
+		var/list/L = search_contents_for(i)
+		if(L.len)
+			for(var/A in L)
+				drop_item(A, force_drop = 1)
+	src.forceMove(null)
+	timestopped = 1
+
+/spell/aoe_turf/revert_form
+	name = "Revert Form"
+	desc = "Morph back into your previous form."
+	abbreviation = "RF"
+	charge_max = 1
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 0
+	hud_state = "wiz_mindswap"
+
+/spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
+	user.transmogrify()
+	user.remove_spell(src)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

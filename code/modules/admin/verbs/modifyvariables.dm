@@ -155,9 +155,8 @@ var/list/forbidden_varedit_object_types = list(
 
 	var/dir
 
-	if(variable in lockedvars)
-		if(!check_rights(R_DEBUG))
-			return
+	if(!can_edit_var(variable))
+		return
 
 	if(isnull(variable))
 		to_chat(usr, "Unable to determine variable type.")
@@ -342,11 +341,10 @@ var/list/forbidden_varedit_object_types = list(
 			to_chat(src, "A variable with this name ([param_var_name]) doesn't exist in this atom ([O])")
 			return
 
-		if(param_var_name == "holder" || param_var_name in lockedvars)
-			if(!check_rights(R_DEBUG))
-				return
-
 		variable = param_var_name
+
+		if(!can_edit_var(variable))
+			return
 
 		var_value = O.vars[variable]
 
@@ -406,9 +404,8 @@ var/list/forbidden_varedit_object_types = list(
 			return
 		var_value = O.vars[variable]
 
-		if(param_var_name == "holder" || variable in lockedvars)
-			if(!check_rights(R_DEBUG))
-				return
+		if(!can_edit_var(variable))
+			return
 
 	if(!autodetect_class)
 
@@ -644,3 +641,14 @@ var/list/forbidden_varedit_object_types = list(
 		to_chat(src, "New matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
 
 	return M
+
+/client/proc/can_edit_var(var/tocheck)
+	if(tocheck in nevervars)
+		to_chat(usr, "Editing this variable is forbidden.")
+		return FALSE
+
+	if(tocheck in lockedvars)
+		if(!check_rights(R_DEBUG))
+			return FALSE
+
+	return TRUE

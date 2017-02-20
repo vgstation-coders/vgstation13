@@ -35,10 +35,10 @@
 	if(locked)
 		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
 			emagged = 1
-			src.overlays += image('icons/obj/storage.dmi', icon_sparking)
+			src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
 			sleep(6)
 			overlays.len = 0
-			overlays += image('icons/obj/storage.dmi', icon_locking)
+			overlays += image('icons/obj/storage/storage.dmi', icon_locking)
 			locked = 0
 			to_chat(user, "You short out the lock on [src].")
 			return
@@ -109,7 +109,7 @@
 			else if ((src.code == src.l_code) && (src.emagged == 0) && (src.l_set == 1))
 				src.locked = 0
 				src.overlays = null
-				overlays += image('icons/obj/storage.dmi', icon_opened)
+				overlays += image('icons/obj/storage/storage.dmi', icon_opened)
 				src.code = null
 			else
 				src.code = "ERROR"
@@ -135,7 +135,7 @@
 // -----------------------------
 /obj/item/weapon/storage/secure/briefcase
 	name = "secure briefcase"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	icon_state = "secure"
 	item_state = "secure-r"
@@ -230,7 +230,7 @@
 
 /obj/item/weapon/storage/secure/safe
 	name = "secure safe"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "safe"
 	icon_opened = "safe0"
 	icon_locking = "safeb"

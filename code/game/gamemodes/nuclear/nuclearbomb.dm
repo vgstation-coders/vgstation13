@@ -270,12 +270,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	return
 
 /obj/machinery/nuclearbomb/blob_act()
-	if (src.timing == -1.0)
-		return
-	else
-		return ..()
 	return
-
 
 #define NUKERANGE 80
 /obj/machinery/nuclearbomb/proc/explode()
@@ -341,11 +336,23 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 	return
 
+/obj/machinery/nuclearbomb/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"deployable",
+		"extended",
+		"timeleft",
+		"timing",
+		"safety")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
 	icon_state = "nucleardisk"
 	item_state = "card-id"
+	flags = FPRINT | TIMELESS
 	w_class = W_CLASS_TINY
 	var/respawned = 0
 

@@ -6,7 +6,13 @@
 
 /datum/artifact_effect/forcefield/New()
 	..()
-	trigger = TRIGGER_TOUCH
+	effect = EFFECT_AURA
+	spawn(0)
+		if(trigger && !istype(trigger,/datum/artifact_trigger/touch/))
+			var/trigger_override = /datum/artifact_trigger/touch
+			qdel(trigger)
+			trigger = null
+			trigger = new trigger_override(src)
 
 /datum/artifact_effect/forcefield/ToggleActivate()
 	..()
