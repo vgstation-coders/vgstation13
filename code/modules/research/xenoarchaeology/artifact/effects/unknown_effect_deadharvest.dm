@@ -26,7 +26,10 @@
 						/mob/living/simple_animal/hostile/necro/zombie/putrid = 100,
 						/mob/living/simple_animal/hostile/necro/zombie/crimson = 250,)
 		if(3) //Necromorphs
-			mob_spawn = list(/mob/living/simple_animal/hostile/monster/necromorph = 150,) //More necromorph mobs when?
+			mob_spawn = list(/mob/living/simple_animal/hostile/necromorph = 150,
+							/mob/living/simple_animal/hostile/necromorph/leaper = 90,
+							/mob/living/simple_animal/hostile/necromorph/puker = 120,
+							/mob/living/simple_animal/hostile/necromorph/exploder = 75,) //More necromorph mobs NOW
 		if(4) //Randomized mobs
 			var/max_mobs = rand(3,7)
 			for(var/i=0 to max_mobs)

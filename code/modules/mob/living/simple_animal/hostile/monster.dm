@@ -1,38 +1,5 @@
 /mob/living/simple_animal/hostile/monster
 
-/mob/living/simple_animal/hostile/monster/necromorph
-	name = "necromorph"
-	desc = "A twisted husk of what was once a human, repurposed to kill."
-	speak_emote = list("roars")
-	icon = 'icons/mob/monster_big.dmi'
-	icon_state = "nmorph_standard"
-	icon_living = "nmorph_standard"
-	icon_dead = "nmorph_dead"
-	health = 80
-	maxHealth = 80
-	melee_damage_lower = 25
-	melee_damage_upper = 50
-	attacktext = "slashes"
-	attack_sound = 'sound/weapons/bladeslice.ogg'
-	faction = "creature"
-	speed = 4
-	size = SIZE_BIG
-	move_to_delay = 4
-	canRegenerate = 1
-	minRegenTime = 300
-	maxRegenTime = 1200
-
-	min_oxy = 0
-	max_oxy = 0
-	min_tox = 0
-	max_tox = 0
-	min_co2 = 0
-	max_co2 = 0
-	min_n2 = 0
-	max_n2 = 0
-	minbodytemp = 0
-	var/stance_step = 0
-
 /mob/living/simple_animal/hostile/monster/skrite
 	name = "skrite"
 	desc = "A highly predatory being with two dripping claws."
