@@ -6,7 +6,7 @@
 	density = 1
 	anchored = 0
 	on = 1 // ACTION
-	health = 50
+	health = 100
 	var/raging = 0
 	var/list/calledout = list()
 	var/shit_reagents = list(TOXIN,STOXIN,SLIMEJELLY,PLASMA,NANITES,HONKSERUM,SILENCER,DISCOUNT,AMATOXIN,PSILOCYBIN,CARPPHEROMONES,BUSTANUT,ROGAN,MOONROCKS,TOXICWASTE,CHEMICAL_WASTE,HORSEMEAT,OFFCOLORCHEESE,BONEMARROW,IRRADIATEDBEANS,MUTATEDBEANS,MINTTOXIN,MERCURY,MINDBREAKER,SPIRITBREAKER,RADIUM,URANIUM,CARPOTOXIN,ZOMBIEPOWDER,AMUTATIONTOXIN,PACID,CHLORALHYDRATE,LITHIUM,HELL_RAMEN)
@@ -40,7 +40,7 @@
 		M << sound('goon/sound/effects/dramatic.ogg', volume = 100) // F U C K temporary measure
 
 /obj/machinery/bot/chefbot/proc/why_is_it_bad()
-	return pick("IS FUCKING [pick("RAW", "BLAND", "UNDERCOOKED", "OVERCOOKED", "INEDIBLE", "RANCID", "DISGUSTING", "GARLICKY", "INEDIBLE", "SALTY", "NOT GOOD ENOUGH", "GREASY")]", "LOOKS LIKE [pick("IT'S NOT EVEN COOKED", "BABY VOMIT", "A MUSHY PIG'S ASS", "REGURGITATED DONKEY SHIT", "A PILE OF ROTTING FLIES", "REFINED CATBEAST PISS", "DOG DINNER", "ANEMIC BITS OF SHIT")]")
+	return pick("IS FUCKING [pick("RAW", "BLAND", "UNDERCOOKED", "OVERCOOKED", "INEDIBLE", "RANCID", "DISGUSTING", "GARLICKY", "INEDIBLE", "SALTY", "NOT GOOD ENOUGH", "GREASY")]", "LOOKS LIKE [pick("IT'S NOT EVEN COOKED", "BABY VOMIT", "A MUSHY PIG'S ASS", "REGURGITATED DONKEY SHIT", "A PILE OF ROTTING FLIES", "REFINED CATBEAST PISS", "IAN'S DINNER", "ANEMIC BITS OF SHIT")]")
 
 /obj/machinery/bot/chefbot/proc/yell()
 	if(prob(50))
@@ -68,7 +68,11 @@
 						is_thechef_the_chef = 1
 						break
 				if(M.wear_id)
-					if(findtext(M.wear_id:assignment, "chef") || findtext(M.wear_id:assignment, "cook"))
+					var/obj/item/weapon/card/id/id = M.wear_id
+					if(istype(M.wear_id, /obj/item/device/pda))
+						var/obj/item/device/pda/pda = M.wear_id
+						id = pda.id
+					if(findtext(id.assignment, "chef") || findtext(id.assignment, "cook"))
 						thechef = M
 						is_thechef_the_chef = 1
 						break
@@ -93,7 +97,7 @@
 					say("WHO COOKED THIS SHIT?")
 				sleep(2 SECONDS)
 				if(shitfood) // fix for cannot read null.name (the food sometimes no longer exists after a sleep (because people eat it I assume)) - haine
-					say("THIS [uppertext(shitfood.name)] [why_is_it_bad()][dork? ", DID YOU BUY YOUR LICENSE, [uppertext(dork)]?" : "!"]")
+					say("THIS [uppertext(shitfood.name)] [why_is_it_bad()][dork? ", DID YOU BUY YOUR FUCING COOKING LICENSE, [uppertext(dork)]?" : "!"]")
 				var/is_in_kitchen = 0
 				if(thechef && is_thechef_the_chef)
 					var/area/area = get_area(thechef)
@@ -164,12 +168,6 @@
 		emag_act(user, W)
 	else
 		src.visible_message("<span class = 'warning'>[user] hits [src] with [W]!</span>")
-		switch(W.damtype) // SEE THIS DAMAGE? IT'S RAAAAAAAAAAW!
-			if("fire")
-				src.health -= W.force * 0.5
-			if("brute")
-				src.health -= W.force * 0.5
-			else
 		if(src.health <= 0)
 			src.explode()
 
