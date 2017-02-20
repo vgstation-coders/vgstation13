@@ -2,7 +2,7 @@
 these cannot rename rooms that are in by default BUT can rename rooms that are created via blueprints/permit*/
 
 /obj/item/blueprints/construction_permit
-	name = "Construction Permit"
+	name = "construction permit"
 	desc = "An electronic permit designed to register a room for the use of APC and air alarms"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "permit"
@@ -12,9 +12,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
 
-/obj/item/blueprints/construction_permit/attack_self(mob/M as mob)
+/obj/item/blueprints/construction_permit/attack_self
 	interact()
-	return
 
 /obj/item/blueprints/construction_permit/Topic(href, href_list)
 	if ((usr.restrained() || usr.stat || usr.get_active_hand() != src))
