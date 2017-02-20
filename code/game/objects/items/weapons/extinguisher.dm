@@ -21,7 +21,6 @@
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
-	var/nozzle_state = 0
 	var/sprite_name = "fire_extinguisher"
 
 /obj/item/weapon/extinguisher/New()
