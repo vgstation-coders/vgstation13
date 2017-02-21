@@ -211,6 +211,7 @@
 
 /obj/structure/closet/crate/secure/large/reinforced/shard
 	name = "Supermatter Shard Crate"
+	req_access = list(access_engine)
 	var/payload = /obj/machinery/power/supermatter/shard
 	New()
 		..()
