@@ -58,7 +58,8 @@ var/list/bad_gremlin_items = list()
 		"<span class='danger'>\The [src] rubs its hands devilishly and starts messing with \the [M].</span>",
 		"<span class='danger'>\The [src] turns a small valve on \the [M].</span>"))
 
-	M.add_custom_fibers("Hairs from a gremlin.")
+	//Add a clue for detectives to find. The clue is only added if no such clue already existed on that machine
+	M.add_custom_fibers("Hairs from a gremlin.", 0)
 
 /mob/living/simple_animal/hostile/gremlin/CanAttack(atom/new_target)
 	if(bad_gremlin_items.Find(new_target.type))
