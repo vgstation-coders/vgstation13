@@ -428,15 +428,15 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	name = "tg17355 robot module"
 
 /obj/item/weapon/robot_module/tg17355/New()
-	src.modules += new /obj/item/borg/cyborghug(src)
-	src.modules += new /obj/item/device/harmalarm(src)
+	..()
 	src.modules += new /obj/item/weapon/cookiesynth(src)
+	src.modules += new /obj/item/device/harmalarm(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
 	src.modules += new /obj/item/weapon/inflatable_dispenser(src)
+	src.modules += new /obj/item/borg/cyborghug(src)
 	src.modules += new /obj/item/weapon/extinguisher(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
 	src.emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
-	sensor_augs = list("Medical", "Light Amplification", "Disable")
+	sensor_augs = list("Medical", "Disable")
 	fix_modules()
 
 /obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
