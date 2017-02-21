@@ -233,3 +233,6 @@
 /obj/structure/closet/crate/secure/large/reinforced/shard/crystal
 	name = "Supermatter Crystal Crate"
 	payload = /obj/machinery/power/supermatter
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	payload = null
