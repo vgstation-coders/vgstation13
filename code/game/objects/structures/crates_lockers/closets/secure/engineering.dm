@@ -210,8 +210,8 @@
 
 
 /obj/structure/closet/crate/secure/large/reinforced/shard
-	name = "Supermatter Shard Crate"
-	req_access = list(access_engine)
+	name = "supermatter shard crate"
+	req_access = list(access_engine_equip)
 	var/payload = /obj/machinery/power/supermatter/shard
 	New()
 		..()
@@ -232,7 +232,7 @@
 
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/crystal
-	name = "Supermatter Crystal Crate"
+	name = "supermatter crystal crate"
 	payload = /obj/machinery/power/supermatter
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/empty

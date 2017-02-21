@@ -1379,9 +1379,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Supermatter shard"
 	cost = 500 //So cargo thinks thrice before killing themselves with it. You're going to need a department account most likely.
 	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
-	containername = "Supermatter Shard Crate"
+	containername = "supermatter shard crate"
 	group = "Engineering"
-	access = access_engine
+	access = access_engine_equip
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
