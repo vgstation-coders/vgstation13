@@ -872,7 +872,7 @@ var/list/admin_verbs_mod = list(
 	M.check_dna(M)
 
 /client/proc/playernotes()
-	set name = "Show Player Info"
+	set name = "Show Player Notes"
 	set category = "Admin"
 	if(holder)
 		holder.PlayerNotes()
