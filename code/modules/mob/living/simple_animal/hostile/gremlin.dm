@@ -13,8 +13,8 @@ var/list/bad_gremlin_items = list()
 	icon_living = "gremlin"
 	icon_dead = "gremlin_dead"
 
-	health = 10
-	maxHealth = 10
+	health = 18
+	maxHealth = 18
 	size = SIZE_TINY
 	search_objects = 3 //Completely ignore mobs
 
@@ -29,6 +29,8 @@ var/list/bad_gremlin_items = list()
 
 	//Amount of ticks spent pathing to the target. If it gets above a certain amount, assume that the target is unreachable and stop
 	var/time_chasing_target = 0
+
+	//If you're going to make gremlins slower, increase this value - otherwise gremlins will abandon their targets too early
 	var/max_time_chasing_target = 2
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
@@ -37,7 +39,8 @@ var/list/bad_gremlin_items = list()
 
 		tamper(M)
 
-		LoseTarget() //Find something new to screw up
+		if(prob(50)) //50% chance to move to the next machine
+			LoseTarget()
 
 /mob/living/simple_animal/hostile/gremlin/proc/tamper(obj/machinery/M)
 	if(M.npc_tamper_act(src)) //The proc returns 1 if there's no interaction
@@ -54,6 +57,8 @@ var/list/bad_gremlin_items = list()
 		"<span class='danger'>\The [src] presses a few buttons on \the [M] and giggles mischievously.</span>",
 		"<span class='danger'>\The [src] rubs its hands devilishly and starts messing with \the [M].</span>",
 		"<span class='danger'>\The [src] turns a small valve on \the [M].</span>"))
+
+	M.add_custom_fibers("Hairs from a gremlin.")
 
 /mob/living/simple_animal/hostile/gremlin/CanAttack(atom/new_target)
 	if(bad_gremlin_items.Find(new_target.type))
@@ -82,11 +87,17 @@ var/list/bad_gremlin_items = list()
 	return ..()
 
 /mob/living/simple_animal/hostile/gremlin/proc/divide()
+	//Health is halved and then reduced by 2. A new gremlin is spawned with the same health as the parent
+	//Need to have at least 6 health for this, otherwise resulting health would be less than 1
+	if(health < 6)
+		return
+
+	visible_message("<span class='notice'>\The [src] splits into two!</span>")
 	var/mob/living/simple_animal/hostile/gremlin/G = new /mob/living/simple_animal/hostile/gremlin(get_turf(src))
 
 	G.inherit_mind(src)
 
-	src.health = round(src.health * 0.5)
+	src.health = round(src.health * 0.5) - 2
 	src.maxHealth = src.health
 	var/matrix/M = src.transform
 	if(!istype(M))
@@ -99,3 +110,14 @@ var/list/bad_gremlin_items = list()
 	G.health = src.health
 	G.maxHealth = src.maxHealth
 	G.transform = M
+
+/mob/living/simple_animal/hostile/gremlin/reagent_act(id, method, volume)
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(WATER, HOLYWATER, ICE) //Water causes gremlins to multiply
+			if(prob(50))
+				divide()
