@@ -73,7 +73,7 @@
 //		src.jetpack.name = "Placeholder Upgrade Item"
 	return
 
-obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
+/obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
 	for(var/obj/item/I in modules)
 		I.mouse_opacity = 2
 	if(emag)
