@@ -90,7 +90,7 @@
 		dat += "</TT>The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
 
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(usr, "\ref[src]", "[name]", 575, 400, src)
+	var/datum/browser/popup = new(usr, "\ref[src]", "[name]", 575, 400)
 	popup.set_content(dat)
 	popup.open()
 
