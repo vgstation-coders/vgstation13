@@ -2,6 +2,7 @@
 	name = "strange ball"
 	desc = "A complex metal ball with \"TG17355\" carved on its surface."
 	icon_state = "omoikaneball"
+	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/device/mmi/posibrain/search_for_candidates()
 	..()
