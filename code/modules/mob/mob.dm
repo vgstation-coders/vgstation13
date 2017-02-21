@@ -1871,6 +1871,7 @@ mob/proc/on_foot()
 		/obj/item/weapon/disk/nuclear,
 		/obj/item/weapon/holder,
 		/obj/item/device/paicard,
+		/obj/item/device/soulstone,
 		)
 	for(var/i in drop_on_transmog)
 		var/list/L = search_contents_for(i)
