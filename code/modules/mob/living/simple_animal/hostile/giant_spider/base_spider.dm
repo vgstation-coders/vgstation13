@@ -1,5 +1,3 @@
-var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_spider)
-
 #define SPIDER_MAX_PRESSURE_DIFF 50
 
 #define SPINNING_WEB 1
