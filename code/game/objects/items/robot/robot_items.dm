@@ -178,10 +178,8 @@
 		user.visible_message("<span class='big danger'>HUMAN HARM</font>")
 		playsound(get_turf(src), 'sound/AI/harmalarm.ogg', 70, 3)
 		for(var/mob/living/carbon/M in ohearers(9, user))
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(istype(H.ears, /obj/item/clothing/ears/earmuffs))
-					continue
+			if(M.earprot())
+				continue
 			to_chat(M, "<span class='warning'>[user] blares out a near-deafening siren from its speakers!</font>")
 			to_chat(M, "<span class='danger'>The siren pierces your hearing!</span>")
 			M.stuttering += 5 SECONDS
@@ -197,10 +195,8 @@
 		user.visible_message("<span class='big danger'>BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT</font>")
 		playsound(get_turf(src), 'sound/machines/warning-buzzer.ogg', 130, 3)
 		for(var/mob/living/carbon/M in hearers(6, user))
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(istype(H.ears, /obj/item/clothing/ears/earmuffs))
-					continue
+			if(M.earprot())
+				continue
 			M.sleeping = 0
 			M.stuttering += 30 SECONDS
 			M.ear_deaf += 10 SECONDS
