@@ -55,8 +55,9 @@
 	var/time
 	var/popcount = 0
 
-/datum/stat/population_stat/New()
+/datum/stat/population_stat/New(pop as num)
 	time = time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+	popcount = pop
 
 /datum/stat/death_stat
 	var/mob_typepath = "null"

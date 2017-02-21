@@ -58,6 +58,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/secrets,
 	/client/proc/shuttle_magic,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/togglelooc, /*toggles looc on/off for everyone*/
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
@@ -871,7 +872,7 @@ var/list/admin_verbs_mod = list(
 	M.check_dna(M)
 
 /client/proc/playernotes()
-	set name = "Show Player Info"
+	set name = "Show Player Notes"
 	set category = "Admin"
 	if(holder)
 		holder.PlayerNotes()

@@ -6,6 +6,7 @@
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
+	mech_flags = MECH_SCAN_ILLEGAL
 	var/target_type = null
 	var/cursed = FALSE
 	var/list/skin_to_mask = list(

@@ -4,7 +4,7 @@
 	var/effecttype = "unknown"		//purely used for admin checks ingame, not needed any more
 	var/effect = EFFECT_TOUCH
 	var/effectrange = 4
-	var/trigger = TRIGGER_TOUCH
+	var/datum/artifact_trigger/trigger
 	var/atom/holder
 	var/activated = 0
 	var/chargelevel = 0
@@ -23,11 +23,11 @@
 //6 = Interdimensional/bluespace? phasing
 //7 = Atomic synthesis
 
-/datum/artifact_effect/New(var/atom/location)
+//send 1 after location to generate a trigger for the effect, only do this on objects that have the required events!
+/datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0)
 	..()
 	holder = location
 	effect = rand(0,MAX_EFFECT)
-	trigger = rand(0,MAX_TRIGGER)
 
 	//this will be replaced by the excavation code later, but it's here just in case
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
@@ -46,6 +46,9 @@
 			//large range, long charge time
 			chargelevelmax = rand(20, 120)
 			effectrange = rand(20, 200)
+
+	if(generate_trigger)
+		GenerateTrigger()
 
 /datum/artifact_effect/proc/ToggleActivate(var/reveal_toggle = 1)
 	//so that other stuff happens first
@@ -118,6 +121,41 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 
 	return 1 - protected
 
+//effect does not fire and outputs a message
 /datum/artifact_effect/proc/Blocked()
 	var/atom/toplevelholder = get_holder_at_turf_level(holder)
 	toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] expells energy which is blocked by the containment field!</span>")
+	isolated = 1
+	spawn(10 SECONDS)
+		isolated = 0
+
+/datum/artifact_effect/proc/IsPrimary()
+	if(istype(holder, /obj/machinery/artifact))
+		var/obj/machinery/artifact/A = holder
+		if(A.primary_effect == src)
+			return 1
+	return 0
+
+/datum/artifact_effect/proc/IsContained()
+	if(istype(holder, /obj/machinery/artifact))
+		var/obj/machinery/artifact/A = holder
+		if(A.contained)
+			return 1
+	return 0
+
+/datum/artifact_effect/proc/GenerateTrigger()
+	if(trigger)
+		qdel(trigger); trigger = null
+	var/triggertype
+	if(effect == EFFECT_TOUCH)
+		triggertype = /datum/artifact_trigger/touch
+	else
+		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+
+	trigger = new triggertype(src)
+
+/datum/artifact_effect/Destroy()
+	if(trigger)
+		qdel(trigger); trigger = null
+	copy_for_battery = null
+	holder = null

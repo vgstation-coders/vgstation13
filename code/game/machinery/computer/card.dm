@@ -6,7 +6,6 @@
 	icon_state = "id"
 	req_access = list(access_change_ids)
 	circuit = "/obj/item/weapon/circuitboard/card"
-	var/obj/item/weapon/card/id/scan = null
 	var/obj/item/weapon/card/id/modify = null
 	var/mode = 0.0
 	var/printing = null
@@ -339,6 +338,14 @@
 		modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")
 
 	return 1
+
+/obj/machinery/computer/card/kick_act(mob/living/H)
+	..()
+	if(modify)
+		if(prob(50))
+			modify.forceMove(get_turf(src))
+			visible_message("<span class='notice'>\A [modify] pops out of \the [src]!</span>")
+			modify = null
 
 /obj/machinery/computer/card/centcom
 	name = "CentCom Identification Computer"

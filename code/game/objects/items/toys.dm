@@ -1249,6 +1249,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "latexballoon"
 	item_state = "lgloves"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/glove
 
@@ -1258,6 +1259,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "latexballoon_blow"
 	item_state = "latexballon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	col = null
 	can_be_strung = FALSE
 

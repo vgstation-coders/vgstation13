@@ -1197,6 +1197,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
 	group = "Engineering"
+	
+/datum/supply_packs/engine/prism
+	name = "Optical prisms"
+	contains = list(/obj/machinery/prism,
+					/obj/machinery/prism)
+	containername = "prism crate"
+	group = "Engineering"
 
 /datum/supply_packs/engine/PA
 	name = "Particle accelerator parts"
@@ -1371,10 +1378,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/machinery/power/supermatter/shard)
 	name = "Supermatter shard"
 	cost = 500 //So cargo thinks thrice before killing themselves with it. You're going to need a department account most likely.
-	containertype = /obj/structure/closet/crate/secure/engisec
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
 	containername = "supermatter shard crate"
 	group = "Engineering"
-	access = access_ce
+	access = access_engine_equip
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
@@ -1504,6 +1511,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure
 	containername = "bloodbag crate"
 	access = access_medical
+	group = "Medical"
+
+/datum/supply_packs/bloodbot
+	name = "Blood Donation Drive Crate"
+	contains = list(/obj/machinery/bot/bloodbot,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
+					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje)
+	cost = 1000
+	containertype = /obj/structure/largecrate
 	group = "Medical"
 
 /datum/supply_packs/wheelchair
@@ -1639,6 +1657,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "borer egg crate"
 	access = access_xenobiology
+	group = "Science"
+
+/datum/supply_packs/anomaly_container
+	name = "Anomaly container"
+	cost = 50
+	containertype = /obj/structure/largecrate/anomaly_container
+	containername = "anomaly container crate"
 	group = "Science"
 
 

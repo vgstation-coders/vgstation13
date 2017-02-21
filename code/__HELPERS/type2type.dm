@@ -68,6 +68,19 @@ proc/tg_jointext(list/list, glue = ",")
 /proc/file2list(filename, seperator="\n")
 	return splittext(return_file_text(filename),seperator)
 
+// Adds all lines to a list excluding line comments and blank lines.
+/proc/file2listExceptComments(filename, seperator="\n", comment_prefix="#", trim_all=TRUE)
+	. = list()
+	var/prefixlen=length(comment_prefix)
+	for(var/line in file2list(filename,seperator))
+		var/trim_line=trim(line)
+		// Drop empty lines.
+		if(trim_line == "")
+			continue
+		// Drop comments.
+		if(copytext(trim_line,1,1+prefixlen)==comment_prefix)
+			continue
+		. += (trim_all ? trim_line : line)
 
 //Turns a direction into text
 

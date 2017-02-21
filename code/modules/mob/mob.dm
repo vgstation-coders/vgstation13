@@ -1854,6 +1854,7 @@ mob/proc/on_foot()
 			transmogged_from = null
 			for(var/atom/movable/AM in contents)
 				AM.forceMove(get_turf(src))
+			forceMove(null)
 			qdel(src)
 		return
 	if(!ispath(target_type, /mob))
@@ -1866,6 +1867,17 @@ mob/proc/on_foot()
 	if(offer_revert_spell)
 		var/spell/change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
+	var/static/list/drop_on_transmog = list(
+		/obj/item/weapon/disk/nuclear,
+		/obj/item/weapon/holder,
+		/obj/item/device/paicard,
+		/obj/item/device/soulstone,
+		)
+	for(var/i in drop_on_transmog)
+		var/list/L = search_contents_for(i)
+		if(L.len)
+			for(var/A in L)
+				drop_item(A, force_drop = 1)
 	src.forceMove(null)
 	timestopped = 1
 
