@@ -210,12 +210,14 @@
 
 
 /obj/structure/closet/crate/secure/large/reinforced/shard
-	name = "Supermatter Shard Crate"
+	name = "supermatter shard crate"
+	req_access = list(access_engine_equip)
 	var/payload = /obj/machinery/power/supermatter/shard
 	New()
 		..()
 		sleep(2)
-		new payload(src)
+		if(payload)
+			new payload(src)
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/machinery/power/supermatter))
@@ -230,5 +232,8 @@
 
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/crystal
-	name = "Supermatter Crystal Crate"
+	name = "supermatter crystal crate"
 	payload = /obj/machinery/power/supermatter
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	payload = null
