@@ -39,7 +39,7 @@
 	wanted_objects = list(/obj/machinery/atmospherics/unary/vent_pump)
 
 	environment_smash = 0//spiderlings cannot smash tables and windows anymore when getting stomped
-	var/list/static/spider_types = list(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/nurse, /mob/living/simple_animal/hostile/giant_spider/hunter)
+	var/static/list/spider_types = list(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/nurse, /mob/living/simple_animal/hostile/giant_spider/hunter)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/New()
 	..()
