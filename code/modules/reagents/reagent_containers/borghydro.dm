@@ -108,13 +108,14 @@
 
 /obj/item/weapon/reagent_containers/borghypo/peace
 	name = "Peace Hypospray"
+	desc = "An tranquilizer synthesizer and injection system. These drugs are capable of inducing a state of relaxation, or euphoria."
 	reagent_ids = list(STOXIN,CRYPTOBIOLIN)
-	volume = 10
+	volume = 5
 	recharge_time = 20
 
 /obj/item/weapon/reagent_containers/borghypo/peace/hacked
 	desc = "Everything's peaceful in death!"
 	icon_state = "borghypo_s"
-	reagent_ids = list(STOXIN,CRYPTOBIOLIN,CYANIDE)
-	volume = 20
+	reagent_ids = list(CYANIDE)
+	volume = 10
 	recharge_time = 10
