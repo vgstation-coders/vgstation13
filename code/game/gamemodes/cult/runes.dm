@@ -659,12 +659,14 @@
 
 	var/mob/living/user = usr
 	while(this_rune && user && user.stat==CONSCIOUS && user.client && user.loc==this_rune.loc)
-		user.take_organ_damage(1, 0)
+		user.take_organ_damage(2, 1)
 		sleep(30)
 	if(D)
 		D.visible_message("<span class='warning'>[D] slowly dissipates into dust and bones.</span>", \
-		"<span class='warning'>You feel pain, as bonds formed between your soul and this homunculus break.</span>", \
+		"<span class='warning'>You feel horrible pain, as bonds formed between your soul and this homunculus break.</span>", \
 		"<span class='warning'>You hear faint rustle.</span>")
+		user.take_organ_damage(10, 10)
+		user.adjustCloneLoss(5)
 		D.dust()
 	return
 
