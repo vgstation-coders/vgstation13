@@ -240,7 +240,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<b>Hide runes: </b>Hide See Blood<br>
 				<b>Reveal runes: </b>Blood See Hide<br>
 				<b>Astral Journey: </b>Hell travel self<br>
-//				<b>Manifest a ghost : </b>Blood See Travel<br>
 				<b>Imbue a talisman: </b>Hell Technology Join<br>
 				<b>Sacrifice: </b>Hell Blood Join<br>
 				<b>Wall: </b>Destroy Travel Self<br>
