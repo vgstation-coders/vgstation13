@@ -306,4 +306,3 @@
 	field_radius = rand(0,200)
 	if(prob(50))
 		toggle()
-s
