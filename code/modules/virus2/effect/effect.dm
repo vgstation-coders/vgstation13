@@ -506,8 +506,6 @@
 /datum/disease2/effect/spiky_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
 	if(!count || skip)
 		return
-	if(!istype(toucher, /mob) || !istype(touched, /mob))
-		return
 	var/datum/organ/external/E
 	var/mob/living/carbon/human/H
 	if(toucher == mob)	//we bumped into someone else
@@ -1029,6 +1027,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	mob.adjustOxyLoss(175 - mob.getToxLoss() - mob.getFireLoss() - mob.getBruteLoss() - mob.getOxyLoss())
 	mob.updatehealth()
 	spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
+		mob.adjustOxyLoss(200) //Starting the suicide process over sometimes puts mobs in a cycle of repeatedly suiciding, somehow even after death
+		mob.updatehealth()
 		mob.suiciding = 0
 
 
