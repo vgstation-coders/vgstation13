@@ -659,7 +659,7 @@
 
 	var/mob/living/user = usr
 	while(this_rune && user && user.stat==CONSCIOUS && user.client && user.loc==this_rune.loc)
-		user.take_organ_damage(2, 1)
+		user.take_organ_damage(1, 1)
 		sleep(30)
 	if(D)
 		D.visible_message("<span class='warning'>[D] slowly dissipates into dust and bones.</span>", \
