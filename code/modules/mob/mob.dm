@@ -1872,6 +1872,7 @@ mob/proc/on_foot()
 		/obj/item/weapon/holder,
 		/obj/item/device/paicard,
 		/obj/item/device/soulstone,
+		/obj/item/device/mmi,
 		)
 	for(var/i in drop_on_transmog)
 		var/list/L = search_contents_for(i)
