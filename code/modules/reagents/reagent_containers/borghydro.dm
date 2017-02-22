@@ -108,7 +108,7 @@
 
 /obj/item/weapon/reagent_containers/borghypo/peace
 	name = "Peace Hypospray"
-	desc = "An tranquilizer synthesizer and injection system. These drugs are capable of inducing a state of relaxation, or euphoria."
+	desc = "A tranquilizer synthesizer and injection system. These drugs are capable of inducing a state of relaxation, or euphoria."
 	reagent_ids = list(STOXIN,CRYPTOBIOLIN)
 	volume = 5
 	recharge_time = 20
