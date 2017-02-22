@@ -4,7 +4,7 @@
 	if(!check_rights(R_POLLING))
 		return
 	if(!dbcon.IsConnected())
-		src << "<span class='danger'>Failed to establish database connection.</span>"
+		to_chat(src, "<span class='danger'>Failed to establish database connection.</span>")
 		return
 	var/polltype = input("Choose poll type.","Poll Type") in list("Single Option","Text Reply","Rating","Multiple Choice")
 	var/choice_amount = 0
@@ -41,7 +41,7 @@
 	if(query_time_later.NextRow())
 		var/checklate = text2num(query_time_later.item[1])
 		if(checklate)
-			src << "Datetime entered is not later than current server time."
+			to_chat(src, "Datetime entered is not later than current server time.")
 			return
 	var/adminonly
 	switch(alert("Admin only poll?",,"Yes","No","Cancel"))
@@ -72,13 +72,14 @@
 	if(polltype == "TEXT")
 		return
 	var/add_option = 1
+	var/i = 1
 	while(add_option)
-		var/option = input("Write your option","Option") as message
+		var/option = input("Write your option [i]","Option") as message
 		if(!option)
 			return
 		option = sanitizeSQL(option)
 		var/percentagecalc
-		switch(alert("Calculate option results as percentage?",,"Yes","No","Cancel"))
+		switch(alert("Calculate option [i] results as percentage?",,"Yes","No","Cancel"))
 			if("Yes")
 				percentagecalc = 1
 			if("No")
@@ -98,7 +99,7 @@
 			if(!maxval)
 				return
 			if(minval >= maxval)
-				src << "Minimum rating value can't be more than maximum rating value"
+				to_chat(src, "Minimum rating value can't be more than maximum rating value")
 				return
 			descmin = input("Optional: Set description for minimum rating","Minimum rating description") as message
 			if(descmin)
@@ -114,10 +115,10 @@
 			var/err = query_polladd_option.ErrorMsg()
 			log_game("SQL ERROR adding new poll option to table. Error : \[[err]\]\n")
 			return
-		switch(alert(" ",,"Add option","Finish","Cancel"))
+		else
+			i++
+		switch(alert("Add more options?",,"Add option","Finish"))
 			if("Add option")
 				add_option = 1
 			if("Finish")
 				add_option = 0
-			else
-				return
