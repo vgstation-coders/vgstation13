@@ -184,3 +184,104 @@
 	..()
 	_color = null
 	update_icon()
+
+/obj/item/weapon/melee/energy/hfmachete
+	name = "high-frequency machete"
+	desc = "A high-frequency broad blade used either as an implement or in combat like a short sword."
+	icon_state = "hfmachete0"
+	var/base_state = "hfmachete"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD
+	force = 13 // You can be crueler than that, Jack.
+	throwforce = 20
+	throw_speed = 8
+	throw_range = 8
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	siemens_coefficient = 1
+	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
+	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
+	var/event_key
+
+/obj/item/weapon/melee/energy/hfmachete/update_icon()
+	icon_state = "[base_state][active]"
+
+/obj/item/weapon/melee/energy/hfmachete/attack_self(mob/living/user)
+	toggleActive(user)
+	add_fingerprint(user)
+
+/obj/item/weapon/melee/energy/hfmachete/proc/toggleActive(mob/user, var/togglestate = "")
+	switch(togglestate)
+		if("on")
+			active = 1
+		if("off")
+			active = 0
+		else
+			active = !active
+	if(active)
+		force = 25
+		throwforce = 6
+		throw_speed = 3
+		sharpness = 1.7
+		sharpness_flags += HOT_EDGE
+		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
+		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
+		event_key = user.on_moved.Add(src, "mob_moved")
+	else
+		force = initial(force)
+		throwforce = initial(throwforce)
+		throw_speed = initial(throw_speed)
+		sharpness = initial(sharpness)
+		sharpness_flags = initial(sharpness_flags)
+		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
+		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
+		user.on_moved.Remove(event_key)
+		event_key = null
+	update_icon()
+
+/obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
+	if(!usr)
+		return ..()
+	spawn()
+		playsound(src, get_sfx("machete_throw"),30, 0)
+		animate(src, transform = turn(matrix(), -30), time = 1, loop = -1)
+		animate(transform = turn(matrix(), -60), time = 1)
+		animate(transform = turn(matrix(), -90), time = 1)
+		animate(transform = turn(matrix(), -120), time = 1)
+		animate(transform = turn(matrix(), -150), time = 1)
+		animate(transform = null, time = 1)
+		while(throwing)
+			sleep(5)
+		animate(src)
+	..(target, range, speed, override, fly_speed = 3)
+
+/obj/item/weapon/melee/energy/hfmachete/throw_impact(atom/hit_atom)
+	if(isturf(hit_atom))
+		for(var/mob/M in hit_atom)
+			playsound(M, get_sfx("machete_throw_hit"),60, 0)
+	..()
+
+/obj/item/weapon/melee/energy/hfmachete/attack(target as mob, mob/living/user as mob)
+	if(isliving(target))
+		playsound(target, get_sfx("machete_hit"),50, 0)
+	if(clumsy_check(user) && prob(50))
+		to_chat(user, "<span class='warning'>Christ.</span>")
+		playsound(target, get_sfx("machete_hit"),50, 0)
+		user.take_organ_damage(active ? 25 : 13)
+		return
+	..()
+
+/obj/item/weapon/melee/energy/hfmachete/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(iscarbon(holder) && active)
+		for(var/obj/effect/plantsegment/P in range(holder,0))
+			qdel(P)
+
+/obj/item/weapon/melee/energy/hfmachete/attackby(obj/item/weapon/W, mob/living/user)
+	..()
+	if(istype(W, /obj/item/weapon/melee/energy/hfmachete))
+		to_chat(user, "<span class='notice'>You combine the two [W] together, making a single scissor-bladed weapon! You feel fucking invincible!</span>")
+		qdel(W)
+		W = null
+		qdel(src)
+		var/B = new /obj/item/weapon/bloodlust(user.loc)
+		user.put_in_hands(B)

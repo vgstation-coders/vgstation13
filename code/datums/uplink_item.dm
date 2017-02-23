@@ -413,6 +413,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/melee/energy/sword
 	cost = 8
 
+/datum/uplink_item/dangerous/machete
+	name = "High-Frequency Machete"
+	desc = "A broad blade used either as an implement or in combat. When inactive can be used as an powerful throwing weapon and when activated its damage is comparable to an Energy Sword."
+	item = /obj/item/weapon/melee/energy/hfmachete
+	cost = 8
+
 /datum/uplink_item/dangerous/emp
 	name = "5 EMP Grenades"
 	desc = "A box that contains 5 EMP grenades. Useful to disrupt communication and silicon lifeforms."
