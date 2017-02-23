@@ -72,6 +72,9 @@
 	if(transmogged_from)
 		qdel(transmogged_from)
 		transmogged_from = null
+	if(transmogged_to)
+		qdel(transmogged_to)
+		transmogged_to = null
 
 	..()
 
@@ -1844,17 +1847,21 @@ mob/proc/on_foot()
 				var/mob/living/carbon/C = transmogged_from
 				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
 					C.drop_item(C.wear_mask, force_drop = 1)
+			var/mob/returned_mob = transmogged_from
+			returned_mob.transmogged_to = null
 			transmogged_from = null
 			for(var/atom/movable/AM in contents)
 				AM.forceMove(get_turf(src))
 			forceMove(null)
 			qdel(src)
+			return returned_mob
 		return
 	if(!ispath(target_type, /mob))
 		EXCEPTION(target_type)
 		return
 	var/mob/M = new target_type(loc)
 	M.transmogged_from = src
+	transmogged_to = M
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
@@ -1874,6 +1881,7 @@ mob/proc/on_foot()
 				drop_item(A, force_drop = 1)
 	src.forceMove(null)
 	timestopped = 1
+	return M
 
 /spell/aoe_turf/revert_form
 	name = "Revert Form"
