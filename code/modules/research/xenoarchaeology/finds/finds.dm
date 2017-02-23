@@ -559,11 +559,15 @@
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_ROBOT)
-			//ancient robots
+			//ancient robots?
 			anomaly_factor = 2
 			apply_material_decorations = 0
 			apply_image_decorations = 0
-			new_item = new /obj/item/device/mmi/posibrain/strangeball(src.loc)
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/device/mmi/posibrain/strangeball
+			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
 
 	var/decorations = ""
 	if(apply_material_decorations)
