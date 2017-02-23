@@ -107,6 +107,7 @@
 	icon_state = "dualsaber0"
 	name = "double-bladed energy sword"
 	desc = "Handle with care."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 3
 	throwforce = 5.0
 	throw_speed = 1
@@ -153,7 +154,6 @@
 	icon_state = "bananabunch0"
 	name = "banana bunch"
 	desc = "Potential for some serious chaos."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 3
 	throwforce = 5.0
 	throw_speed = 1
