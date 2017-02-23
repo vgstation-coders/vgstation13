@@ -135,9 +135,9 @@
 				return
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
-				src.current_temperature = min(HEATER_MAX_TEMPERATURE, src.current_temperature+amount)
+				src.current_temperature = min(FREEZER_MAX_TEMPERATURE, src.current_temperature+amount)
 			else
-				src.current_temperature = max((HEATER_MIN_TEMPERATURE + temp_offset), src.current_temperature+amount)
+				src.current_temperature = max((FREEZER_MIN_TEMPERATURE + temp_offset), src.current_temperature+amount)
 	src.updateUsrDialog()
 	src.add_fingerprint(usr)
 	return
