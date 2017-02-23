@@ -189,4 +189,4 @@ Thus, the two variables affect pump operation are set in New():
 	src.update_icon()
 	src.updateUsrDialog()
 
-#undef
+#undef MAX_PRESSURE
