@@ -404,3 +404,12 @@
 	icon_state = "rottenshoes"
 	item_state = "rottenshoes"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+
+/obj/item/clothing/shoes/winterboots
+	name = "winter boots"
+	desc = "Boots lined with 'synthetic' animal fur."
+	icon_state = "winterboots"
+	item_state = "winterboots"
+	species_fit = list(VOX_SHAPED)
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots

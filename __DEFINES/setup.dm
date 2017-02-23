@@ -129,6 +129,7 @@ var/global/disable_vents     = 0
 #define GLOVES_HEAT_CONDUCTIVITY		0.4	//For normal gloves.
 #define INS_GLOVES_HEAT_CONDUCTIVITY	0.2	//For some heat insulated gloves (black and yellow.)
 
+#define SNOWGEAR_HEAT_CONDUCTIVITY 		0.2	// for now
 #define SPACESUIT_HEAT_CONDUCTIVITY		0	// until a time where space is no longer cold
 
 // Doors!
