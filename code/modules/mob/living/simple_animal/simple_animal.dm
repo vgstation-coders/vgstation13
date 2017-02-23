@@ -737,6 +737,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	for(var/turf/T in range(src,1))
 		if(!istype(T, /turf/space))
 			spaced = 0
+			break
+		for(var/atom/A in T.contents)
+			if(istype(A,/obj/structure/lattice) \
+				|| istype(A, /obj/structure/window) \
+				|| istype(A, /obj/structure/grille))
+				spaced = 0
+				break
 	if(spaced)
 		walk(src,0)
 	return !spaced
