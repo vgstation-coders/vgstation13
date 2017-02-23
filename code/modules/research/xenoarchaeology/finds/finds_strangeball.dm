@@ -38,6 +38,10 @@
 	density = 1
 
 /obj/item/device/mmi/posibrain/strangeball/strangeegg/attack_hand(mob/user)
+	if(ishuman(user) && user:gloves)
+		to_chat(user, "<b>You touch \the [src]</b> with your gloved hands, [pick("but nothing of note happens","but nothing happens","but nothing interesting happens","but you notice nothing different","but nothing seems to have happened")].")
+		return
+	to_chat(user, "<span class='notice'>You touch \the [src].</span>")
 	return search_for_candidates()
 
 /obj/item/device/mmi/posibrain/strangeball/strangeegg/attack_paw(mob/user)
