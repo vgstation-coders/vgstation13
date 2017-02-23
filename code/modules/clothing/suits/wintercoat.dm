@@ -11,14 +11,15 @@
 	var/is_hooded = 0
 	var/nohood = 0
 	var/obj/item/clothing/head/winterhood/hood
-	action_button_name = "Toggle Hood"
+	actions_types = list(/datum/action/item_action/toggle_hood)
 
 /obj/item/clothing/suit/wintercoat/New()
-	..()
 	if(!nohood)
 		hood = new(src)
 	else
-		action_button_name = null
+		actions_types = null
+
+	..()
 
 /obj/item/clothing/head/winterhood
 	name = "winter hood"
