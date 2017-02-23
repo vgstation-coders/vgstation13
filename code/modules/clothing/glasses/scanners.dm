@@ -32,24 +32,22 @@
 	if(on)
 		if(iscarbon(M))
 			apply_color(M)
-
+	..()
+	
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
 			if(iscarbon(user))
 				remove_color(user)
-
+	..()
+	
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
 
 	if (!on)
 		icon_state += "off"
 
-/obj/item/clothing/glasses/scanner/verb/toggle()
-	set category = "Object"
-	set name = "Toggle"
-	set src in usr
-
+/obj/item/clothing/glasses/scanner/proc/toggle()
 	var/mob/C = usr
 	if (!usr)
 		if (!ismob(loc))
@@ -102,7 +100,7 @@
 	origin_tech = Tc_MAGNETS + "=2"
 	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 	see_in_dark = 8
-	action_button_name = "Toggle Night Vision Goggles"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
 	color_matrix = list(0.33,0.33,0.33,0,
@@ -131,7 +129,7 @@
 	vision_flags = SEE_TURFS
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
-	action_button_name = "Toggle Meson Scanner"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
@@ -153,7 +151,7 @@
 	desc = "Allows one to see the original layout of the pipe and cable network."
 	icon_state = "material"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
-	action_button_name = "Toggle Material Scanner"
+	actions_types = list(/datum/action/item_action/toggle_goggles)
 	// vision_flags = SEE_OBJS
 
 	var/list/image/showing = list()

@@ -191,6 +191,7 @@
 	name = "\improper fedora"
 	icon_state = "fedora"
 	item_state = "fedora"
+	actions_types = list(/datum/action/item_action/tip_fedora)
 	desc = "A great hat ruined by being within fifty yards of you."
 	flags = FPRINT
 
@@ -202,13 +203,18 @@
 			to_chat(wearer, "<span class=\"warning\">You feel positively euphoric!</span>")
 
 //TIPS FEDORA
-/obj/item/clothing/head/fedora/verb/tip_fedora()
-	set name = "Tip Fedora"
-	set category = "Object"
-	set desc = "Show that CIS SCUM who's boss." //I'm pretty sure you're mincing memes here, but whatever
-
+/obj/item/clothing/head/fedora/proc/tip_fedora()
 	usr.visible_message("[usr] tips \his fedora.", "You tip your fedora.")
 
+/datum/action/item_action/tip_fedora
+	name = "Tip Fedora"
+	
+/datum/action/item_action/tip_fedora/Trigger()
+	var/obj/item/clothing/head/fedora/T = target
+	if(!istype(T))
+		return
+	T.tip_fedora()
+		
 /obj/item/clothing/head/fedora/white
 	name = "white fedora"
 	icon_state = "fedora_white"

@@ -52,7 +52,7 @@
 	if(user)
 		user.put_in_hands(src)
 		add_fingerprint(user)
-
+				
 /obj/item/clothing/accessory/proc/on_accessory_interact(mob/user, delayed = 0)
 	if(!attached_to)
 		return

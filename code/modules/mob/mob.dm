@@ -219,13 +219,6 @@
 		if(client)
 			client.screen -= zone_sel
 		zone_sel = null
-	if(hud_used)
-		for(var/obj/screen/item_action/actionitem in hud_used.item_action_list)
-			if(client)
-				client.screen -= actionitem
-				client.images -= actionitem.overlay
-			returnToPool(actionitem)
-			hud_used.item_action_list -= actionitem
 
 /mob/proc/cultify()
 	return
