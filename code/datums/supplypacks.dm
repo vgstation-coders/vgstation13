@@ -358,6 +358,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "airbag crate"
 	group = "Supplies"
 
+/datum/supply_packs/weights
+	name = "Barbells"
+	contains = list(/obj/item/weapon/barbell,
+					/obj/item/weapon/barbell,
+					/obj/item/weapon/barbell,
+					/obj/item/weapon/barbell)
+	cost = 20
+	containertype = /obj/structure/closet/crate
+	containername = "barbell crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume

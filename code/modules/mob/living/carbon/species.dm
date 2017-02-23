@@ -60,6 +60,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/heat_level_2 = 400  // Heat damage level 2 above this point.
 	var/heat_level_3 = 1000 // Heat damage level 2 above this point.
 
+	var/muscle_mass = 50
+
 	var/fireloss_mult = 1
 
 	var/darksight = 2

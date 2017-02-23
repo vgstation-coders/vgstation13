@@ -733,6 +733,7 @@
 #include "code\game\objects\items\stacks\tiles\tiles.dm"
 #include "code\game\objects\items\weapons\airlock_painter.dm"
 #include "code\game\objects\items\weapons\armblade.dm"
+#include "code\game\objects\items\weapons\barbell.dm"
 #include "code\game\objects\items\weapons\barricade_kit.dm"
 #include "code\game\objects\items\weapons\boomerang.dm"
 #include "code\game\objects\items\weapons\cards_ids.dm"

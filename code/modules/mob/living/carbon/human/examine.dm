@@ -199,6 +199,17 @@
 	if(M_DWARF in mutations)
 		msg += "[t_He] [t_is] a short, sturdy creature fond of drink and industry.\n"
 
+	if(species.muscle_mass <= 100)
+		msg += "[t_He] [t_is] of an average physique.\n"
+	else if (species.muscle_mass <= 200)
+		msg += "[t_He] [t_is] of an above average physique. \n"
+	else if (species.muscle_mass <= 300)
+		msg += "[t_He] [t_is] extremely buff. Wow. \n"
+	else if (species.muscle_mass <= 1500)
+		msg += "[t_He] [t_has] huge, pulsating muscles. \n"
+	else if (species.muscle_mass > 1500)
+		msg += "[t_He] [t_has] enormous, veiny muscles. Roids? \n"
+
 	if (isUnconscious())
 		msg += "<span class='warning'>[t_He] [t_is]n't responding to anything around [t_him] and seems to be asleep.</span>\n"
 		if((isDead() || src.health < config.health_threshold_crit) && distance <= 3)

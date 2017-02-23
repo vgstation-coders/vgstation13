@@ -78,6 +78,7 @@
 /mob/living/carbon/human/get_unarmed_damage()
 	var/damage = rand(0, species.max_hurt_damage)
 	damage += species.punch_damage
+	damage += species.muscle_mass/100 //At 2000 muscle you get 20 bonus damage. Knock 'em out!
 
 	if(mutations.Find(M_HULK))
 		damage += 5
@@ -97,6 +98,15 @@
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		base_chance += G.bonus_knockout
+
+	if (species.muscle_mass <= 200)
+		base_chance += 5
+	else if (species.muscle_mass <= 300)
+		base_chance += 10
+	else if (species.muscle_mass <= 1500)
+		base_chance += 15
+	else if (species.muscle_mass > 1500)
+		base_chance += 30
 
 	base_chance *= victim.knockout_chance_modifier()
 
