@@ -120,7 +120,7 @@ var/global/list/disease2_list = list()
 		logged_virusfood=0
 
 	//Moving to the next stage
-	if(clicks > stage*100 && prob(10))
+	if(clicks > stage*100 && prob(stageprob))
 		if(stage == max_stage)
 			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antigens [antigens2string(antigen)].")
 			src.cure(mob)
