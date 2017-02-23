@@ -180,3 +180,5 @@
 /datum/action/item_action/toggle_voicechanger
 	name = "Toggle Voice Changer"
 	
+/datum/action/item_action/toggle_hood
+	name = "Toggle Hood"
