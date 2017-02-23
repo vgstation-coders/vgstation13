@@ -5,6 +5,9 @@
 #define DNA2_BUF_UE 2
 #define DNA2_BUF_SE 4
 
+#define MAX_RADIATION_DURATION 20
+#define MAX_RADIATION_INTENSITY 10
+
 //list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0),
 /datum/dna2/record
 	var/datum/dna/dna = null
@@ -649,8 +652,8 @@
 	src.connected.locked = lock_state
 
 /obj/machinery/computer/scan_consolenew/npc_tamper_act(mob/living/L)
-	radiation_duration = rand(1,10)
-	radiation_intensity= rand(1,4)
+	radiation_duration = rand(1, MAX_RADIATION_DURATION)
+	radiation_intensity= rand(1, MAX_RADIATION_INTENSITY)
 
 	pulse_radiation(L)
 
@@ -684,8 +687,8 @@
 
 	if (href_list["radiationDuration"])
 		if (text2num(href_list["radiationDuration"]) > 0)
-			if (src.radiation_duration < 20)
-				src.radiation_duration += 2
+			if (src.radiation_duration < MAX_RADIATION_DURATION)
+				src.radiation_duration = min(radiation_duration + 2, MAX_RADIATION_DURATION)
 		else
 			if (src.radiation_duration > 2)
 				src.radiation_duration -= 2
@@ -693,7 +696,7 @@
 
 	if (href_list["radiationIntensity"])
 		if (text2num(href_list["radiationIntensity"]) > 0)
-			if (src.radiation_intensity < 10)
+			if (src.radiation_intensity < MAX_RADIATION_INTENSITY)
 				src.radiation_intensity++
 		else
 			if (src.radiation_intensity > 1)
@@ -1069,3 +1072,6 @@
 
 
 /////////////////////////// DNA MACHINES
+
+#undef MAX_RADIATION_DURATION
+#undef MAX_RADIATION_INTENSITY

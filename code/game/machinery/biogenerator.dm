@@ -555,5 +555,5 @@
 /obj/machinery/biogenerator/npc_tamper_act(mob/living/L)
 	//Start making random item
 	var/item_to_make = pick(recipes)
-	log_game("[L]([L.key]) is trying to make a [item_to_make] in \the [src]")
+	log_game("[key_name(L)] is trying to make a [item_to_make] in \the [src]")
 	create_product(item_to_make)
