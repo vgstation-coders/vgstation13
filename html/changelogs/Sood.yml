@@ -1,2 +1,3 @@
 author: Sood
-changes: []
+changes:
+ - experiment: Power output from radiation collectors now follows a combination of a logarithmic curve and the old linear equation. This means that you will get diminishing returns from radiation sources as pulse strength exceeds around 2000. In other words, this nerfs energy collection from singulos and SMEs both when working very large bursts of radiation, but lower values get a significant bump. Values may be tweaked as needed, and revert may follow if this turns out to be an awful idea or something.

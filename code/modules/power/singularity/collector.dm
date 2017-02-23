@@ -1,3 +1,5 @@
+#define COLLECTOR_RAD_COEFFICIENT 25 // don't ask me how I got this number anymore
+
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
 var/global/list/rad_collectors = list()
 
@@ -128,7 +130,11 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/proc/receive_pulse(const/pulse_strength)
 	if (P && active)
-		var/power_produced = P.air_contents.toxins * pulse_strength * 3.5 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
+		// pre-logarithmic curve
+		// var/power_produced = P.air_contents.toxins * pulse_strength * 3.5 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
+		var/power_produced = COLLECTOR_RAD_COEFFICIENT * sqrt(pulse_strength * P.air_contents.toxins * log(pulse_strength ^ P.air_contents.toxins))
+		// For anyone interested: this was the result of the square root of a log curve and the old linear equation.
+		// Log curve was y=log (x^z)* 175
 		add_avail(power_produced)
 		last_power = power_produced
 
@@ -153,4 +159,3 @@ var/global/list/rad_collectors = list()
 		last_power = 0
 
 	update_icons()
-
