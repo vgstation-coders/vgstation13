@@ -571,9 +571,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			on = 1
 		update_icon()
 
-		message_admins("[L]([L.key]) has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
+		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
 	else if(occupant && !ejecting) //Eject occupant
-		message_admins("[L]([L.key]) has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
+		message_admins("[key_name(L)] has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
 		go_out()
 
 

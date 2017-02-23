@@ -416,6 +416,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	var/amount = rand(1,25)
 	var/reagent = pick(dispensable_reagents)
-	message_admins("[L] ([key_name(L)]) has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
+	message_admins("[key_name(L)] has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
 
 	dispense_reagent(reagent, amount)
