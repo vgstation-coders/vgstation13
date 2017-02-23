@@ -271,16 +271,22 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	var/blood = 0
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,species.blood_color)
-	else
-		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
-		if(istype(WC) && !WC.attack_cooldown)
+		blood = 1
+	var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
+	if(istype(WC))
+		if(!WC.attack_cooldown)
 			WC.crush(src,species.blood_color)
-		else
-			return //Don't make blood
-	blood_splatter(loc,src,1)
+			blood = 1
+	var/obj/machinery/bot/cleanbot/roomba/R = AM
+	if(istype(R))
+		if(R.armed)
+			R.annoy(src)
+	if(blood)
+		blood_splatter(loc,src,1)
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers

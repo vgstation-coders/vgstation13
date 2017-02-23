@@ -342,6 +342,47 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	qdel(src)
 	return
 
+
+/obj/machinery/bot/cleanbot/roomba
+	desc = "A small, plate-like cleaning robot. It looks quite concerned."
+	icon_state = "roombot0"
+	icon_initial = "roombot"
+	var/armed = 0
+
+/obj/machinery/bot/cleanbot/roomba/attackby(var/obj/item/W, mob/user)
+	..()
+	if(istype(W,/obj/item/weapon/kitchen/utensil/fork) && !armed)
+		if(user.drop_item(W))
+			qdel(W)
+			to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It looks increasingly concerned about its current situation.</span>")
+			armed++
+	else if(istype(W, /obj/item/weapon/lighter) && armed == 1)
+		if(user.drop_item(W))
+			qdel(W)
+			to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It appears to roll its sensor in disappointment before carrying on with its work.</span>")
+			armed++
+			icon_state = "roombot_battle[on]"
+			icon_initial = "roombot_battle"
+
+/obj/machinery/bot/cleanbot/roomba/Crossed(atom/A)
+	if(isliving(A))
+		var/mob/living/L = A
+		if(prob(30))
+			annoy(L)
+	..()
+
+/obj/machinery/bot/cleanbot/roomba/proc/annoy(var/mob/living/L)
+	switch(armed)
+		if(1)
+			L.visible_message("<span class = 'warning'>\The [src] [pick("prongs","pokes","pricks")] \the [L]", "<span class = 'warning'>The little shit, \the [src], stabs you with its attached fork!</span>")
+			var/damage = rand(1,5)
+			L.adjustBruteLoss(damage)
+		if(2)
+			L.visible_message("<span class = 'warning'>\The [src] prongs and singes \the [L]</span>", "<span class = 'warning'>The little shit, \the [src], singes and stabs you with its attached fork and lighter!</span>")
+			var/damage = rand(3,12)
+			L.adjustBruteLoss(damage)
+			L.adjustFireLoss(damage/2)
+
 /obj/item/weapon/bucket_sensor/attackby(var/obj/item/W, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
@@ -353,6 +394,18 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			to_chat(user, "<span class='notice'>You add the robot arm to the bucket and sensor assembly. Beep boop!</span>")
 			user.drop_from_inventory(src)
 			qdel(src)
+
+	else if(istype(W, /obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/metal/M = W
+		if(M.amount >= 5)
+			if(user.drop_item(M))
+				M.use(5)
+				var/turf/T = get_turf(loc)
+				var/obj/machinery/bot/cleanbot/A = new /obj/machinery/bot/cleanbot/roomba(T)
+				A.name = created_name
+				to_chat(user, "<span class='notice'>You add the metal sheets onto and around the bucket and sensor assembly. Beep boop!</span>")
+				user.drop_from_inventory(src)
+				qdel(src)
 
 	else if (istype(W, /obj/item/weapon/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
