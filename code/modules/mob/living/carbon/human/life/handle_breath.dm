@@ -60,11 +60,14 @@
 
 				breath = loc.remove_air(breath_moles)
 
-				if(!is_lung_ruptured())
-					if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
-						if(prob(5)) //5 % chance for a lung rupture if air intake is less of a fifth, or more than five times the threshold
+				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
+					if(prob(15)) //15 % chance for lung damage if air intake is less of a fifth, or more than five times the threshold
+						to_chat(world, "lung damage on [src]")
+						L.damage += 1
+					if(!is_lung_ruptured())
+						var/chance_break = (L.damage / L.min_bruised_damage)*50 //So, 1/15 = 3% chance to rupture, 2/15 = 7% chance, etc.
+						if(prob(chance_break))
 							rupture_lung()
-
 				//Handle filtering
 				var/block = 0
 				if(wear_mask)
