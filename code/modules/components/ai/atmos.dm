@@ -18,6 +18,8 @@
 	var/oxygen_alert = 0
 	var/toxins_alert = 0
 
+	var/min_overheat_temp=40
+
 /datum/component/ai/atmos_checker/RecieveSignal(var/message_type, var/list/args)
 	switch(message_type)
 		if("life")
@@ -40,7 +42,7 @@
 		var/datum/gas_mixture/Environment = T.return_air()
 
 		if(Environment)
-			if(abs(Environment.temperature - controller.getBodyTemperature()) > 40)
+			if(abs(Environment.temperature - controller.getBodyTemperature()) > min_overheat_temp)
 				SendSignal(COMSIG_ADJUST_BODYTEMP, list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
 
 			if(min_oxy)
