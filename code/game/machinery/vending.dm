@@ -184,7 +184,7 @@ var/global/num_vending_terminals = 1
 				var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
 				emptypack.icon_state = P.icon_state
 				emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
-				if(P.stock.len)
+				if(P.stock.len) //this is true when we're dealing with a CUSTOM fill
 					for(var/v_item in P.stock)
 						if(istype(v_item, /obj/item))
 							var/obj/item/I = v_item
@@ -217,18 +217,11 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/check_for_custom_vendor()
 	//We check if there's an in-game object instead of a typepath inside the vending machine.
-	for(var/item in products)
+	for(var/item in products) //We only support the product list for the moment. This means no custom premium/contraband products
 		if(!ispath(item))
 			return TRUE
-		return FALSE
-	/*for(var/item in contraband) //We only support the default list for the moment. Anyways, this was shitcode
-		if(!ispath(item))
-			return true
-		return false
-	for(var/item in premium)
-		if(!ispath(item))
-			return true
-		return false*/
+
+	return FALSE
 
 /obj/machinery/vending/proc/normal_refill(obj/structure/vendomatpack/P, mob/user)
 	for (var/datum/data/vending_product/D in product_records)
@@ -245,9 +238,9 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/custom_refill(obj/structure/vendomatpack/P)
 	for (var/datum/data/vending_product/D in product_records)
 		if (!D.amount)
-			products.Remove(D.product_path) //For the moment custom machines only supports product lists
+			products.Remove(D.product_path)
 			product_records.Remove(D)
-			del(D)
+			qdel(D)
 
 	if(P.stock.len)
 		for(var/v_item in P.stock)
@@ -314,6 +307,9 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.display_color = pick("red", "blue", "green")
+		if(check_for_custom_vendor())
+			var/obj/O = R.product_path
+			R.price = O.price
 
 		if (hidden)
 			R.category=CAT_HIDDEN

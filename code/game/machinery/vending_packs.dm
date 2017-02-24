@@ -18,11 +18,16 @@
 /obj/structure/vendomatpack/custom
 	name = "empty recharge pack"
 	targetvendomat = /obj/machinery/vending/sale
-	icon_state = "generic"
+	icon_state = "sale"
+
+/obj/structure/vendomatpack/custom/New()
+	..()
+	overlays += image('icons/obj/vending_pack.dmi',"emptypack")
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item))
 		if(user.drop_item(O, src))
+			to_chat(user, "--------------------------")
 			stock.Add(O)
 
 /obj/structure/vendomatpack/undefined
