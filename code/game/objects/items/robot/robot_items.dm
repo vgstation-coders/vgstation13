@@ -42,7 +42,7 @@
 	icon_state = "shock"
 
 /obj/item/borg/cyborghug
-	name = "Hugging Module"
+	name = "hugging module"
 	icon_state = "hugmodule"
 	icon = 'icons/obj/borg_items.dmi'
 	desc = "For when a someone really needs a hug."
@@ -152,7 +152,7 @@
 				crush_cooldown = FALSE
 
 /obj/item/device/harmalarm
-	name = "Sonic Harm Prevention Tool"
+	name = "sonic harm prevention tool"
 	desc = "Releases a harmless blast that confuses most organics. For when the harm is JUST TOO MUCH"
 	icon_state = "megaphone"
 	var/cooldown = 0
