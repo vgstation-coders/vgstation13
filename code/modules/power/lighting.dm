@@ -250,6 +250,8 @@ var/global/list/obj/machinery/light/alllights = list()
 					set_light(0)
 			else
 				use_power = 2
+				if((light_color != brightness_color) && !brightness_color)//set_light doesn't set to null values
+					brightness_color = "#FFFFFF"//so we'll use pure white as our value
 				set_light(brightness_range, brightness_power, brightness_color)
 	else
 		use_power = 1
