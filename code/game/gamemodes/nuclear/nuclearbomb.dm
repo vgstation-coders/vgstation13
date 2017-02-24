@@ -389,5 +389,5 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	if(!get_turf(src))
 		var/atom/A
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
-		world.log << "\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]"
+		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
 		qdel(src)
