@@ -182,10 +182,10 @@
 				continue
 			to_chat(M, "<span class='warning'>[user] blares out a near-deafening siren from its speakers!</font>")
 			to_chat(M, "<span class='danger'>The siren pierces your hearing!</span>")
-			M.stuttering += 5 SECONDS
-			M.ear_deaf += 1 SECONDS
-			M.dizziness += 5 SECONDS
-			M.confused +=  5 SECONDS
+			M.stuttering += 5
+			M.ear_deaf += 1
+			M.dizziness += 5
+			M.confused +=  5
 			M.Jitter(5)
 		cooldown = world.time + 20 SECONDS
 		add_gamelogs(user, "used a [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
@@ -198,8 +198,8 @@
 			if(M.earprot())
 				continue
 			M.sleeping = 0
-			M.stuttering += 30 SECONDS
-			M.ear_deaf += 10 SECONDS
+			M.stuttering += 30
+			M.ear_deaf += 10
 			M.Knockdown(7)
 			M.Jitter(30)
 		cooldown = world.time + 1 MINUTES
