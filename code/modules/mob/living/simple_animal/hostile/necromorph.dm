@@ -75,7 +75,7 @@
 	update_climb()
 	if(!isUnconscious())
 		if(stance == HOSTILE_STANCE_IDLE && !client)
-			var/list/can_see = view(get_turf(src), vision_range/1.5) //Nothing too close for comfort
+			var/list/can_see = view(get_turf(src), vision_range/2) //Nothing too close for comfort
 			var/all_clear = 1
 			for(var/mob/living/L in can_see)
 				if(!istype(L, /mob/living/simple_animal/hostile/necromorph) && !(L.isDead()))
@@ -227,4 +227,4 @@
 	if(T) //The first time it runs, it won't work, it'll runtime
 		playsound(T, 'sound/effects/splat.ogg', 50, 1)
 		T.add_vomit_floor(src, 1, 1, 1)
-	sleep(2) //Slow the fuck down, hyperspeed vomit
+	sleep(1) //Slow the fuck down, hyperspeed vomit
