@@ -40,6 +40,8 @@
 /obj/item/device/mmi/posibrain/strangeball/strangeegg/attack_hand(mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/U = user
+		if(U.incapacitated() || U.lying || searching)
+			return
 		if(U.gloves)
 			to_chat(U, "<b>You touch \the [src]</b> with your gloved hands, [pick("but nothing of note happens","but nothing happens","but nothing interesting happens","but you notice nothing different","but nothing seems to have happened")].")
 			return
