@@ -1,5 +1,5 @@
 /obj/item/weapon/cookiesynth
-	name = "Cookie Synthesizer"
+	name = "cookie synthesizer"
 	desc = "A self-recharging device used to rapidly deploy cookies."
 	icon = 'icons/obj/RCD.dmi'
 	icon_state = "rcd"
