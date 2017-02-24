@@ -53,6 +53,7 @@
 	if(ismob(target))
 		var/mob/living/mob_target = target
 		if(mob_target.isDead() && !istype(mob_target, /mob/dead/observer))
+			set waitfor = 0
 			visible_message("<span class = 'notice'>\The [src] starts to take a bite out of \the [target].</span>")
 			stop_automated_movement = 1
 			if(do_after(src, mob_target, 50, needhand = FALSE))
@@ -134,17 +135,20 @@
 /mob/living/simple_animal/hostile/wendigo/evolved/check_evolve()
 	if(consumes > EVOLEVOLV)
 		var/number_of_alpha
-		for(var/mob/living/simple_animal/hostile/wendigo/alpha/A in world)
+		for(var/mob/living/simple_animal/hostile/wendigo/alpha/A in wendigo_alphas)
 			var/datum/zLevel/L = get_z_level(A)
 			if(istype(L,/datum/zLevel/centcomm))
 				continue //Damn it admins
 			if(A.isDead())
 				continue
 			number_of_alpha += 1
+			break
 		if(!number_of_alpha)
 			var/mob/living/simple_animal/hostile/wendigo/alpha/new_wendigo = new /mob/living/simple_animal/hostile/wendigo/alpha(src.loc)
 			new_wendigo.names = names
 			qdel(src)
+
+var/list/wendigo_alphas()
 
 /mob/living/simple_animal/hostile/wendigo/alpha
 	desc = "You can't help but feel that, no matter what, you should have brought a bigger gun."
@@ -168,9 +172,17 @@
 	var/punch_throw_speed = 1
 	var/punch_throw_range = 10
 
+/mob/living/simple_animal/hostile/wendigo/alpha/New()
+	..()
+	wendigo_alphas += src
+
+/mob/living/simple_animal/hostile/wendigo/alpha/Destroy()
+	..()
+	wendigo_alphas -= src
+
 /mob/living/simple_animal/hostile/wendigo/alpha/Life()
 	..()
-	if(health < 300 && enraged == 0)
+	if(health < (maxHealth/2) && enraged == 0)
 		visible_message("<span class = 'warning'>\The [src] seems to slow down, but looks angrier</span>","You're not sure what that sound was, but it didn't sound good at all")
 		enraged = 1
 		speed = 7
