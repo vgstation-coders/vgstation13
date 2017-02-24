@@ -5,7 +5,7 @@
 
 /datum/component/ai/RecieveSignal(var/message_type, var/list/args)
 	switch(message_type)
-		if("state") // list("name"="statename")
+		if(COMSIG_STATE) // list("name"="statename")
 			state = args["name"]
 
 /datum/component/ai/New(var/datum/component_container/CC)

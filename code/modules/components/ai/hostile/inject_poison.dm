@@ -6,7 +6,7 @@
 
 /datum/component/ai/inject_poison/RecieveSignal(var/message_type, var/list/args)
 	switch(message_type)
-		if("attacking target") // list("target"=A)
+		if(COMSIG_ATTACKING) // list("target"=A)
 			OnAttackingTarget(args["target"])
 		else
 			..(message_type, args)

@@ -17,7 +17,7 @@
 
 /mob/living/component/Life()
 	..()
-	container.SendSignal("life",list())
+	container.SendSignal(COMSIG_LIFE,list())
 
 
 /mob/living/component/Destroy()

@@ -3,9 +3,9 @@
 
 /datum/component/ai/escape_confinement/RecieveSignal(var/message_type, var/list/args)
 	switch(message_type)
-		if("life"): // no arguments
+		if(COMSIG_LIFE)
 			OnLife()
-			
+
 /datum/component/ai/escape_confinement/proc/OnLife()
 	life_tick++
 	var/mob/M = container.holder

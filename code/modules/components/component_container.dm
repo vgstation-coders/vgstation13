@@ -1,6 +1,3 @@
-#define COMPONENT_ADDED "component added"
-#define COMPONENT_REMOVING "component removed"
-
 // Basic multipurpose component container.
 /datum/component_container
 
@@ -37,7 +34,7 @@
 		types.Add(new_type)
 	var/datum/component/C = new new_type(src)
 	components.Add(C)
-	SendSignal(COMPONENT_ADDED,list("component"=C))
+	SendSignal(COMSIG_COMPONENT_ADDED,list("component"=C))
 	return C
 
 /**
@@ -46,7 +43,7 @@
  * @param C The component to remove
  */
 /datum/component_container/proc/RemoveComponent(var/datum/component/C)
-	SendSignal(COMPONENT_REMOVING,list("component"=C))
+	SendSignal(COMSIG_COMPONENT_REMOVING,list("component"=C))
 	components.Remove(C)
 	types.Cut()
 	for(var/datum/component/CC in components)

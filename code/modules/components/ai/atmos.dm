@@ -26,69 +26,70 @@
 			..(message_type, args)
 
 /datum/component/ai/atmos_checker/proc/OnLife()
-	if(isliving(container.holder))
-		if(container.holder & INVULNERABLE)
-			return 1
+	if(!isliving(container.holder))
+		return 1
+	if(container.holder & INVULNERABLE)
+		return 1
 
-		var/atmos_suitable = 1
+	var/atmos_suitable = 1
 
-		var/atom/A = container.holder.loc
+	var/atom/A = container.holder.loc
 
-		if(isturf(A))
-			var/turf/T = A
-			var/datum/gas_mixture/Environment = T.return_air()
+	if(isturf(A))
+		var/turf/T = A
+		var/datum/gas_mixture/Environment = T.return_air()
 
-			if(Environment)
-				if(abs(Environment.temperature - controller.getBodyTemperature()) > 40)
-					SendSignal("add body temp", list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
+		if(Environment)
+			if(abs(Environment.temperature - controller.getBodyTemperature()) > 40)
+				SendSignal(COMSIG_ADJUST_BODYTEMP, list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
 
-				if(min_oxy)
-					if(Environment.oxygen < min_oxy)
-						atmos_suitable = 0
-						oxygen_alert = 1
-					else
-						oxygen_alert = 0
+			if(min_oxy)
+				if(Environment.oxygen < min_oxy)
+					atmos_suitable = 0
+					oxygen_alert = 1
+				else
+					oxygen_alert = 0
 
-				if(max_oxy)
-					if(Environment.oxygen > max_oxy)
-						atmos_suitable = 0
+			if(max_oxy)
+				if(Environment.oxygen > max_oxy)
+					atmos_suitable = 0
 
-				if(min_tox)
-					if(Environment.toxins < min_tox)
-						atmos_suitable = 0
+			if(min_tox)
+				if(Environment.toxins < min_tox)
+					atmos_suitable = 0
 
-				if(max_tox)
-					if(Environment.toxins > max_tox)
-						atmos_suitable = 0
-						toxins_alert = 1
-					else
-						toxins_alert = 0
+			if(max_tox)
+				if(Environment.toxins > max_tox)
+					atmos_suitable = 0
+					toxins_alert = 1
+				else
+					toxins_alert = 0
 
-				if(min_n2)
-					if(Environment.nitrogen < min_n2)
-						atmos_suitable = 0
+			if(min_n2)
+				if(Environment.nitrogen < min_n2)
+					atmos_suitable = 0
 
-				if(max_n2)
-					if(Environment.nitrogen > max_n2)
-						atmos_suitable = 0
+			if(max_n2)
+				if(Environment.nitrogen > max_n2)
+					atmos_suitable = 0
 
-				if(min_co2)
-					if(Environment.carbon_dioxide < min_co2)
-						atmos_suitable = 0
+			if(min_co2)
+				if(Environment.carbon_dioxide < min_co2)
+					atmos_suitable = 0
 
-				if(max_co2)
-					if(Environment.carbon_dioxide > max_co2)
-						atmos_suitable = 0
+			if(max_co2)
+				if(Environment.carbon_dioxide > max_co2)
+					atmos_suitable = 0
 
-		//Atmos effect
-		if(controller.getBodyTemperature() < minbodytemp)
-			fire_alert = 2
-			SendSignal("adjust brute loss", cold_damage_per_tick)
-		else if(controller.getBodyTemperature() > maxbodytemp)
-			fire_alert = 1
-			SendSignal("adjust brute loss", heat_damage_per_tick)
-		else
-			fire_alert = 0
+	//Atmos effect
+	if(controller.getBodyTemperature() < minbodytemp)
+		fire_alert = 2
+		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=cold_damage_per_tick))
+	else if(controller.getBodyTemperature() > maxbodytemp)
+		fire_alert = 1
+		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=heat_damage_per_tick))
+	else
+		fire_alert = 0
 
-		if(!atmos_suitable)
-			SendSignal("adjust brute loss", unsuitable_damage)
+	if(!atmos_suitable)
+		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=unsuitable_damage))

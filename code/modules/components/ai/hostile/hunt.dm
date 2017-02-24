@@ -11,15 +11,15 @@
 
 /datum/component/ai/hunt/RecieveSignal(var/message_type, var/list/args)
 	switch(message_type)
-		if("life"): // no arguments
+		if(COMSIG_LIFE) // no arguments
 			OnLife()
 
-		if("bumped") // list("movable"=AM)
+		if(COMSIG_BUMPED) // list("movable"=AM)
 			OnBumped(args["movable"])
 
 /datum/component/ai/hunt/proc/OnLife()
 	life_tick++
-	testing("HUNT LIFE, controller=[!isnull(controller)], busy=[controller && controller.getBusy()], state=[controller && controller.getState()]")
+	//testing("HUNT LIFE, controller=[!isnull(controller)], busy=[controller && controller.getBusy()], state=[controller && controller.getState()]")
 	if(!target_holder)
 		target_holder = GetComponent(/datum/component/ai/target_holder)
 	if(!controller)
@@ -31,22 +31,22 @@
 			var/atom/target = target_holder.GetBestTarget(src, "target_evaluator")
 			//testing("  IDLE STANCE, target=\ref[target]")
 			if(!isnull(target))
-				SendSignal("target", list("target"=target))
-				SendSignal("state", list("state"=HOSTILE_STANCE_ATTACK))
+				SendSignal(COMSIG_TARGET, list("target"=target))
+				SendSignal(COMSIG_STATE, list("state"=HOSTILE_STANCE_ATTACK))
 			else
-				SendSignal("move", list("loc" = pick(orange(movement_range, src))))
+				SendSignal(COMSIG_MOVE, list("loc" = pick(orange(movement_range, src))))
 		if(HOSTILE_STANCE_ATTACK)
 			var/atom/target = target_holder.GetBestTarget(src, "target_evaluator")
 			testing("  ATTACK STANCE, target=\ref[target]")
 			if(!isnull(target))
 				var/turf/T = get_turf(target)
 				if(T)
-					SendSignal("move", list("loc" = T))
+					SendSignal(COMSIG_MOVE, list("loc" = T))
 					return
-			SendSignal("state", list("state"=HOSTILE_STANCE_IDLE)) // Lost target
+			SendSignal(COMSIG_STATE, list("state"=HOSTILE_STANCE_IDLE)) // Lost target
 
 /datum/component/ai/hunt/proc/OnBumped(var/atom/movable/AM)
-	///
+	// TODO
 
 /datum/component/ai/hunt/proc/target_evaluator(var/atom/target)
 	return TRUE
