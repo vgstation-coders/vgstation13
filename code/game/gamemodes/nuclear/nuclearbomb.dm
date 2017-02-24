@@ -360,8 +360,10 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	..()
 	if(!nukedisk)
 		nukedisk = src
+	processing_objects.Add(src)
 
 /obj/item/weapon/disk/nuclear/Destroy()
+	processing_objects.Remove(src)
 	..()
 	replace_disk()
 
@@ -369,6 +371,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
  * NOTE: Don't change it to Destroy().
  */
 /obj/item/weapon/disk/nuclear/Del()
+	processing_objects.Remove(src)
 	replace_disk()
 	..()
 
@@ -381,3 +384,10 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 		message_admins("[log_message] [formatJumpTo(picked_turf, picked_area)]")
 		nukedisk = new /obj/item/weapon/disk/nuclear(picked_turf)
 		respawned = 1
+
+/obj/item/weapon/disk/nuclear/process()
+	if(!get_turf(src))
+		var/atom/A
+		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
+		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
+		qdel(src)
