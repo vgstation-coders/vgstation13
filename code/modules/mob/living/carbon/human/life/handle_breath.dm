@@ -62,7 +62,6 @@
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
 					if(prob(15)) //15 % chance for lung damage if air intake is less of a fifth, or more than five times the threshold
-						to_chat(world, "lung damage on [src]")
 						L.damage += 1
 					if(!is_lung_ruptured())
 						var/chance_break = (L.damage / L.min_bruised_damage)*50 //So, 1/15 = 3% chance to rupture, 2/15 = 7% chance, etc.
