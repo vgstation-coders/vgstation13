@@ -983,7 +983,8 @@ var/global/mulebot_count = 0
 	if(L.loc == src) //Gremlins on the mule get out if the mule has stopped
 		if(mode == MODE_BLOCKED || mode == MODE_NOROUTE)
 			unload()
-			return
+
+		return
 
 	if(!panel_open)
 		togglePanelOpen(null, L)
