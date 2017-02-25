@@ -981,17 +981,12 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/npc_tamper_act(mob/living/L)
 	if(L.loc == src) //Gremlins on the mule get out if the mule has stopped
-		if(mode == MODE_NOROUTE || !wires.RemoteRX() || !wires.HasPower() || !(wires.Motor1() && wires.Motor2())) //Jump ship if the MULE is broken
+		if(mode == MODE_NOROUTE || !wires.RemoteRX() || !wires.HasPower() || !(wires.Motor1() || wires.Motor2())) //Jump ship if the MULE is broken
 			unload()
 
 		return NPC_TAMPER_ACT_NOMSG
 
-	if(!panel_open)
-		togglePanelOpen(null, L)
-	if(wires)
-		wires.npc_tamper(L)
-
-	if(prob(30)) //30% chance to RIDE THE MULE
+	if(prob(80)) //80% chance to RIDE THE MULE
 		//If the MULE hasn't been modified to accept non-orthodox cargo, do it now
 		if(!wires)
 			return
@@ -1019,3 +1014,8 @@ var/global/mulebot_count = 0
 		start()
 
 		message_admins("[key_name(L)] has mounted \the [src] and is riding it to [new_destination.location] ([formatJumpTo(new_destination)])! [formatJumpTo(src)]")
+	else
+		if(!panel_open)
+			togglePanelOpen(null, L)
+		if(wires)
+			wires.npc_tamper(L)
