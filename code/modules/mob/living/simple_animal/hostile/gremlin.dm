@@ -85,6 +85,13 @@ var/list/bad_gremlin_items = list()
 
 	.=..()
 
+/mob/living/simple_animal/hostile/gremlin/EscapeConfinement()
+	if(istype(loc, /obj/machinery)) //If we're inside a machine, screw with it
+		var/obj/machinery/M = loc
+		tamper(M)
+
+	return ..()
+
 //This allows player-controlled gremlins to tamper with machinery
 /mob/living/simple_animal/hostile/gremlin/UnarmedAttack(var/atom/A)
 	if(istype(A, /obj/machinery))
