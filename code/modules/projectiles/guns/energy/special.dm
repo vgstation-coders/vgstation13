@@ -25,6 +25,9 @@
 	cell_type = "/obj/item/weapon/cell/crap"
 	projectile_type = "/obj/item/projectile/ionsmall"
 
+/obj/item/weapon/gun/energy/ionrifle/ionpistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/decloner
 	name = "biological demolecularisor"
 	desc = "A gun that discharges high amounts of controlled radiation to slowly break a target into component elements."
