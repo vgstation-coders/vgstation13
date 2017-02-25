@@ -981,10 +981,10 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/npc_tamper_act(mob/living/L)
 	if(L.loc == src) //Gremlins on the mule get out if the mule has stopped
-		if(mode == MODE_BLOCKED || mode == MODE_NOROUTE)
+		if(mode == MODE_NOROUTE || !wires.RemoteRX() || !wires.HasPower() || !(wires.Motor1() && wires.Motor2())) //Jump ship if the MULE is broken
 			unload()
 
-		return
+		return NPC_TAMPER_ACT_NOMSG
 
 	if(!panel_open)
 		togglePanelOpen(null, L)

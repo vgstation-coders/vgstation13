@@ -43,20 +43,26 @@ var/list/bad_gremlin_items = list()
 			LoseTarget()
 
 /mob/living/simple_animal/hostile/gremlin/proc/tamper(obj/machinery/M)
-	if(M.npc_tamper_act(src)) //The proc returns 1 if there's no interaction
-		visible_message(pick(
-		"<span class='notice'>\The [src] plays around with \the [M], but finds it rather boring.</span>",
-		"<span class='notice'>\The [src] tries to think of some more ways to screw \the [M] up, but fails miserably.</span>",
-		"<span class='notice'>\The [src] decides to ignore \the [M], and starts looking for something more fun.</span>"))
+	switch(M.npc_tamper_act(src))
+		if(NPC_TAMPER_ACT_FORGET)
+			visible_message(pick(
+			"<span class='notice'>\The [src] plays around with \the [M], but finds it rather boring.</span>",
+			"<span class='notice'>\The [src] tries to think of some more ways to screw \the [M] up, but fails miserably.</span>",
+			"<span class='notice'>\The [src] decides to ignore \the [M], and starts looking for something more fun.</span>"))
 
-		bad_gremlin_items.Add(M.type)
-	else
-		visible_message(pick(
-		"<span class='danger'>\The [src]'s eyes light up as \he tampers with \the [M].</span>",
-		"<span class='danger'>\The [src] twists some knobs around on \the [M] and bursts into laughter!</span>",
-		"<span class='danger'>\The [src] presses a few buttons on \the [M] and giggles mischievously.</span>",
-		"<span class='danger'>\The [src] rubs its hands devilishly and starts messing with \the [M].</span>",
-		"<span class='danger'>\The [src] turns a small valve on \the [M].</span>"))
+			bad_gremlin_items.Add(M.type)
+		if(NPC_TAMPER_ACT_NOMSG)
+			//Don't create a visible message
+			M.add_custom_fibers("Hairs from a gremlin.", 0)
+			return
+
+		else
+			visible_message(pick(
+			"<span class='danger'>\The [src]'s eyes light up as \he tampers with \the [M].</span>",
+			"<span class='danger'>\The [src] twists some knobs around on \the [M] and bursts into laughter!</span>",
+			"<span class='danger'>\The [src] presses a few buttons on \the [M] and giggles mischievously.</span>",
+			"<span class='danger'>\The [src] rubs its hands devilishly and starts messing with \the [M].</span>",
+			"<span class='danger'>\The [src] turns a small valve on \the [M].</span>"))
 
 	//Add a clue for detectives to find. The clue is only added if no such clue already existed on that machine
 	M.add_custom_fibers("Hairs from a gremlin.", 0)
