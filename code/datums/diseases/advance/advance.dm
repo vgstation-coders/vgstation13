@@ -377,6 +377,8 @@ var/list/advance_cures = 	list(
 			R.data = data
 		if(preserve.len)
 			R.data["viruses"] = preserve
+		if(R.data["blood_colour"])
+			R.color = R.data["blood_colour"]
 
 /proc/AdminCreateVirus(var/mob/user)
 	var/i = 5

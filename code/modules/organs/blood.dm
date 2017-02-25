@@ -35,7 +35,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(B.id == BLOOD)
 			B.data = list(	"donor"=src,"viruses"=null,"blood_DNA"=dna.unique_enzymes,"blood_colour"= species.blood_color,"blood_type"=dna.b_type,	\
 							"resistances"=null,"trace_chem"=null, "virus2" = null, "antibodies" = null)
-			B.color = B.data["blood_color"]
+			B.color = B.data["blood_colour"]
 
 // Takes care blood loss and regeneration
 /mob/living/carbon/human/proc/handle_blood()
