@@ -39,9 +39,10 @@
 	else //if on the floor, glowshroom on-floor sprite
 		icon_state = "glowshroomf"
 
-	spawn(delay)
-		set_light(round(potency/10))
-		// Spread() - Methinks this is broken - N3X
+	set_light(round(potency/10))
+
+	/*spawn(delay)
+		Spread() - Methinks this is broken - N3X*/
 
 /obj/effect/glowshroom/proc/Spread()
 	//set background = 1
@@ -83,6 +84,8 @@
 				child.yield = yield
 				child.delay = delay
 				child.endurance = endurance
+				child.light_color = light_color
+				set_light(round(potency/10))
 
 				spreaded++
 
