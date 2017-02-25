@@ -62,6 +62,22 @@
 		if(C.enabled)
 			C.RecieveSignal(message_type, args)
 
+/**
+ * Send a signal to the first component of type accepting a signal.
+ *
+ * @param component_type
+ * @param message_type Name of the signal.
+ * @param args List of arguments to send with the signal.
+ */
+/datum/component_container/proc/SendSignalToFirst(var/desired_type, var/message_type, var/list/args, var/shuffle=FALSE)
+	var/list/shuffled=list(components) // Copy list so we don't disorder the container.
+	if(shuffle)
+		shuffled=shuffle(shuffled)
+	for(var/datum/component/C in components)
+		if(C.enabled && istype(C, desired_type))
+			if(C.RecieveSignal(message_type, args)) // return 1 to accept signal.
+				return
+
 
 /**
  * Get the first component matching the specified type.

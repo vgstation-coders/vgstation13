@@ -8,7 +8,8 @@
 	container.AddComponent(/datum/component/controller/mob)
 	container.AddComponent(/datum/component/ai/escape_confinement)
 	container.AddComponent(/datum/component/ai/hunt)
-	var/datum/component/ai/inject_poison/injector = container.AddComponent(/datum/component/ai/inject_poison)
+	container.AddComponent(/datum/component/ai/melee/attack_animal)
+	var/datum/component/ai/melee/inject_reagent/injector = container.AddComponent(/datum/component/ai/melee/inject_reagent)
 	injector.poison_type = STOXIN
 	injector.poison_per_bite = 5
 	var/datum/component/ai/target_finder/simple_view/sv = container.AddComponent(/datum/component/ai/target_finder/simple_view)

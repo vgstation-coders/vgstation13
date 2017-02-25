@@ -27,8 +27,8 @@
 	SendSignal(COMSIG_LIFE, list())
 
 //* Mob calls these to send signals to components. */
-/datum/component/controller/proc/AttackingTarget(var/atom/A)
-	SendSignal(COMSIG_ATTACKING, list("target"=A))
+/datum/component/controller/proc/AttackTarget(var/atom/A)
+	container.SendSignalToFirst(/datum/component/ai, COMSIG_ATTACKING, list("target"=A))
 
 /datum/component/controller/proc/setBusy(var/yes)
 	_busy = yes
