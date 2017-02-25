@@ -66,6 +66,11 @@ var/list/bad_gremlin_items = list()
 		return FALSE
 	if(is_type_in_list(new_target, unwanted_objects))
 		return FALSE
+	if(istype(new_target, /obj/machinery/door/firedoor))
+		var/obj/machinery/door/firedoor/F = new_target
+		//Only tamper with firelocks that are closed, opening them!
+		if(!F.density)
+			return FALSE
 
 	return ..()
 

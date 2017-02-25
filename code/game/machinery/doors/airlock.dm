@@ -1338,6 +1338,11 @@ About the new airlock wires panel:
 	return //Kinda snowflakish, to stop airlocks from shaking when kicked. I'll be refactorfing the whole thing anyways
 
 /obj/machinery/door/airlock/npc_tamper_act(mob/living/L)
+	//Open the firelocks as well, otherwise they block the way for our gremlin which isn't fun
+	for(var/obj/machinery/door/firedoor/F in get_turf(src))
+		if(F.density)
+			F.npc_tamper_act(L)
+
 	if(prob(40)) //40% - mess with wires
 		if(!panel_open)
 			togglePanelOpen(null, L)
