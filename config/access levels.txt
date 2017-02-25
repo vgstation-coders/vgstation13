@@ -16,6 +16,7 @@ For example, a brig door would have it be "2" while a door that requires you hav
 
 Here is a list of the permissions and their numbers (this may be out of date, see code/game/access.dm for an updated version):
 
+access_erp = 0
 access_security = 1
 access_brig = 2
 access_armory = 3
