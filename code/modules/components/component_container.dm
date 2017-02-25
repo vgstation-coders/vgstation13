@@ -69,7 +69,7 @@
  * @param message_type Name of the signal.
  * @param args List of arguments to send with the signal.
  */
-/datum/component_container/proc/SendSignalToFirst(var/desired_type, var/message_type, var/list/args, var/shuffle=FALSE)
+/datum/component_container/proc/SendSignalToFirst(var/desired_type, var/message_type, var/list/args, var/shuffle=TRUE)
 	var/list/shuffled=list(components) // Copy list so we don't disorder the container.
 	if(shuffle)
 		shuffled=shuffle(shuffled)
