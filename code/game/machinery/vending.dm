@@ -443,23 +443,28 @@ var/global/num_vending_terminals = 1
 	else if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
-	else
-		if(is_type_in_list(W, allowed_inputs))
-			if(user.drop_item(W, src))
-				add_item(W)
-				src.updateUsrDialog()
-	/*else if(istype(W, /obj/item/weapon/card) && currently_vending)
+	else if(is_type_in_list(W, allowed_inputs))
+		if(user.drop_item(W, src))
+			add_item(W)
+			src.updateUsrDialog()
+	else if(istype(W, /obj/item/weapon/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
-		if(!linked_db)
-			reconnect_database()
-		if(linked_db)
-			if(linked_account)
-				var/obj/item/weapon/card/I = W
-				scan_card(I)
-			else
-				to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account.</span>")
+		if(linked_account)
+			var/account_try = input(user,"Please enter the already connected account number","Security measure") as num
+			if(account_try != linked_account.account_number)
+				to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account.</span>")
+				return
+			var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
+			for(var/datum/money_account/D in all_money_accounts)
+				if(D.account_number == new_account)
+					linked_account = D
+					playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
+					to_chat(user, "[bicon(src)]<span class='notice'>New connection established: [D.owner_name].</span>")
+					return
+			to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
+
 		else
-			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to accounts database.</span>")*/
+			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account. Please contact a god.</span>")
 
 //H.wear_id
 
