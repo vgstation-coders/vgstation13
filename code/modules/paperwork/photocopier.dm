@@ -414,8 +414,6 @@
 	copies = rand(1, MAX_COPIES)
 	make_copy(L)
 
-	return NPC_TAMPER_ACT_NOMSG
-
 /obj/machinery/photocopier/proc/check_ass() //I'm not sure wether I made this proc because it's good form or because of the name.
 	if(!ass)
 		return 0
