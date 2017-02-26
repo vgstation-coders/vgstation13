@@ -1004,6 +1004,8 @@ var/global/mulebot_count = 0
 		for(var/obj/machinery/navbeacon/N in navbeacons)
 			if(!N.location || !isturf(N.loc))
 				continue
+			if(N.freq != src.beacon_freq) //If the navbeacon is on a different frequency, the mulebot can't navigate to it
+				continue
 			possible_destinations.Add(N)
 
 		//Type in a destination for the MULE
