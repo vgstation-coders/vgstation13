@@ -33,7 +33,7 @@ var/savefile/panicfile
 	*/
 
 	// logs
-	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
+	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day/hh.mm [station_name]")
 
 	investigations[I_HREFS] = new /datum/log_controller(I_HREFS, filename="data/logs/[date_string] hrefs.htm", persist=TRUE)
 	investigations[I_ATMOS] = new /datum/log_controller(I_ATMOS, filename="data/logs/[date_string] atmos.htm", persist=TRUE)
