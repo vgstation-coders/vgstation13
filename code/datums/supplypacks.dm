@@ -1197,7 +1197,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
 	group = "Engineering"
-	
+
 /datum/supply_packs/engine/prism
 	name = "Optical prisms"
 	contains = list(/obj/machinery/prism,
@@ -1763,11 +1763,27 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/lisa
-	name = "Corgi"
+	name = "Female Corgi"
 	contains = list()
 	cost = 50
 	containertype = /obj/structure/largecrate/lisa
-	containername = "corgi Crate"
+	containername = "female corgi crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/corgi
+	name = "Male Corgi"
+	contains = list()
+	cost = 250 // to keep Ian valuable
+	containertype = /obj/structure/largecrate/corgi
+	containername = "male corgi crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/corgi_family
+	name = "Corgi Family"
+	contains = list()
+	cost = 300
+	containertype = /obj/structure/largecrate/corgi_family
+	containername = "corgi family crate"
 	group = "Hydroponics"
 
 /datum/supply_packs/weedcontrol
