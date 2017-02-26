@@ -315,7 +315,7 @@
 
 	timeleft = max(0, timeleft + rand(-60, 60)) //From -1 minute to 1 minute. Can't go below 0
 	timeset(timeleft)
-	timing = TRUE
+	timer_start()
 
 	if(prob(10)) //Flash the flashers
 		for(var/obj/machinery/flasher/F in targets)
