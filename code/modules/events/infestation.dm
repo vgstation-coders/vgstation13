@@ -95,7 +95,7 @@
 		if(VERM_GREMLINS)
 			spawn_types = /mob/living/simple_animal/hostile/gremlin
 			vermstring = "gremlins"
-			max_number = 1 //1 to 2
+			max_number = 4 //2 to 4
 
 	var/number = rand(2, max_number)
 
