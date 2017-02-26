@@ -120,3 +120,43 @@
 /obj/item/weapon/reagent_containers/food/snacks/tortillachip/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/poutineocean
+	name = "poutine ocean"
+	desc = "This enormous, horrific cheese wheel is filled to the brim with poutine. You'll probably never reach the bottom."
+	icon = 'icons/obj/food_huge.dmi'
+	icon_state = "poutineocean"
+	pixel_x = -16
+	pixel_y = -8
+	w_class = W_CLASS_GIANT
+
+/obj/item/weapon/poutineocean/attack_hand(mob/user)
+	to_chat(user, "<span class='warning'>You need a plate!</span>")
+
+/obj/item/weapon/poutineocean/attackby(obj/item/W, mob/user as mob)
+	if (istype(W, /obj/item/trash/plate))
+		qdel(W)
+		var/AM = new /obj/item/weapon/reagent_containers/food/snacks/poutine(get_turf(src))
+		user.put_in_hands(AM)
+		user.visible_message("<span class='notice'>[user] gathers some poutine from the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some poutine from the [src], and shovel it onto your plate!</span>")
+	return
+
+/obj/item/weapon/poutineocean/MouseDrop(over_object)
+	return
+
+/obj/item/weapon/poutineocean/poutinecitadel
+	name = "poutine citadel"
+	desc = "O, Canada!"
+	icon = 'icons/obj/food_huge.dmi'
+	icon_state = "poutinecitadel"
+	pixel_x = -16
+	pixel_y = -8
+	w_class = W_CLASS_GIANT
+
+/obj/item/weapon/poutineocean/poutinecitadel/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/trash/plate))
+		qdel(W)
+		var/AM = new /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup(get_turf(src))
+		user.put_in_hands(AM)
+		user.visible_message("<span class='notice'>[user] gathers some maple syrup poutine from the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some maple syrup poutine from the [src], and shovel it onto your plate!</span>")
+	return
