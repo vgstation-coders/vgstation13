@@ -29,6 +29,12 @@
 /obj/structure/largecrate/lisa
 	icon_state = "lisacrate"
 
+/obj/structure/largecrate/corgi
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/corgi_family
+	icon_state = "lisacrate"
+
 /obj/structure/largecrate/porcelain
 	..()
 
@@ -38,6 +44,18 @@
 /obj/structure/largecrate/lisa/attackby(obj/item/weapon/W as obj, mob/user as mob)	//ugly but oh well
 	if(iscrowbar(W))
 		new /mob/living/simple_animal/corgi/Lisa(loc)
+	..()
+
+/obj/structure/largecrate/corgi/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/corgi(loc)
+	..()
+
+/obj/structure/largecrate/corgi_family/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/corgi(loc)
+		new /mob/living/simple_animal/corgi/Lisa(loc)
+		new /mob/living/simple_animal/corgi/puppy(loc)
 	..()
 
 /obj/structure/largecrate/cow
