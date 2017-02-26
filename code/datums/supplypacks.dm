@@ -1763,7 +1763,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/lisa
-	name = "Female Corgi"
+	name = "Female corgi"
 	contains = list()
 	cost = 50
 	containertype = /obj/structure/largecrate/lisa
@@ -1771,7 +1771,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/corgi
-	name = "Male Corgi"
+	name = "Male corgi"
 	contains = list()
 	cost = 250 // to keep Ian valuable
 	containertype = /obj/structure/largecrate/corgi
@@ -1779,7 +1779,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/corgi_family
-	name = "Corgi Family"
+	name = "Corgi family"
 	contains = list()
 	cost = 300
 	containertype = /obj/structure/largecrate/corgi_family
