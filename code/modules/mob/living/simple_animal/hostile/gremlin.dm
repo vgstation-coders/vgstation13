@@ -20,7 +20,9 @@ var/list/bad_gremlin_items = list()
 
 	//Tampering is handled by the 'npc_tamper()' obj proc
 	wanted_objects = list(
-		/obj/machinery
+		/obj/machinery,
+		/obj/structure/sink,
+		/obj/structure/displaycase
 	)
 
 	//List of objects that we don't even want to try to tamper with
@@ -34,15 +36,15 @@ var/list/bad_gremlin_items = list()
 	var/max_time_chasing_target = 2
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
-	if(istype(target, /obj/machinery))
-		var/obj/machinery/M = target
+	if(istype(target, /obj))
+		var/obj/M = target
 
 		tamper(M)
 
 		if(prob(50)) //50% chance to move to the next machine
 			LoseTarget()
 
-/mob/living/simple_animal/hostile/gremlin/proc/tamper(obj/machinery/M)
+/mob/living/simple_animal/hostile/gremlin/proc/tamper(obj/M)
 	switch(M.npc_tamper_act(src))
 		if(NPC_TAMPER_ACT_FORGET)
 			visible_message(pick(
@@ -51,10 +53,11 @@ var/list/bad_gremlin_items = list()
 			"<span class='notice'>\The [src] decides to ignore \the [M], and starts looking for something more fun.</span>"))
 
 			bad_gremlin_items.Add(M.type)
+			return FALSE
 		if(NPC_TAMPER_ACT_NOMSG)
 			//Don't create a visible message
 			M.add_custom_fibers("Hairs from a gremlin.", 0)
-			return
+			return TRUE
 
 		else
 			visible_message(pick(
@@ -66,6 +69,7 @@ var/list/bad_gremlin_items = list()
 
 	//Add a clue for detectives to find. The clue is only added if no such clue already existed on that machine
 	M.add_custom_fibers("Hairs from a gremlin.", 0)
+	return TRUE
 
 /mob/living/simple_animal/hostile/gremlin/CanAttack(atom/new_target)
 	if(bad_gremlin_items.Find(new_target.type))
@@ -92,15 +96,15 @@ var/list/bad_gremlin_items = list()
 	.=..()
 
 /mob/living/simple_animal/hostile/gremlin/EscapeConfinement()
-	if(istype(loc, /obj/machinery)) //If we're inside a machine, screw with it
-		var/obj/machinery/M = loc
+	if(istype(loc, /obj) && CanAttack(loc)) //If we're inside a machine, screw with it
+		var/obj/M = loc
 		tamper(M)
 
 	return ..()
 
 //This allows player-controlled gremlins to tamper with machinery
 /mob/living/simple_animal/hostile/gremlin/UnarmedAttack(var/atom/A)
-	if(istype(A, /obj/machinery))
+	if(istype(A, /obj/machinery) || istype(A, /obj/structure))
 		tamper(A)
 
 	return ..()

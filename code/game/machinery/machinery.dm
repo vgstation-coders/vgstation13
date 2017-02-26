@@ -728,10 +728,3 @@ Class Procs:
 			scan.forceMove(get_turf(src))
 			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
 			scan = null
-
-//Proc that handles NPCs (gremlins) "tampering" with this machine.
-//The results of this don't have to be negative!
-//Return NPC_TAMPER_ACT_FORGET if there's no interaction (the NPC won't try to tamper with this again)
-//Return NPC_TAMPER_ACT_NOMSG if you don't want to create a visible_message
-/obj/machinery/proc/npc_tamper_act(mob/living/L)
-	return NPC_TAMPER_ACT_FORGET

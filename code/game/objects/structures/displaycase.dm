@@ -119,6 +119,7 @@
 		occupant.forceMove(get_turf(src))
 		occupant=null
 	occupant_overlay=null
+	update_icon()
 
 /obj/structure/displaycase/ex_act(severity)
 	switch(severity)
@@ -181,6 +182,8 @@
 		overlays += occupant_overlay
 	return
 
+/obj/structure/displaycase/npc_tamper_act(mob/living/L)
+	dump() //Screw fingerprints checking and other crap, gremlin magic
 
 /obj/structure/displaycase/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/card/id))
@@ -270,7 +273,6 @@
 				to_chat(user, "<span class='notice'>You press your thumb against the fingerprint scanner, and deactivate the hoverfield built into the case.</span>")
 				if(occupant)
 					dump()
-					update_icon()
 				else
 					to_chat(src, "[bicon(src)] <span class='rose'>\The [src] is empty!</span>")
 		else
