@@ -154,8 +154,8 @@ var/global/datum/controller/vote/vote = new()
 	if(weighted)
 		var/list/filteredchoices = choices.Copy()
 		for(var/a in filteredchoices)
-			if(!filteredchoices[a])
-				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+			if(!filteredchoices[a] || filteredchoices[a] <= 1)
+				filteredchoices -= a //Remove choices with 0/1 votes
 		if(filteredchoices.len)
 			. += pickweight(filteredchoices.Copy())
 	else
