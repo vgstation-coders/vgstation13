@@ -676,7 +676,7 @@ var/global/list/whitelisted_species = list("Human")
 			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 
-		if("Scientist","Roboticist")
+		if("Scientist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
 		if("Research Director")
