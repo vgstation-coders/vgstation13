@@ -149,7 +149,7 @@ var/global/ingredientLimit = 10
 	else
 		. = ..()
 
-/obj/machinery/cooking/attackby(obj/item/I, mob/user, var/force)
+/obj/machinery/cooking/attackby(obj/item/I, mob/user)
 	if(src.active)
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
@@ -162,7 +162,7 @@ var/global/ingredientLimit = 10
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
-		src.takeIngredient(I,user,force)
+		src.takeIngredient(I,user)
 	return
 
 /obj/machinery/cooking/verb/flush_reagents()
@@ -179,14 +179,14 @@ var/global/ingredientLimit = 10
 // Food Processing /////////////////////////////////////////////
 
 //Returns "valid" or the reason for denial.
-/obj/machinery/cooking/proc/validateIngredient(var/obj/item/I, var/force)
+/obj/machinery/cooking/proc/validateIngredient(var/obj/item/I, var/force_cook)
 	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
 		. = "It won't fit."
 	else if(istype(I,/obj/item/weapon/disk/nuclear))
 		. = "It's the fucking nuke disk!"
 	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 		. = "It would be a straining topological exercise."
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything || force)
+	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything || force_cook)
 		. = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
@@ -200,14 +200,14 @@ var/global/ingredientLimit = 10
 		. = "It's not edible food."
 	return
 
-/obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user,var/force)
-	. = src.validateIngredient(I, force)
+/obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user,var/force_cook)
+	. = src.validateIngredient(I, force_cook)
 	if(. == "transto")
 		return
 	if(. == "valid")
 		if(src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != I) && !force))
+		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != I) && !force_cook))
 			return 0
 
 		if(user.drop_item(I, src))
@@ -407,14 +407,14 @@ var/global/ingredientLimit = 10
 	. = ..()
 	empty_icon()
 
-/obj/machinery/cooking/deepfryer/takeIngredient(var/obj/item/I, mob/user, force)
+/obj/machinery/cooking/deepfryer/takeIngredient(var/obj/item/I, mob/user, force_cook)
 	if(reagents.total_volume < DEEPFRY_MINOIL)
 		to_chat(user, "\The [src] doesn't have enough oil to fry in.")
 		return
 	else
 		return ..()
 
-/obj/machinery/cooking/deepfryer/validateIngredient(var/obj/item/I, force)
+/obj/machinery/cooking/deepfryer/validateIngredient(var/obj/item/I, force_cook)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"fried"))
@@ -474,7 +474,8 @@ var/global/ingredientLimit = 10
 
 	var/obj/item/I = pick(pickable_items)
 
-	attackby(I, L, TRUE) //shove the item in, even if it can't be deepfried normally
+	takeIngredient(I, L, TRUE) //shove the item in, even if it can't be deepfried normally
+	empty_icon()
 
 // Grill ///////////////////////////////////////////////////////
 
