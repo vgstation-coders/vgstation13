@@ -69,7 +69,7 @@
 		return
 	return ..()
 
-/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory)
+/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
 	accessories += accessory
 	accessory.forceMove(src)
 	accessory.on_attached(src)
@@ -341,13 +341,19 @@ BLIND     // can't see anything
 	var/can_flip = null
 	var/is_flipped = 1
 	var/ignore_flip = 0
-	action_button_name = "Toggle Mask"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
-
-/obj/item/clothing/mask/verb/togglemask()
-	set name = "Toggle Mask"
-	set category = "Object"
-	set src in usr
+	
+/datum/action/item_action/toggle_mask
+	name = "Toggle Mask"
+	
+/datum/action/item_action/toggle_mask/Trigger()
+	var/obj/item/clothing/mask/T = target
+	if(!istype(T))
+		return
+	T.togglemask()
+	
+/obj/item/clothing/mask/proc/togglemask()
 	if(ignore_flip)
 		return
 	else
@@ -377,9 +383,7 @@ BLIND     // can't see anything
 /obj/item/clothing/mask/New()
 	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
-		action_button_name = null
-		verbs -= /obj/item/clothing/mask/verb/togglemask
-
+		actions_types = null
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -520,10 +524,6 @@ BLIND     // can't see anything
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
 
-/obj/item/clothing/under/ui_action_click()
-	for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
-		HC.togglemap()
-
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
 		return
@@ -573,7 +573,17 @@ BLIND     // can't see anything
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
+		
+/datum/action/item_action/toggle_minimap
+	name = "Toggle Minimap"
 
+/datum/action/item_action/toggle_minimap/Trigger()
+	var/obj/item/clothing/under/T = target
+	if(!istype(T))
+		return
+	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
+		HC.togglemap()
+		
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)

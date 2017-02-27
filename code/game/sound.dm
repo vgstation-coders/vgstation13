@@ -19,6 +19,10 @@ var/list/female_cough_sound = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/
 var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', 'sound/effects/lightning/chainlightning2.ogg', 'sound/effects/lightning/chainlightning3.ogg', 'sound/effects/lightning/chainlightning4.ogg', 'sound/effects/lightning/chainlightning5.ogg', 'sound/effects/lightning/chainlightning6.ogg', 'sound/effects/lightning/chainlightning7.ogg')
 var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hallucinations/veryfar_noise.ogg', 'sound/hallucinations/wail.ogg')
 var/list/fracture_sound = list('sound/effects/bonebreak1.ogg','sound/effects/bonebreak2.ogg','sound/effects/bonebreak3.ogg','sound/effects/bonebreak4.ogg')
+var/list/machete_hit_sound = list('sound/weapons/machete_hit01.ogg', 'sound/weapons/machete_hit02.ogg', 'sound/weapons/machete_hit03.ogg', 'sound/weapons/machete_hit04.ogg', 'sound/weapons/machete_hit05.ogg', 'sound/weapons/machete_hit06.ogg', 'sound/weapons/machete_hit07.ogg', 'sound/weapons/machete_hit08.ogg', 'sound/weapons/machete_hit09.ogg', 'sound/weapons/machete_hit10.ogg',)
+var/list/machete_throw_sound = list('sound/weapons/hfmachete_throw01.ogg', 'sound/weapons/hfmachete_throw02.ogg', 'sound/weapons/hfmachete_throw03.ogg')
+var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg', 'sound/weapons/hfmachete_throw_hit02.ogg', 'sound/weapons/hfmachete_throw_hit03.ogg')
+
 
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
@@ -186,5 +190,11 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(soulstone_sound)
 			if ("fracture")
 				soundin = pick(fracture_sound)
+			if ("machete_hit")
+				soundin = pick(machete_hit_sound)
+			if ("machete_throw")
+				soundin = pick(machete_throw_sound)
+			if ("machete_throw_hit")
+				soundin = pick(machete_throw_hit_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

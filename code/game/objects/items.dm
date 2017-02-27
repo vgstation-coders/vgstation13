@@ -24,7 +24,6 @@
 	var/max_heat_protection_temperature //Set this variable to determine up to which temperature (IN KELVIN) the item protects against heat damage. Keep at null to disable protection. Only protects areas set by heat_protection flags
 	var/heat_conductivity = 0.5 // how conductive an item is to heat a player (ie how quickly someone will lose heat) on a scale of 0 - 1. - 1 is fully conductive, 0 is fully insulative, this is a range, not binary.
 	//If this is set, The item will make an action button on the player's HUD when picked up.
-	var/action_button_name //It is also the text which gets displayed on the action button. If not set it defaults to 'Use [name]'. If it's not set, there'll be no button.
 
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
 	var/_color = null
@@ -52,7 +51,8 @@
 	var/shrapnel_amount = 0 // How many pieces of shrapnel it disintegrates into.
 	var/shrapnel_type = null
 	var/shrapnel_size = 1
-
+	var/list/actions = list() //list of /datum/action's that this item has.
+	var/list/actions_types = list() //list of paths of action datums to give to the item on New().
 
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
@@ -60,12 +60,19 @@
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
 
+/obj/item/New()
+	..()
+	for(var/path in actions_types)
+		new path(src)
+		
 /obj/item/Destroy()
 	if(istype(src.loc, /mob))
 		var/mob/H = src.loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	if(hasvar(src, "holder"))
 		src:holder = null
+	for(var/x in actions)
+		qdel(x)
 	/*  BROKEN, FUCK BYOND
 	if(hasvar(src, "my_atom"))
 		src:my_atom = null*/
@@ -268,7 +275,9 @@
 	reset_plane_and_layer()
 	if(wielded)
 		unwield(user)
-
+	for(var/X in actions)
+		var/datum/action/A = X
+		A.Remove(user)
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
@@ -307,9 +316,14 @@
 	if(cant_drop) //Item can't be dropped
 		if(hand_index) //Item was equipped in a hand slot
 			to_chat(user, "<span class='notice'>\The [src] sticks to your hand!</span>")
-
+	for(var/X in actions)
+		var/datum/action/A = X
+		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
+			A.Grant(user)
 	return
 
+/obj/item/proc/item_action_slot_check(slot, mob/user)
+	return 1
 // called after an item is unequipped or stripped
 /obj/item/proc/unequipped(mob/user, var/from_slot = null)
 	return
@@ -804,13 +818,6 @@
 	if(istype(user, /mob/living/carbon/monkey))
 		src.attack_paw(user)
 	return
-
-//This proc is executed when someone clicks the on-screen UI button. To make the UI button show, set the 'action_button_name'.
-//The default action is attack_self().
-//Checks before we get to here are: mob is alive, mob is not restrained, paralyzed, asleep, resting, laying, item is on the mob.
-/obj/item/proc/ui_action_click()
-	if(src in usr)
-		attack_self(usr)
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = 0)

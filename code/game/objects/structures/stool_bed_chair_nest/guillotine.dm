@@ -177,7 +177,7 @@
 		wrenchAnchor(user)
 
 /obj/structure/bed/guillotine/AltClick(var/mob/user)
-	if(user == victim)
+	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai) || user == victim)	//same restrictions as putting someone into it
 		return
 	if(bladedown)
 		tie_blade(user)
