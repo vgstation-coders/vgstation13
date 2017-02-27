@@ -24,6 +24,12 @@
 			busy = 0
 			stop_automated_movement = 0
 
+/mob/living/simple_animal/hostile/giant_spider/nurse/proc/check_evolve()
+	if(spider_queens.len < MAX_SQUEENS)
+		var/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/NQ = new(src.loc)
+		NQ.inherit_mind(src)
+		qdel(src)
+
 /mob/living/simple_animal/hostile/giant_spider/nurse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -32,10 +38,7 @@
 	..()
 	if(!stat)
 		if(stance == HOSTILE_STANCE_IDLE)
-			if(spider_queens.len < MAX_SQUEENS)
-				new /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider(src.loc)
-				qdel(src)
-				return
+			check_evolve()
 
 			var/list/can_see = view(src, 10)
 			//30% chance to stop wandering and do something
@@ -198,6 +201,9 @@ var/list/spider_queens = list()
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/Destroy()
 	..()
 	spider_queens -= src
+
+/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/check_evolve()
+	return
 
 /obj/item/projectile/web
 	icon_state = "web"
