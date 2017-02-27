@@ -4,7 +4,6 @@ var/global/datum/controller/vote/vote = new()
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
 
-
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
 
@@ -48,6 +47,7 @@ var/global/datum/controller/vote/vote = new()
 	var/lastupdate     = 0
 	var/total_votes    = 0
 	var/weighted        = FALSE // Whether to use weighted voting.
+	var/datum/vote_filter/vote_filter = new /datum/vote_filter/share_filter(0.1)
 
 	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
 	var/lock = FALSE
@@ -156,6 +156,10 @@ var/global/datum/controller/vote/vote = new()
 		for(var/a in filteredchoices)
 			if(!filteredchoices[a])
 				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+
+		//Filters out choices based on the filter
+		vote_filter.filter_vote_list(filteredchoices)
+
 		if(filteredchoices.len)
 			. += pickweight(filteredchoices.Copy())
 	else

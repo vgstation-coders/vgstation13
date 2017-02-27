@@ -1234,6 +1234,7 @@
 #include "code\modules\html_interface\map\crew\crew.dm"
 #include "code\modules\html_interface\nanotrasen\nanotrasen.dm"
 #include "code\modules\html_interface\RCD\RCD.dm"
+#include "code\modules\html_interface\voting\vote_filter.dm"
 #include "code\modules\html_interface\voting\voting.dm"
 #include "code\modules\hydroponics\_hydro_setup.dm"
 #include "code\modules\hydroponics\eggincubator.dm"
