@@ -29,6 +29,8 @@
 		var/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/NQ = new(src.loc)
 		NQ.inherit_mind(src)
 		qdel(src)
+		return 1
+	return 0
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/Life()
 	if(timestopped)
@@ -38,7 +40,8 @@
 	..()
 	if(!stat)
 		if(stance == HOSTILE_STANCE_IDLE)
-			check_evolve()
+			if(check_evolve())
+				return
 
 			var/list/can_see = view(src, 10)
 			//30% chance to stop wandering and do something
@@ -203,7 +206,7 @@ var/list/spider_queens = list()
 	spider_queens -= src
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/check_evolve()
-	return
+	return 0
 
 /obj/item/projectile/web
 	icon_state = "web"
