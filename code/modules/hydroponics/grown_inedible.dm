@@ -61,6 +61,13 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
+/obj/item/weapon/grown/proc/glove_check(var/mob/living/carbon/human/user)
+	if(!user.gloves)
+		return 0
+
+	if(istype(user.gloves, /obj/item/clothing/gloves/botanic_leather) || istype(user.gloves, /obj/item/clothing/gloves/boxing))
+		return 1
+
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.sharpness_flags & CHOPWOOD) // I considered adding serrated to this but c'mon, making planks out of a serrated blade sounds like an awful idea
 		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
@@ -126,8 +133,8 @@
 		to_chat(M, "<span class='warning'>You are heated by the warmth of the of the [name]!</span>")
 		M.bodytemperature += potency/2 * TEMPERATURE_DAMAGE_COEFFICIENT
 /obj/item/weapon/grown/novaflower/pickup(mob/living/carbon/human/user as mob)
-	if(!user.gloves)
-		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
+	if(!glove_check(user))
+		to_chat(user, "<span class='warning'>The [name] burns your hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
 /obj/item/weapon/grown/nettle // -- Skie
@@ -152,8 +159,8 @@
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
-		if(!user.gloves)
-			to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
+		if(!glove_check(user))
+			to_chat(user, "<span class='warning'>The nettle burns your hand!</span>")
 			var/datum/organ/external/affecting = user.get_active_hand_organ()
 			if(affecting && affecting.take_damage(0,force))
 				user.UpdateDamageIcon()
@@ -203,7 +210,7 @@
 	return (BRUTELOSS|TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
-	if(!user.gloves)
+	if(!glove_check(user))
 		if(istype(user, /mob/living/carbon/human))
 			var/datum/organ/external/affecting = user.get_active_hand_organ()
 			if(affecting.take_damage(0,force))

@@ -790,6 +790,7 @@ var/list/special_fruits = list()
 	planted.delay = 50
 	planted.endurance = 100
 	planted.potency = potency
+	planted.light_color = seed.biolum_colour
 	qdel(src)
 
 	to_chat(user, "<span class='notice'>You plant the glowshroom.</span>")

@@ -77,12 +77,12 @@
 						placeCount++
 				if(shroomCount >= placeCount)
 					continue
-
 				var/obj/effect/glowshroom/child = new /obj/effect/glowshroom(newLoc)
 				child.potency = potency
 				child.yield = yield
 				child.delay = delay
 				child.endurance = endurance
+				child.light_color = light_color
 
 				spreaded++
 
