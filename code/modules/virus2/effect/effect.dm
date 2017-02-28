@@ -1024,6 +1024,9 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob)
 
+	if(mob.stat != CONSCIOUS || !canmove || restrained()) //Try as we might, we still can't snap our neck when we are KO or restrained, even if forced.
+		return
+
 	mob.attempt_suicide(1, 0)
 
 /datum/disease2/effect/killertoxins
