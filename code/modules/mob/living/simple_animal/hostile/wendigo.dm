@@ -52,7 +52,7 @@
 
 	if(ismob(target))
 		var/mob/living/mob_target = target
-		if(mob_target.isDead() && !istype(mob_target, /mob/dead/observer))
+		if(mob_target.isDead() && !istype(mob_target, /mob/dead/observer) && (health < maxHealth || ishuman(mob_target)))
 			set waitfor = 0
 			visible_message("<span class = 'notice'>\The [src] starts to take a bite out of \the [target].</span>")
 			stop_automated_movement = 1
@@ -65,11 +65,11 @@
 
 				if(ishuman(mob_target))
 					if(mob_target.health < -400)
-						visible_message("<span class = 'warning'>\The [src] is trying to eat \The [mob_target]!</span>","<span class = 'warning'>You hear crunching.</span>")
+						visible_message("<span class = 'warning'>\The [src] is trying to consume \the [mob_target]!</span>","<span class = 'warning'>You hear crunching.</span>")
 						if(do_after(src, mob_target, 50, needhand = FALSE))
 							consumes += 1
 							names += mob_target.real_name
-							qdel(mob_target)
+							mob_target.gib()
 
 			return
 	. =..()
@@ -100,6 +100,7 @@
 	else
 		speak_chance = 0
 		return name
+
 /mob/living/simple_animal/hostile/wendigo/proc/check_evolve()
 	return
 
@@ -129,8 +130,8 @@
 	health = 250
 	maxHealth = 250
 
-	melee_damage_lower = 25
-	melee_damage_upper = 45
+	melee_damage_lower = 20
+	melee_damage_upper = 35
 
 /mob/living/simple_animal/hostile/wendigo/evolved/check_evolve()
 	if(consumes > EVOLEVOLV)
