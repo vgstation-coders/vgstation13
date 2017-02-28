@@ -230,7 +230,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -313,7 +313,7 @@
 			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
-		if("Peacekeeper")
+		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
@@ -324,7 +324,7 @@
 			module_sprites["Marina-SC"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
-			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			to_chat(src, "<font size='15' color='red'>Under ASIMOV, you are an enforcer of the station's security and preventer of HUMAN HARM. You are meant to aid security, not replace them. You are expected to follow orders and prevent harm above all else. Space law means nothing to you.</b></font></span>")
 			speed = 0
 
 		if("Engineering")
