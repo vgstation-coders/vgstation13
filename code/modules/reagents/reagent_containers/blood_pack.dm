@@ -179,13 +179,14 @@
 					if(reagents.has_reagent(BLOOD))
 						var/list/virus = B.data["virus2"]
 						var/color = B.data["blood_colour"]
+						var/donor = B.data["donor"]
 
 						for(var/i=reagents.get_reagent_amount(BLOOD), i>=21, i-=60)
-							bloodmess_splatter(T, virus, null, null, color)
+							bloodmess_splatter(T, virus, null, null, color, 0, donor)
 							reagents.remove_reagent(BLOOD, 60)
 
 						while (reagents.get_reagent_amount(BLOOD)!=0 && reagents.get_reagent_amount(BLOOD)<=20)
-							bloodmess_drip(T, virus, null, null, color)
+							bloodmess_drip(T, virus, null, null, color, 0, donor)
 							reagents.remove_reagent(BLOOD, 20)
 
 					//it will never have blood at this point

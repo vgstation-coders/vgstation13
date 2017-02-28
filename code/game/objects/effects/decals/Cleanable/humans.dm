@@ -27,6 +27,7 @@ var/global/list/blood_list = list()
 	..()
 	blood_DNA = null
 	virus2 = null
+	donor = null
 
 /obj/effect/decal/cleanable/blood/cultify()
 	return

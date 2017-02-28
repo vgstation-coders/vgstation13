@@ -6,14 +6,15 @@
 	anchored = 1
 
 	// For tracking shit across the floor.
-	var/amount=0 // 0 = don't track
-	var/counts_as_blood=0 // Cult
-	var/transfers_dna=0
+	var/amount = 0 // 0 = don't track
+	var/counts_as_blood = 0 // Cult
+	var/transfers_dna = 0
 	var/list/viruses = list()
 	blood_DNA = list()
-	var/basecolor=DEFAULT_BLOOD // Color when wet.
+	var/basecolor = DEFAULT_BLOOD // Color when wet.
 	var/list/datum/disease2/disease/virus2 = list()
-	var/list/absorbs_types=list() // Types to aggregate.
+	var/list/absorbs_types = list() // Types to aggregate.
+	var/donor = null // reference to the mob
 
 	var/on_wall = 0 //Wall on which this decal is placed on
 
@@ -67,16 +68,18 @@
 				user.blood_DNA = list()
 			user.blood_DNA |= blood_DNA.Copy()
 		user.bloody_hands += taken
+		user.bloody_hands_mob = donor //this was missing and caused blood overlays to always be default color, red.
 		user.hand_blood_color = basecolor
 		user.update_inv_gloves(1)
 		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
 
 /obj/effect/decal/cleanable/resetVariables()
 	Destroy()
-	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
+	..("viruses","virus2", "blood_DNA", "donor", "random_icon_states", args)
 	viruses = list()
 	virus2 = list()
 	blood_DNA = list()
+	donor = null
 
 /obj/effect/decal/cleanable/New()
 	..()
