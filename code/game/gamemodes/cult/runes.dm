@@ -171,6 +171,9 @@
 		if(iscultist(M))
 			to_chat(usr, "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>")
 			return 0
+		if(ismonkey(M) && !M.dexterity_check())
+			to_chat(usr, "<span class='warning'>Its little mind can not comprehend what you are attempting to tell it!</span>")
+			return 0
 		if(M.stat==DEAD)
 			to_chat(usr, "<span class='warning'>You cannot convert the dead.</span>")
 			return 0
