@@ -131,6 +131,6 @@
 /obj/item/clothing/suit/armor/hos/sundowner
 	name = "armoured greatcoat"
 	desc = "An oversized black greatcoat, it makes you feel fucking invincible."
-	icon_state = "sundowner_coat"
-	item_state = "sundowner_coat"
+	icon_state = "sundowner_coat_allblack"
+	item_state = "sundowner_coat_allblack"
 	siemens_coefficient = 0.6
