@@ -21,16 +21,16 @@
 	anchored = 1.0
 
 /obj/structure/morgue/proc/update()
-	if (connected)
+	if(connected)
 		icon_state = "morgue0"
 	else
-		if (contents.len > 0)
+		if(contents.len > 0)
 			var/list/inside = recursive_type_check(src, /mob)
-			if (!inside.len)
+			if(!inside.len)
 				icon_state = "morgue3" // no mobs at all, but objects inside
 			else
-				for (var/mob/body in inside)
-					if (body && body.client && !body.suiciding)
+				for(var/mob/living/body in inside)
+					if(body && body.client && !body.suiciding)
 						icon_state = "morgue4" // clone that mofo
 						return
 				icon_state = "morgue2" // dead no-client mob
