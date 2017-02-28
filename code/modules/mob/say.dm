@@ -5,7 +5,7 @@
 	if(say_disabled)
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
-	usr.say(message)
+	usr.say(to_utf8(message, usr))
 
 /mob/verb/whisper(message as text)
 	set name = "Whisper"
@@ -28,7 +28,7 @@
 		to_chat(usr, "<span class='danger'>Doing this will give us away!</span>")
 		return
 
-	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	message = utf8_sanitize(message, usr, MAX_MESSAGE_LEN)
 
 	if(usr.stat == DEAD)
 		usr.emote_dead(message)

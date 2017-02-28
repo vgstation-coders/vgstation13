@@ -260,6 +260,14 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox cargo pressure helmet"
 	icon_state = "vox-civ-cargo"
 
+/obj/item/clothing/suit/space/vox/civ/mechanic
+	name = "vox mechanic pressure suit"
+	icon_state = "vox-civ-mechanic"
+
+/obj/item/clothing/head/helmet/space/vox/civ/mechanic
+	name = "vox mechanic pressure helmet"
+	icon_state = "vox-civ-mechanic"
+
 /obj/item/clothing/suit/space/vox/civ/librarian
 	name = "vox librarian pressure suit"
 	icon_state = "vox-civ-librarian"
@@ -275,6 +283,16 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 /obj/item/clothing/head/helmet/space/vox/civ/chaplain
 	name = "vox chaplain pressure helmet"
 	icon_state = "vox-civ-chaplain"
+
+/obj/item/clothing/suit/space/vox/civ/mining
+	name = "vox mining pressure suit"
+	icon_state = "vox-civ-mining"
+	goliath_reinforce = TRUE
+
+/obj/item/clothing/head/helmet/space/vox/civ/mining
+	name = "vox mining pressure helmet"
+	icon_state = "vox-civ-mining"
+	goliath_reinforce = TRUE
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
@@ -347,13 +365,21 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox research director pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the head of SCIENCE!"
 	icon_state = "vox-civ-rd"
-	item_state = "vox-pressure-science"
 
 /obj/item/clothing/head/helmet/space/vox/civ/science/rd
 	name = "vox research director pressure helmet"
 	icon_state = "vox-civ-rd"
-	item_state = "vox-pressure-science"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for head of SCIENCE!"
+
+/obj/item/clothing/suit/space/vox/civ/science/roboticist
+	name = "vox roboticist pressure suit"
+	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for roboticists."
+	icon_state = "vox-civ-roboticist"
+
+/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
+	name = "vox roboticist pressure helmet"
+	icon_state = "vox-civ-roboticist"
+	desc = "A very alien-looking helmet for vox crewmembers. This one is for roboticists."
 
 
 //Med/Sci

@@ -39,3 +39,10 @@ var/cmp_field = "name"
 
 /proc/cmp_subsystem_priority(datum/subsystem/a, datum/subsystem/b)
 	return a.priority - b.priority
+
+var/atom/cmp_dist_origin=null
+/proc/cmp_dist_asc(var/atom/a, var/atom/b)
+	return get_dist_squared(cmp_dist_origin, a) - get_dist_squared(cmp_dist_origin, b)
+	
+/proc/cmp_dist_desc(var/atom/a, var/atom/b)
+	return get_dist_squared(cmp_dist_origin, b) - get_dist_squared(cmp_dist_origin, a)

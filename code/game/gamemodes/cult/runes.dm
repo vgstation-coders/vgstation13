@@ -99,7 +99,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			culcount++
-	if(culcount>=3)
+	if(culcount>=2)
 		user.say("Sas[pick("'","`")]so c'arta forbici tarem!")
 
 		nullblock = 0
@@ -1059,7 +1059,7 @@
 		to_chat(user, "<span class='warning'>None of the cultists are currently under restraints.</span>")
 		return fizzle()
 
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to free", "Followers of Geometer") as null|anything in possible_targets
 		if(!cultist)
 			return fizzle()
