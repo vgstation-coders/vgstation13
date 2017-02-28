@@ -1,6 +1,6 @@
 /obj/machinery/bot/chefbot
 	name = "Chef RAMsay"
-	desc = "(icon, name, concept, and any kind of consistency or sense is currently pending)"
+	desc = "Central Command's iconic chefbot."
 	icon = 'goon/icons/obj/aibots.dmi'
 	icon_state = "chefbot-idle"
 	density = 1
@@ -97,7 +97,7 @@
 					say("WHO COOKED THIS SHIT?")
 				sleep(2 SECONDS)
 				if(shitfood) // fix for cannot read null.name (the food sometimes no longer exists after a sleep (because people eat it I assume)) - haine
-					say("THIS [uppertext(shitfood.name)] [why_is_it_bad()][dork? ", DID YOU BUY YOUR FUCKING COOKING LICENSE, [uppertext(dork)]?" : "!"]")
+					say("THIS [uppertext(shitfood.name)] [why_is_it_bad()][dork? ", DID YOU BUY YOUR FUCING COOKING LICENSE, [uppertext(dork)]?" : "!"]")
 				var/is_in_kitchen = 0
 				if(thechef && is_thechef_the_chef)
 					var/area/area = get_area(thechef)
@@ -164,21 +164,55 @@
 	return 0
 
 /obj/machinery/bot/chefbot/attackby(obj/item/W as obj, mob/user as mob)
+	..()
 	if(istype(W, /obj/item/weapon/card/emag))
 		emag_act(user, W)
 	else
 		src.visible_message("<span class = 'warning'>[user] hits [src] with [W]!</span>")
-		if(src.health <= 0)
-			src.explode()
+		if(prob(1))
+			emag_act(user) // WHAT DID YOU DO
+	if(src.health <= 0)
+		src.explode()
+
+/obj/machinery/bot/chefbot/attack_hand(mob/living/carbon/human/M)
+	..()
+	switch(M.a_intent)
+		if (I_HELP)
+			visible_message("[M] tries to turn \the [src] off, but there's no switch!")
+		else
+			var/damage = rand(2, 9)
+			if (prob(90))
+				if (M_HULK in M.mutations)
+					damage += 5
+				playsound(loc, "punch", 25, 1, -1)
+				visible_message("<span class='danger'>[M] has punched [src]!</span>")
+				health -= damage
+				if(prob(1))
+					emag_act(M) // Shit son
+			else
+				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+				visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
+			if(src.health <= 0)
+				src.explode()
+		M.delayNextAttack(10)
+	return
+
+/obj/machinery/bot/chefbot/kick_act()
+	..()
+	on = on? 0 : 1
+	update_icon()
 
 /obj/machinery/bot/chefbot/update_icon()
-	if(raging)
-		icon_state = "chefbot-mad"
-	else
-		if(src.emagged)
-			icon_state = "chefbot-anim2"
+	if(on)
+		if(raging)
+			icon_state = "chefbot-mad"
 		else
-			icon_state = "chefbot-idle"
+			if(src.emagged)
+				icon_state = "chefbot-anim2"
+			else
+				icon_state = "chefbot-idle"
+	else
+		icon_state = "chefbot0"
 
 /obj/machinery/bot/chefbot/explode()
 	src.on = 0
