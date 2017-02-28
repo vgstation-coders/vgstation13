@@ -9,10 +9,12 @@
 	var/subjectjob = null
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..(A)
@@ -88,13 +90,14 @@
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
-		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
+	eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation
 	name = "imitation carp fillet"
@@ -104,49 +107,54 @@
 	name = "venomous spines"
 	desc = "The toxin-filled spines of a space carp."
 	icon_state = "toxicspine"
-	New()
-		..()
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/carppoisongland/New()
+	..()
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	name = "xenomeat"
 	desc = "A slab of xeno meat"
 	icon_state = "xenomeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	src.bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 	name = "spider meat"
 	desc = "A slab of spider meat."
 	icon_state = "spidermeat"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(TOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(TOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
 	name = "venomous spittle sac"
 	desc = "The toxin-filled poison sac of a giant spider."
 	icon_state = "toxicsac"
-	New()
-		..()
-		reagents.add_reagent(TOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland/New()
+	..()
+	reagents.add_reagent(TOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
 	name = "bear meat"
 	desc = "A very manly slab of meat."
 	icon_state = "bearmeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 12)
-		reagents.add_reagent(HYPERZINE, 5)
-		src.bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(HYPERZINE, 5)
+	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach
 	name = "cockroach meat"
@@ -158,14 +166,14 @@
 	desc = "Woah! You were eating THIS all along?"
 	icon_state = "rottenmeat"
 
-	New()
-		..()
-		reagents.add_reagent(SPACE_DRUGS, rand(0,8))
-		reagents.add_reagent(MINDBREAKER, rand(0,2))
-		reagents.add_reagent(NUTRIMENT, rand(0,8))
-		bitesize = 5
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/New()
+	..()
+	reagents.add_reagent(SPACE_DRUGS, rand(0,8))
+	reagents.add_reagent(MINDBREAKER, rand(0,2))
+	reagents.add_reagent(NUTRIMENT, rand(0,8))
+	bitesize = 5
 
-		shapeshift()
+	shapeshift()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
 	visible_message("<span class='info'>\The [src] starts fizzling!</span>")
@@ -196,10 +204,10 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "Doesn't look very appetizing, but if you're considerably hungry..."
 	icon_state = "wendigo_meat"
 
-	New()
-		..()
-		reagents.add_reagent("nutriment", rand(10,25))
-		src.bitesize = 30
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/New()
+	..()
+	reagents.add_reagent("nutriment", rand(10,25))
+	src.bitesize = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	..()
