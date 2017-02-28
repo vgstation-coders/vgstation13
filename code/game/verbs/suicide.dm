@@ -75,18 +75,6 @@
 			to_chat(src, "<span class='warning'>You cannot commit suicide, your host is clinging to life enough to resist it.</span>")
 			return
 
-		var/permitted = 1
-		var/list/allowed = list("Syndicate", "traitor", "Wizard", "Head Revolutionary", "Cultist", "Changeling")
-		for(var/T in allowed)
-			if(mind.special_role == T)
-				permitted = 1
-				break
-
-		if(!permitted)
-			message_admins("<span class='danger'>[ckey] has tried to suicide, but they were not permitted to due to being an antagonist.</span>", 1) //Fairly urgent
-			to_chat(src, "<span class='warning'>Your masters and the gods won't let you do that without a proper reason.</span>")
-			return
-
 		if(!canmove || restrained()) //Just while I finish up the new 'fun' suiciding verb. This is to prevent metagaming via suicide
 			to_chat(src, "<span class='warning'>You can't commit suicide whilst restrained!</span>")
 			return
@@ -189,7 +177,7 @@
 	visible_message(pick("<span class='danger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] is force-deleting \his system files. It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] is turning off \his runtime safety. It looks like \he's trying to commit suicide.</span>", \
-						 "<span class='danger'>[src] is analyzing case situations of his lawset in details. It looks like \he's trying to commit suicide.</span>", \
+						 "<span class='danger'>[src] is analyzing case situations of \his lawset in details. It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] is processing the Ultimate Question of Life, the Universe, and Everything. It looks like \he's trying to commit suicide.</span>"))
 	death(0)
 
