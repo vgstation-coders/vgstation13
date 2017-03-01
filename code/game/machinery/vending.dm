@@ -82,7 +82,7 @@ var/global/num_vending_terminals = 1
 
 	var/machine_id = "#"
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 
 /obj/machinery/vending/cultify()
 	new /obj/structure/cult/forge(loc)
@@ -181,9 +181,7 @@ var/global/num_vending_terminals = 1
 				to_chat(user, "<span class='notice'>[bicon(newmachine)] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
 				newmachine.pack = P.type
-				var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
-				emptypack.icon_state = P.icon_state
-				emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
+				getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
 				if(P.stock.len) //this is true when we're dealing with a CUSTOM fill
 					for(var/v_item in P.stock)
 						if(istype(v_item, /obj/item))
