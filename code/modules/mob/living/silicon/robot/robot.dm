@@ -366,6 +366,7 @@
 			module_sprites["Squadbot"] = "squats"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
+			module_sprites["Rottweiler"] = "rottweiler-combat"
 			speed = -1
 
 	//Custom_sprite check and entry
