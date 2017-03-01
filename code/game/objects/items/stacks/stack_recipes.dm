@@ -241,6 +241,7 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 	new/datum/stack_recipe("donut box",			/obj/item/weapon/storage/fancy/donut_box/empty			),
 	new/datum/stack_recipe("eggbox",			/obj/item/weapon/storage/fancy/egg_box/empty			),
 	new/datum/stack_recipe("paper bin",			/obj/item/weapon/paper_bin/empty						),
+	new/datum/stack_recipe("empty recharge pack",			/obj/structure/vendomatpack/custom, 4),
 	)
 
 /* ========================================================================
