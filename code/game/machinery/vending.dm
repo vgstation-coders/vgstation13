@@ -287,19 +287,12 @@ var/global/num_vending_terminals = 1
 //obj/machinery/vending/proc/build_ingame_object(var/obj/item/I, hidden = 0, req_coin = 0)
 
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
-	to_chat(world, "BUILDING INVENTORY")
 	for(var/typepath in productlist)
-		/*if(!ispath(typepath))
-			handle_ingame_objects(typepath, hidden, req_coin)
-			return*/
-		to_chat(world, "typepath is [typepath]")
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
 
 		if (isnull(amount))
 			amount = 1
-
-		to_chat(world, "amount is [amount]")
 
 		var/datum/data/vending_product/R = new()
 		R.product_path = typepath
