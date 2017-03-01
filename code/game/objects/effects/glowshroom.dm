@@ -39,7 +39,8 @@
 	else //if on the floor, glowshroom on-floor sprite
 		icon_state = "glowshroomf"
 
-	set_light(round(potency/10))
+	spawn(0)//make sure the potency from the shroom that made us has transferred first
+		set_light(round(potency/10))
 
 	/*spawn(delay)
 		Spread() - Methinks this is broken - N3X*/
@@ -85,7 +86,6 @@
 				child.delay = delay
 				child.endurance = endurance
 				child.light_color = light_color
-				set_light(round(potency/10))
 
 				spreaded++
 
