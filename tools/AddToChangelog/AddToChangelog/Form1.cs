@@ -31,7 +31,8 @@ namespace AddToChangelog
             { "Added icon", "imageadd" },
             { "Removed icon", "imagedel" },
             { "Added sound", "soundadd" },
-            { "Removed sound", "sounddel" }
+            { "Removed sound", "sounddel" },
+            { "Ported", "tgs" }
         };
 
         public Dictionary<string, Bitmap> ImageList = new Dictionary<string, Bitmap>();

@@ -106,6 +106,7 @@
     <EmbeddedResource Include="soundadd.png" />
     <EmbeddedResource Include="rscadd.png" />
     <EmbeddedResource Include="tweak.png" />
+    <EmbeddedResource Include="tgs.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
