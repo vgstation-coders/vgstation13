@@ -1275,6 +1275,18 @@ var/list/slot_equipment_priority = list( \
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
 
+// http://www.byond.com/forum/?post=2219001#comment22205313
+// TODO: Clean up and identify the args, document
+/mob/verb/DisableClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
+	set name = ".click"
+	set category = null
+	return
+
+/mob/verb/DisableDblClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
+	set name = ".dblclick"
+	set category = null
+	return
+
 /mob/Topic(href,href_list[])
 	if(href_list["mach_close"])
 		var/t1 = text("window=[href_list["mach_close"]]")
