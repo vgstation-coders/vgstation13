@@ -329,7 +329,7 @@
 
 		if("TG17355")
 			module = new /obj/item/weapon/robot_module/tg17355(src)
-			module_sprites["Peacekeeper"] = "peacekeeper"
+			module_sprites["Peacekeeper"] = "peaceborg"
 			module_sprites["Omoikane"] = "omoikane"
 			speed = 0
 
