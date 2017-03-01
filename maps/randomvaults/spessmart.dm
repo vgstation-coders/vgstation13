@@ -99,7 +99,7 @@ var/list/shop_prices = list( //Cost in space credits
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman) //What in the world could go wrong
+var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite) //What in the world could go wrong
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
