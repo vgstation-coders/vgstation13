@@ -207,7 +207,7 @@ var/global/num_vending_terminals = 1
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					if(check_for_custom_vendor())
-						custom_refill(P)
+						custom_refill(P, user)
 					else
 						normal_refill(P, user)
 			else
@@ -226,14 +226,12 @@ var/global/num_vending_terminals = 1
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in hidden_records)
 		D.amount = D.original_amount
-	var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
-	emptypack.icon_state = P.icon_state
-	emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
+	getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
 		src.attack_hand(user)
 
-/obj/machinery/vending/proc/custom_refill(obj/structure/vendomatpack/P)
+/obj/machinery/vending/proc/custom_refill(obj/structure/vendomatpack/P, mob/user)
 	for (var/datum/data/vending_product/D in product_records)
 		if (!D.amount)
 			products.Remove(D.product_path)
@@ -248,6 +246,8 @@ var/global/num_vending_terminals = 1
 		products += P.stock
 		product_records += P.product_records
 		initialize()
+	getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
+	qdel(P)
 
 /obj/machinery/vending/ex_act(severity)
 	switch(severity)

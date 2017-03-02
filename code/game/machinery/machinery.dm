@@ -502,10 +502,10 @@ Class Procs:
 	return 1
 
 /obj/machinery/proc/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
-	if(!linked_account)
+	if(!linked_account || panel_open)
 		togglePanelOpen(toggleitem, user)
 		return 1
-	var/account_try = input(user,"Please enter the already connected account number","Security measure") as null|num
+	var/account_try = input(user,"Please enter the already connected account number to unlock the panel","Security measure") as null|num
 	if(!user.Adjacent(src))
 		return 0
 	if(account_try != linked_account.account_number)
