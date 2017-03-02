@@ -1,0 +1,7 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: "Added gremlins - neutral mobs that possess the ability to tamper with machinery, electronics and atmospherics equipment. Sprites by @diammz"
+- rscadd: A random event can spawn up to 2 gremlins somewhere on the station.

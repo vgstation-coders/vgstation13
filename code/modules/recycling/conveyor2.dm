@@ -566,3 +566,6 @@
 		convdir = text2num(href_list["setconvdir"])
 		updateConfig()
 		return MT_UPDATE
+
+/obj/machinery/conveyor_switch/npc_tamper_act(mob/living/L)
+	attack_hand(L)

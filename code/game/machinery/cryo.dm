@@ -631,6 +631,19 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
 	return air_contents
 
+/obj/machinery/atmospherics/unary/cryo_cell/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Turn on/off
+		if(on)
+			on = 0
+		else
+			on = 1
+		update_icon()
+
+		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
+	else if(occupant && !ejecting) //Eject occupant
+		message_admins("[key_name(L)] has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
+		go_out()
+
 
 /datum/data/function/proc/reset()
 	return

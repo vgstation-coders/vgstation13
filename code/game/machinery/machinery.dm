@@ -616,7 +616,7 @@ Class Procs:
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
-	if(!user.Adjacent(src))
+	if(!istype(user) || !user.Adjacent(src))
 		return 0
 	if(!prob(prb))
 		return 0
@@ -722,6 +722,7 @@ Class Procs:
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity
+
 	if(scan)
 		if(prob(50))
 			scan.forceMove(get_turf(src))

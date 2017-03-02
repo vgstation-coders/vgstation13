@@ -1,3 +1,6 @@
+#define FREEZER_MIN_TEMPERATURE T0C - 200
+#define FREEZER_MAX_TEMPERATURE T20C
+
 /obj/machinery/atmospherics/unary/cold_sink/freezer
 	name = "Freezer"
 	icon = 'icons/obj/Cryogenic2.dmi'
@@ -132,9 +135,9 @@
 				return
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
-				src.current_temperature = min(T20C, src.current_temperature+amount)
+				src.current_temperature = min(FREEZER_MAX_TEMPERATURE, src.current_temperature+amount)
 			else
-				src.current_temperature = max((T0C - 200 + temp_offset), src.current_temperature+amount)
+				src.current_temperature = max((FREEZER_MIN_TEMPERATURE + temp_offset), src.current_temperature+amount)
 	src.updateUsrDialog()
 	src.add_fingerprint(usr)
 	return
@@ -169,6 +172,16 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/exposed()
 	return TRUE
 
+/obj/machinery/atmospherics/unary/cold_sink/freezer/npc_tamper_act(mob/living/L)
+	current_temperature = rand(FREEZER_MIN_TEMPERATURE + temp_offset, FREEZER_MAX_TEMPERATURE)
+	src.on = rand(0,1)
+	update_icon()
+
+#undef FREEZER_MIN_TEMPERATURE
+#undef FREEZER_MAX_TEMPERATURE
+
+#define HEATER_MIN_TEMPERATURE T20C
+#define HEATER_MAX_TEMPERATURE T20C + 280
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
 	name = "Heater"
@@ -302,9 +315,9 @@
 				return
 			var/amount = text2num(href_list["temp"])
 			if(amount > 0)
-				src.current_temperature = min((T20C+280+temp_offset), src.current_temperature+amount)
+				src.current_temperature = min((HEATER_MAX_TEMPERATURE+temp_offset), src.current_temperature+amount)
 			else
-				src.current_temperature = max(T20C, src.current_temperature+amount)
+				src.current_temperature = max(HEATER_MIN_TEMPERATURE, src.current_temperature+amount)
 	src.updateUsrDialog()
 	src.add_fingerprint(usr)
 	return
@@ -338,3 +351,11 @@
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/exposed()
 	return TRUE
+
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/npc_tamper_act(mob/living/L)
+	current_temperature = rand(HEATER_MIN_TEMPERATURE, HEATER_MAX_TEMPERATURE+temp_offset)
+	src.on = rand(0,1)
+	update_icon()
+
+#undef HEATER_MAX_TEMPERATURE
+#undef HEATER_MIN_TEMPERATURE

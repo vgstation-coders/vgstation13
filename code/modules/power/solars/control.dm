@@ -1,3 +1,10 @@
+#define TRACK_CW 1
+#define TRACK_CCW -1
+
+#define TRACK_OFF 0
+#define TRACK_MANUAL 1
+#define TRACK_AUTOMATIC 2
+
 /obj/machinery/power/solar/control
 	name = "solar panel control"
 	desc = "A controller for solar panel arrays."
@@ -10,9 +17,9 @@
 	var/cdir = 0
 	var/gen = 0
 	var/lastgen = 0
-	var/track = 0			//0 = off  1 = manual  2 = automatic
+	var/track = TRACK_OFF  //TRACK_OFF, TRACK_MANUAL, TRACK_AUTOMATIC
 	var/trackrate = 60		//Measured in tenths of degree per minute (i.e. defaults to 6.0 deg/min)
-	var/trackdir = 1		//-1 = CCW, 1 = CW
+	var/trackdir = TRACK_CW		//TRACK_CW or TRACK_CCW
 	var/nexttime = 0		//Next clock time that manual tracking will move the array
 
 	light_color = LIGHT_COLOR_YELLOW
@@ -181,9 +188,7 @@ Manual Tracking Direction:"}
 				set_panels(cdir)
 				update_icon()
 		if(href_list["tdir"])
-			trackrate = Clamp(trackrate + text2num(href_list["tdir"]), 0, 360)
-			if(trackrate)
-				nexttime = world.time + 6000 / trackrate
+			set_trackrate(trackrate + text2num(href_list["tdir"]))
 
 	if(href_list["track"])
 		if(trackrate)
@@ -202,6 +207,11 @@ Manual Tracking Direction:"}
 	set_panels(cdir)
 	update_icon()
 	updateUsrDialog()
+
+/obj/machinery/power/solar/control/proc/set_trackrate(new_value)
+	trackrate = Clamp(new_value, 0, 360)
+	if(trackrate > 0)
+		nexttime = world.time + 6000 / trackrate
 
 /obj/machinery/power/solar/control/proc/set_panels(var/cdir)
 	for(var/obj/machinery/power/solar/panel/P in getPowernetNodes())
@@ -234,3 +244,8 @@ Manual Tracking Direction:"}
 	if(prob(75))
 		broken()
 		density = 0
+
+/obj/machinery/power/solar/control/npc_tamper_act(mob/living/L)
+	track = rand(0,TRACK_AUTOMATIC)
+	trackdir = pick(TRACK_CW, TRACK_CCW)
+	set_trackrate(rand(0, 360))

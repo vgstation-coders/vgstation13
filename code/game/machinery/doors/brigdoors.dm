@@ -307,3 +307,16 @@
 	id_tag = "Cell 6"
 	dir = 4
 	pixel_x = WORLD_ICON_SIZE
+
+
+/obj/machinery/door_timer/npc_tamper_act(mob/living/L)
+	//Increase or decrease the release time by a random number
+	var/timeleft = timeleft()
+
+	timeleft = max(0, timeleft + rand(-60, 60)) //From -1 minute to 1 minute. Can't go below 0
+	timeset(timeleft)
+	timer_start()
+
+	if(prob(10)) //Flash the flashers
+		for(var/obj/machinery/flasher/F in targets)
+			F.flash()

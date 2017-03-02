@@ -214,20 +214,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			useramount = amount
 
 	if(href_list["dispense"])
-		if (dispensable_reagents.Find(href_list["dispense"]) && container != null)
-			var/obj/item/weapon/reagent_containers/B = src.container
-			var/datum/reagents/R = B.reagents
-			if(!R)
-				if(!B.gcDestroyed)
-					B.create_reagents(B.volume)
-				else
-					qdel(B)
-					B = null
-					return
-			var/space = R.maximum_volume - R.total_volume
-
-			R.add_reagent(href_list["dispense"], min(amount, energy * 10, space))
-			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
+		dispense_reagent(href_list["dispense"], amount)
 
 	if(href_list["ejectBeaker"])
 		if(container)
@@ -235,6 +222,22 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
+
+/obj/machinery/chem_dispenser/proc/dispense_reagent(reagent, amount)
+	if (dispensable_reagents.Find(reagent) && container != null)
+		var/obj/item/weapon/reagent_containers/B = src.container
+		var/datum/reagents/R = B.reagents
+		if(!R)
+			if(!B.gcDestroyed)
+				B.create_reagents(B.volume)
+			else
+				qdel(B)
+				B = null
+				return
+		var/space = R.maximum_volume - R.total_volume
+
+		R.add_reagent(reagent, min(amount, energy * 10, space))
+		energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 
 /obj/machinery/chem_dispenser/kick_act(mob/living/H)
 	..()
@@ -406,3 +409,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 0
 
 #undef FORMAT_DISPENSER_NAME
+
+/obj/machinery/chem_dispenser/npc_tamper_act(mob/living/L)
+	if(stat & (NOPOWER|BROKEN))
+		return 0
+
+	var/amount = rand(1,25)
+	var/reagent = pick(dispensable_reagents)
+	message_admins("[key_name(L)] has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
+
+	dispense_reagent(reagent, amount)

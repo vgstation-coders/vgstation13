@@ -466,3 +466,24 @@
 			reagent_disposal = !reagent_disposal
 			updateUsrDialog()
 	return
+
+/obj/machinery/microwave/npc_tamper_act(mob/living/L)
+	//Put a random nearby item inside. 50% chance to start cooking
+	var/list/pickable_items = list()
+
+	for(var/obj/item/I in range(1, L))
+		if(istype(I, /obj/item/weapon/reagent_containers/food/snacks) || is_type_in_list(I, acceptable_items))
+			pickable_items.Add(I)
+
+	if(!pickable_items.len)
+		return
+
+	var/obj/item/I = pick(pickable_items)
+	if(L.Adjacent(I))
+		visible_message("<span class='danger'>\The [L] stuffs \the [I] into \the [src]!</span>")
+		attackby(I, L)
+	else
+		return
+
+	if(prob(50))
+		cook()

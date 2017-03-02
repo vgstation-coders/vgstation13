@@ -309,6 +309,13 @@ var/global/num_vending_terminals = 1
 		return 1
 	return -1
 
+/obj/machinery/vending/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)
+
+
 /obj/machinery/vending/proc/can_accept_voucher(var/obj/item/voucher/voucher, mob/user)
 	if(istype(voucher, /obj/item/voucher/free_item))
 		var/obj/item/voucher/free_item/free_vouch = voucher
