@@ -2467,25 +2467,14 @@ var/global/num_vending_terminals = 1
 
 
 /obj/machinery/vending/sale
-	name = "Sales vend"
-	desc = "Insert joke here"
+	name = "Sales"
+	desc = "Buy, sell, repeat."
 	icon_state = "sale"
-	vend_reply = "Insert another joke here"
-	product_ads = "Another joke here"
-	product_slogans = "Jokes"
+	//vend_reply = "Insert another joke here"
+	//product_ads = "Another joke here"
+	//product_slogans = "Jokes"
 	products = list(
 		/obj/item/clothing/shoes/black = 10,
-		/obj/item/clothing/shoes/brown = 10,
-		/obj/item/clothing/shoes/blue = 10,
-		/obj/item/clothing/shoes/green = 10,
-		/obj/item/clothing/shoes/yellow = 10,
-		)
-	contraband = list(
-		/obj/item/clothing/shoes/jackboots = 5,
-		/obj/item/clothing/shoes/orange = 5,
-		)
-	premium = list(
-		/obj/item/clothing/shoes/rainbow = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/custom
