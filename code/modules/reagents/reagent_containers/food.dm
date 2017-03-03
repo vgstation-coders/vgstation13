@@ -128,18 +128,19 @@
 	icon_state = "poutineocean"
 	pixel_x = -16
 	pixel_y = -8
+	var/type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutine
 	w_class = W_CLASS_GIANT
 
 /obj/item/weapon/poutineocean/attack_hand(mob/user)
-	to_chat(user, "<span class='warning'>You need a plate!</span>")
+	to_chat(user, "<span class='warning'>You need a plate to get food from \the [src]!</span>")
 
-/obj/item/weapon/poutineocean/attackby(obj/item/W, mob/user as mob)
+/obj/item/weapon/poutineocean/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/trash/plate))
-		qdel(W)
-		var/AM = new /obj/item/weapon/reagent_containers/food/snacks/poutine(get_turf(src))
-		user.put_in_hands(AM)
-		user.visible_message("<span class='notice'>[user] gathers some poutine from the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some poutine from the [src], and shovel it onto your plate!</span>")
-	return
+		if(user.drop_item(W))
+			qdel(W)
+			var/obj/item/AM = new type_to_dispense(get_turf(src))
+			user.put_in_hands(AM)
+			user.visible_message("<span class='notice'>[user] gathers some [AM.name] from \the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some [AM.name] from \the [src], and shovel it onto your plate!</span>")
 
 /obj/item/weapon/poutineocean/MouseDrop(over_object)
 	return
@@ -151,12 +152,6 @@
 	icon_state = "poutinecitadel"
 	pixel_x = -16
 	pixel_y = -8
+	type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
 	w_class = W_CLASS_GIANT
 
-/obj/item/weapon/poutineocean/poutinecitadel/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/trash/plate))
-		qdel(W)
-		var/AM = new /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup(get_turf(src))
-		user.put_in_hands(AM)
-		user.visible_message("<span class='notice'>[user] gathers some maple syrup poutine from the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some maple syrup poutine from the [src], and shovel it onto your plate!</span>")
-	return

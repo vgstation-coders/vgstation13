@@ -2041,6 +2041,18 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/condiment/gravy
 
+
+/datum/recipe/gravybig
+	reagents = list(WATER = 50)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
+		)
+	result = /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig
+
 /datum/recipe/sundayroast
 	reagents = list(GRAVY = 10,SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(

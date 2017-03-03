@@ -5480,8 +5480,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	M.nutrition += nutriment_factor
 	M.adjustOxyLoss(-1 * REM)
 	M.adjustToxLoss(-1 * REM)
-	M.heal_organ_damage(0, 1 * REM)
-	M.heal_organ_damage(2 * REM,0)
+	M.adjustBruteLoss(-1 * REM)
+	M.adjustFireLoss(-1 * REM)
 
 /datum/reagent/blockizine
 	name = "Blockizine"
