@@ -1,5 +1,5 @@
 use byond::call::return_to_byond;
-use encoding::all::{WINDOWS_1252, ASCII};
+use encoding::all::{WINDOWS_1252, ASCII, GB18030};
 use encoding::Encoding;
 use encoding::label::encoding_from_windows_code_page;
 use encoding::types::DecoderTrap;
@@ -9,7 +9,7 @@ use std::ffi::CStr;
 use std::slice;
 use std::ptr::null;
 
-/// Encodes a byte string to UTF-8, using the windows code page supplied.
+/// Encodes a byte string to UTF-8, using the encoding supplied.
 ///
 /// Arguments are in the order of encoding, bytes.
 #[no_mangle]
@@ -185,16 +185,23 @@ fn byte_bounds(text: &str, start: &str, end: &str) -> Option<(usize, usize)> {
     }
 }
 
+/// See utf8.dm for what the codes correspond to.
 unsafe fn decode(args: &[*const libc::c_char]) -> String {
-    let encoding = CStr::from_ptr(args[0])
-        .to_str()
-        .map(|encoding| {
-            encoding_from_windows_code_page(encoding.parse::<usize>().unwrap_or(1252))
-                .unwrap_or(WINDOWS_1252)
-        })
-        .unwrap_or(WINDOWS_1252);
     let bytes = CStr::from_ptr(args[1]).to_bytes();
-    encoding.decode(bytes, DecoderTrap::Replace).unwrap()
+    CStr::from_ptr(args[0])
+    .to_str()
+    .map(|e| e.parse::<usize>().unwrap_or(1252))
+    .map(|e| match e {
+        e @ 874 | e @ 1250 ... 1258 => {
+            encoding_from_windows_code_page(e)
+                .unwrap_or(WINDOWS_1252)
+        },
+        2312 => GB18030,
+        _ => WINDOWS_1252
+    })
+    .unwrap_or(WINDOWS_1252)
+    .decode(bytes, DecoderTrap::Replace)
+    .unwrap()
 }
 
 fn sanitize(text: &str, cap: usize) -> String {
@@ -250,6 +257,12 @@ fn test_utf8() {
     let both = [encoding.as_ptr(), test.as_ptr()];
 
     unsafe { assert_eq!(decode(&both), "Hн thйrй!") };
+
+    let encoding = CString::new(b"2312".as_ref()).unwrap();
+    let test = CString::new(b"\xDE\xC4".as_ref()).unwrap();
+    let both = [encoding.as_ptr(), test.as_ptr()];
+
+    unsafe { assert_eq!(decode(&both), "弈") };
 }
 
 #[test]

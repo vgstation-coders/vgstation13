@@ -98,12 +98,20 @@ For the main html chat area
 			data = analyzeClientData(arglist(params))
 
 		if("encoding")
+			var/encoding = href_list["encoding"]
 			var/static/regex/RE = regex("windows-(874|125\[0-8])")
-			if (RE.Find(href_list["encoding"]))
-				world.log << "ENCODING RECEIVED: [href_list["encoding"]]"
+			if (RE.Find(encoding))
 				owner.encoding = RE.group[1]
+
+			else if (encoding == "gb2312")
+				owner.encoding = "2312"
+
+			// This seems to be the result on Japanese locales, but the client still seems to accept 1252.
+			else if (encoding == "_autodetect")
+				owner.encoding = "1252"
+
 			else
-				stack_trace("Unknown encoding received from client: \"[sanitize(href_list["encoding"])]\". Please report this as a bug.")
+				stack_trace("Unknown encoding received from client: \"[sanitize(encoding)]\". Please report this as a bug.")
 
 	if(data)
 		ehjax_send(data = data)
