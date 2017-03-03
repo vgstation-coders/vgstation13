@@ -195,6 +195,7 @@
 	if(holder)
 		add_admin_verbs()
 		admin_memo_show()
+		holder.add_menu_items()
 
 	log_client_to_db()
 
