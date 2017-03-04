@@ -87,9 +87,9 @@ var/list/special_fruits = list()
 	if(seed.teleporting)
 		splat_reagent_reaction(get_turf(hit_atom))
 		if(do_fruit_teleport(hit_atom, usr, potency))
-			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
+			visible_message("<span class='danger'>\The [src] splatters, causing a distortion in space-time!</span>")
 		else if(splat_decal(get_turf(hit_atom)))
-			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
+			visible_message("<span class='notice'>\The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
 
@@ -267,6 +267,7 @@ var/list/special_fruits = list()
 			s.start()
 			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
 			M.forceMove(picked) //Send then to that location we picked previously
+			M.unlock_from()
 			spawn()
 				s.set_up(3, 1, M)
 				s.start() //Two set of sparks, one before the teleport and one after. //Sure then ?
@@ -276,6 +277,7 @@ var/list/special_fruits = list()
 			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
 			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
 				A.forceMove(picked) //And teleport them to the chosen location.
+				A.unlock_from()
 				spawn()
 					s.set_up(3, 1, A)
 					s.start()
