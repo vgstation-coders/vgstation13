@@ -15,3 +15,6 @@
 	canWearGlasses = 1
 	greaterform = "Golem"
 	languagetoadd = LANGUAGE_GOLEM
+
+/mob/living/carbon/monkey/rock/passive_emote()
+	emote(pick("scratch","jump","roll"))
