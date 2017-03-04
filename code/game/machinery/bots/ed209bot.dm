@@ -982,7 +982,7 @@ Auto Patrol: []"},
 			if( lasercolor || istype(W, /obj/item/clothing/suit/armor/vest) )
 				if(user.drop_item(W))
 					qdel(W)
-					build_step++
+					build_step = 3
 					to_chat(user, "<span class='notice'>You add the armor to [src].</span>")
 					name = "vest/legs/frame assembly"
 					item_state = "[lasercolor]ed209_shell"
@@ -992,14 +992,14 @@ Auto Patrol: []"},
 			if( istype(W, /obj/item/weapon/weldingtool) )
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
-					build_step++
+					build_step = 4
 					name = "shielded frame assembly"
 					to_chat(user, "<span class='notice'>You welded the vest to [src].</span>")
 		if(4)
 			if( istype(W, /obj/item/clothing/head/helmet/tactical/sec) )
 				if(user.drop_item(W))
 					qdel(W)
-					build_step++
+					build_step = 5
 					to_chat(user, "<span class='notice'>You add the helmet to [src].</span>")
 					name = "covered and shielded frame assembly"
 					item_state = "[lasercolor]ed209_hat"
@@ -1009,7 +1009,7 @@ Auto Patrol: []"},
 			if( isprox(W) )
 				if(user.drop_item(W))
 					qdel(W)
-					build_step++
+					build_step = 6
 					to_chat(user, "<span class='notice'>You add the prox sensor to [src].</span>")
 					name = "covered, shielded and sensored frame assembly"
 					item_state = "[lasercolor]ed209_prox"
@@ -1021,9 +1021,11 @@ Auto Patrol: []"},
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>You start to wire [src]...</span>")
 				sleep(40)
+				if(build_step != 6)
+					return
 				if(get_turf(user) == T)
 					coil.use(1)
-					build_step++
+					build_step = 7
 					to_chat(user, "<span class='notice'>You wire the ED-209 assembly.</span>")
 					name = "wired ED-209 assembly"
 
@@ -1046,7 +1048,7 @@ Auto Patrol: []"},
 					name = "taser ED-209 assembly"
 				else
 					return
-			build_step++
+			build_step = 8
 			to_chat(user, "<span class='notice'>You add [W] to [src].</span>")
 			src.item_state = "[lasercolor]ed209_taser"
 			src.icon_state = "[lasercolor]ed209_taser"
@@ -1058,8 +1060,10 @@ Auto Patrol: []"},
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")
 				sleep(40)
+				if(build_step != 8)
+					return
 				if(get_turf(user) == T)
-					build_step++
+					build_step = 9
 					name = "armed [name]"
 					to_chat(user, "<span class='notice'>Taser gun attached.</span>")
 
@@ -1068,7 +1072,6 @@ Auto Patrol: []"},
 				if(!user.drop_item(W))
 					return
 
-				build_step++
 				to_chat(user, "<span class='notice'>You complete the ED-209.</span>")
 				var/turf/T = get_turf(src)
 				new /obj/machinery/bot/ed209(T,created_name,lasercolor)
