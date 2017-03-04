@@ -320,11 +320,11 @@
 	density = 1
 	anchored = 1
 	var/orient = "LEFT"
+	flags = HEAR
 
 /obj/machinery/body_scanconsole/New()
 	..()
 	spawn(5)
-		addHear()
 		if(orient == "RIGHT")
 			icon_state = "body_scannerconsole-r"
 			src.connected = locate(/obj/machinery/bodyscanner, get_step(src, EAST))
@@ -350,10 +350,6 @@
 /obj/machinery/body_scanconsole/blob_act()
 	if(prob(50))
 		qdel(src)
-
-/obj/machinery/body_scanconsole/Destroy()
-	removeHear()
-	..()
 
 /obj/machinery/body_scanconsole/power_change()
 	if(powered())
