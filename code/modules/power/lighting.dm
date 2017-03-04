@@ -513,8 +513,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	L.update()
 	L.add_fingerprint(user)
 
-	user.put_in_active_hand(L)	//puts it in our active hand
-
+	if(!user.put_in_active_hand(L)) //puts it in our active hand if possible
+		L.forceMove(get_turf(user))
 	status = LIGHT_EMPTY
 	update()
 

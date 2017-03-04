@@ -8,9 +8,12 @@
 	canWearClothes = 0
 	canWearHats = 0
 	canWearGlasses = 0
+	canWearBack = 0
+	canWearMasks = 0
 	languagetoadd = LANGUAGE_CLATTER
 	brute_damage_modifier = 2
 	movement_speed_modifier = 0.23
+	safe_oxygen_min = 0
 	greaterform = "Skellington"
 
 /mob/living/carbon/monkey/skellington/say(var/message)
@@ -27,6 +30,9 @@
 	..()
 	set_hand_amount(0)
 
+/mob/living/carbon/monkey/skellington/passive_emote()
+	emote(pick("jump","roll"))
+
 /mob/living/carbon/monkey/skellington/plasma
 	name = "flaming skull"
 	voice_name = "flaming skull"
@@ -35,4 +41,5 @@
 	light_range = 2
 	light_power = 0.5
 	light_color = "#FAA019"
+	burn_damage_modifier = 0.33
 	species_type = /mob/living/carbon/monkey/skellington/plasma
