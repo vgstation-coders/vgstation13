@@ -2264,3 +2264,4 @@
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 		)
 	result = /obj/poutineocean/poutinecitadel
+
