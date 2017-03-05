@@ -1,0 +1,30 @@
+################################
+# Example Changelog File
+#
+# Note: This file, and files beginning with ".", and files that don't end in ".yml" will not be read.  If you change this file, you will look really dumb.
+#
+# Your changelog will be merged with a master changelog. (New stuff added only, and only on the date entry for the day it was merged.)
+# When it is, any changes listed below will disappear.
+#
+# Valid Prefixes: 
+#   bugfix
+#   wip (For works in progress)
+#   tweak
+#   soundadd
+#   sounddel
+#   rscdel (general deleting of nice things)
+#   rscadd (general adding of nice things)
+#   imageadd
+#   imagedel
+#   spellcheck (typo fixes)
+#   experiment
+#   tgs (TG-ported fixes?)
+#################################
+
+# Your name.
+author: Unid
+
+delete-after: True
+
+- rscadd: "Added a new away mission: 'The Hive'. A massive city-sized alien spaceship infamous for conquering hundreds of planets has entered high orbit above the station. Now is the perfect chance to send an elite strike team to put an end to its existence, and it looks like you're the best candidates for the job."
+- rscadd: "Added 4 new enemy types for The Hive. Other than the away mission, they may sometimes spawn from golden slime cores."

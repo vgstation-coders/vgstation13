@@ -51,3 +51,8 @@ var/list/datum/map_element/map_elements = list()
 		return maploader.get_map_dimensions(file)
 
 	return list(width, height)
+
+//Return a list with strings associated with points
+//For example: list("Discovered a vault!" = 500) will add 500 points to the crew's score for discovering a vault
+/datum/map_element/proc/process_scoreboard()
+	return
