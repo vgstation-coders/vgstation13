@@ -1,0 +1,5 @@
+delete-after: true
+changes:
+  - tweak: "Reduced the slow down on the excavation suit for xenoarchaeology."
+
+author: PJB3005
