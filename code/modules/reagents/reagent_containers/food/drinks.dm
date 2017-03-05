@@ -1234,18 +1234,19 @@
 		update_brightness(user)
 		return
 	else if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/donut))
-		var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
-		var/probability = 15*D.soggy
-		to_chat(user, "<span class='notice'>You dip \the [D] into \the [src]</span>")
-		if(prob(probability))
-			to_chat(user, "<span class='danger'>\The [D] breaks off into \the [src]!</span>")
-			D.reagents.trans_to(src,D.reagents.maximum_volume)
-			qdel(D)
-			return
-		reagents.trans_to(D, rand(3,12))
-		if(!D.soggy)
-			D.name = "soggy [D.name]"
-		D.soggy += 1
+		if(reagents.total_volume)
+			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
+			var/probability = 15*D.soggy
+			to_chat(user, "<span class='notice'>You dip \the [D] into \the [src]</span>")
+			if(prob(probability))
+				to_chat(user, "<span class='danger'>\The [D] breaks off into \the [src]!</span>")
+				D.reagents.trans_to(src,D.reagents.maximum_volume)
+				qdel(D)
+				return
+			reagents.trans_to(D, rand(3,12))
+			if(!D.soggy)
+				D.name = "soggy [D.name]"
+			D.soggy += 1
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/light(mob/user,obj/item/I)
 	var/flavor_text = "<span  class='rose'>[user] lights \the [name] with \the [I].</span>"
