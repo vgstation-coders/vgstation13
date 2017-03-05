@@ -140,6 +140,8 @@
 			var/obj/item/AM = new type_to_dispense(get_turf(src))
 			user.put_in_hands(AM)
 			user.visible_message("<span class='notice'>[user] gathers some [AM.name] from \the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some [AM.name] from \the [src], and shovel it onto your plate!</span>")
+			return
+	..()
 
 /obj/poutineocean/MouseDrop(over_object)
 	return
