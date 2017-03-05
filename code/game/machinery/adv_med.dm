@@ -320,7 +320,7 @@
 	density = 1
 	anchored = 1
 	var/orient = "LEFT"
-	flags = HEAR
+	flags = FPRINT | HEAR
 
 /obj/machinery/body_scanconsole/New()
 	..()
