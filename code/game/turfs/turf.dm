@@ -96,7 +96,6 @@
 /turf/ex_act(severity)
 	return 0
 
-
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(2)

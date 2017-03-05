@@ -99,7 +99,9 @@
 	I have no idea why it was in atoms.dm instead of respective files.
 */
 
-/atom/proc/AIShiftClick()
+/atom/proc/AIShiftClick(var/mob/user)
+	if(user.client)
+		user.examination(src)
 	return
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
