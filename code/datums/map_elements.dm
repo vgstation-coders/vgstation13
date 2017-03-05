@@ -83,4 +83,3 @@ var/list/datum/map_element/map_elements = list()
 			//Remove all instances from the list
 			while(L.Remove(A))
 				continue
-

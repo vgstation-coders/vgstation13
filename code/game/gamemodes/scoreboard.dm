@@ -457,6 +457,17 @@
 	if(arena_top_score)
 		dat += "<B>Best Arena Fighter (won [arena_top_score] rounds!):</B> [score["arenabest"]]<BR>"
 
+	for(var/datum/map_element/ME in map_elements)
+		var/list/L = ME.process_scoreboard()
+		if(!L)
+			continue
+
+		dat += "<u>[ME.name]</u><br>"
+		for(var/score_value in L)
+			dat += "<b>[score_value]: </b> [L[score_value]]<br>"
+			score["crewscore"] += L[score_value]
+		dat += "<br>"
+
 	if(score["escapees"])
 		if(score["dmgestdamage"])
 			dat += "<B>Most Battered Escapee:</B> [score["dmgestname"]], [score["dmgestjob"]]: [score["dmgestdamage"]] damage ([score["dmgestkey"]])<BR>"
