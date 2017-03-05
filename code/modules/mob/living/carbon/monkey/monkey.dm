@@ -157,10 +157,6 @@
 	canWearGlasses = 0
 	languagetoadd = LANGUAGE_GREY
 	greaterform = "Grey"
-	brute_damage_modifier = 1.4
-
-/mob/living/carbon/monkey/grey/dexterity_check()
-	return 1
 
 /mob/living/carbon/monkey/grey/passive_emote()
 	emote(pick("scratch","jump","roll"))
