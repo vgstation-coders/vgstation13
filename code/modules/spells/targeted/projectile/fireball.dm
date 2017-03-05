@@ -30,6 +30,11 @@
 
 	hud_state = "wiz_fireball"
 
+/spell/targeted/projectile/dumbfire/fireball/cast(list/targets, mob/user)
+	..(targets, user)
+
+	playsound(get_turf(user), null, 20, 0, drugged_sound = 'sound/effects/fireball.ogg') //Mobs who are hallucinating hear a different sound
+
 /spell/targeted/projectile/dumbfire/fireball/prox_cast(var/list/targets, spell_holder)
 	for(var/mob/living/M in targets)
 		apply_spell_damage(M)

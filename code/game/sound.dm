@@ -28,7 +28,9 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0)
+
+//"drugged_sound" = alternate sound that's played to mobs who are hallucinating
+/proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0, var/drugged_sound = null)
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
@@ -76,10 +78,16 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 			continue
 
 		var/turf/player_turf = get_turf(player)
+		var/sound_to_play = soundin
 
 		if (player_turf && turf_source && player_turf.z == turf_source.z)
 			if(get_dist(player_turf, turf_source) <= Dist)
-				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel)
+				if(drugged_sound && player.hallucinating())
+					sound_to_play = drugged_sound
+
+				if(!sound_to_play) continue
+
+				player.playsound_local(turf_source, sound_to_play, vol, vary, frequency, falloff, gas_modified, channel)
 
 var/const/FALLOFF_SOUNDS = 1
 var/const/SURROUND_CAP = 7
