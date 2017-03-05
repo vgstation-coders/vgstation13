@@ -523,6 +523,7 @@
 	desc = "Goes great with Robust Coffee."
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL //eggs are used
+	var/soggy = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	name = "donut"
