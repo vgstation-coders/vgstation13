@@ -71,7 +71,8 @@
 
 	if(istype(loc, /turf/unsimulated/floor/evil))
 		//Turn into breathing floor (that slows people down) permanently
-		new /turf/unsimulated/floor/evil/breathing(loc)
+		var/turf/T = loc
+		T.ChangeTurf(/turf/unsimulated/floor/evil/breathing)
 
 //Has 2 modes: movement mode and attack mode. When in movement mode, fast but can't attack. When in attack mode, immobile but dangerous
 //Switching between modes takes 0.6-1 seconds
