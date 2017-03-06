@@ -16,6 +16,7 @@
 	keytype = /obj/item/key/janicart
 	flags = OPENCONTAINER
 	noghostspin = 0
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
 
@@ -43,7 +44,7 @@
 
 /obj/structure/bed/chair/vehicle/janicart/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded && !destroyed)
+	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded)
 		if(user.drop_item(W))
 			qdel(W)
 			to_chat(user, "<span class='notice'>You upgrade \the [nick].</span>")
@@ -123,3 +124,9 @@
 						cleaned_human.clean_blood()
 						to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
 	return
+
+/obj/effect/decal/mecha_wreckage/vehicle/janicart
+	icon = 'icons/obj/vehicles.dmi'
+	icon_state = "pussywagon_destroyed"
+	name = "\improper Go-Kart wreckage"
+	desc = "You don't think AAA will cover this."

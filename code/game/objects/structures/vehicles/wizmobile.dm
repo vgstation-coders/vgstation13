@@ -28,6 +28,7 @@
 	layer = FLY_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/firebird
 
 	var/datum/effect/effect/system/trail/firebird/ion_trail
 
@@ -98,3 +99,10 @@
 	name = "snowmobile"
 	desc = "After a complaint from space PETA, santa's been forced to take a less elegant ride."
 	icon_state = "snowmobile"
+
+/obj/effect/decal/mecha_wreckage/vehicle/firebird
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "gokart_wreck"
+	name = "\improper Firebird wreckage"
+	desc = "The magic is gone."

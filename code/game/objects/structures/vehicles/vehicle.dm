@@ -27,7 +27,6 @@
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
-	var/destroyed = 0
 
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
@@ -47,6 +46,7 @@
 
 	var/mob/occupant
 	lock_type = /datum/locking_category/buckle/chair/vehicle
+	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -80,8 +80,6 @@
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
-			if(destroyed)
-				to_chat(user, "<span class='warning'>\The [src.name] is destroyed beyond repair.</span>")
 			add_fingerprint(user)
 			user.visible_message("<span class='notice'>[user] has fixed some of the dents on \the [src].</span>", "<span class='notice'>You fix some of the dents on \the [src]</span>")
 			health += 20
@@ -102,7 +100,7 @@
 		return user.is_holding_item(mykey)
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
-	if(user.incapacitated()  || destroyed)
+	if(user.incapacitated())
 		unlock_atom(user)
 		return
 	if(!check_key(user))
@@ -153,7 +151,7 @@
 		S.Entered(src)*/
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
-	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || destroyed || occupant)
+	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
 		return 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -273,7 +271,7 @@
 /obj/structure/bed/chair/vehicle/proc/HealthCheck()
 	if(health > max_health)
 		health = max_health
-	if(health <= 0 && !destroyed)
+	if(health <= 0)
 		die()
 
 /obj/structure/bed/chair/vehicle/ex_act(severity)
@@ -287,12 +285,19 @@
 	HealthCheck()
 
 /obj/structure/bed/chair/vehicle/proc/die() //called when health <= 0
-	destroyed = 1
 	density = 0
 	visible_message("<span class='warning'>\The [nick] explodes!</span>")
 	explosion(src.loc,-1,0,2,7,10)
-	icon_state = "pussywagon_destroyed"
+	//icon_state = "pussywagon_destroyed"
 	unlock_atom(occupant)
+	if(wreckage_type)
+		var/obj/effect/decal/mecha_wreckage/wreck = new wreckage_type(src.loc)
+		setup_wreckage(wreck)
+	qdel(src)
+
+/obj/structure/bed/chair/vehicle/proc/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
+	// Transfer salvagables here.
+	return
 
 /obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
