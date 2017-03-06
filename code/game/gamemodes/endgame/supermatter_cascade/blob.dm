@@ -148,5 +148,5 @@
 //For an away mission
 /turf/unsimulated/wall/supermatter/no_spread/lake
 	name = "Supermatter Lake"
-	desc = "It appears to be somewhat contained by enormous mechanisms surrounding it from every side. Flight might be the only way to get across it."
+	desc = "It appears to be somewhat contained by magnetic fields surrounding from every side. Not even flight will get you across it."
 	opacity = 0
