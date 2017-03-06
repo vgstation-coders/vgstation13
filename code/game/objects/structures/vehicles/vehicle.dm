@@ -304,14 +304,19 @@
 	..()
 
 /obj/structure/bed/chair/vehicle/unlock_atom(var/atom/movable/AM)
+	var/pixel_x_cache = AM.pixel_x
+	var/pixel_y_cache = AM.pixel_y
 	. = ..()
 	if(!.)
 		return
 
-	AM.pixel_x = 0
-	AM.pixel_y = 0
-
 	if(occupant == AM)
+		if(!occupant.incapacitated())
+			AM.pixel_x = 0
+			AM.pixel_y = 0
+		else
+			AM.pixel_x = -pixel_x_cache
+			AM.pixel_y = -pixel_y_cache
 		occupant = null
 
 /obj/structure/bed/chair/vehicle/lock_atom(var/atom/movable/AM)
