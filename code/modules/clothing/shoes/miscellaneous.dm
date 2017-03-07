@@ -116,7 +116,7 @@
 	icon_state = "galoshes"
 	permeability_coefficient = 0.05
 	clothing_flags = NOSLIP
-	slowdown = SHOES_SLOWDOWN+1
+	slowdown = MISC_SHOE_SLOWDOWN
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 
@@ -131,7 +131,6 @@
 	name = "clown shoes"
 	icon_state = "clown"
 	item_state = "clown_shoes"
-	slowdown = SHOES_SLOWDOWN+1
 	_color = "clown"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 

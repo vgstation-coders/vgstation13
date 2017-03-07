@@ -23,7 +23,7 @@
 	desc = "A cheap NT knock-off of a Unathi battle-rig. Looks like a fish, moves like a fish, steers like a cow."
 	icon_state = "rig-unathi-cheap"
 	item_state = "rig-unathi-cheap"
-	slowdown = 3
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
 
 
 // Vox space gear (vaccuum suit, low pressure armor)
@@ -34,7 +34,7 @@
 /obj/item/clothing/suit/space/vox
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
-	slowdown = 2
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list(VOX_SHAPED)

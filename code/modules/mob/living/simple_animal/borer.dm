@@ -26,7 +26,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_state = "brainslug"
 	icon_living = "brainslug"
 	icon_dead = "brainslug_dead"
-	speed = 5
+	speed = 6
 
 	size = SIZE_SMALL
 

@@ -68,7 +68,7 @@
 
 	if(nutrition >= MOUSEFAT && is_fat == 0)
 		is_fat = 1
-		speed = 5
+		speed = 6
 		meat_amount = initial(meat_amount) + 1
 	else if (nutrition <= 400 && is_fat == 1) //400 = default nutrition value
 		is_fat = 0

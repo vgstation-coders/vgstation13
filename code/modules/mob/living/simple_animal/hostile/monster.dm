@@ -15,7 +15,7 @@
 	attacktext = "slashes"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	faction = "creature"
-	speed = 4
+	speed = 5
 	size = SIZE_BIG
 	move_to_delay = 4
 	canRegenerate = 1

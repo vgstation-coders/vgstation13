@@ -65,7 +65,7 @@
 	ranged_cooldown_cap = 20
 	throw_message = "does nothing against the hard shell of"
 	vision_range = 2
-	speed = 3
+	speed = 4
 	maxHealth = 200
 	health = 200
 	harm_intent_damage = 5
@@ -236,7 +236,7 @@ obj/item/asteroid/basilisk_hide/New()
 	vision_range = 5
 	aggro_vision_range = 9
 	idle_vision_range = 5
-	speed = 3
+	speed = 4
 	maxHealth = 75
 	health = 75
 	harm_intent_damage = 5
@@ -388,7 +388,7 @@ obj/item/asteroid/basilisk_hide/New()
 	move_to_delay = 0
 	friendly = "buzzes near"
 	vision_range = 10
-	speed = 3
+	speed = 4
 	maxHealth = 1
 	health = 1
 	harm_intent_damage = 5
@@ -422,7 +422,7 @@ obj/item/asteroid/basilisk_hide/New()
 	ranged_cooldown_cap = 8
 	friendly = "wails at"
 	vision_range = 5
-	speed = 3
+	speed = 4
 	maxHealth = 300
 	health = 300
 	harm_intent_damage = 0
