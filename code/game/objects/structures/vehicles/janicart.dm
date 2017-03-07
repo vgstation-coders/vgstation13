@@ -29,7 +29,7 @@
 /obj/structure/bed/chair/vehicle/janicart/examine(mob/user)
 	..()
 	if(in_range(src, user) && reagents.has_reagent(LUBE))
-		to_chat(user, "<span class='warning'> Something is very off about this water.</span>")
+		to_chat(user, "<span class='warning'>Something is very off about this water.</span>")
 	switch(health)
 		if(75 to 99)
 			to_chat(user, "<span class='info'>It appears slightly dented.</span>")
@@ -77,6 +77,18 @@
 	if(mybag && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
 		mybag.forceMove(get_turf(usr))
 		usr.put_in_hands(mybag)
+		mybag = null
+
+/obj/structure/bed/chair/vehicle/janicart/die()
+	var/obj/effect/decal/mecha_wreckage/vehicle/wreck = ..()
+
+	// Add janicart upgrade to wreck, if it passes the roll.
+	if(upgraded)
+		wreck.add_salvagable(new /obj/item/mecha_parts/janicart_upgrade(src)) // 30% chance
+
+	// Same with the bag
+	if(mybag)
+		wreck.add_salvagable(mybag, 75)
 		mybag = null
 
 /obj/structure/bed/chair/vehicle/janicart/attack_hand(mob/user)
@@ -128,5 +140,5 @@
 /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "pussywagon_destroyed"
-	name = "\improper Go-Kart wreckage"
-	desc = "You don't think AAA will cover this."
+	name = "janicart wreckage"
+	desc = "Guess it's back to the mop."

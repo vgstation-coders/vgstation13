@@ -13,7 +13,6 @@
 	var/list/welder_salvage = list(/obj/item/stack/sheet/plasteel,/obj/item/stack/sheet/metal,/obj/item/stack/rods)
 	var/list/wirecutters_salvage = list(/obj/item/stack/cable_coil)
 	var/list/crowbar_salvage
-	var/list/final_removal_salvage = list(/obj/item/stack/sheet/metal)
 
 	New()
 		..()
@@ -25,6 +24,28 @@
 		spawn // Why.
 			qdel(src)
 	return
+
+/obj/effect/decal/mecha_wreckage/proc/add_salvagable(var/obj/O, const/salvage_prob=30)
+	// Mecha equipment is ~special~
+	if(istype(O, /obj/item/mecha_parts/mecha_equipment))
+		add_salvagable_equipment(O)
+		return
+
+	if(prob(salvage_prob))
+		crowbar_salvage += O
+		O.forceMove(src)
+	else
+		qdel(O)
+
+/obj/effect/decal/mecha_wreckage/proc/add_salvagable_equipment(var/obj/item/mecha_parts/mecha_equipment/E, const/salvage_prob=30)
+	if(E.salvageable && prob(salvage_prob))
+		crowbar_salvage += E
+		E.forceMove(src)
+		E.equip_ready = 1
+		E.reliability = round(rand(E.reliability/3,E.reliability))
+	else
+		E.forceMove(get_turf(src))
+		E.destroy()
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
 	return
@@ -41,9 +62,10 @@
 /obj/effect/decal/mecha_wreckage/proc/die()
 	qdel(src)
 
-/obj/effect/decal/mecha_wreckage/proc/check_salvage()
+/obj/effect/decal/mecha_wreckage/proc/check_salvage(var/mob/user)
 	if(isemptylist(welder_salvage) && isemptylist(wirecutters_salvage) && isemptylist(crowbar_salvage))
 		die()
+		to_chat(user, "<span class='info'>You finished salvaging \the [src]!</span>")
 
 /obj/effect/decal/mecha_wreckage/proc/pick_random_loot(var/list/possible, const/max_loot=2, const/loot_prob=40)
 	var/list/provided = list()
@@ -63,8 +85,8 @@
 			if(type)
 				var/N = new type(get_turf(user))
 				user.visible_message("[user] cuts [N] from [src]", "You cut [N] from [src]", "You hear a sound of welder nearby")
-				if(istype(N, /obj/item/mecha_parts/part))
-					welder_salvage -= type
+				welder_salvage -= type
+				check_salvage(user)
 			else
 				to_chat(user, "You failed to salvage anything valuable from [src].")
 		else
@@ -78,6 +100,8 @@
 		if(type)
 			var/N = new type(get_turf(user))
 			user.visible_message("[user] cuts [N] from [src].", "You cut [N] from [src].")
+			wirecutters_salvage -= type
+			check_salvage(user)
 		else
 			to_chat(user, "You failed to salvage anything valuable from [src].")
 	if(iscrowbar(W))
@@ -87,6 +111,7 @@
 				S.forceMove(get_turf(user))
 				crowbar_salvage -= S
 				user.visible_message("[user] pries [S] from [src].", "You pry [S] from [src].")
+				check_salvage(user)
 			else
 				to_chat(user, "You failed to salvage anything valuable from [src].")
 		else
