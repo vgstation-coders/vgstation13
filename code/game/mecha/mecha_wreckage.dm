@@ -14,10 +14,10 @@
 	var/list/wirecutters_salvage = list(/obj/item/stack/cable_coil)
 	var/list/crowbar_salvage
 
-	New()
-		..()
-		crowbar_salvage = new
-		return
+/obj/effect/decal/mecha_wreckage/New()
+	..()
+	crowbar_salvage = new
+	return
 
 /obj/effect/decal/mecha_wreckage/ex_act(severity)
 	if(severity < 2)
