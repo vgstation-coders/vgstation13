@@ -2,6 +2,7 @@
 	name = "Radio Transmitter"
 	desc = "A huge hulk of steel containing high-powered phase-modulating radio transmitting equipment."
 
+	anchored = 1
 	icon = 'icons/obj/machines/broadcast.dmi'
 	icon_state = "broadcaster"
 	light_color = LIGHT_COLOR_BLUE
