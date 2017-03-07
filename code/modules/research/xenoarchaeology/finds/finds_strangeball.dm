@@ -22,6 +22,7 @@
 	M.ckey = candidate.ckey
 	M.Namepick()
 	M.updatename()
+	src.investigation_log(I_ARTIFACT, "|| [key_name(candidate)] spawned as TG17355 Cyborg.")
 	qdel(src)
 
 /obj/item/device/mmi/posibrain/strangeball/reset_search()
