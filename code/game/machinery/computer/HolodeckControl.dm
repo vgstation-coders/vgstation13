@@ -385,7 +385,26 @@
 	targetsource.copy_contents_to(linkedholodeck , 1)
 	active = 0
 
+// Holographic Animals
+
+/mob/living/simple_animal/corgi/puppy/holo
+
+/mob/living/simple_animal/corgi/puppy/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return
+
+/mob/living/simple_animal/chicken/holo
+
+/mob/living/simple_animal/chicken/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return
+
+/mob/living/simple_animal/cow/holo
+
+/mob/living/simple_animal/cow/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return
+
+
 // Holographic Items!
+
 
 /turf/simulated/floor/holofloor/
 	thermal_conductivity = 0
