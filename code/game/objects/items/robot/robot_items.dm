@@ -190,8 +190,9 @@
 			M.dizziness += 5
 			M.confused +=  5
 			M.Jitter(5)
+			add_logs(M, "alarmed by \the [src.name]", admin = FALSE)
 		cooldown = world.time + 20 SECONDS
-		add_gamelogs(user, "used a [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
+		add_gamelogs(user, "used \the [src.name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		return
 
 	if(safety == FALSE)
@@ -205,5 +206,6 @@
 			M.ear_deaf += 10
 			M.Knockdown(7)
 			M.Jitter(30)
+			add_logs(M, "alarmed by an emmaged \the [src.name]", admin = FALSE)
 		cooldown = world.time + 1 MINUTES
-		add_gamelogs(user, "used an emagged [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
+		add_gamelogs(user, "used an emagged \the [src.name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
