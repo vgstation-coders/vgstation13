@@ -314,8 +314,7 @@
 			speed = -2
 
 		if("Peacekeeper")
-			module = new /obj/item/weapon/robot_module/security(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
+			module = new /obj/item/weapon/robot_module/peacekeeper(src)
 			module_sprites["Basic"] = "secborg"
 			module_sprites["Sleek"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"

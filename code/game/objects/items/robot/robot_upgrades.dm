@@ -142,7 +142,7 @@
 	name = "robotic Rapid Taser Cooling Module"
 	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/security)
+	required_module = list(/obj/item/weapon/robot_module/peacekeeper)
 	multi_upgrades = 1
 
 
