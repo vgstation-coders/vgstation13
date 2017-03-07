@@ -402,9 +402,7 @@
 /mob/living/simple_animal/cow/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 
-
 // Holographic Items!
-
 
 /turf/simulated/floor/holofloor/
 	thermal_conductivity = 0
