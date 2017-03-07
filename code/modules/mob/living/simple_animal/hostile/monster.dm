@@ -32,6 +32,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 	var/stance_step = 0
+	can_force_doors = 1
 
 /mob/living/simple_animal/hostile/monster/skrite
 	name = "skrite"
