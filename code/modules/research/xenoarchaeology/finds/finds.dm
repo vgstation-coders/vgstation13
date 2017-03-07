@@ -525,7 +525,6 @@
 			possible_spawns += /obj/item/clothing/mask/morphing
 			possible_spawns += /obj/item/clothing/mask/morphing/amorphous
 			//possible_spawns += /obj/item/clothing/mask/happy PENDING REWORK
-			//possible_spawns += /obj/item/clothing/mask/stone WHEN I CODE IT
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_DICE)
@@ -557,6 +556,16 @@
 			apply_material_decorations = 0
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/weapon/gun/projectile/roulette_revolver
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
+		if(ARCHAEO_ROBOT)
+			//ancient robots?
+			anomaly_factor = 2
+			apply_material_decorations = 0
+			apply_image_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/device/mmi/posibrain/strangeball
+			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 
