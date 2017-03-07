@@ -120,14 +120,14 @@
 			if(!shock_cooldown)
 				if(ishuman(M)||ismonkey(M))
 					M.electrocute_act(15, user, 1)
-					add_logs(user, M, "eletrocuted with \the [src.name]", admin = (user.ckey && M.ckey) ? TRUE : FALSE)
+					add_logs(user, M, "eletrocuted with \the [src]", admin = (user.ckey && M.ckey) ? TRUE : FALSE)
 					user.visible_message("<span class='userdanger'>[user] electrocutes [M] with their touch!</span>", \
 						"<span class='danger'>You electrocute [M] with your touch!</span>")
 					M.update_canmove()
 				else
 					if(!isrobot(M))
 						M.adjustFireLoss(15)
-						add_logs(user, M, "shocked with \the [src.name]", admin = (user.ckey && M.ckey) ? TRUE : FALSE)
+						add_logs(user, M, "shocked with \the [src]", admin = (user.ckey && M.ckey) ? TRUE : FALSE)
 						user.visible_message("<span class='danger'>[user] shocks [M]!</span>", \
 							"<span class='danger'>You shock [M]!</span>")
 					else
@@ -148,7 +148,7 @@
 							"<span class='danger'>You crush [M]!</span>")
 				playsound(loc, 'sound/weapons/crushhug.ogg', 50, 1, -1)
 				M.adjustBruteLoss(20)
-				add_logs(user, M, "crushed with \the [src.name]", admin = (user.ckey && M.ckey) ? TRUE : FALSE)
+				add_logs(user, M, "crushed with \the [src]", admin = (user.ckey && M.ckey) ? TRUE : FALSE)
 				user.cell.charge -= 300
 				crush_cooldown = TRUE
 				spawn(2 SECONDS)
@@ -190,9 +190,9 @@
 			M.dizziness += 5
 			M.confused +=  5
 			M.Jitter(5)
-			add_logs(M, "alarmed by \the [src.name]", admin = FALSE)
+			add_logs(M, "alarmed by \the [src]", admin = FALSE)
 		cooldown = world.time + 20 SECONDS
-		add_gamelogs(user, "used \the [src.name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
+		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		return
 
 	if(safety == FALSE)
@@ -206,6 +206,6 @@
 			M.ear_deaf += 10
 			M.Knockdown(7)
 			M.Jitter(30)
-			add_logs(M, "alarmed by an emmaged \the [src.name]", admin = FALSE)
+			add_logs(M, "alarmed by an emagged [name]", admin = FALSE)
 		cooldown = world.time + 1 MINUTES
-		add_gamelogs(user, "used an emagged \the [src.name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
+		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
