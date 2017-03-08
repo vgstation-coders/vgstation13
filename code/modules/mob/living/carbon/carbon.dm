@@ -234,8 +234,8 @@
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
-					"<span class='notice'>[M] shake hands with [src].</span>", \
-					"<span class='notice'>You shake [src]'s hand.</span>", \
+					"<span class='notice'>[M] shakes hands with [src].</span>", \
+					"<span class='notice'>You shake hands with [src].</span>", \
 					)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
