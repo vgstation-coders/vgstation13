@@ -1,3 +1,9 @@
+// Note about encodings:
+//  Encodings are passed by number as it's simplest to do it like this (citation needed)
+//  This may cause some confusion with what codes correspond how.
+//
+// 874 and 1250-1258 are Windows CodePage encodings. The number corresponds to the CodePage.
+// 2312 is gb2312 (Chinese)
 /proc/_determine_encoding(var/mob_or_client)
 	. = "1252"
 	if (isclient(mob_or_client))
