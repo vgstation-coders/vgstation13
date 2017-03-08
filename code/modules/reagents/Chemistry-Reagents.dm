@@ -5455,6 +5455,34 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(H.species.name == "Vox")
 			M.adjustToxLoss(-4 * REM) //chicken and gravy just go together
 
+/datum/reagent/cheesygloop
+	name = "Cheesy Gloop"
+	id = CHEESYGLOOP
+	description = "This fatty, viscous substance is found only within the cheesiest of cheeses. Has the potential to cause heart stoppage."
+	reagent_state = SOLID
+	color = "#FFFF00" //rgb: 255, 255, 0
+	overdose = 5
+	custom_metabolism = 0 //does not leave your body, clogs your arteries! puke or otherwise clear your system ASAP
+
+/datum/reagent/maplesyrup
+	name = "Maple Syrup"
+	id = MAPLESYRUP
+	description = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
+	color = "#7C1C04"
+	alpha = 200
+	nutriment_factor = 20 * REAGENTS_METABOLISM
+
+/datum/reagent/maplesyrup/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	M.adjustOxyLoss(-2 * REM)
+	M.adjustToxLoss(-2 * REM)
+	M.adjustBruteLoss(-3 * REM)
+	M.adjustFireLoss(-3 * REM)
+
 /datum/reagent/blockizine
 	name = "Blockizine"
 	id = BLOCKIZINE
