@@ -327,12 +327,12 @@
 				var/tag = input("Please enter desired tag.", name, ppstag) as text|null
 				if (!tag) //what a check
 					return
-				tag = copytext(sanitize(tag), 1, 20)
+				tag = copytext(strict_ascii(tag), 1, 20)
 				if(length(tag) != 4)
-					to_chat(src, "<span class = 'caution'>The tag must be four letters long!</span>")
+					to_chat(src, "<span class = 'caution'>The tag must be four characters long!</span>")
 					return
 				else
-					update_name(tag)
+					ppstag = tag
 	src.paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
@@ -733,7 +733,8 @@ Target Machine: "}
 
 /mob/living/silicon/pai/proc/softwarepPS()
 	if(!pPS) // Are we a GPS yet?
-		handle_list()
+		GPS_list.Add(src)
+		pPS = 1
 	var/list/locallist = null
 	locallist = GPS_list.Copy()
 	var/dat = "<h3>pAI Positioning System</h3>"
@@ -744,7 +745,7 @@ Target Machine: "}
 		var/area/area = get_area(A)
 		var/tag = null
 		var/rip = null
-		if(istype(A, /mob/living/silicon/pai))
+		if(ispAI(A))
 			var/mob/living/silicon/pai/P = A
 			tag = P.ppstag
 			rip = P.silence_time
@@ -761,10 +762,3 @@ Target Machine: "}
 		else
 			dat += "<BR>[tag]: [format_text(area.name)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z])"
 	return dat
-
-/mob/living/silicon/pai/proc/update_name(var/new_name)
-	ppstag = new_name
-
-/mob/living/silicon/pai/proc/handle_list()
-		GPS_list.Add(src)
-		pPS = 1
