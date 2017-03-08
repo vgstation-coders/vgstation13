@@ -122,10 +122,10 @@
 	if(snack.reagents.total_volume)
 		loaded_food_name = snack.name
 		var/icon/food_to_load = getFlatIcon(snack)
-		food_to_load.Scale(16,16)
+		food_to_load.Scale(24 * PIXEL_MULTIPLIER,24 * PIXEL_MULTIPLIER)
 		loaded_food = image(food_to_load)
-		loaded_food.pixel_x = 8 * PIXEL_MULTIPLIER + src.pixel_x
-		loaded_food.pixel_y = 15 * PIXEL_MULTIPLIER + src.pixel_y
+		loaded_food.pixel_x = 10 * PIXEL_MULTIPLIER + src.pixel_x - round(snack.pixel_x/8)
+		loaded_food.pixel_y = 20 * PIXEL_MULTIPLIER + src.pixel_y - round(snack.pixel_y/8)
 		src.overlays += loaded_food
 		if(snack.reagents.total_volume > snack.bitesize)
 			snack.reagents.trans_to(src, snack.bitesize)
