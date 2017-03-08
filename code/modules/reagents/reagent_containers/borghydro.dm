@@ -81,6 +81,7 @@
 	if(M.reagents)
 		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>")
+		add_logs(user, M, "injected [transferred]u [reagents] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
 	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
