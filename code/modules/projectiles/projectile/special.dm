@@ -13,6 +13,21 @@
 		empulse(get_turf(A), 1, 1)
 	..()
 
+/obj/item/projectile/ionsmall
+	name = "ion bolt"
+	icon_state = "ion"
+	damage = 0
+	damage_type = BURN
+	nodamage = 1
+	layer = PROJECTILE_LAYER
+	flag = "energy"
+	fire_sound = 'sound/weapons/ion.ogg'
+
+/obj/item/projectile/ionsmall/Bump(atom/A as mob|obj|turf|area)
+	if(!bumped && ((A != firer) || reflected))
+		empulse(src, 0, 1)
+	..()
+
 /obj/item/projectile/bullet/gyro
 	name ="explosive bolt"
 	icon_state= "bolter"
