@@ -38,7 +38,6 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	add_dock(/obj/docking_port/destination/vox/mining_east)
 	add_dock(/obj/docking_port/destination/vox/mining_south)
 	add_dock(/obj/docking_port/destination/vox/mining_west)
-	add_dock(/obj/docking_port/destination/vox/clown) // z4 clown roid
 	add_dock(/obj/docking_port/destination/vox/goonsat) //z3 comms sat
 	add_dock(/obj/docking_port/destination/vox/deepspace) //z6 middle of nowhere so vox can hide
 
@@ -138,9 +137,6 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 /obj/docking_port/destination/vox/mining_west
 	areaname = "west of asteroid"
-
-/obj/docking_port/destination/vox/clown
-	areaname = "strange asteroid"
 
 /obj/docking_port/destination/vox/goonsat
 	areaname = "abandoned satellite"
