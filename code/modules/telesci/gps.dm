@@ -52,11 +52,20 @@ var/list/SPS_list = list()
 		t += "<BR><A href='?src=\ref[src];tag=1'>Set Tag</A> "
 		t += "<BR>Tag: [gpstag]"
 
-		for(var/obj/item/device/gps/G in locallist)
-			var/turf/pos = get_turf(G)
-			var/area/gps_area = get_area(G)
-			var/tracked_gpstag = G.gpstag
-			if(G.emped == 1)
+		for(var/A in locallist)
+			var/turf/pos = get_turf(A)
+			var/area/gps_area = get_area(A)
+			var/tracked_gpstag = null
+			var/rip = null
+			if(istype(A, /mob/living/silicon/pai))
+				var/mob/living/silicon/pai/P = A
+				tracked_gpstag = P.ppstag
+				rip = P.silence_time
+			else
+				var/obj/item/device/gps/G = A
+				tracked_gpstag = G.gpstag
+				rip = G.emped
+			if(rip)
 				t += "<BR>[tracked_gpstag]: ERROR"
 			else if(!pos || !gps_area)
 				t += "<BR>[tracked_gpstag]: UNKNOWN"
