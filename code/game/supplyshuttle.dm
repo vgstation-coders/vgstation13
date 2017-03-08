@@ -110,6 +110,7 @@ var/list/mechtoys = list(
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/hacked = 0
 	var/can_order_contraband = 0
+	var/all_access = 0
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
 
@@ -593,7 +594,7 @@ var/list/mechtoys = list(
 	return
 
 /obj/machinery/computer/supplycomp/attack_hand(var/mob/user as mob)
-	if(!allowed(user))
+	if(!allowed(user) && !can_order_contraband) //if board is hacked then it removes access requirement
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
@@ -648,6 +649,7 @@ var/list/mechtoys = list(
 				qdel(src)
 	else
 		return ..()
+
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	// data to send to ui
