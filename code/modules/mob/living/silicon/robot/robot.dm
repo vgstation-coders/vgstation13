@@ -755,6 +755,8 @@
 				if(prob(50))
 					sleep(6)
 					SetEmagged(1)
+					var/I = image('icons/mob/mob.dmi', loc = user, icon_state = "synd") //This is a bad solution, it'll create more icons for every borg you emag. But... how would you be able to tell, anyway?
+					src.client.images += I
 					SetLockdown(1)
 					lawupdate = 0
 					connected_ai = null
