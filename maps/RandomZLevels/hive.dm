@@ -52,19 +52,19 @@
 
 ///////////////////////////////////////////****NARRATIONS****/////////////////////////////////////////////
 /obj/effect/narration/hive/intro
-	msg = "From the window you can see a cylindrical structure larger than anything you've ever seen in your life. Its surface constantly shifts and distorts, and the exterior is covered by massive spikes. That's not at all what you'd expect a spaceship to look like."
+	msg = "From the window you can see a chaotic structure larger than anything you've ever seen in your life. Its surface constantly shifts and distorts, and the exterior is covered in massive spikes. That's not at all what you'd expect a spaceship to look like."
 
 /obj/effect/narration/hive/entrance
 	msg = "As you enter the thin passageway, you begin to feel very uneasy and threatened. Whether it's the breathing walls, the tiny pores that completely cover their surfaces, or the eerie silence that surrounds you - you have absolutely no idea."
 
 /obj/effect/narration/hive/lake
-	msg = "You enter a truly enormous chamber, and the first thing you notice is the supermatter that forms most of this room's floor. This matter constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks, you better be careful - a single misstep and you'll be annihilated faster than you can say 'NO'."
+	msg = "You enter a truly enormous chamber, and the first thing you notice is the supermatter that forms most of this room's floor. This matter constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks, you better be careful - a single misstep and you'll be annihilated faster than you can say anything."
 
 /obj/effect/narration/hive/cloning_hallway
 	msg = "You notice that the surface of the floors and walls around you becomes more and more porous, and more... alive. You must be approaching the cloning chamber."
 
 /obj/effect/narration/hive/cloning
-	msg = "A large alien machine takes up most of this chamber. It looks like a human heart, and it pulsates like one as well. You feel like it's reacting to your presence by beating faster and faster, but that might just be your imagination."
+	msg = "A large alien machine hangs down from the ceiling. It looks like a human heart, and it pulsates like one as well. You feel like it's reacting to your presence by beating faster and faster, but that might just be your imagination."
 	play_sound = 'sound/effects/heart_beat_loop.ogg'
 
 /obj/effect/narration/hive/control
@@ -78,19 +78,20 @@
 ////////PAPERWORKS///////
 /obj/item/weapon/paper/hive/birthday_note
 	name = "Happy Birthday, Chechen"
-	info = {"You only care about two things in your life - eating cakes and perving at Russian chicks, so we got you an appropriate present. Never change, you fat piece of shit.<br>
+	info = {"You only care about two things in your life - eating cakes and perving at Russian chicks, so we got you an appropriate present. Never change, you fat piece of shit.<br><br>
 
-	<i>Dan</i>
-	<i>Parek</i>
-	<i>Szpindel</i>
-	<i>Amara</i>"}
+	<i>Dan</i><br>
+	<i>Parek</i><br>
+	<i>Szpindel</i><br>
+	<i>Amara</i><br>"}
 
-//all info you need to find the marauder parts. if you ctrl+F the map you'll have 7 days of bad luck
+//all info you need to find the marauder parts. if you ctrl+F the map for them you'll have 7 days of bad luck
 //lueduozhe = marauder in google-translate-mandarin
 
 /obj/item/weapon/paper/hive/marauder_lost
 	name = "HOW THE HELL DID YOU LOSE AN ENTIRE LUEDUOZHE"
-	info = "Give me a single reason not to stick all of your retarded asses in the deprotonizer. Lueduozhe 1 is gone and there's a toy in its place. I demand answers."
+	info = {"Give me a single reason not to stick all of your retarded asses in the deprotonizer. Lueduozhe 1 is gone and there's a toy in its place. I demand answers.<br>
+	<i>Omar</i> <b>ID: 1C/1</b>"}
 
 /obj/item/weapon/paper/hive/marauder_rescue
 	name = "Re:Re:Re: Lueduozhe disappeared and Commander wants to deprotonize our asses"
@@ -109,6 +110,16 @@
 	Let's do the exact same thing to the clown before the commander \"deprotonizes our asses\" (does this mean what I think this means?).<br>
 	<i>Amara</i> <b>ID: 222F/4</b>
 	"}
+
+/obj/item/weapon/paper/hive/fluff/unisex
+	name = "Re: Bathroom C is now unisex"
+	info = {"Does this mean that we at DET no longer have a safe place to hide from Barb? Just do me a favor and fucking kill me.<br>
+	<i>Qun Lee</i>"}
+
+/obj/item/weapon/paper/hive/fluff/chain_letter
+	name = "Re: Forward this to 5 people or DEMONS will invade your station and kill you"
+	info = {"I'll see that your mail permissions are revoked, Todd. You're the laughing stock of the division. Do you seriously believe in that crap?<br>
+	<i>Szpindel</i>"}
 
 ////////SOUNDWORKS///////
 
@@ -153,6 +164,7 @@
 /area/awaymission/hive
 	name = "hive"
 
+/*
 /area/awaymission/hive/cloning_chamber
 	name = "hive cloning chamber"
 
@@ -161,6 +173,7 @@
 
 /area/awaymission/hive/control_room
 	name = "hive control room"
+*/
 
 ///////////////////////////////////////////****TURFS****//////////////////////////////////////////////////
 
@@ -307,7 +320,7 @@
 	icon_state = "hive_heart"
 	health = 300
 
-	var/create_cooldown = 45 SECONDS
+	var/create_cooldown = 75 SECONDS
 	var/last_create
 
 /obj/structure/hive/cloner/New()
@@ -327,7 +340,11 @@
 		spawn_aliens()
 
 /obj/structure/hive/cloner/proc/spawn_aliens()
-	playsound(get_turf(src), 'sound/effects/heart_beat_loop.ogg', 100, 0)
+	var/area/A = get_area(src)
+
+	if(A)
+		to_chat(A, 'sound/effects/heart_beat_loop.ogg') //Play the sound globally across the entire away mission
+
 	for(var/obj/effect/landmark/hive/monster_spawner/MS in landmarks_list)
 
 		var/valid_spawn = TRUE
@@ -341,11 +358,15 @@
 		if(!valid_spawn)
 			continue
 
-		var/spawned_type = pick(/mob/living/simple_animal/hostile/hive_alien, /mob/living/simple_animal/hostile/hive_alien/executioner, /mob/living/simple_animal/hostile/hive_alien/artificer, /mob/living/simple_animal/hostile/hive_alien/arsonist)
+		var/spawned_type = pick(\
+		/mob/living/simple_animal/hostile/hive_alien,\
+		/mob/living/simple_animal/hostile/hive_alien/executioner,\
+		/mob/living/simple_animal/hostile/hive_alien/artificer)//,\
+		///mob/living/simple_animal/hostile/hive_alien/arsonist)
 
-		spawn(rand(1,70))
+		spawn(rand(20,150))
 			var/mob/living/simple_animal/hostile/hive_alien/HA = new spawned_type(T)
-			visible_message("<span class='danger'>\The [HA] drops from the ceiling!</span>")
+			HA.visible_message("<span class='danger'>\The [HA] crawls down from an opening in the ceiling!</span>")
 
 /obj/effect/landmark/hive/monster_spawner
 	name = "alien spawner"
