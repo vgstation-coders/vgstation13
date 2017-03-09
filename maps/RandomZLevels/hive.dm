@@ -94,19 +94,19 @@
 
 /obj/item/weapon/paper/hive/marauder_rescue
 	name = "Re:Re:Re: Lueduozhe disappeared and Commander wants to deprotonize our asses"
-	info = {"I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:
-	Chassis: Kitchen in meat fridge
-	Left Arm: Wellness area (the one with the sauna)
-	Right Arm: Atmospherics - Nitrogen chamber
-	Left Leg: Maintenance between research and PersonalQuarters
-	Right Leg: Biomed (near the bridge)
-	Plating: Hallway near the supermatter engine
-	Head: Vending machine in the same hallway (need 60 Wens to get this)
-	CCM: Outside of Atmospherics
-	PCM: Engineering tool storage
-	WCM: Under the radio transmitter
-
-	Let's do the exact same thing to the clown before the commander \"deprotonizes our asses\" (does this mean what I think this means?).
+	info = {"I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:<br><br>
+	Chassis: Kitchen in meat fridge<br>
+	Left Arm: Wellness area (the one with the sauna)<br>
+	Right Arm: Atmospherics - Nitrogen chamber<br>
+	Left Leg: Maintenance between research and PersonalQuarters<br>
+	Right Leg: Biomed (near the bridge)<br>
+	Plating: Hallway near the supermatter engine<br>
+	Head: Vending machine in the same hallway (in place of the $60 chips, somebody else has to get it because I'm broke)<br>
+	CCM: Outside of Atmospherics<br>
+	PCM: Engineering tool storage<br>
+	WCM: Under the radio transmitter<br>
+	<br>
+	Let's do the exact same thing to the clown before the commander \"deprotonizes our asses\" (does this mean what I think this means?).<br>
 	<i>Amara</i> <b>ID: 222F/4</b>
 	"}
 
@@ -179,13 +179,13 @@
 	desc = "This surface is constantly twisting and moving. It looks like it would take a lot of effort to just walk on it."
 	icon_state = "breathingfloor_1"
 
-	var/additional_slowdown = 25
+	var/additional_slowdown = 18
 
 /turf/unsimulated/floor/evil/breathing/New()
 	..()
 
 	icon_state = "breathingfloor_[rand(1,6)]"
-	additional_slowdown = rand(20,30)
+	additional_slowdown = rand(15,21)
 
 /turf/unsimulated/floor/evil/breathing/adjust_slowdown(mob/living/L, current_slowdown)
 	if(istype(L, /mob/living/simple_animal/hostile/hive_alien)) //Hive aliens are immune to this
