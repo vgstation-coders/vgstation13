@@ -25,6 +25,8 @@
 	//Don't wander around - multiple reasons for that (for example bluespace lakes that are very lethal to them)
 	wander = FALSE
 
+	stat_attack = 1
+
 //Shoots napalm bombs. Very slow practically a turret.
 /mob/living/simple_animal/hostile/hive_alien/arsonist
 	name = "hive arsonist"
@@ -97,6 +99,8 @@
 	attacktext = "eviscerates"
 	attack_sound = 'sound/weapons/slash.ogg'
 
+	stat_attack = UNCONSCIOUS //attack living and unconscious
+
 	var/attack_mode = FALSE
 
 	var/transformation_delay_min = 6
@@ -138,9 +142,14 @@
 	walk(src, 0)
 
 /mob/living/simple_animal/hostile/hive_alien/executioner/LostTarget()
-	if(attack_mode)
-		if(!FindTarget()) //If we don't immediately find another target, switch to movement mode
-			mode_movement()
+	if(attack_mode && !FindTarget()) //If we don't immediately find another target, switch to movement mode
+		mode_movement()
+
+	return ..()
+
+/mob/living/simple_animal/hostile/hive_alien/executioner/LoseTarget()
+	if(attack_mode && !FindTarget()) //If we don't immediately find another target, switch to movement mode
+		mode_movement()
 
 	return ..()
 
