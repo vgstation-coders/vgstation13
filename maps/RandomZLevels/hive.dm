@@ -75,6 +75,41 @@
 	msg = "What looks like a massive blob of flesh lies the middle of the room. A glowing substance regularly passes through the tubes under its skin."
 	play_sound = 'sound/ambience/shipambience.ogg' //background noise
 
+////////PAPERWORKS///////
+/obj/item/weapon/paper/hive/birthday_note
+	name = "Happy Birthday, Chechen"
+	info = {"You only care about two things in your life - eating cakes and perving at Russian chicks, so we got you an appropriate present. Never change, you fat piece of shit.<br>
+
+	<i>Dan</i>
+	<i>Parek</i>
+	<i>Szpindel</i>
+	<i>Amara</i>"}
+
+//all info you need to find the marauder parts. if you ctrl+F the map you'll have 7 days of bad luck
+//lueduozhe = marauder in google-translate-mandarin
+
+/obj/item/weapon/paper/hive/marauder_lost
+	name = "HOW THE HELL DID YOU LOSE AN ENTIRE LUEDUOZHE"
+	info = "Give me a single reason not to stick all of your retarded asses in the deprotonizer. Lueduozhe 1 is gone and there's a toy in its place. I demand answers."
+
+/obj/item/weapon/paper/hive/marauder_rescue
+	name = "Re:Re:Re: Lueduozhe disappeared and Commander wants to deprotonize our asses"
+	info = {"I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:
+	Chassis: Kitchen in meat fridge
+	Left Arm: Wellness area (the one with the sauna)
+	Right Arm: Atmospherics - Nitrogen chamber
+	Left Leg: Maintenance between research and PersonalQuarters
+	Right Leg: Biomed (near the bridge)
+	Plating: Hallway near the supermatter engine
+	Head: Vending machine in the same hallway (need 60 Wens to get this)
+	CCM: Outside of Atmospherics
+	PCM: Engineering tool storage
+	WCM: Under the radio transmitter
+
+	Let's do the exact same thing to the clown before the commander \"deprotonizes our asses\" (does this mean what I think this means?).
+	<i>Amara</i> <b>ID: 222F/4</b>
+	"}
+
 ////////SOUNDWORKS///////
 
 /obj/effect/narration/hive/ambience_sound_1
@@ -89,11 +124,29 @@
 /obj/effect/narration/hive/ambience_sound_4
 	play_sound = 'sound/ambience/ambimine.ogg' //background noise - something that sounds like hissing + soundtrack
 
+/obj/effect/narration/hive/ambience_sound_5
+	play_sound = 'sound/ambience/ambimo1.ogg' //morgue intro (creepy stuff)
+
 /obj/effect/trap/sound/hive/alarm //alarm sound (jumpscare xd)
 	sound_to_play = 'sound/ambience/alarm4.ogg'
 
 /obj/effect/trap/sound/hive/static_noise //white noise + voices in the background (another jumpscare)
 	sound_to_play = 'sound/effects/static/static5.ogg'
+
+/obj/effect/trap/sound/hive/birthday //birthday party for a guy who never came back to his quarters (featuring a dead stripper in a cake)
+	sound_to_play = 'sound/ambience/fire_alarm.ogg' //Two sounds making a repetitive ""melody"". Kinda reminded me of the sounds that toys that play music play when they're broken
+
+/obj/effect/trap/sound/hive/birthday/activate()
+	.=..()
+
+	//Eject the dead stripper
+	for(var/obj/structure/popout_cake/corpse_grabber/CG in range(7))
+		CG.release_object(drop = TRUE)
+
+/obj/effect/landmark/corpse/stripper/russian/hive
+	brute_dmg = 100
+	toxin_dmg = 100
+	burn_dmg = 70
 
 ///////////////////////////////////////////****AREAS****//////////////////////////////////////////////////
 
@@ -159,10 +212,13 @@
 
 /obj/structure/hive/proc/healthcheck()
 	if(health <= 0)
-		if(gibtype)
-			new gibtype(get_turf(src))
+		Die()
 
-		qdel(src)
+/obj/structure/hive/proc/Die()
+	if(gibtype)
+		new gibtype(get_turf(src))
+
+	qdel(src)
 
 /obj/structure/hive/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
@@ -304,6 +360,55 @@
 	health = 150
 	gibtype = /obj/effect/gibspawner/human
 
+//Husked mob
+/obj/structure/hive/husk
+	name = "hollow husk"
+	desc = "What was once a living creature, now fully dehydrated and mummified by alien technology. Looks very real and alive from a distance."
+	gibtype = /obj/effect/decal/cleanable/scattered_sand
+	health = 1
+
+	//In subtypes, either set the icon and icon state, or set this variable to the mob's path (e.g. /mob/living/simple_animal/hostile/creature)
+	var/mob_type = null
+
+/obj/structure/hive/husk/New()
+	..()
+
+	if(mob_type)
+		var/atom/A = mob_type
+
+		appearance = initial(A.appearance)
+
+		//Because changing the appearance also changes description and name
+		name = initial(name)
+		desc = initial(desc)
+
+	dir = pick(cardinal)
+
+/obj/structure/hive/husk/Die()
+	visible_message("<span class='notice'>\The [src] crumbles into dust!</span>")
+
+	return ..()
+
+/obj/structure/hive/husk/martian //never
+	icon = 'icons/mob/martian.dmi'
+	icon_state = "fuggle"
+
+/obj/structure/hive/husk/martian/New()
+	..()
+
+	icon_state = pick("fuggle", "martian")
+
+/obj/structure/hive/husk/vox
+	icon = 'icons/mob/vox.dmi'
+	icon_state = "armalis"
+
+/obj/structure/hive/husk/creature
+	icon = 'icons/mob/critter.dmi'
+	icon_state = "otherthing_static"
+
+/obj/structure/hive/husk/wolf
+	mob_type = /mob/living/simple_animal/hostile/wolf
+
 //////TRAPS/////////
 /obj/effect/trap/fire_trap //When triggered, spawns a fire blast nearby
 	name = "fire trap"
@@ -347,3 +452,10 @@
 		map_element.CPU = null
 
 	..()
+
+
+//Rewards
+/obj/item/weapon/cloakingcloak/hive
+	name = "alien cloak"
+	desc = "Very light and soft to the tough, it's hard to believe that you would find something so delicate inside the Hive."
+
