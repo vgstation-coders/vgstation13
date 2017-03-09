@@ -128,7 +128,7 @@ var/global/list/ghdel_profiling = list()
 		reagents = null
 
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
-	invisibility = 101
+	// invisibility = 101
 	INVOKE_EVENT(on_destroyed, list()) // No args.
 	if(on_destroyed)
 		on_destroyed.holder = null
