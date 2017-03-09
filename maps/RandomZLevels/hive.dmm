@@ -22,193 +22,261 @@
 "av" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive)
 "aw" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/space,/area/awaymission/hive)
 "ax" = (/obj/effect/narration/hive/entrance,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"ay" = (/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"az" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"aA" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"aB" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"aC" = (/turf/unsimulated/wall/evil,/area/awaymission/hive/engine_room)
-"aD" = (/turf/unsimulated/wall/evil,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/awaymission/hive/engine_room)
-"aE" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/engine_room)
-"aF" = (/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"aG" = (/turf/unsimulated/wall/supermatter/no_spread/lake,/area/awaymission/hive/engine_room)
-"aH" = (/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"aI" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/space,/area/awaymission/hive/engine_room)
-"aJ" = (/turf/space,/area/awaymission/hive/engine_room)
-"aK" = (/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"aL" = (/mob/living/simple_animal/hostile/hive_alien/executioner/wounded,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"aM" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/engine_room)
-"aN" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive)
-"aO" = (/obj/machinery/door/mineral/hive,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"aP" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/engine_room)
-"aQ" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"aR" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"aS" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/turf/space,/area/awaymission/hive)
-"aT" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"aU" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"aV" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"aW" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"aX" = (/mob/living/simple_animal/hostile/hive_alien/executioner,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"aY" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"aZ" = (/obj/structure/hive/communicator,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/engine_room)
-"ba" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/engine_room)
-"bb" = (/obj/structure/sign/chinese/engineering{pixel_x = -32},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bc" = (/mob/living/simple_animal/hostile/hive_alien/executioner,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"bd" = (/obj/structure/sign/chinese/notice{pixel_y = 32},/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"be" = (/obj/effect/decal/warning_stripes/unshielded_area{pixel_x = -32},/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bf" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bg" = (/obj/effect/narration/hive/ambience_sound_4,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bh" = (/obj/effect/landmark/hive/monster_spawner,/obj/effect/narration/hive/comms,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bi" = (/obj/machinery/power/emitter{dir = 4},/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bj" = (/obj/machinery/power/supermatter/shard,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"bk" = (/obj/structure/window{dir = 4},/obj/structure/window{dir = 1},/obj/structure/grille/broken,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"bl" = (/obj/item/pipe_meter,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bm" = (/obj/machinery/power/emitter{dir = 8},/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bn" = (/obj/effect/narration/hive/ambience_sound_1,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bo" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"bp" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/wall/evil,/area/awaymission/hive)
-"bq" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"br" = (/obj/structure/window{dir = 4},/obj/structure/window,/obj/structure/grille/broken,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"bs" = (/turf/unsimulated/wall/evil,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive)
-"bt" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bu" = (/obj/structure/window/reinforced,/obj/structure/window{dir = 1},/obj/structure/grille,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bv" = (/obj/structure/window/reinforced,/obj/structure/grille,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"bw" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
-"bx" = (/obj/machinery/door/mineral/hive,/obj/effect/landmark/hive/monster_spawner,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"by" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bz" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bA" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bB" = (/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
-"bC" = (/obj/structure/catwalk/invulnerable/hive,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
-"bD" = (/obj/item/weapon/shard,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bE" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bF" = (/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"bG" = (/obj/item/weapon/shard,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bH" = (/obj/item/weapon/shard,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"bI" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bJ" = (/mob/living/simple_animal/hostile/hive_alien/executioner,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bK" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/awaymission/hive)
-"bL" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/knife,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bM" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"bN" = (/obj/structure/table/flipped,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"bO" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/flipped,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bP" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/fork,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bQ" = (/obj/effect/landmark/hive/monster_spawner,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bR" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/wall/evil,/area/awaymission/hive)
-"bS" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/secure_closet/freezer/fridge,/turf/unsimulated/wall/evil,/area/awaymission/hive)
-"bT" = (/obj/machinery/door/airlock/freezer,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"bU" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bV" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive)
-"bW" = (/obj/machinery/door/airlock{name = "Unisex Bathroom"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bX" = (/obj/structure/sign/chinese/restricted_area{pixel_y = 32},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bY" = (/obj/machinery/door/mineral/hive,/obj/effect/narration/hive/lake,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"bZ" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 1},/obj/structure/window{dir = 4},/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
-"ca" = (/obj/structure/sign/chinese/science,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive)
-"cb" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 4},/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
-"cc" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 8},/obj/structure/window{dir = 1},/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
-"cd" = (/obj/structure/window{dir = 1},/obj/structure/window{dir = 8},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"ce" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 8},/obj/structure/window,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
-"cf" = (/obj/effect/narration/hive/cloning_hallway,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cg" = (/turf/simulated/shuttle/floor/airless,/area/awaymission/hive)
-"ch" = (/obj/structure/window{dir = 8},/obj/structure/window{dir = 1},/obj/structure/window,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"ci" = (/obj/machinery/media/transmitter/broadcast,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive)
-"cj" = (/obj/structure/grille,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"ck" = (/obj/structure/window,/obj/item/weapon/shard,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cl" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive)
-"cm" = (/obj/structure/grille,/obj/structure/window,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cn" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive)
-"co" = (/obj/effect/trap/sound/hive/static_noise,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cp" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 4},/obj/structure/window,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
-"cq" = (/obj/machinery/computer/fluff/terminal/old,/obj/structure/table/woodentable,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cr" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cs" = (/obj/effect/decal/warning_stripes/unshielded_area{pixel_x = 32},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"ct" = (/obj/effect/decal/cleanable/greenglow,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cu" = (/obj/machinery/door/mineral/hive,/obj/effect/narration/hive/ambience_sound_3,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cv" = (/obj/structure/window,/obj/structure/window{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cw" = (/obj/effect/decal/warning_stripes{icon_state = "oxygen"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cx" = (/obj/effect/decal/warning_stripes{icon_state = "nitrogen"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cy" = (/obj/structure/window{dir = 8},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cz" = (/obj/machinery/computer/fluff/terminal/compact,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"cA" = (/turf/unsimulated/wall/evil,/area/awaymission/hive/cloning_chamber)
-"cB" = (/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cC" = (/obj/structure/window{dir = 4},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cD" = (/obj/machinery/computer/fluff/shuttle_engines,/turf/unsimulated/wall/evil,/area/awaymission/hive)
-"cE" = (/obj/machinery/computer/fluff/factory,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cF" = (/obj/effect/decal/cleanable/dirt,/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cG" = (/obj/structure/window{dir = 4},/obj/item/stack/sheet/glass/glass{amount = 43},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cH" = (/obj/machinery/computer/fluff/shuttle_engines,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cI" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cJ" = (/obj/effect/landmark/hive/monster_spawner,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
-"cK" = (/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
-"cL" = (/obj/effect/narration/hive/cloning,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cM" = (/obj/effect/landmark/hive/monster_spawner,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cN" = (/obj/machinery/computer/fluff/terminal,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cO" = (/obj/item/stack/sheet/glass/glass{amount = 12},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cP" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cQ" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cR" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"cS" = (/obj/item/hive/cpu,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cT" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/cloning_chamber)
-"cU" = (/obj/effect/trap/sound/hive/alarm,/obj/effect/trap/frog_trap/hive/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"cV" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/awaymission/hive/control_room)
-"cW" = (/turf/unsimulated/wall/evil,/area/awaymission/hive/control_room)
-"cX" = (/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"cY" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"cZ" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/tinsel/red,/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive/control_room)
-"da" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/tinsel/red,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/control_room)
-"db" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/tinsel/red,/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive/control_room)
-"dc" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"dd" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/control_room)
-"de" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"df" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dg" = (/obj/effect/decal/cleanable/ash,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dh" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/control_room)
-"di" = (/obj/structure/window{dir = 1},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"dj" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/awaymission/hive)
-"dk" = (/obj/effect/decal/cleanable/crayon/fuckyou{pixel_x = -32},/obj/item/toy/crayon/green,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dl" = (/obj/effect/decal/cleanable/vomit,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dm" = (/obj/structure/fence/door/secure/from_south,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dn" = (/obj/machinery/computer/fluff/starmap,/obj/structure/sign/chinese/evacuation{pixel_x = -32},/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"do" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dp" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/ash,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dq" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dr" = (/obj/item/stack/sheet/glass/glass{amount = 12},/obj/structure/window{dir = 4},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"ds" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
-"dt" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
-"du" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
-"dv" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive/cloning_chamber)
-"dw" = (/obj/machinery/sleeper/no_console,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dx" = (/obj/effect/decal/remains/human/noskull,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dy" = (/obj/effect/narration/hive/ambience_sound_2,/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"dz" = (/obj/machinery/computer/fluff/shuttle_control,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"dA" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"dB" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive/control_room)
-"dC" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/control_room)
-"dD" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive/control_room)
-"dE" = (/obj/structure/window{dir = 4},/turf/unsimulated/floor/evil,/area/awaymission/hive)
-"dF" = (/obj/machinery/computer/fluff/factory,/turf/unsimulated/wall/evil,/area/awaymission/hive)
-"dG" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
-"dH" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"dI" = (/obj/machinery/door/airlock/glass{name = "Sauna"},/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dJ" = (/obj/structure/hive/pylon,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dK" = (/obj/machinery/computer/fluff/communications,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"dL" = (/obj/effect/narration/hive/control,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"dM" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
-"dN" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/cloning_chamber)
-"dO" = (/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/cloning_chamber)
-"dP" = (/obj/structure/fence/door/secure/from_east{dir = 4},/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dQ" = (/obj/machinery/computer/fluff/shuttle_control,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dR" = (/obj/machinery/computer/fluff/factory,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dS" = (/obj/machinery/computer/fluff/factory,/obj/structure/sign/chinese/evacuation{pixel_x = -32},/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
-"dT" = (/obj/effect/decal/cleanable/ash,/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
-"dU" = (/obj/structure/hive/cloner,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
-"dV" = (/obj/structure/fence/door/secure/from_north,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"dW" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive/control_room)
-"dX" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/control_room)
-"dY" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive)
-"dZ" = (/obj/effect/decal/cleanable/greenglow,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"ea" = (/obj/effect/decal/remains/xeno,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
-"eb" = (/obj/structure/catwalk/invulnerable/hive,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive/cloning_chamber)
-"ec" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive/cloning_chamber)
+"ay" = (/obj/item/weapon/cloakingcloak/hive,/obj/effect/landmark/corpse/mutilated,/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"az" = (/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"aA" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"aB" = (/obj/structure/catwalk/invulnerable/hive,/obj/item/mecha_parts/part/marauder_head,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"aC" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"aD" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"aE" = (/obj/structure/hive/husk/martian,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"aF" = (/turf/unsimulated/wall/evil,/area/awaymission/hive/engine_room)
+"aG" = (/turf/unsimulated/wall/evil,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/awaymission/hive/engine_room)
+"aH" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/engine_room)
+"aI" = (/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"aJ" = (/turf/unsimulated/wall/supermatter/no_spread/lake,/area/awaymission/hive/engine_room)
+"aK" = (/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"aL" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/space,/area/awaymission/hive/engine_room)
+"aM" = (/turf/space,/area/awaymission/hive/engine_room)
+"aN" = (/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"aO" = (/mob/living/simple_animal/hostile/hive_alien/executioner/wounded,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"aP" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/engine_room)
+"aQ" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive)
+"aR" = (/obj/machinery/door/mineral/hive,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"aS" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/engine_room)
+"aT" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"aU" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"aV" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/turf/space,/area/awaymission/hive)
+"aW" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"aX" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"aY" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"aZ" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"ba" = (/mob/living/simple_animal/hostile/hive_alien/executioner,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bb" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bc" = (/obj/structure/hive/communicator,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/engine_room)
+"bd" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/engine_room)
+"be" = (/obj/structure/sign/chinese/engineering{pixel_x = -32},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bf" = (/obj/structure/hive/husk/vox,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bg" = (/obj/structure/hive/husk/wolf,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bh" = (/mob/living/simple_animal/hostile/hive_alien/executioner,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bi" = (/obj/structure/sign/chinese/notice{pixel_y = 32},/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bj" = (/obj/effect/decal/warning_stripes/unshielded_area{pixel_x = -32},/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bk" = (/obj/structure/hive/husk/creature,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bl" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bm" = (/obj/effect/landmark/hive/monster_spawner,/obj/effect/narration/hive/comms,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bn" = (/obj/machinery/power/emitter{dir = 4},/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bo" = (/obj/machinery/power/supermatter/shard,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bp" = (/obj/structure/window{dir = 4},/obj/structure/window{dir = 1},/obj/structure/grille/broken,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bq" = (/obj/item/pipe_meter,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"br" = (/obj/machinery/power/emitter{dir = 8},/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bs" = (/obj/effect/narration/hive/ambience_sound_1,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bt" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bu" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/wall/evil,/area/awaymission/hive)
+"bv" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bw" = (/obj/structure/window{dir = 4},/obj/structure/window,/obj/structure/grille/broken,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bx" = (/turf/unsimulated/wall/evil,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive)
+"by" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/awaymission/hive)
+"bz" = (/obj/structure/sign/chemtable,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive)
+"bA" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall_f10"},/area/awaymission/hive)
+"bB" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bC" = (/obj/structure/window/reinforced,/obj/structure/window{dir = 1},/obj/structure/grille,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bD" = (/obj/structure/window/reinforced,/obj/structure/grille,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bE" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/engine_room)
+"bF" = (/obj/structure/table,/obj/item/weapon/paper/hive/marauder_lost,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"bG" = (/obj/structure/table,/obj/structure/computerframe,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"bH" = (/obj/item/weapon/table_parts,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bI" = (/obj/machinery/door/mineral/hive,/obj/effect/landmark/hive/monster_spawner,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bJ" = (/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"bK" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bL" = (/obj/effect/narration/hive/ambience_sound_4,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bM" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bN" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bO" = (/obj/item/weapon/table_parts,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"bP" = (/obj/item/weapon/paper/hive/marauder_rescue,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bQ" = (/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive/engine_room)
+"bR" = (/obj/structure/catwalk/invulnerable/hive,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"bS" = (/obj/item/weapon/circuitboard/mecha/marauder/peripherals,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bT" = (/obj/item/weapon/shard,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bU" = (/obj/effect/narration/hive/ambience_sound_5,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bV" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bW" = (/obj/item/mecha_parts/part/marauder_torso,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bX" = (/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"bY" = (/obj/item/weapon/shard,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"bZ" = (/obj/item/weapon/shard,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"ca" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cb" = (/mob/living/simple_animal/hostile/hive_alien/executioner,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cc" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/knife,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cd" = (/obj/item/mecha_parts/part/marauder_armour,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"ce" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cf" = (/obj/structure/table/flipped,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cg" = (/obj/effect/decal/cleanable/dirt,/obj/structure/table/flipped,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"ch" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/kitchen/utensil/fork,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"ci" = (/obj/effect/landmark/corpse/engineer/old,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cj" = (/obj/effect/landmark/hive/monster_spawner,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"ck" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/wall/evil,/area/awaymission/hive)
+"cl" = (/obj/machinery/cooking,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cm" = (/obj/effect/decal/cleanable/dirt,/obj/structure/closet/secure_closet/freezer/fridge,/turf/unsimulated/wall/evil,/area/awaymission/hive)
+"cn" = (/obj/machinery/door/airlock/freezer,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"co" = (/obj/item/mecha_parts/chassis/marauder,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cp" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cq" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive)
+"cr" = (/obj/machinery/door/airlock{name = "Unisex Bathroom"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cs" = (/obj/structure/sign/chinese/restricted_area{pixel_y = 32},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"ct" = (/obj/machinery/door/mineral/hive,/obj/effect/narration/hive/lake,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cu" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 1},/obj/structure/window{dir = 4},/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"cv" = (/obj/structure/sign/chinese/science,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive)
+"cw" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 4},/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"cx" = (/obj/item/weapon/invisible_spray,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cy" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 8},/obj/structure/window{dir = 1},/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"cz" = (/obj/item/mecha_parts/part/marauder_right_leg,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cA" = (/obj/effect/decal/mecha_wreckage/marauder,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cB" = (/obj/structure/window{dir = 1},/obj/structure/window{dir = 8},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cC" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 8},/obj/structure/window,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"cD" = (/obj/effect/narration/hive/cloning_hallway,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cE" = (/obj/item/weapon/circuitboard/injector_control,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cF" = (/obj/item/weapon/circuitboard/mecha/marauder/targeting,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive)
+"cG" = (/obj/item/weapon/circuitboard/mech_bay_power_console,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive)
+"cH" = (/obj/structure/window{dir = 8},/obj/structure/window{dir = 1},/obj/structure/window,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cI" = (/obj/item/weapon/circuitboard/large_tank_control,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"cJ" = (/obj/machinery/media/transmitter/broadcast,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive)
+"cK" = (/obj/structure/grille,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cL" = (/obj/structure/window,/obj/item/weapon/shard,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cM" = (/obj/item/mecha_parts/part/marauder_right_arm,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cN" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive)
+"cO" = (/obj/structure/grille,/obj/structure/window,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cP" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive)
+"cQ" = (/obj/structure/sign/chinese/medbay,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive)
+"cR" = (/obj/effect/trap/sound/hive/static_noise,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cS" = (/obj/structure/catwalk/invulnerable/hive,/obj/structure/window{dir = 4},/obj/structure/window,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
+"cT" = (/obj/machinery/computer/fluff/terminal/old,/obj/structure/table/woodentable,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cU" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cV" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTHEAST)"; icon_state = "warning"; dir = 5},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cW" = (/obj/effect/decal/warning_stripes/unshielded_area,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive)
+"cX" = (/obj/effect/decal/cleanable/greenglow,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cY" = (/obj/machinery/door/mineral/hive,/obj/effect/narration/hive/ambience_sound_3,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cZ" = (/obj/structure/window,/obj/structure/window{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"da" = (/obj/effect/decal/warning_stripes{icon_state = "oxygen"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"db" = (/obj/effect/decal/warning_stripes{icon_state = "nitrogen"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dc" = (/obj/item/weapon/circuitboard/mecha/marauder/main,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dd" = (/obj/structure/window{dir = 8},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"de" = (/obj/machinery/computer/fluff/terminal/compact,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"df" = (/turf/unsimulated/wall/evil,/area/awaymission/hive/cloning_chamber)
+"dg" = (/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"dh" = (/obj/structure/window{dir = 4},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"di" = (/obj/machinery/computer/fluff/shuttle_engines,/turf/unsimulated/wall/evil,/area/awaymission/hive)
+"dj" = (/obj/machinery/computer/fluff/factory,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dk" = (/obj/effect/decal/cleanable/dirt,/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dl" = (/obj/structure/window{dir = 4},/obj/item/stack/sheet/glass/glass{amount = 43},/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dm" = (/obj/machinery/computer/fluff/shuttle_engines,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dn" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"do" = (/obj/effect/landmark/hive/monster_spawner,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
+"dp" = (/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
+"dq" = (/obj/effect/narration/hive/cloning,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"dr" = (/obj/effect/landmark/hive/monster_spawner,/mob/living/simple_animal/hostile/hive_alien/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"ds" = (/obj/machinery/computer/fluff/terminal,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dt" = (/obj/item/stack/sheet/glass/glass{amount = 12},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"du" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"dv" = (/obj/structure/sign/chinese/science,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
+"dw" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"dx" = (/obj/effect/trap/fire_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"dy" = (/obj/item/hive/cpu,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dz" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/cloning_chamber)
+"dA" = (/obj/effect/trap/sound/hive/alarm,/obj/effect/trap/frog_trap/hive/artificer,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dB" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/awaymission/hive/control_room)
+"dC" = (/turf/unsimulated/wall/evil,/area/awaymission/hive/control_room)
+"dD" = (/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"dE" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"dF" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/tinsel/red,/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive/control_room)
+"dG" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/tinsel/red,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/control_room)
+"dH" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/tinsel/red,/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive/control_room)
+"dI" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"dJ" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/control_room)
+"dK" = (/obj/structure/hive/pylon,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"dL" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"dM" = (/obj/effect/decal/cleanable/ash,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"dN" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/awaymission/hive/control_room)
+"dO" = (/obj/structure/window{dir = 1},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dP" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/awaymission/hive)
+"dQ" = (/obj/effect/decal/cleanable/crayon/fuckyou{pixel_x = -32},/obj/item/toy/crayon/green,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"dR" = (/obj/effect/decal/cleanable/vomit,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"dS" = (/obj/structure/fence/door/secure/from_south,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"dT" = (/obj/effect/narration/hive/ambience_sound_2,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dU" = (/obj/machinery/computer/fluff/starmap,/obj/structure/sign/chinese/evacuation{pixel_x = -32},/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"dV" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"dW" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/ash,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"dX" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"dY" = (/obj/item/stack/sheet/glass/glass{amount = 12},/obj/structure/window{dir = 4},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"dZ" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
+"ea" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
+"eb" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/cloning_chamber)
+"ec" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive/cloning_chamber)
+"ed" = (/obj/machinery/sleeper/no_console,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"ee" = (/obj/effect/decal/remains/human/noskull,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"ef" = (/obj/machinery/computer/fluff/shuttle_control,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"eg" = (/obj/effect/landmark/hive/monster_spawner,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"eh" = (/obj/machinery/computer/fluff/terminal,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"ei" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive/control_room)
+"ej" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/control_room)
+"ek" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive/control_room)
+"el" = (/obj/structure/window{dir = 4},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"em" = (/obj/machinery/computer/fluff/factory,/turf/unsimulated/wall/evil,/area/awaymission/hive)
+"en" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
+"eo" = (/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"ep" = (/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"eq" = (/obj/machinery/door/airlock/glass{name = "Sauna"},/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"er" = (/obj/structure/hive/pylon,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"es" = (/obj/machinery/computer/fluff/communications,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"et" = (/obj/effect/narration/hive/control,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"eu" = (/obj/effect/trap/cage_trap,/turf/unsimulated/floor/evil,/area/awaymission/hive/control_room)
+"ev" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/cloning_chamber)
+"ew" = (/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive/cloning_chamber)
+"ex" = (/obj/structure/fence/door/secure/from_east{dir = 4},/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"ey" = (/obj/effect/trap/cage_trap,/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"ez" = (/obj/machinery/computer/fluff/shuttle_control,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"eA" = (/obj/machinery/computer/fluff/factory,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eB" = (/obj/machinery/computer/fluff/factory,/obj/structure/sign/chinese/evacuation{pixel_x = -32},/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/control_room)
+"eC" = (/obj/effect/decal/cleanable/ash,/obj/machinery/door/mineral/hive,/turf/unsimulated/floor/evil,/area/awaymission/hive/cloning_chamber)
+"eD" = (/obj/structure/hive/cloner,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/floor/airless,/area/awaymission/hive/cloning_chamber)
+"eE" = (/obj/machinery/sleeper/no_console,/obj/effect/gibspawner/robot,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eF" = (/obj/structure/fence/door/secure/from_north,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eG" = (/obj/structure/fence/door/secure/from_north,/obj/effect/decal/cleanable/blood/drip,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eH" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive/control_room)
+"eI" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive/control_room)
+"eJ" = (/turf/unsimulated/wall/evil,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/awaymission/hive)
+"eK" = (/obj/effect/decal/cleanable/greenglow,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eL" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/gibspawner/xeno,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eM" = (/obj/structure/closet/secure_closet/freezer/meat,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eN" = (/obj/structure/closet/secure_closet/freezer/meat,/obj/machinery/light{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eO" = (/obj/item/stack/cable_coil/cut,/obj/item/trash/chips,/obj/machinery/light{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eP" = (/obj/structure/table,/obj/item/trash/bowl,/obj/item/trash/bowl,/obj/item/trash/chips,/obj/item/trash/plate,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/generic,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eQ" = (/obj/effect/decal/cleanable/blood/drip,/obj/effect/gibspawner/human,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eR" = (/obj/effect/decal/remains/xeno,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eS" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,/obj/item/trash/pistachios,/obj/item/trash/plate,/obj/item/clothing/glasses/thermal/eyepatch,/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eT" = (/obj/structure/bed/chair/comfy/black{dir = 8},/obj/effect/decal/cleanable/fruit_smudge,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eU" = (/obj/item/stack/sheet/metal,/obj/item/trash/bowl,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eV" = (/obj/machinery/sleeper/no_console,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eW" = (/obj/machinery/sleeper/no_console,/obj/item/mecha_parts/part/marauder_left_arm,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"eX" = (/obj/item/weapon/shard,/turf/unsimulated/wall/evil,/area/awaymission/hive)
+"eY" = (/obj/effect/decal/cleanable/scattered_sand,/obj/structure/popout_cake/corpse_grabber,/obj/effect/landmark/corpse/stripper/russian/hive,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"eZ" = (/obj/item/weapon/shard,/obj/item/trash/liquidfood,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fa" = (/obj/item/trash/plate,/obj/item/trash/plate,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fb" = (/obj/structure/catwalk/invulnerable/hive,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive/cloning_chamber)
+"fc" = (/obj/structure/table,/obj/item/stack/cable_coil/cut,/obj/item/trash/liquidfood,/obj/item/trash/pistachios,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fd" = (/obj/item/weapon/shard,/obj/item/trash/liquidfood,/obj/effect/decal/cleanable/scattered_sand,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fe" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"ff" = (/obj/item/weapon/shard,/obj/item/trash/plate,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fg" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive/cloning_chamber)
+"fh" = (/obj/item/stack/sheet/metal,/obj/item/trash/liquidfood,/obj/effect/decal/cleanable/scattered_sand,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fi" = (/obj/item/weapon/circuitboard/microwave,/obj/item/trash/liquidfood,/obj/effect/decal/cleanable/scattered_sand,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fj" = (/obj/machinery/door/airlock{name = "Barbara's Personal Quarters"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"fk" = (/obj/effect/decal/cleanable/vomit,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"fl" = (/obj/machinery/door/airlock{name = "Yi Cheng's Personal Quarters"},/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"fm" = (/obj/effect/decal/cleanable/scattered_sand,/obj/item/weapon/paper/hive/birthday_note,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fn" = (/obj/item/stack/sheet/metal,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fo" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/awaymission/hive)
+"fp" = (/obj/item/trash/liquidfood,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/awaymission/hive)
+"fq" = (/obj/effect/trap/sound/hive/birthday,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
+"fr" = (/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/awaymission/hive)
+"fs" = (/obj/structure/catwalk/invulnerable/hive,/obj/item/mecha_parts/part/marauder_left_leg,/turf/unsimulated/floor/fake_supermatter/hive,/area/awaymission/hive)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -227,88 +295,88 @@ aaaaaaaaaaaaaaaaaaaaaaawaaaaaaaaaaaaaaaaaaawaaaaaaaaaaaaaaaaacacaaaaaaaaacacacac
 aaaaaaaaaaaaaaaaaaaaaaawaaaaaaaaaaaaaaaaaaawaaaaaaaaaaaaawaaacacacacacaaaaaaacacaaaaaaacacacacacacacatacacacacacaaaaacacacacacahacacaaacahacaaaaacahahacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaawaaaaaaaaaaaaawaaaaacacacaaaaacacacacacaaaaacacaaaaaaaaacatacaaaaaaacaaaaacatacacahahacaaaaacacacaaacacahahacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaacaaaaaaaaacacacacacaaaaaaacaaacacacacaaaaacacacacacacacaaaaaaacacacaaaaaaacacaaaaacacacacacacaaaaacacaaaaacacacahahacacaaacacacaaaaacahahahacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaacacacacaaaaacatatacacaaaaacaaacawaaaaaaaaacahahauacaaaaaaaaacacacaaaaaaaaacaaaaacacayayacaaaaaaacacacaaacacahahahacacaaaaacacaaaaaaacahahahacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaacaaacacaaaaacacacacacaaaaacacacawaaaaacacacahahacacaaaaacacacatacacacacacacacacacacacazacaaaaacacaaaaaaacacahahacacacaaaaacacaaacacacahahahacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaacaaacacacaaaaaaacacaaaaaaacatacawaaaaacacahahacacaaaaacacacacatacacacahahahahacayahahahacaaaaacacaaaaacacahahacacacaaaaaaaaaaaaacahahahahahahahacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaacaaaaacacacaaaaaaacacaaaaacatacacaaaaaaacayacacacaaaaaaacatatatatatacahacacacacacacahacacacacacacacacacahahacacaaaaaaaaacacaaacacahahahahahahahahahahahahacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaacacacaaaaaaacacacacatatacaaawacacayacacacacacaaacatatacatatacacacahacahahaAahahazahahahayayacacazazacacacacacacacacaaacacacacacacacahahahahahahahahatatacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaacacacaaacacacacatacaaaaaaacatatatatatacaaawacacayayayayayacacacatatatatatatatacahacacacacacahacacacacacacacacahahacacayacacayacacacacacaaaaaaacacacacacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaacacacacacacacacacacacacacacacatacatacacacawaaacacacacacayacacacacacacatatatatacacahahacahahahahaBahahahahahazahahazahahahayayacacacacacacaaaaaaacacacaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaacatacacaCaDaEaEaEaCaCacauaFaGaFaFaHaCaCaIaJaCaCaiacacayacacacacacacatatatatatacacacacacacacaBacacaKacacacacaLahacacaKacacacacaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaacacacacacacaDaCaMaHaHaHaHaHacaFaFaFaFaGaCaCaCaCaCaCaNaKahayahaKahacacacacatatatatatacacahacacacaOacacacacacacacazacacacahacacacacacacaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaacacacaPaMaFaFaFaHaQaHacaFaFaFaFaHaRaHaHaHaHaHacahayayayayahahahahacacacatacatatacacahacauahahahahahahahahahahahahahahahahacacacaaaaacacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aSaSaSacacaTayaFaFaUaVaFaHaHaHacaFaFaGaFaHaCaCaCaCaCaWacahayaXayayaYacacahacacacatatatatatacacacacacazacacacacazacahacacacazacacahacacacacacacacahayayayacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaacacacacaCaHaVaZaVaHaCbaacaCaFaGaCaCaCaCaCaCaCaHaNbbayayayayahazahahauahacacacatatatacacaKahahahahahahahahacahahahacacacacahazahaKahahahahahacacacacaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaSaSaSacacacaPaHaUbcaRaHaCbdahaCaCaCaCaCaCaCaCaCaCaHaNbeayayahahahacacacacacacacacacacacacacacacacacacacacacahacahacahacacayacauacacacacacacacacacacacaaaaaaaaaaaaacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaacacacacahaHaHaVbcbfbgbhaHaHaHaHbiaCaCaCbjaFbkblbmaNbbahayayahahazahahahahahahbnahaBaBboahahahbpahaAahbpahahacacacahayayayacacacacaaaaaaaaacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-acacacacacacahbqaFaFaUaHaHaCaCaCaCaHaHaCaCaCaHaFbraFaUbsacazacacacacacacacacacacacacacacacacazacacacacacacacacahacacacacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaacacacahaFaUaVaFaVaHaCaCbtaHaCaRaCaCaCbubvbwaFaHazahahacacacacacacacatatatatatatatatacaBacacaKahaBaBahazahazahahahahahayayayayacacaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaSacacacaHaCaMaMaFaHaCbtbtaHaHaHaCaCaCblaFaFaFbtacacaAacacacatatatatatatacatatatatacacaBacacacacacacbxacacacacacacacacacacacayayacacacacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaacacacacacaHaCaHaHaFaHaCbyaHbfaHaHahaAahahahahahaBaBahahahacatatatatatatatatatatacacacacbzacahaBaBaBatbAaBaBahahahahacacatatacacacacaaaaacacahahayayayayayayacacacacaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-acacacacatacacaRaCaHaCaCaCaCbtaFaFaHaHacacacacacacacacacacacacacatatatatatatatatatatacacacacaBacahatataBatatayayatatahahahacacatacaaaaaaaaaaacacacacacacacahahayayatatacacacaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaacatacacahacazacahahahaHbqaFaHaHacacahacacacahahahacacacatatatatatatatatacacacacacacacaBayacatatahauatatayatatahacahacacacacacacacaaaaaaaaaaaaaaaaacacacacacacacacaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaSaSacatacacahacahacahacacaHaHaFaHbBacahahahahahahacahahazbCatatatatacatacacacacacacacacahaBayayacatatatatatatatahahahacahacacatatacaaaaaaaaacacacaaaaaaaaaaaaaaacacacacacacacacacaaaaacacacaaaaacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaacacatacahacahacahacacacacayahacacacacacacacacacacacacbCatatatatatatacayayayahacacayahayacayatataubDahaKahatatahahahacacacacacacacacacacacatacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacatacaaaaacatacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaacacacacahahahahahahahacayahacayayayayayayayayayacbCbCatatatatacacacaybEahahacahacahahayayatatataBatatayatatahacahacacahahahahacatacacacacacaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaacatacacaaacacatatatatacaaaaaaacaaaaaaaaaaaaacacaaaaaaaaaa
-aaaaaaaaaaaaacacaKahahahacacahacayahahahahahayayahayaybFacatatatatatatacahaAahayayahacacahacahahahahaBbGaBatatbHayayahahacayacayayahahacacacaaaaaaaaaaacacacacacacacacacaaaaaaacacacacacatacacacacatatacacacacaaaaaaacaaaaaaaaaaaaacacaaaaaaaaac
-aaaaaSaSaSaSacacahbIahahahahahahaKahacahahbIahbJahahacacacatatatatacacacahacahahayahacacacacahacahatataBatatatatatatayahahacacayayayahacaaaaaaaaacacacbKaeaeacbLaeacacacaaaaaaacacacacatatatatatacatatacaaaaaaaaaaacacaaaaaaacaaaaaaacacaaaaacac
-aaaaaaacacacacacahahahauacacahacahahacayayayahahahahacbCatatatbCazacacacahacacacazacacacacacacahacatataBatatatatatatayacahacacahaybMayacacacacacacacacaybNbObObPaBaiacacacacacacatatatatatacatatatatacacaaaaaaaaacacacaaaaacacaaaaaaacacaaacacaa
-aaacacacatatatacacacahacacacahacacacacacacayahahahahazbCatatatacahahahacahacahahahahazahahahacacahahahahahahahahahahahahahahacahaAauahacacacacacacacacacacacacacbQaiacacacacacatatatacacacacacacacacacaaaaaaacacacacaaaaacacacaaaaaaaaacacacacaa
-acacacacacacacacacacahahahacahahahahahacacayayayahahacbCatatatacacacacacahacahayayayaybFayahacacacazacazbRbRacatatacacacacacacazacacazacacacacacahahahazahahacaBaBaibSacacacacatatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacaaaa
-aaaaaaaaaaaSaSaSaSacacacahacahacacacacacacacayacauacacatatacatatatacacacahazahayayaXayayayahacahahahbIahayayacacacacacacahahahahahayahaKahahacacahacacacauacacaBaBbTayacacacatatacacayayayayayayayayayayayayayayayayayayayacayayacahahacacacacac
-aaaaaaaaaaaaaaacacacacacahahahacaBaBaBaBacahahahahahacatatatatatbCacacacazacahbFayayayayayahacahahahacahahayacayahahahacahayayayahayaBbUahahacacahacayacacacahazacacacacacatatacacacayayayayayacacacacacacacacacacayayayayacayayacahahacacacacac
-aaaaaaaaaaaaacacatatatatacacahayayayayaBbQaBahahayayacacatatatatbCazahazahacahahahayayahahahacahahahazaBahayaYayahayahazahayatayahahaBaKbJahazahahaAahayayahahacacaiacacatatatacacacacacacacacacahahazahayacayayacacacacacacacacacacacacacacacaa
-aaaaaaaaaaacacatacacacatacacacacahayayayacahahayayaeaeacatatatatbCacacacazacacahacacacacahacacahahahbRbVbWahacahahayayacayayatatahazahaKahahacacacacacacacacahacacaiacacatatacacacacayayacayahazahayacahahazahahacayayayayacayayacahahacacacaaaa
-aaaaaaaaacacatacacacacatatatatatatahayayacahayayaybXacacacacatatatatatacahaKahahahahahahahacaAahahahazaBahahahahahayayacacatatatacacacacacazacacatatatacacacahacacacacacatatacacacacayayacayahacacacacacacacacazacacayayayacayayacahahacacacaaaa
-aaaaaaaaacatacacaaacatatatacacatatahahaybMayayayahahacacacacacatatatatacacacacacacacazacacacacahahahacaBahahacahahahayacacatatatatacacacacahacacatatatacahahahahayahacacatatacacacacacacacacazacacayayacayayacahahacacacacacacacacacacacacacacaa
-aaaaaaaaacacacaaacacatatacacaaacatahahahacahahahahahaKahahacacatatatatatatatatatatbCbCbCbCacacahahahahayahahacacacacacacatatatatatatacacacahacacatatatacacacacacayayacacatatacacacacacayayacaAacacayayacacayacahahacayayayacahahacahahacacacaaaa
-aaaaaaaaaaaaaaaaacatatacacaaaaacatatatatatatacacacacacacahacacacacacatatatatatatatatatatbCacacbYacacacayayayacacacacacatatataiatatatatacacaAahacatatatacauahacacacayahacatatacacacacacayayacahacacacacacacacacacazacacayayacahahacahahacacacacaa
-aaaaaaaaaaaaaaacacatacacaaaaacacatacacacacatatatatatatacahacacacacacatatatatatatatatatatbCbCbCbCacacacayahayacacacacatatatatacatatatatatacacahahbZatatacacazacazahahahacatatacacacacacacacacahahacacacayacacacacahahacacacacacacacacacacacacaaaa
-aaaaaaaaaaaaaaacatacacaaaaacacatatacaaaaacacatatacacatatahacacacacacacatatatatacatatatatatbCatbCbCbCacahayayacacatatatatatatcaatatatatatacacacahcbatatacahahahahacacacacatatatatatatacahahacahahahacacayacacahacaAahacayayacahahacahahacacacacaa
-aaaaaaaaaaaaaaacatacaaaaacacatatacacaaaaacatatacacacatatatatatatacacatatatatatatatatatatatbCatatatbCacayayayacacatatatatatatatatacacatatatacacazcbatatacacacazacacacacacatatatatatatacahahacacacahahacacacayayacacazacayayacahahacahahacacacacaa
-aaaaaaaaaaaaacacacacaaaaacatatacacaaaaacatatacaaaaacacacacatatatacatatatacatatatatatatatatbCatatatbCbCacayahacacatatatatatatatacacacacatatatacacbCatatacahahahahahahahacatatatatacatacacacacacacacahauacacayayacahahacacacacacacacacacacacacacaa
-aaaaaaaaaaaaacacaaaaaaaaacatacacaaaaaaacatacacaaaaacayayacatatatatatatacacatatatatatacatatbCatatatatatacacauacatatatatatatatatacacacacacatatacacbCatatatatatatatatatatatatatacatatatacacayayacacacahahahacacacacahahacayayacayayacahahacacacaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaacacacaaaaaaacacayacahatatatatacacacacbCatatatatatatbCatatatatatatacacacatatatatatatatacacacacacacatatatacbCatatatatatatatatatatatatatatatatccahbMayahahacacacaAahacayayacazacacayayacayayacahahacacacaaaa
-aaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaacaaaaaaaaaaaaacayacacahacatatacacayayacbCbCatatatatatbCatatatatatatacacacatatatatatatcdacacacacacacacatatatbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCahahahbIahayacahahahacayayacahahacacacacacacacacacacacacacaa
-aaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaacayayacahatatacacacacacacacbCatatatatatbCatatacatatatacatatatatatatatacahacacacacacacacacatatbCatatatatatatatatatatatatatatatatceahahahayayaycfayayayacacacacahahacahahacayayacahahacacacacaa
-aaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaacaaaaaaaaaaacacacacatatatacacacacahahazbCbCbCatatbCbCbCatatatatatatatatatatatatcdacazacacauayaycgcgaiatatbCatatatatatatatatatatatatacatatatatacacahahahahacahahahahacacacacacacahahacayayacahahacacacacaa
-aaaaaaaaaaaaaaaaaaaaacacatacacacaaaaacatacaaaaaaaaacacacatatatacacacayacazacacacacacacacacacazacatatatatatatacatatatchahazahahacahayayayciaiatatbCatataccjcjcjaccjcjahacatatatatatatacacacacauacacacacahahacayayacahacacacacacacacacacacacacacaa
-aaaaaaaaaaaaaaaaaaacacatatacatacaaaaacatacaaaaaaacacacatatatacacacacayacahahahahazahacacauaBaBacatatatatatatatatatatatckacacahacahayayaybEacatatbCatataiahcjahaccjahcjacatatatatacatacacayacacacayayacahahahacayacacahahacayayacahahacacacacaaaa
-aaaaaaaaaaaaaaaaacatacatatacatacaaaaacatacaaaaacacatatatatahacacauacayacacahayahacacacacacacaBacacatatatatatatatatatatatacacahacauahahayayacacatbCatataiahcjcjacahcjahacatatatatatatacacayayacacacayacacahahacacacacahahacayayacahahacacacacaaaa
-aaaaaaaaaaaaaaaaacatacatatacacacaaaaacatatacacacatatatatacahacacahacayahazahahahazayayayacacahaAacacacacatatatatacacatatatacahacacacahacacacacatcbatatclcmcmcmaccmcmcmcnatatacacacacacacacacacacacacacacacahacayayacacacacacacacacacacacacacacaa
-aaaaaaaaaaaaaaacacatacatatacacaaaaaaacacatatatatatatacacacahacacahacacacacazacazacacacayacacacahahahahacacatatacacacacatatacahahacacahahcoahazbCcpatatacaycqahaccrcqcsaiatatacacacacacacacacayayacacacahacaAacayayacayayacahahacahahacacacacacaa
-aaaaaaaaaaaaaaacacatatatatacaaaaaaaaacacacatatatacacacacahahacacahacacahctahacahayayacacacacacacaiahahaKcucvcvaBaBaAacatatacacahacacacacacacacacatatatacaycwahacahcxahaiatatacacacacacacacacayayacacacacacahacacacacayayacahahacahahacacacacaaaa
-aaaaaaaaaaaaaaaaacacatatatacacaaacacacatatatatacacacacacahacacahahacacacayacacacacayacacahacacacaiacacacacatatcyacayayayahahazahacacacacacacacacatatatacayayczacczayahacatatacacacacacacacacaccAcAcBcAcAcBcBcAcAcAcAcAacacacacacacacacacacacacac
-aaaaaaaaaaaaaaaaaaacacacatatacacacatatatatacacacacahaBahahahacahahacacacayayayayacayacacaBaBacacaiacacacacatatcCatatahatatahacacaccDaccEaccEacacacatatacaBahczacczayahacatatacacaccAcAcAcAcAcAcAcBcBcAcBcBcBcAcAcAcBcAacahahacahahacacacacacaaaa
-aaaaaaaaaaaaaaaaaaaaaaacacatatatatatacacacacacahahcFaBahahahaAahahahacacacacacacacayacacaBaBacacacacacacahahahcGatatahatatahazahatahatahatahatacacatatacahaBczacczayayacatatacacaccAcBcAcBcAcAcAcAcAcAcBcBcAcAcAcBcBcAacacacacahahacacacacaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaacacacacacacacacahahahahahaBacacacacacahahahahacacacaiacacacacacaBaBacacacacaccHahatatacacacahatatacacahayayatahatayatatacacacacacazacafacaYacacacacacaccAcAcIcBcBcJcKcAcAcAcBcLcAcAcAcAcMcBcBcBcAcAcAcAacacacacacaaaaaa
-aaaaaaaaaaaaacaaaaaaaaaaacacacacacacahahahahacacacacacacclacacacacahahahacacaiacacacacacahahacacaiacaccNahatataccHcEahahcOacacahatayatahahayayahahaBatacatbCatatatbCatacatatacaccAcPcBcBcBcBcKcKcAcAcBcQcAcAcAcBcBcBcBcRcPcAcAcAacacacacaaaaaaaa
-aaaaaaaaaaaaacacacaaaaaaacacacacacahahacacacacacacaccSacacacacacacacacahacacacacacacacbIahacacacaiacacacahahahboaBaBaAatatacacahatayatahatatatatataBatatatbCatatatbCatatatatacaccAcAcBcBcBcBcBcBcBcBcQcBcBcBcBcBcBcBcBcBcBcAcAcTacacacacaaaaaaaa
-aaaaaaaaaaaaacacacacacacacacacacaAahacacacahahahacahcUahahacahahacacacahahahacacacahahahacacacacacacacacacatatboacatatatatahazahacayahahatauatatataBatatatbCatatatbCatatatatacaccAcAcAcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcBcAcAcAcTacacacacaaaaaaaa
-aaaaacaaaaacacacacacacacacacacayahacbKacacahcVcWcWcXcYcYcZdadbcYcWcWacacahahahacahahahacacacacacacacacacacatatboacatatatatacacahacahatahatahaBaBaBahacatatbCatatacbCatatatacacaccAcAcAcBcBdccMcBcBcBcBcBcBcBcMdccBcBcBcKcBcAcAcTacacaaaaaaaaaaaa
-aaaaacaaaaacacacayayayacacacahahahacaiacacahdddecWcYcYcXdfdgcYcYcWdhacacacacahahahahacacacacacacacacacahahahahboacacdididiahacahatahatahahahacatacacacacacazacdjacazacacacacacaccAcAcBcBdccBcBcBcBcBcBcBcBcBcBcBdccBcBcBcBcAcAcAacacaaaaaaaaaaaa
-aaaaacacaaacacdkdlacdmacacacahayacacacacacacdddncXcYdodpdpdqcYcYcWdhacacacacacacacacacacacacacacaiacacacahatatahahahdratatahazahacahatahatahacatacacacacahahahaiahahahacacbKaedsdsdsdtdtdtcBcBcBcBdtdscBcBcBdtducBcBcBcBcAdtdsdvacaaaaaaaaaaaaaa
-aaaaacacaaacacdwdxacahahaAahdyacacacayayacahdddzdAdecYdAcXdAcXdAcXdBdCdCcWdCdDacacacacacacacacacaiacacacahatatacacacdEatatahacacaccHacdFacdFacatacacacacahahahacahahahacacaiaccAcAcAcAdGdccBcMcQcBcBdHdHcBcBcMcBdccBcBcBcAcAcAcTacaaaaaaaaaaaaaa
-aaaaaaaaacacacacacacacacacahahacacahdIayacahcXdJcXdKcXdecXcYcYcYcXdLcXcXcXdMdhacacacacacacacacacaiacacacaAahahahatatahatatacacacacacacacacacacatacacacacahahahacahahayacacaiaccAcAcAcBcKcBdccBcBdHdNdOdOdHcBcBdccBcBcBcBcPcAcAcTacaaaaaaaaaaaaaa
-aaaaaaaaacacacacayayaydPahahbEacacdmcnacacacdddQdAdecXdAcXdAcXdAcWdhcXcXcXcXdBaeaeaeacacacaeaeaecnacaccNahatatahatatayahahacacacacacacacacacacatacacacacahcEahaiaydRayacacaiaccAcAcBcKcBcBcBcBdHdOdOdOdOdOcBcBcBcBcBcBcBcPcAcAcTacacaaaaaaaaaaaa
-aaaaaaaaaaacacayayayacacahaTahahaAahaiacacahdhdSdqcXcXcXcYcXcXcXcWcWcXcXcXcXcXahahahacacacacacacaiacaccEahatbCayayayayatatacacacacacacacacatatatacacacacacacacaiacacacacacaiaccAcBcBcBcBcBdccBdTdOdOdUdOdOcBcBdccBcBcBcBcAcAcAcTacacaaaaaaaaaaaa
-aaaaaaaaaaacacdwayacacacaAayahacacdVcnacacahcXdecXcYcXcWcYdpdocXcWcWcXcXcXcXdhacahahahacacacacacaiacacacahacbCacahahahatatacacacacacacacacatacacacacacacacacacaiacacacacacaiaccAcAcBcBcBdccBcBdHdOdOdOdOdOdHcBcBdccBcBcAcAcAcAcAacacacaaaaaaaaaa
-aaaaacacaaacacacacayaydPahacdVacacayacacacacdWdCdCcYcWcWcXcXdXdXdCdDcWcWcWcWdhacacacahahacacacacdYaeaeacacacbCacacahahatatatacacaeaeaeacacatatatacacacacaeaeaeafacacacaeaecnaccAcAcAcBcBcBcBcMcKdGdOdOdOdHcPcMcBcBcBcBcAcAcAcAcAacacacaaaaaaaaaa
-aaaaacacaaacacacacayayacacacayacdZdZacacacahahacahaBacacacahahacacacacacacacacacacacacahauahacacacacacacacbCbCacacacahahauatacacacacacacacatacatatatacacacacacacacacacacacaiaccAcAcAcBcBdccBcBcBdGdGdGdGcBcBcBcBdccBcBcBcAcAcAcAacacacacaaaaaaaa
-aaaaacacacacacacaydZayacacayayacdweaacacacacacacacacacacacacacacacacacacacacacacacacacahayahayaXacacbCbCbCbCacacacacacacacatatatacacacacacatacatatatatatacacacacacacacacacaiaccAcAcAcRcBcBdccMcBcBcKdGcKcBcBcMdccBcBcBcBcAcAcAcTacacacacaaaaaaaa
-aaaaaaacacacacacdwayacacacayayacacacacacacacatatatatatatacacacatatatatatatatacacacacahahacahahayacbCbCacacacacacacacacacacatacatatacacacacatacatacacatatatatacacatatacacacacaccAcAcAcAcBcBcBebebcAcAcBcBcBcBcBcBcBcBcIcAcAcAcAcTacacacacaaaaaaaa
-aaaaaaaaacacacacacacacacacdwayacacacaiacacacatatatatatatatatatatatatatacatatacacacacacacacacahahahbCacacacacacacacacacatatatacacatacacacacatacatacacacacacatatatacacatacatatacacaccAcAcAcBcAebcAcAcAcAcBcAcBcBcAcBcBcBcAcAcAcAecaeaeaeacaaaaaaaa
-aaaaaaaaacacacacacacacacacacacacacacacacacacacatatatatacacacacacacacatatatacacacacacacacacacacacacbCbCbCacacacacacatatatacacacacatacacacacatacatacacacacacatatacacacatatatacatacacacacacacacbCacacacacacacacacacacacacacacacacacacacacacacaaaaaa
-aaaaaaacacacacacaaaaacacaaaaaaaaacacacacaaaaacatatacacacaaaaacacatatatacacacaaaaaaaaaaaaaaaaaaaaacacacbCatacacaaacatacacacacacacatacacaaacatacatacacacacacacatatacacacatacacacatacacacatatatbCacahahahauacacacacacacacacacatatatacacacacacaaaaaa
-aaaaacacaaacacaaaaaaacaaaaaaaaacacacacacaaacacacacacaaaaaaaaacacatatacacaaaaaaacacacacacacacacacacacacbCbCatacaaacatacaaaaacatatatacacaaacatacatacacaaaaaaacacatacacacatacaaacacbCbCbCbCbCbCbCbCbCacacacacacacatatacacatatatacacatatacacacacaaaa
-aaaaacacaaacacaaaaaaacaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaacacatacacacacaaaaaaacatatatatatatatatatatatacbCbCacaaacatacaaaaacatacatacacaaacacacatacacaaaaaaaaacatatacacatacaaaaacbCacacacacacacatatatatatacacatatatatatatatacacacacatatatatacacaa
-aaacacaaaaacacaaaaaaacaaaaaaacacaaaaaaaaaaaaaaaaaaacacacacacatacacaaaaaaaaaaaaacacacacacacacacacacacacacacbCacaaacatacaaacacatacatacacaaacacacatacaaaaaaaaaaacatatacacatacaaaaacbCacacacacacacacatacatatatatatatatatatacacacaaaaacatacacacatacaa
-aaaaaaaaaaaaaaacaaaaacaaaaacaaaaaaaaaaaaaaaaaaaaacacatatatacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaacacatatacacacbCacaaacacacaaacatatacatacaaaaaaacacatacaaaaaaaaaaacacatacacacacaaaaacbCacaaaaaaacacacatacacacatacacacacacatacaaaaaaaaacatacaaacacacaa
-aaaaaaaaaaaaaaacaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaacacatatatacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacatatatacbCacaaaaacaaaaacatacacacacaaaaaaacacatacaaaaaaaaaaaaacatacaaacaaaaaaacbCacaaaaaaaaaaacatacaaacatatacaaaaacacacaaaaaaaaacatacaaaaaaaaaa
-aaaaaaaaaaaaaaacaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaacacatacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacacacatatacbCacacaaaaaaaaacatacacaaacaaaaaaacacatacaaaaaaaaaaaaacatacaaaaaaaaaaacbCacaaaaaaaaaaacacacaaacacacacaaaaacacaaaaaaaaaaacatacaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacatatatatacacacatbCacacaaaaaaaaacatacacaaaaaaaaaaacacatacaaaaaaaaaaaaacacacaaaaaaaaaaacbCacaaaaaaaaaaacacaaaaaaaaaaaaaaaaacacaaaaaaaaaaacacacaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacatacacacacatacacacbCacaaaaaaaaaaacacacaaaaaaaaaaaaacacatacaaaaaaaaaaaaaaacaaaaaaaaaaaaacacacaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaacaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacatatatacacaaaaacatatacbCbCacaaaaaaaaaaaaaaacaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacatacacacacaaaaaaacacbCbCbCacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaacacacacaaaaacatatacacaaaaacaaacawaaaaaaaaacahayauacaaaaaaaaacacacaaaaaaaaacaaaaacacazazacaaaaaaacacacaaacacahahahacacaaaaacacaaaaaaacahahahacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaacaaacacaaaaacacacacacaaaaacacacawaaaaacacacahahacacaaaaacacacatacacacacacacacacacacacaAacaaaaacacaaaaaaacacahahacacacaaaaacacaaacacacahahahacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaacaaacacacaaaaaaacacaaaaaaacatacawaaaaacacahahacacaaaaacacacacatacacacahahahahaAazahahahacaaaaacacaaaaacacahahacacacaaaaaaaaaaaaacahahahahahahahacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaacaaaaaaaaaaaaaa
+aaaaaaaaaaacaaaaacacacaaaaaaacacaaaaacatacacaaaaaaacazacacacaaaaacaBatatatatatahahacacacacacacahacacacacacacacacacahahacacaaaaaaaaacacaaacacahahahahahahahahahahahahacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacaaacacaaaaaaaaacaaaa
+aaaaaaaaaaaaaaaaaaacacacaaaaaaacacacacatatacaaawacacazacacacacacacacatatacatatacacacahacahahaCahahaAahahahazazacacaAaAacacacacacacacacaaacacacacacacacahahahahahahahahatatacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaacacacacacacacaaacacacaaaa
+aaaaacacacaaacacacacatacaaaaaaacatatatatatacaaawacacazazazazazacacacatatatatatatatacahacacacacacahacacacacacacacacahahacacazacacazacacacacacaaaaaaacacacacacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaacazazazazazacacacacaaaaaa
+aaaaacacacacacacacacacacacacacacacatacatacacacawaaacacacacacazacacacacacacatatatatacacahahacahahahahaDahahahahahaAahahaAahahahazazacacacacacacaaaaaaacacacaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaacazacacacazacaEacacaaaaaa
+aaaaaaacatacacaFaGaHaHaHaFaFacauaIaJaIaIaKaFaFaLaMaFaFaiacacazacacacacacacatatatatatacacacacacacacaDacacaNacacacacaOahacacaNacacacacaaaaaaaaaaaaaaaaaaaaaaaaacaaaaaaaaacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacazacacacazazazazacaaaaaa
+aaacacacacacacaGaFaPaKaKaKaKaKacaIaIaIaIaJaFaFaFaFaFaFaQaNahazahaNahacacacacatatatatatacacahacacacaRacacacacacacacaAacacacahacacacacacacaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaacacacacazacacacazacacazacacacaa
+aaaaaaaaacacacaSaPaIaIaIaKaTaKacaIaIaIaIaKaUaKaKaKaKaKacahazazazazahahahahacacacatacatatacacahacauahahahahahahahahahahahahahahahahacacacaaaaacacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacacacacaEacacazazacacaEacacaaaa
+aVaVaVacacaWazaIaIaXaYaIaKaKaKacaIaIaJaIaKaFaFaFaFaFaZacahazbaazazbbacacahacacacatatatatatacacacacacaAacacacacaAacahacacacaAacacahacacacacacacacahazazazacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacacahahazahacacacacazacacacacacaaaaaa
+aaaaaaacacacacaFaKaYbcaYaKaFbdacaFaIaJaFaFaFaFaFaFaFaKaQbeazazazazahaAahahauahacacacatatatacacaNahahahahahahahahacahahahacacacacahaAahaNahahahahahacacacacaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacaCahahbfazahazaCbgacazacacacaaaaaaaaaa
+aaaVaVaVacacacaSaKaXbhaUaKaFbiahaFaFaFaFaFaFaFaFaFaFaKaQbjazazahahahacacacacacacacacacacacacacacacacacacacacacahacahacahacacazacauacacacacacacacacacacacaaaaaaaaaaaaacacacacacaaaaaaaaaaaaaaaaaaaaacacbkahahatahahazahbfahazbbazazazacacaaaaaaaa
+aaaaacacacacahaKaKaYbhblaKbmaKaKaKaKbnaFaFaFboaIbpbqbraQbeahazazahahaAahahahahahahbsahaDaDbtahahahbuahaCahbuahahacacacahazazazacacacacaaaaacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacahahacatatahbgahahahazacacacazaEacacaaaaaa
+acacacacacacahbvaIaIaXaKaKaFaFaFaFaKaKaFaFaFaKaIbwaIaXbxacaAacacacacacacacacacacacacacacacacaAacacacacacacacacahacacacacacacacacacbybzaeaebAacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacahahatatatatatatahahahbfazatacatatacacacacaa
+aaaaaaacacacahaIaXaYaIaYaKaFaFbBaKaFaUaFaFaFbCbDbEaIaKaAahahacacacacacacacatatatatatatatatacaDacacaNahaDaDahaAahaAahahahahahazahahaibFbGbHaiacaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacahahatatahbgacatahahahahahatacacatacacacacac
+aaaaaaaVacacacaKaFaPaPaIaKaFbBbBaKaKaKaFaFaFbqaIaIaIbBacacaCacacacatatatatatatacatatatatacacaDacacacacacacbIacacacacacacacacacacahbJbJazazaiacacacacacacacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacaaacacahbgatahazauataubkahahahazazacatatatacaaaa
+aaaaacacacacacaKaFaKaKaIaKaFbKaKblaKaKbLaCahahahahahaDaDahahahacatatatatatatatatatatacacacacbMacahaDaDaDatbNaDaDahahahahacacatacacaibJahazatatatahahazazazazazazacacacacaaaaaaaaaaaaaaaaaaaaaaacaaaaacacahahahazacatatazatatahahazacacacatacacaa
+acacacacatacacaUaFaKaFaFaFaFbBaIaIaKaKacacacacacacacacacacacacacatatatatatatatatatatacacacacaDacahatataDatatazazatatahahahacacatacaibObPacacacacacacacacacahahazazatatacacacaaaaaaaaaaaaaaaaacacaaaaacacacacacacatatacacatataCahazatatatatacacac
+aaaaaaacatacacahacaAacahahahaKbvaIaKaKacacahacacacahahahacacacatatatatatatatatacacacacacacacaDazacatatahauatatazatatahacahacacacacacacacacaaaaaaaaaaaaaaacacacacacacacacaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaacacatatatatacacacatahahahatacacacacaaaa
+aaaVaVacatacacahacahacahacacaKaKaIaKbQacahahahahahahacahahaAbRatatatatacatacacacacacacacacahaDazazacatatatatatatatahahahacahacacatatacaaaaaaaaacacacaaaaaaaaaaaaaaacacacacacacacacacaaaaacacacaaaaacacacacatatatacacacaaacatacahahatatacaaaaaaaa
+aaaaaaacacatacbSacahacahacacacacazahacacacacacacacacacacacacbRatatatatatatacazazazahacacazahazacazatataubTahaNahatatahahahacacacacacacacacacacacatacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacatacaaaaacatacacatatacacaaaaacacatacacbUacatacacaaaaaa
+aaaaaaaaacacacacahahahahahahahacazahacazazazazazazazazazacbRbRatatatatacacacazbVahahacahacahahazazatatataDatatazatatahacahacacahahahahacatacacacacacaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaacatacacaaacacatatatatacacaaaaacacatatacahahacbWacaaaaaaaa
+aaaaaaaaaaaaacacaNahahahacacahacazahahahahahazazahazazbXacatatatatatatacahaCahazazahacacahacahahahahaDbYaDatatbZazazahahacazacazazahahacacacaaaaaaaaaaacacacacacacacacacaaaaaaacacacacacatacacacacatatacacacacaaaaaaacacatacacahazacatacacaaaaac
+aaaaaVaVaVaVacacahcaahahahahahahaNahacahahcaahcbahahacacacatatatacacacacahacahahazahacacacacahacahatataDatatatatatatazahahacacazazazahacaaaaaaaaacacacbyaeaeacccaeacacacaaaaaaacacacacatatatatatacatatacaaaaaaaaaaacacatatacacahacacatatacaaacac
+aaaaaaacacacacacahahahauacacahacahahacazazazahahahahacbRatatatbRaAaDcdacahacacacaAacacacacacacahacatataDatatatatatatazacahacacahazceazacacacacacacacacazcfcgaDchaDaiacacacacacacatatatatatacatatatatacacaaaaaaaaacacacatatacacaCahacacatacacacaa
+aaacacacatatatacacacahacacacahacacacacacacazahahahahaAbRatatatbRaccibtacahacahahahahaAahahahacacahahahahahahahahahahahahahahacahaCauahacacacacacacacacacacacacafcjaiacacacacacatatatacacacacacacacacacaaaaaaacacacacacacacacacahahahacatacacacaa
+acacacacacacacacacacahahahacahahahahahacacazazazahahacbRatatatacacacacacahacahazazazazbXazahacacacaAacaAckckacatatacacacacacacaAacacaAacacacacacahahahaAahahacclaDaicmacacacacatatacacacacacacacacacacacacacacacacacacacacacacacacaAacacacacaaaa
+aaaaaaaaaaaVaVaVaVacacacahacahacacacacacacacazacauacacatatacatatatacacacahaAahazazbaazazazahacahahahcaahazazacacacacacacahahahahahazahaNahahacacahacacacauacaccaaDcncoacacacatatacacazazazazazazazazazazazazazazbbazazazazahazazacahahacacacacac
+aaaaaaaaaaaaaaacacacacacahahahacaDaDaDaDacahahahahahacatatatatatbRacacacaAacahbXazazazazazahacahahahacahahazacazahahahacahazazazahazaDcpahahacacahacazacacacahaAacacacacacatatacacacazazaWazazacacacacacacacacacacazazazazacazazacahahacacacacac
+aaaaaaaaaaaaacacatatatatacacahazazazazaDcjaDahahazazacacatatatatbRaAahaAahacahahahazazahahahacahahahaAaDahazbbazahazahaAahazatazahahaDaNcbahaAahahaCahazazahahacacaiacacatatatacacacacacacacacacahahaAahazacazaWacacacaAacacaAacacbbacacacacacaa
+aaaaaaaaaaacacatacacacatacacacacahazazazacahahazazaeaeacatatatatbRacacacaAacacahacacacacahacacahahahckcqcrahacahahazazacazazatatahaAahaNahahacacacacacacacacahacacaiacacatatacacacacazazahazahaAahazacahahaAahahaAazazazazacazazacazahacacacaaaa
+aaaaaaaaacacatacacacacatatatatatatahazazacahazazazcsacacacacatatatatatacahaNahahahahahahahacaCahahahaAaDahahahahahazazacacatatatacacacacacaAacacatatatacacacahacacacacacatatacacacacazazacazahacacacacacacacacaAacacazazazacazazacazahacacacaaaa
+aaaaaaaaacatacacaaacatatatacacatatahahazceazazazahahacacacacacatatatatacacacacacacacaAacacacacahahahacaDahahacahahahazacacatatatatacacacacahacacatatatacahahahahazahacacatatacacacacacaAacacaAacacazazacazazacahahacacacaAacacaAacacaAacacacacaa
+aaaaaaaaacacacaaacacatatacacaaacatahahahacahahahahahaNahahacacatatatatatbRatatatatbRbRbRbRacacahahahahazahahacacacacacacatatatatatatacacacahacacatatatacacacacacazazacacatatacacacacacazazacaCacacazazacacazacahahacaWazazacahahbbahahacacacaaaa
+aaaaaaaaaaaaaaaaacatatacacaaaaacatatatatatatacacacacacacahacacacacacatatatatatatatatatatbRacacctacacacazazazacacacacacatatataiatatatatacacaCahacatatatacauahacacacazahacatatacacacacacazazacahacacacacacacacacacaAacacazazacahahacahahacacacacaa
+aaaaaaaaaaaaaaacacatacacaaaaacacatacacacacatatatatatatacahacacacacacatatatatatatatatatatbRbRbRbRacacacazahazacacacacatatatatacatatatatatacacahahcuatatacacaAacaAahahahacatatacacacacacacaAacahahacacacazacacacacahahacacacacahacacacacacacacaaaa
+aaaaaaaaaaaaaaacatacacaaaaacacatatacaaaaacacatatacacatatahacacacacacacatatatatacatatatatatbRatbRbRbRacahazazacacatatatatatatcvatatatatatacacacahcwatatacahahahahacacacacatatatatatatacahahacahahahacacazacacahacaCahacaWazacahahacahahacacacacaa
+aaaaaaaaaaaaaaacatacaaaaacacatatacacaaaaacatatacacacatatatatatatacacatatatatatatatatatatatbRatatatbRacazazazacacatatatatatatatatacacatatatacacaAcwatatacacacaAacacacacacatatatatatatacayauacacacahahacacacazazacacaAacazazaAahahaAahahacacacacaa
+aaaaaaaaaaaaacacacacaaaaacatatacacaaaaacatatacaaaaacacacacatatatacatatatacatatatatatatatatbRatatatbRbRacazahacacatatatatatatatacacacacatatatacacbRatatacahahahahahahahacatatatatacatacacacacacacacahauacacazazacahahacacacacacacacaAacacacacacaa
+aaaaaaaaaaaaacacaaaaaaaaacatacacaaaaaaacatacacaaaaacazazacatatatatatatacacatatatatatacatatbRatatatatatacacauacatatatatatatatatacacacacacatatacacbRatatatatatatatatatatatatatacatatatacacazazacacacahahahacacacacahahaccxazacazazacahahacacacaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaacacacaaaaaaacacazacahatatatatacacacacbRatatatatatatbRatatatatatatacacacatatatatatatatacacacacacacatatatacbRatatatatatatatatatatatatatatatatcyahceazahahacacacaCahacazazacaAacacazazacazazaAahahacacacaaaa
+aaaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaacaaaaaaaaaaaaacazacacczacatatacaccAcAacbRbRatatatatatbRatatatatatatacacacatatatatatatcBacacacacacacacatatatbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRahahahcaahazacahahahacazazacahahacacaAacacaAacacacacacacacaa
+aaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaccAcAacahatatacacacacacacacbRatatatatatbRatatacatatatacatatatatatatatacahacacacacacacacacatatbRatatatatatatatatatatatatatatatatcCahahahazazazcDazazazacacacacahahacahahacazazacahahacacacacaa
+aaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaacaaaaaaaaaaacacacacatatatacacacacahahaAbRbRbRatatbRbRbRatatatatatatatatatatatatcBacaAacacauazcEcFcGaiatatbRatatatatatatatatatatatatacatatatatacacahahahahacahahahahacacacacacacahahacazazahahahacacacacaa
+aaaaaaaaaaaaaaaaaaaaacacatacacacaaaaacatacaaaaaaaaacacacatatatacacacazacaAacacacacacacacacacaAacatatatatatatacatatatcHahaAahahacahazazcIcJaiatatbRatataccKcKcKaccKcKahacatatatatatatacacacacauacacacacahahahazazacahacaAacacacacacacacacacacacaa
+aaaaaaaaaaaaaaaaaaacacatatacatacaaaaacatacaaaaaaacacacatatatacacacacazacahahahahaAahacacauaDaDacatatatatatatatatatatatcLacacahacahazazazbVacatatbRatataiahcKahaccKahcKacatatatatacatacacazacacacazazacahahahacazacacahahacazazaAahahacacacacaaaa
+aaaaaaaaaaaaaaaaacatacatatacatacaaaaacatacaaaaacacatatatatahacacauacazacacahazahacacacacacacaDacacatatatatatatatatatatatacacahacauahahazazacacatbRatataiahcKcKaccMcKahacatatatatatatacacazazacacacazacacahahacahacacauahahazahacahahacacacacaaaa
+aaaaaaaaaaaaaaaaacatacatatacacacaaaaacatatacacacatatatatacahaiacahacazahaAahahahaAazazazacacahaCacacacacatatatatacacatatatacahacacacahacacacacatcwatatcNcOcOcOaccOcOcOcPatatacacacacacacacacacacacacacacacahacaWazacacacacacaAacaAacacacacacacaa
+aaaaaaaaaaaaaaacacatacatatacacaaaaaaacacatatatatatatacacacahcQacahacacacacaAacaAacacacazacacacahahahahacacatatacacacacatatacahahacacahahcRahaAbRcSatatacazcTahaccUcTcVcWatatacacacacacacacacazazacacacahacaCacazazacazazacahahacahahacacacacacaa
+aaaaaaaaaaaaaaacacatatatatacaaaaaaaaacacacatatatacacacacahahacacahacacahcXahacahazazacacacacacacaiahahaNcYcZcZaDaDaCacatatacacahacacacacacacacacatatatacazdaahacahdbahaiatatacacacacacacacacazazacacacacacahacacacacaWazaAahahacahahacacacacaaaa
+aaaaaaaaaaaaaaaaacacatatatacacaaacacacatatatatacacacacacahacacahahacacacazacacacacazacacdcacacacaiacacacacatatddacazazazahahaAahacacacacacacacacatatatacazazdeacdeazahacatatacacacacacacacacacdfdfdgdfdfdgdgdfdfdfdfdfacacacacacacacacacacacacac
+aaaaaaaaaaaaaaaaaaacacacatatacacacatatatatacacacacahaDahahahacahahacacacazazazazacazacacaDaDacacaiacacacacatatdhatatahatatahacacacdiacdjacdjacacacatatacaDahdeacdeazahacatatacacacdfdfdfdfdfdfdfdgdgdfdgdgdgdfdfdfdgdfacahahacahahacacacacacaaaa
+aaaaaaaaaaaaaaaaaaaaaaacacatatatatatacacacacacahahdkaDahahahaCahahahacacacacacacacazacacaDaDacacacacacacahahahdlatatahatatahaAahatahatahatahatacacatatacahaDdeacdeazazacatatacacacdfdgdfdgdfdfdfdfdfdfdgdgdfdfdfdgdgdfacacacacahahacacacacaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaacacacacacacacacahahahahahaDacacacacacahahahahacacacaiacacacacacaDaDacacacacacdmahatatacacacahatatacacahazazatahatazatatacacacacacaAacafacbbacacacacacacdfdfdndgdgdodpdfdfdfdgdqdfdfdfdfdrdgdgdgdfdfdfdfacacacacacaaaaaa
+aaaaaaaaaaaaacaaaaaaaaaaacacacacacacahahahahacacacacacaccNacacacacahahahacacaiacacacacacahahacacaiacacdsahatatacdmdjahahdtacacahatazatahahazazahahaDatacatbRatatatbRatacatatacacdfdudgdgdgdgdpdpdfdvdgdwdfdfdfdgdgdgdgdxdudfdfdfacacacacaaaaaaaa
+aaaaaaaaaaaaacacacaaaaaaacacacacacahahacacacacacacacdyacacacacacacacacahacacacacacacaccaahacacacaiacacacahahahbtaDaDaCatatacacahatazatahatatatatataDatatatbRatatatbRatatatatacacdfdfdgdgdgdgdgdgdgdgdwdgdgdgdgdgdgdgdgdgdgdfdfdzacacacacaaaaaaaa
+aaaaaaaaaaaaacacacacacacacacacacaCahacacacahahahacahdAahahacahahacacacahahahacacacahahahacacacacacacacacacatatbtacatatatatahaAahacazahahatauatatataDatatatbRatatatbRatatatatacacdfdfdfdgdgdgdgdgdgdgdgdgdgdgdgdgdgdgdgdgdfdfdfdzacacacacaaaaaaaa
+aaaaacaaaaacacacacacacacacacacazahacbyacacahdBdCdCdDdEdEdFdGdHdEdCdCacacahahahacahahahacacacacacacacacacacatatbtacatatatatacacahacahatahatahaDaDaDahacatatbRatatacbRatatatacacacdfdfdfdgdgdIdrdgdgdgdgdgdgdgdrdIdgdgdgdpdgdfdfdzacacaaaaaaaaaaaa
+aaaaacaaaaacacacazazazacacacahahahacaiacacahdJdKdCdEdEdDdLdMdEdEdCdNacacacacahahahahacacacacacacacacacahahahahbtacacdOdOdOahacahatahatahahahacatacacacacacaAacdPacaAacacacacacacdfdfdgdgdIdgdgdgdgdgdgdgdgdgdgdgdIdgdgdgdgdfdfdfacacaaaaaaaaaaaa
+aaaaacacaaacacdQdRacdSacacacdTazacacacacacacdJdUdDdEdVdWdWdXdEdEdCdNacacacacacacacacacacacacacacaiacacacahatatahahahdYatatahaAahacahatahatahacatacacacacahahahaiahahahacacbyaedZdZdZeaeaeadgdgdgdgeadZdgdgdgeaebdgdgdgdgdfeadZecacaaaaaaaaaaaaaa
+aaaaacacaaacacedeeacahahaCahahacacacazazacahdJefegdKdEegdDegdDegeheiejejdCejekacacacacacacacacacaiacacacahatatacacacelatatahacacacdmacemacemacatacacacacahahahacahahahacacacacdfdfdfdfendIdgdrdwdgdgeoeodgdgdrdgdIdgdgdgdfdfdfdzacaaaaaaaaaaaaaa
+aaaaaaaaacacacacacacacacacahepacacaheqazacahdDerdDesdDdKdDdEdEdEdDetdDdDdDeudNacacacacacacacacacaiacacacaCahahahatatahatatacacacacacacacacacacatacacacacahahahacahahazacahacacdfdfdfdgdpdgdIdgdgeoeveweweodgdgdIdgdgdgdgdudfdfdzacaaaaaaaaaaaaaa
+aaaaaaaaacacacacazazazexahaheyacacdScPacacacdJezegdKdDegdDegdDegdCdNdDdDdDdDeiaeaeaeacacacaeaeaecPacacdsahatatahatatazahahacacacacacacacacacacatacacacacahdjahaiazeAazahahahahdfdfdgdpdgdgdgdgeoewewewewewdgdgdgdgdgdgdgdudfdfdzacacaaaaaaaaaaaa
+aaaaaaaaaaacacazazazacacahaWepahaCahaiacacahdNeBdXdDdDdDdEdDdDdDdCdCdDdDdDdDdDahahahacacacacacacaiacacdjahatbRazazazazatatacacacacacacacacatatatacacacacacacacaiacacahacacacahdgdgdgdgdgdgdIdgeCeweweDewewdgdgdIdgdgdgdgdfdfdfdzacacaaaaaaaaaaaa
+aaaaaaaaaaacaceEazacacacaCazahacaceFcPacacahdDdKdDdEdDdCdEdWdVdDdCdCdDdDdDdDdNacahahahacacacacacaiacacacahacbRacahahahatatacacacacacacacacatacacacacacacacacacaiacahahacacacacdfdfdgdgdgdIdgdgeoeweweweweweodgdgdIdgdgdfdfdfdfdfacacacaaaaaaaaaa
+aaaaacacaaacacacacazazexahaceGacacazacacacaceHejejdEdCdCdDdDeIeIejekdCdCdCdCdNacacacahahacacacaceJaeaeacacacbRacacahahatatatacacaeaeaeacacatatatacacacbyaeaeaeafdPaCazaeaecPacdfdfdfdgdgdgdgdrdpeneweweweodudrdgdgdgdgdfdfdfdfdfacacacaaaaaaaaaa
+aaaaacacaaacacacacazazacacacazaceKeLacacacahahacahaDacacacahahacacacacacacacacacacacacahauahacacacacacacacbRbRacacacahahauatacacacacacacacatacatatatacaieMeNeOePaiahazazazaiacdfdfdfdgdgdIdgdgdgenenenendgdgdgdgdIdgdgdgdfdfdfdfacacacacaaaaaaaa
+aaaaacacacacacacazeKazacacazeQacedeRacacacacacacacacacacacacacacacacacacacacacacacacacahazahazbaacacbRbRbRbRacacacacacacacatatatacacacacacatacatatatataieSeTeUeVaiahahahahaiacdfdfdfdxdgdgdIdrdgdgdpendpdgdgdrdIdgdgdgdgdfdfdfdzacacacacaaaaaaaa
+aaaaaaacacacacaceWazacacacazazacacacacacacacatatatatatatacacacatatatatatatatacacacacahahacahahazacbRbRacacacacacacacacacacatacatatacacacacatacatacacataceXeYeZfaaiahacacahaiacdfdfdfdfdgdgdgfbfbdfdfdgdgdgdgdgdgdgdgdndfdfdfdfdzacacacacaaaaaaaa
+aaaaaaaaacacacacacacacacacedazacacacaiacacacatatatatatatatatatatatatatacatatacacacacacacacacahahahbRacacacacacacacacacatatatacacatacacacacatacataiacacacfcfdfeffaQacacatahaiacacacdfdfdfdgdffbdfdfdfdfdgdfdgdgdfdgdgdgdfdfdfdffgaeaeaeacaaaaaaaa
+aaaaaaaaacacacacacacacacacacacacacacacacacacacatatatatacacacacacacacatatatacacacacacacacacacacacacbRbRbRacacacacacatatatacacacacatacacacacatacataiacacaifhfifefeaQacatatahaiatacacacacacacacbRacacacacacacacacacacacacacacacacacacacacacacaaaaaa
+aaaaaaacacacacacaaaaacacaaaaaaaaacacacacaaaaacatatacacacaaaaacacatatatacacacaaaaaaaaaaaaaaaaaaaaacacacbRatacacaaacatacacacacacacatacacaaacatacatfjfkahflfmfnfeazacacatahahaiacatacacacatatatbRacahahahauacacacacacacacacacatatatacacacacacaaaaaa
+aaaaacacaaacacaaaaaaacaaaaaaaaacacacacacaaacacacacacaaaaaaaaacacatatacacaaaaaaacacacacacacacacacacacacbRbRatacaaacatacaaaaacatatatacacaaacatacatafaeaefofefpazfqazazazazahaiatatbRbRbRbRbRbRbRbRbRacacacacacacatatacacatatatacacatatacacacacaaaa
+aaaaacacaaacacaaaaaaacaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaacacatacacacacaaaaaaacatatatatatatatatatatatacbRbRacaaacatacaaaaacatacatacacaaacacacatacacacbxfrfrfraeazazaeaeaecPfsatbRacacacacacacatatatatatacacatatatatatatatacacacacatatatatacacaa
+aaacacaaaaacacaaaaaaacaaaaaaacacaaaaaaaaaaaaaaaaaaacacacacacatacacaaaaaaaaaaaaacacacacacacacacacacacacacacbRacaaacatacaaacacatacatacacaaacacacatacaaacacacacacatatatatatacacatatbRacacacacacacacatacatatatatatatatatatacacacaaaaacatacacacatacaa
+aaaaaaaaaaaaaaacaaaaacaaaaacaaaaaaaaaaaaaaaaaaaaacacatatatacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaacacatatacacacbRacaaacacacaaacatatacatacaaaaaaacacatacaaaaaaaaaaacacatacacacatatatacbRacaaaaaaacacacatacacacatacacacacacatacaaaaaaaaacatacaaacacacaa
+aaaaaaaaaaaaaaacaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaacacatatatacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacatatatacbRacaaaaacaaaaacatacacacacaaaaaaacacatacaaaaaaaaaaaaacatacaaacacatacacbRacaaaaaaaaaaacatacaaacatatacaaaaacacacaaaaaaaaacatacaaaaaaaaaa
+aaaaaaaaaaaaaaacaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaacacatacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacacacatatacbRacacaaaaaaaaacatacacaaacaaaaaaacacatacaaaaaaaaaaaaacatacaaaaacatacacbRacaaaaaaaaaaacacacaaacacacacaaaaacacaaaaaaaaaaacatacaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacatatatatacacacatbRacacaaaaaaaaacatacacaaaaaaaaaaacacatacaaaaaaaaaaaaacacacaaaaacatacacbRacaaaaaaaaaaacacaaaaaaaaaaaaaaaaacacaaaaaaaaaaacacacaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacatacacacacatacacacbRacaaaaaaaaaaacacacaaaaaaaaaaaaacacatacaaaaaaaaaaaaaaacaaaaaaacatacacacacaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaacaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacatatatacacaaaaacatatacbRbRacaaaaaaaaaaaaaaacaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaaaaaaaaaacacacaaacaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacatacacacacaaaaaaacacbRbRbRacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacaaaaaaaaaaaaaaacacacacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaacacaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
