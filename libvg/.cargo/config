@@ -1,0 +1,2 @@
+[build]
+rustflags = ["-Z", "unstable-options", "-C", "target-feature=+crt-static"]
