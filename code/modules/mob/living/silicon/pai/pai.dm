@@ -49,7 +49,7 @@
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
-	var/pPS = 0 //Do we have pPS installed?
+	var/pPS = 0 //Are we a pPS in the GPS list?
 	var/ppstag = "PAI0" // Our pPS tag
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
