@@ -1,0 +1,6 @@
+author: kolith
+
+delete-after: True
+
+changes: 
+- tweak: Receiving a random job will no longer put you in a head role.
