@@ -128,7 +128,7 @@
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
 	desc = "It appears to be modeled after a ghost. It looks as though it might disappear at any moment."
-	target_type = /mob/dead/observer
+	target_type = /mob/dead/observer/deafmute
 	icon_state = "ghost_mask"
 
 /obj/item/clothing/mask/morphing/ghost/equipped(mob/living/carbon/C, wear_mask)
