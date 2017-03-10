@@ -57,7 +57,7 @@ var/list/SPS_list = list()
 			var/area/gps_area = get_area(A)
 			var/tracked_gpstag = null
 			var/rip = null
-			if(istype(A, /mob/living/silicon/pai))
+			if(ispAI(A))
 				var/mob/living/silicon/pai/P = A
 				tracked_gpstag = P.ppstag
 				rip = P.silence_time
@@ -102,9 +102,9 @@ var/list/SPS_list = list()
 		if (usr.get_active_hand() != src || usr.stat) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return
-		a = copytext(sanitize(a), 1, 20)
+		a = strict_ascii(a)
 		if(length(a) != 4)
-			to_chat(usr, "<span class = 'caution'>The tag must be four letters long!</span>")
+			to_chat(usr, "<span class = 'caution'>The tag must be four characters long!</span>")
 			return
 
 		else
