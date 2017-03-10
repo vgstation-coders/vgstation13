@@ -1,0 +1,6 @@
+author: kolith
+
+delete-after: True
+
+changes: 
+- bugfix: Ghosts clicking a floodlight will no longer have their name shown.

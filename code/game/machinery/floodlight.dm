@@ -59,7 +59,10 @@
 	if(on)
 		on = 0
 		set_light(0)
-	else
+
+	else if(isobserver(user))
+		return
+
 		if(!cell || !cell.charge > powercost)
 			return
 		on = 1
