@@ -327,7 +327,7 @@
 				var/tag = input("Please enter desired tag.", name, ppstag) as text|null
 				if (!tag) //what a check
 					return
-				tag = copytext(strict_ascii(tag), 1, 20)
+				tag = strict_ascii(tag)
 				if(length(tag) != 4)
 					to_chat(src, "<span class = 'caution'>The tag must be four characters long!</span>")
 					return
