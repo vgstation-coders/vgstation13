@@ -49,6 +49,7 @@ Buildable meters
 #define DISP_SORT_WRAP_JUNCTION	9
 
 var/global/list/unstackable_pipes = list(PIPE_LAYER_MANIFOLD)
+var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
 
 /obj/item/pipe_spawner
 	name = "Pipe Spawner"
@@ -358,7 +359,6 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W)
 			return flip
 	return 0
 
-var/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
 /obj/item/pipe/proc/get_pdir() //endpoints for regular pipes
 
 
@@ -407,12 +407,13 @@ var/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
 	else if (pipe_type in manifold_pipes)
 		dir = 2
 	var/pipe_dir = get_pipe_dir()
-
+	var/unstackable=(pipe_type in unstackable_pipes)
+	var/uses_he=(pipe_type in heat_pipes)
 	for(var/obj/machinery/atmospherics/M in src.loc)
-		if(M.piping_layer != src.piping_layer && !((M.pipe_flags & ALL_LAYER) || (pipe_type in unstackable_pipes)))
+		if(M.piping_layer != src.piping_layer && !unstackable && !(M.pipe_flags & ALL_LAYER))
 			continue
-		if(M.initialize_directions & pipe_dir)	// matches at least one direction on either type of pipe
-			to_chat(user, "<span class='warning'>There is already a pipe at that location.</span>")
+		if(M.has_initialize_direction(pipe_dir, PIPE_TYPE_STANDARD) || (uses_he && M.has_initialize_direction(pipe_dir, PIPE_TYPE_HE)))
+			to_chat(user, "<span class='warning'>There is already a pipe connection in that direction.</span>")
 			return 1
 	// no conflicts found
 
