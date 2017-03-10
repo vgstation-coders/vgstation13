@@ -414,6 +414,7 @@
 				B.name = "Bitcoin Wallet"
 				J = "Warlord" //
 				deity_name = "Murray Rothbard"
+				H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store)
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)
