@@ -1,0 +1,6 @@
+author: kolith
+
+delete-after: True
+
+changes: 
+- tweak: You can no longer alt-click on closed doors/shutters.
