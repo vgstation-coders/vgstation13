@@ -136,7 +136,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_MEDIUM
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
 	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
@@ -183,14 +183,14 @@
 		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
-	name = "ammo-caps"
+	name = "box of cap gun caps"
 	desc = "There are 7 caps left! Make sure to recyle the box in an autolathe when it gets empty."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "357-7"
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 20, MAT_GLASS = 20)
 	melt_temperature = MELTPOINT_PLASTIC
 	w_type = RECYK_MISC
 	var/amount_left = 7.0
