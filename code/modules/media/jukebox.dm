@@ -35,11 +35,9 @@ var/global/global_playlists = list()
 		var/list/playlist=list()
 		if(response)
 			var/json = file2text(response["CONTENT"])
-			if("/>" in json)
+			if("/>" in json || "<b>Exception</b>" in json)
 				continue
-			to_chat(world, json)
 			var/list/list_data = json_decode(json)
-			to_chat(world, list_data)
 			var/songdata = list_data[1]
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
@@ -77,7 +75,6 @@ var/global/global_playlists = list()
 				update_icon()
 				return 0
 			var/list/list_data = json_decode(json)
-			to_chat(world, list_data)
 			var/songdata = list_data[1]
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
