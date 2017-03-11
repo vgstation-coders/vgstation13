@@ -35,10 +35,9 @@ var/global/global_playlists = list()
 		var/list/playlist=list()
 		if(response)
 			var/json = file2text(response["CONTENT"])
-			if("/>" in json || "<b>Exception</b>" in json)
+			if("/>" in json)
 				continue
-			var/list/list_data = json_decode(json)
-			var/songdata = list_data[1]
+			var/list/songdata = json_decode(json)
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
@@ -46,7 +45,7 @@ var/global/global_playlists = list()
 			global_playlists["[playlist_id]"] = playlist.Copy()
 
 /obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
-	if(!config.media_base_url)
+	if(!config.media_base_url || !(playlist_id || playlist))
 		return
 	playlist_id = playlistid
 	if(global_playlists["[playlistid]"])
@@ -74,8 +73,7 @@ var/global/global_playlists = list()
 				stat &= BROKEN
 				update_icon()
 				return 0
-			var/list/list_data = json_decode(json)
-			var/songdata = list_data[1]
+			var/list/songdata = json_decode(json)
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
