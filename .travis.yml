@@ -10,6 +10,7 @@ env:
   - BYOND_MINOR="1363"
   - ALL_MAPS="tgstation metaclub defficiency taxistation test_box test_tiny"
   - RUST_BACKTRACE="1"
+  - RUST_TEST_THREADS=1
 
 cache:
   directories:
