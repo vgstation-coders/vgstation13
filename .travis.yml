@@ -1,7 +1,7 @@
 #pretending we're C because otherwise ruby/rvm will initialize, even with "language: dm".
 language: rust
 rust:
-- nightly
+- stable
 sudo: false
 
 env:
@@ -38,6 +38,8 @@ script:
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - echo ${ALL_MAPS} | xargs ./tools/travis/build.py vgstation13.dme -M 
 - cd libvg
+# Disable CRT static linking to allow stable.
+- rm .cargo/config
 - cargo test
 - cd -
 
