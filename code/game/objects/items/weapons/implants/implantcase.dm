@@ -121,3 +121,15 @@
 		src.imp = new /obj/item/weapon/implant/death_alarm( src )
 		..()
 		return
+
+
+/obj/item/weapon/implantcase/trombone
+	name = "Glass Case- 'Sad Trombone'"
+	desc = "A case containing a sad trombone implant."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "implantcase-b"
+
+/obj/item/weapon/implantcase/trombone/New()
+	src.imp = new /obj/item/weapon/implant/trombone( src )
+	..()
+	return

@@ -101,6 +101,41 @@ Implant Specifics:<BR>"}
 	spawn(delay)
 		malfunction--
 
+//Sad trombome implant
+/obj/item/weapon/implant/trombone
+	name = "sad trombone implant"
+	desc = "Plays a sound on your death."
+	icon_state = "implant_evil"
+
+/obj/item/weapon/implant/trombone/get_data()
+	return {"
+<b>Implant Specifications:</b><BR>
+<b>Name:</b> Honk Tech Comic Relief Implant<BR>
+<b>Life:</b> Activates upon detected death.<BR>
+<b>Important Notes:</b> None<BR>
+<HR>
+<b>Implant Details:</b><BR>
+<b>Function:</b> Plays a sad trombone sound.<BR>
+<b>Special Features:</b> Works under water and in hazardous environments.<BR>
+<b>Integrity:</b> Implant will not malfunction."}
+
+/obj/item/weapon/implant/trombone/trigger(emote, mob/source)
+	if(emote == "deathgasp" && source && source.isDead())
+		activate()
+
+/obj/item/weapon/implant/trombone/activate()
+	if(malfunction == MALFUNCTION_PERMANENT)
+		return
+
+	if(iscarbon(imp_in))
+		var/turf/T = get_turf(imp_in)
+
+		if(T)
+			playsound(T, 'sound/misc/sadtrombone.ogg', 100, 1)
+
+
+		qdel(src)
+
 //BS12 Explosive
 /obj/item/weapon/implant/explosive
 	name = "explosive implant"

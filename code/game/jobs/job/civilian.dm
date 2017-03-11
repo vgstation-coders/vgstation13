@@ -323,6 +323,11 @@
 		H.real_name = pick(clown_names)
 		H.dna.real_name = H.real_name
 		H.rename_self("clown")
+
+		var/obj/item/weapon/implant/trombone/L = new/obj/item/weapon/implant/trombone(H)
+		L.imp_in = H
+		L.implanted = 1
+
 		return 1
 
 
