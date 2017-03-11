@@ -9,6 +9,7 @@ env:
   - BYOND_MAJOR="511"
   - BYOND_MINOR="1363"
   - ALL_MAPS="tgstation metaclub defficiency taxistation test_box test_tiny"
+  - RUST_BACKTRACE="1"
 
 cache:
   directories:
@@ -35,8 +36,10 @@ script:
 - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
 - python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-- echo ${ALL_MAPS} | xargs -I {} ./tools/travis/build.py vgstation13.dme -M {}
-- cd libvg; cargo test; cd -
+- echo ${ALL_MAPS} | xargs ./tools/travis/build.py vgstation13.dme -M 
+- cd libvg
+- cargo test
+- cd -
 
 notifications:
   irc:
