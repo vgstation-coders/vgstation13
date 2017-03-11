@@ -8,7 +8,7 @@ env:
   global:
   - BYOND_MAJOR="511"
   - BYOND_MINOR="1363"
-  - ALL_MAPS="tgstation,metaclub,defficiency,taxistation,test_box,test_tiny"
+  - ALL_MAPS="tgstation metaclub defficiency taxistation test_box test_tiny"
 
 cache:
   directories:
