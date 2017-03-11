@@ -31,8 +31,10 @@ var/global/global_playlists = list()
 			continue
 		global_playlists["[playlist_id]"] = playlist
 
-/proc/get_playlist(var/playlistid = playlist_id)
-	var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+/proc/get_playlist(var/playlistid)
+	if(isnull(playlistid))
+		return
+	var/url="[config.media_base_url]/index.php?playlist=[playlistid]"
 	testing("Updating playlist from [url]...")
 
 	//  Media Server 2 requires a secret key in order to tell the jukebox
