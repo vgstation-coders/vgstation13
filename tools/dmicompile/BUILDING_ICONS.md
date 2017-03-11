@@ -45,7 +45,7 @@ How to Compile
 4. Run the following (with the correct paths, of course):
 
 ```
-cd path/to/vgstation13
+cd path/to/vgstation13/tools/dmicompile
 dmi_compile
 ```
 

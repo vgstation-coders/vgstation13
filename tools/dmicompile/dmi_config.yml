@@ -4,7 +4,7 @@
 #  1. Install BYONDTools (which requires Python, numpy, and Pillow;  Windows users will have to manually install all of these :^)
 #    $ pip install BYONDTools
 #  2. Run dmi_compile
-#    $ cd /path/to/vgstation13/
+#    $ cd /path/to/vgstation13/tools/dmicompile
 #    $ dmi_compile
 #  3. Sit back, and relax.
 #
@@ -21,26 +21,26 @@
 # Mob clothing sprites
 ##############################
  - buildDMI:
-    output: icons/mob/head.dmi
-    dir: icons/mob/head/
+    output: ../../icons/mob/head.dmi
+    dir: ../../icons/mob/head/
  - buildDMI:
-    output: icons/mob/suit.dmi
-    dir: icons/mob/suit/
+    output: ../../icons/mob/suit.dmi
+    dir: ../../icons/mob/suit/
  - buildDMI:
-    output: icons/mob/uniform.dmi
-    dir: icons/mob/uniform/
+    output: ../../icons/mob/uniform.dmi
+    dir: ../../icons/mob/uniform/
 
 ##############################
 # Items
 ##############################
  - buildDMI:
-    output: icons/mob/items_lefthand.dmi
-    dir: icons/mob/in-hand/left/
+    output: ../../icons/mob/items_lefthand.dmi
+    dir: ../../icons/mob/in-hand/left/
  - buildDMI:
-    output: icons/mob/items_righthand.dmi
-    dir: icons/mob/in-hand/right/
+    output: ../../icons/mob/items_righthand.dmi
+    dir: ../../icons/mob/in-hand/right/
  - compare:
-    left: icons/mob/in-hand/left/
-    right: icons/mob/in-hand/right/
-    report: icons/mob/in-hand/in-hand_sync_report.txt
+    left: ../../icons/mob/in-hand/left/
+    right: ../../icons/mob/in-hand/right/
+    report: ../../icons/mob/in-hand/in-hand_sync_report.txt
  
