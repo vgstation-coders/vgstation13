@@ -411,6 +411,8 @@
 				J = "..."
 				deity_name = "Silence"
 			if("Ancap", "Ancapistan", "NAP")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
 				B.name = "Bitcoin Wallet"
 				J = "Bitcoin Miner" //Worst part coming up with job name
 				deity_name = "Murray Rothbard"
