@@ -27,7 +27,7 @@ def main():
         # Make string to replace the map include with.
         includes = ""
         for arg in args.mapfile:
-            includes += "#include \"maps\{}.dm\"\n".format(arg)
+            includes += "#include \"maps\\\\{}.dm\"\n".format(arg)
         
         MAP_INCLUDE_RE = re.compile(r"#include \"maps\\[a-zA-Z0-9][a-zA-Z0-9_]*\.dm\"")
         content = MAP_INCLUDE_RE.sub(includes, content, count=1)
