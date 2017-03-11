@@ -37,6 +37,7 @@ var/global/global_playlists = list()
 			var/json = file2text(response["CONTENT"])
 			if("/>" in json)
 				continue
+			to_chat(world, json)
 			var/list/list_data = json_decode(json)
 			to_chat(world, list_data)
 			var/songdata = list_data[1]
