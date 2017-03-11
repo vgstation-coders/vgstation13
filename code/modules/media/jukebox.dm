@@ -37,10 +37,9 @@ var/global/global_playlists = list()
 			var/json = file2text(response["CONTENT"])
 			if("/>" in json)
 				continue
-			var/json_reader/reader = new()
-			reader.tokens = reader.ScanJson(json)
-			reader.i = 1
-			var/songdata = reader.read_value()
+			var/list/list_data = json_decode(json)
+			to_chat(world, list_data)
+			var/songdata = list_data[1]
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
@@ -76,10 +75,9 @@ var/global/global_playlists = list()
 				stat &= BROKEN
 				update_icon()
 				return 0
-			var/json_reader/reader = new()
-			reader.tokens = reader.ScanJson(json)
-			reader.i = 1
-			var/songdata = reader.read_value()
+			var/list/list_data = json_decode(json)
+			to_chat(world, list_data)
+			var/songdata = list_data[1]
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
