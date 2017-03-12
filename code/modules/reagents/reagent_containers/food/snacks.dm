@@ -523,6 +523,21 @@
 	desc = "Goes great with Robust Coffee."
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL //eggs are used
+	var/soggy = 0
+
+//Called in drinks.dm attackby
+/obj/item/weapon/reagent_containers/food/snacks/donut/proc/dip(var/obj/item/weapon/reagent_containers/R, mob/user)
+	var/probability = 15*soggy
+	to_chat(user, "<span class='notice'>You dip \the [src] into \the [R]</span>")
+	if(prob(probability))
+		to_chat(user, "<span class='danger'>\The [src] breaks off into \the [R]!</span>")
+		src.reagents.trans_to(R,reagents.maximum_volume)
+		qdel(src)
+		return
+	R.reagents.trans_to(src, rand(3,12))
+	if(!soggy)
+		name = "soggy [name]"
+	soggy += 1
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	name = "donut"

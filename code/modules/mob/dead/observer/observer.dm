@@ -936,3 +936,20 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	movespeed = 1/speed
 
 /datum/locking_category/observer
+
+/mob/dead/observer/deafmute/say(var/message)	//A ghost without access to ghostchat. An IC ghost, if you will.
+	to_chat(src, "<span class='notice'>You have no lungs with which to speak.</span>")
+
+/mob/dead/observer/deafmute/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if (isnull(client) || !speech.speaker)
+		return
+
+	var/source = speech.speaker.GetSource()
+	var/source_turf = get_turf(source)
+
+	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
+
+	if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
+		if (source_turf in view(src))
+			rendered_speech = "<B>[rendered_speech]</B>"
+			to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")
