@@ -67,7 +67,7 @@
 		if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
 			to_chat(M, rendered2)//Admins can hear deadchat, if they choose to, no matter if they're blind/deaf or not.
 
-		else if(M.client && M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD))
+		else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
 			//M.show_message(rendered2, 2) //Takes into account blindness and such.
 			to_chat(M, rendered2)
 		else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))

@@ -1898,6 +1898,7 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form
 	name = "Revert Form"
 	desc = "Morph back into your previous form."
+	spell_flags = GHOSTCAST
 	abbreviation = "RF"
 	charge_max = 1
 	invocation = "none"
