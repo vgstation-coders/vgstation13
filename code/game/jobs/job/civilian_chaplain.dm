@@ -418,6 +418,12 @@
 				J = "Bitcoin Miner" //Worst part coming up with job name
 				deity_name = "Murray Rothbard"
 				H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
+			if("cabal", "the cabal")
+				B.name = "Domus Durbentia"
+				J = "The Chosen"
+				var/datum/action/A = new /datum/action/call_cabal
+				A.Grant(H)
+				deity_name = pick("Tchernobog")
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)
