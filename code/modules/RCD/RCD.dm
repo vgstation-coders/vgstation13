@@ -195,6 +195,9 @@
 
 
 /obj/item/device/rcd/afterattack(var/atom/A, var/mob/user)
+	if(istype(A,/obj/item/weapon/storage))
+		return 1 //We're putting this away
+
 	if(!selected)
 		return 1
 
