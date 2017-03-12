@@ -175,11 +175,11 @@
 	build_path = "/obj/machinery/computer/pod/old"
 /obj/item/weapon/circuitboard/syndicatedoor
 	name = "Circuit board (ProComp Executive)"
-	desc = "A circuit board for running a very outdated computer used for opening doors. A tag on it says \"Property of Cybersun Industries\"
+	desc = "A circuit board for running a very outdated computer used for opening doors. A tag on it says \"Property of Cybersun Industries\"."
 	build_path = "/obj/machinery/computer/pod/old/syndicate"
 /obj/item/weapon/circuitboard/swfdoor
 	name = "Circuit board (Magix)"
-	desc = "A circuit board for running a very outdated computer used for opening doors. A tag on it says \"Federation Use Only\"
+	desc = "A circuit board for running a very outdated computer used for opening doors. A tag on it says \"Federation Use Only\"."
 	build_path = "/obj/machinery/computer/pod/old/swf"
 /obj/item/weapon/circuitboard/prisoner
 	name = "Circuit board (Prisoner Management)"
