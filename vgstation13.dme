@@ -32,6 +32,7 @@
 #include "__DEFINES\stylesheet.dm"
 #include "__DEFINES\subsystem.dm"
 #include "__DEFINES\tick.dm"
+#include "__DEFINES\world.dm"
 #include "code\_secrets.dm"
 #include "code\hub.dm"
 #include "code\names.dm"
