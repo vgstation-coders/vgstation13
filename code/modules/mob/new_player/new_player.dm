@@ -460,7 +460,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
 		new_character.disabilities |= NEARSIGHTED
-
+		
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
@@ -474,6 +474,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
+		
+	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
+		new_character.dna.SetSEState(MUTEBLOCK,1,1)
+		new_character.sdisabilities |= MUTE
 
 	new_character.dna.UpdateSE()
 
