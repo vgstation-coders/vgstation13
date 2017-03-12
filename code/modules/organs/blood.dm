@@ -387,7 +387,4 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	if(source.data["virus2"])
 		B.virus2 = virus_copylist(source.data["virus2"])
 
-	if(source.data["donor"])
-		B.donor = source.data["donor"] //reference to the mob
-
 	return B

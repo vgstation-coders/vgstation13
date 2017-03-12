@@ -14,7 +14,6 @@
 	var/basecolor = DEFAULT_BLOOD // Color when wet.
 	var/list/datum/disease2/disease/virus2 = list()
 	var/list/absorbs_types = list() // Types to aggregate.
-	var/donor = null // reference to the mob
 
 	var/on_wall = 0 //Wall on which this decal is placed on
 
@@ -54,32 +53,39 @@
 	if(amount > 0)
 		add_blood_to(perp, amount)
 
-/obj/effect/decal/cleanable/attack_hand(mob/living/carbon/human/user)
-	..()
-	if (amount && istype(user))
-		add_fingerprint(user)
-		if (user.gloves)
-			return
-		var/taken = rand(1,amount)
-		amount -= taken
-		to_chat(user, "<span class='notice'>You get some of \the [src] on your hands.</span>")
-		if(transfers_dna)
-			if (!user.blood_DNA)
-				user.blood_DNA = list()
-			user.blood_DNA |= blood_DNA.Copy()
-		user.bloody_hands += taken
-		user.bloody_hands_mob = donor //this was missing and caused blood overlays to always be default color, red.
-		user.hand_blood_color = basecolor
-		user.update_inv_gloves(1)
-		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
+//With "mouse_opacity = 0", this kinda makes no sense.
+//And also, the bloody hands thing does not work properly.
+//
+//obj/effect/decal/cleanable/attack_hand(mob/living/carbon/human/user)
+//	..()
+//	if (amount && istype(user))
+//		add_fingerprint(user)
+//		if (user.gloves)
+//			return
+//		var/taken = rand(1,amount)
+//		amount -= taken
+//		to_chat(user, "<span class='notice'>You get some of \the [src] on your hands.</span>")
+//
+//		user.bloody_hands(src, taken)
+//		user.hand_blood_color = basecolor
+//		user.update_inv_gloves(1)
 
+//		if(transfers_dna)
+//			if (!user.blood_DNA)
+//				user.blood_DNA = list()
+//			user.blood_DNA |= blood_DNA.Copy()
+//		user.add_blood()
+//		user.bloody_hands += taken
+//		user.hand_blood_color = basecolor
+//		user.update_inv_gloves(1)
+//		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
+//
 /obj/effect/decal/cleanable/resetVariables()
 	Destroy()
-	..("viruses","virus2", "blood_DNA", "donor", "random_icon_states", args)
+	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
 	viruses = list()
 	virus2 = list()
 	blood_DNA = list()
-	donor = null
 
 /obj/effect/decal/cleanable/New()
 	..()

@@ -17,11 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Apparently no one has ever needed to do a blood mess, so I didn't bother making a generic proc.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/proc/bloodmess_splatter(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius, var/donor)
-	new /obj/effect/gibspawner/blood(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius, donor)
+/proc/bloodmess_splatter(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
+	new /obj/effect/gibspawner/blood(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius)
 
-/proc/bloodmess_drip(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius, var/donor)
-	new /obj/effect/gibspawner/blood_drip(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius, donor)
+/proc/bloodmess_drip(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
+	new /obj/effect/gibspawner/blood_drip(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius)
 
 /obj/effect/gibspawner
 	var/sparks = 0 //whether sparks spread on Gib()
@@ -31,17 +31,14 @@
 	var/list/gibdirections = list() //of lists
 	var/fleshcolor //Used for gibbed humans.
 	var/bloodcolor //Used for gibbed humans.
-	var/donor //reference to the mob
 
-/obj/effect/gibspawner/New(location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius, var/donor)
+/obj/effect/gibspawner/New(location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
 	..()
 
 	if(fleshcolor)
 		src.fleshcolor = fleshcolor
 	if(bloodcolor)
 		src.bloodcolor = bloodcolor
-	if(donor)
-		src.donor = donor
 
 	if(istype(loc,/turf)) //basically if a badmin spawns it
 		Gib(loc,viruses,MobDNA,spread_radius)
@@ -75,9 +72,6 @@
 
 				if(viruses)
 					gib.virus2 |= virus_copylist(viruses)
-
-				if(donor)
-					gib.donor = donor
 
 				gib.blood_DNA = list()
 				if(MobDNA)
