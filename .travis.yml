@@ -1,7 +1,7 @@
 #pretending we're C because otherwise ruby/rvm will initialize, even with "language: dm".
 language: rust
 rust:
-- nightly
+- stable
 sudo: false
 
 env:
@@ -36,10 +36,11 @@ script:
 - python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - cd libvg
+- rm .cargo/config
 # --jobs 1 to prevent threading problems with the BYOND crate.
 - cargo test --jobs 1 --verbose
 - cd -
-- echo ${ALL_MAPS} | xargs ./tools/travis/build.py vgstation13.dme -M 
+- echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M 
 
 notifications:
   irc:
