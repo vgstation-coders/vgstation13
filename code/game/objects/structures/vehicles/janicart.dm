@@ -79,9 +79,7 @@
 		usr.put_in_hands(mybag)
 		mybag = null
 
-/obj/structure/bed/chair/vehicle/janicart/die()
-	var/obj/effect/decal/mecha_wreckage/vehicle/wreck = ..()
-
+/obj/structure/bed/chair/vehicle/janicart/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
 	// Add janicart upgrade to wreck, if it passes the roll.
 	if(upgraded)
 		wreck.add_salvagable(new /obj/item/mecha_parts/janicart_upgrade(src)) // 30% chance

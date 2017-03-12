@@ -69,7 +69,7 @@
 
 /obj/effect/decal/mecha_wreckage/proc/pick_random_loot(var/list/possible, const/max_loot=2, const/loot_prob=40)
 	var/list/provided = list()
-	for(var/i=0;i<max_loot;i++)
+	for(var/i = 1 to max_loot)
 		if(!isemptylist(possible) && prob(loot_prob))
 			provided += pick_n_take(possible)
 	return provided
