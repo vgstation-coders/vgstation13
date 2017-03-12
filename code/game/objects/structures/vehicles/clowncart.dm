@@ -17,6 +17,7 @@
 	name = "clowncart"
 	desc = "A goofy-looking cart, commonly used by space clowns for entertainment. There appears to be a coin slot on its side."
 	icon = 'icons/obj/vehicles.dmi'
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/clowncart
 	icon_state = "clowncart0"
 	anchored = 1
 	density = 1
@@ -365,6 +366,12 @@
 		to_chat(user, "<span class='notice'>\The [W] doesn't contain any banana essence!</span>")
 		return 0
 
+/obj/effect/decal/mecha_wreckage/vehicle/clowncart
+	// TODO: Icons plz
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "pussywagon_destroyed"
+	name = "clowncart wreckage"
+	desc = "Now the clown needs cheering up."
 #undef HEALTH_FOR_70X_MODIFIER
 #undef HEALTH_FOR_80X_MODIFIER
 #undef HEALTH_FOR_FLOWER_RECHARGE
