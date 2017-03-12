@@ -229,7 +229,7 @@
 	name = "Blood"
 	id = BLOOD
 	reagent_state = LIQUID
-	color = "#a00000" //rgb: 160, 0, 0
+	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 
 	data = new/list("donor"= null, "viruses" = null, "blood_DNA" = null, "blood_type" = null, \
 	"blood_colour" = DEFAULT_BLOOD, "resistances" = null, "trace_chem" = null, "antibodies" = null)
