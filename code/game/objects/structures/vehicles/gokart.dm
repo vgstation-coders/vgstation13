@@ -11,6 +11,7 @@
 	keytype = /obj/item/key/gokart
 	noghostspin = 0
 	can_have_carts = FALSE
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/gokart
 
 /obj/structure/bed/chair/vehicle/gokart/unlock_atom(var/atom/movable/AM)
 	. = ..()
@@ -40,3 +41,12 @@
 		if(EAST)
 			occupant.pixel_x = -4 * PIXEL_MULTIPLIER
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+
+
+
+/obj/effect/decal/mecha_wreckage/vehicle/gokart
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "gokart_wreck"
+	name = "\improper Go-Kart wreckage"
+	desc = "You don't think AAA will cover this."

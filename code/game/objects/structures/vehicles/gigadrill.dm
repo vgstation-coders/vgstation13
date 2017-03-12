@@ -9,6 +9,7 @@
 	name = "gigadrill"
 	icon_state = "gigadrill"
 	keytype = /obj/item/key/gigadrill
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/gigadrill
 	var/turf/drilling_turf
 
 /obj/structure/bed/chair/vehicle/gigadrill/buckle_mob(mob/M, mob/user)
@@ -47,5 +48,12 @@
 	if(istype(target, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target
 		M.GetDrilled()
+
+/obj/effect/decal/mecha_wreckage/vehicle/gigadrill
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "gigadrill_wreck"
+	name = "gigadrill wreckage"
+	desc = "The rocks are safer.  For now."
 
 #undef DRILL_TIME
