@@ -63,6 +63,7 @@
 		/obj/structure/particle_accelerator,					//the particle accelerator
 		/obj/machinery/am_shielding,							//the AME
 		/obj/machinery/gateway,									//the gateway
+		/obj/structure/catwalk,									//catwalks
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()
@@ -183,6 +184,9 @@
 
 	var/datum/zLevel/L = get_z_level(target)
 	if (L.teleJammed)
+		return
+	var/area/A = get_area(target)
+	if (A.flags & NO_TELEPORT)
 		return
 
 	if(istype(target, /turf) && !istype(target, /turf/simulated/wall))

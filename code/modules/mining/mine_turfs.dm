@@ -32,6 +32,9 @@
 	temperature = T20C
 	mined_type = /turf/unsimulated/floor/asteroid/air
 
+/turf/unsimulated/mineral/hive
+	mined_type = /turf/unsimulated/floor/evil
+
 /turf/unsimulated/mineral/Destroy()
 	return
 

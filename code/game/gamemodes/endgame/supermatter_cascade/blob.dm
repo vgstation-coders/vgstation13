@@ -148,5 +148,5 @@
 //For an away mission
 /turf/unsimulated/wall/supermatter/no_spread/lake
 	name = "Supermatter Lake"
-	desc = "It appears to be somewhat contained by magnetic fields surrounding from every side. Not even flight will get you across it."
+	desc = "It appears to be somewhat contained. It emits a great gravitational pull, making flying or shooting over it impossible."
 	opacity = 0
