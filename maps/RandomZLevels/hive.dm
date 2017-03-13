@@ -55,10 +55,10 @@
 	msg = "From the window you can see a chaotic structure larger than anything you've ever seen in your life. Its surface constantly shifts and distorts, and the exterior is covered in massive spikes. That's not at all what you'd expect a spaceship to look like."
 
 /obj/effect/narration/hive/entrance
-	msg = "As you enter the thin passageway, you begin to feel very uneasy and threatened. Whether it's the breathing walls, the tiny pores that completely cover their surfaces, or the eerie silence that surrounds you - you have absolutely no idea."
+	msg = "As you enter the thin passageway, you begin to feel very uneasy. Despite all the movement around you, your surroundings are dead quiet, except for a very faint heartbeat in the distance. Or could it be yours?"
 
 /obj/effect/narration/hive/lake
-	msg = "You enter a truly enormous chamber, and the first thing you notice is the supermatter that forms most of this room's floor. This matter constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks, you better be careful - a single misstep and you'll be annihilated faster than you can say anything."
+	msg = "A supermatter lake takes up most of this room's floor. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks, you better not make a misstep."
 
 /obj/effect/narration/hive/cloning_hallway
 	msg = "You notice that the surface of the floors and walls around you becomes more and more porous, and more... alive. You must be approaching the cloning chamber."
@@ -77,7 +77,7 @@
 
 ////////PAPERWORKS///////
 /obj/item/weapon/paper/hive/birthday_note
-	name = "Happy Birthday, Chechen"
+	name = "paper- 'Happy Birthday, Chechen'"
 	info = {"You only care about two things in your life - eating cakes and perving at Russian chicks, so we got you an appropriate present. Never change, you fat piece of shit.<br><br>
 
 	<i>Dan</i><br>
@@ -89,20 +89,20 @@
 //lueduozhe = marauder in google-translate-mandarin
 
 /obj/item/weapon/paper/hive/marauder_lost
-	name = "HOW THE HELL DID YOU LOSE AN ENTIRE LUEDUOZHE"
+	name = "paper- 'HOW THE HELL DID YOU LOSE AN ENTIRE LUEDUOZHE'"
 	info = {"Give me a single reason not to stick all of your retarded asses in the deprotonizer. Lueduozhe 1 is gone and there's a toy in its place. I demand answers.<br>
 	<i>Omar</i> <b>ID: 1C/1</b>"}
 
 /obj/item/weapon/paper/hive/marauder_rescue
-	name = "Re:Re:Re: Lueduozhe disappeared and Commander wants to deprotonize our asses"
-	info = {"I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:<br><br>
+	name = "paper- 'Re:Re:Re: The blueblood mech disappeared and Commander wants to deprotonize our asses'"
+	info = {"After concluding an investigation, I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:<br><br>
 	Chassis: Kitchen in meat fridge<br>
-	Left Arm: Wellness area (the one with the sauna)<br>
+	Left Arm: Inside the sauna<br>
 	Right Arm: Atmospherics - Nitrogen chamber<br>
 	Left Leg: Maintenance between research and PersonalQuarters<br>
-	Right Leg: Biomed (near the bridge)<br>
+	Right Leg: Biomed (near the bridge), body scanner 2<br>
 	Plating: Hallway near the supermatter engine<br>
-	Head: Vending machine in the same hallway (in place of the $60 chips, somebody else has to get it because I'm broke)<br>
+	Head: Vending machine in the same hallway (in place of the $60 chips)<br>
 	CCM: Outside of Atmospherics<br>
 	PCM: Engineering tool storage<br>
 	WCM: Under the radio transmitter<br>
@@ -112,14 +112,24 @@
 	"}
 
 /obj/item/weapon/paper/hive/fluff/unisex
-	name = "Re: Bathroom C is now unisex"
+	name = "paper- 'Re: Bathroom C is now unisex'"
 	info = {"Does this mean that we at DET no longer have a safe place to hide from Barb? Just do me a favor and fucking kill me.<br>
 	<i>Qun Lee</i>"}
 
 /obj/item/weapon/paper/hive/fluff/chain_letter
-	name = "Re: Forward this to 5 people or DEMONS will invade your station and kill you"
+	name = "paper- 'Re:Fwd: Forward this to 5 people or DEMONS will invade your station and kill you'"
 	info = {"I'll see that your mail permissions are revoked, Todd. You're the laughing stock of the division. Do you seriously believe in that crap?<br>
 	<i>Szpindel</i>"}
+
+/obj/item/weapon/paper/hive/stickybomb
+	name = "paper- 'Re:Re:Re:Re:Re:Re:Re:Re:Re: Minor adjustments to the stickybomb launcher'"
+	info = {"Again, I'm working in a tiny shed with shit for tools!! I'm not going to do anything until you move me to R&D-15.<br>
+	<i>Dan</i>"}
+
+/obj/item/weapon/paper/hive/nikita
+	name = "paper- 'Is Nikita a male or female name?'"
+	info = {"Just got an email from ChanDE saying that apparently I ordered a \"Nikita\" 2 weeks ago (on New Years when we got shitfaced) and the shuttle is arriving today. What kind of name is that? The Consensus is useless. I need to know because I'm not touching a male mail-whore with a ten mi pole.<br>
+	<i>Yi Cheng</i> <b>ID: 12C/3"}
 
 ////////SOUNDWORKS///////
 
@@ -144,6 +154,20 @@
 /obj/effect/trap/sound/hive/static_noise //white noise + voices in the background (another jumpscare)
 	sound_to_play = 'sound/effects/static/static5.ogg'
 
+/obj/effect/trap/sound/hive/hallucination/turn_around
+	sound_to_play = 'sound/hallucinations/turn_around1.ogg'
+
+/obj/effect/trap/sound/hive/hallucination/wail
+	sound_to_play = 'sound/hallucinations/wail.ogg'
+
+/obj/effect/trap/sound/hive/hallucination/over_here1
+	sound_to_play = 'sound/hallucinations/over_here1.ogg'
+
+/obj/effect/trap/sound/hive/hallucination/over_here2
+	sound_to_play = 'sound/hallucinations/over_here2.ogg'
+
+
+
 /obj/effect/trap/sound/hive/birthday //birthday party for a guy who never came back to his quarters (featuring a dead stripper in a cake)
 	sound_to_play = 'sound/ambience/fire_alarm.ogg' //Two sounds making a repetitive ""melody"". Kinda reminded me of the sounds that toys that play music play when they're broken
 
@@ -159,10 +183,14 @@
 	toxin_dmg = 100
 	burn_dmg = 70
 
-///////////////////////////////////////////****AREAS****//////////////////////////////////////////////////
+///////////////////////////////////////////****AREAS & LADDERS****/////////////////////////////////////
 
 /area/awaymission/hive
 	name = "hive"
+
+/area/awaymission/hive/secure
+	icon_state = "armory"
+	flags = NO_PORTALS | NO_TELEPORT
 
 /*
 /area/awaymission/hive/cloning_chamber
@@ -174,6 +202,14 @@
 /area/awaymission/hive/control_room
 	name = "hive control room"
 */
+
+/obj/structure/ladder/hive/hive
+	id = "hive"
+	height = 1
+
+/obj/structure/ladder/hive/spaceship
+	id = "hive"
+	height = 0
 
 ///////////////////////////////////////////****TURFS****//////////////////////////////////////////////////
 
@@ -302,11 +338,13 @@
 	// Radiation
 	for(var/mob/living/carbon/M in range(src, rad_range))
 		var/msg = pick(\
-		"You feel nauseated.",\
-		"You feel mildly sick.",\
-		"You feel tired.")
+		"You hear a slow clicking.",\
+		"Your head begins to hurt.",\
+		"You feel tired for some reason.",\
+		"You feel odd and out of place.",\
+		"You feel mildly nauseated.")
 
-		to_chat(M, "<span class='userdanger'>[msg]</span>")
+		to_chat(M, "<span class='warning'>[msg]</span>")
 		if(istype(M,/mob/living/carbon/human))
 			M.apply_effect(rad_power, IRRADIATE)
 		else
@@ -364,9 +402,16 @@
 		/mob/living/simple_animal/hostile/hive_alien/artificer)//,\
 		///mob/living/simple_animal/hostile/hive_alien/arsonist)
 
-		spawn(rand(20,150))
+		spawn(rand(2 SECONDS,40 SECONDS))
 			var/mob/living/simple_animal/hostile/hive_alien/HA = new spawned_type(T)
 			HA.visible_message("<span class='danger'>\The [HA] crawls down from an opening in the ceiling!</span>")
+
+			var/played_sound = pick(\
+			'sound/effects/wind/wind_2_1.ogg',\
+			'sound/effects/wind/wind_2_2.ogg',\
+			'sound/effects/wind/wind_3_1.ogg',\
+			)
+			playsound(get_turf(HA), played_sound, 40, 1)
 
 /obj/effect/landmark/hive/monster_spawner
 	name = "alien spawner"
@@ -384,7 +429,7 @@
 //Husked mob
 /obj/structure/hive/husk
 	name = "hollow husk"
-	desc = "What was once a living creature, now fully dehydrated and mummified by alien technology. Looks very real and alive from a distance."
+	desc = "What was once a living creature, now dehydrated and fully mummified by alien technology. Looks very real and alive from a distance."
 	gibtype = /obj/effect/decal/cleanable/scattered_sand
 	health = 1
 
@@ -429,6 +474,14 @@
 
 /obj/structure/hive/husk/wolf
 	mob_type = /mob/living/simple_animal/hostile/wolf
+
+/obj/structure/hive/husk/diona
+	mob_type = /mob/living/simple_animal/hostile/humanoid/diona
+
+/obj/structure/hive/husk/human
+	icon = 'icons/mob/human.dmi'
+	icon_state = "husk_s"
+	desc = "What was once a living creature, now dehydrated and fully mummified by alien technology."
 
 //////TRAPS/////////
 /obj/effect/trap/fire_trap //When triggered, spawns a fire blast nearby
