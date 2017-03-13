@@ -159,6 +159,7 @@
 	to_chat(raider.current, {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
 Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</span>"})
+	to_chat(raider.current, {"<span class='danger'>The Shoal forbids excessive bloodletting.  Minimize casualties or face banishment.</span>"})
 
 	var/obj_count = 0
 
