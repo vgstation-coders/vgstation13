@@ -1,0 +1,6 @@
+author: Exxion
+
+delete-after: True
+
+changes: 
+- tweak: "Alt+clicking to list everything on a tile now works on any tile you can see. You still can't actually interact with things unless they're adjacent to you, of course."
