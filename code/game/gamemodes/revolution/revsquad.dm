@@ -34,6 +34,8 @@
 
 
 /datum/game_mode/revsquad/pre_setup()
+	if(ticker.mode.name == "mixed") // If we're running mixed immediately return 0 so mixed doesnt pick this, because it is incredibly broken
+		return 0
 
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
