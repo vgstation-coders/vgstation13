@@ -33,7 +33,7 @@ before_script:
 script:
 - find maps/ -name '*.dmm' -exec cat {} \; | awk '/(step_[xy]|layer) =/ { exit 1 }'
 - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
-- python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
+- python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - cd libvg
 - rm .cargo/config
