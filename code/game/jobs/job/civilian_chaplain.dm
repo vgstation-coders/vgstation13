@@ -423,7 +423,7 @@
 				J = "The Chosen"
 				var/datum/action/A = new /datum/action/call_cabal
 				A.Grant(H)
-				deity_name = pick("Tchernobog")
+				deity_name = "Tchernobog"
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)

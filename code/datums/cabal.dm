@@ -15,9 +15,6 @@
                             )
 							
 /datum/action/call_cabal/Trigger()
-	if(cooldown > world.time)
-		to_chat(owner, "You do not wish to anger the Dreaming God with incessant mortal praise.")
-		return
 	if(owner.incapacitated())
 		to_chat(owner, "You do not wish to anger the Dreaming God with the praise from someone as weak as yourself.")
 		return
@@ -27,6 +24,9 @@
 	var/mob/living/carbon/human/H = owner
 	if(istype(H) && (H.miming || H.silent))
 		to_chat(owner, "You can not praise the Dreaming God while silenced.")
+		return
+	if(cooldown > world.time)
+		to_chat(owner, "You do not wish to anger the Dreaming God with incessant mortal praise.")
 		return
 	var/soundfile = pick(calls)
 	playsound(get_turf(owner), soundfile, 50, 0)
