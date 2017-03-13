@@ -122,7 +122,8 @@
 	switch(find_type)
 		if(ARCHAEO_BOWL)
 			item_type = "bowl"
-			new_item = new /obj/item/weapon/reagent_containers/glass(src.loc)
+			var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing)
+			new_item = new glass_type(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "bowl"
 			apply_image_decorations = 1
@@ -131,7 +132,8 @@
 				additional_desc = "There appear to be [pick("dark","faintly glowing","pungent","bright")] [pick("red","purple","green","blue")] stains inside."
 		if(ARCHAEO_URN)
 			item_type = "urn"
-			new_item = new /obj/item/weapon/reagent_containers/glass(src.loc)
+			var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing)
+			new_item = new glass_type(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "urn"
 			apply_image_decorations = 1
