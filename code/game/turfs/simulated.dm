@@ -62,14 +62,7 @@
 
 			bloodDNA = null
 
-			// Floorlength braids?  Enjoy your tripping.
-			if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
-				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
-				if(hair_style && (hair_style.flags & HAIRSTYLE_CANTRIP))
-					if(H.m_intent == "run" && prob(5))
-						if (H.Slip(4, 5))
-							step(H, H.dir)
-							to_chat(H, "<span class='notice'>You tripped over your hair!</span>")
+			
 
 		//Anything beyond that point will not fire if the mob isn't physically walking here
 		if(!M.on_foot()) //Checks lying, flying and locked.to
