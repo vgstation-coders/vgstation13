@@ -62,7 +62,7 @@
 	if(!check_can_do())
 		return
 
-	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for dischordant notes...</span>")
+	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for discordant notes...</span>")
 	spawn(5 SECONDS)
 		var/dat
 		dat = format_host_data(get_host_data())
