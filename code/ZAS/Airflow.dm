@@ -469,10 +469,10 @@ mob/living/carbon/human/airflow_hit(atom/A)
 	apply_damage(head_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
 
 	var/chest_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_CHEST,"melee"))
-	apply_damage(chest_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+	apply_damage(chest_damage, BRUTE, LIMB_CHEST, 0, 0, used_weapon = "Airflow")
 
 	var/groin_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_GROIN,"melee"))
-	apply_damage(groin_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+	apply_damage(groin_damage, BRUTE, LIMB_GROIN, 0, 0, used_weapon = "Airflow")
 
 	if((head_damage + chest_damage + groin_damage) > 15)
 		var/turf/T = get_turf(src)
