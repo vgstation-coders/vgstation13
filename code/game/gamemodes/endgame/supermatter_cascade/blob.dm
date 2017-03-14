@@ -1,4 +1,4 @@
-//#define BLUESPACELEAK_FLAT if you touch this I'll cut your fingers
+#define BLUESPACELEAK_FLAT
 
 // QUALITY COPYPASTA
 /turf/unsimulated/wall/supermatter
