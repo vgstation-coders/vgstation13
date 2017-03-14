@@ -1,54 +1,52 @@
 #pretending we're C because otherwise ruby/rvm will initialize, even with "language: dm".
-language: c
+language: rust
+rust:
+- stable
 sudo: false
 
 env:
-    global:
-    - BYOND_MAJOR="511"
-    - BYOND_MINOR="1363"
-    matrix:
-    - DM_MAPFILE="tgstation"
-    - DM_MAPFILE="metaclub"
-    - DM_MAPFILE="defficiency"
-    - DM_MAPFILE="taxistation"
-    - DM_MAPFILE="test_box"
-    - DM_MAPFILE="test_tiny"
+  global:
+  - BYOND_MAJOR="511"
+  - BYOND_MINOR="1363"
+  - ALL_MAPS="tgstation metaclub defficiency taxistation test_box test_tiny"
+  - RUST_BACKTRACE="1"
+  - RUST_TEST_THREADS=1
 
 cache:
   directories:
-    - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
-    - $HOME/.cache/pip
+  - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
+  - $HOME/.cache/pip
 
 addons:
   apt:
     packages:
-      - libc6-i386
-      - libgcc1:i386
-      - libstdc++6:i386
+    - libc6-i386
+    - libgcc1:i386
+    - libstdc++6:i386
 
 install:
-  - pip install --user PyYaml -q
-  - pip install --user beautifulsoup4 -q
+- pip install --user PyYaml beautifulsoup4 subprocess32 -q
 
 before_script:
-  - chmod +x ./dm.sh
-  - chmod +x ./install-byond.sh
-  - ./install-byond.sh
+- tools/travis/install-byond.sh
 
 script:
-  - find maps/ -name '*.dmm' -exec cat {} \; | awk '/step_x =/ { exit 1 }'
-  - find maps/ -name '*.dmm' -exec cat {} \; | awk '/step_y =/ { exit 1 }'
-  - find maps/ -name '*.dmm' -exec cat {} \; | awk '/layer =/  { exit 1 }'
-  - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
-  - python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
-  - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-  - ./dm.sh -M${DM_MAPFILE} vgstation13.dme
+- find maps/ -name '*.dmm' -exec cat {} \; | awk '/(step_[xy]|layer) =/ { exit 1 }'
+- find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
+- python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
+- source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+- cd libvg
+- rm .cargo/config
+# --jobs 1 to prevent threading problems with the BYOND crate.
+- cargo test --jobs 1 --verbose
+- cd -
+- echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M 
 
 notifications:
   irc:
     channels:
-      - "irc.rizon.net#vgstation"
+    - "irc.rizon.net#vgstation"
     template:
-      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
-      - "Change view : %{compare_url}"
-      - "Build details : %{build_url}"
+    - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+    - "Change view : %{compare_url}"
+    - "Build details : %{build_url}"

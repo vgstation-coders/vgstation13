@@ -237,6 +237,7 @@
 					return
 				admin_datums -= adm_ckey
 				D.disassociate()
+				update_byond_admin(adm_ckey)
 
 				message_admins("[key_name_admin(usr)] removed [adm_ckey] from the admins list")
 				log_admin("[key_name(usr)] removed [adm_ckey] from the admins list")
@@ -282,6 +283,7 @@
 
 			var/client/C = directory[adm_ckey]						//find the client with the specified ckey (if they are logged in)
 			D.associate(C)											//link up with the client and add verbs
+			update_byond_admin(adm_ckey)
 
 			message_admins("[key_name_admin(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
 			log_admin("[key_name(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
@@ -297,6 +299,9 @@
 			if(!new_permission)
 				return
 			D.rights ^= permissionlist[new_permission]
+
+			update_byond_admin(adm_ckey)
+			D.update_menu_items()
 
 			message_admins("[key_name_admin(usr)] toggled the [new_permission] permission of [adm_ckey]")
 			log_admin("[key_name(usr)] toggled the [new_permission] permission of [adm_ckey]")

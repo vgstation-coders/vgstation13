@@ -73,33 +73,42 @@
 	src.adding += using
 	move_intent = using
 
-	using = getFromPool(/obj/screen)
-	using.name = "drop"
-	using.icon = ui_style
-	using.icon_state = "act_drop"
-	using.screen_loc = ui_drop_throw
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
+	if(MO.held_items.len)
+		using = getFromPool(/obj/screen)
+		using.name = "drop"
+		using.icon = ui_style
+		using.icon_state = "act_drop"
+		using.screen_loc = ui_drop_throw
+		using.layer = HUD_BASE_LAYER
+		src.adding += using
+
+		using = getFromPool(/obj/screen)
+		using.name = "throw"
+		using.icon = ui_style
+		using.icon_state = "act_throw_off"
+		using.screen_loc = ui_drop_throw
+		using.layer = HUD_BASE_LAYER
+		src.adding += using
 
 	init_hand_icons(ui_style)
+	if(MO.held_items.len > 1)
+		using = getFromPool(/obj/screen/inventory)
+		using.name = "hand"
+		using.dir = SOUTH
+		using.icon = ui_style
+		using.icon_state = "hand1"
+		using.screen_loc = ui_swaphand1
+		using.layer = HUD_BASE_LAYER
+		src.adding += using
 
-	using = getFromPool(/obj/screen/inventory)
-	using.name = "hand"
-	using.dir = SOUTH
-	using.icon = ui_style
-	using.icon_state = "hand1"
-	using.screen_loc = ui_swaphand1
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
-
-	using = getFromPool(/obj/screen/inventory)
-	using.name = "hand"
-	using.dir = SOUTH
-	using.icon = ui_style
-	using.icon_state = "hand2"
-	using.screen_loc = ui_swaphand2
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
+		using = getFromPool(/obj/screen/inventory)
+		using.name = "hand"
+		using.dir = SOUTH
+		using.icon = ui_style
+		using.icon_state = "hand2"
+		using.screen_loc = ui_swaphand2
+		using.layer = HUD_BASE_LAYER
+		src.adding += using
 
 	using = getFromPool(/obj/screen)
 	using.name = "resist"
@@ -140,31 +149,27 @@
 		inv_box.layer = HUD_BASE_LAYER
 		src.adding += inv_box
 
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "mask"
-	inv_box.dir = NORTH
-	inv_box.icon = ui_style
-	inv_box.icon_state = "equip"
-	inv_box.screen_loc = ui_monkey_mask
-	inv_box.slot_id = slot_wear_mask
-	inv_box.layer = HUD_BASE_LAYER
-	src.adding += inv_box
+	if(MO.canWearMasks)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "mask"
+		inv_box.dir = NORTH
+		inv_box.icon = ui_style
+		inv_box.icon_state = "equip"
+		inv_box.screen_loc = ui_monkey_mask
+		inv_box.slot_id = slot_wear_mask
+		inv_box.layer = HUD_BASE_LAYER
+		src.adding += inv_box
 
-	inv_box = getFromPool(/obj/screen/inventory)
-	inv_box.name = "back"
-	inv_box.dir = NORTHEAST
-	inv_box.icon = ui_style
-	inv_box.icon_state = "equip"
-	inv_box.screen_loc = ui_back
-	inv_box.slot_id = slot_back
-	inv_box.layer = HUD_BASE_LAYER
-	src.adding += inv_box
-
-	mymob.throw_icon = getFromPool(/obj/screen)
-	mymob.throw_icon.icon = ui_style
-	mymob.throw_icon.icon_state = "act_throw_off"
-	mymob.throw_icon.name = "throw"
-	mymob.throw_icon.screen_loc = ui_drop_throw
+	if(MO.canWearBack)
+		inv_box = getFromPool(/obj/screen/inventory)
+		inv_box.name = "back"
+		inv_box.dir = NORTHEAST
+		inv_box.icon = ui_style
+		inv_box.icon_state = "equip"
+		inv_box.screen_loc = ui_back
+		inv_box.slot_id = slot_back
+		inv_box.layer = HUD_BASE_LAYER
+		src.adding += inv_box
 
 	mymob.oxygen = getFromPool(/obj/screen)
 	mymob.oxygen.icon = ui_style
@@ -241,5 +246,5 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list(mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.pullin, mymob.gun_setting_icon) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
 	mymob.client.screen += src.adding + src.other

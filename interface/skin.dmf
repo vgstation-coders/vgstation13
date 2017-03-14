@@ -385,29 +385,34 @@ macro "hotkeymode"
 
 
 menu "menu"
-	elem 
-		name = "&File"
+	elem "client_menu"
+		name = "&Client"
 		command = ""
 		saved-params = "is-checked"
 	elem 
 		name = "&Quick screenshot\tF2"
 		command = ".screenshot auto"
-		category = "&File"
+		category = "&Client"
 		saved-params = "is-checked"
 	elem 
 		name = "&Save screenshot as...\tShift+F2"
 		command = ".screenshot"
-		category = "&File"
+		category = "&Client"
 		saved-params = "is-checked"
 	elem 
 		name = ""
 		command = ""
-		category = "&File"
+		category = "&Client"
+		saved-params = "is-checked"
+	elem 
+		name = "Reconnect"
+		command = ".reconnect"
+		category = "&Client"
 		saved-params = "is-checked"
 	elem 
 		name = "&Quit"
 		command = ".quit"
-		category = "&File"
+		category = "&Client"
 		saved-params = "is-checked"
 	elem 
 		name = "&Icons"
@@ -489,6 +494,27 @@ menu "menu"
 		name = "Swap Sides"
 		command = "swapsides"
 		category = "Skin"
+		saved-params = "is-checked"
+	elem "server_menu"
+		name = "Server"
+		command = ""
+		is-disabled = true
+		saved-params = "is-checked"
+	elem 
+		name = "Profiler"
+		command = ".profile"
+		category = "Server"
+		saved-params = "is-checked"
+	elem 
+		name = ""
+		command = ""
+		category = "Server"
+		saved-params = "is-checked"
+	elem "reboot_menu_item"
+		name = "EMERGENCY REBOOT"
+		command = ".reboot"
+		category = "Server"
+		is-disabled = true
 		saved-params = "is-checked"
 
 
@@ -1026,6 +1052,7 @@ window "window1"
 		size = 640x480
 		anchor1 = none
 		anchor2 = none
+		background-color = none
 		is-visible = false
 		border = sunken
 		saved-params = "pos;size;is-minimized;is-maximized"

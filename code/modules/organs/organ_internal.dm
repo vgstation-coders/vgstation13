@@ -226,6 +226,7 @@
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
+		removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
 		organ_holder = removed_organ
 

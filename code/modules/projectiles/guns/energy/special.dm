@@ -16,6 +16,18 @@
 /obj/item/weapon/gun/energy/ionrifle/emp_act(severity)
 	return
 
+/obj/item/weapon/gun/energy/ionrifle/ionpistol
+	name = "ion pistol"
+	desc = "A small, low capacity ion weapon designed to disable mechanical threats"
+	icon_state = "ionpistol"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+	cell_type = "/obj/item/weapon/cell/crap"
+	projectile_type = "/obj/item/projectile/ionsmall"
+
+/obj/item/weapon/gun/energy/ionrifle/ionpistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/decloner
 	name = "biological demolecularisor"
 	desc = "A gun that discharges high amounts of controlled radiation to slowly break a target into component elements."

@@ -1023,14 +1023,11 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = 2
 
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob)
-	mob.suiciding = 1
-	//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-	to_chat(viewers(mob), "<span class='danger'>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</span>")
-	mob.adjustOxyLoss(175 - mob.getToxLoss() - mob.getFireLoss() - mob.getBruteLoss() - mob.getOxyLoss())
-	mob.updatehealth()
-	spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
-		mob.suiciding = 0
 
+	if(mob.stat != CONSCIOUS || !mob.canmove || mob.restrained()) //Try as we might, we still can't snap our neck when we are KO or restrained, even if forced.
+		return
+
+	mob.attempt_suicide(1, 0)
 
 /datum/disease2/effect/killertoxins
 	name = "Toxification Syndrome"

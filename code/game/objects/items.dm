@@ -64,7 +64,7 @@
 	..()
 	for(var/path in actions_types)
 		new path(src)
-		
+
 /obj/item/Destroy()
 	if(istype(src.loc, /mob))
 		var/mob/H = src.loc
@@ -695,6 +695,8 @@
 					return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_wear_mask)
+				if(!MO.canWearMasks)
+					return CANNOT_EQUIP
 				if(MO.wear_mask)
 					return CANNOT_EQUIP
 				if( !(slot_flags & SLOT_MASK) )
@@ -717,6 +719,8 @@
 					return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_back)
+				if(!MO.canWearBack)
+					return CANNOT_EQUIP
 				if(MO.back)
 					return CANNOT_EQUIP
 				if( !(slot_flags & SLOT_BACK) )

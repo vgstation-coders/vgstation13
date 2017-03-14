@@ -83,7 +83,7 @@
 			max_number = 6
 			monsterstring = "a synthetic covering"
 		if(MONSTER_ZOMBIE)
-			spawn_monster_type = pick(/mob/living/simple_animal/hostile/necro/zombie, /mob/living/simple_animal/hostile/monster/necromorph)
+			spawn_monster_type = pick(/mob/living/simple_animal/hostile/necro/zombie, /mob/living/simple_animal/hostile/necromorph, /mob/living/simple_animal/hostile/necromorph/leaper, /mob/living/simple_animal/hostile/necromorph/puker)
 			max_number = 3
 			monsterstring = "extreme decay"
 		if(MONSTER_SKRITE)

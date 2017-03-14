@@ -66,6 +66,7 @@
 	keytype = /obj/item/key/lightcycle
 	layer = FLY_LAYER
 	pass_flags = PASSMOB|PASSDOOR
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/lightcycle
 	var/obj/item/key/lightcycle/summoning_rod = null
 	var/delay_ribbon = 0
 	var/l_color = "#FFFFFF"
@@ -126,7 +127,7 @@
 /obj/structure/bed/chair/vehicle/lightcycle/proc/movement_process()
 	if(!occupant)
 		return
-	if(occupant.incapacitated() || destroyed)
+	if(occupant.incapacitated())
 		unlock_atom(occupant)
 		return
 	if(!check_key(occupant))
@@ -250,3 +251,10 @@
 				spawn(1)
 					L.erase()
 	qdel(src)
+
+/obj/effect/decal/mecha_wreckage/vehicle/lightcycle
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "lightcycle_wreck"
+	name = "light cycle wreckage"
+	desc = "Awaiting garbage collection."

@@ -410,6 +410,14 @@
 				H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
 				J = "..."
 				deity_name = "Silence"
+			if("Ancap", "Ancapistan", "NAP")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
+				B.name = "Bitcoin Wallet"
+				J = "Bitcoin Miner" //Worst part coming up with job name
+				deity_name = "Murray Rothbard"
+				H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)

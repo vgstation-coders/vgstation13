@@ -327,6 +327,12 @@
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
 			speed = 0
 
+		if("TG17355")
+			module = new /obj/item/weapon/robot_module/tg17355(src)
+			module_sprites["Peacekeeper"] = "peaceborg"
+			module_sprites["Omoikane"] = "omoikane"
+			speed = 0
+
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_eng(radio))

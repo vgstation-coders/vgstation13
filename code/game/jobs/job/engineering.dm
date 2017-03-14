@@ -154,7 +154,7 @@
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)
-	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_science)
+	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_tcomsat, access_science)
 	alt_titles = list("Telecommunications Technician", "Spacepod Mechanic", "Greasemonkey")
 
 	pdaslot=slot_l_store
