@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/storage/lockbox
 	name = "lockbox"
 	desc = "A locked box."
