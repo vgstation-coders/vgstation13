@@ -25,6 +25,7 @@
 	src.modules += new /obj/item/weapon/extinguisher/foam(src)
 	src.modules += new /obj/item/device/rcd/rpd(src)
 	src.modules += new /obj/item/device/rcd/tile_painter(src)
+	src.modules += new /obj/item/device/silicate_sprayer
 	src.modules += new /obj/item/blueprints/mommiprints(src)
 	src.modules += new /obj/item/device/material_synth/robot/mommi(src)
 	src.modules += new /obj/item/device/holomap(src)
