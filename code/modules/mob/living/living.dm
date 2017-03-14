@@ -1140,8 +1140,6 @@ Thanks.
 	set name = "Rest"
 	set category = "IC"
 
-	if(client.move_delayer.blocked())
-		return
 	delayNextMove(10)
 	resting = !resting
 	update_canmove()
