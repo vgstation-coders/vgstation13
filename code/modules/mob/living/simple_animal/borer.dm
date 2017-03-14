@@ -370,7 +370,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
 	set name = "Borer Speak"
-	set desc = "Communicate with your brethren"
+	set desc = "Communicate with your brethren."
 	if(!message)
 		return
 
