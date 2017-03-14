@@ -441,6 +441,9 @@
     return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
+	if(operating)
+		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
+		return
 	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
 		dispose()
 		return
