@@ -2,7 +2,7 @@
 /obj/item/verbs/borer/attached_head/verb/borer_speak(var/message as text)
 	set category = "Alien"
 	set name = "Borer Speak"
-	set desc = "Communicate with your bretheren"
+	set desc = "Communicate with your brethren."
 
 	if(!message)
 		return

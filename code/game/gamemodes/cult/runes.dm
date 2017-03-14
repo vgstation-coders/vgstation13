@@ -188,7 +188,7 @@
 			usr.visible_message("<span class='warning'>Something is blocking the conversion!</span>")
 			return 0
 		invocation("rune_convert")
-		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below him glow a bloody red.</span>", \
+		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below \him glow a bloody red.</span>", \
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
