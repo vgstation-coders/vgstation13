@@ -232,6 +232,9 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/update_icon()
+	return
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
@@ -250,6 +253,9 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/update_icon()
+	return
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
