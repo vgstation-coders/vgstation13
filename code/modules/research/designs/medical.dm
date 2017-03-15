@@ -124,7 +124,7 @@
 	name = "Chemical Mask"
 	desc = "A rather sinister mask designed for connection to a chemical pack, providing the pack's safeties are disabled."
 	id = "chemmask"
-	req_tech = list(Tc_BIOTECH = 5, Tc_MATERIALS = 5, Tc_ENGINEERING = 5, Tc_COMBAT = 5, Tc_SYNDICATE = 5)
+	req_tech = list(Tc_BIOTECH = 5, Tc_MATERIALS = 5, Tc_ENGINEERING = 5, Tc_COMBAT = 5)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_SILVER = 100)
 	category = "Medical"
