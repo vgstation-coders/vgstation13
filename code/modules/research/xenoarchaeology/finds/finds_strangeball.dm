@@ -1,5 +1,5 @@
 /obj/item/device/mmi/posibrain/strangeball
-	name = "\improper strange ball"
+	name = "strange ball"
 	desc = "A complex metallic ball with \"TG17355\" carved on its surface."
 	var/ball = "omoikaneball"
 	var/burger = "omoikane"
@@ -32,7 +32,7 @@
 	icon_state = ball
 
 /obj/item/device/mmi/posibrain/strangeball/strangeegg
-	name = "\improper strange egg"
+	name = "strange egg"
 	desc = "A complex egg-like machine with \"TG17355\" carved on its surface."
 	ball = "peaceegg"
 	burger = "peaceborg"
