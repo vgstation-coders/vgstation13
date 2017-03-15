@@ -14,6 +14,13 @@
 	//TODO: fix husking
 	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
 		ChangeToHusk()
+	if( ((maxHealth - total_burn) < config.health_threshold_skeleton) && stat == DEAD)
+		if(died_on_plasmafire)
+			makePlasmaman()
+		else
+			makeSkeleton()
+	/*if( ((maxHealth - total_burn) < config.health_threshold_dust) && stat == DEAD)
+		dust()*/
 	return
 
 /mob/living/carbon/human/getBrainLoss()

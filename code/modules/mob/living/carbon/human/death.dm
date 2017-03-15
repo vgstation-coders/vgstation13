@@ -98,8 +98,11 @@
 
 	if(!gibbed)
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
-
 		update_canmove()
+		for(var/obj/item/I in src) // This is a hacky way to know if someone died on a plasmafire.
+			if(I.contaminated)
+				died_on_plasmafire = 1
+				break
 
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)
@@ -124,6 +127,19 @@
 	update_hair(0)
 
 	mutations.Add(SKELETON)
+	status_flags |= DISFIGURED
+	update_body(0)
+	update_mutantrace()
+	return
+
+/mob/living/carbon/human/proc/makePlasmaman()
+	if(f_style)
+		f_style = "Shaved"
+	if(h_style)
+		h_style = "Bald"
+	update_hair(0)
+
+	set_species("Plasmaman")
 	status_flags |= DISFIGURED
 	update_body(0)
 	update_mutantrace()
