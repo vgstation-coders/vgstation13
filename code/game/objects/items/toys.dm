@@ -105,8 +105,6 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
-    // look I had to force these since the file that had the inhands for the synd balloons was aparently hacked to have more icons than its supposed to and adding them in fucked it up, so bear with me, I can barely code and I hate github and was told to make this a child of the normal balloon, cut me some slack, its babys first PR
-
 /*
  * Fake telebeacon
  */
