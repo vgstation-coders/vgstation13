@@ -77,6 +77,9 @@
 	else
 		return obstacle.bumped_by_firebird(src) //Yep
 
+/obj/structure/bed/chair/vehicle/wizmobile/emp_act(severity)
+	return 0
+
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
 /obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
 	if(can_move)
