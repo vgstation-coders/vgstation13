@@ -99,18 +99,6 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
-/obj/item/toy/syndicateballoon
-	name = "syndicate balloon"
-	desc = "It's just a balloon. There is a tag on the back that reads \"FUK NT!11!\"."
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
-	force = 0
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "syndballoon"
-	item_state = "syndballoon"
-	w_class = W_CLASS_LARGE
-
 /obj/item/toy/syndicateballoon/ntballoon
     name = "nanotrasen balloon"
     desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
