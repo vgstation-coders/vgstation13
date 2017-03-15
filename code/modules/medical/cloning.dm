@@ -384,9 +384,13 @@
 			src.locked = 0
 			to_chat(user, "System unlocked.")
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		if(user.drop_item(W))
-			to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
-			biomass += 50
+		var/obj/item/weapon/reagent_containers/food/snacks/meat/M = W
+		if (!M.reagents.has_reagent(NUTRIMENT))
+			to_chat(user, "<span class='notice'>\The [src] rejects \the [M] as it lacks sufficient nutriment.")
+			return
+		if(user.drop_item(M))
+			to_chat(user, "<span class='notice'>\The [src] processes \the [M].</span>")
+			biomass += M.reagents.get_reagent_amount(NUTRIMENT) * 3
 			qdel(W)
 			return
 
