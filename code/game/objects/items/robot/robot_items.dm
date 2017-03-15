@@ -16,7 +16,7 @@
 
 	attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 
@@ -180,7 +180,7 @@
 	if(safety == TRUE)
 		user.visible_message("<span class='big danger'>HUMAN HARM</font>")
 		playsound(get_turf(src), 'sound/AI/harmalarm.ogg', 70, 3)
-		for(var/mob/living/carbon/M in ohearers(9, user))
+		for(var/mob/living/carbon/M in hearers(9, user))
 			if(M.earprot())
 				continue
 			to_chat(M, "<span class='warning'>[user] blares out a near-deafening siren from its speakers!</font>")
@@ -190,7 +190,7 @@
 			M.dizziness += 5
 			M.confused +=  5
 			M.Jitter(5)
-			add_logs(M, "alarmed by \the [src]", admin = FALSE)
+			add_gamelogs(user, "alarmed [key_name(M)] with \the [src]", tp_link = FALSE)
 		cooldown = world.time + 20 SECONDS
 		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		return
@@ -201,11 +201,11 @@
 		for(var/mob/living/carbon/M in hearers(6, user))
 			if(M.earprot())
 				continue
-			M.sleeping = 0
+			M.sleeping = 0 // WAKE ME UP
 			M.stuttering += 30
 			M.ear_deaf += 10
-			M.Knockdown(7)
+			M.Knockdown(7) // CAN'T WAKE UP
 			M.Jitter(30)
-			add_logs(M, "alarmed by an emagged [name]", admin = FALSE)
+			add_gamelogs(user, "knocked out [key_name(M)] with an emagged [name]", tp_link = FALSE)
 		cooldown = world.time + 1 MINUTES
 		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
