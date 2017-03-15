@@ -99,6 +99,26 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
+/obj/item/toy/syndicateballoon
+	name = "syndicate balloon"
+	desc = "It's just a balloon. There is a tag on the back that reads \"FUK NT!11!\"."
+	throwforce = 0
+	throw_speed = 4
+	throw_range = 20
+	force = 0
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "syndballoon"
+	item_state = "syndballoon"
+	w_class = W_CLASS_LARGE
+
+/obj/item/toy/syndicateballoon/ntballoon
+    name = "nanotrasen balloon"
+    desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
+    icon_state = "ntballoon"
+    item_state = "ntballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+    // look I had to force these since the file that had the inhands for the synd balloons was aparently hacked to have more icons than its supposed to and adding them in fucked it up, so bear with me, I can barely code and I hate github and was told to make this a child of the normal balloon, cut me some slack, its babys first PR
+
 /*
  * Fake telebeacon
  */
