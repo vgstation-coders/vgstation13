@@ -1022,6 +1022,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	for(var/obj/structure/planner/spawnpoint/P in planners)
 		P.icon_state = "planner_ready"
+		P.invisibility = 60
 
 	var/readied = 0
 	for(var/datum/bomberman_spawn/S in spawns)
@@ -1130,6 +1131,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		auto_start = 60
 		for(var/obj/structure/planner/spawnpoint/S in arena)
 			S.overlays.len = 0
+
+	for(var/obj/structure/planner/spawnpoint/P in planners)
+		P.invisibility = 0
 
 	for (var/datum/bomberman_spawn/S in spawns)
 		S.availability = 0
@@ -1388,6 +1392,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 /obj/structure/planner/spawnpoint
 	name = "Spawn Point"
 	desc = "Click to register yourself as a contestant."
+	invisibility = 0
 	var/datum/bomberman_spawn/spawnpoint = null
 
 /obj/structure/planner/spawnpoint/New(turf/loc,var/a,var/datum/bomberman_spawn/bs)
