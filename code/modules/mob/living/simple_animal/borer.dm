@@ -370,7 +370,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
 	set name = "Borer Speak"
-	set desc = "Communicate with your bretheren"
+	set desc = "Communicate with your brethren."
 	if(!message)
 		return
 
@@ -946,7 +946,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(stat)
-		to_chat(src, "You cannot ventcrawl your current state.")
+		to_chat(src, "You cannot ventcrawl in your current state.")
 		return
 
 	if(research.unlocking)
@@ -1097,7 +1097,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set desc = "Check the health of your host."
 	set category = "Alien"
 
-	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for dischordant notes...</span>")
+	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for discordant notes...</span>")
 	spawn(5 SECONDS)
 		healthanalyze(host, src, mode=1, silent=1, skip_checks=1) // I am not rewriting this shit with more immersive strings.  Deal with it. - N3X
 
