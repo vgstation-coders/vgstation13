@@ -1,4 +1,4 @@
-/datum/design/nuclear_gun
+/datum/design/nuclear_gun_modkit
 	name = "Advanced Energy Gun Modkit"
 	desc = "Can be used on an energy gun to grant it the ability to recharge itself over time."
 	id = "nuclear_gun"
@@ -8,7 +8,6 @@
 	reliability_base = 76
 	category = "Weapons"
 	build_path = /obj/item/device/modkit/aeg_parts
-
 
 /datum/design/stunrevolver
 	name = "Stun Revolver"
