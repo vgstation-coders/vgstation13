@@ -107,7 +107,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 5, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
 	reliability_base = 71
-	materials = list(MAT_IRON = 50, MAT_GLASS = 50, MAT_GOLD = 20)
+	materials = list(MAT_IRON = 100, MAT_GLASS = 100)
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/capacitor/adv/super
 
@@ -118,7 +118,7 @@
 	id = "phasic_sensor"
 	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 50, MAT_GLASS = 20, MAT_SILVER = 10)
+	materials = list(MAT_IRON = 100, MAT_GLASS = 40)
 	reliability_base = 72
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/scanning_module/adv/phasic
@@ -140,7 +140,7 @@
 	id = "ultra_micro_laser"
 	req_tech = list(Tc_MAGNETS = 5, Tc_MATERIALS = 5)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10, MAT_GLASS = 20, MAT_URANIUM = 10)
+	materials = list(MAT_IRON = 20, MAT_GLASS = 40)
 	reliability_base = 70
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/micro_laser/high/ultra
