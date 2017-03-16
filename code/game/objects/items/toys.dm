@@ -99,6 +99,12 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
+/obj/item/toy/syndicateballoon/ntballoon
+    name = "nanotrasen balloon"
+    desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
+    icon_state = "ntballoon"
+    item_state = "ntballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */
