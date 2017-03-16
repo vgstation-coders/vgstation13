@@ -4,9 +4,9 @@
 */
 
 /obj/machinery/telecomms/allinone
-	name = "Telecommunications Mainframe"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "comm_server"
+	name = "telecommunications mainframe"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "server"
 	desc = "A compact machine used for portable subspace telecommuniations processing."
 	density = 1
 	anchored = 1

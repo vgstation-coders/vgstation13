@@ -9,8 +9,8 @@ var/list/recentmessages = list() // global list of recent messages broadcasted :
 var/message_delay = 0 // To make sure restarting the recentmessages list is kept in sync
 
 /obj/machinery/telecomms/broadcaster
-	name = "Subspace Broadcaster"
-	icon = 'icons/obj/stationobjs.dmi'
+	name = "subspace broadcaster"
+	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "broadcaster"
 	desc = "A dish-shaped machine used to broadcast processed subspace signals."
 	density = 1

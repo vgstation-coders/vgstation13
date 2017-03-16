@@ -9,8 +9,8 @@
 */
 
 /obj/machinery/telecomms/hub
-	name = "Telecommunication Hub"
-	icon = 'icons/obj/stationobjs.dmi'
+	name = "telecommunication hub"
+	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "hub"
 	desc = "A mighty piece of hardware used to send/receive massive amounts of data."
 	density = 1

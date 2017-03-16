@@ -9,8 +9,8 @@
 */
 
 /obj/machinery/telecomms/bus
-	name = "Bus Mainframe"
-	icon = 'icons/obj/stationobjs.dmi'
+	name = "bus mainframe"
+	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "bus"
 	desc = "A mighty piece of hardware used to send massive amounts of data quickly."
 	density = 1

@@ -7,8 +7,8 @@
 */
 
 /obj/machinery/telecomms/processor
-	name = "Processor Unit"
-	icon = 'icons/obj/stationobjs.dmi'
+	name = "processor unit"
+	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "processor"
 	desc = "This machine is used to process large quantities of information."
 	density = 1

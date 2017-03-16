@@ -7,9 +7,9 @@
 
 
 /obj/machinery/telecomms/server
-	name = "Telecommunication Server"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "comm_server"
+	name = "telecommunication server"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "server"
 	desc = "A machine used to store data and network statistics."
 	density = 1
 	anchored = 1

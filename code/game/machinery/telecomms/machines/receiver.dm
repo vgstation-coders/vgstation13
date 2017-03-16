@@ -7,9 +7,9 @@
 */
 
 /obj/machinery/telecomms/receiver
-	name = "Subspace Receiver"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "broadcast receiver"
+	name = "subspace receiver"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "receiver"
 	desc = "This machine has a dish-like shape and green lights. It is designed to detect and process subspace radio activity."
 	density = 1
 	anchored = 1

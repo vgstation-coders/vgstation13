@@ -7,8 +7,8 @@
 */
 
 /obj/machinery/telecomms/relay
-	name = "Telecommunication Relay"
-	icon = 'icons/obj/stationobjs.dmi'
+	name = "telecommunication relay"
+	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "relay"
 	desc = "A mighty piece of hardware used to send massive amounts of data far away."
 	density = 1
