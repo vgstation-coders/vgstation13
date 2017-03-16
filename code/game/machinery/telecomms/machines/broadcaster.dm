@@ -44,8 +44,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		recentmessages.Add(signal_message)
 
 		// This may be causing some performance issues. - N3X
-		if(signal.data["slow"] > 0)
-			sleep(signal.data["slow"]) // simulate the network lag if necessary
+		//if(signal.data["slow"] > 0)
+		//	sleep(signal.data["slow"]) // simulate the network lag if necessary
 
 		signal.data["level"] |= listening_level
 

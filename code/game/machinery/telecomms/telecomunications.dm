@@ -50,12 +50,12 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		return
 	var/send_count = 0
 
-	signal.data["slow"] += rand(0, round((100-integrity))) // apply some lag based on integrity
+	//signal.data["slow"] += rand(0, round((100-integrity))) // apply some lag based on integrity
 
 	// Apply some lag based on traffic rates
 	var/netlag = round(traffic / 50)
-	if(netlag > signal.data["slow"])
-		signal.data["slow"] = netlag
+	//if(netlag > signal.data["slow"])
+	//	signal.data["slow"] = netlag
 
 // Loop through all linked machines and send the signal or copy.
 	for(var/obj/machinery/telecomms/machine in links)
@@ -90,7 +90,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				"compression" = signal.data["compression"],
 				"message" = signal.data["message"],
 				"radio" = signal.data["radio"],
-				"slow" = signal.data["slow"],
+				//"slow" = signal.data["slow"],
 				"traffic" = signal.data["traffic"],
 				"type" = signal.data["type"],
 				"server" = signal.data["server"],

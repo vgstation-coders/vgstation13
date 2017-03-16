@@ -37,8 +37,8 @@
 		if(original)
 			original.data["done"] = 1
 
-		if(signal.data["slow"] > 0)
-			sleep(signal.data["slow"]) // simulate the network lag if necessary
+		//if(signal.data["slow"] > 0)
+		//	sleep(signal.data["slow"]) // simulate the network lag if necessary
 
 		/* ###### Broadcast a message using signal.data ###### */
 
