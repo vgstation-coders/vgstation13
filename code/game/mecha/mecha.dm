@@ -103,8 +103,8 @@
 	loc.Entered(src)
 	mechas_list += src //global mech list
 	reset_icon()
-	return
 	icon_state += "-open"
+	return
 
 /obj/mecha/Destroy()
 	src.go_out()
