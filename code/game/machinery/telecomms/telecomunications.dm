@@ -1,5 +1,3 @@
-
-
 /*
 	Hello, friends, this is Doohl from sexylands. You may be wondering what this
 	monstrous code file is. Sit down, boys and girls, while I tell you the tale.
@@ -28,7 +26,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/machinetype = 0 // just a hacky way of preventing alike machines from pairing
 	var/toggled = 1 	// Is it toggled on
 	var/on = 1
-	var/integrity = 100 // basically HP, loses integrity by heat
 	var/delay = 10 // how many process() ticks to delay per heat
 	var/heating_power = 40000 // how much heat to transfer to the environment
 	var/long_range_link = 0	// Can you link it across Z levels or on the otherside of the map? (Relay & Hub)
@@ -198,7 +195,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/proc/update_power()
 	if(toggled)
-		if(stat & (BROKEN|NOPOWER|EMPED) || integrity <= 0) // if powered, on. if not powered, off. if too damaged, off
+		if(stat & (BROKEN|NOPOWER|EMPED) || get_integrity() <= 0) // if powered, on. if not powered, off. if too damaged, off
 			on = 0
 		else
 			on = 1

@@ -23,7 +23,6 @@
 	C.integrity = new_integrity
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
-	..()
 	if (issolder(W))
 		if (integrity >= TELECOMMS_MAX_INTEGRITY)
 			to_chat(user, "It's not damaged.")
@@ -36,6 +35,8 @@
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 		integrity = TELECOMMS_MAX_INTEGRITY
 		to_chat(user, "<span class='notice'>You repair the damaged internals of \the [src].</span>")
+		return
+	..()
 
 /obj/machinery/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	..()
@@ -75,7 +76,7 @@
 	var/dat = {"
 		<p>[temp]</p>
 		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[src.toggled ? "On" : "Off"]</a></p>
-		<p><b>Integrity:</b> [Clamp(integrity, 0, TELECOMMS_MAX_INTEGRITY)]</p>
+		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]</p>
 	"}
 	if(on && toggled)
 		dat += {"

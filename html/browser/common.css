@@ -339,28 +339,48 @@ div.notice
 }
 
 td.column {
-    width: 60px;
-    text-align: center;
+	width: 60px;
+	text-align: center;
 }
 td.clmNever {
-    background: #ffcccc;
+	background: #ffcccc;
 }
 
 td.clmNo {
-    background: #ffeeee;
+	background: #ffeeee;
 }
 
 td.clmYes {
-    background: #eeffee;
+	background: #eeffee;
 }
 
 td.clmAlways {
-    background: #ccffcc;
+	background: #ccffcc;
 }
 
 label.fullsize
 {
-    width: 100%;
-    height: 100%;
-    display: inline-block;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+}
+
+input {
+	background-color: #202020;
+	color: #cccccc;
+	border-color: #40628a;
+	padding: 3px;
+	border-radius: 2px;
+	border-style: solid;
+	transition: 0.2s;
+}
+
+input[type="submit"] {
+	line-height: normal;
+}
+
+input[type="submit"]:hover, input[type="textbox"]:focus {
+	border-color: #2e71bf;
+	background-color: #353535;
+	transition: 0.2s;
 }

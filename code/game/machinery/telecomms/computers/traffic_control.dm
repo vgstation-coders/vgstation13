@@ -1,26 +1,18 @@
 /obj/machinery/computer/telecomms/traffic
-	name = "Telecommunications Traffic Control"
+	name = "telecommunications traffic control"
+	desc = "Controls the telecommunication servers' software."
 	icon_state = "computer_generic"
 	circuit = "/obj/item/weapon/circuitboard/comm_traffic"
 
-	var/screen = 0				// the screen number:
-	var/list/servers = list()	// the servers located by the computer
 	var/mob/editingcode
 	var/mob/lasteditor
 	var/list/viewingcode = list()
 	var/obj/machinery/telecomms/server/SelectedServer
 
-	var/network = "NULL"		// the network to probe
-	var/temp = ""				// temporary feedback messages
-
 	var/storedcode = ""			// code stored
 	var/obj/item/weapon/card/id/auth = null
 	var/list/access_log = list()
 	var/process = 0
-
-	light_color = LIGHT_COLOR_GREEN
-
-	req_access = list(access_tcomsat)
 
 /obj/machinery/computer/telecomms/traffic/proc/stop_editing()
 	if(editingcode)
@@ -30,7 +22,6 @@
 		editingcode = null
 
 /obj/machinery/computer/telecomms/traffic/process()
-
 	if(stat & (NOPOWER|BROKEN))
 		stop_editing()
 		return
@@ -84,7 +75,7 @@
 				winshow(M, "Telecomms IDE", 0) // hide the windows
 
 
-/obj/machinery/computer/telecomms/traffic/attack_hand(mob/user as mob)
+/obj/machinery/computer/telecomms/traffic/attack_hand(var/mob/user)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	user.set_machine(src)
@@ -103,9 +94,9 @@
 
 				dat += {"<br>[temp]<br>
 					<br>Current Network: <a href='?src=\ref[src];network=1'>[network]</a><br>"}
-				if(servers.len)
+				if(machines.len)
 					dat += "<br>Detected Telecommunication Servers:<ul>"
-					for(var/obj/machinery/telecomms/T in servers)
+					for(var/obj/machinery/telecomms/T in machines)
 						dat += "<li><a href='?src=\ref[src];viewserver=[T.id]'>\ref[T] [T.name]</a> ([T.id])</li>"
 
 					dat += {"</ul>
@@ -194,7 +185,7 @@
 
 	if(href_list["viewserver"])
 		screen = 1
-		for(var/obj/machinery/telecomms/T in servers)
+		for(var/obj/machinery/telecomms/T in machines)
 			if(T.id == href_list["viewserver"])
 				SelectedServer = T
 				create_log("selected server [T.name]", usr)
@@ -206,25 +197,25 @@
 		switch(href_list["operation"])
 
 			if("release")
-				servers = list()
+				machines.Cut()
 				screen = 0
 
 			if("mainmenu")
 				screen = 0
 
 			if("scan")
-				if(servers.len > 0)
+				if(machines.len > 0)
 					temp = "<font color = #D70B00>- FAILED: CANNOT PROBE WHEN BUFFER FULL -</font color>"
 
 				else
 					for(var/obj/machinery/telecomms/server/T in range(25, src))
 						if(T.network == network)
-							servers.Add(T)
+							machines.Add(T)
 
-					if(!servers.len)
+					if(!machines.len)
 						temp = "<font color = #D70B00>- FAILED: UNABLE TO LOCATE SERVERS IN \[[network]\] -</font color>"
 					else
-						temp = "<font color = #336699>- [servers.len] SERVERS PROBED & BUFFERED -</font color>"
+						temp = "<font color = #336699>- [machines.len] SERVERS PROBED & BUFFERED -</font color>"
 
 					screen = 0
 
@@ -267,23 +258,17 @@
 
 				network = newnet
 				screen = 0
-				servers = list()
+				machines.Cut()
 				temp = "<font color = #336699>- NEW NETWORK TAG SET IN ADDRESS \[[network]\] -</font color>"
 				create_log("has set the network to [network].", usr)
 
 	updateUsrDialog()
 	return
 
-/obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D, var/mob/user)
 	return ..()
+	updateUsrDialog()
 
-/obj/machinery/computer/telecomms/emag(mob/user)
-	if(!emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
-		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
-	src.updateUsrDialog()
-	return 1
 /obj/machinery/computer/telecomms/traffic/proc/canAccess(var/mob/user)
 	if(issilicon(user) || in_range(src,user))
 		return 1

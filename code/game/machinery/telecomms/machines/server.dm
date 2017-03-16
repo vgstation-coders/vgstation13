@@ -5,7 +5,6 @@
 	Store a maximum of 100 logs and then deletes them.
 */
 
-
 /obj/machinery/telecomms/server
 	name = "telecommunication server"
 	icon = 'icons/obj/machines/telecomms.dmi'
@@ -43,10 +42,10 @@
 	server_radio = new()
 
 	component_parts = newlist(
-			/obj/item/weapon/circuitboard/telecomms/server,
-			/obj/item/weapon/stock_parts/subspace/filter,
-			/obj/item/weapon/stock_parts/manipulator,
-			/obj/item/weapon/stock_parts/manipulator
+		/obj/item/weapon/circuitboard/telecomms/server,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
 	)
 
 	RefreshParts()
@@ -108,7 +107,7 @@
 
 				// Give the log a name
 				var/identifier = num2text( rand(-1000,1000) + world.time )
-				log.name = "data packet ([md5(identifier)])"
+				log.hash = md5(identifier)
 
 				if(Compiler && autoruncode)
 					Compiler.Run(signal)	// execute the code
@@ -135,8 +134,6 @@
 		message_admins("[msg] ([formatJumpTo(mob)])", 0, 1)
 
 /obj/machinery/telecomms/server/proc/compile(var/mob/user)
-
-
 	if(Compiler)
 		admin_log(user)
 		return Compiler.Compile(rawcode)
@@ -154,7 +151,8 @@
 /obj/machinery/telecomms/server/proc/add_entry(var/content, var/input)
 	var/datum/comm_log_entry/log = new
 	var/identifier = num2text( rand(-1000,1000) + world.time )
-	log.name = "[input] ([md5(identifier)])"
+	log.name = input
+	log.hash = md5(identifier)
 	log.input_type = input
 	log.parameters["message"] = content
 	log_entries.Add(log)
@@ -164,6 +162,7 @@
 
 /datum/comm_log_entry
 	var/parameters = list() // carbon-copy to signal.data[]
-	var/name = "data packet (#)"
+	var/name = "Data Packet"
+	var/hash = ""
 	var/garbage_collector = 1 // if set to 0, will not be garbage collected
 	var/input_type = "Speech File"

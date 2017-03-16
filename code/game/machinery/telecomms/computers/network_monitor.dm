@@ -1,140 +1,153 @@
 /*
-	Telecomms monitor tracks the overall trafficing of a telecommunications network
+	The network monitor tracks the overall trafficing of a telecommunications network
 	and displays a heirarchy of linked machines.
 */
 
-
 /obj/machinery/computer/telecomms/monitor
-	name = "Telecommunications Monitor"
+	name = "telecommunications network monitor"
+	desc = "Shows the network graph of all machinery on a network."
 	icon_state = "comm_monitor"
 	circuit = "/obj/item/weapon/circuitboard/comm_monitor"
+	var/obj/machinery/telecomms/selected
 
-	var/screen = 0				// the screen number:
-	var/list/machinelist = list()	// the machines located by the computer
-	var/obj/machinery/telecomms/SelectedMachine
-
-	var/network = "NULL"		// the network to probe
-
-	var/temp = ""				// temporary feedback messages
-
-	light_color = LIGHT_COLOR_GREEN
-
-/obj/machinery/computer/telecomms/monitor/attack_hand(mob/user as mob)
+/obj/machinery/computer/telecomms/monitor/attack_hand(var/mob/user)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	user.set_machine(src)
-	var/dat = "<TITLE>Telecommunications Monitor</TITLE><center><b>Telecommunications Monitor</b></center>"
+
+	var/dat = {"
+		<div id='logtemp'>
+			[temp]
+		</div>
+		<hr/>
+	"}
 
 	switch(screen)
+		if (SCREEN_MAIN)
+			dat += {"
+				<form id='network-form' action="?src=\ref[src]" method="get">
+					<input type="hidden" name="src" value="\ref[src]"/>
+					<input type="hidden" name="scan" value="1"/>
+					<label id='network'>
+						Current network: <input class='network-input' type="textbox" name="network" value='[network]'/ />
+					</label>
+					<input type="submit" value="save"/>
+				</form>
+			"}
 
-
-	  // --- Main Menu ---
-
-		if(0)
-
-			dat += {"<br>[temp]<br><br>
-				<br>Current Network: <a href='?src=\ref[src];network=1'>[network]</a><br>"}
-			if(machinelist.len)
-				dat += "<br>Detected Network Entities:<ul>"
-				for(var/obj/machinery/telecomms/T in machinelist)
-					dat += "<li><a href='?src=\ref[src];viewmachine=[T.id]'>\ref[T] [T.name]</a> ([T.id])</li>"
-
-				dat += {"</ul>
-					<br><a href='?src=\ref[src];operation=release'>\[Flush Buffer\]</a>"}
+			if (machines.len)
+				dat += {"
+					<b>Detected network entities:</b>
+					<ul>
+				"}
+				for (var/obj/machinery/telecomms/T in machines)
+					// Cut out brackets.
+					var/ref = copytext("\ref[src]", 2, -1)
+					dat += {"
+						<li>
+							<span class="code">[ref]</span>
+							<a class='vert' href="'?src=\ref[src];viewmachine=\ref[T]'>[T.name]</a>
+						</li>
+					"}
+				dat += {"
+					</ul>
+					<a id='flush' href='?src=\ref[src];flush=1'>Flush buffer</a>
+				"}
 			else
-				dat += "<a href='?src=\ref[src];operation=probe'>\[Probe Network\]</a>"
+				dat += "<b>No network entities detected. Scan for entities:</b> <a href='?src=\ref[src];scan=1'>Scan</a>"
+		if (SCREEN_SELECTED)
+			dat += {"
+				<div id='listcontrols'>
+					<a href='?src=\ref[src];mainmenu=1'>Main menu</a>
+					<a href='?src=\ref[src];refresh=1'>Refresh</a>
+				</div>
 
+				<table>
+					<tr>
+						<td><b>Current network:</b></td>
+						<td class="right"><span class="code">[network]</span></td>
+					</tr>
+					<tr>
+						<td><b>Currently selected entity:</b></td>
+						<td class="right">[selected.name]</td>
+					</tr>
+				</table>
 
-	  // --- Viewing Machine ---
+				<b id="logsmessage">Linked entities:</b><br/>
+				<ol>
+			"}
 
-		if(1)
-
-			dat += {"<br>[temp]<br>
-				<center><a href='?src=\ref[src];operation=mainmenu'>\[Main Menu\]</a></center>
-				<br>Current Network: [network]<br>
-				Selected Network Entity: [SelectedMachine.name] ([SelectedMachine.id])<br>
-				Linked Entities: <ol>"}
-			for(var/obj/machinery/telecomms/T in SelectedMachine.links)
-				if(!T.hide)
-					dat += "<li><a href='?src=\ref[src];viewmachine=[T.id]'>\ref[T.id] [T.name]</a> ([T.id])</li>"
+			for (var/obj/machinery/telecomms/T in selected.links)
+				if (!T.hide)
+					// Cut off brackets
+					var/ref = copytext("\ref[src]", 2, -1)
+					dat += {"
+						<li>
+							<span class="code">[ref]</span>
+							<a class='vert' href='?src\ref[src];viewmachine=\ref[T]'>[T.name]</a>
+						</li>
+					"}
 			dat += "</ol>"
 
-
-
-	user << browse(dat, "window=comm_monitor;size=575x400")
-	onclose(user, "server_control")
-
-	temp = ""
-	return
-
+	var/datum/browser/B = new(user, "\ref[src]", "Telecommunications network monitor", 575, 400, src)
+	B.add_stylesheet("telecomms_computer.css", 'html/browser/telecomms_computer.css')
+	B.set_content(dat)
+	B.open()
+	temp = "&nbsp;"
 
 /obj/machinery/computer/telecomms/monitor/Topic(href, href_list)
-	if(..())
+	. = ..()
+	if (.)
 		return
-
 
 	add_fingerprint(usr)
 	usr.set_machine(src)
 
-	if(href_list["viewmachine"])
-		screen = 1
-		for(var/obj/machinery/telecomms/T in machinelist)
-			if(T.id == href_list["viewmachine"])
-				SelectedMachine = T
-				break
+	if (href_list["viewmachine"])
+		var/obj/machinery/telecomms/T = locate() in machines
+		if (T)
+			screen = SCREEN_SELECTED
+			selected = T
+		. = TRUE
 
-	if(href_list["operation"])
-		switch(href_list["operation"])
+	if (href_list["flush"])
+		machines.Cut()
+		screen = SCREEN_MAIN
+		. = TRUE
 
-			if("release")
-				machinelist = list()
-				screen = 0
+	if (href_list["mainmenu"])
+		screen = SCREEN_MAIN
+		. = TRUE
 
-			if("mainmenu")
-				screen = 0
+	if (href_list["network"])
+		var/newnet = reject_bad_text(href_list["network"])
+		if (length(newnet) > 15)
+			set_temp("FAILED: NETWORK TAG STRING TOO LONG", BAD)
+		else
+			network = newnet
+			machines.Cut()
+			screen = SCREEN_MAIN
+		. = TRUE
 
-			if("probe")
-				if(machinelist.len > 0)
-					temp = "<font color = #D70B00>- FAILED: CANNOT PROBE WHEN BUFFER FULL -</font color>"
+	if (href_list["scan"])
+		if (machines.len)
+			set_temp("FAILED: CANNOT PROBE WHEN BUFFER FULL", BAD)
+		else
+			for (var/obj/machinery/telecomms/T in range(25, src))
+				if (T.network == network)
+					machines.Add(T)
+				if (!machines.len)
+					set_temp("FAILED: UNABLE TO LOCATE NETWORK ENTITIES IN <span class='code'>[network]", BAD)
+				screen = SCREEN_MAIN
+			. = TRUE
+	
+	if (href_list["refresh"])
+		. = TRUE
 
-				else
-					for(var/obj/machinery/telecomms/T in range(25, src))
-						if(T.network == network)
-							machinelist.Add(T)
+	if (.)
+		updateUsrDialog()
 
-					if(!machinelist.len)
-						temp = "<font color = #D70B00>- FAILED: UNABLE TO LOCATE NETWORK ENTITIES IN \[[network]\] -</font color>"
-					else
-						temp = "<font color = #336699>- [machinelist.len] ENTITIES LOCATED & BUFFERED -</font color>"
-
-					screen = 0
-
-
-	if(href_list["network"])
-
-		var/newnet = input(usr, "Which network do you want to view?", "Comm Monitor", network) as null|text
-		if(newnet && ((usr in range(1, src) || issilicon(usr))))
-			if(length(newnet) > 15)
-				temp = "<font color = #D70B00>- FAILED: NETWORK TAG STRING TOO LENGHTLY -</font color>"
-
-			else
-				network = newnet
-				screen = 0
-				machinelist = list()
-				temp = "<font color = #336699>- NEW NETWORK TAG SET IN ADDRESS \[[network]\] -</font color>"
-
-	updateUsrDialog()
-	return
-
-/obj/machinery/computer/telecomms/monitor/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/telecomms/monitor/attackby(var/obj/item/weapon/D, var/mob/user)
 	if(..())
-		return 1
-	src.updateUsrDialog()
-
-/obj/machinery/computer/telecomms/monitor/emag(mob/user)
-	if(!emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
-		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
-		return 1
-	return
+		return TRUE
+	updateUsrDialog()
