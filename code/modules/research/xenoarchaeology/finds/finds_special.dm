@@ -1,6 +1,7 @@
 //What the fuck are these things made of?
 
 /obj/item/weapon/reagent_containers/glass/replenishing
+	mech_flags = MECH_SCAN_ILLEGAL
 	var/spawning_id
 	var/artifact_id
 
