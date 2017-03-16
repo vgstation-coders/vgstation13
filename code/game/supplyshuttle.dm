@@ -593,7 +593,7 @@ var/list/mechtoys = list(
 	return
 
 /obj/machinery/computer/supplycomp/attack_hand(var/mob/user as mob)
-	if(!allowed(user))
+	if(!allowed(user) && !can_order_contraband) //if board is hacked then it removes access requirement
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
@@ -648,6 +648,7 @@ var/list/mechtoys = list(
 				qdel(src)
 	else
 		return ..()
+
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	// data to send to ui
