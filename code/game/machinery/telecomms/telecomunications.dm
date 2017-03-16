@@ -261,410 +261,451 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 					removed.temperature = min((removed.temperature*heat_capacity + heating_power)/heat_capacity, 1000)
 
 				env.merge(removed)
-/*
-	The receiver idles and receives messages from subspace-compatible radio equipment;
-	primarily headsets. They then just relay this information to all linked devices,
-	which can would probably be network hubs.
 
-	Link to Processor Units in case receiver can't send to bus units.
+
+
+
+/**
+
+	Here is the big, bad function that broadcasts a message given the appropriate
+	parameters.
+
+	@param M:
+		Reference to the mob/speaker, stored in signal.data["mob"]
+
+	@param vmask:
+		Boolean value if the mob is "hiding" its identity via voice mask, stored in
+		signal.data["vmask"]
+
+	@param vmessage:
+		If specified, will display this as the message; such as "chimpering"
+		for monkies if the mob is not understood. Stored in signal.data["vmessage"].
+
+	@param radio:
+		Reference to the radio broadcasting the message, stored in signal.data["radio"]
+
+	@param message:
+		The actual string message to display to mobs who understood mob M. Stored in
+		signal.data["message"]
+
+	@param name:
+		The name to display when a mob receives the message. signal.data["name"]
+
+	@param job:
+		The name job to display for the AI when it receives the message. signal.data["job"]
+
+	@param realname:
+		The "real" name associated with the mob. signal.data["realname"]
+
+	@param vname:
+		If specified, will use this name when mob M is not understood. signal.data["vname"]
+
+	@param data:
+		If specified:
+				1 -- Will only broadcast to intercoms
+				2 -- Will only broadcast to intercoms and station-bounced radios
+				3 -- Broadcast to syndicate frequency
+				4 -- AI can't track down this person. Useful for imitation broadcasts where you can't find the actual mob
+
+	@param compression:
+		If 0, the signal is audible
+		If nonzero, the signal may be partially inaudible or just complete gibberish.
+
+	@param level:
+		The list of Z levels that the sending radio is broadcasting to. Having 0 in the list broadcasts on all levels
+
+	@param freq
+		The frequency of the signal
+
+**/
+
+/* Old, for records.
+/proc/Broadcast_Message(var/atom/movable/AM, var/datum/language/speaking,
+						var/vmask, var/obj/item/device/radio/radio,
+						var/message, var/name, var/job, var/realname,
+						var/data, var/compression, var/list/level, var/freq)
 */
-
-/obj/machinery/telecomms/receiver
-	name = "Subspace Receiver"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "broadcast receiver"
-	desc = "This machine has a dish-like shape and green lights. It is designed to detect and process subspace radio activity."
-	density = 1
-	anchored = 1
-	use_power = 1
-	idle_power_usage = 30
-	machinetype = 1
-	heatgen = 0
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/receiver"
-
-/obj/machinery/telecomms/receiver/receive_signal(datum/signal/signal)
+/proc/Broadcast_Message(
+		var/datum/speech/speech, // Most everything is now in here.
+		var/vmask,               // voice mask (bool)
+		var/data,                // ???
+		var/compression,         // Level of compression
+		var/list/level)          // z-levels that can hear us
 #ifdef SAY_DEBUG
-	var/mob/mob = signal.data["mob"]
-	var/datum/language/language = signal.data["language"]
-	var/langname = (language ? language.name : "No language")
-	say_testing(mob, "[src] received radio signal from us, language [langname]")
+	if(speech.speaker)
+		say_testing(speech.speaker, "broadcast_message start - Sending \"[html_encode(speech.message)]\" to [speech.frequency]")
 #endif
 
-	if(!on) // has to be on to receive messages
+	// Cut down on the message sizes.
+	speech.message = copytext(speech.message, 1, MAX_BROADCAST_LEN)
+
+	if(!speech.message)
 		return
-	if(!signal)
-		return
-	if(!check_receive_level(signal))
-		return
-	say_testing(mob, "[src] is on, has signal, and receive is good")
-	if(signal.transmission_method == 2)
 
-		if(is_freq_listening(signal)) // detect subspace signals
+	var/list/radios = list()
 
-			//Remove the level and then start adding levels that it is being broadcasted in.
-			signal.data["level"] = list()
+	var/atom/movable/virtualspeaker/virt = getFromPool(/atom/movable/virtualspeaker, null)
+	virt.name = speech.name
+	virt.job = speech.job
+	//virt.languages = AM.languages
+	virt.source = speech.speaker
+	virt.faketrack = (data == 4) ? 1 : 0
+	virt.radio = speech.radio
 
-			var/can_send = relay_information(signal, "/obj/machinery/telecomms/hub") // ideally relay the copied information to relays
-			if(!can_send)
-				relay_information(signal, "/obj/machinery/telecomms/bus") // Send it to a bus instead, if it's linked to one
-		else
-			say_testing(mob, "[src] is not listening")
-	else
-		say_testing(mob, "bad transmission method")
+	if (compression > 0)
+		speech.message = Gibberish(speech.message, compression + 40)
 
-/obj/machinery/telecomms/receiver/proc/check_receive_level(datum/signal/signal)
+	switch (data)
+		if (1) // broadcast only to intercom devices
+			for (var/obj/item/device/radio/intercom/R in all_radios["[speech.frequency]"])
+				if (R && R.receive_range(speech.frequency, level) > -1)
+					radios += R
+		if (2) // broadcast only to intercoms and station-bounced radios
+			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
+				if (istype(R, /obj/item/device/radio/headset))
+					continue
 
+				if (R && R.receive_range(speech.frequency, level) > -1)
+					radios += R
+		else // broadcast to ALL radio devices
+			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
+				if (R && R.receive_range(speech.frequency, level) > -1)
+					radios += R
 
-	if(signal.data["level"] != listening_level)
-		for(var/obj/machinery/telecomms/hub/H in links)
-			var/list/connected_levels = list()
-			for(var/obj/machinery/telecomms/relay/R in H.links)
-				if(R.can_receive(signal))
-					connected_levels |= R.listening_level
-			if(signal.data["level"] in connected_levels)
-				return 1
-		return 0
-	return 1
+			/*
+			 * Syndicate radios use magic that allows them to hear everything.
+			 * This was already the case, now it just doesn't need the allinone anymore.
+			 * Solves annoying bugs that aren't worth solving.
+			 */
+			if (num2text(speech.frequency) in radiochannelsreverse)
+				for (var/obj/item/device/radio/R in all_radios["[SYND_FREQ]"])
+					if (R && R.receive_range(SYND_FREQ, list(R.z)) > -1)
+						radios |= R
 
+	// get a list of mobs who can hear from the radios we collected and observers
+	var/list/listeners = get_mobs_in_radio_ranges(radios) | observers
 
-/*
-	The HUB idles until it receives information. It then passes on that information
-	depending on where it came from.
+	radios = null
 
-	This is the heart of the Telecommunications Network, sending information where it
-	is needed. It mainly receives information from long-distance Relays and then sends
-	that information to be processed. Afterwards it gets the uncompressed information
-	from Servers/Buses and sends that back to the relay, to then be broadcasted.
-*/
+	// TODO: Review this usage.
+	var/rendered = virt.render_speech(speech) // always call this on the virtualspeaker to advoid issues
+	//var/listeners_sent = 0
+	for (var/atom/movable/listener in listeners)
+		if (listener)
+			//listeners_sent++
+			listener.Hear(speech, rendered)
 
-/obj/machinery/telecomms/hub
-	name = "Telecommunication Hub"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "hub"
-	desc = "A mighty piece of hardware used to send/receive massive amounts of data."
-	density = 1
-	anchored = 1
-	use_power = 1
-	idle_power_usage = 80
-	machinetype = 7
-	heatgen = 40
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/hub"
-	long_range_link = 1
-	netspeed = 40
+	if (length(listeners))
+		listeners = null
 
+			// --- This following recording is intended for research and feedback in the use of department radio channels ---
 
-/obj/machinery/telecomms/hub/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
-	if(is_freq_listening(signal))
-		if(istype(machine_from, /obj/machinery/telecomms/receiver))
-			//If the signal is compressed, send it to the bus.
-			relay_information(signal, "/obj/machinery/telecomms/bus", 1) // ideally relay the copied information to bus units
-		else
-			// Get a list of relays that we're linked to, then send the signal to their levels.
-			relay_information(signal, "/obj/machinery/telecomms/relay", 1)
-			relay_information(signal, "/obj/machinery/telecomms/broadcaster", 1) // Send it to a broadcaster.
+		var/enc_message = speech.speaker.say_quote("\"[speech.message]\"") // Does not need to be html_encoded - N3X
+		var/blackbox_msg = "[speech.speaker] [enc_message]"
 
-
-/*
-	The relay idles until it receives information. It then passes on that information
-	depending on where it came from.
-
-	The relay is needed in order to send information pass Z levels. It must be linked
-	with a HUB, the only other machine that can send/receive pass Z levels.
-*/
-
-/obj/machinery/telecomms/relay
-	name = "Telecommunication Relay"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "relay"
-	desc = "A mighty piece of hardware used to send massive amounts of data far away."
-	density = 1
-	anchored = 1
-	use_power = 1
-	idle_power_usage = 30
-	machinetype = 8
-	heatgen = 0
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/relay"
-	netspeed = 5
-	long_range_link = 1
-	var/broadcasting = 1
-	var/receiving = 1
-
-/obj/machinery/telecomms/relay/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
-
-	// Add our level and send it back
-	if(can_send(signal))
-		signal.data["level"] |= listening_level
-
-// Checks to see if it can send/receive.
-
-/obj/machinery/telecomms/relay/proc/can(datum/signal/signal)
-	if(!on)
-		return 0
-	if(!is_freq_listening(signal))
-		return 0
-	return 1
-
-/obj/machinery/telecomms/relay/proc/can_send(datum/signal/signal)
-	if(!can(signal))
-		return 0
-	return broadcasting
-
-/obj/machinery/telecomms/relay/proc/can_receive(datum/signal/signal)
-	if(!can(signal))
-		return 0
-	return receiving
-
-/*
-	The bus mainframe idles and waits for hubs to relay them signals. They act
-	as junctions for the network.
-
-	They transfer uncompressed subspace packets to processor units, and then take
-	the processed packet to a server for logging.
-
-	Link to a subspace hub if it can't send to a server.
-*/
-
-/obj/machinery/telecomms/bus
-	name = "Bus Mainframe"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "bus"
-	desc = "A mighty piece of hardware used to send massive amounts of data quickly."
-	density = 1
-	anchored = 1
-	use_power = 1
-	idle_power_usage = 50
-	machinetype = 2
-	heatgen = 20
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/bus"
-	netspeed = 40
-	var/change_frequency = 0
-
-/obj/machinery/telecomms/bus/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
-
-	if(is_freq_listening(signal))
-
-		if(change_frequency)
-			signal.frequency = change_frequency
-
-		if(!istype(machine_from, /obj/machinery/telecomms/processor) && machine_from != src) // Signal must be ready (stupid assuming machine), let's send it
-			// send to one linked processor unit
-			var/send_to_processor = relay_information(signal, "/obj/machinery/telecomms/processor")
-
-			if(send_to_processor)
-				return
-			// failed to send to a processor, relay information anyway
-			signal.data["slow"] += rand(1, 5) // slow the signal down only slightly
-			src.receive_information(signal, src)
-
-		// Try sending it!
-		var/list/try_send = list("/obj/machinery/telecomms/server", "/obj/machinery/telecomms/hub", "/obj/machinery/telecomms/broadcaster", "/obj/machinery/telecomms/bus")
-		var/i = 0
-		for(var/send in try_send)
-			if(i)
-				signal.data["slow"] += rand(0, 1) // slow the signal down only slightly
-			i++
-			var/can_send = relay_information(signal, send)
-			if(can_send)
-				break
-
-
-
-/*
-	The processor is a very simple machine that decompresses subspace signals and
-	transfers them back to the original bus. It is essential in producing audible
-	data.
-
-	Link to servers if bus is not present
-*/
-
-/obj/machinery/telecomms/processor
-	name = "Processor Unit"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "processor"
-	desc = "This machine is used to process large quantities of information."
-	density = 1
-	anchored = 1
-	use_power = 1
-	idle_power_usage = 30
-	machinetype = 3
-	heatgen = 100
-	delay = 5
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/processor"
-	var/process_mode = 1 // 1 = Uncompress Signals, 0 = Compress Signals
-
-	receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
-
-		if(is_freq_listening(signal))
-
-			if(process_mode)
-				signal.data["compression"] = 0 // uncompress subspace signal
-			else
-				signal.data["compression"] = 100 // even more compressed signal
-
-			if(istype(machine_from, /obj/machinery/telecomms/bus))
-				relay_direct_information(signal, machine_from) // send the signal back to the machine
-			else // no bus detected - send the signal to servers instead
-				signal.data["slow"] += rand(5, 10) // slow the signal down
-				relay_information(signal, "/obj/machinery/telecomms/server")
-
-
-/*
-	The server logs all traffic and signal data. Once it records the signal, it sends
-	it to the subspace broadcaster.
-
-	Store a maximum of 100 logs and then deletes them.
-*/
-
-
-/obj/machinery/telecomms/server
-	name = "Telecommunication Server"
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "comm_server"
-	desc = "A machine used to store data and network statistics."
-	density = 1
-	anchored = 1
-	use_power = 1
-	idle_power_usage = 15
-	machinetype = 4
-	heatgen = 50
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/server"
-	var/list/log_entries = list()
-	var/list/stored_names = list()
-	var/list/TrafficActions = list()
-	var/logs = 0 // number of logs
-	var/totaltraffic = 0 // gigabytes (if > 1024, divide by 1024 -> terrabytes)
-
-	var/list/memory = list()	// stored memory
-	var/rawcode = ""	// the code to compile (raw text)
-	var/datum/TCS_Compiler/Compiler	// the compiler that compiles and runs the code
-	var/autoruncode = 0		// 1 if the code is set to run every time a signal is picked up
-
-	var/encryption = "null" // encryption key: ie "password"
-	var/salt = "null"		// encryption salt: ie "123comsat"
-							// would add up to md5("password123comsat")
-	var/language = "human"
-	var/obj/item/device/radio/headset/server_radio = null
-	var/last_signal = 0 	// Last time it sent a signal
-
-/obj/machinery/telecomms/server/New()
-	..()
-	Compiler = new()
-	Compiler.Holder = src
-	server_radio = new()
-
-/obj/machinery/telecomms/server/Destroy()
-	// Garbage collects all the NTSL datums.
-	if(Compiler)
-		Compiler.GC()
-		Compiler = null
-	..()
-
-/obj/machinery/telecomms/server/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
-
-	if(signal.data["message"])
-
-		if(is_freq_listening(signal))
-
-			if(traffic > 0)
-				totaltraffic += traffic // add current traffic to total traffic
-
-			//Is this a test signal? Bypass logging
-			if(signal.data["type"] != 4)
-
-				// If signal has a message and appropriate frequency
-
-				update_logs()
-
-				var/datum/comm_log_entry/log = new
-				var/mob/M = signal.data["mob"]
-				// Copy the signal.data entries we want
-				log.parameters["mobtype"] = signal.data["mobtype"]
-				log.parameters["job"] = signal.data["job"]
-				log.parameters["key"] = signal.data["key"]
-				log.parameters["message"] = signal.data["message"]
-				log.parameters["name"] = signal.data["name"]
-				log.parameters["realname"] = signal.data["realname"]
-
-				if(!istype(M, /mob/new_player) && istype(M))
-					log.parameters["uspeech"] = M.universal_speak
+		if(istype(blackbox))
+			switch(speech.frequency)
+				if(1459)
+					blackbox.msg_common += blackbox_msg
+				if(1351)
+					blackbox.msg_science += blackbox_msg
+				if(1353)
+					blackbox.msg_command += blackbox_msg
+				if(1355)
+					blackbox.msg_medical += blackbox_msg
+				if(1357)
+					blackbox.msg_engineering += blackbox_msg
+				if(1359)
+					blackbox.msg_security += blackbox_msg
+				if(1441)
+					blackbox.msg_deathsquad += blackbox_msg
+				if(1345)
+					blackbox.msg_ert += blackbox_msg
+				if(1213)
+					blackbox.msg_syndicate += blackbox_msg
+				if(1349)
+					blackbox.msg_service += blackbox_msg
+				if(1347)
+					blackbox.msg_cargo += blackbox_msg
 				else
-					log.parameters["uspeech"] = 0
+					blackbox.messages += blackbox_msg
+#ifdef SAY_DEBUG
+	if(speech.speaker)
+		say_testing(speech.speaker, "Broadcast_Message finished with [listeners ? listeners.len : 0] listener\s getting our message, [speech.message] lang = [speech.language ? speech.language.name : "none"]")
+#endif
+
+	spawn(50)
+		returnToPool(virt)
+
+/* Obsolete, RIP
+/proc/Broadcast_SimpleMessage(var/source, var/frequency, var/text, var/data, var/mob/M, var/compression, var/level)
 
 
+  /* ###### Prepare the radio connection ###### */
 
-				// If the signal is still compressed, make the log entry gibberish
-				if(signal.data["compression"] > 0)
-					log.parameters["message"] = Gibberish(signal.data["message"], signal.data["compression"] + 50)
-					log.parameters["job"] = Gibberish(signal.data["job"], signal.data["compression"] + 50)
-					log.parameters["name"] = Gibberish(signal.data["name"], signal.data["compression"] + 50)
-					log.parameters["realname"] = Gibberish(signal.data["realname"], signal.data["compression"] + 50)
-					log.input_type = "Corrupt File"
+	if(!M)
+		var/mob/living/carbon/human/H = new
+		M = H
 
-				// Log and store everything that needs to be logged
-				log_entries.Add(log)
-				if(!(signal.data["name"] in stored_names))
-					stored_names.Add(signal.data["name"])
-				logs++
-				signal.data["server"] = src
+	var/datum/radio_frequency/connection = radio_controller.return_frequency(frequency)
 
-				// Give the log a name
-				var/identifier = num2text( rand(-1000,1000) + world.time )
-				log.name = "data packet ([md5(identifier)])"
+	var/display_freq = connection.frequency
 
-				if(Compiler && autoruncode)
-					Compiler.Run(signal)	// execute the code
-
-			var/can_send = relay_information(signal, "/obj/machinery/telecomms/hub")
-			if(!can_send)
-				relay_information(signal, "/obj/machinery/telecomms/broadcaster")
+	var/list/receive = list()
 
 
-/obj/machinery/telecomms/server/proc/setcode(var/t)
-	if(t)
-		if(istext(t))
-			rawcode = t
+	// --- Broadcast only to intercom devices ---
 
-/obj/machinery/telecomms/server/proc/admin_log(var/mob/mob)
-	var/msg = "[key_name(mob)] has compiled a script to [src.id]"
-
-	diary << msg
-	diary << rawcode
-
-	investigation_log(I_NTSL, "[msg]<br /><pre>[rawcode]</pre>")
-
-	if (length(rawcode)) // Let's not bother the admins for empty code.
-		message_admins("[msg] ([formatJumpTo(mob)])", 0, 1)
-
-/obj/machinery/telecomms/server/proc/compile(var/mob/user)
+	if(data == 1)
+		for (var/obj/item/device/radio/intercom/R in connection.devices["[RADIO_CHAT]"])
+			var/turf/position = get_turf(R)
+			if(position && position.z == level)
+				receive |= R.send_hear(display_freq, level)
 
 
-	if(Compiler)
-		admin_log(user)
-		return Compiler.Compile(rawcode)
+	// --- Broadcast only to intercoms and station-bounced radios ---
 
-/obj/machinery/telecomms/server/proc/update_logs()
-	// start deleting the very first log entry
-	if(logs >= 400)
-		for(var/i = 1, i <= logs, i++) // locate the first garbage collectable log entry and remove it
-			var/datum/comm_log_entry/L = log_entries[i]
-			if(L.garbage_collector)
-				log_entries.Remove(L)
-				logs--
-				break
+	else if(data == 2)
+		for (var/obj/item/device/radio/R in connection.devices["[RADIO_CHAT]"])
 
-/obj/machinery/telecomms/server/proc/add_entry(var/content, var/input)
-	var/datum/comm_log_entry/log = new
-	var/identifier = num2text( rand(-1000,1000) + world.time )
-	log.name = "[input] ([md5(identifier)])"
-	log.input_type = input
-	log.parameters["message"] = content
-	log_entries.Add(log)
-	update_logs()
+			if(istype(R, /obj/item/device/radio/headset))
+				continue
+			var/turf/position = get_turf(R)
+			if(position && position.z == level)
+				receive |= R.send_hear(display_freq)
 
-// Simple log entry datum
 
-/datum/comm_log_entry
-	var/parameters = list() // carbon-copy to signal.data[]
-	var/name = "data packet (#)"
-	var/garbage_collector = 1 // if set to 0, will not be garbage collected
-	var/input_type = "Speech File"
+	// --- Broadcast to syndicate radio! ---
+
+	else if(data == 3)
+		var/datum/radio_frequency/syndicateconnection = radio_controller.return_frequency(SYND_FREQ)
+
+		for (var/obj/item/device/radio/R in syndicateconnection.devices["[RADIO_CHAT]"])
+			var/turf/position = get_turf(R)
+			if(position && position.z == level)
+				receive |= R.send_hear(SYND_FREQ)
+
+
+	// --- Broadcast to ALL radio devices ---
+
+	else
+		for (var/obj/item/device/radio/R in connection.devices["[RADIO_CHAT]"])
+			var/turf/position = get_turf(R)
+			if(position && position.z == level)
+				receive |= R.send_hear(display_freq)
+
+
+  /* ###### Organize the receivers into categories for displaying the message ###### */
+
+	// Understood the message:
+	var/list/heard_normal 	= list() // normal message
+
+	// Did not understand the message:
+	var/list/heard_garbled	= list() // garbled message (ie "f*c* **u, **i*er!")
+	var/list/heard_gibberish= list() // completely screwed over message (ie "F%! (O*# *#!<>&**%!")
+
+	for (var/mob/R in receive)
+
+	  /* --- Loop through the receivers and categorize them --- */
+
+		if (R.client && !(R.client.prefs.toggles & CHAT_RADIO)) //Adminning with 80 people on can be fun when you're trying to talk and all you can hear is radios.
+			continue
+
+
+		// --- Check for compression ---
+		if(compression > 0)
+
+			heard_gibberish += R
+			continue
+
+		// --- Can understand the speech ---
+
+		if (R.say_understands(M))
+
+			heard_normal += R
+
+		// --- Can't understand the speech ---
+
+		else
+			// - Just display a garbled message -
+
+			heard_garbled += R
+
+
+  /* ###### Begin formatting and sending the message ###### */
+	if (length(heard_normal) || length(heard_garbled) || length(heard_gibberish))
+
+	  /* --- Some miscellaneous variables to format the string output --- */
+		var/part_a = "<span class='radio'><span class='name'>" // goes in the actual output
+		var/freq_text // the name of the channel
+
+		// --- Set the name of the channel ---
+		switch(display_freq)
+
+			if(SYND_FREQ)
+				freq_text = "#unkn"
+			if(COMM_FREQ)
+				freq_text = "Command"
+			if(1351)
+				freq_text = "Science"
+			if(1355)
+				freq_text = "Medical"
+			if(1357)
+				freq_text = "Engineering"
+			if(1359)
+				freq_text = "Security"
+//			if(1349)
+//				freq_text = "Mining"
+			if(1347)
+				freq_text = "Supply"
+			if(DJ_FREQ)
+				freq_text = "DJ"
+		//There's probably a way to use the list var of channels in code\game\communications.dm to make the dept channels non-hardcoded, but I wasn't in an experimentive mood. --NEO
+
+
+		// --- If the frequency has not been assigned a name, just use the frequency as the name ---
+
+		if(!freq_text)
+			freq_text = format_frequency(display_freq)
+
+		// --- Some more pre-message formatting ---
+
+		var/part_b_extra = ""
+		if(data == 3) // intercepted radio message
+			part_b_extra = " <i>(Intercepted)</i>"
+
+		// Create a radio headset for the sole purpose of using its icon
+		var/obj/item/device/radio/headset/radio = new
+
+		var/part_b = "</span><b> [bicon(radio)]\[[freq_text]\][part_b_extra]</b> <span class='message'>" // Tweaked for security headsets -- TLE
+		var/part_c = "</span></span>"
+
+		if (display_freq==SYND_FREQ)
+			part_a = "<span class='syndradio'><span class='name'>"
+		else if (display_freq==COMM_FREQ)
+			part_a = "<span class='comradio'><span class='name'>"
+		else if (display_freq==SCI_FREQ)
+			part_a = "<span class='sciradio'><span class='name'>"
+		else if (display_freq==MED_FREQ)
+			part_a = "<span class='medradio'><span class='name'>"
+		else if (display_freq==ENG_FREQ)
+			part_a = "<span class='engradio'><span class='name'>"
+		else if (display_freq==SEC_FREQ)
+			part_a = "<span class='secradio'><span class='name'>"
+		else if (display_freq==SERV_FREQ)
+			part_a = "<span class='serradio'><span class='name'>"
+		else if (display_freq==SUPP_FREQ)
+			part_a = "<span class='supradio'><span class='name'>"
+		else if (display_freq==DSQUAD_FREQ)
+			part_a = "<span class='dsquadradio'><span class='name'>"
+		else if (display_freq==RESTEAM_FREQ)
+			part_a = "<span class='dsquadradio'><span class='name'>"
+		else if (display_freq==AIPRIV_FREQ)
+			part_a = "<span class='aiprivradio'><span class='name'>"
+		else if (display_freq==DJ_FREQ)
+			part_a = "<span class='djradio'><span class='name'>"
+
+		// --- This following recording is intended for research and feedback in the use of department radio channels ---
+
+		var/part_blackbox_b = "</span><b> \[[freq_text]\]</b> <span class='message'>" // Tweaked for security headsets -- TLE
+		var/blackbox_msg = "[part_a][source][part_blackbox_b]\"[text]\"[part_c]"
+		//var/blackbox_admin_msg = "[part_a][M.name] (Real name: [M.real_name])[part_blackbox_b][quotedmsg][part_c]"
+
+		//BR.messages_admin += blackbox_admin_msg
+		if(istype(blackbox))
+			switch(display_freq)
+				if(1459)
+					blackbox.msg_common += blackbox_msg
+				if(1351)
+					blackbox.msg_science += blackbox_msg
+				if(1353)
+					blackbox.msg_command += blackbox_msg
+				if(1355)
+					blackbox.msg_medical += blackbox_msg
+				if(1357)
+					blackbox.msg_engineering += blackbox_msg
+				if(1359)
+					blackbox.msg_security += blackbox_msg
+				if(1441)
+					blackbox.msg_deathsquad += blackbox_msg
+				if(1345)
+					blackbox.msg_ert += blackbox_msg
+				if(1213)
+					blackbox.msg_syndicate += blackbox_msg
+				if(1349)
+					blackbox.msg_service += blackbox_msg
+				if(1347)
+					blackbox.msg_cargo += blackbox_msg
+				else
+					blackbox.messages += blackbox_msg
+
+		//End of research and feedback code.
+
+	 /* ###### Send the message ###### */
+
+		/* --- Process all the mobs that heard the voice normally (understood) --- */
+
+		if (length(heard_normal))
+			var/rendered = "[part_a][source][part_b]\"[text]\"[part_c]"
+
+			for (var/mob/R in heard_normal)
+				R.show_message(rendered, 2)
+
+		/* --- Process all the mobs that heard a garbled voice (did not understand) --- */
+			// Displays garbled message (ie "f*c* **u, **i*er!")
+
+		if (length(heard_garbled))
+			var/quotedmsg = "\"[stars(text)]\""
+			var/rendered = "[part_a][source][part_b][quotedmsg][part_c]"
+
+			for (var/mob/R in heard_garbled)
+				R.show_message(rendered, 2)
+
+
+		/* --- Complete gibberish. Usually happens when there's a compressed message --- */
+
+		if (length(heard_gibberish))
+			var/quotedmsg = "\"[Gibberish(text, compression + 50)]\""
+			var/rendered = "[part_a][Gibberish(source, compression + 50)][part_b][quotedmsg][part_c]"
+
+			for (var/mob/R in heard_gibberish)
+				R.show_message(rendered, 2)
+*/
+
+//Use this to test if an obj can communicate with a Telecommunications Network
+
+/atom/proc/test_telecomms()
+	var/datum/signal/signal = src.telecomms_process()
+	var/turf/position = get_turf(src)
+	return (position.z in signal.data["level"] && signal.data["done"])
+
+/atom/proc/telecomms_process()
+
+
+	// First, we want to generate a new radio signal
+	var/datum/signal/signal = getFromPool(/datum/signal)
+	signal.transmission_method = 2 // 2 would be a subspace transmission.
+	var/turf/pos = get_turf(src)
+
+	// --- Finally, tag the actual signal with the appropriate values ---
+	signal.data = list(
+		"slow" = 0, // how much to sleep() before broadcasting - simulates net lag
+		"message" = "TEST",
+		"compression" = rand(45, 50), // If the signal is compressed, compress our message too.
+		"traffic" = 0, // dictates the total traffic sum that the signal went through
+		"type" = 4, // determines what type of radio input it is: test broadcast
+		"reject" = 0,
+		"done" = 0,
+		"level" = pos.z // The level it is being broadcasted at.
+	)
+	signal.frequency = 1459// Common channel
+
+  //#### Sending the signal to all subspace receivers ####//
+	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
+		R.receive_signal(signal)
+
+	sleep(rand(10,25))
+
+	//world.log << "Level: [signal.data["level"]] - Done: [signal.data["done"]]"
+
+	return signal

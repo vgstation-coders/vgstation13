@@ -894,7 +894,7 @@ obj/item/weapon/circuitboard/rdserver
 // Telecomms circuit boards:
 
 /obj/item/weapon/circuitboard/telecomms/receiver
-	name = "Circuit Board (Subspace Receiver)"
+	name = "Circuit Board (Telecomms Subspace Receiver)"
 	desc = "A circuit board used to run a machine that recieves subspace transmissions in telecommunications systems."
 	build_path = "/obj/machinery/telecomms/receiver"
 	board_type = MACHINE
@@ -906,7 +906,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/micro_laser" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/hub
-	name = "Circuit Board (Hub Mainframe)"
+	name = "Circuit Board (Telecomms Hub)"
 	desc = "A circuit board used to run a machine that works as a hub for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/hub"
 	board_type = MACHINE
@@ -917,7 +917,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
 
 /obj/item/weapon/circuitboard/telecomms/relay
-	name = "Circuit Board (Relay Mainframe)"
+	name = "Circuit Board (Telecomms Relay)"
 	desc = "A circuit board used to run a machine that works as a relay for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/relay"
 	board_type = MACHINE
@@ -928,7 +928,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
 
 /obj/item/weapon/circuitboard/telecomms/bus
-	name = "Circuit Board (Bus Mainframe)"
+	name = "Circuit Board (Telecomms Bus Mainframe)"
 	desc = "A circuit board used to run a machine that works as a bus for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/bus"
 	board_type = MACHINE
@@ -939,7 +939,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/processor
-	name = "Circuit Board (Processor Unit)"
+	name = "Circuit Board (Telecomms Processor Unit)"
 	desc = "A circuit board used to run a machine that works as a processing unit for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/processor"
 	board_type = MACHINE
@@ -953,7 +953,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/server
-	name = "Circuit Board (Telecommunication Server)"
+	name = "Circuit Board (Telecomms Server)"
 	desc = "A circuit board used to run a machine that works as a frequency server for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/server"
 	board_type = MACHINE
@@ -964,7 +964,7 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/broadcaster
-	name = "Circuit Board (Subspace Broadcaster)"
+	name = "Circuit Board (Telecomms Subspace Broadcaster)"
 	desc = "A circuit board used to run a machine that sends subspace transmissions in telecommunications systems."
 	build_path = "/obj/machinery/telecomms/broadcaster"
 	board_type = MACHINE
