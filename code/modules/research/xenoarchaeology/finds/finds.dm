@@ -390,7 +390,7 @@
 				new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 				if(prob(10)) // 10% chance to be a smart gun
 					new_item.can_take_pai = TRUE
-					new_item.+desc = "There seems to be some sort of slot in the handle."
+					new_item.desc += "There seems to be some sort of slot in the handle."
 				new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
 
 				//5% chance to explode when first fired
@@ -418,7 +418,7 @@
 			new_item.desc = "This is an antique projectile weapon, you're not sure if it will fire or not."
 			if(prob(10)) // 10% chance to be a smart gun
 				new_item.can_take_pai = TRUE
-				new_item.+desc = "There seems to be some sort of slot in the handle."
+				new_item.desc += "There seems to be some sort of slot in the handle."
 
 			//let's get some ammunition in this gun : weighted to pick available ammo
 			new_gun.caliber = pick(50;list("357" = 1),
