@@ -8,7 +8,7 @@
 #ifdef BLUESPACELEAK_FLAT
 	icon_state = "bluespace"
 #else
-	icon_state = "bluespacecrystal1"
+	icon_state = "bluespace_moving"
 #endif
 
 	light_range = 5
@@ -25,12 +25,7 @@
 /turf/unsimulated/wall/supermatter/New()
 	processing_objects |= src
 #ifndef BLUESPACELEAK_FLAT
-	icon_state = "bluespacecrystal[rand(1,3)]"
-	var/nturns=pick(0,3)
-	if(nturns)
-		var/matrix/M = matrix()
-		M.Turn(90*nturns)
-		transform = M
+	icon_state = "bluespace_moving"
 #endif
 	return ..()
 
