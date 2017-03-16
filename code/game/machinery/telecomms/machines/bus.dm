@@ -18,10 +18,21 @@
 	use_power = 1
 	idle_power_usage = 50
 	machinetype = 2
-	heatgen = 20
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/bus"
+	heating_power = 20
 	netspeed = 40
 	var/change_frequency = 0
+
+/obj/machinery/telecomms/bus/New()
+	..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telecomms/bus,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
+	)
+
+	RefreshParts()
 
 /obj/machinery/telecomms/bus/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 

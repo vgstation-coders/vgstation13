@@ -16,8 +16,21 @@
 	use_power = 1
 	idle_power_usage = 30
 	machinetype = 1
-	heatgen = 0
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/receiver"
+	heating_power = 0
+
+/obj/machinery/telecomms/receiver/New()
+	..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telecomms/receiver,
+		/obj/item/weapon/stock_parts/subspace/ansible,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser
+	)
+
+	RefreshParts()
 
 /obj/machinery/telecomms/receiver/receive_signal(datum/signal/signal)
 #ifdef SAY_DEBUG

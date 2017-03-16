@@ -16,12 +16,24 @@
 	use_power = 1
 	idle_power_usage = 30
 	machinetype = 8
-	heatgen = 0
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/relay"
+	heating_power = 0
 	netspeed = 5
 	long_range_link = 1
 	var/broadcasting = 1
 	var/receiving = 1
+
+/obj/machinery/telecomms/relay/New()
+	..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telecomms/relay,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
+	)
+
+	RefreshParts()
 
 /obj/machinery/telecomms/relay/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 

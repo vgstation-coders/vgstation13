@@ -18,11 +18,22 @@
 	use_power = 1
 	idle_power_usage = 80
 	machinetype = 7
-	heatgen = 40
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/hub"
+	heating_power = 40
 	long_range_link = 1
 	netspeed = 40
 
+/obj/machinery/telecomms/hub/New()
+	..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telecomms/hub,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator
+	)
+
+	RefreshParts()
 
 /obj/machinery/telecomms/hub/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 	if(is_freq_listening(signal))

@@ -29,14 +29,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/toggled = 1 	// Is it toggled on
 	var/on = 1
 	var/integrity = 100 // basically HP, loses integrity by heat
-	var/heatgen = 20 // how much heat to transfer to the environment
 	var/delay = 10 // how many process() ticks to delay per heat
-	var/heating_power = 40000
+	var/heating_power = 40000 // how much heat to transfer to the environment
 	var/long_range_link = 0	// Can you link it across Z levels or on the otherside of the map? (Relay & Hub)
-	var/circuitboard = null // string pointing to a circuitboard type
 	var/hide = 0				// Is it a hidden machine?
 	var/listening_level = 0	// 0 = auto set in New() - this is the z level that the machine is listening to.
-
 
 /obj/machinery/telecomms/proc/relay_information(datum/signal/signal, filter, copysig, amount = 20)
 	// relay signal to all linked machinery that are of type [filter]. If signal has been sent [amount] times, stop sending
@@ -72,7 +69,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			if(long_range_link == 0 && machine.long_range_link == 0)
 				continue
 		// If we're sending a copy, be sure to create the copy for EACH machine and paste the data
-		var/datum/signal/copy = getFromPool(/datum/signal)
+		var/datum/signal/copy = new()
 		if(copysig)
 
 			copy.transmission_method = 2
@@ -146,12 +143,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 
 /obj/machinery/telecomms/New()
-	if(ticker) // if built in the round
-		construct_op = 3
-		stat |= BROKEN
-
 	telecomms_list += src
 	..()
+
+	update_name()
 
 	//Set the listening_level if there's none.
 	if(!listening_level)
@@ -186,14 +181,22 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 					break
 
 /obj/machinery/telecomms/update_icon()
-	if(on)
+	overlays.Cut()
+	if (on)
 		icon_state = initial(icon_state)
 	else
 		icon_state = "[initial(icon_state)]_off"
 
+	if (panel_open)
+		overlays += "[initial(icon_state)]_panel"
+
+/obj/machinery/telecomms/proc/update_name()
+	name = initial(name)
+
+	if (id != "NULL")
+		name += " ([id])"
+
 /obj/machinery/telecomms/proc/update_power()
-
-
 	if(toggled)
 		if(stat & (BROKEN|NOPOWER|EMPED) || integrity <= 0) // if powered, on. if not powered, off. if too damaged, off
 			on = 0
@@ -201,6 +204,14 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			on = 1
 	else
 		on = 0
+
+/obj/machinery/telecomms/power_change()
+	..()
+	update_power_and_icon()
+
+/obj/machinery/telecomms/proc/update_power_and_icon()
+	update_power()
+	update_icon()
 
 /obj/machinery/telecomms/process()
 	update_power()
@@ -218,53 +229,46 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(prob(100/severity))
 		if(!(stat & EMPED))
 			stat |= EMPED
+			update_power_and_icon()
 			var/duration = (300 * 10)/severity
 			spawn(rand(duration - 20, duration + 20)) // Takes a long time for the machines to reboot.
 				stat &= ~EMPED
+				update_power_and_icon()
 	..()
 
 /obj/machinery/telecomms/proc/checkheat()
 	// Checks heat from the environment and applies any integrity damage
 	var/datum/gas_mixture/environment = loc.return_air()
-	switch(environment.temperature)
-		if(T0C to (T20C + 20))
-			integrity = Clamp(integrity, 0, 100)
-		if((T20C + 20) to (T0C + 70))
-			integrity = max(0, integrity - 1)
-	if(delay)
+	if (environment.temperature > T20C + 20)
+		set_integrity(max(0, get_integrity() - 1))
+		if (get_integrity() <= 0)
+			update_power()
+	if(delay > 0)
 		delay--
-	else
-		// If the machine is on, ready to produce heat, and has positive traffic, genn some heat
-		if(on && traffic > 0)
-			produce_heat(heatgen)
-			delay = initial(delay)
+		return
+	// If the machine is on, ready to produce heat, and has positive traffic, genn some heat
+	if(on && traffic > 0)
+		produce_heat()
+		delay = initial(delay)
 
-/obj/machinery/telecomms/proc/produce_heat(heat_amt)
-	if(heatgen == 0)
+/obj/machinery/telecomms/proc/produce_heat()
+	if(!heating_power)
 		return
 
-	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
+	if(~stat & (NOPOWER|BROKEN)) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
-			if(env.temperature < (heat_amt+T0C))
+			var/transfer_moles = 0.25 * env.total_moles()
 
-				var/transfer_moles = 0.25 * env.total_moles()
-
-				var/datum/gas_mixture/removed = env.remove(transfer_moles)
-
-				if(removed)
-
-					var/heat_capacity = removed.heat_capacity()
-					if(heat_capacity == 0 || heat_capacity == null)
-						heat_capacity = 1
-					removed.temperature = min((removed.temperature*heat_capacity + heating_power)/heat_capacity, 1000)
-
-				env.merge(removed)
-
-
-
-
+			var/datum/gas_mixture/removed = L.remove_air(transfer_moles)
+			
+			if(removed)
+				var/heat_capacity = removed.heat_capacity() || 1 // Prevent division by zero.
+				removed.temperature += heating_power/heat_capacity
+				L.assume_air(removed)
+				
+				use_power(heating_power)
 /**
 
 	Here is the big, bad function that broadcasts a message given the appropriate
@@ -344,7 +348,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 	var/list/radios = list()
 
-	var/atom/movable/virtualspeaker/virt = getFromPool(/atom/movable/virtualspeaker, null)
+	var/atom/movable/virtualspeaker/virt = new(null)
 	virt.name = speech.name
 	virt.job = speech.job
 	//virt.languages = AM.languages
@@ -435,7 +439,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 #endif
 
 	spawn(50)
-		returnToPool(virt)
+		qdel(virt)
 
 /* Obsolete, RIP
 /proc/Broadcast_SimpleMessage(var/source, var/frequency, var/text, var/data, var/mob/M, var/compression, var/level)
@@ -680,16 +684,14 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	return (position.z in signal.data["level"] && signal.data["done"])
 
 /atom/proc/telecomms_process()
-
-
 	// First, we want to generate a new radio signal
-	var/datum/signal/signal = getFromPool(/datum/signal)
-	signal.transmission_method = 2 // 2 would be a subspace transmission.
+	var/datum/signal/signal = new()
+	signal.transmission_method = SIGNAL_SUBSPACE
 	var/turf/pos = get_turf(src)
 
 	// --- Finally, tag the actual signal with the appropriate values ---
 	signal.data = list(
-		"slow" = 0, // how much to sleep() before broadcasting - simulates net lag
+		//"slow" = 0, // how much to sleep() before broadcasting - simulates net lag
 		"message" = "TEST",
 		"compression" = rand(45, 50), // If the signal is compressed, compress our message too.
 		"traffic" = 0, // dictates the total traffic sum that the signal went through

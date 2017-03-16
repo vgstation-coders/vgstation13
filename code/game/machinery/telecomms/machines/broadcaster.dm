@@ -18,9 +18,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	use_power = 1
 	idle_power_usage = 25
 	machinetype = 5
-	heatgen = 0
+	heating_power = 0
 	delay = 7
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/broadcaster"
 
 /obj/machinery/telecomms/broadcaster/receive_information(var/datum/signal/signal, var/obj/machinery/telecomms/machine_from)
 	// Don't broadcast rejected signals
@@ -52,7 +51,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	   /** #### - Normal Broadcast - #### **/
 
 		if(signal.data["type"] == 0)
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], signal.data["level"])
@@ -68,7 +67,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 								  signal.data["message"],null, null,
 								  signal.data["compression"], listening_level)
 			*/
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], null, signal.data["compression"], signal.data["level"])
@@ -82,7 +81,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 			/* ###### Broadcast a message using signal.data ###### */
 				// Parameter "data" as 4: AI can't track this person/mob
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 4, signal.data["compression"], signal.data["level"])

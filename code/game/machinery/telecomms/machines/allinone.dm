@@ -13,8 +13,11 @@
 	use_power = 0
 	idle_power_usage = 0
 	machinetype = 6
-	heatgen = 0
+	heating_power = 0
 	var/intercept = 0 // if nonzero, broadcasts all messages to syndicate channel
+
+	// Don't allow CROWDESTROY because it has no circuit and can't be rebuilt.
+	machine_flags = SCREWTOGGLE | MULTITOOL_MENU
 
 /obj/machinery/telecomms/allinone/receive_signal(datum/signal/signal)
 #ifdef SAY_DEBUG
@@ -44,7 +47,7 @@
 
 
 		if(signal.frequency == SYND_FREQ) // if syndicate broadcast, just
-			var/datum/speech/speech = getFromPool(/datum/speech)
+			var/datum/speech/speech = new
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], list(0, z))
