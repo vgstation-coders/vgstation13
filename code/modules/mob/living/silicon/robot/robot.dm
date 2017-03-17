@@ -319,12 +319,12 @@
 			module_sprites["Basic"] = "secborg"
 			module_sprites["Sleek"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
-			module_sprites["Bloodhound"] = "bloodhound"
+			module_sprites["Hound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
-			module_sprites["Marina-SC"] = "marinaSC"
+			module_sprites["Marina-PK"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
-			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			to_chat(src, "<font size='12' color='red'><b><b>You are expected to follow your laws above all else. You are not a Security Officer.</b></font>")
 			speed = 0
 
 		if("TG17355")
