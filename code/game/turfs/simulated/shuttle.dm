@@ -65,6 +65,7 @@
 /turf/simulated/shuttle/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
+		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return
@@ -98,6 +99,7 @@
 /turf/simulated/shuttle/floor4/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
+		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return
