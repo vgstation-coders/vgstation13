@@ -173,9 +173,12 @@
 		pronoun = "They are"
 	else
 		pronoun = "It is"
+
 	..(user, " [pronoun] a [size] item.")
+	if(price && price > 0)
+		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop > 0) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
-		user << "<span class='danger'>It's stuck to your hands!</span>"
+		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
 
 
 /obj/item/attack_ai(mob/user as mob)

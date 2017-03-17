@@ -107,6 +107,7 @@
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
 		new /obj/item/device/destTagger, \
+		new /obj/item/device/priceTagger, \
 
 		),
 		"Misc_Other"=list(
