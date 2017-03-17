@@ -396,9 +396,16 @@
 
 	update_client_hook(loc)
 
+	if(locked_to)
+		spawn(1)
+			if(locked_to.loc != loc)
+				unlock_from()
+
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
 	return 1
+
+
 
 /atom/movable/proc/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
