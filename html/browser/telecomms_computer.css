@@ -1,0 +1,99 @@
+#logtemp {
+	font-size: 17px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+#listcontrols {
+	margin-top: 10px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+#network-form {
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+
+#network {
+	font-weight: bold;
+}
+
+#network input {
+	font-family: Consolas, monospace;
+}
+
+.code {
+	font-family: Consolas, monospace;
+	background-color: #202020;
+	border-style: solid;
+	border-radius: 4px;
+	border-width: 1px;
+	border-color: black;
+	padding: 2px;
+	color: #aaaaaa;
+	display: inline-block;
+	line-height: normal;
+	vertical-align: middle;
+}
+
+.vert {
+	vertical-align: middle;
+}
+
+a#flush {
+	display: inline-block;
+	margin-top: 20px;
+	line-height: normal;
+}
+
+td.right {
+	padding-left: 5px;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+#logsmessage {
+	margin-top: 15px;
+	display: inline-block;
+}
+
+
+.tempbad {
+	color: #D70B00;
+}
+
+.tempneut {
+	color: #3374b4;
+}
+
+.tempmsg::after, .tempmsg::before {
+	content: " - ";
+}
+
+input[type="submit"] {
+	font-family: Consolas;
+}
+
+.error {
+	color: #ff7c7c;
+}
+
+.packet {
+	color: #7fdd85;
+}
+
+#logs {
+	margin-left: 20px;
+}
+
+.messageid, .packettype {
+	padding-right: 10px;
+}
+
+tr.rowspacing > td{
+	padding-bottom: 7px;
+}

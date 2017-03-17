@@ -45,9 +45,9 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 				priority = "Undetermined"
 
 /obj/machinery/message_server
-	icon = 'icons/obj/machines/research.dmi'
-	icon_state = "server"
-	name = "Messaging Server"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "pda_server"
+	name = "messaging server"
 	density = 1
 	anchored = 1.0
 	use_power = 1
@@ -107,11 +107,11 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 
 /obj/machinery/message_server/update_icon()
 	if(stat & (BROKEN|NOPOWER))
-		icon_state = "server-nopower"
+		icon_state = "[initial(icon_state)]-nopower"
 	else if (disabled)
-		icon_state = "server-off"
+		icon_state = "[initial(icon_state)]-off"
 	else
-		icon_state = "server-on"
+		icon_state = "[initial(icon_state)]-on"
 
 	return
 
@@ -175,9 +175,9 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 var/obj/machinery/blackbox_recorder/blackbox
 
 /obj/machinery/blackbox_recorder
-	icon = 'icons/obj/stationobjs.dmi'
+	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "blackbox"
-	name = "Blackbox Recorder"
+	name = "blackbox recorder"
 	density = 1
 	anchored = 1.0
 	use_power = 1

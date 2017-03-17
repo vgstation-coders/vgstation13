@@ -31,7 +31,7 @@
 	//anchored = 1
 	//use_power = 0
 	//idle_power_usage = 0
-	heatgen = 0
+	heating_power = 0
 	autolinkers = list("c_relay")
 
 //HUB
@@ -139,11 +139,6 @@
 
 /obj/machinery/telecomms/server/presets
 	network = "tcommsat"
-
-/obj/machinery/telecomms/server/presets/New()
-	..()
-	name = id
-
 
 /obj/machinery/telecomms/server/presets/science
 	id = "Science Server"
