@@ -26,7 +26,7 @@
 	var/list/memory = list()	// stored memory
 	var/rawcode = ""	// the code to compile (raw text)
 	var/datum/TCS_Compiler/Compiler	// the compiler that compiles and runs the code
-	var/autoruncode = 0		// 1 if the code is set to run every time a signal is picked up
+	var/autoruncode = FALSE		// TRUE if the code is set to run every time a signal is picked up
 
 	var/encryption = "null" // encryption key: ie "password"
 	var/salt = "null"		// encryption salt: ie "123comsat"

@@ -3,7 +3,7 @@
 	var/network = "NULL" // The chose network string
 	var/list/machines = list() // The machines being worked with
 	var/temp = "" // Temporary feedback messages
-
+	
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_tcomsat)
 

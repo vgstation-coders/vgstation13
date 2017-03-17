@@ -3,11 +3,11 @@
 	desc = "The ability to see what the command staff was talking about at your fingertips."
 	icon_state = "comm_serv"
 	circuit = "/obj/item/weapon/circuitboard/comm_server"
-	var/obj/machinery/telecomms/server/SelectedServer
+	var/obj/machinery/telecomms/server/selected = null // Currently selected machine
 	var/universal_translate = FALSE // set to TRUE if it can translate nonhuman speech
 
 /obj/machinery/computer/telecomms/server/Destroy()
-	SelectedServer = null
+	selected = null
 	return ..()
 
 /obj/machinery/computer/telecomms/server/attack_hand(var/mob/user)
@@ -58,10 +58,10 @@
 
 		if (SCREEN_SELECTED)
 			var/traffic = ""
-			if (SelectedServer.totaltraffic >= 1024)
-				traffic = "round(SelectedServer.totaltraffic / 1024) TiB"
+			if (selected.totaltraffic >= 1024)
+				traffic = "round(selected.totaltraffic / 1024) TiB"
 			else
-				traffic = "[SelectedServer.totaltraffic] GiB"
+				traffic = "[selected.totaltraffic] GiB"
 
 			dat += {"
 				<div id='listcontrols'>
@@ -75,7 +75,7 @@
 					</tr>
 					<tr>
 						<td><b>Currently selected server:</b></td>
-						<td class="right">[SelectedServer.id]</td>
+						<td class="right">[selected.id]</td>
 					</tr>
 					<tr>
 						<td><b>Total recorded traffic:</b></td>
@@ -88,7 +88,7 @@
 			"}
 
 			var/i = 0
-			for(var/datum/comm_log_entry/C in SelectedServer.log_entries)
+			for(var/datum/comm_log_entry/C in selected.log_entries)
 				i++
 				switch(C.input_type)
 					if ("Speech File")
@@ -204,7 +204,7 @@
 	if (href_list["viewserver"])
 		var/obj/machinery/telecomms/T = locate(href_list["viewserver"]) in machines
 		if (T)
-			SelectedServer = T
+			selected = T
 			screen = SCREEN_SELECTED
 		. = TRUE
 
@@ -221,10 +221,10 @@
 		if (!allowed(usr))
 			set_temp("<span class='warning'>FAILED: ACCESS DENIED.</span>", BAD)
 
-		else if (SelectedServer)
+		else if (selected)
 			var/datum/comm_log_entry/D
 			try
-				D = SelectedServer.log_entries[text2num(href_list["delete"])]
+				D = selected.log_entries[text2num(href_list["delete"])]
 			catch
 				// Could be Out of Bounds, turning it into a float because of href exploits, anything.
 				return TRUE
@@ -233,7 +233,7 @@
 
 			set_temp("DELETED ENTRY: [D.name]", NEUTRAL)
 
-			SelectedServer.log_entries.Remove(D)
+			selected.log_entries.Remove(D)
 			qdel(D)
 		else
 			set_temp("FAILED: NO SELECTED MACHINE", BAD)

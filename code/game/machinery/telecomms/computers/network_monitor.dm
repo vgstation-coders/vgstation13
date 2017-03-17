@@ -8,7 +8,11 @@
 	desc = "Shows the network graph of all machinery on a network."
 	icon_state = "comm_monitor"
 	circuit = "/obj/item/weapon/circuitboard/comm_monitor"
-	var/obj/machinery/telecomms/selected
+	var/obj/machinery/telecomms/selected = null // Currently selected machine
+
+/obj/machinery/computer/telecomms/monitor/Destroy()
+	selected = null
+	return ..()
 
 /obj/machinery/computer/telecomms/monitor/attack_hand(var/mob/user)
 	if(stat & (BROKEN|NOPOWER))
@@ -16,6 +20,10 @@
 	user.set_machine(src)
 
 	var/dat = {"
+		<div id='logtemp'>
+			<span class='[(auth ? "good" : "bad")]'>[(auth ? "Authenticated" : "Unauthenticated")]</span>
+		</div>
+		<hr/>
 		<div id='logtemp'>
 			[temp]
 		</div>
@@ -42,11 +50,13 @@
 				"}
 				for (var/obj/machinery/telecomms/T in machines)
 					// Cut out brackets.
-					var/ref = copytext("\ref[src]", 2, -1)
+					var/ref = copytext("\ref[T]", 2, -1)
 					dat += {"
 						<li>
 							<span class="code">[ref]</span>
-							<a class='vert' href="'?src=\ref[src];viewmachine=\ref[T]'>[T.name]</a>
+							<a class='vert' href='?src=\ref[src];viewmachine=\ref[T]'>
+								[T.name]
+							</a>
 						</li>
 					"}
 				dat += {"
@@ -80,11 +90,13 @@
 			for (var/obj/machinery/telecomms/T in selected.links)
 				if (!T.hide)
 					// Cut off brackets
-					var/ref = copytext("\ref[src]", 2, -1)
+					var/ref = copytext("\ref[T]", 2, -1)
 					dat += {"
 						<li>
 							<span class="code">[ref]</span>
-							<a class='vert' href='?src\ref[src];viewmachine=\ref[T]'>[T.name]</a>
+							<a class='vert' href='?src=\ref[src];viewmachine=\ref[T]'>
+								[T.name]
+							</a>
 						</li>
 					"}
 			dat += "</ol>"
@@ -104,7 +116,7 @@
 	usr.set_machine(src)
 
 	if (href_list["viewmachine"])
-		var/obj/machinery/telecomms/T = locate() in machines
+		var/obj/machinery/telecomms/T = locate(href_list["viewmachine"]) in machines
 		if (T)
 			screen = SCREEN_SELECTED
 			selected = T

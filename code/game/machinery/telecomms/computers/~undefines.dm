@@ -3,3 +3,4 @@
 
 #undef SCREEN_MAIN
 #undef SCREEN_SERVER
+#undef SCREEN_EDITOR
