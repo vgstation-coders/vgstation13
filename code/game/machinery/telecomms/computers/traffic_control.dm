@@ -10,7 +10,7 @@
 	var/mob/lasteditor
 	var/list/viewingcode = list()
 
-	var/compiling_errors = ""
+	var/result_text =  "" // Compilation results
 
 	var/storedcode = ""
 	var/compilingerrors
@@ -31,6 +31,11 @@
 		lasteditor = user
 	
 	var/dat = {"
+		<div id='logtemp'>
+			<span class='[(auth ? "good" : "bad")]'>[(auth ? "Authenticated" : "Unauthenticated")]</span>
+			<a href='?src=\ref[src];auth=1'>[(auth ? auth.registered_name : "Insert ID")]</a>
+		</div>
+		<hr/>
 		<div id='logtemp'>
 			[temp]
 		</div>
@@ -96,11 +101,8 @@
 					<tr>
 						<td><b>Actions:</b></td>
 						<td class="right">
-							<a href='?src=\ref[src];operation=editcode'>
+							<a href='?src=\ref[src];editcode=1'>
 								Edit code
-							</a>
-							<a href='?src=\ref[src];operation=wipecode'>
-								<span class='average'>Wipe code</span>
 							</a>
 						</td>
 					</tr>
@@ -109,20 +111,24 @@
 			"}
 			if (allservers)
 				dat += {"
-					<a href='?src=\ref[src];operation=runon'>ALWAYS</a>
-					<a href='?src=\ref[src];operation=runoff'>NEVER</a>
+					<td>
+						<a href='?src=\ref[src];runon=1'>ALWAYS</a>
+						<a href='?src=\ref[src];runoff=1'>NEVER</a>
+					</td>
 				"}
 			else
 				dat += {"
-					<a href='?src=\ref[src];operation=togglerun'>[selected.autoruncode ? "ALWAYS" : "NEVER"]</a>
+					<td>
+						<a href='?src=\ref[src];togglerun=1'>[selected.autoruncode ? "ALWAYS" : "NEVER"]</a>
+					</td>
 				"}
 			
-			dat += "</table>"
+			dat += "</tr></table>"
 		if (SCREEN_EDITOR)
 			if (editingcode == user)
 				dat += {"
 					<div id='listcontrols'>
-						<a href='?src=\ref[src];codeback'>Back</a>
+						<a href='?src=\ref[src];codeback=1'>Back</a>
 						<a href='?src=\ref[src];mainmenu=1'>Main menu</a>
 						<a href='?src=\ref[src];refresh=1'>Refresh</a>
 					</div>
@@ -172,7 +178,7 @@
 					<a href="javascript:compileCode()">Compile</a>
 					<a href="javascript:clearCode()">Clear</a>
 					<div class="item">
-						[compiling_errors]
+						[result_text]
 					</div>
 					<form action="byond://" method="POST" id="theform">
 						<input type="hidden" name="choice" value="Compile">
@@ -203,7 +209,7 @@
 						</script>
 					</div>
 					<div class="item">
-						[compiling_errors]
+						[result_text]
 					</div>
 				"} //anything typed will be overridden anyways by the one who is editing the code
 			
@@ -211,6 +217,7 @@
 	B.add_script("codemirror-compressed", 'nano/codemirror/codemirror-compressed.js') // A custom minified JavaScript file of CodeMirror, with the following plugins: CSS Mode, NTSL Mode, CSS-hint addon, Search addon, Sublime Keymap.
 	B.add_stylesheet("codemirror", 'nano/codemirror/codemirror.css')                  // A CSS sheet containing the basic stylings and formatting information for CodeMirror.
 	B.add_stylesheet("lesser-dark", 'nano/codemirror/lesser-dark.css')                // A theme for CodeMirror to use, which closely resembles the rest of the NanoUI style.
+	B.add_stylesheet("telecomms_computer.css", 'html/browser/telecomms_computer.css')
 	B.set_content(dat)
 	B.open()
 	temp = "&nbsp;"
@@ -234,7 +241,8 @@
 	return .
 
 /obj/machinery/computer/telecomms/traffic/Topic(href, href_list)
-	if(..())
+	. = ..()
+	if (.)
 		return
 
 	var/mob/user = usr
@@ -252,26 +260,48 @@
 	add_fingerprint(usr)
 	usr.set_machine(src)
 
-	if(href_list["auth"])
-		if(iscarbon(usr))
+	if (href_list["viewserver"])
+		if (href_list["viewserver"] == "all")
+			allservers = TRUE
+			screen = SCREEN_SELECTED
+		else
+			allservers = FALSE
+			var/obj/machinery/telecomms/server/T = locate(href_list["viewserver"]) in machines
+			if (T)
+				selected = T
+				screen = SCREEN_SELECTED
+		. = TRUE
+
+	if (href_list["flush"])
+		machines.Cut()
+		screen = SCREEN_MAIN
+		. = TRUE
+
+	if (href_list["mainmenu"])
+		screen = SCREEN_MAIN
+		. = TRUE
+
+	if (href_list["auth"])
+		if (iscarbon(usr))
 			var/mob/living/carbon/C = usr
-			if(!auth)
+			if (!auth)
 				var/obj/item/weapon/card/id/I = C.get_active_hand()
-				if(istype(I))
-					if(check_access(I))
-						if(C.drop_item(I, src))
+				if (istype(I))
+					if (check_access(I))
+						if (C.drop_item(I, src))
 							auth = I
-							create_log("has logged in.", usr)
+							set_temp("LOGGED IN")
 			else
-				create_log("has logged out.", usr)
 				auth.forceMove(src.loc)
 				C.put_in_hands(auth)
 				auth = null
+				screen = SCREEN_MAIN
+				set_temp("LOGGED OUT")
 			updateUsrDialog()
 			return
 
 	if (!auth && !issilicon(usr) && !emagged)
-		to_chat(usr, "<span class='warning'>ACCESS DENIED.</span>")
+		set_temp("ACCESS DENIED", BAD)
 		return
 
 	if(href_list["print"])
@@ -284,109 +314,64 @@
 				return
 			if (user != editingcode)
 				return
+			var/list/obj/machinery/telecomms/server/target_servers = list()
 			if (selected)
-				var/obj/machinery/telecomms/server/server = selected
-				server.setcode(code)
-
-				spawn(0)
-					compiling_errors = "Please wait, compiling..."
-					updateUsrDialog()
-
+				target_servers.Add(selected)
+			else if (allservers)
+				target_servers = machines
+			spawn(0)
+				result_text = "Please wait, compiling..."
+				updateUsrDialog()
+				for (var/obj/machinery/telecomms/server/server in target_servers)
+					server.setcode(code)
 					var/list/compileerrors = server.compile(user)
 					if (!telecomms_check(user))
 						return
 					if (compileerrors.len)
-						compiling_errors = "<b>Compile errors</b>"
+						result_text = "<b>Compilation errors:</b><br>"
 						for (var/datum/scriptError/e in compileerrors)
-							compiling_errors += "[e.message]<br>"
-						compiling_errors += "([compileerrors.len] errors)"
-					else
-						compiling_errors = "TCS compilation successful!<br>"
-						compiling_errors += "(0 errors)"
-
-					updateUsrDialog()
-			if (allservers)
-				spawn(0)
-					compiling_errors = "Please wait, compiling..."
-					updateUsrDialog()
-
-					for (var/obj/machinery/telecomms/server/server in machines)
-						server.setcode(code)
-						var/list/compileerrors = server.compile(user)
-						if (!telecomms_check(user))
-							return
-						if (compileerrors.len)
-							compiling_errors = "<b>Compile errors</b><br>"
-							for (var/datum/scriptError/e in compileerrors)
-								compiling_errors += "[e.message]<br>"
-							compiling_errors += "([compileerrors.len] errors)"
-							updateUsrDialog()
-							return
-					compiling_errors = "TCS compilation successful!<br>"
-					compiling_errors += "(0 errors)"
-					updateUsrDialog()
+							result_text += "[e.message]<br>"
+						result_text += "([compileerrors.len] errors)"
+						updateUsrDialog()
+				result_text = "TCS compilation successful!<br>"
+				result_text += "(0 errors)"
+				updateUsrDialog()
 		if ("Clear")
 			if (!telecomms_check(user) || user != editingcode)
 				return
-
+			var/list/var/obj/machinery/telecomms/server/target_servers
 			if (selected)
-				var/obj/machinery/telecomms/server/server = selected
+				target_servers = list(selected)
+			else if (allservers)
+				target_servers = machines
+			for (var/obj/machinery/telecomms/server/server in target_servers)
 				server.memory.Cut()
-				compiling_errors = "Server memory cleared!"
+				result_text = "Server memory cleared!"
 				storedcode = null
-				updateUsrDialog()
-			
-			if (allservers)
-				for (var/obj/machinery/telecomms/server/server in machines)
-					server.memory.Cut()
-					compiling_errors = "Server memory cleared!"
-					storedcode = null
-					updateUsrDialog()
+				. = TRUE
 	
-	if (href_list["viewserver"])
-		screen = SCREEN_SELECTED
-		if (href_list["viewserver"] == "all")
-			allservers = TRUE
-		else
-			allservers = FALSE
-			for (var/obj/machinery/telecomms/server/T in machines)
-				if (T.id == href_list["viewserver"])
-					selected = T
-					break
-	
-	if (href_list["operation"])
-		switch (href_list["operation"])
-			if ("release")
-				machines.Cut()
-				screen = SCREEN_MAIN
-			if ("mainmenu")
-				screen = SCREEN_MAIN
-			if ("codeback")
-				if (allservers || selected)
-					screen = SCREEN_SELECTED
-			if ("scan")
-				if (machines.len)
-					set_temp("FAILED: CANNOT PROBE WHEN BUFFER FULL", BAD)
-				else
-					for (var/obj/machinery/telecomms/server/T in range(25, src))
-						if (T.network == network)
-							machines.Add(T)
-					if (!machines.len)
-						set_temp("FAILED: UNABLE TO LOCATE SERVERS IN <span class='code'[network]</span", BAD)
-					else
-						set_temp("[machines.len] SERVERS PROBED & BUFFERED")
+	if (href_list["codeback"])
+		if (allservers || selected)
+			screen = SCREEN_SELECTED
+		. = TRUE
 
-					screen = SCREEN_MAIN
-			if ("editcode")
-				screen = SCREEN_EDITOR
-			if ("togglerun")
-				selected.autoruncode = !(selected.autoruncode)
-			if ("runon")
-				for (var/obj/machinery/telecomms/server/server in machines)
-					server.autoruncode = TRUE
-			if ("runoff")
-				for (var/obj/machinery/telecomms/server/server in machines)
-					server.autoruncode = FALSE
+	if (href_list["editcode"])
+		screen = SCREEN_EDITOR
+		. = TRUE
+
+	if (href_list["togglerun"])
+		selected.autoruncode = !(selected.autoruncode)
+		. = TRUE
+	
+	if (href_list["runon"])
+		for (var/obj/machinery/telecomms/server/server in machines)
+			server.autoruncode = TRUE
+		. = TRUE
+	
+	if (href_list["runoff"])
+		for (var/obj/machinery/telecomms/server/server in machines)
+			server.autoruncode = FALSE
+		. = TRUE
 	
 	if (href_list["network"])
 		var/newnet = reject_bad_text(href_list["network"])
@@ -397,6 +382,24 @@
 			machines.Cut()
 			screen = SCREEN_MAIN
 		. = TRUE
+
+	if (href_list["scan"])
+		if (machines.len)
+			set_temp("FAILED: CANNOT PROBE WHEN BUFFER FULL", BAD)
+		else
+			for (var/obj/machinery/telecomms/server/T in range(25, src))
+				if (T.network == network)
+					machines.Add(T)
+			if (!machines.len)
+				set_temp("FAILED: UNABLE TO LOCATE SERVERS IN <span class='code'[network]</span", BAD)
+			else
+				set_temp("[machines.len] SERVERS PROBED & BUFFERED")
+
+			screen = SCREEN_MAIN
+		. = TRUE
+
+	if (.)
+		updateUsrDialog()
 
 /obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D, var/mob/user)
 	return ..()

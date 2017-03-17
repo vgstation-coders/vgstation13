@@ -187,7 +187,7 @@
 			dat += "</table>"
 
 	var/datum/browser/B = new(user, "\ref[src]", "Telecommunications server monitor", 575, 400, src)
-	B.add_stylesheet("server_monitor.css", 'html/browser/telecomms_computer.css')
+	B.add_stylesheet("telecomms_computer.css", 'html/browser/telecomms_computer.css')
 	B.set_content(dat)
 	B.open()
 	temp = "&nbsp;"
@@ -220,7 +220,6 @@
 	if (href_list["delete"])
 		if (!allowed(usr))
 			set_temp("<span class='warning'>FAILED: ACCESS DENIED.</span>", BAD)
-
 		else if (selected)
 			var/datum/comm_log_entry/D
 			try

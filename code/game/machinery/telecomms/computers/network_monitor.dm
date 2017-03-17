@@ -21,10 +21,6 @@
 
 	var/dat = {"
 		<div id='logtemp'>
-			<span class='[(auth ? "good" : "bad")]'>[(auth ? "Authenticated" : "Unauthenticated")]</span>
-		</div>
-		<hr/>
-		<div id='logtemp'>
 			[temp]
 		</div>
 		<hr/>
