@@ -153,8 +153,8 @@
 
 	to_chat(user, "Building gas sensor...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
-		return 1
+//	if(!do_after(user, A, 1))
+//		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_gsensor(A)
@@ -170,8 +170,8 @@
 
 	to_chat(user, "Building pipe meter...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
-		return 1
+//	if(!do_after(user, A, 1))  this was the pipe delay code which had that annoying delay for making pipes. it was originally set to 20 instead of 1
+	//	return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_meter(A)
@@ -376,8 +376,8 @@
 	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
 	var/thisdir = selected_dir
-	if(!do_after(user, A, 20))
-		return 1
+//	if(!do_after(user, A, 1))
+	//	return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
 
@@ -443,6 +443,7 @@ var/global/list/disposalpipeID2State = list(
 	"pipe-j1s",
 	"pipe-j1s",
 )
+
 
 //This is a meta thing to send a blended pipe sprite to clients, basically the default straight pipe, but blended blue.
 //Yes I tried to find a proper way to blend things in HTML/CSS, alas.
