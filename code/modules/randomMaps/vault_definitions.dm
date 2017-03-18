@@ -51,7 +51,29 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/rust.dmm"
 
 /datum/map_element/vault/dance_revolution
+	name = "Dance Dance Revolution"
 	file_path = "maps/randomvaults/dance_revolution.dmm"
+	var/obj/structure/dance_dance_revolution/machine
+
+/datum/map_element/vault/dance_revolution/initialize(list/objects)
+	.=..()
+
+	machine = track_atom(locate(/obj/structure/dance_dance_revolution) in objects)
+
+/datum/map_element/vault/dance_revolution/process_scoreboard()
+	var/list/L = list()
+
+	if(!machine)
+		L += "The game has been destroyed!"
+	else if(machine.wins || machine.attempts)
+		L += "[machine.attempts] attempts have been made in total."
+		L += "Of them, [machine.wins] were successful."
+		if(machine.winner)
+			L += "The first dancer to successfully finish the game was [machine.winner]."
+		else
+			L += "Nobody was good enough to finish the game."
+
+	return L
 
 /datum/map_element/vault/spacegym
 	file_path = "maps/randomvaults/spacegym.dmm"

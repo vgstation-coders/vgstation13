@@ -99,6 +99,7 @@ var/list/shop_prices = list( //Cost in space credits
 
 
 /datum/map_element/vault/supermarket
+	name = "Spessmart"
 	file_path = "maps/randomvaults/spessmart.dmm"
 
 	//Statistics gathering!

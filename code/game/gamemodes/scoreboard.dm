@@ -447,9 +447,10 @@
 		if(!L)
 			continue
 
-		dat += "<u>[capitalize(ME.name)]</u><br>"
+		dat += "<u>[ME.name ? uppertext(ME.name) : "UNKNOWN SPACE STRUCTURE"]</u><br>"
+
 		for(var/score_value in L)
-			dat += "<b>[score_value]: </b> [L[score_value]]<br>"
+			dat += "<b>[score_value]</b>[L[score_value] ? "<b>:</b> [L[score_value]]" : ""]<br>"
 			score["crewscore"] += L[score_value]
 		dat += "<br>"
 
