@@ -46,7 +46,6 @@
 	build_path = "/obj/machinery/power/rust_core"
 	board_type = MACHINE
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PLASMATECH + "=4;" + Tc_MAGNETS + "=5;" + Tc_POWERSTORAGE + "=6"
-	frame_desc = "Requires 2 Pico Manipulators, 1 Ultra Micro-Laser, 5 Pieces of Cable, 1 Subspace Crystal and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser/high/ultra" = 1,
@@ -62,7 +61,6 @@
 	build_path = "/obj/machinery/power/rust_fuel_injector"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=6"
-	frame_desc = "Requires 2 Pico Manipulators, 1 Phasic Scanning Module, 1 Super Matter Bin, 1 Console Screen and 5 Pieces of Cable."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
 							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 1,

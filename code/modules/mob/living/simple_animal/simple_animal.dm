@@ -27,7 +27,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = 1	// Does the mob wander around when idle?
 	var/stop_automated_movement_when_pulled = 1 //When set to 1 this stops the animal from moving when someone is pulling it.
-
 	//Interaction
 	var/response_help   = "pokes"
 	var/response_disarm = "shoves"
@@ -135,7 +134,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
-	Move(dest)
+	if(space_check())
+		Move(dest)
 
 /mob/living/simple_animal/Life()
 	if(timestopped)
@@ -729,5 +729,24 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
 	return
+
+/mob/living/simple_animal/proc/space_check() //Returns a 1 if you can move in space or can kick off of something, 0 otherwise
+	if(Process_Spacemove())
+		return 1
+	var/spaced = 1
+	for(var/turf/T in range(src,1))
+		if(!istype(T, /turf/space))
+			spaced = 0
+			break
+		for(var/atom/A in T.contents)
+			if(istype(A,/obj/structure/lattice) \
+				|| istype(A, /obj/structure/window) \
+				|| istype(A, /obj/structure/grille))
+				spaced = 0
+				break
+	if(spaced)
+		walk(src,0)
+	return !spaced
+
 
 /datum/locking_category/simple_animal

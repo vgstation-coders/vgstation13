@@ -103,6 +103,24 @@ Note: Must be placed within 3 tiles of the R&D Console
 /obj/machinery/r_n_d/destructive_analyzer/attack_ghost(mob/user)
 	return
 
+/obj/machinery/r_n_d/destructive_analyzer/npc_tamper_act(mob/living/L)
+	//Put a random nearby item inside.
+	var/list/pickable_items = list()
+
+	for(var/obj/item/I in range(1, L))
+		var/list/temp_tech = ConvertReqString2List(I.origin_tech)
+		if(temp_tech.len)
+			pickable_items.Add(I)
+
+	if(!pickable_items.len)
+		return
+
+	var/obj/item/I = pick(pickable_items)
+	if(L.Adjacent(I))
+		visible_message("<span class='danger'>\The [L] stuffs \the [I] into \the [src]!</span>")
+		attackby(I, L)
+
+
 //For testing purposes only.
 /*/obj/item/weapon/deconstruction_test
 	name = "Test Item"

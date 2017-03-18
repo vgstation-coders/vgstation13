@@ -23,6 +23,8 @@
 	var/canWearClothes = 1
 	var/canWearHats = 1
 	var/canWearGlasses = 1
+	var/canWearMasks = 1
+	var/canWearBack = 1
 
 	var/obj/item/clothing/monkeyclothes/uniform = null
 	var/obj/item/clothing/head/hat = null
@@ -156,6 +158,8 @@
 	languagetoadd = LANGUAGE_GREY
 	greaterform = "Grey"
 
+/mob/living/carbon/monkey/grey/passive_emote()
+	emote(pick("scratch","jump","roll"))
 
 ///mob/living/carbon/monkey/diona/New()
 //Moved to it's duplicate declaration modules\mob\living\carbon\monkey\diona.dm

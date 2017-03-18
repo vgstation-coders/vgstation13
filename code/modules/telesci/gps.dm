@@ -52,11 +52,20 @@ var/list/SPS_list = list()
 		t += "<BR><A href='?src=\ref[src];tag=1'>Set Tag</A> "
 		t += "<BR>Tag: [gpstag]"
 
-		for(var/obj/item/device/gps/G in locallist)
-			var/turf/pos = get_turf(G)
-			var/area/gps_area = get_area(G)
-			var/tracked_gpstag = G.gpstag
-			if(G.emped == 1)
+		for(var/A in locallist)
+			var/turf/pos = get_turf(A)
+			var/area/gps_area = get_area(A)
+			var/tracked_gpstag = null
+			var/rip = null
+			if(ispAI(A))
+				var/mob/living/silicon/pai/P = A
+				tracked_gpstag = P.ppstag
+				rip = P.silence_time
+			else
+				var/obj/item/device/gps/G = A
+				tracked_gpstag = G.gpstag
+				rip = G.emped
+			if(rip)
 				t += "<BR>[tracked_gpstag]: ERROR"
 			else if(!pos || !gps_area)
 				t += "<BR>[tracked_gpstag]: UNKNOWN"
@@ -93,9 +102,9 @@ var/list/SPS_list = list()
 		if (usr.get_active_hand() != src || usr.stat) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return
-		a = copytext(sanitize(a), 1, 20)
+		a = strict_ascii(a)
 		if(length(a) != 4)
-			to_chat(usr, "<span class = 'caution'>The tag must be four letters long!</span>")
+			to_chat(usr, "<span class = 'caution'>The tag must be four characters long!</span>")
 			return
 
 		else

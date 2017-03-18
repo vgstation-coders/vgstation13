@@ -129,6 +129,7 @@ var/global/disable_vents     = 0
 #define GLOVES_HEAT_CONDUCTIVITY		0.4	//For normal gloves.
 #define INS_GLOVES_HEAT_CONDUCTIVITY	0.2	//For some heat insulated gloves (black and yellow.)
 
+#define SNOWGEAR_HEAT_CONDUCTIVITY 		0.2	// for now
 #define SPACESUIT_HEAT_CONDUCTIVITY		0	// until a time where space is no longer cold
 
 // Doors!
@@ -455,6 +456,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_EPILEPTIC   4
 #define DISABILITY_FLAG_DEAF        8
 #define DISABILITY_FLAG_BLIND       16
+#define DISABILITY_FLAG_MUTE		32
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -1580,3 +1582,7 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
 
 #define DEFAULT_BLOOD "#A10808"
+
+//Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
+#define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
+#define NPC_TAMPER_ACT_NOMSG  2 //Don't produce a visible message

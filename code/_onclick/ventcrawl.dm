@@ -83,6 +83,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 /mob/living/simple_animal/spiderbot/can_ventcrawl()
 	return 1
 
+/mob/living/simple_animal/hostile/necromorph/leaper/can_ventcrawl()
+	return 1
+
 /mob/living/carbon/alien/can_ventcrawl()
 	return 1
 
@@ -91,7 +94,6 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 
 /mob/living/carbon/alien/humanoid/queen/can_ventcrawl()
 	return 0
-
 
 /mob/living/var/ventcrawl_layer = PIPING_LAYER_DEFAULT
 

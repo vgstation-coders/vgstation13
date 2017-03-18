@@ -169,11 +169,11 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 //
 
 // Called when wires cut/mended.
-/datum/wires/proc/UpdateCut(var/index, var/mended)
+/datum/wires/proc/UpdateCut(var/index, var/mended, mob/user)
 	return
 
 // Called when wire pulsed. Add code here.
-/datum/wires/proc/UpdatePulsed(var/index)
+/datum/wires/proc/UpdatePulsed(var/index, mob/user)
 	return
 
 /datum/wires/proc/CanUse(var/mob/L)
@@ -209,13 +209,13 @@ var/const/POWER = 8
 // Helper Procs
 //
 
-/datum/wires/proc/PulseColour(var/colour)
-	PulseIndex(GetIndex(colour))
+/datum/wires/proc/PulseColour(var/colour, mob/user = usr)
+	PulseIndex(GetIndex(colour), user)
 
-/datum/wires/proc/PulseIndex(var/index)
+/datum/wires/proc/PulseIndex(var/index, mob/user = usr)
 	if(IsIndexCut(index))
 		return
-	UpdatePulsed(index)
+	UpdatePulsed(index, user)
 
 /datum/wires/proc/GetIndex(var/colour)
 	if(wires[colour])
@@ -279,17 +279,17 @@ var/const/POWER = 8
 // Cut Wire Colour/Index procs
 //
 
-/datum/wires/proc/CutWireColour(var/colour)
+/datum/wires/proc/CutWireColour(var/colour, mob/user = usr)
 	var/index = GetIndex(colour)
-	CutWireIndex(index)
+	CutWireIndex(index, user)
 
-/datum/wires/proc/CutWireIndex(var/index)
+/datum/wires/proc/CutWireIndex(var/index, mob/user = usr)
 	if(IsIndexCut(index))
 		wires_status &= ~index
-		UpdateCut(index, 1)
+		UpdateCut(index, 1, user)
 	else
 		wires_status |= index
-		UpdateCut(index, 0)
+		UpdateCut(index, 0, user)
 
 /datum/wires/proc/RandomCut()
 	var/r = rand(1, wires.len)
@@ -303,3 +303,17 @@ var/const/POWER = 8
 	if(wires_status == (1 << wire_count) - 1)
 		return 1
 	return 0
+
+/datum/wires/proc/npc_tamper(mob/living/L)
+	if(!wires.len)
+		return
+
+	var/wire_to_screw = pick(wires)
+
+	if(IsColourCut(wire_to_screw) || prob(50)) //CutWireColour() proc handles both cutting and mending wires. If the wire is already cut, always mend it back. Otherwise, 50% to cut it and 50% to pulse it
+		CutWireColour(wire_to_screw, L)
+		log_game("[key_name(L)] has [IsColourCut(wire_to_screw) ? "cut" : "mended"] the [wire_to_screw] wire on \the [holder] ([formatJumpTo(holder)])")
+	else
+		PulseColour(wire_to_screw, L)
+		log_game("[key_name(L)] has pulsed the [wire_to_screw] wire on \the [holder] ([formatJumpTo(holder)])")
+

@@ -157,8 +157,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		return obscure(4)
 	if(word1 == cultwords["hell"] && word2 == cultwords["travel"] && word3 == cultwords["self"])
 		return ajourney()
-	if(word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["travel"])
-		return manifest()
 	if(word1 == cultwords["hell"] && word2 == cultwords["technology"] && word3 == cultwords["join"])
 		return talisman()
 	if(word1 == cultwords["hell"] && word2 == cultwords["blood"] && word3 == cultwords["join"])
@@ -242,7 +240,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<b>Hide runes: </b>Hide See Blood<br>
 				<b>Reveal runes: </b>Blood See Hide<br>
 				<b>Astral Journey: </b>Hell travel self<br>
-				<b>Manifest a ghost : </b>Blood See Travel<br>
 				<b>Imbue a talisman: </b>Hell Technology Join<br>
 				<b>Sacrifice: </b>Hell Blood Join<br>
 				<b>Wall: </b>Destroy Travel Self<br>
@@ -260,7 +257,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>Teleport self</h3>
 				Teleport rune is a special rune, as it only needs two words, with the third word being destination. Basically, when you have two runes with the same destination, invoking one will teleport you to the other one. If there are more than 2 runes, you will be teleported to a random one. Runes with different third words will create separate networks. You can imbue this rune into a talisman, giving you a great escape mechanism.<br>
 				<h3>Teleport other</h3>
-				Teleport other allows for teleportation for any movable object to another rune with the same third word. You need 3 cultists chanting the invocation for this rune to work.<br>
+				Teleport other allows for teleportation for any movable object to another rune with the same third word. You need 2 cultists chanting the invocation for this rune to work.<br>
 				<h3>Summon new tome</h3>
 				Invoking this rune summons a new arcane tome.
 				<h3>Convert a person</h3>
@@ -279,8 +276,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				This rune is made to reverse the process of hiding a rune. It reveals all hidden runes in a rather large area around it.
 				<h3>Astral Journey</h3>
 				This rune gently rips your soul out of your body, leaving it intact. You can observe the surroundings as a ghost as well as communicate with other ghosts. Your body takes damage while you are there, so ensure your journey is not too long, or you might never come back.<br>
-				<h3>Manifest a ghost</h3>
-				Unlike the Raise Dead rune, this rune does not require any special preparations or vessels. Instead of using full lifeforce of a sacrifice, it will drain YOUR lifeforce. Stand on the rune and invoke it. If theres a ghost standing over the rune, it will materialise, and will live as long as you dont move off the rune or die. You can put a paper with a name on the rune to make the new body look like that person.<br>
 				<h3>Imbue a talisman</h3>
 				This rune allows you to imbue the magic of some runes into paper talismans. Create an imbue rune, then an appropriate rune beside it. Put an empty piece of paper on the imbue rune and invoke it. You will now have a one-use talisman with the power of the target rune. Using a talisman drains some health, so be careful with it. You can imbue a talisman with power of the following runes: summon tome, reveal, conceal, teleport, disable technology, communicate, deafen, blind and stun.<br>
 				<h3>Sacrifice</h3>
@@ -288,9 +283,9 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>Create a wall</h3>
 				Invoking this rune solidifies the air above it, creating an an invisible wall. To remove the wall, simply invoke the rune again.
 				<h3>Summon cultist</h3>
-				This rune allows you to summon a fellow cultist to your location. The target cultist must be unhandcuffed ant not buckled to anything. You also need to have 3 people chanting at the rune to successfully invoke it. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
+				This rune allows you to summon a fellow cultist to your location. The target cultist must be unhandcuffed ant not buckled to anything. You also need to have 2 people chanting at the rune to successfully invoke it. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
 				<h3>Free a cultist</h3>
-				This rune unhandcuffs and unbuckles any cultist of your choice, no matter where he is. You need to have 3 people invoking the rune for it to work. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
+				This rune unhandcuffs and unbuckles any cultist of your choice, no matter where he is. You need to have 2 people invoking the rune for it to work. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
 				<h3>Deafen</h3>
 				This rune temporarily deafens all non-cultists around you.<br>
 				<h3>Blind</h3>

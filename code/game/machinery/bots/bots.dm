@@ -63,6 +63,12 @@
 		emagged = 2
 		to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
+/obj/machinery/bot/npc_tamper_act(mob/living/L)
+	if(on)
+		turn_off()
+	else
+		turn_on()
+
 /obj/machinery/bot/examine(mob/user)
 	..()
 	if (src.health < maxhealth)

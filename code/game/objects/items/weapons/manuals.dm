@@ -533,3 +533,64 @@
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
+
+/obj/item/weapon/book/manual/mailing_guide
+	name = "Guide to disposal mailing system"
+	icon_state ="book"     // a proper icon would be nice
+	author = "Ulyanovsk Logistics Division"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
+	title = "Guide to disposal mailing system"
+	dat = {"<html>
+				<head>
+				<style>
+				h1 {font-size: 18px; margin: 15px 0px 5px;}
+				h2 {font-size: 15px; margin: 15px 0px 5px;}
+				li {margin: 2px 0px 2px 15px;}
+				ul {margin: 5px; padding: 0px;}
+				ol {margin: 5px; padding: 0px 15px;}
+				</style>
+				</head>
+				<body>
+				<h3>Guide to disposal mailing system</h3>
+                Most people misunderstand how disposal mailing system works; items are sent in bunches, not individually.<br>
+
+				<h4>So, how does it work?</h4>
+				<ul>
+				<li>When an item enters the delivery chute inside the delivery office, a countdown starts. It's about 10 seconds</li>
+                  <li>If another item enters the delivery chute before the countdown ends, the countdown resets and starts again</li>
+                  <li>If the countdown expires, you can hear the faint noise of a piston and <b>all</b> the items inside the delivery chute will be sent <b>to the same destination</b></li>
+                </ul>
+
+                <h4>What will be the destination?</h4>
+                <ul>
+                  <li>If there are no tagged items, all the items will be sent to the recycling room</li>
+                  <li>If there is one item wrapped+tagged, <b>all</b> the items, even the unwrapped/untagged ones and garbage, will be sent at the destination of the tagged item</li>
+                  <li>If there are multiple wrapped+tagged items at the same time inside the delivery chute, the last one sets the destination</li>
+                  <li>If there is a living person or animal inside the delivery chute, all the stuff with it will be sent to the recycling room anyway, ignoring tags; however, you can send living people or animals to a destination if they are inside a container (closets, coffins, animal crates); for living people, it works only if the container is wrapped.<br>
+                Anyway, corpses and dead animals will reach a parcel's destination</li>
+                </ul>
+                <h4>Examples</h4>
+                <b><i>You need to send 4 crates to engineering:</i></b><br>
+                just put all 4 of them on the conveyor belt and wrap+tag one (1) of them as "Engineering"; all of them will reach engineering.<br>
+                <br>
+                <i><b>You need to send a goat crate to hydroponics but the goat crate is unwrappable/untaggable:</i></b><br>
+                just take any other item, for example a piece of paper, wrap+tag it as "Hydroponics", put the wrapped paper and the goat crate both on the conveior belt and let them go together; both of them will reach hydroponics.<br>
+                <br>
+                <i><b>You send 3 parcels in the same shipment, one tagged "Bar", one tagged "Theatre" and the last one tagged "Medbay":</i></b><br>
+                all 3 parcels will be sent to medbay (this is the case when people see parcels reaching the wrong destination).<br>
+
+                <h4>Mail outlet</h4>
+                Inside the delivery office, there is a also a mail outlet that has the purpose of filtering untagged parcels from trash; this is intended to be used by all crew outside cargo to let them use the mailing service without the need to go to cargo.<br>
+                <br>
+                Example:
+                <ol>
+                  <li>a scientist needs to send an item to medbay</li>
+                  <li>he uses package wrap to wrap the item (there is some package wrap in many department and also in the tool storage room, more package wrap can be bought from cargo too)</li>
+                  <li>the scientist can use a pen to add a note to the parcel, for example "send to medbay"</li>
+                  <li>the scientist places the parcel inside a disposal bin</li>
+                  <li>(optional but advised: the scientist could contact cargo staff telling them that he sent a parcel)</li>
+                  <li>the parcel will reach cargo and pop out from the mail outlet instead of the trash outlet</li>
+                  <li>cargo tech will see the parcel, read the note on it, tag it as "medbay" and just use the mailing system as usual</li>
+                </ol>
+
+				</body>
+				</html>"}

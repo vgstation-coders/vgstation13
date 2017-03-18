@@ -142,42 +142,12 @@
 	return TRUE
 
 /datum/game_mode/heist/proc/forge_vox_objectives()
-
-
-
-
-	//Commented out for testing.
-	/* var/i = 1
-	var/max_objectives = pick(2,2,2,3,3)
-	var/list/objs = list()
-	while(i<= max_objectives)
-		var/list/goals = list("kidnap","loot","salvage")
-		var/goal = pick(goals)
-		var/datum/objective/heist/O
-
-		if(goal == "kidnap")
-			goals -= "kidnap"
-			O = new /datum/objective/heist/kidnap()
-		else if(goal == "loot")
-			O = new /datum/objective/heist/loot()
-		else
-			O = new /datum/objective/heist/salvage()
-		O.choose_target()
-		objs += O
-
-		i++
-
-	//-All- vox raids have these two objectives. Failing them loses the game.
-	objs += new /datum/objective/heist/inviolate_crew
-	objs += new /datum/objective/heist/inviolate_death */
-
 	if(prob(25))
 		raid_objectives += new/datum/objective/heist/kidnap
-
 	raid_objectives += new/datum/objective/steal/heist
 	//raid_objectives += new/datum/objective/steal/salvage
 	raid_objectives += new/datum/objective/heist/inviolate_crew
-	raid_objectives += new/datum/objective/heist/inviolate_death
+	//raid_objectives += new/datum/objective/heist/inviolate_death // Crew death permitted. No tears.
 
 	for(var/datum/objective/heist/O in raid_objectives)
 		O.choose_target()
@@ -187,9 +157,9 @@
 
 /datum/game_mode/heist/proc/greet_vox(const/datum/mind/raider)
 	to_chat(raider.current, {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>
-The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to Tau Ceti and much of the unexplored galaxy. You and the crew have come to the Exodus for plunder, trade or both.
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
 Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</span>"})
+	to_chat(raider.current, {"<span class='danger'>The Shoal forbids excessive bloodletting.  Minimize casualties or face banishment.</span>"})
 
 	var/obj_count = 0
 

@@ -41,7 +41,7 @@
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
 	flags = FPRINT
-	action_button_name = "Toggle Scarf"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	can_flip = 1
@@ -134,7 +134,7 @@
 /obj/item/clothing/mask/bandana
 	name = "bandana"
 	desc = "A colorful bandana."
-	action_button_name = "Toggle Bandana"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	w_class = W_CLASS_TINY
 	can_flip = 1
 

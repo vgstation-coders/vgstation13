@@ -99,6 +99,12 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
+/obj/item/toy/syndicateballoon/ntballoon
+    name = "nanotrasen balloon"
+    desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
+    icon_state = "ntballoon"
+    item_state = "ntballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */
@@ -183,7 +189,7 @@
 		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
-	name = "ammo-caps"
+	name = "box of cap gun caps"
 	desc = "There are 7 caps left! Make sure to recyle the box in an autolathe when it gets empty."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "357-7"

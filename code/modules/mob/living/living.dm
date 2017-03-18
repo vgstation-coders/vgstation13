@@ -76,9 +76,10 @@
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)
-		return
+		return 0
 	if(!loc)
-		return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+		return 0	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+	// Why the fuck is this handled here?
 	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))
 			mutations.Add(M_HARDCORE)
@@ -99,7 +100,7 @@
 	if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting)
-				return
+				return 0
 //			to_chat(world, "[src.name]")
 			var/datum/mind/head = ticker.mode.implanted[mind]
 			//var/list/removal
@@ -115,6 +116,7 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
+	return 1
 
 // Apply connect damage
 /mob/living/beam_connect(var/obj/effect/beam/B)
@@ -908,7 +910,33 @@ Thanks.
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
-			if(iscarbon(L))
+			if(istype(B, /obj/structure/bed/guillotine))
+				var/obj/structure/bed/guillotine/G = B
+				if(G.open)
+					G.manual_unbuckle(L)
+				else
+					L.delayNextAttack(100)
+					L.delayNextSpecial(100)
+					L.visible_message("<span class='warning'>\The [L] attempts to dislodge \the [G]'s stocks!</span>",
+									  "<span class='warning'>You attempt to dislodge \the [G]'s stocks (this will take around thirty seconds).</span>",
+									  self_drugged_message="<span class='warning'>You attempt to chew through the wooden stocks of \the [G] (this will take a while).</span>")
+					spawn(0)
+						if(do_after(usr, usr, 300))
+							if(!L.locked_to)
+								return
+							L.visible_message("<span class='danger'>\The [L] dislodges \the [G]'s stocks and climbs out of \the [src]!</span>",\
+								"<span class='notice'>You dislodge \the [G]'s stocks and climb out of \the [G].</span>",\
+								self_drugged_message="<span class='notice'>You successfully chew through the wooden stocks.</span>")
+							G.open = TRUE
+							G.manual_unbuckle(L)
+							G.update_icon()
+							G.verbs -= /obj/structure/bed/guillotine/verb/open_stocks
+							G.verbs += /obj/structure/bed/guillotine/verb/close_stocks
+						else
+							L.simple_message("<span class='warning'>Your escape attempt was interrupted.</span>", \
+								"<span class='warning'>Your chewing was interrupted. Damn it!</span>")
+
+			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				if(C.handcuffed)
 					C.delayNextAttack(100)

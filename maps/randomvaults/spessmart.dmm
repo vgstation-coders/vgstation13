@@ -208,25 +208,27 @@
 "dZ" = (/obj/structure/mirror{pixel_x = -32; pixel_y = 0},/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 2},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
 "ea" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/supermarket/entrance)
 "eb" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/supermarket/entrance)
-"ec" = (/obj/structure/window/reinforced/plasma{dir = 1},/mob/living/simple_animal/robot/robot_greeter/informer,/turf/simulated/floor,/area/vault/supermarket/entrance)
-"ed" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 8},/area/vault/supermarket/entrance)
-"ee" = (/mob/living/simple_animal/hostile/spessmart_guardian,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
-"ef" = (/obj/machinery/vending/coffee,/obj/machinery/light,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
-"eg" = (/obj/machinery/vending/snack,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
-"eh" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
-"ei" = (/obj/machinery/vending/cigarette,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
-"ej" = (/obj/structure/lattice,/obj/structure/window/reinforced{dir = 1},/turf/space,/area/vault/supermarket/entrance)
-"ek" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"el" = (/obj/structure/window/reinforced{dir = 4},/obj/effect/spessmart_entrance,/obj/machinery/door/airlock/glass{name = "Spessmart"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"em" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/spessmart_entrance,/obj/machinery/door/airlock/glass{name = "Spessmart"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"en" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"eo" = (/obj/structure/lattice,/turf/space,/area/vault/supermarket/entrance)
-"ep" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"eq" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"er" = (/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/obj/structure/lattice,/turf/space,/area/vault/supermarket/entrance)
-"es" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/obj/docking_port/destination/vault/supermarket{dir = 2},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"et" = (/obj/structure/window/reinforced{dir = 4},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
-"eu" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"ec" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"ed" = (/obj/structure/window/reinforced/plasma{dir = 1},/mob/living/simple_animal/robot/robot_greeter/informer,/turf/simulated/floor,/area/vault/supermarket/entrance)
+"ee" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor,/area/vault/supermarket/entrance)
+"ef" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{icon_state = "red"; dir = 8},/area/vault/supermarket/entrance)
+"eg" = (/mob/living/simple_animal/hostile/spessmart_guardian,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"eh" = (/obj/machinery/vending/coffee,/obj/machinery/light,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"ei" = (/obj/machinery/vending/snack,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"ej" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"ek" = (/obj/machinery/vending/cigarette,/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"el" = (/obj/structure/lattice,/obj/structure/window/reinforced{dir = 1},/turf/space,/area/vault/supermarket/entrance)
+"em" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"en" = (/obj/structure/window/reinforced{dir = 4},/obj/effect/spessmart_entrance,/obj/machinery/door/airlock/glass{name = "Spessmart"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"eo" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/spessmart_entrance,/obj/machinery/door/airlock/glass{name = "Spessmart"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"ep" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/mob/living/simple_animal/robot/robot_greeter,/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"eq" = (/obj/structure/lattice,/turf/space,/area/vault/supermarket/entrance)
+"er" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"es" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"et" = (/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/obj/structure/lattice,/turf/space,/area/vault/supermarket/entrance)
+"eu" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/obj/docking_port/destination/vault/supermarket{dir = 2},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"ev" = (/obj/structure/window/reinforced{dir = 4},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
+"ew" = (/obj/machinery/door/airlock/multi_tile/glass,/obj/structure/window/reinforced{dir = 8},/obj/machinery/door/poddoor/shutters/preopen{desc = "Nothing to worry about, unless your intentions are vile."; dir = 2; name = "Emergency Shutters"},/turf/simulated/floor{icon_state = "white"},/area/vault/supermarket/entrance)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -270,8 +272,8 @@ aaaaaaaaaNaabMdjbVdndodpdgdgbVdgdgdgdgdgdgdgbVdidididvdwbVabaaaaaaaaaaaa
 aaaaaaabbMbMbMdxbVdndodpdydzbVdAdgdgdgdgdgdBbVdidudididCbVabaaaaaaaaaaaa
 aaaaaaabbMdDbMdEbVbVbVbVbVdFbVdGdHdIdJdIdKdLbVdMdvdidNdibVabaaaaaaaaaaaa
 aaaaaaabbMdObUdPdQbVdRdSdRdRbVdTdgdydUdVdgdWbVdididididibVabaaaaaaaaaaaa
-aaaaaaabbMbMbMbMbMbVdXdYdZeabVebdgdgecdgdgedbVeeefegeheibVabaaaaaaaaaaaa
-aaaaaaababababababbVbVbVbVbVbVejekelejemenejbVbVbVbVbVbVbVabaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaababababababbVeoepeqeoepeqeobVabababababababaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaabVeresetereueterbVaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabbMbMbMbMbMbVdXdYdZeabVebdgecedeedgefbVegeheiejekbVabaaaaaaaaaaaa
+aaaaaaababababababbVbVbVbVbVbVelemeneleoepelbVbVbVbVbVbVbVabaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaababababababbVeqereseqereseqbVabababababababaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaabVeteuevetewevetbVaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}

@@ -5,6 +5,9 @@
 #define DNA2_BUF_UE 2
 #define DNA2_BUF_SE 4
 
+#define MAX_RADIATION_DURATION 20
+#define MAX_RADIATION_INTENSITY 10
+
 //list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0),
 /datum/dna2/record
 	var/datum/dna/dna = null
@@ -619,6 +622,41 @@
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
 
+/obj/machinery/computer/scan_consolenew/proc/pulse_radiation(mob/user)
+	if(connected.contains_husk())
+		to_chat(user, "<span class='notice'>The organism inside does not have DNA.</span>")
+		return 1
+	irradiating = src.radiation_duration
+	var/lock_state = src.connected.locked
+	src.connected.locked = 1//lock it
+
+	sleep(10*src.radiation_duration) // sleep for radiation_duration seconds
+
+	irradiating = 0
+
+	if(!src.connected.occupant)
+		return 1
+
+	if (prob(95))
+		if(prob(75))
+			randmutb(src.connected.occupant)
+		else
+			randmuti(src.connected.occupant)
+	else
+		if(prob(95))
+			randmutg(src.connected.occupant)
+		else
+			randmuti(src.connected.occupant)
+
+	src.connected.occupant.radiation += ((src.radiation_intensity*3)+src.radiation_duration*3)
+	src.connected.locked = lock_state
+
+/obj/machinery/computer/scan_consolenew/npc_tamper_act(mob/living/L)
+	radiation_duration = rand(1, MAX_RADIATION_DURATION)
+	radiation_intensity= rand(1, MAX_RADIATION_INTENSITY)
+
+	pulse_radiation(L)
+
 /obj/machinery/computer/scan_consolenew/Topic(href, href_list)
 	if(..())
 		return 0 // don't update uis
@@ -644,39 +682,13 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseRadiation"])
-		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
-			return 1
-		irradiating = src.radiation_duration
-		var/lock_state = src.connected.locked
-		src.connected.locked = 1//lock it
-
-		sleep(10*src.radiation_duration) // sleep for radiation_duration seconds
-
-		irradiating = 0
-
-		if (!src.connected.occupant)
-			return 1 // return 1 forces an update to all Nano uis attached to src
-
-		if (prob(95))
-			if(prob(75))
-				randmutb(src.connected.occupant)
-			else
-				randmuti(src.connected.occupant)
-		else
-			if(prob(95))
-				randmutg(src.connected.occupant)
-			else
-				randmuti(src.connected.occupant)
-
-		src.connected.occupant.radiation += ((src.radiation_intensity*3)+src.radiation_duration*3)
-		src.connected.locked = lock_state
+		pulse_radiation(usr)
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["radiationDuration"])
 		if (text2num(href_list["radiationDuration"]) > 0)
-			if (src.radiation_duration < 20)
-				src.radiation_duration += 2
+			if (src.radiation_duration < MAX_RADIATION_DURATION)
+				src.radiation_duration = min(radiation_duration + 2, MAX_RADIATION_DURATION)
 		else
 			if (src.radiation_duration > 2)
 				src.radiation_duration -= 2
@@ -684,7 +696,7 @@
 
 	if (href_list["radiationIntensity"])
 		if (text2num(href_list["radiationIntensity"]) > 0)
-			if (src.radiation_intensity < 10)
+			if (src.radiation_intensity < MAX_RADIATION_INTENSITY)
 				src.radiation_intensity++
 		else
 			if (src.radiation_intensity > 1)
@@ -1060,3 +1072,6 @@
 
 
 /////////////////////////// DNA MACHINES
+
+#undef MAX_RADIATION_DURATION
+#undef MAX_RADIATION_INTENSITY

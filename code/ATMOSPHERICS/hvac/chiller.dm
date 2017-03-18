@@ -118,3 +118,6 @@
 			on = 0
 			update_icon()
 	return
+
+/obj/machinery/space_heater/npc_tamper_act(mob/living/L)
+	attack_hand(L)

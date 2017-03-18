@@ -75,55 +75,6 @@
 			rcd.show_default(usr)
 	return 1
 
-
-/obj/screen/item_action
-	icon_state = "template"
-	var/obj/item/owner
-	var/image/overlay
-
-/obj/screen/item_action/New(var/atom/loc, var/obj/item/I)
-	..()
-	owner = I
-	name = I.action_button_name
-	overlay = image(loc = src, layer=src.layer+1)
-	overlay.appearance = I.appearance
-	overlay.name = I.action_button_name
-	overlay.dir = SOUTH
-
-/obj/screen/item_action/Destroy()
-	..()
-	owner = null
-	if(overlay != null)
-		overlay.loc = null
-		overlay = null
-
-/obj/screen/item_action/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc)
-
-/obj/screen/item_action/MouseExited()
-	closeToolTip(usr)
-
-/obj/screen/item_action/Click()
-	if(!usr || !owner)
-		return 1
-	if(usr.attack_delayer.blocked())
-		return
-	//usr.next_move = world.time + 6
-
-	if(usr.stat || usr.restrained() || usr.stunned || usr.lying)
-		return 1
-
-	if(!(owner in usr))
-		return 1
-
-	owner.ui_action_click()
-	return 1
-
-//This is the proc used to update all the action buttons. It just returns for all mob types except humans.
-/mob/proc/update_action_buttons()
-	return
-
-
 /obj/screen/grab
 	name = "grab"
 

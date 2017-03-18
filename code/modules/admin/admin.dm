@@ -369,7 +369,7 @@ var/global/floorIsLava = 0
 	return noteslist
 /datum/admins/proc/show_player_info(var/key as text)
 	set category = "Admin"
-	set name = "Show Player Info"
+	set name = "Show Player Notes"
 
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder

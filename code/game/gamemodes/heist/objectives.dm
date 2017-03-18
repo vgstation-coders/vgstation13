@@ -37,8 +37,8 @@
 
 /datum/objective/heist/kidnap/check_completion()
 	if(target)
-		if(isnull(target.current) || target.current.stat == DEAD)
-			return FALSE // they're destroyed or dead. fail.
+		if(isnull(target.current)/* || target.current.stat == DEAD*/) // Removed dead check, we can clone them after we get them back anyway.
+			return FALSE // they're destroyed. fail.
 
 		var/end_area = get_area_master(locate(/area/shuttle/vox/station))
 
@@ -123,6 +123,7 @@
 			return FALSE //It didn't, fail the object
 	return TRUE
 
+/* LAME
 /datum/theft_objective/number/heist/singulogen
 	name = "gravitational generator"
 	typepath = /obj/machinery/the_singularitygen
@@ -140,6 +141,7 @@
 	typepath = /obj/machinery/power/emitter
 	min = 4
 	max = 4
+*/
 
 /datum/theft_objective/number/heist/nuke
 	name = "thermonuclear device"
@@ -153,9 +155,40 @@
 	min = 6
 	max = 6
 
+/datum/theft_objective/number/heist/supermatter
+	name = "supermatter shard"
+	typepath = /obj/machinery/power/supermatter/shard
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist/organs/check_completion()
+	var/list/search = list()
+	for(var/A in areas)
+		var/area/B = locate(A)
+		search += recursive_type_check(B, typepath)
+	var/valid_organs=0
+	for(var/atom/A in search)
+		if(!istype(A,/obj/item/organ))
+			var/obj/item/organ/O = A
+			if(O && istype(O, typepath) && !O.is_printed && O.had_mind)
+				valid_organs++
+	return (valid_organs >= required_amount)
+
+/datum/theft_objective/number/heist/organs/lungs
+	name = "lungs"
+	typepath = /obj/item/organ/lungs
+	min = 3
+	max = 6
+
+/datum/theft_objective/number/heist/organs/eyes
+	name = "eyes"
+	typepath = /obj/item/organ/eyes
+	min = 3
+	max = 6
+
 /*
  * salvage
- 
+
 
 /datum/objective/steal/salvage
 	target_category = "salvage"

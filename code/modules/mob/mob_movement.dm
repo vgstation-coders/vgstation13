@@ -318,6 +318,7 @@
 				if(M.pulling == mob)
 					if(!M.incapacitated() && M.canmove && mob.Adjacent(M))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 					else
 						M.stop_pulling()
@@ -326,10 +327,12 @@
 				if(chain_datum.extremity_A == mob)
 					if(istype(chain_datum.extremity_B,/mob/living))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 				else if(chain_datum.extremity_B == mob)
 					if(istype(chain_datum.extremity_A,/mob/living))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 
 		if(mob.pinned.len)

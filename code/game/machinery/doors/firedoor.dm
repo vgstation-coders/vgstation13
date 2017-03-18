@@ -164,7 +164,7 @@ var/global/list/alert_overlays_global = list()
 			o += "<span class='warning'>"
 		else
 			o += "<span style='color:blue'>"
-		o += "[celsius]�C</span> "
+		o += "[celsius]°C</span> "
 		o += "<span style='color:blue'>"
 		o += "[pressure]kPa</span></li>"
 		to_chat(user, o)
@@ -482,6 +482,11 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/CanAStarPass()
 	return !density
 
+/obj/machinery/door/firedoor/npc_tamper_act(mob/living/L)
+	if(density)
+		open()
+	else
+		close()
 
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))

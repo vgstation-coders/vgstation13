@@ -118,8 +118,7 @@
 
 		else
 			if(istext(haystack))
-				if(length(haystack) >= end && start > 0)
-					return findtext(haystack, needle, start, end)
+				return utf8_find(haystack, needle, start, end)
 
 // Clone of copytext()
 /proc/docopytext(var/string, var/start = 1, var/end = 0)
@@ -129,10 +128,11 @@
 
 // Clone of length()
 /proc/smartlength(var/container)
-	if(container)
-		if(istype(container, /list) || istext(container))
-			return length(container)
-	return 0
+	if (istext(container))
+		return utf8_len(container)
+
+	return length(container)
+
 // BY DONKIE~
 // String stuff
 /proc/n_lower(var/string)

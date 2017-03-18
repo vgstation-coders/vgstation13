@@ -99,7 +99,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			culcount++
-	if(culcount>=3)
+	if(culcount>=2)
 		user.say("Sas[pick("'","`")]so c'arta forbici tarem!")
 
 		nullblock = 0
@@ -188,7 +188,7 @@
 			usr.visible_message("<span class='warning'>Something is blocking the conversion!</span>")
 			return 0
 		invocation("rune_convert")
-		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below him glow a bloody red.</span>", \
+		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below \him glow a bloody red.</span>", \
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
@@ -1059,7 +1059,7 @@
 		to_chat(user, "<span class='warning'>None of the cultists are currently under restraints.</span>")
 		return fizzle()
 
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to free", "Followers of Geometer") as null|anything in possible_targets
 		if(!cultist)
 			return fizzle()
@@ -1120,7 +1120,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			users+=C
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - user)
 		if(!cultist)
 			return fizzle()

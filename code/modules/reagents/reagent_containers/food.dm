@@ -120,3 +120,38 @@
 /obj/item/weapon/reagent_containers/food/snacks/tortillachip/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,1)
+
+/obj/poutineocean
+	name = "poutine ocean"
+	desc = "This enormous, horrific cheese wheel is filled to the brim with poutine. You'll probably never reach the bottom."
+	icon = 'icons/obj/food_huge.dmi'
+	icon_state = "poutineocean"
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -8 * PIXEL_MULTIPLIER
+	var/type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutine
+
+/obj/poutineocean/attack_hand(mob/user)
+	to_chat(user, "<span class='warning'>You need a plate to get food from \the [src]!</span>")
+
+/obj/poutineocean/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/trash/plate))
+		if(user.drop_item(W))
+			qdel(W)
+			var/obj/item/AM = new type_to_dispense(get_turf(src))
+			user.put_in_hands(AM)
+			user.visible_message("<span class='notice'>[user] gathers some [AM.name] from \the [src], and shovels it onto their plate!</span>", "<span class='notice'>You gather some [AM.name] from \the [src], and shovel it onto your plate!</span>")
+			return
+	..()
+
+/obj/poutineocean/MouseDrop(over_object)
+	return
+
+/obj/poutineocean/poutinecitadel
+	name = "poutine citadel"
+	desc = "O, Canada!"
+	icon = 'icons/obj/food_huge.dmi'
+	icon_state = "poutinecitadel"
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -8 * PIXEL_MULTIPLIER
+	type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
+

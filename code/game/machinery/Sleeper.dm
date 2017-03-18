@@ -173,7 +173,7 @@
 	var/amounts = list(5, 10)
 	var/obj/machinery/sleep_console/connected = null
 	var/sedativeblock = 0 //To prevent people from being surprisesoporific'd
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -626,7 +626,7 @@
 	light_color = LIGHT_COLOR_ORANGE
 	automatic = 1
 	drag_delay = 0
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 
 
 /obj/machinery/sleeper/mancrowave/go_out(var/exit = src.loc)

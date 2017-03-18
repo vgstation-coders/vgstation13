@@ -1233,6 +1233,10 @@
 		light(user,I)
 		update_brightness(user)
 		return
+	else if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/donut))
+		if(reagents.total_volume)
+			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
+			D.dip(src, user)
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/light(mob/user,obj/item/I)
 	var/flavor_text = "<span  class='rose'>[user] lights \the [name] with \the [I].</span>"

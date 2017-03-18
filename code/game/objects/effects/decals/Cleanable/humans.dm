@@ -149,7 +149,7 @@ var/global/list/blood_list = list()
 
 
 
-/obj/effect/decal/cleanable/blood/gibs/proc/streak(var/list/directions, spread_radius = 0)
+/obj/effect/decal/cleanable/blood/proc/streak(var/list/directions, spread_radius = 0)
 	spawn (0)
 		var/direction = pick(directions)
 		for (var/i = 0 to spread_radius)
@@ -178,43 +178,3 @@ var/global/list/blood_list = list()
 	random_icon_states = list("mucus")
 
 	var/dry=0
-
-/obj/effect/decal/cleanable/blood/gibs/blood
-	name = "blood"
-	icon = 'icons/effects/blood.dmi'
-	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
-	amount = 5
-	base_icon = 'icons/effects/blood.dmi'
-
-/obj/effect/decal/cleanable/blood/gibs/blood/update_icon()
-	if(basecolor == "rainbow")
-		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
-	color = basecolor
-	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
-		plane = NOIR_BLOOD_PLANE
-	else
-		plane = ABOVE_TURF_PLANE
-	var/icon/blood = icon(base_icon,icon_state,dir)
-	blood.Blend(basecolor,ICON_MULTIPLY)
-
-	icon = blood
-
-/obj/effect/decal/cleanable/blood/gibs/drips
-	name= "drips of blood"
-	icon = 'icons/effects/drip.dmi'
-	random_icon_states = list("1","2","3","4","5")
-	amount = 0
-	base_icon = 'icons/effects/drip.dmi'
-
-/obj/effect/decal/cleanable/blood/gibs/drips/update_icon()
-	if(basecolor == "rainbow")
-		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
-	color = basecolor
-	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
-		plane = NOIR_BLOOD_PLANE
-	else
-		plane = ABOVE_TURF_PLANE
-	var/icon/blood = icon(base_icon,icon_state,dir)
-	blood.Blend(basecolor,ICON_MULTIPLY)
-
-	icon = blood
