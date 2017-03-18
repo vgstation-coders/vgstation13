@@ -281,6 +281,9 @@
 		screen = SCREEN_MAIN
 		. = TRUE
 
+	if (href_list["refresh"])
+		. = TRUE
+
 	if (href_list["auth"])
 		if (iscarbon(usr))
 			var/mob/living/carbon/C = usr

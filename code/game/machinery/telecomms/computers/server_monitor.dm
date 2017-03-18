@@ -217,6 +217,9 @@
 		screen = SCREEN_MAIN
 		. = TRUE
 
+	if (href_list["refresh"])
+		. = TRUE
+
 	if (href_list["delete"])
 		if (!allowed(usr))
 			set_temp("<span class='warning'>FAILED: ACCESS DENIED.</span>", BAD)
