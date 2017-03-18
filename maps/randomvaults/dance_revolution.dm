@@ -57,7 +57,7 @@
 	playsound(get_turf(src), 'sound/machines/ding2.ogg', 50)
 
 	spawn()
-		for(var/obj/effect/ddr_loot/E in get_area(src))
+		for(var/obj/effect/ddr_loot/E in range(7, src))
 			var/turf/T = get_turf(E)
 			T.visible_message("<span class='danger'>\The [T] melts away!</span>")
 			T.ChangeTurf(/turf/simulated/floor/plating)
