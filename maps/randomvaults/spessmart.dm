@@ -142,7 +142,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	var/datum/map_element/vault/supermarket/map_element
 
-/area/vault/supermarket/loaded_by_map_element(datum/map_element/ME)
+/area/vault/supermarket/spawned_by_map_element(datum/map_element/ME)
 	if(istype(ME, /datum/map_element/vault/supermarket))
 		map_element = ME
 
