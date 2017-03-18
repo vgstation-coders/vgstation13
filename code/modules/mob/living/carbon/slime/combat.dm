@@ -48,7 +48,7 @@
 		to_chat(src, "<span class='notice'>You can't attack while eating.</span>")
 		return
 
-	log_attack("<font color='red'>([src.key])[src] attacked ([target.key])[target]!</font>")
+	add_attacklogs(src, target, "attacked")
 
 	.=..()
 
