@@ -123,12 +123,3 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/research_facility
 	file_path = "maps/randomvaults/research_facility.dmm"
-
-/datum/map_element/vault/supermarket
-	file_path = "maps/randomvaults/spessmart.dmm"
-
-/datum/map_element/vault/supermarket/initialize(list/objects)
-	..()
-
-	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
-	S.initialize()
