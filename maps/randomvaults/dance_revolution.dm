@@ -25,6 +25,11 @@
 
 	var/process_delay = 15 //in deciseconds
 
+	//Stats!
+	var/attempts = 0
+	var/wins = 0
+	var/winner = "" //Name of the winner
+
 /obj/structure/dance_dance_revolution/Destroy()
 	stop_game()
 
@@ -47,14 +52,20 @@
 	for(var/obj/effect/ddr_instruction/D in get_area(src))
 		instruction_effects.Add(D)
 
+	attempts++
+
 	spawn()
 		process()
 
 /obj/structure/dance_dance_revolution/proc/win()
 	to_chat(dancer, "<span class='info'>You win!</span>")
+	if(!winner)
+		winner = "[dancer]"
 
 	stop_game()
 	playsound(get_turf(src), 'sound/machines/ding2.ogg', 50)
+
+	wins++
 
 	spawn()
 		for(var/obj/effect/ddr_loot/E in range(7, src))
