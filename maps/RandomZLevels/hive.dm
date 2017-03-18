@@ -27,16 +27,32 @@
 /datum/map_element/away_mission/hive
 	name = "The Hive"
 	file_path = "maps/RandomZLevels/hive.dmm"
-	desc = "An otherworldly spaceship full of terrible creatures, danger, death and destruction. No, that's not Space Station 13 - that's The Hive."
+	desc = "A hideous space structure full of mindless monsters, death and devastation lurking around every corner. No, this isn't Space Station 13 - this is The Hive."
 
 	var/obj/item/hive/cpu/CPU
+	var/obj/structure/hive/communicator/communicator
+	var/obj/structure/hive/cloner/replicator
+
+	var/bluespace_deaths = 0
+	var/bluespace_alien_kills = 0
 
 /datum/map_element/away_mission/hive/initialize(list/objects)
-	CPU = locate(/obj/item/hive/cpu)
+	..()
+
+	CPU = locate(/obj/item/hive/cpu) in objects
+	communicator = locate(/obj/structure/hive/communicator) in objects
+	replicator = locate(/obj/structure/hive/cloner) in objects
+
 	if(CPU)
 		CPU.map_element = src
 	else
 		message_admins("<span class='warning'>Unable to find the alien CPU in the away mission!</span>")
+
+	if(!communicator)
+		message_admins("<span class='warning'>Unable to find the alien communicator in the away mission!</span>")
+
+	if(!replicator)
+		message_admins("<span class='warning'>Unable to find the alien replicator in the away mission!</span>")
 
 /datum/map_element/away_mission/hive/process_scoreboard()
 	var/list/L = list()
@@ -47,6 +63,20 @@
 		L["Hive CPU retreived!"] = 25000 //Add 25000 points for doing your jobs
 	else
 		L["Hive CPU left behind."] = 0 //Whatever, we'll send somebody to pick it up
+
+	if(!communicator)
+		L["Hive communicator destroyed!"] = 5000
+
+	if(!replicator)
+		L["Hive replicator destroyed!"] = 5000
+
+	if(!bluespace_deaths)
+		L["No supermatter lake-related casualties."] = 1000
+	else
+		L += "[bluespace_deaths] people fell into the supermatter lakes." //Don't subtact points, they had it hard enough
+
+	if(bluespace_alien_kills)
+		L["[bluespace_alien_kills] aliens killed by the supermatter lakes."] = 25 * bluespace_alien_kills
 
 	return L
 
@@ -128,7 +158,7 @@
 
 /obj/item/weapon/paper/hive/nikita
 	name = "paper- 'Is Nikita a male or female name?'"
-	info = {"Just got an email from ChanDE saying that apparently I ordered a \"Nikita\" 2 weeks ago (on New Years when we got shitfaced) and the shuttle is arriving today. What kind of name is that? The Consensus is useless. I need to know because I'm not touching a male mail-whore with a ten mi pole.<br>
+	info = {"Just got an email from ChanDE saying that apparently I ordered a \"Nikita\" 2 weeks ago (on New Years when we got shitfaced) and the shuttle is arriving tomorrow. The Consensus gives me mixed results and I really want to know the gender of this mail whore before it arrives<br>
 	<i>Yi Cheng</i> <b>ID: 12C/3"}
 
 ////////SOUNDWORKS///////
@@ -159,6 +189,7 @@
 
 /obj/effect/trap/sound/hive/hallucination/wail
 	sound_to_play = 'sound/hallucinations/wail.ogg'
+	volume = 100
 
 /obj/effect/trap/sound/hive/hallucination/over_here1
 	sound_to_play = 'sound/hallucinations/over_here1.ogg'
@@ -228,13 +259,13 @@
 	desc = "This surface is constantly twisting and moving. It looks like it would take a lot of effort to just walk on it."
 	icon_state = "breathingfloor_1"
 
-	var/additional_slowdown = 18
+	var/additional_slowdown = 8
 
 /turf/unsimulated/floor/evil/breathing/New()
 	..()
 
 	icon_state = "breathingfloor_[rand(1,6)]"
-	additional_slowdown = rand(15,21)
+	additional_slowdown = rand(6,10)
 
 /turf/unsimulated/floor/evil/breathing/adjust_slowdown(mob/living/L, current_slowdown)
 	if(istype(L, /mob/living/simple_animal/hostile/hive_alien)) //Hive aliens are immune to this
@@ -250,6 +281,26 @@
 
 #undef EVIL_FLOOR_CO2
 
+/turf/unsimulated/wall/supermatter/no_spread/lake
+	name = "Supermatter Lake"
+	desc = "It appears to be somewhat contained. It emits a great gravitational pull, making flying or shooting over it impossible."
+	opacity = 0
+
+/turf/unsimulated/wall/supermatter/no_spread/lake/Consume(atom/A)
+	var/datum/map_element/away_mission/hive/hive
+	if(istype(map_element, /datum/map_element/away_mission/hive))
+		hive = map_element
+
+	if(issilicon(A) || ishuman(A))
+		var/mob/living/L = A
+		if(L.ckey)
+			hive.bluespace_deaths++
+			log_game("[key_name(L)] consumed by a supermatter lake [formatJumpTo(src)]")
+	else if(istype(A, /mob/living/simple_animal/hostile/hive_alien))
+		hive.bluespace_alien_kills++
+
+	return ..()
+
 ///////////////////////////////////////////****STRUCTURES****//////////////////////////////////////////////////
 
 /obj/structure/hive
@@ -258,6 +309,24 @@
 
 	var/health = 10
 	var/gibtype = /obj/effect/gibspawner/robot
+
+	var/datum/map_element/away_mission/hive/away_mission
+
+/obj/structure/hive/spawned_by_map_element(datum/map_element/away_mission/hive/ME)
+	..()
+
+	if(istype(ME))
+		away_mission = ME
+
+/obj/structure/hive/Destroy()
+	..()
+
+	if(away_mission)
+		//Clear references
+		if(away_mission.communicator == src)
+			away_mission.communicator = null
+		else if(away_mission.replicator == src)
+			away_mission.replicator = null
 
 /obj/structure/hive/proc/healthcheck()
 	if(health <= 0)
@@ -527,6 +596,14 @@
 
 	..()
 
+//WASPS - weighted anti-supermatter personal safeguard. Saves you from touching bluespace/supermatter
+//Lore: the sphere emits a special energy field that violently reacts to supermatter. When close to organic matter, the field will surround it as well.
+//The energy field's reaction triggers a paralyzing explosion
+//The explosion will not only
+/obj/item/supermatter_shielding
+	name = "\improper W.A.S.P.S."
+	desc = "A small sphere that saves you from getting annihilated by supermatter by violently exploding. Works when stored inside a backpack or a pocket."
+	w_class = W_CLASS_SMALL
 
 //Rewards
 /obj/item/weapon/cloakingcloak/hive

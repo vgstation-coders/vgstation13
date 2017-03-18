@@ -119,7 +119,7 @@
 	Consume(W)
 
 
-/turf/unsimulated/wall/supermatter/Bumped(atom/AM as mob|obj)
+/turf/unsimulated/wall/supermatter/Bumped(atom/AM)
 	if(istype(AM, /mob/living))
 		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
@@ -133,20 +133,14 @@
 	Consume(AM)
 
 
-/turf/unsimulated/wall/supermatter/proc/Consume(var/mob/living/user)
-	if(istype(user,/mob/dead/observer))
+/turf/unsimulated/wall/supermatter/proc/Consume(atom/AM)
+	if(istype(AM, /mob/dead/observer))
 		return
 
-	qdel(user)
+	AM.supermatter_act(src)
 
 /turf/unsimulated/wall/supermatter/singularity_act()
 	return
 
 /turf/unsimulated/wall/supermatter/no_spread
 	avail_dirs = list()
-
-//For an away mission
-/turf/unsimulated/wall/supermatter/no_spread/lake
-	name = "Supermatter Lake"
-	desc = "It appears to be somewhat contained. It emits a great gravitational pull, making flying or shooting over it impossible."
-	opacity = 0

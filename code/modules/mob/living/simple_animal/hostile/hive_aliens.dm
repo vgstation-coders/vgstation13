@@ -24,8 +24,17 @@
 
 	//Don't wander around - multiple reasons for that (for example bluespace lakes that are very lethal to them)
 	wander = FALSE
+	intent = I_HURT
 
 	stat_attack = 1
+
+/mob/living/simple_animal/hostile/hive_alien/Bump(atom/Obstacle)
+	//I haven't found any other way to make aliens NOT kill themselves on supermatter when pathfinding.
+	//This hack makes them invulnerable to supermatter unless they're getting thrown
+	if(istype(Obstacle, /turf/unsimulated/wall/supermatter) && !throwing)
+		return
+
+	return ..()
 
 //Shoots napalm bombs. Very slow practically a turret.
 /mob/living/simple_animal/hostile/hive_alien/arsonist

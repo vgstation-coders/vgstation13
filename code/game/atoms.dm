@@ -532,6 +532,9 @@ its easier to just keep the beam vertical.
 /atom/proc/emag_act()
 	return
 
+/atom/proc/supermatter_act(atom/source)
+	qdel(src)
+
 /atom/proc/hitby(atom/movable/AM as mob|obj)
 	return
 

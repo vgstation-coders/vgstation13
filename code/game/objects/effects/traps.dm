@@ -39,6 +39,8 @@
 	desc = "JUMPSCARES best scares"
 
 	var/sound_to_play
+	var/volume = 50
+	var/vary = 1
 
 /obj/effect/trap/sound/activate(atom/movable/AM)
 	if(sound_to_play)
@@ -49,4 +51,4 @@
 		else
 			S = sound_to_play
 
-		playsound(get_turf(src), S, 50, 1)
+		playsound(get_turf(src), S, volume, vary)
