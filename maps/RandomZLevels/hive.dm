@@ -126,16 +126,17 @@
 /obj/item/weapon/paper/hive/marauder_rescue
 	name = "paper- 'Re:Re:Re: The blueblood mech disappeared and Commander wants to deprotonize our asses'"
 	info = {"After concluding an investigation, I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:<br><br>
-	Chassis: Kitchen in meat fridge<br>
-	Left Arm: Inside the sauna<br>
-	Right Arm: Atmospherics - Nitrogen chamber<br>
-	Left Leg: Maintenance between research and PersonalQuarters<br>
-	Right Leg: Biomed (near the bridge), body scanner 2<br>
-	Plating: Hallway near the supermatter engine<br>
-	Head: Vending machine in the same hallway (in place of the $60 chips)<br>
-	CCM: Outside of Atmospherics<br>
-	PCM: Engineering tool storage<br>
-	WCM: Under the radio transmitter<br>
+	<b>Chassis</b>: Kitchen in meat fridge<br>
+	<b>Torso</b>: Aux tool storage (near Dan's """workshop""")<br>
+	<b>Left Arm</b>: Inside the sauna<br>
+	<b>Right Arm</b>: Atmospherics - Nitrogen chamber<br>
+	<b>Left Leg</b>: Maintenance between research and PersonalQuarters<br>
+	<b>Right Leg</b>: Biomed (near the bridge), body scanner 2<br>
+	<b>Plating</b>: Hallway near the supermatter engine<br>
+	<b>Head</b>: Vending machine in the same hallway (in place of the $60 chips)<br>
+	<b>CCM</b>: Outside of Atmospherics<br>
+	<b>PCM</b>: Engineering tool storage<br>
+	<b>WCM</b>: Under the radio transmitter<br>
 	<br>
 	Let's do the exact same thing to the clown before the commander \"deprotonizes our asses\" (does this mean what I think this means?).<br>
 	<i>Amara</i> <b>ID: 222F/4</b>
@@ -160,6 +161,14 @@
 	name = "paper- 'Is Nikita a male or female name?'"
 	info = {"Just got an email from ChanDE saying that apparently I ordered a \"Nikita\" 2 weeks ago (on New Years when we got shitfaced) and the shuttle is arriving tomorrow. The Consensus gives me mixed results and I really want to know the gender of this mail whore before it arrives<br>
 	<i>Yi Cheng</i> <b>ID: 12C/3"}
+
+/obj/item/weapon/paper/hive/shielding
+	name = "paper- 'Are you a clumsy ass? Don't forget to grab a SASS'"
+	info = {"The supermatter power generator has claimed two engineer lives last week: Margat and Ivan. To prevent any further deaths, we have ordered
+	ten Spherical Anti-Supermatter Safeguard units from TianGong-5.<br>
+	This ridicilously expensive ball must be carried in your pocket or backpack when working anywhere near the supermatter shard. Then, when you inevitably
+	touch the shard, the SASS will protect you from disintegration - once.<br><br>
+	<i>Cunningham</i> <b>ID: 2E/2</b>"}
 
 ////////SOUNDWORKS///////
 
@@ -596,14 +605,35 @@
 
 	..()
 
-//WASPS - weighted anti-supermatter personal safeguard. Saves you from touching bluespace/supermatter
-//Lore: the sphere emits a special energy field that violently reacts to supermatter. When close to organic matter, the field will surround it as well.
-//The energy field's reaction triggers a paralyzing explosion
-//The explosion will not only
+//SASS - spherical anti-supermatter safeguard. Saves you from touching bluespace/supermatter
+//SASS sphere - spherical anti-supermatter safeguard sphere
 /obj/item/supermatter_shielding
-	name = "\improper W.A.S.P.S."
-	desc = "A small sphere that saves you from getting annihilated by supermatter by violently exploding. Works when stored inside a backpack or a pocket."
+	name = "\improper S.A.S.S. sphere"
+	desc = "A small sphere that, in theory, should prevent you from getting annihilated by supermatter. It looks like a brown marble floating in a strange liquid inside a glass orb."
 	w_class = W_CLASS_SMALL
+
+	icon_state = "supermatter_shield"
+
+	var/stunforce = 10
+	var/infinite = 0
+
+/obj/item/supermatter_shielding/supermatter_act(atom/source)
+	var/turf/T = get_turf(src)
+
+	if(T)
+		explosion(T, -1, -1, 1)
+
+	if(istype(loc, /mob/living))
+		var/mob/living/L = loc
+		L.Stun(stunforce)
+		L.Knockdown(stunforce)
+		L.apply_effect(STUTTER, stunforce)
+
+		if(L)
+			to_chat(L, "<span class='userdanger'>As you approach \the [source], your [src] explodes in a burst of energy, knocking you back. Phew, that was close.</span>")
+
+	if(!infinite)
+		.=..()
 
 //Rewards
 /obj/item/weapon/cloakingcloak/hive

@@ -1744,14 +1744,18 @@ mob/proc/on_foot()
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
 
-/mob/supermatter_act(atom/source)
+/mob/supermatter_act(atom/source, severity)
 	var/contents = get_contents_in_object(src)
 
 	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
 	if(SS)
 		SS.supermatter_act(source)
 	else
-		return ..()
+
+		if(severity == SUPERMATTER_DUST)
+			dust()
+		else
+			qdel(src)
 
 /mob/proc/remove_jitter()
 	if(jitteriness)

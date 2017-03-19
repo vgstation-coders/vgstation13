@@ -1586,3 +1586,7 @@ var/proccalls = 1
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
 #define NPC_TAMPER_ACT_NOMSG  2 //Don't produce a visible message
+
+//supermatter_act() severity values
+#define SUPERMATTER_DELETE 0
+#define SUPERMATTER_DUST   1
