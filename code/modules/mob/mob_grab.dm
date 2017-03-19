@@ -24,6 +24,9 @@
 	assailant = loc
 	affecting = victim
 
+	if(!victim.can_be_grabbed(assailant))
+		returnToPool(src)
+		return
 	if(affecting && affecting.anchored)
 		returnToPool(src)
 		return

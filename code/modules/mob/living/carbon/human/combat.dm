@@ -75,7 +75,7 @@
 		return HALLOSS
 	return ..()
 
-/mob/living/carbon/human/get_unarmed_damage()
+/mob/living/carbon/human/get_unarmed_damage(mob/victim)
 	var/damage = rand(0, species.max_hurt_damage)
 	damage += species.punch_damage
 
@@ -85,7 +85,9 @@
 		damage += 3
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
-		damage += G.damage_added //Increase damage by the gloves' damage modifier
+		damage += G.get_damage_added() //Increase damage by the gloves' damage modifier
+
+		G.on_punch(src, victim)
 
 	return damage
 

@@ -111,7 +111,7 @@
 	info = {"You only care about two things in your life - eating cakes and perving at Russian chicks, so we got you an appropriate present. Never change, you fat piece of shit.<br><br>
 
 	<i>Dan</i><br>
-	<i>Parek</i><br>
+	<i>Parok</i><br>
 	<i>Szpindel</i><br>
 	<i>Amara</i><br>"}
 
@@ -170,6 +170,12 @@
 	touch the shard, the SASS will protect you from disintegration - once.<br><br>
 	<i>Cunningham</i> <b>ID: 2E/2</b>"}
 
+/obj/item/weapon/paper/hive/powerfist
+	name = "paper- 'Powerfists forbidden on board HangTianBao 1'"
+	info = {"Quanfen gloves, also known as "Powerfists" are now considered class 1 weaponry. Crewmembers have until <b>1-44-122-4</b> to give up their powerfists to classified security personnel. After that date, possession of a powerfist will be considered a major A-level offense, and will be prosecuted accordingly.<br>
+
+	<i>Parok</i> <b>ID: 1E/1</b>"}
+
 ////////SOUNDWORKS///////
 
 /obj/effect/narration/hive/ambience_sound_1
@@ -227,6 +233,7 @@
 
 /area/awaymission/hive
 	name = "hive"
+	flags = 0
 
 /area/awaymission/hive/secure
 	icon_state = "armory"
@@ -268,13 +275,13 @@
 	desc = "This surface is constantly twisting and moving. It looks like it would take a lot of effort to just walk on it."
 	icon_state = "breathingfloor_1"
 
-	var/additional_slowdown = 8
+	var/additional_slowdown = 5
 
 /turf/unsimulated/floor/evil/breathing/New()
 	..()
 
 	icon_state = "breathingfloor_[rand(1,6)]"
-	additional_slowdown = rand(6,10)
+	additional_slowdown = rand(3,7)
 
 /turf/unsimulated/floor/evil/breathing/adjust_slowdown(mob/living/L, current_slowdown)
 	if(istype(L, /mob/living/simple_animal/hostile/hive_alien)) //Hive aliens are immune to this
@@ -415,12 +422,20 @@
 /obj/structure/hive/pylon/proc/emit_radiation(rad_range, rad_power )
 	// Radiation
 	for(var/mob/living/carbon/M in range(src, rad_range))
-		var/msg = pick(\
-		"You hear a slow clicking.",\
-		"Your head begins to hurt.",\
-		"You feel tired for some reason.",\
-		"You feel odd and out of place.",\
-		"You feel mildly nauseated.")
+		var/mob/living/carbon/human/H = M
+		var/msg
+		if(istype(H) && H.species && H.species.flags & RAD_ABSORB)
+			msg = pick(\
+			"You feel mildly irradiated.",\
+			"You receive a small dose of radiation.",\
+			"You feel the ambient radiation affecting you.")
+		else
+			msg = pick(\
+			"You hear a slow clicking.",\
+			"Your head begins to hurt.",\
+			"You feel tired.",\
+			"You feel mildly nauseated.",
+			"You feel radiation burns appearing on your body.")
 
 		to_chat(M, "<span class='warning'>[msg]</span>")
 		if(istype(M,/mob/living/carbon/human))

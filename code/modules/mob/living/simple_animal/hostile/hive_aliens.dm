@@ -36,6 +36,9 @@
 
 	return ..()
 
+/mob/living/simple_animal/hostile/hive_alien/can_be_grabbed()
+	return FALSE
+
 //Shoots napalm bombs. Very slow practically a turret.
 /mob/living/simple_animal/hostile/hive_alien/arsonist
 	name = "hive arsonist"
