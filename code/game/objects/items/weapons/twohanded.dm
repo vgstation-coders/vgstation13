@@ -335,6 +335,7 @@
 	attack_delay = 25 // Heavy.
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
+	mech_flags = MECH_SCAN_ILLEGAL
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")

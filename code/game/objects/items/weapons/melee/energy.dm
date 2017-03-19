@@ -198,6 +198,7 @@
 	throw_range = 8
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
+	mech_flags = MECH_SCAN_ILLEGAL
 	siemens_coefficient = 1
 	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
