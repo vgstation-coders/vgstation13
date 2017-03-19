@@ -189,7 +189,7 @@
 	if (A.flags & NO_TELEPORT)
 		return
 
-	if(istype(target, /turf) && !istype(target, /turf/simulated/wall))
+	if(istype(target, /turf) && !istype(target, /turf/simulated/wall) && !istype(target, /turf/unsimulated/wall))
 		send(target,user)
 		return
 

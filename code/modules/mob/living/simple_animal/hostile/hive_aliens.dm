@@ -4,12 +4,17 @@
 //Basic alien
 /mob/living/simple_animal/hostile/hive_alien
 	name = "hive denizen"
-	desc = "A small crab-like creature with a large growth on its shell. Many thin tentacles emanate from it."
+	desc = "A crab-like creature with a large growth on its shell. Many thin tentacles emanate from it."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "hive_denizen"
 	icon_living = "hive_denizen"
 	icon_dead = "hive_denizen_dead"
+
+	health = 120
+	maxHealth = 120
+
+	move_to_delay = 5
 
 	//Not affected by atmos - the hive is a near vacuum
 	min_oxy = 0
@@ -22,11 +27,17 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	//Don't wander around - multiple reasons for that (for example bluespace lakes that are very lethal to them)
+	melee_damage_lower = 15
+	melee_damage_upper = 20
+
+	//Don't wander around
 	wander = FALSE
 	intent = I_HURT
 
+	//Attack unconscious
 	stat_attack = 1
+
+	var/stun_attack = 15 //15% chance to stun per attack
 
 /mob/living/simple_animal/hostile/hive_alien/Bump(atom/Obstacle)
 	//I haven't found any other way to make aliens NOT kill themselves on supermatter when pathfinding.
@@ -39,6 +50,16 @@
 /mob/living/simple_animal/hostile/hive_alien/can_be_grabbed()
 	return FALSE
 
+/mob/living/simple_animal/hostile/hive_alien/AttackingTarget()
+	.=..()
+
+	if(stun_attack && isliving(target))
+		var/mob/living/L = target
+
+		if(prob(stun_attack))
+			to_chat(L, "<span class='userdanger'>You are briefly stunned by \the [src]'s violent onslaught!</span>")
+			L.Stun(rand(1,2))
+
 //Shoots napalm bombs. Very slow practically a turret.
 /mob/living/simple_animal/hostile/hive_alien/arsonist
 	name = "hive arsonist"
@@ -48,10 +69,23 @@
 	icon_living = "hive_arsonist"
 	icon_dead = "hive_arsonist_dead"
 
-	speed = 50
-	turns_per_move = 100
+	health = 200
+	maxHealth = 200
 
-//Turns alien floors into breathing floors. Doesn't wander. Pretty weak but makes it easy for arsonists and executioners to ruin your life
+	melee_damage_lower = 5
+	melee_damage_upper = 10
+
+	ranged = 1
+	projectiletype = /obj/item/projectile/napalm_bomb
+	projectilesound = 'sound/weapons/rocket.ogg'
+	ranged_cooldown_cap = 3
+
+	speed = 100
+	move_to_delay = 150
+
+	stun_attack = FALSE
+
+//Turns alien floors into breathing floors.
 /mob/living/simple_animal/hostile/hive_alien/artificer
 	name = "hive artificer"
 	desc = "A construct tasked with maintenance and improvement of the hive."
@@ -61,19 +95,21 @@
 	icon_dead = "hive_artificer_dead"
 
 	size = SIZE_NORMAL
-	health = 80
-	maxHealth = 80
+	health = 100
+	maxHealth = 100
 
 	harm_intent_damage = 8
-	melee_damage_lower = 10
-	melee_damage_upper = 15
+	melee_damage_lower = 18
+	melee_damage_upper = 23
 	attacktext = "burns"
 	attack_sound = 'sound/weapons/welderattack.ogg'
 
-	turns_per_move = 12
-	speed = 2
+	move_to_delay = 3
+	speed = 4
 
 	wander = FALSE
+
+	stun_attack = FALSE
 
 /mob/living/simple_animal/hostile/hive_alien/artificer/Die()
 	..()
@@ -89,7 +125,7 @@
 		T.ChangeTurf(/turf/unsimulated/floor/evil/breathing)
 
 //Has 2 modes: movement mode and attack mode. When in movement mode, fast but can't attack. When in attack mode, immobile but dangerous
-//Switching between modes takes 0.6-1 seconds
+//Switching between modes takes 0.4-.8 seconds
 /mob/living/simple_animal/hostile/hive_alien/executioner
 	name = "hive executioner"
 	desc = "A terrifying monster of an enormous size. It scuttles very quickly on its many legs, and hides hundreds of blades under its carapace."
@@ -98,25 +134,27 @@
 	icon_living = "hive_executioner_move"
 	icon_dead = "hive_executioner_dead"
 
-	turns_per_move = 8
+	move_to_delay = 5
 	speed = -1
 
-	size = SIZE_HUGE
+	size = SIZE_BIG
 	health = 300
 	maxHealth = 300
 
 	harm_intent_damage = 8
-	melee_damage_lower = 40
-	melee_damage_upper = 50
+	melee_damage_lower = 45
+	melee_damage_upper = 55
 	attacktext = "eviscerates"
 	attack_sound = 'sound/weapons/slash.ogg'
 
 	stat_attack = UNCONSCIOUS //attack living and unconscious
 
+	stun_attack = 30 //30% chance of stun
+
 	var/attack_mode = FALSE
 
-	var/transformation_delay_min = 6
-	var/transformation_delay_max = 10
+	var/transformation_delay_min = 4
+	var/transformation_delay_max = 8
 
 /mob/living/simple_animal/hostile/hive_alien/executioner/proc/mode_movement()
 	icon_state = "hive_executioner_move"
@@ -126,7 +164,7 @@
 
 	anchored = FALSE
 	speed = -1
-	turns_per_move = 5
+	move_to_delay = 8
 	attack_mode = FALSE
 
 	aggro_vision_range = initial(aggro_vision_range)
@@ -144,7 +182,6 @@
 
 	anchored = TRUE
 	speed = 0
-	turns_per_move = 0
 	attack_mode = TRUE
 
 	aggro_vision_range = 1

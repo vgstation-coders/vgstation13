@@ -447,7 +447,7 @@
 		if(!L)
 			continue
 
-		dat += "<u>[ME.name ? uppertext(ME.name) : "UNKNOWN SPACE STRUCTURE"]</u><br>"
+		dat += "<br><u>[ME.name ? uppertext(ME.name) : "UNKNOWN SPACE STRUCTURE"]</u><br>"
 
 		for(var/score_value in L)
 			dat += "<b>[score_value]</b>[L[score_value] ? "<b>:</b> [L[score_value]]" : ""]<br>"
@@ -456,17 +456,6 @@
 
 	if(arena_top_score)
 		dat += "<B>Best Arena Fighter (won [arena_top_score] rounds!):</B> [score["arenabest"]]<BR>"
-
-	for(var/datum/map_element/ME in map_elements)
-		var/list/L = ME.process_scoreboard()
-		if(!L)
-			continue
-
-		dat += "<br><u>[ME.name]</u><br>"
-		for(var/score_value in L)
-			dat += "<b>[score_value]</b>[L[score_value] ? "<b>: </b> [L[score_value]]" : ""]<br>"
-			score["crewscore"] += L[score_value]
-		dat += "<br>"
 
 	if(score["escapees"])
 		if(score["dmgestdamage"])

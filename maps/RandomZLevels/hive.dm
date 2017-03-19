@@ -9,13 +9,13 @@
 //Alien floor: indestructible floor
 
 //Hive pylon: structure that emits very powerful radiation
-//Breathing floor: an alien floor that slows you down when you're walking on it
+//Breathing floor: a special floor that slows down YOU and speeds up the aliens
 //Supermatter lake:  instantly kills you if you touch it or walk into it, no matter your armour, race, gender or admin flags. Thankfully the aliens have been so kind that they've built catwalks over some of it
 
 //Alien Denizen: basic alien, behaves much like a simple space carp
 
 //Alien Executioner: highly mobile enemy. when it comes adjacent to the enemy, it will switch into 'attack mode' and start attacking very fast. When the target moves away, it will switch back into 'movement mode' and start chasing again
-//                   Can't attack while in 'movement mode'. Unaffected by breathing floors.
+//                   Can't attack while in 'movement mode'.
 
 //Alien Arsonist: very slow tank enemy that shoots napalm bombs
 //
@@ -36,16 +36,38 @@
 	var/bluespace_deaths = 0
 	var/bluespace_alien_kills = 0
 
+	var/list/rewards = list()
+	var/start_reward_amount = 0
+
+	var/static/reward_types = list(\
+	/obj/item/weapon/gun/energy/pulse_rifle,
+	/obj/item/weapon/gun/stickybomb,
+	/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
+	/obj/item/mecha_parts, //Marauder parts
+	/obj/item/weapon/cloakingcloak/hive,
+	/obj/item/weapon/invisible_spray,
+	/obj/item/clothing/gloves/powerfist,
+	/obj/item/clothing/glasses/thermal/eyepatch
+	)
+
 /datum/map_element/away_mission/hive/initialize(list/objects)
 	..()
 
-	CPU = locate(/obj/item/hive/cpu) in objects
-	communicator = locate(/obj/structure/hive/communicator) in objects
-	replicator = locate(/obj/structure/hive/cloner) in objects
+	CPU = track_atom(locate(/obj/item/hive/cpu) in objects)
+	communicator = track_atom(locate(/obj/structure/hive/communicator) in objects)
+	replicator = track_atom(locate(/obj/structure/hive/cloner) in objects)
 
-	if(CPU)
-		CPU.map_element = src
-	else
+	for(var/obj/item/I in objects)
+		if(is_type_in_list(I, reward_types))
+			var/tracked = track_atom(I)
+
+			rewards[tracked] = get_turf(tracked) //Associate the reward with the turf.
+
+	start_reward_amount = rewards.len
+	//Rewards may get destroyed, in which case they'll be removed from the rewards list.
+	//Rewards list's len will be subtracted from this value to find the amount of destroyed rewards. It will then be added to the amount of found rewards
+
+	if(!CPU)
 		message_admins("<span class='warning'>Unable to find the alien CPU in the away mission!</span>")
 
 	if(!communicator)
@@ -56,27 +78,40 @@
 
 /datum/map_element/away_mission/hive/process_scoreboard()
 	var/list/L = list()
+	var/CPU_rescued = FALSE
 
 	if(!CPU)
-		L["Hive CPU destroyed!"] = -10000 //Subtract 10000 points for being nuclear fuck-ups and destroying a valuable alien technology
+		L["You have destroyed the Hive CPU, instead of bringing it to Central Command!"] = -10000 //Subtract 10000 points for being nuclear fuck-ups and destroying a valuable alien technology
 	else if(istype(get_area(CPU), /area/shuttle/escape))
-		L["Hive CPU retreived!"] = 25000 //Add 25000 points for doing your jobs
+		L["You have retreived the Hive CPU. Fantastic job!"] = 20000 //Add 20000 points for doing your jobs
+		CPU_rescued = TRUE
 	else
-		L["Hive CPU left behind."] = 0 //Whatever, we'll send somebody to pick it up
+		L["You have left the Hive CPU behind."] = 0 //Whatever, we'll send somebody to pick it up
 
 	if(!communicator)
-		L["Hive communicator destroyed!"] = 5000
+		L["The Hive Communicator has been destroyed!"] = 5000
 
 	if(!replicator)
-		L["Hive replicator destroyed!"] = 5000
+		L["The Hive Replicator has been destroyed"] = 5000
 
 	if(!bluespace_deaths)
 		L["No supermatter lake-related casualties."] = 1000
 	else
-		L += "[bluespace_deaths] people fell into the supermatter lakes." //Don't subtact points, they had it hard enough
+		L += "[bluespace_deaths] [bluespace_deaths == 1 ? "loser was" : "people were"] annihilated in the supermatter lakes."
+
+	var/found_secrets = 0
+	for(var/obj/item/I in rewards)
+		if(I.loc != rewards[I]) //If the reward has been moved, count it as found. Seeing it is not enough
+			found_secrets++
+	found_secrets += start_reward_amount - rewards.len //Destroyed rewards count as 'found' too
 
 	if(bluespace_alien_kills)
-		L["[bluespace_alien_kills] aliens killed by the supermatter lakes."] = 25 * bluespace_alien_kills
+		L["[bluespace_alien_kills] alien\s [bluespace_alien_kills == 1 ? "was" : "were"] annihilated in the supermatter lakes."] = 25 * bluespace_alien_kills
+
+	L["Rewards taken: [found_secrets] / [start_reward_amount]! "] = found_secrets * 50
+
+	if(CPU_rescued && !communicator && !replicator && (found_secrets == start_reward_amount))
+		L["<br>100% completion! Outstanding!"] = 50000
 
 	return L
 
@@ -284,9 +319,10 @@
 	additional_slowdown = rand(3,7)
 
 /turf/unsimulated/floor/evil/breathing/adjust_slowdown(mob/living/L, current_slowdown)
-	if(istype(L, /mob/living/simple_animal/hostile/hive_alien)) //Hive aliens are immune to this
-		return current_slowdown
+	if(istype(L, /mob/living/simple_animal/hostile/hive_alien)) //Hive aliens are sped up
+		return -1
 
+	//Everybody else is slowed down
 	return current_slowdown + additional_slowdown
 
 /turf/unsimulated/floor/fake_supermatter/hive
@@ -325,24 +361,6 @@
 
 	var/health = 10
 	var/gibtype = /obj/effect/gibspawner/robot
-
-	var/datum/map_element/away_mission/hive/away_mission
-
-/obj/structure/hive/spawned_by_map_element(datum/map_element/away_mission/hive/ME)
-	..()
-
-	if(istype(ME))
-		away_mission = ME
-
-/obj/structure/hive/Destroy()
-	..()
-
-	if(away_mission)
-		//Clear references
-		if(away_mission.communicator == src)
-			away_mission.communicator = null
-		else if(away_mission.replicator == src)
-			away_mission.replicator = null
 
 /obj/structure/hive/proc/healthcheck()
 	if(health <= 0)
@@ -388,6 +406,8 @@
 		return 1
 
 //Pylon
+var/list/hive_pylons = list()
+
 /obj/structure/hive/pylon
 	name = "hive pylon"
 	desc = "An alien machine that appears to release large amounts of radiation into its surroundings."
@@ -398,26 +418,43 @@
 	var/radiation_cooldown = 40 SECONDS
 	var/last_pulse
 
-	var/radiation_range = 10
-	var/radiation_power = 40
+	var/radiation_range = 12
+	var/radiation_power = 20
+	var/active = TRUE
 
 /obj/structure/hive/pylon/New()
 	..()
 
+	hive_pylons.Add(src)
 	processing_objects.Add(src)
 
 /obj/structure/hive/pylon/Destroy()
 	processing_objects.Remove(src)
+	hive_pylons.Remove(src)
 
 	..()
+
+/obj/structure/hive/pylon/Die()
+	//One last pulse before dying
+	if(active)
+		emit_radiation(radiation_range, radiation_power)
+
+	..()
+
+/obj/structure/hive/pylon/proc/turn_offline()
+	health = 1
+	icon_state = "hive_pylon_inactive"
+	processing_objects.Remove(src)
+	desc = initial(desc) + " It is inactive."
+	active = FALSE
 
 /obj/structure/hive/pylon/process()
 	if((last_pulse + radiation_cooldown < world.time) && prob(25)) //To make the radiation pulses irregular, it has a 25% chance of pulsing every process
 		last_pulse = world.time
 
 		emit_radiation(radiation_range, radiation_power)
-		radiation_range = rand(7,15)
-		radiation_power = rand(10,70)
+		radiation_range = rand(10,15)
+		radiation_power = rand(10,30)
 
 /obj/structure/hive/pylon/proc/emit_radiation(rad_range, rad_power )
 	// Radiation
@@ -449,9 +486,9 @@
 	desc = "This seemingly organic structure resembling a human heart hangs down from the ceiling, beating at a steady rate."
 
 	icon_state = "hive_heart"
-	health = 300
+	health = 500
 
-	var/create_cooldown = 75 SECONDS
+	var/create_cooldown = 70 SECONDS
 	var/last_create
 
 /obj/structure/hive/cloner/New()
@@ -491,9 +528,9 @@
 
 		var/spawned_type = pick(\
 		/mob/living/simple_animal/hostile/hive_alien,\
-		/mob/living/simple_animal/hostile/hive_alien/executioner,\
-		/mob/living/simple_animal/hostile/hive_alien/artificer)//,\
-		///mob/living/simple_animal/hostile/hive_alien/arsonist)
+		/mob/living/simple_animal/hostile/hive_alien/artificer,\
+		50; /mob/living/simple_animal/hostile/hive_alien/executioner,\
+		10; /mob/living/simple_animal/hostile/hive_alien/arsonist) //Arsonists and executioners are rare
 
 		spawn(rand(2 SECONDS,40 SECONDS))
 			var/mob/living/simple_animal/hostile/hive_alien/HA = new spawned_type(T)
@@ -504,7 +541,7 @@
 			'sound/effects/wind/wind_2_2.ogg',\
 			'sound/effects/wind/wind_3_1.ogg',\
 			)
-			playsound(get_turf(HA), played_sound, 40, 1)
+			playsound(get_turf(HA), played_sound, 60, 1)
 
 /obj/effect/landmark/hive/monster_spawner
 	name = "alien spawner"
@@ -518,6 +555,12 @@
 	icon_state = "hive_comms"
 	health = 150
 	gibtype = /obj/effect/gibspawner/human
+
+/obj/structure/hive/communicator/Die()
+	..()
+
+	for(var/obj/structure/hive/pylon/P in hive_pylons)
+		P.turn_offline()
 
 //Husked mob
 /obj/structure/hive/husk
@@ -550,12 +593,7 @@
 
 /obj/structure/hive/husk/martian //never
 	icon = 'icons/mob/martian.dmi'
-	icon_state = "fuggle"
-
-/obj/structure/hive/husk/martian/New()
-	..()
-
-	icon_state = pick("fuggle", "martian")
+	icon_state = "martian"
 
 /obj/structure/hive/husk/vox
 	icon = 'icons/mob/vox.dmi'
@@ -603,7 +641,7 @@
 
 /obj/item/hive/cpu
 	name = "alien processing unit"
-	desc = "This massive piece of machinery appears to be communicating with the hive, giving orders and controlling the aliens. It appears to be more complex that anything we've ever seen. If you retreived it from here, our research could advance a few hundred years into the future."
+	desc = "This massive piece of machinery appears to play a large part in the Hive's function. If you retreived it from here, our research could advance a few hundred years into the future."
 
 	icon_state = "hive_cpu"
 
@@ -612,13 +650,6 @@
 	anchored = TRUE //Forces people to carry it by hand, no pulling!
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 
-	var/datum/map_element/away_mission/hive/map_element
-
-/obj/item/hive/cpu/Destroy()
-	if(map_element.CPU == src)
-		map_element.CPU = null
-
-	..()
 
 //SASS - spherical anti-supermatter safeguard. Saves you from touching bluespace/supermatter
 //SASS sphere - spherical anti-supermatter safeguard sphere
