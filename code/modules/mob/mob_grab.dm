@@ -19,7 +19,7 @@
 	w_class = W_CLASS_HUGE
 
 
-/obj/item/weapon/grab/New(atom/loc, mob/victim)
+/obj/item/weapon/grab/New(atom/loc, mob/living/victim)
 	..()
 	assailant = loc
 	affecting = victim
