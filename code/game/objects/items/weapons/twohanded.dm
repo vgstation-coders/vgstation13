@@ -220,6 +220,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
+	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
