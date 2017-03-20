@@ -193,7 +193,9 @@
 				new_detected = null
 
 		last_pulse = world.time
-
+	else
+		if(auto_pulse)
+			auto_pulse = 0
 
 	return detected
 
