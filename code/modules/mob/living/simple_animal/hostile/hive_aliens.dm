@@ -4,15 +4,15 @@
 //Basic alien
 /mob/living/simple_animal/hostile/hive_alien
 	name = "hive denizen"
-	desc = "A crab-like creature with a large growth on its shell. Many thin tentacles emanate from it."
+	desc = "A crab-like creature with a large growth on its shell. Many short, thin tentacles emanate from it."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "hive_denizen"
 	icon_living = "hive_denizen"
 	icon_dead = "hive_denizen_dead"
 
-	health = 120
-	maxHealth = 120
+	health = 100
+	maxHealth = 100
 
 	move_to_delay = 5
 
@@ -26,6 +26,8 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hive
 
 	melee_damage_lower = 15
 	melee_damage_upper = 20
@@ -62,18 +64,20 @@
 
 //Shoots napalm bombs. Very slow practically a turret.
 /mob/living/simple_animal/hostile/hive_alien/arsonist
-	name = "hive arsonist"
-	desc = "This twisted creation looks like a mechanic spider with a huge cannon mounted on its back. It's very slow, and mostly uses its eight legs for balancing and adjusting its aim."
+	name = "hive turret"
+	desc = "This twisted creation looks like a large cannon with a small body attached to it. It can barely move itself, and mostly only uses its many legs to adjust its aim."
 
 	icon_state = "hive_arsonist"
 	icon_living = "hive_arsonist"
 	icon_dead = "hive_arsonist_dead"
 
-	health = 200
-	maxHealth = 200
+	health = 180
+	maxHealth = 180
 
 	melee_damage_lower = 5
 	melee_damage_upper = 10
+
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret
 
 	ranged = 1
 	projectiletype = /obj/item/projectile/napalm_bomb
@@ -88,15 +92,15 @@
 //Turns alien floors into breathing floors.
 /mob/living/simple_animal/hostile/hive_alien/artificer
 	name = "hive artificer"
-	desc = "A construct tasked with maintenance and improvement of the hive."
+	desc = "An alien with an egg-shaped body that uses tentacles to move around and interact with its surroundings. Such constructs are usually tasked with repairing and improving the Hive."
 
 	icon_state = "hive_artificer"
 	icon_living = "hive_artificer"
 	icon_dead = "hive_artificer_dead"
 
 	size = SIZE_NORMAL
-	health = 100
-	maxHealth = 100
+	health = 80
+	maxHealth = 80
 
 	harm_intent_damage = 8
 	melee_damage_lower = 18
@@ -127,8 +131,8 @@
 //Has 2 modes: movement mode and attack mode. When in movement mode, fast but can't attack. When in attack mode, immobile but dangerous
 //Switching between modes takes 0.4-.8 seconds
 /mob/living/simple_animal/hostile/hive_alien/executioner
-	name = "hive executioner"
-	desc = "A terrifying monster of an enormous size. It scuttles very quickly on its many legs, and hides hundreds of blades under its carapace."
+	name = "hive defender"
+	desc = "A terrifying monster resembling a massive tick in shape. Hundreds of blades are hidden underneath its shell."
 
 	icon_state = "hive_executioner_move"
 	icon_living = "hive_executioner_move"
@@ -138,8 +142,8 @@
 	speed = -1
 
 	size = SIZE_BIG
-	health = 300
-	maxHealth = 300
+	health = 280
+	maxHealth = 280
 
 	harm_intent_damage = 8
 	melee_damage_lower = 45

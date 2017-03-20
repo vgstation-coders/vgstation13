@@ -115,7 +115,9 @@
 	if(istype(O))
 		if(!saw_ckeys.Find(O.ckey))
 			saw_ckeys.Add(O.ckey)
-			to_chat(O, msg)
+
+			if(msg)
+				to_chat(O, msg)
 
 			if(play_sound)
 				O << play_sound

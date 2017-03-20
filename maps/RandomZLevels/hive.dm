@@ -9,18 +9,18 @@
 //Alien floor: indestructible floor
 
 //Hive pylon: structure that emits very powerful radiation
-//Breathing floor: a special floor that slows down YOU and speeds up the aliens
+//Living floor: a special floor that slows down YOU and speeds up the aliens
 //Supermatter lake:  instantly kills you if you touch it or walk into it, no matter your armour, race, gender or admin flags. Thankfully the aliens have been so kind that they've built catwalks over some of it
 
 //Alien Denizen: basic alien, behaves much like a simple space carp
 
-//Alien Executioner: highly mobile enemy. when it comes adjacent to the enemy, it will switch into 'attack mode' and start attacking very fast. When the target moves away, it will switch back into 'movement mode' and start chasing again
+//Alien Defender: highly mobile enemy. when it comes adjacent to the enemy, it will switch into 'attack mode' and start attacking very fast. When the target moves away, it will switch back into 'movement mode' and start chasing again
 //                   Can't attack while in 'movement mode'.
 
 //Alien Arsonist: very slow tank enemy that shoots napalm bombs
 //
 
-//Alien Artificer: alien that PERMANENTLY turns alien floors below it into breathing floors. They don't wander around and only start moving
+//Alien Artificer: alien that PERMANENTLY turns alien floors below it into living floors. They don't wander around and only start moving
 //                 when they see a target
 
 ///////////////////////////////////////////****THE MISSION****////////////////////////////////////////////
@@ -43,7 +43,6 @@
 	/obj/item/weapon/gun/energy/pulse_rifle,
 	/obj/item/weapon/gun/stickybomb,
 	/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
-	/obj/item/mecha_parts, //Marauder parts
 	/obj/item/weapon/cloakingcloak/hive,
 	/obj/item/weapon/invisible_spray,
 	/obj/item/clothing/gloves/powerfist,
@@ -108,7 +107,7 @@
 	if(bluespace_alien_kills)
 		L["[bluespace_alien_kills] alien\s [bluespace_alien_kills == 1 ? "was" : "were"] annihilated in the supermatter lakes."] = 25 * bluespace_alien_kills
 
-	L["Rewards taken: [found_secrets] / [start_reward_amount]! "] = found_secrets * 50
+	L["Secrets found: [found_secrets] / [start_reward_amount]! "] = found_secrets * 50
 
 	if(CPU_rescued && !communicator && !replicator && (found_secrets == start_reward_amount))
 		L["<br>100% completion! Outstanding!"] = 50000
@@ -116,14 +115,45 @@
 	return L
 
 ///////////////////////////////////////////****NARRATIONS****/////////////////////////////////////////////
+//Briefing
+/datum/command_alert/awaymission/hive
+	name = "Hostile Alien Spaceship Detected"
+	alert_title = "Hostile Spaceship Detected"
+	message = "Summary downloaded and printed out at all communications consoles."
+
+	var/summary_text = {"
+	<b>Situation Summary</b><br><br>
+	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
+	Thankfully, for the first time since its discovery, we have managed to get a partial scan of the Hive, revealing possible points of entry and the spaceship's key areas that have to be eliminated.<br>
+	You are to send a strike team right in the heart of the Hive, and complete the following taskss:<br>
+	<ul>
+	<li>Destroy the Hive Mind</li>
+	<li>Destroy the Hive Replicator</li>
+	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle</li>
+	</ul>
+	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br>
+	Our partial scans indicate dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as other than these vague scan results, we have no idea what awaits you inside.<br>"}
+
+/datum/command_alert/awaymission/hive/announce()
+	..()
+
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- 'Hostile Spaceship Summary'"
+			intercept.info = summary_text
+
+			comm.messagetitle.Add("[command_name()] Status Summary")
+			comm.messagetext.Add(summary_text)
+
 /obj/effect/narration/hive/intro
-	msg = "From the window you can see a chaotic structure larger than anything you've ever seen in your life. Its surface constantly shifts and distorts, and the exterior is covered in massive spikes. That's not at all what you'd expect a spaceship to look like."
+	msg = "In front of you there is the most bizarre and alien structure that you've ever seen. Its surface constantly shifts and distorts, and the exterior is covered in massive spikes. That's not at all what you'd expect a spaceship to look like."
 
 /obj/effect/narration/hive/entrance
-	msg = "As you enter the thin passageway, you begin to feel very uneasy. Despite all the movement around you, your surroundings are dead quiet, except for a very faint heartbeat in the distance. Or could it be yours?"
+	msg = "The interior is as chaotic as you'd expect. Thin passageways spread out in all directions, constantly intertwining and intersecting with each other. Even the walls around you appear to be moving."
 
 /obj/effect/narration/hive/lake
-	msg = "A supermatter lake takes up most of this room's floor. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks, you better not make a misstep."
+	msg = "The first thing you see as you enter this room is the massive supermatter lake on its bottom. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks hanging from the ceiling, you better be careful - a single misstep, and you'll be pulled down into the lake faster than you'd be able to react."
 
 /obj/effect/narration/hive/cloning_hallway
 	msg = "You notice that the surface of the floors and walls around you becomes more and more porous, and more... alive. You must be approaching the cloning chamber."
@@ -137,7 +167,7 @@
 	play_sound = 'sound/ambience/ambimalf.ogg' //same sound as the AI upload
 
 /obj/effect/narration/hive/comms
-	msg = "What looks like a massive blob of flesh lies the middle of the room. A glowing substance regularly passes through the tubes under its skin."
+	msg = "What looks like a massive blob of flesh lies the corner of the room. A glowing substance regularly passes through the tubes under its skin."
 	play_sound = 'sound/ambience/shipambience.ogg' //background noise
 
 ////////PAPERWORKS///////
@@ -306,8 +336,8 @@
 	temperature = T0C-10 //-10 degrees C
 
 /turf/unsimulated/floor/evil/breathing
-	name = "breathing floor"
-	desc = "This surface is constantly twisting and moving. It looks like it would take a lot of effort to just walk on it."
+	name = "living floor"
+	desc = "This surface is constantly twisting and contracting, as if it were alive. It looks like it would take a lot of effort to just walk on it."
 	icon_state = "breathingfloor_1"
 
 	var/additional_slowdown = 5
@@ -410,7 +440,7 @@ var/list/hive_pylons = list()
 
 /obj/structure/hive/pylon
 	name = "hive pylon"
-	desc = "An alien machine that appears to release large amounts of radiation into its surroundings."
+	desc = "An alien machine that releases large amounts of radiation into its surroundings."
 
 	icon_state = "hive_pylon"
 	health = 20
@@ -488,7 +518,7 @@ var/list/hive_pylons = list()
 	icon_state = "hive_heart"
 	health = 500
 
-	var/create_cooldown = 70 SECONDS
+	var/create_cooldown = 50 SECONDS
 	var/last_create
 
 /obj/structure/hive/cloner/New()
@@ -498,6 +528,9 @@ var/list/hive_pylons = list()
 
 /obj/structure/hive/cloner/Destroy()
 	processing_objects.Remove(src)
+
+	for(var/obj/effect/narration/hive/cloning/C in range(7, src)) //The narration effect mentions the replicator when you enter the room. Once you destroy the replicator, silence the narration
+		qdel(C)
 
 	..()
 
@@ -514,6 +547,8 @@ var/list/hive_pylons = list()
 		to_chat(A, 'sound/effects/heart_beat_loop.ogg') //Play the sound globally across the entire away mission
 
 	for(var/obj/effect/landmark/hive/monster_spawner/MS in landmarks_list)
+		if(prob(30)) //30% chance to skip a monster spawner
+			continue
 
 		var/valid_spawn = TRUE
 		var/turf/T = get_turf(MS)
@@ -530,7 +565,7 @@ var/list/hive_pylons = list()
 		/mob/living/simple_animal/hostile/hive_alien,\
 		/mob/living/simple_animal/hostile/hive_alien/artificer,\
 		50; /mob/living/simple_animal/hostile/hive_alien/executioner,\
-		10; /mob/living/simple_animal/hostile/hive_alien/arsonist) //Arsonists and executioners are rare
+		10; /mob/living/simple_animal/hostile/hive_alien/arsonist) //Arsonists and defenders are rare
 
 		spawn(rand(2 SECONDS,40 SECONDS))
 			var/mob/living/simple_animal/hostile/hive_alien/HA = new spawned_type(T)
@@ -551,7 +586,7 @@ var/list/hive_pylons = list()
 //Communication unit
 /obj/structure/hive/communicator
 	name = "hive mind"
-	desc = "This must be the main relay that allows different parts of the Hive to communicate with each other through alien pylons."
+	desc = "This massive blob of flesh constantly pulsates, and a glowing fluid passes through the tubes under its thin skin. The organic growths on top of it occasionally twist and turn, as if surveying their surroundings."
 	icon_state = "hive_comms"
 	health = 150
 	gibtype = /obj/effect/gibspawner/human
@@ -561,6 +596,10 @@ var/list/hive_pylons = list()
 
 	for(var/obj/structure/hive/pylon/P in hive_pylons)
 		P.turn_offline()
+
+	for(var/obj/effect/narration/hive/comms/C in range(7, src)) //The narration effect mentions the hive mind lying in the corner when you enter the room. Once you destroy the communicator, silence the narration
+		C.msg = null
+		//Don't delete it, because it also activates a soundtrack
 
 //Husked mob
 /obj/structure/hive/husk
@@ -634,7 +673,7 @@ var/list/hive_pylons = list()
 /obj/effect/trap/frog_trap/hive/artificer //same but artificers
 	frog_type = /mob/living/simple_animal/hostile/hive_alien/artificer
 
-/obj/effect/trap/frog_trap/hive/executioner //same but executioners. VERY dangerous
+/obj/effect/trap/frog_trap/hive/executioner //same but defenders. VERY dangerous
 	frog_type = /mob/living/simple_animal/hostile/hive_alien/executioner
 
 ///////////////////////////////////////////****ITEMS****//////////////////////////////////////////////////
