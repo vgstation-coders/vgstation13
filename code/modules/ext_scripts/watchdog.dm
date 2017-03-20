@@ -20,10 +20,10 @@ var/global/datum/watchdog/watchdog = new
 	signal << chosen_map
 
 /client/proc/watchdog_force_restart()
-	set name "Panic Restart"
-	set category "Watchdog"
+	set name = "Panic Restart"
+	set category = "Watchdog"
 
-	var/signal = file(restart_signal_file)
+	var/signal = file(watchdog.restart_signal_file)
 	log_admin("[key] restarted the server using the watchdog function")
 	message_admins("[key] restarted the server using the watchdog function")
 	signal << "1"
