@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "fakeops" = 100, "balloon" = 1))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -106,6 +106,19 @@
 				new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/weapon/soap/syndie(src)
+
+
+			if("fakeops")//
+				new /obj/item/clothing/head/helmet/space/syndicate
+				new /obj/item/clothing/suit/space/syndicate
+				new /obj/item/weapon/gun/projectile/automatic/c20r
+				new /obj/item/ammo_storage/magazine/a12mm/ops
+				new /obj/item/weapon/card/id/syndicate
+				new /obj/item/weapon/implanter/explosive(src)
+				new /obj/item/clothing/shoes/magboots/syndie
+				new /obj/item/clothing/under/syndicate
+				new /obj/item/clothing/mask/gas/syndicate
+				new /obj/item/clothing/gloves/combat
 
 
 			if("balloon")//20+20+20+20+20+20+20+20=160
