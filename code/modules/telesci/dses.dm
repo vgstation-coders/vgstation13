@@ -28,18 +28,23 @@
 	var/pulse_range = 25
 	var/pulse_cost = 250
 	var/pulse_between = 3 SECONDS
-	var/last_pulse
+	var/last_pulse = 0
 	var/last_direction
 	var/last_distance
 	var/list/positive_locations = list()
 	var/auto_pulse = 0
 
-/obj/item/device/dses/attack_self(var/mob/user as mob)
+/datum/dses_find
+	var/name
+	var/location_name
+	var/x
+	var/y
+	var/z
+
+/obj/item/device/dses/attack_self(var/mob/user)
 	if(C)
 		return menu_open(user)
-	else
-		to_chat(user, "<span class = 'notice'>The screen remains dark.</span>")
-		return
+	to_chat(user, "<span class = 'notice'>The screen remains dark.</span>")
 
 /obj/item/device/dses/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/dses_module))
@@ -53,93 +58,105 @@
 				C = W
 	..()
 
-/obj/item/device/dses/proc/menu_open(var/mob/user as mob)
+/obj/item/device/dses/proc/menu_open(var/mob/user)
 	var/obj/item/device/dses/t = ""
 	if(C)
 		if(!module_in_list("utoPNG"))
 			t += "<BR><A href='?src=\ref[src];pulse=1'>Pulse</A> "
 		else
-			t += "<BR><A href='?src=\ref[src];tog_pulse=1'>Toggle Pulse:\[[auto_pulse]\]</A>"
-		t += "<BR>Current cell charge: [C.charge]/[C.maxcharge]"
-		t += "<BR>Current device statistics"
-		t += "<BR>Pulse cost: [pulse_cost]"
-		t += "<BR>Pulse range: [pulse_range]"
+			t += "<BR><A href='?src=\ref[src];tog_pulse=1'>Toggle Pulse: \[[auto_pulse]\]</A>"
+		t += "<BR>Current cell charge: [C.charge]/[C.maxcharge]\
+		<BR>Current device statistics\
+		<BR>Pulse cost: [pulse_cost]\
+		<BR>Pulse range: [pulse_range]"
 		if(module_in_list("dirGET"))
-			t += "<BR><B>Last logged direction: [last_direction]</B>"
+			t += "<BR>Last logged direction: [last_direction]"
 		if(module_in_list("getDST"))
-			t += "<BR><B>Distance from previous ping: [last_distance]</B>"
+			t += "<BR>Distance from previous ping: [last_distance]"
 		if(module_in_list("crdLOG") && positive_locations.len)
-			t += "<BR>==Logged successful pings=="
+			t += "<BR><HR>Logged successful pings</HR>"
 			var/current_loc_itt
-			for(var/atom/A in positive_locations)
+			for(var/datum/dses_find/D in positive_locations)
 				current_loc_itt ++
-				t += "<BR>\the [A] in [A.loc] at [A.x-WORLD_X_OFFSET[A.z]] - [A.y-WORLD_Y_OFFSET[A.z]] - [A.z]"
-				t += " === <A href='?src=\ref[src];wipe=[current_loc_itt]'>Wipe log</A>"
+				t += "<BR>\the [D.name] in [D.location_name] at [D.x-WORLD_X_OFFSET[D.z]] - [D.y-WORLD_Y_OFFSET[D.z]] - [D.z]"
+				t += " : <A href='?src=\ref[src];wipe=[current_loc_itt]'>Wipe log</A>"
 			t += "<BR><A href='?src=\ref[src];wipe=0'>Wipe All</A>"
-		t += "<BR><B>Modules installed</B>"
+		t += "<BR><B><HR>Modules installed</HR></B>"
 		if(module_list.len)
 			var/current_module_num = 0
 			for(var/obj/item/weapon/dses_module/D in module_list)
 				current_module_num ++
-				t += "<BR>Module: [D.module_name]"
-				t += "<BR><A href='?src=\ref[src];eject=[current_module_num]'>Eject Module</A>"
+				t += "<BR>Module: [D.module_name] <A href='?src=\ref[src];eject=[current_module_num]'>Eject Module</A>"
 		else
 			t += "<BR>No modules detected"
 		t += "<BR>Module slots [module_list.len]/[module_limit]"
 		t += "<BR><A href='?src=\ref[src];eject_cell=1'>Eject Cell</A>"
 	else
 		t += "<B>No cell detected.</B>"
-	var/datum/browser/popup = new(user, "DSES", name, 300, 450)
+	var/datum/browser/popup = new(user, "\ref[src]", name, 300, 450)
 	popup.set_content(t)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
 
 /obj/item/device/dses/Topic(href, href_list)
 	..()
+
 	usr.set_machine(src)
+
+	if (usr.get_active_hand() != src || usr.isUnconscious())
+		to_chat(usr, "<span class = 'caution'>You need to have \the [src] in your hand to do that!</span>")
+		return
+
 	if(href_list["pulse"])
-		if (usr.get_active_hand() != src || usr.stat)
-			to_chat(usr, "<span class = 'caution'>You need to have \the [src] in your hand to do that!</span>")
-			return
 		if(C.charge < pulse_cost)
 			to_chat(usr, "<span class = 'caution'>\The [C] has insufficient charge to support another pulse.</span>")
 			return
-		handle_pulse(usr)
 
-	else if(href_list["eject"])
+		handle_pulse(usr)
+		. = 1
+
+	if(href_list["eject"])
 		var/index = text2num(href_list["eject"])
 		if(index && index <= module_list.len)
 			var/obj/item/weapon/dses_module/D = module_list[index]
 			uninstall_module(D, usr)
 			D = null
-	else if(href_list["wipe"])
+			. = 1
+
+	if(href_list["wipe"])
 		var/index = text2num(href_list["wipe"])
 		if(index && index <= positive_locations.len)
-			var/atom/A = positive_locations[index]
-			positive_locations -= A
+			var/datum/dses_find/D = positive_locations[index]
+			positive_locations -= D
+			qdel(D)
 		else
+			for(var/datum/dses_find/D in positive_locations)
+				qdel(D)
 			positive_locations = list()
-	else if(href_list["tog_pulse"])
-		auto_pulse = !auto_pulse
-	else if(href_list["eject_cell"])
-		if(C)
-			C.forceMove(get_turf(src))
-			C = null
-			usr << browse(null, "window=DSES")
-			return
-	updateSelfDialog(usr)
+		. = 1
 
-/obj/item/device/dses/updateSelfDialog(mob/user)
-	src.attack_self(user)
+	if(href_list["tog_pulse"])
+		auto_pulse = !auto_pulse
+		. = 1
+
+	if(href_list["eject_cell"])
+		if(C)
+			usr.put_in_hands(C)
+			C = null
+			usr << browse(null, "window=\ref[src]")
+			return
+
+	if(.)
+		updateSelfDialog(usr)
+
 
 /obj/item/device/dses/process()
-	if(auto_pulse && (!last_pulse || last_pulse <= world.time+pulse_between))
+	if(auto_pulse && (last_pulse <= world.time+pulse_between))
 		handle_pulse()
 
 /obj/item/device/dses/proc/handle_pulse(mob/user)
-	if(!last_pulse || last_pulse <= world.time+pulse_between)
-		var/atom/detected
-		detected = pulse()
+	if(last_pulse <= world.time+pulse_between)
+		var/atom/detected = pulse()
 
 		if(!detected)
 			if(user)
@@ -150,30 +167,24 @@
 		playsound(src, 'sound/machines/ping.ogg', 50, 1, gas_modified = 0)
 
 		if(module_in_list("dirGET"))
-			var/detect_dir = get_dir(src, detected)
-			switch(detect_dir)
-				if(1) last_direction = "North"
-				if(2) last_direction = "South"
-				if(4) last_direction = "East"
-				if(5) last_direction = "North East"
-				if(6) last_direction = "South East"
-				if(8) last_direction = "West"
-				if(9) last_direction = "North West"
-				if(10) last_direction = "South West"
-
+			last_direction = dir2text(get_dir(src, detected))
 			if(user)
 				to_chat(user, last_direction)
 
 		if(module_in_list("crdLOG"))
-			if(detected in positive_locations)
-				positive_locations -= detected
-			positive_locations += detected
+			var/datum/dses_find/D = new()
+			D.name = detected.name
+			D.x = detected.x
+			D.y = detected.y
+			D.z = detected.z
+			D.location_name = detected.loc
+			positive_locations += D
 
 		if(module_in_list("getDST"))
 			last_distance = get_dist(get_turf(src), get_turf(detected))
 
 /obj/item/device/dses/proc/pulse()
-	var/list/can_see = range(pulse_range,get_turf(src))
+	var/list/can_see = trange(pulse_range,get_turf(src))
 	var/atom/detected
 	if(C.use(pulse_cost))
 		for(var/turf/T in can_see)
@@ -187,6 +198,7 @@
 					|| istype(A, /obj/structure/window) \
 					|| istype(A, /obj/structure/grille))
 					new_detected = A
+					break
 
 			if(new_detected && get_dist(get_turf(src), get_turf(new_detected)) < get_dist(get_turf(src), get_turf(detected))) //Always pick the closest one
 				detected = new_detected
@@ -210,7 +222,7 @@
 
 /obj/item/device/dses/proc/uninstall_module(var/obj/item/weapon/dses_module/D, mob/user)
 	D.uninstall(src)
-	D.forceMove(get_turf(src))
+	user.put_in_hands(D)
 	module_list -= D
 	to_chat(user, "<span class = 'notice'>Module uninstalled.</span>")
 
@@ -246,12 +258,12 @@
 	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
 
 /obj/item/weapon/dses_module/range_boost/install(var/obj/item/device/dses/D)
-	D.pulse_range = D.pulse_range*2
-	D.pulse_cost = D.pulse_cost*2
+	D.pulse_range *=2
+	D.pulse_cost *=2
 
 /obj/item/weapon/dses_module/range_boost/uninstall(var/obj/item/device/dses/D)
-	D.pulse_range = D.pulse_range/2
-	D.pulse_cost = D.pulse_cost/2
+	D.pulse_range /=2
+	D.pulse_cost /=2
 
 /obj/item/weapon/dses_module/cost_reduc
 	name = "DSES ping resource optimizer"
@@ -259,10 +271,10 @@
 	desc = "Optimizes the cost of DSES pings, reducing the amount of energy needed per ping."
 
 /obj/item/weapon/dses_module/cost_reduc/install(var/obj/item/device/dses/D)
-	D.pulse_cost = D.pulse_cost/2
+	D.pulse_cost /=2
 
 /obj/item/weapon/dses_module/cost_reduc/uninstall(var/obj/item/device/dses/D)
-	D.pulse_cost = D.pulse_cost*2
+	D.pulse_cost *=2
 
 /obj/item/weapon/dses_module/pulse_direction
 	name = "DSES ping resonation locator"
@@ -288,4 +300,4 @@
 /obj/item/weapon/dses_module/distance_get
 	name = "DSES ping distance approximation system"
 	module_name = "getDST"
-	desc = "A small maths system that calculates signal decay between transmission and sending, to approximate distance."
+	desc = "A small mathematics system that calculates signal decay between transmission and sending, to approximate distance."
