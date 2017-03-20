@@ -325,6 +325,10 @@
 
 ///////////////////////////////////////////****TURFS****//////////////////////////////////////////////////
 
+/obj/effect/hidden_door/hive
+	door_typepath = /turf/unsimulated/wall/evil
+	floor_typepath = /turf/unsimulated/floor/evil
+
 #define EVIL_FLOOR_CO2 (44.8 * CELL_VOLUME/(T20C*R_IDEAL_GAS_EQUATION)) //44.8 kPa
 
 /turf/unsimulated/floor/evil

@@ -56,6 +56,8 @@ var/list/hidden_doors = list()
 	name = "hidden door"
 	icon = 'icons/effects/triggers.dmi'
 
+	layer = FLY_LAYER
+
 	var/inverted = 0 //If 1, the door starts opened and closes on switch
 	var/list/door_appearance = list()
 
