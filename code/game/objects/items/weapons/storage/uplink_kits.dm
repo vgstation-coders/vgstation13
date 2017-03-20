@@ -109,16 +109,16 @@
 
 
 			if("fakeops")//
-				new /obj/item/clothing/head/helmet/space/syndicate
-				new /obj/item/clothing/suit/space/syndicate
-				new /obj/item/weapon/gun/projectile/automatic/c20r
-				new /obj/item/ammo_storage/magazine/a12mm/ops
-				new /obj/item/weapon/card/id/syndicate
+				new /obj/item/clothing/head/helmet/space/syndicate(src)
+				new /obj/item/clothing/suit/space/syndicate(src)
+				new /obj/item/weapon/gun/projectile/automatic/c20r(src)
+				new /obj/item/ammo_storage/magazine/a12mm/ops(src)
+				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/weapon/implanter/explosive(src)
-				new /obj/item/clothing/shoes/magboots/syndie
-				new /obj/item/clothing/under/syndicate
-				new /obj/item/clothing/mask/gas/syndicate
-				new /obj/item/clothing/gloves/combat
+				new /obj/item/clothing/shoes/magboots/syndie(src)
+				new /obj/item/clothing/under/syndicate(src)
+				new /obj/item/clothing/mask/gas/syndicate(src)
+				new /obj/item/clothing/gloves/combat(src)
 
 
 			if("balloon")//20+20+20+20+20+20+20+20=160
