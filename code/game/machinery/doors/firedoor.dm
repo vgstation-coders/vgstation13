@@ -136,6 +136,8 @@ var/global/list/alert_overlays_global = list()
 		A.all_doors.Remove(src)
 	. = ..()
 
+/obj/machinery/door/firedoor/proc/is_fulltile()
+	return 1
 
 /obj/machinery/door/firedoor/examine(mob/user)
 	. = ..()
@@ -235,6 +237,15 @@ var/global/list/alert_overlays_global = list()
 
 	if( iscrowbar(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
 		force_open(user, C)
+		return
+
+	if(istype(C, /obj/item/weapon/wrench/socket) && blocked)
+		user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
+		"You begin to deconstruct \the [src] with \the [C].",\
+		"You hear a racket from a ratchet.")
+		if(do_after(user, src, 5 SECONDS))
+			new/obj/item/firedoor_frame(get_turf(src))
+			qdel(src)
 		return
 
 	if( isEmag(C) )
@@ -501,7 +512,70 @@ var/global/list/alert_overlays_global = list()
 			return !density
 	return 1
 
+/obj/machinery/door/firedoor/border_only/is_fulltile()
+	return 0
+
 
 /obj/machinery/door/firedoor/multi_tile
 	icon = 'icons/obj/doors/DoorHazard2x1.dmi'
 	width = 2
+
+
+/obj/item/firedoor_frame
+	name = "firedoor frame"
+	icon = 'icons/obj/doors/DoorHazard.dmi'
+	icon_state = "firedoor_frame"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/electronics.dmi', "right_hand" = 'icons/mob/in-hand/right/electronics.dmi')
+	desc = "The frame for a firedoor, strangely easy to set up considering its application."
+
+/obj/item/firedoor_frame/attack_self(mob/user)
+	construct_firedoor(user)
+
+/obj/item/firedoor_frame/proc/construct_firedoor(mob/user)
+	if(!user || !src)
+		return 0
+	if(!istype(user.loc,/turf))
+		return 0
+	if(!user.IsAdvancedToolUser())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 0
+	switch(alert("firedoor construction", "Would you like to construct a full tile firedoor or one direction?", "One Direction", "Full Firedoor", "Cancel", null))
+		if("One Direction")
+			if(!src)
+				return 1
+			if(src.loc != user)
+				return 1
+			var/list/directions = new/list(cardinal)
+			var/i = 0
+			for (var/obj/machinery/door/firedoor/B in user.loc)
+				i++
+				if(i >= 4)
+					to_chat(user, "<span class='warning'>There are too many firedoors in this location.</span>")
+					return 1
+				directions-=B.dir
+				if(B.is_fulltile())
+					to_chat(user, "<span class='warning'>Can't let you do that.</span>")
+					return 1
+			var/dir_to_set = 2
+			for(var/direction in list( user.dir, turn(user.dir,90), turn(user.dir,180), turn(user.dir,270) ))
+				var/found = 0
+				for(var/obj/machinery/door/firedoor/border_only/B in user.loc)
+					if(B.dir == direction)
+						found = 1
+				if(!found)
+					dir_to_set = direction
+					break
+			var/obj/machinery/door/firedoor/border_only/B = new(user.loc,0)
+			B.dir = dir_to_set
+			qdel(src)
+		if("Full Firedoor")
+			if(!src)
+				return 1
+			if(src.loc != user)
+				return 1
+			if(locate(/obj/machinery/door/firedoor) in user.loc)
+				to_chat(user, "<span class='warning'>There is a firedoor already here.</span>")
+				return 1
+			var/obj/machinery/door/firedoor/F = new(user.loc,0)
+			F.dir = SOUTHWEST
+			qdel(src)
