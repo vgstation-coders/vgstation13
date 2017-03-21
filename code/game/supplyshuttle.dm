@@ -593,7 +593,7 @@ var/list/mechtoys = list(
 	return
 
 /obj/machinery/computer/supplycomp/attack_hand(var/mob/user as mob)
-	if(!allowed(user) && !can_order_contraband) //if board is hacked then it removes access requirement
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
@@ -639,6 +639,7 @@ var/list/mechtoys = list(
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				if(can_order_contraband)
 					M.contraband_enabled = 1
+					req_access = list()
 				for (var/obj/C in src)
 					C.forceMove(loc)
 				A.circuit = M
@@ -648,7 +649,6 @@ var/list/mechtoys = list(
 				qdel(src)
 	else
 		return ..()
-
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	// data to send to ui
