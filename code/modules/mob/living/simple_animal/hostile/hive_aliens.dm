@@ -60,6 +60,15 @@
 
 		if(prob(stun_attack))
 			to_chat(L, "<span class='userdanger'>You are briefly stunned by \the [src]'s violent onslaught!</span>")
+
+			//Animation
+			#define ANIM_PIXEL_OFFSET (16*PIXEL_MULTIPLIER)
+			var/cur_px = pixel_x
+			var/cur_py = pixel_y
+			animate(src, pixel_x = cos(dir2angle_t(get_dir(src, L)))*ANIM_PIXEL_OFFSET, pixel_y = sin(dir2angle_t(get_dir(src, L)))*ANIM_PIXEL_OFFSET, time = 5)
+			animate(pixel_x = cur_px, pixel_y = cur_py, time = 5)
+			#undef ANIM_PIXEL_OFFSET
+
 			L.Stun(rand(1,2))
 
 //Shoots napalm bombs. Very slow practically a turret.
@@ -89,7 +98,12 @@
 
 	stun_attack = FALSE
 
-//Turns alien floors into breathing floors.
+//Turns hive floors into living floors.
+//Can summon dense spikes adjacent to hive walls, preventing escape
+//To summon spikes, the target must have at least 1 hive alien adjacent (the builder doesn't count)
+
+//After summoning spikes, artificers are immobile until they're destroyed (spikes OR the artificer)
+
 /mob/living/simple_animal/hostile/hive_alien/artificer
 	name = "hive artificer"
 	desc = "An alien with an egg-shaped body that uses tentacles to move around and interact with its surroundings. Such constructs are usually tasked with repairing and improving the Hive."
@@ -113,20 +127,124 @@
 
 	wander = FALSE
 
+	ranged = TRUE
+
 	stun_attack = FALSE
+
+	var/obj/structure/hive/spikes/summoned_spikes
 
 /mob/living/simple_animal/hostile/hive_alien/artificer/Die()
 	..()
 
 	flick("hive_artificer_dying", src)
+	if(summoned_spikes)
+		qdel(summoned_spikes)
+		summoned_spikes = null
 
 /mob/living/simple_animal/hostile/hive_alien/artificer/Move()
 	.=..()
 
 	if(istype(loc, /turf/unsimulated/floor/evil))
-		//Turn into breathing floor (that slows people down) permanently
+		//Turn into living floor (that slows enemies down and speeds allies up) permanently
 		var/turf/T = loc
 		T.ChangeTurf(/turf/unsimulated/floor/evil/breathing)
+
+/mob/living/simple_animal/hostile/hive_alien/artificer/proc/block_escape(mob/living/target)
+	if(summoned_spikes)
+		return
+
+	var/target_surrounded = FALSE
+	for(var/mob/living/simple_animal/hostile/hive_alien/H in orange(1, target))
+		if(H == src)
+			continue
+		target_surrounded = TRUE
+		break
+
+	if(!target_surrounded)
+		return
+
+	var/list/valid_dirs = list() //List of valid directions in which spikes can appear.
+
+	var/turf/target_turf = get_turf(target)
+	for(var/D in alldirs) //Go through every turf in every direction. If the turf contains a living mob or a spike, it's invalid. If the turf doesn't have an alien wall adjacent, it's invalid
+		var/turf/check = get_step(target_turf, D)
+
+		if(check.density)
+			continue
+
+		var/mob/obstacle
+		for(var/mob/living/L in check) //Living mob check
+			if(L.isDead())
+				continue
+			obstacle = L
+			break
+		if(obstacle)
+			continue
+
+		if(locate(/obj/structure/hive/spikes) in check) //Spike check
+			break
+
+		//Check that this new turf is adjacent to a hive wall! Store the hive wall's direction for a pretty animation
+		var/evil_wall_dir = 0 //Direction of the evil wall from which the spikes appear
+		for(var/wall_dir_check in cardinal)
+			var/turf/unsimulated/wall/evil/wall_check = get_step(check, wall_dir_check)
+			if(istype(wall_check))
+				evil_wall_dir = wall_dir_check
+				break
+		if(!evil_wall_dir)
+			continue
+
+		valid_dirs["[D]"] = evil_wall_dir
+
+	if(!valid_dirs.len)
+		return
+
+	visible_message("<span class='notice'>\The [src] digs its tentacles into the floor.</span>")
+	start_channeling()
+
+	var/new_dir = text2num(pick(valid_dirs))
+	summoned_spikes = new(get_step(target_turf, new_dir))
+	summoned_spikes.owner = src
+	summoned_spikes.dir = turn(valid_dirs["[new_dir]"], 180)
+
+/mob/living/simple_animal/hostile/hive_alien/artificer/OpenFire(atom/target)
+	block_escape(target)
+
+/mob/living/simple_animal/hostile/hive_alien/artificer/proc/start_channeling()
+	icon_state = "hive_artificer_channeling"
+	ranged = 0
+	anchored = 1
+	aggro_vision_range = 1
+	idle_vision_range = 1
+	vision_range = 1
+	walk(src, 0)
+
+	update_icon()
+
+/mob/living/simple_animal/hostile/hive_alien/artificer/proc/stop_channeling()
+	icon_state = icon_living
+	ranged = initial(ranged)
+	anchored = FALSE
+	aggro_vision_range = initial(aggro_vision_range)
+	idle_vision_range = initial(idle_vision_range)
+	vision_range = initial(vision_range)
+
+	update_icon()
+
+/obj/structure/hive/spikes
+	name = "spikes"
+	icon_state = "hive_spikes"
+
+	health = 50
+
+	var/mob/living/simple_animal/hostile/hive_alien/artificer/owner
+
+/obj/structure/hive/spikes/Die()
+	..()
+
+	if(owner)
+		owner.stop_channeling()
+		owner = null
 
 //Has 2 modes: movement mode and attack mode. When in movement mode, fast but can't attack. When in attack mode, immobile but dangerous
 //Switching between modes takes 0.4-.8 seconds

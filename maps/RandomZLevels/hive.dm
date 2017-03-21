@@ -132,7 +132,7 @@
 	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle</li>
 	</ul>
 	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br>
-	Our partial scans indicate dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as other than these vague scan results, we have no idea what awaits you inside.<br>"}
+	Our partial scans indicate dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as we have no further idea of what might await you inside.<br>"}
 
 /datum/command_alert/awaymission/hive/announce()
 	..()
@@ -371,6 +371,10 @@
 	name = "Supermatter Lake"
 	desc = "It appears to be somewhat contained. It emits a great gravitational pull, making flying or shooting over it impossible."
 	opacity = 0
+
+	//Dimmer light
+	light_range = 3
+	light_power = 1
 
 /turf/unsimulated/wall/supermatter/no_spread/lake/Consume(atom/A)
 	var/datum/map_element/away_mission/hive/hive
