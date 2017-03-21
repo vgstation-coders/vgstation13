@@ -12,7 +12,7 @@
 	has_extinguisher = null
 	opened = 1
 
-/obj/structure/extinguisher_cabinet
+/obj/structure/extinguisher_cabinet/New()
 	..()
 	update_icon()
 
@@ -77,10 +77,10 @@
 	if(!istype(WE))
 		return
 	if(has_extinguisher)
-		to_chat(user, "<span class='notice'>There is still an extinguisher inside</span>")
+		to_chat(user, "<span class='notice'>There is still an extinguisher inside.</span>")
 		return
 	if(!opened)
-		to_chat(user, "<span class='notice'>\The [src] needs to be open before you can dismantle it</span>")
+		to_chat(user, "<span class='notice'>\The [src] needs to be open before you can dismantle it.</span>")
 		return
 	if(!WE.remove_fuel(1, user))
 		return
