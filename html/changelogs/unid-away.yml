@@ -26,7 +26,7 @@ author: Unid
 
 delete-after: True
 
-- rscadd: "Added a new away mission: 'The Hive'. A massive city-sized alien spaceship infamous for destroying hundreds of space stations and outposts has appeared dangerously close to Space Station 13. Beware of its ambient radiation, hostile atmosphere, supermatter lakes and the constant stream of fearless guardians coming your way!"
-- rscadd: "Added 4 new enemy types for the away mission."
-- rscadd: "Added 'SASS' spheres - a tool that, when held or stored in a bag, will prevent supermatter annihilation exactly one time. Can be found in The Hive or in Spessmart."
-- rscadd: "Added nuclear power fists. Similar to knuckledusters, they improve your punches when worn - adding massive damage, stun and knockback to your attacks. The power fists have a 10 second cooldown, need to be recharged with liquid uranium and slightly irradiate their user on use. Can be found in The Hive or in Spessmart."
+- rscadd: Added a new away mission - The Hive. A massive city-sized alien spaceship infamous for destroying hundreds of space stations and outposts has appeared dangerously close to Space Station 13. Beware of its ambient radiation, hostile atmosphere, supermatter lakes and the constant stream of fearless guardians coming your way!
+- rscadd: Added 4 new enemy types for the away mission.
+- rscadd: Added SASS spheres - a tool that, when held or stored in a bag, will save you from supermatter annihilation once. Can be found in The Hive or in Spessmart.
+- rscadd: Added nuclear power fists. Similar to knuckledusters, they improve your punches when worn - adding massive damage, stun and knockback to your attacks. The power fists have a 10 second cooldown, need to be recharged with liquid uranium and slightly irradiate their user on use. Can be found in The Hive or in Spessmart.
