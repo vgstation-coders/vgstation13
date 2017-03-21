@@ -65,10 +65,10 @@
 			t += "<BR><A href='?src=\ref[src];pulse=1'>Pulse</A> "
 		else
 			t += "<BR><A href='?src=\ref[src];tog_pulse=1'>Toggle Pulse: \[[auto_pulse]\]</A>"
-		t += "<BR>Current cell charge: [C.charge]/[C.maxcharge]\
-		<BR>Current device statistics\
-		<BR>Pulse cost: [pulse_cost]\
-		<BR>Pulse range: [pulse_range]"
+		t += {"<BR>Current cell charge: [C.charge]/[C.maxcharge]
+			<BR>Current device statistics
+			<BR>Pulse cost: [pulse_cost]
+			<BR>Pulse range: [pulse_range]"}
 		if(module_in_list("dirGET"))
 			t += "<BR>Last logged direction: [last_direction]"
 		if(module_in_list("getDST"))
@@ -78,8 +78,8 @@
 			var/current_loc_itt
 			for(var/datum/dses_find/D in positive_locations)
 				current_loc_itt ++
-				t += "<BR>\the [D.name] in [D.location_name] at [D.x-WORLD_X_OFFSET[D.z]] - [D.y-WORLD_Y_OFFSET[D.z]] - [D.z]"
-				t += " : <A href='?src=\ref[src];wipe=[current_loc_itt]'>Wipe log</A>"
+				t += {"<BR>\the [D.name] in [D.location_name] at [D.x-WORLD_X_OFFSET[D.z]] - [D.y-WORLD_Y_OFFSET[D.z]] - [D.z]
+				 : <A href='?src=\ref[src];wipe=[current_loc_itt]'>Wipe log</A>"}
 			t += "<BR><A href='?src=\ref[src];wipe=0'>Wipe All</A>"
 		t += "<BR><B><HR>Modules installed</HR></B>"
 		if(module_list.len)
@@ -151,7 +151,7 @@
 
 
 /obj/item/device/dses/process()
-	if(auto_pulse && (last_pulse <= world.time+pulse_between))
+	if(auto_pulse && last_pulse <= world.time+pulse_between)
 		handle_pulse()
 
 /obj/item/device/dses/proc/handle_pulse(mob/user)
@@ -177,7 +177,7 @@
 			D.x = detected.x
 			D.y = detected.y
 			D.z = detected.z
-			D.location_name = detected.loc
+			D.location_name = detected.loc.name
 			positive_locations += D
 
 		if(module_in_list("getDST"))
@@ -300,4 +300,4 @@
 /obj/item/weapon/dses_module/distance_get
 	name = "DSES ping distance approximation system"
 	module_name = "getDST"
-	desc = "A small mathematics system that calculates signal decay between transmission and sending, to approximate distance."
+	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
