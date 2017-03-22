@@ -43,7 +43,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 	name = "synthetic meat"
 	desc = "A synthetic slab of flesh."
-	icon_state = "hivemeat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	name = "human meat"
@@ -195,6 +194,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive
 	name = "alien tissue"
 	desc = "A long piece of rough, black tissue."
+	icon_state = "hivemeat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive/New()
 	..()
