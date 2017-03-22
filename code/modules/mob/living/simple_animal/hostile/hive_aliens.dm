@@ -217,6 +217,7 @@
 	aggro_vision_range = 1
 	idle_vision_range = 1
 	vision_range = 1
+	canmove = 0
 	walk(src, 0)
 
 	update_icon()
@@ -228,6 +229,7 @@
 	aggro_vision_range = initial(aggro_vision_range)
 	idle_vision_range = initial(idle_vision_range)
 	vision_range = initial(vision_range)
+	canmove = 1
 
 	update_icon()
 
@@ -250,7 +252,7 @@
 //Switching between modes takes 0.4-.8 seconds
 /mob/living/simple_animal/hostile/hive_alien/executioner
 	name = "hive defender"
-	desc = "A terrifying monster resembling a massive tick in shape. Hundreds of blades are hidden underneath its shell."
+	desc = "A terrifying monster resembling a massive tick in shape. Hundreds of blades are hidden underneath its rough shell."
 
 	icon_state = "hive_executioner_move"
 	icon_living = "hive_executioner_move"
