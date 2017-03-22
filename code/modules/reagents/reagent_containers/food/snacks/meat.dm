@@ -43,6 +43,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 	name = "synthetic meat"
 	desc = "A synthetic slab of flesh."
+	icon_state = "hivemeat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	name = "human meat"
