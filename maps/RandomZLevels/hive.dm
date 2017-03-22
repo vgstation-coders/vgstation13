@@ -75,14 +75,18 @@
 	if(!replicator)
 		message_admins("<span class='warning'>Unable to find the alien replicator in the away mission!</span>")
 
+	if(usr)
+		if(alert(usr, "Create a command report containing a briefing?", "Adventure awaits", "Yes", "No") == "Yes")
+			command_alert(/datum/command_alert/awaymission/hive)
+
 /datum/map_element/away_mission/hive/process_scoreboard()
 	var/list/L = list()
 	var/CPU_rescued = FALSE
 
 	if(!CPU)
-		L["You have destroyed the Hive CPU, instead of bringing it to Central Command!"] = -10000 //Subtract 10000 points for being nuclear fuck-ups and destroying a valuable alien technology
+		L["The Hive CPU has been destroyed!"] = 5000 //Destroying it is fine, too
 	else if(istype(get_area(CPU), /area/shuttle/escape))
-		L["You have retreived the Hive CPU. Fantastic job!"] = 20000 //Add 20000 points for doing your jobs
+		L["You have retreived the Hive CPU. Fantastic job!"] = 20000 //Add 20000 points for potentially advancing research hundreds of years into the future
 		CPU_rescued = TRUE
 	else
 		L["You have left the Hive CPU behind."] = 0 //Whatever, we'll send somebody to pick it up
@@ -107,7 +111,7 @@
 	if(bluespace_alien_kills)
 		L["[bluespace_alien_kills] alien\s [bluespace_alien_kills == 1 ? "was" : "were"] annihilated in the supermatter lakes."] = 25 * bluespace_alien_kills
 
-	L["Secrets found: [found_secrets] / [start_reward_amount]! "] = found_secrets * 50
+	L["Secrets found: [found_secrets] / [start_reward_amount]! "] = found_secrets * 200
 
 	if(CPU_rescued && !communicator && !replicator && (found_secrets == start_reward_amount))
 		L["<br>100% completion! Outstanding!"] = 50000
@@ -124,12 +128,12 @@
 	var/summary_text = {"
 	<b>Situation Summary</b><br><br>
 	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
-	Thankfully, for the first time since its discovery, we have managed to get a partial scan of the Hive, revealing possible points of entry and the spaceship's key areas that have to be eliminated.<br>
+	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and the spaceship's key areas that have to be eliminated.<br>
 	You are to send a strike team right in the heart of the Hive, and complete the following taskss:<br>
 	<ul>
-	<li>Destroy the Hive Mind</li>
-	<li>Destroy the Hive Replicator</li>
-	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle</li>
+	<li>Destroy the Hive Mind to impair the ship's communication abilities</li>
+	<li>Destroy the Hive Replicator that mass-produces alien troops</li>
+	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle. If that is not possible, destroy it</li>
 	</ul>
 	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br>
 	Our partial scans indicate dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as we have no further idea of what might await you inside.<br>"}
@@ -159,7 +163,7 @@
 	msg = "You notice that the surface of the floors and walls around you becomes more and more porous, and more... alive. You must be approaching the cloning chamber."
 
 /obj/effect/narration/hive/cloning
-	msg = "A large alien machine hangs down from the ceiling. It looks like a human heart, and it pulsates like one as well. You feel like it's reacting to your presence by beating faster and faster, but that might just be your imagination."
+	msg = "A large alien machine hangs down from the ceiling, surrounded by thick, purple matter. It looks like a human heart, and it pulsates like one as well. You feel like it's reacting to your presence by beating faster and faster, but that might just be your imagination."
 	play_sound = 'sound/effects/heart_beat_loop.ogg'
 
 /obj/effect/narration/hive/control
@@ -199,7 +203,7 @@
 	<b>Right Leg</b>: Biomed (near the bridge), body scanner 2<br>
 	<b>Plating</b>: Hallway near the supermatter engine<br>
 	<b>Head</b>: Vending machine in the same hallway (in place of the $60 chips)<br>
-	<b>CCM</b>: Outside of Atmospherics<br>
+	<b>CCM</b>: Maintenance next to the theatre<br>
 	<b>PCM</b>: Engineering tool storage<br>
 	<b>WCM</b>: Under the radio transmitter<br>
 	<br>

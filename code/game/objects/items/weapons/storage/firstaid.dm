@@ -305,6 +305,16 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		for (var/i = 1 to 5)
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
 
+/obj/item/weapon/storage/pill_bottle/radiation
+	name = "Pill bottle (radiation treatment)"
+	desc = "Contains pills used to treat radiation sickness."
+
+/obj/item/weapon/storage/pill_bottle/radiation/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/weapon/reagent_containers/pill/hyronalin(src)
+		new /obj/item/weapon/reagent_containers/pill/arithrazine(src)
+
 /obj/item/weapon/storage/pill_bottle/sweets
 	name = "bag of sweets"
 	desc = "Tasty!"

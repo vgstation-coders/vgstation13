@@ -235,7 +235,7 @@
 	name = "spikes"
 	icon_state = "hive_spikes"
 
-	health = 50
+	health = 40
 
 	var/mob/living/simple_animal/hostile/hive_alien/artificer/owner
 
