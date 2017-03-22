@@ -17,6 +17,7 @@
 	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
+	burn_damage_modifier = 2.5 //TREEEEEES
 	languagetoadd = LANGUAGE_ROOTSPEAK
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 
