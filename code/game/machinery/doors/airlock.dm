@@ -527,9 +527,9 @@ About the new airlock wires panel:
 				return
 			else
 				to_chat(user, "Airlock AI control has been blocked with a firewall. Unable to hack.")
-	if(operating == -1) //Door is emagged
-		to_chat(user, "Unable to establish connection to airlock controller. Verify integrity of airlock circuitry.")
-		return
+		if(operating == -1) //Door is emagged
+			to_chat(user, "Unable to establish connection to airlock controller. Verify integrity of airlock circuitry.")
+			return
 	//separate interface for the AI.
 	user.set_machine(src)
 	var/t1 = text("<B>Airlock Control</B><br>\n")
