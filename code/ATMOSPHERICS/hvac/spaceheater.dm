@@ -127,7 +127,7 @@
 	..()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(!on && cell.charge > 0 && env.oxygen > 5)
+	if(!on && cell.charge > 0 && env.oxygen >= 5)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
 		if(istype(I, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = I
@@ -272,12 +272,11 @@
 
 
 /obj/machinery/space_heater/process()
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_air()
 	if(on)
-		if(cell && cell.charge > 0 && env.oxygen > 5)
-
-			if(istype(T))
+		if(cell && cell.charge > 0 && env.oxygen >= 5)
+			var/turf/simulated/L = loc
+			if(istype(L))
+				var/datum/gas_mixture/env = L.return_air()
 				if(env.temperature != set_temperature + T0C)
 
 					var/transfer_moles = 0.25 * env.total_moles()
@@ -312,10 +311,12 @@
 
 /obj/machinery/space_heater/campfire/process()
 	..()
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/env = T.return_air()
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if(!(cell && cell.charge > 0) && nocell != 2)
+	if(!(cell && cell.charge > 0) && nocell != 2 | env.oxygen < 5)
 		new /obj/effect/decal/cleanable/campfire(get_turf(src))
 		qdel(src)
 		return
