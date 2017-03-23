@@ -127,7 +127,7 @@
 	..()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(!on && cell.charge > 0 && env.oxygen > 10)
+	if(!on && cell.charge > 0 && env.oxygen > 5)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
 		if(istype(I, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = I
@@ -275,7 +275,7 @@
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(on)
-		if(cell && cell.charge > 0 && env.oxygen > 10)
+		if(cell && cell.charge > 0 && env.oxygen > 5)
 
 			if(istype(T))
 				if(env.temperature != set_temperature + T0C)

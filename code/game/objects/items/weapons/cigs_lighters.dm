@@ -88,7 +88,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/location = get_turf(src)
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.oxygen < 10)
+	if(smoketime <= 0 | env.oxygen < 5)
 		lit = -1
 		update_brightness()
 		return
@@ -343,7 +343,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.oxygen < 10)
+	if(smoketime <= 0 | env.oxygen < 5)
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
@@ -756,7 +756,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
 	var/datum/gas_mixture/env = location.return_air()
-	if(env.oxygen < 10)
+	if(env.oxygen < 5)
 		lit = 0
 		update_brightness()
 		visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
