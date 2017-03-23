@@ -273,7 +273,7 @@
 
 /obj/machinery/space_heater/process()
 	if(on)
-		if(cell && cell.charge > 0 && env.oxygen >= 5)
+		if(cell && cell.charge > 0)
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()
