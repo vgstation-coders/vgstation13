@@ -16,6 +16,13 @@
 
 */
 
+#define TRACKMODULE "crdLOG"
+#define AUTOPINGMODULE "utoPNG"
+#define GETDIRMODULE "dirGET"
+#define GETDISTANCEMODULE "getDST"
+#define RANGEDOUBLEMODULE "rngBOOST"
+#define HALFCOSTMODULE "chpPNG"
+
 /obj/item/device/dses
 	name = "deep space exploration system"
 	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."
@@ -61,7 +68,7 @@
 /obj/item/device/dses/proc/menu_open(var/mob/user)
 	var/obj/item/device/dses/t = ""
 	if(C)
-		if(!module_in_list("utoPNG"))
+		if(!module_in_list(AUTOPINGMODULE))
 			t += "<BR><A href='?src=\ref[src];pulse=1'>Pulse</A> "
 		else
 			t += "<BR><A href='?src=\ref[src];tog_pulse=1'>Toggle Pulse: \[[auto_pulse]\]</A>"
@@ -69,11 +76,11 @@
 			<BR>Current device statistics
 			<BR>Pulse cost: [pulse_cost]
 			<BR>Pulse range: [pulse_range]"}
-		if(module_in_list("dirGET"))
+		if(module_in_list(GETDIRMODULE))
 			t += "<BR>Last logged direction: [last_direction]"
-		if(module_in_list("getDST"))
+		if(module_in_list(GETDISTANCEMODULE))
 			t += "<BR>Distance from previous ping: [last_distance]"
-		if(module_in_list("crdLOG") && positive_locations.len)
+		if(module_in_list(TRACKMODULE) && positive_locations.len)
 			t += "<BR><HR>Logged successful pings</HR>"
 			var/current_loc_itt
 			for(var/datum/dses_find/D in positive_locations)
@@ -166,12 +173,12 @@
 
 		playsound(src, 'sound/machines/ping.ogg', 50, 1, gas_modified = 0)
 
-		if(module_in_list("dirGET"))
+		if(module_in_list(GETDIRMODULE))
 			last_direction = dir2text(get_dir(src, detected))
 			if(user)
 				to_chat(user, last_direction)
 
-		if(module_in_list("crdLOG"))
+		if(module_in_list(TRACKMODULE))
 			var/datum/dses_find/D = new()
 			D.name = detected.name
 			D.x = detected.x
@@ -180,7 +187,7 @@
 			D.location_name = detected.loc.name
 			positive_locations += D
 
-		if(module_in_list("getDST"))
+		if(module_in_list(GETDISTANCEMODULE))
 			last_distance = get_dist(get_turf(src), get_turf(detected))
 
 /obj/item/device/dses/proc/pulse()
@@ -254,7 +261,7 @@
 
 /obj/item/weapon/dses_module/range_boost
 	name = "DSES ping long-range listener"
-	module_name = "rngBOOST"
+	module_name = RANGEDOUBLEMODULE
 	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
 
 /obj/item/weapon/dses_module/range_boost/install(var/obj/item/device/dses/D)
@@ -267,7 +274,7 @@
 
 /obj/item/weapon/dses_module/cost_reduc
 	name = "DSES ping resource optimizer"
-	module_name = "chpPNG"
+	module_name = HALFCOSTMODULE
 	desc = "Optimizes the cost of DSES pings, reducing the amount of energy needed per ping."
 
 /obj/item/weapon/dses_module/cost_reduc/install(var/obj/item/device/dses/D)
@@ -278,17 +285,17 @@
 
 /obj/item/weapon/dses_module/pulse_direction
 	name = "DSES ping resonation locator"
-	module_name = "dirGET"
+	module_name = GETDIRMODULE
 	desc = "A much more sensitive listening system which can give a direction to a bounce-back ping."
 
 /obj/item/weapon/dses_module/gps_logger
 	name = "DSES ping resonance logger"
-	module_name = "crdLOG"
+	module_name = TRACKMODULE
 	desc = "Basic memory unit for co-ordinating and logging the locations of succesful pings."
 
 /obj/item/weapon/dses_module/ping_timer
 	name = "DSES automated ping system"
-	module_name = "utoPNG"
+	module_name = AUTOPINGMODULE
 	desc = "Basic clock timer for automating the pinging system, turning it into a toggle."
 
 /obj/item/weapon/dses_module/ping_timer/install(var/obj/item/device/dses/D)
@@ -299,5 +306,5 @@
 
 /obj/item/weapon/dses_module/distance_get
 	name = "DSES ping distance approximation system"
-	module_name = "getDST"
+	module_name = GETDISTANCEMODULE
 	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
