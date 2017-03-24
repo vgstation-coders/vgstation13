@@ -301,26 +301,25 @@
 	item_state = "gold_id"
 
 /obj/item/weapon/card/id/nt_disguise
-	name = "Nanotrasen undercover ID"
+	name = "\improper Nanotrasen undercover ID"
 	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
 	registered_name = null
 
 	var/registered_user = null
-
-/obj/item/weapon/card/id/nt_disguise/attack_self(mob/user as mob)
-
-	var/list/gimmick_names = list(
+	var/static/list/gimmick_names = list(
 		"A. N. Other",
 		"Guy Incognito",
 		"Hugh Zasking",
 		"Ivan Gottasecret"
 	)
 
+/obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
+
 	if(!src.registered_name)
 
-		if (ishuman(loc))
-			var/mob/living/carbon/human/H = loc
-			SetOwnerInfo(H)
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+		 	SetOwnerInfo(H)
 			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
 
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
@@ -328,14 +327,14 @@
 			return
 		src.registered_name = n
 
-		var/u = sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
+		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
 		if(!u)
 			alert("Invalid assignment.")
 			src.registered_name = ""
 			return
 		src.assignment = u
 		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
-		to_chat(user, "<span class='notice'>You successfully forge the NT ID card.</span>")
+		to_chat(user, "<span class='notice'>You successfully configured the NT ID card.</span>")
 		registered_user = user
 
 	else if (!registered_user || registered_user == user)
@@ -361,8 +360,11 @@
 						to_chat(user, "Name changed to [new_name].")
 
 					if("Occupation")
-						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
+						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
 						if (!Adjacent(user))
+							return
+						if (!new_job)
+							alert("Invalid assignment.")
 							return
 						src.assignment = new_job
 						UpdateName()

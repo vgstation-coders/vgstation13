@@ -350,7 +350,7 @@
 
 	var/shattered = 0
 
-/obj/item/weapon/pocket_mirror/attack_self(mob/user as mob)
+/obj/item/weapon/pocket_mirror/attack_self(mob/user)
 	if (shattered)
 		return
 
