@@ -348,7 +348,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		if(ismob(loc))
 			if(env.oxygen < 5)
-				to_chat(M, "<span class='notice'>\The [name] suddenly goes out in a weak fashion.</span>")
+				to_chat(M, "<span class='notice'>\The [src] suddenly goes out in a weak fashion.</span>")
 			else
 				to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
 			M.u_equip(src, 0)	//Un-equip it so the overlays can update
