@@ -319,7 +319,7 @@
 
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-		 	SetOwnerInfo(H)
+			SetOwnerInfo(H)
 			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
 
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
