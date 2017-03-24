@@ -126,8 +126,11 @@
 /obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/user)
 	..()
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_air()
-	if(!on && cell.charge > 0 && env.oxygen >= 5)
+	var/datum/gas_mixture/env = T.return_air()\
+	if(env.oxygen < 5)
+		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
+		return
+	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
 		if(istype(I, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = I
