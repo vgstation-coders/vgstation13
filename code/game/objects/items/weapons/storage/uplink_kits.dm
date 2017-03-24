@@ -108,11 +108,11 @@
 				new /obj/item/weapon/soap/syndie(src)
 
 
-			if("fakeops")//
-				new /obj/item/clothing/head/helmet/space/syndicate(src)
-				new /obj/item/clothing/suit/space/syndicate(src)
-				new /obj/item/weapon/gun/projectile/automatic/c20r(src)
-				new /obj/item/ammo_storage/magazine/a12mm/ops(src)
+			if("fakeops")//Bust into the armory and get shit done
+				new /obj/item/clothing/head/helmet/space/rig/syndi(src)
+				new /obj/item/clothing/suit/space/rig/syndi(src)
+				new /obj/item/weapon/plastique(src)
+				new /obj/item/weapon/plastique(src)
 				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/weapon/implanter/explosive(src)
 				new /obj/item/clothing/shoes/magboots/syndie(src)
