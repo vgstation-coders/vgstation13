@@ -114,6 +114,7 @@ var/global/list/alert_overlays_global = list()
 			if(F.flags & ON_BORDER && src.flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
 				continue
 			spawn(1)
+				new /obj/item/firedoor_frame(get_turf(src))
 				qdel(src)
 			return .
 	var/area/A = get_area(src)
@@ -239,14 +240,17 @@ var/global/list/alert_overlays_global = list()
 		force_open(user, C)
 		return
 
-	if(istype(C, /obj/item/weapon/wrench/socket) && blocked)
-		user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
-		"You begin to deconstruct \the [src] with \the [C].",\
-		"You hear a racket from a ratchet.")
-		if(do_after(user, src, 5 SECONDS))
-			new/obj/item/firedoor_frame(get_turf(src))
-			qdel(src)
-		return
+	if(istype(C, /obj/item/weapon/wrench/socket))
+		if(blocked)
+			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
+			"You begin to deconstruct \the [src] with \the [C].",\
+			"You hear a racket from a ratchet.")
+			if(do_after(user, src, 5 SECONDS))
+				new/obj/item/firedoor_frame(get_turf(src))
+				qdel(src)
+			return
+		else
+			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
 	if( isEmag(C) )
 		if ( density==1 )
@@ -529,53 +533,36 @@ var/global/list/alert_overlays_global = list()
 	desc = "The frame for a firedoor, strangely easy to set up considering its application."
 
 /obj/item/firedoor_frame/attack_self(mob/user)
-	construct_firedoor(user)
-
-/obj/item/firedoor_frame/proc/construct_firedoor(mob/user)
-	if(!user || !src)
+	if(!user)
 		return 0
-	if(!istype(user.loc,/turf))
+	if(!isturf(user.loc))
 		return 0
 	if(!user.IsAdvancedToolUser())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 	switch(alert("firedoor construction", "Would you like to construct a full tile firedoor or one direction?", "One Direction", "Full Firedoor", "Cancel", null))
 		if("One Direction")
-			if(!src)
+			if(!user.is_holding_item(src))
 				return 1
-			if(src.loc != user)
+			var/current_turf = get_turf(src)
+			var/turf_face = get_step(current_turf,user.dir)
+			if(air_master.air_blocked(current_turf, turf_face))
+				to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
 				return 1
-			var/list/directions = new/list(cardinal)
-			var/i = 0
-			for (var/obj/machinery/door/firedoor/B in user.loc)
-				i++
-				if(i >= 4)
-					to_chat(user, "<span class='warning'>There are too many firedoors in this location.</span>")
-					return 1
-				directions-=B.dir
-				if(B.is_fulltile())
-					to_chat(user, "<span class='warning'>Can't let you do that.</span>")
-					return 1
-			var/dir_to_set = 2
-			for(var/direction in list( user.dir, turn(user.dir,90), turn(user.dir,180), turn(user.dir,270) ))
-				var/found = 0
-				for(var/obj/machinery/door/firedoor/border_only/B in user.loc)
-					if(B.dir == direction)
-						found = 1
-				if(!found)
-					dir_to_set = direction
-					break
-			var/obj/machinery/door/firedoor/border_only/B = new(user.loc,0)
-			B.dir = dir_to_set
-			qdel(src)
+			var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+			if(F && F.dir == user.dir)
+				to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
+				return 1
+			if(do_after(user, src, 5 SECONDS))
+				var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
+				B.change_dir(user.dir)
+				qdel(src)
 		if("Full Firedoor")
-			if(!src)
+			if(!user.is_holding_item(src))
 				return 1
-			if(src.loc != user)
-				return 1
-			if(locate(/obj/machinery/door/firedoor) in user.loc)
+			if(locate(/obj/machinery/door/firedoor) in get_turf(user))
 				to_chat(user, "<span class='warning'>There is a firedoor already here.</span>")
 				return 1
-			var/obj/machinery/door/firedoor/F = new(user.loc,0)
-			F.dir = SOUTHWEST
-			qdel(src)
+			if(do_after(user, src, 5 SECONDS))
+				new /obj/machinery/door/firedoor(get_turf(src))
+				qdel(src)
