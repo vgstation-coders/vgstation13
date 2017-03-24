@@ -126,7 +126,7 @@
 /obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/user)
 	..()
 	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/env = T.return_air()\
+	var/datum/gas_mixture/env = T.return_air()
 	if(env.oxygen < 5)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
 		return

@@ -91,8 +91,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(env.oxygen < 5)
 		lit = -1
 		update_brightness()
-		to_chat(M, "The flame on the [src] suddenly goes out in a weak fashion.")
-
+		if(M)
+			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
 	if(location)
 		location.hotspot_expose(heat_production, 5, surfaces = istype(loc, /turf))
 		return
@@ -348,7 +348,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		if(ismob(loc))
 			if(env.oxygen < 5)
-				to_chat(M, "<span class='notice'>The [name] suddenly goes out in a weak fashion.</span>")
+				to_chat(M, "<span class='notice'>\The [name] suddenly goes out in a weak fashion.</span>")
 			else
 				to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
 			M.u_equip(src, 0)	//Un-equip it so the overlays can update
