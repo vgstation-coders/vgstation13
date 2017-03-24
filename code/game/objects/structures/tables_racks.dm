@@ -615,6 +615,18 @@
 		return
 	return ..()
 
+/obj/structure/table/MouseDrop_T(atom/movable/O, mob/user)
+	if(O != user || !ishuman(usr) || !in_range(src, usr) || usr.incapacitated() || usr.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
+		return
+	var/mob/living/carbon/M = user
+	M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+	M.Knockdown(1)
+	if (prob(50))
+		playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+	else
+		playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+	M.visible_message("<span class='danger'>You bang your head on \the [src.name].</span>", "<span class='danger'>[usr] bangs his head on \the [src.name].</span>", "You hear a bang.")
+
 /*
  * Glass
  */
