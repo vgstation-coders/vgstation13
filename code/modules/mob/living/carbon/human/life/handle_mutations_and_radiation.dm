@@ -16,11 +16,11 @@
 	if(radiation)
 
 		//Whoever wrote those next two blocks of code obviously never heard of mathematical helpers
-		if(radiation > 100)
+		/*if(radiation > 100)
 			radiation = 100
 			Knockdown(10)
 			to_chat(src, "<span class='warning'>You feel weak.</span>")
-			emote("collapse")
+			emote("collapse")*/
 
 		if(radiation < 0)
 			radiation = 0
@@ -56,7 +56,7 @@
 						emote("collapse")
 					updatehealth()
 
-				if(75 to 100)
+				if(75 to INFINITY)
 					radiation -= 3
 					adjustToxLoss(3)
 					damage = 1
