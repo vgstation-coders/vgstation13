@@ -227,7 +227,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/kelotane
-	name = "Pill bottle (kelotane)"
+	name = "pill bottle (kelotane)"
 	desc = "Contains pills used to treat burns."
 
 /obj/item/weapon/storage/pill_bottle/kelotane/New()
@@ -237,7 +237,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/antitox
-	name = "Pill bottle (Anti-toxin)"
+	name = "pill bottle (Anti-toxin)"
 	desc = "Contains pills used to counter toxins."
 
 /obj/item/weapon/storage/pill_bottle/antitox/New()
@@ -247,7 +247,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline
-	name = "Pill bottle (inaprovaline)"
+	name = "pill bottle (inaprovaline)"
 	desc = "Contains pills used to stabilize patients."
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline/New()
@@ -276,7 +276,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
-	name = "Pill bottle (hyperzine)"
+	name = "pill bottle (hyperzine)"
 	desc = "Contains pills used to keep you active."
 
 /obj/item/weapon/storage/pill_bottle/hyperzine/New()
@@ -306,7 +306,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
 
 /obj/item/weapon/storage/pill_bottle/radiation
-	name = "Pill bottle (radiation treatment)"
+	name = "pill bottle (radiation treatment)"
 	desc = "Contains pills used to treat radiation sickness."
 
 /obj/item/weapon/storage/pill_bottle/radiation/New()
