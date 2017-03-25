@@ -3,11 +3,6 @@
  *
  * By N3X15
  *******************************/
-// For error handling.
-#define PLAYLIST_INVALID		-1 // When we don't get JSON back
-#define PLAYLIST_EMPTY			-2 // When our playlist came back empty
-#define PLAYLIST_NULL_RESPONSE	-3 // When the HTTP request returns null
-#define PLAYLIST_SERVER_ERROR	-4 // When the media server errors (N3X15's new code anyway)
 
 #define JUKEMODE_SHUFFLE     1 // Default
 #define JUKEMODE_REPEAT_SONG 2
@@ -20,51 +15,40 @@
 
 #define JUKEBOX_RELOAD_COOLDOWN 600 // 60s
 
-// Global juke playlist.
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
 	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
-		var/playlist = get_playlist(playlist_id)
-		if(!istype(playlist, /list))
-			continue
-		global_playlists["[playlist_id]"] = playlist
+		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+		testing("Updating playlist from [url]...")
 
-/proc/get_playlist(var/playlistid)
-	if(isnull(playlistid))
-		return
-	var/url="[config.media_base_url]/index.php?playlist=[playlistid]"
-	testing("Updating playlist from [url]...")
+		//  Media Server 2 requires a secret key in order to tell the jukebox
+		// where the music files are. It's set in config with MEDIA_SECRET_KEY
+		// and MUST be the same as the media server's.
+		//
+		//  Do NOT log this, it's like a password.
+		if(config.media_secret_key!="")
+			url += "&key=[config.media_secret_key]"
 
-	//  Media Server 2 requires a secret key in order to tell the jukebox
-	// where the music files are. It's set in config with MEDIA_SECRET_KEY
-	// and MUST be the same as the media server's.
-	//
-	//  Do NOT log this, it's like a password.
-	if(config.media_secret_key!="")
-		url += "&key=[config.media_secret_key]"
-
-	var/response = world.Export(url)
-	var/list/playlist=list()
-	if(response)
-		var/json = file2text(response["CONTENT"])
-		if("/>" in json)
-			return PLAYLIST_INVALID
-		var/list/songdata = json_decode(json)
-		if(!isnull(songdata["errors"])) // If we get back JSON that looks like {"errors:":[]}
-			return PLAYLIST_SERVER_ERROR
-
-		for(var/list/record in songdata)
-			playlist += new /datum/song_info(record)
-		if(playlist.len==0)
-			return PLAYLIST_EMPTY
-		return playlist
-	else
-		return PLAYLIST_NULL_RESPONSE
+		var/response = world.Export(url)
+		var/list/playlist=list()
+		if(response)
+			var/json = file2text(response["CONTENT"])
+			if("/>" in json)
+				continue
+			var/json_reader/reader = new()
+			reader.tokens = reader.ScanJson(json)
+			reader.i = 1
+			var/songdata = reader.read_value()
+			for(var/list/record in songdata)
+				playlist += new /datum/song_info(record)
+			if(playlist.len==0)
+				continue
+			global_playlists["[playlist_id]"] = playlist.Copy()
 
 /obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
-	if(!config.media_base_url || !playlistid)
+	if(!config.media_base_url)
 		return
 	playlist_id = playlistid
 	if(global_playlists["[playlistid]"])
@@ -72,20 +56,44 @@ var/global/global_playlists = list()
 		playlist = temp.Copy()
 
 	else
-		var/list_get = get_playlist(playlist_id)
-		if(istype(list_get, /list) && isnull(list_get["errors"])) // No errors
-			playlist = list_get
-			global_playlists["[playlistid]"] = playlist.Copy()
+		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
+		testing("[src] - Updating playlist from [url]...")
+
+		//  Media Server 2 requires a secret key in order to tell the jukebox
+		// where the music files are. It's set in config with MEDIA_SECRET_KEY
+		// and MUST be the same as the media server's.
+		//
+		//  Do NOT log this, it's like a password.
+		if(config.media_secret_key!="")
+			url += "&key=[config.media_secret_key]"
+
+		var/response = world.Export(url)
+		playlist=list()
+		if(response)
+			var/json = file2text(response["CONTENT"])
+			if("/>" in json)
+				visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
+				stat &= BROKEN
+				update_icon()
+				return 0
+			var/json_reader/reader = new()
+			reader.tokens = reader.ScanJson(json)
+			reader.i = 1
+			var/songdata = reader.read_value()
+			for(var/list/record in songdata)
+				playlist += new /datum/song_info(record)
+			if(playlist.len==0)
+				visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
+				stat &= BROKEN
+				update_icon()
+				return 0
 			visible_message("<span class='notice'>[bicon(src)] \The [src] beeps, and the menu on its front fills with [playlist.len] items.</span>","<em>You hear a beep.</em>")
-		else // Something errored
-			if(PLAYLIST_NULL_RESPONSE)
-				testing("[src] failed to update playlist: Response null.")
-			visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
-			// These lines would mean that the jukebox would have to be maintained every time the playlist failed to load
-			// But they also didn't break the juke in the first place because it should have been |= not &=
-			// stat &= BROKEN
-			//update_icon()
+		else
+			testing("[src] failed to update playlist: Response null.")
+			stat &= BROKEN
+			update_icon()
 			return 0
+		global_playlists["[playlistid]"] = playlist.Copy()
 	if(autoplay)
 		playing=1
 		autoplay=0
