@@ -79,3 +79,8 @@ EMAG_RECHARGE_RATE 0
 # Number of ticks per recharge cycle
 ## DEFAULT: 0 (no recharging)
 EMAG_RECHARGE_TICKS 0
+
+# Whether hardcore mode (starvation kills) is enabled by default
+# Can be disabled during game!
+## DEFAULT: 0
+HARDCORE_MODE 0
