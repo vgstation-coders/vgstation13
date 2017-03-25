@@ -139,8 +139,18 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 			spawn(0)
 				if(open_doors)
 					D.open()
+					// If it's a shuttle door, unlock it
+					if(istype(D, /obj/machinery/door/unpowered))
+						var/obj/machinery/door/unpowered/U = D
+						if (U)
+							U.locked = 0
 				else
 					D.close()
+					 // If it's a shuttle door, lock it
+					if(istype(D, /obj/machinery/door/unpowered))
+						var/obj/machinery/door/unpowered/U = D
+						if (U)
+							U.locked = 1
 
 	for(var/mob/M in end_location)
 		if(M.client)
