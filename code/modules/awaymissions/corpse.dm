@@ -64,7 +64,7 @@
 
 	if(generate_random_mob_name)
 		M.real_name = random_name(M.gender, mutantrace)
-	else if(istype(possible_names, /list))
+	else if(islist(possible_names))
 		M.real_name = pick(possible_names)
 
 	M.adjustOxyLoss(oxy_dmg) //Kills the new mob
