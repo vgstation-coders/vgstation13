@@ -1990,7 +1990,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		id = null
 
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
-	var/t = input(U, "Please enter message", "[P]", null) as text
+	var/t = input(U, "Please enter message", "Message to [P]", null) as text|null
 	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 	if (!t || !istype(P))
 		return
