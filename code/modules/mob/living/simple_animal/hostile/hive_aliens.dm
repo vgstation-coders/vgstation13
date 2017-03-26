@@ -157,6 +157,8 @@
 	for(var/mob/living/simple_animal/hostile/hive_alien/H in orange(1, target))
 		if(H == src)
 			continue
+		if(H.isDead())
+			continue
 		target_surrounded = TRUE
 		break
 
