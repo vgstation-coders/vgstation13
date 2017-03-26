@@ -401,9 +401,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player) && M.client)
-			to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [message]</font size></b>")
+			to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [msg]</font size></b>")
 			M << sound(announceSound)
-	log_say("[key_name(user)] ([formatJumpTo(get_turf(user))]) has made an announcement from \the [src]: [message]")
+	log_say("[key_name(user)] ([formatJumpTo(get_turf(user))]) has made an announcement from \the [src]: [msg]")
 	message_admins("[key_name_admin(user)] has made an announcement from \the [src].", 1)
 	announceAuth = 0
 	message = ""
