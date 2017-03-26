@@ -276,9 +276,6 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			screen = 0
 
 	if(href_list["sendAnnouncement"])
-		if(!announcementConsole)
-			return
-
 		make_announcement(message)
 
 	if( href_list["department"] && message )
@@ -399,6 +396,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	return "beeps, [text]"
 
 /obj/machinery/requests_console/proc/make_announcement(msg, mob/user = usr)
+	if(!announcementConsole)
+		return
+
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player) && M.client)
 			to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [message]</font size></b>")
@@ -410,7 +410,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	screen = 0
 
 /obj/machinery/requests_console/npc_tamper_act(mob/living/L)
-	if(isgremlin(L) && prob(20)) //20% chance per use to generate an announcement
+	if(announcementConsole && isgremlin(L) && prob(20)) //20% chance per use to generate an announcement
 		var/mob/living/simple_animal/hostile/gremlin/G = L
 		var/msg = G.generate_markov_chain()
 
