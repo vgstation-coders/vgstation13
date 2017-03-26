@@ -12,16 +12,16 @@
 //Living floor: a special floor that slows down YOU and speeds up the aliens
 //Supermatter lake:  instantly kills you if you touch it or walk into it, no matter your armour, race, gender or admin flags. Thankfully the aliens have been so kind that they've built catwalks over some of it
 
-//Alien Denizen: basic alien, behaves much like a simple space carp
+//Alien Denizen: basic alien, fairly robust and has a 15% chance to stun on attack
 
 //Alien Defender: highly mobile enemy. when it comes adjacent to the enemy, it will switch into 'attack mode' and start attacking very fast. When the target moves away, it will switch back into 'movement mode' and start chasing again
-//                   Can't attack while in 'movement mode'.
+//                   Can't attack while in 'movement mode'. 30% chance to stun on attack
 
-//Alien Arsonist: very slow tank enemy that shoots napalm bombs
+//Alien Turret: very slow tank enemy that shoots napalm bombs
 //
 
-//Alien Artificer: alien that PERMANENTLY turns alien floors below it into living floors. They don't wander around and only start moving
-//                 when they see a target
+//Alien Constructor: alien that permanently turns alien floors below it into living floors. They don't wander around and only start moving
+//  when they see a target. When their target is attacked by a different alien, they'll remotely build walls behind the victim, blocking off escape
 
 ///////////////////////////////////////////****THE MISSION****////////////////////////////////////////////
 /datum/map_element/away_mission/hive
@@ -155,6 +155,7 @@
 
 /obj/effect/narration/hive/entrance
 	msg = "The interior is as chaotic as you'd expect. Thin passageways spread out in all directions, constantly intertwining and intersecting with each other. Even the walls around you appear to be moving."
+	play_sound = 'sound/ambience/spookymaint2.ogg'
 
 /obj/effect/narration/hive/lake
 	msg = "The first thing you see as you enter this room is the massive supermatter lake on its bottom. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks hanging from the ceiling, you better be careful - a single misstep, and you'll be pulled down into the lake faster than you'd be able to react."
@@ -168,7 +169,7 @@
 
 /obj/effect/narration/hive/control
 	msg = "You enter what must've once been a cockpit of a space shuttle. Now it's barely recognizable - most of the floors and the walls here have been replaced with alien materials. A nearby computer seems to recognize you as a friendly lifeform, and greets you to the best of its abilities."
-	play_sound = 'sound/ambience/ambimalf.ogg' //same sound as the AI upload
+	play_sound = 'sound/effects/static/static4.ogg'
 
 /obj/effect/narration/hive/comms
 	msg = "What looks like a massive blob of flesh lies the corner of the room. A glowing substance regularly passes through the tubes under its skin."
@@ -292,6 +293,7 @@
 	//Eject the dead stripper
 	for(var/obj/structure/popout_cake/corpse_grabber/CG in range(7))
 		CG.release_object(drop = TRUE)
+
 
 /obj/effect/landmark/corpse/stripper/russian/hive
 	brute_dmg = 100
@@ -530,7 +532,7 @@ var/list/hive_pylons = list()
 	icon_state = "hive_heart"
 	health = 500
 
-	var/create_cooldown = 50 SECONDS
+	var/create_cooldown = 60 SECONDS
 	var/last_create
 
 /obj/structure/hive/cloner/New()
@@ -543,6 +545,8 @@ var/list/hive_pylons = list()
 
 	for(var/obj/effect/narration/hive/cloning/C in range(7, src)) //The narration effect mentions the replicator when you enter the room. Once you destroy the replicator, silence the narration
 		qdel(C)
+
+	to_chat(get_area(src), 'sound/effects/blobkill.ogg')
 
 	..()
 
@@ -575,11 +579,11 @@ var/list/hive_pylons = list()
 
 		var/spawned_type = pick(\
 		/mob/living/simple_animal/hostile/hive_alien,\
-		/mob/living/simple_animal/hostile/hive_alien/artificer,\
-		50; /mob/living/simple_animal/hostile/hive_alien/executioner,\
-		10; /mob/living/simple_animal/hostile/hive_alien/arsonist) //Arsonists and defenders are rare
+		/mob/living/simple_animal/hostile/hive_alien/constructor,\
+		30; /mob/living/simple_animal/hostile/hive_alien/defender,\
+		10; /mob/living/simple_animal/hostile/hive_alien/turret) //Turrets and defenders are rare
 
-		spawn(rand(2 SECONDS,40 SECONDS))
+		spawn(rand(2 SECONDS,15 SECONDS))
 			var/mob/living/simple_animal/hostile/hive_alien/HA = new spawned_type(T)
 			HA.visible_message("<span class='danger'>\The [HA] crawls down from an opening in the ceiling!</span>")
 
@@ -682,11 +686,11 @@ var/list/hive_pylons = list()
 	name = "monster trap"
 	frog_type = /mob/living/simple_animal/hostile/hive_alien
 
-/obj/effect/trap/frog_trap/hive/artificer //same but artificers
-	frog_type = /mob/living/simple_animal/hostile/hive_alien/artificer
+/obj/effect/trap/frog_trap/hive/constructor //same but constructors
+	frog_type = /mob/living/simple_animal/hostile/hive_alien/constructor
 
-/obj/effect/trap/frog_trap/hive/executioner //same but defenders. VERY dangerous
-	frog_type = /mob/living/simple_animal/hostile/hive_alien/executioner
+/obj/effect/trap/frog_trap/hive/defender //same but defenders. VERY dangerous
+	frog_type = /mob/living/simple_animal/hostile/hive_alien/defender
 
 ///////////////////////////////////////////****ITEMS****//////////////////////////////////////////////////
 

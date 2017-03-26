@@ -116,10 +116,13 @@
 		if(!saw_ckeys.Find(O.ckey))
 			saw_ckeys.Add(O.ckey)
 
-			if(msg)
-				to_chat(O, msg)
-
-			if(play_sound)
-				O << play_sound
+			display(O)
 
 	return ..()
+
+/obj/effect/narration/proc/display(mob/living/L)
+	if(msg)
+		to_chat(L, msg)
+
+	if(play_sound)
+		L << play_sound

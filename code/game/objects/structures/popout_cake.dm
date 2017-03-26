@@ -180,9 +180,17 @@
 /obj/structure/popout_cake/corpse_grabber/New()
 	..()
 
-	spawn(40)
+	if(ticker)
+		initialize()
 
-		for(var/mob/living/L in loc)
-			if(L.isDead())
-				L.forceMove(src)
-				break
+/obj/structure/popout_cake/corpse_grabber/spawned_by_map_element()
+	..()
+	initialize()
+
+/obj/structure/popout_cake/corpse_grabber/initialize()
+	..()
+
+	for(var/mob/living/L in loc)
+		if(L.isDead())
+			L.forceMove(src)
+			break

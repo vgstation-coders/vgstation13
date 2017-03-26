@@ -180,15 +180,20 @@
 	var/radiation_per_punch = 15
 	var/stunforce = 5
 
-	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial //Vial with the fuel
+	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = /obj/item/weapon/reagent_containers/glass/beaker/vial //Vial with the fuel
 
 	var/fuel_overlay
 	var/ready_overlay
 
+/obj/item/clothing/gloves/powerfist/full
+	vial = /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
+
 /obj/item/clothing/gloves/powerfist/New()
 	..()
 
-	vial = new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	if(ispath(vial))
+		vial = new vial(src)
+
 	update_icon()
 
 /obj/item/clothing/gloves/powerfist/Destroy()
@@ -247,9 +252,7 @@
 	return ..()
 
 /obj/item/clothing/gloves/powerfist/proc/is_ready()
-	if(last_punch + recharge_time > world.time)
-		return FALSE
-	return TRUE
+	return (last_punch + recharge_time < world.time)
 
 /obj/item/clothing/gloves/powerfist/on_punch(mob/user, mob/living/victim)
 	if(istype(victim) && use_fuel(fuel_cost))
@@ -263,7 +266,7 @@
 
 		last_punch = world.time
 		update_icon()
-		spawn(recharge_time + 0.01)
+		spawn(recharge_time + 10)
 			update_icon()
 
 /obj/item/clothing/gloves/powerfist/attack_self(mob/user)

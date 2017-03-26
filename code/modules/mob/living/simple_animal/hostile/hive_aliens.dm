@@ -72,7 +72,7 @@
 			L.Stun(rand(1,2))
 
 //Shoots napalm bombs. Very slow practically a turret.
-/mob/living/simple_animal/hostile/hive_alien/arsonist
+/mob/living/simple_animal/hostile/hive_alien/turret
 	name = "hive turret"
 	desc = "This twisted creation looks like a large cannon with a small body attached to it. It can barely move itself, and mostly only uses its many legs to adjust its aim."
 
@@ -102,11 +102,11 @@
 //Can summon dense spikes adjacent to hive walls, preventing escape
 //To summon spikes, the target must have at least 1 hive alien adjacent (the builder doesn't count)
 
-//After summoning spikes, artificers are immobile until they're destroyed (spikes OR the artificer)
+//After summoning spikes, constructors are immobile until they're destroyed (spikes OR the constructor)
 
-/mob/living/simple_animal/hostile/hive_alien/artificer
-	name = "hive artificer"
-	desc = "An alien with an egg-shaped body that uses tentacles to move around and interact with its surroundings. Such constructs are usually tasked with repairing and improving the Hive."
+/mob/living/simple_animal/hostile/hive_alien/constructor
+	name = "hive constructor"
+	desc = "An alien with an egg-shaped body that uses tentacles to move around and interact with its surroundings. These creatures are created to maintain and improve the Hive."
 
 	icon_state = "hive_artificer"
 	icon_living = "hive_artificer"
@@ -133,7 +133,7 @@
 
 	var/obj/structure/hive/spikes/summoned_spikes
 
-/mob/living/simple_animal/hostile/hive_alien/artificer/Die()
+/mob/living/simple_animal/hostile/hive_alien/constructor/Die()
 	..()
 
 	flick("hive_artificer_dying", src)
@@ -141,7 +141,7 @@
 		qdel(summoned_spikes)
 		summoned_spikes = null
 
-/mob/living/simple_animal/hostile/hive_alien/artificer/Move()
+/mob/living/simple_animal/hostile/hive_alien/constructor/Move()
 	.=..()
 
 	if(istype(loc, /turf/unsimulated/floor/evil))
@@ -149,7 +149,7 @@
 		var/turf/T = loc
 		T.ChangeTurf(/turf/unsimulated/floor/evil/breathing)
 
-/mob/living/simple_animal/hostile/hive_alien/artificer/proc/block_escape(mob/living/target)
+/mob/living/simple_animal/hostile/hive_alien/constructor/proc/block_escape(mob/living/target)
 	if(summoned_spikes)
 		return
 
@@ -207,10 +207,10 @@
 	summoned_spikes.owner = src
 	summoned_spikes.dir = turn(valid_dirs["[new_dir]"], 180)
 
-/mob/living/simple_animal/hostile/hive_alien/artificer/OpenFire(atom/target)
+/mob/living/simple_animal/hostile/hive_alien/constructor/OpenFire(atom/target)
 	block_escape(target)
 
-/mob/living/simple_animal/hostile/hive_alien/artificer/proc/start_channeling()
+/mob/living/simple_animal/hostile/hive_alien/constructor/proc/start_channeling()
 	icon_state = "hive_artificer_channeling"
 	ranged = 0
 	anchored = 1
@@ -222,7 +222,7 @@
 
 	update_icon()
 
-/mob/living/simple_animal/hostile/hive_alien/artificer/proc/stop_channeling()
+/mob/living/simple_animal/hostile/hive_alien/constructor/proc/stop_channeling()
 	icon_state = icon_living
 	ranged = initial(ranged)
 	anchored = FALSE
@@ -239,7 +239,7 @@
 
 	health = 40
 
-	var/mob/living/simple_animal/hostile/hive_alien/artificer/owner
+	var/mob/living/simple_animal/hostile/hive_alien/constructor/owner
 
 /obj/structure/hive/spikes/Die()
 	..()
@@ -250,9 +250,9 @@
 
 //Has 2 modes: movement mode and attack mode. When in movement mode, fast but can't attack. When in attack mode, immobile but dangerous
 //Switching between modes takes 0.4-.8 seconds
-/mob/living/simple_animal/hostile/hive_alien/executioner
+/mob/living/simple_animal/hostile/hive_alien/defender
 	name = "hive defender"
-	desc = "A terrifying monster resembling a massive tick in shape. Hundreds of blades are hidden underneath its rough shell."
+	desc = "A terrifying monster resembling a massive, bloated tick in shape. Hundreds of blades are hidden underneath its rough shell."
 
 	icon_state = "hive_executioner_move"
 	icon_living = "hive_executioner_move"
@@ -280,7 +280,7 @@
 	var/transformation_delay_min = 4
 	var/transformation_delay_max = 8
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/proc/mode_movement()
+/mob/living/simple_animal/hostile/hive_alien/defender/proc/mode_movement()
 	icon_state = "hive_executioner_move"
 	flick("hive_executioner_movemode", src)
 
@@ -298,7 +298,7 @@
 	//Immediately find a target so that we're not useless for 1 Life() tick!
 	FindTarget()
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/proc/mode_attack()
+/mob/living/simple_animal/hostile/hive_alien/defender/proc/mode_attack()
 	icon_state = "hive_executioner_attack"
 	flick("hive_executioner_attackmode", src)
 
@@ -314,25 +314,25 @@
 
 	walk(src, 0)
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/LostTarget()
+/mob/living/simple_animal/hostile/hive_alien/defender/LostTarget()
 	if(attack_mode && !FindTarget()) //If we don't immediately find another target, switch to movement mode
 		mode_movement()
 
 	return ..()
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/LoseTarget()
+/mob/living/simple_animal/hostile/hive_alien/defender/LoseTarget()
 	if(attack_mode && !FindTarget()) //If we don't immediately find another target, switch to movement mode
 		mode_movement()
 
 	return ..()
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/Goto()
+/mob/living/simple_animal/hostile/hive_alien/defender/Goto()
 	if(attack_mode) //Can't move in attack mode
 		return
 
 	return ..()
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/AttackingTarget()
+/mob/living/simple_animal/hostile/hive_alien/defender/AttackingTarget()
 	if(!attack_mode)
 		return mode_attack()
 
@@ -340,6 +340,6 @@
 
 	return ..()
 
-/mob/living/simple_animal/hostile/hive_alien/executioner/wounded
-	name = "wounded alien executioner"
+/mob/living/simple_animal/hostile/hive_alien/defender/wounded
+	name = "wounded hive defender"
 	health = 80
