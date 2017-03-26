@@ -123,6 +123,7 @@
 				new /obj/item/robot_parts/robot_suit/complete(src)
 				new /obj/item/device/mmi/posibrain(src)
 				new /obj/item/weapon/card/emag(src)
+				new /obj/item/device/flash(src)
 				new /obj/item/borg/upgrade/jetpack(src)
 				new /obj/item/borg/upgrade/reset(src)
 				new /obj/item/borg/upgrade/rename(src)
