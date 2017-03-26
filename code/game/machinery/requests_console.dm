@@ -410,7 +410,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	screen = 0
 
 /obj/machinery/requests_console/npc_tamper_act(mob/living/L)
-	if(announcementConsole && isgremlin(L) && prob(20)) //20% chance per use to generate an announcement
+	if(announcementConsole && isgremlin(L) && prob(10)) //10% chance per use to generate an announcement
 		var/mob/living/simple_animal/hostile/gremlin/G = L
 		var/msg = G.generate_markov_chain()
 
