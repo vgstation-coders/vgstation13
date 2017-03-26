@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "cyborg" = 100, "balloon" = 1))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -117,6 +117,16 @@
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
+
+
+			if("cyborg")
+				new /obj/item/robot_parts/robot_suit/complete(src)
+				new /obj/item/device/mmi/posibrain(src)
+				new /obj/item/weapon/card/emag(src)
+				new /obj/item/borg/upgrade/syndicate(src)
+				new /obj/item/borg/upgrade/reset(src)
+				new /obj/item/borg/upgrade/rename(src)
+				new /obj/item/borg/upgrade/restart(src)
 		tag = tagname
 
 
