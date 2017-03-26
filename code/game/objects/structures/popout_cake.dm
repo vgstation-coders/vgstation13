@@ -180,12 +180,6 @@
 /obj/structure/popout_cake/corpse_grabber/New()
 	..()
 
-	if(ticker)
-		initialize()
-
-/obj/structure/popout_cake/corpse_grabber/spawned_by_map_element()
-	..()
-
 	initialize()
 
 /obj/structure/popout_cake/corpse_grabber/initialize()
