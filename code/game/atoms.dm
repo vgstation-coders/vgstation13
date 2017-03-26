@@ -534,6 +534,7 @@ its easier to just keep the beam vertical.
 
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
+	return 1
 
 /atom/proc/hitby(atom/movable/AM as mob|obj)
 	return

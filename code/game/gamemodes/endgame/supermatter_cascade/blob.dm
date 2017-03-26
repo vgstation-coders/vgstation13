@@ -137,7 +137,7 @@
 	if(istype(AM, /mob/dead/observer))
 		return
 
-	AM.supermatter_act(src)
+	return AM.supermatter_act(src)
 
 /turf/unsimulated/wall/supermatter/singularity_act()
 	return

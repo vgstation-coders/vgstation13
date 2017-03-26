@@ -185,12 +185,14 @@
 
 /obj/structure/popout_cake/corpse_grabber/spawned_by_map_element()
 	..()
+
 	initialize()
 
 /obj/structure/popout_cake/corpse_grabber/initialize()
 	..()
 
-	for(var/mob/living/L in loc)
-		if(L.isDead())
-			L.forceMove(src)
-			break
+	spawn(40) //Search for a corpse after a slight delay, because corpse spawners are objects, and don't spawn the corpse immediately
+		for(var/mob/living/L in loc)
+			if(L.isDead())
+				L.forceMove(src)
+				break

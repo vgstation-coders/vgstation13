@@ -390,8 +390,11 @@
 	if(issilicon(A) || ishuman(A))
 		var/mob/living/L = A
 		if(L.ckey)
-			hive.bluespace_deaths++
+			if(..())
+				hive.bluespace_deaths++
 			log_game("[key_name(L)] consumed by a supermatter lake [formatJumpTo(src)]")
+			return
+
 	else if(istype(A, /mob/living/simple_animal/hostile/hive_alien))
 		hive.bluespace_alien_kills++
 

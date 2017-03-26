@@ -1754,8 +1754,10 @@ mob/proc/on_foot()
 
 		if(severity == SUPERMATTER_DUST)
 			dust()
+			return 1
 		else
 			qdel(src)
+			return 1
 
 /mob/proc/remove_jitter()
 	if(jitteriness)
