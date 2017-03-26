@@ -249,12 +249,6 @@
 	dir = pick(cardinal)
 	//Random direction for a more chaotic look
 
-/obj/machinery/door/mineral/hive/Bumped(atom/user)
-	if(istype(user, /mob/living/simple_animal/hostile/hive_alien/executioner)) //Executioners can't open doors
-		return
-
-	return ..()
-
 /obj/machinery/door/mineral/transparent/icicle
 	name = "icicle door"
 	use_power = 0
