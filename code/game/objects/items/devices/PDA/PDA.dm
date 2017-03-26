@@ -1821,7 +1821,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //TRADER FUNCTIONS======================================
 			if("Send Shuttle")
-				if(cartridge && cartridge.access_trader)
+				if(cartridge && cartridge.access_trader && id && can_access(id.access,list(access_trade)))
 					var/obj/machinery/computer/shuttle_control/C = global.trade_shuttle.control_consoles[1] //There should be exactly one
 					if(C)
 						global.trade_shuttle.travel_to(pick(global.trade_shuttle.docking_ports - global.trade_shuttle.current_port),C,U) //Just send it; this has all relevant checks
