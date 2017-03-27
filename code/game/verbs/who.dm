@@ -6,7 +6,26 @@
 
 	var/list/Lines = list()
 
-	//for admins
+	for(var/client/C in clients)
+		if(C.holder && C.holder.fakekey)
+			Lines += C.holder.fakekey
+		else
+			Lines += C.key
+
+	for(var/line in sortList(Lines))
+		msg += "[line]\n"
+
+	msg += "<b>Total Players: [length(Lines)]</b>\n"
+	to_chat(src, msg)
+
+/client/proc/advwho() //Gives info on character name and living/dead/antag status, as well as the regular Who list.
+	set name = "Who (Advanced)"
+	set category = "Admin"
+
+	var/msg = "\n<b>Current Players:</b>\n"
+
+	var/list/Lines = list()
+
 	var/living = 0 //Currently alive and in the round (possibly unconscious, but not officially dead)
 	var/dead = 0 //Have been in the round but are now deceased
 	var/observers = 0 //Have never been in the round (thus observing)
@@ -14,63 +33,48 @@
 	var/living_antags = 0 //Are antagonists, and currently alive
 	var/dead_antags = 0 //Are antagonists, and have finally met their match
 
-	if(holder)
-		for(var/client/C in clients)
-			var/entry = "\t[C.key]"
-
-			if(C.holder && C.holder.fakekey)
-				entry += " <i>(as [C.holder.fakekey])</i>"
-
-			if(C.mob.real_name)
-				entry += " - Playing as [C.mob.real_name]"
-
-			switch(C.mob.stat)
-				if(UNCONSCIOUS)
-					entry += " - <span style='color:darkgray'><b>Unconscious</b></span>"
-
-				if(DEAD)
-					if(isobserver(C.mob))
-						var/mob/dead/observer/O = C.mob
-
-						if(O.started_as_observer)
-							entry += " - <span style='color:gray'>Observing</span>"
-							observers++
-						else
-							entry += " - <b>DEAD</b>"
-							dead++
-					else if (isnewplayer(C.mob))
-						entry += " - <span style='color:gray'><i>Lobby</i></span>"
-						lobby++
+	for(var/client/C in clients)
+		var/entry = "\t[C.key]"
+		if(C.holder && C.holder.fakekey)
+			entry += " <i>(as [C.holder.fakekey])</i>"
+		if(C.mob.real_name)
+			entry += " - Playing as [C.mob.real_name]"
+		switch(C.mob.stat)
+			if(UNCONSCIOUS)
+				entry += " - <span style='color:darkgray'><b>Unconscious</b></span>"
+			if(DEAD)
+				if(isobserver(C.mob))
+					var/mob/dead/observer/O = C.mob
+					if(O.started_as_observer)
+						entry += " - <span style='color:gray'>Observing</span>"
+						observers++
 					else
 						entry += " - <b>DEAD</b>"
 						dead++
+				else if (isnewplayer(C.mob))
+					entry += " - <span style='color:gray'><i>Lobby</i></span>"
+					lobby++
 				else
-					living++
-
-			if(is_special_character(C.mob))
-				entry += " - <b><span class='red'>Antagonist</span></b>"
-				if(!(C.mob.isDead()))
-					living_antags++
-				else
-					dead_antags++
-
-			entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
-			Lines += entry
-
-		log_admin("[key_name(usr)] used who verb advanced (shows OOC key - IC name, status and if antagonist)")
-	else
-		for(var/client/C in clients)
-			if(C.holder && C.holder.fakekey)
-				Lines += C.holder.fakekey
+					entry += " - <b>DEAD</b>"
+					dead++
 			else
-				Lines += C.key
+				living++
+		if(is_special_character(C.mob))
+			entry += " - <b><span class='red'>Antagonist</span></b>"
+			if(!(C.mob.isDead()))
+				living_antags++
+			else
+				dead_antags++
+		entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
+		Lines += entry
 
 	for(var/line in sortList(Lines))
 		msg += "[line]\n"
-	if(holder)
-		msg += "<b><span class='notice'>Total Living: [living]</span> | Total Dead: [dead] | <span style='color:gray'>Observing: [observers]</span> | <span style='color:gray'><i>In Lobby: [lobby]</i></span> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
+
+	msg += "<b><span class='notice'>Total Living: [living]</span> | Total Dead: [dead] | <span style='color:gray'>Observing: [observers]</span> | <span style='color:gray'><i>In Lobby: [lobby]</i></span> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
 	msg += "<b>Total Players: [length(Lines)]</b>\n"
 	to_chat(src, msg)
+	log_admin("[key_name(usr)] used who verb advanced (shows OOC key - IC name, status and if antagonist)")
 
 /client/verb/adminwho()
 	set category = "Admin"

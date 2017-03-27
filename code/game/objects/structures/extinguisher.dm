@@ -8,6 +8,13 @@
 	var/obj/item/weapon/extinguisher/has_extinguisher = new/obj/item/weapon/extinguisher
 	var/opened = 0
 
+/obj/structure/extinguisher_cabinet/empty
+	has_extinguisher = null
+	opened = 1
+
+/obj/structure/extinguisher_cabinet/New()
+	..()
+	update_icon()
 
 /obj/structure/extinguisher_cabinet/attackby(obj/item/O, mob/user)
 	if(isrobot(user) || isalien(user))
@@ -19,6 +26,8 @@
 				to_chat(user, "<span class='notice'>You place [O] in [src].</span>")
 		else
 			opened = !opened
+	else if(iswelder(O))
+		weld(O, user)
 	else
 		opened = !opened
 	update_icon()
@@ -62,3 +71,18 @@
 			icon_state = "extinguisher_full"
 	else
 		icon_state = "extinguisher_empty"
+
+
+/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+	if(!istype(WE))
+		return
+	if(has_extinguisher)
+		to_chat(user, "<span class='notice'>There is still an extinguisher inside.</span>")
+		return
+	if(!opened)
+		to_chat(user, "<span class='notice'>\The [src] needs to be open before you can dismantle it.</span>")
+		return
+	if(!WE.remove_fuel(1, user))
+		return
+	to_chat(user, "<span class='notice'>You cut \the [src] off of the wall.</span>")
+	qdel(src)
