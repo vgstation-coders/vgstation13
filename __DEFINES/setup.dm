@@ -1584,9 +1584,9 @@ var/proccalls = 1
 #define DEFAULT_BLOOD "#A10808"
 
 //Strike Team Defines
-#TEAM_DEATHSQUAD			"Death Squad"
-#TEAM_ERT					"Emergency Response Team"
-#TEAM_ELITE_SYNDIE			"Elite Strike Team"
+#define TEAM_DEATHSQUAD			"Death Squad"
+#define TEAM_ERT					"Emergency Response Team"
+#define TEAM_ELITE_SYNDIE			"Elite Strike Team"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
