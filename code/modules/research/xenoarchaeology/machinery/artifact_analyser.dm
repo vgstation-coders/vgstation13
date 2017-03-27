@@ -205,7 +205,7 @@
 
 				if(A.primary_effect.trigger.triggertype == TRIGGER_TOUCH || A.primary_effect.trigger.triggertype == TRIGGER_REAGENT)
 					out += " Activation index involves physical interaction with artifact surface."
-				else if(A.primary_effect.trigger.triggertype == TRIGGER_FORCE || A.primary_effect.trigger.triggertype == TRIGGER_ENERGY || A.primary_effect.trigger.triggertype == TRIGGER_TEMPERATURE)
+				else if(A.primary_effect.trigger.triggertype == TRIGGER_FORCE || A.primary_effect.trigger.triggertype == TRIGGER_ENERGY || A.primary_effect.trigger.triggertype == TRIGGER_TEMPERATURE || A.primary_effect.trigger.triggertype == TRIGGER_LIGHT)
 					out += " Activation index involves energetic interaction with artifact surface."
 				else if(A.primary_effect.trigger.triggertype == TRIGGER_GAS)
 					out += " Activation index involves precise local atmospheric conditions."
@@ -249,7 +249,7 @@
 				if(A.secondary_effect.trigger.triggertype == TRIGGER_TOUCH || A.secondary_effect.trigger.triggertype == TRIGGER_REAGENT)
 					out += " Activation index involves physical interaction with artifact surface, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger.triggertype == TRIGGER_FORCE || A.secondary_effect.trigger.triggertype == TRIGGER_ENERGY || A.secondary_effect.trigger.triggertype == TRIGGER_TEMPERATURE)
+				else if(A.secondary_effect.trigger.triggertype == TRIGGER_FORCE || A.secondary_effect.trigger.triggertype == TRIGGER_ENERGY || A.secondary_effect.trigger.triggertype == TRIGGER_TEMPERATURE || A.secondary_effect.trigger.triggertype == TRIGGER_LIGHT)
 					out += " Activation index involves energetic interaction with artifact surface, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
 				else if(A.secondary_effect.trigger.triggertype == TRIGGER_GAS)

@@ -4,6 +4,7 @@
 #define TRIGGER_REAGENT "reagent"
 #define TRIGGER_GAS "gas"
 #define TRIGGER_TEMPERATURE "temperature"
+#define TRIGGER_LIGHT "light"
 
 /datum/artifact_trigger
 	var/triggertype = ""
