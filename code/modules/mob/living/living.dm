@@ -703,6 +703,31 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
+						//this is the gay blood on floor shit -- Added back -- Skie
+							if (M.lying && (prob(M.getBruteLoss() / 6)))
+								var/turf/location = M.loc
+								if (istype(location, /turf/simulated))
+									location.add_blood(M)
+									if(ishuman(M))
+										var/mob/living/carbon/H = M
+										var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
+										if(blood_volume > 0)
+											H:vessel.remove_reagent("blood",1)
+								if(prob(5))
+									M.adjustBruteLoss(1)
+									visible_message("\red \The [M]'s wounds open more from being dragged!")
+							if(M.pull_damage())
+								if(prob(25))
+									M.adjustBruteLoss(2)
+									visible_message("\red \The [M]'s wounds worsen terribly from being dragged!")
+									var/turf/location = M.loc
+									if (istype(location, /turf/simulated))
+										location.add_blood(M)
+										if(ishuman(M))
+											var/mob/living/carbon/H = M
+											var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
+											if(blood_volume > 0)
+												H:vessel.remove_reagent("blood",1)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
