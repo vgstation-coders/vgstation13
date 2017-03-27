@@ -712,13 +712,13 @@ Thanks.
 										var/mob/living/carbon/H = M
 										var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 										if(blood_volume > 0)
-											H:vessel.remove_reagent("blood",4)
-								if(prob(5))
-									M.adjustBruteLoss(2)
-									M.visible_message("<span class='danger'>\The [M]'s wounds open more from being dragged!</span>")
-							if(M.pull_damage())
+											H:vessel.remove_reagent("blood",2)
+								if(prob(10))
+									M.adjustBruteLoss(3)
+									M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
+							if(M.pull_damage() > 0)
 								if(prob(25))
-									M.adjustBruteLoss(5)
+									M.adjustBruteLoss(2 * pull_damage())
 									M.visible_message("<span class='danger'>\The [M]'s wounds worsen terribly from being dragged!</span>")
 									var/turf/location = M.loc
 									if (istype(location, /turf/simulated))
@@ -727,7 +727,7 @@ Thanks.
 											var/mob/living/carbon/H = M
 											var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 											if(blood_volume > 0)
-												H:vessel.remove_reagent("blood",1)
+												H:vessel.remove_reagent("blood",4)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))

@@ -937,17 +937,21 @@ var/list/slot_equipment_priority = list( \
 
 	return 1
 	
-/mob/proc/pull_damage() //Checks if the mob is in crit AND is either bleeding or has a broken unsplinted limb
+/mob/proc/pull_damage() //if in crit, add one for every broken, open or bleeding limb
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		if(H.health < config.health_threshold_crit)
-			/*for(var/name in H.organs)
-				var/datum/organ/external/e = H.organs[name]
-				if((e.status & ORGAN_BROKEN && !e.status & ORGAN_SPLINTED) || (e.status & ORGAN_BLEEDING) || (e.open))
-					return 1
-					break*/
-			return 1
-			
+		var/pull_damage_count = 0
+		if(H.health < config.health_threshold_crit && H.getBruteLoss() < 200)
+			for(var/organ_name in H.organs_by_name)
+				var/datum/organ/external/E = H.organs_by_name[organ_name]
+				if (E.status & ORGAN_BROKEN && !E.status & ORGAN_SPLINTED)
+					pull_damage_count = (pull_damage_count + 1)
+				if  (E.open)
+					pull_damage_count = (pull_damage_count + 1)
+				if  (E.status & ORGAN_BLEEDING)
+					pull_damage_count = (pull_damage_count + 1)	
+				return pull_damage_count
+				break
 		else	
 			return 0
 	
@@ -967,10 +971,10 @@ var/list/slot_equipment_priority = list( \
 
 	if (ismob(AM))
 		var/mob/M = AM
+		if(M.pull_damage()) //Pulling someone who's messed up will mess them up a lot further, inform the user.
+			to_chat(usr,"<span class='warning'>Pulling \the [M] in their current condition would probably be a bad idea.</span>")
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
-			if(M.pull_damage()) //Pulling someone who's messed up will mess them up a lot further, inform the user.
-				to_chat(src, "<span class='warning'>Pulling \the [M] in their current condition would probably be a bad idea.</span>")
 	if (!P.anchored)
 		P.add_fingerprint(src)
 
