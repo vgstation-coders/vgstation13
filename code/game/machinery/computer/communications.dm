@@ -180,11 +180,11 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "<span class='notice'>\The [src.name] cannot establish a bluespace connection.</span>")
 				return
 
-			if("Death Squad" in sent_strike_teams)
+			if(sentStrikeTeams(TEAM_DEATHSQUAD))
 				to_chat(usr, "<span class='warning'>PKI AUTH ERROR: SERVER REPORTS BLACKLISTED COMMUNICATION KEY PLEASE CONTACT SERVICE TECHNICIAN</span>")
 				return
 
-			if("Emergency Response Team" in sent_strike_teams)
+			if(sentStrikeTeams(TEAM_ERT))
 				to_chat(usr, "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>")
 				return
 
@@ -398,7 +398,7 @@ var/shuttle_call/shuttle_calls[0]
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
 	var/sent = 0
-	if ("Emergency Response Team" in sent_strike_teams)
+	if(sentStrikeTeams(TEAM_ERT))
 		sent = 1
 
 	data["ert_sent"] = sent

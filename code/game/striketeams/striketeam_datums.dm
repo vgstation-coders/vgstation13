@@ -26,7 +26,7 @@ var/list/sent_strike_teams = list()
 		return
 
 	//Has someone already sent a strike team of this type
-	if(striketeam_name in sent_strike_teams)
+	if(sentStrikeTeams(striketeam_name))
 		if(user)
 			to_chat(user, "<span class='warning'>[faction_name] has already sent \a [striketeam_name].</span>")
 		qdel(src)
@@ -49,12 +49,11 @@ var/list/sent_strike_teams = list()
 			else
 				mission = initial(mission)
 
-		if(striketeam_name in sent_strike_teams)
+		if(sentStrikeTeams(striketeam_name))
 			to_chat(user, "Looks like someone beat you to it.")
 			qdel(src)
 			return
 
-	sent_strike_teams |= striketeam_name
 	sent_strike_teams[striketeam_name] = src
 
 	if(user)
@@ -69,7 +68,7 @@ var/list/sent_strike_teams = list()
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
 
-	spawn(600)
+	spawn(1 MINUTES)
 		searching = FALSE
 
 		for(var/mob/dead/observer/O in dead_mob_list)
@@ -78,8 +77,8 @@ var/list/sent_strike_teams = list()
 			to_chat(O, "[bicon(team_logo)]<span class='recruit'>Applications for [faction_name]'s [striketeam_name] are now closed.</span>[bicon(team_logo)]")
 
 		if(!applicants || applicants.len <= 0)
-			if(user)
-				to_chat(user, "<span class='warning'>[faction_name] received no applications for the [striketeam_name].</span>")
+			log_admin("[striketeam_name] received no applications.")
+			message_admins("[striketeam_name] received no applications.")
 			failure()
 			qdel(src)
 			return
@@ -105,7 +104,7 @@ var/list/sent_strike_teams = list()
 					applicant = M
 			applicants -= applicant.key
 
-			if(!istype(applicant, /mob/dead/observer))
+			if(!isobserver(applicant))
 				//Making sure we don't recruit people who got back into the game since they applied
 				continue
 
@@ -136,8 +135,8 @@ var/list/sent_strike_teams = list()
 
 /datum/striketeam/Topic(var/href, var/list/href_list)
 	if(href_list["signup"])
-		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O)
+		var/mob/dead/observer/O = usr
+		if(!O || !istype(O))
 			return
 
 		volunteer(O)
@@ -151,10 +150,11 @@ var/list/sent_strike_teams = list()
 		return
 
 	if(jobban_isbanned(O, "Strike Team"))
+		to_chat(O, "<span class='danger'>Banned from Strike Teams.</span>")
 		to_chat(O, "<span class='warning'>Your application to the [striketeam_name] has been discarded due to past conduct..</span>")
 		return
 
-	if(O in applicants)
+	if(O.key in applicants)
 		to_chat(O, "<span class='notice'>Removed from the [striketeam_name] registration list.</span>")
 		applicants -= O.key
 		return
