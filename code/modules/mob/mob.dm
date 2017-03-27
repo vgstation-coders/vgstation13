@@ -936,25 +936,7 @@ var/list/slot_equipment_priority = list( \
 			qdel(point)
 
 	return 1
-	
-/mob/proc/pull_damage() //if in crit, add one for every broken, open or bleeding limb
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		var/pull_damage_count = 0
-		if(H.health < config.health_threshold_crit && H.getBruteLoss() < 200)
-			for(var/organ_name in H.organs_by_name)
-				var/datum/organ/external/E = H.organs_by_name[organ_name]
-				if (E.status & ORGAN_BROKEN && !E.status & ORGAN_SPLINTED)
-					pull_damage_count = (pull_damage_count + 1)
-				if  (E.open)
-					pull_damage_count = (pull_damage_count + 1)
-				if  (E.status & ORGAN_BLEEDING)
-					pull_damage_count = (pull_damage_count + 1)	
-				return pull_damage_count
-				break
-		else	
-			return 0
-	
+
 /mob/proc/has_hand_check()
 	return held_items.len
 
@@ -975,6 +957,7 @@ var/list/slot_equipment_priority = list( \
 			to_chat(usr,"<span class='warning'>Pulling \the [M] in their current condition would probably be a bad idea.</span>")
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
+
 	if (!P.anchored)
 		P.add_fingerprint(src)
 
@@ -1315,6 +1298,18 @@ var/list/slot_equipment_priority = list( \
 		if(usr.client)
 			var/client/C = usr.client
 			C.JoinResponseTeam()
+
+/mob/proc/pull_damage()
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(H.health - H.halloss <= config.health_threshold_softcrit)
+			for(var/name in H.organs_by_name)
+				var/datum/organ/external/e = H.organs_by_name[name]
+				if(H.lying)
+					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
+						return 1
+						break
+		return 0
 
 /mob/MouseDrop(mob/M as mob)
 	..()
