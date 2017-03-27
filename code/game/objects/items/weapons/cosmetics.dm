@@ -369,21 +369,20 @@
 					return
 				if (21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-					H.emote("scream",,, 1)
+					H.emote("scream", auto=1)
 					H.dir = turn(H.dir, 180)
 					return
 				if (41 to 50)
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
 
-		var/userloc = H.loc
 		//handle normal hair
 		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
 		//gender intentionally left null so speshul snowflakes can cross-hairdress
 		if (species_hair.len)
 			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
-			if (userloc != H.loc)
-				return	//no tele-grooming
+			if (!Adjacent(user) || user.incapacitated())
+				return
 			if (new_style)
 				H.h_style = new_style
 				H.update_hair()
@@ -402,5 +401,7 @@
 
 /obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom)
 	..()
+	if(!isturf(hit_atom))
+		return
 	if (prob(25))
 		shatter()
