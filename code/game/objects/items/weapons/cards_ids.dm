@@ -325,21 +325,31 @@
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
 		if(!n)
 			return
+		if (!Adjacent(user) || user.incapacitated())
+			return
 		src.registered_name = n
 
 		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
 		if(!u)
 			alert("Invalid assignment.")
-			src.registered_name = ""
+			src.registered_name = null
+			return
+		if (!Adjacent(user) || user.incapacitated())
+			src.registered_name = null
 			return
 		src.assignment = u
 		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
 		to_chat(user, "<span class='notice'>You successfully configured the NT ID card.</span>")
-		registered_user = user
 
-	else if (!registered_user || registered_user == user)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			registered_user = H.dna.unique_enzymes
+
+	else if (!registered_user || user.dna.unique_enzymes && registered_user == user.dna.unique_enzymes)
 		if (!registered_user)
-			registered_user = user
+			if(ishuman(user))
+				var/mob/living/carbon/human/H = user
+				registered_user = H.dna.unique_enzymes
 
 		switch(alert(user,"Would you like to display \the [src] or edit it?","Nanotrasen undercover ID","Show","Edit"))
 
@@ -351,7 +361,7 @@
 
 					if ("Name")
 						var/new_name = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
-						if (!Adjacent(user))
+						if (!Adjacent(user) || user.incapacitated())
 							return
 						if (!new_name)
 							return
@@ -361,7 +371,7 @@
 
 					if("Occupation")
 						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
-						if (!Adjacent(user))
+						if (!Adjacent(user) || user.incapacitated())
 							return
 						if (!new_job)
 							alert("Invalid assignment.")
