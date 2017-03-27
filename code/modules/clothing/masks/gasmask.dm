@@ -103,9 +103,8 @@
 //someone who isn't me should really refactor this so it isnt instantiating all the masks in the game on startup
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	if(type == /obj/item/clothing/mask/gas/voice)
-		for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
-			clothing_choices += new Type
+	for(var/Type in existing_typesof(/obj/item/clothing/mask) - /obj/item/clothing/mask - typesof(/obj/item/clothing/mask/gas/voice))
+		clothing_choices += new Type
 
 /obj/item/clothing/mask/gas/voice/attackby(obj/item/I, mob/user)
 	..()
