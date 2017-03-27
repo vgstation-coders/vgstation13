@@ -345,7 +345,7 @@
 			var/mob/living/carbon/human/H = user
 			registered_user = H.dna.unique_enzymes
 
-	else if (!registered_user || user.dna.unique_enzymes && registered_user == user.dna.unique_enzymes)
+	else if (!registered_user || user.dna && registered_user == user.dna.unique_enzymes)
 		if (!registered_user)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
