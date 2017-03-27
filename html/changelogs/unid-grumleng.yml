@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: Gremlins can now use communication and request consoles.
