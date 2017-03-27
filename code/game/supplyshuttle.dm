@@ -639,6 +639,7 @@ var/list/mechtoys = list(
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				if(can_order_contraband)
 					M.contraband_enabled = 1
+					req_access = list()
 				for (var/obj/C in src)
 					C.forceMove(loc)
 				A.circuit = M
