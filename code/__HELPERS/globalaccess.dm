@@ -1289,16 +1289,8 @@
 			return global.voxresearch_shuttle;
 		if("response_team_members")
 			return global.response_team_members;
-		if("send_emergency_team")
-			return global.send_emergency_team;
-		if("ert_base_chance")
-			return global.ert_base_chance;
-		if("can_call_ert")
-			return global.can_call_ert;
-		if("sent_strike_team")
-			return global.sent_strike_team;
-		if("sent_syndicate_strike_team")
-			return global.sent_syndicate_strike_team;
+		if("sent_strike_teams")
+			return global.sent_strike_teams;
 		if("icons_to_ignore_at_floor_init")
 			return global.icons_to_ignore_at_floor_init;
 		if("plating_icons")
@@ -3114,16 +3106,8 @@
 			global.voxresearch_shuttle=newval
 		if("response_team_members")
 			global.response_team_members=newval
-		if("send_emergency_team")
-			global.send_emergency_team=newval
-		if("ert_base_chance")
-			global.ert_base_chance=newval
-		if("can_call_ert")
-			global.can_call_ert=newval
-		if("sent_strike_team")
-			global.sent_strike_team=newval
-		if("sent_syndicate_strike_team")
-			global.sent_syndicate_strike_team=newval
+		if("sent_strike_teams")
+			global.sent_strike_teams=newval
 		if("icons_to_ignore_at_floor_init")
 			global.icons_to_ignore_at_floor_init=newval
 		if("plating_icons")
