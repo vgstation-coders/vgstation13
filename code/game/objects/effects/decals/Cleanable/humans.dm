@@ -148,7 +148,7 @@ var/global/list/blood_list = list()
 
 
 
-
+//We should really get directional blood streak sprites again --snx
 /obj/effect/decal/cleanable/blood/proc/streak(var/list/directions, spread_radius = 0)
 	spawn (0)
 		var/direction = pick(directions)
