@@ -457,3 +457,27 @@ obj/item/weapon/banhammer/admin
 //		base_overlay.appearance = appearance
 //		base_overlay.plane = FLOAT_PLANE
 //		overlays += base_overlay
+
+/obj/item/weapon/plank
+	name = "Plank"
+	desc = "A 2X4 with a face drawn in crayon. You feel like it's watching you."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "theplank"
+	item_state = "theplank"
+	hitsound = "sound/weapons/smash.ogg"
+	flags = FPRINT
+	slot_flags = SLOT_BELT
+	force = 4
+	sharpness = 0
+	siemens_coefficient = 0
+	w_class = W_CLASS_MEDIUM
+	attack_verb = list("smacks, planks, slams, whacks, 2X4s")
+
+/obj/item/weapon/plank/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/soap))
+		to_chat(user, "You begin scrubbing the face off \the [src].")
+		if(do_after(user, src, 30))
+			to_chat(user, "You finish scrubbing.")
+			user.put_in_hands(new /obj/item/stack/sheet/wood(user))
+			qdel(src)

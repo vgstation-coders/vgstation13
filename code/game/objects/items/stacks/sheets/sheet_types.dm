@@ -104,6 +104,21 @@
 					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 					new /obj/structure/lattice/wood(T)
 
+/obj/item/stack/sheet/wood/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = W
+		to_chat(user, "You begin drawing a face on the plank.")
+		if(do_after(user, src, 80))
+			to_chat(user, "You finish drawing a face on the plank.")
+			if(C.uses)
+				C.uses--
+				if(!C.uses)
+					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
+					qdel(C)
+			user.put_in_hands(new /obj/item/weapon/plank(user))
+			use(1)
+
 /obj/item/stack/sheet/wood/cultify()
 	return
 
