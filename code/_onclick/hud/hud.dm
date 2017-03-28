@@ -228,6 +228,8 @@ var/global/obj/screen/clicker/catcher = new()
 		construct_hud()
 	else if(ispAI(mymob))
 		pai_hud()
+	else if(ismartian(mymob))
+		martian_hud()
 
 	if(isliving(mymob))
 		var/obj/screen/using
