@@ -13,8 +13,11 @@
 	for(var/mob/living/C in view(1,src))
 		if(C!=src && !istype(C,/mob/living/carbon/slime))
 			choices += C
-
-	var/mob/living/carbon/M = input(src,"Who do you wish to feed on?") in null|choices
+	var/mob/living/carbon/M
+	if (choices)
+		M = choices[1]
+		if (choices.len > 1)
+			M = input(src,"Who do you wish to feed on?") in null|choices
 	if(!M)
 		return
 	if(M in view(1, src))
@@ -31,6 +34,7 @@
 						to_chat(src, "<span class='notice'><i>I have latched onto the subject and begun feeding...</i></span>")
 						to_chat(M, "<span class='danger'>The [src.name] has latched onto your head!</span>")
 						Feedon(M)
+						add_attacklogs(src, M, "feeds on")
 
 					else
 						to_chat(src, "<i>This subject does not have a strong enough life energy...</i>")
