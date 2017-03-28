@@ -97,6 +97,41 @@ var/list/shop_prices = list( //Cost in space credits
 //No guns sorry
 )
 
+
+/datum/map_element/vault/supermarket
+	name = "Spessmart"
+	file_path = "maps/randomvaults/spessmart.dmm"
+
+	//Statistics gathering!
+	var/credits_spent   = 0
+	var/goods_purchased = 0
+	var/alarm_activated = "" //Holds the explanation for alarm's activation
+
+/datum/map_element/vault/supermarket/process_scoreboard()
+	var/list/L = list()
+
+	if(credits_spent || goods_purchased || alarm_activated)
+		L += "Credits spent: $[credits_spent]"
+		L += "Goods purchased: [goods_purchased]"
+
+		if(alarm_activated)
+			L += "Alarm activated: [alarm_activated]"
+
+	return L
+
+/datum/map_element/vault/supermarket/proc/set_stats_alarm_activated(msg)
+	if(alarm_activated)
+		return
+
+	alarm_activated = msg
+
+/datum/map_element/vault/supermarket/initialize(list/objects)
+	..()
+
+	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
+	S.initialize()
+
+
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
 var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite) //What in the world could go wrong
@@ -105,6 +140,14 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /area/vault/supermarket
 	name = "Spessmart"
 	flags = NO_PORTALS | NO_TELEPORT
+
+	var/datum/map_element/vault/supermarket/map_element
+
+/area/vault/supermarket/spawned_by_map_element(datum/map_element/ME)
+	if(istype(ME, /datum/map_element/vault/supermarket))
+		map_element = ME
+
+	..()
 
 /area/vault/supermarket/entrance
 	name = "Spessmart Entrance"
@@ -163,17 +206,21 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		return
 
 	if(items.Find(AM))
-		return on_theft()
+		return on_theft(AM)
 	else
 		var/list/AM_contents = get_contents_in_object(AM, /obj/item)
 
 		for(var/obj/item/I in AM_contents)
 			if(items.Find(I))
-				return on_theft()
+				return on_theft(I)
 
-/area/vault/supermarket/shop/proc/purchased(obj/item/I)
+/area/vault/supermarket/shop/proc/purchased(obj/item/I, price)
 	items.Remove(I)
 	I.name = initial(I.name)
+
+	if(map_element)
+		map_element.goods_purchased++
+		map_element.credits_spent += price
 
 /area/vault/supermarket/shop/proc/item_destroyed()
 	for(var/obj/item/I in items)
@@ -181,10 +228,19 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			items.Remove(I)
 			message_admins("Spessmart has entered lockdown due to the destruction of \a [I]!")
 
+			if(map_element)
+				map_element.set_stats_alarm_activated("Destruction of \a [I][usr ? " by [usr]" : ""]")
+
 	if(customer_has_entered)
 		on_theft()
 
-/area/vault/supermarket/shop/proc/on_theft()
+/area/vault/supermarket/shop/proc/on_robot_kill()
+	if(map_element)
+		map_element.set_stats_alarm_activated("Destruction of a robot[usr ? " by [usr]" : ""]")
+
+	on_theft()
+
+/area/vault/supermarket/shop/proc/on_theft(obj/item/I)
 	if(lockdown)
 		return
 
@@ -204,6 +260,9 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	src.firealert()
 	entrance.firealert()
+
+	if(map_element)
+		map_element.set_stats_alarm_activated("Theft of [I ? "\a [I]" : "an unknown item"]")
 
 ///////ROBOTS
 /mob/living/simple_animal/robot
@@ -330,7 +389,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /mob/living/simple_animal/robot/robot_cashier/Die()
 	var/area/vault/supermarket/shop/A = get_area(src)
 	if(istype(A))
-		A.on_theft()
+		A.on_robot_kill()
 
 	return ..()
 
@@ -366,7 +425,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 					else
 						say("[found_items.len] items for $[price].00 space credits. Change: $[loaded_cash - price].00 space credits. Thank you for shopping at Spessmart!")
 						for(var/obj/item/I in found_items)
-							shop.purchased(I)
+							shop.purchased(I, shop.items[I])
 						if(shop.destination_disks > 0)
 							say("Please take this complimentary Spessmart shuttle destination disk as well. Shop smart, shop Spessmart!")
 							new /obj/item/weapon/disk/shuttle_coords/vault/supermarket(input_loc)
@@ -572,7 +631,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/area/vault/supermarket/A = get_area(src)
 	if(istype(A))
 		var/area/vault/supermarket/shop/AS = locate(/area/vault/supermarket/shop)
-		AS.on_theft()
+		AS.on_robot_kill()
 
 /mob/living/simple_animal/hostile/spessmart_guardian/secure_area/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)

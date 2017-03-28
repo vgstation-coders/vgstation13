@@ -2099,6 +2099,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/dress/plaid_red = 10,
 		/obj/item/clothing/under/dress/plaid_blue = 10,
 		/obj/item/clothing/under/greaser = 10,
+		/obj/item/clothing/under/sl_suit = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
@@ -2133,6 +2134,7 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/shoes/jackboots = 5,
 		/obj/item/clothing/shoes/orange = 5,
+		/obj/item/clothing/shoes/laceup = 5,
 		)
 	premium = list(
 		/obj/item/clothing/shoes/rainbow = 1,

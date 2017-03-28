@@ -642,6 +642,8 @@
 					config.silent_borg = 1
 				if("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
+				if("hardcore_mode")
+					hardcore_mode = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

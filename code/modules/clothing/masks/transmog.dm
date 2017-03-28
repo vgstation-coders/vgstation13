@@ -27,7 +27,7 @@
 
 /obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
-		if(C.get_item_by_slot(wear_mask) == src)
+		if(C.get_item_by_slot(slot_wear_mask) == src)
 			if(target_type != C.type)
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
 				if(cursed)

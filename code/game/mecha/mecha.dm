@@ -87,7 +87,6 @@
 /obj/mecha/New()
 	..()
 	events = new
-	icon_state += "-open"
 	add_radio()
 	add_cabin()
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
@@ -104,6 +103,7 @@
 	loc.Entered(src)
 	mechas_list += src //global mech list
 	reset_icon()
+	icon_state += "-open"
 	return
 
 /obj/mecha/Destroy()

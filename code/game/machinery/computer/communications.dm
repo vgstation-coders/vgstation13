@@ -600,6 +600,22 @@ var/shuttle_call/shuttle_calls[0]
 
 	frequency.post_signal(src, status_signal)
 
+/obj/machinery/computer/communications/npc_tamper_act(mob/living/user)
+	if(!authenticated)
+		if(prob(20)) //20% chance to log in
+			authenticated = TRUE
+
+	else //Already logged in
+		if(prob(50)) //50% chance to log off
+			authenticated = FALSE
+		else if(isgremlin(user)) //make a hilarious public message
+			var/mob/living/simple_animal/hostile/gremlin/G = user
+			var/result = G.generate_markov_chain()
+
+			if(result)
+				captain_announce(result)
+				log_say("[key_name(usr)] ([formatJumpTo(get_turf(G))]) has made a captain announcement: [result]")
+				message_admins("[key_name_admin(G)] has made a captain announcement.", 1)
 
 /obj/machinery/computer/communications/Destroy()
 

@@ -48,6 +48,8 @@
 		to_chat(src, "<span class='notice'>You can't attack while eating.</span>")
 		return
 
+	add_attacklogs(src, target, "attacked")
+
 	.=..()
 
 

@@ -527,7 +527,9 @@ About the new airlock wires panel:
 				return
 			else
 				to_chat(user, "Airlock AI control has been blocked with a firewall. Unable to hack.")
-
+		if(operating == -1) //Door is emagged
+			to_chat(user, "Unable to establish connection to airlock controller. Verify integrity of airlock circuitry.")
+			return
 	//separate interface for the AI.
 	user.set_machine(src)
 	var/t1 = text("<B>Airlock Control</B><br>\n")
@@ -735,7 +737,7 @@ About the new airlock wires panel:
 				update_multitool_menu(usr)
 
 
-	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl()))
+	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
 		//AI
 		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
 		//aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door,  8 door safties, 9 door speed
