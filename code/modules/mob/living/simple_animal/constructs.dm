@@ -77,6 +77,12 @@
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "const_spell_ready")
+	for(var/spell/S in spell_list)
+		if(S.charge_type & Sp_RECHARGE)
+			if(S.charge_counter == S.charge_max) //Spell is fully charged - let the proc handle everything
+				S.take_charge()
+			else //Spell is on cooldown and already recharging - there's no need to call S.process(), just reset charges to 0
+				S.charge_counter = 0
 	updateicon()
 
 /mob/living/simple_animal/construct/Die()
