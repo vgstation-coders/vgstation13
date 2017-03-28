@@ -703,8 +703,8 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-						//this is the gay blood on floor shit -- Added back -- Skie
-							if (M.lying && (prob(M.getBruteLoss() / 6)))
+						//this is the gay blood on floor shit -- Added back --snx
+							if (M.lying && (prob(M.getBruteLoss() / 3)))
 								if(isturf(M.loc))
 									blood_splatter(M.loc,M)
 									if(ishuman(M))
