@@ -1,5 +1,6 @@
 /datum/artifact_trigger/touch
 	triggertype = TRIGGER_TOUCH
+	scanned_trigger = SCAN_PHYSICAL
 	var/key_attackhand
 
 /datum/artifact_trigger/touch/New()

@@ -6,8 +6,13 @@
 #define TRIGGER_TEMPERATURE "temperature"
 #define TRIGGER_LIGHT "light"
 
+#define SCAN_PHYSICAL 0
+#define SCAN_ENERGETIC 1
+#define SCAN_ATMOS 2
+
 /datum/artifact_trigger
 	var/triggertype = ""
+	var/scanned_trigger = ""
 	var/obj/machinery/artifact/my_artifact
 	var/datum/artifact_effect/my_effect
 

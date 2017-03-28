@@ -3,6 +3,7 @@
 
 /datum/artifact_trigger/temperature
 	triggertype = TRIGGER_TEMPERATURE
+	scanned_trigger = SCAN_ENERGETIC
 	var/heat_triggered = 0
 	var/key_attackby
 

@@ -203,11 +203,11 @@
 					else
 						out += " interspersed throughout substructure and shell."
 
-				if(A.primary_effect.trigger.triggertype == TRIGGER_TOUCH || A.primary_effect.trigger.triggertype == TRIGGER_REAGENT)
+				if(A.primary_effect.trigger.scanned_trigger == SCAN_PHYSICAL)
 					out += " Activation index involves physical interaction with artifact surface."
-				else if(A.primary_effect.trigger.triggertype == TRIGGER_FORCE || A.primary_effect.trigger.triggertype == TRIGGER_ENERGY || A.primary_effect.trigger.triggertype == TRIGGER_TEMPERATURE || A.primary_effect.trigger.triggertype == TRIGGER_LIGHT)
+				else if(A.primary_effect.trigger.scanned_trigger == SCAN_ENERGETIC)
 					out += " Activation index involves energetic interaction with artifact surface."
-				else if(A.primary_effect.trigger.triggertype == TRIGGER_GAS)
+				else if(A.primary_effect.trigger.scanned_trigger == SCAN_ATMOS)
 					out += " Activation index involves precise local atmospheric conditions."
 				else
 					out += " Unable to determine any data about activation trigger."
@@ -246,13 +246,13 @@
 					else
 						out += " interspersed throughout substructure and shell."
 
-				if(A.secondary_effect.trigger.triggertype == TRIGGER_TOUCH || A.secondary_effect.trigger.triggertype == TRIGGER_REAGENT)
+				if(A.secondary_effect.trigger.scanned_trigger == SCAN_PHYSICAL)
 					out += " Activation index involves physical interaction with artifact surface, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger.triggertype == TRIGGER_FORCE || A.secondary_effect.trigger.triggertype == TRIGGER_ENERGY || A.secondary_effect.trigger.triggertype == TRIGGER_TEMPERATURE || A.secondary_effect.trigger.triggertype == TRIGGER_LIGHT)
+				else if(A.secondary_effect.trigger.scanned_trigger == SCAN_ENERGETIC)
 					out += " Activation index involves energetic interaction with artifact surface, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger.triggertype == TRIGGER_GAS)
+				else if(A.secondary_effect.trigger.scanned_trigger == SCAN_ATMOS)
 					out += " Activation index involves precise local atmospheric conditions, but subsystems indicate \
 					anomalous interference with standard attempts at triggering."
 				else
