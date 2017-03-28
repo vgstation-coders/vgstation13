@@ -7,6 +7,7 @@
 #define TRIGGER_LIGHT "light"
 #define TRIGGER_PRESSURE "pressure"
 #define TRIGGER_ELECTRIC "electric"
+#define TRIGGER_SPEED "speed"
 
 #define SCAN_PHYSICAL 0
 #define SCAN_ENERGETIC 1

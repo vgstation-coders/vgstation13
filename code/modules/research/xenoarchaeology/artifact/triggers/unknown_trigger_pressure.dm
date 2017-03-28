@@ -6,10 +6,12 @@
 	scanned_trigger = SCAN_ATMOS
 	var/high_triggered = 0
 	//possibly make the required pressure random in the futurem, when better facilities are added
+	var/key_explode
 
 /datum/artifact_trigger/pressure/New()
 	..()
 	high_triggered = prob(50)
+	key_explode = my_artifact.on_explode.Add(src, "owner_explode")
 
 /datum/artifact_trigger/pressure/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
@@ -31,4 +33,5 @@
 	Triggered(0, context, 0)
 
 /datum/artifact_trigger/pressure/Destroy()
+	my_artifact.on_explode.Remove(key_explode)
 	..()

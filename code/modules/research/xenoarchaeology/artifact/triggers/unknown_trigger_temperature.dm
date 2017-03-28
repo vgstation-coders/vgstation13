@@ -6,12 +6,14 @@
 	scanned_trigger = SCAN_ATMOS
 	var/heat_triggered = 0
 	var/key_attackby
+	var/key_explode
 
 /datum/artifact_trigger/temperature/New()
 	..()
 	heat_triggered = prob(50)
 
 	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
+	key_explode = my_artifact.on_explode.Add(src, "owner_explode")
 
 /datum/artifact_trigger/temperature/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
@@ -42,4 +44,5 @@
 
 /datum/artifact_trigger/temperature/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
+	my_artifact.on_explode.Remove(key_explode)
 	..()

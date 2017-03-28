@@ -1970,6 +1970,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_light.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_pressure.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_reagent.dm"
+#include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_speed.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_temperature.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_touch.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds.dm"
