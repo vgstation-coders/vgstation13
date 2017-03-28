@@ -27,6 +27,13 @@
 			radiation = 0
 
 		else
+
+			if(species.flags & RAD_GLOW)
+				// Lighting based on radiation.
+				var/rad_glow = Clamp(radiation/20,0.25,5)
+				set_light(rad_glow, rad_glow/2, "#5dca31")
+
+
 			if(species.flags & RAD_ABSORB)
 				var/rads = radiation/25
 				radiation -= rads
@@ -38,8 +45,12 @@
 				rad_tick = 0
 				return
 
+
+
 			var/damage = 0
 			switch(radiation)
+				if(0 to 1)
+					radiation = 0
 				if(1 to 49)
 					radiation--
 					rad_tick++
@@ -120,12 +131,12 @@
 				//Nosebleed
 				if(prob(15))
 					to_chat(src, "<span class = 'danger'>Your nose starts bleeding!</span>")
-				drip(1*minor_rad_multiplier)
+				drip(1)
 			if(prob(5*major_rad_multiplier))
 				//Hallucination
 				hallucination += rand(1,5)*minor_rad_multiplier
 		if(rad_tick > 200)
-			if(prob(5*rad_multiplier))
+			if(prob(2*major_rad_multiplier))
 				//Internal hemorrhaging
 				var/list/limbs_to_bleed = list()
 				for(var/datum/organ/external/E in organs)
@@ -149,6 +160,11 @@
 				if(organ_to_damage.len)
 					var/datum/organ/internal/victim = pick(organ_to_damage)
 					victim.damage += rand(1,5)*rad_multiplier
+			if(prob(0.5*major_rad_multiplier))
+				//Become uncloneable
+				if(!(M_NOCLONE in mutations))
+					to_chat(src, "<span class = 'blob'>You feel something twist and break.</span>")
+					mutations |= M_NOCLONE
 		if(rad_tick > 400)
 			if(prob(2*major_rad_multiplier))
 				//Minor limb mutation
@@ -173,7 +189,7 @@
 			if(prob(10)*minor_rad_multiplier)
 				//Blindness
 				var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
-				if(!E.robotic)
+				if(!E.robotic && (sdisabilities & BLIND || disabilities & NEARSIGHTED))
 					to_chat(src, "<span class = 'danger'>[pick("Your eyesight starts to fade!","Your eyes go cloudy!","Are you going blind?")]</span>")
 					E.damage += 2.5
 					eye_blurry = min(eye_blurry+1.5,50)
@@ -259,7 +275,9 @@
 							update_body()
 			if(prob(1*major_rad_multiplier))
 				//Rad glow
-				to_chat(src, "<span class = 'blob'>You start glowing!</span>")
+				if(!(species.flags & RAD_GLOW))
+					to_chat(src, "<span class = 'blob'>You start glowing!</span>")
+					species.flags |= RAD_GLOW
 		if(rad_tick > 600)
 			if(prob(0.01*extreme_rad_multiplier))
 				//Ghoulification

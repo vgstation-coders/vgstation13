@@ -536,6 +536,7 @@ Thanks.
 	germ_level = 0
 	next_pain_time = 0
 	radiation = 0
+	rad_tick = 0
 	nutrition = 400
 	bodytemperature = 310
 	sdisabilities = 0
