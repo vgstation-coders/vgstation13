@@ -3,7 +3,7 @@
 
 /datum/artifact_trigger/temperature
 	triggertype = TRIGGER_TEMPERATURE
-	scanned_trigger = SCAN_ENERGETIC
+	scanned_trigger = SCAN_ATMOS
 	var/heat_triggered = 0
 	var/key_attackby
 
@@ -39,7 +39,6 @@
 /datum/artifact_trigger/temperature/proc/owner_explode(var/list/event_args, var/source)
 	var/context = event_args[2]
 	Triggered(0, context, 0)
-	my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context]([my_effect.trigger]).")
 
 /datum/artifact_trigger/temperature/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)

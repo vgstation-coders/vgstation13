@@ -7,7 +7,7 @@
 /datum/artifact_trigger/light/New()
 	..()
 	dark_triggered = prob(50)
-	lum_trigger = rand(1,10)
+	lum_trigger = rand(2,9)
 
 /datum/artifact_trigger/light/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
