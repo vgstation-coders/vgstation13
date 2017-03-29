@@ -108,7 +108,7 @@
 				var/obj/item/weapon/spacecash/dosh = item
 				my_artifact.visible_message("<span class='info'>[toucher] inserts a credit chip into [my_artifact].</span>")
 				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || $[dosh.get_total()] [dosh] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
-				time_left += dosh.get_total() //2 seconds per credit
+				time_left += (dosh.get_total() * 3) //6 seconds per credit
 				qdel(dosh)
 			else
 				to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept credits!</span>")

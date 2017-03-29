@@ -207,13 +207,13 @@
 				switch(A.primary_effect.trigger.scanned_trigger)
 					if(SCAN_PHYSICAL)
 						out += " Activation index involves physical interaction with artifact surface."
-					else if(SCAN_PHYSICAL_ENERGETIC)
+					if(SCAN_PHYSICAL_ENERGETIC)
 						out += " Activation index involves energetic interaction with artifact surface."
-					else if(SCAN_CONSTANT_ENERGETIC)
+					if(SCAN_CONSTANT_ENERGETIC)
 						out += " Activation index involves prolonged energetic interaction with artifact surface."
-					else if(SCAN_ATMOS)
+					if(SCAN_ATMOS)
 						out += " Activation index involves precise local atmospheric conditions."
-					else if(SCAN_OCULAR)
+					if(SCAN_OCULAR)
 						out += " Activation index involves specific ocular conditions around the artifact."
 					else
 						out += " Unable to determine any data about activation trigger."
@@ -256,18 +256,18 @@
 				switch(A.secondary_effect.trigger.scanned_trigger)
 					if(SCAN_PHYSICAL)
 						out += " Activation index involves physical interaction with artifact surface."
-					else if(SCAN_PHYSICAL_ENERGETIC)
+					if(SCAN_PHYSICAL_ENERGETIC)
 						out += " Activation index involves energetic interaction with artifact surface."
-					else if(SCAN_CONSTANT_ENERGETIC)
+					if(SCAN_CONSTANT_ENERGETIC)
 						out += " Activation index involves prolonged energetic interaction with artifact surface."
-					else if(SCAN_ATMOS)
+					if(SCAN_ATMOS)
 						out += " Activation index involves precise local atmospheric conditions."
-					else if(SCAN_OCULAR)
+					if(SCAN_OCULAR)
 						out += " Activation index involves specific ocular conditions around the artifact."
 					else
 						out += " Unable to determine any data about activation trigger."
 
-				out+= "Subsystems indicate anomalous interference with standard attempts at triggering."
+				out+= " Subsystems indicate anomalous interference with standard attempts at triggering."
 			return out
 		else
 			//it was an ordinary item
