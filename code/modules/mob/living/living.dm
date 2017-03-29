@@ -712,7 +712,7 @@ Thanks.
 										var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 										if(blood_volume > 0)
 											H:vessel.remove_reagent("blood",2)*/ //Commented out till we can un-fuck lag from blood
-								if(prob(6))
+								if(prob(50)) //ha, ha, rip and tear
 									M.adjustBruteLoss(1)
 									M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
 							if(M.pull_damage())
