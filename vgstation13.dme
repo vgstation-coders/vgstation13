@@ -10,6 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
+#include "code\modules\mob\living\carbon\martian\life.dm"
 #include "__DEFINES\archaeo_defines.dm"
 #include "__DEFINES\areas.dm"
 #include "__DEFINES\atom_locking.dm"
@@ -1487,7 +1488,6 @@
 #include "code\modules\mob\living\carbon\monkey\skeleton.dm"
 #include "code\modules\mob\living\carbon\monkey\update_icons.dm"
 #include "code\modules\mob\living\carbon\monkey\vox.dm"
-#include "code\modules\mob\living\carbon\monkey\martian\martian.dm"
 #include "code\modules\mob\living\carbon\slime\combat.dm"
 #include "code\modules\mob\living\carbon\slime\death.dm"
 #include "code\modules\mob\living\carbon\slime\emote.dm"

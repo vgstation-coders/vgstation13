@@ -6,9 +6,8 @@
 /*
  DESIGN:
 
- + large, gelatinous bodies that let them survive explosions and harsh conditions (like vacuum) more easily than humans
  + tentacles provide better grasp than hands. Martians are more resistant to winds, disarms and other hazards that would stun a human
- + can do multiple things at once (ambidextrousness)
+ + are ambidextrous
 
  * breathe oxygen and exhale CO2 like humans do
 
@@ -19,7 +18,7 @@
 
 /mob/living/carbon/martian
 	name = "martian"
-	desc = "A large alien resembling an octopus."
+	desc = "An alien resembling an overgrown octopus."
 	voice_name = "martian"
 
 	icon = 'icons/mob/martian.dmi'
