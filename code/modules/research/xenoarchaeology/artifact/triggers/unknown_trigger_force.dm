@@ -2,7 +2,7 @@
 
 /datum/artifact_trigger/force
 	triggertype = TRIGGER_FORCE
-	scanned_trigger = SCAN_ENERGETIC
+	scanned_trigger = SCAN_PHYSICAL_ENERGETIC
 	var/key_attackby
 	var/key_explode
 	var/key_projectile

@@ -1,6 +1,6 @@
 /datum/artifact_trigger/notvisible
 	triggertype = TRIGGER_NOT_VISIBLE
-	scanned_trigger = SCAN_ENERGETIC
+	scanned_trigger = SCAN_OCULAR
 	var/visible = 0
 	var/dir_trigger = 0
 

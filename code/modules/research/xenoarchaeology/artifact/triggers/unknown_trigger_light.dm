@@ -1,6 +1,6 @@
 /datum/artifact_trigger/light
 	triggertype = TRIGGER_LIGHT
-	scanned_trigger = SCAN_ENERGETIC
+	scanned_trigger = SCAN_OCULAR
 	var/dark_triggered = 0
 	var/lum_trigger = 5
 

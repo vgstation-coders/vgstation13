@@ -11,11 +11,7 @@
 	var/toucher = event_args[1]
 	var/context = event_args[2]
 
-	if(my_effect.IsPrimary())
-		Triggered(toucher, context, 0)
-	else if(!my_effect.IsPrimary())
-		Triggered(toucher, context, 0)
-	..()
+	Triggered(toucher, context, 0)
 
 	if(my_effect.effect == EFFECT_TOUCH)
 		if (my_effect.IsContained())

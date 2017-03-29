@@ -1,6 +1,6 @@
 /datum/artifact_trigger/electricity
 	triggertype = TRIGGER_ELECTRIC
-	scanned_trigger = SCAN_ENERGETIC
+	scanned_trigger = SCAN_CONSTANT_ENERGETIC
 	var/power_load = 7500
 
 /datum/artifact_trigger/electricity/New()

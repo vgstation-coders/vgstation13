@@ -1,6 +1,6 @@
 /datum/artifact_trigger/speed
 	triggertype = TRIGGER_SPEED
-	scanned_trigger = SCAN_ENERGETIC
+	scanned_trigger = SCAN_CONSTANT_ENERGETIC
 	var/needed_distance
 	var/toggles = 0
 	var/turf/old_T

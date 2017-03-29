@@ -12,8 +12,10 @@
 #define TRIGGER_PAY2USE "pay2use"
 
 #define SCAN_PHYSICAL 0
-#define SCAN_ENERGETIC 1
-#define SCAN_ATMOS 2
+#define SCAN_PHYSICAL_ENERGETIC 1
+#define SCAN_CONSTANT_ENERGETIC 2
+#define SCAN_ATMOS 3
+#define SCAN_OCULAR 4
 
 /datum/artifact_trigger
 	var/triggertype = ""
@@ -65,3 +67,19 @@
 /datum/artifact_trigger/Destroy()
 	my_artifact = null
 	my_effect = null
+
+
+/datum/artifact_trigger/Topic(href, href_list)
+	..()
+	if(href_list["close"])
+		return
+	if(usr.restrained() || usr.lying || usr.stat)
+		return 1
+	if (!usr.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 1
+	if ((!in_range(my_artifact, usr) || !istype(my_artifact.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		return 1
+
+	my_artifact.add_fingerprint(usr)
+	my_artifact.add_hiddenprint(usr)
