@@ -1968,6 +1968,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_force.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_gas.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_light.dm"
+#include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_pay2use.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_pressure.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_reagent.dm"
 #include "code\modules\research\xenoarchaeology\artifact\triggers\unknown_trigger_speed.dm"

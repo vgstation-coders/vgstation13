@@ -9,6 +9,7 @@
 #define TRIGGER_ELECTRIC "electric"
 #define TRIGGER_SPEED "speed"
 #define TRIGGER_NOT_VISIBLE "not_visible"
+#define TRIGGER_PAY2USE "pay2use"
 
 #define SCAN_PHYSICAL 0
 #define SCAN_ENERGETIC 1
