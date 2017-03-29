@@ -134,7 +134,8 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/relaymove(var/mob/user, direction)
 	if(!check_key(user))
-		to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
+		if(can_warn())
+			to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
 		return 0
 	return ..()
 
