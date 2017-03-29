@@ -729,7 +729,7 @@ Thanks.
 												var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 												if(blood_volume > 0)
 													H:vessel.remove_reagent("blood",5)
-													M.visible_message("<span class='danger'>\The [M] loses some a lot of blood from being dragged!</span>")
+													M.visible_message("<span class='danger'>\The [M] loses a lot of blood from being dragged!</span>")
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
