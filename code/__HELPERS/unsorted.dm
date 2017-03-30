@@ -1609,6 +1609,9 @@ Game Mode config tags:
 /proc/stack_trace(message = "Getting a stack trace.")
 	CRASH(message)
 
+/proc/sentStrikeTeams(var/team)
+	return (team in sent_strike_teams)
+
 
 /proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
 	var/turf/T1 = A
