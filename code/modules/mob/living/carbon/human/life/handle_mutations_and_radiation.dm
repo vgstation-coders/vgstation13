@@ -1,5 +1,13 @@
 //Refer to life.dm for caller
 
+#define RADDOSELIGHT 100
+#define RADDOSEMINOR 200
+#define RADDOSEADVANCED 300
+#define RADDOSECRITICAL 400
+#define RADDOSEDEADLY 500
+#define RADDOSEFATAL 600
+
+
 /mob/living/carbon/human/proc/handle_mutations_and_radiation()
 	if(flags & INVULNERABLE)
 		return
@@ -123,7 +131,7 @@
 		var/major_rad_multiplier = max(1, radiation/70)
 		var/extreme_rad_multiplier = max(1, radiation/100)
 
-		if(rad_tick > 100)
+		if(rad_tick > RADDOSELIGHT)
 			if(prob(5*rad_multiplier))
 				//Vomit
 				vomit()
@@ -135,7 +143,7 @@
 			if(prob(5*major_rad_multiplier))
 				//Hallucination
 				hallucination += rand(1,5)*minor_rad_multiplier
-		if(rad_tick > 200)
+		if(rad_tick > RADDOSEMINOR)
 			if(prob(2*major_rad_multiplier))
 				//Internal hemorrhaging
 				var/list/limbs_to_bleed = list()
@@ -149,7 +157,7 @@
 						to_chat(src, "<span class = 'danger'>You feel something tear in your [victim.display_name]</span>")
 					var/datum/wound/internal_bleeding/I = new (1*minor_rad_multiplier)
 					victim.wounds += I
-		if(rad_tick > 300)
+		if(rad_tick > RADDOSEADVANCED)
 			if(prob(5*rad_multiplier))
 				//Organ damage
 				var/list/organ_to_damage = list()
@@ -165,7 +173,7 @@
 				if(!(M_NOCLONE in mutations))
 					to_chat(src, "<span class = 'blob'>You feel something twist and break.</span>")
 					mutations |= M_NOCLONE
-		if(rad_tick > 400)
+		if(rad_tick > RADDOSECRITICAL)
 			if(prob(2*major_rad_multiplier))
 				//Minor limb mutation
 				var/list/datum/organ/external/candidates = list()
@@ -189,7 +197,7 @@
 			if(prob(10)*minor_rad_multiplier)
 				//Blindness
 				var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
-				if(!E.robotic && (sdisabilities & BLIND || disabilities & NEARSIGHTED))
+				if(!E.robotic && !(sdisabilities & BLIND || disabilities & NEARSIGHTED))
 					to_chat(src, "<span class = 'danger'>[pick("Your eyesight starts to fade!","Your eyes go cloudy!","Are you going blind?")]</span>")
 					E.damage += 2.5
 					eye_blurry = min(eye_blurry+1.5,50)
@@ -197,13 +205,13 @@
 						simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
 						sdisabilities |= BLIND
 					else if (E.damage >= E.min_bruised_damage && !(disabilities & NEARSIGHTED))
-						simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
+						simple_message("<span class='warning'>It becomes hard to see for some reason.</span>","<span class='warning'>Somebody turns the lights off.</span>")
 						eye_blind = 5
 						eye_blurry = 5
 						disabilities |= NEARSIGHTED
 						spawn(100)
-						disabilities &= ~NEARSIGHTED
-		if(rad_tick > 500)
+							disabilities &= ~NEARSIGHTED
+		if(rad_tick > RADDOSEDEADLY)
 			if(prob(2.5*major_rad_multiplier))
 				//Necrosis Have sloughs of meat fall off the subject, maybe a limb fall off or become skeletal. Look at frankenstein limb code
 				var/inst = pick(1, 2, 3)
@@ -278,11 +286,12 @@
 				if(!(species.flags & RAD_GLOW))
 					to_chat(src, "<span class = 'blob'>You start glowing!</span>")
 					species.flags |= RAD_GLOW
-		if(rad_tick > 600)
+		if(rad_tick > RADDOSEFATAL)
 			if(prob(0.01*extreme_rad_multiplier))
 				//Ghoulification
-				to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
 				if(set_species("Ghoul"))
-					regenerate_icons()
-					visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")
-					Knockdown(3)
+					to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
+					spawn(1 SECONDS)
+						Knockdown(3)
+						regenerate_icons()
+						visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")
