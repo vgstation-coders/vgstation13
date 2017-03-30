@@ -11,7 +11,7 @@
 	..()
 	needed_distance = rand(1,9) //needed distance to traverse per process()
 	old_T = get_turf(my_artifact)
-	toggles = prob(50)
+	toggles = prob(80)
 	last_moved = world.time
 
 /datum/artifact_trigger/speed/CheckTrigger()
