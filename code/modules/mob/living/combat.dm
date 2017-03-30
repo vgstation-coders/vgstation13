@@ -39,6 +39,9 @@
 
 		. = TRUE
 
+/mob/living/proc/can_be_grabbed(mob/living/grabber)
+	return TRUE
+
 /mob/living/proc/break_pulls(mob/living/target)
 	if(target.pulling)
 		visible_message("<span class='danger'>[src] has broken [target]'s grip on [target.pulling]!</span>")

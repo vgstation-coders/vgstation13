@@ -10,6 +10,7 @@
 	var/generate_random_appearance = 0
 
 	var/corpsegender = G_MALE
+	var/list/possible_names
 
 	var/corpseuniform = null //Set this to an object path to have the slot filled with said object on the corpse.
 	var/corpsesuit = null
@@ -63,6 +64,8 @@
 
 	if(generate_random_mob_name)
 		M.real_name = random_name(M.gender, mutantrace)
+	else if(islist(possible_names))
+		M.real_name = pick(possible_names)
 
 	M.adjustOxyLoss(oxy_dmg) //Kills the new mob
 	M.adjustBruteLoss(brute_dmg)
@@ -530,6 +533,23 @@
 	corpsesuit = list(/obj/item/clothing/suit/doshjacket, /obj/item/clothing/suit/ianshirt, /obj/item/clothing/suit/simonjacket, /obj/item/clothing/suit/storage/lawyer/bluejacket, /obj/item/clothing/suit/storage/lawyer/purpjacket)
 
 	corpsemask = /obj/item/clothing/mask/breath
+
+/obj/effect/landmark/corpse/stripper
+	name = "Stripper"
+	corpsegender = G_FEMALE
+
+	generate_random_mob_name = FALSE
+	possible_names = list("Candy", "Glitter", "Diamond", "Sugar", "Angel", "Queenie", "Tiffany", "Kitty")
+
+	generate_random_appearance = TRUE
+
+	corpseuniform = list(/obj/item/clothing/under/swimsuit/purple, /obj/item/clothing/under/swimsuit/green, /obj/item/clothing/under/swimsuit/red)
+	corpseshoes = /obj/item/clothing/shoes/kneesocks
+
+/obj/effect/landmark/corpse/stripper/russian
+	possible_names = list("Konfetka", "Florida", "Matilda", "Ogonjok", "Almaz", "Kisulja")
+
+	corpsehelmet = list(/obj/item/clothing/head/ushanka, /obj/item/clothing/head/squatter_hat) //heh
 
 /obj/effect/landmark/corpse/vox
 	name = "Dead vox"

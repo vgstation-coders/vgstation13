@@ -46,7 +46,8 @@
 		/obj/machinery/anomaly,
 		/obj/machinery/bunsen_burner,
 		/obj/item/weapon/sword/venom,
-		/obj/item/weapon/cylinder
+		/obj/item/weapon/cylinder,
+		/obj/item/clothing/gloves/powerfist,
 		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()
@@ -276,6 +277,11 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
+	..()
+
+	reagents.add_reagent(URANIUM, 25)
 
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
 
