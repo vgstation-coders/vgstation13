@@ -70,16 +70,4 @@
 
 
 /datum/artifact_trigger/Topic(href, href_list)
-	..()
-	if(href_list["close"])
-		return
-	if(usr.restrained() || usr.lying || usr.stat)
-		return 1
-	if (!usr.dexterity_check())
-		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 1
-	if ((!in_range(my_artifact, usr) || !istype(my_artifact.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		return 1
-
-	my_artifact.add_fingerprint(usr)
-	my_artifact.add_hiddenprint(usr)
+	return my_artifact.Topic(href, href_list)

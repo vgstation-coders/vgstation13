@@ -30,6 +30,3 @@
 		return
 	else //makes sure the powernet stays under load if the artifact is moving
 		PN.load += power_load
-
-/datum/artifact_trigger/electricity/Destroy()
-	..()

@@ -19,11 +19,8 @@
 				Triggered(0, "LIGHT", 0)
 			else if(dark_triggered && light_available <= lum_trigger)
 				Triggered(0, "DARK", 0)
-		else if(my_effect.activated)
+		else
 			if(!dark_triggered && light_available <= lum_trigger)
 				Triggered(0, "DARK", 0)
 			else if(dark_triggered && light_available >= lum_trigger)
 				Triggered(0, "LIGHT", 0)
-
-/datum/artifact_trigger/light/Destroy()
-	..()

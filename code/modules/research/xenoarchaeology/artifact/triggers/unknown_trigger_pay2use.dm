@@ -65,8 +65,9 @@
 		dat += "1 Hour - $500 - "
 		dat += "<A href='?src=\ref[src];pay1h=1'>Pay</a><BR>"
 
-		toucher << browse(dat, "window=anomaly;size=450x500")
-		onclose(toucher, "anomaly")
+		var/datum/browser/popup = new(toucher, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
+		popup.set_content(dat)
+		popup.open()
 
 /datum/artifact_trigger/pay2use/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -177,10 +178,6 @@
 /datum/artifact_trigger/pay2use/Topic(href, href_list)
 	if(..())
 		return
-	usr.set_machine(my_artifact)
-	if(href_list["close"])
-		usr << browse(null, "window=anomaly")
-		usr.machine = null
 	if(href_list["pay1m"])
 		payviacard(10, 60, usr) //(credits paid, time given in seconds, usr)
 	if(href_list["pay2m"])
