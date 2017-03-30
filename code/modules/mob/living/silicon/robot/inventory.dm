@@ -29,6 +29,9 @@
 	contents -= module
 	if(module)
 		module.forceMove(src.module)
+		for(var/X in module.actions)
+			var/datum/action/A = X
+			A.Remove(src)
 	hud_used.update_robot_modules_display()
 	return 1
 
@@ -74,6 +77,9 @@
 	if(activated(O))
 		to_chat(src, "<span class='notice'>Already activated</span>")
 		return
+	for(var/X in O.actions)
+		var/datum/action/A = X
+		A.Grant(src)
 	if(!module_state_1)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_1 = O

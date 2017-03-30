@@ -15,6 +15,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
+		update_action_buttons()
 		update_items()
 	if (src.stat != DEAD) //still using power
 		use_power()
