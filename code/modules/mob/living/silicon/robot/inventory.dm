@@ -32,8 +32,6 @@
 		for(var/X in module.actions)
 			var/datum/action/A = X
 			A.Remove(src)
-	if(module)
-		module.forceMove(src.module)
 	hud_used.update_robot_modules_display()
 	return 1
 
