@@ -120,6 +120,12 @@
 
 ///////////////////////////////////////////****NARRATIONS****/////////////////////////////////////////////
 //Briefing
+
+/obj/item/weapon/photo/hive_map/New()
+	..()
+
+	img = icon('icons/effects/224x224.dmi', "hive_map")
+
 /datum/command_alert/awaymission/hive
 	name = "Hostile Alien Spaceship Detected"
 	alert_title = "Hostile Spaceship Detected"
@@ -128,15 +134,17 @@
 	var/summary_text = {"
 	<b>Situation Summary</b><br><br>
 	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
-	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and the spaceship's key areas that have to be eliminated.<br>
+	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and what could be the spaceship's vital areas.<br>
 	You are to send a strike team right in the heart of the Hive, and complete the following tasks:<br>
 	<ul>
 	<li>Destroy the Hive Mind to impair the ship's communication abilities</li>
 	<li>Destroy the Hive Replicator that mass-produces alien troops</li>
 	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle. If that is not possible, destroy it</li>
 	</ul>
+	<br>
 	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br>
-	Our partial scans indicate dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as we have no further idea of what might await you inside.<br>"}
+	We have attached an image with the approximate locations of your objectives. The entry point is marked with an arrow. Number 1 is the suspected location of the Hive Mind. Number 2 is the suspected location of the control room. Number 3 is the suspected location of the Hive Replicator.<br>
+	Additionally, our partial scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as we have no further idea of what might await you inside.<br>"}
 
 /datum/command_alert/awaymission/hive/announce()
 	..()
@@ -146,6 +154,7 @@
 			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
 			intercept.name = "paper- 'Hostile Spaceship Summary'"
 			intercept.info = summary_text
+			intercept.img = new /obj/item/weapon/photo/hive_map(src)
 
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(summary_text)
