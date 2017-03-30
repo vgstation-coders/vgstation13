@@ -544,7 +544,7 @@ var/list/hive_pylons = list()
 	icon_state = "hive_heart"
 	health = 500
 
-	var/create_cooldown = 60 SECONDS
+	var/create_cooldown = 90 SECONDS
 	var/last_create
 
 /obj/structure/hive/cloner/New()
