@@ -133,7 +133,7 @@
 
 	var/summary_text = {"
 	<b>Situation Summary</b><br><br>
-	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
+	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 6 hours, after which your station will be destroyed with no chance to fight back.<br>
 	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and what could be the spaceship's vital areas.<br>
 	You are to send a strike team right in the heart of the Hive, and complete the following tasks:<br>
 	<ul>
@@ -167,7 +167,8 @@
 	play_sound = 'sound/ambience/spookymaint2.ogg'
 
 /obj/effect/narration/hive/lake
-	msg = "The first thing you see as you enter this room is the massive supermatter lake on its bottom. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks hanging from the ceiling, you better be careful - a single misstep, and you'll be pulled down into the lake faster than you'd be able to react."
+	msg = {"The first thing you see as you enter this room is the massive supermatter lake on its bottom. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks hanging from the ceiling, you better be careful - a single misstep, and you'll be pulled down into the lake faster than you'd be able to do anything.<br>
+	<i>Switch to <b>"walk"</b> intent to move carefully.</i><br>"}
 
 /obj/effect/narration/hive/cloning_hallway
 	msg = "You notice that the surface of the floors and walls around you becomes more and more porous, and more... alive. You must be approaching the cloning chamber."
@@ -390,6 +391,18 @@
 	//Dimmer light
 	light_range = 3
 	light_power = 1
+
+/turf/unsimulated/wall/supermatter/no_spread/lake/Bumped(atom/AM)
+	if(istype(AM, /mob/living))
+		var/mob/living/L = AM
+		//Being on walk intent prevents you from instant death
+
+		//Exceptions: you're blind, you're getting thrown, or you're incapacitated (stunned)
+		if(!L.incapacitated() && !L.throwing && !L.is_blind() && (L.m_intent == M_INTENT_WALK))
+			to_chat(L, "<span class='notice'>You avoid stepping into \the [src].</span>")
+			return
+
+	return ..()
 
 /turf/unsimulated/wall/supermatter/no_spread/lake/Consume(atom/A)
 	var/datum/map_element/away_mission/hive/hive
