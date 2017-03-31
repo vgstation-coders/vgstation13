@@ -32,6 +32,9 @@
 	if(!user.Adjacent(target))
 		return
 
+	if(!do_after(user, target, 60))
+		return
+
 	if(user.client && (target in user.client.screen) && !(user.is_holding_item(target)))
 		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
 			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
