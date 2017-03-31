@@ -313,7 +313,7 @@
 			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
-		if("Peacekeeper")
+		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
@@ -327,7 +327,7 @@
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
 			speed = 0
 
-		if("TG17355")
+		if("Peacekeeper")
 			module = new /obj/item/weapon/robot_module/tg17355(src)
 			module_sprites["Peacekeeper"] = "peaceborg"
 			module_sprites["Omoikane"] = "omoikane"
