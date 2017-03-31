@@ -625,7 +625,7 @@
 		playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 	else
 		playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
-	M.visible_message("<span class='danger'>You bang your head on \the [name].</span>", "<span class='danger'>[user] bangs \his head on \the [name].</span>", "You hear a bang.")
+	M.visible_message("<span class='danger'>You bang your head on \the [src].</span>", "<span class='danger'>[user] bangs \his head on \the [src].</span>", "You hear a bang.")
 
 /*
  * Glass
