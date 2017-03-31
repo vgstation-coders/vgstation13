@@ -286,7 +286,7 @@
 	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 99
-	spawn_positions = 1
+	spawn_positions = 15
 	supervisors = "the head of personnel"
 	selection_color = "#dddddd"
 	idtype = /obj/item/weapon/card/id/clown
