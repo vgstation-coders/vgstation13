@@ -133,7 +133,7 @@
 
 	var/summary_text = {"
 	<b>Situation Summary</b><br><br>
-	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 6 hours, after which your station will be destroyed with no chance to fight back.<br>
+	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
 	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and what could be the spaceship's vital areas.<br>
 	You are to send a strike team right in the heart of the Hive, and complete the following tasks:<br>
 	<ul>
@@ -393,7 +393,7 @@
 	light_power = 1
 
 /turf/unsimulated/wall/supermatter/no_spread/lake/Bumped(atom/AM)
-	if(istype(AM, /mob/living))
+	if(isliving(AM))
 		var/mob/living/L = AM
 		//Being on walk intent prevents you from instant death
 
