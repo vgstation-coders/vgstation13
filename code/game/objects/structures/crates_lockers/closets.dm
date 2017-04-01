@@ -263,6 +263,7 @@
 
 /obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
 	if(user.environment_smash)
+//		user.do_attack_animation(src, user) //This will look stupid
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
