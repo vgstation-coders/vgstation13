@@ -29,7 +29,7 @@
 	contents -= module
 	if(module)
 		module.forceMove(src.module)
-	module.dropped(src)
+		module.dropped(src)
 	hud_used.update_robot_modules_display()
 	return 1
 
