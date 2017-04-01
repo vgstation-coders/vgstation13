@@ -133,18 +133,18 @@
 
 	var/summary_text = {"
 	<b>Situation Summary</b><br><br>
-	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
-	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and what could be the spaceship's vital areas.<br>
-	You are to send a strike team right in the heart of the Hive, and complete the following tasks:<br>
+	A hostile alien spacecraft, codename "The Hive", was detected in orbit above your station, preparing for an attack. Usually at this point it's too late to do anything, as even nuclear weapons are powerless against it.<br>
+	But today, there is hope for you. We have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and the ship's important areas. This information should help you assemble a strike team and destroy the Hive before it destroys you.<br>
+	You are to complete the following objectives:<br>
 	<ul>
 	<li>Destroy the Hive Mind to impair the ship's communication abilities</li>
 	<li>Destroy the Hive Replicator that mass-produces alien troops</li>
 	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle. If that is not possible, destroy it</li>
 	</ul>
 	<br>
-	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br>
-	We have attached an image with the approximate locations of your objectives. The entry point is marked with an arrow. Number 1 is the suspected location of the Hive Mind. Number 2 is the suspected location of the control room. Number 3 is the suspected location of the Hive Replicator.<br>
-	Additionally, our partial scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as we have no further idea of what might await you inside.<br>"}
+	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br><br>
+	We have also attached an image with the approximate locations of your targets. The entry point is marked with an arrow. Number 1 is the suspected location of the Hive Mind. Number 2 is the suspected location of the control room. Number 3 is the suspected location of the Hive Replicator.<br>
+	The scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as no living man before has ever entered the Hive, and nobody knows what might await you inside.<br>"}
 
 /datum/command_alert/awaymission/hive/announce()
 	..()
