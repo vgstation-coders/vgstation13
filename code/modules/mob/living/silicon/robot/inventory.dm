@@ -75,7 +75,7 @@
 	if(activated(O))
 		to_chat(src, "<span class='notice'>Already activated</span>")
 		return
-	I.equipped(src)
+	O.equipped(src)
 	if(!module_state_1)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_1 = O
