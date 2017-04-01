@@ -64,7 +64,7 @@ var/list/sent_strike_teams = list()
 
 	var/icon/team_logo = icon('icons/mob/mob.dmi', logo)
 	for(var/mob/dead/observer/O in dead_mob_list)
-		if(jobban_isbanned(O, "Strike Team") || O.client.is_afk())
+		if(!O.client || jobban_isbanned(O, "Strike Team") || O.client.is_afk())
 			continue
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
@@ -73,7 +73,7 @@ var/list/sent_strike_teams = list()
 		searching = FALSE
 
 		for(var/mob/dead/observer/O in dead_mob_list)
-			if(jobban_isbanned(O, "Strike Team") || O.client.is_afk())
+			if(!O.client || jobban_isbanned(O, "Strike Team") || O.client.is_afk())
 				continue
 			to_chat(O, "[bicon(team_logo)]<span class='recruit'>Applications for [faction_name]'s [striketeam_name] are now closed.</span>[bicon(team_logo)]")
 
