@@ -415,7 +415,7 @@
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.item_state = new_item.icon_state
 			new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-			additional_desc = "This is an antique projectile weapon, you're not sure if it will fire or not."
+			additional_desc = "Looks like an antique projectile weapon, you're not sure if it will fire or not."
 			if(prob(10)) // 10% chance to be a smart gun
 				new_item.can_take_pai = TRUE
 				additional_desc += "There seems to be some sort of slot in the handle."
