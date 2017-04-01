@@ -150,7 +150,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //Doubles as a mask entity, aka can be put to your mouth like a real cigarette
 /obj/item/clothing/mask/cigarette
 	name = "cigarette"
-	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
+	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a phoron flood."
 	icon_state = "cig"
 	item_state = "cig"
 	w_class = W_CLASS_TINY
@@ -292,9 +292,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		to_chat(usr, "<span class='warning'>You fail to light \the [src]. It appears to be wet.</span>")
 		return
 
-	if(reagents.get_reagent_amount(PLASMA)) //Plasma explodes when exposed to fire
+	if(reagents.get_reagent_amount(PHORON)) //Phoron explodes when exposed to fire
 		var/datum/effect/effect/system/reagents_explosion/e = new()
-		e.set_up(round(reagents.get_reagent_amount(PLASMA)/2.5, 1), get_turf(src), 0, 0)
+		e.set_up(round(reagents.get_reagent_amount(PHORON)/2.5, 1), get_turf(src), 0, 0)
 		e.start()
 		if(ismob(loc))
 			var/mob/M = loc

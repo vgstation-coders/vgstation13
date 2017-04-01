@@ -163,25 +163,25 @@ var/global/ZAS_Settings/zas_settings = new
 
 
 ///////////////////////////////////////
-// PLASMA SHIT
+// PHORON SHIT
 ///////////////////////////////////////
-// ALL CAPS BECAUSE PLASMA IS HARDCORE YO
+// ALL CAPS BECAUSE PHORON IS HARDCORE YO
 // And I'm too lazy to fix the refs.
 
-/datum/ZAS_Setting/PLASMA_DMG
-	name = "Plasma Damage Amount"
+/datum/ZAS_Setting/PHORON_DMG
+	name = "Phoron Damage Amount"
 	desc = "Self Descriptive"
 	value = 3
 	valtype=ZAS_TYPE_NUMERIC
 
 /datum/ZAS_Setting/CLOTH_CONTAMINATION
 	name = "Cloth Contamination"
-	desc = "If this is on, plasma does damage by getting into cloth."
+	desc = "If this is on, phoron does damage by getting into cloth."
 	value = 1
 	valtype=ZAS_TYPE_BOOLEAN
 
-/datum/ZAS_Setting/PLASMAGUARD_ONLY
-	name = "PlasmaGuard Only"
+/datum/ZAS_Setting/PHORONGUARD_ONLY
+	name = "PhoronGuard Only"
 	desc = "If this is on, only biosuits and spacesuits protect against contamination and ill effects."
 	value = 0
 	valtype=ZAS_TYPE_BOOLEAN
@@ -194,13 +194,13 @@ var/global/ZAS_Settings/zas_settings = new
 
 /datum/ZAS_Setting/SKIN_BURNS
 	name = "Skin Burns"
-	desc = "Plasma has an effect similar to mustard gas on the un-suited."
+	desc = "Phoron has an effect similar to mustard gas on the un-suited."
 	value = 0
 	valtype=ZAS_TYPE_BOOLEAN
 
 /datum/ZAS_Setting/EYE_BURNS
 	name = "Eye Burns"
-	desc = "Plasma burns the eyes of anyone not wearing eye protection."
+	desc = "Phoron burns the eyes of anyone not wearing eye protection."
 	value = 1
 	valtype=ZAS_TYPE_BOOLEAN
 
@@ -210,9 +210,9 @@ var/global/ZAS_Settings/zas_settings = new
 	value = 0.02 //Per tick?  ASK ARYN
 	valtype=ZAS_TYPE_NUMERIC
 
-/datum/ZAS_Setting/PLASMA_HALLUCINATION
-	name = "Plasma Hallucination"
-	desc = "Does being in plasma cause you to hallucinate?"
+/datum/ZAS_Setting/PHORON_HALLUCINATION
+	name = "Phoron Hallucination"
+	desc = "Does being in phoron cause you to hallucinate?"
 	value = 0
 	valtype=ZAS_TYPE_BOOLEAN
 
@@ -412,45 +412,45 @@ a { color: white; }
 			message_admins("[key_name(usr)] reloaded ZAS settings from disk.")
 
 /ZAS_Settings/proc/SetDefault(var/mob/user)
-	var/list/setting_choices = list("Plasma - Standard", "Plasma - Low Hazard", "Plasma - High Hazard", "Plasma - Oh Shit!", "ZAS - Normal", "ZAS - Forgiving", "ZAS - Dangerous", "ZAS - Hellish")
+	var/list/setting_choices = list("Phoron - Standard", "Phoron - Low Hazard", "Phoron - High Hazard", "Phoron - Oh Shit!", "ZAS - Normal", "ZAS - Forgiving", "ZAS - Dangerous", "ZAS - Hellish")
 	var/def = input(user, "Which of these presets should be used?") as null|anything in setting_choices
 	if(!def)
 		return
 	switch(def)
-		if("Plasma - Standard")
-			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1)   //If this is on, plasma does damage by getting into cloth.
-			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     0)
+		if("Phoron - Standard")
+			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1)   //If this is on, phoron does damage by getting into cloth.
+			Set("/datum/ZAS_Setting/PHORONGUARD_ONLY",     0)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   0)   //Chance of genetic corruption as well as toxic damage, X in 1000.
-			Set("/datum/ZAS_Setting/SKIN_BURNS",           0)   //Plasma has an effect similar to mustard gas on the un-suited.
-			Set("/datum/ZAS_Setting/EYE_BURNS",            1)   //Plasma burns the eyes of anyone not wearing eye protection.
-			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 0)
+			Set("/datum/ZAS_Setting/SKIN_BURNS",           0)   //Phoron has an effect similar to mustard gas on the un-suited.
+			Set("/datum/ZAS_Setting/EYE_BURNS",            1)   //Phoron burns the eyes of anyone not wearing eye protection.
+			Set("/datum/ZAS_Setting/PHORON_HALLUCINATION", 0)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.02)
 
-		if("Plasma - Low Hazard")
-			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  0) //If this is on, plasma does damage by getting into cloth.
-			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     0)
+		if("Phoron - Low Hazard")
+			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  0) //If this is on, phoron does damage by getting into cloth.
+			Set("/datum/ZAS_Setting/PHORONGUARD_ONLY",     0)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   0) //Chance of genetic corruption as well as toxic damage, X in 1000
-			Set("/datum/ZAS_Setting/SKIN_BURNS",           0) //Plasma has an effect similar to mustard gas on the un-suited.
-			Set("/datum/ZAS_Setting/EYE_BURNS",            1) //Plasma burns the eyes of anyone not wearing eye protection.
-			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 0)
+			Set("/datum/ZAS_Setting/SKIN_BURNS",           0) //Phoron has an effect similar to mustard gas on the un-suited.
+			Set("/datum/ZAS_Setting/EYE_BURNS",            1) //Phoron burns the eyes of anyone not wearing eye protection.
+			Set("/datum/ZAS_Setting/PHORON_HALLUCINATION", 0)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.01)
 
-		if("Plasma - High Hazard")
-			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1) //If this is on, plasma does damage by getting into cloth.
-			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     0)
+		if("Phoron - High Hazard")
+			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1) //If this is on, phoron does damage by getting into cloth.
+			Set("/datum/ZAS_Setting/PHORONGUARD_ONLY",     0)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   0) //Chance of genetic corruption as well as toxic damage, X in 1000.
-			Set("/datum/ZAS_Setting/SKIN_BURNS",           1) //Plasma has an effect similar to mustard gas on the un-suited.
-			Set("/datum/ZAS_Setting/EYE_BURNS",            1) //Plasma burns the eyes of anyone not wearing eye protection.
-			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 1)
+			Set("/datum/ZAS_Setting/SKIN_BURNS",           1) //Phoron has an effect similar to mustard gas on the un-suited.
+			Set("/datum/ZAS_Setting/EYE_BURNS",            1) //Phoron burns the eyes of anyone not wearing eye protection.
+			Set("/datum/ZAS_Setting/PHORON_HALLUCINATION", 1)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.05)
 
-		if("Plasma - Oh Shit!")
-			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1) //If this is on, plasma does damage by getting into cloth.
-			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     1)
+		if("Phoron - Oh Shit!")
+			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1) //If this is on, phoron does damage by getting into cloth.
+			Set("/datum/ZAS_Setting/PHORONGUARD_ONLY",     1)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   5) //Chance of genetic corruption as well as toxic damage, X in 1000.
-			Set("/datum/ZAS_Setting/SKIN_BURNS",           1) //Plasma has an effect similar to mustard gas on the un-suited.
-			Set("/datum/ZAS_Setting/EYE_BURNS",            1) //Plasma burns the eyes of anyone not wearing eye protection.
-			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 1)
+			Set("/datum/ZAS_Setting/SKIN_BURNS",           1) //Phoron has an effect similar to mustard gas on the un-suited.
+			Set("/datum/ZAS_Setting/EYE_BURNS",            1) //Phoron burns the eyes of anyone not wearing eye protection.
+			Set("/datum/ZAS_Setting/PHORON_HALLUCINATION", 1)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.075)
 
 		if("ZAS - Normal")

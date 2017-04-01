@@ -350,7 +350,7 @@
 			reagents.add_reagent(REDTEA, 30)
 		if(3)
 			name = "Hippie Farms Eco-Tea"
-			desc = "Remember when the station was powered by solar panels instead of raping space for its plasma, then creating an engine of destruction? Hippie Farms remembers, maaaan."
+			desc = "Remember when the station was powered by solar panels instead of raping space for its phoron, then creating an engine of destruction? Hippie Farms remembers, maaaan."
 			reagents.add_reagent(GREENTEA, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER

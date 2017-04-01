@@ -34,10 +34,10 @@
 	domutcheck(AM,null)
 	qdel(src)
 
-/obj/effect/mine/plasma
-	name = "Plasma Mine"
+/obj/effect/mine/phoron
+	name = "Phoron Mine"
 
-/obj/effect/mine/plasma/trigger(AM)
+/obj/effect/mine/phoron/trigger(AM)
 	for(var/turf/simulated/floor/target in range(1,src))
 		if(!target.blocks_air)
 			var/datum/gas_mixture/payload = new

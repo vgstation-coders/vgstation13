@@ -266,19 +266,19 @@
 		L.apply_effect(15,IRRADIATE,0)
 	return
 
-/obj/machinery/door/airlock/plasma
-	name = "Plasma Airlock"
+/obj/machinery/door/airlock/phoron
+	name = "Phoron Airlock"
 	desc = "No way this can end badly."
-	icon = 'icons/obj/doors/Doorplasma.dmi'
-	mineral = "plasma"
+	icon = 'icons/obj/doors/Doorphoron.dmi'
+	mineral = "phoron"
 
 	autoignition_temperature = 300
 	fire_fuel = 10
 
-/obj/machinery/door/airlock/plasma/ignite(temperature)
-	PlasmaBurn(temperature)
+/obj/machinery/door/airlock/phoron/ignite(temperature)
+	PhoronBurn(temperature)
 
-/obj/machinery/door/airlock/plasma/proc/PlasmaBurn(temperature)
+/obj/machinery/door/airlock/phoron/proc/PhoronBurn(temperature)
 	for(var/turf/simulated/floor/target_tile in range(2,loc))
 //		if(target_tile.parent && target_tile.parent.group_processing) // THESE PROBABLY DO SOMETHING IMPORTANT BUT I DON'T KNOW HOW TO FIX IT - Erthilo
 //			target_tile.parent.suspend_group_processing()
@@ -289,14 +289,14 @@
 		target_tile.assume_air(napalm)
 		spawn (0)
 			target_tile.hotspot_expose(temperature, 400, surfaces=1)
-	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
+	for(var/obj/structure/falsewall/phoron/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
-		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
+		T.ChangeTurf(/turf/simulated/wall/mineral/phoron/)
 		qdel (F)
 		F = null
-	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
+	for(var/turf/simulated/wall/mineral/phoron/W in range(3,src))
 		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
-	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
+	for(var/obj/machinery/door/airlock/phoron/D in range(3,src))
 		D.ignite(temperature/4)
 	new/obj/structure/door_assembly( src.loc )
 	qdel (src)
@@ -1228,7 +1228,7 @@ About the new airlock wires panel:
 		DA.throw_at(T,1,2)
 	return DA //Returns the new assembly
 
-/obj/machinery/door/airlock/plasma/attackby(obj/C, mob/user)
+/obj/machinery/door/airlock/phoron/attackby(obj/C, mob/user)
 	var/heat = C.is_hot()
 	if(heat > 300)
 		ignite(heat)

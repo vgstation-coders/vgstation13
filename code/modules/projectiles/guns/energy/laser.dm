@@ -256,18 +256,18 @@
 	charge_cost = 50
 
 
-/obj/item/weapon/gun/energy/plasma
-	name = "plasma gun"
-	desc = "A high-power plasma gun. You shouldn't ever see this."
+/obj/item/weapon/gun/energy/phoron
+	name = "phoron gun"
+	desc = "A high-power phoron gun. You shouldn't ever see this."
 	icon_state = "xray"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	fire_sound = 'sound/weapons/elecfire.ogg'
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2"
-	projectile_type = /obj/item/projectile/energy/plasma
+	projectile_type = /obj/item/projectile/energy/phoron
 	charge_cost = 50
 
-/obj/item/weapon/gun/energy/plasma/failure_check(var/mob/living/carbon/human/M)
+/obj/item/weapon/gun/energy/phoron/failure_check(var/mob/living/carbon/human/M)
 	if(prob(15))
 		fire_delay += rand(2, 6)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -291,42 +291,42 @@
 		return 0
 	return ..()
 
-/obj/item/weapon/gun/energy/plasma/pistol
-	name = "plasma pistol"
-	desc = "A state of the art pistol utilizing plasma in a uranium-235 lined core to output searing bolts of energy."
+/obj/item/weapon/gun/energy/phoron/pistol
+	name = "phoron pistol"
+	desc = "A state of the art pistol utilizing phoron in a uranium-235 lined core to output searing bolts of energy."
 	icon_state = "alienpistol"
 	item_state = null
 	w_class = W_CLASS_TINY
-	projectile_type = /obj/item/projectile/energy/plasma/pistol
+	projectile_type = /obj/item/projectile/energy/phoron/pistol
 	charge_cost = 100
 
-/obj/item/weapon/gun/energy/plasma/pistol/isHandgun()
+/obj/item/weapon/gun/energy/phoron/pistol/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/plasma/light
-	name = "plasma rifle"
-	desc = "A state of the art rifle utilizing plasma in a uranium-235 lined core to output radiating bolts of energy."
+/obj/item/weapon/gun/energy/phoron/light
+	name = "phoron rifle"
+	desc = "A state of the art rifle utilizing phoron in a uranium-235 lined core to output radiating bolts of energy."
 	icon_state = "lightalienrifle"
 	item_state = null
-	projectile_type = /obj/item/projectile/energy/plasma/light
+	projectile_type = /obj/item/projectile/energy/phoron/light
 	charge_cost = 50
 
-/obj/item/weapon/gun/energy/plasma/rifle
-	name = "plasma cannon"
-	desc = "A state of the art cannon utilizing plasma in a uranium-235 lined core to output hi-power, radiating bolts of energy."
+/obj/item/weapon/gun/energy/phoron/rifle
+	name = "phoron cannon"
+	desc = "A state of the art cannon utilizing phoron in a uranium-235 lined core to output hi-power, radiating bolts of energy."
 	icon_state = "alienrifle"
 	item_state = null
 	w_class = W_CLASS_LARGE
 	slot_flags = null
-	projectile_type = /obj/item/projectile/energy/plasma/rifle
+	projectile_type = /obj/item/projectile/energy/phoron/rifle
 	charge_cost = 150
 
-/obj/item/weapon/gun/energy/plasma/MP40k
-	name = "Plasma MP40k"
-	desc = "A plasma MP40k. Ich liebe den geruch von plasma am morgen."
+/obj/item/weapon/gun/energy/phoron/MP40k
+	name = "Phoron MP40k"
+	desc = "A phoron MP40k. Ich liebe den geruch von phoron am morgen."
 	icon_state = "PlasMP"
 	item_state = null
-	projectile_type = /obj/item/projectile/energy/plasma/MP40k
+	projectile_type = /obj/item/projectile/energy/phoron/MP40k
 	charge_cost = 75
 
 /obj/item/weapon/gun/energy/laser/LaserAK

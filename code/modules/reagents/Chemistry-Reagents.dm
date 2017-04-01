@@ -522,8 +522,8 @@
 		holder.remove_reagent("toxin", 2 * REM)
 	if(holder.has_reagent("stoxin"))
 		holder.remove_reagent("stoxin", 2 * REM)
-	if(holder.has_reagent("plasma"))
-		holder.remove_reagent("plasma", REM)
+	if(holder.has_reagent("phoron"))
+		holder.remove_reagent("phoron", REM)
 	if(holder.has_reagent("sacid"))
 		holder.remove_reagent("sacid", REM)
 	if(holder.has_reagent("cyanide"))
@@ -1945,14 +1945,14 @@
 				if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage //aren't they toxin-proof anyways?
 					H.adjustToxLoss(10 * REM)
 
-/datum/reagent/plasma
-	name = "Plasma"
-	id = PLASMA
-	description = "Plasma in its liquid form."
+/datum/reagent/phoron
+	name = "Phoron"
+	id = PHORON
+	description = "Phoron in its liquid form."
 	reagent_state = LIQUID
 	color = "#500064" //rgb: 80, 0, 100
 
-/datum/reagent/plasma/on_mob_life(var/mob/living/M)
+/datum/reagent/phoron/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
@@ -1962,7 +1962,7 @@
 	M.adjustToxLoss(3 * REM)
 
 /*
-/datum/reagent/plasma/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/phoron/reaction_obj(var/obj/O, var/volume)
 
 	if(..())
 		return 1
@@ -1970,7 +1970,7 @@
 	var/turf/T = get_turf(O)
 	self.reaction_turf(T, volume)
 
-/datum/reagent/plasma/reaction_turf(var/turf/simulated/T, var/volume)
+/datum/reagent/phoron/reaction_turf(var/turf/simulated/T, var/volume)
 
 	if(..())
 		return 1
@@ -2139,8 +2139,8 @@
 		holder.remove_reagent("toxin", 5)
 	if(holder.has_reagent("stoxin"))
 		holder.remove_reagent("stoxin", 5)
-	if(holder.has_reagent("plasma"))
-		holder.remove_reagent("plasma", 5)
+	if(holder.has_reagent("phoron"))
+		holder.remove_reagent("phoron", 5)
 	if(holder.has_reagent("sacid"))
 		holder.remove_reagent("sacid", 5)
 	if(holder.has_reagent("pacid"))
@@ -5275,9 +5275,9 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	id = FANCYDAN
 	description = "Full of that patented Dan taste you love!"
 
-/datum/reagent/drink/tea/plasmatea
-	name = "Plasma Pekoe"
-	id = PLASMATEA
+/datum/reagent/drink/tea/phorontea
+	name = "Phoron Pekoe"
+	id = PHORONTEA
 	description = "Probably not the safest beverage."
 
 /datum/reagent/drink/tea/greytea

@@ -1,25 +1,25 @@
 // PLASMEN SHIT
 // CAN'T WEAR UNLESS YOU'RE A PINK SKELLINGTON
-/obj/item/clothing/suit/space/plasmaman
-	name = "plasmaman suit"
-	desc = "A special containment suit designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
+/obj/item/clothing/suit/space/phoronman
+	name = "phoronman suit"
+	desc = "A special containment suit designed to protect a phoronman's volatile body from outside exposure and quickly extinguish it in emergencies."
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
 	slowdown = 1
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("Plasmaman")
-	clothing_flags = PLASMAGUARD
+	species_restricted = list("Phoronman")
+	clothing_flags = PHORONGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
-	icon_state = "plasmaman_suit"
-	item_state = "plasmaman_suit"
+	icon_state = "phoronman_suit"
+	item_state = "phoronman_suit"
 
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
 
-/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/user)
+/obj/item/clothing/suit/space/phoronman/proc/Extinguish(var/mob/user)
 	var/mob/living/carbon/human/H=user
 	if(next_extinguish > world.time)
 		return
@@ -28,23 +28,23 @@
 	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
 	H.ExtinguishMob()
 
-/obj/item/clothing/head/helmet/space/plasmaman
-	name = "plasmaman helmet"
-	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
-	clothing_flags = PLASMAGUARD
+/obj/item/clothing/head/helmet/space/phoronman
+	name = "phoronman helmet"
+	desc = "A special containment helmet designed to protect a phoronman's volatile body from outside exposure and quickly extinguish it in emergencies."
+	clothing_flags = PHORONGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	species_restricted = list("Plasmaman")
+	species_restricted = list("Phoronman")
 	eyeprot = 0
 
-	icon_state = "plasmaman_helmet0"
-	item_state = "plasmaman_helmet0"
-	var/base_state = "plasmaman_helmet"
+	icon_state = "phoronman_helmet0"
+	item_state = "phoronman_helmet0"
+	var/base_state = "phoronman_helmet"
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
-	
-/obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
+
+/obj/item/clothing/head/helmet/space/phoronman/attack_self(mob/user)
 	if(no_light)
 		return
 	on = !on
@@ -56,300 +56,300 @@
 	user.update_inv_head()
 
 // Tc_ENGINEERING
-/obj/item/clothing/suit/space/plasmaman/assistant
-	name = "plasmaman assistant suit"
-	icon_state = "plasmamanAssistant_suit"
+/obj/item/clothing/suit/space/phoronman/assistant
+	name = "phoronman assistant suit"
+	icon_state = "phoronmanAssistant_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/assistant
-	name = "plasmaman assistant helmet"
-	icon_state = "plasmamanAssistant_helmet0"
-	base_state = "plasmamanAssistant_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/assistant
+	name = "phoronman assistant helmet"
+	icon_state = "phoronmanAssistant_helmet0"
+	base_state = "phoronmanAssistant_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/atmostech
-	name = "plasmaman atmospheric suit"
-	icon_state = "plasmamanAtmos_suit"
+/obj/item/clothing/suit/space/phoronman/atmostech
+	name = "phoronman atmospheric suit"
+	icon_state = "phoronmanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	slowdown = 2
 
-/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-	name = "plasmaman atmospheric helmet"
-	icon_state = "plasmamanAtmos_helmet0"
-	base_state = "plasmamanAtmos_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/atmostech
+	name = "phoronman atmospheric helmet"
+	icon_state = "phoronmanAtmos_helmet0"
+	base_state = "phoronmanAtmos_helmet"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
-/obj/item/clothing/suit/space/plasmaman/engineer
-	name = "plasmaman engineer suit"
-	icon_state = "plasmamanEngineer_suit"
+/obj/item/clothing/suit/space/phoronman/engineer
+	name = "phoronman engineer suit"
+	icon_state = "phoronmanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	slowdown = 2
 
-/obj/item/clothing/head/helmet/space/plasmaman/engineer
-	name = "plasmaman engineer helmet"
-	icon_state = "plasmamanEngineer_helmet0"
-	base_state = "plasmamanEngineer_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/engineer
+	name = "phoronman engineer helmet"
+	icon_state = "phoronmanEngineer_helmet0"
+	base_state = "phoronmanEngineer_helmet"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 1
 
-/obj/item/clothing/suit/space/plasmaman/engineer/ce
-	name = "plasmaman chief engineer suit"
-	icon_state = "plasmaman_CE"
+/obj/item/clothing/suit/space/phoronman/engineer/ce
+	name = "phoronman chief engineer suit"
+	icon_state = "phoronman_CE"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
-/obj/item/clothing/head/helmet/space/plasmaman/engineer/ce
-	name = "plasmaman chief engineer helmet"
-	icon_state = "plasmaman_CE_helmet0"
-	base_state = "plasmaman_CE_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/engineer/ce
+	name = "phoronman chief engineer helmet"
+	icon_state = "phoronman_CE_helmet0"
+	base_state = "phoronman_CE_helmet"
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 
 //SERVICE
 
-/obj/item/clothing/suit/space/plasmaman/botanist
-	name = "plasmaman botanist suit"
-	icon_state = "plasmamanBotanist_suit"
+/obj/item/clothing/suit/space/phoronman/botanist
+	name = "phoronman botanist suit"
+	icon_state = "phoronmanBotanist_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/botanist
-	name = "plasmaman botanist helmet"
-	icon_state = "plasmamanBotanist_helmet0"
-	base_state = "plasmamanBotanist_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/botanist
+	name = "phoronman botanist helmet"
+	icon_state = "phoronmanBotanist_helmet0"
+	base_state = "phoronmanBotanist_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/chaplain
-	name = "plasmaman chaplain suit"
-	icon_state = "plasmamanChaplain_suit"
+/obj/item/clothing/suit/space/phoronman/chaplain
+	name = "phoronman chaplain suit"
+	icon_state = "phoronmanChaplain_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/chaplain
-	name = "plasmaman chaplain helmet"
-	icon_state = "plasmamanChaplain_helmet0"
-	base_state = "plasmamanChaplain_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/chaplain
+	name = "phoronman chaplain helmet"
+	icon_state = "phoronmanChaplain_helmet0"
+	base_state = "phoronmanChaplain_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/clown
-	name = "plasmaman clown suit"
-	icon_state = "plasmaman_Clown"
+/obj/item/clothing/suit/space/phoronman/clown
+	name = "phoronman clown suit"
+	icon_state = "phoronman_Clown"
 
-/obj/item/clothing/head/helmet/space/plasmaman/clown
-	name = "plasmaman clown helmet"
-	icon_state = "plasmaman_Clown_helmet0"
-	base_state = "plasmaman_Clown_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/clown
+	name = "phoronman clown helmet"
+	icon_state = "phoronman_Clown_helmet0"
+	base_state = "phoronman_Clown_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/mime
-	name = "plasmaman mime suit"
-	icon_state = "plasmaman_Mime"
+/obj/item/clothing/suit/space/phoronman/mime
+	name = "phoronman mime suit"
+	icon_state = "phoronman_Mime"
 
-/obj/item/clothing/head/helmet/space/plasmaman/mime
-	name = "plasmaman mime helmet"
-	icon_state = "plasmaman_Mime_helmet0"
-	base_state = "plasmaman_Mime_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/mime
+	name = "phoronman mime helmet"
+	icon_state = "phoronman_Mime_helmet0"
+	base_state = "phoronman_Mime_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/service
-	name = "plasmaman service suit"
-	icon_state = "plasmamanService_suit"
+/obj/item/clothing/suit/space/phoronman/service
+	name = "phoronman service suit"
+	icon_state = "phoronmanService_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/service
-	name = "plasmaman service helmet"
-	icon_state = "plasmamanService_helmet0"
-	base_state = "plasmamanService_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/service
+	name = "phoronman service helmet"
+	icon_state = "phoronmanService_helmet0"
+	base_state = "phoronmanService_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/janitor
-	name = "plasmaman janitor suit"
-	icon_state = "plasmamanJanitor_suit"
+/obj/item/clothing/suit/space/phoronman/janitor
+	name = "phoronman janitor suit"
+	icon_state = "phoronmanJanitor_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/janitor
-	name = "plasmaman janitor helmet"
-	icon_state = "plasmamanJanitor_helmet0"
-	base_state = "plasmamanJanitor_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/janitor
+	name = "phoronman janitor helmet"
+	icon_state = "phoronmanJanitor_helmet0"
+	base_state = "phoronmanJanitor_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/lawyer
-	name = "plasmaman lawyer suit"
-	icon_state = "plasmamanlawyer_suit"
+/obj/item/clothing/suit/space/phoronman/lawyer
+	name = "phoronman lawyer suit"
+	icon_state = "phoronmanlawyer_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/lawyer
-	name = "plasmaman lawyer helmet"
-	icon_state = "plasmamanlawyer_helmet0"
-	base_state = "plasmamanlawyer_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/lawyer
+	name = "phoronman lawyer helmet"
+	icon_state = "phoronmanlawyer_helmet0"
+	base_state = "phoronmanlawyer_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/bee
-	name = "plasmaman bee suit"
-	icon_state = "plasmamanbee_suit"
+/obj/item/clothing/suit/space/phoronman/bee
+	name = "phoronman bee suit"
+	icon_state = "phoronmanbee_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/bee
-	name = "plasmaman bee helmet"
-	icon_state = "plasmamanbee_helmet0"
-	base_state = "plasmamanbee_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/bee
+	name = "phoronman bee helmet"
+	icon_state = "phoronmanbee_helmet0"
+	base_state = "phoronmanbee_helmet"
 
 //CARGO
 
-/obj/item/clothing/suit/space/plasmaman/cargo
-	name = "plasmaman cargo suit"
-	icon_state = "plasmamanCargo_suit"
+/obj/item/clothing/suit/space/phoronman/cargo
+	name = "phoronman cargo suit"
+	icon_state = "phoronmanCargo_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/cargo
-	name = "plasmaman cargo helmet"
-	icon_state = "plasmamanCargo_helmet0"
-	base_state = "plasmamanCargo_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/cargo
+	name = "phoronman cargo helmet"
+	icon_state = "phoronmanCargo_helmet0"
+	base_state = "phoronmanCargo_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/miner
-	name = "plasmaman miner suit"
-	icon_state = "plasmamanMiner_suit"
+/obj/item/clothing/suit/space/phoronman/miner
+	name = "phoronman miner suit"
+	icon_state = "phoronmanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	slowdown = 2
 	goliath_reinforce = TRUE
 
-/obj/item/clothing/head/helmet/space/plasmaman/miner
-	name = "plasmaman miner helmet"
-	icon_state = "plasmamanMiner_helmet0"
-	base_state = "plasmamanMiner_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/miner
+	name = "phoronman miner helmet"
+	icon_state = "phoronmanMiner_helmet0"
+	base_state = "phoronmanMiner_helmet"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	goliath_reinforce = TRUE
 
 
 // MEDSCI
 
-/obj/item/clothing/suit/space/plasmaman/medical
-	name = "plasmaman medical suit"
-	icon_state = "plasmamanMedical_suit"
+/obj/item/clothing/suit/space/phoronman/medical
+	name = "phoronman medical suit"
+	icon_state = "phoronmanMedical_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/medical
-	name = "plasmaman medical helmet"
-	icon_state = "plasmamanMedical_helmet0"
-	base_state = "plasmamanMedical_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/medical
+	name = "phoronman medical helmet"
+	icon_state = "phoronmanMedical_helmet0"
+	base_state = "phoronmanMedical_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/medical/paramedic
-	name = "plasmaman paramedic suit"
-	icon_state = "plasmaman_Paramedic"
+/obj/item/clothing/suit/space/phoronman/medical/paramedic
+	name = "phoronman paramedic suit"
+	icon_state = "phoronman_Paramedic"
 
-/obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic
-	name = "plasmaman paramedic helmet"
-	icon_state = "plasmaman_Paramedic_helmet0"
-	base_state = "plasmaman_Paramedic_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/medical/paramedic
+	name = "phoronman paramedic helmet"
+	icon_state = "phoronman_Paramedic_helmet0"
+	base_state = "phoronman_Paramedic_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/medical/chemist
-	name = "plasmaman chemist suit"
-	icon_state = "plasmaman_Chemist"
+/obj/item/clothing/suit/space/phoronman/medical/chemist
+	name = "phoronman chemist suit"
+	icon_state = "phoronman_Chemist"
 
-/obj/item/clothing/head/helmet/space/plasmaman/medical/chemist
-	name = "plasmaman chemist helmet"
-	icon_state = "plasmaman_Chemist_helmet0"
-	base_state = "plasmaman_Chemist_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/medical/chemist
+	name = "phoronman chemist helmet"
+	icon_state = "phoronman_Chemist_helmet0"
+	base_state = "phoronman_Chemist_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/medical/cmo
-	name = "plasmaman chief medical officer suit"
-	icon_state = "plasmaman_CMO"
+/obj/item/clothing/suit/space/phoronman/medical/cmo
+	name = "phoronman chief medical officer suit"
+	icon_state = "phoronman_CMO"
 
-/obj/item/clothing/head/helmet/space/plasmaman/medical/cmo
-	name = "plasmaman chief medical officer helmet"
-	icon_state = "plasmaman_CMO_helmet0"
-	base_state = "plasmaman_CMO_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/medical/cmo
+	name = "phoronman chief medical officer helmet"
+	icon_state = "phoronman_CMO_helmet0"
+	base_state = "phoronman_CMO_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/science
-	name = "plasmaman scientist suit"
-	icon_state = "plasmamanScience_suit"
+/obj/item/clothing/suit/space/phoronman/science
+	name = "phoronman scientist suit"
+	icon_state = "phoronmanScience_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/science
-	name = "plasmaman scientist helmet"
-	icon_state = "plasmamanScience_helmet0"
-	base_state = "plasmamanScience_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/science
+	name = "phoronman scientist helmet"
+	icon_state = "phoronmanScience_helmet0"
+	base_state = "phoronmanScience_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/science/rd
-	name = "plasmaman research director suit"
-	icon_state = "plasmaman_RD"
+/obj/item/clothing/suit/space/phoronman/science/rd
+	name = "phoronman research director suit"
+	icon_state = "phoronman_RD"
 
-/obj/item/clothing/head/helmet/space/plasmaman/science/rd
-	name = "plasmaman research director helmet"
-	icon_state = "plasmaman_RD_helmet0"
-	base_state = "plasmaman_RD_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/science/rd
+	name = "phoronman research director helmet"
+	icon_state = "phoronman_RD_helmet0"
+	base_state = "phoronman_RD_helmet"
 
 
 //SECURITY
 
-/obj/item/clothing/suit/space/plasmaman/security
-	name = "plasmaman security suit"
-	icon_state = "plasmamanSecurity_suit"
+/obj/item/clothing/suit/space/phoronman/security
+	name = "phoronman security suit"
+	icon_state = "phoronmanSecurity_suit"
 	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
 
-/obj/item/clothing/head/helmet/space/plasmaman/security
-	name = "plasmaman security helmet"
-	icon_state = "plasmamanSecurity_helmet0"
-	base_state = "plasmamanSecurity_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/security
+	name = "phoronman security helmet"
+	icon_state = "phoronmanSecurity_helmet0"
+	base_state = "phoronmanSecurity_helmet"
 	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
 	eyeprot = 1
 
-/obj/item/clothing/suit/space/plasmaman/security/hos
-	name = "plasmaman head of security suit"
-	icon_state = "plasmaman_HoS"
+/obj/item/clothing/suit/space/phoronman/security/hos
+	name = "phoronman head of security suit"
+	icon_state = "phoronman_HoS"
 
-/obj/item/clothing/head/helmet/space/plasmaman/security/hos
-	name = "plasmaman head of security helmet"
-	icon_state = "plasmaman_HoS_helmet0"
-	base_state = "plasmaman_HoS_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/security/hos
+	name = "phoronman head of security helmet"
+	icon_state = "phoronman_HoS_helmet0"
+	base_state = "phoronman_HoS_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/security/hop
-	name = "plasmaman head of personnel suit"
-	icon_state = "plasmaman_HoP"
+/obj/item/clothing/suit/space/phoronman/security/hop
+	name = "phoronman head of personnel suit"
+	icon_state = "phoronman_HoP"
 
-/obj/item/clothing/head/helmet/space/plasmaman/security/hop
-	name = "plasmaman head of personnel helmet"
-	icon_state = "plasmaman_HoP_helmet0"
-	base_state = "plasmaman_HoP_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/security/hop
+	name = "phoronman head of personnel helmet"
+	icon_state = "phoronman_HoP_helmet0"
+	base_state = "phoronman_HoP_helmet"
 
-/obj/item/clothing/suit/space/plasmaman/security/captain
-	name = "plasmaman captain suit"
-	icon_state = "plasmaman_Captain"
+/obj/item/clothing/suit/space/phoronman/security/captain
+	name = "phoronman captain suit"
+	icon_state = "phoronman_Captain"
 
-/obj/item/clothing/head/helmet/space/plasmaman/security/captain
-	name = "plasmaman captain helmet"
-	icon_state = "plasmaman_Captain_helmet0"
-	base_state = "plasmaman_Captain_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/security/captain
+	name = "phoronman captain helmet"
+	icon_state = "phoronman_Captain_helmet0"
+	base_state = "phoronman_Captain_helmet"
 
 
 //MISC
 
-/obj/item/clothing/suit/space/plasmaman/prisoner
-	name = "plasmaman prisoner suit"
-	icon_state = "plasmaman_prisoner_suit"
+/obj/item/clothing/suit/space/phoronman/prisoner
+	name = "phoronman prisoner suit"
+	icon_state = "phoronman_prisoner_suit"
 	max_heat_protection_temperature = null
 	pressure_resistance = null
 	allowed = list(/obj/item/weapon/tank)
 
-/obj/item/clothing/head/helmet/space/plasmaman/prisoner
-	name = "plasmaman prisoner helmet"
-	icon_state = "plasmaman_prisoner_helmet0"
-	base_state = "plasmaman_prisoner_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/prisoner
+	name = "phoronman prisoner helmet"
+	icon_state = "phoronman_prisoner_helmet0"
+	base_state = "phoronman_prisoner_helmet"
 	pressure_resistance = null
 
-/obj/item/clothing/suit/space/plasmaman/moltar
+/obj/item/clothing/suit/space/phoronman/moltar
 	name = "moltar's firesuit"
-	icon_state = "plasmamanMoltar_suit"
+	icon_state = "phoronmanMoltar_suit"
 
-/obj/item/clothing/head/helmet/space/plasmaman/moltar
+/obj/item/clothing/head/helmet/space/phoronman/moltar
 	name = "moltar's mask"
-	icon_state = "plasmamanMoltar_helmet"
-	base_state = "plasmamanMoltar_helmet"
+	icon_state = "phoronmanMoltar_helmet"
+	base_state = "phoronmanMoltar_helmet"
 	no_light=1
 
 
 
 //NUKEOPS
 
-/obj/item/clothing/suit/space/plasmaman/nuclear
-	name = "blood red plasmaman suit"
-	icon_state = "plasmaman_Nukeops"
+/obj/item/clothing/suit/space/phoronman/nuclear
+	name = "blood red phoronman suit"
+	icon_state = "phoronman_Nukeops"
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
 	siemens_coefficient = 0.6
 
-/obj/item/clothing/head/helmet/space/plasmaman/nuclear
-	name = "blood red plasmaman helmet"
-	icon_state = "plasmaman_Nukeops_helmet0"
-	base_state = "plasmaman_Nukeops_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/nuclear
+	name = "blood red phoronman helmet"
+	icon_state = "phoronman_Nukeops_helmet0"
+	base_state = "phoronman_Nukeops_helmet"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.6
 	var/obj/machinery/camera/camera
 
-/obj/item/clothing/head/helmet/space/plasmaman/nuclear/attack_self(mob/user)
+/obj/item/clothing/head/helmet/space/phoronman/nuclear/attack_self(mob/user)
 	if(camera)
 		..(user)
 	else
@@ -359,7 +359,7 @@
 		camera.c_tag = user.name
 		to_chat(user, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")
 
-/obj/item/clothing/head/helmet/space/plasmaman/nuclear/examine(mob/user)
+/obj/item/clothing/head/helmet/space/phoronman/nuclear/examine(mob/user)
 	..()
 	if(get_dist(user,src) <= 1)
 		to_chat(user, "<span class='info'>This helmet has a built-in camera. It's [camera ? "" : "in"]active.</span>")
@@ -367,17 +367,17 @@
 
 //CULT
 
-/obj/item/clothing/suit/space/plasmaman/cultist
-	name = "plasmaman cultist armor"
-	icon_state = "plasmaman_cult"
-	item_state = "plasmaman_cult"
-	desc = "A bulky suit of armour, menacing with red energy. It looks like it would fit a plasmaman."
+/obj/item/clothing/suit/space/phoronman/cultist
+	name = "phoronman cultist armor"
+	icon_state = "phoronman_cult"
+	item_state = "phoronman_cult"
+	desc = "A bulky suit of armour, menacing with red energy. It looks like it would fit a phoronman."
 	slowdown = 1
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 
-/obj/item/clothing/head/helmet/space/plasmaman/cultist
-	name = "plasmaman cultist helmet"
-	icon_state = "plasmamanCult_helmet0"
-	base_state = "plasmamanCult_helmet"
+/obj/item/clothing/head/helmet/space/phoronman/cultist
+	name = "phoronman cultist helmet"
+	icon_state = "phoronmanCult_helmet0"
+	base_state = "phoronmanCult_helmet"
 	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)

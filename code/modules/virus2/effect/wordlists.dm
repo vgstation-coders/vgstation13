@@ -52,7 +52,7 @@
 	"HoS"		=	"CMO",
 	"QM"		=	"captain",
 	"HoP"		=	"RD",
-	"plasma"	=	"oxygen",
+	"phoron"	=	"oxygen",
 	"n2o"		=	"co2",
 	"opposite"	=	"same",
 	"Ian"		=	"Runtime",

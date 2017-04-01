@@ -3,8 +3,8 @@
 Making Bombs with ZAS:
 Make burny fire with lots of burning
 Draw off 5000K gas from burny fire
-separate gas into oxygen and plasma components
-Obtain plasma and oxygen tanks filled up about 50-75% with normal-temp gas
+separate gas into oxygen and phoron components
+Obtain phoron and oxygen tanks filled up about 50-75% with normal-temp gas
 Fill rest with super hot gas from separated canisters, they should be about 125C now.
 Attach to transfer valve and open. BOOM.
 
@@ -94,7 +94,7 @@ Attach to transfer valve and open. BOOM.
 	if(locate(/obj/fire) in src)
 		return 1
 	var/datum/gas_mixture/air_contents = return_air()
-	if(!air_contents || exposed_temperature < PLASMA_MINIMUM_BURN_TEMPERATURE)
+	if(!air_contents || exposed_temperature < PHORON_MINIMUM_BURN_TEMPERATURE)
 		return 0
 
 	var/igniting = 0
@@ -272,7 +272,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	//  In the aforementioned cases, it's null. - N3X.
 	var/value = 0
 
-	if((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
+	if((temperature > PHORON_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
 		var/total_fuel = 0
 		var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
@@ -347,7 +347,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
 	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
+		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PHORON_VISIBLE)
 			return 1
 		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
 			return 1
@@ -391,7 +391,7 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
 	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
+		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PHORON_VISIBLE)
 			return 1
 		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
 			return 1

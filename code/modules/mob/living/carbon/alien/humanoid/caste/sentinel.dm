@@ -3,10 +3,10 @@
 	caste = "s"
 	maxHealth = 175
 	health = 125
-	plasma = 100
-	max_plasma = 250
+	phoron = 100
+	max_phoron = 250
 	icon_state = "aliens_s"
-	plasma_rate = 10
+	phoron_rate = 10
 
 //As far as movement goes, Sentinels are average
 

@@ -1017,7 +1017,7 @@ var/global/num_vending_terminals = 1
 	desc = "A vendor with a wide variety of masks and gas tanks."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "dispenser"
-	product_paths = "/obj/item/weapon/tank/oxygen;/obj/item/weapon/tank/plasma;/obj/item/weapon/tank/emergency_oxygen;/obj/item/weapon/tank/emergency_oxygen/engi;/obj/item/clothing/mask/breath"
+	product_paths = "/obj/item/weapon/tank/oxygen;/obj/item/weapon/tank/phoron;/obj/item/weapon/tank/emergency_oxygen;/obj/item/weapon/tank/emergency_oxygen/engi;/obj/item/clothing/mask/breath"
 	product_amounts = "10;10;10;5;25"
 	vend_delay = 0
 */
@@ -1267,7 +1267,7 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/medical
 
 //This one's from bay12
-/obj/machinery/vending/plasmaresearch
+/obj/machinery/vending/phoronresearch
 	name = "Toximate 3000"
 	desc = "All the fine parts you need in one vending machine!"
 	products = list(
@@ -2173,7 +2173,7 @@ var/global/num_vending_terminals = 1
 		message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE!")
 		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
 		contraband[/obj/item/clothing/suit/space/rig/nazi] = 3
-		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
+		contraband[/obj/item/weapon/gun/energy/phoron/MP40k] = 4
 		src.build_inventory(contraband, 1)
 		emagged = 1
 		overlays = 0
@@ -2198,7 +2198,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/officeruniform = 10,
 		/obj/item/clothing/head/helmet/space/rig/nazi = 3,
 		/obj/item/clothing/suit/space/rig/nazi = 3,
-		/obj/item/weapon/gun/energy/plasma/MP40k = 4,
+		/obj/item/weapon/gun/energy/phoron/MP40k = 4,
 		)
 
 	pack = /obj/structure/vendomatpack/nazivend //can be reloaded with the same packs as the regular one

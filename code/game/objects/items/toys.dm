@@ -402,14 +402,14 @@
  */
 /obj/item/toy/bomb
 	name = "commemorative Toxins clock"
-	desc = "A bright-colored plastic clock, commemorating 20 years of Nanotrasen's Plasma division. Comes with permanent snooze button, just twist the valve!"
+	desc = "A bright-colored plastic clock, commemorating 20 years of Nanotrasen's Phoron division. Comes with permanent snooze button, just twist the valve!"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "valve"
 	var/image/rendered
 
 /obj/item/toy/bomb/New()
 	..()
-	overlays += image(icon = icon, icon_state = "plasma")
+	overlays += image(icon = icon, icon_state = "phoron")
 	var/icon/J = new(icon, icon_state = "oxygen")
 	J.Shift(WEST, 13)
 	underlays += J
@@ -831,10 +831,10 @@
 	desc = "Won't search you on code green!"
 	icon_state = "sec"
 
-/obj/item/toy/gasha/plasman
-	name = "toy plasmaman"
+/obj/item/toy/gasha/phoronn
+	name = "toy phoronman"
 	desc = "All of the undending agony of the real thing, but in tiny plastic form!"
-	icon_state = "plasman"
+	icon_state = "phoronn"
 
 /obj/item/toy/gasha/shard
 	name = "toy supermatter shard"

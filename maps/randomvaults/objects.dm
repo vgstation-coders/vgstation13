@@ -517,13 +517,13 @@
 /obj/machinery/portable_atmospherics/canister/old/attack_ai()
 	return
 
-/obj/machinery/portable_atmospherics/canister/old/plasma
+/obj/machinery/portable_atmospherics/canister/old/phoron
 	name = "Canister: \[Toxins\]"
 	icon_state = "orangeold"
 	canister_color = "orangeold"
 	can_label = 0
 
-/obj/machinery/portable_atmospherics/canister/old/plasma/New(loc)
+/obj/machinery/portable_atmospherics/canister/old/phoron/New(loc)
 	..(loc)
 	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()

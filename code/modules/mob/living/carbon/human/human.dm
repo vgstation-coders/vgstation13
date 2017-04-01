@@ -52,9 +52,9 @@
 	h_style = "Bald"
 	..(new_loc, "Skeletal Vox")
 
-/mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/phoron/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
-	..(new_loc, "Plasmaman")
+	..(new_loc, "Phoronman")
 
 /mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"

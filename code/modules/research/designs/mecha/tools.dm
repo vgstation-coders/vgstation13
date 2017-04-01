@@ -26,7 +26,7 @@
 	req_tech = list(Tc_MATERIALS = 4, Tc_BLUESPACE = 3, Tc_MAGNETS = 4, Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/rcd
 	category = "Exosuit_Tools"
-	materials = list(MAT_IRON=30000,MAT_PLASMA=25000,MAT_SILVER=20000,MAT_GOLD=20000)
+	materials = list(MAT_IRON=30000,MAT_PHORON=25000,MAT_SILVER=20000,MAT_GOLD=20000)
 
 /datum/design/mech_gravcatapult
 	name = "Module Design (Gravitational Catapult Module)"
@@ -49,13 +49,13 @@
 	materials = list(MAT_IRON=10000,MAT_GOLD=1000,MAT_SILVER=2000,MAT_GLASS=5000)
 
 /* MISSING
-/datum/design/mech_plasma_generator
-	name = "Module Design (Plasma Converter Module)"
-	desc = "Exosuit-mounted plasma converter."
-	id = "mech_plasma_generator"
+/datum/design/mech_phoron_generator
+	name = "Module Design (Phoron Converter Module)"
+	desc = "Exosuit-mounted phoron converter."
+	id = "mech_phoron_generator"
 	build_type = MECHFAB
-	req_tech = list(Tc_PLASMATECH = 2, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 2)
-	build_path = /obj/item/mecha_parts/mecha_equipment/plasma_generator
+	req_tech = list(Tc_PHORONTECH = 2, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 2)
+	build_path = /obj/item/mecha_parts/mecha_equipment/phoron_generator
 	category = "Exosuit_Modules"
 */
 
@@ -159,10 +159,10 @@
 	category = "Exosuit_Tools"
 	materials = list(MAT_IRON=10000)
 
-/datum/design/mech_generator_plasma
-	name = "Module Design (Plasma Generator)"
-	desc = "A power generator that runs on burning plasma."
-	id = "mech_generator_plasma"
+/datum/design/mech_generator_phoron
+	name = "Module Design (Phoron Generator)"
+	desc = "A power generator that runs on burning phoron."
+	id = "mech_generator_phoron"
 	build_type = MECHFAB
 	req_tech = list(Tc_ENGINEERING = 1)
 	build_path = /obj/item/mecha_parts/mecha_equipment/generator
@@ -197,7 +197,7 @@
 	req_tech = list(Tc_MATERIALS = 5, Tc_MAGNETS = 4, Tc_ENGINEERING = 5)
 	build_path = /obj/item/mecha_parts/mecha_equipment/jetpack
 	category = "Exosuit_Modules"
-	materials = list("$iron"=25000,"$plasma"=25000,"$uranium"=7500)
+	materials = list("$iron"=25000,"$phoron"=25000,"$uranium"=7500)
 
 /datum/design/mech_jail_cell
 	name = "Exosuit Module Design (Mounted Jail Cell)"

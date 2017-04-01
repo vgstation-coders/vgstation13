@@ -18,8 +18,8 @@
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 
-	var/plasma = 250
-	var/max_plasma = 500
+	var/phoron = 250
+	var/max_phoron = 500
 	var/neurotoxin_cooldown = 0
 
 	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
@@ -29,7 +29,7 @@
 
 	status_flags = CANPARALYSE|CANPUSH
 	var/heal_rate = 2.5
-	var/plasma_rate = 5
+	var/phoron_rate = 5
 
 	var/oxygen_alert = 0
 	var/toxins_alert = 0
@@ -37,18 +37,18 @@
 
 	var/heat_protection = 0.5
 
-/mob/living/carbon/alien/AdjustPlasma(amount)
-	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
-	updatePlasmaHUD()
+/mob/living/carbon/alien/AdjustPhoron(amount)
+	phoron = min(max(phoron + amount,0),max_phoron) //upper limit of max_phoron, lower limit of 0
+	updatePhoronHUD()
 
-/mob/living/carbon/alien/proc/updatePlasmaHUD()
+/mob/living/carbon/alien/proc/updatePhoronHUD()
 	if(hud_used)
 		if(!hud_used.vampire_blood_display)
-			hud_used.plasma_hud()
+			hud_used.phoron_hud()
 			//hud_used.human_hud(hud_used.ui_style)
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[plasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[phoron]</font><br>  / <font color='#BE7DBE' size='1'>[max_phoron]</font></div>"
 	return
 
 /*
@@ -78,8 +78,8 @@ In all, this is a lot like the monkey code. /N
 		else
 			M.unarmed_attack_mob(src)
 
-/mob/living/carbon/alien/proc/getPlasma()
-	return plasma
+/mob/living/carbon/alien/proc/getPhoron()
+	return phoron
 
 /mob/living/carbon/alien/eyecheck()
 	return 2
@@ -108,7 +108,7 @@ In all, this is a lot like the monkey code. /N
 			adjustBruteLoss(-heal_rate)
 			adjustFireLoss(-heal_rate)
 			adjustOxyLoss(-heal_rate)
-		AdjustPlasma(plasma_rate)
+		AdjustPhoron(phoron_rate)
 
 	if(!environment || (flags & INVULNERABLE))
 		return
@@ -178,17 +178,17 @@ In all, this is a lot like the monkey code. /N
 			if(1 to 49)
 				radiation--
 				if(prob(25))
-					AdjustPlasma(1)
+					AdjustPhoron(1)
 
 			if(50 to 74)
 				radiation -= 2
-				AdjustPlasma(1)
+				AdjustPhoron(1)
 				if(prob(5))
 					radiation -= 5
 
 			if(75 to 100)
 				radiation -= 3
-				AdjustPlasma(3)
+				AdjustPhoron(3)
 
 /mob/living/carbon/alien/handle_fire()//Aliens on fire code
 	if(..())
@@ -211,7 +211,7 @@ In all, this is a lot like the monkey code. /N
 	..()
 
 	if(statpanel("Status"))
-		stat(null, "Plasma Stored: [getPlasma()]/[max_plasma]")
+		stat(null, "Phoron Stored: [getPhoron()]/[max_phoron]")
 
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)

@@ -13,7 +13,7 @@
 	//	Motion, EMP-Proof, X-Ray, Microphone
 	var/list/obj/item/possible_upgrades = list(
 		/obj/item/device/assembly/prox_sensor,
-		/obj/item/stack/sheet/mineral/plasma,
+		/obj/item/stack/sheet/mineral/phoron,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
 		/obj/item/device/assembly/voice,
 		)
@@ -127,9 +127,9 @@
 			to_chat(user, "The assembly already has \a [W] inside!")
 			return
 		if (istype(W, /obj/item/stack))
-			var/obj/item/stack/sheet/mineral/plasma/s = W
+			var/obj/item/stack/sheet/mineral/phoron/s = W
 			s.use(1)
-			upgrades += new /obj/item/stack/sheet/mineral/plasma
+			upgrades += new /obj/item/stack/sheet/mineral/phoron
 		else
 			if(!user.drop_item(W, src))
 				return

@@ -4,7 +4,7 @@
 	spread = "On contact"
 	spread_type = CONTACT_GENERAL
 	cure = "Chick Chicky Boom!"
-	cure_id = PLASMA
+	cure_id = PHORON
 	agent = "Unknown"
 	affected_species = list("Human")
 	permeability_mod = 1

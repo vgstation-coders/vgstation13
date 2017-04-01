@@ -36,7 +36,7 @@
 /obj/item/weapon/module/rust_fuel_compressor
 	name = "Internal circuitry (R-UST Mk. 7 fuel compressor)"
 	icon_state = "card_mod"
-	origin_tech = Tc_MATERIALS + "=6;" + Tc_PLASMATECH + "=4"
+	origin_tech = Tc_MATERIALS + "=6;" + Tc_PHORONTECH + "=4"
 
 //////////////////////////////////////
 // RUST Tokamak Core board
@@ -45,7 +45,7 @@
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
 	build_path = "/obj/machinery/power/rust_core"
 	board_type = MACHINE
-	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PLASMATECH + "=4;" + Tc_MAGNETS + "=5;" + Tc_POWERSTORAGE + "=6"
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PHORONTECH + "=4;" + Tc_MAGNETS + "=5;" + Tc_POWERSTORAGE + "=6"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser/high/ultra" = 1,
@@ -60,7 +60,7 @@
 	name = "Internal circuitry (R-UST Mk. 7 fuel injector)"
 	build_path = "/obj/machinery/power/rust_fuel_injector"
 	board_type = MACHINE
-	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=6"
+	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=4;" + Tc_PHORONTECH + "=4;" + Tc_MATERIALS + "=6"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
 							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 1,

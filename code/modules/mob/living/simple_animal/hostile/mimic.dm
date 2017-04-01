@@ -368,7 +368,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/weapon/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
 				/obj/item/weapon/handcuffs, /obj/item/weapon/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/weapon/gun/osipr, /obj/item/weapon/gun/energy/staff/animate,\
 				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/laser/cannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
-				/obj/item/weapon/melee/cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
+				/obj/item/weapon/melee/cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/phoron, /obj/item/weapon/gibtonite), //Security items and weapons
 
 	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
 
@@ -388,7 +388,7 @@ var/global/list/item_mimic_disguises = list(
 	//Nuke, nuke disk, all coins, all minerals (except for those with no icons)
 	"vault" = list(/obj/machinery/nuclearbomb, /obj/item/weapon/disk/nuclear) + typesof(/obj/item/weapon/coin) + typesof(/obj/item/stack/sheet/mineral) - /obj/item/stack/sheet/mineral,
 
-	"chapel" = list(/obj/item/weapon/storage/bible, /obj/item/clothing/head/chaplain_hood, /obj/item/clothing/head/helmet/space/plasmaman/chaplain, /obj/item/clothing/suit/chaplain_hoodie, /obj/item/clothing/suit/space/plasmaman/chaplain,\
+	"chapel" = list(/obj/item/weapon/storage/bible, /obj/item/clothing/head/chaplain_hood, /obj/item/clothing/head/helmet/space/phoronman/chaplain, /obj/item/clothing/suit/chaplain_hoodie, /obj/item/clothing/suit/space/phoronman/chaplain,\
 				/obj/item/device/pda/chaplain, /obj/item/weapon/nullrod, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater, /obj/item/weapon/staff), //Chaplain garb, null rod, bible, holy water
 )
 

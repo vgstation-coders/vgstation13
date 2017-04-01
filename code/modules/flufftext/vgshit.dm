@@ -24,7 +24,7 @@ Classified System #507
 		<th>Line Total</th>
 	</tr>
 	<tr>
-		<td>GAS MINERS (oxygen, nitrogen, plasma)</td>
+		<td>GAS MINERS (oxygen, nitrogen, phoron)</td>
 		<td>3</td>
 		<td>$1,600,000</td>
 		<td>$4,800,000</td>

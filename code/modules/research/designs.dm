@@ -11,7 +11,7 @@ they are simply references used as part of a "has materials?" type proc. They al
 The currently supporting non-reagent materials:
 - $iron (/obj/item/stack/metal). One sheet = 3750 units. NB: do not use $metal. It is outdated and will cause issues
 - $glass (/obj/item/stack/glass). One sheet = 3750 units.
-- $plasma (/obj/item/stack/plasma). One sheet = 3750 units.
+- $phoron (/obj/item/stack/phoron). One sheet = 3750 units.
 - $silver (/obj/item/stack/silver). One sheet = 3750 units.
 - $gold (/obj/item/stack/gold). One sheet = 3750 units.
 - $uranium (/obj/item/stack/uranium). One sheet = 3750 units.
@@ -25,7 +25,7 @@ Don't add new keyword/IDs if they are made from an existing one (such as rods wh
 Design Guidlines
 - The reliability formula for all R&D built items is reliability_base (a fixed number) + total tech levels required to make it +
 reliability_mod (starts at 0, gets improved through experimentation). Example: PACMAN generator. 79 base reliablity + 6 tech
-(3 plasmatech, 3 powerstorage) + 0 (since it's completely new) = 85% reliability. Reliability is the chance it works CORRECTLY.
+(3 phorontech, 3 powerstorage) + 0 (since it's completely new) = 85% reliability. Reliability is the chance it works CORRECTLY.
 - When adding new designs, check rdreadme.dm to see what kind of things have already been made and where new stuff is needed.
 - A single sheet of anything is 3750 units of material. Materials besides metal/glass require help from other jobs (mining for
 other types of metals and chemistry for reagents).
@@ -34,7 +34,7 @@ other types of metals and chemistry for reagents).
 The required techs are the following:
 - Materials Research				max=9	"materials"
 - Engineering Research				max=5	"engineering"
-- Plasma Research					max=4	"plasmatech"
+- Phoron Research					max=4	"phorontech"
 - Power Manipulation Technology		max=6	"powerstorage"
 - 'Blue-space' Research				max=10	"bluespace"
 - Biological Technology				max=5	"biotech"

@@ -49,7 +49,7 @@
 			<div class="statusLabel">Oxygen: 			</div><div class="statusValue"><span id="oxypercent">0</span> %</div><br>
 			<div class="statusLabel">Nitrogen: 			</div><div class="statusValue"><span id="nitpercent">0</span> %</div><br>
 			<div class="statusLabel">Carbon Dioxide: 	</div><div class="statusValue"><span id="co2percent">0</span> %</div><br>
-			<div class="statusLabel">Plasma: 			</div><div class="statusValue"><span id="plapercent">0</span> %</div><br>
+			<div class="statusLabel">Phoron: 			</div><div class="statusValue"><span id="plapercent">0</span> %</div><br>
 			<div class="statusLabel">Nitrous Oxide: 	</div><div class="statusValue"><span id="n2opercent">0</span> %</div><br>
 		</div>
 		<h2>

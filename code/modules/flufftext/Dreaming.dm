@@ -3,7 +3,7 @@ mob/living/carbon/proc/dream()
 	var/list/dreams = list(
 		"an ID card","a bottle","a familiar face","a crewmember","a toolbox","a security officer","the captain",
 		"deep space","a doctor","the engine","a traitor","an ally","darkness","light","a scientist","a monkey",
-		"a loved one","warmth","the sun","a hat","the Luna","a planet","plasma","air","the medical bay","the bridge",
+		"a loved one","warmth","the sun","a hat","the Luna","a planet","phoron","air","the medical bay","the bridge",
 		"blinking lights","a blue light","Nanotrasen","healing","power","respect","riches","space","happiness","pride",
 		"water","melons","flying","the eggs","money","the head of personnel","the head of security","a chief engineer",
 		"a research director","a chief medical officer","the detective","the warden","a member of the internal affairs",
@@ -13,10 +13,10 @@ mob/living/carbon/proc/dream()
 		"the rain","the ai core","the mining station","the research station","a beaker of strange liquid","a team","a man with a bad haircut",
 		"the moons of jupiter","an old malfunctioning AI","a ship full of spiders","bork","a chicken","a supernova","lockers","ninjas",
 		"chickens","the oven","euphoria","space god","farting","bones burning","flesh evaporating","distant worlds","skeletons",
-		"voices everywhere","death","a traitor","dark allyways","darkness","a catastrophe","a gun","freezing","a ruined station","plasma fires",
+		"voices everywhere","death","a traitor","dark allyways","darkness","a catastrophe","a gun","freezing","a ruined station","phoron fires",
 		"an abandoned laboratory","The Syndicate","blood","falling","flames","ice","the cold","an operating table","a war","red men","malfunctioning robots",
 		"a ship full of spiders","valids","hardcore","your mom","lewd","explosions","broken bones","clowns everywhere","features","a crash","a skrell","a unathi","a tajaran",
-		"a vox","a plasmaman","a skellington","a diona","the derelict","the end of the world","the thunderdome","a ship full of dead clowns","a chicken with godlike powers",
+		"a vox","a phoronman","a skellington","a diona","the derelict","the end of the world","the thunderdome","a ship full of dead clowns","a chicken with godlike powers",
 		"a red bus that drives through space",
 		)
 	spawn(0)

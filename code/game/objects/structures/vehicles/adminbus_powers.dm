@@ -310,7 +310,7 @@
 				50;/obj/item/weapon/coin/silver,
 				50;/obj/item/weapon/coin/diamond,
 				40;/obj/item/weapon/coin/iron,
-				50;/obj/item/weapon/coin/plasma,
+				50;/obj/item/weapon/coin/phoron,
 				40;/obj/item/weapon/coin/uranium,
 				10;/obj/item/weapon/coin/clown,
 				50;/obj/item/weapon/coin/phazon,
@@ -494,8 +494,8 @@
 		qdel(G)
 
 	for(var/obj/item/weapon/shard/S in range(centerloc,repair_range))
-		if(istype(S,/obj/item/weapon/shard/plasma))
-			new/obj/item/stack/sheet/glass/plasmaglass(S.loc)
+		if(istype(S,/obj/item/weapon/shard/phoron))
+			new/obj/item/stack/sheet/glass/phoronglass(S.loc)
 		else
 			new/obj/item/stack/sheet/glass/glass(S.loc)
 		qdel(S)

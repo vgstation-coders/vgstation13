@@ -6,7 +6,7 @@ var/list
 					"hsbsuit" = "Suit Up (Space Travel Gear)",
 					"hsbmetal" = "Spawn 50 Metal",
 					"hsbglass" = "Spawn 50 Glass",
-					"hsbplasma" = "Spawn 50 Plasma",
+					"hsbphoron" = "Spawn 50 Phoron",
 					"phazon" = "Spawn 50 Phazon",
 					"hsbregulator" = "Spawn Air Regulator",
 					"hsbfilter" = "Spawn Air Filter",
@@ -165,8 +165,8 @@ datum/hSB
 					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/glass/glass
 					hsb.amount = 50
 					hsb.forceMove(usr.loc)
-				if("hsbplasma")
-					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/plasma
+				if("hsbphoron")
+					var/obj/item/stack/sheet/hsb = new/obj/item/stack/sheet/mineral/phoron
 					hsb.amount = 50
 					hsb.forceMove(usr.loc)
 				if("phazon")

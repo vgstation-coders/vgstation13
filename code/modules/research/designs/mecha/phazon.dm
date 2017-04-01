@@ -16,7 +16,7 @@
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/phazon_torso
 	category = "Phazon"
-	materials = list(MAT_IRON=35000,MAT_GLASS=10000,MAT_PLASMA=20000, MAT_PHAZON=5000)
+	materials = list(MAT_IRON=35000,MAT_GLASS=10000,MAT_PHORON=20000, MAT_PHAZON=5000)
 
 /datum/design/phazon/l_arm
 	name = "Exosuit Structure (Phazon left arm)"
@@ -26,7 +26,7 @@
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/phazon_left_arm
 	category = "Phazon"
-	materials = list(MAT_IRON=20000,MAT_PLASMA=10000, MAT_PHAZON=2500)
+	materials = list(MAT_IRON=20000,MAT_PHORON=10000, MAT_PHAZON=2500)
 
 /datum/design/phazon/r_arm
 	name = "Exosuit Structure (Phazon right arm)"
@@ -36,7 +36,7 @@
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/phazon_right_arm
 	category = "Phazon"
-	materials = list(MAT_IRON=20000,MAT_PLASMA=10000, MAT_PHAZON=2500)
+	materials = list(MAT_IRON=20000,MAT_PHORON=10000, MAT_PHAZON=2500)
 
 /datum/design/phazon/l_leg
 	name = "Exosuit Structure (Phazon left leg)"
@@ -46,7 +46,7 @@
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/phazon_left_leg
 	category = "Phazon"
-	materials = list(MAT_IRON=20000,MAT_PLASMA=10000, MAT_PHAZON=2500)
+	materials = list(MAT_IRON=20000,MAT_PHORON=10000, MAT_PHAZON=2500)
 
 /datum/design/phazon/r_leg
 	name = "Exosuit Structure (Phazon right leg)"
@@ -56,7 +56,7 @@
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/phazon_right_leg
 	category = "Phazon"
-	materials = list(MAT_IRON=20000,MAT_PLASMA=10000, MAT_PHAZON=2500)
+	materials = list(MAT_IRON=20000,MAT_PHORON=10000, MAT_PHAZON=2500)
 
 /datum/design/phazon/head
 	name = "Exosuit Structure (Phazon head)"
@@ -66,4 +66,4 @@
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/phazon_head
 	category = "Phazon"
-	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PLASMA=10000, MAT_PHAZON=2500)
+	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PHORON=10000, MAT_PHAZON=2500)

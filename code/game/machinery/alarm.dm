@@ -107,7 +107,7 @@
 	TLV["oxygen"] =			list(16, 19, 135, 140) // Partial pressure, kpa
 	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
 	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
-	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+	TLV["phoron"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 	TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
@@ -120,7 +120,7 @@
 		if(AALARM_PRESET_SERVER) // Cold as fuck.
 			TLV["oxygen"] =			list(-1.0, -1.0,-1.0,-1.0)
 			TLV["carbon_dioxide"] = list(-1.0, -1.0,   5,  10) // Partial pressure, kpa
-			TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+			TLV["phoron"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 			TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 			TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 			TLV["pressure"] =		list(0,ONE_ATMOSPHERE*0.10,ONE_ATMOSPHERE*1.40,ONE_ATMOSPHERE*1.60) /* kpa */
@@ -173,7 +173,7 @@
 	TLV["oxygen"] =			list(16, 19, 135, 140) // Partial pressure, kpa
 	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
 	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
-	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+	TLV["phoron"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
 	TLV["temperature"] =	list(T0C-26, T0C, T0C+40, T0C+66) // K
@@ -288,7 +288,7 @@
 	var/oxygen_dangerlevel = get_danger_level(environment.oxygen*partial_pressure, TLV["oxygen"])
 	var/nitrogen_dangerlevel = get_danger_level(environment.nitrogen*partial_pressure, TLV["nitrogen"])
 	var/co2_dangerlevel = get_danger_level(environment.carbon_dioxide*partial_pressure, TLV["carbon_dioxide"])
-	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, TLV["plasma"])
+	var/phoron_dangerlevel = get_danger_level(environment.toxins*partial_pressure, TLV["phoron"])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
 	var/n2o_dangerlevel = get_danger_level(n2o_moles*partial_pressure, TLV["n2o"])
 	var/other_dangerlevel = get_danger_level(other_moles*partial_pressure, TLV["other"])
@@ -298,7 +298,7 @@
 		oxygen_dangerlevel,
 		co2_dangerlevel,
 		nitrogen_dangerlevel,
-		plasma_dangerlevel,
+		phoron_dangerlevel,
 		n2o_dangerlevel,
 		other_dangerlevel,
 		temperature_dangerlevel
@@ -531,9 +531,9 @@
 	var/co2_dangerlevel = get_danger_level(environment.carbon_dioxide*partial_pressure, current_settings)
 	var/co2_percent = round(environment.carbon_dioxide / total * 100, 2)
 
-	current_settings = TLV["plasma"]
-	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, current_settings)
-	var/plasma_percent = round(environment.toxins / total * 100, 2)
+	current_settings = TLV["phoron"]
+	var/phoron_dangerlevel = get_danger_level(environment.toxins*partial_pressure, current_settings)
+	var/phoron_percent = round(environment.toxins / total * 100, 2)
 
 	current_settings = TLV["other"]
 	var/n2o_moles = 0.0
@@ -560,7 +560,7 @@
 	percentages["oxygen"]=oxygen_percent
 	percentages["nitrogen"]=nitrogen_percent
 	percentages["co2"]=co2_percent
-	percentages["plasma"]=plasma_percent
+	percentages["phoron"]=phoron_percent
 	percentages["n2o"]=n2o_moles
 	percentages["other"]=other_moles
 	data["contents"]=percentages
@@ -571,10 +571,10 @@
 	danger["oxygen"]=oxygen_dangerlevel
 	danger["nitrogen"]=nitrogen_dangerlevel
 	danger["co2"]=co2_dangerlevel
-	danger["plasma"]=plasma_dangerlevel
+	danger["phoron"]=phoron_dangerlevel
 	danger["n2o"]=n2o_dangerlevel
 	danger["other"]=other_dangerlevel
-	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,plasma_dangerlevel,other_dangerlevel,temperature_dangerlevel)
+	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,phoron_dangerlevel,other_dangerlevel,temperature_dangerlevel)
 	data["danger"]=danger
 	return data
 

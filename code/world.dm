@@ -122,7 +122,7 @@ var/savefile/panicfile
 
 	plmaster = new /obj/effect/overlay()
 	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
+	plmaster.icon_state = "phoron"
 	plmaster.layer = FLY_LAYER
 	plmaster.plane = EFFECTS_PLANE
 	plmaster.mouse_opacity = 0

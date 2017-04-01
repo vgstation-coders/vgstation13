@@ -383,8 +383,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/spookycostume
 	name = "Halloween costumes"
-	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
-					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
+	contains = list(/obj/item/clothing/suit/space/phoronman/moltar,
+					/obj/item/clothing/head/helmet/space/phoronman/moltar,
 					/obj/item/clothing/under/skelevoxsuit,
 					/obj/item/clothing/head/snake)
 	cost = 31
@@ -572,15 +572,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "vox supplies crate"
 	group = "Clothing"
 
-/datum/supply_packs/plasmaman_supply
-	name = "Plasmaman supplies"
-	contains = list(/obj/item/clothing/suit/space/plasmaman,
-					/obj/item/clothing/head/helmet/space/plasmaman,
-					/obj/item/weapon/tank/plasma/plasmaman,
+/datum/supply_packs/phoronman_supply
+	name = "Phoronman supplies"
+	contains = list(/obj/item/clothing/suit/space/phoronman,
+					/obj/item/clothing/head/helmet/space/phoronman,
+					/obj/item/weapon/tank/phoron/phoronman,
 					/obj/item/clothing/mask/breath)
 	cost = 100
 	containertype = /obj/structure/closet/crate
-	containername = "plasmaman supplies crate"
+	containername = "phoronman supplies crate"
 	group = "Clothing"
 
 /datum/supply_packs/grey_supply
@@ -718,9 +718,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/eweapons
 	name = "Incendiary weapons"
 	contains = list(/obj/item/weapon/gun/projectile/flamethrower/full,
-					/obj/item/weapon/tank/plasma,
-					/obj/item/weapon/tank/plasma,
-					/obj/item/weapon/tank/plasma,
+					/obj/item/weapon/tank/phoron,
+					/obj/item/weapon/tank/phoron,
+					/obj/item/weapon/tank/phoron,
 					/obj/item/weapon/grenade/chem_grenade/incendiary,
 					/obj/item/weapon/grenade/chem_grenade/incendiary,
 					/obj/item/weapon/grenade/chem_grenade/incendiary)
@@ -1197,7 +1197,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
 	group = "Engineering"
-	
+
 /datum/supply_packs/engine/prism
 	name = "Optical prisms"
 	contains = list(/obj/machinery/prism,
@@ -1630,11 +1630,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_science
 	group = "Science"
 
-/datum/supply_packs/plasma
-	name = "Plasma assembly kit"
-	contains = list(/obj/item/weapon/tank/plasma,
-					/obj/item/weapon/tank/plasma,
-					/obj/item/weapon/tank/plasma,
+/datum/supply_packs/phoron
+	name = "Phoron assembly kit"
+	contains = list(/obj/item/weapon/tank/phoron,
+					/obj/item/weapon/tank/phoron,
+					/obj/item/weapon/tank/phoron,
 					/obj/item/device/assembly/igniter,
 					/obj/item/device/assembly/igniter,
 					/obj/item/device/assembly/igniter,
@@ -1645,8 +1645,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/assembly/timer,
 					/obj/item/device/assembly/timer)
 	cost = 10
-	containertype = /obj/structure/closet/crate/secure/plasma
-	containername = "plasma assembly crate"
+	containertype = /obj/structure/closet/crate/secure/phoron
+	containername = "phoron assembly crate"
 	access = access_tox_storage
 	group = "Science"
 

@@ -165,14 +165,14 @@
 	icon_opened = "weaponcrateopen"
 	icon_closed = "weaponcrate"
 
-/obj/structure/closet/crate/secure/plasma
-	desc = "A secure plasma crate."
-	name = "Plasma crate"
+/obj/structure/closet/crate/secure/phoron
+	desc = "A secure phoron crate."
+	name = "Phoron crate"
 	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "plasmacrate"
+	icon_state = "phoroncrate"
 	density = 1
-	icon_opened = "plasmacrateopen"
-	icon_closed = "plasmacrate"
+	icon_opened = "phoroncrateopen"
+	icon_closed = "phoroncrate"
 
 /obj/structure/closet/crate/secure/gear
 	desc = "A secure gear crate."
@@ -321,11 +321,11 @@
 	icon_opened = "engisecurecrateopen"
 	icon_closed = "engisecurecrate"
 
-/obj/structure/closet/crate/secure/plasma/prefilled
+/obj/structure/closet/crate/secure/phoron/prefilled
 	var/count=10
-/obj/structure/closet/crate/secure/plasma/prefilled/New()
+/obj/structure/closet/crate/secure/phoron/prefilled/New()
 	for(var/i=0;i<count;i++)
-		new /obj/item/weapon/tank/plasma(src)
+		new /obj/item/weapon/tank/phoron(src)
 
 /obj/structure/closet/crate/hydroponics/prespawned
 	//This exists so the prespawned hydro crates spawn with their contents.

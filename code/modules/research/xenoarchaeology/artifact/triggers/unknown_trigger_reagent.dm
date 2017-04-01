@@ -18,7 +18,7 @@
 			Triggered(toucher, reagent_group, item)
 		else if(reagent_group == "ACID" && (item.reagents.has_reagent(SACID, 1) || item.reagents.has_reagent(PACID, 1) || item.reagents.has_reagent(DIETHYLAMINE, 1)))
 			Triggered(toucher, reagent_group, item)
-		else if(reagent_group == "VOLATILE" && (item.reagents.has_reagent(PLASMA, 1) || item.reagents.has_reagent(THERMITE, 1)))
+		else if(reagent_group == "VOLATILE" && (item.reagents.has_reagent(PHORON, 1) || item.reagents.has_reagent(THERMITE, 1)))
 			Triggered(toucher, reagent_group, item)
 		else if(reagent_group == "TOXIN" && (item.reagents.has_reagent(TOXIN, 1) || item.reagents.has_reagent(CYANIDE, 1) || item.reagents.has_reagent(AMATOXIN, 1) || item.reagents.has_reagent(NEUROTOXIN, 1)))
 			Triggered(toucher, reagent_group, item)

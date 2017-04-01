@@ -118,7 +118,7 @@
 /obj/effect/gas_puff
 	name = "gas puff"
 	desc = "A small puff of gas."
-	icon = 'icons/effects/plasma.dmi'
+	icon = 'icons/effects/phoron.dmi'
 	icon_state = null
 	density = 0
 	w_type=NOT_RECYCLABLE
@@ -128,10 +128,10 @@
 
 	if(type_of_gas)
 		switch(type_of_gas)
-			if("plasma")
+			if("phoron")
 				icon_state = "onturf-purple"
-				name = "plasma puff"
-				desc = "A small puff of plasma gas."
+				name = "phoron puff"
+				desc = "A small puff of phoron gas."
 			if("N2O")
 				icon_state = "sl_gas"
 				name = "N2O puff"

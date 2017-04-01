@@ -3,7 +3,7 @@
  *		Oxygen
  *		Anesthetic
  *		Air
- *		Plasma
+ *		Phoron
  *		Emergency Oxygen
  */
 
@@ -56,20 +56,20 @@
 	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD, , (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD)
 
 /*
- * Plasma
+ * Phoron
  */
-/obj/item/weapon/tank/plasma
-	name = "plasma tank"
-	desc = "Contains dangerous plasma. Do not inhale. Warning: extremely flammable."
-	icon_state = "plasma"
+/obj/item/weapon/tank/phoron
+	name = "phoron tank"
+	desc = "Contains dangerous phoron. Do not inhale. Warning: extremely flammable."
+	icon_state = "phoron"
 	flags = FPRINT
 	slot_flags = null	//they have no straps!
 
-/obj/item/weapon/tank/plasma/New()
+/obj/item/weapon/tank/phoron/New()
 	. = ..()
 	air_contents.adjust(, , , (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C))
 
-/obj/item/weapon/tank/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/tank/phoron/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 
 	if (istype(W, /obj/item/weapon/gun/projectile/flamethrower))
@@ -82,9 +82,9 @@
 		src.forceMove(F)
 	return
 
-/obj/item/weapon/tank/plasma/plasmaman
-	desc = "The lifeblood of plasmamen.  Warning:  Extremely flammable, do not inhale (unless you're a plasmaman)."
-	icon_state = "plasma_fr"
+/obj/item/weapon/tank/phoron/phoronman
+	desc = "The lifeblood of phoronmen.  Warning:  Extremely flammable, do not inhale (unless you're a phoronman)."
+	icon_state = "phoron_fr"
 	slot_flags = SLOT_BACK
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 

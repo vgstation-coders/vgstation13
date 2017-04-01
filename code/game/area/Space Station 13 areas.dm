@@ -684,8 +684,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "voxresearch"
 	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 
-/area/vox_station/plasman_lab
-	name = "\improper Plasma Genetic Research"
+/area/vox_station/phoronn_lab
+	name = "\improper Phoron Genetic Research"
 	icon_state = "voxtoxins"
 	holomap_color = HOLOMAP_AREACOLOR_SCIENCE
 

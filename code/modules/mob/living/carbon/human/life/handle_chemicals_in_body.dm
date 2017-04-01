@@ -16,19 +16,19 @@
 					alien = IS_DIONA
 				if(/datum/species/vox)
 					alien = IS_VOX
-				if(/datum/species/plasmaman)
-					alien = IS_PLASMA
+				if(/datum/species/phoronman)
+					alien = IS_PHORON
 		reagents.metabolize(src,alien)
 
 	if(status_flags & GODMODE)
 		return 0 //Godmode. This causes jittering and other variables to never go down but whatever.
 
-	var/total_plasmaloss = 0
+	var/total_phoronloss = 0
 	for(var/obj/item/I in src)
-		if(I.contaminated && !(species.flags & PLASMA_IMMUNE))
-			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
+		if(I.contaminated && !(species.flags & PHORON_IMMUNE))
+			total_phoronloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 		I.OnMobLife(src)
-	adjustToxLoss(total_plasmaloss)
+	adjustToxLoss(total_phoronloss)
 
 	if(species.flags & REQUIRE_LIGHT)
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing

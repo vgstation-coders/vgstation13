@@ -141,7 +141,7 @@
 		//IF OUR FACTION IS A REFERENCE TO A SPECIFIC MOB THEN WE DON'T ATTACK HIM (examples include viscerator grenades, staff of animation mimics, asteroid monsters)
 		if((faction == "\ref[L]") && !attack_same)
 			return 0
-		//IF WE ARE GOLD SLIME+PLASMA MONSTERS THEN WE DON'T ATTACK SLIMES/SLIME PEOPLE/ADAMANTINE GOLEMS
+		//IF WE ARE GOLD SLIME+PHORON MONSTERS THEN WE DON'T ATTACK SLIMES/SLIME PEOPLE/ADAMANTINE GOLEMS
 		if(faction == "slimesummon")
 			if(isslime(L))
 				return 0

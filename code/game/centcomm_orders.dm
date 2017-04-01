@@ -90,12 +90,12 @@ var/global/current_centcomm_order_id=124901
 //////////////////////////////////////////////
 // ORDERS START HERE
 //////////////////////////////////////////////
-/datum/centcomm_order/per_unit/plasma
+/datum/centcomm_order/per_unit/phoron
 	name = "Nanotrasen"
 	recurring = 1
 	requested = list(
-		/obj/item/stack/sheet/mineral/plasma = INFINITY
+		/obj/item/stack/sheet/mineral/phoron = INFINITY
 	)
 	unit_prices=list(
-		/obj/item/stack/sheet/mineral/plasma = 0.5 // 1 credit per two plasma sheets.
+		/obj/item/stack/sheet/mineral/phoron = 0.5 // 1 credit per two phoron sheets.
 	)

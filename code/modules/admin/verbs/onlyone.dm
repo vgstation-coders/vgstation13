@@ -125,8 +125,8 @@
 	for (var/obj/item/I in H)
 		if (istype(I, /obj/item/weapon/implant))
 			continue
-		if(isplasmaman(H)) //Plasmamen don't lose their plasma gear since they need it to live.
-			if(!(istype(I, /obj/item/clothing/suit/space/plasmaman) || istype(I, /obj/item/clothing/head/helmet/space/plasmaman) || istype(I, /obj/item/weapon/tank/plasma/plasmaman) || istype(I, /obj/item/clothing/mask/breath)))
+		if(isphoronman(H)) //Phoronmen don't lose their phoron gear since they need it to live.
+			if(!(istype(I, /obj/item/clothing/suit/space/phoronman) || istype(I, /obj/item/clothing/head/helmet/space/phoronman) || istype(I, /obj/item/weapon/tank/phoron/phoronman) || istype(I, /obj/item/clothing/mask/breath)))
 				qdel(I)
 		else if(isvox(H)) //Vox don't lose their N2 gear since they need it to live.
 			if(!(istype(I, /obj/item/weapon/tank/nitrogen) || istype(I, /obj/item/clothing/mask/breath/vox)))
@@ -136,7 +136,7 @@
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/kilt(H), slot_w_uniform)
 	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(H), slot_ears)
-	if(!isplasmaman(H)) //Plasmamen don't get a beret since they need their helmet to not burn to death.
+	if(!isphoronman(H)) //Phoronmen don't get a beret since they need their helmet to not burn to death.
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/beret(H), slot_head)
 	H.put_in_hands(new /obj/item/weapon/claymore(H))
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(H), slot_shoes)
@@ -152,7 +152,7 @@
 	H.equip_to_slot_or_del(W, slot_wear_id)
 
 	return H
-	
+
 
 //MAGIC MISSILE
 /datum/only_one/wizardwars
@@ -181,9 +181,9 @@
 		if(!istype(I, /obj/item/weapon/implant))
 			qdel(I)
 
-	if(isplasmaman(H))
+	if(isphoronman(H))
 		H.set_species("Skellington", 1) //Don't want them just catching fire, and this is the most similar species that doesn't need the suit.
-		to_chat(H, "<span class='notice'>Your solid plasma vanishes, leaving behind only bones!</span>")
+		to_chat(H, "<span class='notice'>Your solid phoron vanishes, leaving behind only bones!</span>")
 
 	H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(H), slot_w_uniform)
