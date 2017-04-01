@@ -417,7 +417,6 @@
 		if(I && istype(I))
 			O = I.remove(user)
 			if(O && istype(O))
-
 				// Stop the organ from continuing to reject.
 				O.organ_data.rejecting = null
 

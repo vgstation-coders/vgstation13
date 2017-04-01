@@ -436,8 +436,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/tajaran
-		"stomach" =  /datum/organ/internal/stomach
+		"eyes" =     /datum/organ/internal/eyes/tajaran,
+		"stomach" =  /datum/organ/internal/stomach,
 	)
 
 /datum/species/tajaran/New()
@@ -517,7 +517,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/grey
+		"eyes" =     /datum/organ/internal/eyes/grey,
 		"stomach" =  /datum/organ/internal/stomach
 	)
 
@@ -548,7 +548,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/muton
+		"eyes" =     /datum/organ/internal/eyes/muton,
 		"stomach" =  /datum/organ/internal/stomach
 	)
 
@@ -624,7 +624,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/vox
+		"eyes" =     /datum/organ/internal/eyes/vox,
 		"stomach" =  /datum/organ/internal/stomach
 	)
 
@@ -947,7 +947,7 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/grue
+		"eyes" =     /datum/organ/internal/eyes/grue,
 		"stomach" =  /datum/organ/internal/stomach
 	)
 

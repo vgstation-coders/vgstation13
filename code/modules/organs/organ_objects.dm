@@ -221,6 +221,12 @@
 	organ_tag = "stomach"
 	organ_type = /datum/organ/internal/stomach
 
+/obj/item/organ/stomach/removed(var/mob/living/target,var/mob/living/user)
+	..()
+	var/mob/living/carbon/human/H = target
+	H.reagents.clear_reagents()
+	H.reagents.maximum_volume = 50
+
 /obj/item/organ/stomach/adv_room
 	name = "bluespace stomach"
 	robotic = 2

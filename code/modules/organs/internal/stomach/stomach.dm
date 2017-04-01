@@ -66,11 +66,11 @@ Chemistry-reagents.dm
 	if(H.reagents.maximum_volume != max_reagents)
 		H.reagents.maximum_volume = max_reagents
 
-/datum/organ/internal/stomach/remove()
+/datum/organ/internal/stomach/remove(var/mob/user, var/quiet=0)
 	var/mob/living/carbon/human/H = owner
 	H.reagents.clear_reagents()
 	H.reagents.maximum_volume = 50
-	..()
+	..(user, quiet)
 
 /datum/organ/internal/stomach/adv_room
 	name = "bluespace stomach"
