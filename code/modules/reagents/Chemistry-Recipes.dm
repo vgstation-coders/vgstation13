@@ -2208,6 +2208,13 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
 
+/datum/chemical_reaction/greyvodka
+	name = "Greyshirt Vodka"
+	id = GREYVODKA
+	result = GREYVODKA
+	required_reagents = list(POTATO = 2, WATER = 2, ROACHSHELL = 1)
+	result_amount = 5
+
 /datum/chemical_reaction/sake
 	name = "Sake"
 	id = SAKE
