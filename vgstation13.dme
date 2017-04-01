@@ -1663,6 +1663,7 @@
 #include "code\modules\organs\internal\lungs\filter.dm"
 #include "code\modules\organs\internal\lungs\lung.dm"
 #include "code\modules\organs\internal\lungs\lung_gasses.dm"
+#include "code\modules\organs\internal\stomach\stomach.dm"
 #include "code\modules\overlays\mobs.dm"
 #include "code\modules\paperwork\clipboard.dm"
 #include "code\modules\paperwork\explosive_paper.dm"

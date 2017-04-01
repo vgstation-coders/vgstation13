@@ -43,7 +43,7 @@
 		user.simple_message("<span class='warning'>This organ has a barcode identifying it as printed from a bioprinter.</span>","<span class='warning'>It's got spaghetti sauce on it. Ew.</span>")
 	else
 		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
-		
+
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
@@ -213,6 +213,63 @@
 	icon_state = "appendix"
 	organ_tag = "appendix"
 
+/obj/item/organ/stomach
+	name = "stomach"
+	icon_state = "liver"
+	prosthetic_name = "holding bag"
+	prosthetic_icon = "liver-prosthetic"
+	organ_tag = "stomach"
+	organ_type = /datum/organ/internal/stomach
+
+/obj/item/organ/stomach/adv_room
+	name = "bluespace stomach"
+	robotic = 2
+	prosthetic_name = null
+	prosthetic_icon = null
+	icon_state = "liver-prosthetic"
+	organ_type = /datum/organ/internal/stomach/adv_room
+
+/obj/item/organ/stomach/adv_chem
+	name = "transmutation membrane"
+	robotic = 2
+	prosthetic_name = null
+	prosthetic_icon = null
+	icon_state = "liver-prosthetic"
+	organ_type = /datum/organ/internal/stomach/adv_chem
+	var/chem_to_copy = PEPTOBISMOL
+
+/obj/item/organ/stomach/adv_chem/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/reagent_containers/dropper))
+		var/obj/item/weapon/reagent_containers/dropper/D = W
+		if(D.reagents.reagent_list.len > 1)
+			to_chat(user, "<span class = 'notice'>Too many chemicals to possibly scan. Aborting.</span>")
+			return 0
+		to_chat(user, "<span class = 'notice'>Sample received, scanning.</span>")
+		spawn(1 SECONDS)
+			var/chem_success
+			for(var/datum/reagent/R in D.reagents.reagent_list)
+				if(R.dupeable)
+					if(R.reagent_state == 2) //Gasses only
+						to_chat(user, "<span class = 'notice'>Reagent analyzed, identified as [R.name] and added to database.</span>")
+						D.reagents.remove_reagent(R.id, 5)
+						chem_success = R.id
+						break
+			if(chem_success)
+				chem_to_copy = chem_success
+				to_chat(user, "<span class = 'notice'>Sample scannned succesfully.</span>")
+			else
+				to_chat(user, "<span class = 'notice'>Unable to locate a replicable reagent.</span>")
+			return
+	..()
+
+/obj/item/organ/stomach/adv_chem/replaced(var/mob/living/target)
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		var/datum/organ/internal/stomach/adv_chem/A = H.internal_organs_by_name[organ_tag]
+
+		A.chem = chem_to_copy
+
+
 //These are here so they can be printed out via the fabricator.
 /obj/item/organ/heart/prosthetic
 	robotic = 2
@@ -231,6 +288,9 @@
 
 /obj/item/organ/appendix
 	name = "appendix"
+
+/obj/item/organ/stomach/prosthetic
+	robotic = 2
 
 /obj/item/organ/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)

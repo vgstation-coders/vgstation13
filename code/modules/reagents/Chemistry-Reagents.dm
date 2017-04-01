@@ -167,6 +167,15 @@
 		var/datum/reagents/R = holder
 		R.reagent_list.Add(src)
 
+/datum/reagent/proc/get_stomach_metabolism()
+	if(ishuman(holder))
+		var/mob/living/carbon/human/H = holder
+		var/datum/organ/internal/stomach/S = H.internal_organs_by_name["stomach"]
+
+		return S.food_metabolism
+
+	return FOOD_METABOLISM
+
 /datum/reagent/Destroy()
 	if(istype(holder))
 		holder.reagent_list -= src
@@ -2958,7 +2967,10 @@
 	reagent_state = LIQUID
 	color = "#B31008" //rgb: 179, 16, 8
 	data = 1 //Used as a tally
-	custom_metabolism = FOOD_METABOLISM
+
+/datum/reagent/capsaicin/New()
+	..()
+	custom_metabolism = get_stomach_metabolism()
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
@@ -3050,7 +3062,10 @@
 	reagent_state = LIQUID
 	color = "#B31008" //rgb: 139, 166, 233
 	data = 1 //Used as a tally
-	custom_metabolism = FOOD_METABOLISM
+
+/datum/reagent/frostoil/New()
+	..()
+	custom_metabolism = get_stomach_metabolism()
 
 /datum/reagent/frostoil/on_mob_life(var/mob/living/M)
 
@@ -3575,14 +3590,14 @@
 			if(1 to 20)
 				if(prob(5))
 					to_chat(H,"<span class='warning'>You don't feel very good.</span>")
-					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
+					holder.remove_reagent(src.id, 0.1 * get_stomach_metabolism())
 			if(20 to 35)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 				if(prob(5))
 					H.adjustToxLoss(0.1)
 					H.visible_message("[H] groans.")
-					holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
+					holder.remove_reagent(src.id, 0.3 * get_stomach_metabolism())
 			if(35 to INFINITY)
 				if(prob(10))
 					to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
@@ -3592,7 +3607,7 @@
 					if(istype(L))
 						L.take_damage(0.1, 1)
 					H.adjustToxLoss(0.13)
-					holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
+					holder.remove_reagent(src.id, 0.5 * get_stomach_metabolism())
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
@@ -3723,11 +3738,14 @@
 	reagent_state = LIQUID
 	nutriment_factor = REAGENTS_METABOLISM
 	color = "#E78108" //rgb: 231, 129, 8
-	custom_metabolism = FOOD_METABOLISM
 	var/adj_dizzy = 0
 	var/adj_drowsy = 0
 	var/adj_sleepy = 0
 	var/adj_temp = 0
+
+/datum/reagent/drink/New()
+	..()
+	custom_metabolism = get_stomach_metabolism()
 
 /datum/reagent/drink/on_mob_life(var/mob/living/M)
 
@@ -3875,8 +3893,11 @@
 	name = "Potato Juice"
 	id = POTATO
 	description = "Juice of the potato. Bleh."
-	nutriment_factor = 5 * FOOD_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+
+/datum/reagent/drink/potato_juice/New()
+	..()
+	nutriment_factor = 5 * get_stomach_metabolism()
 
 /datum/reagent/drink/milk
 	name = "Milk"
@@ -3916,9 +3937,12 @@
 	name = "Hot Chocolate"
 	id = HOT_COCO
 	description = "Made with love! And coco beans."
-	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
 	adj_temp = 5
+
+/datum/reagent/drink/hot_coco/New()
+	..()
+	nutriment_factor = 2 * get_stomach_metabolism()
 
 /datum/reagent/drink/coffee
 	name = "Coffee"
@@ -4142,8 +4166,11 @@
 	id = MILKSHAKE
 	color = "#AEE5E4" //rgb" 174, 229, 228
 	adj_temp = -9
-	custom_metabolism = FOOD_METABOLISM
 	data = 1 //Used as a tally
+
+/datum/reagent/drink/cold/milkshake/New()
+	..()
+	custom_metabolism = get_stomach_metabolism()
 
 /datum/reagent/drink/cold/milkshake/on_mob_life(var/mob/living/M)
 
@@ -4235,7 +4262,6 @@
 	reagent_state = LIQUID
 	nutriment_factor = 0 //So alcohol can fill you up! If they want to.
 	color = "#404030" //RGB: 64, 64, 48
-	custom_metabolism = FOOD_METABOLISM
 	var/dizzy_adj = 3
 	var/slurr_adj = 3
 	var/confused_adj = 2
@@ -4244,6 +4270,10 @@
 	var/blur_start = 260 //Amount absorbed after which mob starts getting blurred vision
 	var/pass_out = 450 //Amount absorbed after which mob starts passing out
 	var/common_data = 1 //Needed to add all ethanol subtype's datas
+
+/datum/reagent/ethanol/New()
+	..()
+	custom_metabolism = get_stomach_metabolism()
 
 /datum/reagent/ethanol/on_mob_life(var/mob/living/M)
 
@@ -4314,8 +4344,11 @@
 	name = "Beer"
 	id = BEER
 	description = "An alcoholic beverage made from malted grains, hops, yeast, and water."
-	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+
+/datum/reagent/ethanol/beer/New()
+	..()
+	nutriment_factor = 2 * get_stomach_metabolism()
 
 /datum/reagent/ethanol/beer/on_mob_life(var/mob/living/M)
 
@@ -4713,8 +4746,11 @@
 	id = DOCTORSDELIGHT
 	description = "A gulp a day keeps the MediBot away. That's probably for the best."
 	reagent_state = LIQUID
-	nutriment_factor = FOOD_METABOLISM
 	color = "#BA7DBA" //rgb: 73, 49, 73
+
+/datum/reagent/drink/doctors_delight/New()
+	..()
+	nutriment_factor = get_stomach_metabolism()
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 
@@ -5020,15 +5056,21 @@
 	name = "Banana Mama"
 	id = BANANAHONK
 	description = "A drink from Clown Heaven."
-	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+
+/datum/reagent/drink/bananahonk/New()
+	..()
+	nutriment_factor = get_stomach_metabolism()
 
 /datum/reagent/drink/silencer
 	name = "Silencer"
 	id = SILENCER
 	description = "A drink from Mime Heaven."
-	nutriment_factor = FOOD_METABOLISM
 	color = "#664300" //rgb: 102, 67, 0
+
+/datum/reagent/drink/silencer/New()
+	..()
+	nutriment_factor = get_stomach_metabolism()
 
 /datum/reagent/drink/silencer/on_mob_life(var/mob/living/M)
 
@@ -5082,9 +5124,12 @@
 	name = "Driest Martini"
 	id = DRIESTMARTINI
 	description = "Only for the experienced. You think you see sand floating in the glass."
-	nutriment_factor = FOOD_METABOLISM
 	color = "#2E6671" //rgb: 46, 102, 113
 	data = 1 //Used as a tally
+
+/datum/reagent/ethanol/deadrum/driestmartini/New()
+	..()
+	nutriment_factor = get_stomach_metabolism()
 
 /datum/reagent/ethanol/deadrum/driestmartini/on_mob_life(var/mob/living/M)
 
@@ -5296,7 +5341,10 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/coffee/tonio
 	name = "Tonio"
 	id = TONIO
-	nutriment_factor = FOOD_METABOLISM
+
+/datum/reagent/drink/coffee/tonio/New()
+	..()
+	nutriment_factor = get_stomach_metabolism()
 
 /datum/reagent/tonio/on_mob_life(var/mob/living/M)
 
