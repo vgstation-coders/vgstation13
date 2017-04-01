@@ -265,27 +265,31 @@
 	if(prob(75))
 		destroy()
 
-/obj/structure/table/attack_paw(mob/user)
+/obj/structure/table/attack_paw(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
 		user.delayNextAttack(8)
 		destroy()
 
 
-/obj/structure/table/attack_alien(mob/user)
+/obj/structure/table/attack_alien(mob/living/user)
+	user.do_attack_animation(src, user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash>0)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 
 
 
-/obj/structure/table/attack_hand(mob/user)
+/obj/structure/table/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
@@ -639,13 +643,14 @@
 	parts = /obj/item/weapon/table_parts/glass
 	health = 30
 
-/obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
+/obj/structure/table/glass/attackby(obj/item/W as obj, mob/living/user as mob, params)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
+					user.do_attack_animation(src, W)
 					if (prob(15))
 						M.Knockdown(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
@@ -665,6 +670,7 @@
 			returnToPool(W)
 
 	else if (user.a_intent == I_HURT)
+		user.do_attack_animation(src, W)
 		user.delayNextAttack(10)
 		health -= W.force
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
@@ -784,24 +790,28 @@
 			offset_step++
 			return 1
 
-/obj/structure/table/attack_hand(mob/user)
+/obj/structure/table/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
-/obj/structure/rack/attack_paw(mob/user)
+/obj/structure/rack/attack_paw(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 
-/obj/structure/rack/attack_alien(mob/user)
+/obj/structure/rack/attack_alien(mob/living/user)
+	user.do_attack_animation(src, user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
 /obj/structure/rack/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash>0)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 

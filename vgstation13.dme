@@ -1317,6 +1317,7 @@
 #include "code\modules\migrations\SS13_Prefs\006-add-tooltips.dm"
 #include "code\modules\migrations\SS13_Prefs\007-remove-flavortext.dm"
 #include "code\modules\migrations\SS13_Prefs\008-add-stumble.dm"
+#include "code\modules\migrations\SS13_Prefs\009-add-attackanim.dm"
 #include "code\modules\migrations\SS13_Prefs\_base.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"

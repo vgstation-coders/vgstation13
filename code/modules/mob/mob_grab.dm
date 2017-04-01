@@ -18,6 +18,10 @@
 	item_state = "nothing"
 	w_class = W_CLASS_HUGE
 
+/obj/item/weapon/grab/attack_icon()
+	if(affecting)
+		return affecting
+	..()
 
 /obj/item/weapon/grab/New(atom/loc, mob/living/victim)
 	..()

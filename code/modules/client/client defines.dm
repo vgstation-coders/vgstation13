@@ -77,3 +77,6 @@
 
 	// This gets set by goonchat.
 	var/encoding = "1252"
+
+var/list/person_animation_viewers = list()
+var/list/item_animation_viewers = list()

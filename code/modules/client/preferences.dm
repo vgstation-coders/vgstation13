@@ -183,6 +183,9 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/list/roles=list() // "role" => ROLEPREF_*
 
+	//attack animation type
+	var/attack_animation = NO_ANIMATION
+
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
@@ -354,6 +357,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Character Records:<b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
+	<b>Attack Animations:<b>
+	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
   </div>
 </div>"}
 
@@ -1514,9 +1519,24 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					load_save_sqlite(user.ckey, user, num)
 					default_slot = num
 					close_load_dialog(user)
+
 				if("tab")
 					if(href_list["tab"])
 						current_tab = text2num(href_list["tab"])
+
+				if("attack_animation")
+					if(attack_animation == NO_ANIMATION)
+						item_animation_viewers |= client
+						attack_animation = ITEM_ANIMATION
+
+					else if(attack_animation == ITEM_ANIMATION)
+						attack_animation = PERSON_ANIMATION
+						person_animation_viewers |= client
+						item_animation_viewers -= client
+
+					else if(attack_animation == PERSON_ANIMATION)
+						attack_animation = NO_ANIMATION
+						person_animation_viewers -= client
 
 			if(user.client.holder)
 				switch(href_list["preference"])
