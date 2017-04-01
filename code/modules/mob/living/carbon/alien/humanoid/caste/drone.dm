@@ -4,7 +4,7 @@
 	maxHealth = 100
 	health = 100
 	icon_state = "aliend_s"
-	plasma_rate = 15
+	phoron_rate = 15
 
 /mob/living/carbon/alien/humanoid/drone/movement_delay()
 	var/tally = 2 + move_delay_add + config.alien_delay //Drones are slow

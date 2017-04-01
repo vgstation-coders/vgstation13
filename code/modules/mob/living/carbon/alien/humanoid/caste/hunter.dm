@@ -3,10 +3,10 @@
 	caste = "h"
 	maxHealth = 250
 	health = 250
-	plasma = 100
-	max_plasma = 150
+	phoron = 100
+	max_phoron = 150
 	icon_state = "alienh_s"
-	plasma_rate = 5
+	phoron_rate = 5
 
 /mob/living/carbon/alien/humanoid/hunter/movement_delay()
 	var/tally = -2 + move_delay_add + config.alien_delay //Hunters are fast
@@ -56,7 +56,7 @@
 		if(m_intent == "run" || resting)
 			..()
 		else
-			AdjustPlasma(-heal_rate)
+			AdjustPhoron(-heal_rate)
 
 
 //Hunter verbs
@@ -71,7 +71,7 @@
 		update_icons()
 	else
 		if(powerc(50))
-			AdjustPlasma(-50)
+			AdjustPhoron(-50)
 			alien_invis = 1.0
 			update_icons()
 			to_chat(src, "<span class='good'>You are now invisible.</span>")

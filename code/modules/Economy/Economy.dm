@@ -47,7 +47,7 @@
 #define GEAR_EVA 15
 
 //---- The following corporations are friendly with Nanotrasen and loosely enable trade and travel:
-//Corporation Nanotrasen - Generalised / high tech research and plasma exploitation.
+//Corporation Nanotrasen - Generalised / high tech research and phoron exploitation.
 //Corporation Vessel Contracting - Ship and station construction, materials research.
 //Corporation Osiris Atmospherics - Atmospherics machinery construction and chemical research.
 //Corporation Second Red Cross Society - 26th century Red Cross reborn as a dominating economic force in biomedical science (research and materials).

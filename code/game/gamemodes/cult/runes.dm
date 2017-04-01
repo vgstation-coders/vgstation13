@@ -1312,9 +1312,9 @@
 			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr].</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			if(isplasmaman(P))
-				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
-				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+			if(isphoronman(P))
+				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/phoronman/cultist(P), slot_head)
+				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/phoronman/cultist(P), slot_wear_suit)
 			else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
@@ -1344,9 +1344,9 @@
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 					var/datum/game_mode/cult/mode_ticker = ticker.mode
-					if(isplasmaman(P))
-						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
-						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+					if(isphoronman(P))
+						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/phoronman/cultist(P), slot_head)
+						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/phoronman/cultist(P), slot_wear_suit)
 					else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)

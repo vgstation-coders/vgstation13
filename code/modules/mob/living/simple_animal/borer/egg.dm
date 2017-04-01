@@ -17,7 +17,7 @@
 	var/ping_cooldown = 50
 
 	var/list/required_mols=list(
-		"toxins"=MOLES_PLASMA_VISIBLE,
+		"toxins"=MOLES_PHORON_VISIBLE,
 		"oxygen"=5
 	)
 
@@ -90,7 +90,7 @@
 	if(!location)
 		return
 	var/datum/gas_mixture/environment = location.return_air()
-	//testing("[type]/PROCESS() - plasma: [environment.toxins]")
+	//testing("[type]/PROCESS() - phoron: [environment.toxins]")
 	var/meets_conditions=1
 	for(var/gas_id in required_mols)
 		if(environment.vars[gas_id] <= required_mols[gas_id])

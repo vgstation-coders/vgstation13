@@ -74,13 +74,13 @@
 	name = "large bolt"
 	damage = 20
 
-/obj/item/projectile/energy/plasma
-	name = "plasma bolt"
-	icon_state = "plasma"
+/obj/item/projectile/energy/phoron
+	name = "phoron bolt"
+	icon_state = "phoron"
 	var/knockdown_chance = 0
 	fire_sound = 'sound/weapons/elecfire.ogg'
 
-/obj/item/projectile/energy/plasma/on_hit(var/atom/target, var/blocked = 0)
+/obj/item/projectile/energy/phoron/on_hit(var/atom/target, var/blocked = 0)
 	if (..(target, blocked))
 		var/mob/living/L = target
 		L.contaminate()
@@ -92,29 +92,29 @@
 		return 1
 	return 0
 
-/obj/item/projectile/energy/plasma/pistol
+/obj/item/projectile/energy/phoron/pistol
 	damage = 25
-	icon_state = "plasma1"
+	icon_state = "phoron1"
 	irradiate = 12
 
-/obj/item/projectile/energy/plasma/light
+/obj/item/projectile/energy/phoron/light
 	damage = 35
-	icon_state = "plasma2"
+	icon_state = "phoron2"
 	irradiate = 20
 	knockdown_chance = 30
 
-/obj/item/projectile/energy/plasma/rifle
+/obj/item/projectile/energy/phoron/rifle
 	damage = 50
-	icon_state = "plasma3"
+	icon_state = "phoron3"
 	irradiate = 35
 	knockdown_chance = 50
 
-/obj/item/projectile/energy/plasma/MP40k
+/obj/item/projectile/energy/phoron/MP40k
 	damage = 35
 	eyeblur = 4
 	irradiate = 25
 	knockdown_chance = 40
-	icon_state = "plasma3"
+	icon_state = "phoron3"
 
 /obj/item/projectile/energy/neurotoxin
 	name = "neurotoxin bolt"

@@ -55,12 +55,12 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
-/obj/item/clothing/under/rank/plasmares
-	desc = "It's made of a special fiber that provides minor protection against bombs. It has markings that denote the wearer as a plasma researcher."
-	name = "plasma researcher's jumpsuit"
-	icon_state = "plasmares"
-	item_state = "plasmares"
-	_color = "plasmares"
+/obj/item/clothing/under/rank/phoronres
+	desc = "It's made of a special fiber that provides minor protection against bombs. It has markings that denote the wearer as a phoron researcher."
+	name = "phoron researcher's jumpsuit"
+	icon_state = "phoronres"
+	item_state = "phoronres"
+	_color = "phoronres"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL

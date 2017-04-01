@@ -153,10 +153,10 @@
 /datum/lung_gas/toxic
 	var/max_pp=0 // Maximum toxins partial pressure before you get effects. (0.5)
 	var/max_pp_mask=0 // Same as above, but with a mask. (5 _MOLES_; Set to 0 to disable mask blocking.)
-	var/reagent_id = PLASMA // What reagent to add
+	var/reagent_id = PHORON // What reagent to add
 	var/reagent_mult = 10
 
-/datum/lung_gas/toxic/New(var/gas_id, var/trace_gas=0, var/max_pp=0, var/max_pp_mask=0, var/reagent_id=PLASMA, var/reagent_mult=10)
+/datum/lung_gas/toxic/New(var/gas_id, var/trace_gas=0, var/max_pp=0, var/max_pp_mask=0, var/reagent_id=PHORON, var/reagent_mult=10)
 	..(gas_id,trace_gas)
 	src.max_pp = max_pp
 	src.max_pp_mask = max_pp_mask
@@ -170,7 +170,7 @@
 	if(pp > max_pp) // Too much toxins
 		//testing("TOXIC: gasid=[id];pp=[pp]")
 		var/ratio = (pp/max_pp) * reagent_mult // WAS: (moles/max_moles) * 10
-		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
+		//adjustToxLoss(Clamp(ratio, MIN_PHORON_DAMAGE, MAX_PHORON_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(max_pp_mask)
 			if(H.wear_mask)
 				if(H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
@@ -180,9 +180,9 @@
 						ratio = 0
 		if(ratio)
 			if(H.reagents)
-				// H.reagents.add_reagent(PLASMA, Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
+				// H.reagents.add_reagent(PHORON, Clamp(ratio, MIN_PHORON_DAMAGE, MAX_PHORON_DAMAGE))
 				// no this is bad n3x pls no
-				H.adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
+				H.adjustToxLoss(Clamp(ratio, MIN_PHORON_DAMAGE, MAX_PHORON_DAMAGE))
 			H.toxins_alert = max(H.toxins_alert, 1)
 	else
 		H.toxins_alert = 0

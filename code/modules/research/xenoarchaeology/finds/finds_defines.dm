@@ -94,7 +94,7 @@
 			return "iron"
 		if(ARCHAEO_ROBOT)
 			return "iron"
-	return "plasma"
+	return "phoron"
 
 //see /turf/unsimulated/mineral/New() in code/modules/mining/mine_turfs.dm
 /proc/get_random_digsite_type()
@@ -202,7 +202,7 @@ var/list/responsive_carriers = list( \
 	"iron", \
 	"chlorine", \
 	"phosphorus", \
-	"plasma")
+	"phoron")
 
 var/list/finds_as_strings = list( \
 	"Trace organic cells", \

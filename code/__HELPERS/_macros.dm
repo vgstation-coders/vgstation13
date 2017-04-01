@@ -15,7 +15,7 @@
 
 #define isgrey(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grey))
 
-#define isplasmaman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/plasmaman))
+#define isphoronman(A) (ishuman(A) && A.species && istype(A.species, /datum/species/phoronman))
 
 #define isskellington(A) (ishuman(A) && A.species && istype(A.species, /datum/species/skellington))
 

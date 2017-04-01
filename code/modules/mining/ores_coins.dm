@@ -63,11 +63,11 @@
 	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 	qdel(src)
 
-/obj/item/weapon/ore/plasma
-	name = "Plasma ore"
-	icon_state = "Plasma ore"
+/obj/item/weapon/ore/phoron
+	name = "Phoron ore"
+	icon_state = "Phoron ore"
 	origin_tech = Tc_MATERIALS + "=2"
-	material=MAT_PLASMA
+	material=MAT_PHORON
 	melt_temperature = MELTPOINT_STEEL+500
 
 /obj/item/weapon/ore/silver
@@ -359,10 +359,10 @@
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
 
-/obj/item/weapon/coin/plasma
-	material=MAT_PLASMA
-	name = "Solid plasma coin"
-	icon_state = "coin_plasma"
+/obj/item/weapon/coin/phoron
+	material=MAT_PHORON
+	name = "Solid phoron coin"
+	icon_state = "coin_phoron"
 	credits = 0.1
 	melt_temperature=MELTPOINT_STEEL+500
 

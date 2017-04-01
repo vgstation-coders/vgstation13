@@ -240,14 +240,14 @@
 /datum/theft_objective/number/proc/getAmountStolen(var/obj/item/I)
 	return I:amount
 
-/datum/theft_objective/number/traitor/plasma_gas
-	name = "moles of plasma (full tank)"
+/datum/theft_objective/number/traitor/phoron_gas
+	name = "moles of phoron (full tank)"
 	typepath = /obj/item/weapon/tank
 	min=28
 	max=28
 	protected_jobs = list("Research Director", "Scientist")
 
-/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
+/datum/theft_objective/number/traitor/phoron_gas/getAmountStolen(var/obj/item/I)
 	return I:air_contents:toxins
 
 /datum/theft_objective/number/traitor/coins

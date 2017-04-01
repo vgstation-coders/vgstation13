@@ -56,7 +56,7 @@
 	w_class = W_CLASS_LARGE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
-	clothing_flags = ONESIZEFITSALL | PLASMAGUARD
+	clothing_flags = ONESIZEFITSALL | PHORONGUARD
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
 	armor = list(melee = 65, bullet = 55, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 60)

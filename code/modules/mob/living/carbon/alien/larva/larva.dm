@@ -6,8 +6,8 @@
 
 	maxHealth = 25
 	health = 25
-	plasma = 50
-	max_plasma = 50
+	phoron = 50
+	max_phoron = 50
 	size = SIZE_TINY
 
 	var/growth = 0
@@ -35,7 +35,7 @@
 	if(statpanel("Status"))
 		stat(null, "Progress: [growth]/[LARVA_GROW_TIME]")
 
-/mob/living/carbon/alien/larva/AdjustPlasma(amount)
+/mob/living/carbon/alien/larva/AdjustPhoron(amount)
 	if(stat != DEAD)
 		growth = min(growth + 1, LARVA_GROW_TIME)
 	..(amount)

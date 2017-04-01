@@ -572,7 +572,7 @@
 		if(4)
 			reagents.add_reagent(SPRINKLES, 3)
 		if(5)
-			reagents.add_reagent(PLASMA, 3)
+			reagents.add_reagent(PHORON, 3)
 		if(6)
 			reagents.add_reagent(COCO, 3)
 		if(7)

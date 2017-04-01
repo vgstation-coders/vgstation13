@@ -494,7 +494,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					getFromPool(/obj/item/weapon/shard/plasma, loc)
+					getFromPool(/obj/item/weapon/shard/phoron, loc)
 
 
 /**********************Asteroid**************************/
@@ -633,7 +633,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "Mineral deposit"
 	var/mineralSpawnChanceList = list(
 		"Iron"      = 50,
-		"Plasma"    = 25,
+		"Phoron"    = 25,
 		"Uranium"   = 5,
 		"Gold"      = 5,
 		"Silver"    = 5,
@@ -685,7 +685,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Diamond" = 2,
 		"Gold"    = 10,
 		"Silver"  = 10,
-		"Plasma"  = 25,
+		"Phoron"  = 25,
 		/*
 		"Pharosium"  = 5,
 		"Char"  = 5,
@@ -727,7 +727,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Molitz"  = 1,
 		"Cytine"  = 1,
 		*/
-		"Plasma"  = 25,
+		"Phoron"  = 25,
 		"Clown"   = 15,
 		"Phazon"  = 10
 	)
@@ -769,11 +769,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	scan_state = "rock_Silver"
 
 
-/turf/unsimulated/mineral/plasma
-	name = "Plasma deposit"
-	icon_state = "rock_Plasma"
-	mineral = new /mineral/plasma
-	scan_state = "rock_Plasma"
+/turf/unsimulated/mineral/phoron
+	name = "Phoron deposit"
+	icon_state = "rock_Phoron"
+	mineral = new /mineral/phoron
+	scan_state = "rock_Phoron"
 
 
 /turf/unsimulated/mineral/clown

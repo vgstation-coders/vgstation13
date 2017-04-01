@@ -107,12 +107,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Nanotrasen's head programmer quit this evening when people did not respond well to his new features on NTOS. Said features included the ability to instantly transmit pictures of your butt to people by blinking.",
 		"Nanotrasen CEO Johnson Lovelocker was photographed this morning celebrating his birthday will well deserved hookers and blow.",
 		"Discount Dan's stock has risen 20 points today after CEO Discount Dan promised to include a free toy in every 'Happy Dan' meal. In other news, we have over 300 confirmed reports of broken teeth and lead poisoning in children 6 and under.",
-		"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
+		"Discount Dan has come under fire today after trying to hug a phoronman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
 		"Nanotrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
 		)
 	var/global/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
 		"Tajarans continue to protest in their 'Trillion Fur March' today. We have reports that the Space American army is giving a KOS order on all non-humans in the area.",
-		"Read the all new book by known Plasmaman rights activist Spookler Boney, 'AGHGHHGHGH KILL ME IT BURNS AGHHHHHHH'",
+		"Read the all new book by known Phoronman rights activist Spookler Boney, 'AGHGHHGHGH KILL ME IT BURNS AGHHHHHHH'",
 		"Read the all new book by the worlds most renown skeleton Johnny Hips, 'It aint easy, being bony.'",
 		"Scientists in Space Austria have found a chicken with the ability to warp space-time. More at ten.",
 		"Scientists working on at the Bluespace Portal Research Facility (BPRF), have looked into the fabric of reality. They report that all it is out there is a bunch of fat nerds and a chicken.",
@@ -175,7 +175,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Zero is an even number.",
 		"The longest English word that can be spelled without repeating any letters is 'uncopyrightable'.",
 		"10! (Ten factorial) seconds equals exactly six Earth weeks.",
-		"Want to remember the first digits of Pi easily? You can do it by counting each word's letters in 'May I have a large container of plasma?'"
+		"Want to remember the first digits of Pi easily? You can do it by counting each word's letters in 'May I have a large container of phoron?'"
 		)
 	var/currentevent1 = null
 	var/currentevent2 = null
@@ -825,13 +825,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						var/o2_level = environment.oxygen/total_moles
 						var/n2_level = environment.nitrogen/total_moles
 						var/co2_level = environment.carbon_dioxide/total_moles
-						var/plasma_level = environment.toxins/total_moles
-						var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
+						var/phoron_level = environment.toxins/total_moles
+						var/unknown_level =  1-(o2_level+n2_level+co2_level+phoron_level)
 
 						dat += {"Nitrogen: [round(n2_level*100)]%<br>
 							Oxygen: [round(o2_level*100)]%<br>
 							Carbon Dioxide: [round(co2_level*100)]%<br>
-							Plasma: [round(plasma_level*100)]%<br>"}
+							Phoron: [round(phoron_level*100)]%<br>"}
 						if(unknown_level > 0.01)
 							dat += "OTHER: [round(unknown_level)]%<br>"
 					dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"

@@ -63,11 +63,11 @@
 /obj/item/stack/sheet/plasteel
 	name = "plasteel"
 	singular_name = "plasteel sheet"
-	desc = "This sheet is an alloy of iron and plasma."
+	desc = "This sheet is an alloy of iron and phoron."
 	icon_state = "sheet-plasteel"
 	item_state = "sheet-plasteel"
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL, MAT_PLASMA = CC_PER_SHEET_MISC) // Was 7500, which doesn't make any fucking sense
-	perunit = 2875 //average of plasma and metal
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL, MAT_PHORON = CC_PER_SHEET_MISC) // Was 7500, which doesn't make any fucking sense
+	perunit = 2875 //average of phoron and metal
 	throwforce = 15.0
 	flags = FPRINT
 	siemens_coefficient = 1

@@ -232,9 +232,9 @@ proc/move_mining_shuttle()
 	origin_tech = Tc_MATERIALS + "=4"
 	desc = "This makes no metallurgic sense."
 
-/obj/item/weapon/pickaxe/plasmacutter
-	name = "plasma cutter"
-	icon_state = "plasmacutter"
+/obj/item/weapon/pickaxe/phoroncutter
+	name = "phoron cutter"
+	icon_state = "phoroncutter"
 	item_state = "gun"
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
@@ -242,13 +242,13 @@ proc/move_mining_shuttle()
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
-	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
-	desc = "A rock cutter that uses bursts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_PHORONTECH + "=3;" + Tc_ENGINEERING + "=3"
+	desc = "A rock cutter that uses bursts of hot phoron. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
 
-/obj/item/weapon/pickaxe/plasmacutter/is_hot()
+/obj/item/weapon/pickaxe/phoroncutter/is_hot()
 	return 1
 
 /obj/item/weapon/pickaxe/diamond

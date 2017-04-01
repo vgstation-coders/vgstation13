@@ -148,7 +148,7 @@
 	to_spawn = list(
 		/obj/item/stack/sheet/glass/glass{amount = 50},
 		/obj/item/stack/sheet/glass/rglass{amount = 50},
-		/obj/item/stack/sheet/glass/plasmaglass{amount = 50},
+		/obj/item/stack/sheet/glass/phoronglass{amount = 50},
 		/obj/item/stack/light_w{amount = 50},
 		/obj/item/stack/sheet/mineral/plastic{amount = 50},
 		/obj/item/stack/sheet/metal{amount = 50},
@@ -202,7 +202,7 @@
 		/obj/machinery/the_singularitygen,
 		/obj/machinery/vending/dinnerware,
 		/obj/machinery/vending/engineering,
-		/obj/machinery/vending/plasmaresearch,
+		/obj/machinery/vending/phoronresearch,
 		/obj/machinery/vending/robotics,
 		/obj/machinery/vending/sovietsoda,
 		/obj/structure/AIcore,
@@ -521,7 +521,7 @@
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
 		/obj/item/weapon/coin/phazon,
-		/obj/item/weapon/coin/plasma,
+		/obj/item/weapon/coin/phoron,
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
@@ -632,7 +632,7 @@
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/harpoon,
 		/obj/item/weapon/melee/classic_baton,
-		/obj/item/weapon/pickaxe/plasmacutter,
+		/obj/item/weapon/pickaxe/phoroncutter,
 		/obj/item/weapon/shield/energy,
 		)
 
@@ -715,7 +715,7 @@
 		/obj/item/weapon/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
 		/obj/item/weapon/weldingtool/hugetank,
-		/obj/item/weapon/tank/plasma,
+		/obj/item/weapon/tank/phoron,
 		/obj/item/gun_part/silencer,
 		/obj/item/weapon/storage/backpack/holding,
 		)

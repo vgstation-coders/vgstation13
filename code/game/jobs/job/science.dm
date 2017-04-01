@@ -57,7 +57,7 @@
 	idtype = /obj/item/weapon/card/id/research
 	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
-	alt_titles = list("Xenoarcheologist", "Anomalist", "Plasma Researcher", "Xenobiologist", "Research Botanist")
+	alt_titles = list("Xenoarcheologist", "Anomalist", "Phoron Researcher", "Xenobiologist", "Research Botanist")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/toxins
@@ -72,8 +72,8 @@
 	switch(H.mind.role_alt_title)
 		if("Scientist")
 			H.equip_or_collect(new /obj/item/clothing/under/rank/scientist(H), slot_w_uniform)
-		if("Plasma Researcher")
-			H.equip_or_collect(new /obj/item/clothing/under/rank/plasmares(H), slot_w_uniform)
+		if("Phoron Researcher")
+			H.equip_or_collect(new /obj/item/clothing/under/rank/phoronres(H), slot_w_uniform)
 		if("Xenobiologist")
 			H.equip_or_collect(new /obj/item/clothing/under/rank/xenobio(H), slot_w_uniform)
 		if("Anomalist")

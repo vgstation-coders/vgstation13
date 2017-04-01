@@ -338,30 +338,30 @@
 	WA.update_icon()
 	return WA
 
-/obj/machinery/door/window/plasma
-	name = "Plasma Window Door"
-	desc = "A sliding glass door strengthened by plasma."
-	icon = 'icons/obj/doors/plasmawindoor.dmi'
+/obj/machinery/door/window/phoron
+	name = "Phoron Window Door"
+	desc = "A sliding glass door strengthened by phoron."
+	icon = 'icons/obj/doors/phoronwindoor.dmi'
 	health = 300
-	shard = /obj/item/weapon/shard/plasma
+	shard = /obj/item/weapon/shard/phoron
 	penetration_dampening = 6
 
-/obj/machinery/door/window/plasma/make_assembly(mob/user as mob)
+/obj/machinery/door/window/phoron/make_assembly(mob/user as mob)
 	// Windoor assembly
-	var/obj/structure/windoor_assembly/plasma/WA = new /obj/structure/windoor_assembly/plasma(src.loc)
+	var/obj/structure/windoor_assembly/phoron/WA = new /obj/structure/windoor_assembly/phoron(src.loc)
 	set_assembly(user, WA)
 	return WA
 
-/obj/machinery/door/window/plasma/secure
-	name = "Secure Plasma Window Door"
+/obj/machinery/door/window/phoron/secure
+	name = "Secure Phoron Window Door"
 	icon_state = "leftsecure"
 	base_state = "leftsecure"
 	health = 400
 	secure = 1
 	penetration_dampening = 8
 
-/obj/machinery/door/window/plasma/secure/make_assembly(mob/user as mob)
-	var/obj/structure/windoor_assembly/plasma/WA = ..(user)
+/obj/machinery/door/window/phoron/secure/make_assembly(mob/user as mob)
+	var/obj/structure/windoor_assembly/phoron/WA = ..(user)
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA

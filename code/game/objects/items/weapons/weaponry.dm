@@ -382,7 +382,7 @@ obj/item/weapon/banhammer/admin
 		for(var/i in blades)
 			var/obj/item/weapon/shard/S = blades[i]
 			var/break_chance = 15
-			if(istype(S, /obj/item/weapon/shard/plasma))
+			if(istype(S, /obj/item/weapon/shard/phoron))
 				break_chance = round(break_chance * 0.66)
 			if(prob(break_chance))
 				break_shard(S, i)

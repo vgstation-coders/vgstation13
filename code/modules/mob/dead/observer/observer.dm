@@ -620,9 +620,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/o2_concentration = environment.oxygen/total_moles
 		var/n2_concentration = environment.nitrogen/total_moles
 		var/co2_concentration = environment.carbon_dioxide/total_moles
-		var/plasma_concentration = environment.toxins/total_moles
+		var/phoron_concentration = environment.toxins/total_moles
 
-		var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
+		var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+phoron_concentration)
 		if(abs(n2_concentration - N2STANDARD) < 20)
 			to_chat(src, "<span class='notice'>Nitrogen: [round(n2_concentration*100)]% ([round(environment.nitrogen,0.01)] moles)</span>")
 		else
@@ -638,8 +638,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		else
 			to_chat(src, "<span class='notice'>CO2: [round(co2_concentration*100)]% ([round(environment.carbon_dioxide,0.01)] moles)</span>")
 
-		if(plasma_concentration > 0.01)
-			to_chat(src, "<span class='warning'>Plasma: [round(plasma_concentration*100)]% ([round(environment.toxins,0.01)] moles)</span>")
+		if(phoron_concentration > 0.01)
+			to_chat(src, "<span class='warning'>Phoron: [round(phoron_concentration*100)]% ([round(environment.toxins,0.01)] moles)</span>")
 
 		if(unknown_concentration > 0.01)
 			to_chat(src, "<span class='warning'>Unknown: [round(unknown_concentration*100)]% ([round(unknown_concentration*total_moles,0.01)] moles)</span>")

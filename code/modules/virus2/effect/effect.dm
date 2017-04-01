@@ -1244,11 +1244,11 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	mob.put_in_hands(virus)
 
 
-/datum/disease2/effect/plasma
+/datum/disease2/effect/phoron
 	name = "Toxin Sublimation"
 	stage = 4
 
-/datum/disease2/effect/plasma/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/phoron/activate(var/mob/living/carbon/mob)
 	//var/src = mob
 	var/hack = mob.loc
 	var/turf/simulated/T = get_turf(hack)

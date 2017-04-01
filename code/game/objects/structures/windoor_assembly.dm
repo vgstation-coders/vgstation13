@@ -25,12 +25,12 @@
 	var/facing = "l"	//Does the windoor open to the left or right?
 	var/secure = ""		//Whether or not this creates a secure windoor
 	var/state = "01"	//How far the door assembly has progressed in terms of sprites
-	var/plasma = 0
+	var/phoron = 0
 
-/obj/structure/windoor_assembly/plasma
-	icon = 'icons/obj/doors/plasmawindoor.dmi'
-	name = "Plasma Windoor Assembly"
-	plasma = 1
+/obj/structure/windoor_assembly/phoron
+	icon = 'icons/obj/doors/phoronwindoor.dmi'
+	name = "Phoron Windoor Assembly"
+	phoron = 1
 
 /obj/structure/windoor_assembly/New(dir=NORTH)
 	..()
@@ -83,8 +83,8 @@ obj/structure/windoor_assembly/Destroy()
 						if(!src || !WT.isOn())
 							return
 						to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
-						if(plasma)
-							getFromPool(/obj/item/stack/sheet/glass/plasmarglass, get_turf(src), 5)
+						if(phoron)
+							getFromPool(/obj/item/stack/sheet/glass/phoronrglass, get_turf(src), 5)
 						else
 							getFromPool(/obj/item/stack/sheet/glass/rglass, get_turf(src), 5)
 						if(secure)
@@ -255,12 +255,12 @@ obj/structure/windoor_assembly/Destroy()
 
 //I'm actually surprised this works, but boy am I pleased that it does
 /obj/structure/windoor_assembly/proc/Create()
-	if(secure && plasma)
-		return new /obj/machinery/door/window/plasma/secure(src.loc)
-	else if(secure && !plasma)
+	if(secure && phoron)
+		return new /obj/machinery/door/window/phoron/secure(src.loc)
+	else if(secure && !phoron)
 		return new /obj/machinery/door/window/brigdoor(src.loc)
-	else if(plasma)
-		return new /obj/machinery/door/window/plasma(src.loc)
+	else if(phoron)
+		return new /obj/machinery/door/window/phoron(src.loc)
 	else
 		return new /obj/machinery/door/window(src.loc)
 

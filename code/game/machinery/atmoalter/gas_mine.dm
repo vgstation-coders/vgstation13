@@ -142,7 +142,7 @@
 		air_contents.oxygen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 /obj/machinery/atmospherics/miner/toxins
-	name = "\improper Plasma Gas Miner"
+	name = "\improper Phoron Gas Miner"
 	overlay_color = "#FF0000"
 
 	AddAir()

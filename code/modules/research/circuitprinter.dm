@@ -36,7 +36,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 						MAT_GOLD,
 						MAT_DIAMOND,
 						MAT_URANIUM,
-						MAT_PLASMA,
+						MAT_PHORON,
 						MAT_SILVER
 	)
 

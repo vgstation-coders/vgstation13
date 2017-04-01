@@ -6,7 +6,7 @@
 	icon_state = "alienq_s"
 	status_flags = CANPARALYSE
 	heal_rate = 5
-	plasma_rate = 20
+	phoron_rate = 20
 
 /mob/living/carbon/alien/humanoid/queen/movement_delay()
 	var/tally = 5 + move_delay_add + config.alien_delay //Queens are slow as fuck

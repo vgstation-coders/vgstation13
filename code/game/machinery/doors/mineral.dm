@@ -153,23 +153,23 @@
 		..()
 		opacity = 0
 
-/obj/machinery/door/mineral/transparent/plasma
-	prefix = "plasma"
-	icon_state = "plasmadoor_closed"
+/obj/machinery/door/mineral/transparent/phoron
+	prefix = "phoron"
+	icon_state = "phorondoor_closed"
 	hardness = 4
 
-/obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/door/mineral/transparent/phoron/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)
 	return ..()
 
-/obj/machinery/door/mineral/transparent/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/machinery/door/mineral/transparent/phoron/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
 		TemperatureAct(exposed_temperature)
 
-/obj/machinery/door/mineral/transparent/plasma/proc/TemperatureAct(temperature)
+/obj/machinery/door/mineral/transparent/phoron/proc/TemperatureAct(temperature)
 	for(var/turf/simulated/floor/target_tile in range(2,loc))
 
 		var/datum/gas_mixture/napalm = new //Napalm? Whelp. There should be a better way for this.

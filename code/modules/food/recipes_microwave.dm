@@ -1218,7 +1218,7 @@
 	reagents = list(FLOUR = 5)
 	items = list(
 		/obj/item/pipe,
-		/obj/item/stack/sheet/mineral/plasma,
+		/obj/item/stack/sheet/mineral/phoron,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mommispaghetti
 
@@ -1958,7 +1958,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/risotto
 
 /datum/recipe/potentham
-	reagents = list(PLASMA = 10)
+	reagents = list(PHORON = 10)
 	items = list(
 
 		/obj/item/weapon/reagent_containers/food/snacks/meat/box,

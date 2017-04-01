@@ -13,7 +13,7 @@
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
 	throwforce = 15.0
-	
+
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
@@ -42,19 +42,19 @@
 	..()
 	return
 
-/obj/item/weapon/shard/plasma
-	name = "plasma shard"
-	desc = "A shard of plasma glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."
+/obj/item/weapon/shard/phoron
+	name = "phoron shard"
+	desc = "A shard of phoron glass. Considerably tougher then normal glass shards. Apparently not tough enough to be a window."
 	force = 8.0
 	throwforce = 15.0
-	icon_state = "plasmalarge"
+	icon_state = "phoronlarge"
 	item_state = "shard-plasglass"
-	glass = /obj/item/stack/sheet/glass/plasmaglass
-	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small/plasma"
+	glass = /obj/item/stack/sheet/glass/phoronglass
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small/phoron"
 
-/obj/item/weapon/shard/plasma/New()
+/obj/item/weapon/shard/phoron/New()
 	..()
-	src.icon_state = pick("plasmalarge", "plasmamedium", "plasmasmall")
+	src.icon_state = pick("phoronlarge", "phoronmedium", "phoronsmall")
 	return
 
 /obj/item/weapon/shard/shrapnel

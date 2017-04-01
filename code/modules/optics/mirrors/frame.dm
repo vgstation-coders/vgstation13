@@ -36,8 +36,8 @@
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 
-	if(istype(W, /obj/item/stack/sheet/glass/plasmarglass))
-		var/obj/item/stack/sheet/glass/plasmarglass/stack = W
+	if(istype(W, /obj/item/stack/sheet/glass/phoronrglass))
+		var/obj/item/stack/sheet/glass/phoronrglass/stack = W
 		if(stack.amount < 5)
 			to_chat(user, "<span class='warning'>You need at least 5 [stack] to build a beamsplitter.</span>")
 			return
