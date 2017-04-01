@@ -175,6 +175,9 @@
 			*/
 		msg += "[t_He] [t_is] wearing [bicon(wear_id)] \a [wear_id].\n"
 
+	if(flavortown)
+		msg += "[flavortown]\n"
+
 	switch(jitteriness)
 		if(JITTER_HIGH to INFINITY)
 			msg += "<span class='danger'>[t_He] [t_is] convulsing violently!</span>\n"
