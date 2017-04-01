@@ -354,7 +354,20 @@
 			return !density
 	return 1
 
-/obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
+/obj/structure/table/MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+	if(O == user)
+		if(!ishuman(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
+			return
+		var/mob/living/carbon/M = user
+		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.Knockdown(1)
+		if (prob(50))
+			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+		else
+			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
+		return
+
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
 	if(user.drop_item())
@@ -614,18 +627,6 @@
 			return
 		return
 	return ..()
-
-/obj/structure/table/MouseDrop_T(atom/movable/O, mob/user)
-	if(O != user || !ishuman(user) || !Adjacent(src, user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
-		return
-	var/mob/living/carbon/M = user
-	M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
-	M.Knockdown(1)
-	if (prob(50))
-		playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-	else
-		playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
-	M.visible_message("<span class='danger'>You bang your head on \the [src].</span>", "<span class='danger'>[user] bangs \his head on \the [src].</span>", "You hear a bang.")
 
 /*
  * Glass
