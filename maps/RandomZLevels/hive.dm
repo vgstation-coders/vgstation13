@@ -144,7 +144,7 @@
 	<br>
 	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br><br>
 	We have also attached an image with the approximate locations of your targets. The entry point is marked with an arrow. Number 1 is the suspected location of the Hive Mind. Number 2 is the suspected location of the control room. Number 3 is the suspected location of the Hive Replicator.<br>
-	The scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as no man before has ever entered the Hive, and nobody knows what might await you inside.<br>"}
+	The scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as no living man before has ever entered the Hive, and nobody knows what might await you inside.<br>"}
 
 /datum/command_alert/awaymission/hive/announce()
 	..()
