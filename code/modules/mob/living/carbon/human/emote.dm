@@ -577,18 +577,27 @@
 			else
 				if(!stat)
 					if (!muzzled)
+						var/list/screamSound = male_scream_sound
+						if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
+							screamSound = female_scream_sound
+						var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
 						if (auto == 1)
 							if(world.time-last_emote_sound >= 30)//prevent scream spam with things like poly spray
 								msg = "<B>[src]</B> screams in agony!"
-								var/list/screamSound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
-								if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
-									screamSound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
-								var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
 								playsound(get_turf(src), scream, 50, 0)
 								m_type = HEARABLE
 								last_emote_sound = world.time
 						else
 							msg = "<B>[src]</B> screams!"
+							if(manual_scream_counter >= 0 && manual_scream_counter < 5 MINUTES)
+								if(world.time - last_manual_scream >= 60 SECONDS)
+									playsound(get_turf(src), scream, 50, 0)
+									manual_scream_counter += 3 MINUTES
+
+									if(manual_scream_counter >= 5 MINUTES)
+										manual_scream_counter = -1
+										spawn(10 MINUTES)
+											manual_scream_counter = 0
 							m_type = HEARABLE
 					else
 						msg = "<B>[src]</B> makes a very loud noise."
