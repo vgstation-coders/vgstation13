@@ -71,7 +71,6 @@ var/datum/controller/gameticker/ticker
 		pregame_timeleft = world.timeofday + delay_timetotal
 		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
 		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
-		to_chat(world, "<b>IF YOU CAN READ THIS THE FUCKING SERVER IS COMPILING SHIT</b>") // Test
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
 				sleep(1)
