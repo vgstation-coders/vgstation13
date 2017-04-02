@@ -272,7 +272,7 @@ var/list/all_doors = list()
 			qdel(B)
 
 	// TODO: rework how fire works on doors
-	var/obj/fire/F = locate() in loc
+	var/obj/effect/fire/F = locate() in loc
 	if(F)
 		qdel(F)
 

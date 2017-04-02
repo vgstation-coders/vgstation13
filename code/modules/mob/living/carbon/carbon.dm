@@ -138,7 +138,7 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -149,7 +149,7 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -306,7 +306,7 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen)
+	if(target.type == /obj/abstract/screen)
 		return
 
 	var/atom/movable/item = src.get_active_hand()

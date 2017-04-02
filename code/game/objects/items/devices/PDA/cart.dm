@@ -24,6 +24,7 @@
 	var/access_status_display = 0
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
+	var/access_trader = 0
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -244,6 +245,11 @@
 	name = "Doorman Cartridge"
 	access_remote_door = 1
 	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
+
+/obj/item/weapon/cartridge/trader
+	name = "Trader Cartridge"
+	icon_state = "cart-vox"
+	access_trader = 1
 
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))

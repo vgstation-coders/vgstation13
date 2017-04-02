@@ -10,7 +10,7 @@
 "aj" = (/obj/structure/flora/ausbushes/fullgrass,/turf/simulated/floor/holofloor/grass,/area)
 "ak" = (/obj/structure/flora/ausbushes/grassybush,/turf/simulated/floor/holofloor/grass,/area)
 "al" = (/obj/structure/rack/holo,/obj/item/clothing/under/dress/dress_saloon,/obj/item/clothing/head/hairflower,/turf/simulated/floor/holofloor{icon_state = "cult"},/area)
-"am" = (/obj/structure/rack/holo,/obj/map/spawner/set_spawner/theater,/turf/simulated/floor/holofloor{icon_state = "cult"},/area)
+"am" = (/obj/structure/rack/holo,/obj/abstract/map/spawner/set_spawner/theater,/turf/simulated/floor/holofloor{icon_state = "cult"},/area)
 "an" = (/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Burn-Mix Floor"; nitrogen = 0; oxygen = 2500; temperature = 370; toxins = 5},/area)
 "ao" = (/turf/simulated/floor/holofloor{dir = 9; icon_state = "red"},/area)
 "ap" = (/turf/simulated/floor/holofloor{dir = 1; icon_state = "red"},/area)

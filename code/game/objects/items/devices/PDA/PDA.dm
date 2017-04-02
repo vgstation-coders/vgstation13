@@ -414,6 +414,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a special edition with a transparent case."
 	note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
 
+/obj/item/device/pda/trader
+	name = "Trader PDA"
+	desc = "Much good for trade."
+	note = "Congratulations, your station ãplU‰%ZÃ’67ÕEz4Æ¦U¦ŸÉ8¥E1ÀÓÐ‹îöÈ~±šÞ@¡ÐT¥u1B¤Õkñ@iž8÷NJŠó"
+	icon_state = "pda-trader"
+	default_cartridge = /obj/item/weapon/cartridge/trader
+
 /obj/item/device/pda/chef
 	name = "Chef PDA"
 	default_cartridge = /obj/item/weapon/cartridge/chef
@@ -610,7 +617,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/MouseDrop(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
-	if((!istype(over_object, /obj/screen)) && can_use(M))
+	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)
 	return
 
@@ -741,6 +748,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
 					if (cartridge.access_remote_door)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
+					if (cartridge.access_trader)
+						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
 
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
@@ -1808,6 +1817,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				else
 					U << browse(null, "window=pda")
 					return
+
+
+//TRADER FUNCTIONS======================================
+			if("Send Shuttle")
+				if(cartridge && cartridge.access_trader && id && can_access(id.access,list(access_trade)))
+					var/obj/machinery/computer/shuttle_control/C = global.trade_shuttle.control_consoles[1] //There should be exactly one
+					if(C)
+						global.trade_shuttle.travel_to(pick(global.trade_shuttle.docking_ports - global.trade_shuttle.current_port),C,U) //Just send it; this has all relevant checks
 
 
 //SYNDICATE FUNCTIONS===================================

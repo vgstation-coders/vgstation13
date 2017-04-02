@@ -320,7 +320,7 @@
 	return 0
 
 /obj/structure/closet/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob, var/needs_opened = 1, var/show_message = 1, var/move_them = 1)
-	if(istype(O, /obj/screen))	//fix for HUD elements making their way into the world	-Pete
+	if(istype(O, /obj/abstract/screen))	//fix for HUD elements making their way into the world	-Pete
 		return 0
 	if(!isturf(O.loc))
 		return 0

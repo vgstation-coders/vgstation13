@@ -1,8 +1,8 @@
-/obj/screen/movable/spell_master
+/obj/abstract/screen/movable/spell_master
 	name = "Spells"
 	icon = 'icons/mob/screen_spells.dmi'
 	icon_state = "wiz_spell_ready"
-	var/list/obj/screen/spell/spell_objects = list()
+	var/list/obj/abstract/screen/spell/spell_objects = list()
 	var/showing = 0
 	globalscreen = 1
 	var/open_state = "master_open"
@@ -13,9 +13,9 @@
 	var/mob/spell_holder
 	var/length = 9
 
-/obj/screen/movable/spell_master/Destroy()
+/obj/abstract/screen/movable/spell_master/Destroy()
 	..()
-	for(var/obj/screen/spell/spells in spell_objects)
+	for(var/obj/abstract/screen/spell/spells in spell_objects)
 		spells.spellmaster = null
 	spell_objects = null
 	if(spell_holder)
@@ -24,32 +24,32 @@
 			spell_holder.client.screen -= src
 		spell_holder = null
 
-/obj/screen/movable/spell_master/resetVariables()
+/obj/abstract/screen/movable/spell_master/resetVariables()
 	..("spell_objects", args)
 	spell_objects = list()
 
-/obj/screen/movable/spell_master/MouseDrop()
+/obj/abstract/screen/movable/spell_master/MouseDrop()
 	if(showing)
 		return
 
 	return ..()
 
-/obj/screen/movable/spell_master/MouseEntered(location,control,params)
+/obj/abstract/screen/movable/spell_master/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
 
-/obj/screen/movable/spell_master/MouseExited()
+/obj/abstract/screen/movable/spell_master/MouseExited()
 	closeToolTip(usr)
 
-/obj/screen/movable/spell_master/Click()
+/obj/abstract/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
 		returnToPool(src)
 		return
 
 	toggle_open()
 
-/obj/screen/movable/spell_master/proc/toggle_open(var/forced_state = 0)
+/obj/abstract/screen/movable/spell_master/proc/toggle_open(var/forced_state = 0)
 	if(showing && (forced_state != 2))
-		for(var/obj/screen/spell/O in spell_objects)
+		for(var/obj/abstract/screen/spell/O in spell_objects)
 			if(spell_holder && spell_holder.client)
 				spell_holder.client.screen -= O
 			O.handle_icon_updates = 0
@@ -63,7 +63,7 @@
 		overlays.len = 0
 		overlays.Add(open_state)
 
-/obj/screen/movable/spell_master/proc/open_spellmaster()
+/obj/abstract/screen/movable/spell_master/proc/open_spellmaster()
 	var/list/screen_loc_xy = splittext(screen_loc,",")
 
 	//Create list of X offsets
@@ -77,7 +77,7 @@
 	var/y_pix = screen_loc_Y[2]
 
 	for(var/i = 1; i <= spell_objects.len; i++)
-		var/obj/screen/spell/S = spell_objects[i]
+		var/obj/abstract/screen/spell/S = spell_objects[i]
 		var/xpos = x_position + (x_position < (world.view+1) ? 1 : -1)*(i%length)
 		var/ypos = y_position + (y_position < (world.view+1) ? round(i/length) : -round(i/length))
 		S.screen_loc = "[encode_screen_X(xpos)]:[x_pix],[encode_screen_Y(ypos)]:[y_pix]"
@@ -85,7 +85,7 @@
 			spell_holder.client.screen += S
 			S.handle_icon_updates = 1
 
-/obj/screen/movable/spell_master/proc/add_spell(var/spell/spell)
+/obj/abstract/screen/movable/spell_master/proc/add_spell(var/spell/spell)
 	if(!spell)
 		return
 
@@ -100,7 +100,7 @@
 	if(spell.spell_flags & NO_BUTTON) //no button to add if we don't get one
 		return
 
-	var/obj/screen/spell/newscreen = getFromPool(/obj/screen/spell)
+	var/obj/abstract/screen/spell/newscreen = getFromPool(/obj/abstract/screen/spell)
 	newscreen.spellmaster = src
 	newscreen.spell = spell
 
@@ -118,7 +118,7 @@
 	spell_objects.Add(newscreen)
 	toggle_open(2) //forces the icons to refresh on screen
 
-/obj/screen/movable/spell_master/proc/remove_spell(var/spell/spell)
+/obj/abstract/screen/movable/spell_master/proc/remove_spell(var/spell/spell)
 	returnToPool(spell.connected_button)
 
 	spell.connected_button = null
@@ -128,20 +128,20 @@
 	else
 		returnToPool(src)
 
-/obj/screen/movable/spell_master/proc/silence_spells(var/amount)
-	for(var/obj/screen/spell/spell in spell_objects)
+/obj/abstract/screen/movable/spell_master/proc/silence_spells(var/amount)
+	for(var/obj/abstract/screen/spell/spell in spell_objects)
 		spell.spell.silenced = amount
 		spell.update_charge(1)
 
-/obj/screen/movable/spell_master/proc/update_spells(forced = 0, mob/user)
+/obj/abstract/screen/movable/spell_master/proc/update_spells(forced = 0, mob/user)
 	if(user && user.client)
 		if(!(src in user.client.screen))
 			user.client.screen += src
-	for(var/obj/screen/spell/spell in spell_objects)
+	for(var/obj/abstract/screen/spell/spell in spell_objects)
 		spell.update_charge(forced)
 
 
-/obj/screen/movable/spell_master/genetic
+/obj/abstract/screen/movable/spell_master/genetic
 	name = "Mutant Powers"
 	icon_state = "genetic_spell_ready"
 
@@ -150,7 +150,7 @@
 
 	screen_loc = ui_genetic_master
 
-/obj/screen/movable/spell_master/alien
+/obj/abstract/screen/movable/spell_master/alien
 	name = "Alien Abilities"
 	icon_state = "alien_spell_ready"
 
@@ -160,7 +160,7 @@
 	screen_loc = ui_alien_master
 	length = 9
 
-/obj/screen/movable/spell_master/malf
+/obj/abstract/screen/movable/spell_master/malf
 	name = "Malfunction Modules"
 	icon_state = "grey_spell_ready"
 
@@ -169,7 +169,7 @@
 
 	screen_loc = ui_alien_master
 
-/obj/screen/movable/spell_master/racial
+/obj/abstract/screen/movable/spell_master/racial
 	name = "Racial Abilities"
 	icon_state = "racial_spell_ready"
 
@@ -181,7 +181,7 @@
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////
-/obj/screen/spell
+/obj/abstract/screen/spell
 	icon = 'icons/mob/screen_spells.dmi'
 	icon_state = "wiz_spell_base"
 	var/spell_base = "wiz"
@@ -189,12 +189,12 @@
 	globalscreen = 1
 	var/spell/spell = null
 	var/handle_icon_updates = 0
-	var/obj/screen/movable/spell_master/spellmaster
+	var/obj/abstract/screen/movable/spell_master/spellmaster
 
 	var/icon/last_charged_icon
 	var/channeling_image
 
-/obj/screen/spell/MouseEntered(location,control,params)
+/obj/abstract/screen/spell/MouseEntered(location,control,params)
 	if(!spell)
 		return
 	var/dat = ""
@@ -215,10 +215,10 @@
 			dat += "<br>Range: Self"
 	openToolTip(usr,src,params,title = name,content = dat)
 
-/obj/screen/spell/MouseExited()
+/obj/abstract/screen/spell/MouseExited()
 	closeToolTip(usr)
 
-/obj/screen/spell/Destroy()
+/obj/abstract/screen/spell/Destroy()
 	..()
 	spell = null
 	last_charged_icon = null
@@ -231,7 +231,7 @@
 		returnToPool(spellmaster)
 	spellmaster = null
 
-/obj/screen/spell/proc/update_charge(var/forced_update = 0)
+/obj/abstract/screen/spell/proc/update_charge(var/forced_update = 0)
 	if(!spell)
 		returnToPool(src)
 		return
@@ -269,7 +269,7 @@
 	if(spell.silenced)
 		overlays += image(icon = icon, icon_state = "silence")
 
-/obj/screen/spell/Click(location, control, params)
+/obj/abstract/screen/spell/Click(location, control, params)
 	if(!usr || !spell)
 		returnToPool(src)
 		return
@@ -283,13 +283,13 @@
 	update_charge(1)
 
 //Helper proc, does not remove channeling
-/obj/screen/spell/proc/add_channeling()
+/obj/abstract/screen/spell/proc/add_channeling()
 	var/image/channel = image(icon = icon, loc = src, icon_state = "channeled", layer = src.layer + 1)
 	channeling_image = channel
 	if(spellmaster && spellmaster.spell_holder && spellmaster.spell_holder.client)
 		spellmaster.spell_holder.client.images += channeling_image
 
-/obj/screen/spell/proc/remove_channeling()
+/obj/abstract/screen/spell/proc/remove_channeling()
 	if(spellmaster && spellmaster.spell_holder && spellmaster.spell_holder.client)
 		spellmaster.spell_holder.client.images -= channeling_image
 	channeling_image = null
