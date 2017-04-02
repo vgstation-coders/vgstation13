@@ -281,8 +281,10 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	var/list/all_contents = src.contents.Copy()
 	var/area/entrance = locate(/area/vault/supermarket/entrance)
+	var/area/restricted = locate(/area/vault/supermarket/restricted)
 
 	all_contents += entrance.contents
+	all_contents += restricted.contents
 
 	for(var/obj/machinery/door/poddoor/shutters/S in all_contents)
 		spawn()
