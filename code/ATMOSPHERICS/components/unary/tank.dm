@@ -32,8 +32,8 @@
 
 
 /obj/machinery/atmospherics/unary/tank/toxins
-	icon_state = "phoron"
-	name = "Pressure Tank (Phoron)"
+	icon_state = "plasma"
+	name = "Pressure Tank (Plasma)"
 
 /obj/machinery/atmospherics/unary/tank/toxins/New()
 	..()
@@ -42,8 +42,8 @@
 
 
 /obj/machinery/atmospherics/unary/tank/oxygen_agent_b
-	icon_state = "phoron"
-	name = "Pressure Tank (Oxygen + Phoron)"
+	icon_state = "plasma"
+	name = "Pressure Tank (Oxygen + Plasma)"
 
 /obj/machinery/atmospherics/unary/tank/oxygen_agent_b/New()
 	..()

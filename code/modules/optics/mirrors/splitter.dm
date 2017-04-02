@@ -2,7 +2,7 @@
 
 /obj/machinery/mirror/beamsplitter
 	name = "beamsplitter"
-	desc = "Uses a half-silvered phoron-glass mirror to split beams in two directions."
+	desc = "Uses a half-silvered plasma-glass mirror to split beams in two directions."
 	mirror_state = "splitter"
 	icon_state = "splitter" // For alignment when mapping
 	nsplits = 2
@@ -10,7 +10,7 @@
 /obj/machinery/mirror/beamsplitter/New()
 	..()
 	component_parts = list(
-		new /obj/item/stack/sheet/glass/phoronrglass(src,5),
+		new /obj/item/stack/sheet/glass/plasmarglass(src,5),
 	)
 
 /obj/machinery/mirror/beamsplitter/get_deflections(var/in_dir)

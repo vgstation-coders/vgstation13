@@ -159,13 +159,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
 
-/datum/material/phoron
-	name="Phoron"
-	id=MAT_PHORON
+/datum/material/plasma
+	name="Plasma"
+	id=MAT_PLASMA
 	value=40
-	oretype=/obj/item/weapon/ore/phoron
-	sheettype=/obj/item/stack/sheet/mineral/phoron
-	cointype=/obj/item/weapon/coin/phoron
+	oretype=/obj/item/weapon/ore/plasma
+	sheettype=/obj/item/stack/sheet/mineral/plasma
+	cointype=/obj/item/weapon/coin/plasma
 
 /datum/material/gold
 	name="Gold"

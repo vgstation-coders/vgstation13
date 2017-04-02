@@ -39,7 +39,7 @@
 
 	var/stomachProcessProbability = 50
 	var/digestionProbability = 20
-	var/flatPhoronValue = 5 //flat phoron amount given for non-items
+	var/flatPlasmaValue = 5 //flat plasma amount given for non-items
 
 	var/atom/currentlyEating //what the worm is currently eating
 	var/eatingDuration = 0 //how long he's been eating it for
@@ -139,7 +139,7 @@
 				var/turf/simulated/wall/wall = target
 				wall.ChangeTurf(/turf/simulated/floor)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src)
-				M.amount = flatPhoronValue
+				M.amount = flatPlasmaValue
 				return 1
 		else if(istype(target,/atom/movable))
 			if(istype(target,/mob) || eatingDuration >= 50) //5 ticks to eat stuff like airlocks
@@ -174,21 +174,21 @@
 	proc/ProcessStomach()
 		for(var/atom/movable/stomachContent in contents)
 			if(prob(digestionProbability))
-				if(istype(stomachContent,/obj/item/stack)) //converts to phoron, keeping the stack value
-					if(!istype(stomachContent,/obj/item/stack/sheet/mineral/phoron))
+				if(istype(stomachContent,/obj/item/stack)) //converts to plasma, keeping the stack value
+					if(!istype(stomachContent,/obj/item/stack/sheet/mineral/plasma))
 						var/obj/item/stack/oldStack = stomachContent
-						new /obj/item/stack/sheet/mineral/phoron(src, oldStack.amount)
+						new /obj/item/stack/sheet/mineral/plasma(src, oldStack.amount)
 						qdel(oldStack)
 						oldStack = null
 						continue
-				else if(istype(stomachContent,/obj/item)) //converts to phoron, keeping the w_class
+				else if(istype(stomachContent,/obj/item)) //converts to plasma, keeping the w_class
 					var/obj/item/oldItem = stomachContent
-					new /obj/item/stack/sheet/mineral/phoron(src, oldItem.w_class)
+					new /obj/item/stack/sheet/mineral/plasma(src, oldItem.w_class)
 					qdel(oldItem)
 					oldItem = null
 					continue
 				else
-					new /obj/item/stack/sheet/mineral/phoron(src, flatPhoronValue) //just flat amount
+					new /obj/item/stack/sheet/mineral/plasma(src, flatPlasmaValue) //just flat amount
 					qdel(stomachContent)
 					stomachContent = null
 					continue

@@ -5,7 +5,7 @@ Mineral Sheets
 		- Brick
 		- Diamond
 		- Uranium
-		- Phoron
+		- Plasma
 		- Gold
 		- Silver
 		- Clown
@@ -121,30 +121,30 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 	..()
 
 /*
- * Phoron
+ * Plasma
  */
-/obj/item/stack/sheet/mineral/phoron
-	name = "solid phoron"
-	singular_name = "phoron sheet"
-	icon_state = "sheet-phoron"
+/obj/item/stack/sheet/mineral/plasma
+	name = "solid plasma"
+	singular_name = "plasma sheet"
+	icon_state = "sheet-plasma"
 	force = 5.0
 	throwforce = 5
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 3
-	origin_tech = Tc_PHORONTECH + "=2;" + Tc_MATERIALS + "=2"
+	origin_tech = Tc_PLASMATECH + "=2;" + Tc_MATERIALS + "=2"
 	perunit = 2000
-	sheettype = "phoron"
+	sheettype = "plasma"
 	melt_temperature = MELTPOINT_STEEL + 500
-	recyck_mat = MAT_PHORON
+	recyck_mat = MAT_PLASMA
 
-var/list/datum/stack_recipe/phoron_recipes = list ( \
-	new/datum/stack_recipe("phoron floor tile", /obj/item/stack/tile/mineral/phoron, 1, 4, 20), \
-	new/datum/stack_recipe("phoron door", /obj/machinery/door/mineral/transparent/phoron, 10, one_per_turf = 1, on_floor = 1), \
+var/list/datum/stack_recipe/plasma_recipes = list ( \
+	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
+	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
 	)
 
-/obj/item/stack/sheet/mineral/phoron/New(var/loc, var/amount=null)
-	recipes = phoron_recipes
+/obj/item/stack/sheet/mineral/plasma/New(var/loc, var/amount=null)
+	recipes = plasma_recipes
 
 	..()
 

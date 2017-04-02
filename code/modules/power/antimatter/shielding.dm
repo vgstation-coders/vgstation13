@@ -10,7 +10,7 @@ proc/cardinalrange(var/center)
 
 /obj/machinery/am_shielding
 	name = "antimatter reactor section"
-	desc = "This device was built using a phoron life-form that increases phoron's natural ability to react with neutrinos while reducing the combustibility."
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."
 
 	//icon = 'icons/obj/machines/antimatter.dmi'
 	icon = 'icons/obj/machines/new_ame.dmi'
@@ -26,7 +26,7 @@ proc/cardinalrange(var/center)
 	var/obj/machinery/power/am_control_unit/control_unit = null
 	var/processing = 0//To track if we are in the update list or not, we need to be when we are damaged and if we ever
 	var/stability = 100//If this gets low bad things tend to happen
-	var/efficiency = 1//How many cores this core counts for when doing power processing, phoron in the air and stability could affect this
+	var/efficiency = 1//How many cores this core counts for when doing power processing, plasma in the air and stability could affect this
 	var/coredirs = 0
 	var/dirs = 0
 	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
@@ -110,7 +110,7 @@ proc/cardinalrange(var/center)
 	if(!processing)
 		. = PROCESS_KILL
 	//TODO: core functions and stability
-	//TODO: think about checking the airmix for phoron and increasing power output
+	//TODO: think about checking the airmix for plasma and increasing power output
 
 
 /obj/machinery/am_shielding/emp_act()//Immune due to not really much in the way of electronics.

@@ -66,7 +66,7 @@
 /mining_surprise/wizden
 	name = "Hidden Den"
 	walltypes = list(
-		/turf/simulated/wall/mineral/phoron=3,
+		/turf/simulated/wall/mineral/plasma=3,
 		/turf/unsimulated/mineral/random/high_chance=1
 	)
 	floortypes = list(
@@ -132,7 +132,7 @@
 		/turf/simulated/floor/bluegrid=1
 	)
 	spawntypes = list(
-		/obj/item/weapon/pickaxe/phoroncutter=1,
+		/obj/item/weapon/pickaxe/plasmacutter=1,
 		/obj/machinery/shieldgen=1,
 		/obj/item/weapon/cell/hyper=1
 	)

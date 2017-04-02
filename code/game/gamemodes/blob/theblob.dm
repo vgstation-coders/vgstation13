@@ -222,7 +222,7 @@ var/list/blob_looks
 	switch(W.damtype)
 		if("fire")
 			damage = (W.force / max(src.fire_resist,1))
-			if(istype(W, /obj/item/weapon/weldingtool) || istype(W, /obj/item/weapon/pickaxe/phoroncutter))
+			if(istype(W, /obj/item/weapon/weldingtool) || istype(W, /obj/item/weapon/pickaxe/plasmacutter))
 				playsound(get_turf(src), 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))

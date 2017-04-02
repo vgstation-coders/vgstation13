@@ -3,13 +3,13 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector
 	name = "Radiation Collector Array"
-	desc = "A device which uses Hawking Radiation and phoron to produce power."
+	desc = "A device which uses Hawking Radiation and plasma to produce power."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "ca"
 	anchored = 0
 	density = 1
 	req_access = list(access_engine_equip)
-	var/obj/item/weapon/tank/phoron/P = null
+	var/obj/item/weapon/tank/plasma/P = null
 	var/last_power = 0
 	var/active = 0
 	var/locked = 0
@@ -62,12 +62,12 @@ var/global/list/rad_collectors = list()
 		else
 			to_chat(user, "<span class='notice'>\The [W] registers that the unit is currently not producing power.</span>")
 		return 1
-	else if(istype(W, /obj/item/weapon/tank/phoron))
+	else if(istype(W, /obj/item/weapon/tank/plasma))
 		if(!src.anchored)
 			to_chat(user, "<span class='warning'>\The [src] needs to be secured to the floor first.</span>")
 			return 1
 		if(src.P)
-			to_chat(user, "<span class='warning'>A phoron tank is already loaded.</span>")
+			to_chat(user, "<span class='warning'>A plasma tank is already loaded.</span>")
 			return 1
 		if(user.drop_item(W, src))
 			src.P = W
@@ -92,7 +92,7 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/wrenchAnchor(mob/user)
 	if(P)
-		to_chat(user, "<span class='warning'>Remove the phoron tank first.</span>")
+		to_chat(user, "<span class='warning'>Remove the plasma tank first.</span>")
 		return
 	if(..() == 1)
 		if(anchored)

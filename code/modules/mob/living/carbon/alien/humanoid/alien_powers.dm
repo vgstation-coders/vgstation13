@@ -9,8 +9,8 @@ Doesn't work on other aliens/AI.*/
 	if(stat)
 		to_chat(src, "<span class='alien'>You must be conscious to do this.</span>")
 		return 0
-	else if(X && getPhoron() < X)
-		to_chat(src, "<span class='alien'>Not enough phoron stored.</span>")
+	else if(X && getPlasma() < X)
+		to_chat(src, "<span class='alien'>Not enough plasma stored.</span>")
 		return 0
 	else if(Y && (!isturf(src.loc) || istype(src.loc, /turf/space)))
 		to_chat(src, "<span class='alien'>Bad place for a garden!</span>")
@@ -26,9 +26,9 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 50
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/weeds/node)
@@ -41,7 +41,7 @@ Doesn't work on other aliens/AI.*/
 	set category = "Alien"
 
 	if(powerc(5))
-		AdjustPhoron(-5)
+		AdjustPlasma(-5)
 		for(var/obj/item/clothing/mask/facehugger/F in range(8,user))
 			F.GoActive()
 		emote("roar")
@@ -56,9 +56,9 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 10
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 7
 	spell_flags = WAIT_FOR_CLICK
@@ -95,31 +95,31 @@ Doesn't work on other aliens/AI.*/
 		to_chat(M, "<span class='alien'>You hear a strange, alien voice in your head... <em>[storedmessage]</span></em>")
 		to_chat(user, "<span class='alien'>You said: [storedmessage] to [M]</span>")
 
-/spell/targeted/alientransferphoron
-	name = "Transfer Phoron"
-	desc = "Transfer your phoron to another alien"
+/spell/targeted/alientransferplasma
+	name = "Transfer Plasma"
+	desc = "Transfer your plasma to another alien"
 	panel = "Alien"
 	hud_state = "alien_transfer"
 	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
-	holder_var_type = "phoron"
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	holder_var_type = "plasma"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 2
 	compatible_mobs = list(/mob/living/carbon/alien)
 
 //Does it take charge before casting? How to transfer to new alien
-/spell/targeted/alientransferphoron/cast(var/list/targets, mob/user)
+/spell/targeted/alientransferplasma/cast(var/list/targets, mob/user)
 	var/mob/living/carbon/alien/M = targets[1]
-	var/amount = input(user, "Amount:", "Transfer Phoron to [M]") as num
+	var/amount = input(user, "Amount:", "Transfer Plasma to [M]") as num
 	if(amount)
 		amount = abs(round(amount))
 		holder_var_amount = amount
 		if(check_charge(user = user) && get_dist(user, M) <= range) //Since input is a blocking operation
 			take_charge(user = user)
-			to_chat(M, "<span class='alien'>\The [user] has transfered [amount] phoron to you.</span>")
-			to_chat(user, "<span class='alien'>You have trasferred [amount] phoron to [M]</span>")
+			to_chat(M, "<span class='alien'>\The [user] has transfered [amount] plasma to you.</span>")
+			to_chat(user, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
 		else
 			to_chat(user, "<span class='alien'>You need to be closer.</span>")
 	holder_var_amount = 0
@@ -132,9 +132,9 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 50
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 	still_recharging_msg = "<span class='alien'>You must regenerate your neurotoxin stores first.</span>"
 	charge_max = 50
 
@@ -184,9 +184,9 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 75
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
 	full_list = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
@@ -201,9 +201,9 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = WAIT_FOR_CLICK
 	charge_type = Sp_HOLDVAR|Sp_RECHARGE
 	charge_max = 8 SECONDS
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 200
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	range = 1
 
@@ -267,9 +267,9 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 	charge_type = Sp_HOLDVAR
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 75
-	insufficient_holder_msg = "<span class='alien'>Not enough phoron stored.</span>"
+	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
 
 	spell_flags = IGNORESPACE|NODUPLICATE
 
@@ -300,7 +300,7 @@ a
 /spell/aoe_turf/evolve/drone
 	desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
 
-	holder_var_type = "phoron"
+	holder_var_type = "plasma"
 	holder_var_amount = 500
 
 /spell/aoe_turf/evolve/drone/cast_check(skipcharge = 0, mob/user)
@@ -340,9 +340,9 @@ a
 /spell/aoe_turf/evolve/larva/spell_do_after(mob/user)
 	var/explanation_message = {"<span class='notice'><B>You are growing into a beautiful alien! It is time to choose a caste.</B><br>
 	There are three castes to choose from:<br>
-	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate phoron slowly and have low reserves.<br>
+	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate plasma slowly and have low reserves.<br>
 	<B>Sentinels</B> are tasked with protecting the hive and are deadly up close and at a range. They are not as physically imposing nor fast as the hunters.<br>
-	<B>Drones</B> are the working class, offering the largest phoron storage and generation. They are the only caste which may evolve again, turning into the dreaded alien queen."}
+	<B>Drones</B> are the working class, offering the largest plasma storage and generation. They are the only caste which may evolve again, turning into the dreaded alien queen."}
 	to_chat(user, explanation_message)
 	spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
 	while(spawning == "Repeat Explanation")
@@ -397,7 +397,7 @@ a
 
 /mob/living/carbon/alien/humanoid/CtrlClickOn(var/atom/A)
 	if(isalien(A))
-		transfer_phoron(A)
+		transfer_plasma(A)
 		return
 	. = ..()
 */

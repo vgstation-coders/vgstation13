@@ -89,12 +89,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	if(prob(5))
 		consume_gasses = list()
-		var/gas = pick("oxygen","nitrogen","phoron","carbon_dioxide")
+		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
 		consume_gasses[gas] = rand(3,9)
 
 	if(prob(5))
 		exude_gasses = list()
-		var/gas = pick("oxygen","nitrogen","phoron","carbon_dioxide")
+		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
 		exude_gasses[gas] = rand(3,9)
 
 	chems = list()
@@ -191,7 +191,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		SYNAPTIZINE = 100,
 		LEPORAZINE = 100,
 		POTASSIUM = 100,
-		PHORON = 100,
+		PLASMA = 100,
 		// Misc Medicines
 		BICARIDINE = 100,
 		INAPROVALINE = 100,

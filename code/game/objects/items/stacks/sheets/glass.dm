@@ -2,8 +2,8 @@
  * Contains:
  *		Glass sheets
  *		Reinforced glass sheets
- *		Phoron Glass Sheets
- *		Reinforced Phoron Glass Sheets (AKA Holy fuck strong windows)
+ *		Plasma Glass Sheets
+ *		Reinforced Plasma Glass Sheets (AKA Holy fuck strong windows)
  */
 
 /obj/item/stack/sheet/glass
@@ -252,43 +252,43 @@
 	starting_materials = null
 
 /*
- * Phoron Glass sheets
+ * Plasma Glass sheets
  */
 
-/obj/item/stack/sheet/glass/phoronglass
-	name = "phoron glass"
-	desc = "A very strong and very resistant sheet of a phoron-glass alloy."
+/obj/item/stack/sheet/glass/plasmaglass
+	name = "plasma glass"
+	desc = "A very strong and very resistant sheet of a plasma-glass alloy."
 	singular_name = "glass sheet"
-	icon_state = "sheet-phoronglass"
-	sname = "phoron"
-	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PHORON = CC_PER_SHEET_MISC)
-	origin_tech = Tc_MATERIALS + "=3;" + Tc_PHORONTECH + "=2"
-	created_window = /obj/structure/window/phoron
-	full_window = /obj/structure/window/full/phoron
-	rglass = /obj/item/stack/sheet/glass/phoronrglass
-	perunit = 2875 //average of phoron and glass
+	icon_state = "sheet-plasmaglass"
+	sname = "plasma"
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_PLASMATECH + "=2"
+	created_window = /obj/structure/window/plasma
+	full_window = /obj/structure/window/full/plasma
+	rglass = /obj/item/stack/sheet/glass/plasmarglass
+	perunit = 2875 //average of plasma and glass
 	melt_temperature = MELTPOINT_STEEL + 500
-	glass_quality = 1.15 //Can you imagine a world in which phoronglass is worse than rglass
+	glass_quality = 1.15 //Can you imagine a world in which plasmaglass is worse than rglass
 	shealth = 20
-	shard_type = /obj/item/weapon/shard/phoron
+	shard_type = /obj/item/weapon/shard/plasma
 
 /*
- * Reinforced phoron glass sheets
+ * Reinforced plasma glass sheets
  */
-/obj/item/stack/sheet/glass/phoronrglass
-	name = "reinforced phoron glass"
-	desc = "Phoron glass which seems to have rods or something stuck in them."
-	singular_name = "reinforced phoron glass sheet"
-	icon_state = "sheet-phoronrglass"
-	sname = "phoron_ref"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PHORON = CC_PER_SHEET_MISC)
+/obj/item/stack/sheet/glass/plasmarglass
+	name = "reinforced plasma glass"
+	desc = "Plasma glass which seems to have rods or something stuck in them."
+	singular_name = "reinforced plasma glass sheet"
+	icon_state = "sheet-plasmarglass"
+	sname = "plasma_ref"
+	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
-	origin_tech = Tc_MATERIALS + "=4;" + Tc_PHORONTECH + "=2"
-	created_window = /obj/structure/window/reinforced/phoron
-	full_window = /obj/structure/window/full/reinforced/phoron
-	windoor = /obj/structure/windoor_assembly/phoron
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
+	created_window = /obj/structure/window/reinforced/plasma
+	full_window = /obj/structure/window/full/reinforced/plasma
+	windoor = /obj/structure/windoor_assembly/plasma
 	perunit = 2875
 	reinforced = 1
 	glass_quality = 1.3
 	shealth = 30
-	shard_type = /obj/item/weapon/shard/phoron
+	shard_type = /obj/item/weapon/shard/plasma

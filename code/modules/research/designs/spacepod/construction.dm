@@ -13,10 +13,10 @@
 	desc = "Allows for the construction of a spacepod core system, made up of the engine and life support systems."
 	id = "podcore"
 	build_type = PODFAB
-	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_PHORONTECH = 3, Tc_BLUESPACE = 2)
+	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_PLASMATECH = 3, Tc_BLUESPACE = 2)
 	build_path = /obj/item/pod_parts/core
 	category = "Pod_Parts"
-	materials = list(MAT_IRON=5000,MAT_URANIUM=1000,MAT_PHORON=5000)
+	materials = list(MAT_IRON=5000,MAT_URANIUM=1000,MAT_PLASMA=5000)
 
 //POD ARMOUR
 
@@ -25,10 +25,10 @@
 	desc = "Allows for the construction of spacepod armor. This is the civilian version."
 	id = "podarmor_civ"
 	build_type = PODFAB
-	req_tech = list(Tc_MATERIALS = 3, Tc_PHORONTECH = 3)
+	req_tech = list(Tc_MATERIALS = 3, Tc_PLASMATECH = 3)
 	build_path = /obj/item/pod_parts/armor
 	category = "Pod_Armor"
-	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PHORON=10000)
+	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PLASMA=10000)
 
 //FRAME PARTS.
 

@@ -32,7 +32,7 @@ tank [un]loading stuff
 turn on/off
 
 /obj/machinery/power/port_gen/examine()
-display round(lastgen) and phorontank amount
+display round(lastgen) and plasmatank amount
 
 */
 
@@ -97,7 +97,7 @@ display round(lastgen) and phorontank amount
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
-	var/sheet_path = /obj/item/stack/sheet/mineral/phoron
+	var/sheet_path = /obj/item/stack/sheet/mineral/plasma
 	var/board_path = "/obj/item/weapon/circuitboard/pacman"
 	var/sheet_left = 0 // How much is left of the sheet
 	var/time_per_sheet = 40

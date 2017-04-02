@@ -25,7 +25,7 @@
 	id = "bluespace_crystal"
 	req_tech = list(Tc_BLUESPACE = 4, Tc_MATERIALS = 6)
 	build_type = PROTOLATHE
-	materials = list(MAT_DIAMOND = 1500, MAT_PHORON = 1500)
+	materials = list(MAT_DIAMOND = 1500, MAT_PLASMA = 1500)
 	reliability = 100
 	category = "Bluespace"
 	build_path = /obj/item/bluespace_crystal/artificial

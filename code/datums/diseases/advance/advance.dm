@@ -16,7 +16,7 @@ var/list/advance_cures = 	list(
 									NUTRIMENT, SUGAR, ORANGEJUICE,
 									SPACEACILLIN, KELOTANE, ETHANOL,
 									LEPORAZINE, SYNAPTIZINE, LIPOZINE,
-									SILVER, GOLD, PHORON
+									SILVER, GOLD, PLASMA
 								)
 
 /*

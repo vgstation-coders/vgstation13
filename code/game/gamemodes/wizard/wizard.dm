@@ -206,7 +206,7 @@
 
 	wizard_mob.make_all_robot_parts_organic()
 
-	// For Vox and phorondudes.
+	// For Vox and plasmadudes.
 	//wizard_mob.species.handle_post_spawn(wizard_mob)
 
 	to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")

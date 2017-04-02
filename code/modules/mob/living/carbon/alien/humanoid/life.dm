@@ -184,7 +184,7 @@
 
 		if(Toxins_pp) // Detect toxins in air
 
-			AdjustPhoron(breath.toxins*250)
+			AdjustPlasma(breath.toxins*250)
 			toxins_alert = max(toxins_alert, 1)
 
 			toxins_used = breath.toxins

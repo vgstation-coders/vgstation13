@@ -203,10 +203,10 @@ datum/tech/engineering
 	id = "engineering"
 	max_level=5
 
-datum/tech/phorontech
-	name = "Phoron Research"
-	desc = "Research into the mysterious substance colloqually known as 'phoron'."
-	id = "phorontech"
+datum/tech/plasmatech
+	name = "Plasma Research"
+	desc = "Research into the mysterious substance colloqually known as 'plasma'."
+	id = "plasmatech"
 	max_level=4
 
 datum/tech/powerstorage

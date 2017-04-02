@@ -1,19 +1,19 @@
 //MINERAL FLOORS ARE HERE
-//Includes: PHORON, GOLD, SILVER, BANANIUM, DIAMOND, URANIUM, PHAZON
+//Includes: PLASMA, GOLD, SILVER, BANANIUM, DIAMOND, URANIUM, PHAZON
 
-//PHORON
+//PLASMA
 
 /turf/simulated/floor/mineral/New()
 	if(floor_tile)
 		material = floor_tile.material
 	..()
 
-/turf/simulated/floor/mineral/phoron
-	name = "phoron floor"
-	icon_state = "phoron"
+/turf/simulated/floor/mineral/plasma
+	name = "plasma floor"
+	icon_state = "plasma"
 
-/turf/simulated/floor/mineral/phoron/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/mineral/phoron, null)
+/turf/simulated/floor/mineral/plasma/New()
+	floor_tile = getFromPool(/obj/item/stack/tile/mineral/plasma, null)
 	..()
 
 //GOLD

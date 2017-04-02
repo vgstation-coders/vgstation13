@@ -561,7 +561,7 @@
 	max_fuel = 40
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PHORONTECH + "=3"
+	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	icon_state = "ewelder"
 	var/last_gen = 0
 

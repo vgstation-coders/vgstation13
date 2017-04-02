@@ -112,7 +112,7 @@
 	desc = "What was once a grey, twisted and warped by machine."
 	icon_state = "grey_cyber_horror"
 
-/mob/living/simple_animal/hostile/monster/cyber_horror/Phoronman
-	name = "phoronman cyber horror"
-	desc = "What was once the suit of a phoronman, filled with roiling nanobots."
-	icon_state = "phoron_cyber_horror"
+/mob/living/simple_animal/hostile/monster/cyber_horror/Plasmaman
+	name = "plasmaman cyber horror"
+	desc = "What was once the suit of a plasmaman, filled with roiling nanobots."
+	icon_state = "plasma_cyber_horror"

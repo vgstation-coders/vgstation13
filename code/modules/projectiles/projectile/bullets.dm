@@ -5,7 +5,7 @@
 	damage_type = BRUTE
 	nodamage = 0
 	phase_type = PROJREACT_WINDOWS
-	penetration = 5 //bullets can now by default move through up to 5 windows, or 2 reinforced windows, or 1 phoron window. (reinforced phoron windows still have enough dampening to completely block them)
+	penetration = 5 //bullets can now by default move through up to 5 windows, or 2 reinforced windows, or 1 plasma window. (reinforced plasma windows still have enough dampening to completely block them)
 	flag = "bullet"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	var/embed = 1
@@ -43,9 +43,9 @@
 	name = "small shrapnel"
 	damage = 25
 
-/obj/item/projectile/bullet/shrapnel/small/phoron
+/obj/item/projectile/bullet/shrapnel/small/plasma
 
-	name = "small phoron shrapnel"
+	name = "small plasma shrapnel"
 	damage_type = TOX
 	color = "#BF5FFF"
 	damage = 35
@@ -585,7 +585,7 @@
 			var/o2_concentration = gas_jet.oxygen/total_moles
 			var/n2_concentration = gas_jet.nitrogen/total_moles
 			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
-			var/phoron_concentration = gas_jet.toxins/total_moles
+			var/plasma_concentration = gas_jet.toxins/total_moles
 			var/n2o_concentration = null
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
@@ -603,8 +603,8 @@
 				gas_type = "nitrogen"
 			if(co2_concentration > 0.5)
 				gas_type = "CO2"
-			if(phoron_concentration > 0.5)
-				gas_type = "phoron"
+			if(plasma_concentration > 0.5)
+				gas_type = "plasma"
 			if(n2o_concentration && n2o_concentration > 0.5)
 				gas_type = "N2O"
 

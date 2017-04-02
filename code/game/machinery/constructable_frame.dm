@@ -334,10 +334,10 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/pacman
 	name = "Circuit Board (PACMAN-type Generator)"
-	desc = "A circuit board used to run a machine that converts phoron into electricity."
+	desc = "A circuit board used to run a machine that converts plasma into electricity."
 	build_path = "/obj/machinery/power/port_gen/pacman"
 	board_type = MACHINE
-	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=3;" + Tc_PHORONTECH + "=3;" + Tc_ENGINEERING + "=3"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=3;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser" = 1,

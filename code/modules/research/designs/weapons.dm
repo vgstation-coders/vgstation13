@@ -34,39 +34,39 @@
 	locked = 1
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/xcomphoronpistol
-	name = "Phoron Pistol"
-	desc = "A phoron pistol."
-	id = "xcomphoronpistol"
-	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_PHORONTECH = 3)
+/datum/design/xcomplasmapistol
+	name = "Plasma Pistol"
+	desc = "A plasma pistol."
+	id = "xcomplasmapistol"
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_PLASMATECH = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PHORON = 12000, MAT_URANIUM = 4000)
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PLASMA = 12000, MAT_URANIUM = 4000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/phoron/pistol
+	build_path = /obj/item/weapon/gun/energy/plasma/pistol
 	locked = 1
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/xcomphoronrifle
-	name = "Phoron Cannon"
-	desc = "A phoron cannon."
-	id = "xcomphoronrifle"
-	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_PHORONTECH = 3)
+/datum/design/xcomplasmarifle
+	name = "Plasma Cannon"
+	desc = "A plasma cannon."
+	id = "xcomplasmarifle"
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_PLASMATECH = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 3000, MAT_PHORON = 28000, MAT_URANIUM = 12000)
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 3000, MAT_PLASMA = 28000, MAT_URANIUM = 12000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/phoron/rifle
+	build_path = /obj/item/weapon/gun/energy/plasma/rifle
 	locked = 1
 	req_lock_access = list(access_armory, access_weapons)
 
-/datum/design/xcomlightphoronrifle
-	name = "Phoron Rifle"
-	desc = "A phoron rifle."
-	id = "xcomlightphoronrifle"
-	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_PHORONTECH = 3)
+/datum/design/xcomlightplasmarifle
+	name = "Plasma Rifle"
+	desc = "A plasma rifle."
+	id = "xcomlightplasmarifle"
+	req_tech = list(Tc_COMBAT = 5, Tc_MATERIALS = 3, Tc_POWERSTORAGE = 3, Tc_PLASMATECH = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PHORON = 20000, MAT_URANIUM = 8000)
+	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PLASMA = 20000, MAT_URANIUM = 8000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/phoron/light
+	build_path = /obj/item/weapon/gun/energy/plasma/light
 	locked = 1
 	req_lock_access = list(access_armory, access_weapons)
 

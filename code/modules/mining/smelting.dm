@@ -51,12 +51,12 @@
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/diamond
 
-/datum/smelting_recipe/phoron
-	name = "Phoron"
+/datum/smelting_recipe/plasma
+	name = "Plasma"
 	ingredients=list(
-		MAT_PHORON = 1
+		MAT_PLASMA = 1
 	)
-	yieldtype = /obj/item/stack/sheet/mineral/phoron
+	yieldtype = /obj/item/stack/sheet/mineral/plasma
 
 /datum/smelting_recipe/uranium
 	name = "Uranium"
@@ -76,7 +76,7 @@
 	name = "Plasteel"
 	ingredients=list(
 		MAT_IRON = 1,
-		MAT_PHORON = 1
+		MAT_PLASMA = 1
 	)
 	yieldtype = /obj/item/stack/sheet/plasteel
 
@@ -87,22 +87,22 @@
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/clown
 
-/datum/smelting_recipe/phoron_glass
-	name = "Phoron Glass"
+/datum/smelting_recipe/plasma_glass
+	name = "Plasma Glass"
 	ingredients=list(
-		MAT_PHORON = 1,
+		MAT_PLASMA = 1,
 		MAT_GLASS = 1
 	)
-	yieldtype = /obj/item/stack/sheet/glass/phoronglass
+	yieldtype = /obj/item/stack/sheet/glass/plasmaglass
 
-/datum/smelting_recipe/phoron_rglass
-	name="Reinforced Phoron Glass"
+/datum/smelting_recipe/plasma_rglass
+	name="Reinforced Plasma Glass"
 	ingredients=list(
-		MAT_PHORON = 1,
+		MAT_PLASMA = 1,
 		MAT_GLASS = 1,
 		MAT_IRON = 1
 	)
-	yieldtype=/obj/item/stack/sheet/glass/phoronrglass
+	yieldtype=/obj/item/stack/sheet/glass/plasmarglass
 
 /datum/smelting_recipe/phazon
 	name = "phazon"

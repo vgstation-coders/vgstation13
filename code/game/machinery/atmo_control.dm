@@ -35,7 +35,7 @@
 		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_out_flag=1">[output&1 ? "Yes" : "No"]</a>
 		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_out_flag=2">[output&2 ? "Yes" : "No"]</a>
 		<li>Monitor Oxygen Concentration: <a href="?src=\ref[src];toggle_out_flag=4">[output&4 ? "Yes" : "No"]</a>
-		<li>Monitor Phoron Concentration: <a href="?src=\ref[src];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
+		<li>Monitor Plasma Concentration: <a href="?src=\ref[src];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
 		<li>Monitor Nitrogen Concentration: <a href="?src=\ref[src];toggle_out_flag=16">[output&16 ? "Yes" : "No"]</a>
 		<li>Monitor Carbon Dioxide Concentration: <a href="?src=\ref[src];toggle_out_flag=32">[output&32 ? "Yes" : "No"]</a>
 	</ul>"}
@@ -172,7 +172,7 @@
 					if(data["carbon_dioxide"])
 						sensor_part += "<li>[data["carbon_dioxide"]]% CO<sub>2</sub></li>"
 					if(data["toxins"])
-						sensor_part += "<li>[data["toxins"]]% Phoron</li>"
+						sensor_part += "<li>[data["toxins"]]% Plasma</li>"
 					sensor_part += "</ul></td></tr>"
 				sensor_part += "</table>"
 

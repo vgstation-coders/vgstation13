@@ -141,8 +141,8 @@
 	new /obj/item/clothing/shoes/orange(src)
 	new /obj/item/clothing/shoes/orange(src)
 	new /obj/item/clothing/shoes/orange(src)
-	new /obj/item/clothing/suit/space/phoronman/prisoner(src)
-	new /obj/item/clothing/head/helmet/space/phoronman/prisoner(src)
+	new /obj/item/clothing/suit/space/plasmaman/prisoner(src)
+	new /obj/item/clothing/head/helmet/space/plasmaman/prisoner(src)
 	AddToProfiler()
 	return
 
@@ -248,7 +248,7 @@
 	new /obj/item/clothing/under/rank/scientist(src)
 	new /obj/item/clothing/under/rank/scientist(src)
 	new /obj/item/clothing/under/rank/xenoarch(src)
-	new /obj/item/clothing/under/rank/phoronres(src)
+	new /obj/item/clothing/under/rank/plasmares(src)
 	new /obj/item/clothing/under/rank/xenobio(src)
 	new /obj/item/clothing/under/rank/anomalist(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)

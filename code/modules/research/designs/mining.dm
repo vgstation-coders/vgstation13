@@ -18,16 +18,16 @@
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/drill
 
-/datum/design/phoroncutter
-	name = "Phoron Cutter"
+/datum/design/plasmacutter
+	name = "Plasma Cutter"
 	desc = "You could use it to cut limbs off of xenos! Or, you know, mine stuff."
-	id = "phoroncutter"
-	req_tech = list(Tc_MATERIALS = 4, Tc_PHORONTECH = 3, Tc_ENGINEERING = 3)
+	id = "plasmacutter"
+	req_tech = list(Tc_MATERIALS = 4, Tc_PLASMATECH = 3, Tc_ENGINEERING = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 1500, MAT_GLASS = 500, MAT_GOLD = 500, MAT_PHORON = 500)
+	materials = list(MAT_IRON = 1500, MAT_GLASS = 500, MAT_GOLD = 500, MAT_PLASMA = 500)
 	reliability_base = 79
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/phoroncutter
+	build_path = /obj/item/weapon/pickaxe/plasmacutter
 
 /datum/design/pick_diamond
 	name = "Diamond Pickaxe"

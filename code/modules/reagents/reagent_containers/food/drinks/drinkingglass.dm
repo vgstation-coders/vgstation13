@@ -652,10 +652,10 @@
 					icon_state = CHIFIR
 					name = "Chifir"
 					desc = "Russian style of tea, not for those with weak stomachs."
-				if(PHORONTEA)
-					icon_state = PHORONTEA
-					name = "Phoron Pekoe"
-					desc = "You can practically taste the science, or maybe that's just the horrible phoron burns."
+				if(PLASMATEA)
+					icon_state = PLASMATEA
+					name = "Plasma Pekoe"
+					desc = "You can practically taste the science, or maybe that's just the horrible plasma burns."
 				if(COFFEE)
 					icon_state = COFFEE
 					name = "Coffee"

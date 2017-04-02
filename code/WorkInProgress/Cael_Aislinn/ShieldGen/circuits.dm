@@ -6,7 +6,7 @@
 	name = "Circuit board (Experimental hull shield generator)"
 	board_type = MACHINE
 	build_path = "/obj/machinery/shield_gen/external"
-	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PHORONTECH + "=3"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
 							"/obj/item/weapon/stock_parts/subspace/transmitter" = 1,
@@ -22,7 +22,7 @@
 	name = "Circuit board (Experimental shield generator)"
 	board_type = MACHINE
 	build_path = "/obj/machinery/shield_gen/external"
-	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PHORONTECH + "=3"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
 							"/obj/item/weapon/stock_parts/subspace/transmitter" = 1,

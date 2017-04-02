@@ -16,7 +16,7 @@
 	req_tech = list(Tc_ENGINEERING = 1)
 	build_path = /obj/item/borg/upgrade/engineering
 	category = "Robotic_Upgrade_Modules"
-	materials = list(MAT_IRON=10000,MAT_GLASS=10000,MAT_PHORON=5000)
+	materials = list(MAT_IRON=10000,MAT_GLASS=10000,MAT_PLASMA=5000)
 
 /datum/design/medical_module_surgery
 	name = "medical module board"
@@ -96,4 +96,4 @@
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/jetpack
 	category = "Robotic_Upgrade_Modules"
-	materials = list(MAT_IRON=10000,MAT_PHORON=15000,MAT_URANIUM = 20000)
+	materials = list(MAT_IRON=10000,MAT_PLASMA=15000,MAT_URANIUM = 20000)

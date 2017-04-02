@@ -79,7 +79,7 @@
 		/obj/item/toy/gasha/engi,
 		/obj/item/toy/gasha/atmos,
 		/obj/item/toy/gasha/sec,
-		/obj/item/toy/gasha/phoronn,
+		/obj/item/toy/gasha/plasman,
 		/obj/item/toy/gasha/shard,
 		/obj/item/toy/gasha/mime,
 		/obj/item/toy/gasha/captain,

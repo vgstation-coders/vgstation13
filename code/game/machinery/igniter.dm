@@ -1,7 +1,7 @@
 var/global/list/igniters = list()
 /obj/machinery/igniter
 	name = "igniter"
-	desc = "It's useful for igniting phoron."
+	desc = "It's useful for igniting plasma."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "igniter1"
 	var/id_tag = null

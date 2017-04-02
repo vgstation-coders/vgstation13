@@ -1,7 +1,7 @@
 #define Tc_PROGRAMMING       "programming"
 #define Tc_ENGINEERING       "engineering"
 #define Tc_MATERIALS         "materials"
-#define Tc_PHORONTECH        "phorontech"
+#define Tc_PLASMATECH        "plasmatech"
 #define Tc_MAGNETS           "magnets"
 #define Tc_SYNDICATE         "syndicate"
 #define Tc_BLUESPACE         "bluespace"

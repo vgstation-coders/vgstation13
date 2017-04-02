@@ -1,10 +1,10 @@
 /obj/item/stack/tile/mineral
 
-/obj/item/stack/tile/mineral/phoron
-	name = "phoron tile"
-	singular_name = "phoron floor tile"
-	desc = "A tile made out of highly flammable phoron. This can only end well."
-	icon_state = "tile_phoron"
+/obj/item/stack/tile/mineral/plasma
+	name = "plasma tile"
+	singular_name = "plasma floor tile"
+	desc = "A tile made out of highly flammable plasma. This can only end well."
+	icon_state = "tile_plasma"
 	w_class = W_CLASS_MEDIUM
 	force = 1.0
 	throwforce = 1.0
@@ -12,7 +12,7 @@
 	throw_range = 7
 	max_amount = 60
 
-	material = "phoron"
+	material = "plasma"
 
 /obj/item/stack/tile/mineral/uranium
 	name = "uranium tile"

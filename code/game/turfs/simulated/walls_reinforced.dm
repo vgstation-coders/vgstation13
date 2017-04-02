@@ -178,7 +178,7 @@
 					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 				return
 
-			if(istype(W, /obj/item/weapon/pickaxe/phoroncutter)) //Ah, snowflake coding, my favorite
+			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter)) //Ah, snowflake coding, my favorite
 
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external cover.</span>", \
 					"<span class='notice'>You begin slicing through \the [src]'s external cover.</span>", \
@@ -294,7 +294,7 @@
 					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 				return
 
-			if(istype(W, /obj/item/weapon/pickaxe/phoroncutter))
+			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter))
 
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s external support rods.</span>")

@@ -150,7 +150,7 @@ var/list/mechtoys = list(
 	//supply points have been replaced with MONEY MONEY MONEY - N3X
 	var/credits_per_slip = 2
 	var/credits_per_crate = 5
-	//var/credits_per_phoron = 0.5 // 2 phoron for 1 point
+	//var/credits_per_plasma = 0.5 // 2 plasma for 1 point
 	//control
 	var/ordernum
 	var/list/centcomm_orders = list()
@@ -259,12 +259,12 @@ var/list/mechtoys = list(
 		if(MA.anchored)
 			continue
 
-		if(istype(MA, /obj/item/stack/sheet/mineral/phoron))
-			var/obj/item/stack/sheet/mineral/phoron/P = MA
+		if(istype(MA, /obj/item/stack/sheet/mineral/plasma))
+			var/obj/item/stack/sheet/mineral/plasma/P = MA
 			if(P.redeemed)
 				continue
 			var/datum/material/mat = materials_list.getMaterial(P.sheettype)
-			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for phoron they receive that hasn't been redeemed already.
+			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
 
 		// Must be in a crate!
 		else if(istype(MA,/obj/structure/closet/crate))
@@ -272,12 +272,12 @@ var/list/mechtoys = list(
 			var/find_slip = 1
 
 			for(var/atom/A in MA)
-				if(istype(A, /obj/item/stack/sheet/mineral/phoron))
-					var/obj/item/stack/sheet/mineral/phoron/P = A
+				if(istype(A, /obj/item/stack/sheet/mineral/plasma))
+					var/obj/item/stack/sheet/mineral/plasma/P = A
 					if(P.redeemed)
 						continue
 					var/datum/material/mat = materials_list.getMaterial(P.sheettype)
-					cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for phoron they receive that hasn't been redeemed already.
+					cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
 					continue
 				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
 					var/obj/item/weapon/paper/slip = A

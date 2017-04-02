@@ -7,7 +7,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	return FALSE
 
 /obj/item/clothing/can_contaminate()
-	return !(clothing_flags & PHORONGUARD)
+	return !(clothing_flags & PLASMAGUARD)
 
 /obj/item/proc/contaminate()
 	// do a contamination overlay?
@@ -30,7 +30,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 
 	if(!pl_head_protected())
 		if(prob(1))
-			suit_contamination() //Phoron can sometimes get through such an open suit.
+			suit_contamination() //Plasma can sometimes get through such an open suit.
 
 //Cannot wash backpacks currently.
 //	if(istype(back,/obj/item/weapon/storage/backpack))
@@ -39,7 +39,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 /mob/proc/pl_effects()
 
 /mob/living/carbon/human/pl_effects()
-	//Handles all the bad things phoron can do.
+	//Handles all the bad things plasma can do.
 
 	if(flags & INVULNERABLE)
 		return
@@ -93,8 +93,8 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 /mob/living/carbon/human/proc/pl_head_protected()
 	//Checks if the head is adequately sealed.
 	if(head)
-		if(zas_settings.Get(/datum/ZAS_Setting/PHORONGUARD_ONLY))
-			if(head.clothing_flags & PHORONGUARD)
+		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
+			if(head.clothing_flags & PLASMAGUARD)
 				return 1
 			else if(check_body_part_coverage(EYES))
 				head.contaminate()
@@ -106,8 +106,8 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 /mob/living/carbon/human/proc/pl_suit_protected()
 	//Checks if the suit is adequately sealed.
 	if(wear_suit)
-		if(zas_settings.Get(/datum/ZAS_Setting/PHORONGUARD_ONLY))
-			if(wear_suit.clothing_flags & PHORONGUARD)
+		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
+			if(wear_suit.clothing_flags & PLASMAGUARD)
 				return 1
 			else if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
 				wear_suit.contaminate()
@@ -132,11 +132,11 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 
 	var/obj/item/I = Obj
 
-	// items that are in phoron, but not on a mob, can still be contaminated.
+	// items that are in plasma, but not on a mob, can still be contaminated.
 	if(istype(I) && zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
 		var/datum/gas_mixture/environment = return_air()
 
-		if(environment.toxins > MOLES_PHORON_VISIBLE + 1)
+		if(environment.toxins > MOLES_PLASMA_VISIBLE + 1)
 			if(I.can_contaminate())
 				I.contaminate()
 */

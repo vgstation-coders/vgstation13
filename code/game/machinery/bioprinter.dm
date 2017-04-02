@@ -24,7 +24,7 @@
 		"heart"            = list(/obj/item/organ/heart,  50),
 		"human lungs"      = list(/obj/item/organ/lungs,  30),
 		"vox lungs"        = list(/obj/item/organ/lungs/vox,  30),
-		"phoronman lungs"  = list(/obj/item/organ/lungs/phoronman,  30),
+		"plasmaman lungs"  = list(/obj/item/organ/lungs/plasmaman,  30),
 		"kidneys"          = list(/obj/item/organ/kidneys,20),
 		"human eyes"       = list(/obj/item/organ/eyes,   30),
 		"grey eyes"        = list(/obj/item/organ/eyes/grey,   30),

@@ -18,7 +18,7 @@
 
 	var/list/overlayGraphics = list()
 
-	if (GRAPHICS_PHORON & newGraphics)
+	if (GRAPHICS_PLASMA & newGraphics)
 		overlayGraphics += plmaster
 
 	if (GRAPHICS_N2O & newGraphics)

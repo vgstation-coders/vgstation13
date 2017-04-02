@@ -227,9 +227,9 @@
 	if (firstExtract != null)
 		extract_uses = firstExtract.Uses
 		for(var/i=1,i<=extract_uses,i++)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
-			if (reservoir.reagents.has_reagent(PHORON, 5))
-				reservoir.reagents.trans_id_to(firstExtract, PHORON, 5)		//If the grenade contains a slime extract, the grenade will check in this order
-			else if (reservoir.reagents.has_reagent(BLOOD, 5))	//for any Phoron -> Blood ->or Water among the reagents of the other containers
+			if (reservoir.reagents.has_reagent(PLASMA, 5))
+				reservoir.reagents.trans_id_to(firstExtract, PLASMA, 5)		//If the grenade contains a slime extract, the grenade will check in this order
+			else if (reservoir.reagents.has_reagent(BLOOD, 5))	//for any Plasma -> Blood ->or Water among the reagents of the other containers
 				reservoir.reagents.trans_id_to(firstExtract, BLOOD, 5)		//and inject 5u of it into the slime extract.
 			else if (reservoir.reagents.has_reagent(WATER, 5))
 				reservoir.reagents.trans_id_to(firstExtract, WATER, 5)
@@ -240,8 +240,8 @@
 		if (secondExtract != null)
 			extract_uses = secondExtract.Uses
 			for(var/j=1,j<=extract_uses,j++)	//why don't anyone ever uses "while" directives anyway?
-				if (reservoir.reagents.has_reagent(PHORON, 5))
-					reservoir.reagents.trans_id_to(secondExtract, PHORON, 5)	//since the order in which slime extracts are inserted matters (in the case of an Ex grenade)
+				if (reservoir.reagents.has_reagent(PLASMA, 5))
+					reservoir.reagents.trans_id_to(secondExtract, PLASMA, 5)	//since the order in which slime extracts are inserted matters (in the case of an Ex grenade)
 				else if (reservoir.reagents.has_reagent(BLOOD, 5))//this allow users to plannify which reagent will get into which extract.
 					reservoir.reagents.trans_id_to(secondExtract, BLOOD, 5)
 				else if (reservoir.reagents.has_reagent(WATER, 5))
@@ -402,7 +402,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 
 	B1.reagents.add_reagent(ALUMINUM, 15)
 	//B1.reagents.add_reagent(FUEL,20)
-	B2.reagents.add_reagent(PHORON, 15)
+	B2.reagents.add_reagent(PLASMA, 15)
 	B2.reagents.add_reagent(SACID, 15)
 	//B1.reagents.add_reagent(FUEL,20)
 

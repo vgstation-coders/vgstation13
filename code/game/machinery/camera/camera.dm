@@ -213,9 +213,9 @@ var/list/camera_messages = list()
 			to_chat(user, "You can't reach into the camera's circuitry with the wires on the way.")
 			return*/
 		if (istype(W, /obj/item/stack))
-			var/obj/item/stack/sheet/mineral/phoron/s = W
+			var/obj/item/stack/sheet/mineral/plasma/s = W
 			s.use(1)
-			assembly.upgrades += new /obj/item/stack/sheet/mineral/phoron
+			assembly.upgrades += new /obj/item/stack/sheet/mineral/plasma
 		else
 			if(!user.drop_item(W, src))
 				return

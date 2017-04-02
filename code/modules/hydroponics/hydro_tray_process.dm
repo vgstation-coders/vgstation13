@@ -129,7 +129,7 @@
 							missing_gas++
 							continue
 						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.oxygen),1)
-					if("phoron")
+					if("plasma")
 						if(environment.toxins < seed.consume_gasses[gas])
 							missing_gas++
 							continue

@@ -66,7 +66,7 @@
 /datum/barsign/vg/chemlab
 	name = "The Chem Lab"
 	icon = "chemlab"
-	desc = "Try our new phoron martinis!"
+	desc = "Try our new plasma martinis!"
 
 /datum/barsign/vg/mime
 	name = "Moonshine Mime"

@@ -62,7 +62,7 @@
 	name = "PACMAN-type Generator Board"
 	desc = "The circuit board that for a PACMAN-type portable generator."
 	id = "pacman"
-	req_tech = list(Tc_PROGRAMMING = 3, Tc_PHORONTECH = 3, Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_PLASMATECH = 3, Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3)
 	build_type = IMPRINTER
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20)
@@ -207,9 +207,9 @@
 	name = "Circuit Design (R-UST Mk. 7 fuel compressor)"
 	desc = "Allows for the construction of circuit boards used to build a fuel compressor of the R-UST Mk. 7 fusion engine."
 	id = "rust_fuel_compressor"
-	req_tech = list(Tc_MATERIALS = 6, Tc_PHORONTECH = 4)
+	req_tech = list(Tc_MATERIALS = 6, Tc_PLASMATECH = 4)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PHORON = 3000, MAT_DIAMOND = 1000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 1000)
 	category = "Misc"
 	build_path = "/obj/item/weapon/module/rust_fuel_compressor"
 
@@ -217,10 +217,10 @@
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
 	desc = "The circuit board that for a RUST-pattern tokamak fusion core."
 	id = "pacman"
-	req_tech = list(bluespace = 3, phorontech = 4, magnets = 5, powerstorage = 6)
+	req_tech = list(bluespace = 3, plasmatech = 4, magnets = 5, powerstorage = 6)
 	build_type = IMPRINTER
 	reliability_base = 79
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PHORON = 3000, MAT_DIAMOND = 2000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 2000)
 	category = "Misc"
 	build_path = "/obj/item/weapon/circuitboard/rust_core"
 
@@ -228,10 +228,10 @@
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
 	desc = "The circuit board that for a RUST-pattern particle accelerator."
 	id = "pacman"
-	req_tech = list(powerstorage = 3, engineering = 4, phorontech = 4, materials = 6)
+	req_tech = list(powerstorage = 3, engineering = 4, plasmatech = 4, materials = 6)
 	build_type = IMPRINTER
 	reliability_base = 79
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PHORON = 3000, MAT_URANIUM = 2000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_URANIUM = 2000)
 	category = "Misc"
 	build_path = "/obj/item/weapon/circuitboard/rust_core"
 
@@ -241,18 +241,18 @@
 	name = "Circuit Design (Experimental hull shield generator)"
 	desc = "Allows for the construction of circuit boards used to build an experimental hull shield generator."
 	id = "shield_gen"
-	req_tech = list(Tc_BLUESPACE = 4, Tc_PHORONTECH = 3)
+	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PHORON = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
 	build_path = "/obj/machinery/shield_gen/external"
 
 /datum/design/shield_gen
 	name = "Circuit Design (Experimental shield generator)"
 	desc = "Allows for the construction of circuit boards used to build an experimental shield generator."
 	id = "shield_gen"
-	req_tech = list(Tc_BLUESPACE = 4, Tc_PHORONTECH = 3)
+	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PHORON = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
 	build_path = "/obj/machinery/shield_gen/external"
 
 /datum/design/shield_cap
@@ -261,5 +261,5 @@
 	id = "shield_cap"
 	req_tech = list(Tc_MAGNETS = 3, Tc_POWERSTORAGE = 4)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PHORON = 10000, MAT_DIAMOND = 5000, MAT_SILVER = 10000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_SILVER = 10000)
 	build_path = "/obj/machinery/shield_gen/external"

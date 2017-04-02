@@ -82,9 +82,9 @@
 	materials[MAT_GLASS] += techtotal * round(rand(150, 300), 50) * modifier
 	if(src.build_type == GENFAB)
 		if(prob(techtotal * 15)) //let's add an extra cost of some medium-rare material - sure a lot of items
-			materials[pick(MAT_PHORON, MAT_URANIUM, MAT_GOLD, MAT_SILVER)] += techtotal * round(rand(50, 250), 10) * modifier
+			materials[pick(MAT_PLASMA, MAT_URANIUM, MAT_GOLD, MAT_SILVER)] += techtotal * round(rand(50, 250), 10) * modifier
 		if(prob(techtotal * 8))//and another cost, because we can - can proc for some items
-			materials[pick(MAT_PHORON, MAT_URANIUM, MAT_GOLD, MAT_SILVER)] += techtotal * round(rand(50, 250), 10) * modifier
+			materials[pick(MAT_PLASMA, MAT_URANIUM, MAT_GOLD, MAT_SILVER)] += techtotal * round(rand(50, 250), 10) * modifier
 		if(techtotal >= 7) //let's add something REALLY rare - bananium and phazon removed for now
 			materials[/*pick(*/MAT_DIAMOND/*, MAT_CLOWN, MAT_PHAZON)*/] += techtotal * round(rand(10, 150), 10) * modifier
 

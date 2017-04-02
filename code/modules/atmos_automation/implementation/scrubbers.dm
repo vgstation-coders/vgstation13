@@ -92,7 +92,7 @@
 
 var/global/list/gas_labels=list(
 	"co2" = "CO<sub>2</sub>",
-	"tox" = "Phoron",
+	"tox" = "Plasma",
 	"n2o" = "N<sub>2</sub>O",
 	"o2"  = "O<sub>2</sub>",
 	"n2"  = "N<sub>2</sub>"

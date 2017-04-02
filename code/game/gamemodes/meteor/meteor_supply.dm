@@ -46,7 +46,7 @@
 	getFromPool(/obj/item/stack/sheet/wood, src, 50)
 	getFromPool(/obj/item/stack/sheet/wood, src, 50)
 	getFromPool(/obj/item/stack/sheet/glass/rglass, src, 50)
-	getFromPool(/obj/item/stack/sheet/glass/phoronrglass, src, 50)
+	getFromPool(/obj/item/stack/sheet/glass/plasmarglass, src, 50)
 
 //Assorted protection items. Gloves, sunglasses
 /obj/structure/closet/crate/meteor_assorted_protection

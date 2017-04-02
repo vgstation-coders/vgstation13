@@ -15,7 +15,7 @@
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = Tc_COMBAT + "=1;" + Tc_PHORONTECH + "=1"
+	origin_tech = Tc_COMBAT + "=1;" + Tc_PLASMATECH + "=1"
 	ejectshell = 0
 	caliber = null
 	ammo_type = null
@@ -30,7 +30,7 @@
 	var/turf/previousturf = null
 	var/obj/item/weapon/weldingtool/weldtool = null
 	var/obj/item/device/assembly/igniter/igniter = null
-	var/obj/item/weapon/tank/phoron/ptank = null
+	var/obj/item/weapon/tank/plasma/ptank = null
 	var/window_open = 0
 
 /obj/item/weapon/gun/projectile/flamethrower/isHandgun()
@@ -170,9 +170,9 @@
 			update_icon()
 			return
 
-	if(istype(W,/obj/item/weapon/tank/phoron))
+	if(istype(W,/obj/item/weapon/tank/plasma))
 		if(ptank)
-			to_chat(user, "<span class='notice'>There appears to already be a phoron tank loaded in [src]!</span>")
+			to_chat(user, "<span class='notice'>There appears to already be a plasma tank loaded in [src]!</span>")
 			return
 		if(user.drop_item(W, src))
 			ptank = W
@@ -200,7 +200,7 @@
 /obj/item/weapon/gun/projectile/flamethrower/proc/flamethrower_window(mob/user)
 	if(window_open)
 		user.set_machine(src)
-		var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [ptank ? "[ptank.air_contents.return_pressure()]" : "No tank loaded."]<BR>\nPercentage to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_percent] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove phorontank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
+		var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [ptank ? "[ptank.air_contents.return_pressure()]" : "No tank loaded."]<BR>\nPercentage to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_percent] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove plasmatank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
 		user << browse(dat, "window=flamethrower;size=600x300")
 		onclose(user, "flamethrower", src)
 
@@ -249,7 +249,7 @@
 
 /obj/item/weapon/gun/projectile/flamethrower/full/tank/New(var/loc)
 	..()
-	ptank = new /obj/item/weapon/tank/phoron(src)
+	ptank = new /obj/item/weapon/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
 	gas_tank.toxins = 29.1
 	gas_tank.update_values()

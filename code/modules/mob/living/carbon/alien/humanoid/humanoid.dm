@@ -26,7 +26,7 @@
 	add_spell(new /spell/aoe_turf/alienregurgitate, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 	add_spell(new /spell/aoe_turf/conjure/alienweeds, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 	add_spell(new /spell/targeted/alienwhisper, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/targeted/alientransferphoron, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alientransferplasma, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(flags & INVULNERABLE)

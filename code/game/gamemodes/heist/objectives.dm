@@ -230,9 +230,9 @@
 	min = 100
 	max = 100
 
-/datum/theft_objective/number/salvage/phoron
-	name = "phoron"
-	typepath = /obj/item/stack/sheet/mineral/phoron
+/datum/theft_objective/number/salvage/plasma
+	name = "plasma"
+	typepath = /obj/item/stack/sheet/mineral/plasma
 	min = 100
 	max = 100
 

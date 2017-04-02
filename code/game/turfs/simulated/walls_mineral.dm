@@ -123,20 +123,20 @@
 	radiate()
 	..()
 
-/turf/simulated/wall/mineral/phoron
-	name = "phoron wall"
-	desc = "A wall with phoron plating. This is definately a bad idea."
-	icon_state = "phoron0"
-	walltype = "phoron"
-	mineral = "phoron"
+/turf/simulated/wall/mineral/plasma
+	name = "plasma wall"
+	desc = "A wall with plasma plating. This is definately a bad idea."
+	icon_state = "plasma0"
+	walltype = "plasma"
+	mineral = "plasma"
 
-/turf/simulated/wall/mineral/phoron/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/wall/mineral/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
 		ignite(W.is_hot())
 		return
 	..()
 
-/turf/simulated/wall/mineral/phoron/proc/PhoronBurn(temperature)
+/turf/simulated/wall/mineral/plasma/proc/PlasmaBurn(temperature)
 	var/pdiff = performWallPressureCheck(src.loc)
 	if(pdiff > 0)
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
@@ -153,29 +153,29 @@
 		napalm.temperature = 400+T0C
 		target_tile.assume_air(napalm)
 		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
-	for(var/obj/structure/falsewall/phoron/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
+	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
-		T.ChangeTurf(/turf/simulated/wall/mineral/phoron/)
+		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
 		qdel (F)
 		F = null
-	for(var/turf/simulated/wall/mineral/phoron/W in range(3,src))
+	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
 		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
-	for(var/obj/machinery/door/airlock/phoron/D in range(3,src))
+	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
 		D.ignite(temperature/4)
 
-/turf/simulated/wall/mineral/phoron/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
+/turf/simulated/wall/mineral/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
 	if(exposed_temperature > 300)
-		PhoronBurn(exposed_temperature)
+		PlasmaBurn(exposed_temperature)
 
-/turf/simulated/wall/mineral/phoron/ignite(exposed_temperature)
+/turf/simulated/wall/mineral/plasma/ignite(exposed_temperature)
 	if(exposed_temperature > 300)
-		PhoronBurn(exposed_temperature)
+		PlasmaBurn(exposed_temperature)
 
-/turf/simulated/wall/mineral/phoron/bullet_act(var/obj/item/projectile/Proj)
+/turf/simulated/wall/mineral/plasma/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj,/obj/item/projectile/beam))
-		PhoronBurn(2500)
+		PlasmaBurn(2500)
 	else if(istype(Proj,/obj/item/projectile/ion))
-		PhoronBurn(500)
+		PlasmaBurn(500)
 	..()
 
 /*

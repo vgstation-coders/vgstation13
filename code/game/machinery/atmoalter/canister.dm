@@ -61,8 +61,8 @@
 	canister_color = "blue"
 	can_label = 0
 
-/obj/machinery/portable_atmospherics/canister/phoron
-	name = "Canister \[Phoron\]"
+/obj/machinery/portable_atmospherics/canister/plasma
+	name = "Canister \[Plasma\]"
 	icon_state = "orange"
 	canister_color = "orange"
 	can_label = 0
@@ -219,7 +219,7 @@
 	else
 		can_label = 0
 
-	if(air_contents.temperature > PHORON_FLASHPOINT)
+	if(air_contents.temperature > PLASMA_FLASHPOINT)
 		air_contents.zburn()
 		nanomanager.update_uis(src)
 
@@ -391,7 +391,7 @@
 				"\[N2O\]" = "redws", \
 				"\[N2\]" = "red", \
 				"\[O2\]" = "blue", \
-				"\[Phoron\]" = "orange", \
+				"\[Plasma\]" = "orange", \
 				"\[CO2\]" = "black", \
 				"\[Air\]" = "grey", \
 				"\[CAUTION\]" = "yellow", \
@@ -408,7 +408,7 @@
 
 	return 1
 
-/obj/machinery/portable_atmospherics/canister/phoron/New(loc)
+/obj/machinery/portable_atmospherics/canister/plasma/New(loc)
 	..(loc)
 	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()

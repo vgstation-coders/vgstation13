@@ -44,7 +44,7 @@
 	 */
 
 	var/list/il_bio = list("slimes", "spiders", "blobs", "dead bodies", "food items", "monkeys", "humans", "non-humans", "plants", "traitors", "syndicate agents", "vampires", "crewmen", "wizards", "voxes", "ghosts", "corgis", "cats", "parrots", \
-	"chickens", "aliens", "xenomorphs", "skellingtons", "phoronmen", "security officers", "doctors", "chemists", "engineers", "heads of staff", "captains", "gods", "clowns", "mimes", "assistants", "chefs", "chaplains", "librarians", \
+	"chickens", "aliens", "xenomorphs", "skellingtons", "plasmamen", "security officers", "doctors", "chemists", "engineers", "heads of staff", "captains", "gods", "clowns", "mimes", "assistants", "chefs", "chaplains", "librarians", \
 	"janitors", "chief medical officers", "heads of security", "heads of personnel", "research directors", "chief engineers", "atmospheric technicians", "detectives", "quartermasters", "cargo technicians", "miners", "scientists", "potted plants")
 
 	var/list/il_bio_desc = list("dead", "alive", "human", "non-human", "crew", "non-crew", "dangerous", "harmful", "hazardous", "safe", "helpful", "non-existent", "existent", "traitorous", "loyal", "implanted", \
@@ -53,8 +53,8 @@
 
 	var/list/il_bio_act = list("be harmed", "be killed", "be removed", "be made into food", "be stunned", "be exterminated", "be helped", "be disarmed", "be saved", "be beheaded", "be set to arrest", "have all their records deleted", "be arrested", \
 	"be hugged", "be stalked", "be enslaved", "be protected", "be insulted", "be respected", "be electrified", "be exiled from the station", "be beeped, pinged and buzzed to profusely", "be read Woody's Got Wood to", "be extracted safely", "be fed constantly", \
-	"be spaced", "be incinerated", "be revived", "be augmented", "breathe air", "breathe phoron", "breathe carbon dioxide", "breathe dinitrogen", "breathe dioxygen", "breathe nitrous oxyde", "breathe water", "breathe", "not breathe", "eat", "not eat", \
-	"drink water", "drink acid", "drink alcohol", "drink liquid phoron", "drink medicine", "drink liquid metal", "take a shower", "be buckled to chairs", "lie down", "stand up", "come out of the closet", "never be in space", "always be in space", \
+	"be spaced", "be incinerated", "be revived", "be augmented", "breathe air", "breathe plasma", "breathe carbon dioxide", "breathe dinitrogen", "breathe dioxygen", "breathe nitrous oxyde", "breathe water", "breathe", "not breathe", "eat", "not eat", \
+	"drink water", "drink acid", "drink alcohol", "drink liquid plasma", "drink medicine", "drink liquid metal", "take a shower", "be buckled to chairs", "lie down", "stand up", "come out of the closet", "never be in space", "always be in space", \
 	"dance in sight of silicons", "never move in sight of silicons", "stay out of sight of silicons", "be in sight of silicons", "be loyalty implanted", "undergo medical examination", "be handcuffed", "never be restrained", "be saved at all costs", \
 	"have fun", "never have fun", "learn how to swim", "be used as test subjects", "be armed", "never carry weapons", "be inoculated with a harfum virus", "be cured of all diseases", "be able to describe space law sentences properly", "be watered regularly")
 

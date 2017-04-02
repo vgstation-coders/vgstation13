@@ -28,7 +28,7 @@ var/const/INGEST = 2
 		//Chemical Reactions - Initialises all /datum/chemical_reaction into a list
 		// It is filtered into multiple lists within a list.
 		// For example:
-		// chemical_reaction_list[PHORON] is a list of all reactions relating to phoron
+		// chemical_reaction_list[PLASMA] is a list of all reactions relating to plasma
 
 		chemical_reactions_list = list()
 

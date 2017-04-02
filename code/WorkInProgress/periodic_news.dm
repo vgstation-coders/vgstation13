@@ -107,7 +107,7 @@
 
 			message = {"More on the Refuge food riots: The Refuge Council has condemned Nanotrasen's withdrawal from
 			the colony, claiming \"there has been no increase in anti-Nanotrasen activity\", and \"\[the only] reason
-			Nanotrasen withdrew was because the \[Tenebrae Lupus] system's Phoron deposits have been completely mined out.
+			Nanotrasen withdrew was because the \[Tenebrae Lupus] system's Plasma deposits have been completely mined out.
 			We have little to trade with them now\". Nanotrasen officials have denied these allegations, calling them
 			\"further proof\" of the colony's anti-Nanotrasen stance. Meanwhile, Refuge Security has been unable to quell
 			the riots. More on this at 6."}

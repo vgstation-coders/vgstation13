@@ -94,11 +94,11 @@
 
 	handle_breath(breath)
 
-	if(species.name == "Phoronman") //For phoronmen only, fuck species modularity
+	if(species.name == "Plasmaman") //For plasmamen only, fuck species modularity
 
 		//Check if we're wearing our biosuit and mask.
-		if(!(istype(wear_suit, /obj/item/clothing/suit/space/phoronman) || istype(wear_suit,/obj/item/clothing/suit/space/bomberman)) || !(istype(head,/obj/item/clothing/head/helmet/space/phoronman) || istype(head,/obj/item/clothing/head/helmet/space/bomberman)))
-			//testing("Phoronman [src] leakin'.  coverflags=[cover_flags]")
+		if(!(istype(wear_suit, /obj/item/clothing/suit/space/plasmaman) || istype(wear_suit,/obj/item/clothing/suit/space/bomberman)) || !(istype(head,/obj/item/clothing/head/helmet/space/plasmaman) || istype(head,/obj/item/clothing/head/helmet/space/bomberman)))
+			//testing("Plasmaman [src] leakin'.  coverflags=[cover_flags]")
 			//OH FUCK HE LEAKIN'.
 			//This was OP.
 			//environment.adjust(tx = environment.total_moles()*BREATH_PERCENTAGE) //About one breath's worth. (I know we aren't breathing it out, but this should be about the right amount)
@@ -110,7 +110,7 @@
 					IgniteMob()
 		else
 			if(fire_stacks > 0)
-				var/obj/item/clothing/suit/space/phoronman/PS=wear_suit
+				var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
 				PS.Extinguish(src)
 
 	if(breath)

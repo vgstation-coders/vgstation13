@@ -51,7 +51,7 @@
 					owner.adjustToxLoss(0.1 * process_accuracy)
 
 			// Can't cope with toxins at all
-			for(var/toxin in list(TOXIN, PHORON, SACID, PACID, CYANIDE, LEXORIN, AMATOXIN, CHLORALHYDRATE, CARPOTOXIN, ZOMBIEPOWDER, MINDBREAKER))
+			for(var/toxin in list(TOXIN, PLASMA, SACID, PACID, CYANIDE, LEXORIN, AMATOXIN, CHLORALHYDRATE, CARPOTOXIN, ZOMBIEPOWDER, MINDBREAKER))
 				if(owner.reagents.has_reagent(toxin))
 					owner.adjustToxLoss(0.3 * process_accuracy)
 

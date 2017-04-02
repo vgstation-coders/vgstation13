@@ -249,7 +249,7 @@
 			else if(istype(W, /obj/item/weapon/stamp/rd))
 				colour1 = "#D22EF7"
 				colour2 = "#D312E5"
-				to_chat(user, "Selected color: Phoron Purple")
+				to_chat(user, "Selected color: Plasma Purple")
 			else
 				colour1 = "#000000"
 				colour2 = "#6D6D6D"

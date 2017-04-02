@@ -532,30 +532,30 @@
 	anchored = 0
 	d_state = WINDOWLOOSE
 
-/obj/structure/window/phoron
+/obj/structure/window/plasma
 
-	name = "phoron window"
-	desc = "A window made out of a phoron-silicate alloy. It looks insanely tough to break and burn through."
-	icon_state = "phoronwindow"
-	shardtype = /obj/item/weapon/shard/phoron
-	sheettype = /obj/item/stack/sheet/glass/phoronglass
+	name = "plasma window"
+	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
+	icon_state = "plasmawindow"
+	shardtype = /obj/item/weapon/shard/plasma
+	sheettype = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
 
-/obj/structure/window/reinforced/phoron
+/obj/structure/window/reinforced/plasma
 
-	name = "reinforced phoron window"
-	desc = "A window made out of a phoron-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
-	icon_state = "phoronrwindow"
-	shardtype = /obj/item/weapon/shard/phoron
-	sheettype = /obj/item/stack/sheet/glass/phoronrglass
+	name = "reinforced plasma window"
+	desc = "A window made out of a plasma-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
+	icon_state = "plasmarwindow"
+	shardtype = /obj/item/weapon/shard/plasma
+	sheettype = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
 
-/obj/structure/window/reinforced/phoron/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/structure/window/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
 
 /obj/structure/window/reinforced/tinted

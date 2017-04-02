@@ -55,9 +55,9 @@ var/global/disable_vents     = 0
 #define MOLES_CO2MARS MOLES_CELLMARS*CO2MARS
 #define MOLES_N2MARS  MOLES_CELLMARS*N2MARS
 
-#define MOLES_PHORON_VISIBLE	0.7 //Moles in a standard cell after which phoron is visible
-#define MIN_PHORON_DAMAGE 1
-#define MAX_PHORON_DAMAGE 10
+#define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
+#define MIN_PLASMA_DAMAGE 1
+#define MAX_PLASMA_DAMAGE 10
 
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
@@ -168,7 +168,7 @@ var/global/disable_vents     = 0
 #define FIRE_MINIMUM_TEMPERATURE_TO_EXIST	100+T0C
 #define FIRE_SPREAD_RADIOSITY_SCALE		0.85
 #define FIRE_CARBON_ENERGY_RELEASED	  500000 //Amount of heat released per mole of burnt carbon into the tile
-#define FIRE_PHORON_ENERGY_RELEASED	 3000000 //Amount of heat released per mole of burnt phoron into the tile
+#define FIRE_PLASMA_ENERGY_RELEASED	 3000000 //Amount of heat released per mole of burnt plasma into the tile
 #define FIRE_GROWTH_RATE			40000 //For small fires
 
 //#define WATER_BOIL_TEMP 393
@@ -177,13 +177,13 @@ var/global/disable_vents     = 0
 #define CARBON_LIFEFORM_FIRE_RESISTANCE 200+T0C
 #define CARBON_LIFEFORM_FIRE_DAMAGE		4
 
-//Phoron fire properties
-#define PHORON_MINIMUM_BURN_TEMPERATURE		100+T0C
-#define PHORON_FLASHPOINT 					246+T0C
-#define PHORON_UPPER_TEMPERATURE			1370+T0C
-#define PHORON_MINIMUM_OXYGEN_NEEDED		2
-#define PHORON_MINIMUM_OXYGEN_PHORON_RATIO	20
-#define PHORON_OXYGEN_FULLBURN				10
+//Plasma fire properties
+#define PLASMA_MINIMUM_BURN_TEMPERATURE		100+T0C
+#define PLASMA_FLASHPOINT 					246+T0C
+#define PLASMA_UPPER_TEMPERATURE			1370+T0C
+#define PLASMA_MINIMUM_OXYGEN_NEEDED		2
+#define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
+#define PLASMA_OXYGEN_FULLBURN				10
 
 #define T0C  273.15					// 0degC
 #define T20C 293.15					// 20degC
@@ -300,7 +300,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define NOSLIP				2 //prevents from slipping on wet floors, in space etc
 #define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
 #define ONESIZEFITSALL		8
-#define PHORONGUARD 		16 //Does not get contaminated by phoron.
+#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
 #define BLOCK_BREATHING 	32 //When worn, prevents breathing!
 
 //flags for pass_flags
@@ -813,7 +813,7 @@ SEE_PIXELS	256
 #define MAT_URANIUM		"$uranium"
 #define MAT_DIAMOND		"$diamond"
 #define MAT_PHAZON		"$phazon"
-#define MAT_PHORON		"$phoron"
+#define MAT_PLASMA		"$plasma"
 #define MAT_CLOWN		"$clown"
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
@@ -968,7 +968,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define RAD_ABSORB 64
 #define REQUIRE_LIGHT 128
 #define HYPOTHERMIA_IMMUNE 256
-#define PHORON_IMMUNE 512
+#define PLASMA_IMMUNE 512
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -1302,7 +1302,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
 #define IS_VOX 2
-#define IS_PHORON 3
+#define IS_PLASMA 3
 
 
 //Turf Construction defines

@@ -43,7 +43,7 @@
 		user.simple_message("<span class='warning'>This organ has a barcode identifying it as printed from a bioprinter.</span>","<span class='warning'>It's got spaghetti sauce on it. Ew.</span>")
 	else
 		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
-
+		
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
@@ -130,11 +130,11 @@
 	prosthetic_name = "vox gas exchange system"
 	organ_type = /datum/organ/internal/lungs/vox
 
-/obj/item/organ/lungs/phoronman
+/obj/item/organ/lungs/plasmaman
 	name = "weird pink lungs"
-	icon_state = "phoronman-lungs"
-	prosthetic_name = "phoronman gas exchange system"
-	organ_type = /datum/organ/internal/lungs/phoronman
+	icon_state = "plasmaman-lungs"
+	prosthetic_name = "plasmaman gas exchange system"
+	organ_type = /datum/organ/internal/lungs/plasmaman
 
 /obj/item/organ/lungs/filter
 	name = "advanced lungs"

@@ -215,8 +215,8 @@
 	if(!S)
 		return FAILED_TO_ADD
 
-	S.materials_scanned |= list("phoron glass" = /obj/item/stack/sheet/glass/phoronglass,
-								"reinforced phoron glass" = /obj/item/stack/sheet/glass/phoronrglass,
+	S.materials_scanned |= list("plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
+								"reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
 								"carpet tiles" = /obj/item/stack/tile/carpet)
 
 /obj/item/borg/upgrade/service

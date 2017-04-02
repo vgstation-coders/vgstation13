@@ -350,7 +350,7 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ORTHO,	"carbon_dioxide"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"nitrous_oxide"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"air"),
-		new /datum/paint_info/decal(DIR_ORTHO,	"phoron"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"plasma"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"zoo"),
 
 		// Numbers

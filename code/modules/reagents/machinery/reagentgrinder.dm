@@ -19,7 +19,7 @@
 
 		//Sheets
 		/obj/item/stack/sheet/metal           = list(IRON = 20),
-		/obj/item/stack/sheet/mineral/phoron  = list(PHORON = 20),
+		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),
 		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = 20),
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),

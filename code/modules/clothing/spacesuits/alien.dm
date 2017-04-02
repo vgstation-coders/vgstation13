@@ -319,7 +319,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. Has some heat protection."
 	icon_state = "vox-civ-atmos"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
-	clothing_flags = PHORONGUARD
+	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
@@ -327,7 +327,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-civ-atmos"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some heat protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
-	clothing_flags = PHORONGUARD
+	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
@@ -335,14 +335,14 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A more advanced pressure suit made for vox crewmembers. Has some radiation and heat protection."
 	icon_state = "vox-civ-ce"
 	armor = list(melee = 10, bullet = 5, laser = 10, energy = 5, bomb = 10, bio = 100, rad = 50)
-	clothing_flags = PHORONGUARD
+	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure helmet"
 	icon_state = "vox-civ-ce"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some radiation and heat protection."
-	clothing_flags = PHORONGUARD
+	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 //Science
