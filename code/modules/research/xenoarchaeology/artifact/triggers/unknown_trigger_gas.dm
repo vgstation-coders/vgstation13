@@ -2,6 +2,7 @@
 
 /datum/artifact_trigger/gas
 	triggertype = TRIGGER_GAS
+	scanned_trigger = SCAN_ATMOS
 	var/trigger_gas = 0
 
 /datum/artifact_trigger/gas/New()

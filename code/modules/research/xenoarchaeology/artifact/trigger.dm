@@ -4,9 +4,22 @@
 #define TRIGGER_REAGENT "reagent"
 #define TRIGGER_GAS "gas"
 #define TRIGGER_TEMPERATURE "temperature"
+#define TRIGGER_LIGHT "light"
+#define TRIGGER_PRESSURE "pressure"
+#define TRIGGER_ELECTRIC "electric"
+#define TRIGGER_SPEED "speed"
+#define TRIGGER_NOT_VISIBLE "not_visible"
+#define TRIGGER_PAY2USE "pay2use"
+
+#define SCAN_PHYSICAL 0
+#define SCAN_PHYSICAL_ENERGETIC 1
+#define SCAN_CONSTANT_ENERGETIC 2
+#define SCAN_ATMOS 3
+#define SCAN_OCULAR 4
 
 /datum/artifact_trigger
 	var/triggertype = ""
+	var/scanned_trigger = ""
 	var/obj/machinery/artifact/my_artifact
 	var/datum/artifact_effect/my_effect
 
@@ -54,3 +67,7 @@
 /datum/artifact_trigger/Destroy()
 	my_artifact = null
 	my_effect = null
+
+
+/datum/artifact_trigger/Topic(href, href_list)
+	return my_artifact.Topic(href, href_list)

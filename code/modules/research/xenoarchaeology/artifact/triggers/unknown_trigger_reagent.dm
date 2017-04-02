@@ -1,5 +1,6 @@
 /datum/artifact_trigger/reagent
 	triggertype = TRIGGER_REAGENT
+	scanned_trigger = SCAN_PHYSICAL
 	var/reagent_group = 0
 	var/key_attackby
 
