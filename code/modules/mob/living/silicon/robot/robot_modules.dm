@@ -276,7 +276,7 @@
 
 
 /obj/item/weapon/robot_module/security
-	name = "security robot module"
+	name = "peacekeeper robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -425,7 +425,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/tg17355
-	name = "peacekeeper robot module"
+	name = "tg17355 robot module"
 
 /obj/item/weapon/robot_module/tg17355/New()
 	..()

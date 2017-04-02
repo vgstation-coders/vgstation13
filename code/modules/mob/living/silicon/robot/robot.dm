@@ -231,8 +231,6 @@
 
 /proc/getAvailableRobotModules()
 	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
-	if(security_level >= SEC_LEVEL_BLUE)
-		modules+="Security"
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -315,7 +313,7 @@
 			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
-		if("Security")
+		if("Peacekeeper")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
@@ -329,7 +327,7 @@
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
 			speed = 0
 
-		if("Peacekeeper")
+		if("TG17355")
 			module = new /obj/item/weapon/robot_module/tg17355(src)
 			module_sprites["Peacekeeper"] = "peaceborg"
 			module_sprites["Omoikane"] = "omoikane"
