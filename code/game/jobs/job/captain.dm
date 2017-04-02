@@ -13,7 +13,7 @@
 	minimal_access = list() 	//See get_access()
 	minimal_player_age = 14
 
-	species_whitelist = list("Human", "Plasmaman")
+	species_whitelist = list("Human")
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/captain
@@ -72,7 +72,7 @@
 	req_admin_notify = 1
 	minimal_player_age = 10
 
-	species_whitelist = list("Human", "Plasmaman")
+	species_whitelist = list("Human")
 
 	access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons, access_forensics_lockers,
 			            access_medical, access_engine, access_change_ids, access_ai_upload, access_eva, access_heads,
