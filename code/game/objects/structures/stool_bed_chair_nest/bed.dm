@@ -196,11 +196,11 @@
 	desc = "A rack for carrying a collapsed roller bed."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
-	var/obj/item/roller/held
+	var/obj/structure/bed/roller/held
 
 /obj/item/roller_holder/New()
 	..()
-	held = new /obj/item/roller(src)
+	held = new(src)
 
 /obj/item/roller_holder/attack_self(mob/user as mob)
 
@@ -209,9 +209,8 @@
 		return
 
 	to_chat(user, "<span class='notice'>You deploy the roller bed.</span>")
-	var/obj/structure/bed/roller/R = new /obj/structure/bed/roller(user.loc)
-	R.add_fingerprint(user)
-	qdel(held)
+	held.add_fingerprint(user)
+	held.forceMove(get_turf(src))
 	held = null
 
 /datum/locking_category/buckle/bed
