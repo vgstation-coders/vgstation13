@@ -846,6 +846,8 @@
 	return appearance
 
 /atom/movable/proc/do_attack_animation(atom/target, atom/tool)
+	set waitfor = 0
+
 	if(target == src)
 		return
 	var/horizontal = 0
@@ -888,16 +890,16 @@
 	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
 	item.appearance = tool.attack_icon()
 	item.alpha = 128
-	item.loc = src
-	item.pixel_x = horizontal * 0.5 * WORLD_ICON_SIZE
-	item.pixel_y = vertical * 0.5 * WORLD_ICON_SIZE
+	item.loc = target
+	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
 	item.mouse_opacity = 0
 
 	var/viewers = item_animation_viewers.Copy()
 	for(var/client/C in viewers)
 		C.images += item
 
-	animate(item, pixel_x = horizontal * WORLD_ICON_SIZE, pixel_y = vertical * WORLD_ICON_SIZE, time = 3)
+	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
 	sleep(3)
 	for(var/client/C in viewers)
 		C.images -= item
