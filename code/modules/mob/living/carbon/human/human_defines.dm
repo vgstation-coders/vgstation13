@@ -79,9 +79,6 @@
 
 	var/obj/item/weapon/organ/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
 
-	var/manual_scream_counter = 0
-	var/last_manual_scream = 0
-
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
