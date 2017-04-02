@@ -33,7 +33,7 @@
 				severity = 9
 			if(-INFINITY to -95)
 				severity = 10
-		overlay_fullscreen("crit", /obj/screen/fullscreen/crit, severity)
+		overlay_fullscreen("crit", /obj/abstract/screen/fullscreen/crit, severity)
 	else
 		clear_fullscreen("crit")
 		if(oxyloss)
@@ -55,7 +55,7 @@
 					severity = 6
 				if(45 to INFINITY)
 					severity = 7
-			overlay_fullscreen("oxy", /obj/screen/fullscreen/oxy, severity)
+			overlay_fullscreen("oxy", /obj/abstract/screen/fullscreen/oxy, severity)
 		else
 			clear_fullscreen("oxy")
 		//Fire and Brute damage overlay (BSSR)
@@ -78,12 +78,12 @@
 					severity = 5
 				if(85 to INFINITY)
 					severity = 6
-			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("brute", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")
 			//damageoverlay.overlays += I
 		if(pain_numb)
-			overlay_fullscreen("numb", /obj/screen/fullscreen/numb)
+			overlay_fullscreen("numb", /obj/abstract/screen/fullscreen/numb)
 		else
 			clear_fullscreen("numb")
 	if(stat == DEAD)
@@ -267,23 +267,23 @@
 			if(glasses)	//To every /obj/item
 				var/obj/item/clothing/glasses/G = glasses
 				if(!G.prescription)
-					overlay_fullscreen("nearsighted", /obj/screen/fullscreen/impaired, 1)
+					overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/impaired, 1)
 				else
 					clear_fullscreen("nearsighted")
 			else
-				overlay_fullscreen("nearsighted", /obj/screen/fullscreen/impaired, 1)
+				overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/impaired, 1)
 		else
 			clear_fullscreen("nearsighted")
 		if(eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
 		if(eye_blurry)
-			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		else
 			clear_fullscreen("blurry")
 		if(druggy)
-			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
 
@@ -291,13 +291,13 @@
 		if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi))
 			var/obj/item/clothing/head/welding/O = head
 			if(!O.up && tinted_weldhelh)
-				overlay_fullscreen("tint", /obj/screen/fullscreen/impaired, 2)
+				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 				masked = 1
 
 		if(!masked && istype(glasses, /obj/item/clothing/glasses/welding) && !istype(glasses, /obj/item/clothing/glasses/welding/superior))
 			var/obj/item/clothing/glasses/welding/O = glasses
 			if(!O.up && tinted_weldhelh)
-				overlay_fullscreen("tint", /obj/screen/fullscreen/impaired, 2)
+				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 				masked = 1
 
 		if(!masked)

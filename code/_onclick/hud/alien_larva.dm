@@ -4,9 +4,9 @@
 	src.adding = list()
 	src.other = list()
 
-	var/obj/screen/using
+	var/obj/abstract/screen/using
 
-	using = getFromPool(/obj/screen)
+	using = getFromPool(/obj/abstract/screen)
 	using.name = "act_intent"
 	using.dir = SOUTHWEST
 	using.icon = 'icons/mob/screen1_alien.dmi'
@@ -15,7 +15,7 @@
 	src.adding += using
 	action_intent = using
 
-	using = getFromPool(/obj/screen)
+	using = getFromPool(/obj/abstract/screen)
 	using.name = "mov_intent"
 	using.dir = SOUTHWEST
 	using.icon = 'icons/mob/screen1_alien.dmi'
@@ -24,39 +24,39 @@
 	src.adding += using
 	move_intent = using
 
-	mymob.oxygen = getFromPool(/obj/screen)
+	mymob.oxygen = getFromPool(/obj/abstract/screen)
 	mymob.oxygen.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.oxygen.icon_state = "oxy0"
 	mymob.oxygen.name = "oxygen"
 	mymob.oxygen.screen_loc = ui_alien_oxygen
 
-	mymob.toxin = getFromPool(/obj/screen)
+	mymob.toxin = getFromPool(/obj/abstract/screen)
 	mymob.toxin.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.toxin.icon_state = "tox0"
 	mymob.toxin.name = "toxin"
 	mymob.toxin.screen_loc = ui_alien_toxin
 
 
-	mymob.fire = getFromPool(/obj/screen)
+	mymob.fire = getFromPool(/obj/abstract/screen)
 	mymob.fire.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.fire.icon_state = "fire0"
 	mymob.fire.name = "fire"
 	mymob.fire.screen_loc = ui_alien_fire
 
 
-	mymob.healths = getFromPool(/obj/screen)
+	mymob.healths = getFromPool(/obj/abstract/screen)
 	mymob.healths.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_alien_health
 
-	mymob.pullin = getFromPool(/obj/screen)
+	mymob.pullin = getFromPool(/obj/abstract/screen)
 	mymob.pullin.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
-	mymob.zone_sel = getFromPool(/obj/screen/zone_sel)
+	mymob.zone_sel = getFromPool(/obj/abstract/screen/zone_sel)
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image("icon" = 'icons/mob/zone_sel.dmi', "icon_state" = text("[]", mymob.zone_sel.selecting))
 

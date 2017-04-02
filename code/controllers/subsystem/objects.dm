@@ -28,7 +28,7 @@ var/list/processing_objects = list()
 	..("P:[processing_objects.len]")
 
 
-/datum/subsystem/obj/fire(resumed = FALSE)
+/datum/subsystem/obj/effect/fire(resumed = FALSE)
 	if (!resumed)
 		currentrun = global.processing_objects.Copy()
 

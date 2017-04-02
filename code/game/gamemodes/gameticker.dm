@@ -234,7 +234,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!
 	//Now we have a general cinematic centrally held within the gameticker....far more efficient!
-	var/obj/screen/cinematic = null
+	var/obj/abstract/screen/cinematic = null
 
 	//Plus it provides an easy way to make cinematics for other events. Just use this as a template :)
 /datum/controller/gameticker/proc/station_explosion_cinematic(var/station_missed=0, var/override = null)

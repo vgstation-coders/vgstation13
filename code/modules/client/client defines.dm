@@ -71,9 +71,9 @@
 	var/list/parallax_movable = list()
 	var/list/parallax_offset = list()
 	var/turf/previous_turf = null
-	var/obj/screen/plane_master/parallax_master/parallax_master = null
-	var/obj/screen/plane_master/parallax_dustmaster/parallax_dustmaster = null
-	var/obj/screen/plane_master/parallax_spacemaster/parallax_spacemaster = null
+	var/obj/abstract/screen/plane_master/parallax_master/parallax_master = null
+	var/obj/abstract/screen/plane_master/parallax_dustmaster/parallax_dustmaster = null
+	var/obj/abstract/screen/plane_master/parallax_spacemaster/parallax_spacemaster = null
 
 	// This gets set by goonchat.
 	var/encoding = "1252"

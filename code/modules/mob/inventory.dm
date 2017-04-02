@@ -13,9 +13,9 @@
  * Small detail: Your mob cannot unequip their jumpsuit yet. You need to add it to mob/your_mob/u_equip()
  * Oh yeah, you need to add the new variable for the jumpsuit to mob/your_mob/get_all_slots(). I know, I know, this is why we need inventory datums.
  *
- * Okay, so your mob still has no HUD element for their inventory slot. That takes a /obj/screen/inventory... beats me how most of it works, but you do need to have it point to
+ * Okay, so your mob still has no HUD element for their inventory slot. That takes a /obj/abstract/screen/inventory... beats me how most of it works, but you do need to have it point to
  * slot_id = slot_w_uniform and define a new screen_loc for it. I would advise you to just look at code/_onclick/hud/monkey.dm and do the ol' monkey see, monkey do.
- * When you click on that obj/screen/inventory, it calls attack_ui() which by default will just call equip_to_slot_if_possible(item, slot_id)
+ * When you click on that obj/abstract/screen/inventory, it calls attack_ui() which by default will just call equip_to_slot_if_possible(item, slot_id)
  * At this point I think you need to handle some UI shitcode in mob/your_mob/update_inv_w_uniform(), something like w_uniform.screen_loc = the_screen_loc_you_defined_earlier
  *
  * For other players to be able to strip and forcibly put on the uniform on your mob, you need to give it a fancy mob/your_mob/show_inv(), and put HREF links that you'll pick up
@@ -26,7 +26,7 @@
  * So, a list of all methods used:
  * /obj/item/proc/mob_can_equip() -> mob/equip_to_slot() -> update_inv_[slot]()
  * get_item_by_slot(), u_equip(), get_all_slots()
- * obj/screen/inventory -> ??? -> attack_ui()? -> equip_to_slot_if_possible() -> ??????? -> update_inv_[slot]()?
+ * obj/abstract/screen/inventory -> ??? -> attack_ui()? -> equip_to_slot_if_possible() -> ??????? -> update_inv_[slot]()?
  * show_inv() -> Topic() -> handle_strip_slot()
  */
 
@@ -148,7 +148,7 @@
 	if(!hud_used)
 		return
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -162,7 +162,7 @@
 	if(!hud_used)
 		return
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else

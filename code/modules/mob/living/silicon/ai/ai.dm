@@ -562,7 +562,7 @@ var/list/ai_list = list()
 		else //harm
 			if(M.unarmed_attack_mob(src))
 				if(prob(8))
-					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
+					flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
 
 /mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
 	M.unarmed_attack_mob(src)

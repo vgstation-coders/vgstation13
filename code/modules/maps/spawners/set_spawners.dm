@@ -7,10 +7,10 @@
 //
 //**************************************************************
 
-/obj/map/spawner/set_spawner
+/obj/abstract/map/spawner/set_spawner
 	var/sub_chance = 100
 
-/obj/map/spawner/set_spawner/perform_spawn()
+/obj/abstract/map/spawner/set_spawner/perform_spawn()
 
 	var/obj/spawned
 	to_spawn = pick(to_spawn)
@@ -26,7 +26,7 @@
 // Subtypes ////////////////////////////////////////////////////
 //**************************************************************
 
-/obj/map/spawner/set_spawner/theater
+/obj/abstract/map/spawner/set_spawner/theater
 	name = "theater costume spawner"
 	icon_state = "costumes"
 	to_spawn = list(

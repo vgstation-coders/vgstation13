@@ -703,9 +703,10 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
+
 							//this is the gay blood on floor shit -- Added back --snx
-							var/turf/TM = M.loc	
-							if (TM.has_gravity() && M.lying && (prob(M.getBruteLoss() / 3)))	
+							var/turf/TM = M.loc
+							if (TM.has_gravity() && M.lying && (prob(M.getBruteLoss() / 3)))
 								if(prob(6)) //Too much bloooooood
 									blood_splatter(M.loc,M)
 									if(ishuman(M))
@@ -1527,7 +1528,7 @@ Thanks.
 	affect_silicon = 0 means that the flash won't affect silicons at all.
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)

@@ -15,7 +15,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	var/picked = 0
 	var/subtype="keeper"
-	var/obj/screen/inv_tool = null
+	var/obj/abstract/screen/inv_tool = null
 	var/prefix = "Mobile MMI"
 	var/damage_control_network = "Damage Control"
 
