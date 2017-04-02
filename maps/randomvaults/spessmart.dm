@@ -1,24 +1,37 @@
 var/list/shop_prices = list( //Cost in space credits
 //Misc objects
-/obj/item/weapon/soap = 20,
+
+/obj/item/weapon/soap = 5,
+/obj/item/weapon/soap/syndie = 25,
+/obj/item/weapon/soap/nanotrasen = 25,
+/obj/item/weapon/soap/deluxe = 30,
+
 /obj/item/weapon/phone = 30,
-/obj/item/weapon/mop = 20,
+/obj/item/weapon/mop = 10,
 /obj/item/weapon/lipstick/random = 30,
 /obj/item/weapon/lazarus_injector = 500,
+/obj/item/weapon/lazarus_injector/advanced = 750,
 /obj/item/weapon/kitchen/rollingpin = 20,
 /obj/item/weapon/hand_labeler = 10,
-/obj/item/weapon/extinguisher = 20,
+
+/obj/item/weapon/extinguisher = 10,
+/obj/item/weapon/extinguisher/mini = 5,
+/obj/item/weapon/extinguisher/foam = 20,
+
 /obj/item/weapon/crowbar/red = 5,
 /obj/item/weapon/bikehorn/rubberducky = 5,
 /obj/item/weapon/bikehorn = 5,
 /obj/item/weapon/lighter/zippo = 20,
-/obj/item/weapon/screwdriver = 3,
-/obj/item/weapon/wrench = 3,
+/obj/item/weapon/screwdriver = 5,
+/obj/item/weapon/wrench = 5,
+/obj/item/weapon/wrench/socket = 150,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
 /obj/item/mounted/poster = 20,
-/obj/item/candle = 5,
+/obj/item/candle = 1,
 
+//disk leading to a random vault. If there doesn't exist a valid vault, it shows up as a blank disk
+/obj/item/weapon/disk/shuttle_coords/vault/random = 800,
 
 //tools
 /obj/item/weapon/surgicaldrill = 100,
@@ -32,16 +45,21 @@ var/list/shop_prices = list( //Cost in space credits
 
 /obj/item/weapon/switchtool/surgery = 250,
 /obj/item/weapon/switchtool/swiss_army_knife = 500,
-/obj/item/weapon/rcl = 100,
+/obj/item/weapon/rcl = 50,
 /obj/item/weapon/glue = 500,
 /obj/item/weapon/chisel = 20,
 /obj/item/weapon/scythe = 50,
 /obj/item/bluespace_crystal/flawless = 10000,
-/obj/item/bluespace_crystal/artificial = 1000,
-/obj/item/bluespace_crystal = 750,
+/obj/item/bluespace_crystal/artificial = 500,
+/obj/item/bluespace_crystal = 1000,
 /obj/item/device/assembly_frame = 50,
+
 /obj/item/device/camera = 30,
+/obj/item/device/camera/big_photos = 300,
+
 /obj/item/device/flash = 20,
+/obj/item/device/flash/synthetic = 1,
+
 /obj/item/device/robotanalyzer = 5,
 /obj/item/device/soundsynth = 20,
 /obj/item/device/transfer_valve = 500, //What could go wrong
@@ -52,16 +70,16 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/taperecorder = 30,
 /obj/item/device/rcd/tile_painter = 30,
 /obj/item/device/rcd/matter/engineering = 30,
-/obj/item/device/paicard = 10,
+/obj/item/device/paicard = 20,
 /obj/item/device/megaphone = 25,
 /obj/item/device/hailer = 10,
 /obj/item/broken_device = 1,
 /obj/item/toy/balloon = 1,
-/obj/item/toy/syndicateballoon = 700,
-/obj/item/weapon/am_containment = 60,
+/obj/item/toy/syndicateballoon = 300,
+/obj/item/weapon/am_containment = 10,
 /obj/item/weapon/cane = 5,
-/obj/item/weapon/legcuffs/beartrap = 100,
-/obj/item/weapon/rcd_ammo = 20,
+/obj/item/weapon/legcuffs/beartrap = 50,
+/obj/item/weapon/rcd_ammo = 10,
 /obj/item/weapon/storage/pneumatic = 40,
 /obj/item/weapon/resonator = 100,
 /obj/item/weapon/gun/energy/kinetic_accelerator = 80,
@@ -76,24 +94,38 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 200,
 /obj/item/weapon/solder = 10,
-/obj/item/supermatter_shielding = 1000,
+/obj/item/supermatter_shielding = 500,
+/obj/item/weapon/cell/hyper = 50,
 
 
 //weapons
 /obj/item/weapon/melee/classic_baton = 100,
 /obj/item/weapon/melee/lance = 200,
 /obj/item/weapon/melee/telebaton = 500,
-/obj/item/weapon/claymore = 600,
+/obj/item/weapon/claymore = 400,
 /obj/item/weapon/fireaxe  = 200,
-/obj/item/weapon/spear/wooden = 200,
+/obj/item/weapon/spear/wooden = 100,
 /obj/item/weapon/spear = 30,
 /obj/item/weapon/crossbow = 100,
 /obj/item/weapon/hatchet = 20,
-/obj/item/weapon/harpoon = 125,
+/obj/item/weapon/harpoon = 100,
 /obj/item/weapon/boomerang/toy = 5,
 /obj/item/weapon/boomerang = 30,
-/obj/item/weapon/batteringram = 1000,
-/obj/item/weapon/shield/riot = 250,
+/obj/item/weapon/batteringram = 500,
+/obj/item/weapon/shield/riot = 150,
+/obj/item/weapon/shield/riot/buckler = 50,
+/obj/item/weapon/shield/riot/roman = 150,
+/obj/item/weapon/shield/energy = 1000,
+/obj/item/weapon/bullwhip = 200,
+/obj/item/weapon/melee/morningstar = 300,
+/obj/item/weapon/subspacetunneler = 500,
+
+//mischievous items
+/obj/item/device/powersink = 700,
+/obj/item/weapon/card/emag = 500,
+/obj/item/weapon/cloakingcloak = 800,
+/obj/item/weapon/pen/sleepypen = 1200,
+/obj/item/device/device_analyser/syndicate = 20000,
 
 //No guns sorry
 )
@@ -639,6 +671,16 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		say("[user.gender == FEMALE ? "Miss" : "Sir"], only Spessmart employees with level 5 access may access this area. If you are a Spessmart employee, please show me your ID card.")
 	else
 		return ..()
+
+/mob/living/simple_animal/hostile/spessmart_guardian/recharging
+	var/introduced = FALSE
+
+/mob/living/simple_animal/hostile/spessmart_guardian/recharging/Aggro()
+	if(!introduced)
+		say("The tank was labeled and scanned as drinking water, not welding fuel. It was not my fault that it was fed to the human. It is nonsense that you're punishing me instead of... Wait. You are not EPSILON. Unknown intruder detected. Extermination protocol started.")
+		introduced = TRUE
+
+	return ..()
 
 ///////SPAWNER
 /obj/map/spawner/supermarket
