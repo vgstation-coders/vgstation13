@@ -703,20 +703,21 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-//this is the gay blood on floor shit -- Added back --snx
-							if (M.lying && (prob(M.getBruteLoss() / 3)))	
+							//this is the gay blood on floor shit -- Added back --snx
+							var/turf/TM = M.loc	
+							if (TM.has_gravity() && M.lying && (prob(M.getBruteLoss() / 3)))	
 								if(prob(6)) //Too much bloooooood
-									if(isturf(M.loc))
-										blood_splatter(M.loc,M)
-										if(ishuman(M))
-											var/mob/living/carbon/H = M
-											var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
-											if(blood_volume > 0)
-												H:vessel.remove_reagent("blood",2)
-												M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
+									blood_splatter(M.loc,M)
+									if(ishuman(M))
+										var/mob/living/carbon/H = M
+										var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
+										if(blood_volume > 0)
+											H:vessel.remove_reagent("blood",2)
+											M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
 								if(prob(50))
-									M.adjustBruteLoss(1)
-									M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
+									if(isturf(M.loc))
+										M.adjustBruteLoss(1)
+										M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
 							if(M.pull_damage())
 								if(prob(25))
 									M.adjustBruteLoss(2)

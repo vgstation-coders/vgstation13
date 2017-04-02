@@ -1302,14 +1302,16 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/pull_damage()
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		if(H.health - H.halloss <= config.health_threshold_softcrit)
-			for(var/name in H.organs_by_name)
-				var/datum/organ/external/e = H.organs_by_name[name]
-				if(H.lying)
-					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
-						return 1
-						break
-		return 0
+		var/turf/TH = H.loc	
+		if (TH.has_gravity())
+			if(H.health - H.halloss <= config.health_threshold_softcrit)
+				for(var/name in H.organs_by_name)
+					var/datum/organ/external/e = H.organs_by_name[name]
+					if(H.lying)
+						if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
+							return 1
+							break
+			return 0
 
 /mob/MouseDrop(mob/M as mob)
 	..()
