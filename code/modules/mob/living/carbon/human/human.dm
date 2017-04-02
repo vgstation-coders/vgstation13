@@ -10,7 +10,6 @@
 	var/list/hud_list[9]
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
-	var/flavortown
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
@@ -188,17 +187,6 @@
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
 	update_colour(0,1)
-	generate_flavortown()
-
-/mob/living/carbon/human/proc/generate_flavortown()
-	var/heshe = "she"
-	var/himher = "her"
-	var/hisher = "her"
-	if(gender == "male")
-		heshe = "he"
-		himher = "him"
-		hisher = "his"
-	flavortown = "Although [heshe] seems like a[pick("n ordinary"," regular"," normal"," boring"," cute","n intriguing")] [pick("spaceman","person","hero","lady")], [heshe] is actually [pick("a well known space criminal who escaped from jail","a supermodel","a dark ethereal being that is worshipped by a cult","an amazing soldier who served in hundreds of space battles and is the most well decorated hero in the entire universe and is the person you personally look up to and want to be more like","the universal record holder for most people murdered with a fireaxe in a day","the president of an entire planet","a broody assassin sent here to kill the CEO of Nanotrasen","a mob boss that everyone fears and respects","your father who went through a few sex changes because [heshe] couldn't decide on [hisher] real gender","an anthromorphic pony","the return of Jesus Christ","the most skilled engineer this side of milky way galaxy","Adolf Hitler after he was cloned by Nanotrasen since they wanted to get rid of the space jews and there was only one man they could count on but [heshe] escaped from the facility they were using [hisher] ideas from and is now going lone wolf","pretty boring","amazingly attractive and everyone fawns over [himher] to the point [heshe] gets really uncomfortable being out in public so [heshe] got a job here at Nanotrasen","an ex-Spetsnaz soldier who got cryogenically frozen in the year 1997 and was just recently awoken in the age of space and really wants to kill people since [heshe] doesn't like the fact that space is so shitty compared to Russia")]. \nYou immediately notice just how [pick("amazing","wondrous","outstanding","beautiful","cool","pretty","slitted")] [hisher] [pick("cerulean","celery green","slate gray","royal purple","bloodshot red","brilliant gold","completely void","heavenly white","poo brown","sparkling emerald","feline yellow","christmas")] and [pick("cerulean","celery green","slate gray","royal purple","bloodshot red","brilliant gold","completely void","heavenly white","poo brown","sparkling emerald","feline yellow","christmas")] colored [pick("eyes","glistening orbs","holes where [hisher] eyes should be")] are."
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
