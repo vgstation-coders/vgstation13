@@ -170,14 +170,12 @@
 				to_chat(user, "<span class = 'warning'>No structures detected.</span>")
 				user.playsound_local(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1, gas_modified = 0)
 			else
-				for(var/mob/M in get_turf(src))
-					M.playsound_local(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1, gas_modified = 0)
+				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1, gas_modified = 0, extrarange = -7)
 			return
 		if(user)
 			user.playsound_local(get_turf(src), 'sound/machines/ping.ogg', 50, 1, gas_modified = 0)
 		else
-			for(var/mob/M in get_turf(src))
-				M.playsound_local(get_turf(src), 'sound/machines/ping.ogg', 50, 1, gas_modified = 0)
+			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1, gas_modified = 0, extrarange = -7)
 		if(module_in_list(GETDIRMODULE))
 			last_direction = dir2text(get_dir(src, detected))
 			if(user)
