@@ -40,7 +40,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/reagent_containers/pill/cyanide = 400,
 /obj/item/weapon/reagent_containers/pill/happy = 20,
 /obj/item/weapon/reagent_containers/pill/nanobot = 500,
-/obj/item/weapon/reagent_containers/pill/creatine_safe = 200,
+/obj/item/weapon/reagent_containers/pill/creatine_safe = 700,
 /obj/item/weapon/reagent_containers/chempack = 350,
 /obj/item/clothing/mask/chemmask = 350,
 
