@@ -948,6 +948,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 		H.drop_item(W, force_drop = 1)
 	W.forceMove(owner)
 
+/datum/organ/external/proc/skeletify()
+	if(istype(species, /datum/species/skellington))
+		return
+	owner.visible_message("<span class = 'warning'>The flesh falls off of \the [owner]'s [display_name]!</span>","<span class = 'warning'>The flesh is falling off of your [display_name]!</span>")
+	var/new_species_name
+	if(isvox(src))
+		new_species_name = "Skeletal Vox"
+	else
+		new_species_name = "Skellington"
+	var/datum/species/S = all_species[new_species_name]
+	species = new S.type
+	owner.update_body()
+
 /****************************************************
 			   ORGAN DEFINES
 ****************************************************/

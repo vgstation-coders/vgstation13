@@ -172,14 +172,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 
 	if(species && species.anatomy_flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
-		return
+		return 0
 
 	if(!amt)
-		return
+		return 0
 
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
+	return 1
 
 /****************************************************
 				BLOOD TRANSFERS

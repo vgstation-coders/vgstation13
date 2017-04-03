@@ -137,9 +137,8 @@
 				vomit()
 			if(prob(5*minor_rad_multiplier))
 				//Nosebleed
-				if(prob(15))
+				if(prob(15) && drip(1))
 					to_chat(src, "<span class = 'danger'>Your nose starts bleeding!</span>")
-				drip(1)
 			if(prob(5*major_rad_multiplier))
 				//Hallucination
 				hallucination += rand(1,5)*minor_rad_multiplier
@@ -148,7 +147,7 @@
 				//Internal hemorrhaging
 				var/list/limbs_to_bleed = list()
 				for(var/datum/organ/external/E in organs)
-					if(E.is_robotic())
+					if(!E.is_organic())
 						continue
 					limbs_to_bleed.Add(E)
 				if(limbs_to_bleed.len)
@@ -167,7 +166,7 @@
 					organ_to_damage.Add(I)
 				if(organ_to_damage.len)
 					var/datum/organ/internal/victim = pick(organ_to_damage)
-					victim.damage += rand(1,5)*rad_multiplier
+					victim.take_damage(rand(1,5)*rad_multiplier,silent = 0)
 			if(prob(0.5*major_rad_multiplier))
 				//Become uncloneable
 				if(!(M_NOCLONE in mutations))
@@ -178,7 +177,7 @@
 				//Minor limb mutation
 				var/list/datum/organ/external/candidates = list()
 				for (var/datum/organ/external/O in organs)
-					if(!(O.status & ORGAN_MUTATED|ORGAN_ROBOT))
+					if(O.is_usable() && O.is_organic())
 						candidates.Add(O)
 				if (candidates.len)
 					var/datum/organ/external/O = pick(candidates)
@@ -187,27 +186,27 @@
 			if(prob(5*rad_multiplier))
 				//Minor clone damage
 				adjustCloneLoss(rand(1,5))
-				to_chat(src, "<span class='warning'>[pick("You can feel your body becoming weak!</span>", \
+				to_chat(src, "<span class='warning'>[pick("You can feel your body becoming weak!", \
 				"You feel like you're about to die!", \
 				"You feel every part of your body screaming in agony!", \
 				"A low, rolling pain passes through your body!", \
 				"Your body feels as if it's falling apart!", \
 				"You feel extremely weak!", \
-				"A sharp, deep pain bathes every inch of your body!")]")
-			if(prob(10)*minor_rad_multiplier)
+				"A sharp, deep pain bathes every inch of your body!")]</span>")
+			if(prob(10*minor_rad_multiplier))
 				//Blindness
 				var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
 				if(!E.robotic && !(sdisabilities & BLIND || disabilities & NEARSIGHTED))
 					to_chat(src, "<span class = 'danger'>[pick("Your eyesight starts to fade!","Your eyes go cloudy!","Are you going blind?")]</span>")
-					E.damage += 2.5
+					E.take_damage(2.5, TRUE)
 					eye_blurry = min(eye_blurry+1.5,50)
 					if (E.damage >= E.min_broken_damage && !(sdisabilities & BLIND))
 						simple_message("<span class='warning'>You go blind!</span>","<span class='warning'>Somebody turns the lights off.</span>")
 						sdisabilities |= BLIND
 					else if (E.damage >= E.min_bruised_damage && !(disabilities & NEARSIGHTED))
 						simple_message("<span class='warning'>It becomes hard to see for some reason.</span>","<span class='warning'>Somebody turns the lights off.</span>")
-						eye_blind = 5
-						eye_blurry = 5
+						eye_blind += 5
+						eye_blurry += 5
 						disabilities |= NEARSIGHTED
 						spawn(100)
 							disabilities &= ~NEARSIGHTED
@@ -220,36 +219,26 @@
 					if(1)
 						//Drop some meat
 						to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
-						var/totalslabs = 1
-						var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 						var/sourcename = real_name
 						var/sourcejob = job
 						var/sourcenutriment = nutrition / 15
-						//var/sourcetotalreagents = mob.reagents.total_volume
 
-						for(var/i = 1 to totalslabs)
-							var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
-							newmeat.name = sourcename + " " + newmeat.name
-							newmeat.subjectname = sourcename
-							newmeat.subjectjob = sourcejob
-							newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
-							//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
-							allmeat[i] = newmeat
+						var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
+						newmeat.name = sourcename + " " + newmeat.name
+						newmeat.subjectname = sourcename
+						newmeat.subjectjob = sourcejob
+						newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment)
+						var/turf/Tx = get_turf(src)
+						newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
 
-							var/obj/item/meatslab = allmeat[i]
-							var/turf/Tx = get_turf(src)
-							meatslab.forceMove(get_turf(src))
-							meatslab.throw_at(Tx, i, 3)
-
-							if(!Tx.density)
-								var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
-								D.New(Tx,i)
+						if(!Tx.density)
+							blood_splatter(src,vessel,TRUE)
 
 					if(2)
 						//Drop a limb
 						var/list/datum/organ/external/candidates = list()
 						for (var/datum/organ/external/O in organs)
-							if(O.status & ORGAN_ROBOT)
+							if(!O.is_organic())
 								continue
 							if(O.vital)
 								continue
@@ -263,24 +252,17 @@
 						//Skeletonify a limb
 						var/list/datum/organ/external/candidates = list()
 						for (var/datum/organ/external/O in organs)
-							if(O.status & ORGAN_ROBOT)
+							if(!O.is_organic())
 								continue
 							if(O.amputated)
 								continue
-							if(O.species == "Skeletal Vox" || O.species == "Skellington")
+							if(istype(O.species, /datum/species/skellington))
 								continue
 							candidates.Add(O)
 						if(candidates.len)
 							var/datum/organ/external/victim = pick(candidates)
-							to_chat(src, "<span class = 'warning'>The flesh is falling off of your [victim.display_name]!</span>")
-							var/new_species_name
-							if(isvox(src))
-								new_species_name = "Skeletal Vox"
-							else
-								new_species_name = "Skellington"
-							var/datum/species/S = all_species[new_species_name]
-							victim.species = new S.type
-							update_body()
+							victim.skeletify()
+
 			if(prob(1*major_rad_multiplier))
 				//Rad glow
 				if(!(species.flags & RAD_GLOW))
