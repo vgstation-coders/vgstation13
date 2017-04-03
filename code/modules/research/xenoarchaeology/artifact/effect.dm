@@ -55,11 +55,11 @@
 	spawn(0)
 		if(activated)
 			activated = 0
-		else
-			activated = 1
 			isolated = 1
 			spawn(20 SECONDS)
 				isolated = 0
+		else
+			activated = 1
 
 		if(reveal_toggle == 1 && holder)
 			if(istype(holder, /obj/machinery/artifact))

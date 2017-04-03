@@ -76,30 +76,43 @@
 
 	if(context == "MELEE")
 		if(iscoin(item))
+			var/obj/item/weapon/coin/inserted_coin = item
 			if(mode == COIN)
-				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [item] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
-				my_artifact.visible_message("<span class='info'>[toucher] inserts a coin into [my_artifact].</span>")
 				if(istype(item, /obj/item/weapon/coin/clown))
 					playsound(get_turf(my_artifact), 'sound/items/bikehorn.ogg', 50, 1)
 					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/iron))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/iron))
 					time_left += 10
-				else if(istype(item, /obj/item/weapon/coin/silver))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/silver))
 					time_left += 30
-				else if(istype(item, /obj/item/weapon/coin/gold))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/gold))
 					time_left += 60
-				else if(istype(item, /obj/item/weapon/coin/plasma))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/plasma))
 					time_left += 45
-				else if(istype(item, /obj/item/weapon/coin/uranium))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/uranium))
 					time_left += 50
-				else if(istype(item, /obj/item/weapon/coin/diamond))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/diamond))
 					time_left += 100
-				else if(istype(item, /obj/item/weapon/coin/phazon))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/phazon))
 					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/adamantine))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/adamantine))
 					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/mythril))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/mythril))
 					time_left += 150
+				else
+					to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept this type of coin!</span>")
+					return
+
+				my_artifact.visible_message("<span class='info'>[toucher] inserts a coin into [my_artifact].</span>")
+				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [item] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
+
+				if(inserted_coin.string_attached)
+					if(prob(50))
+						to_chat(toucher, "<SPAN CLASS='notice'>You successfully pulled the coin out before the [my_artifact] could swallow it.</SPAN>")
+						return
+					else
+						to_chat(toucher, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the [my_artifact] ate it, string and all.</SPAN>")
+
 				qdel(item)
 			else
 				to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept coins!</span>")
