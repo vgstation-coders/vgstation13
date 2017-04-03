@@ -24,7 +24,7 @@
 	var/isbroken = 0
 	light_range = 5
 	light_color = LIGHT_COLOR_RED
-	var/last_check
+	var/last_check = 0
 
 /obj/structure/cult/pylon/New()
 	..()
@@ -36,9 +36,8 @@
 
 /obj/structure/cult/pylon/process()
 	if(!isbroken && world.time > last_check + 3 SECONDS)
-		var/list/can_see = view(src, 3)
 		last_check = world.time
-		for(var/mob/living/simple_animal/construct/C in can_see)
+		for(var/mob/living/simple_animal/construct/C in view(src, 3))
 			if(C.health < C.maxHealth)
 				if(prob(15))
 					src.visible_message("<span class='sinister'>\the [src] mends some of \the <EM>[C]'s</EM> wounds.</span>")
@@ -50,6 +49,10 @@
 	attackpylon(M, 5)
 
 /obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/user as mob)
+	if(istype(M, /mob/living/simple_animal/construct/builder))
+		if(isbroken && prob(20))
+			repair(M)
+			return
 	attackpylon(user, user.melee_damage_upper)
 
 /obj/structure/cult/pylon/attackby(obj/item/W as obj, mob/user as mob)
@@ -72,19 +75,14 @@
 			to_chat(user, "You hit the pylon!")
 			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 	else
+		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		if(prob(damage * 2))
 			to_chat(user, "You pulverize what was left of the pylon!")
 			qdel(src)
 		else
 			to_chat(user, "You hit the pylon!")
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 
-/obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/M)
-	if(istype(M, /mob/living/simple_animal/construct/builder))
-		if(isbroken && prob(20))
-			repair(M)
-			return
-	..()
+
 
 /obj/structure/cult/pylon/proc/repair(mob/user as mob)
 	if(isbroken)
