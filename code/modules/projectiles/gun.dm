@@ -351,7 +351,7 @@
 	if(P.pai)
 		to_chat(P.pai, "<span class='info'><b>You have been connected to \a [src].</b></span>")
 		to_chat(P.pai, "<span class='info'>Your controls are:</span>")
-		to_chat(P.pai, "<span class='info'>- (Z) Use hotkey: Connect or disconnect from \the [src]'s firing mechanism.</span>")
+		to_chat(P.pai, "<span class='info'>- PageDown / Z(hotkey mode): Connect or disconnect from \the [src]'s firing mechanism.</span>")
 		to_chat(P.pai, "<span class='info'>- Click on a target: Fire \the [src] at the target.</span>")
 
 /obj/item/weapon/gun/attack_integrated_pai(mob/living/silicon/pai/user)
