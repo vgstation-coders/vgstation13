@@ -24,7 +24,27 @@
 	var/isbroken = 0
 	light_range = 5
 	light_color = LIGHT_COLOR_RED
-	var/obj/item/wepon = null
+	var/last_check
+
+/obj/structure/cult/pylon/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/structure/cult/pylon/Destroy()
+	..()
+	processing_objects.Remove(src)
+
+/obj/structure/cult/pylon/process()
+	if(!isbroken && world.time > last_check + 3 SECONDS)
+		var/list/can_see = view(src, 3)
+		last_check = world.time
+		for(var/mob/living/simple_animal/construct/C in can_see)
+			if(C.health < C.maxHealth)
+				if(prob(15))
+					src.visible_message("<span class='sinister'>\the [src] mends some of \the <EM>[C]'s</EM> wounds.</span>")
+				make_tracker_effects(get_turf(src), C)
+				C.health = min(C.maxHealth, C.health + 3) //Not quite as good as artificers
+
 
 /obj/structure/cult/pylon/attack_hand(mob/M as mob)
 	attackpylon(M, 5)
@@ -59,6 +79,12 @@
 			to_chat(user, "You hit the pylon!")
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 
+/obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/M)
+	if(istype(M, /mob/living/simple_animal/construct/builder))
+		if(isbroken && prob(20))
+			repair(M)
+			return
+	..()
 
 /obj/structure/cult/pylon/proc/repair(mob/user as mob)
 	if(isbroken)
