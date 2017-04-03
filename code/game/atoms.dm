@@ -129,7 +129,7 @@ var/global/list/ghdel_profiling = list()
 
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-	INVOKE_EVENT(on_destroyed, list(src)) // 1 argument - the object itself
+	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
@@ -531,6 +531,10 @@ its easier to just keep the beam vertical.
 
 /atom/proc/emag_act()
 	return
+
+/atom/proc/supermatter_act(atom/source, severity)
+	qdel(src)
+	return 1
 
 /atom/proc/hitby(atom/movable/AM as mob|obj)
 	return

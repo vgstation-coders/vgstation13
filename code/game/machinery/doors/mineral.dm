@@ -238,6 +238,17 @@
 /obj/machinery/door/mineral/resin/acidable()
 	return 0
 
+/obj/machinery/door/mineral/hive
+	prefix = ""
+	icon = 'icons/obj/doors/morgue.dmi'
+	icon_state = "door_closed"
+
+/obj/machinery/door/mineral/hive/New()
+	..()
+
+	dir = pick(cardinal)
+	//Random direction for a more chaotic look
+
 /obj/machinery/door/mineral/transparent/icicle
 	name = "icicle door"
 	use_power = 0

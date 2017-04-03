@@ -46,7 +46,7 @@
 
 	to_chat(user, "A small [locked ? "red" : "green"] light indicates the cabinet is [locked ? "" : "un"]locked.")
 
-/obj/structure/closet/fireaxecabinet/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+/obj/structure/closet/fireaxecabinet/attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
 
 	user.delayNextAttack(10) //Whatever we do here, no clicking around for the user for at least one second
 
@@ -54,7 +54,7 @@
 	if(fireaxe)
 		hasaxe = 1
 
-	if(isrobot(usr) || src.locked)
+	if(isrobot(user) || src.locked)
 		if(istype(O, /obj/item/device/multitool))
 			visible_message("<span class='notice'>[user] starts fiddling with \the [src]'s locking module.</span>", \
 			"<span class='notice'>You start disabling \the [src]'s locking module.</span>")
@@ -73,6 +73,7 @@
 						update_icon()
 				return
 			else //We are hitting the closet
+				user.do_attack_animation(src, O)
 				if(W.force < 15)
 					playsound(user, 'sound/effects/Glasshit.ogg', 100, 1)
 					visible_message("<span class='notice'>\The [src]'s protective glass glances off [user]'s hit with \the [O].")

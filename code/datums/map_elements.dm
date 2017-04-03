@@ -71,10 +71,15 @@ var/list/datum/map_element/map_elements = list()
 
 
 /datum/map_element/proc/clear_references(list/params)
-	var/atom/A = locate(/atom) in params
+	var/atom/A = params["atom"]
+	if(!A)
+		return
 
 	//Remove instances by brute force (there aren't that many vars in map element datums)
 	for(var/key in vars)
+		if(key == "vars")
+			continue
+
 		if(vars[key] == A)
 			vars[key] = null
 		else if(istype(vars[key], /list))
@@ -83,4 +88,3 @@ var/list/datum/map_element/map_elements = list()
 			//Remove all instances from the list
 			while(L.Remove(A))
 				continue
-

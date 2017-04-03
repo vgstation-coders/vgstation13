@@ -907,11 +907,11 @@
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
-		//ERT
-		if(jobban_isbanned(M, "Emergency Response Team") || isbanned_dept)
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'><font color=red>Emergency Response Team</font></a></td>"
+		//Strike Team
+		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'>Emergency Response Team</a></td>"
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
 
 
 		//Vox Raider
@@ -2559,10 +2559,26 @@
 				for(var/mob/living/carbon/human/H in mob_list)
 					spawn(0)
 						H.corgize()
-			if("striketeam")
-				if(usr.client.strike_team())
-					feedback_inc("admin_secrets_fun_used",1)
-					feedback_add_details("admin_secrets_fun_used","Strike")
+			if("striketeam-deathsquad")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","DeathQuad")
+				var/datum/striketeam/deathsquad/team = new /datum/striketeam/deathsquad()
+				team.trigger_strike(usr)
+			if("striketeam-ert")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ERT")
+				var/datum/striketeam/ert/team = new /datum/striketeam/ert()
+				team.trigger_strike(usr)
+			if("striketeam-syndi")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SyndiStrikeTeam")
+				var/datum/striketeam/syndicate/team = new /datum/striketeam/syndicate()
+				team.trigger_strike(usr)
+			if("striketeam-custom")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CustomStrikeTeam")
+				var/datum/striketeam/custom/team = new /datum/striketeam/custom()
+				team.trigger_strike(usr)
 			if("tripleAI")
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3036,24 +3052,49 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","CA")
 				var/answer = alert("Are you sure you want to create a custom artifact?",,"Yes","No")
+
 				if(answer == "Yes")
 					//Either have them as all random, or have custom artifacts
 					var/list/effects = typesof(/datum/artifact_effect)
+					var/list/triggers = typesof(/datum/artifact_trigger)
 					effects.Remove(/datum/artifact_effect)
+					triggers.Remove(/datum/artifact_trigger)
+
 					var/answer1 = alert("Just a primary, or primary and secondary effects?",,"Primary only","Primary and Secondary")
-					var/primary_effect = input(usr, "Which primary effect would you like?", "Primary effect") as null|anything in effects
-					var/secondary_effect
+					var/answer2 = alert("Randomly generated triggers (safer), or manually picked (might break certain effects)?",,"Random","Manual")
+
+					var/custom_primary_effect = input(usr, "Which primary effect would you like?", "Primary effect") as null|anything in effects
+					var/custom_primary_trigger
+					if(answer2 == "Manual")
+						custom_primary_trigger = input(usr, "Which trigger would you like for the primary effect?", "Primary trigger") as null|anything in triggers
+
+					var/custom_secondary_effect
+					var/custom_secondary_trigger
 					if(answer1 == "Primary and Secondary")
-						secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
-					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr))
-					qdel(custom.primary_effect); custom.primary_effect = null
-					custom.primary_effect = new primary_effect(custom)
-					custom.primary_effect.GenerateTrigger()
-					qdel(custom.secondary_effect); custom.secondary_effect = null
-					if(secondary_effect)
-						custom.secondary_effect = new secondary_effect(custom)
-						custom.secondary_effect.GenerateTrigger()
+						custom_secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
+						if(answer2 == "Manual")
+							custom_secondary_trigger = input(usr, "Which trigger would you like for the secondary effect?", "Secondary trigger") as null|anything in triggers
+
+					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr), null, 0)
+					custom.primary_effect = new custom_primary_effect(custom)
+					if(answer2 == "Random")
+						custom.primary_effect.GenerateTrigger()
+					else
+						custom.primary_effect.trigger = new custom_primary_trigger(custom.primary_effect)
+
+					custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a primary effect [custom.primary_effect.artifact_id]: [custom.primary_effect] || range: [custom.primary_effect.effectrange] || charge time: [custom.primary_effect.chargelevelmax] || trigger: [custom.primary_effect.trigger].")
+
+					if(custom_secondary_effect)
+						custom.secondary_effect = new custom_secondary_effect(custom)
+						if(answer2 == "Random")
+							custom.secondary_effect.GenerateTrigger()
+						else
+							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
+						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
+
+
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
+
 
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)

@@ -117,12 +117,25 @@
 		to_chat(L, "<span class='info'>The string has already been pulled!</span>")
 		return
 
-	visible_message("<span class='notice'>All of a sudden, something emerges from \the [src]!</span>")
 	to_chat(L, "<span class='info'>You pull on the party string!</span>")
+
+	release_object(L)
+
+	string_pulled = 1
+
+/obj/structure/popout_cake/proc/release_object(var/atom/L, var/drop = FALSE)
+	if(!L)
+		if(!src.contents.len)
+			return
+
+		L = pick(src.contents)
+
+	visible_message("<span class='notice'>All of a sudden, something emerges from \the [src]!</span>")
 
 	lock_atom(L, /datum/locking_category/popout_cake)
 
 	spawn(10)
+
 		playsound(get_turf(src), 'sound/effects/party_horn.ogg', 50, 1)
 
 		sleep(10)
@@ -132,7 +145,10 @@
 		s.set_up(6, 0, get_turf(src)) //6 sparks in all directions
 		s.start()
 
-	string_pulled = 1
+		if(drop)
+			sleep(20)
+
+			unlock_atom(L)
 
 /obj/structure/popout_cake/relaymove(mob/living/L, direction)
 	if(!istype(L))
@@ -159,3 +175,18 @@
 	slices_amount -= Clamp(round(Proj.damage / 3), 1, 4)
 
 	check_slices()
+
+//When spawned, stuffs the corpse underneath it inside
+/obj/structure/popout_cake/corpse_grabber/New()
+	..()
+
+	initialize()
+
+/obj/structure/popout_cake/corpse_grabber/initialize()
+	..()
+
+	spawn(40) //Search for a corpse after a slight delay, because corpse spawners are objects, and don't spawn the corpse immediately
+		for(var/mob/living/L in loc)
+			if(L.isDead())
+				L.forceMove(src)
+				break

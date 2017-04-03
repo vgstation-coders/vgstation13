@@ -60,3 +60,18 @@
 		var/obj/item/stack/cable_coil/coil = C
 		if(get_turf(src) == src.loc)
 			coil.turf_place(src.loc, user)
+
+/obj/structure/catwalk/invulnerable/ex_act()
+	return
+
+/obj/structure/catwalk/invulnerable/attackby()
+	return
+
+//For an away mission
+/obj/structure/catwalk/invulnerable/hive
+	plane = ABOVE_TURF_PLANE
+
+/obj/structure/catwalk/invulnerable/hive/isSmoothableNeighbor(atom/A)
+	if(istype(A, /turf/unsimulated/wall/supermatter))
+		return FALSE
+	return ..()

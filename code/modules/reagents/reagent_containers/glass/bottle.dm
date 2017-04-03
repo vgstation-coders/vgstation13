@@ -59,7 +59,6 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/update_icon()
-
 	overlays.len = 0
 
 	if(reagents.total_volume)
@@ -81,6 +80,7 @@
 				filling.icon_state = "[icon_state]30"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
 
 	if(!is_open_container())
@@ -470,7 +470,7 @@
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
 
-/obj/item/weapon/reagent_containers/glass/bottle/update_icon()
+/obj/item/weapon/reagent_containers/glass/bottle/bleach/update_icon()
 	overlays.len = 0
 
 	if(!is_open_container())

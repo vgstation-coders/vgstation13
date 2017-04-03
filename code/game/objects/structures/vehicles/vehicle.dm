@@ -47,6 +47,7 @@
 	var/mob/occupant
 	lock_type = /datum/locking_category/buckle/chair/vehicle
 	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
+	var/last_warn
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -104,10 +105,11 @@
 		unlock_atom(user)
 		return
 	if(!check_key(user))
-		to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
+		if(can_warn())
+			to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
 		return 0
 	if(empstun > 0)
-		if(user)
+		if(user && can_warn(user))
 			to_chat(user, "<span class='warning'>\The [src] is unresponsive.</span>")
 		return 0
 	if(move_delayer.blocked())
@@ -149,6 +151,12 @@
 	if(istype(src.loc, /turf/space) && (!src.Process_Spacemove(0, user)))
 		var/turf/space/S = src.loc
 		S.Entered(src)*/
+
+/obj/structure/bed/chair/vehicle/proc/can_warn() //Should be used for any instance of to_chat in relaymove
+	if(world.time < last_warn + 1 SECONDS)
+		return 0
+	last_warn = world.time
+	return 1
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
 	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)

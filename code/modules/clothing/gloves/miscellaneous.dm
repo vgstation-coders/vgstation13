@@ -160,3 +160,146 @@
 	desc = "For these tense combat situations when you just have to pick your nose."
 	icon_state = "nr_fgloves"
 	item_state = "nr_fgloves"
+
+//Like powerfist from fallout, but NUCLEAR. It throws people back and adds 50 damage every 15 seconds. Also it irradiates you
+/obj/item/clothing/gloves/powerfist
+	name = "nuclear powerfists"
+	desc = "A pair of nuclear-powered contraptions meant to be worn on your hands, they massively increase force and energy of your punches. The reactor is recharged with uranium, and must cool down after every punch."
+
+	icon_state = "powerfist"
+
+	//Amount of fuel needed for increased damage, and for the knockback. Both increased damage and knockback use this amount, so in practice TWICE this value is used per punch
+	//Vial can hold 25 units max
+	//12.5 per punch - two punches per full fuel vial
+	var/const/fuel_cost = 6.25
+
+	var/last_punch = 0
+	var/recharge_time = 10 SECONDS
+
+	var/powered_damage_added = 50
+	var/radiation_per_punch = 15
+	var/stunforce = 5
+
+	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = /obj/item/weapon/reagent_containers/glass/beaker/vial //Vial with the fuel
+
+	var/fuel_overlay
+	var/ready_overlay
+
+/obj/item/clothing/gloves/powerfist/full
+	vial = /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
+
+/obj/item/clothing/gloves/powerfist/New()
+	..()
+
+	if(ispath(vial))
+		vial = new vial(src)
+
+	update_icon()
+
+/obj/item/clothing/gloves/powerfist/Destroy()
+	qdel(vial)
+	vial = null
+
+	..()
+
+/obj/item/clothing/gloves/powerfist/examine(mob/user)
+	..()
+
+	if(!vial)
+		to_chat(user, "<span class='info'>There is no fuel container inside.</span>")
+	else
+		to_chat(user, "<span class='info'>The fuel container is [round(vial.reagents.total_volume / vial.reagents.maximum_volume * 100)]% full.</span>")
+
+	if(is_ready())
+		to_chat(user, "<span class='info'>\The [src] are ready.</span>")
+
+/obj/item/clothing/gloves/powerfist/update_icon()
+	..()
+
+	overlays.Remove(fuel_overlay)
+	overlays.Remove(ready_overlay)
+
+	if(!vial)
+		fuel_overlay = null
+	else
+		var/fuel_amount = vial.reagents.get_reagent_amount(URANIUM)
+		switch(fuel_amount)
+			if(0)
+				fuel_overlay = "powerfist_no_fuel"
+			if(0.1 to fuel_cost)
+				fuel_overlay = "powerfist_fuel_25"
+			if(fuel_cost to fuel_cost*2)
+				fuel_overlay = "powerfist_fuel_50"
+			if(fuel_cost*2 to fuel_cost*3)
+				fuel_overlay = "powerfist_fuel_75"
+			else
+				fuel_overlay = "powerfist_fuel_100"
+
+	if(!is_ready())
+		ready_overlay = null
+	else
+		ready_overlay = "powerfist_ready"
+
+	if(ready_overlay)
+		overlays.Add(ready_overlay)
+	if(fuel_overlay)
+		overlays.Add(fuel_overlay)
+
+/obj/item/clothing/gloves/powerfist/get_damage_added()
+	if(use_fuel(fuel_cost))
+		return powered_damage_added
+
+	return ..()
+
+/obj/item/clothing/gloves/powerfist/proc/is_ready()
+	return (last_punch + recharge_time < world.time)
+
+/obj/item/clothing/gloves/powerfist/on_punch(mob/user, mob/living/victim)
+	if(istype(victim) && use_fuel(fuel_cost))
+		to_chat(user, "<span class='notice'>As \the [src] activate, you feel a truly powerful force assisting your punch.</span>")
+		playsound(get_turf(src), 'sound/mecha/mechentry.ogg', 100, 1)
+
+		victim.throw_at(get_edge_target_turf(loc, loc.dir), 5, 1)
+		victim.Stun(stunforce)
+		victim.Knockdown(stunforce)
+		victim.apply_effect(STUTTER, stunforce)
+
+		last_punch = world.time
+		update_icon()
+		spawn(recharge_time + 10)
+			update_icon()
+
+/obj/item/clothing/gloves/powerfist/attack_self(mob/user)
+	user.put_in_hands(vial)
+	to_chat(user, "<span class='info'>You eject \the [vial] from \the [src].</span>")
+	vial = null
+	update_icon()
+
+/obj/item/clothing/gloves/powerfist/attackby(obj/item/W, mob/user)
+	if(vial)
+		return
+
+	if(istype(W, /obj/item/weapon/reagent_containers/glass/beaker/vial))
+		if(user.drop_item(W))
+			to_chat(user, "<span class='info'>You insert \the [W] into \the [src].</span>")
+			W.forceMove(src)
+			vial = W
+			update_icon()
+
+/obj/item/clothing/gloves/powerfist/proc/use_fuel(amount)
+	if(!is_ready())
+		return FALSE
+	if(!vial || !vial.reagents)
+		return FALSE
+	if(!vial.reagents.has_reagent(URANIUM, amount))
+		return FALSE
+
+	vial.reagents.remove_reagent(URANIUM, amount)
+
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		H.apply_effect(radiation_per_punch, IRRADIATE)
+
+	update_icon()
+
+	return TRUE
