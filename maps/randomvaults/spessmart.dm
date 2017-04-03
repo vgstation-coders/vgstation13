@@ -30,8 +30,29 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/mounted/poster = 20,
 /obj/item/candle = 1,
 
+/obj/item/asteroid/goliath_hide = 50,
+
+/obj/item/weapon/storage/backpack/clown = 20,
+/obj/item/weapon/storage/backpack/captain = 50,
+/obj/item/weapon/storage/briefcase/centcomm = 100,
+
+//Medicine and chemistry
+/obj/item/weapon/reagent_containers/pill/cyanide = 400,
+/obj/item/weapon/reagent_containers/pill/happy = 20,
+/obj/item/weapon/reagent_containers/pill/nanobot = 500,
+/obj/item/weapon/reagent_containers/pill/creatine_safe = 200,
+/obj/item/weapon/reagent_containers/chempack = 350,
+/obj/item/clothing/mask/chemmask = 350,
+
+//DNA injectors with powers
+/obj/item/weapon/dnainjector/nofail/elvis = 50,
+/obj/item/weapon/dnainjector/nofail/sweedish = 50,
+/obj/item/weapon/dnainjector/nofail/jumpy = 250,
+/obj/item/weapon/dnainjector/nofail/mattereater = 250,
+/obj/item/weapon/dnainjector/nofail/hulkmut = 500,
+
 //disk leading to a random vault. If there doesn't exist a valid vault, it shows up as a blank disk
-/obj/item/weapon/disk/shuttle_coords/vault/random = 800,
+/obj/item/weapon/disk/shuttle_coords/vault/random = 90,
 
 //tools
 /obj/item/weapon/surgicaldrill = 100,
@@ -94,8 +115,9 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 200,
 /obj/item/weapon/solder = 10,
-/obj/item/supermatter_shielding = 500,
+/obj/item/supermatter_shielding = 300,
 /obj/item/weapon/cell/hyper = 50,
+/obj/item/weapon/weldingtool/gatling/empty = 150,
 
 
 //weapons
@@ -119,13 +141,15 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/bullwhip = 200,
 /obj/item/weapon/melee/morningstar = 300,
 /obj/item/weapon/subspacetunneler = 500,
+/obj/item/weapon/dualsaber = 3200,
 
 //mischievous items
 /obj/item/device/powersink = 700,
-/obj/item/weapon/card/emag = 500,
+/obj/item/weapon/card/emag = 1500,
 /obj/item/weapon/cloakingcloak = 800,
 /obj/item/weapon/pen/sleepypen = 1200,
-/obj/item/device/device_analyser/syndicate = 20000,
+/obj/item/weapon/reagent_containers/spray/chemsprayer = 600,
+/obj/item/device/device_analyser/syndicate = 15000,
 
 //No guns sorry
 )
@@ -134,6 +158,8 @@ var/list/shop_prices = list( //Cost in space credits
 /datum/map_element/vault/supermarket
 	name = "Spessmart"
 	file_path = "maps/randomvaults/spessmart.dmm"
+
+	var/customer_has_entered = FALSE
 
 	//Statistics gathering!
 	var/credits_spent   = 0
@@ -194,7 +220,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/list/items = list()
 	var/lockdown = 0
 	var/destination_disks = 1	//number of complimentary Spessmart destination disks left to give
-	var/customer_has_entered = FALSE
 
 /area/vault/supermarket/restricted
 	name = "Spessmart Maintenance"
@@ -264,7 +289,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			if(map_element)
 				map_element.set_stats_alarm_activated("Destruction of \a [I][usr ? " by [usr]" : ""]")
 
-	if(customer_has_entered)
+	if(map_element.customer_has_entered)
 		on_theft()
 
 /area/vault/supermarket/shop/proc/on_robot_kill()
@@ -338,7 +363,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /obj/effect/spessmart_entrance/Crossed(atom/movable/AM)
 	if(isliving(AM))
 		var/area/vault/supermarket/shop/A = get_area(src)
-		A.customer_has_entered = TRUE
+		A.map_element.customer_has_entered = TRUE
 		spawn(1)
 			for(var/cdir in alldirs)
 				for(var/mob/living/simple_animal/robot/robot_greeter/G in get_step(src, cdir))
