@@ -124,7 +124,7 @@
 	if(attack_animation == PERSON_ANIMATION)
 		person_animation_viewers |= client
 		item_animation_viewers -= client
-	else if(attack_animation = ITEM_ANIMATION)
+	else if(attack_animation == ITEM_ANIMATION)
 		item_animation_viewers |= client
 		person_animation_viewers -= client
 	else
