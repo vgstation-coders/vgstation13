@@ -957,7 +957,7 @@ var/list/slot_equipment_priority = list( \
 			var/mob/living/carbon/HM = M
 			if (HM.health - HM.halloss <= config.health_threshold_softcrit)
 				to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
-				add_logs(usr, HM, "started dragging critically wounded", admin = FALSE)
+				add_logs(src, HM, "started dragging critically wounded", admin = (M.ckey))
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 

@@ -718,7 +718,7 @@ Thanks.
 										var/mob/living/carbon/H = M
 										var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 										if(blood_volume > 0)
-											H:vessel.remove_reagent("blood",2)
+											H:vessel.remove_reagent("blood",4)
 											M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
 								
 							if(M.drag_damage() && (M.health - M.halloss <= config.health_threshold_softcrit)) //Crit damage boost
@@ -728,6 +728,7 @@ Thanks.
 											apply_damage(4, BRUTE, damagedorgan)
 											M.visible_message("<span class='warning'>The wounds on \The [M]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
 											var/mob/living/carbon/human/updatetarget = M
+											add_logs(src, M, "caused drag damage to", admin = (M.ckey))
 											updatetarget.update_body()
 								if(prob(8))
 									if(isturf(M.loc))
@@ -736,9 +737,9 @@ Thanks.
 											var/mob/living/carbon/H = M
 											var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
 											if(blood_volume > 0)
-												H:vessel.remove_reagent("blood",5)
+												H:vessel.remove_reagent("blood",8)
 												M.visible_message("<span class='danger'>\The [M] loses a lot of blood from being dragged!</span>")
-												add_logs(usr, M, "caused critical drag-damage-induced bloodloss to", admin = FALSE)
+												add_logs(src, M, "caused drag damage bloodloss to", admin = (M.ckey))
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
