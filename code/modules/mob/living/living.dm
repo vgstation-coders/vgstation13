@@ -705,7 +705,7 @@ Thanks.
 								M.start_pulling(secondarypull)
 							//this is the gay blood on floor shit -- Added back --snx
 							if(M.pull_damage())
-								if(prob(6)) //Too much bloooooood
+								if(prob(4))
 									blood_splatter(M.loc,M)
 									if(ishuman(M))
 										var/mob/living/carbon/H = M
@@ -713,7 +713,7 @@ Thanks.
 										if(blood_volume > 0)
 											H:vessel.remove_reagent("blood",2)
 											M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
-								if(prob(50))
+								if(prob(30))
 									M.adjustBruteLoss(1)
 									M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
 							if(M.pull_damage_crit())
