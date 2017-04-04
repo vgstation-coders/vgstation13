@@ -703,10 +703,8 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-
 							//this is the gay blood on floor shit -- Added back --snx
-							var/turf/TM = M.loc
-							if (TM.has_gravity() && M.lying && (prob(M.getBruteLoss() / 3)))
+							if(M.pull_damage())
 								if(prob(6)) //Too much bloooooood
 									blood_splatter(M.loc,M)
 									if(ishuman(M))
@@ -716,10 +714,9 @@ Thanks.
 											H:vessel.remove_reagent("blood",2)
 											M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
 								if(prob(50))
-									if(isturf(M.loc))
-										M.adjustBruteLoss(1)
-										M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
-							if(M.pull_damage())
+									M.adjustBruteLoss(1)
+									M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
+							if(M.pull_damage_crit())
 								if(prob(25))
 									M.adjustBruteLoss(2)
 									M.visible_message("<span class='danger'>\The [M]'s wounds worsen terribly from being dragged!</span>")
@@ -1528,7 +1525,7 @@ Thanks.
 	affect_silicon = 0 means that the flash won't affect silicons at all.
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
