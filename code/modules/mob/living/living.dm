@@ -705,14 +705,14 @@ Thanks.
 								M.start_pulling(secondarypull)
 							/* Drag damage is here!*/							
 							if(M.drag_damage() && !(M.health - M.halloss <= config.health_threshold_softcrit))
-								if(prob(M.getBruteLoss() / 4)) //Chance to damage
+								if(prob(M.getBruteLoss() / 5)) //Chance to damage
 									for(var/datum/organ/external/damagedorgan in M.drag_damage())
 										if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-											apply_damage(1, BRUTE, damagedorgan)
-											M.visible_message("<span class='warning'>\The [damagedorgan.display_name] wounds on [M] worsen from being dragged!</span>")
+											apply_damage(2, BRUTE, damagedorgan)
+											M.visible_message("<span class='warning'>The wounds on \The [M]'s [damagedorgan.display_name] worsen from being dragged!</span>")
 											var/mob/living/carbon/human/updatetarget = M
 											updatetarget.update_body()
-								if(prob(M.getBruteLoss() / 6)) //Chance to bleed
+								if(prob(M.getBruteLoss() / 8)) //Chance to bleed
 									blood_splatter(M.loc,M)
 									if(ishuman(M))
 										var/mob/living/carbon/H = M
@@ -722,23 +722,23 @@ Thanks.
 											M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
 								
 							if(M.drag_damage() && (M.health - M.halloss <= config.health_threshold_softcrit)) //Crit damage boost
-								if(prob(M.getBruteLoss() / 3))
+								if(prob(15))
 									for(var/datum/organ/external/damagedorgan in M.drag_damage())
 										if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-											apply_damage(2, BRUTE, damagedorgan)
-											M.visible_message("<span class='warning'>\The [damagedorgan.display_name] wounds on [M] worsen terribly from being dragged!</span>")
+											apply_damage(4, BRUTE, damagedorgan)
+											M.visible_message("<span class='warning'>The wounds on \The [M]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
 											var/mob/living/carbon/human/updatetarget = M
 											updatetarget.update_body()
-									if(prob(15))
-										if(isturf(M.loc))
-											blood_splatter(M.loc,M,1)
-											if(ishuman(M))
-												var/mob/living/carbon/H = M
-												var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
-												if(blood_volume > 0)
-													H:vessel.remove_reagent("blood",5)
-													M.visible_message("<span class='danger'>\The [M] loses a lot of blood from being dragged!</span>")
-													add_logs(usr, M, "caused critical drag-damage-induced bloodloss to", admin = FALSE)
+								if(prob(8))
+									if(isturf(M.loc))
+										blood_splatter(M.loc,M,1)
+										if(ishuman(M))
+											var/mob/living/carbon/H = M
+											var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
+											if(blood_volume > 0)
+												H:vessel.remove_reagent("blood",5)
+												M.visible_message("<span class='danger'>\The [M] loses a lot of blood from being dragged!</span>")
+												add_logs(usr, M, "caused critical drag-damage-induced bloodloss to", admin = FALSE)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
