@@ -236,6 +236,8 @@
 				msg = "<B>[src]</B> has left the building..."
 			if(M_HARDCORE in mutations)
 				msg = "<B>[src]</B> whispers with \his final breath, <i>'i told u i was hardcore..'</i>"
+				if(miming)
+					msg = "<B>[src]</B> seizes up and falls limp, \his eyes dead and lifeless..."
 			else
 				if(isgolem(src))
 					msg = "<B>[src]</B> crumbles into dust..."
