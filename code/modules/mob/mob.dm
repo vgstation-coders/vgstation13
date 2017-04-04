@@ -953,8 +953,11 @@ var/list/slot_equipment_priority = list( \
 
 	if (ismob(AM))
 		var/mob/M = AM
-		if(M.pull_damage_crit()) //Pulling someone who's messed up will mess them up a lot further, inform the user.
-			to_chat(usr,"<span class='warning'>Pulling \the [M] in their current condition would probably be a bad idea.</span>")
+		if (M.drag_damage()) 
+			var/mob/living/carbon/HM = M
+			if (HM.health - HM.halloss <= config.health_threshold_softcrit)
+				to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
+				add_logs(usr, HM, "started dragging critically wounded", admin = FALSE)
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
@@ -1299,32 +1302,16 @@ var/list/slot_equipment_priority = list( \
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
 
-/mob/proc/pull_damage()
+/mob/proc/drag_damage()
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		var/turf/TH = H.loc	
-		if (TH.has_gravity())
-			for(var/name in H.organs_by_name)
-				var/datum/organ/external/e = H.organs_by_name[name]
-				if(H.lying)
-					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING))
-						return 1
-						break
-		return 0
-	
-/mob/proc/pull_damage_crit() //More damage!
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		var/turf/TH = H.loc	
-		if (TH.has_gravity())
-			if(H.health - H.halloss <= config.health_threshold_softcrit)
-				for(var/name in H.organs_by_name)
-					var/datum/organ/external/e = H.organs_by_name[name]
-					if(H.lying)
-						if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
-							return 1
-							break
-			return 0
+		var/list/return_organs = list()
+		if (TH.has_gravity() && H.lying)
+			for(var/datum/organ/external/damagedorgan in H.organs)
+				if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
+					return_organs += damagedorgan
+			return return_organs
 
 /mob/MouseDrop(mob/M as mob)
 	..()
