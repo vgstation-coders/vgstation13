@@ -1119,7 +1119,6 @@
 		sleep(50)
 
 	var/blocked = list(
-		/mob/living/simple_animal/hostile/alien/queen/large,
 		/mob/living/simple_animal/hostile/faithless,
 		/mob/living/simple_animal/hostile/faithless/cult,
 		/mob/living/simple_animal/hostile/scarybat/cult,
