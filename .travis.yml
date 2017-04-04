@@ -31,8 +31,9 @@ before_script:
 - tools/travis/install-byond.sh
 
 script:
-- find maps/ -name '*.dmm' -exec cat {} \; | awk '/(step_[xy]|layer) =/ { exit 1 }'
-- find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
+# Executes all the travis checks in the folder - if any of them returns a failure
+# This should as well
+- find ./scripts/travis-checks/ -type f -exec {} +
 - python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - cd libvg
