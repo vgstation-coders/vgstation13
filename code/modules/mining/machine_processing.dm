@@ -19,6 +19,7 @@
 
 	var/obj/item/weapon/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
 
+
 /obj/machinery/computer/smelting/New()
 	. = ..()
 
@@ -292,6 +293,8 @@
 
 	var/credits = 0 //Amount of money, set to -1 to disable the $ amount showing in the menu (recycling, for example)
 
+	var/ore_multiplier = 1// the multiplier for ore upgrades
+
 /obj/machinery/mineral/processing_unit/Destroy()
 	. = ..()
 
@@ -322,10 +325,12 @@
 
 	i = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/A in component_parts)
-		i += A.rating - 1
+		i += A.rating / 2
 
 	idle_power_usage = initial(idle_power_usage) - (i * (initial(idle_power_usage) / 4))
 	active_power_usage = initial(active_power_usage) - (i * (initial(active_power_usage) / 4))
+
+	ore_multiplier = initial(ore_multiplier) * i
 
 /obj/machinery/mineral/processing_unit/New()
 	. = ..()
@@ -408,13 +413,13 @@
 		if(!O.material)
 			continue
 
-		ore.addAmount(O.material, 1)//1 per ore
+		ore.addAmount(O.material, ore_multiplier)
 
 		var/datum/material/mat = ore.getMaterial(O.material)
 		if(!mat)
 			continue
 
-		credits += mat.value //Dosh.
+		credits += mat.value * ore_multiplier //Dosh.
 
 		qdel(O)
 
