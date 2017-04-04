@@ -49,9 +49,9 @@
 	attackpylon(M, 5)
 
 /obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/user as mob)
-	if(istype(M, /mob/living/simple_animal/construct/builder))
+	if(istype(user, /mob/living/simple_animal/construct/builder))
 		if(isbroken && prob(20))
-			repair(M)
+			repair(user)
 			return
 	attackpylon(user, user.melee_damage_upper)
 
