@@ -505,7 +505,6 @@ var/global/ingredientLimit = 10
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"sugar"))
 			. = "It's already a sugar copy."
-	return
 
 /obj/machinery/cooking/deepfryer/sugarizer/initialize()
 	..()
