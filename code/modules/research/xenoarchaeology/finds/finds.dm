@@ -375,10 +375,10 @@
 			/obj/item/weapon/gun/energy/laser,\
 			/obj/item/weapon/gun/energy/xray,\
 			/obj/item/weapon/gun/energy/laser/captain,\
-			/obj/item/weapon/gun/energy/temperature,\
+			/obj/item/weapon/gun/energy/ionrifle,\
 			/obj/item/weapon/gun/energy/plasma/pistol,\
 			/obj/item/weapon/gun/energy/floragun,\
-			/obj/item/weapon/gun/energy/bison,\
+			/obj/item/weapon/gun/energy/laser/rainbow,\
 			/obj/item/weapon/gun/energy/taser)
 			if(spawn_type)
 				var/obj/item/weapon/gun/energy/new_gun = new spawn_type(src.loc)
