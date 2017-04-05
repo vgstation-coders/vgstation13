@@ -116,6 +116,7 @@
 	space_dust		=	sanitize_integer(space_dust, 0, 1, initial(space_dust))
 	parallax_speed	=	sanitize_integer(parallax_speed, 0, 5, initial(parallax_speed))
 	stumble			= 	sanitize_integer(stumble, 0, 1, initial(stumble))
+	attack_animation=	sanitize_integer(attack_animation, 0, 65535, initial(attack_animation))
 
 	initialize_preferences()
 	return 1
