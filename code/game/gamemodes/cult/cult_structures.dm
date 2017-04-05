@@ -31,8 +31,9 @@
 	processing_objects.Add(src)
 
 /obj/structure/cult/pylon/Destroy()
-	..()
 	processing_objects.Remove(src)
+	..()
+
 
 /obj/structure/cult/pylon/process()
 	if(!isbroken && world.time > last_check + 3 SECONDS)
@@ -50,9 +51,12 @@
 
 /obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/user as mob)
 	if(istype(user, /mob/living/simple_animal/construct/builder))
-		if(isbroken && prob(20))
-			repair(user)
-			return
+		if(isbroken)
+			if(prob(20))
+				repair(user)
+				return
+			else
+				to_chat(user, "You fail to repair the pylon")
 	attackpylon(user, user.melee_damage_upper)
 
 /obj/structure/cult/pylon/attackby(obj/item/W as obj, mob/user as mob)
