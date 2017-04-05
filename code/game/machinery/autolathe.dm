@@ -92,6 +92,7 @@
 		new /obj/item/ammo_casing/shotgun/flare(), \
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
+		new /obj/item/toy/ammo/gun(), \
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \

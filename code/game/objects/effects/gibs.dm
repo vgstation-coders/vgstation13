@@ -17,11 +17,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Apparently no one has ever needed to do a blood mess, so I didn't bother making a generic proc.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/proc/bloodmess_splatter(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
-	new /obj/effect/gibspawner/blood(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor)
+/proc/bloodmess_splatter(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
+	new /obj/effect/gibspawner/blood(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius)
 
-/proc/bloodmess_drip(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor)
-	new /obj/effect/gibspawner/blood_drip(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor)
+/proc/bloodmess_drip(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
+	new /obj/effect/gibspawner/blood_drip(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius)
 
 /obj/effect/gibspawner
 	var/sparks = 0 //whether sparks spread on Gib()
@@ -49,11 +49,6 @@
 		return
 
 	var/obj/effect/decal/cleanable/blood/gibs/gib = null
-	for(var/datum/disease/D in viruses)
-		if(D.spread_type == SPECIAL)
-			D.cure(1)
-			qdel(D)
-			D = null
 
 	if(sparks)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -75,16 +70,8 @@
 
 				gib.update_icon()
 
-				//new virus2 lines, nothing from the old virus code is currently working I believe.
 				if(viruses)
 					gib.virus2 |= virus_copylist(viruses)
-
-				if(viruses.len > 0)
-					for(var/datum/disease/D in viruses)
-						if(prob(virusProb))
-							var/datum/disease/viruus = D.Copy(1)
-							gib.viruses += viruus
-							viruus.holder = gib
 
 				gib.blood_DNA = list()
 				if(MobDNA)

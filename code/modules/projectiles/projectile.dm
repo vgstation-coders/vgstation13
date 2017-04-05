@@ -349,12 +349,10 @@ var/list/impact_master = list()
 			if(!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
 				var/turf/T = A
 				T.bullet_marks++
-				var/icon/I = icon(T.icon, T.icon_state)
 				var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
 				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
 				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
-				I.Blend(trace,ICON_MULTIPLY ,1 ,1)							//we can now blend our resulting icon on the wall
-				T.icon = I
+				T.overlays += trace
 		return 1
 
 	bullet_die()

@@ -12,7 +12,7 @@
 		to_chat(src, "Guests may not use OOC.")
 		return
 
-	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
+	msg = utf8_sanitize(msg, src, MAX_MESSAGE_LEN)
 	if(!msg)
 		return
 
@@ -108,7 +108,7 @@
 		to_chat(src, "Guests may not use OOC.")
 		return
 
-	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
+	msg = to_utf8(copytext(sanitize(msg), 1, MAX_MESSAGE_LEN), src)
 	if(!msg)
 		return
 

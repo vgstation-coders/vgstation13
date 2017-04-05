@@ -165,10 +165,8 @@
 				return
 
 			var/amount = src.reagents.maximum_volume - src.reagents.total_volume
-			var/datum/reagent/B = T.take_blood(null, amount)
-			//reagents.add_reagent(BLOOD,
+			var/datum/reagent/B = T.take_blood(src, amount)
 			if (B)
-				reagents.add_reagent(BLOOD, amount, B.data)
 				user.visible_message("<span class='notice'>[user] takes a blood sample from [target].</span>",
 									 "<span class='notice'>You take a blood sample from [target].</span>")
 			else

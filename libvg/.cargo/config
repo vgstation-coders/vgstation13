@@ -1,0 +1,4 @@
+[build]
+# If you're gonna change anything here.
+# Make Travis not blindly delete this to be able to use stable.
+rustflags = ["-Z", "unstable-options", "-C", "target-feature=+crt-static"]

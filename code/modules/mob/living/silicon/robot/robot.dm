@@ -317,7 +317,7 @@
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
-			module_sprites["Blue Knight 2.0"] = "sleeksecurity"
+			module_sprites["Sleek"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
@@ -325,6 +325,12 @@
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			speed = 0
+
+		if("TG17355")
+			module = new /obj/item/weapon/robot_module/tg17355(src)
+			module_sprites["Peacekeeper"] = "peaceborg"
+			module_sprites["Omoikane"] = "omoikane"
 			speed = 0
 
 		if("Engineering")
@@ -366,6 +372,7 @@
 			module_sprites["Squadbot"] = "squats"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
+			module_sprites["Rottweiler"] = "rottweiler-combat"
 			speed = -1
 
 	//Custom_sprite check and entry

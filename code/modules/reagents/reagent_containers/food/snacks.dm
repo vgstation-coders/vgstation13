@@ -523,6 +523,21 @@
 	desc = "Goes great with Robust Coffee."
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL //eggs are used
+	var/soggy = 0
+
+//Called in drinks.dm attackby
+/obj/item/weapon/reagent_containers/food/snacks/donut/proc/dip(var/obj/item/weapon/reagent_containers/R, mob/user)
+	var/probability = 15*soggy
+	to_chat(user, "<span class='notice'>You dip \the [src] into \the [R]</span>")
+	if(prob(probability))
+		to_chat(user, "<span class='danger'>\The [src] breaks off into \the [R]!</span>")
+		src.reagents.trans_to(R,reagents.maximum_volume)
+		qdel(src)
+		return
+	R.reagents.trans_to(src, rand(3,12))
+	if(!soggy)
+		name = "soggy [name]"
+	soggy += 1
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	name = "donut"
@@ -4898,6 +4913,51 @@
 /obj/item/weapon/reagent_containers/food/snacks/poutine/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous
+	name = "dangerously cheesy poutine"
+	desc = "Fries, cheese, gravy & more cheese. Be careful with this, it's dangerous!"
+	icon_state = "poutinedangerous"
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous/New()
+	..()
+	reagents.add_reagent(CHEESYGLOOP, 3) //need 2+ wheels to reach overdose, which will stop the heart until all is removed
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+	name = "dangerously cheesy poutine barrel"
+	desc = "Four cheese wheels full of gravy, fries and cheese curds, arranged like a barrel. This is degeneracy, Canadian style."
+	icon_state = "poutinebarrel"
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel/New()
+	..()
+	reagents.add_reagent(CHEESYGLOOP, 5)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/mapleleaf
+	name = "maple leaf"
+	desc = "A large maple leaf."
+	icon_state = "mapleleaf"
+
+/obj/item/weapon/reagent_containers/food/snacks/mapleleaf/New()
+	..()
+	reagents.add_reagent(MAPLESYRUP, 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
+	name = "maple syrup poutine"
+	desc = "French fries lathered with Canadian maple syrup and cheese curds. Delightful, eh?"
+	icon_state = "poutinesyrup"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinesyrup/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(MAPLESYRUP, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/bleachkipper

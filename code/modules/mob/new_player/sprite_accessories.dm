@@ -56,7 +56,7 @@
 		name = "Bald"
 		icon_state = "bald"
 		gender = MALE
-		species_allowed = list("Human","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox")
+		species_allowed = list("Human","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror")
 
 	short
 		name = "Short Hair"	  // try to capatilize the names please~
@@ -289,12 +289,12 @@
 		icon_state = "hair_braid"
 		gender = FEMALE
 		flags = HAIRSTYLE_CANTRIP
-	
+
 	kanade
 		name = "Kanade"
 		icon_state = "hair_kanade"
 		gender = FEMALE
-		
+
 	odango
 		name = "Odango"
 		icon_state = "hair_odango"
@@ -503,7 +503,7 @@
 		name = "Shaved"
 		icon_state = "bald"
 		gender = NEUTER
-		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox")
+		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror")
 
 	watson
 		name = "Watson Mustache"

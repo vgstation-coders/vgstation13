@@ -5,7 +5,6 @@
 	icon = 'icons/obj/pipes/heat.dmi'
 	icon_state = "intact"
 	level = 2
-	var/initialize_directions_he
 
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
@@ -69,8 +68,8 @@
 
 	// Get gas from pipenet
 	var/datum/gas_mixture/internal = return_air()
-	var/internal_transfer_moles = 0.25 * internal.total_moles()
-	var/datum/gas_mixture/internal_removed = internal.remove(internal_transfer_moles)
+	var/remove_ratio = volume/internal.volume
+	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
 
 	//Get processable air sample and thermal info from environment
 	var/datum/gas_mixture/environment = loc.return_air()
@@ -120,8 +119,8 @@
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/proc/radiate()
 	var/datum/gas_mixture/internal = return_air()
-	var/internal_transfer_moles = 0.25 * internal.total_moles()
-	var/datum/gas_mixture/internal_removed = internal.remove(internal_transfer_moles)
+	var/remove_ratio = volume/internal.volume
+	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
 
 	if (!internal_removed)
 		return

@@ -11,7 +11,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
 	icon = 'icons/obj/cryogenics.dmi'
-	icon_state = "cell-off"
+	icon_state = "pod0"
+	icon_state_open = "pod0_open"
 	density = 1
 	anchored = 1.0
 	layer = ABOVE_WINDOW_LAYER
@@ -24,10 +25,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
 	var/current_heat_capacity = 50
+	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
-	light_color = LIGHT_COLOR_GREEN
+	light_color = LIGHT_COLOR_HALOGEN
 	light_range_on = 1
 	light_power_on = 2
 	use_auto_lights = 1
@@ -90,6 +92,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(occupant)
 		to_chat(user, "<span class='bnotice'>The cryo cell is already occupied!</span>")
 		return
+	if(panel_open)
+		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
 		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
@@ -119,6 +124,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The sleeper is unoccupied!</span>")
 		return
+	if(panel_open)
+		to_chat(usr, "<span class='warning'>Close the maintenance panel first!</span>") // I don't know how the fuck you managed this but close the damn panel.
+		return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
 		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
@@ -135,14 +143,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 	visible_message("[usr] starts to remove [occupant.name] from \the [src].")
 	go_out(over_location)
-
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
 
 	if(stat & NOPOWER)
 		on = 0
 
-	update_icon()
 	if(!node)
 		return
 	if(!on)
@@ -197,6 +203,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		to_chat(user, "<span class='notice'>Too far away to view contents.</span>")
 
 /obj/machinery/atmospherics/unary/cryo_cell/attack_hand(mob/user)
+	if(panel_open)
+		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
 	ui_interact(user)
 
  /**
@@ -290,6 +299,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return 1
 
 	if(href_list["switchOn"])
+		if(panel_open)
+			to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
+			return
 		on = 1
 		update_icon()
 
@@ -341,6 +353,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
 	if(iswrench(G))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
+	if(isscrewdriver(G))
+		if(occupant || on)
+			to_chat(user, "<span class='notice'>The maintenance panel is locked.</span>")
+			return
 	if(..())
 		return
 	if (panel_open)
@@ -348,6 +364,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		interact(user)
 		return 1
 	if(istype(G, /obj/item/weapon/grab))
+		if(panel_open)
+			to_chat(user, "<span class='bnotice'>Close the maintenance panel first.</span>")
+			return
 		if(!ismob(G:affecting))
 			return
 		for(var/mob/living/carbon/slime/M in range(1,G:affecting))
@@ -362,41 +381,82 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return
 
 /obj/machinery/atmospherics/unary/cryo_cell/update_icon()
-	overlays.len = 0
-	if(on)
-		if(occupant)
-			if(occupant.stat == DEAD || !occupant.has_brain())
-				overlays += cryo_health_indicator["dead"]
-			else
-				if(occupant.health >= occupant.maxHealth)
-					overlays += cryo_health_indicator["full"]
-				else
-					switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
-						if(100 to INFINITY) // No idea how we got here with the check above...
-							overlays += cryo_health_indicator["full"]
-						if(75 to 100)
-							overlays += cryo_health_indicator["good"]
-						if(50 to 75)
-							overlays += cryo_health_indicator["average"]
-						if(25 to 50)
-							overlays += cryo_health_indicator["bad"]
-						if(0 to 25)
-							overlays += cryo_health_indicator["worse"]
-						if(-25 to 0)
-							overlays += cryo_health_indicator["critgood"]
-						if(-50 to -25)
-							overlays += cryo_health_indicator["critaverage"]
-						if(-75 to -50)
-							overlays += cryo_health_indicator["critbad"]
-						if(-100 to -75)
-							overlays += cryo_health_indicator["critworse"]
-						else //Shouldn't ever happen. I really hope it doesn't ever happen.
-							overlays += cryo_health_indicator["dead"]
-			icon_state = "cell-occupied"
-			return
-		icon_state = "cell-on"
+	handle_update_icon()
+
+/obj/machinery/atmospherics/unary/cryo_cell/proc/handle_update_icon() //making another proc to avoid spam in update_icon
+	overlays.Cut()
+	if(!panel_open)
+		icon_state = "pod[on]"
+
+	if(!src.occupant)
+		overlays += "lid[on]" //if no occupant, just put the lid overlay on, and ignore the rest
 		return
-	icon_state = "cell-off"
+
+	if(occupant)
+		var/image/pickle = image(occupant.icon, occupant.icon_state)
+		pickle.overlays = occupant.overlays
+		pickle.pixel_y = 20
+
+		overlays += pickle
+		overlays += "lid[on]"
+		if(src.on && !running_bob_animation) //no bobbing if off
+			var/up = 0 //used to see if we are going up or down, 1 is down, 2 is up
+			spawn(0) // Without this, the icon update will block. The new thread will die once the occupant leaves.
+				running_bob_animation = 1
+				while(src.on && occupant) // Just to make sure bobing stops if cryo goes off with a patient inside.
+					overlays.len = 0 //have to remove the overlays first
+
+					switch(pickle.pixel_y) //this looks messy as fuck but it works, switch won't call itself twice
+
+						if(21) //inbetween state, for smoothness
+							switch(up) //this is set later in the switch, to keep track of where the mob is supposed to go
+								if(2) //2 is up
+									pickle.pixel_y = 22 //set to highest
+
+								if(1) //1 is down
+									pickle.pixel_y = 20 //set to lowest
+
+						if(20) //mob is at it's lowest
+							pickle.pixel_y = 21 //set to inbetween
+							up = 2 //have to go up
+
+						if(22) //mob is at it's highest
+							pickle.pixel_y = 21 //set to inbetween
+							up = 1 //have to go down
+
+					pickle.overlays = occupant.overlays // We sync
+					overlays += pickle //re-add the mob to the icon
+					overlays += "lid[on]" //re-add the overlay of the pod, they are inside it, not floating
+
+					if(occupant.stat == DEAD || !occupant.has_brain())
+						overlays += cryo_health_indicator["dead"]
+					else
+						if(occupant.health >= occupant.maxHealth)
+							overlays += cryo_health_indicator["full"]
+						else
+							switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
+								if(100 to INFINITY) // No idea how we got here with the check above...
+									overlays += cryo_health_indicator["full"]
+								if(75 to 100)
+									overlays += cryo_health_indicator["good"]
+								if(50 to 75)
+									overlays += cryo_health_indicator["average"]
+								if(25 to 50)
+									overlays += cryo_health_indicator["bad"]
+								if(0 to 25)
+									overlays += cryo_health_indicator["worse"]
+								if(-25 to 0)
+									overlays += cryo_health_indicator["critgood"]
+								if(-50 to -25)
+									overlays += cryo_health_indicator["critaverage"]
+								if(-75 to -50)
+									overlays += cryo_health_indicator["critbad"]
+								if(-100 to -75)
+									overlays += cryo_health_indicator["critworse"]
+								else //Shouldn't ever happen. I really hope it doesn't ever happen.
+									overlays += cryo_health_indicator["dead"]
+					sleep(7) //don't want to jiggle violently, just slowly bob
+				running_bob_animation = 0
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
 	if(air_contents.total_moles() < 10)
@@ -481,7 +541,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	for (var/atom/movable/x in src.contents)
 		if((x in component_parts) || (x == src.beaker))
 			continue
-		x.forceMove(src.loc)
+		x.forceMove(get_step(loc, SOUTH))//to avoid PLAAAAANES issues with our cryo cell
 	if(occupant)
 		if(exit == src.loc)
 			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
@@ -519,6 +579,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
 	occupant = M
+	for(var/obj/item/I in M.held_items)
+		M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
 	//M.metabslow = 1
 	add_fingerprint(usr)
 	update_icon()
@@ -530,6 +592,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	set name = "Eject occupant"
 	set category = "Object"
 	set src in oview(1)
+	if(panel_open)
+		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
 	if(usr == occupant)//If the user is inside the tube...
 		if (usr.isDead())//and he's not dead....
 			return
@@ -555,6 +620,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(M.Victim == usr)
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
+	if(panel_open)
+		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
 	if (usr.isUnconscious() || stat & (NOPOWER|BROKEN))
 		return
 	put_mob(usr)
@@ -562,6 +630,19 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
 	return air_contents
+
+/obj/machinery/atmospherics/unary/cryo_cell/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Turn on/off
+		if(on)
+			on = 0
+		else
+			on = 1
+		update_icon()
+
+		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
+	else if(occupant && !ejecting) //Eject occupant
+		message_admins("[key_name(L)] has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
+		go_out()
 
 
 /datum/data/function/proc/reset()

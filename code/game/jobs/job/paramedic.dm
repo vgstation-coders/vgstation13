@@ -25,7 +25,7 @@
 			if(4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med((H), slot_back))
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/medical/paramedic(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)

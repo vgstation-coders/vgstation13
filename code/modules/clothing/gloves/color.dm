@@ -167,7 +167,7 @@
 	species_fit = list(VOX_SHAPED)
 	
 /obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots 
-	action_button_name = "Prime Gun/Lower Aim"
+	actions_types = list(/datum/action/item_action/toggle_gun)
 	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
 	var/charging = FALSE
 	

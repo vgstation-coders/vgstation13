@@ -71,8 +71,10 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/reagent/blood/B = H.get_blood(H.vessel)
-		if(B.data["virus2"])
+		if(B && B.data && B.data["virus2"])
 			dat += "WARNING: Viral agent detected. Ineligible for blood donation.<BR>"
+		else if(!B)
+			dat += "WARNING: No blood detected. Ineligible for blood donation.<BR>"
 		else
 			dat += {"Welcome [H]! Your blood level is [round(B.volume/560*100)]%, and your blood type is [B.data["blood_type"]].<BR>
 				You must have at least [round(509/560*100)]% to donate blood. <a href='?src=\ref[src];donate=[1]'>Donate now!</a><BR>
@@ -119,8 +121,13 @@
 			speak("Sorry! One customer at a time!")
 			return
 		else
-			speak(pick("I'll just take a quick bite.","You may feel a slight sting.","There will be no anesthetic.","Delicious!","Don't mind if I do...","Thanks!"))
-			drink(usr)
+			if(ishuman(usr))
+				var/mob/living/carbon/human/H = usr
+				if(H.species.anatomy_flags & NO_BLOOD)
+					to_chat(usr, "<span class = 'notice'>You have no blood to give!</span>")
+				else
+					speak(pick("I'll just take a quick bite.","You may feel a slight sting.","There will be no anesthetic.","Delicious!","Don't mind if I do...","Thanks!"))
+					drink(usr)
 
 	else if(href_list["togglevoice"] && (!src.locked || issilicon(usr)))
 		quiet = !quiet
@@ -176,7 +183,7 @@
 		if(prob(5))
 			speak(pick("Blaah!","I vant to suck your blood!","I never drink... wine.","The blood is the life.","I must hunt soon!","I hunger!","Death rages.","The night beckons.","Mwa ha ha!"))
 		for(var/mob/living/carbon/human/H in view(1,src))
-			if(H.vessel.has_reagent(BLOOD))
+			if(H.vessel.has_reagent(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
 				drink(H)
 				return //Dr. Acula is easily distracted. If he finds anything to drink en route to his target he will stop and drain it first.
 		if(target && !target.vessel.get_reagent_amount(BLOOD))
@@ -184,7 +191,7 @@
 		if(!target)
 			var/list/possible_targets = list()
 			for(var/mob/living/carbon/human/H in view(7,src))
-				if(H.vessel.get_reagent_amount(BLOOD))
+				if(H.vessel.get_reagent_amount(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
 					possible_targets += H
 			if(possible_targets)
 				target = pick(possible_targets)

@@ -582,6 +582,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	throw_speed = 3
 	throw_range = 6
 	origin_tech = Tc_BIOTECH + "=4"
+	mech_flags = MECH_SCAN_FAIL
 	var/Uses = 1 // uses before it goes inert
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = /mob/living/carbon/slime

@@ -97,6 +97,22 @@ For the main html chat area
 		if("analyzeClientData")
 			data = analyzeClientData(arglist(params))
 
+		if("encoding")
+			var/encoding = href_list["encoding"]
+			var/static/regex/RE = regex("windows-(874|125\[0-8])")
+			if (RE.Find(encoding))
+				owner.encoding = RE.group[1]
+
+			else if (encoding == "gb2312")
+				owner.encoding = "2312"
+
+			// This seems to be the result on Japanese locales, but the client still seems to accept 1252.
+			else if (encoding == "_autodetect")
+				owner.encoding = "1252"
+
+			else
+				stack_trace("Unknown encoding received from client: \"[sanitize(encoding)]\". Please report this as a bug.")
+
 	if(data)
 		ehjax_send(data = data)
 
@@ -134,7 +150,7 @@ For the main html chat area
 	deets["clientData"]["ckey"] = owner.ckey
 	deets["clientData"]["ip"] = owner.address
 	deets["clientData"]["compid"] = owner.computer_id
-	var/data = list2json(deets)
+	var/data = json_encode(deets)
 	ehjax_send(data = data)
 
 //Called by client, sent data to investigate (cookie history so far)
@@ -143,7 +159,7 @@ For the main html chat area
 		return
 
 	if(cookie != "none")
-		var/list/connData = json2list(cookie)
+		var/list/connData = json_decode(cookie)
 		if (connData && islist(connData) && connData.len > 0 && connData["connData"])
 			src.connectionHistory = connData["connData"] //lol fuck
 			var/list/found = new()

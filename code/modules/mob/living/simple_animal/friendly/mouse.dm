@@ -1,7 +1,10 @@
-#define MOUSEFAT 500
-#define MOUSESTARVE 200
+#define MOUSETFAT 1000
+#define MOUSEFAT 600
+#define MOUSESTARVE 25
+#define MOUSEHUNGRY 100
 #define MOVECOST 1
 #define STANDCOST 0.5
+
 /mob/living/simple_animal/mouse
 	name = "mouse"
 	real_name = "mouse"
@@ -66,24 +69,33 @@
 		else if(prob(5))
 			emote("snuffles")
 
+	if(nutrition >= MOUSETFAT)
+		visible_message("<span class = 'warning'>\The [src] explodes!</span>")
+		gib()
+		return
+
 	if(nutrition >= MOUSEFAT && is_fat == 0)
 		is_fat = 1
 		speed = 5
 		meat_amount = initial(meat_amount) + 1
-	else if (nutrition <= 400 && is_fat == 1) //400 = default nutrition value
+	else if ((nutrition <= MOUSEFAT-25 && is_fat == 1) || (nutrition > MOUSEHUNGRY && is_fat == 0))
 		is_fat = 0
 		speed = initial(speed)
 		meat_amount = initial(meat_amount)
-	if(nutrition <= MOUSESTARVE && prob(10) && client)
+	if(nutrition <= MOUSESTARVE && prob(5) && client)
 		to_chat(src, "<span class = 'warning'>You are starving!</span>")
 		health -= 1
+	if(nutrition <= MOUSEHUNGRY && nutrition > MOUSESTARVE)
+		speed = 3
+		if(prob(5))
+			to_chat(src, "<span class = 'warning'>You are getting hungry!</span>")
 
 
 
 	if(!isUnconscious())
 		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
 
-		if(!food_target)
+		if(!food_target && (!client || nutrition <= MOUSEHUNGRY)) //Regular mice will be moved towards food, mice with a client won't be moved unless they're desperate
 			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
@@ -124,7 +136,10 @@
 
 /mob/living/simple_animal/mouse/Move()
 	..()
-	nutrition = max(0, nutrition - MOVECOST)
+	var/multiplier = 1
+	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement
+		multiplier = 2.5
+	nutrition = max(0, nutrition - MOVECOST*multiplier)
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -165,6 +180,8 @@
 			to_chat(user, "<span class='notice'>It seems a bit frazzled.</span>")
 		if(disease_carrier && virus2.len)
 			to_chat(user, "<span class='blob'>It seems unwell.</span>") //Blob class is snot green
+		if(nutrition <= MOUSEHUNGRY)
+			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0

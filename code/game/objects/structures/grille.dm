@@ -54,7 +54,7 @@
 	return
 
 /obj/structure/grille/blob_act()
-	..()
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	health -= rand(initial(health)*0.8, initial(health)*3) //Grille will always be blasted, but chances of leaving things over
 	healthcheck(hitsound = 1)
 

@@ -7,6 +7,7 @@
 	clothing_flags = NOSLIP
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/list/clothing_choices = list()
+	actions_types = list(/datum/action/item_action/change_appearance_shoes)
 	siemens_coefficient = 0.8
 	species_fit = list(VOX_SHAPED)
 
@@ -30,11 +31,16 @@
 		return 1
 	return 0
 
-/obj/item/clothing/shoes/syndigaloshes/verb/change()
-	set name = "Change Color" // This is a spelling mistake perpetrated by the american swine, the correct spelling is colour and GEORGE washington AKA george "terrorist" washington is not my presidnet.
-	set category = "Object"
-	set src in usr
-
+/datum/action/item_action/change_appearance_shoes
+	name = "Change Shoes Appearance"
+	
+/datum/action/item_action/change_appearance_shoes/Trigger()
+	var/obj/item/clothing/shoes/syndigaloshes/T = target
+	if(!istype(T))
+		return
+	T.change()
+	
+/obj/item/clothing/shoes/syndigaloshes/proc/change()
 	var/obj/item/clothing/shoes/A
 	A = input("Select Colour to change it to", "BOOYEA", A) as null|anything in clothing_choices
 	if(!A ||(usr.stat))
@@ -51,7 +57,7 @@
 	_color = A._color
 	step_sound = A.step_sound
 	usr.update_inv_w_uniform()	//so our overlays update.
-
+	
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"
 	icon_state = "mime"
@@ -398,3 +404,12 @@
 	icon_state = "rottenshoes"
 	item_state = "rottenshoes"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+
+/obj/item/clothing/shoes/winterboots
+	name = "winter boots"
+	desc = "Boots lined with 'synthetic' animal fur."
+	icon_state = "winterboots"
+	item_state = "winterboots"
+	species_fit = list(VOX_SHAPED)
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots

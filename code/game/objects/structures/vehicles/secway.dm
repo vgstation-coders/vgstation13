@@ -4,6 +4,7 @@
 	icon_state = "secway"
 	keytype = /obj/item/key/security
 	can_have_carts = FALSE
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/secway
 	var/clumsy_check = 1
 
 /obj/item/key/security
@@ -64,3 +65,10 @@
 		var/mob/living/idiot = obstacle
 		idiot.Knockdown(2)
 		idiot.Stun(2)
+
+/obj/effect/decal/mecha_wreckage/vehicle/secway
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "gokart_wreck"
+	name = "secway wreckage"
+	desc = "Nothing to see here!"

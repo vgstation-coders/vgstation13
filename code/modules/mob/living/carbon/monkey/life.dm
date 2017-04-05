@@ -89,7 +89,11 @@
 			step(src, pick(cardinal))
 
 		if(prob(1))
-			emote(pick("scratch","jump","roll","tail"))
+			passive_emote()
+
+
+/mob/living/carbon/monkey/proc/passive_emote()
+	emote(pick("scratch","jump","roll","tail"))
 
 /mob/living/carbon/monkey/calculate_affecting_pressure(var/pressure)
 	..()

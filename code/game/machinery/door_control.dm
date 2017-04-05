@@ -128,6 +128,9 @@
 	else
 		icon_state = "doorctrl0"
 
+/obj/machinery/door_control/npc_tamper_act(mob/living/L)
+	attack_hand(L)
+
 /obj/machinery/driver_button/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)

@@ -51,3 +51,36 @@ var/list/datum/map_element/map_elements = list()
 		return maploader.get_map_dimensions(file)
 
 	return list(width, height)
+
+//Return a list with strings associated with points
+//For example: list("Discovered a vault!" = 500) will add 500 points to the crew's score for discovering a vault
+/datum/map_element/proc/process_scoreboard()
+	return
+
+//Proc for statskeeping and tracking objects. Cleans references afterwards - very safe to use. Use it to assign objects as values to variables
+//Example use:
+//  boss_enemy = track_atom(new /mob/living/simple_animal/corgi)
+
+/datum/map_element/proc/track_atom(atom/A)
+	if(!istype(A))
+		return
+
+	A.on_destroyed.Add(src, "clear_references")
+
+	return A
+
+
+/datum/map_element/proc/clear_references(list/params)
+	var/atom/A = locate(/atom) in params
+
+	//Remove instances by brute force (there aren't that many vars in map element datums)
+	for(var/key in vars)
+		if(vars[key] == A)
+			vars[key] = null
+		else if(istype(vars[key], /list))
+			var/list/L = vars[key]
+
+			//Remove all instances from the list
+			while(L.Remove(A))
+				continue
+
