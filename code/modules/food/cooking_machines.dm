@@ -510,8 +510,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/deepfryer/sugarizer/initialize()
 	..()
 	flush_reagents()
-	reagents.add_reagent(SUGAR, 300) // this will literally block the oil from being added, because the sugarizer is a subtype of the frier
-					 // there has to be a better way to do this
+	reagents.add_reagent(SUGAR, 300)
 
 
 /obj/machinery/cooking/deepfryer/sugarizer/empty_icon() //sees if the value is empty, and changes the icon if it is
@@ -544,15 +543,6 @@ var/global/ingredientLimit = 10
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
-		if(H.stored_mob)
-			H.stored_mob.ghostize()
-			H.stored_mob.death()
-			qdel(H.stored_mob)
-
-	for(var/obj/item/embedded in src.ingredient.contents)
-		embedded.forceMove(src.loc)
 	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the sugarizer creates a sugar copy
 	src.ingredient = null
 	empty_icon() //see if the icon needs updating from the loss of oil
