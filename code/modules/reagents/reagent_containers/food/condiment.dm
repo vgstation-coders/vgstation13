@@ -187,7 +187,7 @@
 				icon_state = GRAVY
 			if(SZECHUAN)
 				name = "szechuan sauce"
-				desc = "A long forgotten sauce of Earth, recently re-discovered. It's taste is said to be stuff of legends."
+				desc = "A long forgotten sauce of Earth, recently re-discovered. Its taste is said to be stuff of legends."
 				icon_state = SZECHUAN
 			else
 				name = "misc condiment bottle"
@@ -375,7 +375,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/szechuan
 	name = "szechuan sauce"
-	desc = "A long forgotten sauce of Earth, recently re-discovered. It's taste is said to be stuff of legends."
+	desc = "A long forgotten sauce of Earth, recently re-discovered. Its taste is said to be stuff of legends."
 
 /obj/item/weapon/reagent_containers/food/condiment/szechuan/New()
 	..()

@@ -2938,7 +2938,7 @@
 /datum/reagent/szechuan
 	name = "Szechuan"
 	id = SZECHUAN
-	description = "A long forgotten sauce of Earth, recently re-discovered. It's taste is said to be stuff of legends."
+	description = "A long forgotten sauce of Earth, recently re-discovered. Its taste is said to be stuff of legends."
 	reagent_state = LIQUID
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#6D2D26" //rgb: 121, 35, 0
