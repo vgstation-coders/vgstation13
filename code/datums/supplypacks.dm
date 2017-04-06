@@ -1738,7 +1738,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/aquaculture // fish n shit
-	name = "Aquaculture Supply"
+	name = "Aquaculture supply"
 	contains = list(/obj/item/weapon/fishtools/fish_egg_scoop,
 					/obj/item/weapon/fishtools/fish_net,
 					/obj/item/weapon/fishtools/fish_food,
@@ -1759,7 +1759,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Hydroponics"
 
 /datum/supply_packs/exoticfish // weird fish eggs n shit
-	name = "Exotic Fish"
+	name = "Exotic fish"
 	contains = list(/obj/item/fish_eggs/goldfish,
 					/obj/item/fish_eggs/goldfish,
 					/obj/item/fish_eggs/clownfish,
