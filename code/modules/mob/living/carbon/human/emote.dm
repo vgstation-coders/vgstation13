@@ -234,7 +234,7 @@
 			if(M_ELVIS in mutations)
 				src.emote("fart")
 				msg = "<B>[src]</B> has left the building..."
-			if(M_HARDCORE in mutations)
+			if(!miming && (M_HARDCORE in mutations))
 				msg = "<B>[src]</B> whispers with \his final breath, <i>'i told u i was hardcore..'</i>"
 			else
 				if(isgolem(src))

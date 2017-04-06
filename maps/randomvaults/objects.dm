@@ -74,6 +74,9 @@
 
 /area/vault/prison
 
+/obj/docking_port/destination/vault
+	var/valid_random_destination = TRUE //If FALSE, random shuttle destination disks can't pick this docking port
+
 /obj/item/weapon/disk/shuttle_coords/vault/prison
 	destination = /obj/docking_port/destination/vault/prison
 

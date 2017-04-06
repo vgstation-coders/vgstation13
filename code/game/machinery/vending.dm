@@ -2410,9 +2410,13 @@ var/global/num_vending_terminals = 1
 	products = list (
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		/obj/item/clothing/suit/storage/trader = 3,
+		/obj/item/device/pda/trader = 3,
+		/obj/item/weapon/capsule = 60
 		)
 	prices = list(
-		/obj/item/clothing/suit/storage/trader = 100
+		/obj/item/clothing/suit/storage/trader = 100,
+		/obj/item/device/pda/trader = 100,
+		/obj/item/weapon/capsule = 10
 		)
 
 /obj/machinery/vending/trader/New()
