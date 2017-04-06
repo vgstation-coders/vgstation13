@@ -537,6 +537,13 @@ var/global/ingredientLimit = 10
 	D.appearance = src.ingredient.appearance
 	D.name = "sugar [src.ingredient.name]"
 	D.desc = "It's \an [src.ingredient.name] made out of sugar!"
+	D.color = list(
+    				1, 0, 0, 0,
+  					0, 1, 0, 0,
+   					0, 0, 1, 0,
+   					0, 0, 0, 1,
+   					0.12, 0.12, 0.12, 0
+					)
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states
 
