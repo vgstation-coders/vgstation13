@@ -317,8 +317,6 @@
 #define FISHBLEACH		"fishbleach"
 #define CHEESYGLOOP		"cheesy_gloop"
 #define MAPLESYRUP		"maple_syrup"
-#define SZECHUAN		"szechuan"
-
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
