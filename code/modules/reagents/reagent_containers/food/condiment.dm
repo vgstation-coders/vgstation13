@@ -185,6 +185,10 @@
 				icon_state = CINNAMON
 			if(GRAVY)
 				icon_state = GRAVY
+			if(SZECHUAN)
+				name = "szechuan sauce"
+				desc = "A long forgotten sauce of Earth, recently re-discovered. It's taste is said to be stuff of legends."
+				icon_state = SZECHUAN
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -368,6 +372,14 @@
 	name = "gravy cruise"
 	desc = "Still a bit too small to sail on."
 	volume = 50
+
+/obj/item/weapon/reagent_containers/food/condiment/szechuan
+	name = "szechuan sauce"
+	desc = "A long forgotten sauce of Earth, recently re-discovered. It's taste is said to be stuff of legends."
+
+/obj/item/weapon/reagent_containers/food/condiment/szechuan/New()
+	..()
+	reagents.add_reagent(SZECHUAN, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig/New()
 	..()
