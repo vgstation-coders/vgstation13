@@ -534,8 +534,8 @@ var/global/ingredientLimit = 10
 	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 	if(cooks_in_reagents)
 		src.transfer_reagents_to_food(D)
-	D.name = "sugar [src.ingredient.name]"
 	D.appearance = src.ingredient.appearance
+	D.name = "sugar [src.ingredient.name]"
 	D.desc = "It's \an [src.ingredient.name] made out of sugar!"
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states
