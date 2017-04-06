@@ -185,10 +185,6 @@
 				icon_state = CINNAMON
 			if(GRAVY)
 				icon_state = GRAVY
-			if(SZECHUAN)
-				name = "szechuan sauce"
-				desc = "A long forgotten sauce of Earth, recently re-discovered. Its taste is said to be stuff of legends."
-				icon_state = SZECHUAN
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -373,14 +369,6 @@
 	desc = "Still a bit too small to sail on."
 	volume = 50
 
-/obj/item/weapon/reagent_containers/food/condiment/szechuan
-	name = "szechuan sauce"
-	desc = "A long forgotten sauce of Earth, recently re-discovered. Its taste is said to be stuff of legends."
-
-/obj/item/weapon/reagent_containers/food/condiment/szechuan/New()
-	..()
-	reagents.add_reagent(SZECHUAN, 50)
-
 /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig/New()
 	..()
 	reagents.add_reagent(GRAVY, 50)
@@ -389,7 +377,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,SZECHUAN=10,CAPSAICIN=10,HONEY=10,KETCHUP=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,KETCHUP=10,COCO=10)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
