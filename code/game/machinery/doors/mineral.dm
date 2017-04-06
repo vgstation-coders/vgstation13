@@ -99,12 +99,15 @@
 		ore = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 	else
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
-		ore = new P(get_turf(src))
-	ore.amount = oreAmount
-	if(devastated)
-		ore.amount -= 2
+		if(P)
+			ore = new P(get_turf(src))
+
+	if(ore)
+		ore.amount = oreAmount
+		if(devastated)
+			ore.amount -= 2
+
 	qdel(src)
-	return
 
 /obj/machinery/door/mineral/ex_act(severity = 1)
 	switch(severity)
@@ -119,8 +122,6 @@
 		if(3)
 			hardness -= 0.1
 			CheckHardness()
-	return
-
 
 /obj/machinery/door/mineral/iron
 	prefix = "metal"
@@ -242,6 +243,7 @@
 	prefix = ""
 	icon = 'icons/obj/doors/morgue.dmi'
 	icon_state = "door_closed"
+	hardness = 1 //very weak
 
 /obj/machinery/door/mineral/hive/New()
 	..()
