@@ -103,3 +103,13 @@
 	materials = list (MAT_IRON = 4000, MAT_GLASS = 2000)
 	category = "Bluespace"
 	build_path = /obj/item/device/telepad_beacon
+
+/datum/design/dses
+	name = "Deep Space Exploration System"
+	desc = "Use this to tell you if something is close by when drifting in space"
+	id = "dses_system"
+	req_tech = list(Tc_BLUESPACE = 2, Tc_MATERIALS = 4)
+	build_type = PODFAB
+	materials = list (MAT_IRON = 4500, MAT_GLASS = 1500, MAT_GOLD = 400, MAT_DIAMOND = 100)
+	category = "Bluespace"
+	build_path = /obj/item/device/dses

@@ -40,6 +40,7 @@
 	var/last_distance
 	var/list/positive_locations = list()
 	var/auto_pulse = 0
+	origin_tech = list(Tc_BLUESPACE = 2, Tc_MATERIALS = 4)
 
 /datum/dses_find
 	var/name
@@ -51,7 +52,7 @@
 /obj/item/device/dses/attack_self(var/mob/user)
 	if(C)
 		return menu_open(user)
-	to_chat(user, "<span class = 'notice'>The screen remains dark.</span>")
+	to_chat(user, "<span class = 'notice'>The screen remains dark, as no cell is installed.</span>")
 
 /obj/item/device/dses/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/dses_module))
@@ -266,6 +267,7 @@
 	name = "DSES ping long-range listener"
 	module_name = RANGEDOUBLEMODULE
 	desc = "A high-gain amplifier circuit for a DSES receiver, effectively doubling the range."
+	origin_tech = list(Tc_BLUESPACE = 3)
 
 /obj/item/weapon/dses_module/range_boost/install(var/obj/item/device/dses/D)
 	D.pulse_range *=2
@@ -279,6 +281,7 @@
 	name = "DSES ping resource optimizer"
 	module_name = HALFCOSTMODULE
 	desc = "Optimizes the cost of DSES pings, reducing the amount of energy needed per ping."
+	origin_tech = list(Tc_POWERSTORAGE = 3)
 
 /obj/item/weapon/dses_module/cost_reduc/install(var/obj/item/device/dses/D)
 	D.pulse_cost /=2
@@ -290,16 +293,19 @@
 	name = "DSES ping resonation locator"
 	module_name = GETDIRMODULE
 	desc = "A much more sensitive listening system which can give a direction to a bounce-back ping."
+	origin_tech = list(Tc_BLUESPACE = 3, Tc_MAGNETS = 3)
 
 /obj/item/weapon/dses_module/gps_logger
 	name = "DSES ping resonance logger"
 	module_name = TRACKMODULE
 	desc = "Basic memory unit for co-ordinating and logging the locations of succesful pings."
+	origin_tech = list(Tc_PROGRAMMING = 3, Tc_MAGNETS = 2)
 
 /obj/item/weapon/dses_module/ping_timer
 	name = "DSES automated ping system"
 	module_name = AUTOPINGMODULE
 	desc = "Basic clock timer for automating the pinging system, turning it into a toggle."
+	origin_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 3)
 
 /obj/item/weapon/dses_module/ping_timer/install(var/obj/item/device/dses/D)
 	processing_objects.Add(D)
@@ -311,3 +317,4 @@
 	name = "DSES ping distance approximation system"
 	module_name = GETDISTANCEMODULE
 	desc = "A small mathematic system that calculates signal decay between transmission and sending, to approximate distance."
+	origin_tech = list(Tc_BLUESPACE = 4, Tc_MAGNETS = 3)
