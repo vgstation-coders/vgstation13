@@ -10,10 +10,10 @@
 	var/obj/target = null
 	var/check_flags = 0
 	var/processing = 0
-	var/obj/screen/movable/action_button/button = null
+	var/obj/abstract/screen/movable/action_button/button = null
 	var/button_icon = 'icons/mob/actions.dmi'
 	var/background_icon_state = "bg_default"
-	var/buttontooltipstyle = "" 
+	var/buttontooltipstyle = ""
 
 	var/icon_icon = 'icons/mob/actions.dmi'
 	var/button_icon_state = "default"
@@ -93,7 +93,7 @@
 			button.color = rgb(255,255,255,255)
 			return 1
 
-/datum/action/proc/ApplyIcon(obj/screen/movable/action_button/current_button)
+/datum/action/proc/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
 	current_button.overlays = null
 	if(icon_icon && button_icon_state)
 		var/image/img
@@ -129,7 +129,7 @@
 		I.attack_self(owner)
 	return 1
 
-/datum/action/item_action/ApplyIcon(obj/screen/movable/action_button/current_button)
+/datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
 	current_button.overlays = null
 
 	if(button_icon && button_icon_state)
@@ -142,43 +142,43 @@
 		I.layer = FLOAT_LAYER //AAAH
 		current_button.overlays += I
 		I.layer = old
-		
+
 //Mostly attack self procs renamed
 /datum/action/item_action/set_internals
 	name = "Set Internals"
-	
+
 /datum/action/item_action/instrument
 	name = "Play Instrument"
-	
+
 /datum/action/item_action/toggle_goggles
 	name = "Toggle Goggles"
-	
+
 /datum/action/item_action/toggle_helmet
 	name = "Toggle Helmet"
-	
+
 /datum/action/item_action/toggle_mask
 	name = "Toggle Mask"
-	
+
 /datum/action/item_action/toggle_magboots
 	name = "Toggle Magboots"
-	
+
 /datum/action/item_action/toggle_gun
 	name = "Toggle Gun"
-	
+
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
-	
+
 /datum/action/item_action/activate_siren
 	name = "Activate Siren"
-	
+
 /datum/action/item_action/toggle_helmet_camera
 	name = "Toggle Helmet Camera"
-	
+
 /datum/action/item_action/toggle_firemode
 	name = "Toggle Firemode"
-	
+
 /datum/action/item_action/toggle_voicechanger
 	name = "Toggle Voice Changer"
-	
+
 /datum/action/item_action/toggle_hood
 	name = "Toggle Hood"

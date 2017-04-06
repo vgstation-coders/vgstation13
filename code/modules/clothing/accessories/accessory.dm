@@ -52,7 +52,7 @@
 	if(user)
 		user.put_in_hands(src)
 		add_fingerprint(user)
-				
+
 /obj/item/clothing/accessory/proc/on_accessory_interact(mob/user, delayed = 0)
 	if(!attached_to)
 		return
@@ -71,7 +71,7 @@
 /obj/item/proc/generate_accessory_overlays()
 	return
 
-/obj/item/clothing/generate_accessory_overlays(var/obj/Overlays/O)
+/obj/item/clothing/generate_accessory_overlays(var/obj/abstract/Overlays/O)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
 			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")

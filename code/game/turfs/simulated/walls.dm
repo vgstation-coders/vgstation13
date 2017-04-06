@@ -355,7 +355,7 @@
 	if(istype(user,/mob/living/simple_animal/construct/builder))
 		var/spell/aoe_turf/conjure/wall/S = locate() in user.spell_list
 		S.perform(user, 0, list(src))
-		//var/obj/screen/spell/SS = S.connected_button
+		//var/obj/abstract/screen/spell/SS = S.connected_button
 		//SS.update_charge(1)
 		return 1
 	return 0

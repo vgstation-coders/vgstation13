@@ -25,7 +25,7 @@
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 
-	var/obj/Overlays/damage_overlay
+	var/obj/abstract/Overlays/damage_overlay
 	var/cracked_base = "crack"
 
 	var/fire_temp_threshold = 800

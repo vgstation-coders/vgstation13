@@ -10,7 +10,7 @@ var/parallax_initialized = 0
 var/space_color = "#050505"
 var/list/parallax_icon[(GRID_WIDTH**2)*3]
 
-/obj/screen/parallax
+/obj/abstract/screen/parallax
 	var/base_offset_x = 0
 	var/base_offset_y = 0
 	mouse_opacity = 0
@@ -24,12 +24,12 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	globalscreen = 1
 	var/parallax_speed = 0
 
-/obj/screen/plane_master
+/obj/abstract/screen/plane_master
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
 	globalscreen = 1
 
-/obj/screen/plane_master/parallax_master
+/obj/abstract/screen/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
 	blend_mode = BLEND_MULTIPLY
 	color = list(
@@ -39,7 +39,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	0,0,0,0,
 	0,0,0,1)
 
-/obj/screen/plane_master/parallax_spacemaster //Turns space white, causing the parallax to only show in areas with opacity. Somehow
+/obj/abstract/screen/plane_master/parallax_spacemaster //Turns space white, causing the parallax to only show in areas with opacity. Somehow
 	plane = PLANE_SPACE_BACKGROUND
 	color = list(
 	0,0,0,0,
@@ -47,13 +47,13 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	0,0,0,0,
 	1,1,1,1)
 
-/obj/screen/plane_master/parallax_spacemaster/New()
+/obj/abstract/screen/plane_master/parallax_spacemaster/New()
 	..()
 	overlays += image(icon = 'icons/mob/screen1.dmi', icon_state = "blank")
 	if(universe)
 		universe.convert_parallax(src)
 
-/obj/screen/plane_master/parallax_dustmaster
+/obj/abstract/screen/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_DUST
 	color = list(0,0,0,0)
 
@@ -68,15 +68,15 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	var/client/C = mymob.client
 
 	if(!C.parallax_master)
-		C.parallax_master = getFromPool(/obj/screen/plane_master/parallax_master)
+		C.parallax_master = getFromPool(/obj/abstract/screen/plane_master/parallax_master)
 	if(!C.parallax_spacemaster)
-		C.parallax_spacemaster = getFromPool(/obj/screen/plane_master/parallax_spacemaster)
+		C.parallax_spacemaster = getFromPool(/obj/abstract/screen/plane_master/parallax_spacemaster)
 	if(!C.parallax_dustmaster)
-		C.parallax_dustmaster = getFromPool(/obj/screen/plane_master/parallax_dustmaster)
+		C.parallax_dustmaster = getFromPool(/obj/abstract/screen/plane_master/parallax_dustmaster)
 
 	if(!C.parallax.len)
-		for(var/obj/screen/parallax/bgobj in parallax_icon)
-			var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
+		for(var/obj/abstract/screen/parallax/bgobj in parallax_icon)
+			var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
 			parallax_layer.appearance = bgobj.appearance
 			parallax_layer.base_offset_x = bgobj.base_offset_x
 			parallax_layer.base_offset_y = bgobj.base_offset_y
@@ -96,7 +96,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	var/client/C = mymob.client
 	if(C.prefs.space_parallax)
 		parallax_on_clients |= C
-		for(var/obj/screen/parallax/bgobj in C.parallax)
+		for(var/obj/abstract/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
 		C.screen |= C.parallax_master
 		C.screen |= C.parallax_spacemaster
@@ -109,7 +109,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		else
 			C.parallax_dustmaster.color = list(0,0,0,0)
 	else
-		for(var/obj/screen/parallax/bgobj in C.parallax)
+		for(var/obj/abstract/screen/parallax/bgobj in C.parallax)
 			C.screen -= bgobj
 		parallax_on_clients -= C
 		C.screen -= C.parallax_master
@@ -138,7 +138,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 
 	C.previous_turf = posobj
 
-	for(var/obj/screen/parallax/bgobj in C.parallax_movable)
+	for(var/obj/abstract/screen/parallax/bgobj in C.parallax_movable)
 		var/accumulated_offset_x = bgobj.base_offset_x - round(offsetx * bgobj.parallax_speed * C.prefs.parallax_speed)
 		var/accumulated_offset_y = bgobj.base_offset_y - round(offsety * bgobj.parallax_speed * C.prefs.parallax_speed)
 
@@ -176,7 +176,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		pixel_y += WORLD_ICON_SIZE * round(i/PARALLAX_IMAGE_WIDTH)
 
 	for(var/i in 0 to ((GRID_WIDTH**2)-1))
-		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
 
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
@@ -193,7 +193,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		index++
 
 	for(var/i in 0 to ((GRID_WIDTH**2)-1))
-		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
 
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
@@ -210,7 +210,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		index++
 
 	for(var/i in 0 to ((GRID_WIDTH**2)-1))
-		var/obj/screen/parallax/parallax_layer = getFromPool(/obj/screen/parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = getFromPool(/obj/abstract/screen/parallax)
 		var/list/L = list()
 		for(var/j in 1 to PARALLAX_IMAGE_TILES)
 			if(plane3[j+i*PARALLAX_IMAGE_TILES] <= PARALLAX2_ICON_NUMBER)
@@ -227,7 +227,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 
 	parallax_initialized = 1
 
-/obj/screen/parallax/proc/calibrate_parallax(var/i)
+/obj/abstract/screen/parallax/proc/calibrate_parallax(var/i)
 	if(!i)
 		return
 

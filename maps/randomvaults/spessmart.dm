@@ -710,13 +710,13 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	return ..()
 
 ///////SPAWNER
-/obj/map/spawner/supermarket
+/obj/abstract/map/spawner/supermarket
 	name = "Spessmart spawner"
 	amount = 4
 	chance = 50
 	jiggle = 10
 
-/obj/map/spawner/supermarket/CreateItem(new_item_type)
+/obj/abstract/map/spawner/supermarket/CreateItem(new_item_type)
 	var/obj/item/I = ..()
 
 	spawn()
@@ -731,27 +731,27 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	return I
 
-/obj/map/spawner/supermarket/tools
+/obj/abstract/map/spawner/supermarket/tools
 	icon_state = "ass_tools"
 	amount = 4
 	chance = 50
 	jiggle = 10
 
-/obj/map/spawner/supermarket/tools/New()
+/obj/abstract/map/spawner/supermarket/tools/New()
 	to_spawn = shop_prices
 	return ..()
 
-/obj/map/spawner/supermarket/circuits/New()
+/obj/abstract/map/spawner/supermarket/circuits/New()
 	if(!circuitboard_prices.len)
 		for(var/C in circuitboards)
 			circuitboard_prices[C] = 75
 	to_spawn = circuitboard_prices
 	return ..()
 
-/obj/map/spawner/supermarket/clothing
+/obj/abstract/map/spawner/supermarket/clothing
 	amount = 6
 
-/obj/map/spawner/supermarket/clothing/New()
+/obj/abstract/map/spawner/supermarket/clothing/New()
 	if(!clothing_prices.len)
 		for(var/C in clothing)
 			clothing_prices[C] = 150

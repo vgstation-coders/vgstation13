@@ -179,8 +179,8 @@
 		if(over_object == M)
 			M.put_in_hands(src)
 			to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
-		else if(istype(over_object, /obj/screen/inventory))
-			var/obj/screen/inventory/OI = over_object
+		else if(istype(over_object, /obj/abstract/screen/inventory))
+			var/obj/abstract/screen/inventory/OI = over_object
 
 			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)
@@ -350,7 +350,7 @@
 			src.forceMove(H)
 			user.put_in_active_hand(H)
 			to_chat(user, "<span class = 'notice'>You combine \the [C] and \the [src] into a hand.</span>")
-			
+
 			H.currenthand += C
 			H.currenthand += src
 			H.update_icon()

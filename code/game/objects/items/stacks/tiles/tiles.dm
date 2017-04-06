@@ -31,7 +31,7 @@
 
 /obj/item/stack/tile/plasteel/attack_self(mob/user)
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/screen/draggable, src, user)
+		active = getFromPool(/obj/abstract/screen/draggable, src, user)
 		to_chat(user, "Beginning plating construction mode, click and hold to use.")
 		return
 	else //End click drag construction, create grille

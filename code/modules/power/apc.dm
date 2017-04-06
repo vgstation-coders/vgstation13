@@ -970,7 +970,7 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)

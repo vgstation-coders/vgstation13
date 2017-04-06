@@ -30,12 +30,12 @@
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
 		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
-			var/obj/screen/screenobj = AM
+			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
@@ -417,7 +417,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
 	return
 
@@ -1801,7 +1801,7 @@ mob/proc/on_foot()
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
 	var/init_deaf = ear_deaf
-	overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+	overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	blinded = 1
 	eye_blind = 1
 	ear_deaf = 1

@@ -104,7 +104,7 @@
 			hud_used.mymob.gui_icons.blob_healthbar.icon_state = "health"
 
 		if(severity > 0)
-			overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("damage")
 
@@ -249,7 +249,7 @@
 	if(client && gui_icons)
 		for(var/i=1;i<=24;i++)
 			client.screen -= gui_icons.specialblobs[i]
-			var/obj/screen/specialblob/S = gui_icons.specialblobs[i]
+			var/obj/abstract/screen/specialblob/S = gui_icons.specialblobs[i]
 			var/obj/effect/blob/B = null
 			if(i<=special_blobs.len)
 				B = special_blobs[i]

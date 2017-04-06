@@ -21,7 +21,7 @@
 
 /obj/machinery/cart/cargo/proc/load(var/atom/movable/C)
 
-	if (istype(C, /obj/screen) || C.anchored)
+	if (istype(C, /obj/abstract/screen) || C.anchored)
 		return
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
