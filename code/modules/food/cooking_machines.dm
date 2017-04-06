@@ -535,16 +535,14 @@ var/global/ingredientLimit = 10
 	if(cooks_in_reagents)
 		src.transfer_reagents_to_food(D)
 	D.name = "sugar [src.ingredient.name]"
-	D.icon = src.ingredient.icon
-	D.icon_state = src.ingredient.icon_state
-	D.overlays = src.ingredient.overlays
-	D.desc = "It's a [src.ingredient.name] made out of sugar!"
+	D.appearance = src.ingredient.appearance
+	D.desc = "It's \an [src.ingredient.name] made out of sugar!"
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states
 
 	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the sugarizer creates a sugar copy
 	src.ingredient = null
-	empty_icon() //see if the icon needs updating from the loss of oil
+	empty_icon() //see if the icon needs updating from the loss of sugar
 	return
 
 
