@@ -103,9 +103,11 @@
 			ore = new P(get_turf(src))
 
 	if(ore)
-		ore.amount = oreAmount
+		var/new_amount = oreAmount
 		if(devastated)
-			ore.amount -= 2
+			new_amount -= 2
+
+		ore.set_amount(new_amount)
 
 	qdel(src)
 
