@@ -1773,8 +1773,3 @@
 		O.send_to_past(duration)
 
 	updatehealth()
-
-/mob/living/carbon/human/attack_icon()
-	if(M_HULK in mutations)
-		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
-	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")

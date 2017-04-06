@@ -165,6 +165,3 @@
 
 /mob/living/simple_animal/hostile/bear/LoseTarget()
 	..(5)
-
-/mob/living/simple_animal/hostile/bear/attack_icon()
-	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "bear")

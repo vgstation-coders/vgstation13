@@ -110,8 +110,7 @@ CREATE TABLE client (
     space_parallax INTEGER,
     space_dust     INTEGER,
     parallax_speed INTEGER,
-    stumble        INTEGER,
-	attack_animation INTEGER
+    stumble        INTEGER
 );
 
 
