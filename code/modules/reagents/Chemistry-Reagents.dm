@@ -5508,7 +5508,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		volume = holder.maximum_volume
 		holder.update_total()
 
-datum/reagent/fishbleach
+/datum/reagent/fishbleach
 	name = "Fish Bleach"
 	id = FISHBLEACH
 	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
@@ -5520,3 +5520,24 @@ datum/reagent/fishbleach
 		return 1
 	H.color = "#12A7C9"
 	return
+
+/datum/reagent/roach_shell
+	name = "Cockroach chitin"
+	id = ROACHSHELL
+	description = "Looks like somebody's been shelling peanuts."
+	reagent_state = SOLID
+	color = "#8B4513"
+
+/datum/reagent/ethanol/deadrum/greyvodka
+	name = "Greyshirt vodka"
+	id = GREYVODKA
+	description = "Made presumably from whatever scrapings you can get out of maintenance. Don't think, just drink."
+	reagent_state = LIQUID
+	color = "#DEF7F5"
+	alpha = 64
+
+/datum/reagent/ethanol/deadrum/greyvodka/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	H.radiation = max(H.radiation - 5 * REM, 0)
+	H.rad_tick = max(H.rad_tick - 3 * REM, 0)

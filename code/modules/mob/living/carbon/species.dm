@@ -947,3 +947,19 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/grue/makeName()
 	return "grue"
+
+
+/datum/species/ghoul
+	name = "Ghoul"
+	icobase = 'icons/mob/human_races/r_ghoul.dmi'
+	deform = 'icons/mob/human_races/r_skeleton.dmi' //It's thin leathery skin on top of bone, deformation's just gonna show bone
+
+	flags = NO_PAIN | IS_WHITELISTED | RAD_ABSORB
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
+	has_mutant_race = 0
+
+	burn_mod = 1.2
+	brute_mod = 0.8
+	move_speed_multiplier = 2
+
+	blood_color = "#7FFF00"
