@@ -542,7 +542,7 @@ var/global/ingredientLimit = 10
   					0, 1, 0, 0,
    					0, 0, 1, 0,
    					0, 0, 0, 1,
-   					0.12, 0.12, 0.12, 0
+   					0.20, 0.08, 0.08, 0
 					)
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states

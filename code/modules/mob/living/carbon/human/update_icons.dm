@@ -1092,6 +1092,8 @@ var/global/list/damage_icon_parts = list()
 		O.name = "[index]"
 		O.icon = t_inhand_state
 		O.icon_state = t_state
+		if(I.color)
+			O.color = I.color
 		O.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
 		O.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
 		O.layer = O.layer
