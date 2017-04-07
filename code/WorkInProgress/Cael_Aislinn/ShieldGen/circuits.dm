@@ -4,6 +4,7 @@
 
 /obj/item/weapon/circuitboard/shield_gen_ex
 	name = "Circuit board (Experimental hull shield generator)"
+	desc = "A circuit board used to run an experimental hull shield generator."
 	board_type = MACHINE
 	build_path = "/obj/machinery/shield_gen/external"
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
@@ -20,8 +21,9 @@
 
 /obj/item/weapon/circuitboard/shield_gen
 	name = "Circuit board (Experimental shield generator)"
+	desc = "A circuit board used to run an experimental shield generator."
 	board_type = MACHINE
-	build_path = "/obj/machinery/shield_gen/external"
+	build_path = "/obj/machinery/shield_gen"
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
@@ -36,6 +38,7 @@
 
 /obj/item/weapon/circuitboard/shield_cap
 	name = "Circuit board (Experimental shield capacitor)"
+	desc = "A circuit board used to run an experimental shield capacitor."
 	board_type = MACHINE
 	build_path = "/obj/machinery/shield_capacitor"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_POWERSTORAGE + "=4"
