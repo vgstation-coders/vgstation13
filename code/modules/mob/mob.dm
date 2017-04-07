@@ -953,13 +953,14 @@ var/list/slot_equipment_priority = list( \
 
 	if (ismob(AM))
 		var/mob/M = AM
-		if (M.drag_damage()) 
-			var/mob/living/carbon/HM = M
-			if (HM.health - HM.halloss <= config.health_threshold_softcrit)
-				to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
-				add_logs(src, HM, "started dragging critically wounded", admin = (M.ckey))
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
+		var/mob/living/carbon/human/HM = AM
+		if (HM.drag_damage()) 
+			if (HM.health - HM.halloss <= config.health_threshold_softcrit)
+				to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
+				add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))
+		
 
 	if (!P.anchored)
 		P.add_fingerprint(src)
@@ -1303,15 +1304,17 @@ var/list/slot_equipment_priority = list( \
 	//		C.JoinResponseTeam()
 
 /mob/proc/drag_damage()
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		var/turf/TH = H.loc	
-		var/list/return_organs = list()
-		if (TH.has_gravity() && H.lying)
-			for(var/datum/organ/external/damagedorgan in H.organs)
-				if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
-					return_organs += damagedorgan
-			return return_organs
+	return list()
+	
+/mob/living/carbon/human/drag_damage()
+	var/mob/living/carbon/human/H = src
+	var/turf/TH = H.loc	
+	var/list/return_organs = list()
+	if (TH.has_gravity() && H.lying)
+		for(var/datum/organ/external/damagedorgan in H.organs)
+			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
+				return_organs += damagedorgan
+		return return_organs
 
 /mob/MouseDrop(mob/M as mob)
 	..()
