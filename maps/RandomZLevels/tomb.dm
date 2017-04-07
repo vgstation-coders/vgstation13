@@ -371,6 +371,7 @@
 
 /obj/effect/landmark/water_puzzle
 	name = "water puzzle sewers"
+	destroy_on_creation = FALSE
 
 /turf/unsimulated/beach/water/deep/teleport
 	var/turf/teleport_destination

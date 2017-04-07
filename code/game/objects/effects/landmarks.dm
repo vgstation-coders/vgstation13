@@ -1,3 +1,11 @@
+var/list/landmarks_list = list() //list of all landmarks
+var/list/landmarks_by_type = list() //list of landmark types associated with object lists
+
+//Returns a list of all landmark turfs or an empty list
+/proc/get_landmarks(input_type)
+	var/list/L = landmarks_by_type[input_type]
+	return L ? L : list()
+
 /obj/effect/landmark
 	name = "landmark"
 	icon = 'icons/mob/screen1.dmi'
@@ -5,28 +13,20 @@
 	anchored = 1
 	w_type=NOT_RECYCLABLE
 
+	var/destroy_on_creation = TRUE
+
 /obj/effect/landmark/New()
 	. = ..()
 	tag = text("landmark*[]", name)
 	invisibility = 101
 
+	if(!islist(landmarks_by_type[src.type]))
+		landmarks_by_type[src.type] = list()
+
+	var/list/L = landmarks_by_type[src.type]
+	L.Add(loc)
+
 	switch(name)			//some of these are probably obsolete
-		if("shuttle")
-			shuttle_z = z
-			qdel(src)
-
-		if("airtunnel_stop")
-			airtunnel_stop = x
-
-		if("airtunnel_start")
-			airtunnel_start = x
-
-		if("airtunnel_bottom")
-			airtunnel_bottom = y
-
-		if("monkey")
-			monkeystart += loc
-			qdel(src)
 		if("start")
 			newplayer_start += loc
 			qdel(src)
@@ -71,13 +71,6 @@
 			xeno_spawn += loc
 			qdel(src)
 
-		if("endgame_exit")
-			endgame_safespawns += loc
-			qdel(src)
-		if("bluespacerift")
-			endgame_exits += loc
-			qdel(src)
-
 	landmarks_list += src
 	return 1
 
@@ -89,7 +82,7 @@
 	name = "start"
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "x"
-	anchored = 1.0
+	anchored = 1
 
 /obj/effect/landmark/start/New()
 	..()
@@ -97,6 +90,14 @@
 	invisibility = 101
 
 	return 1
+
+/obj/effect/landmark/bluespacerift
+	name = "bluespace rift"
+	desc = "In the event of a supermatter cascade, the portal to safety spawns here."
+
+/obj/effect/landmark/endgame_exit
+	name = "endgame exit"
+	desc = "In the event of a supermatter cascade, the portal to safety teleports you here."
 
 /obj/effect/narration
 	name = "narrator"

@@ -623,6 +623,7 @@ var/list/hive_pylons = list()
 	name = "alien spawner"
 	desc = "Periodically spawns monsters if the hive replicator isn't destroyed."
 	icon_state = "x"
+	destroy_on_creation = FALSE
 
 //Communication unit
 /obj/structure/hive/communicator
