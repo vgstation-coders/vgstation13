@@ -705,13 +705,13 @@ Thanks.
 								M.start_pulling(secondarypull)
 							/* Drag damage is here!*/	
 							var/mob/living/carbon/human/HM = M
-							if(HM.drag_damage() && !(HM.health - HM.halloss <= config.health_threshold_softcrit))
+							if(HM.drag_damage() && !HM.isincrit())
 								if(prob(HM.getBruteLoss() / 5)) //Chance to damage
 									for(var/datum/organ/external/damagedorgan in HM.drag_damage())
 										if((damagedorgan.brute_dam) < damagedorgan.max_damage)
 											apply_damage(2, BRUTE, damagedorgan)
-											HM.visible_message("<span class='warning'>The wounds on \The [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
-											HM.update_body()
+											HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
+											HM.UpdateDamageIcon()
 								if(prob(HM.getBruteLoss() / 8)) //Chance to bleed
 									blood_splatter(HM.loc,HM)
 									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
@@ -719,14 +719,14 @@ Thanks.
 										HM:vessel.remove_reagent("blood",4)
 										HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
 								
-							if(HM.drag_damage() && (HM.health - HM.halloss <= config.health_threshold_softcrit)) //Crit damage boost
+							if(HM.drag_damage() && HM.isincrit()) //Crit damage boost
 								if(prob(15))
 									for(var/datum/organ/external/damagedorgan in HM.drag_damage())
 										if((damagedorgan.brute_dam) < damagedorgan.max_damage)
 											apply_damage(4, BRUTE, damagedorgan)
-											HM.visible_message("<span class='warning'>The wounds on \The [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
+											HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
 											add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
-											HM.update_body()
+											HM.UpdateDamageIcon()
 								if(prob(8))
 									if(isturf(HM.loc))
 										blood_splatter(HM.loc,HM,1)
@@ -1531,7 +1531,7 @@ Thanks.
 	affect_silicon = 0 means that the flash won't affect silicons at all.
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
