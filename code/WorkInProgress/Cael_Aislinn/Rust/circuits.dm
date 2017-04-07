@@ -3,7 +3,7 @@
 
 /obj/item/weapon/circuitboard/rust_core_control
 	name = "Circuit board (R-UST Mk. 7 core controller)"
-	desc = "A circuit board used to run the core controller computer of a R-UST Mk. 7 engine.."
+	desc = "A circuit board used to run the core controller computer of a R-UST Mk. 7 engine."
 	build_path = "/obj/machinery/computer/rust_core_control"
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 
