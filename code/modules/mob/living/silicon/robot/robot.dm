@@ -56,16 +56,12 @@
 	var/locked = 1
 	var/list/req_access = list(access_robotics)
 	var/ident = 0
-	var/hasbutt = 1
 	//var/list/laws = list()
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
 	var/viewalerts = 0
 	var/modtype = "Default"
-	var/lower_mod = 0
-	var/jetpack = 0
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
-	var/datum/effect/effect/system/spark_spread/spark_system//So they can initialize sparks whenever/N
-	var/jeton = 0
+	var/datum/effect/effect/system/spark_spread/spark_system //So they can initialize sparks whenever/N
 
 	var/killswitch = 0
 	var/killswitch_time = 60
@@ -191,6 +187,8 @@
 	qdel(cell)
 	qdel(radio)
 	qdel(camera)
+	qdel(spark_system)
+	qdel(ion_trail)
 
 	for(var/datum/robot_component/C in components)
 		qdel(C)
@@ -207,6 +205,8 @@
 	cell = null
 	radio = null
 	camera = null
+	spark_system = null
+	ion_trail = null
 
 	wires = null
 	connected_ai = null
