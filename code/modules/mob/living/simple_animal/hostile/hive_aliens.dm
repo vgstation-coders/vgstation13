@@ -133,10 +133,11 @@
 
 	var/obj/structure/hive/spikes/summoned_spikes
 
-/mob/living/simple_animal/hostile/hive_alien/constructor/Die()
+/mob/living/simple_animal/hostile/hive_alien/constructor/death(var/gibbed=FALSE)
 	..()
 
-	flick("hive_artificer_dying", src)
+	if(!gibbed)
+		flick("hive_artificer_dying", src)
 	if(summoned_spikes)
 		qdel(summoned_spikes)
 		summoned_spikes = null

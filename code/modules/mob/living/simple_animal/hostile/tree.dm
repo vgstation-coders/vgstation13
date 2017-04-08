@@ -52,8 +52,8 @@
 			L.Knockdown(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
-/mob/living/simple_animal/hostile/tree/Die()
-	..()
+/mob/living/simple_animal/hostile/tree/death(var/gibbed=FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'><b>[src]</b> is hacked into pieces!</span>")
 	playsound(loc, 'sound/effects/woodcutting.ogg', 100, 1)
 	new /obj/item/stack/sheet/wood(loc)
@@ -67,7 +67,8 @@
 	icon_dead = "festivus_pole"
 	icon_gib = "festivus_pole"
 
-/mob/living/simple_animal/hostile/tree/festivus/Die()
+/mob/living/simple_animal/hostile/tree/festivus/death(var/gibbed=FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'><b>[src]</b> is hacked into pieces!</span>")
 	new /obj/item/weapon/nullrod(loc)
 	qdel(src)

@@ -48,7 +48,7 @@
 	if(parent)
 		parent.owned_bee_swarms.Remove(src)
 
-/mob/living/simple_animal/bee/Die()
+/mob/living/simple_animal/bee/death(var/gibbed=FALSE)
 	returnToPool(src)
 
 /mob/living/simple_animal/bee/gib()

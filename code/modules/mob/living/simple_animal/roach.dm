@@ -63,26 +63,23 @@
 	maxHealth = rand(1,6)
 	health = maxHealth
 
-/mob/living/simple_animal/cockroach/Die(var/gore = 1)
-	if(gore)
-
-		var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(src.loc)
-		remains.dir = src.dir
-		remains.pixel_x = src.pixel_x
-		remains.pixel_y = src.pixel_y
-
-		if(flying)
-			animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
-
-		playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
-
+/mob/living/simple_animal/cockroach/death(var/gibbed=TRUE)
+	if(!gibbed)
 		..()
 
-		qdel(src)
+	var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(src.loc)
+	remains.dir = src.dir
+	remains.pixel_x = src.pixel_x
+	remains.pixel_y = src.pixel_y
 
-	else
+	if(flying)
+		animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
 
-		return ..()
+	playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
+
+	..()
+
+	qdel(src)
 
 /mob/living/simple_animal/cockroach/Crossed(mob/living/O)
 	if(!istype(O))
@@ -98,7 +95,7 @@
 		return
 
 	if(prob(15))
-		Die(gore = 1)
+		death(TRUE)
 
 /mob/living/simple_animal/cockroach/wander_move(turf/dest)
 	..()
@@ -274,7 +271,7 @@
 
 	switch(id)
 		if(TOXIN)
-			Die(gore = 0)
+			death(TRUE)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
 	if(size >= H.size)
@@ -283,7 +280,7 @@
 	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
 	H.visible_message("<span class='notice'>[H] eats \the [src]!</span>", "<span class='notice'>You eat \the [src]!</span>")
 
-	Die(gore = 1)
+	death(TRUE)
 	qdel(src)
 
 	H.vomit()

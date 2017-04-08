@@ -147,7 +147,7 @@
 			times_examined_while_dead = 0
 	..()
 
-/mob/living/simple_animal/parrot/Die()
+/mob/living/simple_animal/parrot/death(var/gibbed=FALSE)
 	if(held_item)
 		held_item.forceMove(src.loc)
 		held_item = null

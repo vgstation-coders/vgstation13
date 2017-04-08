@@ -265,7 +265,7 @@
 
 //////////////END HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
-/mob/living/simple_animal/hostile/Die()
+/mob/living/simple_animal/hostile/death(var/gibbed=FALSE)
 	LoseAggro()
 	..()
 	walk(src, 0)

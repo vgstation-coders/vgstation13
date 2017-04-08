@@ -150,13 +150,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			stat = CONSCIOUS
 			density = 1
 			update_canmove()
+			animal_count[src.type]++
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
 
 
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 		return 0
 
 	life_tick++
@@ -518,34 +519,26 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(statpanel("Status") && show_stat_health)
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
-/mob/living/simple_animal/proc/Die()
-	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
-	living_mob_list -= src
-	dead_mob_list += src
+/mob/living/simple_animal/death(var/gibbed=FALSE)
+	if(stat == DEAD)
+		return
+
+	if(!gibbed)
+		death_message()
+
+	// so /mob/living/simple_animal/Life() doesn't magically revive them.
+	health = 0
+
 	icon_state = icon_dead
 	stat = DEAD
 	density = 0
 
 	animal_count[src.type]--
-	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
-		var/list/L = animal_butchering_products[src.species_type]
-		src.butchering_drops = list()
 
-		for(var/butchering_type in L)
-			src.butchering_drops += new butchering_type
+	..()
 
-	verbs += /mob/living/proc/butcher
-
-	return
-
-/mob/living/simple_animal/death(gibbed)
-	if(stat == DEAD)
-		return
-
-	if(!gibbed)
-		visible_message("<span class='danger'>\the [src] stops moving...</span>")
-
-	Die()
+/mob/living/simple_animal/proc/death_message()
+	visible_message("<span class='danger'>\the [src] stops moving...</span>")
 
 /mob/living/simple_animal/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -573,7 +566,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
 	if(status_flags & GODMODE)
@@ -587,7 +580,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 
 /mob/living/simple_animal/proc/skinned()
 	if(butchering_drops)
