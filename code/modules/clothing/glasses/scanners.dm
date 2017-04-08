@@ -178,9 +178,11 @@
 
 /obj/item/clothing/glasses/scanner/material/unequipped(var/mob/M)
 	update_mob()
+	..()
 
 /obj/item/clothing/glasses/scanner/material/equipped(var/mob/M)
 	update_mob(M)
+	..()
 
 /obj/item/clothing/glasses/scanner/material/OnMobLife(var/mob/living/carbon/human/M)
 	update_mob(M.glasses == src ? M : null)
