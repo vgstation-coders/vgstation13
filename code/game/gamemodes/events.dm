@@ -295,9 +295,8 @@
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
 
 /proc/carp_migration() // -- Darem
-	for(var/obj/effect/landmark/C in landmarks_list)
-		if(C.name == "carpspawn")
-			new /mob/living/simple_animal/hostile/carp(C.loc)
+	for(var/C in get_landmarks(/obj/effect/landmark/carpspawn))
+		new /mob/living/simple_animal/hostile/carp(get_turf(C))
 	//sleep(100)
 	spawn(rand(300, 600)) //Delayed announcements to keep the crew on their toes.
 		command_alert(/datum/command_alert/carp)
