@@ -96,7 +96,6 @@
 	space_dust		=	text2num(preference_list_client["space_dust"])
 	parallax_speed	=	text2num(preference_list_client["parallax_speed"])
 	stumble			=	text2num(preference_list_client["stumble"])
-	attack_animation=	text2num(preference_list_client["attack_animation"])
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
@@ -116,21 +115,7 @@
 	space_dust		=	sanitize_integer(space_dust, 0, 1, initial(space_dust))
 	parallax_speed	=	sanitize_integer(parallax_speed, 0, 5, initial(parallax_speed))
 	stumble			= 	sanitize_integer(stumble, 0, 1, initial(stumble))
-	attack_animation=	sanitize_integer(attack_animation, 0, 65535, initial(attack_animation))
-
-	initialize_preferences()
 	return 1
-
-/datum/preferences/proc/initialize_preferences(client_login = 0)
-	if(attack_animation == PERSON_ANIMATION)
-		person_animation_viewers |= client
-		item_animation_viewers -= client
-	else if(attack_animation == ITEM_ANIMATION)
-		item_animation_viewers |= client
-		person_animation_viewers -= client
-	else
-		item_animation_viewers -= client
-		person_animation_viewers -= client
 
 
 /datum/preferences/proc/load_preferences()
@@ -178,8 +163,6 @@
 	randomslot		= sanitize_integer(randomslot, 0, 1, initial(randomslot))
 	volume			= sanitize_integer(volume, 0, 100, initial(volume))
 	special_popup	= sanitize_integer(special_popup, 0, 1, initial(special_popup))
-
-	initialize_preferences()
 	return 1
 
 
@@ -195,15 +178,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, ckey)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -242,7 +225,6 @@
 	S["space_parallax"] << space_parallax
 	S["space_dust"]		<< space_dust
 	S["parallax_speed"]	<< parallax_speed
-	S["attack_animation"]<< attack_animation
 	return 1
 
 //saving volume changes

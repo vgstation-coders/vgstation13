@@ -421,12 +421,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 		else
-			L.do_attack_animation(src, L)
+
 			var/damage = rand(5, 10)
 			visible_message("<span class='danger'>[L] bites [src]!</span>")
 
 			if(stat != DEAD)
-				visible_message("<span class='danger'>[L] feeds on [src]!</span>", "<span class='notice'>You feed on [src]!</span>")
 				adjustBruteLoss(damage)
 				L.growth = min(L.growth + damage, LARVA_GROW_TIME)
 
@@ -476,7 +475,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		user.delayNextAttack(8)
 		if(O.force)
-			user.do_attack_animation(src)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0

@@ -1929,8 +1929,5 @@ mob/proc/on_foot()
 	user.transmogrify()
 	user.remove_spell(src)
 
-/mob/attack_icon()
-	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
-
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
