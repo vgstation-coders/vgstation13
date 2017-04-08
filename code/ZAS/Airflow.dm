@@ -100,7 +100,7 @@ Contains helper procs for airflow, handled in /connection_group.
 		return 1
 	if(CheckSlip() < 0)
 		return 0
-	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
+	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 

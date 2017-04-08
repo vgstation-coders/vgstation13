@@ -18,14 +18,14 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env)
 		if(!my_effect.activated)
-			if(!high_triggered && env.pressure < LOW_PRESSURE_TRIGGER)
+			if(!high_triggered && env.return_pressure() < LOW_PRESSURE_TRIGGER)
 				Triggered(0, "LOWPRESSURE", 0)
-			else if(high_triggered && env.pressure > HIGH_PRESSURE_TRIGGER)
+			else if(high_triggered && env.return_pressure() > HIGH_PRESSURE_TRIGGER)
 				Triggered(0, "HIGHPRESSURE", 0)
 		else
-			if(!high_triggered && env.pressure > LOW_PRESSURE_TRIGGER)
+			if(!high_triggered && env.return_pressure() > LOW_PRESSURE_TRIGGER)
 				Triggered(0, "HIGHPRESSURE", 0)
-			else if(high_triggered && env.pressure < HIGH_PRESSURE_TRIGGER)
+			else if(high_triggered && env.return_pressure() < HIGH_PRESSURE_TRIGGER)
 				Triggered(0, "LOWPRESSURE", 0)
 
 /datum/artifact_trigger/pressure/proc/owner_explode(var/list/event_args, var/source)

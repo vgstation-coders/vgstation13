@@ -127,7 +127,7 @@
 	..()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.oxygen < 5)
+	if(env.gas[GAS_OXYGEN] < 5)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
 		return
 	if(!on && cell.charge > 0)
@@ -319,7 +319,7 @@
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if(!(cell && cell.charge > 0) && nocell != 2 | env.oxygen < 5)
+	if(!(cell && cell.charge > 0) && nocell != 2 | env.gas[GAS_OXYGEN] < 5)
 		new /obj/effect/decal/cleanable/campfire(get_turf(src))
 		qdel(src)
 		return

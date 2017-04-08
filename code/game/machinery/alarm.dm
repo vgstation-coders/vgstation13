@@ -279,7 +279,6 @@
 
 	var/partial_pressure = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
 	var/environment_pressure = environment.return_pressure()
-	var/n2o_moles = 0.0
 	var/other_moles = 0.0
 	for(var/id in environment.gas - mundane_gases)
 		other_moles += environment.gas[id]

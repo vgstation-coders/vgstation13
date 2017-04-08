@@ -35,33 +35,6 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_P_Y		-5*PIXEL_MULTIPLIER //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
-<<<<<<< Updated upstream:__DEFINES/setup.dm
-#define R_IDEAL_GAS_EQUATION	8.314 //kPa*L/(K*mol)
-#define ONE_ATMOSPHERE		101.325	//kPa
-#define MARS_ATMOSPHERE		0.6 //kPa
-
-#define CELL_VOLUME 2500	//liters in a cell
-#define MOLES_CELLSTANDARD (ONE_ATMOSPHERE*CELL_VOLUME/(T20C*R_IDEAL_GAS_EQUATION))	//moles in a 2.5 m^3 cell at 101.325 Pa and 20 degC - about 103.934 in case you're searching
-#define MOLES_CELLMARS (MARS_ATMOSPHERE*CELL_VOLUME/(T20C*R_IDEAL_GAS_EQUATION)) //Same as above but for mars (temperature is 20 degrees - it's assumed that it's noon on Mars)
-
-#define O2STANDARD 0.21
-#define N2STANDARD 0.79
-
-#define CO2MARS 0.96
-#define N2MARS  0.04 //Mars atmosphere is actually 1.9% nitrogen, 1.9% argon with traces of other gases. Simplified to 4% nitrogen
-
-#define MOLES_O2STANDARD MOLES_CELLSTANDARD*O2STANDARD	// O2 standard value (21%)
-#define MOLES_N2STANDARD MOLES_CELLSTANDARD*N2STANDARD	// N2 standard value (79%)
-
-#define MOLES_CO2MARS MOLES_CELLMARS*CO2MARS
-#define MOLES_N2MARS  MOLES_CELLMARS*N2MARS
-
-#define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
-#define MIN_PLASMA_DAMAGE 1
-#define MAX_PLASMA_DAMAGE 10
-
-=======
->>>>>>> Stashed changes:code/setup.dm
 #define mouse_respawn_time 5 //Amount of time that must pass between a player dying as a mouse and repawning as a mouse. In minutes.
 
 // Pressure limits.

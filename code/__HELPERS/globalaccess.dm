@@ -1777,8 +1777,6 @@
 			return global.atmos_controllers;
 		if("ul_FastRoot")
 			return global.ul_FastRoot;
-		if("sharing_lookup_table")
-			return global.sharing_lookup_table;
 		if("air_master")
 			return global.air_master;
 		if("tick_multiplier")
@@ -3594,8 +3592,6 @@
 			global.atmos_controllers=newval
 		if("ul_FastRoot")
 			global.ul_FastRoot=newval
-		if("sharing_lookup_table")
-			global.sharing_lookup_table=newval
 		if("air_master")
 			global.air_master=newval
 		if("tick_multiplier")

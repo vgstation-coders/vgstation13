@@ -1,14 +1,22 @@
 #define CELL_VOLUME        2500 // Liters in a cell.
 #define MOLES_CELLSTANDARD (ONE_ATMOSPHERE * CELL_VOLUME / (T20C * R_IDEAL_GAS_EQUATION)) // Moles in a 2.5 m^3 cell at 101.325 kPa and 20 C.
+#define MOLES_CELLMARS (MARS_ATMOSPHERE*CELL_VOLUME/(T20C*R_IDEAL_GAS_EQUATION)) //Same as above but for mars (temperature is 20 degrees - it's assumed that it's noon on Mars)
 
 #define O2STANDARD 0.21 // Percentage.
 #define N2STANDARD 0.79
+
+#define MARS_ATMOSPHERE		0.6 //kPa
+#define CO2MARS 0.96
+#define N2MARS  0.04 //Mars atmosphere is actually 1.9% nitrogen, 1.9% argon with traces of other gases. Simplified to 4% nitrogen
 
 #define MOLES_PLASMA_VISIBLE 0.7 // Moles in a standard cell after which plasma is visible.
 #define MOLES_O2STANDARD     (MOLES_CELLSTANDARD * O2STANDARD) // O2 standard value (21%)
 #define MOLES_N2STANDARD     (MOLES_CELLSTANDARD * N2STANDARD) // N2 standard value (79%)
 #define MOLES_O2ATMOS (MOLES_O2STANDARD * 50)
 #define MOLES_N2ATMOS (MOLES_N2STANDARD * 50)
+
+#define MOLES_CO2MARS MOLES_CELLMARS*CO2MARS
+#define MOLES_N2MARS  MOLES_CELLMARS*N2MARS
 
 // These are for when a mob breathes poisonous air.
 #define MIN_PLASMA_DAMAGE 1
@@ -53,6 +61,7 @@
 // Plasma fire properties.
 #define PLASMA_MINIMUM_BURN_TEMPERATURE    (T0C +  100) //374 K - autoignite temperature in tanks and canisters - enclosed environments I guess
 #define PLASMA_FLASHPOINT                  (T0C +  246) //519 K - autoignite temperature in air if that ever gets implemented.
+#define PLASMA_UPPER_TEMPERATURE	       (T0C + 1370)
 
 //These control the mole ratio of oxidizer and fuel used in the combustion reaction
 #define FIRE_REACTION_OXIDIZER_AMOUNT	3 //should be greater than the fuel amount if fires are going to spread much

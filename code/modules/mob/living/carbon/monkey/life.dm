@@ -381,9 +381,6 @@
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(wear_mask)
 			if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-				if(breath.toxins > safe_toxins_mask)
-					ratio = (breath.toxins/safe_toxins_mask) * 10
-			if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 				if(breath.gas[GAS_PLASMA] > safe_toxins_mask)
 					ratio = (breath.gas[GAS_PLASMA]/safe_toxins_mask) * 10
 				else

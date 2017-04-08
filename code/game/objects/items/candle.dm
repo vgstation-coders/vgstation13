@@ -39,7 +39,7 @@
 	wax--
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.oxygen < 5)
+	if(env.gas[GAS_OXYGEN] < 5)
 		src.lit = 0
 		set_light(0)
 		processing_objects.Remove(src)

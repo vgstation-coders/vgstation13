@@ -194,16 +194,6 @@
 	verbs -= /obj/structure/inflatable/verb/hand_deflate
 	deflate()
 
-/obj/structure/inflatable/proc/update_nearby_tiles(var/turf/T)
-	if(isnull(air_master))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-	if(isturf(T))
-		air_master.mark_for_update(T)
-	return 1
-
 /obj/structure/inflatable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
