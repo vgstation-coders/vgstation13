@@ -1,5 +1,5 @@
 /mob/living/silicon/robot
-	name = "Cyborg"are
+	name = "Cyborg"
 	real_name = "Cyborg"
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "robot"
