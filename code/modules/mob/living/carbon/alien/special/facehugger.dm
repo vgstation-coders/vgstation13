@@ -249,7 +249,7 @@ var/const/MAX_ACTIVE_TIME = 400
 			if(prob(rng)) // Temporary balance change, all mouth-covering hats will be more effective
 				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [mouth_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(mouth_protection)
-				GoIdle(15)
+				GoIdle(50)
 				return
 			else
 				H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
@@ -257,7 +257,7 @@ var/const/MAX_ACTIVE_TIME = 400
 					Die()
 					return
 				else
-					GoIdle(15)
+					GoIdle(50)
 					return
 			return
 
