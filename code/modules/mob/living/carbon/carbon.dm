@@ -198,12 +198,7 @@
 				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
 			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
-		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
-			var/t_him = "it"
-			if (src.gender == MALE)
-				t_him = "him"
-			else if (src.gender == FEMALE)
-				t_him = "her"
+		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15t
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
@@ -215,8 +210,8 @@
 			AdjustKnockdown(-3)
 			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
-				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
-				"<span class='notice'>You shake [src] trying to wake [t_him] up!</span>", \
+				"<span class='notice'>[M] shakes [src] trying to wake \him up!</span>", \
+				"<span class='notice'>You shake [src] trying to wake \him up!</span>", \
 				drugged_message = "<span class='notice'>[M] starts massaging [src]'s back.</span>", \
 				self_drugged_message = "<span class='notice'>You start massaging [src]'s back.</span>"
 				)

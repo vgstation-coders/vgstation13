@@ -1,3 +1,5 @@
+/mob/living/var/event/on_resist
+
 /mob/living/New()
 	. = ..()
 	generate_static_overlay()
@@ -792,9 +794,6 @@ Thanks.
 			if(direct & WEST)
 				hook.override_starting_X--
 				hook.override_target_X--
-
-/mob/living
-	var/event/on_resist
 
 /mob/living/New()
 	. = ..()

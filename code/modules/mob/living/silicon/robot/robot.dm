@@ -185,6 +185,22 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
 /mob/living/silicon/robot/Destroy()
+	qdel(rbPDA)
+	qdel(station_holomap)
+	qdel(cell)
+	qdel(module)
+	qdel(radio)
+	qdel(camera)
+
+	rbPDA = null
+	station_holomap = null
+	cell = null
+	module = null
+	radio = null
+	camera = null
+
+	wires = null
+
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
