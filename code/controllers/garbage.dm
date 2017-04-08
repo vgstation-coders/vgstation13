@@ -2,7 +2,7 @@
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
 #define GC_FORCE_DEL_PER_TICK 60
 //#define GC_DEBUG
-//#define GC_FINDREF
+#define GC_FINDREF
 
 /datum/var/gcDestroyed
 

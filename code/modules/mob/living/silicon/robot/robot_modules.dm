@@ -34,6 +34,7 @@
 	for(var/obj/A in upgrades)
 		qdel(upgrades)
 	upgrades = null
+	contents = null
 	..()
 
 /obj/item/weapon/robot_module/proc/recharge_consumable()
