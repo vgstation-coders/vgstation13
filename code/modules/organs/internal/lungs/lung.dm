@@ -30,6 +30,7 @@
 	//testing("Ticking lungs...")
 
 	// First, we consume air.
+	breath.volume = inhale_volume
 	for(var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
 		G.handle_inhale()

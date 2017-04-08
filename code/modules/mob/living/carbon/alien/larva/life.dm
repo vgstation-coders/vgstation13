@@ -160,21 +160,21 @@
 	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
 
 	//Partial pressure of the toxins in our breath
-	var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+	var/Toxins_pp = (breath.gas[GAS_PLASMA]/breath.total_moles())*breath_pressure
 
 	if(Toxins_pp) // Detect toxins in air
 
-		AdjustPlasma(breath.toxins*250)
+		AdjustPlasma(breath.gas[GAS_PLASMA]*250)
 		toxins_alert = max(toxins_alert, 1)
 
-		toxins_used = breath.toxins
+		toxins_used = breath.gas[GAS_PLASMA]
 
 	else
 		toxins_alert = 0
 
 	//Breathe in toxins and out oxygen
-	breath.toxins -= toxins_used
-	breath.oxygen += toxins_used
+	breath.adjust_gas(GAS_PLASMA, -toxins_used, FALSE)
+	breath.adjust_gas(GAS_OXYGEN, toxins_used)
 
 	if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
 		if(prob(20))

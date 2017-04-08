@@ -141,7 +141,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 							if(BODYTEMP_HEAT_DAMAGE_LIMIT to INFINITY)
 								to_chat(src, "<span class='danger'>You feel a searing heat coming from the vent!</span>")
 
-						switch(vent_found.air_contents.pressure)
+						switch(vent_found.air_contents.return_pressure())
 							if(0 to HAZARD_LOW_PRESSURE)
 								to_chat(src, "<span class='danger'>You feel a rushing draw pulling you into the vent!</span>")
 							if(HAZARD_LOW_PRESSURE to WARNING_LOW_PRESSURE)

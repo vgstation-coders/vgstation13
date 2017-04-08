@@ -730,3 +730,5 @@
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
 
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

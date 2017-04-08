@@ -1,7 +1,45 @@
 var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 
-/obj/item
-	var/contaminated = 0
+/pl_control
+	var/PLASMA_DMG = 3
+	var/PLASMA_DMG_NAME = "Plasma Damage Amount"
+	var/PLASMA_DMG_DESC = "Self Descriptive"
+
+	var/CLOTH_CONTAMINATION = 1
+	var/CLOTH_CONTAMINATION_NAME = "Cloth Contamination"
+	var/CLOTH_CONTAMINATION_DESC = "If this is on, plasma does damage by getting into cloth."
+
+	var/PLASMAGUARD_ONLY = 0
+	var/PLASMAGUARD_ONLY_NAME = "\"PlasmaGuard Only\""
+	var/PLASMAGUARD_ONLY_DESC = "If this is on, only biosuits and spacesuits protect against contamination and ill effects."
+
+	var/GENETIC_CORRUPTION = 0
+	var/GENETIC_CORRUPTION_NAME = "Genetic Corruption Chance"
+	var/GENETIC_CORRUPTION_DESC = "Chance of genetic corruption as well as toxic damage, X in 10,000."
+
+	var/SKIN_BURNS = 0
+	var/SKIN_BURNS_DESC = "Plasma has an effect similar to mustard gas on the un-suited."
+	var/SKIN_BURNS_NAME = "Skin Burns"
+
+	var/EYE_BURNS = 1
+	var/EYE_BURNS_NAME = "Eye Burns"
+	var/EYE_BURNS_DESC = "Plasma burns the eyes of anyone not wearing eye protection."
+
+	var/CONTAMINATION_LOSS = 0.02
+	var/CONTAMINATION_LOSS_NAME = "Contamination Loss"
+	var/CONTAMINATION_LOSS_DESC = "How much toxin damage is dealt from contaminated clothing" //Per tick?  ASK ARYN
+
+	var/PLASMA_HALLUCINATION = 0
+	var/PLASMA_HALLUCINATION_NAME = "Plasma Hallucination"
+	var/PLASMA_HALLUCINATION_DESC = "Does being in plasma cause you to hallucinate?"
+
+	var/N2O_HALLUCINATION = 1
+	var/N2O_HALLUCINATION_NAME = "N2O Hallucination"
+	var/N2O_HALLUCINATION_DESC = "Does being in sleeping gas cause you to hallucinate?"
+
+
+obj/var/contaminated = 0
+
 
 /obj/item/proc/can_contaminate()
 	return FALSE
@@ -10,15 +48,14 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	return !(clothing_flags & PLASMAGUARD)
 
 /obj/item/proc/contaminate()
-	// do a contamination overlay?
-	// temporary measure to keep contamination less deadly than it was.
+	//Do a contamination overlay? Temporary measure to keep contamination less deadly than it was.
 	if(!contaminated)
 		contaminated = 1
-		overlays.Add(contamination_overlay)
+		overlays += contamination_overlay
 
 /obj/item/proc/decontaminate()
 	contaminated = 0
-	overlays.Remove(contamination_overlay)
+	overlays -= contamination_overlay
 
 /mob/proc/contaminate()
 
@@ -49,31 +86,32 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		contaminate()
 
 	//Anything else requires them to not be dead.
-	if(stat >= 2)
+	if(isDead())
 		return
 
-	if(species.breath_type != "toxins")
+	if(species.breath_type == GAS_PLASMA)
+		return
 
-		//Burn skin if exposed.
-		if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
-			if(!pl_head_protected() || !pl_suit_protected())
-				burn_skin(0.75)
-				if(prob(20))
-					to_chat(src, "<span class='warning'>Your skin burns!</span>")
-				updatehealth()
+	//Burn skin if exposed.
+	if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
+		if(!pl_head_protected() || !pl_suit_protected())
+			burn_skin(0.75)
+			if(prob(20))
+				to_chat(src, "<span class='warning'>Your skin burns!</span>")
+			updatehealth()
 
-		//Burn eyes if exposed.
-		if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
-			var/eye_protection = get_body_part_coverage(EYES)
-			if(!eye_protection)
-				burn_eyes()
+	//Burn eyes if exposed.
+	if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
+		var/eye_protection = get_body_part_coverage(EYES)
+		if(!eye_protection)
+			burn_eyes()
 
-		//Genetic Corruption
-		if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
-			if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
-				randmutb(src)
-				to_chat(src, "<span class='warning'>High levels of toxins cause you to spontaneously mutate.</span>")
-				domutcheck(src,null)
+	//Genetic Corruption
+	if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
+		if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
+			randmutb(src)
+			to_chat(src, "<span class='warning'>High levels of toxins cause you to spontaneously mutate.</span>")
+			domutcheck(src,null)
 
 
 /mob/living/carbon/human/proc/burn_eyes()
@@ -89,6 +127,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
 			to_chat(src, "<span class='warning'>You are blinded!</span>")
 			eye_blind += 20
+
 
 /mob/living/carbon/human/proc/pl_head_protected()
 	//Checks if the head is adequately sealed.
@@ -119,24 +158,20 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 
 /mob/living/carbon/human/proc/suit_contamination()
 	//Runs over the things that can be contaminated and does so.
-	if(w_uniform)
-		w_uniform.contaminate()
-	if(shoes)
-		shoes.contaminate()
-	if(gloves)
-		gloves.contaminate()
+	if(w_uniform) w_uniform.contaminate()
+	if(shoes) shoes.contaminate()
+	if(gloves) gloves.contaminate()
 
-/*
-/turf/Entered(atom/movable/Obj, atom/OldLoc)
-	..(Obj, OldLoc)
-
-	var/obj/item/I = Obj
-
-	// items that are in plasma, but not on a mob, can still be contaminated.
-	if(istype(I) && zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
-		var/datum/gas_mixture/environment = return_air()
-
-		if(environment.toxins > MOLES_PLASMA_VISIBLE + 1)
-			if(I.can_contaminate())
+/* We hate this
+turf/Entered(obj/item/I)
+	. = ..()
+	//Items that are in plasma, but not on a mob, can still be contaminated.
+	if(istype(I) && zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION) && I.can_contaminate())
+		var/datum/gas_mixture/env = return_air(1)
+		if(!env)
+			return
+		for(var/g in env.gas)
+			if(gas_data.flags[g] & XGM_GAS_CONTAMINANT && env.gas[g] > gas_data.overlay_limit[g] + 1)
 				I.contaminate()
+				break
 */

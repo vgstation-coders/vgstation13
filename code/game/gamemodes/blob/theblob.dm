@@ -6,7 +6,7 @@
 /obj/effect/blob/New(turf/loc,newlook = "new")
 /obj/effect/blob/Destroy()
 /obj/effect/blob/projectile_check()
-/obj/effect/blob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 /obj/effect/blob/beam_connect(var/obj/effect/beam/B)
 /obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
 /obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)

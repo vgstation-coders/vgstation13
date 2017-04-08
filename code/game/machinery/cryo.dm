@@ -472,7 +472,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
 			if(istype(guy) && guy.species && guy.species.breath_type != "oxygen")
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-			if(air_contents.oxygen > 2)
+			if(air_contents.gas[GAS_OXYGEN] > 2)
 				if(occupant.getOxyLoss())
 					occupant.adjustOxyLoss(-1)
 			else

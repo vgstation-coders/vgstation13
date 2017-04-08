@@ -143,18 +143,11 @@
 
 	var/total_moles = air.total_moles()
 	if(round(total_moles, 0.01))	//Check if there's total moles to avoid divisions by zero.
-		interface.updateContent("oxypercent", Clamp(round(100 * air.oxygen			/ total_moles, 0.1), 0, 100))
-		interface.updateContent("nitpercent", Clamp(round(100 * air.nitrogen		/ total_moles, 0.1), 0, 100))
-		interface.updateContent("co2percent", Clamp(round(100 * air.carbon_dioxide	/ total_moles, 0.1), 0, 100))
-		interface.updateContent("plapercent", Clamp(round(100 * air.toxins			/ total_moles, 0.1), 0, 100))
-
-		//Begin stupid shit to get the N2O amount.
-		var/datum/gas/sleeping_agent/G = locate(/datum/gas/sleeping_agent) in air.trace_gases
-		var/n2o_moles = 0
-		if(G)
-			n2o_moles = G.moles
-
-		interface.updateContent("n2opercent", Clamp(round(100 * n2o_moles			/ total_moles, 0.1), 0, 100))
+		interface.updateContent("oxypercent", Clamp(round(100 * air.gas[GAS_OXYGEN]   / total_moles, 0.1), 0, 100))
+		interface.updateContent("nitpercent", Clamp(round(100 * air.gas[GAS_NITROGEN] / total_moles, 0.1), 0, 100))
+		interface.updateContent("co2percent", Clamp(round(100 * air.gas[GAS_CARBON]   / total_moles, 0.1), 0, 100))
+		interface.updateContent("plapercent", Clamp(round(100 * air.gas[GAS_PLASMA]   / total_moles, 0.1), 0, 100))
+		interface.updateContent("n2opercent", Clamp(round(100 * air.gas[GAS_SLEEPING] / total_moles, 0.1), 0, 100))
 
 	else
 		interface.updateContent("oxypercent", 0)

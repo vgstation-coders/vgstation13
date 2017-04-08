@@ -9,7 +9,7 @@ var/global/list/alert_overlays_global = list()
 /proc/convert_c2k(var/temp)
 	return ((temp + T0C)) // * 1.8) + 32
 
-/proc/getCardinalAirInfo(var/atom/source, var/turf/loc, var/list/stats=list("temperature"))
+/proc/getCardinalAirInfo(var/atom/source, var/turf/location, var/temperature, var/pressure)
 	var/list/temps = new/list(4)
 	for(var/dir in cardinal)
 		var/direction
@@ -23,27 +23,31 @@ var/global/list/alert_overlays_global = list()
 			if(WEST)
 				direction = 4
 
-		var/turf/simulated/T=get_turf(get_step(loc,dir))
+		var/turf/simulated/T=get_turf(get_step(location,dir))
 
 		if(dir == turn(source.dir, 180) && source.flags & ON_BORDER) //[   ][  |][   ] imagine the | is the source (with dir EAST -> facing right), and the brackets are floors. When we try to get the turf to the left's air info, use the middle's turf instead
 			if(!(locate(/obj/machinery/door/airlock) in get_turf(source))) //If we're on a door, however, DON'T DO THIS -> doors are airtight, so the result will be innacurate! This is a bad snowflake, but as long as it makes the feature freeze go away...
 				T = get_turf(source)
 
-		var/list/rstats = new /list(stats.len)
+		var/list/rstats = list()
 		if(!source.Adjacent(T)) //Stop reading air contents through windows asshole
 			rstats = null
 		else
 			if(T && istype(T) && T.zone)
 				var/datum/gas_mixture/environment = T.return_air()
-				for(var/i=1;i<=stats.len;i++)
-					rstats[i] = environment.vars[stats[i]]
+				if(temperature)
+					rstats["temperature"] = environment.temperature
+				if(pressure)
+					rstats["pressure"] = environment.return_pressure()
 			else if(istype(T, /turf/simulated))
 				rstats = null // Exclude zone (wall, door, etc).
 			else if(istype(T, /turf))
 				// Should still work.  (/turf/return_air())
 				var/datum/gas_mixture/environment = T.return_air()
-				for(var/i=1;i<=stats.len;i++)
-					rstats[i] = environment.vars[stats[i]]
+				if(temperature)
+					rstats["temperature"] = environment.temperature
+				if(pressure)
+					rstats["pressure"] = environment.return_pressure()
 		temps[direction] = rstats
 	return temps
 
@@ -161,8 +165,8 @@ var/global/list/alert_overlays_global = list()
 			o += "<span class='warning'>DATA UNAVAILABLE</span>"
 			to_chat(usr, o)
 			continue
-		var/celsius = convert_k2c(tile_info[index][1])
-		var/pressure = tile_info[index][2]
+		var/celsius = convert_k2c(tile_info[index]["temperature"])
+		var/pressure = tile_info[index]["pressure"]
 		if(dir_alerts[index] & (FIREDOOR_ALERT_HOT|FIREDOOR_ALERT_COLD))
 			o += "<span class='warning'>"
 		else
@@ -438,13 +442,13 @@ var/global/list/alert_overlays_global = list()
 				pdiff_alert = 0
 				changed = 1 // update_icon()
 
-		tile_info = getCardinalAirInfo(src,src.loc,list("temperature","pressure"))
+		tile_info = getCardinalAirInfo(source = src, location = src.loc, temperature = 1, pressure = 1)
 		var/old_alerts = dir_alerts
-		for(var/index = 1; index <= 4; index++)
+		for(var/index = 1 to 4)
 			var/list/tileinfo=tile_info[index]
 			if(tileinfo==null)
 				continue // Bad data.
-			var/celsius = convert_k2c(tileinfo[1])
+			var/celsius = convert_k2c(tileinfo["temperature"])
 
 			var/alerts=0
 

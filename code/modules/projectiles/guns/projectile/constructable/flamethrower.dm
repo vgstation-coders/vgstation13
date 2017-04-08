@@ -47,7 +47,7 @@
 		qdel(ptank)
 		ptank = null
 	..()
-	return
+
 
 
 /obj/item/weapon/gun/projectile/flamethrower/process()
@@ -61,7 +61,7 @@
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
 		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))
-	return
+
 
 
 /obj/item/weapon/gun/projectile/flamethrower/update_icon()
@@ -75,7 +75,7 @@
 		item_state = "flamethrower_1"
 	else
 		item_state = "flamethrower_0"
-	return
+
 
 /obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/target, mob/user, flag)
 	if (istype(target, /obj/item/weapon/storage/backpack ))
@@ -111,7 +111,7 @@
 	var/pressure = tank_gas.return_pressure()
 	var/total_moles = tank_gas.total_moles()
 	if(total_moles)
-		var/o2_concentration = tank_gas.oxygen/total_moles
+		var/o2_concentration = tank_gas.gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else
@@ -187,7 +187,7 @@
 		user.show_message(analyzer.output_gas_scan(ptank.air_contents, src, 0), 1)
 		return
 	..()
-	return
+
 
 
 /obj/item/weapon/gun/projectile/flamethrower/attack_self(mob/user as mob)
@@ -195,7 +195,7 @@
 		return
 	window_open = 1
 	flamethrower_window(user)
-	return
+
 
 /obj/item/weapon/gun/projectile/flamethrower/proc/flamethrower_window(mob/user)
 	if(window_open)
@@ -235,7 +235,7 @@
 	if(istype(loc, /mob/living/carbon))
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
-	return
+
 
 /obj/item/weapon/gun/projectile/flamethrower/full/New(var/loc)
 	..()
@@ -245,13 +245,11 @@
 	igniter.secured = 0
 	status = 1
 	update_icon()
-	return
+
 
 /obj/item/weapon/gun/projectile/flamethrower/full/tank/New(var/loc)
 	..()
 	ptank = new /obj/item/weapon/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
-	gas_tank.toxins = 29.1
-	gas_tank.update_values()
+	gas_tank.adjust_gas(GAS_PLASMA, 29.1)
 	update_icon()
-	return

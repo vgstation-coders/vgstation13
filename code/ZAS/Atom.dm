@@ -1,7 +1,7 @@
 /atom/movable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return (!density || !height || air_group)
 
-/turf/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+/turf/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group=0)
 	if(!target)
 		return 0
 
@@ -22,6 +22,16 @@
 
 		return 1
 
+//Convenience function for atoms to update turfs they occupy
+/atom/movable/proc/update_nearby_tiles(need_rebuild)
+	if(!air_master)
+		return 0
+
+	for(var/turf/simulated/turf in locs)
+		air_master.mark_for_update(turf)
+
+	return 1
+
 //Basically another way of calling Cross(null, other, 0, 0) and Cross(null, other, 1.5, 1).
 //Returns:
 // 0 - Not blocked
@@ -34,13 +44,14 @@
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
-	return !Cross(null, other, 0, 0) + 2*!Cross(null, other, 1.5, 1)
+	return (AIR_BLOCKED*!Cross(null, other, 0, 0))|(ZONE_BLOCKED*!Cross(null, other, 1.5, 1))
+
 
 /turf/c_airblock(turf/other)
 	#ifdef ZASDBG
 	ASSERT(isturf(other))
 	#endif
-	if(blocks_air)
+	if(blocks_air || other.blocks_air)
 		return BLOCKED
 
 	//Z-level handling code. Always block if there isn't an open space.

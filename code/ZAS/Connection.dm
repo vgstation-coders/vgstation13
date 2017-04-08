@@ -76,12 +76,14 @@ Class Procs:
 		edge.add_connection(src)
 
 /connection/proc/mark_direct()
-	state |= CONNECTION_DIRECT
-//	to_chat(world, "Marked direct.")
+	if(!direct())
+		state |= CONNECTION_DIRECT
+		edge.direct++
 
 /connection/proc/mark_indirect()
-	state &= ~CONNECTION_DIRECT
-//	to_chat(world, "Marked indirect.")
+	if(direct())
+		state &= ~CONNECTION_DIRECT
+		edge.direct--
 
 /connection/proc/mark_space()
 	state |= CONNECTION_SPACE
@@ -95,38 +97,30 @@ Class Procs:
 /connection/proc/erase()
 	edge.remove_connection(src)
 	state |= CONNECTION_INVALID
-//	to_chat(world, "Connection Erased: [state]")
 
 /connection/proc/update()
-//	to_chat(world, "Updated, \...")
 	if(!istype(A,/turf/simulated))
-//		to_chat(world, "Invalid A.")
 		erase()
 		return
 
 	var/block_status = air_master.air_blocked(A,B)
 	if(block_status & AIR_BLOCKED)
-//		to_chat(world, "Blocked connection.")
 		erase()
 		return
 	else if(block_status & ZONE_BLOCKED)
-		if(direct())
-			mark_indirect()
-		else
-			mark_direct()
+		mark_indirect()
+	else
+		mark_direct()
 
-	var/b_is_space = (!istype(B,/turf/simulated))
+	var/b_is_space = !istype(B,/turf/simulated)
 
 	if(state & CONNECTION_SPACE)
 		if(!b_is_space)
-//			to_chat(world, "Invalid B.")
 			erase()
 			return
 		if(A.zone != zoneA)
-//			to_chat(world, "Zone changed, \...")
 			if(!A.zone)
 				erase()
-//				to_chat(world, "erased.")
 				return
 			else
 				edge.remove_connection(src)
@@ -134,22 +128,18 @@ Class Procs:
 				edge.add_connection(src)
 				zoneA = A.zone
 
-//		to_chat(world, "valid.")
 		return
 
 	else if(b_is_space)
-//		to_chat(world, "Invalid B.")
 		erase()
 		return
 
 	if(A.zone == B.zone)
-//		to_chat(world, "A == B")
 		erase()
 		return
 
 	if(A.zone != zoneA || (zoneB && (B.zone != zoneB)))
 
-//		to_chat(world, "Zones changed, \...")
 		if(A.zone && B.zone)
 			edge.remove_connection(src)
 			edge = air_master.get_edge(A.zone, B.zone)
@@ -157,9 +147,5 @@ Class Procs:
 			zoneA = A.zone
 			zoneB = B.zone
 		else
-//			to_chat(world, "erased.")
 			erase()
 			return
-
-
-//	to_chat(world, "valid.")

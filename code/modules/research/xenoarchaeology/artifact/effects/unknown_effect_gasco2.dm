@@ -1,4 +1,3 @@
-
 /datum/artifact_effect/gasco2
 	effecttype = "gasco2"
 	var/max_pressure
@@ -18,10 +17,10 @@
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env)
-			env.carbon_dioxide += rand(2,15)
+			env.adjust_gas(GAS_CARBON, rand(2,15))
 
 /datum/artifact_effect/gasco2/DoEffectAura()
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
-		if(env && env.total_moles < max_pressure)
-			env.carbon_dioxide += pick(0, 0, 0.1, rand())
+		if(env && env.return_pressure() < max_pressure)
+			env.adjust_gas(GAS_CARBON, pick(0, 0, 0.1, rand()))
