@@ -1095,7 +1095,7 @@ var/global/list/damage_icon_parts = list()
 		if(I.color)
 			O.color = I.color
 		else
-			O.color = "#ffffff"
+			O.color = null // this prevents a bug where all inhands would be colored after holding a colored item
 		O.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
 		O.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
 		O.layer = O.layer
