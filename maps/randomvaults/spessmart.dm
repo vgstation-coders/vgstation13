@@ -346,8 +346,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	if(icon == 'icons/mob/robots.dmi')
 		overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-[src.icon_state]"))
 
-/mob/living/simple_animal/robot/Die()
-	..()
+/mob/living/simple_animal/robot/death(var/gibbed=FALSE)
+	..(TRUE)
 
 	robogibs(get_turf(src))
 	qdel(src)
@@ -446,7 +446,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/loaded_cash = 0
 	var/help_cd = 0
 
-/mob/living/simple_animal/robot/robot_cashier/Die()
+/mob/living/simple_animal/robot/robot_cashier/death(var/gibbed=FALSE)
 	var/area/vault/supermarket/shop/A = get_area(src)
 	if(istype(A))
 		A.on_robot_kill()
@@ -662,8 +662,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Die()
-	..()
+/mob/living/simple_animal/hostile/spessmart_guardian/death(var/gibbed=FALSE)
+	..(TRUE)
 
 	robogibs(get_turf(src))
 	qdel(src)
