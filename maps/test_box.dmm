@@ -1,6 +1,6 @@
 "aaa" = (/turf/space,/area)
 "aab" = (/obj/effect/landmark/dungeon_area,/turf/space,/area)
-"aac" = (/obj/effect/landmark{name = "carpspawn"},/turf/space,/area)
+"aac" = (/obj/effect/landmark/carpspawn,/turf/space,/area)
 "aad" = (/obj/docking_port/destination/syndicate/north,/turf/space,/area)
 "aae" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area)
 "aaf" = (/obj/structure/lattice,/obj/structure/grille,/turf/space,/area)
@@ -7933,7 +7933,7 @@
 "cWG" = (/obj/docking_port/destination/syndicate/southeast,/turf/space,/area)
 "cWH" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating,/area)
 "cWI" = (/turf/unsimulated/wall,/area/start)
-"cWJ" = (/obj/effect/landmark/start,/turf/unsimulated/floor,/area/start)
+"cWJ" = (/obj/effect/landmark/newplayer_start,/turf/unsimulated/floor,/area/start)
 "cWK" = (/turf/unsimulated/wall/splashscreen,/area/start)
 
 (1,1,1) = {"

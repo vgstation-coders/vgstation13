@@ -66,7 +66,7 @@
 "bn" = (/obj/machinery/gateway{dir = 6},/turf/simulated/floor{icon_state = "dark-markings"},/area/gateway)
 "bo" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/terminal{dir = 1},/turf/simulated/floor,/area/crew_quarters/bar)
 "bp" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/crew_quarters/bar)
-"bq" = (/obj/effect/landmark/start,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
+"bq" = (/obj/effect/landmark/newplayer_start,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "br" = (/obj/machinery/suit_storage_unit/engie,/turf/simulated/floor,/area/crew_quarters/bar)
 "bs" = (/obj/machinery/telepad,/turf/simulated/floor,/area/crew_quarters/bar)
 "bt" = (/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "dark"},/area/gateway)

@@ -22,7 +22,7 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 	anchored = 1
 	w_type=NOT_RECYCLABLE
 
-	var/destroy_on_creation = TRUE
+	var/destroy_on_creation = FALSE
 
 /obj/effect/landmark/New()
 	. = ..()
@@ -60,56 +60,74 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 /obj/effect/landmark/bluespacerift
 	name = "bluespace rift"
 	desc = "In the event of a supermatter cascade, the portal to safety spawns here."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/endgame_exit
 	name = "endgame exit"
 	desc = "In the event of a supermatter cascade, the portal to safety teleports you here."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/xeno_spawn
 	name = "xeno spawn"
 	desc = "Random events may spawn xenomorphs here."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/latejoin
 	name = "latejoin"
 	desc = "Late arrivals spawn here."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/assistant_latejoin
 	name = "assistant latejoin"
 	desc = "Late arrivals that are also assistants spawn here."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/wizardstart
 	name = "wizard spawn"
 	desc = "Wizards spawn here"
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/newplayer_start
 	name = "newplayer start"
 	desc = "The title screen that is shown to players when they connect to the server."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/prisonwarp
 	name = "prisonwarp"
 	desc = "A prison in central command used by admins."
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/blobstart
 	name = "blobstart"
 	desc = "A spawn location for blobs and some other minor events."
 
+
 /obj/effect/landmark/holdingfacility
 	name = "holding facility"
 	desc = "Captured people go here." //Unused currently
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/thunderdome/green
 	name = "thunderdome 1"
 	desc = "Team Green"
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/thunderdome/red
 	name = "thunderdome 2"
 	desc = "Team Red"
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/thunderdome/admin
 	name = "thunderdome admin area"
+	destroy_on_creation = TRUE
 
 /obj/effect/landmark/thunderdome/observe
 	name = "thunderdome spectators"
+	destroy_on_creation = TRUE
+
+/obj/effect/landmark/carpspawn
+	name = "carp spawn"
+	desc = "Random event spawns carps here."
 
 /obj/effect/narration
 	name = "narrator"
