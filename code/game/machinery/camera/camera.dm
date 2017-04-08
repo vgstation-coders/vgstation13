@@ -116,6 +116,10 @@ var/list/camera_names=list()
 	if(adv_camera)
 		for(var/key in adv_camera.camerasbyzlevel)
 			adv_camera.camerasbyzlevel[key] -= src
+	motionTargets = null
+	if(area_motion.motioncamera == src)
+		area_motion.motioncamera = null
+	area_motion = null
 	..()
 
 /obj/machinery/camera/emp_act(severity)
