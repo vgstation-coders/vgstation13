@@ -14,7 +14,9 @@
 	for(var/obj/effect/landmark/C in landmarks_list)
 		if(C.name == "carpspawn")
 			if(prob(90)) //Give it a sliver of randomness
-				spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(C.loc))
+				var/mob/living/simple_animal/hostile/carp/CARP = new(C.loc)
+				CARP.migration_wave = src
+				spawned_carp.Add(CARP)
 
 /datum/event/carp_migration/end()
 	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)

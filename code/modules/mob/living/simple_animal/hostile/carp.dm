@@ -46,6 +46,9 @@
 
 	faction = "carp"
 
+	//this is actually dumb and should be fixed
+	var/datum/event/carp_migration/migration_wave = null
+
 	var/pheromones_act = PHEROMONES_NEUTRAL //This variable determines how carps act to pheromones. Big carps won't attack the source,
 	//baby carps follow the source and holocarps don't give a shit
 	held_items = list()
@@ -55,6 +58,12 @@
 	gender = pick(MALE, FEMALE)
 	if(gender==FEMALE)
 		child_amount = rand(4,6) //Mother explodes on death, so letting it leave 5 child carps (that can't breed) behind is fair
+
+/mob/living/simple_animal/hostile/carp/Destroy()
+	if(migration_wave)
+		migration_wave.spawned_carp -= src
+		migration_wave = null
+	..()
 
 /mob/living/simple_animal/hostile/carp/examine(mob/user)
 	..()
