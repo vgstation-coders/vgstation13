@@ -375,10 +375,10 @@
 			/obj/item/weapon/gun/energy/laser,\
 			/obj/item/weapon/gun/energy/xray,\
 			/obj/item/weapon/gun/energy/laser/captain,\
-			/obj/item/weapon/gun/energy/temperature,\
-			/obj/item/weapon/gun/energy/plasma,\
+			/obj/item/weapon/gun/energy/ionrifle,\
+			/obj/item/weapon/gun/energy/plasma/pistol,\
 			/obj/item/weapon/gun/energy/floragun,\
-			/obj/item/weapon/gun/energy/bison,\
+			/obj/item/weapon/gun/energy/laser/rainbow,\
 			/obj/item/weapon/gun/energy/taser)
 			if(spawn_type)
 				var/obj/item/weapon/gun/energy/new_gun = new spawn_type(src.loc)
@@ -390,7 +390,7 @@
 				new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 				if(prob(10)) // 10% chance to be a smart gun
 					new_item.can_take_pai = TRUE
-					additional_desc += "There seems to be some sort of slot in the handle."
+					additional_desc += " There seems to be some sort of slot in the handle."
 				new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
 
 				//5% chance to explode when first fired
@@ -418,7 +418,7 @@
 			additional_desc = "Looks like an antique projectile weapon, you're not sure if it will fire or not."
 			if(prob(10)) // 10% chance to be a smart gun
 				new_item.can_take_pai = TRUE
-				additional_desc += "There seems to be some sort of slot in the handle."
+				additional_desc += " There seems to be some sort of slot in the handle."
 
 			//let's get some ammunition in this gun : weighted to pick available ammo
 			new_gun.caliber = pick(50;list("357" = 1),
