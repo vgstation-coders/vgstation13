@@ -1498,7 +1498,7 @@
 			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai")
 			return
 
-		var/turf/prison_cell = pick_landmark(prisonwarp, null)
+		var/turf/prison_cell = pick_landmark(/obj/effect/landmark/prisonwarp, null)
 
 		if(!prison_cell)
 			return
@@ -1737,7 +1737,7 @@
 			observer.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(observer), slot_shoes)
 		M.Paralyse(5)
 		sleep(5)
-		M.forceMove(pick_landmark(/obj/effect/landmark/thunderdmoe/observe))
+		M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/observe))
 		spawn(50)
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome.</span>")
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Observer.)")
