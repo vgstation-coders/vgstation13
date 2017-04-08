@@ -46,7 +46,7 @@
 			for(var/mob/M in player_list)
 				if(!istype(M,/mob/new_player) && M.client)
 					M << sound('sound/AI/granomalies.ogg')
-			var/turf/T = pick(blobstart)
+			var/turf/T = pick_landmark(/obj/effect/landmark/blobstart)
 			var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 			spawn(rand(50, 300))
 				del(bh)

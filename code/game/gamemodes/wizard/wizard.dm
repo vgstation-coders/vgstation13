@@ -55,6 +55,8 @@
 	wizard.assigned_role = "MODE" //So they aren't chosen for other jobs.
 	wizard.special_role = "Wizard"
 	wizard.original = wizard.current
+
+	var/list/wizardstart = get_landmarks(/obj/effect/landmark/wizardstart)
 	if(wizardstart.len == 0)
 		to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")

@@ -13,7 +13,7 @@
 				if(user.z != src.z)
 					return
 				user.loc.loc.Exited(user)
-				user.forceMove(pick(latejoin))
+				user.forceMove(pick_landmark(/obj/effect/landmark/latejoin))
 			if("No")
 				return
 

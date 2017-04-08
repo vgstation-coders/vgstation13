@@ -1,10 +1,19 @@
 var/list/landmarks_list = list() //list of all landmarks
-var/list/landmarks_by_type = list() //list of landmark types associated with object lists
+var/list/landmarks_by_type = list() //list of landmark types associated with turf lists
 
 //Returns a list of all landmark turfs or an empty list
-/proc/get_landmarks(input_type)
+/proc/get_landmarks(input_type, readonly = TRUE)
 	var/list/L = landmarks_by_type[input_type]
-	return L ? L : list()
+	return L ? (readonly ? L : L.Copy()) : list()
+
+/proc/pick_landmark(input_type, backup_type = /obj/effect/landmark/latejoin)
+	var/list/L = get_landmarks(input_type)
+	if(!L.len && (backup_type != input_type))
+		L = get_landmarks(backup_type)
+	if(!L.len)
+		return null
+
+	return pick(L)
 
 /obj/effect/landmark
 	name = "landmark"
@@ -26,53 +35,10 @@ var/list/landmarks_by_type = list() //list of landmark types associated with obj
 	var/list/L = landmarks_by_type[src.type]
 	L.Add(loc)
 
-	switch(name)			//some of these are probably obsolete
-		if("start")
-			newplayer_start += loc
-			qdel(src)
-
-		if("wizard")
-			wizardstart += loc
-			qdel(src)
-
-		if("JoinLate")
-			latejoin += loc
-			qdel(src)
-		if("AssetJoinLate")
-			assistant_latejoin += loc
-			qdel(src)
-
-		//prisoners
-		if("prisonwarp")
-			prisonwarp += loc
-			qdel(src)
-	//	if("mazewarp")
-	//		mazewarp += loc
-		if("Holding Facility")
-			holdingfacility += loc
-		if("tdome1")
-			tdome1	+= loc
-		if("tdome2")
-			tdome2 += loc
-		if("tdomeadmin")
-			tdomeadmin	+= loc
-		if("tdomeobserve")
-			tdomeobserve += loc
-		//not prisoners
-		if("prisonsecuritywarp")
-			prisonsecuritywarp += loc
-			qdel(src)
-
-		if("blobstart")
-			blobstart += loc
-			qdel(src)
-
-		if("xeno_spawn")
-			xeno_spawn += loc
-			qdel(src)
-
 	landmarks_list += src
-	return 1
+
+	if(destroy_on_creation)
+		qdel(src)
 
 /obj/effect/landmark/Destroy()
 	landmarks_list -= src
@@ -98,6 +64,52 @@ var/list/landmarks_by_type = list() //list of landmark types associated with obj
 /obj/effect/landmark/endgame_exit
 	name = "endgame exit"
 	desc = "In the event of a supermatter cascade, the portal to safety teleports you here."
+
+/obj/effect/landmark/xeno_spawn
+	name = "xeno spawn"
+	desc = "Random events may spawn xenomorphs here."
+
+/obj/effect/landmark/latejoin
+	name = "latejoin"
+	desc = "Late arrivals spawn here."
+
+/obj/effect/landmark/assistant_latejoin
+	name = "assistant latejoin"
+	desc = "Late arrivals that are also assistants spawn here."
+
+/obj/effect/landmark/wizardstart
+	name = "wizard spawn"
+	desc = "Wizards spawn here"
+
+/obj/effect/landmark/newplayer_start
+	name = "newplayer start"
+	desc = "The title screen that is shown to players when they connect to the server."
+
+/obj/effect/landmark/prisonwarp
+	name = "prisonwarp"
+	desc = "A prison in central command used by admins."
+
+/obj/effect/landmark/blobstart
+	name = "blobstart"
+	desc = "A spawn location for blobs and some other minor events."
+
+/obj/effect/landmark/holdingfacility
+	name = "holding facility"
+	desc = "Captured people go here." //Unused currently
+
+/obj/effect/landmark/thunderdome/green
+	name = "thunderdome 1"
+	desc = "Team Green"
+
+/obj/effect/landmark/thunderdome/red
+	name = "thunderdome 2"
+	desc = "Team Red"
+
+/obj/effect/landmark/thunderdome/admin
+	name = "thunderdome admin area"
+
+/obj/effect/landmark/thunderdome/observe
+	name = "thunderdome spectators"
 
 /obj/effect/narration
 	name = "narrator"

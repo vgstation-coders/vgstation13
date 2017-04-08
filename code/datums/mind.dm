@@ -748,7 +748,7 @@
 					ticker.mode.update_wizard_icons_added(src)
 					log_admin("[key_name_admin(usr)] has wizard'ed [current].")
 			if("lair")
-				current.forceMove(pick(wizardstart))
+				current.forceMove(pick_landmark(/obj/effect/landmark/wizardstart))
 			if("dressup")
 				ticker.mode.equip_wizard(current)
 			if("name")
@@ -779,7 +779,7 @@
 					ticker.mode.update_wizard_icons_added(src)
 					log_admin("[key_name_admin(usr)] has apprentice'ed [current].")
 			if("lair")
-				current.forceMove(pick(wizardstart))
+				current.forceMove(pick_landmark(/obj/effect/landmark/wizardstart))
 			if("dressup")
 				ticker.mode.equip_wizard(current)
 			if("name")
@@ -1221,11 +1221,8 @@ proc/clear_memory(var/silent = 1)
 		assigned_role = "MODE"
 		//ticker.mode.learn_basic_spells(current)
 		ticker.mode.update_wizard_icons_added(src)
-		if(!wizardstart.len)
-			current.forceMove(pick(latejoin))
-			to_chat(current, "HOT INSERTION, GO GO GO")
-		else
-			current.forceMove(pick(wizardstart))
+
+		current.forceMove(pick_landmark(/obj/effect/landmark/wizardstart))
 
 		ticker.mode.equip_wizard(current)
 		for(var/obj/item/weapon/spellbook/S in current.contents)

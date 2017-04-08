@@ -361,7 +361,7 @@ client/proc/one_click_antag()
 		return
 
 	//First we spawn a dude.
-	var/mob/living/carbon/human/new_character = new(pick(latejoin))//The mob being spawned.
+	var/mob/living/carbon/human/new_character = new(pick_landmark(/obj/effect/landmark/latejoin))//The mob being spawned.
 
 	new_character.gender = pick(MALE,FEMALE)
 

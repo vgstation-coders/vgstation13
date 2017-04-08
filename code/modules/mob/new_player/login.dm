@@ -8,10 +8,7 @@
 		mind.active = 1
 		mind.current = src
 
-	if(length(newplayer_start))
-		loc = pick(newplayer_start)
-	else
-		loc = locate(1,1,1)
+	forceMove(pick_landmark(/obj/effect/landmark/newplayer_start))
 
 	change_sight(adding = SEE_TURFS)
 	player_list |= src

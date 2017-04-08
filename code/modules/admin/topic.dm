@@ -1498,7 +1498,7 @@
 			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai")
 			return
 
-		var/turf/prison_cell = pick(prisonwarp)
+		var/turf/prison_cell = pick_landmark(prisonwarp, null)
 
 		if(!prison_cell)
 			return
@@ -1671,11 +1671,11 @@
 			if("Green")
 				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Green)")
 				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Green)", 1)
-				M.forceMove(pick(tdome1))
+				M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/green))
 			if("Red")
 				log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Team Red)")
 				message_admins("[key_name_admin(usr)] has sent [key_name_admin(M)] to the thunderdome. (Team Red)", 1)
-				M.forceMove(pick(tdome2))
+				M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/red))
 
 		to_chat(M, "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
 		"The wheel of fate is turning!",\
@@ -1703,7 +1703,7 @@
 
 		M.Paralyse(5)
 		sleep(5)
-		M.forceMove(pick(tdomeadmin))
+		M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/admin))
 		spawn(50)
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome.</span>")
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Admin.)")
@@ -1737,7 +1737,7 @@
 			observer.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(observer), slot_shoes)
 		M.Paralyse(5)
 		sleep(5)
-		M.forceMove(pick(tdomeobserve))
+		M.forceMove(pick_landmark(/obj/effect/landmark/thunderdmoe/observe))
 		spawn(50)
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome.</span>")
 		log_admin("[key_name(usr)] has sent [key_name(M)] to the thunderdome. (Observer.)")
@@ -2828,7 +2828,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","GA")
 				command_alert(/datum/command_alert/wormholes)
-				var/turf/T = pick(blobstart)
+				var/turf/T = pick_landmark(/obj/effect/landmark/blobstart)
 				var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 				spawn(rand(100, 600))
 					qdel(bh)

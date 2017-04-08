@@ -696,7 +696,8 @@
 				AM.shuttle_rotate(rotate)
 
 		//Move landmarks - for moving the arrivals shuttle
-		for(var/list/L in moved_landmarks) //moved_landmarks: code/game/area/areas.dm, 527 (above the move_contents_to proc)
+		for(var/landmark_type in moved_landmarks) //moved_landmarks: code/game/area/areas.dm, 527 (above the move_contents_to proc)
+			var/list/L = get_landmarks(landmark_type)
 			if(old_turf in L)
 				L -= old_turf
 				L += new_turf
