@@ -1,5 +1,5 @@
 /mob/living/silicon/robot
-	name = "Cyborg"
+	name = "Cyborg"are
 	real_name = "Cyborg"
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "robot"
@@ -185,21 +185,31 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
 /mob/living/silicon/robot/Destroy()
+	qdel(module)
 	qdel(rbPDA)
 	qdel(station_holomap)
 	qdel(cell)
-	qdel(module)
 	qdel(radio)
 	qdel(camera)
 
+	for(var/datum/robot_component/C in components)
+		qdel(C)
+	components = null
+
+	module_active = null
+	module_state_1 = null
+	module_state_2 = null
+	module_state_3 = null
+
+	module = null
 	rbPDA = null
 	station_holomap = null
 	cell = null
-	module = null
 	radio = null
 	camera = null
 
 	wires = null
+	connected_ai = null
 
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.

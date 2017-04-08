@@ -109,6 +109,11 @@
 	onclose(user, "radio")
 	return
 
+/obj/item/device/radio/borg/Destroy()
+	qdel(keyslot)
+	keyslot = null
+	..()
+
 /obj/item/device/radio/off
 	listening = 0
 
