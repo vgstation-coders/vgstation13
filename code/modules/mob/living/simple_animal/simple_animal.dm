@@ -476,7 +476,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		user.delayNextAttack(8)
 		if(O.force)
-			user.do_attack_animation(src)
+			user.do_attack_animation(src, O)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
