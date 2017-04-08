@@ -1391,11 +1391,7 @@ obj/item/weapon/organ/r_leg/New(loc, mob/living/carbon/human/H)
 /obj/item/weapon/organ/head/ashtype()
 	return /obj/item/weapon/skull
 
-obj/item/weapon/organ/head/Destroy()
-	if(brainmob)
-		qdel(brainmob)
-		brainmob = null
-	..()
+
 
 //obj/item/weapon/organ/head/with_teeth starts with 32 human teeth!
 /obj/item/weapon/organ/head/with_teeth/New()
@@ -1545,6 +1541,8 @@ obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 obj/item/weapon/organ/head/Destroy()
 	if(brainmob)
 		brainmob.ghostize()
+		qdel(brainmob)
+		brainmob = null
 	if(origin_body)
 		origin_body.decapitated = null
 		origin_body = null

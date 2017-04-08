@@ -32,6 +32,10 @@
 			qdel(B)
 			B = null
 
+	if(on_resist)
+		qdel(on_resist)
+		on_resist = null
+
 	. = ..()
 
 /mob/living/examine(mob/user) //Show the mob's size and whether it's been butchered
@@ -790,16 +794,11 @@ Thanks.
 				hook.override_target_X--
 
 /mob/living
-    var/event/on_resist
+	var/event/on_resist
 
 /mob/living/New()
-    . = ..()
-    on_resist = new(owner = src)
-
-/mob/living/Destroy()
-    . = ..()
-    qdel(on_resist)
-    on_resist = null
+	. = ..()
+	on_resist = new(owner = src)
 
 /mob/living/verb/resist()
 	set name = "Resist"

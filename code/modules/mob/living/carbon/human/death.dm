@@ -64,7 +64,12 @@
 	for(var/obj/abstract/Overlays/O in obj_overlays)
 		returnToPool(O)
 
+	for(var/datum/organ/O in organs)
+		organs -= O
+		qdel(O)
+
 	obj_overlays = null
+	organs = null
 
 /mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)
