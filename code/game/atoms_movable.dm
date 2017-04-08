@@ -848,6 +848,9 @@
 /atom/movable/proc/do_attack_animation(atom/target, atom/tool)
 	set waitfor = 0
 
+	if(!tool)
+		tool = src
+
 	if(target == src)
 		return
 	var/horizontal = 0
