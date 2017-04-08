@@ -543,7 +543,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				//right now we don't support blood mixing or something similar at all.
 					if(R.data["virus2"] && data["virus2"])
 						R.data["virus2"] |= virus_copylist(data["virus2"])
-				else if (R.data)
+				else if (!isnull(data))
 					R.data = data //just in case someone adds a new reagent with a data var
 
 			handle_reactions()
@@ -564,7 +564,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.data["virus2"] |= virus_copylist(data["virus2"])
 				if(data["blood_colour"])
 					R.color = data["blood_colour"]
-			else if (R.data)
+			else if (!isnull(data))
 				R.data = data
 
 		update_total()
