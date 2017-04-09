@@ -6,7 +6,6 @@
 	maxHealth = 300
 	health = 300
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
@@ -60,12 +59,10 @@
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
 	var/viewalerts = 0
 	var/modtype = "Default"
-	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
 	var/datum/effect/effect/system/spark_spread/spark_system //So they can initialize sparks whenever/N
 
 	var/killswitch = 0
 	var/killswitch_time = 60
-	var/weapon_lock = 0
 	var/weaponlock_time = 120
 	var/lawupdate = 1 //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
@@ -167,17 +164,6 @@
 		rbPDA = new/obj/item/device/pda/ai(src)
 	rbPDA.set_name_and_job(custom_name,braintype)
 
-/mob/living/silicon/robot/debug_droideka
-	New()
-		..()
-		module = new /obj/item/weapon/robot_module/combat(src)
-		radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
-		base_icon = icon_state
-		icon_state = "droid-combat"
-		overlays -= image(icon = icon, icon_state = "eyes")
-		base_icon = icon_state
-		updateicon()
-
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
 /mob/living/silicon/robot/Destroy()
@@ -188,7 +174,6 @@
 	qdel(radio)
 	qdel(camera)
 	qdel(spark_system)
-	qdel(ion_trail)
 
 	for(var/datum/robot_component/C in components)
 		qdel(C)
@@ -206,7 +191,6 @@
 	radio = null
 	camera = null
 	spark_system = null
-	ion_trail = null
 
 	wires = null
 	connected_ai = null
@@ -1158,10 +1142,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return

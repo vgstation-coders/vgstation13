@@ -198,7 +198,7 @@
 				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
 			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
-		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15t
+		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)

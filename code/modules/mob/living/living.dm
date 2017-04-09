@@ -2,6 +2,8 @@
 
 /mob/living/New()
 	. = ..()
+	on_resist = new(owner = src)
+
 	generate_static_overlay()
 	if(istype(static_overlays,/list) && static_overlays.len)
 		for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
@@ -794,10 +796,6 @@ Thanks.
 			if(direct & WEST)
 				hook.override_starting_X--
 				hook.override_target_X--
-
-/mob/living/New()
-	. = ..()
-	on_resist = new(owner = src)
 
 /mob/living/verb/resist()
 	set name = "Resist"

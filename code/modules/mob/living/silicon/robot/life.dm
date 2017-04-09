@@ -20,7 +20,6 @@
 	if (src.stat != DEAD) //still using power
 		use_power()
 		process_killswitch()
-		process_locks()
 		if(module)
 			module.recharge_consumable(src)
 	update_canmove()
@@ -158,11 +157,11 @@
 		src.see_in_dark = 8
 		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	else
-		if (M_XRAY in mutations || src.sight_mode & BORGXRAY)
+		if (M_XRAY in mutations)
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			src.see_in_dark = 8
 			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-		if ((src.sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
+		if (sensor_mode == THERMAL_VISION)
 			change_sight(adding = SEE_MOBS)
 			src.see_in_dark = 4
 			src.see_invisible = SEE_INVISIBLE_MINIMUM
@@ -175,7 +174,7 @@
 				 					0.33,0.33,0.33,0,
 				 					0,0,0,1,
 				 					-0.2,0,-0.2,0)
-		if ((src.sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
+		if (sensor_mode == MESON_VISION)
 			change_sight(adding = SEE_TURFS)
 			src.see_in_dark = 8
 			see_invisible = SEE_INVISIBLE_MINIMUM
@@ -311,16 +310,6 @@
 			killswitch = 0
 			spawn(5)
 				gib()
-
-/mob/living/silicon/robot/proc/process_locks()
-	if(weapon_lock)
-		uneq_all()
-		weaponlock_time --
-		if(weaponlock_time <= 0)
-			if(src.client)
-				to_chat(src, "<span class='warning'><B>Weapon Lock Timed Out!</span>")
-			weapon_lock = 0
-			weaponlock_time = 120
 
 //Robots on fire
 /mob/living/silicon/robot/handle_fire()
