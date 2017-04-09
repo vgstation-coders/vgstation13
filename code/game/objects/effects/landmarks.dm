@@ -2,9 +2,13 @@ var/list/landmarks_list = list() //list of all landmarks
 var/list/landmarks_by_type = list() //list of landmark types associated with turf lists
 
 //Returns a list of all landmark turfs or an empty list
+//If readonly is false, it returns a COPY of the list, which can be changed without affecting the original list
 /proc/get_landmarks(input_type, readonly = TRUE)
-	var/list/L = landmarks_by_type[input_type]
-	return L ? (readonly ? L : L.Copy()) : list()
+	var/list/L = landmarks_by_type[input_type] || list()
+	if(!readonly)
+		L = L.Copy()
+
+	return L
 
 /proc/pick_landmark(input_type, backup_type = /obj/effect/landmark/latejoin)
 	var/list/L = get_landmarks(input_type)
@@ -42,6 +46,12 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 
 /obj/effect/landmark/Destroy()
 	landmarks_list -= src
+
+	if(!destroy_on_creation)
+		var/list/L = landmarks_by_type[src.type]
+		if(L)
+			L.Remove(loc)
+
 	..()
 
 /obj/effect/landmark/start
@@ -128,6 +138,38 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 /obj/effect/landmark/carpspawn
 	name = "carp spawn"
 	desc = "Random event spawns carps here."
+
+/obj/effect/landmark/nukeops/nuke_spawn
+	name = "nuke spawn"
+	desc = "Nuke spawns here."
+
+/obj/effect/landmark/nukeops/gear_closet
+	name = "gear closet"
+	desc = "Gear closet spawns here."
+
+/obj/effect/landmark/nukeops/uplink
+	name = "uplink"
+	desc = "Uplink spawns here"
+
+/obj/effect/landmark/nukeops/bomb
+	name = "bomb"
+	desc = "A bomb spawns here."
+
+/obj/effect/landmark/nukeops/syndicate_spawn
+	name = "syndicate spawn"
+	desc = "Operatives spawn here."
+
+/obj/effect/landmark/syndicate_commando/bomb
+	name = "Syndicate-Commando-Bomb"
+
+/obj/effect/landmark/syndicate_commando/commando_spawn
+	name = "Syndicate-Commando"
+
+/obj/effect/landmark/commando/commando_spawn
+	name = "Commando"
+
+/obj/effect/landmark/ert/ert_spawn
+	name = "ERT"
 
 /obj/effect/narration
 	name = "narrator"

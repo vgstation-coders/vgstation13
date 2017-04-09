@@ -6,7 +6,7 @@
 	mission = "Clean up the Station of all enemies of Nanotrasen. Avoid damage to Nanotrasen assets, unless you judge it necessary."
 	team_size = 6
 	min_size_for_leader = 4//set to 0 so there's always a designated team leader or to -1 so there is no leader.
-	spawns_name = "Commando"
+	spawns_type = /obj/effect/landmark/commando/commando_spawn
 	can_customize = FALSE
 	logo = "death-logo"
 

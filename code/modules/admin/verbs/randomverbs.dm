@@ -528,9 +528,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			//ticker.mode.learn_basic_spells(new_character)
 			ticker.mode.equip_wizard(new_character)
 		if("Syndicate")
-			var/obj/effect/landmark/synd_spawn = locate("landmark*Syndicate-Spawn")
+			var/turf/synd_spawn = pick_landmark(/obj/effect/landmark/nukeops/syndicate_spawn)
 			if(synd_spawn)
-				new_character.forceMove(get_turf(synd_spawn))
+				new_character.forceMove(synd_spawn)
 			call(/datum/game_mode/proc/equip_syndicate)(new_character)
 		if("Death Commando")//Leaves them at late-join spawn.
 			new_character.equip_death_commando()

@@ -247,30 +247,25 @@ client/proc/one_click_antag()
 				var/mob/living/carbon/human/new_character=makeBody(theghost)
 				new_character.mind.make_Nuke()
 
-		var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
-		var/obj/effect/landmark/closet_spawn = locate("landmark*Syndicate-Uplink")
+		var/turf/nuke_spawn = pick_landmark(/obj/effect/landmark/nukeops/nuke_spawn)
+		var/turf/closet_spawn = pick_landmark(/obj/effect/landmark/nukeops/uplink)
 
 		var/nuke_code = "[rand(10000, 99999)]"
 
 		if(nuke_spawn)
-			var/obj/item/weapon/paper/P = new
+			var/obj/item/weapon/paper/P = new(nuke_spawn)
 			P.info = "Sadly, the Syndicate could not get you a nuclear bomb.  We have, however, acquired the arming code for the station's onboard nuke.  The nuclear authorization code is: <b>[nuke_code]</b>"
 			P.name = "nuclear bomb code and instructions"
-			P.forceMove(nuke_spawn.loc)
 
 		if(closet_spawn)
 			new /obj/structure/closet/syndicate/nuclear(closet_spawn.loc)
 
-		for (var/obj/effect/landmark/A in /area/syndicate_station/start)//Because that's the only place it can BE -Sieve
-			if (A.name == "Syndicate-Gear-Closet")
-				new /obj/structure/closet/syndicate/personal(A.loc)
-				del(A)
-				continue
-
-			if (A.name == "Syndicate-Bomb")
-				new /obj/effect/spawner/newbomb/timer/syndicate(A.loc)
-				del(A)
-				continue
+		for(var/obj/effect/landmark/nukeops/bomb/B in landmarks_list)
+			new /obj/effect/spawner/newbomb/timer/syndicate(get_turf(B))
+			qdel(B)
+		for(var/obj/effect/landmark/nukeops/gear_closet/G in landmarks_list)
+			new /obj/structure/closet/syndicate/personal(get_turf(G))
+			qdel(G)
 
 		for(var/datum/mind/synd_mind in ticker.mode.syndicates)
 			if(synd_mind.current)
@@ -349,9 +344,8 @@ client/proc/one_click_antag()
 		if(numagents >= 6)
 			return 0
 
-		for (var/obj/effect/landmark/L in /area/shuttle/syndicate_elite)
-			if (L.name == "Syndicate-Commando-Bomb")
-				new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
+		for(var/obj/effect/landmark/syndicate_commando/bomb/L in landmarks_list)
+			new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
 
 	return 1
 

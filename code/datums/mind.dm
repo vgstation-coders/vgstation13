@@ -861,7 +861,7 @@
 					ticker.mode.greet_syndicate(src)
 					log_admin("[key_name_admin(usr)] has nuke op'ed [current].")
 			if("lair")
-				current.forceMove(get_turf(locate("landmark*Syndicate-Spawn")))
+				current.forceMove(pick_landmark(/obj/effect/landmark/nukeops/syndicate_spawn))
 			if("dressup")
 				var/mob/living/carbon/human/H = current
 				qdel(H.belt)
@@ -1191,7 +1191,7 @@ proc/clear_memory(var/silent = 1)
 		ticker.mode.forge_syndicate_objectives(src)
 		ticker.mode.greet_syndicate(src)
 
-		current.forceMove(get_turf(locate("landmark*Syndicate-Spawn")))
+		current.forceMove(pick_landmark(/obj/effect/landmark/nukeops/syndicate_spawn))
 
 		var/mob/living/carbon/human/H = current
 		qdel(H.belt)

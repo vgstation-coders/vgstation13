@@ -6,15 +6,14 @@
 	mission = "Purify the station."
 	team_size = 6
 	min_size_for_leader = -1//set to 0 so there's always a designated team leader or to -1 so there is no leader.
-	spawns_name = "Syndicate-Commando"
+	spawns_type = /obj/effect/landmark/commando/commando_spawn
 	can_customize = FALSE
 	logo = "synd-logo"
 
 
 /datum/striketeam/syndicate/extras()
-	for (var/obj/effect/landmark/L in landmarks_list)
-		if (L.name == "Syndicate-Commando-Bomb")
-			new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
+	for(var/obj/effect/landmark/syndicate_commando/bomb/L in landmarks_list)
+		new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
 
 /datum/striketeam/syndicate/create_commando(obj/spawn_location, syndicate_leader_selected = 0)
 	var/mob/living/carbon/human/new_syndicate_commando = new(spawn_location.loc)
