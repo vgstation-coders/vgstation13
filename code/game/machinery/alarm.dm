@@ -523,16 +523,16 @@
 	var/oxygen_percent = round(environment.gas[GAS_OXYGEN] / total * 100, 2)
 
 	current_settings = TLV["nitrogen"]
-	var/nitrogen_dangerlevel = get_danger_level(environment.gas[GAS_OXYGEN]*partial_pressure, current_settings)
-	var/nitrogen_percent = round(environment.gas[GAS_OXYGEN] / total * 100, 2)
+	var/nitrogen_dangerlevel = get_danger_level(environment.gas[GAS_NITROGEN]*partial_pressure, current_settings)
+	var/nitrogen_percent = round(environment.gas[GAS_NITROGEN] / total * 100, 2)
 
 	current_settings = TLV["carbon_dioxide"]
-	var/co2_dangerlevel = get_danger_level(environment.gas[GAS_OXYGEN]*partial_pressure, current_settings)
-	var/co2_percent = round(environment.gas[GAS_OXYGEN] / total * 100, 2)
+	var/co2_dangerlevel = get_danger_level(environment.gas[GAS_CARBON]*partial_pressure, current_settings)
+	var/co2_percent = round(environment.gas[GAS_CARBON] / total * 100, 2)
 
 	current_settings = TLV["plasma"]
-	var/plasma_dangerlevel = get_danger_level(environment.gas[GAS_OXYGEN]*partial_pressure, current_settings)
-	var/plasma_percent = round(environment.gas[GAS_OXYGEN] / total * 100, 2)
+	var/plasma_dangerlevel = get_danger_level(environment.gas[GAS_PLASMA]*partial_pressure, current_settings)
+	var/plasma_percent = round(environment.gas[GAS_PLASMA] / total * 100, 2)
 
 	current_settings = TLV["n2o"]
 	var/n2o_dangerlevel = get_danger_level(environment.gas[GAS_SLEEPING]*partial_pressure, current_settings)
