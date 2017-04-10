@@ -496,6 +496,17 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 
+/obj/machinery/cooking/deepfryer/confectionator/new()
+	..()
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/confectionator,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/console_screen,\
+		/obj/item/weapon/stock_parts/matter_bin\
+	)
+
+	RefreshParts()
+
 /obj/machinery/cooking/deepfryer/confectionator/validateIngredient(var/obj/item/I, var/force_cook)
 	if(I.w_class < W_CLASS_LARGE)
 		. = "valid"
