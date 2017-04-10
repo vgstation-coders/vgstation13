@@ -1,4 +1,4 @@
-fco
+
 //**************************************************************
 //
 // Cooking Machinery
@@ -483,7 +483,7 @@ var/global/ingredientLimit = 10
 
 // but with sugar
 
-#define confectionator_MINSUGAR 50
+#define CONFECTIONATOR_MINSUGAR 50
 
 /obj/machinery/cooking/deepfryer/confectionator
 	name = "confectionator"
