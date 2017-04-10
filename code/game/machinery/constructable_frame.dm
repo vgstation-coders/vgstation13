@@ -1264,5 +1264,6 @@ obj/item/weapon/circuitboard/rdserver
 /obj/item/weapon/circuitboard/confectionator
 
 	name = "Circuit Board (Confectionator)"
-	desc = "A circuit board used to run a kitchen appliance"
+	desc = "A circuit board used to run a kitchen appliance."
+	board_type = MACHINE
 	build_path = "/obj/machinery/cooking/deepfryer/confectionator"

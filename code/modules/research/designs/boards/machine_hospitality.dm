@@ -59,7 +59,7 @@
 	build_path = /obj/item/weapon/circuitboard/egg_incubator
 
 /datum/design/confectionator
-	name = "Circuit Design (Confectionator"
+	name = "Circuit Design (Confectionator)"
 	desc = "Allows for the construction of circuit boards used to build a confectionator"
 	id = "confectionator"
 	req_tech = list(Tc_BIOTECH = 2)

@@ -495,7 +495,7 @@ var/global/ingredientLimit = 10
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
-
+	machine_flags = WRENCHMOVE | CROWDESTROY | SCREWTOGGLE | FIXED2WORK | SHUTTLEWRENCH
 /obj/machinery/cooking/deepfryer/confectionator/New()
 	..()
 	component_parts = newlist(\
