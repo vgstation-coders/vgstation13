@@ -496,7 +496,7 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 
-/obj/machinery/cooking/deepfryer/confectionator/new()
+/obj/machinery/cooking/deepfryer/confectionator/New()
 	..()
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/confectionator,\
