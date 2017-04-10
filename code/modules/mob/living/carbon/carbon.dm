@@ -89,7 +89,7 @@
 	if(!istype(M, /mob/living/carbon))
 		return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+		var/datum/organ/external/temp = M.get_active_hand_organ()
 
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
