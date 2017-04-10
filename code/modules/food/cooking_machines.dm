@@ -496,13 +496,14 @@ var/global/ingredientLimit = 10
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 	machine_flags = WRENCHMOVE | CROWDESTROY | SCREWTOGGLE | FIXED2WORK | SHUTTLEWRENCH
+
 /obj/machinery/cooking/deepfryer/confectionator/New()
-	..()
+	. = ..()
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/confectionator,\
+		/obj/item/weapon/stock_parts/micro_laser,\
 		/obj/item/weapon/stock_parts/scanning_module,\
-		/obj/item/weapon/stock_parts/console_screen,\
-		/obj/item/weapon/stock_parts/matter_bin\
+		/obj/item/weapon/stock_parts/console_screen\
 	)
 
 	RefreshParts()
@@ -519,7 +520,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/confectionator/initialize()
 	..()
-	flush_reagents()
+	reagents.clear_reagents()
 	reagents.add_reagent(SUGAR, 300)
 
 
