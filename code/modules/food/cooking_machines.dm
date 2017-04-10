@@ -528,13 +528,13 @@ var/global/ingredientLimit = 10
 	if(ingredient)
 		icon_state = "confectionator_on"
 		playsound(get_turf(src),'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
-	else if(reagents.total_volume < confectionator_MINSUGAR)
+	else if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
 		icon_state = "confectionator_empty"
 	else
 		icon_state = initial(icon_state)
 
 /obj/machinery/cooking/deepfryer/confectionator/takeIngredient(var/obj/item/I, mob/user, force_cook)
-	if(reagents.total_volume < confectionator_MINSUGAR)
+	if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
 		to_chat(user, "\The [src] doesn't have enough sugar.")
 		return
 	else
