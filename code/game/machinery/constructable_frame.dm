@@ -1260,3 +1260,9 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Isotope Ratio Spectrometer)"
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = "/obj/machinery/anomaly/isotope_ratio"
+
+/obj/item/weapon/circuitboard/confectionator
+
+	name = "Circuit Board (Confectionator)"
+	desc = "A circuit board used to run a kitchen appliance"
+	build_path = "/obj/machinery/cooking/deepfryer/confectionator"

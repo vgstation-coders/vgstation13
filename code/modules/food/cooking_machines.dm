@@ -1,4 +1,4 @@
-
+fco
 //**************************************************************
 //
 // Cooking Machinery
@@ -478,58 +478,58 @@ var/global/ingredientLimit = 10
 	empty_icon()
 
 
-// Sugarizer ///////////////////////////////////////
+// confectionator ///////////////////////////////////////
 // its like a deepfrier
 
 // but with sugar
 
-#define SUGARIZER_MINSUGAR 50
+#define confectionator_MINSUGAR 50
 
-/obj/machinery/cooking/deepfryer/sugarizer
-	name = "sugarizer"
+/obj/machinery/cooking/deepfryer/confectionator
+	name = "confectionator"
 	desc = "Creates sugar copies of stuff."
-	icon_state = "sugarizer_off"
-	icon_state_on = "sugarizer_on"
+	icon_state = "confectionator_off"
+	icon_state_on = "confectionator_on"
 	foodChoices = null
 	cookTime = 100
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
 
-/obj/machinery/cooking/deepfryer/sugarizer/validateIngredient(var/obj/item/I, var/force_cook)
+/obj/machinery/cooking/deepfryer/confectionator/validateIngredient(var/obj/item/I, var/force_cook)
 	if(I.w_class < W_CLASS_LARGE)
 		. = "valid"
 
 	else
-		. = "The sugarizer will not be able to replicate that."
+		. = "The confectionator will not be able to replicate that."
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"sugar"))
 			. = "It's already a sugar copy."
 
-/obj/machinery/cooking/deepfryer/sugarizer/initialize()
+/obj/machinery/cooking/deepfryer/confectionator/initialize()
 	..()
 	flush_reagents()
 	reagents.add_reagent(SUGAR, 300)
 
 
-/obj/machinery/cooking/deepfryer/sugarizer/empty_icon() //sees if the value is empty, and changes the icon if it is
+/obj/machinery/cooking/deepfryer/confectionator/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
 	if(ingredient)
-		icon_state = "sugarizer_on"
+		icon_state = "confectionator_on"
 		playsound(get_turf(src),'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
-	else if(reagents.total_volume < SUGARIZER_MINSUGAR)
-		icon_state = "sugarizer_empty"
+	else if(reagents.total_volume < confectionator_MINSUGAR)
+		icon_state = "confectionator_empty"
 	else
 		icon_state = initial(icon_state)
 
-/obj/machinery/cooking/deepfryer/sugarizer/takeIngredient(var/obj/item/I, mob/user, force_cook)
-	if(reagents.total_volume < SUGARIZER_MINSUGAR)
+/obj/machinery/cooking/deepfryer/confectionator/takeIngredient(var/obj/item/I, mob/user, force_cook)
+	if(reagents.total_volume < confectionator_MINSUGAR)
 		to_chat(user, "\The [src] doesn't have enough sugar.")
 		return
 	else
 		return ..()
 
-/obj/machinery/cooking/deepfryer/sugarizer/makeFood(var/item/I)
+/obj/machinery/cooking/deepfryer/confectionator/makeFood(var/item/I)
 
 	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 	if(cooks_in_reagents)
@@ -542,12 +542,12 @@ var/global/ingredientLimit = 10
   					0, 1, 0, 0,
    					0, 0, 1, 0,
    					0, 0, 0, 1,
-   					0.20, 0.08, 0.08, 0
+   					0.18, 0.08, 0.08, 0
 					)
 	if(src.ingredient.inhand_states)
 		D.inhand_states = src.ingredient.inhand_states
 
-	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the sugarizer creates a sugar copy
+	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the confectionator creates a sugar copy
 	src.ingredient = null
 	empty_icon() //see if the icon needs updating from the loss of sugar
 	return
