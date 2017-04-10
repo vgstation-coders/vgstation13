@@ -135,7 +135,7 @@
 
 	if(grown_seed.consume_gasses)
 		for(var/gas in grown_seed.consume_gasses)
-			dat += "<br>It will consume [gas_data.name[gas]] from the environment."
+			dat += "<br>It will consume [XGM.name[gas]] from the environment."
 	if(grown_seed.exude_gasses)
 		for(var/gas in grown_seed.exude_gasses)
 			dat += "<br>It will exude [gas] into the environment."

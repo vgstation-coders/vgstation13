@@ -39,7 +39,7 @@
 
 	if(moles > 0 && abs(temperature - temp) > MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
 		var/self_heat_capacity = heat_capacity()
-		var/giver_heat_capacity = gas_data.specific_heat[gasid] * moles
+		var/giver_heat_capacity = XGM.specific_heat[gasid] * moles
 		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
 		if(combined_heat_capacity != 0)
 			temperature = (temp * giver_heat_capacity + temperature * self_heat_capacity) / combined_heat_capacity
@@ -117,7 +117,7 @@
 /datum/gas_mixture/proc/heat_capacity()
 	. = 0
 	for(var/g in gas)
-		. += gas_data.specific_heat[g] * gas[g]
+		. += XGM.specific_heat[g] * gas[g]
 	. *= group_multiplier
 
 
@@ -171,8 +171,8 @@
 		return SPECIFIC_ENTROPY_VACUUM	//that gas isn't here
 
 	//group_multiplier gets divided out in volume/gas[gasid] - also, V/(m*T) = R/(partial pressure)
-	var/molar_mass = gas_data.molar_mass[gasid]
-	var/specific_heat = gas_data.specific_heat[gasid]
+	var/molar_mass = XGM.molar_mass[gasid]
+	var/specific_heat = XGM.specific_heat[gasid]
 	return R_IDEAL_GAS_EQUATION * ( log( (IDEAL_GAS_ENTROPY_CONSTANT*volume/(gas[gasid] * temperature)) * (molar_mass*specific_heat*temperature)**(2/3) + 1 ) +  15 )
 
 	//alternative, simpler equation
@@ -251,13 +251,13 @@
 
 	var/sum = 0
 	for(var/g in gas)
-		if(gas_data.flags[g] & flag)
+		if(XGM.flags[g] & flag)
 			sum += gas[g]
 
 	var/datum/gas_mixture/removed = new
 
 	for(var/g in gas)
-		if(gas_data.flags[g] & flag)
+		if(XGM.flags[g] & flag)
 			removed.gas[g] = QUANTIZE((gas[g] / sum) * amount)
 			gas[g] -= removed.gas[g] / group_multiplier
 
@@ -271,7 +271,7 @@
 /datum/gas_mixture/proc/get_by_flag(flag)
 	. = 0
 	for(var/g in gas)
-		if(gas_data.flags[g] & flag)
+		if(XGM.flags[g] & flag)
 			. += gas[g]
 
 //Copies gas and temperature from another gas_mixture.
@@ -322,19 +322,19 @@
 //Rechecks the gas_mixture and adjusts the graphic list if needed.
 //Two lists can be passed by reference if you need know specifically which graphics were added and removed.
 /datum/gas_mixture/proc/check_tile_graphic(list/graphic_add = null, list/graphic_remove = null)
-	for(var/g in gas_data.overlay_limit)
-		if(graphic.Find(gas_data.tile_overlay[g]))
+	for(var/g in XGM.overlay_limit)
+		if(graphic.Find(XGM.tile_overlay[g]))
 			//Overlay is already applied for this gas, check if it's still valid.
-			if(gas[g] <= gas_data.overlay_limit[g])
+			if(gas[g] <= XGM.overlay_limit[g])
 				if(!graphic_remove)
 					graphic_remove = list()
-				graphic_remove += gas_data.tile_overlay[g]
+				graphic_remove += XGM.tile_overlay[g]
 		else
 			//Overlay isn't applied for this gas, check if it's valid and needs to be added.
-			if(gas[g] > gas_data.overlay_limit[g])
+			if(gas[g] > XGM.overlay_limit[g])
 				if(!graphic_add)
 					graphic_add = list()
-				graphic_add += gas_data.tile_overlay[g]
+				graphic_add += XGM.tile_overlay[g]
 
 	. = 0
 	//Apply changes
@@ -483,12 +483,12 @@
 	var/list/all_contents = list()
 
 	for (var/gasid in gas)
-		all_contents += gas_data.name[gasid]
+		all_contents += XGM.name[gasid]
 
 	return english_list(all_contents)
 
 /datum/gas_mixture/proc/loggable_contents()
 	. = list()
 	for (var/gasid in gas)
-		if (gas_data.flags[gasid] & XGM_GAS_LOGGED)
-			. += "<span class='bold red'>[gas_data.name[gasid]]</span>"
+		if (XGM.flags[gasid] & XGM_GAS_LOGGED)
+			. += "<span class='bold red'>[XGM.name[gasid]]</span>"

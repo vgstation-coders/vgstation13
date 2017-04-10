@@ -6,7 +6,19 @@
 #define GAS_VOLATILE "volatile_fuel"
 #define GAS_OXAGENT  "oxygen_agent_b"
 
-/decl/xgm_gas/oxygen
+/datum/gas
+	var/id = ""
+	var/name = "Unnamed Gas"
+	var/specific_heat = 20	// J/(mol*K)
+	var/molar_mass = 0.032	// kg/mol
+
+	var/tile_overlay = null
+	var/overlay_limit = null
+
+	var/flags = 0
+
+
+/datum/gas/oxygen
 	id = GAS_OXYGEN
 	name = "Oxygen"
 	specific_heat = 20	// J/(mol*K)
@@ -14,19 +26,19 @@
 
 	flags = XGM_GAS_OXIDIZER
 
-/decl/xgm_gas/nitrogen
+/datum/gas/nitrogen
 	id = GAS_NITROGEN
 	name = "Nitrogen"
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.028	// kg/mol
 
-/decl/xgm_gas/carbon_dioxide
+/datum/gas/carbon_dioxide
 	id = GAS_CARBON
 	name = "Carbon Dioxide"
 	specific_heat = 30	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol
 
-/decl/xgm_gas/plasma
+/datum/gas/plasma
 	id = GAS_PLASMA
 	name = "Plasma"
 
@@ -43,7 +55,7 @@
 	overlay_limit = MOLES_PLASMA_VISIBLE
 	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT
 
-/decl/xgm_gas/sleeping_agent
+/datum/gas/sleeping_agent
 	id =  GAS_SLEEPING
 	name = "Sleeping Agent"
 	specific_heat = 40	// J/(mol*K)
@@ -53,7 +65,7 @@
 	overlay_limit = 1
 	flags = XGM_GAS_OXIDIZER //N2O is a powerful oxidizer
 
-/decl/xgm_gas/volatile_fuel
+/datum/gas/volatile_fuel
 	id = GAS_VOLATILE
 	name = "Volatile Fuel"
 
@@ -62,7 +74,7 @@
 
 	flags = XGM_GAS_FUEL
 
-/decl/xgm_gas/oxygen_agent_b
+/datum/gas/oxygen_agent_b
 	id = GAS_OXAGENT
 	name = "Oxygen Agent B"
 

@@ -2,6 +2,7 @@
 // All in one file so it's easier to see what everything is relative to.
 
 #define SS_INIT_TICKER_SPAWN       999
+#define SS_INIT_XGM                27
 #define SS_INIT_RUST               26
 #define SS_INIT_SUPPLY_SHUTTLE     25
 #define SS_INIT_SUN                24

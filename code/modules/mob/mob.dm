@@ -291,7 +291,7 @@
 	t += "<br />Temperature: [env.return_temperature()] K"
 
 	for (var/gasid in env.gas)
-		t += "<br />[gas_data.name[gasid]]: [env.gas[gasid]] moles"
+		t += "<br />[XGM.name[gasid]]: [env.gas[gasid]] moles"
 
 	t += "</span>"
 
