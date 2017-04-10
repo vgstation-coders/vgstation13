@@ -211,3 +211,20 @@
 
 /atom/proc/attack_construct(mob/user as mob,var/dist = null)
 	return 0
+
+//Martians
+/mob/living/carbon/martian/UnarmedAttack(atom/A)
+	if(ismob(A))
+		delayNextAttack(10)
+	A.attack_martian(src)
+
+/mob/living/carbon/martian/RangedAttack(atom/A)
+	if(mutations.len)
+		if((M_LASER in mutations) && a_intent == I_HURT)
+			LaserEyes(A) // moved into a proc below
+
+		else if(M_TK in mutations)
+			A.attack_tk(src)
+
+/atom/proc/attack_martian(mob/user)
+	return attack_paw(user)
