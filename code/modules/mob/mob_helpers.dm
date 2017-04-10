@@ -26,6 +26,12 @@
 /mob/proc/is_fat()
 	return 0
 
+mob/proc/isincrit()
+	return 0
+	
+/mob/proc/drag_damage()
+	return list()
+	
 /mob/dead/observer/get_screen_colour()
 	return default_colour_matrix
 
