@@ -1,7 +1,7 @@
 //how do i counter a stove lul: the spell
 /spell/mirror_of_pain
 	name = "Pain Mirror"
-	desc = "An unholy charm that lasts for 5 seconds. While active, it reflects all damage you receive to everybody around you."
+	desc = "An unholy charm that lasts for 5 seconds. While active, it redirects all incoming damage to everybody around you, leaving you unharmed."
 
 	school = "necromancy"
 	charge_max = 90 SECONDS
