@@ -31,7 +31,7 @@
 	flags = XGM_GAS_OXIDIZER
 
 /datum/gas/oxygen/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return abs(moles/mixture.total_moles() - O2STANDARD) < 2
+	return abs(moles/mixture.total_moles() - O2STANDARD) < 0.02
 
 /datum/gas/nitrogen
 	id = GAS_NITROGEN
@@ -41,7 +41,7 @@
 	molar_mass = 0.028	// kg/mol
 
 /datum/gas/nitrogen/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return abs(moles/mixture.total_moles() - N2STANDARD) < 2
+	return abs(moles/mixture.total_moles() - N2STANDARD) < 0.2
 
 /datum/gas/carbon_dioxide
 	id = GAS_CARBON
@@ -53,7 +53,7 @@
 	flags = XGM_GAS_LOGGED
 
 /datum/gas/carbon_dioxide/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() > 0.01
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/plasma
 	id = GAS_PLASMA
@@ -72,8 +72,8 @@
 	overlay_limit = MOLES_PLASMA_VISIBLE
 	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
 
-/datum/gas/carbon_dioxide/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() > 0.01
+/datum/gas/plasma/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/sleeping_agent
 	id = GAS_SLEEPING
@@ -86,8 +86,8 @@
 	overlay_limit = 1
 	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED // N₂O is a powerful oxidizer
 
-/datum/gas/carbon_dioxide/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() > 0.01
+/datum/gas/sleeping_agent/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/volatile_fuel
 	id = GAS_VOLATILE
@@ -98,8 +98,8 @@
 
 	flags = XGM_GAS_FUEL | XGM_GAS_LOGGED
 
-/datum/gas/carbon_dioxide/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() > 0.01
+/datum/gas/volatile_fuel/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/oxygen_agent_b
 	id = GAS_OXAGENT
@@ -110,5 +110,5 @@
 
 	flags = XGM_GAS_FUEL | XGM_GAS_OXIDIZER | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
 
-/datum/gas/carbon_dioxide/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() > 0.01
+/datum/gas/oxygen_agent_b/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01

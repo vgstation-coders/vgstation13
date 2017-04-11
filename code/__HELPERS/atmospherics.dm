@@ -17,11 +17,11 @@
 
 	var/temp_safe = !human_standard || (mixture.temperature > BODYTEMP_COLD_DAMAGE_LIMIT && mixture.temperature < BODYTEMP_HEAT_DAMAGE_LIMIT)
 	. += "<span class='[temp_safe ? "notice" : "warning"]'>Temperature: [round(mixture.temperature-T0C)]&deg;C</span> <span class='notice'>([round(mixture.temperature)] K)</span><br>"
-	. += "<span class='notice'>Heat Capacity: [round(environment.heat_capacity(),0.1)] J/K</span>"
+	. += "<span class='notice'>Heat Capacity: [round(mixture.heat_capacity(),0.1)] J/K</span>"
 
 	for (var/gasid in mixture.gas)
-		var/datum/gas/gas = XGM.gas[gasid]
+		var/datum/gas/gas = XGM.gases[gasid]
 		var/moles = mixture.gas[gasid]
 		var/safe = !human_standard || gas.is_human_safe(moles, mixture)
-		. += "<br><span class='[safe ? "notice" : "warning"]'>[XGM.name[mix]]: [round((mixture.gas[mix] / total_moles) * 100)]% ([round(moles, 0.01)] mol)</span>"
+		. += "<br><span class='[safe ? "notice" : "warning"]'><b>[XGM.short_name[gasid]]</b>: [round((moles/total_moles) * 100)]% ([round(moles, 0.01)] mol)</span>"
 

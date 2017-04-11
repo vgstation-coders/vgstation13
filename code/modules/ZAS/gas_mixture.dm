@@ -491,4 +491,4 @@
 	. = list()
 	for (var/gasid in gas)
 		if (XGM.flags[gasid] & XGM_GAS_LOGGED)
-			. += "<span class='bold red'>[XGM.name[gasid]]</span>"
+			. += "<span class='bold red'>[XGM.short_name[gasid]]</span>"
