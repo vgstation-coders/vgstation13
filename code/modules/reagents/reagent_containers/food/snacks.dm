@@ -4975,8 +4975,9 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
 	name = "mud pie"
-	desc = "while not looking very appetising, looks like somebody had fun making it."
+	desc = "While not looking very appetizing, it at least looks like somebody had fun making it."
 	icon_state = "mud_pie"
+	filling_color = "#462B20"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie/New()
 	..()
