@@ -1,7 +1,7 @@
 //how do i counter a stove lul: the spell
 /spell/mirror_of_pain
 	name = "Pain Mirror"
-	desc = "An unholy charm that lasts for 5 seconds. While active, it causes everybody around you to receive the same damage that you do."
+	desc = "An unholy charm that lasts for 2 seconds. While active, it reflects all damage you receive to everybody around you."
 
 	school = "necromancy"
 	charge_max = 90 SECONDS
@@ -13,7 +13,7 @@
 
 	hud_state = "wiz_reflect_pain"
 
-	duration = 5 SECONDS
+	duration = 2 SECONDS
 
 	var/image/user_overlay
 
@@ -33,7 +33,7 @@
 
 /spell/mirror_of_pain/cast(list/targets, mob/user)
 	for(var/mob/living/L in targets)
-		L.visible_message("<span class='sinister'>You feel bound to \the [L].</span>",\
+		L.visible_message("<span class='sinister'>An unholy charm binds your life to [L]. While the spell is active, any pain \he receive\s will be redirected to you.</span>",\
 		"<span class='sinister'>You bind your life essence to this plane. Any pain you endure will be also felt by everybody around you.</span>")
 		var/event_key = L.on_damaged.Add(src, "reflect")
 		L.overlays.Add(user_overlay)
@@ -99,5 +99,7 @@
 	if(istype(holder))
 		holder.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage with [src.name] active. Reflected to [affected_amount] people.</font>"
 
+	return TRUE //Block the damage
+
 /spell/mirror_of_pain/get_scoreboard_suffix()
-	return " ([absorbed_damage] damage taken, [dealt_damage] damage dealt)"
+	return " ([absorbed_damage] damage absorbed, [dealt_damage] damage dealt)"
