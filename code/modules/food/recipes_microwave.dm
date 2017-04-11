@@ -2265,3 +2265,11 @@
 		)
 	result = /obj/structure/poutineocean/poutinecitadel
 
+
+/datum/recipe/mud_pie
+	reagents = list(WATER = 25)
+	items = list(
+		/obj/item/weapon/ore/glass,
+		/obj/item/weapon/ore/glass,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
