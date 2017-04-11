@@ -22,7 +22,7 @@
 	var/dealt_damage = 0
 
 	//How much damage can be done per one instance. There to prevent instakilling everybody by suiciding (which does 200 damage)
-	var/damage_limit = 80
+	var/damage_limit = 50
 
 /spell/mirror_of_pain/New()
 	..()

@@ -405,6 +405,21 @@ emp_act
 				if (!prob((gotarmor-100)*-1))
 					Paralyse(10)
 
+
+	//Deal damage
+
+	//The on_damaged event returns 1 if the damage should be blocked
+	//Because there are two types of damage at once (brute & burn), do it this way (instead of making a simple if(INVOKE_EVENT) statement)
+	var/damage_blocked = 0
+
+	//INVOKE_EVENT may return null sometimes - this doesn't work nice with bitflags (which is what's being done here). Hence the !! operator - it turns a null into a 0.
+	var/brute_resolved = !!INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = b_loss))
+	var/burn_resolved = !!INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = f_loss))
+	damage_blocked |= (brute_resolved | burn_resolved)
+
+	if(damage_blocked)
+		return
+
 	var/update = 0
 
 	// focus most of the blast on one organ
