@@ -1,7 +1,7 @@
 //how do i counter a stove lul: the spell
 /spell/mirror_of_pain
 	name = "Pain Mirror"
-	desc = "An unholy charm that lasts for 2 seconds. While active, it reflects all damage you receive to everybody around you."
+	desc = "An unholy charm that lasts for 3.5 seconds. While active, it reflects all damage you receive to everybody around you."
 
 	school = "necromancy"
 	charge_max = 90 SECONDS
@@ -13,7 +13,7 @@
 
 	hud_state = "wiz_reflect_pain"
 
-	duration = 2 SECONDS
+	duration = 3.5 SECONDS
 
 	var/image/user_overlay
 
@@ -40,7 +40,7 @@
 		playsound(get_turf(L), 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
 
 		spawn(duration)
-			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't share received damage with your enemies anymore.</span>")
+			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't reflect received damage to your enemies anymore.</span>")
 			L.on_damaged.Remove(event_key)
 			L.overlays.Remove(user_overlay)
 
