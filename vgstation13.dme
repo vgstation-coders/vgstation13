@@ -51,6 +51,7 @@
 #include "code\__DEFINES\hooks.dm"
 #include "code\__HELPERS\_macros.dm"
 #include "code\__HELPERS\angles_dirs.dm"
+#include "code\__HELPERS\atmospherics.dm"
 #include "code\__HELPERS\cmp.dm"
 #include "code\__HELPERS\datumpool.dm"
 #include "code\__HELPERS\files.dm"
