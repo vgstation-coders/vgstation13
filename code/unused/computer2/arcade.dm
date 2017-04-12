@@ -3,13 +3,9 @@
 	size = 8.0
 	var/enemy_name = "Space Villian"
 	var/temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
-	var/player_max_hp = 30
 	var/player_hp = 30 //Player health/attack points
-	var/player_max_mp = 10
 	var/player_mp = 10
-	var/enemy_max_hp = 45
 	var/enemy_hp = 45 //Enemy health/attack points
-	var/enemy_max_mp = 20
 	var/enemy_mp = 20
 	var/gameover = 0
 	var/blocked = 0 //Player cannot attack/heal while set
@@ -95,10 +91,10 @@
 
 	if (href_list["newgame"]) //Reset everything
 		temp = "New Round"
-		player_hp = player_hp
-		player_mp = player_max_mp
-		enemy_hp = enemy_max_hp
-		enemy_mp = enemy_max_mp
+		player_hp = 30
+		player_mp = 10
+		enemy_hp = 45
+		enemy_mp = 20
 		gameover = 0
 
 	src.master.add_fingerprint(usr)

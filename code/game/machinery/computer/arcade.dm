@@ -203,10 +203,10 @@
 			return
 
 		temp = "New Round"
-		player_hp = 30
-		player_mp = 10
-		enemy_hp = 45
-		enemy_mp = 20
+		player_hp = player_max_hp
+		player_mp = player_max_mp
+		enemy_hp = enemy_max_hp
+		enemy_mp = enemy_max_mp
 		gameover = 0
 		turtle = 0
 
