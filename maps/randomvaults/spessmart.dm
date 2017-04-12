@@ -283,9 +283,10 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /area/vault/supermarket/shop/proc/item_destroyed(list/params)
 	var/atom/destroyed = params["atom"]
 
-	if(istype(destroyed, /obj/item) && items.Find(destroyed)) //Destroying store items only angers the shopkeepers if the items weren't purchased (still in the items list)
-		map_element.set_stats_alarm_activated("Destruction of an unpurchased item ([destroyed])[usr ? " by [usr]" : ""]")
-		items.Remove(destroyed)
+	if(istype(destroyed, /obj/item)) //Destroying store items only angers the shopkeepers if the items weren't purchased (still in the items list)
+		if(items.Find(destroyed))
+			map_element.set_stats_alarm_activated("Destruction of an unpurchased item ([destroyed])[usr ? " by [usr]" : ""]")
+			items.Remove(destroyed)
 	else
 		map_element.set_stats_alarm_activated("Destruction of property ([destroyed])[usr ? " by [usr]" : ""]")
 
