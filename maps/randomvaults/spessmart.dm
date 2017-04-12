@@ -292,7 +292,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	else
 		map_element.set_stats_alarm_activated("Destruction of property ([destroyed])[usr ? " by [usr]" : ""]")
 
-	if(map_element.customer_has_entered)
+	if(!lockdown && map_element.customer_has_entered)
 		message_admins("Spessmart has entered lockdown due to the destruction of \a [destroyed]!")
 		on_theft()
 
