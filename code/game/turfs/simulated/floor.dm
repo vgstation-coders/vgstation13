@@ -597,19 +597,14 @@ turf/simulated/floor/update_icon()
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
 			to_chat(user, "<span class='notice'>You shovel the grass.</span>")
 			if(prob(10))
-				switch(rand(1,6))
-					if(1)
-						new /obj/item/seeds/carrotseed(src)
-					if(2)
-						new /obj/item/weapon/reagent_containers/food/snacks/grown/carrot(src)
-					if(3)
-						new /obj/item/seeds/potatoseed(src)
-					if(4)
-						new /obj/item/weapon/reagent_containers/food/snacks/grown/potato(src)
-					if(5)
-						new /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet(src)
-					if(6)
-						new /obj/item/seeds/whitebeetseed(src)
+				var/to_spawn = pick(
+					/obj/item/seeds/carrotseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
+					/obj/item/seeds/potatoseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+					/obj/item/seeds/whitebeetseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,)
+				new to_spawn(src)
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 		else
