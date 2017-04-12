@@ -280,16 +280,17 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		map_element.goods_purchased++
 		map_element.credits_spent += price
 
-/area/vault/supermarket/shop/proc/item_destroyed()
-	for(var/obj/item/I in items)
-		if(isnull(I.loc) || I.gcDestroyed)
-			items.Remove(I)
-			message_admins("Spessmart has entered lockdown due to the destruction of \a [I]!")
+/area/vault/supermarket/shop/proc/item_destroyed(list/params)
+	var/atom/destroyed = params["atom"]
 
-			if(map_element)
-				map_element.set_stats_alarm_activated("Destruction of \a [I][usr ? " by [usr]" : ""]")
+	if(istype(destroyed, /obj/item) && items.Find(destroyed)) //Destroying store items only angers the shopkeepers if the items weren't purchased (still in the items list)
+		map_element.set_stats_alarm_activated("Destruction of an unpurchased item ([destroyed])[usr ? " by [usr]" : ""]")
+		items.Remove(destroyed)
+	else
+		map_element.set_stats_alarm_activated("Destruction of property ([destroyed])[usr ? " by [usr]" : ""]")
 
 	if(map_element.customer_has_entered)
+		message_admins("Spessmart has entered lockdown due to the destruction of \a [destroyed]!")
 		on_theft()
 
 /area/vault/supermarket/shop/proc/on_robot_kill()
