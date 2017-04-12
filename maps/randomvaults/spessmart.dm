@@ -283,10 +283,12 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /area/vault/supermarket/shop/proc/item_destroyed(list/params)
 	var/atom/destroyed = params["atom"]
 
-	if(istype(destroyed, /obj/item)) //Destroying store items only angers the shopkeepers if the items weren't purchased (still in the items list)
+	if(istype(destroyed, /obj/item))
 		if(items.Find(destroyed))
 			map_element.set_stats_alarm_activated("Destruction of an unpurchased item ([destroyed])[usr ? " by [usr]" : ""]")
 			items.Remove(destroyed)
+		else
+			return //Destroying store items only angers the shopkeepers if the items weren't purchased (still in the items list)
 	else
 		map_element.set_stats_alarm_activated("Destruction of property ([destroyed])[usr ? " by [usr]" : ""]")
 
@@ -689,11 +691,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 			var/phrase = pick("Spessmart law was broken. The punishment is death.", "Spessmart law is above everything. Prepare to die.", "Spessmart law is sacred. Die, heretic.", "Threat to Spessmart detected. Extermination protocol started.")
 			say(phrase)
-
-	var/area/vault/supermarket/A = get_area(src)
-	if(istype(A))
-		var/area/vault/supermarket/shop/AS = locate(/area/vault/supermarket/shop)
-		AS.on_robot_kill()
 
 /mob/living/simple_animal/hostile/spessmart_guardian/secure_area/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
