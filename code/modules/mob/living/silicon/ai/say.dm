@@ -143,7 +143,7 @@ var/const/VOX_DELAY = 600
 	set category = "AI Commands"
 
 	//I am kill but here
-	if(stat)
+	if(isUnconscious())
 		return
 
 	// If we're in an APC, and APC is ded, ABORT
