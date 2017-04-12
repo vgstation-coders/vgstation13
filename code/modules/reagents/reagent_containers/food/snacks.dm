@@ -3713,7 +3713,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
 	name = "Giga Puddi"
-	desc = "A large crème caramel"
+	desc = "A large crÃ¨me caramel"
 	icon_state = "gigapuddi"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL //milk
@@ -3724,17 +3724,17 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi/happy
-	desc = "A large crème caramel made with extra love"
+	desc = "A large crÃ¨me caramel made with extra love"
 	icon_state = "happypuddi"
 	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi/anger
-	desc = "A large crème caramel made with extra hate"
+	desc = "A large crÃ¨me caramel made with extra hate"
 	icon_state = "angerpuddi"
 
 /obj/item/weapon/reagent_containers/food/snacks/flan
 	name = "Flan"
-	desc = "A small crème caramel"
+	desc = "A small crÃ¨me caramel"
 	icon_state = "flan"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
@@ -4292,7 +4292,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/eclair
 	name = "\improper eclair"
-	desc = "Plus doux que ses lèvres."
+	desc = "Plus doux que ses lÃ¨vres."
 	icon_state = "eclair"
 	bitesize = 5
 
@@ -4986,9 +4986,8 @@
 	reagents.add_reagent(TOXIN, rand(1,5))
 	if(prob(15))
 		name = "exceptional " + initial(name)
-		desc = "The crème de la pire of culinary arts."
+		desc = "The crÃ¨me de la pire of culinary arts."
 		reagents.add_reagent(SUGAR, 2)
 		reagents.add_reagent(TOXIN, rand(3,8))
 		reagents.add_reagent(COCO, 3)
 	bitesize = 2
-
