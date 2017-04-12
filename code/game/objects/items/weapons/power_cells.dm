@@ -95,7 +95,7 @@
 	name = "infinite-capacity power cell!"
 	icon_state = "icell"
 	origin_tech =  null
-	maxcharge = 30000
+	maxcharge = 1.#INF
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 	use()
 		return 1
