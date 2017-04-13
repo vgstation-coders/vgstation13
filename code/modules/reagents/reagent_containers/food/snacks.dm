@@ -645,7 +645,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/friedegg/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
 	reagents.add_reagent(BLACKPEPPER, 1)
 	bitesize = 1
@@ -658,7 +658,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledegg/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/organ
 	name		=	"organ"
@@ -836,7 +836,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/human/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
@@ -847,7 +847,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
@@ -856,7 +856,7 @@
 	icon_state = "hburger"
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -865,7 +865,7 @@
 	food_flags = FOOD_MEAT
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger
@@ -875,7 +875,7 @@
 	food_flags = FOOD_MEAT
 /obj/item/weapon/reagent_containers/food/snacks/fishburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	reagents.add_reagent(CARPPHEROMONES, 3)
 	bitesize = 3
 
@@ -896,7 +896,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chickenburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburger
@@ -1500,7 +1500,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
 	reagents.add_reagent(BLACKPEPPER, 1)
 	bitesize = 3
@@ -2936,7 +2936,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/synth/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 50)
+	reagents.add_reagent(NUTRIMENT, 45)
 	reagents.add_reagent(TOMATOJUICE, 6)
 	bitesize = 2
 
@@ -3577,7 +3577,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo
@@ -3588,7 +3588,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	reagents.add_reagent(CAPSAICIN, 10)
 	bitesize = 3
 
@@ -3600,7 +3600,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/lemon/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/xeno
@@ -3611,7 +3611,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/xeno/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	bitesize = 3
 
 
