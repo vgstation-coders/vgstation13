@@ -145,9 +145,9 @@
 
 			observer.started_as_observer = 1
 			close_spawn_windows()
-			var/obj/O = locate("landmark*Observer-Start")
+			var/obj/O = pick_landmark(/obj/effect/landmark/observer_start)
 			to_chat(src, "<span class='notice'>Now teleporting.</span>")
-			observer.forceMove(O.loc)
+			observer.forceMove(get_turf(O))
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
 			client.prefs.update_preview_icon(1)

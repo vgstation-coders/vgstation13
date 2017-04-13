@@ -3154,7 +3154,7 @@
 "biH" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/space,/area/shuttle/mining/outpost)
 "biI" = (/obj/effect/landmark/start{name = "Tourist"},/turf/unsimulated/floor{icon_state = "floor"},/area/shuttle/arrival/station)
 "biJ" = (/obj/effect/landmark/start{name = "Clown"},/turf/unsimulated/floor{icon_state = "floor"},/area/shuttle/arrival/station)
-"biK" = (/obj/landmark{name = "Observer-Start"},/obj/item/device/radio/beacon,/obj/effect/landmark/newplayer_start,/turf/unsimulated/floor{icon_state = "floor"},/area/shuttle/arrival/station)
+"biK" = (/obj/landmark/observer_start,/obj/item/device/radio/beacon,/obj/effect/landmark/newplayer_start,/turf/unsimulated/floor{icon_state = "floor"},/area/shuttle/arrival/station)
 "biL" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/floor{icon_state = "arrivalcorner"; dir = 2},/area/research_outpost/anomaly)
 "biM" = (/obj/machinery/door/firedoor/border_only{dir = 8},/turf/simulated/floor{icon_state = "arrival"},/area/research_outpost/anomaly)
 "biN" = (/turf/simulated/floor{icon_state = "arrival"},/area/research_outpost)

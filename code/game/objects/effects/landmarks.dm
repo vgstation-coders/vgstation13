@@ -159,6 +159,9 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 	name = "syndicate spawn"
 	desc = "Operatives spawn here."
 
+/obj/effect/landmark/nuclear_bomb
+	name = "Nuclear-Bomb"
+
 /obj/effect/landmark/syndicate_commando/bomb
 	name = "Syndicate-Commando-Bomb"
 
@@ -168,8 +171,30 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 /obj/effect/landmark/commando/commando_spawn
 	name = "Commando"
 
+/obj/effect/landmark/commando/bomb
+	name = "Commando-Bomb"
+
+/obj/effect/landmark/commando/manual
+	name = "Commando_Manual"
+
+/obj/effect/landmark/marauder/entry
+	name = "Marauder Entry"
+
+/obj/effect/landmark/marauder/exit
+	name = "Marauder Exit"
+
 /obj/effect/landmark/ert/ert_spawn
 	name = "ERT"
+
+/obj/effect/landmark/lightsout
+	name = "lightsout"
+	desc = "Lights in this area may break from a random event."
+
+/obj/effect/landmark/observer_start
+	name = "Observer-Start"
+
+/obj/effect/landmark/syndicate_uplink
+	name = "Syndicate-Uplink"
 
 /obj/effect/narration
 	name = "narrator"

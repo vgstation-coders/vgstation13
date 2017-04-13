@@ -1270,7 +1270,7 @@
 "yv" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 5},/area/mine/explored)
 "yw" = (/turf/unsimulated/mineral/random/high_chance,/area/mine/explored)
 "yx" = (/obj/structure/catwalk,/turf/space,/area)
-"yy" = (/obj/effect/landmark{name = "Marauder Entry"},/turf/space,/area)
+"yy" = (/obj/effect/landmark/marauder/entry,/turf/space,/area)
 "yz" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
 "yA" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
 "yB" = (/turf/unsimulated/mineral/random,/area)

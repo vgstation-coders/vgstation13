@@ -1186,7 +1186,7 @@
 "wP" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor{icon_state = "warnwhite"; dir = 1},/area/medical/medbay)
 "wQ" = (/obj/machinery/computer/secure_data,/obj/item/device/radio/intercom{broadcasting = 0; freerange = 0; listening = 1; name = "Common Channel"; pixel_y = 25},/turf/simulated/floor,/area/crew_quarters/heads{name = "\improper Job Assignment"})
 "wR" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/turf/simulated/shuttle/plating,/area/shuttle/arrival/station)
-"wS" = (/obj/effect/landmark{name = "Observer-Start"},/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
+"wS" = (/obj/effect/landmark/observer_start,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "wT" = (/obj/effect/landmark/start{name = "Head of Personnel"},/obj/structure/bed/chair/office/dark{dir = 1},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor,/area/crew_quarters/heads{name = "\improper Job Assignment"})
 "wU" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating{icon_state = "warnplatecorner"; dir = 2},/area/hallway/primary/central)
 "wV" = (/obj/machinery/atmospherics/binary/pump/on,/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating{dir = 2; icon_state = "warnplate"},/area/hallway/primary/central)
