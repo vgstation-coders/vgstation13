@@ -2111,7 +2111,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledrice/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/ricepudding
