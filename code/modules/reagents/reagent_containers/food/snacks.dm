@@ -1891,7 +1891,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeysdelight/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(NUTRIMENT, 15)
 	reagents.add_reagent(BANANA, 5)
 	reagents.add_reagent(BLACKPEPPER, 1)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
