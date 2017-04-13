@@ -1267,3 +1267,7 @@ obj/item/weapon/circuitboard/rdserver
 	desc = "A circuit board used to run a kitchen appliance."
 	board_type = MACHINE
 	build_path = "/obj/machinery/cooking/deepfryer/confectionator"
+	req_components = list(
+						"/obj/item/weapon/stock_parts/matter_bin" = 1,
+						"/obj/item/weapon/stock_parts/scanning_module" = 1,
+						"/obj/item/weapon/stock_parts/micro_laser" = 1)
