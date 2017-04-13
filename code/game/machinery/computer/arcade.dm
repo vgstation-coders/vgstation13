@@ -7,9 +7,13 @@
 	var/enemy_name = "Space Villain"
 	var/temp = "Winners Don't Use Spacedrugs" //Temporary message, for attack messages, etc
 	var/player_hp = 30 //Player health/attack points
+	var/player_max_hp = 30
 	var/player_mp = 10
+	var/player_max_mp = 10
 	var/enemy_hp = 45 //Enemy health/attack points
+	var/enemy_max_hp = 45
 	var/enemy_mp = 20
+	var/enemy_max_mp = 20
 	var/gameover = 0
 	var/blocked = 0 //Player cannot attack/heal while set
 	var/list/cheaters = list() //Trying to cheat twice at cuban pete gibs you
@@ -75,9 +79,13 @@
 	enemy_name = A.game_data["enemy_name"]
 	temp = A.game_data["temp"]
 	player_hp = A.game_data["player_hp"]
+	player_max_hp = A.game_data["player_max_hp"]
 	player_mp = A.game_data["player_mp"]
+	player_max_mp = A.game_data["player_max_mp"]
 	enemy_hp = A.game_data["enemy_hp"]
-	enemy_mp =A.game_data["enemy_mp"]
+	enemy_max_hp = A.game_data["enemy_max_hp"]
+	enemy_mp = A.game_data["enemy_mp"]
+	enemy_max_mp = A.game_data["enemy_max_mp"]
 	gameover = A.game_data["gameover"]
 	blocked = A.game_data["blocked"]
 
@@ -92,9 +100,13 @@
 	A.game_data["enemy_name"] = enemy_name
 	A.game_data["temp"] = temp
 	A.game_data["player_hp"] = player_hp
+	A.game_data["player_max_hp"] = player_max_hp
 	A.game_data["player_mp"] = player_mp
+	A.game_data["player_max_mp"] = player_max_mp
 	A.game_data["enemy_hp"] = enemy_hp
+	A.game_data["enemy_max_hp"] = enemy_max_hp
 	A.game_data["enemy_mp"] = enemy_mp
+	A.game_data["enemy_max_mp"] = enemy_max_mp
 	A.game_data["gameover"] = gameover
 	A.game_data["blocked"] = blocked
 
@@ -191,10 +203,10 @@
 			return
 
 		temp = "New Round"
-		player_hp = 30
-		player_mp = 10
-		enemy_hp = 45
-		enemy_mp = 20
+		player_hp = player_max_hp
+		player_mp = player_max_mp
+		enemy_hp = enemy_max_hp
+		enemy_mp = enemy_max_mp
 		gameover = 0
 		turtle = 0
 
