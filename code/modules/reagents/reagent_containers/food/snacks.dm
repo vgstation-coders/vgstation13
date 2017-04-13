@@ -2122,7 +2122,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/ricepudding/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/riceball
@@ -2132,7 +2132,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/riceball/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi
@@ -2142,7 +2142,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(CAPSAICIN, 2)
 	bitesize = 3
 
@@ -3754,7 +3754,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/honeyflan/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(CINNAMON, 5)
 	reagents.add_reagent(HONEY, 6)
 	bitesize = 3
@@ -4094,7 +4094,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(CINNAMON,5)
 	bitesize = 3
 
