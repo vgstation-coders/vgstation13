@@ -409,7 +409,9 @@ emp_act
 	//Deal damage
 
 	//The on_damaged event returns 1 if the damage should be blocked
-	//Because there are two types of damage at once (brute & burn), do it this way (instead of making a simple if(INVOKE_EVENT) statement)
+	//There are two types of damage at once (brute & burn), so do it through bitflags, because
+	//if(INVOKE_EVENT(brute) || INVOKE_EVENT(burn)) won't call the second proc if the first one returns 1
+	//This way both of the events are called, and the damage is blocked if either of them return 1
 	var/damage_blocked = 0
 
 	//INVOKE_EVENT may return null sometimes - this doesn't work nice with bitflags (which is what's being done here). Hence the !! operator - it turns a null into a 0.
