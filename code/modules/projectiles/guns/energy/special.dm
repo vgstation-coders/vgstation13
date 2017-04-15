@@ -193,13 +193,33 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	var/mob/living/carbon/human/H = target
 	if(!H.stat || H.health > config.health_threshold_crit)
 		return 0
+
+	//Pretty particles
+	make_tracker_effects(get_turf(H), user)
+	//Not so pretty manical laughter
+	if(iswizard(user) || isapprentice(user))
+		user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
+		"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
+		"G'T T'FUK UP.",\
+		"IF YOU DIE, YOU DIE FOR ME.",\
+		"EVEN IN DEATH YOU MAY SERVE.",\
+		"YOUR SUFFERING IS MY ENJOYMENT.",\
+		"A NEW PLAYTHING FOR MY COLLECTION.",\
+		"YOUR TIME HAS NOT COME, YET.",\
+		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
+
+	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+
 	switch(raisetype)
 		if(ZOMBIE)
-			new /mob/living/simple_animal/hostile/necro/zombie(get_turf(target), user, H.mind)
+			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H.mind)
+			T.get_clothes(H, T)
+			T.name = H.real_name
+			T.host = H
+			H.loc = null
 		if(SKELETON)
 			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
-
-	H.gib()
+			H.gib()
 	charges--
 
 

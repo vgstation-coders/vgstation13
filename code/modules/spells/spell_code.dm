@@ -83,7 +83,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/hud_state = "" //name of the icon used in generating the spell hud object
 	var/override_base = ""
 
-	var/obj/screen/spell/connected_button
+	var/obj/abstract/screen/spell/connected_button
 	var/currently_channeled = 0
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 

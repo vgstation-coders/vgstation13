@@ -2252,7 +2252,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 		)
-	result = /obj/poutineocean
+	result = /obj/structure/poutineocean
 
 /datum/recipe/poutinecitadel
 	reagents = list (MAPLESYRUP = 50)
@@ -2263,5 +2263,5 @@
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 		)
-	result = /obj/poutineocean/poutinecitadel
+	result = /obj/structure/poutineocean/poutinecitadel
 

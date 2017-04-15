@@ -442,9 +442,11 @@
 	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>
 	<B>Total money trasferred:</B> [score["totaltransfer"]]<BR>"}
 
+	//Vault and away mission specific scoreboard elements
+	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)
 	for(var/datum/map_element/ME in map_elements)
 		var/list/L = ME.process_scoreboard()
-		if(!L)
+		if(!L || !L.len)
 			continue
 
 		dat += "<br><u>[ME.name ? uppertext(ME.name) : "UNKNOWN SPACE STRUCTURE"]</u><br>"

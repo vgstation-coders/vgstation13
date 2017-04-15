@@ -17,14 +17,14 @@
 
 //Hud stuff
 
-	var/obj/screen/cells = null
-	var/obj/screen/inv1 = null
-	var/obj/screen/inv2 = null
-	var/obj/screen/inv3 = null
-	var/obj/screen/sensor = null
+	var/obj/abstract/screen/cells = null
+	var/obj/abstract/screen/inv1 = null
+	var/obj/abstract/screen/inv2 = null
+	var/obj/abstract/screen/inv3 = null
+	var/obj/abstract/screen/sensor = null
 
 	var/shown_robot_modules = 0
-	var/obj/screen/robot_modules_background
+	var/obj/abstract/screen/robot_modules_background
 
 //3 Modules can be activated at any one time.
 	var/obj/item/weapon/robot_module/module = null
@@ -996,7 +996,7 @@
 		if (I_HURT)
 			if(M.unarmed_attack_mob(src))
 				if(prob(8))
-					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
+					flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
 
 		if (I_DISARM)
 			if(!(lying))

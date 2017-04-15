@@ -848,6 +848,8 @@
 /atom/movable/proc/do_attack_animation(atom/target, atom/tool)
 	set waitfor = 0
 
+	ASSERT(tool) //If no tool, shut down the proc and call the coder police
+
 	if(target == src)
 		return
 	var/horizontal = 0
@@ -873,6 +875,7 @@
 		override_image.loc = src
 		override_image.pixel_x = pixel_x
 		override_image.pixel_y = pixel_y
+		override_image.dir = dir
 
 		var/adjusted_x = pixel_x + horizontal * 3 * PIXEL_MULTIPLIER
 		var/adjusted_y = pixel_y + vertical * 3 * PIXEL_MULTIPLIER

@@ -160,7 +160,9 @@ proc/move_mining_shuttle()
 
 /obj/item/device/flashlight/lantern
 	name = "lantern"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flashlights_n_lamps.dmi', "right_hand" = 'icons/mob/in-hand/right/flashlights_n_lamps.dmi')
 	icon_state = "lantern"
+	item_state = "lantern"
 	desc = "A mining lantern."
 	brightness_on = 6			// luminosity when on
 	light_power = 2

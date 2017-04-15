@@ -190,7 +190,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			severity = 6
 
 	if(severity > 0)
-		overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+		overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
 	else
 		clear_fullscreen("damage")
 

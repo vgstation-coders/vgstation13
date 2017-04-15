@@ -1,5 +1,5 @@
 //Gremlins
-//Small monsters that don't usually attack humans or other animals. Instead they mess with electronics, computers and machinery
+//Small monsters that don't attack humans or other animals. Instead they mess with electronics, computers and machinery
 
 //List of objects that gremlins can't tamper with (because nobody coded an interaction for it)
 //List starts out empty. Whenever a gremlin finds a machine that it couldn't tamper with, the machine's type is added here, and all machines of such type are ignored from then on (NOT SUBTYPES)
@@ -16,7 +16,7 @@ var/list/bad_gremlin_items = list()
 	flags = HEAR_ALWAYS
 	health = 18
 	maxHealth = 18
-	size = SIZE_TINY
+	size = SIZE_SMALL
 	search_objects = 3 //Completely ignore mobs
 
 	//Tampering is handled by the 'npc_tamper()' obj proc

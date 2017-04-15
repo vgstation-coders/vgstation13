@@ -218,19 +218,19 @@
 //	if (src.fire) src.fire.icon_state = "fire[src.fire_alert ? 1 : 0]"
 
 	if(src.eye_blind || blinded)
-		overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	else
 		clear_fullscreen("blind")
 	if (src.disabilities & NEARSIGHTED)
-		overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
+		overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
 	else
 		clear_fullscreen("impaired")
 	if (src.eye_blurry)
-		overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+		overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 	else
 		clear_fullscreen("blurry")
 	if (src.druggy)
-		overlay_fullscreen("high", /obj/screen/fullscreen/high)
+		overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 	else
 		clear_fullscreen("high")
 

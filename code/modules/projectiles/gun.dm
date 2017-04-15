@@ -347,6 +347,20 @@
 	else
 		return ..() //Pistolwhippin'
 
+/obj/item/weapon/gun/state_controls_pai(obj/item/device/paicard/P)
+	if(P.pai)
+		to_chat(P.pai, "<span class='info'><b>You have been connected to \a [src].</b></span>")
+		to_chat(P.pai, "<span class='info'>Your controls are:</span>")
+		to_chat(P.pai, "<span class='info'>- PageDown / Z(hotkey mode): Connect or disconnect from \the [src]'s firing mechanism.</span>")
+		to_chat(P.pai, "<span class='info'>- Click on a target: Fire \the [src] at the target.</span>")
+
+/obj/item/weapon/gun/attack_integrated_pai(mob/living/silicon/pai/user)
+	if(!pai_safety)
+		to_chat(user, "<span class='notice'>You connect to \the [src]'s firing mechanism.</span>")
+	else
+		to_chat(user, "<span class='notice'>You disconnect from \the [src]'s firing mechanism.</span>")
+	pai_safety = !pai_safety
+
 /obj/item/weapon/gun/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)	//to allow any gun to be pAI-compatible, on a basic level, just by varediting
 	if(check_pai_can_fire(user))
 		Fire(A,user,use_shooter_turf = TRUE)

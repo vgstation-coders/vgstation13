@@ -1124,6 +1124,19 @@
 	..()
 	reagents.add_reagent(LIMEJUICE, 100)
 
+/obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka
+	name = "Greyshirt vodka"
+	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
+	icon_state = "grey_vodka"
+	vending_cat = "spirits"
+	starting_materials = null
+	isGlass = 1
+	molotov = -1
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka/New()
+	..()
+	reagents.add_reagent(GREYVODKA, 100)
+
 
 
 

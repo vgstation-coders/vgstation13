@@ -1052,6 +1052,10 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/get_rating()
 	return 0
 
+// Like the above, but used for RPED sorting of parts.
+/obj/item/proc/rped_rating()
+	return get_rating()
+
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")

@@ -91,7 +91,7 @@ Attach to transfer valve and open. BOOM.
 		return 0
 	if(fire_protection > world.time-300)
 		return 0
-	if(locate(/obj/fire) in src)
+	if(locate(/obj/effect/fire) in src)
 		return 1
 	var/datum/gas_mixture/air_contents = return_air()
 	if(!air_contents || exposed_temperature < PLASMA_MINIMUM_BURN_TEMPERATURE)
@@ -101,8 +101,8 @@ Attach to transfer valve and open. BOOM.
 
 	if(air_contents.check_combustability(src, surfaces))
 		igniting = 1
-		if(! (locate(/obj/fire) in src))
-			new /obj/fire(src)
+		if(! (locate(/obj/effect/fire) in src))
+			new /obj/effect/fire(src)
 
 	return igniting
 
@@ -119,7 +119,7 @@ Attach to transfer valve and open. BOOM.
 		fuel_found += A.getFireFuel()
 	return fuel_found
 
-/obj/fire
+/obj/effect/fire
 	//Icon for fire on turfs.
 
 	anchored = 1
@@ -134,7 +134,7 @@ Attach to transfer valve and open. BOOM.
 
 	light_color = LIGHT_COLOR_FIRE
 
-/obj/fire/proc/Extinguish()
+/obj/effect/fire/proc/Extinguish()
 	var/turf/simulated/S=loc
 
 	if(istype(S))
@@ -146,7 +146,7 @@ Attach to transfer valve and open. BOOM.
 	qdel(src)
 
 
-/obj/fire/process()
+/obj/effect/fire/process()
 	if(timestopped)
 		return 0
 	. = 1
@@ -231,9 +231,9 @@ Attach to transfer valve and open. BOOM.
 					continue
 
 				//Spread the fire.
-				if(!(locate(/obj/fire) in enemy_tile))
+				if(!(locate(/obj/effect/fire) in enemy_tile))
 					if( prob( 50 + 50 * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
-						new/obj/fire(enemy_tile)
+						new/obj/effect/fire(enemy_tile)
 
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
@@ -249,13 +249,13 @@ Attach to transfer valve and open. BOOM.
 ///////////////////////////////// FLOW HAS BEEN REMERGED /// feel free to delete the fire again from here on //////////////////////////////////////////////////////////////////
 
 
-/obj/fire/New()
+/obj/effect/fire/New()
 	. = ..()
 	dir = pick(cardinal)
 	set_light(3)
 	air_master.active_hotspots.Add(src)
 
-/obj/fire/Destroy()
+/obj/effect/fire/Destroy()
 	air_master.active_hotspots.Remove(src)
 
 	set_light(0)

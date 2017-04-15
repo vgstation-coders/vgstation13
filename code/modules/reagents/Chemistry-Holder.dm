@@ -537,13 +537,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			update_total()
 			my_atom.on_reagent_change()
 
-			if(data)
+			if(!isnull(data))
 				if (reagent == BLOOD)
 				//to do: add better ways for blood colors to interact with each other
 				//right now we don't support blood mixing or something similar at all.
 					if(R.data["virus2"] && data["virus2"])
 						R.data["virus2"] |= virus_copylist(data["virus2"])
-				else if (R.data)
+				else
 					R.data = data //just in case someone adds a new reagent with a data var
 
 			handle_reactions()
@@ -557,14 +557,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		R.holder = src
 		R.volume = amount
 
-		if(data)
+		if(!isnull(data))
 			if (reagent == BLOOD)
 				R.data = data.Copy()
 				if(data["virus2"])
 					R.data["virus2"] |= virus_copylist(data["virus2"])
 				if(data["blood_colour"])
 					R.color = data["blood_colour"]
-			else if (R.data)
+			else
 				R.data = data
 
 		update_total()

@@ -232,8 +232,8 @@
 
 		if(!istype(object, /atom))
 			return
-		if(istype(object, /obj/screen))
-			var/obj/screen/using = object
+		if(istype(object, /obj/abstract/screen))
+			var/obj/abstract/screen/using = object
 			if(using.screen_loc == ui_acti || using.screen_loc == ui_iarrowleft || using.screen_loc == ui_iarrowright)//ignore all HUD objects save 'intent' and its arrows
 				return ..()
 			else

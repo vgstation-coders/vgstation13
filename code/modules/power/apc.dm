@@ -655,7 +655,7 @@
 /obj/machinery/power/apc/attack_alien(mob/living/carbon/alien/humanoid/user)
 	if(!user)
 		return
-	user.do_attack_animation(src)
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
@@ -970,7 +970,7 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)

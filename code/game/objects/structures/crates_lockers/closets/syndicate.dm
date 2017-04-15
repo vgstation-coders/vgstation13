@@ -162,7 +162,7 @@
 
 	New()
 		sleep(2)
-		new /obj/map/spawner/space/vox/trader/spacesuit(src)
+		new /obj/abstract/map/spawner/space/vox/trader/spacesuit(src)
 		new /obj/item/clothing/mask/breath/vox(src)
 		new /obj/item/clothing/shoes/magboots/vox(src)
 		new /obj/item/clothing/under/vox/vox_casual(src)
