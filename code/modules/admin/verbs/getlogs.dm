@@ -57,10 +57,18 @@
 		#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
 	src << ftp(file(path))
 	#else
-	src << run(file(path))
+	var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+	if(method == "Save to file")
+		src << ftp(file(path))
+	else if(method == "Open in notepad")
+		src << run(file(path))
 	#endif
 	#else
-	src << run(file(path))
+	var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+	if(method == "Save to file")
+		src << ftp(file(path))
+	else if(method == "Open in notepad")
+		src << run(file(path))
 	#endif
 	to_chat(src, "Attempting to send file, this may take a fair few minutes if the file is very large.")
 
@@ -84,10 +92,18 @@
 		#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
 	src << ftp(file(path))
 	#else
-	src << run(file(path))
+	var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+	if(method == "Save to file")
+		src << ftp(file(path))
+	else if(method == "Open in notepad")
+		src << run(file(path))
 	#endif
 	#else
-	src << run(file(path))
+	var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+	if(method == "Save to file")
+		src << ftp(file(path))
+	else if(method == "Open in notepad")
+		src << run(file(path))
 	#endif
 	to_chat(src, "Attempting to send file, this may take a fair few minutes if the file is very large.")
 	return
@@ -108,10 +124,18 @@
 			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
 		src << ftp(file(path))
 		#else
-		src << run(file(path))
+		var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+		if(method == "Save to file")
+			src << ftp(file(path))
+		else if(method == "Open in notepad")
+			src << run(file(path))
 		#endif
 		#else
-		src << run(file(path))
+		var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+		if(method == "Save to file")
+			src << ftp(file(path))
+		else if(method == "Open in notepad")
+			src << run(file(path))
 		#endif
 	else
 		to_chat(src, "<font color='red'>Error: view_txt_log(): File not found/Invalid path([path]).</font>")
@@ -132,10 +156,18 @@
 			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
 		src << ftp(file(path))
 		#else
-		src << run(file(path))
+		var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+		if(method == "Save to file")
+			src << ftp(file(path))
+		else if(method == "Open in notepad")
+			src << run(file(path))
 		#endif
 		#else
-		src << run(file(path))
+		var/method = alert("What method do you wish to get the logs?",,"Save to file","Open in notepad")
+		if(method == "Save to file")
+			src << ftp(file(path))
+		else if(method == "Open in notepad")
+			src << run(file(path))
 		#endif
 	else
 		to_chat(src, "<font color='red'>Error: view_atk_log(): File not found/Invalid path([path]).</font>")
