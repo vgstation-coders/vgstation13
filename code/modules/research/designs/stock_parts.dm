@@ -197,7 +197,7 @@
 	build_path = /obj/item/weapon/stock_parts/subspace/treatment
 
 /datum/design/subspace_analyzer
-	name = "Subspace Analyzer"
+	name = "Subspace Wavelength Analyzer"
 	desc = "A sophisticated analyzer capable of analyzing cryptic subspace wavelengths."
 	id = "s-analyzer"
 	req_tech = list(Tc_PROGRAMMING = 3, Tc_MAGNETS = 4, Tc_MATERIALS = 4, Tc_BLUESPACE = 2)

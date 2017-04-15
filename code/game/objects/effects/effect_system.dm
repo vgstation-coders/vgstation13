@@ -215,6 +215,13 @@ steam.start() -- spawns the effect
 			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
 			sparks.start(nextdir)
 
+// This sparks.
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE)
+	loc = get_turf(loc)
+	var/datum/effect/effect/system/spark_spread/S = new
+	S.set_up(amount, cardinals, loc)
+	S.start()
+
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
 // direct can be optinally added when set_up, to make the smoke always travel in one direction
