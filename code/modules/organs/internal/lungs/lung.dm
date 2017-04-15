@@ -15,7 +15,7 @@
 		new /datum/lung_gas/metabolizable(GAS_OXYGEN, min_pp=16, max_pp=140),
 		new /datum/lung_gas/waste(GAS_CARBON,         max_pp=10),
 		new /datum/lung_gas/toxic(GAS_PLASMA,         max_pp=0.5, max_pp_mask=5, reagent_id=PLASMA, reagent_mult=0.1),
-		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 
 	var/inhale_volume = BREATH_VOLUME
@@ -45,13 +45,13 @@
 			return 1	//godmode
 		if(breath.temperature < H.species.cold_level_1)
 			if(prob(20))
-				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
+				to_chat(H, "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>")
 		else if(breath.temperature > H.species.heat_level_1)
 			if(prob(20))
 				if(H.dna.mutantrace == "slime")
-					H << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
+					to_chat(H, "<span class='warning'>You feel supercharged by the extreme heat!</span>")
 				else
-					H << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
+					to_chat(H, "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>")
 
 		if(H.dna.mutantrace == "slime")
 			if(breath.temperature < H.species.cold_level_1)
@@ -106,7 +106,7 @@
 		new /datum/lung_gas/metabolizable(GAS_NITROGEN, min_pp=16, max_pp=140),
 		new /datum/lung_gas/waste(GAS_CARBON,           max_pp=10), // I guess? Ideally it'd be some sort of nitrogen compound.  Maybe N2O?
 		new /datum/lung_gas/toxic(GAS_OXYGEN,           max_pp=0.5, max_pp_mask=0, reagent_id=OXYGEN, reagent_mult=0.1),
-		new /datum/lung_gas/sleep_agent(GAS_SLEEPING,   trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING,   min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 
 
@@ -117,5 +117,5 @@
 	gasses = list(
 		new /datum/lung_gas/metabolizable(GAS_PLASMA, min_pp=16, max_pp=140),
 		new /datum/lung_gas/waste(GAS_CARBON,         max_pp=10),
-		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)

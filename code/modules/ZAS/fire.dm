@@ -172,7 +172,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 		return 1
 
 	fire = new(src, fl)
-	air_master.active_fire_zones |= zone
+	SSair.active_fire_zones |= zone
 
 	var/obj/effect/decal/cleanable/liquid_fuel/fuel = locate() in src
 	zone.fire_tiles |= src
@@ -206,7 +206,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 		fuel_objs.Cut()
 
 	if(!fire_tiles.len)
-		air_master.active_fire_zones.Remove(src)
+		SSair.active_fire_zones.Remove(src)
 
 /zone/proc/remove_liquidfuel(var/used_liquid_fuel, var/remove_fire=0)
 	if(!fuel_objs.len)
@@ -323,7 +323,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	set_light(3, 1, color)
 
 	firelevel = fl
-	air_master.active_hotspots.Add(src)
+	SSair.active_hotspots.Add(src)
 
 /obj/effect/fire/proc/fire_color(var/env_temperature)
 	var/temperature = max(4000*sqrt(firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)), env_temperature)
@@ -350,7 +350,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 		T.fire = null
 		loc = null
 
-	air_master.active_hotspots.Remove(src)
+	SSair.active_hotspots.Remove(src)
 
 //Returns the firelevel
 /datum/gas_mixture/proc/zburn(zone/zone, force_burn, no_check = 0)
