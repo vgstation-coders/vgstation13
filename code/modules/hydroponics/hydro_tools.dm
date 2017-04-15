@@ -281,6 +281,16 @@
 	icon_state = "pestspray"
 	pest_kill_str = 6
 
+/obj/item/weapon/plantspray/pests/proc/use(amount = 1)
+	if(pest_kill_str >= amount)
+		pest_kill_str -= amount
+
+		if(pest_kill_str == 0)
+			name = "empty [src]"
+
+		return TRUE
+	return FALSE
+
 /obj/item/weapon/plantspray/pests/old
 	name = "bottle of pestkiller"
 	icon = 'icons/obj/chemical.dmi'
