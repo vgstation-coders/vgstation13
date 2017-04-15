@@ -66,6 +66,7 @@
 /mob/living/simple_animal/cockroach/death(var/gibbed=TRUE)
 	if(!gibbed)
 		..()
+		return
 
 	var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(src.loc)
 	remains.dir = src.dir

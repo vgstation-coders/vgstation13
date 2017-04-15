@@ -182,7 +182,7 @@
 
 	..()
 
-/mob/living/simple_animal/spiderbot/death()
+/mob/living/simple_animal/spiderbot/death(var/gibbed=FALSE)
 	if(camera)
 		camera.status = 0
 	if(held_item && !isnull(held_item))
