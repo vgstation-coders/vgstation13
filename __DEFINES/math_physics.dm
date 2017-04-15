@@ -27,6 +27,9 @@
 #define T20C 293.15 //   20.0 degrees celcius
 #define TCMB 2.73   // -270.3 degrees celcius
 
+#define KELVIN       // So you can write "10 KELVIN"
+#define CELCIUS +T0C // So you can write "10 CELCIUS"
+
 #define CLAMP01(x) max(0, min(1, x))
 #define QUANTIZE(variable) (round(variable,0.0001))
 
@@ -40,3 +43,16 @@
 
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16
+
+#define MELTPOINT_GLASS     1774 KELVIN
+#define MELTPOINT_STEEL     1783 KELVIN
+#define MELTPOINT_GOLD      1337 KELVIN
+#define MELTPOINT_SILVER    1235 KELVIN
+#define MELTPOINT_DIAMOND   3823 KELVIN
+#define MELTPOINT_BANANIUM  696  KELVIN
+#define MELTPOINT_URANIUM   1405 KELVIN
+#define MELTPOINT_PLASMA    373  KELVIN
+#define MELTPOINT_PLASTEEL  0 // Cannot melt.
+#define MELTPOINT_SILICON   1686 KELVIN
+#define MELTPOINT_PLASTIC   453  KELVIN
+#define MELTPOINT_SNOW      304  KELVIN

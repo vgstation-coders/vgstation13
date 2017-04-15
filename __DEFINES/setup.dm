@@ -1022,12 +1022,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_WOOD  573.15
 #define AUTOIGNITION_PAPER 519.15
 
-#define MELTPOINT_GLASS   1500+T0C
-#define MELTPOINT_STEEL   1510+T0C
-#define MELTPOINT_SILICON 1687 // KELVIN
-#define MELTPOINT_PLASTIC 180+T0C
-#define MELTPOINT_SNOW	304.15	//about 30°C
-
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
 #define SNOWBALL_TIMELIMIT 400	//in deciseconds, how long after being spawn does the snowball disappears if it hasn't been picked up

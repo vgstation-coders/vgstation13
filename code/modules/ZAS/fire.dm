@@ -19,6 +19,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
 
+	// Melt temperature of 0 means "cannot melt".
 	var/melt_temperature=0
 	var/molten = 0
 
@@ -105,7 +106,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 /turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
 //	burn(adj_temp)
 #warn hilarity ensuing
-	if(adj_temp > melt_temperature && prob(1))
+	if(melt_temperature != 0 && adj_temp > melt_temperature && prob(1))
 		dismantle_wall(1)
 
 	return ..()
