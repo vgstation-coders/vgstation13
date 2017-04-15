@@ -314,7 +314,7 @@
 	aggro_vision_range = 1
 	idle_vision_range = 1
 	vision_range = 1
-	brute_damage_modifier = 2 * initial(brute_damage_modifier)
+	brute_damage_modifier = 3 * initial(brute_damage_modifier)
 
 	walk(src, 0)
 
