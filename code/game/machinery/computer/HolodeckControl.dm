@@ -310,16 +310,15 @@
 		holographic_items = targetsource.copy_contents_to(linkedholodeck)
 
 		spawn(30)
-			for(var/obj/effect/landmark/L in linkedholodeck)
-				if(L.name=="Atmospheric Test Start")
-					spawn(20)
-						var/turf/T = get_turf(L)
-						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-						s.set_up(2, 1, T)
-						s.start()
-						if(T)
-							T.temperature = 5000
-							T.hotspot_expose(50000,50000,1,surfaces=1)
+			for(var/obj/effect/landmark/holodeck_atmos/L in linkedholodeck)
+				spawn(20)
+					var/turf/T = get_turf(L)
+					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+					s.set_up(2, 1, T)
+					s.start()
+					if(T)
+						T.temperature = 5000
+						T.hotspot_expose(50000,50000,1,surfaces=1)
 
 		active = 1
 	else
@@ -360,7 +359,7 @@
 
 	spawn(30)
 		for(var/obj/effect/landmark/L in linkedholodeck)
-			if(L.name=="Atmospheric Test Start")
+			if(istype(L, /obj/effect/landmark/holodeck_atmos))
 				spawn(20)
 					var/turf/T = get_turf(L)
 					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -369,7 +368,7 @@
 					if(T)
 						T.temperature = 5000
 						T.hotspot_expose(50000,50000,1,surfaces=1)
-			if(L.name=="Holocarp Spawn")
+			else if(istype(L, /obj/effect/landmark/holodeck_holocarp))
 				new /mob/living/simple_animal/hostile/carp/holocarp(L.loc)
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()

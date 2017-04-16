@@ -196,9 +196,16 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 /obj/effect/landmark/holodeck_atmos
 	name = "Atmospheric Test Start"
 
+/obj/effect/landmark/holodeck_holocarp
+	name = "Holocarp Spawn"
+
 /obj/effect/landmark/tripai
 	name = "tripai"
 	desc = "AI spawn locations when there's more than one"
+
+/obj/effect/landmark/voxstart
+	name = "voxstart"
+	desc = "Vox raiders"
 
 /obj/effect/narration
 	name = "narrator"
