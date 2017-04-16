@@ -976,12 +976,13 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
-				if(ishuman(AM))
+				/*if(ishuman(AM))
 					var/mob/living/carbon/human/HM = AM
 					if (HM.drag_damage()) 
 						if (HM.isincrit())
 							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
-							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))
+							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
+// Commented out till I can figure out how to fix people still pulling when they're pulled --snx
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
