@@ -418,26 +418,26 @@ client/proc/one_click_antag()
 		var/max_raiders = 1
 		var/raiders = max_raiders
 		//Spawns vox raiders and equips them.
-		for (var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "voxstart")
-				if(raiders<=0)
-					break
+		for (var/obj/effect/landmark/voxstart/L in landmarks_list)
+			if(raiders<=0)
+				break
 
-				var/mob/living/carbon/human/new_vox = create_vox_raider(L, leader_chosen)
+			var/mob/living/carbon/human/new_vox = create_vox_raider(L, leader_chosen)
 
-				while((!theghost || !theghost.client) && candidates.len)
-					theghost = pick(candidates)
-					candidates.Remove(theghost)
+			while((!theghost || !theghost.client) && candidates.len)
+				theghost = pick(candidates)
+				candidates.Remove(theghost)
 
-				if(!theghost)
-					qdel(new_vox)
-					break
+			if(!theghost)
+				qdel(new_vox)
+				break
 
-				new_vox.key = theghost.key
-				to_chat(new_vox, "<span class='notice'>You are a Vox Primalis, fresh out of the Shoal. Your ship has arrived at the Tau Ceti system hosting the NSV Exodus... or was it the Luna? NSS? Utopia? Nobody is really sure, but everyong is raring to start pillaging! Your current goal is: <span class='danger'> [input]</span></span>")
-				to_chat(new_vox, "<span class='warning'>Don't forget to turn on your nitrogen internals!</span>")
+			new_vox.key = theghost.key
+			to_chat(new_vox, "<span class='notice'>You are a Vox Primalis, fresh out of the Shoal. Your ship has arrived at the Tau Ceti system hosting the NSV Exodus... or was it the Luna? NSS? Utopia? Nobody is really sure, but everyong is raring to start pillaging! Your current goal is: <span class='danger'> [input]</span></span>")
+			to_chat(new_vox, "<span class='warning'>Don't forget to turn on your nitrogen internals!</span>")
 
-				raiders--
+			raiders--
+
 			if(raiders > max_raiders)
 				return 0
 	else

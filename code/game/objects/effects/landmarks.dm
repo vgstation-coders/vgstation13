@@ -140,7 +140,7 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 	desc = "Random event spawns carps here."
 
 /obj/effect/landmark/nukeops/nuke_spawn
-	name = "nuke spawn"
+	name = "Nuclear-Bomb"
 	desc = "Nuke spawns here."
 
 /obj/effect/landmark/nukeops/gear_closet
@@ -158,9 +158,6 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 /obj/effect/landmark/nukeops/syndicate_spawn
 	name = "syndicate spawn"
 	desc = "Operatives spawn here."
-
-/obj/effect/landmark/nuclear_bomb
-	name = "Nuclear-Bomb"
 
 /obj/effect/landmark/syndicate_commando/bomb
 	name = "Syndicate-Commando-Bomb"
@@ -195,6 +192,13 @@ var/list/landmarks_by_type = list() //list of landmark types associated with tur
 
 /obj/effect/landmark/syndicate_uplink
 	name = "Syndicate-Uplink"
+
+/obj/effect/landmark/holodeck_atmos
+	name = "Atmospheric Test Start"
+
+/obj/effect/landmark/tripai
+	name = "tripai"
+	desc = "AI spawn locations when there's more than one"
 
 /obj/effect/narration
 	name = "narrator"

@@ -4524,7 +4524,7 @@
 "bIZ" = (/obj/structure/cable{icon_state = "1-2"; pixel_y = 0; d1 = 1; d2 = 2},/turf/simulated/floor/plating,/area/maintenance/starboardsolar)
 "bJa" = (/obj/machinery/power/solar_control{id_tag = "starboardsolar"; name = "Starboard Solar Control"; track = 2},/obj/structure/cable{icon_state = "1-2"; pixel_y = 0; d1 = 1; d2 = 2},/turf/simulated/floor/plating,/area/maintenance/starboardsolar)
 "bJb" = (/obj/structure/cable{icon_state = "1-2"; pixel_y = 0; d1 = 1; d2 = 2},/turf/simulated/floor/plating/airless,/area/solar/starboard)
-"bJc" = (/obj/landmark{name = "Nuclear-Bomb"},/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
+"bJc" = (/obj/landmark/nuke_spawn,/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "bJd" = (/obj/item/clothing/head/welding,/turf/unsimulated/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "bJe" = (/obj/machinery/power/solar{name = "Upload Solar Array"},/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/floor/airless{icon_state = "solarpanel"},/area)
 "bJf" = (/obj/machinery/power/smes{capacity = 9e+006; charge = 9e+006; chargelevel = 7500; chargemode = 1; charging = 1; name = "Primary Upload SMES"; online = 1; output = 5000},/obj/structure/cable,/turf/simulated/floor,/area/turret_protected/ai_upload_foyer)
