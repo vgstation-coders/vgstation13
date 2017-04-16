@@ -710,7 +710,7 @@ Thanks.
 								if(prob(HM.getBruteLoss() / 5)) //Chance to damage
 									for(var/datum/organ/external/damagedorgan in HM.drag_damage())
 										if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-											apply_damage(2, BRUTE, damagedorgan)
+											HM.apply_damage(2, BRUTE, damagedorgan)
 											HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
 											HM.UpdateDamageIcon()
 								if(prob(HM.getBruteLoss() / 8)) //Chance to bleed
@@ -724,7 +724,7 @@ Thanks.
 								if(prob(15))
 									for(var/datum/organ/external/damagedorgan in HM.drag_damage())
 										if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-											apply_damage(4, BRUTE, damagedorgan)
+											HM.apply_damage(4, BRUTE, damagedorgan)
 											HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
 											add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
 											HM.UpdateDamageIcon()
