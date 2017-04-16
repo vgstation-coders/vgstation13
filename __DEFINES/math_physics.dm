@@ -27,7 +27,7 @@
 #define T20C 293.15 //   20.0 degrees celcius
 #define TCMB 2.73   // -270.3 degrees celcius
 
-#define KELVIN       // So you can write "10 KELVIN"
+#define KELVIN  +0   // So you can write "10 KELVIN"
 #define CELCIUS +T0C // So you can write "10 CELCIUS"
 
 #define CLAMP01(x) max(0, min(1, x))
