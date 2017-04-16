@@ -2083,7 +2083,7 @@
 "Oc" = (/obj/machinery/flasher{id_tag = "flash"; name = "Thunderdome Flash"},/turf/simulated/floor/bluegrid,/area/tdome)
 "Od" = (/obj/machinery/camera{pixel_x = 12; pixel_y = -10; network = list("thunder"); c_tag = "Green Team"},/obj/effect/landmark/thunderdome/green,/turf/unsimulated/floor{name = "plating"},/area/tdome/tdome1)
 "Oe" = (/obj/machinery/telecomms/allinone{intercept = 1},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
-"Of" = (/obj/effect/landmark/nuke_spawn,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
+"Of" = (/obj/effect/landmark/nukeops/nuke_spawn,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "Og" = (/obj/structure/bookcase,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
 "Oh" = (/obj/structure/bed/chair{dir = 4},/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
 "Oi" = (/obj/structure/table/woodentable,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)

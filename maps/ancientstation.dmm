@@ -403,7 +403,7 @@
 "hM" = (/obj/structure/bed,/turf/simulated/floor,/area/security)
 "hN" = (/obj/machinery/firealarm{pixel_x = -32},/turf/simulated/floor,/area/shuttle_airlock)
 "hO" = (/obj/effect/landmark{name = "CTF-rogue"},/turf/simulated/floor,/area/shuttle_airlock)
-"hP" = (/obj/effect/landmark{name = "Nuclear-Bomb"},/turf/simulated/floor,/area/shuttle_airlock)
+"hP" = (/obj/effect/landmark/nukeops/nuke_spawn,/turf/simulated/floor,/area/shuttle_airlock)
 "hQ" = (/obj/machinery/camera{dir = 4; c_tag = "Crew Sleeping Area"},/turf/simulated/floor,/area/sleep_area)
 "hR" = (/turf/simulated/floor,/area/sleep_area)
 "hS" = (/obj/item/device/radio/intercom{pixel_x = 32},/turf/simulated/floor,/area/sleep_area)
