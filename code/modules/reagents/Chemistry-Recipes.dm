@@ -971,7 +971,7 @@
 /datum/chemical_reaction/slimetile/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/stack/tile/slime/T = new /obj/item/stack/tile/slime
-	T.amount = 2
+	T.amount = 5
 	T.forceMove(get_turf(holder.my_atom))
 
 //Metal
