@@ -946,6 +946,7 @@
 	result_amount = 1
 	required_other = 1
 	required_container = /obj/item/slime_extract/green
+
 /datum/chemical_reaction/slimecoat
 	name = "Slime Coat"
 	id = "slimecoat"
@@ -958,6 +959,21 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/clothing/suit/raincoat/R = new /obj/item/clothing/suit/raincoat
 	R.forceMove(get_turf(holder.my_atom))
+
+/datum/chemical_reaction/slimetile
+	name = "Slime tiles"
+	id = "slimetile"
+	result = null
+	required_reagents = list(IRON = 5)
+	required_container = /obj/item/slime_extract/green
+	required_other = 1
+
+/datum/chemical_reaction/slimetile/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/stack/tile/slime/T = new /obj/item/stack/tile/slime
+	T.amount = 2
+	T.forceMove(get_turf(holder.my_atom))
+
 //Metal
 /datum/chemical_reaction/slimemetal
 	name = "Slime Metal"
