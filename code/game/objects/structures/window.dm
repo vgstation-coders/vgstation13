@@ -28,7 +28,7 @@
 	var/obj/abstract/Overlays/damage_overlay
 	var/cracked_base = "crack"
 
-	var/fire_temp_threshold = 800
+	var/fire_temp_threshold = MELTPOINT_GLASS
 	var/fire_volume_mod = 100
 
 /obj/structure/window/New(loc)
@@ -498,7 +498,7 @@
 
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
-	if(exposed_temperature > T0C + fire_temp_threshold)
+	if(fire_temp_threshold && exposed_temperature > T0C + fire_temp_threshold)
 		health -= round(exposed_volume/fire_volume_mod)
 		healthcheck(sound = 0)
 	..()
@@ -527,7 +527,7 @@
 	health = 120
 	penetration_dampening = 5
 
-	fire_temp_threshold = 32000
+	fire_temp_threshold = 32000 KELVIN
 	fire_volume_mod = 1000
 
 /obj/structure/window/reinforced/plasma
@@ -540,8 +540,7 @@
 	health = 160
 	penetration_dampening = 7
 
-/obj/structure/window/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return
+	fire_temp_threshold = 0
 
 /obj/structure/window/reinforced/tinted
 
