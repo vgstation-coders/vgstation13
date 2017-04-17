@@ -742,3 +742,21 @@
 			sleep(1)
 			I.throw_at(user, 16, 2)
 			counter++
+
+///// ANCIENT SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph)
+	spell = null
+	icon_state = "book"
+	desc = "A book of lost and forgotten knowledge"
+	spellname = "forgotten knowledge"
+
+/obj/item/weapon/spellbook/oneuse/ancient/New()
+	..()
+	spell = pick(possible_spells)
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user as mob)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal ancient knowledge!</span>")
+	user.gib()
+	qdel(src)
