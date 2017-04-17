@@ -64,8 +64,8 @@
 #define PLASMA_UPPER_TEMPERATURE	       (T0C + 1370)
 
 //These control the mole ratio of oxidizer and fuel used in the combustion reaction
-#define FIRE_REACTION_OXIDIZER_AMOUNT	3 //should be greater than the fuel amount if fires are going to spread much
-#define FIRE_REACTION_FUEL_AMOUNT		2
+#define FIRE_REACTION_OXIDIZER_AMOUNT	2 //should be greater than the fuel amount if fires are going to spread much
+#define FIRE_REACTION_FUEL_AMOUNT		3
 
 //These control the speed at which fire burns
 #define FIRE_GAS_BURNRATE_MULT			1
