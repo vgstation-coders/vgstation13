@@ -974,6 +974,18 @@
 	T.amount = 5
 	T.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/slimeheart
+	name = "slime heart"
+	id = "R_heart"
+	result = null
+	required_reagents = list(BLOOD = 5)
+	required_container = /obj/item/slime_extract/green
+	required_other = 1
+/datum/chemical_reaction/slimeheart/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/slime_heart/S = new /obj/item/slime_heart
+	S.forceMove(get_turf(holder.my_atom))
+
 //Metal
 /datum/chemical_reaction/slimemetal
 	name = "Slime Metal"
