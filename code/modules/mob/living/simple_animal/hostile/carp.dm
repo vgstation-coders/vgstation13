@@ -59,7 +59,12 @@
 	if(gender==FEMALE)
 		child_amount = rand(4,6) //Mother explodes on death, so letting it leave 5 child carps (that can't breed) behind is fair
 
+/mob/living/simple_animal/hostile/carp/die()
+	friends.Cut()
+	..()
+
 /mob/living/simple_animal/hostile/carp/Destroy()
+	friends = null
 	if(migration_wave)
 		migration_wave.spawned_carp -= src
 		migration_wave = null
