@@ -378,10 +378,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	to_chat(src, "<span class='danger'>You latch on firmly to \the [H]'s neck.</span>")
 	to_chat(H, "<span class='userdanger'>\The [src] latches on to your neck!</span>")
 
-	if(!iscarbon(src))
-		H.LAssailant = null
-	else
-		H.LAssailant = src
 	while(do_mob(src, H, 50))
 		if(!mind.vampire || !(mind in ticker.mode.vampires))
 			to_chat(src, "<span class='warning'>Your fangs have disappeared!</span>")

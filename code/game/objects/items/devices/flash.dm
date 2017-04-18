@@ -46,11 +46,6 @@
 
 	log_attack("<font color='red'>[key_name(user)] Used the [src.name] to flash [key_name(M)]</font>")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-
 	if(!clown_check(user))
 		return
 
@@ -93,7 +88,7 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
-		
+
 		if(Subject.eyecheck() > 0)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else

@@ -1316,8 +1316,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
-
 		now_pushing = 0
 		spawn(0)
 			..()

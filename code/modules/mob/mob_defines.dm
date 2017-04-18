@@ -206,9 +206,6 @@
 			statpanel("[P.panel]","",P)
 	*/
 
-//The last mob/living/carbon to push/drag/grab this mob (mostly used by slimes friend recognition)
-	var/mob/living/carbon/LAssailant = null
-
 //Wizard mode, but can be used in other modes thanks to the brand new "Give Spell" badmin button
 	var/spell/list/spell_list = list()
 
@@ -253,8 +250,6 @@
 	var/turf/listed_turf = null  //the current turf being examined in the stat panel
 
 	var/list/active_genes=list()
-
-	var/kills=0
 
 	var/last_movement = -100 // Last world.time the mob actually moved of its own accord.
 

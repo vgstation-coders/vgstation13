@@ -139,11 +139,6 @@
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to inject [M.name] ([M.ckey])</font>")
 	log_attack("[user.name] ([user.ckey]) used the [name] to inject [M.name] ([M.ckey])")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-
 	if(inuse)
 		return 0
 

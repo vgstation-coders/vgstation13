@@ -742,6 +742,7 @@ var/list/potential_theft_objectives=list(
 /datum/objective/minimize_casualties/check_completion()
 	if(blocked)
 		return 0
-	if(owner.kills.len>5)
-		return 0
+	// haha this doesnt do anything anymore
+	// if(owner.kills.len>5)
+	// 	return 0
 	return 1

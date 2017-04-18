@@ -34,10 +34,6 @@
 
 	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</span>")
 	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to handcuff [M.name] ([M.ckey])</span>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
 
 	log_attack("[user.name] ([user.ckey]) Attempted to handcuff [M.name] ([M.ckey])")
 

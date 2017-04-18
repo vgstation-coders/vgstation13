@@ -219,11 +219,6 @@ obj/machinery/gibber/New()
 	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
 	log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(src.occupant)]</B>")
 
-	if(!iscarbon(user))
-		src.occupant.LAssailant = null
-	else
-		src.occupant.LAssailant = user
-
 	src.occupant.death(1)
 	src.occupant.ghostize(0)
 

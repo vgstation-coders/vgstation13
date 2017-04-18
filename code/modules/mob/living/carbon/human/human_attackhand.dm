@@ -52,10 +52,6 @@
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
-	if(!iscarbon(M))
-		LAssailant = null
-	else
-		LAssailant = M
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
 	return
 
@@ -142,10 +138,6 @@
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='red'>Kicked [src.name] ([src.ckey]) for [damage] damage</font>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been kicked by [M.name] ([M.ckey]) for [damage] damage</font>")
-	if(!iscarbon(M))
-		LAssailant = null
-	else
-		LAssailant = M
 	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
 
 /mob/living/carbon/human/attack_hand(mob/living/carbon/human/M)
