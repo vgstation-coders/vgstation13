@@ -59,9 +59,6 @@ var/event = 0
 var/hadevent = 0
 var/blobevent = 0
 	///////////////
-var/starticon = null
-var/midicon = null
-var/endicon = null
 var/diary = null
 var/diaryofmeanpeople = null
 var/admin_diary = null
@@ -110,10 +107,10 @@ var/list/WORLD_X_OFFSET = list()
 var/list/WORLD_Y_OFFSET = list()
 
 var/shuttle_z = map.zCentcomm	//default
-var/airtunnel_start = 68 // default
-var/airtunnel_stop = 68 // default
-var/airtunnel_bottom = 72 // default
-var/list/monkeystart = list()
+// var/airtunnel_start = 68 // default
+// var/airtunnel_stop = 68 // default
+// var/airtunnel_bottom = 72 // default
+// var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
@@ -123,35 +120,27 @@ var/list/holdingfacility = list()	//captured people go here
 var/list/xeno_spawn = list()//Aliens spawn at these.
 var/list/endgame_safespawns = list()
 var/list/endgame_exits = list()
+// TODO: remove these and refactor any procs that use them
 var/list/tdome1 = list()
 var/list/tdome2 = list()
 var/list/tdomeobserve = list()
 var/list/tdomeadmin = list()
-var/list/prisonsecuritywarp = list()	//prison security goes to these
-var/list/prisonwarped = list()	//list of players already warped
+//var/list/prisonsecuritywarp = list()	//prison security goes to these
+//var/list/prisonwarped = list()	//list of players already warped
+// man that second list is a scary concept, hard dels woo
 var/list/blobstart = list()
 var/list/ninjastart = list()
 //	list/traitors = list()	//traitor list
-var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
-var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
-var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/const/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
+var/const/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/const/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
 var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cultchat
 
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
-var/list/combatlog = list()
-var/list/IClog = list()
-var/list/OOClog = list()
-var/list/adminlog = list()
-
 var/suspend_alert = 0
-
-var/Debug = 0	// global debug switch
-var/Debug2 = 0
-
-var/datum/debug/debugobj
 
 var/datum/moduletypes/mods = new()
 
@@ -335,7 +324,7 @@ var/global/list/mineral_turfs = list()
 var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)
 
 //Used to set an atom's color var to "grayscale". The magic of color matrixes.
-var/list/grayscale = list(0.3,0.3,0.3,0,0.59,0.59,0.59,0,0.11,0.11,0.11,0,0,0,0,1,0,0,0,0)
+var/const/list/grayscale = list(0.3,0.3,0.3,0,0.59,0.59,0.59,0,0.11,0.11,0.11,0,0,0,0,1,0,0,0,0)
 
 //For adminbus blob looks
 var/adminblob_icon = null

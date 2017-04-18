@@ -458,13 +458,13 @@ var/list/beam_master = list()
 				tS = 1
 				sleep(3)
 			if(first)
-				icon = midicon
+				// icon = midicon
 				if(timestopped || loc.timestopped)
 					tS = 1
 					timestopped = 0
 			if((!( current ) || loc == current)) //If we pass our target
 				broken = 1
-				icon = endicon
+				// icon = endicon
 				tang = adjustAngle(get_angle(original,current))
 				if(tang > 180)
 					tang -= 180
@@ -488,8 +488,8 @@ var/list/beam_master = list()
 //			to_chat(world, "[x] [y]")
 			if(!bumped && !isturf(original))
 				if(loc == get_turf(original))
-					if(!(original in permutated))
-						icon = endicon
+					// if(!(original in permutated))
+					// 	icon = endicon
 					if(!broken)
 						tang = adjustAngle(get_angle(original,current))
 						if(tang > 180)

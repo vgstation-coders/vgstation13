@@ -15,18 +15,18 @@
 			shuttle_z = z
 			qdel(src)
 
-		if("airtunnel_stop")
-			airtunnel_stop = x
+		// if("airtunnel_stop")
+		// 	airtunnel_stop = x
+		//
+		// if("airtunnel_start")
+		// 	airtunnel_start = x
+		//
+		// if("airtunnel_bottom")
+		// 	airtunnel_bottom = y
 
-		if("airtunnel_start")
-			airtunnel_start = x
-
-		if("airtunnel_bottom")
-			airtunnel_bottom = y
-
-		if("monkey")
-			monkeystart += loc
-			qdel(src)
+		// if("monkey")
+		// 	monkeystart += loc
+		// 	qdel(src)
 		if("start")
 			newplayer_start += loc
 			qdel(src)
@@ -59,9 +59,9 @@
 		if("tdomeobserve")
 			tdomeobserve += loc
 		//not prisoners
-		if("prisonsecuritywarp")
+		/*if("prisonsecuritywarp")
 			prisonsecuritywarp += loc
-			qdel(src)
+			qdel(src)*/
 
 		if("blobstart")
 			blobstart += loc
