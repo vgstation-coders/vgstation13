@@ -95,27 +95,24 @@
 		if(iscoin(item))
 			var/obj/item/weapon/coin/inserted_coin = item
 			if(mode == COIN)
-				if(istype(item, /obj/item/weapon/coin/clown))
-					playsound(get_turf(my_artifact), 'sound/items/bikehorn.ogg', 50, 1)
-					toggled = !toggled
-				else if(istype(inserted_coin, /obj/item/weapon/coin/iron))
+				if(istype(inserted_coin, /obj/item/weapon/coin/iron))
 					time_left += coin_value
+					my_artifact.visible_message("<span class='info'>Something clicks from within [my_artifact].</span>")
 				else if(istype(inserted_coin, /obj/item/weapon/coin/silver))
 					time_left += coin_value * 3
-				else if(istype(inserted_coin, /obj/item/weapon/coin/gold))
-					time_left += coin_value * 6
 				else if(istype(inserted_coin, /obj/item/weapon/coin/plasma))
 					time_left += coin_value * 4
-				else if(istype(inserted_coin, /obj/item/weapon/coin/uranium))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/gold) || istype(inserted_coin, /obj/item/weapon/coin/uranium))
 					time_left += coin_value * 6
 				else if(istype(inserted_coin, /obj/item/weapon/coin/diamond))
 					time_left += coin_value * 10
-				else if(istype(inserted_coin, /obj/item/weapon/coin/phazon))
+				else if(istype(inserted_coin, /obj/item/weapon/coin/phazon) || istype(inserted_coin, /obj/item/weapon/coin/adamantine) || istype(inserted_coin, /obj/item/weapon/coin/mythril))
 					toggled = !toggled
-				else if(istype(inserted_coin, /obj/item/weapon/coin/adamantine))
+					my_artifact.visible_message("<span class='info'>Something clicks from within [my_artifact].</span>")
+				else if(istype(item, /obj/item/weapon/coin/clown))
+					playsound(get_turf(my_artifact), 'sound/items/bikehorn.ogg', 50, 1)
 					toggled = !toggled
-				else if(istype(inserted_coin, /obj/item/weapon/coin/mythril))
-					toggled = !toggled
+
 				else
 					to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept this type of coin!</span>")
 					return
