@@ -145,11 +145,11 @@
 	material = "fabric"
 
 obj/item/stack/tile/slime
-	name = "Tile of slime"
+	name = "tile of slime"
 	desc = "A flat piece of slime made through xenobiology"
 	icon_state = "tile-slime"
 	w_class = W_CLASS_MEDIUM
-	force = 1.0
+	force = 1
 	throwforce = 1.0
 	throw_speed = 5
 	throw_range = 20

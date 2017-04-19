@@ -1,5 +1,5 @@
 /obj/item/slime_heart
-	name = "Slime Heart"
+	name = "slime Heart"
 	desc = "You devil..."
 	icon = 'icons/mob/slimes.dmi'
 	icon_state = "Slime-Heart"
