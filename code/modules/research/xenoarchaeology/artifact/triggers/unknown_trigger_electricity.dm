@@ -1,7 +1,7 @@
 /datum/artifact_trigger/electricity
 	triggertype = TRIGGER_ELECTRIC
 	scanned_trigger = SCAN_CONSTANT_ENERGETIC
-	var/power_load = 7500
+	var/power_load = 1000
 
 /datum/artifact_trigger/electricity/New()
 	..()
@@ -25,8 +25,5 @@
 			Triggered(0, "NOTENOUGHELECTRICITY", 0)
 		return
 	else if(!my_effect.activated)
-//		PN.load += power_load
 		Triggered(0, "ELECTRICITY", 0)
 		return
-//	else //makes sure the powernet stays under load if the artifact is moving
-//		PN.load += power_load

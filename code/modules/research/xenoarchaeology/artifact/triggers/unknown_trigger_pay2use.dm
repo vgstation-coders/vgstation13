@@ -9,7 +9,11 @@
 	var/key_attackhand
 	var/key_attackby
 	var/time_left = 0
+	var/toggled = 0
 	var/obj/machinery/account_database/linked_db
+	var/stored_dosh = 0
+	var/coin_value = 10
+	var/credit_value = 3 //6 seconds per credit by default
 
 /datum/artifact_trigger/pay2use/New()
 	..()
@@ -17,6 +21,10 @@
 	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 	mode = rand(0,2)
 	reconnect_database()
+	if(my_effect.chargelevelmax > 30)
+		coin_value = my_effect.chargelevelmax
+		credit_value = my_effect.chargelevelmax / 5 //5 credits per effect charge
+
 
 /datum/artifact_trigger/pay2use/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
@@ -30,13 +38,17 @@
 	if(time_left < 0)
 		time_left = 0
 
-	if(time_left)
-		if(!my_effect.activated)
-			Triggered(0, "MONEY", 0)
-		time_left--
+	if(!toggled)
+		if(time_left)
+			if(!my_effect.activated)
+				Triggered(0, "MONEY", 0)
+			time_left--
+		else
+			if(my_effect.activated)
+				Triggered(0, "NOMONEY", 0)
 	else
-		if(my_effect.activated)
-			Triggered(0, "NOMONEY", 0)
+		if(!my_effect.activated)
+			Triggered(0, "MONEYTOGGLE", 0)
 
 /datum/artifact_trigger/pay2use/proc/owner_attackhand(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -49,21 +61,26 @@
 		var/dat = "<TT><center><b>[my_artifact.artifact_id]</b></center><hr /><br>" //display the name, and added a horizontal rule
 		dat += "<b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
 
-		dat += "1 Minute - $10 - "
-		dat += "<A href='?src=\ref[src];pay1m=1'>Pay</a><BR>"
-
-		dat += "2 Minutes - $19 - "
+		dat += "2 Minutes - $10 - "
 		dat += "<A href='?src=\ref[src];pay2m=1'>Pay</a><BR>"
 
-		dat += "5 Minutes - $45 - "
+		dat += "5 Minutes - $20 - "
 		dat += "<A href='?src=\ref[src];pay5m=1'>Pay</a><BR>"
 
-		dat += "10 Minutes - $85 - "
+		dat += "10 Minutes - $40 - "
 		dat += "<A href='?src=\ref[src];pay10m=1'>Pay</a><BR>"
 
+		dat += "30 Minutes - $85 - "
+		dat += "<A href='?src=\ref[src];pay30m=1'>Pay</a><BR>"
+
 		dat += "BEST VALUE FOR MONEY<BR>"
-		dat += "1 Hour - $500 - "
+		dat += "1 Hour - $150 - "
 		dat += "<A href='?src=\ref[src];pay1h=1'>Pay</a><BR>"
+
+		if(stored_dosh > 50)
+			dat += "Returning Customer Bonus<BR>"
+			dat += "Toggle - $25 - "
+			dat += "<A href='?src=\ref[src];toggled=1'>Pay</a><BR>"
 
 		var/datum/browser/popup = new(toucher, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
 		popup.set_content(dat)
@@ -80,25 +97,25 @@
 			if(mode == COIN)
 				if(istype(item, /obj/item/weapon/coin/clown))
 					playsound(get_turf(my_artifact), 'sound/items/bikehorn.ogg', 50, 1)
-					time_left += 150
+					toggled = !toggled
 				else if(istype(inserted_coin, /obj/item/weapon/coin/iron))
-					time_left += 10
+					time_left += coin_value
 				else if(istype(inserted_coin, /obj/item/weapon/coin/silver))
-					time_left += 30
+					time_left += coin_value * 3
 				else if(istype(inserted_coin, /obj/item/weapon/coin/gold))
-					time_left += 60
+					time_left += coin_value * 6
 				else if(istype(inserted_coin, /obj/item/weapon/coin/plasma))
-					time_left += 45
+					time_left += coin_value * 4
 				else if(istype(inserted_coin, /obj/item/weapon/coin/uranium))
-					time_left += 50
+					time_left += coin_value * 6
 				else if(istype(inserted_coin, /obj/item/weapon/coin/diamond))
-					time_left += 100
+					time_left += coin_value * 10
 				else if(istype(inserted_coin, /obj/item/weapon/coin/phazon))
-					time_left += 150
+					toggled = !toggled
 				else if(istype(inserted_coin, /obj/item/weapon/coin/adamantine))
-					time_left += 150
+					toggled = !toggled
 				else if(istype(inserted_coin, /obj/item/weapon/coin/mythril))
-					time_left += 150
+					toggled = !toggled
 				else
 					to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept this type of coin!</span>")
 					return
@@ -121,8 +138,16 @@
 			if(mode == CREDIT)
 				var/obj/item/weapon/spacecash/dosh = item
 				my_artifact.visible_message("<span class='info'>[toucher] inserts a credit chip into [my_artifact].</span>")
+				if(prob(90)) //1 in 10 chance to toggle
+					time_left += (dosh.get_total() * 3) //6 seconds per credit
+					if(toggled)
+						toggled = !toggled
+						my_artifact.visible_message("<span class='info'>Something clicks from within [my_artifact].</span>")
+				else
+					my_artifact.visible_message("<span class='info'>Something clicks from within [my_artifact].</span>")
+					toggled = !toggled
 				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || $[dosh.get_total()] [dosh] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
-				time_left += (dosh.get_total() * 3) //6 seconds per credit
+				stored_dosh += dosh.get_total()
 				qdel(dosh)
 			else
 				to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept credits!</span>")
@@ -170,6 +195,7 @@
 
 			//transfer the money
 			D.money -= transaction_amount
+			stored_dosh += transaction_amount
 
 			to_chat(M, "[bicon(my_artifact)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
 
@@ -184,23 +210,28 @@
 			D.transaction_log.Add(T)
 
 			// Vend the item
-			time_left += bought_time
+			if(bought_time > 0)
+				time_left += bought_time
+			else
+				toggled = !toggled
 
 			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [C] used to deposit $[dosh] and activate ([my_effect.trigger]) || used by [key_name(M)].")
 
 /datum/artifact_trigger/pay2use/Topic(href, href_list)
 	if(..())
 		return
-	if(href_list["pay1m"])
-		payviacard(10, 60, usr) //(credits paid, time given in seconds, usr)
 	if(href_list["pay2m"])
-		payviacard(19, 120, usr)
+		payviacard(10, 120, usr) //(credits paid, time given in seconds, usr)
 	if(href_list["pay5m"])
-		payviacard(45, 300, usr)
+		payviacard(20, 300, usr)
 	if(href_list["pay10m"])
-		payviacard(85, 600, usr)
+		payviacard(40, 600, usr)
+	if(href_list["pay30m"])
+		payviacard(85, 1800, usr)
 	if(href_list["pay1h"])
 		payviacard(500, 3600, usr)
+	if(href_list["toggled"])
+		payviacard(25, 0, usr)
 
 /datum/artifact_trigger/pay2use/Destroy()
 	my_artifact.on_attackhand.Remove(key_attackhand)
