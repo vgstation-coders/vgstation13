@@ -947,19 +947,6 @@
 	required_other = 1
 	required_container = /obj/item/slime_extract/green
 
-/datum/chemical_reaction/slimecoat
-	name = "Slime Coat"
-	id = "slimecoat"
-	result = null
-	required_reagents = list(SUGAR = 5)
-	required_container = /obj/item/slime_extract/green
-	required_other = 1
-
-/datum/chemical_reaction/slimecoat/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/clothing/suit/raincoat/R = new /obj/item/clothing/suit/raincoat
-	R.forceMove(get_turf(holder.my_atom))
-
 /datum/chemical_reaction/slimetile
 	name = "Slime tiles"
 	id = "slimetile"
