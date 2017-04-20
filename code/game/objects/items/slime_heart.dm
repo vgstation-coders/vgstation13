@@ -18,4 +18,3 @@
 				C.adjustToxLoss(-3)
 			else
 				C.adjustToxLoss(5)
-			spawn(1 SECONDS)
