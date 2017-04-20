@@ -3,7 +3,6 @@
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
 	sheet_amt = 1
-	dir = 1
 	var/image/buckle_overlay = null // image for overlays when a mob is buckled to the chair
 	var/image/secondary_buckle_overlay = null // for those really complicated chairs
 	var/noghostspin = 0 //Set it to 1 if ghosts should NEVER be able to spin this
