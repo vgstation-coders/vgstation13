@@ -986,6 +986,18 @@
 	var/obj/item/slime_heart/S = new /obj/item/slime_heart
 	S.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/slimecoat
+	name = "slime coat"
+	id = "R_coat"
+	result = null
+	required_reagents = list(WATER = 5)
+	required_container = /obj/item/slime_extract/green
+	required_other = 1
+/datum/chemical_reaction/slimecoat/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/clothing/suit/wintercoat/slimecoat/C = new /obj/item/clothing/suit/wintercoat/slimecoat
+	C.forceMove(get_turf(holder.my_atom))
+
 //Metal
 /datum/chemical_reaction/slimemetal
 	name = "Slime Metal"
