@@ -512,10 +512,6 @@
 						if (R.fields["id"] == E.fields["id"])
 							if(hasHUD(usr,"security"))
 								to_chat(usr, "<b>Name:</b> [R.fields["name"]]	<b>Criminal Status:</b> [R.fields["criminal"]]")
-								to_chat(usr, "<b>Minor Crimes:</b> [R.fields["mi_crim"]]")
-								to_chat(usr, "<b>Details:</b> [R.fields["mi_crim_d"]]")
-								to_chat(usr, "<b>Major Crimes:</b> [R.fields["ma_crim"]]")
-								to_chat(usr, "<b>Details:</b> [R.fields["ma_crim_d"]]")
 								to_chat(usr, "<b>Notes:</b> [R.fields["notes"]]")
 								to_chat(usr, "<a href='?src=\ref[src];secrecordComment=`'>\[View Comment Log\]</a>")
 								read = 1
@@ -1679,17 +1675,17 @@
 mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
-		
+
 /mob/living/carbon/human/drag_damage()
 	var/mob/living/carbon/human/H = src
-	var/turf/TH = H.loc	
+	var/turf/TH = H.loc
 	var/list/return_organs = list()
 	if (TH.has_gravity() && H.lying)
 		for(var/datum/organ/external/damagedorgan in H.organs)
 			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
 				return_organs += damagedorgan
 		return return_organs
-	
+
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
