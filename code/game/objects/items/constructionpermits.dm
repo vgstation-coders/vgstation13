@@ -45,5 +45,5 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		else
 			return
 	text += "</BODY></HTML>"
-	usr << browse(text, "window=blueprints")
-	onclose(usr, "blueprints")
+	usr << browse(text, "window=construction permit")
+	onclose(usr, "construction permit")
