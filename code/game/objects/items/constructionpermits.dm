@@ -12,9 +12,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
 
-/obj/item/blueprints/construction_permit/attack_self
-	interact()
-
 
 /obj/item/blueprints/construction_permit/interact()
 	var/area/A = get_area()
