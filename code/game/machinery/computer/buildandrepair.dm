@@ -144,6 +144,7 @@
 	name = "Circuit board (Robotics Control)"
 	desc = "A circuit board for running a computer used for monitoring and locking or destroying cyborgs."
 	build_path = "/obj/machinery/computer/robotics"
+	var/access_hacked = 0
 	origin_tech = Tc_PROGRAMMING + "=3"
 /obj/item/weapon/circuitboard/cloning
 	name = "Circuit board (Cloning Console)"
@@ -358,6 +359,11 @@
 	contraband_enabled = !contraband_enabled
 	return
 
+/obj/item/weapon/circuitboard/robotics/solder_improve(mob/user as mob)
+	to_chat(user, "<span class='notice'>You [access_hacked ? "" : "un"]connect the security fuse.</span>")
+	access_hacked = !access_hacked
+	return
+
 /obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
 	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
 		return ..()
@@ -490,6 +496,11 @@
 					var/obj/machinery/computer/supplycomp/SC = B
 					var/obj/item/weapon/circuitboard/supplycomp/C = circuit
 					SC.can_order_contraband = C.contraband_enabled
+				if(istype(circuit,/obj/item/weapon/circuitboard/robotics))
+					var/obj/machinery/computer/robotics/SC = B
+					var/obj/item/weapon/circuitboard/robotics/C = circuit
+					SC.access_removed = C.access_hacked
+
 				else if(istype(circuit,/obj/item/weapon/circuitboard/arcade))
 					var/obj/machinery/computer/arcade/arcade = B
 					var/obj/item/weapon/circuitboard/arcade/C = circuit

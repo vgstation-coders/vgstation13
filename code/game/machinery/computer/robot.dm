@@ -2,7 +2,7 @@
 
 
 /obj/machinery/computer/robotics
-	name = "robotics control"
+	name = "Robotics Control"
 	desc = "Used to remotely lockdown or detonate linked Cyborgs."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "robot"
@@ -15,6 +15,7 @@
 	var/timeleft = 60
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
+	var/access_removed = 0
 
 	light_color = LIGHT_COLOR_PINK
 
@@ -237,3 +238,43 @@
 	..()
 	req_access = list()
 	to_chat(user, "You disable the console's access requirement.")
+
+/obj/machinery/computer/robotics/attackby(I as obj, user as mob)
+	if(isscrewdriver(I))
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		if(do_after(user, src, 20))
+			if (stat & BROKEN)
+				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
+				getFromPool(/obj/item/weapon/shard, loc)
+				var/obj/item/weapon/circuitboard/robotics/M = new /obj/item/weapon/circuitboard/robotics( A )
+					//M.access_req = access_req
+				for (var/obj/C in src)
+					C.forceMove(loc)
+				A.circuit = M
+				A.state = 3
+				A.icon_state = "3"
+				A.anchored = 1
+				qdel(src)
+			else
+				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
+				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
+				var/obj/item/weapon/circuitboard/robotics/M = new /obj/item/weapon/circuitboard/robotics( A )
+				if(access_removed)
+					M.access_hacked = 1
+				for (var/obj/C in src)
+					C.forceMove(loc)
+				A.circuit = M
+				A.state = 4
+				A.icon_state = "4"
+				A.anchored = 1
+				qdel(src)
+	if(ismultitool(I))
+		if(!access_removed)
+			to_chat(user, "The consoles firewall stops you from changing its settings")
+		else
+			req_access = list()
+			to_chat(user, "You overide the consoles access restrictions")
+	else
+		return ..()
+
