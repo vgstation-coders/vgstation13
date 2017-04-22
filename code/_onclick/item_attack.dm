@@ -13,7 +13,8 @@
 	return
 
 /atom/movable/attackby(obj/item/W, mob/user)
-	if(W && !(W.flags&NOBLUDGEON))
+	if(W && !(W.flags&NO_ATTACK_MSG))
+		user.do_attack_animation(src, W)
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
@@ -32,7 +33,7 @@
 	return
 
 // Overrides the weapon attack so it can attack any atoms like when we want to have an effect on an object independent of attackby
-// It is a powerfull proc but it should be used wisely, if there is other alternatives instead use those
+// It is a powerful proc but it should be used wisely, if there are other alternatives instead use those
 // If it returns 1 it exits click code. Always . = 1 at start of the function if you delete src.
 /obj/item/proc/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	return

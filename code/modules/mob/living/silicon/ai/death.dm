@@ -2,9 +2,11 @@
 	if(stat == DEAD)
 		return
 	stat = DEAD
-	if (src.custom_sprite == 1)//check for custom AI sprite, defaulting to blue screen if no.
-		icon_state = "[ckey]-ai-crash"
-	else icon_state = "ai-crash"
+	if("[icon_state]-crash" in icon_states(src.icon,1))
+		icon_state = "[icon_state]-crash"
+	else
+		icon_state = "ai-crash"
+
 	update_canmove()
 	if(src.eyeobj)
 		src.eyeobj.forceMove(get_turf(src))
@@ -35,7 +37,7 @@
 			break
 		callshuttle++
 
-	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || sent_strike_team)
+	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		callshuttle = 0
 
 	if(callshuttle == 3) //if all three conditions are met

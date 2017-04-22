@@ -6,6 +6,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 30
 	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	throwforce = 0
 	throw_speed = 0
 	throw_range = 0

@@ -384,8 +384,8 @@
 
 
 /obj/structure/mannequin/proc/canEquip(var/mob/user, var/item_slot, var/obj/item/itemToCheck)
-	if((fat && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING))) || ((species.flags & IS_BULKY) && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING) || (item_slot == SLOT_MANNEQUIN_FEET) || (item_slot == SLOT_MANNEQUIN_GLOVES) || (item_slot == SLOT_MANNEQUIN_MASK))))
-		if(!(itemToCheck.flags & ONESIZEFITSALL))
+	if((fat && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING))) || ((species.anatomy_flags & IS_BULKY) && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING) || (item_slot == SLOT_MANNEQUIN_FEET) || (item_slot == SLOT_MANNEQUIN_GLOVES) || (item_slot == SLOT_MANNEQUIN_MASK))))
+		if(!(itemToCheck.clothing_flags & ONESIZEFITSALL))
 			if(user)
 				to_chat(user, "<span class='warning'>\The [src] is too large for \the [itemToCheck]</span>")
 			return 0
@@ -426,7 +426,7 @@
 /obj/structure/mannequin/update_icon()
 	..()
 	overlays.len = 0
-	var/obj/Overlays/O = getFromPool(/obj/Overlays/)
+	var/obj/abstract/Overlays/O = getFromPool(/obj/abstract/Overlays/)
 	O.layer = FLOAT_LAYER
 	O.overlays.len = 0
 
@@ -444,7 +444,7 @@
 	overlays += I
 	returnToPool(O)
 
-/obj/structure/mannequin/proc/update_icon_slot(var/obj/Overlays/O, var/slot)
+/obj/structure/mannequin/proc/update_icon_slot(var/obj/abstract/Overlays/O, var/slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]
 	if(clothToUpdate)
 		var/t_state = clothToUpdate.icon_state
@@ -457,8 +457,8 @@
 			if(SLOT_MANNEQUIN_ICLOTHING,SLOT_MANNEQUIN_OCLOTHING)
 				if(clothToUpdate._color)
 					t_state = clothToUpdate._color
-				if(fat || species.flags & IS_BULKY)
-					if(clothToUpdate.flags&ONESIZEFITSALL)
+				if(fat || species.anatomy_flags & IS_BULKY)
+					if(clothToUpdate.clothing_flags&ONESIZEFITSALL)
 						I = image(slotIcon[MANNEQUIN_ICONS_FAT], "[t_state]_s")
 				else if(primitive)
 					t_state = clothToUpdate.item_state
@@ -499,7 +499,7 @@
 
 		clothToUpdate.generate_accessory_overlays(O)
 
-/obj/structure/mannequin/proc/update_icon_hand(var/obj/Overlays/O,var/index)
+/obj/structure/mannequin/proc/update_icon_hand(var/obj/abstract/Overlays/O,var/index)
 	var/obj/item/heldItem = get_held_item_by_index(index)
 
 	if(heldItem)

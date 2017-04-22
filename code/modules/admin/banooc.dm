@@ -17,19 +17,10 @@ var/oocban_keylist[0]
 		return
 
 	//OOC permabans
-	var/DBQuery/query = dbcon.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = 'OOC_PERMABAN' AND isnull(unbanned)")
+	var/DBQuery/query = dbcon.NewQuery("SELECT ckey FROM erro_ban WHERE (bantype = 'OOC_PERMABAN'  OR (bantype = 'OOC_TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
 	query.Execute()
 
 	while(query.NextRow())
 		var/ckey = query.item[1]
-
-		oocban_keylist.Add("[ckey]")
-
-	//OOC tempbans
-	var/DBQuery/query1 = dbcon.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = 'OOC_TEMPBAN' AND isnull(unbanned) AND expiration_time > Now()")
-	query1.Execute()
-
-	while(query1.NextRow())
-		var/ckey = query1.item[1]
 
 		oocban_keylist.Add("[ckey]")

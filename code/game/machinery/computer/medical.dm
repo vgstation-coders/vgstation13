@@ -6,7 +6,6 @@
 	icon_state = "medcomp"
 	req_one_access = list(access_medical, access_forensics_lockers)
 	circuit = "/obj/item/weapon/circuitboard/med_data"
-	var/obj/item/weapon/card/id/scan = null
 	var/authenticated = null
 	var/rank = null
 	var/screen = null
@@ -515,7 +514,7 @@
 
 /obj/machinery/computer/med_data/laptop
 	name = "Medical Laptop"
-	desc = "Cheap Nanotrasen Laptop."
+	desc = "A cheap laptop connected to the medical records."
 	icon_state = "medlaptop"
 
 	machine_flags = 0

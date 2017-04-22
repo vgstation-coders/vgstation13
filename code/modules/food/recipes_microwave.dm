@@ -143,6 +143,11 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
+/datum/recipe/veggieburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
+	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -283,6 +288,17 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/eclair
 
+/datum/recipe/eclair_big
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eclair/big
+
 /datum/recipe/waffles
 	reagents = list(FLOUR = 10)
 	items = list(
@@ -311,6 +327,23 @@
 	reagents = list(FLOUR = 5, SUGAR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sugarcookie
+
+/datum/recipe/gingerbread_man
+	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
+
+/datum/recipe/livinggingerbread_man
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man,
+		/obj/item/slime_extract/grey
+		)
+	result = /mob/living/simple_animal/hostile/gingerbread
+
+/datum/recipe/candy_cane
+	reagents = list(SUGAR = 5, WATER = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/candy_cane
 
 /datum/recipe/muffin
 	reagents = list(MILK = 5, FLOUR = 5)
@@ -471,6 +504,11 @@
 /datum/recipe/baguette
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, FLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/baguette
+
+/datum/recipe/croissant
+	reagents = list(FLOUR = 5, WATER = 5, MILK = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/croissant
 
 // Asian ///////////////////////////////////////////////////////
 
@@ -743,6 +781,26 @@
 		)
 	result = /obj/structure/popout_cake
 
+/datum/recipe/fruitcake
+	reagents = list(MILK = 5, FLOUR = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/orange,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
+
+/datum/recipe/christmascake
+	reagents = list(SUGAR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
+
 // Pies ////////////////////////////////////////////////////////
 
 /datum/recipe/pie
@@ -810,6 +868,15 @@
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
+
+
+/datum/recipe/mincepie
+	reagents = list(FLOUR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
+		/obj/item/weapon/reagent_containers/food/snacks/meat
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mincepie
 
 // Kebabs //////////////////////////////////////////////////////
 
@@ -1283,6 +1350,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
 
+/datum/recipe/nofruitsalad
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+
 /datum/recipe/chickensalad
 	reagents = list (VINEGAR = 5)
 	items = list(
@@ -1605,6 +1680,18 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
+
+/datum/recipe/bleachkipper
+	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/robot_parts/head,
+		/obj/item/weapon/handcuffs,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue,
+		/obj/item/toy/crayon/blue
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bleachkipper
 
 /datum/recipe/poissoncru
 	reagents = list(LIMEJUICE = 10)
@@ -1954,6 +2041,18 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/condiment/gravy
 
+
+/datum/recipe/gravybig
+	reagents = list(WATER = 50)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
+		)
+	result = /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig
+
 /datum/recipe/sundayroast
 	reagents = list(GRAVY = 10,SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(
@@ -2103,3 +2202,66 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/vanishingstew
+
+/datum/recipe/poutine
+	reagents = list(GRAVY = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/fries,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
+
+/datum/recipe/poutinedangerous
+	reagents = list(GRAVY = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/poutine,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous
+
+/datum/recipe/poutinebarrel
+	reagents = list(GRAVY = 50)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+
+/datum/recipe/mapleleaf
+	reagents = list (SUGAR = 10, HONEY = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/aloe,
+		/obj/item/stack/sheet/snow
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/mapleleaf
+
+/datum/recipe/poutinesyrup
+	reagents = list (MAPLESYRUP = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/poutine
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
+
+/datum/recipe/poutineocean
+	reagents = list (GRAVY = 100)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+		)
+	result = /obj/structure/poutineocean
+
+/datum/recipe/poutinecitadel
+	reagents = list (MAPLESYRUP = 50)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
+		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+		)
+	result = /obj/structure/poutineocean/poutinecitadel
+

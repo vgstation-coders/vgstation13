@@ -61,9 +61,10 @@
 
 	interpreter.container = src
 
-	interpreter.SetVar("PI",	 	3.141592653)	// value of pi
-	interpreter.SetVar("E",		 	2.718281828)	// value of e
-	interpreter.SetVar("SQURT2", 	1.414213562)	// value of the square root of 2
+	interpreter.SetVar("TAU",	 	TAU)			// value of tau
+	interpreter.SetVar("PI",	 	PI)				// value of pi
+	interpreter.SetVar("E",		 	E)				// value of e
+	interpreter.SetVar("SQURT2", 	Sqrt2)			// value of the square root of 2
 	interpreter.SetVar("FALSE", 	0)				// boolean shortcut to 0
 	interpreter.SetVar("false", 	0)				// boolean shortcut to 0
 	interpreter.SetVar("TRUE",		1)				// boolean shortcut to 1
@@ -140,7 +141,7 @@
 				@param replacestring: 	the string to replace the substring with
 
 	*/
-	interpreter.SetProc("replace",		/proc/n_replacetext)
+	interpreter.SetProc("replace",		/proc/utf8_replace)
 
 	/*
 		-> Locates an element/substring inside of a list or string
@@ -177,7 +178,7 @@
 
 	interpreter.SetProc("pick",			/proc/n_pick)
 	interpreter.SetProc("prob",			/proc/prob_chance)
-	interpreter.SetProc("substr",		/proc/docopytext)
+	interpreter.SetProc("substr",		/proc/utf8_copy)
 
 	interpreter.SetProc("shuffle",		/proc/shuffle)
 	interpreter.SetProc("uniquevector",	/proc/uniquelist)
@@ -187,14 +188,14 @@
 	interpreter.SetProc("vector2text",	/proc/vg_jointext)
 
 	// Strings
-	interpreter.SetProc("lower",		/proc/n_lower)
-	interpreter.SetProc("upper",		/proc/n_upper)
+	interpreter.SetProc("lower",		/proc/utf8_lowercase)
+	interpreter.SetProc("upper",		/proc/utf8_uppercase)
 	interpreter.SetProc("explode",		/proc/string_explode)
 	interpreter.SetProc("repeat",		/proc/n_repeat)
-	interpreter.SetProc("reverse",		/proc/reverse_text)
+	interpreter.SetProc("reverse",		/proc/utf8_reverse)
 	interpreter.SetProc("tonum",		/proc/n_str2num)
-	interpreter.SetProc("capitalize",	/proc/capitalize)
-	interpreter.SetProc("replacetextEx",/proc/n_replacetextEx)
+	interpreter.SetProc("capitalize",	/proc/utf8_capitalize)
+	//interpreter.SetProc("replacetextEx",/proc/n_replacetextEx)
 
 	// Numbers
 	interpreter.SetProc("tostring",		/proc/n_num2str)

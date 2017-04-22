@@ -118,3 +118,6 @@
 			var/mob/living/carbon/C = A
 			if(C.bodytemperature >= SNOWBALL_MINIMALTEMP)
 				C.bodytemperature -= 5
+
+/mob/living/simple_animal/hostile/retaliate/snowman/dead/Life()
+	return 0

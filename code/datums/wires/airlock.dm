@@ -22,22 +22,22 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 	wire_count = 12
 	window_y = 570
 
-	New()
-		wire_names=list(
-			"[AIRLOCK_WIRE_IDSCAN]"        = "ID Scan",
-			"[AIRLOCK_WIRE_MAIN_POWER1]"   = "Main Power 1",
-			"[AIRLOCK_WIRE_MAIN_POWER2]"   = "Main Power 2",
-			"[AIRLOCK_WIRE_DOOR_BOLTS]"    = "Bolts",
-			"[AIRLOCK_WIRE_BACKUP_POWER1]" = "Backup Power 1",
-			"[AIRLOCK_WIRE_BACKUP_POWER2]" = "Backup Power 2",
-			"[AIRLOCK_WIRE_OPEN_DOOR]"     = "Open",
-			"[AIRLOCK_WIRE_AI_CONTROL]"    = "AI Control",
-			"[AIRLOCK_WIRE_ELECTRIFY]"     = "Electrify",
-			"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
-			"[AIRLOCK_WIRE_SPEED]"         = "Speed",
-			"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
-		)
-		..()
+/datum/wires/airlock/New()
+	wire_names=list(
+		"[AIRLOCK_WIRE_IDSCAN]"        = "ID Scan",
+		"[AIRLOCK_WIRE_MAIN_POWER1]"   = "Main Power 1",
+		"[AIRLOCK_WIRE_MAIN_POWER2]"   = "Main Power 2",
+		"[AIRLOCK_WIRE_DOOR_BOLTS]"    = "Bolts",
+		"[AIRLOCK_WIRE_BACKUP_POWER1]" = "Backup Power 1",
+		"[AIRLOCK_WIRE_BACKUP_POWER2]" = "Backup Power 2",
+		"[AIRLOCK_WIRE_OPEN_DOOR]"     = "Open",
+		"[AIRLOCK_WIRE_AI_CONTROL]"    = "AI Control",
+		"[AIRLOCK_WIRE_ELECTRIFY]"     = "Electrify",
+		"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
+		"[AIRLOCK_WIRE_SPEED]"         = "Speed",
+		"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
+	)
+	..()
 
 /datum/wires/airlock/CanUse(var/mob/living/L)
 	if(!..())
@@ -62,7 +62,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 	(A.normalspeed==0 ? "The 'Check Timing Mechanism' light is on." : "The 'Check Timing Mechanism' light is off."))
 
 
-/datum/wires/airlock/UpdateCut(var/index, var/mended)
+/datum/wires/airlock/UpdateCut(var/index, var/mended, mob/user)
 
 	var/obj/machinery/door/airlock/A = holder
 	switch(index)
@@ -71,22 +71,22 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			if(!mended)
 				//Cutting either one disables the main door power, but unless backup power is also cut, the backup power re-powers the door in 10 seconds. While unpowered, the door may be crowbarred open, but bolts-raising will not work. Cutting these wires may electocute the user.
 				A.loseMainPower()
-				A.shock(usr, 50)
+				A.shock(user, 50)
 			else
 				if((!IsIndexCut(AIRLOCK_WIRE_MAIN_POWER1)) && (!IsIndexCut(AIRLOCK_WIRE_MAIN_POWER2)))
 					A.regainMainPower()
-					A.shock(usr, 50)
+					A.shock(user, 50)
 
 		if(AIRLOCK_WIRE_BACKUP_POWER1, AIRLOCK_WIRE_BACKUP_POWER2)
 
 			if(!mended)
 				//Cutting either one disables the backup door power (allowing it to be crowbarred open, but disabling bolts-raising), but may electocute the user.
 				A.loseBackupPower()
-				A.shock(usr, 50)
+				A.shock(user, 50)
 			else
 				if((!IsIndexCut(AIRLOCK_WIRE_BACKUP_POWER1)) && (!IsIndexCut(AIRLOCK_WIRE_BACKUP_POWER2)))
 					A.regainBackupPower()
-					A.shock(usr, 50)
+					A.shock(user, 50)
 
 		if(AIRLOCK_WIRE_DOOR_BOLTS)
 
@@ -116,7 +116,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			if(!mended)
 				//Cutting this wire electrifies the door, so that the next person to touch the door without insulated gloves gets electrocuted.
 				if(A.secondsElectrified != -1)
-					A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
+					A.shockedby += text("\[[time_stamp()]\][user](ckey:[user.ckey])")
 					A.secondsElectrified = -1
 			else
 				if(A.secondsElectrified == -1)
@@ -137,7 +137,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			A.update_icon()
 
 
-/datum/wires/airlock/UpdatePulsed(var/index)
+/datum/wires/airlock/UpdatePulsed(var/index, mob/user)
 
 	var/obj/machinery/door/airlock/A = holder
 	switch(index)
@@ -181,7 +181,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_ELECTRIFY)
 			//one wire for electrifying the door. Sending a pulse through this electrifies the door for 30 seconds.
 			if(A.secondsElectrified==0)
-				A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
+				A.shockedby += text("\[[time_stamp()]\][user](ckey:[user.ckey])")
 				A.secondsElectrified = 30
 				spawn(10)
 					if(A)

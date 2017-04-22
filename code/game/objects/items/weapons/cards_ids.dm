@@ -288,20 +288,6 @@
 
 	return "Unknown"
 
-// vgedit: We have different wallets.
-/*
-/obj/item/weapon/card/id/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
-	if(istype(W,/obj/item/weapon/id_wallet))
-		to_chat(user, "You slip [src] into [W].")
-		src.name = "[src.registered_name]'s [W.name] ([src.assignment])"
-		src.desc = W.desc
-		src.icon = W.icon
-		src.icon_state = W.icon_state
-		del(W)
-		return
-*/
-
 /obj/item/weapon/card/id/silver
 	name = "identification card"
 	desc = "A silver card which shows honour and dedication."
@@ -313,6 +299,89 @@
 	desc = "A golden card which shows power and might."
 	icon_state = "gold"
 	item_state = "gold_id"
+
+/obj/item/weapon/card/id/nt_disguise
+	name = "\improper Nanotrasen undercover ID"
+	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
+	registered_name = null
+
+	var/registered_user = null
+	var/static/list/gimmick_names = list(
+		"A. N. Other",
+		"Guy Incognito",
+		"Hugh Zasking",
+		"Ivan Gottasecret"
+	)
+
+/obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
+
+	if(!src.registered_name)
+
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			SetOwnerInfo(H)
+			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
+
+		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
+		if(!n)
+			return
+		if (!Adjacent(user) || user.incapacitated())
+			return
+		src.registered_name = n
+
+		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+		if(!u)
+			alert("Invalid assignment.")
+			src.registered_name = null
+			return
+		if (!Adjacent(user) || user.incapacitated())
+			src.registered_name = null
+			return
+		src.assignment = u
+		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+		to_chat(user, "<span class='notice'>You successfully configured the NT ID card.</span>")
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			registered_user = H.dna.unique_enzymes
+
+	else if (!registered_user || user.dna && registered_user == user.dna.unique_enzymes)
+		if (!registered_user)
+			if(ishuman(user))
+				var/mob/living/carbon/human/H = user
+				registered_user = H.dna.unique_enzymes
+
+		switch(alert(user,"Would you like to display \the [src] or edit it?","Nanotrasen undercover ID","Show","Edit"))
+
+			if ("Show")
+				return ..()
+
+			if ("Edit")
+				switch(alert(user,"What would you like to edit on \the [src]?", "Nanotrasen undercover ID", "Name", "Occupation"))
+
+					if ("Name")
+						var/new_name = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
+						if (!Adjacent(user) || user.incapacitated())
+							return
+						if (!new_name)
+							return
+						src.registered_name = new_name
+						UpdateName()
+						to_chat(user, "Name changed to [new_name].")
+
+					if("Occupation")
+						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+						if (!Adjacent(user) || user.incapacitated())
+							return
+						if (!new_job)
+							alert("Invalid assignment.")
+							return
+						src.assignment = new_job
+						UpdateName()
+						to_chat(user, "Occupation changed to [new_job].")
+
+	else
+		..()
 
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
@@ -542,7 +611,7 @@
 	name = "Research ID"
 	registered_name = "Scientist"
 	icon_state = "research"
-	desc = "Pinnacle of name technology."
+	desc = "The pinnacle of name technology."
 	access = list(access_science, access_rnd, access_tox_storage, access_robotics, access_xenobiology, access_rd)
 
 /obj/item/weapon/card/id/supply
@@ -563,21 +632,21 @@
 	name = "Head of Security ID"
 	registered_name = "HoS"
 	icon_state = "HoS"
-	desc = "An ID awarded to only the most robust shits in the buisness."
+	desc = "An ID awarded to only the most robust shits in the business."
 	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 
 /obj/item/weapon/card/id/cmo
 	name = "Chief Medical Officer ID"
 	registered_name = "CMO"
 	icon_state = "CMO"
-	desc = "It gives off the faint smell of chloral, mixed with a backdraft of shittery."
+	desc = "It gives off the faint smell of chloral hydrate, mixed with a backdraft of equipment abuse."
 	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
 
 /obj/item/weapon/card/id/rd
 	name = "Research Director ID"
 	registered_name = "RD"
 	icon_state = "RD"
-	desc = "If you put your ear to the card, you can faintly hear screaming, glomping, and mechs. What the fuck."
+	desc = "If you put your ear to the card, you can faintly hear screaming, glomping, and mechs. What the fuck?"
 	access = list(access_rd, access_heads, access_rnd, access_genetics, access_morgue, access_tox_storage, access_teleporter, access_sec_doors, access_science, access_robotics, access_xenobiology, access_ai_upload, access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway)
 
 /obj/item/weapon/card/id/ce
@@ -591,7 +660,7 @@
 	name = "Pink ID"
 	registered_name = "HONK!"
 	icon_state = "clown"
-	desc = "Even looking at the card strikes you with deep fear."
+	desc = "Just looking at the card strikes you with deep fear."
 	access = list(access_clown, access_theatre, access_maint_tunnels)
 
 /obj/item/weapon/card/id/mime
@@ -606,18 +675,18 @@
 	registered_name = "Red Team Fighter"
 	assignment = "Red Team Fighter"
 	icon_state = "TDred"
-	desc = "This ID card is given to those who fought inside the thunderdome for the Red Team. Not many have lived to see one of those, even fewer lived to keep it."
+	desc = "This ID card is given to those who fought inside the thunderdome for the Red Team. Not many have lived to see one of these, and even fewer lived to keep them."
 
 /obj/item/weapon/card/id/thunderdome/green
 	name = "Thunderdome Green ID"
 	registered_name = "Green Team Fighter"
 	assignment = "Green Team Fighter"
 	icon_state = "TDgreen"
-	desc = "This ID card is given to those who fought inside the thunderdome for the Green Team. Not many have lived to see one of those, even fewer lived to keep it."
+	desc = "This ID card is given to those who fought inside the thunderdome for the Green Team. Not many have lived to see one of these, and even fewer lived to keep them."
 
 /obj/item/weapon/card/id/vox
 	name = "traveler's ID"
-	desc = "A traveler's ID card, required to legally travel in human-controlled territories. It's very worn out and the photo is almost unrecognizable."
+	desc = "A traveler's ID card, required to legally travel in human-controlled territories. It shows signs of wear and the photo is almost unrecognizable."
 	registered_name = "traveler"
 	assignment = "visitor"
 	icon_state = "trader"

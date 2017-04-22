@@ -161,6 +161,9 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 	if (N)
 		fill_amount = N
 
+/obj/item/weapon/reagent_containers/chempack/attack()
+	return
+
 /obj/item/weapon/reagent_containers/chempack/afterattack(atom/A as obj, mob/user as mob, var/adjacency_flag)
 	if (istype(A, /obj/structure/reagent_dispensers) && adjacency_flag)
 		var/tx_amount = transfer_sub(A, src, fill_amount, user)
@@ -171,13 +174,16 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 /obj/item/weapon/reagent_containers/chempack/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
 		if(src.safety && auxiliary)
-			if (stage)
+			if(stage)
 				to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can insert a beaker!</span>")
 				return
 			if(user.type == /mob/living/silicon/robot) //Can't have silicons putting their beakers inside this.
 				return
 			if(src.beaker)
 				to_chat(user, "There is already a beaker loaded into \the [src].")
+				return
+			if(W.w_class > W_CLASS_SMALL)
+				to_chat(user, "<span class='warning'>\The [W] is too big to fit.</span>")
 				return
 			else
 				if(user.drop_item(W, src))

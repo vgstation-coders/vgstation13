@@ -238,11 +238,12 @@
 		return
 	//for(var/obj/O in src)
 	//	O.loc = src.loc
-	if (src.occupant.client)
-		src.occupant.client.eye = src.occupant.client.mob
-		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.forceMove(src.loc)
-	src.occupant = null
+	if(!occupant.gcDestroyed)
+		if (occupant.client)
+			occupant.client.eye = occupant.client.mob
+			occupant.client.perspective = MOB_PERSPECTIVE
+		occupant.forceMove(src.loc)
+	occupant = null
 	build_icon()
 	src.use_power = 1
 	// Removes dropped items/magically appearing mobs from the charger too
@@ -283,7 +284,7 @@
 /obj/machinery/recharge_station/proc/mob_enter(mob/living/silicon/robot/R)
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
-	if (R.stat == 2)
+	if (R.stat == 2 || !R.canmove)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 		return
 	if (!(istype(R, /mob/living/silicon/)))

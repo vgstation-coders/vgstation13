@@ -87,3 +87,6 @@
 		if (isanimal(other))
 			return 1
 	return ..()
+
+/mob/living/silicon/can_read()
+	return TRUE

@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Title: Atmos Control UI
 Used In File(s): /code/game/machinery/alarm.dm
 -->
@@ -29,7 +29,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 	</div>
 {{else}}
 	{{:helper.link("Main Menu","gear",{"reset":1},null,null)}}
-	
+
 	<!-- The markup below is a direct copy of air_alarm.tmpl -->
 	<h3>{{:data.name}}</h3>
 	{{if !data.air}}
@@ -65,9 +65,14 @@ Used In File(s): /code/game/machinery/alarm.dm
 				{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.co2),helper.precisionRound(data.air.contents.co2,2))}}
 			</div>
 			<div class="line">
-				<div class="statusLabel">Toxins:</div>
+				<div class="statusLabel">Plasma:</div>
 				{{:helper.displayBar(data.air.contents.plasma, 0, 100, helper.dangerToClass(data.air.danger.plasma))}}
 				{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.plasma),helper.precisionRound(data.air.contents.plasma,2))}}
+			</div>
+			<div class="line">
+				<div class="statusLabel">Nitrous Oxide:</div>
+				{{:helper.displayBar(data.air.contents.n2o, 0, 100, helper.dangerToClass(data.air.danger.n2o))}}
+				{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.n2o),helper.precisionRound(data.air.contents.n2o,2))}}
 			</div>
 			{{if data.air.danger.other>0}}
 			<div class="line">
@@ -271,9 +276,21 @@ Used In File(s): /code/game/machinery/alarm.dm
 							{{/for}}
 						</tr>
 						<tr>
-							<th>Toxins</th>
+							<th>Plasma</th>
 							{{for data.sensors.plasma}}
 								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'plasma','var':index+1})}}</td>
+							{{/for}}
+						</tr>
+						<tr>
+							<th>Nitrous Oxide</th>
+							{{for data.sensors.n2o}}
+								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'n2o','var':index+1})}}</td>
+							{{/for}}
+						</tr>
+						<tr>
+							<th>Trace Gases</th>
+							{{for data.sensors.other}}
+								<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'other','var':index+1})}}</td>
 							{{/for}}
 						</tr>
 						<tr>

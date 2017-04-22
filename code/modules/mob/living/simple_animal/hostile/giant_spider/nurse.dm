@@ -1,3 +1,5 @@
+#define MAX_SQUEENS 5
+
 //nursemaids - these create webs and eggs
 // Slower
 /mob/living/simple_animal/hostile/giant_spider/nurse
@@ -22,6 +24,14 @@
 			busy = 0
 			stop_automated_movement = 0
 
+/mob/living/simple_animal/hostile/giant_spider/nurse/proc/check_evolve()
+	if(spider_queens.len < MAX_SQUEENS)
+		var/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/NQ = new(src.loc)
+		NQ.inherit_mind(src)
+		qdel(src)
+		return 1
+	return 0
+
 /mob/living/simple_animal/hostile/giant_spider/nurse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -30,6 +40,9 @@
 	..()
 	if(!stat)
 		if(stance == HOSTILE_STANCE_IDLE)
+			if(check_evolve())
+				return
+
 			var/list/can_see = view(src, 10)
 			//30% chance to stop wandering and do something
 			if(!busy && prob(30))
@@ -165,6 +178,8 @@
 			busy = 0
 			stop_automated_movement = 0
 
+var/list/spider_queens = list()
+
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider
 	name = "spider queen"
 	desc = "Massive, dark, and very furry. This is an absolutely massive spider. Its fangs are almost as big as you!"
@@ -181,6 +196,17 @@
 	projectiletype = /obj/item/projectile/web
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
+
+/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/New()
+	..()
+	spider_queens += src
+
+/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/Destroy()
+	..()
+	spider_queens -= src
+
+/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/check_evolve()
+	return 0
 
 /obj/item/projectile/web
 	icon_state = "web"

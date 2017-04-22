@@ -1,16 +1,3 @@
-#define SOFT_DM "digital messenger"
-#define SOFT_CM "crew manifest"
-#define SOFT_FL "flashlight"
-#define SOFT_RT "redundant threading"
-#define SOFT_RS "remote signaller"
-#define SOFT_WJ "wirejack"
-#define SOFT_CS "chem synth"
-#define SOFT_FS "food synth"
-#define SOFT_UT "universal translator"
-#define SOFT_MS "medical supplement"
-#define SOFT_SS "security supplement"
-#define SOFT_AS "atmosphere sensor"
-
 /mob/living/silicon/pai
 	name = "pAI"
 	icon = 'icons/obj/pda.dmi'
@@ -61,6 +48,9 @@
 	var/charge = 0						// 0 - 15, used for charging up the chem synth and food synth
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
+
+	var/pPS = 0 //Are we a pPS in the GPS list?
+	var/ppstag = "PAI0" // Our pPS tag
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)
@@ -242,8 +232,98 @@
 	src:cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
+	if(incapacitated())
+		return
+	var/list/modifiers = params2list(params)
+	if(modifiers["middle"])
+		MiddleClickOn(A)
+		return
+	if(modifiers["shift"])
+		ShiftClickOn(A)
+		return
+	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		AltClickOn(A)
+		return
+	if(modifiers["ctrl"])
+		CtrlClickOn(A)
+		return
+
+	if(istype(card.loc, /obj))
+		var/obj/O = card.loc
+		if(O.integratedpai == card)
+			if(O == A)
+				O.attack_integrated_pai(src)
+				return
+			else
+				O.on_integrated_pai_click(src, A)
+				return
 	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
 		A.attack_pai(src)
+
+/mob/living/silicon/pai/CtrlClickOn(var/atom/A)
+	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
+		A.attack_pai(src)
+
+/mob/living/silicon/pai/verb/quick_equip()	//exists to pass usage of the equip hotkey on to equipkey_integrated_pai()
+	set name = "quick-equip"
+	set hidden = 1
+
+	if(ispAI(src))
+		var/mob/living/silicon/pai/P = src
+		if(P.incapacitated())
+			return
+		if(istype(P.card.loc, /obj))
+			var/obj/O = P.card.loc
+			if(O.integratedpai == P.card)
+				O.equipkey_integrated_pai(P)
+
+/mob/living/silicon/pai/mode()	//exists to pass usage of the attack_self() hotkey on to attack_integrated_pai()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = 1
+
+	if(ispAI(src))
+		var/mob/living/silicon/pai/P = src
+		if(P.incapacitated())
+			return
+		if(istype(P.card.loc, /obj))
+			var/obj/O = P.card.loc
+			if(O.integratedpai == P.card)
+				O.attack_integrated_pai(P)
+
+/mob/living/silicon/pai/a_intent_change(input as text)
+	set name = "a-intent"
+	set hidden = 1
+
+	if(ispAI(src))
+		var/mob/living/silicon/pai/P = src
+		if(P.incapacitated())
+			return
+		if(istype(P.card.loc, /obj))
+			var/obj/O = P.card.loc
+			if(O.integratedpai == P.card)
+				switch(input)
+					if(I_HELP)
+						O.intenthelp_integrated_pai(P)
+					if(I_DISARM)
+						O.intentdisarm_integrated_pai(P)
+					if(I_GRAB)
+						O.intentgrab_integrated_pai(P)
+					if(I_HURT)
+						O.intenthurt_integrated_pai(P)
+					if("right")
+						O.intentright_integrated_pai(P)
+					if("left")
+						O.intentleft_integrated_pai(P)
+
+/mob/living/silicon/pai/relaymove(dir)
+	if(incapacitated())
+		return
+	if(istype(card.loc, /obj))
+		var/obj/O = card.loc
+		if(O.integratedpai == card)
+			O.pAImove(src, dir)
 
 /atom/proc/attack_pai(mob/user as mob)
 	return

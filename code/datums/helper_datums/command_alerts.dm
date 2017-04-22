@@ -375,10 +375,10 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Vermin Alert"
 	alert_title = "Vermin infestation"
 
-/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels")
+/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels", warning = "Clear them out, before this starts to affect productivity.")
 	..()
 
-	message = "Bioscans indicate that [vermstring] have been breeding in [locstring]. Clear them out, before this starts to affect productivity."
+	message = "Bioscans indicate that [vermstring] have been breeding in [locstring]. [warning]"
 
 /datum/command_alert/mob_swarm
 	name = "Mob Swarm"

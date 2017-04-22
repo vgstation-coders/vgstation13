@@ -41,7 +41,7 @@ Mineral Sheets
 	melt_temperature = MELTPOINT_GLASS
 	recyck_mat = MAT_GLASS
 
-var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
+var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	new/datum/stack_recipe("pile of dirt", /obj/machinery/portable_atmospherics/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("sandstone door", /obj/machinery/door/mineral/sandstone, 10, one_per_turf = 1, on_floor = 1), \
 /*	new/datum/stack_recipe("sandstone wall", ???), \
@@ -84,7 +84,7 @@ var/global/list/datum/stack_recipe/sandstone_recipes = list ( \
 	melt_temperature = 3820 // In a vacuum, but fuck dat
 	recyck_mat = MAT_DIAMOND
 
-var/global/list/datum/stack_recipe/diamond_recipes = list ( \
+var/list/datum/stack_recipe/diamond_recipes = list ( \
 	new/datum/stack_recipe("diamond floor tile", /obj/item/stack/tile/mineral/diamond, 1, 4, 20), \
 	new/datum/stack_recipe("diamond door", /obj/machinery/door/mineral/transparent/diamond, 10, one_per_turf = 1, on_floor = 1), \
 	)
@@ -111,7 +111,7 @@ var/global/list/datum/stack_recipe/diamond_recipes = list ( \
 	melt_temperature = 1132+T0C
 	recyck_mat = MAT_URANIUM
 
-var/global/list/datum/stack_recipe/uranium_recipes = list ( \
+var/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
 	new/datum/stack_recipe("uranium door", /obj/machinery/door/mineral/uranium, 10, one_per_turf = 1, on_floor = 1), \
 	)
@@ -138,7 +138,7 @@ var/global/list/datum/stack_recipe/uranium_recipes = list ( \
 	melt_temperature = MELTPOINT_STEEL + 500
 	recyck_mat = MAT_PLASMA
 
-var/global/list/datum/stack_recipe/plasma_recipes = list ( \
+var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
 	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
 	)
@@ -163,7 +163,7 @@ var/global/list/datum/stack_recipe/plasma_recipes = list ( \
 	sheettype = "plastic"
 	recyck_mat = MAT_PLASTIC
 
-var/global/list/datum/stack_recipe/plastic_recipes = list ( \
+var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
@@ -210,7 +210,7 @@ var/global/list/datum/stack_recipe/plastic_recipes = list ( \
 	sheettype = "gold"
 	recyck_mat = MAT_GOLD
 
-var/global/list/datum/stack_recipe/gold_recipes = list ( \
+var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
 	new/datum/stack_recipe("golden door", /obj/machinery/door/mineral/gold, 10, one_per_turf = 1, on_floor = 1), \
 	)
@@ -222,7 +222,7 @@ var/global/list/datum/stack_recipe/gold_recipes = list ( \
 /*
  * Phazon
  */
-var/global/list/datum/stack_recipe/phazon_recipes = list( \
+var/list/datum/stack_recipe/phazon_recipes = list( \
 	new/datum/stack_recipe("phazon floor tile", /obj/item/stack/tile/mineral/phazon, 1, 4, 20), \
 	)
 
@@ -262,7 +262,7 @@ var/global/list/datum/stack_recipe/phazon_recipes = list( \
 	sheettype = "silver"
 	recyck_mat = MAT_SILVER
 
-var/global/list/datum/stack_recipe/silver_recipes = list ( \
+var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
 	new/datum/stack_recipe("silver door", /obj/machinery/door/mineral/silver, 10, one_per_turf = 1, on_floor = 1), \
 	)
@@ -288,7 +288,7 @@ var/global/list/datum/stack_recipe/silver_recipes = list ( \
 	sheettype = "clown"
 	recyck_mat = MAT_CLOWN
 
-var/global/list/datum/stack_recipe/clown_recipes = list ( \
+var/list/datum/stack_recipe/clown_recipes = list ( \
 	new/datum/stack_recipe("bananium floor tile", /obj/item/stack/tile/mineral/clown, 1, 4, 20), \
 	)
 

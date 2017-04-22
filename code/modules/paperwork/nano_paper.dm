@@ -29,7 +29,7 @@
 	set src in usr
 
 	// Didn't feel like this was appropriate for a paper that is made of plastic
-	//if((M_CLUMSY in usr.mutations) && prob(50))
+	//if(clumsy_check(usr) && prob(50))
 //		to_chat(usr, "<span class='warning'>You cut yourself on the paper.</span>")
 	//	return
 

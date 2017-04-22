@@ -27,7 +27,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = 1	// Does the mob wander around when idle?
 	var/stop_automated_movement_when_pulled = 1 //When set to 1 this stops the animal from moving when someone is pulling it.
-
 	//Interaction
 	var/response_help   = "pokes"
 	var/response_disarm = "shoves"
@@ -135,7 +134,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
-	Move(dest)
+	if(space_check())
+		Move(dest)
 
 /mob/living/simple_animal/Life()
 	if(timestopped)
@@ -204,10 +204,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					wander_move(destination)
 					turns_since_move = 0
 
+	var/someone_in_earshot=0
+	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
+		// All we're doing here is seeing if there's any CLIENTS nearby.
+		for(var/mob/M in get_hearers_in_view(7, src))
+			if(M.client)
+				someone_in_earshot=1
+				break
+
 	//Speaking
-	if(!client && speak_chance && (ckey == null))
-		if(rand(0,200) < speak_chance)
-			if(speak && speak.len)
+	if(!client && speak_chance && (ckey == null) && someone_in_earshot)
+		if(speak && speak.len)
+			if(rand(0,200) < speak_chance)
 				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
 					var/length = speak.len
 					if(emote_hear && emote_hear.len)
@@ -344,24 +352,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		act = "me"
 	..(act, type, desc)
 
-/mob/living/simple_animal/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-
-		visible_message("<span class='warning'><B>\The [M]</B> [M.attacktext] \the [src]!</span>")
-
-		add_logs(M, src, "attacked", admin=0)
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
-			adjustBrainLoss(damage)
-		else
-			adjustBruteLoss(damage,M.melee_damage_type)
-		updatehealth()
+/mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
+	M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
@@ -382,32 +374,17 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	switch(M.a_intent)
 
 		if(I_HELP)
-			if (health > 0)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
+			if(health > 0)
+				visible_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
-			if (M.grab_check(src))
-				return
-			if (!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
+			M.grab_mob(src)
 
 		if(I_HURT, I_DISARM)
-			adjustBruteLoss(harm_intent_damage)
+			M.unarmed_attack_mob(src)
+			//adjustBruteLoss(harm_intent_damage)
 
-			visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+			//visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
 	return
 
@@ -430,36 +407,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	switch(M.a_intent)
 
 		if (I_HELP)
-
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 		if (I_GRAB)
-			if(M.grab_check(src))
-				return
-			if(!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
-
+			M.grab_mob(src)
 		if(I_HURT, I_DISARM)
-			var/damage = rand(15, 30)
-			visible_message("<span class='danger'>[M] has slashed at [src]!</span>")
-			adjustBruteLoss(damage)
-
-	return
+			M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/attack_larva(mob/living/carbon/alien/larva/L as mob)
 
@@ -469,11 +421,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 		else
-
+			L.do_attack_animation(src, L)
 			var/damage = rand(5, 10)
 			visible_message("<span class='danger'>[L] bites [src]!</span>")
 
 			if(stat != DEAD)
+				visible_message("<span class='danger'>[L] feeds on [src]!</span>", "<span class='notice'>You feed on [src]!</span>")
 				adjustBruteLoss(damage)
 				L.growth = min(L.growth + damage, LARVA_GROW_TIME)
 
@@ -514,7 +467,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		else
 			to_chat(user, "<span class='notice'>This [src] is dead, medical items won't bring it back to life.</span>")
 	else if((meat_type || butchering_drops) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
-		if(O.is_sharp())
+		if(O.sharpness_flags & SHARP_BLADE)
 			if(user.a_intent != I_HELP)
 				to_chat(user, "<span class='info'>You must be on <b>help</b> intent to do this!</span>")
 			else
@@ -523,6 +476,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		user.delayNextAttack(8)
 		if(O.force)
+			user.do_attack_animation(src, O)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
@@ -774,5 +728,27 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	src.resurrect()
 	src.revive()
 	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+
+/mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
+	return
+
+/mob/living/simple_animal/proc/space_check() //Returns a 1 if you can move in space or can kick off of something, 0 otherwise
+	if(Process_Spacemove())
+		return 1
+	var/spaced = 1
+	for(var/turf/T in range(src,1))
+		if(!istype(T, /turf/space))
+			spaced = 0
+			break
+		for(var/atom/A in T.contents)
+			if(istype(A,/obj/structure/lattice) \
+				|| istype(A, /obj/structure/window) \
+				|| istype(A, /obj/structure/grille))
+				spaced = 0
+				break
+	if(spaced)
+		walk(src,0)
+	return !spaced
+
 
 /datum/locking_category/simple_animal

@@ -7,9 +7,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/throwforce = 1
 	var/siemens_coefficient = 0 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
 	var/sharpness = 0 //not a binary - rough guide is 0.8 cutting, 1 cutting well, 1.2 specifically sharp (knives, etc) 1.5 really sharp (scalpels, e-weapons)
+	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
 
-	var/edge = 0
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
 
 	var/damtype = "brute"
@@ -29,11 +29,22 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/defective = 0
 
+	var/can_take_pai = FALSE
+	var/obj/item/device/paicard/integratedpai = null
+	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+	var/pAImovement_delay = 0
+
+	// Can we wrench/weld this to a turf with a dense /obj on it?
+	var/can_affix_to_dense_turf=0
+
+	var/has_been_invisible_sprayed = FALSE
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
 		var/turf/T = loc
 		T.soft_add_holomap(src)
+	verbs -= /obj/verb/remove_pai
 
 /obj/Destroy()
 	for(var/mob/user in _using)
@@ -42,9 +53,122 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(src in processing_objects)
 		processing_objects -= src
 
+	if(integratedpai)
+		qdel(integratedpai)
+		integratedpai = null
+		verbs -= /obj/verb/remove_pai
+
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
+
+
+/obj/proc/install_pai(obj/item/device/paicard/P)
+	if(!P || !istype(P))
+		return 0
+	P.forceMove(src)
+	integratedpai = P
+	verbs += /obj/verb/remove_pai
+
+
+/obj/attackby(obj/item/weapon/W, mob/user)
+	if(can_take_pai && istype(W, /obj/item/device/paicard))
+		if(integratedpai)
+			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
+			return
+
+		if(user.drop_item(W))
+			to_chat(user, "You insert \the [W] into a slot in \the [src].")
+			install_pai(W)
+			state_controls_pai(W)
+			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+
+/obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
+	if(P.pai)
+		return 1
+	return 0
+
+/obj/proc/attack_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI clicks on the object, or uses the attack_self() hotkey
+	return
+
+/obj/proc/swapkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the swap_hand() hotkey
+	return
+
+/obj/proc/throwkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the toggle_throw_mode() hotkey
+	return
+
+/obj/proc/dropkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the drop hotkey
+	return
+
+/obj/proc/equipkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the equip hotkey
+	return
+
+/obj/proc/intentright_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the cycle-intent-right hotkey
+	return
+
+/obj/proc/intentleft_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the cycle-intent-left hotkey
+	return
+
+/obj/proc/intenthelp_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the help intent hotkey
+	return
+
+/obj/proc/intentdisarm_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the disarm intent hotkey
+	return
+
+/obj/proc/intentgrab_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the grab intent hotkey
+	return
+
+/obj/proc/intenthurt_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the hurt intent hotkey
+	return
+
+/obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
+	if(pAImove_delayer.blocked())
+		user.last_movement=world.time
+		return 0
+	else
+		delayNextpAIMove(getpAIMovementDelay())
+		if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
+			delayNextpAIMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
+		user.last_movement=world.time
+		return 1
+
+/obj/proc/getpAIMovementDelay()
+	return pAImovement_delay
+
+/obj/proc/delayNextpAIMove(var/delay, var/additive=0)
+	pAImove_delayer.delayNext(delay,additive)
+
+/obj/proc/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)
+	if(istype(A,/obj/machinery)||(istype(A,/mob)&&user.secHUD))
+		A.attack_pai(user)
+
+/obj/verb/remove_pai()
+	set name = "Remove pAI"
+	set category = "Object"
+	set src in range(1)
+
+	var/mob/M = usr
+	if(!M.Adjacent(src))
+		return
+	if(!M.dexterity_check())
+		to_chat(usr, "You don't have the dexterity to do this!")
+		return
+	if(M.incapacitated())
+		to_chat(M, "You can't do that while you're incapacitated!")
+		return
+
+	to_chat(M, "You eject \the [integratedpai] from \the [src].")
+	M.put_in_hands(eject_integratedpai_if_present())
+	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
+
+/obj/proc/eject_integratedpai_if_present()
+	if(integratedpai)
+		integratedpai.forceMove(get_turf(src))
+		verbs -= /obj/verb/remove_pai
+		var/obj/item/device/paicard/P = integratedpai
+		integratedpai = null
+		return P
+	return 0
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
@@ -80,6 +204,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return heat_production
 
 /obj/proc/process()
+	set waitfor = FALSE
 	processing_objects.Remove(src)
 
 /obj/assume_air(datum/gas_mixture/giver)
@@ -308,11 +433,29 @@ a {
 		machine._using += src
 		machine.in_use = 1
 
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+/** Returns 1 or 0 depending on whether the machine can be affixed to this position.
+ * Used to determine whether other density=1 things are on this tile.
+ * @param user Tool user
+ * @return bool Can affix here
+ */
+/obj/proc/canAffixHere(var/mob/user)
+	if(density==0 || can_affix_to_dense_turf)
+		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
 		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
-			return -1
+			return FALSE // NOPE
+	return TRUE
+
+/** Anchors shit to the deck via wrench.
+ * NOTE: WHOEVER CODED THIS IS AN ABSOLUTE FUCKING RETARD AND USES -1 AS FAIL INSTEAD OF 0.
+ * @param user The mob doing the wrenching
+ * @param time_to_wrench The time to complete the wrenchening
+ * @returns 1 on success, -1 on fail
+ */
+/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+	if(!canAffixHere(user))
+		return -1
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
 			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
@@ -325,6 +468,8 @@ a {
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	if(do_after(user, src, time_to_wrench))
+		if(!canAffixHere(user))
+			return -1
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
@@ -398,3 +543,34 @@ a {
 	if(!defective)
 		defective = 1
 		desc += "\nIt doesn't look to be in the best shape."
+
+/obj/proc/clumsy_check(var/mob/living/user)
+	if(istype(user))
+		return (M_CLUMSY in user.mutations)
+	return 0
+
+//Proc that handles NPCs (gremlins) "tampering" with this object.
+//Return NPC_TAMPER_ACT_FORGET if there's no interaction (the NPC won't try to tamper with this again)
+//Return NPC_TAMPER_ACT_NOMSG if you don't want to create a visible_message
+/obj/proc/npc_tamper_act(mob/living/L)
+	return NPC_TAMPER_ACT_FORGET
+
+/obj/actual_send_to_future(var/duration)
+	var/turf/current_turf = get_turf(src)
+	var/datum/current_loc = loc
+	forceMove(null)
+
+	..()
+
+	if(!current_loc.gcDestroyed)
+		forceMove(current_loc)
+	else
+		forceMove(current_turf)
+
+/obj/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"sharpness",
+		"integratedpai")
+
+	reset_vars_after_duration(resettable_vars, duration)

@@ -72,7 +72,7 @@
 		var/obj/item/weapon/gun/energy/E = installed
 
 		switch(E.type)
-			if(/obj/item/weapon/gun/energy/laser/bluetag)
+			if(/obj/item/weapon/gun/energy/tag/blue)
 				lasercolor = "b"
 				req_access = list(access_maint_tunnels)
 				check_records = 0
@@ -81,7 +81,7 @@
 				stun_all = 0
 				check_anomalies = 0
 
-			if(/obj/item/weapon/gun/energy/laser/redtag)
+			if(/obj/item/weapon/gun/energy/tag/red)
 				lasercolor = "r"
 				req_access = list(access_maint_tunnels)
 				check_records = 0
@@ -210,7 +210,7 @@ Status: []<BR>"},
 			cover.visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
 		else //But when unsecured the cover is gone, so it shows the message itself
 			visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
-		if(istype(installed, /obj/item/weapon/gun/energy/laser/redtag) || istype(installed, /obj/item/weapon/gun/energy/laser/redtag))
+		if(istype(installed, /obj/item/weapon/gun/energy/tag/red) || istype(installed, /obj/item/weapon/gun/energy/tag/red))
 			installed.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
 		req_access = null
@@ -551,18 +551,18 @@ Status: []<BR>"},
 		threatcount = 0//But does not target anyone else
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
+		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if((src.lasercolor) == "r")
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
+		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if (src.check_records) // if the turret can check the records, check if they are set to *Arrest* on records

@@ -414,16 +414,25 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
 	//speech bubble
-	var/list/speech_bubble_recipients = list()
+	var/list/tracking_speech_bubble_recipients = list()
+	var/list/static_speech_bubble_recipients = list()
 	for(var/mob/M in hearers)
 		M.heard(src)
 		if(M.client)
-			speech_bubble_recipients.Add(M.client)
+			if(src.invisibility > M.see_invisible) //You cannot see who's talking, so you only get a vague sense of where the sound originated from. This is mostly for Jaunt invocation.
+				static_speech_bubble_recipients.Add(M.client)
+			else
+				tracking_speech_bubble_recipients.Add(M.client)
 	spawn(0)
-		var/image/speech_bubble = image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1)
-		speech_bubble.plane = BASE_PLANE
-		speech_bubble.appearance_flags = RESET_COLOR
-		flick_overlay(speech_bubble, speech_bubble_recipients, 30)
+		if(static_speech_bubble_recipients.len)
+			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_turf(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), static_speech_bubble_recipients)
+		if(tracking_speech_bubble_recipients.len)
+			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), tracking_speech_bubble_recipients)
+
+/proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist)
+	speech_bubble.plane = BASE_PLANE
+	speech_bubble.appearance_flags = RESET_COLOR
+	flick_overlay(speech_bubble, clientlist, 30)
 
 /mob/proc/addSpeechBubble(image/speech_bubble)
 	if(client)

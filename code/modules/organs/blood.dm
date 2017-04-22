@@ -22,7 +22,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	vessel = new/datum/reagents(600)
 	vessel.my_atom = src
 
-	if(species && species.flags & NO_BLOOD) //We want the var for safety but we can do without the actual blood.
+	if(species && species.anatomy_flags & NO_BLOOD) //We want the var for safety but we can do without the actual blood.
 		return
 
 	vessel.add_reagent(BLOOD,560)
@@ -35,13 +35,13 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(B.id == BLOOD)
 			B.data = list(	"donor"=src,"viruses"=null,"blood_DNA"=dna.unique_enzymes,"blood_colour"= species.blood_color,"blood_type"=dna.b_type,	\
 							"resistances"=null,"trace_chem"=null, "virus2" = null, "antibodies" = null)
-			B.color = B.data["blood_color"]
+			B.color = B.data["blood_colour"]
 
 // Takes care blood loss and regeneration
 /mob/living/carbon/human/proc/handle_blood()
 
 
-	if(species && species.flags & NO_BLOOD)
+	if(species && species.anatomy_flags & NO_BLOOD)
 		return
 
 	if(stat != DEAD && bodytemperature >= 170)	//Dead or cryosleep people do not pump the blood.
@@ -171,15 +171,16 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /mob/living/carbon/human/proc/drip(var/amt as num)
 
 
-	if(species && species.flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
-		return
+	if(species && species.anatomy_flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
+		return 0
 
 	if(!amt)
-		return
+		return 0
 
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
+	return 1
 
 /****************************************************
 				BLOOD TRANSFERS
@@ -230,7 +231,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 //For humans, blood does not appear from blue, it comes from vessels.
 /mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 
-	if(species && species.flags & NO_BLOOD)
+	if(species && species.anatomy_flags & NO_BLOOD)
 		return null
 
 	if(vessel.get_reagent_amount(BLOOD) < amount)
@@ -265,7 +266,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 
-	if(species && species.flags & NO_BLOOD)
+	if(species && species.anatomy_flags & NO_BLOOD)
 		reagents.add_reagent(BLOOD, amount, injected.data)
 		reagents.update_total()
 		return

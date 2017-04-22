@@ -24,6 +24,8 @@
 		new /obj/item/clothing/shoes/workboots(src)
 		new /obj/item/weapon/cartridge/ce(src)
 		new /obj/item/device/radio/headset/heads/ce(src)
+		new /obj/item/weapon/storage/box/inflatables(src)
+		new /obj/item/weapon/inflatable_dispenser(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
 		new /obj/item/device/t_scanner/advanced(src)
 		new /obj/item/device/device_analyser/advanced(src)
@@ -112,6 +114,7 @@
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
 		new /obj/item/clothing/under/rank/engineer(src)
 		new /obj/item/clothing/shoes/workboots(src)
+		new /obj/item/weapon/storage/box/inflatables(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
 //		new /obj/item/weapon/cartridge/engineering(src)
 		new /obj/item/device/radio/headset/headset_eng(src)
@@ -143,6 +146,7 @@
 			new /obj/item/weapon/storage/backpack/satchel_norm(src)
 		new /obj/item/clothing/under/rank/atmospheric_technician(src)
 		new /obj/item/clothing/shoes/workboots(src)
+		new /obj/item/weapon/storage/box/inflatables(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
 		new /obj/item/weapon/extinguisher/foam(src)
 		// new /obj/item/weapon/cartridge/engineering(src)
@@ -206,11 +210,14 @@
 
 
 /obj/structure/closet/crate/secure/large/reinforced/shard
-	name = "Supermatter Shard Crate"
+	name = "supermatter shard crate"
+	req_access = list(access_engine_equip)
+	var/payload = /obj/machinery/power/supermatter/shard
 	New()
 		..()
 		sleep(2)
-		new /obj/machinery/power/supermatter/shard(src)
+		if(payload)
+			new payload(src)
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/machinery/power/supermatter))
@@ -222,3 +229,11 @@
 		if(S.damage) //This is what I like to call predicting the metagame
 			return 0
 	return ..()
+
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/crystal
+	name = "supermatter crystal crate"
+	payload = /obj/machinery/power/supermatter
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	payload = null

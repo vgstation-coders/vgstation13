@@ -38,8 +38,8 @@
 		var/laws
 		dat += "Stored AI: [src.occupant.name]<br>System integrity: [src.occupant.system_integrity()]%<br>"
 
-		if (src.occupant.laws.zeroth)
-			laws += "0: [src.occupant.laws.zeroth]<BR>"
+		//if (src.occupant.laws.zeroth)
+		//	laws += "0: [src.occupant.laws.zeroth]<BR>"
 
 		var/number = 1
 		for (var/index = 1, index <= src.occupant.laws.inherent.len, index++)

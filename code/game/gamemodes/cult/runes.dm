@@ -13,12 +13,14 @@
 	return 0
 
 /obj/effect/rune/proc/invocation(var/animation_icon)
+	if(c_animation) // if you've more than one, it won't go away
+		return
 	c_animation = new /atom/movable/overlay(src.loc)
 	c_animation.name = "cultification"
 	c_animation.density = 0
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
-	c_animation.plane = EFFECTS_LAYER
+	c_animation.plane = EFFECTS_PLANE
 	c_animation.master = src.loc
 	c_animation.icon_state = "[animation_icon]"
 	flick("cultification",c_animation)
@@ -97,7 +99,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			culcount++
-	if(culcount>=3)
+	if(culcount>=2)
 		user.say("Sas[pick("'","`")]so c'arta forbici tarem!")
 
 		nullblock = 0
@@ -186,7 +188,7 @@
 			usr.visible_message("<span class='warning'>Something is blocking the conversion!</span>")
 			return 0
 		invocation("rune_convert")
-		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below him glow a bloody red.</span>", \
+		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below \him glow a bloody red.</span>", \
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
@@ -266,7 +268,7 @@
 
 	else
 		for(var/mob/M in active_cultists)
-			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this world.</span>")//narsie won't appear if a supermatter cascade has started
+			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this universe.</span>")//narsie won't appear if a supermatter cascade has started
 
 		return
 
@@ -612,7 +614,7 @@
 	D.canmove = 0
 	var/atom/movable/overlay/animation = null
 
-	usr.visible_message("<span class='warning'> A shape forms in the center of the rune. A shape of... a man.<BR>The world feels blury as your soul permeates this temporary body.</span>", \
+	usr.visible_message("<span class='warning'> A shape forms in the center of the rune. A shape of... a man.<BR>The world feels blurry as your soul permeates this temporary body.</span>", \
 	"<span class='warning'> A shape forms in the center of the rune. A shape of... a man.</span>", \
 	"<span class='warning'>You hear liquid flowing.</span>")
 
@@ -1057,7 +1059,7 @@
 		to_chat(user, "<span class='warning'>None of the cultists are currently under restraints.</span>")
 		return fizzle()
 
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to free", "Followers of Geometer") as null|anything in possible_targets
 		if(!cultist)
 			return fizzle()
@@ -1118,7 +1120,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			users+=C
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - user)
 		if(!cultist)
 			return fizzle()
@@ -1170,7 +1172,7 @@
 		if(nullblock)
 			continue
 		C.ear_deaf += 50
-		C.show_message("<span class='warning'>The world around you suddenly becomes quiet.</span>")
+		C.show_message("<span class='notice'>The world around you suddenly becomes quiet.</span>")
 		affected++
 		if(prob(1))
 			C.sdisabilities |= DEAF
@@ -1307,7 +1309,7 @@
 		usr.whisper("Sa tatha najin")
 		if(ishuman(user))
 			var/mob/living/carbon/human/P = user
-			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr]...</span>", \
+			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr].</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
 			if(isplasmaman(P))
@@ -1421,6 +1423,12 @@
 								M = null
 								to_chat(C, "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
+								for(var/spell/S in C.spell_list)
+									if(S.charge_type & Sp_RECHARGE)
+										if(S.charge_counter == S.charge_max) //Spell is fully charged - let the proc handle everything
+											S.take_charge()
+										else //Spell is on cooldown and already recharging - there's no need to call S.process(), just reset charges to 0
+											S.charge_counter = 0
 				qdel(src)
 				return
 			else

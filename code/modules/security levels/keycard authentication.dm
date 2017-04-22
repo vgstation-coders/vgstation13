@@ -179,7 +179,9 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			revoke_maint_all_access()
 			feedback_inc("alert_keycard_auth_maintRevoke",1)
 		if("Emergency Response Team")
-			trigger_armed_response_team(1,ert_reason)
+			var/datum/striketeam/ert/response_team = new()
+			response_team.mission = ert_reason
+			response_team.trigger_strike()
 			feedback_inc("alert_keycard_auth_ert",1)
 
 var/global/maint_all_access = 0

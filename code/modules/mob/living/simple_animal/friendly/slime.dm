@@ -21,6 +21,7 @@
 	mob_bump_flag = SLIME
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
+	held_items = list()
 
 /mob/living/simple_animal/slime/attackby(var/obj/item/weapon/slimeparapotion/O as obj, var/mob/user as mob)
 	if(istype(O))
@@ -125,6 +126,6 @@
 				severity = 6
 
 		if(severity > 0)
-			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("brute", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")

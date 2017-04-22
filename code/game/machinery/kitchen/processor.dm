@@ -244,5 +244,11 @@
 	src.visible_message("<span class='notice'>[src] is done.</span>", \
 		"You hear [src] stop")
 
+/obj/machinery/processor/attack_ghost(mob/user as mob)
+	user.examination(src)
+
 /obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(user.incapacitated())
+		return
+
 	attackby(O,user)

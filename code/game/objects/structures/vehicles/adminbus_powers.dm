@@ -331,8 +331,8 @@
 
 	var/distributed = 0
 
-	if(locked_atoms.len)
-		var/mob/living/M = locked_atoms[1]
+	if(is_locking(/datum/locking_category/adminbus))
+		var/mob/living/M = get_locked(/datum/locking_category/adminbus)[1]
 		if(iscarbon(M))
 			for(var/i = 1 to M.held_items.len)
 				if(M.held_items[i] == null)
@@ -393,8 +393,8 @@
 
 	var/distributed = 0
 
-	if(locked_atoms.len)
-		var/mob/living/M = locked_atoms[1]
+	if(is_locking(/datum/locking_category/adminbus))
+		var/mob/living/M = get_locked(/datum/locking_category/adminbus)[1]
 		if(iscarbon(M))
 			var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(M)
 
@@ -811,7 +811,7 @@
 /obj/item/packobelongings
 	name = "Unknown's belongings"
 	desc = "Full of stuff."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "belongings"
 	w_class = W_CLASS_MEDIUM
 
@@ -979,8 +979,8 @@
 	var/turf/T = get_turf(src)
 	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
 
-	if(locked_atoms.len)
-		var/mob/living/M = locked_atoms[1]
+	if(is_locking(/datum/locking_category/adminbus))
+		var/mob/living/M = get_locked(/datum/locking_category/adminbus)[1]
 		M.hud_used.remove_adminbus_hud()
 
 	qdel(src)//RIP ADMINBUS

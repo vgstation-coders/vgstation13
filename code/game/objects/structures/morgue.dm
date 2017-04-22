@@ -21,16 +21,16 @@
 	anchored = 1.0
 
 /obj/structure/morgue/proc/update()
-	if (connected)
+	if(connected)
 		icon_state = "morgue0"
 	else
-		if (contents.len > 0)
+		if(contents.len > 0)
 			var/list/inside = recursive_type_check(src, /mob)
-			if (!inside.len)
+			if(!inside.len)
 				icon_state = "morgue3" // no mobs at all, but objects inside
 			else
-				for (var/mob/body in inside)
-					if (body && body.client)
+				for(var/mob/living/body in inside)
+					if(body && body.client && !body.suiciding)
 						icon_state = "morgue4" // clone that mofo
 						return
 				icon_state = "morgue2" // dead no-client mob
@@ -133,16 +133,7 @@
 		else
 			dir=4
 	if (istype(P, /obj/item/weapon/pen))
-		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null) as text
-		if (user.get_active_hand() != P)
-			return
-		if (!Adjacent(user) || user.incapacitated())
-			return
-		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
-		if (t)
-			src.name = "morgue- '[t]'"
-		else
-			src.name = initial(src.name)
+		set_tiny_label(user, " - '", "'")
 	src.add_fingerprint(user)
 
 /obj/structure/morgue/relaymove(mob/user as mob)
@@ -298,16 +289,7 @@
 
 /obj/structure/crematorium/attackby(P as obj, mob/user as mob)
 	if (istype(P, /obj/item/weapon/pen))
-		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
-		if (user.get_active_hand() != P)
-			return
-		if (!Adjacent(user) || user.stat)
-			return
-		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
-		if (t)
-			src.name = text("Crematorium- '[]'", t)
-		else
-			src.name = "Crematorium"
+		set_tiny_label(user, " - '", "'")
 	src.add_fingerprint(user)
 
 /obj/structure/crematorium/relaymove(mob/user as mob)

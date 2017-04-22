@@ -27,6 +27,9 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
 
+/obj/item/weapon/gun/energy/laser/pistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/laser/rifle
 	name = "laser rifle"
 	desc = "A laser rifle issued to high ranking members of a certain shadow corporation."
@@ -111,13 +114,16 @@
 
 /obj/item/weapon/gun/energy/laser/blaster/update_icon()
 
-obj/item/weapon/gun/energy/laser/retro
+/obj/item/weapon/gun/energy/laser/retro
 	name ="retro laser"
 	icon_state = "retro"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	desc = "An older model of the basic lasergun, no longer used by Nanotrasen's security or military forces. Nevertheless, it is still quite deadly and easy to maintain, making it a favorite amongst pirates and other outlaws."
 	projectile_type = /obj/item/projectile/beam/retro
+
+/obj/item/weapon/gun/energy/laser/retro/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/laser/captain
 	icon_state = "caplaser"
@@ -129,6 +135,8 @@ obj/item/weapon/gun/energy/laser/retro
 	var/charge_tick = 0
 	projectile_type = "/obj/item/projectile/beam/captain"
 
+/obj/item/weapon/gun/energy/laser/captain/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/laser/captain/New()
 	..()
@@ -213,9 +221,6 @@ obj/item/weapon/gun/energy/laser/retro
 
 	fire_delay = 2
 
-	isHandgun()
-		return 0
-
 /obj/item/weapon/gun/energy/laser/cannon/empty/New()
 	..()
 
@@ -295,6 +300,9 @@ obj/item/weapon/gun/energy/laser/retro
 	projectile_type = /obj/item/projectile/energy/plasma/pistol
 	charge_cost = 100
 
+/obj/item/weapon/gun/energy/plasma/pistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/plasma/light
 	name = "plasma rifle"
 	desc = "A state of the art rifle utilizing plasma in a uranium-235 lined core to output radiating bolts of energy."
@@ -330,91 +338,6 @@ obj/item/weapon/gun/energy/laser/retro
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 75
 
-////////Laser Tag////////////////////
-
-/obj/item/weapon/gun/energy/laser/bluetag
-	name = "laser tag gun"
-	icon_state = "bluetag"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	desc = "Standard issue weapon of the Imperial Guard."
-	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
-	origin_tech = Tc_MAGNETS + "=2"
-	mech_flags = null // So it can be scanned by the Device Analyser
-	clumsy_check = 0
-	var/charge_tick = 0
-
-/obj/item/weapon/gun/energy/laser/bluetag/special_check(var/mob/living/carbon/human/M)
-	if(ishuman(M))
-		if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
-			return 1
-		to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
-	return 0
-
-/obj/item/weapon/gun/energy/laser/bluetag/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/laser/bluetag/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-
-/obj/item/weapon/gun/energy/laser/bluetag/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
-
-
-
-/obj/item/weapon/gun/energy/laser/redtag
-	name = "laser tag gun"
-	icon_state = "redtag"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	desc = "Standard issue weapon of the Imperial Guard."
-	projectile_type = "/obj/item/projectile/beam/lasertag/red"
-	origin_tech = Tc_MAGNETS + "=2"
-	mech_flags = null // So it can be scanned by the Device Analyser
-	clumsy_check = 0
-	var/charge_tick = 0
-
-/obj/item/weapon/gun/energy/laser/redtag/special_check(var/mob/living/carbon/human/M)
-	if(ishuman(M))
-		if(istype(M.wear_suit, /obj/item/clothing/suit/redtag))
-			return 1
-		to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
-	return 0
-
-/obj/item/weapon/gun/energy/laser/redtag/New()
-	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/gun/energy/laser/redtag/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-
-/obj/item/weapon/gun/energy/laser/redtag/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
-
-
 /obj/item/weapon/gun/energy/megabuster
 	name = "Mega-buster"
 	desc = "An arm-mounted buster toy!"
@@ -442,3 +365,45 @@ obj/item/weapon/gun/energy/laser/retro
 	charge_cost = 25
 	fire_sound = 'sound/weapons/mmlbuster.ogg'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/megabusters.dmi', "right_hand" = 'icons/mob/in-hand/right/megabusters.dmi')
+
+/obj/item/weapon/gun/energy/laser/smart
+	name = "smart laser gun"
+	desc = "An upgraded model of the basic laser gun. There seems to be some sort of slot in the handle."
+	can_take_pai = TRUE
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=4"
+
+/obj/item/weapon/gun/energy/laser/rainbow
+
+	name = "rainbow laser"
+	desc = "A fearsome gun used by clown special forces. Its design is flawed however as clumsy users find it hard to operate."
+	projectile_type = "/obj/item/projectile/beam/white"
+	var/current_color = 1
+	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
+	var/fire_mode = 1 // 1 = laser, 0 = braindamage.
+	icon_state = "rainbow_laser"
+/obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/living/user)
+
+	switch(fire_mode)
+		if(0)
+			fire_mode = 1
+			to_chat(user, "<span class='warning'>\The [src.name] is now set to kill.</span>")
+			projectile_type = "/obj/item/projectile/beam/white"
+			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
+			fire_sound = 'sound/weapons/Laser.ogg'
+		if(1)
+			fire_mode = 0
+			to_chat(user, "<span class='warning'>\The [src.name] is now set to mindflay.</span>")
+			projectile_type = "/obj/item/projectile/beam/rainbow/braindamage"
+			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
+			fire_sound = 'sound/items/quack.ogg'
+
+
+
+/obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+
+	projectile_color = color_list[current_color]
+	if(current_color < color_list.len )
+		current_color+=1
+	else
+		current_color = 1
+	..()

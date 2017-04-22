@@ -6,8 +6,7 @@
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
-	invocation = "Rah'dee K'Alari"
-	invocation_type = SpI_SHOUT
+	invocation_type = SpI_NONE
 	range = SELFCAST
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
@@ -53,7 +52,7 @@
 	target.candrop = 0
 	target.alphas["etheral_jaunt"] = 125 //Spoopy mode to know you are jaunting
 	target.handle_alpha()
-	for(var/obj/screen/movable/spell_master/SM in target.spell_masters)
+	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(duration+25)
 	target.delayNextAttack(duration+25)
 	target.click_delayer.setDelay(duration+25)
@@ -75,7 +74,7 @@
 	//Forcemove him onto the tile and make him visible and vulnerable
 	target.forceMove(mobloc)
 	target.invisibility = 0
-	for(var/obj/screen/movable/spell_master/SM in target.spell_masters)
+	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(0)
 	target.flags &= ~INVULNERABLE
 	target.density = old_density

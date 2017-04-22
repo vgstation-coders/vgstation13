@@ -1,7 +1,7 @@
 /obj/effect/blob/node
 	name = "blob node"
 	icon_state = "node"
-	desc = "Some pulsating blob creature thingy"
+	desc = "A part of a blob."
 	health = 100
 	maxhealth = 100
 	fire_resist = 2

@@ -1,6 +1,6 @@
 /obj/item/weapon/gun/projectile/hecate
-	name = "\improper PGM Hécate II"
-	desc = "An Anti-Materiel Rifle. You can read \"Fabriqué en Haute-Savoie\" on the receiver. Whatever that means..."
+	name = "\improper PGM HÃ©cate II"
+	desc = "An Anti-Materiel Rifle. You can read \"FabriquÃ© en Haute-Savoie\" on the receiver. Whatever that means..."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "hecate"
 	item_state = null
@@ -19,7 +19,7 @@
 	var/backup_view = 7
 
 /obj/item/weapon/gun/projectile/hecate/isHandgun()
-	return 0
+	return FALSE
 
 /obj/item/weapon/gun/projectile/hecate/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)	return //we're placing gun on a table or in backpack

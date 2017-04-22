@@ -23,6 +23,8 @@
 		process_locks()
 	update_canmove()
 	handle_beams()
+	if(locked_to_z)
+		check_locked_zlevel()
 
 
 
@@ -216,19 +218,19 @@
 //	if (src.fire) src.fire.icon_state = "fire[src.fire_alert ? 1 : 0]"
 
 	if(src.eye_blind || blinded)
-		overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	else
 		clear_fullscreen("blind")
 	if (src.disabilities & NEARSIGHTED)
-		overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
+		overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
 	else
 		clear_fullscreen("impaired")
 	if (src.eye_blurry)
-		overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+		overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 	else
 		clear_fullscreen("blurry")
 	if (src.druggy)
-		overlay_fullscreen("high", /obj/screen/fullscreen/high)
+		overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 	else
 		clear_fullscreen("high")
 
@@ -262,5 +264,21 @@
 /mob/living/silicon/robot/mommi/update_canmove()
 	canmove = !(paralysis || stunned || knockdown || locked_to || lockcharge || anchored)
 	return canmove
+
+/mob/living/silicon/robot/mommi/proc/check_locked_zlevel()
+	if(!locked_to_z)
+		return
+
+	var/datum/zLevel/current_zlevel = get_z_level(src)
+	if(!current_zlevel)
+		return
+	if(current_zlevel.z != locked_to_z)
+		to_chat(src, "<span class='userdanger'>Your hardware detects that you have left your intended location. Initiating self-destruct.</span>")
+		locked_to_z = 0
+		spawn(rand(2,7) SECONDS)
+			if(mmi) //no sneaking brains away
+				qdel(mmi)
+				mmi = null
+			gib()
 
 #undef MOMMI_LOW_POWER

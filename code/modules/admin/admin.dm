@@ -106,6 +106,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
 			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
 			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
+			<A href='?src=\ref[src];Assplode=\ref[M]'>Assplode</A> |
 		"}
 
 	// Mob-specific controls.
@@ -368,7 +369,7 @@ var/global/floorIsLava = 0
 	return noteslist
 /datum/admins/proc/show_player_info(var/key as text)
 	set category = "Admin"
-	set name = "Show Player Info"
+	set name = "Show Player Notes"
 
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
@@ -645,7 +646,7 @@ var/global/floorIsLava = 0
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
 			"}
 		else
-			dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
+			dat+="Something bad happened. More accurately, this broke. Please make a bug report."
 
 //	to_chat(world, "Channelname: [src.admincaster_feed_channel.channel_name] [src.admincaster_feed_channel.author]")
 //	to_chat(world, "Msg: [src.admincaster_feed_message.author] [src.admincaster_feed_message.body]")
@@ -726,12 +727,13 @@ var/global/floorIsLava = 0
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
 			<BR>
+			<BR>
 			"}
 
 	if(check_rights(R_ADMIN,0))
 		dat += {"
 			<B>Admin Secrets</B><BR>
-			<BR><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
 			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
 			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
@@ -749,6 +751,20 @@ var/global/floorIsLava = 0
 			<BR>
 			"}
 
+
+	if(check_rights(R_ADMIN,0))
+		dat += {"
+			<B>Strike Teams</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<BR>
+			<BR>
+			"}
+
+
 	if(check_rights(R_FUN,0))
 		dat += {"
 			<B>'Random' Events</B><BR>
@@ -759,6 +775,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
 			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
 			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
@@ -786,43 +804,43 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
-			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
+			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
 			<A href='?src=\ref[src];secretsfun=quickpower'>Power all SMES</A><BR>
 			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=makelink'>Make the station linked with Central Command</A><BR>
+			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
+			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=striketeam'>Send in a strike team</A><BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=traitor_all'>Everyone is the traitor</A><BR>
-			<A href='?src=\ref[src];secretsfun=onlyone'>There can be only one!</A><BR>
+			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
+			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
 			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
 			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
+			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
 			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (DANGEROUS: extremely lame)</A><BR>
+			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=massbomber'>Turn every players into Bomberman</A><BR>
+			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
-			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy stuff</A><BR>
-			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players(default)</A><BR>
-			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environnement(default)</A><BR>
+			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
+			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
+			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
 			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
@@ -972,6 +990,20 @@ var/global/floorIsLava = 0
 	log_admin("[key_name(usr)] toggled OOC.")
 	message_admins("[key_name_admin(usr)] toggled OOC.", 1)
 	feedback_add_details("admin_verb","TOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/togglelooc()
+	set category = "Server"
+	set desc="Globally Toggles LOOC"
+	set name="Toggle LOOC"
+
+	looc_allowed = !(looc_allowed)
+	if (looc_allowed)
+		to_chat(world, "<B>Local OOC has been globally enabled!</B>")
+	else
+		to_chat(world, "<B>Local OOC has been globally disabled!</B>")
+	log_admin("[key_name(usr)] toggled LOOC.")
+	message_admins("[key_name_admin(usr)]toggled LOOC.", 1)
+	feedback_add_details("admin_verb", "TLOOC") //2nd parameter must be unique to the new proc
 
 
 /datum/admins/proc/toggleoocdead()
@@ -1240,7 +1272,7 @@ var/global/floorIsLava = 0
 */
 /datum/admins/proc/spawn_atom(var/object as text)
 	set category = "Debug"
-	set desc = "(atom path) Spawn an atom"
+	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes"
 	set name = "Spawn"
 
 	if(!check_rights(R_SPAWN))
@@ -1248,9 +1280,17 @@ var/global/floorIsLava = 0
 
 	var/list/matches = new()
 
-	for(var/path in typesof(/atom))
-		if(findtext("[path]", object))
-			matches += path
+	if(text_ends_with(object, ".")) //Path ends with a dot - DO NOT include subtypes
+		object = copytext(object, 1, length(object)) //Remove the dot
+
+		for(var/path in typesof(/atom))
+			if(text_ends_with("[path]", object))
+				matches += path
+	else //Include subtypes
+		for(var/path in typesof(/atom))
+			if(findtext("[path]", object))
+				matches += path
+
 
 	if(matches.len==0)
 		return
@@ -1327,29 +1367,28 @@ var/global/floorIsLava = 0
 /datum/admins/proc/output_ai_laws()
 	var/ai_number = 0
 	for(var/mob/living/silicon/S in mob_list)
-		ai_number++
-		if(isAI(S))
-			to_chat(usr, "<b>AI [key_name(S, usr)]'s laws:</b>")
-		else if(isrobot(S))
-			var/mob/living/silicon/robot/R = S
-			to_chat(usr, "<b>[isMoMMI(R) ? "Mobile-MMI" : "CYBORG"] [key_name(S, usr)] [R.connected_ai?"(Slaved to: [R.connected_ai])":"(Independant)"]: laws:</b>")
-		else if (ispAI(S))
-			var/mob/living/silicon/pai/pAI = S
-			to_chat(usr, "<b>pAI [key_name(S, usr)]'s laws (master: [pAI.master] ):</b>")
-		else
-			to_chat(usr, "<b>SOMETHING SILICON [key_name(S, usr)]'s laws:</b>")
+		if(!istype(S, /mob/living/silicon/decoy))
+			ai_number++
+			if(isAI(S))
+				to_chat(usr, "<b>AI [key_name(S, usr)]'s laws:</b>")
+			else if(isrobot(S))
+				var/mob/living/silicon/robot/R = S
+				to_chat(usr, "<b>[isMoMMI(R) ? "Mobile-MMI" : "CYBORG"] [key_name(S, usr)] [R.connected_ai?"(Slaved to: [R.connected_ai])":"(Independant)"]: laws:</b>")
+			else if (ispAI(S))
+				var/mob/living/silicon/pai/pAI = S
+				to_chat(usr, "<b>pAI [key_name(S, usr)]'s laws (master: [pAI.master] ):</b>")
+			else
+				to_chat(usr, "<b>SOMETHING SILICON [key_name(S, usr)]'s laws:</b>")
 
-		if(ispAI(S))
-			var/mob/living/silicon/pai/pAI = S
-			pAI.show_directives(usr)
-		else if (S.laws == null)
-			to_chat(usr, "[key_name(S, usr)]'s laws are null?? Contact a coder.")
-		else
-			S.laws.show_laws(usr)
-
+			if(ispAI(S))
+				var/mob/living/silicon/pai/pAI = S
+				pAI.show_directives(usr)
+			else if (S.laws == null)
+				to_chat(usr, "[key_name(S, usr)]'s laws are null?? Contact a coder.")
+			else
+				S.laws.show_laws(usr)
 	if(!ai_number)
 		to_chat(usr, "<b>No AIs located</b>")//Just so you know the thing is actually working and not just ignoring you.
-
 
 /client/proc/update_mob_sprite(mob/living/carbon/human/H as mob in mob_list)
 	set category = "Admin"

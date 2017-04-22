@@ -23,7 +23,8 @@
 															//legacy, until the departmental is ready
 															SOFT_MS = 30, //records + HUD
 															SOFT_SS = 30, //records + HUD
-															SOFT_AS = 5
+															SOFT_AS = 5,
+															SOFT_PS = 10
 															)
 
 
@@ -73,6 +74,8 @@
 				left_part = src.softwareShield()
 			if("flashlight")
 				left_part = src.softwareLight()
+			if("pps")
+				left_part = src.softwarepPS()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -82,18 +85,18 @@
 			<html>
 			<head>
 				<style type=\"text/css\">
-					body { background-image:url('html/paigrid.png'); }
+					body { background-color:#333333; }
 
 					#header { text-align:center; color:white; font-size: 30px; height: 35px; width: 100%; letter-spacing: 2px; z-index: 5}
 					#content {position: relative; left: 10px; height: 400px; width: 100%; z-index: 0}
 
-					#leftmenu {color: #AAAAAA; background-color:#333333; width: 400px; height: auto; min-height: 340px; position: absolute; z-index: 0}
+					#leftmenu {margin: 0 auto; color: #AAAAAA; background-color:#333333; width: 370px; height: auto; min-height: 340px; position: absolute; z-index: 0}
 					#leftmenu a:link { color: #CCCCCC; }
 					#leftmenu a:hover { color: #CC3333; }
 					#leftmenu a:visited { color: #CCCCCC; }
 					#leftmenu a:active { color: #000000; }
 
-					#rightmenu {color: #CCCCCC; background-color:#555555; width: 200px ; height: auto; min-height: 340px; right: 10px; position: absolute; z-index: 1}
+					#rightmenu {margin: auto; padding: 10px; color: #CCCCCC; background-color:#555555; width: 200px ; height: auto; min-height: 340px; right: 10px; position: absolute; z-index: 1}
 					#rightmenu a:link { color: #CCCCCC; }
 					#rightmenu a:hover { color: #CC3333; }
 					#rightmenu a:visited { color: #CCCCCC; }
@@ -249,6 +252,7 @@
 
 		// Accessing medical records
 		if("medicalsupplement")
+			src.secHUD = 0 // Can't have both of them at the same time
 			src.medHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
@@ -264,6 +268,7 @@
 						src.medicalActive1 = R
 						src.medicalActive2 = M
 		if("securitysupplement")
+			src.medHUD = 0 // Can't have both of them at the same time
 			src.secHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])
@@ -317,6 +322,17 @@
 					card.set_light(4) //Equal to flashlight
 				else
 					card.set_light(0)
+		if("pps")
+			if(href_list["tag"])
+				var/tag = input("Please enter desired tag.", name, ppstag) as text|null
+				if (!tag) //what a check
+					return
+				tag = strict_ascii(tag)
+				if(length(tag) != 4)
+					to_chat(src, "<span class = 'caution'>The tag must be four characters long!</span>")
+					return
+				else
+					ppstag = tag
 	src.paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
@@ -366,6 +382,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
 		if(s == SOFT_FS)
 			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
+		if(s == SOFT_PS)
+			dat += "<a href='byond://?src=\ref[src];software=pps;sub=0'>pAI Positioning System</a> <br>"
 	dat += "<br>"
 
 	// Advanced
@@ -408,16 +426,14 @@
 		<b>Prime Directive</b><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_law0]<br>
 		<b>Supplemental Directives</b><br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_laws]<br>
-		<br>"}
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_laws]<br>"}
 	dat += {"<i><p>Recall, personality, that you are a complex thinking, sentient being. Unlike station AI models, you are capable of
 			 comprehending the subtle nuances of human language. You may parse the \"spirit\" of a directive and follow its intent,
 			 rather than tripping over pedantics and getting snared by technicalities. Above all, you are machine in name and build
-			 only. In all other aspects, you may be seen as the ideal, unwavering human companion that you are.</i></p><br><br><p>
-			 <b>Your prime directive comes before all others. Should a supplemental directive conflict with it, you are capable of
+			 only. In all other aspects, you may be seen as the ideal, unwavering human companion that you are.</i></p><br>
+			 <p><b>Your prime directive comes before all others. Should a supplemental directive conflict with it, you are capable of
 			 simply discarding this inconsistency, ignoring the conflicting supplemental directive and continuing to fulfill your
-			 prime directive to the best of your ability.</b></p><br><br>-
-			"}
+			 prime directive to the best of your ability.</b></p><br>"}
 	return dat
 
 /mob/living/silicon/pai/proc/CheckDNA(var/mob/M, var/mob/living/silicon/pai/P)
@@ -645,6 +661,7 @@ Target Machine: "}
 		dat += {"Available Chemicals:<br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
+		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
@@ -712,4 +729,36 @@ Target Machine: "}
 	dat += {"</ul>
 		<br><br>
 		Messages: <hr> [pda.tnote]"}
+	return dat
+
+/mob/living/silicon/pai/proc/softwarepPS()
+	if(!pPS) // Are we a GPS yet?
+		GPS_list.Add(src)
+		pPS = 1
+	var/list/locallist = null
+	locallist = GPS_list.Copy()
+	var/dat = "<h3>pAI Positioning System</h3>"
+	dat+= "<br>Tag: [ppstag]"
+	dat+= "<br><a href='byond://?src=\ref[src];software=pps;tag=1;sub=0'>Set Tag</a> <br>"
+	for(var/A in locallist)
+		var/turf/pos = get_turf(A)
+		var/area/area = get_area(A)
+		var/tag = null
+		var/rip = null
+		if(ispAI(A))
+			var/mob/living/silicon/pai/P = A
+			tag = P.ppstag
+			rip = P.silence_time
+		else
+			var/obj/item/device/gps/G = A
+			tag = G.gpstag
+			rip = G.emped
+		if(rip)
+			dat += "<BR>[tag]: ERROR"
+		else if(!pos || !area)
+			dat += "<BR>[tag]: UNKNOWN"
+		else if(pos.z > WORLD_X_OFFSET.len)
+			dat += "<BR>[tag]: [format_text(area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
+		else
+			dat += "<BR>[tag]: [format_text(area.name)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z])"
 	return dat

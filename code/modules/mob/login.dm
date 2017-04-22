@@ -35,7 +35,7 @@
 	client.images = null				//remove the images such as AIs being unable to see runes
 
 	if(spell_masters)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.toggle_open(1)
 			client.screen -= spell_master
 
@@ -80,7 +80,7 @@
 	CallHook("Login", list("client" = src.client, "mob" = src))
 
 	if(spell_masters)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			client.screen += spell_master
 			spell_master.toggle_open(1)
 

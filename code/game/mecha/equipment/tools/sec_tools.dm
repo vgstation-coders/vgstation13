@@ -1,15 +1,13 @@
-#define MECH_JAIL_TIME 10
-
 /obj/item/mecha_parts/mecha_equipment/tool/jail
 	name = "\improper Mounted Jail Cell"
-	desc = "Mounted Jail Cell, capable of holding up to two prisoners for a limited time. (Can be attached to Gygax)"
+	desc = "A Mounted Jail Cell, capable of holding up to two prisoners. (Can be attached to Gygax)"
 	icon_state = "mecha_jail"
 	origin_tech = Tc_BIOTECH + "=2;" + Tc_COMBAT + "=4"
 	energy_drain = 20
 	range = MELEE
 	reliability = 1000
 	equip_cooldown = 50 //very long time to actually load someone up
-	var/list/cells = list("cell1" = list("mob" = null, "timer" = 0), "cell2" = list("mob" = null, "timer" = 0))
+	var/list/cells = list("cell1" = null, "cell2" = null)
 	var/datum/global_iterator/pr_mech_jail
 	salvageable = 0
 
@@ -31,10 +29,9 @@
 /obj/item/mecha_parts/mecha_equipment/tool/jail/destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
-	for(var/list/cell in cells) //safety nets
-		var/celldetails = cells[cell]
-		if(celldetails["mob"])
-			var/mob/living/carbon/occupant = celldetails["mob"]
+	for(var/cell in cells) //safety nets
+		if(cells[cell])
+			var/mob/living/carbon/occupant = cells[cell]
 			occupant.forceMove(get_turf(src))
 	return ..()
 
@@ -45,17 +42,15 @@
 //returns the cell that's got a space
 /obj/item/mecha_parts/mecha_equipment/tool/jail/proc/CellFree()
 	for(var/cell in cells)
-		var/list/celldetails = cells[cell]
-		if(!celldetails["mob"])
-			return celldetails
+		if(!cells[cell])
+			return cell
 	return
 
 //are all our cells empty?
 /obj/item/mecha_parts/mecha_equipment/tool/jail/proc/AllFree()
 	var/allfree = 1
 	for(var/cell in cells)
-		var/list/celldetails = cells[cell]
-		if(celldetails["mob"])
+		if(cells[cell])
 			allfree = 0
 			break
 	return allfree
@@ -79,7 +74,7 @@
 			occupant_message("[target] will not fit into the jail cell because they have a slime latched onto their head.")
 			return
 	occupant_message("You start putting [target] into [src].")
-	chassis.visible_message("[chassis] starts putting [target] into the [src].")
+	chassis.visible_message("[chassis] starts putting [target] into \the [src].")
 	var/C = chassis.loc
 	var/T = target.loc
 	if(do_after_cooldown(target))
@@ -89,17 +84,11 @@
 			occupant_message("<font color=\"red\"><B>The jail cells are already occupied!</B></font>")
 			return
 		target.forceMove(src)
-		var/list/chosencell = CellFree()
-		chosencell["mob"] = target
-		chosencell["timer"] = MECH_JAIL_TIME
+		var/chosencell = CellFree()
+		cells[chosencell] = target
 		if(!CellFree())
 			set_ready_state(0)
 		target.reset_view(src)
-		/*
-		if(target.client)
-		target.client.perspective = EYE_PERSPECTIVE
-		target.client.eye = chassis
-		*/
 		if(CellFree()) //because the process can't have been already going if both cells were empty
 			pr_mech_jail.start()
 		occupant_message("<font color='blue'>[target] successfully loaded into [src].")
@@ -108,25 +97,33 @@
 		return 1
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/go_out(var/list/L)
-	var/mob/living/ejected = L["mob"]
+/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/go_out(var/cell)
+	var/mob/living/ejected = cells[cell]
 	if(!ejected)
 		return
 	ejected.forceMove(get_turf(src))
 	occupant_message("[ejected] ejected.")
 	log_message("[ejected] ejected.")
-	L["timer"] = 0
 	ejected.reset_view()
-	/*
-	if(occupant.client)
-	occupant.client.eye = occupant.client.mob
-	occupant.client.perspective = MOB_PERSPECTIVE
-	*/
-	L["mob"] = null
+	cells[cell] = null
 	ejected = null
+	if(CellFree())
+		set_ready_state(1)
 	if(AllFree())
 		pr_mech_jail.stop()
-		set_ready_state(1)
+	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/subdue(var/cell)
+	var/mob/living/prisoner = cells[cell]
+	if(!prisoner)
+		return
+	prisoner.Stun(10)
+	prisoner.Knockdown(10)
+	prisoner.apply_effect(STUTTER, 10)
+	chassis.use_power(energy_drain)
+	playsound(chassis, 'sound/weapons/Egloves.ogg', 50, 1)
+	occupant_message("[prisoner] has been subdued.")
+	log_message("[prisoner] has been subdued.")
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/detach()
@@ -141,10 +138,8 @@
 	if(output)
 		var/temp = ""
 		for(var/cell in cells)
-			var/list/celldetails = cells[cell]
-			var/mob/living/carbon/occupant = celldetails["mob"]
-			var/timer = celldetails["timer"]
-			temp += "<br />\[Occupant: [occupant ? "[occupant] (Health: [occupant.health]%)" : "none"]\]<br />|Time left: [timer * 3]|<a href='?src=\ref[src];eject[cell]=1'>Eject</a>"
+			var/mob/living/carbon/occupant = cells[cell]
+			temp += "<br />\[Occupant: [occupant ? "[occupant] (Health: [occupant.health]%)" : "none"]\]<br />|<a href='?src=\ref[src];subdue[cell]=1'>Subdue</a>|<a href='?src=\ref[src];eject[cell]=1'>Eject</a>|"
 		return "[output] [temp]"
 	return
 
@@ -153,11 +148,12 @@
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 	for(var/cell in cells)
 		if(filter.get("eject[cell]"))
-			go_out(cells[cell])
+			go_out(cell)
+		if(filter.get("subdue[cell]"))
+			subdue(cell)
 	return
 
 /datum/global_iterator/mech_jail/process(var/obj/item/mecha_parts/mecha_equipment/tool/jail/J)
-	//log_admin("Timer 1: [J.ctimer1], Timer 2: [J.ctimer2]")
 	if(!J.chassis)
 		J.set_ready_state(1)
 		return stop()
@@ -166,18 +162,16 @@
 		J.log_message("Deactivated.")
 		J.occupant_message("[src] deactivated - no power.")
 		for(var/cell in J.cells)
-			J.go_out(J.cells[cell])
+			J.go_out(cell)
 		return stop()
 	if(J.AllFree())
 		return stop()
-	for(var/cell in J.cells)
-		var/list/thiscell = J.cells[cell]
-		if (thiscell["mob"])
-			thiscell["timer"]--
-			if (thiscell["timer"] <= 0)
-				J.go_out(thiscell)
-			else if(thiscell["timer"] == 1)
-				J.occupant_message("<span class='warning'>[thiscell["mob"]] will be ejected in 3 seconds!</span>")
 	J.chassis.use_power(J.energy_drain)
 	J.update_equip_info()
 	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/break_out(var/mob/M)
+	if(!istype(M))
+		return
+	M.visible_message("<span class='danger'>\The [M] pops the lid off of \the [src] and climbs out!.</span>","<span class='notice'>You pop the lid off of \the [src] and climb out!</span>")
+	M.forceMove(get_turf(src))

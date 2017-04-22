@@ -1,5 +1,6 @@
 /obj/machinery/recharger
 	name = "recharger"
+	desc = "A charging station for energy weapons that draws from the area's power. Simply insert an energy weapon with a cell to begin recharging."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "recharger0"
 	anchored = 1

@@ -1,5 +1,6 @@
 /obj/item/device/chameleon
 	name = "chameleon-projector"
+	desc = "A device that can scan an object's appearance and cloak a user."
 	icon_state = "shield0"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -59,7 +60,7 @@
 	if(active_dummy)
 		eject_all()
 		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
-		del(active_dummy)
+		qdel(active_dummy)
 		active_dummy = null
 		to_chat(usr, "<span class='notice'>You deactivate [src].</span>")
 		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))

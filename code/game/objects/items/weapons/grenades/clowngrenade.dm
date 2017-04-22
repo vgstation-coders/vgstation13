@@ -1,6 +1,6 @@
 /obj/item/weapon/grenade/clown_grenade
 	name = "Banana Grenade"
-	desc = "HONK! brand Bananas. In a special applicator for rapid slipping of wide areas."
+	desc = "A grenade used for rapid slipping of larger areas. Contains banana peels that release acid when slipped on."
 	icon_state = "chemg"
 	item_state = "flashbang"
 	w_class = W_CLASS_SMALL

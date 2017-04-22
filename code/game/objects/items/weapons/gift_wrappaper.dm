@@ -123,7 +123,7 @@
 		/obj/item/weapon/beach_ball,
 //		/obj/item/weapon/beach_ball/holoball,
 		/obj/item/weapon/banhammer,
-		/obj/item/toy/balloon,
+		/obj/item/toy/waterballoon,
 //		/obj/item/toy/blink,	//this one reaaally needs a revamp. there's a limit to how lame a toy can be.
 		/obj/item/toy/crossbow,
 		/obj/item/toy/gun,

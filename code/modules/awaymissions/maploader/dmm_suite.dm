@@ -70,4 +70,8 @@ dmm_suite{
 		// map_name: A valid name for the map to be saved, such as "castle" (Required).
 		// flags: Any, or a combination, of several bit flags (Optional, see documentation).
 		}
+
+	verb/get_map_dimensions(var/dmm_file as file){
+		// dmm_file: A .dmm file to check (Required).
+		}
 	}

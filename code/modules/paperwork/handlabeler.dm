@@ -34,15 +34,6 @@
 	if(issilicon(target))
 		to_chat(user, "<span class='notice'>You can't label cyborgs.</span>")
 		return
-	if(istype(target, /obj/item/weapon/reagent_containers/glass))
-		to_chat(user, "<span class='notice'>The label can't stick to the [target.name].  (Try using a pen)</span>")
-		return
-
-	if(target.labeled)
-		target.remove_label()
-	target.labeled = " ([label])"
-	target.name = "[target.name] ([label])"
-	new/atom/proc/remove_label(target)
 
 	if(user.a_intent == I_HURT && target.min_harm_label)
 		user.visible_message("<span class='warning'>[user] labels [target] as [label]... with malicious intent!</span>", \
@@ -52,6 +43,8 @@
 	else
 		user.visible_message("<span class='notice'>[user] labels [target] as [label].</span>", \
 							 "<span class='notice'>You label [target] as [label].</span>")
+
+	target.set_labeled(label)
 
 	chars_left = max(chars_left - (length(label) + 2),0)
 
@@ -116,27 +109,17 @@
 	else
 		to_chat(user, "<span class='info'>The label roll is all used up.</span>")
 
-/atom/proc/remove_label()
-	set name = "Remove label"
-	set src in view(1)
-	set category = "Object"
-	var/atom/A = src
-	A.name = replacetext(A.name, A.labeled, "")
-	A.labeled = null
-	if(A.harm_labeled)
-		A.harm_labeled = 0
-		A.harm_label_update()
-	A.verbs -= /atom/proc/remove_label
-
-/atom/proc/harm_label_update()
-	return //To be assigned (or not, in most cases) on a per-item basis.
-
 /obj/item/device/label_roll
 	name = "label roll"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "label_cart" //Placeholder image; recolored police tape
 	w_class = W_CLASS_TINY
 	var/left = 250
+
+/obj/item/device/label_roll/New(var/loc, var/amount=null)
+	..()
+	if(amount)
+		left = amount
 
 /obj/item/device/label_roll/examine(mob/user) //Shamelessly stolen from above.
 	..()
@@ -145,7 +128,46 @@
 	else
 		to_chat(user, "<span class='warning'>Something has fucked up and this item should have deleted itself. Throw it away for IMMERSION.</span>")
 
-/obj/item/device/label_roll/New(var/loc, var/amount=null)
-	..()
-	if(amount)
-		left = amount
+/*
+ * ATOM PROCS
+ */
+
+/atom/proc/set_labeled(var/label, var/start_text = " (", var/end_text = ")")
+	if(labeled)
+		remove_label()
+	labeled = "[start_text][label][end_text]"
+	name = "[name][labeled]"
+	new/atom/proc/remove_label_verb(src)
+
+/atom/proc/remove_label_verb()
+	set name = "Remove label"
+	set src in view(1)
+	set category = "Object"
+	if(usr.incapacitated())
+		return
+	remove_label()
+	to_chat(usr, "<span class='notice'>You remove the label.</span>")
+
+/atom/proc/remove_label()
+	name = replacetext(name, labeled, "")
+	labeled = null
+	if(harm_labeled)
+		harm_labeled = 0
+		harm_label_update()
+	verbs -= /atom/proc/remove_label_verb
+
+/atom/proc/harm_label_update()
+	return //To be assigned (or not, in most cases) on a per-item basis.
+
+// Not really sure where to put this. This is a verb that lets you add a tiny label to the item without consuming label rolls or anything.
+// Used for pen-labeling pill bottles, beakers and whatnot.
+/atom/proc/set_tiny_label(var/mob/user, var/start_text = " (", var/end_text = ")")
+	var/tmp_label = sanitize(input(user, "Enter a label for \the [src]","Label",copytext(labeled, length(start_text), length(labeled)-length(end_text))) as text|null)
+	if (!Adjacent(user) || user.incapacitated() || !tmp_label || !length(tmp_label))
+		return FALSE
+	if(length(tmp_label) > 16)
+		to_chat(user, "<span class='warning'>The label can be at most 16 characters long.</span>")
+		return FALSE
+	to_chat(user, "<span class='notice'>You set the label to \"[tmp_label]\".</span>")
+	set_labeled(tmp_label, start_text, end_text)
+	return TRUE

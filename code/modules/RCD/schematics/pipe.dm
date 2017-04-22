@@ -1,15 +1,16 @@
-#define PIPE_BINARY		0
-#define PIPE_BENT			1
-#define PIPE_TRINARY	2
-#define PIPE_TRIN_M		3
-#define PIPE_UNARY		4
+#define PIPE_NONE    0
+#define PIPE_BINARY  1
+#define PIPE_BENT    2
+#define PIPE_TRINARY 3
+#define PIPE_TRIN_M  4
+#define PIPE_UNARY   5
 
 //UTILITIES.
 
 /datum/rcd_schematic/decon_pipes
-	name		= "Eat pipes"
-	category	= "Utilities"
-	flags		= RCD_RANGE
+	name     = "Eat pipes"
+	category = "Utilities"
+	flags    = RCD_RANGE | RCD_ALLOW_SWITCH
 
 /datum/rcd_schematic/decon_pipes/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /atom/movable))
@@ -36,19 +37,19 @@
 		qdel(AM)
 
 /datum/rcd_schematic/paint_pipes
-	name		= "Paint pipes"
-	category	= "Utilities"
-	flags		= RCD_RANGE
+	name     = "Paint pipes"
+	category = "Utilities"
+	flags    = RCD_RANGE
 	var/mass_colour = 0
 	var/list/available_colors = list(
-		"grey"		= PIPE_COLOR_GREY,
-		"red"		= PIPE_COLOR_RED,
-		"blue"		= PIPE_COLOR_BLUE,
-		"cyan"		= PIPE_COLOR_CYAN,
-		"green"		= PIPE_COLOR_GREEN,
-		"orange"	= PIPE_COLOR_ORANGE,
-		"purple"	= PIPE_COLOR_PURPLE,
-		"custom" 	= "custom"
+		"grey"   = PIPE_COLOR_GREY,
+		"red"    = PIPE_COLOR_RED,
+		"blue"   = PIPE_COLOR_BLUE,
+		"cyan"   = PIPE_COLOR_CYAN,
+		"green"  = PIPE_COLOR_GREEN,
+		"orange" = PIPE_COLOR_ORANGE,
+		"purple" = PIPE_COLOR_PURPLE,
+		"custom" = "custom"
 	)
 	var/last_colouration = 0
 	var/selected_color = "grey"
@@ -142,9 +143,9 @@
 //METERS AND SENSORS.
 
 /datum/rcd_schematic/gsensor
-	name		= "Gas sensor"
-	category	= "Devices"
-	flags		= RCD_RANGE | RCD_GET_TURF
+	name     = "Gas sensor"
+	category = "Devices"
+	flags    = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
 
 /datum/rcd_schematic/gsensor/attack(var/atom/A, var/mob/user)
 	if(!isturf(A))
@@ -159,9 +160,9 @@
 	new /obj/item/pipe_gsensor(A)
 
 /datum/rcd_schematic/pmeter
-	name		= "Pipe meter"
-	category	= "Devices"
-	flags		= RCD_RANGE | RCD_GET_TURF
+	name     = "Pipe meter"
+	category = "Devices"
+	flags    = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
 
 /datum/rcd_schematic/pmeter/attack(var/atom/A, var/mob/user)
 	if(!isturf(A))
@@ -178,14 +179,14 @@
 //ACTUAL PIPES.
 
 /datum/rcd_schematic/pipe
-	name					= "Pipe"
-	category				= "Regular pipes"
-	flags					= RCD_RANGE | RCD_GET_TURF
+	name             = "Pipe"
+	category         = "Regular pipes"
+	flags            = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
 
-	var/pipe_id				= PIPE_SIMPLE_STRAIGHT
-	var/pipe_type			= PIPE_BINARY
-	var/selected_dir		= NORTH
-	var/layer				= PIPING_LAYER_DEFAULT //Layer selected, at 0, no layer picker will be available (disposals).
+	var/pipe_id      = PIPE_SIMPLE_STRAIGHT
+	var/pipe_type    = PIPE_BINARY
+	var/selected_dir = NORTH
+	var/layer        = PIPING_LAYER_DEFAULT //Layer selected, at 0, no layer picker will be available (disposals).
 
 /datum/rcd_schematic/pipe/New(var/obj/item/device/rcd/n_master)
 	. = ..()
@@ -216,23 +217,28 @@
 	send_asset(client, "RPD_0_4.png")
 	send_asset(client, "RPD_0_1.png")
 
-
+// NOTE: these define the order in which scrolling with alt+mousewheel occur too!
+// These have been made the same as the directions used in get_HTML() because of that.
+// Rule of thumb: scrolling is clockwise.
 /datum/rcd_schematic/pipe/proc/get_dirs()
 	switch(pipe_type)
-		if(PIPE_UNARY, PIPE_TRINARY)
-			. = cardinal
+		if(PIPE_UNARY)
+			. = list(NORTH, EAST, SOUTH, WEST)
+
+		if(PIPE_TRINARY)
+			. = list(NORTH, EAST, WEST, SOUTH)
 
 		if(PIPE_BINARY)
 			. = list(NORTH, EAST)
 
 		if(PIPE_BENT)
-			. = diagonal
+			. = list(NORTHWEST, NORTHEAST, SOUTHEAST, SOUTHWEST)
 
 		if(PIPE_TRIN_M)
-			. = alldirs
+			. = list(NORTH, EAST, WEST, NORTHEAST, SOUTHWEST, NORTHWEST, SOUTHEAST, SOUTH)
 
 		else
-			.= list()
+			. = list()
 
 /datum/rcd_schematic/pipe/proc/register_icon(var/dir)
 	register_asset("RPD_[pipe_id]_[dir].png", new/icon('icons/obj/pipe-item.dmi', pipeID2State[pipe_id + 1], dir))
@@ -241,71 +247,67 @@
 	send_asset(client, "RPD_[pipe_id]_[dir].png")
 
 /datum/rcd_schematic/pipe/get_HTML()
-	. += "<p>"
+	. += "<h4>Directions & layers</h4>"
+	. += "<div id='dir_holder'>"
 
-	. += "<h4>Layers</h4>"
+	switch(pipe_type)
+		if(PIPE_BINARY)
+			. += render_dir_image(NORTH,     "Vertical")
+			. += render_dir_image(EAST,      "Horizontal")
+
+		if(PIPE_UNARY)
+			. += render_dir_image(NORTH,     "North")
+			. += render_dir_image(EAST,      "East")
+			. += render_dir_image(SOUTH,     "South")
+			. += render_dir_image(WEST,      "West")
+
+		if(PIPE_BENT)
+			. += render_dir_image(NORTHWEST, "West to North")
+			. += render_dir_image(NORTHEAST, "North to East")
+			. += "<br/>"
+			. += render_dir_image(SOUTHWEST, "South to West")
+			. += render_dir_image(SOUTHEAST, "East to South")
+
+		if(PIPE_TRINARY)
+			. += render_dir_image(NORTH,     "West South East")
+			. += render_dir_image(EAST,      "North West South")
+			. += "<br/>"
+			. += render_dir_image(SOUTH,     "East North West")
+			. += render_dir_image(WEST,      "South East North")
+
+		if(PIPE_TRIN_M)
+			. += render_dir_image(NORTH,     "West South East")
+			. += render_dir_image(EAST,      "North West South")
+			. += "<br/>"
+			. += render_dir_image(SOUTH,     "East North West")
+			. += render_dir_image(WEST,      "South East North")
+			. += "<br/>"
+			. += render_dir_image(SOUTHEAST, "West South East")
+			. += render_dir_image(NORTHEAST, "North West South")
+			. += "<br/>"
+			. += render_dir_image(NORTHWEST, "East North West")
+			. += render_dir_image(SOUTHWEST, "South East North")
+
+	. += "</div>"
 
 	if(layer)
 		. += {"
 		<div class="layer_holder">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer vertical one 			[layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer vertical two 			[layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer vertical three 		[layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer vertical four 			[layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer vertical five 			[layer == 5 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer vertical one   [layer == 1 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer vertical two   [layer == 2 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer vertical three [layer == 3 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer vertical four  [layer == 4 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer vertical five  [layer == 5 ? "selected" : ""]"></div></a>
 		</div>
 
 		<div class="layer_holder" style="left: 200px;">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer horizontal one		[layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer horizontal two		[layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer horizontal three		[layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer horizontal four		[layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer horizontal five		[layer == 5 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer horizontal one   [layer == 1 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer horizontal two   [layer == 2 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer horizontal three [layer == 3 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer horizontal four  [layer == 4 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer horizontal five  [layer == 5 ? "selected" : ""]"></div></a>
 		</div>
-
 	"}
-
-	. += "<h4>Directions</h4>"
-
-	switch(pipe_type)
-		if(PIPE_BINARY)
-			. += render_dir_image(NORTH,		"Vertical")
-			. += render_dir_image(EAST,			"Horizontal")
-
-		if(PIPE_UNARY)
-			. += render_dir_image(NORTH,		"North")
-			. += render_dir_image(EAST,			"East")
-			. += render_dir_image(SOUTH,		"South")
-			. += render_dir_image(WEST,			"West")
-
-		if(PIPE_BENT)
-			. += render_dir_image(NORTHWEST,	"West to North")
-			. += render_dir_image(NORTHEAST,	"North to East")
-			. += "<br/>"
-			. += render_dir_image(SOUTHWEST,	"South to West")
-			. += render_dir_image(SOUTHEAST,	"East to South")
-
-		if(PIPE_TRINARY)
-			. += render_dir_image(NORTH,		"West South East")
-			. += render_dir_image(EAST,			"North West South")
-			. += "<br/>"
-			. += render_dir_image(SOUTH,		"East North West")
-			. += render_dir_image(WEST,			"South East North")
-
-		if(PIPE_TRIN_M)
-			. += render_dir_image(NORTH,		"West South East")
-			. += render_dir_image(EAST,			"North West South")
-			. += "<br/>"
-			. += render_dir_image(SOUTH,		"East North West")
-			. += render_dir_image(WEST,			"South East North")
-			. += "<br/>"
-			. += render_dir_image(6,			"West South East")
-			. += render_dir_image(5,			"North West South")
-			. += "<br/>"
-			. += render_dir_image(9,			"East North West")
-			. += render_dir_image(10,			"South East North")
-
-	. += "</p>"
 
 /datum/rcd_schematic/pipe/proc/render_dir_image(var/dir, var/title)
 	var/selected = ""
@@ -317,21 +319,57 @@
 /datum/rcd_schematic/pipe/Topic(var/href, var/href_list)
 	if(href_list["set_dir"])
 		var/dir = text2num(href_list["set_dir"])
-		if(!(dir in alldirs) || selected_dir == dir)
+		if(!(dir in get_dirs()) || selected_dir == dir)
 			return 1
 
-		selected_dir = dir
-		master.update_options_menu()
+		set_dir(dir)
 
 		return 1
 
 	if(href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
-		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), 1, 5)
+		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		if(layer == n_layer) //No point doing anything.
 			return 1
 
-		layer = n_layer
-		master.update_options_menu()
+		set_layer(n_layer)
+
+		return 1
+
+/datum/rcd_schematic/pipe/proc/set_dir(var/new_dir)
+	selected_dir = new_dir
+	master.update_options_menu()
+
+/datum/rcd_schematic/pipe/proc/set_layer(var/new_layer)
+	layer = new_layer
+	master.data["pipe_layer"] = new_layer
+	master.update_options_menu()
+
+/datum/rcd_schematic/pipe/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
+	var/list/modifiers = params2list(params)
+	if (modifiers["shift"] && layer)
+		var/new_layer = layer
+		if (delta_y <= 0)
+			new_layer++
+			if (new_layer > PIPING_LAYER_MAX)
+				new_layer = PIPING_LAYER_MIN
+		else
+			new_layer--
+			if (new_layer < PIPING_LAYER_MIN)
+				new_layer = PIPING_LAYER_MAX
+
+		set_layer(new_layer)
+
+	if (modifiers["alt"] && pipe_type != PIPE_NONE)
+		var/list/dirs = get_dirs()
+		var/index = dirs.Find(selected_dir)
+		if (delta_y >= 0)
+			index++
+			if (index > dirs.len)
+				index = 1
+		else
+			index = index - 1 || dirs.len
+
+		set_dir(dirs[index])
 
 /datum/rcd_schematic/pipe/attack(var/atom/A, var/mob/user)
 	to_chat(user, "Building Pipes ...")
@@ -352,19 +390,18 @@
 	if(!istype(old_schematic, /datum/rcd_schematic/pipe))
 		return ..()
 
-	var/datum/rcd_schematic/pipe/P = old_schematic
-	if(P.layer)
-		layer = P.layer
+	if (layer && master.data["pipe_layer"])
+		layer = master.data["pipe_layer"]
 
 	return ..()
 
 //Disposal piping.
 /datum/rcd_schematic/pipe/disposal
-	category		= "Disposal Pipes"
+	category      = "Disposal Pipes"
 
-	layer				= 0	//Set to 0 to disable layer selection.
-	pipe_id			= DISP_PIPE_STRAIGHT
-	var/actual_id	= 0	//This is needed because disposals construction code is a shit.
+	layer         = 0 // Set to 0 to disable layer selection.
+	pipe_id       = DISP_PIPE_STRAIGHT
+	var/actual_id = 0 // This is needed because disposals construction code is a shit.
 
 /datum/rcd_schematic/pipe/disposal/register_icon(var/dir)
 	register_asset("RPD_D_[pipe_id]_[dir].png", new/icon('icons/obj/pipes/disposal.dmi', disposalpipeID2State[pipe_id + 1], dir))
@@ -472,10 +509,11 @@ var/global/list/disposalpipeID2State = list(
 	pipe_type	= PIPE_TRIN_M
 
 /datum/rcd_schematic/pipe/layer_manifold
-	name		= "Layer Manifold"
+	name      = "Layer Manifold"
 
-	pipe_id		= PIPE_LAYER_MANIFOLD
-	pipe_type	= PIPE_UNARY
+	pipe_id   = PIPE_LAYER_MANIFOLD
+	pipe_type = PIPE_UNARY
+	layer     = 0
 
 /datum/rcd_schematic/pipe/layer_adapter
 	name		= "Layer Adapter"
@@ -682,7 +720,7 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= DISP_END_BIN
 	actual_id	= 6
-	pipe_type	= -1	//Will disable the icon.
+	pipe_type	= PIPE_NONE //Will disable the icon.
 
 /datum/rcd_schematic/pipe/disposal/outlet
 	name		= "Outlet"

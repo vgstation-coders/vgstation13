@@ -210,8 +210,8 @@
 			icon_state = icon_opened
 
 /obj/structure/closet/secure_closet/paramedic
-	name = "Paramedic EVA gear"
-	desc = "A locker with a Paramedic EVA suit."
+	name = "Paramedic Gear"
+	desc = "A locker with gear designed for use by paramedics, including an EVA suit."
 	icon_state = "medical1"
 	icon_closed = "medical"
 	icon_locked = "medical1"
@@ -227,4 +227,5 @@
 		new /obj/item/clothing/suit/space/paramedic(src)
 		new /obj/item/clothing/head/helmet/space/paramedic(src)
 		new /obj/item/clothing/shoes/magboots(src)
+		new /obj/item/weapon/storage/firstaid/internalbleed(src)
 		return

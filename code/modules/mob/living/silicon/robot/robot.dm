@@ -8,6 +8,7 @@
 
 	var/sight_mode = 0
 	var/custom_name = ""
+	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	//var/crisis //Admin-settable for combat module use.
@@ -16,14 +17,14 @@
 
 //Hud stuff
 
-	var/obj/screen/cells = null
-	var/obj/screen/inv1 = null
-	var/obj/screen/inv2 = null
-	var/obj/screen/inv3 = null
-	var/obj/screen/sensor = null
+	var/obj/abstract/screen/cells = null
+	var/obj/abstract/screen/inv1 = null
+	var/obj/abstract/screen/inv2 = null
+	var/obj/abstract/screen/inv3 = null
+	var/obj/abstract/screen/sensor = null
 
 	var/shown_robot_modules = 0
-	var/obj/screen/robot_modules_background
+	var/obj/abstract/screen/robot_modules_background
 
 //3 Modules can be activated at any one time.
 	var/obj/item/weapon/robot_module/module = null
@@ -75,7 +76,6 @@
 	var/speed = 0 //Cause sec borgs gotta go fast //No they dont!
 	var/scrambledcodes = 0 // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
-	var/pose
 	var/lawcheck[1]
 	var/ioncheck[1]
 
@@ -148,6 +148,7 @@
 		cell_component.installed = 1
 
 	playsound(loc, startup_sound, 75, 1)
+	// This should just grab from a list of all languages.
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	add_language(LANGUAGE_TRADEBAND)
 	add_language(LANGUAGE_VOX, 0)
@@ -229,7 +230,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -312,11 +313,11 @@
 			module_sprites["Arachne"] = "arachne"
 			speed = -2
 
-		if("Security")
+		if("Peacekeeper")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
-			module_sprites["Red Knight 2.0"] = "sleeksecurity"
+			module_sprites["Sleek"] = "sleeksecurity"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
 			module_sprites["Securitron"] = "securitron"
@@ -324,6 +325,12 @@
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			speed = 0
+
+		if("TG17355")
+			module = new /obj/item/weapon/robot_module/tg17355(src)
+			module_sprites["Peacekeeper"] = "peaceborg"
+			module_sprites["Omoikane"] = "omoikane"
 			speed = 0
 
 		if("Engineering")
@@ -365,6 +372,7 @@
 			module_sprites["Squadbot"] = "squats"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
+			module_sprites["Rottweiler"] = "rottweiler-combat"
 			speed = -1
 
 	//Custom_sprite check and entry
@@ -431,22 +439,22 @@
 
 /mob/living/silicon/robot/verb/Namepick()
 	set category = "Robot Commands"
-	if(custom_name)
+	if(namepick_uses <= 0)
+		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
+	namepick_uses--
+	var/newname
+	for(var/i = 1 to 3)
+		newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
+		if(newname == "")
+			continue
+		if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+			break
 
-	spawn(0)
-		var/newname
-		for(var/i = 1 to 3)
-			newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
-			if(newname == "")
-				continue
-			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
-				break
-
-		if (newname != "")
-			custom_name = newname
-		updatename()
-		updateicon()
+	if (newname != "")
+		custom_name = newname
+	updatename()
+	updateicon()
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
@@ -618,10 +626,10 @@
 	if(G)
 		stat(null, text("Reinforced Glass Sheets: [G.amount]/50"))
 */
-/mob/living/silicon/robot/proc/show_welder_fuel()
+/mob/living/silicon/robot/proc/show_welding_fuel()
 	var/obj/item/weapon/weldingtool/WT = installed_module(/obj/item/weapon/weldingtool)
 	if(WT)
-		stat(null, text("Welder Fuel: [WT.get_fuel()]/[WT.max_fuel]"))
+		stat(null, text("Welding fuel: [WT.get_fuel()]/[WT.max_fuel]"))
 
 /mob/living/silicon/robot/proc/show_stacks()
 	if(!module)
@@ -640,7 +648,7 @@
 		show_metal_sheets()
 		show_glass_sheets()
 		show_rglass_sheets()*/
-		show_welder_fuel()
+		show_welding_fuel()
 		show_stacks()
 
 
@@ -848,9 +856,6 @@
 					C.r_arm = new/obj/item/robot_parts/r_arm(C)
 					C.updateicon()
 					new/obj/item/robot_parts/chest(loc)
-					// This doesn't work.  Don't use it.
-					//src.Destroy()
-					// del() because it's infrequent and mobs act weird in qdel.
 					qdel(src)
 			else
 				// Okay we're not removing the cell or an MMI, but maybe something else?
@@ -980,58 +985,18 @@
 				to_chat(usr, "You unlock your cover.")
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
 
 	switch(M.a_intent)
-
 		if (I_HELP)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>")
 
 		if (I_GRAB)
-			if (M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='attack'>[] has grabbed [] passively!</span>", M, src), 1)
+			M.grab_mob(src)
 
 		if (I_HURT)
-			var/damage = rand(10, 20)
-			if (prob(90))
-				/*
-				if (M.class == "combat")
-					damage += 15
-					if(prob(20))
-						knockdown = max(knockdown,4)
-						stunned = max(stunned,4)
-				What is this?*/
-
-				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
+			if(M.unarmed_attack_mob(src))
 				if(prob(8))
-					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
+					flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
 
 		if (I_DISARM)
 			if(!(lying))
@@ -1040,100 +1005,21 @@
 					step(src,get_dir(M,src))
 					spawn(5) step(src,get_dir(M,src))
 					playsound(loc, 'sound/weapons/pierce.ogg', 50, 1, -1)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has forced back []!</span>", M, src), 1)
+					visible_message("<span class='danger'>[M] has forced back [src]!</span>")
 				else
 					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] attempted to force back []!</span>", M, src), 1)
+					visible_message("<span class='danger'>[M] attempted to force back [src]!</span>")
 	return
 
 
 
-/mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
+/mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
 
-	if(M.Victim)
-		return // can't attack while eating!
+/mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M)
+	M.unarmed_attack_mob(src)
 
-	if (health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)
-		add_logs(M, src, "glomped on", 0)
-
-		var/damage = rand(1, 3)
-
-		if(istype(src, /mob/living/carbon/slime/adult))
-			damage = rand(20, 40)
-		else
-			damage = rand(5, 35)
-
-		damage = round(damage / 2) // borgs recieve half damage
-		adjustBruteLoss(damage)
-
-
-		if(M.powerlevel > 0)
-			var/stunprob = 10
-
-			switch(M.powerlevel)
-				if(1 to 2)
-					stunprob = 20
-				if(3 to 4)
-					stunprob = 30
-				if(5 to 6)
-					stunprob = 40
-				if(7 to 8)
-					stunprob = 60
-				if(9)
-					stunprob = 70
-				if(10)
-					stunprob = 95
-
-			if(prob(stunprob))
-				M.powerlevel -= 3
-				if(M.powerlevel < 0)
-					M.powerlevel = 0
-
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>The [M.name] has electrified []!</span>", src), 1)
-
-				flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
-
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
-
-				if (prob(stunprob) && M.powerlevel >= 8)
-					adjustBruteLoss(M.powerlevel * rand(6,10))
-
-
-		updatehealth()
-
-	return
-
-/mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='danger'>[M] [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage)
-		updatehealth()
-
-
-/mob/living/silicon/robot/attack_hand(mob/user)
+/mob/living/silicon/robot/attack_hand(mob/living/user)
 
 	add_fingerprint(user)
 
@@ -1154,15 +1040,19 @@
 			cell_component.wrapped = null
 			cell_component.installed = 0
 			updateicon()
+			return
 		else if(cell_component.installed == -1)
 			cell_component.installed = 0
 			var/obj/item/broken_device = cell_component.wrapped
 			to_chat(user, "You remove \the [broken_device].")
 			user.put_in_active_hand(broken_device)
+			return
 
-	if (user.a_intent == I_HELP)
-		help_shake_act(user)
-		return
+	switch(user.a_intent)
+		if(I_HELP)
+			help_shake_act(user)
+		if(I_HURT)
+			user.unarmed_attack_mob(src)
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all
@@ -1517,13 +1407,6 @@
 		state = 1
 	lockcharge = state
 	update_canmove()
-
-/mob/living/silicon/robot/verb/pose()
-	set name = "Set Pose"
-	set desc = "Sets a description which will be shown when someone examines you."
-	set category = "IC"
-
-	pose =  copytext(sanitize(input(usr, "This is [src]. It is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
 	if(triesleft == 0 || !module_sprites.len)

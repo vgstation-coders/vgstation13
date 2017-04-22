@@ -30,53 +30,52 @@
 "aD" = (/obj/machinery/floodlight,/turf/unsimulated/floor,/area/vault/factory)
 "aE" = (/obj/item/weapon/wrench,/turf/simulated/floor/plating,/area/vault/factory)
 "aF" = (/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
-"aG" = (/obj/item/weapon/circuitboard/conveyor,/turf/simulated/floor/plating,/area/vault/factory)
-"aH" = (/obj/item/weapon/circuitboard/conveyor,/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
-"aI" = (/obj/item/robot_parts/robot_suit,/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
-"aJ" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/plating,/area/vault/factory)
-"aK" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor/plating,/area/vault/factory)
-"aL" = (/obj/structure/reagent_dispensers,/obj/item/clothing/head/welding,/turf/simulated/floor/plating,/area/vault/factory)
-"aM" = (/obj/structure/disposaloutlet{dir = 1},/obj/structure/disposalpipe/trunk,/turf/simulated/floor/plating,/area/vault/factory)
-"aN" = (/obj/item/device/silicate_sprayer/advanced,/mob/living/simple_animal/hostile/hivebot/rapid,/turf/simulated/floor/plating,/area/vault/factory)
-"aO" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/factory)
-"aP" = (/obj/machinery/conveyor,/turf/simulated/floor/plating,/area/vault/factory)
-"aQ" = (/obj/item/weapon/wrench,/obj/effect/gibspawner/human,/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
-"aR" = (/obj/structure/disposalpipe/segment,/turf/simulated/wall/r_wall,/area/vault/factory)
-"aS" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/unsimulated/mineral,/area/vault/factory)
-"aT" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/unsimulated/mineral,/area/vault/factory)
-"aU" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/unsimulated/mineral,/area/vault/factory)
-"aV" = (/obj/structure/sign/examroom,/turf/simulated/wall,/area/vault/factory)
-"aW" = (/obj/machinery/conveyor,/obj/structure/window/barricade,/turf/simulated/floor/plating,/area/vault/factory)
-"aX" = (/obj/structure/disposalpipe/segment,/turf/unsimulated/mineral,/area/vault/factory)
-"aY" = (/obj/machinery/conveyor,/obj/structure/plasticflaps{opacity = 1},/turf/simulated/floor/plating,/area/vault/factory)
-"aZ" = (/obj/machinery/conveyor,/turf/simulated/floor/engine,/area/vault/factory)
-"ba" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/factory)
-"bb" = (/obj/machinery/power/emitter/energycannon{dir = 8},/turf/simulated/floor/engine,/area/vault/factory)
-"bc" = (/obj/structure/lattice,/obj/item/weapon/shard/plasma,/turf/space,/area)
-"bd" = (/obj/machinery/power/emitter/energycannon{dir = 4},/turf/simulated/floor/engine,/area/vault/factory)
-"be" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/factory)
-"bf" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/simulated/wall/r_wall,/area/vault/factory)
-"bg" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/simulated/wall/r_wall,/area/vault/factory)
-"bh" = (/obj/effect/gibspawner/robot,/turf/space,/area)
-"bi" = (/obj/item/robot_parts/robot_component/radio,/turf/space,/area)
-"bj" = (/obj/machinery/conveyor,/obj/structure/plasticflaps{opacity = 1},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bk" = (/obj/structure/sign/fire,/turf/simulated/wall/r_wall,/area/vault/factory)
-"bl" = (/obj/structure/disposalpipe/broken,/obj/structure/disposalpipe/broken{dir = 4},/obj/effect/gibspawner/robot,/turf/space,/area)
-"bm" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area)
-"bn" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area)
-"bo" = (/mob/living/simple_animal/hostile/monster/cyber_horror/quiet{name = "factory overseer"},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bp" = (/obj/machinery/conveyor,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bq" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"br" = (/obj/machinery/disposal{desc = "A pneumatic waste disposal unit. This one is used to transport malfunctioning hivebots."; name = "recycling"},/obj/structure/disposalpipe/trunk,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bs" = (/obj/structure/disposalpipe/segment,/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
-"bt" = (/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bu" = (/obj/structure/disposalpipe/segment{dir = 1; icon_state = "pipe-c"},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bv" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/obj/structure/rack,/obj/item/weapon/glue{pixel_y = 6},/obj/item/weapon/glue,/obj/item/weapon/glue{pixel_y = -6},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"bw" = (/obj/structure/disposalpipe/segment,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
-"bx" = (/obj/machinery/disposal{desc = "A pneumatic device that sends you to the nearest Hivebot Transport Unit."; name = "pipe-based transportation unit"},/obj/structure/disposalpipe/trunk{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
-"by" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area/vault/factory)
-"bz" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/turf/space,/area)
-"bA" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
+"aG" = (/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
+"aH" = (/obj/item/robot_parts/robot_suit,/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
+"aI" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/plating,/area/vault/factory)
+"aJ" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor/plating,/area/vault/factory)
+"aK" = (/obj/structure/reagent_dispensers,/obj/item/clothing/head/welding,/turf/simulated/floor/plating,/area/vault/factory)
+"aL" = (/obj/structure/disposaloutlet{dir = 1},/obj/structure/disposalpipe/trunk,/turf/simulated/floor/plating,/area/vault/factory)
+"aM" = (/obj/item/device/silicate_sprayer/advanced,/mob/living/simple_animal/hostile/hivebot/rapid,/turf/simulated/floor/plating,/area/vault/factory)
+"aN" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/factory)
+"aO" = (/obj/machinery/conveyor,/turf/simulated/floor/plating,/area/vault/factory)
+"aP" = (/obj/item/weapon/wrench,/obj/effect/gibspawner/human,/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
+"aQ" = (/obj/structure/disposalpipe/segment,/turf/simulated/wall/r_wall,/area/vault/factory)
+"aR" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/unsimulated/mineral,/area/vault/factory)
+"aS" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/unsimulated/mineral,/area/vault/factory)
+"aT" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/unsimulated/mineral,/area/vault/factory)
+"aU" = (/obj/structure/sign/examroom,/turf/simulated/wall,/area/vault/factory)
+"aV" = (/obj/machinery/conveyor,/obj/structure/window/barricade,/turf/simulated/floor/plating,/area/vault/factory)
+"aW" = (/obj/structure/disposalpipe/segment,/turf/unsimulated/mineral,/area/vault/factory)
+"aX" = (/obj/machinery/conveyor,/obj/structure/plasticflaps{opacity = 1},/turf/simulated/floor/plating,/area/vault/factory)
+"aY" = (/obj/machinery/conveyor,/turf/simulated/floor/engine,/area/vault/factory)
+"aZ" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/factory)
+"ba" = (/obj/machinery/power/emitter/energycannon{dir = 8},/turf/simulated/floor/engine,/area/vault/factory)
+"bb" = (/obj/structure/lattice,/obj/item/weapon/shard/plasma,/turf/space,/area)
+"bc" = (/obj/machinery/power/emitter/energycannon{dir = 4},/turf/simulated/floor/engine,/area/vault/factory)
+"bd" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/factory)
+"be" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/simulated/wall/r_wall,/area/vault/factory)
+"bf" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/simulated/wall/r_wall,/area/vault/factory)
+"bg" = (/obj/effect/gibspawner/robot,/turf/space,/area)
+"bh" = (/obj/item/robot_parts/robot_component/radio,/turf/space,/area)
+"bi" = (/obj/machinery/conveyor,/obj/structure/plasticflaps{opacity = 1},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bj" = (/obj/structure/sign/fire,/turf/simulated/wall/r_wall,/area/vault/factory)
+"bk" = (/obj/structure/disposalpipe/broken,/obj/structure/disposalpipe/broken{dir = 4},/obj/effect/gibspawner/robot,/turf/space,/area)
+"bl" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area)
+"bm" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area)
+"bn" = (/mob/living/simple_animal/hostile/monster/cyber_horror/quiet{name = "factory overseer"},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bo" = (/obj/machinery/conveyor,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bp" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bq" = (/obj/machinery/disposal{desc = "A pneumatic waste disposal unit. This one is used to transport malfunctioning hivebots."; name = "recycling"},/obj/structure/disposalpipe/trunk,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"br" = (/obj/structure/disposalpipe/segment,/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
+"bs" = (/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bt" = (/obj/structure/disposalpipe/segment{dir = 1; icon_state = "pipe-c"},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bu" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/obj/structure/rack,/obj/item/weapon/glue{pixel_y = 6},/obj/item/weapon/glue,/obj/item/weapon/glue{pixel_y = -6},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bv" = (/obj/structure/disposalpipe/segment,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
+"bw" = (/obj/machinery/disposal{desc = "A pneumatic device that sends you to the nearest Hivebot Transport Unit."; name = "pipe-based transportation unit"},/obj/structure/disposalpipe/trunk{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bx" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area/vault/factory)
+"by" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/turf/space,/area)
+"bz" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -89,18 +88,18 @@ aaacaeadadadaeaeaeaeaeaeaeaeadadadacacaa
 aaacaeaeadadaeafagahagaiajaeadadadadacac
 acakalaeaeaeaeamanaoapaqaraeasasasasadac
 aaakatauavawauaxanayazaAaraeasaBaCasadac
-aaakaDaeaEaeaeaFaGaHazaIaraeasaJanasadac
-acakalaeaKaLaeaeaeaGazaeaeaeasaMasasadac
-aaacaeaeaNaOaeadaeaPaQaeadadasaRasadadac
-aaacaeaeaeaeaeadaeaPazaeaSaTaTaUadadadac
-aaacadadadadadadaVaWaFaeaXadadadadacacac
-aaacacacadadacacasaYasasaRacadadacacaaaa
-aaaaaaacacacasasasaZbabbaRacbcacacaaaaaa
-aaaaaaaaaaaaasbdbeaZasbfbgbhbiaaaaaaaaaa
-aaaaaaaaaaaaasasasbjasaRbkasblbmbnaaaaaa
-aaaaaaaaaaaaadasbobpbobqbrasaXacbsaaaaaa
-aaaaaaaaaaadadasbtbpbtbubvasaXadbwaaaaaa
-aaaaaaaaaaadadasbtbtbtbtbxbyaUbzbAaaaaaa
+aaakaDaeaEaeaeaFanaGazaHaraeasaIanasadac
+acakalaeaJaKaeaeaeanazaeaeaeasaLasasadac
+aaacaeaeaMaNaeadaeaOaPaeadadasaQasadadac
+aaacaeaeaeaeaeadaeaOazaeaRaSaSaTadadadac
+aaacadadadadadadaUaVaFaeaWadadadadacacac
+aaacacacadadacacasaXasasaQacadadacacaaaa
+aaaaaaacacacasasasaYaZbaaQacbbacacaaaaaa
+aaaaaaaaaaaaasbcbdaYasbebfbgbhaaaaaaaaaa
+aaaaaaaaaaaaasasasbiasaQbjasbkblbmaaaaaa
+aaaaaaaaaaaaadasbnbobnbpbqasaWacbraaaaaa
+aaaaaaaaaaadadasbsbobsbtbuasaWadbvaaaaaa
+aaaaaaaaaaadadasbsbsbsbsbwbxaTbybzaaaaaa
 aaaaaaaaaaaaadasasasasasasasaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaadadadadadaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaadadadaaaaaaaaaaaaaaaa

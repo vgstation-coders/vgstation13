@@ -33,14 +33,20 @@
 
 /obj/machinery/cooking/icemachine/takeIngredient(var/obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/glass))
-		if(!src.beaker)
-			if(user.drop_item(I, src))
-				src.beaker = I
-				. = 1
-				to_chat(user, "<span class='notice'>You add the [I.name] to the [src.name].</span>")
-				src.updateUsrDialog()
-		else
+		if(src.beaker)
 			to_chat(user, "<span class='warning'>The [src.name] already has a beaker.</span>")
+			return
+
+		if(I.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [I] is too big to fit.</span>")
+			return
+
+		if(user.drop_item(I, src))
+			src.beaker = I
+			. = 1
+			to_chat(user, "<span class='notice'>You add the [I.name] to the [src.name].</span>")
+			src.updateUsrDialog()
+
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/icecream))
 		if(!I.reagents.has_reagent(SPRINKLES))
 			I.reagents.add_reagent(SPRINKLES,1)

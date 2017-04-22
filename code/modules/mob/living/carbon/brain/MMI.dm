@@ -164,9 +164,6 @@ obj/item/device/mmi/Destroy()
 	if(istype(O, /obj/item/weapon/implanter))
 		return//toplel
 
-	if(brainmob)
-		O.attack(brainmob, user)//Oh noooeeeee
-		return
 	..()
 
 	//TODO: ORGAN REMOVAL UPDATE. Make the brain remain in the MMI so it doesn't lose organ data.
@@ -178,10 +175,8 @@ obj/item/device/mmi/Destroy()
 	else
 		to_chat(user, "<span class='notice'>You upend \the [src], spilling the brain onto the floor.</span>")
 		var/obj/item/organ/brain/brain = new(user.loc)
-		brainmob.container = null//Reset brainmob mmi var.
-		brainmob.forceMove(brain)//Throw mob into brain.
-		living_mob_list -= brainmob//Get outta here
-		brain.brainmob = brainmob//Set the brain to use the brainmob
+		brain.transfer_identity(brainmob)
+		qdel(brainmob)
 		brainmob = null//Set mmi brainmob var to null
 
 		icon_state = "mmi_empty"

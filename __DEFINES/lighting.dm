@@ -2,8 +2,8 @@
 #define LIGHTING_INTERVAL       5 // frequency, in 1/10ths of a second, of the lighting process
 
 #ifndef LIGHTING_INSTANT_UPDATES
-#define LIGHTING_INTERVAL       5    // Frequency, in 1/10ths of a second, of the lighting process.
-#include "..\code\controllers\Processes\lighting.dm"
+//#include "..\code\controllers\subsystem\lighting.dm"
+//Ok this doesn't work INCLUDE IT YOURSELF.
 #endif
 
 #define LIGHTING_FALLOFF        1 // type of falloff to use for lighting; 1 for circular, 2 for square
@@ -66,3 +66,9 @@
 #define LIGHT_COLOR_SLIME_LAMP "#AFC84B" //Weird color, between yellow and green, very slimy. rgb(175, 200, 75)
 #define LIGHT_COLOR_TUNGSTEN   "#FAE1AF" //Extremely diluted yellow, close to skin color (for some reason). rgb(250, 225, 175)
 #define LIGHT_COLOR_HALOGEN    "#F0FAFA" //Barely visible cyan-ish hue, as the doctor prescribed. rgb(240, 250, 250)
+
+//Defines for lighting status, see power/lighting.dm
+#define LIGHT_OK     0
+#define LIGHT_EMPTY  1
+#define LIGHT_BROKEN 2
+#define LIGHT_BURNED 3

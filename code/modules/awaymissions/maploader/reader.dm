@@ -5,6 +5,43 @@
 //global datum that will preload variables on atoms instanciation
 var/global/dmm_suite/preloader/_preloader = null
 
+/**
+ * Returns a list with two numbers. First number is the map's width. Second number is the map's height.
+ */
+var/list/map_dimension_cache = list()
+
+/dmm_suite/get_map_dimensions(var/dmm_file as file)
+	var/quote = ascii2text(34)
+	var/tfile = file2text(dmm_file)
+	var/hash = md5(tfile)
+
+	if(map_dimension_cache.Find(hash))
+		return map_dimension_cache[hash]
+
+	var/tfile_len = length(tfile)
+	var/lpos = 1 // the models definition index
+
+	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
+	if(!key_len)
+		key_len = 1
+
+	//proceed line by line to find the map layout
+	//Another way to do this would be to search for this string: (1,1,1) = {" , but if some joker varedited that into the map it would break bigly
+	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
+		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
+		if(copytext(tline,1,2) != quote)//we reached the map "layout"
+			break
+
+	var/zpos = findtext(tfile, "\n(1,1,", lpos, 0)
+	var/zgrid = copytext(tfile, findtext(tfile, quote+"\n", zpos, 0)+2, findtext(tfile,"\n"+quote, zpos, 0)+1) //copy the whole map grid
+	var/x_depth = length(copytext(zgrid, 1, findtext(zgrid, "\n", 2, 0))) //Length of an encoded line (like "aaaaaaaaAAAAAAAAAAAA")
+	var/map_width = x_depth / key_len //Divide length of the encoded line by the length of the key to get the map's width
+	var/map_height= length(zgrid) / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
+
+	var/return_list = list(map_width, map_height)
+	map_dimension_cache[hash] = return_list
+
+	return return_list
 
 /**
  * Construct the model map and control the loading process
@@ -194,6 +231,7 @@ var/global/dmm_suite/preloader/_preloader = null
 
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
+		spawned_atoms |= instance
 
 	if(_preloader && instance)
 		_preloader.load(instance)

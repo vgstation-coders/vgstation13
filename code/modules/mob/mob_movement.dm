@@ -27,18 +27,36 @@
 
 /client/proc/treat_hotkeys(var/keypress)
 	keypress = turn(keypress, dir)
+	var/mob/living/silicon/pai/pai_override = null
+	var/obj/pai_container = null
+	if(ispAI(usr))
+		var/mob/living/silicon/pai/P = usr
+		if(!P.incapacitated())
+			if(istype(P.card.loc, /obj))
+				pai_container = P.card.loc
+				if(pai_container.integratedpai == P.card)
+					pai_override = P
 	switch(keypress)
 		if(NORTHEAST)
+			if(pai_override)
+				pai_container.swapkey_integrated_pai(pai_override)
+				return
 			swap_hand()
 		if(SOUTHEAST)
 			attack_self()
 		if(SOUTHWEST)
+			if(pai_override)
+				pai_container.throwkey_integrated_pai(pai_override)
+				return
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
 				C.toggle_throw_mode()
 			else
 				to_chat(usr, "<span class='warning'>This mob type cannot throw items.</span>")
 		if(NORTHWEST)
+			if(pai_override)
+				pai_container.dropkey_integrated_pai(pai_override)
+				return
 			if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
 				to_chat(usr, "<span class='notice'>You cease waiting to use your power")
 				return
@@ -252,6 +270,11 @@
 	if(isAI(mob))
 		return AIMove(loc,dir,mob)
 
+	if(ispAI(mob))
+		var/mob/living/silicon/pai/P = mob
+		P.relaymove(dir)
+		return
+
 	if(mob.monkeyizing)
 		return//This is sota the goto stop mobs from moving var
 
@@ -287,11 +310,15 @@
 		return O.relaymove(mob, dir)
 
 	if(isturf(mob.loc))
-		if(mob.restrained())//Why being pulled while cuffed prevents you from moving
+		if(mob.restrained()) //Why being pulled while cuffed prevents you from moving
+			if(mob.grabbed_by.len)
+				to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+				return 0
 			for(var/mob/M in range(mob, 1))
 				if(M.pulling == mob)
-					if(!M.restrained() && M.stat == 0 && M.canmove && mob.Adjacent(M))
+					if(!M.incapacitated() && M.canmove && mob.Adjacent(M))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 					else
 						M.stop_pulling()
@@ -300,10 +327,12 @@
 				if(chain_datum.extremity_A == mob)
 					if(istype(chain_datum.extremity_B,/mob/living))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 				else if(chain_datum.extremity_B == mob)
 					if(istype(chain_datum.extremity_A,/mob/living))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 
 		if(mob.pinned.len)
@@ -369,6 +398,9 @@
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
+			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
+				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
+			//	to_chat(src, "<span class='notice'>First Step</span>")
 			step(mob, dir)
 			mob.last_movement=world.time
 
@@ -387,7 +419,8 @@
 
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
-				del(G)
+				qdel(G)
+				mob.grabbed_by.Remove(G)
 			if(G.state == GRAB_AGGRESSIVE)
 				mob.delayNextMove(10)
 				if(!prob(25))
@@ -474,7 +507,7 @@
 			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
-			if(!(newLoc.flags & NOJAUNT))
+			if(!(newLoc.turf_flags & NOJAUNT))
 				mob.forceEnter(newLoc)
 				mob.dir = direct
 			else

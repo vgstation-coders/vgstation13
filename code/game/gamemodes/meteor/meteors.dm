@@ -442,6 +442,8 @@ var/list/blob_candidates = list()
 		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
 	else
 		new/obj/effect/blob/core(T, no_morph = 1)
+	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
 
 //It's a tool to debug and test stuff, ok? Pls don't hand them out to players unless you just want to set the world on fire.
 /obj/item/weapon/meteor_gun

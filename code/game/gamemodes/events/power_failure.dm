@@ -6,11 +6,8 @@
 	for(var/obj/machinery/power/battery/smes/S in power_machines)
 		if(istype(get_area(S), /area/turret_protected) || S.z != map.zMainStation)
 			continue
-		S.charge = 0
-		S.output = 0
-		S.online = 0
+		S.stat |= FORCEDISABLE
 		S.update_icon()
-		S.power_change()
 
 	var/list/skipped_areas = list(/area/engineering/engine, /area/turret_protected/ai)
 
@@ -30,8 +27,11 @@
 				break
 		if(skip)
 			continue
+		A.old_power_light = A.power_light
 		A.power_light = 0
+		A.old_power_equip = A.power_equip
 		A.power_equip = 0
+		A.old_power_environ = A.power_environ
 		A.power_environ = 0
 
 	for(var/obj/machinery/power/apc/C in power_machines)
@@ -45,6 +45,7 @@
 			if(skip)
 				continue
 			C.chargemode = 0
+			C.old_charge = C.cell.charge
 			C.cell.charge = 0
 
 /proc/power_restore(var/announce = 1)
@@ -54,21 +55,19 @@
 		command_alert(/datum/command_alert/power_restored)
 	for(var/obj/machinery/power/apc/C in power_machines)
 		if(C.cell && C.z == map.zMainStation)
-			C.cell.charge = C.cell.maxcharge
+			C.cell.charge = Clamp(C.cell.charge, C.old_charge, C.cell.maxcharge)
 			C.chargemode = 1
 	for(var/obj/machinery/power/battery/smes/S in power_machines)
 		if(S.z != map.zMainStation)
 			continue
-		S.charge = S.capacity
-		S.output = 200000
-		S.online = 1
+		S.stat &= ~FORCEDISABLE
 		S.update_icon()
-		S.power_change()
+
 	for(var/area/A in areas)
 		if(A.name != "Space" && A.name != "Engine Walls" && A.name != "Chemical Lab Test Chamber" && A.name != "space" && A.name != "Escape Shuttle" && A.name != "Arrival Area" && A.name != "Arrival Shuttle" && A.name != "start area" && A.name != "Engine Combustion Chamber")
-			A.power_light = 1
-			A.power_equip = 1
-			A.power_environ = 1
+			A.power_light = max(A.power_light, A.old_power_light)
+			A.power_equip = max(A.power_equip, A.old_power_equip)
+			A.power_environ = max(A.power_environ, A.old_power_environ)
 	suspend_alert = 0
 
 /proc/power_restore_quick(var/announce = 1)

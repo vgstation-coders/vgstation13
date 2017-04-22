@@ -62,21 +62,22 @@
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/Ma in component_parts)
-		T += Ma.rating
-	if(T >= 1)
-		T -= 1
+	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+ 	T += Ma.rating //T is the ammount of stock parts grade. 1 tier 1 part is a  T=1,  2 tier 2 parts is a T=4, 1 tier 1 and 1 tier 3 part is a T=5
+ 	if(T >= 2) // this removes 1 part tier level. This is to account for the fact that machines like the protolathe have 1 micro manip in them by default which means 1 tier level
+ 		T -= 2
+
 	var/diff
-	diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T))/25,0.01)
+	diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
 	if(resource_coeff!=diff)
 		resource_coeff = diff
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/Ml in component_parts)
+	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 		T += Ml.rating
-	if(T>= 2)
+	if(T>= 2)  // same idea for the formula for above
 		T -= 2
-	diff = round(initial(time_coeff) - (initial(time_coeff)*(T))/25,0.01)
+	diff = round(initial(time_coeff) - (initial(time_coeff)*(T *5))/25,0.01)
 	if(time_coeff!=diff)
 		time_coeff = diff
 
@@ -451,6 +452,11 @@
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
 
+/obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
+	..()
+	if(stopped)
+		start_processing_queue()
+
 // Tell the machine to start processing the queue on the next process().
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
 	stopped=0
@@ -602,7 +608,16 @@
 		ui_interact(usr)
 		return 1
 
+/obj/machinery/r_n_d/fabricator/npc_tamper_act(mob/living/L)
+	if(!part_sets || !part_sets.len)
+		return
 
+	var/list/part_set = part_sets[pick(part_sets)]
+	if(!part_set || !part_set.len)
+		return
+
+	var/new_design = pick(part_set)
+	build_part(new_design)
 
 /obj/machinery/r_n_d/fabricator/attack_hand(mob/user as mob)
 	if(user.stat || user.restrained()) //allowed is later on, so we don't check it

@@ -13,12 +13,14 @@
 	health = 50
 	max_health = 50
 
+	can_have_carts = FALSE
+
 	var/image/wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
 	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
-	wheel_overlay = MOB_PLANE
+	wheel_overlay.plane = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
 	if(occupant)
@@ -50,7 +52,7 @@
 		overlays -= wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
-	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || destroyed || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
 	return 1
 
@@ -132,14 +134,17 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/relaymove(var/mob/user, direction)
 	if(!check_key(user))
-		to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
+		if(can_warn())
+			to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
 		return 0
 	return ..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/handle_layer()
 	if(dir == NORTH)
 		plane = ABOVE_HUMAN_PLANE
+		layer = VEHICLE_LAYER
 	else
+		layer = OBJ_LAYER
 		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/check_key(var/mob/user)
@@ -167,18 +172,18 @@
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/examine(mob/user)
 	..()
 
-	if(locked_atoms.len > 9)
+	if(is_locking(/datum/locking_category/buckle/chair/vehicle) > 9)
 		to_chat(user, "<b>WHAT THE FUCK</b>")
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
 	//Same as parent's, but no occupant check!
-	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || destroyed)
+	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
 		return 0
 	return 1
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/update_mob()
 	var/i = 0
-	for(var/mob/living/L in locked_atoms)
+	for(var/mob/living/L in get_locked(/datum/locking_category/buckle/chair/vehicle))
 		L.pixel_x = 0
 		L.pixel_y = 3 * PIXEL_MULTIPLIER + (i * 6 * PIXEL_MULTIPLIER) //Stack people on top of each other!
 

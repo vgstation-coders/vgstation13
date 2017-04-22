@@ -81,6 +81,10 @@
 	if(stat & BROKEN || !I || !user)
 		return
 
+	if(!user.has_hand_check())
+		to_chat(user, "<span class='warning'>You don't have any hands!</span>")
+		return
+
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
 		if(isscrewdriver(I))
@@ -107,7 +111,7 @@
 				to_chat(user, "You start slicing the floorweld off the disposal unit.")
 
 				if(do_after(user, src,20))
-					if(!src || !W.isOn())
+					if(gcDestroyed || !W.isOn())
 						return
 					to_chat(user, "You sliced the floorweld off the disposal unit.")
 					var/obj/structure/disposalconstruct/C = new (src.loc)
@@ -129,9 +133,9 @@
 		var/obj/item/weapon/storage/bag/B = I
 		if(B.contents.len == 0)
 			if(user.drop_item(I, src))
-				to_chat(user, "<span class='notice'>You throw away the empty [B].</span>")
+				to_chat(user, "<span class='notice'>You throw away \the empty [B].</span>")
 				return
-		to_chat(user, "<span class='notice'>You empty the [B].</span>")
+		to_chat(user, "<span class='notice'>You empty \the [B].</span>")
 		B.mass_remove(src)
 		B.update_icon()
 		update_icon()
@@ -439,7 +443,7 @@
 				M.show_message("\the [I] lands in \the [src].", 1)
 		else
 			for(var/mob/M in viewers(src))
-				M.show_message("\the [I] bounces off of \the [src]'s rim!.", 1)
+				M.show_message("\the [I] bounces off of \the [src]'s rim!", 1)
 		return 0
 	else
 		return ..(mover, target, height, air_group)
@@ -550,7 +554,7 @@
 		AM.forceMove(src)
 		if(istype(AM, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = AM
-			if(((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT)) || H.species.flags & IS_BULKY)		// is a human and fat?
+			if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)		// is a human and fat?
 				has_fat_guy = 1			// set flag on holder
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM
@@ -637,10 +641,16 @@
 
 // called when player tries to move while in a pipe
 /obj/structure/disposalholder/relaymove(mob/user as mob)
+	//testing("src.loc=[src.loc]")
+	//testing("user.stat=[user.stat]")
 	if (user.stat)
 		return
+	//testing("Passed statcheck")
 	if (src.loc)
-		for (var/mob/M in hearers(src.loc.loc))
+		for (var/mob/M in hearers(get_turf(src)))
+			if(M.clong_delayer.blocked()) continue
+			M.clong_delayer.setDelay(10)
+			//testing("SENDING CLONG")
 			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
 	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
@@ -884,27 +894,21 @@
 //weldingtool: unfasten and convert to obj/disposalconstruct
 
 /obj/structure/disposalpipe/attackby(var/obj/item/I, var/mob/user)
-
 	var/turf/T = src.loc
-	if(T.intact)
+	if(T.intact) 	//has a floortile attached
 		return		// prevent interaction with T-scanner revealed pipes
+
 	src.add_fingerprint(user)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
 
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			// check if anything changed over 2 seconds
-			var/turf/uloc = user.loc
-			var/atom/wloc = W.loc
-			to_chat(user, "Slicing the disposal pipe.")
-			sleep(30)
-			if(!W.isOn())
-				return
-			if(user.loc == uloc && wloc == W.loc)
+			to_chat(user, "You start slicing the disposal pipe.")
+			if(do_after(user, src, 3 SECONDS))
+				if(gcDestroyed || !W.isOn())
+					return
 				welded()
-			else
-				to_chat(user, "You must stay still while welding the pipe.")
 		else
 			to_chat(user, "You need more welding fuel to cut the pipe.")
 			return
@@ -1394,17 +1398,11 @@
 
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			// check if anything changed over 2 seconds
-			var/turf/uloc = user.loc
-			var/atom/wloc = W.loc
-			to_chat(user, "Slicing the disposal pipe.")
-			sleep(30)
-			if(!W.isOn())
-				return
-			if(user.loc == uloc && wloc == W.loc)
+			to_chat(user, "You start slicing the disposal pipe.")
+			if(do_after(user, src, 3 SECONDS))
+				if(gcDestroyed || !W.isOn())
+					return
 				welded()
-			else
-				to_chat(user, "You must stay still while welding the pipe.")
 		else
 			to_chat(user, "You need more welding fuel to cut the pipe.")
 			return
@@ -1545,8 +1543,8 @@
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
+			if(do_after(user, src, 20))
+				if(gcDestroyed || !W.isOn())
 					return
 				to_chat(user, "You sliced the floorweld off the disposal outlet.")
 				var/obj/structure/disposalconstruct/C = new (src.loc)

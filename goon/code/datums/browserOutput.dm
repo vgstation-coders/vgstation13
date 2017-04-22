@@ -11,7 +11,8 @@ For the main html chat area
 	"goon/browserassets/css/fonts/fontawesome-webfont.ttf",
 	"goon/browserassets/css/fonts/fontawesome-webfont.woff",
 	"goon/browserassets/css/font-awesome.css",
-	"goon/browserassets/css/browserOutput.css"
+	"goon/browserassets/css/browserOutput.css",
+	"goon/browserassets/css/browserOutput_colorblindv1.css"
 )
 
 //Precaching a bunch of shit
@@ -96,6 +97,22 @@ For the main html chat area
 
 		if("analyzeClientData")
 			data = analyzeClientData(arglist(params))
+
+		if("encoding")
+			var/encoding = href_list["encoding"]
+			var/static/regex/RE = regex("windows-(874|125\[0-8])")
+			if (RE.Find(encoding))
+				owner.encoding = RE.group[1]
+
+			else if (encoding == "gb2312")
+				owner.encoding = "2312"
+
+			// This seems to be the result on Japanese locales, but the client still seems to accept 1252.
+			else if (encoding == "_autodetect")
+				owner.encoding = "1252"
+
+			else
+				stack_trace("Unknown encoding received from client: \"[sanitize(encoding)]\". Please report this as a bug.")
 
 	if(data)
 		ehjax_send(data = data)
@@ -196,10 +213,11 @@ For the main html chat area
 		return
 
 	if (isicon(obj))
-		if (!bicon_cache["\ref[obj]"]) // Doesn't exist yet, make it.
+		//Icons get pooled constantly, references are no good here.
+		/*if (!bicon_cache["\ref[obj]"]) // Doesn't exist yet, make it.
 			bicon_cache["\ref[obj]"] = icon2base64(obj)
-
-		return "<img class='icon misc' src='data:image/png;base64,[bicon_cache["\ref[obj]"]]'>"
+		return "<img class='icon misc' src='data:image/png;base64,[bicon_cache["\ref[obj]"]]'>"*/
+		return "<img class='icon misc' src='data:image/png;base64,[icon2base64(obj)]'>"
 
 	// Either an atom or somebody fucked up and is gonna get a runtime, which I'm fine with.
 	var/atom/A = obj
@@ -218,10 +236,21 @@ For the main html chat area
 /proc/bi(obj)
 	bicon(obj)
 
+//Costlier version of bicon() that uses getFlatIcon() to account for overlays, underlays, etc. Use with extreme moderation, ESPECIALLY on mobs.
+/proc/costly_bicon(var/obj)
+	if (!obj)
+		return
+
+	if (isicon(obj))
+		return bicon(obj)
+
+	var/icon/I = getFlatIcon(obj)
+	return bicon(I)
+
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
-	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || target == world))
+	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
 		target << message
 		if (!isatom(target)) // Really easy to mix these up, and not having to make sure things are mobs makes the code cleaner.
 			CRASH("DEBUG: Boutput called with invalid message")
@@ -257,7 +286,15 @@ For the main html chat area
 				C.chatOutput.messageQueue.Add(message)
 				return
 
+		if(istype(target, /datum/log))
+			var/datum/log/L = target
+			L.log += (message + "\n")
+			return
+
 		message = replacetext(message, "\n", "<br>")
 
 		// url_encode it TWICE, this way any UTF-8 characters are able to be decoded by the Javascript.
 		target << output(url_encode(url_encode(message)), "browseroutput:output")
+
+/datum/log	//exists purely to capture to_chat() output
+	var/log = ""

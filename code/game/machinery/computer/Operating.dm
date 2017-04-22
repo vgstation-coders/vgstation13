@@ -1,7 +1,8 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/machinery/computer/operating
-	name = "Operating Computer"
+	name = "operating computer"
+	desc = "Used to monitor an organism's health on an adjacent operating table."
 	density = 1
 	anchored = 1.0
 	icon_state = "operating"

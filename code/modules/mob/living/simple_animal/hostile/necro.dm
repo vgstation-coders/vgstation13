@@ -1,6 +1,33 @@
 /mob/living/simple_animal/hostile/necro
 	var/mob/creator
 	var/unique_name = 0
+	faction = "necro"
+
+/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
+	..()
+	if(Owner)
+		faction = "\ref[Owner]"
+		friends.Add(Owner)
+		creator = Owner
+		if(Controller)
+			mind = Controller
+			ckey = ckey(mind.key)
+			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
+		var/ref = "\ref[Owner.mind]"
+		var/list/necromancers
+		if(!(Owner.mind in ticker.mode.necromancer))
+			ticker.mode:necromancer[ref] = list()
+		necromancers = ticker.mode:necromancer[ref]
+		necromancers.Add(Controller)
+		ticker.mode:necromancer[ref] = necromancers
+		ticker.mode.update_necro_icons_added(Owner.mind)
+		ticker.mode.update_necro_icons_added(Controller)
+		ticker.mode.update_all_necro_icons()
+		ticker.mode.risen.Add(Controller)
+
+	if(name == initial(name) && !unique_name)
+		name += " ([rand(1,1000)])"
+
 /mob/living/simple_animal/hostile/necro/skeleton
 	name = "skeleton"
 	desc = "Truly the ride never ends."
@@ -39,20 +66,22 @@
 
 	environment_smash = 1
 	meat_type = null
-
+/*
 #define EVOLVING 1
 #define MOVING_TO_TARGET 2
 #define EATING 3
 #define OPENING_DOOR 4
-//#define SMASHING_LIGHT 5
+#define SMASHING_LIGHT 5*/
+
+#define MAX_EAT_MULTIPLIER 4 //Dead for humans is -maxHealth, uncloneable is -maxHealth * 2
 
 /mob/living/simple_animal/hostile/necro/zombie //Boring ol default zombie
 	name = "zombie"
 	desc = "A reanimated corpse that looks like it has seen better days."
 	icon_state = "zombie"
 	icon_living = "zombie"
-	icon_dead = "zombie_dead"
-	icon_gib = "zombie_dead"
+	icon_dead = "zombie"
+	icon_gib = "zombie"
 	speak_chance = 0
 	turns_per_move = 5
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
@@ -73,6 +102,7 @@
 	melee_damage_upper = 20
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
+	stat_attack = DEAD
 
 	min_oxy = 0
 	max_oxy = 0
@@ -89,7 +119,7 @@
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse
 	var/can_evolve = FALSE //False if we don't want it to evolve
-	var/busy //If the zombie is busy, and what it's busy doing
+	//var/busy //If the zombie is busy, and what it's busy doing
 
 #define CANT 0
 #define CAN 1
@@ -99,44 +129,69 @@
 
 	var/break_doors = CANT //If CAN, they can attempt to open doors. If CANPLUS, they break the door down entirely
 	var/health_cap = 250 //Maximum possible health it can have. Because screw having a 1000 health mob
-/*	wanted_objects = list(
-		/obj/machinery/light,        // Bust out lights
+	var/busy = FALSE //Stop spamming the damn doorsmash
+	wanted_objects = list(
+		/obj/machinery/light,
+		/obj/machinery/door        // Bust out lights
 	)
 	search_objects = 1
 
+	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
+
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
+	if(the_target == creator)
+		return 0
+	if(ismob(the_target))
+		var/mob/living/M = the_target
+		if(ishuman(the_target)) //Checking for food
+			var/mob/living/carbon/human/H = the_target
+			if(H.isDead())
+				if(check_edibility(H))
+					return the_target
+				else
+					return 0
+			else
+				return ..(the_target)
+		else
+			if(M.isDead())
+				return 0
+
+	if(istype(the_target,/obj/machinery/door)) //Checking for doors
+		var/obj/machinery/door/D = the_target
+		if(can_open_door(D))
+			return the_target
+		else
+			return 0
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
-		// Not empty or broken
-		return L.status != 1 && L.status != 2
-	return ..(the_target)*/ //Too buggy, gets caught on terrain way too much
+		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
 
-/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
-	..()
-	if(Owner)
-		faction = "\ref[Owner]"
-		friends.Add(Owner)
-		if(Controller)
-			mind = Controller
-			ckey = ckey(mind.key)
-			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
-		var/ref = "\ref[Owner.mind]"
-		var/list/necromancers
-		if(!(Owner.mind in ticker.mode.necromancer))
-			ticker.mode:necromancer[ref] = list()
-		necromancers = ticker.mode:necromancer[ref]
-		necromancers.Add(Controller)
-		ticker.mode:necromancer[ref] = necromancers
-		ticker.mode.update_necro_icons_added(Owner.mind)
-		ticker.mode.update_necro_icons_added(Controller)
-		ticker.mode.update_all_necro_icons()
-		ticker.mode.risen.Add(Controller)
+	return ..(the_target)
 
-	if(name == initial(name) && !unique_name)
-		name += " ([rand(1,1000)])"
+/mob/living/simple_animal/hostile/necro/zombie/AttackingTarget()
+	if(!target)
+		return
+
+	if(target == creator)
+		return
+
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(H.isDead() && check_edibility(H))
+			eat(H)
+			return 0
+
+	if(istype (target, /obj/machinery/door))
+		var/obj/machinery/door/D = target
+		if(can_open_door(D))
+			force_door(D)
+		return 0
+
+	return..()
+
+
 
 /mob/living/simple_animal/hostile/necro/zombie/Life()
-	..()
 	/*TODONE
 	First, check if the zombie can potentially evolve
 	Have the zombie move to a corpse and start chewing at it
@@ -145,12 +200,10 @@
 	*/
 	if(!isUnconscious())
 		if(stance == HOSTILE_STANCE_IDLE && !client) //Not doing anything at the time
-			var/list/can_see = view(src, vision_range)
-			if(!busy)
-				if(can_evolve)//Can we evolve, and have we fed
-					busy = EVOLVING
-					check_evolve()
-					busy = 0
+			if(can_evolve)//Can we evolve, and have we fed
+				check_evolve()
+	..()
+				/*
 				if((health < maxHealth) || (maxHealth < health_cap) && !busy)
 					var/mob/living/carbon/human/C = find_food(can_see)//Is there something to eat in range?
 					if(C) //If so, chow down
@@ -162,6 +215,7 @@
 							eat(C)
 							C = null
 							walk(src, 0)
+
 				if(!busy && break_doors != CANT)//So we don't try to eat and open doors
 					var/obj/machinery/door/D = find_door(can_see)//Is there a door to open in range?
 					if(D)
@@ -173,13 +227,13 @@
 							force_door(D)
 							D = null
 							walk(src, 0)
-
 		else
 			busy = 0
 			stop_automated_movement = 0
 	else
 		walk(src,0)
-
+		*/
+/*
 /mob/living/simple_animal/hostile/necro/zombie/proc/find_food(var/list/can_see)
 	for(var/mob/living/carbon/human/C in can_see) //Because of how can_see lists things, it'll go in order of closest to furthest
 		if(C.isDead() && check_edibility(C))
@@ -198,7 +252,10 @@
 			busy = 0
 			stop_automated_movement = 0
 			walk(src,0)
+*/
 /mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
+	if(busy) //Already smashing a door or eating something
+		return 0
 	if((istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window)) && !client)
 		return 0
 	if(break_doors == CANT)//Moreso used for when a player-controlled zombie attempts to forceopen a door
@@ -236,47 +293,57 @@
 	D.visible_message("<span class='warning'>\The [D]'s motors whine as something attempts to brute force their way through it!</span>")
 	playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
 	D.shake(1, 8)
-	if(do_after(src, D, 100*time_mult, needhand = FALSE)) //Roughly 10 seconds for people on the other side of the door to run the heck away
-		if(can_open_door(D))//Let's see if nobody quickly bolted it
-			if(break_doors == CANPLUS) //Guaranteed
-				D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
-				if(istype(D, /obj/machinery/door/airlock/))
-					var/obj/machinery/door/airlock/A = D
-					A.locked = 0
-					A.welded = 0
-					A.jammed = 0
-				D.open(1)
-			else
-				if(prob(33))
-					D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
+	busy = TRUE
+	var/target_loc = D.loc
+	var/self_loc = src.loc
+	spawn(10 SECONDS*time_mult)
+		if(D.loc == target_loc && self_loc == src.loc) //Not moved
+			if(can_open_door(D))//Let's see if nobody quickly bolted it
+				if(break_doors == CANPLUS) //Guaranteed
+					D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
+					if(istype(D, /obj/machinery/door/airlock/))
+						var/obj/machinery/door/airlock/A = D
+						A.locked = 0
+						A.welded = 0
+						A.jammed = 0
 					D.open(1)
-	busy = 0
+				else
+					if(prob(33))
+						D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
+						D.open(1)
+					else
+						playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
+						D.shake(1, 8)
+	busy = FALSE
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
-	if(!(target.isDead()))
-		return 0 //It ain't dead
-	if(isjusthuman(target)) //Humans are always edible
-		return 1
-	if(target.health > -400) //So they're not caught eating the same dumb bird all day
-		return 1
+	if(busy)
+		return 0
+	if((health < maxHealth) || (maxHealth < health_cap))
+		if(!(target.isDead()))
+			return 0 //It ain't dead
+		if(isjusthuman(target)) //Humans are always edible
+			return 1
+		if(target.health > -(target.maxHealth*MAX_EAT_MULTIPLIER)) //So they're not caught eating the same dumb bird all day
+			return 1
 
 	return 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
-	visible_message("<span class='notice'>\The [src] starts to take a bite out of \the [target].</span>")
+	visible_message("<span class='warning'>\The [src] takes a bite out of \the [target].</span>")
+	busy = TRUE
 	stop_automated_movement = 1
-	if(do_after(src, target, 50, needhand = FALSE))
-		playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
-		var/damage = rand(melee_damage_lower, melee_damage_upper)
-		target.adjustBruteLoss(damage)
-		health = min(maxHealth, health+damage)
-		if(maxHealth < health_cap)
-			maxHealth += 5 //A well fed zombie is a scary zombie
-		times_eaten += 1
+	playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+	var/damage = rand(melee_damage_lower, melee_damage_upper)
+	target.adjustBruteLoss(damage)
+	if(maxHealth < health_cap)
+		maxHealth += 5 //A well fed zombie is a scary zombie
+	health = min(maxHealth, health+damage)
+	times_eaten += 1
+	busy = FALSE
 	stop_automated_movement = 0
-	busy = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
 	if(!can_evolve) //How did you get here if not?
@@ -311,8 +378,12 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
 	if(ispath(evolve_to, /mob/living/simple_animal/hostile/necro))
-		var/mob/living/evolution = new evolve_to(src.loc,,)
+		var/mob/living/simple_animal/hostile/necro/evolution = new evolve_to(src.loc,,)
 		evolution.name = name //We want to keep the name
+		evolution.inherit_mind(src)
+		evolution.creator = creator
+		evolution.friends = friends.Copy()
+		get_clothes(src, evolution)
 		if(mind)
 			mind.transfer_to(evolution) //Just in the offchance we have a player in control
 		qdel(src)
@@ -321,11 +392,38 @@
 		new evolve_to(src.loc)
 		qdel(src)
 
-/mob/living/simple_animal/hostile/necro/zombie/delayedRegen()
+/mob/living/simple_animal/hostile/necro/zombie/update_transform() //Literally pulled from carbon/update_icons.dm
+	if(lying != lying_prev)
+		var/matrix/final_transform = matrix()
+		var/final_pixel_y = pixel_y
+		var/final_dir = dir
+
+		if(lying == 0) // lying to standing
+			final_pixel_y += 6 * PIXEL_MULTIPLIER
+		else //if(lying != 0)
+			if(lying_prev == 0) // standing to lying
+				final_pixel_y -= 6 * PIXEL_MULTIPLIER
+				final_transform.Turn(90)
+
+		lying_prev = lying // so we don't try to animate until there's been another change.
+
+		animate(src, transform = final_transform, pixel_y = final_pixel_y, dir = final_dir, time = 2, easing = EASE_IN | EASE_OUT)
+
+/mob/living/simple_animal/hostile/necro/zombie/revive()
 	..()
 	times_revived += 1
+	lying = 0
+	update_transform()
+
+/mob/living/simple_animal/hostile/necro/zombie/Die()
+	..()
+	lying = 1
+	update_transform()
 
 /mob/living/simple_animal/hostile/necro/zombie/UnarmedAttack(atom/A) //There's got to be a better way to keep everything together
+	if(A == creator) //Evil necromancy magic means no attacking our creator
+		to_chat(src, "Try as you might, you can't bring yourself to attack [A]")
+		return
 	..()
 	if(istype(A, /obj/machinery/door))
 		if(can_open_door(A))
@@ -336,10 +434,17 @@
 		if(check_edibility(A))
 			eat(A)
 
+/mob/living/simple_animal/hostile/necro/zombie/Destroy()
+
+	for(var/obj/item/I in clothing)
+		I.forceMove(get_turf(src))
+		clothing.Remove(I)
+	..()
+
 /mob/living/simple_animal/hostile/necro/zombie/turned //Not very useful
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
-	icon_dead = "zombie_turned_dead"
+	icon_dead = "zombie_turned"
 	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
 	maxHealth = 50
 	health = 50
@@ -412,7 +517,7 @@
 /mob/living/simple_animal/hostile/necro/zombie/rotting
 	icon_living = "zombie_rotten"
 	icon_state = "zombie_rotten"
-	icon_dead = "zombie_rotten_dead"
+	icon_dead = "zombie_rotten"
 	desc = "A reanimated corpse that looks like it has seen better days. Whoever this was is long gone."
 	maxHealth = 100
 	health = 100
@@ -429,7 +534,7 @@
 /mob/living/simple_animal/hostile/necro/zombie/putrid
 	icon_living = "zombie" //The original
 	icon_state = "zombie"
-	icon_dead = "zombie_dead"
+	icon_dead = "zombie"
 	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttenous"
 	maxHealth = 150
 	health = 150
@@ -446,17 +551,46 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
 	//Make the target drop their stuff, move them into the contents of the zombie so the ghost can at least see how its zombie self is doing
-	target.drop_all()
+	//target.drop_all()
 	var/mob/living/simple_animal/hostile/necro/zombie/turned/new_zombie = new /mob/living/simple_animal/hostile/necro/zombie/turned(target.loc)
+	get_clothes(target, new_zombie)
 	new_zombie.name = target.real_name
 	new_zombie.host = target
 	target.loc = null
+
+/mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
+	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34
+	Coalate these into a list
+	add the targets overlay to the zombie
+	make the target drop everything
+	transfer everything that was on the list into the zombie
+	Otherwise if it's zombie just transfer the overlay and the clothes reference*/
+	var/list/clothes_to_transfer = list()
+	var/image/I = image('icons/effects/32x32.dmi',"blank")
+	if(istype(target, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = target
+		I.overlays |= H.overlays
+		for(var/obj/item/IT in H.get_all_slots())
+			clothes_to_transfer += IT
+			H.drop_from_inventory(IT)
+			IT.forceMove(new_zombie)
+	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie))
+		var/mob/living/simple_animal/hostile/necro/zombie/Z = target
+		I.overlays |= Z.overlays
+		for(var/obj/item/IT in Z.clothing)
+			clothes_to_transfer += IT
+			Z.clothing.Remove(IT)
+			IT.forceMove(new_zombie)
+
+	new_zombie.overlays += I
+	for(var/obj/item/IT in clothes_to_transfer)
+		new_zombie.clothing.Add(IT)
 
 /mob/living/simple_animal/hostile/necro/zombie/crimson
 	name = "crimson skull"
 	icon_state = "zombie_crimson"
 	icon_living = "zombie_crimson"
-	icon_dead = "zombie_crimson_dead"
+	icon_dead = "zombie_crimson"
 	maxHealth = 150
 	health = 150
 	melee_damage_lower = 15
@@ -469,8 +603,8 @@
 /mob/living/simple_animal/hostile/necro/zombie/leatherman
 	..()
 	name = "leatherman"
-	icon_dead = "zombie_leather_dead"
-	icon_gib = "zombie_leather_dead"
+	icon_dead = "zombie_leather"
+	icon_gib = "zombie_leather"
 	icon_state = "zombie_leather"
 	icon_living = "zombie_leather"
 	desc = "Fuck you!"

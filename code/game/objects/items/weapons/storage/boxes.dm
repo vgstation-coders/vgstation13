@@ -22,6 +22,7 @@
 /obj/item/weapon/storage/box
 	name = "box"
 	desc = "It's just an ordinary box."
+	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box"
 	item_state = "syringe_kit"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
@@ -48,7 +49,7 @@
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
-	desc = "A packet of six imported DromedaryCo cancer sticks. A label on the packaging reads, \"Wouldn't a slow death make a change?\""
+	desc = "A packet of six imported DromedaryCo cigarettes. A label on the packaging reads: \"Wouldn't a slow death make a change?\""
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "Dpacket"
 	item_state = "Dpacket"
@@ -65,12 +66,16 @@
 /obj/item/weapon/storage/box/survival
 	name = "survival equipment box"
 	desc = "Makes braving the hazards of space a little bit easier."
+	icon_state = "box_emergency"
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
+/obj/item/weapon/storage/box/survival/vox
+	icon_state = "box_vox"
 
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
@@ -80,6 +85,9 @@
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/engineer
+	icon_state = "box_eva"
+
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
 	for(var/atom/A in src)
@@ -87,6 +95,9 @@
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
+/obj/item/weapon/storage/box/survival/ert
+	icon_state = "box_ERT"
 
 /obj/item/weapon/storage/box/survival/ert/New()
 	..()
@@ -98,7 +109,7 @@
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
-	desc = "Contains white gloves."
+	desc = "A box containing white latex gloves. gloves."
 	icon_state = "latex"
 
 /obj/item/weapon/storage/box/gloves/New()
@@ -108,7 +119,7 @@
 
 /obj/item/weapon/storage/box/bgloves
 	name = "box of black gloves"
-	desc = "Contains black gloves."
+	desc = "A box containing black gloves."
 	icon_state = "bgloves"
 
 /obj/item/weapon/storage/box/bgloves/New()
@@ -118,7 +129,7 @@
 
 /obj/item/weapon/storage/box/sunglasses
 	name = "box of sunglasses"
-	desc = "Contains sunglasses."
+	desc = "A box containing sunglasses."
 	icon_state = "sunglass"
 
 /obj/item/weapon/storage/box/sunglasses/New()
@@ -128,7 +139,7 @@
 
 /obj/item/weapon/storage/box/masks
 	name = "sterile masks"
-	desc = "This box contains masks of sterility."
+	desc = "This box contains sterile masks."
 	icon_state = "sterile"
 
 /obj/item/weapon/storage/box/masks/New()
@@ -139,13 +150,14 @@
 
 /obj/item/weapon/storage/box/syringes
 	name = "syringes"
-	desc = "A biohazard alert warning is printed on the box"
+	desc = "A box containing syringes. A reminder label warns of syringes becoming potential biohazards when not properly sanitized."
 	icon_state = "syringe"
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/syringe(src)
+	new /obj/item/weapon/reagent_containers/syringe/giant(src)
 
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
@@ -159,6 +171,7 @@
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
 	desc = "This box contains injectors it seems."
+	icon_state = "box_injector"
 
 /obj/item/weapon/storage/box/injectors/New()
 	..()
@@ -181,7 +194,7 @@
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<B>WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</B>"
+	desc = "<span class='userdanger'>WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</span>"
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/flashbangs/New()
@@ -209,7 +222,7 @@
 
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
-	desc = "A box with 5 emp grenades."
+	desc = "A box containing emp grenades."
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/emps/New()
@@ -219,7 +232,7 @@
 
 /obj/item/weapon/storage/box/wind
 	name = "wind grenades"
-	desc = "A box containing 3 wind grenades"
+	desc = "A box containing wind grenades."
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/wind/New()
@@ -229,7 +242,7 @@
 
 /obj/item/weapon/storage/box/foam
 	name = "metal foam grenades"
-	desc = "A box containing 7 metal foam grenades"
+	desc = "A box containing metal foam grenades."
 	icon_state = "metalfoam"
 
 /obj/item/weapon/storage/box/foam/New()
@@ -327,7 +340,7 @@
 
 /obj/item/weapon/storage/box/cups
 	name = "box of paper cups"
-	desc = "It has pictures of paper cups on the front."
+	desc = "It has a picture of a paper cup on the front."
 
 /obj/item/weapon/storage/box/cups/New()
 	..()
@@ -337,7 +350,7 @@
 
 /obj/item/weapon/storage/box/donkpockets
 	name = "box of donk-pockets"
-	desc = "<B>Instructions:</B> <I>Heat in microwave. Product will cool if not eaten within seven minutes.</I>"
+	desc = "<span class='notice'>Instructions: Heat in microwave. Product will cool if not eaten within seven minutes.</span>"
 	icon_state = "donk_kit"
 	var/pocket_amount = 6
 
@@ -394,7 +407,7 @@
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
-	desc = "Has so many empty IDs."
+	desc = "Contains blank identification cards."
 	icon_state = "id"
 
 /obj/item/weapon/storage/box/ids/New()
@@ -425,7 +438,7 @@
 
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
-	desc = "<span class='danger'>WARNING:</span> <I>Keep out of reach of children</I>."
+	desc = "<span class='userdanger'>WARNING: Keep out of reach of children.</span>"
 	icon_state = "mousetraps"
 
 /obj/item/weapon/storage/box/mousetraps/New()
@@ -497,6 +510,36 @@
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/device/label_roll(src)
 
+/obj/item/weapon/storage/box/labels
+	name = "label roll box"
+	desc = "A box of refill rolls for a hand labeler."
+	icon_state = "labels"
+
+/obj/item/weapon/storage/box/labels/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/device/label_roll(src)
+
+/obj/item/weapon/storage/box/wreath/wreath_bow
+	name = "wreath (bow) box"
+	desc = "Just add hands for Christmas."
+	icon_state = "wreath_bow"
+
+/obj/item/weapon/storage/box/wreath/wreath_bow/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/mounted/frame/wreath/wreath_bow(src)
+
+/obj/item/weapon/storage/box/wreath/wreath_nobow
+	name = "wreath (holly) box"
+	desc = "Emergency Christmas supplies."
+	icon_state = "wreath_nobow"
+
+/obj/item/weapon/storage/box/wreath/wreath_nobow/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/mounted/frame/wreath/wreath_nobow(src)
+
 /obj/item/weapon/storage/box/snappops
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
@@ -523,7 +566,7 @@
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
 	desc = "It's a box of mugs."
-	icon_state = "box"
+	icon_state = "box_mug"
 
 /obj/item/weapon/storage/box/mugs/New()
 	..()
@@ -533,7 +576,6 @@
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
 	name = "replacement bulbs"
-	icon = 'icons/obj/storage.dmi'
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
 	item_state = "syringe_kit"
@@ -583,3 +625,162 @@
 		new /obj/item/weapon/light/tube/he(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb/he(src)
+
+/obj/item/weapon/storage/box/inflatables
+	name = "inflatable barrier box"
+	desc = "Contains inflatable walls and doors. Specially designed for space-efficient packing of deflated structures."
+	icon_state = "inf_box"
+	can_only_hold = list(
+		"/obj/item/inflatable/door",
+		"/obj/item/inflatable/wall")
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 21
+
+/obj/item/weapon/storage/box/inflatables/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/inflatable/door(src)
+	for(var/i = 1 to 4)
+		new /obj/item/inflatable/wall(src)
+
+/obj/item/weapon/storage/box/ornaments
+	name = "box of ornaments"
+	desc = "A box of seven glass Christmas ornaments. Color not included."
+	icon_state = "ornament_box"
+	foldable = null
+	starting_materials = list(MAT_GLASS = 2500)		//needed for autolathe production
+
+/obj/item/weapon/storage/box/ornaments/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/ornament(src)
+	if(prob(10))
+		new /obj/item/ornament/topper(src)
+	else
+		new /obj/item/ornament(src)
+
+/obj/item/weapon/storage/box/ornaments/teardrop_ornaments
+	name = "box of teardrop ornaments"
+	desc = "A box of seven teardrop-shaped glass Christmas ornaments. Color not included."
+	icon_state = "teardrop_ornament_box"
+
+/obj/item/weapon/storage/box/ornaments/teardrop_ornaments/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/ornament/teardrop(src)
+
+/obj/item/weapon/storage/box/botanydisk
+	name = "flora disk box"
+	desc = "A box of flora data disks."
+	icon_state = "botanydisk"
+
+/obj/item/weapon/storage/box/botanydisk/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/disk/botany(src)
+
+/obj/item/weapon/storage/box/holobadge
+	name = "holobadge box"
+	desc = "A box containing holobadges."
+	icon_state = "box_badge"
+
+/obj/item/weapon/storage/box/holobadge/New()
+	..()
+	for(var/i = 1 to 4)
+		new /obj/item/clothing/accessory/holobadge(src)
+	new /obj/item/clothing/accessory/holobadge/cord(src)
+	new /obj/item/clothing/accessory/holobadge/cord(src)
+
+/obj/item/weapon/storage/box/spellbook
+	name = "Spellbook Bundle"
+	desc = "High quality discount spells! This bundle is non-refundable. The end user is solely liable for any damages arising from misuse of these products."
+
+/obj/item/weapon/storage/box/spellbook/New()
+	..()
+	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
+	possible_books -= /obj/item/weapon/spellbook/oneuse
+	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	for(var/i =1; i <= 7; i++)
+		var/randombook = pick(possible_books)
+		var/book = new randombook(src)
+		src.contents += book
+		possible_books -= randombook
+
+/obj/item/weapon/storage/box/spellbook/random/New()
+	..()
+	var/randomsprite = pick("a","b")
+	icon_state = "wizbox-[randomsprite]"
+
+/obj/item/weapon/storage/box/chrono_grenades
+	name = "box of chrono grenades"
+	desc = "A box of seven experimental chrono grenades."
+	icon_state = "chrono_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade(src)
+
+/obj/item/weapon/storage/box/balloons
+	name = "box of balloons"
+	desc = "A box containing seven balloons of various colors."
+	icon_state = "balloon_box"
+
+/obj/item/weapon/storage/box/balloons/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/future
+	icon_state = "future_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/future/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/future(src)
+
+/obj/item/weapon/storage/box/balloons/long
+	name = "box of long balloons"
+	desc = "A box containing seven long balloons of various colors."
+	icon_state = "long_balloon_box"
+
+/obj/item/weapon/storage/box/balloons/long/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long(src)
+
+/obj/item/weapon/storage/box/balloons/long/living/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long/living(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/past
+	icon_state = "past_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/past/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/past(src)
+
+// Who organizes this shit?
+
+/obj/item/weapon/storage/box/actionfigure
+	name = "box of action figures"
+	desc = "The latest set of collectable action figures."
+	icon_state = "box"
+
+/obj/item/weapon/storage/box/actionfigure/New()
+	..()
+	for(var/i in 1 to 4)
+		var/randomFigure = pick(subtypesof(/obj/item/toy/figure))
+		new randomFigure(src)

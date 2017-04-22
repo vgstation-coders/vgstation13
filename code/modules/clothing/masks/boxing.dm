@@ -3,7 +3,7 @@
 	desc = "Worn by robust fighters, flying high to defeat their foes!"
 	icon_state = "luchag"
 	item_state = "luchag"
-	flags = FPRINT|MASKINTERNALS
+	clothing_flags = MASKINTERNALS
 	body_parts_covered = HEAD|EARS|EYES
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0

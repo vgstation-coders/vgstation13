@@ -95,11 +95,11 @@
 	if(auth)
 
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='green'>\[Authenticated\]</font></a>&#09;/
-			Server Power: <A href='?src=\ref[src];active=1'>[src.linkedServer && src.linkedServer.active ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a></h4>"}
+			Server Power: <A href='?src=\ref[src];active=1'>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a></h4>"}
 	else
 
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='red'>\[Unauthenticated\]</font></a>&#09;/
-			Server Power: <u>[src.linkedServer && src.linkedServer.active ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u></h4>"}
+			Server Power: <u>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u></h4>"}
 	if(hacking || emagged)
 		screen = 2
 	else if(!auth || !linkedServer || (linkedServer.stat & (NOPOWER|BROKEN)))
@@ -295,7 +295,7 @@
 		//Turn the server on/off.
 		if (href_list["active"])
 			if(auth)
-				linkedServer.active = !linkedServer.active
+				linkedServer.disabled = !linkedServer.disabled
 		//Find a server
 		if (href_list["find"])
 			if(message_servers && message_servers.len > 1)

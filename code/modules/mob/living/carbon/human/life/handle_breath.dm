@@ -41,9 +41,9 @@
 
 		//No breath from internal atmosphere so get breath from location
 		if(!breath)
-			if(head && (head.flags & BLOCK_BREATHING)) //Worn items which block breathing are handled first
+			if(head && (head.clothing_flags & BLOCK_BREATHING)) //Worn items which block breathing are handled first
 				//
-			else if(wear_mask && (wear_mask.flags & BLOCK_BREATHING))
+			else if(wear_mask && (wear_mask.clothing_flags & BLOCK_BREATHING))
 				//
 			else if(isobj(loc))
 				var/obj/location_as_object = loc
@@ -68,13 +68,13 @@
 				//Handle filtering
 				var/block = 0
 				if(wear_mask)
-					if(wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
+					if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 						block = 1
 				if(glasses)
-					if(glasses.flags & BLOCK_GAS_SMOKE_EFFECT)
+					if(glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 						block = 1
 				if(head)
-					if(head.flags & BLOCK_GAS_SMOKE_EFFECT)
+					if(head.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 						block = 1
 
 				if(!block)
@@ -120,14 +120,15 @@
 		if(virus2 && virus2.len > 0)
 			if(prob(10) && get_infection_chance(src))
 //					log_debug("[src] : Exhaling some viruses")
-				for(var/mob/living/carbon/M in view(1,src))
-					src.spread_disease_to(M)
+				for(var/mob/living/M in range(1,src))
+					if(can_be_infected(M))
+						spread_disease_to(src,M)
 
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))
 			internal = null
-		if(!wear_mask || !(wear_mask.flags & MASKINTERNALS))
+		if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS))
 			internal = null
 		if(internal)
 			return internal.remove_air_volume(volume_needed)

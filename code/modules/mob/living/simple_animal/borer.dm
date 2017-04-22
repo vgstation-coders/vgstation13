@@ -82,6 +82,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/channeling_bone_shield = 0
 	var/channeling_bone_hammer = 0
 	var/channeling_bone_cocoon = 0
+	var/channeling_night_vision = 0
 
 	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0
@@ -91,6 +92,19 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
+	held_items = list()
+
+/mob/living/simple_animal/borer/defected_borer
+	name = "special borer"
+	real_name = "special borer"
+	desc = "A slightly defected, yet incredibly happy little brainslug"
+	speak_emote = list("borks")
+	emote_hear = list("barks")
+	attacktext = "barks at"
+	friendly = "barks at"
+	icon_state = "bestborer"
+	icon_living = "bestborer"
+	icon_dead = "bestborer"
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
@@ -176,7 +190,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			severity = 6
 
 	if(severity > 0)
-		overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+		overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
 	else
 		clear_fullscreen("damage")
 
@@ -352,14 +366,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	else
 		return ..()
 
-/mob/living/simple_animal/borer/start_pulling(var/atom/movable/AM)
-	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
-
 // VERBS!
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
 	set name = "Borer Speak"
-	set desc = "Communicate with your bretheren"
+	set desc = "Communicate with your brethren."
 	if(!message)
 		return
 
@@ -516,7 +527,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(chem.name == BLOOD)
-		if(istype(host, /mob/living/carbon/human) && !(host.species.flags & NO_BLOOD))
+		if(istype(host, /mob/living/carbon/human) && !(host.species.anatomy_flags & NO_BLOOD))
 			host.vessel.add_reagent(chem.name, units)
 		else
 			to_chat(src, "<span class='notice'>Your host seems to be a species that doesn't use blood.<span>")
@@ -935,7 +946,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(stat)
-		to_chat(src, "You cannot ventcrawl your current state.")
+		to_chat(src, "You cannot ventcrawl in your current state.")
 		return
 
 	if(research.unlocking)
@@ -1086,7 +1097,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set desc = "Check the health of your host."
 	set category = "Alien"
 
-	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for dischordant notes...</span>")
+	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for discordant notes...</span>")
 	spawn(5 SECONDS)
 		healthanalyze(host, src, mode=1, silent=1, skip_checks=1) // I am not rewriting this shit with more immersive strings.  Deal with it. - N3X
 

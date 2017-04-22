@@ -188,7 +188,7 @@
 /obj/structure/stackopacks
 	name = "stack of recharge packs"
 	desc = "A bunch of hefty carboard boxes."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "stackopack"
 	density = 1
 	flags = FPRINT

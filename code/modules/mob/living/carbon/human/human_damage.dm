@@ -7,8 +7,9 @@
 	var/total_burn	= 0
 	var/total_brute	= 0
 	for(var/datum/organ/external/O in organs)	//hardcoded to streamline things a bit
-		total_brute	+= O.brute_dam
-		total_burn	+= O.burn_dam
+		if(O.is_organic() && O.is_existing())
+			total_brute	+= O.brute_dam
+			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
 	//TODO: fix husking
 	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
@@ -80,7 +81,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=damage_source.sharpness_flags & SHARP_BLADE, used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(-amount, 0, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -97,7 +98,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=damage_source.sharpness_flags & SHARP_BLADE, used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(0, -amount, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -169,6 +170,8 @@
 /mob/living/carbon/human/proc/get_damageable_organs()
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
+		if(!O.is_existing())
+			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
 	return parts
@@ -262,7 +265,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 This function restores the subjects blood to max.
 */
 /mob/living/carbon/human/proc/restore_blood()
-	if(!species.flags & NO_BLOOD)
+	if(!species.anatomy_flags & NO_BLOOD)
 		var/blood_volume = vessel.get_reagent_amount(BLOOD)
 		vessel.add_reagent(BLOOD,560.0-blood_volume)
 
@@ -285,7 +288,7 @@ This function restores all organs.
 	return
 
 
-/mob/living/carbon/human/proc/get_organ(var/zone)
+/mob/living/carbon/human/get_organ(var/zone)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
@@ -296,8 +299,7 @@ This function restores all organs.
 
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
 	if((damagetype != BRUTE) && (damagetype != BURN))
-		..(damage, damagetype, def_zone, blocked, ignore_events = ignore_events)
-		return 1
+		return ..(damage, damagetype, def_zone, blocked, ignore_events = ignore_events)
 
 	if(blocked >= 2)
 		return 0
@@ -338,7 +340,7 @@ This function restores all organs.
 
 	//Embedded projectile code.
 	if(!organ)
-		return
+		return damage
 /*/vg/ EDIT
 	if(istype(used_weapon,/obj/item/weapon))
 		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.
@@ -360,7 +362,8 @@ This function restores all organs.
 			S.desc = "[S.desc] It looks like it was fired from [P.shot_from]."
 			S.forceMove(src)
 			organ.implants += S
-			visible_message("<span class='danger'>The projectile sticks in the wound!</span>")
+			if(P.embed_message)
+				visible_message("<span class='danger'>The projectile sticks in the wound!</span>")
 			S.add_blood(src)
 	if(istype(used_weapon,/obj/item/projectile/flare)) //We want them to carry the flare, not a projectile
 		var/obj/item/projectile/flare/F = used_weapon
@@ -380,7 +383,7 @@ This function restores all organs.
 				adjust_fire_stacks(0.5) //as seen in ignite code
 				update_icon = 1
 			qdel(F)
-	return 1
+	return damage
 
 //Adds cancer, including stage of cancer and limb
 //Right now cancer is adminbus only. You can inflict it via the full (old) Player Panel and all "prayer types" (includes Centcomm message)
@@ -397,3 +400,30 @@ This function restores all organs.
 
 	if(picked_organ)
 		picked_organ.cancer_stage += stage //This can pick a limb which already has cancer, in which case it will add to it
+
+/mob/living/carbon/human/proc/limitedrevive()
+	resurrect()
+	timeofdeath = 0
+	tod = null
+
+	toxloss = 0
+	oxyloss = 0
+	bruteloss = 0
+	fireloss = 0
+	for(var/datum/organ/external/O in organs)
+		if(O.destspawn || O.is_robotic())
+			continue
+		O.rejuvenate()
+		O.number_wounds = 0
+		O.wounds = list()
+	heal_overall_damage(1000, 1000)
+	if(reagents)
+		reagents.clear_reagents()
+	restore_blood()
+	bodytemperature = 310
+	stat = UNCONSCIOUS
+	regenerate_icons()
+	flash_eyes(visual = 1)
+	apply_effect(10, EYE_BLUR)
+	apply_effect(10, WEAKEN)
+	update_canmove()

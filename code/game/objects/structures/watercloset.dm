@@ -421,6 +421,9 @@
 			C.bodytemperature = min(T0C + 37.5, C.bodytemperature + 0.5)
 			return
 
+/obj/machinery/shower/npc_tamper_act(mob/living/L)
+	attack_hand(L)
+
 /obj/structure/sink
 	name = "sink"
 	icon = 'icons/obj/watercloset.dmi'
@@ -550,6 +553,15 @@
 				"<span class='notice'>You wash \a [O] using \the [src].</span>")
 
 		busy = FALSE
+
+/obj/structure/sink/npc_tamper_act(mob/living/L)
+	if(istype(L, /mob/living/simple_animal/hostile/gremlin))
+		visible_message("<span class='danger'>\The [L] climbs into \the [src] and turns the faucet on!</span>")
+
+		var/mob/living/simple_animal/hostile/gremlin/G = L
+		G.divide()
+
+	return NPC_TAMPER_ACT_NOMSG
 
 /obj/structure/sink/kitchen
 	name = "kitchen sink"

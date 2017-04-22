@@ -144,7 +144,7 @@ var/list/nest_locations = list()
 	var/smallest_distance = 555
 	var/best_nest
 	for(var/obj/structure/bed/nest/N in nest_locations)
-		if((N.z == src.z) && (N.locked_atoms.len == 0))
+		if(N.z == z && !N.is_locking(/datum/locking_category/buckle/bed/nest))
 			var/dist = get_dist(src,N)
 			if(dist < smallest_distance)
 				smallest_distance = dist
@@ -281,6 +281,7 @@ var/list/nest_locations = list()
 	icon_dead = "alienq_dead"
 	health = 250
 	maxHealth = 250
+	gender = FEMALE
 	melee_damage_lower = 15
 	melee_damage_upper = 15
 	ranged = 1
@@ -340,6 +341,7 @@ var/list/nest_locations = list()
 	move_to_delay = 4
 	maxHealth = 400
 	health = 400
+	size = SIZE_HUGE
 	pixel_x = -16 * PIXEL_MULTIPLIER
 
 /obj/item/projectile/neurotox

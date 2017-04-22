@@ -1,5 +1,3 @@
-var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_spider)
-
 #define SPIDER_MAX_PRESSURE_DIFF 50
 
 #define SPINNING_WEB 1
@@ -63,6 +61,7 @@ var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_s
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+	held_items = list()
 
 /mob/living/simple_animal/hostile/giant_spider/update_icons()
 	.=..()
@@ -100,7 +99,7 @@ var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_s
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
 		// Not empty or broken
-		return L.status != 1 && L.status != 2
+		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/giant_spider/proc/CanOpenDoor(var/obj/machinery/door/D)

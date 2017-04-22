@@ -3,7 +3,7 @@
 	desc = "Used to hold things when you don't have enough hands for that."
 	icon_state = "webbing"
 	_color = "webbing"
-	var/slots = 3
+	var/storage_slots = 3
 	var/list/can_only_hold = list() //I would add the other storage item variables, but nothing would use them yet, so there's no point.
 	var/list/cant_hold = list("/obj/item/clothing/accessory/storage", "/obj/item/clothing/under") //NO RECURSION
 	var/obj/item/weapon/storage/internal/hold
@@ -14,7 +14,7 @@
 	hold = new (src)
 	hold.name = name //So that you don't just put things into "the storage"
 	hold.master_item = src
-	hold.storage_slots = slots
+	hold.storage_slots = storage_slots
 	hold.can_only_hold = can_only_hold
 	hold.cant_hold = cant_hold
 
@@ -67,34 +67,35 @@
 	desc = "Sturdy mess of synthcotton belts and buckles, ready to share your burden."
 	icon_state = "webbing"
 	_color = "webbing"
+	origin_tech = Tc_MATERIALS + "=2"
 
 /obj/item/clothing/accessory/storage/webbing/paramed
 	name = "paramedic webbing"
 	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel"
 	icon_state = "vest_white"
 	_color = "vest_white"
-	slots = 4
+	storage_slots = 4
 
 /obj/item/clothing/accessory/storage/black_vest
 	name = "black webbing vest"
 	desc = "Robust black synthcotton vest with lots of pockets to hold whatever you need, but cannot hold in hands."
 	icon_state = "vest_black"
 	_color = "vest_black"
-	slots = 5
+	storage_slots = 5
 
 /obj/item/clothing/accessory/storage/brown_vest
 	name = "brown webbing vest"
 	desc = "Worn brownish synthcotton vest with lots of pockets to unload your hands."
 	icon_state = "vest_brown"
 	_color = "vest_brown"
-	slots = 5
+	storage_slots = 5
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"
 	desc = "A bandolier designed with eight pouches for diffrent ammunition types."
 	icon_state = "bandolier"
 	_color = "bandolier"
-	slots = 8
+	storage_slots = 8
 	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
 
 /obj/item/clothing/accessory/storage/knifeharness
@@ -102,7 +103,7 @@
 	desc = "A heavily decorated harness of sinew and leather with two knife-loops."
 	icon_state = "unathiharness2"
 	_color = "unathiharness2"
-	slots = 2
+	storage_slots = 2
 	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
 
 /obj/item/clothing/accessory/storage/neorussian

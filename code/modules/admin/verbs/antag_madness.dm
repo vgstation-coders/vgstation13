@@ -111,10 +111,6 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	to_chat(M, "<span class='danger'>You get the feeling that you're not the only one who remembered his true origin. Will they be your allies or your foes? That is for you to decide.</span>")
 
 /proc/create_madness(var/mob/living/carbon/human/M, var/choice)
-	if (M.mind.assigned_role == "Clown")
-		to_chat(M, "The adminbus has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself.")
-		M.mutations.Remove(M_CLUMSY)
-
 	switch(choice)
 		if("traitor")
 			if(istraitor(M))
@@ -391,8 +387,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(pack, slot_in_backpack)
 			to_chat(M, "Your previous belongings have been stored in your backpack.")
 
-			del(M.wear_suit)
-			del(M.head)
+			qdel(M.wear_suit)
+			qdel(M.head)
+			M.wear_suit = null
+			M.head = null
 			M.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/syndicate(M), slot_wear_mask)
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndi(M), slot_wear_suit)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndi(M), slot_head)

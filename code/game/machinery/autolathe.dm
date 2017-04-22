@@ -92,6 +92,7 @@
 		new /obj/item/ammo_casing/shotgun/flare(), \
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
+		new /obj/item/toy/ammo/gun(), \
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \
@@ -102,6 +103,7 @@
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/device/taperecorder(), \
 		new /obj/item/weapon/chisel(), \
+		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
 		new /obj/item/device/destTagger, \
@@ -116,6 +118,8 @@
 		new /obj/item/weapon/camera_assembly(), \
 		new /obj/item/stack/sheet/glass/rglass(), \
 		new /obj/item/stack/rods(), \
+		new /obj/item/weapon/storage/box/ornaments(), \
+		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/gun/projectile/flamethrower/full(), \

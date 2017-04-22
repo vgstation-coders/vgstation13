@@ -54,11 +54,11 @@
 		set src in usr
 
 		if(icon_state == "psyche")
-			to_chat(usr, "<span class='warning'>Your suit is malfunctioning</span>")
+			to_chat(usr, "<span class='warning'>Your suit is malfunctioning.</span>")
 			return
 
 		var/obj/item/clothing/under/A
-		A = input("Select Colour to change it to", "BOOYEA", A) in clothing_choices
+		A = input("Select the jumpsuit's new appearance.", "BOOYEA", A) in clothing_choices
 		if(!A)
 			return
 

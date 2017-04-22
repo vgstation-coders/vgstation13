@@ -1,3 +1,11 @@
+#define MAX_POFFSET 10
+
+#define MAX_X (world.maxx + 50)
+#define MIN_X -49
+
+#define MAX_Y (world.maxy + 50)
+#define MIN_Y -49
+
 /obj/machinery/computer/telescience
 	name = "telepad control console"
 	desc = "Used to teleport objects to and from the telescience telepad."
@@ -358,6 +366,27 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		return
 	return
 
+/obj/machinery/computer/telescience/npc_tamper_act(mob/living/L)
+	x_player_off = rand(-MAX_POFFSET, MAX_POFFSET)
+	y_player_off = rand(-MAX_POFFSET, MAX_POFFSET)
+
+	x_co = rand(MIN_X, MAX_X)
+	y_co = rand(MIN_Y, MAX_Y)
+	var/new_z = rand(1, map.zLevels.len)
+	if(new_z != map.zCentcomm)
+		z_co = new_z
+
+	if(prob(50)) //Send
+		if(cell && cell.charge>=teleport_cell_usage)
+			sending = 1
+			teleport(usr)
+		src.updateUsrDialog()
+	else //Receive
+		if(cell && cell.charge>=teleport_cell_usage)
+			sending = 0
+			teleport(usr)
+		src.updateUsrDialog()
+
 /obj/machinery/computer/telescience/Topic(href, href_list)
 	if(href_list["close"])
 		if(usr.machine == src)
@@ -369,7 +398,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 
 	if(href_list["setPOffsetX"])
 		var/new_x = input("Please input desired X offset.", name, x_player_off) as num
-		if(new_x < -10 || new_x > 10)
+		if(new_x < -MAX_POFFSET || new_x > MAX_POFFSET)
 			to_chat(usr, "<span class='caution'>Error: Invalid X offset (-10 to 10)</span>")
 		else
 			x_player_off = new_x
@@ -378,7 +407,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 
 	if(href_list["setPOffsetY"])
 		var/new_y = input("Please input desired X offset.", name, y_player_off) as num
-		if(new_y < -10 || new_y > 10)
+		if(new_y < -MAX_POFFSET || new_y > MAX_POFFSET)
 			to_chat(usr, "<span class='caution'>Error: Invalid Y offset (-10 to 10)</span>")
 		else
 			y_player_off = new_y
@@ -389,7 +418,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	if(href_list["setx"])
 		var/new_x = input("Please input desired X coordinate.", name, x_co) as num
 		var/x_validate=new_x+x_off
-		if(x_validate < -49 || x_validate > world.maxx+50)
+		if(x_validate < MIN_X || x_validate > MAX_X)
 			to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 		else
 			x_co = new_x
@@ -399,7 +428,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	if(href_list["sety"])
 		var/new_y = input("Please input desired Y coordinate.", name, y_co) as num
 		var/y_validate=new_y+y_off
-		if(y_validate < -49 || y_validate > world.maxy+50)
+		if(y_validate < MIN_Y || y_validate > MAX_Y)
 			to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 		else
 			y_co = new_y

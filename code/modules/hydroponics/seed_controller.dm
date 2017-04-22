@@ -7,7 +7,7 @@
 var/global/datum/controller/plants/plant_controller // Set in New().
 
 /datum/controller/plants
-
+	var/processing = FALSE
 	var/plants_per_tick = PLANTS_PER_TICK
 	var/plant_tick_time = PLANT_TICK_TIME
 	var/list/plant_queue = list()      // All queued plants.

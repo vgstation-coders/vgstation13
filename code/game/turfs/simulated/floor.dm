@@ -96,6 +96,10 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 /turf/simulated/floor/blob_act()
 	return
 
+/turf/simulated/floor/add_dust()
+	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
+		getFromPool(/obj/effect/decal/cleanable/dirt,src)
+
 turf/simulated/floor/update_icon()
 	overlays -= floor_overlay
 
@@ -592,6 +596,16 @@ turf/simulated/floor/update_icon()
 			new /obj/item/weapon/ore/glass(src)
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
 			to_chat(user, "<span class='notice'>You shovel the grass.</span>")
+			if(prob(10))
+				var/to_spawn = pick(
+					/obj/item/seeds/carrotseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
+					/obj/item/seeds/potatoseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+					/obj/item/seeds/whitebeetseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,)
+				new to_spawn(src)
+				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 		else
 			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
@@ -662,7 +676,7 @@ turf/simulated/floor/update_icon()
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
 			S.perform(user, 0, list(src))
-			//var/obj/screen/spell/SS = S.connected_button
+			//var/obj/abstract/screen/spell/SS = S.connected_button
 			//SS.update_charge(1)
 			return 1
 	return 0

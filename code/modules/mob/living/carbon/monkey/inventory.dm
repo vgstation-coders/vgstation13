@@ -62,6 +62,21 @@
 			return legcuffed
 	return null
 
+// Return the item currently in the slot denoted by the slot flag
+/mob/living/carbon/monkey/get_item_by_flag(slot_flag)
+	switch(slot_flag)
+		if(SLOT_BACK)
+			return back
+		if(SLOT_ICLOTHING)
+			return uniform
+		if(SLOT_HEAD)
+			return hat
+		if(SLOT_MASK)
+			return wear_mask
+		if(SLOT_EYES)
+			return glasses
+	return null
+
 /mob/living/carbon/monkey/get_all_slots()
 	return list(
 		back,
@@ -72,9 +87,8 @@
 		handcuffed,
 		legcuffed)
 
-/mob/living/carbon/monkey/u_equip(obj/item/W as obj, dropped = 1)
+/mob/living/carbon/monkey/u_equip(obj/item/W as obj, dropped = 1, var/slot = null)
 	var/success = 0
-	var/slot = null
 	if(!W)
 		return 0
 

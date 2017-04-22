@@ -99,70 +99,41 @@
 	return
 
 
-////////////////////Necromancy//////////////////////
-#define ZOMBIE 0
-#define SKELETON 1
-//#define FAITHLESS 2
-/obj/item/weapon/staff/necro
-	name = "staff of necromancy"
-	desc = "A wicked looking staff that pulses with evil energy."
-	icon_state = "necrostaff"
-	item_state = "necrostaff"
-	var/charge_tick = 0
-	var/charges = 3
-	var/raisetype = 0
-	var/next_change = 0
-/obj/item/weapon/staff/necro/New()
+//necromancy moved to code\modules\projectiles\guns\energy\special.dm --Sonix
+
+
+#define CLOAKINGCLOAK "cloakingcloak"
+
+/obj/item/weapon/cloakingcloak
+	name = "cloak of cloaking"
+	desc = "A silk cloak that will hide you from anything with eyes."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "cloakingcloak"
+	w_class = W_CLASS_MEDIUM
+	force = 0
+	flags = FPRINT | TWOHANDABLE
+	var/event_key
+
+/obj/item/weapon/cloakingcloak/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(iscarbon(holder) && wielded)
+		var/mob/living/carbon/C = holder
+		if(C.m_intent == "run" && prob(10))
+			if(C.Slip(4, 5))
+				step(C, C.dir)
+				C.visible_message("<span class='warning'>\The [C] trips over \his [name] and appears out of thin air!</span>","<span class='warning'>You trip over your [name] and become visible again!</span>")
+
+/obj/item/weapon/cloakingcloak/update_wield(mob/user)
 	..()
-	processing_objects.Add(src)
-
-
-/obj/item/weapon/staff/necro/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-
-/obj/item/weapon/staff/necro/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	charges++
-	return 1
-
-/obj/item/weapon/staff/necro/attack_self(mob/user)
-	if(next_change > world.timeofday)
-		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
-		return
-	/*if(raisetype < FAITHLESS)
-		raisetype = !raisetype
-	else
-		raisetype = ZOMBIE*/
-	raisetype = !raisetype
-
-	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
-	next_change = world.timeofday + 30
-
-/obj/item/weapon/staff/necro/afterattack(atom/target, mob/user, proximity)
-	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
-		return 0
-	var/mob/living/carbon/human/H = target
-	if(!H.stat || H.health > config.health_threshold_crit)
-		return 0
-	switch(raisetype)
-		if(ZOMBIE)
-			new /mob/living/simple_animal/hostile/necro/zombie(get_turf(target), user, H.mind)
-		if(SKELETON)
-			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
-
-	H.gib()
-	charges--
-
-
-
-/obj/item/weapon/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
-	afterattack(target,user,1)
-
-#undef ZOMBIE
-#undef SKELETON
-//#undef FAITHLESS
+	if(user)
+		user.update_inv_hands()
+		if(wielded)
+			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
+			event_key = user.on_moved.Add(src, "mob_moved")
+			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
+			user.alphas[CLOAKINGCLOAK] = 1
+		else
+			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
+			user.on_moved.Remove(event_key)
+			event_key = null
+			user.alpha = initial(user.alpha)
+			user.alphas.Remove(CLOAKINGCLOAK)

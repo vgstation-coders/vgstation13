@@ -51,6 +51,10 @@
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
 	var/jammed = 0
 
+	var/projectile_color = null
+
+	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
+
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
@@ -86,7 +90,7 @@
 		Fire(A,user,params, "struggle" = struggle) //Otherwise, fire normally.
 
 /obj/item/weapon/gun/proc/isHandgun()
-	return 1
+	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
@@ -125,12 +129,12 @@
 			return 0
 	return 1
 
-/obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)//TODO: go over this
+/obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)//TODO: go over this
 	//Exclude lasertag guns from the M_CLUMSY check.
 	if(clumsy_check)
 		if(istype(user, /mob/living))
 			var/mob/living/M = user
-			if ((M_CLUMSY in M.mutations) && prob(50))
+			if (clumsy_check(M) && prob(50))
 				to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
 				M.take_organ_damage(0,20)
 				M.drop_item(src, force_drop = 1)
@@ -144,6 +148,8 @@
 	var/atom/originaltarget = target
 
 	var/turf/curloc = user.loc
+	if(use_shooter_turf)
+		curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
 		return
@@ -168,7 +174,7 @@
 	if(defective)
 		if(!failure_check(user))
 			return
-	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
+	if(!istype(src, /obj/item/weapon/gun/energy/tag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 
@@ -237,7 +243,8 @@
 	in_chamber.yo = targloc.y - curloc.y
 	in_chamber.xo = targloc.x - curloc.x
 	in_chamber.inaccurate = (istype(user.locked_to, /obj/structure/bed/chair/vehicle))
-
+	if(projectile_color)
+		in_chamber.apply_projectile_color(projectile_color)
 	if(params)
 		var/list/mouse_control = params2list(params)
 		if(mouse_control["icon-x"])
@@ -339,3 +346,31 @@
 			return ..() //Allows a player to choose to melee instead of shoot, by being on help intent.
 	else
 		return ..() //Pistolwhippin'
+
+/obj/item/weapon/gun/state_controls_pai(obj/item/device/paicard/P)
+	if(P.pai)
+		to_chat(P.pai, "<span class='info'><b>You have been connected to \a [src].</b></span>")
+		to_chat(P.pai, "<span class='info'>Your controls are:</span>")
+		to_chat(P.pai, "<span class='info'>- PageDown / Z(hotkey mode): Connect or disconnect from \the [src]'s firing mechanism.</span>")
+		to_chat(P.pai, "<span class='info'>- Click on a target: Fire \the [src] at the target.</span>")
+
+/obj/item/weapon/gun/attack_integrated_pai(mob/living/silicon/pai/user)
+	if(!pai_safety)
+		to_chat(user, "<span class='notice'>You connect to \the [src]'s firing mechanism.</span>")
+	else
+		to_chat(user, "<span class='notice'>You disconnect from \the [src]'s firing mechanism.</span>")
+	pai_safety = !pai_safety
+
+/obj/item/weapon/gun/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)	//to allow any gun to be pAI-compatible, on a basic level, just by varediting
+	if(check_pai_can_fire(user))
+		Fire(A,user,use_shooter_turf = TRUE)
+
+/obj/item/weapon/gun/proc/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
+	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe))	//can't fire the gun from inside pipes or disposal pipes
+		to_chat(user, "<span class='warning'>You can't aim \the [src] properly from this location!</span>")
+		return FALSE
+	else if(!pai_safety)
+		to_chat(user, "<span class='warning'>You're not connected to \the [src]'s firing mechanism!</span>")
+		return FALSE
+	else
+		return TRUE

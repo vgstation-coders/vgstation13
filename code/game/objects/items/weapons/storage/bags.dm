@@ -67,7 +67,7 @@
 	cant_hold = list("/obj/item/weapon/disk/nuclear")
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
-	flags = FPRINT | BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
+	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
 
 /obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbid wearing bags with something inside!
@@ -330,7 +330,7 @@
 // -----------------------------
 
 /obj/item/weapon/storage/bag/gadgets
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "gadget_bag"
 	slot_flags = SLOT_BELT
 	name = "gadget bag"
@@ -358,7 +358,7 @@
 // This used to be /obj/item/weapon/moneybag
 
 /obj/item/weapon/storage/bag/money
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	name = "money bag"
 	icon_state = "moneybag"
 

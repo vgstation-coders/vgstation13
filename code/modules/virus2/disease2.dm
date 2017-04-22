@@ -8,7 +8,7 @@ var/global/list/disease2_list = list()
 	var/dead = 0
 	var/clicks = 0
 	var/uniqueID = 0
-	var/list/datum/disease2/effectholder/effects = list()
+	var/list/datum/disease2/effect/effects = list()
 	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
 	var/max_stage = 4
 
@@ -17,19 +17,32 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,10000)
+	log_debug("Virus [uniqueID] created with notes: [notes]")
 	log += "<br />[timestamp()] CREATED - [notes]<br>"
 	disease2_list["[uniqueID]"] = src
 	..()
 
+/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0)
+	var/list/datum/disease2/effect/list = list()
+	for(var/e in typesof(/datum/disease2/effect))
+		var/datum/disease2/effect/f = new e
+		if(f.stage == stage && f.badness <= max_badness)
+			list += f
+	var/datum/disease2/effect/e = pick(list)
+	e.chance = rand(1, e.max_chance)
+	return e
+
 /datum/disease2/disease/proc/makerandom(var/greater=0)
-	for(var/i=1 ; i <= max_stage ; i++ )
-		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder(src)
-		holder.stage = i
+	log_debug("Randomizing virus [uniqueID] with greater=[greater]")
+	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
-			holder.getrandomeffect(2)
+			var/datum/disease2/effect/e = new_random_effect(2, i)
+			effects += e
+			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
 		else
-			holder.getrandomeffect()
-		effects += holder
+			var/datum/disease2/effect/e = new_random_effect(1, i)
+			effects += e
+			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
 	uniqueID = rand(0,10000)
 	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
@@ -47,16 +60,15 @@ var/global/list/disease2_list = list()
 		return // return if isn't proper mob type
 	var/datum/disease2/disease/D = new /datum/disease2/disease("custom_disease") //set base name
 	for(var/i = 1; i <= D.max_stage; i++)  // run through this loop until everything is set
-		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in ((typesof(/datum/disease2/effect) - /datum/disease2/effect)) // choose a symptom from the list of them
-		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder(infectedMob) // create the infectedMob as a holder for it.
-		holder.stage = i // set the stage of this holder equal to i.
-		var/datum/disease2/effect/f = new symptom // initalize the new symptom
-		holder.effect = f // assign the new symptom to the holder
-		holder.chance = input(C, "Choose chance", "Chance") as num // set the chance of the symptom that can occur
-		if(holder.chance > 100 || holder.chance < 0)
+		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
+			// choose a symptom from the list of them
+		var/datum/disease2/effect/e = new symptom(D)
+		e.chance = input(C, "Choose chance", "Chance") as num
+			// set the chance of the symptom that can occur
+		if(e.chance > 100 || e.chance < 0)
 			return 0
-		D.log += "[f.name] [holder.chance]%<br>"
-		D.effects += holder // add the holder to the disease
+		D.log += "Added [e.name] at [e.chance]% chance<br>"
+		D.effects += e
 
 	disease2_list -= D.uniqueID
 	D.uniqueID = rand(0, 10000)
@@ -84,6 +96,7 @@ var/global/list/disease2_list = list()
 		return
 	if(stage <= 1 && clicks == 0) 	// with a certain chance, the mob may become immune to the disease before it starts properly
 		if(prob(5))
+			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigens2string(antigen)].")
 			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
 /*
 	if(mob.radiation > 50)
@@ -107,46 +120,61 @@ var/global/list/disease2_list = list()
 		logged_virusfood=0
 
 	//Moving to the next stage
-	if(clicks > stage*100 && prob(10))
+	if(clicks > stage*100 && prob(stageprob))
 		if(stage == max_stage)
+			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antigens [antigens2string(antigen)].")
 			src.cure(mob)
 			mob.antibodies |= src.antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
+			return
 		else
 			stage++
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
 
+	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
+	if(prob(100 - (100 / mob.virus2.len)))
+		return
+
 	//Do nasty effects
-	for(var/datum/disease2/effectholder/e in effects)
-		e.runeffect(mob,stage)
+	for(var/datum/disease2/effect/e in effects)
+		if (e.can_run_effect(stage))
+			e.run_effect(mob)
 
 	//Short airborne spread
 	if(src.spreadtype == "Airborne")
 		for(var/mob/living/carbon/M in oview(1,mob))
 			if(airborne_can_reach(get_turf(mob), get_turf(M)))
 				infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
+		for(var/mob/living/simple_animal/mouse/MM in oview(1,mob))
+			if(airborne_can_reach(get_turf(mob), get_turf(MM)))
+				infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
 
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
-	for(var/datum/disease2/effectholder/e in effects)
-		e.effect.deactivate(mob)
+	log_debug("Virus [uniqueID] in [key_name(mob)] has been cured and is being removed from their body.")
+	for(var/datum/disease2/effect/e in effects)
+		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
 
 /datum/disease2/disease/proc/minormutate()
 	//uniqueID = rand(0,10000)
-	var/datum/disease2/effectholder/holder = pick(effects)
-	holder.minormutate()
+	var/datum/disease2/effect/e = pick(effects)
+	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)
-	var/datum/disease2/effectholder/holder = pick(effects)
-	holder.majormutate()
+	var/i = rand(1, effects.len)
+	var/datum/disease2/effect/e = effects[i]
+	var/datum/disease2/effect/f = new_random_effect(2, e.stage)
+	effects[i] = f
+	log_debug("Virus [uniqueID] has major mutated [e.name] into [f.name].")
+	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
 	if (prob(5))
 		antigen = text2num(pick(ANTIGENS))
 		antigen |= text2num(pick(ANTIGENS))
@@ -160,28 +188,21 @@ var/global/list/disease2_list = list()
 	disease.antigen   = antigen
 	disease.uniqueID = uniqueID
 	disease.speed = speed
-	disease.stage = stage
-	disease.clicks = clicks
-	for(var/datum/disease2/effectholder/holder in effects)
-		var/datum/disease2/effectholder/newholder = new /datum/disease2/effectholder(disease)
-		newholder.effect = new holder.effect.type
-		newholder.chance = holder.chance
-		newholder.cure = holder.cure
-		newholder.multiplier = holder.multiplier
-		newholder.happensonce = holder.happensonce
-		newholder.stage = holder.stage
-		disease.effects += newholder
+//	disease.stage = stage
+//	disease.clicks = clicks
+	for(var/datum/disease2/effect/e in effects)
+		disease.effects += e.getcopy(disease)
 	return disease
 
 /datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
 	var/list/types = list()
 	var/list/types2 = list()
-	for(var/datum/disease2/effectholder/d in effects)
-		types += d.effect.type
+	for(var/datum/disease2/effect/e in effects)
+		types += e.type
 	var/equal = 1
 
-	for(var/datum/disease2/effectholder/d in disease.effects)
-		types2 += d.effect.type
+	for(var/datum/disease2/effect/e in disease.effects)
+		types2 += e.type
 
 	for(var/type in types)
 		if(!(type in types2))
@@ -215,8 +236,8 @@ var/global/list/virusDB = list()
 	r += "<BR>Infection rate : [infectionchance]"
 	r += "<BR>Spread form : [spreadtype]"
 	r += "<BR>Progress Speed : [stageprob]"
-	for(var/datum/disease2/effectholder/E in effects)
-		r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier]. Verosity : [E.chance]. Type : [5-E.stage]."
+	for(var/datum/disease2/effect/e in effects)
+		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
 
 	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
 	return r

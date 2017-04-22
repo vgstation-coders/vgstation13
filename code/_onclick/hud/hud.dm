@@ -3,37 +3,40 @@
 	Used to show and hide huds for all the different mob types,
 	including inventories and item quick actions.
 */
-var/global/obj/screen/clicker/catcher = new()
+var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud
 	var/mob/mymob
 
-	var/obj/screen/grab_intent
-	var/obj/screen/hurt_intent
-	var/obj/screen/disarm_intent
-	var/obj/screen/help_intent
+	var/obj/abstract/screen/grab_intent
+	var/obj/abstract/screen/hurt_intent
+	var/obj/abstract/screen/disarm_intent
+	var/obj/abstract/screen/help_intent
 
 	var/hud_shown = 1			//Used for the HUD toggle (F12)
 	var/inventory_shown = 1		//the inventory
 	var/show_intent_icons = 0
 	var/hotkey_ui_hidden = 0	//This is to hide the buttons that can be used via hotkeys. (hotkeybuttons list of buttons)
 
-	var/obj/screen/lingchemdisplay
-	var/obj/screen/vampire_blood_display // /vg/
-	var/list/obj/screen/hand_hud_objects = list()
-	var/obj/screen/action_intent
-	var/obj/screen/move_intent
+	var/obj/abstract/screen/lingchemdisplay
+	var/obj/abstract/screen/vampire_blood_display // /vg/
+	var/list/obj/abstract/screen/hand_hud_objects = list()
+	var/obj/abstract/screen/action_intent
+	var/obj/abstract/screen/move_intent
+
+	var/obj/abstract/screen/movable/action_button/hide_toggle/hide_actions_toggle
+	var/action_buttons_hidden = 0
 
 	var/list/adding
 	var/list/other
-	var/obj/screen/holomap/holomap_obj
-	var/list/obj/screen/hotkeybuttons
-
-	var/list/obj/screen/item_action/item_action_list = list()	//Used for the item action ui buttons.
+	var/obj/abstract/screen/holomap/holomap_obj
+	var/list/obj/abstract/screen/hotkeybuttons
 
 /datum/hud/New(mob/owner)
 	mymob = owner
 	instantiate()
+	hide_actions_toggle = new
+	hide_actions_toggle.InitialiseIcon(mymob)
 	..()
 
 /datum/hud/Destroy()
@@ -49,8 +52,8 @@ var/global/obj/screen/clicker/catcher = new()
 	move_intent = null
 	adding = null
 	other = null
+	hide_actions_toggle = null
 	hotkeybuttons = null
-	item_action_list = null
 	mymob = null
 
 
@@ -131,7 +134,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 /datum/hud/proc/init_hand_icons(var/new_icon, var/new_color, var/new_alpha)
 	for(var/i = 1 to mymob.held_items.len) //Hands
-		var/obj/screen/inventory/inv_box = getFromPool(/obj/screen/inventory)
+		var/obj/abstract/screen/inventory/inv_box = getFromPool(/obj/abstract/screen/inventory)
 		inv_box.name = "[mymob.get_index_limb_name(i)]"
 
 		if(mymob.get_direction_by_index(i) == "right_hand")
@@ -153,7 +156,7 @@ var/global/obj/screen/clicker/catcher = new()
 		src.adding += inv_box
 
 /datum/hud/proc/update_hand_icons()
-	var/obj/screen/inventory/example = locate(/obj/screen/inventory) in hand_hud_objects
+	var/obj/abstract/screen/inventory/example = locate(/obj/abstract/screen/inventory) in hand_hud_objects
 
 	var/new_icon = 'icons/mob/screen1_White.dmi'
 	var/new_color = null
@@ -164,7 +167,7 @@ var/global/obj/screen/clicker/catcher = new()
 		new_color = example.color
 		new_alpha = example.alpha
 
-	for(var/obj/screen/inventory/IN in hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/IN in hand_hud_objects)
 		if(mymob.client)
 			adding -= IN
 			mymob.client.screen -= IN
@@ -223,17 +226,19 @@ var/global/obj/screen/clicker/catcher = new()
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
+	else if(ispAI(mymob))
+		pai_hud()
 
 	if(isliving(mymob))
-		var/obj/screen/using
-		using = getFromPool(/obj/screen)
+		var/obj/abstract/screen/using
+		using = getFromPool(/obj/abstract/screen)
 		using.dir = SOUTHWEST
 		using.icon = 'icons/mob/screen1.dmi'
 		using.icon_state = "block"
 		src.adding += using
 		mymob:schematics_background = using
 
-	holomap_obj = getFromPool(/obj/screen/holomap)
+	holomap_obj = getFromPool(/obj/abstract/screen/holomap)
 	holomap_obj.name = "holomap"
 	holomap_obj.icon = null
 	holomap_obj.icon_state = ""
@@ -244,6 +249,7 @@ var/global/obj/screen/clicker/catcher = new()
 	mymob.client.screen += src.holomap_obj
 
 	reload_fullscreen()
+	mymob.update_action_buttons(1)
 	update_parallax_existence()
 
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)
@@ -264,8 +270,6 @@ var/global/obj/screen/clicker/catcher = new()
 					src.client.screen -= src.hud_used.other
 				if(src.hud_used.hotkeybuttons)
 					src.client.screen -= src.hud_used.hotkeybuttons
-				if(src.hud_used.item_action_list)
-					src.client.screen -= src.hud_used.item_action_list
 
 				//Due to some poor coding some things need special treatment:
 				//These ones are a part of 'adding', 'other' or 'hotkeybuttons' but we want them to stay
@@ -291,7 +295,7 @@ var/global/obj/screen/clicker/catcher = new()
 
 			hud_used.hidden_inventory_update()
 			hud_used.persistant_inventory_update()
-			update_action_buttons()
+			update_action_buttons(1)
 		else
 			to_chat(usr, "<span class='warning'>Inventory hiding is currently only supported for human mobs, sorry.</span>")
 	else
@@ -328,7 +332,7 @@ var/global/obj/screen/clicker/catcher = new()
 		if(!override)
 			override = R.schematics
 		if(!R.closer)
-			R.closer = getFromPool(/obj/screen/close)
+			R.closer = getFromPool(/obj/abstract/screen/close)
 			R.closer.icon_state = "x"
 			R.closer.master = R
 			R.closer.transform *= 0.8
@@ -346,8 +350,8 @@ var/global/obj/screen/clicker/catcher = new()
 					to_chat(usr, "<span class='danger'>Unexpected type in schematics list. [RS][RS ? "/[RS.type]" : "null"]")
 					continue
 			if(!RS.ourobj)
-				RS.ourobj = getFromPool(/obj/screen/schematics, null, RS)
-			var/obj/screen/A = RS.ourobj
+				RS.ourobj = getFromPool(/obj/abstract/screen/schematics, null, RS)
+			var/obj/abstract/screen/A = RS.ourobj
 			//Module is not currently active
 			L.client.screen += A
 			if(x < 0)
@@ -364,7 +368,7 @@ var/global/obj/screen/clicker/catcher = new()
 		L.client.screen += R.closer
 
 	else
-		for(var/obj/screen/schematics/A in L.client.screen)
+		for(var/obj/abstract/screen/schematics/A in L.client.screen)
 			L.client.screen -= A
 		L.client.screen -= L.schematics_background
 		L.client.screen -= R.closer

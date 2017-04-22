@@ -3,7 +3,7 @@
 
 /obj/machinery/power/battery/portable
 	name = "portable power storage unit"
-	desc = "A IOn-model portable storage unit, used to transport charge around the station."
+	desc = "A Ion-model portable storage unit, used to transport charge around the station."
 	icon_state = "port_smes"
 	density = 1
 	anchored = 0
@@ -110,4 +110,3 @@
 
 	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
-

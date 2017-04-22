@@ -12,6 +12,26 @@
 	icon_state = "wood0"
 	walltype = "wood"
 	mineral = "wood"
+	girder_type = /obj/structure/girder/wood
+	hardness = 0 // a hulk can smash through wood easily
+
+/turf/simulated/wall/mineral/wood/attackby(var/obj/item/W, var/mob/user)
+	if(W.sharpness_flags & CHOPWOOD)
+		playsound(src, 'sound/effects/woodcuttingshort.ogg', 50, 1)
+		user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
+							"<span class='notice'>You smash through \the [src].</span>",\
+							"<span class='warning'>You hear the sound of wood being cut</span>"
+							)
+		dismantle_wall()
+	else
+		..()
+
+/turf/simulated/wall/mineral/wood/ex_act(var/severity)
+	if(severity < 3)
+		ChangeTurf(get_underlying_turf())
+		getFromPool(/obj/item/stack/sheet/wood, src, 2)
+	else
+		dismantle_wall()
 
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"

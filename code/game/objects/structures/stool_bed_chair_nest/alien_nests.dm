@@ -17,8 +17,8 @@
 	..()
 
 /obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
-	if(locked_atoms.len)
-		var/mob/M = locked_atoms[1]
+	if(is_locking(/datum/locking_category/buckle/bed/nest))
+		var/mob/M = get_locked(/datum/locking_category/buckle/bed/nest)[1]
 		if(M != user)
 			M.visible_message(\
 				"<span class='notice'>[user.name] pulls [M.name] free from the sticky nest!</span>",\
@@ -39,7 +39,7 @@
 		src.add_fingerprint(user)
 
 /obj/structure/bed/nest/buckle_mob(mob/M as mob, mob/user as mob)
-	if (locked_atoms.len || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
+	if (is_locking(/datum/locking_category/buckle/bed/nest) || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
 		return
 
 	if(ishuman(M) && M.client && !M.lying)
@@ -59,7 +59,7 @@
 			"<span class='notice'>[user.name] secretes a thick vile goo, securing [M.name] into \the [src]!</span>",\
 			"<span class='warning'>[user.name] drenches you in a foul-smelling resin, trapping you in \the [src]!</span>",\
 			"<span class='notice'>You hear squelching...</span>")
-	lock_atom(M, /datum/locking_category/bed/nest)
+	lock_atom(M, /datum/locking_category/buckle/bed/nest)
 	src.add_fingerprint(user)
 	var/image/nest_covering = image(icon,"nest-covering")
 	nest_covering.plane = ABOVE_OBJ_PLANE
@@ -90,10 +90,10 @@
 		qdel(src)
 
 /obj/structure/bed/nest/proc/stabilize()
-	if(!locked_atoms || !locked_atoms.len)
+	if(!is_locking(/datum/locking_category/buckle/bed/nest))
 		return
 
-	var/mob/M = locked_atoms[1]
+	var/mob/M = get_locked(/datum/locking_category/buckle/bed/nest)[1]
 
 	if(iscarbon(M) && (M.stat != DEAD) && (M.reagents.get_reagent_amount(STABILIZINE) < 1))
 		M.reagents.add_reagent(STABILIZINE, 2)
@@ -101,7 +101,7 @@
 		return
 
 	spawn(15)
-		if(!gcDestroyed && locked_atoms.len)
+		if(!gcDestroyed && is_locking(/datum/locking_category/buckle/bed/nest))
 			stabilize()
 
 /obj/structure/bed/nest/acidable()
@@ -109,5 +109,5 @@
 
 #undef ALIEN_NEST_LOCKED_Y_OFFSET
 
-/datum/locking_category/bed/nest
+/datum/locking_category/buckle/bed/nest
 	pixel_y_offset = 6 * PIXEL_MULTIPLIER

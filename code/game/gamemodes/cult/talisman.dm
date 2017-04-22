@@ -127,7 +127,7 @@
 <A href='?src=\ref[src];rune=runestun'>Fuu ma'jin</A> - Allows you to stun a person by attacking them with the talisman.<BR>
 <A href='?src=\ref[src];rune=soulstone'>Kal om neth</A> - Summons a soul stone<BR>
 <A href='?src=\ref[src];rune=construct'>Da A'ig Osk</A> - Summons a construct shell for use with captured souls. It is too large to carry on your person.<BR>"}
-//<A href='?src=\ref[src];rune=armor'>Sa tatha najin</A> - Allows you to summon armoured robes and an unholy blade<BR> //Kept for reference
+//<A href='?src=\ref[src];rune=armor'>Sa tatha najin</A> - Allows you to summon armored robes and an unholy blade<BR> //Kept for reference
 	usr << browse(dat, "window=id_com;size=350x200")
 	return
 
@@ -201,7 +201,7 @@
 
 /obj/item/weapon/paper/talisman/proc/blind()
 	var/affected = 0
-	for(var/mob/living/carbon/C in view(2,usr))
+	for(var/mob/living/carbon/C in view(3,usr))
 		if (iscultist(C))
 			continue
 		nullblock = 0
@@ -231,7 +231,7 @@
 			continue
 		C.ear_deaf += 30
 		//talismans is weaker.
-		C.show_message("\<span class='warning'>The world around you suddenly becomes quiet.</span>")
+		C.show_message("<span class='notice'>The world around you suddenly becomes quiet.</span>")
 		affected++
 	if(affected)
 		usr.whisper("Sti[pick("'","`")] kaliedir!")

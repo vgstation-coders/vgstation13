@@ -62,7 +62,7 @@
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || (istype(W, /obj/item/weapon/fireaxe) && W:wielded) || istype(W, /obj/item/weapon/melee/energy))
+	if(W.sharpness_flags & CHOPWOOD) // I considered adding serrated to this but c'mon, making planks out of a serrated blade sounds like an awful idea
 		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
 		playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
 		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 2, user)

@@ -128,8 +128,8 @@
 			to_chat(user, "<span class='notice'>You empty \the [src] onto [target].</span>")
 			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [src] ([type]) onto \the [target].")
 			if(reagents.has_reagent(FUEL))
-				message_admins("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-				log_game("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+				message_admins("[user.name] ([user.ckey]) poured welding fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+				log_game("[user.name] ([user.ckey]) poured welding fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			src.reagents.reaction(target, TOUCH)
 			spawn(5) src.reagents.clear_reagents()
 			return
@@ -216,19 +216,6 @@
 						if(!W)
 							return
 						W.reagents.reaction(atm, TOUCH)                      // Touch, since we sprayed it.
-						if(W.reagents.has_reagent(WATER))
-							if(istype(atm,/obj/machinery/space_heater/campfire))
-								var/obj/machinery/space_heater/campfire/campfire = atm
-								campfire.cell.charge = 0
-								campfire.process()
-							if(isliving(atm)) // For extinguishing mobs on fire
-								var/mob/living/M = atm                           // Why isn't this handled by the reagent? - N3X
-								M.ExtinguishMob()
-							if(atm.on_fire) // For extinguishing objects on fire
-								atm.extinguish()
-							if(atm.molten) // Molten shit.
-								atm.molten=0
-								atm.solidify()
 					if(W.loc == my_target)
 						break
 					sleep(2)

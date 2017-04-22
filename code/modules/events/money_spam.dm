@@ -6,16 +6,16 @@
 /datum/event/pda_spam/setup()
 	time_failed = world.time
 	for(var/obj/machinery/message_server/MS in message_servers)
-		if(MS.active)
+		if(MS.is_functioning())
 			useMS = MS
 			break
 
 /datum/event/pda_spam/tick()
-	if(!useMS || !useMS.active)
+	if(!useMS || !useMS.is_functioning())
 		useMS = null
 		if(message_servers)
 			for (var/obj/machinery/message_server/MS in message_servers)
-				if(MS.active)
+				if(MS.is_functioning())
 					useMS = MS
 					break
 

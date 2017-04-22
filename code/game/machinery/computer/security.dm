@@ -2,11 +2,10 @@
 
 /obj/machinery/computer/secure_data//TODO:SANITY
 	name = "Security Records"
-	desc = "Used to view and edit personnel's security records"
+	desc = "Used to view and edit personnel's security records."
 	icon_state = "security"
 	req_one_access = list(access_security, access_forensics_lockers)
 	circuit = "/obj/item/weapon/circuitboard/secure_data"
-	var/obj/item/weapon/card/id/scan = null
 	var/authenticated = null
 	var/rank = null
 	var/screen = null

@@ -72,7 +72,7 @@
 			return 0
 
 		var/mob/living/carbon/human/H = M
-		if(H.species && !(H.species.flags & CAN_BE_FAT))
+		if(H.species && !(H.species.anatomy_flags & CAN_BE_FAT))
 			return 0
 
 		return 1

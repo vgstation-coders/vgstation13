@@ -70,7 +70,7 @@ var/list/mechtoys = list(
 		return prob(60)
 
 	var/obj/structure/bed/B = mover
-	if (istype(mover, /obj/structure/bed) && B.locked_atoms.len)//if it's a bed/chair and someone is locked_to, it will not pass
+	if (istype(mover, /obj/structure/bed) && B.is_locking(B.lock_type))//if it's a bed/chair and someone is buckled, it will not pass
 		return 0
 
 	else if(isliving(mover)) // You Shall Not Pass!
@@ -144,8 +144,9 @@ var/list/mechtoys = list(
 	var/comment = null
 
 /datum/controller/supply_shuttle
-	processing = 1
-	processing_interval = 300
+	var/processing = 1
+	var/processing_interval = 300
+	var/iteration = 0
 	//supply points have been replaced with MONEY MONEY MONEY - N3X
 	var/credits_per_slip = 2
 	var/credits_per_crate = 5
@@ -534,7 +535,7 @@ var/list/mechtoys = list(
 			var/max_crates = round((account.money - total_money_req) / (P.cost + SUPPLY_TAX))
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,REASON_LEN)
+		var/reason = copytext(sanitize(strict_ascii(input(usr,"Reason:","Why do you require this item?","") as null|text)),1,REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -758,7 +759,7 @@ var/list/mechtoys = list(
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = copytext(sanitize(input(usr, "Reason:", "Why do you require this item?", "") as null|text), 1, REASON_LEN)
+		var/reason = copytext(sanitize(strict_ascii(input(usr, "Reason:", "Why do you require this item?", "") as null|text)), 1, REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)

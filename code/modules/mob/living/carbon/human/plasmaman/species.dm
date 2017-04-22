@@ -4,11 +4,9 @@
 	deform = 'icons/mob/human_races/r_plasmaman_pb.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "punches"
-	has_sweat_glands = 0
 
-	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED*/ | NO_BLOOD
-	// These things are just really, really griefy. IS_WHITELISTED removed for now - N3X
-	flags = NO_BLOOD|IS_WHITELISTED
+	flags = IS_WHITELISTED | PLASMA_IMMUNE
+	anatomy_flags = NO_BLOOD
 
 	//default_mutations=list(SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma
@@ -117,6 +115,9 @@
 		if("Mime")
 			suit=/obj/item/clothing/suit/space/plasmaman/mime
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/mime
+		if("Internal Affairs Agent")
+			suit=/obj/item/clothing/suit/space/plasmaman/lawyer
+			helm=/obj/item/clothing/head/helmet/space/plasmaman/lawyer
 	H.equip_or_collect(new suit(H), slot_wear_suit)
 	H.equip_or_collect(new helm(H), slot_head)
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.
@@ -124,3 +125,6 @@
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
 		H.internals.icon_state = "internal1"
+
+/datum/species/plasmaman/can_artifact_revive()
+	return 0

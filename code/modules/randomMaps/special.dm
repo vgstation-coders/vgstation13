@@ -70,7 +70,7 @@
 			area_object.contents.Add(T)
 			T.change_area(old_area, area_object)
 
-		tcheck(80,1)
+		CHECK_TICK
 
 	//Use the recursive division method: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
 	//Start with a single chamber and divide it into two chambers with a wall (which has an opening somewhere)
@@ -152,3 +152,31 @@
 					T.ChangeTurf(wall_type)
 
 		sleep(1)
+
+
+//
+/datum/map_element/customizable/vault_placement
+	file_path = null
+
+	width  = 0
+	height = 0
+
+/datum/map_element/customizable/vault_placement/pre_load()
+	if(usr && (!width || !height))
+		width  = input(usr, "Enter the area's width (4-400). The starting point is the lower left corner. Enter an invalid value to cancel.", "Vault Generator", 100) as num
+		if(width < 4 || width > 400)
+			width = 0
+			return
+
+		height = input(usr, "Enter the area's height (4-400). The starting point is the lower left corner. Enter an invalid value to cancel.", "Vault Generator", 100) as num
+		if(height < 4 || height > 400)
+			height = 0
+			return
+
+/datum/map_element/customizable/vault_placement/initialize()
+	if(!location)
+		return
+	if(!width || !height)
+		return
+
+	populate_area_with_vaults(block(location, locate(location.x + width, location.y + height, location.z)))

@@ -214,7 +214,7 @@
 
 /obj/machinery/rail_car
 	name = "Rail car"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "miningcar"
 	var/direction = "S"  //S = south, N = north, E = east, W = west. Determines whichw ay it'll look first
 	var/moving = 0;

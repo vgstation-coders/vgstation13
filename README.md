@@ -1,15 +1,15 @@
-# vgstation
+# vgstation [![Build Status](https://travis-ci.org/vgstation-coders/vgstation13.svg?branch=master)](https://travis-ci.org/vgstation-coders/vgstation13)
 
-[Website](http://ss13.moe) - [Code](https://github.com/d3athrow/vgstation13)
+[Website](http://ss13.moe) - [Code](https://github.com/vgstation-coders/vgstation13)
 
-[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it
+[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it:  [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
 
-[![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
+[Discord Coding Server Invite Link](https://discord.gg/afVXAyq)
 
 ---
 
 ### GETTING THE CODE
-The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://gitlab.com/vgstation/vgstation/repository/archive.zip?ref=Bleeding-Edge) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a git client, the process for getting and using one is described below, (for more information our coders in IRC can tell you how to use one).
+The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a git client, the process for getting and using one is described below, (for more information our coders in IRC can tell you how to use one).
 
 ### Git client
 
@@ -17,13 +17,13 @@ The more complicated but infinitely more useful way is to use a 'git' client.
 
 We recommend and support our users using the smartgit client, obtainable at [smartgit](http://www.syntevo.com/smartgit/). After installing it, create a new file folder where you want to host the code, right click on that folder and click on "Open in Smartgit".  
 
-When that opens, click repository at the top left and choose 'clone'. You can either use the link for the main repository https://github.com/d3athrow/vgstation13.git, or to clone your own fork the format is https://github.com/USERNAME/REPONAME.git, just copy the URL at your fork and add .git.
+When that opens, click repository at the top left and choose 'clone'. You can either use the link for the main repository https://github.com/vgstation-coders/vgstation13.git, or to clone your own fork the format is https://github.com/USERNAME/REPONAME.git, just copy the URL at your fork and add .git.
 
 #### Updating the Code
 
 After you have cloned, make sure you have a remote to the main repository and your own forked repository by making a remote using the links above. By right clicking on your remote to this repo you can 'pull' the most recent version of the code from the main repository.
 
-You can then create new branches of code directly from our Bleeding-Edge branch on your computer. 
+You can then create new branches of code directly from our Bleeding-Edge branch on your computer.
 
 Warning: If you checkout different branches or update the code while Dream Maker is open, this can cause problems when someone adds/removes files or when one of the files changed is currently open.
 
@@ -59,6 +59,10 @@ You'll also want to edit admins.txt to remove the default admins and add your ow
 where the BYOND key must be in lowercase and the admin rank must be properly capitalized.  There are a bunch more admin ranks, but these two should be enough for most servers, assuming you have trustworthy admins.
 
 Finally, to start the server, run Dream Daemon and enter the path to your compiled vgstation13.dmb file.  Make sure to set the port to the one you  specified in the config.txt, and set the Security box to 'Trusted'.  Then press GO and the server should start up and be ready to join.
+
+#### Linux
+
+We use a Rust library called `libvg` to handle some things like UTF-8 handling. A Windows build is shipped with the code (`libvg.dll`), however a Linux version is not. If you want to run /vg/station13 on Linux, you will have to compile this binary yourself (or ask for a build on Discord). See [`libvg/readme.md`](libvg/README.md) for details on how to compile it.
 
 ---
 

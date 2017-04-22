@@ -1,12 +1,13 @@
 /obj/item/device/rcd/rpd
-	name				= "Rapid Piping Device (RPD)"
-	desc				= "A device used to rapidly pipe things."
-	icon_state			= "rpd"
+	name       = "\improper Rapid-Piping-Device (RPD)"
+	desc       = "A device used to rapidly pipe things."
+	icon_state = "rpd"
 
-	starting_materials	= list(MAT_IRON = 75000, MAT_GLASS = 37500)
+	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 
-	schematics	= list(
+	var/hook_key
 
+	schematics = list(
 		/* Utilities */
 		/datum/rcd_schematic/decon_pipes,
 		/datum/rcd_schematic/paint_pipes,
@@ -64,27 +65,31 @@
 		/datum/rcd_schematic/pipe/disposal/sort,
 		/datum/rcd_schematic/pipe/disposal/sort_wrap
 	)
-/obj/item/device/rcd/rpd/rebuild_ui()
-	var/dat = ""
 
-	dat += {"
-	<b>Selected:</b> <span id="selectedname"></span>
-	<h2>Options</h2>
-	<div id="schematic_options">
-	</div>
-	<h2>Available schematics</h2>
-	"}
-	for(var/cat in schematics)
-		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
-		var/list/L = schematics[cat]
-		for(var/i = 1 to L.len)	//So we have the indexes.
-			var/datum/rcd_schematic/C = L[i]
-			dat += "<li><a href='?src=\ref[interface];cat=[cat];index=[i]'>[C.name]</a></li>"
+/obj/item/device/rcd/rpd/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
+	to_chat(user, "<span class='notice'>To quickly scroll between layers, use shift+mousewheel.</span>")
+	to_chat(user, "<span class='notice'>Note that hotkeys like ctrl click do not work while the RPD is held in your active hand!</span>")
 
-		dat += "</ul>"
+/obj/item/device/rcd/rpd/pickup(var/mob/living/L)
+	..()
+	
+	hook_key = L.on_clickon.Add(src, "mob_onclickon")
 
-	interface.updateLayout(dat)
+/obj/item/device/rcd/rpd/dropped(var/mob/living/L)
+	..()
 
-	if(selected)
-		update_options_menu()
-		interface.updateContent("selectedname",			selected.name)
+	L.on_clickon.Remove(hook_key)
+	hook_key = null
+
+// If the RPD is held, some modifiers are removed.
+// This is to prevent the mouse wheel bindings (which require alt and such)
+// From being a pain to use, because alt click intercepts regular clicks.
+/obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
+	if (L.get_active_hand() != src)
+		return
+	
+	var/list/modifiers = event_args["modifiers"]
+	modifiers -= list("alt", "shift", "ctrl")
+	

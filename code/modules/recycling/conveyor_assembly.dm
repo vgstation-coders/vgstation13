@@ -21,7 +21,7 @@
 
 /obj/item/stack/conveyor_assembly/attack_self(mob/user)
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/screen/draggable, src, user)
+		active = getFromPool(/obj/abstract/screen/draggable, src, user)
 		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
 		return
 	else
@@ -64,7 +64,7 @@
 		new /obj/structure/conveyor_assembly(placelocation, direction)
 	if(amount && !disposed)
 		spawn()
-			active = getFromPool(/obj/screen/draggable, src, user)
+			active = getFromPool(/obj/abstract/screen/draggable, src, user)
 
 /obj/item/stack/conveyor_assembly/end_drag_use(mob/user)
 	if(placeimage && user && user.client)
@@ -89,7 +89,7 @@
 
 /obj/structure/conveyor_assembly
 	name = "conveyor belt assembly"
-	desc = "These are the thingies that make the loop go round."
+	desc = "At last, your very own baggage claim."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "conveyor-assembly"
 	density = 0
@@ -102,7 +102,7 @@
 
 /obj/structure/conveyor_assembly/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It needs some plates applied as sheeting.</span>")
+	to_chat(user, "<span class='info'>It needs some metal sheets applied as plating.</span>")
 
 /obj/structure/conveyor_assembly/attackby(obj/item/P, mob/user)
 	if(iscrowbar(P))

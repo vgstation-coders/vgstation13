@@ -27,10 +27,10 @@
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
-		src.use(1)
 		new /obj/item/weapon/circuitboard/blank(user.loc)
 		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
 		playsound(src.loc, 'sound/items/Welder.ogg', 35, 1)
+		src.use(1)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W
 		var/obj/item/stack/sheet/glass/RG = new rglass()

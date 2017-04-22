@@ -21,11 +21,11 @@
 /obj/item/weapon/clipboard/MouseDrop(obj/over_object as obj) //Quick clipboard fix. -Agouri
 	if(ishuman(usr))
 		var/mob/M = usr
-		if(!(istype(over_object, /obj/screen/inventory) ))
+		if(!(istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
 
 		if(!M.incapacitated() && Adjacent(usr))
-			var/obj/screen/inventory/OI = over_object
+			var/obj/abstract/screen/inventory/OI = over_object
 
 			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)
@@ -133,12 +133,7 @@
 		if(href_list["read"])
 			var/obj/item/weapon/paper/P = locate(href_list["read"])
 			if(P)
-				if(!(istype(usr, /mob/living/carbon/human) || istype(usr, /mob/dead/observer) || istype(usr, /mob/living/silicon)))
-					usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY[P.color ? " bgcolor=[P.color]":""]>[stars(P.info)][P.stamps]</BODY></HTML>", "window=[P.name]")
-					onclose(usr, "[P.name]")
-				else
-					usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY[P.color ? " bgcolor=[P.color]":""]>[P.info][P.stamps]</BODY></HTML>", "window=[P.name]")
-					onclose(usr, "[P.name]")
+				P.show_text(usr)
 
 		if(href_list["look"])
 			var/obj/item/weapon/photo/P = locate(href_list["look"])

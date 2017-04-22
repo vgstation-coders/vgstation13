@@ -6,11 +6,19 @@
 	var/banglet = 0
 
 /obj/item/weapon/grenade/flashbang/prime()
-	update_mob()
 	var/turf/flashbang_turf = get_turf(src)
 	if(!flashbang_turf)
 		return
-	for(var/mob/living/M in get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai)))
+
+	var/list/mobs_to_flash_and_bang = get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
+
+	var/mob/living/holder = get_holder_of_type(src, /mob/living)
+	if(holder) //Holding a flashbang while it goes off is a bad idea.
+		bang(flashbang_turf, holder, TRUE)
+		mobs_to_flash_and_bang -= holder
+	update_mob()
+
+	for(var/mob/living/M in mobs_to_flash_and_bang)
 		if(M.isVentCrawling()) //possibly more exceptions to be added in the future
 			continue
 		bang(flashbang_turf, M)
@@ -22,24 +30,28 @@
 		B.update_icon()
 	qdel(src)
 
-/obj/item/weapon/grenade/flashbang/proc/bang(var/turf/T , var/mob/living/M)
+/obj/item/weapon/grenade/flashbang/proc/bang(var/turf/T, var/mob/living/M, var/ignore_protection = 0)
 	if (locate(/obj/item/weapon/cloaking_device, M))			// Called during the loop that bangs people in lockers/containers and when banging
 		for(var/obj/item/weapon/cloaking_device/S in M)			// people in normal view.  Could theroetically be called during other explosions.
 			S.active = 0										// -- Polymorph
 			S.icon_state = "shield0"
 
 //Checking for protections
-	var/eye_safety = M.eyecheck()
-	var/ear_safety = M.earprot() //some arbitrary measurement of ear protection, I guess? doesn't even matter if it goes above 1
+	var/eye_safety = 0
+	var/ear_safety = 0
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(istype(H.head, /obj/item/clothing/head/helmet))
+	if(!ignore_protection)
+		eye_safety = M.eyecheck()
+		ear_safety = M.earprot() //some arbitrary measurement of ear protection, I guess? doesn't even matter if it goes above 1
+
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(istype(H.head, /obj/item/clothing/head/helmet))
+				ear_safety += 1
+		if(M_HULK in M.mutations)
 			ear_safety += 1
-	if(M_HULK in M.mutations)
-		ear_safety += 1
-	if(istype(M.loc, /obj/mecha))
-		ear_safety += 1
+		if(istype(M.loc, /obj/mecha))
+			ear_safety += 1
 
 //Flashing everyone
 	if(eye_safety < 1)

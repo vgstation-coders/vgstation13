@@ -2,7 +2,7 @@
 
 /obj/item/weapon/storage/box/samplebags
 	name = "sample bag box"
-	desc = "A box claiming to contain sample bags."
+	desc = "A box containing sample bags."
 
 /obj/item/weapon/storage/box/samplebags/New()
 	for(var/i=0, i<7, i++)

@@ -7,13 +7,13 @@
 	var/obj/item/device/rcd/master	//Okay all of the vars here are obvious...
 	var/icon
 	var/icon_state
-	var/obj/screen/schematics/ourobj
+	var/obj/abstract/screen/schematics/ourobj
 	var/datum/selection_schematic/selected
 
 /datum/rcd_schematic/New(var/obj/item/device/rcd/n_master)
 	master = n_master
 	. = ..()
-	ourobj = getFromPool(/obj/screen/schematics, null, src)
+	ourobj = getFromPool(/obj/abstract/screen/schematics, null, src)
 
 /datum/rcd_schematic/Destroy()
 	master = null
@@ -104,3 +104,27 @@ params:
 /datum/rcd_schematic/proc/build_ui()
 	master.interface.updateLayout("<div id='schematic_options'> </div>")
 
+/datum/rcd_schematic/proc/schematic_list_line(var/datum/html_interface/interface, var/fav=FALSE)
+	var/fav_html
+	// Important distinction: being favorited vs being rendered for the favorited list.
+	// The fav parameter means the latter.
+	if (master.favorites.Find(src))
+		fav_html = "<a href='?src=\ref[interface];schematic=\ref[src];act=defav' class='fav' title='Unfavorite'>\[X]</a>"
+
+		if (fav)
+			var/index = master.favorites.Find(src)
+			fav_html += "<span class='fav'>"
+			fav_html += index != master.favorites.len ? "<a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=down'>&#8743;</a>" : "&nbsp;"
+			fav_html += index != 1                    ? "<a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=up'>&#8744;</a>" : "&nbsp;"
+			fav_html += "</span>"
+
+	else
+		fav_html = "<a href='?src=\ref[interface];schematic=\ref[src];act=fav' class='fav' title='Favorite'>\[F]</a>"
+
+	var/class = ""
+	if (fav && master.selected == src)
+		class = "class='schematic_selected'"
+
+	return "<li>[fav_html]<a href='?src=\ref[interface];schematic=\ref[src];act=select' [class]>[name]</a></li>"
+
+/datum/rcd_schematic/proc/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)

@@ -44,7 +44,7 @@
 
 
 /obj/machinery/power/apc
-	desc = "A control terminal for the area electrical systems."
+	desc = "A control terminal for the area's electrical systems."
 	icon_state = "apc0"
 	anchored = 1
 	use_power = 0
@@ -52,6 +52,7 @@
 	var/spooky=0
 	var/obj/item/weapon/cell/cell
 	var/start_charge = 90				// initial cell charge %
+	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
 	var/cell_type = 2500				// 0=no cell, 1=regular, 2=high-cap (x5) <- old, now it's just 0=no cell, otherwise dictate cellcapacity by changing this value. 1 used to be 1000, 2 was 2500
 	var/opened = 0                      //0=closed, 1=opened, 2=cover removed
 	var/shorted = 0
@@ -377,7 +378,7 @@
 		update_icon()
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
-/obj/machinery/power/apc/attackby(obj/item/W, mob/user)
+/obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	src.add_fingerprint(user)
@@ -600,10 +601,11 @@
 					|| istype(W,/obj/item/weapon/crowbar) \
 				) \
 				&& prob(20) )
+			user.do_attack_animation(src, W)
 			opened = 2
 			user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
-				"You hear bang")
+				"You hear a loud bang.") //"you hear bang" is so bad I have to leave a comment to immortalize it
 			update_icon()
 		else
 			if (istype(user, /mob/living/silicon))
@@ -653,6 +655,7 @@
 /obj/machinery/power/apc/attack_alien(mob/living/carbon/alien/humanoid/user)
 	if(!user)
 		return
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
@@ -967,7 +970,7 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
@@ -1043,7 +1046,7 @@
 
 /obj/machinery/power/apc/process()
 
-	if(stat & (BROKEN|MAINT))
+	if(stat & (BROKEN|MAINT|FORCEDISABLE))
 		return
 	if(!areaMaster.requires_power)
 		return
@@ -1145,7 +1148,7 @@
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(cell.percent() > 75 && !areaMaster.poweralm && make_alerts)
+			if(cell.percent() > 35 && !areaMaster.poweralm && make_alerts) // 35% to prevent spamming alerts if it fluctuates
 				areaMaster.poweralert(1, src)
 
 		// now trickle-charge the cell
@@ -1336,5 +1339,18 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		update_icon()
 		return 1
 	return 0
+
+//We kinda do things our own way and don't really use NOPOWER or such, so we need different sanity
+/obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
+	if(shorted || (!cell && !charging))
+		return FALSE
+	return ..()
+
+/obj/machinery/power/apc/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)
+
 
 #undef APC_UPDATE_ICON_COOLDOWN

@@ -19,7 +19,7 @@ FLOOR SAFES
 	var/tumbler_2_open
 	var/dial = 0		//where is the dial pointing?
 	var/space = 0		//the combined w_class of everything in the safe
-	var/maxspace = 24	//the maximum combined w_class of stuff in the safe
+	var/maxspace = 48	//the maximum combined w_class of stuff in the safe
 
 
 /obj/structure/safe/New()
@@ -206,7 +206,7 @@ obj/structure/safe/ex_act(severity)
 		/obj/item/weapon/gun/energy/staff,
 		/obj/item/weapon/gun/energy/staff/animate,
 		/obj/item/weapon/gun/energy/staff/focus,
-		/obj/item/clothing/suit/space/rig/wizard/complete
+		/obj/item/complete/rig/wizard
 		)
 
 /obj/structure/safe/floor/wizard/New()

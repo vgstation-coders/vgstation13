@@ -33,6 +33,8 @@
 	var/obj/item/weapon/tank/plasma/ptank = null
 	var/window_open = 0
 
+/obj/item/weapon/gun/projectile/flamethrower/isHandgun()
+	return FALSE
 
 /obj/item/weapon/gun/projectile/flamethrower/Destroy()
 	if(weldtool)

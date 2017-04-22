@@ -212,12 +212,13 @@
 	// Attempt to transfer from our glass
 	var/refill_id = reagents.get_master_reagent_id()
 	var/refill_name = reagents.get_master_reagent_name()
+	var/datum/reagent/R = reagents.get_reagent(refill_id)
 
 	var/sent_amount = transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 	// Service borgs regenerate the amount transferred after a while
 	// TODO Why doesn't the borg module handle this nonsense?
-	if (sent_amount > 0 && isrobot(user))
+	if (sent_amount > 0 && isrobot(user) && R.dupeable)
 		var/mob/living/silicon/robot/borg = user
 		if (!istype(borg.module, /obj/item/weapon/robot_module/butler) || !borg.cell)
 			return
@@ -250,34 +251,12 @@
 	else
 		to_chat(user, "<span class='info'>\The [src] is full!</span>")
 
-/obj/item/weapon/reagent_containers/food/drinks/proc/imbibe(mob/user) //Drink the liquid within
-
-
-	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].[lit ? " It's hot!" : ""]</span>")
-	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
-
+/obj/item/weapon/reagent_containers/food/drinks/imbibe(mob/user) //Drink the liquid within
 	if(lit)
 		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
 		lit = 0
 
-	if(isrobot(user))
-		reagents.remove_any(gulp_size)
-		return 1
-	if(reagents.total_volume)
-		if (ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(H.species.chem_flags & NO_DRINK)
-				reagents.reaction(get_turf(H), TOUCH)
-				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-				reagents.remove_any(gulp_size)
-				return 0
-
-		reagents.reaction(user, INGEST)
-		spawn(5)
-			reagents.trans_to(user, gulp_size)
-
-	update_brightness()
-	return 1
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
@@ -591,6 +570,15 @@
 	user.drop_from_inventory(src)
 	qdel(src)
 
+/obj/item/weapon/reagent_containers/food/drinks/discount_sauce
+	name = "\improper Discount Dan's Special Sauce"
+	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
+	icon_state = "discount_sauce"
+	volume = 3
+
+/obj/item/weapon/reagent_containers/food/drinks/discount_sauce/New()
+	..()
+	reagents.add_reagent(DISCOUNT, 3)
 
 
 /obj/item/weapon/reagent_containers/food/drinks/beer
@@ -793,6 +781,19 @@
 		icon_state = "water_cup"
 	else
 		icon_state = "water_cup_e"
+
+/obj/item/weapon/reagent_containers/food/drinks/danswhiskey
+	name = "Discount Dan's 'Malt' Whiskey"
+	desc = "The very cheapest and most sickening method of liver failure."
+	icon_state = "dans_whiskey"
+
+/obj/item/weapon/reagent_containers/food/drinks/danswhiskey/New()
+	..()
+	reagents.add_reagent(DANS_WHISKEY, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
 //	itself), in Chemistry-Recipes.dm (for the reaction that changes the components into the drink), and here (for the drinking glass
@@ -918,6 +919,7 @@
 	throw_speed = 3
 	throw_range = 5
 	sharpness = 0.8 //same as glass shards
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	w_class = W_CLASS_TINY
 	item_state = "beer"
 	attack_verb = list("stabs", "slashes", "attacks")
@@ -1122,6 +1124,19 @@
 	..()
 	reagents.add_reagent(LIMEJUICE, 100)
 
+/obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka
+	name = "Greyshirt vodka"
+	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
+	icon_state = "grey_vodka"
+	vending_cat = "spirits"
+	starting_materials = null
+	isGlass = 1
+	molotov = -1
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka/New()
+	..()
+	reagents.add_reagent(GREYVODKA, 100)
+
 
 
 
@@ -1213,7 +1228,7 @@
 	if(istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
 		qdel(I)
-		I = null
+		I = null //??
 		molotov = 1
 		flags ^= OPENCONTAINER
 		name = "incendiary cocktail"
@@ -1221,6 +1236,7 @@
 		desc = "A rag stuffed into a bottle."
 		update_icon()
 		slot_flags = SLOT_BELT
+		return 1
 	else if(I.is_hot())
 		light(user,I)
 		update_brightness(user)
@@ -1230,6 +1246,10 @@
 		light(user,I)
 		update_brightness(user)
 		return
+	else if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/donut))
+		if(reagents.total_volume)
+			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
+			D.dip(src, user)
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/light(mob/user,obj/item/I)
 	var/flavor_text = "<span  class='rose'>[user] lights \the [name] with \the [I].</span>"

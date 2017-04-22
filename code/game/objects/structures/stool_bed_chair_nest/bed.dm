@@ -17,7 +17,7 @@
 	var/sheet_type = /obj/item/stack/sheet/metal
 	var/sheet_amt = 1
 
-	var/lock_type = /datum/locking_category/bed
+	var/lock_type = /datum/locking_category/buckle/bed
 
 /obj/structure/bed/alien
 	name = "resting contraption"
@@ -52,14 +52,14 @@
 	buckle_mob(M, user)
 
 /obj/structure/bed/proc/manual_unbuckle(mob/user as mob)
-	if(!locked_atoms.len)
+	if(!is_locking(lock_type))
 		return
 
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
-	var/mob/M = locked_atoms[1]
+	var/mob/M = get_locked(lock_type)[1]
 	if(M != user)
 		M.visible_message(\
 			"<span class='notice'>[M] was unbuckled by [user]!</span>",\
@@ -128,7 +128,7 @@
 	anchored = 0
 
 	lockflags = DENSE_WHEN_LOCKED
-	lock_type = /datum/locking_category/bed/roller
+	lock_type = /datum/locking_category/buckle/bed/roller
 
 /obj/item/roller
 	name = "roller bed"
@@ -162,16 +162,18 @@
 		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(locked_atoms.len)
+		if(is_locking(lock_type))
 			return 0
 
-		visible_message("[usr] collapses \the [src.name]")
+		visible_message("[usr] collapses \the [src.name].")
 
 		new/obj/item/roller(get_turf(src))
 
 		qdel(src)
 
-/obj/structure/bed/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/roller_holder))
+		manual_unbuckle(user)
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		getFromPool(sheet_type, get_turf(src), 2)
@@ -180,10 +182,40 @@
 
 	. = ..()
 
+/obj/structure/bed/roller/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W,/obj/item/roller_holder))
+		var/obj/item/roller_holder/RH = W
+		if(!RH.held)
+			to_chat(user, "<span class='notice'>You collect the roller bed.</span>")
+			src.forceMove(RH)
+			RH.held = src
 
-/datum/locking_category/bed
+/obj/item/roller_holder
+	name = "roller bed rack"
+	desc = "A rack for carrying a collapsed roller bed."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "folded"
+	var/obj/structure/bed/roller/held
+
+/obj/item/roller_holder/New()
+	..()
+	held = new(src)
+
+/obj/item/roller_holder/attack_self(mob/user as mob)
+
+	if(!held)
+		to_chat(user, "<span class='notice'>The rack is empty.</span>")
+		return
+
+	to_chat(user, "<span class='notice'>You deploy the roller bed.</span>")
+	held.add_fingerprint(user)
+	held.forceMove(get_turf(src))
+	held = null
+
+/datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE
 
-/datum/locking_category/bed/roller
+/datum/locking_category/buckle/bed/roller
 	pixel_y_offset = 6 * PIXEL_MULTIPLIER
 	flags = DENSE_WHEN_LOCKING | LOCKED_SHOULD_LIE

@@ -3,7 +3,7 @@
 /obj/item/weapon/evidencebag
 	name = "evidence bag"
 	desc = "An empty evidence bag."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "evidenceobj"
 	item_state = ""
 	w_class = W_CLASS_TINY
@@ -78,16 +78,14 @@
 
 obj/item/weapon/evidencebag/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/weapon/pen))
-		var/new_label = sanitize(trim(input("What should the new label be", "") as null|text))
-		if(new_label)
-			name = "bag ([new_label])"
-			to_chat(user, "<span class='notice'>You write on the label of the bag.</span>")
+		set_tiny_label(user)
 	else
 		..(W, user)
 
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"
-	desc = "A box claiming to contain evidence bags."
+	desc = "A box containing evidence bags."
+	icon_state = "evidencebox"
 	New()
 		new /obj/item/weapon/evidencebag(src)
 		new /obj/item/weapon/evidencebag(src)

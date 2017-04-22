@@ -1,0 +1,34 @@
+<!--
+Title: Area Atmos Computer
+Used in File(s): code\game\machinery\atmoalter\area_atmos_computer.dm
+-->
+<h3>Scrubbers:</h3>
+<div class="line">
+	{{:helper.link('Refresh','refresh',{"refresh" : 1},null,null)}}
+</div>
+{{for data.scrubbers}}
+<div class="statusDisplay">
+	<div class="line">
+		<b>{{>value.full_name}}:</b>
+	</div>
+	<div class="line">
+		<div class="statusLabel">Operating:</div>
+		<div class="statusValue">
+			{{:helper.link(value.isOperating ? 'On' : 'Off', 'power', {'toggle' : "1", 'id' : value.id },null,(value.isOperating?'linkOn':'red'))}}
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">Holding tank pressure:</div>
+		<div class="statusValue">
+			{{:helper.precisionRound(value.pressure,4)}} kPa
+		</div>
+	</div>
+	</div>
+{{empty}}
+	<div class="line">No scrubbers connected.</div>
+{{/for}}
+</div>
+
+<div class="line">
+	{{>data.zone_text}}
+</div>

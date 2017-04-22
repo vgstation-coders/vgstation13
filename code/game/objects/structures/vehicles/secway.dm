@@ -3,6 +3,8 @@
 	desc = "A brave security cyborg gave its life to help you look like a complete tool."
 	icon_state = "secway"
 	keytype = /obj/item/key/security
+	can_have_carts = FALSE
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/secway
 	var/clumsy_check = 1
 
 /obj/item/key/security
@@ -52,7 +54,7 @@
 	if(clumsy_check)
 		if(istype(occupant, /mob/living))
 			var/mob/living/M = occupant
-			if(!(M_CLUMSY in M.mutations) && M.dizziness < 450)
+			if(!clumsy_check(M) && M.dizziness < 450)
 				return
 	occupant.Knockdown(2)
 	occupant.Stun(2)
@@ -64,3 +66,9 @@
 		idiot.Knockdown(2)
 		idiot.Stun(2)
 
+/obj/effect/decal/mecha_wreckage/vehicle/secway
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "gokart_wreck"
+	name = "secway wreckage"
+	desc = "Nothing to see here!"

@@ -152,35 +152,11 @@
 
 /datum/asset/simple/pda
 	assets = list(
-		"pda_atmos.png"		= 'icons/pda_icons/pda_atmos.png',
-		"pda_back.png"			= 'icons/pda_icons/pda_back.png',
-		"pda_bell.png"			= 'icons/pda_icons/pda_bell.png',
-		"pda_blank.png"		= 'icons/pda_icons/pda_blank.png',
-		"pda_boom"				= 'icons/pda_icons/pda_boom.png',
-		"pda_bucket.png"		= 'icons/pda_icons/pda_bucket.png',
-		"pda_crate.png"			= 'icons/pda_icons/pda_crate.png',
-		"pda_cuffs.png"			= 'icons/pda_icons/pda_cuffs.png',
-		"pda_eject.png"			= 'icons/pda_icons/pda_eject.png',
-		"pda_exit.png"			= 'icons/pda_icons/pda_exit.png',
-		"pda_flashlight.png"	= 'icons/pda_icons/pda_flashlight.png',
-		"pda_honk.png"			= 'icons/pda_icons/pda_honk.png',
-		"pda_mail.png"			= 'icons/pda_icons/pda_mail.png',
-		"pda_medical.png"		= 'icons/pda_icons/pda_medical.png',
-		"pda_menu.png"		= 'icons/pda_icons/pda_menu.png',
-		"pda_mule.png"			= 'icons/pda_icons/pda_mule.png',
-		"pda_notes.png"		= 'icons/pda_icons/pda_notes.png',
-		"pda_power.png"		= 'icons/pda_icons/pda_power.png',
-		"pda_alert.png"			= 'icons/pda_icons/pda_alert.png',
-		"pda_rdoor.png"		= 'icons/pda_icons/pda_rdoor.png',
-		"pda_reagent.png"		= 'icons/pda_icons/pda_reagent.png',
-		"pda_refresh.png"		= 'icons/pda_icons/pda_refresh.png',
-		"pda_scanner.png"		= 'icons/pda_icons/pda_scanner.png',
-		"pda_signaler.png"		= 'icons/pda_icons/pda_signaler.png',
-		"pda_status.png"		= 'icons/pda_icons/pda_status.png',
-		"pda_clock.png"			= 'icons/pda_icons/pda_clock.png',
-		"pda_game.png"		= 'icons/pda_icons/pda_game.png',
-		"pda_egg.png"			= 'icons/pda_icons/pda_egg.png',
-		"pda_money.png"				= 'icons/pda_icons/pda_money.png',
+		"pda.css"		= 'html/browser/pda.css'
+	)
+
+/datum/asset/simple/pda_stationmap
+	assets = list(
 		"pda_minimap_box.png"	= 'icons/pda_icons/pda_minimap_box.png',
 		"pda_minimap_bg_notfound.png"	= 'icons/pda_icons/pda_minimap_bg_notfound.png',
 		"pda_minimap_deff.png"					= 'icons/pda_icons/pda_minimap_deff.png',

@@ -16,6 +16,7 @@
 	icon_state = "0"
 	amount_per_transfer_from_this = 5
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
 	starting_materials = list(MAT_GLASS = 1000)
@@ -34,7 +35,8 @@
 	                            /obj/item/weapon/implantcase/chem,
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
 	                            /obj/item/clothing/mask/facehugger/lamarr,
-	                            /obj/item/asteroid/hivelord_core)
+	                            /obj/item/asteroid/hivelord_core,
+										 /obj/item/weapon/reagent_containers/blood)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -68,6 +70,9 @@
 /obj/item/weapon/reagent_containers/syringe/attack_paw(var/mob/user)
 	return attack_hand(user)
 
+/obj/item/weapon/reagent_containers/syringe/attack(mob/M as mob, mob/user as mob, def_zone)
+	return //Stop trying to drink from syringes!
+
 /obj/item/weapon/reagent_containers/syringe/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
@@ -80,7 +85,7 @@
 		return
 
 	if (user.a_intent == I_HURT && ismob(target))
-		if((M_CLUMSY in user.mutations) && prob(50))
+		if(clumsy_check(user) && prob(50))
 			target = user
 
 		if (target != user && !can_stab) // You still can stab yourself if you're clumsy, honk
@@ -160,10 +165,8 @@
 				return
 
 			var/amount = src.reagents.maximum_volume - src.reagents.total_volume
-			var/datum/reagent/B = T.take_blood(null, amount)
-			//reagents.add_reagent(BLOOD,
+			var/datum/reagent/B = T.take_blood(src, amount)
 			if (B)
-				reagents.add_reagent(BLOOD, amount, B.data)
 				user.visible_message("<span class='notice'>[user] takes a blood sample from [target].</span>",
 									 "<span class='notice'>You take a blood sample from [target].</span>")
 			else
@@ -171,9 +174,15 @@
 					"<span class='warning'>You insert the syringe into [target], draw back the plunger and get... nothing?</span>")
 	// Drawing from objects draws their contents
 	else if (isobj(target))
-		if (!target.is_open_container() && !istype(target, /obj/structure/reagent_dispensers) && !istype(target, /obj/item/slime_extract))
+		if (!target.is_open_container() && !istype(target, /obj/structure/reagent_dispensers) && !istype(target, /obj/item/slime_extract) && !istype(target, /obj/item/weapon/reagent_containers/blood))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from this object.")
 			return
+
+		if (istype(target, /obj/item/weapon/reagent_containers/blood))
+			var/obj/item/weapon/reagent_containers/blood/L = target
+			if (L.mode == BLOODPACK_CUT)
+				to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
+				return
 
 		var/tx_amount = 0
 		if (istype(target, /obj/item/weapon/reagent_containers) || istype(target, /obj/structure/reagent_dispensers))
@@ -210,6 +219,12 @@
 	if (target.reagents.total_volume >= target.reagents.maximum_volume)
 		to_chat(user, "<span class='warning'>\The [target] is full.</span>")
 		return
+
+	if (istype(target, /obj/item/weapon/reagent_containers/blood))
+		var/obj/item/weapon/reagent_containers/blood/L = target
+		if (L.mode == BLOODPACK_CUT)
+			to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
+			return
 
 	// Attempting to inject someone else takes time
 	if (ismob(target) && target != user)
@@ -309,7 +324,7 @@
 
 /obj/item/weapon/reagent_containers/syringe/giant
 	name = "giant syringe"
-	desc = "A syringe used for lethal injections."
+	desc = "A syringe commonly used for lethal injections."
 	amount_per_transfer_from_this = 50
 	possible_transfer_amounts = null
 	volume = 50

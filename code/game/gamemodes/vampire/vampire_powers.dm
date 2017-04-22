@@ -76,8 +76,10 @@
 	victims -= mind.current
 	if(!victims.len)
 		return
-	var/mob/living/carbon/T = input(src, "Victim?") as null|anything in victims
-
+	var/mob/living/carbon/T 
+	T = victims[1]
+	if (victims.len > 1)
+		T = input(src, "Victim?") as null|anything in victims
 	if(!T)
 		return
 	if(!(T in view(active_range)))
@@ -219,16 +221,14 @@
 	log_admin("[ckey(src.key)] has death-touched [ckey(C.key)]. The latter will die in moments.")
 	message_admins("[ckey(src.key)] has death-touched [ckey(C.key)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[C.x];Y=[C.y];Z=[C.z]'>JMP</A>). The latter will die in moments.")
 	var/datum/disease2/disease/shutdown = new /datum/disease2/disease("Created by vamp [key_name(M)].")
-	var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder
 	var/datum/disease2/effect/organs/vampire/O = new /datum/disease2/effect/organs/vampire
-	holder.effect += O
-	holder.chance = 10
+	O.chance = 10
 	shutdown.infectionchance = 100
 	shutdown.antigen |= text2num(pick(ANTIGENS))
 	shutdown.antigen |= text2num(pick(ANTIGENS))
 	shutdown.spreadtype = "None"
 	shutdown.uniqueID = rand(0,10000)
-	shutdown.effects += holder
+	shutdown.effects += O
 	shutdown.speed = 1
 	shutdown.stage = 2
 	shutdown.clicks = 185

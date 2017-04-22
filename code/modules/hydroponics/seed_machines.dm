@@ -23,15 +23,6 @@
 			genes = list()
 			genesource = "unknown"
 
-/obj/item/weapon/storage/box/botanydisk
-	name = "flora disk box"
-	desc = "A box of flora data disks."
-
-/obj/item/weapon/storage/box/botanydisk/New()
-	..()
-	for(var/i = 1 to 7)
-		new /obj/item/weapon/disk/botany(src)
-
 /obj/machinery/botany
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"

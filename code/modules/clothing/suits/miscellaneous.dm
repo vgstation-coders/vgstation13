@@ -17,7 +17,7 @@
 	blood_overlay_type = "armor"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/gun/energy/laser/bluetag)
+	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
 	siemens_coefficient = 3.0
 
 /obj/item/clothing/suit/redtag
@@ -28,7 +28,7 @@
 	blood_overlay_type = "armor"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/gun/energy/laser/redtag)
+	allowed = list (/obj/item/weapon/gun/energy/tag/red)
 	siemens_coefficient = 3.0
 
 /*
@@ -87,7 +87,7 @@
 	desc = "This robe commands authority."
 	icon_state = "judge"
 	item_state = "judge"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	allowed = list(/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/spacecash)
 
 
@@ -341,7 +341,7 @@
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
-	desc = "Und das heiﬂt: Erika."
+	desc = "Und das hei√üt: Erika."
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
@@ -490,3 +490,29 @@
 	heat_conductivity = 0
 	slowdown = 5
 	bearpelt = 1
+
+/obj/item/clothing/suit/storage/trader
+	name = "trader's coat"
+	desc = "A long trenchcoat with many pockets sewn into the lining."
+	icon_state = "tradercoat"
+	item_state = "tradercoat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	blood_overlay_type = "coat"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED)
+	max_combined_w_class = 28
+	storage_slots = 14
+	actions_types = list(/datum/action/item_action/show_wares)
+	
+/datum/action/item_action/show_wares/Trigger()
+	var/obj/item/clothing/suit/storage/trader/T = target
+	if(!istype(T))
+		return
+	T.show_wares()
+	
+/obj/item/clothing/suit/storage/trader/proc/show_wares()
+	var/mob/M = loc
+	if(!istype(M) || M.incapacitated())
+		return
+	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")

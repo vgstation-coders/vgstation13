@@ -24,8 +24,14 @@ var/global/list/existing_typesof_cache = list()
 	for(var/checked_type in L) //Go through all types
 		var/atom/A = checked_type
 
-		if(!initial(A.icon_state) || !initial(A.icon)) //No icon or icon_state -> into the trash it goes
+		if(!initial(A.icon) || !initial(A.icon_state)) //No icon or icon_state -> into the trash it goes
 			L.Remove(checked_type)
+			continue
+
+		var/list/IS = icon_states(initial(A.icon))
+		if(!(initial(A.icon_state) in IS)) //If icon_state is set, but doesn't exist in the icon -> hello trash can my old friend
+			L.Remove(checked_type)
+			continue
 
 	existing_typesof_cache[path] = L.Copy()
 

@@ -96,16 +96,6 @@
 	time = 2 MINUTES
 	chem_type = /datum/borer_chem/head/unlockable/rezadone
 
-// Burn treatment research tree.
-
-/datum/unlockable/borer/head/chem_unlock/dermaline
-	id = "dermaline"
-	name = "Dermaline Secretion"
-	desc = "Learn how to synthesize dermaline."
-	cost = 150
-	time = 20 SECONDS
-	chem_type = /datum/borer_chem/head/unlockable/dermaline
-
 // Oxygen research tree
 /datum/unlockable/borer/head/chem_unlock/dexalin
 	id = "dexalin"
@@ -185,6 +175,16 @@
 	cost = 200
 	time = 60 SECONDS
 	chem_type = /datum/borer_chem/chest/unlockable/clottingagent
+
+// Burn treatment research tree.
+
+/datum/unlockable/borer/chest/chem_unlock/dermaline
+	id = "dermaline"
+	name = "Dermaline Secretion"
+	desc = "Learn how to synthesize dermaline."
+	cost = 150
+	time = 20 SECONDS
+	chem_type = /datum/borer_chem/chest/unlockable/dermaline
 
 /////////////////Arm Unlocks////////////////////////
 
@@ -281,15 +281,6 @@
 				host.update_mutations()
 				break
 
-// Metabolism tree
-/datum/unlockable/borer/head/gene_unlock/sober
-	id = "sober"
-	name = "Liver Function Boost"
-	desc = "Your host's liver is able to handle massive quantities of alcohol."
-	cost = 200
-	time = 30 SECONDS
-	gene_name = "SOBER"
-
 // Vision tree
 /datum/unlockable/borer/head/gene_unlock/farsight
 	id = "farsight"
@@ -298,15 +289,6 @@
 	cost = 200
 	time = 1 MINUTES
 	gene_name = "FARSIGHT"
-
-/datum/unlockable/borer/head/gene_unlock/xray
-	id = "xray"
-	name = "High-Energy Vision"
-	desc = "Adjusts your host's eyes to see in the X-Ray spectrum."
-	cost = 200
-	time = 2 MINUTES
-	gene_name = "XRAY"
-	prerequisites=list("farsight")
 
 //////////////Chest Unlocks/////////////////
 
@@ -358,6 +340,15 @@
 	time = 1 MINUTES
 	gene_name = "COLD"
 	prerequisites=list("frostoil")
+
+// Metabolism tree
+/datum/unlockable/borer/chest/gene_unlock/sober
+	id = "sober"
+	name = "Liver Function Boost"
+	desc = "Your host's liver is able to handle massive quantities of alcohol."
+	cost = 200
+	time = 30 SECONDS
+	gene_name = "SOBER"
 
 ///////////////Arm Unlocks//////////////////////
 
@@ -512,6 +503,16 @@
 	if(!istype(B))
 		return
 	B.taste_blood()
+
+/datum/unlockable/borer/head/verb_unlock/night_vision
+	id = "night_vision"
+	name = "Night Vision"
+	desc = "Learn how to expend chemicals constantly in order to convert visual data from your host's eyes into the infrared spectrum."
+	cost = 200
+	time = 2 MINUTES
+	verb_type = /obj/item/verbs/borer/attached_head/night_vision
+	give_when_attached=1
+	prerequisites=list("farsight")
 
 //////////Chest Verbs///////////////////
 

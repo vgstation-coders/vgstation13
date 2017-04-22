@@ -1,8 +1,5 @@
 /**********************Mineral deposits**************************/
 
-/datum/controller/game_controller
-	var/list/artifact_spawning_turfs = list()
-
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
@@ -35,6 +32,9 @@
 	temperature = T20C
 	mined_type = /turf/unsimulated/floor/asteroid/air
 
+/turf/unsimulated/mineral/hive
+	mined_type = /turf/unsimulated/floor/evil
+
 /turf/unsimulated/mineral/Destroy()
 	return
 
@@ -42,8 +42,7 @@
 	mineral_turfs += src
 	. = ..()
 	MineralSpread()
-	if(ticker)
-		initialize()
+	initialize()
 
 turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	mineral_turfs -= src
@@ -51,23 +50,29 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/initialize() 	// TODO: OPTIMISE THIS USING PLANES
 	spawn(1)
+		var/image/I = image('icons/turf/walls.dmi')
+		I.plane = ABOVE_TURF_PLANE
 		var/turf/T
 		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))
 			T = get_step(src, NORTH)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_s")
+				I.icon_state = "rock_side_s"
+				T.overlays += I
 		if((istype(get_step(src, SOUTH), /turf/simulated/floor)) || (istype(get_step(src, SOUTH), /turf/space)) || (istype(get_step(src, SOUTH), /turf/simulated/shuttle/floor)))
 			T = get_step(src, SOUTH)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_n", layer=6)
+				I.icon_state = "rock_side_n"
+				T.overlays += I
 		if((istype(get_step(src, EAST), /turf/simulated/floor)) || (istype(get_step(src, EAST), /turf/space)) || (istype(get_step(src, EAST), /turf/simulated/shuttle/floor)))
 			T = get_step(src, EAST)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
+				I.icon_state = "rock_side_w"
+				T.overlays += I
 		if((istype(get_step(src, WEST), /turf/simulated/floor)) || (istype(get_step(src, WEST), /turf/space)) || (istype(get_step(src, WEST), /turf/simulated/shuttle/floor)))
 			T = get_step(src, WEST)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+				I.icon_state = "rock_side_e"
+				T.overlays += I
 	/*
 	if (mineralName && mineralAmt && spread && spreadChance)
 		for(var/trydir in list(1,2,4,8))
@@ -180,6 +185,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/obj/mecha/M = AM
 		if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.selected.action(src)
+
+	else if(istype(AM,/obj/structure/bed/chair/vehicle/gigadrill))
+		var/obj/structure/bed/chair/vehicle/gigadrill/G = AM
+		G.drill(src)
 
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
@@ -300,6 +309,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						B = getFromPool(/obj/structure/boulder, src)
 						if(artifact_find)
 							B.artifact_find = artifact_find
+							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] - [artifact_find.artifact_id] found by [key_name(user)].")
 					else
 						artifact_debris(1)
 
@@ -398,6 +408,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
+		investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] destroyed by [key_name(usr)].")
 		for(var/mob/living/M in range(src, 200))
 			to_chat(M, "<font color='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></font>")
 			if(prob(50)) //pain
@@ -516,8 +527,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
-	if(ticker)
-		initialize()
+	initialize()
 
 /turf/unsimulated/floor/asteroid/initialize()
 	updateMineralOverlays()

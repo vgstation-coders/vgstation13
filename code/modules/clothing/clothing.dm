@@ -11,6 +11,7 @@
 	var/cold_speed_protection = 300 //that cloth allows its wearer to keep walking at normal speed at lower temperatures
 
 	var/list/obj/item/clothing/accessory/accessories = list()
+	var/goliath_reinforce = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -68,7 +69,7 @@
 		return
 	return ..()
 
-/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory)
+/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
 	accessories += accessory
 	accessory.forceMove(src)
 	accessory.on_attached(src)
@@ -249,7 +250,7 @@
 
 /obj/item/clothing/ears/earmuffs
 	name = "earmuffs"
-	desc = "Protects your hearing from loud noises, and quiet ones as well."
+	desc = "Protects your hearing from both loud and quiet noises."
 	icon_state = "earmuffs"
 	item_state = "earmuffs"
 	slot_flags = SLOT_EARS
@@ -322,6 +323,12 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/Touch(var/atom/A, mob/user, proximity)
 	return 0 // return 1 to cancel attack_hand()
 
+/obj/item/clothing/gloves/proc/get_damage_added()
+	return damage_added
+
+/obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
 //Head
 /obj/item/clothing/head
 	name = "head"
@@ -340,13 +347,19 @@ BLIND     // can't see anything
 	var/can_flip = null
 	var/is_flipped = 1
 	var/ignore_flip = 0
-	action_button_name = "Toggle Mask"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/mask/verb/togglemask()
-	set name = "Toggle Mask"
-	set category = "Object"
-	set src in usr
+/datum/action/item_action/toggle_mask
+	name = "Toggle Mask"
+
+/datum/action/item_action/toggle_mask/Trigger()
+	var/obj/item/clothing/mask/T = target
+	if(!istype(T))
+		return
+	T.togglemask()
+
+/obj/item/clothing/mask/proc/togglemask()
 	if(ignore_flip)
 		return
 	else
@@ -376,9 +389,7 @@ BLIND     // can't see anything
 /obj/item/clothing/mask/New()
 	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
-		action_button_name = null
-		verbs -= /obj/item/clothing/mask/verb/togglemask
-
+		actions_types = null
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -405,12 +416,25 @@ BLIND     // can't see anything
 	permeability_coefficient = 0.50
 	slowdown = SHOES_SLOWDOWN
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
+	var/step_sound = ""
+	var/stepstaken = 1
+
+/obj/item/clothing/shoes/proc/step_action()
+	stepstaken++
+	if(step_sound != "" && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		switch(H.m_intent)
+			if("run")
+				if(stepstaken % 2 == 1)
+					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
+			if("walk")
+				playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
 /obj/item/clothing/shoes/clean_blood()
-	..()
+	. = ..()
 	track_blood = 0
 
 //Suit
@@ -449,7 +473,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
-	desc = "A suit that protects against low pressure environments. Has a big 13 on the back."
+	desc = "A suit that protects against low pressure environments. Has a big \"13\" on the back."
 	icon_state = "space"
 	item_state = "s_suit"
 	w_class = W_CLASS_LARGE//bulky item
@@ -506,10 +530,6 @@ BLIND     // can't see anything
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
 
-/obj/item/clothing/under/ui_action_click()
-	for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
-		HC.togglemap()
-
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
 		return
@@ -560,6 +580,16 @@ BLIND     // can't see anything
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
 
+/datum/action/item_action/toggle_minimap
+	name = "Toggle Minimap"
+
+/datum/action/item_action/toggle_minimap/Trigger()
+	var/obj/item/clothing/under/T = target
+	if(!istype(T))
+		return
+	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
+		HC.togglemap()
+
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
@@ -571,3 +601,5 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
+
+

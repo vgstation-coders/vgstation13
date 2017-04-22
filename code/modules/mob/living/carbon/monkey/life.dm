@@ -89,7 +89,11 @@
 			step(src, pick(cardinal))
 
 		if(prob(1))
-			emote(pick("scratch","jump","roll","tail"))
+			passive_emote()
+
+
+/mob/living/carbon/monkey/proc/passive_emote()
+	emote(pick("scratch","jump","roll","tail"))
 
 /mob/living/carbon/monkey/calculate_affecting_pressure(var/pressure)
 	..()
@@ -296,7 +300,7 @@
 	if(internal)
 		if (!contents.Find(internal))
 			internal = null
-		if (!wear_mask || !(wear_mask.flags|MASKINTERNALS) )
+		if (!wear_mask || !(wear_mask.clothing_flags|MASKINTERNALS) )
 			internal = null
 		if(internal)
 			if (internals)
@@ -376,7 +380,7 @@
 		var/ratio = (breath.toxins/safe_toxins_max) * 10
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(wear_mask)
-			if(wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
+			if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 				if(breath.toxins > safe_toxins_mask)
 					ratio = (breath.toxins/safe_toxins_mask) * 10
 				else
@@ -520,7 +524,7 @@
 			else
 				light_amount = 5
 		nutrition += light_amount
-		traumatic_shock -= light_amount
+		pain_shock_stage -= light_amount
 
 		if(nutrition > 500)
 			nutrition = 500
@@ -641,6 +645,11 @@
 
 
 /mob/living/carbon/monkey/proc/handle_regular_hud_updates()
+	if(!client)
+		return
+
+	regular_hud_updates()
+
 	if (stat == 2 || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
@@ -649,6 +658,10 @@
 		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 2
 		see_invisible = SEE_INVISIBLE_LIVING
+
+		if(glasses)
+			handle_glasses_vision_updates(glasses)
+
 
 	if (healths)
 		if (stat != 2)
@@ -709,19 +722,19 @@
 
 	if(stat != DEAD)
 		if(src.eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
 		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired, 2)
+			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired, 2)
 		else
 			clear_fullscreen("impaired")
 		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		else
 			clear_fullscreen("blurry")
 		if (src.druggy)
-			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
 

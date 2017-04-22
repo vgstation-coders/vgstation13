@@ -92,4 +92,7 @@
 
 #include "defficiency/areas.dm" // Areas
 
+#include "defficiency/jobs.dm"
+
 #include "defficiency.dmm"
+

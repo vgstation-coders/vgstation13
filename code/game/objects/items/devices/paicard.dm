@@ -9,6 +9,8 @@
 	origin_tech = Tc_PROGRAMMING + "=2"
 	var/looking_for_personality = 0
 	var/mob/living/silicon/pai/pai
+	var/last_ping_time = 0
+	var/ping_cooldown = 5 SECONDS
 
 /obj/item/device/paicard/New()
 	..()
@@ -68,7 +70,11 @@
 	if(looking_for_personality&&paiController.check_recruit(O))
 		paiController.recruitWindow(O)
 	else
-		visible_message("<span class='notice'>\The [src] pings softly.</span>")
+		if(last_ping_time + ping_cooldown <= world.time)
+			last_ping_time = world.time
+			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+		else
+			to_chat(O, "[src] is recharging. Try again in a few moments.")
 
 /obj/item/device/paicard/Topic(href, href_list)
 
@@ -85,7 +91,7 @@
 			var/datum/dna/dna = usr.dna
 			pai.master = M.real_name
 			pai.master_dna = dna.unique_enzymes
-			to_chat(pai, "<font color = red><h3>You have been bound to a new master.</h3></font>")
+			to_chat(pai, "<font color = red><h3>You have been bound to a new master: [pai.master].</h3></font>")
 	if(href_list["request"])
 		src.looking_for_personality = 1
 		paiController.findPAI(src, usr)

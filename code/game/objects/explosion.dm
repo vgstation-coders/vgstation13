@@ -103,8 +103,8 @@ var/explosion_shake_message_cooldown = 0
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
 
 		//Pause the lighting updates for a bit.
-		var/datum/controller/process/lighting = processScheduler.getProcess("lighting")
-		lighting.disable()
+		var/postponeCycles = max(round(devastation_range/8),1)
+		SSlighting.postpone(postponeCycles)
 
 		if(heavy_impact_range > 1)
 			var/datum/effect/system/explosion/E = new/datum/effect/system/explosion()
@@ -145,6 +145,8 @@ var/explosion_shake_message_cooldown = 0
 
 			T.ex_act(dist)
 
+			CHECK_TICK
+
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
 		if(Debug2)
@@ -157,8 +159,6 @@ var/explosion_shake_message_cooldown = 0
 					bhangmeter.sense_explosion(x0, y0, z0, devastation_range, heavy_impact_range, light_impact_range, took, 0, verbose)
 
 		sleep(8)
-
-		lighting.enable()
 
 	return 1
 

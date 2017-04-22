@@ -18,8 +18,8 @@
 	var/image/item_overlay = null
 	var/obj/item/to_be_dropped = null //to allow items to be dropped at range
 
-/obj/item/weapon/gun/hookshot/flesh/New(turf/T, var/p_borer = null)
-	..(T)
+/obj/item/weapon/gun/hookshot/flesh/New(atom/A, var/p_borer = null)
+	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	if(!parent_borer)
@@ -239,8 +239,8 @@
 	var/mob/living/simple_animal/borer/parent_borer = null
 	var/image/item_overlay = null
 
-/obj/item/projectile/hookshot/flesh/New(turf/T = null, var/p_borer = null)
-	..(T)
+/obj/item/projectile/hookshot/flesh/New(atom/A = null, var/p_borer = null)
+	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	update_icon()

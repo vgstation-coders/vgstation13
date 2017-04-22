@@ -29,6 +29,10 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
+#define ishorrorform(A) (ishuman(A) && A.species && istype(A.species, /datum/species/horror))
+
+#define isgrue(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grue))
+
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 
 #define isalien(A) istype(A, /mob/living/carbon/alien)
@@ -38,6 +42,8 @@
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
+
+#define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -102,6 +108,8 @@
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
 #define iscoil(A) istype(A, /obj/item/stack/cable_coil)
+
+#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 
 #define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
 
@@ -195,7 +203,7 @@ proc/get_space_area()
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 
 #define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.forceMove(center);           \
+	dview_mob.loc = center;           \
 	dview_mob.see_invisible = invis_flags; \
 	for(type in view(range, dview_mob))
 
@@ -213,4 +221,6 @@ proc/get_space_area()
 #define is_in_valid_nest(egg) (isturf(egg.loc))
 
 
-#define CHECK_TICK if(world.tick_usage > 90) sleep(world.tick_lag)
+#define subtypesof(A) (typesof(A) - A)
+
+#define LIBVG(function, arguments...) call("./libvg.[world.system_type == "UNIX" ? "so" : "dll"]", function)(arguments)

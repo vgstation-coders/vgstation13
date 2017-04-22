@@ -29,11 +29,6 @@
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if((M_CLUMSY in user.mutations) && prob(50))
-		to_chat(usr, "<span class='warning'>Uh... how do these things work?!</span>")
-		handcuffs_apply(M, user, TRUE)
-		return
-
 	if(M.handcuffed)
 		return
 
@@ -69,6 +64,10 @@
 		else
 			feedback_add_details("handcuffs", "H")
 
+		if(clumsy_check(user) && prob(50))
+			to_chat(user, "<span class='warning'>Uh... how do these things work?!</span>")
+			C = user
+
 		user.visible_message("<span class='danger'>\The [user] has put \the [src] on \the [C]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \the [src] on [C.name] ([C.ckey])</font>")
 		C.attack_log += text("\[[time_stamp()]\] <font color='red'>Handcuffed with \the [src] by [user.name] ([user.ckey])</font>")
@@ -76,7 +75,7 @@
 
 		var/obj/item/weapon/handcuffs/cuffs = src
 		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
-			cuffs = new(get_turf(user))
+			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(user))
 		else
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
@@ -84,6 +83,9 @@
 /obj/item/weapon/handcuffs/cyborg
 //This space intentionally left blank
 
+/obj/item/weapon/handcuffs/cyborg/on_remove(var/mob/living/carbon/C)
+	spawn(1)
+		qdel(src)
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate

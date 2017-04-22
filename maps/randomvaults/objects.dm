@@ -1,5 +1,10 @@
 //Object and area definitions go here
-/area/vault //Please make all areas used in vaults a subtype of this!
+//Please make all areas used in vaults one of these:
+//  * subtype of /area/vault
+//  * /area/vault/automap (preferred option)
+//  * subtype of /area/vault/automap
+
+/area/vault
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
@@ -7,6 +12,27 @@
 
 /area/vault/holomapAlwaysDraw()
 	return 0
+
+//Special area that can be used in map elements. When loaded, it creates a new area object and transfers all of its contents into it.
+//This means that this area can be put into multiple map elements without any issues
+/area/vault/automap
+
+/area/vault/automap/spawned_by_map_element(datum/map_element/ME, list/objects)
+	var/area/vault/automap/new_area = new src.type
+
+	for(var/turf/T in src.contents)
+		new_area.contents.Add(T)
+
+		T.change_area(src, new_area)
+		for(var/atom/allthings in T.contents)
+			allthings.change_area(src, new_area)
+
+	new_area.tag = "[new_area.type]/\ref[ME]"
+	new_area.addSorted()
+
+/area/vault/automap/no_light
+	icon_state = "ME_vault_lit"
+	dynamic_lighting = FALSE
 
 /area/vault/icetruck
 
@@ -48,6 +74,9 @@
 
 /area/vault/prison
 
+/obj/docking_port/destination/vault
+	var/valid_random_destination = TRUE //If FALSE, random shuttle destination disks can't pick this docking port
+
 /obj/item/weapon/disk/shuttle_coords/vault/prison
 	destination = /obj/docking_port/destination/vault/prison
 
@@ -81,6 +110,44 @@
 /area/vault/AIsat
 	requires_power = 1
 
+/area/vault/taxi_engi
+	name = "\improper Destroyed Engineering"
+	requires_power = 1
+
+/area/vault/taxi_engi/engineering
+	name = "\improper Engineering"
+
+/area/vault/taxi_engi/atmos
+	name = "\improper Atmospherics"
+	icon_state = "atmos"
+
+/area/vault/taxi_engi/mechanics
+	name = "\improper Mechanics"
+	icon_state = "mechanics"
+
+/area/vault/taxi_engi/storage
+	name = "\improper Storage"
+
+/area/vault/taxi_engi/secure_storage
+	name = "\improper Storage"
+	icon_state = "engine_storage"
+
+/area/vault/taxi_engi/engine
+	name = "\improper Engine Room"
+	icon_state = "engine_control"
+
+/area/vault/taxi_engi/CE_office
+	name = "\improper Chief Engineer Office"
+	icon_state = "head_quarters"
+
+/area/vault/taxi_engi/podbay
+	name = "\improper Podbay"
+	icon_state = "pod"
+
+/area/vault/taxi_engi/lobby
+	name = "\improper Lobby"
+	icon_state = "engine_lobby"
+
 /area/vault/ejectedengine
 	requires_power = 1
 
@@ -113,6 +180,72 @@
 /area/vault/droneship/New()
 	..()
 	pod_code = "[rand(10000, 99999.0)]"
+
+/area/vault/meteorlogical
+	name = "\improper Meteorlogical Station"
+
+
+/area/vault/lightship
+	name = "\improper Lightspeed Ship"
+	requires_power = 1
+
+/area/vault/lightship/nopowerstorage
+	name = "\improper Engine Storage Bay"
+	icon_state = "engine"
+	requires_power = 0
+
+/area/vault/lightship/cockpit
+	name = "\improper Cockpit"
+
+/area/vault/lightship/dronebay
+	name = "\improper Drone Bay"
+
+/area/vault/lightship/Doormaint
+	name = "\improper Airlock Maintenance"
+
+/area/vault/lightship/cameraroom
+	name = "\improper Surveillance Room"
+
+/area/vault/lightship/shieldbattery
+	name = "\improper Shield Battery"
+
+/area/vault/lightship/Medbay
+	name = "\improper Medical Bay"
+
+/area/vault/lightship/lounge
+	name = "\improper Lounge"
+
+/area/vault/lightship/dining
+	name = "\improper Dining Quarters"
+
+/area/vault/lightship/atmospherics
+	name = "\improper Atmospherics"
+
+/area/vault/lightship/teleporter
+	name = "\improper Teleportation Station"
+
+/area/vault/lightship/maintenance
+	name = "\improper Maintenance"
+
+/area/vault/lightship/engine
+	name = "\improper Engineering"
+
+/area/vault/lightship/portdock
+	name = "\improper Port Docking"
+
+/area/vault/lightship/starboarddocking
+	name = "\improper Starboard Docking"
+
+/area/vault/lightship/weaponsroom
+	name = "\improper Weapon Systems"
+
+
+/area/vault/icecomet
+	jammed = 2
+
+
+/area/vault/research
+
 
 /obj/machinery/door/poddoor/droneship
 	name = "\improper OSIPR Pod-Door"
@@ -256,6 +389,9 @@
 /obj/machinery/power/apc/no_alerts/vault_listening/initialize()
 	. = ..()
 	name = "\improper Listening Outpost APC"
+
+/obj/machinery/power/apc/no_alerts/vault_taxi/initialize()
+	. = ..()
 
 /obj/machinery/power/battery/smes/vault_listening
 	chargelevel = 30000

@@ -7,7 +7,10 @@ var/global/vox_tick = 1
 	R.set_frequency(SYND_FREQ) //Same frequency as the syndicate team in Nuke mode.
 	equip_to_slot_or_del(R, slot_ears)
 
-	equip_to_slot_or_del(new /obj/item/clothing/under/vox/vox_robes(src), slot_w_uniform)
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
+	equip_to_slot_or_del(uni, slot_w_uniform)
+
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
 	equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
 

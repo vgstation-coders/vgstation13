@@ -21,7 +21,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
 	slowdown = 1.0
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -43,7 +43,7 @@
 			return
 		to_chat(user,"<span class='notice'>you tie up \the [src] with some of \the [C]</span>")
 		C.use(4)
-		var/obj/ghetto = new /obj/item/clothing/suit/space/rig/ghettorig (src.loc)
+		var/obj/ghetto = new /obj/item/clothing/suit/space/ghettorig (src.loc)
 		qdel(src)
 		user.put_in_hands(ghetto)
 

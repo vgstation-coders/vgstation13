@@ -70,7 +70,7 @@
 	//Logs all hrefs
 	if(config && config.log_hrefs && investigations[I_HREFS])
 		var/datum/log_controller/I = investigations[I_HREFS]
-		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br />")
+		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][copytext(sanitize(href), 1, 3000)]<br />")
 
 	switch(href_list["_src_"])
 		if("holder")
@@ -140,6 +140,12 @@
 		admins += src
 		holder.owner = src
 
+	var/static/list/localhost_addresses = list("127.0.0.1","::1")
+	if(config.localhost_autoadmin)
+		if((!address && !world.port) || (address in localhost_addresses))
+			var/datum/admins/D = new /datum/admins("Host", R_HOST, src.ckey)
+			D.associate(src)
+
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")
 			if(!holder)
@@ -177,6 +183,8 @@
 		preferences_datums[ckey] = prefs
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
+	prefs.client = src
+	prefs.initialize_preferences(client_login = 1)
 
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
@@ -194,6 +202,7 @@
 	if(holder)
 		add_admin_verbs()
 		admin_memo_show()
+		holder.add_menu_items()
 
 	log_client_to_db()
 
@@ -395,7 +404,13 @@
 	if(display_to_user && !(role_desired & ROLEPREF_PERSIST))
 		if(!(role_desired & ROLEPREF_POLLED))
 			spawn
-				var/answer = alert(src,"[role_id]\n\nNOTE:  You will only be polled about this role once per round. To change your choice, use Preferences > Setup Special Roles.  The change will take place AFTER this recruiting period.","Role Recruitment", "Yes","No","Never")
+				var/question={"[role_id]
+
+Yes/No: Only affects this round
+Never/Always: Affects future rounds, you will not be polled again.
+
+NOTE:  You will only be polled about this role once per round. To change your choice, use Preferences > Setup Special Roles.  The change will take place AFTER this recruiting period."}
+				var/answer = alert(src,question,"Role Recruitment", "Yes","No","Never")
 				switch(answer)
 					if("Never")
 						prefs.roles[role_id] = ROLEPREF_NEVER

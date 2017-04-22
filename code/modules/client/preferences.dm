@@ -23,6 +23,7 @@ var/global/list/special_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+	ROLE_COMMANDO	  = 1,
 )
 
 var/list/antag_roles = list(
@@ -37,6 +38,7 @@ var/list/antag_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+	ROLE_COMMANDO	  = 1,
 //	"infested monkey" = IS_MODE_COMPILED("monkey"),
 )
 
@@ -103,6 +105,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/parallax_speed = 2
 	var/special_popup = 0
 	var/tooltips = 1
+	var/stumble = 0						//whether the player pauses after their first step
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -180,6 +183,9 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/list/roles=list() // "role" => ROLEPREF_*
 
+	//attack animation type
+	var/attack_animation = NO_ANIMATION
+
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
@@ -220,6 +226,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		if(theclient)
 			alert(theclient, "For some reason you've failed to load your save slot 5 times now, so you've been generated a random character. Don't worry, it didn't overwrite your old one.","Randomized Character", "OK")
 	saveloaded = 1
+	theclient << 'sound/misc/prefsready.wav'
 
 /datum/preferences/proc/setup_character_options(var/dat, var/user)
 
@@ -324,6 +331,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=nanoui'><b>[(usenanoui) ? "NanoUI" : "HTML"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
+	<b>Pause after first step:</b>
+	<a href='?_src_=prefs;preference=stumble'><b>[(stumble) ? "Yes" : "No"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -348,6 +357,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Character Records:<b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
+	<b>Attack Animations:<b>
+	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
   </div>
 </div>"}
 
@@ -406,7 +417,7 @@ var/const/MAX_SAVE_SLOTS = 8
 				}
 
 			function mouseUp(event,levelup,leveldown,rank){
-				if(event.button == 0)
+				if(event.button == 0 || event.button == 1)
 					{
 					//alert("left click " + levelup + " " + rank);
 					setJobPrefRedirect(1, rank);
@@ -421,7 +432,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 				return true;
 				}
-			</script>"}
+			</script>"} //the event.button == 1 check is brought to you by legacy IE running in wine
 
 
 	HTML += {"<center>
@@ -624,6 +635,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_EPILEPTIC,  "Seizures")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_DEAF,       "Deaf")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_BLIND,      "Blind")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_MUTE,       "Mute")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -1044,7 +1056,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("s_tone")
 					s_tone = random_skin_tone(species)
 				if("bag")
-					backbag = rand(1,4)
+					backbag = rand(1,5)
 				/*if("skin_style")
 					h_style = random_skin_style(gender)*/
 				if("all")
@@ -1058,25 +1070,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					else
 						to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
 				if("next_hair_style")
-					if (gender == MALE)
-						h_style = next_list_item(h_style, hair_styles_male_list)
-					else
-						h_style = next_list_item(h_style, hair_styles_female_list)
+					h_style = next_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
 				if("previous_hair_style")
-					if (gender == MALE)
-						h_style = previous_list_item(h_style, hair_styles_male_list)
-					else
-						h_style = previous_list_item(h_style, hair_styles_female_list)
+					h_style = previous_list_item(h_style, valid_sprite_accessories(hair_styles_list, gender, species))
 				if("next_facehair_style")
-					if (gender == MALE)
-						f_style = next_list_item(f_style, facial_hair_styles_male_list)
-					else
-						f_style = next_list_item(f_style, facial_hair_styles_female_list)
+					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
-					if (gender == MALE)
-						f_style = previous_list_item(f_style, facial_hair_styles_male_list)
-					else
-						f_style = previous_list_item(f_style, facial_hair_styles_female_list)
+					f_style = previous_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("age")
 					var/new_age = input(user, "Choose your character's age:\n([AGE_MIN]-[AGE_MAX])", "Character Preference") as num|null
 					if(new_age)
@@ -1101,17 +1101,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					if(prev_species != species)
 						//grab one of the valid hair styles for the newly chosen species
-						var/list/valid_hairstyles = list()
-						for(var/hairstyle in hair_styles_list)
-							var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-							if(gender == MALE && S.gender == FEMALE)
-								continue
-							if(gender == FEMALE && S.gender == MALE)
-								continue
-							if( !(species in S.species_allowed))
-								continue
-							valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
+						var/list/valid_hairstyles = valid_sprite_accessories(hair_styles_list, gender, species, HAIRSTYLE_CANTRIP)
 						if(valid_hairstyles.len)
 							h_style = pick(valid_hairstyles)
 						else
@@ -1119,18 +1109,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							h_style = hair_styles_list["Bald"]
 
 						//grab one of the valid facial hair styles for the newly chosen species
-						var/list/valid_facialhairstyles = list()
-						for(var/facialhairstyle in facial_hair_styles_list)
-							var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-							if(gender == MALE && S.gender == FEMALE)
-								continue
-							if(gender == FEMALE && S.gender == MALE)
-								continue
-							if( !(species in S.species_allowed))
-								continue
-
-							valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
+						var/list/valid_facialhairstyles = valid_sprite_accessories(facial_hair_styles_list, gender, species)
 						if(valid_facialhairstyles.len)
 							f_style = pick(valid_facialhairstyles)
 						else
@@ -1201,15 +1180,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							b_hair = hex2num(copytext(new_hair, 6, 8))
 
 				if("h_style")
-					var/list/valid_hairstyles = list()
-					for(var/hairstyle in hair_styles_list)
-						var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-						if( !(species in S.species_allowed))
-							continue
-
-						valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
-
-					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_hairstyles
+					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
 						h_style = new_h_style
 
@@ -1222,19 +1193,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							b_facial = hex2num(copytext(new_facial, 6, 8))
 
 				if("f_style")
-					var/list/valid_facialhairstyles = list()
-					for(var/facialhairstyle in facial_hair_styles_list)
-						var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-						if(gender == MALE && S.gender == FEMALE)
-							continue
-						if(gender == FEMALE && S.gender == MALE)
-							continue
-						if( !(species in S.species_allowed))
-							continue
-
-						valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
-
-					var/new_f_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_facialhairstyles
+					var/new_f_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(facial_hair_styles_list, gender, species)
 					if(new_f_style)
 						f_style = new_f_style
 
@@ -1511,6 +1470,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					tooltips = !tooltips
 				if("progbar")
 					progress_bars = !progress_bars
+				if("stumble")
+					stumble = !stumble
 
 				if("ghost_deadchat")
 					toggles ^= CHAT_DEAD
@@ -1558,9 +1519,24 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					load_save_sqlite(user.ckey, user, num)
 					default_slot = num
 					close_load_dialog(user)
+
 				if("tab")
 					if(href_list["tab"])
 						current_tab = text2num(href_list["tab"])
+
+				if("attack_animation")
+					if(attack_animation == NO_ANIMATION)
+						item_animation_viewers |= client
+						attack_animation = ITEM_ANIMATION
+
+					else if(attack_animation == ITEM_ANIMATION)
+						attack_animation = PERSON_ANIMATION
+						person_animation_viewers |= client
+						item_animation_viewers -= client
+
+					else if(attack_animation == PERSON_ANIMATION)
+						attack_animation = NO_ANIMATION
+						person_animation_viewers -= client
 
 			if(user.client.holder)
 				switch(href_list["preference"])
@@ -1655,7 +1631,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		else
 			continue
 	var/datum/species/chosen_species = all_species[species]
-	if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.flags & CAN_BE_FAT) )
+	if( (disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		character.mutations += M_FAT
 		character.mutations += M_OBESITY
 	if(disabilities & DISABILITY_FLAG_NEARSIGHTED)
@@ -1675,7 +1651,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		underwear = 0 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me. //HAH NOW NO MORE MAGIC CLONING UNDIES
 	character.underwear = underwear
 
-	if(backbag > 4 || backbag < 1)
+	if(backbag > 5 || backbag < 1)
 		backbag = 1 //Same as above
 	character.backbag = backbag
 
@@ -1730,13 +1706,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		<legend>Legend</legend>
 		<dl>
 			<dt>Never:</dt>
-			<dd>Automatically respond 'no' to all requests to become this role.</dd>
+			<dd>Decline this role for this round and all future rounds. You will not be polled again.</dd>
 			<dt>No:</dt>
-			<dd>Responds no to requests to become this role, with options to sign up to become it. Default.</dd>
+			<dd>Default. Decline this role for this round only.</dd>
 			<dt>Yes:</dt>
-			<dd>Responds yes to requests to become this role, with options to opt out of becoming it.</dd>
+			<dd>Accept this role for this round only.</dd>
 			<dt>Always:</dt>
-			<dd>Automatically respond 'yes' to all requests to become this role.</dd>
+			<dd>Accept this role for this round and all future rounds. You will not be polled again.</dd>
 		</dl>
 	</fieldset>
 
@@ -1841,7 +1817,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	return 1
 
 /datum/preferences/Topic(href, href_list)
-	if(!usr || !client)
+	if(!client)
+		return
+	if(!usr)
+		WARNING("No usr on Topic for [client] with href [href]!")
 		return
 	if(client.mob!=usr)
 		to_chat(usr, "YOU AREN'T ME GO AWAY")

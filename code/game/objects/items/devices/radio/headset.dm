@@ -1,6 +1,6 @@
 /obj/item/device/radio/headset
 	name = "radio headset"
-	desc = "An updated, modular intercom that fits over the head. Takes encryption keys"
+	desc = "An updated, modular intercom that fits over the head. Takes encryption keys."
 	icon_state = "headset"
 	item_state = "headset"
 	starting_materials = list(MAT_IRON = 75)
@@ -51,9 +51,9 @@
 	icon_state = "sec_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_sec(src)
-		..()
+/obj/item/device/radio/headset/headset_sec/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_sec(src)
+	..()
 
 /obj/item/device/radio/headset/headset_eng
 	name = "engineering radio headset"
@@ -61,9 +61,9 @@
 	icon_state = "eng_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_eng
-		..()
+/obj/item/device/radio/headset/headset_eng/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_eng
+	..()
 
 /obj/item/device/radio/headset/headset_rob
 	name = "robotics radio headset"
@@ -71,9 +71,9 @@
 	icon_state = "rob_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_rob
-		..()
+/obj/item/device/radio/headset/headset_rob/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_rob
+	..()
 
 /obj/item/device/radio/headset/headset_med
 	name = "medical radio headset"
@@ -81,9 +81,9 @@
 	icon_state = "med_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_med
-		..()
+/obj/item/device/radio/headset/headset_med/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_med
+	..()
 
 /obj/item/device/radio/headset/headset_sci
 	name = "science radio headset"
@@ -91,9 +91,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_sci
-		..()
+/obj/item/device/radio/headset/headset_sci/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_sci
+	..()
 
 /obj/item/device/radio/headset/headset_medsci
 	name = "medical research radio headset"
@@ -101,9 +101,9 @@
 	icon_state = "med_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_medsci
-		..()
+/obj/item/device/radio/headset/headset_medsci/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_medsci
+	..()
 
 /obj/item/device/radio/headset/headset_com
 	name = "command radio headset"
@@ -111,9 +111,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_com
-		..()
+/obj/item/device/radio/headset/headset_com/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_com
+	..()
 
 /obj/item/device/radio/headset/heads/captain
 	name = "captain's headset"
@@ -121,9 +121,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/heads/captain
-		..()
+/obj/item/device/radio/headset/heads/captain/New()
+	keyslot2 = new /obj/item/device/encryptionkey/heads/captain
+	..()
 
 /obj/item/device/radio/headset/heads/rd
 	name = "Research Director's headset"
@@ -131,9 +131,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/heads/rd
-		..()
+/obj/item/device/radio/headset/heads/rd/New()
+	keyslot2 = new /obj/item/device/encryptionkey/heads/rd
+	..()
 
 /obj/item/device/radio/headset/heads/hos
 	name = "head of security's headset"
@@ -141,9 +141,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/heads/hos
-		..()
+/obj/item/device/radio/headset/heads/hos/New()
+	keyslot2 = new /obj/item/device/encryptionkey/heads/hos
+	..()
 
 /obj/item/device/radio/headset/heads/ce
 	name = "chief engineer's headset"
@@ -151,9 +151,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/heads/ce
-		..()
+/obj/item/device/radio/headset/heads/ce/New()
+	keyslot2 = new /obj/item/device/encryptionkey/heads/ce
+	..()
 
 /obj/item/device/radio/headset/heads/cmo
 	name = "chief medical officer's headset"
@@ -161,9 +161,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/heads/cmo
-		..()
+/obj/item/device/radio/headset/heads/cmo/New()
+	keyslot2 = new /obj/item/device/encryptionkey/heads/cmo
+	..()
 
 /obj/item/device/radio/headset/heads/hop
 	name = "head of personnel's headset"
@@ -171,9 +171,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/heads/hop
-		..()
+/obj/item/device/radio/headset/heads/hop/New()
+	keyslot2 = new /obj/item/device/encryptionkey/heads/hop
+	..()
 
 /obj/item/device/radio/headset/headset_cargo
 	name = "supply radio headset"
@@ -181,9 +181,9 @@
 	icon_state = "cargo_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_cargo
-		..()
+/obj/item/device/radio/headset/headset_cargo/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_cargo
+	..()
 
 /obj/item/device/radio/headset/headset_mining
 	name = "supply radio headset"
@@ -191,9 +191,9 @@
 	icon_state = "mine_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_mining
-		..()
+/obj/item/device/radio/headset/headset_mining/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_mining
+	..()
 
 /obj/item/device/radio/headset/headset_service
 	name = "service radio headset"
@@ -201,9 +201,9 @@
 	icon_state = "service_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_service
-		..()
+/obj/item/device/radio/headset/headset_service/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_service
+	..()
 
 /obj/item/device/radio/headset/headset_engsci
 	name = "research engineering radio headset"
@@ -211,9 +211,9 @@
 	icon_state = "eng_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_engsci
-		..()
+/obj/item/device/radio/headset/headset_engsci/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_engsci
+	..()
 
 /obj/item/device/radio/headset/headset_servsci
 	name = "research service radio headset"
@@ -221,9 +221,9 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/headset_servsci
-		..()
+/obj/item/device/radio/headset/headset_servsci/New()
+	keyslot2 = new /obj/item/device/encryptionkey/headset_servsci
+	..()
 
 /obj/item/device/radio/headset/headset_earmuffs
 	name = "headset earmuffs"
@@ -232,9 +232,9 @@
 	icon_state = "headset_earmuffs"
 	item_state = "earmuffs"
 
-	New()
-		//keyslot2 = new /obj/item/device/encryptionkey/headset_serveng
-		..()
+/obj/item/device/radio/headset/headset_earmuffs/New()
+	//keyslot2 = new /obj/item/device/encryptionkey/headset_serveng
+	..()
 
 /obj/item/device/radio/headset/deathsquad
 	name = "Deathsquad headset"
@@ -243,9 +243,9 @@
 	item_state = "headset"
 	freerange = 1
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/deathsquad
-		..()
+/obj/item/device/radio/headset/deathsquad/New()
+	keyslot2 = new /obj/item/device/encryptionkey/deathsquad
+	..()
 
 /obj/item/device/radio/headset/ert
 	name = "CentCom Response Team headset"
@@ -254,9 +254,9 @@
 	item_state = "headset"
 	freerange = 1
 
-	New()
-		keyslot2 = new /obj/item/device/encryptionkey/ert
-		..()
+/obj/item/device/radio/headset/ert/New()
+	keyslot2 = new /obj/item/device/encryptionkey/ert
+	..()
 
 /obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()

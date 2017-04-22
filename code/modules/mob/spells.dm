@@ -1,4 +1,4 @@
-/mob/proc/add_spell(var/spell/spell_to_add, var/spell_base = "wiz_spell_ready", var/master_type = /obj/screen/movable/spell_master)
+/mob/proc/add_spell(var/spell/spell_to_add, var/spell_base = "wiz_spell_ready", var/master_type = /obj/abstract/screen/movable/spell_master, var/iswizard = FALSE)
 	if(ispath(spell_to_add, /spell))
 		spell_to_add = new spell_to_add
 
@@ -7,14 +7,18 @@
 
 	spell_to_add.holder = src
 	if(spell_masters.len)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			if(spell_master.type == master_type)
 				spell_list.Add(spell_to_add)
 				spell_master.add_spell(spell_to_add)
 				spell_to_add.on_added(src)
+				if(mind && iswizard)
+					if(!mind.wizard_spells)
+						mind.wizard_spells = list()
+					mind.wizard_spells += spell_to_add
 				return 1
 
-	var/obj/screen/movable/spell_master/new_spell_master = getFromPool(master_type) //we're here because either we didn't find our type, or we have no spell masters to attach to
+	var/obj/abstract/screen/movable/spell_master/new_spell_master = getFromPool(master_type) //we're here because either we didn't find our type, or we have no spell masters to attach to
 	if(client)
 		src.client.screen += new_spell_master
 	new_spell_master.spell_holder = src
@@ -24,6 +28,10 @@
 	spell_masters.Add(new_spell_master)
 	spell_list.Add(spell_to_add)
 	spell_to_add.on_added(src)
+	if(mind && iswizard)
+		if(!mind.wizard_spells)
+			mind.wizard_spells = list()
+		mind.wizard_spells += spell_to_add
 	return 1
 
 /mob/proc/cast_spell(spell/spell_to_cast, list/targets)
@@ -49,7 +57,7 @@
 	if(mind && mind.wizard_spells)
 		mind.wizard_spells.Remove(spell_to_remove)
 	spell_list.Remove(spell_to_remove)
-	for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+	for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 		spell_master.remove_spell(spell_to_remove)
 	return 1
 
@@ -60,5 +68,5 @@
 	if(!spell_masters || !spell_masters.len)
 		return
 
-	for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+	for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 		spell_master.silence_spells(amount)

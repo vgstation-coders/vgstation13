@@ -12,12 +12,13 @@
 	force = 15
 	throwforce = 10
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+/obj/item/weapon/sword/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return(BRUTELOSS)
 
 /obj/item/weapon/sword/attack_self(mob/user as mob)
 	if(!hypo)
@@ -274,6 +275,7 @@
 				w_class = W_CLASS_LARGE
 				force = 25
 				sharpness = 2.0
+				sharpness_flags = SHARP_TIP | SHARP_BLADE
 				slot_flags = SLOT_BACK
 				attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
 				complete = 1

@@ -6,7 +6,6 @@
 	icon_state = "id"
 	req_access = list(access_change_ids)
 	circuit = "/obj/item/weapon/circuitboard/card"
-	var/obj/item/weapon/card/id/scan = null
 	var/obj/item/weapon/card/id/modify = null
 	var/mode = 0.0
 	var/printing = null
@@ -88,13 +87,13 @@
 	if(scan)
 		to_chat(usr, "You remove \the [scan] from \the [src].")
 		scan.forceMove(get_turf(src))
-		if(!usr.get_active_hand())
+		if(Adjacent(usr) && !usr.get_active_hand())
 			usr.put_in_hands(scan)
 		scan = null
 	else if(modify)
 		to_chat(usr, "You remove \the [modify] from \the [src].")
 		modify.forceMove(get_turf(src))
-		if(!usr.get_active_hand())
+		if(Adjacent(usr) && !usr.get_active_hand())
 			usr.put_in_hands(modify)
 		modify = null
 	else
@@ -104,6 +103,13 @@
 /obj/machinery/computer/card/attackby(obj/item/weapon/card/id/id_card, mob/user)
 	if(!istype(id_card))
 		return ..()
+
+	//Past this point, we are for sure inserting an ID.
+	if(!user.dexterity_check()) //Since we can't remove the ID, let's not put it in, to prevent tragic ID stuckness.
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(id_card.loc == src) //With telekinesis, someone can retain the reference to a card after it's put inside via TKgrab, thus attacking us with a card we already had
+		return
 
 	if(!is_centcom() && !scan && (access_change_ids in id_card.access))
 		if(user.drop_item(id_card, src))
@@ -210,14 +216,10 @@
 			if (modify)
 				data_core.manifest_modify(modify.registered_name, modify.assignment)
 				modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")
-				if(ishuman(usr))
-					modify.forceMove(usr.loc)
-					if(!usr.get_active_hand())
-						usr.put_in_hands(modify)
-					modify = null
-				else
-					modify.forceMove(loc)
-					modify = null
+				modify.forceMove(get_turf(src))
+				if(Adjacent(usr) && !usr.get_active_hand())
+					usr.put_in_hands(modify)
+				modify = null
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
@@ -225,15 +227,11 @@
 						modify = I
 
 		if ("scan")
-			if (scan)
-				if(ishuman(usr))
-					scan.forceMove(usr.loc)
-					if(!usr.get_active_hand())
-						usr.put_in_hands(scan)
-					scan = null
-				else
-					scan.forceMove(src.loc)
-					scan = null
+			if(scan)
+				scan.forceMove(get_turf(src))
+				if(Adjacent(usr) && !usr.get_active_hand())
+					usr.put_in_hands(scan)
+				scan = null
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
@@ -340,6 +338,14 @@
 		modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")
 
 	return 1
+
+/obj/machinery/computer/card/kick_act(mob/living/H)
+	..()
+	if(modify)
+		if(prob(50))
+			modify.forceMove(get_turf(src))
+			visible_message("<span class='notice'>\A [modify] pops out of \the [src]!</span>")
+			modify = null
 
 /obj/machinery/computer/card/centcom
 	name = "CentCom Identification Computer"

@@ -6,6 +6,11 @@ var/global/roundstart_enable_wages = 0
 		wages_enabled = 1
 	WageLoop()
 
+/datum/command_alert/wages
+	name = "wage payout"
+	message = "Payroll has been processed. All accounts eligible have have received their paycheck as a direct deposit, including department accounts."
+	noalert = 1
+
 /proc/wagePayout()
 	for(var/datum/money_account/Acc in all_money_accounts)
 		if(Acc.wage_gain)
@@ -18,7 +23,7 @@ var/global/roundstart_enable_wages = 0
 			T.time = worldtime2text()
 			T.source_terminal = "Nanotrasen Payroll Server"
 			Acc.transaction_log.Add(T)
-	captain_announce("Payroll has been processed. All accounts eligible have have recieved their paycheck as a direct deposit, including department accounts.")
+	command_alert(/datum/command_alert/wages)
 
 /proc/WageLoop()
 	set waitfor = 0

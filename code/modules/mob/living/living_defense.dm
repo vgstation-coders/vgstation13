@@ -59,7 +59,7 @@
 		P.on_hit(src,2)
 		return 2
 	if(!P.nodamage)
-		apply_damage((P.damage/(absorb+1)), P.damage_type, def_zone, absorb, 0, used_weapon = P)
+		apply_damage((P.damage/(absorb+1)), P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
 		regenerate_icons()
 	P.on_hit(src, absorb)
 	if(istype(P, /obj/item/projectile/beam/lightning))
@@ -102,14 +102,14 @@
 		if(assailant && assailant.mob && istype(assailant.mob,/mob))
 			M = assailant.mob
 
-		if(speed >= 20)
+		if(speed >= EMBED_THROWING_SPEED)
 			var/obj/item/weapon/W = O
 			var/momentum = speed/2
 
 			visible_message("<span class='warning'>[src] staggers under the impact!</span>","<span class='warning'>You stagger under the impact!</span>")
 			src.throw_at(get_edge_target_turf(src,dir),1,momentum)
 
-			if(istype(W.loc,/mob/living) && W.is_sharp()) //Projectile is embedded and suitable for pinning.
+			if(istype(W.loc,/mob/living) && W.sharpness_flags & SHARP_TIP) //Projectile is embedded and suitable for pinning.
 
 				if(!istype(src,/mob/living/carbon/human)) //Handles embedding for non-humans and simple_animals.
 					O.forceMove(src)
@@ -278,11 +278,6 @@
 		return 1
 	var/turf/location = get_turf(src)
 	location.hotspot_expose(700, 50, 1,surfaces=1)
-
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		if(H.mind && H.mind.vampire && H.stat == DEAD)
-			dust()
 
 /mob/living/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	adjust_fire_stacks(0.5)

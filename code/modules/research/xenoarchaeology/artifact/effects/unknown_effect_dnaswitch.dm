@@ -4,6 +4,7 @@
 	effecttype = "dnaswitch"
 	effect_type = 5
 	var/severity
+	copy_for_battery = list("severity")
 
 /datum/artifact_effect/dnaswitch/New()
 	..()

@@ -226,6 +226,16 @@ proc/arctan(x)
 #undef k1
 #undef k2
 
+/**
+ * Get Distance, Squared
+ *
+ * Because sqrt is slow, this returns the distance squared, which skips the sqrt step.
+ *
+ * Use to compare distances. Used in component mobs.
+ */
+/proc/get_dist_squared(var/atom/a, var/atom/b)
+	return ((b.x-a.x)**2) + ((b.y-a.y)**2)
+
 //Checks if something's a power of 2, to check bitflags.
 //Thanks to wwjnc for this.
 /proc/test_bitflag(var/bitflag)

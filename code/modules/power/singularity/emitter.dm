@@ -298,6 +298,7 @@
 	flags = 0
 	damage = 30
 	damage_type = BURN
+	plane = EFFECTS_PLANE
 
 	var/base_state = "emitter"
 	var/power = 1
@@ -343,3 +344,6 @@
 /obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
 	id_tag = O.id_tag
 	set_frequency(O.id_tag)
+
+/obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
+	attack_hand(L)

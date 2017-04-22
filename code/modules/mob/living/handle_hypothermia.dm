@@ -19,7 +19,7 @@ var/global/list/coldwarning_hard = list("Holy shit, it's freezing cold!","You sh
 /mob/living/carbon/human/undergoing_hypothermia()
 	. = ..()
 	if(.)
-		if(species && !(species.can_be_hypothermic))
+		if(species && species.flags & HYPOTHERMIA_IMMUNE)
 			return NO_HYPOTHERMIA
 		else
 			return .

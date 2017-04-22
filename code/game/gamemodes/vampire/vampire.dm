@@ -278,11 +278,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	to_chat(vampire.current, "<B>You must complete the following tasks:</B>")
 	vampire.current << sound('sound/effects/vampire_intro.ogg')
 
-	if (vampire.current.mind)
-		if (vampire.current.mind.assigned_role == "Clown")
-			to_chat(vampire.current, "<span class='sinister'>Your lust for blood has allowed you to overcome your clumsy nature allowing you to wield weapons without harming yourself.</span>")
-			vampire.current.mutations.Remove(M_CLUMSY)
-
 	var/obj_count = 1
 	for(var/datum/objective/objective in vampire.objectives)
 		to_chat(vampire.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
@@ -392,7 +387,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			to_chat(src, "<span class='warning'>Your fangs have disappeared!</span>")
 			src.mind.vampire.draining = null
 			return 0
-		if(H.species.flags & NO_BLOOD)
+		if(H.species.anatomy_flags & NO_BLOOD)
 			to_chat(src, "<span class='warning'>Not a drop of blood here.</span>")
 			src.mind.vampire.draining = null
 			return 0

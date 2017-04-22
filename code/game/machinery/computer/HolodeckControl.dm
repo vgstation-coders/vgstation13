@@ -41,12 +41,22 @@
 		<A href='?src=\ref[src];picnicarea=1'>((Picnic Area)</font>)</A><BR>
 		<A href='?src=\ref[src];snowfield=1'>((Snow Field)</font>)</A><BR>
 		<A href='?src=\ref[src];theatre=1'>((Theatre)</font>)</A><BR>
+		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=\ref[src];wildride=1'>((Wild Ride)</font>)</A><BR>
+		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
+		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
+		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
+		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
+		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>
 		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>"}
 //	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
 	if(emagged)
 		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
+			Ensure the holodeck is empty before testing.<BR>
+			<BR>
+			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Begin Combat Arena Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
 			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
@@ -126,6 +136,41 @@
 			if(target)
 				loadProgram(target)
 
+		else if(href_list["firingrange"])
+			target = locate(/area/holodeck/source_firingrange)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["wildride"])
+			target = locate(/area/holodeck/source_wildride)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["chess"])
+			target = locate(/area/holodeck/source_chess)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["maze"])
+			target = locate(/area/holodeck/source_maze)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["dining"])
+			target = locate(/area/holodeck/source_dining)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["lasertag"])
+			target = locate(/area/holodeck/source_lasertag)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["zoo"])
+			target = locate(/area/holodeck/source_zoo)
+			if(target)
+				loadProgram(target)
+
 		else if(href_list["turnoff"])
 			target = locate(/area/holodeck/source_plating)
 			if(target)
@@ -135,6 +180,13 @@
 			if(!emagged)
 				return
 			target = locate(/area/holodeck/source_burntest)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["ragecage"])
+			if(!emagged)
+				return
+			target = locate(/area/holodeck/source_ragecage)
 			if(target)
 				loadProgram(target)
 
@@ -339,7 +391,7 @@
 	thermal_conductivity = 0
 
 /turf/simulated/floor/holofloor/grass
-	name = "Lush Grass"
+	name = "lush Grass"
 	icon_state = "grass1"
 	floor_tile = new/obj/item/stack/tile/grass
 
@@ -354,99 +406,72 @@
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
 
+/turf/simulated/floor/holofloor/light
+	name = "light floor"
+	luminosity = 5
+	icon_state = "light_on"
+	floor_tile
+
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
-
-
 /obj/structure/table/holotable
-	name = "table"
-	desc = "A square piece of metal standing on four metal legs. It can not move."
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "table"
-	density = 1
-	anchored = 1.0
-	throwpass = 1	//You can throw objects over this, despite it's density.
+	parts = null
 
-/obj/structure/table/holotable/attack_paw(mob/user as mob)
-	return attack_hand(user)
-
-/obj/structure/table/holotable/attack_alien(mob/user as mob) //Removed code for larva since it doesn't work. Previous code is now a larva ability. /N
-	return attack_hand(user)
-
-/obj/structure/table/holotable/attack_animal(mob/living/simple_animal/user as mob) //Removed code for larva since it doesn't work. Previous code is now a larva ability. /N
-	return attack_hand(user)
-
-/obj/structure/table/holotable/attack_hand(mob/user as mob)
-	return // HOLOTABLE DOES NOT GIVE A FUCK
-
-/obj/structure/table/holotable/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
-		if(G.state<GRAB_AGGRESSIVE)
-			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
-			return
-		G.affecting.forceMove(src.loc)
-		G.affecting.Knockdown(5)
-		visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on the table.</span>")
-		qdel(W)
-		return
-
-	if(iswrench(W))
-		to_chat(user, "It's a holotable!  There are no bolts!")
-		return
-
-	if(isrobot(user))
-		return
+/obj/structure/table/holotable/can_disassemble()
+	return FALSE
 
 /obj/structure/table/holotable/wood
 	name = "table"
-	desc = "A square piece of wood standing on four wooden legs. It can not move."
+	desc = "A square piece of wood standing on four wooden legs. It cannot move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "woodtable"
 
 /obj/item/clothing/gloves/boxing/hologlove
 	name = "boxing gloves"
 	desc = "Because you really needed another excuse to punch your crewmates."
-	icon_state = "boxing"
-	item_state = "boxing"
+	icon_state = "boxingred"
+	item_state = "boxingred"
 
-/obj/structure/holowindow
-	name = "reinforced window"
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "rwindow"
-	desc = "A window."
-	density = 1
-	layer = ABOVE_DOOR_LAYER
-	pressure_resistance = 4*ONE_ATMOSPHERE
-	anchored = 1.0
-	flags = ON_BORDER
+/obj/structure/window/reinforced/holo/spawnBrokenPieces()
+	return
 
-/obj/structure/holowindow/Uncross(var/atom/movable/mover, var/turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.Bump(src)
-			return !density
-	return 1
+/obj/structure/window/reinforced/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(isscrewdriver(W))
+		to_chat(user, "It's a holowindow! It has no frame!")
+		return
 
-/obj/structure/holowindow/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
+	return ..()
+
+/obj/structure/window/reinforced/holo/spawnBrokenPieces()
+	return
+
+/obj/structure/window/holo/spawnBrokenPieces()
+	return
+
+/obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)
+	if(isscrewdriver(W))
+		to_chat(user, "It's a holowindow! It has no frame!")
+		return
+
+	return ..()
+
+/obj/structure/window/holo/spawnBrokenPieces()
+	return
+
+/obj/structure/rack/holo
+	parts = null
+
+/obj/structure/rack/holo/can_disassemble()
+	return FALSE
+
 
 /obj/item/weapon/holo
 	damtype = HALLOSS
 
 /obj/item/weapon/holo/esword
+	name = "energy sword"
 	desc = "May the force be within you. Sorta"
 	icon_state = "sword0"
 	force = 3.0
@@ -454,7 +479,7 @@
 	throw_range = 5
 	throwforce = 0
 	w_class = W_CLASS_SMALL
-	flags = FPRINT
+	flags = FPRINT | NOBLOODY
 	var/active = 0
 
 /obj/item/weapon/holo/esword/green
@@ -471,9 +496,6 @@
 	if(active)
 		return 1
 	return 0
-
-/obj/item/weapon/holo/esword/attack(target as mob, mob/user as mob)
-	..()
 
 /obj/item/weapon/holo/esword/New()
 	AddToProfiler()
@@ -508,7 +530,7 @@
 
 /obj/structure/holohoop
 	name = "basketball hoop"
-	desc = "Boom, Shakalaka!."
+	desc = "Boom, Shakalaka!"
 	icon = 'icons/obj/basketball.dmi'
 	icon_state = "hoop"
 	anchored = 1
@@ -614,7 +636,7 @@
 
 	eventstarted = 1
 
-	for(var/obj/structure/holowindow/W in currentarea)
+	for(var/obj/structure/window/reinforced/holo/W in currentarea)
 		qdel(W)
 
 	for(var/mob/M in currentarea)

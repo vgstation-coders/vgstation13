@@ -6,13 +6,33 @@
 
 /datum/design/smes
 	name = "Circuit Design (SMES) "
-	desc = "Allows for the construction of circuit boards used to build SMES Power Storage Units."
+	desc = "Allows for the construction of circuit boards used to build Superconducting Magnetic Energy Storage Units."
 	id="smes"
 	req_tech = list(Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/smes
+
+/datum/design/portable_smes
+	name = "Circuit Design (Portable SMES) "
+	desc = "Allows for the construction of circuit boards used to build portable Superconducting Magnetic Energy Storage Units."
+	id="portable_smes"
+	req_tech = list(Tc_POWERSTORAGE = 5, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/port_smes
+
+/datum/design/portable_smes_port //Needed to connect the portable SMES.
+	name = "Circuit Design (Portable SMES Port) "
+	desc = "Allows for the construction of circuit boards used to build the connector to a portable SMES."
+	id="portable_smes_port"
+	req_tech = list(Tc_POWERSTORAGE = 5, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/battery_port
 
 /datum/design/treadmill
 	name = "Circuit Design (Treadmill Generator)"

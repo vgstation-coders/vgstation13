@@ -1,4 +1,4 @@
-/mob/living/simple_animal/hostile/asteroid/
+/mob/living/simple_animal/hostile/asteroid
 	vision_range = 2
 	min_oxy = 0
 	max_oxy = 0
@@ -20,6 +20,7 @@
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
+	held_items = list()
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()
@@ -435,13 +436,12 @@ obj/item/asteroid/basilisk_hide/New()
 	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
-	if(istype(ttarget))
-		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
-
-	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
 	var/tturf = get_turf(ttarget)
-	new /obj/effect/goliath_tentacle/original(tturf)
-	ranged_cooldown = ranged_cooldown_cap
+	if(!istype(tturf, /turf/space) && istype(ttarget))
+		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
+		playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
+		new /obj/effect/goliath_tentacle/original(tturf)
+		ranged_cooldown = ranged_cooldown_cap
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goliath/adjustBruteLoss(var/damage)
@@ -471,7 +471,8 @@ obj/item/asteroid/basilisk_hide/New()
 		var/spawndir = pick(directions)
 		directions -= spawndir
 		var/turf/T = get_step(src,spawndir)
-		new /obj/effect/goliath_tentacle(T)
+		if(!istype(T, /turf/space))
+			new /obj/effect/goliath_tentacle(T)
 	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()
@@ -495,10 +496,10 @@ obj/item/asteroid/basilisk_hide/New()
 	w_class = W_CLASS_MEDIUM
 
 /obj/item/asteroid/goliath_hide/afterattack(atom/target, mob/user, proximity_flag)
-	if(proximity_flag)
-		if(istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining) || istype(target, /obj/item/clothing/suit/space/plasmaman/miner) || istype(target, /obj/item/clothing/head/helmet/space/plasmaman/miner))
-			var/obj/item/clothing/C = target
-			var/current_armor = C.armor
+	if(proximity_flag && istype(target, /obj/item/clothing))
+		var/obj/item/clothing/C = target
+		var/current_armor = C.armor
+		if(C.goliath_reinforce)
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")

@@ -37,7 +37,7 @@
 	..()
 
 	if(istype(H))
-		H.add_spell(new /spell/aoe_turf/conjure/construct)
+		H.add_spell(new /spell/aoe_turf/conjure/construct, iswizard = TRUE)
 		H.add_language(LANGUAGE_CULT)
 
 /datum/spellbook_artifact/armor
@@ -60,7 +60,7 @@
 	name = "Staff of Necromancy"
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
-	spawned_items = list(/obj/item/weapon/staff/necro)
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
 
 #define APPRENTICE_PRICE 5
 /datum/spellbook_artifact/apprentice
@@ -75,7 +75,7 @@
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 5 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
+	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
@@ -93,6 +93,12 @@
 		H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
 
+/datum/spellbook_artifact/cloakingcloak
+	name = "Cloak of Cloaking"
+	desc = "A delicate satin sheet that will render you invisible when you cover yourself with it. It is somewhat cumbersome, and running while underneath it is sure to cause you to trip."
+	abbreviation = "CC"
+	spawned_items = list(/obj/item/weapon/cloakingcloak)
+
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
@@ -108,7 +114,7 @@
 
 	H.rightandwrong(0)
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
-	
+
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic
 	name = "Summon Magic"

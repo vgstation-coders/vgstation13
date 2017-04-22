@@ -214,20 +214,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			useramount = amount
 
 	if(href_list["dispense"])
-		if (dispensable_reagents.Find(href_list["dispense"]) && container != null)
-			var/obj/item/weapon/reagent_containers/B = src.container
-			var/datum/reagents/R = B.reagents
-			if(!R)
-				if(!B.gcDestroyed)
-					B.create_reagents(B.volume)
-				else
-					qdel(B)
-					B = null
-					return
-			var/space = R.maximum_volume - R.total_volume
-
-			R.add_reagent(href_list["dispense"], min(amount, energy * 10, space))
-			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
+		dispense_reagent(href_list["dispense"], amount)
 
 	if(href_list["ejectBeaker"])
 		if(container)
@@ -236,6 +223,27 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
 
+/obj/machinery/chem_dispenser/proc/dispense_reagent(reagent, amount)
+	if (dispensable_reagents.Find(reagent) && container != null)
+		var/obj/item/weapon/reagent_containers/B = src.container
+		var/datum/reagents/R = B.reagents
+		if(!R)
+			if(!B.gcDestroyed)
+				B.create_reagents(B.volume)
+			else
+				qdel(B)
+				B = null
+				return
+		var/space = R.maximum_volume - R.total_volume
+
+		R.add_reagent(reagent, min(amount, energy * 10, space))
+		energy = max(energy - min(amount, energy * 10, space) / 10, 0)
+
+/obj/machinery/chem_dispenser/kick_act(mob/living/H)
+	..()
+	if(container)
+		detach()
+
 /obj/machinery/chem_dispenser/proc/detach()
 	targetMoveKey=null
 
@@ -243,11 +251,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
 		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/mob/living/silicon/robot/R = container:holder:loc
-			if(R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
-				container.forceMove(R)
-			else
-				container.forceMove(container:holder)
+			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = container
+			borgbeak.return_to_modules()
 		container = null
 		return 1
 
@@ -270,11 +275,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(isrobot(user))
 		if(!can_use(user))
+			to_chat(user, "Your programming forbids interaction with this device.")
 			return
 
 	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
+			return
+		if(D.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [D] is too big to fit.</span>")
 			return
 		else if(!panel_open)
 			if(!user.drop_item(D, src))
@@ -401,3 +410,13 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 0
 
 #undef FORMAT_DISPENSER_NAME
+
+/obj/machinery/chem_dispenser/npc_tamper_act(mob/living/L)
+	if(stat & (NOPOWER|BROKEN))
+		return 0
+
+	var/amount = rand(1,25)
+	var/reagent = pick(dispensable_reagents)
+	message_admins("[key_name(L)] has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
+
+	dispense_reagent(reagent, amount)

@@ -6,6 +6,15 @@
 
 var/global/mulebot_count = 0
 
+#define MODE_IDLE 0
+#define MODE_LOADING 1
+#define MODE_MOVING 2
+#define MODE_RETURNING 3
+#define MODE_BLOCKED 4
+#define MODE_COMPUTING 5
+#define MODE_WAITING 6
+#define MODE_NOROUTE 7
+
 /obj/machinery/bot/mulebot
 	name = "\improper MULEbot"
 	desc = "A Multiple Utility Load Effector bot."
@@ -18,6 +27,7 @@ var/global/mulebot_count = 0
 	maxhealth = 150
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
+	can_take_pai = TRUE
 	var/atom/movable/load = null		// the loaded crate (usually)
 	var/beacon_freq = 1400
 	var/control_freq = 1447
@@ -65,6 +75,8 @@ var/global/mulebot_count = 0
 
 	var/bloodiness = 0		// count of bloodiness
 	var/currentBloodColor = DEFAULT_BLOOD
+	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
+	var/coolingdown = FALSE
 
 /obj/machinery/bot/mulebot/New()
 	..()
@@ -491,7 +503,7 @@ var/global/mulebot_count = 0
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard)
+		if(AM == cell || AM == botcard || AM == integratedpai)
 			continue
 
 		AM.forceMove(src.loc)
@@ -738,8 +750,12 @@ var/global/mulebot_count = 0
 			else
 				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
 				M.stop_pulling()
-				M.Stun(8)
-				M.Knockdown(5)
+				if(integratedpai)
+					M.Stun(1)
+					M.Knockdown(1)
+				else
+					M.Stun(8)
+					M.Knockdown(5)
 				M.lying = 1
 	..()
 
@@ -748,10 +764,14 @@ var/global/mulebot_count = 0
 
 // called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
+	if(integratedpai && coolingdown)
+		return
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/mulebot/proc/RunOverCreature() called tick#: [world.time]")
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,15)
+	if(integratedpai)
+		damage = round(damage/3.33)
 	H.apply_damage(2*damage, BRUTE, LIMB_HEAD)
 	H.apply_damage(2*damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_LEG)
@@ -760,6 +780,13 @@ var/global/mulebot_count = 0
 	H.apply_damage(0.5*damage, BRUTE, LIMB_RIGHT_ARM)
 	bloodiness += 4
 	currentBloodColor=bloodcolor // For if species get different blood colors.
+	if(run_over_cooldown)
+		run_over_coolingdown()
+
+/obj/machinery/bot/mulebot/proc/run_over_coolingdown()
+	coolingdown = TRUE
+	spawn(run_over_cooldown)
+		coolingdown = FALSE
 
 // player on mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)
@@ -922,3 +949,75 @@ var/global/mulebot_count = 0
 	O.New(O.loc)
 	unload(0)
 	qdel(src)
+
+/obj/machinery/bot/mulebot/getpAIMovementDelay()
+	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2
+
+/obj/machinery/bot/mulebot/pAImove(mob/living/silicon/pai/user, dir)
+	if(getpAIMovementDelay() < 0)
+		to_chat(user, "There seems to be something wrong with the motor. Have a technician check the wires.")
+		return
+	if(!..())
+		return
+	if(!on)
+		to_chat(user, "You can't move \the [src] while it's turned off.")
+		return
+	var/turf/T = loc
+	if(!T.has_gravity())
+		return
+	step(src, dir)
+
+/obj/machinery/bot/mulebot/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/movable/A)
+	if(!istype(A) || !Adjacent(A) || A.anchored)
+		return
+	load(A)
+	if(load)
+		to_chat(user, "You load \the [A] onto \the [src].")
+
+/obj/machinery/bot/mulebot/attack_integrated_pai(mob/living/silicon/pai/user)
+	if(load)
+		to_chat(user, "You unload \the [load].")
+		unload()
+
+/obj/machinery/bot/mulebot/npc_tamper_act(mob/living/L)
+	if(L.loc == src) //Gremlins on the mule get out if the mule has stopped
+		if(mode == MODE_NOROUTE || !wires.RemoteRX() || !wires.HasPower() || !(wires.Motor1() || wires.Motor2())) //Jump ship if the MULE is broken
+			unload()
+
+		return NPC_TAMPER_ACT_NOMSG
+
+	if(prob(80)) //80% chance to RIDE THE MULE
+		//If the MULE hasn't been modified to accept non-orthodox cargo, do it now
+		if(!wires)
+			return
+		if(!wires.IsIndexCut(WIRE_LOADCHECK))
+			wires.CutWireIndex(WIRE_LOADCHECK)
+
+		//Turn the MULE ON
+		if(!on && !turn_on())
+			return
+
+		//Mount the MULE
+		load(L)
+
+		var/list/possible_destinations = list()
+		for(var/obj/machinery/navbeacon/N in navbeacons)
+			if(!N.location || !isturf(N.loc))
+				continue
+			if(N.freq != src.beacon_freq) //If the navbeacon is on a different frequency, the mulebot can't navigate to it
+				continue
+			possible_destinations.Add(N)
+
+		//Type in a destination for the MULE
+		var/obj/machinery/navbeacon/new_destination = pick(possible_destinations)
+		set_destination(new_destination.location)
+
+		//GO!
+		start()
+
+		message_admins("[key_name(L)] has mounted \the [src] and is riding it to [new_destination.location] ([formatJumpTo(new_destination)])! [formatJumpTo(src)]")
+	else
+		if(!panel_open)
+			togglePanelOpen(null, L)
+		if(wires)
+			wires.npc_tamper(L)

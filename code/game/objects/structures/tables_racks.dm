@@ -13,7 +13,7 @@
  */
 /obj/structure/table
 	name = "table"
-	desc = "A square piece of metal standing on four metal legs. It can not move."
+	desc = "A square piece of metal standing on four metal legs. It cannot move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "table"
 	density = 1
@@ -21,7 +21,7 @@
 	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
-	var/icon/clicked
+	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 	var/flipped = 0
 	var/health = 100
 
@@ -39,6 +39,8 @@
 	for(var/obj/structure/table/T in src.loc)
 		if(T != src)
 			qdel(T)
+	if(flipped)
+		flip(dir)
 	update_icon()
 	update_adjacent()
 
@@ -60,19 +62,15 @@
 	return 0
 
 /obj/structure/table/proc/destroy()
-	new parts(loc)
-	density = 0
-	qdel(src)
-
-/obj/structure/rack/proc/destroy()
-	new parts(loc)
+	if(parts)
+		new parts(loc)
 	density = 0
 	qdel(src)
 
 /obj/structure/table/proc/can_disassemble()
 	return 1
 
-/obj/structure/table/update_icon()
+/obj/structure/table/update_icon() //MWAHAHAHAHAAAAAH!!! WELCOME TO MAGIC NUMBER HELL!!!
 	spawn(2) //So it properly updates when deleting
 
 		if(flipped)
@@ -267,27 +265,31 @@
 	if(prob(75))
 		destroy()
 
-/obj/structure/table/attack_paw(mob/user)
+/obj/structure/table/attack_paw(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes the [src] apart!</span>")
 		user.delayNextAttack(8)
 		destroy()
 
 
-/obj/structure/table/attack_alien(mob/user)
+/obj/structure/table/attack_alien(mob/living/user)
+	user.do_attack_animation(src, user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash>0)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 
 
 
-/obj/structure/table/attack_hand(mob/user)
+/obj/structure/table/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
@@ -356,7 +358,20 @@
 			return !density
 	return 1
 
-/obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
+/obj/structure/table/MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+	if(O == user)
+		if(!ishuman(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
+			return
+		var/mob/living/carbon/M = user
+		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.Knockdown(1)
+		if (prob(50))
+			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+		else
+			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
+		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
+		return
+
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
 	if(user.drop_item())
@@ -525,8 +540,15 @@
 	return 1
 
 /obj/structure/table/flipped
-	icon_state = "tableflip0"
 	flipped = 1
+
+/obj/structure/table/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"flipped",
+		"health")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 /*
  * Wooden tables
@@ -621,13 +643,14 @@
 	parts = /obj/item/weapon/table_parts/glass
 	health = 30
 
-/obj/structure/table/glass/attackby(obj/item/W as obj, mob/user as mob, params)
+/obj/structure/table/glass/attackby(obj/item/W as obj, mob/living/user as mob, params)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
+					user.do_attack_animation(src, W)
 					if (prob(15))
 						M.Knockdown(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
@@ -647,6 +670,7 @@
 			returnToPool(W)
 
 	else if (user.a_intent == I_HURT)
+		user.do_attack_animation(src, W)
 		user.delayNextAttack(10)
 		health -= W.force
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
@@ -673,10 +697,19 @@
 	density = 1
 	flags = FPRINT
 	anchored = 1.0
-	throwpass = 1	//You can throw objects over this, despite it's density.
+	throwpass = 1	//You can throw objects over this, despite its density.
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
 	var/health = 20
+
+/obj/structure/rack/proc/destroy(var/dropParts = TRUE)
+	if(parts && dropParts)
+		new parts(loc)
+	density = 0
+	qdel(src)
+
+/obj/structure/rack/proc/can_disassemble()
+	return TRUE
 
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
@@ -687,20 +720,24 @@
 /obj/structure/rack/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			qdel(src)
+			destroy(FALSE)
 		if(2.0)
-			qdel(src)
 			if(prob(50))
-				new /obj/item/weapon/rack_parts(src.loc)
+				destroy(TRUE)
+			else
+				destroy(FALSE)
 		if(3.0)
 			if(prob(25))
-				qdel(src)
-				new /obj/item/weapon/rack_parts(src.loc)
+				destroy(TRUE)
+			else
+				destroy(FALSE)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)
-		new /obj/item/weapon/rack_parts(loc)
-		qdel(src)
+		destroy()
+
+/obj/structure/rack/proc/spawnParts()
+	new /obj/item/weapon/rack_parts(loc)
 
 /obj/structure/rack/kick_act()
 	health -= 5
@@ -708,13 +745,10 @@
 	..()
 
 /obj/structure/rack/blob_act()
-	if(prob(75))
-		del(src)
-		return
-	else if(prob(50))
-		new /obj/item/weapon/rack_parts(src.loc)
-		del(src)
-		return
+	if(prob(50))
+		destroy(TRUE)
+	else
+		destroy(FALSE)
 
 /obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
@@ -735,10 +769,9 @@
 	return
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (iswrench(W))
-		new /obj/item/weapon/rack_parts( src.loc )
+	if(iswrench(W) && can_disassemble())
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		del(src)
+		destroy(TRUE)
 		return
 
 	if(user.drop_item(W, src.loc))
@@ -757,24 +790,28 @@
 			offset_step++
 			return 1
 
-/obj/structure/table/attack_hand(mob/user)
+/obj/structure/table/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		destroy()
 
-/obj/structure/rack/attack_paw(mob/user)
+/obj/structure/rack/attack_paw(mob/living/user)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 
-/obj/structure/rack/attack_alien(mob/user)
+/obj/structure/rack/attack_alien(mob/living/user)
+	user.do_attack_animation(src, user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
 	destroy()
 
 /obj/structure/rack/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash>0)
+		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
 

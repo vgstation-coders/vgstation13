@@ -7,9 +7,17 @@
 	if(now_pushing)
 		return
 	..()
-	if(istype(AM, /mob/living/carbon) && prob(10))
-		src.spread_disease_to(AM, "Contact")
+	if(can_be_infected(AM) && prob(10))
+		spread_disease_to(src, AM, "Contact")
+	handle_symptom_on_touch(src, AM, BUMP)
+	if(istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/C = AM
+		C.handle_symptom_on_touch(src, AM, BUMP)
 
+/mob/living/carbon/Bumped(var/atom/movable/AM)
+	..()
+	if(!istype(AM, /mob/living/carbon))
+		handle_symptom_on_touch(AM, src, BUMP)
 
 /mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
 	. = ..()
@@ -23,24 +31,7 @@
 		update_minimap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		visible_message("<span class='warning'><B>[M]</B> [M.attacktext] \the [src] !</span>")
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
-		if(M.zone_sel && M.zone_sel.selecting)
-			dam_zone = M.zone_sel.selecting
-		var/datum/organ/external/affecting = ran_zone(dam_zone)
-
-		apply_damage(damage,M.melee_damage_type, affecting)
-		updatehealth()
-
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/proc/update_minimap()
 	var/obj/item/device/pda/pda_device = machine
@@ -98,20 +89,13 @@
 	if(!istype(M, /mob/living/carbon))
 		return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+		var/datum/organ/external/temp = M.get_active_hand_organ()
 
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	share_contact_diseases(M)
-	return
-
-
-/mob/living/carbon/attack_paw(mob/M as mob)
-	if(!istype(M, /mob/living/carbon))
-		return
-	share_contact_diseases(M)
-	return
+	handle_symptom_on_touch(M, src, HAND)
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
 	var/damage = shock_damage * siemens_coeff
@@ -154,7 +138,7 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -165,7 +149,7 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -199,10 +183,10 @@
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
-					status += "<span class='orangeb'>peeling away</span>"
+					status += "<span class='orange bold'>peeling away</span>"
 
 				else if(burndamage > 10)
-					status += "<span class='orangei'>blistered</span>"
+					status += "<span class='orange italics'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
@@ -238,14 +222,27 @@
 				)
 		// BEGIN HUGCODE - N3X
 		else
+			var/datum/organ/external/S = src.get_organ(M.zone_sel.selecting)
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			M.visible_message( \
-				"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
-				"<span class='notice'>You hug [src].</span>", \
-				)
+			if(M.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED))
+				M.visible_message( \
+					"<span class='notice'>[M] pats [src]'s head.</span>", \
+					"<span class='notice'>You pat [src]'s head.</span>", \
+					)
+			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
+				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				M.visible_message( \
+					"<span class='notice'>[M] shakes hands with [src].</span>", \
+					"<span class='notice'>You shake hands with [src].</span>", \
+					)
+			else
+				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				M.visible_message( \
+					"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
+					"<span class='notice'>You hug [src].</span>", \
+					)
 			reagents.add_reagent(PARACETAMOL, 1)
 
 			share_contact_diseases(M)
@@ -309,7 +306,7 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen)
+	if(target.type == /obj/abstract/screen)
 		return
 
 	var/atom/movable/item = src.get_active_hand()
@@ -358,8 +355,9 @@
 	//actually throw it!
 	if (item)
 		item.forceMove(get_turf(src))
-		src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
-			drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
+		if(!(item.flags & NO_THROW_MSG))
+			src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
+				drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
 
 		src.apply_inertia(get_dir(target, src))
 
@@ -645,3 +643,50 @@
 /mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
 	if(eyecheck() < intensity)
 		..()
+
+/mob/living/carbon/proc/has_active_symptom(var/symptom_type)	//returns true if the mob has a virus with the given symptom type AND the symptom has activated at least once
+	if(!symptom_type)
+		return
+	if(virus2.len)
+		for(var/I in virus2)
+			var/datum/disease2/disease/D = virus2[I]
+			if(D.effects.len)
+				for(var/datum/disease2/effect/E in D.effects)
+					if(istype(E, symptom_type))
+						if(E.count > 0)
+							return E
+
+/mob/living/carbon/proc/handle_symptom_on_touch(var/toucher, var/touched, var/touch_type)
+	if(virus2.len)
+		for(var/I in virus2)
+			var/datum/disease2/disease/D = virus2[I]
+			if(D.effects.len)
+				for(var/datum/disease2/effect/E in D.effects)
+					E.on_touch(src, toucher, touched, touch_type)
+
+/mob/living/carbon/proc/get_lowest_body_alpha()
+	if(!body_alphas.len)
+		return 255
+	var/lowest_alpha = 255
+	for(var/alpha_modification in body_alphas)
+		lowest_alpha = min(lowest_alpha,body_alphas[alpha_modification])
+	return lowest_alpha
+
+/mob/living/carbon/advanced_mutate()
+	..()
+	if(prob(5))
+		hasmouth = !hasmouth
+
+/mob/living/carbon/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"gender",
+		"antibodies",
+		"last_eating",
+		"life_tick",
+		"number_wounds",
+		"handcuffed",
+		"legcuffed",
+		"pulse")
+
+	reset_vars_after_duration(resettable_vars, duration)

@@ -25,7 +25,7 @@
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 
-	var/obj/Overlays/damage_overlay
+	var/obj/abstract/Overlays/damage_overlay
 	var/cracked_base = "crack"
 
 	var/fire_temp_threshold = 800
@@ -53,15 +53,15 @@
 		to_chat(user, "It appears to be completely loose and movable.")
 	//switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
-		to_chat(user, "It's in perfect shape, not even a scratch.")
+		to_chat(user, "It's in perfect shape without a single scratch.")
 	else if(health >= 0.8*initial(health))
 		to_chat(user, "It has a few scratches and a small impact.")
 	else if(health >= 0.5*initial(health))
-		to_chat(user, "It has a few impacts and some cracks running from them.")
+		to_chat(user, "It has a few impacts with some cracks running from them.")
 	else if(health >= 0.2*initial(health))
-		to_chat(user, "It's covered in impact marks and most of the outer sheet is crackled.")
+		to_chat(user, "It's covered in impact marks and most of the outer layer is cracked.")
 	else
-		to_chat(user, "It's completely crackled over multiple layers, it's a miracle it's even standing.")
+		to_chat(user, "It's cracked over multiple layers and has many impact marks.")
 	if(reinforced) //Normal windows can be loose or not, reinforced windows are more complex
 		switch(d_state)
 			if(WINDOWSECURE)
@@ -128,13 +128,14 @@
 			return
 
 /obj/structure/window/blob_act()
-	..()
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	health -= rand(30, 50)
 	healthcheck()
 
 /obj/structure/window/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 
+	H.do_attack_animation(src, H)
 	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
 	"<span class='danger'>You kick \the [src].</span>")
 
@@ -183,9 +184,10 @@
 		healthcheck()
 		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
 
-/obj/structure/window/attack_hand(mob/user as mob)
+/obj/structure/window/attack_hand(mob/living/user as mob)
 
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
 		health -= 25
@@ -194,6 +196,7 @@
 
 	//Bang against the window
 	else if(usr.a_intent == I_HURT)
+		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
@@ -213,9 +216,9 @@
 
 	return attack_hand(user)
 
-/obj/structure/window/proc/attack_generic(mob/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
+/obj/structure/window/proc/attack_generic(mob/living/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
 
-
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(10)
 	health -= damage
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
@@ -241,7 +244,7 @@
 		return
 	attack_generic(user, rand(10, 15))
 
-/obj/structure/window/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
 		var/obj/item/weapon/grab/G = W
@@ -249,6 +252,7 @@
 			var/mob/living/M = G.affecting
 			var/gstate = G.state
 			returnToPool(W)	//Gotta delete it here because if window breaks, it won't get deleted
+			user.do_attack_animation(src, W)
 			switch(gstate)
 				if(GRAB_PASSIVE)
 					M.apply_damage(5) //Meh, bit of pain, window is fine, just a shove
@@ -388,6 +392,7 @@
 				to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 				return
 
+	user.do_attack_animation(src, W)
 	if(W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
 		health -= W.force
@@ -449,10 +454,13 @@
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
 		if(loc)
 			playsound(get_turf(src), "shatter", 70, 1)
-		getFromPool(shardtype, loc, sheetamount)
-		if(reinforced)
-			getFromPool(/obj/item/stack/rods, loc, sheetamount)
+		spawnBrokenPieces()
 	..()
+
+/obj/structure/window/proc/spawnBrokenPieces()
+	getFromPool(shardtype, loc, sheetamount)
+	if(reinforced)
+		getFromPool(/obj/item/stack/rods, loc, sheetamount)
 
 /obj/structure/window/Move()
 
@@ -565,6 +573,14 @@
 	icon_state = "fwindow"
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
+
+/obj/structure/window/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"health",
+		"d_state")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

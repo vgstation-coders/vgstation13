@@ -34,7 +34,8 @@
 		////////////
 	var/next_allowed_topic_time = 10
 	// comment out the line below when debugging locally to enable the options & messages menu
-	//control_freak = 1
+	// CONTROL_FREAK_MACROS allows new macros to be made, but won't permit overriding skin-defined ones.  http://www.byond.com/forum/?post=2219001#comment22205313
+	// control_freak = CONTROL_FREAK_ALL | CONTROL_FREAK_MACROS
 
 
 		////////////////////////////////////
@@ -70,6 +71,12 @@
 	var/list/parallax_movable = list()
 	var/list/parallax_offset = list()
 	var/turf/previous_turf = null
-	var/obj/screen/plane_master/parallax_master/parallax_master = null
-	var/obj/screen/plane_master/parallax_dustmaster/parallax_dustmaster = null
-	var/obj/screen/plane_master/parallax_spacemaster/parallax_spacemaster = null
+	var/obj/abstract/screen/plane_master/parallax_master/parallax_master = null
+	var/obj/abstract/screen/plane_master/parallax_dustmaster/parallax_dustmaster = null
+	var/obj/abstract/screen/plane_master/parallax_spacemaster/parallax_spacemaster = null
+
+	// This gets set by goonchat.
+	var/encoding = "1252"
+
+var/list/person_animation_viewers = list()
+var/list/item_animation_viewers = list()

@@ -10,7 +10,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list("Plasmaman")
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
 	icon_state = "plasmaman_suit"
@@ -31,7 +31,7 @@
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"
 	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list("Plasmaman")
 	eyeprot = 0
@@ -42,8 +42,8 @@
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
-	action_button_name = "Toggle Helmet Light"
-
+	actions_types = list(/datum/action/item_action/toggle_light)
+	
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
 		return
@@ -162,6 +162,23 @@
 	icon_state = "plasmamanJanitor_helmet0"
 	base_state = "plasmamanJanitor_helmet"
 
+/obj/item/clothing/suit/space/plasmaman/lawyer
+	name = "plasmaman lawyer suit"
+	icon_state = "plasmamanlawyer_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/lawyer
+	name = "plasmaman lawyer helmet"
+	icon_state = "plasmamanlawyer_helmet0"
+	base_state = "plasmamanlawyer_helmet"
+
+/obj/item/clothing/suit/space/plasmaman/bee
+	name = "plasmaman bee suit"
+	icon_state = "plasmamanbee_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/bee
+	name = "plasmaman bee helmet"
+	icon_state = "plasmamanbee_helmet0"
+	base_state = "plasmamanbee_helmet"
 
 //CARGO
 
@@ -179,12 +196,14 @@
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	slowdown = 2
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner
 	name = "plasmaman miner helmet"
 	icon_state = "plasmamanMiner_helmet0"
 	base_state = "plasmamanMiner_helmet"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
+	goliath_reinforce = TRUE
 
 
 // MEDSCI

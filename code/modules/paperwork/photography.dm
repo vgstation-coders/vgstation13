@@ -133,12 +133,14 @@
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/device/camera/big_photos
+	name = "\improper XL camera"
 	photo_size = 5
 
 /obj/item/device/camera/big_photos/set_zoom()
 	return
 
 /obj/item/device/camera/huge_photos
+	name = "\improper XXL camera"
 	photo_size = 7
 
 /obj/item/device/camera/huge_photos/set_zoom()

@@ -78,7 +78,7 @@ var/global/list/igniters = list()
 				return
 		else
 			:
-			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
+			to_chat(user, "<span class='warning'>You need more welding fuel to do that.</span>")
 			return 1
 
 

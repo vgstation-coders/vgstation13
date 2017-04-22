@@ -21,6 +21,14 @@
 		var/obj/item/weapon/storage/S=O
 		L += S.return_inv()
 
+	else if(istype(O,/obj/item/clothing/accessory/storage))
+		var/obj/item/clothing/accessory/storage/S=O
+		L += S.hold.return_inv()
+
+	else if(istype(O,/obj/item/clothing/suit/storage))
+		var/obj/item/clothing/suit/storage/S=O
+		L += S.hold.return_inv()
+
 	else if(istype(O,/obj/item/weapon/gift))
 		var/obj/item/weapon/gift/G = O
 		L += G.gift
@@ -30,9 +38,8 @@
 	else if(istype(O,/obj/item/delivery))
 		var/obj/item/delivery/D = O
 		for(var/atom/movable/wrapped in D) //Under normal circumstances, there will be only one thing in it, but not all circumstances are normal
-			L += wrapped
-			if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(wrapped)
+			L += get_contents(wrapped)
+
 	return L
 
 /datum/theft_objective/proc/check_completion(datum/mind/owner)
@@ -69,20 +76,15 @@
 	typepath = /obj/item/weapon/hand_tele
 	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
-/datum/theft_objective/traitor/rcd
-	name = "an RCD"
-	typepath = /obj/item/device/rcd/matter/engineering
-	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")
+/datum/theft_objective/traitor/cap_hardsuit
+	name = "the captain's full-body armor" //technically only the bodypiece, which is the hardest one to conceal anyways
+	typepath = /obj/item/clothing/suit/armor/captain
+	protected_jobs = list("Captain")
 
-/datum/theft_objective/traitor/rpd
-	name = "an RPD"
-	typepath = /obj/item/device/rcd/rpd
-	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")//engineers have atmos access.
-
-/datum/theft_objective/traitor/jetpack
-	name = "a jetpack"
-	typepath = /obj/item/weapon/tank/jetpack
-	protected_jobs = list("Chief Engineer", "Captain", "Trader", "Atmospherics Technician", "Station Engineer", "Shaft Miner")
+/datum/theft_objective/traitor/cap_stamp
+	name = "the captain's rubber stamp"
+	typepath = /obj/item/weapon/stamp/captain
+	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/cap_jumpsuit
 	name = "the captain's jumpsuit"
@@ -212,7 +214,7 @@
 		var/found_amount = 0
 		for(var/obj/I in all_items) //Check for items
 			if(istype(I, typepath))
-			
+
 				//Stealing the cheap autoinjector doesn't count
 				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
 					continue

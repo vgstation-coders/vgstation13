@@ -117,8 +117,12 @@
 
 	if(istype(user, /mob/living))
 		var/mob/living/M = user
-		if ((M_CLUMSY in M.mutations) && prob(50))
-			to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+
+		if(M_HULK in M.mutations)
+			to_chat(M, "<span class='warning'>Your meaty finger is much too large for the trigger guard!</span>")
+			return 0
+		else if(clumsy_check(M) && prob(50))
+			to_chat(M, "<span class='danger'>[src] blows up in your face!</span>")
 			target = M
 
 	var/turf/curloc = get_turf(user)

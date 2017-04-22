@@ -101,28 +101,30 @@
 	else
 		usr.set_machine(src)
 		if (href_list["chemical"])
-			if (src.connected)
-				if (src.connected.occupant)
-					if (src.connected.occupant.stat == DEAD)
-						to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
-					else if(href_list["chemical"] == STOXIN && src.connected.sedativeblock)
-						if(src.connected.sedativeblock < 3)
-							to_chat(usr, "<span class='warning'>Sedative injections not yet ready. Please try again in a few seconds.</span>")
-						else //if this guy is seriously just mashing the soporific button...
-							to_chat(usr, "[pick( \
-							"<span class='warning'>This guy just got jammed into the machine, give them a breath before trying to pump them full of drugs.</span>", \
-							"<span class='warning'>Give it a rest.</span>", \
-							"<span class='warning'>Aren't you going to tuck them in before putting them to sleep?</span>", \
-							"<span class='warning'>Slow down just a second, they aren't going anywhere... right?</span>", \
-							"<span class='warning'>Just got to make sure you're not tripping the fuck out of an innocent bystander, stay tight.</span>", \
-							"<span class='warning'>The occupant is still moving around!</span>", \
-							"<span class='warning'>Sorry pal, safety procedures.</span>", \
-							"<span class='warning'>But it's not bedtime yet!</span>")]")
-						src.connected.sedativeblock++
-					else if(src.connected.occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
-						to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
+			if (src.connected && src.connected.occupant)
+				if (src.connected.occupant.stat == DEAD)
+					to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
+				else if(href_list["chemical"] == STOXIN && src.connected.sedativeblock)
+					if(src.connected.sedativeblock < 3)
+						to_chat(usr, "<span class='warning'>Sedative injections not yet ready. Please try again in a few seconds.</span>")
+					else //if this guy is seriously just mashing the soporific button...
+						to_chat(usr, "[pick( \
+						"<span class='warning'>This guy just got jammed into the machine, give them a breath before trying to pump them full of drugs.</span>", \
+						"<span class='warning'>Give it a rest.</span>", \
+						"<span class='warning'>Aren't you going to tuck them in before putting them to sleep?</span>", \
+						"<span class='warning'>Slow down just a second, they aren't going anywhere... right?</span>", \
+						"<span class='warning'>Just got to make sure you're not tripping the fuck out of an innocent bystander, stay tight.</span>", \
+						"<span class='warning'>The occupant is still moving around!</span>", \
+						"<span class='warning'>Sorry pal, safety procedures.</span>", \
+						"<span class='warning'>But it's not bedtime yet!</span>")]")
+					src.connected.sedativeblock++
+				else if(src.connected.occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
+					to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
+				else
+					if(!(href_list["chemical"] in connected.available_options)) //href exploitu go home
+						to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["chemical"]] button was there just a second ago!")
 					else
-						src.connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
+						connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
 		if (href_list["wakeup"])
 			connected.wakeup(usr)
 		if (href_list["toggle_autoeject"])
@@ -171,7 +173,7 @@
 	var/amounts = list(5, 10)
 	var/obj/machinery/sleep_console/connected = null
 	var/sedativeblock = 0 //To prevent people from being surprisesoporific'd
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -518,6 +520,7 @@
 		if(occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
+			occupant.resting = 0
 		src.on = 0
 		if(auto_eject_after)
 			src.go_out()
@@ -530,8 +533,9 @@
 		if(x in component_parts)
 			continue
 		x.forceMove(src.loc)
-	occupant.forceMove(exit)
-	occupant.reset_view()
+	if(!occupant.gcDestroyed)
+		occupant.forceMove(exit)
+		occupant.reset_view()
 	occupant = null
 	update_icon()
 	return 1
@@ -622,7 +626,7 @@
 	light_color = LIGHT_COLOR_ORANGE
 	automatic = 1
 	drag_delay = 0
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 
 
 /obj/machinery/sleeper/mancrowave/go_out(var/exit = src.loc)
@@ -769,7 +773,7 @@
 	if(connected.automatic && connected.occupant && !connected.on)
 		connected.cook("Thermoregulate")
 	if(!connected.on)
-	else if(!src || !connected || !connected.occupant || connected.occupant.loc != connected) //Check if someone's released/replaced/bombed him already
+	else if(!src || !connected || !connected.occupant || connected.occupant.loc != connected || connected.occupant.gcDestroyed) //Check if someone's released/replaced/bombed him already
 		connected.occupant = null
 		connected.on = 0
 		connected.update_icon()

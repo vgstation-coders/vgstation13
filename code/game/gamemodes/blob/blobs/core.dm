@@ -1,7 +1,7 @@
 /obj/effect/blob/core
 	name = "blob core"
 	icon_state = "core"
-	desc = "Some big pulsating blob creature thingy"
+	desc = "A part of a blob. It is large and pulsating."
 	health = 200
 	maxhealth = 200
 	fire_resist = 2

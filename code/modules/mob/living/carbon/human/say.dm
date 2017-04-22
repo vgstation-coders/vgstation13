@@ -49,10 +49,9 @@
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]
-			for(var/datum/disease2/effectholder/EFH in V.effects)
-				var/datum/disease2/effect/effect = EFH.effect
-				if(effect.affect_voice && effect.affect_voice_active)
-					effect.affect_mob_voice(speech)
+			for(var/datum/disease2/effect/e in V.effects)
+				if(e.affect_voice && e.affect_voice_active)
+					e.affect_mob_voice(speech)
 	..(speech)
 	if(dna)
 		species.handle_speech(speech,src)
@@ -193,3 +192,6 @@
 	//		return 1
 	//	return 0
 	return ..()
+
+/mob/living/carbon/human/can_read()
+	return TRUE //no brain damage checks for now

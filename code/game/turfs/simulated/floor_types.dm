@@ -362,8 +362,14 @@
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "concrete"
 
+/turf/simulated/floor/plating/snow/cold
+	temperature = 273
 /turf/simulated/floor/plating/snow/ex_act(severity)
 	return
+
+/turf/simulated/floor/plating/snow/ice
+	name = "ice"
+	icon_state = "ice"
 
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"

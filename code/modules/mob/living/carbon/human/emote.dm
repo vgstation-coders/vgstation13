@@ -101,7 +101,7 @@
 
 		if ("choke")
 			if(miming)
-				msg = "<B>[src]</B> clutches his throat desperately!"
+				msg = "<B>[src]</B> clutches \his throat desperately!"
 				m_type = VISIBLE
 			else
 				if (!muzzled)
@@ -234,8 +234,8 @@
 			if(M_ELVIS in mutations)
 				src.emote("fart")
 				msg = "<B>[src]</B> has left the building..."
-			if(M_HARDCORE in mutations)
-				msg = "<B>[src]</B> whispers with his final breath, <i>'i told u i was hardcore..'</i>"
+			if(!miming && (M_HARDCORE in mutations))
+				msg = "<B>[src]</B> whispers with \his final breath, <i>'i told u i was hardcore..'</i>"
 			else
 				if(isgolem(src))
 					msg = "<B>[src]</B> crumbles into dust..."
@@ -655,7 +655,7 @@
 					var/wearing_mask=0
 					if(wear_suit && wear_suit.body_parts_covered & LOWER_TORSO)
 						wearing_suit=1
-						if (internal != null && wear_mask && (wear_mask.flags & MASKINTERNALS))
+						if (internal != null && wear_mask && (wear_mask.clothing_flags & MASKINTERNALS))
 							wearing_mask=1
 
 					// Process toxic farts first.
@@ -669,7 +669,7 @@
 						else
 							// Was /turf/, now /mob/
 							for(var/mob/living/M in view(location,aoe_range))
-								if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
+								if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
 									continue
 								if(!airborne_can_reach(location,get_turf(M),aoe_range))
 									continue
@@ -775,10 +775,3 @@
 			visible_message(msg)
 		else if (m_type & HEARABLE)
 			visible_message(message = msg, blind_message = msg, ignore_self = (stat==UNCONSCIOUS)?1:0) // stop spamming ourselves with our own emotes when unconscious
-
-/mob/living/carbon/human/verb/pose()
-	set name = "Set Pose"
-	set desc = "Sets a description which will be shown when someone examines you."
-	set category = "IC"
-
-	pose =  copytext(sanitize(input(usr, "This is [src]. \He is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)

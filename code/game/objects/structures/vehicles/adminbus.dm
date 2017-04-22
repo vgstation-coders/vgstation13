@@ -308,7 +308,7 @@
 	update_rearview()
 
 /obj/structure/bed/chair/vehicle/adminbus/buckle_mob(mob/M, mob/user)
-	if(M != user|| !ismob(M)|| get_dist(src, user) > 1|| user.restrained()|| user.lying|| user.stat|| M.locked_to|| istype(user, /mob/living/silicon)|| destroyed)
+	if(M != user|| !ismob(M)|| get_dist(src, user) > 1|| user.restrained()|| user.lying|| user.stat|| M.locked_to|| istype(user, /mob/living/silicon))
 		return
 
 	if(!(istype(user,/mob/living/carbon/human/dummy) || istype(user,/mob/living/simple_animal/corgi/Ian)))
@@ -388,7 +388,7 @@
 		for(var/i=1;i<=MAX_CAPACITY;i++)
 			var/mob/living/M = occupant
 			M.client.screen -= M.gui_icons.rearviews[i]
-			var/obj/screen/adminbus/S = M.gui_icons.rearviews[i]
+			var/obj/abstract/screen/adminbus/S = M.gui_icons.rearviews[i]
 			var/icon/passenger_img = null
 			var/atom/A = null
 			if(i<=passengers.len)

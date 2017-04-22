@@ -169,7 +169,7 @@
 			src.toggle_power()
 			return
 		//emit some particles
-		for(var/obj/structure/particle_accelerator/particle_emitter/PE in connected_parts)
+		for(var/obj/structure/particle_accelerator/particle_emitter/center/PE in connected_parts)
 			if(PE)
 				PE.emit_particle(src.strength)
 	return
@@ -277,4 +277,9 @@
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
-	return
+
+/obj/machinery/particle_accelerator/control_box/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)

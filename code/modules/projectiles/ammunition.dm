@@ -11,6 +11,9 @@
 	var/caliber = ""							//Which kind of guns it can be loaded into
 	var/projectile_type = ""//The bullet type to create when New() is called
 	var/obj/item/projectile/BB = null 			//The loaded bullet
+	shrapnel_amount = 1
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small"
+	shrapnel_size = 1
 
 
 /obj/item/ammo_casing/New()
@@ -26,6 +29,15 @@
 	name = "[BB ? "" : "spent "][initial(name)]"
 	icon_state = "[initial(icon_state)][BB ? "-live" : ""]"
 	desc = "[initial(desc)][BB ? "" : " This one is spent."]"
+
+/obj/item/ammo_casing/get_shrapnel_projectile()
+	if(BB)
+
+		var/obj/item/projectile/bullet_bill = BB
+		BB = null
+		return bullet_bill
+	else
+		return new shrapnel_type(src)
 
 
 //Boxes of ammo

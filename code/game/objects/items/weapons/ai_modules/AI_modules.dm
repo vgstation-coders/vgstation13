@@ -146,8 +146,11 @@ Refactored AI modules by N3X15
 /******************** keeper (MoMMIs only) *******************/
 
 /obj/item/weapon/aiModule/keeper
-	name = "'Keeper' AI Module"
+	modname = "KEEPER"
 	desc = "HOW DID YOU GET THIS OH GOD WHAT.  Hidden lawset for MoMMIs."
+
+/obj/item/weapon/aiModule/keeper/updateLaw()
+	return
 
 /obj/item/weapon/aiModule/keeper/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()

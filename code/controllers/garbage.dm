@@ -4,6 +4,8 @@
 //#define GC_DEBUG
 //#define GC_FINDREF
 
+/datum/var/gcDestroyed
+
 var/datum/garbage_collector/garbageCollector
 var/soft_dels = 0
 
@@ -128,6 +130,9 @@ world/loop_checks = 0
 	if(isnull(D))
 		return
 
+	if(D.being_sent_to_past())
+		return
+
 	if(isnull(garbageCollector))
 		del(D)
 		return
@@ -151,31 +156,37 @@ world/loop_checks = 0
 
 		garbageCollector.addTrash(D)
 
+/datum/proc/being_sent_to_past()
+	if(being_sent_to_past)
+		return 1
+
+/atom/movable/being_sent_to_past()
+	if(..())
+		invisibility = 101
+		density = 0
+		anchored = 1
+		timestopped = 1
+		flags |= INVULNERABLE | TIMELESS
+		if(loc)
+			if(ismob(loc))
+				var/mob/M = loc
+				M.drop_item(src, force_drop = 1)
+		forceMove(null)
+		return 1
+/*
 /datum/controller
 	var/processing = 0
 	var/iteration = 0
 	var/processing_interval = 0
 
 /datum/controller/proc/recover() // If we are replacing an existing controller (due to a crash) we attempt to preserve as much as we can.
-
+*/
 /*
  * Like Del(), but for qdel.
  * Called BEFORE qdel moves shit.
  */
 /datum/proc/Destroy()
 	qdel(src, 1, 1)
-
-/client/proc/qdel_toggle()
-	set name = "Toggle qdel Behavior"
-	set desc = "Toggle qdel usage between normal and force del()."
-	set category = "Debug"
-
-	garbageCollector.del_everything = !garbageCollector.del_everything
-	to_chat(world, "<b>GC: qdel turned [garbageCollector.del_everything ? "off" : "on"].</b>")
-	log_admin("[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].")
-	message_admins("<span class='notice'>[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].</span>", 1)
-
-
 
 #ifdef GC_FINDREF
 /datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)

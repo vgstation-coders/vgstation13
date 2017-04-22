@@ -76,11 +76,7 @@
 		user.visible_message("<span class='warning'>[user] [anchored ? "":"un"]anchors \the [src] [anchored ? "to":"from"] the floor.</span>", \
 		"<span class='notice'>You [anchored ? "":"un"]anchor the [src] [anchored ? "to":"from"] the floor.</span>")
 	else if(istype(O, /obj/item/weapon/pen))
-		var/newname = stripped_input(user, "What category title would you like to give to this [name]?")
-		if(!newname)
-			return
-		else
-			name = ("bookcase ([sanitize(newname)])")
+		set_tiny_label(user)
 	else if(O.damtype == BRUTE || O.damtype == BURN)
 		user.delayNextAttack(10) //We are attacking the bookshelf
 		health -= O.force
@@ -89,6 +85,11 @@
 		healthcheck()
 	else
 		return ..() //Weapon checks for weapons without brute or burn damage type and grab check
+
+//AAHHHHHHHHH HARDMAPPING
+/obj/structure/bookcase/set_labeled()
+	name = initial(name)
+	..()
 
 /obj/structure/bookcase/attack_hand(var/mob/user as mob)
 	if(contents.len)

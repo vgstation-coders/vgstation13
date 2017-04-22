@@ -61,6 +61,23 @@
 */
 //No longer weak to fire
 
+/*Code for aliens attacking aliens. Because aliens act on a hivemind, I don't see them as very aggressive with each other.
+As such, they can either help or harm other aliens. Help works like the human help command while harm is a simple nibble.
+In all, this is a lot like the monkey code. /N
+*/
+
+/mob/living/carbon/alien/attack_alien(mob/living/carbon/alien/humanoid/M)
+	..()
+
+	switch(M.a_intent)
+
+		if(I_HELP)
+			help_shake_act(M)
+		if(I_GRAB)
+			M.grab_mob(src)
+		else
+			M.unarmed_attack_mob(src)
+
 /mob/living/carbon/alien/proc/getPlasma()
 	return plasma
 

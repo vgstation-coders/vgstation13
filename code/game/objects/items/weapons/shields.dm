@@ -3,7 +3,7 @@
 
 /obj/item/weapon/shield/riot
 	name = "riot shield"
-	desc = "A shield adept at blocking blunt objects from connecting with the torso of the shield wielder."
+	desc = "A shield adept at blocking blunt objects from connecting with the shield's wielder."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "riot"
 	flags = FPRINT
@@ -109,7 +109,7 @@
 		return 0
 
 /obj/item/weapon/shield/energy/attack_self(mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50))
+	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You beat yourself in the head with [src].</span>")
 		user.take_organ_damage(5)
 	active = !active
@@ -218,8 +218,8 @@
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/shield/riot/bone/New(turf/T, var/p_borer = null)
-	..(T)
+/obj/item/weapon/shield/riot/bone/New(atom/A, var/p_borer = null)
+	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	if(!parent_borer)

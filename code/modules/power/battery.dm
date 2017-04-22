@@ -24,7 +24,7 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
-	if(stat & BROKEN)
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
 		return
 
 	overlays += battery_online[online + 1]
@@ -86,7 +86,8 @@ var/global/list/battery_online =	list(
 	smes_output_max = initial(smes_output_max) + lasercount*25000
 
 /obj/machinery/power/battery/process()
-	if (stat & BROKEN)
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		last_charge = 0
 		return
 
 	if(infinite_power) //Only used for magical machines - BEWARE
@@ -203,7 +204,7 @@ var/global/list/battery_online =	list(
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "smes.tmpl", "SMES Power Storage Unit", 540, 380)
+		ui = new(user, src, ui_key, "smes.tmpl", "The SMES Unit", 540, 380)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -297,24 +298,19 @@ var/global/list/battery_online =	list(
 
 
 /obj/machinery/power/battery/emp_act(severity)
-
-	var/old_online = online
-	var/old_charging = charging
-	var/old_output = output
-
-	online = 0
-	charging = 0
-	output = 0
 	charge = max(0, charge - 1e6/severity)
-
+	stat |= EMPED
 	spawn(100)
-		if(output == 0)
-			output = old_output
-		if(online == 0)
-			online = old_online
-		if(charging == 0)
-			charging = old_charging
+		stat &= ~EMPED
 	..()
+
+/obj/machinery/power/battery/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Toggle on/off
+		online = !online
+		update_icon()
+	else //Screw up power input/output
+		chargelevel = rand(0, smes_input_max)
+		output = rand(0, smes_output_max)
 
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
 	var/href = "<A href='?src=\ref[S];rate control=1;[V]"

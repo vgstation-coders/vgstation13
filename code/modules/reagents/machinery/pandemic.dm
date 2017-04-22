@@ -172,11 +172,8 @@
 /obj/machinery/computer/pandemic/proc/detach()
 	beaker.forceMove(src.loc)
 	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-		var/mob/living/silicon/robot/R = beaker:holder:loc
-		if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-			beaker.forceMove(R)
-		else
-			beaker.forceMove(beaker:holder)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
+		borgbeak.return_to_modules()
 	beaker = null
 	overlays -= image(icon = icon, icon_state = "mixer_overlay")
 	src.updateUsrDialog()
@@ -281,7 +278,7 @@
 	return
 
 
-/obj/machinery/computer/pandemic/attackby(var/obj/I as obj, var/mob/user as mob)
+/obj/machinery/computer/pandemic/attackby(var/obj/item/I as obj, var/mob/user as mob)
 	if(..())
 		return 1
 	else if(istype(I, /obj/item/weapon/reagent_containers/glass))
@@ -289,6 +286,9 @@
 			return
 		if(src.beaker)
 			to_chat(user, "A beaker is already loaded into the machine.")
+			return
+		if(I.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [I] is too big to fit.</span>")
 			return
 		if(!user.drop_item(I, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")

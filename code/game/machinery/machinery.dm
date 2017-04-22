@@ -151,6 +151,7 @@ Class Procs:
 	var/emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
+	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
@@ -200,6 +201,7 @@ Class Procs:
 	return PROJREACT_OBJS
 
 /obj/machinery/process() // If you dont use process or power why are you here
+	set waitfor = FALSE
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
@@ -550,6 +552,7 @@ Class Procs:
 	return emag_cost
 
 /obj/machinery/attackby(var/obj/O, var/mob/user)
+	..()
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
@@ -562,7 +565,8 @@ Class Procs:
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
 				return -1 //state set to 2, can't do it
 			else
-				if(wrenchAnchor(user) && machine_flags && FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+				// wrenchAnchor returns -1 on check failures, for some reason.
+				if(wrenchAnchor(user) == 1 && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
 					return 1
@@ -573,7 +577,7 @@ Class Procs:
 	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
 
-	if(iswelder(O) && machine_flags & WELD_FIXED)
+	if(iswelder(O) && machine_flags & WELD_FIXED && canAffixHere(user))
 		return weldToFloor(O, user)
 
 	if(iscrowbar(O) && machine_flags & CROWDESTROY)
@@ -605,14 +609,14 @@ Class Procs:
 	if(!P.hackloop(src))
 		return 0
 	return 1
-	
+
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
 	return(src in machines)
-	
+
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
-	if(!user.Adjacent(src))
+	if(!istype(user) || !user.Adjacent(src))
 		return 0
 	if(!prob(prb))
 		return 0
@@ -718,3 +722,9 @@ Class Procs:
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity
+
+	if(scan)
+		if(prob(50))
+			scan.forceMove(get_turf(src))
+			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
+			scan = null

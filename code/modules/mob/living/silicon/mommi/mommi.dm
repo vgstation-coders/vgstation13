@@ -15,7 +15,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
 	var/picked = 0
 	var/subtype="keeper"
-	var/obj/screen/inv_tool = null
+	var/obj/abstract/screen/inv_tool = null
 	var/prefix = "Mobile MMI"
 	var/damage_control_network = "Damage Control"
 
@@ -27,8 +27,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	mob_swap_flags = ALLMOBS
 	mob_push_flags = 0
 
-	var/tool_state = null
-	var/head_state = null
+	var/obj/item/tool_state = null
+	var/obj/item/head_state = null
 
 	modtype = "robot" // Not sure what this is, but might be cool to have seperate loadouts for MoMMIs (e.g. paintjobs and tools)
 	//Cyborgs will sync their laws with their AI by default, but we may want MoMMIs to be mute independents at some point, kinda like the Keepers in Ass Effect.
@@ -209,7 +209,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	// Check to see if we're emagged.  If so, we disable KEEPER.
 	keeper = 0
 
-/mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
 		var/obj/item/stack/cable_coil/coil = W
 		adjustFireLoss(-30)
@@ -312,6 +312,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		return 0
 
 	else
+		user.do_attack_animation(src, W)
 		spark_system.start()
 		return ..()
 

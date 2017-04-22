@@ -49,7 +49,7 @@ proc/SetupXenoarch()
 		//dont create artifact machinery in animal or plant digsites, or if we already have one
 		if(!M.artifact_find && digsite != 1 && digsite != 2 && prob(ARTIFACT_SPAWN_CHANCE))
 			M.artifact_find = new()
-			master_controller.artifact_spawning_turfs.Add(M)
+			SSxenoarch.artifact_spawning_turfs.Add(M)
 
 		if(isnull(M.geologic_data))
 			M.geologic_data = new/datum/geosample(M)

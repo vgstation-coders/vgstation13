@@ -20,6 +20,7 @@
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_mask
+	held_items = list()
 
 /mob/living/simple_animal/crab/Life()
 	if(timestopped)
@@ -87,7 +88,7 @@
 
 /mob/living/simple_animal/crab/snowy
 	name = "Snowy"
-	desc = "While you'd think that most crabs in cold climates would stick to the relatively warmer water, this one's adapted to living on the land and has camouflage to boot"
+	desc = "While you'd think that most crabs in cold climates would stick to the relatively warmer water, this one's adapted to living on the land and even has camouflage to boot!"
 	icon_state = "snowcrab"
 	icon_living = "snowcrab"
 	icon_dead = "snowcrab_dead"

@@ -1,18 +1,3 @@
-/*/obj/effect/plantsegment/HasProximity(var/mob/living/M)
-
-	if(!istype(M) || !Adjacent(M))
-		return
-
-	if(!is_mature() || limited_growth)
-		return
-
-	if(!(locked_atoms && locked_atoms.len) && !M.locked_to && !M.anchored && (M.size <= SIZE_SMALL || prob(round(seed.potency/6))) )
-		//wait a tick for the Entered() proc that called HasProximity() to finish (and thus the moving animation),
-		//so we don't appear to teleport from two tiles away when moving into a turf adjacent to vines.
-		spawn(1)
-			if(M && !M.locked_to)
-				entangle_mob(M)*/
-
 /obj/effect/plantsegment/proc/special_cooldown()
 	return world.time >= last_special + max(3 SECONDS, 100-seed.potency)
 
@@ -169,13 +154,13 @@
 		to_chat(victim, "<span class='danger'>The vines [pick("wind", "tangle", "tighten")] around you!</span>")
 
 /obj/effect/plantsegment/proc/grab_mob(var/mob/living/victim)
-	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
+	if(!victim || victim.locked_to || !Adjacent(victim)|| !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
 		return
 
 	var/can_grab = 1
 	if(istype(victim, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = victim
-		if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP))
+		if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.clothing_flags & NOSLIP))
 			can_grab = 0
 	if(can_grab)
 		src.visible_message("<span class='danger'>Tendrils lash out from \the [src] and drag \the [victim] in!</span>")

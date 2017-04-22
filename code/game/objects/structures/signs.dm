@@ -125,47 +125,47 @@
 
 /obj/structure/sign/biohazard
 	name = "BIOHAZARD"
-	desc = "A warning sign which reads 'BIOHAZARD'"
+	desc = "A warning sign which reads 'BIOHAZARD'."
 	icon_state = "bio"
 
 /obj/structure/sign/electricshock
 	name = "HIGH VOLTAGE"
-	desc = "A warning sign which reads 'HIGH VOLTAGE'"
+	desc = "A warning sign which reads 'HIGH VOLTAGE'."
 	icon_state = "shock"
 
 /obj/structure/sign/examroom
 	name = "EXAM"
-	desc = "A guidance sign which reads 'EXAM ROOM'"
+	desc = "A guidance sign which reads 'EXAM ROOM'."
 	icon_state = "examroom"
 
 /obj/structure/sign/vacuum
 	name = "HARD VACUUM AHEAD"
-	desc = "A warning sign which reads 'HARD VACUUM AHEAD'"
+	desc = "A warning sign which reads 'HARD VACUUM AHEAD'."
 	icon_state = "space"
 
 /obj/structure/sign/deathsposal
 	name = "DISPOSAL LEADS TO SPACE"
-	desc = "A warning sign which reads 'DISPOSAL LEADS TO SPACE'"
+	desc = "A warning sign which reads 'DISPOSAL LEADS TO SPACE'."
 	icon_state = "deathsposal"
 
 /obj/structure/sign/pods
 	name = "ESCAPE PODS"
-	desc = "A warning sign which reads 'ESCAPE PODS'"
+	desc = "A warning sign which reads 'ESCAPE PODS'."
 	icon_state = "pods"
 
 /obj/structure/sign/fire
 	name = "DANGER: FIRE"
-	desc = "A warning sign which reads 'DANGER: FIRE'"
+	desc = "A warning sign which reads 'DANGER: FIRE'."
 	icon_state = "fire"
 
 /obj/structure/sign/nosmoking_1
 	name = "NO SMOKING"
-	desc = "A warning sign which reads 'NO SMOKING'"
+	desc = "A warning sign which reads 'NO SMOKING'."
 	icon_state = "nosmoking"
 
 /obj/structure/sign/nosmoking_2
 	name = "NO SMOKING"
-	desc = "A warning sign which reads 'NO SMOKING'"
+	desc = "A warning sign which reads 'NO SMOKING'."
 	icon_state = "nosmoking2"
 
 /obj/structure/sign/redcross
@@ -180,12 +180,12 @@
 
 /obj/structure/sign/goldenplaque
 	name = "The Most Robust Men Award for Robustness"
-	desc = "To be Robust is not an action or a way of life, but a mental state. Only those with the force of Will strong enough to act during a crisis, saving friend from foe, are truly Robust. Stay Robust my friends."
+	desc = "\"To be robust is not an action or a way of life, but a mental state. Only those with the force of will strong enough to act during a crisis, saving friend from foe, acting when everyone else may think and act against you, are truly robust. Stay robust, my friends.\""
 	icon_state = "goldenplaque"
 
 /obj/structure/sign/kiddieplaque
 	name = "\improper AI developer's plaque"
-	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\""
+	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\"."
 	icon_state = "kiddieplaque"
 
 /obj/structure/sign/atmosplaque
@@ -195,12 +195,12 @@
 
 /obj/structure/sign/science			//These 3 have multiple types, just var-edit the icon_state to whatever one you want on the map
 	name = "SCIENCE!"
-	desc = "A warning sign which reads 'SCIENCE!'"
+	desc = "A warning sign which reads 'SCIENCE!'."
 	icon_state = "science1"
 
 /obj/structure/sign/chemistry
 	name = "CHEMISTRY"
-	desc = "A warning sign which reads 'CHEMISTRY'"
+	desc = "A warning sign which reads 'CHEMISTRY'."
 	icon_state = "chemistry1"
 
 /obj/structure/sign/chemtable
@@ -210,7 +210,7 @@
 
 /obj/structure/sign/botany
 	name = "HYDROPONICS"
-	desc = "A warning sign which reads 'HYDROPONICS'"
+	desc = "A warning sign which reads 'HYDROPONICS'."
 	icon_state = "hydro1"
 
 /obj/structure/sign/directions/science
@@ -230,7 +230,7 @@
 
 /obj/structure/sign/directions/medical
 	name = "Medical Bay"
-	desc = "A direction sign, pointing out which way Meducal Bay is."
+	desc = "A direction sign, pointing out the direction of the medical bay."
 	icon_state = "direction_med"
 
 /obj/structure/sign/directions/evac

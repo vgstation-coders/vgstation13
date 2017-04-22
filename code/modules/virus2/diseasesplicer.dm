@@ -4,7 +4,7 @@
 	icon_state = "virus"
 	circuit = "/obj/item/weapon/circuitboard/splicer"
 
-	var/datum/disease2/effectholder/memorybank = null
+	var/datum/disease2/effect/memorybank = null
 	var/analysed = 0
 	var/obj/item/weapon/virusdish/dish = null
 	var/burning = 0
@@ -59,9 +59,9 @@
 		if(memorybank)
 			dat += "<A href='?src=\ref[src];splice=1'>"
 			if(analysed)
-				dat += "[memorybank.effect.name] ([5-memorybank.effect.stage])"
+				dat += "[memorybank.name] ([memorybank.stage])"
 			else
-				dat += "Unknown DNA strand ([5-memorybank.effect.stage])"
+				dat += "Unknown DNA strand ([memorybank.stage])"
 			dat += "</a>"
 
 			dat += "<BR><A href='?src=\ref[src];disk=1'>Burn DNA Sequence to data storage disk</a>"
@@ -73,11 +73,11 @@
 		if(dish)
 			if(dish.virus2)
 				if(dish.growth >= 50)
-					for(var/datum/disease2/effectholder/e in dish.virus2.effects)
+					for(var/datum/disease2/effect/e in dish.virus2.effects)
 						dat += "<BR><A href='?src=\ref[src];grab=\ref[e]'> DNA strand"
 						if(dish.analysed)
-							dat += ": [e.effect.name]"
-						dat += " (5-[e.effect.stage])</a>"
+							dat += ": [e.name]"
+						dat += " ([e.stage])</a>"
 				else
 					dat += "<BR>Insufficent cells to attempt gene splicing."
 			else
@@ -111,9 +111,9 @@
 		if(!burning)
 			var/obj/item/weapon/diseasedisk/d = new /obj/item/weapon/diseasedisk(src.loc)
 			if(analysed)
-				d.name = "[memorybank.effect.name] GNA disk (Stage: [5-memorybank.effect.stage])"
+				d.name = "[memorybank.name] GNA disk (Stage: [memorybank.stage])"
 			else
-				d.name = "Unknown GNA disk (Stage: [5-memorybank.effect.stage])"
+				d.name = "Unknown GNA disk (Stage: [memorybank.stage])"
 			d.effect = memorybank
 			alert_noise("ping")
 
@@ -138,6 +138,7 @@
 		if (spliced != 0)
 			//Here we generate a new ID so the spliced pathogen gets it's own entry in the database instead of being shown as the old one.
 			dish.virus2.uniqueID = rand(0,10000)
+			dish.info = dish.virus2.get_info()
 			dish.virus2.addToDB()
 			spliced = 0
 
@@ -146,14 +147,14 @@
 
 	else if(href_list["splice"])
 		if(dish)
-			for(var/datum/disease2/effectholder/e in dish.virus2.effects)
-				var/old_e=e.effect.name
+			for(var/x = 1 to dish.virus2.effects.len)
+				var/datum/disease2/effect/e = dish.virus2.effects[x]
 				if(e.stage == memorybank.stage)
-					e.effect = memorybank.effect
-					dish.virus2.log += "<br />[timestamp()] [e.effect.name] spliced in by [key_name(usr)] (replaces [old_e])"
+					dish.virus2.effects[x] = memorybank.getcopy(dish.virus2)
+					log_debug("Virus [dish.virus2.uniqueID] had [memorybank.name] spliced into to replace [e.name] by [key_name(usr)].")
+					dish.virus2.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
 
 			splicing = 10
-//			dish.virus2.spreadtype = "Blood"
 
 	else if(href_list["disk"])
 		burning = 10

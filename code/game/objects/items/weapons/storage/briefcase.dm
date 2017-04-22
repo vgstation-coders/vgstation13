@@ -30,7 +30,7 @@
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	//..()
 
-	if ((M_CLUMSY in user.mutations) && prob(50))
+	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
@@ -143,3 +143,22 @@
 	var/obj/item/weapon/gun/projectile/automatic/SMG = new
 	SMG.gun_flags &= ~AUTOMAGDROP //dont want to drop mags in null space, do we?
 	stored_item = SMG
+
+/obj/item/weapon/storage/briefcase/bees
+	var/released = FALSE
+
+/obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
+	if(!released)
+		release()
+	..()
+
+/obj/item/weapon/storage/briefcase/bees/proc/release()
+	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
+	var/mob/living/simple_animal/bee/BEE = new(get_turf(src))
+	BEE.strength = 20
+	BEE.toxic = 5
+	BEE.mut = 2
+	BEE.feral = 25
+	BEE.icon_state = "bees_swarm-feral"
+	BEE.newTarget()
+	released = TRUE

@@ -270,12 +270,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	return
 
 /obj/machinery/nuclearbomb/blob_act()
-	if (src.timing == -1.0)
-		return
-	else
-		return ..()
 	return
-
 
 #define NUKERANGE 80
 /obj/machinery/nuclearbomb/proc/explode()
@@ -295,6 +290,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
+	explosion(bomb_location, 30, 60, 120, 120, 10)
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
 		if( (bomb_location.x < (world.maxx/2-NUKERANGE)) || (bomb_location.x > (world.maxx/2+NUKERANGE)) || (bomb_location.y < (world.maxy-NUKERANGE)) || (bomb_location.y > (world.maxy+NUKERANGE)) )
 			off_station = 1
@@ -341,11 +337,23 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 	return
 
+/obj/machinery/nuclearbomb/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"deployable",
+		"extended",
+		"timeleft",
+		"timing",
+		"safety")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
 	icon_state = "nucleardisk"
 	item_state = "card-id"
+	flags = FPRINT | TIMELESS
 	w_class = W_CLASS_TINY
 	var/respawned = 0
 
@@ -353,8 +361,10 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	..()
 	if(!nukedisk)
 		nukedisk = src
+	processing_objects.Add(src)
 
 /obj/item/weapon/disk/nuclear/Destroy()
+	processing_objects.Remove(src)
 	..()
 	replace_disk()
 
@@ -362,6 +372,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
  * NOTE: Don't change it to Destroy().
  */
 /obj/item/weapon/disk/nuclear/Del()
+	processing_objects.Remove(src)
 	replace_disk()
 	..()
 
@@ -374,3 +385,10 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 		message_admins("[log_message] [formatJumpTo(picked_turf, picked_area)]")
 		nukedisk = new /obj/item/weapon/disk/nuclear(picked_turf)
 		respawned = 1
+
+/obj/item/weapon/disk/nuclear/process()
+	if(!get_turf(src))
+		var/atom/A
+		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
+		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
+		qdel(src)

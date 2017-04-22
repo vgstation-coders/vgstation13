@@ -32,7 +32,7 @@
  *
  * */
 
-//The person who made this honestly thought that the average coder from the distant future of 2015 would understand any of this shit without a thorough and painful examination
+//The person who made this honestly thought that the average coder from the distant future of 2017 would understand any of this shit without a thorough and painful examination
 //And this is exactly why any Chemistry-related system is impenetrable to anyone but the best coders, even things theorically as simple as this
 //So as I decrypt this arcane coding technology, I'll add comments where I see it fit, so absolutely fucking everywhere
 //I'll take my Nobel Prize with fries thank you

@@ -4,7 +4,7 @@
 
 /obj/item/weapon/melee/defibrillator
 	name = "emergency defibrillator"
-	desc = "Used to restore fibrilating patients, and somehow bring them back from the dead too."
+	desc = "Used to restore fibrillating patients."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "defib_full"
 	item_state = "defib"
@@ -47,7 +47,7 @@
 
 /obj/item/weapon/melee/defibrillator/attack_self(mob/user)
 	if(charges || ready)
-		if((M_CLUMSY in user.mutations) && prob(50) && charges)
+		if(clumsy_check(user) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
 			sparks.start()
 			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
@@ -137,7 +137,7 @@
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
 		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
-		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations  || !target.has_brain() || target.suiciding == 1)
+		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations || !target.has_brain() || target.suiciding == 1)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
 		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here

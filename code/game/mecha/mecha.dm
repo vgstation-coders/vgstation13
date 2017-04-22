@@ -87,7 +87,6 @@
 /obj/mecha/New()
 	..()
 	events = new
-	icon_state += "-open"
 	add_radio()
 	add_cabin()
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
@@ -104,6 +103,7 @@
 	loc.Entered(src)
 	mechas_list += src //global mech list
 	reset_icon()
+	icon_state += "-open"
 	return
 
 /obj/mecha/Destroy()
@@ -232,8 +232,8 @@
 
 		if(!istype(object, /atom))
 			return
-		if(istype(object, /obj/screen))
-			var/obj/screen/using = object
+		if(istype(object, /obj/abstract/screen))
+			var/obj/abstract/screen/using = object
 			if(using.screen_loc == ui_acti || using.screen_loc == ui_iarrowleft || using.screen_loc == ui_iarrowright)//ignore all HUD objects save 'intent' and its arrows
 				return ..()
 			else
@@ -507,9 +507,9 @@
 		src.destroy()
 	return
 
-/obj/mecha/attack_hand(mob/user as mob)
+/obj/mecha/attack_hand(mob/living/user as mob)
 	src.log_message("Attack by hand/paw. Attacker - [user].",1)
-
+	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -524,7 +524,8 @@
 	return src.attack_hand(user)
 
 
-/obj/mecha/attack_alien(mob/user as mob)
+/obj/mecha/attack_alien(mob/living/user as mob)
+	user.do_attack_animation(src, user)
 	src.log_message("Attack by alien. Attacker - [user].",1)
 	if(!prob(src.deflect_chance))
 		src.take_damage(15)
@@ -542,10 +543,12 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_animal(mob/living/simple_animal/user as mob)
+	user.do_attack_animation(src, user)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)
 	if(user.melee_damage_upper == 0)
 		user.emote("[user.friendly] [src]")
 	else
+		add_logs(user, src, "attacked", admin = user.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
 		if(!prob(src.deflect_chance))
 			var/damage = rand(user.melee_damage_lower, user.melee_damage_upper)
 			src.take_damage(damage)
@@ -718,8 +721,9 @@
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 	return
 
-/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	user.delayNextAttack(8)
+	user.do_attack_animation(src, W)
 	src.log_message("Attacked by [W]. Attacker - [user]")
 	if(prob(src.deflect_chance))
 		to_chat(user, "<span class='attack'>The [W] bounces off [src.name] armor.</span>")
@@ -1075,7 +1079,7 @@
 		return
 	src.log_message("[usr] tries to move in.")
 	if (src.occupant)
-		to_chat(usr, "<span class='bnotice'>The [src.name] is already occupied!</span>")
+		to_chat(usr, "<span class='bnotice'>\The [src] is already occupied!</span>")
 		src.log_append_to_last("Permission denied.")
 		return
 /*
@@ -1098,7 +1102,7 @@
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
-	visible_message("<span class='notice'>[usr] starts to climb into [src.name]</span>")
+	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 
 	if(enter_after(40,usr))

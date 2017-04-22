@@ -5,7 +5,8 @@
 	voice_name = "unknown"
 	icon = 'icons/mob/human.dmi'
 	icon_state = "body_m_s"
-	can_butcher = 0
+	can_butcher = 1
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
 	var/list/hud_list[9]
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
@@ -66,7 +67,10 @@
 	h_style = "Bald"
 	..(new_loc, "Golem")
 	gender = NEUTER
-	meat_type = /obj/item/weapon/ore/diamond
+
+/mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Grue")
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
@@ -115,6 +119,8 @@
 		else
 			src.set_species()
 
+	movement_speed_modifier = species.move_speed_multiplier
+
 	default_language = get_default_language()
 
 	create_reagents(1000)
@@ -134,29 +140,29 @@
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
 
-	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/Overlays/fire_layer)
-	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/Overlays/mutantrace_layer)
-	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/Overlays/damage_layer)
-	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/Overlays/uniform_layer)
-	obj_overlays[ID_LAYER]			= getFromPool(/obj/Overlays/id_layer)
-	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/Overlays/shoes_layer)
-	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/Overlays/gloves_layer)
-	obj_overlays[EARS_LAYER]		= getFromPool(/obj/Overlays/ears_layer)
-	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/Overlays/suit_layer)
-	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/Overlays/glasses_layer)
-	obj_overlays[BELT_LAYER]		= getFromPool(/obj/Overlays/belt_layer)
-	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/Overlays/suit_store_layer)
-	obj_overlays[BACK_LAYER]		= getFromPool(/obj/Overlays/back_layer)
-	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/Overlays/hair_layer)
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/Overlays/glasses_over_hair_layer)
-	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/Overlays/facemask_layer)
-	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
-	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/Overlays/handcuff_layer)
-	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/Overlays/legcuff_layer)
-	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer) //moved to human/update_inv_hand()
-	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/Overlays/tail_layer)
-	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/Overlays/targeted_layer)
+	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
+	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
+	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
+	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
+	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
+	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
+	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/abstract/Overlays/gloves_layer)
+	obj_overlays[EARS_LAYER]		= getFromPool(/obj/abstract/Overlays/ears_layer)
+	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
+	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/abstract/Overlays/glasses_layer)
+	obj_overlays[BELT_LAYER]		= getFromPool(/obj/abstract/Overlays/belt_layer)
+	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/abstract/Overlays/suit_store_layer)
+	obj_overlays[BACK_LAYER]		= getFromPool(/obj/abstract/Overlays/back_layer)
+	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/abstract/Overlays/hair_layer)
+	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/abstract/Overlays/glasses_over_hair_layer)
+	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/abstract/Overlays/facemask_layer)
+	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
+	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/abstract/Overlays/handcuff_layer)
+	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/abstract/Overlays/legcuff_layer)
+	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/abstract/Overlays/hand_layer) //moved to human/update_inv_hand()
+	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/abstract/Overlays/tail_layer)
+	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/abstract/Overlays/targeted_layer)
 
 	..()
 
@@ -179,6 +185,8 @@
 				to_chat(src, "<h5><span class='notice'>Hardcore mode is enabled!</span></h5>")
 				to_chat(src, "<b>You must eat to survive. Starvation for extended periods of time will kill you!</b>")
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
+
+	update_colour(0,1)
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
@@ -233,34 +241,7 @@
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
 /mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
-		if(!iscarbon(M))
-			LAssailant = null
-		else
-			LAssailant = M
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		add_logs(M, src, "attacked", admin=0)
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		var/dam_zone = pick(organs_by_name)
-
-		if(M.zone_sel && M.zone_sel.selecting)
-			dam_zone = M.zone_sel.selecting
-
-		if(check_shields(damage)) //Shield check
-			return
-
-		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-		var/armor = run_armor_check(affecting, "melee") //Armor check
-
-		apply_damage(damage, M.melee_damage_type, affecting, armor)
-		src.visible_message("<span class='danger'>[M] [M.attacktext] [src] in \the [affecting.display_name]!</span>")
-
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
@@ -271,74 +252,7 @@
 	return 0
 
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
-	if(M.Victim)
-		return // can't attack while eating!
-
-	if (health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)
-		add_logs(M, src, "glomped on", 0)
-		var/damage = rand(1, 3)
-
-		if(istype(M, /mob/living/carbon/slime/adult))
-			damage = rand(10, 35)
-		else
-			damage = rand(5, 25)
-
-
-		var/dam_zone = pick(organs_by_name)
-
-		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-		var/armor_block = run_armor_check(affecting, "melee")
-		apply_damage(damage, BRUTE, affecting, armor_block)
-
-
-		if(M.powerlevel > 0)
-			var/stunprob = 10
-			var/power = M.powerlevel + rand(0,3)
-
-			switch(M.powerlevel)
-				if(1 to 2)
-					stunprob = 20
-				if(3 to 4)
-					stunprob = 30
-				if(5 to 6)
-					stunprob = 40
-				if(7 to 8)
-					stunprob = 60
-				if(9)
-					stunprob = 70
-				if(10)
-					stunprob = 95
-
-			if(prob(stunprob))
-				M.powerlevel -= 3
-				if(M.powerlevel < 0)
-					M.powerlevel = 0
-
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>The [M.name] has shocked []!</span>", src), 1)
-
-				Knockdown(power)
-				if (stuttering < power)
-					stuttering = power
-				Stun(power)
-
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
-
-				if (prob(stunprob) && M.powerlevel >= 8)
-					adjustFireLoss(M.powerlevel * rand(6,10))
-
-
-		updatehealth()
-
-	return
-
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
 	if (timestopped)
@@ -357,16 +271,22 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	var/blood = 0
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,species.blood_color)
-	else
-		var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
-		if(istype(WC) && !WC.attack_cooldown)
+		blood = 1
+	var/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/WC = AM
+	if(istype(WC))
+		if(!WC.attack_cooldown)
 			WC.crush(src,species.blood_color)
-		else
-			return //Don't make blood
-	blood_splatter(loc,src,1)
+			blood = 1
+	var/obj/machinery/bot/cleanbot/roomba/R = AM
+	if(istype(R))
+		if(R.armed)
+			R.annoy(src)
+	if(blood)
+		blood_splatter(loc,src,1)
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
@@ -776,12 +696,21 @@
 	else if (href_list["lookitem"])
 		var/obj/item/I = locate(href_list["lookitem"])
 		usr.examination(I)
+	else if (href_list["listitems"])
+		var/mob/M = usr
+		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
+			var/obj/item/I = locate(href_list["listitems"])
+			var/obj/item/weapon/storage/internal/S = I
+			if(istype(S))
+				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
+					for(var/J in I.contents)
+						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
 
 /**
- * Returns a number between -1 to 2.
+ * Returns a number between -2 to 2.
  * TODO: What's the default return value?
  */
 /mob/living/carbon/human/eyecheck()
@@ -799,7 +728,7 @@
 	if(E)
 		. += E.eyeprot
 
-	return Clamp(., -1, 2)
+	return Clamp(., -2, 2)
 
 
 /mob/living/carbon/human/IsAdvancedToolUser()
@@ -1051,7 +980,7 @@
 	var/datum/organ/external/head/h = organs_by_name[LIMB_HEAD]
 	h.disfigured = 0
 
-	if(species && !(species.flags & NO_BLOOD))
+	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
 		fixblood()
 
@@ -1226,7 +1155,7 @@
 
 	selection.forceMove(get_turf(src))
 	affected.implants -= selection
-	shock_stage+=10
+	pain_shock_stage+=10
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)
@@ -1326,6 +1255,9 @@
 		//if(src.species.language)	src.remove_language(species.language)
 		if(src.species.abilities)
 			src.verbs -= species.abilities
+		if(species.spells)
+			for(var/spell in species.spells)
+				remove_spell(spell)
 		for(var/L in species.known_languages)
 			remove_language(L)
 		species.clear_organs(src)
@@ -1340,9 +1272,10 @@
 	if(species.default_language)
 		add_language(species.default_language)
 	if(src.species.abilities)
-		//if(src.species.language)	src.add_language(species.language)
-		if(src.species.abilities)
-			src.verbs |= species.abilities
+		src.verbs |= species.abilities
+	if(species.spells)
+		for(var/spell in species.spells)
+			add_spell(spell, "racial_spell_ready", /obj/abstract/screen/movable/spell_master/racial)
 	if(force_organs || !src.organs || !src.organs.len)
 		src.species.create_organs(src)
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
@@ -1354,6 +1287,7 @@
 		src.see_invisible = SEE_INVISIBLE_LIVING
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
+	meat_type = species.meat_type
 	spawn()
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)
@@ -1470,16 +1404,16 @@
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
 			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/redtag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/red))
 				threatcount += 2
 		if(lasercolor == "r")
 			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/bluetag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 2
 		return threatcount
 	//Check for ID
@@ -1554,7 +1488,7 @@
 	if(radiations)
 		apply_effect(current_size * radiations, IRRADIATE)
 	if(shoes)
-		if(shoes.flags & NOSLIP && current_size <= STAGE_FOUR)
+		if(shoes.clothing_flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
 	..()
 /mob/living/carbon/human/get_default_language()
@@ -1740,11 +1674,121 @@
 	..()
 
 /mob/living/carbon/human/is_fat()
-	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
+mob/living/carbon/human/isincrit()
+	if (health - halloss <= config.health_threshold_softcrit)
+		return 1
+		
+/mob/living/carbon/human/drag_damage()
+	var/mob/living/carbon/human/H = src
+	var/turf/TH = H.loc	
+	var/list/return_organs = list()
+	if (TH.has_gravity() && H.lying)
+		for(var/datum/organ/external/damagedorgan in H.organs)
+			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
+				return_organs += damagedorgan
+		return return_organs
+	
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
+	if(species.flags & NO_PAIN)
+		return FALSE
+	if(pain_numb)
+		return FALSE
+	return TRUE
 
-	return !(species.flags & NO_PAIN)
+/mob/living/carbon/human/advanced_mutate()
+	..()
+	if(prob(10))
+		species.punch_damage = rand(1,5)
+	species.max_hurt_damage = rand(1,10)
+	if(prob(10))
+		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
 
+	species.heat_level_3 = rand(800, 1200)
+	species.heat_level_2 = round(species.heat_level_3 / 2.5)
+	species.heat_level_1 = round(species.heat_level_2 / 1.11)
+	species.cold_level_1 = rand(160, 360)
+	species.cold_level_2 = round(species.cold_level_1 / 1.3)
+	species.cold_level_3 = round(species.cold_level_2 / 1.66)
+
+	if(prob(30))
+		species.darksight = rand(0,8)
+	species.hazard_high_pressure *= rand(5,20)/10
+	species.warning_high_pressure = round(species.hazard_high_pressure / 1.69)
+	species.hazard_low_pressure *= rand(5,20)/10
+	species.warning_low_pressure = round(species.hazard_low_pressure * 2.5)
+	if(prob(5))
+		species.warning_low_pressure = -1
+		species.hazard_low_pressure = -1
+
+	species.brute_mod *= rand(5,20)/10
+	species.burn_mod *= rand(5,20)/10
+
+	if(prob(5))
+		species.flags = rand(0,65535)
+	if(prob(5))
+		species.anatomy_flags = rand(0,65535)
+	if(prob(5))
+		species.chem_flags = rand(0,65535)
+
+/mob/living/carbon/human/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"r_hair",
+		"g_hair",
+		"b_hair",
+		"h_style",
+		"r_facial",
+		"g_facial",
+		"b_facial",
+		"f_style",
+		"r_eyes",
+		"g_eyes",
+		"b_eyes",
+		"s_tone",
+		"lip_style",
+		"wear_suit",
+		"w_uniform",
+		"shoes",
+		"belt",
+		"gloves",
+		"glasses",
+		"head",
+		"ears",
+		"wear_id",
+		"r_store",
+		"l_store",
+		"s_store",
+		"l_ear",
+		"r_ear",
+		"said_last_words",
+		"failed_last_breath",
+		"last_dam",
+		"bad_external_organs",
+		"xylophone",
+		"meatleft",
+		"check_mutations",
+		"lastFart",
+		"last_emote_sound",
+		"decapitated",
+		"organs",
+		"organs_by_name",
+		"internal_organs",
+		"internal_organs_by_name")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+	for(var/datum/organ/internal/O in internal_organs)
+		O.send_to_past(duration)
+	for(var/datum/organ/external/O in organs)
+		O.send_to_past(duration)
+
+	updatehealth()
+
+/mob/living/carbon/human/attack_icon()
+	if(M_HULK in mutations)
+		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
+	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")

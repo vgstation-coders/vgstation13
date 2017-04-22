@@ -22,7 +22,7 @@
 			return 1
 
 		//The analgesic effect wears off slowly
-		analgesic = max(0, analgesic - 1)
+		pain_numb = max(0, pain_numb - 1)
 
 		//UNCONSCIOUS. NO-ONE IS HOME
 		if((getOxyLoss() > 50) || (config.health_threshold_crit > health))

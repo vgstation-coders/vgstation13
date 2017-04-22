@@ -15,6 +15,7 @@
 	var/list/datum/autopsy_data_scanner/chemtraces = list()
 	var/target_name = null
 	var/timeofdeath = null
+	var/advanced_butchery = null
 
 /datum/autopsy_data_scanner
 	var/weapon = null // this is the DEFINITE weapon type that was used
@@ -39,6 +40,23 @@
 		return W
 
 /obj/item/weapon/autopsy_scanner/proc/add_data(var/datum/organ/external/O)
+	if(istype(O,/datum/organ/external/chest))
+		var/mob/living/carbon/human/H = O.owner
+		if(H)
+			if(H.advanced_butchery && H.advanced_butchery.len)
+				advanced_butchery = "\The [target_name] seems to have been butchered with"
+				for(var/i = 1, i <= H.advanced_butchery.len, i++)
+					var/tool_name = H.advanced_butchery[i]
+					if(tool_name == "grue")
+						advanced_butchery = "<span class='warning'>\The [target_name] is likely to have been eaten by a grue.</span>"
+						break
+					if(H.advanced_butchery.len == 1)
+						advanced_butchery += " \a [tool_name]."
+					else if(i != H.advanced_butchery.len)
+						advanced_butchery += " \a [tool_name][H.advanced_butchery.len > 2 ? "," : ""]"
+					else
+						advanced_butchery += " and \a [tool_name]."
+
 	if(!O.autopsy_data.len && !O.trace_chemicals.len)
 		return
 
@@ -76,6 +94,7 @@
 	for(var/V in O.trace_chemicals)
 		if(O.trace_chemicals[V] > 0 && !chemtraces.Find(V))
 			chemtraces += V
+
 
 /obj/item/weapon/autopsy_scanner/verb/print_data()
 	set category = "Object"
@@ -153,6 +172,8 @@
 		for(var/chemID in chemtraces)
 			scan_data += chemID
 			scan_data += "<br>"
+
+	scan_data += "<br>[advanced_butchery]<br>"
 
 	for(var/mob/O in viewers(usr))
 		O.show_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)

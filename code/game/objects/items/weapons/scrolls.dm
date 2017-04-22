@@ -1,6 +1,6 @@
 /obj/item/weapon/teleportation_scroll
 	name = "scroll of teleportation"
-	desc = "A scroll for moving around."
+	desc = "A scroll allowing limited uses of transportation."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "scroll"
 	var/uses = 4.0

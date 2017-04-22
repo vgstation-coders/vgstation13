@@ -71,7 +71,7 @@
 /obj/item/proc/generate_accessory_overlays()
 	return
 
-/obj/item/clothing/generate_accessory_overlays(var/obj/Overlays/O)
+/obj/item/clothing/generate_accessory_overlays(var/obj/abstract/Overlays/O)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
 			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")
@@ -277,15 +277,3 @@
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
 
-/obj/item/weapon/storage/box/holobadge
-	name = "holobadge box"
-	desc = "A box claiming to contain holobadges."
-
-/obj/item/weapon/storage/box/holobadge/New()
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge/cord(src)
-	new /obj/item/clothing/accessory/holobadge/cord(src)
-	..()

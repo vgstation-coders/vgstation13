@@ -16,6 +16,12 @@
 	var/amount_per_transfer_from_this = 10
 	var/possible_transfer_amounts = list(10,25,50,100)
 
+/obj/structure/reagent_dispensers/AltClick(mob/user)
+	if(!user.incapacitated() && user.Adjacent(get_turf(src)) && possible_transfer_amounts)
+		set_APTFT()
+		return
+	return ..()
+
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W) && wrenchable())
 		return wrenchAnchor(user)
@@ -77,7 +83,7 @@
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
 	name = "watertank"
-	desc = "A watertank"
+	desc = "A storage tank containing water."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "watertank"
 	amount_per_transfer_from_this = 10
@@ -88,7 +94,7 @@
 
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
-	desc = "A fueltank"
+	desc = "A storage tank containing welding fuel."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "weldtank"
 	amount_per_transfer_from_this = 10
@@ -178,6 +184,10 @@
 /obj/structure/reagent_dispensers/fueltank/ex_act()
 	explode()
 
+/obj/structure/reagent_dispensers/fueltank/singularity_act()
+	qdel(src)
+	return  2
+
 /obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
@@ -219,7 +229,7 @@
 	amount_per_transfer_from_this = 5
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "water_cooler"
-	possible_transfer_amounts = null
+	possible_transfer_amounts = list(5,10,30)
 	anchored = 0
 	var/addedliquid = 500
 	var/paper_cups = 10
@@ -255,7 +265,7 @@
 
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"
-	desc = "A beer keg"
+	desc = "A massive keg with a bottle of beer painted on the front."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "beertankTEMP"
 	amount_per_transfer_from_this = 10

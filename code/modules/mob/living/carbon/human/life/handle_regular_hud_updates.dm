@@ -33,10 +33,12 @@
 				severity = 9
 			if(-INFINITY to -95)
 				severity = 10
-		overlay_fullscreen("crit", /obj/screen/fullscreen/crit, severity)
+		overlay_fullscreen("crit", /obj/abstract/screen/fullscreen/crit, severity)
 	else
 		clear_fullscreen("crit")
 		if(oxyloss)
+			if(pain_numb)
+				oxyloss = max((oxyloss - 20) / 2, 0) //Make the damage appear smaller than it really is
 			var/severity = 0
 			switch(oxyloss)
 				if(10 to 20)
@@ -53,13 +55,15 @@
 					severity = 6
 				if(45 to INFINITY)
 					severity = 7
-			overlay_fullscreen("oxy", /obj/screen/fullscreen/oxy, severity)
+			overlay_fullscreen("oxy", /obj/abstract/screen/fullscreen/oxy, severity)
 		else
 			clear_fullscreen("oxy")
 		//Fire and Brute damage overlay (BSSR)
 		var/hurtdamage = src.getBruteLoss() + src.getFireLoss() + damageoverlaytemp
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
 		if(hurtdamage)
+			if(pain_numb)
+				hurtdamage = max((hurtdamage - 20) / 2, 0) //Make the damage appear smaller than it really is
 			var/severity = 0
 			switch(hurtdamage)
 				if(5 to 15)
@@ -74,10 +78,14 @@
 					severity = 5
 				if(85 to INFINITY)
 					severity = 6
-			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("brute", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")
 			//damageoverlay.overlays += I
+		if(pain_numb)
+			overlay_fullscreen("numb", /obj/abstract/screen/fullscreen/numb)
+		else
+			clear_fullscreen("numb")
 	if(stat == DEAD)
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
@@ -121,42 +129,18 @@
 
 
 		if(glasses)
-			var/obj/item/clothing/glasses/G = glasses
-			if(istype(G))
-				if(G.see_in_dark)
-					see_in_dark = max(see_in_dark, G.see_in_dark)
-				see_in_dark += G.darkness_view
-				if(G.vision_flags) //MESONS
-					change_sight(adding = G.vision_flags)
-					if(!druggy)
-						see_invisible = SEE_INVISIBLE_MINIMUM
-				if(G.see_invisible)
-					see_invisible = G.see_invisible
-
-			/* HUD shit goes here, as long as it doesn't modify sight flags
-			 * The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
-			 */
-
-			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud))
-				var/obj/item/clothing/glasses/sunglasses/sechud/O = glasses
-				if(O.hud)
-					O.hud.process_hud(src)
-				if(!druggy)
-					see_invisible = SEE_INVISIBLE_LIVING
-			else if(istype(glasses, /obj/item/clothing/glasses/hud))
-				var/obj/item/clothing/glasses/hud/O = glasses
-				O.process_hud(src)
-				if(!druggy)
-					see_invisible = SEE_INVISIBLE_LIVING
+			handle_glasses_vision_updates(glasses)
 
 		else if(!seer)
 			see_invisible = SEE_INVISIBLE_LIVING
 
+		apply_vision_overrides()
+
 
 		if(healths)
 			healths.overlays.len = 0
-			if (analgesic)
-				healths.icon_state = "health_health_numb"
+			if (pain_numb)
+				healths.icon_state = "health_numb"
 			else
 				var/ruptured = is_lung_ruptured()
 				if(hal_screwyhud)
@@ -168,8 +152,8 @@
 							if(ruptured)
 								healths.overlays.Add(organ_damage_overlays["[e.name]_max"])
 								continue
-						var/total_damage = e.brute_dam + e.burn_dam
-						if(e.status & ORGAN_BROKEN)
+						var/total_damage = e.get_damage()
+						if(!e.is_existing())
 							healths.overlays.Add(organ_damage_overlays["[e.name]_gone"])
 						else
 							switch(total_damage)
@@ -186,7 +170,6 @@
 						healths.icon_state = "health7"
 					else
 						switch(health - halloss)
-						//switch(100 - ((species && species.flags & NO_PAIN) ? 0 : traumatic_shock))
 							if(100 to INFINITY)
 								healths.icon_state = "health0"
 							if(80 to 100)
@@ -284,23 +267,23 @@
 			if(glasses)	//To every /obj/item
 				var/obj/item/clothing/glasses/G = glasses
 				if(!G.prescription)
-					overlay_fullscreen("nearsighted", /obj/screen/fullscreen/impaired, 1)
+					overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/impaired, 1)
 				else
 					clear_fullscreen("nearsighted")
 			else
-				overlay_fullscreen("nearsighted", /obj/screen/fullscreen/impaired, 1)
+				overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/impaired, 1)
 		else
 			clear_fullscreen("nearsighted")
 		if(eye_blind || blinded)
-			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
 		if(eye_blurry)
-			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		else
 			clear_fullscreen("blurry")
 		if(druggy)
-			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
 
@@ -308,13 +291,13 @@
 		if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi))
 			var/obj/item/clothing/head/welding/O = head
 			if(!O.up && tinted_weldhelh)
-				overlay_fullscreen("tint", /obj/screen/fullscreen/impaired, 2)
+				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 				masked = 1
 
 		if(!masked && istype(glasses, /obj/item/clothing/glasses/welding) && !istype(glasses, /obj/item/clothing/glasses/welding/superior))
 			var/obj/item/clothing/glasses/welding/O = glasses
 			if(!O.up && tinted_weldhelh)
-				overlay_fullscreen("tint", /obj/screen/fullscreen/impaired, 2)
+				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
 				masked = 1
 
 		if(!masked)

@@ -20,7 +20,7 @@
 	..()
 	item = null // Disabled
 
-/datum/uplink_item/stealthy_tools/syndigolashes/New()
+/datum/uplink_item/stealthy_tools/syndigaloshes/New()
 	..()
 	cost = 10
 

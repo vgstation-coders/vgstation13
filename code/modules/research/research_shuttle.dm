@@ -111,7 +111,7 @@ proc/move_research_shuttle()
 				to_chat(usr, "<span class='notice'>The nuclear disk is too precious for Nanotrasen to send it to an Asteroid.</span>")
 				return
 		if (!research_shuttle_moving)
-			to_chat(usr, "<span class='notice'>Shuttle recieved message and will be sent shortly.</span>")
+			to_chat(usr, "<span class='notice'>Shuttle received message and will be sent shortly.</span>")
 			move_research_shuttle()
 		else
 			to_chat(usr, "<span class='notice'>Shuttle is already moving.</span>")

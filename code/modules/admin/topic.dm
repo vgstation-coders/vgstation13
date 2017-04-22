@@ -39,11 +39,12 @@
 					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
 			if("9")
 				log_admin("[key_name(usr)] has spawned aliens.")
-				src.makeAliens()
+				if(!src.makeAliens())
+					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
 			if("10")
 				log_admin("[key_name(usr)] has spawned a death squad.")
 				if(!makeDeathsquad())
-					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available</span>")
+					to_chat(usr, "<span class='warning'>Unfortunately, there were no candidates available.</span>")
 			if("11")
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
@@ -55,6 +56,7 @@
 		log_admin("[key_name(usr)] has notified [key_name(S)] of a change to their laws.")
 		message_admins("[usr.key] has notified [key_name(S)] of a change to their laws.")
 
+		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
 		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
 		if(S.laws)
@@ -235,6 +237,7 @@
 					return
 				admin_datums -= adm_ckey
 				D.disassociate()
+				update_byond_admin(adm_ckey)
 
 				message_admins("[key_name_admin(usr)] removed [adm_ckey] from the admins list")
 				log_admin("[key_name(usr)] removed [adm_ckey] from the admins list")
@@ -280,6 +283,7 @@
 
 			var/client/C = directory[adm_ckey]						//find the client with the specified ckey (if they are logged in)
 			D.associate(C)											//link up with the client and add verbs
+			update_byond_admin(adm_ckey)
 
 			message_admins("[key_name_admin(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
 			log_admin("[key_name(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
@@ -295,6 +299,9 @@
 			if(!new_permission)
 				return
 			D.rights ^= permissionlist[new_permission]
+
+			update_byond_admin(adm_ckey)
+			D.update_menu_items()
 
 			message_admins("[key_name_admin(usr)] toggled the [new_permission] permission of [adm_ckey]")
 			log_admin("[key_name(usr)] toggled the [new_permission] permission of [adm_ckey]")
@@ -900,11 +907,11 @@
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
-		//ERT
-		if(jobban_isbanned(M, "Emergency Response Team") || isbanned_dept)
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'><font color=red>Emergency Response Team</font></a></td>"
+		//Strike Team
+		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'>Emergency Response Team</a></td>"
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
 
 
 		//Vox Raider
@@ -2162,7 +2169,7 @@
 		S.victim = M
 		S.forceMove(M.loc)
 		spawn(20)
-			del(S)
+			qdel(S)
 
 		var/turf/simulated/floor/T = get_turf(M)
 		if(istype(T))
@@ -2180,6 +2187,30 @@
 			M.Stun(20)
 			M.Knockdown(20)
 			M.stuttering = 20
+
+	else if(href_list["Assplode"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/living/carbon/human/H = locate(href_list["Assplode"])
+		if(!ishuman(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+			return
+
+		if(H.op_stage.butt != 4) // does the target have an ass
+			var/obj/item/clothing/head/butt/B = new(H.loc)
+			B.transfer_buttdentity(H)
+			H.op_stage.butt = 4 //No having two butts.
+			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
+			log_admin("[key_name(H)] was buttblasted by [src.owner]")
+			message_admins("[key_name(H)] was buttblasted by [src.owner]")
+			playsound(get_turf(H), 'sound/effects/superfart.ogg', 50, 1)
+			H.apply_damage(40, BRUTE, LIMB_GROIN)
+			H.apply_damage(10, BURN, LIMB_GROIN)
+			H.Knockdown(8)
+			H.Stun(8)
+		else
+			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
 
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
@@ -2515,7 +2546,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SAC")
 				for(var/obj/item/clothing/O in world)
-					del(O)
+					qdel(O)
 			if("monkey")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","M")
@@ -2528,10 +2559,26 @@
 				for(var/mob/living/carbon/human/H in mob_list)
 					spawn(0)
 						H.corgize()
-			if("striketeam")
-				if(usr.client.strike_team())
-					feedback_inc("admin_secrets_fun_used",1)
-					feedback_add_details("admin_secrets_fun_used","Strike")
+			if("striketeam-deathsquad")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","DeathQuad")
+				var/datum/striketeam/deathsquad/team = new /datum/striketeam/deathsquad()
+				team.trigger_strike(usr)
+			if("striketeam-ert")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ERT")
+				var/datum/striketeam/ert/team = new /datum/striketeam/ert()
+				team.trigger_strike(usr)
+			if("striketeam-syndi")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SyndiStrikeTeam")
+				var/datum/striketeam/syndicate/team = new /datum/striketeam/syndicate()
+				team.trigger_strike(usr)
+			if("striketeam-custom")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CustomStrikeTeam")
+				var/datum/striketeam/custom/team = new /datum/striketeam/custom()
+				team.trigger_strike(usr)
 			if("tripleAI")
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2784,7 +2831,7 @@
 				var/turf/T = pick(blobstart)
 				var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 				spawn(rand(100, 600))
-					del(bh)
+					qdel(bh)
 
 			if("timeanomalies")	//dear god this code was awful :P Still needs further optimisation
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2841,12 +2888,22 @@
 				feedback_add_details("admin_secrets_fun_used","IR")
 				message_admins("[key_name_admin(usr)] has sent an immovable rod to the station", 1)
 				immovablerod()
+			if("immovablebig")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","IRB")
+				message_admins("[key_name_admin(usr)] has sent an immovable pillar to the station.", 1)
+				immovablerod(1)
+			if("immovablehyper")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","IRH")
+				message_admins("[key_name_admin(usr)] has sent an immovable monolith to the station. That one's gonna hurt.", 1)
+				immovablerod(2)
 			if("prison_break")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")
 				message_admins("[key_name_admin(usr)] has allowed a prison break", 1)
 				prison_break()
-			if("lightout")
+			if("lightsout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","LO")
 				message_admins("[key_name_admin(usr)] has broke a lot of lights", 1)
@@ -2896,7 +2953,7 @@
 				message_admins("[key_name_admin(usr)] made the floor LAVA! It'll last [length] seconds and it will deal [damage] damage to everyone.", 1)
 				var/count = 0
 				var/list/lavaturfs = list()
-				for(var/turf/simulated/floor/F in turfs)
+				for(var/turf/simulated/floor/F in world)
 					count++
 					if(!(count % 50000))
 						sleep(world.tick_lag)
@@ -2974,8 +3031,7 @@
 				for(var/obj/item/W in world)
 					if(istype(W, /obj/item/clothing) || istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/weapon/disk) || istype(W, /obj/item/weapon/tank))
 						continue
-					W.icon = 'icons/obj/gun.dmi'
-					W.icon_state = "revolver"
+					W.icon = 'icons/obj/fakegun.dmi'
 					W.item_state = "gun"
 				message_admins("[key_name_admin(usr)] made every item look like a gun")
 			if("experimentalguns")
@@ -2992,6 +3048,54 @@
 					to_chat(C, "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>")
 					U.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
+			if("create_artifact")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CA")
+				var/answer = alert("Are you sure you want to create a custom artifact?",,"Yes","No")
+
+				if(answer == "Yes")
+					//Either have them as all random, or have custom artifacts
+					var/list/effects = typesof(/datum/artifact_effect)
+					var/list/triggers = typesof(/datum/artifact_trigger)
+					effects.Remove(/datum/artifact_effect)
+					triggers.Remove(/datum/artifact_trigger)
+
+					var/answer1 = alert("Just a primary, or primary and secondary effects?",,"Primary only","Primary and Secondary")
+					var/answer2 = alert("Randomly generated triggers (safer), or manually picked (might break certain effects)?",,"Random","Manual")
+
+					var/custom_primary_effect = input(usr, "Which primary effect would you like?", "Primary effect") as null|anything in effects
+					var/custom_primary_trigger
+					if(answer2 == "Manual")
+						custom_primary_trigger = input(usr, "Which trigger would you like for the primary effect?", "Primary trigger") as null|anything in triggers
+
+					var/custom_secondary_effect
+					var/custom_secondary_trigger
+					if(answer1 == "Primary and Secondary")
+						custom_secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
+						if(answer2 == "Manual")
+							custom_secondary_trigger = input(usr, "Which trigger would you like for the secondary effect?", "Secondary trigger") as null|anything in triggers
+
+					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr), null, 0)
+					custom.primary_effect = new custom_primary_effect(custom)
+					if(answer2 == "Random")
+						custom.primary_effect.GenerateTrigger()
+					else
+						custom.primary_effect.trigger = new custom_primary_trigger(custom.primary_effect)
+
+					custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a primary effect [custom.primary_effect.artifact_id]: [custom.primary_effect] || range: [custom.primary_effect.effectrange] || charge time: [custom.primary_effect.chargelevelmax] || trigger: [custom.primary_effect.trigger].")
+
+					if(custom_secondary_effect)
+						custom.secondary_effect = new custom_secondary_effect(custom)
+						if(answer2 == "Random")
+							custom.secondary_effect.GenerateTrigger()
+						else
+							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
+						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
+
+
+					message_admins("[key_name_admin(usr)] has created a custom artifact")
+
+
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SG")
@@ -2999,6 +3103,9 @@
 					W.icon_state = "schoolgirl"
 					W.item_state = "w_suit"
 					W._color = "schoolgirl"
+					if(ismob(W.loc))
+						var/mob/M = W.loc
+						M.update_inv_w_uniform()
 				message_admins("[key_name_admin(usr)] activated Japanese Animes mode")
 				world << sound('sound/AI/animes.ogg')
 			if("eagles")//SCRAW
@@ -3340,7 +3447,7 @@
 				var/num=0
 				for(var/obj/item/device/transfer_valve/TV in world)
 					if(TV.tank_one||TV.tank_two)
-						del(TV)
+						qdel(TV)
 						TV++
 				message_admins("[key_name_admin(usr)] has removed [num] bombs", 1)
 			if("detonate_bombs")

@@ -38,7 +38,7 @@
 	log_admin("[key_name(src)] played a local sound [S]")
 	message_admins("[key_name_admin(src)] played a local sound [S]", 1)
 	S.status = SOUND_STREAM | SOUND_UPDATE
-	playsound(source = get_turf(src.mob), soundin = S, vol = 50, vary = 0, falloff = 0, channel = CHANNEL_ADMINMUSIC)
+	playsound(source = get_turf(src.mob), soundin = S, vol = 50, vary = 0, falloff = 0)
 	feedback_add_details("admin_verb","PLS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 

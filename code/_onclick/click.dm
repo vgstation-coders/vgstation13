@@ -48,6 +48,10 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	on_clickon.Invoke(list(
+		"modifiers" = modifiers,
+		"target" = A
+	))
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
@@ -333,3 +337,17 @@
 			change_dir(WEST)
 
 	Facing()
+
+
+// File renamed to mouse.dm?
+/atom/MouseWheel(delta_x,delta_y,location,control,params)
+	usr.MouseWheelOn(src, delta_x, delta_y, params)
+
+
+/mob/proc/MouseWheelOn(var/atom/object, var/delta_x, var/delta_y, var/params)
+	if (timestopped || isStunned())
+		return FALSE
+
+	var/obj/item/W = get_active_hand()
+	if (W)
+		W.MouseWheeled(src, delta_x, delta_y, params)

@@ -9,6 +9,7 @@
 	force = 30
 	throwforce = 10
 	sharpness = 1.35
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	var/checkcult = 1
 
@@ -33,7 +34,7 @@
 
 /obj/item/weapon/melee/cultblade/pickup(mob/living/user as mob)
 	if(checkcult && !iscultist(user))
-		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to be rid of this blade quickly.</span>")
+		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
 		user.Dizzy(120)
 
 
@@ -60,7 +61,7 @@
 
 /obj/item/clothing/suit/cultrobes
 	name = "cult robes"
-	desc = "A set of armored robes worn by the followers of Nar-Sie"
+	desc = "A set of armored robes worn by the followers of Nar-Sie."
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
@@ -83,7 +84,7 @@
 
 /obj/item/clothing/suit/magusred
 	name = "magus robes"
-	desc = "A set of armored robes worn by the followers of Nar-Sie"
+	desc = "A set of armored robes worn by the followers of Nar-Sie."
 	icon_state = "magusred"
 	item_state = "magusred"
 	flags = FPRINT
@@ -102,10 +103,10 @@
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/space/cult
-	name = "cult armour"
+	name = "cult armor"
 	icon_state = "cult_armour"
 	item_state = "cult_armour"
-	desc = "A bulky suit of armour, bristling with spikes. It looks space proof."
+	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 0

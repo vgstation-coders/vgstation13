@@ -54,7 +54,7 @@
 	if(!armed)
 		to_chat(user, "<span class='notice'>You arm [src].</span>")
 	else
-		if(((user.getBrainLoss() >= 60 || (M_CLUMSY in user.mutations)) && prob(50)))
+		if(((user.getBrainLoss() >= 60 || clumsy_check(user)) && prob(50)))
 
 			var/datum/organ/external/OE = user.get_active_hand_organ()
 

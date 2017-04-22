@@ -8,7 +8,8 @@
 
 /obj/structure/snow
 	name = "snow"
-	layer = BELOW_OBJ_LAYER
+	layer = SNOW_LAYER
+	plane = ABOVE_TURF_PLANE
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 	alpha = 230
@@ -314,6 +315,7 @@
 var/global/list/datum/stack_recipe/snow_recipes = list (
 	new/datum/stack_recipe("snowman", /mob/living/simple_animal/hostile/retaliate/snowman, 10, time = 50, one_per_turf = 0, on_floor = 1),
 	new/datum/stack_recipe("snow barricade", /obj/structure/window/barricade/snow, 20, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("ice armor", /obj/item/clothing/suit/armor/ice, 50, time = 50, one_per_turf = 0, on_floor = 0),
 	)
 
 
@@ -328,6 +330,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	density = 1.0
 	health = 50.0
 	var/maxhealth = 50.0
+	materialtype = /obj/item/stack/sheet/snow
 
 /obj/structure/window/barricade/snow/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/stack/sheet/snow))
@@ -340,7 +343,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 				return
 		else
 			return
-		return
 	else
 		switch(W.damtype)
 			if("fire")
@@ -387,6 +389,17 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		return 1
 	else
 		return 0
+
+/////PEDESTAL////
+/obj/structure/snow_pedestal
+	name = "snow pedestal"
+	desc = "A collection of snow formed into a pedestal."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "snowbarricade"
+	density = 1
+	anchored = 1
+	layer = TABLE_LAYER
+	throwpass = 1
 
 //////TREES//////
 /obj/structure/snow_flora

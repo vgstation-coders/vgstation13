@@ -359,7 +359,7 @@ var/global/list/PDA_Manifest = list()
 	src.theworld = theworld
 
 /obj/effect/stop/sleeping/Crossed(atom/movable/A)
-	if(sleeptime > world.time)
+	if(!(A.flags & TIMELESS) && sleeptime > world.time)
 		if(ismob(A))
 			var/mob/living/L = A
 			if(L.mind != owner)

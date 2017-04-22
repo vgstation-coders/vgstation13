@@ -31,6 +31,7 @@
 				return 1
 
 			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			add_gamelogs(user, "deconstructed \the [T] with \the [master]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
 
@@ -366,7 +367,7 @@
 	var/build_type
 	var/icon_state
 	var/icon
-	var/obj/screen/ourobj
+	var/obj/abstract/screen/ourobj
 	var/datum/rcd_schematic/master
 
 /datum/selection_schematic/proc/clicked(var/mob/user)
@@ -375,7 +376,7 @@
 /datum/selection_schematic/New(var/master)
 	..()
 	src.master = master
-	ourobj = getFromPool(/obj/screen/schematics, null, src)
+	ourobj = getFromPool(/obj/abstract/screen/schematics, null, src)
 
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)

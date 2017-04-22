@@ -122,7 +122,8 @@
 	switch(find_type)
 		if(ARCHAEO_BOWL)
 			item_type = "bowl"
-			new_item = new /obj/item/weapon/reagent_containers/glass(src.loc)
+			var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing)
+			new_item = new glass_type(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "bowl"
 			apply_image_decorations = 1
@@ -131,7 +132,8 @@
 				additional_desc = "There appear to be [pick("dark","faintly glowing","pungent","bright")] [pick("red","purple","green","blue")] stains inside."
 		if(ARCHAEO_URN)
 			item_type = "urn"
-			new_item = new /obj/item/weapon/reagent_containers/glass(src.loc)
+			var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing)
+			new_item = new glass_type(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "urn"
 			apply_image_decorations = 1
@@ -372,13 +374,23 @@
 			/obj/item/weapon/gun/energy/laser/practice,\
 			/obj/item/weapon/gun/energy/laser,\
 			/obj/item/weapon/gun/energy/xray,\
-			/obj/item/weapon/gun/energy/laser/captain)
+			/obj/item/weapon/gun/energy/laser/captain,\
+			/obj/item/weapon/gun/energy/ionrifle,\
+			/obj/item/weapon/gun/energy/plasma/pistol,\
+			/obj/item/weapon/gun/energy/floragun,\
+			/obj/item/weapon/gun/energy/laser/rainbow,\
+			/obj/item/weapon/gun/energy/taser)
 			if(spawn_type)
 				var/obj/item/weapon/gun/energy/new_gun = new spawn_type(src.loc)
 				new_item = new_gun
 				new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 				new_item.icon_state = "egun[rand(1,6)]"
-				new_gun.desc = "This is an antique energy weapon, you're not sure if it will fire or not."
+				new_item.item_state = new_item.icon_state
+				additional_desc = "Looks like an antique energy weapon, you're not sure if it will fire or not."
+				new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
+				if(prob(10)) // 10% chance to be a smart gun
+					new_item.can_take_pai = TRUE
+					additional_desc += " There seems to be some sort of slot in the handle."
 				new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
 
 				//5% chance to explode when first fired
@@ -401,6 +413,12 @@
 			new_item = new_gun
 			new_item.icon_state = "gun[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
+			new_item.item_state = new_item.icon_state
+			new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
+			additional_desc = "Looks like an antique projectile weapon, you're not sure if it will fire or not."
+			if(prob(10)) // 10% chance to be a smart gun
+				new_item.can_take_pai = TRUE
+				additional_desc += " There seems to be some sort of slot in the handle."
 
 			//let's get some ammunition in this gun : weighted to pick available ammo
 			new_gun.caliber = pick(50;list("357" = 1),
@@ -522,8 +540,9 @@
 			anomaly_factor = 4
 			apply_material_decorations = 0
 			var/list/possible_spawns = list()
-			possible_spawns += /obj/item/clothing/mask/happy
-			//possible_spawns += /obj/item/clothing/mask/stone WHEN I CODE IT
+			possible_spawns += /obj/item/clothing/mask/morphing
+			possible_spawns += /obj/item/clothing/mask/morphing/amorphous
+			//possible_spawns += /obj/item/clothing/mask/happy PENDING REWORK
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_DICE)
@@ -555,6 +574,16 @@
 			apply_material_decorations = 0
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/weapon/gun/projectile/roulette_revolver
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
+		if(ARCHAEO_ROBOT)
+			//ancient robots?
+			anomaly_factor = 2
+			apply_material_decorations = 0
+			apply_image_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/device/mmi/posibrain/strangeball
+			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 

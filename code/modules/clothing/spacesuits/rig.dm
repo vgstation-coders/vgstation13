@@ -11,7 +11,7 @@
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
-	action_button_name = "Toggle Helmet Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
@@ -25,16 +25,6 @@
 	//Useful for helmets with special starting conditions (namely, starts lit)
 	update_brightness()
 	update_icon()
-
-/obj/item/clothing/head/helmet/space/rig/ghettorig
-	name = "jury-rigged fire helmet"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this helmet isn't particularly good."
-	icon_state = "ghettorig"
-	_color = "ghetto"
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	eyeprot = 0
-	species_fit = list(GREY_SHAPED)
-
 
 /obj/item/clothing/head/helmet/space/rig/examine(mob/user)
 
@@ -52,9 +42,9 @@
 		if(on) //The helmet light is currently on
 			on = 0 //Force it off
 			update_brightness() //Update as neccesary
-		action_button_name = null //Disable the action button (which is only used to toggle the light, in theory)
+		actions_types = null//Disable the action button (which is only used to toggle the light, in theory)
 	else //We have a light
-		action_button_name = initial(action_button_name) //Make sure we restore the action button
+		actions_types = list(/datum/action/item_action/toggle_light) //Make sure we restore the action button
 
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 
@@ -96,15 +86,6 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 
-/obj/item/clothing/suit/space/rig/ghettorig
-	name = "jury-rigged firesuit"
-	icon_state = "ghettorig"
-	item_state = "ghettorig"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this space suit isn't particularly good."
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED)
-
-
 //Chief Engineer's rig
 /obj/item/clothing/head/helmet/space/rig/elite
 	name = "advanced hardsuit helmet"
@@ -115,7 +96,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/elite
 	icon_state = "rig-white"
@@ -125,7 +106,7 @@
 	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish."
 	item_state = "ce_hardsuit"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 
 //Mining rig
@@ -138,6 +119,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -146,7 +128,7 @@
 	item_state = "mining_hardsuit"
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-
+	goliath_reinforce = TRUE
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
@@ -157,7 +139,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	_color = "syndi"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
-	action_button_name = "Toggle Helmet Camera" //This helmet does not have a light, but we'll do as if
+	actions_types = list(/datum/action/item_action/toggle_helmet_camera) //This helmet does not have a light, but we'll do as if
 	siemens_coefficient = 0.6
 	var/obj/machinery/camera/camera
 	pressure_resistance = 40 * ONE_ATMOSPHERE
@@ -182,7 +164,7 @@
 /obj/item/clothing/suit/space/rig/syndi
 	icon_state = "rig-syndi"
 	name = "blood-red hardsuit"
-	desc = "An advanced suit that protects against injuries during special operations. Property of Gorlex Marauders."
+	desc = "An advanced suit that protects against injuries during special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	item_state = "syndie_hardsuit"
 	species_fit = list(GREY_SHAPED)
 	species_fit = list(VOX_SHAPED)
@@ -232,14 +214,6 @@
 
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
-
-/obj/item/clothing/suit/space/rig/wizard/complete/New()	//Use to spawn a complete gemsuit set all at once
-	..()
-	new /obj/item/clothing/head/helmet/space/rig/wizard(loc)
-	new /obj/item/clothing/suit/space/rig/wizard(loc)
-	new /obj/item/clothing/gloves/purple(loc)
-	new /obj/item/clothing/shoes/sandal(loc)
-	qdel(src)
 
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
@@ -311,7 +285,7 @@
 	_color = "atmos"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -321,7 +295,7 @@
 	name = "atmos hardsuit"
 	item_state = "atmos_hardsuit"
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT  |  PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -398,7 +372,6 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
-
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
 	name = "deathsquad helmet"
@@ -411,7 +384,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "deathsquad"
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/deathsquad
 	name = "deathsquad suit"
@@ -424,7 +397,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 
 //Knight armour rigs
@@ -439,7 +412,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
@@ -453,7 +426,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
 	name = "Black Knight's helm"

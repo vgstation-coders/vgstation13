@@ -1,7 +1,7 @@
 /obj/item/verbs/borer/attached_arm/verb/borer_speak(var/message as text)
 	set category = "Alien"
 	set name = "Borer Speak"
-	set desc = "Communicate with your bretheren"
+	set desc = "Communicate with your brethren."
 
 	if(!message)
 		return
@@ -313,7 +313,7 @@
 		return
 	else
 		chemicals -= 100
-		empulse(get_turf(src), 1, 2, 0)
+		empulse(get_turf(src), 1, 2, 1)
 
 //////////UTILITY TREE/////////////////////
 /obj/item/verbs/borer/attached_arm/repair_bone/verb/repair_bone()

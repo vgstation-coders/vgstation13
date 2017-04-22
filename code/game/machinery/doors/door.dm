@@ -48,8 +48,9 @@ var/list/all_doors = list()
 
 	// turf animation
 	var/atom/movable/overlay/c_animation = null
-
+	var/makes_noise = 0
 	var/soundeffect = 'sound/machines/airlock.ogg'
+	var/soundpitch = 30
 
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
 
@@ -89,7 +90,7 @@ var/list/all_doors = list()
 		var/obj/structure/bed/chair/vehicle/vehicle = AM
 
 		if (density)
-			if (vehicle.locked_atoms.len && !operating && allowed(vehicle.locked_atoms[1]))
+			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 				if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
@@ -170,7 +171,28 @@ var/list/all_doors = list()
 		else
 			return open()
 
+	if(horror_force(user))
+		return
+
 	denied()
+
+/obj/machinery/door/proc/horror_force(var/mob/living/carbon/human/H) //H is for HORROR, BABY!
+	if(!ishorrorform(H))
+		return FALSE
+
+	playsound(H.loc, 'sound/effects/horrorforce2.ogg', 80)
+	visible_message("<span class='danger'>\The [src]'s motors whine as several great tendrils begin trying to force it open!</span>")
+	if(do_after(H, src, 32))
+		open(1)
+		visible_message("<span class='danger'>[H.name] forces \the [src] open!</span>")
+
+		// Open firedoors, too.
+		for(var/obj/machinery/door/firedoor/FD in loc)
+			FD.open(1)
+	else
+		to_chat(H, "<span class='warning'>You fail to open \the [src].</span>")
+
+	return TRUE
 
 /obj/machinery/door/blob_act()
 	if(prob(BLOB_PROBABILITY))
@@ -202,6 +224,9 @@ var/list/all_doors = list()
 	if(!operating)
 		operating = 1
 
+	if(makes_noise)
+		playsound(get_turf(src), soundeffect, soundpitch, 1)
+
 	set_opacity(0)
 	door_animate("opening")
 	sleep(animation_delay)
@@ -231,6 +256,9 @@ var/list/all_doors = list()
 
 	layer = closed_layer
 
+	if (makes_noise)
+		playsound(get_turf(src), soundeffect, soundpitch, 1)
+
 	density = 1
 	door_animate("closing")
 	sleep(animation_delay)
@@ -244,7 +272,7 @@ var/list/all_doors = list()
 			qdel(B)
 
 	// TODO: rework how fire works on doors
-	var/obj/fire/F = locate() in loc
+	var/obj/effect/fire/F = locate() in loc
 	if(F)
 		qdel(F)
 
@@ -340,6 +368,9 @@ var/list/all_doors = list()
 
 	if(!T)
 		T = get_turf(src)
+	if(!isturf(T))
+		return 0
+
 	update_heat_protection(T)
 	air_master.mark_for_update(T)
 

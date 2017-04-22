@@ -238,3 +238,14 @@
 
 	if(cancerous_growth <= 0) //No cancerous growth this tick, no effects
 		return 1
+
+/datum/organ/send_to_past(var/duration)
+	var/static/list/resettable_vars = list(
+		"owner",
+		"status",
+		"autopsy_data",
+		"trace_chemicals",
+		"germ_level",
+		"cancer_stage")
+
+	reset_vars_after_duration(resettable_vars, duration, TRUE)

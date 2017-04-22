@@ -299,10 +299,6 @@
 	if (!istype(traitor_mob))
 		return
 	. = 1
-	if (traitor_mob.mind)
-		if (traitor_mob.mind.assigned_role == "Clown")
-			to_chat(traitor_mob, "Your training has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself.")
-			traitor_mob.mutations.Remove(M_CLUMSY)
 
 	// find a radio! toolbox(es), backpack, belt, headset
 	var/loc = ""

@@ -1,10 +1,10 @@
 #define CLONEPODRANGE 7
 /obj/machinery/computer/cloning
 	name = "cloning console"
+	desc = "A computer that takes DNA from a DNA scanner and uses it to clone an organism with a cloning pod."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "cloning"
 	circuit = "/obj/item/weapon/circuitboard/cloning"
-	var/list/links = list() //list of machines connected to this cloning console.
 	req_access = list(access_heads) //Only used for record deletion right now.
 	var/obj/machinery/dna_scannernew/scanner = null //Linked scanner. For scanning.
 	//var/obj/machinery/species_modifier/species_mod = null //linked Species Modifier. For handling species.
@@ -27,8 +27,24 @@
 		return
 	return
 
+/obj/machinery/computer/cloning/Destroy()
+	if(pod1)
+		pod1.connected = null
+		pod1 = null
+	if(scanner)
+		scanner.connected = null
+		scanner = null
+	if(diskette)
+		qdel(diskette)
+		diskette = null
+	records.Cut()
+	active_record = null
+
+	..()
+
 /obj/machinery/computer/cloning/initialize()
-	src.pod1 = findcloner()
+	pod1 = findcloner()
+	pod1.connected = src
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -37,24 +53,20 @@
 	return (istype(O,/obj/machinery/cloning) && get_dist(src,O) < CLONEPODRANGE)
 
 /obj/machinery/computer/cloning/isLinkedWith(var/obj/O)
-	return O != null && O in links
+	return O != null && (O == pod1 || O == scanner)
 
-/obj/machinery/computer/cloning/getLink(var/idx)
-	return (idx >= 1 && idx <= links.len) ? links[idx] : null
+///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
+//	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
 /obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/link/context)
 	if(istype(O, /obj/machinery/cloning/clonepod))
 		pod1 = O
+		pod1.connected = src
 		return 1
-/*	if(istype(O, /obj/machinery/cloning/species_modifier))
-		species_mod = O
-		return 1
-*/
 
 /obj/machinery/computer/cloning/proc/updatemodules()
-	src.scanner = findscanner()
-	if (!isnull(src.pod1))
-		src.pod1.connected = src // Some variable the pod needs
+	scanner = findscanner()
+	scanner.connected = src
 
 /obj/machinery/computer/cloning/proc/findscanner()
 	var/obj/machinery/dna_scannernew/scannerf = null
@@ -77,7 +89,6 @@
 	for (pod_found in orange(src, CLONEPODRANGE))
 		if(pod_found.connected)
 			continue
-		pod_found.connected = src
 		return pod_found
 
 #undef CLONEPODRANGE
@@ -329,14 +340,19 @@
 			//Can't clone without someone to clone.  Or a pod.  Or if the pod is busy. Or full of gibs.
 			if(!pod1 || !canLink(pod1)) //If the pod exists BUT it's too far away from the console
 				temp = "Error: No Clonepod detected."
+				return
 			else if(pod1.occupant)
 				temp = "Error: Clonepod is currently occupied."
+				return
 			else if(pod1.biomass < CLONE_BIOMASS)
 				temp = "Error: Not enough biomass."
+				return
 			else if(pod1.mess)
 				temp = "Error: Clonepod malfunction."
+				return
 			else if(!config.revival_cloning)
 				temp = "Error: Unable to initiate cloning cycle."
+				return
 
 			var/success = pod1.growclone(C)
 			if(success)
@@ -346,7 +362,7 @@
 				C = null
 				menu = 1
 			else
-
+				//if growclone() failed, we can't clone the guy, so what is this even DOING here?
 				var/mob/selected = find_dead_player("[C.ckey]")
 				if(!selected)
 					temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."

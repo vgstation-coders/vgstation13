@@ -24,16 +24,7 @@
 	attackby(obj/item/weapon/I as obj, mob/user as mob)
 		..()
 		if (istype(I, /obj/item/weapon/pen))
-			var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
-			if (user.get_active_hand() != I)
-				return
-			if (!Adjacent(user) || user.stat)
-				return
-			t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
-			if(t)
-				src.name = text("Glass Case- '[]'", t)
-			else
-				src.name = "Glass Case"
+			set_tiny_label(user, " - '", "'")
 		else if(istype(I, /obj/item/weapon/reagent_containers/syringe))
 			if(!src.imp)
 				return

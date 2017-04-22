@@ -114,6 +114,7 @@ var/global/list/alert_overlays_global = list()
 			if(F.flags & ON_BORDER && src.flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
 				continue
 			spawn(1)
+				new /obj/item/firedoor_frame(get_turf(src))
 				qdel(src)
 			return .
 	var/area/A = get_area(src)
@@ -136,6 +137,8 @@ var/global/list/alert_overlays_global = list()
 		A.all_doors.Remove(src)
 	. = ..()
 
+/obj/machinery/door/firedoor/proc/is_fulltile()
+	return 1
 
 /obj/machinery/door/firedoor/examine(mob/user)
 	. = ..()
@@ -164,7 +167,7 @@ var/global/list/alert_overlays_global = list()
 			o += "<span class='warning'>"
 		else
 			o += "<span style='color:blue'>"
-		o += "[celsius]�C</span> "
+		o += "[celsius]°C</span> "
 		o += "<span style='color:blue'>"
 		o += "[pressure]kPa</span></li>"
 		to_chat(user, o)
@@ -237,6 +240,32 @@ var/global/list/alert_overlays_global = list()
 		force_open(user, C)
 		return
 
+	if(istype(C, /obj/item/weapon/wrench/socket))
+		if(blocked)
+			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
+			"You begin to deconstruct \the [src] with \the [C].",\
+			"You hear a racket from a ratchet.")
+			if(do_after(user, src, 5 SECONDS))
+				new/obj/item/firedoor_frame(get_turf(src))
+				qdel(src)
+			return
+		else
+			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
+
+	if( isEmag(C) )
+		if ( density==1 )
+			flick("door_spark", src)
+			spawn(6)
+			force_open(user, C)
+			spawn(8)
+			blocked = TRUE
+			update_icon()
+			return
+		else
+			blocked = TRUE
+			update_icon()
+			return
+
 	if(blocked)
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
 		return
@@ -270,27 +299,13 @@ var/global/list/alert_overlays_global = list()
 		if(check_access(ID))
 			access_granted = 1
 
-	var/answer = "Yes"
-	if(answer == "No")
-		return
-	if(user.locked_to)
-		if(!istype(user.locked_to, /obj/structure/bed/chair/vehicle))
-			to_chat(user, "Sorry, you must remain able bodied and close to \the [src] in order to use it.")
-			return
-	if(user.incapacitated() || get_dist(src, user) > 1)
-		to_chat(user, "Sorry, you must remain able bodied and close to \the [src] in order to use it.")
-		return
-
 	if(alarmed && density && lockdown && !access_granted/* && !( users_name in users_to_open ) */)
-		// Too many shitters on /vg/ for the honor system to work.
+		if(horror_force(user))
+			return
+
 		to_chat(user, "<span class='warning'>Access denied. Please wait for authorities to arrive, or for the alert to clear.</span>")
 		return
-		// End anti-shitter system
-		/*
-		user.visible_message("<span class='warning'>\The [src] opens for \the [user]</span>",\
-		"\The [src] opens after you acknowledge the consequences.",\
-		"You hear a beep, and a door opening.")
-		*/
+
 	else
 		user.visible_message("<span class='notice'>\The [src] [density ? "open" : "close"]s for \the [user].</span>",\
 		"\The [src] [density ? "open" : "close"]s.",\
@@ -314,6 +329,7 @@ var/global/list/alert_overlays_global = list()
 		spawn(50)
 			if(alarmed && !density)
 				close()
+
 /obj/machinery/door/firedoor/open()
 	if(!loc || blocked)
 		return
@@ -326,6 +342,7 @@ var/global/list/alert_overlays_global = list()
 	if(alarmed)
 		spawn(50)
 			close()
+
 /obj/machinery/door/firedoor/proc/force_open(mob/user, var/obj/C) //used in mecha/equipment/tools/tools.dm
 	var/area/A = get_area_master(src)
 	ASSERT(istype(A)) // This worries me.
@@ -349,7 +366,12 @@ var/global/list/alert_overlays_global = list()
 		spawn(0)
 			close()
 	investigation_log(I_ATMOS, "has been [density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
-	return
+	return TRUE
+
+/obj/machinery/door/firedoor/horror_force(var/mob/living/carbon/human/H)
+	if(!ishorrorform(H))
+		return FALSE
+	return force_open(H)
 
 /obj/machinery/door/firedoor/close()
 	if(blocked || !loc)
@@ -475,6 +497,11 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/CanAStarPass()
 	return !density
 
+/obj/machinery/door/firedoor/npc_tamper_act(mob/living/L)
+	if(density)
+		open()
+	else
+		close()
 
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
@@ -489,7 +516,53 @@ var/global/list/alert_overlays_global = list()
 			return !density
 	return 1
 
+/obj/machinery/door/firedoor/border_only/is_fulltile()
+	return 0
+
 
 /obj/machinery/door/firedoor/multi_tile
 	icon = 'icons/obj/doors/DoorHazard2x1.dmi'
 	width = 2
+
+
+/obj/item/firedoor_frame
+	name = "firedoor frame"
+	icon = 'icons/obj/doors/DoorHazard.dmi'
+	icon_state = "firedoor_frame"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/electronics.dmi', "right_hand" = 'icons/mob/in-hand/right/electronics.dmi')
+	desc = "The frame for a firedoor, strangely easy to set up considering its application."
+
+/obj/item/firedoor_frame/attack_self(mob/user)
+	if(!user)
+		return 0
+	if(!isturf(user.loc))
+		return 0
+	if(!user.IsAdvancedToolUser())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 0
+	switch(alert("firedoor construction", "Would you like to construct a full tile firedoor or one direction?", "One Direction", "Full Firedoor", "Cancel", null))
+		if("One Direction")
+			if(!user.is_holding_item(src))
+				return 1
+			var/current_turf = get_turf(src)
+			var/turf_face = get_step(current_turf,user.dir)
+			if(air_master.air_blocked(current_turf, turf_face))
+				to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
+				return 1
+			var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+			if(F && F.dir == user.dir)
+				to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
+				return 1
+			if(do_after(user, src, 5 SECONDS))
+				var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
+				B.change_dir(user.dir)
+				qdel(src)
+		if("Full Firedoor")
+			if(!user.is_holding_item(src))
+				return 1
+			if(locate(/obj/machinery/door/firedoor) in get_turf(user))
+				to_chat(user, "<span class='warning'>There is a firedoor already here.</span>")
+				return 1
+			if(do_after(user, src, 5 SECONDS))
+				new /obj/machinery/door/firedoor(get_turf(src))
+				qdel(src)

@@ -14,13 +14,21 @@
 	pdatype = /obj/item/device/pda/chaplain
 
 /datum/job/chaplain/equip(var/mob/living/carbon/human/H)
-
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 	H.add_language("Spooky") //SPOOK
 	var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(H) //BS12 EDIT
 	H.put_in_hands(B)
 	H.equip_or_collect(new /obj/item/clothing/under/rank/chaplain(H), slot_w_uniform)
 	//H.equip_or_collect(new /obj/item/device/pda/chaplain(H), slot_belt)
-	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
 	if(H.backbag == 1)
 		H.put_in_hands(new H.species.survival_gear(H))
 	else
@@ -148,7 +156,7 @@
 				B.name = "The Odyssey"
 				J = "Oracle"
 				deity_name = pick("Zeus", "Poseidon", "Athena", "Persephone", "Ares", "Apollo")
-			if("Latin", "Rome", "Roma", "Roman")
+			if("latin", "rome", "roma", "roman")
 				B.name = "Cult of Rome"
 				H.equip_or_collect(new /obj/item/clothing/head/helmet/roman/legionaire(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/under/roman(H), slot_w_uniform)
@@ -321,7 +329,7 @@
 			if("communism", "socialism")
 				B.name = "The Communist Manifesto"
 				J = "Komrade"
-				deity_name = "Karl Max"
+				deity_name = "Karl Marx"
 				H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
 			if("capitalism", "free market", "liberalism", "money")
@@ -402,6 +410,14 @@
 				H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
 				J = "..."
 				deity_name = "Silence"
+			if("Ancap", "Ancapistan", "NAP")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
+				B.name = "Bitcoin Wallet"
+				J = "Bitcoin Miner" //Worst part coming up with job name
+				deity_name = "Murray Rothbard"
+				H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)

@@ -23,7 +23,12 @@
 		to_chat(user, "<span class='warning'>The borg must choose a module before he can be upgraded!</span>")
 		return FAILED_TO_ADD
 
-	if(required_module.len)
+
+	if(isMoMMI(R))
+		if(!add_to_mommis)
+			to_chat(user, "<span class='warning'>\The [src] only functions on Nanotrasen Cyborgs.</span>")
+			return FAILED_TO_ADD
+	else if(required_module.len)
 		if(!(R.module.type in required_module))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
@@ -34,10 +39,6 @@
 
 	if(!R.opened)
 		to_chat(user, "<span class='warning'>You must first open \the [src]'s cover!</span>")
-		return FAILED_TO_ADD
-
-	if(isMoMMI(R) && !add_to_mommis)
-		to_chat(user, "<span class='warning'>\The [src] only functions on Nanotrasen Cyborgs.</span>")
 		return FAILED_TO_ADD
 
 	if(!multi_upgrades && (src.type in R.module.upgrades))
@@ -172,7 +173,7 @@
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering)
-	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide)
+	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 	add_to_mommis = 1
 
 /obj/item/borg/upgrade/jetpack/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)

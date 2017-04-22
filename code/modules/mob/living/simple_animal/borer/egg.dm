@@ -68,9 +68,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	if(O)
+		var/defect = rand(1,10000)
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
-		var/mob/living/simple_animal/borer/B = new (T, child_prefix_index)
+		//Adds the chance for a "special" borer to be born
+		var/borer_type = (defect == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
+		var/mob/living/simple_animal/borer/B = new borer_type(T, child_prefix_index)
 		B.transfer_personality(O.client)
 		// Play hatching noise here.
 		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
