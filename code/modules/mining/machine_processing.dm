@@ -68,6 +68,23 @@
 
 	var/dat = {"
 	<div style="overflow:hidden;">
+	<div class="block">
+	The ore processor is currently <A href='?src=\ref[src];toggle_power=1' class='[smelter_data["on"] ? "linkOn" : "linkDanger"]'>[smelter_data["on"] ? "processing" : "disabled"]</a>
+	"}
+
+	if(smelter_data["credits"] != -1)
+		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
+
+		if(istype(id))
+			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
+			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
+		else
+			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
+
+	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
+		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
+	
+	dat += {"</div>
 	<div style="float:left;" class="block">
 	<table>
 		<tr>
@@ -119,25 +136,10 @@
 		"}
 
 	dat += {"
-	</table></div>
-	<div style="float:left" class="block">
-	The ore processor is currently <A href='?src=\ref[src];toggle_power=1' class='[smelter_data["on"] ? "linkOn" : "linkDanger"]'>[smelter_data["on"] ? "processing" : "disabled"]</a>
-	"}
-
-	if(smelter_data["credits"] != -1)
-		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
-
-		if(istype(id))
-			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
-			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
-		else
-			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
-
-	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
-		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A></div></div>"
+	</table></div></div>"}
 
 
-	var/datum/browser/popup = new(user, "console_processing_unit", name, 800, 500, src)
+	var/datum/browser/popup = new(user, "console_processing_unit", name, 460, 620, src)
 	popup.set_content(dat)
 	popup.open()
 
