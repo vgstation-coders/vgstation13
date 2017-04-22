@@ -360,9 +360,8 @@
 	return
 
 /obj/item/weapon/circuitboard/robotics/solder_improve(mob/user as mob)
-	to_chat(user, "<span class='notice'>You [access_hacked ? "" : "un"]connect the security fuse.</span>")
+	to_chat(user, "<span class='notice'>You [access_hacked ? "" : "dis"]connect the security fuse.</span>")
 	access_hacked = !access_hacked
-	return
 
 /obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
 	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
