@@ -188,6 +188,9 @@
 
 	update_colour(0,1)
 
+	spawn()
+		update_mutantrace()
+
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
 
@@ -1679,17 +1682,17 @@
 mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
-		
+
 /mob/living/carbon/human/drag_damage()
 	var/mob/living/carbon/human/H = src
-	var/turf/TH = H.loc	
+	var/turf/TH = H.loc
 	var/list/return_organs = list()
 	if (TH.has_gravity() && H.lying)
 		for(var/datum/organ/external/damagedorgan in H.organs)
 			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
 				return_organs += damagedorgan
 		return return_organs
-	
+
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
