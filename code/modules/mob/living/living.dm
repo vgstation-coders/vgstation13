@@ -665,9 +665,9 @@ Thanks.
 				stop_pulling()
 				return
 			else
-				if(Debug)
-					diary <<"pulling disappeared? at [__LINE__] in mob.dm - pulling = [pulling]"
-					diary <<"REPORT THIS"
+				// if(Debug)
+				// 	diary <<"pulling disappeared? at [__LINE__] in mob.dm - pulling = [pulling]"
+				// 	diary <<"REPORT THIS"
 
 		/////
 		if(pulling && pulling.anchored)

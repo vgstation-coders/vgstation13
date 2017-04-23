@@ -224,10 +224,11 @@ var/global/Holiday = null
 
 			message_admins("<span class='notice'>DEBUG: Event: Egg spawned at [Egg.loc] ([Egg.x],[Egg.y],[Egg.z])</span>")*/
 
-		if("End of the World")
-			if(prob(eventchance))
-				GameOver()
+		// broken proc and also we're not in 2012 anymore
+		// if("End of the World")
+		// 	if(prob(holidayeventchance))
+				// GameOver()
 
 		if("Christmas","Christmas Eve")
-			if(prob(eventchance))
+			if(prob(holidayeventchance))
 				ChristmasEvent()

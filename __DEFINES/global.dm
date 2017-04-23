@@ -54,9 +54,7 @@ var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick
 
 var/skipupdate = 0
 	///////////////
-var/eventchance = 10 //% per 5 mins
-var/event = 0
-var/hadevent = 0
+var/holidayeventchance = 10 //percent chance for a holiday event to fire automatically on its given day, see Holidays.dm
 var/blobevent = 0
 	///////////////
 var/diary = null
@@ -87,7 +85,6 @@ var/shuttle_frozen = 0
 var/shuttle_left = 0
 var/tinted_weldhelh = 1
 
-var/list/jobMax = list()
 var/list/bombers = list(  )
 var/list/admin_log = list (  )
 var/list/lastsignalers = list(	)	//keeps last 100 signals here in format: "[src] used \ref[src] @ location [src.loc]: [freq]/[code]"
@@ -131,9 +128,9 @@ var/list/tdomeadmin = list()
 var/list/blobstart = list()
 var/list/ninjastart = list()
 //	list/traitors = list()	//traitor list
-var/const/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
-var/const/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
-var/const/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
+var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
 var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cultchat
 
@@ -144,7 +141,6 @@ var/suspend_alert = 0
 
 var/datum/moduletypes/mods = new()
 
-var/wavesecret = 0
 var/gravity_is_on = 1
 
 var/shuttlecoming = 0
@@ -324,7 +320,7 @@ var/global/list/mineral_turfs = list()
 var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)
 
 //Used to set an atom's color var to "grayscale". The magic of color matrixes.
-var/const/list/grayscale = list(0.3,0.3,0.3,0,0.59,0.59,0.59,0,0.11,0.11,0.11,0,0,0,0,1,0,0,0,0)
+var/list/grayscale = list(0.3,0.3,0.3,0,0.59,0.59,0.59,0,0.11,0.11,0.11,0,0,0,0,1,0,0,0,0)
 
 //For adminbus blob looks
 var/adminblob_icon = null
