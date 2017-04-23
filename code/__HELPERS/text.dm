@@ -378,7 +378,7 @@ proc/checkhtml(var/t)
 var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
 /proc/format_watts(var/number)
 	if(number<0)
-		return "-[format_watts(number)]"
+		return "-[format_watts(abs(number))]"
 	if(number==0)
 		return "0 W"
 
