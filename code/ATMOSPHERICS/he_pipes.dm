@@ -9,7 +9,7 @@
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 
-	var/const/RADIATION_CAPACITY = 32000 // Radiation isn't particularly effective (TODO BALANCE)
+	var/RADIATION_CAPACITY = 32000       // Radiation isn't particularly effective (TODO BALANCE)
 	                                     //  Plate value is 30000, increased it a bit because of additional surface area. - N3X
 	var/const/ENERGY_MULT        = 6.4   // Not sure what this is, keeping it the same as plates.
 
@@ -217,6 +217,7 @@
 	icon = 'icons/obj/pipe-item.dmi'
 	icon_state = "he_manifold"
 	var/obj/machinery/atmospherics/node3
+	RADIATION_CAPACITY = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/New()
 	.. ()
@@ -270,7 +271,7 @@
 	icon_state = "he_manifold4w"
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
-	level = 2
+	RADIATION_CAPACITY = 32000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/New()
 	.. ()
