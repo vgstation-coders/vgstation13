@@ -2368,8 +2368,8 @@
 	
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Diona")
-			M.adjustFireLoss(4)
+		if(isdiona(H))
+			M.adjustFireLoss(1)
 			
 	
 	if(prob(5))
