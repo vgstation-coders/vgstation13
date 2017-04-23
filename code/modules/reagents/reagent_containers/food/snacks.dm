@@ -645,7 +645,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/friedegg/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
 	reagents.add_reagent(BLACKPEPPER, 1)
 	bitesize = 1
@@ -658,7 +658,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledegg/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/organ
 	name		=	"organ"
@@ -836,7 +836,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/human/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
@@ -847,7 +847,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
@@ -856,7 +856,7 @@
 	icon_state = "hburger"
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -865,7 +865,7 @@
 	food_flags = FOOD_MEAT
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger
@@ -875,7 +875,7 @@
 	food_flags = FOOD_MEAT
 /obj/item/weapon/reagent_containers/food/snacks/fishburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	reagents.add_reagent(CARPPHEROMONES, 3)
 	bitesize = 3
 
@@ -896,7 +896,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chickenburger/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 7)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburger
@@ -974,7 +974,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(NUTRIMENT, 10)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/muffin
@@ -1170,7 +1170,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/wingfangchu/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
 
@@ -1500,7 +1500,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
 	reagents.add_reagent(BLACKPEPPER, 1)
 	bitesize = 3
@@ -1891,7 +1891,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeysdelight/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(NUTRIMENT, 15)
 	reagents.add_reagent(BANANA, 5)
 	reagents.add_reagent(BLACKPEPPER, 1)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
@@ -2111,7 +2111,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledrice/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/ricepudding
@@ -2122,7 +2122,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/ricepudding/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/riceball
@@ -2132,7 +2132,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/riceball/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(NUTRIMENT, 4)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi
@@ -2142,7 +2142,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(CAPSAICIN, 2)
 	bitesize = 3
 
@@ -2936,7 +2936,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/synth/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 50)
+	reagents.add_reagent(NUTRIMENT, 45)
 	reagents.add_reagent(TOMATOJUICE, 6)
 	bitesize = 2
 
@@ -3577,7 +3577,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo
@@ -3588,7 +3588,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	reagents.add_reagent(CAPSAICIN, 10)
 	bitesize = 3
 
@@ -3600,7 +3600,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/lemon/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/xeno
@@ -3611,7 +3611,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/curry/xeno/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 25)
 	bitesize = 3
 
 
@@ -3754,7 +3754,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/honeyflan/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(CINNAMON, 5)
 	reagents.add_reagent(HONEY, 6)
 	bitesize = 3
@@ -3769,7 +3769,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(NUTRIMENT, 12)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/heart
@@ -4071,7 +4071,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/coleslaw/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/risotto
@@ -4081,7 +4081,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/risotto/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(WINE, 2)
 	bitesize = 2
 
@@ -4094,7 +4094,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(CINNAMON,5)
 	bitesize = 3
 
@@ -4399,7 +4399,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(NUTRIMENT, 30)
 	reagents.add_reagent(CORNOIL, 4)
 	reagents.add_reagent(GRAVY, 4)
 
@@ -4617,7 +4617,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,2)
+	reagents.add_reagent(NUTRIMENT,4)
 	set_light(2)
 
 /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
@@ -4672,7 +4672,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,5)
+	reagents.add_reagent(NUTRIMENT,8)
 
 /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
 	name = "chinese cold salad"
@@ -4682,7 +4682,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,8)
+	reagents.add_reagent(NUTRIMENT,12)
 	reagents.add_reagent(FROSTOIL,2)
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
@@ -4725,7 +4725,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,6)
+	reagents.add_reagent(NUTRIMENT,8)
 
 /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
 	name = "chili con carne"
@@ -4778,7 +4778,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/poissoncru/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,4)
+	reagents.add_reagent(NUTRIMENT,6)
 
 /obj/item/weapon/reagent_containers/food/snacks/chickensalad
 	name = "chicken salad"
@@ -4819,7 +4819,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/mexicansalad/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,6)
+	reagents.add_reagent(NUTRIMENT,8)
 
 /obj/item/weapon/reagent_containers/food/snacks/gazpacho
 	name = "gazpacho"
@@ -4840,7 +4840,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/bruschetta/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,3)
+	reagents.add_reagent(NUTRIMENT,5)
 
 /obj/item/weapon/reagent_containers/food/snacks/gelatin
 	name = "gelatin"
