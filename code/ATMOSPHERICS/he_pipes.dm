@@ -271,7 +271,7 @@
 	icon_state = "he_manifold4w"
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
-	RADIATION_CAPACITY = 32000
+	RADIATION_CAPACITY = 24000
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/New()
 	.. ()
