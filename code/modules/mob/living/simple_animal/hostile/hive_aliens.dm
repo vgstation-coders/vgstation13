@@ -296,6 +296,7 @@
 	aggro_vision_range = initial(aggro_vision_range)
 	idle_vision_range = initial(aggro_vision_range)
 	vision_range = initial(aggro_vision_range)
+	brute_damage_modifier = initial(brute_damage_modifier)
 
 	//Immediately find a target so that we're not useless for 1 Life() tick!
 	FindTarget()
@@ -313,6 +314,7 @@
 	aggro_vision_range = 1
 	idle_vision_range = 1
 	vision_range = 1
+	brute_damage_modifier = 3 * initial(brute_damage_modifier)
 
 	walk(src, 0)
 
