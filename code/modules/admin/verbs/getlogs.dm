@@ -52,16 +52,7 @@
 		return
 
 	message_admins("[key_name_admin(src)] accessed file: [path]")
-	#ifdef RUNWARNING
-	#if DM_VERSION > 506 && DM_VERSION < 508
-		#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
-	src << ftp(file(path))
-	#else
-	src << run(file(path))
-	#endif
-	#else
-	src << run(file(path))
-	#endif
+	obtain_log(path, src)
 	to_chat(src, "Attempting to send file, this may take a fair few minutes if the file is very large.")
 
 //This proc allows download of past server logs saved within the data/logs/ folder.
@@ -79,16 +70,7 @@
 		return
 
 	message_admins("[key_name_admin(src)] accessed file: [path]")
-	#ifdef RUNWARNING
-	#if DM_VERSION > 506 && DM_VERSION < 508
-		#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
-	src << ftp(file(path))
-	#else
-	src << run(file(path))
-	#endif
-	#else
-	src << run(file(path))
-	#endif
+	obtain_log(path, src)
 	to_chat(src, "Attempting to send file, this may take a fair few minutes if the file is very large.")
 	return
 
@@ -103,16 +85,7 @@
 
 	var/path = "data/logs/[time2text(world.realtime,"YYYY/MM-Month/DD-Day")].log"
 	if( fexists(path) )
-	#ifdef RUNWARNING
-		#if DM_VERSION > 506 && DM_VERSION < 508
-			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
-		src << ftp(file(path))
-		#else
-		src << run(file(path))
-		#endif
-		#else
-		src << run(file(path))
-		#endif
+		obtain_log(path, src)
 	else
 		to_chat(src, "<font color='red'>Error: view_txt_log(): File not found/Invalid path([path]).</font>")
 		return
@@ -127,16 +100,7 @@
 
 	var/path = "data/logs/[time2text(world.realtime,"YYYY/MM-Month/DD-Day")] Attack.log"
 	if( fexists(path) )
-		#ifdef RUNWARNING
-		#if DM_VERSION > 506 && DM_VERSION < 508
-			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
-		src << ftp(file(path))
-		#else
-		src << run(file(path))
-		#endif
-		#else
-		src << run(file(path))
-		#endif
+		obtain_log(path, src)
 	else
 		to_chat(src, "<font color='red'>Error: view_atk_log(): File not found/Invalid path([path]).</font>")
 		return
@@ -157,3 +121,27 @@
 	popup.open()
 
 	feedback_add_details("admin_verb","VMAL")
+
+//Used by the other procs to actually send the selected logs to the user
+/proc/obtain_log(var/path = null, src)
+	if(path && src)
+		#ifdef RUNWARNING
+		#if DM_VERSION > 506 && DM_VERSION < 508
+			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
+		src << ftp(file(path))
+		#else
+		var/method = alert("How do you want to get the logs?",,"Save to file","Open in notepad")
+		if(method == "Save to file")
+			src << ftp(file(path))
+		else if(method == "Open in notepad")
+			src << run(file(path))
+		#endif
+		#else
+		var/method = alert("How do you want to get the logs?",,"Save to file","Open in notepad")
+		if(method == "Save to file")
+			src << ftp(file(path))
+		else if(method == "Open in notepad")
+			src << run(file(path))
+		#endif
+	else
+		to_chat(src, "Error, no log file or src passed to obtain_log")
