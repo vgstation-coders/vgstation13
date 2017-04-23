@@ -2365,7 +2365,13 @@
 
 	if(..())
 		return 1
-
+	
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.name == "Diona")
+			M.adjustFireLoss(4)
+			
+	
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
 
