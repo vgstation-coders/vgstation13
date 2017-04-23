@@ -48,7 +48,19 @@ Buildable meters
 #define DISP_SORT_JUNCTION		8
 #define DISP_SORT_WRAP_JUNCTION	9
 
-var/global/list/unstackable_pipes = list(PIPE_LAYER_MANIFOLD)
+var/global/list/unstackable_pipes = list(
+	PIPE_LAYER_MANIFOLD,
+	PIPE_UVENT,
+	PIPE_SCRUBBER,
+	PIPE_HEAT_EXCHANGE,
+	PIPE_THERMAL_PLATE,
+	PIPE_INJECTOR,
+	PIPE_DP_VENT,
+	PIPE_PASV_VENT,
+	PIPE_JUNCTION,
+	PIPE_HE_BENT,
+	PIPE_HE_STRAIGHT
+)
 var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
 
 /obj/item/pipe_spawner
