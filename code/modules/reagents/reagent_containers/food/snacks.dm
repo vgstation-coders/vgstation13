@@ -4972,3 +4972,22 @@
 /obj/item/weapon/reagent_containers/food/snacks/bleachkipper/New()
 	..()
 	reagents.add_reagent(FISHBLEACH, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
+	name = "mud pie"
+	desc = "While not looking very appetizing, it at least looks like somebody had fun making it."
+	icon_state = "mud_pie"
+	filling_color = "#462B20"
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, rand(0,2))
+	reagents.add_reagent(TOXIN, rand(1,5))
+	if(prob(15))
+		name = "exceptional " + initial(name)
+		desc = "The crème de la pire of culinary arts."
+		reagents.add_reagent(SUGAR, 2)
+		reagents.add_reagent(TOXIN, rand(3,8))
+		reagents.add_reagent(COCO, 3)
+	bitesize = 2
