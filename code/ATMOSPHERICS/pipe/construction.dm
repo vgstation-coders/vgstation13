@@ -59,7 +59,9 @@ var/global/list/unstackable_pipes = list(
 	PIPE_PASV_VENT,
 	PIPE_JUNCTION,
 	PIPE_HE_BENT,
-	PIPE_HE_STRAIGHT
+	PIPE_HE_STRAIGHT,
+	PIPE_GAS_FILTER,
+	PIPE_GAS_MIXER
 )
 var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
 
