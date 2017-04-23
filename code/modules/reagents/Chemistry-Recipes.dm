@@ -2511,7 +2511,7 @@
 	name = "Mead"
 	id = MEAD
 	result = MEAD
-	required_reagents = list(SUGAR = 1, WATER = 1)
+	required_reagents = list(HONEY = 1, WATER = 1)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 2
 
