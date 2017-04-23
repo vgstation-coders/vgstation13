@@ -186,8 +186,10 @@
 				to_chat(src, "<b>You must eat to survive. Starvation for extended periods of time will kill you!</b>")
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
-	update_mutantrace()
 	update_colour(0,1)
+
+	spawn()
+		update_mutantrace()
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
