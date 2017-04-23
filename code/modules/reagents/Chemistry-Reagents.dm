@@ -2366,12 +2366,6 @@
 	if(..())
 		return 1
 	
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(isdiona(H))
-			M.adjustFireLoss(1)
-			
-	
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
 
