@@ -514,6 +514,7 @@
 								to_chat(usr, "<b>Name:</b> [R.fields["name"]]	<b>Criminal Status:</b> [R.fields["criminal"]]")
 								to_chat(usr, "<b>Notes:</b> [R.fields["notes"]]")
 								var/counter = 1
+								to_chat(usr, "<b>Comments:</b>")
 								while(R.fields[text("com_[]", counter)])
 									to_chat(usr, text("[]", R.fields[text("com_[]", counter)]))
 									counter++
