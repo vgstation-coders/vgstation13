@@ -427,3 +427,17 @@ This function restores all organs.
 	apply_effect(10, EYE_BLUR)
 	apply_effect(10, WEAKEN)
 	update_canmove()
+
+/mob/living/carbon/human/apply_radiation(var/rads, var/application = EXTERNAL)
+	if(application == EXTERNAL)
+		var/contents = get_contents_in_object(src)
+
+		var/obj/item/device/geiger_counter/G = locate(/obj/item/device/geiger_counter) in contents
+
+		if(G)
+			G.measure_rad(src, rads)
+
+	if(reagents)
+		if(reagents.has_reagent(LITHOTORCRAZINE))
+			rads = rads/2
+	..()

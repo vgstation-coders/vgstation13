@@ -131,6 +131,9 @@
 		var/major_rad_multiplier = max(1, radiation/70)
 		var/extreme_rad_multiplier = max(1, radiation/100)
 
+		if(reagents.has_reagent(ARITHRAZINE) && prob(51-extreme_rad_multiplier))
+			return
+
 		if(rad_tick > RADDOSELIGHT)
 			if(prob(5*rad_multiplier))
 				//Vomit
@@ -141,7 +144,7 @@
 					to_chat(src, "<span class = 'danger'>Your nose starts bleeding!</span>")
 			if(prob(5*major_rad_multiplier))
 				//Hallucination
-				hallucination += rand(1,5)*minor_rad_multiplier
+				hallucination += rand(1,5)*major_rad_multiplier
 		if(rad_tick > RADDOSEMINOR)
 			if(prob(2*major_rad_multiplier))
 				//Internal hemorrhaging
@@ -154,7 +157,7 @@
 					var/datum/organ/external/victim = pick(limbs_to_bleed)
 					if(prob(35))
 						to_chat(src, "<span class = 'danger'>You feel something tear in your [victim.display_name]</span>")
-					var/datum/wound/internal_bleeding/I = new (1*minor_rad_multiplier)
+					var/datum/wound/internal_bleeding/I = new (1*major_rad_multiplier)
 					victim.wounds += I
 		if(rad_tick > RADDOSEADVANCED)
 			if(prob(5*rad_multiplier))
@@ -217,22 +220,24 @@
 				switch(inst)
 
 					if(1)
-						//Drop some meat
-						to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
-						var/sourcename = real_name
-						var/sourcejob = job
 						var/sourcenutriment = nutrition / 15
+						if(sourcenutriment > 1)
+							//Drop some meat
+							to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
+							var/sourcename = real_name
+							var/sourcejob = job
 
-						var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
-						newmeat.name = sourcename + " " + newmeat.name
-						newmeat.subjectname = sourcename
-						newmeat.subjectjob = sourcejob
-						newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment)
-						var/turf/Tx = get_turf(src)
-						newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
 
-						if(!Tx.density)
-							blood_splatter(Tx,src,TRUE)
+							var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
+							newmeat.name = sourcename + " " + newmeat.name
+							newmeat.subjectname = sourcename
+							newmeat.subjectjob = sourcejob
+							newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment)
+							var/turf/Tx = get_turf(src)
+							newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
+
+							if(!Tx.density)
+								blood_splatter(Tx,src,TRUE)
 
 					if(2)
 						//Drop a limb

@@ -320,6 +320,7 @@
 #define ROACHSHELL		"roach_shell"
 #define GREYVODKA		"grey_vodka"
 #define MEDCORES		"medium cores"
+#define LITHOTORCRAZINE "lithotorcrazine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

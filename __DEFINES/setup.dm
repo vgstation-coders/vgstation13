@@ -788,6 +788,8 @@ SEE_PIXELS	256
 // Special 'weapons', used in damage procs
 #define WPN_HIGH_BODY_TEMP "High Body Temperature"
 #define WPN_LOW_BODY_TEMP  "Low Body Temperature"
+#define INTERNAL "internal"
+#define EXTERNAL "external"
 
 ///////////////////ORGAN DEFINES///////////////////
 
