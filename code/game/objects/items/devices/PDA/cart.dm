@@ -514,7 +514,7 @@ Code:
 					Comments/Log:<br>"}
 				var/counter = 1
 				while(active3.fields["com_[counter]"])
-					menu += "[S.fields["com_[counter]"]]<BR>"
+					menu += "[active3.fields["com_[counter]"]]<BR>"
 					counter++
 
 			else
