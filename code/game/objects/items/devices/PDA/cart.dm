@@ -510,7 +510,13 @@ Code:
 
 				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
 					Important Notes:<br>
-					[active3.fields["notes"]]"}
+					[active3.fields["notes"]]
+					Comments/Log:<br>"}
+				var/counter = 1
+				while(active3.fields["com_[counter]"])
+					menu += "[S.fields["com_[counter]"]]<BR>"
+					counter++
+
 			else
 				menu += "<b>Record Lost!</b><br>"
 
