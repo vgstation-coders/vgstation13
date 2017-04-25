@@ -1051,7 +1051,7 @@ var/list/datum/dna/hivemind_bank = list()
 
 /obj/item/verbs/changeling/proc/changeling_paralysis_sting()
 	set category = "Changeling"
-	set name = "Paralysis Sting (20)"
+	set name = "Paralysis Sting (30)"
 	set desc = "Makes our victim temporarily paralyzed below the neck. They'll still be able to talk and yell for help."
 
 	var/mob/M = loc
