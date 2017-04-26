@@ -5,7 +5,8 @@
 
 	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 300
-	charge_max = 100
+	charge_max = 10 SECONDS
+	cooldown_min = 2 SECONDS
 	spell_flags = 0
 	range = 0
 	cast_sound = null
