@@ -82,7 +82,7 @@
 
 		//Alive - follow the master
 		if(!isDead())
-			if(canmove)
+			if(canmove && get_dist(master, src) > 2)
 				Goto(master, move_to_delay)
 
 /mob/living/simple_animal/hostile/arcane_golem/Die()
