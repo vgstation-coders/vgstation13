@@ -1892,8 +1892,6 @@
 			global.skipupdate=newval
 		if("holidayeventchance")
 			global.holidayeventchance=newval
-		if("event")
-			global.event=newval
 		if("blobevent")
 			global.blobevent=newval
 		if("diary")
@@ -3250,8 +3248,6 @@
 			global.wages_enabled=newval
 		if("roundstart_enable_wages")
 			global.roundstart_enable_wages=newval
-		if("event_last_fired")
-			global.event_last_fired=newval
 		if("allEvents")
 			global.allEvents=newval
 		if("potentialRandomEvents")
