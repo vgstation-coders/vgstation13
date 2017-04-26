@@ -12,6 +12,8 @@
 
 	hud_state = "wiz_shield"
 
+	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+
 /spell/aoe_turf/conjure/forcewall/mime
 	name = "Invisible wall"
 	desc = "Create an invisible wall on your location."
@@ -56,7 +58,7 @@
 	if(istype(mover, /obj/item/projectile/bullet/invisible))
 		return 1
 	..()
-	
+
 /obj/effect/forcefield/cultify()
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)
