@@ -38,7 +38,6 @@
 	heat_damage_per_tick = 0
 	cold_damage_per_tick = 0
 	stop_automated_movement = 1
-	wander = 0
 
 
 /mob/living/simple_animal/hostile/arcane_golem/Destroy()
@@ -83,10 +82,8 @@
 
 		//Alive - follow the master
 		if(!isDead())
-			if(canmove && get_dist(master, src) > 2)
+			if(canmove)
 				Goto(master, move_to_delay)
-			else
-				walk(src, 0)
 
 /mob/living/simple_animal/hostile/arcane_golem/Die()
 	..()
