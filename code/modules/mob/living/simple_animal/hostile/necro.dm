@@ -314,7 +314,7 @@
 					else
 						playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
 						D.shake(1, 8)
-	busy = FALSE
+		busy = FALSE
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
@@ -429,7 +429,10 @@
 		if(can_open_door(A))
 			force_door(A)
 		else
-			visible_message("\The [src] looks over \the [A] for a moment.", "<span class='notice'>You don't think you can get \the [A] open.</span>")
+			if(busy)
+				to_chat(src, "<span class='notice'>You're busy with something else.</span>")
+			else
+				to_chat(src, "<span class='notice'>You don't think you can get \the [A] open.</span>")
 	if(istype(A, /mob/living/carbon/human))
 		if(check_edibility(A))
 			eat(A)
