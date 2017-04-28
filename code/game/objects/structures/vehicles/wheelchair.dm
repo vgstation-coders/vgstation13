@@ -220,13 +220,13 @@
 		internal_battery.use(2) //Example use: 100 charge to get from the cargo desk to medbay side entrance
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/getMovementDelay()
-	if(internal_battery && internal_battery.charge)
+	if(internal_battery && internal_battery.charge>0)
 		return 0
 	else
 		return (..() * 2) //It's not designed to move this way!
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/check_key(var/mob/user)
-	if(internal_battery && internal_battery.charge)
+	if(internal_battery && internal_battery.charge>0)
 		return 1
 	else
 		return ..()
