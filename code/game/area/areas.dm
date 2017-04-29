@@ -733,18 +733,18 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 			for(var/obj/machinery/door/D2 in T1)
 				doors += D2
 			/*if(T1.parent)
-				air_master.groups_to_rebuild += T1.parent
+				SSair.groups_to_rebuild += T1.parent
 			else
-				air_master.mark_for_update(T1)*/
+				SSair.mark_for_update(T1)*/
 
 	if(fromupdate.len)
 		for(var/turf/simulated/T2 in fromupdate)
 			for(var/obj/machinery/door/D2 in T2)
 				doors += D2
 			/*if(T2.parent)
-				air_master.groups_to_rebuild += T2.parent
+				SSair.groups_to_rebuild += T2.parent
 			else
-				air_master.mark_for_update(T2)*/
+				SSair.mark_for_update(T2)*/
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()

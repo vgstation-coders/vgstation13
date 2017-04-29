@@ -46,7 +46,7 @@
 			var/scrubber_info[0]
 			scrubber_info["id"] = scrubber.id
 			scrubber_info["full_name"] = scrubber.name
-			scrubber_info["pressure"] = scrubber.air_contents.pressure
+			scrubber_info["pressure"] = scrubber.air_contents.return_pressure()
 			scrubber_info["isOperating"] = scrubber.on
 			scrubbers += list(scrubber_info)
 	data["scrubbers"] = scrubbers

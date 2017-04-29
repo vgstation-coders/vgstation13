@@ -58,8 +58,8 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 
 	if(survive_on_station)
 		if(seed.consume_gasses)
-			seed.consume_gasses["plasma"] = null //PHORON DOES NOT EXIST
-			seed.consume_gasses["carbon_dioxide"] = null
+			seed.consume_gasses[GAS_PLASMA] = null //PHORON DOES NOT EXIST // Agreed.
+			seed.consume_gasses[GAS_CARBON] = null
 		if(seed.chems && !isnull(seed.chems[PACID]))
 			seed.chems[PACID] = null // Eating through the hull will make these plants completely inviable, albeit very dangerous.
 			seed.chems -= null // Setting to null does not actually remove the entry, which is weird.

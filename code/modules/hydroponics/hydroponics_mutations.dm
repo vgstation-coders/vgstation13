@@ -293,12 +293,12 @@
 			generic_mutation_message("shakes!")
 
 		if("breathe_aliengas") //This is honestly awful and pretty unfun. It just guarantees that the user will have to apply a new enviro gene. But for now I'm leaving it in
-			var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+			var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.consume_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 
 		if("exude_dangerousgas")
-			var/gas = pick("nitrogen","plasma","carbon_dioxide")
+			var/gas = pick(GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 			seed.exude_gasses[gas] = rand(3,9)
 			generic_mutation_message("shakes!")
 

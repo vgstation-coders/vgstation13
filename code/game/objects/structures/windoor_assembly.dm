@@ -300,14 +300,3 @@ obj/structure/windoor_assembly/Destroy()
 
 	update_icon()
 	return
-
-/obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if (isnull(air_master))
-		return 0
-
-	var/T = loc
-
-	if (isturf(T))
-		air_master.mark_for_update(T)
-
-	return 1

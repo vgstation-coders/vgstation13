@@ -98,8 +98,8 @@ var/list/all_doors = list()
 				denied()
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
-	// TODO: analyze this
-	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
+//Prevents zas from forcing you to open doors
+	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 		return
 
 	add_fingerprint(user)
@@ -362,8 +362,8 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/requiresID()
 	return 1
 
-/obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
-	if(!air_master)
+/obj/machinery/door/update_nearby_tiles(var/turf/T)
+	if(!SSair)
 		return 0
 
 	if(!T)
@@ -372,7 +372,7 @@ var/list/all_doors = list()
 		return 0
 
 	update_heat_protection(T)
-	air_master.mark_for_update(T)
+	SSair.mark_for_update(T)
 
 	update_freelok_sight()
 	return 1

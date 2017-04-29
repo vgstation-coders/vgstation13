@@ -239,10 +239,10 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	t += {"Nitrogen : [env.nitrogen]
-Oxygen : [env.oxygen]
-Plasma : [env.toxins]
-CO2: [env.carbon_dioxide]
+	t += {"Nitrogen : [env.gas[GAS_NITROGEN]]
+Oxygen : [env.gas[GAS_OXYGEN]]
+Plasma : [env.gas[GAS_PLASMA]]
+CO2: [env.gas[GAS_CARBON]]
 Pressure: [env.return_pressure()]"}
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -1132,8 +1132,10 @@ Pressure: [env.return_pressure()]"}
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 100 //Don't need to explain, space magic
-				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
+
+				//Don't need to explain, space magic
+				//Perfect freezer cooling
+				Plasma.air_contents.adjust_gas_temp(GAS_PLASMA, 100, 73.15)
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
 				Plasma.forceMove(Rad)
