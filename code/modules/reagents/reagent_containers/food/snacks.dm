@@ -4991,3 +4991,15 @@
 		reagents.add_reagent(TOXIN, rand(3,8))
 		reagents.add_reagent(COCO, 3)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/magbites
+	name = "mag-bites"
+	desc = "Tiny boot-shaped cheese puffs. Made with real magnets!\
+	<br>Warning: not suitable for those with heart conditions or on medication, consult your doctor before consuming this product. Cheese dust may stain or dissolve fabrics."
+	icon_state = "magbites"
+
+/obj/item/weapon/reagent_containers/food/snacks/magbites/New()
+	..()
+	reagents.add_reagent(MEDCORES, 6)
+	reagents.add_reagent(SODIUMCHLORIDE, 6)
+	reagents.add_reagent(NUTRIMENT, 4)

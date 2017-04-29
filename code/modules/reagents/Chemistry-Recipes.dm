@@ -2813,6 +2813,12 @@
 	required_reagents = list(MINDBREAKER = 1, OXYGEN = 1, INAPROVALINE = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/sheer_heart_attack
+	name = "hardcore induced heart attack"
+	id = MEDCORES
+	result = CHEESYGLOOP
+	required_reagents = list(MEDCORES = 0.1, HYPERZINE = 0.1)
+	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
