@@ -337,7 +337,7 @@
 			module_sprites["Kodiak"] = "kodiak-sec"
 			module_sprites["Noble"] = "Noble-SEC"
 			module_sprites["R34 - SEC10a 'Woody'"] = "woody"
-			to_chat(src, "<font size='15' color='red'>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</font></span>")
+			to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
 			speed = 0
 
 		if("TG17355")
