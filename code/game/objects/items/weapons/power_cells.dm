@@ -127,12 +127,12 @@
 	spawn(rand(1,3) SECONDS)
 		var/power_to_use = min(charge, rand(800,1200))
 		playsound(loc, 'sound/effects/eleczap.ogg', 80, 1)
-		use(power_to_use)
-		user.adjustFireLoss(power_to_use/100) //So 8 to 12 damage
-		user.visible_message("<span class = 'notice'>\The [user] is electrocuted by \the [src]</span>", "<span class = 'warning'>You are [pick("frazzled","electrocuted","zapped")] by \the [src]!</span>")
-		user.set_light(2,2,"#ffff00")
-		spawn(power_to_use/100 SECONDS)
-			user.set_light(0)
+		if(use(power_to_use))
+			user.adjustFireLoss(power_to_use/100) //So 8 to 12 damage
+			user.visible_message("<span class = 'notice'>\The [user] is electrocuted by \the [src]</span>", "<span class = 'warning'>You are [pick("frazzled","electrocuted","zapped")] by \the [src]!</span>")
+			user.set_light(2,2,"#ffff00")
+			spawn(power_to_use/100 SECONDS)
+				user.set_light(0)
 
 /obj/item/weapon/cell/slime
 	name = "charged slime core"
