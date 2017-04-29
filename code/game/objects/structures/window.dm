@@ -28,7 +28,7 @@
 	var/obj/abstract/Overlays/damage_overlay
 	var/cracked_base = "crack"
 
-	var/fire_temp_threshold = 800
+	var/fire_temp_threshold = MELTPOINT_GLASS
 	var/fire_volume_mod = 100
 
 /obj/structure/window/New(loc)
@@ -469,21 +469,6 @@
 	dir = ini_dir
 	update_nearby_tiles()
 
-//This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_tiles().
-/obj/structure/window/proc/update_nearby_tiles(var/turf/T)
-
-
-	if(isnull(air_master))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-
-	if(isturf(T))
-		air_master.mark_for_update(T)
-
-	return 1
-
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
 /obj/structure/window/proc/update_nearby_icons(var/turf/T)
 
@@ -513,7 +498,7 @@
 
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
-	if(exposed_temperature > T0C + fire_temp_threshold)
+	if(fire_temp_threshold && exposed_temperature > T0C + fire_temp_threshold)
 		health -= round(exposed_volume/fire_volume_mod)
 		healthcheck(sound = 0)
 	..()
@@ -542,7 +527,7 @@
 	health = 120
 	penetration_dampening = 5
 
-	fire_temp_threshold = 32000
+	fire_temp_threshold = 32000 KELVIN
 	fire_volume_mod = 1000
 
 /obj/structure/window/reinforced/plasma
@@ -555,8 +540,7 @@
 	health = 160
 	penetration_dampening = 7
 
-/obj/structure/window/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return
+	fire_temp_threshold = 0
 
 /obj/structure/window/reinforced/tinted
 

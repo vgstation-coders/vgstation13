@@ -137,12 +137,12 @@
 	OT.master = V
 
 	PT.air_contents.temperature = PLASMA_FLASHPOINT
-	PT.air_contents.toxins = 15
-	PT.air_contents.carbon_dioxide = 33
+	PT.air_contents.gas[GAS_PLASMA] = 15
+	PT.air_contents.gas[GAS_CARBON] = 33
 	PT.air_contents.update_values()
 
 	OT.air_contents.temperature = PLASMA_FLASHPOINT
-	OT.air_contents.oxygen = 48
+	OT.air_contents.gas[GAS_OXYGEN] = 48
 	OT.air_contents.update_values()
 
 	var/obj/item/device/assembly/S

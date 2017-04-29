@@ -135,7 +135,7 @@ var/global/list/organ_damage_overlays = list(
 	//No need to update all of these procs if the guy is dead.
 	if(stat != DEAD && !in_stasis)
 
-		if(air_master.current_cycle % 4 == 2 || failed_last_breath) //First, resolve location and get a breath
+		if(SSair.current_cycle % 4 == 2 || failed_last_breath) //First, resolve location and get a breath
 			breathe() //Only try to take a breath every 4 ticks, unless suffocating
 			last_processed = "Breathe"
 

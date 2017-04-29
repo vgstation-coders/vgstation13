@@ -122,39 +122,36 @@
 	name = "\improper N2O Gas Miner"
 	overlay_color = "#FFCCCC"
 
-	AddAir()
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air_contents.trace_gases += trace_gas
-		trace_gas.moles = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+/obj/machinery/atmospherics/miner/sleeping_agent/AddAir()
+	air_contents.adjust_gas(GAS_SLEEPING, internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 /obj/machinery/atmospherics/miner/nitrogen
 	name = "\improper N2 Gas Miner"
 	overlay_color = "#CCFFCC"
 
-	AddAir()
-		air_contents.nitrogen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+/obj/machinery/atmospherics/miner/nitrogen/AddAir()
+	air_contents.adjust_gas(GAS_NITROGEN, internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 /obj/machinery/atmospherics/miner/oxygen
 	name = "\improper O2 Gas Miner"
 	overlay_color = "#007FFF"
 
-	AddAir()
-		air_contents.oxygen = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+/obj/machinery/atmospherics/miner/oxygen/AddAir()
+	air_contents.adjust_gas(GAS_OXYGEN, internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 /obj/machinery/atmospherics/miner/toxins
 	name = "\improper Plasma Gas Miner"
 	overlay_color = "#FF0000"
 
-	AddAir()
-		air_contents.toxins = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+/obj/machinery/atmospherics/miner/toxins/AddAir()
+	air_contents.adjust_gas(GAS_PLASMA, internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 /obj/machinery/atmospherics/miner/carbon_dioxide
 	name = "\improper CO2 Gas Miner"
 	overlay_color = "#CDCDCD"
 
-	AddAir()
-		air_contents.carbon_dioxide = internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-
+/obj/machinery/atmospherics/miner/carbon_dioxide/AddAir()
+	air_contents.adjust_gas(GAS_CARBON, internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 
 /obj/machinery/atmospherics/miner/air
 	name = "\improper Air Miner"
@@ -163,6 +160,6 @@
 
 	on = 0
 
-	AddAir()
-		air_contents.oxygen = 0.2 * internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-		air_contents.nitrogen = 0.8 * internal_pressure*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+/obj/machinery/atmospherics/miner/air/AddAir()
+	air_contents.adjust_gas(GAS_OXYGEN,   O2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_NITROGEN, N2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))

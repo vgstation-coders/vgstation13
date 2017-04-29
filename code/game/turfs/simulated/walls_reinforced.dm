@@ -21,6 +21,7 @@
 	penetration_dampening = 20
 
 	var/d_state = WALLCOMPLETED
+	melt_temperature = MELTPOINT_PLASTEEL
 
 /turf/simulated/wall/r_wall/examine(mob/user)
 	..()

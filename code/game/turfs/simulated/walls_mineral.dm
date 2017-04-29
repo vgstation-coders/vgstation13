@@ -48,6 +48,7 @@
 	mineral = "gold"
 	//var/electro = 1
 	//var/shocked = null
+	melt_temperature = MELTPOINT_GOLD
 
 /turf/simulated/wall/mineral/silver
 	name = "silver wall"
@@ -58,6 +59,8 @@
 	//var/electro = 0.75
 	//var/shocked = null
 
+	melt_temperature = MELTPOINT_SILVER
+
 /turf/simulated/wall/mineral/diamond
 	name = "diamond wall"
 	desc = "A wall with diamond plating. You monster."
@@ -66,12 +69,16 @@
 	mineral = "diamond"
 	explosion_block = 3
 
+	melt_temperature = MELTPOINT_DIAMOND
+
 /turf/simulated/wall/mineral/clown
 	name = "bananium wall"
 	desc = "A wall with bananium plating. Honk!"
 	icon_state = "clown0"
 	walltype = "clown"
 	mineral = "clown"
+
+	melt_temperature = MELTPOINT_BANANIUM
 
 /turf/simulated/wall/mineral/sandstone
 	name = "sandstone wall"
@@ -81,6 +88,8 @@
 	mineral = "sandstone"
 	explosion_block = 0
 
+	melt_temperature = MELTPOINT_GLASS
+
 /turf/simulated/wall/mineral/plastic
 	name = "plastic wall"
 	desc = "A wall made of colorful plastic blocks attached together."
@@ -89,6 +98,8 @@
 	mineral = "plastic"
 	opacity = 0
 	explosion_block = 0
+
+	melt_temperature = MELTPOINT_PLASTIC
 
 /turf/simulated/wall/mineral/uranium
 	name = "uranium wall"
@@ -149,8 +160,8 @@
 			target_tile.parent.suspend_group_processing()*/
 		var/datum/gas_mixture/napalm = new
 		var/toxinsToDeduce = 20
-		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 400+T0C
+		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 		target_tile.assume_air(napalm)
 		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve

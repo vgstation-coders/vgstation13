@@ -528,7 +528,7 @@
 
 /obj/machinery/portable_atmospherics/canister/old/plasma/New(loc)
 	..(loc)
-	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_PLASMA, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /obj/machinery/portable_atmospherics/canister/old/oxygen
@@ -539,7 +539,7 @@
 
 /obj/machinery/portable_atmospherics/canister/old/oxygen/New(loc)
 	..(loc)
-	air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_gas(GAS_OXYGEN, (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
 	update_icon()
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/vault
