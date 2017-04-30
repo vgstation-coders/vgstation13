@@ -742,3 +742,9 @@
 			sleep(1)
 			I.throw_at(user, 16, 2)
 			counter++
+
+/obj/item/weapon/spellbook/oneuse/arcane_golem
+	spell = /spell/aoe_turf/conjure/arcane_golem
+	spellname = "forge arcane golem"
+	icon_state = "bookgolem"
+	desc = "This book has several completely blank pages."
