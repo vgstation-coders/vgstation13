@@ -20,6 +20,8 @@
 		on_uattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
+	if(on_irradiate)
+		on_irradiate.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -63,11 +65,13 @@
 	qdel(on_uattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
+	qdel(on_irradiate)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 	on_clickon = null
+	on_irradiate = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -241,6 +245,7 @@
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
+	on_irradiate = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -954,7 +959,7 @@ var/list/slot_equipment_priority = list( \
 	if (ismob(AM))
 		var/mob/M = AM
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
-			P = M.locked_to		
+			P = M.locked_to
 
 	if (!P.anchored)
 		P.add_fingerprint(src)
@@ -978,7 +983,7 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = usr
 				/*if(ishuman(AM))
 					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage()) 
+					if (HM.drag_damage())
 						if (HM.isincrit())
 							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
 							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/

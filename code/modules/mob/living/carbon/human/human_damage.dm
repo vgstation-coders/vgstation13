@@ -430,12 +430,7 @@ This function restores all organs.
 
 /mob/living/carbon/human/apply_radiation(var/rads, var/application = EXTERNAL)
 	if(application == EXTERNAL)
-		var/contents = get_contents_in_object(src)
-
-		var/obj/item/device/geiger_counter/G = locate(/obj/item/device/geiger_counter) in contents
-
-		if(G)
-			G.measure_rad(src, rads)
+		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
 
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
