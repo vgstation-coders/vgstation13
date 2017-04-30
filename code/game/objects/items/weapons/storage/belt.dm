@@ -380,5 +380,7 @@
 		"/obj/item/weapon/soap",
 		"/obj/item/key/janicart",
 		"/obj/item/clothing/gloves",
-		"/obj/item/weapon/caution")
+		"/obj/item/weapon/caution",
+		"/obj/item/weapon/mop",
+		"/obj/item/weapon/storage/bag/trash")
 
