@@ -113,8 +113,8 @@
 	minor_fault = 1
 
 /obj/item/weapon/cell/crepe
-	name = "power crepe"
-	desc = "Warning: May contain dairy products, 12,000kw of searing death, gluten."
+	name = "power crêpe"
+	desc = "Warning: May contain dairy products, 12,000kJ of searing death, gluten."
 	origin_tech = Tc_POWERSTORAGE + "=3"
 	icon_state = "power_crepe"
 	maxcharge = 12000
@@ -130,9 +130,10 @@
 		if(use(power_to_use))
 			user.adjustFireLoss(power_to_use/100) //So 8 to 12 damage
 			user.visible_message("<span class = 'notice'>\The [user] is electrocuted by \the [src]</span>", "<span class = 'warning'>You are [pick("frazzled","electrocuted","zapped")] by \the [src]!</span>")
-			user.set_light(2,2,"#ffff00")
-			spawn(power_to_use/100 SECONDS)
-				user.set_light(0)
+			if(!user.light_range)
+				user.set_light(2,2,"#ffff00")
+				spawn(power_to_use/100 SECONDS)
+					user.set_light(0)
 
 /obj/item/weapon/cell/slime
 	name = "charged slime core"
