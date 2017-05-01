@@ -1955,7 +1955,7 @@
 	name = "Slime Cash"
 	id = "m_cash"
 	result = null
-	required_reagents = list(PHAZON = 5)
+	required_reagents = list(GOLD = 5)
 	result_amount = 1
 	required_container = /obj/item/slime_extract/pyrite
 	required_other = 1
