@@ -56,15 +56,15 @@
 	wizard.special_role = "Wizard"
 	wizard.original = wizard.current
 
-	var/list/wizardstart = get_landmarks(/obj/effect/landmark/wizardstart)
-	if(wizardstart.len == 0)
+	var/turf/wizardstart = pick_landmark(/obj/effect/landmark/wizardstart)
+	if(!wizardstart)
 		to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		return 0
 
 	for(var/datum/mind/wwizard in wizards)
-		wwizard.current.forceMove(pick(wizardstart))
+		wwizard.current.forceMove(wizardstart)
 
 	log_admin("Starting a round of wizard with [wizards.len] wizards.")
 	message_admins("Starting a round of wizard with [wizards.len] wizards.")
