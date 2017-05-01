@@ -1922,35 +1922,61 @@
 	var/obj/item/device/camera_film/P = new /obj/item/device/camera_film
 	P.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/slimestop
+	name = "Slime timestop"
+	id = "s_stop"
+	result = null
+	required_reagents = list(PHAZON = 5)
+	result_amount = 1
+	required_container = /obj/item/slime_extract/sepia
+	required_other = 1
+	alert_admins = ALERT_ALL_REAGENTS
+
+/datum/chemical_reaction/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	timestop(get_turf(holder.my_atom), 25,5)
+
 //Pyrite
-/datum/chemical_reaction/slimepaint
-	name = "Slime Paint"
-	id = "s_paint"
+/datum/chemical_reaction/slimegamble
+	name = "Slime Gamble"
+	id = "s_gamble"
 	result = null
 	required_reagents = list(PLASMA = 5)
 	result_amount = 1
 	required_container = /obj/item/slime_extract/pyrite
 	required_other = 1
 
-/datum/chemical_reaction/slimepaint/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slimegamble/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/list/paints = typesof(/obj/item/weapon/reagent_containers/glass/paint) - /obj/item/weapon/reagent_containers/glass/paint
-	var/chosen = pick(paints)
-	var/obj/P = new chosen
-	if(P)
-		P.forceMove(get_turf(holder.my_atom))
+	var/obj/machinery/computer/slot_machine/M = new /obj/machinery/computer/slot_machine
+	M.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimecash
 	name = "Slime Cash"
 	id = "m_cash"
 	result = null
-	required_reagents = list(BLOOD = 5)
+	required_reagents = list(PHAZON = 5)
 	result_amount = 1
 	required_container = /obj/item/slime_extract/pyrite
 	required_other = 1
 
 /datum/chemical_reaction/slimecash/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
+
+	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+
+	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+		if(ishuman(O))
+			var/mob/living/carbon/human/H = O
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+				H.flash_eyes(visual = 1)
+				to_chat(O, "<span class='danger'>Hail to you!</span>")
+			else
+				to_chat(O, "<span class='notice'>A thousand credits appear right before you!</span>")
+		else
+			to_chat(O, "<span class='notice'>A thousand credits appear right before you!</span>")
+
+
+	var/obj/item/weapon/spacecash/c1000/C = new /obj/item/weapon/spacecash/c1000/
 	C.amount = 1
 	C.forceMove(get_turf(holder.my_atom))
 
