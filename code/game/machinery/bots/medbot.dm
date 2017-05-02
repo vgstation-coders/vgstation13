@@ -251,6 +251,7 @@
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		flick("medibot_spark", src)
+		playsound(src.loc, 'sound/medbot/Chemical_Detected.ogg', 35)
 		patient = null
 		if(user)
 			oldpatient = user
@@ -309,8 +310,8 @@
 				last_found = world.time
 				spawn(0)
 					if((last_newpatient_speak + 100) < world.time) //Don't spam these messages!
-						var/message = pick("Hey, you! Hold on, I'm coming.","Wait! I want to help!","You appear to be injured!")
-						speak(message)
+						playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35)
+						say("Administering medical attention!")
 						last_newpatient_speak = world.time
 						if(declare_treatment)
 							var/area/location = get_area(src)
@@ -414,8 +415,8 @@
 		return
 
 	if(C.stat == 2)
-		var/death_message = pick("No! NO!","Live, damnit! LIVE!","I...I've never lost a patient before. Not today, I mean.")
-		speak(death_message)
+		playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35)
+		visible_message("<b>[src]</b> points at [C.name]!")
 		oldpatient = patient
 		patient = null
 		currently_healing = 0
