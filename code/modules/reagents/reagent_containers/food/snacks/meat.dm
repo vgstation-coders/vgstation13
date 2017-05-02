@@ -219,7 +219,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "goose liver"
 	desc = "The liver from the eldritch space goose."
 	icon_state = "goosemeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/goosemeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 1

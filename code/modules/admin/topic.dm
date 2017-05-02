@@ -2877,7 +2877,7 @@
 				var/choice = input("You sure you want to spawn a migration?") in list("Badmin", "Cancel")
 				if(choice == "Badmin")
 					message_admins("[key_name_admin(usr)] has spawned an animal migration.", 1)
-					new /datum/event/carp_migration
+					new /datum/event/animal_migration
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","R")
@@ -3261,7 +3261,7 @@
 					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
 					return
 				if(choice == "Migration")
-					command_alert(/datum/command_alert/carp)
+					command_alert(/datum/command_alert/animal_migration)
 					message_admins("[key_name_admin(usr)] triggered a FAKE Migration Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Migration Alert.")
 					return

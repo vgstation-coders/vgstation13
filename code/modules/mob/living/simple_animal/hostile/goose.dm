@@ -17,6 +17,7 @@
 	maxHealth = 35
 	health = 35
 	size = SIZE_BIG
+	meat_amount = 2
 
 	harm_intent_damage = 8
 	melee_damage_lower = 8

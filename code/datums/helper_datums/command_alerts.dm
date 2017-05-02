@@ -141,7 +141,7 @@
 
 //////CARP
 
-/datum/command_alert/carp
+/datum/command_alert/animal_migration
 	name = "Migration"
 	alert_title = "Lifesign Alert"
 
