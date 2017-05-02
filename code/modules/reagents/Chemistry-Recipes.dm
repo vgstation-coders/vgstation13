@@ -1934,6 +1934,7 @@
 
 /datum/chemical_reaction/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
 
 //Pyrite
