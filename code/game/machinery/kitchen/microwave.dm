@@ -244,6 +244,9 @@
 				display_name = "Turnovers"
 				items_measures[display_name] = "turnover"
 				items_measures_p[display_name] = "turnovers"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/goosemeat))
+				items_measures[display_name] = "liver"
+				items_measures_p[display_name] = "livers"
 			items_counts[display_name]++
 		for (var/O in items_counts)
 			var/N = items_counts[O]
