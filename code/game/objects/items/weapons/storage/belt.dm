@@ -26,7 +26,7 @@
 
 /obj/item/weapon/storage/belt/utility
 	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
-	desc = "It has a tag that rates it for compatibility with standard tools, device analyzers, flashlights, cables, engineering tape, small fire extinguishers, compressed matter cartridges, light replacers, and fuel cans."
+	desc = "It has a tag that rates it for compatibility with standard tools, device analyzers, flashlights, cables, engineering tape, small fire extinguishers, compressed matter cartridges, and fuel cans."
 	icon_state = "utilitybelt"
 	item_state = "utility"
 	w_class = W_CLASS_LARGE
