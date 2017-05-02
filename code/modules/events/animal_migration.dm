@@ -1,8 +1,8 @@
 /datum/event/animal_migration
 	announceWhen	= 20
 	endWhen = 450
-	var/list/spawned_carp = list()
-	var/spawn_type = /mob/living/simple_animal/hostile/carp
+	var/list/spawned_mob = list()
+	var/spawn_type = /mob/living/simple_animal/
 
 /datum/event/animal_migration/setup()
 	announceWhen = rand(15, 30)
@@ -16,12 +16,12 @@
 	for(var/obj/effect/landmark/C in landmarks_list)
 		if(C.name == "carpspawn")
 			if(prob(90)) //Give it a sliver of randomness
-				spawned_carp.Add(new spawn_type(C.loc))
+				spawned_mob.Add(new spawn_type(C.loc))
 
 /datum/event/animal_migration/end()
-	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)
-		if(!C.stat)
-			var/turf/T = get_turf(C)
+	for(var/mob/living/simple_animal/M in spawned_mob)
+		if(!M.stat)
+			var/turf/T = get_turf(M)
 			if(istype(T, /turf/space))
-				qdel(C)
-				C = null
+				qdel(M)
+				M = null
