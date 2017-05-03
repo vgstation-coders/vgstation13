@@ -178,14 +178,14 @@ var/list/uplink_items = list()
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
 	item = /obj/item/weapon/glue
-	cost = 6
+	cost = 4
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 5
+	cost = 4
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
