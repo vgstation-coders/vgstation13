@@ -364,3 +364,23 @@
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
+
+/obj/item/weapon/storage/belt/janitor
+	name = "janibelt"
+	desc = "A belt used to hold most janitorial supplies."
+	icon_state = "janibelt"
+	item_state = "janibelt"
+	storage_slots = 8
+	fits_max_w_class = 5
+	can_only_hold = list(
+		"/obj/item/weapon/grenade/chem_grenade",
+		"/obj/item/device/lightreplacer",
+		"/obj/item/device/flashlight",
+		"/obj/item/weapon/reagent_containers/spray",
+		"/obj/item/weapon/soap",
+		"/obj/item/key/janicart",
+		"/obj/item/clothing/gloves",
+		"/obj/item/weapon/caution",
+		"/obj/item/weapon/mop",
+		"/obj/item/weapon/storage/bag/trash")
+

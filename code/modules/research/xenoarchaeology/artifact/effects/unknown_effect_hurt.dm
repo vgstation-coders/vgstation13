@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/hurt
 	effecttype = I_HURT
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 5
 
 /datum/artifact_effect/hurt/DoEffectTouch(var/mob/toucher)
