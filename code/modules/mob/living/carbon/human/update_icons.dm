@@ -275,7 +275,7 @@ var/global/list/damage_icon_parts = list()
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 	//Underwear
-	if(underwear >0 && underwear < 12 && species.anatomy_flags & HAS_UNDERWEAR)
+	if(underwear >0 && underwear < 15 && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 
