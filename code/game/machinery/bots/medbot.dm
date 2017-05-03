@@ -43,6 +43,7 @@
 	var/declare_cooldown = 0 //Prevents spam of critical patient alerts.
 	var/pai_analyze_mode = FALSE //Used to switch between injecting people or analyzing them (for pAIs)
 	var/reagent_id = null
+	var/last_spoke = 0
 
 	bot_type = MED_BOT
 
@@ -309,7 +310,7 @@
 				oldpatient = C
 				last_found = world.time
 				spawn(0)
-					if((last_newpatient_speak + 100) < world.time) //Don't spam these messages!
+					if((last_newpatient_speak + 100 < world.time) &&  (shut_up == 0)) //Don't spam these messages!
 						playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35)
 						say("Administering medical attention!")
 						last_newpatient_speak = world.time
@@ -317,6 +318,7 @@
 							var/area/location = get_area(src)
 							broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 					visible_message("<b>[src]</b> points at [C.name]!")
+					sleep(35)
 				break
 			else
 				continue
@@ -441,18 +443,42 @@
 	if (!reagent_id && (C.getBruteLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_brute))
 			reagent_id = treatment_brute
+			if((C.getBruteLoss() <= 50) && (C.getBruteLoss() > 0) && (shut_up == 0))
+				playsound(src.loc, 'sound/medbot/Minor_lacerations.ogg', 35)
+				say("Minor lacerations detected!")
+				sleep(35)
+			if(patient.getBruteLoss() > 50 && (shut_up == 0))
+				playsound(src.loc, 'sound/medbot/Major_lacerations.ogg', 35)
+				say("Major lacerations detected!")
+				sleep(35)
 
-	if (!reagent_id && (C.getOxyLoss() >= (15 + heal_threshold)))
+	if (!reagent_id && (C.getOxyLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_oxy))
 			reagent_id = treatment_oxy
+			if(shut_up == 0)
+				playsound(src.loc, 'sound/medbot/Blood_loss.ogg', 35)
+				say("Blood loss detected!")
+				sleep(25)
 
 	if (!reagent_id && (C.getFireLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_fire))
 			reagent_id = treatment_fire
+			if(shut_up == 0)
+				playsound(src.loc, 'sound/medbot/Heat_damage.ogg', 35)
+				say("Warning! Extreme heat damage detected!")
+				sleep(45)
+
 
 	if (!reagent_id && (C.getToxLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_tox))
 			reagent_id = treatment_tox
+			if(shut_up == 0)
+				playsound(src.loc, 'sound/medbot/Blood_toxins.ogg', 35)
+				say("Warning! Blood toxin levels detected!")
+				sleep(45)
+				playsound(src.loc, 'sound/medbot/Antitoxin_shot.ogg', 35)
+				say("Antitoxin administered!")
+				sleep(25)
 
 
 	if(!reagent_id) //If they don't need any of that they're probably cured!
@@ -490,36 +516,6 @@
 	icon_state = "[icon_initial][on]"
 	currently_healing = 0
 	reagent_id = null
-
-	if(shut_up == 0)
-
-		if((patient.getBruteLoss() <= 50) && (patient.getBruteLoss() > 0))
-			playsound(src.loc, 'sound/medbot/Minor_lacerations.ogg', 35)
-			say("Minor lacerations detected!")
-			sleep(35)
-
-		if(patient.getBruteLoss() > 50)
-			playsound(src.loc, 'sound/medbot/Major_lacerations.ogg', 35)
-			say("Major lacerations detected!")
-			sleep(35)
-
-		if(patient.getToxLoss() > 0)
-			playsound(src.loc, 'sound/medbot/Blood_toxins.ogg', 35)
-			say("Warning! Blood toxin levels detected!")
-			sleep(45)
-			playsound(src.loc, 'sound/medbot/Antitoxin_shot.ogg', 35)
-			say("Antitoxin administered!")
-			sleep(25)
-
-		if(patient.getFireLoss() > 0)
-			playsound(src.loc, 'sound/medbot/Heat_damage.ogg', 35)
-			say("Warning! Extreme heat damage detected!")
-			sleep(45)
-
-		if(patient.getOxyLoss() > 10)
-			playsound(src.loc, 'sound/medbot/Blood_loss.ogg', 35)
-			say("Blood loss detected!")
-			sleep(25)
 
 	return
 
