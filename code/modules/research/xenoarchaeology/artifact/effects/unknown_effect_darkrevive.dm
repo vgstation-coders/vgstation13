@@ -1,9 +1,9 @@
 /datum/artifact_effect/darkrevive
 	effecttype = "darkrevive"
+	effect = EFFECT_TOUCH
 
 /datum/artifact_effect/darkrevive/New()
 	..()
-	effect = EFFECT_TOUCH
 	effect_type = pick(0,2,5)
 
 /datum/artifact_effect/darkrevive/DoEffectTouch(var/mob/living/carbon/human/user)
