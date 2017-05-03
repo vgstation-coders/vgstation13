@@ -454,13 +454,12 @@
 		if(!C.reagents.has_reagent(treatment_tox))
 			reagent_id = treatment_tox
 
+
 	if(!reagent_id) //If they don't need any of that they're probably cured!
 		oldpatient = patient
 		patient = null
 		currently_healing = 0
 		last_found = world.time
-		var/message = pick("All patched up!","An apple a day keeps me away.","Feel better soon!")
-		speak(message)
 		return
 	else
 		icon_state = "[icon_initial]s"
@@ -474,6 +473,7 @@
 				inject_patient()
 
 /obj/machinery/bot/medbot/proc/inject_patient()
+
 	var/succesful_inject = 0
 	if ((get_dist(src, patient) <= 1) && (on))
 		if((reagent_id == "internal_beaker") && (reagent_glass) && (reagent_glass.reagents.total_volume))
@@ -490,6 +490,37 @@
 	icon_state = "[icon_initial][on]"
 	currently_healing = 0
 	reagent_id = null
+
+	if(shut_up == 0)
+
+		if((patient.getBruteLoss() <= 50) && (patient.getBruteLoss() > 0))
+			playsound(src.loc, 'sound/medbot/Minor_lacerations.ogg', 35)
+			say("Minor lacerations detected!")
+			sleep(35)
+
+		if(patient.getBruteLoss() > 50)
+			playsound(src.loc, 'sound/medbot/Major_lacerations.ogg', 35)
+			say("Major lacerations detected!")
+			sleep(35)
+
+		if(patient.getToxLoss() > 0)
+			playsound(src.loc, 'sound/medbot/Blood_toxins.ogg', 35)
+			say("Warning! Blood toxin levels detected!")
+			sleep(45)
+			playsound(src.loc, 'sound/medbot/Antitoxin_shot.ogg', 35)
+			say("Antitoxin administered!")
+			sleep(25)
+
+		if(patient.getFireLoss() > 0)
+			playsound(src.loc, 'sound/medbot/Heat_damage.ogg', 35)
+			say("Warning! Extreme heat damage detected!")
+			sleep(45)
+
+		if(patient.getOxyLoss() > 10)
+			playsound(src.loc, 'sound/medbot/Blood_loss.ogg', 35)
+			say("Blood loss detected!")
+			sleep(25)
+
 	return
 
 /obj/machinery/bot/medbot/proc/speak(var/message)
@@ -507,6 +538,7 @@
 /obj/machinery/bot/medbot/explode()
 	on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35)
 	var/turf/Tsec = get_turf(src)
 
 	switch(skin)
@@ -642,6 +674,7 @@
 						qdel(W)
 						build_step++
 						to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
+						playsound(src.loc, 'sound/medbot/Automedic_on.ogg', 35)
 						var/turf/T = get_turf(src)
 						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
 						S.skin = skin
