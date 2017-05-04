@@ -116,7 +116,7 @@
 	charge_max = 30 SECONDS
 
 /spell/aoe_turf/time_suit/future_jump/cast(var/list/targets, mob/user)
-	future_rift(user, 10 SECONDS, 1, TRUE)
+	future_rift(user, 10 SECONDS, 1, TRUE, TRUE)
 
 /spell/aoe_turf/time_suit/past_jump
 	name = "Jump to Past"
@@ -126,7 +126,7 @@
 	charge_max = 60 SECONDS
 
 /spell/aoe_turf/time_suit/past_jump/cast(var/list/targets, mob/user)
-	past_rift(user, 10 SECONDS, 1, TRUE)
+	past_rift(user, 10 SECONDS, 1, TRUE, TRUE)
 	spawn(10 SECONDS)
 		if(suit)
 			suit.refresh_spells(user)
