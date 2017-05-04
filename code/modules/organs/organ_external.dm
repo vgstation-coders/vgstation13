@@ -953,7 +953,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return
 	owner.visible_message("<span class = 'warning'>The flesh falls off of \the [owner]'s [display_name]!</span>","<span class = 'warning'>The flesh is falling off of your [display_name]!</span>")
 	var/new_species_name
-	if(isvox(src))
+	if(istype(species, /datum/species/vox))
 		new_species_name = "Skeletal Vox"
 	else
 		new_species_name = "Skellington"
@@ -964,10 +964,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/proc/plasmify()
 	if(istype(species, /datum/species/plasmaman))
 		return
+	if(istype(species, /datum/species/vox))
+		return //There is no chicken flambe
 	if(istype(species, /datum/species/skellington))
 		owner.visible_message("<span class = 'warning'>\The [owner]'s [display_name] changes to a purple hue as it begins to crumble!</span>","<span class = 'warning'>Your [display_name] turns purple. Holy fuck!</span>")
-	else if(isvox(src))
-		return //There is no chicken flambe
 	else
 		owner.visible_message("<span class = 'warning'>The flesh falls off of \the [owner]'s [display_name], and crackles incessently!</span>","<span class = 'warning'>The flesh falls off of your [display_name], and begins to gain a purple hue.</span>")
 	var/datum/species/S = all_species["Plasmaman"]
