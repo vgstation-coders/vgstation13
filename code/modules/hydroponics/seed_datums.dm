@@ -208,8 +208,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		IMPEDREZENE = 100,
 		VALERENIC_ACID = 100,
 		CYANIDE = 100,
-		NEUROTOXIN = 100,
-		TOXIN = 100,
+		CURARE = 100,
+		SOLANINE = 100,
 		SLIMEJELLY = 75,
 		// Fun Things
 		MUTATIONTOXIN = 50,

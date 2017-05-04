@@ -5746,3 +5746,15 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = PHENOL
 	description = "Phenol is a corrosive acid which can cause chemical burns."
 	color = "#8E18A9" //rgb: 142, 24, 169
+
+/datum/reagent/ethanol/deadrum/neurotoxin/curare
+	name = "Curare"
+	id = CURARE
+	description = "An alkaloid plant extract which causes weakness of the skeletal muscles."
+	color = "#2E2E61" //rgb: 46, 46, 97
+
+/datum/reagent/toxin/solanine
+	name = "Solanine"
+	id = SOLANINE
+	description = "A glycoalkaloid poison."
+	color = "#CF3600" //rgb: 207, 54, 0

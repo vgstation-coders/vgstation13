@@ -477,7 +477,7 @@
 	display_name = "ghost pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper)
-	chems = list(CONDENSEDCAPSAICIN = list(3,4), NEUROTOXIN = list(0,40))
+	chems = list(CONDENSEDCAPSAICIN = list(3,4), CURARE = list(0,40))
 	packet_icon = "seed-ghostpepper"
 	plant_icon = "chilighost"
 
@@ -531,7 +531,7 @@
 	mutants = list("deathberries")
 	packet_icon = "seed-poisonberry"
 	plant_icon = "poisonberry"
-	chems = list(NUTRIMENT = list(1), TOXIN = list(3,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,5))
 
 /datum/seed/berry/poison/death
 	name = "deathberries"
@@ -541,7 +541,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
 	packet_icon = "seed-deathberry"
 	plant_icon = "deathberry"
-	chems = list(NUTRIMENT = list(1), TOXIN = list(3,3), LEXORIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), LEXORIN = list(1,5))
 
 	yield = 3
 	potency = 50
@@ -731,7 +731,7 @@
 	packet_icon = "seed-ambrosiavulgaris"
 	plant_icon = "ambrosiavulgaris"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), TOXIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5))
 
 	lifespan = 60
 	maturation = 6
@@ -755,7 +755,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), TOXIN = list(1,5), spiritbreaker = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10))
 
 
 /datum/seed/ambrosia/deus

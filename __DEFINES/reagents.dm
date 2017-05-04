@@ -341,6 +341,8 @@
 #define ALLICIN			"allicin"
 #define FORMIC_ACID		"formic_acid"
 #define PHENOL			"phenol"
+#define CURARE			"curare"
+#define SOLANINE		"solanine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
