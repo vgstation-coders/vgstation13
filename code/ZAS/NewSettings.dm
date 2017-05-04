@@ -228,10 +228,10 @@ var/global/ZAS_Settings/zas_settings = new
 	value = 1
 	valtype=ZAS_TYPE_BOOLEAN
 
-/datum/ZAS_Setting/PLASMA_MUTATION_CHANCE
-	name = "Plasmaman mutation chance divider"
-	desc = "Divides the chance for an exposed limb to plasmify. 5 = 1/5th of toxin damage chance."
-	value = 5
+/datum/ZAS_Setting/PLASMA_MUTATION_MULTIPLIER
+	name = "Plasmaman mutation chance multiplier"
+	desc = "multiplies the chance for an exposed limb to plasmify. Toxin damage times value."
+	value = 0.2
 	valtype=ZAS_TYPE_NUMERIC
 /**
 * ZAS Settings

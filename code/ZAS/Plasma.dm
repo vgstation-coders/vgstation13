@@ -49,7 +49,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		contaminate()
 	//Turn exposed limbs into plasmaman limbs
 	if(zas_settings.Get(/datum/ZAS_Setting/PLASMA_MUTATION))
-		if(prob(getToxLoss())/zas_settings.Get(/datum/ZAS_Setting/PLASMA_MUTATION_CHANCE))
+		if(prob(getToxLoss())*zas_settings.Get(/datum/ZAS_Setting/PLASMA_MUTATION_MULTIPLIER))
 			var/datum/organ/external/victim
 			var/plasma_limb_count
 			var/list/clothes = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
