@@ -954,7 +954,7 @@ var/list/slot_equipment_priority = list( \
 	if (ismob(AM))
 		var/mob/M = AM
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
-			P = M.locked_to		
+			P = M.locked_to
 
 	if (!P.anchored)
 		P.add_fingerprint(src)
@@ -978,7 +978,7 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = usr
 				/*if(ishuman(AM))
 					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage()) 
+					if (HM.drag_damage())
 						if (HM.isincrit())
 							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
 							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
@@ -1850,8 +1850,7 @@ mob/proc/on_foot()
 		"s_active",
 		"wear_mask",
 		"radiation",
-		"stat",
-		"suiciding")
+		"stat")
 
 	reset_vars_after_duration(resettable_vars, duration)
 
