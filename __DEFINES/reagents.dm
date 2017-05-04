@@ -329,6 +329,18 @@
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
 
+//Plant-specific reagents
+#define TANNIC_ACID		"tannic_acid"
+#define KATHALAI		"kathalai"
+#define OPIUM			"opium"
+#define MESCALINE		"mescaline"
+#define NICOTINE		"nicotine"
+#define COCAINE			"cocaine"
+#define ZEAXANTHIN		"zeaxanthin"
+#define VALERENIC_ACID	"valerenic_acid"
+#define ALLICIN			"allicin"
+#define FORMIC_ACID		"formic_acid"
+#define PHENOL			"phenol"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

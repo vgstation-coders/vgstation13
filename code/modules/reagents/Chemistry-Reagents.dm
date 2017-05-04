@@ -5677,3 +5677,72 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = SOLID
 	color = "#FFA500"
 	custom_metabolism = 0.1
+
+//Plant-specific reagents
+
+/datum/reagent/kelotane/tannic_acid
+	name = "Tannic Acid"
+	id = TANNIC_ACID
+	description = "Tannic acid is a natural burn remedy."
+	reagent_state = LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/dermaline/kathalai
+	name = "Kathalai"
+	id = KATHALAI
+	description = "Kathalai is an exceptional natural burn remedy, it performs twice as well as tannic acid."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/bicaridine/opium
+	name = "Opium"
+	id = OPIUM
+	description = "Opium is an exceptional natural pain reliever."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/space_drugs/mescaline
+	name = "Mescaline"
+	id = MESCALINE
+	description = "Known to cause mild hallucinations, mescaline is often used recreationally."
+	color = "#60A584" //rgb: 96, 165, 132
+
+/datum/reagent/synaptizine/nicotine
+	name = "Nicotine"
+	id = NICOTINE
+	description = "Nicotine is used to improve cognition, alertness, and focus."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/hyperzine/cocaine
+	name = "Cocaine"
+	id = COCAINE
+	description = "Cocaine is a powerful nervous system stimulant."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/imidazoline/zeaxanthin
+	name = "Zeaxanthin"
+	id = ZEAXANTHIN
+	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/stoxin/valerenic_acid
+	name = "Valerenic Acid"
+	id = VALERENIC_ACID
+	description = "An herbal sedative used to treat insomnia."
+	color = "#E895CC" //rgb: 232, 149, 204
+
+/datum/reagent/anti_toxin/allicin
+	name = "Allicin"
+	id = ALLICIN
+	description = "Allicin is a natural broad-spectrum antitoxin."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/sacid/formic_acid
+	name = "Formic Acid"
+	id = FORMIC_ACID
+	description = "A weak natural acid which causes a burning sensation upon contact."
+	color = "#DB5008" //rgb: 219, 80, 8
+
+/datum/reagent/pacid/phenol
+	name = "Phenol"
+	id = PHENOL
+	description = "Phenol is a corrosive acid which can cause chemical burns."
+	color = "#8E18A9" //rgb: 142, 24, 169
