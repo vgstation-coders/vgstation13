@@ -5770,3 +5770,15 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = HYOSCYAMINE
 	description = "Hyoscyamine is a tropane alkaloid which can disrupt the central nervous system."
 	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/lexorin/coriamyrtin
+	name = "Coriamyrtin"
+	id = CORIAMYRTIN
+	description = "Coriamyrtin is a toxin which causes respiratory problems."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/dexalin/thymol
+	name = "Thymol"
+	id = THYMOL
+	description = "Thymol is used in the treatment of respiratory problems."
+	color = "#C8A5DC" //rgb: 200, 165, 220

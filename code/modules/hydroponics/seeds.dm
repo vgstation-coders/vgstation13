@@ -541,7 +541,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
 	packet_icon = "seed-deathberry"
 	plant_icon = "deathberry"
-	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), LEXORIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5))
 
 	yield = 3
 	potency = 50

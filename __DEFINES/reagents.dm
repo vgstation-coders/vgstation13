@@ -345,6 +345,8 @@
 #define SOLANINE		"solanine"
 #define PHYSOSTIGMINE	"physostigmine"
 #define HYOSCYAMINE		"hyoscyamine"
+#define CORIAMYRTIN		"coriamyrtin"
+#define THYMOL			"thymol"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
