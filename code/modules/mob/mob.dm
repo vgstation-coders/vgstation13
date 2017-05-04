@@ -411,9 +411,8 @@
 		if(M)
 			if(M.client)
 				var/client/C = M.client
-				if(C.ObscuredTurfs.len)
-					if(get_turf(src) in C.ObscuredTurfs)
-						continue
+				if(get_turf(src) in C.ObscuredTurfs)
+					continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
