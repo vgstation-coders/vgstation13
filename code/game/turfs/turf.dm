@@ -64,6 +64,8 @@
 	// Map element which spawned this turf
 	var/datum/map_element/map_element
 
+	var/image/viewblock
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

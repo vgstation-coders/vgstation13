@@ -401,6 +401,19 @@
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
 	for(var/mob/virtualhearer/hearer in viewers(location))
+		var/mob/M
+		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/holo = hearer.attached
+			if(holo.master)
+				M = holo.master
+		if(istype(hearer.attached, /mob))
+			M = hearer.attached
+		if(M)
+			if(M.client)
+				var/client/C = M.client
+				if(C.ObscuredTurfs.len)
+					if(get_turf(src) in C.ObscuredTurfs)
+						continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
@@ -954,7 +967,7 @@ var/list/slot_equipment_priority = list( \
 	if (ismob(AM))
 		var/mob/M = AM
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
-			P = M.locked_to		
+			P = M.locked_to
 
 	if (!P.anchored)
 		P.add_fingerprint(src)
@@ -978,7 +991,7 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = usr
 				/*if(ishuman(AM))
 					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage()) 
+					if (HM.drag_damage())
 						if (HM.isincrit())
 							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
 							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
