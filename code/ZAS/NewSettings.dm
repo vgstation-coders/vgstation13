@@ -222,6 +222,17 @@ var/global/ZAS_Settings/zas_settings = new
 	value = 1
 	valtype=ZAS_TYPE_BOOLEAN
 
+/datum/ZAS_Setting/PLASMA_MUTATION
+	name = "Plasmaman Mutation"
+	desc = "Does being in plasma cause a persons exposed limbs to turn into that of a plasmaman?"
+	value = 1
+	valtype=ZAS_TYPE_BOOLEAN
+
+/datum/ZAS_Setting/PLASMA_MUTATION_CHANCE
+	name = "Plasmaman mutation chance divider"
+	desc = "Divides the chance for an exposed limb to plasmify. 5 = 1/5th of toxin damage chance."
+	value = 5
+	valtype=ZAS_TYPE_NUMERIC
 /**
 * ZAS Settings
 *

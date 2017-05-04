@@ -47,7 +47,28 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	//Contamination
 	if(zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
 		contaminate()
-
+	//Turn exposed limbs into plasmaman limbs
+	if(zas_settings.Get(/datum/ZAS_Setting/PLASMA_MUTATION))
+		if(prob(getToxLoss())/zas_settings.Get(/datum/ZAS_Setting/PLASMA_MUTATION_CHANCE))
+			var/datum/organ/external/victim
+			var/plasma_limb_count
+			var/list/clothes = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
+			for(var/datum/organ/external/E in organs)
+				if(!E.is_organic())
+					continue
+				if(E.amputated)
+					continue
+				for(var/obj/item/clothing/C in clothes)
+					if(C && istype(C))
+						if(C.body_parts_covered & E.body_part)
+							continue
+				if(istype(E.species, /datum/species/plasmaman))
+					plasma_limb_count++
+					continue
+				victim = E
+				break
+			if(victim && prob(100/plasma_limb_count))
+				victim.plasmify()
 	//Anything else requires them to not be dead.
 	if(stat >= 2)
 		return
