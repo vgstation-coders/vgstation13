@@ -11,9 +11,9 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
 
-/obj/item/clothing/head/helmet/space/time/equipped(mob/living/carbon/human/H, head)
+/obj/item/clothing/head/helmet/space/time/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
-	if(istype(H) && H.get_item_by_slot(head) == src)
+	if(istype(H) && H.get_item_by_slot(slot_head) == src)
 		var/obj/item/clothing/suit/space/time/T = H.get_item_by_slot(slot_wear_suit)
 		if(istype(T))
 			T.activate_suit(H)
@@ -78,9 +78,9 @@
 	H.remove_spell(pastjump)
 	playsound(src, 'sound/misc/timesuit_deactivate.ogg', 50)
 
-/obj/item/clothing/suit/space/time/equipped(mob/living/carbon/human/H, wear_suit)
+/obj/item/clothing/suit/space/time/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
-	if(istype(H) && H.get_item_by_slot(wear_suit) == src)
+	if(istype(H) && H.get_item_by_slot(slot_wear_suit) == src)
 		if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/helmet/space/time))
 			activate_suit(H)
 
