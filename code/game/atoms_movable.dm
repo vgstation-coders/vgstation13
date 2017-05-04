@@ -405,18 +405,15 @@
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
-//				C.mob.hud_used.update_parallax_values()
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
 		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.update_special_views()
-//				C.mob.hud_used.update_parallax_values()
 	else if(client && hud_used)
 		var/client/C = client
 		C.update_special_views()
-//		hud_used.update_parallax_values()
 
 /atom/movable/proc/forceEnter(atom/destination)
 	if(destination)
