@@ -56,9 +56,9 @@
 /obj/item/clothing/suit/space/time/proc/refresh_spells(mob/living/carbon/human/H)
 	if(!istype(H))
 		return
-	H.add_spell(timestop, "time_spell_ready", /obj/screen/movable/spell_master/time)
-	H.add_spell(futurejump, "time_spell_ready", /obj/screen/movable/spell_master/time)
-	H.add_spell(pastjump, "time_spell_ready", /obj/screen/movable/spell_master/time)
+	H.add_spell(timestop, "time_spell_ready", /obj/abstract/screen/movable/spell_master/time)
+	H.add_spell(futurejump, "time_spell_ready", /obj/abstract/screen/movable/spell_master/time)
+	H.add_spell(pastjump, "time_spell_ready", /obj/abstract/screen/movable/spell_master/time)
 
 /obj/item/clothing/suit/space/time/proc/activate_suit(mob/living/carbon/human/H)
 	if(!istype(H))

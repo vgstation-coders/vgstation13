@@ -34,7 +34,7 @@
 	if(single_target)
 		if(istype(A, /atom/movable))
 			var/atom/movable/AM = A
-				AM.attempt_future_send(duration, ignore_timeless)
+			AM.attempt_future_send(duration, ignore_timeless)
 	else
 		for(var/turf/T in targets)
 			for(var/atom/movable/everything in T)
@@ -53,7 +53,8 @@
 		return
 	send_to_future(duration)
 	if(ismob(src))
-		playsound_local(everything, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+		var/mob/M = src
+		M.playsound_local(M, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 
 
 /obj/item/weapon/grenade/chronogrenade/past
@@ -97,13 +98,14 @@
 		return
 	send_to_past(duration)
 	if(ismob(src))
-		playsound_local(everything, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+		var/mob/M = src
+		M.playsound_local(M, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 
 /proc/showrift(var/turf/T, var/range)
 	for(var/client/C in clients)
+		if(C.mob)
+			C.mob.see_fall(T, range)
+	spawn(10)
+		for(var/client/C in clients)
 			if(C.mob)
-				C.mob.see_fall(T, range)
-		spawn(10)
-			for(var/client/C in clients)
-				if(C.mob)
-					C.mob.see_fall()
+				C.mob.see_fall()
