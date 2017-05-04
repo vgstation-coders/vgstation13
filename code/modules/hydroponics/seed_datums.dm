@@ -203,9 +203,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		HYRONALIN = 100,
 		BLOOD = 100,
 		// Misc Poisons
-		CRYPTOBIOLIN = 100,
+		PHYSOSTIGMINE = 100,
 		MERCURY = 100,
-		IMPEDREZENE = 100,
+		HYOSCYAMINE = 100,
 		VALERENIC_ACID = 100,
 		CYANIDE = 100,
 		CURARE = 100,

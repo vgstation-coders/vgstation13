@@ -343,6 +343,8 @@
 #define PHENOL			"phenol"
 #define CURARE			"curare"
 #define SOLANINE		"solanine"
+#define PHYSOSTIGMINE	"physostigmine"
+#define HYOSCYAMINE		"hyoscyamine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

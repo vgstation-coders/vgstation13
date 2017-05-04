@@ -5758,3 +5758,15 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = SOLANINE
 	description = "A glycoalkaloid poison."
 	color = "#CF3600" //rgb: 207, 54, 0
+
+/datum/reagent/cryptobiolin/physostigmine
+	name = "Physostigmine"
+	id = PHYSOSTIGMINE
+	description = "Physostigmine causes confusion and dizzyness."
+	color = "#C8A5DC" //rgb: 200, 165, 220
+
+/datum/reagent/impedrezene/hyoscyamine
+	name = "Hyoscyamine"
+	id = HYOSCYAMINE
+	description = "Hyoscyamine is a tropane alkaloid which can disrupt the central nervous system."
+	color = "#C8A5DC" //rgb: 200, 165, 220
