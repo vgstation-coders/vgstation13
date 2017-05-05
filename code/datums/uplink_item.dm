@@ -20,13 +20,11 @@ var/list/uplink_items = list()
 			if(I.last)
 				last += I
 				continue
-			var/month = time2text(world.realtime,"MM")
-			var/day = time2text(world.realtime,"DD")
 			if(I.only_on_month)
-				if(month != I.only_on_month)
+				if(time2text(world.realtime,"MM") != I.only_on_month)
 					continue
 			if(I.only_on_day)
-				if(day != I.only_on_day)
+				if(time2text(world.realtime,"DD") != I.only_on_day)
 					continue
 
 			if(!uplink_items[I.category])

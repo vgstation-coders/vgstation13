@@ -513,9 +513,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/New()
 	..()
-	var/month = time2text(world.realtime,"MM")
-	var/day = time2text(world.realtime,"DD")
-	if(month != "02" || day != "14")
+	if(time2text(world.realtime, "MM/DD") == "02/14")
 		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
 		qdel(src)
 
