@@ -10,6 +10,8 @@
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/undergoing_deletion = 0
+	var/atmos_connected = FALSE
+	var/connection/atmos_connection
 
 	var/list/exit_beams = list()
 
@@ -55,14 +57,29 @@
 		qdel(src)
 		return
 
+	spawn(5)
+		connect_atmospheres()
+
 	spawn(lifespan)
 		qdel(src)
+
+/obj/effect/portal/proc/connect_atmospheres()
+	if(!atmos_connected)
+		if(target)
+			if(istype(target, /obj/effect/portal))
+				var/obj/effect/portal/P = target
+				P.atmos_connected = TRUE
+				atmos_connected = TRUE
+				atmos_connection = new (get_turf(src), get_turf(P))
 
 /obj/effect/portal/Destroy()
 	if(undergoing_deletion)
 		return
 	undergoing_deletion = 1
 	playsound(loc,'sound/effects/portal_close.ogg',60,1)
+	if(atmos_connection)
+		atmos_connection.erase()
+		atmos_connection = null
 
 	purge_beams()
 	owner = null
