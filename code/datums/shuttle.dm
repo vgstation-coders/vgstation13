@@ -279,7 +279,12 @@
 				spawn()
 					P.shoot_exhaust()
 
+	current_port.start_warning_lights()
+	destination_port.start_warning_lights()
+
 	spawn(get_pre_flight_delay())
+		current_port.stop_warning_lights()
+		destination_port.stop_warning_lights()
 		//If moving to another zlevel, check for items which can't leave the zlevel (nuke disk, primarily)
 		if(linked_port.z != D.z)
 			var/atom/A = forbid_movement()
