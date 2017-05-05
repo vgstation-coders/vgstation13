@@ -72,14 +72,18 @@
 				atmos_connected = TRUE
 				atmos_connection = new (get_turf(src), get_turf(P))
 
+/obj/effect/portal/proc/disconnect_atmospheres()
+	atmos_connected = FALSE
+	if(atmos_connection)
+		atmos_connection.erase()
+		atmos_connection = null
+
 /obj/effect/portal/Destroy()
 	if(undergoing_deletion)
 		return
 	undergoing_deletion = 1
 	playsound(loc,'sound/effects/portal_close.ogg',60,1)
-	if(atmos_connection)
-		atmos_connection.erase()
-		atmos_connection = null
+	disconnect_atmospheres()
 
 	purge_beams()
 	owner = null
