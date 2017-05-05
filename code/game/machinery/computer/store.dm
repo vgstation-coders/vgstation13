@@ -39,6 +39,12 @@
 
 /obj/machinery/computer/merch/New()
 	..()
+	var/month = time2text(world.realtime,"MM")
+	var/day = time2text(world.realtime,"DD")
+	if(month == "02" && day == "14")
+		var/valentines = list("Valentine's Day" = list(/datum/storeitem/valentinechocolatebar,),)
+		categories += valentines
+
 	machine_id = "[station_name()] Merch Computer #[multinum_display(num_merch_computers,4)]"
 	num_merch_computers++
 

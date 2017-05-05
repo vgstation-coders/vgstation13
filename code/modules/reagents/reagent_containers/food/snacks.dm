@@ -505,6 +505,27 @@
 	icon_state = "chocolatebar"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	name = "Valentine's Day chocolate bar"
+	desc = "Made (or bought) with love!"
+	icon_state = "valentinebar"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/New()
+	..()
+	var/month = time2text(world.realtime,"MM")
+	var/day = time2text(world.realtime,"DD")
+	if(month != "02" || day != "14")
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	desc = "Bought (or made) with love!"
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
+	..()
+	reagents.add_reagent(BICARODYNE, 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."
