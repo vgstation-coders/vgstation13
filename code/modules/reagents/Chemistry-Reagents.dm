@@ -5696,7 +5696,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/bicaridine/opium
 	name = "Opium"
 	id = OPIUM
-	description = "Opium is an exceptional natural pain reliever."
+	description = "Opium is an exceptional natural analgesic."
 	color = "#C8A5DC" //rgb: 200, 165, 220
 
 /datum/reagent/space_drugs/mescaline
