@@ -68,9 +68,17 @@
 		if(target)
 			if(istype(target, /obj/effect/portal))
 				var/obj/effect/portal/P = target
-				P.atmos_connected = TRUE
-				atmos_connected = TRUE
-				atmos_connection = new (get_turf(src), get_turf(P))
+				if(get_turf(src) && get_turf(P))
+					var/valid_connection = FALSE
+					if(air_master.has_valid_zone(get_turf(src)))
+						atmos_connection = new (get_turf(src), get_turf(P))
+						valid_connection = TRUE
+					if(air_master.has_valid_zone(get_turf(P)))
+						P.atmos_connection = new (get_turf(P), get_turf(src))
+						valid_connection = TRUE
+					if(valid_connection)
+						P.atmos_connected = TRUE
+						atmos_connected = TRUE
 
 /obj/effect/portal/proc/disconnect_atmospheres()
 	atmos_connected = FALSE
