@@ -285,15 +285,26 @@
 
 	if (can_shoot())
 		//Point blank shooting if on harm intent or target we were targeting.
-		if(user.a_intent == I_HURT)
-			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-			damage_multiplier = 1.3
-			src.Fire(M,user,0,0,1)
-			damage_multiplier = 1
-			return
-		else if(target && M in target)
-			src.Fire(M,user,0,0,1)
-			return
+		if(user.a_intent == I_HURT || (target && M in target))
+			if(dna_profile)
+				if(dna_profile != user.dna.unique_enzymes)
+					self_destruct(user)
+					return
+			else
+				click_empty(user)
+				say("PLEASE REGISTER A DNA SAMPLE.")
+				return
+			if(user.a_intent == I_HURT)
+				if(chamber_round())
+					user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
+					damage_multiplier = 1.3
+					src.Fire(M,user,0,0,1)
+					damage_multiplier = 1
+				return
+			else
+				if(chamber_round())
+					src.Fire(M,user,0,0,1)
+				return
 		else
 			return ..()
 	else

@@ -6,7 +6,7 @@
 	var/magpulse = 0
 	var/mag_slow = 2
 //	clothing_flags = NOSLIP //disabled by default
-	action_button_name = "Toggle Magboots"
+	actions_types = list(/datum/action/item_action/toggle_magboots)
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 
@@ -20,7 +20,7 @@
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
-		user.visible_message("<span class='danger'>\The [user] slowly raises his foot above the lying [victim.name], preparing to stomp on \him.</span>")
+		user.visible_message("<span class='danger'>\The [user] slowly raises \his foot above the lying [victim.name], preparing to stomp on \him.</span>")
 		toggle()
 
 		if(do_after(user, src, 3 SECONDS))
@@ -44,10 +44,7 @@
 		toggle()
 		playsound(get_turf(victim), 'sound/mecha/mechstep.ogg', 100, 1)
 
-/obj/item/clothing/shoes/magboots/verb/toggle()
-	set name = "Toggle Magboots"
-	set category = "Object"
-	set src in usr
+/obj/item/clothing/shoes/magboots/proc/toggle()
 	if(usr.isUnconscious())
 		return
 	if(src.magpulse)

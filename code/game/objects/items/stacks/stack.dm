@@ -222,6 +222,10 @@
 	src.amount += amount
 	update_materials()
 
+/obj/item/stack/proc/set_amount(new_amount)
+	amount = new_amount
+	update_materials()
+
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
 	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
 		return

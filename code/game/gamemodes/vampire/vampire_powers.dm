@@ -76,8 +76,10 @@
 	victims -= mind.current
 	if(!victims.len)
 		return
-	var/mob/living/carbon/T = input(src, "Victim?") as null|anything in victims
-
+	var/mob/living/carbon/T 
+	T = victims[1]
+	if (victims.len > 1)
+		T = input(src, "Victim?") as null|anything in victims
 	if(!T)
 		return
 	if(!(T in view(active_range)))

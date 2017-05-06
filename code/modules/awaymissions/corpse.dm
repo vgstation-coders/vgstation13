@@ -10,6 +10,7 @@
 	var/generate_random_appearance = 0
 
 	var/corpsegender = G_MALE
+	var/list/possible_names
 
 	var/corpseuniform = null //Set this to an object path to have the slot filled with said object on the corpse.
 	var/corpsesuit = null
@@ -63,6 +64,8 @@
 
 	if(generate_random_mob_name)
 		M.real_name = random_name(M.gender, mutantrace)
+	else if(islist(possible_names))
+		M.real_name = pick(possible_names)
 
 	M.adjustOxyLoss(oxy_dmg) //Kills the new mob
 	M.adjustBruteLoss(brute_dmg)
@@ -70,6 +73,9 @@
 	M.adjustToxLoss(toxin_dmg)
 
 	M.iscorpse = 1
+
+	M.pixel_x = src.pixel_x
+	M.pixel_y = src.pixel_y
 
 	if(generate_random_appearance)
 		M.dna.ResetSE()
@@ -199,6 +205,7 @@
 				W.access = list()
 		if(corpseidjob)
 			W.assignment = corpseidjob
+			W.name = "[W.name] ([W.assignment])"
 		W.registered_name = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
 
@@ -329,6 +336,23 @@
 	corpseback = /obj/item/weapon/storage/backpack
 	corpseshoes = /obj/item/clothing/shoes/white
 	corpseid = 0
+
+/obj/effect/landmark/corpse/roboticist
+	name = "Roboticist"
+	corpseradio = /obj/item/device/radio/headset/headset_rob
+	corpseuniform = /obj/item/clothing/under/rank/roboticist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Roboticist"
+	corpseidaccess = "Roboticist"
+
+/obj/effect/landmark/corpse/roboticist/spessmart
+	corpseidjob = "Spessmart Roboticist"
+	generate_random_mob_name = 1
+	generate_random_appearance = 1
+	brute_dmg = 100
+	toxin_dmg = 6
 
 /obj/effect/landmark/corpse/miner
 	corpseradio = /obj/item/device/radio/headset/headset_mining
@@ -510,6 +534,23 @@
 
 	corpsemask = /obj/item/clothing/mask/breath
 
+/obj/effect/landmark/corpse/stripper
+	name = "Stripper"
+	corpsegender = G_FEMALE
+
+	generate_random_mob_name = FALSE
+	possible_names = list("Candy", "Glitter", "Diamond", "Sugar", "Angel", "Queenie", "Tiffany", "Kitty")
+
+	generate_random_appearance = TRUE
+
+	corpseuniform = list(/obj/item/clothing/under/swimsuit/purple, /obj/item/clothing/under/swimsuit/green, /obj/item/clothing/under/swimsuit/red)
+	corpseshoes = /obj/item/clothing/shoes/kneesocks
+
+/obj/effect/landmark/corpse/stripper/russian
+	possible_names = list("Konfetka", "Florida", "Matilda", "Ogonjok", "Almaz", "Kisulja")
+
+	corpsehelmet = list(/obj/item/clothing/head/ushanka, /obj/item/clothing/head/squatter_hat) //heh
+
 /obj/effect/landmark/corpse/vox
 	name = "Dead vox"
 	mutantrace = "Vox"
@@ -546,6 +587,25 @@
 	husk = 1
 	brute_dmg = 250
 	burn_dmg = 100
+
+/obj/effect/landmark/corpse/catbeast //only good catbeast is a dead one
+	name = "Test Subject"
+	generate_random_mob_name = 0
+	generate_random_appearance = 1
+	corpsegender = G_BOTH
+
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpsesuit = /obj/item/clothing/suit/straight_jacket
+	corpsemask = /obj/item/clothing/mask/muzzle
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/blindfold
+
+/obj/effect/landmark/corpse/catbeast/createCorpse()
+	if(prob(50))
+		corpsemask = null
+	if(prob(50))
+		corpsesuit = null
+	if(prob(50))
+		corpseglasses = null
 
 #undef G_MALE
 #undef G_FEMALE

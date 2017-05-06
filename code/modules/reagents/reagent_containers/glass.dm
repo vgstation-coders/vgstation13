@@ -46,7 +46,8 @@
 		/obj/machinery/anomaly,
 		/obj/machinery/bunsen_burner,
 		/obj/item/weapon/sword/venom,
-		/obj/item/weapon/cylinder
+		/obj/item/weapon/cylinder,
+		/obj/item/clothing/gloves/powerfist,
 		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()
@@ -232,6 +233,9 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/update_icon()
+	return
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
@@ -250,6 +254,9 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
+
+/obj/item/weapon/reagent_containers/glass/beaker/bluespace/update_icon()
+	return
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -271,6 +278,11 @@
 /obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
+/obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
+	..()
+
+	reagents.add_reagent(URANIUM, 25)
+
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
 
 	New()
@@ -288,6 +300,14 @@
 	New()
 		..()
 		reagents.add_reagent(SLIMEJELLY, 50)
+
+/obj/item/weapon/reagent_containers/glass/beaker/mednanobots
+	name = "beaker 'nanobots'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/mednanobots/New()
+	..()
+	reagents.add_reagent("mednanobots", 25)
+	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bucket
 	desc = "It's a bucket."

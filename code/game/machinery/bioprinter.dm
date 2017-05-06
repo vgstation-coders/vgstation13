@@ -69,6 +69,7 @@
 		stored_matter -= products[choice][2]
 		var/new_organ = products[choice][1]
 		var/obj/item/organ/O = new new_organ(get_turf(src))
+		O.is_printed = TRUE // Heist stuff.
 
 		if(prints_prosthetics)
 			O.robotic = 2

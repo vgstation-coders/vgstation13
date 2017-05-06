@@ -45,7 +45,7 @@
 		for (var/datum/medical_effect/M in side_effects)
 			if (M.cure(src) || M.strength > 60)
 				side_effects -= M
-				del(M)
+				qdel(M)
 			else
 				if(life_tick % 45 == 0)
 					M.on_life(src, strength_percent*M.strength)

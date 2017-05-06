@@ -9,43 +9,43 @@
 //	flags = NOREACT
 	flags = HEAR | PROXMOVE
 	var/datum/mind/mind
-
+	var/list/datum/action/actions = list()
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 
-	var/obj/screen/hands = null
-	var/obj/screen/pullin = null
-	var/obj/screen/kick_icon = null
-	var/obj/screen/bite_icon = null
-	var/obj/screen/visible = null
-	var/obj/screen/purged = null
-	var/obj/screen/internals = null
-	var/obj/screen/oxygen = null
-	var/obj/screen/i_select = null
-	var/obj/screen/m_select = null
-	var/obj/screen/toxin = null
-	var/obj/screen/fire = null
-	var/obj/screen/bodytemp = null
-	var/obj/screen/healths = null
-	var/obj/screen/throw_icon = null
-	var/obj/screen/nutrition_icon = null
-	var/obj/screen/pressure = null
-	var/obj/screen/damageoverlay = null
-	var/obj/screen/pain = null
-	var/obj/screen/gun/item/item_use_icon = null
-	var/obj/screen/gun/move/gun_move_icon = null
-	var/obj/screen/gun/run/gun_run_icon = null
-	var/obj/screen/gun/mode/gun_setting_icon = null
+	var/obj/abstract/screen/hands = null
+	var/obj/abstract/screen/pullin = null
+	var/obj/abstract/screen/kick_icon = null
+	var/obj/abstract/screen/bite_icon = null
+	var/obj/abstract/screen/visible = null
+	var/obj/abstract/screen/purged = null
+	var/obj/abstract/screen/internals = null
+	var/obj/abstract/screen/oxygen = null
+	var/obj/abstract/screen/i_select = null
+	var/obj/abstract/screen/m_select = null
+	var/obj/abstract/screen/toxin = null
+	var/obj/abstract/screen/fire = null
+	var/obj/abstract/screen/bodytemp = null
+	var/obj/abstract/screen/healths = null
+	var/obj/abstract/screen/throw_icon = null
+	var/obj/abstract/screen/nutrition_icon = null
+	var/obj/abstract/screen/pressure = null
+	var/obj/abstract/screen/damageoverlay = null
+	var/obj/abstract/screen/pain = null
+	var/obj/abstract/screen/gun/item/item_use_icon = null
+	var/obj/abstract/screen/gun/move/gun_move_icon = null
+	var/obj/abstract/screen/gun/run/gun_run_icon = null
+	var/obj/abstract/screen/gun/mode/gun_setting_icon = null
 
 	//monkey inventory icons
-	var/obj/screen/m_suitclothes = null
-	var/obj/screen/m_suitclothesbg = null
-	var/obj/screen/m_hat = null
-	var/obj/screen/m_hatbg = null
-	var/obj/screen/m_glasses = null
-	var/obj/screen/m_glassesbg = null
+	var/obj/abstract/screen/m_suitclothes = null
+	var/obj/abstract/screen/m_suitclothesbg = null
+	var/obj/abstract/screen/m_hat = null
+	var/obj/abstract/screen/m_hatbg = null
+	var/obj/abstract/screen/m_glasses = null
+	var/obj/abstract/screen/m_glassesbg = null
 
 	//spells hud icons - this interacts with add_spell and remove_spell
-	var/list/obj/screen/movable/spell_master/spell_masters = null
+	var/list/obj/abstract/screen/movable/spell_master/spell_masters = null
 
 	//thou shall always be able to see the Geometer of Blood
 	var/image/narsimage = null
@@ -60,7 +60,7 @@
 	I'll make some notes on where certain variable defines should probably go.
 	Changing this around would probably require a good look-over the pre-existing code.
 	*/
-	var/obj/screen/zone_sel/zone_sel = null
+	var/obj/abstract/screen/zone_sel/zone_sel = null
 
 	var/use_me = 1 //Allows all mobs to use the me verb by default, will have to manually specify they cannot
 	var/damageoverlaytemp = 0
@@ -170,6 +170,7 @@
 
 	var/datum/dna/dna = null//Carbon
 	var/radiation = 0.0//Carbon
+	var/rad_tick = 0.0//Carbon
 
 	var/list/mutations = list() //Carbon -- Doohl
 	//see: setup.dm for list of mutations
@@ -275,9 +276,17 @@
 	var/event/on_uattack
 	var/event/on_logout
 	var/event/on_damaged
+	// Allows overiding click modifiers and such.
+	var/event/on_clickon
 
 	var/list/alphas = list()
 	var/spell_channeling
+
+	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
+	var/see_invisible_override = 0
+
+	var/mob/transmogged_from	//holds a reference to the mob that this mob used to be before being transmogrified
+	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", "attack_log", "speak_emote", args)

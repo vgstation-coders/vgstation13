@@ -1,38 +1,5 @@
 /mob/living/simple_animal/hostile/monster
 
-/mob/living/simple_animal/hostile/monster/necromorph
-	name = "necromorph"
-	desc = "A twisted husk of what was once a human, repurposed to kill."
-	speak_emote = list("roars")
-	icon = 'icons/mob/monster_big.dmi'
-	icon_state = "nmorph_standard"
-	icon_living = "nmorph_standard"
-	icon_dead = "nmorph_dead"
-	health = 80
-	maxHealth = 80
-	melee_damage_lower = 25
-	melee_damage_upper = 50
-	attacktext = "slashes"
-	attack_sound = 'sound/weapons/bladeslice.ogg'
-	faction = "creature"
-	speed = 4
-	size = SIZE_BIG
-	move_to_delay = 4
-	canRegenerate = 1
-	minRegenTime = 300
-	maxRegenTime = 1200
-
-	min_oxy = 0
-	max_oxy = 0
-	min_tox = 0
-	max_tox = 0
-	min_co2 = 0
-	max_co2 = 0
-	min_n2 = 0
-	max_n2 = 0
-	minbodytemp = 0
-	var/stance_step = 0
-
 /mob/living/simple_animal/hostile/monster/skrite
 	name = "skrite"
 	desc = "A highly predatory being with two dripping claws."
@@ -75,8 +42,8 @@
 	speak_chance = 20
 	turns_per_move = 5
 	see_in_dark = 6
-	maxHealth = 150
-	health = 150
+	maxHealth = 175
+	health = 175
 	melee_damage_lower = 5
 	melee_damage_upper = 15
 	attacktext = "flails around and hits"
@@ -91,7 +58,7 @@
 	..()
 
 	if(prob(90) && health+emp_damage<maxHealth)
-		health+=4                                                                        //Created by misuse of medical nanobots, so it heals
+		health+=6                                                                        //Created by misuse of medical nanobots, so it heals
 		if(prob(15))
 			visible_message("<span class='warning'>[src]'s wounds heal slightly!</span>")
 

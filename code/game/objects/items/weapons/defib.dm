@@ -137,7 +137,7 @@
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
 		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
-		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations  || !target.has_brain() || target.suiciding == 1)
+		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations || !target.has_brain() || target.suiciding == 1)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
 		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here

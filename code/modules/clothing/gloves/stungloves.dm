@@ -57,7 +57,7 @@
 	if(wired && cell)
 		item_state = "stungloves"
 	else
-		item_state = initial(item_state)
+		item_state = icon_state
 	if(ishuman(src.loc))
 		var/mob/living/carbon/human/H = src.loc
 		H.update_inv_gloves()
@@ -69,7 +69,11 @@
 		return
 
 	var/mob/living/L = A
-	if(prox == TRUE && user.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
+	if(prox == TRUE)//Stungloves. ANY contact will stun the alien.
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.check_body_part_coverage(HANDS,src)) //can't touch someone if something is on top of them
+				return
 		visible_message("<span class='danger'>\The [A] has been touched with the stun gloves by [user]!</span>")
 
 		if(cell.charge >= STUNGLOVES_CHARGE_COST)

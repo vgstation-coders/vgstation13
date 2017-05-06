@@ -112,12 +112,14 @@
 	if(src.attached && src.beaker)
 		// Give blood
 		if(mode)
-			if(src.beaker.volume > 0)
-				var/transfer_amount = REAGENTS_METABOLISM
+			if(beaker.volume > 0)
 				if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
 					// speed up transfer if the container has ONLY blood
-					transfer_amount = 4
-				src.beaker.reagents.trans_to(src.attached, transfer_amount)
+					beaker.reagents.trans_to(attached, 4)
+				else
+					// otherwise: transfer a little bit of all reagents to the patient. the reason why we don't transfer a set amount is because 0.2u of 10 different reagents is 0.02u of each, which is entirely too little.
+					for(var/datum/reagent/reagent in beaker.reagents.reagent_list)
+						beaker.reagents.trans_id_to(attached, reagent.id, reagent.custom_metabolism)
 				update_icon()
 
 		// Take blood
@@ -191,11 +193,16 @@
 /obj/machinery/iv_drip/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>\The [src] is [mode ? "injecting" : "taking blood"].</span>")
+	to_chat(user, "<span class='info'>It is attached to [attached ? attached : "no one"].</span>")
 	if(beaker)
 		if(beaker.reagents && beaker.reagents.reagent_list.len)
-			to_chat(user, "<span class='info'>Attached is \a [beaker] with [beaker.reagents.total_volume] units of liquid.</span>")
+			if(beaker.reagents.reagent_list.len == 1 && beaker.reagents.has_reagent(BLOOD))
+				to_chat(user, "<span class='info'>Attached is \an [beaker] with [beaker.reagents.total_volume] units of blood remaining.</span>")
+			else
+				to_chat(user, "<span class='info'>Attached is \an [beaker] with a solution of:</span>")
+				for(var/datum/reagent/R in beaker.reagents.reagent_list)
+					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
 			to_chat(user, "<span class='info'>Attached is \an empty [beaker].</span>")
 	else
 		to_chat(user, "<span class='info'>No chemicals are attached.</span>")
-	to_chat(user, "<span class='info'>It is attached to [attached ? attached : "no one"].</span>")

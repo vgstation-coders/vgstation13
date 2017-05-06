@@ -653,6 +653,12 @@ var/global/list/whitelisted_species = list("Human")
 		if("Cargo Technician","Quartermaster")
 			suit=/obj/item/clothing/suit/space/vox/civ/cargo
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/cargo
+		if("Shaft Miner")
+			suit=/obj/item/clothing/suit/space/vox/civ/mining
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/mining
+		if("Mechanic")
+			suit=/obj/item/clothing/suit/space/vox/civ/mechanic
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/mechanic
 		if("Chaplain")
 			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
@@ -670,12 +676,15 @@ var/global/list/whitelisted_species = list("Human")
 			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 
-		if("Scientist","Roboticist")
+		if("Scientist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
 		if("Research Director")
 			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
+		if("Roboticist")
+			suit=/obj/item/clothing/suit/space/vox/civ/science/roboticist
+			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
 
 		if("Medical Doctor")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical
@@ -938,3 +947,19 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/grue/makeName()
 	return "grue"
+
+
+/datum/species/ghoul
+	name = "Ghoul"
+	icobase = 'icons/mob/human_races/r_ghoul.dmi'
+	deform = 'icons/mob/human_races/r_skeleton.dmi' //It's thin leathery skin on top of bone, deformation's just gonna show bone
+
+	flags = NO_PAIN | IS_WHITELISTED | RAD_ABSORB
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
+	has_mutant_race = 0
+
+	burn_mod = 1.2
+	brute_mod = 0.8
+	move_speed_multiplier = 2
+
+	blood_color = "#7FFF00"

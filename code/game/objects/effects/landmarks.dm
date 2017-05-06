@@ -103,6 +103,7 @@
 	icon_state = "megaphone"
 
 	var/msg
+	var/play_sound
 	var/list/saw_ckeys = list() //List of ckeys which have seen the message
 
 /obj/effect/narration/New()
@@ -114,6 +115,14 @@
 	if(istype(O))
 		if(!saw_ckeys.Find(O.ckey))
 			saw_ckeys.Add(O.ckey)
-			to_chat(O, msg)
+
+			display(O)
 
 	return ..()
+
+/obj/effect/narration/proc/display(mob/living/L)
+	if(msg)
+		to_chat(L, msg)
+
+	if(play_sound)
+		L << play_sound

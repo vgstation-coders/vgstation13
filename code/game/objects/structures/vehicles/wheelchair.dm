@@ -13,6 +13,8 @@
 	health = 50
 	max_health = 50
 
+	can_have_carts = FALSE
+
 	var/image/wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
@@ -50,7 +52,7 @@
 		overlays -= wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
-	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || destroyed || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
 	return 1
 
@@ -132,7 +134,8 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/relaymove(var/mob/user, direction)
 	if(!check_key(user))
-		to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
+		if(can_warn())
+			to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
 		return 0
 	return ..()
 
@@ -174,7 +177,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
 	//Same as parent's, but no occupant check!
-	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || destroyed)
+	if(M != user || !Adjacent(user) || (!ishuman(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
 		return 0
 	return 1
 

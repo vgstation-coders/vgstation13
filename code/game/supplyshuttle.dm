@@ -37,7 +37,7 @@ var/list/mechtoys = list(
 /obj/structure/plasticflaps/attackby(obj/item/I as obj, mob/user as mob)
 	if(iscrowbar(I) && anchored == 1)
 		if(airtight == 0)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 		else
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		user.visible_message("[user] [airtight? "loosen the [src] from" : "tighten the [src] into"] an airtight position.", "You [airtight? "loosen the [src] from" : "tighten the [src] into"] an airtight position.")
@@ -47,7 +47,7 @@ var/list/mechtoys = list(
 		return 1
 	if(iswrench(I) && airtight != 1)
 		if(anchored == 0)
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		else
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		user.visible_message("[user] [anchored? "loosens" : "tightens"] the flap from its anchoring.", "You [anchored? "loosen" : "tighten"] the flap from its anchoring.")
@@ -535,7 +535,7 @@ var/list/mechtoys = list(
 			var/max_crates = round((account.money - total_money_req) / (P.cost + SUPPLY_TAX))
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,REASON_LEN)
+		var/reason = copytext(sanitize(strict_ascii(input(usr,"Reason:","Why do you require this item?","") as null|text)),1,REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -759,7 +759,7 @@ var/list/mechtoys = list(
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = copytext(sanitize(input(usr, "Reason:", "Why do you require this item?", "") as null|text), 1, REASON_LEN)
+		var/reason = copytext(sanitize(strict_ascii(input(usr, "Reason:", "Why do you require this item?", "") as null|text)), 1, REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)

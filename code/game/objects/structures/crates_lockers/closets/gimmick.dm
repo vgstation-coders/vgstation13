@@ -11,6 +11,21 @@
 	else
 		icon_state = icon_opened
 
+/obj/structure/closet/cabinet/medivault
+	name = "old cabinet"
+	desc = "This cabinet has been gathering dust, and hasn't been disturbed in some years."
+
+/obj/structure/closet/cabinet/medivault/New()
+	..()
+	sleep(2)
+	new /obj/item/weapon/storage/box/masks(src)
+	new /obj/item/weapon/storage/backpack/satchel_med(src)
+	new /obj/item/clothing/under/rank/medical(src)
+	new /obj/item/clothing/head/bio_hood/virology(src)
+	new /obj/item/clothing/suit/bio_suit/virology(src)
+	new /obj/item/clothing/shoes/white(src)
+	new /obj/item/weapon/paper/pamphlet/medivault(src)
+
 /obj/structure/closet/acloset
 	name = "strange closet"
 	desc = "It looks alien!"

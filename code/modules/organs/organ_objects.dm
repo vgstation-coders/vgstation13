@@ -14,6 +14,8 @@
 	var/datum/organ/internal/organ_data       // Stores info when removed.
 	var/prosthetic_name = "prosthetic organ"  // Flavour string for robotic organ.
 	var/prosthetic_icon                       // Icon for robotic organ.
+	var/is_printed = FALSE                    // Used for heist.
+	var/had_mind = FALSE                      // Owner had a mind at some point. (heist)
 
 /obj/item/organ/attack_self(mob/user as mob)
 
@@ -34,6 +36,18 @@
 	if(!robotic)
 		processing_objects -= src
 	..()
+
+/obj/item/organ/examine(var/mob/user, var/size = "")
+	..()
+	if(is_printed)
+		user.simple_message("<span class='warning'>This organ has a barcode identifying it as printed from a bioprinter.</span>","<span class='warning'>It's got spaghetti sauce on it. Ew.</span>")
+	else
+		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
+		
+	if(!had_mind)
+		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
+	else
+		user.simple_message("<span class='info'>The organ seems to be full of life!</span>","<span class='info'>It's making happy little cooing noises at you. Aw.</span>")
 
 /obj/item/organ/process()
 
@@ -219,8 +233,6 @@
 	name = "appendix"
 
 /obj/item/organ/proc/removed(var/mob/living/target,var/mob/living/user)
-
-
 	if(!target || !user)
 		return
 
@@ -229,6 +241,8 @@
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> had a vital organ ([src]) removed by [user.name] ([user.ckey]) (INTENT: [uppertext(user.a_intent)])</font>"
 		msg_admin_attack("[user.name] ([user.ckey]) removed a vital organ ([src]) from [target.name] ([target.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 		target.death()
+
+	had_mind=!isnull(target.mind)
 
 /obj/item/organ/appendix/removed(var/mob/living/target,var/mob/living/user)
 

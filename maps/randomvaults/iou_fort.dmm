@@ -9,7 +9,7 @@
 "i" = (/obj/effect/landmark/corpse{husk = 1},/turf/simulated/floor{icon_state = "white"},/area/vault/ioufort)
 "j" = (/obj/effect/landmark/corpse{husk = 1},/obj/machinery/light{dir = 8},/turf/simulated/floor{icon_state = "white"},/area/vault/ioufort)
 "k" = (/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/vault/ioufort)
-"l" = (/obj/map/spawner/mobs/carp,/turf/space,/area)
+"l" = (/obj/abstract/map/spawner/mobs/carp,/turf/space,/area)
 "m" = (/turf/simulated/floor{icon_state = "warnwhite"},/area/vault/ioufort)
 "n" = (/turf/simulated/floor,/area/vault/ioufort)
 "o" = (/obj/machinery/light,/turf/simulated/floor,/area/vault/ioufort)

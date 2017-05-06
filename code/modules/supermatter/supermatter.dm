@@ -122,22 +122,22 @@
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
 	if(src.fingerprintshidden)
-		prints = ", all touchers : [list2params(src.fingerprintshidden)]"
+		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	if(current_size == STAGE_FIVE)
 		S.expand(STAGE_SUPER, 1)
-		log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
-		message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+		log_admin("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
+		message_admins("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 15000
 
 /obj/machinery/power/supermatter/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
 	if(src.fingerprintshidden)
-		prints = ", all touchers : " + src.fingerprintshidden
+		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
 	S.expand(STAGE_SUPER, 1)
-	log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
+	log_admin("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 20000
 
@@ -420,12 +420,13 @@
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
 	if(istype(user))
-		user.dust()
+		. = user.supermatter_act(src, SUPERMATTER_DUST)
 		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
 			return
 		power += 200
-	else
-		qdel(user)
+	else if(istype(user, /atom))
+		var/atom/A = user
+		. = A.supermatter_act(src, SUPERMATTER_DELETE)
 
 	power += 200
 

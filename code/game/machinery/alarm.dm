@@ -1040,7 +1040,7 @@ FIRE ALARM
 		src.updateDialog()
 	last_process = world.timeofday
 
-	if(locate(/obj/fire) in loc)
+	if(locate(/obj/effect/fire) in loc)
 		alarm()
 
 	return
@@ -1163,6 +1163,9 @@ var/global/list/firealarms = list() //shrug
 	firealarms.Remove(src)
 	..()
 
+/obj/machinery/firealarm/npc_tamper_act(mob/living/L)
+	alarm()
+
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"
 	desc = "Cuban Pete is in the house!"
@@ -1258,3 +1261,7 @@ var/global/list/firealarms = list() //shrug
 
 	add_fingerprint(usr)
 	return
+
+/obj/machinery/alarm/npc_tamper_act(mob/living/L)
+	if(wires)
+		wires.npc_tamper(L)

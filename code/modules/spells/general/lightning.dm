@@ -99,17 +99,17 @@
 	return 1
 
 // Listener for /atom/movable/on_moved
-/spell/lightning/cast(var/list/targets)
+/spell/lightning/cast(var/list/targets, mob/user)
 	var/mob/living/L = targets[1]
 	if(istype(L))
 		zapzap--
 		if(zapzap)
-			to_chat(holder, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
+			to_chat(user, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
 			. = 1
 
-		invocation(holder)
+		invocation(user)
 		spawn()
-			zapmuthafucka(holder, L, bounces)
+			zapmuthafucka(user, L, bounces)
 		src.process()
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
@@ -169,7 +169,7 @@
 		var/currdist = -1
 		for(var/mob/living/M in view(target,bounce_range))
 //			to_chat(world, "checking [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) for a bounce")
-			if((M != holder && M != usr) && M != user)
+			if(M != holder && M != user)
 				if(!(M in zapped) && target == otarget)//we are chaining off something going to our original target
 					continue
 				var/dist = get_dist(M, user)

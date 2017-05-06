@@ -95,7 +95,7 @@
 	name = "infinite-capacity power cell!"
 	icon_state = "icell"
 	origin_tech =  null
-	maxcharge = 30000
+	maxcharge = 1.#INF
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 	use()
 		return 1
@@ -129,3 +129,15 @@
 	desc = "A specially designed power cell for heating and cooling projectiles"
 	icon_state = "icell"
 	maxcharge = 900
+
+/obj/item/weapon/cell/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"charge",
+		"rigged",
+		"minor_fault",
+		"brute_damage",
+		"electronics_damage")
+
+	reset_vars_after_duration(resettable_vars, duration)
+

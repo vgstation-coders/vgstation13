@@ -333,7 +333,7 @@ client/proc/one_click_antag()
 					candidates.Remove(theghost)
 
 				if(!theghost)
-					del(new_syndicate_commando)
+					qdel(new_syndicate_commando)
 					break
 
 				new_syndicate_commando.key = theghost.key
@@ -436,7 +436,7 @@ client/proc/one_click_antag()
 					candidates.Remove(theghost)
 
 				if(!theghost)
-					del(new_vox)
+					qdel(new_vox)
 					break
 
 				new_vox.key = theghost.key

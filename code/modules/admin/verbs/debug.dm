@@ -463,7 +463,7 @@ Pressure: [env.return_pressure()]"}
 	if(hsbitem)
 		for(var/atom/O in world)
 			if(istype(O, hsbitem))
-				del(O)
+				qdel(O)
 		log_admin("[key_name(src)] has deleted all instances of [hsbitem].")
 		message_admins("[key_name_admin(src)] has deleted all instances of [hsbitem].", 0)
 	feedback_add_details("admin_verb","DELA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -534,7 +534,7 @@ Pressure: [env.return_pressure()]"}
 	var/mob/adminmob = src.mob
 	M.ckey = src.ckey
 	if( isobserver(adminmob) )
-		del(adminmob)
+		qdel(adminmob)
 	feedback_add_details("admin_verb","ADC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_areatest()
@@ -683,7 +683,7 @@ Pressure: [env.return_pressure()]"}
 		for (var/obj/item/I in M)
 			if (istype(I, /obj/item/weapon/implant))
 				continue
-			del(I)
+			qdel(I)
 	switch(dresscode)
 		if ("strip")
 			//do nothing
@@ -770,7 +770,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(M), slot_shoes)
 			var/obj/item/weapon/storage/backpack/backpack = new(M)
 			for(var/obj/item/I in backpack)
-				del(I)
+				qdel(I)
 			M.equip_to_slot_or_del(backpack, slot_back)
 
 			M.put_in_hands(new /obj/item/weapon/mop(M))
@@ -862,7 +862,7 @@ Pressure: [env.return_pressure()]"}
 
 			var/obj/item/weapon/storage/secure/briefcase/sec_briefcase = new(M)
 			for(var/obj/item/briefcase_item in sec_briefcase)
-				del(briefcase_item)
+				qdel(briefcase_item)
 			for(var/i=3, i>0, i--)
 				sec_briefcase.contents += new /obj/item/weapon/spacecash/c1000
 			sec_briefcase.contents += new /obj/item/weapon/gun/energy/crossbow
@@ -990,7 +990,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
 		if("emergency response team")
-			M.equip_strike_team()
+			M.equip_response_team()
 
 		if("special ops officer")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/combat(M), slot_w_uniform)
@@ -1148,7 +1148,7 @@ Pressure: [env.return_pressure()]"}
 		if(G.anchored)
 			var/obj/machinery/singularity/S = new /obj/machinery/singularity(get_turf(G), 50)
 			spawn(0)
-				del(G)
+				qdel(G)
 			S.energy = 1250 //No energy dissipates
 			S.current_size = 7
 			S.icon = 'icons/effects/224x224.dmi'
@@ -1180,7 +1180,7 @@ Pressure: [env.return_pressure()]"}
 
 	for(var/obj/machinery/power/battery/smes/SMES in power_machines)
 		var/turf/T=SMES.loc
-		del(SMES)
+		qdel(SMES)
 		var/obj/machinery/power/battery/smes/infinite/magic = new(T)
 		// Manually set up our powernets since stupid seems to reign in the powernet code.
 		magic.connect_to_network()
@@ -1495,7 +1495,7 @@ client/proc/delete_all_bomberman()
 	for(var/obj/structure/softwall/O in bombermangear)
 		qdel(O)
 
-	for(var/turf/unsimulated/wall/bomberman/T in turfs)
+	for(var/turf/unsimulated/wall/bomberman/T in world)
 		T.ChangeTurf(/turf/simulated/wall)
 
 

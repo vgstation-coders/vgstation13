@@ -155,8 +155,9 @@
 
 /obj/item/weapon/storage/box/syringes/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/syringe(src)
+	new /obj/item/weapon/reagent_containers/syringe/giant(src)
 
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
@@ -731,3 +732,55 @@
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/toy/balloon(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/future
+	icon_state = "future_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/future/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/future(src)
+
+/obj/item/weapon/storage/box/balloons/long
+	name = "box of long balloons"
+	desc = "A box containing seven long balloons of various colors."
+	icon_state = "long_balloon_box"
+
+/obj/item/weapon/storage/box/balloons/long/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long(src)
+
+/obj/item/weapon/storage/box/balloons/long/living/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long/living(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/past
+	icon_state = "past_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/past/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/past(src)
+
+// Who organizes this shit?
+
+/obj/item/weapon/storage/box/actionfigure
+	name = "box of action figures"
+	desc = "The latest set of collectable action figures."
+	icon_state = "box"
+
+/obj/item/weapon/storage/box/actionfigure/New()
+	..()
+	for(var/i in 1 to 4)
+		var/randomFigure = pick(subtypesof(/obj/item/toy/figure))
+		new randomFigure(src)

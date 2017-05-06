@@ -71,7 +71,7 @@
 /obj/item/proc/generate_accessory_overlays()
 	return
 
-/obj/item/clothing/generate_accessory_overlays(var/obj/Overlays/O)
+/obj/item/clothing/generate_accessory_overlays(var/obj/abstract/Overlays/O)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
 			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")

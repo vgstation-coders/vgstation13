@@ -15,8 +15,6 @@
 
 	var/list/smelter_data //All the data we have about the smelter, since it uses radio connection based RC.
 
-	var/show_all_ores = 0 //Should we show all ores? (even ones we don't have).
-
 	var/obj/item/weapon/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
 
 /obj/machinery/computer/smelting/New()
@@ -69,17 +67,32 @@
 	user.set_machine(src)
 
 	var/dat = {"
+	<div style="overflow:hidden;">
+	<div class="block">
+	The ore processor is currently <A href='?src=\ref[src];toggle_power=1' class='[smelter_data["on"] ? "linkOn" : "linkDanger"]'>[smelter_data["on"] ? "processing" : "disabled"]</a>
+	"}
+
+	if(smelter_data["credits"] != -1)
+		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
+
+		if(istype(id))
+			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
+			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
+		else
+			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
+
+	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
+		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
+	
+	dat += {"</div>
+	<div style="float:left;" class="block">
 	<table>
 		<tr>
 			<th>Mineral</th>
 			<th>Amount</th>
-			<th colspan="2">Controls</th>
 		</tr>"}
 
 	for(var/ore_id in smelter_data["ore"])
-		if(!smelter_data["ore"][ore_id]["amount"] && !show_all_ores)
-			continue
-
 		dat += {"
 		<tr>
 			<td>[smelter_data["ore"][ore_id]["name"]]</td>
@@ -87,12 +100,11 @@
 		</tr>
 		"}
 
-	dat += "</table><br>"
-
-	dat += "Currently displaying [show_all_ores ? "all ore types" : "only available ore types"]. <A href='?src=\ref[src];toggle_ores=1'>\[[show_all_ores ? "show less" : "show more"]\]</a><hr>"
+	dat += "</table></div>"
 
 	dat += {"
-	<b>Available recipes:</b><br>
+	<div style="float:left;" class="block">
+	<b>Available recipes: </b><br>
 	<table>
 		<tr>
 			<th>Output</th>
@@ -124,24 +136,10 @@
 		"}
 
 	dat += {"
-	</table><hr>
-	The ore processor is currently <A href='?src=\ref[src];toggle_power=1' class='[smelter_data["on"] ? "linkOn" : "linkDanger"]'>[smelter_data["on"] ? "processing" : "disabled"]</a>
-	"}
-
-	if(smelter_data["credits"] != -1)
-		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
-
-		if(istype(id))
-			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
-			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
-		else
-			dat += text("No ID inserted.  <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
-
-	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
-		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
+	</table></div></div>"}
 
 
-	var/datum/browser/popup = new(user, "console_processing_unit", name, 400, 500, src)
+	var/datum/browser/popup = new(user, "console_processing_unit", name, 460, 620, src)
 	popup.set_content(dat)
 	popup.open()
 
@@ -160,10 +158,6 @@
 	if(href_list["toggle_power"])
 		send_signal(list("toggle_power" = 1))
 		request_status()
-		return 1
-
-	if(href_list["toggle_ores"])
-		show_all_ores = !show_all_ores
 		return 1
 
 	if(href_list["eject"])

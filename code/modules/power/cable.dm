@@ -190,34 +190,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(iswirecutter(W))
 		if(shock(user, 50))
 			return
-
-		if(src.d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
-			getFromPool(/obj/item/stack/cable_coil, T, 2, light_color)
-		else
-			getFromPool(/obj/item/stack/cable_coil, T, 1, light_color)
-
-		user.visible_message("<span class='warning'>[user] cuts the cable.</span>", "<span class='info'>You cut the cable.</span>")
-
-		//investigate_log("was cut by [key_name(usr, usr.client)] in [user.loc.loc]","wires")
-
-		var/message = "A wire has been cut "
-		var/atom/A = user
-
-		if(A)
-			var/turf/Z = get_turf(A)
-			var/area/my_area = get_area(Z)
-
-			message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
-
-			var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
-
-			if(M)
-				message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
-				log_game("[M.real_name] ([M.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
-
-		message_admins(message, 0, 1)
-
-		returnToPool(src)
+		cut(user, T)
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/coil = W
@@ -240,10 +213,50 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	src.add_fingerprint(user)
 
+/obj/structure/cable/attack_animal(mob/M)
+	if(isanimal(M))
+		if(ismouse(M))
+			var/mob/living/simple_animal/mouse/N = M
+			M.delayNextAttack(10)
+			M.visible_message("<span class='danger'>[M] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span>")
+			shock(M, 50)
+			if(prob(5) && N.can_chew_wires)
+				var/turf/T = src.loc
+				cut(N, T)
+
 /obj/structure/cable/bite_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span></span>")
 
 	shock(H, 100, 2.0)
+
+/obj/structure/cable/proc/cut(mob/user, var/turf/T)
+	if(src.d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
+		getFromPool(/obj/item/stack/cable_coil, T, 2, light_color)
+	else
+		getFromPool(/obj/item/stack/cable_coil, T, 1, light_color)
+
+	user.visible_message("<span class='warning'>[user] cuts the cable.</span>", "<span class='info'>You cut the cable.</span>")
+
+	//investigate_log("was cut by [key_name(usr, usr.client)] in [user.loc.loc]","wires")
+
+	var/message = "A wire has been cut "
+	var/atom/A = user
+
+	if(A)
+		var/turf/Z = get_turf(A)
+		var/area/my_area = get_area(Z)
+
+		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
+
+		var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
+
+		if(M)
+			message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
+			log_game("[M.real_name] ([M.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
+
+	message_admins(message, 0, 1)
+
+	returnToPool(src)
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)

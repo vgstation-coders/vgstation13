@@ -362,7 +362,8 @@ This function restores all organs.
 			S.desc = "[S.desc] It looks like it was fired from [P.shot_from]."
 			S.forceMove(src)
 			organ.implants += S
-			visible_message("<span class='danger'>The projectile sticks in the wound!</span>")
+			if(P.embed_message)
+				visible_message("<span class='danger'>The projectile sticks in the wound!</span>")
 			S.add_blood(src)
 	if(istype(used_weapon,/obj/item/projectile/flare)) //We want them to carry the flare, not a projectile
 		var/obj/item/projectile/flare/F = used_weapon

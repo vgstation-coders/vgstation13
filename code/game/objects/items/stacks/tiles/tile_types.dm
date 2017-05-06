@@ -143,3 +143,22 @@
 	max_amount = 60
 
 	material = "fabric"
+
+obj/item/stack/tile/slime
+	name = "tile of slime"
+	desc = "A flat piece of slime made through xenobiology"
+	icon_state = "tile-slime"
+	w_class = W_CLASS_MEDIUM
+	force = 1
+	throwforce = 1.0
+	throw_speed = 5
+	throw_range = 20
+	flags = FPRINT
+	siemens_coefficient = 1
+	max_amount = 30
+
+/obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
+	if(L.dna.mutantrace == "slime")
+		return -1
+	else
+		return current_slowdown+5

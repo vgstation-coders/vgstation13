@@ -96,6 +96,9 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(head.clothing_flags & PLASMAGUARD)
 				return 1
+			else if(check_body_part_coverage(EYES))
+				head.contaminate()
+				return 1
 		else if(check_body_part_coverage(EYES))
 			return 1
 	return 0
@@ -105,6 +108,9 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(wear_suit)
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(wear_suit.clothing_flags & PLASMAGUARD)
+				return 1
+			else if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
+				wear_suit.contaminate()
 				return 1
 		else
 			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))

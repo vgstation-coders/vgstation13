@@ -5,6 +5,8 @@
 
 	var/nudge_script_path = "nudge.py"  // where the nudge.py script is located
 
+	var/localhost_autoadmin = 0			// Give local host clients +HOST upon joining
+
 	var/log_ooc = 0						// log OOC channel
 	var/tts_server = ""					// TTS Server
 	var/log_access = 0					// log login/logout
@@ -256,6 +258,9 @@
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1
+
+				if ("localhost_autoadmin")
+					localhost_autoadmin = 1
 
 				if ("log_ooc")
 					config.log_ooc = 1
@@ -637,6 +642,8 @@
 					config.silent_borg = 1
 				if("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
+				if("hardcore_mode")
+					hardcore_mode = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

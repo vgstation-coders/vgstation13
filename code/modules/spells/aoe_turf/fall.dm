@@ -109,9 +109,9 @@ var/global/list/falltempoverlays = list()
 			if(C.mob)
 				C.mob.see_fall(ourturf, range)
 		spawn(10)
-		for(var/client/C in clients)
-			if(C.mob)
-				C.mob.see_fall()
+			for(var/client/C in clients)
+				if(C.mob)
+					C.mob.see_fall()
 
 	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
 

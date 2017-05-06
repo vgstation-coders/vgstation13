@@ -31,6 +31,7 @@
 #define CARBON 			"carbon"
 #define CHLORINE 			"chlorine"
 #define FLUORINE 			"fluorine"
+#define CHLORAMINE			"chloramine"
 #define SODIUM 			"sodium"
 #define PHOSPHORUS 			"phosphorus"
 #define LITHIUM 			"lithium"
@@ -53,11 +54,13 @@
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"
+#define PHAZON 			"phazon"
 #define ALUMINUM 			"aluminum"
 #define SILICON 			"silicon"
 #define FUEL 			"fuel"
 #define VOMIT 			"vomit"
 #define CLEANER 			"cleaner"
+#define BLEACH 				"bleach"
 #define FERTILIZER 			"fertilizer"
 #define EZNUTRIENT 			"eznutrient"
 #define ROBUSTHARVEST 			"robustharvest"
@@ -307,9 +310,16 @@
 #define BAHAMA_MAMA		"bahama_mama"
 #define RED_MEAD		"red_mead"
 #define ICED_BEER		"iced_beer"
+#define DANS_WHISKEY		"dans_whiskey"
 #define CHARCOAL		"charcoal"
 #define SANGRIA			"sangria"
 #define BLOCKIZINE		"blockizine"
+#define FISHBLEACH		"fishbleach"
+#define CHEESYGLOOP		"cheesy_gloop"
+#define MAPLESYRUP		"maple_syrup"
+#define ROACHSHELL		"roach_shell"
+#define GREYVODKA		"grey_vodka"
+#define MEDCORES		"medium cores"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -328,6 +338,6 @@
 
 //Pulse related bullshit
 var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
+var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA)					//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
-var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
+var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional

@@ -34,6 +34,8 @@
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
 			if(4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(5)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
 		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
@@ -77,6 +79,8 @@
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
 			if(4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(5)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
 		switch(H.mind.role_alt_title)
 			if("Station Engineer")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/engineer(H), slot_w_uniform)
@@ -127,6 +131,8 @@
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
 			if(4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(5)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/atmospheric_technician(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)
@@ -148,7 +154,7 @@
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)
-	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_science)
+	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_tcomsat, access_science)
 	alt_titles = list("Telecommunications Technician", "Spacepod Mechanic", "Greasemonkey")
 
 	pdaslot=slot_l_store
@@ -166,6 +172,8 @@
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
 			if(4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(5)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/mechanic(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)

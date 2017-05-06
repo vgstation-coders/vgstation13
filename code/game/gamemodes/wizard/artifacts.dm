@@ -60,9 +60,9 @@
 	name = "Staff of Necromancy"
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
-	spawned_items = list(/obj/item/weapon/staff/necro)
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
 
-#define APPRENTICE_PRICE 5
+#define APPRENTICE_PRICE Sp_BASE_PRICE
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
 	desc = "A magical contract binding an apprentice wizard to your service, using it will summon them to your side."

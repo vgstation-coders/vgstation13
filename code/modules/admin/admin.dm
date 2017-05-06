@@ -369,7 +369,7 @@ var/global/floorIsLava = 0
 	return noteslist
 /datum/admins/proc/show_player_info(var/key as text)
 	set category = "Admin"
-	set name = "Show Player Info"
+	set name = "Show Player Notes"
 
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
@@ -727,12 +727,13 @@ var/global/floorIsLava = 0
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
 			<BR>
+			<BR>
 			"}
 
 	if(check_rights(R_ADMIN,0))
 		dat += {"
 			<B>Admin Secrets</B><BR>
-			<BR><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
 			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
 			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
@@ -750,6 +751,20 @@ var/global/floorIsLava = 0
 			<BR>
 			"}
 
+
+	if(check_rights(R_ADMIN,0))
+		dat += {"
+			<B>Strike Teams</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<BR>
+			<BR>
+			"}
+
+
 	if(check_rights(R_FUN,0))
 		dat += {"
 			<B>'Random' Events</B><BR>
@@ -760,6 +775,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
 			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
 			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
@@ -796,13 +813,13 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
+			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=striketeam'>Send in a strike team</A><BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
@@ -973,6 +990,20 @@ var/global/floorIsLava = 0
 	log_admin("[key_name(usr)] toggled OOC.")
 	message_admins("[key_name_admin(usr)] toggled OOC.", 1)
 	feedback_add_details("admin_verb","TOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/datum/admins/proc/togglelooc()
+	set category = "Server"
+	set desc="Globally Toggles LOOC"
+	set name="Toggle LOOC"
+
+	looc_allowed = !(looc_allowed)
+	if (looc_allowed)
+		to_chat(world, "<B>Local OOC has been globally enabled!</B>")
+	else
+		to_chat(world, "<B>Local OOC has been globally disabled!</B>")
+	log_admin("[key_name(usr)] toggled LOOC.")
+	message_admins("[key_name_admin(usr)]toggled LOOC.", 1)
+	feedback_add_details("admin_verb", "TLOOC") //2nd parameter must be unique to the new proc
 
 
 /datum/admins/proc/toggleoocdead()

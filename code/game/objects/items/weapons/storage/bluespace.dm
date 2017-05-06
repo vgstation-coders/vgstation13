@@ -49,10 +49,11 @@
 	log_game("[key_name(user)] detonated [H] and [src], creating a singularity.")
 	to_chat(user, "<span class = 'danger'>The Bluespace interfaces of the two devices catastrophically malfunction, throwing you to the ground in the process!</span>")
 	to_chat(user, "<span class='danger'>FUCK!</span>")
+	var/turf/T = get_turf(src)
 	qdel(H)
-	new /obj/machinery/singularity (get_turf(src))
-	user.throw_at(get_turf(src), 10, 5) //if they moved away from the turf before getting knockdown, they end up back in the singulo's grasp anyway.
 	qdel(src)
+	var/obj/machinery/singularity/S = new (T)
+	S.Bumped(user)
 
 /obj/item/weapon/storage/backpack/holding/singularity_act(var/current_size,var/obj/machinery/singularity/S)
 	var/dist = max(current_size, 1)

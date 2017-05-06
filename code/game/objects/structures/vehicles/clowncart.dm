@@ -17,6 +17,7 @@
 	name = "clowncart"
 	desc = "A goofy-looking cart, commonly used by space clowns for entertainment. There appears to be a coin slot on its side."
 	icon = 'icons/obj/vehicles.dmi'
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/clowncart
 	icon_state = "clowncart0"
 	anchored = 1
 	density = 1
@@ -78,9 +79,6 @@
 
 /obj/structure/bed/chair/vehicle/clowncart/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/bikehorn))
-		if(destroyed)
-			to_chat(user, "<span class='danger'>[src] is completely wrecked, it's over.</span>")
-			return
 		if(honk + 20 > world.timeofday)
 			return
 		add_fingerprint(user)
@@ -258,11 +256,11 @@
 				to_chat(user, "Selected color: Boring Black")
 
 /obj/structure/bed/chair/vehicle/clowncart/relaymove(mob/user, direction)
-	if(user.incapacitated() || destroyed)
+	if(user.incapacitated())
 		unlock_atom(user)
 		return
 	if(empstun > 0)
-		if(user)
+		if(user && can_warn())
 			to_chat(user, "<span class='warning'>[src]'s banana essence battery has been shorted out.</span>")
 		return
 	if(reagents.total_volume <= 0 && max_health < HEALTH_FOR_FREE_MOVEMENT) //No fuel
@@ -294,10 +292,10 @@
 				new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
 				reagents.remove_reagent(BANANA,BANANA_FOR_TRAITOR_PEEL)
 	else
-		to_chat(user, "<span class='notice'>You have to honk to be able to ride [src].</span>")
+		if(can_warn())
+			to_chat(user, "<span class='notice'>You have to honk to be able to ride [src].</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/die()
-	destroyed = 1
 	density = 0
 	visible_message("<span class='warning'>[nick] explodes in a puff of pure potassium!</span>")
 	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 75, 1)
@@ -369,6 +367,12 @@
 		to_chat(user, "<span class='notice'>\The [W] doesn't contain any banana essence!</span>")
 		return 0
 
+/obj/effect/decal/mecha_wreckage/vehicle/clowncart
+	// TODO: Icons plz
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "pussywagon_destroyed"
+	name = "clowncart wreckage"
+	desc = "Now the clown needs cheering up."
 #undef HEALTH_FOR_70X_MODIFIER
 #undef HEALTH_FOR_80X_MODIFIER
 #undef HEALTH_FOR_FLOWER_RECHARGE

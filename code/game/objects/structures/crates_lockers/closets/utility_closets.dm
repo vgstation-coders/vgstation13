@@ -50,10 +50,6 @@
 		if ("delete")
 			qdel(src)
 			return
-		/*if ("fire")
-			new /obj/structure/closet/firecloset(src.loc)
-			del(src)
-			return*/
 
 /obj/structure/closet/emcloset/legacy/New()
 	..()

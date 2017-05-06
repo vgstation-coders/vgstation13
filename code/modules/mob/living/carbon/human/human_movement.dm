@@ -79,6 +79,9 @@
 		else
 			tally -= 10
 
+	if(reagents.has_reagent(MEDCORES))
+		tally *=3
+
 	if(reagents.has_reagent(FROSTOIL) && dna.mutantrace == "slime")
 		tally *= 5
 

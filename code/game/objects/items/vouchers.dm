@@ -24,3 +24,11 @@
 	freebies = list(/obj/item/weapon/reagent_containers/food/drinks/coffee, /obj/item/weapon/reagent_containers/food/drinks/tea, /obj/item/weapon/reagent_containers/food/drinks/h_chocolate)
 	vend_amount = 1
 	shred_on_use = 0
+
+/obj/item/voucher/free_item/snack
+	name = "free snack voucher"
+	desc = "Perk Up Your Day, with this handy free snack from your trusted name-brand vending machines."
+
+	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/candy,/obj/item/weapon/reagent_containers/food/drinks/dry_ramen,/obj/item/weapon/reagent_containers/food/snacks/chips,/obj/item/weapon/reagent_containers/food/snacks/sosjerky,/obj/item/weapon/reagent_containers/food/snacks/no_raisin,/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers)
+	vend_amount = 1
+	shred_on_use = 0

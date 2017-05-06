@@ -11,7 +11,7 @@ Configuration:
 		src.tooltips = new /datum/tooltip(src)
 Usage:
 - Define mouse event procs on your (probably HUD) object and simply call the show and hide procs respectively:
-	/obj/screen/hud
+	/obj/abstract/screen/hud
 		MouseEntered(location, control, params)
 			usr.client.tooltip.show(params, title = src.name, content = src.desc)
 		MouseExited()

@@ -37,6 +37,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	// Can we wrench/weld this to a turf with a dense /obj on it?
 	var/can_affix_to_dense_turf=0
 
+	var/has_been_invisible_sprayed = FALSE
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
@@ -81,8 +83,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 
-/obj/proc/state_controls_pai(obj/item/device/paicard/P) //text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
-	return
+/obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
+	if(P.pai)
+		return 1
+	return 0
 
 /obj/proc/attack_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI clicks on the object, or uses the attack_self() hotkey
 	return
@@ -119,9 +123,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
 	if(pAImove_delayer.blocked())
+		user.last_movement=world.time
 		return 0
 	else
 		delayNextpAIMove(getpAIMovementDelay())
+		if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
+			delayNextpAIMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
+		user.last_movement=world.time
 		return 1
 
 /obj/proc/getpAIMovementDelay()
@@ -150,11 +158,17 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return
 
 	to_chat(M, "You eject \the [integratedpai] from \the [src].")
-	integratedpai.forceMove(get_turf(src))
-	M.put_in_hands(integratedpai)
-	integratedpai = null
+	M.put_in_hands(eject_integratedpai_if_present())
 	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
-	verbs -= /obj/verb/remove_pai
+
+/obj/proc/eject_integratedpai_if_present()
+	if(integratedpai)
+		integratedpai.forceMove(get_turf(src))
+		verbs -= /obj/verb/remove_pai
+		var/obj/item/device/paicard/P = integratedpai
+		integratedpai = null
+		return P
+	return 0
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
@@ -534,3 +548,29 @@ a {
 	if(istype(user))
 		return (M_CLUMSY in user.mutations)
 	return 0
+
+//Proc that handles NPCs (gremlins) "tampering" with this object.
+//Return NPC_TAMPER_ACT_FORGET if there's no interaction (the NPC won't try to tamper with this again)
+//Return NPC_TAMPER_ACT_NOMSG if you don't want to create a visible_message
+/obj/proc/npc_tamper_act(mob/living/L)
+	return NPC_TAMPER_ACT_FORGET
+
+/obj/actual_send_to_future(var/duration)
+	var/turf/current_turf = get_turf(src)
+	var/datum/current_loc = loc
+	forceMove(null)
+
+	..()
+
+	if(!current_loc.gcDestroyed)
+		forceMove(current_loc)
+	else
+		forceMove(current_turf)
+
+/obj/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"sharpness",
+		"integratedpai")
+
+	reset_vars_after_duration(resettable_vars, duration)

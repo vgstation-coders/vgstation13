@@ -226,7 +226,16 @@
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
+		removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
 		organ_holder = removed_organ
 
 	return removed_organ
+
+/datum/organ/internal/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"damage",
+		"robotic")
+
+	reset_vars_after_duration(resettable_vars, duration)

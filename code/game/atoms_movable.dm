@@ -719,3 +719,190 @@
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
+
+/atom/movable/proc/send_to_future(var/duration)	//don't override this, only call it
+	spawn()
+		actual_send_to_future(duration)
+
+/atom/movable/proc/actual_send_to_future(var/duration)	//don't call this, only override it
+	var/init_invisibility = invisibility
+	var/init_invuln = flags & INVULNERABLE
+	var/init_density = density
+	var/init_anchored = anchored
+	var/init_timeless = flags & TIMELESS
+
+	invisibility = INVISIBILITY_MAXIMUM
+	flags |= INVULNERABLE
+	density = 0
+	anchored = 1
+	flags |= TIMELESS
+	if(!ignoreinvert)
+		invertcolor(src)
+	timestopped = 1
+
+	for(var/atom/movable/AM in contents)
+		AM.send_to_future(duration)
+
+	sleep(duration)
+	timestopped = 0
+	if(!init_invuln)
+		flags &= ~INVULNERABLE
+	density = init_density
+	anchored = init_anchored
+	if(!init_timeless)
+		flags &= ~TIMELESS
+	appearance = falltempoverlays[src]
+	falltempoverlays -= src
+	ignoreinvert = initial(ignoreinvert)
+	invisibility = init_invisibility
+
+/datum/proc/send_to_past(var/duration)
+	return
+
+/datum/var/being_sent_to_past
+
+/atom/movable/send_to_past(var/duration)
+	var/current_loc = loc
+	var/static/list/resettable_vars = list(
+		"being_sent_to_past",
+		"invisibility",
+		"alpha",
+		"name",
+		"desc",
+		"dir",
+		"pixel_x",
+		"pixel_y",
+		"layer",
+		"transform",
+		"density",
+		"last_move",
+		"last_moved",
+		"anchored",
+		"move_speed",
+		"throw_speed",
+		"throw_range",
+		"timestopped",
+		"flags",
+		"gcDestroyed")
+	var/list/stored_vars = list()
+	for(var/x in resettable_vars)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	for(var/atom/movable/AM in contents)
+		AM.send_to_past(duration)
+	if(reagents)
+		reagents.send_to_past(duration)
+
+	being_sent_to_past = TRUE
+	spawn(duration)
+		if(istype(loc, /mob))
+			var/mob/M = loc
+			M.drop_item(src, force_drop = 1)
+		forceMove(current_loc)
+		for(var/x in stored_vars)
+			if(istype(stored_vars[x], /list))
+				var/list/L = stored_vars[x]
+				if(!L)
+					vars[x] = null
+					continue
+				else if(!L.len)
+					vars[x] = list()
+					continue
+			vars[x] = stored_vars[x]
+		update_icon()
+
+/datum/proc/reset_vars_after_duration(var/list/to_reset, var/duration, var/sending_to_past = FALSE)
+	if(!to_reset || !to_reset.len || !duration)
+		return
+	if(sending_to_past)
+		to_reset.Add("being_sent_to_past")
+	var/list/stored_vars = list()
+	for(var/x in to_reset)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	if(sending_to_past)
+		being_sent_to_past = TRUE
+	spawn(duration)
+		for(var/x in stored_vars)
+			if(istype(stored_vars[x], /list))
+				var/list/L = stored_vars[x]
+				if(!L)
+					vars[x] = null
+					continue
+				else if(!L.len)
+					vars[x] = list()
+					continue
+			vars[x] = stored_vars[x]
+
+/atom/proc/attack_icon()
+	return appearance
+
+/atom/movable/proc/do_attack_animation(atom/target, atom/tool)
+	set waitfor = 0
+
+	ASSERT(tool) //If no tool, shut down the proc and call the coder police
+
+	if(target == src)
+		return
+	var/horizontal = 0
+	var/vertical = 0
+
+	var/direction = get_dir(src, target)
+
+	if(direction & NORTH)
+		vertical = 1
+	else if(direction & SOUTH)
+		vertical = -1
+
+	if(direction & EAST)
+		horizontal = 1
+	else if(direction & WEST)
+		horizontal = -1
+
+//Attack animation that looks like person being pixel shifted
+	spawn()
+		var/image/override_image = image(icon = icon, icon_state = icon_state) //only because byond will not create an image if you do not give it some values
+		override_image.appearance = appearance
+		override_image.override = 1
+		override_image.loc = src
+		override_image.pixel_x = pixel_x
+		override_image.pixel_y = pixel_y
+		override_image.dir = dir
+
+		var/adjusted_x = pixel_x + horizontal * 3 * PIXEL_MULTIPLIER
+		var/adjusted_y = pixel_y + vertical * 3 * PIXEL_MULTIPLIER
+		var/viewers = person_animation_viewers.Copy()
+		for(var/client/C in viewers)
+			C.images += override_image
+
+		animate(override_image, pixel_x = adjusted_x, pixel_y = adjusted_y, time = 1)
+		animate(pixel_x = pixel_x, pixel_y = pixel_y, time = 1)
+		sleep(2)
+		for(var/client/C in viewers)
+			C.images -= override_image
+
+//Attack Animation for ghost object being pixel shifted onto person
+	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
+	item.appearance = tool.attack_icon()
+	item.alpha = 128
+	item.loc = target
+	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
+	item.mouse_opacity = 0
+
+	var/viewers = item_animation_viewers.Copy()
+	for(var/client/C in viewers)
+		C.images += item
+
+	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
+	sleep(3)
+	for(var/client/C in viewers)
+		C.images -= item

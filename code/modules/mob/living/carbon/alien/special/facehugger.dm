@@ -1,12 +1,17 @@
-
-
 //TODO: Make these simple_animals
 
-var/const/MIN_IMPREGNATION_TIME = 100 //time it takes to impregnate someone
-var/const/MAX_IMPREGNATION_TIME = 150
+#define MIN_IMPREGNATION_TIME 10 SECONDS //time it takes to impregnate someone
+#define MAX_IMPREGNATION_TIME 15 SECONDS
 
-var/const/MIN_ACTIVE_TIME = 200 //time between being dropped and going idle
-var/const/MAX_ACTIVE_TIME = 400
+#define MIN_ACTIVE_TIME 20 SECONDS //time between being dropped and going idle
+#define MAX_ACTIVE_TIME 40 SECONDS
+
+#define CHANCE_TO_REMOVE_HEADWEAR 50
+#define CHANCE_TO_REMOVE_SPECIAL_HEADWEAR 15
+#define CHANCE_TO_DIE_AFTER_HEAD_DENIED 75
+#define CHANCE_TO_NOT_REMOVE_MASKS 20
+#define TIME_IDLE_AFTER_HEAD_DENIED 5 SECONDS
+#define TIME_IDLE_AFTER_ATTACH_DENIED 15 SECONDS
 
 /obj/item/clothing/mask/facehugger
 	name = "facehugger" //Let's call this 'alien' what it is. Come on Bay
@@ -118,7 +123,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	// 		if(stat != DEAD)
 	// 			carr << "You pick up a facehugger"
 	// 			carr.facehuggers += 1
-	// 			del(src)
+	// 			qdel(src)
 	//
 	// 		else
 	// 			user << "This facehugger is dead."
@@ -243,21 +248,21 @@ var/const/MAX_ACTIVE_TIME = 400
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
 			stat_collection.xeno.proper_head_protection++
-			var/rng = 50
+			var/rng = CHANCE_TO_REMOVE_HEADWEAR
 			if(istype(mouth_protection, /obj/item/clothing/head/helmet/space/rig))
-				rng = 15
+				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
 			if(prob(rng)) // Temporary balance change, all mouth-covering hats will be more effective
 				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [mouth_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(mouth_protection)
-				GoIdle(15)
+				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 				return
 			else
 				H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
-				if(prob(75) && sterile == 0)
+				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && sterile == 0)
 					Die()
 					return
 				else
-					GoIdle(15)
+					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 					return
 			return
 
@@ -265,7 +270,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		var/mob/living/carbon/target = L
 
 		if(target.wear_mask)
-			if(prob(20))
+			if(prob(CHANCE_TO_NOT_REMOVE_MASKS))
 				return 0
 			var/obj/item/clothing/W = target.wear_mask
 			if(!W.canremove)
@@ -287,7 +292,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		C.wear_mask = src
 		//C.regenerate_icons()
 
-	GoIdle(150) //so it doesn't jump the people that tear it off
+	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) //so it doesn't jump the people that tear it off
 
 	spawn(preggers)
 		Impregnate(L)
@@ -369,4 +374,4 @@ var/const/MAX_ACTIVE_TIME = 400
 	return 1
 
 /obj/item/clothing/mask/facehugger/acidable()
-	return 0
+	return sterile

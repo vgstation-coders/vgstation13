@@ -134,9 +134,17 @@ var/list/datum/power/changeling/powerinstances = list()
 
 /datum/power/changeling/unfat_sting
 	name = "Unfat Sting"
-	desc = "We silently sting a human, forcing them to rapidly metobolize their fat."
+	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
+	helptext = "Caution: This can also target you!"
 	genomecost = 0
 	verbpath = /obj/item/verbs/changeling/proc/changeling_unfat_sting
+
+/datum/power/changeling/fat_sting
+	name = "Fat Sting"
+	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
+	helptext = "Caution: This can also target you!"
+	genomecost = 0
+	verbpath = /obj/item/verbs/changeling/proc/changeling_fat_sting
 
 /datum/power/changeling/boost_range
 	name = "Boost Range"

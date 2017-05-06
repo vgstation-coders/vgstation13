@@ -82,6 +82,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/channeling_bone_shield = 0
 	var/channeling_bone_hammer = 0
 	var/channeling_bone_cocoon = 0
+	var/channeling_night_vision = 0
 
 	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0
@@ -189,7 +190,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			severity = 6
 
 	if(severity > 0)
-		overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+		overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
 	else
 		clear_fullscreen("damage")
 
@@ -369,7 +370,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)
 	set category = "Alien"
 	set name = "Borer Speak"
-	set desc = "Communicate with your bretheren"
+	set desc = "Communicate with your brethren."
 	if(!message)
 		return
 
@@ -945,7 +946,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(stat)
-		to_chat(src, "You cannot ventcrawl your current state.")
+		to_chat(src, "You cannot ventcrawl in your current state.")
 		return
 
 	if(research.unlocking)
@@ -1096,7 +1097,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set desc = "Check the health of your host."
 	set category = "Alien"
 
-	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for dischordant notes...</span>")
+	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for discordant notes...</span>")
 	spawn(5 SECONDS)
 		healthanalyze(host, src, mode=1, silent=1, skip_checks=1) // I am not rewriting this shit with more immersive strings.  Deal with it. - N3X
 

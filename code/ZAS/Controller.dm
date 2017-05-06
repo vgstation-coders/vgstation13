@@ -103,7 +103,7 @@ Class Procs:
 
 	var/simulated_turf_count = 0
 
-	for(var/turf/simulated/S in turfs)
+	for(var/turf/simulated/S in world)
 		simulated_turf_count++
 		if(!(simulated_turf_count % 50000))
 			sleep(world.tick_lag)
@@ -180,7 +180,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	if(.)
 		tick_progress = "processing fire"
 
-	for(var/obj/fire/fire in active_hotspots)
+	for(var/obj/effect/fire/fire in active_hotspots)
 		fire.process()
 		CHECK_TICK
 

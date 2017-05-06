@@ -188,6 +188,27 @@
 	if (mob.reagents.get_reagent_amount(GYRO) < 1)
 		mob.reagents.add_reagent(GYRO, 1)
 
+/datum/disease2/effect/bee_vomit
+	name = "Melisso-Emeto Syndrome"
+	stage = 1
+	max_multiplier = 10
+
+/datum/disease2/effect/bee_vomit/activate(var/mob/living/carbon/mob)
+	if (mob.reagents.get_reagent_amount(HONEY) < 10+multiplier*2)
+		mob.reagents.add_reagent(HONEY, 1)
+
+	if((mob.reagents.get_reagent_amount(HONEY)>= 10+multiplier*2) && prob(10))
+		if(prob(25))
+			to_chat(mob, "<span class='warning'>You feel a buzzing in your throat</span>")
+		spawn(5 SECONDS)
+			var/turf/simulated/T = get_turf(mob)
+			if(prob(30))
+				playsound(T, 'sound/effects/splat.ogg', 50, 1)
+				mob.visible_message("<span class='warning'>[mob] spits out a bee!</span>","<span class='danger'>You throw up a bee!</span>")
+				T.add_vomit_floor(mob, 1, 1, 1)
+			for(var/i = 0 to multiplier)
+				new/mob/living/simple_animal/bee(get_turf(mob))
+
 
 ////////////////////////STAGE 2/////////////////////////////////
 
@@ -230,8 +251,9 @@
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
 	mob.say("*cough")
-	for(var/mob/living/carbon/M in oview(2,mob))
-		mob.spread_disease_to(M)
+	for(var/mob/living/M in oview(2,mob))
+		if(can_be_infected(M))
+			spread_disease_to(src, M)
 
 
 /datum/disease2/effect/hungry
@@ -461,48 +483,72 @@
 	affect_voice_active = 0
 	..()
 
-/datum/disease2/effect/butterfly_skin
-	name = "Epidermolysis Bullosa"
-	stage = 3
+
+/datum/disease2/effect/spiky_skin
+	name = "Porokeratosis Acanthus"
+	stage = 2
 	max_count = 1
 	var/skip = FALSE
 
-/datum/disease2/effect/butterfly_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+/datum/disease2/effect/spiky_skin/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
-		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have fragile skin if you don't have skin at all.
+		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have spiky skin if you don't have skin at all.
 			skip = TRUE
 			return
-	to_chat(mob, "<span class='warning'>Your skin feels a little fragile.</span>")
+	to_chat(mob, "<span class='warning'>Your skin feels a little prickly.</span>")
 
-/datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/carbon/mob)
+/datum/disease2/effect/spiky_skin/deactivate(var/mob/living/carbon/mob)
 	if(!skip)
-		to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!.</span>")
+		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
 	..()
 
-/datum/disease2/effect/butterfly_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
-	if(count && !skip)
-		var/datum/organ/external/E
-		if(ishuman(mob))
-			var/mob/living/carbon/human/H = mob
-			while(!E || (E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
-				E = pick(H.organs)
-		if(toucher == mob)
-			if(E)
-				to_chat(mob, "<span class='warning'>As you bump into \the [touched], some of the skin on your [E.display_name] shears off!</span>")
-				E.take_damage(10)
-			else
-				to_chat(mob, "<span class='warning'>As you bump into \the [touched], some of your skin shears off!</span>")
-				mob.apply_damage(10)
+/datum/disease2/effect/spiky_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+	if(!count || skip)
+		return
+	if(!istype(toucher, /mob) || !istype(touched, /mob))
+		return
+	var/datum/organ/external/E
+	var/mob/living/carbon/human/H
+	if(toucher == mob)	//we bumped into someone else
+		if(ishuman(touched))
+			H = touched
+	else	//someone else bumped into us
+		if(ishuman(toucher))
+			H = toucher
+	if(H)
+		var/list/have_checked = list()
+		while(!E || (E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
+			E = pick(H.organs)
+			if(!(E in have_checked))
+				have_checked.Add(E)
+			if(have_checked.len == H.organs.len)
+				E = null
+				break
+	if(toucher == mob)
+		if(E)
+			to_chat(mob, "<span class='warning'>As you bump into \the [touched], your spines dig into \his [E.display_name]!</span>")
+			E.take_damage(5)
 		else
-			if(E)
-				to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, some of the skin on your [E.display_name] shears off!</span>")
-				to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], some of the skin on \his [E.display_name] shears off!</span>")
-				E.take_damage(10)
-			else
-				to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, some of your skin shears off!</span>")
-				to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], some of \his skin shears off!</span>")
-				mob.apply_damage(10)
+			to_chat(mob, "<span class='warning'>As you bump into \the [touched], your spines dig into \him!</span>")
+			var/mob/living/L = touched
+			if(istype(L) && !istype(L, /mob/living/silicon))
+				L.apply_damage(5)
+		var/mob/M = touched
+		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([mob] bumped into [M])", admin_warn = FALSE)
+	else
+		if(E)
+			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \his [E.display_name]!</span>")
+			to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], \his spines dig into your [E.display_name]!</span>")
+			E.take_damage(5)
+		else
+			to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, your spines dig into \him!</span>")
+			to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], \his spines dig into you!</span>")
+			var/mob/living/L = toucher
+			if(istype(L) && !istype(L, /mob/living/silicon))
+				L.apply_damage(5)
+		var/mob/M = touched
+		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([M] bumped into [mob])", admin_warn = FALSE)
 
 
 ////////////////////////STAGE 3/////////////////////////////////
@@ -851,6 +897,50 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			honkers.canremove = 1
 
 
+/datum/disease2/effect/butterfly_skin
+	name = "Epidermolysis Bullosa"
+	stage = 3
+	max_count = 1
+	var/skip = FALSE
+
+/datum/disease2/effect/butterfly_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have fragile skin if you don't have skin at all.
+			skip = TRUE
+			return
+	to_chat(mob, "<span class='warning'>Your skin feels a little fragile.</span>")
+
+/datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/carbon/mob)
+	if(!skip)
+		to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!</span>")
+	..()
+
+/datum/disease2/effect/butterfly_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+	if(count && !skip)
+		var/datum/organ/external/E
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H = mob
+			while(!E || (E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
+				E = pick(H.organs)
+		if(toucher == mob)
+			if(E)
+				to_chat(mob, "<span class='warning'>As you bump into \the [touched], some of the skin on your [E.display_name] shears off!</span>")
+				E.take_damage(10)
+			else
+				to_chat(mob, "<span class='warning'>As you bump into \the [touched], some of your skin shears off!</span>")
+				mob.apply_damage(10)
+		else
+			if(E)
+				to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, some of the skin on your [E.display_name] shears off!</span>")
+				to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], some of the skin on \his [E.display_name] shears off!</span>")
+				E.take_damage(10)
+			else
+				to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, some of your skin shears off!</span>")
+				to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], some of \his skin shears off!</span>")
+				mob.apply_damage(10)
+
+
 ////////////////////////STAGE 4/////////////////////////////////
 
 
@@ -933,14 +1023,11 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = 2
 
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob)
-	mob.suiciding = 1
-	//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-	to_chat(viewers(mob), "<span class='danger'>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</span>")
-	mob.adjustOxyLoss(175 - mob.getToxLoss() - mob.getFireLoss() - mob.getBruteLoss() - mob.getOxyLoss())
-	mob.updatehealth()
-	spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
-		mob.suiciding = 0
 
+	if(mob.stat != CONSCIOUS || !mob.canmove || mob.restrained()) //Try as we might, we still can't snap our neck when we are KO or restrained, even if forced.
+		return
+
+	mob.attempt_suicide(1, 0)
 
 /datum/disease2/effect/killertoxins
 	name = "Toxification Syndrome"
@@ -1243,7 +1330,106 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			multiplier -= 0.3 // The virus tempers expectations
 
 
+/datum/disease2/effect/thick_skin	//increases brute damage resistance, decreases thermal loss, and increases heat gained from calories burned, all scaling with the multiplier
+	name = "Harlequin Ichthyosis"	//also causes loss of sweat glands, difficulty breathing, and bleeding with a high multiplier
+	stage = 4
+	max_multiplier = 100
+	chance = 10
+	var/skip = FALSE
+	var/brute_mod_subtracted = 0
+	var/therm_loss_mod_subtracted = 0
+	var/cal_heat_mod_added = 0
 
+/datum/disease2/effect/thick_skin/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have thick skin if you don't have skin at all.
+			skip = TRUE
+			return
+	mob.brute_damage_modifier += brute_mod_subtracted
+	mob.thermal_loss_multiplier += therm_loss_mod_subtracted
+	mob.calorie_burning_heat_multiplier -= cal_heat_mod_added
+	brute_mod_subtracted = 0
+	therm_loss_mod_subtracted = 0
+	cal_heat_mod_added = 0
+	switch(multiplier)
+		if(1 to 30)
+			switch(multiplier)
+				if(1 to 10)
+					to_chat(mob, "<span class='warning'>Your skin feels a little thick.</span>")
+				if(11 to 20)
+					to_chat(mob, "<span class='warning'>Your skin feels a little dry.</span>")
+				if(21 to 30)
+					to_chat(mob, "<span class='warning'>Your skin is beginning to crack at the joints.</span>")
+			brute_mod_subtracted = 0.05
+			therm_loss_mod_subtracted = 0.5
+			cal_heat_mod_added = 5
+			if(ishuman(mob))
+				var/mob/living/carbon/human/H = mob
+				if(initial(H.species.anatomy_flags) & HAS_SWEAT_GLANDS)
+					H.species.anatomy_flags |= HAS_SWEAT_GLANDS
+		if(31 to 100)
+			switch(multiplier)
+				if(31 to 50)
+					switch(multiplier)
+						if(31 to 40)
+							to_chat(mob, "<span class='warning'>Your skin feels hard as a rock.</span>")
+						if(41 to 50)
+							to_chat(mob, "<span class='warning'>You feel warmer than usual.</span>")
+					brute_mod_subtracted = 0.1
+					therm_loss_mod_subtracted = 1
+					cal_heat_mod_added = 10
+				if(51 to 70)
+					switch(multiplier)
+						if(51 to 60)
+							to_chat(mob, "<span class='warning'>The cracks in your skin multiply, separating it into plates.</span>")
+						if(61 to 70)
+							to_chat(mob, "<span class='warning'>The cracks between the plates on your skin widen.</span>")
+					brute_mod_subtracted = 0.25
+					therm_loss_mod_subtracted = 1
+					cal_heat_mod_added = 10
+				if(71 to 100)
+					switch(multiplier)
+						if(71 to 80)
+							to_chat(mob, "<span class='warning'>The plates on your skin grow thicker.</span>")
+						if(81 to 100)
+							switch(multiplier)
+								if(81 to 90)
+									if(ishuman(mob))
+										var/mob/living/carbon/human/H = mob
+										if(~H.flags & NO_BREATHE)
+											to_chat(mob, "<span class='warning'>The thickness of the plate on your chest is making it difficult to breathe.</span>")
+								if(91 to 100)
+									to_chat(mob, "<span class='warning'>The cracks in your skin are beginning to open into wounds.</span>")
+									if(ishuman(mob))
+										var/mob/living/carbon/human/H = mob
+										H.drip(10)
+							mob.losebreath += rand(1,5)
+					brute_mod_subtracted = 0.5
+					therm_loss_mod_subtracted = 1
+					cal_heat_mod_added = 20
+			if(ishuman(mob))
+				var/mob/living/carbon/human/H = mob
+				H.species.anatomy_flags &= ~HAS_SWEAT_GLANDS
+
+	mob.brute_damage_modifier -= brute_mod_subtracted
+	mob.thermal_loss_multiplier -= therm_loss_mod_subtracted
+	mob.calorie_burning_heat_multiplier += cal_heat_mod_added
+	mob.cap_calorie_burning_bodytemp = FALSE
+	multiplier = min(multiplier + 10, max_multiplier)
+
+/datum/disease2/effect/thick_skin/deactivate(var/mob/living/carbon/mob)
+	if(!skip)
+		mob.brute_damage_modifier += brute_mod_subtracted
+		mob.thermal_loss_multiplier += therm_loss_mod_subtracted
+		mob.calorie_burning_heat_multiplier -= cal_heat_mod_added
+		mob.cap_calorie_burning_bodytemp = initial(mob.cap_calorie_burning_bodytemp)
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H = mob
+			if(initial(H.species.anatomy_flags) & HAS_SWEAT_GLANDS)
+				H.species.anatomy_flags |= HAS_SWEAT_GLANDS
+		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
+	..()
 ////////////////////////SPECIAL/////////////////////////////////
 
 

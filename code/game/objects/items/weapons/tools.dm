@@ -211,7 +211,7 @@
 	icon_state = "welder"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	hitsound = 'sound/weapons/toolhit.ogg'
-	flags = FPRINT
+	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 
@@ -507,6 +507,14 @@
 /obj/item/weapon/weldingtool/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][welding ? "1" : ""]" //Ternary operator.
+
+/obj/item/weapon/weldingtool/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"welding",
+		"status")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 
 /obj/item/weapon/weldingtool/empty

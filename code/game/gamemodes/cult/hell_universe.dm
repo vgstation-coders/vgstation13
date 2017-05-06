@@ -100,7 +100,7 @@ In short:
 
 /datum/universal_state/hell/OverlayAndAmbientSet()
 	set waitfor = FALSE
-	for(var/turf/T in turfs)
+	for(var/turf/T in world)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
@@ -140,12 +140,12 @@ In short:
 
 /datum/universal_state/hell/proc/convert_all_parallax()
 	for(var/client/C in clients)
-		var/obj/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
+		var/obj/abstract/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
 		if(PS)
 			convert_parallax(PS)
 		CHECK_TICK
 
-/datum/universal_state/hell/convert_parallax(obj/screen/plane_master/parallax_spacemaster/PS)
+/datum/universal_state/hell/convert_parallax(obj/abstract/screen/plane_master/parallax_spacemaster/PS)
 	PS.color = list(
 	0,0,0,0,
 	0,0,0,0,

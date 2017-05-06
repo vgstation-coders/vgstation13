@@ -166,8 +166,7 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/Test_ZAS_Connection
 	src.verbs += /client/proc/SDQL2_query
 	src.verbs += /client/proc/check_sim_unsim
-	src.verbs += /client/proc/nanomapgen_DumpImage
-	src.verbs += /client/proc/nanomapgen_DumpImageAll
+	src.verbs += /proc/generateMiniMaps
 	src.verbs += /client/proc/maprender
 	//src.verbs += /client/proc/cmd_admin_rejuvenate
 
@@ -303,7 +302,7 @@ var/intercom_range_display_status = 0
 		/obj/machinery/door
 	)
 
-	for(var/turf/T in turfs)
+	for(var/turf/T in world)
 		for(var/basetype in acceptable_types)
 			var/list/badtiles[0]
 			if(istype(T,basetype))

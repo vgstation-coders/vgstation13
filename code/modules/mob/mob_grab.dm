@@ -4,7 +4,7 @@
 /obj/item/weapon/grab
 	name = "grab"
 	flags = NO_ATTACK_MSG
-	var/obj/screen/grab/hud = null
+	var/obj/abstract/screen/grab/hud = null
 	var/mob/affecting = null
 	var/mob/assailant = null
 	var/state = GRAB_PASSIVE
@@ -18,17 +18,24 @@
 	item_state = "nothing"
 	w_class = W_CLASS_HUGE
 
+/obj/item/weapon/grab/attack_icon()
+	if(affecting)
+		return affecting
+	..()
 
-/obj/item/weapon/grab/New(atom/loc, mob/victim)
+/obj/item/weapon/grab/New(atom/loc, mob/living/victim)
 	..()
 	assailant = loc
 	affecting = victim
 
+	if(!victim.can_be_grabbed(assailant))
+		returnToPool(src)
+		return
 	if(affecting && affecting.anchored)
 		returnToPool(src)
 		return
 
-	hud = getFromPool(/obj/screen/grab)
+	hud = getFromPool(/obj/abstract/screen/grab)
 	hud.icon_state = "reinforce"
 	hud.name = "reinforce grab"
 	hud.master = src
@@ -118,7 +125,7 @@
 		return s_click(hud)
 
 
-/obj/item/weapon/grab/proc/s_click(obj/screen/S)
+/obj/item/weapon/grab/proc/s_click(obj/abstract/screen/S)
 	if(!affecting || !assailant || gcDestroyed)
 		return
 	if(assailant.attack_delayer.blocked())

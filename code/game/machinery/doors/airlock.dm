@@ -527,7 +527,9 @@ About the new airlock wires panel:
 				return
 			else
 				to_chat(user, "Airlock AI control has been blocked with a firewall. Unable to hack.")
-
+		if(operating == -1) //Door is emagged
+			to_chat(user, "Unable to establish connection to airlock controller. Verify integrity of airlock circuitry.")
+			return
 	//separate interface for the AI.
 	user.set_machine(src)
 	var/t1 = text("<B>Airlock Control</B><br>\n")
@@ -679,8 +681,8 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (isElectrified())
 		if (istype(mover, /obj/item))
-			var/obj/item/i = mover
-			if (i.materials && (i.materials.getAmount(MAT_IRON) > 0))
+			var/obj/item/I = mover
+			if (I.siemens_coefficient > 0)
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(5, 1, src)
 				s.start()
@@ -735,7 +737,7 @@ About the new airlock wires panel:
 				update_multitool_menu(usr)
 
 
-	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl()))
+	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
 		//AI
 		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
 		//aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door,  8 door safties, 9 door speed
@@ -1336,3 +1338,17 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/shake()
 	return //Kinda snowflakish, to stop airlocks from shaking when kicked. I'll be refactorfing the whole thing anyways
+
+/obj/machinery/door/airlock/npc_tamper_act(mob/living/L)
+	//Open the firelocks as well, otherwise they block the way for our gremlin which isn't fun
+	for(var/obj/machinery/door/firedoor/F in get_turf(src))
+		if(F.density)
+			F.npc_tamper_act(L)
+
+	if(prob(40)) //40% - mess with wires
+		if(!panel_open)
+			togglePanelOpen(null, L)
+		if(wires)
+			wires.npc_tamper(L)
+	else //60% - just open it
+		open()

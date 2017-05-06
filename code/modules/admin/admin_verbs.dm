@@ -6,6 +6,7 @@ var/list/admin_verbs_default = list(
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/check_antagonists,		/*shows all antags*/
+	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
 	/datum/admins/proc/checkCKEY
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
@@ -58,6 +59,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/secrets,
 	/client/proc/shuttle_magic,
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/togglelooc, /*toggles looc on/off for everyone*/
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
@@ -71,10 +73,10 @@ var/list/admin_verbs_admin = list(
 	/client/proc/check_customitem_activity,
 	// /client/proc/man_up,
 	// /client/proc/global_man_up,
-	/client/proc/response_team, // Response Teams admin verb
 	/client/proc/toggle_antagHUD_use,
 	/client/proc/toggle_antagHUD_restrictions,
-	/client/proc/allow_character_respawn    /* Allows a ghost to respawn */
+	/client/proc/allow_character_respawn,    /* Allows a ghost to respawn */
+	/client/proc/watchdog_force_restart		/*forces restart using watchdog feature*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -164,7 +166,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/qdel_toggle,              // /vg/
 	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
@@ -201,8 +202,7 @@ var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
 	)
 var/list/admin_verbs_polling = list(
-	/client/proc/create_poll,
-	/client/proc/remove_broken_polls
+	/client/proc/create_poll
 	)
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
@@ -364,8 +364,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/client/proc/nanomapgen_DumpImage,
-		/client/proc/nanomapgen_DumpImageAll,
+		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
 
@@ -874,7 +873,7 @@ var/list/admin_verbs_mod = list(
 	M.check_dna(M)
 
 /client/proc/playernotes()
-	set name = "Show Player Info"
+	set name = "Show Player Notes"
 	set category = "Admin"
 	if(holder)
 		holder.PlayerNotes()

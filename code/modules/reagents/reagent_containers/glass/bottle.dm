@@ -59,7 +59,6 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/update_icon()
-
 	overlays.len = 0
 
 	if(reagents.total_volume)
@@ -81,6 +80,7 @@
 				filling.icon_state = "[icon_state]30"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
 
 	if(!is_open_container())
@@ -420,7 +420,7 @@
 	name = "Rezadone Bottle"
 	desc = "A small bottle. Contains a small amount of Rezadone."
 	icon = 'icons/obj/chemical.dmi'
-	
+
 /obj/item/weapon/reagent_containers/glass/bottle/rezadone/New()
 	..()
 	reagents.add_reagent(REZADONE, 30)
@@ -429,7 +429,7 @@
 	name = "Alkysine Bottle"
 	desc = "A small bottle. Contains a small amount of Alkysine."
 	icon = 'icons/obj/chemical.dmi'
-	
+
 /obj/item/weapon/reagent_containers/glass/bottle/alkysine/New()
 	..()
 	reagents.add_reagent(ALKYSINE, 30)
@@ -438,7 +438,7 @@
 	name = "Alkysine Bottle"
 	desc = "A small bottle. Contains a small amount of Alkysine."
 	icon = 'icons/obj/chemical.dmi'
-	
+
 /obj/item/weapon/reagent_containers/glass/bottle/alkysinesmall/New()
 	..()
 	reagents.add_reagent(ALKYSINE, 10)
@@ -460,3 +460,23 @@
 /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall/New()
 	..()
 	reagents.add_reagent(NANOBOTS, 10)
+
+/obj/item/weapon/reagent_containers/glass/bottle/bleach
+	name = "Bleach Bottle"
+	desc = "A bottle of BLAM! Ultraclean brand bleach. Has many warning labels."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bleachbottle"
+	starting_materials = list(MAT_PLASTIC = 1000)
+	w_type = RECYK_MISC
+	melt_temperature = MELTPOINT_PLASTIC
+
+/obj/item/weapon/reagent_containers/glass/bottle/bleach/update_icon()
+	overlays.len = 0
+
+	if(!is_open_container())
+		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
+		overlays += lid
+
+/obj/item/weapon/reagent_containers/glass/bottle/bleach/New()
+	..()
+	reagents.add_reagent(BLEACH, 15)

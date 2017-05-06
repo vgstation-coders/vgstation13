@@ -1,4 +1,4 @@
-/obj/screen/draggable
+/obj/abstract/screen/draggable
 	icon = 'icons/mob/screen_draggable.dmi'
 	icon_state = "blank"
 	var/mob/attachedmob
@@ -12,33 +12,33 @@
 //So we put a temporary screen object to catch clicks until someone tries dragging
 //If they drag we remove the screen object, if they don't it catches the click and removes the draggable
 ////////////////////////////////////////////
-	var/obj/screen/fuckbyond
+	var/obj/abstract/screen/fuckbyond
 
-/obj/screen/fuckbyond
+/obj/abstract/screen/fuckbyond
 	icon = 'icons/mob/screen_draggable.dmi'
 	icon_state = "blank"
 	mouse_opacity = 0
 	screen_loc = ui_entire_screen
-	var/obj/screen/draggable
+	var/obj/abstract/screen/draggable
 
-/obj/screen/fuckbyond/New(master)
+/obj/abstract/screen/fuckbyond/New(master)
 	..()
 	draggable = master
 	name = draggable.name
 
-/obj/screen/fuckbyond/Destroy()
+/obj/abstract/screen/fuckbyond/Destroy()
 	..()
 	draggable = null
 
-/obj/screen/fuckbyond/MouseUp()
+/obj/abstract/screen/fuckbyond/MouseUp()
 	returnToPool(draggable)
 ///////////////////////////////////////////////
 
 
-/obj/screen/draggable/New(loc, mob/user)
+/obj/abstract/screen/draggable/New(loc, mob/user)
 	..()
 //But no seriously, fuck byond
-	fuckbyond = getFromPool(/obj/screen/fuckbyond, src)
+	fuckbyond = getFromPool(/obj/abstract/screen/fuckbyond, src)
 
 //References to the object/user
 	attachedobject = loc
@@ -51,7 +51,7 @@
 	mouse_over_pointer = "[attachedobject.icon_state]"
 	mouse_drag_pointer = "[attachedobject.icon_state]"
 
-/obj/screen/draggable/Destroy()
+/obj/abstract/screen/draggable/Destroy()
 	..()
 	if(attachedobject)
 		attachedobject.end_drag_use(attachedmob)
@@ -64,7 +64,7 @@
 		returnToPool(fuckbyond)
 		fuckbyond = null
 
-/obj/screen/draggable/MouseDown(turf/location,control,params)
+/obj/abstract/screen/draggable/MouseDown(turf/location,control,params)
 	mouse_opacity = 0 //Because dragging wont occur when you are inside of your own src, we hide the src to mouses
 	fuckbyond.mouse_opacity = 2 //It is now this little bastards responsibility to tell us if someone finishes a single click
 
@@ -86,7 +86,7 @@
 					break
 		sleep(world.tick_lag)
 
-/obj/screen/draggable/MouseDrag(over_object,src_location,turf/over_location,src_control,over_control,params)
+/obj/abstract/screen/draggable/MouseDrag(over_object,src_location,turf/over_location,src_control,over_control,params)
 	if(istype(over_location) && attachedmob) //null when over black space
 		centerdist_x = over_location.x - attachedmob.x //maintains distance from usr in case usr moves
 		centerdist_y = over_location.y - attachedmob.y
@@ -94,7 +94,7 @@
 		returnToPool(fuckbyond)
 		fuckbyond = null
 
-/obj/screen/draggable/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
+/obj/abstract/screen/draggable/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
 	if(attachedobject)
 		attachedobject.drag_success(attachedmob, over_location)
 	returnToPool(src) //releasing the drag ends the usage

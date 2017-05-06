@@ -64,6 +64,7 @@
 				oxytanks.Add(I)
 				oxygentanks++
 				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+				update_icon()
 		else
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
@@ -74,6 +75,7 @@
 				platanks.Add(I)
 				plasmatanks++
 				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+				update_icon()
 		else
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()

@@ -23,7 +23,8 @@
 															//legacy, until the departmental is ready
 															SOFT_MS = 30, //records + HUD
 															SOFT_SS = 30, //records + HUD
-															SOFT_AS = 5
+															SOFT_AS = 5,
+															SOFT_PS = 10
 															)
 
 
@@ -73,6 +74,8 @@
 				left_part = src.softwareShield()
 			if("flashlight")
 				left_part = src.softwareLight()
+			if("pps")
+				left_part = src.softwarepPS()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -319,6 +322,17 @@
 					card.set_light(4) //Equal to flashlight
 				else
 					card.set_light(0)
+		if("pps")
+			if(href_list["tag"])
+				var/tag = input("Please enter desired tag.", name, ppstag) as text|null
+				if (!tag) //what a check
+					return
+				tag = strict_ascii(tag)
+				if(length(tag) != 4)
+					to_chat(src, "<span class = 'caution'>The tag must be four characters long!</span>")
+					return
+				else
+					ppstag = tag
 	src.paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
@@ -368,6 +382,8 @@
 			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
 		if(s == SOFT_FS)
 			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
+		if(s == SOFT_PS)
+			dat += "<a href='byond://?src=\ref[src];software=pps;sub=0'>pAI Positioning System</a> <br>"
 	dat += "<br>"
 
 	// Advanced
@@ -713,4 +729,36 @@ Target Machine: "}
 	dat += {"</ul>
 		<br><br>
 		Messages: <hr> [pda.tnote]"}
+	return dat
+
+/mob/living/silicon/pai/proc/softwarepPS()
+	if(!pPS) // Are we a GPS yet?
+		GPS_list.Add(src)
+		pPS = 1
+	var/list/locallist = null
+	locallist = GPS_list.Copy()
+	var/dat = "<h3>pAI Positioning System</h3>"
+	dat+= "<br>Tag: [ppstag]"
+	dat+= "<br><a href='byond://?src=\ref[src];software=pps;tag=1;sub=0'>Set Tag</a> <br>"
+	for(var/A in locallist)
+		var/turf/pos = get_turf(A)
+		var/area/area = get_area(A)
+		var/tag = null
+		var/rip = null
+		if(ispAI(A))
+			var/mob/living/silicon/pai/P = A
+			tag = P.ppstag
+			rip = P.silence_time
+		else
+			var/obj/item/device/gps/G = A
+			tag = G.gpstag
+			rip = G.emped
+		if(rip)
+			dat += "<BR>[tag]: ERROR"
+		else if(!pos || !area)
+			dat += "<BR>[tag]: UNKNOWN"
+		else if(pos.z > WORLD_X_OFFSET.len)
+			dat += "<BR>[tag]: [format_text(area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
+		else
+			dat += "<BR>[tag]: [format_text(area.name)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z])"
 	return dat

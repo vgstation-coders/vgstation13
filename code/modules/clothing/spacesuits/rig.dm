@@ -11,7 +11,7 @@
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
-	action_button_name = "Toggle Helmet Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
@@ -25,16 +25,6 @@
 	//Useful for helmets with special starting conditions (namely, starts lit)
 	update_brightness()
 	update_icon()
-
-/obj/item/clothing/head/helmet/space/rig/ghettorig
-	name = "jury-rigged fire helmet"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this helmet isn't particularly good."
-	icon_state = "ghettorig"
-	_color = "ghetto"
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	eyeprot = 0
-	species_fit = list(GREY_SHAPED)
-
 
 /obj/item/clothing/head/helmet/space/rig/examine(mob/user)
 
@@ -52,9 +42,9 @@
 		if(on) //The helmet light is currently on
 			on = 0 //Force it off
 			update_brightness() //Update as neccesary
-		action_button_name = null //Disable the action button (which is only used to toggle the light, in theory)
+		actions_types = null//Disable the action button (which is only used to toggle the light, in theory)
 	else //We have a light
-		action_button_name = initial(action_button_name) //Make sure we restore the action button
+		actions_types = list(/datum/action/item_action/toggle_light) //Make sure we restore the action button
 
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 
@@ -95,15 +85,6 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
-
-/obj/item/clothing/suit/space/rig/ghettorig
-	name = "jury-rigged firesuit"
-	icon_state = "ghettorig"
-	item_state = "ghettorig"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this space suit isn't particularly good."
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED)
-
 
 //Chief Engineer's rig
 /obj/item/clothing/head/helmet/space/rig/elite
@@ -158,7 +139,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	_color = "syndi"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
-	action_button_name = "Toggle Helmet Camera" //This helmet does not have a light, but we'll do as if
+	actions_types = list(/datum/action/item_action/toggle_helmet_camera) //This helmet does not have a light, but we'll do as if
 	siemens_coefficient = 0.6
 	var/obj/machinery/camera/camera
 	pressure_resistance = 40 * ONE_ATMOSPHERE

@@ -173,6 +173,7 @@
 	icon_state = "black_suit"
 	item_state = "bl_suit"
 	_color = "black_suit"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/suit_jacket/really_black

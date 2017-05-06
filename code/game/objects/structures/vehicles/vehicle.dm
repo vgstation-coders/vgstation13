@@ -27,7 +27,6 @@
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
-	var/destroyed = 0
 
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
@@ -42,8 +41,13 @@
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
+	var/obj/machinery/cart/next_cart = null
+	var/can_have_carts = TRUE
+
 	var/mob/occupant
 	lock_type = /datum/locking_category/buckle/chair/vehicle
+	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
+	var/last_warn
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -77,8 +81,6 @@
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
-			if(destroyed)
-				to_chat(user, "<span class='warning'>\The [src.name] is destroyed beyond repair.</span>")
 			add_fingerprint(user)
 			user.visible_message("<span class='notice'>[user] has fixed some of the dents on \the [src].</span>", "<span class='notice'>You fix some of the dents on \the [src]</span>")
 			health += 20
@@ -99,21 +101,24 @@
 		return user.is_holding_item(mykey)
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
-	if(user.incapacitated()  || destroyed)
+	if(user.incapacitated())
 		unlock_atom(user)
 		return
 	if(!check_key(user))
-		to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
+		if(can_warn())
+			to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
 		return 0
 	if(empstun > 0)
-		if(user)
+		if(user && can_warn(user))
 			to_chat(user, "<span class='warning'>\The [src] is unresponsive.</span>")
 		return 0
 	if(move_delayer.blocked())
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = loc
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
@@ -147,8 +152,14 @@
 		var/turf/space/S = src.loc
 		S.Entered(src)*/
 
+/obj/structure/bed/chair/vehicle/proc/can_warn() //Should be used for any instance of to_chat in relaymove
+	if(world.time < last_warn + 1 SECONDS)
+		return 0
+	last_warn = world.time
+	return 1
+
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
-	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || destroyed || occupant)
+	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
 		return 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -177,6 +188,28 @@
 	else
 		plane = OBJ_PLANE
 		layer = ABOVE_OBJ_LAYER
+
+/obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+	..()
+
+	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+		return
+
+	if (istype(C, /obj/machinery/cart))
+
+		if (!next_cart)
+			next_cart = C
+			next_cart.previous_cart = src
+			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
+			playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
+			return
+
+		else if (next_cart == C)
+			next_cart.previous_cart = null
+			next_cart = null
+			user.visible_message("[user] disconnects [C] to [src].", "You disconnect [C] to [src]")
+			playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
+			return
 
 /obj/structure/bed/chair/vehicle/update_dir()
 	. = ..()
@@ -246,7 +279,7 @@
 /obj/structure/bed/chair/vehicle/proc/HealthCheck()
 	if(health > max_health)
 		health = max_health
-	if(health <= 0 && !destroyed)
+	if(health <= 0)
 		die()
 
 /obj/structure/bed/chair/vehicle/ex_act(severity)
@@ -260,12 +293,19 @@
 	HealthCheck()
 
 /obj/structure/bed/chair/vehicle/proc/die() //called when health <= 0
-	destroyed = 1
 	density = 0
 	visible_message("<span class='warning'>\The [nick] explodes!</span>")
 	explosion(src.loc,-1,0,2,7,10)
-	icon_state = "pussywagon_destroyed"
+	//icon_state = "pussywagon_destroyed"
 	unlock_atom(occupant)
+	if(wreckage_type)
+		var/obj/effect/decal/mecha_wreckage/wreck = new wreckage_type(src.loc)
+		setup_wreckage(wreck)
+	qdel(src)
+
+/obj/structure/bed/chair/vehicle/proc/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
+	// Transfer salvagables here.
+	return
 
 /obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
@@ -295,5 +335,13 @@
 	occupant = AM
 
 	update_mob()
+
+/obj/structure/bed/chair/vehicle/Move()
+	var/oldloc = loc
+	..()
+	if (loc == oldloc)
+		return
+	if(next_cart)
+		next_cart.Move(oldloc)
 
 /datum/locking_category/buckle/chair/vehicle

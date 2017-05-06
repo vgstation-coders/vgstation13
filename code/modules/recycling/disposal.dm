@@ -133,9 +133,9 @@
 		var/obj/item/weapon/storage/bag/B = I
 		if(B.contents.len == 0)
 			if(user.drop_item(I, src))
-				to_chat(user, "<span class='notice'>You throw away the empty [B].</span>")
+				to_chat(user, "<span class='notice'>You throw away \the empty [B].</span>")
 				return
-		to_chat(user, "<span class='notice'>You empty the [B].</span>")
+		to_chat(user, "<span class='notice'>You empty \the [B].</span>")
 		B.mass_remove(src)
 		B.update_icon()
 		update_icon()

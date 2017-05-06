@@ -99,7 +99,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			culcount++
-	if(culcount>=3)
+	if(culcount>=2)
 		user.say("Sas[pick("'","`")]so c'arta forbici tarem!")
 
 		nullblock = 0
@@ -188,7 +188,7 @@
 			usr.visible_message("<span class='warning'>Something is blocking the conversion!</span>")
 			return 0
 		invocation("rune_convert")
-		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below him glow a bloody red.</span>", \
+		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below \him glow a bloody red.</span>", \
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
@@ -268,7 +268,7 @@
 
 	else
 		for(var/mob/M in active_cultists)
-			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this world.</span>")//narsie won't appear if a supermatter cascade has started
+			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this universe.</span>")//narsie won't appear if a supermatter cascade has started
 
 		return
 
@@ -1059,7 +1059,7 @@
 		to_chat(user, "<span class='warning'>None of the cultists are currently under restraints.</span>")
 		return fizzle()
 
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to free", "Followers of Geometer") as null|anything in possible_targets
 		if(!cultist)
 			return fizzle()
@@ -1120,7 +1120,7 @@
 	for(var/mob/living/C in orange(1,src))
 		if(iscultist(C) && !C.stat)
 			users+=C
-	if(users.len>=3)
+	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - user)
 		if(!cultist)
 			return fizzle()
@@ -1423,6 +1423,12 @@
 								M = null
 								to_chat(C, "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
+								for(var/spell/S in C.spell_list)
+									if(S.charge_type & Sp_RECHARGE)
+										if(S.charge_counter == S.charge_max) //Spell is fully charged - let the proc handle everything
+											S.take_charge()
+										else //Spell is on cooldown and already recharging - there's no need to call S.process(), just reset charges to 0
+											S.charge_counter = 0
 				qdel(src)
 				return
 			else

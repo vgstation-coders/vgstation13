@@ -1173,6 +1173,38 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Holodeck - Space"
 	jammed=SUPER_JAMMED
 
+/area/holodeck/source_firingrange
+	name = "\improper Holodeck - Firing Range"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_wildride
+	name = "\improper Holodeck - Wild Ride"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_chess
+	name = "\improper Holodeck - Chess Board"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_maze
+	name = "\improper Holodeck - Maze"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_dining
+	name = "\improper Holodeck - Dining Hall"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_lasertag
+	name = "\improper Holodeck - Laser Tag Arena"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_zoo
+	name = "\improper Holodeck - Zoo"
+	jammed=SUPER_JAMMED
+
+/area/holodeck/source_ragecage
+	name = "\improper Holodeck - Rage Cage"
+	jammed=SUPER_JAMMED
+
 
 
 

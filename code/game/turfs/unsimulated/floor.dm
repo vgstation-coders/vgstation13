@@ -17,6 +17,10 @@
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
 
+/turf/unsimulated/floor/add_dust()
+	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
+		new/obj/effect/decal/cleanable/dirt(src)
+
 /turf/unsimulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
@@ -60,3 +64,21 @@
 	icon_state = "ironsand1"
 
 	..()
+
+/turf/unsimulated/floor/fake_supermatter
+	name = "Supermatter"
+	desc = ""
+	icon='icons/turf/space.dmi'
+#ifdef BLUESPACELEAK_FLAT
+	icon_state = "bluespace"
+#else
+	icon_state = "bluespacecrystal1"
+#endif
+
+	//To differentiate between fake and real supermatter when mapping
+	color = "#777777"
+
+/turf/unsimulated/floor/fake_supermatter/New()
+	..()
+
+	color = "#FFFFFF"

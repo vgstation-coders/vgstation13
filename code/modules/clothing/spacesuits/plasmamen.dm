@@ -42,8 +42,8 @@
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
-	action_button_name = "Toggle Helmet Light"
-
+	actions_types = list(/datum/action/item_action/toggle_light)
+	
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
 		return
@@ -162,6 +162,23 @@
 	icon_state = "plasmamanJanitor_helmet0"
 	base_state = "plasmamanJanitor_helmet"
 
+/obj/item/clothing/suit/space/plasmaman/lawyer
+	name = "plasmaman lawyer suit"
+	icon_state = "plasmamanlawyer_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/lawyer
+	name = "plasmaman lawyer helmet"
+	icon_state = "plasmamanlawyer_helmet0"
+	base_state = "plasmamanlawyer_helmet"
+
+/obj/item/clothing/suit/space/plasmaman/bee
+	name = "plasmaman bee suit"
+	icon_state = "plasmamanbee_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/bee
+	name = "plasmaman bee helmet"
+	icon_state = "plasmamanbee_helmet0"
+	base_state = "plasmamanbee_helmet"
 
 //CARGO
 

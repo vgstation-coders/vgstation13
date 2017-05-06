@@ -7,8 +7,8 @@
 	if(now_pushing)
 		return
 	..()
-	if(istype(AM, /mob/living/carbon) && prob(10))
-		src.spread_disease_to(AM, "Contact")
+	if(can_be_infected(AM) && prob(10))
+		spread_disease_to(src, AM, "Contact")
 	handle_symptom_on_touch(src, AM, BUMP)
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
@@ -89,7 +89,7 @@
 	if(!istype(M, /mob/living/carbon))
 		return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+		var/datum/organ/external/temp = M.get_active_hand_organ()
 
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
@@ -138,7 +138,7 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -149,7 +149,7 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -234,8 +234,8 @@
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
-					"<span class='notice'>[M] shake hands with [src].</span>", \
-					"<span class='notice'>You shake [src]'s hand.</span>", \
+					"<span class='notice'>[M] shakes hands with [src].</span>", \
+					"<span class='notice'>You shake hands with [src].</span>", \
 					)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -306,7 +306,7 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen)
+	if(target.type == /obj/abstract/screen)
 		return
 
 	var/atom/movable/item = src.get_active_hand()
@@ -654,7 +654,7 @@
 				for(var/datum/disease2/effect/E in D.effects)
 					if(istype(E, symptom_type))
 						if(E.count > 0)
-							return 1
+							return E
 
 /mob/living/carbon/proc/handle_symptom_on_touch(var/toucher, var/touched, var/touch_type)
 	if(virus2.len)
@@ -663,3 +663,30 @@
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_touch(src, toucher, touched, touch_type)
+
+/mob/living/carbon/proc/get_lowest_body_alpha()
+	if(!body_alphas.len)
+		return 255
+	var/lowest_alpha = 255
+	for(var/alpha_modification in body_alphas)
+		lowest_alpha = min(lowest_alpha,body_alphas[alpha_modification])
+	return lowest_alpha
+
+/mob/living/carbon/advanced_mutate()
+	..()
+	if(prob(5))
+		hasmouth = !hasmouth
+
+/mob/living/carbon/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"gender",
+		"antibodies",
+		"last_eating",
+		"life_tick",
+		"number_wounds",
+		"handcuffed",
+		"legcuffed",
+		"pulse")
+
+	reset_vars_after_duration(resettable_vars, duration)

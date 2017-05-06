@@ -141,13 +141,8 @@ var/savefile/panicfile
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	spawn(1)
-		turfs = new/list(maxx*maxy*maxz)
-		world.log << "DEBUG: TURFS LIST LENGTH [turfs.len]"
-		build_turfs_list()
-
-		spawn(9)
-			Master.Setup()
+	spawn(10)
+		Master.Setup()
 
 	for(var/plugin_type in typesof(/plugin))
 		var/plugin/P = new plugin_type()
@@ -238,10 +233,22 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
-	if(reason == 1)
-		if(usr && usr.client)
-			if(!usr.client.holder)
-				return 0
+	if(reason == REBOOT_HOST)
+		if(usr)
+			if (!check_rights(R_SERVER))
+				log_admin("[key_name(usr)] Attempted to reboot world via client debug tools, but they do not have +SERVER and were denied.")
+				message_admins("[key_name_admin(usr)] Attempted to reboot world via client debug tools, but they do not have +SERVER and were denied.")
+				return
+
+			log_admin("[key_name(usr)] Has requested an immediate world restart via client side debugging tools.")
+			message_admins("[key_name_admin(usr)] Has requested an immediate world restart via client side debugging tools.")
+			// To prevent the server shutting down before logs get to the admins or some nonsense.
+			sleep(1)
+
+		to_chat(world, "<span class='danger big'>Rebooting World immediately due to host request!</span>")
+		..()
+		return
+
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
 	if(config.map_voting)
@@ -502,12 +509,3 @@ proc/establish_old_db_connection()
 		return 1
 
 #undef FAILED_DB_CONNECTION_CUTOFF
-/world/proc/build_turfs_list()
-	var/count = 0
-	for(var/Z = 1 to world.maxz)
-		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000))
-				sleep(world.tick_lag)
-			count++
-			T.initialize()
-			turfs[count] = T

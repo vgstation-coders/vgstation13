@@ -1,5 +1,6 @@
 /datum/artifact_effect/reagentblock
 	effecttype = "reagentblock"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	var/duration = 0
 	copy_for_battery = list("duration")
 

@@ -140,6 +140,12 @@
 		admins += src
 		holder.owner = src
 
+	var/static/list/localhost_addresses = list("127.0.0.1","::1")
+	if(config.localhost_autoadmin)
+		if((!address && !world.port) || (address in localhost_addresses))
+			var/datum/admins/D = new /datum/admins("Host", R_HOST, src.ckey)
+			D.associate(src)
+
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")
 			if(!holder)
@@ -177,6 +183,8 @@
 		preferences_datums[ckey] = prefs
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
+	prefs.client = src
+	prefs.initialize_preferences(client_login = 1)
 
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
@@ -194,6 +202,7 @@
 	if(holder)
 		add_admin_verbs()
 		admin_memo_show()
+		holder.add_menu_items()
 
 	log_client_to_db()
 

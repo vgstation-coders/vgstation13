@@ -474,6 +474,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
+		
+	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
+		new_character.dna.SetSEState(MUTEBLOCK,1,1)
+		new_character.sdisabilities |= MUTE
 
 	new_character.dna.UpdateSE()
 

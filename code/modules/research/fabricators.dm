@@ -452,6 +452,11 @@
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
 
+/obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
+	..()
+	if(stopped)
+		start_processing_queue()
+
 // Tell the machine to start processing the queue on the next process().
 /obj/machinery/r_n_d/fabricator/proc/start_processing_queue()
 	stopped=0
@@ -603,7 +608,16 @@
 		ui_interact(usr)
 		return 1
 
+/obj/machinery/r_n_d/fabricator/npc_tamper_act(mob/living/L)
+	if(!part_sets || !part_sets.len)
+		return
 
+	var/list/part_set = part_sets[pick(part_sets)]
+	if(!part_set || !part_set.len)
+		return
+
+	var/new_design = pick(part_set)
+	build_part(new_design)
 
 /obj/machinery/r_n_d/fabricator/attack_hand(mob/user as mob)
 	if(user.stat || user.restrained()) //allowed is later on, so we don't check it

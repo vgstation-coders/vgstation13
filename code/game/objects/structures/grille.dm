@@ -54,7 +54,7 @@
 	return
 
 /obj/structure/grille/blob_act()
-	..()
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	health -= rand(initial(health)*0.8, initial(health)*3) //Grille will always be blasted, but chances of leaving things over
 	healthcheck(hitsound = 1)
 
@@ -66,6 +66,7 @@
 	attack_hand(user)
 
 /obj/structure/grille/attack_hand(mob/user as mob)
+	user.do_attack_animation(src, user)
 	var/humanverb = pick(list("kick", "slam", "elbow")) //Only verbs with a third person "s", thank you
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [humanverb]s \the [src].</span>", \
@@ -81,6 +82,7 @@
 /obj/structure/grille/attack_alien(mob/user as mob)
 	if(istype(user, /mob/living/carbon/alien/larva))
 		return
+	user.do_attack_animation(src, user)
 	var/alienverb = pick(list("slam", "rip", "claw")) //See above
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [alienverb]s \the [src].</span>", \
@@ -93,6 +95,7 @@
 /obj/structure/grille/attack_slime(mob/user as mob)
 	if(!istype(user, /mob/living/carbon/slime/adult))
 		return
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] smashes against \the [src].</span>", \
 						 "<span class='warning'>You smash against \the [src].</span>", \
@@ -106,6 +109,7 @@
 	M.delayNextAttack(8)
 	if(M.melee_damage_upper == 0)
 		return
+	M.do_attack_animation(src, M)
 	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
 					  "<span class='warning'>You smash against \the [src].</span>", \
 					  "You hear twisting metal.")
@@ -198,16 +202,24 @@
 			"<span class='notice'>You place \a [WD] on \the [src].</span>")
 		return
 
+	var/dam = 0
 	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
-		health = 0
-		healthcheck()
+		dam = health
+	else if(istype(W, /obj/item/weapon/shard))
+		dam = W.force * 0.1 //Turns the base shard into a .5 damage item. If you want to break an electrified grille with that, you're going to EARN IT, ROD. BY. ROD.
+	else
+		switch(W.damtype)
+			if("fire")
+				dam = W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
+			if("brute")
+				dam = W.force * 0.5 //Rod matrices have an innate resistance to brute damage
 
-	switch(W.damtype)
-		if("fire")
-			health -= W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
-		if("brute")
-			health -= W.force * 0.5 //Rod matrices have an innate resistance to brute damage
-	shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
+	if(!(W.sharpness_flags & INSULATED_EDGE))
+		shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
+
+	if(dam)
+		user.do_attack_animation(src, W)
+	health -= dam
 	healthcheck(hitsound = 1)
 	..()
 	return
@@ -240,6 +252,14 @@
 		health -= 1
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
+
+/obj/structure/grille/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"health",
+		"broken")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 //Mapping entities and alternatives !
 

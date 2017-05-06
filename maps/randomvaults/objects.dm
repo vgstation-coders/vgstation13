@@ -74,6 +74,9 @@
 
 /area/vault/prison
 
+/obj/docking_port/destination/vault
+	var/valid_random_destination = TRUE //If FALSE, random shuttle destination disks can't pick this docking port
+
 /obj/item/weapon/disk/shuttle_coords/vault/prison
 	destination = /obj/docking_port/destination/vault/prison
 
@@ -190,25 +193,25 @@
 	name = "\improper Engine Storage Bay"
 	icon_state = "engine"
 	requires_power = 0
-	
+
 /area/vault/lightship/cockpit
-	name = "\improper Cockpit"	
-	
+	name = "\improper Cockpit"
+
 /area/vault/lightship/dronebay
-	name = "\improper Drone Bay"	
-	
+	name = "\improper Drone Bay"
+
 /area/vault/lightship/Doormaint
-	name = "\improper Airlock Maintenance"	
-	
+	name = "\improper Airlock Maintenance"
+
 /area/vault/lightship/cameraroom
-	name = "\improper Surveillance Room"	
-	
+	name = "\improper Surveillance Room"
+
 /area/vault/lightship/shieldbattery
-	name = "\improper Shield Battery"	
-	
+	name = "\improper Shield Battery"
+
 /area/vault/lightship/Medbay
-	name = "\improper Medical Bay"	
-	
+	name = "\improper Medical Bay"
+
 /area/vault/lightship/lounge
 	name = "\improper Lounge"
 
@@ -235,10 +238,13 @@
 
 /area/vault/lightship/weaponsroom
 	name = "\improper Weapon Systems"
-	
+
 
 /area/vault/icecomet
 	jammed = 2
+
+
+/area/vault/research
 
 
 /obj/machinery/door/poddoor/droneship

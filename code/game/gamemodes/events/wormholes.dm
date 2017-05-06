@@ -1,7 +1,7 @@
 /proc/wormhole_event()
 	spawn()
 		var/list/pick_turfs = list()
-		for(var/turf/simulated/floor/T in turfs)
+		for(var/turf/simulated/floor/T in world)
 			if(T.z == map.zMainStation)
 				pick_turfs += T
 

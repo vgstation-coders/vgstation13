@@ -23,10 +23,10 @@
 	..()
 
 /mob/living/carbon/alien/humanoid/proc/add_spells_and_verbs()
-	add_spell(new /spell/aoe_turf/alienregurgitate, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/aoe_turf/conjure/alienweeds, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/targeted/alienwhisper, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/targeted/alientransferplasma, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/alienregurgitate, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/alienweeds, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alienwhisper, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alientransferplasma, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(flags & INVULNERABLE)
@@ -141,6 +141,7 @@
 
 		if(I_DISARM)
 			if(!lying)
+				M.do_attack_animation(src, M)
 				if(prob(5)) //Very small chance to push an alien down.
 					Knockdown(2)
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -198,3 +199,6 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		handle_strip_pocket(usr, href_list["pockets"])
+
+/mob/living/carbon/alien/humanoid/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "alien")
