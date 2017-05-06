@@ -172,7 +172,7 @@ here is an example of what it might look like:
 	var/random = rand(1,1000)
 	switch(random)
 		if(1 to 4)
-			var/spider = pick(spider_types - /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider)
+			var/spider = pick(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/nurse, /mob/living/simple_animal/hostile/giant_spider/hunter)
 			new spider(T)
 		if(5)
 			new /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider(T)

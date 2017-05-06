@@ -1714,7 +1714,7 @@
 /datum/recipe/bleachkipper
 	reagents = list(SODIUM = 10, HYDROGEN = 10, CHLORINE = 10, PHAZON = 1)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp,
 		/obj/item/robot_parts/head,
 		/obj/item/weapon/handcuffs,
 		/obj/item/toy/crayon/blue,
