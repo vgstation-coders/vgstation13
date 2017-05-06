@@ -274,7 +274,7 @@ proc/AirflowSpace(zone/A)
 /mob/living/carbon/human/AirflowCanPush()
 	if(reagents.has_reagent(MEDCORES))
 		return 0
-	..()
+	return ..()
 
 /atom/movable/proc/GotoAirflowDest(n)
 	last_airflow = world.time
