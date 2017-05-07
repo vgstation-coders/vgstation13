@@ -170,7 +170,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -209,7 +209,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -237,7 +237,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -283,7 +283,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -318,7 +318,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -349,7 +349,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -368,7 +368,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -394,7 +394,7 @@
 
 				else if(istype(O.type, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -413,7 +413,7 @@
 
 				else if(istype(O.type, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -438,7 +438,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -458,7 +458,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000))
 							sleep(world.tick_lag)
@@ -484,7 +484,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000)) sleep(world.tick_lag)
 						if ( istype(A , O.type) )
@@ -502,7 +502,7 @@
 
 				else if(istype(O, /turf))
 					var/count = 0
-					for(var/turf/A in turfs)
+					for(var/turf/A in world)
 						count++
 						if(!(count % 50000)) sleep(world.tick_lag)
 						if (A.type == O.type)

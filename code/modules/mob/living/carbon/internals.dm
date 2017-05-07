@@ -22,7 +22,7 @@
 /mob/living/carbon/proc/toggle_internals(var/mob/living/user, var/obj/item/weapon/tank/T)
 	if(user.incapacitated())
 		return
-	
+
 	if(internal)
 		internal.add_fingerprint(user)
 		internal = null
@@ -69,3 +69,12 @@
 		else
 			to_chat(src, "<span class='notice'>You are now running on internals from \the [T].</span>")
 		return 1
+
+/mob/living/carbon/proc/update_internals()
+	var/new_icon_state
+	if(internal)
+		new_icon_state = "internal1"
+	else
+		new_icon_state = "internal0"
+	if(internals)
+		internals.icon_state = new_icon_state

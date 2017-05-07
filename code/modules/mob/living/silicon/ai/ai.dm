@@ -81,6 +81,8 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_GOLEM, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_MOUSE, 1)
+	add_language(LANGUAGE_GOLEM, 1)
+	add_language(LANGUAGE_SLIME, 1)
 	add_language(LANGUAGE_HUMAN, 1)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName
@@ -210,7 +212,7 @@ var/list/ai_list = list()
 	*/
 		//if(icon_state == initial(icon_state))
 	/* Nuked your hidden shit.*/
-	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President")
+	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President", "Fort")
 	switch(icontype)
 		if("Clown")
 			icon_state = "ai-clown2"
@@ -280,8 +282,8 @@ var/list/ai_list = list()
 			icon_state = "ai-royal"
 		if("Heartline")
 			icon_state = "ai-heartline"
-		if("Hades") 
-			icon_state = "ai-hades"	
+		if("Hades")
+			icon_state = "ai-hades"
 		if("Helios")
 			icon_state = "ai-helios"
 		if("Syndicat")
@@ -306,6 +308,8 @@ var/list/ai_list = list()
 			icon_state = "ai-murica"
 		if("President")
 			icon_state = "ai-pres"
+		if("Fort")
+			icon_state = "ai-boxfort"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
@@ -560,7 +564,7 @@ var/list/ai_list = list()
 		else //harm
 			if(M.unarmed_attack_mob(src))
 				if(prob(8))
-					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
+					flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
 
 /mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
 	M.unarmed_attack_mob(src)
@@ -752,7 +756,8 @@ var/list/ai_list = list()
 		"Yotsuba",
 		"Girl",
 		"Boy",
-		"SHODAN"
+		"SHODAN",
+		"Corgi"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -781,6 +786,8 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo10"))
 				if("SHODAN")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo11"))
+				if("Corgi")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo12"))
 
 	return
 

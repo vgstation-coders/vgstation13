@@ -182,6 +182,7 @@
 					G.icon_state = new_glove_icon_state
 					G._color = color
 					G.name = new_glove_name
+					G.update_icon()
 					if(!istype(G, /obj/item/clothing/gloves/black/thief))
 						G.desc = new_desc
 			if(new_shoe_icon_state && new_shoe_name)
@@ -189,7 +190,7 @@
 //					to_chat(world, "DEBUG: YUP! FOUND IT!")
 					if (S.chained == 1)
 						S.chained = 0
-						S.slowdown = SHOES_SLOWDOWN
+						S.slowdown = NO_SLOWDOWN
 						new /obj/item/weapon/handcuffs( src )
 					S.icon_state = new_shoe_icon_state
 					S._color = color

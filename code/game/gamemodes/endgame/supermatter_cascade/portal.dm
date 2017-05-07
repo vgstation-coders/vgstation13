@@ -12,7 +12,7 @@
 
 	layer = SUPER_PORTAL_LAYER
 
-	consume_range = 6
+	consume_range = 12
 
 /obj/machinery/singularity/narsie/large/exit/New()
 	..()
@@ -25,7 +25,7 @@
 	for(var/mob/M in player_list)
 		if(M.client)
 			M.see_rift(src)
-	consume()
+	eat()
 
 /obj/machinery/singularity/narsie/large/exit/acquire(var/mob/food)
 	return

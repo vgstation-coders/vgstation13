@@ -112,12 +112,7 @@ Feel free to do whatever with this if you think it lacks.
 			return
 
 		busy = 1
-		var/obj/item/device/pda/P = colorlist[chosenPDA]
-
-		storedpda.icon_state = initial(P.icon_state)
-		storedpda.desc = initial(P.desc)
-		if(!storedpda.owner)
-			storedpda.name = initial(P.name)
+		paint_pda(chosenPDA)
 
 		sleep(10)
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully recolored to \a [storedpda]\"")
@@ -126,6 +121,17 @@ Feel free to do whatever with this if you think it lacks.
 	else
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 
+/obj/machinery/pdapainter/proc/paint_pda(new_color, obj/item/device/pda/override_pda)
+	var/obj/item/device/pda/modified = storedpda
+	if(override_pda)
+		modified = override_pda
+
+	var/obj/item/device/pda/P = colorlist[new_color]
+
+	modified.icon_state = initial(P.icon_state)
+	modified.desc = initial(P.desc)
+	if(!modified.owner)
+		modified.name = initial(P.name)
 
 /obj/machinery/pdapainter/verb/ejectpda()
 	set name = "Eject PDA"
@@ -166,7 +172,14 @@ Feel free to do whatever with this if you think it lacks.
 	else
 		to_chat(usr, "\The [src] is not ready to print again.")
 
+/obj/machinery/pdapainter/npc_tamper_act(mob/living/L)
+	if(last_print + 300 < world.timeofday)
+		var/obj/item/device/pda/P = new /obj/item/device/pda(get_turf(src))
+		last_print = world.timeofday
 
+		//Paint the PDA into a random color
+		var/new_color = pick(colorlist)
+		paint_pda(new_color, P)
 
 /obj/machinery/pdapainter/power_change()
 	..()

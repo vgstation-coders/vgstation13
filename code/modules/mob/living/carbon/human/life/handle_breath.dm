@@ -60,9 +60,12 @@
 
 				breath = loc.remove_air(breath_moles)
 
-				if(!is_lung_ruptured())
-					if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
-						if(prob(5)) //5 % chance for a lung rupture if air intake is less of a fifth, or more than five times the threshold
+				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
+					if(prob(15)) // 15% chance for lung damage if air intake is less of a fifth, or more than five times the threshold
+						L.damage += 1
+					if(!is_lung_ruptured())
+						var/chance_break = (L.damage / L.min_bruised_damage)*50 // Chance to rupture: 1/15 = 3%, 2/15 = 7%, etc...
+						if(prob(chance_break))
 							rupture_lung()
 
 				//Handle filtering
@@ -120,8 +123,9 @@
 		if(virus2 && virus2.len > 0)
 			if(prob(10) && get_infection_chance(src))
 //					log_debug("[src] : Exhaling some viruses")
-				for(var/mob/living/carbon/M in view(1,src))
-					src.spread_disease_to(M)
+				for(var/mob/living/M in range(1,src))
+					if(can_be_infected(M))
+						spread_disease_to(src,M)
 
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)

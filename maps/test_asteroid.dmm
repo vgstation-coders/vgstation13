@@ -149,7 +149,7 @@
 "cS" = (/turf/simulated/wall/r_wall,/area/research_outpost/atmos)
 "cT" = (/obj/structure/transit_tube{icon_state = "S-NW"},/obj/structure/lattice,/turf/space,/area)
 "cU" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/shuttle/trade/start)
-"cV" = (/obj/structure/table,/obj/map/spawner/assistant/materials,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/trade/start)
+"cV" = (/obj/structure/table,/obj/abstract/map/spawner/assistant/materials,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/trade/start)
 "cW" = (/obj/machinery/door/window{name = "Tradeship Windoor"; req_one_access_txt = "140"},/obj/machinery/door/poddoor/shutters/preopen{id_tag = "TS"; name = "Tradeship Shutters"},/obj/machinery/door_control{id_tag = "TS"; name = "Tradeship Shutters"; pixel_x = 0; pixel_y = -25; req_access_txt = "140"},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/trade/start)
 "cX" = (/obj/structure/flora/pottedplant/random,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/trade/start)
 "cY" = (/obj/structure/lattice,/obj/structure/transit_tube{icon_state = "N-S"},/turf/space,/area)

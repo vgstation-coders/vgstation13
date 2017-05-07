@@ -174,14 +174,14 @@
 		activated = 1
 		timing = 0
 		if(!inserted_battery.battery_effect.activated)
-			src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || emission started by [key_name(usr)]")
+			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id]([inserted_battery.battery_effect]) emission started by [key_name(usr)]")
 			inserted_battery.battery_effect.ToggleActivate(1)
 	if(href_list["shutdown"])
 		activated = 0
 	if(href_list["starttimer"])
 		timing = 1
 		archived_time = time
-		src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || emission timed by [key_name(usr)]")
+		src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id]([inserted_battery.battery_effect]) emission timed by [key_name(usr)]")
 	if(href_list["ejectbattery"])
 		shutdown_emission()
 		inserted_battery.forceMove(get_turf(src))

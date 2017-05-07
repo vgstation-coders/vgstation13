@@ -84,7 +84,7 @@
 	activate(var/mob/M, var/connected, var/flags)
 		..(M,connected,flags)
 		var/spell/granted = new spelltype
-		M.add_spell(granted, "genetic_spell_ready", /obj/screen/movable/spell_master/genetic)
+		M.add_spell(granted, "genetic_spell_ready", /obj/abstract/screen/movable/spell_master/genetic)
 		if(!granted_spells)
 			granted_spells = list()
 		granted_spells += granted

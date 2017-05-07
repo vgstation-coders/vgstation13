@@ -15,6 +15,7 @@ var/area/space_area
 	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
+	flags = 0
 
 /area/New()
 	area_turfs = list()
@@ -406,6 +407,11 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
+
+	if(issnow(src))
+		Obj.update_shadow()
+	else if(istype(oldArea) && issnow(oldArea))
+		Obj.underlays -= Obj.shadow
 
 	for(var/mob/mob_in_obj in Obj.contents)
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))

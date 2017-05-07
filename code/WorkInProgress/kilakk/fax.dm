@@ -15,7 +15,6 @@ var/list/alldepartments = list("Central Command")
 	active_power_usage = 200
 	power_channel = EQUIP
 
-	var/obj/item/weapon/card/id/scan = null // identification
 	var/authenticated = 0
 
 	var/obj/item/weapon/paper/tofax = null // what we're sending

@@ -623,6 +623,21 @@ var/global/list/loopModeNames=list(
 	update_music()
 	return
 
+
+/obj/machinery/media/jukebox/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)
+
+/obj/machinery/media/jukebox/kick_act(mob/living/H)
+	..()
+	if(stat & NOPOWER || any_power_cut())
+		return
+	playing=!playing
+	update_music()
+	update_icon()
+
 /obj/machinery/media/jukebox/bar
 	department = "Civilian"
 	req_access = list(access_bar)

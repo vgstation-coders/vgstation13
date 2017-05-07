@@ -20,6 +20,16 @@
 	locked = 1
 	req_lock_access = list(access_armory)
 
+/datum/design/mami
+	name = "Machine-Man Interface"
+	desc = "A synthetic brain interface intended to give silicon-based minds control of organic tissue. It's semi-organic, so store it in a cool, dry place."
+	id = "mami"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_BIOTECH = 4, Tc_NANOTRASEN = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 12000, MAT_GLASS = 52500, MAT_GOLD = 24000, MAT_SILVER = 12000, MAT_PLASTIC = 2000) //yes it's expensive
+	category = "Nanotrasen"
+	build_path = /obj/item/organ/brain/mami
+
 /datum/design/gravitywell
 	name = "Gravity Well Gun"
 	desc = "After years of studying the Singularity, our engineers have come up with a way to produce a similar graviational anomaly that automatically decays after a bit less than a minute. Use with extreme caution!"

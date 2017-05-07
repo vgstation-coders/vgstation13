@@ -27,8 +27,8 @@
 /obj/item/weapon/paper_bin/MouseDrop(over_object)
 	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
 		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
-			if(istype(over_object,/obj/screen/inventory)) //We're being dragged into the user's UI...
-				var/obj/screen/inventory/OI = over_object
+			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
+				var/obj/abstract/screen/inventory/OI = over_object
 
 				if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
 					usr.u_equip(src, 0)

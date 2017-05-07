@@ -14,6 +14,9 @@ info.json
 # Compiled Python doohickies
 *.pyc
 
+# Vim
+*.swp
+
 #ignore any files in config/, except those in subdirectories.
 /config/*
 !/config/*/*
@@ -54,3 +57,5 @@ players2.sqlite
 
 # Investigate logs that have an annoying tendency to generate during testing
 /data/investigate/*
+
+cfg

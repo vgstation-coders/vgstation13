@@ -149,7 +149,7 @@ var/global/ingredientLimit = 10
 	else
 		. = ..()
 
-/obj/machinery/cooking/attackby(obj/item/I,mob/user)
+/obj/machinery/cooking/attackby(obj/item/I, mob/user)
 	if(src.active)
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
@@ -179,14 +179,14 @@ var/global/ingredientLimit = 10
 // Food Processing /////////////////////////////////////////////
 
 //Returns "valid" or the reason for denial.
-/obj/machinery/cooking/proc/validateIngredient(var/obj/item/I)
+/obj/machinery/cooking/proc/validateIngredient(var/obj/item/I, var/force_cook)
 	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
 		. = "It won't fit."
 	else if(istype(I,/obj/item/weapon/disk/nuclear))
 		. = "It's the fucking nuke disk!"
 	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 		. = "It would be a straining topological exercise."
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything)
+	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything || force_cook)
 		. = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
@@ -200,14 +200,14 @@ var/global/ingredientLimit = 10
 		. = "It's not edible food."
 	return
 
-/obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user)
-	. = src.validateIngredient(I)
+/obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user,var/force_cook)
+	. = src.validateIngredient(I, force_cook)
 	if(. == "transto")
 		return
 	if(. == "valid")
 		if(src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || user.get_active_hand() != I)
+		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != I) && !force_cook))
 			return 0
 
 		if(user.drop_item(I, src))
@@ -407,14 +407,14 @@ var/global/ingredientLimit = 10
 	. = ..()
 	empty_icon()
 
-/obj/machinery/cooking/deepfryer/takeIngredient(var/obj/item/I, mob/user)
+/obj/machinery/cooking/deepfryer/takeIngredient(var/obj/item/I, mob/user, force_cook)
 	if(reagents.total_volume < DEEPFRY_MINOIL)
 		to_chat(user, "\The [src] doesn't have enough oil to fry in.")
 		return
 	else
 		return ..()
 
-/obj/machinery/cooking/deepfryer/validateIngredient(var/obj/item/I)
+/obj/machinery/cooking/deepfryer/validateIngredient(var/obj/item/I, force_cook)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
 		if(findtext(I.name,"fried"))
@@ -461,6 +461,109 @@ var/global/ingredientLimit = 10
 	src.ingredient = null
 	empty_icon() //see if the icon needs updating from the loss of oil
 	return
+
+/obj/machinery/cooking/deepfryer/npc_tamper_act(mob/living/L)
+	//Deepfry a random nearby item
+	var/list/pickable_items = list()
+
+	for(var/obj/item/I in range(1, L))
+		pickable_items.Add(I)
+
+	if(!pickable_items.len)
+		return
+
+	var/obj/item/I = pick(pickable_items)
+
+	takeIngredient(I, L, TRUE) //shove the item in, even if it can't be deepfried normally
+	empty_icon()
+
+
+// confectionator ///////////////////////////////////////
+// its like a deepfrier
+
+// but with sugar
+
+#define CONFECTIONATOR_MINSUGAR 50
+
+/obj/machinery/cooking/deepfryer/confectionator
+	name = "confectionator"
+	desc = "Creates sugar copies of stuff."
+	icon_state = "confectionator_off"
+	icon_state_on = "confectionator_on"
+	foodChoices = null
+	cookTime = 100
+	recursive_ingredients = 1
+	cks_max_volume = 400
+	cooks_in_reagents = 1
+	machine_flags = WRENCHMOVE | CROWDESTROY | SCREWTOGGLE | FIXED2WORK | SHUTTLEWRENCH
+
+/obj/machinery/cooking/deepfryer/confectionator/New()
+	. = ..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/confectionator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/matter_bin
+	)
+
+	RefreshParts()
+
+/obj/machinery/cooking/deepfryer/confectionator/validateIngredient(var/obj/item/I, var/force_cook)
+	if(I.w_class < W_CLASS_LARGE)
+		. = "valid"
+
+	else
+		. = "The confectionator will not be able to replicate that."
+	if((. == "valid") && (!foodNesting))
+		if(findtext(I.name,"sugar"))
+			. = "It's already a sugar copy."
+
+/obj/machinery/cooking/deepfryer/confectionator/initialize()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(SUGAR, 300)
+
+
+/obj/machinery/cooking/deepfryer/confectionator/empty_icon() //sees if the value is empty, and changes the icon if it is
+	reagents.update_total() //make the values refresh
+	if(ingredient)
+		icon_state = "confectionator_on"
+		playsound(get_turf(src),'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+	else if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
+		icon_state = "confectionator_empty"
+	else
+		icon_state = initial(icon_state)
+
+/obj/machinery/cooking/deepfryer/confectionator/takeIngredient(var/obj/item/I, mob/user, force_cook)
+	if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
+		to_chat(user, "\The [src] doesn't have enough sugar.")
+		return
+	else
+		return ..()
+
+/obj/machinery/cooking/deepfryer/confectionator/makeFood(var/item/I)
+
+	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
+	if(cooks_in_reagents)
+		src.transfer_reagents_to_food(D)
+	D.appearance = src.ingredient.appearance
+	D.name = "sugar [src.ingredient.name]"
+	D.desc = "It's \an [src.ingredient.name] made out of sugar!"
+	D.color = list(
+    				1, 0, 0, 0,
+  					0, 1, 0, 0,
+   					0, 0, 1, 0,
+   					0, 0, 0, 1,
+   					0.18, 0.08, 0.08, 0
+					)
+	if(src.ingredient.inhand_states)
+		D.inhand_states = src.ingredient.inhand_states
+
+	src.ingredient.forceMove(src.loc) // returns the item instead of destroying it, as the confectionator creates a sugar copy
+	src.ingredient = null
+	empty_icon() //see if the icon needs updating from the loss of sugar
+	return
+
 
 // Grill ///////////////////////////////////////////////////////
 

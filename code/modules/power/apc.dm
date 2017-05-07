@@ -113,6 +113,12 @@
 
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
+
+	if(areaMaster.areaapc)
+		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+		qdel(src)
+		return
+
 	wires = new(src)
 	// offset 24 pixels in direction of dir
 	// this allows the APC to be embedded in a wall, yet still inside an area
@@ -121,10 +127,6 @@
 	src.tdir = dir		// to fix Vars bug
 	dir = SOUTH
 
-	if(areaMaster.areaapc)
-		world.log << "Secondary APC detected in area: [areaMaster.name], deleting the second APC"
-		qdel(src)
-		return
 	areaMaster.set_apc(src)
 
 	if(src.tdir & 3)
@@ -378,7 +380,7 @@
 		update_icon()
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
-/obj/machinery/power/apc/attackby(obj/item/W, mob/user)
+/obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	src.add_fingerprint(user)
@@ -601,6 +603,7 @@
 					|| istype(W,/obj/item/weapon/crowbar) \
 				) \
 				&& prob(20) )
+			user.do_attack_animation(src, W)
 			opened = 2
 			user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
@@ -654,6 +657,7 @@
 /obj/machinery/power/apc/attack_alien(mob/living/carbon/alien/humanoid/user)
 	if(!user)
 		return
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
@@ -968,7 +972,7 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
@@ -1293,25 +1297,24 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 				sleep(1)
 
 /obj/machinery/power/apc/Destroy()
-	areaMaster.remove_apc(src)
-	if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				ticker.mode:apcs--
-	areaMaster.power_light = 0
-	areaMaster.power_equip = 0
-	areaMaster.power_environ = 0
-	areaMaster.power_change()
+	if(areaMaster.areaapc == src)
+		areaMaster.remove_apc(src)
+		if(malfai && operating)
+			if (ticker.mode.config_tag == "malfunction")
+				if (STATION_Z == z)
+					var/datum/game_mode/malfunction/M = ticker.mode
+					M.apcs--
+		areaMaster.power_light = 0
+		areaMaster.power_equip = 0
+		areaMaster.power_environ = 0
+		areaMaster.power_change()
+
 	if(occupant)
 		malfvacate(1)
 
 	if(cell)
 		cell.forceMove(loc)
 		cell = null
-
-	if(terminal)
-		terminal.master = null
-		terminal = null
 
 	if(wires)
 		qdel(wires)
@@ -1343,5 +1346,12 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(shorted || (!cell && !charging))
 		return FALSE
 	return ..()
+
+/obj/machinery/power/apc/npc_tamper_act(mob/living/L)
+	if(!panel_open)
+		togglePanelOpen(null, L)
+	if(wires)
+		wires.npc_tamper(L)
+
 
 #undef APC_UPDATE_ICON_COOLDOWN

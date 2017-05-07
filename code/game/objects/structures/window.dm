@@ -25,11 +25,14 @@
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 
-	var/obj/Overlays/damage_overlay
+	var/obj/abstract/Overlays/damage_overlay
+	var/image/oneway_overlay
 	var/cracked_base = "crack"
 
 	var/fire_temp_threshold = 800
 	var/fire_volume_mod = 100
+
+	var/one_way = 0 //If set to 1, it will act as a one-way window.
 
 /obj/structure/window/New(loc)
 
@@ -40,6 +43,7 @@
 	update_nearby_tiles()
 	update_nearby_icons()
 	update_icon()
+	oneway_overlay = image('icons/obj/structures.dmi', src, "one_way_overlay")
 
 /obj/structure/window/projectile_check()
 	return PROJREACT_WINDOWS
@@ -128,13 +132,14 @@
 			return
 
 /obj/structure/window/blob_act()
-	..()
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	health -= rand(30, 50)
 	healthcheck()
 
 /obj/structure/window/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 
+	H.do_attack_animation(src, H)
 	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
 	"<span class='danger'>You kick \the [src].</span>")
 
@@ -183,9 +188,10 @@
 		healthcheck()
 		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
 
-/obj/structure/window/attack_hand(mob/user as mob)
+/obj/structure/window/attack_hand(mob/living/user as mob)
 
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
 		health -= 25
@@ -194,6 +200,7 @@
 
 	//Bang against the window
 	else if(usr.a_intent == I_HURT)
+		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
@@ -213,9 +220,9 @@
 
 	return attack_hand(user)
 
-/obj/structure/window/proc/attack_generic(mob/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
+/obj/structure/window/proc/attack_generic(mob/living/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
 
-
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(10)
 	health -= damage
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
@@ -241,7 +248,7 @@
 		return
 	attack_generic(user, rand(10, 15))
 
-/obj/structure/window/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
 		var/obj/item/weapon/grab/G = W
@@ -249,6 +256,7 @@
 			var/mob/living/M = G.affecting
 			var/gstate = G.state
 			returnToPool(W)	//Gotta delete it here because if window breaks, it won't get deleted
+			user.do_attack_animation(src, W)
 			switch(gstate)
 				if(GRAB_PASSIVE)
 					M.apply_damage(5) //Meh, bit of pain, window is fine, just a shove
@@ -271,6 +279,29 @@
 			msg_admin_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			log_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			return
+
+	if(iscrowbar(W) && one_way)
+		to_chat(user, "<span class='notice'>You pry the sheet of plastic off the window.</span>")
+		one_way = 0
+		getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1)
+		overlays -= oneway_overlay
+		return
+
+	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
+		if(one_way)
+			to_chat(user, "<span class='notice'>This [src] already has one-way tint on it.</span>")
+			return
+		var/obj/item/stack/sheet/mineral/plastic/P = W
+		one_way = 1
+		P.use(1)
+		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
+//		if(!oneway_overlay)
+//			oneway_overlay = new(src)
+//			oneway_overlay.icon = icon('icons/obj/structures.dmi')
+//			oneway_overlay.dir = src.dir
+//			oneway_overlay.icon_state = "one_way_overlay"
+		overlays += oneway_overlay
+		return
 
 	//Start construction and deconstruction, absolute priority over the other object interactions to avoid hitting the window
 
@@ -388,6 +419,7 @@
 				to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 				return
 
+	user.do_attack_animation(src, W)
 	if(W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
 		health -= W.force
@@ -568,6 +600,14 @@
 	icon_state = "fwindow"
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
+
+/obj/structure/window/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"health",
+		"d_state")
+
+	reset_vars_after_duration(resettable_vars, duration)
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

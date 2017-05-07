@@ -26,6 +26,9 @@
 		if(WEST)
 			pixel_x = -25 * PIXEL_MULTIPLIER
 
+/obj/machinery/driver_button/npc_tamper_act(mob/living/L)
+	attack_hand(L)
+
 /obj/machinery/ignition_switch
 	name = "ignition switch"
 	icon = 'icons/obj/objects.dmi'
@@ -40,6 +43,9 @@
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
+
+/obj/machinery/ignition_switch/npc_tamper_act(mob/living/L)
+	attack_hand(L)
 
 /obj/machinery/flasher_button
 	name = "flasher button"
@@ -56,6 +62,9 @@
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 
+/obj/machinery/flasher_button/npc_tamper_act(mob/living/L)
+	attack_hand(L)
+
 /obj/machinery/crema_switch
 	desc = "Burn baby burn!"
 	name = "crematorium igniter"
@@ -69,3 +78,6 @@
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
+
+/obj/machinery/crema_switch/npc_tamper_act(mob/living/L)
+	attack_hand(L)

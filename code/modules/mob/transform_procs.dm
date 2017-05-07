@@ -183,7 +183,7 @@
 
 
 //human -> robot
-/mob/living/carbon/human/proc/Robotize(var/delete_items = 0)
+/mob/living/carbon/human/proc/Robotize(var/delete_items = 0, var/skipnaming=0)
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -226,7 +226,9 @@
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
 
-	spawn() O.Namepick()
+	if(!skipnaming)
+		spawn()
+			O.Namepick()
 
 	spawn(0)//To prevent the proc from returning null.
 		qdel(src)

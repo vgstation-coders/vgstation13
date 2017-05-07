@@ -31,6 +31,7 @@
 #define CARBON 			"carbon"
 #define CHLORINE 			"chlorine"
 #define FLUORINE 			"fluorine"
+#define CHLORAMINE			"chloramine"
 #define SODIUM 			"sodium"
 #define PHOSPHORUS 			"phosphorus"
 #define LITHIUM 			"lithium"
@@ -53,11 +54,13 @@
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"
+#define PHAZON 			"phazon"
 #define ALUMINUM 			"aluminum"
 #define SILICON 			"silicon"
 #define FUEL 			"fuel"
 #define VOMIT 			"vomit"
 #define CLEANER 			"cleaner"
+#define BLEACH 				"bleach"
 #define FERTILIZER 			"fertilizer"
 #define EZNUTRIENT 			"eznutrient"
 #define ROBUSTHARVEST 			"robustharvest"
@@ -82,6 +85,7 @@
 #define PERIDAXON 			"peridaxon"
 #define BICARIDINE 			"bicaridine"
 #define HYPERZINE 			"hyperzine"
+#define HYPOZINE 			"hypozine"
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
@@ -307,9 +311,16 @@
 #define BAHAMA_MAMA		"bahama_mama"
 #define RED_MEAD		"red_mead"
 #define ICED_BEER		"iced_beer"
+#define DANS_WHISKEY		"dans_whiskey"
 #define CHARCOAL		"charcoal"
 #define SANGRIA			"sangria"
 #define BLOCKIZINE		"blockizine"
+#define FISHBLEACH		"fishbleach"
+#define CHEESYGLOOP		"cheesy_gloop"
+#define MAPLESYRUP		"maple_syrup"
+#define ROACHSHELL		"roach_shell"
+#define GREYVODKA		"grey_vodka"
+#define MEDCORES		"medium cores"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -318,6 +329,24 @@
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
 
+//Plant-specific reagents
+#define TANNIC_ACID		"tannic_acid"
+#define KATHALAI		"kathalai"
+#define OPIUM			"opium"
+#define MESCALINE		"mescaline"
+#define CYTISINE		"cytisine"
+#define COCAINE			"cocaine"
+#define ZEAXANTHIN		"zeaxanthin"
+#define VALERENIC_ACID	"valerenic_acid"
+#define ALLICIN			"allicin"
+#define FORMIC_ACID		"formic_acid"
+#define PHENOL			"phenol"
+#define CURARE			"curare"
+#define SOLANINE		"solanine"
+#define PHYSOSTIGMINE	"physostigmine"
+#define HYOSCYAMINE		"hyoscyamine"
+#define CORIAMYRTIN		"coriamyrtin"
+#define THYMOL			"thymol"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -327,7 +356,7 @@
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 //Pulse related bullshit
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
+var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE)	//increase heart rate
+var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
-var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
+var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional

@@ -44,7 +44,7 @@ display round(lastgen) and plasmatank amount
 	name = "Portable Generator"
 	desc = "A portable generator for emergency backup power"
 	icon = 'icons/obj/power.dmi'
-	icon_state = "portgen0"
+	icon_state = "portgen1"
 	density = 1
 	anchored = 0
 	use_power = 0
@@ -76,7 +76,7 @@ display round(lastgen) and plasmatank amount
 
 	else
 		active = 0
-		icon_state = initial(icon_state)
+		update_icon()
 		handleInactive()
 
 /obj/machinery/power/port_gen/attack_hand(mob/user as mob)
@@ -292,12 +292,12 @@ display round(lastgen) and plasmatank amount
 		if(href_list["action"] == "enable")
 			if(!active && HasFuel() && !crit_fail)
 				active = 1
-				icon_state = "portgen1"
+				update_icon()
 				src.updateUsrDialog()
 		if(href_list["action"] == "disable")
 			if (active)
 				active = 0
-				icon_state = "portgen0"
+				update_icon()
 				src.updateUsrDialog()
 		if(href_list["action"] == "eject")
 			if(!active)
@@ -314,6 +314,18 @@ display round(lastgen) and plasmatank amount
 		if (href_list["action"] == "close")
 			usr << browse(null, "window=port_gen")
 			usr.unset_machine()
+
+/obj/machinery/power/port_gen/npc_tamper_act(mob/living/L)
+	active = !active
+	update_icon()
+
+/obj/machinery/power/port_gen/update_icon()
+	..()
+
+	if(!active)
+		icon_state = "portgen0"
+	else
+		icon_state = initial(icon_state)
 
 /obj/machinery/power/port_gen/pacman/super
 	name = "S.U.P.E.R.P.A.C.M.A.N.-type Portable Generator"

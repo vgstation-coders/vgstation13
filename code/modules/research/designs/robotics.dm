@@ -52,17 +52,6 @@
 	build_path = /obj/item/device/mmi/radio_enabled
 	category = "Robotics"
 
-/*
-/datum/design/mami
-	name = "Machine-Man Interface"
-	desc = "A synthetic brain interface intended to give silicon-based minds control of organic tissue."
-	id = "mami"
-	req_tech = list(Tc_PROGRAMMING = 4, Tc_BIOTECH = 4)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000, MAT_GLASS = 500, MAT_GOLD = 500, MAT_SILVER = 500)
-	build_path = /obj/item/organ/brain/mami
-*/
-
 /datum/design/synthetic_flash
 	name = "Synthetic Flash"
 	desc = "When a problem arises, SCIENCE is the solution."

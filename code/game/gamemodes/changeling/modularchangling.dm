@@ -134,9 +134,17 @@ var/list/datum/power/changeling/powerinstances = list()
 
 /datum/power/changeling/unfat_sting
 	name = "Unfat Sting"
-	desc = "We silently sting a human, forcing them to rapidly metobolize their fat."
+	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
+	helptext = "Caution: This can also target you!"
 	genomecost = 0
 	verbpath = /obj/item/verbs/changeling/proc/changeling_unfat_sting
+
+/datum/power/changeling/fat_sting
+	name = "Fat Sting"
+	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
+	helptext = "Caution: This can also target you!"
+	genomecost = 0
+	verbpath = /obj/item/verbs/changeling/proc/changeling_fat_sting
 
 /datum/power/changeling/boost_range
 	name = "Boost Range"
@@ -177,9 +185,9 @@ var/list/datum/power/changeling/powerinstances = list()
 	verbpath = /mob/proc/changeling_engorgedglands
 
 /datum/power/changeling/DigitalCamoflague
-	name = "Digital Camoflauge"
-	desc = "We evolve the ability to distort our form and proprtions, defeating common altgorthms used to detect lifeforms on cameras."
-	helptext = "We cannot be tracked by camera while using this skill.  However, humans looking at us will find us.. uncanny.  We must constantly expend chemicals to maintain our form like this."
+	name = "Digital Camouflage"
+	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
+	helptext = "We cannot be tracked by camera while using this skill.  However, humans looking at us will find us... uncanny.  We must constantly expend chemicals to maintain our form like this."
 	genomecost = 3
 	allowduringlesserform = 1
 	verbpath = /obj/item/verbs/changeling/proc/changeling_digitalcamo

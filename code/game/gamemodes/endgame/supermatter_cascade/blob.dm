@@ -1,11 +1,19 @@
+//#define BLUESPACELEAK_FLAT if you touch this I'll cut your fingers
+
 // QUALITY COPYPASTA
 /turf/unsimulated/wall/supermatter
 	name = "Supermatter Sea"
 	desc = "THE END IS right now actually."
-	icon_state = "supermatter"
+	icon='icons/turf/space.dmi'
+#ifdef BLUESPACELEAK_FLAT
+	icon_state = "bluespace"
+#else
+	icon_state = "bluespacecrystal1"
+#endif
 
-	//luminosity = 5
-	//light_color="#0066FF"
+	light_range = 5
+	light_power = 2
+	light_color="#0066FF"
 	layer = SUPERMATTER_WALL_LAYER
 	plane = LIGHTING_PLANE
 
@@ -16,6 +24,14 @@
 
 /turf/unsimulated/wall/supermatter/New()
 	processing_objects |= src
+#ifndef BLUESPACELEAK_FLAT
+	icon_state = "bluespacecrystal[rand(1,3)]"
+	var/nturns=pick(0,3)
+	if(nturns)
+		var/matrix/M = matrix()
+		M.Turn(90*nturns)
+		transform = M
+#endif
 	return ..()
 
 /turf/unsimulated/wall/supermatter/Destroy()
@@ -46,7 +62,9 @@
 	// EXPAND DONG
 	if(isturf(T))
 		// This is normally where a growth animation would occur
-//		new /obj/effect/overlay/bluespacify(T)
+#ifdef BLUESPACELEAK_FLAT
+		new /obj/effect/overlay/bluespacify(T)
+#endif
 		spawn(10)
 			// Nom.
 			for(var/atom/movable/A in T)
@@ -101,7 +119,7 @@
 	Consume(W)
 
 
-/turf/unsimulated/wall/supermatter/Bumped(atom/AM as mob|obj)
+/turf/unsimulated/wall/supermatter/Bumped(atom/AM)
 	if(istype(AM, /mob/living))
 		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
@@ -115,11 +133,11 @@
 	Consume(AM)
 
 
-/turf/unsimulated/wall/supermatter/proc/Consume(var/mob/living/user)
-	if(istype(user,/mob/dead/observer))
+/turf/unsimulated/wall/supermatter/proc/Consume(atom/AM)
+	if(istype(AM, /mob/dead/observer))
 		return
 
-	qdel(user)
+	return AM.supermatter_act(src)
 
 /turf/unsimulated/wall/supermatter/singularity_act()
 	return

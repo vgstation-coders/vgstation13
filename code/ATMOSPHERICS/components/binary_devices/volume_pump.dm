@@ -1,3 +1,5 @@
+#define MAX_TRANSFER_RATE 200
+
 /*
 Every cycle, the pump uses the air in air_in to try and make air_out the perfect pressure.
 
@@ -20,7 +22,7 @@ Thus, the two variables affect pump operation are set in New():
 	desc = "A volumetric pump"
 
 	var/on = 0
-	var/transfer_rate = 200
+	var/transfer_rate = MAX_TRANSFER_RATE
 
 	var/frequency = 0
 	var/id_tag = null
@@ -148,8 +150,8 @@ Thus, the two variables affect pump operation are set in New():
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
 	if(href_list["set_transfer_rate"])
-		var/new_transfer_rate = input(usr,"Enter new output volume (0-200l/s)","Flow control",src.transfer_rate) as num
-		src.transfer_rate = max(0, min(200, new_transfer_rate))
+		var/new_transfer_rate = input(usr,"Enter new output volume (0-[MAX_TRANSFER_RATE]l/s)","Flow control",src.transfer_rate) as num
+		src.transfer_rate = max(0, min(MAX_TRANSFER_RATE, new_transfer_rate))
 		investigation_log(I_ATMOS,"was set to [transfer_rate] L/s by [key_name(usr)]")
 	usr.set_machine(src)
 	src.update_icon()
@@ -159,3 +161,16 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/power_change()
 	..()
 	update_icon()
+
+/obj/machinery/atmospherics/binary/volume_pump/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Turn on/off
+		on = !on
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(L)]")
+	else //Change pressure
+		transfer_rate = rand(0, MAX_TRANSFER_RATE)
+		investigation_log(I_ATMOS,"was set to [transfer_rate] L/s by [key_name(L)]")
+
+	src.update_icon()
+	src.updateUsrDialog()
+
+#undef MAX_TRANSFER_RATE

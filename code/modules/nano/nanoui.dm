@@ -229,11 +229,11 @@ nanoui is used to open and update nano browser uis
 					"autoUpdateContent" = auto_update_content,
 					"showMap" = show_map,
 					"mapZLevel" = map_z_level,
+					"mapLongName" = map.nameLong,
 					"mapName" = map.nameShort,
 					"worldmaxx" = world.maxx,
 					"worldmaxy" = world.maxy,
 					"user" = list("name" = user.name),
-					"map_dir" = map.map_dir // Map datum holds the folder for the nanoui station images.
 			)
 	return config_data
 
@@ -362,6 +362,7 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/set_map_z_level(nz)
 	map_z_level = nz
+
 
  /**
   * Set whether or not to use the "old" on close logic (mainly unset_machine())

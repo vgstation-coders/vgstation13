@@ -1,3 +1,5 @@
+#define MAX_RADIUS 200
+
 //renwicks: fictional unit to describe shield strength
 //a small meteor hit will deduct 1 renwick of strength from that shield tile
 //light explosion range will do 1 renwick's damage
@@ -6,8 +8,8 @@
 //explosion damage is cumulative. if a tile is in range of light, medium and heavy damage, it will take a hit from all three
 
 /obj/machinery/shield_gen
-	name = "shield generator"
-	desc = "Machine that generates an impenetrable field of energy when activated."
+	name = "\improper Starscreen shield generator"
+	desc = "Generates a box-shaped wall of energy when active."
 	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
 	icon_state = "generator0"
 	var/active = 0
@@ -196,8 +198,8 @@
 		toggle()
 	else if( href_list["change_radius"] )
 		field_radius += text2num(href_list["change_radius"])
-		if(field_radius > 200)
-			field_radius = 200
+		if(field_radius > MAX_RADIUS)
+			field_radius = MAX_RADIUS
 		else if(field_radius < 0)
 			field_radius = 0
 	else if( href_list["strengthen_rate"] )
@@ -301,3 +303,10 @@
 		if(get_dist(src,T) == field_radius)
 			out.Add(T)
 	return out
+
+/obj/machinery/shield_gen/npc_tamper_act(mob/living/L)
+	field_radius = rand(0,MAX_RADIUS)
+	if(prob(50))
+		toggle()
+
+#undef MAX_RADIUS

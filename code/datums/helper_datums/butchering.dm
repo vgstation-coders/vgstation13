@@ -162,6 +162,11 @@
 /datum/butchering_product/skin/monkey
 	result = /obj/item/stack/sheet/animalhide/monkey
 
+/datum/butchering_product/skin/deer
+	result = /obj/item/stack/sheet/animalhide/deer
+	amount = 3
+	initial_amount = 3
+
 //--------------Spider legs-------
 
 /datum/butchering_product/spider_legs
@@ -211,6 +216,32 @@
 	if(!amount)
 		return "Its core has been taken. "
 
+//======deer head
+
+/datum/butchering_product/deer_head
+	result = /obj/item/deer_head
+	verb_name = "remove head"
+	verb_gerund = "removing the head from"
+	amount = 1
+	butcher_time = 15
+
+/datum/butchering_product/deer_head/desc_modifier()
+	if(!amount)
+		return "Its head has been taken. "
+
+//======bear hands
+
+/datum/butchering_product/bear_hand
+	result = /obj/item/bear_hands
+	verb_name = "remove hands"
+	verb_gerund = "disarming"
+	amount = 1
+	butcher_time = 20
+
+/datum/butchering_product/bear_hand/desc_modifier()
+	if(!amount)
+		return "Its paws have been removed. "
+
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
 #define TEETH_LOTS		/datum/butchering_product/teeth/lots	//16-24
@@ -224,12 +255,13 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
 	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
-	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, , /datum/butchering_product/bear_hand, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
 	/mob/living/simple_animal/hostile/alien				= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH), //Same as the player-controlled aliens
 	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk
 	/mob/living/simple_animal/hostile/creature			= list(TEETH_LOTS),
 	/mob/living/simple_animal/hostile/frog				= list(/datum/butchering_product/frog_leg),
+	/mob/living/simple_animal/hostile/deer				= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN),

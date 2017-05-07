@@ -15,7 +15,7 @@
 	item_state = "paramedic-eva"
 	desc = "A paramedic space suit. Used in the recovery of bodies from space."
 	species_restricted = list("exclude",VOX_SHAPED)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 //Space santa outfit suit
 /obj/item/clothing/head/helmet/space/santahat
@@ -29,7 +29,7 @@
 	desc = "Festive!"
 	icon_state = "santa"
 	item_state = "santa"
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	clothing_flags = ONESIZEFITSALL
 	allowed = list(/obj/item) //for stuffing exta special presents
 
@@ -50,7 +50,7 @@
 	item_state = "pirate"
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
 
@@ -86,7 +86,7 @@
 	item_state = "clown-eva"
 	species_restricted = list("exclude",VOX_SHAPED)
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana, /obj/item/weapon/bananapeel, /obj/item/weapon/soap, /obj/item/weapon/reagent_containers/spray, /obj/item/weapon/tank)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
@@ -103,3 +103,16 @@
 				footstep++
 		else
 			playsound(H, step_sound, 20, 1)
+
+//Prisoner Softsuits. Syndi-sprite merely cosmetic and has shit stats
+/obj/item/clothing/head/helmet/space/prison
+	name = "Prisoner Helmet"
+	icon_state = "syndicate-helm-orange"
+	item_state = "syndicate-helm-orange"
+	desc = "A Orange Space Helmet meant to provide minimal space protection."
+
+/obj/item/clothing/suit/space/prison
+	name = "Prisoner Space Suit"
+	icon_state = "syndicate-orange"
+	item_state = "syndicate-orange"
+	desc = "A Orange Space Suit meant to provide minimal space protection."

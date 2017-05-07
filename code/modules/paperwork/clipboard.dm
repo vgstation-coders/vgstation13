@@ -21,11 +21,11 @@
 /obj/item/weapon/clipboard/MouseDrop(obj/over_object as obj) //Quick clipboard fix. -Agouri
 	if(ishuman(usr))
 		var/mob/M = usr
-		if(!(istype(over_object, /obj/screen/inventory) ))
+		if(!(istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
 
 		if(!M.incapacitated() && Adjacent(usr))
-			var/obj/screen/inventory/OI = over_object
+			var/obj/abstract/screen/inventory/OI = over_object
 
 			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)

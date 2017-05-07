@@ -93,3 +93,12 @@
 	if(iscrowbar(W))
 		new /obj/structure/skele_stand(loc)
 	..()
+
+/obj/structure/largecrate/anomaly_container
+	name = "anomaly container crate"
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/anomaly_container/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		new /obj/structure/anomaly_container(loc)
+	..()

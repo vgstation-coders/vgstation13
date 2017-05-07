@@ -5,6 +5,9 @@
 
   decay_rate = 5 // 5% chance of a turf decaying on lighting update (there's no actual tick for turfs). Code that triggers this is lighting_overlays.dm, line #62.
 
+	// RGB, [0,1]
+	//var/list/LUMCOUNT_CASCADE=list(0.5,0,0)
+
 /datum/universal_state/supermatter_cascade/OnShuttleCall(var/mob/user)
 	if(user)
 		if(user.hallucinating())
@@ -62,6 +65,7 @@
 
 	// Disable Nar-Sie.
 	ticker.mode.eldergod=0
+	// TODO: If Nar-Sie is present, have it say "Well fuck this" and leave, for shits and giggles.
 
 	ticker.StartThematic("endgame")
 
@@ -71,6 +75,7 @@
 		message_admins("<span class='warning'><font size=7>SOMEBODY DIDNT PUT ENDGAME EXITS FOR THIS FUCKING MAP: [map.nameLong]</span></font>")
 	else
 		new /obj/machinery/singularity/narsie/large/exit(pick(endgame_exits))
+
 	spawn(rand(30,60) SECONDS)
 		command_alert(/datum/command_alert/supermatter_cascade)
 
@@ -133,7 +138,8 @@
 
 /datum/universal_state/supermatter_cascade/OverlayAndAmbientSet()
 	set waitfor = FALSE
-	for(var/turf/T in turfs)
+	convert_all_parallax()
+	for(var/turf/T in world)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "end01")
 		else
@@ -141,13 +147,30 @@
 				T.underlays += "end01"
 		CHECK_TICK
 
+	// This ends up looking like shit.  - N3X
+	/*
 	for(var/datum/lighting_corner/C in global.all_lighting_corners)
 		if (!C.active)
 			continue
 
 		if(C.z != map.zCentcomm)
-			C.update_lumcount(0.15, 0.5, 0)
+			C.update_lumcount(LUMCOUNT_CASCADE[1], LUMCOUNT_CASCADE[2], LUMCOUNT_CASCADE[3])
 		CHECK_TICK
+	*/
+
+/datum/universal_state/supermatter_cascade/proc/convert_all_parallax()
+	for(var/client/C in clients)
+		var/obj/abstract/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
+		if(PS)
+			convert_parallax(PS)
+		CHECK_TICK
+
+/datum/universal_state/supermatter_cascade/convert_parallax(obj/abstract/screen/plane_master/parallax_spacemaster/PS)
+	PS.color = list(
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	0,0.4,1,1) // Looks like RGBA? Currently #0066FF
 
 /datum/universal_state/supermatter_cascade/proc/MiscSet()
 	for (var/obj/machinery/firealarm/alm in machines)

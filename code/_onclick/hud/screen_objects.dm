@@ -6,7 +6,7 @@
 	They are used with the client/screen list and the screen_loc var.
 	For more information, see the byond documentation on the screen_loc and screen vars.
 */
-/obj/screen
+/obj/abstract/screen
 	name = ""
 	icon = 'icons/mob/screen1.dmi'
 	layer = HUD_BASE_LAYER
@@ -16,11 +16,11 @@
 	appearance_flags = NO_CLIENT_COLOR
 	plane = HUD_PLANE
 
-/obj/screen/Destroy()
+/obj/abstract/screen/Destroy()
 	master = null
 	..()
 
-/obj/screen/text
+/obj/abstract/screen/text
 	icon = null
 	icon_state = null
 	mouse_opacity = 0
@@ -28,15 +28,15 @@
 	maptext_height = 480
 	maptext_width = 480
 
-/obj/screen/adminbus
+/obj/abstract/screen/adminbus
 
-/obj/screen/specialblob
+/obj/abstract/screen/specialblob
 	var/obj/effect/blob/linked_blob = null
 
-/obj/screen/schematics
+/obj/abstract/screen/schematics
 	var/datum/rcd_schematic/ourschematic
 
-/obj/screen/schematics/New(var/atom/loc, var/datum/rcd_schematic/ourschematic)
+/obj/abstract/screen/schematics/New(var/atom/loc, var/datum/rcd_schematic/ourschematic)
 	if(!ourschematic)
 		qdel(src)
 		return
@@ -47,25 +47,25 @@
 	name = ourschematic.name
 	transform = transform*0.8
 
-/obj/screen/schematics/Click()
+/obj/abstract/screen/schematics/Click()
 	if(ourschematic)
 		ourschematic.clicked(usr)
 
-/obj/screen/schematics/Destroy()
+/obj/abstract/screen/schematics/Destroy()
 	ourschematic = null
 	..()
 
-/obj/screen/inventory
+/obj/abstract/screen/inventory
 	var/slot_id	//The indentifier for the slot. It has nothing to do with ID cards.
 	var/hand_index
 
-/obj/screen/holomap
+/obj/abstract/screen/holomap
 
-/obj/screen/close
+/obj/abstract/screen/close
 	name = "close"
 	globalscreen = 1
 
-/obj/screen/close/Click()
+/obj/abstract/screen/close/Click()
 	if(master)
 		if(istype(master, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = master
@@ -75,74 +75,25 @@
 			rcd.show_default(usr)
 	return 1
 
-
-/obj/screen/item_action
-	icon_state = "template"
-	var/obj/item/owner
-	var/image/overlay
-
-/obj/screen/item_action/New(var/atom/loc, var/obj/item/I)
-	..()
-	owner = I
-	name = I.action_button_name
-	overlay = image(loc = src, layer=src.layer+1)
-	overlay.appearance = I.appearance
-	overlay.name = I.action_button_name
-	overlay.dir = SOUTH
-
-/obj/screen/item_action/Destroy()
-	..()
-	owner = null
-	if(overlay != null)
-		overlay.loc = null
-		overlay = null
-
-/obj/screen/item_action/MouseEntered(location,control,params)
-	openToolTip(usr,src,params,title = name,content = desc)
-
-/obj/screen/item_action/MouseExited()
-	closeToolTip(usr)
-
-/obj/screen/item_action/Click()
-	if(!usr || !owner)
-		return 1
-	if(usr.attack_delayer.blocked())
-		return
-	//usr.next_move = world.time + 6
-
-	if(usr.stat || usr.restrained() || usr.stunned || usr.lying)
-		return 1
-
-	if(!(owner in usr))
-		return 1
-
-	owner.ui_action_click()
-	return 1
-
-//This is the proc used to update all the action buttons. It just returns for all mob types except humans.
-/mob/proc/update_action_buttons()
-	return
-
-
-/obj/screen/grab
+/obj/abstract/screen/grab
 	name = "grab"
 
-/obj/screen/grab/Click()
+/obj/abstract/screen/grab/Click()
 	var/obj/item/weapon/grab/G = master
 	G.s_click(src)
 	return 1
 
-/obj/screen/grab/attack_hand()
+/obj/abstract/screen/grab/attack_hand()
 	return
 
-/obj/screen/grab/attackby()
+/obj/abstract/screen/grab/attackby()
 	return
 
-/obj/screen/storage
+/obj/abstract/screen/storage
 	name = "storage"
 	globalscreen = 1
 
-/obj/screen/storage/Click(location, control, params)
+/obj/abstract/screen/storage/Click(location, control, params)
 	if(usr.attack_delayer.blocked())
 		return
 	if(usr.incapacitated())
@@ -156,7 +107,7 @@
 			//usr.next_move = world.time+2
 	return 1
 
-/obj/screen/gun
+/obj/abstract/screen/gun
 	name = "gun"
 	icon = 'icons/mob/screen1.dmi'
 	master = null
@@ -183,19 +134,19 @@
 		screen_loc = ui_gun_select
 		//dir = 1
 
-/obj/screen/gun/MouseEntered(location,control,params)
+/obj/abstract/screen/gun/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
 
-/obj/screen/gun/MouseExited()
+/obj/abstract/screen/gun/MouseExited()
 	closeToolTip(usr)
 
-/obj/screen/zone_sel
+/obj/abstract/screen/zone_sel
 	name = "damage zone"
 	icon_state = "zone_sel"
 	screen_loc = ui_zonesel
 	var/selecting = LIMB_CHEST
 
-/obj/screen/zone_sel/Click(location, control,params)
+/obj/abstract/screen/zone_sel/Click(location, control,params)
 	var/list/PL = params2list(params)
 	var/icon_x = text2num(PL["icon-x"])
 	var/icon_y = text2num(PL["icon-y"])
@@ -256,11 +207,11 @@
 		update_icon()
 	return 1
 
-/obj/screen/zone_sel/update_icon()
+/obj/abstract/screen/zone_sel/update_icon()
 	overlays.len = 0
 	overlays += image('icons/mob/zone_sel.dmi', "[selecting]")
 
-/obj/screen/clicker
+/obj/abstract/screen/clicker
 	icon = 'icons/mob/screen1.dmi'
 	icon_state = "blank"
 	plane = CLICKCATCHER_PLANE
@@ -268,7 +219,7 @@
 	globalscreen = 1
 	screen_loc = ui_entire_screen
 
-/obj/screen/clicker/Click(location, control, params)
+/obj/abstract/screen/clicker/Click(location, control, params)
 	var/list/modifiers = params2list(params)
 	var/turf/T = screen_loc2turf(modifiers["screen-loc"], get_turf(usr), usr)
 	T.Click(location, control, params)
@@ -287,7 +238,7 @@
 	Y = Clamp((origin.y + text2num(Y) - (view + 1)), 1, world.maxy)
 	return locate(X, Y, origin.z)
 
-/obj/screen/Click(location, control, params)
+/obj/abstract/screen/Click(location, control, params)
 	if(!usr)
 		return 1
 
@@ -319,15 +270,15 @@
 				var/mob/living/carbon/C = usr
 				if(C.legcuffed)
 					to_chat(C, "<span class='notice'>You are legcuffed! You cannot run until you get [C.legcuffed] removed!</span>")
-					C.m_intent = "walk"	//Just incase
+					C.m_intent = M_INTENT_WALK	//Just incase
 					C.hud_used.move_intent.icon_state = "walking"
 					return 1
 				switch(usr.m_intent)
-					if("run")
-						usr.m_intent = "walk"
+					if(M_INTENT_RUN)
+						usr.m_intent = M_INTENT_WALK
 						usr.hud_used.move_intent.icon_state = "walking"
-					if("walk")
-						usr.m_intent = "run"
+					if(M_INTENT_WALK)
+						usr.m_intent = M_INTENT_RUN
 						usr.hud_used.move_intent.icon_state = "running"
 				if(istype(usr,/mob/living/carbon/alien/humanoid))
 					usr.update_icons()
@@ -576,7 +527,7 @@
 			return 0
 	return 1
 
-/obj/screen/adminbus/Click()
+/obj/abstract/screen/adminbus/Click()
 	switch(name)
 		if("Delete Bus")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
@@ -715,7 +666,7 @@
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
 				A.toggle_lights(usr,2)
 
-/obj/screen/specialblob/Click()
+/obj/abstract/screen/specialblob/Click()
 	if(isovermind(usr))
 		var/mob/camera/blob/overmind = usr
 		switch(name)
@@ -743,7 +694,7 @@
 				overmind.forceMove(linked_blob.loc)
 		return 1
 
-/obj/screen/inventory/Click()
+/obj/abstract/screen/inventory/Click()
 	// At this point in client Click() code we have passed the 1/10 sec check and little else
 	// We don't even know if it's a middle click
 	if(usr.attack_delayer.blocked())
@@ -768,10 +719,10 @@
 	return 1
 
 /client/proc/reset_screen()
-	for(var/obj/screen/objects in src.screen)
+	for(var/obj/abstract/screen/objects in src.screen)
 		if(!objects.globalscreen)
 			returnToPool(objects)
 	src.screen = null
 
-/obj/screen/acidable()
+/obj/abstract/screen/acidable()
 	return 0

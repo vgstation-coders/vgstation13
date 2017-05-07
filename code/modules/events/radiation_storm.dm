@@ -1,6 +1,7 @@
 /datum/event/radiation_storm
 	announceWhen	= 1
 	var/safe_zones = list(
+		/area/engineering/engineering_auxiliary,
 		/area/maintenance,
 		/area/crew_quarters/sleep,
 		/area/security/prison,

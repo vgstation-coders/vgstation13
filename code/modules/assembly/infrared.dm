@@ -23,7 +23,8 @@
 		"On" = "on;number"
 	)
 
-	New() del(src)
+	New()
+		qdel(src) // Why is this even
 
 
 ///obj/item/device/assembly/infra/describe()

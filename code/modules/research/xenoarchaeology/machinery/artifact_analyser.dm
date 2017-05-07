@@ -154,8 +154,8 @@
 		if(/obj/structure/constructshell)
 			return "Tribal idol - Item resembles statues/emblems built by superstitious pre-warp civilisations to honour their gods. Material appears to be a \
 			rock/plastcrete composite."
-		if(/obj/machinery/giga_drill)
-			return "Automated mining drill - structure composed of titanium-carbide alloy, with tip and drill lines edged in an alloy of diamond and plasma."
+		if(/obj/structure/bed/chair/vehicle/gigadrill)
+			return "An old and dusty vehicle with a mining drill - structure composed of titanium-carbide alloy, with tip and drill lines edged in an alloy of diamond and plasma."
 		if(/obj/structure/cult/pylon)
 			return "Tribal pylon - Item resembles statues/emblems built by cargo cult civilisations to honour energy systems from post-warp civilisations."
 		if(/obj/mecha/working/hoverpod)
@@ -169,12 +169,13 @@
 		if(/obj/machinery/artifact)
 			//the fun one
 			var/obj/machinery/artifact/A = scanned_obj
-			var/out = "Anomalous alien device - Composed of an unknown alloy, "
+			var/out = "Energy signature ID - [A.artifact_id]<br><br>"
+			out += "Anomalous alien device - Composed of an unknown alloy, "
 
 			//primary effect
-			if(A.my_effect)
+			if(A.primary_effect)
 				//what kind of effect the artifact has
-				switch(A.my_effect.effect_type)
+				switch(A.primary_effect.effect_type)
 					if(1)
 						out += "concentrated energy emissions"
 					if(2)
@@ -194,7 +195,7 @@
 				out += " have been detected "
 
 				//how the artifact does it's effect
-				switch(A.my_effect.effect)
+				switch(A.primary_effect.effect)
 					if(1)
 						out += " emitting in an ambient energy field."
 					if(2)
@@ -202,14 +203,20 @@
 					else
 						out += " interspersed throughout substructure and shell."
 
-				if(A.my_effect.trigger >= 0 && A.my_effect.trigger <= 4)
-					out += " Activation index involves physical interaction with artifact surface."
-				else if(A.my_effect.trigger >= 5 && A.my_effect.trigger <= 8)
-					out += " Activation index involves energetic interaction with artifact surface."
-				else if(A.my_effect.trigger >= 9 && A.my_effect.trigger <= 12)
-					out += " Activation index involves precise local atmospheric conditions."
-				else
-					out += " Unable to determine any data about activation trigger."
+				//effect's trigger
+				switch(A.primary_effect.trigger.scanned_trigger)
+					if(SCAN_PHYSICAL)
+						out += " Activation index involves physical interaction with artifact surface."
+					if(SCAN_PHYSICAL_ENERGETIC)
+						out += " Activation index involves energetic interaction with artifact surface."
+					if(SCAN_CONSTANT_ENERGETIC)
+						out += " Activation index involves prolonged energetic interaction with artifact surface."
+					if(SCAN_ATMOS)
+						out += " Activation index involves precise local atmospheric conditions."
+					if(SCAN_OCULAR)
+						out += " Activation index involves specific ocular conditions around the artifact."
+					else
+						out += " Unable to determine any data about activation trigger."
 
 			//secondary:
 			if(A.secondary_effect)
@@ -245,17 +252,22 @@
 					else
 						out += " interspersed throughout substructure and shell."
 
-				if(A.secondary_effect.trigger >= 0 && A.secondary_effect.trigger <= 4)
-					out += " Activation index involves physical interaction with artifact surface, but subsystems indicate \
-					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger >= 5 && A.secondary_effect.trigger <= 8)
-					out += " Activation index involves energetic interaction with artifact surface, but subsystems indicate \
-					anomalous interference with standard attempts at triggering."
-				else if(A.secondary_effect.trigger >= 9 && A.secondary_effect.trigger <= 12)
-					out += " Activation index involves precise local atmospheric conditions, but subsystems indicate \
-					anomalous interference with standard attempts at triggering."
-				else
-					out += " Unable to determine any data about activation trigger."
+				//effect's trigger
+				switch(A.secondary_effect.trigger.scanned_trigger)
+					if(SCAN_PHYSICAL)
+						out += " Activation index involves physical interaction with artifact surface."
+					if(SCAN_PHYSICAL_ENERGETIC)
+						out += " Activation index involves energetic interaction with artifact surface."
+					if(SCAN_CONSTANT_ENERGETIC)
+						out += " Activation index involves prolonged energetic interaction with artifact surface."
+					if(SCAN_ATMOS)
+						out += " Activation index involves precise local atmospheric conditions."
+					if(SCAN_OCULAR)
+						out += " Activation index involves specific ocular conditions around the artifact."
+					else
+						out += " Unable to determine any data about activation trigger."
+
+				out+= " Subsystems indicate anomalous interference with standard attempts at triggering."
 			return out
 		else
 			//it was an ordinary item

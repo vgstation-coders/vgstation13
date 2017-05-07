@@ -48,8 +48,9 @@ var/list/all_doors = list()
 
 	// turf animation
 	var/atom/movable/overlay/c_animation = null
-
+	var/makes_noise = 0
 	var/soundeffect = 'sound/machines/airlock.ogg'
+	var/soundpitch = 30
 
 	var/explosion_block = 0 //regular airlocks are 1, blast doors are 3, higher values mean increasingly effective at blocking explosions.
 
@@ -223,6 +224,9 @@ var/list/all_doors = list()
 	if(!operating)
 		operating = 1
 
+	if(makes_noise)
+		playsound(get_turf(src), soundeffect, soundpitch, 1)
+
 	set_opacity(0)
 	door_animate("opening")
 	sleep(animation_delay)
@@ -252,6 +256,9 @@ var/list/all_doors = list()
 
 	layer = closed_layer
 
+	if (makes_noise)
+		playsound(get_turf(src), soundeffect, soundpitch, 1)
+
 	density = 1
 	door_animate("closing")
 	sleep(animation_delay)
@@ -265,7 +272,7 @@ var/list/all_doors = list()
 			qdel(B)
 
 	// TODO: rework how fire works on doors
-	var/obj/fire/F = locate() in loc
+	var/obj/effect/fire/F = locate() in loc
 	if(F)
 		qdel(F)
 

@@ -86,6 +86,10 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		C.holder = null
 	admins.len = 0
 
+	// Clear profiler and debug access.
+	for(var/A in world.GetConfig("admin"))
+		world.SetConfig("APP/admin", A, null)
+
 	if(config.admin_legacy_system)
 		load_admin_ranks()
 
@@ -123,6 +127,8 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 			//find the client for a ckey if they are connected and associate them with the new admin datum
 			D.associate(directory[ckey])
 
+			if(D.rights & (R_DEBUG|R_SERVER)) // Grant profile/reboot access
+				world.SetConfig("APP/admin", ckey, "role=admin")
 	else
 		//The current admin system uses SQL
 
@@ -149,6 +155,10 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 
 			//find the client for a ckey if they are connected and associate them with the new admin datum
 			D.associate(directory[ckey])
+
+			if(D.rights & (R_DEBUG|R_SERVER)) // Grant profile/reboot access
+				world.SetConfig("APP/admin", ckey, "role=admin")
+
 		if(!admin_datums)
 			world.log << "The database query in load_admins() resulted in no admins being added to the list. Reverting to legacy system."
 			diary << "The database query in load_admins() resulted in no admins being added to the list. Reverting to legacy system."
@@ -187,3 +197,9 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 	holder.associate(src)
 
 #endif
+
+/proc/update_byond_admin(var/ckey)
+	var/datum/admins/D = admin_datums[ckey]
+	world.SetConfig("APP/admin", ckey, null)
+	if (D && D.rights & (R_SERVER|R_DEBUG))
+		world.SetConfig("APP/admin", ckey, "role=admin")

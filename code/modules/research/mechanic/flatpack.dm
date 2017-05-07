@@ -147,6 +147,12 @@
 		if((stacked.len + stacking.stacked.len + 2) >= MAX_FLATPACK_STACKS) //how many flatpacks we can in a stack (including the bases)
 			to_chat(user, "You can't stack flatpacks that high.")
 			return
+		if(user.incapacitated() || user.lying) //make sure they can interact with it
+			return
+		if(!ishuman(user) && !isrobot(user)) //check mob type
+			return
+		if(!user.can_MouseDrop(src, user)) //make sure it's adjacent and whatnot
+			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
 		add_stack(stacking)
@@ -250,11 +256,11 @@
 /datum/construction/flatpack_unpack/spawn_result(mob/user as mob)
 	var/obj/structure/closet/crate/flatpack/FP = holder
 	if(!istype(FP))
-		del(src)
+		qdel(src)
 		return
 	else
 		FP.Finalize()
-		del(src)
+		qdel(src)
 		return 1
 
 #undef Fl_ACTION

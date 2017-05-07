@@ -25,7 +25,7 @@ var/const/max_assembly_amount = 300
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/rcd_ammo))
 		compressed_matter += 10
-		del(W)
+		qdel(W)
 		return
 	..()
 
@@ -98,7 +98,7 @@ var/const/max_assembly_amount = 300
 				break
 //			to_chat(world, "<span class='notice'>[reagent]: new_assembly_quantities[reagent]<br></span>")
 		if(fail)
-			del(F)
+			qdel(F)
 			compressed_matter = old_matter
 			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Out of matter.\'</span>")
 		else

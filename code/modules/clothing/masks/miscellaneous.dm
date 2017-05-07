@@ -41,7 +41,7 @@
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
 	flags = FPRINT
-	action_button_name = "Toggle Scarf"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	can_flip = 1
@@ -77,12 +77,18 @@
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/mask/balaclava/skimask
+	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
+	name = "ski mask"
+	desc = "This NT-brand skimask is sure to keep you warm."
+
 /obj/item/clothing/mask/neorussian
 	name = "neo-Russian mask"
 	desc = "Somehow, it makes you act and look way more polite than usual."
 	icon_state = "nr_mask"
 	item_state = "nr_mask"
 	body_parts_covered = FACE
+	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"
@@ -134,7 +140,7 @@
 /obj/item/clothing/mask/bandana
 	name = "bandana"
 	desc = "A colorful bandana."
-	action_button_name = "Toggle Bandana"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	w_class = W_CLASS_TINY
 	can_flip = 1
 

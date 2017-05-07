@@ -244,3 +244,6 @@
 		flick("tvalvem[src.state][!src.state]",src)
 	else
 		icon_state = "tvalvem[state]"
+
+/obj/machinery/atmospherics/trinary/tvalve/npc_tamper_act(mob/living/L)
+	attack_hand(L)

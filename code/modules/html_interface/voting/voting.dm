@@ -185,11 +185,11 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 
-		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null]</b>"
+		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null].</b>"
 		for(var/choice in choices)
 			if(. == choice)
 				continue
-			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]\s"
+			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	log_vote(text)

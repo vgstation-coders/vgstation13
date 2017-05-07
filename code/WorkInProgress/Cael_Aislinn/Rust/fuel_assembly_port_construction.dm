@@ -13,7 +13,7 @@
 /obj/item/mounted/frame/rust_fuel_assembly_port/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (iswrench(W))
 		new /obj/item/stack/sheet/plasteel( get_turf(src.loc), 12 )
-		del(src)
+		qdel(src)
 		return
 	..()
 
@@ -100,7 +100,7 @@
 		if(do_after(user, src, 10))
 			has_electronics &= 1
 			to_chat(user, "You place the port control board inside the frame.")
-			del(W)
+			qdel(W)
 		return
 
 	else if (istype(W, /obj/item/weapon/weldingtool) && opened && !has_electronics)
@@ -118,7 +118,7 @@
 				"<span class='warning'>[src] has been cut away from the wall by [user.name].</span>",\
 				"You detached the port frame.",\
 				"<span class='warning'>You hear welding.</span>")
-			del(src)
+			qdel(src)
 		return
 
 	..()

@@ -22,6 +22,23 @@
 /obj/item/weapon/disk/shuttle_coords/vault
 	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research)
 
+///obj/item/weapon/disk/shuttle_coords/vault/random -> leads to a random vault with a docking port!
+/obj/item/weapon/disk/shuttle_coords/vault/random/initialize()
+	var/list/L = list()
+	for(var/obj/docking_port/destination/vault/V in all_docking_ports)
+		if(!V.valid_random_destination)
+			continue
+		L.Add(V)
+
+	if(L.len)
+		destination = pick(L)
+
+	..()
+
+	if(!destination)
+		name = "blank shuttle destination disk"
+		desc = "A small disk containing nothing."
+
 //This disk will link to station's arrivals when spawned
 
 /obj/item/weapon/disk/shuttle_coords/New()
@@ -49,7 +66,7 @@
 /obj/item/weapon/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
 	if(!allowed_shuttles.len)
 		return TRUE
-	
+
 	return is_type_in_list(S, allowed_shuttles)
 
 /obj/item/weapon/disk/shuttle_coords/proc/reset()

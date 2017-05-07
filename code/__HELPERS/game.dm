@@ -8,19 +8,9 @@
 	return null
 
 /proc/get_area(const/atom/O)
-	if (isnull(O))
-		return
-
-	var/atom/A = O
-
-	for (var/i = 0, ++i <= 16)
-		if (isarea(A))
-			return A
-
-		if (istype(A))
-			A = A.loc
-		else
-			return
+	var/turf/T = get_turf(O)
+	if(T)
+		return T.loc
 
 /proc/get_area_master(const/O)
 	var/area/A = get_area(O)
@@ -332,7 +322,7 @@ var/list/DummyCache = list()
 
 /proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
 	if(!isobj(O))
-		O = new /obj/screen/text()
+		O = new /obj/abstract/screen/text()
 	O.maptext = maptext
 	O.maptext_height = maptext_height
 	O.maptext_width = maptext_width

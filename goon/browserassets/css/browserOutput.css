@@ -237,7 +237,8 @@ em						{font-style: normal;	font-weight: bold;}
 .say					{}
 .siliconsay				{font-family: 'Courier New', Courier, monospace;}
 .deadsay				{color: #5c00e6;}
-.radio					{color: #008000;}
+.radio					{color: #ff9933;}
+.commonradio			{color: #008000;}
 .deptradio				{color: #993399;}
 .comradio				{color: #193A7A;}
 .syndradio				{color: #6d3f40;}
@@ -296,6 +297,8 @@ h1.alert, h2.alert		{color: #000000;}
 .grey					{color: #585858; font-family: Dotum, sans-serif;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
 .gutter					{color: #61380B; font-style: italic;}
+.golem					{color: #B4DBCB; font-weight: bold;}
+.slime					{color: #96FFC5;}
 .orange					{color: #ffa500;}
 .maroon					{color: #800000;}
 

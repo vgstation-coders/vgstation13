@@ -47,7 +47,7 @@
 						pixel_x = rand(-6,6)
 						pixel_y = rand(-6,6)
 					else
-						del(src)
+						qdel(src)
 	else
 		return ..()
 

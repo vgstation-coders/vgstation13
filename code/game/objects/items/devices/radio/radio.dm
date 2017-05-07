@@ -198,31 +198,6 @@
 
 /obj/item/device/radio/proc/isWireCut(var/index)
 	return wires.IsIndexCut(index)
-/*
-/obj/item/device/radio/proc/autosay(var/message, var/from, var/channel) //BS12 EDIT
-	var/datum/radio_frequency/connection = null
-	if(channel && channels && channels.len > 0)
-		if (channel == "department")
-//			to_chat(world, "DEBUG: channel=\"[channel]\" switching to \"[channels[1]]\"")
-			channel = channels[1]
-		connection = secure_radio_connections[channel]
-	else
-		connection = radio_connection
-		channel = null
-	if (!istype(connection))
-		return
-	if (!connection)
-		return
-
-	var/mob/living/silicon/ai/A = new /mob/living/silicon/ai(src, null, null, 1)
-	Broadcast_Message(connection, all_languages[LANGUAGE_HUMAN], A,
-						0, "*garbled automated announcement*", src,
-						message, from, "Automated Announcement", from, "synthesized voice",
-						4, 0, list(1), 1459)
-	del(A)
-	return
-
-*/
 
 /obj/item/device/radio/talk_into(var/datum/speech/speech_orig, var/channel=null)
 	say_testing(loc, "\[Radio\] - Got radio/talk_into([html_encode(speech_orig.message)], [channel!=null ? channel : "null"]).")

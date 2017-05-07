@@ -69,7 +69,7 @@
 		return
 	return ..()
 
-/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory)
+/obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
 	accessories += accessory
 	accessory.forceMove(src)
 	accessory.on_attached(src)
@@ -323,6 +323,12 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/Touch(var/atom/A, mob/user, proximity)
 	return 0 // return 1 to cancel attack_hand()
 
+/obj/item/clothing/gloves/proc/get_damage_added()
+	return damage_added
+
+/obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
 //Head
 /obj/item/clothing/head
 	name = "head"
@@ -341,13 +347,19 @@ BLIND     // can't see anything
 	var/can_flip = null
 	var/is_flipped = 1
 	var/ignore_flip = 0
-	action_button_name = "Toggle Mask"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/mask/verb/togglemask()
-	set name = "Toggle Mask"
-	set category = "Object"
-	set src in usr
+/datum/action/item_action/toggle_mask
+	name = "Toggle Mask"
+
+/datum/action/item_action/toggle_mask/Trigger()
+	var/obj/item/clothing/mask/T = target
+	if(!istype(T))
+		return
+	T.togglemask()
+
+/obj/item/clothing/mask/proc/togglemask()
 	if(ignore_flip)
 		return
 	else
@@ -377,9 +389,7 @@ BLIND     // can't see anything
 /obj/item/clothing/mask/New()
 	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
-		action_button_name = null
-		verbs -= /obj/item/clothing/mask/verb/togglemask
-
+		actions_types = null
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -404,7 +414,7 @@ BLIND     // can't see anything
 	slot_flags = SLOT_FEET
 	heat_conductivity = SHOE_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.50
-	slowdown = SHOES_SLOWDOWN
+
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
 	var/stepstaken = 1
@@ -441,7 +451,6 @@ BLIND     // can't see anything
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
-
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
 //      Meaning the the suit is defined directly after the corrisponding helmet. Just like below!
@@ -473,7 +482,7 @@ BLIND     // can't see anything
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = 3
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
@@ -519,10 +528,6 @@ BLIND     // can't see anything
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
-
-/obj/item/clothing/under/ui_action_click()
-	for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
-		HC.togglemap()
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
@@ -574,6 +579,16 @@ BLIND     // can't see anything
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
 
+/datum/action/item_action/toggle_minimap
+	name = "Toggle Minimap"
+
+/datum/action/item_action/toggle_minimap/Trigger()
+	var/obj/item/clothing/under/T = target
+	if(!istype(T))
+		return
+	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
+		HC.togglemap()
+
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
@@ -585,5 +600,5 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
-	
+
 

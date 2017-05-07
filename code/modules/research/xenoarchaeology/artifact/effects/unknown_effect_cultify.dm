@@ -1,10 +1,7 @@
 /datum/artifact_effect/cultify
 	effecttype = "cultify"
+	effect = list(EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 2
-
-/datum/artifact_effect/cultify/New()
-	..()
-	effect = pick(EFFECT_AURA, EFFECT_PULSE)
 
 /datum/artifact_effect/cultify/DoEffectAura()
 	make_culty(min(3, effectrange))

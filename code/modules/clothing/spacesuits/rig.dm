@@ -11,7 +11,7 @@
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
-	action_button_name = "Toggle Helmet Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
@@ -25,16 +25,6 @@
 	//Useful for helmets with special starting conditions (namely, starts lit)
 	update_brightness()
 	update_icon()
-
-/obj/item/clothing/head/helmet/space/rig/ghettorig
-	name = "jury-rigged fire helmet"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this helmet isn't particularly good."
-	icon_state = "ghettorig"
-	_color = "ghetto"
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	eyeprot = 0
-	species_fit = list(GREY_SHAPED)
-
 
 /obj/item/clothing/head/helmet/space/rig/examine(mob/user)
 
@@ -52,9 +42,9 @@
 		if(on) //The helmet light is currently on
 			on = 0 //Force it off
 			update_brightness() //Update as neccesary
-		action_button_name = null //Disable the action button (which is only used to toggle the light, in theory)
+		actions_types = null//Disable the action button (which is only used to toggle the light, in theory)
 	else //We have a light
-		action_button_name = initial(action_button_name) //Make sure we restore the action button
+		actions_types = list(/datum/action/item_action/toggle_light) //Make sure we restore the action button
 
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 
@@ -88,22 +78,13 @@
 	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
-
-/obj/item/clothing/suit/space/rig/ghettorig
-	name = "jury-rigged firesuit"
-	icon_state = "ghettorig"
-	item_state = "ghettorig"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this space suit isn't particularly good."
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED)
-
 
 //Chief Engineer's rig
 /obj/item/clothing/head/helmet/space/rig/elite
@@ -158,7 +139,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	_color = "syndi"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 35, bio = 100, rad = 60)
-	action_button_name = "Toggle Helmet Camera" //This helmet does not have a light, but we'll do as if
+	actions_types = list(/datum/action/item_action/toggle_helmet_camera) //This helmet does not have a light, but we'll do as if
 	siemens_coefficient = 0.6
 	var/obj/machinery/camera/camera
 	pressure_resistance = 40 * ONE_ATMOSPHERE
@@ -187,7 +168,7 @@
 	item_state = "syndie_hardsuit"
 	species_fit = list(GREY_SHAPED)
 	species_fit = list(VOX_SHAPED)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	w_class = W_CLASS_MEDIUM
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
@@ -220,7 +201,7 @@
 	name = "gem-encrusted hardsuit"
 	desc = "A bizarre gem-encrusted suit that radiates magical energies."
 	item_state = "wiz_hardsuit"
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	w_class = W_CLASS_MEDIUM
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -339,10 +320,10 @@
 	icon_state = "rig-atmos_gold"
 	name = "atmos hardsuit"
 	item_state = "atmos_gold_hardsuit"
-	slowdown = 2
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/storage/toolbox)
 
 //ADMINBUS RIGS. SOVIET + NAZI
 /obj/item/clothing/head/helmet/space/rig/nazi
@@ -361,7 +342,7 @@
 	desc = "The attire of a true krieger. All shall fall, and only das vaterland will remain."
 	item_state = "rig-nazi"
 	icon_state = "rig-nazi"
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
@@ -438,7 +419,7 @@
 	desc = "A well polished set of armour belonging to a Space-Knight. Maidens Rescued in Space: 100, Maidens who have slept with me in Space: 0."
 	icon_state = "rig-knight"
 	item_state = "rig-knight"
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	allowed = list(/obj/item/weapon/gun,/obj/item/weapon/melee/baton,/obj/item/weapon/tank,/obj/item/weapon/shield/energy,/obj/item/weapon/claymore)
 	armor = list(melee = 60, bullet = 40, laser = 40,energy = 30, bomb = 50, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -494,3 +475,33 @@
 	item_state = "rig0-t51b"
 	armor = list(melee = 35, bullet = 35, laser = 40, energy = 40, bomb = 80, bio = 100, rad = 100)
 	_color="t51b"
+
+
+//Ghetto space suit
+/obj/item/clothing/head/helmet/space/rig/ghettorig
+	name = "jury-rigged space-proof fire helmet"
+	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
+	icon_state = "ghettorig"
+	_color = "ghetto"
+	pressure_resistance = 4 * ONE_ATMOSPHERE
+	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
+	body_parts_covered = FULL_HEAD|BEARD
+	heat_conductivity = 0
+	gas_transfer_coefficient = 0.01
+	permeability_coefficient = 0.01
+	eyeprot = 0
+	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/suit/space/ghettorig
+	name = "jury-rigged space-proof firesuit"
+	icon_state = "ghettorig"
+	item_state = "ghettorig"
+	desc = "A firesuit jury-rigged into being 'space-proof' somehow."
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
+	pressure_resistance = 4 * ONE_ATMOSPHERE
+	slowdown = 5 //just wear a firesuit instead if you want to go fast
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	heat_conductivity = 0 //thanks, blanket
+	gas_transfer_coefficient = 0.60
+	permeability_coefficient = 0.30

@@ -2,18 +2,19 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
 
-	if (src.handcuffed)
+	if (src.handcuffed &&  handcuffed.is_visible())
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
-	if (src.wear_mask)
+	if (src.wear_mask && !(wear_mask.invisibility || wear_mask.alpha <= 1))
 		msg += "It has [bicon(src.wear_mask)] \a [src.wear_mask] on its head.\n"
 
 	for(var/obj/item/I in held_items)
-		if(I.blood_DNA && I.blood_DNA.len)
-			msg += "<span class='warning'>It has [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
-		else
-			msg += "It has [bicon(I)] \a [I] in its [get_index_limb_name(is_holding_item(I))].\n"
+		if(I.is_visible())
+			if(I.blood_DNA && I.blood_DNA.len)
+				msg += "<span class='warning'>It has [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
+			else
+				msg += "It has [bicon(I)] \a [I] in its [get_index_limb_name(is_holding_item(I))].\n"
 
-	if (src.back)
+	if (src.back && back.is_visible())
 		msg += "It has [bicon(src.back)] \a [src.back] on its back.\n"
 	if (isDead())
 		msg += "<span class='deadsay'>It is limp and unresponsive, with no signs of life.</span>\n"

@@ -110,7 +110,7 @@
 	src.add_fingerprint(user)
 
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/screen/draggable, src, user)
+		active = getFromPool(/obj/abstract/screen/draggable, src, user)
 		to_chat(user, "Beginning lattice construction mode, click and hold to use. Use rods again to create grille.")
 		return
 	else //End click drag construction, create grille

@@ -113,3 +113,9 @@
 	color = LIGHTING_BASE_MATRIX
 
 	return ..("color")
+
+/atom/movable/lighting_overlay/send_to_future(var/duration)
+	return
+
+/atom/movable/lighting_overlay/send_to_past(var/duration)
+	return

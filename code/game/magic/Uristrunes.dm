@@ -34,7 +34,6 @@ var/list/word_to_uristrune_table = null
 	|| (word1 == cultwords["blood"] && word2 == cultwords["join"] && word3 == cultwords["hell"])	\
 	|| (word1 == cultwords["hide"] && word2 == cultwords["see"] && word3 == cultwords["blood"])	\
 	|| (word1 == cultwords["hell"] && word2 == cultwords["travel"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["travel"])	\
 	|| (word1 == cultwords["hell"] && word2 == cultwords["technology"] && word3 == cultwords["join"])	\
 	|| (word1 == cultwords["hell"] && word2 == cultwords["blood"] && word3 == cultwords["join"])	\
 	|| (word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["hide"])	\
@@ -84,8 +83,6 @@ var/list/word_to_uristrune_table = null
 		return "Hide Runes"
 	else if((word1 == cultwords["hell"] && word2 == cultwords["travel"] && word3 == cultwords["self"]))
 		return "Astral Journey"
-	else if((word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["travel"]))
-		return "Manifest Ghost"
 	else if((word1 == cultwords["hell"] && word2 == cultwords["technology"] && word3 == cultwords["join"]))
 		return "Imbue Talisman"
 	else if((word1 == cultwords["hell"] && word2 == cultwords["blood"] && word3 == cultwords["join"]))
@@ -130,14 +127,15 @@ var/list/uristrune_cache = list()
 	var/finalblood = bloodcolor
 	var/list/blood_hsl = rgb2hsl(GetRedPart(bloodcolor),GetGreenPart(bloodcolor),GetBluePart(bloodcolor))
 	if(blood_hsl.len)
-		var/list/blood_rbg = hsl2rgb(blood_hsl[1],blood_hsl[2],128)//producing a color that is neither too bright nor too dark
-		if(blood_hsl.len)
-			finalblood = rgb(blood_rbg[1],blood_rbg[2],blood_rbg[3])
+		var/list/blood_rgb = hsl2rgb(blood_hsl[1],blood_hsl[2],50)//producing a color that is neither too bright nor too dark
+		if(blood_rgb.len)
+			finalblood = rgb(blood_rgb[1],blood_rgb[2],blood_rgb[3])
 
 	var/bc1 = finalblood
 	var/bc2 = finalblood
 	bc1 += "C8"
 	bc2 += "64"
+
 	I.SwapColor(rgb(0, 0, 0, 100), bc1)
 	I.SwapColor(rgb(0, 0, 0, 50), bc1)
 

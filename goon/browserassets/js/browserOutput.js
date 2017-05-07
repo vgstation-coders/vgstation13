@@ -62,8 +62,18 @@ var opts = {
 	'clientData': [],
 
 	// List of macros in the 'hotkeymode' macro set.
-	'macros': {}
+	'macros': {},
+
+	// index in the color presets list.
+	'colorPreset': 0
 };
+
+// Array of names for colorblind presets.
+// If not set to normal, a CSS file `browserOutput_${name}.css` will be added to the head.
+var colorPresets = [
+	'normal',
+	'colorblindv1'
+]
 
 function outerHTML(el) {
     var wrap = document.createElement('div');
@@ -82,6 +92,11 @@ if (typeof String.prototype.trim !== 'function') {
 	String.prototype.trim = function () {
 		return this.replace(/^\s+|\s+$/g, '');
 	};
+}
+
+function updateColorPreset() {
+	var el = $("#colorPresetLink")[0];
+	el.href = "browserOutput_"+colorPresets[opts.colorPreset]+".css";
 }
 
 //Shit fucking piece of crap that doesn't work god fuckin damn it
@@ -494,6 +509,12 @@ if (typeof $ === 'undefined') {
 }
 
 $(function() {
+	// Detect encoding.
+	if (document.defaultCharset)
+	{
+		runByond("?_src_=chat&proc=encoding&encoding=" + escaper(document.defaultCharset));
+	}
+
 	$messages = $('#messages');
 	$subOptions = $('#subOptions');
 
@@ -523,6 +544,7 @@ $(function() {
 		'spingDisabled': getCookie('pingdisabled'),
 		'shighlightTerms': getCookie('highlightterms'),
 		'shighlightColor': getCookie('highlightcolor'),
+		'scolorPreset': getCookie('colorpreset')
 	};
 
 	if (savedConfig.sfontSize) {
@@ -557,6 +579,12 @@ $(function() {
 	if (savedConfig.shighlightColor) {
 		opts.highlightColor = savedConfig.shighlightColor;
 		internalOutput('<span class="internal boldnshit">Loaded highlight color of: '+savedConfig.shighlightColor+'</span>', 'internal');
+	}
+
+	if (savedConfig.scolorPreset) {
+		opts.colorPreset = Number(savedConfig.scolorPreset);
+		updateColorPreset();
+		internalOutput('<span class="internal boldnshit">Loaded color preset of: '+colorPresets[opts.colorPreset]+'</span>', 'internal');
 	}
 
 	(function() {
@@ -921,11 +949,18 @@ $(function() {
 		opts.messageCount = 0;
 	});
 
+	$('#changeColorPreset').click(function() {
+		opts.colorPreset = (opts.colorPreset+1) % colorPresets.length;
+		updateColorPreset();
+		setCookie('colorpreset', opts.colorPreset, 365);
+		internalOutput('<span class="internal boldnshit">Changed color preset to: '+colorPresets[opts.colorPreset]);
+	});
+
 	// Tell BYOND to give us a macro list.
 	// I don't know why but for some retarded reason,
 	// You need to activate hotkeymode before you can winget the macros in it.
-	runByond('byond://winset?id=mainwindow&macro=hotkeymode')
-	runByond('byond://winset?id=mainwindow&macro=macro')
+	runByond('byond://winset?id=mainwindow&macro=hotkeymode');
+	runByond('byond://winset?id=mainwindow&macro=macro');
 
 	runByond('byond://winget?callback=wingetMacros&id=hotkeymode.*&property=command');
 

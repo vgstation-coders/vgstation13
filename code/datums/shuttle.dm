@@ -87,6 +87,8 @@
 
 	var/destroy_everything = 0
 
+	var/disable_mesons = 0
+
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
@@ -279,7 +281,14 @@
 				spawn()
 					P.shoot_exhaust()
 
+	current_port.start_warning_lights()
+	destination_port.start_warning_lights()
+
 	spawn(get_pre_flight_delay())
+		if(current_port)
+			current_port.stop_warning_lights()
+		if(destination_port)
+			destination_port.stop_warning_lights()
 		//If moving to another zlevel, check for items which can't leave the zlevel (nuke disk, primarily)
 		if(linked_port.z != D.z)
 			var/atom/A = forbid_movement()
@@ -429,6 +438,12 @@
 
 		if(istype(AM,/mob/living))
 			var/mob/living/M = AM
+
+			if(istype(AM,/mob/living/carbon/human) && disable_mesons)
+				var/mob/living/carbon/human/H = AM
+				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson))
+					var/obj/item/clothing/glasses/scanner/meson/mesons = H.glasses
+					mesons.disable(H)
 
 			if(!M.locked_to)
 				shake_camera(M, 10, 1) // unbuckled, HOLY SHIT SHAKE THE ROOM

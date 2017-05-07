@@ -22,6 +22,9 @@
 	icon_state = "rock"
 	canSmoothWith = null
 
+/turf/unsimulated/wall/rock/underground
+	icon_state = "cave_wall"
+
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
@@ -36,20 +39,26 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-turf/unsimulated/wall/splashscreen
+/turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
 	plane = EFFECTS_PLANE
 	canSmoothWith = null
 
-	New()
-		var/path = "icons/splashworks/"
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		icon = file("[path][pick(filenames)]")
+/turf/unsimulated/wall/splashscreen/New()
+	var/path = "icons/splashworks/"
+	var/list/filenames = flist(path)
+	for(var/filename in filenames)
+		if(copytext(filename, length(filename)) == "/")
+			filenames -= filename
+	icon = file("[path][pick(filenames)]")
+
+/turf/unsimulated/wall/splashscreen/snowmap
+	icon = 'icons/snowstation.gif' // not in the splashworks file so it doesn't appear in other cases
+
+/turf/unsimulated/wall/splashscreen/snowmap/New()
+	return
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"
@@ -71,3 +80,16 @@ turf/unsimulated/wall/splashscreen
 /turf/unsimulated/wall/cult/cultify()
 	return
 
+/turf/unsimulated/wall/evil
+	name = "alien wall"
+	desc = "You feel a sense of dread from just looking at this wall. Its surface seems to be constantly moving, as if it were breathing."
+	icon_state = "evilwall_1"
+	opacity = 1
+	density = 1
+	canSmoothWith = null
+
+/turf/unsimulated/wall/evil/New()
+	..()
+
+	if(prob(80))
+		icon_state = "evilwall_[rand(1,8)]"

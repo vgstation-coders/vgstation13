@@ -9,6 +9,19 @@
 
 /proc/robogibs(atom/location, var/list/viruses)
 	new /obj/effect/gibspawner/robot(get_turf(location),viruses)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//The following procs were thought to be used in correlation with the amount of blood available, example:
+//a loop in [bloodpack.dm] that spawns      _______________________________________
+//1 blood splatter per 60u of blood     >>>|this means that 6drips = 1splatter    |
+//and 1 blood drip per 10u                |same behaviour as proc/blood_splatter|
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Apparently no one has ever needed to do a blood mess, so I didn't bother making a generic proc.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/proc/bloodmess_splatter(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
+	new /obj/effect/gibspawner/blood(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius)
+
+/proc/bloodmess_drip(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
+	new /obj/effect/gibspawner/blood_drip(get_turf(location), viruses, MobDNA, fleshcolor, bloodcolor, spread_radius)
 
 /obj/effect/gibspawner
 	var/sparks = 0 //whether sparks spread on Gib()
@@ -36,11 +49,6 @@
 		return
 
 	var/obj/effect/decal/cleanable/blood/gibs/gib = null
-	for(var/datum/disease/D in viruses)
-		if(D.spread_type == SPECIAL)
-			D.cure(1)
-			qdel(D)
-			D = null
 
 	if(sparks)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -62,12 +70,8 @@
 
 				gib.update_icon()
 
-				if(viruses.len > 0)
-					for(var/datum/disease/D in viruses)
-						if(prob(virusProb))
-							var/datum/disease/viruus = D.Copy(1)
-							gib.viruses += viruus
-							viruus.holder = gib
+				if(viruses)
+					gib.virus2 |= virus_copylist(viruses)
 
 				gib.blood_DNA = list()
 				if(MobDNA)

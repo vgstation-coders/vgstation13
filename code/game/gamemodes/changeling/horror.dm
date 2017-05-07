@@ -35,3 +35,9 @@
 
 	override_icon = 'icons/mob/horror.dmi'
 	has_mutant_race = 0
+
+
+/datum/species/horror/handle_post_spawn(var/mob/living/carbon/human/H)
+	H.h_style = "Bald"
+	H.f_style = "Shaved"
+	H.update_hair()

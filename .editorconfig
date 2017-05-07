@@ -1,0 +1,7 @@
+# http://editorconfig.org/
+# Atom: Install the editorconfig addon.
+root = True
+
+[*.dm,*.dme]
+indent_style = tab
+indent_size = 2

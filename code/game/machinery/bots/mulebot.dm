@@ -6,6 +6,15 @@
 
 var/global/mulebot_count = 0
 
+#define MODE_IDLE 0
+#define MODE_LOADING 1
+#define MODE_MOVING 2
+#define MODE_RETURNING 3
+#define MODE_BLOCKED 4
+#define MODE_COMPUTING 5
+#define MODE_WAITING 6
+#define MODE_NOROUTE 7
+
 /obj/machinery/bot/mulebot
 	name = "\improper MULEbot"
 	desc = "A Multiple Utility Load Effector bot."
@@ -969,3 +978,46 @@ var/global/mulebot_count = 0
 	if(load)
 		to_chat(user, "You unload \the [load].")
 		unload()
+
+/obj/machinery/bot/mulebot/npc_tamper_act(mob/living/L)
+	if(L.loc == src) //Gremlins on the mule get out if the mule has stopped
+		if(mode == MODE_NOROUTE || !wires.RemoteRX() || !wires.HasPower() || !(wires.Motor1() || wires.Motor2())) //Jump ship if the MULE is broken
+			unload()
+
+		return NPC_TAMPER_ACT_NOMSG
+
+	if(prob(80)) //80% chance to RIDE THE MULE
+		//If the MULE hasn't been modified to accept non-orthodox cargo, do it now
+		if(!wires)
+			return
+		if(!wires.IsIndexCut(WIRE_LOADCHECK))
+			wires.CutWireIndex(WIRE_LOADCHECK)
+
+		//Turn the MULE ON
+		if(!on && !turn_on())
+			return
+
+		//Mount the MULE
+		load(L)
+
+		var/list/possible_destinations = list()
+		for(var/obj/machinery/navbeacon/N in navbeacons)
+			if(!N.location || !isturf(N.loc))
+				continue
+			if(N.freq != src.beacon_freq) //If the navbeacon is on a different frequency, the mulebot can't navigate to it
+				continue
+			possible_destinations.Add(N)
+
+		//Type in a destination for the MULE
+		var/obj/machinery/navbeacon/new_destination = pick(possible_destinations)
+		set_destination(new_destination.location)
+
+		//GO!
+		start()
+
+		message_admins("[key_name(L)] has mounted \the [src] and is riding it to [new_destination.location] ([formatJumpTo(new_destination)])! [formatJumpTo(src)]")
+	else
+		if(!panel_open)
+			togglePanelOpen(null, L)
+		if(wires)
+			wires.npc_tamper(L)

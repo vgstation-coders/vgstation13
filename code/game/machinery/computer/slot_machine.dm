@@ -330,6 +330,9 @@
 
 	return 1
 
+/obj/machinery/computer/slot_machine/npc_tamper_act(mob/living/L)
+	spin(L)
+
 #undef MINIMUM_WIN_TO_BROADCAST
 #undef MINIMUM_MONEY_TO_PLAY
 

@@ -11,19 +11,15 @@
 	var/on = 0.0
 	var/stabilization_on = 0
 	var/volume_rate = 500              //Needed for borg jetpack transfer
-	action_button_name = "Toggle Jetpack"
+	actions_types = list(/datum/action/item_action/set_internals, /datum/action/item_action/jetpack_stabilization,/datum/action/item_action/toggle_jetpack)
 
-/obj/item/weapon/tank/jetpack/verb/toggle_rockets()
-	set name = "Toggle Jetpack Stabilization"
-	set category = "Object"
+/obj/item/weapon/tank/jetpack/proc/toggle_rockets()
 	src.stabilization_on = !( src.stabilization_on )
 	to_chat(usr, "You toggle the stabilization [stabilization_on? "on":"off"].")
 	return
 
 
-/obj/item/weapon/tank/jetpack/verb/toggle()
-	set name = "Toggle Jetpack"
-	set category = "Object"
+/obj/item/weapon/tank/jetpack/proc/toggle()
 	on = !on
 	if(on)
 		icon_state = "[icon_state]-on"
@@ -53,8 +49,29 @@
 	G = null
 	return
 
-/obj/item/weapon/tank/jetpack/ui_action_click()
-	toggle()
+/datum/action/item_action/toggle_jetpack
+	name = "Toggle Jetpack"
+
+/datum/action/item_action/toggle_jetpack/Trigger()
+	var/obj/item/weapon/tank/jetpack/T = target
+	if(!istype(T))
+		return
+	T.toggle()
+
+/datum/action/item_action/jetpack_stabilization
+	name = "Toggle Jetpack Stabilization"
+
+/datum/action/item_action/jetpack_stabilization/IsAvailable()
+	var/obj/item/weapon/tank/jetpack/J = target
+	if(!istype(J) || !J.on)
+		return 0
+	return ..()
+
+/datum/action/item_action/jetpack_stabilization/Trigger()
+	var/obj/item/weapon/tank/jetpack/T = target
+	if(!istype(T))
+		return
+	T.toggle_rockets()
 
 /obj/item/weapon/tank/jetpack/New()
 	. = ..()
@@ -105,3 +122,6 @@
 /obj/item/weapon/tank/jetpack/carbondioxide/New()
 	. = ..()
 	air_contents.adjust(, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+
+/obj/item/weapon/tank/jetpack/carbondioxide/silicon
+	actions_types = list(/datum/action/item_action/jetpack_stabilization,/datum/action/item_action/toggle_jetpack)

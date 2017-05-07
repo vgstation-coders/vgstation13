@@ -141,6 +141,11 @@ var/const/VOX_DELAY = 600
 	set name = "Announcement"
 	set desc = "Send an announcement to the crew"
 	set category = "AI Commands"
+
+	//I am kill but here
+	if(isUnconscious())
+		return
+
 	// If we're in an APC, and APC is ded, ABORT
 	if(parent && istype(parent) && parent.stat)
 		return

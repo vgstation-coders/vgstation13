@@ -1,5 +1,5 @@
 /obj/item/weapon/reagent_containers/borghypo
-	name = "Cyborg Hypospray"
+	name = "cyborg hypospray"
 	desc = "An advanced chemical synthesizer and injection system, designed for heavy-duty medical equipment."
 	icon = 'icons/obj/syringe.dmi'
 	item_state = "hypo"
@@ -81,6 +81,7 @@
 	if(M.reagents)
 		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>")
+		add_logs(user, M, "injected [transferred]u [reagents] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
 	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
@@ -100,8 +101,22 @@
 	to_chat(user, "<span class='info'>It's currently producing '[reagent_ids[mode]]'.</span>")
 
 /obj/item/weapon/reagent_containers/borghypo/upgraded
-	name = "Upgraded Cyborg Hypospray"
+	name = "upgraded cyborg hypospray"
 	desc = "An upgraded hypospray with more potent chemicals and a larger storage capacity."
 	reagent_ids = list(DOCTORSDELIGHT, DEXALINP, SPACEACILLIN, "charcoal")
 	volume = 50
 	recharge_time = 3 // time it takes for shots to recharge (in seconds)
+
+/obj/item/weapon/reagent_containers/borghypo/peace
+	name = "peace hypospray"
+	desc = "A tranquilizer synthesizer and injection system. These drugs are capable of inducing a state of relaxation, or euphoria."
+	reagent_ids = list(STOXIN,CRYPTOBIOLIN)
+	volume = 5
+	recharge_time = 20
+
+/obj/item/weapon/reagent_containers/borghypo/peace/hacked
+	desc = "Everything's peaceful in death!"
+	icon_state = "borghypo_s"
+	reagent_ids = list(CYANIDE)
+	volume = 10
+	recharge_time = 10

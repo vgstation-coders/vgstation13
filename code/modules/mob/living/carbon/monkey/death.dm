@@ -37,6 +37,7 @@
 			O.show_message("<b>\The [name]</b> lets out a faint chimper as it collapses and stops moving...", 1) //ded -- Urist
 
 	update_canmove()
+	update_icons()
 
 	ticker.mode.check_win()
 

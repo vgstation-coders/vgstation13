@@ -50,6 +50,8 @@ code\game\\dna\genes\goon_powers.dm
 
 	hud_state = "wiz_blind"
 
+	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+
 /spell/targeted/genetic/mutate
 	name = "Mutate"
 	desc = "This spell causes you to turn into a hulk and gain laser vision for a short while."

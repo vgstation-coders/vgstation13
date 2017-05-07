@@ -20,6 +20,12 @@ var/list/uplink_items = list()
 			if(I.last)
 				last += I
 				continue
+			if(I.only_on_month)
+				if(time2text(world.realtime,"MM") != I.only_on_month)
+					continue
+			if(I.only_on_day)
+				if(time2text(world.realtime,"DD") != I.only_on_day)
+					continue
 
 			if(!uplink_items[I.category])
 				uplink_items[I.category] = list()
@@ -48,6 +54,8 @@ var/list/uplink_items = list()
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
 	var/list/job = null
+	var/only_on_month	//two-digit month as string
+	var/only_on_day		//two-digit day as string
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -113,6 +121,17 @@ var/list/uplink_items = list()
 */
 //Work in Progress, job specific antag tools
 
+/datum/uplink_item/valentine
+	category = "Valentine's Day Special!"
+	only_on_month = "02"
+	only_on_day = "14"
+
+/datum/uplink_item/valentine/explosivechocolate
+	name = "Explosive Chocolate Bar"
+	desc = "A special Valentine's Day chocolate bar chock-full of Bicarodyne. For adding that little extra oompf to your hugs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	cost = 8
+
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
 
@@ -160,11 +179,32 @@ var/list/uplink_items = list()
 	cost = 8
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/banannon
+	name = "Banannon"
+	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard."
+	item = /obj/item/weapon/gun/banannon
+	cost = 18
+	job = list("Clown")
+
+/datum/uplink_item/jobspecific/livingballoons
+	name = "Box of Living Long Balloons"
+	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them."
+	item = /obj/item/weapon/storage/box/balloons/long/living
+	cost = 6
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
 	item = /obj/item/weapon/glue
-	cost = 6
+	cost = 4
+	job = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/invisible_spray
+	name = "Can of Invisible Spray"
+	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/invisible_spray/permanent
+	cost = 4
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
@@ -203,6 +243,13 @@ var/list/uplink_items = list()
 	desc = "Part of the notorious Ambrosia family, this species is nearly indistinguishable from Ambrosia Vulgaris. However, its branches contain a revolting toxin. Eight units are enough to drive victims insane after a three-minute delay."
 	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 2
+	job = list("Botanist")
+
+/datum/uplink_item/jobspecific/beecase
+	name = "Briefcase Full of Bees"
+	desc = "A briefcase containing twenty angry bees."
+	item = /obj/item/weapon/storage/briefcase/bees
+	cost = 4
 	job = list("Botanist")
 
 //Chef
@@ -274,6 +321,13 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 12
 	job = list("Medical Doctor", "Chief Medical Officer")
+	
+/datum/uplink_item/jobspecific/hypozinebottle
+	name = "Lethal Speed Chemical"
+	desc = "15 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
+	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	cost = 12
+	job = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
 //Engineer
 /datum/uplink_item/jobspecific/powergloves
@@ -385,6 +439,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/melee/energy/sword
 	cost = 8
 
+/datum/uplink_item/dangerous/machete
+	name = "High-Frequency Machete"
+	desc = "A broad blade used either as an implement or in combat. When inactive can be used as an powerful throwing weapon and when activated its damage is comparable to an Energy Sword."
+	item = /obj/item/weapon/melee/energy/hfmachete
+	cost = 8
+
 /datum/uplink_item/dangerous/emp
 	name = "5 EMP Grenades"
 	desc = "A box that contains 5 EMP grenades. Useful to disrupt communication and silicon lifeforms."
@@ -477,11 +537,17 @@ var/list/uplink_items = list()
 	item = /obj/item/device/chameleon
 	cost = 6
 
-/datum/uplink_item/stealthy_tools/chameleon_proj
+/datum/uplink_item/stealthy_tools/smoke_bombs
 	name = "Instant Smoke Bombs"
 	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 3
+
+/datum/uplink_item/stealthy_tools/decoy_balloon
+	name = "Decoy Balloon"
+	desc = "A balloon that looks just like you when inflated."
+	item = /obj/item/toy/balloon/decoy
+	cost = 1
 
 
 // DEVICE AND TOOLS

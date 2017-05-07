@@ -121,9 +121,9 @@ proc/cardinalrange(var/center)
 	stability -= 20
 	if(prob(100-stability))
 		if(prob(10))//Might create a node
-			new /obj/effect/blob/node(src.loc,150)
+			new /obj/effect/blob/node(get_turf(src),150)
 		else
-			new /obj/effect/blob(src.loc,60)
+			new /obj/effect/blob(get_turf(src),60)
 		qdel(src)
 		return
 	check_stability()

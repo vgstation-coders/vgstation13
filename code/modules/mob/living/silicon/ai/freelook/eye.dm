@@ -10,7 +10,7 @@
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
-	flags = HEAR_ALWAYS
+	flags = HEAR_ALWAYS | TIMELESS
 
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
@@ -123,7 +123,10 @@
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
 		if(step)
+			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 4))
+				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			user.eyeobj.forceMove(step)
+	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5
 	if(user.acceleration)

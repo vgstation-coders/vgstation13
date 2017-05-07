@@ -129,7 +129,7 @@ var/global/list/ghdel_profiling = list()
 
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-	INVOKE_EVENT(on_destroyed, list()) // No args.
+	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
@@ -532,6 +532,10 @@ its easier to just keep the beam vertical.
 /atom/proc/emag_act()
 	return
 
+/atom/proc/supermatter_act(atom/source, severity)
+	qdel(src)
+	return 1
+
 /atom/proc/hitby(atom/movable/AM as mob|obj)
 	return
 
@@ -745,7 +749,9 @@ its easier to just keep the beam vertical.
 	gender = gend
 
 /mob/living/carbon/human/setGender(gend = FEMALE)
-	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
+	if(species.gender)	//species-level gender override
+		gend = species.gender
+	else if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
 		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
 	// var/old_gender = src.gender
 	src.gender = gend
@@ -808,3 +814,9 @@ its easier to just keep the beam vertical.
 /atom/proc/toggle_timeless()
 	flags ^= TIMELESS
 	return flags & TIMELESS
+
+/atom/proc/is_visible()
+	if(invisibility || alpha <= 1)
+		return FALSE
+	else
+		return TRUE

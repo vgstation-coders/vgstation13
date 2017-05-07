@@ -81,6 +81,8 @@ var/list/impact_master = list()
 	var/error = 0
 	var/target_angle = 0
 
+	var/lock_angle = 0
+
 	var/override_starting_X = 0
 	var/override_starting_Y = 0
 	var/override_target_X = 0
@@ -139,7 +141,8 @@ var/list/impact_master = list()
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
-	playsound(loc, hitsound, 35, 1)
+	if(!isnull(hitsound))
+		playsound(loc, hitsound, 35, 1)
 	return 1
 
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
@@ -346,12 +349,10 @@ var/list/impact_master = list()
 			if(!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
 				var/turf/T = A
 				T.bullet_marks++
-				var/icon/I = icon(T.icon, T.icon_state)
 				var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
 				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
 				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
-				I.Blend(trace,ICON_MULTIPLY ,1 ,1)							//we can now blend our resulting icon on the wall
-				T.icon = I
+				T.overlays += trace
 		return 1
 
 	bullet_die()
@@ -403,7 +404,8 @@ var/list/impact_master = list()
 		//If the icon has not been added yet
 		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
-			I.Turn(target_angle+45)
+			if(!lock_angle)
+				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
 
@@ -628,7 +630,8 @@ var/list/impact_master = list()
 	if(linear_movement)
 		if( !("[icon_state][target_angle]" in bullet_master) )
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
-			I.Turn(target_angle+45)
+			if(!lock_angle)
+				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
 

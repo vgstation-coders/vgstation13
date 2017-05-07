@@ -60,15 +60,19 @@
 		var/turf/T = get_turf(DL)
 		T.ChangeTurf(/turf/unsimulated/floor)
 
-/obj/effect/trap/frog_trap //When triggered, spawns 4 frogs around you
+/obj/effect/trap/frog_trap //When triggered, spawns 4 frogs around you.
 	name = "frog trap"
 
+	var/frog_type = /mob/living/simple_animal/hostile/frog
+	var/msg = "<span class='userdanger'>An ambush! Curse them!</span>"
+
 /obj/effect/trap/frog_trap/activate(atom/movable/AM)
-	to_chat(AM, "<span class='userdanger'>An ambush! Curse them!</span>")
+	if(msg)
+		to_chat(AM, msg)
 
 	for(var/dir in cardinal)
 		var/turf/T = get_step(AM, dir)
-		new /mob/living/simple_animal/hostile/frog(T)
+		new frog_type(T)
 
 		sleep(rand(2,8))
 

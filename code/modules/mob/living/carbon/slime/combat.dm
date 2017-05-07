@@ -48,6 +48,8 @@
 		to_chat(src, "<span class='notice'>You can't attack while eating.</span>")
 		return
 
+	add_attacklogs(src, target, "attacked")
+
 	.=..()
 
 
@@ -77,7 +79,7 @@
 
 		visible_message("<span class='danger'>\The [src] has shocked \the [target]!</span>")
 	else if(issilicon(target))
-		target.flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
+		target.flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
 		if(powerlevel >= 8)
 			adjustBruteLoss(powerlevel * rand(6,10))
 

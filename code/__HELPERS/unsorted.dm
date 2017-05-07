@@ -1318,6 +1318,9 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	anchored = 1
 	flags = INVULNERABLE
 
+/mob/dview/send_to_future(var/duration)
+	return
+
 //Gets the Z level datum for this atom's Z level
 /proc/get_z_level(var/atom/A)
 	var/z
@@ -1349,15 +1352,6 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			return 1
 	return 0
 
-//Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)
-//Returns 1 is there's something, 0 if it finds nothing
-/turf/proc/has_contents()
-	if(!contents.len)
-		return 0
-	for(var/atom/A in contents)
-		if(!istype(A, /atom/movable/lighting_overlay))
-			return 0
-	return 1
 
 //This helper uses the method shown above to clear up the tile's contents, if any, ignoring the lighting overlays (technically all systems contents)
 //Includes an exception list if you don't want to delete some stuff
@@ -1600,18 +1594,70 @@ Game Mode config tags:
 		i *= 2
 	while (world.tick_usage > min(TICK_LIMIT_TO_RUN, CURRENT_TICKLIMIT))
 
+/proc/procedurally_generate()
+	var/total_time
+	var/watch
+	var/gen_total = 0
+	for(var/datum/zLevel/current_zlevel in map.zLevels)
+		if(current_zlevel.procedurally_generate)
+			var/list_of_turfs = list() // what turfs to consider for radial generating on
+			var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
+			var/chance 			 // around about how many you want to have spawned on a z-level.
+			var/rmap_name
+			switch(current_zlevel.procedurally_generate)
+				if(SNOW_PROCEDURAL_GENERATION)
+					list_of_turfs = snow_turfs
+					list_of_options = list(new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest(mapspawned = 0) = 47,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large(mapspawned = 0) = 10,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/dense(mapspawned = 0) = 15,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large/dense(mapspawned = 0) = 5,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass(mapspawned = 0) = 15,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass/large(mapspawned = 0) = 5,
+										   new /obj/procedural_generator/cellular_automata/ice(mapspawned = 0) = 3)
+					chance = 1250 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
+					rmap_name = "snow"
+				if(SNOWMINE_PROCEDURAL_GENERATION)
+					list_of_turfs = mineral_turfs_underground
+					list_of_options = list(new /obj/procedural_generator/cellular_automata/spider_cave(mapspawed = 0) = 100)
+					chance = 60
+					continue
+
+			log_startup_progress("Procedurally generating a [rmap_name] map on z level: [current_zlevel.name]")
+			watch = start_watch()
+			var/list/current_zlevel_list = list_of_turfs["[current_zlevel.z]"]
+			var/generator_num = round(current_zlevel_list.len * (chance/(world.maxy * world.maxx)))
+			for(var/i = 1 to generator_num)
+				var/turf/T = pick(current_zlevel_list)
+				var/obj/procedural_generator/procedural_gen_type = pickweight(list_of_options)
+				procedural_gen_type.deploy_generator(T)
+			var/time = stop_watch(watch)
+			log_startup_progress("Finished procedurally generating z:[current_zlevel.z]([current_zlevel.name]) with [generator_num] radial generators in [time]s")
+			total_time += time
+			sleep(world.tick_lag)
+			gen_total += generator_num
+			for(var/obj/procedural_generator/pgen in list_of_options)
+				if(pgen.pooled)
+					returnToPool(pgen)
+				else
+					qdel(pgen)
+
+	log_startup_progress("Finished procedurally generating the entire map with [gen_total] procedural generators in [total_time]s")
+
 #undef DELTA_CALC
 
 
 /proc/stack_trace(message = "Getting a stack trace.")
 	CRASH(message)
 
+/proc/sentStrikeTeams(var/team)
+	return (team in sent_strike_teams)
+
 
 /proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
 	var/turf/T1 = A
 	var/turf/T2 = B
-	if(!istype(A))
+	if(!istype(T1))
 		T1 = get_turf(A)
-	if(!istype(B))
+	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))

@@ -190,3 +190,218 @@
 		H.b_hair = color_b
 	H.update_hair()
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+
+#define INVISIBLESPRAY "invisiblespray"
+
+/obj/item/weapon/invisible_spray
+	name = "can of invisible spray"
+	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
+	icon = 'icons/obj/items.dmi'
+	icon_state = "invisible_spray"
+	flags = FPRINT
+	w_class = W_CLASS_SMALL
+	var/permanent = 0
+	var/invisible_time = 5 MINUTES
+	var/sprays_left = 1
+	var/static/list/prohibited_objects = list( //For fun removal
+		)
+
+/obj/item/weapon/invisible_spray/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (!proximity_flag)
+		return 0
+	if(istype(target, /turf))
+		return
+	if(!sprays_left)
+		to_chat(user, "\The [src] is empty.")
+		return
+	if(target.invisibility || target.alpha <= 1)
+		to_chat(user, "\The [target] is already invisible!")
+		return
+	if(is_type_in_list(target,prohibited_objects))
+		to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
+		return 1
+	if(istype(target, /mob))
+		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
+			var/mob/living/carbon/C = target
+			C.body_alphas[INVISIBLESPRAY] = 1
+			C.regenerate_icons()
+			if(!permanent)
+				spawn(invisible_time)
+					if(C)
+						C.body_alphas.Remove(INVISIBLESPRAY)
+						C.regenerate_icons()
+		else
+			var/mob/M = target
+			M.alpha = 1	//to cloak immediately instead of on the next Life() tick
+			M.alphas[INVISIBLESPRAY] = 1
+			if(!permanent)
+				spawn(invisible_time)
+					if(M)
+						M.alpha = initial(M.alpha)
+						M.alphas.Remove(INVISIBLESPRAY)
+	else
+		if(istype(target, /obj))
+			var/obj/O = target
+			O.alpha = 1
+			O.has_been_invisible_sprayed = TRUE
+			if(O.loc == user)
+				user.regenerate_icons()
+			if(!permanent)
+				spawn(invisible_time)
+					if(O)
+						O.alpha = initial(O.alpha)
+						O.has_been_invisible_sprayed = FALSE
+						if(ismob(O.loc))
+							var/mob/M = O.loc
+							M.regenerate_icons()
+	if(target == user)
+		to_chat(user, "You spray yourself with \the [src].")
+	else
+		to_chat(user, "You spray \the [target] with \the [src].")
+	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	sprays_left--
+	if(istype(target, /obj/machinery/power/supermatter))
+		return 0
+	return 1
+
+/obj/item/weapon/invisible_spray/permanent
+	desc = "A can of... invisibility?"
+	permanent = 1
+
+/obj/item/weapon/razor
+	name = "electric razor"
+	desc = "The latest and greatest power razor born from the science of shaving."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "razor"
+	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_IRON = 340)
+
+/obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
+	if(location == "mouth")
+		H.f_style = "Shaved"
+	else
+		H.h_style = "Skinhead"
+
+	H.update_hair()
+	playsound(loc, 'sound/items/Welder2.ogg', 20, 1)
+
+
+/obj/item/weapon/razor/attack(mob/M, mob/user)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/location = user.zone_sel.selecting
+		if(location == "mouth")
+			if(H.check_body_part_coverage(MOUTH))
+				to_chat(user,"<span class='warning'>The mask is in the way!</span>")
+				return
+			if(H.f_style == "Shaved")
+				to_chat(user,"<span class='warning'>Already clean-shaven!</span>")
+				return
+
+			if(H == user) //shaving yourself
+				user.visible_message("[user] starts to shave their facial hair with [src].", \
+									 "<span class='notice'>You take a moment to shave your facial hair with [src]...</span>")
+				if(do_after(user, H, 5))
+					user.visible_message("[user] shaves \his facial hair clean with [src].", \
+										 "<span class='notice'>You finish shaving with [src]. Fast and clean!</span>")
+					shave(H, location)
+			else
+				user.visible_message("<span class='warning'>[user] tries to shave [H]'s facial hair with [src].</span>", \
+									 "<span class='notice'>You start shaving [H]'s facial hair...</span>")
+				if(do_after(user, H, 50))
+					user.visible_message("<span class='warning'>[user] shaves off [H]'s facial hair with [src].</span>", \
+										 "<span class='notice'>You shave [H]'s facial hair clean off.</span>")
+					shave(H, location)
+
+		else if(location == LIMB_HEAD)
+			if(H.check_body_part_coverage(HEAD))
+				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
+				return
+			if(H.h_style == "Bald" || H.h_style == "Skinhead")
+				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
+				return
+
+			if(H == user) //shaving yourself
+				user.visible_message("[user] starts to shave their head with [src].", \
+									 "<span class='notice'>You start to shave your head with [src]...</span>")
+				if(do_after(user, H, 5))
+					user.visible_message("[user] shaves \his head with [src].", \
+										 "<span class='notice'>You finish shaving with [src].</span>")
+					shave(H, location)
+			else
+				user.visible_message("<span class='warning'>[user] tries to shave [H]'s head with [src]!</span>", \
+									 "<span class='notice'>You start shaving [H]'s head...</span>")
+				if(do_after(user, H, 50))
+					user.visible_message("<span class='warning'>[user] shaves [H]'s head bald with [src]!</span>", \
+										 "<span class='notice'>You shave [H]'s head bald.</span>")
+					shave(H, location)
+		else
+			..()
+	else
+		..()
+
+/obj/item/weapon/pocket_mirror //shamelessly copypasted from [mirror.dm]
+	name = "pocket mirror"
+	desc = "Mirror mirror on the wall, who's the most robust of them all? Touching the mirror will bring out Nanotrasen's state of the art hair modification system."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "pocket_mirror"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+
+	var/shattered = 0
+
+/obj/item/weapon/pocket_mirror/attack_self(mob/user)
+	if (shattered)
+		return
+
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (isvampire(H))
+			if (!(VAMP_MATURE in H.mind.vampire.powers))
+				to_chat(H, "<span class='notice'>You don't see anything.</span>")
+				return
+
+		if (user.hallucinating())
+			switch(rand(1,100))
+				if (1 to 20)
+					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
+					H.Knockdown(4)
+					return
+				if (21 to 40)
+					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
+					H.emote("scream", auto=1)
+					H.dir = turn(H.dir, 180)
+					return
+				if (41 to 50)
+					to_chat(H, "<span class='notice'>You don't see anything.</span>")
+					return
+
+		//handle normal hair
+		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
+		//gender intentionally left null so speshul snowflakes can cross-hairdress
+		if (species_hair.len)
+			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
+			if (!Adjacent(user) || user.incapacitated())
+				return
+			if (new_style)
+				H.h_style = new_style
+				H.update_hair()
+
+/obj/item/weapon/pocket_mirror/proc/shatter()
+	if (shattered)
+		return
+	shattered = 1
+	icon_state = "pocket_mirror_broke"
+	playsound(src, "shatter", 70, 1)
+	desc = "Oh no, seven years of bad luck!"
+
+/obj/item/weapon/pocket_mirror/kick_act()
+	shatter()
+	..()
+
+/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom)
+	..()
+	if(!isturf(hit_atom))
+		return
+	if (prob(25))
+		shatter()

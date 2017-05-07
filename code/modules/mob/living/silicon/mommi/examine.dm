@@ -18,7 +18,7 @@
 		msg += "It is wearing [bicon(head_state)] [head_state] on its head.\n"
 	if(tool_state)
 		var/obj/item/I = tool_state
-		msg += "Its utitility claw is gripping [bicon(I)] [I.gender==PLURAL?"some":"a"] [I.name].\n"
+		msg += "Its utility claw is gripping [bicon(I)] [I.gender==PLURAL?"some":"a"] [I.name].\n"
 
 	if(opened)
 		msg += "<span class='warning'>Its cover is open and the power cell is [cell ? "installed" : "missing"].</span>\n"

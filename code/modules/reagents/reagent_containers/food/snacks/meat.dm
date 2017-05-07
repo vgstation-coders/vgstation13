@@ -84,21 +84,27 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
-		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 6
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
+	eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/imitation
 	name = "imitation carp fillet"
 	desc = "Almost just like the real thing, kinda."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/clown
+	name = "clownfish fillet"
+	desc = "A fine cut of the ocean's biggest prankster."
+	icon_state = "clownfillet"
 
 /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
 	name = "venomous spines"
@@ -153,6 +159,12 @@
 	desc = "A cockroach's severed abdomen, small but nonetheless nutritious."
 	icon_state = "roachmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, rand(5,12))
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
@@ -190,3 +202,67 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive
+	name = "alien tissue"
+	desc = "A long piece of rough, black tissue."
+	icon_state = "hivemeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/New()
+	..()
+
+	reagents.add_reagent(CARBON, 5)
+	reagents.add_reagent(pick(IRON, GOLD, SILVER, URANIUM), rand(0,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/New()
+	..()
+
+	reagents.add_reagent(OXYGEN, rand(1,5))
+	reagents.add_reagent(ETHANOL, rand(1,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rabbit
+	name = "rabbit meat"
+	desc = "A slice of rabbit"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rabbit/New()
+	..()
+	reagents.add_reagent("hyperzine", rand(0,3))
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
+	name = "strange meat"
+	desc = "Doesn't look very appetizing, but if you're considerably hungry..."
+	icon_state = "wendigo_meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/New()
+	..()
+	reagents.add_reagent("nutriment", rand(10,25))
+	bitesize = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
+	..()
+	if(ishuman(eater))
+		eater.contract_disease(new /datum/disease/wendigo_transformation)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet
+	name = "non-descript fish fillet"
+	desc = "You wonder where this came from."
+	icon_state = "fishfillet"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal
+	name = "raw fish fillet"
+	desc = "A cut and cleaned fillet of fresh fish."
+	icon_state = "fishfillet"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal/New()
+	..()
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown
+	name = "clownfish fillet"
+	desc = "A fine cut of the ocean's biggest prankster."
+	icon_state = "fishfillet" // placeholder
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown/New()
+	..()
+	bitesize = 2

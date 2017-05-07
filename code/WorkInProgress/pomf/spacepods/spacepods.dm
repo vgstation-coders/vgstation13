@@ -113,8 +113,9 @@
 				H.forceMove(get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
-			del(ion_trail)
-			del(src)
+			qdel(ion_trail)
+			ion_trail = null // Should be nulled by qdel src in next line but OH WELL
+			qdel(src)
 		if(2)
 			deal_damage(100)
 		if(3)
@@ -421,7 +422,7 @@
 					if(t_air)
 						t_air.merge(removed)
 					else //just delete the cabin gas, we're in space or some shit
-						del(removed)
+						qdel(removed)
 		else
 			return stop()
 		return

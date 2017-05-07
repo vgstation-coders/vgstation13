@@ -11,7 +11,7 @@ var/list/nest_locations = list()
 	response_help = "pokes the"
 	response_disarm = "shoves the"
 	response_harm = "hits the"
-	speed = -1
+	speed = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	species_type = /mob/living/simple_animal/hostile/alien
 	maxHealth = 100
@@ -281,6 +281,7 @@ var/list/nest_locations = list()
 	icon_dead = "alienq_dead"
 	health = 250
 	maxHealth = 250
+	gender = FEMALE
 	melee_damage_lower = 15
 	melee_damage_upper = 15
 	ranged = 1
@@ -340,6 +341,7 @@ var/list/nest_locations = list()
 	move_to_delay = 4
 	maxHealth = 400
 	health = 400
+	size = SIZE_HUGE
 	pixel_x = -16 * PIXEL_MULTIPLIER
 
 /obj/item/projectile/neurotox

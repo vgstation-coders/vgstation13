@@ -115,6 +115,9 @@
 		if("Mime")
 			suit=/obj/item/clothing/suit/space/plasmaman/mime
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/mime
+		if("Internal Affairs Agent")
+			suit=/obj/item/clothing/suit/space/plasmaman/lawyer
+			helm=/obj/item/clothing/head/helmet/space/plasmaman/lawyer
 	H.equip_or_collect(new suit(H), slot_wear_suit)
 	H.equip_or_collect(new helm(H), slot_head)
 	H.equip_or_collect(new/obj/item/weapon/tank/plasma/plasmaman(H), tank_slot) // Bigger plasma tank from Raggy.

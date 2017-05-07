@@ -15,6 +15,7 @@
 	icon_state = "silicate sprayer"
 
 	w_class = W_CLASS_SMALL
+	flags = FPRINT | OPENCONTAINER
 
 	origin_tech = Tc_ENGINEERING + "=2"
 

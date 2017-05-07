@@ -184,8 +184,6 @@
 				desc = "A spice, obtained from the bark of cinnamomum trees."
 				icon_state = CINNAMON
 			if(GRAVY)
-				name = "gravy boat"
-				desc = "Too small to set sail on."
 				icon_state = GRAVY
 			else
 				name = "misc condiment bottle"
@@ -365,6 +363,15 @@
 /obj/item/weapon/reagent_containers/food/condiment/gravy/New()
 	..()
 	reagents.add_reagent(GRAVY, 10)
+
+/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig
+	name = "gravy cruise"
+	desc = "Still a bit too small to sail on."
+	volume = 50
+
+/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig/New()
+	..()
+	reagents.add_reagent(GRAVY, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic
 	name = "exotic bottle"

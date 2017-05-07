@@ -154,3 +154,5 @@ var/global/list/rad_collectors = list()
 
 	update_icons()
 
+/obj/machinery/power/rad_collector/npc_tamper_act(mob/living/L)
+	attack_hand(L)

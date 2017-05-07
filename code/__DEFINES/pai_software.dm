@@ -10,3 +10,4 @@
 #define SOFT_MS "medical supplement"
 #define SOFT_SS "security supplement"
 #define SOFT_AS "atmosphere sensor"
+#define SOFT_PS "pai positioning system"

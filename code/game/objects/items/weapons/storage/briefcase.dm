@@ -143,3 +143,22 @@
 	var/obj/item/weapon/gun/projectile/automatic/SMG = new
 	SMG.gun_flags &= ~AUTOMAGDROP //dont want to drop mags in null space, do we?
 	stored_item = SMG
+
+/obj/item/weapon/storage/briefcase/bees
+	var/released = FALSE
+
+/obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
+	if(!released)
+		release()
+	..()
+
+/obj/item/weapon/storage/briefcase/bees/proc/release()
+	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
+	var/mob/living/simple_animal/bee/BEE = new(get_turf(src))
+	BEE.strength = 20
+	BEE.toxic = 5
+	BEE.mut = 2
+	BEE.feral = 25
+	BEE.icon_state = "bees_swarm-feral"
+	BEE.newTarget()
+	released = TRUE

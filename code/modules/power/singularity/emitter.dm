@@ -344,3 +344,6 @@
 /obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
 	id_tag = O.id_tag
 	set_frequency(O.id_tag)
+
+/obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
+	attack_hand(L)

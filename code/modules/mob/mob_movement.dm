@@ -318,6 +318,7 @@
 				if(M.pulling == mob)
 					if(!M.incapacitated() && M.canmove && mob.Adjacent(M))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 					else
 						M.stop_pulling()
@@ -326,40 +327,26 @@
 				if(chain_datum.extremity_A == mob)
 					if(istype(chain_datum.extremity_B,/mob/living))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 				else if(chain_datum.extremity_B == mob)
 					if(istype(chain_datum.extremity_A,/mob/living))
 						to_chat(src, "<span class='notice'>You're restrained! You can't move!</span>")
+						mob.delayNextMove(5)
 						return 0
 
 		if(mob.pinned.len)
 			to_chat(src, "<span class='notice'>You're pinned to a wall by [mob.pinned[1]]!</span>")
 			return 0
 
-		// COMPLEX MOVE DELAY SHIT
-		////////////////////////////
-		var/move_delay=0 // set move delay
-		mob.last_move_intent = world.time + 10
-		switch(mob.m_intent)
-			if("run")
-				if(mob.drowsyness > 0)
-					move_delay += 6
-				move_delay += 1+config.run_speed
-			if("walk")
-				move_delay += 7+config.walk_speed
-		move_delay += mob.movement_delay()
-
-		var/obj/item/weapon/grab/Findgrab = locate() in mob
-		if(Findgrab)
-			move_delay += 7
-
-		//We are now going to move
+		var/move_delay = mob.movement_delay()
 		var/old_dir = mob.dir
-		move_delay = max(move_delay,1)
-		if(mob.movement_speed_modifier)
-			move_delay *= (1/mob.movement_speed_modifier)
+
 		mob.delayNextMove(move_delay)
-		//Something with pulling things
+		mob.last_move_intent = world.time + 10
+
+		// Something with pulling things
+		var/obj/item/weapon/grab/Findgrab = locate() in src
 		if(Findgrab)
 			var/list/L = mob.ret_grab()
 			if(istype(L, /list))
@@ -372,8 +359,7 @@
 							step(mob, dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
-								if ((diag - 1) & diag)
-								else
+								if (!((diag - 1) & diag))
 									diag = null
 								if ((get_dist(mob, M) > 1 || diag))
 									step(M, get_dir(M.loc, T))
@@ -416,7 +402,8 @@
 
 		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
-				del(G)
+				qdel(G)
+				mob.grabbed_by.Remove(G)
 			if(G.state == GRAB_AGGRESSIVE)
 				mob.delayNextMove(10)
 				if(!prob(25))
@@ -503,7 +490,7 @@
 			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
-			if(!(newLoc.flags & NOJAUNT))
+			if(!(newLoc.turf_flags & NOJAUNT))
 				mob.forceEnter(newLoc)
 				mob.dir = direct
 			else
@@ -575,3 +562,28 @@
 	else
 		step(pulling, get_dir(pulling.loc, A))
 	return
+
+/mob/proc/movement_delay()
+	return (base_movement_tally() * movement_tally_multiplier())
+
+/mob/proc/base_movement_tally()
+	switch(m_intent)
+		if("run")
+			if(drowsyness > 0)
+				. += 6
+			. += MOB_RUN_TALLY+config.run_speed
+		if("walk")
+			. += MOB_WALK_TALLY+config.walk_speed
+	
+	var/obj/item/weapon/grab/Findgrab = locate() in src
+	if(Findgrab)
+		. += 7
+
+/mob/proc/movement_tally_multiplier()
+	. = 1
+	if(!flying)
+		var/turf/T = loc
+		if(istype(T))
+			. = T.adjust_slowdown(src, .)
+		if(movement_speed_modifier)
+			. *= (1/movement_speed_modifier)

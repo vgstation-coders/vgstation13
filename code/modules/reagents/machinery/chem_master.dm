@@ -27,6 +27,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/chem_board = /obj/item/weapon/circuitboard/chemmaster3000
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
+	var/max_pill_size = 50
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -78,6 +79,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
 	handle_new_reservoir(scancount*25+100)
+	max_pill_size = initial(max_pill_size)+manipcount*25 // i suck at math
+
 
 /obj/machinery/chem_master/proc/handle_new_reservoir(var/newvol)
 	if(reagents.maximum_volume == newvol)
@@ -206,46 +209,82 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		else if(href_list["add"])
-
+			var/id = href_list["add"]
+			var/amount
 			if(href_list["amount"])
-				var/id = href_list["add"]
-				var/amount = text2num(href_list["amount"])
-				if(amount < 0)
-					return
-				R.trans_id_to(src, id, amount)
+				amount = text2num(href_list["amount"])
+			else if(href_list["percent"])
+				amount = R.get_reagent_amount(id) * text2num(href_list["percent"]) / 100
+			if(isnull(amount) || amount < 0)
+				return
+			R.trans_id_to(src, id, amount)
 			src.updateUsrDialog()
 			return 1
 
-		else if(href_list["addcustom"])
-
-			var/id = href_list["addcustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
-			useramount = isgoodnumber(useramount)
-			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
+		else if(href_list["addall"])
+			var/amount
+			if(href_list["amount"])
+				amount = text2num(href_list["amount"])
+			else if(href_list["percent"])
+				amount = R.total_volume * text2num(href_list["percent"]) / 100
+			if(isnull(amount) || amount < 0)
+				return
+			R.trans_to(src, amount)
 			src.updateUsrDialog()
 			return 1
 
 		else if(href_list["remove"])
-
+			var/id = href_list["remove"]
+			var/amount
 			if(href_list["amount"])
-				var/id = href_list["remove"]
-				var/amount = text2num(href_list["amount"])
-				if(amount < 0)
-					return
-				if(mode)
-					reagents.trans_id_to(beaker, id, amount)
-				else
-					reagents.remove_reagent(id, amount)
+				amount = text2num(href_list["amount"])
+			else if(href_list["percent"])
+				amount = R.get_reagent_amount(id) * text2num(href_list["percent"]) / 100
+			if(isnull(amount) || amount < 0)
+				return
+			if(mode)
+				reagents.trans_id_to(beaker, id, amount)
+			else
+				reagents.remove_reagent(id, amount)
 			src.updateUsrDialog()
 			return 1
 
-		else if(href_list["removecustom"])
+		else if(href_list["removeall"])
+			var/amount
+			if(href_list["amount"])
+				amount = text2num(href_list["amount"])
+			else if(href_list["percent"])
+				amount = R.total_volume * text2num(href_list["percent"]) / 100
+			if(isnull(amount) || amount < 0)
+				return
+			if(mode)
+				reagents.trans_to(beaker, amount)
+			else
+				reagents.remove_all(amount)
+			src.updateUsrDialog()
+			return 1
 
+		else if(href_list["addcustom"])
+			var/id = href_list["addcustom"]
+			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = isgoodnumber(useramount)
+			src.Topic(null, list("amount" = "[useramount]", "add" = "[id]"))
+			return 1
+		else if(href_list["addallcustom"])
+			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = isgoodnumber(useramount)
+			src.Topic(null, list("amount" = "[useramount]", "addall" = "1"))
+			return 1
+		else if(href_list["removecustom"])
 			var/id = href_list["removecustom"]
 			useramount = input("Select the amount to transfer.", 30, useramount) as num
 			useramount = isgoodnumber(useramount)
 			src.Topic(null, list("amount" = "[useramount]", "remove" = "[id]"))
-			src.updateUsrDialog()
+			return 1
+		else if(href_list["removeallcustom"])
+			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = isgoodnumber(useramount)
+			src.Topic(null, list("amount" = "[useramount]", "removeall" = "1"))
 			return 1
 
 		else if(href_list["toggle"])
@@ -274,8 +313,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				return
 
 			var/amount_per_pill = reagents.total_volume/count
-			if(amount_per_pill > 50)
-				amount_per_pill = 50
+			if(amount_per_pill > max_pill_size)
+				amount_per_pill = max_pill_size
 			if(href_list["createempty"])
 				amount_per_pill = 0 //If "createempty" is 1, pills are empty and no reagents are used.
 
@@ -390,12 +429,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-
 /obj/machinery/chem_master/proc/generate_pill_icon_cache()
 	pill_icon_cache = list()
 	for(var/i = 1 to MAX_PILL_SPRITE)
-		pill_icon_cache += "<img src='data:image/png;base64,[icon2base64(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))]'>"
-		//This is essentially just bicon(). Ideally we WOULD use just bicon(), but right now it's fucked up when used on icons because it goes by their \ref.
+		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
 
 /obj/machinery/chem_master/attack_hand(mob/user as mob)
 	. = ..()
@@ -412,46 +449,102 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
-		//dat += "<A href='?src=\ref[src];close=1'>Close</A>"
 	else
 		var/datum/reagents/R = beaker.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
+
 		if(src.loaded_pill_bottle)
 			dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 		else if(windowtype == "chem_master")
 			dat += "No pill bottle inserted.<BR><BR>"
+
+		//
+		// BEAKER
+		//
+
 		if(!R.total_volume)
 			dat += "Beaker is empty."
 		else
-			dat += "Add to buffer:<BR>"
+			dat += {"
+				<table>
+					<td class="column1">
+						Add to buffer:
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];addall=1;percent=[100/3]'>33%</A>
+						<A href='?src=\ref[src];addall=1;percent=50'>50%</A>
+						<A href='?src=\ref[src];addallcustom=1'>Custom</A>
+						<A href='?src=\ref[src];addall=1;amount=[R.total_volume]'>All</A>
+					</td>
+				</table>
+			"}
+
+			dat += "<table>"
 			for(var/datum/reagent/G in R.reagent_list)
+				dat += "<tr>"
+				dat += {"
+					<td class="column1">
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(?)</A>
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
+						<A href='?src=\ref[src];add=[G.id];amount=5'>5u</A>
+						<A href='?src=\ref[src];add=[G.id];amount=10'>10u</A>
+						<A href='?src=\ref[src];addcustom=[G.id]'>Custom</A>
+						<A href='?src=\ref[src];add=[G.id];amount=[G.volume]'>All</A>
+					</td>
+				"}
+				dat += "</tr>"
+			dat += "</table>"
 
-				dat += {"[G.name] , [G.volume] Units -
-					<A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(Analyze)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=1'>(1)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=5'>(5)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=10'>(10)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=[G.volume]'>(All)</A>
-					<A href='?src=\ref[src];addcustom=[G.id]'>(Custom)</A><BR>"}
+		//
+		// BUFFER
+		//
 
-		dat += "<HR>Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A><BR>"
+		dat += "<HR>"
 		if(reagents.total_volume)
-			for(var/datum/reagent/N in reagents.reagent_list)
+			dat += {"
+				<table>
+					<td class="column1">
+						Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A>
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];removeall=1;percent=[100/3]'>33%</A>
+						<A href='?src=\ref[src];removeall=1;percent=50'>50%</A>
+						<A href='?src=\ref[src];removeallcustom=1'>Custom</A>
+						<A href='?src=\ref[src];removeall=1;amount=[reagents.total_volume]'>All</A>
+					</td>
+				</table>
+			"}
 
-				dat += {"[N.name] , [N.volume] Units -
-					<A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(Analyze)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=1'>(1)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=5'>(5)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=10'>(10)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=[N.volume]'>(All)</A>
-					<A href='?src=\ref[src];removecustom=[N.id]'>(Custom)</A><BR>"}
+			dat += "<table>"
+			for(var/datum/reagent/N in reagents.reagent_list)
+				dat += "<tr>"
+				dat += {"
+					<td class="column1">
+						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(?)</A>
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>
+						<A href='?src=\ref[src];remove=[N.id];amount=5'>5u</A>
+						<A href='?src=\ref[src];remove=[N.id];amount=10'>10u</A>
+						<A href='?src=\ref[src];removecustom=[N.id]'>Custom</A>
+						<A href='?src=\ref[src];remove=[N.id];amount=[N.volume]'>All</A>
+					</td>
+				"}
+				dat += "</tr>"
+			dat += "</table>"
 		else
 			dat += "Buffer is empty.<BR>"
-		if(!condi)
-			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><a href=\"?src=\ref[src]&change_bottle=1\"><img src=\"bottle[bottlesprite].png\" /></a><BR>"}
-			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
 
-			dat += {"<div class="li"></div>"}
+		if(condi)
+			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
+		else
+			//
+			// PILL ICONS
+			//
+			dat += "<HR>"
+			dat += "<div class='pillIconsContainer'>"
 			for(var/i = 1 to MAX_PILL_SPRITE)
 				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 							<div class="pillIcon">
@@ -460,16 +553,18 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 						</a>"}
 				if (i%10 == 0)
 					dat +="<br>"
-
-			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR>
-					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills (50 units max each; [max_pill_count] max)</A><BR>
+			dat += "</div>"
+			//
+			// BUTTONS
+			//
+			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>
+					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
 					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
 					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
-		else
-			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
+
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 500, src)
+	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 475, 500, src)
 	popup.add_stylesheet("chemmaster", 'html/browser/chem_master.css')
 	popup.set_content(dat)
 	popup.open()
@@ -487,6 +582,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return num
 	else
 		return 0
+
+/obj/machinery/chem_master/kick_act(mob/living/H)
+	..()
+	if(beaker)
+		detach()
 
 /obj/machinery/chem_master/update_icon()
 

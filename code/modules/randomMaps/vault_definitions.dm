@@ -25,7 +25,7 @@ var/list/existing_vaults = list()
 			if(new_turf.type != zlevel_base_turf_type) //And vault's base turf differs from zlevel's base turf
 				new_turf.ChangeTurf(zlevel_base_turf_type)
 
-		new_turf.flags |= NO_MINIMAP //Makes the spawned turfs invisible on minimaps
+		new_turf.turf_flags |= NO_MINIMAP //Makes the spawned turfs invisible on minimaps
 
 //How to create a new vault:
 //1) create a map in maps/randomVaults/
@@ -51,7 +51,29 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/rust.dmm"
 
 /datum/map_element/vault/dance_revolution
+	name = "Dance Dance Revolution"
 	file_path = "maps/randomvaults/dance_revolution.dmm"
+	var/obj/structure/dance_dance_revolution/machine
+
+/datum/map_element/vault/dance_revolution/initialize(list/objects)
+	.=..()
+
+	machine = track_atom(locate(/obj/structure/dance_dance_revolution) in objects)
+
+/datum/map_element/vault/dance_revolution/process_scoreboard()
+	var/list/L = list()
+
+	if(!machine)
+		L += "The game has been destroyed!"
+	else if(machine.wins || machine.attempts)
+		L += "[machine.attempts] attempts have been made in total."
+		L += "Of them, [machine.wins] were successful."
+		if(machine.winner)
+			L += "The first dancer to successfully finish the game was [machine.winner]."
+		else
+			L += "Nobody was good enough to finish the game."
+
+	return L
 
 /datum/map_element/vault/spacegym
 	file_path = "maps/randomvaults/spacegym.dmm"
@@ -120,3 +142,6 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/ice_comet
 	file_path = "maps/randomvaults/ice_comet.dmm"
+
+/datum/map_element/vault/research_facility
+	file_path = "maps/randomvaults/research_facility.dmm"

@@ -99,8 +99,18 @@
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
-		if(config.limbs_can_break && brute_dam + burn_dam >= max_damage * config.organ_health_multiplier)
-			if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
+		var/threshold_multiplier = 1
+		if(isslimeperson(owner))
+			threshold_multiplier = 0
+		if(config.limbs_can_break && brute_dam + burn_dam >= max_damage * config.organ_health_multiplier * threshold_multiplier)
+			if(isslimeperson(owner))
+				var/chance_multiplier = 1
+				if(istype(src, /datum/organ/external/head))
+					chance_multiplier = 0.5
+				if(prob(brute * sharp * chance_multiplier))
+					droplimb(1)
+					return
+			else if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
 				droplimb(1)
 				return
 		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
@@ -333,7 +343,7 @@
 			return
 
 	//Bone fracurtes
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)))
+	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(owner.species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -495,7 +505,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
-			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
+			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
@@ -607,6 +617,28 @@ Note that amputating the affected organ does in fact remove the infection from t
 		tbrute = 3
 	return "[tbrute][tburn]"
 
+/datum/organ/external/proc/rejuvenate_limb()
+	for(var/obj/item/weapon/shard/shrapnel/s in implants)
+		if(istype(s))
+			implants -= s
+			owner.contents -= s
+			qdel(s)
+			s = null
+	amputated = 0
+	brute_dam = 0
+	burn_dam = 0
+	damage_state = "00"
+	germ_level = 0
+	hidden = null
+	number_wounds = 0
+	open = 0
+	perma_injury = 0
+	stage = 0
+	status = 0
+	trace_chemicals = list()
+	wounds = list()
+	wound_update_accuracy = 1
+
 /****************************************************
 			   DISMEMBERMENT
 ****************************************************/
@@ -709,6 +741,33 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(vital)
 			owner.death()
 
+		if(owner.species.anatomy_flags & NO_STRUCTURE)
+			status |= ORGAN_ATTACHABLE
+			amputated = 1
+			setAmputatedTree()
+			open = 0
+
+		if(isslimeperson(owner) && organ)
+			spawn(1)
+			if(organ.borer)
+				organ.borer.detach()
+			if(name != LIMB_HEAD)
+				qdel(organ)
+			else
+				var/headloc = organ.loc
+				rejuvenate_limb()
+				var/datum/organ/internal/I = organ.organ_data
+				var/obj/item/organ/O = I.remove(owner)
+				if(O && istype(O))
+					O.organ_data.rejecting = null
+					owner.internal_organs_by_name["brain"] = null
+					owner.internal_organs_by_name -= "brain"
+					owner.internal_organs -= O.organ_data
+					internal_organs -= O.organ_data
+					O.removed(owner,owner)
+					O.loc = headloc
+				qdel(organ)
+
 /datum/organ/external/proc/generate_dropped_organ(var/obj/item/current_organ)
 	return current_organ
 
@@ -768,6 +827,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/fracture()
+	if(owner.species.anatomy_flags & NO_BONES)
+		return
 	if(status & ORGAN_BROKEN)
 		return
 	owner.visible_message("<span class='danger'>You hear a loud cracking sound coming from \the [owner].</span>", \
@@ -947,6 +1008,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/mob/living/H = W.loc
 		H.drop_item(W, force_drop = 1)
 	W.forceMove(owner)
+
+/datum/organ/external/proc/skeletify()
+	if(istype(species, /datum/species/skellington))
+		return
+	owner.visible_message("<span class = 'warning'>The flesh falls off of \the [owner]'s [display_name]!</span>","<span class = 'warning'>The flesh is falling off of your [display_name]!</span>")
+	var/new_species_name
+	if(isvox(src))
+		new_species_name = "Skeletal Vox"
+	else
+		new_species_name = "Skellington"
+	var/datum/species/S = all_species[new_species_name]
+	species = new S.type
+	owner.update_body()
 
 /****************************************************
 			   ORGAN DEFINES
@@ -1405,7 +1479,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 		qdel(src)
 		return
 	//Add (facial) hair.
-	if(H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
+	if(H && H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
 		if(facial_hair_style)
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -1414,7 +1488,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 
 			overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
 
-	if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+	if(H && H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 		if(hair_style)
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
@@ -1437,23 +1511,25 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 	//	if(H.gender == FEMALE)
 	//		H.icon_state = "head_f"
 	//	H.overlays += H.generate_head_icon()
-	transfer_identity(H)
+	if(H)
+		transfer_identity(H)
 
-	name = "[H.real_name]'s head"
+		name = "[H.real_name]'s head"
 
-	H.regenerate_icons()
+		H.regenerate_icons()
 
-	brainmob.stat = 2
-	brainmob.death()
+	if(brainmob)
+		brainmob.stat = 2
+		brainmob.death()
 
-	if(brainmob.mind && brainmob.mind.special_role == HIGHLANDER)
-		if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
-			var/mob/living/carbon/human/L = H.lastattacker
-			if(L.mind && L.mind.special_role == HIGHLANDER)
-				L.revive(0)
-				to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
-				var/turf/T1 = get_turf(H)
-				make_tracker_effects(T1, L)
+		if(brainmob.mind && brainmob.mind.special_role == HIGHLANDER)
+			if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
+				var/mob/living/carbon/human/L = H.lastattacker
+				if(L.mind && L.mind.special_role == HIGHLANDER)
+					L.revive(0)
+					to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
+					var/turf/T1 = get_turf(H)
+					make_tracker_effects(T1, L)
 
 obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
 	brainmob = new(src)
@@ -1540,3 +1616,27 @@ obj/item/weapon/organ/head/Destroy()
 		if(OE.grasp_id == index && OE.can_grasp)
 			return OE
 	return null
+
+/datum/organ/external/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"damage_state",
+		"brute_dam",
+		"burn_dam",
+		"last_dam",
+		"wounds",
+		"number_wounds",
+		"perma_injury",
+		"parent",
+		"children",
+		"internal_organs",
+		"open",
+		"stage",
+		"cavity",
+		"sabotaged",
+		"encased",
+		"implants")
+
+	reset_vars_after_duration(resettable_vars, duration)
+	for(var/datum/wound/W in wounds)
+		W.send_to_past(duration)

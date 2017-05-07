@@ -28,7 +28,7 @@
 
 /obj/item/weapon/plastique/suicide_act(var/mob/user)
 	. = (BRUTELOSS)
-	to_chat(viewers(user), "<span class='danger'>[user] activates the C4 and holds it above his head! It looks like \he's going out with a bang!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] activates the C4 and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	var/message_say = "FOR NO RAISIN!"
 	if(user.mind)
 		if(user.mind.special_role)
@@ -38,7 +38,7 @@
 			else if(role == "changeling")
 				message_say = "FOR THE HIVE!"
 			else if(role == "cultist")
-				message_say = "FOR NARSIE!"
+				message_say = "FOR NAR-SIE!"
 	user.say(message_say)
 	target = user
 	explode(get_turf(user))

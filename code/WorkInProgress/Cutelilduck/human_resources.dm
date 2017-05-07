@@ -104,7 +104,7 @@
 		else
 			icon_state = "centcom_old"
 			bans = "9" //if get_region_accesses ever uses 9 we're fucked
-			del(DE)
+			qdel(DE)
 	else
 		return ..()
 
@@ -143,6 +143,6 @@
 				to_chat(user, "<span class='notice'>You require at least one stamp.</span>")
 				return
 			icon_state = "centcom_old"
-			del(D)
+			qdel(D)
 	else
 		return ..()

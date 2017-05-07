@@ -29,6 +29,8 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
+#define isslimeperson(A) (ishuman(A) && A.species && istype(A.species, /datum/species/slime))
+
 #define ishorrorform(A) (ishuman(A) && A.species && istype(A.species, /datum/species/horror))
 
 #define isgrue(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grue))
@@ -42,6 +44,8 @@
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
+
+#define isgremlin(A) (istype(A, /mob/living/simple_animal/hostile/gremlin))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -176,6 +180,8 @@
 
 #define isspace(A) (A.type == /area)
 
+#define issnow(A) (isspace(A) && map.base_turf == /turf/snow)	// I'm sorry
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
 proc/get_space_area()
@@ -220,3 +226,5 @@ proc/get_space_area()
 
 
 #define subtypesof(A) (typesof(A) - A)
+
+#define LIBVG(function, arguments...) call("./libvg.[world.system_type == "UNIX" ? "so" : "dll"]", function)(arguments)

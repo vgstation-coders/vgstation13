@@ -147,9 +147,8 @@
 				return 0
 			if(ishuman(L))
 				var/mob/living/carbon/human/H = L
-				if(H.dna)
-					if((H.dna.mutantrace == "slime") || (isgolem(H)))
-						return 0
+				if((isslimeperson(H)) || (isgolem(H)))
+					return 0
 		//IF WE ARE MOBS SPAWNED BY THE ADMINBUS THEN WE DON'T ATTACK TEST DUMMIES OR IAN (wait what? man that's snowflaky as fuck)
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
@@ -189,7 +188,7 @@
 					OpenFire(target)
 			if(target.Adjacent(src))	//If they're next to us, attack
 				AttackingTarget()
-			if(canmove)
+			if(canmove && space_check())
 				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
 					walk_away(src,target,retreat_distance,move_to_delay)
 				else
@@ -199,7 +198,7 @@
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
 		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
-			if(canmove)
+			if(canmove && space_check())
 				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
 				A.attack_animal(src)

@@ -25,8 +25,11 @@ Pipelines + Other Objects -> Pipe network
 	var/nodealert = 0
 	var/update_icon_ready = 0 // don't update icons before they're ready or if they don't want to be
 	var/starting_volume = 200
-	// Which directions can we connect with?
+
+	// Which directions can we connect with? (TODO: list?)
 	var/initialize_directions = 0
+	var/initialize_directions_he = 0 // Same, but for HE pipes.
+
 	var/can_be_coloured = 0
 	var/image/centre_overlay = null
 	// Investigation logs
@@ -100,6 +103,15 @@ Pipelines + Other Objects -> Pipe network
 	for(var/direction in cardinal)
 		if(direction & initialize_directions)
 			. += direction
+
+// Convenience function for /obj/item/pipe
+/obj/machinery/atmospherics/proc/has_initialize_direction(var/direction, var/connection_type=PIPE_TYPE_STANDARD)
+	switch(connection_type)
+		if(PIPE_TYPE_STANDARD)
+			return (initialize_directions & direction)
+		if(PIPE_TYPE_HE)
+			return (initialize_directions_he & direction)
+	return FALSE
 
 /obj/machinery/atmospherics/proc/node_color_for(var/obj/machinery/atmospherics/other)
 	if (default_colour && other.default_colour && (other.default_colour != default_colour)) // if both pipes have special colours - average them
@@ -299,15 +311,14 @@ Pipelines + Other Objects -> Pipe network
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
 		if(istype(W, /obj/item/weapon/wrench/socket) && istype(src, /obj/machinery/atmospherics/pipe))
 			to_chat(user, "<span class='warning'>You begin to open the pressure release valve on the pipe...</span>")
-			if(do_after(user, src, 50))
-				if(!loc)
-					return
-				playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
-				user.visible_message("[user] vents \the [src].",
-									"You have vented \the [src].",
-									"You hear a ratchet.")
-				var/datum/gas_mixture/internal_removed = int_air.remove(int_air.total_moles()*starting_volume/int_air.volume)
-				env_air.merge(internal_removed)
+			if(!do_after(user, src, 50) || !loc)
+				return
+			playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
+			user.visible_message("[user] vents \the [src].",
+								"You have vented \the [src].",
+								"You hear a ratchet.")
+			var/datum/gas_mixture/internal_removed = int_air.remove(int_air.total_moles()*starting_volume/int_air.volume)
+			env_air.merge(internal_removed)
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1

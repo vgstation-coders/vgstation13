@@ -409,30 +409,11 @@
 
 	// Extract the organ!
 	if(target.op_stage.current_organ)
-
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
-
-		var/obj/item/organ/O
-		if(I && istype(I))
-			O = I.remove(user)
-			if(O && istype(O))
-
-				// Stop the organ from continuing to reject.
-				O.organ_data.rejecting = null
-
-				// Transfer over some blood data, if the organ doesn't have data.
-				var/datum/reagent/blood/organ_blood = O.reagents.reagent_list[BLOOD]
-				if(!organ_blood || !organ_blood.data["blood_DNA"])
-					target.vessel.trans_to(O, 5, 1, 1)
-
-				// Kinda redundant, but I'm getting some buggy behavior.
-				target.internal_organs_by_name[target.op_stage.current_organ] = null
-				target.internal_organs_by_name -= target.op_stage.current_organ
-				target.internal_organs -= O.organ_data
-				affected.internal_organs -= O.organ_data
-				O.removed(target,user)
-
+		var/datum/organ/external/affectedarea = target.get_organ(target_zone)
+		var/datum/organ/internal/targetorgan = target.internal_organs_by_name[target.op_stage.current_organ]
+		
+		target.remove_internal_organ(user, targetorgan, affectedarea)
+		
 		target.op_stage.current_organ = null
 
 /datum/surgery_step/internal/remove_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

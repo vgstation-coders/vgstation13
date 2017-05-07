@@ -32,12 +32,35 @@ var/list/admin_datums = list()
 		admins |= C
 		owner.verbs -= /client/proc/readmin
 
+		add_menu_items()
+
 /datum/admins/proc/disassociate()
 	if(owner)
 		admins -= owner
 		owner.remove_admin_verbs()
 		owner.holder = null
+
+		remove_menu_items()
+
 		owner = null
+
+
+/datum/admins/proc/add_menu_items()
+	if (owner && rights & (R_DEBUG|R_SERVER))
+		winset(owner, "server_menu", "is-disabled=false")
+
+		if (rights & R_SERVER)
+			winset(owner, "reboot_menu_item", "is-disabled=false")
+
+/datum/admins/proc/remove_menu_items()
+	if (owner)
+		winset(owner, "server_menu", "is-disabled=true")
+		winset(owner, "reboot_menu_item", "is-disabled=true")
+
+/datum/admins/proc/update_menu_items()
+	if (owner)
+		remove_menu_items()
+		add_menu_items()
 
 /*
 checks if usr is an admin with at least ONE of the flags in rights_required. (Note, they don't need all the flags)

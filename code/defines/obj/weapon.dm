@@ -392,6 +392,10 @@
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 
+/obj/item/weapon/legcuffs/beartrap/armed
+	armed = 1
+	icon_state = "beartrap1"
+
 /obj/item/weapon/legcuffs/beartrap/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
 	return (BRUTELOSS)

@@ -111,7 +111,10 @@
 		new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(src)
 		new /obj/item/clothing/suit/armor/vest(src)
 		new /obj/item/clothing/under/rank/head_of_security/jensen(src)
-		new /obj/item/clothing/suit/armor/hos/jensen(src)
+		if(prob(50))
+			new /obj/item/clothing/suit/armor/hos/jensen(src)
+		else
+			new /obj/item/clothing/suit/armor/hos/sundowner(src)
 		new /obj/item/clothing/head/helmet/tactical/HoS/dermal(src)
 		new /obj/item/weapon/cartridge/hos(src)
 		new /obj/item/device/detective_scanner(src)

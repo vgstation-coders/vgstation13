@@ -411,3 +411,11 @@
 
 	updateDialog()
 	return 1
+
+/obj/machinery/power/am_control_unit/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Toggle on/off
+		toggle_power()
+		message_admins("AME toggled [active?"on":"off"] by [key_name(L)] at [formatJumpTo(src)]",0,1)
+	else //Set strength
+		fuel_injection = rand(1, 300) //there's technically no limit on how high this can go so 300 is nothing but an arbitary limit
+		message_admins("AME injection strength set to [fuel_injection] by [key_name(L)] at [formatJumpTo(src)]",0,1)

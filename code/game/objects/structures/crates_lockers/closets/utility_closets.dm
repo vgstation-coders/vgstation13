@@ -18,9 +18,12 @@
 	icon_state = "emergency"
 	icon_closed = "emergency"
 	icon_opened = "emergencyopen"
+	var/default_stuff = 1
 
 /obj/structure/closet/emcloset/New()
 	..()
+	if(!default_stuff)
+		return
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	switch (pickweight(list("small" = 55, "aid" = 25, "tank" = 10, "both" = 10, "nothing" = 0, "delete" = 0)))
 		if ("small")
@@ -50,10 +53,6 @@
 		if ("delete")
 			qdel(src)
 			return
-		/*if ("fire")
-			new /obj/structure/closet/firecloset(src.loc)
-			del(src)
-			return*/
 
 /obj/structure/closet/emcloset/legacy/New()
 	..()
@@ -74,6 +73,19 @@
 	new /obj/item/weapon/tank/nitrogen(src)
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/clothing/mask/breath/vox(src)
+
+/obj/structure/closet/emcloset/cold
+	desc = "It's a decrepit storage unit containing emergency supplies."
+	icon_state = "coldemerg"
+	icon_closed = "coldemerg"
+	icon_opened = "coldemergopen"
+	default_stuff = 0
+
+/obj/structure/closet/emcloset/cold/New()
+	..()
+	for(var/i = 1 to rand(3,4))
+		new /obj/item/weapon/storage/toolbox/emergency(src)
+
 
 /*
  * Fire Closet

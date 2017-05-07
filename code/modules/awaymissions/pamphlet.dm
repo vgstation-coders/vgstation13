@@ -36,3 +36,21 @@
 //we don't want the silly text overlay!
 /obj/item/weapon/paper/pamphlet/update_icon()
 	return
+
+/obj/item/weapon/paper/pamphlet/medivault
+	info = "<b>Welcome to the Nanotrasen Research and Medical facility...</b></br>\
+			If you are reading this pamphlet then congratulations on your recent reassignment \
+			to this new, state of the art medical facility! You'll be involved in exciting and \
+			ground-breaking research projects and together with other Nanotrasen Medical \
+			Researchers, you will pave the way for a bright, new Nanotrasen Approved™ universe! <br><br> \
+			<b>Notes on Security Protocol</b><br>\
+			Security is of the utmost concern, and here at Nanotrasen we are always working to \
+			ensure that all of our employees can enjoy a safe working environment. Given the \
+			sensitive nature of your work here at this facility, additional security protocols will \
+			be enforced. All personnel at the facility are loyalty implanted and are required to \
+			have their implant checked every Monday by the security team. Failure to have your loyalty \
+			implant checked will result in disciplinary measures. Furthermore Cyborgs and other AI \
+			controlled machines are not permitted at the facility due to the risks posed by potential \
+			mechanical failures. Failure to follow all Security Protocols will result in harsh disciplinary \
+			measures. Please familiarise yourself with all of our Security Protocols and have a productive \
+			day!"

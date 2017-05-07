@@ -426,7 +426,7 @@
 /obj/structure/mannequin/update_icon()
 	..()
 	overlays.len = 0
-	var/obj/Overlays/O = getFromPool(/obj/Overlays/)
+	var/obj/abstract/Overlays/O = getFromPool(/obj/abstract/Overlays/)
 	O.layer = FLOAT_LAYER
 	O.overlays.len = 0
 
@@ -444,7 +444,7 @@
 	overlays += I
 	returnToPool(O)
 
-/obj/structure/mannequin/proc/update_icon_slot(var/obj/Overlays/O, var/slot)
+/obj/structure/mannequin/proc/update_icon_slot(var/obj/abstract/Overlays/O, var/slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]
 	if(clothToUpdate)
 		var/t_state = clothToUpdate.icon_state
@@ -499,7 +499,7 @@
 
 		clothToUpdate.generate_accessory_overlays(O)
 
-/obj/structure/mannequin/proc/update_icon_hand(var/obj/Overlays/O,var/index)
+/obj/structure/mannequin/proc/update_icon_hand(var/obj/abstract/Overlays/O,var/index)
 	var/obj/item/heldItem = get_held_item_by_index(index)
 
 	if(heldItem)

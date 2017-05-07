@@ -64,7 +64,15 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
-	login_music = fcopy_rsc(oursong)
+	if(map.base_turf == /turf/snow)
+		var/path = "sound/music/xmas/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
 
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
@@ -224,6 +232,8 @@ var/datum/controller/gameticker/ticker
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
+	spawn(5 MINUTES) // poll every 5 minutes
+		population_poll_loop()
 
 	wageSetup()
 
@@ -232,7 +242,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!
 	//Now we have a general cinematic centrally held within the gameticker....far more efficient!
-	var/obj/screen/cinematic = null
+	var/obj/abstract/screen/cinematic = null
 
 	//Plus it provides an easy way to make cinematics for other events. Just use this as a template :)
 /datum/controller/gameticker/proc/station_explosion_cinematic(var/station_missed=0, var/override = null)

@@ -332,3 +332,6 @@ obj/machinery/gibber/New()
 		if (!Tx.density)
 			var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
 			O.New(Tx,i)
+
+/obj/machinery/gibber/npc_tamper_act(mob/living/L)
+	attack_hand(L)

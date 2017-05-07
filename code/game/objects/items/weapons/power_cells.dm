@@ -95,7 +95,7 @@
 	name = "infinite-capacity power cell!"
 	icon_state = "icell"
 	origin_tech =  null
-	maxcharge = 30000
+	maxcharge = 1.#INF
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 	use()
 		return 1
@@ -112,6 +112,28 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 
+/obj/item/weapon/cell/crepe
+	name = "power crêpe"
+	desc = "Warning: May contain dairy products, 12,000kJ of searing death, gluten."
+	origin_tech = Tc_POWERSTORAGE + "=3"
+	icon_state = "power_crepe"
+	maxcharge = 12000
+	charge = 12000
+	w_type = RECYK_BIOLOGICAL
+	minor_fault = 1
+
+/obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
+	user.visible_message("<span class = 'notice'>\The [user] takes a bite out of \the [src]</span>", "<span class = 'warning'>You take a bite out of \the [src]</span>")
+	spawn(rand(1,3) SECONDS)
+		var/power_to_use = min(charge, rand(800,1200))
+		playsound(loc, 'sound/effects/eleczap.ogg', 80, 1)
+		if(use(power_to_use))
+			user.adjustFireLoss(power_to_use/100) //So 8 to 12 damage
+			user.visible_message("<span class = 'notice'>\The [user] is electrocuted by \the [src]</span>", "<span class = 'warning'>You are [pick("frazzled","electrocuted","zapped")] by \the [src]!</span>")
+			if(!user.light_range)
+				user.set_light(2,2,"#ffff00")
+				spawn(power_to_use/100 SECONDS)
+					user.set_light(0)
 
 /obj/item/weapon/cell/slime
 	name = "charged slime core"
@@ -129,3 +151,15 @@
 	desc = "A specially designed power cell for heating and cooling projectiles"
 	icon_state = "icell"
 	maxcharge = 900
+
+/obj/item/weapon/cell/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"charge",
+		"rigged",
+		"minor_fault",
+		"brute_damage",
+		"electronics_damage")
+
+	reset_vars_after_duration(resettable_vars, duration)
+

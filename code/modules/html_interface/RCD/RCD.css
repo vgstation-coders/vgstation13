@@ -21,6 +21,13 @@ a.color {
 	border:1px solid white;
 }
 
+a.schematic_selected {
+	color: #199130;
+}
+a.schematic_selected:hover {
+	background-color: #199130;
+}
+
 a.selected img,
 a:hover {
 	background: #0066cc;
@@ -38,12 +45,18 @@ a.no_dec:hover
 	color: #ffffff;
 }
 
+#dir_holder
+{
+	display: inline-block;
+	margin-right: 10px;
+}
+
 /* RPD layers, YES I SUCK AT CSS */
 
 .layer_holder
 {
 	height: 32px;
-	width: 50px;
+	width: 40px;
 	display: inline-block;
 }
 
@@ -58,11 +71,11 @@ a.no_dec:hover
 
 .layer.vertical
 {
-	top: 0px;
+	/*top: 0px;*/
 	background-image: url(RPD_0_1.png);
 	width: 5px;
 	height: 32px;
-	right: 0px;
+	/*right: 0px;*/
 	background-position: 19px 0px;
 	display: inline-block;
 	position: relative;
@@ -78,16 +91,21 @@ a.no_dec:hover
 	background-image: url(RPD-layer-blended-1.png);
 }
 
-.layer.horizontal.one		{margin-top: 0px;}
-.layer.horizontal.two		{margin-top: 6px;}
-.layer.horizontal.three		{margin-top: 6px;}
-.layer.horizontal.four		{margin-top: 6px;}
-.layer.horizontal.five		{margin-top: 6px;}
+.layer.horizontal.one		{top: 0px;}
+.layer.horizontal.two		{top: 2px;}
+.layer.horizontal.three		{top: 2px;}
+.layer.horizontal.four		{top: 2px;}
+.layer.horizontal.five		{top: 2px;}
 
 /* IT WERKS DON'T TOUCH IT */
 
 .layer.vertical.one			{left: 0px;}
-.layer.vertical.two			{left: -2px;}
-.layer.vertical.three		{left: -4px;}
-.layer.vertical.four		{left: -6px;}
-.layer.vertical.five		{left: -8px;}
+.layer.vertical.two			{left: -1px;}
+.layer.vertical.three		{left: -3px;}
+.layer.vertical.four		{left: -5px;}
+.layer.vertical.five		{left: -7px;}
+
+.fav
+{
+	font-family: Consolas, monospace;
+}

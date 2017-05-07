@@ -76,9 +76,10 @@
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)
-		return
+		return 0
 	if(!loc)
-		return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+		return 0	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+	// Why the fuck is this handled here?
 	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))
 			mutations.Add(M_HARDCORE)
@@ -99,7 +100,7 @@
 	if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting)
-				return
+				return 0
 //			to_chat(world, "[src.name]")
 			var/datum/mind/head = ticker.mode.implanted[mind]
 			//var/list/removal
@@ -115,6 +116,7 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
+	return 1
 
 // Apply connect damage
 /mob/living/beam_connect(var/obj/effect/beam/B)
@@ -293,7 +295,13 @@
 	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
 		return 0
 
-	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
+	var/mult = 1
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(H.species.tox_mod)
+			mult = H.species.tox_mod
+
+	toxloss = min(max(toxloss + (amount * tox_damage_modifier * mult), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
 	if(status_flags & GODMODE)
@@ -322,6 +330,11 @@
 
 	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
 		return 0
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(isslimeperson(H))
+			amount = 0
 
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
@@ -418,8 +431,14 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	  return 0 // only carbon liveforms have this proc
-				// now with silicons
+	var/damage = shock_damage * siemens_coeff
+
+	if(damage <= 0)
+		damage = 0
+
+	adjustFireLoss(damage)
+
+	return damage
 
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -528,6 +547,7 @@ Thanks.
 	germ_level = 0
 	next_pain_time = 0
 	radiation = 0
+	rad_tick = 0
 	nutrition = 400
 	bodytemperature = 310
 	sdisabilities = 0
@@ -695,6 +715,40 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
+							/* Drag damage is here!*/
+							var/mob/living/carbon/human/HM = M
+							var/list/damaged_organs = HM.drag_damage()
+							if (damaged_organs)
+								if(!HM.isincrit() && damaged_organs.len)
+									if(prob(HM.getBruteLoss() / 5)) //Chance to damage
+										for(var/datum/organ/external/damagedorgan in damaged_organs)
+											if((damagedorgan.brute_dam) < damagedorgan.max_damage)
+												HM.apply_damage(2, BRUTE, damagedorgan)
+												HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
+												HM.UpdateDamageIcon()
+									if(prob(HM.getBruteLoss() / 8)) //Chance to bleed
+										blood_splatter(HM.loc,HM)
+										var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
+										if(blood_volume > 0)
+											HM:vessel.remove_reagent("blood",4)
+											HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
+
+								if(HM.isincrit() && damaged_organs.len) //Crit damage boost
+									if(prob(15))
+										for(var/datum/organ/external/damagedorgan in damaged_organs)
+											if((damagedorgan.brute_dam) < damagedorgan.max_damage)
+												HM.apply_damage(4, BRUTE, damagedorgan)
+												HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
+												add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
+												HM.UpdateDamageIcon()
+									if(prob(8))
+										if(isturf(HM.loc))
+											blood_splatter(HM.loc,HM,1)
+											var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
+											if(blood_volume > 0)
+												HM:vessel.remove_reagent("blood",8)
+												HM.visible_message("<span class='danger'>\The [HM] loses a lot of blood from being dragged!</span>")
+												add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
@@ -902,7 +956,33 @@ Thanks.
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
-			if(iscarbon(L))
+			if(istype(B, /obj/structure/bed/guillotine))
+				var/obj/structure/bed/guillotine/G = B
+				if(G.open)
+					G.manual_unbuckle(L)
+				else
+					L.delayNextAttack(100)
+					L.delayNextSpecial(100)
+					L.visible_message("<span class='warning'>\The [L] attempts to dislodge \the [G]'s stocks!</span>",
+									  "<span class='warning'>You attempt to dislodge \the [G]'s stocks (this will take around thirty seconds).</span>",
+									  self_drugged_message="<span class='warning'>You attempt to chew through the wooden stocks of \the [G] (this will take a while).</span>")
+					spawn(0)
+						if(do_after(usr, usr, 300))
+							if(!L.locked_to)
+								return
+							L.visible_message("<span class='danger'>\The [L] dislodges \the [G]'s stocks and climbs out of \the [src]!</span>",\
+								"<span class='notice'>You dislodge \the [G]'s stocks and climb out of \the [G].</span>",\
+								self_drugged_message="<span class='notice'>You successfully chew through the wooden stocks.</span>")
+							G.open = TRUE
+							G.manual_unbuckle(L)
+							G.update_icon()
+							G.verbs -= /obj/structure/bed/guillotine/verb/open_stocks
+							G.verbs += /obj/structure/bed/guillotine/verb/close_stocks
+						else
+							L.simple_message("<span class='warning'>Your escape attempt was interrupted.</span>", \
+								"<span class='warning'>Your chewing was interrupted. Damn it!</span>")
+
+			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				if(C.handcuffed)
 					C.delayNextAttack(100)
@@ -1465,8 +1545,66 @@ Thanks.
 	affect_silicon = 0 means that the flash won't affect silicons at all.
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
 		return 1
+
+/mob/living/proc/advanced_mutate()
+	color = list(rand(),rand(),rand(),0,
+				rand(),rand(),rand(),0,
+				rand(),rand(),rand(),0,
+				0,0,0,1,
+				0,0,0,0)
+	if(prob(5))
+		eye_blind = rand(0,100)
+	if(prob(10))
+		eye_blurry = rand(0,100)
+	if(prob(5))
+		ear_deaf = rand(0,100)
+	brute_damage_modifier += rand(-5,5)/10
+	burn_damage_modifier += rand(-5,5)/10
+	tox_damage_modifier += rand(-5,5)/10
+	oxy_damage_modifier += rand(-5,5)/10
+	clone_damage_modifier += rand(-5,5)/10
+	brain_damage_modifier += rand(-5,5)/10
+	hal_damage_modifier += rand(-5,5)/10
+
+	movement_speed_modifier += rand(-9,9)/10
+	if(prob(1))
+		universal_speak = !universal_speak
+	if(prob(1))
+		universal_understand = !universal_understand
+
+	maxHealth = rand(50,200)
+	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
+	if(prob(5))
+		cap_calorie_burning_bodytemp = !cap_calorie_burning_bodytemp
+	if(prob(10))
+		calorie_burning_heat_multiplier += rand(-5,5)/10
+	if(prob(10))
+		thermal_loss_multiplier += rand(-5,5)/10
+
+/mob/living/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"maxHealth",
+		"health",
+		"bruteloss",
+		"oxyloss",
+		"toxloss",
+		"fireloss",
+		"cloneloss",
+		"brainloss",
+		"halloss",
+		"hallucination",
+		"meat_taken",
+		"on_fire",
+		"fire_stacks",
+		"specialsauce",
+		"silent",
+		"is_ventcrawling",
+		"suiciding")
+
+	reset_vars_after_duration(resettable_vars, duration)

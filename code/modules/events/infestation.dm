@@ -15,12 +15,14 @@
 #define VERM_BORERS  5
 #define VERM_MIMICS  6
 #define VERM_ROACHES 7
+#define VERM_GREMLINS 8
 
 /datum/event/infestation
 	announceWhen = 15
 	endWhen = 20
 	var/locstring
 	var/vermstring
+	var/vermin = VERM_MICE
 
 /datum/event/infestation/start()
 
@@ -57,7 +59,9 @@
 
 	var/list/spawn_types = list()
 	var/max_number = 4
-	var/vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS)
+
+	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_GREMLINS)
+
 	switch(vermin)
 		if(VERM_MICE)
 			spawn_types = list(/mob/living/simple_animal/mouse/gray, /mob/living/simple_animal/mouse/brown, /mob/living/simple_animal/mouse/white)
@@ -88,6 +92,10 @@
 			spawn_types = /mob/living/simple_animal/cockroach
 			vermstring = "roaches"
 			max_number = 30 //Thanks obama
+		if(VERM_GREMLINS)
+			spawn_types = /mob/living/simple_animal/hostile/gremlin
+			vermstring = "gremlins"
+			max_number = 4 //2 to 4
 
 	var/number = rand(2, max_number)
 
@@ -108,7 +116,11 @@
 			new spawn_type(picked)
 
 /datum/event/infestation/announce()
-	command_alert(new /datum/command_alert/vermin(vermstring, locstring))
+	var/warning = "Clear them out, before this starts to affect productivity."
+	if(vermin == VERM_GREMLINS)
+		warning = "Drive them away!" //DF reference
+
+	command_alert(new /datum/command_alert/vermin(vermstring, locstring, warning))
 
 #undef LOC_KITCHEN
 #undef LOC_ATMOS
@@ -124,4 +136,5 @@
 #undef VERM_SPIDERS
 #undef VERM_SLIMES
 #undef VERM_BATS
-#undef VERB_MIMICS
+#undef VERM_MIMICS
+#undef VERM_GREMLINS

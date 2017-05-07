@@ -23,6 +23,9 @@
 	icon_state = "ointment"
 	item_state = "firstaid-ointment"
 
+/obj/item/weapon/storage/firstaid/fire/empty
+	empty = 1
+
 /obj/item/weapon/storage/firstaid/fire/New()
 	..()
 	if (empty)
@@ -62,6 +65,9 @@
 	icon_state = "antitoxin"
 	item_state = "firstaid-toxin"
 
+/obj/item/weapon/storage/firstaid/toxin/empty
+	empty = 1
+
 /obj/item/weapon/storage/firstaid/toxin/New()
 	..()
 	if (empty)
@@ -83,6 +89,9 @@
 	desc = "A box full of oxygen goodies."
 	icon_state = "o2"
 	item_state = "firstaid-oxy"
+
+/obj/item/weapon/storage/firstaid/o2/empty
+	empty = 1
 
 /obj/item/weapon/storage/firstaid/o2/New()
 	..()
@@ -137,7 +146,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = W_CLASS_SMALL
-	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper", "/obj/item/weapon/reagent_containers/food/snacks/sweet")
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
@@ -154,10 +163,10 @@
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
 		var/mob/M = usr //I don't see how this is necessary
-		if (!( istype(over_object, /obj/screen/inventory) ))
+		if (!( istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
 		if (!M.incapacitated() && Adjacent(M))
-			var/obj/screen/inventory/SI = over_object
+			var/obj/abstract/screen/inventory/SI = over_object
 
 			if(SI.hand_index && M.put_in_hand_check(src, SI.hand_index))
 				M.u_equip(src, 0)
@@ -218,7 +227,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/kelotane
-	name = "Pill bottle (kelotane)"
+	name = "pill bottle (kelotane)"
 	desc = "Contains pills used to treat burns."
 
 /obj/item/weapon/storage/pill_bottle/kelotane/New()
@@ -228,7 +237,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/antitox
-	name = "Pill bottle (Anti-toxin)"
+	name = "pill bottle (Anti-toxin)"
 	desc = "Contains pills used to counter toxins."
 
 /obj/item/weapon/storage/pill_bottle/antitox/New()
@@ -238,7 +247,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline
-	name = "Pill bottle (inaprovaline)"
+	name = "pill bottle (inaprovaline)"
 	desc = "Contains pills used to stabilize patients."
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline/New()
@@ -267,7 +276,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
-	name = "Pill bottle (hyperzine)"
+	name = "pill bottle (hyperzine)"
 	desc = "Contains pills used to keep you active."
 
 /obj/item/weapon/storage/pill_bottle/hyperzine/New()
@@ -295,3 +304,30 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		..()
 		for (var/i = 1 to 5)
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+
+/obj/item/weapon/storage/pill_bottle/radiation
+	name = "pill bottle (radiation treatment)"
+	desc = "Contains pills used to treat radiation sickness."
+
+/obj/item/weapon/storage/pill_bottle/radiation/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/weapon/reagent_containers/pill/hyronalin(src)
+		new /obj/item/weapon/reagent_containers/pill/arithrazine(src)
+
+/obj/item/weapon/storage/pill_bottle/sweets
+	name = "bag of sweets"
+	desc = "Tasty!"
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "candybag"
+	var/spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet
+
+	/obj/item/weapon/storage/pill_bottle/sweets/New()
+		..()
+		overlays -= colour_overlay
+		colour_overlay = null
+		for (var/i = 1 to 10)
+			new spawn_type(src)
+
+/obj/item/weapon/storage/pill_bottle/sweets/strange
+	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange

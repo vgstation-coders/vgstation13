@@ -13,7 +13,7 @@
 	var/brightness_on = 4
 	var/on = 0
 	var/no_light = 0
-	action_button_name = "Toggle Helmet Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/capspace/attack_self(mob/user)
@@ -40,7 +40,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = 1.5
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 65, bullet = 50, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 50)
 	siemens_coefficient = 0.7
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY

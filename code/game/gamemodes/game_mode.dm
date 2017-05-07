@@ -184,33 +184,38 @@
 	for(var/mob/living/carbon/human/man in player_list) if(man.client && man.mind)
 		// NT relation option
 		var/special_role = man.mind.special_role
+		var/became_a_suspect = FALSE
 		if (special_role == "Wizard" || special_role == "Ninja" || special_role == "Syndicate")
 			continue	//NT intelligence ruled out possiblity that those are too classy to pretend to be a crew.
 		if(man.client.prefs.nanotrasen_relation == "Opposed" && prob(50) || \
 		   man.client.prefs.nanotrasen_relation == "Skeptical" && prob(20))
 			suspects += man
+			became_a_suspect = TRUE
 		// Antags
 		else if(special_role == "traitor" && prob(40) || \
 		   special_role == "Changeling" && prob(50) || \
 		   special_role == "Cultist" && prob(30) || \
 		   special_role == "Head Revolutionary" && prob(30))
 			suspects += man
+			became_a_suspect = TRUE
+		// Some poor people who were just in the wrong place at the wrong time..
+		else if(prob(10))
+			suspects += man
+			became_a_suspect = TRUE
 
-			// If they're a traitor or likewise, give them extra TC in exchange.
+
+		if(became_a_suspect)
 			var/obj/item/device/uplink/hidden/suplink = man.mind.find_syndicate_uplink()
-			if(suplink)
+			if(suplink) // If they're a traitor or likewise, give them extra TC in exchange.
 				var/extra = 8
 				suplink.uses += extra
 				if(man.mind)
 					man.mind.total_TC += extra
 				to_chat(man, "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>")
-			else
+			else if(special_role) // If they're an antag without an uplink
 				// Give them a warning!
 				to_chat(man, "<span class='warning'>They are on to you!</span>")
 
-		// Some poor people who were just in the wrong place at the wrong time..
-		else if(prob(10))
-			suspects += man
 	for(var/mob/M in suspects)
 		if(M.mind.assigned_role == "MODE")
 			//intercepttext += "Someone with the job of <b>[pick("Assistant","Station Engineer", "Medical Doctor")]</b> <br>" //Lets just make them not appear at all

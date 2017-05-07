@@ -1,3 +1,5 @@
+#define MAX_PRESSURE 4500
+
 /*
 Every cycle, the pump uses the air in air_in to try and make air_out the perfect pressure.
 
@@ -156,8 +158,8 @@ Thus, the two variables affect pump operation are set in New():
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)].")
 	if(href_list["set_press"])
-		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",src.target_pressure) as num
-		src.target_pressure = max(0, min(4500, new_pressure))
+		var/new_pressure = input(usr,"Enter new output pressure (0-[MAX_PRESSURE]kPa)","Pressure control",src.target_pressure) as num
+		src.target_pressure = max(0, min(MAX_PRESSURE, new_pressure))
 		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(usr)].")
 	usr.set_machine(src)
 	src.update_icon()
@@ -175,3 +177,16 @@ Thus, the two variables affect pump operation are set in New():
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")
 		return 1
 	return ..()
+
+/obj/machinery/atmospherics/binary/pump/npc_tamper_act(mob/living/L)
+	if(prob(50)) //Turn on/off
+		on = !on
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(L)]")
+	else //Change pressure
+		src.target_pressure = rand(0, MAX_PRESSURE)
+		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(L)]")
+
+	src.update_icon()
+	src.updateUsrDialog()
+
+#undef MAX_PRESSURE

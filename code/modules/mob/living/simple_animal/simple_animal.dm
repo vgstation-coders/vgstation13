@@ -27,7 +27,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = 1	// Does the mob wander around when idle?
 	var/stop_automated_movement_when_pulled = 1 //When set to 1 this stops the animal from moving when someone is pulling it.
-
 	//Interaction
 	var/response_help   = "pokes"
 	var/response_disarm = "shoves"
@@ -70,7 +69,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/friendly = "nuzzles" //If the mob does no damage with it's attack
 	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
 
-	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
+	var/speed = 1 //Higher speed is slower, decimal speed is faster. DO NOT SET THIS TO NEGATIVES OR 0. MAKING THIS SMALLER THAN 1 MAKES YOUR MOB SUPER FUCKING FAST BE WARNED.
 
 	//Hot simple_animal baby making vars
 	var/childtype = null
@@ -122,6 +121,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/Login()
 	if(src && src.client)
 		src.client.reset_screen()
+	walk(src,0) //If the mob was in the process of moving somewhere, this should override it so PC mobs aren't banded back
 	..()
 
 /mob/living/simple_animal/updatehealth()
@@ -135,7 +135,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
-	Move(dest)
+	if(space_check())
+		Move(dest)
 
 /mob/living/simple_animal/Life()
 	if(timestopped)
@@ -204,10 +205,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					wander_move(destination)
 					turns_since_move = 0
 
+	var/someone_in_earshot=0
+	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
+		// All we're doing here is seeing if there's any CLIENTS nearby.
+		for(var/mob/M in get_hearers_in_view(7, src))
+			if(M.client)
+				someone_in_earshot=1
+				break
+
 	//Speaking
-	if(!client && speak_chance && (ckey == null))
-		if(rand(0,200) < speak_chance)
-			if(speak && speak.len)
+	if(!client && speak_chance && (ckey == null) && someone_in_earshot)
+		if(speak && speak.len)
+			if(rand(0,200) < speak_chance)
 				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
 					var/length = speak.len
 					if(emote_hear && emote_hear.len)
@@ -413,11 +422,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 		else
-
+			L.do_attack_animation(src, L)
 			var/damage = rand(5, 10)
 			visible_message("<span class='danger'>[L] bites [src]!</span>")
 
 			if(stat != DEAD)
+				visible_message("<span class='danger'>[L] feeds on [src]!</span>", "<span class='notice'>You feed on [src]!</span>")
 				adjustBruteLoss(damage)
 				L.growth = min(L.growth + damage, LARVA_GROW_TIME)
 
@@ -467,6 +477,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		user.delayNextAttack(8)
 		if(O.force)
+			user.do_attack_animation(src, O)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
@@ -483,24 +494,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='warning'>[user] gently taps [src] with the [O]. </span>")
 
-/mob/living/simple_animal/movement_delay()
-	var/tally = 0 //Incase I need to add stuff other than "speed" later
+/mob/living/simple_animal/base_movement_tally()
+	return speed
 
-	tally = speed
-
-	if(purge)//Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move. (muh dotuh)
-		if(tally <= 0)
-			tally = 1
-		tally *= purge
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	return tally+config.animal_delay
+/mob/living/simple_animal/movement_tally_multiplier()
+	. = ..()
+	if(purge) // Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move. (muh dotuh)
+		. *= purge
 
 /mob/living/simple_animal/Stat()
 	..()
@@ -721,5 +721,24 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
 	return
+
+/mob/living/simple_animal/proc/space_check() //Returns a 1 if you can move in space or can kick off of something, 0 otherwise
+	if(Process_Spacemove())
+		return 1
+	var/spaced = 1
+	for(var/turf/T in range(src,1))
+		if(!istype(T, /turf/space))
+			spaced = 0
+			break
+		for(var/atom/A in T.contents)
+			if(istype(A,/obj/structure/lattice) \
+				|| istype(A, /obj/structure/window) \
+				|| istype(A, /obj/structure/grille))
+				spaced = 0
+				break
+	if(spaced)
+		walk(src,0)
+	return !spaced
+
 
 /datum/locking_category/simple_animal

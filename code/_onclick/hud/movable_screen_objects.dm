@@ -8,21 +8,22 @@
 //Movable Screen Object
 //Not tied to the grid, places it's center where the cursor is
 
-/obj/screen/movable
+/obj/abstract/screen/movable
 	var/snap2grid = FALSE
+	var/moved = FALSE
 
-/obj/screen/movable/MouseEntered(location,control,params)
+/obj/abstract/screen/movable/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
 
-/obj/screen/movable/MouseExited()
+/obj/abstract/screen/movable/MouseExited()
 	closeToolTip(usr)
 //Snap Screen Object
 //Tied to the grid, snaps to the nearest turf
 
-/obj/screen/movable/snap
+/obj/abstract/screen/movable/snap
 	snap2grid = TRUE
 
-/obj/screen/movable/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+/obj/abstract/screen/movable/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
 	var/list/PM = params2list(params)
 
 	//No screen-loc information? abort.
@@ -47,13 +48,15 @@
 		var/pix_Y = text2num(screen_loc_Y[2]) - WORLD_ICON_SIZE/2
 		screen_loc = "[screen_loc_X[1]]:[pix_X],[screen_loc_Y[1]]:[pix_Y]"
 
-/obj/screen/movable/proc/get_view_size()
+	moved = screen_loc
+
+/obj/abstract/screen/movable/proc/get_view_size()
 	if(usr && usr.client)
 		. = usr.client.view
 	else
 		. = world.view
 
-/obj/screen/movable/spell_master/get_view_size()
+/obj/abstract/screen/movable/spell_master/get_view_size()
 	if(spell_holder && spell_holder.client)
 		. = spell_holder.client.view
 	else if(usr && usr.client)
@@ -61,7 +64,7 @@
 	else
 		. = world.view
 
-/obj/screen/movable/proc/encode_screen_X(X)
+/obj/abstract/screen/movable/proc/encode_screen_X(X)
 	var/view = get_view_size()
 	if(X > view+1)
 		. = "EAST-[view*2 + 1-X]"
@@ -70,7 +73,7 @@
 	else
 		. = "CENTER"
 
-/obj/screen/movable/proc/decode_screen_X(X)
+/obj/abstract/screen/movable/proc/decode_screen_X(X)
 	//Find EAST/WEST implementations
 	var/view = get_view_size()
 	if(findtext(X,"EAST-"))
@@ -86,7 +89,7 @@
 	else if(findtext(X,"CENTER"))
 		. = view+1
 
-/obj/screen/movable/proc/encode_screen_Y(Y)
+/obj/abstract/screen/movable/proc/encode_screen_Y(Y)
 	var/view = get_view_size()
 	if(Y > view+1)
 		. = "NORTH-[view*2 + 1-Y]"
@@ -95,7 +98,7 @@
 	else
 		. = "CENTER"
 
-/obj/screen/movable/proc/decode_screen_Y(Y)
+/obj/abstract/screen/movable/proc/decode_screen_Y(Y)
 	var/view = get_view_size()
 	if(findtext(Y,"NORTH-"))
 		var/num = text2num(copytext(Y,7)) //Trim NORTH-
@@ -115,7 +118,7 @@
 	set category = "Debug"
 	set name = "Spawn Movable UI Object"
 
-	var/obj/screen/movable/M = new()
+	var/obj/abstract/screen/movable/M = new()
 	M.name = "Movable UI Object"
 	M.icon_state = "block"
 	M.maptext = "Movable"
@@ -134,7 +137,7 @@
 	set category = "Debug"
 	set name = "Spawn Snap UI Object"
 
-	var/obj/screen/movable/snap/S = new()
+	var/obj/abstract/screen/movable/snap/S = new()
 	S.name = "Snap UI Object"
 	S.icon_state = "block"
 	S.maptext = "Snap"

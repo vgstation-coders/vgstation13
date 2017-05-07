@@ -31,7 +31,7 @@ var/global/list/available_paintings = list(
 	//"justice", spawned in the courtroom/IAA office if there is no courtroom
 	//"blank", crafted with wood, TODO: give a way to players to paint on them
 	//"anatomy", TODO: add one in medbay/surgery.
-	//"carp", TODO: make wall trophies their own items
+	//"carp", TODO: make wall trophies their own items TODONE
 	//"daddy", TODO: well it's not a painting...so make it its own item...?
 
 /obj/item/mounted/frame/painting
@@ -150,7 +150,17 @@ var/global/list/available_paintings = list(
 		if("carp")
 			name = "\improper 'Singing' Mounted Carp"
 			desc = "Too unrobust to beat a carp to death with your bare hands and mount it on a plank of wood? Then this professionally taxidermied trophy is just for you! Note: Does not actually sing."
-
+		if("carp_real")
+			name = "\improper Mounted Carp"
+			desc = "The one that didn't quite get away."
+		if("deer")
+			name = "\improper Mounted Deer head"
+			desc = "The result of a succesful hunt. Ready to mount on a wall."
+			icon_state = "deer"
+		if("deer_flesh")
+			name = "\improper Mounted Flesh Deer head"
+			desc = "What the fuck."
+			icon_state = "deer"
 		else
 			name = "painting"
 			desc = "A blank painting."
@@ -188,9 +198,46 @@ var/global/list/available_paintings = list(
 /obj/item/mounted/frame/painting/blank
 	paint = "blank"
 
+/obj/item/mounted/frame/painting/blank/attackby(obj/W, mob/user)
+	if(istype(W, /obj/item/weapon/holder/animal/carp))
+		var/obj/item/weapon/holder/animal/carp/C = W
+		if(C.stored_mob.stat != DEAD)
+			to_chat(user, "<span class = 'warning'>\The [C.stored_mob] squirms and resists!</span>")
+			return
+		else
+			var/obj/item/mounted/frame/painting/P = new (get_turf(user))
+			P.paint = "carp_real"
+			P.update_painting()
+			user.put_in_hands(P)
+			user.drop_item(C, force_drop = 1)
+			qdel(C)
+			qdel(src)
+	if(istype(W, /obj/item/deer_head))
+		var/obj/item/deer_head/D = W
+
+		var/obj/item/mounted/frame/painting/deer/P = new (get_turf(user))
+		user.put_in_hands(P)
+		user.drop_item(D, force_drop = 1)
+		qdel(D)
+		qdel(src)
+	..()
+
 /obj/item/mounted/frame/painting/cultify()
 	new /obj/item/mounted/frame/painting/narsie(loc)
 	..()
+
+/obj/item/mounted/frame/painting/deer
+	paint = "deer"
+
+/obj/item/mounted/frame/painting/deer/cultify()
+	new /obj/item/mounted/frame/painting/flesh_deer(loc)
+	..()
+
+/obj/item/mounted/frame/painting/flesh_deer
+	paint = "deer_flesh"
+
+/obj/item/mounted/frame/painting/flesh_deer/cultify()
+	return
 
 /obj/item/mounted/frame/painting/narsie
 	paint = "narsie"
@@ -302,7 +349,12 @@ var/global/list/available_paintings = list(
 		if("carp")
 			name = "\improper 'Singing' Mounted Carp"
 			desc = "Too unrobust to beat a carp to death with your bare hands and mount it on a plank of wood? Then this professionally taxidermied trophy is just for you! Note: Does not actually sing."
-
+		if("deer")
+			name = "\improper Mounted Deer head"
+			desc = "The result of a succesful hunt. Its glassed eyes seem to follow you around the room."
+		if("deer_flesh")
+			name = "\improper Mounted Flesh Deer head"
+			desc = "The result of an unsuccesful exorcism, or worse. Its fleshy eyes ARE following you around the room."
 		else
 			name = "painting"
 			desc = "a blank painting."
@@ -332,15 +384,26 @@ var/global/list/available_paintings = list(
 
 
 /obj/structure/painting/cultify()
-	var/obj/structure/painting/narsie/N = new(loc)
-	N.pixel_x = pixel_x
-	N.pixel_y = pixel_y
+	if(icon_state == "deer")
+		var/obj/structure/painting/deer_flesh/N = new(loc)
+		N.pixel_x = pixel_x
+		N.pixel_y = pixel_y
+	else
+		var/obj/structure/painting/narsie/N = new(loc)
+		N.pixel_x = pixel_x
+		N.pixel_y = pixel_y
 	..()
 
 /obj/structure/painting/narsie
 	icon_state = "narsie"
 
 /obj/structure/painting/narsie/cultify()
+	return
+
+/obj/structure/painting/deer_flesh
+	icon_state = "deer_flesh"
+
+/obj/structure/painting/deer_flesh/cultify()
 	return
 
 /obj/structure/painting/random/New()

@@ -53,4 +53,6 @@
 	chickchicky()
 
 /obj/item/device/maracas/proc/chickchicky()
-	playsound(get_turf(src), 'sound/misc/maracas.ogg', 50, 1)
+	var/turf/T = get_turf(src)
+	if(T) // if our maracas explode, we won't be able to chickchicky because we'll have no turf
+		playsound(T, 'sound/misc/maracas.ogg', 50, 1)

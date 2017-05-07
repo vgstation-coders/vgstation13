@@ -5,6 +5,8 @@
 
 	var/nudge_script_path = "nudge.py"  // where the nudge.py script is located
 
+	var/localhost_autoadmin = 0			// Give local host clients +HOST upon joining
+
 	var/log_ooc = 0						// log OOC channel
 	var/tts_server = ""					// TTS Server
 	var/log_access = 0					// log login/logout
@@ -125,14 +127,6 @@
 	//Unversal modifiers
 	var/run_speed = 0
 	var/walk_speed = 0
-
-	//Mob specific modifiers. NOTE: These will affect different mob types in different ways
-	var/human_delay = 0
-	var/robot_delay = 0
-	var/monkey_delay = 0
-	var/alien_delay = 0
-	var/slime_delay = 0
-	var/animal_delay = 0
 
 	var/admin_legacy_system = 0	//Defines whether the server uses the legacy admin system with admins.txt or the SQL system. Config option in config.txt
 	var/ban_legacy_system = 0	//Defines whether the server uses the legacy banning system with the files in /data or the SQL system. Config option in config.txt
@@ -256,6 +250,9 @@
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1
+
+				if ("localhost_autoadmin")
+					localhost_autoadmin = 1
 
 				if ("log_ooc")
 					config.log_ooc = 1
@@ -601,18 +598,6 @@
 					config.run_speed = value
 				if("walk_speed")
 					config.walk_speed = value
-				if("human_delay")
-					config.human_delay = value
-				if("robot_delay")
-					config.robot_delay = value
-				if("monkey_delay")
-					config.monkey_delay = value
-				if("alien_delay")
-					config.alien_delay = value
-				if("slime_delay")
-					config.slime_delay = value
-				if("animal_delay")
-					config.animal_delay = value
 				if("organ_health_multiplier")
 					config.organ_health_multiplier = value / 100
 				if("organ_regeneration_multiplier")
@@ -637,6 +622,8 @@
 					config.silent_borg = 1
 				if("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
+				if("hardcore_mode")
+					hardcore_mode = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

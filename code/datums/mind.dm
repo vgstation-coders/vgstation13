@@ -1166,8 +1166,8 @@ proc/clear_memory(var/silent = 1)
 	if(!(src in ticker.mode.malf_ai))
 		ticker.mode.malf_ai += src
 		var/mob/living/silicon/ai/A = current
-		A.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
-		A.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+		A.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		A.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 		var/datum/ai_laws/laws = A.laws
 		laws.malfunction()
 		A.show_laws()

@@ -223,6 +223,52 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	emagged = 1
 	to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 
+/obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
+	linked_destroy.busy = 1
+	screen = 0.1
+	updateUsrDialog()
+	flick("d_analyzer_process", linked_destroy)
+
+	spawn(24)
+		if(linked_destroy)
+			if(!linked_destroy.hacked)
+				if(!linked_destroy.loaded_item)
+					to_chat(user, "<span class='warning'>The destructive analyzer appears to be empty.</span>")
+					screen = 1.0
+					linked_destroy.busy = 0
+					return
+				if(linked_destroy.loaded_item.reliability >= 90)
+					var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
+					for(var/T in temp_tech)
+						files.UpdateTech(T, temp_tech[T])
+				if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
+					files.UpdateDesign(linked_destroy.loaded_item.type)
+				if(linked_lathe && linked_destroy.loaded_item.materials) //Also sends salvaged materials to a linked protolathe, if any.
+					for(var/matID in linked_destroy.loaded_item.materials.storage) //Transfers by ID
+						linked_lathe.materials.addAmount(matID, linked_destroy.loaded_item.materials.storage[matID])
+				linked_destroy.loaded_item = null
+			for(var/obj/I in linked_destroy.contents)
+				for(var/mob/M in I.contents)
+					M.death()
+				if(istype(I,/obj/item/stack/sheet)) //Only deconstructs one sheet at a time instead of the entire stack
+					var/obj/item/stack/sheet/S = I
+					if(S.amount > 1)
+						S.amount--
+						linked_destroy.loaded_item = S
+					else
+						qdel(S)
+						S = null
+						linked_destroy.icon_state = "d_analyzer"
+				else
+					if(!(I in linked_destroy.component_parts))
+						qdel(I)
+						I = null
+						linked_destroy.icon_state = "d_analyzer"
+			use_power(250)
+			screen = 1.0
+			updateUsrDialog()
+			linked_destroy.busy = 0
+
 /obj/machinery/computer/rdconsole/Topic(href, href_list)
 	if(..())
 		return
@@ -322,49 +368,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				var/choice = input("Proceeding will destroy loaded item.") in list("Proceed", "Cancel")
 				if(choice == "Cancel" || !linked_destroy)
 					return
-				linked_destroy.busy = 1
-				screen = 0.1
-				updateUsrDialog()
-				flick("d_analyzer_process", linked_destroy)
-				spawn(24)
-					if(linked_destroy)
-						if(!linked_destroy.hacked)
-							if(!linked_destroy.loaded_item)
-								to_chat(usr, "<span class='warning'>The destructive analyzer appears to be empty.</span>")
-								screen = 1.0
-								linked_destroy.busy = 0
-								return
-							if(linked_destroy.loaded_item.reliability >= 90)
-								var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
-								for(var/T in temp_tech)
-									files.UpdateTech(T, temp_tech[T])
-							if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
-								files.UpdateDesign(linked_destroy.loaded_item.type)
-							if(linked_lathe && linked_destroy.loaded_item.materials) //Also sends salvaged materials to a linked protolathe, if any.
-								for(var/matID in linked_destroy.loaded_item.materials.storage) //Transfers by ID
-									linked_lathe.materials.addAmount(matID, linked_destroy.loaded_item.materials.storage[matID])
-							linked_destroy.loaded_item = null
-						for(var/obj/I in linked_destroy.contents)
-							for(var/mob/M in I.contents)
-								M.death()
-							if(istype(I,/obj/item/stack/sheet)) //Only deconstructs one sheet at a time instead of the entire stack
-								var/obj/item/stack/sheet/S = I
-								if(S.amount > 1)
-									S.amount--
-									linked_destroy.loaded_item = S
-								else
-									qdel(S)
-									S = null
-									linked_destroy.icon_state = "d_analyzer"
-							else
-								if(!(I in linked_destroy.component_parts))
-									qdel(I)
-									I = null
-									linked_destroy.icon_state = "d_analyzer"
-						use_power(250)
-						screen = 1.0
-						updateUsrDialog()
-						linked_destroy.busy = 0
+
+				deconstruct_item()
 
 	else if(href_list["lock"]) //Lock the console from use by anyone without tox access.
 		if(src.allowed(usr))
@@ -999,6 +1004,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	dat = jointext(dat,"")
 	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
 	onclose(user, "rdconsole")
+
+/obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
+	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that
+	if(linked_destroy && linked_destroy.loaded_item)
+		deconstruct_item()
 
 /obj/machinery/computer/rdconsole/mommi
 	name = "MoMMI R&D Console"

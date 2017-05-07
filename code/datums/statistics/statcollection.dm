@@ -30,6 +30,7 @@
 	var/explosion_stats = list()
 	var/uplink_purchases = list()
 	var/badass_bundles = list()
+	var/population_polls = list()
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
@@ -49,6 +50,14 @@
 	var/gamemode = "UNSET"
 	var/mixed_gamemodes = null
 	var/round_start_time = null
+
+/datum/stat/population_stat
+	var/time
+	var/popcount = 0
+
+/datum/stat/population_stat/New(pop as num)
+	time = time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+	popcount = pop
 
 /datum/stat/death_stat
 	var/mob_typepath = "null"
@@ -177,6 +186,10 @@
 		tech_level_total += KT.level
 	return tech_level_total
 
+/datum/stat_collector/proc/writePopulationStats(statfile)
+	for(var/datum/stat/population_stat/PS in population_polls)
+		statfile << "POPCOUNT|[PS.time]|[PS.popcount]"
+
 /datum/stat_collector/proc/antagCheck(statfile)
 	for(var/datum/mind/Mind in ticker.minds)
 		for(var/datum/objective/objective in Mind.objectives)
@@ -254,9 +267,24 @@
 	revsquad.writeStats(statfile)
 
 	antagCheck(statfile)
+	writePopulationStats(statfile)
 
 	Write_Footer(statfile)
 	world << "Statistics written to file in [(start_time - world.realtime)/10] seconds." // I think that's right?
 
 
 // TODO write all living mobs to DB
+
+
+// Global stuff
+/proc/population_poll()
+	var/playercount = 0
+	for(var/mob/M in player_list)
+		if(M.client)
+			playercount += 1
+	stat_collection.population_polls += (new /datum/stat/population_stat(playercount))
+
+/proc/population_poll_loop()
+	while(1)
+		population_poll()
+		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine

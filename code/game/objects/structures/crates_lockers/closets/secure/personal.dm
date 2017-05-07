@@ -7,10 +7,8 @@
 /obj/structure/closet/secure_closet/personal/New()
 	..()
 	spawn(2)
-		if(prob(50))
-			new /obj/item/weapon/storage/backpack(src)
-		else
-			new /obj/item/weapon/storage/backpack/satchel_norm(src)
+		var/B = pick(/obj/item/weapon/storage/backpack, /obj/item/weapon/storage/backpack/satchel_norm, /obj/item/weapon/storage/backpack/messenger)
+		new B(src)
 		new /obj/item/device/radio/headset( src )
 	return
 

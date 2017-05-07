@@ -348,23 +348,6 @@
 /obj/machinery/singularity/proc/consume(const/atom/A)
 	var/gain = A.singularity_act(current_size,src)
 	src.energy += gain
-	/*if(istype(A, /obj/))
-		if(isbot(A))
-			var/obj/machinery/bot/B = A
-			if(B.flags & INVULNERABLE)
-				return
-			else
-				src.energy += 20000//Instantly sends it to max size
-				SetUniversalState(/datum/universal_state/supermatter_cascade) //AND NOW YOU'RE FUCKED
-			expand(11, 1)
-			var/prints=""
-			if(A.fingerprintshidden)
-				prints=", all touchers: "+A.fingerprintshidden
-
-			log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [A.fingerprintslast].")
-			message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [A.fingerprintslast].")
-			del(A)
-			return*/
 	return
 
 /*

@@ -23,6 +23,7 @@ var/global/lastDecTalkUse = 0
 	And the base of the send_speech() proc, which is the core of saycode.
 */
 var/list/freqtospan = list(
+	"1459" = "commonradio",
 	"1351" = "sciradio",
 	"1355" = "medradio",
 	"1357" = "engradio",
@@ -37,6 +38,7 @@ var/list/freqtospan = list(
 	)
 
 var/list/freqtoname = list(
+	"1459" = "Common",
 	"1351" = "Science",
 	"1353" = "Command",
 	"1355" = "Medical",
@@ -343,7 +345,16 @@ var/global/resethearers = 0
 		return
 
 	for(var/mob/virtualhearer/VH in hearers(R, T))
-		. += VH.attached
+		var/can_hear = 1
+		if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
+			var/mob/M = VH.attached
+			if(M.client)						//The mob has a client.
+				var/client/C = M.client
+				if(C.ObscuredTurfs.len)			//The client is in range of something that is artificially obscuring its view.
+					if(T in C.ObscuredTurfs)	//The source's turf is one that is being artificially obscured.
+						can_hear = 0
+		if(can_hear)
+			. += VH.attached
 
 /**
  * Returns a list of mobs who can hear any of the radios given in @radios.

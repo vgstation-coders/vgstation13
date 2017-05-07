@@ -17,7 +17,7 @@
 	light_power = 2.5
 	light_range = 4
 	light_color = LIGHT_COLOR_RED
-	action_button_name = "Activate Siren"
+	actions_types = list(/datum/action/item_action/activate_siren)
 	var/spamcheck = 0
 	species_fit = list(GREY_SHAPED)
 
@@ -209,3 +209,4 @@
 	icon_state = "nr_helmet"
 	item_state = "nr_helmet"
 	body_parts_covered = EARS|HEAD
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY

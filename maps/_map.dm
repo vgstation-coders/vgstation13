@@ -31,7 +31,7 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-
+	var/base_turf = /turf/space
 	//Center of thunderdome admin room
 	var/tDomeX = 0
 	var/tDomeY = 0
@@ -50,7 +50,6 @@
 	//Fuck the preprocessor
 	var/dorf = 0
 	var/linked_to_centcomm = 1
-
 	//If 1, only spawn vaults that are exclusive to this map (other vaults aren't spawned). For more info, see code/modules/randomMaps/vault_definitions.dm
 	var/only_spawn_map_exclusive_vaults = 0
 
@@ -113,7 +112,7 @@
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
 	if(!level.base_turf)
-		level.base_turf = /turf/space
+		level.base_turf = base_turf
 	if(z_to_use > zLevels.len)
 		zLevels.len = z_to_use
 	zLevels[z_to_use] = level
@@ -137,8 +136,9 @@ var/global/list/accessable_z_levels = list()
 	var/teleJammed = 0
 	var/movementJammed = 0 //Prevents you from accessing the zlevel by drifting
 	var/movementChance = ZLEVEL_BASE_CHANCE
-	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
+	var/base_turf //Our base turf, what shows under the station when destroyed. - Defaults to the map's base turf, usually space.
 	var/z //Number of the z-level (the z coordinate)
+	var/procedurally_generate = NO_PROCEDURAL_GENERATION
 
 ////////////////////////////////
 
@@ -147,20 +147,38 @@ var/global/list/accessable_z_levels = list()
 	name = "station"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
 
+/datum/zLevel/station/snow
+	name = "outpost"
+	base_turf = /turf/snow
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
+	procedurally_generate = SNOW_PROCEDURAL_GENERATION
+
 /datum/zLevel/centcomm
 
 	name = "centcomm"
 	teleJammed = 1
 	movementJammed = 1
 
+/datum/zLevel/centcomm/snow
+	base_turf = /turf/snow
+
 /datum/zLevel/space
 
 	name = "space"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
-/datum/zLevel/mining
+/datum/zLevel/space/snow
+	name = "tundra"
+	base_turf = /turf/snow
+	procedurally_generate = SNOW_PROCEDURAL_GENERATION
 
+/datum/zLevel/mining
 	name = "mining"
+
+/datum/zLevel/mining/snow
+	base_turf = /turf/unsimulated/floor/asteroid/underground
+	procedurally_generate = SNOWMINE_PROCEDURAL_GENERATION
+	movementJammed = 1
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert
@@ -202,7 +220,7 @@ proc/get_base_turf(var/z)
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	if(update_old_base)
 		var/count = 0
-		for(var/turf/T in turfs)
+		for(var/turf/T in world)
 			count++
 			if(!(count % 50000))
 				sleep(world.tick_lag)

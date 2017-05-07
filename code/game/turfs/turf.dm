@@ -6,6 +6,7 @@
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
 	var/intact = 1
+	var/turf_flags = 0
 
 	//properties for open tiles (/floor)
 	var/oxygen = 0
@@ -62,6 +63,8 @@
 
 	// Map element which spawned this turf
 	var/datum/map_element/map_element
+
+	var/image/viewblock
 
 /turf/examine(mob/user)
 	..()
@@ -136,7 +139,8 @@
 			objects++
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
-					Obj.HasProximity(A, 1)
+					if(Obj && A)
+						Obj.HasProximity(A, 1)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
@@ -239,9 +243,14 @@
 	return 0
 /turf/proc/is_arcade_floor()
 	return 0
+/turf/proc/is_slime_floor()
+	return 0
 /turf/proc/is_mineral_floor()
 	return 0
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
+	return 0
+
+/turf/proc/slippy_by_default()
 	return 0
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
@@ -266,12 +275,22 @@
 		if(O.level == 1)
 			O.hide(0)
 
+// override for snow turfs, since they should never hide anything
+/turf/snow/levelupdate()
+	update_holomap_planes()
+	for(var/obj/O in src)
+		if(O.level == 1)
+			O.hide(0)
+
 // Removes all signs of lattice on the pos of the turf -Donkieyo
 /turf/proc/RemoveLattice()
 	var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 	if(L)
 		qdel (L)
 		L = null
+
+/turf/proc/add_dust()
+	return
 
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
@@ -315,6 +334,10 @@
 
 	if(connections)
 		connections.erase_all()
+
+	if(N == /turf/space)
+		for(var/obj/effect/decal/cleanable/C in src)
+			qdel(C)//enough with footprints floating in space
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
@@ -482,7 +505,7 @@
 			M.take_damage(100, "brute")
 
 /turf/proc/Bless()
-	flags |= NOJAUNT
+	turf_flags |= NOJAUNT
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs
@@ -676,8 +699,9 @@
 
 #undef PLANE_FOR
 
-// Return -1 to make movement instant for the mob
-// Return high values to make movement slower
+// This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
+// Return a high number to make the mob move slower.
+// Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
 
@@ -714,3 +738,11 @@
 	.=..()
 
 	src.map_element = ME
+
+/turf/send_to_past(var/duration)
+	var/current_type = type
+	being_sent_to_past = TRUE
+	spawn(duration)
+		being_sent_to_past = FALSE
+		ChangeTurf(current_type)
+

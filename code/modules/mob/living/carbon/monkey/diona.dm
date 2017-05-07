@@ -17,6 +17,7 @@
 	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
+	burn_damage_modifier = 2.5 //TREEEEEES
 	languagetoadd = LANGUAGE_ROOTSPEAK
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 
@@ -162,29 +163,54 @@
 
 	src.visible_message("<span class='warning'>[src] flicks out a feeler and neatly steals a sample of [M]'s blood.</span>","<span class='warning'>You flick out a feeler and neatly steal a sample of [M]'s blood.</span>")
 	donors += M.real_name
+	var/progress = donors.len //Get value here so it isn't changed from under us
 	spawn(25)
-		update_progression()
+		update_progression(progress)
 
-/mob/living/carbon/monkey/diona/proc/update_progression()
+/mob/living/carbon/monkey/diona/proc/update_progression(var/progress)
 
-
-	if(!donors.len)
-		return
-
-	if(donors.len == 5)
-		ready_evolve = 1
-		to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
-	else if(donors.len == 4)
-		to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
-		add_language(LANGUAGE_GALACTIC_COMMON)
-		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
-	else if(donors.len == 3)
-		to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
-	else if(donors.len == 2)
-		to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
-		//say_understands() effectively lets us understand common language at this point
-	else
-		to_chat(src, "<span class='good'>The blood seeps into your small form, and you draw out the echoes of memories and personality from it, working them into your budding mind.</span>")
+	switch(progress) //Stop them from skipping levels
+		if(5)
+			ready_evolve = 1
+			to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
+		if(4)
+			to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
+			add_language(LANGUAGE_GALACTIC_COMMON)
+			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+		if(3)
+			to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
+		if(2)
+			to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
+			//say_understands() effectively lets us understand common language at this point
+		if(1)
+			to_chat(src, "<span class='good'>The blood seeps into your small form, and you draw out the echoes of memories and personality from it, working them into your budding mind.</span>")
 
 /mob/living/carbon/monkey/diona/dexterity_check()
 	return 0
+
+/mob/living/carbon/monkey/diona/update_icons()
+	update_hud()
+	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
+	overlays.len = 0
+	var/matrix/M = matrix()
+	for(var/image/I in overlays_standing)
+		overlays += I
+
+	if(stat == DEAD)
+		icon_state = "[initial(icon_state)]_dead"
+		src.transform = M
+	else if(resting)
+		icon_state = "[initial(icon_state)]_sleep"
+	else if(lying || stunned)
+		icon_state = "[initial(icon_state)]_sleep"
+		M.Turn(90)
+		M.Translate(1,-6)
+		src.transform = M
+	else
+		icon_state = "[initial(icon_state)]"
+		src.transform = M
+
+/mob/living/carbon/monkey/diona/death(gibbed)
+	..()
+	for (var/obj/item/I in get_all_slots())
+		drop_from_inventory(I) // Floating hat, mask and bag looks silly as fuck

@@ -263,13 +263,17 @@ proc/AirflowSpace(zone/A)
 /atom/movable/var/tmp/last_airflow = 0
 
 // Mainly for bustanuts.
+
 /atom/movable/proc/AirflowCanPush()
 	return 1
 
 /mob/AirflowCanPush()
-	if (M_HARDCORE in mutations)
-		return 0
 	return 1
+
+/mob/living/carbon/human/AirflowCanPush()
+	if(reagents.has_reagent(MEDCORES))
+		return 0
+	return ..()
 
 /atom/movable/proc/GotoAirflowDest(n)
 	last_airflow = world.time
@@ -458,14 +462,21 @@ mob/living/carbon/human/airflow_hit(atom/A)
 
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
 
+	for(var/i in contents)
+		if(istype(i, /obj/item/airbag))
+			var/obj/item/airbag/airbag = i
+			airbag.deploy(src)
+			b_loss = 0
+			break
+
 	var/head_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_HEAD,"melee"))
 	apply_damage(head_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
 
 	var/chest_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_CHEST,"melee"))
-	apply_damage(chest_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+	apply_damage(chest_damage, BRUTE, LIMB_CHEST, 0, 0, used_weapon = "Airflow")
 
 	var/groin_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_GROIN,"melee"))
-	apply_damage(groin_damage, BRUTE, LIMB_HEAD, 0, 0, used_weapon = "Airflow")
+	apply_damage(groin_damage, BRUTE, LIMB_GROIN, 0, 0, used_weapon = "Airflow")
 
 	if((head_damage + chest_damage + groin_damage) > 15)
 		var/turf/T = get_turf(src)

@@ -35,7 +35,7 @@
 	client.images = null				//remove the images such as AIs being unable to see runes
 
 	if(spell_masters)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.toggle_open(1)
 			client.screen -= spell_master
 
@@ -43,6 +43,8 @@
 	hud_used = new /datum/hud(src)
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
+	if(client.snow)
+		client.screen += client.snow
 
 	regular_hud_updates()
 
@@ -80,7 +82,7 @@
 	CallHook("Login", list("client" = src.client, "mob" = src))
 
 	if(spell_masters)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			client.screen += spell_master
 			spell_master.toggle_open(1)
 

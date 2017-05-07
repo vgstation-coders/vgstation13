@@ -43,7 +43,7 @@
 					for(var/b = 1 to icon_size)
 						//Finding turf and all turf contents
 						var/turf/currentturf = locate(x+a,y+b,z)
-						if(!currentturf || (currentturf.flags & NO_MINIMAP))
+						if(!currentturf || (currentturf.turf_flags & NO_MINIMAP))
 							continue
 						var/list/allturfcontents = currentturf.contents.Copy()
 
@@ -55,8 +55,8 @@
 								if(A.locs[1] != A.loc)
 									allturfcontents -= A
 
-						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
-						if(!istype(currentturf,/turf/space))
+						//Remove the following line if you want to add base turfs to your renders, I think it is cheaper to merely use a pregenned image for this
+						if(!istype(currentturf,get_base_turf(z)))
 							allturfcontents += currentturf
 
 						//Due to processing order, a pixelshifted object will be overriden in certain directions,

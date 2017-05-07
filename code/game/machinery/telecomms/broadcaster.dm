@@ -453,6 +453,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 				freq_text = "Supply"
 			if(DJ_FREQ)
 				freq_text = "DJ"
+			if(COMMON_FREQ)
+				freq_text = "Common"
 		//There's probably a way to use the list var of channels in code\game\communications.dm to make the dept channels non-hardcoded, but I wasn't in an experimentive mood. --NEO
 
 
@@ -497,6 +499,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			part_a = "<span class='aiprivradio'><span class='name'>"
 		else if (display_freq==DJ_FREQ)
 			part_a = "<span class='djradio'><span class='name'>"
+		else if (display_freq==COMMON_FREQ)
+			part_a = "<span class='commonradio'><span class='name'>"
 
 		// --- This following recording is intended for research and feedback in the use of department radio channels ---
 
@@ -602,4 +606,3 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	//world.log << "Level: [signal.data["level"]] - Done: [signal.data["done"]]"
 
 	return signal
-

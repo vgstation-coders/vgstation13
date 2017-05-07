@@ -537,6 +537,16 @@
 					item_state = SANGRIA
 					name = "\improper Sangria"
 					desc = "So sweet, you won't feel the alcohol until you're wasted."
+				if(DANS_WHISKEY)
+					icon_state = DANS_WHISKEY
+					item_state = DANS_WHISKEY
+					name = "Discount Dan's 'Malt' Whiskey"
+					desc = "The very cheapest and most sickening method of liver failure."
+				if(GREYVODKA)
+					icon_state = "ginvodkaglass"
+					item_state = "ginvodkaglass"
+					name = "glass of Grey vodka"
+					desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"

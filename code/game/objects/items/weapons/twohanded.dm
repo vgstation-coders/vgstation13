@@ -15,7 +15,6 @@
 	icon_state = "offhand"
 	name = "offhand"
 	abstract = 1
-	flags = SLOWDOWN_WHEN_CARRIED
 	var/obj/item/wielding = null
 
 /obj/item/offhand/dropped(user)
@@ -69,7 +68,8 @@
 	force = 10
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
-	flags = FPRINT | TWOHANDABLE
+	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
+	slowdown = FIREAXE_SLOWDOWN
 
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
@@ -122,6 +122,9 @@
 	item_state = "dualsaber[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness = wielded ? 1.5 : 0
+	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
@@ -166,6 +169,9 @@
 	item_state = "bananabunch[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
+	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
+	sharpness = wielded ? 1.5 : 0
+	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
@@ -214,6 +220,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
+	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
@@ -263,6 +270,14 @@
 		user.update_inv_hands()
 	return
 
+/obj/item/weapon/spear/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/organ/head))
+		if(loc == user)
+			user.drop_item(src, force_drop = 1)
+		var/obj/structure/headpole/H = new (get_turf(src), W, src)
+		user.drop_item(W, H, force_drop = 1)
+
 /obj/item/weapon/spear/wooden
 	name = "steel spear"
 	desc = "An ancient weapon of an ancient design, with a smooth wooden handle and a sharp steel blade."
@@ -308,3 +323,96 @@
 			user.regenerate_icons()
 			var/client/C = user.client
 			C.changeView(C.view - 7)
+
+/obj/item/weapon/bloodlust
+	icon_state = "bloodlust0"
+	name = "high-frequency pincer blade \"bloodlust\""
+	desc = "A scissor-like weapon made using two high-frequency machetes. Don't run with it in your hands."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 17
+	throwforce = 3
+	throw_speed = 1
+	throw_range = 5
+	attack_delay = 25 // Heavy.
+	w_class = W_CLASS_LARGE
+	flags = FPRINT | TWOHANDABLE
+	mech_flags = MECH_SCAN_ILLEGAL
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
+	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	var/event_key
+
+/obj/item/weapon/bloodlust/update_wield(mob/user)
+	..()
+	icon_state = "bloodlust[wielded ? 1 : 0]"
+	item_state = icon_state
+	force = wielded ? 34 : initial(force)
+	sharpness_flags = wielded ? SHARP_BLADE | SERRATED_BLADE | HOT_EDGE : initial(sharpness_flags)
+	sharpness = wielded ? 2 : initial(sharpness)
+	to_chat(user, wielded ? "<span class='warning'> [src] starts vibrating.</span>" : "<span class='notice'> [src] stops vibrating.</span>")
+	playsound(user, wielded ? 'sound/weapons/hfmachete1.ogg' : 'sound/weapons/hfmachete0.ogg', 40, 0 )
+	if(user)
+		user.update_inv_hands()
+	if(wielded)
+		event_key = user.on_moved.Add(src, "mob_moved")
+	else
+		user.on_moved.Remove(event_key)
+		event_key = null
+
+/obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
+	if(isliving(target))
+		playsound(target, get_sfx("machete_hit"),50, 0)
+	if(clumsy_check(user) && prob(50))
+		to_chat(user, "<span class='warning'>Son of a bitch... You... got yourself.</span>")
+		playsound(target, get_sfx("machete_hit"),50, 0)
+		user.take_organ_damage(wielded ? 34 : 17)
+		return
+	..()
+
+/obj/item/weapon/bloodlust/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(iscarbon(holder) && wielded)
+		for(var/obj/effect/plantsegment/P in range(holder,0))
+			qdel(P)
+
+/obj/item/weapon/bloodlust/IsShield()
+	if(wielded)
+		return 1
+	else
+		return 0
+
+/obj/item/weapon/bloodlust/pickup(mob/user)
+	playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
+	to_chat(user, "<span class='notice'>You attach [src] to your arm.</span>")
+	cant_drop = 1
+
+/obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
+	..()
+	if(istype(W, /obj/item/weapon/screwdriver) && user.is_holding_item(src))
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
+		user.drop_item(src, force_drop=1)
+
+/obj/item/weapon/bloodlust/suicide_act(mob/user)
+	. = (OXYLOSS)
+	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
+	spawn(2 SECONDS) //Adds drama.
+	if(ishuman(user))
+		var/mob/living/carbon/human/U = user
+		if(U.organs_by_name)
+			var/datum/organ/external/head/H = U.get_organ(LIMB_HEAD)
+			if(istype(H) && ~H.status & ORGAN_DESTROYED)
+				H.droplimb(1)
+				playsound(U, get_sfx("machete_hit"),50, 0)
+				blood_splatter(get_turf(user),U,1)
+	return .
+
+/obj/item/weapon/spear/xeno
+	name = "claw-tipped spear"
+	desc = "A hunters weapon. The claw of a xenomorph afixed onto a makeshift staff."
+	icon_state = "spear_claw"
+	base_state = "spear_claw"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+
+	force = 18
+	base_force = 18
+	throwforce = 25

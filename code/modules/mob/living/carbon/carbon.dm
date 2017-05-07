@@ -7,8 +7,8 @@
 	if(now_pushing)
 		return
 	..()
-	if(istype(AM, /mob/living/carbon) && prob(10))
-		src.spread_disease_to(AM, "Contact")
+	if(can_be_infected(AM) && prob(10))
+		spread_disease_to(src, AM, "Contact")
 	handle_symptom_on_touch(src, AM, BUMP)
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
@@ -89,7 +89,7 @@
 	if(!istype(M, /mob/living/carbon))
 		return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+		var/datum/organ/external/temp = M.get_active_hand_organ()
 
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
@@ -103,7 +103,8 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(dna.mutantrace == "slime")
+	var/mob/living/carbon/human/H = src
+	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
@@ -138,7 +139,7 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -149,7 +150,7 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -234,8 +235,8 @@
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
-					"<span class='notice'>[M] shake hands with [src].</span>", \
-					"<span class='notice'>You shake [src]'s hand.</span>", \
+					"<span class='notice'>[M] shakes hands with [src].</span>", \
+					"<span class='notice'>You shake hands with [src].</span>", \
 					)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -306,7 +307,7 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen)
+	if(target.type == /obj/abstract/screen)
 		return
 
 	var/atom/movable/item = src.get_active_hand()
@@ -565,8 +566,14 @@
 				return 1
 	return 0
 
-/mob/living/carbon/CheckSlip()
-	return !locked_to && !lying && !unslippable
+#define SLIPTYPE_DEFAULT 1
+#define SLIPTYPE_ICE 2
+/mob/living/carbon/CheckSlip(var/sliptype = SLIPTYPE_DEFAULT)
+	switch(sliptype)
+		if(SLIPTYPE_DEFAULT)
+			return !locked_to && !lying && !unslippable
+		if(SLIPTYPE_ICE)
+			return !locked_to && !unslippable
 
 /mob/living/carbon/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
 	if(!slip_on_walking && m_intent == "walk")
@@ -654,7 +661,7 @@
 				for(var/datum/disease2/effect/E in D.effects)
 					if(istype(E, symptom_type))
 						if(E.count > 0)
-							return 1
+							return E
 
 /mob/living/carbon/proc/handle_symptom_on_touch(var/toucher, var/touched, var/touch_type)
 	if(virus2.len)
@@ -663,3 +670,57 @@
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_touch(src, toucher, touched, touch_type)
+
+/mob/living/carbon/proc/get_lowest_body_alpha()
+	if(!body_alphas.len)
+		return 255
+	var/lowest_alpha = 255
+	for(var/alpha_modification in body_alphas)
+		lowest_alpha = min(lowest_alpha,body_alphas[alpha_modification])
+	return lowest_alpha
+
+/mob/living/carbon/advanced_mutate()
+	..()
+	if(prob(5))
+		hasmouth = !hasmouth
+
+/mob/living/carbon/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"gender",
+		"antibodies",
+		"last_eating",
+		"life_tick",
+		"number_wounds",
+		"handcuffed",
+		"legcuffed",
+		"pulse")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/carbon/movement_tally_multiplier()
+	. = ..()
+	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		for(var/obj/item/I in get_clothing_items())
+			if(I.slowdown <= 0)
+				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
+			else
+				. *= I.slowdown
+
+		for(var/obj/item/I in held_items)
+			if(I.flags & SLOWDOWN_WHEN_CARRIED)
+				. *= I.slowdown
+
+/mob/living/carbon/base_movement_tally()
+	. = ..()
+	if(flying)
+		return // Calculate none of the following because we're technically on a vehicle
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		return // Hyperzine ignores slowdown
+	if(istype(loc, /turf/space))
+		return // Space ignores slowdown
+
+	if(feels_pain() && !has_painkillers())
+		var/health_deficiency = (100 - health - halloss)
+		if(health_deficiency >= 40)
+			. += (health_deficiency / 25)

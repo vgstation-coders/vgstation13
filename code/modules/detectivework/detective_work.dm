@@ -50,6 +50,15 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 	if(!suit_fibers.len)
 		del suit_fibers
 
+/atom/proc/add_custom_fibers(var/txt, var/duplicates = TRUE)
+	if(!suit_fibers)
+		suit_fibers = list()
+
+	if(duplicates)
+		suit_fibers += txt
+	else
+		suit_fibers |= txt
+
 var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(print) proc, and means about 80% of
 								//the print must be there for it to be complete.  (Prints are 32 digits)
 
@@ -82,17 +91,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 
 	req_access = list(access_forensics_lockers)
 
-
-/obj/machinery/computer/forensic_scanning/New()
-	..()
-	new /obj/item/weapon/book/manual/detective(get_turf(src))
-	return
-
-
 /obj/machinery/computer/forensic_scanning/attack_ai(mob/user)
 	src.add_hiddenprint(user)
 	return attack_hand(user)
-
 
 /obj/machinery/computer/forensic_scanning/attack_hand(mob/user)
 	if(..())

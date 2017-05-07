@@ -959,6 +959,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )
 						playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
 					else
+						user.do_attack_animation(src, W)
 						src.hitstaken++
 						if(src.hitstaken==3)
 							visible_message("[user.name] smashes the [src]!")

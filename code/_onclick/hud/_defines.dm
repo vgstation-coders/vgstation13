@@ -16,13 +16,6 @@
 //Overlays that cover the entire screen
 #define ui_entire_screen "WEST,SOUTH TO EAST,NORTH"
 
-//Upper left action buttons, displayed when you pick up an item that has this enabled.
-#define ui_action_slot1 "WEST:[6*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot2 "WEST+1:[8*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot3 "WEST+2:[10*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot4 "WEST+3:[12*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-#define ui_action_slot5 "WEST+4:[14*PIXEL_MULTIPLIER],NORTH-1:[26*PIXEL_MULTIPLIER]"
-
 //Lower left, persistant menu
 #define ui_inventory "WEST:[6*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
 
@@ -106,6 +99,7 @@
 #define ui_spell_master "EAST-1:16,NORTH-1:16" //Used as compile time value
 #define ui_genetic_master "EAST-1:16,NORTH-3:16" //Used as compile time value
 #define ui_alien_master "EAST-0:-4,NORTH-0:-6" //Used as compile time value
+#define ui_racial_master "EAST-0:-4,NORTH-2:-6" //Used as compile time value
 
 //Pop-up inventory
 #define ui_shoes "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"

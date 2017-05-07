@@ -173,7 +173,7 @@
 	var/amounts = list(5, 10)
 	var/obj/machinery/sleep_console/connected = null
 	var/sedativeblock = 0 //To prevent people from being surprisesoporific'd
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -520,6 +520,7 @@
 		if(occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
+			occupant.resting = 0
 		src.on = 0
 		if(auto_eject_after)
 			src.go_out()
@@ -625,7 +626,7 @@
 	light_color = LIGHT_COLOR_ORANGE
 	automatic = 1
 	drag_delay = 0
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 
 
 /obj/machinery/sleeper/mancrowave/go_out(var/exit = src.loc)
@@ -814,6 +815,14 @@
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 		connected.on = 0
 		if(connected.occupant)
+			if(ishuman(connected.occupant))
+				var/mob/living/carbon/human/H = connected.occupant
+				if(isdiona(H))
+					if(H.h_style != "Popped Hair")
+						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
+						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 1)
+						H.h_style = "Popped Hair"
+						H.update_hair()
 			connected.go_out()
 		connected.update_icon()
 

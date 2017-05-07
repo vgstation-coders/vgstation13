@@ -78,4 +78,5 @@ var/datum/subsystem/more_init/SSmore_init
 						DI.Blend(S.blood_color, ICON_MULTIPLY)
 					//testing("Completed [damage_state]/[O.icon_name]/[species_blood]")
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
-	del(H)
+	spawn(1)
+		qdel(H)

@@ -13,6 +13,21 @@
 		empulse(get_turf(A), 1, 1)
 	..()
 
+/obj/item/projectile/ionsmall
+	name = "ion bolt"
+	icon_state = "ion"
+	damage = 0
+	damage_type = BURN
+	nodamage = 1
+	layer = PROJECTILE_LAYER
+	flag = "energy"
+	fire_sound = 'sound/weapons/ion.ogg'
+
+/obj/item/projectile/ionsmall/Bump(atom/A as mob|obj|turf|area)
+	if(!bumped && ((A != firer) || reflected))
+		empulse(src, 0, 1)
+	..()
+
 /obj/item/projectile/bullet/gyro
 	name ="explosive bolt"
 	icon_state= "bolter"
@@ -348,6 +363,17 @@ obj/item/projectile/kinetic/New()
 	var/temperature = T0C + 175
 	var/fire_duration
 
+/obj/item/projectile/fire_breath/New(turf/T, var/direction, var/F_Dam, var/P, var/T, var/F_Dur)
+	..(T,direction)
+	if(F_Dam)
+		fire_damage = F_Dam
+	if(P)
+		pressure = P
+	if(T)
+		temperature = T
+	if(F_Dur)
+		fire_duration = F_Dur
+
 /obj/item/projectile/fire_breath/process_step()
 	..()
 
@@ -389,3 +415,23 @@ obj/item/projectile/kinetic/New()
 		M.bodytemperature = max(M.bodytemperature-5 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
 		playsound(M, 'sound/effects/freeze.ogg', 100, 1)
 	return 1
+
+/obj/item/projectile/napalm_bomb
+	name = "napalm bomb"
+	icon_state = "fireball"
+	damage = 0
+	damage_type = BURN
+	nodamage = 1
+	layer = PROJECTILE_LAYER
+	flag = "bio"
+	fire_sound = 'sound/weapons/rocket.ogg'
+
+	projectile_slowdown = 0.5
+
+	var/fire_damage = 5
+	var/pressure = ONE_ATMOSPHERE * 4.5
+	var/temperature = T0C + 175
+	var/fire_duration = 10
+
+/obj/item/projectile/napalm_bomb/on_hit(var/atom/target, var/blocked = 0)
+	new /obj/effect/fire_blast/blue(get_turf(target), fire_damage, 0, 1, pressure, temperature, fire_duration)
