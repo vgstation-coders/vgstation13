@@ -1594,6 +1594,25 @@ Game Mode config tags:
 		i *= 2
 	while (world.tick_usage > min(TICK_LIMIT_TO_RUN, CURRENT_TICKLIMIT))
 
+#undef DELTA_CALC
+
+
+/proc/stack_trace(message = "Getting a stack trace.")
+	CRASH(message)
+
+/proc/sentStrikeTeams(var/team)
+	return (team in sent_strike_teams)
+
+
+/proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
+	var/turf/T1 = A
+	var/turf/T2 = B
+	if(!istype(T1))
+		T1 = get_turf(A)
+	if(!istype(T2))
+		T2 = get_turf(B)
+	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
+
 /proc/procedurally_generate()
 	var/total_time
 	var/watch
@@ -1636,28 +1655,7 @@ Game Mode config tags:
 			sleep(world.tick_lag)
 			gen_total += generator_num
 			for(var/obj/procedural_generator/pgen in list_of_options)
-				if(pgen.pooled)
-					returnToPool(pgen)
-				else
-					qdel(pgen)
+				qdel(pgen)
 
 	log_startup_progress("Finished procedurally generating the entire map with [gen_total] procedural generators in [total_time]s")
 
-#undef DELTA_CALC
-
-
-/proc/stack_trace(message = "Getting a stack trace.")
-	CRASH(message)
-
-/proc/sentStrikeTeams(var/team)
-	return (team in sent_strike_teams)
-
-
-/proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
-	var/turf/T1 = A
-	var/turf/T2 = B
-	if(!istype(T1))
-		T1 = get_turf(A)
-	if(!istype(T2))
-		T2 = get_turf(B)
-	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
