@@ -185,8 +185,8 @@ var/list/datum/power/changeling/powerinstances = list()
 	verbpath = /mob/proc/changeling_engorgedglands
 
 /datum/power/changeling/DigitalCamoflague
-	name = "Digital Camoflauge"
-	desc = "We evolve the ability to distort our form and proprtions, defeating common altgorthms used to detect lifeforms on cameras."
+	name = "Digital Camouflage"
+	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
 	helptext = "We cannot be tracked by camera while using this skill.  However, humans looking at us will find us.. uncanny.  We must constantly expend chemicals to maintain our form like this."
 	genomecost = 3
 	allowduringlesserform = 1
