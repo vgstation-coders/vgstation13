@@ -84,7 +84,7 @@
 	name = "Brick"
 	ingredients=list(
 		MAT_IRON = 1,
-		MAT_SAND = 1
+		MAT_GLASS = 1
 	)
 	yieldtype = /obj/item/stack/sheet/mineral/brick
 
