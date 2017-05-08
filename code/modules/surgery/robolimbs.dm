@@ -74,8 +74,8 @@
 
 /datum/surgery_step/limb/mend/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("[user] is beginning reposition flesh and nerve endings where where [target]'s [affected.display_name] used to be with [tool].", \
-	"You start repositioning flesh and nerve endings where where [target]'s [affected.display_name] used to be with [tool].")
+	user.visible_message("[user] is beginning reposition flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].", \
+	"You start repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].")
 	..()
 
 /datum/surgery_step/limb/mend/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
