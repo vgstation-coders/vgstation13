@@ -1000,7 +1000,8 @@ var/global/list/whitelisted_species = list("Human")
 		)
 
 /datum/species/slime/xenobio
-	default_mutations = list(M_NO_SHOCK)
+	name = "Evolved Slime"
+	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 
 /datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isslimeperson(H))
@@ -1019,7 +1020,7 @@ var/global/list/whitelisted_species = list("Human")
 	name = "puddle of slime"
 	desc = "The remains of a slime person."
 	stat = DEAD
-	icon = 'icons/mob/human_races/r_golem.dmi'
+	icon = 'icons/mob/human_races/r_golem.dmi'	//To-Do
 	icon_state = "golem_dust"
 	density = 0
 	meat_type = /obj/item/slime_heart

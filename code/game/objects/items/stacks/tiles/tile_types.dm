@@ -158,7 +158,8 @@ obj/item/stack/tile/slime
 	max_amount = 30
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
-	if(L.dna.mutantrace == "slime")
-		return -1
-	else
-		return current_slowdown+5
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		if(isslimeperson(H))
+			return -1
+	return current_slowdown+5

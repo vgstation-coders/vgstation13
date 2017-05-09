@@ -103,7 +103,8 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(dna.mutantrace == "slime")
+	var/mob/living/carbon/human/H = src
+	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
