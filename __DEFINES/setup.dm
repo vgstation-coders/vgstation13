@@ -981,6 +981,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_SKIN 64
 #define NO_BLOOD 128
 #define HAS_SWEAT_GLANDS 256
+#define NO_BONES 512
+#define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1335,6 +1337,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_CULT "Cult"
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
+#define LANGUAGE_SLIME "Slime"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG

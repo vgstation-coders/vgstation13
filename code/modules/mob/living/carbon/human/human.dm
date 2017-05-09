@@ -72,6 +72,11 @@
 	h_style = "Bald"
 	..(new_loc, "Grue")
 
+/mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Slime")
+	gender = NEUTER
+
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
@@ -1729,6 +1734,7 @@ mob/living/carbon/human/isincrit()
 
 	species.brute_mod *= rand(5,20)/10
 	species.burn_mod *= rand(5,20)/10
+	species.tox_mod *= rand(5,20)/10
 
 	if(prob(5))
 		species.flags = rand(0,65535)

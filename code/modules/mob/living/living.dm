@@ -295,7 +295,13 @@
 	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
 		return 0
 
-	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
+	var/mult = 1
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(H.species.tox_mod)
+			mult = H.species.tox_mod
+
+	toxloss = min(max(toxloss + (amount * tox_damage_modifier * mult), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
 	if(status_flags & GODMODE)

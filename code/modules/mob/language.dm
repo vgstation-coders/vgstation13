@@ -213,6 +213,19 @@
 	flags = RESTRICTED
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
+/datum/language/slime
+	name = LANGUAGE_SLIME
+	desc = "A tonal language produced by the bubbling of the ambient atmosphere through a slime's surface."
+	speech_verb = "bubbles"
+	ask_verb = "gurgles"
+	exclaim_verb = "froths"
+	whisper_verb = "burbles"
+	colour = "aqua"
+	native = 1
+	key = "f"
+	flags = RESTRICTED
+	syllables = list("ba","ab","be","eb","bi","ib","bo","ob","bu","ub")
+
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"
 	var/len = max(1,Ceiling(length(message)/5))
