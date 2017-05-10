@@ -457,11 +457,8 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 
 /client/proc/update_special_views()
 	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
-		if(!parallax_initialized)
-			break
-		else
+		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
-			break
 
 	for(var/obj/structure/window/W in view(view,mob))
 		if(W.one_way)

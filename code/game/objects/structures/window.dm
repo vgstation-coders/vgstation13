@@ -283,7 +283,7 @@
 	if(iscrowbar(W) && one_way)
 		to_chat(user, "<span class='notice'>You pry the sheet of plastic off the window.</span>")
 		one_way = 0
-		new /obj/item/stack/sheet/mineral/plastic(get_turf(user))
+		getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1)
 		overlays -= oneway_overlay
 		return
 
