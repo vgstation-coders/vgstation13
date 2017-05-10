@@ -1919,22 +1919,15 @@ mob/proc/on_foot()
 	var/mob/contained_mob
 
 /obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
-	if(M)
-		M.forceMove(src)
-		contained_mob = M
+	ASSERT(M)
+	M.forceMove(src)
+	contained_mob = M
 
 /obj/transmog_body_container/proc/get_rid_of()
 	for(var/atom/movable/AM in contents)
 		AM.forceMove(get_turf(src))
 	contained_mob = null
 	qdel(src)
-
-/obj/transmog_body_container/proc/get_contained_mob()
-	if(!contents.len)
-		return null
-	else
-		for(var/i in contents)
-			return i
 
 /obj/transmog_body_container/Destroy()
 	contained_mob = null
