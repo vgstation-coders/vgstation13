@@ -5541,3 +5541,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	H.radiation = max(H.radiation - 5 * REM, 0)
 	H.rad_tick = max(H.rad_tick - 3 * REM, 0)
+
+/datum/reagent/mediumcores
+	name = "medium-salted cores"
+	id = MEDCORES
+	description = "A derivative of the chemical known as 'Hardcores', easier to mass produce, but at a cost of quality."
+	reagent_state = SOLID
+	color = "#FFA500"
+	custom_metabolism = 0.1

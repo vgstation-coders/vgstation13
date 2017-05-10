@@ -1296,7 +1296,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define GLOBALCAST -2
 
 //buying costs
-#define Sp_BASE_PRICE 5
+#define Sp_BASE_PRICE 20
 
 ///////WIZ END/////////
 

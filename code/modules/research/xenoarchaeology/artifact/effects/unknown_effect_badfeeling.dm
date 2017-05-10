@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/badfeeling
 	effecttype = "badfeeling"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 2
 	var/list/messages = list("You feel worried.",\
 		"Something doesn't feel right.",\

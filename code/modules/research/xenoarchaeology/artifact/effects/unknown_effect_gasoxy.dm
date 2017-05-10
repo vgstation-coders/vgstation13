@@ -1,12 +1,12 @@
 
 /datum/artifact_effect/gasoxy
 	effecttype = "gasoxy"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA)
 	var/max_pressure
 	copy_for_battery = list("max_pressure")
 
 /datum/artifact_effect/gasoxy/New()
 	..()
-	effect = pick(EFFECT_TOUCH, EFFECT_AURA)
 	max_pressure = rand(115,1000)
 	effect_type = pick(6,7)
 

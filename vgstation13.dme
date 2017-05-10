@@ -1123,6 +1123,7 @@
 #include "code\modules\clothing\spacesuits\plasmamen.dm"
 #include "code\modules\clothing\spacesuits\rig.dm"
 #include "code\modules\clothing\spacesuits\syndi.dm"
+#include "code\modules\clothing\spacesuits\time.dm"
 #include "code\modules\clothing\spacesuits\void.dm"
 #include "code\modules\clothing\suits\alien.dm"
 #include "code\modules\clothing\suits\armor.dm"
