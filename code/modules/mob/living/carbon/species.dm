@@ -1038,7 +1038,6 @@ var/global/list/whitelisted_species = list("Human")
 /mob/living/slime_pile/update_icon()
 	if(slime_person)
 		var/icon/I = new ('icons/mob/human_races/r_slime.dmi', "slime_puddle")
-//		var/image/I = image('icons/mob/human_races/r_slime.dmi', src, "slime_puddle")
 		I.Blend(rgb(slime_person.multicolor_skin_r, slime_person.multicolor_skin_g, slime_person.multicolor_skin_b), ICON_ADD)
 		overlays += I
 
