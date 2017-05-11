@@ -45,7 +45,7 @@
 	dna.mutantrace = "skelevox"
 	greaterform = "Skeletal Vox"
 	eggsleft = 0
- 
+
 /mob/living/carbon/monkey/vox/Life()
 	..()
 	if(prob(5) && eggsleft > 4)
