@@ -26,6 +26,9 @@
 		/obj/item/clothing/under/rank/head_of_security
 		)
 
+	holomap_offset_x = list(110,0,0,86,4,0,0,)
+	holomap_offset_y = list(119,0,0,94,10,0,0,)
+
 ////////////////////////////////////////////////////////////////
 
 #include "ministation.dmm"
