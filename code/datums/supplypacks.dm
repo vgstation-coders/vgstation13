@@ -367,6 +367,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/mask/gas/clown_hat,
 					/obj/item/clothing/under/rank/clown,
 					/obj/item/weapon/bikehorn,
+					/obj/item/clothing/glasses/eyepatch
 					/obj/item/clothing/under/mime,
 					/obj/item/clothing/shoes/mime,
 					/obj/item/clothing/gloves/white,
