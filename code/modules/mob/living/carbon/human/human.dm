@@ -66,7 +66,6 @@
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Golem")
-	gender = NEUTER
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
@@ -75,7 +74,6 @@
 /mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Slime")
-	gender = NEUTER
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
@@ -117,6 +115,9 @@
 
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
+	skin_r = rand(0,255)
+	skin_g = rand(0,255)
+	skin_b = rand(0,255)
 
 	if(!src.species)
 		if(new_species_name)
@@ -1274,6 +1275,9 @@
 
 	src.species = new S.type
 	src.species.myhuman = src
+
+	if(S.gender)
+		gender = S.gender
 
 	for(var/L in species.known_languages)
 		add_language(L)

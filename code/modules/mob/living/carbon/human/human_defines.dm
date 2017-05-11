@@ -17,6 +17,9 @@
 	var/b_eyes = 0
 
 	var/s_tone = 0	//Skin tone
+	var/skin_r = 0	//For multicolor races
+	var/skin_g = 0
+	var/skin_b = 0
 
 	var/lip_style = null	//no lipstick by default- arguably misleading, as it could be used for general makeup
 

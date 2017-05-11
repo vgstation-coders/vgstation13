@@ -82,7 +82,7 @@
 /obj/item/organ/brain/slime_core
 	name = "crystallized slime core"
 	desc = "The crystallized core of a slime person."
-//	icon_state = "brain2"	//To-Do
+	icon_state = "slime_person_core"
 	organ_type = /datum/organ/internal/brain/slime_core
 
 /obj/item/organ/brain/slime_core/process()

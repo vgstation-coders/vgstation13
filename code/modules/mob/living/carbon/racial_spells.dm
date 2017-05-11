@@ -64,12 +64,12 @@
 	desc = "Sprout new limbs to replace lost ones."
 	panel = "Racial Abilities"
 	override_base = "racial"
-	hud_state = "racial_dark"	//To-Do
+	hud_state = "racial_regen_limbs"
 	spell_flags = INCLUDEUSER
 	charge_type = Sp_RECHARGE
 	charge_max = 100
 	range = SELFCAST
-	cast_sound = null //'sound/misc/grue_growl.ogg'
+	cast_sound = 'sound/effects/squelch1.ogg'
 	still_recharging_msg = "<span class='notice'>You're still regaining your strength.</span>"
 
 /spell/regen_limbs/cast(list/targets, mob/user)
@@ -99,10 +99,14 @@
 							H.nutrition -= 50
 							O.rejuvenate_limb()
 							has_regenerated = TRUE
+							user.visible_message("<span class='warning'>\The [user] sprouts a new [O.display_name]!</span>",\
+ 								"<span class='notice'>You sprout a new [O.display_name]!</span>")
 				else if(H.nutrition >= 100)
 					H.nutrition -= 100
 					O.rejuvenate_limb()
 					has_regenerated = TRUE
+					user.visible_message("<span class='warning'>\The [user] sprouts a new [O.display_name]!</span>",\
+						"<span class='notice'>You sprout a new [O.display_name]!</span>")
 
 		H.resting = 0
 		H.regenerate_icons()

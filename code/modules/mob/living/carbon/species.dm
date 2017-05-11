@@ -137,6 +137,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
 
+	var/gender	//For races with only one or neither
+
 
 /datum/species/New()
 	..()
@@ -820,6 +822,8 @@ var/global/list/whitelisted_species = list("Human")
 	uniform_icons = 'icons/mob/uniform_fat.dmi'
 	primitive = /mob/living/carbon/monkey/rock
 
+	gender = NEUTER
+
 	blood_color = "#B4DBCB"
 	flesh_color = "#B4DBCB"
 
@@ -968,15 +972,17 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/slime
 	name = "Slime"
 	icobase = 'icons/mob/human_races/r_slime.dmi'
-//	deform = 'icons/mob/human_races/r_def_golem.dmi'	//To-Do
+	deform = 'icons/mob/human_races/r_def_slime.dmi'
 	known_languages = list(LANGUAGE_SLIME)
 	meat_type = /obj/item/slime_heart
 	attack_verb = "glomps"
 
 	flags = IS_WHITELISTED | NO_BREATHE
-	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE
+	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
 
 	spells = list(/spell/regen_limbs)
+
+	gender = NEUTER
 
 	tox_mod = 2
 
@@ -1008,7 +1014,7 @@ var/global/list/whitelisted_species = list("Human")
 		return
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
-//	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)	//To-Do
+	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
@@ -1020,11 +1026,20 @@ var/global/list/whitelisted_species = list("Human")
 	name = "puddle of slime"
 	desc = "The remains of a slime person."
 	stat = DEAD
-	icon = 'icons/mob/human_races/r_golem.dmi'	//To-Do
-	icon_state = "golem_dust"
+	icon = 'icons/mob/human_races/r_slime.dmi'
+	icon_state = "slime_puddle"
 	density = 0
 	meat_type = /obj/item/slime_heart
 	var/mob/living/carbon/human/slime_person
+
+/mob/living/slime_pile/New()
+	..()
+	spawn(1)
+		update_icon()
+
+/mob/living/slime_pile/update_icon()
+	if(slime_person)
+		icon.Blend(rgb(slime_person.skin_r, slime_person.skin_g, slime_person.skin_b), ICON_ADD)
 
 /mob/living/slime_pile/attack_hand(mob/user)
 	if(slime_person)

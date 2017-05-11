@@ -663,6 +663,7 @@
 		if(!isslimeperson(human))
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
 			human.set_species("Evolved Slime")
+			human.regenerate_icons()
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"

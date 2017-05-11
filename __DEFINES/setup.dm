@@ -984,6 +984,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define HAS_SWEAT_GLANDS 256
 #define NO_BONES 512
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
+#define MULTICOLOR 2048	//skin color is unique rather than tone variation
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
