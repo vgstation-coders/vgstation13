@@ -798,7 +798,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-
+			<A href='?src=\ref[src];secretsfun=generic_event'>Trigger a random event from the list of all</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
