@@ -355,7 +355,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
-	primitive = /mob/living/carbon/monkey/vox //for now
+	primitive = /mob/living/carbon/monkey/vox/skeletal
 
 	warning_low_pressure = 50
 	hazard_low_pressure = 0
