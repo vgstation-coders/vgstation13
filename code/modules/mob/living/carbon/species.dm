@@ -991,13 +991,13 @@ var/global/list/whitelisted_species = list("Human")
 	blood_color = "#96FFC5"
 	flesh_color = "#96FFC5"
 
-	cold_level_1 = 273  // Cold damage level 1 below this point.
-	cold_level_2 = 250  // Cold damage level 2 below this point.
-	cold_level_3 = 230  // Cold damage level 3 below this point.
+	cold_level_1 = T0C  	// Cold damage level 1 below this point.
+	cold_level_2 = T0C-23	// Cold damage level 2 below this point.
+	cold_level_3 = T0C-43	// Cold damage level 3 below this point.
 
-	heat_level_1 = 330  // Heat damage level 1 above this point.
-	heat_level_2 = 350  // Heat damage level 2 above this point.
-	heat_level_3 = 373  // Heat damage level 3 above this point.
+	heat_level_1 = T0C+57	// Heat damage level 1 above this point.
+	heat_level_2 = T0C+77	// Heat damage level 2 above this point.
+	heat_level_3 = T0C+100	// Heat damage level 3 above this point.
 
 	has_mutant_race = 0
 
@@ -1010,8 +1010,6 @@ var/global/list/whitelisted_species = list("Human")
 	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 
 /datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
-	if(!isslimeperson(H))
-		return
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
@@ -1026,8 +1024,8 @@ var/global/list/whitelisted_species = list("Human")
 	name = "puddle of slime"
 	desc = "The remains of a slime person."
 	stat = DEAD
-	icon = 'icons/mob/human_races/r_slime.dmi'
-	icon_state = "slime_puddle"
+	icon = null //'icons/mob/human_races/r_slime.dmi'
+	icon_state = null //"slime_puddle"
 	density = 0
 	meat_type = /obj/item/slime_heart
 	var/mob/living/carbon/human/slime_person
@@ -1039,7 +1037,10 @@ var/global/list/whitelisted_species = list("Human")
 
 /mob/living/slime_pile/update_icon()
 	if(slime_person)
-		icon.Blend(rgb(slime_person.skin_r, slime_person.skin_g, slime_person.skin_b), ICON_ADD)
+		var/icon/I = new ('icons/mob/human_races/r_slime.dmi', "slime_puddle")
+//		var/image/I = image('icons/mob/human_races/r_slime.dmi', src, "slime_puddle")
+		I.Blend(rgb(slime_person.multicolor_skin_r, slime_person.multicolor_skin_g, slime_person.multicolor_skin_b), ICON_ADD)
+		overlays += I
 
 /mob/living/slime_pile/attack_hand(mob/user)
 	if(slime_person)

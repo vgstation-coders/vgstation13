@@ -252,7 +252,7 @@ var/global/list/damage_icon_parts = list()
 	//Skin tone
 	if(!skeleton && !husk && !hulk)
 		if(species.anatomy_flags & MULTICOLOR)
-			stand_icon.Blend(rgb(skin_r, skin_g, skin_b), ICON_ADD)
+			stand_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
 		else if(species.anatomy_flags & HAS_SKIN_TONE)
 			if(s_tone >= 0)
 				stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)

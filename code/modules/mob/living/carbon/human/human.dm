@@ -115,9 +115,9 @@
 
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
-	skin_r = rand(0,255)
-	skin_g = rand(0,255)
-	skin_b = rand(0,255)
+	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
+	multicolor_skin_g = rand(0,255)
+	multicolor_skin_b = rand(0,255)
 
 	if(!src.species)
 		if(new_species_name)
