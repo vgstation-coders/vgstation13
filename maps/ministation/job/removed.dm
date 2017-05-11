@@ -5,11 +5,6 @@
 	total_positions = 0
 	spawn_positions = 0
 
-/datum/job/hydro
-	..()
-	total_positions = 1
-	spawn_positions = 1
-
 /datum/job/qm
 	..()
 	total_positions = 0
@@ -34,11 +29,6 @@
 	..()
 	total_positions = 0
 	spawn_positions = 0
-
-/datum/job/chaplain
-	..()
-	total_positions = 1
-	spawn_positions = 1
 
 /datum/job/chief_engineer
 	..()
@@ -84,11 +74,6 @@
 	..()
 	total_positions = 0
 	spawn_positions = 0
-
-/datum/job/cyborg
-	..()
-	total_positions = 1
-	spawn_positions = 1
 
 /datum/job/paramedic
 	..()
