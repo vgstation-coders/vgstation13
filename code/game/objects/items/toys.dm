@@ -761,19 +761,18 @@
 	desc = "Mildly explosive."
 	icon_state = "newcop"
 	var/emagged = 0
+
 /obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
-	return
-/obj/item/toy/gasha/newcop/attack_self(mob/user as mob)
-	if (emagged)
-		sleep(50)
 
 		playsound(get_turf(src), 'sound/effects/kirakrik.ogg', 100, 1)
 
-		sleep(10)
-		explosion(get_turf(src), 1,2,4)
+		sleep(50)
+		src.say("Someone pass the boombox")
+		sleep(5)
+		explosion(get_turf(src), -1,1,4)
 		qdel(src)
 	else
 		return
