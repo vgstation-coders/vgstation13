@@ -1621,3 +1621,18 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
+
+
+/proc/generate_random_recipes()
+	var/list/recipes_to_generate = typesof(/datum/random_chemical_recipe) - /datum/random_chemical_recipe
+	testing("RANDOM RECIPES: [recipes_to_generate.len] recipes found")
+	var/tally = 0
+	for(var/path in recipes_to_generate)
+		var/datum/random_chemical_recipe/recipe = new path()
+		testing("RANDOM RECIPES: Generating [recipe].")
+		if(recipe.generate_recipe())
+			tally++
+			testing("RANDOM RECIPES: [recipe] succesfully generated.")
+		qdel(recipe)
+
+	testing("RANDOM RECIPES: Succesfully generated [tally] recipes.")

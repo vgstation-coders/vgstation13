@@ -1853,6 +1853,7 @@
 #include "code\modules\reagents\reagent_containers\food\snacks\eggs\roach.dm"
 #include "code\modules\reagents\reagent_containers\glass\bottle.dm"
 #include "code\modules\reagents\reagent_containers\glass\bottle\robot.dm"
+#include "code\modules\reagents\reagents\random_recipes.dm"
 #include "code\modules\reagents\reagents\vg.dm"
 #include "code\modules\recycling\conveyor2.dm"
 #include "code\modules\recycling\conveyor_assembly.dm"
