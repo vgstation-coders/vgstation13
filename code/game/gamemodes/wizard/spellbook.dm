@@ -812,7 +812,6 @@
 	if(!success)
 		user.forceMove(pick(L))
 
-
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient
