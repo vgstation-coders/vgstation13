@@ -763,14 +763,14 @@
 	var/emagged = 0
 
 /obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+	if(isEmag(I) && !emagged)
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
 
 		playsound(get_turf(src), 'sound/effects/kirakrik.ogg', 100, 1)
 
 		sleep(50)
-		src.say("Someone pass the boombox")
+		say("Someone pass the boombox.")
 		sleep(5)
 		explosion(get_turf(src), -1,1,4)
 		qdel(src)
