@@ -568,7 +568,7 @@
 /mob/proc/movement_delay()
 	return (base_movement_tally() * movement_tally_multiplier())
 
-/proc/base_movement_tally()
+/mob/proc/base_movement_tally()
 	switch(m_intent)
 		if("run")
 			if(drowsyness > 0)

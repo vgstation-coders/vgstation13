@@ -497,7 +497,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/base_movement_tally()
 	return speed
 
-/mob/living/simple_animal/movement_tally_multipler()
+/mob/living/simple_animal/movement_tally_multiplier()
 	. = ..()
 	if(purge) // Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move. (muh dotuh)
 		. *= purge

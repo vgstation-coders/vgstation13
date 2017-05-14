@@ -4,7 +4,7 @@
 	icon_state = "magboots0"
 	var/base_state = "magboots"
 	var/magpulse = 0
-	var/mag_slow = MAGBOOTS_SLOW_HIGH
+	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH
 //	clothing_flags = NOSLIP //disabled by default
 	actions_types = list(/datum/action/item_action/toggle_magboots)
 	species_fit = list(VOX_SHAPED)
