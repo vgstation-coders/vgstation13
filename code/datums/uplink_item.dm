@@ -20,6 +20,12 @@ var/list/uplink_items = list()
 			if(I.last)
 				last += I
 				continue
+			if(I.only_on_month)
+				if(time2text(world.realtime,"MM") != I.only_on_month)
+					continue
+			if(I.only_on_day)
+				if(time2text(world.realtime,"DD") != I.only_on_day)
+					continue
 
 			if(!uplink_items[I.category])
 				uplink_items[I.category] = list()
@@ -48,6 +54,8 @@ var/list/uplink_items = list()
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
 	var/list/job = null
+	var/only_on_month	//two-digit month as string
+	var/only_on_day		//two-digit day as string
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -112,6 +120,17 @@ var/list/uplink_items = list()
 //
 */
 //Work in Progress, job specific antag tools
+
+/datum/uplink_item/valentine
+	category = "Valentine's Day Special!"
+	only_on_month = "02"
+	only_on_day = "14"
+
+/datum/uplink_item/valentine/explosivechocolate
+	name = "Explosive Chocolate Bar"
+	desc = "A special Valentine's Day chocolate bar chock-full of Bicarodyne. For adding that little extra oompf to your hugs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	cost = 8
 
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
