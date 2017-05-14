@@ -32,7 +32,7 @@
 	faction = "spiders"
 	pass_flags = PASSTABLE
 	move_to_delay = 6
-	speed = 3
+	speed = 4
 	attack_sound = 'sound/weapons/spiderlunge.ogg'
 
 	species_type = /mob/living/simple_animal/hostile/giant_spider

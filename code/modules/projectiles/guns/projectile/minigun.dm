@@ -45,9 +45,9 @@
 /obj/item/weapon/gun/gatling/update_wield(mob/user)
 	item_state = "minigun[wielded ? 1 : 0]"
 	if(wielded)
-		slowdown = 10
+		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
-		slowdown = 0
+		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 /obj/item/weapon/gun/gatling/process_chambered()
 	if(in_chamber)
@@ -107,9 +107,9 @@
 /obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)
 	item_state = "beegun[wielded ? 1 : 0]"
 	if(wielded)
-		slowdown = 10
+		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
-		slowdown = 0
+		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 /obj/item/weapon/gun/gatling/beegun/process_chambered()
 	if(in_chamber)

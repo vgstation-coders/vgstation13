@@ -100,37 +100,23 @@
 	slime_mutation[4] = /mob/living/carbon/slime/purple
 
 /mob/living/carbon/slime/movement_delay()
-	var/tally = 0
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45)
-		tally += (health_deficiency / 25)
-
-	if (bodytemperature < 183.222)
-		tally += (283.222 - bodytemperature) / 10 * 1.75
-
-	if(reagents)
-		if(reagents.has_reagent(HYPERZINE)) // hyperzine slows slimes down
-			tally *= 2 // moves twice as slow
-
-		if(reagents.has_reagent(FROSTOIL)) // frostoil also makes them move VEEERRYYYYY slow
-			tally *= 5
-
-	if(health <= 0) // if damaged, the slime moves twice as slow
-		tally *= 2
-
 	if (bodytemperature >= 330.23) // 135 F
-		return -1	// slimes become supercharged at high temperatures
+		return min(..(), 1) // Slimes become supercharged at high temperatures
+	return ..()
 
-	return tally+config.slime_delay
+/mob/living/carbon/slime/base_movement_tally()
+	. = ..()
+	if (bodytemperature < 183.222)
+		. += (283.222 - bodytemperature) / 10 * 1.75
 
+/mob/living/carbon/slime/movement_tally_multiplier()
+	. = ..()
+	if(health <= 0) // if damaged, the slime moves twice as slow
+		. *= 2
+	if(reagents.has_reagent(HYPERZINE)) // Hyperzine slows slimes down
+		. *= 2
+	if(reagents.has_reagent(FROSTOIL)) // Frostoil also makes them move VERY slowly
+		. *= 5
 
 /mob/living/carbon/slime/Bump(atom/movable/AM as mob|obj)
 	if(now_pushing)

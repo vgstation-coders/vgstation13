@@ -686,8 +686,9 @@
 
 #undef PLANE_FOR
 
-// Return -1 to make movement instant for the mob
-// Return high values to make movement slower
+// This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
+// Return a high number to make the mob move slower.
+// Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
 

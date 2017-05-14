@@ -17,7 +17,7 @@
 	attacktext = "glomps"
 	attack_sound = 'sound/weapons/welderattack.ogg'
 	faction = "slimesummon"
-	speed = 4
+	speed = 5
 	can_butcher = 0
 	meat_type = null
 
