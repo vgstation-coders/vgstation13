@@ -192,13 +192,13 @@ var/shuttle_call/shuttle_calls[0]
 			//	to_chat(usr, "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>")
 			//	return
 
-			if(emergency_shuttle.online)
-				to_chat(usr, "The emergency shuttle is already on its way.")
-				return
+			//if(emergency_shuttle.online)
+			//	to_chat(usr, "The emergency shuttle is already on its way.")
+			//	return
 			if(!(get_security_level() in list("red", "delta")))
 				to_chat(usr, "<span class='notice'>The station must be in an emergency to request a Response Team.</span>")
 				return
-			if(authenticated != 2 || issilicon(usr))
+			if(authenticated != 1 || issilicon(usr))
 				to_chat(usr, "<span class='warning'>\The [src.name]'s screen flashes, \"Access Denied\".</span>")
 				return
 
