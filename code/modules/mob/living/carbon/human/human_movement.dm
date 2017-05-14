@@ -76,6 +76,8 @@
 	if(reagents.has_reagent(HYPERZINE))
 		if(dna.mutantrace == "slime")
 			tally *= 2
+		else if(isdiona(src))
+			tally -= 4
 		else
 			tally -= 10
 
