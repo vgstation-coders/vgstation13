@@ -139,13 +139,13 @@
 
 	..()
 
-//////CARP
+//////ANIMAL
 
-/datum/command_alert/carp
-	name = "Carp Migration"
+/datum/command_alert/animal_migration
+	name = "Migration"
 	alert_title = "Lifesign Alert"
 
-/datum/command_alert/carp/announce()
+/datum/command_alert/animal_migration/announce()
 	message = "Unknown biological entities have been detected near [station_name()], please stand-by."
 
 	..()

@@ -234,6 +234,9 @@
 			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
 				items_measures[display_name] = "fillet of meat"
 				items_measures_p[display_name] = "fillets of meat"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/goosemeat))
+				items_measures[display_name] = "liver"
+				items_measures_p[display_name] = "livers"
 			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))
 				items_measures[display_name] = "egg"
 				items_measures_p[display_name] = "eggs"

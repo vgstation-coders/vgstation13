@@ -155,3 +155,11 @@
 	pixel_y = -8 * PIXEL_MULTIPLIER
 	type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
 
+
+obj/item/weapon/reagent_containers/food/snacks/foiegras
+	name = "Foie Gras"
+	desc = "Goose liver filled with corn. Why is this a delicacy?"
+	icon_state = "foiegras"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
+

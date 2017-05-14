@@ -2871,13 +2871,13 @@
 				feedback_add_details("admin_secrets_fun_used","PDA")
 				new /datum/event/pda_spam
 
-			if("carp")
+			if("migration")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","C")
-				var/choice = input("You sure you want to spawn carp?") in list("Badmin", "Cancel")
+				var/choice = input("You sure you want to spawn a migration?") in list("Badmin", "Cancel")
 				if(choice == "Badmin")
-					message_admins("[key_name_admin(usr)] has spawned carp.", 1)
-					new /datum/event/carp_migration
+					message_admins("[key_name_admin(usr)] has spawned an animal migration.", 1)
+					new /datum/event/animal_migration
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","R")
@@ -3221,7 +3221,7 @@
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Return")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Migration", "Return")
 				//Big fat lists of effects, not very modular but at least there's less buttons
 				if(choice == "Return") //Actually fuck this
 					return //Duh
@@ -3260,10 +3260,10 @@
 					message_admins("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
 					log_admin("[key_name_admin(usr)] triggered a FAKE Meteor Alert.")
 					return
-				if(choice == "Carp Migration")
-					command_alert(/datum/command_alert/carp)
-					message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
-					log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
+				if(choice == "Migration")
+					command_alert(/datum/command_alert/animal_migration)
+					message_admins("[key_name_admin(usr)] triggered a FAKE Migration Alert.")
+					log_admin("[key_name_admin(usr)] triggered a FAKE Migration Alert.")
 					return
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)

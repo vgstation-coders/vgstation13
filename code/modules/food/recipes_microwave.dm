@@ -2273,3 +2273,11 @@
 		/obj/item/weapon/ore/glass,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
+
+
+/datum/recipe/foiegras
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/goosemeat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/corn,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/foiegras

@@ -43,7 +43,7 @@ var/list/event_last_fired = list()
 	if(account_hack_attempted)
 		possibleEvents[/datum/event/money_hacker] = 30
 
-	possibleEvents[/datum/event/carp_migration] = 40
+	possibleEvents[/datum/event/animal_migration] = 40
 	possibleEvents[/datum/event/brand_intelligence] = 30
 	possibleEvents[/datum/event/rogue_drone] = 25
 	possibleEvents[/datum/event/infestation] = 50
