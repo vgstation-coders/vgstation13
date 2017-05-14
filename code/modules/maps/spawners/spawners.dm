@@ -894,6 +894,15 @@
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		)
+
+/obj/abstract/map/spawner/mobs/deer
+	name = "deer spawner"
+	icon_state = "mob_deer"
+	amount = 7
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/deer,
+	)
+
 /obj/abstract/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"

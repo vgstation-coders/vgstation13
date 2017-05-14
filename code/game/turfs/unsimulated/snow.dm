@@ -27,7 +27,7 @@ var/global/list/snow_turfs = list()
 
 	var/snowballs = 0
 	var/global/list/cached_appearances = list()
-	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
+	var/global/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/snow/New()
 	if(!cached_appearances.len)	// first time running, let's CACHE IMAGES
@@ -91,7 +91,7 @@ var/global/list/snow_turfs = list()
 /turf/snow/permafrost
 	icon_state = "permafrost_full"
 
-/turf/snow/permafrost/initialize()
+/turf/snow/permafrost/New()
 	..()
 	snowballs = 0
 	new /obj/dirtpath(src)

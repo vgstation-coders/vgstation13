@@ -4,14 +4,11 @@ adapted in dreammaker for /vg/ snowmap
 how it works: it performs it on a list five times and then applies the list to the surroundings - setbaseturf isn't cheap enough to call five times to do this the "proper" way
 the wall is the turf you want to start with (#)
 the floor is the turf you want to have generate in (.)
-
 Procedurally generated so no two levels are (likely) exactly the same.
 Relatively simple concept, and implementation.
 A natural, cave-like map to add variety, uniqueness or an alternative to room-based dungeons.
 (we're using it for lakes now though, seems to transfer fairly fluidly (ha puns) to that.)
-
 here is an example of what it might look like:
-
 ############################################################
 ###....####################################.....############
 ##......######################..#########.........##########
@@ -57,23 +54,27 @@ here is an example of what it might look like:
 	var/percent_area_walls = 45
 	var/iterations = 5
 	var/watch
+	var/mapgrid_scale = 1
 	var/list/list_of_turfs = list()
-
+	var/list/mapgrid
+	var/could_not_place = 0
 
 /obj/procedural_generator/cellular_automata/deploy_generator(var/turf/bottomleft)
-	var/mapgrid = init_mapgrid() // first generates a random map
+	init_mapgrid() // first generates a random map
 	for(var/i = 1 to iterations)
-		make_caverns(mapgrid,i)
-	apply_mapgrid_to_turfs(mapgrid,bottomleft)
+		make_caverns(i)
+	could_not_place = check_mapgrid()
+	if(!could_not_place)
+		apply_mapgrid_to_turfs(bottomleft)
 
 /obj/procedural_generator/cellular_automata/proc/init_mapgrid()
-	// New empty map
-	var/list/mapgrid[][] = new/list(mapgrid_width,mapgrid_height)
+	if(!mapgrid)
+		mapgrid = new/list(mapgrid_width,mapgrid_height)
+	else if(could_not_place)
+		could_not_place = 0
+		return
 	for(var/row = 1 to mapgrid_height)
 		for(var/column = 1 to mapgrid_width)
-//			if(!((column + row*column) % 50000))
-//				sleep(world.tick_lag)
-			// If coordinants lie on the the edge of the map (creates a border)
 			if(column == 1)
 				mapgrid[column][row] = CA_PERMAWALL
 			else if(row == 1)
@@ -88,17 +89,14 @@ here is an example of what it might look like:
 					mapgrid[column][row] = CA_WALL
 				else
 					mapgrid[column][row] = CA_FLOOR
-	return mapgrid
 
-/obj/procedural_generator/cellular_automata/proc/make_caverns(var/list/mapgrid,var/iteration)
+/obj/procedural_generator/cellular_automata/proc/make_caverns(var/iteration)
 	for(var/row = 1 to mapgrid_height)
 		for(var/column = 1 to mapgrid_width)
-//			if(!((column + row*column) % 50000))
-//				sleep(world.tick_lag)
-			mapgrid[column][row] = place_wall_logic(mapgrid,column,row,iteration)
+			mapgrid[column][row] = place_wall_logic(column,row,iteration)
 
-/obj/procedural_generator/cellular_automata/proc/place_wall_logic(var/list/mapgrid,var/column,var/row,var/iteration)
-	var/num_walls = get_adjacent_walls(mapgrid,column,row)
+/obj/procedural_generator/cellular_automata/proc/place_wall_logic(var/column,var/row,var/iteration)
+	var/num_walls = get_adjacent_walls(column,row)
 	switch(mapgrid[column][row])
 		if(CA_PERMAWALL)
 			return CA_PERMAWALL
@@ -110,7 +108,7 @@ here is an example of what it might look like:
 				return CA_WALL
 	return CA_FLOOR
 
-/obj/procedural_generator/cellular_automata/proc/get_adjacent_walls(var/list/mapgrid,var/column,var/row,var/n = 1)
+/obj/procedural_generator/cellular_automata/proc/get_adjacent_walls(var/column,var/row,var/n = 1)
 
 	if(mapgrid[column][row] == CA_PERMAWALL)
 		return
@@ -127,18 +125,27 @@ here is an example of what it might look like:
 	return wallcounter
 
 
-/obj/procedural_generator/cellular_automata/proc/apply_mapgrid_to_turfs(var/list/mapgrid,var/turf/bottomleft)
-//	var/number_of_turfs_changed
+/obj/procedural_generator/cellular_automata/proc/check_mapgrid(var/turf/bottomleft)
 	for(var/row = 1 to mapgrid_height)
 		for(var/column = 1 to mapgrid_width)
-//			if(!((column + row*column) % 50000))
-//				sleep(world.tick_lag)
 			if(!(mapgrid[column][row])) // it's a floor
-				var/turf/T = locate((bottomleft.x-1)+column,(bottomleft.y-1)+row,bottomleft.z)
-				if(T && istype(T,ca_wall))
-					makefloor(T)
-//	var/datum/zLevel/zlevesoninquiry = map.zLevels[bottomleft.z]
-//	log_startup_progress("Finished cellular automata generaton on z:[bottomleft.z]([zlevesoninquiry.name]) with [number_of_turfs_changed] new [name]s in [stop_watch(watch)]s")
+				for(var/scale_row = 1 to mapgrid_scale)
+					for(var/scale_column = 1 to mapgrid_scale)
+						var/turf/T = locate((bottomleft.x-1)+(column * mapgrid_scale)+scale_column,(bottomleft.y-1)+(row * mapgrid_scale) + scale_row,bottomleft.z)
+						if(T && istype(T,ca_wall))
+							continue
+						else
+							return TRUE
+
+/obj/procedural_generator/cellular_automata/proc/apply_mapgrid_to_turfs(var/turf/bottomleft)
+
+	for(var/row = 1 to mapgrid_height)
+		for(var/column = 1 to mapgrid_width)
+			if(!(mapgrid[column][row])) // it's a floor
+				for(var/scale_row = 1 to mapgrid_scale)
+					for(var/scale_column = 1 to mapgrid_scale)
+						var/turf/T = locate((bottomleft.x-1)+(column * mapgrid_scale)+scale_column,(bottomleft.y-1)+(row * mapgrid_scale) + scale_row,bottomleft.z)
+						makefloor(T)
 
 /obj/procedural_generator/cellular_automata/proc/makefloor(var/turf/T)
 	T.clear_contents(list(type))
@@ -147,6 +154,9 @@ here is an example of what it might look like:
 /obj/procedural_generator/cellular_automata/ice
 	name = "glacier lake"
 	ca_wall = /turf/snow
+	mapgrid_width = 20
+	mapgrid_height = 10
+	mapgrid_scale = 2
 
 /obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/snow/T)
 	if(T.snowballs)
@@ -172,7 +182,7 @@ here is an example of what it might look like:
 	var/random = rand(1,1000)
 	switch(random)
 		if(1 to 4)
-			var/spider = pick(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/nurse, /mob/living/simple_animal/hostile/giant_spider/hunter)
+			var/spider = pick(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/hunter, /mob/living/simple_animal/hostile/giant_spider/nurse)
 			new spider(T)
 		if(5)
 			new /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider(T)
@@ -183,14 +193,14 @@ here is an example of what it might look like:
 		if(13)
 			new /obj/effect/landmark/corpse/syndicatecommando(T) // if you add loot to it, they will come.
 
-/obj/procedural_generator/cellular_automata/spider_cave/place_wall_logic(var/list/mapgrid,var/column,var/row,var/iteration)
+/obj/procedural_generator/cellular_automata/spider_cave/place_wall_logic(var/column,var/row,var/iteration)
 	if(iteration == 3)
 		var/num_walls = get_adjacent_walls(mapgrid,column,row,n = 2)
 		if(num_walls <= 2)
 			return CA_WALL
 	return ..()
 
-/obj/procedural_generator/cellular_automata/spider_cave/apply_mapgrid_to_turfs(var/list/mapgrid,var/turf/bottomleft)
+/obj/procedural_generator/cellular_automata/spider_cave/apply_mapgrid_to_turfs(var/turf/bottomleft)
 	..()
 	for(var/turf/T in list_of_turfs)
 		T.update_icon()
