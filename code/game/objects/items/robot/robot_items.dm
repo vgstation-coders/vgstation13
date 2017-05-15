@@ -181,6 +181,7 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 	if(safety == TRUE)
 		user.visible_message("<span class='big danger'>HUMAN HARM</font>")
 		playsound(get_turf(src), 'sound/AI/harmalarm.ogg', 70, 3)
+		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		for(var/mob/living/carbon/M in hearers(9, user))
 			if(M.earprot())
 				continue
@@ -193,12 +194,12 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 			M.Jitter(5)
 			add_gamelogs(user, "alarmed [key_name(M)] with \the [src]", admin = FALSE, tp_link = FALSE)
 		cooldown = world.time + 20 SECONDS
-		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		return
 
 	if(safety == FALSE)
 		user.visible_message("<span class='big danger'>BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT</font>")
 		playsound(get_turf(src), 'sound/machines/warning-buzzer.ogg', 130, 3)
+		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 		for(var/mob/living/carbon/M in hearers(6, user))
 			if(M.earprot())
 				continue
@@ -209,4 +210,3 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 			M.Jitter(30)
 			add_gamelogs(user, "knocked out [key_name(M)] with an emagged [name]", admin = FALSE, tp_link = FALSE)
 		cooldown = world.time + 1 MINUTES
-		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
