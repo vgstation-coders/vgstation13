@@ -198,7 +198,7 @@ var/shuttle_call/shuttle_calls[0]
 			if(!(get_security_level() in list("red", "delta")))
 				to_chat(usr, "<span class='notice'>The station must be in an emergency to request a Response Team.</span>")
 				return
-			if(authenticated != 1 || issilicon(usr))
+			if(!authenticated || issilicon(usr))
 				to_chat(usr, "<span class='warning'>\The [src.name]'s screen flashes, \"Access Denied\".</span>")
 				return
 
