@@ -90,11 +90,16 @@ var/global/list/snow_turfs = list()
 
 /turf/snow/permafrost
 	icon_state = "permafrost_full"
+	var/gen_path = 1
 
 /turf/snow/permafrost/New()
 	..()
 	snowballs = 0
-	new /obj/dirtpath(src)
+	if(gen_path)
+		new /obj/dirtpath(src)
+
+/turf/snow/permafrost/no_path
+	gen_path = 0
 
 
 /turf/snow/attackby(var/obj/item/weapon/W, var/mob/user)
@@ -338,7 +343,8 @@ var/global/list/snow_turfs = list()
 	return hole
 
 /obj/glacier/attackby(var/obj/item/W, mob/user)
-	to_chat(user,"<span class='notice'>you smash a hole in the ice with \the [W]</span>") // todo: better
-	hole = TRUE
-	relativewall()
+	if(!hole)
+		to_chat(user,"<span class='notice'>you smash a hole in the ice with \the [W]</span>") // todo: better
+		hole = TRUE
+		relativewall()
 	..()

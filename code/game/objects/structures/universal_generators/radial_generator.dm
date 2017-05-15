@@ -252,8 +252,8 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	gen_types_hard = list(/obj/structure/flora/tree/pine = 250, \
 								/obj/structure/flora/bush = 100, \
 								/obj/structure/flora/rock/pile/snow = 200, \
-								/obj/structure/flora/grass/white = 1000, \
-								/obj/abstract/map/spawner/mobs/wolf = 25)
+								/obj/structure/flora/grass/white = 900, \
+								/obj/abstract/map/spawner/mobs/wolf = 100)
 
 //A much more dense forest, with a lot more trees
 /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large/dense
@@ -271,8 +271,8 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	gen_types_hard = list(/obj/structure/flora/tree/pine = 250, \
 								/obj/structure/flora/bush = 100, \
 								/obj/structure/flora/rock/pile/snow = 200, \
-								/obj/structure/flora/grass/white = 1000,\
-								/mob/living/simple_animal/hostile/wendigo/human = 5)
+								/obj/structure/flora/grass/white = 950,\
+								/mob/living/simple_animal/hostile/wendigo/human = 50)
 
 //A patch of snowy grass, with some rocks and bushes thrown in
 /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass
@@ -314,12 +314,14 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
 	gen_types_soft = list(/obj/structure/flora/rock/pile/snow = 100, \
 								/obj/structure/flora/bush = 400, \
-								/obj/structure/flora/grass/white = 1000)
+								/obj/structure/flora/grass/white = 1000,\
+								/obj/abstract/map/spawner/mobs/deer = 300,\
+								)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
 	gen_types_hard = list(/obj/structure/flora/rock/pile/snow = 50, \
 								/obj/structure/flora/bush = 200, \
 								/obj/structure/flora/grass/white = 1000,\
-								/obj/abstract/map/spawner/mobs/deer = 20,\
+								/obj/abstract/map/spawner/mobs/deer = 250,\
 								)
 
 //Children spawn snow-related turfs
