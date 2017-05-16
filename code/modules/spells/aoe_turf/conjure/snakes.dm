@@ -18,5 +18,5 @@
 		for(var/mob/M in wizard_snakes)
 			qdel(M)
 	if(!..())
-		visible_message("<span class='warning'>\The [user]'s body splits into a mass of snakes!</span>")
+		user.visible_message("<span class='warning'>\The [user]'s body splits into a mass of snakes!</span>","<span class='notice'>Your body splits into a mass of snakes.</span>")
 		user.transmogrify(/mob/living/simple_animal/cat/snek/wizard, TRUE)
