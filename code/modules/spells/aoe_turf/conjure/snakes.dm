@@ -4,6 +4,7 @@
 
 	summon_type = list(/mob/living/simple_animal/cat/snek/wizard)
 
+	price = Sp_BASE_PRICE / 2
 	range = 3
 	charge_max = 300
 	invocation = "WI'L OV SHNISSUGAH"
