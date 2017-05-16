@@ -39,8 +39,8 @@
 	/spell/aoe_turf/conjure/pontiac,
 	/spell/aoe_turf/conjure/arcane_golem,
 	/spell/targeted/bound_object,
-	/spell/noclothes,
-	/spell/aoe_turf/conjure/snakes
+	/spell/aoe_turf/conjure/snakes,
+	/spell/noclothes
 	)
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
