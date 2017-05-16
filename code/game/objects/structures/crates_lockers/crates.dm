@@ -146,6 +146,13 @@
 	density = 1
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
+/obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
+    if(iswrench(W) && wrenchable())
+        return wrenchAnchor(user)
+    ..()
+
+/obj/structure/closet/crate/bin/wrenchable()
+    return TRUE
 
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
@@ -202,6 +209,13 @@
 	greenlight = "largebing"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
+/obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
+    if(iswrench(W) && wrenchable())
+        return wrenchAnchor(user)
+    ..()
+
+/obj/structure/closet/crate/secure/bin/wrenchable()
+    return TRUE
 
 /obj/structure/closet/crate/secure/large
 	name = "large crate"
