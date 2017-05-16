@@ -13,6 +13,7 @@
 	var/list/available_spells = list(
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
+	/spell/targeted/projectile/dumbfire/fireball/firebreath,
 	/spell/lightning,
 	/spell/aoe_turf/ring_of_fire,
 	/spell/aoe_turf/disable_tech,
