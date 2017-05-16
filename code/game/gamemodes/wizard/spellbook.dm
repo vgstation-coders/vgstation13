@@ -40,6 +40,7 @@
 	/spell/aoe_turf/conjure/arcane_golem,
 	/spell/targeted/bound_object,
 	/spell/aoe_turf/conjure/snakes,
+	/spell/targeted/push,
 	/spell/noclothes
 	)
 
