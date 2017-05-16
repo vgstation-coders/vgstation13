@@ -5,16 +5,6 @@
 	total_positions = 0
 	spawn_positions = 0
 
-/datum/job/qm
-	..()
-	total_positions = 0
-	spawn_positions = 0
-
-/datum/job/mining
-	..()
-	total_positions = 0
-	spawn_positions = 0
-
 /datum/job/mime
 	..()
 	total_positions = 0
@@ -30,20 +20,11 @@
 	total_positions = 0
 	spawn_positions = 0
 
-/datum/job/chief_engineer
-	..()
-	total_positions = 0
-	spawn_positions = 0
-
 /datum/job/atmos
 	..()
 	total_positions = 0
 	spawn_positions = 0
 
-/datum/job/cmo
-	..()
-	total_positions = 0
-	spawn_positions = 0
 
 /datum/job/geneticist
 	..()
@@ -55,17 +36,13 @@
 	total_positions = 0
 	spawn_positions = 0
 
-/datum/job/rd
-	..()
-	total_positions = 0
-	spawn_positions = 0
 
 /datum/job/roboticist
 	..()
 	total_positions = 0
 	spawn_positions = 0
 
-/datum/job/hos
+/datum/job/hop
 	..()
 	total_positions = 0
 	spawn_positions = 0
