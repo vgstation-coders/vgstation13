@@ -9,6 +9,11 @@
 /obj/structure/closet/has_shadow()
 	return 1
 
+/mob/living/carbon/has_shadow()
+	if(lying)
+		return 0
+	. = ..()
+
 /atom/movable/proc/update_shadow()
 	if(!has_shadow())
 		return
@@ -22,7 +27,7 @@
 	shadow.alpha = SHADOW_ALPHA
 	shadow.color = "#000000"
 	shadow.appearance_flags = KEEP_TOGETHER
-
+	shadow.mouse_opacity = 0
 
 	var/matrix/M = matrix()
 	M.Scale(-1,1)

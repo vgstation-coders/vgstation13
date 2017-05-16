@@ -50,12 +50,12 @@
 	name = "Head of Security's winter coat"
 	icon_state = "coathos"
 	nohood = 1
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/wintercoat/security/warden
 	name = "Warden's winter coat"
 	icon_state = "coatwarden"
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 	nohood = 1
 
 /obj/item/clothing/suit/wintercoat/medical
@@ -93,7 +93,7 @@
 	name = "Head of Personnel's winter coat"
 	icon_state = "coathop"
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/wintercoat/miner
 	name = "mining winter coat"

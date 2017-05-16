@@ -4,11 +4,14 @@ adapted in dreammaker for /vg/ snowmap
 how it works: it performs it on a list five times and then applies the list to the surroundings - setbaseturf isn't cheap enough to call five times to do this the "proper" way
 the wall is the turf you want to start with (#)
 the floor is the turf you want to have generate in (.)
+
 Procedurally generated so no two levels are (likely) exactly the same.
 Relatively simple concept, and implementation.
 A natural, cave-like map to add variety, uniqueness or an alternative to room-based dungeons.
 (we're using it for lakes now though, seems to transfer fairly fluidly (ha puns) to that.)
+
 here is an example of what it might look like:
+
 ############################################################
 ###....####################################.....############
 ##......######################..#########.........##########
@@ -63,13 +66,14 @@ here is an example of what it might look like:
 	init_mapgrid() // first generates a random map
 	for(var/i = 1 to iterations)
 		make_caverns(i)
-	could_not_place = check_mapgrid()
+	could_not_place = check_mapgrid(bottomleft)
 	if(!could_not_place)
 		apply_mapgrid_to_turfs(bottomleft)
 
 /obj/procedural_generator/cellular_automata/proc/init_mapgrid()
 	if(!mapgrid)
 		mapgrid = new/list(mapgrid_width,mapgrid_height)
+		world.log << "new list"
 	else if(could_not_place)
 		could_not_place = 0
 		return
@@ -117,9 +121,8 @@ here is an example of what it might look like:
 
 	for(var/iy = (row-n) to (row+n))
 		for(var/ix = (column-n) to (column+n))
-			if(ix > 0 && ix < mapgrid.len)
-				var/list/mapgridy = mapgrid[ix]
-				if(!(ix == column && iy == row) && iy > 0 && iy < mapgridy.len)
+			if(ix > 0 && ix < mapgrid_width)
+				if(!(ix == column && iy == row) && iy > 0 && iy < mapgrid_height)
 					if(mapgrid[ix][iy])
 						wallcounter++
 	return wallcounter
@@ -154,17 +157,17 @@ here is an example of what it might look like:
 /obj/procedural_generator/cellular_automata/ice
 	name = "glacier lake"
 	ca_wall = /turf/snow
-	mapgrid_width = 20
-	mapgrid_height = 10
-	mapgrid_scale = 2
+	mapgrid_width = 10
+	mapgrid_height = 5
+	mapgrid_scale = 4
 
 /obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/snow/T)
-	if(T.snowballs)
+	if(T && T.snowballs)
 		T.clear_contents(list(type))
 		var/obj/glacier/G = new /obj/glacier(T,icon_update_later = 1)
 		list_of_turfs += G
 
-/obj/procedural_generator/cellular_automata/ice/apply_mapgrid_to_turfs(var/list/mapgrid,var/turf/bottomleft)
+/obj/procedural_generator/cellular_automata/ice/apply_mapgrid_to_turfs(var/turf/bottomleft)
 	..()
 	for(var/obj/glacier/G in list_of_turfs)
 		G.relativewall()

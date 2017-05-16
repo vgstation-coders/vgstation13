@@ -23,7 +23,7 @@ var/global/list/snow_turfs = list()
 	dynamic_lighting = 0
 	luminosity = 1
 	plane = BELOW_TURF_PLANE
-	var/slowdown = 6
+	var/slowdown = 2
 
 	var/snowballs = 0
 	var/global/list/cached_appearances = list()
