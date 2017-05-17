@@ -16,6 +16,8 @@
 	var/pressure = ONE_ATMOSPHERE * 4.5
 	level_max = list(Sp_TOTAL = 8, Sp_SPEED = 4, Sp_POWER = 4)
 
+	hud_state = "wiz_firebreath"
+
 /spell/targeted/projectile/dumbfire/fireball/firebreath/spawn_projectile(var/location, var/direction)
 	return new proj_type(location,direction,P = pressure)
 
