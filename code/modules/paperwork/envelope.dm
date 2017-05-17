@@ -41,8 +41,9 @@
 				update_icon()
 	else
 		if(P.sharpness && P.sharpness_flags & SHARP_BLADE)
-			user.visible_message("\The [user] slices the top of \the [src] open with \the [P].","You slice the top of \the [src] open with \the [P].")
 			open()
+			user.visible_message("\The [user] slices the top of \the [src] open with \the [P].","You slice the top of \the [src] open with \the [P].")
+			playsound(get_turf(src), 'sound/effects/paper_tear.ogg', 10, 1)
 
 /obj/item/weapon/paper/envelope/AltClick(mob/user)
 	if(open && contained_paper)
@@ -66,6 +67,7 @@
 		else
 			open()
 			user.visible_message("\The [user] tears open the top of \the [src].","You tear open the top of \the [src].")
+			playsound(get_turf(src), 'sound/effects/paper_tear.ogg', 50, 1)
 	else
 		AltClick(user)
 
