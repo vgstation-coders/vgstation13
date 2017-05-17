@@ -753,6 +753,7 @@
 /obj/item/weapon/spellbook/oneuse/firebreath
 	spell = /spell/targeted/projectile/dumbfire/fireball/firebreath
 	spellname = "fire breath"
+	icon_state = "bookfirebreath"
 	desc = "This book's pages are singed."
 
 /obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
