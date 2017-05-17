@@ -10,7 +10,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 
 /mob/living/simple_animal/hostile/glow_orb
 	name = "strange glowing orb"
-	desc = "A hovering glowing orb, drifting to and fro lazily under its own power."
+	desc = "A hovering glowing orb, drifting to-and-fro lazily under its own power."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "glow_stone_active"
 	icon_living = "glow_stone_active"
@@ -81,7 +81,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 			following = M
 			set_light(4, 1, "#68E8FF")
 		else if(M == following)
-			to_chat(M, "<span class = 'notice'>\The [src] droops idly as it maintains position</span>")
+			to_chat(M, "<span class = 'notice'>\The [src] droops idly as it maintains position.</span>")
 			following = null
 			set_light(4, 1, "#0068B2")
 			walk(src,0)
@@ -104,7 +104,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 /mob/living/simple_animal/hostile/glow_orb/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/beam/lightning/spell) || istype(P, /obj/item/projectile/energy/electrode))
 		if(!unstable)
-			visible_message("<span class = 'warning'>\The [src]'s light grows greater in intensity, and begins to shake uncontrollably</span>")
+			visible_message("<span class = 'warning'>\The [src]'s light grows greater in intensity, and begins to shake uncontrollably.</span>")
 			set_light(world.view,3,"#ff2014")
 			detonate()
 		return

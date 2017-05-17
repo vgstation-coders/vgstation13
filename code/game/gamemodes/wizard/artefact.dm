@@ -163,7 +163,7 @@
 		return
 	else
 		if (clumsy_check(user) && prob(50))
-			to_chat(user, "<span class = 'notice'>Ooh, shiny</span>")
+			to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
 			failure()
 			return
 		else if(prob(65))
@@ -171,7 +171,7 @@
 			activate()
 		else
 			if(prob(5))
-				visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")]</span>")
+				visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
 				if(prob(50))
 					failure()
 			to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
@@ -194,7 +194,7 @@
 	visible_message("<span class = 'notice'>\The [src] begins to glow increasingly in a brilliant manner...</span>")
 	crit_failure = 1
 	spawn(1 SECONDS)
-		visible_message("<span class = 'warning>...and vibrate violently</span>")
+		visible_message("<span class = 'warning>...and vibrate violently!</span>")
 	playsound(get_turf(src),'sound/weapons/inc_tone.ogg', 50, 1)
 	spawn(2 SECONDS)
 		explosion(loc, 0, 1, 2, 3)
