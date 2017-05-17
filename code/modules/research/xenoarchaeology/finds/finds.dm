@@ -454,6 +454,8 @@
 			//completely unknown alien device
 			anomaly_factor = 2
 			if(prob(50))
+				new_item = new /obj/item/weapon/glow_orb(loc)
+			if(prob(50))
 				apply_image_decorations = 0
 		if(ARCHAEO_FOSSIL)
 			//fossil bone/skull
