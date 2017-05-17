@@ -794,7 +794,7 @@
 			if(clear)
 				L+=T
 	if(!L.len)
-		to_chat(holder, "Oh wait, nothing happened.")
+		to_chat(user, "Oh wait, nothing happened.")
 		return
 
 	user.unlock_from()
