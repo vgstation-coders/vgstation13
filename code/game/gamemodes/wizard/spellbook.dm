@@ -761,3 +761,14 @@
 	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
 	user.adjust_fire_stacks(0.5)
 	user.IgniteMob()
+
+/obj/item/weapon/spellbook/oneuse/snakes
+	spell = /spell/aoe_turf/conjure/snakes
+	spellname = "become snakes"
+	desc = "This book is bound in snake skin."
+
+/obj/item/weapon/spellbook/oneuse/snakes/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You transform into a snake!</span>")
+	user.transmogrify(/mob/living/simple_animal/cat/snek/wizard, TRUE)
+	spawn(600)
+		user.transmogrify()
