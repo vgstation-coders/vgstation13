@@ -389,12 +389,7 @@
 						M.amount = 5
 						state = -1
 						qdel(src)
-					else
-						to_chat(user, "<span class='notice'>The welding tool needs to be on to start this task.</span>")
-						return 1
-				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-					return 1
+				return 1
 		if(1)
 			if(iswrench(P) && wrenchAnchor(user))
 				src.state = 0
