@@ -749,3 +749,13 @@
 	spellname = "forge arcane golem"
 	icon_state = "bookgolem"
 	desc = "This book has several completely blank pages."
+
+/obj/item/weapon/spellbook/oneuse/firebreath
+	spell = /spell/targeted/projectile/dumbfire/fireball/firebreath
+	spellname = "fire breath"
+	desc = "This book's pages are singed."
+
+/obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
+	user.adjust_fire_stacks(0.5)
+	user.IgniteMob()
