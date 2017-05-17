@@ -380,6 +380,7 @@ var/global/list/paper_folding_results = list ( \
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
 	"origami heart" = /obj/item/weapon/p_folded/folded_heart,
+	"envelope" = /obj/item/weapon/paper/envelope,
 	)
 
 /obj/item/weapon/paper/verb/fold()
