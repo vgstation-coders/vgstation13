@@ -765,6 +765,7 @@
 /obj/item/weapon/spellbook/oneuse/snakes
 	spell = /spell/aoe_turf/conjure/snakes
 	spellname = "become snakes"
+	icon_state = "booksnakes"
 	desc = "This book is bound in snake skin."
 
 /obj/item/weapon/spellbook/oneuse/snakes/recoil(mob/living/carbon/user)
