@@ -778,6 +778,7 @@
 /obj/item/weapon/spellbook/oneuse/push
 	spell = /spell/targeted/push
 	spellname = "dimensional push"
+	icon_state = "bookpush"
 	desc = "This book seems like it moves away as you get closer to it."
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
