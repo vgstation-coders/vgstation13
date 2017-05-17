@@ -137,6 +137,12 @@
 			newgas.temperature = target_temp
 		return newgas
 
+/obj/structure/closet/crate/freezer/surgery
+	desc = "A freezer specifically designed to store organic material."
+	name = "surgery freezer"
+	icon_state = "surgeryfreezer"
+	icon_opened = "surgeryfreezeropen"
+	icon_closed = "surgeryfreezer"
 
 /obj/structure/closet/crate/bin
 	desc = "A large bin."

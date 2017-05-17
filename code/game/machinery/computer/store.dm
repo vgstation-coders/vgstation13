@@ -39,6 +39,10 @@
 
 /obj/machinery/computer/merch/New()
 	..()
+	if(time2text(world.realtime, "MM/DD") == "02/14")
+		var/valentines = list("Valentine's Day" = list(/datum/storeitem/valentinechocolatebar,),)
+		categories += valentines
+
 	machine_id = "[station_name()] Merch Computer #[multinum_display(num_merch_computers,4)]"
 	num_merch_computers++
 

@@ -253,8 +253,8 @@
 			stop_automated_movement = 0
 			walk(src,0)
 */
-/mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
-	if(busy) //Already smashing a door or eating something
+/mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D, busy_override = 0)
+	if(busy && !busy_override) //Already smashing a door or eating something
 		return 0
 	if((istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window)) && !client)
 		return 0
@@ -298,7 +298,8 @@
 	var/self_loc = src.loc
 	spawn(10 SECONDS*time_mult)
 		if(D.loc == target_loc && self_loc == src.loc) //Not moved
-			if(can_open_door(D))//Let's see if nobody quickly bolted it
+			to_chat(src, "<span class = 'notice'>You get a grip of \the [D], and...</span>")
+			if(can_open_door(D, 1))//Let's see if nobody quickly bolted it
 				if(break_doors == CANPLUS) //Guaranteed
 					D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
 					if(istype(D, /obj/machinery/door/airlock/))
@@ -312,6 +313,7 @@
 						D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
 						D.open(1)
 					else
+						to_chat(src, "<span class = 'notice'>You fail to open \the [D]</span>")
 						playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
 						D.shake(1, 8)
 		busy = FALSE
@@ -333,7 +335,6 @@
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
 	visible_message("<span class='warning'>\The [src] takes a bite out of \the [target].</span>")
-	busy = TRUE
 	stop_automated_movement = 1
 	playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
@@ -342,7 +343,6 @@
 		maxHealth += 5 //A well fed zombie is a scary zombie
 	health = min(maxHealth, health+damage)
 	times_eaten += 1
-	busy = FALSE
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
@@ -544,6 +544,13 @@
 	can_evolve = 0
 	var/zombify_chance = 25 //Down with hardcoding
 	break_doors = CAN
+
+/mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
+	if(busy)
+		return 0
+	if(isjusthuman(target))
+		return 1
+	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()

@@ -53,6 +53,7 @@
 	soundeffect = 'sound/machines/airlock.ogg'
 	var/pitch = 30
 	penetration_dampening = 10
+	var/image/shuttle_warning_lights
 
 	explosion_block = 1
 

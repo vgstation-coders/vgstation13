@@ -704,7 +704,7 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-							/* Drag damage is here!*/	
+							/* Drag damage is here!*/
 							var/mob/living/carbon/human/HM = M
 							var/list/damaged_organs = HM.drag_damage()
 							if (damaged_organs)
@@ -721,7 +721,7 @@ Thanks.
 										if(blood_volume > 0)
 											HM:vessel.remove_reagent("blood",4)
 											HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
-									
+
 								if(HM.isincrit() && damaged_organs.len) //Crit damage boost
 									if(prob(15))
 										for(var/datum/organ/external/damagedorgan in damaged_organs)
@@ -1593,6 +1593,7 @@ Thanks.
 		"fire_stacks",
 		"specialsauce",
 		"silent",
-		"is_ventcrawling")
+		"is_ventcrawling",
+		"suiciding")
 
 	reset_vars_after_duration(resettable_vars, duration)

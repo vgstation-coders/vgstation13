@@ -2365,7 +2365,7 @@
 
 	if(..())
 		return 1
-
+	
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
 
