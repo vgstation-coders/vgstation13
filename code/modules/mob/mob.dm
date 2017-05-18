@@ -1188,7 +1188,7 @@ var/list/slot_equipment_priority = list( \
             if(length(msg) <= 32)
                 return "<font color='#ffa000'><b>[msg]</b></font>"
             else
-                return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];flavor_text=[user]'>More</a></b></font>"
+                return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];flavor_text=more'>More</a></b></font>"
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"
@@ -1396,16 +1396,16 @@ var/list/slot_equipment_priority = list( \
 	return
 
 /mob/Topic(href,href_list[])
-	if(href_list["mach_close"])
-		var/t1 = text("window=[href_list["mach_close"]]")
-		unset_machine()
-		src << browse(null, t1)
-	//if (href_list["joinresponseteam"])
-	//	if(usr.client)
-	//		var/client/C = usr.client
-	//		C.JoinResponseTeam()
+    if(href_list["mach_close"])
+        var/t1 = text("window=[href_list["mach_close"]]")
+        unset_machine()
+        src << browse(null, t1)
+    //if (href_list["joinresponseteam"])
+    //    if(usr.client)
+    //        var/client/C = usr.client
+    //        C.JoinResponseTeam()
 
- 	switch(href_list["flavor_text"])
+    switch(href_list["flavor_text"])
         if("more")
             usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", name, replacetext(flavor_text, "\n", "<BR>")), text("window=[];size=500x200", name))
             onclose(usr, "[name]")
