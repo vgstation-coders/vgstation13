@@ -1,14 +1,14 @@
 
 //**************************************************************
-// Map Datum -- Boxstation
+// Map Datum -- Bagel
 //**************************************************************
 
 /datum/map/active
-	nameShort = "box"
-	nameLong = "Box Station"
-	map_dir = "boxstation"
-	tDomeX = 128
-	tDomeY = 69
+	nameShort = "bagel"
+	nameLong = "Bagelstation"
+	map_dir = "bagelstation"
+	tDomeX = 108
+	tDomeY = 70
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
@@ -21,18 +21,28 @@
 			},
 		/datum/zLevel/mining,
 		/datum/zLevel/space{
-			name = "spacePirateShip" ;
+			name = "spaceEmpty" ;
 			},
 		)
+
 	enabled_jobs = list(/datum/job/trader)
 
 	load_map_elements = list(
 	/datum/map_element/dungeon/holodeck
 	)
 
-	holomap_offset_x = list(0,0,0,86,4,0,0,)
-	holomap_offset_y = list(0,0,0,94,10,0,0,)
+
+//All security airlocks have randomized wires
+/obj/machinery/door/airlock/glass_security/New()
+	.=..()
+	wires = new /datum/wires/airlock/secure(src)
+
+/obj/machinery/door/airlock/security/New()
+	.=..()
+	wires = new /datum/wires/airlock/secure(src)
 
 ////////////////////////////////////////////////////////////////
 #include "defficiency/pipes.dm" // Atmos layered pipes.
-#include "tgstation.dmm"
+
+#include "bagelstation.dmm"
+

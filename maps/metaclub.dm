@@ -1,14 +1,14 @@
 
 //**************************************************************
-// Map Datum -- Metaclub
+// Map Datum -- Bagel
 //**************************************************************
 
 /datum/map/active
-	nameShort = "meta"
-	nameLong = "Meta Club"
-	map_dir = "metaclub"
-	tDomeX = 128
-	tDomeY = 69
+	nameShort = "bagel"
+	nameLong = "Bagelstation"
+	map_dir = "bagelstation"
+	tDomeX = 108
+	tDomeY = 70
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
@@ -21,8 +21,8 @@
 			},
 		/datum/zLevel/mining,
 		/datum/zLevel/space{
-			name = "spaceEmpty1" ;
-			}
+			name = "spaceEmpty" ;
+			},
 		)
 
 	enabled_jobs = list(/datum/job/trader)
@@ -31,10 +31,18 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
-// Metaclub areas
-/area/science/xenobiology/specimen_7
-	name = "\improper Xenobiology Specimen Cage 7"
-	icon_state = "xenocell7"
+
+//All security airlocks have randomized wires
+/obj/machinery/door/airlock/glass_security/New()
+	.=..()
+	wires = new /datum/wires/airlock/secure(src)
+
+/obj/machinery/door/airlock/security/New()
+	.=..()
+	wires = new /datum/wires/airlock/secure(src)
 
 ////////////////////////////////////////////////////////////////
-#include "metaclub.dmm"
+#include "defficiency/pipes.dm" // Atmos layered pipes.
+
+#include "bagelstation.dmm"
+
