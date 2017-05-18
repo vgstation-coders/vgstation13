@@ -1176,7 +1176,7 @@ var/list/slot_equipment_priority = list( \
 		to_chat(src, "<h2 class='alert'>OOC Warning:</h2>")
 		to_chat(src, "<span class='alert'>Your flavor text is likely out of date! <a href='?src=\ref[src];flavor_text=change'>Change</a></span>")
 
-/mob/proc/print_flavor_text()
+/mob/proc/print_flavor_text(user)
     if(flavor_text)
         var/msg = replacetext(flavor_text, "\n", "<br />")
         if (ishuman(src))
@@ -1188,7 +1188,7 @@ var/list/slot_equipment_priority = list( \
             if(length(msg) <= 32)
                 return "<font color='#ffa000'><b>[msg]</b></font>"
             else
-                return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];flavor_text=more'>More</a></b></font>"
+                return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[user];flavor_text=[flavor_text];target_name=[name]'>More</a></b></font>"
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"
@@ -1396,19 +1396,19 @@ var/list/slot_equipment_priority = list( \
 	return
 
 /mob/Topic(href,href_list[])
-    if(href_list["mach_close"])
-        var/t1 = text("window=[href_list["mach_close"]]")
-        unset_machine()
-        src << browse(null, t1)
-    //if (href_list["joinresponseteam"])
-    //    if(usr.client)
-    //        var/client/C = usr.client
-    //        C.JoinResponseTeam()
+	if(href_list["mach_close"])
+		var/t1 = text("window=[href_list["mach_close"]]")
+		unset_machine()
+		src << browse(null, t1)
+	//if (href_list["joinresponseteam"])
+	//	if(usr.client)
+	//		var/client/C = usr.client
+	//		C.JoinResponseTeam()
 
-    switch(href_list["flavor_text"])
-        if("more")
-            usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", name, replacetext(flavor_text, "\n", "<BR>")), text("window=[];size=500x200", name))
-            onclose(usr, "[name]")
+	if((href_list["flavor_text"]) && (href_list["target_name"]))
+		var/datum/browser/popup = new(src, "\ref[src]", href_list["target_name"], 500, 200)
+		popup.set_content(replacetext(href_list["flavor_text"], "\n", "<br>"))
+		popup.open()
 
 /mob/MouseDrop(mob/M as mob)
 	..()
