@@ -1850,7 +1850,9 @@ mob/proc/on_foot()
 		"s_active",
 		"wear_mask",
 		"radiation",
-		"stat")
+		"stat",
+		"monkeyizing",
+		"key")
 
 	reset_vars_after_duration(resettable_vars, duration)
 
