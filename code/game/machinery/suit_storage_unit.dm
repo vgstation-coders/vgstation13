@@ -79,6 +79,12 @@
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
+/obj/machinery/suit_storage_unit/prison
+	SUIT_TYPE = /obj/item/clothing/suit/space/prison
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/prison
+	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
 /obj/machinery/suit_storage_unit/medical/empty
 	isopen = 1
 	SUIT_TYPE = null
