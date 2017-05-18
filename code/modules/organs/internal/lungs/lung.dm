@@ -8,6 +8,9 @@
 	parent_organ = LIMB_CHEST
 	removed_type = /obj/item/organ/lungs
 
+	min_bruised_damage = 8
+	min_broken_damage = 15
+
 	// /vg/ now delegates breathing to the appropriate organ.
 
 	// DEFAULTS FOR HUMAN LUNGS:
@@ -89,10 +92,10 @@
 			owner.audible_cough()		//respitory tract infection
 
 	if(is_bruised())
-		if(prob(2))
+		if(prob(((damage-min_bruised_damage)/min_broken_damage)*100))
 			spawn owner.emote("me", 1, "coughs up blood!")
 			owner.drip(10)
-		if(prob(4))
+		if(prob(((damage-min_bruised_damage)/min_broken_damage)*150))
 			spawn owner.emote("me", 1, "gasps for air!")
 			owner.losebreath += 5
 
