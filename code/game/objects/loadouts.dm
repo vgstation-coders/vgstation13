@@ -5,8 +5,9 @@
 	..(T)
 	if(istype(M))
 		equip_items(M)
-	spawn(10)	//to allow its items to be spawned and accessed, but not allow it to exist forever
+	spawn(10)	//to allow its items to be manually spawned and accessed, for the purposes of obtaining references
 		if(!gcDestroyed)
+			get_items()
 			qdel(src)
 
 /obj/abstract/loadout/proc/get_items()

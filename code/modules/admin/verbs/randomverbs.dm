@@ -1077,8 +1077,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_equip_loadout(mob/M as mob in mob_list)
-	set category = "Special Verbs"
-	set name = "Fun"
+	set category = "Fun"
+	set name = "Equip Loadout"
 
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
