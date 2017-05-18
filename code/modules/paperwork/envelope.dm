@@ -5,10 +5,6 @@
 	var/obj/item/weapon/paper/contained_paper
 	var/open = TRUE
 	var/torn = FALSE
-	var/nano
-
-/obj/item/weapon/paper/envelope/New(loc, var/obj/item/weapon/paper/unfolds_into)
-	..(loc)
 
 /obj/item/weapon/paper/envelope/update_icon()
 	overlays.len = 0
