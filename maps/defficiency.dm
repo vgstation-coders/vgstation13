@@ -4,9 +4,9 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "bagel"
-	nameLong = "Bagelstation"
-	map_dir = "bagelstation"
+	nameShort = "deff"
+	nameLong = "Defficiency"
+	map_dir = "defficiency"
 	tDomeX = 108
 	tDomeY = 70
 	tDomeZ = 2
