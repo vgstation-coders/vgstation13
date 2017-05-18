@@ -245,6 +245,10 @@ proc/process_adminbus_teleport_locs()
 	name = "supply shuttle"
 	icon_state = "shuttle3"
 
+/area/shuttle/security
+	name = "\improper Security Shuttle"
+	icon_state = "shuttlered"
+
 /area/shuttle/mining
 	name = "\improper Mining Shuttle"
 	music = "music/escape.ogg"
