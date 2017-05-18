@@ -5,7 +5,7 @@ var/global/datum/shuttle/security/security_shuttle = new(starting_area = /area/s
 	can_link_to_computer = LINK_FREE
 	req_access = list(access_security)
 
-/datum/shuttle/mining/initialize()
+/datum/shuttle/security/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/security/station)
 	add_dock(/obj/docking_port/destination/security/outpost)
