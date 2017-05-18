@@ -645,6 +645,46 @@ var/list/slot_equipment_priority = list( \
 			break
 	return openslot
 
+/mob/proc/unequip_everything()
+	for(var/slot in slot_equipment_priority)
+		var/obj/item/I = get_item_by_slot(slot)
+		if(I)
+			u_equip(I)
+
+/mob/proc/recursive_list_equip(list/L)	//Used for equipping a list of items to a mob without worrying about the order (like needing to put a jumpsuit before a belt)
+	if(!L || !L.len)
+		return
+
+	for(var/obj/item/O in L)
+		O.forceMove(get_turf(src))	//At the very least, all the stuff should be on our tile
+
+	var/has_succeeded_once = TRUE
+	while(has_succeeded_once)
+		has_succeeded_once = FALSE
+		for(var/obj/item/I in L)
+			if(equip_to_appropriate_slot(I))
+				has_succeeded_once = TRUE
+				L.Remove(I)
+	if(L.len)
+		var/obj/item/weapon/storage/B = back
+		for(var/obj/item/I in L)
+			if(istype(B))
+				B.handle_item_insertion(I,1)
+
+/mob/proc/equip_loadout(var/type)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
+	if(type)
+		if(ispath(type, /obj/abstract/loadout))
+			new type(get_turf(src), src)
+	else
+		var/turf/T = get_turf(usr)
+		if(T)
+			unequip_everything()	//unequip everything before equipping loadout
+			var/list/to_equip = list()
+			for(var/obj/item/I in T.contents)
+				to_equip.Add(new I.type(get_turf(src)))
+			recursive_list_equip(to_equip)
+
+
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M)
 		return 0

@@ -124,7 +124,8 @@ var/list/admin_verbs_spawn = list(
 	/client/proc/respawn_character, //Allows us to re-spawn someone
 	/client/proc/debug_reagents, //Allows us to spawn reagents in mobs/containers
 	/client/proc/create_awaymission, //Allows us to summon away missions
-	/client/proc/create_map_element
+	/client/proc/create_map_element,
+	/client/proc/cmd_admin_equip_loadout //Allows us to equip sets of items to mobs
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,

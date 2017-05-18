@@ -1075,3 +1075,27 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	usr << ftp(F)
 
 	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/cmd_admin_equip_loadout(mob/M as mob in mob_list)
+	set category = "Special Verbs"
+	set name = "Fun"
+
+	if(!holder)
+		to_chat(src, "Only administrators may use this command.")
+		return
+	if(!mob)
+		return
+	var/list/loadouts = (typesof(/obj/abstract/loadout) - /obj/abstract/loadout) + "USE ITEMS ON MY TURF"
+	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
+	if(!loadout_type)
+		return
+	else if(loadout_type == "USE ITEMS ON MY TURF")
+		M.equip_loadout()
+	else
+		if(!ispath(loadout_type))
+			alert("ERROR: No such loadout type found.")
+			return
+		M.equip_loadout(loadout_type)
+
+
+	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
