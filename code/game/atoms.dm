@@ -603,6 +603,7 @@ its easier to just keep the beam vertical.
 			if(!istype(H.dna, /datum/dna))
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
+				H.dna.flavor_text = H.dna.flavor_text
 		H.check_dna()
 
 		//Now, deal with gloves.
