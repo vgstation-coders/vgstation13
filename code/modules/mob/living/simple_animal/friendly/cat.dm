@@ -131,7 +131,7 @@ var/list/wizard_snakes
 		wizard_snakes = list()
 	wizard_snakes.Add(src)
 
-/mob/living/simple_animal/cat/snek/wizard/Die()
+/mob/living/simple_animal/cat/snek/wizard/death_untransmogrify()
 	if(!transmogrify())
 		visible_message("<span class='notice'>\The [src] vanishes!</span>")
 		qdel(src)
