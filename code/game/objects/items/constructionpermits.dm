@@ -32,7 +32,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 "}
 		if (AREA_SPECIAL)
 			text += {"
-<p>This place isn't noted on the permits records.</p>
+<p>This place isn't noted on the permit's records.</p>
 "}
 		if (AREA_BLUEPRINTS)
 			text += {"
