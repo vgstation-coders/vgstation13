@@ -46,30 +46,30 @@
 	if(!reagents.has_reagent(HYPERZINE))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
-		if(M_FAT in mutations) // hyperzine can't save you, fatty!
-			. *= 1.5
-		if(M_RUN in mutations)
-			. *= 0.8
+	if(M_FAT in mutations) // hyperzine can't save you, fatty!
+		. *= 1.5
+	if(M_RUN in mutations)
+		. *= 0.8
 
-		if(reagents.has_reagent(NUKA_COLA))
-			. *= 0.8
-		
-		if(dna.mutantrace == "slime")
-			if(reagents.has_reagent(HYPERZINE))
-				. *= 2
-			if(reagents.has_reagent(FROSTOIL))
-				. *= 5
-		// Bomberman stuff
-		var/skate_bonus = 0
-		var/disease_slow = 0
-		for(var/obj/item/weapon/bomberman/dispenser in src)
-			disease_slow = max(disease_slow, dispenser.slow)
-			skate_bonus = max(skate_bonus, dispenser.speed_bonus) // if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
-		
-		if(skate_bonus > 1)
-			. *= 1/skate_bonus
-		if(disease_slow > 0)
-			. *= disease_slow * 6
+	if(reagents.has_reagent(NUKA_COLA))
+		. *= 0.8
+	
+	if(dna.mutantrace == "slime")
+		if(reagents.has_reagent(HYPERZINE))
+			. *= 2
+		if(reagents.has_reagent(FROSTOIL))
+			. *= 5
+	// Bomberman stuff
+	var/skate_bonus = 0
+	var/disease_slow = 0
+	for(var/obj/item/weapon/bomberman/dispenser in src)
+		disease_slow = max(disease_slow, dispenser.slow)
+		skate_bonus = max(skate_bonus, dispenser.speed_bonus) // if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
+	
+	if(skate_bonus > 1)
+		. *= 1/skate_bonus
+	if(disease_slow > 0)
+		. *= disease_slow * 6
 
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)

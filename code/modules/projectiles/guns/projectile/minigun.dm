@@ -8,7 +8,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	slot_flags = null
-	flags = FPRINT | TWOHANDABLE
+	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	w_class = W_CLASS_HUGE//we be fuckin huge maaan
 	fire_delay = 0
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
