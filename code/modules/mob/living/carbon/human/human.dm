@@ -66,11 +66,14 @@
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Golem")
-	gender = NEUTER
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Grue")
+
+/mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Slime")
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
@@ -112,6 +115,9 @@
 
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
+	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
+	multicolor_skin_g = rand(0,255)
+	multicolor_skin_b = rand(0,255)
 
 	if(!src.species)
 		if(new_species_name)
@@ -1270,6 +1276,9 @@
 	src.species = new S.type
 	src.species.myhuman = src
 
+	if(S.gender)
+		gender = S.gender
+
 	for(var/L in species.known_languages)
 		add_language(L)
 	if(species.default_language)
@@ -1729,6 +1738,7 @@ mob/living/carbon/human/isincrit()
 
 	species.brute_mod *= rand(5,20)/10
 	species.burn_mod *= rand(5,20)/10
+	species.tox_mod *= rand(5,20)/10
 
 	if(prob(5))
 		species.flags = rand(0,65535)

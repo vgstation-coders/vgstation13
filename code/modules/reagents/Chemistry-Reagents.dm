@@ -433,7 +433,7 @@
 				if(M.acidable())
 					M.take_organ_damage(min(15, volume * 2))
 
-		else if(H.dna.mutantrace == "slime")
+		else if(isslimeperson(H))
 
 			H.adjustToxLoss(rand(1,3))
 
@@ -660,10 +660,10 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/human = M
-		if(human.dna.mutantrace == null)
+		if(!isslimeperson(human))
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
-			human.dna.mutantrace = "slime"
-			human.update_mutantrace()
+			human.set_species("Evolved Slime")
+			human.regenerate_icons()
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"
@@ -1756,7 +1756,7 @@
 			M.adjustToxLoss(rand(5, 10))
 
 		for(var/mob/living/carbon/human/H in T)
-			if(H.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				H.adjustToxLoss(rand(0.5, 1))
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2965,6 +2965,9 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
 	switch(data)
 		if(1 to 15)
 			M.bodytemperature += 0.6 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -2972,19 +2975,19 @@
 				holder.remove_reagent("frostoil", 5)
 			if(isslime(M))
 				M.bodytemperature += rand(5,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature += rand(5,20)
 		if(15 to 25)
 			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature += rand(10,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature += rand(10,20)
 		if(25 to INFINITY)
 			M.bodytemperature += 1.2 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature += rand(15,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature += rand(15,20)
 	data++
 
@@ -3057,6 +3060,9 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
 	switch(data)
 		if(1 to 15)
 			M.bodytemperature = max(M.bodytemperature-0.3 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
@@ -3064,13 +3070,13 @@
 				holder.remove_reagent("capsaicin", 5)
 			if(isslime(M))
 				M.bodytemperature -= rand(5,20)
-			if(M.dna && M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(5,20)
 		if(15 to 25)
 			M.bodytemperature = max(M.bodytemperature-0.6 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
 			if(isslime(M))
 				M.bodytemperature -= rand(10,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(10,20)
 		if(25 to INFINITY)
 			M.bodytemperature = max(M.bodytemperature-0.9 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
@@ -3078,7 +3084,7 @@
 				M.emote("shiver")
 			if(isslime(M))
 				M.bodytemperature -= rand(15,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(15,20)
 	data++
 
@@ -3090,7 +3096,7 @@
 	for(var/mob/living/carbon/slime/M in T)
 		M.adjustToxLoss(rand(15, 30))
 	for(var/mob/living/carbon/human/H in T)
-		if(H.dna.mutantrace == "slime")
+		if(isslimeperson(H))
 			H.adjustToxLoss(rand(5, 15))
 
 /datum/reagent/sodiumchloride
@@ -4150,6 +4156,9 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
 	switch(data)
 		if(1 to 15)
 			M.bodytemperature -= 0.1 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -4157,13 +4166,13 @@
 				holder.remove_reagent("capsaicin", 5)
 			if(isslime(M))
 				M.bodytemperature -= rand(5,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(5,20)
 		if(15 to 25)
 			M.bodytemperature -= 0.2 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature -= rand(10,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(10,20)
 		if(25 to INFINITY)
 			M.bodytemperature -= 0.3 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -4171,7 +4180,7 @@
 				M.emote("shiver")
 			if(isslime(M))
 				M.bodytemperature -= rand(15,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(15,20)
 	data++
 
