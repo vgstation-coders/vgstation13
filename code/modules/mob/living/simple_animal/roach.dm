@@ -257,7 +257,7 @@
 		if(P.use(1))
 			to_chat(user, "You spray \the [src] with \the [P].")
 			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-			Die(gore = 0)
+			death(FALSE)
 	else
 		return ..()
 
