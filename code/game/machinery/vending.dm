@@ -1949,6 +1949,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/apron = 3,
 		/obj/item/clothing/under/waiter = 3,
 		/obj/item/clothing/under/pirate = 3,
+		/obj/item/clothing/glasses/eyepatch = 3,
 		/obj/item/clothing/suit/pirate = 3,
 		/obj/item/clothing/head/pirate = 3,
 		/obj/item/clothing/head/bandana = 3,

@@ -13,6 +13,7 @@
 	var/list/available_spells = list(
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
+	/spell/targeted/projectile/dumbfire/fireball/firebreath,
 	/spell/lightning,
 	/spell/aoe_turf/ring_of_fire,
 	/spell/aoe_turf/disable_tech,
@@ -38,6 +39,8 @@
 	/spell/aoe_turf/conjure/pontiac,
 	/spell/aoe_turf/conjure/arcane_golem,
 	/spell/targeted/bound_object,
+	/spell/aoe_turf/conjure/snakes,
+	/spell/targeted/push,
 	/spell/noclothes
 	)
 
@@ -748,3 +751,62 @@
 	spellname = "forge arcane golem"
 	icon_state = "bookgolem"
 	desc = "This book has several completely blank pages."
+
+/obj/item/weapon/spellbook/oneuse/firebreath
+	spell = /spell/targeted/projectile/dumbfire/fireball/firebreath
+	spellname = "fire breath"
+	icon_state = "bookfirebreath"
+	desc = "This book's pages are singed."
+
+/obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
+	user.adjust_fire_stacks(0.5)
+	user.IgniteMob()
+
+/obj/item/weapon/spellbook/oneuse/snakes
+	spell = /spell/aoe_turf/conjure/snakes
+	spellname = "become snakes"
+	icon_state = "booksnakes"
+	desc = "This book is bound in snake skin."
+
+/obj/item/weapon/spellbook/oneuse/snakes/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You transform into a snake!</span>")
+	user.transmogrify(/mob/living/simple_animal/cat/snek/wizard, TRUE)
+	spawn(600)
+		user.transmogrify()
+
+/obj/item/weapon/spellbook/oneuse/push
+	spell = /spell/targeted/push
+	spellname = "dimensional push"
+	icon_state = "bookpush"
+	desc = "This book seems like it moves away as you get closer to it."
+
+/obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
+	var/area/thearea = pick(areas)
+	var/list/L = list()
+	for(var/turf/T in get_area_turfs(thearea.type))
+		if(!T.density)
+			var/clear = 1
+			for(var/obj/O in T)
+				if(O.density)
+					clear = 0
+					break
+			if(clear)
+				L+=T
+	if(!L.len)
+		to_chat(user, "Oh wait, nothing happened.")
+		return
+
+	user.unlock_from()
+	var/attempt = null
+	var/success = 0
+	while(L.len)
+		attempt = pick(L)
+		success = user.Move(attempt)
+		if(!success)
+			L.Remove(attempt)
+		else
+			break
+	if(!success)
+		user.forceMove(pick(L))

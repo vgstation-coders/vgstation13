@@ -71,6 +71,7 @@
 		if(disease_slow > 0)
 			. *= disease_slow * 6
 
+
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act
 	if(restrained())
