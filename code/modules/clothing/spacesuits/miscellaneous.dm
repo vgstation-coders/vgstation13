@@ -132,3 +132,16 @@
 				footstep++
 		else
 			playsound(H, step_sound, 20, 1)
+
+//Prisoner Softsuits. Syndi-sprite merely cosmetic and has shit stats
+/obj/item/clothing/head/helmet/space/prison
+	name = "Prisoner Helmet"
+	icon_state = "syndicate-helm-orange"
+	item_state = "syndicate-helm-orange"
+	desc = "A Orange Space Helmet meant to provide minimal space protection."
+
+/obj/item/clothing/suit/space/prison
+	name = "Prisoner Space Suit"
+	icon_state = "syndicate-orange"
+	item_state = "syndicate-orange"
+	desc = "A Orange Space Suit meant to provide minimal space protection."
