@@ -123,3 +123,8 @@
 				healths.icon_state = "shade_health6"
 			else
 				healths.icon_state = "shade_health7"
+
+/mob/living/simple_animal/shade/happiest/Die()
+	transmogrify()
+	if(!gcDestroyed)
+		qdel(src)
