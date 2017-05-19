@@ -5681,7 +5681,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 //Plant-specific reagents
 
 /datum/reagent/kelotane/tannic_acid
-	name = "Tannic Acid"
+	name = "Tannic acid"
 	id = TANNIC_ACID
 	description = "Tannic acid is a natural burn remedy."
 	reagent_state = LIQUID
@@ -5724,7 +5724,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#CC4303" //rgb: 204, 67, 3
 
 /datum/reagent/stoxin/valerenic_acid
-	name = "Valerenic Acid"
+	name = "Valerenic acid"
 	id = VALERENIC_ACID
 	description = "An herbal sedative used to treat insomnia."
 	color = "#EAB160" //rgb: 234, 177, 96
@@ -5736,7 +5736,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#F1DEB4" //rgb: 241, 222, 180
 
 /datum/reagent/sacid/formic_acid
-	name = "Formic Acid"
+	name = "Formic acid"
 	id = FORMIC_ACID
 	description = "A weak natural acid which causes a burning sensation upon contact."
 	color = "#9B3D00" //rgb: 155, 61, 0

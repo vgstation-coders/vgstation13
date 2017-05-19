@@ -2030,6 +2030,9 @@
 	required_reagents = list(SOYMILK = 4, SACID = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/soysauce/natural
+	required_reagents = list(SOYMILK = 4, FORMIC_ACID = 1)
+
 /datum/chemical_reaction/vinegar
 	name = "Malt Vinegar"
 	id = VINEGAR
