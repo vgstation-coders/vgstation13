@@ -23,6 +23,7 @@ var/global/lastDecTalkUse = 0
 	And the base of the send_speech() proc, which is the core of saycode.
 */
 var/list/freqtospan = list(
+	"1459" = "commonradio",
 	"1351" = "sciradio",
 	"1355" = "medradio",
 	"1357" = "engradio",
@@ -37,6 +38,7 @@ var/list/freqtospan = list(
 	)
 
 var/list/freqtoname = list(
+	"1459" = "Common",
 	"1351" = "Science",
 	"1353" = "Command",
 	"1355" = "Medical",

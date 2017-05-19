@@ -319,6 +319,7 @@
 #define MAPLESYRUP		"maple_syrup"
 #define ROACHSHELL		"roach_shell"
 #define GREYVODKA		"grey_vodka"
+#define MEDCORES		"medium cores"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

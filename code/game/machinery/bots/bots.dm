@@ -98,7 +98,7 @@
 		return
 	M.do_attack_animation(src, M)
 	src.health -= M.melee_damage_upper
-	src.visible_message("<span class='danger'>[M] has [M.attacktext] [src]!</span>")
+	src.visible_message("<span class='danger'>[M] [M.attacktext] [src]!</span>")
 	add_logs(M, src, "attacked", admin=0)
 	if(prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)

@@ -505,6 +505,25 @@
 	icon_state = "chocolatebar"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	name = "Valentine's Day chocolate bar"
+	desc = "Made (or bought) with love!"
+	icon_state = "valentinebar"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/New()
+	..()
+	if(time2text(world.realtime, "MM/DD") != "02/14")
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	desc = "Bought (or made) with love!"
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
+	..()
+	reagents.add_reagent(BICARODYNE, 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."
@@ -4972,3 +4991,34 @@
 /obj/item/weapon/reagent_containers/food/snacks/bleachkipper/New()
 	..()
 	reagents.add_reagent(FISHBLEACH, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
+	name = "mud pie"
+	desc = "While not looking very appetizing, it at least looks like somebody had fun making it."
+	icon_state = "mud_pie"
+	filling_color = "#462B20"
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, rand(0,2))
+	reagents.add_reagent(TOXIN, rand(1,5))
+	if(prob(15))
+		name = "exceptional " + initial(name)
+		desc = "The crème de la pire of culinary arts."
+		reagents.add_reagent(SUGAR, 2)
+		reagents.add_reagent(TOXIN, rand(3,8))
+		reagents.add_reagent(COCO, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/magbites
+	name = "mag-bites"
+	desc = "Tiny boot-shaped cheese puffs. Made with real magnets!\
+	<br>Warning: not suitable for those with heart conditions or on medication, consult your doctor before consuming this product. Cheese dust may stain or dissolve fabrics."
+	icon_state = "magbites"
+
+/obj/item/weapon/reagent_containers/food/snacks/magbites/New()
+	..()
+	reagents.add_reagent(MEDCORES, 6)
+	reagents.add_reagent(SODIUMCHLORIDE, 6)
+	reagents.add_reagent(NUTRIMENT, 4)

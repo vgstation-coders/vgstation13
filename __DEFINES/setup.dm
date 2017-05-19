@@ -1,6 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 510
-#error Your version of byond is too old, you need version 510 or higher
+#if DM_VERSION < 511
+#error Your version of byond is too old, you need version 511 or higher
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
@@ -1296,7 +1296,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define GLOBALCAST -2
 
 //buying costs
-#define Sp_BASE_PRICE 5
+#define Sp_BASE_PRICE 20
 
 ///////WIZ END/////////
 

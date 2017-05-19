@@ -121,6 +121,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/Login()
 	if(src && src.client)
 		src.client.reset_screen()
+	walk(src,0) //If the mob was in the process of moving somewhere, this should override it so PC mobs aren't banded back
 	..()
 
 /mob/living/simple_animal/updatehealth()
@@ -477,7 +478,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		user.delayNextAttack(8)
 		if(O.force)
-			user.do_attack_animation(src)
+			user.do_attack_animation(src, O)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0

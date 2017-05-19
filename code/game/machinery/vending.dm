@@ -1133,6 +1133,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/bustanuts = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/oldempirebar = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/magbites = 6,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 13,
@@ -1143,6 +1144,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 12,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 40,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
+		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		)
 
 	pack = /obj/structure/vendomatpack/snack
@@ -1947,6 +1949,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/apron = 3,
 		/obj/item/clothing/under/waiter = 3,
 		/obj/item/clothing/under/pirate = 3,
+		/obj/item/clothing/glasses/eyepatch = 3,
 		/obj/item/clothing/suit/pirate = 3,
 		/obj/item/clothing/head/pirate = 3,
 		/obj/item/clothing/head/bandana = 3,

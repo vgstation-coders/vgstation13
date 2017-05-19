@@ -947,85 +947,43 @@
 	required_other = 1
 	required_container = /obj/item/slime_extract/green
 
-/datum/chemical_reaction/slimeperidaxon
-	name = "Slime Peridaxon"
-	id = "m_peridaxon"
+/datum/chemical_reaction/slimetile
+	name = "Slime tiles"
+	id = "slimetile"
+	result = null
+	required_reagents = list(IRON = 5)
+	required_container = /obj/item/slime_extract/green
+	required_other = 1
+
+/datum/chemical_reaction/slimetile/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/stack/tile/slime/T = new /obj/item/stack/tile/slime
+	T.amount = 5
+	T.forceMove(get_turf(holder.my_atom))
+
+/datum/chemical_reaction/slimeheart
+	name = "slime heart"
+	id = "R_heart"
+	result = null
+	required_reagents = list(BLOOD = 5)
+	required_container = /obj/item/slime_extract/green
+	required_other = 1
+/datum/chemical_reaction/slimeheart/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/slime_heart/S = new /obj/item/slime_heart
+	S.forceMove(get_turf(holder.my_atom))
+
+/datum/chemical_reaction/slimecoat
+	name = "slime coat"
+	id = "R_coat"
 	result = null
 	required_reagents = list(WATER = 5)
-	result_amount = 1
 	required_container = /obj/item/slime_extract/green
 	required_other = 1
-
-/datum/chemical_reaction/slimeperidaxon/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slimecoat/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "peridaxon bottle"
-	B.reagents.add_reagent(PERIDAXON, 5)
-	B.forceMove(get_turf(holder.my_atom))
-
-/datum/chemical_reaction/slimedexplus
-	name = "Slime Dexalin Plus"
-	id = "m_dexplus"
-	result = null
-	required_reagents = list(OXYGEN = 5)
-	result_amount = 1
-	required_container = /obj/item/slime_extract/green
-	required_other = 1
-
-/datum/chemical_reaction/slimedexplus/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "Dexalin Plus Bottle"
-	B.reagents.add_reagent(DEXALINP, 5)
-	B.forceMove(get_turf(holder.my_atom))
-
-/datum/chemical_reaction/slimesdelight
-	name = "Slime Doctor's Delight"
-	id = "m_doctordelight"
-	result = null
-	required_reagents = list(SUGAR = 5)
-	result_amount = 1
-	required_container = /obj/item/slime_extract/green
-	required_other = 1
-
-/datum/chemical_reaction/slimesdelight/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "Doctor's Delight bottle"
-	B.reagents.add_reagent(DOCTORSDELIGHT, 10)
-	B.forceMove(get_turf(holder.my_atom))
-
-/datum/chemical_reaction/slimebicard
-	name = "Slime Bicaridine"
-	id = "m_bicaridine"
-	result = null
-	required_reagents = list(CARBON = 5)
-	result_amount = 1
-	required_container = /obj/item/slime_extract/green
-	required_other = 1
-
-/datum/chemical_reaction/slimebicard/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "bicaridine bottle"
-	B.reagents.add_reagent(BICARIDINE, 10)
-	B.forceMove(get_turf(holder.my_atom))
-
-/datum/chemical_reaction/slimedermaline
-	name = "Slime Dermaline"
-	id = "m_dermaline"
-	result = null
-	required_reagents = list(PHOSPHORUS = 5)
-	result_amount = 1
-	required_container = /obj/item/slime_extract/green
-	required_other = 1
-
-/datum/chemical_reaction/slimedermaline/on_reaction(var/datum/reagents/holder)
-	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
-	B.name = "Dermaline bottle"
-	B.reagents.add_reagent(DERMALINE, 5)
-	B.forceMove(get_turf(holder.my_atom))
+	var/obj/item/clothing/suit/wintercoat/slimecoat/C = new /obj/item/clothing/suit/wintercoat/slimecoat
+	C.forceMove(get_turf(holder.my_atom))
 
 //Metal
 /datum/chemical_reaction/slimemetal
@@ -1643,32 +1601,62 @@
 /datum/chemical_reaction/slimemutate2/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 
-/datum/chemical_reaction/slimemednanobots
-	name = "Slime Medical Nanobots"
-	id = "m_mednanobots"
-	result = MEDNANOBOTS
+/datum/chemical_reaction/slimenanobots
+	name = "Slime Nanobots"
+	id = "s_nanobots"
+	result = NANOBOTS
 	required_reagents = list(GOLD = 5)
-	result_amount = 1
+	result_amount = 5
 	required_other = 1
 	required_container = /obj/item/slime_extract/black
 	alert_admins = ALERT_ALL_REAGENTS
 
-/datum/chemical_reaction/slimemednanobots/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slimenanobots/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 
-/datum/chemical_reaction/slimecomnanobots
-	name  = "Slime Combat Nanobots"
-	id = "m_comnanobots"
-	result = COMNANOBOTS
-	required_reagents = list(URANIUM = 5)
+/datum/chemical_reaction/slimeperidaxon
+	name = "Slime Peridaxon"
+	id = "m_peridaxon"
+	result = null
+	required_reagents = list(WATER = 5)
 	result_amount = 1
-	required_other = 1
 	required_container = /obj/item/slime_extract/black
-	alert_admins = ALERT_ALL_REAGENTS
+	required_other = 1
 
-/datum/chemical_reaction/slimecomnanobots/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slimeperidaxon/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
+	B.name = "peridaxon bottle"
+	B.reagents.add_reagent(PERIDAXON, 5)
+	B.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/slimesdelight
+	name = "Slime Doctor's Delight"
+	id = "m_doctordelight"
+	result = null
+	required_reagents = list(SUGAR = 5)
+	result_amount = 1
+	required_container = /obj/item/slime_extract/black
+	required_other = 1
+
+/datum/chemical_reaction/slimesdelight/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
+	B.name = "Doctor's Delight bottle"
+	B.reagents.add_reagent(DOCTORSDELIGHT, 10)
+	B.forceMove(get_turf(holder.my_atom))
+
+/datum/chemical_reaction/slimerezadone
+	name = "Slime Rezadone"
+	id = "m_rezadone"
+	result = REZADONE
+	required_reagents = list(BLOOD = 5)
+	result_amount = 10
+	required_container = /obj/item/slime_extract/black
+	required_other = 1
+
+/datum/chemical_reaction/slimerezadone/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 //Oil
 /datum/chemical_reaction/slimeexplosion
 	name = "Slime Explosion"
@@ -2511,7 +2499,7 @@
 	name = "Mead"
 	id = MEAD
 	result = MEAD
-	required_reagents = list(SUGAR = 1, WATER = 1)
+	required_reagents = list(HONEY = 1, WATER = 1)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 2
 
@@ -2825,6 +2813,12 @@
 	required_reagents = list(MINDBREAKER = 1, OXYGEN = 1, INAPROVALINE = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/sheer_heart_attack
+	name = "hardcore induced heart attack"
+	id = MEDCORES
+	result = CHEESYGLOOP
+	required_reagents = list(MEDCORES = 0.1, HYPERZINE = 0.1)
+	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

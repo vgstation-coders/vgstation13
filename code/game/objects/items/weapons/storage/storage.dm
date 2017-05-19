@@ -30,13 +30,17 @@
 	var/foldable_amount = 1 // Number of foldables to produce, if any - N3X
 	var/internal_store = 0
 
+/obj/item/weapon/storage/proc/can_use()
+	return TRUE
+
 /obj/item/weapon/storage/MouseDrop(obj/over_object as obj)
 	if (ishuman(usr) || ismonkey(usr)) //so monkeys can take off their backpacks -- Urist
 		var/mob/M = usr
 		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object) && Adjacent(M))
 			var/mob/living/L = usr
 			if(istype(L) && !(L.incapacitated() || L.lying))
-				empty_contents_to(over_object)
+				if(can_use())
+					empty_contents_to(over_object)
 
 		if(!( istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
@@ -319,7 +323,7 @@
 	if(!istype(W))
 		return 0
 	if(usr)
-		usr.u_equip(W,1)
+		usr.u_equip(W,0)
 		usr.update_icons()	//update our overlays
 	W.forceMove(src)
 	W.on_enter_storage(src)

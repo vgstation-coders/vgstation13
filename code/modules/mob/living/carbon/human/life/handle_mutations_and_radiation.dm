@@ -232,7 +232,7 @@
 						newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
 
 						if(!Tx.density)
-							blood_splatter(src,vessel,TRUE)
+							blood_splatter(Tx,src,TRUE)
 
 					if(2)
 						//Drop a limb

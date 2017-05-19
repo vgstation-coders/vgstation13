@@ -2,6 +2,7 @@
 //todo
 /datum/artifact_effect/dnaswitch
 	effecttype = "dnaswitch"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 5
 	var/severity
 	copy_for_battery = list("severity")

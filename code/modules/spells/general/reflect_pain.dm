@@ -1,7 +1,7 @@
 //how do i counter a stove lul: the spell
 /spell/mirror_of_pain
 	name = "Pain Mirror"
-	desc = "An unholy charm that lasts for 5 seconds. While active, it causes everybody around you to receive the same damage that you do."
+	desc = "An unholy charm that lasts for 5 seconds. While active, it redirects all incoming damage to everybody around you, leaving you unharmed."
 
 	school = "necromancy"
 	charge_max = 90 SECONDS
@@ -22,7 +22,7 @@
 	var/dealt_damage = 0
 
 	//How much damage can be done per one instance. There to prevent instakilling everybody by suiciding (which does 200 damage)
-	var/damage_limit = 80
+	var/damage_limit = 50
 
 /spell/mirror_of_pain/New()
 	..()
@@ -33,14 +33,16 @@
 
 /spell/mirror_of_pain/cast(list/targets, mob/user)
 	for(var/mob/living/L in targets)
-		L.visible_message("<span class='sinister'>You feel bound to \the [L].</span>",\
-		"<span class='sinister'>You bind your life essence to this plane. Any pain you endure will be also felt by everybody around you.</span>")
+		to_chat(L, "<span class='sinister'>You bind your life essence to this plane. Any pain you endure will be also felt by everybody around you.</span>")
+		for(var/mob/living/T in view(L))
+			if(!T.isDead() && (T != L))
+				to_chat(T, "<span class='sinister'>An unholy charm binds your life to [L]. While the spell is active, any pain \he receive\s will be redirected to you.</span>")
 		var/event_key = L.on_damaged.Add(src, "reflect")
 		L.overlays.Add(user_overlay)
 		playsound(get_turf(L), 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
 
 		spawn(duration)
-			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't share received damage with your enemies anymore.</span>")
+			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't reflect received damage to your enemies anymore.</span>")
 			L.on_damaged.Remove(event_key)
 			L.overlays.Remove(user_overlay)
 
@@ -99,5 +101,7 @@
 	if(istype(holder))
 		holder.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage with [src.name] active. Reflected to [affected_amount] people.</font>"
 
+	return TRUE //Block the damage
+
 /spell/mirror_of_pain/get_scoreboard_suffix()
-	return " ([absorbed_damage] damage taken, [dealt_damage] damage dealt)"
+	return " ([absorbed_damage] damage absorbed, [dealt_damage] damage dealt)"

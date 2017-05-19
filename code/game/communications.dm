@@ -159,6 +159,7 @@ var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat wind
 var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
 var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
 var/const/DJ_FREQ = 1201 //Media
+var/const/COMMON_FREQ = 1459
 
 // central command channels, i.e deathsquid & response teams
 var/list/CENT_FREQS = list(1345, 1441)

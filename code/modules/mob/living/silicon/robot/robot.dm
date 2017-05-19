@@ -265,6 +265,7 @@
 			module_sprites["#11"] = "servbot"
 			module_sprites["Spider"] = "spider-standard"
 			module_sprites["Polar"] = "kodiak-standard"
+			module_sprites["Noble"] = "Noble-STD"
 			speed = 0
 
 		if("Service")
@@ -280,6 +281,7 @@
 			module_sprites["Sleek"] = "sleekservice"
 			module_sprites["#27"] = "servbot-service"
 			module_sprites["Teddy"] = "kodiak-service"
+			module_sprites["Noble"] = "Noble-SRV"
 			speed = 0
 
 		if("Supply")
@@ -295,6 +297,7 @@
 			module_sprites["Sleek"] = "sleekminer"
 			module_sprites["#31"] = "servbot-miner"
 			module_sprites["Kodiak"] = "kodiak-miner"
+			module_sprites["Noble"] = "Noble-SUP"
 			speed = -1
 
 		if("Medical")
@@ -311,6 +314,7 @@
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
 			module_sprites["Arachne"] = "arachne"
+			module_sprites["Noble"] = "Noble-MED"
 			speed = -2
 
 		if("Peacekeeper")
@@ -324,6 +328,7 @@
 			module_sprites["Marina-SC"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
+			module_sprites["Noble"] = "Noble-SEC"
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
 			speed = 0
 
@@ -347,6 +352,7 @@
 			module_sprites["Sleek"] = "sleekengineer"
 			module_sprites["#25"] = "servbot-engi"
 			module_sprites["Kodiak"] = "kodiak-eng"
+			module_sprites["Noble"] = "Noble-ENG"
 			speed = -2
 
 		if("Janitor")
@@ -359,6 +365,7 @@
 			module_sprites["Marina-JN"] = "marinaJN"
 			module_sprites["Sleek"] = "sleekjanitor"
 			module_sprites["#29"] = "servbot-jani"
+			module_sprites["Noble"] = "Noble-JAN"
 			speed = -1
 
 		if("Combat")

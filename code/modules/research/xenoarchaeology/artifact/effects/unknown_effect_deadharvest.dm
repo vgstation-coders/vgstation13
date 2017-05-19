@@ -1,5 +1,6 @@
 /datum/artifact_effect/deadharvest
 	effecttype = "deadharvest"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	var/list/mob_spawn = list()
 	var/points = 0
 	var/can_be_controlled = 0
@@ -7,7 +8,6 @@
 
 /datum/artifact_effect/deadharvest/New()
 	..()
-	effect = pick(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	can_be_controlled = pick(0,1)
 	if(!mob_spawn.len)
 		new_mob_spawn_list()

@@ -1,10 +1,7 @@
 /datum/artifact_effect/plantkiller
 	effecttype = "plantkiller"
+	effect = list(EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 5
-
-/datum/artifact_effect/plantkiller/New()
-	..()
-	effect = pick(EFFECT_AURA, EFFECT_PULSE)
 
 /datum/artifact_effect/plantkiller/DoEffectAura()
 	if(holder)
