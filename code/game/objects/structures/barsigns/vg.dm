@@ -82,5 +82,4 @@
 	name = "A Modern and Progressive Tavern"
 	icon = "progressive"
 	desc = "Whatever that means."
-	pixel_x = 0
 	pixel_y = -64
