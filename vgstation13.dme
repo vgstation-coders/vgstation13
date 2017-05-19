@@ -1601,6 +1601,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\faithless.dm"
 #include "code\modules\mob\living\simple_animal\hostile\frog.dm"
 #include "code\modules\mob\living\simple_animal\hostile\gingerbreadman.dm"
+#include "code\modules\mob\living\simple_animal\hostile\glow_orb.dm"
 #include "code\modules\mob\living\simple_animal\hostile\gremlin.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hive_aliens.dm"
 #include "code\modules\mob\living\simple_animal\hostile\hivebot.dm"
