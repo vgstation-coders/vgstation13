@@ -631,11 +631,20 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/close_sound = list('sound/items/zippo_close.ogg')
 	fuel = 100 //Zippos da bes
 
+/obj/item/weapon/lighter/red
+	icon_state = "lighter-r"
+/obj/item/weapon/lighter/cyan
+	icon_state = "lighter-c"
+/obj/item/weapon/lighter/yellow
+	icon_state = "lighter-y"
+/obj/item/weapon/lighter/green
+	icon_state = "lighter-g"
+
 /obj/item/weapon/lighter/random/New()
-	. = ..()
-	var/color = pick("r","c","y","g")
-	icon_state = "lighter-[color]"
-	update_brightness()
+	var/color = pick("red","cyan","yellow","green")
+	var/lighter_path = text2path("/obj/item/weapon/lighter/[color]")
+	new lighter_path(src.loc)
+	qdel(src)
 
 /obj/item/weapon/lighter/examine(mob/user)
 

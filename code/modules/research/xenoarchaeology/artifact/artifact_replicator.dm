@@ -51,7 +51,7 @@
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/hemostat,
 		/obj/item/weapon/kitchen/utensil/knife/large,
-		/obj/item/weapon/lighter,
+		/obj/item/weapon/lighter/random,
 		/obj/item/weapon/light/bulb,
 		/obj/item/weapon/light/tube,
 		/obj/item/weapon/pickaxe,
