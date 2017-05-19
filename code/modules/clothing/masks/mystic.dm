@@ -72,8 +72,6 @@ var/list/has_been_shade
 		has_been_shade.Add(S.key)
 		S.name = "Shade of [M.real_name]"
 		S.real_name = "Shade of [M.real_name]"
-		if (M.client)
-			M.client.mob = S
 		S.cancel_camera()
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")
