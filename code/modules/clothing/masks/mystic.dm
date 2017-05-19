@@ -67,7 +67,7 @@ var/list/has_been_shade
 		if(M.key in has_been_shade)
 			continue
 		flick("happiest_flash", src)
-		var/mob/dead/observer/ghost/G = M.ghostize(1)
+		var/mob/dead/observer/G = M.ghostize(1)
 		var/mob/living/simple_animal/shade/happiest/S = G.transmogrify(/mob/living/simple_animal/shade/happiest, TRUE)
 		has_been_shade.Add(S.key)
 		S.name = "Shade of [M.real_name]"
