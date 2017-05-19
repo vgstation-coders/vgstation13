@@ -158,10 +158,10 @@ var/shuttle_call/shuttle_calls[0]
 			if (istype(I, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = I
 				I = pda.id
-			if (I && istype(I))
-				if(access_captain in I.access)
-					authenticated = 2
-			if(authenticated != 2)
+			//if (I && istype(I))
+			//	if(access_captain in I.access)
+			//		authenticated = 2
+			if(!authenticated)
 				to_chat(usr, "<span class='warning'>You do not have clearance to use this function.</span>")
 				return
 			setMenuState(usr,COMM_SCREEN_ERT)
