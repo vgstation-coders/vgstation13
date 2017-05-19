@@ -27,6 +27,9 @@
 		visible_message("<span class='danger'><B>[src] shudders violently and explodes!</B>","<span class='warning'>You feel your body rupture!</span></span>")
 		explosion(get_turf(loc), -1, -1, 3, 5)
 		src.gib()
+		return
+
+	..()
 
 /mob/living/simple_animal/vox/armalis/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
