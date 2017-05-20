@@ -1,5 +1,5 @@
 /mob/living/carbon/human/movement_delay()
-	if(dna.mutantrace == "slime")
+	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F
 			return min(..(), 1)
 	return ..()
@@ -21,7 +21,7 @@
 	if (hungry >= 70)
 		. += hungry/50
 
-	if (dna.mutantrace == "slime")
+	if (isslimeperson(src))
 		if (bodytemperature < 183.222)
 			. += (283.222 - bodytemperature) / 10 * 175 // MAGIC NUMBERS!
 	else if (undergoing_hypothermia())
@@ -54,7 +54,7 @@
 	if(reagents.has_reagent(NUKA_COLA))
 		. *= 0.8
 	
-	if(dna.mutantrace == "slime")
+	if(isslimeperson(src))
 		if(reagents.has_reagent(HYPERZINE))
 			. *= 2
 		if(reagents.has_reagent(FROSTOIL))

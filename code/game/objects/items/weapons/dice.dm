@@ -101,8 +101,8 @@
 	if(triggered)
 		return
 	..()
-	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled a [result]")
-	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled a [result]")
+	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
+	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled [result]")
 	if(result == 1)
 		to_chat(user, "<span class='danger'>Rocks fall, you die.</span>")
 		user.gib()
@@ -143,8 +143,8 @@
 	..()
 	if(deactivated == 0) //If the dice has power then something will happen
 		if(istype(user,/mob/living/carbon/human)) //check that a humanoid is rolling the dice; Xenomorphs / Sillicons need not apply.
-			message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled a [result]")
-			log_game("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled a [result]")
+			message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled [result]")
+			log_game("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled [result]")
 			var/mob/living/carbon/human/h = user
 			switch(result)
 				if(1)

@@ -75,6 +75,25 @@
 		to_chat(M, "<span class='warning'> Apparently it didn't work.</span>")
 		if(M != user)
 			to_chat(user, "<span class='warning'> Apparently it didn't work.</span>")
+	else if(istype(M, /mob/living/carbon/slime/pygmy))
+		var/mob/living/carbon/slime/S = M
+		var/mob/living/carbon/human/slime/H = new (S.loc)
+		if(S.mind)
+			S.mind.transfer_to(H)
+		else
+			H.key = S.key
+		S.transferImplantsTo(H)
+		S.transferBorers(H)
+		qdel(S)
+		var/i
+		while(!i)
+			var/randomname = H.species.makeName()
+			if(findname(randomname))
+				continue
+			else
+				H.real_name = randomname
+				i++
+		uses--
 	else
 		if(istype(M,/mob/living))
 			M.radiation += rand(1,10)
@@ -156,7 +175,7 @@
 	inuse = 0
 
 	M.visible_message("<span class='danger'>\The [M] has been injected with \the [src] by \the [user].</span>")
-	if (!istype(M, /mob/living/carbon/human) && !istype(M, /mob/living/carbon/monkey))
+	if (!istype(M, /mob/living/carbon/human) && !istype(M, /mob/living/carbon/monkey) && !istype(M, /mob/living/carbon/slime/pygmy))
 		to_chat(user, "<span class='warning'>Apparently, the DNA injector didn't work...</span>")
 		return
 

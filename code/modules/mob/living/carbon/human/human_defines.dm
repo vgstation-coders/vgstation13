@@ -17,6 +17,9 @@
 	var/b_eyes = 0
 
 	var/s_tone = 0	//Skin tone
+	var/multicolor_skin_r = 0	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
+	var/multicolor_skin_g = 0
+	var/multicolor_skin_b = 0
 
 	var/lip_style = null	//no lipstick by default- arguably misleading, as it could be used for general makeup
 
