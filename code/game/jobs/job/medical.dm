@@ -60,7 +60,7 @@
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
-	alt_titles = list("Surgeon", "Emergency Physician", "Nurse")
+	alt_titles = list("Dentist", "Emergency Physician", "Nurse", "Surgeon")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
@@ -80,6 +80,10 @@
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
 		if (H.mind.role_alt_title)
 			switch(H.mind.role_alt_title)
+				if("Dentist")
+					H.equip_or_collect(new /obj/item/clothing/under/rank/medical/green(H), slot_w_uniform)
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/head/surgery/green(H), slot_head)
 				if("Emergency Physician")
 					H.equip_or_collect(new /obj/item/clothing/under/rank/medical(H), slot_w_uniform)
 					H.equip_or_collect(new /obj/item/clothing/suit/storage/fr_jacket(H), slot_wear_suit)

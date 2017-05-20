@@ -28,8 +28,9 @@
 		"kidneys"          = list(/obj/item/organ/kidneys,20),
 		"human eyes"       = list(/obj/item/organ/eyes,   30),
 		"grey eyes"        = list(/obj/item/organ/eyes/grey,   30),
-		"vox eyes"        = list(/obj/item/organ/eyes/vox,   30),
-		"liver"            = list(/obj/item/organ/liver,  50)
+		"vox eyes"         = list(/obj/item/organ/eyes/vox,   30),
+		"liver"            = list(/obj/item/organ/liver,  50),
+		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)
 
 /obj/machinery/bioprinter/New()
@@ -69,7 +70,8 @@
 		stored_matter -= products[choice][2]
 		var/new_organ = products[choice][1]
 		var/obj/item/organ/O = new new_organ(get_turf(src))
-		O.is_printed = TRUE // Heist stuff.
+		if(choice == !"tooth")
+			O.is_printed = TRUE // Heist stuff.
 
 		if(prints_prosthetics)
 			O.robotic = 2
