@@ -211,6 +211,9 @@
 /datum/organ/internal/brain/ash
 	removed_type = /obj/item/organ/brain/ash
 
+/datum/organ/internal/brain/slime_core
+	removed_type = /obj/item/organ/brain/slime_core
+
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = LIMB_GROIN
@@ -226,7 +229,8 @@
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
-		removed_organ.had_mind = !isnull(owner.mind)
+		if(owner)
+			removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
 		organ_holder = removed_organ
 

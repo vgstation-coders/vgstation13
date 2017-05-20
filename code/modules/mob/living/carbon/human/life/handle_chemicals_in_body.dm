@@ -91,6 +91,8 @@
 	if(nutrition > OVEREAT_THRESHOLD)
 		if(overeatduration < 600) //capped so people don't take forever to unfat
 			overeatduration++
+		if(isslimeperson(src))
+			nutrition = OVEREAT_THRESHOLD
 	else
 		if(overeatduration > 1)
 			if(M_OBESITY in mutations)

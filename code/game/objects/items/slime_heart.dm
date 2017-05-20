@@ -10,7 +10,9 @@
 	if(iscarbon(mob))
 		var/mob/living/carbon/C = mob
 		if(C.is_holding_item(src))
-			if(C.dna && C.dna.mutantrace == "slime")
-				C.adjustToxLoss(-3)
-			else
-				C.adjustToxLoss(5)
+			if(ishuman(C))
+				var/mob/living/carbon/human/H = C
+				if(isslimeperson(H))
+					H.adjustToxLoss(-3)
+					return
+			C.adjustToxLoss(5)

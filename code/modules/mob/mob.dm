@@ -1864,47 +1864,39 @@ mob/proc/on_foot()
 /mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
-			transmogged_from.forceMove(loc)
-			if(key)
-				transmogged_from.key = key
-			transmogged_from.timestopped = 0
-			if(istype(transmogged_from, /mob/living/carbon))
-				var/mob/living/carbon/C = transmogged_from
-				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
-					C.drop_item(C.wear_mask, force_drop = 1)
-			var/mob/returned_mob = transmogged_from
-			returned_mob.transmogged_to = null
-			transmogged_from = null
-			for(var/atom/movable/AM in contents)
-				AM.forceMove(get_turf(src))
-			forceMove(null)
-			qdel(src)
-			return returned_mob
+			var/obj/transmog_body_container/tC = transmogged_from
+			if(tC.contained_mob)
+				tC.contained_mob.forceMove(loc)
+				if(key)
+					tC.contained_mob.key = key
+				tC.contained_mob.timestopped = 0
+				if(istype(tC.contained_mob, /mob/living/carbon))
+					var/mob/living/carbon/C = tC.contained_mob
+					if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+						C.drop_item(C.wear_mask, force_drop = 1)
+				var/mob/returned_mob = tC.contained_mob
+				returned_mob.transmogged_to = null
+				tC.get_rid_of()
+				transmogged_from = null
+				for(var/atom/movable/AM in contents)
+					AM.forceMove(get_turf(src))
+				forceMove(null)
+				qdel(src)
+				return returned_mob
 		return
 	if(!ispath(target_type, /mob))
 		EXCEPTION(target_type)
 		return
 	var/mob/M = new target_type(loc)
-	M.transmogged_from = src
+	var/obj/transmog_body_container/C = new (M)
+	M.transmogged_from = C
 	transmogged_to = M
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
 		var/spell/change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	var/static/list/drop_on_transmog = list(
-		/obj/item/weapon/disk/nuclear,
-		/obj/item/weapon/holder,
-		/obj/item/device/paicard,
-		/obj/item/device/soulstone,
-		/obj/item/device/mmi,
-		)
-	for(var/i in drop_on_transmog)
-		var/list/L = search_contents_for(i)
-		if(L.len)
-			for(var/A in L)
-				drop_item(A, force_drop = 1)
-	src.forceMove(null)
+	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
@@ -1922,6 +1914,29 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/obj/transmog_body_container
+	name = "transmog body container"
+	desc = "You should not be seeing this."
+	flags = TIMELESS
+	var/mob/contained_mob
+
+/obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
+	ASSERT(M)
+	M.forceMove(src)
+	contained_mob = M
+
+/obj/transmog_body_container/proc/get_rid_of()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	contained_mob = null
+	qdel(src)
+
+/obj/transmog_body_container/Destroy()
+	contained_mob = null
+	for(var/i in contents)
+		qdel(i)
+	..()
 
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")

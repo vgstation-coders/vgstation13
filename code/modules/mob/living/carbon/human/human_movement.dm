@@ -17,7 +17,7 @@
 	if(species && species.move_speed_mod)
 		tally += species.move_speed_mod
 
-	if(dna.mutantrace == "slime")
+	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F
 			return -1	// slimes become supercharged at high temperatures
 		if (bodytemperature < 183.222)
@@ -74,7 +74,7 @@
 	tally = tally - skate_bonus + (6 * disease_slow)
 
 	if(reagents.has_reagent(HYPERZINE))
-		if(dna.mutantrace == "slime")
+		if(isslimeperson(src))
 			tally *= 2
 		else if(isdiona(src))
 			tally -= 4
@@ -84,7 +84,7 @@
 	if(reagents.has_reagent(MEDCORES))
 		tally *=3
 
-	if(reagents.has_reagent(FROSTOIL) && dna.mutantrace == "slime")
+	if(reagents.has_reagent(FROSTOIL) && isslimeperson(src))
 		tally *= 5
 
 	return max((tally+config.human_delay), -1) //cap at -1 as the 'fastest'
