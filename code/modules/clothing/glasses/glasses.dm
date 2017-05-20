@@ -6,6 +6,16 @@
 	eyeprot = -1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/glasses/hud/health/prescription
+	name = "prescription health scanner HUD"
+	desc = "A Health Scanner HUD with prescription lenses."
+	prescription = 1
+
+/obj/item/clothing/glasses/sunglasses/sechud/prescription
+	name = "prescription security HUD"
+	desc = "A Security HUD with prescription lenses."
+	prescription = 1
+
 /obj/item/clothing/glasses/science
 	name = "science goggles"
 	desc = "nothing."
