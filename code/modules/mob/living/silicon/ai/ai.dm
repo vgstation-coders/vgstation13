@@ -754,7 +754,8 @@ var/list/ai_list = list()
 		"Yotsuba",
 		"Girl",
 		"Boy",
-		"SHODAN"
+		"SHODAN",
+		"Corgi"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -783,6 +784,8 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo10"))
 				if("SHODAN")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo11"))
+				if("Corgi")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo12"))
 
 	return
 
