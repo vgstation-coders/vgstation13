@@ -711,7 +711,7 @@
 			T.imbue = "emp"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["blood"] && R.word2==cultwords["see"] && R.word3==cultwords["destroy"]) //conceal
+		if(R.word1==cultwords["hide"] && R.word2==cultwords["see"] && R.word3==cultwords["blood"]) //conceal
 			T = new(src.loc)
 			T.imbue = "conceal"
 			imbued_from = R
@@ -755,7 +755,7 @@
 		invocation("rune_imbue")
 	else
 		usr.say("H'drak v[pick("'","`")]loso, mir'kanas verbot!")
-		usr.show_message("\<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 1, "<span class='warning'>You hear a faint fizzle.</span>", 2)
+		usr.show_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 1, "<span class='warning'>You hear a faint fizzle.</span>", 2)
 		to_chat(usr, "<span class='notice'>You remembered the words correctly, but the rune isn't working properly. Maybe you're missing something in the ritual.</span>")
 
 /////////////////////////////////////////THIRTEENTH RUNE
