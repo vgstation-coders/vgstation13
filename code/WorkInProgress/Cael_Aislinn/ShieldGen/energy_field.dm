@@ -2,8 +2,8 @@
 //---------- actual energy field
 
 /obj/effect/energy_field
-	name = "energy field"
-	desc = "Impenetrable field of energy, capable of blocking anything as long as it's active."
+	name = "energy wall"
+	desc = "Sparkles, tingles, and stops you in your tracks."
 	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
 	icon_state = "shieldsparkles"
 	anchored = 1
