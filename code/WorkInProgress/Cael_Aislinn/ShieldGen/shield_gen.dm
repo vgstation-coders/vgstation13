@@ -9,7 +9,7 @@
 
 /obj/machinery/shield_gen
 	name = "Starscreen shield generator"
-	desc = "Gnerates a box-shaped wall of energy when active."
+	desc = "Generates a box-shaped wall of energy when active."
 	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
 	icon_state = "generator0"
 	var/active = 0
