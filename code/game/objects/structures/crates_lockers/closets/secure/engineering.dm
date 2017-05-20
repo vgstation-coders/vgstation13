@@ -120,7 +120,10 @@
 		new /obj/item/device/radio/headset/headset_eng(src)
 		new /obj/item/clothing/suit/storage/hazardvest(src)
 		new /obj/item/clothing/mask/gas(src)
-		new /obj/item/clothing/glasses/scanner/meson(src)
+		if(prob(50))
+			new /obj/item/clothing/glasses/scanner/meson/prescription(src)
+		else
+			new /obj/item/clothing/glasses/scanner/meson(src)
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/taperoll/engineering(src)
 		new /obj/item/device/gps/engineering(src)
