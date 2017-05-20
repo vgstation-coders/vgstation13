@@ -620,8 +620,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/New()
 	..()
-	spawn(0)
-		update_icon()
+	update_icon()
 
 /obj/item/weapon/lighter/Destroy()
 	. = ..()
@@ -647,8 +646,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	color_suffix = "g"
 
 /obj/item/weapon/lighter/random/New()
-	..()
 	color_suffix = pick("r","c","y","g")
+	..()
 
 /obj/item/weapon/lighter/examine(mob/user)
 
