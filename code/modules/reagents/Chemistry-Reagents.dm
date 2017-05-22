@@ -2378,7 +2378,7 @@
 	var/has_been_hypozined = 0
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
 	var/hypozined_at = 0 //world.time
-	custom_metabolism = 0.02
+	custom_metabolism = 0.04
 	var/oldspeed = 0
 	data = 1
 
@@ -2403,7 +2403,7 @@
 	if(..())
 		return 1
 	
-	M.reagents.add_reagent ("hyperzine", 0.1) //To pretend it's all okay.
+	M.reagents.add_reagent ("hyperzine", 0.03) //To pretend it's all okay.
 	if(ishuman(M))
 		if(data<121 && !has_been_hypozined)
 			has_been_hypozined = 1
@@ -2469,6 +2469,7 @@
 							to_chat(H, "<span class='alert'>The heat engulfs you!</span>")
 							for(var/datum/organ/external/E in H.organs)
 								E.droplimb(1, 1) //Bye limbs!
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
 					else if (heartdamage < 100)
 						damagedheart.damage += heartdamage
 						H.adjustOxyLoss(heartdamage)
