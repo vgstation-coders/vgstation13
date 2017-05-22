@@ -1706,9 +1706,9 @@ mob/living/carbon/human/isincrit()
 	return internal_organs_by_name["heart"]
 	
 //Moved from internal organ surgery
-//Removes organ from target, gives organ object to user
-//TODO: FIX
-mob/living/carbon/human/remove_internal_organ(var/mob/living/user, mob/living/carbon/human/target, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+//Removes organ from src, places organ object under user
+//example: H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/extractedorgan
 
 	if(targetorgan && istype(targetorgan))
@@ -1721,19 +1721,13 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, mob/living/ca
 			// Transfer over some blood data, if the organ doesn't have data.
 			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
 			if(!organ_blood || !organ_blood.data["blood_DNA"])
-				target.vessel.trans_to(extractedorgan, 5, 1, 1)
+				vessel.trans_to(extractedorgan, 5, 1, 1)
 			
-			target.internal_organs_by_name["targetorgan"] = null
-			target.internal_organs_by_name[targetorgan] = null
-			target.internal_organs_by_name -= "targetorgan"
-			target.internal_organs_by_name -= targetorgan
-			target.internal_organs_by_name.Remove("targetorgan")
-			target.internal_organs_by_name.Remove(targetorgan)
-			target.internal_organs -= extractedorgan.organ_data
-			target.internal_organs -= extractedorgan
+			internal_organs_by_name[targetorgan.name] = null
+			internal_organs_by_name -= targetorgan.name
+			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
-			affectedarea.internal_organs -= extractedorgan
-			extractedorgan.removed(target,user)
+			extractedorgan.removed(src,user)
 			
 			return extractedorgan
 		

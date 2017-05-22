@@ -2378,7 +2378,7 @@
 	var/has_been_hypozined = 0
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
 	var/hypozined_at = 0 //world.time
-	custom_metabolism = 0.01
+	custom_metabolism = 0.02
 	var/oldspeed = 0
 	data = 1
 
@@ -2459,29 +2459,30 @@
 			if(explodeheart)
 				if(H.get_heart())//Got a heart?
 					var/datum/organ/internal/heart/damagedheart = H.get_heart()
-					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
-					if (heartdamage > 99)
-						damagedheart.damage += 200
-						qdel (H.remove_internal_organ(H,H,damagedheart,LIMB_CHEST))
-						H.adjustOxyLoss(100)
+					if (heartdamage >= 100)
+						if(H.species.name != "Diona") //fuck dionae
+							to_chat(H, "<span class='alert'>You feel a terrible pain in your chest!</span>")
+							damagedheart.damage += 200 //Bye heart.
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+							H.adjustOxyLoss(heartdamage)
+						else
+							to_chat(H, "<span class='alert'>The heat engulfs you!</span>")
+							for(var/datum/organ/external/E in H.organs)
+								E.droplimb(1, 1) //Bye limbs!
 					else if (heartdamage < 100)
 						damagedheart.damage += heartdamage
 						H.adjustOxyLoss(heartdamage)
 				else//No heart?
-					to_chat(H, "<font size='15' color='red'><b>The heat engulfs you!</b></font>")
-					if (heartdamage > 100)
+					to_chat(H, "<span class='alert'>The heat engulfs you!</span>")
+					if (heartdamage >= 100)
 						for(var/datum/organ/external/E in H.organs)
 							E.droplimb(1, 1) //Bye limbs!
-							if(H.species)
-								hgibs(H.loc, H.viruses, H.dna, H.species.flesh_color, H.species.blood_color)
-							else
-								hgibs(H.loc, H.viruses, H.dna)
 					else if (heartdamage < 100)
 						H.adjustBruteLoss(heartdamage / 2)
 						H.adjustFireLoss(heartdamage / 3)
 						H.adjustToxLoss(heartdamage / 8)
 		else
-			M.gib() //fuck non-humans desu
+			M.gib() 
 		data = 1
 
 /datum/reagent/cryoxadone

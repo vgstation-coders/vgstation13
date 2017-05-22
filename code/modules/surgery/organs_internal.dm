@@ -412,7 +412,7 @@
 		var/datum/organ/external/affectedarea = target.get_organ(target_zone)
 		var/datum/organ/internal/targetorgan = target.internal_organs_by_name[target.op_stage.current_organ]
 		
-		target.remove_internal_organ(user, target, targetorgan, affectedarea)
+		target.remove_internal_organ(user, targetorgan, affectedarea)
 		
 		target.op_stage.current_organ = null
 
