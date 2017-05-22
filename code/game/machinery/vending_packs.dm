@@ -160,6 +160,11 @@
 	targetvendomat = /obj/machinery/vending/chapel
 	icon_state = "chapel"
 
+/obj/structure/vendomatpack/barbervend
+	name = "Barbervend recharge pack"
+	targetvendomat = /obj/machinery/vending/barber
+	icon_state = "barber"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack

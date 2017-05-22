@@ -1,2 +1,5 @@
 author: ArthurDentist
-changes: []
+changes:
+  - rscadd: Added a Barber uniform.
+  - rscadd: Added a Barber vendor which vends hairdye, the new uniform and other goodies.
+  - rscadd: The Barber vendorpack can be ordered from cargo. 

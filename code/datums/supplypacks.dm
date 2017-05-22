@@ -1197,7 +1197,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
 	group = "Engineering"
-	
+
 /datum/supply_packs/engine/prism
 	name = "Optical prisms"
 	contains = list(/obj/machinery/prism,
@@ -1950,6 +1950,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "clothing stack of packs"
 	group = "Vending Machine packs"
+
+/datum/supply_packs/barbermachines
+	name = "Barber packs"
+	contains = list(/obj/structure/vendomatpack/barbervend,
+					/obj/structure/vendomatpack/barbervend)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Barber stack of packs"
+	group = "Vending Machine packs"
+
 
 /*
 /datum/supply_packs/sovietmachines
