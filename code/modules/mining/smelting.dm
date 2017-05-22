@@ -80,6 +80,14 @@
 	)
 	yieldtype = /obj/item/stack/sheet/plasteel
 
+/datum/smelting_recipe/brick
+	name = "Brick"
+	ingredients=list(
+		MAT_IRON = 1,
+		MAT_GLASS = 1
+	)
+	yieldtype = /obj/item/stack/sheet/mineral/brick
+
 /datum/smelting_recipe/clown
 	name = "Bananium"
 	ingredients=list(
