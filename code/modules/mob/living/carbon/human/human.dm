@@ -1702,6 +1702,41 @@ mob/living/carbon/human/isincrit()
 				return_organs += damagedorgan
 		return return_organs
 
+/mob/living/carbon/human/get_heart()	
+	return internal_organs_by_name["heart"]
+	
+//Moved from internal organ surgery
+//Removes organ from target, gives organ object to user
+//TODO: FIX
+mob/living/carbon/human/remove_internal_organ(var/mob/living/user, mob/living/carbon/human/target, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+	var/obj/item/organ/extractedorgan
+
+	if(targetorgan && istype(targetorgan))
+		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
+		if(extractedorgan && istype(extractedorgan))
+
+			// Stop the organ from continuing to reject.
+			extractedorgan.organ_data.rejecting = null
+
+			// Transfer over some blood data, if the organ doesn't have data.
+			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
+			if(!organ_blood || !organ_blood.data["blood_DNA"])
+				target.vessel.trans_to(extractedorgan, 5, 1, 1)
+			
+			target.internal_organs_by_name["targetorgan"] = null
+			target.internal_organs_by_name[targetorgan] = null
+			target.internal_organs_by_name -= "targetorgan"
+			target.internal_organs_by_name -= targetorgan
+			target.internal_organs_by_name.Remove("targetorgan")
+			target.internal_organs_by_name.Remove(targetorgan)
+			target.internal_organs -= extractedorgan.organ_data
+			target.internal_organs -= extractedorgan
+			affectedarea.internal_organs -= extractedorgan.organ_data
+			affectedarea.internal_organs -= extractedorgan
+			extractedorgan.removed(target,user)
+			
+			return extractedorgan
+		
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE

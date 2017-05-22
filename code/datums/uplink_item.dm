@@ -321,6 +321,13 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 12
 	job = list("Medical Doctor", "Chief Medical Officer")
+	
+/datum/uplink_item/jobspecific/hypozinebottle
+	name = "Lethal Speed Chemical"
+	desc = "15 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
+	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	cost = 12
+	job = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
 //Engineer
 /datum/uplink_item/jobspecific/powergloves
