@@ -153,6 +153,12 @@
 	desc = "A cockroach's severed abdomen, small but nonetheless nutritious."
 	icon_state = "roachmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, rand(5,12))
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"

@@ -30,12 +30,12 @@
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
 		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
-			var/obj/screen/screenobj = AM
+			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
@@ -417,7 +417,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
 	return
 
@@ -953,8 +953,6 @@ var/list/slot_equipment_priority = list( \
 
 	if (ismob(AM))
 		var/mob/M = AM
-		if(M.pull_damage()) //Pulling someone who's messed up will mess them up a lot further, inform the user.
-			to_chat(usr,"<span class='warning'>Pulling \the [M] in their current condition would probably be a bad idea.</span>")
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
@@ -978,6 +976,13 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
+				/*if(ishuman(AM))
+					var/mob/living/carbon/human/HM = AM
+					if (HM.drag_damage())
+						if (HM.isincrit())
+							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
+							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
+// Commented out till I can figure out how to fix people still pulling when they're pulled --snx
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1298,18 +1303,6 @@ var/list/slot_equipment_priority = list( \
 	//	if(usr.client)
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
-
-/mob/proc/pull_damage()
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		if(H.health - H.halloss <= config.health_threshold_softcrit)
-			for(var/name in H.organs_by_name)
-				var/datum/organ/external/e = H.organs_by_name[name]
-				if(H.lying)
-					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
-						return 1
-						break
-		return 0
 
 /mob/MouseDrop(mob/M as mob)
 	..()
@@ -1799,7 +1792,7 @@ mob/proc/on_foot()
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
 	var/init_deaf = ear_deaf
-	overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+	overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	blinded = 1
 	eye_blind = 1
 	ear_deaf = 1
@@ -1857,10 +1850,13 @@ mob/proc/on_foot()
 		"s_active",
 		"wear_mask",
 		"radiation",
-		"stat",
-		"suiciding")
+		"stat")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration - 1)
+		for(var/atom/movable/AM in contents)
+			drop_item(AM, force_drop = 1)
 
 	spawn(duration + 1)
 		regenerate_icons()
@@ -1868,47 +1864,39 @@ mob/proc/on_foot()
 /mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
-			transmogged_from.forceMove(loc)
-			if(key)
-				transmogged_from.key = key
-			transmogged_from.timestopped = 0
-			if(istype(transmogged_from, /mob/living/carbon))
-				var/mob/living/carbon/C = transmogged_from
-				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
-					C.drop_item(C.wear_mask, force_drop = 1)
-			var/mob/returned_mob = transmogged_from
-			returned_mob.transmogged_to = null
-			transmogged_from = null
-			for(var/atom/movable/AM in contents)
-				AM.forceMove(get_turf(src))
-			forceMove(null)
-			qdel(src)
-			return returned_mob
+			var/obj/transmog_body_container/tC = transmogged_from
+			if(tC.contained_mob)
+				tC.contained_mob.forceMove(loc)
+				if(key)
+					tC.contained_mob.key = key
+				tC.contained_mob.timestopped = 0
+				if(istype(tC.contained_mob, /mob/living/carbon))
+					var/mob/living/carbon/C = tC.contained_mob
+					if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+						C.drop_item(C.wear_mask, force_drop = 1)
+				var/mob/returned_mob = tC.contained_mob
+				returned_mob.transmogged_to = null
+				tC.get_rid_of()
+				transmogged_from = null
+				for(var/atom/movable/AM in contents)
+					AM.forceMove(get_turf(src))
+				forceMove(null)
+				qdel(src)
+				return returned_mob
 		return
 	if(!ispath(target_type, /mob))
 		EXCEPTION(target_type)
 		return
 	var/mob/M = new target_type(loc)
-	M.transmogged_from = src
+	var/obj/transmog_body_container/C = new (M)
+	M.transmogged_from = C
 	transmogged_to = M
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
 		var/spell/change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	var/static/list/drop_on_transmog = list(
-		/obj/item/weapon/disk/nuclear,
-		/obj/item/weapon/holder,
-		/obj/item/device/paicard,
-		/obj/item/device/soulstone,
-		/obj/item/device/mmi,
-		)
-	for(var/i in drop_on_transmog)
-		var/list/L = search_contents_for(i)
-		if(L.len)
-			for(var/A in L)
-				drop_item(A, force_drop = 1)
-	src.forceMove(null)
+	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
@@ -1926,6 +1914,32 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/obj/transmog_body_container
+	name = "transmog body container"
+	desc = "You should not be seeing this."
+	flags = TIMELESS
+	var/mob/contained_mob
+
+/obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
+	ASSERT(M)
+	M.forceMove(src)
+	contained_mob = M
+
+/obj/transmog_body_container/proc/get_rid_of()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	contained_mob = null
+	qdel(src)
+
+/obj/transmog_body_container/Destroy()
+	contained_mob = null
+	for(var/i in contents)
+		qdel(i)
+	..()
+
+/mob/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

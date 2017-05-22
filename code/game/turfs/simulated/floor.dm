@@ -111,6 +111,8 @@ turf/simulated/floor/update_icon()
 	else if(is_plating())
 		if(!broken && !burnt)
 			icon_state = icon_plating //Because asteroids are 'platings' too.
+	else if(is_slime_floor())
+		icon_state = "tile-slime"
 	else if(is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
 		if(T.on)
@@ -171,7 +173,6 @@ turf/simulated/floor/update_icon()
 	else if(is_arcade_floor())
 		if(!broken && !burnt)
 			icon_state = "arcade"
-
 	else if(is_wood_floor())
 		if(!broken && !burnt)
 			if( !(icon_state in wood_icons) )
@@ -260,6 +261,12 @@ turf/simulated/floor/update_icon()
 		return 1
 	return 0
 
+/turf/simulated/floor/is_slime_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/slime))
+		return 1
+	else
+		return 0
+
 /turf/simulated/floor/is_plating()
 	if(!floor_tile)
 		return 1
@@ -293,6 +300,10 @@ turf/simulated/floor/update_icon()
 	else if(is_grass_floor())
 		src.icon_state = "sand[pick("1","2","3")]"
 		broken = 1
+	else if(is_slime_floor())
+		spawn(rand(2,10))
+			make_plating()
+		return //slime burns up or completely loses form
 	else if(is_mineral_floor())
 		if(material=="diamond")
 			return //diamond doesn't break
@@ -596,6 +607,16 @@ turf/simulated/floor/update_icon()
 			new /obj/item/weapon/ore/glass(src)
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
 			to_chat(user, "<span class='notice'>You shovel the grass.</span>")
+			if(prob(10))
+				var/to_spawn = pick(
+					/obj/item/seeds/carrotseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
+					/obj/item/seeds/potatoseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+					/obj/item/seeds/whitebeetseed,
+					/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,)
+				new to_spawn(src)
+				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 		else
 			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
@@ -666,7 +687,7 @@ turf/simulated/floor/update_icon()
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
 			S.perform(user, 0, list(src))
-			//var/obj/screen/spell/SS = S.connected_button
+			//var/obj/abstract/screen/spell/SS = S.connected_button
 			//SS.update_charge(1)
 			return 1
 	return 0

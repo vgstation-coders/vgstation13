@@ -76,7 +76,7 @@
 			return
 
 		else // We are in an AI core and are unpowered.
-			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 			if(client)
 				change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				see_in_dark = 0

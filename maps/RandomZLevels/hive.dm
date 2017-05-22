@@ -133,18 +133,18 @@
 
 	var/summary_text = {"
 	<b>Situation Summary</b><br><br>
-	A hostile space craft, dubbed "The Hive", was just detected in orbit above your station. A 6.35 km encounter is expected to happen in 3 hours, after which your station will be destroyed with no chance to fight back.<br>
-	Thankfully, we have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and what could be the spaceship's vital areas.<br>
-	You are to send a strike team right in the heart of the Hive, and complete the following tasks:<br>
+	A hostile alien spacecraft, codename "The Hive", was detected in orbit above your station, preparing for an attack. Usually at this point it's too late to do anything, as even nuclear weapons are powerless against it.<br>
+	But today, there is hope for you. We have just managed to get a first ever partial scan of the Hive, revealing possible points of entry and the ship's important areas. This information should help you assemble a strike team and destroy the Hive before it destroys you.<br>
+	You are to complete the following objectives:<br>
 	<ul>
 	<li>Destroy the Hive Mind to impair the ship's communication abilities</li>
 	<li>Destroy the Hive Replicator that mass-produces alien troops</li>
 	<li>Disarm the Hive CPU and bring it to Central Command on the escape shuttle. If that is not possible, destroy it</li>
 	</ul>
 	<br>
-	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br>
-	We have attached an image with the approximate locations of your objectives. The entry point is marked with an arrow. Number 1 is the suspected location of the Hive Mind. Number 2 is the suspected location of the control room. Number 3 is the suspected location of the Hive Replicator.<br>
-	Additionally, our partial scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as we have no further idea of what might await you inside.<br>"}
+	A gateway drone has been crashed into one of the entrances into the ship. Your station's gateway will be linked to it shortly.<br><br>
+	We have also attached an image with the approximate locations of your targets. The entry point is marked with an arrow. Number 1 is the suspected location of the Hive Mind. Number 2 is the suspected location of the control room. Number 3 is the suspected location of the Hive Replicator.<br>
+	The scans have shown signs of dangerous levels of background radiation, ambient magnetic fields, a hostile atmosphere and presence of alien life forms. Prepare for the assault thoroughly, as no living man before has ever entered the Hive, and nobody knows what might await you inside.<br>"}
 
 /datum/command_alert/awaymission/hive/announce()
 	..()
@@ -167,7 +167,8 @@
 	play_sound = 'sound/ambience/spookymaint2.ogg'
 
 /obj/effect/narration/hive/lake
-	msg = "The first thing you see as you enter this room is the massive supermatter lake on its bottom. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks hanging from the ceiling, you better be careful - a single misstep, and you'll be pulled down into the lake faster than you'd be able to react."
+	msg = {"The first thing you see as you enter this room is the massive supermatter lake on its bottom. It constantly sizzles and sparks as dust specks collide with it. If you're going to walk on these catwalks hanging from the ceiling, you better be careful - a single misstep, and you'll be pulled down into the lake faster than you'd be able to do anything.<br>
+	<i>Switch to <b>"walk"</b> intent to move carefully.</i><br>"}
 
 /obj/effect/narration/hive/cloning_hallway
 	msg = "You notice that the surface of the floors and walls around you becomes more and more porous, and more... alive. You must be approaching the cloning chamber."
@@ -390,6 +391,18 @@
 	//Dimmer light
 	light_range = 3
 	light_power = 1
+
+/turf/unsimulated/wall/supermatter/no_spread/lake/Bumped(atom/AM)
+	if(isliving(AM))
+		var/mob/living/L = AM
+		//Being on walk intent prevents you from instant death
+
+		//Exceptions: you're blind, you're getting thrown, or you're incapacitated (stunned)
+		if(!L.incapacitated() && !L.throwing && !L.is_blind() && (L.m_intent == M_INTENT_WALK))
+			to_chat(L, "<span class='notice'>You avoid stepping into \the [src].</span>")
+			return
+
+	return ..()
 
 /turf/unsimulated/wall/supermatter/no_spread/lake/Consume(atom/A)
 	var/datum/map_element/away_mission/hive/hive

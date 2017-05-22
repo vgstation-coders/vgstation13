@@ -103,7 +103,7 @@
 	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source."
 
 	charge_max = 200
-	spell_flags = CONSTRUCT_CHECK
+	spell_flags = CONSTRUCT_CHECK|IGNORESPACE|IGNOREDENSE|NODUPLICATE
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 0

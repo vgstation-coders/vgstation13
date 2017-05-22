@@ -433,7 +433,7 @@
 				if(M.acidable())
 					M.take_organ_damage(min(15, volume * 2))
 
-		else if(H.dna.mutantrace == "slime")
+		else if(isslimeperson(H))
 
 			H.adjustToxLoss(rand(1,3))
 
@@ -445,7 +445,7 @@
 	if(volume >= 3) //Hardcoded
 		T.wet(800)
 
-	var/hotspot = (locate(/obj/fire) in T)
+	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
 		lowertemp.temperature = max(min(lowertemp.temperature-2000, lowertemp.temperature / 2), 0)
@@ -660,10 +660,10 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/human = M
-		if(human.dna.mutantrace == null)
+		if(!isslimeperson(human))
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
-			human.dna.mutantrace = "slime"
-			human.update_mutantrace()
+			human.set_species("Evolved Slime")
+			human.regenerate_icons()
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"
@@ -1756,7 +1756,7 @@
 			M.adjustToxLoss(rand(5, 10))
 
 		for(var/mob/living/carbon/human/H in T)
-			if(H.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				H.adjustToxLoss(rand(0.5, 1))
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -2365,7 +2365,7 @@
 
 	if(..())
 		return 1
-
+	
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
 
@@ -2965,6 +2965,9 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
 	switch(data)
 		if(1 to 15)
 			M.bodytemperature += 0.6 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -2972,19 +2975,19 @@
 				holder.remove_reagent("frostoil", 5)
 			if(isslime(M))
 				M.bodytemperature += rand(5,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature += rand(5,20)
 		if(15 to 25)
 			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature += rand(10,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature += rand(10,20)
 		if(25 to INFINITY)
 			M.bodytemperature += 1.2 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature += rand(15,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature += rand(15,20)
 	data++
 
@@ -3057,6 +3060,9 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
 	switch(data)
 		if(1 to 15)
 			M.bodytemperature = max(M.bodytemperature-0.3 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
@@ -3064,13 +3070,13 @@
 				holder.remove_reagent("capsaicin", 5)
 			if(isslime(M))
 				M.bodytemperature -= rand(5,20)
-			if(M.dna && M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(5,20)
 		if(15 to 25)
 			M.bodytemperature = max(M.bodytemperature-0.6 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
 			if(isslime(M))
 				M.bodytemperature -= rand(10,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(10,20)
 		if(25 to INFINITY)
 			M.bodytemperature = max(M.bodytemperature-0.9 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
@@ -3078,7 +3084,7 @@
 				M.emote("shiver")
 			if(isslime(M))
 				M.bodytemperature -= rand(15,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(15,20)
 	data++
 
@@ -3090,7 +3096,7 @@
 	for(var/mob/living/carbon/slime/M in T)
 		M.adjustToxLoss(rand(15, 30))
 	for(var/mob/living/carbon/human/H in T)
-		if(H.dna.mutantrace == "slime")
+		if(isslimeperson(H))
 			H.adjustToxLoss(rand(5, 15))
 
 /datum/reagent/sodiumchloride
@@ -3441,7 +3447,7 @@
 
 	if(volume >= 3)
 		T.wet(800)
-	var/hotspot = (locate(/obj/fire) in T)
+	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
 		lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2), 0)
@@ -4150,6 +4156,9 @@
 	if(..())
 		return 1
 
+	var/mob/living/carbon/human/H
+	if(ishuman(M))
+		H = M
 	switch(data)
 		if(1 to 15)
 			M.bodytemperature -= 0.1 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -4157,13 +4166,13 @@
 				holder.remove_reagent("capsaicin", 5)
 			if(isslime(M))
 				M.bodytemperature -= rand(5,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(5,20)
 		if(15 to 25)
 			M.bodytemperature -= 0.2 * TEMPERATURE_DAMAGE_COEFFICIENT
 			if(isslime(M))
 				M.bodytemperature -= rand(10,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(10,20)
 		if(25 to INFINITY)
 			M.bodytemperature -= 0.3 * TEMPERATURE_DAMAGE_COEFFICIENT
@@ -4171,7 +4180,7 @@
 				M.emote("shiver")
 			if(isslime(M))
 				M.bodytemperature -= rand(15,20)
-			if(M.dna.mutantrace == "slime")
+			if(isslimeperson(H))
 				M.bodytemperature -= rand(15,20)
 	data++
 
@@ -5508,7 +5517,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		volume = holder.maximum_volume
 		holder.update_total()
 
-datum/reagent/fishbleach
+/datum/reagent/fishbleach
 	name = "Fish Bleach"
 	id = FISHBLEACH
 	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
@@ -5520,3 +5529,32 @@ datum/reagent/fishbleach
 		return 1
 	H.color = "#12A7C9"
 	return
+
+/datum/reagent/roach_shell
+	name = "Cockroach chitin"
+	id = ROACHSHELL
+	description = "Looks like somebody's been shelling peanuts."
+	reagent_state = SOLID
+	color = "#8B4513"
+
+/datum/reagent/ethanol/deadrum/greyvodka
+	name = "Greyshirt vodka"
+	id = GREYVODKA
+	description = "Made presumably from whatever scrapings you can get out of maintenance. Don't think, just drink."
+	reagent_state = LIQUID
+	color = "#DEF7F5"
+	alpha = 64
+
+/datum/reagent/ethanol/deadrum/greyvodka/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	H.radiation = max(H.radiation - 5 * REM, 0)
+	H.rad_tick = max(H.rad_tick - 3 * REM, 0)
+
+/datum/reagent/mediumcores
+	name = "medium-salted cores"
+	id = MEDCORES
+	description = "A derivative of the chemical known as 'Hardcores', easier to mass produce, but at a cost of quality."
+	reagent_state = SOLID
+	color = "#FFA500"
+	custom_metabolism = 0.1

@@ -19,7 +19,7 @@
 	to_chat(src, msg)
 
 /client/proc/advwho() //Gives info on character name and living/dead/antag status, as well as the regular Who list.
-	set name = "Who (Advanced)"
+	set name = "Who Advanced"
 	set category = "Admin"
 
 	var/msg = "\n<b>Current Players:</b>\n"

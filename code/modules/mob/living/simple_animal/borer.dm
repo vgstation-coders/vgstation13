@@ -190,7 +190,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			severity = 6
 
 	if(severity > 0)
-		overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+		overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
 	else
 		clear_fullscreen("damage")
 
@@ -313,7 +313,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/encoded_message = html_encode(message)
 
 	to_chat(src, "You drop words into [host]'s body: <span class='borer2host'>\"[encoded_message]\"</span>")
-	if(hostlimb == LIMB_HEAD)
+	if(host.transmogged_to)
+		to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+	else if(hostlimb == LIMB_HEAD)
 		to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
 	else
 		to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")

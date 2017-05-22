@@ -247,6 +247,13 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 
+/datum/recipe/valentinebar
+	items = list(
+		/obj/item/organ/heart,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+
 // Human ///////////////////////////////////////////////////////
 
 /datum/recipe/human //Parent datum only
@@ -2252,7 +2259,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 		)
-	result = /obj/poutineocean
+	result = /obj/structure/poutineocean
 
 /datum/recipe/poutinecitadel
 	reagents = list (MAPLESYRUP = 50)
@@ -2263,7 +2270,26 @@
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
 		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
 		)
-	result = /obj/poutineocean/poutinecitadel
+	result = /obj/structure/poutineocean/poutinecitadel
+
+
+/datum/recipe/mud_pie
+	reagents = list(WATER = 25)
+	items = list(
+		/obj/item/weapon/ore/glass,
+		/obj/item/weapon/ore/glass,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
+	
+/datum/recipe/power_crepe
+	reagents = list(RADIUM = 5)
+	items = list(
+		/obj/item/weapon/cell,
+		/obj/item/weapon/reagent_containers/food/snacks/dough,
+		/obj/item/stack/cable_coil,
+		)
+	result = /obj/item/weapon/cell/crepe
+	time = 300
 
 /*seafood!*/
 

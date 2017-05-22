@@ -122,3 +122,20 @@
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
+
+var/list/wizard_snakes
+
+/mob/living/simple_animal/cat/snek/wizard/New()	//For the snake spell
+	..()
+	if(!wizard_snakes)
+		wizard_snakes = list()
+	wizard_snakes.Add(src)
+
+/mob/living/simple_animal/cat/snek/wizard/Die()
+	if(!transmogrify())
+		visible_message("<span class='notice'>\The [src] vanishes!</span>")
+		qdel(src)
+
+/mob/living/simple_animal/cat/snek/wizard/Destroy()
+	wizard_snakes.Remove(src)
+	..()

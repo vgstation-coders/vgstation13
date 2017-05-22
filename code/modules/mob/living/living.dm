@@ -295,7 +295,13 @@
 	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
 		return 0
 
-	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
+	var/mult = 1
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(H.species.tox_mod)
+			mult = H.species.tox_mod
+
+	toxloss = min(max(toxloss + (amount * tox_damage_modifier * mult), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
 	if(status_flags & GODMODE)
@@ -536,6 +542,7 @@ Thanks.
 	germ_level = 0
 	next_pain_time = 0
 	radiation = 0
+	rad_tick = 0
 	nutrition = 400
 	bodytemperature = 310
 	sdisabilities = 0
@@ -703,33 +710,40 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-//this is the gay blood on floor shit -- Added back --snx
-							if (M.lying && (prob(M.getBruteLoss() / 3)))	
-								if(prob(6)) //Too much bloooooood
-									if(isturf(M.loc))
-										blood_splatter(M.loc,M)
-										if(ishuman(M))
-											var/mob/living/carbon/H = M
-											var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
+							/* Drag damage is here!*/
+							var/mob/living/carbon/human/HM = M
+							var/list/damaged_organs = HM.drag_damage()
+							if (damaged_organs)
+								if(!HM.isincrit() && damaged_organs.len)
+									if(prob(HM.getBruteLoss() / 5)) //Chance to damage
+										for(var/datum/organ/external/damagedorgan in damaged_organs)
+											if((damagedorgan.brute_dam) < damagedorgan.max_damage)
+												HM.apply_damage(2, BRUTE, damagedorgan)
+												HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
+												HM.UpdateDamageIcon()
+									if(prob(HM.getBruteLoss() / 8)) //Chance to bleed
+										blood_splatter(HM.loc,HM)
+										var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
+										if(blood_volume > 0)
+											HM:vessel.remove_reagent("blood",4)
+											HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
+
+								if(HM.isincrit() && damaged_organs.len) //Crit damage boost
+									if(prob(15))
+										for(var/datum/organ/external/damagedorgan in damaged_organs)
+											if((damagedorgan.brute_dam) < damagedorgan.max_damage)
+												HM.apply_damage(4, BRUTE, damagedorgan)
+												HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
+												add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
+												HM.UpdateDamageIcon()
+									if(prob(8))
+										if(isturf(HM.loc))
+											blood_splatter(HM.loc,HM,1)
+											var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
 											if(blood_volume > 0)
-												H:vessel.remove_reagent("blood",2)
-												M.visible_message("<span class='warning'>\The [M] loses some blood from being dragged!</span>")
-								if(prob(50))
-									M.adjustBruteLoss(1)
-									M.visible_message("<span class='warning'>\The [M]'s wounds worsen from being dragged!</span>")
-							if(M.pull_damage())
-								if(prob(25))
-									M.adjustBruteLoss(2)
-									M.visible_message("<span class='danger'>\The [M]'s wounds worsen terribly from being dragged!</span>")
-									if(prob(25))
-										if(isturf(M.loc))
-											blood_splatter(M.loc,M,1)
-											if(ishuman(M))
-												var/mob/living/carbon/H = M
-												var/blood_volume = round(H:vessel.get_reagent_amount("blood"))
-												if(blood_volume > 0)
-													H:vessel.remove_reagent("blood",5)
-													M.visible_message("<span class='danger'>\The [M] loses a lot of blood from being dragged!</span>")
+												HM:vessel.remove_reagent("blood",8)
+												HM.visible_message("<span class='danger'>\The [HM] loses a lot of blood from being dragged!</span>")
+												add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
@@ -1526,7 +1540,7 @@ Thanks.
 	affect_silicon = 0 means that the flash won't affect silicons at all.
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
@@ -1585,6 +1599,7 @@ Thanks.
 		"fire_stacks",
 		"specialsauce",
 		"silent",
-		"is_ventcrawling")
+		"is_ventcrawling",
+		"suiciding")
 
 	reset_vars_after_duration(resettable_vars, duration)

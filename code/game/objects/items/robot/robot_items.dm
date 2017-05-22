@@ -14,27 +14,28 @@
 	icon = 'icons/obj/decals.dmi'
 	icon_state = "shock"
 
-	attack(mob/M as mob, mob/living/silicon/robot/user as mob)
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
-		msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
+	user.do_attack_animation(M, src)
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+	msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
 
-		user.cell.charge -= 30
+	user.cell.charge -= 30
 
-		M.Knockdown(5)
-		if (M.stuttering < 5)
-			M.stuttering = 5
-		M.Stun(5)
+	M.Knockdown(5)
+	if (M.stuttering < 5)
+		M.stuttering = 5
+	M.Stun(5)
 
-		for(var/mob/O in viewers(M, null))
-			if (O.client)
-				O.show_message("<span class='danger'>[user] has prodded [M] with an electrically-charged arm!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
+	for(var/mob/O in viewers(M, null))
+		if (O.client)
+			O.show_message("<span class='danger'>[user] has prodded [M] with an electrically-charged arm!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 
 /obj/item/borg/overdrive
 	name = "overdrive"
@@ -180,6 +181,7 @@
 	if(safety == TRUE)
 		user.visible_message("<span class='big danger'>HUMAN HARM</font>")
 		playsound(get_turf(src), 'sound/AI/harmalarm.ogg', 70, 3)
+		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		for(var/mob/living/carbon/M in hearers(9, user))
 			if(M.earprot())
 				continue
@@ -190,14 +192,14 @@
 			M.dizziness += 5
 			M.confused +=  5
 			M.Jitter(5)
-			add_gamelogs(user, "alarmed [key_name(M)] with \the [src]", tp_link = FALSE)
+			add_gamelogs(user, "alarmed [key_name(M)] with \the [src]", admin = FALSE, tp_link = FALSE)
 		cooldown = world.time + 20 SECONDS
-		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		return
 
 	if(safety == FALSE)
 		user.visible_message("<span class='big danger'>BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT</font>")
 		playsound(get_turf(src), 'sound/machines/warning-buzzer.ogg', 130, 3)
+		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 		for(var/mob/living/carbon/M in hearers(6, user))
 			if(M.earprot())
 				continue
@@ -206,6 +208,5 @@
 			M.ear_deaf += 10
 			M.Knockdown(7) // CAN'T WAKE UP
 			M.Jitter(30)
-			add_gamelogs(user, "knocked out [key_name(M)] with an emagged [name]", tp_link = FALSE)
+			add_gamelogs(user, "knocked out [key_name(M)] with an emagged [name]", admin = FALSE, tp_link = FALSE)
 		cooldown = world.time + 1 MINUTES
-		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")

@@ -426,13 +426,13 @@
 			clear_fullscreens()
 
 			if(src.eye_blind)
-				overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+				overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 			if (src.disabilities & NEARSIGHTED)
-				overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
+				overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
 			if (src.eye_blurry)
-				overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+				overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 			if (src.druggy)
-				overlay_fullscreen("high", /obj/screen/fullscreen/high)
+				overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 
 		if (stat != 2)
 			if (machine)

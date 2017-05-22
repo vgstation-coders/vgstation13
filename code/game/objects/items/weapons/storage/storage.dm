@@ -19,8 +19,8 @@
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 7 //The number of storage slots in this container.
-	var/obj/screen/storage/boxes = null
-	var/obj/screen/close/closer = null
+	var/obj/abstract/screen/storage/boxes = null
+	var/obj/abstract/screen/close/closer = null
 	var/use_to_pickup	//Set this to make it possible to use this item in an inverse way, so you can have the item in your hand and click items on the floor to pick them up.
 	var/display_contents_with_number	//Set this to make the storage item group contents of the same type and display them as a number.
 	var/allow_quick_empty	//Set this variable to allow the object to have the 'empty' verb, which dumps all the contents on the floor.
@@ -30,15 +30,19 @@
 	var/foldable_amount = 1 // Number of foldables to produce, if any - N3X
 	var/internal_store = 0
 
+/obj/item/weapon/storage/proc/can_use()
+	return TRUE
+
 /obj/item/weapon/storage/MouseDrop(obj/over_object as obj)
 	if (ishuman(usr) || ismonkey(usr)) //so monkeys can take off their backpacks -- Urist
 		var/mob/M = usr
 		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object) && Adjacent(M))
 			var/mob/living/L = usr
 			if(istype(L) && !(L.incapacitated() || L.lying))
-				empty_contents_to(over_object)
+				if(can_use())
+					empty_contents_to(over_object)
 
-		if(!( istype(over_object, /obj/screen/inventory) ))
+		if(!( istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
 
 		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
@@ -46,7 +50,7 @@
 
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		if(!( M.restrained() ) && !( M.stat ))
-			var/obj/screen/inventory/OI = over_object
+			var/obj/abstract/screen/inventory/OI = over_object
 
 			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)
@@ -319,7 +323,7 @@
 	if(!istype(W))
 		return 0
 	if(usr)
-		usr.u_equip(W,1)
+		usr.u_equip(W,0)
 		usr.update_icons()	//update our overlays
 	W.forceMove(src)
 	W.on_enter_storage(src)
@@ -523,13 +527,13 @@
 	else
 		verbs -= /obj/item/weapon/storage/verb/toggle_gathering_mode
 
-	src.boxes = getFromPool(/obj/screen/storage)
+	src.boxes = getFromPool(/obj/abstract/screen/storage)
 	src.boxes.name = "storage"
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
 	src.boxes.layer = HUD_BASE_LAYER
-	src.closer = getFromPool(/obj/screen/close)
+	src.closer = getFromPool(/obj/abstract/screen/close)
 	src.closer.master = src
 	src.closer.icon_state = "x"
 	src.closer.layer = HUD_ITEM_LAYER

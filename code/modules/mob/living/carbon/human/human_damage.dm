@@ -124,6 +124,8 @@
 	..()
 
 	amount = amount * clone_damage_modifier
+	if(isslimeperson(src))
+		amount = 0
 
 	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
 		return 0

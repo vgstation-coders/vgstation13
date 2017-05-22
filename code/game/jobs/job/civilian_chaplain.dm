@@ -71,7 +71,7 @@
 				else
 					J = "Magister"
 				deity_name = "Satan"
-			if("cthulhu", "outer gods", "elder gods", "esoteric order of dagon")
+			if("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
 				B.name = pick("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 				deity_name = "Cthulhu" //I hope it's spelt correctly
 			if("islam", "muslim")

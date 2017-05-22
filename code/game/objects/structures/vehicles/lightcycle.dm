@@ -166,7 +166,7 @@
 		if(delay_ribbon)
 			delay_ribbon--
 		else
-			new /obj/lightribbon(T,l_color,lastdir,lastLASTdir)
+			new /obj/effect/lightribbon(T,l_color,lastdir,lastLASTdir)
 			lastLASTdir = lastdir
 			lastdir = dir
 
@@ -205,7 +205,7 @@
 
 	occupant.pixel_y = 2 * PIXEL_MULTIPLIER
 
-/obj/lightribbon
+/obj/effect/lightribbon
 	name = "light ribbon"
 	desc = "A wall of light ejected from the back of a light cycle."
 	anchored = 1
@@ -215,7 +215,7 @@
 	var/l_color = "#FFFFFF"
 	var/erasing = FALSE
 
-/obj/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
+/obj/effect/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
 	..(A)
 	if(currdir)
 		if(!lastdir)
@@ -238,14 +238,14 @@
 		icon += l_color
 	set_light(1,5,l_color)
 
-/obj/lightribbon/attackby(obj/item/weapon/W, mob/user)
+/obj/effect/lightribbon/attackby(obj/item/weapon/W, mob/user)
 	if(!(user.locked_to && istype(user.locked_to, /obj/structure/bed/chair/vehicle/lightcycle)))
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
 		qdel(src)
 
-/obj/lightribbon/proc/erase()	//can be called by admins to erase the whole line of ribbon
+/obj/effect/lightribbon/proc/erase()	//can be called by admins to erase the whole line of ribbon
 	erasing = TRUE
-	for(var/obj/lightribbon/L in orange(1,src))
+	for(var/obj/effect/lightribbon/L in orange(1,src))
 		if(L.l_color == l_color)
 			if(!L.erasing)
 				spawn(1)

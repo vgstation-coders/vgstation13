@@ -89,7 +89,7 @@
 	if(!istype(M, /mob/living/carbon))
 		return
 	if (hasorgans(M))
-		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
+		var/datum/organ/external/temp = M.get_active_hand_organ()
 
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
@@ -103,7 +103,8 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(dna.mutantrace == "slime")
+	var/mob/living/carbon/human/H = src
+	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
@@ -138,7 +139,7 @@
 	if(++active_hand > held_items.len)
 		active_hand = 1
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -149,7 +150,7 @@
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
 		if(active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
@@ -306,7 +307,7 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen)
+	if(target.type == /obj/abstract/screen)
 		return
 
 	var/atom/movable/item = src.get_active_hand()

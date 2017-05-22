@@ -66,11 +66,14 @@
 /mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Golem")
-	gender = NEUTER
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Grue")
+
+/mob/living/carbon/human/slime/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Slime")
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
@@ -112,6 +115,9 @@
 
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
+	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
+	multicolor_skin_g = rand(0,255)
+	multicolor_skin_b = rand(0,255)
 
 	if(!src.species)
 		if(new_species_name)
@@ -140,29 +146,29 @@
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
 
-	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/Overlays/fire_layer)
-	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/Overlays/mutantrace_layer)
-	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/Overlays/damage_layer)
-	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/Overlays/uniform_layer)
-	obj_overlays[ID_LAYER]			= getFromPool(/obj/Overlays/id_layer)
-	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/Overlays/shoes_layer)
-	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/Overlays/gloves_layer)
-	obj_overlays[EARS_LAYER]		= getFromPool(/obj/Overlays/ears_layer)
-	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/Overlays/suit_layer)
-	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/Overlays/glasses_layer)
-	obj_overlays[BELT_LAYER]		= getFromPool(/obj/Overlays/belt_layer)
-	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/Overlays/suit_store_layer)
-	obj_overlays[BACK_LAYER]		= getFromPool(/obj/Overlays/back_layer)
-	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/Overlays/hair_layer)
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/Overlays/glasses_over_hair_layer)
-	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/Overlays/facemask_layer)
-	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
-	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/Overlays/handcuff_layer)
-	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/Overlays/legcuff_layer)
-	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/Overlays/hand_layer) //moved to human/update_inv_hand()
-	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/Overlays/tail_layer)
-	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/Overlays/targeted_layer)
+	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
+	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
+	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
+	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
+	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
+	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
+	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/abstract/Overlays/gloves_layer)
+	obj_overlays[EARS_LAYER]		= getFromPool(/obj/abstract/Overlays/ears_layer)
+	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
+	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/abstract/Overlays/glasses_layer)
+	obj_overlays[BELT_LAYER]		= getFromPool(/obj/abstract/Overlays/belt_layer)
+	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/abstract/Overlays/suit_store_layer)
+	obj_overlays[BACK_LAYER]		= getFromPool(/obj/abstract/Overlays/back_layer)
+	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/abstract/Overlays/hair_layer)
+	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/abstract/Overlays/glasses_over_hair_layer)
+	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/abstract/Overlays/facemask_layer)
+	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
+	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/abstract/Overlays/handcuff_layer)
+	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/abstract/Overlays/legcuff_layer)
+	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/abstract/Overlays/hand_layer) //moved to human/update_inv_hand()
+	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/abstract/Overlays/tail_layer)
+	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/abstract/Overlays/targeted_layer)
 
 	..()
 
@@ -187,6 +193,9 @@
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
 	update_colour(0,1)
+
+	spawn()
+		update_mutantrace()
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
@@ -1267,6 +1276,9 @@
 	src.species = new S.type
 	src.species.myhuman = src
 
+	if(S.gender)
+		gender = S.gender
+
 	for(var/L in species.known_languages)
 		add_language(L)
 	if(species.default_language)
@@ -1275,7 +1287,7 @@
 		src.verbs |= species.abilities
 	if(species.spells)
 		for(var/spell in species.spells)
-			add_spell(spell, "racial_spell_ready", /obj/screen/movable/spell_master/racial)
+			add_spell(spell, "racial_spell_ready", /obj/abstract/screen/movable/spell_master/racial)
 	if(force_organs || !src.organs || !src.organs.len)
 		src.species.create_organs(src)
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
@@ -1676,6 +1688,20 @@
 /mob/living/carbon/human/is_fat()
 	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
+mob/living/carbon/human/isincrit()
+	if (health - halloss <= config.health_threshold_softcrit)
+		return 1
+
+/mob/living/carbon/human/drag_damage()
+	var/mob/living/carbon/human/H = src
+	var/turf/TH = H.loc
+	var/list/return_organs = list()
+	if (TH.has_gravity() && H.lying)
+		for(var/datum/organ/external/damagedorgan in H.organs)
+			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
+				return_organs += damagedorgan
+		return return_organs
+
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
@@ -1712,6 +1738,7 @@
 
 	species.brute_mod *= rand(5,20)/10
 	species.burn_mod *= rand(5,20)/10
+	species.tox_mod *= rand(5,20)/10
 
 	if(prob(5))
 		species.flags = rand(0,65535)
@@ -1773,3 +1800,8 @@
 		O.send_to_past(duration)
 
 	updatehealth()
+
+/mob/living/carbon/human/attack_icon()
+	if(M_HULK in mutations)
+		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
+	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
