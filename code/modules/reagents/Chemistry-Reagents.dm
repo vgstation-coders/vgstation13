@@ -2377,7 +2377,6 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	var/has_been_hypozined = 0
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
-	var/hypozined_at = 0 //world.time
 	custom_metabolism = 0.04
 	var/oldspeed = 0
 	data = 1
@@ -2414,13 +2413,13 @@
 		if(60 to 100)	//Speed up after a minute
 			if(data==60)
 				to_chat(M, "<span class='notice'>You feel faster.")
-			M.movement_speed_modifier = 1.5
+			M.movement_speed_modifier += 0.5
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("Your leg muscles pulsate", "You feel invigorated", "You feel like running")].")
 		if(101 to 115)	//painfully fast
 			if(data==101)
 				to_chat(M, "<span class='notice'>Your muscles start to feel pretty hot.")
-			M.movement_speed_modifier = 2
+			M.movement_speed_modifier += 0.5
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(10))
@@ -2430,7 +2429,7 @@
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
 				H.adjustFireLoss(0.1)
 		if(116 to 120)	//traverse at a velocity exceeding the norm
-			M.movement_speed_modifier = 4
+			M.movement_speed_modifier += 2
 			if(data==116)
 				to_chat(M, "<span class='danger'>Your muscles are burning up!")
 			if(ishuman(M))
@@ -2443,12 +2442,11 @@
 				H.adjustToxLoss(1)
 				H.adjustFireLoss(2)
 		if(121 to INFINITY)	//went2fast
-			M.movement_speed_modifier = oldspeed
 			dehypozine(M)
 	data++
 
 /datum/reagent/hypozine/proc/dehypozine(var/mob/living/M, heartdamage = 100, override_remove = 0, explodeheart = 1)
-
+	M.movement_speed_modifier = oldspeed
 	if(has_been_hypozined && !has_had_heart_explode)
 		has_had_heart_explode = 1
 		if(!override_remove)
@@ -2460,7 +2458,7 @@
 				if(H.get_heart())//Got a heart?
 					var/datum/organ/internal/heart/damagedheart = H.get_heart()
 					if (heartdamage >= 100)
-						if(H.species.name != "Diona") //fuck dionae
+						if(H.species.name != "Diona" && damagedheart) //fuck dionae
 							to_chat(H, "<span class='alert'>You feel a terrible pain in your chest!</span>")
 							damagedheart.damage += 200 //Bye heart.
 							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
