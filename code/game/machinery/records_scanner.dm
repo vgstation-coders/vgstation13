@@ -115,10 +115,6 @@ obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
 	M.fields["cdi_d"] = "No diseases have been diagnosed at the moment."
 	M.fields["notes"] = "No notes."
 	S.fields["criminal"] = "None"
-	S.fields["mi_crim"] = "None"
-	S.fields["mi_crim_d"] = "No minor crime convictions."
-	S.fields["ma_crim"] = "None"
-	S.fields["ma_crim_d"] = "No major crime convictions."
 	S.fields["notes"] = "No notes."
 
 	//Begin locked reporting
@@ -139,5 +135,3 @@ obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
 	data_core.medical += M
 	data_core.security += S
 	data_core.locked += L
-
-

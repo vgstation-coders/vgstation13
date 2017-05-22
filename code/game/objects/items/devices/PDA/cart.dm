@@ -509,12 +509,14 @@ Code:
 			if (istype(active3, /datum/data/record) && (active3 in data_core.security))
 
 				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
-					Minor Crimes: [active3.fields["mi_crim"]]<br>
-					Details: [active3.fields["mi_crim"]]<br><br>
-					Major Crimes: [active3.fields["ma_crim"]]<br>
-					Details: [active3.fields["ma_crim_d"]]<br><br>
 					Important Notes:<br>
-					[active3.fields["notes"]]"}
+					[active3.fields["notes"]]
+					Comments/Log:<br>"}
+				var/counter = 1
+				while(active3.fields["com_[counter]"])
+					menu += "[active3.fields["com_[counter]"]]<BR>"
+					counter++
+
 			else
 				menu += "<b>Record Lost!</b><br>"
 
