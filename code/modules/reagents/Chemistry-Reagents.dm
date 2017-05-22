@@ -2372,7 +2372,7 @@
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
-	description = "Hypozine is an extremely effective, short lasting, muscle stimulant. Metabolises rather slowly."
+	description = "Hypozine is an extremely effective, short lasting, muscle stimulant."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	var/has_been_hypozined = 0
@@ -2436,9 +2436,9 @@
 				var/mob/living/carbon/human/H = M
 				if(prob(25))
 					if (M.get_heart())
-						to_chat(M, "<span class='danger'>[pick("Your legs are burning", "All you feel is your heart racing", "You feel like you have to run away from it all")]!")
+						to_chat(M, "<span class='danger'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
 					else 
-						to_chat(M, "<span class='danger'>[pick("Your legs are burning", "You feel like you're on fire", "You feel like you have to run away from it all")]!")
+						to_chat(M, "<span class='danger'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
 				H.adjustToxLoss(1)
 				H.adjustFireLoss(2)
 		if(121 to INFINITY)	//went2fast
