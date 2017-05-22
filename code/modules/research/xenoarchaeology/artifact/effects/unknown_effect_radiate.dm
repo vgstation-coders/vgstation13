@@ -11,20 +11,20 @@
 
 /datum/artifact_effect/radiate/DoEffectTouch(var/mob/living/user)
 	if(user)
-		user.apply_radiation(radiation_amount * 5,INTERNAL)
+		user.apply_radiation(radiation_amount * 5,RAD_INTERNAL)
 		user.updatehealth()
 		return 1
 
 /datum/artifact_effect/radiate/DoEffectAura()
 	if(holder)
 		for (var/mob/living/M in range(src.effectrange,holder))
-			M.apply_radiation(radiation_amount,INTERNAL)
+			M.apply_radiation(radiation_amount,RAD_INTERNAL)
 			M.updatehealth()
 		return 1
 
 /datum/artifact_effect/radiate/DoEffectPulse()
 	if(holder)
 		for (var/mob/living/M in range(src.effectrange,holder))
-			M.apply_radiation(radiation_amount * 25,INTERNAL)
+			M.apply_radiation(radiation_amount * 25,RAD_INTERNAL)
 			M.updatehealth()
 		return 1

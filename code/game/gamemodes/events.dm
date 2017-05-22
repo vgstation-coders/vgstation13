@@ -232,9 +232,9 @@
 		if(T.z != map.zMainStation)
 			continue
 		if(istype(H,/mob/living/carbon/human))
-			H.apply_radiation((rand(15,75)),EXTERNAL)
+			H.apply_radiation((rand(15,75)),RAD_EXTERNAL)
 			if (prob(5))
-				H.apply_radiation((rand(90,150)),EXTERNAL)
+				H.apply_radiation((rand(90,150)),RAD_EXTERNAL)
 			if (prob(25))
 				if (prob(75))
 					randmutb(H)
@@ -248,7 +248,7 @@
 			continue
 		if(T.z != map.zMainStation)
 			continue
-		M.apply_radiation((rand(15,75)),EXTERNAL)
+		M.apply_radiation((rand(15,75)),RAD_EXTERNAL)
 	sleep(100)
 	command_alert(/datum/command_alert/radiation)
 

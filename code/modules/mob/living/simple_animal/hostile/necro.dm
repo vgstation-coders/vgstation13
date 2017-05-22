@@ -640,7 +640,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/unarmed_attack_mob(mob/living/target)
 	..()
-	target.apply_radiation(rand(melee_damage_lower, melee_damage_upper)/5, EXTERNAL)
+	target.apply_radiation(rand(melee_damage_lower, melee_damage_upper)/5, RAD_EXTERNAL)
 
 #define RAD_COST 100
 
@@ -677,7 +677,7 @@
 			var/list/can_see = view(src, vision_range)
 			for(var/mob/living/carbon/human/H in can_see)
 				var/rad_cost = min(radiation, rand(10,20))
-				H.apply_radiation(rad_cost, EXTERNAL)
+				H.apply_radiation(rad_cost, RAD_EXTERNAL)
 				radiation -= rad_cost
 			for(var/mob/living/simple_animal/hostile/necro/zombie/ghoul/G in can_see)
 				if(G.isDead() && radiation > 100)
@@ -685,7 +685,7 @@
 					radiation -= 100
 				if(radiation > 25)
 					var/rad_cost = min(radiation, rand(10,20))
-					G.apply_radiation(10, EXTERNAL)
+					G.apply_radiation(10, RAD_EXTERNAL)
 					radiation -= rad_cost
 			last_rad_blast = world.time
 			spawn(3 SECONDS)

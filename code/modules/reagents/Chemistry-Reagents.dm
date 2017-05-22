@@ -554,7 +554,7 @@
 		return 1
 
 	M.adjustToxLoss(-2 * REM)
-	M.apply_radiation(4 * REM,INTERNAL)
+	M.apply_radiation(4 * REM,RAD_INTERNAL)
 
 /datum/reagent/toxin
 	name = "Toxin"
@@ -1362,7 +1362,7 @@
 	if(..())
 		return 1
 
-	M.apply_radiation(2 * REM, INTERNAL)
+	M.apply_radiation(2 * REM, RAD_INTERNAL)
 	//Radium may increase your chances to cure a disease
 	if(iscarbon(M)) //Make sure to only use it on carbon mobs
 		var/mob/living/carbon/C = M
@@ -1371,7 +1371,7 @@
 				var/datum/disease2/disease/V = C.virus2[ID]
 				if(prob(5))
 					if(prob(50))
-						C.apply_radiation(50, INTERNAL) //Curing it that way may kill you instead
+						C.apply_radiation(50, RAD_INTERNAL) //Curing it that way may kill you instead
 						C.adjustToxLoss(100)
 					C.antibodies |= V.antigen
 
@@ -1508,7 +1508,7 @@
 		M = holder.my_atom
 	if(..())
 		return 1
-	M.apply_radiation(10,INTERNAL)
+	M.apply_radiation(10,RAD_INTERNAL)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -1630,7 +1630,7 @@
 	if(..())
 		return 1
 
-	M.apply_radiation(1, INTERNAL)
+	M.apply_radiation(1, RAD_INTERNAL)
 
 /datum/reagent/uranium/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -1653,7 +1653,7 @@
 	if(..())
 		return 1
 
-	M.apply_radiation(5, INTERNAL)
+	M.apply_radiation(5, RAD_INTERNAL)
 	if(prob(20))
 		M.advanced_mutate()
 
@@ -5394,7 +5394,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	M.apply_radiation(2, INTERNAL)
+	M.apply_radiation(2, RAD_INTERNAL)
 
 /datum/reagent/drink/sportdrink
 	name = "Sport Drink"

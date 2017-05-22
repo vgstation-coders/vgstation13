@@ -544,7 +544,7 @@ var/list/hive_pylons = list()
 			"You feel radiation burns appearing on your body.")
 
 		to_chat(M, "<span class='warning'>[msg]</span>")
-		M.apply_radiation(rad_power, EXTERNAL)
+		M.apply_radiation(rad_power, RAD_EXTERNAL)
 
 //Cloner
 /obj/structure/hive/cloner

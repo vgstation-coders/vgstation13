@@ -113,8 +113,8 @@
 /mob/living/ashify()
 	return //let's not go ashy, shall we?
 
-/mob/living/proc/apply_radiation(var/rads, var/application = EXTERNAL)
-	if(application == EXTERNAL) //Supermatter, PA particles, jukebox, transmitter
+/mob/living/proc/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(application == RAD_EXTERNAL) //Supermatter, PA particles, jukebox, transmitter
 		apply_effect(rads, IRRADIATE)
-	if(application == INTERNAL) //
+	if(application == RAD_INTERNAL) //
 		radiation += rads

@@ -1489,7 +1489,7 @@
 				step_towards(I, src)
 				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
 	if(radiations)
-		apply_radiation(current_size * radiations, EXTERNAL)
+		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)
 		if(shoes.clothing_flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0

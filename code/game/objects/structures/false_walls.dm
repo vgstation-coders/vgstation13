@@ -341,7 +341,7 @@
 		if(world.time > last_event+15)
 			active = 1
 			for(var/mob/living/L in range(3,src))
-				L.apply_radiation(12,EXTERNAL)
+				L.apply_radiation(12,RAD_EXTERNAL)
 			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
 			last_event = world.time

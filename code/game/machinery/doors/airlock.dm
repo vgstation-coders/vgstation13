@@ -263,7 +263,7 @@
 
 /obj/machinery/door/airlock/uranium/proc/radiate()
 	for(var/mob/living/L in range (3,src))
-		L.apply_radiation(15,EXTERNAL)
+		L.apply_radiation(15,RAD_EXTERNAL)
 	return
 
 /obj/machinery/door/airlock/plasma

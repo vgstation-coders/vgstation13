@@ -475,7 +475,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/proc/rad_pulse() //Called by pulsing the transmit wire
 	for(var/mob/living/carbon/M in view(src,3))
 		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful
-		M.apply_radiation((rads*2),EXTERNAL)
+		M.apply_radiation((rads*2),RAD_EXTERNAL)
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
 	if(isobserver(usr) && !isAdminGhost(usr))

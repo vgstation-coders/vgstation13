@@ -190,19 +190,19 @@
 /obj/item/weapon/ore/cerenkite/ex_act()
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_radiation((rand(10, 50)), EXTERNAL)
+		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
 /obj/item/weapon/ore/cerenkite/attack_hand(mob/user as mob)
 	var/L = get_turf(user)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_radiation((rand(10, 50)), EXTERNAL)
+		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
 /obj/item/weapon/ore/cerenkite/bullet_act(var/obj/item/projectile/P)
 	var/L = get_turf(src)
 	for(var/mob/living/carbon/human/M in viewers(L, null))
-		M.apply_radiation((rand(10, 50)), EXTERNAL)
+		M.apply_radiation((rand(10, 50)), RAD_EXTERNAL)
 	qdel(src)
 
 /obj/item/weapon/ore/cytine
