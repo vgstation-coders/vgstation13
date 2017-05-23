@@ -3,7 +3,7 @@
 //pulls energy out of a power net and charges an adjacent generator
 
 /obj/machinery/shield_capacitor
-	name = "starscreen shield capacitor"
+	name = "Starscreen shield capacitor"
 	desc = "Charges Starscreen shield generators."
 	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
 	icon_state = "capacitor"
