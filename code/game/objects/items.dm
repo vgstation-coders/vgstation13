@@ -32,7 +32,7 @@
 	var/gas_transfer_coefficient = 1 // for leaking gas from turf to mask and vice-versa (for masks right now, but at some point, i'd like to include space helmets)
 	var/permeability_coefficient = 1 // for chemicals/diseases
 	siemens_coefficient = 1 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
-	var/slowdown = 0 // How much clothing is slowing you down. Negative values speeds you up
+	var/slowdown = NO_SLOWDOWN // How much each piece of clothing is slowing you down. Works as a MULTIPLIER, i.e. 0.8 slowdown makes you go 20% faster, 1.5 slowdown makes you go 50% slower.
 
 	var/canremove = 1 //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
 	var/cant_drop = 0 //If 1, can't drop it from hands!

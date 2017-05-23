@@ -483,6 +483,16 @@
 		icon_state = "hair_shinobu"
 		gender = FEMALE
 
+	halfshave
+		name = "Half-shave"
+		icon_state = "hair_halfshave"
+		gender = FEMALE
+
+	manbun
+		name = "Manbun"
+		icon_state = "hair_manbun"
+		gender = MALE
+
 	bald
 		name = "Bald"
 		icon_state = "bald"
@@ -779,6 +789,12 @@
 		name = "Vox Nights"
 		icon_state = "vox_nights"
 		species_allowed = list(VOX_SHAPED)
+		do_colouration = 0
+
+	diona_popcorn
+		name = "Popped Hair"
+		icon_state = "hair_popcorn"
+		species_allowed = list("Diona")
 		do_colouration = 0
 
 /datum/sprite_accessory/facial_hair

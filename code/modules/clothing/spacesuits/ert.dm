@@ -34,7 +34,7 @@
 	icon_state = "ert_commander"
 	item_state = "suit-command"
 	w_class = W_CLASS_LARGE
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 60)
 	clothing_flags = PLASMAGUARD
 	pressure_resistance = 200 * ONE_ATMOSPHERE
@@ -61,7 +61,7 @@
 	desc = "A suit worn by the commander of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_commander"
 	item_state = "suit-command"
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 
 //Security
 /obj/item/clothing/head/helmet/space/ert/security

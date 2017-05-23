@@ -133,6 +133,7 @@
 	desc = "Something about this dice seems wrong"
 	name = "\improper Mysterious d20"
 	var/deactivated = 0 //Eventually the dice runs out of power
+	var/infinite = 0 //dice with 1 will not run out
 
 /obj/item/weapon/dice/d20/cursed/pickup(mob/user as mob)
 	..()
@@ -154,7 +155,7 @@
 				if(2 to 5)
 					to_chat(user, "<span class=sinister><B>It could be worse, but not much worse! Enjoy your curse! </span></B>")
 					h.flash_eyes(visual = 1)
-					switch(pick(1,2,3))
+					switch(pick(1,2,3,4))
 						if(1)
 							if(h.species.name != "Tajaran")
 								if(h.set_species("Tajaran"))
@@ -167,8 +168,38 @@
 							for(var/datum/organ/external/E in h.organs)
 								E.droplimb(1)
 						if(3)
-							user.reagents.add_reagent(AMUTATIONTOXIN, 1)
-							to_chat(user, "<span class=danger><B>You've been turned into a slime! </span></B>")
+							var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
+							kneesock.canremove = 0
+							var/obj/item/clothing/suit/maidapron/apron = new /obj/item/clothing/suit/maidapron
+							apron.canremove = 0
+							var/obj/item/clothing/head/kitty/kitty_ears = new /obj/item/clothing/head/kitty
+							kitty_ears.canremove = 0
+							var/obj/item/clothing/under/maid/maid_uniform = new /obj/item/clothing/under/maid
+							maid_uniform.canremove = 0
+							if(h.w_uniform)
+								h.drop_from_inventory(h.w_uniform)
+							if(h.head)
+								h.drop_from_inventory(h.head)
+							if(h.wear_suit)
+								h.drop_from_inventory(h.wear_suit)
+							if(h.shoes)
+								h.drop_from_inventory(h.shoes)
+							h.equip_to_slot(maid_uniform,slot_w_uniform)
+							h.equip_to_slot(kneesock,slot_shoes)
+							h.equip_to_slot(apron,slot_wear_suit)
+							h.equip_to_slot(kitty_ears,slot_head)
+							to_chat(user, "<span class=danger><B>You have been turned into a disgusting faggot! </span></B>")
+						if(4)
+							if(h.species.name != "Tajaran") // Catbeasts don't get to roll the dice and turn into monsters.
+								var/list/valid_species = (all_species - list("Krampus", "Horror"))
+								for(var/datum/organ/external/E in h.organs)
+									E.species = all_species[pick(valid_species)]
+									h.regenerate_icons()
+								to_chat(user, "<span class=danger><B>You have been turned into a disgusting monster! </span></B>")
+							else
+								for(var/datum/organ/external/E in h.organs)
+									E.droplimb(1) //Catbeasts lose limbs
+
 				if(6 to 9)
 					to_chat(user, "<span class=sinister></B>You have rolled low and shall recieve a curse! It could be a lot worse however! </span></B>")
 					h.flash_eyes(visual = 1)
@@ -224,8 +255,8 @@
 							h.adjustBrainLoss(200)
 							user.reagents.add_reagent(NUTRIMENT, 1000)
 							user.overeatduration = 1000
-
 							to_chat(user, "<span class=danger><B>In this moment you feel euphoric! </span></B>")
+
 				if(10 to 12)
 					to_chat(user, "<span class=sinister><B>You get nothing. No curse or reward! </span></B>")
 				if(13)
@@ -236,7 +267,7 @@
 
 				if(14 to 19)
 					to_chat(user, "<span class=sinister><B>You've rolled well and shall be rewarded! </span></B>")
-					switch(pick(1,2,3,4,5))
+					switch(pick(1,2,3,4,5,6))
 						if(1)
 							user.dna.SetSEState(INCREASERUNBLOCK,1)
 							user.dna.SetSEState(SMALLSIZEBLOCK,1)
@@ -261,16 +292,32 @@
 							user.update_mutations()
 							to_chat(user, "<span class=danger><B>You have been granted protection! </span></B>")
 						if(4)
-							getFromPool(/obj/item/stack/sheet/mineral/gold,user.loc,50)
+							getFromPool(/obj/item/stack/sheet/mineral/gold,user.loc,25)
 							to_chat(user, "<span class=danger)(B>You have been reward in gold! </span></B>")
 						if(5)
-							getFromPool(/obj/item/stack/sheet/mineral/silver,user.loc,50)
+							getFromPool(/obj/item/stack/sheet/mineral/silver,user.loc,25)
 							to_chat(user, "<span class=danger><B>You have been rewarded in silver! </span></B>")
+						if(6)
+							to_chat(user, "<span class=danger><B>You have been reward with a fancy new costume! </span></B>")
+							switch(pick(1,2,3))
+								if(1)
+									new /obj/item/clothing/under/bikersuit(user.loc, user)
+									new /obj/item/clothing/head/helmet/biker(user.loc, user)
+									new /obj/item/clothing/shoes/mime/biker(user.loc, user)
+									new /obj/item/clothing/gloves/bikergloves(user.loc, user)
+								if(2)
+									new /obj/item/clothing/under/officeruniform(user.loc, user)
+									new /obj/item/clothing/suit/officercoat(user.loc, user)
+									new /obj/item/clothing/head/naziofficer(user.loc, user)
+								if(3)
+									new /obj/item/clothing/head/helmet/richard(user.loc, user)
+									new /obj/item/clothing/under/jacketsuit(user.loc, user)
+
 				if(20)
 					to_chat(user, "<span class=sinister><B>A perfect roll! enjoy your reward! </span></B>")
-					getFromPool(/obj/item/stack/sheet/mineral/phazon,user.loc,50)
-					getFromPool(/obj/item/stack/sheet/mineral/diamond,user.loc,50)
-					getFromPool(/obj/item/stack/sheet/mineral/clown,user.loc,50)
+					getFromPool(/obj/item/stack/sheet/mineral/phazon,user.loc,10)
+					getFromPool(/obj/item/stack/sheet/mineral/diamond,user.loc,10)
+					getFromPool(/obj/item/stack/sheet/mineral/clown,user.loc,10)
 					user.dna.SetSEState(XRAYBLOCK,1)
 					user.dna.SetSEState(TELEBLOCK,1)
 					user.dna.SetSEState(INCREASERUNBLOCK,1)
@@ -289,12 +336,21 @@
 					to_chat(user, "<span class=danger><B>You have been rewarded handsomely with rare minerals and powers! </span></B>")
 
 			if(prob(15))
-				deactivated = 1
-				user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
-				name = "d20"
-				desc = "A die with twenty sides. The prefered die to throw at the GM."
+				if(!infinite)
+					deactivated = 1
+					user.visible_message("<span class=danger><B>The dice shudders and loses its power! </span></B>")
+					name = "d20"
+					desc = "A die with twenty sides. The prefered die to throw at the GM."
+				else
+					return 0
 	else
 		return 0
+
+/obj/item/weapon/dice/d20/cursed/infinite
+	infinite = 1
+
+/obj/item/weapon/dice/d20/cursed/unfair
+	sides = 12 //unfair varient will never roll higher then 12, but it looks like a normal mysterious d20 and otherwise acts like one
 
 //####Borg Die
 /obj/item/weapon/dice/borg //8 in 1
