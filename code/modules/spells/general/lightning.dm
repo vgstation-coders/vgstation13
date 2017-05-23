@@ -125,7 +125,7 @@
 	L.our_spell = src
 	playsound(get_turf(user), oursound, 100, 1, "vary" = 0)
 	L.tang = adjustAngle(get_angle(U,T))
-	L.icon = midicon
+	// L.icon = midicon
 	L.icon_state = "[L.tang]"
 	L.firer = user
 	L.def_zone = LIMB_CHEST

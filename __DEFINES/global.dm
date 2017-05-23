@@ -54,14 +54,9 @@ var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick
 
 var/skipupdate = 0
 	///////////////
-var/eventchance = 10 //% per 5 mins
-var/event = 0
-var/hadevent = 0
+var/holidayeventchance = 10 //percent chance for a holiday event to fire automatically on its given day, see Holidays.dm
 var/blobevent = 0
 	///////////////
-var/starticon = null
-var/midicon = null
-var/endicon = null
 var/diary = null
 var/diaryofmeanpeople = null
 var/admin_diary = null
@@ -90,7 +85,6 @@ var/shuttle_frozen = 0
 var/shuttle_left = 0
 var/tinted_weldhelh = 1
 
-var/list/jobMax = list()
 var/list/bombers = list(  )
 var/list/admin_log = list (  )
 var/list/lastsignalers = list(	)	//keeps last 100 signals here in format: "[src] used \ref[src] @ location [src.loc]: [freq]/[code]"
@@ -110,10 +104,10 @@ var/list/WORLD_X_OFFSET = list()
 var/list/WORLD_Y_OFFSET = list()
 
 var/shuttle_z = map.zCentcomm	//default
-var/airtunnel_start = 68 // default
-var/airtunnel_stop = 68 // default
-var/airtunnel_bottom = 72 // default
-var/list/monkeystart = list()
+// var/airtunnel_start = 68 // default
+// var/airtunnel_stop = 68 // default
+// var/airtunnel_bottom = 72 // default
+// var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
@@ -123,12 +117,14 @@ var/list/holdingfacility = list()	//captured people go here
 var/list/xeno_spawn = list()//Aliens spawn at these.
 var/list/endgame_safespawns = list()
 var/list/endgame_exits = list()
+// TODO: remove these and refactor any procs that use them
 var/list/tdome1 = list()
 var/list/tdome2 = list()
 var/list/tdomeobserve = list()
 var/list/tdomeadmin = list()
-var/list/prisonsecuritywarp = list()	//prison security goes to these
-var/list/prisonwarped = list()	//list of players already warped
+//var/list/prisonsecuritywarp = list()	//prison security goes to these
+//var/list/prisonwarped = list()	//list of players already warped
+// man that second list is a scary concept, hard dels woo
 var/list/blobstart = list()
 var/list/ninjastart = list()
 //	list/traitors = list()	//traitor list
@@ -141,21 +137,10 @@ var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cu
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
-var/list/combatlog = list()
-var/list/IClog = list()
-var/list/OOClog = list()
-var/list/adminlog = list()
-
 var/suspend_alert = 0
-
-var/Debug = 0	// global debug switch
-var/Debug2 = 0
-
-var/datum/debug/debugobj
 
 var/datum/moduletypes/mods = new()
 
-var/wavesecret = 0
 var/gravity_is_on = 1
 
 var/shuttlecoming = 0
