@@ -12,7 +12,7 @@
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		if (!affected)
 			return 0
-		return target_zone == "mouth"
+		return target_zone == LIMB_MOUTH
 
 
 ///////MEND ROOTS///////
@@ -107,7 +107,7 @@
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		if (!affected)
 			return 0
-		return target_zone == "mouth"
+		return target_zone == LIMB_MOUTH
 
 
 ///////SET JAWS///////
