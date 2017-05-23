@@ -16,7 +16,11 @@
 /spell/aoe_turf/conjure/snakes/cast(list/targets, mob/user)
 	if(wizard_snakes)
 		for(var/mob/M in wizard_snakes)
-			qdel(M)
+			if(wizard_snakes[M] == holder)
+				qdel(M)
 	if(!..())
 		user.visible_message("<span class='warning'>\The [user]'s body splits into a mass of snakes!</span>","<span class='notice'>Your body splits into a mass of snakes.</span>")
 		user.transmogrify(/mob/living/simple_animal/cat/snek/wizard, TRUE)
+
+/spell/aoe_turf/conjure/snakes/summon_object(var/type, var/location)
+	return new type(location, holder)

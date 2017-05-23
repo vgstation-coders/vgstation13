@@ -125,11 +125,12 @@
 
 var/list/wizard_snakes
 
-/mob/living/simple_animal/cat/snek/wizard/New()	//For the snake spell
-	..()
+/mob/living/simple_animal/cat/snek/wizard/New(turf/T, var/spell_holder)	//For the snake spell
+	..(T)
 	if(!wizard_snakes)
 		wizard_snakes = list()
-	wizard_snakes.Add(src)
+	if(spell_holder)
+		wizard_snakes[src] = spell_holder
 
 /mob/living/simple_animal/cat/snek/wizard/Die()
 	if(!transmogrify())
@@ -137,5 +138,6 @@ var/list/wizard_snakes
 		qdel(src)
 
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
-	wizard_snakes.Remove(src)
+	wizard_snakes[src] = null
+	wizard_snakes -= src
 	..()
