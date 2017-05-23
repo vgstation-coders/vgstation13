@@ -27,9 +27,11 @@
 	var/rads = arguments["rads"]
 	if(on && world.time > last_call + COOLDOWN)
 		to_chat(user, "<span class = 'notice'>Radiation detected.</span>")
+		last_call = world.time
 		spawn(5)
-			to_chat(user, "<span class = 'soghun'>Radiation dosage: [rads] rads</span>")
-			last_call = world.time
+			if(user && on)
+				to_chat(user, "<span class = 'soghun'>Radiation dosage: [rads] rads.</span>")
+
 
 /obj/item/device/geiger_counter/attack_self(mob/user)
 	on = !on
