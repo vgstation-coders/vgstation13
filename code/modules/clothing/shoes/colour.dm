@@ -88,7 +88,7 @@
 /obj/item/clothing/shoes/orange/attack_self(mob/user as mob)
 	if (src.chained)
 		src.chained = null
-		src.slowdown = SHOES_SLOWDOWN
+		src.slowdown = NO_SLOWDOWN
 		new chaintype( user.loc )
 		src.icon_state = "orange"
 	return
@@ -102,7 +102,7 @@
 			return
 		src.chained = 1
 		src.chaintype = H.type
-		src.slowdown = 15
+		src.slowdown = SHACKLE_SHOES_SLOWDOWN
 		src.icon_state = "orange1"
 		qdel(H)
 		H = null

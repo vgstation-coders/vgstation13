@@ -5,7 +5,7 @@
 	desc = "A special containment suit designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -70,7 +70,7 @@
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	slowdown = 2
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
 /obj/item/clothing/head/helmet/space/plasmaman/atmostech
 	name = "plasmaman atmospheric helmet"
@@ -84,7 +84,7 @@
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
-	slowdown = 2
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
 /obj/item/clothing/head/helmet/space/plasmaman/engineer
 	name = "plasmaman engineer helmet"
@@ -195,7 +195,7 @@
 	name = "plasmaman miner suit"
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
-	slowdown = 2
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner

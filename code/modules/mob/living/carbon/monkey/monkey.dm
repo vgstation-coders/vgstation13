@@ -164,31 +164,15 @@
 ///mob/living/carbon/monkey/diona/New()
 //Moved to it's duplicate declaration modules\mob\living\carbon\monkey\diona.dm
 
-/mob/living/carbon/monkey/movement_delay()
-	var/tally = 0
-
-	if(reagents)
-		if(reagents.has_reagent(HYPERZINE))
-			return -1
-
-		if(reagents.has_reagent(NUKA_COLA))
-			return -1
-
-	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45)
-		tally += (health_deficiency / 25)
+/mob/living/carbon/monkey/base_movement_tally()
+	. = ..()
+	if(reagents.has_reagent(HYPERZINE))
+		return // Hyperzine ignores slowdown
+	if(istype(loc, /turf/space))
+		return // Space ignores slowdown
 
 	if (bodytemperature < 283.222)
-		tally += (283.222 - bodytemperature) / 10 * 1.75
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	return tally+config.monkey_delay
+		. += (283.222 - bodytemperature) / 10 * 1.75
 
 /mob/living/carbon/monkey/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)

@@ -409,9 +409,6 @@
 			return M
 	return 0
 
-/mob/proc/movement_delay()
-	return 0
-
 /mob/proc/Life()
 	set waitfor = FALSE
 	if(timestopped)

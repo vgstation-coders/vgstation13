@@ -69,7 +69,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/friendly = "nuzzles" //If the mob does no damage with it's attack
 	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
 
-	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
+	var/speed = 1 //Higher speed is slower, decimal speed is faster. DO NOT SET THIS TO NEGATIVES OR 0. MAKING THIS SMALLER THAN 1 MAKES YOUR MOB SUPER FUCKING FAST BE WARNED.
 
 	//Hot simple_animal baby making vars
 	var/childtype = null
@@ -494,24 +494,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='warning'>[user] gently taps [src] with the [O]. </span>")
 
-/mob/living/simple_animal/movement_delay()
-	var/tally = 0 //Incase I need to add stuff other than "speed" later
+/mob/living/simple_animal/base_movement_tally()
+	return speed
 
-	tally = speed
-
-	if(purge)//Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move. (muh dotuh)
-		if(tally <= 0)
-			tally = 1
-		tally *= purge
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	return tally+config.animal_delay
+/mob/living/simple_animal/movement_tally_multiplier()
+	. = ..()
+	if(purge) // Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move. (muh dotuh)
+		. *= purge
 
 /mob/living/simple_animal/Stat()
 	..()

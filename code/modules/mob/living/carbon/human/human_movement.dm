@@ -1,93 +1,76 @@
 /mob/living/carbon/human/movement_delay()
-	if(istype(loc, /turf/space))
-		return -1 // It's hard to be slowed down in space by... anything
-
-	if(flying)
-		return -1
-
-	var/tally = 0
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	if(species && species.move_speed_mod)
-		tally += species.move_speed_mod
-
 	if(isslimeperson(src))
 		if (bodytemperature >= 330.23) // 135 F
-			return -1	// slimes become supercharged at high temperatures
-		if (bodytemperature < 183.222)
-			tally += (283.222 - bodytemperature) / 10 * 1.75
-	else if (undergoing_hypothermia())
-		tally += 2*undergoing_hypothermia()
+			return min(..(), 1)
+	return ..()
 
-	//(/vg/ EDIT disabling for now) handle_embedded_objects() //Moving with objects stuck in you can cause bad times.
+/mob/living/carbon/human/base_movement_tally()
+	. = ..()
 
-	if(reagents.has_reagent(NUKA_COLA))
-		tally -= 10
+	if(flying)
+		return // Calculate none of the following because we're technically on a vehicle
+	if(reagents.has_reagent(HYPERZINE))
+		return // Hyperzine ignores slowdown
+	if(istype(loc, /turf/space))
+		return // Space ignores slowdown
 
-	if((M_RUN in mutations))
-		tally -= 10
-
-	var/health_deficiency = (100 - health - halloss)
-	if(health_deficiency >= 40)
-		tally += (health_deficiency / 25)
+	if (species && species.move_speed_mod)
+		. += species.move_speed_mod
 
 	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
 	if (hungry >= 70)
-		tally += hungry/50
+		. += hungry/50
 
-	if(wear_suit)
-		tally += wear_suit.slowdown
+	if (isslimeperson(src))
+		if (bodytemperature < 183.222)
+			. += (283.222 - bodytemperature) / 10 * 175 // MAGIC NUMBERS!
+	else if (undergoing_hypothermia())
+		. += 2*undergoing_hypothermia()
 
-	if(shoes)
-		tally += shoes.slowdown
+	if(feels_pain() && !has_painkillers())
+		if(pain_shock_stage >= 50)
+			. += 3
+		
+		for(var/organ_name in list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG))
+			var/datum/organ/external/E = get_organ(organ_name)
+			if(!E || (E.status & ORGAN_DESTROYED))
+				. += 4
+			if(E.status & ORGAN_SPLINTED)
+				. += 0.5
+			else if(E.status & ORGAN_BROKEN)
+				. += 1.5
 
-	for(var/obj/item/I in held_items)
-		if(I.flags & SLOWDOWN_WHEN_CARRIED)
-			tally += I.slowdown
+/mob/living/carbon/human/movement_tally_multiplier()
+	. = ..()
 
-	for(var/organ_name in list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG))
-		var/datum/organ/external/E = get_organ(organ_name)
-		if(!E || (E.status & ORGAN_DESTROYED))
-			tally += 4
-		if(E.status & ORGAN_SPLINTED)
-			tally += 0.5
-		else if(E.status & ORGAN_BROKEN)
-			tally += 1.5
+	if(!reagents.has_reagent(HYPERZINE))
+		if(!shoes)
+			. *= NO_SHOES_SLOWDOWN
+	if(M_FAT in mutations) // hyperzine can't save you, fatty!
+		. *= 1.5
+	if(M_RUN in mutations)
+		. *= 0.8
 
-	if(pain_shock_stage >= 50)
-		tally += 3
-
-	if(M_FAT in src.mutations)
-		tally += 1.5
-
+	if(reagents.has_reagent(NUKA_COLA))
+		. *= 0.8
+	
+	if(isslimeperson(src))
+		if(reagents.has_reagent(HYPERZINE))
+			. *= 2
+		if(reagents.has_reagent(FROSTOIL))
+			. *= 5
+	// Bomberman stuff
 	var/skate_bonus = 0
 	var/disease_slow = 0
 	for(var/obj/item/weapon/bomberman/dispenser in src)
 		disease_slow = max(disease_slow, dispenser.slow)
-		skate_bonus = max(skate_bonus, dispenser.speed_bonus)//if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
-	tally = tally - skate_bonus + (6 * disease_slow)
+		skate_bonus = max(skate_bonus, dispenser.speed_bonus) // if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
+	
+	if(skate_bonus > 1)
+		. *= 1/skate_bonus
+	if(disease_slow > 0)
+		. *= disease_slow * 6
 
-	if(reagents.has_reagent(HYPERZINE))
-		if(isslimeperson(src))
-			tally *= 2
-		else if(isdiona(src))
-			tally -= 4
-		else
-			tally -= 10
-
-	if(reagents.has_reagent(MEDCORES))
-		tally *=3
-
-	if(reagents.has_reagent(FROSTOIL) && isslimeperson(src))
-		tally *= 5
-
-	return max((tally+config.human_delay), -1) //cap at -1 as the 'fastest'
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act
