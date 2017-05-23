@@ -607,7 +607,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	throwforce = 4
 	flags = null
 	siemens_coefficient = 1
-	var/color_suffix = "g" // Determines the sprite used
+	var/color_suffix = "-g" // Determines the sprite used
 	var/brightness_on = 2 //Sensibly better than a match or a cigarette
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
@@ -628,16 +628,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	processing_objects -= src
 
 /obj/item/weapon/lighter/red
-	color_suffix = "r"
+	color_suffix = "-r"
 /obj/item/weapon/lighter/cyan
-	color_suffix = "c"
+	color_suffix = "-c"
 /obj/item/weapon/lighter/yellow
-	color_suffix = "y"
+	color_suffix = "-y"
 /obj/item/weapon/lighter/green
-	color_suffix = "g"
+	color_suffix = "-g"
 
 /obj/item/weapon/lighter/random/New()
-	color_suffix = pick("r","c","y","g")
+	color_suffix = "-[pick("r","c","y","g")]"
 	..()
 
 /obj/item/weapon/lighter/examine(mob/user)
@@ -649,13 +649,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	switch(lit)
 		if(1)
 			name = "lit [initial(name)]"
-			item_state = "[initial(item_state)]-[color_suffix]on"
-			icon_state = "[initial(icon_state)]-[color_suffix]-on"
+			item_state = "[initial(item_state)][color_suffix]on"
+			icon_state = "[initial(icon_state)][color_suffix]-on"
 			damtype = BURN
 		if(0)
 			name = "[initial(name)]"
-			item_state = "[initial(item_state)]-[color_suffix]off"
-			icon_state = "[initial(icon_state)]-[color_suffix]"
+			item_state = "[initial(item_state)][color_suffix]off"
+			icon_state = "[initial(icon_state)][color_suffix]"
 			damtype = BRUTE
 
 /obj/item/weapon/lighter/proc/update_brightness()
@@ -752,6 +752,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "The Zippo lighter. Need to light a smoke? Zippo!"
 	icon_state = "zippo"
 	item_state = "zippo"
+	color_suffix = null
 	var/open_sound = list('sound/items/zippo_open.ogg')
 	var/close_sound = list('sound/items/zippo_close.ogg')
 	fuel = 100 //Zippos da bes
@@ -776,16 +777,3 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
 		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
 	update_brightness()
-
-/obj/item/weapon/lighter/zippo/update_icon()
-	switch(lit)
-		if(1)
-			name = "lit [initial(name)]"
-			item_state = "[initial(item_state)]on"
-			icon_state = "[initial(icon_state)]-on"
-			damtype = BURN
-		if(0)
-			name = "[initial(name)]"
-			item_state = "[initial(item_state)]off"
-			icon_state = "[initial(icon_state)]"
-			damtype = BRUTE
