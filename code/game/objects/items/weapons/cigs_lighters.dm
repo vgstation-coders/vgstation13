@@ -601,12 +601,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "cheap lighter"
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "lighter-g"
-	item_state = "lighter-g"
+	icon_state = "lighter"
+	item_state = "lighter"
 	w_class = W_CLASS_TINY
 	throwforce = 4
 	flags = null
 	siemens_coefficient = 1
+	var/color_suffix = "g" // Determines the sprite used
 	var/brightness_on = 2 //Sensibly better than a match or a cigarette
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
@@ -616,6 +617,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
+
+/obj/item/weapon/lighter/New()
+	..()
+	update_icon()
 
 /obj/item/weapon/lighter/Destroy()
 	. = ..()
@@ -631,11 +636,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/close_sound = list('sound/items/zippo_close.ogg')
 	fuel = 100 //Zippos da bes
 
+/obj/item/weapon/lighter/red
+	color_suffix = "r"
+/obj/item/weapon/lighter/cyan
+	color_suffix = "c"
+/obj/item/weapon/lighter/yellow
+	color_suffix = "y"
+/obj/item/weapon/lighter/green
+	color_suffix = "g"
+
 /obj/item/weapon/lighter/random/New()
-	. = ..()
-	var/color = pick("r","c","y","g")
-	icon_state = "lighter-[color]"
-	update_brightness()
+	color_suffix = pick("r","c","y","g")
+	..()
 
 /obj/item/weapon/lighter/examine(mob/user)
 
@@ -647,13 +659,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	switch(lit)
 		if(1)
 			name = "lit [initial(name)]"
-			item_state = "[initial(item_state)]on"
-			icon_state = "[initial(icon_state)]-on"
+			item_state = "[initial(item_state)]-[color_suffix]on"
+			icon_state = "[initial(icon_state)]-[color_suffix]-on"
 			damtype = BURN
 		if(0)
 			name = "[initial(name)]"
-			item_state = "[initial(item_state)]off"
-			icon_state = "[initial(icon_state)]"
+			item_state = "[initial(item_state)]-[color_suffix]off"
+			icon_state = "[initial(icon_state)]-[color_suffix]"
 			damtype = BRUTE
 
 /obj/item/weapon/lighter/proc/update_brightness()
