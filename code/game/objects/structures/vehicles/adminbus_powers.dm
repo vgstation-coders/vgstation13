@@ -573,7 +573,7 @@
 
 */
 
-			M.forceMove(pick(tdomeobserve))
+			M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/observe))
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome. Thank you for riding with us and enjoy your games.</span>")
 
 		else if(isbot(A))
@@ -583,7 +583,7 @@
 			B.flags &= ~INVULNERABLE
 			B.anchored = 0
 			passengers -= B
-			B.forceMove(pick(tdomeobserve))
+			B.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/observe))
 
 		var/turf/TD = get_turf(A)
 		if(TD)
@@ -775,9 +775,9 @@
 
 		switch(team)
 			if("Green")
-				M.forceMove(pick(tdome1))
+				M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/green))
 			if("Red")
-				M.forceMove(pick(tdome2))
+				M.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/red))
 
 		to_chat(M, "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
 		"The wheel of fate is turning!",\
@@ -798,9 +798,9 @@
 
 		switch(team)
 			if("Green")
-				B.forceMove(pick(tdome1))
+				B.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/green))
 			if("Red")
-				B.forceMove(pick(tdome2))
+				B.forceMove(pick_landmark(/obj/effect/landmark/thunderdome/red))
 
 	var/turf/T = get_turf(A)
 	if(T)

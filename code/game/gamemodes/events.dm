@@ -46,7 +46,7 @@
 			for(var/mob/M in player_list)
 				if(!istype(M,/mob/new_player) && M.client)
 					M << sound('sound/AI/granomalies.ogg')
-			var/turf/T = pick(blobstart)
+			var/turf/T = pick_landmark(/obj/effect/landmark/blobstart)
 			var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 			spawn(rand(50, 300))
 				del(bh)
@@ -295,9 +295,8 @@
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
 
 /proc/carp_migration() // -- Darem
-	for(var/obj/effect/landmark/C in landmarks_list)
-		if(C.name == "carpspawn")
-			new /mob/living/simple_animal/hostile/carp(C.loc)
+	for(var/C in get_landmarks(/obj/effect/landmark/carpspawn))
+		new /mob/living/simple_animal/hostile/carp(get_turf(C))
 	//sleep(100)
 	spawn(rand(300, 600)) //Delayed announcements to keep the crew on their toes.
 		command_alert(/datum/command_alert/carp)
@@ -311,8 +310,8 @@
 
 		for(var/i=1,i<=lightsoutAmount,i++)
 			var/list/possibleEpicentres = list()
-			for(var/obj/effect/landmark/newEpicentre in landmarks_list)
-				if(newEpicentre.name == "lightsout" && !(newEpicentre in epicentreList))
+			for(var/obj/effect/landmark/lightsout/newEpicentre in landmarks_list)
+				if(!(newEpicentre in epicentreList))
 					possibleEpicentres += newEpicentre
 			if(possibleEpicentres.len)
 				epicentreList += pick(possibleEpicentres)

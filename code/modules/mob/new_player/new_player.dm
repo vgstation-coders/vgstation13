@@ -145,9 +145,9 @@
 
 			observer.started_as_observer = 1
 			close_spawn_windows()
-			var/obj/O = locate("landmark*Observer-Start")
+			var/obj/O = pick_landmark(/obj/effect/landmark/observer_start)
 			to_chat(src, "<span class='notice'>Now teleporting.</span>")
-			observer.forceMove(O.loc)
+			observer.forceMove(get_turf(O))
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
 			client.prefs.update_preview_icon(1)
@@ -329,7 +329,7 @@
 	EquipCustomItems(character)
 
 	// TODO:  Job-specific latejoin overrides.
-	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+	character.forceMove(pick_landmark(rank == "Assistant" ? /obj/effect/landmark/assistant_latejoin : /obj/effect/landmark/latejoin))
 	//Give them their fucking wheelchair where they spawn instead of inside of the splash screen
 	var/datum/organ/external/left_leg = character.get_organ(LIMB_LEFT_FOOT)
 	var/datum/organ/external/right_leg = character.get_organ(LIMB_RIGHT_FOOT)
@@ -474,7 +474,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
-		
+
 	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE

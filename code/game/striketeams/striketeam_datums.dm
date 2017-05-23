@@ -7,7 +7,7 @@ var/list/sent_strike_teams = list()
 	var/mission = "Clean up the Station of all enemies of Nanotrasen. Avoid damage to Nanotrasen assets, unless you judge it necessary."
 	var/team_size = 6
 	var/min_size_for_leader = 4//set to 0 so there's always a designated team leader or to -1 so there is no leader.
-	var/spawns_name = "Commando"
+	var/spawns_type = /obj/effect/landmark/commando/commando_spawn
 	var/can_customize = FALSE
 	var/logo = "nano-logo"
 
@@ -167,11 +167,7 @@ var/list/sent_strike_teams = list()
 
 
 /datum/striketeam/proc/list_commando_spawns()
-	var/list/commando_spawns = list()
-	for(var/obj/effect/landmark/L in landmarks_list)
-		if (L.name == spawns_name)
-			commando_spawns |= L
-	return commando_spawns
+	return get_landmarks(spawns_type)
 
 ///////////////////////////////////////CUSTOM STRIKE TEAMS///////////////////////////////////
 
@@ -180,7 +176,7 @@ var/list/sent_strike_teams = list()
 	faction_name = input(user, "Name the organization sending this strike team.", "Custom Strike Team", "")
 	team_size = input(user, "Set the maximum amount of commandos in your squad", "Custom Strike Team", "") as num
 	min_size_for_leader = -1
-	spawns_name = input(user, "What are named the landmarks you want your squadies to spawn at?", "Custom Strike Team", "")
+	spawns_type = input(user, "What are named the landmarks you want your squadies to spawn at?", "Custom Strike Team", "") as null|anything in typesof(/obj/effect/landmark)
 	can_customize = FALSE
 	logo = input(user, "Got a custom logo for your strike team?", "Custom Strike Team", "nano-logo")
 	..()

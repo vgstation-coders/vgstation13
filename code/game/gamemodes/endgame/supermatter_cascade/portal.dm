@@ -34,6 +34,7 @@
 
 	if (istype(A, /mob/living/))
 		var/mob/living/L = A
+		var/list/endgame_safespawns = get_landmarks(/obj/effect/landmark/endgame_exit)
 		if(L.locked_to && istype(L.locked_to,/obj/structure/bed/))
 			var/turf/O = L.locked_to
 			do_teleport(O, pick(endgame_safespawns))

@@ -59,12 +59,11 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	//Build a list of spawn points.
 	var/list/turf/raider_spawn = list()
 
-	for(var/obj/effect/landmark/L in landmarks_list)
-		if(L.name == "voxstart")
-			raider_spawn += get_turf(L)
-			qdel(L)
-			L = null
-			continue
+	for(var/obj/effect/landmark/voxstart/L in landmarks_list)
+		raider_spawn += get_turf(L)
+		qdel(L)
+		L = null
+		continue
 
 	//Generate objectives for the group.
 	raid_objectives = forge_vox_objectives()

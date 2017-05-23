@@ -11,10 +11,9 @@
 	command_alert(/datum/command_alert/carp)
 
 /datum/event/carp_migration/start()
-	for(var/obj/effect/landmark/C in landmarks_list)
-		if(C.name == "carpspawn")
-			if(prob(90)) //Give it a sliver of randomness
-				spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(C.loc))
+	for(var/obj/effect/landmark/carpspawn/C in landmarks_list)
+		if(prob(90)) //Give it a sliver of randomness
+			spawned_carp.Add(new /mob/living/simple_animal/hostile/carp(C.loc))
 
 /datum/event/carp_migration/end()
 	for(var/mob/living/simple_animal/hostile/carp/C in spawned_carp)

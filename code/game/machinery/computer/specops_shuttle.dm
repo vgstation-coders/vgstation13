@@ -163,16 +163,13 @@ var/specops_shuttle_timeleft = 0
 
 		sleep(10)
 
-		var/spawn_marauder[] = new()
-		for(var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "Marauder Entry")
-				spawn_marauder.Add(L)
-		for(var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "Marauder Exit")
-				var/obj/effect/portal/P = new(L.loc)
-				P.invisibility = 101//So it is not seen by anyone.
-				P.target = pick(spawn_marauder)//Where the marauder will arrive.
-				spawn_marauder.Remove(P.target)
+		var/list/spawn_marauder = get_landmarks(/obj/effect/landmark/marauder/entry, 0)
+
+		for(var/obj/effect/landmark/marauder/exit/L in landmarks_list)
+			var/obj/effect/portal/P = new(L.loc)
+			P.invisibility = 101//So it is not seen by anyone.
+			P.target = pick(spawn_marauder)//Where the marauder will arrive.
+			spawn_marauder.Remove(P.target)
 
 		sleep(10)
 

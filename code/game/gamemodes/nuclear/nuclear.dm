@@ -135,15 +135,14 @@
 
 	var/list/turf/synd_spawn = list()
 
-	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "Syndicate-Spawn")
-			synd_spawn += get_turf(A)
-			qdel(A)
-			A = null
-			continue
+	for(var/obj/effect/landmark/nukeops/syndicate_spawn/A in landmarks_list)
+		synd_spawn += get_turf(A)
+		qdel(A)
+		A = null
+		continue
 
-	var/obj/effect/landmark/uplinklocker = locate("landmark*Syndicate-Uplink")	//i will be rewriting this shortly
-	var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
+	var/turf/uplinklocker = pick_landmark(/obj/effect/landmark/nukeops/uplink)
+	var/turf/nuke_spawn = pick_landmark(/obj/effect/landmark/nukeops/nuke_spawn)
 
 	var/nuke_code = "[rand(10000, 99999)]"
 	var/leader_selected = 0

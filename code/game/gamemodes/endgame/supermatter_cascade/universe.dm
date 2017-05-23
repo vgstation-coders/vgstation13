@@ -71,6 +71,7 @@
 
 	PlayerSet()
 	CHECK_TICK
+	var/list/endgame_exits = get_landmarks(/obj/effect/landmark/endgame_exit)
 	if(!endgame_exits.len)
 		message_admins("<span class='warning'><font size=7>SOMEBODY DIDNT PUT ENDGAME EXITS FOR THIS FUCKING MAP: [map.nameLong]</span></font>")
 	else

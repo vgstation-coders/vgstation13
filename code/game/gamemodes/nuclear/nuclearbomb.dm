@@ -378,7 +378,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/item/weapon/disk/nuclear/proc/replace_disk()
 	if(blobstart.len > 0 && !respawned && (nukedisk == src))
-		var/picked_turf = get_turf(pick(blobstart))
+		var/picked_turf = get_turf(pick_landmark(/obj/effect/landmark/blobstart))
 		var/picked_area = formatLocation(picked_turf)
 		var/log_message = "[type] has been destroyed. Creating one at"
 		log_game("[log_message] [picked_area]")

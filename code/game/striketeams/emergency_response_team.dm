@@ -8,7 +8,7 @@ var/list/response_team_members = list()
 	mission = "Ensure the station's return to working order, or organize its evacuation if judged necessary."
 	team_size = 6
 	min_size_for_leader = 0//set to 0 so there's always a designated team leader or to -1 so there is no leader.
-	spawns_name = "ERT"
+	spawns_type = /obj/effect/landmark/ert/ert_spawn
 	can_customize = TRUE
 	logo = "ert-logo"
 
