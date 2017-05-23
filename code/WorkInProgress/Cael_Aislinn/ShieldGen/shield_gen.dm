@@ -8,7 +8,7 @@
 //explosion damage is cumulative. if a tile is in range of light, medium and heavy damage, it will take a hit from all three
 
 /obj/machinery/shield_gen
-	name = "Starscreen shield generator"
+	name = "\improper Starscreen shield generator"
 	desc = "Generates a box-shaped wall of energy when active."
 	icon = 'code/WorkInProgress/Cael_Aislinn/ShieldGen/shielding.dmi'
 	icon_state = "generator0"
