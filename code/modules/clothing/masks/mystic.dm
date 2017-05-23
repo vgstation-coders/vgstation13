@@ -52,11 +52,9 @@
 	flick("happiest_flash", src)
 	canremove = 1
 
-var/list/has_been_shade
+var/list/has_been_shade = list()
 
 /obj/item/clothing/mask/happy/proc/RaiseShade(var/mob/living/carbon/human/H)
-	if(!has_been_shade)
-		has_been_shade = list()
 	for(var/mob/living/carbon/human/M in view(4, H))
 		if(!M)
 			return
@@ -64,12 +62,14 @@ var/list/has_been_shade
 			continue
 		if(M.client == null)
 			continue
-		if(M.key in has_been_shade)
+		if(!M.mind)
+			continue
+		if(M.mind in has_been_shade)
 			continue
 		flick("happiest_flash", src)
+		has_been_shade.Add(M.mind)
 		var/mob/dead/observer/G = M.ghostize(1)
 		var/mob/living/simple_animal/shade/happiest/S = G.transmogrify(/mob/living/simple_animal/shade/happiest, TRUE)
-		has_been_shade.Add(S.key)
 		S.name = "Shade of [M.real_name]"
 		S.real_name = "Shade of [M.real_name]"
 		S.cancel_camera()
