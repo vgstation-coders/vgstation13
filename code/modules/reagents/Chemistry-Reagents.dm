@@ -2410,14 +2410,14 @@
 			oldspeed = M.movement_speed_modifier
 			
 	switch(data)
-		if(60 to 100)	//Speed up after a minute
+		if(60 to 99)	//Speed up after a minute
 			if(data==60)
 				to_chat(M, "<span class='notice'>You feel faster.")
 			M.movement_speed_modifier += 0.5
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("Your leg muscles pulsate", "You feel invigorated", "You feel like running")].")
-		if(101 to 115)	//painfully fast
-			if(data==101)
+		if(100 to 114)	//painfully fast
+			if(data==100)
 				to_chat(M, "<span class='notice'>Your muscles start to feel pretty hot.")
 			M.movement_speed_modifier += 0.5
 			if(ishuman(M))
@@ -2428,9 +2428,9 @@
 					else 
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
 				H.adjustFireLoss(0.1)
-		if(116 to 120)	//traverse at a velocity exceeding the norm
+		if(115 to 120)	//traverse at a velocity exceeding the norm
 			M.movement_speed_modifier += 2
-			if(data==116)
+			if(data==115)
 				to_chat(M, "<span class='danger'>Your muscles are burning up!")
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
