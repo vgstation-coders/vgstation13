@@ -1774,6 +1774,8 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
+	if(vessel)
+		vessel.send_to_past(duration)
 
 	updatehealth()
 
