@@ -19,7 +19,7 @@
 	/spell/aoe_turf/disable_tech,
 	/spell/aoe_turf/smoke,
 	/spell/targeted/genetic/blind,
-	/spell/targeted/subjugation,
+	/spell/targeted/disorient,
 	/spell/targeted/mind_transfer,
 	/spell/aoe_turf/conjure/forcewall,
 	/spell/aoe_turf/blink,
@@ -621,13 +621,13 @@
 		to_chat(user, "<span class = 'warning'>You feel like you've been pushing yourself too hard! </span>")
 		qdel(src)
 
-/obj/item/weapon/spellbook/oneuse/subjugate
-	spell = /spell/targeted/subjugation
-	spellname = "subjugation"
-	icon_state = "booksubjugate"
+/obj/item/weapon/spellbook/oneuse/disorient
+	spell = /spell/targeted/disorient
+	spellname = "disorient"
+	icon_state = "bookdisorient"
 	desc = "This book makes you feel dizzy."
 
-/obj/item/weapon/spellbook/oneuse/subjugate/recoil(mob/living/carbon/user as mob)
+/obj/item/weapon/spellbook/oneuse/disorient/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
 		user.reagents.add_reagent(RUM, 200)
 		to_chat(user, "<span class = 'warning'>You feel very drunk all of a sudden.</span>")
