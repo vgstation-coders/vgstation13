@@ -372,3 +372,16 @@
 	display_contents_with_number = 1 //With lods of emone, you're gonna need some compression
 	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/weapon/ore", "/obj/item/weapon/spacecash")
 	cant_hold = list()
+
+// -----------------------------
+//          Slime Bag
+// -----------------------------
+/obj/item/weapon/storage/bag/slime
+	icon = 'icons/obj/storage/storage.dmi'
+	name = "slime core bag"
+	icon_state = "slimebag"
+	desc = "A special bag used to collect slime cores, almost looks like it's alive...."
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_MEDIUM
+	storage_slots = 15
+	can_only_hold = list("/obj/item/slime_extract")
