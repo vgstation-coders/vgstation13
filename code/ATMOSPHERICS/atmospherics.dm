@@ -354,7 +354,7 @@ Pipelines + Other Objects -> Pipe network
 			if(do_after(user, target_move, 10))
 				user.remove_ventcrawl()
 				user.forceMove(target_move.loc) //handles entering and so on
-				user.visible_message("You hear something squeezing through the ducts.", "You climb out the ventilation system.")
+				user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
 		else if(target_move.can_crawl_through())
 			if(target_move.return_network(target_move) != return_network(src))
 				user.remove_ventcrawl()
