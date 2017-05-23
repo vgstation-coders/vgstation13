@@ -1,2 +1,4 @@
 author: ArthurDentist
-changes: []
+changes:
+  - tweak: Cursed dice no longer cause sliming. New punishments (and a new reward) have been added instead.
+  - rscadd: Admins can now spawn infinite and unfair varients of the cursed dice.
