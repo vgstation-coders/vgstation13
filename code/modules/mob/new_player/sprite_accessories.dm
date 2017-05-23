@@ -483,6 +483,16 @@
 		icon_state = "hair_shinobu"
 		gender = FEMALE
 
+	halfshave
+		name = "Half-shave"
+		icon_state = "hair_halfshave"
+		gender = FEMALE
+
+	manbun
+		name = "Manbun"
+		icon_state = "hair_manbun"
+		gender = MALE
+
 	bald
 		name = "Bald"
 		icon_state = "bald"
