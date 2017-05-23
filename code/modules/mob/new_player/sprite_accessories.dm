@@ -781,6 +781,12 @@
 		species_allowed = list(VOX_SHAPED)
 		do_colouration = 0
 
+	diona_popcorn
+		name = "Popped Hair"
+		icon_state = "hair_popcorn"
+		species_allowed = list("Diona")
+		do_colouration = 0
+
 /datum/sprite_accessory/facial_hair
 
 	taj_sideburns
