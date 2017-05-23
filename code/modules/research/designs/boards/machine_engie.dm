@@ -254,7 +254,6 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 2000, MAT_GOLD = 2000)
 	build_path = "/obj/machinery/shield_gen"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
 
 /datum/design/shield_cap
 	name = "Circuit Design (Experimental shield capacitor)"
