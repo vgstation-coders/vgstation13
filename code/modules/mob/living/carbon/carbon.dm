@@ -694,13 +694,13 @@
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
-	if(!(reagents.has_reagent(HYPERZINE)))
+	if(!istype(loc, /turf/space) && !reagents.has_reagent(HYPERZINE))
 		for(var/obj/item/I in get_clothing_items())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
 				. *= I.slowdown
-		
+
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
