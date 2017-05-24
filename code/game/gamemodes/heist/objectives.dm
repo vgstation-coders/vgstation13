@@ -282,7 +282,7 @@
 	return (valid_organs >= required_amount)
 
 /datum/theft_objective/number/heist_hard/organs/appendix
-	name = "lungs"
+	name = "appendixes"
 	typepath = /obj/item/organ/appendix
 	min = 3
 	max = 6
