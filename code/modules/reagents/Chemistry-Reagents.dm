@@ -2365,7 +2365,7 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
 		
@@ -5705,10 +5705,10 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Known to cause mild hallucinations, mescaline is often used recreationally."
 	color = "#B8CD93" //rgb: 184, 205, 147
 
-/datum/reagent/synaptizine/nicotine
-	name = "Nicotine"
-	id = NICOTINE
-	description = "Nicotine is used to improve cognition, alertness, and focus."
+/datum/reagent/synaptizine/cytisine
+	name = "Cytisine"
+	id = CYTISINE
+	description = "Cytisine is an alkaloid which mimics the effects of nicotine."
 	color = "#A49B50" //rgb: 164, 155, 80
 
 /datum/reagent/hyperzine/cocaine

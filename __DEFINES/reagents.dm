@@ -334,7 +334,7 @@
 #define KATHALAI		"kathalai"
 #define OPIUM			"opium"
 #define MESCALINE		"mescaline"
-#define NICOTINE		"nicotine"
+#define CYTISINE		"cytisine"
 #define COCAINE			"cocaine"
 #define ZEAXANTHIN		"zeaxanthin"
 #define VALERENIC_ACID	"valerenic_acid"
@@ -357,6 +357,6 @@
 
 //Pulse related bullshit
 var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA)					//decrease heart rate
+var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
 var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional
