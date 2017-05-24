@@ -1083,13 +1083,22 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+	if(!check_rights(R_SPAWN))
+		return
 	if(!mob)
 		return
+	var/delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|"Yes"|"No"
+		if(!delete_items)
+			return
 	var/list/loadouts = (typesof(/obj/abstract/loadout) - /obj/abstract/loadout) + "USE ITEMS ON MY TURF"
 	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
 	if(!loadout_type)
 		return
-	else if(loadout_type == "USE ITEMS ON MY TURF")
+	if(delete_items == "Yes")
+		var/list/dropped_items = M.unequip_everything()
+		for(var/atom/A in dropped_items)
+			qdel(A)
+	if(loadout_type == "USE ITEMS ON MY TURF")
 		M.equip_loadout()
 	else
 		if(!ispath(loadout_type))

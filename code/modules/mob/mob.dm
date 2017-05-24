@@ -646,10 +646,13 @@ var/list/slot_equipment_priority = list( \
 	return openslot
 
 /mob/proc/unequip_everything()
+	var/list/unequipped_items = list()
 	for(var/slot in slot_equipment_priority)
 		var/obj/item/I = get_item_by_slot(slot)
 		if(I)
+			unequipped_items.Add(I)
 			u_equip(I)
+	return unequipped_items
 
 /mob/proc/recursive_list_equip(list/L)	//Used for equipping a list of items to a mob without worrying about the order (like needing to put a jumpsuit before a belt)
 	if(!L || !L.len)

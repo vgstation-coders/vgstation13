@@ -53,3 +53,116 @@
 						/obj/item/clothing/shoes/combat,
 						/obj/item/weapon/storage/belt/security,
 						/obj/item/weapon/gun/lawgiver)
+
+/obj/abstract/loadout/standard_space_gear
+	items_to_spawn = list(/obj/item/clothing/shoes/black,
+						/obj/item/clothing/under/color/grey,
+						/obj/item/clothing/suit/space,
+						/obj/item/clothing/head/helmet/space,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/engineer_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig,
+						/obj/item/clothing/head/helmet/space/rig,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/CE_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig/elite,
+						/obj/item/clothing/head/helmet/space/rig/elite,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/mining_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig/mining,
+						/obj/item/clothing/head/helmet/space/rig/mining,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/syndi_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig/syndi,
+						/obj/item/clothing/head/helmet/space/rig/syndi,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/wizard_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig/wizard,
+						/obj/item/clothing/head/helmet/space/rig/wizard,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/medical_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig/medical,
+						/obj/item/clothing/head/helmet/space/rig/medical,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/atmos_RIG
+	items_to_spawn = list(/obj/item/clothing/suit/space/rig/atmos,
+						/obj/item/clothing/head/helmet/space/rig/atmos,
+						/obj/item/weapon/tank/jetpack/oxygen,
+						/obj/item/clothing/mask/breath)
+
+/obj/abstract/loadout/tournament_standard_red
+	items_to_spawn = list(/obj/item/clothing/under/color/red,
+						/obj/item/clothing/shoes/black,
+						/obj/item/clothing/suit/armor/vest,
+						/obj/item/clothing/head/helmet/thunderdome,
+						/obj/item/weapon/gun/energy/pulse_rifle/destroyer,
+						/obj/item/weapon/kitchen/utensil/knife/large,
+						/obj/item/weapon/grenade/smokebomb)
+
+/obj/abstract/loadout/tournament_standard_green
+	items_to_spawn = list(/obj/item/clothing/under/color/green,
+						/obj/item/clothing/shoes/black,
+						/obj/item/clothing/suit/armor/vest,
+						/obj/item/clothing/head/helmet/thunderdome,
+						/obj/item/weapon/gun/energy/pulse_rifle/destroyer,
+						/obj/item/weapon/kitchen/utensil/knife/large,
+						/obj/item/weapon/grenade/smokebomb)
+
+/obj/abstract/loadout/tournament_gangster
+	items_to_spawn = list(/obj/item/clothing/under/det,
+						/obj/item/clothing/shoes/black,
+						/obj/item/clothing/suit/storage/det_suit,
+						/obj/item/clothing/glasses/thermal/monocle,
+						/obj/item/clothing/head/det_hat,
+						/obj/item/weapon/cloaking_device,
+						/obj/item/weapon/gun/projectile,
+						/obj/item/ammo_storage/box/a357)
+
+/obj/abstract/loadout/tournament_chef
+	items_to_spawn = list(/obj/item/clothing/under/rank/chef,
+						/obj/item/clothing/suit/chef,
+						/obj/item/clothing/shoes/black,
+						/obj/item/clothing/head/chefhat,
+						/obj/item/weapon/kitchen/rollingpin,
+						/obj/item/weapon/kitchen/utensil/knife/large,
+						/obj/item/weapon/kitchen/utensil/knife/large,
+						/obj/item/weapon/kitchen/utensil/knife/large)
+/*
+/obj/abstract/loadout/tournament_janitor
+	items_to_spawn = list(/obj/item/clothing/under/rank/janitor,
+						/obj/item/clothing/shoes/black,
+						/obj/item/weapon/storage/backpack,
+						/obj/item/weapon/mop,
+						/obj/item/weapon/reagent_containers/glass/bucket,
+						)
+
+/obj/abstract/loadout/
+	items_to_spawn = list(,
+						)
+
+/obj/abstract/loadout/
+	items_to_spawn = list(,
+						)
+
+/obj/abstract/loadout/
+	items_to_spawn = list(,
+						)
+
+/obj/abstract/loadout/
+	items_to_spawn = list(,
+						)
+*/
