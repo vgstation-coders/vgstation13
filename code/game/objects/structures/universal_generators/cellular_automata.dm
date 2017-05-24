@@ -159,7 +159,7 @@ here is an example of what it might look like:
 	ca_wall = /turf/snow
 	mapgrid_width = 10
 	mapgrid_height = 5
-	mapgrid_scale = 4
+	mapgrid_scale = 2
 
 /obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/snow/T)
 	if(T && T.snowballs)

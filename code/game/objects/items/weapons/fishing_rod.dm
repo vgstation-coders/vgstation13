@@ -1,7 +1,5 @@
-#define MAX_FISHING_TIME 160
-#define MAX_LINE_TENSION 100
 #define TENSION_DELTA 15 // max rodtension decay per tick/max increase per attack_self
-#define FISHPULL_UPDATES 16 // amount of times the fish pulling code will tick during MAX_FISHING_TIME
+#define FISHPULL_UPDATES 16 // amount of times the fish pulling code will tick during max_fishing_time
 #define FISHPULL_BASELINE 40 // used in calculating pulling strength of a catch
 
 // -----------------------------
@@ -80,11 +78,18 @@
 	var/tmp/busy = 0 //check if in use to stop bait scumming
 	var/obj/item/weapon/hookeditem
 	var/fishstage = 50 // when fishstage hits 0, we catch the fish, if it goes above 100, we lose the fish
-	var/rodtension = 0 // if tension hits MAX_LINE_TENSION the line snaps, pulling power is based on tension scaling from 0=no pulling  and  (MAX_LINE_TENSION - 1)=strongest pull
+	var/rodtension = 0 // if tension hits max_line_tension the line snaps, pulling power is based on tension scaling from 0=no pulling  and  (max_line_tension - 1)=strongest pull
+	var/max_line_tension = 100
+	var/max_fishing_time = 160
 	var/list/bait_types = list( // The types of bait this rod is able to use
 		/datum/bait_type/standard_bait,
 		/datum/bait_type/clown,
 		)
+
+/obj/item/weapon/fishingrod/reinforced
+	name = "reinforced fishing rod"
+	desc = "With better flexibility and strain points, this rod will let you ramp up the tension more on the line."
+	max_line_tension = 150
 
 /obj/item/weapon/fishingrod/New()
 	..()
@@ -129,6 +134,16 @@
 /obj/item/weapon/fishingrod/attack_self(mob/user)
 	if(busy)
 		rodtension += rand(5, TENSION_DELTA)
+		to_chat(user, "<span class = 'notice'>You reel in the line.</span>")
+		switch(rodtension)
+			if(0 to 40)
+				to_chat(user, "<span class = 'notice>The line is loose.</span>")
+			if(41 to 70)
+				to_chat(user, "<span class = 'notice'>The line is tense.</span>")
+			if(71 to 90)
+				to_chat(user, "<span class = 'warning'>The line is tense!</span>")
+			if(91 to INFINITY)
+				to_chat(user, "<span class = 'warning>The line is close to breaking point!</span>")
 		return
 	if(hookeditem)
 		to_chat(user, "<span class='notice'>You remove \the [hookeditem] from \the [src].</span>")
@@ -179,7 +194,7 @@
 	rodtension = rand(20, 40)
 	var/start_loc = user.loc
 	var/target_start_loc = target.loc
-	var/sleepfraction = MAX_FISHING_TIME / FISHPULL_UPDATES
+	var/sleepfraction = max_fishing_time / FISHPULL_UPDATES
 
 	var/image/progbar
 	if(user.client)//user.client.prefs.progress_bars)
@@ -190,23 +205,32 @@
 		progbar.appearance_flags = RESET_COLOR
 		user.client.images |= progbar
 
-	var/endtime = world.time + MAX_FISHING_TIME
+	var/endtime = world.time + max_fishing_time
 	var/success = FALSE
 	while(world.time < endtime)
 		sleep(sleepfraction)
 		if(!user || !hookeditem || user.isStunned() || !(user.loc == start_loc) || !(target.loc == target_start_loc) || !(user.find_held_item_by_type(src)))
 			break
-		if(rodtension >= MAX_LINE_TENSION)
+		if(rodtension+10 >= max_line_tension)
+			to_chat(user, "<span class = 'danger'>The line starts to strain!</span>")
+		if(rodtension >= max_line_tension)
+			to_chat(user, "<span class = 'danger'>The line snaps!</span>")
+			playsound(get_turf(src), 'sound/weapons/whip.ogg', 30, 1, -2)
 			break
+		var/prev_fishstage = fishstage
 		if(istype(hookeditem, /obj/item/weapon/reagent_containers/food/snacks/fish)) // Only fish have a length and weight so we'll just use default values for non-fish items
 			fish_pull()
 		else
 			other_pull(FISHPULL_BASELINE)
+		if(fishstage > prev_fishstage)
+			to_chat(user, "<span class = 'warning'>The catch is getting away!</span>")
+		else if(fishstage < prev_fishstage)
+			to_chat(user, "<span class = 'notice'>You're starting to reel the catch in, whatever it is.</span>")
 		rodtension -= rand(0, TENSION_DELTA)
 		if(fishstage <= 0) // we caught the fish
 			success = TRUE
 			break
-		progbar.icon_state = "prog_bar_[round(fishstage, 10)]"
+		progbar.icon_state = "prog_bar_[100-round(fishstage, 10)]"
 		user.client.images |= progbar
 	if(progbar)
 		progbar.icon_state = "prog_bar_stopped"
@@ -216,7 +240,9 @@
 				if(progbar)
 					progbar.loc = null
 	if(success)
+		to_chat(user, "<span class = 'notice'>You've caught something!</span>")
 		return 1
+	to_chat(user, "<span class = 'warning'>You fail to catch anything.</span>")
 	return 0
 
 // calculate the relative weight of the fish compared to the default weight value
@@ -233,8 +259,6 @@
 /obj/item/weapon/fishingrod/proc/other_pull(var/fish_strength)
 	var/pullamount = calculate_pull(Clamp(fish_strength, 20, 60))
 	fishstage += pullamount
-	to_chat(world, "pullamount is [pullamount]")
-	to_chat(world, "<span class='warning'>rodtension is [rodtension]")
 
 // calculates whether to reel the fish in or not, and by how much we are reeling in
 /obj/item/weapon/fishingrod/proc/calculate_pull(var/fish_strength)

@@ -343,7 +343,7 @@ var/global/list/snow_turfs = list()
 	return hole
 
 /obj/glacier/attackby(var/obj/item/W, mob/user)
-	if(!hole)
+	if(!hole && prob(W.force*5))
 		to_chat(user,"<span class='notice'>you smash a hole in the ice with \the [W]</span>") // todo: better
 		hole = TRUE
 		relativewall()
