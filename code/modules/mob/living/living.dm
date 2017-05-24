@@ -331,6 +331,11 @@
 	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
 		return 0
 
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(isslimeperson(H))
+			amount = 0
+
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setCloneLoss(var/amount)

@@ -81,6 +81,8 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_GOLEM, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_MOUSE, 1)
+	add_language(LANGUAGE_GOLEM, 1)
+	add_language(LANGUAGE_SLIME, 1)
 	add_language(LANGUAGE_HUMAN, 1)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName

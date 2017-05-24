@@ -163,6 +163,8 @@
 	add_language(LANGUAGE_GUTTER, 0)
 	add_language(LANGUAGE_MONKEY, 0)
 	add_language(LANGUAGE_MOUSE, 0)
+	add_language(LANGUAGE_GOLEM, 0)
+	add_language(LANGUAGE_SLIME, 0)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 // setup the PDA and its name
