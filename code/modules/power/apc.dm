@@ -1304,11 +1304,11 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 				if (STATION_Z == z)
 					var/datum/game_mode/malfunction/M = ticker.mode
 					M.apcs--
-
 		areaMaster.power_light = 0
 		areaMaster.power_equip = 0
 		areaMaster.power_environ = 0
 		areaMaster.power_change()
+
 	if(occupant)
 		malfvacate(1)
 
