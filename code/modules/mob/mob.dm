@@ -409,9 +409,6 @@
 			return M
 	return 0
 
-/mob/proc/movement_delay()
-	return 0
-
 /mob/proc/Life()
 	set waitfor = FALSE
 	if(timestopped)
@@ -1850,7 +1847,9 @@ mob/proc/on_foot()
 		"s_active",
 		"wear_mask",
 		"radiation",
-		"stat")
+		"stat",
+		"monkeyizing",
+		"key")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

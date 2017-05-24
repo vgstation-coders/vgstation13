@@ -1340,19 +1340,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/shield_gen
 	contains = list(/obj/item/weapon/circuitboard/shield_gen)
-	name = "Exp. shield generator board"
+	name = "Starscreen generator board"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "experimental shield generator crate"
+	containername = "Starscreen shield generator crate"
 	group = "Engineering"
 	access = access_ce
 
 /datum/supply_packs/shield_cap
 	contains = list(/obj/item/weapon/circuitboard/shield_cap)
-	name = "Exp. shield capacitor board"
+	name = "Starscreen capacitor board"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "experimental shield capacitor crate"
+	containername = "Starscreen shield capacitor crate"
 	group = "Engineering"
 	access = access_ce
 

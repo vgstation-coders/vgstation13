@@ -35,7 +35,7 @@
 	var/obj/item/held_item = null //Storage for single item they can hold.
 	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
-	speed = -1                    //Spiderbots gotta go fast.
+	speed = 1                    //Spiderbots gotta go fast.
 	//pass_flags = PASSTABLE      //Maybe griefy?
 	speak_emote = list("beeps","clicks","chirps")
 	canEnterVentWith = "/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/obj/item/device/mmi=0"

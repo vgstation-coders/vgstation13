@@ -6,14 +6,9 @@
 	icon_state = "aliend_s"
 	plasma_rate = 15
 
-/mob/living/carbon/alien/humanoid/drone/movement_delay()
-	var/tally = 2 + move_delay_add + config.alien_delay //Drones are slow
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-	return tally
+/mob/living/carbon/alien/humanoid/drone/movement_tally_multiplier()
+	. = ..()
+	. *= 2 // Drones are slow
 
 /mob/living/carbon/alien/humanoid/drone/New()
 	var/datum/reagents/R = new/datum/reagents(100)
