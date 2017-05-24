@@ -166,7 +166,7 @@
 
 /mob/living/carbon/monkey/base_movement_tally()
 	. = ..()
-	if(reagents.has_reagent(HYPERZINE))
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown

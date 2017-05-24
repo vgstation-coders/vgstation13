@@ -9,7 +9,7 @@
 
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_reagent(HYPERZINE))
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
@@ -30,7 +30,7 @@
 	if(feels_pain() && !has_painkillers())
 		if(pain_shock_stage >= 50)
 			. += 3
-		
+
 		for(var/organ_name in list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG))
 			var/datum/organ/external/E = get_organ(organ_name)
 			if(!E || (E.status & ORGAN_DESTROYED))
@@ -43,7 +43,7 @@
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()
 
-	if(!reagents.has_reagent(HYPERZINE))
+	if(!reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		if(!shoes)
 			. *= NO_SHOES_SLOWDOWN
 	if(M_FAT in mutations) // hyperzine can't save you, fatty!
@@ -53,9 +53,9 @@
 
 	if(reagents.has_reagent(NUKA_COLA))
 		. *= 0.8
-	
+
 	if(isslimeperson(src))
-		if(reagents.has_reagent(HYPERZINE))
+		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 			. *= 2
 		if(reagents.has_reagent(FROSTOIL))
 			. *= 5
@@ -65,7 +65,7 @@
 	for(var/obj/item/weapon/bomberman/dispenser in src)
 		disease_slow = max(disease_slow, dispenser.slow)
 		skate_bonus = max(skate_bonus, dispenser.speed_bonus) // if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
-	
+
 	if(skate_bonus > 1)
 		. *= 1/skate_bonus
 	if(disease_slow > 0)
