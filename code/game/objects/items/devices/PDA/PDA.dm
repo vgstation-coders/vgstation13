@@ -285,6 +285,32 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
+/obj/item/device/pda/heads/assassin/New()
+	..()
+	name = "Reaper PDA"
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				owner = M.real_name
+				ownjob = "Reaper"
+				name = "PDA-[M.real_name] ([ownjob])"
+				break
+
+/obj/item/device/pda/heads/nt_rep/New()
+	..()
+	name = "Nanotrasen Navy Representative PDA"
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				owner = M.real_name
+				ownjob = "Nanotrasen Navy Representative"
+				name = "PDA-[M.real_name] ([ownjob])"
+				break
+
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop

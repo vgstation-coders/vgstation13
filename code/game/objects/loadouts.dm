@@ -141,15 +141,149 @@
 						/obj/item/weapon/kitchen/utensil/knife/large,
 						/obj/item/weapon/kitchen/utensil/knife/large,
 						/obj/item/weapon/kitchen/utensil/knife/large)
-/*
+
 /obj/abstract/loadout/tournament_janitor
 	items_to_spawn = list(/obj/item/clothing/under/rank/janitor,
 						/obj/item/clothing/shoes/black,
 						/obj/item/weapon/storage/backpack,
 						/obj/item/weapon/mop,
-						/obj/item/weapon/reagent_containers/glass/bucket,
-						)
+						/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+						/obj/item/weapon/grenade/chem_grenade/cleaner,
+						/obj/item/weapon/grenade/chem_grenade/cleaner,
+						/obj/item/stack/tile/plasteel,
+						/obj/item/stack/tile/plasteel,
+						/obj/item/stack/tile/plasteel,
+						/obj/item/stack/tile/plasteel,
+						/obj/item/stack/tile/plasteel,
+						/obj/item/stack/tile/plasteel
+						/obj/item/stack/tile/plasteel)
 
+/obj/abstract/loadout/pirate
+	items_to_spawn = list(/obj/item/clothing/under/pirate,
+						/obj/item/clothing/shoes/brown,
+						/obj/item/clothing/head/bandana,
+						/obj/item/clothing/glasses/eyepatch,
+						/obj/item/weapon/melee/energy/sword/pirate)
+
+/obj/abstract/loadout/space_pirate
+	items_to_spawn = list(/obj/item/clothing/under/pirate,
+						/obj/item/clothing/shoes/brown,
+						/obj/item/clothing/suit/space/pirate,
+						/obj/item/clothing/head/helmet/space/pirate,
+						/obj/item/clothing/glasses/eyepatch,
+						/obj/item/weapon/melee/energy/sword/pirate)
+
+/obj/abstract/loadout/soviet_soldier
+	items_to_spawn = list(/obj/item/clothing/under/soviet,
+						/obj/item/clothing/shoes/black,
+						/obj/item/clothing/head/ushanka)
+
+/obj/abstract/loadout/tunnel_clown
+	items_to_spawn = list(/obj/item/clothing/under/rank/clown,
+						/obj/item/clothing/shoes/clown_shoes,
+						/obj/item/clothing/gloves/black,
+						/obj/item/clothing/mask/gas/clown_hat,
+						/obj/item/clothing/head/chaplain_hood,
+						/obj/item/device/radio/headset,
+						/obj/item/clothing/glasses/thermal/monocle,
+						/obj/item/clothing/suit/chaplain_hoodie,
+						/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+						/obj/item/weapon/bikehorn,
+						/obj/item/weapon/card/id/tunnel_clown,
+						/obj/item/weapon/fire_axe)
+
+/obj/abstract/loadout/masked_killer
+	items_to_spawn = list(/obj/item/clothing/under/overalls/bloody,
+						/obj/item/clothing/shoes/white/bloody,
+						/obj/item/clothing/gloves/latex/bloody,
+						/obj/item/clothing/mask/surgical/bloody,
+						/obj/item/clothing/head/welding/bloody,
+						/obj/item/device/radio/headset/bloody,
+						/obj/item/clothing/glasses/thermal/monocle/bloody,
+						/obj/item/clothing/suit/apron/bloody,
+						/obj/item/weapon/kitchen/utensil/knife/large/bloody,
+						/obj/item/weapon/scalpel/bloody,
+						/obj/item/weapon/fireaxe/bloody)
+
+/obj/abstract/loadout/assassin
+	items_to_spawn = list(/obj/item/clothing/under/suit_jacket,
+						/obj/item/clothing/shoes/black,
+						/obj/item/clothing/gloves/black,
+						/obj/item/device/radio/headset,
+						/obj/item/clothing/glasses/sunglasses,
+						/obj/item/clothing/suit/wcoat,
+						/obj/item/weapon/melee/energy/sword,
+						/obj/item/weapon/cloaking_device,
+						/obj/item/weapon/storage/secure/briefcase/assassin,
+						/obj/item/device/pda/heads/assassin,
+						/obj/item/weapon/card/id/syndicate/assassin)
+
+/obj/abstract/loadout/death_commando
+	items_to_spawn = list(/obj/item/device/radio/headset/deathsquad,
+						/obj/item/clothing/under/deathsquad,
+						/obj/item/weapon/melee/energy/sword,
+						/obj/item/weapon/gun/projectile/mateba,
+						/obj/item/clothing/shoes/magboots/deathsquad,
+						/obj/item/clothing/gloves/combat,
+						/obj/item/clothing/glasses/thermal,
+						/obj/item/clothing/head/helmet/space/rig/deathsquad,
+						/obj/item/clothing/mask/gas/swat,
+						/obj/item/clothing/suit/space/rig/deathsquad,
+						/obj/item/weapon/tank/emergency_oxygen/double,
+						/obj/item/weapon/storage/backpack/security,
+						/obj/item/weapon/storage/box,
+						/obj/item/ammo_storage/box/a357,
+						/obj/item/weapon/storage/firstaid/regular,
+						/obj/item/weapon/pinpointer,
+						/obj/item/weapon/shield/energy,
+						/obj/item/weapon/plastique,
+						/obj/item/weapon/gun/energy/pulse_rifle,
+						/obj/item/weapon/card/id/death_commando)
+
+/obj/abstract/loadout/death_commando/equip_items(var/mob/M)
+	M.unequip_everything()
+	M.equip_death_commando()
+	qdel(src)
+
+/obj/abstract/loadout/syndicate_commando
+	items_to_spawn = list(/obj/item/device/radio/headset/syndicate/commando,
+						/obj/item/clothing/under/syndicate/commando,
+						/obj/item/weapon/melee/energy/sword,
+						/obj/item/weapon/grenade/empgrenade,
+						/obj/item/weapon/gun/projectile/silenced,
+						/obj/item/clothing/shoes/swat,
+						/obj/item/clothing/gloves/swat,
+						/obj/item/clothing/glasses/thermal,
+						/obj/item/clothing/mask/gas/syndicate,
+						/obj/item/clothing/head/helmet/space/syndicate/black,
+						/obj/item/clothing/suit/space/syndicate/black,
+						/obj/item/weapon/tank/emergency_oxygen,
+						/obj/item/weapon/storage/backpack/security,
+						/obj/item/weapon/storage/box,
+						/obj/item/ammo_storage/box/c45,
+						/obj/item/weapon/storage/firstaid/regular,
+						/obj/item/weapon/plastique,
+						/obj/item/osipr_core,
+						/obj/item/weapon/plastique,
+						/obj/item/energy_magazine/osipr,
+						/obj/item/weapon/gun/osipr,
+						/obj/item/weapon/card/id/syndicate/commando)
+
+/obj/abstract/loadout/syndicate_commando/equip_items(var/mob/M)
+	M.unequip_everything()
+	M.equip_syndicate_commando()
+	qdel(src)
+
+/obj/abstract/loadout/nanotrasen_representative
+	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/representative,
+						/obj/item/clothing/shoes/centcom,
+						/obj/item/clothing/gloves/white,
+						/obj/item/device/radio/headset/heads/hop,
+						/obj/item/device/pda/heads/nt_rep,
+						/obj/item/clothing/glasses/sunglasses,
+						/obj/item/weapon/clipboard,
+						/obj/item/weapon/card/id/nt_rep)
+/*
 /obj/abstract/loadout/
 	items_to_spawn = list(,
 						)

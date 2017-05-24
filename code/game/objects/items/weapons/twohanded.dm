@@ -99,6 +99,10 @@
 			qdel(A)
 			A = null
 
+/obj/item/weapon/fireaxe/bloody/New()
+	..()
+	add_blood()
+
 
 /*
  * Double-Bladed Energy Swords - Cheridan

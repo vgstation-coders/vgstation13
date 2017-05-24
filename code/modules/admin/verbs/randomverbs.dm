@@ -1087,7 +1087,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 	if(!mob)
 		return
-	var/delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|"Yes"|"No"
+	var/delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
 		if(!delete_items)
 			return
 	var/list/loadouts = (typesof(/obj/abstract/loadout) - /obj/abstract/loadout) + "USE ITEMS ON MY TURF"

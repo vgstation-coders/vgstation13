@@ -29,7 +29,7 @@
 	..()
 	icon_state = "incisionmanager_off"
 
-	
+
 /obj/item/weapon/hemostat
 	name = "hemostat"
 	desc = "You think you have seen this before."
@@ -119,6 +119,10 @@
 						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
 	return (BRUTELOSS)
+
+/obj/item/weapon/scalpel/bloody/New()
+	..()
+	add_blood()
 
 
 /obj/item/weapon/scalpel/laser

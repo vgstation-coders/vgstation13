@@ -31,6 +31,10 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/mask/surgical/bloody/New()
+	..()
+	add_blood()
+
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"
 	desc = "Warning: moustache is fake."

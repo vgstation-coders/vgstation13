@@ -23,6 +23,10 @@
 	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass/fertilizer,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
 	species_fit = list(VOX_SHAPED)
 
+/obj/item/clothing/suit/apron/bloody/New()
+	..()
+	add_blood()
+
 //Captain
 /obj/item/clothing/suit/captunic
 	name = "captain's parade tunic"

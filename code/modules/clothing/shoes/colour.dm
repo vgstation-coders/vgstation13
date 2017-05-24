@@ -67,6 +67,10 @@
 	_color = "white"
 	species_fit = list(VOX_SHAPED)
 
+/obj/item/clothing/shoes/white/bloody/New()
+	..()
+	add_blood()
+
 /obj/item/clothing/shoes/leather
 	name = "leather shoes"
 	desc = "A sturdy pair of leather shoes."

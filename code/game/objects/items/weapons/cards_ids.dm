@@ -692,3 +692,75 @@
 	icon_state = "trader"
 	access = list(access_trade)
 	base_access = list(access_trade)
+
+/obj/item/weapon/card/id/tunnel_clown/New()
+	..()
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				name = "[M.real_name]'s ID Card"
+				registered_name = M.real_name
+				break
+	access = get_all_accesses()
+	assignment = "Tunnel Clown!"
+
+
+/obj/item/weapon/card/id/syndicate/assassin/New()
+	..()
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				name = "[M.real_name]'s ID Card"
+				registered_name = M.real_name
+				break
+	access = get_all_accesses()
+	assignment = "Reaper"
+
+/obj/item/weapon/card/id/death_commando/New()
+	..()
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				name = "[M.real_name]'s ID Card"
+				registered_name = M.real_name
+				break
+	icon_state = "deathsquad"
+	access = get_centcom_access("Death Commando")
+	assignment = "Death Commando"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				name = "[M.real_name]'s ID Card"
+				registered_name = M.real_name
+				break
+	icon_state = "id"
+	access = get_all_accesses()
+	access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)
+	assignment = "Syndicate Commando"
+
+/obj/item/weapon/card/id/nt_rep/New()
+	..()
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				name = "[M.real_name]'s ID Card"
+				registered_name = M.real_name
+				break
+	icon_state = "centcom"
+	item_state = "id_inv"
+	access = get_all_accesses()
+	access += list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer")
+	assignment = "Nanotrasen Navy Representative"

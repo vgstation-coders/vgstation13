@@ -260,6 +260,10 @@
 		see_invisible &= ~SEE_INVISIBLE_MINIMUM
 		invisa_view = 0
 
+/obj/item/clothing/glasses/thermal/monocle/bloody/New()
+	..()
+	add_blood()
+
 /obj/item/clothing/glasses/thermal/eyepatch
 	name = "Optical Thermal Eyepatch"
 	desc = "An eyepatch with built-in thermal optics."

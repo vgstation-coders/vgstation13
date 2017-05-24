@@ -365,6 +365,10 @@
 		user.drop_from_inventory(src)
 		qdel(src)
 
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
+	..()
+	reagents.add_reagent(WATER, 150)
+
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
 	name = "Blender Jug"
