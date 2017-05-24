@@ -155,7 +155,7 @@
 						/obj/item/stack/tile/plasteel,
 						/obj/item/stack/tile/plasteel,
 						/obj/item/stack/tile/plasteel,
-						/obj/item/stack/tile/plasteel
+						/obj/item/stack/tile/plasteel,
 						/obj/item/stack/tile/plasteel)
 
 /obj/abstract/loadout/pirate
