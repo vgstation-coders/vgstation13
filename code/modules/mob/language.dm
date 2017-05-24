@@ -207,9 +207,9 @@
 	ask_verb = "groans"
 	exclaim_verb = "cracks"
 	whisper_verb = "grumbles"
-	colour = "brown"
+	colour = "golem"
 	native = 1
-	key = "p"
+	key = "8"
 	flags = RESTRICTED
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
@@ -220,7 +220,7 @@
 	ask_verb = "gurgles"
 	exclaim_verb = "froths"
 	whisper_verb = "burbles"
-	colour = "aqua"
+	colour = "slime"
 	native = 1
 	key = "f"
 	flags = RESTRICTED
