@@ -79,9 +79,9 @@
 	corpse = /obj/effect/landmark/corpse/skellington/petard
 
 /mob/living/simple_animal/hostile/humanoid/skellington/petard/AttackingTarget()
-	Die()
+	death()
 
-/mob/living/simple_animal/hostile/humanoid/skellington/petard/Die()
+/mob/living/simple_animal/hostile/humanoid/skellington/petard/death(var/gibbed=FALSE)
 	var/turf/T = get_turf(src)
 
 	..()

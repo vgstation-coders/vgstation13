@@ -79,16 +79,14 @@
 		src.add_spell(new spell, "const_spell_ready")
 	updateicon()
 
-/mob/living/simple_animal/construct/Die()
-	..()
-	for(var/i=0;i<3;i++)
+/mob/living/simple_animal/construct/death(var/gibbed=FALSE)
+	..(TRUE)
+
+	for(var/i = 1 to 3)
 		new /obj/item/weapon/ectoplasm (src.loc)
-	for(var/mob/M in viewers(src, null))
-		if((M.client && !( M.blinded )))
-			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
-	ghostize()
+
+	visible_message("<span class='warning'>\The [src] collapses in a shattered heap.</span>")
 	qdel (src)
-	return
 
 /mob/living/simple_animal/construct/examine(mob/user)
 	var/msg = "<span cass='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"

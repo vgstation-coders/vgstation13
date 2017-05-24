@@ -86,20 +86,20 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 			set_light(4, 1, "#0068B2")
 			walk(src,0)
 	else
-		Die()
+		death()
 
 	..()
 
-/mob/living/simple_animal/hostile/glow_orb/Die()
-	..()
+/mob/living/simple_animal/hostile/glow_orb/death(var/gibbed=FALSE)
+	..(TRUE)
 	visible_message("<span class = 'notice'>\The [src] grows dim as it falls to the ground.</span>")
-	flick("glow_stone_deactivate", src)
+	var/obj/item/weapon/glow_orb/orb = new/obj/item/weapon/glow_orb(get_turf(src))
+	orb.set_light(light_range, light_power, light_color)
+	qdel(src)
+	flick("glow_stone_deactivate", orb)
 	spawn(10)
-		playsound(get_turf(src), 'sound/weapons/orb_deactivate.ogg', 50,1)
-		set_light(0)
-		new/obj/item/weapon/glow_orb(get_turf(src))
-		qdel(src)
-		return
+		playsound(get_turf(orb), 'sound/weapons/orb_deactivate.ogg', 50,1)
+		orb.set_light(0)
 
 /mob/living/simple_animal/hostile/glow_orb/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/beam/lightning/spell) || istype(P, /obj/item/projectile/energy/electrode))

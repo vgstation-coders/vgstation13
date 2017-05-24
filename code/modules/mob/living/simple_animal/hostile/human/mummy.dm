@@ -41,7 +41,7 @@
 	corpseuniform = /obj/item/clothing/under/mummy_rags
 	corpsehelmet = /obj/item/clothing/head/mummy_rags
 
-/mob/living/simple_animal/hostile/humanoid/mummy/Die()
+/mob/living/simple_animal/hostile/humanoid/mummy/death(var/gibbed=FALSE)
 	if(!isturf(loc))
 		return
 

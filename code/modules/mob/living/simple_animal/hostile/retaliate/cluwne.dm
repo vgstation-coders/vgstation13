@@ -286,7 +286,7 @@
 	message = uppertext(jointext(temp_message, " "))
 	return ..(message)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Die()
+/mob/living/simple_animal/hostile/retaliate/cluwne/death(var/gibbed=FALSE)
 	..()
 	walk(src, 0)
 
@@ -343,8 +343,8 @@
 		return
 	..()
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/death(var/gibbed=FALSE)
+	..(TRUE)
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
 	qdel(src)

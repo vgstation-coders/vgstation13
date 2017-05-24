@@ -63,12 +63,11 @@
 		if (2)
 			adjustBruteLoss(10)
 
-/mob/living/simple_animal/hostile/hivebot/Die()
-	..()
+/mob/living/simple_animal/hostile/hivebot/death(var/gibbed=FALSE)
+	..(TRUE)
 	visible_message("<b>[src]</b> blows apart!")
 	new /obj/effect/gibspawner/robot(src.loc)
 	qdel(src)
-	return
 
 /mob/living/simple_animal/hostile/hivebot/tele//this still needs work
 	name = "Beacon"

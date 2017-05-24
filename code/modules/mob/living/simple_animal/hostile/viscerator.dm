@@ -33,11 +33,10 @@
 	if(stat == CONSCIOUS)
 		animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 15, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/viscerator/Die()
-	..()
+/mob/living/simple_animal/hostile/viscerator/death(var/gibbed=FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'><b>[src]</b> is smashed into pieces!</span>")
 	qdel (src)
-	return
 
 /mob/living/simple_animal/hostile/viscerator/CanAttack(var/atom/the_target)
 	if(ismob(the_target))

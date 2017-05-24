@@ -31,7 +31,7 @@
 	faction = "mummy"
 	corpse = null
 
-/mob/living/simple_animal/hostile/humanoid/jackal/Die()
+/mob/living/simple_animal/hostile/humanoid/jackal/death(var/gibbed=FALSE)
 	visible_message("<span class='danger'>\The [src] crumbles to dust!</span>")
 
 	..()

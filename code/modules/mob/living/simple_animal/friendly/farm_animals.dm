@@ -330,7 +330,7 @@
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/Die()
+/mob/living/simple_animal/hostile/retaliate/box/death(var/gibbed=FALSE)
 	..()
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
@@ -338,7 +338,7 @@
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
 		if(!stat && size < SIZE_BIG)
 			if(!user.drop_item(O))
-				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+				to_chat(user, "<span class='notice'>You can't let go of \the [O]!</span>")
 				return
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")

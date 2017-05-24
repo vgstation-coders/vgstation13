@@ -45,20 +45,21 @@
 		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
 
-/mob/living/simple_animal/hostile/humanoid/Die()
-	..()
-	if(corpse)
-		new corpse(loc)
+/mob/living/simple_animal/hostile/humanoid/death(var/gibbed=FALSE)
+	..(TRUE)
 
-	if(items_to_drop.len)
+	if (!gibbed)
+		if(corpse)
+			new corpse(loc)
 
-		for(var/object in items_to_drop)
+		if(items_to_drop.len)
 
-			if(ispath(object))
-				new object (get_turf(src))
-			else if(istype(object, /atom/movable))
-				var/atom/movable/A = object
-				A.forceMove(get_turf(src))
+			for(var/object in items_to_drop)
+
+				if(ispath(object))
+					new object (get_turf(src))
+				else if(istype(object, /atom/movable))
+					var/atom/movable/A = object
+					A.forceMove(get_turf(src))
 
 	qdel(src)
-	return
