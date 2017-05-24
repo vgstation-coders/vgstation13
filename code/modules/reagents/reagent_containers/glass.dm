@@ -48,6 +48,7 @@
 		/obj/item/weapon/sword/venom,
 		/obj/item/weapon/cylinder,
 		/obj/item/clothing/gloves/powerfist,
+		/obj/item/weapon/vape,
 		)
 
 /obj/item/weapon/reagent_containers/glass/get_rating()

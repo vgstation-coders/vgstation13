@@ -761,3 +761,79 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		lit = 0
 		update_brightness()
 		visible_message("<span class='warning'>Without warning, the flame on \the [src] suddenly goes out in a weak fashion.</span>")
+
+/obj/item/weapon/vape
+	name = "E-Cigarette"
+	desc = "More commony refered to as a mouth fedora"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "vape"
+	var/datum/effect/effect/system/smoke_spread/smoke = new()
+	var/max_beaker_volume = 50
+	var/beaker = null
+	var/vape_amount = 5
+	var/emagged = FALSE
+
+/obj/item/weapon/vape/attack_self(mob/living/user)
+	if(emagged == TRUE)
+		playsound(get_turf(src), 'sound/effects/Explosion_Small1.ogg', 50, 0)
+		user.apply_damage(20, BURN, "head")
+		qdel(src)
+		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
+		sparks.set_up(3, 0, get_turf(user))
+		sparks.start()
+		to_chat(user, "<span class='userdanger'>The [name] suddenly explodes in your mouth!</span>")
+	else
+
+		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
+		user.delayNextAttack(50)
+
+		if(beaker)
+			B.reagents.trans_to(user, vape_amount)
+
+		user.visible_message("<span class='rose'>[user] takes a hit from the \the [src] and makes a nice cloud!</span>")
+		playsound(get_turf(src), 'sound/effects/smoke.ogg', 50, 1, -3)
+		smoke.set_up(1, 0, src.loc)
+		smoke.attach(src)
+		smoke.start()
+
+/obj/item/weapon/vape/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is going crazy on the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	playsound(get_turf(src), 'sound/effects/smoke.ogg', 50, 1, -3)
+	smoke.set_up(15, 0, src.loc)
+	smoke.attach(src)
+	smoke.start()
+	return (OXYLOSS)
+
+/obj/item/weapon/vape/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/reagent_containers/glass/beaker))
+		if(beaker)
+			to_chat(user, "<span class='notice'>There is already a beaker in \the [src]'s beaker port.</span>")
+			return
+		var/obj/item/weapon/reagent_containers/glass/beaker/B = W
+		if(B.volume > max_beaker_volume)
+			to_chat(user, "<span class='warning'>That beaker is too large to fit into \the [src]'s beaker port.</span>")
+			return
+		if(!user.drop_item(W, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			return 1
+		beaker = W
+		to_chat(user, "You insert \the [W] into \the [src]'s beaker port.")
+
+/obj/item/weapon/vape/AltClick(mob/user)
+	if(usr.incapacitated())
+		return
+	if(!beaker)
+		return
+	else
+		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
+		B.forceMove(user.loc)
+		user.put_in_hands(B)
+		beaker = null
+		to_chat(user, "You remove \the [B] from \the [src].")
+
+/obj/item/weapon/vape/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/card/emag))
+		emagged = TRUE
+	else return
+
+
