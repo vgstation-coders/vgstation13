@@ -1156,26 +1156,6 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
-/mob/proc/update_flavor_text()
-	set src in usr
-
-	if(usr != src)
-		to_chat(usr, "No.")
-		return
-
-	var/msg = input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",html_decode(flavor_text)) as message|null
-
-	if(msg != null)
-		msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-		msg = html_encode(msg)
-
-		flavor_text = msg
-
-/mob/proc/warn_flavor_changed()
-	if(flavor_text) // Don't spam people that don't use it!
-		to_chat(src, "<h2 class='alert'>OOC Warning:</h2>")
-		to_chat(src, "<span class='alert'>Your flavor text is likely out of date! <a href='?src=\ref[src];flavor_text=change'>Change</a></span>")
-
 /mob/proc/print_flavor_text(user)
     if(flavor_text)
         var/msg = replacetext(flavor_text, "\n", "<br />")

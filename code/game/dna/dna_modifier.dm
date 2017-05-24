@@ -974,7 +974,6 @@
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
 					databuf.dna.real_name=connected.occupant.name
-					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Structural Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1
