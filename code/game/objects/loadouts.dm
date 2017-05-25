@@ -192,12 +192,12 @@
 						/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 						/obj/item/weapon/bikehorn,
 						/obj/item/weapon/card/id/tunnel_clown,
-						/obj/item/weapon/fire_axe)
+						/obj/item/weapon/fireaxe)
 
 /obj/abstract/loadout/tunnel_clown/alter_items(var/list/items, var/mob/M)
 	for(var/obj/item/weapon/card/id/I in items)
-		name = "[M.real_name]'s ID Card"
-		registered_name = M.real_name
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
 
 /obj/abstract/loadout/masked_killer
 	items_to_spawn = list(/obj/item/clothing/under/overalls,
