@@ -61,10 +61,6 @@
 	_color = "medical"				//matches cmo stamp
 	species_fit = list(VOX_SHAPED)
 
-/obj/item/clothing/gloves/latex/bloody/New()
-	..()
-	add_blood()
-
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
 	name = "botanist's leather gloves"

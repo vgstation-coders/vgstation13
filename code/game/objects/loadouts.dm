@@ -17,6 +17,7 @@
 /obj/abstract/loadout/proc/equip_items(var/mob/M)
 	M.unequip_everything()	//unequip everything before equipping loadout
 	var/list/spawned_items = spawn_items()
+	alter_items(spawned_items, M)
 	M.recursive_list_equip(spawned_items)
 	qdel(src)
 
@@ -28,6 +29,7 @@
 			to_return.Add(I)
 	return to_return
 
+/obj/abstract/loadout/proc/alter_items(var/list/items, var/mob/M)
 
 /obj/abstract/loadout/gemsuit
 	items_to_spawn = list(/obj/item/clothing/head/helmet/space/rig/wizard,
@@ -192,18 +194,27 @@
 						/obj/item/weapon/card/id/tunnel_clown,
 						/obj/item/weapon/fire_axe)
 
+/obj/abstract/loadout/tunnel_clown/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		name = "[M.real_name]'s ID Card"
+		registered_name = M.real_name
+
 /obj/abstract/loadout/masked_killer
-	items_to_spawn = list(/obj/item/clothing/under/overalls/bloody,
-						/obj/item/clothing/shoes/white/bloody,
-						/obj/item/clothing/gloves/latex/bloody,
-						/obj/item/clothing/mask/surgical/bloody,
-						/obj/item/clothing/head/welding/bloody,
-						/obj/item/device/radio/headset/bloody,
-						/obj/item/clothing/glasses/thermal/monocle/bloody,
-						/obj/item/clothing/suit/apron/bloody,
-						/obj/item/weapon/kitchen/utensil/knife/large/bloody,
-						/obj/item/weapon/scalpel/bloody,
-						/obj/item/weapon/fireaxe/bloody)
+	items_to_spawn = list(/obj/item/clothing/under/overalls,
+						/obj/item/clothing/shoes/white,
+						/obj/item/clothing/gloves/latex,
+						/obj/item/clothing/mask/surgical,
+						/obj/item/clothing/head/welding,
+						/obj/item/device/radio/headset,
+						/obj/item/clothing/glasses/thermal/monocle,
+						/obj/item/clothing/suit/apron,
+						/obj/item/weapon/kitchen/utensil/knife/large,
+						/obj/item/weapon/scalpel,
+						/obj/item/weapon/fireaxe)
+
+/obj/abstract/loadout/masked_killer/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/I in items)
+		I.add_blood(M)
 
 /obj/abstract/loadout/assassin
 	items_to_spawn = list(/obj/item/clothing/under/suit_jacket,
@@ -217,6 +228,14 @@
 						/obj/item/weapon/storage/secure/briefcase/assassin,
 						/obj/item/device/pda/heads/assassin,
 						/obj/item/weapon/card/id/syndicate/assassin)
+
+/obj/abstract/loadout/assassin/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+	for(var/obj/item/device/pda/P in items)
+		P.owner = M.real_name
+		P.name = "PDA-[M.real_name] ([P.ownjob])"
 
 /obj/abstract/loadout/death_commando
 	items_to_spawn = list(/obj/item/device/radio/headset/deathsquad,
@@ -240,6 +259,11 @@
 						/obj/item/weapon/gun/energy/pulse_rifle,
 						/obj/item/weapon/card/id/death_commando)
 
+/obj/abstract/loadout/death_commando/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+
 /obj/abstract/loadout/death_commando/equip_items(var/mob/M)
 	M.unequip_everything()
 	if(ishuman(M))
@@ -247,6 +271,7 @@
 		H.equip_death_commando()
 	else
 		var/list/spawned_items = spawn_items()
+		alter_items(spawned_items, M)
 		M.recursive_list_equip(spawned_items)
 	qdel(src)
 
@@ -274,6 +299,11 @@
 						/obj/item/weapon/gun/osipr,
 						/obj/item/weapon/card/id/syndicate/commando)
 
+/obj/abstract/loadout/syndicate_commando/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+
 /obj/abstract/loadout/syndicate_commando/equip_items(var/mob/M)
 	M.unequip_everything()
 	if(ishuman(M))
@@ -281,6 +311,7 @@
 		H.equip_syndicate_commando()
 	else
 		var/list/spawned_items = spawn_items()
+		alter_items(spawned_items, M)
 		M.recursive_list_equip(spawned_items)
 	qdel(src)
 
@@ -294,6 +325,14 @@
 						/obj/item/weapon/clipboard,
 						/obj/item/weapon/card/id/nt_rep)
 
+/obj/abstract/loadout/nanotrasen_representative/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+	for(var/obj/item/device/pda/P in items)
+		P.owner = M.real_name
+		P.name = "PDA-[M.real_name] ([P.ownjob])"
+
 /obj/abstract/loadout/nanotrasen_officer
 	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/officer,
 						/obj/item/clothing/shoes/centcom,
@@ -304,6 +343,14 @@
 						/obj/item/clothing/glasses/sunglasses,
 						/obj/item/weapon/gun/energy,
 						/obj/item/weapon/card/id/centcom/nt_officer)
+
+/obj/abstract/loadout/nanotrasen_officer/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+	for(var/obj/item/device/pda/P in items)
+		P.owner = M.real_name
+		P.name = "PDA-[M.real_name] ([P.ownjob])"
 
 /obj/abstract/loadout/nanotrasen_captain
 	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/captain,
@@ -316,6 +363,14 @@
 						/obj/item/weapon/gun/energy,
 						/obj/item/weapon/card/id/centcom/nt_officer)
 
+/obj/abstract/loadout/nanotrasen_captain/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+	for(var/obj/item/device/pda/P in items)
+		P.owner = M.real_name
+		P.name = "PDA-[M.real_name] ([P.ownjob])"
+
 /obj/abstract/loadout/nanotrasen_supreme_commander
 	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/captain,
 						/obj/item/clothing/shoes/centcom,
@@ -327,6 +382,14 @@
 						/obj/item/weapon/gun/energy/laser/captain,
 						/obj/item/device/pda/heads/nt_supreme,
 						/obj/item/weapon/card/id/admin/nt_supreme)
+
+/obj/abstract/loadout/nanotrasen_supreme_commander/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+	for(var/obj/item/device/pda/P in items)
+		P.owner = M.real_name
+		P.name = "PDA-[M.real_name] ([P.ownjob])"
 
 /obj/abstract/loadout/emergency_response_team
 	items_to_spawn = list(/obj/item/device/radio/headset/ert,
@@ -341,6 +404,11 @@
 						/obj/item/weapon/storage/firstaid/regular,
 						/obj/item/weapon/card/id/emergency_responder)
 
+/obj/abstract/loadout/emergency_response_team/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+
 /obj/abstract/loadout/emergency_response_team/equip_items(var/mob/M)
 	M.unequip_everything()
 	if(ishuman(M))
@@ -348,6 +416,7 @@
 		H.equip_response_team()
 	else
 		var/list/spawned_items = spawn_items()
+		alter_items(spawned_items, M)
 		M.recursive_list_equip(spawned_items)
 	qdel(src)
 
@@ -364,6 +433,11 @@
 						/obj/item/weapon/lighter/zippo,
 						/obj/item/weapon/storage/backpack/satchel,
 						/obj/item/weapon/card/id/special_operations)
+
+/obj/abstract/loadout/special_ops_officer/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
 
 /obj/abstract/loadout/blue_wizard
 	items_to_spawn = list(/obj/item/clothing/under/lightpurple,
@@ -413,6 +487,11 @@
 						/obj/item/clothing/under/soviet,
 						/obj/item/weapon/card/id/soviet_admiral)
 
+/obj/abstract/loadout/soviet_admiral/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/weapon/card/id/I in items)
+		I.name = "[M.real_name]'s ID Card"
+		I.registered_name = M.real_name
+
 /obj/abstract/loadout/bomberman
 	items_to_spawn = list(/obj/item/clothing/under/darkblue,
 						/obj/item/clothing/shoes/purple,
@@ -429,16 +508,12 @@
 						/obj/item/clothing/gloves/purple,
 						/obj/item/weapon/bomberman)
 
-/obj/abstract/loadout/arena_bomberman/equip_items(var/mob/M)
-	M.unequip_everything()
-	var/list/spawned_items = spawn_items()
-	for(var/obj/item/clothing/C in spawned_items)
+/obj/abstract/loadout/arena_bomberman/alter_items(var/list/items, var/mob/M)
+	for(var/obj/item/clothing/C in items)
 		C.canremove = 0
 		if(istype(C, /obj/item/clothing/suit/space/bomberman))
 			var/obj/item/clothing/suit/space/bomberman/B = C
 			B.slowdown = HARDSUIT_SLOWDOWN_LOW
-	M.recursive_list_equip(spawned_items)
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e","f",)
 	M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	M.name = "Bomberman #[rand(1,999)]"
-	qdel(src)

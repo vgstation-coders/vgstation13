@@ -55,10 +55,6 @@
 		usr.update_hair()
 		usr.update_inv_ears()
 
-/obj/item/clothing/head/welding/bloody/New()
-	..()
-	add_blood()
-
 
 /*
  * Cakehat

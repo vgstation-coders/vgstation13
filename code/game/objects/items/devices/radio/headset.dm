@@ -367,7 +367,3 @@
 		secure_radio_connections[ch_name] = add_radio(src, radiochannels[ch_name])
 
 	return
-
-/obj/item/device/radio/headset/bloody/New()
-	..()
-	add_blood()

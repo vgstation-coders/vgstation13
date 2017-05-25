@@ -234,10 +234,6 @@
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
 	return (BRUTELOSS)
 
-/obj/item/weapon/kitchen/utensil/knife/large/bloody/New()
-	..()
-	add_blood()
-
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"
 	desc = "The unearthly energies that once powered this blade are now dormant."

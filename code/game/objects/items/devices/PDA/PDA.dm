@@ -285,70 +285,25 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
-/obj/item/device/pda/heads/assassin/New()
-	..()
+/obj/item/device/pda/heads/assassin
 	name = "Reaper PDA"
-	var/turf/T = get_turf(src)
-	if(T)
-		for(var/atom/movable/A in T.contents)
-			if(istype(A, /mob))
-				var/mob/M = A
-				owner = M.real_name
-				ownjob = "Reaper"
-				name = "PDA-[M.real_name] ([ownjob])"
-				break
+	ownjob = "Reaper"
 
-/obj/item/device/pda/heads/nt_rep/New()
-	..()
+/obj/item/device/pda/heads/nt_rep
 	name = "Nanotrasen Navy Representative PDA"
-	var/turf/T = get_turf(src)
-	if(T)
-		for(var/atom/movable/A in T.contents)
-			if(istype(A, /mob))
-				var/mob/M = A
-				owner = M.real_name
-				ownjob = "Nanotrasen Navy Representative"
-				name = "PDA-[M.real_name] ([ownjob])"
-				break
+	ownjob = "Nanotrasen Navy Representative"
 
-/obj/item/device/pda/heads/nt_officer/New()
-	..()
+/obj/item/device/pda/heads/nt_officer
 	name = "Nanotrasen Navy Officer PDA"
-	var/turf/T = get_turf(src)
-	if(T)
-		for(var/atom/movable/A in T.contents)
-			if(istype(A, /mob))
-				var/mob/M = A
-				owner = M.real_name
-				ownjob = "Nanotrasen Navy Officer"
-				name = "PDA-[M.real_name] ([ownjob])"
-				break
+	ownjob = "Nanotrasen Navy Officer"
 
-/obj/item/device/pda/heads/nt_captain/New()
-	..()
+/obj/item/device/pda/heads/nt_captain
 	name = "Nanotrasen Navy Captain PDA"
-	var/turf/T = get_turf(src)
-	if(T)
-		for(var/atom/movable/A in T.contents)
-			if(istype(A, /mob))
-				var/mob/M = A
-				owner = M.real_name
-				ownjob = "Nanotrasen Navy Captain"
-				name = "PDA-[M.real_name] ([ownjob])"
-				break
+	ownjob = "Nanotrasen Navy Captain"
 
-/obj/item/device/pda/heads/nt_supreme/New()
-	..()
+/obj/item/device/pda/heads/nt_supreme
 	name = "Nanotrasen Supreme Commander PDA"
-	var/turf/T = get_turf(src)
-	if(T)
-		for(var/atom/movable/A in T.contents)
-			if(istype(A, /mob))
-				var/mob/M = A
-				owner = M.real_name
-				ownjob = "Nanotrasen Supreme Commander"
-				name = "PDA-[M.real_name] ([ownjob])"
-				break
+	ownjob = "Nanotrasen Supreme Commander"
 
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"

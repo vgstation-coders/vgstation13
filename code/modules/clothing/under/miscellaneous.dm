@@ -226,10 +226,6 @@
 	gender = PLURAL
 	species_fit = list(GREY_SHAPED)
 
-/obj/item/clothing/under/overalls/bloody/New()
-	..()
-	add_blood()
-
 /obj/item/clothing/under/pirate
 	name = "pirate outfit"
 	desc = "Yarr."
