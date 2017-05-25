@@ -78,5 +78,9 @@
 	// This gets set by goonchat.
 	var/encoding = "1252"
 
+	//One-way windows
+	var/list/ViewFilter = list()
+	var/list/ObscuredTurfs = list()
+
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()
