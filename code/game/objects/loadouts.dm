@@ -242,7 +242,12 @@
 
 /obj/abstract/loadout/death_commando/equip_items(var/mob/M)
 	M.unequip_everything()
-	M.equip_death_commando()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.equip_death_commando()
+	else
+		var/list/spawned_items = spawn_items()
+		M.recursive_list_equip(spawned_items)
 	qdel(src)
 
 /obj/abstract/loadout/syndicate_commando
@@ -271,7 +276,12 @@
 
 /obj/abstract/loadout/syndicate_commando/equip_items(var/mob/M)
 	M.unequip_everything()
-	M.equip_syndicate_commando()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.equip_syndicate_commando()
+	else
+		var/list/spawned_items = spawn_items()
+		M.recursive_list_equip(spawned_items)
 	qdel(src)
 
 /obj/abstract/loadout/nanotrasen_representative
@@ -333,7 +343,12 @@
 
 /obj/abstract/loadout/emergency_response_team/equip_items(var/mob/M)
 	M.unequip_everything()
-	M.equip_response_team()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.equip_response_team()
+	else
+		var/list/spawned_items = spawn_items()
+		M.recursive_list_equip(spawned_items)
 	qdel(src)
 
 /obj/abstract/loadout/special_ops_officer

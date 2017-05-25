@@ -224,7 +224,7 @@
 	item_state = "lb_suit"
 	_color = "overalls"
 	gender = PLURAL
-	species_fit = list(GREY_SHAPED)'
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/overalls/bloody/New()
 	..()
