@@ -123,6 +123,8 @@
 
 #define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
 
+#define isMGC(A) istype(A, /obj/item/weapon/gun/MechaGunConverter)
+
 #define iswire(O) istype(O, /obj/item/stack/cable_coil)
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)

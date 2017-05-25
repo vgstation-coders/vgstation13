@@ -5,6 +5,15 @@
 	var/projectile
 	var/fire_sound
 
+/obj/item/mecha_parts/mecha_equipment/weapon/attackby(obj/item/weapon/MGC as obj, mob/user as mob)
+	if(isMGC(MGC))
+		//originalclass = src //For deconversion -- What gun was it?
+		//projectiles //the amount of ammo it has
+		new /obj/item/weapon/gun/ConvertedMountedGun(src.loc, src.icon_state,src.projectile,src.fire_sound)
+		user.visible_message("<span class='notice'>You attach the conversion kit to the [src].</span>")
+		qdel(src)
+		qdel(MGC)
+
 
 /obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
 	if(..())
