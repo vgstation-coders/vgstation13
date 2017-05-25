@@ -43,12 +43,13 @@
 	stat_collection.add_death_stat(src)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
-	if(transmogged_from)
-		death_untransmogrify()
-		return
-	return ..(gibbed)
+
+	death_untransmogrify()
 
 /mob/proc/death_untransmogrify()
+	if (!transmogged_from)
+		return FALSE
+
 	var/obj/transmog_body_container/C = transmogged_from
 	var/mob/living/L = C.contained_mob
 	transmogrify()
@@ -56,6 +57,8 @@
 	if(istype(L))
 		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
 		L.updatehealth()
+
+	return TRUE
 
 //This proc should be used when you're restoring a guy to life. It will remove him from the dead mob list, and add him to the living mob list. It will also remove any verbs
 //that his dead body has

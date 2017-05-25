@@ -136,6 +136,8 @@ var/list/wizard_snakes
 		visible_message("<span class='notice'>\The [src] vanishes!</span>")
 		qdel(src)
 
+	return TRUE
+
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
 	wizard_snakes.Remove(src)
 	..()
