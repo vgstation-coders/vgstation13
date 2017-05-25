@@ -311,6 +311,45 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				name = "PDA-[M.real_name] ([ownjob])"
 				break
 
+/obj/item/device/pda/heads/nt_officer/New()
+	..()
+	name = "Nanotrasen Navy Officer PDA"
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				owner = M.real_name
+				ownjob = "Nanotrasen Navy Officer"
+				name = "PDA-[M.real_name] ([ownjob])"
+				break
+
+/obj/item/device/pda/heads/nt_captain/New()
+	..()
+	name = "Nanotrasen Navy Captain PDA"
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				owner = M.real_name
+				ownjob = "Nanotrasen Navy Captain"
+				name = "PDA-[M.real_name] ([ownjob])"
+				break
+
+/obj/item/device/pda/heads/nt_supreme/New()
+	..()
+	name = "Nanotrasen Supreme Commander PDA"
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/atom/movable/A in T.contents)
+			if(istype(A, /mob))
+				var/mob/M = A
+				owner = M.real_name
+				ownjob = "Nanotrasen Supreme Commander"
+				name = "PDA-[M.real_name] ([ownjob])"
+				break
+
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop

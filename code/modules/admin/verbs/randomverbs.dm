@@ -1106,5 +1106,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			return
 		M.equip_loadout(loadout_type)
 
+	log_admin("[key_name(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].")
+	message_admins("<span class='notice'>[key_name_admin(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].</span>", 1)
 
 	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

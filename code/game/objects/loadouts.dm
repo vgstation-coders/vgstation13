@@ -283,20 +283,147 @@
 						/obj/item/clothing/glasses/sunglasses,
 						/obj/item/weapon/clipboard,
 						/obj/item/weapon/card/id/nt_rep)
-/*
-/obj/abstract/loadout/
-	items_to_spawn = list(,
-						)
 
-/obj/abstract/loadout/
-	items_to_spawn = list(,
-						)
+/obj/abstract/loadout/nanotrasen_officer
+	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/officer,
+						/obj/item/clothing/shoes/centcom,
+						/obj/item/clothing/gloves/white,
+						/obj/item/device/radio/headset/heads/captain,
+						/obj/item/clothing/head/beret/centcom/officer,
+						/obj/item/device/pda/heads/nt_officer,
+						/obj/item/clothing/glasses/sunglasses,
+						/obj/item/weapon/gun/energy,
+						/obj/item/weapon/card/id/centcom/nt_officer)
 
-/obj/abstract/loadout/
-	items_to_spawn = list(,
-						)
+/obj/abstract/loadout/nanotrasen_captain
+	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/captain,
+						/obj/item/clothing/shoes/centcom,
+						/obj/item/clothing/gloves/white,
+						/obj/item/device/radio/headset/heads/captain,
+						/obj/item/clothing/head/beret/centcom/captain,
+						/obj/item/device/pda/heads/nt_captain,
+						/obj/item/clothing/glasses/sunglasses,
+						/obj/item/weapon/gun/energy,
+						/obj/item/weapon/card/id/centcom/nt_officer)
 
-/obj/abstract/loadout/
-	items_to_spawn = list(,
-						)
-*/
+/obj/abstract/loadout/nanotrasen_supreme_commander
+	items_to_spawn = list(/obj/item/clothing/under/rank/centcom/captain,
+						/obj/item/clothing/shoes/centcom,
+						/obj/item/clothing/gloves/centcom,
+						/obj/item/device/radio/headset/heads/captain,
+						/obj/item/clothing/head/centhat,
+						/obj/item/clothing/suit/armor/centcomm,
+						/obj/item/clothing/glasses/sunglasses,
+						/obj/item/weapon/gun/energy/laser/captain,
+						/obj/item/device/pda/heads/nt_supreme,
+						/obj/item/weapon/card/id/admin/nt_supreme)
+
+/obj/abstract/loadout/emergency_response_team
+	items_to_spawn = list(/obj/item/device/radio/headset/ert,
+						/obj/item/clothing/under/ert,
+						/obj/item/device/flashlight,
+						/obj/item/weapon/gun/energy/gun,
+						/obj/item/clothing/glasses/sunglasses/sechud,
+						/obj/item/clothing/shoes/swat,
+						/obj/item/clothing/gloves/swat,
+						/obj/item/weapon/storage/backpack/security,
+						/obj/item/weapon/storage/box/survival/ert,
+						/obj/item/weapon/storage/firstaid/regular,
+						/obj/item/weapon/card/id/emergency_responder)
+
+/obj/abstract/loadout/emergency_response_team/equip_items(var/mob/M)
+	M.unequip_everything()
+	M.equip_response_team()
+	qdel(src)
+
+/obj/abstract/loadout/special_ops_officer
+	items_to_spawn = list(/obj/item/clothing/under/syndicate/combat,
+						/obj/item/clothing/suit/armor/swat/officer,
+						/obj/item/clothing/shoes/combat,
+						/obj/item/clothing/gloves/combat,
+						/obj/item/device/radio/headset/heads/captain,
+						/obj/item/clothing/glasses/thermal/eyepatch,
+						/obj/item/clothing/mask/cigarette/cigar/havana,
+						/obj/item/clothing/head/beret/centcom,
+						/obj/item/weapon/gun/energy/pulse_rifle/M1911,
+						/obj/item/weapon/lighter/zippo,
+						/obj/item/weapon/storage/backpack/satchel,
+						/obj/item/weapon/card/id/special_operations)
+
+/obj/abstract/loadout/blue_wizard
+	items_to_spawn = list(/obj/item/clothing/under/lightpurple,
+						/obj/item/clothing/suit/wizrobe,
+						/obj/item/clothing/shoes/sandal,
+						/obj/item/device/radio/headset,
+						/obj/item/clothing/head/wizard,
+						/obj/item/weapon/storage/backpack,
+						/obj/item/weapon/storage/box,
+						/obj/item/weapon/teleportation_scroll,
+						/obj/item/weapon/spellbook,
+						/obj/item/weapon/staff)
+
+/obj/abstract/loadout/red_wizard
+	items_to_spawn = list(/obj/item/clothing/under/lightpurple,
+						/obj/item/clothing/suit/wizrobe/red,
+						/obj/item/clothing/shoes/sandal,
+						/obj/item/device/radio/headset,
+						/obj/item/clothing/head/wizard/red,
+						/obj/item/weapon/storage/backpack,
+						/obj/item/weapon/storage/box,
+						/obj/item/weapon/teleportation_scroll,
+						/obj/item/weapon/spellbook,
+						/obj/item/weapon/staff)
+
+/obj/abstract/loadout/marisa_wizard
+	items_to_spawn = list(/obj/item/clothing/under/lightpurple,
+						/obj/item/clothing/suit/wizrobe/marisa,
+						/obj/item/clothing/shoes/sandal/marisa,
+						/obj/item/device/radio/headset,
+						/obj/item/clothing/head/wizard/marisa,
+						/obj/item/weapon/storage/backpack,
+						/obj/item/weapon/storage/box,
+						/obj/item/weapon/teleportation_scroll,
+						/obj/item/weapon/spellbook,
+						/obj/item/weapon/staff)
+
+/obj/abstract/loadout/soviet_admiral
+	items_to_spawn = list(/obj/item/clothing/head/hgpiratecap,
+						/obj/item/clothing/shoes/combat,
+						/obj/item/clothing/gloves/combat,
+						/obj/item/device/radio/headset/heads/captain,
+						/obj/item/clothing/glasses/thermal/eyepatch,
+						/obj/item/clothing/suit/hgpirate,
+						/obj/item/weapon/storage/backpack/satchel,
+						/obj/item/weapon/gun/projectile/mateba,
+						/obj/item/clothing/under/soviet,
+						/obj/item/weapon/card/id/soviet_admiral)
+
+/obj/abstract/loadout/bomberman
+	items_to_spawn = list(/obj/item/clothing/under/darkblue,
+						/obj/item/clothing/shoes/purple,
+						/obj/item/clothing/head/helmet/space/bomberman,
+						/obj/item/clothing/suit/space/bomberman,
+						/obj/item/clothing/gloves/purple,
+						/obj/item/weapon/bomberman)
+
+/obj/abstract/loadout/arena_bomberman
+	items_to_spawn = list(/obj/item/clothing/under/darkblue,
+						/obj/item/clothing/shoes/purple,
+						/obj/item/clothing/head/helmet/space/bomberman,
+						/obj/item/clothing/suit/space/bomberman,
+						/obj/item/clothing/gloves/purple,
+						/obj/item/weapon/bomberman)
+
+/obj/abstract/loadout/arena_bomberman/equip_items(var/mob/M)
+	M.unequip_everything()
+	var/list/spawned_items = spawn_items()
+	for(var/obj/item/clothing/C in spawned_items)
+		C.canremove = 0
+		if(istype(C, /obj/item/clothing/suit/space/bomberman))
+			var/obj/item/clothing/suit/space/bomberman/B = C
+			B.slowdown = HARDSUIT_SLOWDOWN_LOW
+	M.recursive_list_equip(spawned_items)
+	var/list/randomhexes = list("7","8","9","a","b","c","d","e","f",)
+	M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
+	M.name = "Bomberman #[rand(1,999)]"
+	qdel(src)
