@@ -51,6 +51,7 @@
 							/obj/item/toy/foamblade							= 1,
 							/obj/item/weapon/storage/box/actionfigure		= 1,
 							/obj/item/toy/syndicateballoon/ntballoon		= 1,
+							/obj/item/toy/fidgetspinner						= 1,
 							)
 
 /obj/machinery/computer/arcade
