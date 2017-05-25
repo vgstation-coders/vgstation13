@@ -323,7 +323,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/storage/toolbox)
 
 //ADMINBUS RIGS. SOVIET + NAZI
 /obj/item/clothing/head/helmet/space/rig/nazi
