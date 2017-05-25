@@ -675,14 +675,15 @@ var/list/slot_equipment_priority = list( \
 				B.handle_item_insertion(I,1)
 	regenerate_icons()
 
-/mob/proc/equip_loadout(var/type)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
+/mob/proc/equip_loadout(var/type, var/unequip_current = TRUE)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
 	if(type)
 		if(ispath(type, /obj/abstract/loadout))
-			new type(get_turf(src), src)
+			new type(get_turf(src), src, unequip_current)
 	else
 		var/turf/T = get_turf(usr)
 		if(T)
-			unequip_everything()	//unequip everything before equipping loadout
+			if(unequip_current)
+				unequip_everything()	//unequip everything before equipping loadout
 			var/list/to_equip = list()
 			for(var/obj/item/I in T.contents)
 				to_equip.Add(new I.type(get_turf(src)))

@@ -1084,27 +1084,35 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		to_chat(src, "Only administrators may use this command.")
 		return
 	if(!check_rights(R_SPAWN))
+		to_chat(src, "You do not have the required permissions to use this command.")
 		return
 	if(!mob)
 		return
-	var/delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
-	if(!delete_items)
+	var/list/dropped_items
+	var/delete_items
+	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Loadout","") as null|anything in list("Yes","No")
+	if(!strip_items)
 		return
-	var/list/loadouts = (typesof(/obj/abstract/loadout) - /obj/abstract/loadout) + "USE ITEMS ON MY TURF"
+	if(strip_items == "Yes")
+		delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
+		if(!delete_items)
+			return
+	var/list/loadouts = list() + "USE ITEMS ON MY TURF" + (typesof(/obj/abstract/loadout) - /obj/abstract/loadout)
 	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
 	if(!loadout_type)
 		return
-	if(delete_items == "Yes")
-		var/list/dropped_items = M.unequip_everything()
-		for(var/atom/A in dropped_items)
-			qdel(A)
+	if(strip_items == "Yes")
+		dropped_items = M.unequip_everything()
+		if(delete_items == "Yes")
+			for(var/atom/A in dropped_items)
+				qdel(A)
 	if(loadout_type == "USE ITEMS ON MY TURF")
-		M.equip_loadout()
+		M.equip_loadout(null, FALSE)
 	else
 		if(!ispath(loadout_type))
 			alert("ERROR: No such loadout type found.")
 			return
-		M.equip_loadout(loadout_type)
+		M.equip_loadout(loadout_type, FALSE)
 
 	log_admin("[key_name(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].")
 	message_admins("<span class='notice'>[key_name_admin(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].</span>", 1)

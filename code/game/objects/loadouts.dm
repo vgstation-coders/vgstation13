@@ -1,9 +1,11 @@
 /obj/abstract/loadout
 	var/list/items_to_spawn = list()
 
-/obj/abstract/loadout/New(turf/T, var/mob/M)
+/obj/abstract/loadout/New(turf/T, var/mob/M, var/unequip_current = TRUE)
 	..(T)
 	if(istype(M))
+		if(unequip_current)
+			M.unequip_everything()	//unequip everything before equipping loadout
 		equip_items(M)
 	spawn(10)	//to allow its items to be manually spawned and accessed, for the purposes of obtaining references
 		if(!gcDestroyed)
@@ -15,7 +17,6 @@
 	qdel(src)
 
 /obj/abstract/loadout/proc/equip_items(var/mob/M)
-	M.unequip_everything()	//unequip everything before equipping loadout
 	var/list/spawned_items = spawn_items()
 	alter_items(spawned_items, M)
 	M.recursive_list_equip(spawned_items)
@@ -265,7 +266,6 @@
 		I.registered_name = M.real_name
 
 /obj/abstract/loadout/death_commando/equip_items(var/mob/M)
-	M.unequip_everything()
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.equip_death_commando()
@@ -305,7 +305,6 @@
 		I.registered_name = M.real_name
 
 /obj/abstract/loadout/syndicate_commando/equip_items(var/mob/M)
-	M.unequip_everything()
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.equip_syndicate_commando()
@@ -410,7 +409,6 @@
 		I.registered_name = M.real_name
 
 /obj/abstract/loadout/emergency_response_team/equip_items(var/mob/M)
-	M.unequip_everything()
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.equip_response_team()
