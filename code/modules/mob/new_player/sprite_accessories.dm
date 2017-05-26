@@ -486,7 +486,6 @@
 	halfshave
 		name = "Half-shave"
 		icon_state = "hair_halfshave"
-		gender = FEMALE
 
 	manbun
 		name = "Manbun"
