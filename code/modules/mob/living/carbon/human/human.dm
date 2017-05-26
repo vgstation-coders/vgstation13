@@ -1739,6 +1739,7 @@ mob/living/carbon/human/isincrit()
 		"b_eyes",
 		"s_tone",
 		"lip_style",
+		"eye_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",
