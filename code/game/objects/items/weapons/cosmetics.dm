@@ -122,7 +122,7 @@
 	name = "[colour] eyeshadow"
 	..()
 
-/obj/item/weapon/eyeshadow/attack(mob/M as mob, mob/user as mob)
+/obj/item/weapon/eyeshadow/attack(mob/M, mob/user)
 	if(!istype(M, /mob))
 		return
 

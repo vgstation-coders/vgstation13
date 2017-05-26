@@ -2470,7 +2470,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/makeup
 	name = "Sapphire Cosmetics"
 	desc = "A vending machine full of cosmetics and beauty products."
-	product_slogans = " There is no such thing as natural beauty.; Wear the look of the future.;Be the beauty in the eye of every beholder."
+	product_slogans = "There is no such thing as natural beauty.; Wear the look of the future.;Be the beauty in the eye of every beholder."
 	product_ads = "Why be yourself when you can be perfection?"
 	vend_reply = "The other girls will be so envious."
 	icon_state = "makeup"
@@ -2487,5 +2487,8 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/hair_dye = 3,
+		)
+	premium = list(
+		/obj/item/clothing/head/hairflower = 3,
 		)
 	pack = /obj/structure/vendomatpack/makeup
