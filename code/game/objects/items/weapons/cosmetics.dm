@@ -313,14 +313,14 @@
 				if(do_after(user, H, 5))
 					user.visible_message("[user] shaves \his facial hair clean with [src].", \
 										 "<span class='notice'>You finish shaving with [src]. Fast and clean!</span>")
-					shave(H, location)
+					shave(H, user, location)
 			else
 				user.visible_message("<span class='warning'>[user] tries to shave [H]'s facial hair with [src].</span>", \
 									 "<span class='notice'>You start shaving [H]'s facial hair...</span>")
 				if(do_after(user, H, 50))
 					user.visible_message("<span class='warning'>[user] shaves off [H]'s facial hair with [src].</span>", \
 										 "<span class='notice'>You shave [H]'s facial hair.</span>")
-					shave(H, location)
+					shave(H, user, location)
 
 		else if(location == LIMB_HEAD)
 			if(H.check_body_part_coverage(HEAD))
@@ -336,14 +336,14 @@
 				if(do_after(user, H, 5))
 					user.visible_message("[user] shaves \his head with [src].", \
 										 "<span class='notice'>You finish shaving with [src].</span>")
-					shave(H, location)
+					shave(H, user, location)
 			else
 				user.visible_message("<span class='warning'>[user] tries to shave [H]'s head with [src]!</span>", \
 									 "<span class='notice'>You start shaving [H]'s head...</span>")
 				if(do_after(user, H, 50))
 					user.visible_message("<span class='warning'>[user] shaves [H]'s head with [src]!</span>", \
 										 "<span class='notice'>You shave [H]'s head.</span>")
-					shave(H, location)
+					shave(H, user, location)
 		else
 			..()
 	else
