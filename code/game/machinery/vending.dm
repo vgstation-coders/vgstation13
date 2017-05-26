@@ -2443,3 +2443,25 @@ var/global/num_vending_terminals = 1
 	for(var/random_items = 1 to premium.len - 4)
 		premium.Remove(pick(premium))
 	src.initialize()
+
+/obj/machinery/vending/barber
+	name = "BarberVend"
+	desc = "The ultimate vendor for any aspiring space stylist."
+	product_slogans = "Haircuts for everyone!;Choose your own style!;A new look avaliable now!"
+	product_ads = "Our new hairdye formula, now avaliable in any color!"
+	vend_reply = "Enjoy your new look!"
+	icon_state = "barber"
+	products = list(
+		/obj/item/weapon/hair_dye = 4,
+		/obj/item/weapon/razor = 4,
+		/obj/item/weapon/pocket_mirror = 4,
+		/obj/item/clothing/mask/fakemoustache = 4,
+		/obj/item/clothing/under/rank/barber = 4,
+		/obj/item/clothing/head/barber = 4,
+		/obj/item/clothing/shoes/white = 4,
+		/obj/item/clothing/gloves/white = 4,
+		)
+	contraband = list(
+		/obj/item/weapon/lipstick/random = 5,
+		)
+	pack = /obj/structure/vendomatpack/barbervend

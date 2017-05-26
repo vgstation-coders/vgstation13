@@ -323,7 +323,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/storage/toolbox)
 
 //ADMINBUS RIGS. SOVIET + NAZI
 /obj/item/clothing/head/helmet/space/rig/nazi
@@ -475,3 +475,33 @@
 	item_state = "rig0-t51b"
 	armor = list(melee = 35, bullet = 35, laser = 40, energy = 40, bomb = 80, bio = 100, rad = 100)
 	_color="t51b"
+
+
+//Ghetto space suit
+/obj/item/clothing/head/helmet/space/rig/ghettorig
+	name = "jury-rigged space-proof fire helmet"
+	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
+	icon_state = "ghettorig"
+	_color = "ghetto"
+	pressure_resistance = 4 * ONE_ATMOSPHERE
+	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
+	body_parts_covered = FULL_HEAD|BEARD
+	heat_conductivity = 0
+	gas_transfer_coefficient = 0.01
+	permeability_coefficient = 0.01
+	eyeprot = 0
+	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/suit/space/ghettorig
+	name = "jury-rigged space-proof firesuit"
+	icon_state = "ghettorig"
+	item_state = "ghettorig"
+	desc = "A firesuit jury-rigged into being 'space-proof' somehow."
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
+	pressure_resistance = 4 * ONE_ATMOSPHERE
+	slowdown = 5 //just wear a firesuit instead if you want to go fast
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	heat_conductivity = 0 //thanks, blanket
+	gas_transfer_coefficient = 0.60
+	permeability_coefficient = 0.30

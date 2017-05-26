@@ -8,19 +8,9 @@
 	return null
 
 /proc/get_area(const/atom/O)
-	if (isnull(O))
-		return
-
-	var/atom/A = O
-
-	for (var/i = 0, ++i <= 16)
-		if (isarea(A))
-			return A
-
-		if (istype(A))
-			A = A.loc
-		else
-			return
+	var/turf/T = get_turf(O)
+	if(T)
+		return T.loc
 
 /proc/get_area_master(const/O)
 	var/area/A = get_area(O)

@@ -29,6 +29,9 @@
 	maxbodytemp = 323 // Above 50 Degrees Celcius
 	var/turns_since_scan = 0
 	var/mob/living/simple_animal/mouse/movement_target=null
+	var/kill_verbs = list("splats", "toys with", "worries")
+	var/growl_verbs = list("hisses and spits", "mrowls fiercely", "growls")
+
 	held_items = list()
 
 //RUNTIME IS ALIVE! SQUEEEEEEEE~
@@ -40,6 +43,26 @@
 	icon_dead = "cat_dead"
 	gender = FEMALE
 
+/mob/living/simple_animal/cat/Proc
+	name = "Proc"
+
+/mob/living/simple_animal/cat/salem
+	name = "Salem"
+	desc = "Meow."
+	icon_state = "salem"
+	icon_living= "salem"
+	icon_dead= "salem_dead"
+	gender = FEMALE
+
+/mob/living/simple_animal/cat/kitten
+	name = "kitten"
+	desc = "D'aaawwww"
+	icon_state = "kitten"
+	icon_living = "kitten"
+	icon_dead = "kitten_dead"
+	gender = NEUTER
+	size = SIZE_TINY
+
 /mob/living/simple_animal/cat/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -50,7 +73,7 @@
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
 				if(!M.stat)
 					M.splat()
-					emote(pick("<span class='warning'>splats the [M]!</span>","<span class='warning'>toys with the [M]</span>","worries the [M]"))
+					emote("<span class='warning'>[pick(kill_verbs)] \the [M]!</span>")
 					movement_target = null
 					stop_automated_movement = 0
 					break
@@ -59,7 +82,7 @@
 
 	for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
 		if(prob(15))
-			emote(pick("hisses and spits!","mrowls fiercely!","eyes [snack] hungrily."))
+			emote(pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
 		break
 
 	if(!stat && !resting && !locked_to)
@@ -81,30 +104,9 @@
 				stop_automated_movement = 1
 				walk_to(src,movement_target,0,3)
 
-/mob/living/simple_animal/cat/Proc
-	name = "Proc"
-
-/mob/living/simple_animal/cat/salem
-	name = "Salem"
-	desc = "Meow."
-	icon_state = "salem"
-	icon_living= "salem"
-	icon_dead= "salem_dead"
-	gender = FEMALE
-
-/mob/living/simple_animal/cat/kitten
-	name = "kitten"
-
-	desc = "D'aaawwww"
-	icon_state = "kitten"
-	icon_living = "kitten"
-	icon_dead = "kitten_dead"
-	gender = NEUTER
-	size = SIZE_TINY
 
 /mob/living/simple_animal/cat/snek
 	name = "snake"
-
 	desc = "sssSSSSsss"
 	icon_state = "snek"
 	icon_living = "snek"
@@ -114,6 +116,8 @@
 	speak_emote = list("hisses")
 	emote_hear = list("hisses")
 	emote_see = list("slithers")
+	kill_verbs = list("strikes at", "splats", "bites", "lunges at")
+	growl_verbs = list("hisses")
 
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
@@ -125,11 +129,12 @@
 
 var/list/wizard_snakes
 
-/mob/living/simple_animal/cat/snek/wizard/New()	//For the snake spell
-	..()
+/mob/living/simple_animal/cat/snek/wizard/New(turf/T, var/spell_holder)	//For the snake spell
+	..(T)
 	if(!wizard_snakes)
 		wizard_snakes = list()
-	wizard_snakes.Add(src)
+	if(spell_holder)
+		wizard_snakes[src] = spell_holder
 
 /mob/living/simple_animal/cat/snek/wizard/Die()
 	if(!transmogrify())
@@ -137,5 +142,6 @@ var/list/wizard_snakes
 		qdel(src)
 
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
-	wizard_snakes.Remove(src)
+	wizard_snakes[src] = null
+	wizard_snakes -= src
 	..()
