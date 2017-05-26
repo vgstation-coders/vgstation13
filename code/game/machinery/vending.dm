@@ -2456,11 +2456,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/hair_dye = 4,
 		/obj/item/weapon/razor = 4,
 		/obj/item/weapon/pocket_mirror = 1,
-		/obj/item/clothing/mask/fakemoustache = 3,
-		/obj/item/clothing/under/rank/barber = 3,
-		/obj/item/clothing/head/barber = 3
-		/obj/item/clothing/shoes/white = 3
-		/obj/item/clothing/gloves/white = 3
+		/obj/item/clothing/mask/fakemoustache = 4,
+		/obj/item/clothing/under/rank/barber = 4,
+		/obj/item/clothing/head/barber = 4,
+		/obj/item/clothing/shoes/white = 4,
+		/obj/item/clothing/gloves/white = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/lipstick/random = 5,

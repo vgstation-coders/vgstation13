@@ -549,7 +549,7 @@
 		return 1
 
 /datum/job/barber
-title = "Barber"
+	title = "Barber"
 	flag = BARBER
 	department_flag = CIVILIAN
 	faction = "Station"
@@ -577,8 +577,6 @@ title = "Barber"
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 			if(5)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-		if (H.mind.role_alt_title)
-			switch(H.mind.role_alt_title)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/barber(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/gloves/white(H), slot_gloves)
