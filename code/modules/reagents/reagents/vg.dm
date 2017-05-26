@@ -20,8 +20,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H=M
 		H.vomit()
-		holder.remove_reagent("charcoal",volume) // Remove all charcoal.
-		return
+		//holder.remove_reagent("charcoal",volume) // Remove all charcoal. //For what purpose?
 
 	for(var/datum/reagent/reagent in holder.reagent_list)
 		if(reagent.id in charcoal_doesnt_remove)

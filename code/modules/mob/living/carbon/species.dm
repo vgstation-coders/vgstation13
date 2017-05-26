@@ -126,7 +126,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes
+		"eyes" =     /datum/organ/internal/eyes,
+		"stomach" =  /datum/organ/internal/stomach
 		)
 
 	//If we will apply mutant race overlays or not.
@@ -438,7 +439,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/tajaran
+		"eyes" =     /datum/organ/internal/eyes/tajaran,
+		"stomach" =  /datum/organ/internal/stomach,
 	)
 
 /datum/species/tajaran/New()
@@ -518,7 +520,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/grey
+		"eyes" =     /datum/organ/internal/eyes/grey,
+		"stomach" =  /datum/organ/internal/stomach
 	)
 
 /datum/species/muton // /vg/
@@ -548,7 +551,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/muton
+		"eyes" =     /datum/organ/internal/eyes/muton,
+		"stomach" =  /datum/organ/internal/stomach
 	)
 
 	move_speed_mod = 1
@@ -623,7 +627,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/vox
+		"eyes" =     /datum/organ/internal/eyes/vox,
+		"stomach" =  /datum/organ/internal/stomach
 	)
 
 /datum/species/vox/equip(var/mob/living/carbon/human/H)
@@ -947,7 +952,8 @@ var/global/list/whitelisted_species = list("Human")
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
-		"eyes" =     /datum/organ/internal/eyes/grue
+		"eyes" =     /datum/organ/internal/eyes/grue,
+		"stomach" =  /datum/organ/internal/stomach
 	)
 
 /datum/species/grue/makeName()

@@ -74,7 +74,6 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
 
 /datum/chemical_reaction/creatine
 	name = "Creatine"
@@ -429,7 +428,6 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
