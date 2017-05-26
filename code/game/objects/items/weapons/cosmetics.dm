@@ -275,7 +275,7 @@
 	icon_state = "razor"
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 340)
-/obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
+/obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, mob/user, location = "mouth")
 	if(location == "mouth")
 		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
 		if(species_facial_hair.len)
