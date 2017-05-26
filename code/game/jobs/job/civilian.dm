@@ -547,3 +547,45 @@
 		L.imp_in = H
 		L.implanted = 1
 		return 1
+
+/datum/job/barber
+title = "Barber"
+	flag = BARBER
+	department_flag = CIVILIAN
+	faction = "Station"
+	idtype = /obj/item/weapon/card/id
+	total_positions = 0
+	spawn_positions = 0
+	supervisors = "the head of personnel"
+	selection_color = "#dddddd"
+	access = list(access_maint_tunnels, access_barber)
+	//minimal_access = list()
+	alt_titles = list("Hair Dresser")
+
+	pdaslot=slot_belt
+	pdatype=/obj/item/device/pda
+
+	equip(var/mob/living/carbon/human/H)
+		if(!H)
+			return 0
+		switch(H.backbag)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(5)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
+		if (H.mind.role_alt_title)
+			switch(H.mind.role_alt_title)
+		H.equip_or_collect(new /obj/item/clothing/under/rank/barber(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/clothing/shoes/white(H), slot_shoes)
+		H.equip_or_collect(new /obj/item/clothing/gloves/white(H), slot_gloves)
+		H.equip_or_collect(new /obj/item/clothing/mask/fakemoustache(H), slot_wear_mask)
+		H.equip_or_collect(new /obj/item/clothing/head/barber(H), slot_head)
+		H.put_in_hands(new /obj/item/weapon/razor)
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+		else
+			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)

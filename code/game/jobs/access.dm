@@ -68,6 +68,7 @@
 /var/const/access_weapons = 66 //Weapon authorization for secbots
 /var/const/access_taxi = 67 // Taxi drivers
 /var/const/access_shop = 68
+/var/const/access_barber = 69 //Barbers
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
 /var/const/Mostly for admin fun times.*/
@@ -235,7 +236,7 @@
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi)
+	            access_keycard_auth, access_tcomsat, access_gateway, access_barber, access_paramedic, access_mechanic, access_taxi)
 
 /proc/get_absolutely_all_accesses()
 	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain)
@@ -272,7 +273,7 @@
 		if(5) //command
 			return list(access_heads, access_RC_announce, access_keycard_auth, access_change_ids, access_ai_upload, access_teleporter, access_eva, access_tcomsat, access_gateway, access_all_personal_lockers, access_heads_vault, access_hop, access_captain)
 		if(6) //station general
-			return list(access_shop, access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer, access_clown, access_mime)
+			return list(access_shop, access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer, access_barber, access_clown, access_mime)
 		if(7) //supply
 			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
 
@@ -437,6 +438,8 @@
 			return "Taxi Shuttle"
 		if(access_mechanic)
 			return "Mechanics Workshop"
+		if(access_barber)
+			return "Barber's"
 
 
 /proc/get_centcom_access_desc(A)
