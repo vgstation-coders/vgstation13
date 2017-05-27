@@ -2412,15 +2412,15 @@
 		if(60 to 99)	//Speed up after a minute
 			if(data==60)
 				to_chat(M, "<span class='notice'>You feel faster.")
-			M.movement_speed_modifier += 0.5
-			oldspeed += 0.5
+				M.movement_speed_modifier += 0.5
+				oldspeed += 0.5
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("Your leg muscles pulsate", "You feel invigorated", "You feel like running")].")
 		if(100 to 114)	//painfully fast
 			if(data==100)
 				to_chat(M, "<span class='notice'>Your muscles start to feel pretty hot.")
-			M.movement_speed_modifier += 0.5
-			oldspeed += 0.5
+				M.movement_speed_modifier += 0.5
+				oldspeed += 0.5
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(10))
@@ -2430,17 +2430,18 @@
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
 				H.adjustFireLoss(0.1)
 		if(115 to 120)	//traverse at a velocity exceeding the norm
-			M.movement_speed_modifier += 2
-			oldspeed += 2
 			if(data==115)
-				to_chat(M, "<span class='danger'>Your muscles are burning up!")
+				to_chat(M, "<span class='alert'>Your muscles are burning up!")
+				M.movement_speed_modifier += 2
+				oldspeed += 2
+			
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(25))
 					if (M.get_heart())
-						to_chat(M, "<span class='danger'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
+						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
 					else 
-						to_chat(M, "<span class='danger'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
+						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
 				H.adjustToxLoss(1)
 				H.adjustFireLoss(2)
 		if(121 to INFINITY)	//went2fast
@@ -2461,12 +2462,12 @@
 					var/datum/organ/internal/heart/damagedheart = H.get_heart()
 					if (heartdamage >= 100)
 						if(H.species.name != "Diona" && damagedheart) //fuck dionae
-							to_chat(H, "<span class='alert'>You feel a terrible pain in your chest!</span>")
+							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
 							damagedheart.damage += 200 //Bye heart.
 							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
 							H.adjustOxyLoss(heartdamage)
 						else
-							to_chat(H, "<span class='alert'>The heat engulfs you!</span>")
+							to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
 							for(var/datum/organ/external/E in H.organs)
 								E.droplimb(1, 1) //Bye limbs!
 								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
@@ -2474,7 +2475,7 @@
 						damagedheart.damage += heartdamage
 						H.adjustOxyLoss(heartdamage)
 				else//No heart?
-					to_chat(H, "<span class='alert'>The heat engulfs you!</span>")
+					to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
 					if (heartdamage >= 100)
 						for(var/datum/organ/external/E in H.organs)
 							E.droplimb(1, 1) //Bye limbs!
