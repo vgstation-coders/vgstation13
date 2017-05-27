@@ -75,7 +75,7 @@ var/list/has_been_shade = list()
 		S.cancel_camera()
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")
-		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and cause joyful chaos for [H.real_name]!</span>")
+		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and carry out [H.real_name]'s bidding with joy!</span>")
 
 /obj/item/clothing/mask/happy/acidable()
 	return 0
