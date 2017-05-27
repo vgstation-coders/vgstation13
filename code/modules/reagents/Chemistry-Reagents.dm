@@ -2407,19 +2407,20 @@
 		if(data<121 && !has_been_hypozined)
 			has_been_hypozined = 1
 			has_had_heart_explode = 0 //Fuck them UP after they're done going fast.
-			oldspeed = M.movement_speed_modifier
 			
 	switch(data)
 		if(60 to 99)	//Speed up after a minute
 			if(data==60)
 				to_chat(M, "<span class='notice'>You feel faster.")
 			M.movement_speed_modifier += 0.5
+			oldspeed += 0.5
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("Your leg muscles pulsate", "You feel invigorated", "You feel like running")].")
 		if(100 to 114)	//painfully fast
 			if(data==100)
 				to_chat(M, "<span class='notice'>Your muscles start to feel pretty hot.")
 			M.movement_speed_modifier += 0.5
+			oldspeed += 0.5
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(10))
@@ -2430,6 +2431,7 @@
 				H.adjustFireLoss(0.1)
 		if(115 to 120)	//traverse at a velocity exceeding the norm
 			M.movement_speed_modifier += 2
+			oldspeed += 2
 			if(data==115)
 				to_chat(M, "<span class='danger'>Your muscles are burning up!")
 			if(ishuman(M))
@@ -2446,7 +2448,7 @@
 	data++
 
 /datum/reagent/hypozine/proc/dehypozine(var/mob/living/M, heartdamage = 100, override_remove = 0, explodeheart = 1)
-	M.movement_speed_modifier = oldspeed
+	M.movement_speed_modifier -= oldspeed
 	if(has_been_hypozined && !has_had_heart_explode)
 		has_had_heart_explode = 1
 		if(!override_remove)
@@ -2483,6 +2485,7 @@
 		else
 			M.gib() 
 		data = 1
+		oldspeed = 0
 
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
