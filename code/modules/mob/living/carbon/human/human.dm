@@ -1678,6 +1678,35 @@ mob/living/carbon/human/isincrit()
 				return_organs += damagedorgan
 		return return_organs
 
+/mob/living/carbon/human/get_heart()	
+	return internal_organs_by_name["heart"]
+	
+//Moved from internal organ surgery
+//Removes organ from src, places organ object under user
+//example: H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+	var/obj/item/organ/extractedorgan
+
+	if(targetorgan && istype(targetorgan))
+		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
+		if(extractedorgan && istype(extractedorgan))
+
+			// Stop the organ from continuing to reject.
+			extractedorgan.organ_data.rejecting = null
+
+			// Transfer over some blood data, if the organ doesn't have data.
+			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
+			if(!organ_blood || !organ_blood.data["blood_DNA"])
+				vessel.trans_to(extractedorgan, 5, 1, 1)
+			
+			internal_organs_by_name[targetorgan.name] = null
+			internal_organs_by_name -= targetorgan.name
+			internal_organs -= extractedorgan.organ_data
+			affectedarea.internal_organs -= extractedorgan.organ_data
+			extractedorgan.removed(src,user)
+			
+			return extractedorgan
+		
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE

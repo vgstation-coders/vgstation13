@@ -2368,6 +2368,125 @@
 	
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
+		
+/datum/reagent/hypozine //syndie hyperzine
+	name = "Hypozine"
+	id = HYPOZINE
+	description = "Hypozine is an extremely effective, short lasting, muscle stimulant."
+	reagent_state = LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	var/has_been_hypozined = 0
+	var/has_had_heart_explode = 0 //We've applied permanent damage.
+	custom_metabolism = 0.04
+	var/oldspeed = 0
+	data = 1
+
+/datum/reagent/hypozine/reagent_deleted()
+
+	if(..())
+		return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!has_been_hypozined || has_had_heart_explode)
+			return
+		var/timedmg = ((120 SECONDS) - data) / 10
+		dehypozine(H, timedmg * 3, 1, 0)
+
+/datum/reagent/hypozine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	
+	M.reagents.add_reagent ("hyperzine", 0.03) //To pretend it's all okay.
+	if(ishuman(M))
+		if(data<121 && !has_been_hypozined)
+			has_been_hypozined = 1
+			has_had_heart_explode = 0 //Fuck them UP after they're done going fast.
+			
+	switch(data)
+		if(60 to 99)	//Speed up after a minute
+			if(data==60)
+				to_chat(M, "<span class='notice'>You feel faster.")
+				M.movement_speed_modifier += 0.5
+				oldspeed += 0.5
+			if(prob(5))
+				to_chat(M, "<span class='notice'>[pick("Your leg muscles pulsate", "You feel invigorated", "You feel like running")].")
+		if(100 to 114)	//painfully fast
+			if(data==100)
+				to_chat(M, "<span class='notice'>Your muscles start to feel pretty hot.")
+				M.movement_speed_modifier += 0.5
+				oldspeed += 0.5
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(prob(10))
+					if (M.get_heart())
+						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "You feel your heart racing", "You feel like running as far as you can")]!")
+					else 
+						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
+				H.adjustFireLoss(0.1)
+		if(115 to 120)	//traverse at a velocity exceeding the norm
+			if(data==115)
+				to_chat(M, "<span class='alert'>Your muscles are burning up!")
+				M.movement_speed_modifier += 2
+				oldspeed += 2
+			
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(prob(25))
+					if (M.get_heart())
+						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
+					else 
+						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
+				H.adjustToxLoss(1)
+				H.adjustFireLoss(2)
+		if(121 to INFINITY)	//went2fast
+			dehypozine(M)
+	data++
+
+/datum/reagent/hypozine/proc/dehypozine(var/mob/living/M, heartdamage = 100, override_remove = 0, explodeheart = 1)
+	M.movement_speed_modifier -= oldspeed
+	if(has_been_hypozined && !has_had_heart_explode)
+		has_had_heart_explode = 1
+		if(!override_remove)
+			holder.remove_reagent(src.id) //Clean them out
+		
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(explodeheart)
+				if(H.get_heart())//Got a heart?
+					var/datum/organ/internal/heart/damagedheart = H.get_heart()
+					if (heartdamage >= 100)
+						if(H.species.name != "Diona" && damagedheart) //fuck dionae
+							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+							damagedheart.damage += 200 //Bye heart.
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+							H.adjustOxyLoss(heartdamage)
+						else
+							to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+							for(var/datum/organ/external/E in H.organs)
+								E.droplimb(1, 1) //Bye limbs!
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
+					else if (heartdamage < 100)
+						damagedheart.damage += heartdamage
+						H.adjustOxyLoss(heartdamage)
+				else//No heart?
+					to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+					if (heartdamage >= 100)
+						for(var/datum/organ/external/E in H.organs)
+							E.droplimb(1, 1) //Bye limbs!
+					else if (heartdamage < 100)
+						H.adjustBruteLoss(heartdamage / 2)
+						H.adjustFireLoss(heartdamage / 3)
+						H.adjustToxLoss(heartdamage / 8)
+		else
+			M.gib() 
+		data = 1
+		oldspeed = 0
 
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
