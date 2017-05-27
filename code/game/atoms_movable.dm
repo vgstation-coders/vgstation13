@@ -101,6 +101,10 @@
 
 	..()
 
+/atom/movable/resetVariables()
+	..()
+	pooledvariables[type]["starting_materials"] =  vars["starting_materials"] //BYOND doesn't properly handle the initial() of lists, that fixes it for this thing
+
 /proc/delete_profile(var/type, code = 0)
 	if(!ticker || ticker.current_state < 3)
 		return

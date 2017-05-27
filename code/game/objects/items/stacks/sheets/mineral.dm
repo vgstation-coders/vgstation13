@@ -24,7 +24,7 @@ Mineral Sheets
 		return 0
 
 	rec.addAmount(recyck_mat, amount)
-	. = 1
+	return 1
 
 /*
  * Sandstone
