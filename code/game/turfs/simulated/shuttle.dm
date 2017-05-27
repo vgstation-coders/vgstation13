@@ -17,6 +17,10 @@
 	blocks_air = 1
 	explosion_block = 2
 
+/turf/simulated/shuttle/wall/dark
+	icon = 'icons/turf/shuttle2.dmi'
+	icon_state = "center"
+
 /turf/simulated/shuttle/wall/shuttle_rotate(angle) //delete this when autosmooth is added
 	src.transform = turn(src.transform, angle)
 
@@ -43,6 +47,9 @@
 /turf/simulated/shuttle/floor
 	name = "floor"
 	icon_state = "floor"
+
+/turf/simulated/shuttle/floor/dark
+	icon = 'icons/turf/shuttlefloors.dmi'
 
 /turf/simulated/shuttle/floor/airless
 	oxygen   = 0.01
@@ -79,8 +86,11 @@
 	nitrogen = 0.01
 
 /turf/simulated/shuttle/floor4 // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
-	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
+	name = "brig floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
+
+/turf/simulated/shuttle/floor4/dark
+	icon = 'icons/turf/shuttlefloors.dmi'
 
 /turf/simulated/shuttle/floor4/ex_act(severity)
 	switch(severity)
