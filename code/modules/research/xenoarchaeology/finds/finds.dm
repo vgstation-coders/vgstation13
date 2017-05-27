@@ -544,7 +544,7 @@
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/clothing/mask/morphing
 			possible_spawns += /obj/item/clothing/mask/morphing/amorphous
-			//possible_spawns += /obj/item/clothing/mask/happy PENDING REWORK
+			possible_spawns += /obj/item/clothing/mask/happy
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_DICE)
