@@ -1,3 +1,5 @@
+#define ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL 1
+
 /spell/aoe_turf/conjure/arcane_golem
 	name = "Forge Arcane Golem"
 	desc = "Creates a fragile construct that follows you around. It knows a basic version of all of your spells, and will cast them simultaneously with you - at the same target. If cast while an arcane golem is already summoned, your arcane golems will be teleported to you instead. It's unable to learn Mind Transfer and Forge Arcane Golem."
@@ -52,16 +54,6 @@
 			golems.Remove(AG)
 
 /spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/hostile/arcane_golem/AG, mob/user)
-	for(var/spell/S in user.spell_list)
-		if(is_type_in_list(S, forbidden_spells))
-			continue
-
-		var/spell/copy = new S.type
-		copy.spell_flags = S.spell_flags & ~NEEDSCLOTHES //Remove robes requirement
-		copy.charge_max = 0 //This is gonna suck with player controlled golems
-
-		AG.add_spell(copy)
-
 	AG.faction = "\ref[user]"
 	to_chat(user, "<span class='sinister'>You infuse \the [AG] with your mana and knowledge. If it dies, your arcane abilities will be affected.</span>")
 	src.golems.Add(AG)
@@ -71,6 +63,8 @@
 	var/target = arguments["target"]
 
 	if(!istype(spell_to_copy) || !istype(spell_to_copy.holder))
+		return
+	if(is_type_in_list(spell_to_copy, forbidden_spells))
 		return
 
 	var/turf/caster_turf = get_turf(spell_to_copy.holder)
@@ -88,9 +82,7 @@
 		targets = list(target)
 
 	for(var/mob/living/simple_animal/hostile/arcane_golem/AG in golems)
-		var/spell/cast_spell = locate(spell_to_copy.type) in AG.spell_list
-		if(!istype(cast_spell))
-			continue
+		var/spell/cast_spell = spell_to_copy
 
 		AG.change_dir(cast_dir) //Face the same direction as the wizard
 
@@ -101,14 +93,20 @@
 
 		//Golems cast spells AFTER the wizard
 		spawn(rand(1,3))
-			AG.cast_spell(cast_spell, targets.Copy())
+			//Instead of giving each golem an copy of each of the wiz's spells,
+			//Use the wizard's spell object for every golem
+			//This ensures that the spells are identical, and that all upgrades are copied
+
+			//Spell code makes golems ignore spell cooldowns/charges, so it isn't an issue
+
+			cast_spell.perform(AG, target_override = targets.Copy())
 
 //UPGRADES
 /spell/aoe_turf/conjure/arcane_golem/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
 		if(Sp_AMOUNT)
 			spell_levels[Sp_AMOUNT]++
-			golem_limit++
+			golem_limit += ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL
 
 			return "You can now sustain [golem_limit] golems at once."
 
@@ -119,6 +117,8 @@
 /spell/aoe_turf/conjure/arcane_golem/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
 		if(Sp_AMOUNT)
-			return "Gain the ability to sustain [golem_limit + 1] golems at once."
+			return "Gain the ability to sustain [golem_limit + ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL] golems at once."
 
 	return ..()
+
+#undef ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL

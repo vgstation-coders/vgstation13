@@ -654,6 +654,20 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= PIPE_HEAT_EXCHANGE
 	pipe_type	= PIPE_UNARY
 
+/datum/rcd_schematic/pipe/he_manifold
+	name		= "Manifold"
+	category	= "Heat Exchange"
+
+	pipe_id		= PIPE_HE_MANIFOLD
+	pipe_type	= PIPE_TRINARY
+
+/datum/rcd_schematic/pipe/he_manifold4w
+	name		= "4-Way Manifold"
+	category	= "Heat Exchange"
+
+	pipe_id		= PIPE_HE_MANIFOLD4W
+	pipe_type	= PIPE_BINARY
+
 //INSULATED PIPES.
 
 /datum/rcd_schematic/pipe/insulated

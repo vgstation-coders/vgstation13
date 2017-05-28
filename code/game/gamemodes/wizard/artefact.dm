@@ -137,3 +137,65 @@
 			event_key = null
 			user.alpha = initial(user.alpha)
 			user.alphas.Remove(CLOAKINGCLOAK)
+
+
+/obj/item/weapon/glow_orb
+	name = "inert stone"
+	desc = "A peculiar fist-sized stone which hums with dormant energy."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "glow_stone_dormant"
+	w_class = W_CLASS_TINY
+	force = 0
+	var/prime_time = 2 SECONDS
+	var/crit_failure = 0
+	var/activating = 0
+
+/obj/item/weapon/glow_orb/attack_self(mob/user)
+	if(crit_failure)
+		to_chat(user, "<span class = 'warning'>\The [src] is vibrating erratically!</span>")
+		return
+	if(activating)
+		to_chat(user, "<span class = 'warning'>\The [src] hums with energy as it begins to glow brighter.</span>")
+		return
+	if(iswizard(user) || isapprentice(user))
+		to_chat(user, "<span class = 'notice'>You prime the glow-stone, it will transform in [prime_time/10] seconds.</span>")
+		activate()
+		return
+	else
+		if (clumsy_check(user) && prob(50))
+			to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
+			failure()
+			return
+		else if(prob(65))
+			to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
+			activate()
+		else
+			if(prob(5))
+				visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
+				if(prob(50))
+					failure()
+			to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
+
+/obj/item/weapon/glow_orb/proc/activate()
+	activating = 1
+	spawn(prime_time)
+		if(crit_failure) //Damn it clown
+			return
+		if(ismob(loc))
+			var/mob/M = loc
+			M.drop_from_inventory(src)
+		playsound(get_turf(src), 'sound/weapons/orb_activate.ogg', 50,1)
+		flick("glow_stone_activate", src)
+		spawn(10)
+			new/mob/living/simple_animal/hostile/glow_orb(get_turf(src))
+			qdel(src)
+
+/obj/item/weapon/glow_orb/proc/failure()
+	visible_message("<span class = 'notice'>\The [src] begins to glow increasingly in a brilliant manner...</span>")
+	crit_failure = 1
+	spawn(1 SECONDS)
+		visible_message("<span class = 'warning>...and vibrate violently!</span>")
+	playsound(get_turf(src),'sound/weapons/inc_tone.ogg', 50, 1)
+	spawn(2 SECONDS)
+		explosion(loc, 0, 1, 2, 3)
+		qdel(src)

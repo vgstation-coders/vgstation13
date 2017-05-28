@@ -247,6 +247,7 @@
 	//Here let's calculate their health so the pod doesn't immediately eject them!!!
 	H.updatehealth()
 
+	has_been_shade.Remove(clonemind)
 	clonemind.transfer_to(H)
 
 	H.ckey = R.ckey

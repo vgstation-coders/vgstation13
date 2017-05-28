@@ -261,7 +261,7 @@
 	icon_dead = "hive_executioner_dead"
 
 	move_to_delay = 5
-	speed = -1
+	speed = 1
 
 	size = SIZE_BIG
 	health = 280
@@ -289,7 +289,7 @@
 	sleep(rand(transformation_delay_min, transformation_delay_max))
 
 	anchored = FALSE
-	speed = -1
+	speed = 1
 	move_to_delay = 8
 	attack_mode = FALSE
 

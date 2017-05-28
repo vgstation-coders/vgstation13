@@ -201,7 +201,7 @@
 		src.wdata = list()
 		src.chemtraces = list()
 		src.timeofdeath = null
-		to_chat(user, "<span class='warning'>A new patient has been registered.. Purging data for previous patient.</span>")
+		to_chat(user, "<span class='warning'>A new patient has been registered. Purging data for previous patient.</span>")
 
 	src.timeofdeath = M.timeofdeath
 

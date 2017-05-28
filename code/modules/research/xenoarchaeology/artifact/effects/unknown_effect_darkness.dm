@@ -1,11 +1,11 @@
 /datum/artifact_effect/darkness
 	effecttype = "darkness"
+	effect = list(EFFECT_AURA, EFFECT_PULSE)
 	var/dark_level
 	copy_for_battery = list("dark_level")
 
 /datum/artifact_effect/darkness/New()
 	..()
-	effect = rand(1,2)
 	effect_type = pick(0,3,4)
 	effectrange = rand(2,12)
 	dark_level = rand(2,7)

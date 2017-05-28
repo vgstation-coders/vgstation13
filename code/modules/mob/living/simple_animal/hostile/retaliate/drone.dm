@@ -19,7 +19,7 @@
 	stop_automated_movement_when_pulled = 0
 	health = 300
 	maxHealth = 300
-	speed = 8
+	speed = 9
 	projectiletype = /obj/item/projectile/beam/drone
 	projectilesound = 'sound/weapons/laser3.ogg'
 	environment_smash = 2

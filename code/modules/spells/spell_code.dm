@@ -376,6 +376,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return 1
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
+	//Arcane golems have no cooldowns on their spells
+	if(istype(user, /mob/living/simple_animal/hostile/arcane_golem))
+		return 1
+
 	if(!skipcharge)
 		if(charge_type & Sp_RECHARGE)
 			if(charge_counter < charge_max)

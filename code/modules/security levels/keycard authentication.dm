@@ -9,7 +9,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	var/event = ""
 	var/screen = 1
 	var/confirmed = 0 //This variable is set by the device that confirms the request.
-	var/confirm_delay = 20 //(2 seconds)
+	var/confirm_delay = 5 SECONDS
 	var/busy = 0 //Busy when waiting for authentication or an event request has been sent from this device.
 	var/obj/machinery/keycard_auth/event_source
 	var/mob/event_triggered_by
@@ -83,7 +83,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
-
+		else
+			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
 			</ul>"}

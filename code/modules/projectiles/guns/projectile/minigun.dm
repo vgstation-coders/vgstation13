@@ -8,7 +8,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	slot_flags = null
-	flags = FPRINT | TWOHANDABLE
+	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	w_class = W_CLASS_HUGE//we be fuckin huge maaan
 	fire_delay = 0
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
@@ -45,9 +45,9 @@
 /obj/item/weapon/gun/gatling/update_wield(mob/user)
 	item_state = "minigun[wielded ? 1 : 0]"
 	if(wielded)
-		slowdown = 10
+		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
-		slowdown = 0
+		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 /obj/item/weapon/gun/gatling/process_chambered()
 	if(in_chamber)
@@ -107,9 +107,9 @@
 /obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)
 	item_state = "beegun[wielded ? 1 : 0]"
 	if(wielded)
-		slowdown = 10
+		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
-		slowdown = 0
+		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
 /obj/item/weapon/gun/gatling/beegun/process_chambered()
 	if(in_chamber)

@@ -103,7 +103,8 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(dna.mutantrace == "slime")
+	var/mob/living/carbon/human/H = src
+	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
@@ -690,3 +691,30 @@
 		"pulse")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/carbon/movement_tally_multiplier()
+	. = ..()
+	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		for(var/obj/item/I in get_clothing_items())
+			if(I.slowdown <= 0)
+				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
+			else
+				. *= I.slowdown
+
+		for(var/obj/item/I in held_items)
+			if(I.flags & SLOWDOWN_WHEN_CARRIED)
+				. *= I.slowdown
+
+/mob/living/carbon/base_movement_tally()
+	. = ..()
+	if(flying)
+		return // Calculate none of the following because we're technically on a vehicle
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		return // Hyperzine ignores slowdown
+	if(istype(loc, /turf/space))
+		return // Space ignores slowdown
+
+	if(feels_pain() && !has_painkillers())
+		var/health_deficiency = (100 - health - halloss)
+		if(health_deficiency >= 40)
+			. += (health_deficiency / 25)

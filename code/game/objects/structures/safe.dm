@@ -193,7 +193,7 @@ obj/structure/safe/ex_act(severity)
 		/obj/item/weapon/spellbook/oneuse/fireball,
 		/obj/item/weapon/spellbook/oneuse/smoke,
 		/obj/item/weapon/spellbook/oneuse/blind,
-		/obj/item/weapon/spellbook/oneuse/subjugate,
+		/obj/item/weapon/spellbook/oneuse/disorient,
 		/obj/item/weapon/spellbook/oneuse/mindswap,
 		/obj/item/weapon/spellbook/oneuse/forcewall,
 		/obj/item/weapon/spellbook/oneuse/teleport/blink,

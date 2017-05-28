@@ -8,7 +8,7 @@
 	icon_state = null
 	item_state = "pill"
 	possible_transfer_amounts = null
-	volume = 50
+	volume = 100
 	starting_materials = null
 //	starting_materials = list(MAT_IRON = 5) //What?
 	w_type = RECYK_METAL

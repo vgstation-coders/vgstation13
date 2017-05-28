@@ -99,6 +99,7 @@
 #define ui_spell_master "EAST-1:16,NORTH-1:16" //Used as compile time value
 #define ui_genetic_master "EAST-1:16,NORTH-3:16" //Used as compile time value
 #define ui_alien_master "EAST-0:-4,NORTH-0:-6" //Used as compile time value
+#define ui_racial_master "EAST-0:-4,NORTH-2:-6" //Used as compile time value
 
 //Pop-up inventory
 #define ui_shoes "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"

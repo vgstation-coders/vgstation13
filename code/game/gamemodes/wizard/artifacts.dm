@@ -131,6 +131,15 @@
 	H.rightandwrong(1)
 	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
 
+/datum/spellbook_artifact/glow_orbs
+	name = "Bundle of glow orbs"
+	desc = "Useful for lighting up the dark so you can read more books, touch-sensitive to assign a user. Warning - Do not expose to electricity."
+	abbreviation = "GO"
+	spawned_items = list(/obj/item/weapon/glow_orb,\
+						/obj/item/weapon/glow_orb,\
+						/obj/item/weapon/glow_orb,\
+						)
+
 //SANTA BUNDLE
 
 /datum/spellbook_artifact/santa_bundle

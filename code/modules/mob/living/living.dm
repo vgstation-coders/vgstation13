@@ -295,7 +295,13 @@
 	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
 		return 0
 
-	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
+	var/mult = 1
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(H.species.tox_mod)
+			mult = H.species.tox_mod
+
+	toxloss = min(max(toxloss + (amount * tox_damage_modifier * mult), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
 	if(status_flags & GODMODE)
@@ -324,6 +330,11 @@
 
 	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
 		return 0
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(isslimeperson(H))
+			amount = 0
 
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
@@ -704,7 +715,7 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-							/* Drag damage is here!*/	
+							/* Drag damage is here!*/
 							var/mob/living/carbon/human/HM = M
 							var/list/damaged_organs = HM.drag_damage()
 							if (damaged_organs)
@@ -721,7 +732,7 @@ Thanks.
 										if(blood_volume > 0)
 											HM:vessel.remove_reagent("blood",4)
 											HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
-									
+
 								if(HM.isincrit() && damaged_organs.len) //Crit damage boost
 									if(prob(15))
 										for(var/datum/organ/external/damagedorgan in damaged_organs)
@@ -1593,6 +1604,7 @@ Thanks.
 		"fire_stacks",
 		"specialsauce",
 		"silent",
-		"is_ventcrawling")
+		"is_ventcrawling",
+		"suiciding")
 
 	reset_vars_after_duration(resettable_vars, duration)

@@ -1,5 +1,6 @@
 /datum/artifact_effect/gravity
 	effecttype = "gravity"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 1
 
 	var/pull_strength

@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/radiate
 	effecttype = "radiate"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	var/radiation_amount
 	copy_for_battery = list("radiation_amount")
 

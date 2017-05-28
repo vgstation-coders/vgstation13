@@ -1,5 +1,6 @@
 /datum/artifact_effect/cellcharge
 	effecttype = "cellcharge"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 3
 	var/next_message
 

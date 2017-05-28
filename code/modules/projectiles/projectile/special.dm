@@ -363,6 +363,17 @@ obj/item/projectile/kinetic/New()
 	var/temperature = T0C + 175
 	var/fire_duration
 
+/obj/item/projectile/fire_breath/New(turf/T, var/direction, var/F_Dam, var/P, var/T, var/F_Dur)
+	..(T,direction)
+	if(F_Dam)
+		fire_damage = F_Dam
+	if(P)
+		pressure = P
+	if(T)
+		temperature = T
+	if(F_Dur)
+		fire_duration = F_Dur
+
 /obj/item/projectile/fire_breath/process_step()
 	..()
 

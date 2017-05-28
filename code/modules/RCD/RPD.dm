@@ -46,6 +46,8 @@
 		/datum/rcd_schematic/pipe/he_bent,
 		/datum/rcd_schematic/pipe/juntion,
 		/datum/rcd_schematic/pipe/heat_exchanger,
+		/datum/rcd_schematic/pipe/he_manifold,
+		/datum/rcd_schematic/pipe/he_manifold4w,
 
 		/* Insulated Pipes */
 		/datum/rcd_schematic/pipe/insulated,
@@ -74,7 +76,7 @@
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-	
+
 	hook_key = L.on_clickon.Add(src, "mob_onclickon")
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
@@ -89,7 +91,7 @@
 /obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
 	if (L.get_active_hand() != src)
 		return
-	
+
 	var/list/modifiers = event_args["modifiers"]
 	modifiers -= list("alt", "shift", "ctrl")
-	
+
