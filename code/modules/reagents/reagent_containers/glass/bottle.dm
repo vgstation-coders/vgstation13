@@ -413,7 +413,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/hypozine/New()
 	..()
-	reagents.add_reagent(HYPOZINE, 15)
+	reagents.add_reagent(HYPOZINE, 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/sacid
 	name = "Sulphuric Acid Bottle"
