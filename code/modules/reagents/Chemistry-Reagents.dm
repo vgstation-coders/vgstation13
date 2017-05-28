@@ -5790,3 +5790,22 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = THYMOL
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
+
+/datum/reagent/hemoscyanine
+	name = "Hemoscyanine"
+	id = HEMOSCYANINE
+	description = "Hemoscyanine is a toxin which can destroy blood cells."
+	reagent_state = LIQUID
+	color = "#600000" //rgb: 96, 0, 0
+
+//End of plant-specific reagents
+
+/datum/reagent/hemoscyanine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!(H.species.anatomy_flags & NO_BLOOD))
+			H.vessel.remove_reagent(BLOOD, 2 * REM)

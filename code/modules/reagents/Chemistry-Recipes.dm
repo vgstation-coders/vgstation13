@@ -2838,5 +2838,12 @@
 	required_catalysts = list(ROACHSHELL = 1, LITHOTORCRAZINE = 1)
 	result_amount = 10
 
+/datum/chemical_reaction/hemoscyanine
+	name = "Hemoscyanine"
+	id = HEMOSCYANINE
+	result = HEMOSCYANINE
+	required_reagents = list(SOLANINE = 1, HYOSCYAMINE = 1, PHENOL = 1)
+	result_amount = 3
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
