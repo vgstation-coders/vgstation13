@@ -2365,7 +2365,7 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
 		
@@ -5677,3 +5677,108 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = SOLID
 	color = "#FFA500"
 	custom_metabolism = 0.1
+
+//Plant-specific reagents
+
+/datum/reagent/kelotane/tannic_acid
+	name = "Tannic acid"
+	id = TANNIC_ACID
+	description = "Tannic acid is a natural burn remedy."
+	reagent_state = LIQUID
+	color = "#150A03" //rgb: 21, 10, 3
+
+/datum/reagent/dermaline/kathalai
+	name = "Kathalai"
+	id = KATHALAI
+	description = "Kathalai is an exceptional natural burn remedy, it performs twice as well as tannic acid."
+	color = "#32BD08" //rgb: 50, 189, 8
+
+/datum/reagent/bicaridine/opium
+	name = "Opium"
+	id = OPIUM
+	description = "Opium is an exceptional natural analgesic."
+	color = "#AE9260" //rgb: 174, 146, 96
+
+/datum/reagent/space_drugs/mescaline
+	name = "Mescaline"
+	id = MESCALINE
+	description = "Known to cause mild hallucinations, mescaline is often used recreationally."
+	color = "#B8CD93" //rgb: 184, 205, 147
+
+/datum/reagent/synaptizine/cytisine
+	name = "Cytisine"
+	id = CYTISINE
+	description = "Cytisine is an alkaloid which mimics the effects of nicotine."
+	color = "#A49B50" //rgb: 164, 155, 80
+
+/datum/reagent/hyperzine/cocaine
+	name = "Cocaine"
+	id = COCAINE
+	description = "Cocaine is a powerful nervous system stimulant."
+	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/imidazoline/zeaxanthin
+	name = "Zeaxanthin"
+	id = ZEAXANTHIN
+	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
+	color = "#CC4303" //rgb: 204, 67, 3
+
+/datum/reagent/stoxin/valerenic_acid
+	name = "Valerenic acid"
+	id = VALERENIC_ACID
+	description = "An herbal sedative used to treat insomnia."
+	color = "#EAB160" //rgb: 234, 177, 96
+
+/datum/reagent/anti_toxin/allicin
+	name = "Allicin"
+	id = ALLICIN
+	description = "Allicin is a natural broad-spectrum antitoxin."
+	color = "#F1DEB4" //rgb: 241, 222, 180
+
+/datum/reagent/sacid/formic_acid
+	name = "Formic acid"
+	id = FORMIC_ACID
+	description = "A weak natural acid which causes a burning sensation upon contact."
+	color = "#9B3D00" //rgb: 155, 61, 0
+
+/datum/reagent/pacid/phenol
+	name = "Phenol"
+	id = PHENOL
+	description = "Phenol is a corrosive acid which can cause chemical burns."
+	color = "#C71839" //rgb: 199, 24, 57
+
+/datum/reagent/ethanol/deadrum/neurotoxin/curare
+	name = "Curare"
+	id = CURARE
+	description = "An alkaloid plant extract which causes weakness of the skeletal muscles."
+	color = "#94DC76" //rgb: 148, 220, 118
+
+/datum/reagent/toxin/solanine
+	name = "Solanine"
+	id = SOLANINE
+	description = "A glycoalkaloid poison."
+	color = "#6C8347" //rgb: 108, 131, 71
+
+/datum/reagent/cryptobiolin/physostigmine
+	name = "Physostigmine"
+	id = PHYSOSTIGMINE
+	description = "Physostigmine causes confusion and dizzyness."
+	color = "#0098D7" //rgb: 0, 152, 215
+
+/datum/reagent/impedrezene/hyoscyamine
+	name = "Hyoscyamine"
+	id = HYOSCYAMINE
+	description = "Hyoscyamine is a tropane alkaloid which can disrupt the central nervous system."
+	color = "#BBD0C9" //rgb: 187, 208, 201
+
+/datum/reagent/lexorin/coriamyrtin
+	name = "Coriamyrtin"
+	id = CORIAMYRTIN
+	description = "Coriamyrtin is a toxin which causes respiratory problems."
+	color = "#FB6892" //rgb: 251, 104, 146
+
+/datum/reagent/dexalin/thymol
+	name = "Thymol"
+	id = THYMOL
+	description = "Thymol is used in the treatment of respiratory problems."
+	color = "#790D27" //rgb: 121, 13, 39

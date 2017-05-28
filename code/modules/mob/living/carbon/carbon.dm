@@ -694,7 +694,7 @@
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
-	if(!istype(loc, /turf/space) && !reagents.has_reagent(HYPERZINE))
+	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		for(var/obj/item/I in get_clothing_items())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
@@ -709,7 +709,7 @@
 	. = ..()
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
-	if(reagents.has_reagent(HYPERZINE))
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
