@@ -766,7 +766,7 @@
 	mutants = null
 	packet_icon = "seed-ambrosiadeus"
 	plant_icon = "ambrosiadeus"
-	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), NICOTINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
+	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), CYTISINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
