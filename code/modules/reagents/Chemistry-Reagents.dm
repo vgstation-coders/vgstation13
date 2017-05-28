@@ -5791,6 +5791,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
 
+//End of plant-specific reagents
+
 /datum/reagent/hemoscyanine
 	name = "Hemoscyanine"
 	id = HEMOSCYANINE
@@ -5798,14 +5800,109 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#600000" //rgb: 96, 0, 0
 
-//End of plant-specific reagents
-
 /datum/reagent/hemoscyanine/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!(H.species.anatomy_flags & NO_BLOOD))
-			H.vessel.remove_reagent(BLOOD, 2 * REM)
+			H.vessel.remove_reagent(BLOOD, 2)
+
+/datum/reagent/anthracene
+	name = "Anthracene"
+	id = ANTHRACENE
+	description = "Anthracene is a fluorophore which emits a weak green glow."
+	reagent_state = LIQUID
+	color = "#00ff00" //rgb: 0, 255, 0
+	data = 0
+	var/light_intensity = 4
+	var/initial_color = null
+
+/datum/reagent/anthracene/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!data)
+		initial_color = M.light_color
+		M.light_color = LIGHT_COLOR_GREEN
+		M.set_light(light_intensity)
+		data++
+
+/datum/reagent/anthracene/reagent_deleted()
+	if(..())
+		return 1
+
+	if(!holder)
+		return
+	var/atom/A =  holder.my_atom
+	A.light_color = initial_color
+	A.set_light(0)
+
+/datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		var/init_color = M.light_color
+		M.light_color = LIGHT_COLOR_GREEN
+		M.set_light(light_intensity)
+		spawn(volume * 10)
+			M.light_color = init_color
+			M.set_light(0)
+
+/datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	var/init_color = T.light_color
+	T.light_color = LIGHT_COLOR_GREEN
+	T.set_light(light_intensity)
+	spawn(volume * 10)
+		T.light_color = init_color
+		T.set_light(0)
+
+/datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	var/init_color = O.light_color
+	O.light_color = LIGHT_COLOR_GREEN
+	O.set_light(light_intensity)
+	spawn(volume * 10)
+		O.light_color = init_color
+		O.set_light(0)
+
+/datum/reagent/osteopyrum
+	name = "Osteopyrum"
+	id = OSTEOPYRUM
+	description = "Osteopyrum is capable of accelerating the mitosis of osteocytes to dangerous levels."
+	reagent_state = LIQUID
+	color = "#575c70" //rgb: 87, 92, 112
+
+/datum/reagent/osteopyrum/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!(H.species.anatomy_flags & NO_BONES))
+			if(prob(20))
+				var/list/broken_limbs = list()
+				for(var/datum/organ/external/O in H.organs)
+					if(O.is_broken())
+						broken_limbs.Add(O)
+				if(broken_limbs.len)
+					var/datum/organ/external/E = pick(broken_limbs)
+					E.status &= ~ORGAN_BROKEN
+					E.perma_injury = 0
+					var/healed_damage = 0
+					if(E.brute_dam > E.min_broken_damage * config.organ_health_multiplier)
+						healed_damage = E.brute_dam - ((E.min_broken_damage * config.organ_health_multiplier) - 1)
+						E.heal_damage(healed_damage)
+					E.take_damage(0, healed_damage + 20)
+					H.visible_message("<span class='warning'>You see the bones in \the [H]'s [E.display_name] move in an unnatural way.</span>", \
+					"<span class='warning'>Your [E.display_name] burns as the bones inside it realign!</span>", \
+					"<span class='notice'>You hear an odd crack.</span>")
+					playsound(H.loc, "fracture", 100, 1, -2)
+

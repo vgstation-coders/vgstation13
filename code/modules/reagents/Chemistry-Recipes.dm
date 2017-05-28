@@ -2843,7 +2843,21 @@
 	id = HEMOSCYANINE
 	result = HEMOSCYANINE
 	required_reagents = list(SOLANINE = 1, HYOSCYAMINE = 1, PHENOL = 1)
-	result_amount = 3
+	result_amount = 1
+
+/datum/chemical_reaction/anthracene
+	name = "Anthracene"
+	id = ANTHRACENE
+	result = ANTHRACENE
+	required_reagents = list(ZEAXANTHIN = 1, MESCALINE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/osteopyrum
+	name = "Osteopyrum"
+	id = OSTEOPYRUM
+	result = OSTEOPYRUM
+	required_reagents = list(OPIUM = 1, FORMIC_ACID = 1)
+	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
