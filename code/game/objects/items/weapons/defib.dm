@@ -106,7 +106,7 @@
 	return
 
 /obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
-	var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
+	var/datum/organ/internal/heart/heart = target.get_heart()
 	if(heart)
 		heart.damage += rand(5,60)
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
@@ -137,7 +137,7 @@
 		charges--
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
-		var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
+		var/datum/organ/internal/heart/heart = target.get_heart()
 		if(!heart)
 			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
