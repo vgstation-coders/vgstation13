@@ -224,7 +224,7 @@ For the main html chat area
 	var/key = ("[A.icon]" || "\ref[A.icon]")+":[A.icon_state]"
 	if (!bicon_cache[key]) // Doesn't exist, make it.
 		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1)
-		if (ishuman(obj)) // Shitty workaround for a BYOND issue.
+		if (!"[A.icon]") // Shitty workaround for a BYOND issue.
 			var/icon/temp = I
 			I = icon()
 			I.Insert(temp, dir = SOUTH)
