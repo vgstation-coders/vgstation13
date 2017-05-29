@@ -217,8 +217,8 @@
 /datum/disease2/effect/heart_attack/activate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
-		if(internal_organs_by_name["heart"])
-			var/obj/item/organ/blown_heart = H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+		if(H.internal_organs_by_name["heart"])
+			var/obj/item/organ/blown_heart = H.remove_internal_organ(H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 			var/list/spawn_turfs = list()
 			for(var/turf/T in orange(1, H))
 				if(!T.density)
