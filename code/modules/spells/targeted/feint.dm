@@ -68,3 +68,4 @@
 	L.candrop = 1
 	L.alphas -= "etheral_jaunt"
 	L.handle_alpha()
+	to_chat(M, "<span class='danger'>\The [L] teleports behind you!</span>")
