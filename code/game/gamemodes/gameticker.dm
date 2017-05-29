@@ -64,7 +64,15 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
-	login_music = fcopy_rsc(oursong)
+	if(map.base_turf == /turf/snow)
+		var/path = "sound/music/xmas/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
 
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)

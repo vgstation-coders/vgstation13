@@ -116,3 +116,17 @@
 	name = "plasmaman cyber horror"
 	desc = "What was once the suit of a plasmaman, filled with roiling nanobots."
 	icon_state = "plasma_cyber_horror"
+
+/mob/living/simple_animal/hostile/monster/rabbit
+	name = "Killer rabbit of Caerbannog"
+	desc = "It's got a vicious streak a mile wide!"
+	icon_state = "rabbit_white"
+	icon_living = "rabbit_white"
+	icon_dead = "rabbit_white_dead"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rabbit
+	maxHealth = 150
+	health = 150
+	melee_damage_lower = 10
+	melee_damage_upper = 30
+	attacktext = "bites"
+	attack_sound = 'sound/weapons/bite.ogg'

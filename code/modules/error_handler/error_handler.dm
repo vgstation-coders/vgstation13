@@ -11,7 +11,7 @@
 		world.log << "\[[time_stamp()]] Uncaught exception: [e]"
 		return ..()
 
-	if (!global.error_last_seen) // A runtime is occurring too early in start-up initialization
+	if (!islist(global.error_last_seen)) // A runtime is occurring too early in start-up initialization
 		return ..()
 
 	global.total_runtimes++

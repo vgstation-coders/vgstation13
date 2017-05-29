@@ -1766,3 +1766,62 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
+/obj/item/toy/ball
+	name = "ball"
+	desc = "A ball!"
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "beach_ball"
+	w_class = W_CLASS_TINY //So they go further when kicking
+
+/obj/item/toy/ball/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
+	if(user.drop_item(src))
+		src.throw_at(target, throw_range, throw_speed)
+
+/obj/item/toy/ball/throw_at(atom/target, range, speed, override = 1) //Shamelessly stolen from boomerang.dm
+	if(!usr)
+		return ..()
+
+	spawn()
+		animate(src, transform = turn(matrix(), 120), time = 5, loop = -1)
+		animate(transform = turn(matrix(), 240), time = 5)
+		animate(transform = null, time = 5)
+
+		while(throwing)
+			sleep(5)
+
+		animate(src) //Stop the animation
+
+	..()
+
+/obj/item/toy/ball/throw_impact(atom/hit_atom, var/speed, user)
+	if(iscarbon(hit_atom) && !isslime(hit_atom))
+		var/mob/living/carbon/L = hit_atom
+		if(L.get_active_hand() == null)
+			to_chat(hit_atom, "<span class='info'>You catch \the [src]!</span>")
+			L.put_in_active_hand(src)
+			throwing = 0
+			return
+
+	return ..()
+
+/obj/item/toy/ball/beach
+	name = "beach ball"
+	desc = "A beach ball, good for losing in the ocean"
+	icon_state = "beach_ball"
+
+/obj/item/toy/ball/rugby
+	name = "rugby ball"
+	desc = "Made of leather, kick with your toes pointed towards the threading"
+	icon_state = "rugby_ball"
+
+/obj/item/toy/ball/basketball
+	name = "basketball"
+	desc = "Here's your chance, do your dance, at the space jam."
+	icon_state = "basketball"
+
+
+/obj/item/weapon/beach_ball/holoball //To keep it all atomic, keeping this here so as to avoid editing maps
+	name = "basketball"
+	desc = "Here's your chance, do your dance, at the space jam."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "basketball"

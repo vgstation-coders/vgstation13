@@ -52,7 +52,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
 
-	var/cold_level_1 = 260  // Cold damage level 1 below this point.
+	var/cold_level_1 = 220  // Cold damage level 1 below this point.
 	var/cold_level_2 = 200  // Cold damage level 2 below this point.
 	var/cold_level_3 = 120  // Cold damage level 3 below this point.
 
@@ -303,7 +303,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
 
-	cold_level_1 = 280 //Default 260 - Lower is better
+	cold_level_1 = 280 //Default 220 - Lower is better
 	cold_level_2 = 220 //Default 200
 	cold_level_3 = 130 //Default 120
 
@@ -410,7 +410,7 @@ var/global/list/whitelisted_species = list("Human")
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
 	darksight = 8
 
-	cold_level_1 = 200 //Default 260
+	cold_level_1 = 200 //Default 220
 	cold_level_2 = 140 //Default 200
 	cold_level_3 = 80 //Default 120
 

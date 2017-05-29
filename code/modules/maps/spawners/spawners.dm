@@ -561,7 +561,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/boiledegg,
 		/obj/item/weapon/reagent_containers/food/snacks/brainburger,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
 		/obj/item/weapon/reagent_containers/food/snacks/chips,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
@@ -894,6 +894,15 @@
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		/mob/living/simple_animal/hostile/wolf/alpha,
 		)
+
+/obj/abstract/map/spawner/mobs/deer
+	name = "deer spawner"
+	icon_state = "mob_deer"
+	amount = 7
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/deer,
+	)
+
 /obj/abstract/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"

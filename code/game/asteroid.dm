@@ -61,6 +61,9 @@ proc/make_mining_asteroid_secret()
 	var/sanity = 0
 	var/list/turfs = null
 
+	if(istype(map.base_turf,/turf/snow))
+		return
+
 	turfs = get_area_turfs(/area/mine/unexplored)
 
 	if(!turfs.len)

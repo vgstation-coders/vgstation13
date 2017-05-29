@@ -1648,6 +1648,9 @@
 	else
 		plane = HUMAN_PLANE
 
+	if(istype(areaMaster) && issnow(areaMaster))
+		update_shadow()
+
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)
 		for(var/i = (held_items.len + 1) to new_amount) //For all the new indexes, create a hand organ

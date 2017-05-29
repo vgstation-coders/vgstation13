@@ -11,6 +11,9 @@
 	name = "Mine"
 	icon_state = "explored"
 
+/area/mine/explored/dangerous
+	icon_state = "dangerzone"
+
 /area/mine/unexplored
 	name = "Mine"
 	icon_state = "unexplored"
