@@ -7,6 +7,9 @@
 	siemens_coefficient = 1
 	force = 3
 	w_class = W_CLASS_SMALL
+	var/no_remove = 0
+	var/deploy_sound = "sound/weapons/switchblade.ogg"
+	var/undeploy_sound = "sound/weapons/switchblade.ogg"
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -59,6 +62,9 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
+	if(istype(used_item, /obj/item/weapon/screwdriver) && no_remove)
+		to_chat(user, "You can't remove modules from this.")
+		return
 	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
 		return remove_module(user)
 	if(add_module(used_item, user))
@@ -114,11 +120,12 @@
 	return 1
 
 /obj/item/weapon/switchtool/proc/undeploy()
-	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
+	playsound(get_turf(src), undeploy_sound, 10, 1)
 	deployed.cant_drop = 0
 	deployed = null
 	overlays.len = 0
 	w_class = initial(w_class)
+	update_icon()
 
 /obj/item/weapon/switchtool/proc/deploy(var/module)
 	if(!(module in stored_modules))
@@ -129,11 +136,12 @@
 	if(deployed)
 		return FALSE
 
-	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
+	playsound(get_turf(src), deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	deployed.cant_drop = 1
 	overlays += get_module_name(module)
 	w_class = max(w_class, deployed.w_class)
+	update_icon()
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/choose_deploy(mob/user)
@@ -184,6 +192,7 @@
 
 	icon_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
+	no_remove = 0
 
 	stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
 						"/obj/item/weapon/wrench:wrench" = null,
@@ -207,3 +216,178 @@
 	if(istype(deployed, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/lighter = deployed
 		lighter.lit = 1
+		..()
+
+//Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
+/obj/item/weapon/switchtool/holo
+	name = "Holo switchtool"
+	icon_state = "holo_switchtool"
+	item_state = "Hswitchtool"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtools.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtools.dmi')
+	desc = "A switchtool that can take on the form of nearly any tool. It's experimental hardlight emitter requires tech disks to help define it's shape."
+	var/brightness_max = 4
+	var/brightness_min = 2
+	deploy_sound = "sound/weapons/switchsound.ogg"
+	undeploy_sound = "sound/weapons/switchsound.ogg"
+	//
+	//deploy_sound = "sound/weapons/saberon.ogg"
+	//undeploy_sound = "sound/weapons/saberoff.ogg"
+	light_color =  LIGHT_COLOR_CYAN
+	no_remove = 1
+	mech_flags = MECH_SCAN_ILLEGAL
+
+	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
+						"/obj/item/device/flashlight:Light" = null,
+						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null)
+
+//Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
+/obj/item/weapon/switchtool/holo/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+	if(..())
+		return
+	if(istype(D, /obj/item/weapon/disk/tech_disk))
+		var/obj/item/weapon/disk/tech_disk/T = D
+		var/datum/tech/disk_tech = T.stored
+		if(istype(disk_tech, /datum/tech/biotech) && disk_tech.level >= 3)
+			stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
+			stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
+			stored_modules["/obj/item/weapon/cautery:Cautery"] = new /obj/item/weapon/cautery(src)
+			stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
+			stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
+			stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
+			to_chat(user, "The Holo switchtool has medical designs now!")
+			return
+	if(istype(D, /obj/item/weapon/disk/tech_disk))
+		var/obj/item/weapon/disk/tech_disk/T = D
+		var/datum/tech/disk_tech = T.stored
+		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
+			stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
+			stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
+			stored_modules["/obj/item/weapon/wirecutters:Wirecutters"] = new /obj/item/weapon/wirecutters(src)
+			stored_modules["/obj/item/weapon/crowbar:Crowbar"] = new /obj/item/weapon/crowbar(src)
+			stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
+			stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
+			to_chat(user, "The Holo switchtool has engineering designs now!")
+			return
+	if(istype(D, /obj/item/weapon/disk/tech_disk))
+		var/obj/item/weapon/disk/tech_disk/T = D
+		var/datum/tech/disk_tech = T.stored
+		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
+			stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
+			to_chat(user, "The Holo switchtool has a defensive design now!")
+			return
+	if(istype(D, /obj/item/weapon/disk/tech_disk))
+		var/obj/item/weapon/disk/tech_disk/T = D
+		var/datum/tech/disk_tech = T.stored
+		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
+			stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
+			to_chat(user, "The Holo switchtool has an offensive design now!")
+			return
+	if(istype(D, /obj/item/weapon/disk/tech_disk)) //easter egg sword based on the LoZ BoTW guardian++ sword, this is bus levels of research only. Didn't want to let the sprite go to waste.
+		var/obj/item/weapon/disk/tech_disk/T = D
+		var/datum/tech/disk_tech = T.stored
+		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
+			stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
+			to_chat(user, "The Holo switchtool has a secret offensive design now!")
+			return
+	/**
+	//Joke module about power[clean/creep]
+	if(istype(D, /obj/item/weapon/disk/tech_disk))
+		var/obj/item/weapon/disk/tech_disk/T = D
+		var/datum/tech/disk_tech = T.stored
+		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
+			stored_modules["/obj/item/weapon/soap:Soap"] = new /obj/item/weapon/circular_saw(src)
+			to_chat(user, "The Holo switchtool has power clean designs now!")
+			return
+	**/
+//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, looks like 1u per 5 byond seconds, thanks byond.
+//It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
+	if(istype(deployed, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/weldingtool = deployed
+		weldingtool.welding = 1
+		weldingtool.status = 1
+		weldingtool.max_fuel = 50
+		weldingtool.start_fueled = 1
+
+//for the inhand sprite changes
+//Big shitty wall of else if lazy code
+
+obj/item/weapon/switchtool/holo/update_icon()
+	if(istype(deployed, /obj/item/device/flashlight))
+		item_state = "flashlight"
+
+	else if(istype(deployed, /obj/item/weapon/scalpel))
+		item_state = "scalpel"
+
+	else if(istype(deployed, /obj/item/weapon/circular_saw))
+		item_state = "circularsaw"
+
+	else if(istype(deployed, /obj/item/weapon/surgicaldrill))
+		item_state = "drill"
+
+	else if(istype(deployed, /obj/item/weapon/cautery))
+		item_state = "cautery"
+
+	else if(istype(deployed, /obj/item/weapon/hemostat))
+		item_state = "hemostat"
+
+	else if(istype(deployed, /obj/item/weapon/retractor))
+		item_state = "retractor"
+
+	else if(istype(deployed, /obj/item/weapon/bonesetter))
+		item_state = "bonesetter"
+
+	else if(istype(deployed, /obj/item/weapon/screwdriver))
+		item_state = "screwdriver"
+
+	else if(istype(deployed, /obj/item/weapon/wrench))
+		item_state = "wrench"
+
+	else if(istype(deployed, /obj/item/weapon/wirecutters))
+		item_state = "wirecutters"
+
+	else if(istype(deployed, /obj/item/weapon/crowbar))
+		item_state = "crowbar"
+
+	else if(istype(deployed, /obj/item/device/multitool))
+		item_state = "multitool"
+
+	else if(istype(deployed, /obj/item/weapon/weldingtool))
+		item_state = "weldingtool"
+
+	else if(istype(deployed, /obj/item/weapon/shield/energy))
+		item_state = "shield"
+
+	else if(istype(deployed, /obj/item/weapon/melee/energy/sword/activated))
+		item_state = "sword"
+
+	else if(istype(deployed, /obj/item/weapon/melee/energy/hfmachete/activated))
+		item_state = "sharper sword"
+
+	//else if(istype(deployed, /obj/item/weapon/soap))
+		//item_state = "soap"
+
+	else
+		item_state = "Hswitchtool"
+
+	if(istype(loc, /mob))
+		var/mob/M = loc
+		M.update_inv_hands()
+
+/obj/item/weapon/switchtool/holo/IsShield()
+	if(istype(deployed, /obj/item/weapon/shield/energy))
+		return 1
+	else
+		return 0
+
+//All modules make small amounts of light, flashlight making more.
+/obj/item/weapon/switchtool/holo/deploy(var/module)
+	if(!..())
+		return FALSE
+	set_light(brightness_min)
+	if(istype(deployed, /obj/item/device/flashlight))
+		set_light(brightness_max)
+
+/obj/item/weapon/switchtool/holo/undeploy()
+	..()
+	set_light(0)
+
