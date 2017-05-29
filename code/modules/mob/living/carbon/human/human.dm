@@ -1768,6 +1768,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		"b_eyes",
 		"s_tone",
 		"lip_style",
+		"eye_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",

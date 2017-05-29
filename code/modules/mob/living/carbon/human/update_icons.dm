@@ -277,6 +277,10 @@ var/global/list/damage_icon_parts = list()
 		if(lip_style && (species && species.anatomy_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
+		if(eye_style)
+			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "eyeshadow_[eye_style]_light_s"), ICON_OVERLAY)
+
+
 	//Underwear
 	if(underwear >0 && underwear < 15 && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
@@ -1174,6 +1178,9 @@ var/global/list/damage_icon_parts = list()
 
 	if(lip_style)
 		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
+
+	if(eye_style)
+		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "eyeshadow_[eye_style]_light_l"), ICON_OVERLAY)
 
 	var/image/face_lying_image = new /image(icon = face_lying)
 	return face_lying_image
