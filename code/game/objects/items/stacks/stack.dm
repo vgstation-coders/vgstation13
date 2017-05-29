@@ -229,6 +229,8 @@
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
 	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
 		return
+	if(!can_stack_with(S))
+		return
 	var/transfer = min(amount, S.max_amount - S.amount)
 	if(transfer <= 0)
 		return

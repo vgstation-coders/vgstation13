@@ -172,4 +172,6 @@ proc/sort_surgeries()
 	var/butt_replace = 0
 	var/genitals = 0
 	var/head_reattach = 0
+	var/tooth_replace = 0
+	var/tooth_extract = 0
 	var/current_organ
