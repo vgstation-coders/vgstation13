@@ -209,6 +209,31 @@
 			for(var/i = 0 to multiplier)
 				new/mob/living/simple_animal/bee(get_turf(mob))
 
+/datum/disease2/effect/heart_attack
+	name = "Heart Attack Syndrome"
+	stage = 1
+	max_count = 1
+
+/datum/disease2/effect/heart_attack/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(internal_organs_by_name["heart"])
+			var/obj/item/organ/blown_heart = H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+			var/list/spawn_turfs = list()
+			for(var/turf/T in orange(1, H))
+				if(!T.density)
+					spawn_turfs.Add(T)
+			if(!spawn_turfs.len)
+				spawn_turfs.Add(get_turf(H))
+			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
+			heart_attack.name = blown_heart.name
+			heart_attack.icon = blown_heart.icon
+			heart_attack.icon_state = blown_heart.icon_state
+			heart_attack.icon_living = blown_heart.icon_state
+			heart_attack.environment_smash = 0
+			H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
+			qdel(blown_heart)
+
 
 ////////////////////////STAGE 2/////////////////////////////////
 
