@@ -182,7 +182,7 @@
 	protected_jobs = list("Research Director", "Scientist")
 
 /datum/theft_objective/traitor/Holotool
-	name = "the  Holo switchtool"
+	name = "the holo switchtool"
 	typepath = /obj/item/weapon/switchtool/holo
 	protected_jobs = list("Research Director")
 

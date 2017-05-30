@@ -62,7 +62,7 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, /obj/item/weapon/screwdriver) && no_remove)
+	if(istype(used_item, removing_item) && no_remove)
 		to_chat(user, "You can't remove modules from this.")
 		return
 	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
@@ -192,7 +192,6 @@
 
 	icon_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
-	no_remove = 0
 
 	stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
 						"/obj/item/weapon/wrench:wrench" = null,
@@ -220,16 +219,15 @@
 
 //Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
 /obj/item/weapon/switchtool/holo
-	name = "Holo switchtool"
+	name = "\improper Holo switchtool"
 	icon_state = "holo_switchtool"
 	item_state = "Hswitchtool"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtools.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtools.dmi')
-	desc = "A switchtool that can take on the form of nearly any tool. It's experimental hardlight emitter requires tech disks to help define it's shape."
+	desc = "A switchtool that can take on the form of nearly any tool. Its experimental hardlight emitter requires tech disks to help define its shape."
 	var/brightness_max = 4
 	var/brightness_min = 2
 	deploy_sound = "sound/weapons/switchsound.ogg"
 	undeploy_sound = "sound/weapons/switchsound.ogg"
-	//
 	//deploy_sound = "sound/weapons/saberon.ogg"
 	//undeploy_sound = "sound/weapons/saberoff.ogg"
 	light_color =  LIGHT_COLOR_CYAN
@@ -256,9 +254,6 @@
 			stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
 			to_chat(user, "The Holo switchtool has medical designs now!")
 			return
-	if(istype(D, /obj/item/weapon/disk/tech_disk))
-		var/obj/item/weapon/disk/tech_disk/T = D
-		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
 			stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
@@ -268,32 +263,20 @@
 			stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
 			to_chat(user, "The Holo switchtool has engineering designs now!")
 			return
-	if(istype(D, /obj/item/weapon/disk/tech_disk))
-		var/obj/item/weapon/disk/tech_disk/T = D
-		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
 			to_chat(user, "The Holo switchtool has a defensive design now!")
 			return
-	if(istype(D, /obj/item/weapon/disk/tech_disk))
-		var/obj/item/weapon/disk/tech_disk/T = D
-		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
 			to_chat(user, "The Holo switchtool has an offensive design now!")
 			return
-	if(istype(D, /obj/item/weapon/disk/tech_disk)) //easter egg sword based on the LoZ BoTW guardian++ sword, this is bus levels of research only. Didn't want to let the sprite go to waste.
-		var/obj/item/weapon/disk/tech_disk/T = D
-		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
 			to_chat(user, "The Holo switchtool has a secret offensive design now!")
 			return
 	/**
 	//Joke module about power[clean/creep]
-	if(istype(D, /obj/item/weapon/disk/tech_disk))
-		var/obj/item/weapon/disk/tech_disk/T = D
-		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
 			stored_modules["/obj/item/weapon/soap:Soap"] = new /obj/item/weapon/circular_saw(src)
 			to_chat(user, "The Holo switchtool has power clean designs now!")
