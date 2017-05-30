@@ -1975,7 +1975,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
 
 /datum/recipe/potatosalad
 	reagents = list(WATER = 10, MILK = 10, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
