@@ -1149,6 +1149,17 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
+/datum/recipe/avocadosoup
+	reagents = list(WATER = 5, LIMEJUICE = 5, CREAM = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+		)
+	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa
+
 // Sandwiches //////////////////////////////////////////////////
 
 /datum/recipe/sandwich
