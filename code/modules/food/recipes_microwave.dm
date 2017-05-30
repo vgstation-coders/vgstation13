@@ -148,6 +148,14 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
 	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
 
+/datum/recipe/avocadoburger
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
