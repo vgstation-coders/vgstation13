@@ -1968,6 +1968,15 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
 
+/datum/recipe/avocadomilkshake
+	reagents = list(MILK = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/icecream,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
+
 /datum/recipe/potatosalad
 	reagents = list(WATER = 10, MILK = 10, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(

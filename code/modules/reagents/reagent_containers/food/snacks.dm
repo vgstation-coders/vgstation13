@@ -4107,6 +4107,20 @@
 	reagents.add_reagent(ICE, 5)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
+	name = "avocado milkshake"
+	desc = "Strange, but good."
+	icon_state = "avocadomilkshake"
+	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL //milk
+	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(SUGAR, 5)
+	reagents.add_reagent(ICE, 5)
+	bitesize = 4
+
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad
 	name = "Potato Salad"
 	desc = "With 21st century technology, it could take as long as three days to make this."
