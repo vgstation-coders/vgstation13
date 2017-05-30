@@ -136,6 +136,7 @@ var/global/list/accessable_z_levels = list()
 	var/name = ""
 	var/teleJammed = 0
 	var/movementJammed = 0 //Prevents you from accessing the zlevel by drifting
+	var/bluespace_jammed = 0
 	var/movementChance = ZLEVEL_BASE_CHANCE
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/z //Number of the z-level (the z coordinate)
@@ -152,6 +153,7 @@ var/global/list/accessable_z_levels = list()
 	name = "centcomm"
 	teleJammed = 1
 	movementJammed = 1
+	bluespace_jammed = 1
 
 /datum/zLevel/space
 
