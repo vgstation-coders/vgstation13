@@ -1158,7 +1158,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
 
 // Sandwiches //////////////////////////////////////////////////
 
