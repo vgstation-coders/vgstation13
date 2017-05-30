@@ -1458,6 +1458,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			heart_attack.melee_damage_upper = 15
 			heart_attack.health = 50
 			heart_attack.maxHealth = 50
+			heart_attack.stat_attack = 1
 			qdel(blown_heart)
 
 
