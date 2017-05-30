@@ -2055,6 +2055,17 @@
 	..()
 	reagents.add_reagent(SLIMEJELLY, 5)
 
+/obj/item/weapon/reagent_containers/food/snacks/avocadotoast
+	name = "avocado toast"
+	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
+	icon_state = "avocadotoast"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger
 	name = "Jelly Burger"
 	desc = "Culinary delight..?"

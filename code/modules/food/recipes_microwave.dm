@@ -1206,6 +1206,14 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
 
+/datum/recipe/avocadotoast
+	reagents = list (SODIUMCHLORIDE = 2)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadotoast
+
 // Coder Snacks ///////////////////////////////////////////////////////
 
 /datum/recipe/spaghetti
@@ -1507,7 +1515,8 @@
 /datum/recipe/guacamole
 	reagents = list(LIMEJUICE = 10, SODIUMCHLORIDE = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
 
@@ -2280,7 +2289,7 @@
 		/obj/item/weapon/ore/glass,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
-	
+
 /datum/recipe/power_crepe
 	reagents = list(RADIUM = 5)
 	items = list(
