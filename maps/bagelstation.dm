@@ -44,7 +44,7 @@
 ////////////////////////////////////////////////////////////////
 #include "defficiency/pipes.dm" // Atmos layered pipes.
 
-#include "bagelstation/jobs.dm
+#include "bagelstation/jobs.dm"
 
 #include "bagelstation.dmm"
 

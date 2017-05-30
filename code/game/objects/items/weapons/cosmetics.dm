@@ -276,12 +276,12 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 340)
 /obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, mob/user, location = "mouth")
+	if(!Adjacent(user) || user.incapacitated())
+		return
 	if(location == "mouth")
 		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
 		if(species_facial_hair.len)
 			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
-			if(!Adjacent(user) || user.incapacitated())
-				return
 			if(new_style)
 				H.f_style = new_style
 	else
