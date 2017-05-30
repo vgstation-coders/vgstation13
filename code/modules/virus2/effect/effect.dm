@@ -1449,10 +1449,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			if(!spawn_turfs.len)
 				spawn_turfs.Add(get_turf(H))
 			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
-			heart_attack.name = blown_heart.name
-			heart_attack.icon = blown_heart.icon
-			heart_attack.icon_state = blown_heart.icon_state
-			heart_attack.icon_living = blown_heart.icon_state
+			heart_attack.appearance = blown_heart.appearance
+			heart_attack.icon_dead = "heart-off"
 			heart_attack.environment_smash = 0
 			heart_attack.melee_damage_lower = 15
 			heart_attack.melee_damage_upper = 15
