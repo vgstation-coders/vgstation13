@@ -11,8 +11,9 @@
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-	//TODO: fix husking
-	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
+
+	if((maxHealth - total_burn) < config.health_threshold_dead)
+		death(FALSE)
 		ChangeToHusk()
 	return
 
