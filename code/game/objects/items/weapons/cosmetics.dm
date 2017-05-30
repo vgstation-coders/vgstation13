@@ -276,8 +276,6 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 340)
 /obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, mob/user, location = "mouth")
-	if(!Adjacent(user) || user.incapacitated())
-		return
 	if(location == "mouth")
 		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
 		if(species_facial_hair.len)
@@ -290,8 +288,11 @@
 			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
 			if(!Adjacent(user) || user.incapacitated())
 				return
+
 			if(new_style)
 				H.h_style = new_style
+	if(!Adjacent(user) || user.incapacitated())
+		return
 	H.update_hair()
 	playsound(loc, 'sound/items/Welder2.ogg', 20, 1)
 
@@ -311,6 +312,8 @@
 				user.visible_message("[user] starts to style their facial hair with [src].", \
 									 "<span class='notice'>You take a moment to style your facial hair with [src]...</span>")
 				if(do_after(user, H, 5))
+					if(!Adjacent(user) || user.incapacitated())
+						return
 					shave(H, user, location)
 					user.visible_message("[user] styles \his facial hair with [src].", \
 										 "<span class='notice'>You finish styling with [src].</span>")
@@ -318,6 +321,8 @@
 				user.visible_message("<span class='warning'>[user] tries to style [H]'s facial hair with [src].</span>", \
 									 "<span class='notice'>You start styling [H]'s facial hair...</span>")
 				if(do_after(user, H, 50))
+					if(!Adjacent(user) || user.incapacitated())
+						return
 					shave(H, user, location)
 					user.visible_message("<span class='warning'>[user] style [H]'s facial hair with [src].</span>", \
 										 "<span class='notice'>You style [H]'s facial hair.</span>")
@@ -334,6 +339,8 @@
 				user.visible_message("[user] starts to style their hair with [src].", \
 									 "<span class='notice'>You start to style your hair with [src]...</span>")
 				if(do_after(user, H, 5))
+					if(!Adjacent(user) || user.incapacitated())
+						return
 					shave(H, user, location)
 					user.visible_message("[user] style \his hair with [src].", \
 										 "<span class='notice'>You finish styling with [src].</span>")
@@ -341,6 +348,8 @@
 				user.visible_message("<span class='warning'>[user] tries to style [H]'s hair with [src]!</span>", \
 									 "<span class='notice'>You start styling [H]'s hair...</span>")
 				if(do_after(user, H, 50))
+					if(!Adjacent(user) || user.incapacitated())
+						return
 					shave(H, user, location)
 					user.visible_message("<span class='warning'>[user] styles [H]'s hair with [src]!</span>", \
 										 "<span class='notice'>You style [H]'s hair.</span>")
