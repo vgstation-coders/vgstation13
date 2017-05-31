@@ -949,15 +949,20 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 /datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
-		if(H.species && (H.species.anatomy_flags & NO_BLOOD))	//Can't have clotting factors if you don't have blood!
+		if(H.species && (H.species.anatomy_flags & NO_BLOOD))	//Can't have fragile skin if you don't have skin at all.
 			skip = TRUE
 			return
-		if (H.reagents.get_reagent_amount(CLOTTING_AGENT) < 5)
-			H.reagents.add_reagent(CLOTTING_AGENT, 5)
-			for (var/datum/organ/external/E in H.organs)
-				if (E.status & ORGAN_BLEEDING)
-					to_chat(mob, "<span class = 'notice'>You feel your wounds rapidly scabbing over.</span>")
-					break
+
+/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(skip)
+		return
+	var/mob/living/carbon/human/H = mob
+	if (H.reagents.get_reagent_amount(CLOTTING_AGENT) < 5)
+		H.reagents.add_reagent(CLOTTING_AGENT, 5)
+		for (var/datum/organ/external/E in H.organs)
+			if (E.status & ORGAN_BLEEDING)
+				to_chat(mob, "<span class = 'notice'>You feel your wounds rapidly scabbing over.</span>")
+				break
 
 
 ////////////////////////STAGE 4/////////////////////////////////
