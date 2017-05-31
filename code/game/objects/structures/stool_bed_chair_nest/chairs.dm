@@ -408,12 +408,26 @@
 
 //Folding chair
 
-
-
 /obj/structure/bed/chair/folding
 	name = "folding chair"
 	icon_state = "folding_chair"
 	anchored = 0
+	var/obj/item/folding_chair/folded
+
+/obj/structure/bed/chair/folding/New(turf/T, var/chair)
+	..(T)
+	if(!folded)
+		if(chair)
+			folded = chair
+		else
+			folded = new(src, src)
+
+/obj/structure/bed/chair/folding/Destroy()
+	if(folded)
+		folded.unfolded = null
+		qdel(folded)
+		folded = null
+	..()
 
 /obj/item/folding_chair
 	name = "folding chair"
@@ -421,12 +435,29 @@
 	icon = 'icons/obj/stools-chairs-beds.dmi'
 	icon_state = "folded_chair"
 	w_class = W_CLASS_LARGE
+	var/obj/structure/bed/chair/folding/unfolded
+
+/obj/item/folding_chair/New(turf/T, var/chair)
+	..(T)
+	if(!unfolded)
+		if(chair)
+			unfolded = chair
+		else
+			unfolded = new(src, src)
+
+/obj/item/folding_chair/Destroy()
+	if(unfolded)
+		unfolded.folded = null
+		qdel(unfolded)
+		unfolded = null
+	..()
 
 /obj/item/folding_chair/attack_self(mob/user)
-	var/obj/structure/bed/chair/folding/F = new /obj/structure/bed/chair/folding(user.loc)
-	F.add_fingerprint(user)
-	F.dir = user.dir
-	qdel(src)
+	unfolded.forceMove(user.loc)
+	unfolded.add_fingerprint(user)
+	unfolded.dir = user.dir
+	user.drop_item(src, force_drop = 1)
+	forceMove(unfolded)
 
 /obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
 	..()
@@ -439,6 +470,5 @@
 
 		visible_message("[usr] folds up \the [src].")
 
-		new/obj/item/folding_chair(get_turf(src))
-
-		qdel(src)
+		folded.forceMove(get_turf(src))
+		forceMove(folded)
