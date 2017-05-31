@@ -252,7 +252,7 @@
 			stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
 			stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
 			stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
-			to_chat(user, "The Holo switchtool has medical designs now!")
+			to_chat(user, "The holo switchtool has medical designs now!")
 			return
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
@@ -261,94 +261,66 @@
 			stored_modules["/obj/item/weapon/crowbar:Crowbar"] = new /obj/item/weapon/crowbar(src)
 			stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
 			stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
-			to_chat(user, "The Holo switchtool has engineering designs now!")
+			to_chat(user, "The holo switchtool has engineering designs now!")
 			return
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
-			to_chat(user, "The Holo switchtool has a defensive design now!")
+			to_chat(user, "The holo switchtool has a defensive design now!")
 			return
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
-			to_chat(user, "The Holo switchtool has an offensive design now!")
+			to_chat(user, "The holo switchtool has an offensive design now!")
 			return
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
-			to_chat(user, "The Holo switchtool has a secret offensive design now!")
+			to_chat(user, "The holo switchtool has a secret offensive design now!")
 			return
-	/**
-	//Joke module about power[clean/creep]
+	//Joke module about power[clean/creep], this is dumb but exists.
+	//How does a UV light clean even? It just sterilizes. I guess it works because it's like suit storages with their UV suit cleaner.
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
-			stored_modules["/obj/item/weapon/soap:Soap"] = new /obj/item/weapon/circular_saw(src)
-			to_chat(user, "The Holo switchtool has power clean designs now!")
+			stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
+			to_chat(user, "The holo switchtool has a power clean design now!")
 			return
-	**/
-//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, looks like 1u per 5 byond seconds, thanks byond.
-//It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
-	if(istype(deployed, /obj/item/weapon/weldingtool))
-		var/obj/item/weapon/weldingtool/weldingtool = deployed
-		weldingtool.welding = 1
-		weldingtool.status = 1
-		weldingtool.max_fuel = 50
-		weldingtool.start_fueled = 1
 
 //for the inhand sprite changes
-//Big shitty wall of else if lazy code
-
+//Big shitty wall of else if quality code
 obj/item/weapon/switchtool/holo/update_icon()
 	if(istype(deployed, /obj/item/device/flashlight))
 		item_state = "flashlight"
-
 	else if(istype(deployed, /obj/item/weapon/scalpel))
 		item_state = "scalpel"
-
 	else if(istype(deployed, /obj/item/weapon/circular_saw))
 		item_state = "circularsaw"
-
 	else if(istype(deployed, /obj/item/weapon/surgicaldrill))
 		item_state = "drill"
-
 	else if(istype(deployed, /obj/item/weapon/cautery))
 		item_state = "cautery"
-
 	else if(istype(deployed, /obj/item/weapon/hemostat))
 		item_state = "hemostat"
-
 	else if(istype(deployed, /obj/item/weapon/retractor))
 		item_state = "retractor"
-
 	else if(istype(deployed, /obj/item/weapon/bonesetter))
 		item_state = "bonesetter"
-
 	else if(istype(deployed, /obj/item/weapon/screwdriver))
 		item_state = "screwdriver"
-
 	else if(istype(deployed, /obj/item/weapon/wrench))
 		item_state = "wrench"
-
 	else if(istype(deployed, /obj/item/weapon/wirecutters))
 		item_state = "wirecutters"
-
 	else if(istype(deployed, /obj/item/weapon/crowbar))
 		item_state = "crowbar"
-
 	else if(istype(deployed, /obj/item/device/multitool))
 		item_state = "multitool"
-
 	else if(istype(deployed, /obj/item/weapon/weldingtool))
 		item_state = "weldingtool"
-
 	else if(istype(deployed, /obj/item/weapon/shield/energy))
 		item_state = "shield"
-
 	else if(istype(deployed, /obj/item/weapon/melee/energy/sword/activated))
 		item_state = "sword"
-
 	else if(istype(deployed, /obj/item/weapon/melee/energy/hfmachete/activated))
 		item_state = "sharper sword"
-
-	//else if(istype(deployed, /obj/item/weapon/soap))
-		//item_state = "soap"
-
+	else if(istype(deployed, /obj/item/weapon/soap/holo))
+		item_state = "uvsoap"
 	else
 		item_state = "Hswitchtool"
 
@@ -369,6 +341,15 @@ obj/item/weapon/switchtool/holo/update_icon()
 	set_light(brightness_min)
 	if(istype(deployed, /obj/item/device/flashlight))
 		set_light(brightness_max)
+
+	//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, looks like 1u per 5 byond seconds, thanks byond.
+//It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
+	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
+		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
+		weldingtool.welding = 1
+		weldingtool.status = 1
+		weldingtool.max_fuel = 50
+		weldingtool.start_fueled = 1
 
 /obj/item/weapon/switchtool/holo/undeploy()
 	..()

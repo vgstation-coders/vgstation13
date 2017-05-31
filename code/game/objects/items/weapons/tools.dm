@@ -568,11 +568,17 @@
 /obj/item/weapon/weldingtool/experimental/empty
 	start_fueled = 0
 
+/obj/item/weapon/weldingtool/experimental/process()
+	..()
+	reagents.add_reagent(FUEL, 5)
+
+/**
 /obj/item/weapon/weldingtool/experimental/proc/fuel_gen()//Proc to make the experimental welder generate fuel, optimized as fuck -Sieve
 	var/gen_amount = ((world.time-last_gen)/25)          //Too bad it's not actually implemented
 	reagents += (gen_amount)
 	if(reagents > max_fuel)
 		reagents = max_fuel
+**/
 
 /*
  * Crowbar
