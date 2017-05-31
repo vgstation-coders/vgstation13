@@ -5,16 +5,6 @@
 	var/projectile
 	var/fire_sound
 
-/obj/item/mecha_parts/mecha_equipment/weapon/attackby(obj/item/weapon/MGC as obj, mob/user as mob)
-	if(isMGC(MGC))
-		//originalclass = src //For deconversion -- What gun was it?
-		//projectiles //the amount of ammo it has
-		new /obj/item/weapon/gun/ConvertedMountedGun(src.loc, src.icon_state,src.projectile,src.fire_sound)
-		user.visible_message("<span class='notice'>You attach the conversion kit to the [src].</span>")
-		qdel(src)
-		qdel(MGC)
-
-
 /obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
 	if(..())
 		if(istype(M))
@@ -177,6 +167,23 @@
 	..()
 	projectiles = max_projectiles
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/attackby(obj/item/weapon/MGC as obj, mob/user as mob)
+	if(isMGC(MGC))
+		if (!defective)
+			var/obj/item/weapon/gun/ConvertedMountedGun/congun
+			congun = new/obj/item/weapon/gun/ConvertedMountedGun(src.loc)
+			congun.icon_state = src.icon_state
+			congun.projectile = src.projectile
+			congun.fire_sound = src.fire_sound
+			congun.current_shells = src.projectiles
+			congun.originalclass = src
+			projectiles_per_shot = src.projectiles_per_shot
+			user.visible_message("<span class='notice'>You attach the conversion kit to the [src].</span>")
+			qdel(src)
+			qdel(MGC)
+		else
+			to_chat(user, "<span class='danger'>\The [MGC] is defective!</span>")
+	
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)
 		..()

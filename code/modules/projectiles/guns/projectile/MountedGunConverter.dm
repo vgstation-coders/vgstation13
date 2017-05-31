@@ -3,8 +3,8 @@ obj/item/weapon/gun/MechaGunConverter
 	desc = "use on mecha gun to make man gun"
 
 /obj/item/weapon/gun/ConvertedMountedGun
-	name = "Man-portable mounted weapon"
-	desc = "A converted exosuit weapon."
+	name = "man-portable exosuit weapon"
+	desc = "A really big gun with a trigger assembly on it."
 	icon = 'icons/mecha/mecha_equipment.dmi'
 	icon_state = "mecha_equip"
 	item_state = "minigun0"
@@ -18,17 +18,18 @@ obj/item/weapon/gun/MechaGunConverter
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
 	var/max_shells = 200
 	var/current_shells = 200
-	var/originalclass = null
+	var/originalclass
+	var/projectile
+	var/projectiles_per_shot
 
 obj/item/weapon/gun/MechaGunConverter/New()
 	..()
-	icon_state = icon_state
 
-/obj/item/weapon/gun/gatling/examine(mob/user)
+/obj/item/weapon/gun/ConvertedMountedGun/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>Has [current_shells] round\s remaining.</span>")
 
-/obj/item/weapon/gun/gatling/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/ConvertedMountedGun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 
@@ -38,36 +39,36 @@ obj/item/weapon/gun/MechaGunConverter/New()
 	else
 		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
-/obj/item/weapon/gun/gatling/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/ConvertedMountedGun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	..()
 	var/list/turf/possible_turfs = list()
 	for(var/turf/T in orange(target,1))
 		possible_turfs += T
 	spawn()
-		for(var/i = 1; i <= 3; i++)
+		for(var/i = 1; i <= projectiles_per_shot; i++)
 			sleep(1)
 			var/newturf = pick(possible_turfs)
 			..(newturf,user,params,reflex,struggle)
 
-/obj/item/weapon/gun/gatling/update_wield(mob/user)
+/obj/item/weapon/gun/ConvertedMountedGun/update_wield(mob/user)
 	item_state = "minigun[wielded ? 1 : 0]"
 	if(wielded)
 		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
 		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
-/obj/item/weapon/gun/gatling/process_chambered()
+/obj/item/weapon/gun/ConvertedMountedGun/process_chambered()
 	if(in_chamber)
 		return 1
 	if(current_shells)
 		current_shells--
-		update_icon()
-		in_chamber = new/obj/item/projectile/bullet/gatling()//We create bullets as we are about to fire them. No other way to remove them from the gatling.
+		var/obj/item/projectile/bullet/loadedbullet = new projectile
+		in_chamber = loadedbullet//We create bullets as we are about to fire them. No other way to remove them from the gun.
 		new/obj/item/ammo_casing_gatling(get_turf(src))
 		return 1
 	return 0
 
-/obj/item/weapon/gun/gatling/attack_self(mob/user)
+/obj/item/weapon/gun/ConvertedMountedGun/attack_self(mob/user)
 	if(wielded)
 		unwield(user)
 	else
