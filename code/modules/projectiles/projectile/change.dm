@@ -29,6 +29,9 @@
 		M.overlays.len = 0
 		M.invisibility = 101
 
+		if(istype(M, /mob/living/carbon/human))
+			M.remove_changeling_verb()
+
 		if(istype(M, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/Robot = M
 			if(Robot.mmi)
