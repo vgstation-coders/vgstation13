@@ -946,16 +946,14 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	stage = 3
 	var/skip = FALSE
 
-/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob,var/multiplier)
+/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob)
+	if(skip)
+		return
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		if(H.species && (H.species.anatomy_flags & NO_BLOOD))	//Can't have fragile skin if you don't have skin at all.
 			skip = TRUE
 			return
-
-/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(skip)
-		return
 	var/mob/living/carbon/human/H = mob
 	if (H.reagents.get_reagent_amount(CLOTTING_AGENT) < 5)
 		H.reagents.add_reagent(CLOTTING_AGENT, 5)
