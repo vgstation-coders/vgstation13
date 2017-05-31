@@ -29,9 +29,6 @@
 	size = SIZE_BIG
 	wanted_objects = list(/obj/item/slime_extract)
 	var/obj/item/weapon/storage/bag/slime/B
-/mob/living/simple_animal/hostile/helperslime/New()
-	..()
-	overlays += image(icon = icon, icon_state = "aslime-mischevous")
 
 /mob/living/simple_animal/hostile/helperslime/CanAttack(atom/new_target)
 	if(istype(new_target, /obj/item/slime_extract))
@@ -47,3 +44,13 @@
 
 /mob/living/simple_animal/hostile/helperslime/New()
 	B = new/obj/item/weapon/storage/bag/slime
+
+/mob/living/simple_animal/hostile/helperslime/AttackingTarget()
+	for(var/mob/M in view(src))
+		if(CanAttack(M))
+		...
+
+	if(istype(target,/obj/item/slime_extract))
+		B.attackby(target,src)
+	else
+		return
