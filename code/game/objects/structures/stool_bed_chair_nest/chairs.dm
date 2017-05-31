@@ -405,3 +405,40 @@
 	color = "#c94c4c"
 /obj/structure/bed/chair/comfy/couch/turn/outward/red
 	color = "#c94c4c"
+
+//Folding chair
+
+
+
+/obj/structure/bed/chair/folding
+	name = "folding chair"
+	icon_state = "folding_chair"
+	anchored = 0
+
+/obj/item/folding_chair
+	name = "folding chair"
+	desc = "A collapsed folding chair that can be carried around."
+	icon = 'icons/obj/stools-chairs-beds.dmi'
+	icon_state = "folded_chair"
+	w_class = W_CLASS_LARGE
+
+/obj/item/folding_chair/attack_self(mob/user)
+	var/obj/structure/bed/chair/folding/F = new /obj/structure/bed/chair/folding(user.loc)
+	F.add_fingerprint(user)
+	F.dir = user.dir
+	qdel(src)
+
+/obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
+	..()
+	if(over_object == usr && Adjacent(usr))
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
+
+		if(is_locking(lock_type))
+			return 0
+
+		visible_message("[usr] folds up \the [src].")
+
+		new/obj/item/folding_chair(get_turf(src))
+
+		qdel(src)
