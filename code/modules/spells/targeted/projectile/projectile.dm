@@ -15,13 +15,16 @@ If the spell_projectile is seeking, it will update its target every process and 
 	var/proj_step_delay = 1 //lower = faster
 	var/cast_prox_range = 1
 
+/spell/targeted/projectile/proc/spawn_projectile(var/location, var/direction)
+	return new proj_type(location,direction)
+
 /spell/targeted/projectile/cast(list/targets, mob/user = usr)
 
 	if(istext(proj_type))
 		proj_type = text2path(proj_type) // sanity filters
 
 	for(var/atom/target in targets)
-		var/obj/item/projectile/projectile = new proj_type(user.loc, user.dir)
+		var/obj/item/projectile/projectile = spawn_projectile(user.loc, user.dir)
 
 		if(!projectile)
 			return

@@ -156,8 +156,9 @@
 				target = get_step_towards(target, get_dir(target, user))
 //				to_chat(world, "new target is [formatJumpTo(target)](<a href='?_src_=vars;Vars=\ref[target]'>VV</a>)")
 	if(istype(target))
-		target.emp_act(2)
-		target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
+		if(!istype(target, /mob/living/simple_animal/hostile/glow_orb))
+			target.emp_act(2)
+			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
 		var/obj/item/projectile/beam/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
 		B.damage = basedamage

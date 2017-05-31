@@ -74,7 +74,7 @@
 
 /datum/surgery_step/limb/mend/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("[user] is beginning reposition flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].", \
+	user.visible_message("[user] is beginning to reposition flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].", \
 	"You start repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].")
 	..()
 
@@ -120,7 +120,7 @@
 /datum/surgery_step/limb/prepare/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts adjusting area around [target]'s [affected.display_name] with \the [tool].", \
-	"You start adjusting area around [target]'s [affected.display_name] with \the [tool]..")
+	"You start adjusting area around [target]'s [affected.display_name] with \the [tool].")
 	..()
 
 /datum/surgery_step/limb/prepare/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -162,6 +162,9 @@
 	if (p.part)
 		if (!(target_zone in p.part))
 			return 0
+	if(isslimeperson(target))
+		to_chat(user, "<span class='info'>You're not even sure how to secure this to \the [target].</span>")
+		return 0
 	return ..()
 
 /datum/surgery_step/limb/attach/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -206,6 +209,9 @@
 
 /datum/surgery_step/limb/attach_plank/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(isslimeperson(target))
+		to_chat(user, "<span class='info'>You're not even sure how to secure this to \the [target].</span>")
+		return 0
 	return ..() && affected.status & ORGAN_ATTACHABLE
 
 /datum/surgery_step/limb/attach_plank/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -251,6 +257,10 @@
 		return 0
 	if (o.part)
 		if (!(target_zone == o.part))
+			return 0
+	if(isslimeperson(target))
+		if(!o.species || !istype(o.species, /datum/species/slime))
+			to_chat(user, "<span class='info'>You're not even sure how to secure this to \the [target].</span>")
 			return 0
 	return ..()
 

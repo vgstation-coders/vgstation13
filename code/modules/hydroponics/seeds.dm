@@ -477,7 +477,7 @@
 	display_name = "ghost pepper plants"
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper)
-	chems = list(CONDENSEDCAPSAICIN = list(3,4), NEUROTOXIN = list(0,40))
+	chems = list(CONDENSEDCAPSAICIN = list(3,4), CURARE = list(0,40))
 	packet_icon = "seed-ghostpepper"
 	plant_icon = "chilighost"
 
@@ -531,7 +531,7 @@
 	mutants = list("deathberries")
 	packet_icon = "seed-poisonberry"
 	plant_icon = "poisonberry"
-	chems = list(NUTRIMENT = list(1), TOXIN = list(3,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,5))
 
 /datum/seed/berry/poison/death
 	name = "deathberries"
@@ -541,7 +541,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
 	packet_icon = "seed-deathberry"
 	plant_icon = "deathberry"
-	chems = list(NUTRIMENT = list(1), TOXIN = list(3,3), LEXORIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5))
 
 	yield = 3
 	potency = 50
@@ -556,7 +556,7 @@
 	packet_icon = "seed-nettle"
 	plant_icon = "nettle"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1,50), SACID = list(0,1))
+	chems = list(NUTRIMENT = list(1,50), FORMIC_ACID = list(0,1))
 	lifespan = 30
 	maturation = 6
 	production = 6
@@ -572,7 +572,7 @@
 	mutants = null
 	packet_icon = "seed-deathnettle"
 	plant_icon = "deathnettle"
-	chems = list(NUTRIMENT = list(1,50), PACID = list(0,1))
+	chems = list(NUTRIMENT = list(1,50), PHENOL = list(0,1))
 
 	maturation = 8
 	yield = 2
@@ -731,7 +731,7 @@
 	packet_icon = "seed-ambrosiavulgaris"
 	plant_icon = "ambrosiavulgaris"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1), SPACE_DRUGS = list(1,8), KELOTANE = list(1,8,1), BICARIDINE = list(1,10,1), TOXIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5))
 
 	lifespan = 60
 	maturation = 6
@@ -755,7 +755,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), SPACE_DRUGS = list(1,8), KELOTANE = list(1,8,1), BICARIDINE = list(1,10,1), TOXIN = list(1,5), spiritbreaker = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10))
 
 
 /datum/seed/ambrosia/deus
@@ -766,7 +766,7 @@
 	mutants = null
 	packet_icon = "seed-ambrosiadeus"
 	plant_icon = "ambrosiadeus"
-	chems = list(NUTRIMENT = list(1), BICARIDINE = list(1,8), SYNAPTIZINE = list(1), HYPERZINE = list(1,10,1), SPACE_DRUGS = list(1,10))
+	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), NICOTINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -826,7 +826,7 @@
 	mutants = list("libertycap","glowshroom")
 	packet_icon = "mycelium-reishi"
 	plant_icon = "reishi"
-	chems = list(NUTRIMENT = list(1), STOXIN = list(3,3), SPACE_DRUGS = list(1,25))
+	chems = list(NUTRIMENT = list(1), VALERENIC_ACID = list(3,3), MESCALINE = list(1,25))
 
 	maturation = 10
 	production = 5
@@ -966,7 +966,7 @@
 	packet_icon = "seed-poppy"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/poppy)
 	plant_icon = "poppy"
-	chems = list(NUTRIMENT = list(1,20), BICARIDINE = list(1,10))
+	chems = list(NUTRIMENT = list(1,20), OPIUM = list(1,10))
 
 	lifespan = 25
 	potency = 20
@@ -1065,7 +1065,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
 	mutants = null
 	plant_icon = "greengrape"
-	chems = list(NUTRIMENT = list(1,10), KELOTANE = list(3,5))
+	chems = list(NUTRIMENT = list(1,10), TANNIC_ACID = list(3,5))
 
 //Everything else
 /datum/seed/peanuts
@@ -1111,7 +1111,7 @@
 	packet_icon = "seed-shand"
 	products = list(/obj/item/stack/medical/bruise_pack/tajaran)
 	plant_icon = "shand"
-	chems = list(BICARIDINE = list(0,10))
+	chems = list(OPIUM = list(0,10))
 
 	lifespan = 50
 	maturation = 3
@@ -1127,7 +1127,7 @@
 	packet_icon = "seed-mtear"
 	products = list(/obj/item/stack/medical/ointment/tajaran)
 	plant_icon = "mtear"
-	chems = list(HONEY = list(1,10), KELOTANE = list(3,5))
+	chems = list(HONEY = list(1,10), TANNIC_ACID = list(3,5))
 
 	lifespan = 50
 	maturation = 3
@@ -1267,7 +1267,7 @@
 	packet_icon = "seed-carrot"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
 	plant_icon = "carrot"
-	chems = list(NUTRIMENT = list(1,20), IMIDAZOLINE = list(3,5))
+	chems = list(NUTRIMENT = list(1,20), ZEAXANTHIN = list(3,5))
 
 	lifespan = 25
 	maturation = 10
@@ -1501,7 +1501,7 @@
 	packet_icon = "seed-kudzu"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod)
 	plant_icon = "kudzu"
-	chems = list(NUTRIMENT = list(1,50), ANTI_TOXIN = list(2,10))
+	chems = list(NUTRIMENT = list(1,50), ALLICIN = list(2,10))
 
 	lifespan = 20
 	maturation = 6
@@ -1654,7 +1654,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/garlic)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "garlic"
-	chems = list(HOLYWATER = list(1,25),NUTRIMENT = list(1,10))
+	chems = list(HOLYWATER = list(1,25),NUTRIMENT = list(1,10), ALLICIN = list(5,10))
 
 	potency = 15
 	lifespan = 200
@@ -1673,7 +1673,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "pitcher"
-	chems = list(SACID = list(1,25))
+	chems = list(FORMIC_ACID = list(1,25))
 
 	potency = 10
 	lifespan = 50
@@ -1696,7 +1696,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "aloe"
-	chems = list(DERMALINE = list(1,10)) //Not as good as poppy's bicaridine for speedy heals, but general purpose.
+	chems = list(KATHALAI = list(1,10)) //Not as good as poppy's opium for speedy heals, but general purpose.
 
 	lifespan = 30
 	maturation = 6

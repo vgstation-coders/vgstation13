@@ -250,11 +250,14 @@ var/global/list/damage_icon_parts = list()
 				stand_icon.Blend(temp, ICON_OVERLAY)
 
 	//Skin tone
-	if(!skeleton && !husk && !hulk && (species.anatomy_flags & HAS_SKIN_TONE))
-		if(s_tone >= 0)
-			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
-		else
-			stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+	if(!skeleton && !husk && !hulk)
+		if(species.anatomy_flags & MULTICOLOR)
+			stand_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
+		else if(species.anatomy_flags & HAS_SKIN_TONE)
+			if(s_tone >= 0)
+				stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
+			else
+				stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
 
 	if(husk)
 		var/icon/mask = new(stand_icon)
@@ -273,6 +276,10 @@ var/global/list/damage_icon_parts = list()
 		//Mouth	(lipstick!)
 		if(lip_style && (species && species.anatomy_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
+
+		if(eye_style)
+			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "eyeshadow_[eye_style]_light_s"), ICON_OVERLAY)
+
 
 	//Underwear
 	if(underwear >0 && underwear < 15 && species.anatomy_flags & HAS_UNDERWEAR)
@@ -1171,6 +1178,9 @@ var/global/list/damage_icon_parts = list()
 
 	if(lip_style)
 		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
+
+	if(eye_style)
+		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "eyeshadow_[eye_style]_light_l"), ICON_OVERLAY)
 
 	var/image/face_lying_image = new /image(icon = face_lying)
 	return face_lying_image

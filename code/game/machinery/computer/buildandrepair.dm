@@ -3,7 +3,7 @@
 /obj/structure/computerframe
 	density = 1
 	anchored = 0
-	name = "Computer Frame"
+	name = "computer frame"
 	desc = "A metal frame ready to recieve a circuit board, wires and a glass panel."
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
@@ -20,7 +20,7 @@
 	density = 0
 	anchored = 0
 	w_class = W_CLASS_SMALL
-	name = "Circuit board"
+	name = "circuit board"
 	desc = "A circuit board with no markings and barely any imprinting. Likely worn or broken."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "id_mod"
@@ -378,18 +378,16 @@
 				return 1
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
-				if(!WT.remove_fuel(0, user))
-					to_chat(user, "The welding tool must be on to complete this task.")
-					return 1
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				if(do_after(user, src, 10) && state == 0)
-					if(!src || !WT.isOn())
-						return
-					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
-					M.amount = 5
-					state = -1
-					qdel(src)
+				if(WT.remove_fuel(0, user))
+					to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
+					if(do_after(user, src, 10) && state == 0)
+						if(!src || !WT.isOn())
+							return
+						playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+						user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
+						new /obj/item/stack/sheet/metal/(src.loc, 5)
+						state = -1
+						qdel(src)
 				return 1
 		if(1)
 			if(iswrench(P) && wrenchAnchor(user))
@@ -402,7 +400,7 @@
 						return
 
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-					to_chat(user, "<span class='notice'>You place the circuit board inside the frame.</span>")
+					user.visible_message("[user] places \the [B] inside the frame.", "You place \the [B] inside the frame.", "You hear metallic sounds.")
 					src.icon_state = "1"
 					src.circuit = P
 				else
@@ -410,13 +408,13 @@
 				return 1
 			if(isscrewdriver(P) && circuit)
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
+				user.visible_message("[user] screws the circuit board into place.", "You screw the circuit board into place.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
 				return 1
 			if(iscrowbar(P) && circuit)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
+				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
 				circuit.forceMove(src.loc)
@@ -425,7 +423,7 @@
 		if(2)
 			if(isscrewdriver(P) && circuit)
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
+				user.visible_message("[user] unfastens the circuit board.", "You unfasten the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "1"
 				return 1
@@ -434,11 +432,11 @@
 				if (C.amount < 5)
 					to_chat(user, "<span class='warning'>You need at least 5 lengths of cable coil for this!</span>")
 					return 1
-
+				to_chat(user, "You begin to install wires into the frame.")
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 				if (do_after(user, src, 20) && state == 2 && C.amount >= 5)
 					C.use(5)
-					to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
+					user.visible_message("[user] installs wires into the frame.", "You install wires into the frame.", "You hear metallic sounds.")
 					src.state = 3
 					src.icon_state = "3"
 
@@ -446,10 +444,10 @@
 		if(3)
 			if(iswirecutter(P))
 				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You remove the cables.</span>")
+				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
-				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 5)
+				new /obj/item/stack/cable_coil(get_turf(src), 5)
 				return 1
 
 			if(istype(P, /obj/item/stack/sheet/glass/glass))
@@ -457,11 +455,11 @@
 				if (G.amount < 2)
 					to_chat(user, "<span class='warning'>You need at least 2 sheets of glass for this!</span>")
 					return 1
-
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				to_chat(user, "<span class='notice'>You start installing the glass panel onto the frame.")
 				if(do_after(user, src, 20) && state == 3 && G.amount >= 2)
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 					G.use(2)
-					to_chat(user, "<span class='notice'>You put in the glass panel.</span>")
+					user.visible_message("[user] installs the glass panel onto the frame.", "You install the glass panel onto the frame.", "You hear metallic sounds.")
 					src.state = 4
 					src.icon_state = "4"
 
@@ -469,7 +467,7 @@
 		if(4)
 			if(iscrowbar(P))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
+				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )

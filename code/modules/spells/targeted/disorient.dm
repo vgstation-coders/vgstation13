@@ -1,6 +1,6 @@
-/spell/targeted/subjugation
-	name = "Subjugation"
-	desc = "This spell temporarily subjugates a target's mind."
+/spell/targeted/disorient
+	name = "Disorient"
+	desc = "This spell temporarily disorients a target."
 	abbreviation = "SJ"
 
 	school = "transmutation"
@@ -18,4 +18,4 @@
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	spell_flags = WAIT_FOR_CLICK
 
-	hud_state = "wiz_subj"
+	hud_state = "wiz_disorient"

@@ -95,7 +95,7 @@ proc/process_ghost_teleport_locs()
 	for(var/area/AR in areas)
 		if(ghostteleportlocs.Find(AR.name))
 			continue
-		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
+		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome) || istype(AR, /area/shuttle))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 		var/turf/picked = safepick(get_area_turfs(AR.type))
@@ -244,6 +244,10 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/supply
 	name = "supply shuttle"
 	icon_state = "shuttle3"
+
+/area/shuttle/security
+	name = "\improper Security Shuttle"
+	icon_state = "shuttlered"
 
 /area/shuttle/mining
 	name = "\improper Mining Shuttle"

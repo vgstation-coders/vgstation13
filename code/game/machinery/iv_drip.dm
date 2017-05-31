@@ -1,6 +1,7 @@
 /obj/machinery/iv_drip
 	name = "\improper IV drip"
 	icon = 'icons/obj/iv_drip.dmi'
+	icon_state = "unhooked_inject"
 	anchored = 0
 	density = 0 //Tired of these blocking up the station
 
@@ -11,9 +12,9 @@
 
 /obj/machinery/iv_drip/update_icon()
 	if(src.attached)
-		icon_state = "hooked"
+		icon_state = "hooked[mode ? "_inject" : "_draw"]"
 	else
-		icon_state = ""
+		icon_state = "unhooked[mode ? "_inject" : "_draw"]"
 
 	overlays = null
 
@@ -183,6 +184,7 @@
 
 	mode = !mode
 	to_chat(usr, "<span class='info'>The [src] is now [mode ? "injecting" : "taking blood"].</span>")
+	update_icon()
 
 /obj/machinery/iv_drip/AltClick()
 	if(!usr.isUnconscious() && Adjacent(usr))

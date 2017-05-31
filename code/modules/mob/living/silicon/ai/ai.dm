@@ -81,6 +81,8 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_GOLEM, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_MOUSE, 1)
+	add_language(LANGUAGE_GOLEM, 1)
+	add_language(LANGUAGE_SLIME, 1)
 	add_language(LANGUAGE_HUMAN, 1)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName
@@ -754,7 +756,8 @@ var/list/ai_list = list()
 		"Yotsuba",
 		"Girl",
 		"Boy",
-		"SHODAN"
+		"SHODAN",
+		"Corgi"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -783,6 +786,8 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo10"))
 				if("SHODAN")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo11"))
+				if("Corgi")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo12"))
 
 	return
 

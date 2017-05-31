@@ -78,6 +78,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
+	var/tox_mod			// toxin multiplier
 
 	var/body_temperature = 310.15
 
@@ -135,6 +136,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
 
 	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+
+	var/gender	//For races with only one or neither
 
 
 /datum/species/New()
@@ -814,10 +817,12 @@ var/global/list/whitelisted_species = list("Human")
 	attack_verb = "punches"
 
 	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
-	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY | NO_STRUCTURE
 
 	uniform_icons = 'icons/mob/uniform_fat.dmi'
 	primitive = /mob/living/carbon/monkey/rock
+
+	gender = NEUTER
 
 	blood_color = "#B4DBCB"
 	flesh_color = "#B4DBCB"
@@ -963,3 +968,124 @@ var/global/list/whitelisted_species = list("Human")
 	move_speed_multiplier = 2
 
 	blood_color = "#7FFF00"
+
+/datum/species/slime
+	name = "Slime"
+	icobase = 'icons/mob/human_races/r_slime.dmi'
+	deform = 'icons/mob/human_races/r_def_slime.dmi'
+	known_languages = list(LANGUAGE_SLIME)
+	meat_type = /obj/item/slime_heart
+	attack_verb = "glomps"
+
+	flags = IS_WHITELISTED | NO_BREATHE
+	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
+
+	spells = list(/spell/regen_limbs)
+
+	gender = NEUTER
+
+	tox_mod = 2
+
+	primitive = /mob/living/carbon/slime/pygmy
+
+	blood_color = "#96FFC5"
+	flesh_color = "#96FFC5"
+
+	cold_level_1 = T0C  	// Cold damage level 1 below this point.
+	cold_level_2 = T0C-23	// Cold damage level 2 below this point.
+	cold_level_3 = T0C-43	// Cold damage level 3 below this point.
+
+	heat_level_1 = T0C+57	// Heat damage level 1 above this point.
+	heat_level_2 = T0C+77	// Heat damage level 2 above this point.
+	heat_level_3 = T0C+100	// Heat damage level 3 above this point.
+
+	has_mutant_race = 0
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain/slime_core,
+		)
+
+/datum/species/slime/xenobio
+	name = "Evolved Slime"
+	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
+
+/datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+	for(var/atom/movable/I in H.contents)
+		I.forceMove(H.loc)
+	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
+	var/mob/living/slime_pile/S = new(H.loc)
+	if(H.real_name)
+		S.real_name = H.real_name
+		S.desc = "The remains of what used to be [S.real_name]."
+	S.slime_person = H
+	H.forceMove(S)
+
+/mob/living/slime_pile //serves as the corpse of slime people
+	name = "puddle of slime"
+	desc = "The remains of a slime person."
+	stat = DEAD
+	icon = null //'icons/mob/human_races/r_slime.dmi'
+	icon_state = null //"slime_puddle"
+	density = 0
+	meat_type = /obj/item/slime_heart
+	var/mob/living/carbon/human/slime_person
+
+/mob/living/slime_pile/New()
+	..()
+	spawn(1)
+		update_icon()
+
+/mob/living/slime_pile/update_icon()
+	if(slime_person)
+		var/icon/I = new ('icons/mob/human_races/r_slime.dmi', "slime_puddle")
+		I.Blend(rgb(slime_person.multicolor_skin_r, slime_person.multicolor_skin_g, slime_person.multicolor_skin_b), ICON_ADD)
+		overlays += I
+
+/mob/living/slime_pile/attack_hand(mob/user)
+	if(slime_person)
+		var/datum/organ/external/head = slime_person.get_organ(LIMB_HEAD)
+		var/datum/organ/internal/I = slime_person.internal_organs_by_name["brain"]
+
+		var/obj/item/organ/O
+		if(I && istype(I))
+			O = I.remove(user)
+			if(O && istype(O))
+
+				O.organ_data.rejecting = null
+
+				slime_person.internal_organs_by_name["brain"] = null
+				slime_person.internal_organs_by_name -= "brain"
+				slime_person.internal_organs -= O.organ_data
+				head.internal_organs -= O.organ_data
+				O.removed(slime_person,user)
+				user.put_in_hands(O)
+				to_chat(user, "<span class='notice'>You remove \the [O] from \the [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>You root around inside \the [src], but find nothing.</span>")
+
+/mob/living/slime_pile/attackby(obj/item/I, mob/user)
+	if(slime_person)
+		if(istype(I, /obj/item/organ/brain/slime_core))
+			if(slime_person.internal_organs_by_name["brain"])
+				to_chat(user, "<span class='notice'>There is already \a [I] in \the [src].</span>")
+				return
+			if(user.drop_item(I))
+				var/datum/organ/external/head = slime_person.get_organ(LIMB_HEAD)
+				var/obj/item/organ/O = I
+
+				if(istype(O))
+					O.organ_data.transplant_data = list()
+					O.organ_data.transplant_data["species"] =    slime_person.species.name
+					O.organ_data.transplant_data["blood_type"] = slime_person.dna.b_type
+					O.organ_data.transplant_data["blood_DNA"] =  slime_person.dna.unique_enzymes
+
+					O.organ_data.organ_holder = null
+					O.organ_data.owner = slime_person
+					slime_person.internal_organs |= O.organ_data
+					head.internal_organs |= O.organ_data
+					slime_person.internal_organs_by_name[O.organ_tag] = O.organ_data
+					O.organ_data.status |= ORGAN_CUT_AWAY
+					O.replaced(slime_person)
+
+				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
+				qdel(O)

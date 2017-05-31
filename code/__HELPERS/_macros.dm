@@ -29,6 +29,8 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
+#define isslimeperson(A) (ishuman(A) && A.species && istype(A.species, /datum/species/slime))
+
 #define ishorrorform(A) (ishuman(A) && A.species && istype(A.species, /datum/species/horror))
 
 #define isgrue(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grue))

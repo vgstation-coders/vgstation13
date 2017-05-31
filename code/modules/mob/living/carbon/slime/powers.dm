@@ -14,7 +14,7 @@
 		if(C!=src && !istype(C,/mob/living/carbon/slime))
 			choices += C
 	var/mob/living/carbon/M
-	if (choices)
+	if (choices.len)
 		M = choices[1]
 		if (choices.len > 1)
 			M = input(src,"Who do you wish to feed on?") in null|choices
@@ -184,6 +184,24 @@
 		return
 	if(!istype(src, /mob/living/carbon/slime/adult))
 		if(amount_grown >= 10)
+			if(istype(src, /mob/living/carbon/slime/pygmy))
+				var/mob/living/carbon/human/slime/S = new (loc)
+				if(mind)
+					mind.transfer_to(S)
+				else
+					S.key = key
+				transferImplantsTo(S)
+				transferBorers(S)
+				qdel(src)
+				var/i
+				while(!i)
+					var/randomname = S.species.makeName()
+					if(findname(randomname))
+						continue
+					else
+						S.real_name = randomname
+						i++
+				return
 			var/mob/living/carbon/slime/adult/new_slime = new adulttype(loc)
 			new_slime.nutrition = nutrition
 			new_slime.powerlevel = max(0, powerlevel-1)

@@ -215,8 +215,6 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define FLOWFRAC 0.99				// fraction of gas transfered per process
 
-#define SHOES_SLOWDOWN -1.0			// How much shoes slow you down by default. Negative values speed you up
-
 //WEIGHT CLASSES
 #define W_CLASS_TINY 1
 #define W_CLASS_SMALL 2
@@ -970,6 +968,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define HYPOTHERMIA_IMMUNE 256
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
+#define ELECTRIC_HEAL 2048
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -981,6 +980,9 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_SKIN 64
 #define NO_BLOOD 128
 #define HAS_SWEAT_GLANDS 256
+#define NO_BONES 512
+#define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
+#define MULTICOLOR 2048	//skin color is unique rather than tone variation
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1335,6 +1337,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_CULT "Cult"
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
+#define LANGUAGE_SLIME "Slime"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG

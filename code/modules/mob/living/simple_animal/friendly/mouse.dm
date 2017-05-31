@@ -76,7 +76,7 @@
 
 	if(nutrition >= MOUSEFAT && is_fat == 0)
 		is_fat = 1
-		speed = 5
+		speed = 6
 		meat_amount = initial(meat_amount) + 1
 	else if ((nutrition <= MOUSEFAT-25 && is_fat == 1) || (nutrition > MOUSEHUNGRY && is_fat == 0))
 		is_fat = 0

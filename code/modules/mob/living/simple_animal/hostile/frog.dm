@@ -32,7 +32,7 @@
 	ranged_message = "leaps"
 
 	move_to_delay = 6
-	speed = 2
+	speed = 3
 
 	harm_intent_damage = 6
 	melee_damage_lower = 1
