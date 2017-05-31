@@ -36,6 +36,7 @@
 
 	var/canremove = 1 //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
 	var/cant_drop = 0 //If 1, can't drop it from hands!
+	var/cant_drop_msg = " sticks to your hand!"
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
@@ -320,7 +321,7 @@
 /obj/item/proc/equipped(var/mob/user, var/slot, hand_index = 0)
 	if(cant_drop) //Item can't be dropped
 		if(hand_index) //Item was equipped in a hand slot
-			to_chat(user, "<span class='notice'>\The [src] sticks to your hand!</span>")
+			to_chat(user, "<span class='notice'>\The [src][cant_drop_msg]</span>")
 	for(var/X in actions)
 		var/datum/action/A = X
 		if(item_action_slot_check(slot, user)) //some items only give their actions buttons when in a specific slot.
