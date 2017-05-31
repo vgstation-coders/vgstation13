@@ -302,11 +302,16 @@
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
 	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
+	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
 		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
 			. = pda.id.assignment
 		else
 			. = pda.ownjob
+	else if (istype(wallet))
+		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
+		if(istype(wallet_id))
+			. = wallet_id.assignment
 	else if (istype(id))
 		. = id.assignment
 	else
