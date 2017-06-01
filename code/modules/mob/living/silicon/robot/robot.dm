@@ -1054,11 +1054,11 @@
 		else
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		to_chat(src, "<span class='notice'>Starting self-righting mechanism.</span>")
-		spawn(Knockdown SECONDS)
+		spawn(knockdown SECONDS)
 			if (stat != DEAD)
 				wakeup()
 
-/mob/living/silicon/robot/wakeup()
+/mob/living/silicon/robot/proc/wakeup()
 	if (lying)
 		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
 		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
@@ -1106,7 +1106,7 @@
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [src.name]!</span>")
 					AdjustKnockdown(-3)
-					if (Knockdown <= 0)
+					if (knockdown <= 0)
 						wakeup()
 			else
 				help_shake_act(user)
