@@ -22,6 +22,15 @@
 /datum/robot_component/proc/install()
 /datum/robot_component/proc/uninstall()
 
+// not to be confused with the component-specific destroy, of course
+// thanks old coders
+/datum/robot_component/Destroy()
+	qdel(wrapped)
+	if(owner)
+		if(src in owner.components)
+			owner.components -= src
+		owner = null
+
 /datum/robot_component/proc/destroy()
 	var/obj/item/broken_device/G = new/obj/item/broken_device
 	G.component = wrapped.type // the broken component now "remembers" the component it used to be, now it's scrap. This is used to fix the scrap into the component it was.

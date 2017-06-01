@@ -20,7 +20,6 @@
 	if (src.stat != DEAD) //still using power
 		use_power()
 		process_killswitch()
-		process_locks()
 	update_canmove()
 	handle_beams()
 	if(locked_to_z)

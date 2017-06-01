@@ -1,5 +1,9 @@
+/mob/living/var/event/on_resist
+
 /mob/living/New()
 	. = ..()
+	on_resist = new(owner = src)
+
 	generate_static_overlay()
 	if(istype(static_overlays,/list) && static_overlays.len)
 		for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
@@ -31,6 +35,10 @@
 			butchering_drops -= B
 			qdel(B)
 			B = null
+
+	if(on_resist)
+		qdel(on_resist)
+		on_resist = null
 
 	. = ..()
 
@@ -804,18 +812,6 @@ Thanks.
 			if(direct & WEST)
 				hook.override_starting_X--
 				hook.override_target_X--
-
-/mob/living
-    var/event/on_resist
-
-/mob/living/New()
-    . = ..()
-    on_resist = new(owner = src)
-
-/mob/living/Destroy()
-    . = ..()
-    qdel(on_resist)
-    on_resist = null
 
 /mob/living/verb/resist()
 	set name = "Resist"

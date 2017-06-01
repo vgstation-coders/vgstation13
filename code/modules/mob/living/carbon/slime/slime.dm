@@ -69,6 +69,13 @@
 	update_icon = 0
 	nutrition = 800 // 1200 = max
 
+/mob/living/carbon/slime/death()
+	Friends.Cut()
+	FriendsWeight.Cut()
+	Victim.Cut()
+	Target.Cut()
+	..()
+
 /mob/living/carbon/slime/Destroy()
 	..()
 	Friends = null

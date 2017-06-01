@@ -20,6 +20,9 @@
 		for (var/mob/target in motionTargets)
 			if (target.stat == 2)
 				lostTarget(target)
+			// are we an area-monitoring camera? is the mob no longer in the area?
+			if(!isnull(area_motion) && area_motion != get_area(target))
+				lostTarget(target)
 			// If not detecting with motion camera...
 			if (!area_motion)
 				// See if the camera is still in range
@@ -64,4 +67,3 @@
 	if (!area_motion)
 		if(isliving(AM))
 			newTarget(AM)
-
