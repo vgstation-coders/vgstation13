@@ -421,6 +421,21 @@
 	cant_drop = 1
 	cant_drop_msg = "'s bolts descend and dig into your arm!"
 	charge_wait = 2	//40 seconds to fully charge
+	var/charged = TRUE
 
 /obj/item/weapon/gun/energy/laser/captain/combustion/isHandgun()
 	return FALSE
+
+/obj/item/weapon/gun/energy/laser/captain/combustion/process()
+	. = ..()
+	if(power_supply.charge >= power_supply.maxcharge)
+		if(!charged)
+			charged = TRUE
+			var/turf/T = get_turf(src)
+			if(T)
+				playsound(T,'sound/mecha/powerup.ogg',100)
+
+/obj/item/weapon/gun/energy/laser/captain/combustion/process_chambered()
+	. = ..()
+	if(.)
+		charged = FALSE
