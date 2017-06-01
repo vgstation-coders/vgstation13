@@ -1053,14 +1053,17 @@
 			visible_message("<span class='danger'>\The [src]'s cover flies open!</span>")
 		else
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-	if (stat != DEAD)
 		to_chat(src, "<span class='notice'>Starting self-righting mechanism.</span>")
-		spawn(5 SECONDS)
+		spawn(Knockdown SECONDS)
 			if (stat != DEAD)
-			animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
-			playsound(loc, 'sound/machines/ping.ogg', 50, 0)
-	lying = 0
+				wakeup()
 
+/mob/living/silicon/robot/wakeup()
+	if (lying)
+		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
+		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
+	lying = 0
+				
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
 
@@ -1098,7 +1101,15 @@
 
 	switch(user.a_intent)
 		if(I_HELP)
-			help_shake_act(user)
+			if (src.lying)
+				if (src.stat != DEAD)
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [src.name]!</span>")
+					AdjustKnockdown(-3)
+					if (Knockdown <= 0)
+						wakeup()
+			else
+				help_shake_act(user)
 		if(I_HURT)
 			user.unarmed_attack_mob(src)
 		if(I_DISARM)
