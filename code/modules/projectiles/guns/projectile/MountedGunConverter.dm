@@ -1,10 +1,12 @@
 obj/item/weapon/gun/MechaGunConverter
 	name = "mecha gun converter"
+	icon = 'icons/mecha/mecha_equipment.dmi'
+	icon_state = "mecha_equip"
 	desc = "use on mecha gun to make man gun"
 
 /obj/item/weapon/gun/ConvertedMountedGun
-	name = "man-portable exosuit weapon"
-	desc = "A really big gun with a trigger assembly on it."
+	name = "undefined converted mecha gun"
+	desc = "if you see this, something has gone wrong"
 	icon = 'icons/mecha/mecha_equipment.dmi'
 	icon_state = "mecha_equip"
 	item_state = "minigun0"
@@ -28,7 +30,7 @@ obj/item/weapon/gun/MechaGunConverter/New()
 /obj/item/weapon/gun/ConvertedMountedGun/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>Has [current_shells] round\s remaining.</span>")
-
+	
 /obj/item/weapon/gun/ConvertedMountedGun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
@@ -41,11 +43,12 @@ obj/item/weapon/gun/MechaGunConverter/New()
 
 /obj/item/weapon/gun/ConvertedMountedGun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	..()
+	//Add firer info here?
 	var/list/turf/possible_turfs = list()
 	for(var/turf/T in orange(target,1))
 		possible_turfs += T
 	spawn()
-		for(var/i = 1; i <= projectiles_per_shot; i++)
+		for(var/i = 1; i < projectiles_per_shot; i++)
 			sleep(1)
 			var/newturf = pick(possible_turfs)
 			..(newturf,user,params,reflex,struggle)
@@ -63,7 +66,9 @@ obj/item/weapon/gun/MechaGunConverter/New()
 	if(current_shells)
 		current_shells--
 		var/obj/item/projectile/bullet/loadedbullet = new projectile
-		in_chamber = loadedbullet//We create bullets as we are about to fire them. No other way to remove them from the gun.
+		in_chamber = loadedbullet
+		//Add firer info here?
+		//Maybe check code for grenade launcher / RPG?
 		new/obj/item/ammo_casing_gatling(get_turf(src))
 		return 1
 	return 0
@@ -73,7 +78,19 @@ obj/item/weapon/gun/MechaGunConverter/New()
 		unwield(user)
 	else
 		wield(user)
-
+		
+			/*********************************************
+							DE-CONVERSION!
+			*********************************************/
+/obj/item/weapon/gun/ConvertedMountedGun/attackby(obj/item/weapon/S as obj, mob/user as mob)
+	if(isscrewdriver(S))
+		var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/backcon
+		backcon = new originalclass(src.loc)
+		backcon.projectiles = src.current_shells
+		user.visible_message("<span class='notice'>You remove the conversion kit from the [src].</span>")
+		backcon = new/obj/item/weapon/gun/MechaGunConverter(src.loc)
+		qdel(src)
+		
 /obj/item/ammo_casing_gatling
 	name = "large bullet casing"
 	desc = "An oversized bullet casing."

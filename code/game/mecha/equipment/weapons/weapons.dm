@@ -162,6 +162,7 @@
 	var/max_projectiles
 	var/projectiles
 	var/projectile_energy_cost
+	var/projectiles_per_shot
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
 	..()
@@ -176,13 +177,15 @@
 			congun.projectile = src.projectile
 			congun.fire_sound = src.fire_sound
 			congun.current_shells = src.projectiles
-			congun.originalclass = src
-			projectiles_per_shot = src.projectiles_per_shot
+			congun.originalclass = src.type
+			congun.projectiles_per_shot = src.projectiles_per_shot
+			congun.name = "converted " + src.name
+			congun.desc = src.desc + ("<span class='notice'>It's got a man-portable conversion kit attached.</span>")
 			user.visible_message("<span class='notice'>You attach the conversion kit to the [src].</span>")
 			qdel(src)
 			qdel(MGC)
 		else
-			to_chat(user, "<span class='danger'>\The [MGC] is defective!</span>")
+			to_chat(user, "<span class='danger'>\The [src] is defective!</span>")
 	
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)
@@ -228,7 +231,7 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	max_projectiles = 40
 	projectile_energy_cost = 25
-	var/projectiles_per_shot = 4
+	projectiles_per_shot = 4
 //	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
@@ -278,7 +281,7 @@
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	max_projectiles = 300
 	projectile_energy_cost = 20
-	var/projectiles_per_shot = 3
+	projectiles_per_shot = 3
 //	var/deviation = 0.3
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/action(atom/target)
