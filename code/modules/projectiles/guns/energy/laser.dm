@@ -413,14 +413,14 @@
 	name = "combustion cannon"
 	icon_state = "combustion_cannon"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	desc = "An odd-looking metallic pillar, nearly featureless apart from a small number of lights. There is an opening in the back just large enough for your arm. The large bolts surrounding the opening in the back don't look very inviting."
+	desc = "An odd-looking metallic pillar, nearly featureless apart from a small number of lights. There is an opening in the back just large enough for your arm."
 	force = 12
 	charge_cost = 1000	//one shot per charge
 	fire_sound = null
 	projectile_type = "/obj/item/projectile/beam/combustion"
-	cant_drop = 1
-	cant_drop_msg = "'s bolts descend and dig into your arm!"
 	charge_wait = 2	//40 seconds to fully charge
+	slot_flags = 0
+	w_class = W_CLASS_HUGE
 	var/charged = TRUE
 
 /obj/item/weapon/gun/energy/laser/captain/combustion/isHandgun()
