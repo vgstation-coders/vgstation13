@@ -1038,28 +1038,28 @@
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [disarmer] has attempted to tip over \the [src]!</span>")
 		return
-
-	lying = 1
-	uneq_all()
-	AdjustKnockdown(5)
-	animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
-	spark_system.start()
-	visible_message("<span class='danger'>\The [disarmer] has tipped over \the [src]!</span>")
-	if (prob(2))
-		locked = 0
-		opened = 1
-		updateicon()
-		playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
-		visible_message("<span class='danger'>\The [src]'s cover flies open!</span>")
 	else
-		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		lying = 1
+		uneq_all()
+		AdjustKnockdown(5)
+		animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
+		spark_system.start()
+		visible_message("<span class='danger'>\The [disarmer] has tipped over \the [src]!</span>")
+		if (prob(2))
+			locked = 0
+			opened = 1
+			updateicon()
+			playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
+			visible_message("<span class='danger'>\The [src]'s cover flies open!</span>")
+		else
+			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	if (stat != DEAD)
 		to_chat(src, "<span class='notice'>Starting self-righting mechanism.</span>")
-		spawn(50)
+		spawn(5 SECONDS)
+			if (stat != DEAD)
 			animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
 			playsound(loc, 'sound/machines/ping.ogg', 50, 0)
 	lying = 0
-	return
 
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
