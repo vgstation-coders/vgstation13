@@ -135,8 +135,9 @@
 			M.flashed = 1
 			M.flash_eyes(affect_silicon = 1)
 			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
-			sleep(length*10)
-			M.flashed = 0
+			spawn(length*10)
+				if (M.flashed)
+					M.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
