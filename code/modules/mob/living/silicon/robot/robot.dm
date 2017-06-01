@@ -1020,7 +1020,44 @@
 					visible_message("<span class='danger'>[M] attempted to force back [src]!</span>")
 	return
 
+/mob/living/silicon/robot/disarm_mob(mob/living/disarmer)
+	var/rotate = dir
+	
+	if (lying)
+		return
 
+	if (get_dir(disarmer, src) in(list(4,8)))
+		rotate = pick(1,2)
+
+	add_logs(disarmer, src, "tipped over", admin = (src.ckey && disarmer.ckey) ? TRUE : FALSE)
+
+	if(prob(40))
+		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+		visible_message("<span class='danger'>[disarmer] has attempted to tip over [src]!</span>")
+		return
+
+	do_attack_animation(src, disarmer)
+
+	if(prob(40))
+		lying = 1
+		SetKnockdown(5)
+		animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
+		spark_system.start()
+		visible_message("<span class='danger'>[disarmer] has tipped over [src]!</span>")
+		if (prob(10))
+			locked = 0
+			opened = 1
+			updateicon()
+			playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
+			visible_message("<span class='danger'>[src]\'s cover flies open!</span>")
+		else
+			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		sleep(50)
+		to_chat(src, "<span class='notice'>Starting self-righting mechanism.</span>")
+		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
+		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
+		lying = 0
+	return
 
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
@@ -1062,6 +1099,8 @@
 			help_shake_act(user)
 		if(I_HURT)
 			user.unarmed_attack_mob(src)
+		if(I_DISARM)
+			disarm_mob(user)
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all
