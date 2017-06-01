@@ -38,6 +38,7 @@
 
 
 /obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob)
+	var/length
 	if(!user || !M) //sanity
 		return
 
@@ -129,9 +130,13 @@
 		if(flashfail)
 			user.visible_message("<span class='notice'>[user] fails to overload [M]'s sensors with the flash!</span>")
 		else
-			M.Knockdown(rand(5, 10))
+			length = rand(5,10)
+			M.Knockdown(length)
+			M.flashed = 1
 			M.flash_eyes(affect_silicon = 1)
 			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
+			sleep(length*10)
+			M.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
