@@ -126,7 +126,7 @@
 								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
 					else
 						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
-	else if(istype(M, /mob/living/silicon))
+	else if(issilicon(M))
 		var/mob/living/silicon/R = M
 		if(flashfail)
 			user.visible_message("<span class='notice'>[user] fails to overload [R]'s sensors with the flash!</span>")
