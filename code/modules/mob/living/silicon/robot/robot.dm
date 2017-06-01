@@ -1026,8 +1026,8 @@
 	
 	if (lying)
 		return
-	if (flashed || STAT == DEAD)
-		continue
+	if (!flashed || !stat == DEAD)
+		return
 	if (get_dir(disarmer, src) in(list(4,8)))
 		rotate = pick(1,2)
 
@@ -1041,7 +1041,7 @@
 
 	else
 		lying = 1
-		unequip_all()
+		uneq_all()
 		SetKnockdown(5)
 		animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
 		spark_system.start()
@@ -1054,7 +1054,7 @@
 			visible_message("<span class='danger'>[src]\'s cover flies open!</span>")
 		else
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		if (STAT != DEAD)
+		if (stat != DEAD)
 			to_chat(src, "<span class='notice'>Starting self-righting mechanism.</span>")
 			sleep(50)
 			animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
