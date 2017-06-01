@@ -126,18 +126,19 @@
 								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
 					else
 						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
-	else if(issilicon(M))
+	else if(istype(M, /mob/living/silicon))
+		var/mob/living/silicon/R = M
 		if(flashfail)
-			user.visible_message("<span class='notice'>[user] fails to overload [M]'s sensors with the flash!</span>")
+			user.visible_message("<span class='notice'>[user] fails to overload [R]'s sensors with the flash!</span>")
 		else
 			length = rand(5,10)
-			M.Knockdown(length)
-			M.flashed = 1
-			M.flash_eyes(affect_silicon = 1)
-			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
+			R.Knockdown(length)
+			R.flashed = 1
+			R.flash_eyes(affect_silicon = 1)
+			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
 			spawn(length*10)
-				if (M.flashed)
-					M.flashed = 0
+				if (R.flashed)
+					R.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
