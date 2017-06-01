@@ -136,7 +136,7 @@
 			R.flashed = 1
 			R.flash_eyes(affect_silicon = 1)
 			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
-			spawn(length*10)
+			spawn(length SECONDS)
 				if (R.flashed)
 					R.flashed = 0
 	else //simple_animal maybe?
