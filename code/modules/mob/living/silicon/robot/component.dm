@@ -31,8 +31,8 @@
 	// The thing itself isn't there anymore, but some fried remains are.
 	installed = -1
 	uninstall()
-	if(src.owner.can_diagnose())
-		to_chat(src.owner, "<span class='alert' style=\"font-family:Courier\">Warning: Critical damage to [brokenpartname] sustained. Component offline.</span>")
+	if(owner.can_diagnose())
+		to_chat(owner, "<span class='alert' style=\"font-family:Courier\">Warning: Critical damage to [brokenpartname] sustained. Component offline.</span>")
 
 /datum/robot_component/proc/take_damage(brute, electronics, sharp)
 	if(installed != 1)
