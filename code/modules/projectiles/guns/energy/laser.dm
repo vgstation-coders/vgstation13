@@ -233,8 +233,7 @@
 		return 1
 	if(isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(250)
+		if(R && R.cell && R.cell.use(250))
 			in_chamber = new/obj/item/projectile/beam/heavylaser(src)
 			return 1
 	return 0
