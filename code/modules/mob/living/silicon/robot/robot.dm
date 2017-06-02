@@ -979,7 +979,7 @@
 	else if(istype(W, /obj/item/device/encryptionkey/) && opened)
 		if(radio)//sanityyyyyy
 			radio.attackby(W,user)//GTFO, you have your own procs
-			if (src.can_diagnose())
+			if (can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">Radio encryption key installed.</span>")
 		else
 			to_chat(user, "Unable to locate a radio.")
