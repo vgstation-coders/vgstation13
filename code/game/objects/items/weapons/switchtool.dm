@@ -219,7 +219,7 @@
 
 //Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
 /obj/item/weapon/switchtool/holo
-	name = "\improper Holo switchtool"
+	name = "holo switchtool"
 	icon_state = "holo_switchtool"
 	item_state = "Hswitchtool"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtools.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtools.dmi')
