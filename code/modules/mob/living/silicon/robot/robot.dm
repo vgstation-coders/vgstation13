@@ -501,8 +501,11 @@
 	viewalerts = 1
 	src << browse(dat, "window=robotalerts&can_close=0")
 
+/mob/living/silicon/robot/can_diagnose()
+	return is_component_functioning("diagnosis unit") 
+	
 /mob/living/silicon/robot/proc/self_diagnosis()
-	if(!is_component_functioning("diagnosis unit"))
+	if(!can_diagnose())
 		return null
 
 	var/dat = "<HEAD><TITLE>[src.name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
@@ -517,7 +520,7 @@
 	set category = "Robot Commands"
 	set name = "Self Diagnosis"
 
-	if(!self_diagnosis())
+	if(!can_diagnose())
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
 
 	var/dat = self_diagnosis()
@@ -818,8 +821,8 @@
 				W.forceMove(null)
 
 				to_chat(usr, "<span class='notice'>You install the [W.name].</span>")
-				if(src.self_diagnosis())
-					to_chat(src, "<span class='info'><span style=\"font-family:Courier\">New [W.name] installed.</span>")
+				if(src.can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">New [W.name] installed.</span>")
 
 				return
 
@@ -853,15 +856,15 @@
 		if(opened)
 			if(cell)
 				to_chat(user, "You close the cover.")
-				if(src.self_diagnosis())
-					to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Cover closed.</span>")
+				if(src.can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Cover closed.</span>")
 				opened = 0
 				updateicon()
 			else if(mmi && wiresexposed && wires.IsAllCut())
 				//Cell is out, wires are exposed, remove MMI, produce damaged chassis, baleet original mob.
 				to_chat(user, "You jam the crowbar into the robot and begin levering [mmi].")
-				if(src.self_diagnosis())
-					to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Chassis disassembly in progress.</span>")
+				if(src.can_diagnose())
+					to_chat(src, "<span class='alert' style=\"font-family:Courier\">Chassis disassembly in progress.</span>")
 				if (do_after(user, src,3))
 					to_chat(user, "You damage some parts of the chassis, but eventually manage to rip out [mmi]!")
 					var/obj/item/robot_parts/robot_suit/C = new/obj/item/robot_parts/robot_suit(loc)
@@ -889,16 +892,16 @@
 				if(istype(C.wrapped, /obj/item/broken_device))
 					var/obj/item/broken_device/I = C.wrapped
 					to_chat(user, "You remove \the [I].")
-					if(src.self_diagnosis())
-						to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Destroyed [I.name] removed.</span>")
+					if(src.can_diagnose())
+						to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed [C] removed.</span>")
 					I.forceMove(src.loc)
 				else
 					var/obj/item/robot_parts/robot_component/I = C.wrapped
 					I.brute_damage = C.brute_damage
 					I.electronics_damage = C.electronics_damage
 					to_chat(user, "You remove \the [I].")
-					if(src.self_diagnosis())
-						to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Functional [I.name] removed.</span>")
+					if(src.can_diagnose())
+						to_chat(src, "<span class='info' style=\"font-family:Courier\">Functional [I.name] removed.</span>")
 					I.forceMove(src.loc)
 
 				if(C.installed == 1)
@@ -910,8 +913,8 @@
 				to_chat(user, "The cover is locked and cannot be opened.")
 			else
 				to_chat(user, "You open the cover.")
-				if(src.self_diagnosis())
-					to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Cover opened.</span>")
+				if(src.can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Cover opened.</span>")
 				opened = 1
 				updateicon()
 
@@ -929,15 +932,15 @@
 			oldpowercell.brute_damage = C.brute_damage
 			user.drop_item(W, src)
 			user.put_in_hands(oldpowercell)
-			if(src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Cell removed.</span>")
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 			C.installed = 1
 			C.wrapped = W
 			C.electronics_damage = cell.electronics_damage
 			C.brute_damage = cell.brute_damage
 			C.install()
-			if(src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
 		else
 			user.drop_item(W, src)
 			cell = W
@@ -948,8 +951,8 @@
 			C.electronics_damage = cell.electronics_damage
 			C.brute_damage = cell.brute_damage
 			C.install()
-			if(src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
 
 	else if (iswiretool(W))
 		if (wiresexposed)
@@ -960,15 +963,15 @@
 	else if(isscrewdriver(W) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-		if(src.self_diagnosis())
-			to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
+		if(src.can_diagnose())
+			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
 	else if(isscrewdriver(W) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
-			if(src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Radio encryption keys modified.</span>")
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Radio encryption keys modified.</span>")
 		else
 			to_chat(user, "Unable to locate a radio.")
 		updateicon()
@@ -976,8 +979,8 @@
 	else if(istype(W, /obj/item/device/encryptionkey/) && opened)
 		if(radio)//sanityyyyyy
 			radio.attackby(W,user)//GTFO, you have your own procs
-			if (src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Radio encryption key installed.</span>")
+			if (src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Radio encryption key installed.</span>")
 		else
 			to_chat(user, "Unable to locate a radio.")
 
@@ -990,18 +993,20 @@
 			if(allowed(usr))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
-				if(src.self_diagnosis())
-					to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
+				if(src.can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
-		U.attempt_action(src,user)
-		if(src.self_diagnosis())
-			to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Installation of [U.name] attempted.</span>")
-
+		if (U.attempt_action(src,user))
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Installation of [U.name] failed.</span>")
+		else
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Installation of [U.name] succeeded.</span>")
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return 0
@@ -1070,8 +1075,8 @@
 			user.put_in_active_hand(cell)
 			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
-			if(src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Cell removed.</span>")
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 			src.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
 			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [src.name] ([src.ckey])</font>"
 			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([src.ckey])</font>")
@@ -1085,8 +1090,8 @@
 			var/obj/item/broken_device = cell_component.wrapped
 			to_chat(user, "You remove \the [broken_device].")
 			user.put_in_active_hand(broken_device)
-			if(src.self_diagnosis())
-				to_chat(src, "<span class='info'><span style=\"font-family:Courier\">Destroyed [broken_device] removed.</span>")
+			if(src.can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed power cell removed.</span>")
 			return
 
 	switch(user.a_intent)
