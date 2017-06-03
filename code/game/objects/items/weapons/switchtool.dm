@@ -7,7 +7,6 @@
 	siemens_coefficient = 1
 	force = 3
 	w_class = W_CLASS_SMALL
-	var/no_remove = 0
 	var/deploy_sound = "sound/weapons/switchblade.ogg"
 	var/undeploy_sound = "sound/weapons/switchblade.ogg"
 	throwforce = 6.0
@@ -62,7 +61,7 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && no_remove)
+	if(istype(used_item, removing_item) && /obj/item/weapon/switchtool/holo)
 		to_chat(user, "You can't remove modules from this.")
 		return
 	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
@@ -231,7 +230,6 @@
 	//deploy_sound = "sound/weapons/saberon.ogg"
 	//undeploy_sound = "sound/weapons/saberoff.ogg"
 	light_color =  LIGHT_COLOR_CYAN
-	no_remove = 1
 	mech_flags = MECH_SCAN_ILLEGAL
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
@@ -284,7 +282,7 @@
 
 //for the inhand sprite changes
 //Big shitty wall of else if quality code
-obj/item/weapon/switchtool/holo/update_icon()
+/obj/item/weapon/switchtool/holo/update_icon()
 	if(istype(deployed, /obj/item/device/flashlight))
 		item_state = "flashlight"
 	else if(istype(deployed, /obj/item/weapon/scalpel))
