@@ -79,15 +79,21 @@
 	if(wrapped)
 		return
 	if(istype(glass))	//You can dip gum into beakers and beaker subtypes
-		reagents.remove_reagent(SUGAR, replacement_chem_volume)
-		var/transfered = glass.reagents.trans_to(src, replacement_chem_volume)
-		if(transfered)	//If reagents were transfered, show the message
+		if(transfer_some_reagents(glass))	//If reagents were transfered, show the message
 			to_chat(user, "<span class='notice'>You dip \the [src] into \the [glass].</span>")
-			replacement_chem_volume = max(0, replacement_chem_volume - transfered)
 		else	//If not, either the beaker was empty, or the gum was full
 			if(!glass.reagents.total_volume) //Only show an explicit message if the beaker was empty, you can't tell gum is "full"
 				to_chat(user, "<span class='warning'>\The [glass] is empty.</span>")
 				return
+
+/obj/item/gum/proc/transfer_some_reagents(obj/item/weapon/reagent_containers/R, var/amount, var/log = FALSE, var/user)
+	if(!amount)
+		amount = replacement_chem_volume
+	reagents.remove_reagent(SUGAR, amount)
+	var/transferred = R.reagents.trans_to(src, amount, log_transfer = log, whodunnit = user)
+	if(transferred)
+		replacement_chem_volume = max(0, replacement_chem_volume - transferred)
+		return transferred
 
 /obj/item/gum/proc/explode(var/location)
 	if(!target)
