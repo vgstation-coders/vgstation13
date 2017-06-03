@@ -157,6 +157,11 @@
 			hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
+	var/shock_damage = 5
+	var/obj/item/clothing/gloves/U
+	var/obj/item/clothing/gloves/T
+	var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
+
 	if (src.health >= config.health_threshold_crit)
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
@@ -233,11 +238,36 @@
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
-				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				M.visible_message( \
-					"<span class='notice'>[M] shakes hands with [src].</span>", \
-					"<span class='notice'>You shake hands with [src].</span>", \
-					)
+				if (istype(M.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves))
+					U = M.get_item_by_slot(slot_gloves)
+
+				if (istype(src.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves/fyellow))
+					T = src.get_item_by_slot(slot_gloves)
+					shock_damage = T.siemens_coefficient * shock_damage
+
+				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && !(istype(src.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves/yellow)))
+					sparks.set_up(3, 0, src)
+					add_logs(src, M, "stungloved", admin = TRUE)
+					visible_message("<span class='danger'>\The [src] can't seem to let go from \the [M]'s shocking handshake!</span>")
+					src.apply_effect(effect = 1, effecttype = PARALYZE)
+					playsound(src,(src.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					while(U.cell.charge >= STUNGLOVES_CHARGE_COST)
+						U.cell.charge -= STUNGLOVES_CHARGE_COST
+						src.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
+						sparks.start()
+						sleep(1)
+						animate(src, pixel_y = pixel_y + 2 * PIXEL_MULTIPLIER, time = 1, loop = 2)
+						sleep(1)
+						animate(src, pixel_y = pixel_y - 2 * PIXEL_MULTIPLIER, time = 1, loop = 2)
+					to_chat(M, "<span class='notice'>Your gloves run out of power.</span>")
+				else
+					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && istype(src.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves/yellow))
+						to_chat(M, "<span class='notice'>The [src]'s insulated gloves prevent them from being shocked.</span>")
+					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					M.visible_message( \
+						"<span class='notice'>[M] shakes hands with [src].</span>", \
+						"<span class='notice'>You shake hands with [src].</span>", \
+						)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
