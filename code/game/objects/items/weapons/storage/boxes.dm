@@ -787,7 +787,7 @@
 
 /obj/item/weapon/storage/box/mechfigures
 	name = "box of mech figurines"
-	desc = "A old box of mech figurines"
+	desc = "An old box of mech figurines"
 	icon_state = "box"
 
 /obj/item/weapon/storage/box/mechfigures/New()
