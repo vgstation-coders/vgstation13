@@ -246,7 +246,7 @@
 					shock_damage = T.siemens_coefficient * shock_damage
 
 				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && !(istype(src.get_item_by_slot(slot_gloves), /obj/item/clothing/gloves/yellow)))
-					sparks.set_up(3, 0, src)
+					sparks.set_up(1, 0, src)
 					add_logs(src, M, "stungloved", admin = TRUE)
 					visible_message("<span class='danger'>\The [src] can't seem to let go from \the [M]'s shocking handshake!</span>")
 					src.apply_effect(effect = 1, effecttype = PARALYZE)
