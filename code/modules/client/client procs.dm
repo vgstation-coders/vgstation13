@@ -489,14 +489,11 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		List += onewaylist
 		for(var/turf/T in List)
 			T.viewblock = image('icons/turf/overlays.dmi',T,"black_box",10)
-			T.viewblock.plane = STATIC_PLANE	//still need to run one more test for this
 			if(T in onewaylist)
 				for(W in T.contents)
 					if(W.one_way)
-						var/image/window_image = new (T.viewblock)
-						window_image.appearance = W.appearance
-						window_image.plane = FULLSCREEN_PLANE
-						T.viewblock.overlays += window_image
+						T.viewblock = image('icons/turf/overlays.dmi',T,"black_box[W.dir]",10)
+			T.viewblock.plane = FULLSCREEN_PLANE
 			src << T.viewblock
 			newimages += T.viewblock
 			ObscuredTurfs += T
