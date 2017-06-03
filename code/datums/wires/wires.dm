@@ -144,15 +144,6 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				else
 					to_chat(L, "<span class='error'>You need a multitool!</span>")
 
-					/**
-				if(istype(I, /obj/item/weapon/switchtool))
-					var/obj/item/weapon/switchtool/d = deployed
-					if(d./obj/item/device/multitool())
-						var/colour = href_list["pulse"]
-						PulseColour(colour)
-						holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")
-						**/
-
 			else if(href_list["attach"])
 				var/colour = href_list["attach"]
 				// Detach
