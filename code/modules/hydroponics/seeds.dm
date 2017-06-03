@@ -442,6 +442,18 @@
 	seed_type = "avocado"
 	vending_cat = "fruits"
 
+/obj/item/seeds/avocadoseed/whole
+	name = "avocado seed"
+	desc = "The pit of an avocado."
+	seed_type = "avocado"
+	vending_cat = "fruits"
+	icon_state = "avocado_pit"
+
+/obj/item/seeds/avocadoseed/whole/update_appearance()
+	if(!seed)
+		return
+	icon_state = "avocado_pit"
+
 // Chili plants/variants.
 /datum/seed/chili
 

@@ -966,6 +966,7 @@ var/list/special_fruits = list()
 	if(W.sharpness_flags & SHARP_BLADE)
 		if(cut && cant_eat_msg)
 			user.visible_message("\The [user] removes the pit from \the [src] with \the [W].","You remove the pit from \the [src] with \the [W].")
+			new /obj/item/seeds/avocadoseed/whole(get_turf(user))
 			if(loc == user)
 				if(src in user.held_items)
 					user.drop_item(src, force_drop = 1)
@@ -992,6 +993,7 @@ var/list/special_fruits = list()
 	icon_state = "avocado_cut"
 	cant_eat_msg = "'s seed is too large to eat."
 	cut = TRUE
+	plantname = null	//So people can't use the pit as a seed AND feed each half to the seed extractor
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
 	desc = "An unusually fatty fruit, it can be used in both savory and sweet dishes."
