@@ -37,6 +37,10 @@
 	syndie = 1
 	recalculateChannels()
 
+/obj/item/device/radio/headset/syndicate/commando/New()
+	..()
+	set_frequency(SYND_FREQ)
+
 /obj/item/device/radio/headset/binary
 	origin_tech = Tc_SYNDICATE + "=3"
 /obj/item/device/radio/headset/binary/New()

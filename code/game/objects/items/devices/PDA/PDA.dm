@@ -285,6 +285,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
+/obj/item/device/pda/heads/assassin
+	name = "Reaper PDA"
+	ownjob = "Reaper"
+
+/obj/item/device/pda/heads/nt_rep
+	name = "Nanotrasen Navy Representative PDA"
+	ownjob = "Nanotrasen Navy Representative"
+
+/obj/item/device/pda/heads/nt_officer
+	name = "Nanotrasen Navy Officer PDA"
+	ownjob = "Nanotrasen Navy Officer"
+
+/obj/item/device/pda/heads/nt_captain
+	name = "Nanotrasen Navy Captain PDA"
+	ownjob = "Nanotrasen Navy Captain"
+
+/obj/item/device/pda/heads/nt_supreme
+	name = "Nanotrasen Supreme Commander PDA"
+	ownjob = "Nanotrasen Supreme Commander"
+
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop

@@ -120,11 +120,11 @@ var/list/admin_verbs_fun = list(
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
 	/client/proc/spawn_datum, //Allows us to spawn datums to the marked datum buffer
-	/client/proc/cmd_admin_dress, //Allows us to spawn clothing and dress a mob with it in one click
 	/client/proc/respawn_character, //Allows us to re-spawn someone
 	/client/proc/debug_reagents, //Allows us to spawn reagents in mobs/containers
 	/client/proc/create_awaymission, //Allows us to summon away missions
-	/client/proc/create_map_element
+	/client/proc/create_map_element,
+	/client/proc/cmd_admin_equip_loadout //Allows us to equip sets of items to mobs
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
@@ -228,7 +228,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
 	/client/proc/object_talk,
-	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
 	/client/proc/drop_emp,
