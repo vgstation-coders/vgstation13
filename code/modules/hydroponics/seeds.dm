@@ -437,6 +437,23 @@
 	vending_cat = "Vox hydroponics"
 	hydroflags = HYDRO_VOX
 
+/obj/item/seeds/avocadoseed
+	name = "packet of avocado seeds"
+	seed_type = "avocado"
+	vending_cat = "fruits"
+
+/obj/item/seeds/avocadoseed/whole
+	name = "avocado seed"
+	desc = "The pit of an avocado."
+	seed_type = "avocado"
+	vending_cat = "fruits"
+	icon_state = "avocado_pit"
+
+/obj/item/seeds/avocadoseed/whole/update_appearance()
+	if(!seed)
+		return
+	icon_state = "avocado_pit"
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -1588,6 +1605,25 @@
 	water_consumption = 6
 	nutrient_consumption = 1
 	growth_stages = 4
+
+/datum/seed/avocado
+	name = "avocado"
+	seed_name = "avocado"
+	display_name = "avocado tree"
+	packet_icon = "seed-avocado"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/avocado)
+	plant_dmi = 'icons/obj/hydroponics2.dmi'
+	plant_icon = "avocado"
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,20))
+
+	lifespan = 55
+	maturation = 6
+	production = 6
+	yield = 2
+	potency = 10
+	ideal_light = 8
+	large = 0
 
 // Vox Food
 
