@@ -1,4 +1,0 @@
-author: Shadowmech88
-delete-after: True
-changes: 
-- rscadd: "ADMINS: The 'Select Equipment' admin verb has been replaced with an 'Equip Loadout' admin verb. Functionality is somewhat the same, except now an option is included to use the items on your turf instead of a predetermined loadout. This allows you to spawn whatever equipment you want individually, put it all in a pile, and use the verb to duplicate and equip the set to multiple mobs."
