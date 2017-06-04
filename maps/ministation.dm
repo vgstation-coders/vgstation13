@@ -47,8 +47,8 @@
 	#include "ministation\misc.dm"
 	#include "ministation\telecomms.dm"
 	#include "ministation\uplink_item.dm"
-	#include "ministation\job\jobs.dm"
-	#include "ministation\job\removed.dm"
+	//#include "ministation\job\jobs.dm" //Job changes removed for now
+	//#include "ministation\job\removed.dm"
 
 //#elif !defined(MAP_OVERRIDE)
 	//#warn a map has already been included, ignoring ministation.
