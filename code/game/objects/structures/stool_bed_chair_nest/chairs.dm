@@ -1,4 +1,4 @@
-/obj/structure/bed/chair
+/obj/structure/bed/chair  
 	name = "chair"
 	desc = "You sit in this. Either by will or force."
 	icon_state = "chair"
@@ -12,11 +12,14 @@
 /obj/structure/bed/chair/New()
 	..()
 	if(ticker)
-		initialize()
+		initialize()	
 
 /obj/structure/bed/chair/initialize()
-	..()
+	..()	
+	if(usr)
+		dir=usr.dir
 	handle_layer()
+	
 
 /obj/structure/bed/chair/can_spook()
 	. = ..()
@@ -41,19 +44,17 @@
 		getFromPool(sheet_type, get_turf(src), sheet_amt)
 		qdel(src)
 		return
-
 	. = ..()
 
 /obj/structure/bed/chair/update_dir()
 	..()
-
 	handle_layer()
 
 /obj/structure/bed/chair/proc/handle_layer()
 	if(dir == NORTH)
-		plane = ABOVE_HUMAN_PLANE
+		plane = ABOVE_HUMAN_PLANE		
 	else
-		plane = OBJ_PLANE
+		plane = OBJ_PLANE		
 
 /obj/structure/bed/chair/proc/spin()
 	change_dir(turn(dir, 90))
@@ -78,7 +79,7 @@
 
 	spin()
 
-/obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)//to bucle : if Mob has no butt, return.
 	if(!istype(M))
 		return
 	var/mob/living/carbon/human/target = null
@@ -222,7 +223,6 @@
 /obj/structure/bed/chair/office
 	icon_state = "officechair_white"
 	sheet_amt = 1
-
 	anchored = 0
 
 /obj/structure/bed/chair/office/New()
