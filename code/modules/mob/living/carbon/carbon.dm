@@ -269,6 +269,7 @@
 						U.cell.charge = 0
 						H.remove_jitter()
 						H.SetStunned(0)
+						H.SetKnockdown(5)
 						M.SetStunned(0)
 						to_chat(M, "<span class='notice'>Your gloves run out of power.</span>")
 				else
