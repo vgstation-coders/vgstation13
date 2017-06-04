@@ -243,7 +243,7 @@
 				if (istype(T, /obj/item/clothing/gloves))
 					shock_damage = T.siemens_coefficient * shock_damage
 
-				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && !(istype(T, /obj/item/clothing/gloves/yellow)))
+				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient > 0)
 					shock_time = U.cell.charge/STUNGLOVES_CHARGE_COST
 					shock_damage = shock_damage * shock_time
 
@@ -273,7 +273,7 @@
 						M.SetStunned(0)
 						to_chat(M, "<span class='notice'>Your gloves run out of power.</span>")
 				else
-					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && istype(T, /obj/item/clothing/gloves/yellow))
+					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient == 0)
 						to_chat(M, "<span class='notice'>\The [src]'s insulated gloves prevent them from being shocked.</span>")
 
 					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
