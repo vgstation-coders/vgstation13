@@ -286,3 +286,15 @@
 		qdel(src)
 		var/B = new /obj/item/weapon/bloodlust(user.loc)
 		user.put_in_hands(B)
+
+/obj/item/weapon/melee/energy/hfmachete/activated/New()
+	..()
+	active = 1
+	force = 25
+	throwforce = 6
+	throw_speed = 3
+	sharpness = 1.7
+	w_class = W_CLASS_LARGE
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
+	hitsound = get_sfx("machete_hit")
+	update_icon()
