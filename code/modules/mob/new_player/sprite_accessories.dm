@@ -797,6 +797,54 @@
 		species_allowed = list("Diona")
 		do_colouration = 0
 
+	diona_alienflower
+		name = "Alien Flower"
+		icon_state = "hair_alienflower"
+		species_allowed = list("Diona")
+		do_colouration = 0
+
+	diona_bigflower
+		name = "Big Flower"
+		icon_state = "hair_bigflower"
+		species_allowed = list("Diona")
+
+	diona_bluebells
+		name = "Bluebells"
+		icon_state = "hair_bluebells"
+		species_allowed = list("Diona")
+		do_colouration = 0
+
+	diona_leafpile
+		name = "Leafpile"
+		icon_state = "hair_leafpile"
+		species_allowed = list("Diona")
+		additional_accessories = 1
+
+	diona_flytraps
+		name = "Flytraps"
+		icon_state = "hair_flytraps"
+		species_allowed = list("Diona")
+		do_colouration = 0
+
+	diona_hangingflowers
+		name = "Hanging Flowers"
+		icon_state = "hair_hangingflowers"
+		species_allowed = list("Diona")
+		additional_accessories = 1
+
+	diona_rosebush
+		name = "Rosebush"
+		icon_state = "hair_rosebush"
+		species_allowed = list("Diona")
+		additional_accessories = 1
+
+	diona_mushroom
+		name = "Small Mushroom"
+		icon_state = "hair_mushroom"
+		species_allowed = list("Diona")
+		additional_accessories = 1
+
+
 /datum/sprite_accessory/facial_hair
 
 	taj_sideburns
