@@ -32,6 +32,9 @@
 /mob/living/silicon/feels_pain()
 	return FALSE
 
+/mob/living/silicon/proc/can_diagnose()
+	return null
+	
 /mob/living/silicon/proc/cancelAlarm()
 	return
 
