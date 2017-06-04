@@ -1128,6 +1128,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 2,
+		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
@@ -1145,6 +1146,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 40,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
+		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
 
 	pack = /obj/structure/vendomatpack/snack
