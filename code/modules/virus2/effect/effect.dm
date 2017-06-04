@@ -253,7 +253,7 @@
 	mob.say("*cough")
 	for(var/mob/living/M in oview(2,mob))
 		if(can_be_infected(M))
-			spread_disease_to(src, M)
+			spread_disease_to(mob, M)
 
 
 /datum/disease2/effect/hungry
