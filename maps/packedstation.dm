@@ -1,12 +1,12 @@
 
 //**************************************************************
-// Map Datum -- Smolstation
+// Map Datum -- Packedstation
 //**************************************************************
 
 /datum/map/active
-	nameShort = "Smol"
-	nameLong = "Smol Station"
-	map_dir = "smolstation"
+	nameShort = "Pack"
+	nameLong = "Packed Station"
+	map_dir = "packedstation"
 	tDomeX = 128
 	tDomeY = 69
 	tDomeZ = 2
@@ -36,19 +36,19 @@
 /datum/map/active/New()
 	.=..()
 
-	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on smolstation - the asteroid shuttle
+	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 ////////////////////////////////////////////////////////////////
-#include "smolstation.dmm"
+#include "packedstation.dmm"
 
 #if !defined(MAP_OVERRIDE_FILES)
 	#define MAP_OVERRIDE_FILES
-	#include "smolstation\misc.dm"
-	#include "smolstation\telecomms.dm"
-	#include "smolstation\uplink_item.dm"
-	//#include "smolstation\job\jobs.dm" //Job changes removed for now
-	//#include "smolstation\job\removed.dm"
+	#include "packedstation\misc.dm"
+	#include "packedstation\telecomms.dm"
+	#include "packedstation\uplink_item.dm"
+	//#include "packedstation\job\jobs.dm" //Job changes removed for now
+	//#include "packedstation\job\removed.dm"
 
 //#elif !defined(MAP_OVERRIDE)
-	//#warn a map has already been included, ignoring smolstation.
+	//#warn a map has already been included, ignoring packedstation.
