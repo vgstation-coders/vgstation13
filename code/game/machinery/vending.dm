@@ -1105,13 +1105,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/glowstick/yellow = 2,
 		/obj/item/weapon/glowstick/magenta = 2
 		)
-	prices = list( //Just for the glowing vouchers. Maybe should add a 'vouched' section to vendomats?
-		/obj/item/weapon/glowstick = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
-		/obj/item/weapon/glowstick/red = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
-		/obj/item/weapon/glowstick/blue = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
-		/obj/item/weapon/glowstick/yellow = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
-		/obj/item/weapon/glowstick/magenta = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER 
-		)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 	pack = /obj/structure/vendomatpack/assist
 
