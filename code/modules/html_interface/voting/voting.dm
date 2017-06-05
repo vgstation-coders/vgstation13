@@ -308,7 +308,7 @@ var/global/datum/controller/vote/vote = new()
 			if(istype(usr) && usr.client)
 				interact(usr.client)
 
-		to_chat(world, "<font color='purple'><b>[text]</b><br>Type vote to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
+		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
 		switch(vote_type)
 			if("crew_transfer")
 				world << sound('sound/voice/Serithi/Shuttlehere.ogg')
