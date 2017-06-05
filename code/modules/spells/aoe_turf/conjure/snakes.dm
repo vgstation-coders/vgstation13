@@ -32,3 +32,7 @@
 		for(var/mob/M in wizard_snakes)
 			if(wizard_snakes[M] == holder)
 				qdel(M)
+
+/spell/aoe_turf/conjure/snakes/choose_targets(mob/user = usr)
+	center = pick(view_or_range(range, holder, selection_type))
+	return ..()
