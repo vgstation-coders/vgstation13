@@ -1,6 +1,7 @@
 #define CAT_NORMAL 1
 #define CAT_HIDDEN 2
 #define CAT_COIN   3
+#define CAT_VOUCH  4
 
 var/global/num_vending_terminals = 1
 
@@ -49,12 +50,14 @@ var/global/num_vending_terminals = 1
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
 	var/list/premium 	= list()	// No specified amount = only one in stock
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
+	var/list/vouched     = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
 
 	var/product_slogans = ""	//String of slogans separated by semicolons, optional
 	var/product_ads = ""		//String of small ad messages in the vending screen - random chance
 	var/list/product_records = list()
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
+	var/list/voucher_records = list()
 	var/list/slogan_list = list()
 	var/list/small_ads = list()	//Small ad messages in the vending screen - random chance of popping up whenever you open it
 	var/vend_reply				//Thank you for shopping!
@@ -133,6 +136,7 @@ var/global/num_vending_terminals = 1
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
+	build_inventory(vouched, 0, 0, 1)
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -261,7 +265,7 @@ var/global/num_vending_terminals = 1
 			if(prob(25))
 				malfunction()
 
-/obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
+/obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0,voucher_only=0)
 	for(var/typepath in productlist)
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
@@ -282,6 +286,9 @@ var/global/num_vending_terminals = 1
 		else if (req_coin)
 			R.category=CAT_COIN
 			coin_records    += R
+		else if (voucher_only)
+			voucher_records += R
+			R.category=CAT_VOUCH
 		else
 			R.category = CAT_NORMAL
 			product_records.Add(R)
@@ -294,6 +301,7 @@ var/global/num_vending_terminals = 1
 	var/list/datum_products = list()
 	datum_products |= hidden_records
 	datum_products |= coin_records
+	datum_products |= voucher_records
 	datum_products |= product_records
 	for(var/datum/data/vending_product/product in datum_products)
 		if(product.product_path == this_type)
@@ -360,7 +368,7 @@ var/global/num_vending_terminals = 1
 			src.update_vicon()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
-			to_chat(user, "<span class='notice'>[src] is broken! Fix it first.</span>")
+			to_chat(user, "<span class='notice'>The glass in the [src] is broken! Fix it first.</span>")
 			return
 	. = ..()
 	if(.)
@@ -621,6 +629,14 @@ var/global/num_vending_terminals = 1
 	damaged()
 
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='notice'>The glass in the [src] is broken, it refuses to work.</span>")
+		return
+	
+	if(stat & (NOPOWER))
+		to_chat(user, "<span class='notice'>The [src] is dark and unresponsive.</span>")
+		return
+		
 	if(user.lying || user.incapacitated())
 		return 0
 
@@ -629,9 +645,6 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='danger'>You slam the [src] with your mind!</span>")
 			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")
 			damaged()
-
-	if(stat & (BROKEN|NOPOWER))
-		return
 
 	if(seconds_electrified > 0)
 		if(shock(user, 100))
@@ -1083,7 +1096,21 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/assembly/timer = 2,
 		)
 	premium = list(
-		/obj/item/device/assembly_frame = 1,
+		/obj/item/device/assembly_frame = 1
+		)
+	vouched = list(
+		/obj/item/weapon/glowstick = 2,
+		/obj/item/weapon/glowstick/red = 2,
+		/obj/item/weapon/glowstick/blue = 2,
+		/obj/item/weapon/glowstick/yellow = 2,
+		/obj/item/weapon/glowstick/magenta = 2
+		)
+	prices = list( //Just for the glowing vouchers. Maybe should add a 'vouched' section to vendomats?
+		/obj/item/weapon/glowstick = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
+		/obj/item/weapon/glowstick/red = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
+		/obj/item/weapon/glowstick/blue = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
+		/obj/item/weapon/glowstick/yellow = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER, 
+		/obj/item/weapon/glowstick/magenta = ARBITRARILY_LARGE_NUMBER * ARBITRARILY_LARGE_NUMBER 
 		)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 	pack = /obj/structure/vendomatpack/assist
