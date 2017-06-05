@@ -129,6 +129,10 @@
 
 var/list/wizard_snakes
 
+/mob/living/simple_animal/cat/snek/wizard
+	health = 5
+	maxHealth = 5
+
 /mob/living/simple_animal/cat/snek/wizard/New(turf/T, var/spell_holder)	//For the snake spell
 	..(T)
 	if(!wizard_snakes)
