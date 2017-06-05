@@ -44,7 +44,8 @@
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
 	if(transmogged_from)
-		var/mob/living/L = transmogged_from
+		var/obj/transmog_body_container/C = transmogged_from
+		var/mob/living/L = C.contained_mob
 		transmogrify()
 		L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
 		if(istype(L))

@@ -10,6 +10,7 @@ Strange audio (should be rare) (done)
 Gunshots/explosions/opening doors/less rare audio (done)
 
 */
+#define MIN_HAL_SLEEP 30
 
 mob/living/carbon/var
 	image/halimage
@@ -24,7 +25,11 @@ mob/living/carbon/proc/handle_hallucinations()
 		return
 	handling_hal = 1
 	while(hallucination > 20)
-		sleep(rand(200,500)/(hallucination/25))
+		sleep(max(MIN_HAL_SLEEP,(rand(200,500)/(hallucination/25))))
+		if((src.reagents.has_reagent(CITALOPRAM) && prob(30)) || src.reagents.has_reagent(PAROXETINE))
+			continue
+		if(prob(3) && hallucinations.len < 3)
+			fake_attack(src)
 		var/halpick = rand(1,106)
 		switch(halpick)
 			if(0 to 15)
@@ -188,7 +193,6 @@ mob/living/carbon/proc/handle_hallucinations()
 						possible_points += F
 					if(possible_points.len)
 						var/turf/simulated/floor/target = pick(possible_points)
-						halbody.plane = MOB_PLANE
 						switch(rand(1,4))
 							if(1)
 								halbody = image('icons/mob/human.dmi',target,"husk_l",TURF_LAYER)
@@ -198,7 +202,7 @@ mob/living/carbon/proc/handle_hallucinations()
 								halbody = image('icons/mob/alien.dmi',target,"alienother",TURF_LAYER)
 	//						if(5)
 	//							halbody = image('xcomalien.dmi',target,"chryssalid",TURF_LAYER)
-
+						halbody.plane = MOB_PLANE
 						if(client)
 							client.images += halbody
 						spawn(rand(50,80)) //Only seen for a brief moment.
@@ -238,7 +242,7 @@ mob/living/carbon/proc/handle_hallucinations()
 					src << sound('sound/AI/aimalf.ogg')
 
 					if(src.client)
-						message_admins("[key_name(usr)] just got a fake delta AI message from hallucinating! [formatJumpTo(get_turf(usr))]")
+						message_admins("[key_name(src)] just got a fake delta AI message from hallucinating! [formatJumpTo(get_turf(src))]")
 				else
 					switch(rand(1,10)) //Copied from nanites disease
 						if(1)
@@ -294,8 +298,8 @@ mob/living/carbon/proc/handle_hallucinations()
 						foodie.override = 1 //Override the affected mob's appearance with the food item
 
 						var/client/C = src.client //Get client of the hallucinating mob
-
-						C.images += foodie //Give it the image!
+						if(C)
+							C.images += foodie //Give it the image!
 
 						if(L == src)
 							to_chat(src, "<span class='info'>You feel like a [initial(random_food.name)]. Oh wow!</span>")

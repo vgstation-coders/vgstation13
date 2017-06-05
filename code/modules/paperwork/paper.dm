@@ -380,6 +380,7 @@ var/global/list/paper_folding_results = list ( \
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
 	"origami heart" = /obj/item/weapon/p_folded/folded_heart,
+	"envelope" = /obj/item/weapon/paper/envelope,
 	)
 
 /obj/item/weapon/paper/verb/fold()
@@ -396,14 +397,20 @@ var/global/list/paper_folding_results = list ( \
 		return //second check in case some chucklefuck moves the paper or falls down while the menu is open
 
 	usr.drop_item(src, force_drop = 1)	//Drop the original paper to free our hand and call proper inventory handling code
-	var/obj/item/weapon/p_folded/P = new foldtype(get_turf(src), unfolds_into = src) //Let's make a new item that unfolds into the original paper
+	var/obj/item/P
+	if(ispath(foldtype, /obj/item/weapon/p_folded))
+		P = new foldtype(get_turf(src), unfolds_into = src) //Let's make a new item that unfolds into the original paper
+	else
+		P = new foldtype(get_turf(src))
 	src.forceMove(P)	//and also contains it, for good measure.
 	usr.put_in_hands(P)
 	P.pixel_y = src.pixel_y
 	P.pixel_x = src.pixel_x
 	if (istype(src, /obj/item/weapon/paper/nano))
 		P.color = "#9A9A9A"
-		P.nano = 1
+		if(istype(P, /obj/item/weapon/p_folded))
+			var/obj/item/weapon/p_folded/pf = P
+			pf.nano = 1
 	usr.visible_message("<span class='notice'>[usr] folds \the [src.name] into a [P.name].</span>", "<span class='notice'>You fold \the [src.name] into a [P.name].</span>")
 	transfer_fingerprints(src, P)
 	return

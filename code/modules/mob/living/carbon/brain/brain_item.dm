@@ -78,3 +78,12 @@
 	visible_message("<span class = 'sinister'>\The [src] suddenly turns to ash, unable to exist detached from its host.</span>")
 	new /obj/effect/decal/cleanable/ash(loc)
 	qdel(src)
+
+/obj/item/organ/brain/slime_core
+	name = "crystallized slime core"
+	desc = "The crystallized core of a slime person."
+	icon_state = "slime_person_core"
+	organ_type = /datum/organ/internal/brain/slime_core
+
+/obj/item/organ/brain/slime_core/process()
+	processing_objects -= src

@@ -142,9 +142,12 @@
 	return TRUE
 
 /datum/game_mode/heist/proc/forge_vox_objectives()
-	if(prob(25))
+	if(prob(50))
 		raid_objectives += new/datum/objective/heist/kidnap
-	raid_objectives += new/datum/objective/steal/heist
+	else
+		raid_objectives += new/datum/objective/steal/heist_easy
+		raid_objectives += new/datum/objective/steal/heist_easy
+	raid_objectives += new/datum/objective/steal/heist_hard
 	//raid_objectives += new/datum/objective/steal/salvage
 	raid_objectives += new/datum/objective/heist/inviolate_crew
 	//raid_objectives += new/datum/objective/heist/inviolate_death // Crew death permitted. No tears.
@@ -154,6 +157,7 @@
 
 	for(var/datum/objective/steal/O in raid_objectives)
 		O.find_target()
+
 
 /datum/game_mode/heist/proc/greet_vox(const/datum/mind/raider)
 	to_chat(raider.current, {"<span class='notice'><B>You are a Vox Raider, fresh from the Shoal!</b>

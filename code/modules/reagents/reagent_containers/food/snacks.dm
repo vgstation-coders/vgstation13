@@ -505,6 +505,25 @@
 	icon_state = "chocolatebar"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	name = "Valentine's Day chocolate bar"
+	desc = "Made (or bought) with love!"
+	icon_state = "valentinebar"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/New()
+	..()
+	if(time2text(world.realtime, "MM/DD") != "02/14")
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	desc = "Bought (or made) with love!"
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
+	..()
+	reagents.add_reagent(BICARODYNE, 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."
@@ -963,6 +982,17 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SILENCER, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadoburger
+	name = "avocado burger"
+	desc = "Blurring the line between ingredient and condiment."
+	icon_state = "avocadoburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadoburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -1697,6 +1727,19 @@
 		src.desc = "A wish come true!"
 		reagents.add_reagent(NUTRIMENT, 8)
 
+/obj/item/weapon/reagent_containers/food/snacks/avocadosoup
+	name = "Vegetable soup"
+	desc = "May be served either hot or cold."
+	icon_state = "avocadosoup"
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_LIQUID
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadosoup/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(WATER, 5)
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/hotchili
 	name = "Hot Chili"
 	desc = "A five alarm Texan Chili!"
@@ -2035,6 +2078,17 @@
 /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadotoast
+	name = "avocado toast"
+	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
+	icon_state = "avocadotoast"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger
 	name = "Jelly Burger"
@@ -4052,6 +4106,20 @@
 	reagents.add_reagent(SUGAR, 5)
 	reagents.add_reagent(ICE, 5)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
+	name = "avocado milkshake"
+	desc = "Strange, but good."
+	icon_state = "avocadomilkshake"
+	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL //milk
+	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(SUGAR, 5)
+	reagents.add_reagent(ICE, 5)
+	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad
 	name = "Potato Salad"

@@ -99,8 +99,18 @@
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
-		if(config.limbs_can_break && brute_dam + burn_dam >= max_damage * config.organ_health_multiplier)
-			if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
+		var/threshold_multiplier = 1
+		if(isslimeperson(owner))
+			threshold_multiplier = 0
+		if(config.limbs_can_break && brute_dam + burn_dam >= max_damage * config.organ_health_multiplier * threshold_multiplier)
+			if(isslimeperson(owner))
+				var/chance_multiplier = 1
+				if(istype(src, /datum/organ/external/head))
+					chance_multiplier = 0.5
+				if(prob(brute * sharp * chance_multiplier))
+					droplimb(1)
+					return
+			else if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
 				droplimb(1)
 				return
 		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
@@ -333,7 +343,7 @@
 			return
 
 	//Bone fracurtes
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)))
+	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(owner.species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -607,6 +617,28 @@ Note that amputating the affected organ does in fact remove the infection from t
 		tbrute = 3
 	return "[tbrute][tburn]"
 
+/datum/organ/external/proc/rejuvenate_limb()
+	for(var/obj/item/weapon/shard/shrapnel/s in implants)
+		if(istype(s))
+			implants -= s
+			owner.contents -= s
+			qdel(s)
+			s = null
+	amputated = 0
+	brute_dam = 0
+	burn_dam = 0
+	damage_state = "00"
+	germ_level = 0
+	hidden = null
+	number_wounds = 0
+	open = 0
+	perma_injury = 0
+	stage = 0
+	status = 0
+	trace_chemicals = list()
+	wounds = list()
+	wound_update_accuracy = 1
+
 /****************************************************
 			   DISMEMBERMENT
 ****************************************************/
@@ -709,6 +741,33 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(vital)
 			owner.death()
 
+		if(owner.species.anatomy_flags & NO_STRUCTURE)
+			status |= ORGAN_ATTACHABLE
+			amputated = 1
+			setAmputatedTree()
+			open = 0
+
+		if(isslimeperson(owner) && organ)
+			spawn(1)
+			if(organ.borer)
+				organ.borer.detach()
+			if(name != LIMB_HEAD)
+				qdel(organ)
+			else
+				var/headloc = organ.loc
+				rejuvenate_limb()
+				var/datum/organ/internal/I = organ.organ_data
+				var/obj/item/organ/O = I.remove(owner)
+				if(O && istype(O))
+					O.organ_data.rejecting = null
+					owner.internal_organs_by_name["brain"] = null
+					owner.internal_organs_by_name -= "brain"
+					owner.internal_organs -= O.organ_data
+					internal_organs -= O.organ_data
+					O.removed(owner,owner)
+					O.loc = headloc
+				qdel(organ)
+
 /datum/organ/external/proc/generate_dropped_organ(var/obj/item/current_organ)
 	return current_organ
 
@@ -768,6 +827,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/fracture()
+	if(owner.species.anatomy_flags & NO_BONES)
+		return
 	if(status & ORGAN_BROKEN)
 		return
 	owner.visible_message("<span class='danger'>You hear a loud cracking sound coming from \the [owner].</span>", \

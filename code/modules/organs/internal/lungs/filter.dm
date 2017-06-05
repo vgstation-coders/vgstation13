@@ -3,6 +3,9 @@
 	name = "advanced lungs"
 	removed_type = /obj/item/organ/lungs/filter
 
+	min_bruised_damage = 15
+	min_broken_damage = 30
+
 	gasses = list()
 	var/list/intake_settings=list(
 		"oxygen" = list(

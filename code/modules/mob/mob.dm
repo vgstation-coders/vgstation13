@@ -401,15 +401,24 @@
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
 	for(var/mob/virtualhearer/hearer in viewers(location))
+		var/mob/M
+		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/holo = hearer.attached
+			if(holo.master)
+				M = holo.master
+		if(istype(hearer.attached, /mob))
+			M = hearer.attached
+		if(M)
+			if(M.client)
+				var/client/C = M.client
+				if(get_turf(src) in C.ObscuredTurfs)
+					continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
 	for(var/mob/M in mob_list)
 		if (M.real_name == text("[]", msg))
 			return M
-	return 0
-
-/mob/proc/movement_delay()
 	return 0
 
 /mob/proc/Life()
@@ -647,6 +656,58 @@ var/list/slot_equipment_priority = list( \
 			openslot = 1
 			break
 	return openslot
+
+/mob/proc/unequip_everything()
+	var/list/unequipped_items = list()
+	for(var/slot in slot_equipment_priority)
+		var/obj/item/I = get_item_by_slot(slot)
+		if(I)
+			unequipped_items.Add(I)
+			u_equip(I)
+	return unequipped_items
+
+/mob/proc/recursive_list_equip(list/L)	//Used for equipping a list of items to a mob without worrying about the order (like needing to put a jumpsuit before a belt)
+	if(!L || !L.len)
+		return
+
+	for(var/obj/item/O in L)
+		O.forceMove(get_turf(src))	//At the very least, all the stuff should be on our tile
+
+	var/has_succeeded_once = TRUE
+	while(has_succeeded_once)
+		has_succeeded_once = FALSE
+		for(var/obj/item/I in L)
+			if(equip_to_appropriate_slot(I))
+				has_succeeded_once = TRUE
+				L.Remove(I)
+	if(L.len)
+		var/obj/item/weapon/storage/B = back
+		for(var/obj/item/I in L)
+			if(istype(B))
+				B.handle_item_insertion(I,1)
+	regenerate_icons()
+
+/mob/proc/equip_loadout(var/type, var/unequip_current = TRUE)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
+	if(type)
+		if(ispath(type, /obj/abstract/loadout))
+			new type(get_turf(src), src, unequip_current)
+	else
+		var/turf/T = get_turf(usr)
+		if(T)
+			if(unequip_current)
+				unequip_everything()	//unequip everything before equipping loadout
+			var/list/to_equip = list()
+			for(var/obj/item/I in T.contents)
+				to_equip.Add(new I.type(get_turf(src)))
+			recursive_list_equip(to_equip)
+			var/loadout_list = ""
+			for(var/obj/item/O in to_equip)
+				if(O == to_equip[to_equip.len])
+					loadout_list += "[O.type]"
+				else
+					loadout_list += "[O.type], "
+			log_admin("[key_name(src)] has been equipped with a custom loadout consisting of [loadout_list].")
+
 
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M)
@@ -954,7 +1015,7 @@ var/list/slot_equipment_priority = list( \
 	if (ismob(AM))
 		var/mob/M = AM
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
-			P = M.locked_to		
+			P = M.locked_to
 
 	if (!P.anchored)
 		P.add_fingerprint(src)
@@ -978,7 +1039,7 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = usr
 				/*if(ishuman(AM))
 					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage()) 
+					if (HM.drag_damage())
 						if (HM.isincrit())
 							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
 							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
@@ -1851,9 +1912,14 @@ mob/proc/on_foot()
 		"wear_mask",
 		"radiation",
 		"stat",
-		"suiciding")
+		"monkeyizing",
+		"key")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration - 1)
+		for(var/atom/movable/AM in contents)
+			drop_item(AM, force_drop = 1)
 
 	spawn(duration + 1)
 		regenerate_icons()
@@ -1861,47 +1927,39 @@ mob/proc/on_foot()
 /mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
-			transmogged_from.forceMove(loc)
-			if(key)
-				transmogged_from.key = key
-			transmogged_from.timestopped = 0
-			if(istype(transmogged_from, /mob/living/carbon))
-				var/mob/living/carbon/C = transmogged_from
-				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
-					C.drop_item(C.wear_mask, force_drop = 1)
-			var/mob/returned_mob = transmogged_from
-			returned_mob.transmogged_to = null
-			transmogged_from = null
-			for(var/atom/movable/AM in contents)
-				AM.forceMove(get_turf(src))
-			forceMove(null)
-			qdel(src)
-			return returned_mob
+			var/obj/transmog_body_container/tC = transmogged_from
+			if(tC.contained_mob)
+				tC.contained_mob.forceMove(loc)
+				if(key)
+					tC.contained_mob.key = key
+				tC.contained_mob.timestopped = 0
+				if(istype(tC.contained_mob, /mob/living/carbon))
+					var/mob/living/carbon/C = tC.contained_mob
+					if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+						C.drop_item(C.wear_mask, force_drop = 1)
+				var/mob/returned_mob = tC.contained_mob
+				returned_mob.transmogged_to = null
+				tC.get_rid_of()
+				transmogged_from = null
+				for(var/atom/movable/AM in contents)
+					AM.forceMove(get_turf(src))
+				forceMove(null)
+				qdel(src)
+				return returned_mob
 		return
 	if(!ispath(target_type, /mob))
 		EXCEPTION(target_type)
 		return
 	var/mob/M = new target_type(loc)
-	M.transmogged_from = src
+	var/obj/transmog_body_container/C = new (M)
+	M.transmogged_from = C
 	transmogged_to = M
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
 		var/spell/change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	var/static/list/drop_on_transmog = list(
-		/obj/item/weapon/disk/nuclear,
-		/obj/item/weapon/holder,
-		/obj/item/device/paicard,
-		/obj/item/device/soulstone,
-		/obj/item/device/mmi,
-		)
-	for(var/i in drop_on_transmog)
-		var/list/L = search_contents_for(i)
-		if(L.len)
-			for(var/A in L)
-				drop_item(A, force_drop = 1)
-	src.forceMove(null)
+	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
@@ -1919,6 +1977,29 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/obj/transmog_body_container
+	name = "transmog body container"
+	desc = "You should not be seeing this."
+	flags = TIMELESS
+	var/mob/contained_mob
+
+/obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
+	ASSERT(M)
+	M.forceMove(src)
+	contained_mob = M
+
+/obj/transmog_body_container/proc/get_rid_of()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	contained_mob = null
+	qdel(src)
+
+/obj/transmog_body_container/Destroy()
+	contained_mob = null
+	for(var/i in contents)
+		qdel(i)
+	..()
 
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")

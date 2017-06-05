@@ -1197,7 +1197,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/rad_collector)
 	containername = "collector crate"
 	group = "Engineering"
-	
+
 /datum/supply_packs/engine/prism
 	name = "Optical prisms"
 	contains = list(/obj/machinery/prism,
@@ -1340,19 +1340,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/shield_gen
 	contains = list(/obj/item/weapon/circuitboard/shield_gen)
-	name = "Exp. shield generator board"
+	name = "Starscreen generator board"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "experimental shield generator crate"
+	containername = "Starscreen shield generator crate"
 	group = "Engineering"
 	access = access_ce
 
 /datum/supply_packs/shield_cap
 	contains = list(/obj/item/weapon/circuitboard/shield_cap)
-	name = "Exp. shield capacitor board"
+	name = "Starscreen capacitor board"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "experimental shield capacitor crate"
+	containername = "Starscreen shield capacitor crate"
 	group = "Engineering"
 	access = access_ce
 
@@ -1950,6 +1950,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "clothing stack of packs"
 	group = "Vending Machine packs"
+
+/datum/supply_packs/barbermachines
+	name = "Barber packs"
+	contains = list(/obj/structure/vendomatpack/barbervend,
+					/obj/structure/vendomatpack/barbervend)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Barber stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/makeupmachines
+	name = "Cosmetics packs"
+	contains = list(/obj/structure/vendomatpack/makeup,
+					/obj/structure/vendomatpack/makeup)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Cosmetics stack of packs"
+	group = "Vending Machine packs"
+
 
 /*
 /datum/supply_packs/sovietmachines

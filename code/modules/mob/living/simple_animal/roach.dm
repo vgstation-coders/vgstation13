@@ -192,7 +192,7 @@
 	if(isUnconscious())
 		return
 
-	speed = -4
+	speed = 1
 	turns_since_move = 5 //Remove any delay
 
 	icon_state = "cockroach_fly"

@@ -454,3 +454,50 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
+
+/client/proc/update_special_views()
+	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.
+		if(parallax_initialized)
+			mob.hud_used.update_parallax_values()
+
+	for(var/obj/structure/window/W in view(view,mob))
+		if(W.one_way)
+			update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in view.
+			break
+
+/client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
+	var/Image										//Code heavily cannibalized from a demo made by Byond member Shadowdarke.
+	var/turf/Oneway
+	var/obj/structure/window/W
+	var/list/newimages = list()
+	var/list/onewaylist = list()
+	var/inverse_dir
+
+	if(!v)
+		return
+
+	ObscuredTurfs.len = 0
+
+	for(W in view(view,mob))
+		if(W.one_way)
+			inverse_dir = turn(W.dir, 180)
+			if(inverse_dir & get_dir(W,mob))
+				Oneway = get_turf(W)
+				Oneway.opacity = 1
+				onewaylist += Oneway
+
+	if(onewaylist.len)
+		var/list/List = v - view(view,mob)
+		for(var/turf/T in List)
+			T.viewblock = image('icons/turf/overlays.dmi',T,"black_box",10)
+			T.viewblock.plane = FULLSCREEN_PLANE
+			src << T.viewblock
+			newimages += T.viewblock
+			ObscuredTurfs += T
+
+		for(var/turf/I in onewaylist)
+			I.opacity = 0
+
+	for(Image in ViewFilter-newimages)
+		images -= Image
+	ViewFilter = newimages

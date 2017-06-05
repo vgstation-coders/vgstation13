@@ -16,6 +16,8 @@ cache:
   directories:
   - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
   - $HOME/.cache/pip
+  - $TRAVIS_BUILD_DIR/libvg/target
+  - $HOME/.cargo
 
 addons:
   apt:
@@ -40,7 +42,7 @@ script:
 # --jobs 1 to prevent threading problems with the BYOND crate.
 - cargo test --jobs 1 --verbose
 - cd -
-- echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M 
+- echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M
 
 notifications:
   irc:

@@ -97,6 +97,9 @@
 	desc = "An untrustworthy bar of soap. Smells of fear."
 	icon_state = "soapsyndie"
 
+/obj/item/weapon/soap/holo
+	name = "UV sterilizer"
+	desc = "This shouldn't exist."
 
 /obj/item/weapon/c_tube
 	name = "cardboard tube"

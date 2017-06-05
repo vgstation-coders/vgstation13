@@ -784,3 +784,24 @@
 	for(var/i in 1 to 4)
 		var/randomFigure = pick(subtypesof(/obj/item/toy/figure))
 		new randomFigure(src)
+
+/obj/item/weapon/storage/box/mechfigures
+	name = "box of mech figurines"
+	desc = "An old box of mech figurines"
+	icon_state = "box"
+
+/obj/item/weapon/storage/box/mechfigures/New()
+	..()
+	for(var/i in 1 to 4)
+		var/randomFigurine = pick(/obj/item/toy/prize/ripley,
+							/obj/item/toy/prize/fireripley,
+							/obj/item/toy/prize/deathripley,
+							/obj/item/toy/prize/gygax,
+							/obj/item/toy/prize/durand,
+							/obj/item/toy/prize/honk,
+							/obj/item/toy/prize/marauder,
+							/obj/item/toy/prize/seraph,
+							/obj/item/toy/prize/mauler,
+							/obj/item/toy/prize/odysseus,
+							/obj/item/toy/prize/phazon)
+		new randomFigurine(src)

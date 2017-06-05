@@ -945,3 +945,57 @@ var/list/special_fruits = list()
 				counter = 0
 				available_fruits = shuffle(available_fruits)
 			counter++
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado
+	name = "avocado"
+	desc = "An unusually fatty fruit containing a single large seed."
+	icon_state = "avocado"
+	filling_color = "#EAE791"
+	plantname = "avocado"
+	var/cant_eat_msg = "'s skin is much too tough to chew."
+	var/cut = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/can_consume(mob/living/carbon/eater, mob/user)
+	if(cant_eat_msg)
+		to_chat(user, "<span class='notice'>This [name][cant_eat_msg]</span>")
+	else
+		return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(W.sharpness_flags & SHARP_BLADE)
+		if(cut && cant_eat_msg)
+			user.visible_message("\The [user] removes the pit from \the [src] with \the [W].","You remove the pit from \the [src] with \the [W].")
+			new /obj/item/seeds/avocadoseed/whole(get_turf(user))
+			if(loc == user)
+				if(src in user.held_items)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/P = new(get_turf(src))
+					user.put_in_hands(P)
+					qdel(src)
+					return
+			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src))
+			qdel(src)
+		else
+			user.visible_message("\The [user] slices \the [src] in half with \the [W].","You slice \the [src] in half with \the [W].")
+			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
+			if(loc == user)
+				if(src in user.held_items)
+					user.drop_item(src, force_drop = 1)
+					user.put_in_hands(pick(halves))
+					qdel(src)
+					return
+			qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
+	name = "avocado half"
+	desc = "This half still has the seed embedded in it."
+	icon_state = "avocado_cut"
+	cant_eat_msg = "'s seed is too large to eat."
+	cut = TRUE
+	plantname = null	//So people can't use the pit as a seed AND feed each half to the seed extractor
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
+	desc = "An unusually fatty fruit, it can be used in both savory and sweet dishes."
+	icon_state = "avocado_pitted"
+	cant_eat_msg = null

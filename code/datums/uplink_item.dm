@@ -20,6 +20,12 @@ var/list/uplink_items = list()
 			if(I.last)
 				last += I
 				continue
+			if(I.only_on_month)
+				if(time2text(world.realtime,"MM") != I.only_on_month)
+					continue
+			if(I.only_on_day)
+				if(time2text(world.realtime,"DD") != I.only_on_day)
+					continue
 
 			if(!uplink_items[I.category])
 				uplink_items[I.category] = list()
@@ -48,6 +54,8 @@ var/list/uplink_items = list()
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
 	var/list/job = null
+	var/only_on_month	//two-digit month as string
+	var/only_on_day		//two-digit day as string
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -112,6 +120,17 @@ var/list/uplink_items = list()
 //
 */
 //Work in Progress, job specific antag tools
+
+/datum/uplink_item/valentine
+	category = "Valentine's Day Special!"
+	only_on_month = "02"
+	only_on_day = "14"
+
+/datum/uplink_item/valentine/explosivechocolate
+	name = "Explosive Chocolate Bar"
+	desc = "A special Valentine's Day chocolate bar chock-full of Bicarodyne. For adding that little extra oompf to your hugs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	cost = 8
 
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
@@ -302,6 +321,13 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 12
 	job = list("Medical Doctor", "Chief Medical Officer")
+
+/datum/uplink_item/jobspecific/hypozinebottle
+	name = "Lethal Speed Chemical"
+	desc = "30 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
+	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	cost = 12
+	job = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
 //Engineer
 /datum/uplink_item/jobspecific/powergloves
@@ -595,6 +621,12 @@ var/list/uplink_items = list()
 	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls, attach it to organisms to destroy them, or connect a signaler to its wiring to make it remotely detonable. It has a modifiable timer with a minimum setting of 10 seconds."
 	item = /obj/item/weapon/plastique
 	cost = 4
+
+/datum/uplink_item/device_tools/explosive_gum
+	name = "Explosive Chewing Gum"
+	desc = "A single stick of explosive chewing gum, detonates five seconds after you start chewing. Can be stuck to walls and objects."
+	item = /obj/item/gum/explosive
+	cost = 8
 
 /datum/uplink_item/device_tools/powersink
 	name = "Power Sink"

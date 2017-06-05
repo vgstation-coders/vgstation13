@@ -815,6 +815,14 @@
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 		connected.on = 0
 		if(connected.occupant)
+			if(ishuman(connected.occupant))
+				var/mob/living/carbon/human/H = connected.occupant
+				if(isdiona(H))
+					if(H.h_style != "Popped Hair")
+						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
+						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 1)
+						H.h_style = "Popped Hair"
+						H.update_hair()
 			connected.go_out()
 		connected.update_icon()
 
