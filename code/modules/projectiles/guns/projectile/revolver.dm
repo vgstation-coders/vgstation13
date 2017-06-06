@@ -283,6 +283,7 @@
 	max_shells = 1
 	gun_flags = 0
 	conventional_firearm = 0
+	clumsy_check = 0
 
 /obj/item/weapon/gun/projectile/banana/proc/make_peel(mob/user)
 	user.drop_item(src, force_drop = 1)
