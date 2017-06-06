@@ -7,6 +7,8 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 /obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
