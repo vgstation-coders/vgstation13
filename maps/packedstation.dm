@@ -46,7 +46,7 @@
 	#define MAP_OVERRIDE_FILES
 	#include "packedstation\misc.dm"
 	#include "packedstation\telecomms.dm"
-	#include "packedstation\uplink_item.dm"
+	//#include "packedstation\uplink_item.dm"
 	//#include "packedstation\job\jobs.dm" //Job changes removed for now
 	//#include "packedstation\job\removed.dm"
 
