@@ -1115,10 +1115,10 @@ Thanks.
 					if(do_after(CM, CM, 50))
 						if(!CM.handcuffed || CM.locked_to)
 							return
-						CM.visible_message("<span class='danger'>[CM] manages to break the handcuffs!</span>",
-										   "<span class='notice'>You successfuly break your handcuffs.</span>")
+						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.handcuffed]!</span>",
+										   "<span class='notice'>You successfully break \the [CM.handcuffed].</span>")
 						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-						var/obj/item/weapon/handcuffs/cuffs = CM.handcuffed
+						var/obj/item/cuffs = CM.handcuffed
 						CM.drop_from_inventory(cuffs)
 						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
 							qdel(cuffs)
@@ -1127,23 +1127,23 @@ Thanks.
 
 
 			else
-				var/obj/item/weapon/handcuffs/HC = CM.handcuffed
-				var/breakouttime = HC.breakouttime
-				if(!(breakouttime))
-					breakouttime = 1200 //Default
-				CM.visible_message("<span class='danger'>[CM] attempts to remove [HC]!</span>",
-								   "<span class='warning'>You attempt to remove [HC] (this will take around [(breakouttime)/600] minutes and you need to stand still).</span>",
+				var/obj/item/HC = CM.handcuffed
+				var/resist_time = HC.restraint_resist_time
+				if(!(resist_time))
+					resist_time = 2 MINUTES //Default
+				CM.visible_message("<span class='danger'>[CM] attempts to remove \the [HC]!</span>",
+								   "<span class='warning'>You attempt to remove \the [HC] (this will take around [(resist_time)/600] minutes and you need to stand still).</span>",
 								   self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
 				spawn(0)
-					if(do_after(CM,CM, breakouttime))
+					if(do_after(CM,CM, resist_time))
 						if(!CM.handcuffed || CM.locked_to)
 							return // time leniency for lag which also might make this whole thing pointless but the server
-						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
-										   "<span class='notice'>You successfuly remove [HC].</span>",
+						CM.visible_message("<span class='danger'>[CM] manages to remove \the [HC]!</span>",
+										   "<span class='notice'>You successfully remove \the [HC].</span>",
 										   self_drugged_message="<span class='notice'>You successfully regain control of your hands.</span>")
 						CM.drop_from_inventory(HC)
 					else
-						CM.simple_message("<span class='warning'>Your uncuffing attempt was interrupted.</span>",
+						CM.simple_message("<span class='warning'>Your attempt to remove \the [HC] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
 		else if(CM.legcuffed && CM.canmove && CM.special_delayer.blocked())
