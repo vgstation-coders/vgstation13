@@ -976,7 +976,7 @@ var/list/special_fruits = list()
 					return
 			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src))
 			qdel(src)
-		else
+		else if(!cut)
 			user.visible_message("\The [user] slices \the [src] in half with \the [W].","You slice \the [src] in half with \the [W].")
 			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
 			if(loc == user)
