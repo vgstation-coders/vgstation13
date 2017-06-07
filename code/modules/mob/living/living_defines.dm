@@ -62,7 +62,7 @@
 	var/list/icon/pipes_shown = list()
 	var/last_played_vent
 	var/is_ventcrawling = 0
-	var/ventcrawl_exit_target = FALSE // Used in [ATMOSPHERICS/atmospherics.dm] to prevent message spam and being able to ventcrawl past vents
+	var/ventcrawl_exit_target = null // Used in [ATMOSPHERICS/atmospherics.dm] to prevent message spam and being able to ventcrawl past vents
 
 	var/species_type
 	var/holder_type = /obj/item/weapon/holder/animal	//When picked up, put us into a holder of this type. Dionae use /obj/item/weapon/holder/diona, others - the default one
