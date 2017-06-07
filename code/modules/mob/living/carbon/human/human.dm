@@ -75,6 +75,10 @@
 	h_style = "Bald"
 	..(new_loc, "Slime")
 
+/mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc)
+	initialize_basic_NPC_components()
+
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
@@ -1683,9 +1687,9 @@ mob/living/carbon/human/isincrit()
 				return_organs += damagedorgan
 		return return_organs
 
-/mob/living/carbon/human/get_heart()	
+/mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
-	
+
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
@@ -1703,15 +1707,15 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
 			if(!organ_blood || !organ_blood.data["blood_DNA"])
 				vessel.trans_to(extractedorgan, 5, 1, 1)
-			
+
 			internal_organs_by_name[targetorgan.name] = null
 			internal_organs_by_name -= targetorgan.name
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
-			
+
 			return extractedorgan
-		
+
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
@@ -1818,3 +1822,12 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	if(M_HULK in mutations)
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
+
+/mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
+	NPC_brain = new (src)
+	NPC_brain.AddComponent(/datum/component/controller/mob)
+	NPC_brain.AddComponent(/datum/component/ai/hand_control)
+
+/mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
+	initialize_barebones_NPC_components()
+	NPC_brain.AddComponent(/datum/component/ai/human_brain)
