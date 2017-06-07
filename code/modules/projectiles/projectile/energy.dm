@@ -143,7 +143,7 @@
 			scramble(1, H, 100) // Scramble all UIs
 			scramble(null, H, 5) // Scramble SEs, 5% chance for each block
 
-			H.apply_effect((rand(50, 250)),IRRADIATE)
+			H.apply_radiation((rand(50, 250)),RAD_EXTERNAL)
 
 /obj/item/projectile/energy/buster
 	name = "buster shot"

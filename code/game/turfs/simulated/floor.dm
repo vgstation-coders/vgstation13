@@ -650,7 +650,7 @@ turf/simulated/floor/update_icon()
 					set_light(3)
 					icon_state = "uranium_inactive"
 					for(var/mob/living/L in range(2,src)) //Weak radiation
-						L.apply_effect(3,IRRADIATE,0)
+						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
 					spawn(20)
 						set_light(0)
