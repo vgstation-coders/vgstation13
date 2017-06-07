@@ -1831,3 +1831,5 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
 	NPC_brain.AddComponent(/datum/component/ai/human_brain)
+	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
+	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)

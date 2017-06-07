@@ -9,6 +9,7 @@
 
 	var/list/friendly_factions = list()
 	var/list/enemy_factions = list()
+	var/list/enemy_types = list(/mob/living/simple_animal/mouse)
 	var/list/friends = list()
 	var/list/true_friends = list()
 	var/list/enemies = list()
@@ -20,7 +21,8 @@
 
 /datum/component/ai/human_brain/proc/OnLife()
 	life_tick++
-	//testing("HUNT LIFE, controller=[!isnull(controller)], busy=[controller && controller.getBusy()], state=[controller && controller.getState()]")
+	if(!target_holder)
+		target_holder = GetComponent(/datum/component/ai/target_holder)
 	if(!controller)
 		controller = GetComponent(/datum/component/controller)
 	if(controller.getBusy())
@@ -28,10 +30,17 @@
 	if(!ishuman(container.holder))
 		return
 	var/mob/living/carbon/human/H = container.holder
+
+	var/atom/target = target_holder.GetBestTarget(src, "target_evaluator")
+	//testing("  IDLE STANCE, target=\ref[target]")
+	if(!isnull(target))
+		SendSignal(COMSIG_TARGET, list("target"=target))
+		SendSignal(COMSIG_STATE, list("state"=HOSTILE_STANCE_ATTACK))
+
 	if(H.stat != CONSCIOUS || !H.canmove || !isturf(H.loc))
 		SendSignal(COMSIG_MOVE, list("dir" = 0))
 	AssessNeeds(H)
-	var/obj/item/I = AttainExternalGoal(H)
+	var/obj/item/I = AttainExternalItemGoal(H)
 	if(I)
 		if(H.Adjacent(I))
 			AcquireItem(H, I)
@@ -77,48 +86,62 @@
 		personal_desires.Add(DESIRE_MASK)
 	if(!H.get_item_by_slot(slot_wear_id))
 		personal_desires.Add(DESIRE_ID)
-
-/datum/component/ai/human_brain/proc/AttainExternalGoal(mob/living/carbon/human/H)
+/*
+/datum/component/ai/human_brain/proc/LookForTarget(mob/living/carbon/human/H)
 	var/obj/item/goal = null
-	for(var/D in personal_desires)
-		for(var/obj/item/I in view(H))
-			switch(D)
-				if(DESIRE_HAVE_WEAPON)
-					if(!goal || I.force > goal.force || (I.force == goal.force && I.sharpness > goal.sharpness))
-						goal = I
-				if(DESIRE_FOOD)
-					if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
-						goal = I
-				if(DESIRE_UNDERCLOTHING)
-					if(I.slot_flags & SLOT_ICLOTHING)
-						goal = I
-				if(DESIRE_SHOES)
-					if(I.slot_flags & SLOT_FEET)
-						goal = I
-				if(DESIRE_BACK)
-					if(I.slot_flags & SLOT_BACK)
-						goal = I
-				if(DESIRE_GLOVES)
-					if(I.slot_flags & SLOT_GLOVES)
-						goal = I
-				if(DESIRE_HAT)
-					if(I.slot_flags & SLOT_HEAD)
-						goal = I
-				if(DESIRE_BELT)
-					if(I.slot_flags & SLOT_BELT)
-						goal = I
-				if(DESIRE_EXOSUIT)
-					if(I.slot_flags & SLOT_OCLOTHING)
-						goal = I
-				if(DESIRE_GLASSES)
-					if(I.slot_flags & SLOT_EYES)
-						goal = I
-				if(DESIRE_MASK)
-					if(I.slot_flags & SLOT_MASK)
-						goal = I
-				if(DESIRE_ID)
-					if(I.slot_flags & SLOT_ID)
-						goal = I
+	for(var/D in desire_ranks)
+		if(D in personal_desires)
+			for(var/mob/M in view(H))
+				switch(D)
+					if(DESIRE_CONFLICT)
+						if(!M.stat)
+							goal = I
+		if(goal)
+			break
+	return goal
+*/
+/datum/component/ai/human_brain/proc/AttainExternalItemGoal(mob/living/carbon/human/H)
+	var/obj/item/goal = null
+	for(var/D in desire_ranks)
+		if(D in personal_desires)
+			for(var/obj/item/I in view(H))
+				switch(D)
+					if(DESIRE_HAVE_WEAPON)
+						if((!goal && I.force > 2) || (goal && (I.force > goal.force || (I.force == goal.force && I.sharpness > goal.sharpness))))
+							goal = I
+					if(DESIRE_FOOD)
+						if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
+							goal = I
+					if(DESIRE_UNDERCLOTHING)
+						if(I.slot_flags & SLOT_ICLOTHING)
+							goal = I
+					if(DESIRE_SHOES)
+						if(I.slot_flags & SLOT_FEET)
+							goal = I
+					if(DESIRE_BACK)
+						if(I.slot_flags & SLOT_BACK)
+							goal = I
+					if(DESIRE_GLOVES)
+						if(I.slot_flags & SLOT_GLOVES)
+							goal = I
+					if(DESIRE_HAT)
+						if(I.slot_flags & SLOT_HEAD)
+							goal = I
+					if(DESIRE_BELT)
+						if(I.slot_flags & SLOT_BELT)
+							goal = I
+					if(DESIRE_EXOSUIT)
+						if(I.slot_flags & SLOT_OCLOTHING)
+							goal = I
+					if(DESIRE_GLASSES)
+						if(I.slot_flags & SLOT_EYES)
+							goal = I
+					if(DESIRE_MASK)
+						if(I.slot_flags & SLOT_MASK)
+							goal = I
+					if(DESIRE_ID)
+						if(I.slot_flags & SLOT_ID)
+							goal = I
 		if(goal)
 			break
 	return goal
@@ -138,3 +161,6 @@
 		SendSignal(COMSIG_ITMATKSELF, list())
 		sleep(1)
 	SendSignal(COMSIG_DROP, list())
+
+/datum/component/ai/human_brain/proc/target_evaluator(var/atom/target)
+	return TRUE
