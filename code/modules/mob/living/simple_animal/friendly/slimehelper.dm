@@ -25,16 +25,17 @@
 	max_co2 = 0
 	min_n2 = 0
 	max_n2 = 0
+	search_objects = 2
 	stop_automated_movement_when_pulled = 1
 	size = SIZE_BIG
 	wanted_objects = list(/obj/item/slime_extract)
 	var/obj/item/weapon/storage/bag/slime/B
+	var/obj/item/slime_extract/S
 
-/mob/living/simple_animal/hostile/helperslime/CanAttack(atom/new_target)
+/mob/living/simple_animal/hostile/helperslime/CanAttack(var/atom/new_target)
 	if(istype(new_target, /obj/item/slime_extract))
 		return 1
-	else
-		return 0
+	return 0
 /obj/item/weapon/storage/bag/slime
 	name = "slime bag"
 	desc = "If you can see this this means something messed up"
@@ -43,13 +44,10 @@
 
 
 /mob/living/simple_animal/hostile/helperslime/New()
+	..()
 	B = new/obj/item/weapon/storage/bag/slime
 
 /mob/living/simple_animal/hostile/helperslime/AttackingTarget()
-	for(var/mob/M in view(src))
-		if(CanAttack(M))
-		...
-
 	if(istype(target,/obj/item/slime_extract))
 		B.attackby(target,src)
 	else
