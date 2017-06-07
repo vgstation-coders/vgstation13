@@ -208,10 +208,6 @@
 				M.attack_log +="\[[time_stamp()]\]<font color='orange'> Mech Drilled by [chassis.occupant.name] ([chassis.occupant.ckey]) with [src.name]</font>"
 				chassis.occupant.attack_log += "\[[time_stamp()]\]<font color='red'> Mech Drilled [M.name] ([M.ckey]) with [src.name]</font>"
 				log_attack("<font color='red'>[chassis.occupant.name] ([chassis.occupant.ckey]) mech drilled [M.name] ([M.ckey]) with [src.name]</font>" )
-				if(!iscarbon(chassis.occupant))
-					M.LAssailant = null
-				else
-					M.LAssailant = chassis.occupant
 			log_message("Drilled through [target]")
 			occupant_message("<font color='red'><b>You drill into \the [target].</b></font>")
 			chassis.visible_message("<font color='red'><b>[chassis] drills into \the [target]!</b></font>", "You hear a drill breaking something.")

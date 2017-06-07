@@ -13,7 +13,6 @@
 	target.grabbed_by += G
 
 	G.synch()
-	target.LAssailant = src
 	target.grabbed_by(src)
 
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)

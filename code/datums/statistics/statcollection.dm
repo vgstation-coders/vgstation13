@@ -131,7 +131,6 @@
 		return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
-	d.last_attacked_by = M.LAssailant
 	d.death_x = M.x
 	d.death_y = M.y
 	d.death_z = M.z

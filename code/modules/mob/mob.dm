@@ -1031,13 +1031,9 @@ var/list/slot_equipment_priority = list( \
 		src.pulling = P
 		P.pulledby = src
 		update_pull_icon()
-		if(ismob(P))
+		/*if(ismob(P))
 			var/mob/M = P
-			if(!iscarbon(src))
-				M.LAssailant = null
-			else
-				M.LAssailant = usr
-				/*if(ishuman(AM))
+				if(ishuman(AM))
 					var/mob/living/carbon/human/HM = AM
 					if (HM.drag_damage())
 						if (HM.isincrit())

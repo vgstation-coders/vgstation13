@@ -136,11 +136,6 @@
 		if(!src.isDead() && src.ckey) //Message admins if the hit mob is alive and has a ckey
 			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 
-		if(!iscarbon(M))
-			src.LAssailant = null
-		else
-			src.LAssailant = M
-
 /*
 	Ear and eye protection
 
