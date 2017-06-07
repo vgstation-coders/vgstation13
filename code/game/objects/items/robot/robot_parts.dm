@@ -312,3 +312,14 @@
 			sabotaged = 1
 		return
 	..()
+
+/obj/item/robot_parts/robot_suit/complete
+	name = "robot endoskeleton"
+	desc = "A complex metal backbone with standard limb sockets and pseudomuscle anchors."
+	icon_state = "robo_suit"
+	l_arm = 1
+	r_arm = 1
+	l_leg = 1
+	r_leg = 1
+	chest = 1
+	head = 1
