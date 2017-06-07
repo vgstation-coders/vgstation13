@@ -1678,19 +1678,21 @@ mob/living/carbon/human/isincrit()
 				return_organs += damagedorgan
 		return return_organs
 
-/mob/living/carbon/human/get_heart()	
+/mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
-	
+
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
+//Needs to be passed the name of the TYPE of organ with no capitalization, else it fails. No /improver Vox Lungs please
 //example: H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
-mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea, var/organstring)
+	if(!organstring)
+		message_admins("[src] ([src.ckey]) had remove_internal_organ called with no organstring by [user], targetorgan was [targetorgan]. Please notify coders.")
+		return 0
 	var/obj/item/organ/extractedorgan
-
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
 		if(extractedorgan && istype(extractedorgan))
-
 			// Stop the organ from continuing to reject.
 			extractedorgan.organ_data.rejecting = null
 
@@ -1698,15 +1700,17 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
 			if(!organ_blood || !organ_blood.data["blood_DNA"])
 				vessel.trans_to(extractedorgan, 5, 1, 1)
-			
-			internal_organs_by_name[targetorgan.name] = null
-			internal_organs_by_name -= targetorgan.name
+
+
+			internal_organs_by_name[organstring] = null
+			internal_organs_by_name -= organstring
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
-			
+
+
 			return extractedorgan
-		
+
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE

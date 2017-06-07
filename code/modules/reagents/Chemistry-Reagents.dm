@@ -2368,7 +2368,7 @@
 
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
-		
+
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
@@ -2401,13 +2401,13 @@
 
 	if(..())
 		return 1
-	
+
 	M.reagents.add_reagent ("hyperzine", 0.03) //To pretend it's all okay.
 	if(ishuman(M))
 		if(data<121 && !has_been_hypozined)
 			has_been_hypozined = 1
 			has_had_heart_explode = 0 //Fuck them UP after they're done going fast.
-			
+
 	switch(data)
 		if(60 to 99)	//Speed up after a minute
 			if(data==60)
@@ -2426,7 +2426,7 @@
 				if(prob(10))
 					if (M.get_heart())
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "You feel your heart racing", "You feel like running as far as you can")]!")
-					else 
+					else
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
 				H.adjustFireLoss(0.1)
 		if(115 to 120)	//traverse at a velocity exceeding the norm
@@ -2434,13 +2434,13 @@
 				to_chat(M, "<span class='alert'>Your muscles are burning up!")
 				M.movement_speed_modifier += 2
 				oldspeed += 2
-			
+
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(25))
 					if (M.get_heart())
 						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
-					else 
+					else
 						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
 				H.adjustToxLoss(1)
 				H.adjustFireLoss(2)
@@ -2454,7 +2454,7 @@
 		has_had_heart_explode = 1
 		if(!override_remove)
 			holder.remove_reagent(src.id) //Clean them out
-		
+
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if(explodeheart)
@@ -2464,13 +2464,13 @@
 						if(H.species.name != "Diona" && damagedheart) //fuck dionae
 							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
 							damagedheart.damage += 200 //Bye heart.
-							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST), "heart"))
 							H.adjustOxyLoss(heartdamage)
 						else
 							to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
 							for(var/datum/organ/external/E in H.organs)
 								E.droplimb(1, 1) //Bye limbs!
-								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST), "heart")) //and heart!
 					else if (heartdamage < 100)
 						damagedheart.damage += heartdamage
 						H.adjustOxyLoss(heartdamage)
@@ -2484,7 +2484,7 @@
 						H.adjustFireLoss(heartdamage / 3)
 						H.adjustToxLoss(heartdamage / 8)
 		else
-			M.gib() 
+			M.gib()
 		data = 1
 		oldspeed = 0
 
