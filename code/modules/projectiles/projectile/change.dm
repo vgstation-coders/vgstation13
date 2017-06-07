@@ -116,16 +116,12 @@
 				if(M.default_language)
 					Slime.default_language = M.default_language
 			if("xeno")
-				var/alien_caste = pick("Hunter","Sentinel","Drone","Larva")
+				var/alien_caste = pick("Hunter","Sentinel")
 				switch(alien_caste)
 					if("Hunter")
 						new_mob = new /mob/living/carbon/alien/humanoid/hunter(M.loc)
 					if("Sentinel")
 						new_mob = new /mob/living/carbon/alien/humanoid/sentinel(M.loc)
-					if("Drone")
-						new_mob = new /mob/living/carbon/alien/humanoid/drone(M.loc)
-					else
-						new_mob = new /mob/living/carbon/alien/larva(M.loc)
 				var/mob/living/carbon/alien/Alien = new_mob
 				Alien.languages |= M.languages
 				if(M.default_language)
