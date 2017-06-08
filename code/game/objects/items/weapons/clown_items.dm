@@ -36,6 +36,9 @@
 		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
 			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
 
+	if(!do_after(user, target, 60))
+		return
+
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
