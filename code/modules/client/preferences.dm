@@ -184,7 +184,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/list/roles=list() // "role" => ROLEPREF_*
 
 	//attack animation type
-	var/attack_animation = NO_ANIMATION
+	var/attack_animation = PERSON_ANIMATION
 
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 
