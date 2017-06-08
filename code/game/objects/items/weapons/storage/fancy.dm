@@ -23,6 +23,9 @@
 	var/icon_type = "donut"
 	var/plural_type = "s" //Why does the english language have to be so complicated to work with ?
 	var/empty = 0
+	var/descriptive_type = "" //piece of, stick of, et cetera
+	var/plural_descriptive_type = "" //pieces of, sticks of
+	var/box_type = "box"
 
 	foldable = /obj/item/stack/sheet/cardboard
 
@@ -41,11 +44,11 @@
 /obj/item/weapon/storage/fancy/examine(mob/user)
 	..()
 	if(contents.len <= 0)
-		to_chat(user, "<span class='info'>There are no [src.icon_type][plural_type] left in the box.</span>")
+		to_chat(user, "<span class='info'>There are no [plural_descriptive_type][src.icon_type][plural_type] left in the [box_type].</span>")
 	else if(contents.len == 1)
-		to_chat(user, "<span class='info'>There is one [src.icon_type] left in the box.</span>")
+		to_chat(user, "<span class='info'>There is one [descriptive_type][src.icon_type] left in the [box_type].</span>")
 	else
-		to_chat(user, "<span class='info'>There are [src.contents.len] [src.icon_type][plural_type] in the box.</span>")
+		to_chat(user, "<span class='info'>There are [src.contents.len] [plural_descriptive_type][src.icon_type][plural_type] in the [box_type].</span>")
 
 
 /*
@@ -279,6 +282,7 @@
 	icon_type = "cigarette"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	w_type=RECYK_MISC
+	var/equip_from_box = TRUE
 
 /obj/item/weapon/storage/fancy/cigarettes/New()
 	..()
@@ -309,7 +313,7 @@
 	if(!istype(M, /mob))
 		return
 
-	if(M == user && user.zone_sel.selecting == "mouth" && contents.len > 0 && !user.wear_mask)
+	if(equip_from_box && M == user && user.zone_sel.selecting == "mouth" && contents.len > 0 && !user.wear_mask)
 		var/obj/item/clothing/mask/cigarette/W = new /obj/item/clothing/mask/cigarette(user)
 		reagents.trans_to(W, (reagents.total_volume/contents.len))
 		user.equip_to_slot_if_possible(W, slot_wear_mask)
@@ -530,3 +534,37 @@
 	storage_slots = 2
 
 //SLIDER BOXES END
+
+////////////
+//GUM PACK//
+////////////
+/obj/item/weapon/storage/fancy/cigarettes/gum
+	name = "pack of chewing gum"
+	desc = "Guaranteed extra chewy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "gum_pack"
+	item_state = null
+	storage_slots = 10
+	can_only_hold = list("/obj/item/gum") // Strict type check.
+	icon_type = "gum"
+	plural_type = ""
+	descriptive_type = "stick of "
+	plural_descriptive_type = "sticks of "
+	box_type = "pack"
+	equip_from_box = FALSE
+
+/obj/item/weapon/storage/fancy/cigarettes/gum/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to storage_slots)
+		new /obj/item/gum(src)
+
+/obj/item/weapon/storage/fancy/cigarettes/gum/update_icon()
+	return
+
+/obj/item/weapon/storage/fancy/cigarettes/gum/remove_from_storage(obj/item/gum/G, atom/new_location)
+	if(istype(G))
+		if(reagents.total_volume)
+			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
+	..()

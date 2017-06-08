@@ -506,7 +506,7 @@
 	for(var/mob/living/M in view(toxrange, src.loc))
 		if(M.flags & INVULNERABLE)
 			continue
-		M.apply_effect(rand(radiationmin,radiation), IRRADIATE)
+		M.apply_radiation(rand(radiationmin,radiation), RAD_EXTERNAL)
 		toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
 		M.apply_effect(toxdamage, TOX)
 	return
@@ -539,7 +539,7 @@
 /obj/machinery/singularity/proc/smwave()
 	for(var/mob/living/M in view(10, src.loc))
 		if(prob(67))
-			M.apply_effect(rand(energy), IRRADIATE)
+			M.apply_radiation(rand(energy), RAD_EXTERNAL)
 			to_chat(M, "<span class='warning'>You hear an uneartly ringing, then what sounds like a shrilling kettle as you are washed with a wave of heat.</span>")
 			to_chat(M, "<span class='notice'>Miraculously, it fails to kill you.</span>")
 		else

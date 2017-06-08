@@ -194,7 +194,7 @@
 		return
 
 	for(var/mob/living/M in viewers(src, null))
-		M.radiation += rand(5, 10)
+		M.apply_radiation(rand(5, 10), RAD_EXTERNAL)
 
 	..()
 

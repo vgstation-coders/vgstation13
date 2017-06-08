@@ -29,7 +29,7 @@
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)
 	s.start()
-	AM.radiation += 50
+	AM.apply_radiation(50, RAD_INTERNAL)
 	randmutb(AM)
 	domutcheck(AM,null)
 	qdel(src)

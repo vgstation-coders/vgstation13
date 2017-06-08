@@ -8,6 +8,8 @@
 	return null
 
 /proc/get_area(const/atom/O)
+	if(isarea(O))
+		return O
 	var/turf/T = get_turf(O)
 	if(T)
 		return T.loc

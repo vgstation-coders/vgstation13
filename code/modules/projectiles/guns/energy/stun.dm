@@ -154,7 +154,7 @@
 		to_chat(M, "<span class='warning'>\The [src] makes a noise.</span>")
 		return 1
 	if(prob(15))
-		M.apply_effect(rand(15,30), IRRADIATE)
+		M.apply_radiation(rand(15,30), RAD_EXTERNAL)
 		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
 		return 1
 	if(prob(10))

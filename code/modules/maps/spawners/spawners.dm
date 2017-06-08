@@ -1087,8 +1087,8 @@
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/item/complete/rig/soviet,
-		/obj/item/complete/rig/nazi,
+		/obj/abstract/loadout/soviet_rigsuit,
+		/obj/abstract/loadout/nazi_rigsuit,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1165,9 +1165,9 @@
 	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/item/complete/rig/soviet,
-	/obj/item/complete/rig/nazi,
-	/obj/item/complete/outfit/dredd
+	/obj/abstract/loadout/soviet_rigsuit,
+	/obj/abstract/loadout/nazi_rigsuit,
+	/obj/abstract/loadout/dredd_gear
 )
 
 /obj/abstract/map/spawner/safe/medal

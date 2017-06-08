@@ -172,7 +172,7 @@
 	name = "utility robot jetpack"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering)
+	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering,/obj/item/weapon/robot_module/combat)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 	add_to_mommis = 1
 

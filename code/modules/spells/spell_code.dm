@@ -549,3 +549,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/on_removed(mob/user)
 	return
+
+/spell/proc/on_holder_death(mob/user)
+	return

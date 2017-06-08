@@ -438,7 +438,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			new_character.add_language("[client.prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
-		client.prefs.real_name = random_name(new_character.gender)
+		client.prefs.real_name = random_name(new_character.gender, new_character.species.name)
 		client.prefs.randomize_appearance_for(new_character)
 	else
 		client.prefs.copy_to(new_character)
@@ -474,7 +474,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
-		
+
 	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE

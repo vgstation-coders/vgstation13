@@ -1014,7 +1014,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return
 	owner.visible_message("<span class = 'warning'>The flesh falls off of \the [owner]'s [display_name]!</span>","<span class = 'warning'>The flesh is falling off of your [display_name]!</span>")
 	var/new_species_name
-	if(isvox(src))
+	if(isvox(owner))
 		new_species_name = "Skeletal Vox"
 	else
 		new_species_name = "Skellington"

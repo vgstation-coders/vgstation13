@@ -1128,6 +1128,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 2,
+		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake = 4,
@@ -1145,6 +1146,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 40,
 		/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped = 75,
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
+		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		)
 
 	pack = /obj/structure/vendomatpack/snack
@@ -1620,6 +1622,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/plastiseed = 3,
 		/obj/item/seeds/riceseed = 3,
 		/obj/item/seeds/cinnamomum = 3,
+		/obj/item/seeds/avocadoseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -2465,3 +2468,30 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/lipstick/random = 5,
 		)
 	pack = /obj/structure/vendomatpack/barbervend
+
+
+/obj/machinery/vending/makeup
+	name = "Sapphire Cosmetics"
+	desc = "A vending machine full of cosmetics and beauty products."
+	product_slogans = "There is no such thing as natural beauty.; Wear the look of the future.;Be the beauty in the eye of every beholder."
+	product_ads = "Why be yourself when you can be perfection?"
+	vend_reply = "The other girls will be so envious."
+	icon_state = "makeup"
+	products = list(
+		/obj/item/weapon/eyeshadow = 3,
+		/obj/item/weapon/eyeshadow/jade = 3,
+		/obj/item/weapon/eyeshadow/purple = 3,
+		/obj/item/weapon/lipstick/black = 3,
+		/obj/item/weapon/lipstick/blue = 3,
+		/obj/item/weapon/lipstick/jade = 3,
+		/obj/item/weapon/lipstick/purple = 3,
+		/obj/item/weapon/lipstick = 3,
+		/obj/item/weapon/pocket_mirror = 3,
+		)
+	contraband = list(
+		/obj/item/weapon/hair_dye = 3,
+		)
+	premium = list(
+		/obj/item/clothing/head/hairflower = 3,
+		)
+	pack = /obj/structure/vendomatpack/makeup

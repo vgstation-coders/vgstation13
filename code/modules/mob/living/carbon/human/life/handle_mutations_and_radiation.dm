@@ -131,6 +131,9 @@
 		var/major_rad_multiplier = max(1, radiation/70)
 		var/extreme_rad_multiplier = max(1, radiation/100)
 
+		if(reagents.has_reagent(ARITHRAZINE) && prob(51-extreme_rad_multiplier))
+			return
+
 		if(rad_tick > RADDOSELIGHT)
 			if(prob(5*rad_multiplier))
 				//Vomit
@@ -141,27 +144,32 @@
 					to_chat(src, "<span class = 'danger'>Your nose starts bleeding!</span>")
 			if(prob(5*major_rad_multiplier))
 				//Hallucination
-				hallucination += rand(1,5)*minor_rad_multiplier
+				hallucination += rand(1,5)*major_rad_multiplier
 		if(rad_tick > RADDOSEMINOR)
 			if(prob(2*major_rad_multiplier))
 				//Internal hemorrhaging
 				var/list/limbs_to_bleed = list()
+				var/wound_count
 				for(var/datum/organ/external/E in organs)
 					if(!E.is_organic())
 						continue
 					limbs_to_bleed.Add(E)
-				if(limbs_to_bleed.len)
+					wound_count += E.wounds.len
+				if(wound_count < 3*minor_rad_multiplier && limbs_to_bleed.len) //Some form of limit to the internal bleeding
 					var/datum/organ/external/victim = pick(limbs_to_bleed)
-					if(prob(35))
-						to_chat(src, "<span class = 'danger'>You feel something tear in your [victim.display_name]</span>")
-					var/datum/wound/internal_bleeding/I = new (1*minor_rad_multiplier)
-					victim.wounds += I
+					if(victim.wounds.len < 1*major_rad_multiplier)
+						if(prob(35))
+							to_chat(src, "<span class = 'danger'>You feel something tear in your [victim.display_name]</span>")
+						var/datum/wound/internal_bleeding/I = new (1*major_rad_multiplier)
+						victim.wounds += I
 		if(rad_tick > RADDOSEADVANCED)
 			if(prob(5*rad_multiplier))
 				//Organ damage
 				var/list/organ_to_damage = list()
 				for(var/datum/organ/internal/I in internal_organs)
 					if(I.robotic)
+						continue
+					if(I.damage > 15*rad_multiplier)
 						continue
 					organ_to_damage.Add(I)
 				if(organ_to_damage.len)
@@ -217,22 +225,24 @@
 				switch(inst)
 
 					if(1)
-						//Drop some meat
-						to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
-						var/sourcename = real_name
-						var/sourcejob = job
-						var/sourcenutriment = nutrition / 15
+						var/sourcenutriment = nutrition / 5
+						if(sourcenutriment > 1)
+							//Drop some meat
+							to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
+							var/sourcename = real_name
+							var/sourcejob = job
 
-						var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
-						newmeat.name = sourcename + " " + newmeat.name
-						newmeat.subjectname = sourcename
-						newmeat.subjectjob = sourcejob
-						newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment)
-						var/turf/Tx = get_turf(src)
-						newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
 
-						if(!Tx.density)
-							blood_splatter(Tx,src,TRUE)
+							var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
+							newmeat.name = sourcename + " " + newmeat.name
+							newmeat.subjectname = sourcename
+							newmeat.subjectjob = sourcejob
+							newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment)
+							var/turf/Tx = get_turf(src)
+							newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
+
+							if(!Tx.density)
+								blood_splatter(Tx,src,TRUE)
 
 					if(2)
 						//Drop a limb
@@ -271,9 +281,22 @@
 		if(rad_tick > RADDOSEFATAL)
 			if(prob(0.01*extreme_rad_multiplier))
 				//Ghoulification
-				if(set_species("Ghoul"))
-					to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
-					spawn(1 SECONDS)
-						Knockdown(3)
-						regenerate_icons()
-						visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")
+				if(prob(5*getBrainLoss())) //Ferality
+					to_chat(src, "[pick("<span class = 'notice'>You feel yourself fading away.","<span class = 'danger'>You try to keep a hold of what you once were, but your mind shatters as you sink into the darkness.","<span class = 'notice'>You are no more. All that is left is a twisted husk of your former self, and it hungers.")]</span>")
+					var/mob/living/simple_animal/hostile/necro/zombie/to_spawn
+					if(species.flags & RAD_GLOW && prob(20*extreme_rad_multiplier))
+						to_spawn = new /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one(get_turf(src))
+					else
+						to_spawn = new /mob/living/simple_animal/hostile/necro/zombie/ghoul(get_turf(src))
+					to_spawn.get_clothes(src, to_spawn)
+					to_spawn.name = real_name
+					visible_message("<span class='danger'>\The [src] seems to jitter and gnash as their form loses bulk, and their eyes lose all sense of sentience.</span>")
+					qdel(src)
+					return
+				else
+					if(set_species("Ghoul"))
+						to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
+						spawn(1 SECONDS)
+							Knockdown(3)
+							regenerate_icons()
+							visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")

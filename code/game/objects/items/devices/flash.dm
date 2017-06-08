@@ -38,6 +38,7 @@
 
 
 /obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob)
+	var/length
 	if(!user || !M) //sanity
 		return
 
@@ -126,12 +127,18 @@
 					else
 						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
 	else if(issilicon(M))
+		var/mob/living/silicon/R = M
 		if(flashfail)
-			user.visible_message("<span class='notice'>[user] fails to overload [M]'s sensors with the flash!</span>")
+			user.visible_message("<span class='notice'>[user] fails to overload [R]'s sensors with the flash!</span>")
 		else
-			M.Knockdown(rand(5, 10))
-			M.flash_eyes(affect_silicon = 1)
-			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
+			length = rand(5,10)
+			R.Knockdown(length)
+			R.flashed = 1
+			R.flash_eyes(affect_silicon = 1)
+			user.visible_message("<span class='warning'>[user] overloads [R]'s sensors with the flash!</span>")
+			spawn(length SECONDS)
+				if (R.flashed)
+					R.flashed = 0
 	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 

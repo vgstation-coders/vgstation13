@@ -302,11 +302,16 @@
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
 	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
+	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
 		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
 			. = pda.id.assignment
 		else
 			. = pda.ownjob
+	else if (istype(wallet))
+		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
+		if(istype(wallet_id))
+			. = wallet_id.assignment
 	else if (istype(id))
 		. = id.assignment
 	else
@@ -1474,7 +1479,7 @@
 				step_towards(I, src)
 				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
 	if(radiations)
-		apply_effect(current_size * radiations, IRRADIATE)
+		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)
 		if(shoes.clothing_flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
@@ -1683,7 +1688,7 @@ mob/living/carbon/human/isincrit()
 
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
-//example: H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+//example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/extractedorgan
 	if(targetorgan && istype(targetorgan))
@@ -1698,13 +1703,11 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 			if(!organ_blood || !organ_blood.data["blood_DNA"])
 				vessel.trans_to(extractedorgan, 5, 1, 1)
 
-
 			internal_organs_by_name[organstring] = null
 			internal_organs_by_name -= organstring
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
-
 
 			return extractedorgan
 
@@ -1769,6 +1772,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		"b_eyes",
 		"s_tone",
 		"lip_style",
+		"eye_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",

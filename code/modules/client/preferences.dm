@@ -209,7 +209,7 @@ var/const/MAX_SAVE_SLOTS = 8
 			while(!speciesinit)
 				sleep(1)
 			randomize_appearance_for()
-			real_name = random_name(gender)
+			real_name = random_name(gender, species)
 			save_character_sqlite(theckey, C, default_slot)
 			saveloaded = 1
 
@@ -220,7 +220,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		attempts++
 	if(attempts >= 5)//failsafe so people don't get locked out of the round forever
 		randomize_appearance_for()
-		real_name = random_name(gender)
+		real_name = random_name(gender, species)
 		log_debug("Player [theckey] FAILED to load save 5 times and has been randomized.")
 		log_admin("Player [theckey] FAILED to load save 5 times and has been randomized.")
 		if(theclient)

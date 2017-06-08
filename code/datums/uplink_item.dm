@@ -193,6 +193,13 @@ var/list/uplink_items = list()
 	cost = 6
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/bananagun
+	name = "Banana Gun"
+	desc = "One shot only, appears to be a banana until fired. Do not attempt to eat."
+	item = /obj/item/weapon/gun/projectile/banana
+	cost = 2
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
@@ -321,7 +328,7 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 12
 	job = list("Medical Doctor", "Chief Medical Officer")
-	
+
 /datum/uplink_item/jobspecific/hypozinebottle
 	name = "Lethal Speed Chemical"
 	desc = "30 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
@@ -621,6 +628,12 @@ var/list/uplink_items = list()
 	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls, attach it to organisms to destroy them, or connect a signaler to its wiring to make it remotely detonable. It has a modifiable timer with a minimum setting of 10 seconds."
 	item = /obj/item/weapon/plastique
 	cost = 4
+
+/datum/uplink_item/device_tools/explosive_gum
+	name = "Explosive Chewing Gum"
+	desc = "A single stick of explosive chewing gum, detonates five seconds after you start chewing. Can be stuck to walls and objects."
+	item = /obj/item/gum/explosive
+	cost = 8
 
 /datum/uplink_item/device_tools/powersink
 	name = "Power Sink"

@@ -148,6 +148,14 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
 	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
 
+/datum/recipe/avocadoburger
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -1141,6 +1149,17 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
+/datum/recipe/avocadosoup
+	reagents = list(WATER = 5, LIMEJUICE = 5, CREAM = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
+
 // Sandwiches //////////////////////////////////////////////////
 
 /datum/recipe/sandwich
@@ -1205,6 +1224,14 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
+
+/datum/recipe/avocadotoast
+	reagents = list (SODIUMCHLORIDE = 2)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadotoast
 
 // Coder Snacks ///////////////////////////////////////////////////////
 
@@ -1507,7 +1534,8 @@
 /datum/recipe/guacamole
 	reagents = list(LIMEJUICE = 10, SODIUMCHLORIDE = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
 		)
 	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
 
@@ -1940,6 +1968,15 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
 
+/datum/recipe/avocadomilkshake
+	reagents = list(MILK = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/icecream,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
+
 /datum/recipe/potatosalad
 	reagents = list(WATER = 10, MILK = 10, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(
@@ -2280,7 +2317,7 @@
 		/obj/item/weapon/ore/glass,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
-	
+
 /datum/recipe/power_crepe
 	reagents = list(RADIUM = 5)
 	items = list(

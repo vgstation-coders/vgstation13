@@ -74,6 +74,10 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 /mob/living/simple_animal/hostile/glow_orb/AttackingTarget()
 	return
 
+/mob/living/simple_animal/hostile/glow_orb/Process_Spacemove(var/check_drift = 0)
+	return 1
+
+
 /mob/living/simple_animal/hostile/glow_orb/attack_hand(mob/living/carbon/human/M)
 	if(M.a_intent == I_HELP)
 		if(M != following)
