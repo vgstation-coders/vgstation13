@@ -6,7 +6,7 @@
 var/global/num_vending_terminals = 1
 
 /datum/data/vending_product
-	var/product_name = "\improper generic"
+	var/product_name = "generic"
 	var/product_path = null
 	var/original_amount = 0
 	var/amount = 0
@@ -17,7 +17,7 @@ var/global/num_vending_terminals = 1
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
-	name = "\improper compressed sale cartridge"
+	name = "compressed sale cartridge"
 	desc = "A compressed matter variant used to load vending machines."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "rcd"
@@ -515,7 +515,7 @@ var/global/num_vending_terminals = 1
 
 			//create an entry on the buy's account's transaction log
 			var/datum/transaction/T = new()
-			T.target_name = "\improper [linked_account.owner_name] (via [src.name])"
+			T.target_name = "[linked_account.owner_name] (via [src.name])"
 			T.purpose = "Purchase of [currently_vending.product_name]"
 			T.amount = "-[transaction_amount]"
 			T.source_terminal = machine_id
@@ -1013,7 +1013,7 @@ var/global/num_vending_terminals = 1
 /*
 
 /obj/machinery/vending/[vendors name here]   // --vending machine template   :)
-	name = "\improper "
+	name = ""
 	desc = ""
 	icon = ''
 	icon_state = ""
@@ -1026,7 +1026,7 @@ var/global/num_vending_terminals = 1
 
 /*
 /obj/machinery/vending/atmospherics //Commenting this out until someone ponies up some actual working, broken, and unpowered sprites - Quarxink
-	name = "\improper Tank Vendor"
+	name = "Tank Vendor"
 	desc = "A vendor with a wide variety of masks and gas tanks."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "dispenser"
