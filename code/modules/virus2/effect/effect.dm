@@ -941,6 +941,28 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				mob.apply_damage(10)
 
 
+/datum/disease2/effect/thick_blood
+	name = "Hyper-Fibrinogenesis"
+	stage = 3
+	var/skip = FALSE
+
+/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob)
+	if(skip)
+		return
+	var/mob/living/carbon/human/H = mob
+	if(ishuman(H))
+		if(H.species && (H.species.anatomy_flags & NO_BLOOD))	//Can't have thick blood if you don't have blood at all.
+			skip = TRUE
+			return
+	if (H.reagents.get_reagent_amount(CLOTTING_AGENT) < 5)
+		H.reagents.add_reagent(CLOTTING_AGENT, 5)
+		if (ishuman(H))
+			for (var/datum/organ/external/E in H.organs)
+				if (E.status & ORGAN_BLEEDING)
+					to_chat(mob, "<span class = 'notice'>You feel your wounds rapidly scabbing over.</span>")
+					break
+
+
 ////////////////////////STAGE 4/////////////////////////////////
 
 
