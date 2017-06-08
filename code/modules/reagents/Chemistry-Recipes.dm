@@ -2852,12 +2852,5 @@
 	required_reagents = list(ZEAXANTHIN = 1, MESCALINE = 1)
 	result_amount = 2
 
-/datum/chemical_reaction/osteopyrum
-	name = "Osteopyrum"
-	id = OSTEOPYRUM
-	result = OSTEOPYRUM
-	required_reagents = list(OPIUM = 1, FORMIC_ACID = 1)
-	result_amount = 2
-
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

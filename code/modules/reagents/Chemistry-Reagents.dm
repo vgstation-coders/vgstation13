@@ -5873,36 +5873,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		O.light_color = init_color
 		O.set_light(0)
 
-/datum/reagent/osteopyrum
-	name = "Osteopyrum"
-	id = OSTEOPYRUM
-	description = "Osteopyrum is capable of accelerating the mitosis of osteocytes to dangerous levels."
-	reagent_state = LIQUID
-	color = "#575c70" //rgb: 87, 92, 112
-
-/datum/reagent/osteopyrum/on_mob_life(var/mob/living/M)
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(!(H.species.anatomy_flags & NO_BONES))
-			if(prob(20))
-				var/list/broken_limbs = list()
-				for(var/datum/organ/external/O in H.organs)
-					if(O.is_broken())
-						broken_limbs.Add(O)
-				if(broken_limbs.len)
-					var/datum/organ/external/E = pick(broken_limbs)
-					E.status &= ~ORGAN_BROKEN
-					E.perma_injury = 0
-					var/healed_damage = 0
-					if(E.brute_dam > E.min_broken_damage * config.organ_health_multiplier)
-						healed_damage = E.brute_dam - ((E.min_broken_damage * config.organ_health_multiplier) - 1)
-						E.heal_damage(healed_damage)
-					E.take_damage(0, healed_damage + 20)
-					H.visible_message("<span class='warning'>You see the bones in \the [H]'s [E.display_name] move in an unnatural way.</span>", \
-					"<span class='warning'>Your [E.display_name] burns as the bones inside it realign!</span>", \
-					"<span class='notice'>You hear an odd crack.</span>")
-					playsound(H.loc, "fracture", 100, 1, -2)
-
