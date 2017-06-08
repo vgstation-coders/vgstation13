@@ -233,11 +233,54 @@
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
-				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				M.visible_message( \
-					"<span class='notice'>[M] shakes hands with [src].</span>", \
-					"<span class='notice'>You shake hands with [src].</span>", \
-					)
+				var/shock_damage = 5
+				var/shock_time = 0
+				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
+				var/obj/item/clothing/gloves/T = src.get_item_by_slot(slot_gloves)
+				var/mob/living/carbon/human/H
+				var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
+
+				if (istype(T, /obj/item/clothing/gloves))
+					shock_damage = T.siemens_coefficient * shock_damage
+
+				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient > 0)
+					shock_time = U.cell.charge/STUNGLOVES_CHARGE_COST
+					shock_damage = shock_damage * shock_time
+
+					if ((M_CLUMSY in M.mutations) && prob(10))
+						to_chat(M, "<span class='warning'>You accidentally shake hands with yourself!</span>")
+						H = M
+					else
+						H = src
+						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
+						add_logs(H, M, "stungloved", admin = TRUE)
+			
+					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
+
+					sparks.set_up(3, 0, H)
+					sparks.start()
+
+					H.Stun(shock_time SECONDS)
+					M.Stun(shock_time SECONDS)
+					H.Jitter(shock_time SECONDS)
+
+					spawn(shock_time SECONDS)
+						U.cell.charge = 0
+						H.remove_jitter()
+						H.SetStunned(0)
+						H.SetKnockdown(5)
+						M.SetStunned(0)
+						to_chat(M, "<span class='notice'>Your gloves run out of power.</span>")
+				else
+					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient == 0)
+						to_chat(M, "<span class='notice'>\The [src]'s insulated gloves prevent them from being shocked.</span>")
+
+					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					M.visible_message( \
+						"<span class='notice'>[M] shakes hands with [src].</span>", \
+						"<span class='notice'>You shake hands with [src].</span>", \
+						)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
