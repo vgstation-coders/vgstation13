@@ -11,16 +11,12 @@
 #define DESIRE_MASK "desire_mask"
 #define DESIRE_ID "desire_id"
 #define DESIRE_HAVE_WEAPON "desire_have_weapon"
-#define DESIRE_USE_WEAPON "desire_use_weapon"
-#define DESIRE_TREASURE "desire_treasure"
 #define DESIRE_CONFLICT "desire_conflict"
 
 var/list/desire_ranks = list(
-	DESIRE_USE_WEAPON,
 	DESIRE_HAVE_WEAPON,
 	DESIRE_CONFLICT,
 	DESIRE_FOOD,
-	DESIRE_TREASURE,
 	DESIRE_UNDERCLOTHING,
 	DESIRE_SHOES,
 	DESIRE_BACK,

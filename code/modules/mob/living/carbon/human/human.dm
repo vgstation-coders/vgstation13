@@ -1833,3 +1833,4 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	NPC_brain.AddComponent(/datum/component/ai/human_brain)
 	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
 	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
+	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
