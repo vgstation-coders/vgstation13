@@ -125,7 +125,7 @@
 	desc = "A stunning shell."
 	icon_state = "stunshell"
 	projectile_type = "/obj/item/projectile/bullet/stunshot"
-	starting_materials = list(MAT_IRON = 2500)
+	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/dart

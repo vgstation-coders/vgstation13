@@ -244,7 +244,7 @@
 	id = "stunshell"
 	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 4000)
+	materials = list(MAT_IRON = 1000)
 	category = "Weapons"
 	build_path = /obj/item/ammo_casing/shotgun/stunshell
 
@@ -257,3 +257,13 @@
 	materials = list(MAT_IRON = 12000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/storage/pneumatic
+
+/datum/design/stunshellbox
+	name = "Stun Shell Box"
+	desc = "A box of Stun Shells"
+	id = "stunshell_box"
+	req_tech = list(Tc_COMBAT = 3, Tc_MATERIALS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 15000, MAT_CARDBOARD = 3750)
+	category = "Weapons"
+	build_path = /obj/item/weapon/storage/box/stunshells
