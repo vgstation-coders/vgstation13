@@ -249,8 +249,10 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	mymob.client.screen += src.holomap_obj
 
 	reload_fullscreen()
-	mymob.update_action_buttons(1)
 	update_parallax_existence()
+	spawn(1)//Gives the action buttons some time to have a HUD to work with
+		mymob.update_action_buttons(1)
+
 
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)
 /mob/verb/button_pressed_F12()
