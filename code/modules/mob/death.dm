@@ -43,6 +43,9 @@
 	stat_collection.add_death_stat(src)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
+	if(spell_masters && spell_masters.len)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
+			spell_master.on_holder_death(src)
 	if(transmogged_from)
 		var/obj/transmog_body_container/C = transmogged_from
 		var/mob/living/L = C.contained_mob
