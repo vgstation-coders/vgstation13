@@ -368,7 +368,7 @@ var/global/num_vending_terminals = 1
 			src.update_vicon()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
-			to_chat(user, "<span class='notice'>The glass in the [src] is broken! Fix it first.</span>")
+			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it first.</span>")
 			return
 	. = ..()
 	if(.)
@@ -630,11 +630,11 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
 	if(stat & (BROKEN))
-		to_chat(user, "<span class='notice'>The glass in the [src] is broken, it refuses to work.</span>")
+		to_chat(user, "<span class='notice'>The glass in \the [src] is broken, it refuses to work.</span>")
 		return
 	
 	if(stat & (NOPOWER))
-		to_chat(user, "<span class='notice'>The [src] is dark and unresponsive.</span>")
+		to_chat(user, "<span class='notice'>\The [src] is dark and unresponsive.</span>")
 		return
 		
 	if(user.lying || user.incapacitated())
@@ -642,7 +642,7 @@ var/global/num_vending_terminals = 1
 
 	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
 		if(!Adjacent(user))
-			to_chat(user, "<span class='danger'>You slam the [src] with your mind!</span>")
+			to_chat(user, "<span class='danger'>You slam \the [src] with your mind!</span>")
 			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")
 			damaged()
 
@@ -770,7 +770,7 @@ var/global/num_vending_terminals = 1
 		coin.forceMove(get_turf(src))
 		if(!usr.get_active_hand())
 			usr.put_in_hands(coin)
-		to_chat(usr, "<span class='notice'>You remove the [coin] from the [src]</span>")
+		to_chat(usr, "<span class='notice'>You remove \the [coin] from \the [src]</span>")
 		coin = null
 	usr.set_machine(src)
 
@@ -864,7 +864,7 @@ var/global/num_vending_terminals = 1
 			var/obj/item/weapon/coin/real_coin = coin
 			if(real_coin.string_attached)
 				if(prob(50))
-					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before the [src] could swallow it.</SPAN>")
+					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before \the [src] could swallow it.</SPAN>")
 					return_coin = 1
 				else
 					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
