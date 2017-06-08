@@ -2464,13 +2464,13 @@
 						if(H.species.name != "Diona" && damagedheart) //fuck dionae
 							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
 							damagedheart.damage += 200 //Bye heart.
-							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST), "heart"))
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
 							H.adjustOxyLoss(heartdamage)
 						else
 							to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
 							for(var/datum/organ/external/E in H.organs)
 								E.droplimb(1, 1) //Bye limbs!
-								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST), "heart")) //and heart!
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
 					else if (heartdamage < 100)
 						damagedheart.damage += heartdamage
 						H.adjustOxyLoss(heartdamage)
