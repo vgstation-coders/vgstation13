@@ -2,6 +2,10 @@
 /mob/verb/pray(msg as text)
 	set category = "IC"
 	set name = "Pray"
+	
+	if(istype(get_item_by_slot(slot_head), /obj/item/clothing/head/fedora))
+		to_chat(usr, "<span class='warning'>You are too euphoric to pray, you don't need any phony gods blessing, you are enlightened by your own intelligence.</span>")
+		return
 
 	if(say_disabled) //This is here to try to identify lag problems
 		to_chat(usr, "<span class='warning'>Speech is currently admin-disabled.</span>")
