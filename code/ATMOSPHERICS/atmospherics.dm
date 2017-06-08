@@ -352,7 +352,7 @@ Pipelines + Other Objects -> Pipe network
 			user.visible_message("Something is squeezing through the ducts...", "You start crawling out the ventilation system.")
 			target_move.shake(2, 3)
 			user.ventcrawl_exit_target = target_move
-			spawn
+			spawn()
 				if(do_after(user, src, 1 SECONDS))
 					user.remove_ventcrawl()
 					user.forceMove(target_move.loc) //handles entering and so on
