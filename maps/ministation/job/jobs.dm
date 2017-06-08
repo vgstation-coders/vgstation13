@@ -6,7 +6,7 @@
 
 /datum/job/New()
 	..()
-	supervisors = "the captain and the head of personnel"
+	supervisors = "the captain"
 
 /datum/job/assistant // Here so assistant appears on the top of the select job list.
 
