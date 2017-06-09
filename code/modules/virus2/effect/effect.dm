@@ -963,6 +963,16 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 					break
 
 
+/datum/disease2/effect/teratoma
+	name = "Teratoma Syndrome"
+	stage = 3
+
+/datum/disease2/effect/teratoma/activate(var/mob/living/carbon/mob)
+	var/organ_type = pick(existing_typesof(/obj/item/organ) + /obj/item/stack/teeth)
+	var/obj/item/spawned_organ = new organ_type(get_turf(mob))
+	mob.visible_message("<span class='warning'>\A [spawned_organ.name] is extruded from \the [mob]'s body and falls to the ground!</span>","<span class='warning'>\A [spawned_organ.name] is extruded from your body and falls to the ground!</span>")
+
+
 ////////////////////////STAGE 4/////////////////////////////////
 
 
