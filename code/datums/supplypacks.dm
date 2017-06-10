@@ -858,8 +858,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "security checkpoint crate"
 	group = "Security"
 
-/datum/supply_packs/fourtyfive
-	name = "NT USP pack"
+/datum/supply_packs/380auto
+	name = "NT Glock pack"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
 					/obj/item/weapon/gun/projectile/sec,
 					/obj/item/voucher/free_item/hot_drink,
@@ -870,8 +870,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_armory
 	group = "Security"
 
-/datum/supply_packs/fourtyfive/lethals
-	name = ".45 pistol lethal ammo"
+/datum/supply_packs/380auto/lethals
+	name = "NT Glock lethal ammo"
 	contains = list(/obj/item/ammo_storage/box/b380auto,
 					/obj/item/ammo_storage/magazine/m380auto/empty,
 					/obj/item/ammo_storage/magazine/m380auto/empty,
@@ -882,8 +882,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_armory
 	group = "Security"
 
-/datum/supply_packs/fourtyfive/practice
-	name = ".45 pistol practice ammo"
+/datum/supply_packs/380auto/practice
+	name = "NT Glock practice ammo"
 	contains = list(/obj/item/ammo_storage/box/b380auto/practice,
 					/obj/item/ammo_storage/magazine/m380auto/practice/empty,
 					/obj/item/ammo_storage/magazine/m380auto/practice/empty,
@@ -894,8 +894,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_security
 	group = "Security"
 
-/datum/supply_packs/fourtyfive/rubber
-	name = ".45 pistol rubber ammo"
+/datum/supply_packs/380auto/rubber
+	name = "NT Glock rubber ammo"
 	contains = list(/obj/item/ammo_storage/box/b380auto/rubber,
 					/obj/item/ammo_storage/magazine/m380auto/rubber/empty,
 					/obj/item/ammo_storage/magazine/m380auto/rubber/empty,
