@@ -872,10 +872,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/fourtyfive/lethals
 	name = ".45 pistol lethal ammo"
-	contains = list(/obj/item/ammo_storage/box/c45,
-					/obj/item/ammo_storage/magazine/c45/empty,
-					/obj/item/ammo_storage/magazine/c45/empty,
-					/obj/item/ammo_storage/magazine/c45)
+	contains = list(/obj/item/ammo_storage/box/b380auto,
+					/obj/item/ammo_storage/magazine/m380auto/empty,
+					/obj/item/ammo_storage/magazine/m380auto/empty,
+					/obj/item/ammo_storage/magazine/m380auto)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/gear
 	containername = ".45 pistol lethal ammo crate"
@@ -884,10 +884,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/fourtyfive/practice
 	name = ".45 pistol practice ammo"
-	contains = list(/obj/item/ammo_storage/box/c45/practice,
-					/obj/item/ammo_storage/magazine/c45/practice/empty,
-					/obj/item/ammo_storage/magazine/c45/practice/empty,
-					/obj/item/ammo_storage/magazine/c45/practice)
+	contains = list(/obj/item/ammo_storage/box/b380auto/practice,
+					/obj/item/ammo_storage/magazine/m380auto/practice/empty,
+					/obj/item/ammo_storage/magazine/m380auto/practice/empty,
+					/obj/item/ammo_storage/magazine/m380auto/practice)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/gear
 	containername = ".45 pistol practice ammo crate"
@@ -896,10 +896,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/fourtyfive/rubber
 	name = ".45 pistol rubber ammo"
-	contains = list(/obj/item/ammo_storage/box/c45/rubber,
-					/obj/item/ammo_storage/magazine/c45/rubber/empty,
-					/obj/item/ammo_storage/magazine/c45/rubber/empty,
-					/obj/item/ammo_storage/magazine/c45/rubber)
+	contains = list(/obj/item/ammo_storage/box/b380auto/rubber,
+					/obj/item/ammo_storage/magazine/m380auto/rubber/empty,
+					/obj/item/ammo_storage/magazine/m380auto/rubber/empty,
+					/obj/item/ammo_storage/magazine/m380auto/rubber)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/gear
 	containername = ".45 pistol rubber ammo crate"
