@@ -41,6 +41,7 @@
 	/spell/targeted/bound_object,
 	/spell/aoe_turf/conjure/snakes,
 	/spell/targeted/push,
+	/spell/targeted/feint,
 	/spell/noclothes
 	)
 
