@@ -99,6 +99,9 @@
 		if(M.stat == DEAD)
 			return
 		if(chassis.occupant.a_intent == I_HURT)
+			if(istype(chassis, /obj/mecha/working/hamsandwich))
+				to_chat(chassis.occupant, "<span class='warning'>WARNING: OSHA regulations prohibit use of \the [src] in that way.</span>")
+				return
 			M.take_overall_damage(dam_force)
 			if(!M)
 				return //we killed some sort of simple animal and the corpse was deleted.
@@ -222,7 +225,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(istype(M, /obj/mecha/working) || istype(M, /obj/mecha/combat))
+		if((istype(M, /obj/mecha/working) || istype(M, /obj/mecha/combat)) && !istype(M, /obj/mecha/working/hamsandwich))
 			return 1
 	return 0
 
@@ -249,7 +252,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
-		if(istype(M))
+		if(istype(M) && !istype(M, /obj/mecha/working/hamsandwich))
 			return 1
 	return 0
 
@@ -767,7 +770,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(!istype(M, /obj/mecha/combat/honker))
+		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/hamsandwich))
 			if(!M.proc_res["dynattackby"])
 				return 1
 	return 0
@@ -818,7 +821,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(!istype(M, /obj/mecha/combat/honker))
+		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/hamsandwich))
 			if(!M.proc_res["dynbulletdamage"] && !M.proc_res["dynhitby"])
 				return 1
 	return 0
