@@ -1,5 +1,5 @@
 /obj/structure/closet/secure_closet/engineering_chief
-	name = "chief engineer's locker"
+	name = "\improper Chief Engineer's locker"
 	req_access = list(access_ce)
 	icon_state = "securece1"
 	icon_closed = "securece"
@@ -83,7 +83,7 @@
 	new /obj/item/weapon/weldingtool/largetank(src)
 
 /obj/structure/closet/secure_closet/engineering_personal
-	name = "engineer's locker"
+	name = "\improper Engineer's locker"
 	req_access = list(access_engine_equip)
 	icon_state = "secureeng1"
 	icon_closed = "secureeng"
@@ -117,7 +117,7 @@
 	new /obj/item/clothing/glasses/scanner/material(src)
 
 /obj/structure/closet/secure_closet/engineering_atmos
-	name = "atmospheric technician's locker"
+	name = "\improper Atmospheric Technician's locker"
 	req_access = list(access_atmospherics)
 	icon_state = "secureatmos1"
 	icon_closed = "secureatmos"
@@ -153,7 +153,7 @@
 	new /obj/item/device/gps/engineering(src)
 
 /obj/structure/closet/secure_closet/engineering_mechanic
-	name = "mechanic's locker"
+	name = "\improper Mechanic's locker"
 	req_access = list(access_mechanic)
 	icon_state = "securemechni1"
 	icon_closed = "securemechni"
