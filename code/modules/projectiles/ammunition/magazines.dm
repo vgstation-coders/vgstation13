@@ -124,7 +124,6 @@
 /obj/item/ammo_storage/magazine/m380auto
 	name = "pistol magazine (.380AUTO)"
 	desc = "A magazine designed for common .380AUTO pistols. Holds 10 rounds."
-	icon = 'icons/obj/glock.dmi'
 	icon_state = "m380AUTO"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
@@ -132,7 +131,7 @@
 	caliber = ".380AUTO"
 	max_ammo = 10
 	multiple_sprites = 1
-	sprite_modulo = 10
+	sprite_modulo = 2
 
 /obj/item/ammo_storage/magazine/m380auto/empty
 	starting_ammo = 0

@@ -122,8 +122,12 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = SILENCECOMP
+	gun_flags = SILENCECOMP | EMPTYCASINGS
 
+/obj/item/weapon/gun/projectile/NTUSP/update_icon()
+	..()
+	icon_state = "secguncomp[silenced ? "-s" : ""][chambered ? "" : "-e"]"
+	
 /obj/item/weapon/gun/projectile/NTUSP/fancy
 	desc = "The NT USP is a relatively rare sidearm, produced by a NanoTrasen subsidiary. This one has a sweet pearl finish. Uses .45 rounds."
 	name = "\improper NT USP Custom"
@@ -138,7 +142,7 @@
 /obj/item/weapon/gun/projectile/sec
 	name = "\improper NT Glock"
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds."
-	icon = 'icons/obj/glock.dmi'
+	icon = 'icons/obj/biggun.dmi'
 	icon_state = "secglock"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
@@ -147,7 +151,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = SILENCECOMP
+	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
