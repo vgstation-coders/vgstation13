@@ -79,7 +79,7 @@
 	desc = "A box of .380AUTO bullets. Holds 30 rounds."
 	icon_state = "9mmred"
 	origin_tech = Tc_COMBAT + "=2"
-	ammo_type = "/obj/item/ammo_casing/c380AUTO"
+	ammo_type = "/obj/item/ammo_casing/c380auto"
 	caliber = ".380AUTO"
 	max_ammo = 30
 
@@ -87,13 +87,13 @@
 	name = "pistol ammo box (.380AUTO practice)"
 	desc = "A box of .380AUTO practice bullets. Holds 30 rounds."
 	icon_state = "9mmwhite"
-	ammo_type = "/obj/item/ammo_casing/c380AUTO/practice"
+	ammo_type = "/obj/item/ammo_casing/c380auto/practice"
 
 /obj/item/ammo_storage/box/b380auto/rubber
 	name = "pistol ammo box (.380AUTO rubber)"
 	desc = "A box of .380AUTO rubber bullets. Holds 30 rounds."
 	icon_state = "9mmblue"
-	ammo_type = "/obj/item/ammo_casing/c380AUTO/rubber"
+	ammo_type = "/obj/item/ammo_casing/c380auto/rubber"
 	
 /obj/item/ammo_storage/box/BMG50
 	name = "ammo box (.50 BMG)"
