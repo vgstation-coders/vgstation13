@@ -45,3 +45,11 @@
 /obj/item/voucher/free_item/glowing/New()
 	..()
 	set_light(1.4,2,"#FFFF00")
+	
+/obj/item/voucher/free_item/glockammo
+	name = "ammo voucher"
+	desc = "Load up! Redeem at a SecTech for two magazines of criminal-stopping .45 ammunition."
+	icon_state = "secvoucher"
+	freebies = list(/obj/item/ammo_storage/magazine/c45,/obj/item/ammo_storage/magazine/c45/rubber)
+	vend_amount = 2 
+	single_items = 1 

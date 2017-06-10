@@ -1560,6 +1560,10 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/head/helmet/siren = 2
 		)
+	vouched = list(
+		/obj/item/ammo_storage/magazine/c45 = 10,
+		/obj/item/ammo_storage/magazine/c45/rubber = 10
+		)
 
 	pack = /obj/structure/vendomatpack/security
 
