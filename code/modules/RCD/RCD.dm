@@ -118,7 +118,7 @@
 
 /obj/item/device/rcd/Topic(var/href, var/list/href_list)
 	. = ..()
-	if (. || usr.isStunned() || !(src in usr))
+	if (. || usr.isStunned() || (!(src in usr) && !istype(loc, /obj/item/mecha_parts/mecha_equipment)))
 		return 1
 
 	if (href_list["schematic"])
@@ -191,7 +191,7 @@
 	if(!selected)
 		return 1
 
-	if(~selected.flags & (RCD_SELF_SANE | RCD_RANGE) && !(user.Adjacent(A) && A.Adjacent(user))) // If RCD_SELF_SANE and RCD_RANGE are disabled we use adjacency.
+	if(~selected.flags & (RCD_SELF_SANE | RCD_RANGE) && !(user.Adjacent(A) && A.Adjacent(user)) && !istype(loc, /obj/item/mecha_parts/mecha_equipment)) // If RCD_SELF_SANE and RCD_RANGE are disabled we use adjacency.
 		return 1
 
 	if(selected.flags & RCD_RANGE && ~selected.flags & RCD_SELF_SANE && get_dist(A, user) > 1) // RCD_RANGE is used AND we're NOT SELF_SANE, use range(1)

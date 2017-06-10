@@ -500,15 +500,26 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/rcd
-	name = "\improper Exosuit-Mounted RCD"
-	desc = "An exosuit-mounted Rapid Construction Device. (Can be attached to: Any exosuit)"
+	name = "\improper Exosuit-Mounted RED"
+	desc = "An exosuit-mounted Rapid Engineering Device. (Can be attached to: Any exosuit)"
 	icon_state = "mecha_rcd"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=4"
 	equip_cooldown = 10
 	energy_drain = 250
 	range = MELEE|RANGED
+	var/device = 0	//0 - RCD, 1 - RPD
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
+	var/obj/item/device/rcd/rpd/RPD
+
+/obj/item/mecha_parts/mecha_equipment/tool/rcd/New()
+	..()
+	RPD = new(src)
+
+/obj/item/mecha_parts/mecha_equipment/tool/rcd/Destroy()
+	qdel(RPD)
+	RPD = null
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/rcd/action(atom/target)
 	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
@@ -519,76 +530,78 @@
 		target = get_turf(target)
 	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
 		return
-	playsound(chassis, 'sound/machines/click.ogg', 50, 1)
 	//meh
-	switch(mode)
-		if(0)
-			if (istype(target, /turf/simulated/wall))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					target:ChangeTurf(/turf/simulated/floor/plating)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-			else if (istype(target, /turf/simulated/floor))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					target:ChangeTurf(get_base_turf(target.z))
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-			else if (istype(target, /obj/machinery/door/airlock))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					qdel(target)
-					target = null
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-		if(1)
-			if(istype(target, /turf/space))
-				occupant_message("Building Floor...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					target:ChangeTurf(/turf/simulated/floor/plating/airless)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					spark(chassis, 2, FALSE)
-					chassis.use_power(energy_drain*2)
-			else if(istype(target, /turf/simulated/floor))
-				occupant_message("Building Wall...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					target:ChangeTurf(/turf/simulated/wall)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					spark(chassis, 2, FALSE)
-					chassis.use_power(energy_drain*2)
-		if(2)
-			if(istype(target, /turf/simulated/floor))
-				occupant_message("Building Airlock...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
-					T.autoclose = 1
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
-					chassis.use_power(energy_drain*2)
-	return
+	if(device)
+		RPD.afterattack(target, chassis.occupant)
+	else
+		playsound(chassis, 'sound/machines/click.ogg', 50, 1)
+		switch(mode)
+			if(0)
+				if (istype(target, /turf/simulated/wall))
+					occupant_message("Deconstructing [target]...")
+					set_ready_state(0)
+					if(do_after_cooldown(target))
+						if(disabled)
+							return
+						chassis.spark_system.start()
+						target:ChangeTurf(/turf/simulated/floor/plating)
+						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						chassis.use_power(energy_drain)
+				else if (istype(target, /turf/simulated/floor))
+					occupant_message("Deconstructing [target]...")
+					set_ready_state(0)
+					if(do_after_cooldown(target))
+						if(disabled)
+							return
+						chassis.spark_system.start()
+						target:ChangeTurf(get_base_turf(target.z))
+						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						chassis.use_power(energy_drain)
+				else if (istype(target, /obj/machinery/door/airlock))
+					occupant_message("Deconstructing [target]...")
+					set_ready_state(0)
+					if(do_after_cooldown(target))
+						if(disabled)
+							return
+						chassis.spark_system.start()
+						qdel(target)
+						target = null
+						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						chassis.use_power(energy_drain)
+			if(1)
+				if(istype(target, /turf/space))
+					occupant_message("Building Floor...")
+					set_ready_state(0)
+					if(do_after_cooldown(target))
+						if(disabled)
+							return
+						target:ChangeTurf(/turf/simulated/floor/plating/airless)
+						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						chassis.spark_system.start()
+						chassis.use_power(energy_drain*2)
+				else if(istype(target, /turf/simulated/floor))
+					occupant_message("Building Wall...")
+					set_ready_state(0)
+					if(do_after_cooldown(target))
+						if(disabled)
+							return
+						target:ChangeTurf(/turf/simulated/wall)
+						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						chassis.spark_system.start()
+						chassis.use_power(energy_drain*2)
+			if(2)
+				if(istype(target, /turf/simulated/floor))
+					occupant_message("Building Airlock...")
+					set_ready_state(0)
+					if(do_after_cooldown(target))
+						if(disabled)
+							return
+						chassis.spark_system.start()
+						var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
+						T.autoclose = 1
+						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
+						chassis.use_power(energy_drain*2)
 
 
 /obj/item/mecha_parts/mecha_equipment/tool/rcd/Topic(href,href_list)
@@ -597,15 +610,22 @@
 		mode = text2num(href_list["mode"])
 		switch(mode)
 			if(0)
-				occupant_message("Switched RCD to Deconstruct.")
+				occupant_message("Switched RED to Deconstruct.")
 			if(1)
-				occupant_message("Switched RCD to Construct.")
+				occupant_message("Switched RED to Construct.")
 			if(2)
-				occupant_message("Switched RCD to Construct Airlock.")
-	return
+				occupant_message("Switched RED to Construct Airlock.")
+	if(href_list["swap"])
+		device = !device
+	if(href_list["menu"])
+		RPD.attack_self(chassis.occupant)
+	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/rcd/get_equip_info()
-	return "[..()] \[<a href='?src=\ref[src];mode=0'>D</a>|<a href='?src=\ref[src];mode=1'>C</a>|<a href='?src=\ref[src];mode=2'>A</a>\]"
+	if(device)
+		return "[..()] \[<a href='?src=\ref[src];menu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
+	else
+		return "[..()] \[<a href='?src=\ref[src];mode=0'>D</a>|<a href='?src=\ref[src];mode=1'>C</a>|<a href='?src=\ref[src];mode=2'>A</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
 
 
 

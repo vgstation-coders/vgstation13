@@ -121,7 +121,7 @@
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return TRUE
-	if (!in_range(src, usr))
+	if (!in_range(src, usr) && !istype(loc, /obj/item/mecha_parts/mecha_equipment))
 		return TRUE
 
 	add_fingerprint(usr)
