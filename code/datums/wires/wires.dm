@@ -129,7 +129,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 					to_chat(L, "<span class='error'>You need wirecutters!</span>")
 
 			else if(href_list["pulse"])
-				if(istype(I, /obj/item/device/multitool))
+				if(ismultitool(I))
 					var/colour = href_list["pulse"]
 					PulseColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")
