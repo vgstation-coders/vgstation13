@@ -164,6 +164,7 @@
 		new /obj/item/device/rcd/rpd(src)
 		new /obj/item/device/analyzer(src)
 		new /obj/item/clothing/glasses/scanner/material(src)
+		new /obj/item/device/gps/engineering(src)
 		return
 
 /obj/structure/closet/secure_closet/engineering_mechanic
