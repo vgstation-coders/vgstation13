@@ -70,7 +70,12 @@
 			.++
 
 /mob/proc/get_active_hand()
-	return get_held_item_by_index(active_hand)
+	var/obj/item/held = get_held_item_by_index(active_hand)
+	if(isswitchtool(held))
+		var/obj/item/weapon/switchtool/S = held
+		if(S.deployed)
+			return S.deployed
+	return held
 
 /mob/proc/get_held_item_ui_location(index)
 	if(!is_valid_hand_index(index))
