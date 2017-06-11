@@ -61,9 +61,6 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && /obj/item/weapon/switchtool/holo)
-		to_chat(user, "You can't remove modules from this.")
-		return
 	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
 		return remove_module(user)
 	if(add_module(used_item, user))
@@ -231,15 +228,14 @@
 	//undeploy_sound = "sound/weapons/saberoff.ogg"
 	light_color =  LIGHT_COLOR_CYAN
 	mech_flags = MECH_SCAN_ILLEGAL
+	removing_item = null
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
 						"/obj/item/device/flashlight:Light" = null,
 						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null)
 
 //Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
-/obj/item/weapon/switchtool/holo/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
-	if(..())
-		return
+/obj/item/weapon/switchtool/holo/add_module(var/obj/item/D, mob/user)
 	if(istype(D, /obj/item/weapon/disk/tech_disk))
 		var/obj/item/weapon/disk/tech_disk/T = D
 		var/datum/tech/disk_tech = T.stored
@@ -251,7 +247,7 @@
 			stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
 			stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
 			to_chat(user, "The holo switchtool has medical designs now!")
-			return
+			return 1
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
 			stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
@@ -260,26 +256,26 @@
 			stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
 			stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
 			to_chat(user, "The holo switchtool has engineering designs now!")
-			return
+			return 1
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
 			to_chat(user, "The holo switchtool has a defensive design now!")
-			return
+			return 1
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
 			to_chat(user, "The holo switchtool has an offensive design now!")
-			return
+			return 1
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
 			to_chat(user, "The holo switchtool has a secret offensive design now!")
-			return
+			return 1
 	//Joke module about power[clean/creep], this is dumb but exists.
 	//How does a UV light clean even? It just sterilizes. I guess it works because it's like suit storages with their UV suit cleaner.
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
 			stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
 			to_chat(user, "The holo switchtool has a power clean design now!")
-			return
-
+			return 1
+	
 //for the inhand sprite changes
 //Big shitty wall of else if quality code
 /obj/item/weapon/switchtool/holo/update_icon()
