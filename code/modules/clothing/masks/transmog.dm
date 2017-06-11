@@ -123,7 +123,7 @@
 /obj/item/clothing/mask/morphing/amorphous/New()
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
-	target_type = pick(existing_typesof(/mob/living/simple_animal))
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid))
 
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
