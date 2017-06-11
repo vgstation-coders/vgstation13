@@ -42,6 +42,7 @@
 		bomb_appearance = null
 		name = "pipe gun"
 		desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
+		w_class = W_CLASS_MEDIUM
 	update_icon()
 
 /obj/item/weapon/gun/projectile/blastcannon/pickup(mob/user as mob)
