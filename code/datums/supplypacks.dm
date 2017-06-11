@@ -1667,6 +1667,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "anomaly container crate"
 	group = "Science"
 
+/datum/supply_packs/ttv
+	name = "Tank Transfer Valve"
+	contains = list(/obj/item/device/transfer_valve)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/plasma
+	containername = "tank transfer valve crate"
+	access = access_rd
+	group = "Science"
+
 
 //////HYDROPONICS//////
 
