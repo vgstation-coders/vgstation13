@@ -161,6 +161,7 @@
 		L.lastattacker = user
 
 		L.Stun(stunforce)
+		L.apply_effect(10, STUTTER, 0)
 		L.Knockdown(stunforce)
 		L.apply_effect(STUTTER, stunforce)
 
