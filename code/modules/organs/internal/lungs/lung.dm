@@ -6,6 +6,7 @@
 /datum/organ/internal/lungs
 	name = "lungs"
 	parent_organ = LIMB_CHEST
+	organ_type = "lungs"
 	removed_type = /obj/item/organ/lungs
 
 	min_bruised_damage = 8
