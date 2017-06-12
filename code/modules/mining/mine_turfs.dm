@@ -419,7 +419,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				M.flash_eyes(visual = 1)
 				if(prob(50))
 					M.Stun(5)
-			M.apply_effect(25, IRRADIATE)
+			M.apply_radiation(25, RAD_EXTERNAL)
 
 	if(rand(1,500) == 1)
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")

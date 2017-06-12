@@ -2,6 +2,7 @@
 /datum/organ/internal/liver
 	name = "liver"
 	parent_organ = LIMB_CHEST
+	organ_type = "liver"
 	var/process_accuracy = 10
 	var/efficiency = 1
 

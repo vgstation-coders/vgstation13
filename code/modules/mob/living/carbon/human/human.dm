@@ -1483,7 +1483,7 @@
 				step_towards(I, src)
 				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
 	if(radiations)
-		apply_effect(current_size * radiations, IRRADIATE)
+		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)
 		if(shoes.clothing_flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
@@ -1692,24 +1692,23 @@ mob/living/carbon/human/isincrit()
 
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
-//example: H.remove_internal_organ(H,internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+//example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/extractedorgan
-
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
 		if(extractedorgan && istype(extractedorgan))
-
 			// Stop the organ from continuing to reject.
 			extractedorgan.organ_data.rejecting = null
 
 			// Transfer over some blood data, if the organ doesn't have data.
 			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
+			var/organstring = targetorgan.organ_type
 			if(!organ_blood || !organ_blood.data["blood_DNA"])
 				vessel.trans_to(extractedorgan, 5, 1, 1)
 
-			internal_organs_by_name[targetorgan.name] = null
-			internal_organs_by_name -= targetorgan.name
+			internal_organs_by_name[organstring] = null
+			internal_organs_by_name -= organstring
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)

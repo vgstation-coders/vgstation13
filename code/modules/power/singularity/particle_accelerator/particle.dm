@@ -138,7 +138,7 @@
 	if(istype(M,/mob/living/carbon/monkey))
 		if(M:wear_suit) //TODO: check for radiation protection
 			radiation = round(radiation/2,1)*/
-	M.apply_effect((radiation*3),IRRADIATE,0)
+	M.apply_radiation((radiation*3),RAD_EXTERNAL)
 	M.updatehealth()
 //	to_chat(M, "<span class='warning'>You feel odd.</span>")
 	return

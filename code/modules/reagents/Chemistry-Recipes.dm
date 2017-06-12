@@ -2823,5 +2823,20 @@
 	required_reagents = list(MEDCORES = 0.1, HYPERZINE = 0.1)
 	result_amount = 2
 
+/datum/chemical_reaction/lithotorcrazine
+	name = "Lithotorcrazine"
+	id = LITHOTORCRAZINE
+	result = LITHOTORCRAZINE
+	required_reagents = list(LITHIUM = 1, ARITHRAZINE = 3, URANIUM = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/lithotorcrazine_better
+	name = "Improved Lithotorcrazine recipe"
+	id = LITHOTORCRAZINE
+	result = LITHOTORCRAZINE
+	required_reagents = list(LITHIUM = 1, HYRONALIN = 1, INAPROVALINE = 1)
+	required_catalysts = list(ROACHSHELL = 1, LITHOTORCRAZINE = 1)
+	result_amount = 10
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

@@ -298,7 +298,7 @@
 
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
-		H.apply_effect(radiation_per_punch, IRRADIATE)
+		H.apply_radiation(radiation_per_punch, RAD_INTERNAL) //Direct contact with skin
 
 	update_icon()
 

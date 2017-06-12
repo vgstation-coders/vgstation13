@@ -27,6 +27,7 @@
 
 	var/obj/abstract/Overlays/damage_overlay
 	var/image/oneway_overlay
+	var/image/oneway_self_overlay	//the image of itself that gets placed above the oneway_overlay
 	var/cracked_base = "crack"
 
 	var/fire_temp_threshold = 800
@@ -281,11 +282,14 @@
 			return
 
 	if(iscrowbar(W) && one_way)
-		to_chat(user, "<span class='notice'>You pry the sheet of plastic off the window.</span>")
-		one_way = 0
-		getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1)
-		overlays -= oneway_overlay
-		return
+		if(!is_fulltile() && get_turf(user) != get_turf(src))
+			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
+		else
+			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
+			one_way = 0
+			getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1)
+			overlays -= oneway_overlay
+			return
 
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)

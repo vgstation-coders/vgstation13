@@ -554,7 +554,7 @@
 		return 1
 
 	M.adjustToxLoss(-2 * REM)
-	M.apply_effect(4 * REM, IRRADIATE, 0)
+	M.apply_radiation(4 * REM,RAD_INTERNAL)
 
 /datum/reagent/toxin
 	name = "Toxin"
@@ -1362,7 +1362,7 @@
 	if(..())
 		return 1
 
-	M.apply_effect(2 * REM, IRRADIATE,0)
+	M.apply_radiation(2 * REM, RAD_INTERNAL)
 	//Radium may increase your chances to cure a disease
 	if(iscarbon(M)) //Make sure to only use it on carbon mobs
 		var/mob/living/carbon/C = M
@@ -1371,7 +1371,7 @@
 				var/datum/disease2/disease/V = C.virus2[ID]
 				if(prob(5))
 					if(prob(50))
-						C.radiation += 50 //Curing it that way may kill you instead
+						C.apply_radiation(50, RAD_INTERNAL) //Curing it that way may kill you instead
 						C.adjustToxLoss(100)
 					C.antibodies |= V.antigen
 
@@ -1508,7 +1508,7 @@
 		M = holder.my_atom
 	if(..())
 		return 1
-	M.apply_effect(10,IRRADIATE,0)
+	M.apply_radiation(10,RAD_INTERNAL)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -1630,7 +1630,7 @@
 	if(..())
 		return 1
 
-	M.apply_effect(1, IRRADIATE, 0)
+	M.apply_radiation(1, RAD_INTERNAL)
 
 /datum/reagent/uranium/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -1653,7 +1653,7 @@
 	if(..())
 		return 1
 
-	M.apply_effect(5, IRRADIATE, 0)
+	M.apply_radiation(5, RAD_INTERNAL)
 	if(prob(20))
 		M.advanced_mutate()
 
@@ -2262,6 +2262,14 @@
 	if(prob(15))
 		M.take_organ_damage(1, 0)
 
+/datum/reagent/lithotorcrazine
+	name = "Lithotorcrazine"
+	id = LITHOTORCRAZINE
+	description = "A derivative of Arithrazine. Rather than reducing radiation in a host, actively impedes the host from being irradiated instead."
+	reagent_state = SOLID
+	color = "#C0C0C0"
+	custom_metabolism = 0.2
+
 /datum/reagent/alkysine
 	name = "Alkysine"
 	id = ALKYSINE
@@ -2368,7 +2376,7 @@
 
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
-		
+
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
@@ -2401,13 +2409,13 @@
 
 	if(..())
 		return 1
-	
+
 	M.reagents.add_reagent ("hyperzine", 0.03) //To pretend it's all okay.
 	if(ishuman(M))
 		if(data<121 && !has_been_hypozined)
 			has_been_hypozined = 1
 			has_had_heart_explode = 0 //Fuck them UP after they're done going fast.
-			
+
 	switch(data)
 		if(60 to 99)	//Speed up after a minute
 			if(data==60)
@@ -2426,7 +2434,7 @@
 				if(prob(10))
 					if (M.get_heart())
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "You feel your heart racing", "You feel like running as far as you can")]!")
-					else 
+					else
 						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
 				H.adjustFireLoss(0.1)
 		if(115 to 120)	//traverse at a velocity exceeding the norm
@@ -2434,13 +2442,13 @@
 				to_chat(M, "<span class='alert'>Your muscles are burning up!")
 				M.movement_speed_modifier += 2
 				oldspeed += 2
-			
+
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(prob(25))
 					if (M.get_heart())
 						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
-					else 
+					else
 						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
 				H.adjustToxLoss(1)
 				H.adjustFireLoss(2)
@@ -2454,7 +2462,7 @@
 		has_had_heart_explode = 1
 		if(!override_remove)
 			holder.remove_reagent(src.id) //Clean them out
-		
+
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if(explodeheart)
@@ -2484,7 +2492,7 @@
 						H.adjustFireLoss(heartdamage / 3)
 						H.adjustToxLoss(heartdamage / 8)
 		else
-			M.gib() 
+			M.gib()
 		data = 1
 		oldspeed = 0
 
@@ -5514,7 +5522,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	M.apply_effect(2, IRRADIATE, 0)
+	M.apply_radiation(2, RAD_INTERNAL)
 
 /datum/reagent/drink/sportdrink
 	name = "Sport Drink"

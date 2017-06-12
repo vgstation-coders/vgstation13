@@ -9,6 +9,7 @@
 	var/min_bruised_damage = 10
 	var/min_broken_damage = 30
 	var/parent_organ = LIMB_CHEST
+	var/organ_type //What organ type it is (lungs, heart) keep it lower case
 	var/robotic = 0 //For being a robot
 	var/removed_type //When removed, forms this object.
 	var/list/transplant_data // Blood DNA and colour of donor
@@ -22,6 +23,7 @@
 	I.damage = damage
 	I.min_bruised_damage = min_bruised_damage
 	I.min_broken_damage = min_broken_damage
+	I.organ_type = organ_type
 	I.parent_organ = parent_organ
 	I.robotic = robotic
 	I.removed_type = removed_type
@@ -195,16 +197,19 @@
 /datum/organ/internal/heart //This is not set to vital because death immediately occurs in blood.dm if it is removed.
 	name = "heart"
 	parent_organ = LIMB_CHEST
+	organ_type = "heart"
 	removed_type = /obj/item/organ/heart
 
 /datum/organ/internal/kidney
 	name = "kidneys"
 	parent_organ = LIMB_GROIN
+	organ_type = "kidneys"
 	removed_type = /obj/item/organ/kidneys
 
 /datum/organ/internal/brain
 	name = "brain"
 	parent_organ = LIMB_HEAD
+	organ_type = "brain"
 	removed_type = /obj/item/organ/brain
 	vital = 1
 
@@ -217,6 +222,7 @@
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = LIMB_GROIN
+	organ_type = "appendix"
 	removed_type = /obj/item/organ/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
@@ -233,7 +239,6 @@
 			removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
 		organ_holder = removed_organ
-
 	return removed_organ
 
 /datum/organ/internal/send_to_past(var/duration)

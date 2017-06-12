@@ -941,6 +941,28 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				mob.apply_damage(10)
 
 
+/datum/disease2/effect/thick_blood
+	name = "Hyper-Fibrinogenesis"
+	stage = 3
+	var/skip = FALSE
+
+/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob)
+	if(skip)
+		return
+	var/mob/living/carbon/human/H = mob
+	if(ishuman(H))
+		if(H.species && (H.species.anatomy_flags & NO_BLOOD))	//Can't have thick blood if you don't have blood at all.
+			skip = TRUE
+			return
+	if (H.reagents.get_reagent_amount(CLOTTING_AGENT) < 5)
+		H.reagents.add_reagent(CLOTTING_AGENT, 5)
+		if (ishuman(H))
+			for (var/datum/organ/external/E in H.organs)
+				if (E.status & ORGAN_BLEEDING)
+					to_chat(mob, "<span class = 'notice'>You feel your wounds rapidly scabbing over.</span>")
+					break
+
+
 ////////////////////////STAGE 4/////////////////////////////////
 
 
@@ -1430,6 +1452,36 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				H.species.anatomy_flags |= HAS_SWEAT_GLANDS
 		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
 	..()
+
+/datum/disease2/effect/heart_attack
+	name = "Heart Attack Syndrome"
+	stage = 4
+	max_count = 1
+
+/datum/disease2/effect/heart_attack/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.get_heart())
+			H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
+			var/obj/item/organ/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
+			var/list/spawn_turfs = list()
+			for(var/turf/T in orange(1, H))
+				if(!T.density)
+					spawn_turfs.Add(T)
+			if(!spawn_turfs.len)
+				spawn_turfs.Add(get_turf(H))
+			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
+			heart_attack.appearance = blown_heart.appearance
+			heart_attack.icon_dead = "heart-off"
+			heart_attack.environment_smash = 0
+			heart_attack.melee_damage_lower = 15
+			heart_attack.melee_damage_upper = 15
+			heart_attack.health = 50
+			heart_attack.maxHealth = 50
+			heart_attack.stat_attack = 1
+			qdel(blown_heart)
+
+
 ////////////////////////SPECIAL/////////////////////////////////
 
 

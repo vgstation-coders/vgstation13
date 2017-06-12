@@ -430,3 +430,12 @@ This function restores all organs.
 	apply_effect(10, EYE_BLUR)
 	apply_effect(10, WEAKEN)
 	update_canmove()
+
+/mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(application == RAD_EXTERNAL)
+		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+
+	if(reagents)
+		if(reagents.has_reagent(LITHOTORCRAZINE))
+			rads = rads/2
+	..()
