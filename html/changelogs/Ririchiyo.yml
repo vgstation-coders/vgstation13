@@ -1,5 +1,3 @@
 author: Ririchiyo
-changes:
-- rscadd: Stunbatons now cause stuttering upon stunning.
-- tweak: Voice Analyzers are now unable to understand a mob that is stuttering.
+changes: []
 delete-after: false
