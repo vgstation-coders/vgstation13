@@ -33,7 +33,7 @@
 
 /datum/artifact_trigger/proc/CheckTrigger()
 
-/datum/artifact_trigger/proc/Triggered(var/toucher = null, var/context = null, var/item = null)
+/datum/artifact_trigger/proc/Triggered(var/toucher = null, var/context = null, var/item = null, var/secondary_override = 0)
 	if(my_effect.IsPrimary())
 		if(my_effect.effect != EFFECT_TOUCH)
 			var/log = "|| effect [my_effect.artifact_id]([my_effect]) triggered"
@@ -49,7 +49,7 @@
 			my_artifact.investigation_log(I_ARTIFACT, log)
 			my_effect.ToggleActivate()
 
-	else if(!my_effect.IsPrimary() && prob(25))	//secondary effects only have a 1/4 chance to trigger
+	else if(!my_effect.IsPrimary() && (prob(25) || secondary_override))	//secondary effects only have a 1/4 chance to trigger, unless overridden
 		if(my_effect.effect != EFFECT_TOUCH)
 			var/log = "|| effect [my_effect.artifact_id]([my_effect]) triggered"
 			if(my_effect.activated)

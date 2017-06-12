@@ -223,13 +223,18 @@
 						icon_state = "suspension1"
 					else
 						icon_state = "suspension1-b"
-	else if(istype(W, /obj/item/weapon/card))
-		var/obj/item/weapon/card/I = W
+	else if(istype(W, /obj/item/weapon/card) || istype(W, /obj/item/device/pda))
+		var/obj/item/weapon/card/I
+		if(istype(W, /obj/item/device/pda))
+			var/obj/item/device/pda/pda = W
+			I = pda.id
+		else
+			I = W
 		if(!auth_card)
 			if(attempt_unlock(I))
-				to_chat(user, "<span class='info'>You swipe [I], the console flashes \'<i>Access granted.</i>\'</span>")
+				to_chat(user, "<span class='info'>You swipe [W], the console flashes \'<i>Access granted.</i>\'</span>")
 			else
-				to_chat(user, "<span class='warning'>You swipe [I], console flashes \'<i>Access denied.</i>\'</span>")
+				to_chat(user, "<span class='warning'>You swipe [W], console flashes \'<i>Access denied.</i>\'</span>")
 		else
 			to_chat(user, "<span class='warning'>Remove [auth_card] first.</span>")
 
