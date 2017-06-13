@@ -1587,6 +1587,19 @@
 	var/obj/item/weapon/slimepotion/P = new /obj/item/weapon/slimepotion
 	P.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/helperslimes
+	name = "helper slimesummon"
+	id = "h_ss"
+	result = null
+	required_reagents = list(BLOOD = 5)
+	result_amount = 1
+	required_container = /obj/item/slime_extract/pink
+	required_other = 1
+/datum/chemical_reaction/helperslimes/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/mob/living/simple_animal/hostile/helperslime/S = new /mob/living/simple_animal/hostile/helperslime
+	S.forceMove(get_turf(holder.my_atom))
+
 //Black
 /datum/chemical_reaction/slimemutate2
 	name = "Advanced Mutation Toxin"
