@@ -276,6 +276,7 @@
 	var/event/on_uattack
 	var/event/on_logout
 	var/event/on_damaged
+	var/event/on_irradiate
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 

@@ -105,6 +105,12 @@
 	hud_state = "time_stop"
 	charge_max = 30 SECONDS
 
+/spell/aoe_turf/time_suit/time_stop/before_cast(list/targets, atom/user)
+	if(user.timestopped)
+		return list()
+	else
+		return ..()
+
 /spell/aoe_turf/time_suit/time_stop/cast(var/list/targets, mob/user)
 	timestop(user, 5 SECONDS, 2)
 
@@ -115,6 +121,12 @@
 	hud_state = "time_future"
 	charge_max = 30 SECONDS
 
+/spell/aoe_turf/time_suit/future_jump/before_cast(list/targets, atom/user)
+	if(user.timestopped)
+		return list()
+	else
+		return ..()
+
 /spell/aoe_turf/time_suit/future_jump/cast(var/list/targets, mob/user)
 	future_rift(user, 10 SECONDS, 1, TRUE, TRUE)
 
@@ -124,6 +136,12 @@
 	abbreviation = "RF"
 	hud_state = "time_past"
 	charge_max = 60 SECONDS
+
+/spell/aoe_turf/time_suit/past_jump/before_cast(list/targets, atom/user)
+	if(user.timestopped)
+		return list()
+	else
+		return ..()
 
 /spell/aoe_turf/time_suit/past_jump/cast(var/list/targets, mob/user)
 	past_rift(user, 10 SECONDS, 1, TRUE, TRUE)

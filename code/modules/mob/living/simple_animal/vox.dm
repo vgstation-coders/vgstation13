@@ -13,7 +13,7 @@
 	melee_damage_lower = 30
 	melee_damage_upper = 40
 	attacktext = "slammed its enormous claws into"
-	speed = -1
+	speed = 1
 	environment_smash = 2 // WALLS
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	status_flags = 0
@@ -116,7 +116,7 @@
 	if(istype(O,/obj/item/vox/armalis_armour))
 		user.drop_item(O, src, force_drop = 1)
 		armour = O
-		speed = 1
+		speed = 2
 		maxHealth += 200
 		health += 200
 		visible_message("<span class='notice'>[src] is quickly outfitted in [O] by [user].</span>","<span class='notice'>You quickly outfit [src] in [O].</span>")
@@ -135,7 +135,7 @@
 	overlays = list()
 	if(armour)
 		var/icon/armour = image('icons/mob/vox.dmi',"armour")
-		speed = 1
+		speed = 2
 		overlays += armour
 	if(amp)
 		var/icon/amp = image('icons/mob/vox.dmi',"amplifier")

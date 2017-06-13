@@ -181,6 +181,11 @@
 	typepath = /obj/item/device/transfer_valve
 	protected_jobs = list("Research Director", "Scientist")
 
+/datum/theft_objective/traitor/Holotool
+	name = "the holo switchtool"
+	typepath = /obj/item/weapon/switchtool/holo
+	protected_jobs = list("Research Director")
+
 
 /datum/theft_objective/number
 	var/min=0

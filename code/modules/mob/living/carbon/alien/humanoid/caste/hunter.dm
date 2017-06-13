@@ -8,14 +8,8 @@
 	icon_state = "alienh_s"
 	plasma_rate = 5
 
-/mob/living/carbon/alien/humanoid/hunter/movement_delay()
-	var/tally = -2 + move_delay_add + config.alien_delay //Hunters are fast
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-	return tally
+/mob/living/carbon/alien/humanoid/hunter/movement_tally_multiplier()
+	return ..() * 0.9 // Hunters are fast.
 
 /mob/living/carbon/alien/humanoid/hunter/New()
 	var/datum/reagents/R = new/datum/reagents(100)

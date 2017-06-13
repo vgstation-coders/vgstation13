@@ -11,8 +11,9 @@
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-	//TODO: fix husking
-	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
+
+	if((maxHealth - total_burn) < config.health_threshold_dead)
+		death(FALSE)
 		ChangeToHusk()
 	return
 
@@ -429,3 +430,12 @@ This function restores all organs.
 	apply_effect(10, EYE_BLUR)
 	apply_effect(10, WEAKEN)
 	update_canmove()
+
+/mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(application == RAD_EXTERNAL)
+		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+
+	if(reagents)
+		if(reagents.has_reagent(LITHOTORCRAZINE))
+			rads = rads/2
+	..()

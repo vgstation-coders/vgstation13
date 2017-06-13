@@ -64,6 +64,8 @@
 	// Map element which spawned this turf
 	var/datum/map_element/map_element
 
+	var/image/viewblock
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -686,8 +688,9 @@
 
 #undef PLANE_FOR
 
-// Return -1 to make movement instant for the mob
-// Return high values to make movement slower
+// This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
+// Return a high number to make the mob move slower.
+// Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
 

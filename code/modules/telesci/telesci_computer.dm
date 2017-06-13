@@ -232,7 +232,7 @@
 			var/L = get_turf(E)
 			sparks(target = L)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
-				M.apply_effect((rand(10, 20)), IRRADIATE, 0)
+				M.apply_radiation((rand(10, 20)), RAD_INTERNAL)
 				to_chat(M, "<span class='warning'>You feel strange.</span>")
 		return
 	/* Lets not, for now.  - N3X

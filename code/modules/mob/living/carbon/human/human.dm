@@ -302,11 +302,16 @@
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
 	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
+	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
 		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
 			. = pda.id.assignment
 		else
 			. = pda.ownjob
+	else if (istype(wallet))
+		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
+		if(istype(wallet_id))
+			. = wallet_id.assignment
 	else if (istype(id))
 		. = id.assignment
 	else
@@ -521,39 +526,15 @@
 						if (R.fields["id"] == E.fields["id"])
 							if(hasHUD(usr,"security"))
 								to_chat(usr, "<b>Name:</b> [R.fields["name"]]	<b>Criminal Status:</b> [R.fields["criminal"]]")
-								to_chat(usr, "<b>Minor Crimes:</b> [R.fields["mi_crim"]]")
-								to_chat(usr, "<b>Details:</b> [R.fields["mi_crim_d"]]")
-								to_chat(usr, "<b>Major Crimes:</b> [R.fields["ma_crim"]]")
-								to_chat(usr, "<b>Details:</b> [R.fields["ma_crim_d"]]")
 								to_chat(usr, "<b>Notes:</b> [R.fields["notes"]]")
-								to_chat(usr, "<a href='?src=\ref[src];secrecordComment=`'>\[View Comment Log\]</a>")
-								read = 1
-			if(!read)
-				to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
-	else if (href_list["secrecordComment"])
-		if(hasHUD(usr,"security"))
-			var/perpname = "wot"
-			var/read = 0
-			if(wear_id)
-				if(istype(wear_id,/obj/item/weapon/card/id))
-					perpname = wear_id:registered_name
-				else if(istype(wear_id,/obj/item/device/pda))
-					var/obj/item/device/pda/tempPda = wear_id
-					perpname = tempPda.owner
-			else
-				perpname = src.name
-			for (var/datum/data/record/E in data_core.general)
-				if (E.fields["name"] == perpname)
-					for (var/datum/data/record/R in data_core.security)
-						if (R.fields["id"] == E.fields["id"])
-							if(hasHUD(usr,"security"))
-								read = 1
 								var/counter = 1
+								to_chat(usr, "<b>Comments:</b>")
 								while(R.fields[text("com_[]", counter)])
 									to_chat(usr, text("[]", R.fields[text("com_[]", counter)]))
 									counter++
 								if (counter == 1)
-									to_chat(usr, "No comment found")
+									to_chat(usr, "No comments found.")
+								read = 1
 								to_chat(usr, "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>")
 			if(!read)
 				to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -1498,7 +1479,7 @@
 				step_towards(I, src)
 				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
 	if(radiations)
-		apply_effect(current_size * radiations, IRRADIATE)
+		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)
 		if(shoes.clothing_flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
@@ -1702,6 +1683,34 @@ mob/living/carbon/human/isincrit()
 				return_organs += damagedorgan
 		return return_organs
 
+/mob/living/carbon/human/get_heart()
+	return internal_organs_by_name["heart"]
+
+//Moved from internal organ surgery
+//Removes organ from src, places organ object under user
+//example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+	var/obj/item/organ/extractedorgan
+	if(targetorgan && istype(targetorgan))
+		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
+		if(extractedorgan && istype(extractedorgan))
+			// Stop the organ from continuing to reject.
+			extractedorgan.organ_data.rejecting = null
+
+			// Transfer over some blood data, if the organ doesn't have data.
+			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
+			var/organstring = targetorgan.organ_type
+			if(!organ_blood || !organ_blood.data["blood_DNA"])
+				vessel.trans_to(extractedorgan, 5, 1, 1)
+
+			internal_organs_by_name[organstring] = null
+			internal_organs_by_name -= organstring
+			internal_organs -= extractedorgan.organ_data
+			affectedarea.internal_organs -= extractedorgan.organ_data
+			extractedorgan.removed(src,user)
+
+			return extractedorgan
+
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
@@ -1763,6 +1772,7 @@ mob/living/carbon/human/isincrit()
 		"b_eyes",
 		"s_tone",
 		"lip_style",
+		"eye_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",
@@ -1798,6 +1808,8 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
+	if(vessel)
+		vessel.send_to_past(duration)
 
 	updatehealth()
 

@@ -235,6 +235,15 @@
 	new /obj/item/weapon/reagent_containers/syringe(src)
 	return
 
+/obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	name = "box (C)"
+
+/obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/bottle/hypozine(src)
+	new /obj/item/weapon/reagent_containers/syringe(src)
+	return	
+	
 /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."

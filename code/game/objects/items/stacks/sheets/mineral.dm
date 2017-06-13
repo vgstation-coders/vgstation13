@@ -213,6 +213,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
 	new/datum/stack_recipe("golden door", /obj/machinery/door/mineral/gold, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("gold tooth", /obj/item/stack/teeth/gold, 1, 1, 20), \
 	)
 
 /obj/item/stack/sheet/mineral/gold/New(var/loc, var/amount=null)

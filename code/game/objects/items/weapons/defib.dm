@@ -106,11 +106,12 @@
 	return
 
 /obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
-	var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
+	var/datum/organ/internal/heart/heart = target.get_heart()
+	if(heart)
+		heart.damage += rand(5,60)
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
 	target.Knockdown(rand(6,12))
 	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
-	heart.damage += rand(5,60)
 	target.emote("scream",,, 1) //If we're going this route, it kinda hurts
 	target.updatehealth()
 	spawn() //Logging
@@ -128,7 +129,7 @@
 	return
 
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
-	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest</span>", \
+	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
 	if(do_after(user,target,30))
 		sparks.start()
@@ -136,6 +137,11 @@
 		charges--
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
+		var/datum/organ/internal/heart/heart = target.get_heart()
+		if(!heart)
+			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
+			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+			return
 		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
 		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations || !target.has_brain() || target.suiciding == 1)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
@@ -159,7 +165,6 @@
 			//we couldn't find a suitable ghost.
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
-		var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
 		if(prob(25))
 			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
 		target.apply_damage(-target.getOxyLoss(),OXY)
@@ -179,6 +184,7 @@
 			target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumb "pounce back up" behavior
 			target.apply_effect(10, PARALYZE)
 			target.update_canmove()
+			has_been_shade.Remove(target.mind)
 			to_chat(target, "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>")
 		else
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")

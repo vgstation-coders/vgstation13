@@ -202,3 +202,7 @@
 
 /mob/living/carbon/alien/humanoid/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "alien")
+
+/mob/living/carbon/alien/humanoid/base_movement_tally()
+	. = ..()
+	. += move_delay_add

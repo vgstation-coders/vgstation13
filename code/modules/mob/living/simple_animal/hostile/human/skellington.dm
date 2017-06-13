@@ -71,7 +71,7 @@
 	desc = "A skeleton carrying a bunch of bombs. Highly explosive."
 
 	icon_state = "petard"
-	speed = 8
+	speed = 9
 
 	faction = "pirate"
 	attacktext = "blows up"

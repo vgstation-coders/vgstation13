@@ -17,7 +17,7 @@
  */
 
 /datum/objective/heist/kidnap/choose_target()
-	var/list/roles = list("Chief Engineer", "Research Director", "Roboticist", "Chemist", "Station Engineer")
+	var/list/roles = list("Chief Engineer", "Research Director", "Roboticist", "Chemist", "Medical Doctor", "Janitor", "Bartender")
 
 	for(var/role in shuffle(roles))
 		find_target_by_role(role)
@@ -80,16 +80,25 @@
  * heist
  */
 
-/datum/objective/steal/heist
-	target_category = "heist"
+/datum/objective/steal/heist_easy
+	target_category = "heist_easy"
 
-/datum/objective/steal/heist/format_explanation()
-	return "We are lacking in hardware. Steal [steal_target.name]."
+/datum/objective/steal/heist_hard
+	target_category = "heist_hard"
 
-/datum/theft_objective/number/heist
+/datum/objective/steal/heist_easy/format_explanation()
+	return "We are lacking in some trivial devices. Steal [steal_target.name]."
+
+/datum/objective/steal/heist_hard/format_explanation()
+	return "We are lacking in expensive hardware or bioware. Steal [steal_target.name]."
+
+/datum/theft_objective/number/heist_easy
 	areas = list(/area/shuttle/vox/station)
 
-/datum/theft_objective/number/heist/check_completion()
+/datum/theft_objective/number/heist_hard
+	areas = list(/area/shuttle/vox/station)
+
+/datum/theft_objective/number/heist_easy/check_completion()
 	var/list/search = list()
 	var/found = 0
 	for(var/A in areas)
@@ -99,29 +108,15 @@
 		found++
 	return (found >= required_amount)
 
-/datum/theft_objective/number/heist/particle_accelerator
-	name = "complete particle accelerator"
-	typepath = /obj/structure/particle_accelerator
-	min = 1
-	max = 1
-
-/datum/theft_objective/number/heist/particle_accelerator/check_completion()
-	var/list/contents = list(/obj/structure/particle_accelerator/end_cap, \
-							/obj/structure/particle_accelerator/fuel_chamber, \
-							/obj/structure/particle_accelerator/particle_emitter/center, \
-							/obj/structure/particle_accelerator/particle_emitter/left, \
-							/obj/structure/particle_accelerator/particle_emitter/right, \
-							/obj/structure/particle_accelerator/power_box,)
+/datum/theft_objective/number/heist_hard/check_completion()
 	var/list/search = list()
+	var/found = 0
 	for(var/A in areas)
 		var/area/B = locate(A)
-		search += recursive_type_check(B, /obj/structure/particle_accelerator)
-	for(var/C in contents)
-		for(var/atom/A in search)
-			if(istype(A,C)) //Does search contain this part type
-				continue
-			return FALSE //It didn't, fail the object
-	return TRUE
+		search += recursive_type_check(B, typepath)
+	for(var/C in search)
+		found++
+	return (found >= required_amount)
 
 /* LAME
 /datum/theft_objective/number/heist/singulogen
@@ -143,25 +138,137 @@
 	max = 4
 */
 
-/datum/theft_objective/number/heist/nuke
-	name = "thermonuclear device"
-	typepath = /obj/machinery/nuclearbomb
-	min = 1
-	max = 1
+///easy objectives (near the outside of the station or common///
 
-/datum/theft_objective/number/heist/gun
+/datum/theft_objective/number/heist_easy/gun
 	name = "guns"
 	typepath = /obj/item/weapon/gun
-	min = 6
+	min = 4
 	max = 6
 
-/datum/theft_objective/number/heist/supermatter
+/datum/theft_objective/number/heist_easy/supermatter
 	name = "supermatter shard"
 	typepath = /obj/machinery/power/supermatter/shard
 	min = 1
 	max = 1
 
-/datum/theft_objective/number/heist/organs/check_completion()
+/datum/theft_objective/number/heist_easy/jukebox
+	name = "jukebox"
+	typepath = /obj/machinery/media/jukebox
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_easy/microwave
+	name = "microwave ovens"
+	typepath = /obj/machinery/microwave
+	min = 2
+	max = 2
+
+/datum/theft_objective/number/heist_easy/camera
+	name = "polaroid cameras"
+	typepath = /obj/item/device/camera
+	min = 4
+	max = 4
+
+/datum/theft_objective/number/heist_easy/canister
+	name = "canister of plasma"
+	typepath = /obj/machinery/portable_atmospherics/canister/plasma
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_easy/plants
+	name = "house plants"
+	typepath = /obj/structure/flora
+	min = 6
+	max = 10
+
+/datum/theft_objective/number/heist_easy/borgrecharger
+	name = "cyborg recharging stations"
+	typepath = /obj/machinery/recharge_station
+	min = 2
+	max = 2
+
+/datum/theft_objective/number/heist_easy/fueltank
+	name = "welding fuel tanks"
+	typepath = /obj/structure/reagent_dispensers/fueltank
+	min = 2
+	max = 4
+
+/datum/theft_objective/number/heist_easy/filingcabinet
+	name = "filing cabinets"
+	typepath = /obj/structure/filingcabinet
+	min = 2
+	max = 4
+
+///hard objectives (near the inside of the station or rare///
+
+/datum/theft_objective/number/heist_hard/particle_accelerator
+	name = "complete and assembled particle accelerator"
+	typepath = /obj/structure/particle_accelerator
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/particle_accelerator/check_completion()
+	var/list/contents = list(/obj/structure/particle_accelerator/end_cap, \
+							/obj/structure/particle_accelerator/fuel_chamber, \
+							/obj/structure/particle_accelerator/particle_emitter/center, \
+							/obj/structure/particle_accelerator/particle_emitter/left, \
+							/obj/structure/particle_accelerator/particle_emitter/right, \
+							/obj/structure/particle_accelerator/power_box,)
+	var/list/search = list()
+	for(var/A in areas)
+		var/area/B = locate(A)
+		search += recursive_type_check(B, /obj/structure/particle_accelerator)
+	for(var/C in contents)
+		for(var/atom/A in search)
+			if(istype(A,C)) //Does search contain this part type
+				continue
+			return FALSE //It didn't, fail the object
+	return TRUE
+
+/datum/theft_objective/number/heist_hard/nuke
+	name = "thermonuclear device"
+	typepath = /obj/machinery/nuclearbomb
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/cat
+	name = "cat"
+	typepath = /mob/living/simple_animal/cat
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/duck
+	name = "rubber ducky"
+	typepath = /obj/item/weapon/bikehorn/rubberducky
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/borgupload
+	name = "cyborg upload console circuit board"
+	typepath = /obj/item/weapon/circuitboard/borgupload
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/amplifier
+	name = "subspace amplifiers"
+	typepath = /obj/item/weapon/stock_parts/subspace/amplifier
+	min = 4
+	max = 6
+
+/datum/theft_objective/number/heist_hard/clownmask
+	name = "clown's mask"
+	typepath = /obj/item/clothing/mask/gas/clown_hat
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/piano
+	name = "space piano"
+	typepath = /obj/structure/piano
+	min = 1
+	max = 1
+
+/datum/theft_objective/number/heist_hard/organs/check_completion()
 	var/list/search = list()
 	for(var/A in areas)
 		var/area/B = locate(A)
@@ -174,13 +281,13 @@
 				valid_organs++
 	return (valid_organs >= required_amount)
 
-/datum/theft_objective/number/heist/organs/lungs
-	name = "lungs"
-	typepath = /obj/item/organ/lungs
+/datum/theft_objective/number/heist_hard/organs/appendix
+	name = "appendixes"
+	typepath = /obj/item/organ/appendix
 	min = 3
 	max = 6
 
-/datum/theft_objective/number/heist/organs/eyes
+/datum/theft_objective/number/heist_hard/organs/eyes
 	name = "eyes"
 	typepath = /obj/item/organ/eyes
 	min = 3

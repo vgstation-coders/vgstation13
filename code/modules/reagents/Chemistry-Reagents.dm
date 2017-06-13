@@ -554,7 +554,7 @@
 		return 1
 
 	M.adjustToxLoss(-2 * REM)
-	M.apply_effect(4 * REM, IRRADIATE, 0)
+	M.apply_radiation(4 * REM,RAD_INTERNAL)
 
 /datum/reagent/toxin
 	name = "Toxin"
@@ -1362,7 +1362,7 @@
 	if(..())
 		return 1
 
-	M.apply_effect(2 * REM, IRRADIATE,0)
+	M.apply_radiation(2 * REM, RAD_INTERNAL)
 	//Radium may increase your chances to cure a disease
 	if(iscarbon(M)) //Make sure to only use it on carbon mobs
 		var/mob/living/carbon/C = M
@@ -1371,7 +1371,7 @@
 				var/datum/disease2/disease/V = C.virus2[ID]
 				if(prob(5))
 					if(prob(50))
-						C.radiation += 50 //Curing it that way may kill you instead
+						C.apply_radiation(50, RAD_INTERNAL) //Curing it that way may kill you instead
 						C.adjustToxLoss(100)
 					C.antibodies |= V.antigen
 
@@ -1508,7 +1508,7 @@
 		M = holder.my_atom
 	if(..())
 		return 1
-	M.apply_effect(10,IRRADIATE,0)
+	M.apply_radiation(10,RAD_INTERNAL)
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -1630,7 +1630,7 @@
 	if(..())
 		return 1
 
-	M.apply_effect(1, IRRADIATE, 0)
+	M.apply_radiation(1, RAD_INTERNAL)
 
 /datum/reagent/uranium/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -1653,7 +1653,7 @@
 	if(..())
 		return 1
 
-	M.apply_effect(5, IRRADIATE, 0)
+	M.apply_radiation(5, RAD_INTERNAL)
 	if(prob(20))
 		M.advanced_mutate()
 
@@ -2262,6 +2262,14 @@
 	if(prob(15))
 		M.take_organ_damage(1, 0)
 
+/datum/reagent/lithotorcrazine
+	name = "Lithotorcrazine"
+	id = LITHOTORCRAZINE
+	description = "A derivative of Arithrazine. Rather than reducing radiation in a host, actively impedes the host from being irradiated instead."
+	reagent_state = SOLID
+	color = "#C0C0C0"
+	custom_metabolism = 0.2
+
 /datum/reagent/alkysine
 	name = "Alkysine"
 	id = ALKYSINE
@@ -2365,9 +2373,128 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(5))
 		M.emote(pick("twitch","blink_r","shiver"))
+
+/datum/reagent/hypozine //syndie hyperzine
+	name = "Hypozine"
+	id = HYPOZINE
+	description = "Hypozine is an extremely effective, short lasting, muscle stimulant."
+	reagent_state = LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	var/has_been_hypozined = 0
+	var/has_had_heart_explode = 0 //We've applied permanent damage.
+	custom_metabolism = 0.04
+	var/oldspeed = 0
+	data = 1
+
+/datum/reagent/hypozine/reagent_deleted()
+
+	if(..())
+		return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!has_been_hypozined || has_had_heart_explode)
+			return
+		var/timedmg = ((120 SECONDS) - data) / 10
+		dehypozine(H, timedmg * 3, 1, 0)
+
+/datum/reagent/hypozine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.reagents.add_reagent ("hyperzine", 0.03) //To pretend it's all okay.
+	if(ishuman(M))
+		if(data<121 && !has_been_hypozined)
+			has_been_hypozined = 1
+			has_had_heart_explode = 0 //Fuck them UP after they're done going fast.
+
+	switch(data)
+		if(60 to 99)	//Speed up after a minute
+			if(data==60)
+				to_chat(M, "<span class='notice'>You feel faster.")
+				M.movement_speed_modifier += 0.5
+				oldspeed += 0.5
+			if(prob(5))
+				to_chat(M, "<span class='notice'>[pick("Your leg muscles pulsate", "You feel invigorated", "You feel like running")].")
+		if(100 to 114)	//painfully fast
+			if(data==100)
+				to_chat(M, "<span class='notice'>Your muscles start to feel pretty hot.")
+				M.movement_speed_modifier += 0.5
+				oldspeed += 0.5
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(prob(10))
+					if (M.get_heart())
+						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "You feel your heart racing", "You feel like running as far as you can")]!")
+					else
+						to_chat(M, "<span class='notice'>[pick("Your legs are heating up", "Your body is aching to move", "You feel like running as far as you can")]!")
+				H.adjustFireLoss(0.1)
+		if(115 to 120)	//traverse at a velocity exceeding the norm
+			if(data==115)
+				to_chat(M, "<span class='alert'>Your muscles are burning up!")
+				M.movement_speed_modifier += 2
+				oldspeed += 2
+
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(prob(25))
+					if (M.get_heart())
+						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "All you feel is your heart racing", "Run! Run through the pain")]!")
+					else
+						to_chat(M, "<span class='alert'>[pick("Your legs are burning", "You feel like you're on fire", "Run! Run through the heat")]!")
+				H.adjustToxLoss(1)
+				H.adjustFireLoss(2)
+		if(121 to INFINITY)	//went2fast
+			dehypozine(M)
+	data++
+
+/datum/reagent/hypozine/proc/dehypozine(var/mob/living/M, heartdamage = 100, override_remove = 0, explodeheart = 1)
+	M.movement_speed_modifier -= oldspeed
+	if(has_been_hypozined && !has_had_heart_explode)
+		has_had_heart_explode = 1
+		if(!override_remove)
+			holder.remove_reagent(src.id) //Clean them out
+
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(explodeheart)
+				if(H.get_heart())//Got a heart?
+					var/datum/organ/internal/heart/damagedheart = H.get_heart()
+					if (heartdamage >= 100)
+						if(H.species.name != "Diona" && damagedheart) //fuck dionae
+							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+							damagedheart.damage += 200 //Bye heart.
+							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
+							H.adjustOxyLoss(heartdamage)
+						else
+							to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+							for(var/datum/organ/external/E in H.organs)
+								E.droplimb(1, 1) //Bye limbs!
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
+					else if (heartdamage < 100)
+						damagedheart.damage += heartdamage
+						H.adjustOxyLoss(heartdamage)
+				else//No heart?
+					to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+					if (heartdamage >= 100)
+						for(var/datum/organ/external/E in H.organs)
+							E.droplimb(1, 1) //Bye limbs!
+					else if (heartdamage < 100)
+						H.adjustBruteLoss(heartdamage / 2)
+						H.adjustFireLoss(heartdamage / 3)
+						H.adjustToxLoss(heartdamage / 8)
+		else
+			M.gib()
+		data = 1
+		oldspeed = 0
 
 /datum/reagent/cryoxadone
 	name = "Cryoxadone"
@@ -5395,7 +5522,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	M.apply_effect(2, IRRADIATE, 0)
+	M.apply_radiation(2, RAD_INTERNAL)
 
 /datum/reagent/drink/sportdrink
 	name = "Sport Drink"
@@ -5558,3 +5685,108 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = SOLID
 	color = "#FFA500"
 	custom_metabolism = 0.1
+
+//Plant-specific reagents
+
+/datum/reagent/kelotane/tannic_acid
+	name = "Tannic acid"
+	id = TANNIC_ACID
+	description = "Tannic acid is a natural burn remedy."
+	reagent_state = LIQUID
+	color = "#150A03" //rgb: 21, 10, 3
+
+/datum/reagent/dermaline/kathalai
+	name = "Kathalai"
+	id = KATHALAI
+	description = "Kathalai is an exceptional natural burn remedy, it performs twice as well as tannic acid."
+	color = "#32BD08" //rgb: 50, 189, 8
+
+/datum/reagent/bicaridine/opium
+	name = "Opium"
+	id = OPIUM
+	description = "Opium is an exceptional natural analgesic."
+	color = "#AE9260" //rgb: 174, 146, 96
+
+/datum/reagent/space_drugs/mescaline
+	name = "Mescaline"
+	id = MESCALINE
+	description = "Known to cause mild hallucinations, mescaline is often used recreationally."
+	color = "#B8CD93" //rgb: 184, 205, 147
+
+/datum/reagent/synaptizine/cytisine
+	name = "Cytisine"
+	id = CYTISINE
+	description = "Cytisine is an alkaloid which mimics the effects of nicotine."
+	color = "#A49B50" //rgb: 164, 155, 80
+
+/datum/reagent/hyperzine/cocaine
+	name = "Cocaine"
+	id = COCAINE
+	description = "Cocaine is a powerful nervous system stimulant."
+	color = "#FFFFFF" //rgb: 255, 255, 255
+
+/datum/reagent/imidazoline/zeaxanthin
+	name = "Zeaxanthin"
+	id = ZEAXANTHIN
+	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
+	color = "#CC4303" //rgb: 204, 67, 3
+
+/datum/reagent/stoxin/valerenic_acid
+	name = "Valerenic acid"
+	id = VALERENIC_ACID
+	description = "An herbal sedative used to treat insomnia."
+	color = "#EAB160" //rgb: 234, 177, 96
+
+/datum/reagent/anti_toxin/allicin
+	name = "Allicin"
+	id = ALLICIN
+	description = "Allicin is a natural broad-spectrum antitoxin."
+	color = "#F1DEB4" //rgb: 241, 222, 180
+
+/datum/reagent/sacid/formic_acid
+	name = "Formic acid"
+	id = FORMIC_ACID
+	description = "A weak natural acid which causes a burning sensation upon contact."
+	color = "#9B3D00" //rgb: 155, 61, 0
+
+/datum/reagent/pacid/phenol
+	name = "Phenol"
+	id = PHENOL
+	description = "Phenol is a corrosive acid which can cause chemical burns."
+	color = "#C71839" //rgb: 199, 24, 57
+
+/datum/reagent/ethanol/deadrum/neurotoxin/curare
+	name = "Curare"
+	id = CURARE
+	description = "An alkaloid plant extract which causes weakness of the skeletal muscles."
+	color = "#94DC76" //rgb: 148, 220, 118
+
+/datum/reagent/toxin/solanine
+	name = "Solanine"
+	id = SOLANINE
+	description = "A glycoalkaloid poison."
+	color = "#6C8347" //rgb: 108, 131, 71
+
+/datum/reagent/cryptobiolin/physostigmine
+	name = "Physostigmine"
+	id = PHYSOSTIGMINE
+	description = "Physostigmine causes confusion and dizzyness."
+	color = "#0098D7" //rgb: 0, 152, 215
+
+/datum/reagent/impedrezene/hyoscyamine
+	name = "Hyoscyamine"
+	id = HYOSCYAMINE
+	description = "Hyoscyamine is a tropane alkaloid which can disrupt the central nervous system."
+	color = "#BBD0C9" //rgb: 187, 208, 201
+
+/datum/reagent/lexorin/coriamyrtin
+	name = "Coriamyrtin"
+	id = CORIAMYRTIN
+	description = "Coriamyrtin is a toxin which causes respiratory problems."
+	color = "#FB6892" //rgb: 251, 104, 146
+
+/datum/reagent/dexalin/thymol
+	name = "Thymol"
+	id = THYMOL
+	description = "Thymol is used in the treatment of respiratory problems."
+	color = "#790D27" //rgb: 121, 13, 39

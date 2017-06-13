@@ -471,7 +471,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	desc = "First developed by NASA in 1964 for the US space program!"
 	heat_conductivity = 0 // Good luck losing heat in this!
-	slowdown = 10
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
@@ -488,7 +488,7 @@
 	desc = "Using an Advanced Space Blanket requires Advanced Power Blanket Training."
 	icon_state = "goodblanket"
 	heat_conductivity = 0
-	slowdown = 5
+	slowdown = HARDSUIT_SLOWDOWN_MED
 	bearpelt = 1
 
 /obj/item/clothing/suit/storage/trader

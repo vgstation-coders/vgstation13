@@ -54,7 +54,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	if(!istype(disease))
 //		log_debug("Bad virus")
 		return 0
-	if(!can_be_infected())
+	if(!can_be_infected(M))
 //		log_debug("Bad mob")
 		return 0
 	if ("[disease.uniqueID]" in M.virus2)

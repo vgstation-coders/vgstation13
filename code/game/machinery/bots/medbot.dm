@@ -43,6 +43,7 @@
 	var/declare_cooldown = 0 //Prevents spam of critical patient alerts.
 	var/pai_analyze_mode = FALSE //Used to switch between injecting people or analyzing them (for pAIs)
 	var/reagent_id = null
+	var/last_spoke = 0
 
 	bot_type = MED_BOT
 
@@ -118,7 +119,7 @@
 	if (.)
 		return
 	var/dat
-	dat += "<TT><B>Automatic Medical Unit v1.0</B></TT><BR><BR>"
+	dat += "<TT><B>Automatic Medical Unit v1.1</B></TT><BR><BR>"
 	dat += "Status: <A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A><BR>"
 	dat += "Maintenance panel panel is [open ? "opened" : "closed"]<BR>"
 	dat += "Beaker: "
@@ -251,6 +252,7 @@
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		flick("medibot_spark", src)
+		playsound(src.loc, 'sound/medbot/Chemical_Detected.ogg', 35, channel = CHANNEL_MEDBOTS)
 		patient = null
 		if(user)
 			oldpatient = user
@@ -308,14 +310,15 @@
 				oldpatient = C
 				last_found = world.time
 				spawn(0)
-					if((last_newpatient_speak + 100) < world.time) //Don't spam these messages!
-						var/message = pick("Hey, you! Hold on, I'm coming.","Wait! I want to help!","You appear to be injured!")
-						speak(message)
+					if((last_newpatient_speak + 100 < world.time) &&  (shut_up == 0)) //Don't spam these messages!
+						playsound(src.loc, 'sound/medbot/Administering_medical.ogg', 35, channel = CHANNEL_MEDBOTS)
+						say("Administering medical attention!")
 						last_newpatient_speak = world.time
 						if(declare_treatment)
 							var/area/location = get_area(src)
 							broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 					visible_message("<b>[src]</b> points at [C.name]!")
+					sleep(35)
 				break
 			else
 				continue
@@ -414,8 +417,8 @@
 		return
 
 	if(C.stat == 2)
-		var/death_message = pick("No! NO!","Live, damnit! LIVE!","I...I've never lost a patient before. Not today, I mean.")
-		speak(death_message)
+		playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
+		visible_message("<b>[src]</b> points at [C.name]!")
 		oldpatient = patient
 		patient = null
 		currently_healing = 0
@@ -436,30 +439,55 @@
 	if (!reagent_id && (virus))
 		if(!C.reagents.has_reagent(treatment_virus))
 			reagent_id = treatment_virus
+			playsound(src.loc, 'sound/medbot/Biohazard_detected.ogg', 35, channel = CHANNEL_MEDBOTS)
+			sleep(35)
 
 	if (!reagent_id && (C.getBruteLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_brute))
 			reagent_id = treatment_brute
+			if((C.getBruteLoss() <= 50) && (C.getBruteLoss() > 0) && (shut_up == 0))
+				playsound(src.loc, 'sound/medbot/Minor_lacerations.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Minor lacerations detected!")
+				sleep(35)
+			if(patient.getBruteLoss() > 50 && (shut_up == 0))
+				playsound(src.loc, 'sound/medbot/Major_lacerations.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Major lacerations detected!")
+				sleep(35)
 
-	if (!reagent_id && (C.getOxyLoss() >= (15 + heal_threshold)))
+	if (!reagent_id && (C.getOxyLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_oxy))
 			reagent_id = treatment_oxy
+			if(shut_up == 0)
+				playsound(src.loc, 'sound/medbot/Blood_loss.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Blood loss detected!")
+				sleep(25)
 
 	if (!reagent_id && (C.getFireLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_fire))
 			reagent_id = treatment_fire
+			if(shut_up == 0)
+				playsound(src.loc, 'sound/medbot/Heat_damage.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Warning! Extreme heat damage detected!")
+				sleep(45)
+
 
 	if (!reagent_id && (C.getToxLoss() >= heal_threshold))
 		if(!C.reagents.has_reagent(treatment_tox))
 			reagent_id = treatment_tox
+			if(shut_up == 0)
+				playsound(src.loc, 'sound/medbot/Blood_toxins.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Warning! Blood toxin levels detected!")
+				sleep(45)
+				playsound(src.loc, 'sound/medbot/Antitoxin_shot.ogg', 35, channel = CHANNEL_MEDBOTS)
+				say("Antitoxin administered!")
+				sleep(25)
+
 
 	if(!reagent_id) //If they don't need any of that they're probably cured!
 		oldpatient = patient
 		patient = null
 		currently_healing = 0
 		last_found = world.time
-		var/message = pick("All patched up!","An apple a day keeps me away.","Feel better soon!")
-		speak(message)
 		return
 	else
 		icon_state = "[icon_initial]s"
@@ -473,6 +501,7 @@
 				inject_patient()
 
 /obj/machinery/bot/medbot/proc/inject_patient()
+
 	var/succesful_inject = 0
 	if ((get_dist(src, patient) <= 1) && (on))
 		if((reagent_id == "internal_beaker") && (reagent_glass) && (reagent_glass.reagents.total_volume))
@@ -489,6 +518,7 @@
 	icon_state = "[icon_initial][on]"
 	currently_healing = 0
 	reagent_id = null
+
 	return
 
 /obj/machinery/bot/medbot/proc/speak(var/message)
@@ -506,6 +536,7 @@
 /obj/machinery/bot/medbot/explode()
 	on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
 	var/turf/Tsec = get_turf(src)
 
 	switch(skin)
@@ -641,6 +672,7 @@
 						qdel(W)
 						build_step++
 						to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
+						playsound(src.loc, 'sound/medbot/Automedic_on.ogg', 35, channel = CHANNEL_MEDBOTS)
 						var/turf/T = get_turf(src)
 						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
 						S.skin = skin

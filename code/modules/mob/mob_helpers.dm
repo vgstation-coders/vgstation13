@@ -29,9 +29,15 @@
 mob/proc/isincrit()
 	return 0
 	
+mob/proc/get_heart()
+	return null
+	
+mob/proc/remove_internal_organ()
+	return null
+
 /mob/proc/drag_damage()
 	return list()
-	
+
 /mob/dead/observer/get_screen_colour()
 	return default_colour_matrix
 

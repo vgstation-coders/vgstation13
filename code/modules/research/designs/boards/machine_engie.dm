@@ -238,28 +238,28 @@
 //Cael shield gen designs.
 
 /datum/design/shield_gen_ex
-	name = "Circuit Design (Experimental hull shield generator)"
-	desc = "Allows for the construction of circuit boards used to build an experimental hull shield generator."
+	name = "Circuit Design (Starscreen-EX External shield generator)"
+	desc = "Allows for the construction of circuit boards used to build a Starscreen-EX external shield generator."
 	id = "shield_gen"
 	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 2000, MAT_GOLD = 2000)
 	build_path = "/obj/item/weapon/circuitboard/shield_gen_ex"
 
 /datum/design/shield_gen
-	name = "Circuit Design (Experimental shield generator)"
-	desc = "Allows for the construction of circuit boards used to build an experimental shield generator."
+	name = "Circuit Design (Starscreen shield generator)"
+	desc = "Allows for the construction of circuit boards used to build a Starscreen shield generator."
 	id = "shield_gen"
 	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_GOLD = 10000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 2000, MAT_GOLD = 2000)
 	build_path = "/obj/machinery/shield_gen"
 
 /datum/design/shield_cap
-	name = "Circuit Design (Experimental shield capacitor)"
-	desc = "Allows for the construction of circuit boards used to build an experimental shielding capacitor."
+	name = "Circuit Design (Starscreen shield capacitor)"
+	desc = "Allows for the construction of circuit boards used to build a Starscreen shield capacitor."
 	id = "shield_cap"
 	req_tech = list(Tc_MAGNETS = 3, Tc_POWERSTORAGE = 4)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 10000, MAT_DIAMOND = 5000, MAT_SILVER = 10000)
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
 	build_path = "/obj/item/weapon/circuitboard/shield_cap"

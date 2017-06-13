@@ -487,13 +487,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 /obj/item/weapon/tome/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
 	if(istype(T, /obj/item/weapon/tome) && iscultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
-			if("cancel")
+			if("Cancel")
 				return
-//		var/list/nearby = viewers(1,src) //- Fuck this as well. No clue why this doesnt work. -K0000
-//			if (T.loc != user)
-//				return
-//		for(var/mob/M in nearby)
-//			if(M == user)
 		for(var/w in words)
 			words[w] = T.words[w]
 		to_chat(user, "You copy the translation notes from your tome.")

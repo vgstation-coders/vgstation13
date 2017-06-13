@@ -26,7 +26,7 @@
 	stop_automated_movement_when_pulled = 1
 	maxHealth = 30
 	health = 30
-	speed = 10
+	speed = 11
 
 	var/brain_op_stage = 0.0 // Faking it
 
@@ -330,7 +330,7 @@
 	health = 100
 	size = 1
 
-	speed = -1
+	speed = 1
 	turns_per_move = 1
 
 	melee_damage_type = "BRAIN"

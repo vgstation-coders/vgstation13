@@ -28,8 +28,9 @@
 		"kidneys"          = list(/obj/item/organ/kidneys,20),
 		"human eyes"       = list(/obj/item/organ/eyes,   30),
 		"grey eyes"        = list(/obj/item/organ/eyes/grey,   30),
-		"vox eyes"        = list(/obj/item/organ/eyes/vox,   30),
-		"liver"            = list(/obj/item/organ/liver,  50)
+		"vox eyes"         = list(/obj/item/organ/eyes/vox,   30),
+		"liver"            = list(/obj/item/organ/liver,  50),
+		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)
 
 /obj/machinery/bioprinter/New()
@@ -68,17 +69,18 @@
 
 		stored_matter -= products[choice][2]
 		var/new_organ = products[choice][1]
-		var/obj/item/organ/O = new new_organ(get_turf(src))
-		O.is_printed = TRUE // Heist stuff.
+		var/printed_organ = new new_organ(get_turf(src))
+		if(istype(printed_organ, /obj/item/organ))
+			var/obj/item/organ/O = printed_organ
+			O.is_printed = TRUE // Heist stuff.
 
-		if(prints_prosthetics)
-			O.robotic = 2
-		//else if(loaded_dna)
-			//visible_message("<span class='notice'>The printer would be using the DNA sample if it was coded.</span>")
-			//TODO: Copy DNA hash or donor reference over to new organ.
+			if(prints_prosthetics)
+				O.robotic = 2
+			//else if(loaded_dna)
+				//visible_message("<span class='notice'>The printer would be using the DNA sample if it was coded.</span>")
+				//TODO: Copy DNA hash or donor reference over to new organ.
 
 		visible_message("<span class='notice'>\The [src] spits out a brand new organ.</span>")
-
 	else
 		visible_message("<span class='warning'>\The [src]'s error light flickers. It can't make new organs out of thin air, fill it up first.</span>")
 

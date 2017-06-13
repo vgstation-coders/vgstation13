@@ -137,7 +137,7 @@
 		var/mob/living/carbon/human/H = M
 		if((H.species.flags & IS_PLANT))
 			if(prob(mutstrength*2))
-				M.apply_effect((rand(30,80)),IRRADIATE)
+				M.apply_radiation((rand(30,80)),RAD_EXTERNAL)
 				M.Knockdown(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)

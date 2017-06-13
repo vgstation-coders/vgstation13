@@ -200,7 +200,7 @@
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along part of it")]."
 		if(ARCHAEO_LIGHTER)
 			item_type = "[pick("cylinder","tank","chamber")]"
-			new_item = new /obj/item/weapon/lighter(src.loc)
+			new_item = new /obj/item/weapon/lighter/random(src.loc)
 			additional_desc = "There is a tiny device attached."
 			if(prob(30))
 				apply_image_decorations = 1
@@ -544,7 +544,7 @@
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/clothing/mask/morphing
 			possible_spawns += /obj/item/clothing/mask/morphing/amorphous
-			//possible_spawns += /obj/item/clothing/mask/happy PENDING REWORK
+			possible_spawns += /obj/item/clothing/mask/happy
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_DICE)
