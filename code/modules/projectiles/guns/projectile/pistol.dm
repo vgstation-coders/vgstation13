@@ -129,7 +129,7 @@
 	icon_state = "secguncomp[silenced ? "-s" : ""][chambered ? "" : "-e"]"
 	
 /obj/item/weapon/gun/projectile/NTUSP/fancy
-	desc = "The NT USP is a relatively rare sidearm, produced by a NanoTrasen subsidiary. This one has a sweet pearl finish. Uses .45 rounds."
+	desc = "The NT USP is a relatively rare sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds.<br><span class='notice'>This one has a sweet pearl finish!</span>"
 	name = "\improper NT USP Custom"
 	icon_state = "secgunfancy"
 
@@ -158,7 +158,7 @@
 	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 	
 /obj/item/weapon/gun/projectile/sec/fancy
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. <br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span> "
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
 	name = "\improper NT Glock Custom"
 	icon_state = "secgunfancy"
 
