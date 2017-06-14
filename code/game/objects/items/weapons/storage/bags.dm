@@ -69,6 +69,12 @@
 	slot_flags = SLOT_BELT | SLOT_HEAD
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
 
+obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
+	return can_be_inserted(I,1)
+
+obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
+	return handle_item_insertion(I,0)
+
 /obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbid wearing bags with something inside!
 	.=..()
