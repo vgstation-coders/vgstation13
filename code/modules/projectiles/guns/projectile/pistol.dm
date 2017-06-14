@@ -141,9 +141,9 @@
 			
 /obj/item/weapon/gun/projectile/sec
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds."
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
 	icon = 'icons/obj/biggun.dmi'
-	icon_state = "secglock"
+	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	max_shells = 8
@@ -157,6 +157,11 @@
 	..()
 	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 	
-/*/obj/item/weapon/gun/projectile/sec/new()
+/obj/item/weapon/gun/projectile/sec/fancy
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. <br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span> "
+	name = "\improper NT Glock Custom"
+	icon_state = "secgunfancy"
+
+/obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
-	update_icon()*/
+	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
