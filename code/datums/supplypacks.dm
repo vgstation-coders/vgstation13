@@ -862,8 +862,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "NT Glock pack"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
 					/obj/item/weapon/gun/projectile/sec,
-					/obj/item/voucher/free_item/hot_drink,
-					/obj/item/voucher/free_item/snack)
+					/obj/item/voucher/free_item/glockammo,
+					/obj/item/voucher/free_item/glockammo)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = ".45 pistols crate"
