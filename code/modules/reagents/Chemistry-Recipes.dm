@@ -16,8 +16,9 @@
 	var/result_amount = 0
 	var/secondary = 0 //Set to nonzero if secondary reaction
 	var/list/secondary_results = list() //Additional reagents produced by the reaction
-	var/requires_heating = 0
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
+	var/is_cold_recipe = 0
+	var/required_temp = 0
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]

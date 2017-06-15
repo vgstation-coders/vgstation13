@@ -43,7 +43,7 @@ datum/reagent/chemical_waste
 	color = "#ADFF2F"   //rgb: 173, 255, 47, toxic green
 
 
-	
+
 /datum/chemical_reaction/lithiumsodiumtungstate	//LiNa2WO4, not the easiest chem to mix
 	name = "Lithium Sodium Tungstate"
 	id = LITHIUMSODIUMTUNGSTATE
@@ -66,7 +66,7 @@ datum/reagent/chemical_waste
 	secondary_results = list(CHEMICAL_WASTE = 1)
 	required_reagents = list(DENSITY_SEPARATED_SAMPLE = 5)
 	result_amount = 4
-	requires_heating = 1
+	required_temp = 971.15 //Melting point of Sodium tungstate
 
 /obj/item/weapon/reagent_containers/glass/solution_tray
 	name = "solution tray"
@@ -97,34 +97,34 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/glass/solution_tray( src )
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/tungsten
 	name = "beaker 'tungsten'"
-	
+
 /obj/item/weapon/reagent_containers/glass/beaker/tungsten/New()
 	..()
 	reagents.add_reagent(TUNGSTEN,50)
 	update_icon()
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/oxygen
 	name = "beaker 'oxygen'"
-	
+
 /obj/item/weapon/reagent_containers/glass/beaker/oxygen/New()
 	..()
 	reagents.add_reagent(OXYGEN,50)
 	update_icon()
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/sodium
 	name = "beaker 'sodium'"
-	
+
 /obj/item/weapon/reagent_containers/glass/beaker/sodium/New()
 	..()
 	reagents.add_reagent(SODIUM,50)
 	update_icon()
-	
+
 
 /obj/item/weapon/reagent_containers/glass/beaker/lithium
 	name = "beaker 'lithium'"
@@ -133,16 +133,7 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	..()
 	reagents.add_reagent(LITHIUM,50)
 	update_icon()
-	
 
-/obj/item/weapon/reagent_containers/glass/beaker/water
-	name = "beaker 'water'"
-
-/obj/item/weapon/reagent_containers/glass/beaker/water/New()
-	..()
-	reagents.add_reagent(WATER,50)
-	update_icon()
-	
 
 /obj/item/weapon/reagent_containers/glass/beaker/water
 	name = "beaker 'water'"
@@ -152,7 +143,16 @@ obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/
 	reagents.add_reagent(WATER,50)
 	update_icon()
 
-	
+
+/obj/item/weapon/reagent_containers/glass/beaker/water
+	name = "beaker 'water'"
+
+/obj/item/weapon/reagent_containers/glass/beaker/water/New()
+	..()
+	reagents.add_reagent(WATER,50)
+	update_icon()
+
+
 /obj/item/weapon/reagent_containers/glass/beaker/fuel
 	name = "beaker 'fuel'"
 
