@@ -307,12 +307,12 @@
 		if(alreadyhas)
 			to_chat(user, "The holo switchtool already has [alreadyhas] technology!")
 
-#undef BT	1
-#undef ENGI	2
-#undef CB	4
-#undef SYNDI	8
-#undef NT	16
-#undef PS	32
+#undef BT
+#undef ENGI
+#undef CB
+#undef SYNDI
+#undef NT
+#undef PS
 
 //for the inhand sprite changes
 //Big shitty wall of else if quality code
