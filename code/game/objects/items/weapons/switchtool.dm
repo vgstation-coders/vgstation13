@@ -250,7 +250,7 @@
 		var/obj/item/weapon/disk/tech_disk/T = D
 		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/biotech) && disk_tech.level >= 3)
-			if(!has_tech & BT)
+			if(!(has_tech & BT))
 				stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
 				stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
 				stored_modules["/obj/item/weapon/cautery:Cautery"] = new /obj/item/weapon/cautery(src)
@@ -262,7 +262,7 @@
 				return TRUE
 			alreadyhas = "Biotech"
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
-			if(!has_tech & ENGI)
+			if(!(has_tech & ENGI))
 				stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
 				stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
 				stored_modules["/obj/item/weapon/wirecutters:Wirecutters"] = new /obj/item/weapon/wirecutters(src)
@@ -274,21 +274,21 @@
 				return TRUE
 			alreadyhas = "Engineering"
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
-			if(!has_tech & CB)
+			if(!(has_tech & CB))
 				stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
 				to_chat(user, "The holo switchtool has a defensive design now!")
 				has_tech |= CB
 				return TRUE
 			alreadyhas = "Combat"
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
-			if(!has_tech & SYNDI)
+			if(!(has_tech & SYNDI))
 				stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
 				to_chat(user, "The holo switchtool has an offensive design now!")
 				has_tech |= SYNDI
 				return TRUE
 			alreadyhas = "Syndicate"
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
-			if(!has_tech & NT)
+			if(!(has_tech & NT))
 				stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
 				to_chat(user, "The holo switchtool has a secret offensive design now!")
 				has_tech |= NT
@@ -297,7 +297,7 @@
 	//Joke module about power[clean/creep], this is dumb but exists.
 	//How does a UV light clean even? It just sterilizes. I guess it works because it's like suit storages with their UV suit cleaner.
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
-			if(!has_tech & PS)
+			if(!(has_tech & PS))
 				stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
 				to_chat(user, "The holo switchtool has a power clean design now!")
 				has_tech |= PS
