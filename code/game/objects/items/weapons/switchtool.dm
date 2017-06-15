@@ -275,7 +275,7 @@
 			stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
 			to_chat(user, "The holo switchtool has a power clean design now!")
 			return TRUE
-	
+
 //for the inhand sprite changes
 //Big shitty wall of else if quality code
 /obj/item/weapon/switchtool/holo/update_icon()
