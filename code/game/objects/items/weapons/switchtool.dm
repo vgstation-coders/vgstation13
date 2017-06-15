@@ -38,7 +38,7 @@
 				if(stored_modules[module] == deployed)
 					stored_modules[module] = null
 			undeploy()
-		return 1
+		return TRUE
 
 /obj/item/weapon/switchtool/New()
 	..()
@@ -64,7 +64,7 @@
 	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
 		return remove_module(user)
 	if(add_module(used_item, user))
-		return 1
+		return TRUE
 	else
 		return ..()
 
@@ -101,7 +101,7 @@
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
 					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
-					return 1
+					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
 	deployed.cant_drop = 0
@@ -113,7 +113,7 @@
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
 	playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
 	undeploy()
-	return 1
+	return TRUE
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(get_turf(src), undeploy_sound, 10, 1)
@@ -153,7 +153,7 @@
 	else if(potential_modules.len == 1)
 		deploy(potential_modules[1])
 		to_chat(user, "You deploy \the [potential_modules[1]]")
-		return 1
+		return TRUE
 
 	else
 		var/chosen_module = input(user,"What do you want to deploy?", "[src]", "Cancel") as anything in potential_modules
@@ -165,7 +165,7 @@
 					break
 			if(deploy(true_module))
 				to_chat(user, "You deploy \the [deployed].")
-			return 1
+			return TRUE
 		return
 
 /obj/item/weapon/switchtool/surgery
@@ -247,7 +247,7 @@
 			stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
 			stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
 			to_chat(user, "The holo switchtool has medical designs now!")
-			return 1
+			return TRUE
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
 			stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
@@ -256,25 +256,25 @@
 			stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
 			stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
 			to_chat(user, "The holo switchtool has engineering designs now!")
-			return 1
+			return TRUE
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
 			to_chat(user, "The holo switchtool has a defensive design now!")
-			return 1
+			return TRUE
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
 			stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
 			to_chat(user, "The holo switchtool has an offensive design now!")
-			return 1
+			return TRUE
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
 			stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
 			to_chat(user, "The holo switchtool has a secret offensive design now!")
-			return 1
+			return TRUE
 	//Joke module about power[clean/creep], this is dumb but exists.
 	//How does a UV light clean even? It just sterilizes. I guess it works because it's like suit storages with their UV suit cleaner.
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
 			stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
 			to_chat(user, "The holo switchtool has a power clean design now!")
-			return 1
+			return TRUE
 	
 //for the inhand sprite changes
 //Big shitty wall of else if quality code
@@ -324,7 +324,7 @@
 
 /obj/item/weapon/switchtool/holo/IsShield()
 	if(istype(deployed, /obj/item/weapon/shield/energy))
-		return 1
+		return TRUE
 	else
 		return 0
 
