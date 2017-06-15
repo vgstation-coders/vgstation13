@@ -214,12 +214,12 @@
 		..()
 
 
-#define BT		1
-#define ENGI		2
-#define CB		4
-#define SYNDI		8
-#define NT		16
-#define PS		32
+#define BT 1
+#define ENGI 2
+#define CB 4
+#define SYNDI 8
+#define NT 16
+#define PS 32
 
 //Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
 /obj/item/weapon/switchtool/holo
