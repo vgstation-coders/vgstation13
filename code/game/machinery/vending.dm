@@ -1287,6 +1287,9 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/weapon/storage/pill_bottle/time_release = 2,
 		)
+	vouched = list(	
+		/obj/item/weapon/medbot_cube = 2
+		)
 
 	pack = /obj/structure/vendomatpack/medical
 
