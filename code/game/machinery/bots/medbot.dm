@@ -3,6 +3,19 @@
 //MEDBOT ASSEMBLY
 #define INJECTION_TIME 30
 
+/obj/item/weapon/medbot_cube
+	name = "advanced medibot cube"
+	desc = "Compressed Nanotrasen Advanced Medibot, ready for deployment. Just unwrap the cube!"
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "medbotcube"
+
+/obj/item/weapon/medbot_cube/attack_self(mob/user)
+	user.visible_message("<span class='warning'>\The [src] suddenly expands into a fully functional medibot!</span>", \
+	"<span class='warning'>You carefully unwrap \the [src] and it suddenly expands into a fully functional medibot!</span>")
+	new /obj/machinery/bot/medbot/mysterious/nanotrasen(get_turf(src))
+	qdel(src)
+
+
 /obj/machinery/bot/medbot
 	name = "Medibot"
 	desc = "A little medical robot. He looks somewhat underwhelmed. It has a slot for pAIs."
@@ -55,6 +68,11 @@
 	treatment_brute = BICARIDINE
 	treatment_fire = KELOTANE
 	treatment_tox = ANTI_TOXIN
+
+/obj/machinery/bot/medbot/mysterious/nanotrasen
+	name = "Nanotrasen Advanced Medibot"
+	desc = "Not entirely a replacement for a real doctor."
+	skin = "nanotrasen"
 
 /obj/item/weapon/firstaid_arm_assembly
 	name = "first aid/robot arm assembly"

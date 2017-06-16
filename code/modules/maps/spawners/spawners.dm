@@ -1110,7 +1110,8 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/dnainjector/nofail/randompower,
-	/obj/item/weapon/gun/syringe/rapidsyringe
+	/obj/item/weapon/gun/syringe/rapidsyringe,
+	/obj/item/voucher/free_item/medical_safe
 )
 
 
