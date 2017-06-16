@@ -46,9 +46,10 @@
 	#define MAP_OVERRIDE_FILES
 	#include "packedstation\misc.dm"
 	#include "packedstation\telecomms.dm"
-	//#include "packedstation\uplink_item.dm"
-	//#include "packedstation\job\jobs.dm" //Job changes removed for now
-	//#include "packedstation\job\removed.dm"
+	/* This is gonna stay just in case - Prometh
+	#include "packedstation\uplink_item.dm"
+	#include "packedstation\job\jobs.dm" //Job changes removed for now
+	#include "packedstation\job\removed.dm"
 
-//#elif !defined(MAP_OVERRIDE)
-	//#warn a map has already been included, ignoring packedstation.
+#elif !defined(MAP_OVERRIDE)
+	#warn a map has already been included, ignoring packedstation. */
