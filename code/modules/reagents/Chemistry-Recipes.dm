@@ -2849,7 +2849,7 @@
 	name = "Anthracene"
 	id = ANTHRACENE
 	result = ANTHRACENE
-	required_reagents = list(ZEAXANTHIN = 1, MESCALINE = 1)
+	required_reagents = list(ZEAXANTHIN = 1, RADIUM = 1)
 	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
