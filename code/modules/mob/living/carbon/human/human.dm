@@ -75,6 +75,10 @@
 	h_style = "Bald"
 	..(new_loc, "Slime")
 
+/mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc)
+	initialize_basic_NPC_components()
+
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
@@ -1817,3 +1821,15 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	if(M_HULK in mutations)
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
+
+/mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
+	NPC_brain = new (src)
+	NPC_brain.AddComponent(/datum/component/controller/mob)
+	NPC_brain.AddComponent(/datum/component/ai/hand_control)
+
+/mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
+	initialize_barebones_NPC_components()
+	NPC_brain.AddComponent(/datum/component/ai/human_brain)
+	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
+	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
+	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
