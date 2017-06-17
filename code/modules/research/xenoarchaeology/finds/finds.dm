@@ -588,6 +588,14 @@
 			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
+		if(ARCHAEO_SASH)
+			//red ribbon arm
+			anomaly_factor = 2
+			apply_material_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/red_ribbon_arm
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
 
 	var/decorations = ""
 	if(apply_material_decorations)
