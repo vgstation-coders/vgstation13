@@ -176,7 +176,7 @@
 		manual_unbuckle(user)
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		getFromPool(sheet_type, get_turf(src), 2)
+		drop_stack(sheet_type, loc, 2, user)
 		qdel(src)
 		return
 
