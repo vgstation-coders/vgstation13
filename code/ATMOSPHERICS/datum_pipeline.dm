@@ -4,6 +4,9 @@
 	var/list/obj/machinery/atmospherics/pipe/members = list()
 	var/list/obj/machinery/atmospherics/pipe/edges = list() //Used for building networks
 
+	var/list/obj/machinery/atmospherics/pipe/update_icon_queue = list() // prevents duplicate update_icon() processing
+	var/datum/pipeline/processing_update_queue = FALSE // tells the pipeline whether or not to start processing queue
+
 	var/datum/pipe_network/network
 
 	var/alert_pressure = 0
@@ -229,3 +232,19 @@
 			air.temperature -= heat/total_heat_capacity
 	if(network)
 		network.update = 1
+
+
+//Slows down the rate of update_icon() when many of them are called simultaneously and prevents some duplicate processing
+/datum/pipeline/proc/process_update_icon_queue()
+	for (var/obj/machinery/atmospherics/P in update_icon_queue)//P is the pipe that needs to call update_icon()
+		if (P.update_icon_dup_flag == TRUE)//Sets this flag to TRUE when it gets added to the list
+			P.update_icon()
+			P.update_icon_dup_flag = FALSE//Sets this flag to FALSE when it has been processed (and thus wont' reprocess it if its in the list again)
+	update_icon_queue = new()
+	processing_update_queue = FALSE
+
+// Adds pipes to the list of things that need to call update_icon() and starts processing it if that hasn't already started
+/datum/pipeline/proc/add_to_queue(pipe)
+	update_icon_queue += pipe
+	if (processing_update_queue == FALSE)
+		processing_update_queue = TRUE
