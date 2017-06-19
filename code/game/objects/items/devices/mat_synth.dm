@@ -95,9 +95,7 @@
 									dropped_sheet.amount = amount
 					else
 						to_chat(R, "<span class='notice'>Dropping [amount] of [initial(material_type.name)] onto the floor.</span>")
-						var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
-						dropped_sheet.amount = amount
-
+						drop_stack(material_type, get_turf(src), amount, user)
 
 					R.module.rebuild()
 					R.hud_used.update_robot_modules_display()
