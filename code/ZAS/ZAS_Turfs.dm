@@ -48,7 +48,7 @@
 /turf/simulated/var/current_graphic = null
 /turf/simulated/var/tmp/datum/gas_mixture/air
 /turf/simulated/var/tmp/processing = 1
-/turf/simulated/var/tmp/air_check_directions = 0 //Do not modify this, just add turf to air_master.tiles_to_update
+/turf/simulated/var/tmp/air_check_directions = 0 //Do not modify this, just add turf to SSair.tiles_to_update
 /turf/simulated/var/tmp/obj/fire/active_hotspot
 /turf/simulated/var/tmp/was_icy=0
 
@@ -128,15 +128,15 @@
 		air.temperature = temperature
 		air.update_values()
 
-		if(air_master)
-			air_master.tiles_to_update.Add(src)
+		if(SSair)
+			SSair.tiles_to_update.Add(src)
 
 	else
-		if(air_master)
+		if(SSair)
 			for(var/direction in cardinal)
 				var/turf/simulated/floor/target = get_step(src,direction)
 				if(istype(target))
-					air_master.tiles_to_update |= target
+					SSair.tiles_to_update |= target
 
 /turf/simulated/Destroy()
 	if(active_hotspot)
@@ -146,7 +146,7 @@
 		for(var/direction in list(NORTH, SOUTH, EAST, WEST))
 			var/turf/simulated/tile = get_step(src,direction)
 			if(istype(tile) && !tile.blocks_air)
-				air_master.tiles_to_update.Add(tile)
+				SSair.tiles_to_update.Add(tile)
 	..()
 
 /turf/simulated/copy_air_from(var/turf/T)
@@ -225,9 +225,9 @@
 			new/zone(list(src))
 
 	//Check pass sanity of the connections.
-	if("\ref[src]" in air_master.turfs_with_connections)
-		for(var/connection/C in air_master.turfs_with_connections["\ref[src]"])
-			air_master.connections_to_check |= C
+	if("\ref[src]" in SSair.turfs_with_connections)
+		for(var/connection/C in SSair.turfs_with_connections["\ref[src]"])
+			SSair.connections_to_check |= C
 
 	if(zone && istype(zone.air) && !zone.rebuild)
 		if(zone.air.check_tile_graphic())

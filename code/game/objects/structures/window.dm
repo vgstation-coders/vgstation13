@@ -504,14 +504,14 @@
 /obj/structure/window/proc/update_nearby_tiles(var/turf/T)
 
 
-	if(isnull(air_master))
+	if(isnull(SSair))
 		return 0
 
 	if(!T)
 		T = get_turf(src)
 
 	if(isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1
 

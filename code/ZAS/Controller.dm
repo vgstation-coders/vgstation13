@@ -1,4 +1,4 @@
-var/datum/controller/air_system/air_master
+var/datum/controller/air_system/SSair
 
 var/tick_multiplier = 2
 
@@ -249,7 +249,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	ASSERT(A != B)
 	#endif
 
-	var/block = air_master.air_blocked(A,B)
+	var/block = SSair.air_blocked(A,B)
 	if(block & AIR_BLOCKED)
 		return
 

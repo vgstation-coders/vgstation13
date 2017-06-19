@@ -70,10 +70,10 @@
 				var/obj/effect/portal/P = target
 				if(get_turf(src) && get_turf(P))
 					var/valid_connection = FALSE
-					if(air_master.has_valid_zone(get_turf(src)))
+					if(SSair.has_valid_zone(get_turf(src)))
 						atmos_connection = new (get_turf(src), get_turf(P))
 						valid_connection = TRUE
-					if(air_master.has_valid_zone(get_turf(P)))
+					if(SSair.has_valid_zone(get_turf(P)))
 						P.atmos_connection = new (get_turf(P), get_turf(src))
 						valid_connection = TRUE
 					if(valid_connection)

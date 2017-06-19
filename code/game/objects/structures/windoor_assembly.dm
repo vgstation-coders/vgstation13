@@ -302,12 +302,12 @@ obj/structure/windoor_assembly/Destroy()
 	return
 
 /obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if (isnull(air_master))
+	if (isnull(SSair))
 		return 0
 
 	var/T = loc
 
 	if (isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1

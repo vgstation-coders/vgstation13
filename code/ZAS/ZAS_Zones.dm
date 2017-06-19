@@ -54,12 +54,12 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	//Ensuring the zone list doesn't get clogged with null values.
 	for(var/turf/simulated/T in contents)
 		RemoveTurf(T)
-		air_master.tiles_to_reconsider_zones += T
+		SSair.tiles_to_reconsider_zones += T
 	for(var/zone/Z in connected_zones)
 		if(src in Z.connected_zones)
 			Z.connected_zones.Remove(src)
 	for(var/connection/C in connections)
-		air_master.connections_to_check += C
+		SSair.connections_to_check += C
 	zones.Remove(src)
 	air = null
 	. = ..()
@@ -73,7 +73,7 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	//Ensuring the zone list doesn't get clogged with null values.
 	for(var/turf/simulated/T in contents)
 		RemoveTurf(T)
-		air_master.tiles_to_reconsider_zones += T
+		SSair.tiles_to_reconsider_zones += T
 
 	//Removing zone connections and scheduling connection cleanup
 	for(var/zone/Z in connected_zones)
@@ -82,7 +82,7 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	connected_zones = null
 
 	for(var/connection/C in connections)
-		air_master.connections_to_check += C
+		SSair.connections_to_check += C
 	connections = null
 
 	return 1
@@ -482,7 +482,7 @@ zone/proc/Rebuild()
 
 	if(!istype(sample) || !sample.CanPass(null, sample, 1.5, 1)) //Not a single valid turf.
 		for(var/turf/simulated/T in contents)
-			air_master.tiles_to_update |= T
+			SSair.tiles_to_update |= T
 		return SoftDelete()
 
 	new_contents = FloodFill(sample)
@@ -518,8 +518,8 @@ zone/proc/Rebuild()
 			if(!iscatwalk(T) && !T.zone && T.CanPass(null, T, 1.5, 1))
 				var/zone/Z = new /zone(T)
 				Z.air.copy_from(air)
-			else if(!T in air_master.tiles_to_update)
-				air_master.tiles_to_update.Add(T)
+			else if(!T in SSair.tiles_to_update)
+				SSair.tiles_to_update.Add(T)
 
 	for(var/turf/simulated/T in contents)
 		if(T.zone && T.zone != src)
