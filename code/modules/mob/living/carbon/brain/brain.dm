@@ -35,6 +35,11 @@
 		canmove = 0
 	return canmove
 
+/mob/living/carbon/brain/say(var/message)
+	if (container && istype(container, /obj/item/device/mmi/posibrain))
+		return ..(message, "R")
+	return ..(message)
+
 /mob/living/carbon/brain/say_understands(var/atom/movable/other)//Goddamn is this hackish, but this say code is so odd
 	if(other)
 		other = other.GetSource()
