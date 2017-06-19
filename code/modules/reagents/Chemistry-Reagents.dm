@@ -5790,3 +5790,86 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = THYMOL
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
+
+//End of plant-specific reagents
+
+/datum/reagent/hemoscyanine
+	name = "Hemoscyanine"
+	id = HEMOSCYANINE
+	description = "Hemoscyanine is a toxin which can destroy blood cells."
+	reagent_state = LIQUID
+	color = "#600000" //rgb: 96, 0, 0
+
+/datum/reagent/hemoscyanine/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!(H.species.anatomy_flags & NO_BLOOD))
+			H.vessel.remove_reagent(BLOOD, 2)
+
+/datum/reagent/anthracene
+	name = "Anthracene"
+	id = ANTHRACENE
+	description = "Anthracene is a fluorophore which emits a weak green glow."
+	reagent_state = LIQUID
+	color = "#00ff00" //rgb: 0, 255, 0
+	data = 0
+	var/light_intensity = 4
+	var/initial_color = null
+
+/datum/reagent/anthracene/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!data)
+		initial_color = M.light_color
+		M.light_color = LIGHT_COLOR_GREEN
+		M.set_light(light_intensity)
+		data++
+
+/datum/reagent/anthracene/reagent_deleted()
+	if(..())
+		return 1
+
+	if(!holder)
+		return
+	var/atom/A =  holder.my_atom
+	A.light_color = initial_color
+	A.set_light(0)
+
+/datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	if(..())
+		return 1
+
+	if(method == TOUCH)
+		var/init_color = M.light_color
+		M.light_color = LIGHT_COLOR_GREEN
+		M.set_light(light_intensity)
+		spawn(volume * 10)
+			M.light_color = init_color
+			M.set_light(0)
+
+/datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	var/init_color = T.light_color
+	T.light_color = LIGHT_COLOR_GREEN
+	T.set_light(light_intensity)
+	spawn(volume * 10)
+		T.light_color = init_color
+		T.set_light(0)
+
+/datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	var/init_color = O.light_color
+	O.light_color = LIGHT_COLOR_GREEN
+	O.set_light(light_intensity)
+	spawn(volume * 10)
+		O.light_color = init_color
+		O.set_light(0)
+
