@@ -484,7 +484,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 								found = 1
 								break
 					if(!found)
-						to_chat(user, "<span class='notice'>You have no blood in, on, or around you can use to draw a rune!</span>")
+						to_chat(user, "<span class='notice'>You have no blood in, on, or around you that you can use to draw a rune!</span>")
 						return
 			else
 				user.visible_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>",\
