@@ -94,6 +94,8 @@
 			return "iron"
 		if(ARCHAEO_ROBOT)
 			return "iron"
+		if(ARCHAEO_TOY)
+			return "potassium"
 	return "plasma"
 
 //see /turf/unsimulated/mineral/New() in code/modules/mining/mine_turfs.dm
@@ -136,6 +138,7 @@
 			75;ARCHAEO_UNKNOWN,\
 			50;ARCHAEO_SHARD,\
 			50;ARCHAEO_RODS,\
+			50;ARCHAEO_TOY,\
 			25;ARCHAEO_METAL,\
 			5;ARCHAEO_REMAINS_HUMANOID\
 			)

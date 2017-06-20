@@ -596,6 +596,18 @@
 			possible_spawns += /obj/item/red_ribbon_arm
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
+		if(ARCHAEO_TOY)
+			apply_material_decorations = 1
+			apply_image_decorations = 0
+			apply_prefix = 1
+			if(prob(50))
+				anomaly_factor = 0
+				new_item = new /obj/item/weapon/bikehorn/rubberducky/angry(loc)
+			else
+				anomaly_factor = 1
+				var/new_type = pick(existing_typesof(/obj/item/toy))
+				new_item = new new_type(loc)
+
 
 	var/decorations = ""
 	if(apply_material_decorations)
