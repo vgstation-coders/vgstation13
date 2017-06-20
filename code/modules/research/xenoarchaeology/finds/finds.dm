@@ -605,8 +605,10 @@
 				new_item = new /obj/item/weapon/bikehorn/rubberducky/angry(loc)
 			else
 				anomaly_factor = 1
-				var/new_type = pick(existing_typesof(/obj/item/toy))
-				new_item = new new_type(loc)
+				var/list/possible_spawns=list()
+				possible_spawns = existing_typesof(/obj/item/toy)
+				var/new_type = pick(possible_spawns)
+				new_item = new new_type(src.loc)
 
 
 	var/decorations = ""

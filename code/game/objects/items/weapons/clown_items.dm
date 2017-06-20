@@ -179,6 +179,8 @@
 	do_teleport(src, get_turf(src), teleport_range, asoundout = hitsound)
 	last_teleport = world.time
 
+#undef TELE_COOLDOWN
+
 
 #define GLUE_WEAROFF_TIME -1 //was 9000: 15 minutes, or 900 seconds. Negative values = infinite glue
 
