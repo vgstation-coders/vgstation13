@@ -602,7 +602,7 @@
 			apply_prefix = 1
 			if(prob(50))
 				anomaly_factor = 0
-				new_item = new /obj/item/weapon/bikehorn/rubberducky/angry(loc)
+				new_item = new /obj/item/weapon/bikehorn/rubberducky/quantum(loc)
 			else
 				anomaly_factor = 1
 				var/list/possible_spawns=list()

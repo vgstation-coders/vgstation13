@@ -148,20 +148,20 @@
 
 #define TELE_COOLDOWN 5 SECONDS
 
-/obj/item/weapon/bikehorn/rubberducky/angry
+/obj/item/weapon/bikehorn/rubberducky/quantum
 	desc = "A quantum quacker"
 	var/teleport_range = 5
 	var/last_teleport
 
-/obj/item/weapon/bikehorn/rubberducky/angry/New()
+/obj/item/weapon/bikehorn/rubberducky/quantum/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/bikehorn/rubberducky/angry/Destroy()
+/obj/item/weapon/bikehorn/rubberducky/quantum/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/bikehorn/rubberducky/angry/process()
+/obj/item/weapon/bikehorn/rubberducky/quantum/process()
 	var/visible = FALSE
 
 	for (var/mob/living/M in viewers(src))
@@ -173,7 +173,7 @@
 		do_teleport(src, get_turf(src), teleport_range, asoundin = hitsound)
 		last_teleport = world.time
 
-/obj/item/weapon/bikehorn/rubberducky/angry/equipped(var/mob/user, var/slot, hand_index = 0)
+/obj/item/weapon/bikehorn/rubberducky/quantum/equipped(var/mob/user, var/slot, hand_index = 0)
 	to_chat(user, "<span class = 'warning'>\The [src] disappears from your grasp!</span>")
 	user.drop_item(src)
 	do_teleport(src, get_turf(src), teleport_range, asoundout = hitsound)
