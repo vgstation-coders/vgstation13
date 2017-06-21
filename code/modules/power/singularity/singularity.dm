@@ -307,7 +307,7 @@
 	//set background = BACKGROUND_ENABLED
 	//var/ngrabbed=0
 	for(var/atom/X in orange(grav_pull, src))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+		if(islightingoverlay(X))//since there's one on every turf
 			continue
 		// Caps grabbing shit at 100 items.
 		//if(ngrabbed==100)

@@ -79,8 +79,10 @@
 		un_opaque = loc
 
 	loc = null
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
+
+#warn opacity ?????
+//	if (un_opaque)
+//		un_opaque.recalc_atom_opacity()
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)

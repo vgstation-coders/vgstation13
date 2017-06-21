@@ -29,12 +29,6 @@
 			return global.error_cooldown;
 		if("html_interfaces")
 			return global.html_interfaces;
-		if("all_lighting_corners")
-			return global.all_lighting_corners;
-		if("LIGHTING_CORNER_DIAGONAL")
-			return global.LIGHTING_CORNER_DIAGONAL;
-		if("all_lighting_overlays")
-			return global.all_lighting_overlays;
 		if("validartifactprojectiles")
 			return global.validartifactprojectiles;
 		if("cargo_telepads")
@@ -71,8 +65,6 @@
 			return global.total_runtimes_skipped;
 		if("error_cache")
 			return global.error_cache;
-		if("dummy_lighting_corner")
-			return global.dummy_lighting_corner;
 		if("security_level")
 			return global.security_level;
 		if("iconCache")
@@ -641,10 +633,6 @@
 			return global.SSlighting;
 		if("lighting_update_lights")
 			return global.lighting_update_lights;
-		if("lighting_update_corners")
-			return global.lighting_update_corners;
-		if("lighting_update_overlays")
-			return global.lighting_update_overlays;
 		if("SSmachinery")
 			return global.SSmachinery;
 		if("machines")
@@ -1892,12 +1880,6 @@
 			global.error_cooldown=newval
 		if("html_interfaces")
 			global.html_interfaces=newval
-		if("all_lighting_corners")
-			global.all_lighting_corners=newval
-		if("LIGHTING_CORNER_DIAGONAL")
-			global.LIGHTING_CORNER_DIAGONAL=newval
-		if("all_lighting_overlays")
-			global.all_lighting_overlays=newval
 		if("validartifactprojectiles")
 			global.validartifactprojectiles=newval
 		if("cargo_telepads")
@@ -1934,8 +1916,6 @@
 			global.total_runtimes_skipped=newval
 		if("error_cache")
 			global.error_cache=newval
-		if("dummy_lighting_corner")
-			global.dummy_lighting_corner=newval
 		if("security_level")
 			global.security_level=newval
 		if("iconCache")
@@ -2504,10 +2484,6 @@
 			global.SSlighting=newval
 		if("lighting_update_lights")
 			global.lighting_update_lights=newval
-		if("lighting_update_corners")
-			global.lighting_update_corners=newval
-		if("lighting_update_overlays")
-			global.lighting_update_overlays=newval
 		if("SSmachinery")
 			global.SSmachinery=newval
 		if("machines")

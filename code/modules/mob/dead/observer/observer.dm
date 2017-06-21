@@ -22,6 +22,7 @@
 	layer = GHOST_LAYER
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
+	var/seedarkness = 1
 
 	// Holomaps for ghosts
 	var/obj/item/device/station_map/station_holomap = null
@@ -660,10 +661,16 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Toggle Darkness"
 	set category = "Ghost"
 
-	if (see_invisible == SEE_INVISIBLE_OBSERVER_NOLIGHTING)
-		see_invisible = SEE_INVISIBLE_OBSERVER
+	seedarkness = !seedarkness
+	update_darkness()
+
+/mob/dead/observer/proc/update_darkness()
+	if(seedarkness)
+		client.screen |= dark_plane
+		client.screen |= master_plane
 	else
-		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+		client.screen -= dark_plane
+		client.screen -= master_plane
 
 /mob/dead/observer/verb/become_mouse()
 	set name = "Become mouse"

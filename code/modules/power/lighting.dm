@@ -121,7 +121,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/brightness_color = null
 	var/status = LIGHT_OK		// LIGHT_OK, _EMPTY, _BURNED or _BROKEN
 	var/flickering = 0
-	var/light_type = /obj/item/weapon/light/tube		// the type of light item
+	var/tube_type = /obj/item/weapon/light/tube		// the type of light item
 	var/fitting = "tube"
 	var/switchcount = 0			// count of number of times switched on/off
 								// this is used to calc the probability the light burns out
@@ -168,13 +168,13 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	cost = 4
 	desc = "A small lighting fixture."
-	light_type = /obj/item/weapon/light/bulb
+	tube_type = /obj/item/weapon/light/bulb
 
 
 /obj/machinery/light/spot
 	name = "spotlight"
 	fitting = "large tube"
-	light_type = /obj/item/weapon/light/tube/large
+	tube_type = /obj/item/weapon/light/tube/large
 	brightness_range = 8
 	brightness_power = 1
 	cost = 8
@@ -324,7 +324,7 @@ var/global/list/obj/machinery/light/alllights = list()
 				brightness_color = L.brightness_color
 				cost = L.cost
 				base_state = L.base_state
-				light_type = L.type
+				tube_type = L.type
 				on = has_power()
 				update()
 
@@ -505,7 +505,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			return				// if burned, don't remove the light
 
 	// create a light tube/bulb item and put it in the user's hand
-	var/obj/item/weapon/light/L = new light_type()
+	var/obj/item/weapon/light/L = new tube_type()
 	L.status = status
 	L.rigged = rigged
 	L.brightness_range = brightness_range

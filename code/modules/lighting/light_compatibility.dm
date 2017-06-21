@@ -1,0 +1,1 @@
+/atom/var/dynamic_lighting

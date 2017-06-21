@@ -22,7 +22,7 @@
 
 /datum/artifact_effect/gravity/proc/gravitypull(range)
 	for(var/atom/X in orange(effectrange, holder))
-		if(X.type == /atom/movable/lighting_overlay)
+		if(islightingoverlay(X))
 			continue
 		if(istype(X, /mob/living) && X.Adjacent(holder))
 			var/mob/living/L = X
