@@ -2,6 +2,8 @@
 	icon = 'icons/obj/assemblies.dmi'
 	name = "tank transfer valve"
 	icon_state = "valve_1"
+	item_state = "ttv"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	desc = "Regulates the transfer of air between two tanks"
 	var/obj/item/weapon/tank/tank_one
 	var/obj/item/weapon/tank/tank_two
