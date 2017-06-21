@@ -17,6 +17,7 @@
 	origin_tech = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
 
 	var/mode = 1 //0 is material selection, 1 is material production
+	var/inv_mode = 1 //mode toggle, either store in the material bay (1) or drop to the floor (0)
 	var/emagged = 0
 
 	var/obj/item/stack/sheet/active_material = /obj/item/stack/sheet/metal
@@ -61,37 +62,41 @@
 			amount = Clamp(round(amount, 1), 0, 50)
 			if(amount)
 				if(TakeCost(amount, modifier, R))
-					var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
-					if(!inside_sheet)
-						var/obj/item/stack/sheet/created_sheet = new material_type(R.module)
-						R.module.modules += created_sheet
-						if(amount <= created_sheet.max_amount)
-							created_sheet.amount += (amount-created_sheet.amount)
-							to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
+					if(inv_mode)
+						var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
+						if(!inside_sheet)
+							var/obj/item/stack/sheet/created_sheet = new material_type(R.module)
+							R.module.modules += created_sheet
+							if(amount <= created_sheet.max_amount)
+								created_sheet.amount += (amount-created_sheet.amount)
+								to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
+							else
+								if(created_sheet.amount <= created_sheet.max_amount)
+									var/transfer_amount = min(created_sheet.max_amount - created_sheet.amount, amount)
+									created_sheet.amount += (transfer_amount-1)
+									amount -= transfer_amount
+								if(amount >= 1 && (created_sheet.amount >= created_sheet.max_amount))
+									to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
+									var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
+									dropped_sheet.amount = (amount - 1)
 						else
-							if(created_sheet.amount <= created_sheet.max_amount)
-								var/transfer_amount = min(created_sheet.max_amount - created_sheet.amount, amount)
-								created_sheet.amount += (transfer_amount-1)
-								amount -= transfer_amount
-							if(amount >= 1 && (created_sheet.amount >= created_sheet.max_amount))
-								to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
-								var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
-								dropped_sheet.amount = (amount - 1)
-
+							if((inside_sheet.amount + amount) <= inside_sheet.max_amount)
+								inside_sheet.amount += amount
+								to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
+								return
+							else
+								if(inside_sheet.amount <= inside_sheet.max_amount)
+									var/transfer_amount = min(inside_sheet.max_amount - inside_sheet.amount, amount)
+									inside_sheet.amount += transfer_amount
+									amount -= transfer_amount
+								if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
+									to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
+									var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
+									dropped_sheet.amount = amount
 					else
-						if((inside_sheet.amount + amount) <= inside_sheet.max_amount)
-							inside_sheet.amount += amount
-							to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
-							return
-						else
-							if(inside_sheet.amount <= inside_sheet.max_amount)
-								var/transfer_amount = min(inside_sheet.max_amount - inside_sheet.amount, amount)
-								inside_sheet.amount += transfer_amount
-								amount -= transfer_amount
-							if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
-								to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
-								var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
-								dropped_sheet.amount = amount
+						to_chat(R, "<span class='notice'>Dropping [amount] of [initial(material_type.name)] onto the floor.</span>")
+						drop_stack(material_type, get_turf(src), amount, user)
+
 					R.module.rebuild()
 					R.hud_used.update_robot_modules_display()
 					return
@@ -218,3 +223,12 @@
 		var/mob/living/silicon/robot/R = user
 		return R.cell.use(spawned * modifier * MAT_SYNTH_ROBO)
 	return
+
+/obj/item/device/material_synth/robot/verb/toggle_mode()
+	set name = "Toggle inventory mode"
+	set category = "Object"
+	set src in range(0)
+	if(usr.incapacitated())
+		return
+	inv_mode = !inv_mode
+	to_chat(usr, "<span class = 'notice'>\The [src] will now [inv_mode ? "store materials to inventory" : "drop materials to the floor"] on material synthesis.</span>")
