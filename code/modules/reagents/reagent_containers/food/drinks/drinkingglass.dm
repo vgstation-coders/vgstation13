@@ -547,6 +547,11 @@
 					item_state = "ginvodkaglass"
 					name = "glass of Grey vodka"
 					desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
+				if(BONEJUICE)
+					icon_state = "pwineglass"
+					item_state = "pwineglass"
+					name = "glass of bone hurting juice"
+					desc = "It's a juice that hurts your bones. Possibly addictive."
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"
