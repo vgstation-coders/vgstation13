@@ -43,7 +43,7 @@
 		user.simple_message("<span class='warning'>This organ has a barcode identifying it as printed from a bioprinter.</span>","<span class='warning'>It's got spaghetti sauce on it. Ew.</span>")
 	else
 		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
-		
+
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
@@ -211,7 +211,7 @@
 /obj/item/organ/liver
 	name = "liver"
 	icon_state = "liver"
-	prosthetic_name = "artifical metabolizer"
+	prosthetic_name = "artificial metabolizer"
 	prosthetic_icon = "liver-prosthetic"
 	organ_tag = "liver"
 	organ_type = /datum/organ/internal/liver
