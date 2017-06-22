@@ -2689,6 +2689,13 @@
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 5
 
+/datum/chemical_reaction/bonejuice
+	name = "Bone Hurting Juice"
+	id = BONEJUICE
+	result = BONEJUICE
+	required_reagents = list(MILK = 1, PACID = 1, WHISKEY = 1)
+	result_amount = 3
+
 //Cafe stuff!
 /datum/chemical_reaction/acidtea
 	name = "Earl's Grey Tea"

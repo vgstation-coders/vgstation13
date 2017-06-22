@@ -5273,6 +5273,32 @@
 					H.adjustToxLoss(3)
 				H.adjustToxLoss(0.3)
 
+/datum/reagent/ethanol/deadrum/bonejuice
+	name = "Bone Hurting Juice"
+	id = BONEJUICE
+	description = "A juice that hurts your bones. Possibly addictive."
+	reagent_state = LIQUID
+	color = "#8E18A9" //rgb: 142, 24, 169
+
+/datum/reagent/ethanol/deadrum/bonejuice/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species && (H.species.anatomy_flags & NO_BONES))
+			return
+		else
+			switch(volume)
+				if(1 to 50)
+					if(prob(15))
+						to_chat(H,"<span class='warning'>Ow. Oof. Oooouch. Your bones hurt.</span>")
+				if(51 to INFINITY)
+					if(prob(25))
+						to_chat(H,"<span class='warning'>OW! OOF! AAAHH! Your bones REALLY hurt.</span>")
+					for (var/datum/organ/external/E in H.organs)
+						E.min_broken_damage = max(5, E.min_broken_damage - 30)
+
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar

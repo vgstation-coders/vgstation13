@@ -324,6 +324,7 @@
 #define LITHOTORCRAZINE "lithotorcrazine"
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
+#define BONEJUICE		"bonejuice"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
