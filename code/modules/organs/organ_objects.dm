@@ -152,6 +152,14 @@
 	organ_tag = "kidneys"
 	organ_type = /datum/organ/internal/kidney
 
+/obj/item/organ/kidneys/filter
+	name = "toxin filters"
+	icon_state = "advanced-kidneys"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/kidney/filter
+	robotic=2
+
 /obj/item/organ/eyes
 	name = "eyeballs"
 	icon_state = "eyes"
@@ -203,7 +211,7 @@
 /obj/item/organ/liver
 	name = "liver"
 	icon_state = "liver"
-	prosthetic_name = "toxin filter"
+	prosthetic_name = "artifical metabolizer"
 	prosthetic_icon = "liver-prosthetic"
 	organ_tag = "liver"
 	organ_type = /datum/organ/internal/liver
