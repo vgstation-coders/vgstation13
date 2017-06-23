@@ -149,7 +149,7 @@
 #define TELE_COOLDOWN 5 SECONDS
 
 /obj/item/weapon/bikehorn/rubberducky/quantum
-	desc = "A quantum quacker"
+	desc = "A quantum quacker."
 	var/teleport_range = 5
 	var/last_teleport
 
@@ -162,16 +162,17 @@
 	..()
 
 /obj/item/weapon/bikehorn/rubberducky/quantum/process()
-	var/visible = FALSE
+	if(world.time > last_teleport + TELE_COOLDOWN)
+		var/visible = FALSE
 
-	for (var/mob/living/M in viewers(src))
-		if(!M.isUnconscious() && !is_blind(M))
-			visible = TRUE
-			break
+		for (var/mob/living/M in viewers(src))
+			if(!M.isUnconscious() && !is_blind(M))
+				visible = TRUE
+				break
 
-	if(!visible && world.time > last_teleport + TELE_COOLDOWN)
-		do_teleport(src, get_turf(src), teleport_range, asoundin = hitsound)
-		last_teleport = world.time
+		if(!visible)
+			do_teleport(src, get_turf(src), teleport_range, asoundin = hitsound)
+			last_teleport = world.time
 
 /obj/item/weapon/bikehorn/rubberducky/quantum/equipped(var/mob/user, var/slot, hand_index = 0)
 	to_chat(user, "<span class = 'warning'>\The [src] disappears from your grasp!</span>")
