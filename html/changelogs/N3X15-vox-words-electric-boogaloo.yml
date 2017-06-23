@@ -9,7 +9,7 @@ delete-after: True
 # Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
-changes: 
-- rscadd: "Added shitload of new vox words, like dead, dying, murder, murdering, etc, ops, traders, etc.  ""
-- rscadd: Added 6 new random roundstart PROTIPS.
-- rscadd: Sound generator can now accept sound clips instead of TTS speech.
+changes:
+- rscadd: "Added shitload of new vox words, like dead, dying, murder, murdering, etc, ops, traders, etc."
+- rscadd: "Added 6 new random roundstart PROTIPS."
+- wip: "Sound generator can now accept sound clips instead of TTS speech."
