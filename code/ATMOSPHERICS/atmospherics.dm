@@ -15,7 +15,7 @@ Pipelines + Other Objects -> Pipe network
 
 //Pipe bitflags
 #define IS_MIRROR	1
-#define ALL_LAYER	2 //if the pipe can connect at any layer, instead of just the specific one
+#define ALL_LAYER	2 // if the pipe can connect at any layer, instead of just the specific one
 
 /obj/machinery/atmospherics
 	anchored = 1
@@ -30,6 +30,7 @@ Pipelines + Other Objects -> Pipe network
 	var/initialize_directions = 0
 	var/initialize_directions_he = 0 // Same, but for HE pipes.
 
+	var/update_icon_dup_flag =  FALSE // To prevent duplicate processing of update_icon, see the disconnect proc as well as datum_pipelin.dm for more details
 	var/can_be_coloured = 0
 	var/image/centre_overlay = null
 	// Investigation logs
@@ -37,12 +38,12 @@ Pipelines + Other Objects -> Pipe network
 	var/global/list/node_con = list()
 	var/global/list/node_ex = list()
 	var/pipe_flags = 0
-	var/obj/machinery/atmospherics/mirror //not actually an object reference, but a type. The reflection of the current pipe
+	var/obj/machinery/atmospherics/mirror // not actually an object reference, but a type. The reflection of the current pipe
 	var/default_colour = null
 	var/image/pipe_image
 	plane = ABOVE_TURF_PLANE
 	layer = PIPE_LAYER
-	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
+	var/piping_layer = PIPING_LAYER_DEFAULT // used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
 	holomap = TRUE
@@ -57,7 +58,7 @@ Pipelines + Other Objects -> Pipe network
 	update_planes_and_layers()
 
 /obj/machinery/atmospherics/Destroy()
-	for(var/mob/living/M in src) //ventcrawling is serious business
+	for(var/mob/living/M in src) // ventcrawling is serious business
 		M.remove_ventcrawl()
 		M.forceMove(src.loc)
 	if(pipe_image)
@@ -71,7 +72,7 @@ Pipelines + Other Objects -> Pipe network
 	..()
 
 /obj/machinery/atmospherics/ex_act(severity)
-	for(var/atom/movable/A in src) //ventcrawling is serious business
+	for(var/atom/movable/A in src) // ventcrawling is serious business
 		A.ex_act(severity)
 	..()
 
@@ -139,8 +140,8 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/proc/node_plane()
 	return level == LEVEL_BELOW_FLOOR ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE
 
-/obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
-	update_planes_and_layers()
+/obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list) //constructor - adjacent_procd prevents this function from propogating forever
+	update_planes_and_layers() // Empty function for children to inherit and utilize
 	if(!can_be_coloured && color)
 		default_colour = color
 		color = null
@@ -148,12 +149,12 @@ Pipelines + Other Objects -> Pipe network
 		color = default_colour
 		default_colour = null
 	alpha = invisibility ? 128 : 255
-	if (!update_icon_ready)
+	if (!update_icon_ready)  // update_icon_ready gets set to 1 when update_icon runs if not already 1
 		update_icon_ready = 1
 	else
-		underlays.Cut()
+		underlays.Cut() // removes other underlays? [areas.dm ln 557]
 	var/list/missing_nodes = icon_directions()
-	for (var/obj/machinery/atmospherics/connected_node in node_list)
+	for (var/obj/machinery/atmospherics/connected_node in node_list)  // runs for:each connected node
 		var/con_dir = get_dir(src, connected_node)
 		missing_nodes -= con_dir // finds all the directions that aren't pointed to by a node
 		var/image/nodecon = icon_node_con(con_dir)
@@ -163,8 +164,8 @@ Pipelines + Other Objects -> Pipe network
 			nodecon.layer = node_layer()
 			underlays += nodecon
 		if (!adjacent_procd && connected_node.update_icon_ready && !(istype(connected_node,/obj/machinery/atmospherics/pipe/simple)))
-			connected_node.update_icon(1)
-	for (var/missing_dir in missing_nodes)
+			connected_node.update_icon(1)  // nodes update eachother. See constructor for argument details.
+	for (var/missing_dir in missing_nodes) // This loop updates missing directions.
 		var/image/nodeex = icon_node_ex(missing_dir)
 		if(!color)
 			nodeex.color = default_colour ? default_colour : PIPE_COLOR_GREY
@@ -280,7 +281,11 @@ Pipelines + Other Objects -> Pipe network
 	// Is permitted to return null
 
 /obj/machinery/atmospherics/proc/disconnect(obj/machinery/atmospherics/reference)
-	update_icon()
+	if (istype(reference, /obj/machinery/atmospherics/pipe))  //If it's a pipe (and therefore part of a pipeline)
+		var/obj/machinery/atmospherics/pipe/P = reference
+		P.parent.add_to_queue(P) ////Add it to a list of pipes (in the pipeline) that need to call update_icon()
+	else
+		update_icon()
 
 /obj/machinery/atmospherics/proc/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	error("[src] does not define a buildFrom!")
