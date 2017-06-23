@@ -13,6 +13,7 @@
 	var/attack_text = "bites"
 	var/languagetoadd = LANGUAGE_MONKEY
 	var/namenumbers = TRUE
+	var/flag = 0
 
 	mob_bump_flag = MONKEY
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
