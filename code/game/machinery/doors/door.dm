@@ -157,6 +157,9 @@ var/list/all_doors = list()
 	if (istype(I, /obj/item/device/detective_scanner))
 		return
 
+	if(isobserver(user) && !isAdminGhost(user))
+		return
+
 	// borgs can't attack doors open
 	// because it conflicts with their AI-like interaction with them
 	if (isrobot(user))
