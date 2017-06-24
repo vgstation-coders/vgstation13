@@ -4,6 +4,12 @@
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 
+var/light_power_multiplier = 1
+/client/verb/modify_lighting_multiplier()
+	light_power_multiplier = input("Light Multiplier","Light Multiplier", 1 ) as num
+	for(var/obj/light/L in world)
+		L.cast_light()
+
 // Casts shadows from occluding objects for a given light.
 
 /obj/light/proc/cast_light()
@@ -19,7 +25,7 @@
 	//cap light range to 5
 	light_range = min(5, light_range)
 
-	alpha = min(255,max(0,round(light_power*25)))
+	alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
 
 	if(is_directional_light())
 		icon = 'icons/lighting/directional_overlays.dmi'
@@ -70,54 +76,6 @@
 		if(CheckOcclusion(T))
 			CastShadow(T)
 
-	overlays = temp_appearance
-	temp_appearance = null
-
-/obj/light/proc/cast_light1()
-	to_chat(world, "cast light called")
-	temp_appearance = list()
-
-	//cap light range to 5
-	light_range = min(5, light_range)
-
-	alpha = min(255,max(0,round(light_power*25)))
-
-	if(is_directional_light())
-		icon = 'icons/lighting/directional_overlays.dmi'
-		light_range = 2.5
-	else
-		pixel_x = pixel_y = -(world.icon_size * light_range)
-		switch(light_range)
-			if(1)
-				icon = 'icons/lighting/light_range_1.dmi'
-			if(2)
-				icon = 'icons/lighting/light_range_2.dmi'
-			if(3)
-				icon = 'icons/lighting/light_range_3.dmi'
-			if(4)
-				icon = 'icons/lighting/light_range_4.dmi'
-			if(5)
-				icon = 'icons/lighting/light_range_5.dmi'
-
-	icon_state = "white"
-
-	var/image/I = image(icon)
-	I.layer = 4
-	I.icon_state = "overlay"
-	temp_appearance += I
-
-	var/list/visible_turfs = list()
-	for(var/turf/T in range(light_range, src))
-		visible_turfs += T
-	if(visible_turfs.len)
-		to_chat(world, "visible turfs")
-
-	for(var/turf/T in visible_turfs)
-		if(CheckOcclusion(T))
-			to_chat(world, "cast shadow")
-			CastShadow(T)
-
-	to_chat(world, "complete cast light with [temp_appearance.len] overlays")
 	overlays = temp_appearance
 	temp_appearance = null
 

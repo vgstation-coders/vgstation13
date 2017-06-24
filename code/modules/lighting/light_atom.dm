@@ -3,7 +3,7 @@
 	var/light_type = LIGHT_SOFT
 	var/light_power = 1
 	var/light_range = 1
-	var/light_color = "#FFFFFF"
+	var/light_color = "#F4FFFA"
 
 /atom/Destroy()
 	if(light_obj)
