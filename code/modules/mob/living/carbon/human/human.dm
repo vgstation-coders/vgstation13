@@ -1679,23 +1679,19 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/get_broken_organs()
 	var/mob/living/carbon/human/H = src
-	var/turf/TH = H.loc
 	var/list/return_organs = list()
-	if (TH.has_gravity() && H.lying)
-		for(var/datum/organ/external/damagedorgan in H.organs)
-			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED))
-				return_organs += damagedorgan
-		return return_organs
+	for(var/datum/organ/external/damagedorgan in H.organs)
+		if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED))
+			return_organs += damagedorgan
+	return return_organs
 
 /mob/living/carbon/human/get_bleeding_organs()
 	var/mob/living/carbon/human/H = src
-	var/turf/TH = H.loc
 	var/list/return_organs = list()
-	if (TH.has_gravity() && H.lying)
-		for(var/datum/organ/external/damagedorgan in H.organs)
-			if(damagedorgan.status & ORGAN_BLEEDING)
-				return_organs += damagedorgan
-		return return_organs		
+	for(var/datum/organ/external/damagedorgan in H.organs)
+		if(damagedorgan.status & ORGAN_BLEEDING)
+			return_organs += damagedorgan
+	return return_organs		
 		
 /mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
