@@ -739,10 +739,10 @@ Thanks.
 													add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
 													HM.UpdateDamageIcon()
 								
-								if (bleeding_organs.len)
+								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
 									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
 									/*Sometimes species with NO_BLOOD get blood, hence weird check*/
-									if(blood_volume > 0 || !(HM.species.anatomy_flags & NO_BLOOD))
+									if(blood_volume > 0)
 										if(isturf(HM.loc))
 											if(!HM.isincrit())
 												if(prob(blood_volume / 89.6)) //Chance to bleed based on blood remaining
