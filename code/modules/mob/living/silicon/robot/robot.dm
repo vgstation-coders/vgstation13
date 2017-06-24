@@ -6,7 +6,7 @@
 	maxHealth = 300
 	health = 300
 	flashed = 0
-	
+
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
@@ -379,7 +379,7 @@
 			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
 			module_sprites["Mr. Gutsy"] = "mrgutsy"
 			module_sprites["Marina-CB"] = "marinaCB"
-			module_sprites["Squadbot"] = "squats"
+			module_sprites["Chesty"] = "chesty"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
 			module_sprites["Rottweiler"] = "rottweiler-combat"
@@ -503,8 +503,8 @@
 	src << browse(dat, "window=robotalerts&can_close=0")
 
 /mob/living/silicon/robot/can_diagnose()
-	return is_component_functioning("diagnosis unit") 
-	
+	return is_component_functioning("diagnosis unit")
+
 /mob/living/silicon/robot/proc/self_diagnosis()
 	if(!can_diagnose())
 		return null
@@ -1056,7 +1056,7 @@
 
 /mob/living/silicon/robot/disarm_mob(mob/living/disarmer)
 	var/rotate = dir
-	
+
 	if (lying)
 		return
 	if (!flashed || !stat == DEAD)
@@ -1066,7 +1066,7 @@
 
 	add_logs(disarmer, src, "tipped over", admin = (src.ckey && disarmer.ckey) ? TRUE : FALSE)
 	do_attack_animation(src, disarmer)
-	
+
 	if(prob(40))
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [disarmer] has attempted to tip over \the [src]!</span>")
@@ -1096,7 +1096,7 @@
 		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
 		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
 	lying = 0
-				
+
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
 
