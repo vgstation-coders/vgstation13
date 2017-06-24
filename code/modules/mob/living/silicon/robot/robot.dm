@@ -379,7 +379,7 @@
 			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
 			module_sprites["Mr. Gutsy"] = "mrgutsy"
 			module_sprites["Marina-CB"] = "marinaCB"
-			module_sprites["Chesty"] = "chesty"
+			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
 			module_sprites["Rottweiler"] = "rottweiler-combat"
