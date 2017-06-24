@@ -41,7 +41,7 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.oxygen < 5)
 		src.lit = 0
-		set_light(0)
+		kill_light()
 		processing_objects.Remove(src)
 		update_icon()
 		return
@@ -59,7 +59,7 @@
 	if(lit)
 		lit = 0
 		update_icon()
-		set_light(0)
+		kill_light()
 
 /obj/item/candle/is_hot()
 	if(lit)

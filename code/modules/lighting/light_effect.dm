@@ -1,6 +1,6 @@
 /obj/light
 	mouse_opacity = 0
-	plane = LIGHTING_PLANE+1
+	plane = LIGHTING_PLANE_MASTER
 
 	layer = 1
 	//layer 1 = base plane layer

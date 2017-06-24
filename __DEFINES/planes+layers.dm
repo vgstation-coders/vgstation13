@@ -189,7 +189,12 @@ What is the naming convention for planes or layers?
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
 
-#define LIGHTING_PLANE 			-1			// For Lighting. - The highest plane.
+#define LIGHTING_PLANE_MASTER		-1
+
+#define BASE_PLANE 				0		// Not for anything, but this is the default.
+	#define AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD 999
+
+#define LIGHTING_PLANE 			1			// For Lighting. - The highest plane.
 
 	#define LIGHTBULB_LAYER 		0
 	#define POINTER_LAYER 			1
@@ -199,9 +204,6 @@ What is the naming convention for planes or layers?
 	#define SUPERMATTER_WALL_LAYER 	5
 	#define SUPER_PORTAL_LAYER		6
 	#define NARSIE_GLOW 			7
-
-#define BASE_PLANE 				0		// Not for anything, but this is the default.
-	#define AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD 999
 
 #define STATIC_PLANE 			2		// For AI's static.
 

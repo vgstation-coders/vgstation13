@@ -155,7 +155,7 @@
 					min_oxy = initial(min_oxy)
 					minbodytemp = initial(minbodytemp)
 					maxbodytemp = initial(maxbodytemp)
-					set_light(0)
+					kill_light()
 					inventory_head.forceMove(src.loc)
 					inventory_head = null
 					regenerate_icons()

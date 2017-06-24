@@ -82,7 +82,7 @@
 		return powernet.load
 	else
 		return 0
-		
+
 /obj/machinery/power/proc/get_powernet()
 	check_rebuild()
 	return powernet
@@ -146,7 +146,7 @@
 
 		if(!use_auto_lights)
 			return
-		set_light(0)
+		kill_light()
 
 
 // connect the machine to a powernet if a node cable is present on the turf

@@ -24,7 +24,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		set_light(0)
+		kill_light()
 
 //Captain's space suit This is not the proper path but I don't currently know enough about how this all works to mess with it.
 /obj/item/clothing/suit/armor/captain

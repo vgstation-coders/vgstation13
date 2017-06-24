@@ -34,7 +34,7 @@
 		if(!(stat & (BROKEN|NOPOWER)))
 			set_light(2)
 		else
-			set_light(0)
+			kill_light()
 
 /datum/fridge_pile
 	var/name = ""

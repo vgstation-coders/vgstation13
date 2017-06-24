@@ -20,7 +20,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		set_light(0)
+		kill_light()
 
 /obj/item/clothing/head/hardhat/orange
 	icon_state = "hardhat0_orange"

@@ -1340,7 +1340,7 @@
 	if(lit)
 		set_light(src.brightness_lit)
 	else
-		set_light(0)
+		kill_light()
 
 /obj/item/weapon/reagent_containers/food/drinks/update_icon()
 	src.overlays.len = 0

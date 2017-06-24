@@ -188,7 +188,7 @@
 		if(!(stat & (BROKEN|NOPOWER)) && occupant)
 			set_light(light_range_on, light_power_on)
 		else
-			set_light(0)
+			kill_light()
 	var/connected_type = /obj/machinery/sleep_console
 	var/on = 0
 	var/target_time = 0
@@ -562,7 +562,7 @@
 		return
 	src.go_out()
 	add_fingerprint(usr)
-	set_light(0)
+	kill_light()
 	return
 
 /obj/machinery/sleeper/verb/move_inside()
@@ -651,7 +651,7 @@
 	if(on)
 		set_light(light_range_on, light_power_on)
 	else
-		set_light(0)
+		kill_light()
 	if(connected)
 		connected.update_icon()
 	else

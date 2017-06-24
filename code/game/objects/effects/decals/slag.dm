@@ -26,7 +26,7 @@
 			set_light(2)
 
 /obj/effect/decal/slag/Destroy()
-	set_light(0)
+	kill_light()
 	processing_objects.Remove(src)
 	..()
 
@@ -61,7 +61,7 @@
 
 /obj/effect/decal/slag/solidify()
 	icon_state="slagcold"
-	set_light(0)
+	kill_light()
 
 /obj/effect/decal/slag/melt()
 	icon_state="slaghot"

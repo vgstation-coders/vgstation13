@@ -76,7 +76,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		set_light(brightness_on)
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/weapon/match/process()
@@ -206,7 +206,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		set_light(brightness_on)
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/mask/cigarette/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -664,7 +664,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		set_light(brightness_on)
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)

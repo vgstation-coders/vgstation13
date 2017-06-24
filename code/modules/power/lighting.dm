@@ -250,13 +250,13 @@ var/global/list/obj/machinery/light/alllights = list()
 					status = LIGHT_BURNED
 					icon_state = "l[base_state]-burned"
 					on = 0
-					set_light(0)
+					kill_light()
 			else
 				use_power = 2
 				set_light(brightness_range, brightness_power, brightness_color)
 	else
 		use_power = 1
-		set_light(0)
+		kill_light()
 
 	active_power_usage = (cost * 10)
 	if(on != on_gs)

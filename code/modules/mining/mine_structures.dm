@@ -107,7 +107,7 @@
 			if(!lantern)
 				update_brightness()
 				break
-			set_light(0)
+			kill_light()
 			sleep(rand(5, 15))
 			update_brightness()
 

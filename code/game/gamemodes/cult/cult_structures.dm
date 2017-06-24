@@ -74,7 +74,7 @@
 			isbroken = 1
 			density = 0
 			icon_state = "pylon-broken"
-			set_light(0)
+			kill_light()
 		else
 			to_chat(user, "You hit the pylon!")
 			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)

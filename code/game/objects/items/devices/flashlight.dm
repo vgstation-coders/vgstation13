@@ -26,7 +26,7 @@
 		set_light(brightness_on)
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null, var/playsound = 1)
 	if(on)
@@ -37,7 +37,7 @@
 				playsound(get_turf(src), sound_on, 50, 1)
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 		if(playsound && has_sound)
 			playsound(get_turf(src), sound_off, 50, 1)
 

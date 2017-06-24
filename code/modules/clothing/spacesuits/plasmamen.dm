@@ -43,7 +43,7 @@
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
-	
+
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
 		return
@@ -52,7 +52,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		set_light(0)
+		kill_light()
 	user.update_inv_head()
 
 // Tc_ENGINEERING

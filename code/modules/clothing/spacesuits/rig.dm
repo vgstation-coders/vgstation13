@@ -53,7 +53,7 @@
 	if(on)
 		set_light(brightness_on,0,color_on)
 	else
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/head/helmet/space/rig/update_icon()
@@ -71,7 +71,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		set_light(0)
+		kill_light()
 	user.update_inv_head()
 
 /obj/item/clothing/suit/space/rig

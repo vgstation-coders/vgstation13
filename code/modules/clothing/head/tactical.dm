@@ -51,7 +51,7 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 	if(flashlight && flashlight.on)
 		set_light(flashlight.brightness_on)
 	else
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/head/helmet/tactical/update_icon()

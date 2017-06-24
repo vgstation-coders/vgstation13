@@ -37,6 +37,8 @@
 		set_light(0)
 		if (reagents.reagent_list.len > 0)
 			//mrid = R.get_master_reagent_id()
+			kill_light()
+			light_color = null
 			isGlass = 1
 			item_state = "glass_empty"
 			switch(reagents.get_master_reagent_id())

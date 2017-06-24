@@ -26,14 +26,14 @@
 			if(cell.charge < powercost)
 				on = 0
 				update_icon()
-				set_light(0)
+				kill_light()
 				visible_message("<span class='warning'>\The [src] shuts down!</span>")
 				return
 
 		else
 			on = 0
 			update_icon()
-			set_light(0)
+			kill_light()
 			visible_message("<span class='warning'>\The [src] shuts down!</span>")
 			return
 
@@ -58,7 +58,7 @@
 
 	if(on)
 		on = 0
-		set_light(0)
+		kill_light()
 	else
 		if(!cell || !cell.charge > powercost)
 			return
