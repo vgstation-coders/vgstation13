@@ -34,6 +34,9 @@
 			for(var/obj/machinery/atmospherics/binary/valve/digital/V in atmos_machines)
 				if(!isnull(V.id_tag) && V.frequency == parent.frequency)
 					valves|=V.id_tag
+			for(var/obj/machinery/atmospherics/trinary/tvalve/digital/V in atmos_machines)
+				if(!isnull(V.id_tag) && V.frequency == parent.frequency)
+					valves|=V.id_tag
 			if(valves.len==0)
 				to_chat(usr, "<span class='warning'>Unable to find any digital valves on this frequency.</span>")
 				return
