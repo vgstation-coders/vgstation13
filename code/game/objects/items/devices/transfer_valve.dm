@@ -11,6 +11,8 @@
 	var/toggle = 1
 
 	var/damaged = 0
+	
+	w_class = W_CLASS_LARGE
 
 	flags = FPRINT | PROXMOVE
 
@@ -236,3 +238,8 @@
 // eventually maybe have it update icon to show state (timer, prox etc.) like old bombs
 /obj/item/device/transfer_valve/proc/c_state()
 	return
+
+/obj/item/device/transfer_valve/mediumsize
+	name = "modified tank transfer valve"
+	desc = "Regulates the transfer of air between two tanks. This one was modified to be smaller."
+	w_class = W_CLASS_MEDIUM
