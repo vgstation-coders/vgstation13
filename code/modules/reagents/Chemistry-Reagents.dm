@@ -2387,7 +2387,7 @@
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
 	custom_metabolism = 0.04
 	var/oldspeed = 0
-	data = 1
+	data = 0
 
 /datum/reagent/hypozine/reagent_deleted()
 
@@ -2400,10 +2400,11 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(!has_been_hypozined || has_had_heart_explode)
+		if(!has_been_hypozined)
 			return
-		var/timedmg = ((120 SECONDS) - data) / 10
-		dehypozine(H, timedmg * 3, 1, 0)
+		var/timedmg = ((data - 60) / 2) 
+		if (timedmg > 0)
+			dehypozine(H, timedmg, 1, 0)
 
 /datum/reagent/hypozine/on_mob_life(var/mob/living/M)
 
@@ -2456,7 +2457,7 @@
 			dehypozine(M)
 	data++
 
-/datum/reagent/hypozine/proc/dehypozine(var/mob/living/M, heartdamage = 100, override_remove = 0, explodeheart = 1)
+/datum/reagent/hypozine/proc/dehypozine(var/mob/living/M, heartdamage = 30, override_remove = 0, explodeheart = 1)
 	M.movement_speed_modifier -= oldspeed
 	if(has_been_hypozined && !has_had_heart_explode)
 		has_had_heart_explode = 1
@@ -2465,35 +2466,49 @@
 
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(explodeheart)
-				if(H.get_heart())//Got a heart?
-					var/datum/organ/internal/heart/damagedheart = H.get_heart()
-					if (heartdamage >= 100)
-						if(H.species.name != "Diona" && damagedheart) //fuck dionae
-							to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
-							damagedheart.damage += 200 //Bye heart.
+
+			if(H.get_heart())//Got a heart?
+				var/datum/organ/internal/heart/damagedheart = H.get_heart()
+				if (heartdamage >= 30)
+					if(H.species.name != "Diona" && damagedheart) //fuck dionae
+						to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
+						damagedheart.damage += heartdamage //Bye heart.
+						if(explodeheart)
 							qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST)))
-							H.adjustOxyLoss(heartdamage)
-						else
-							to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
-							for(var/datum/organ/external/E in H.organs)
-								E.droplimb(1, 1) //Bye limbs!
-								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
-					else if (heartdamage < 100)
-						damagedheart.damage += heartdamage
-						H.adjustOxyLoss(heartdamage)
-				else//No heart?
-					to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
-					if (heartdamage >= 100)
+						H.adjustOxyLoss(heartdamage*2)
+						H.adjustBruteLoss(heartdamage)
+					else
+						to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
 						for(var/datum/organ/external/E in H.organs)
 							E.droplimb(1, 1) //Bye limbs!
-					else if (heartdamage < 100)
-						H.adjustBruteLoss(heartdamage / 2)
-						H.adjustFireLoss(heartdamage / 3)
-						H.adjustToxLoss(heartdamage / 8)
+							H.adjustFireLoss(heartdamage)
+							H.adjustBruteLoss(heartdamage)
+							H.adjustToxLoss(heartdamage)
+							if(explodeheart)
+								qdel(H.remove_internal_organ(H,damagedheart,H.get_organ(LIMB_CHEST))) //and heart!
+				else if (heartdamage < 30)
+					if(H.species.name != "Diona")
+						to_chat(H, "<span class='danger'>You feel a sharp pain in your chest!</span>")
+					else
+						to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+						H.adjustFireLoss(heartdamage)
+					damagedheart.damage += heartdamage
+					H.adjustToxLoss(heartdamage)
+					H.adjustBruteLoss(heartdamage)
+			else//No heart?
+				to_chat(H, "<span class='danger'>The heat engulfs you!</span>")
+				if (heartdamage >= 30)
+					for(var/datum/organ/external/E in H.organs)
+						E.droplimb(1, 1) //Bye limbs!
+						H.adjustBruteLoss(heartdamage)
+						H.adjustFireLoss(heartdamage)
+				else if (heartdamage < 30)
+					H.adjustBruteLoss(heartdamage)
+					H.adjustFireLoss(heartdamage)
+					H.adjustToxLoss(heartdamage)
 		else
 			M.gib()
-		data = 1
+		data = 0
 		oldspeed = 0
 
 /datum/reagent/cryoxadone
