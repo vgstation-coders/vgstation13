@@ -1561,10 +1561,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, safety = 0)
 	if(be_random_name)
 		real_name = random_name(gender,species)
-
-	if(be_random_body)
-		random_character(gender)
-
 	if(config.humans_need_surnames && species == "Human")
 		var/firstspace = findtext(real_name, " ")
 		var/name_length = length(real_name)
@@ -1582,25 +1578,30 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.sec_record = sec_record
 	character.gen_record = gen_record
 
-	character.setGender(gender)
-	character.age = age
 
-	character.r_eyes = r_eyes
-	character.g_eyes = g_eyes
-	character.b_eyes = b_eyes
+	if(be_random_body)
+		//random_character(gender) - This just selects a random character from the OLD character database.
+		randomize_appearance_for() // Correct.
+	else
+		character.setGender(gender)
+		character.age = age
 
-	character.r_hair = r_hair
-	character.g_hair = g_hair
-	character.b_hair = b_hair
+		character.r_eyes = r_eyes
+		character.g_eyes = g_eyes
+		character.b_eyes = b_eyes
 
-	character.r_facial = r_facial
-	character.g_facial = g_facial
-	character.b_facial = b_facial
+		character.r_hair = r_hair
+		character.g_hair = g_hair
+		character.b_hair = b_hair
 
-	character.s_tone = s_tone
+		character.r_facial = r_facial
+		character.g_facial = g_facial
+		character.b_facial = b_facial
 
-	character.h_style = h_style
-	character.f_style = f_style
+		character.s_tone = s_tone
+
+		character.h_style = h_style
+		character.f_style = f_style
 
 
 	character.skills = skills

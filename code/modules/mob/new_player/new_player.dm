@@ -150,6 +150,9 @@
 			observer.forceMove(O.loc)
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
+			// Has to be done here so we can get our random icon.
+			if(client.prefs.be_random_body)
+				client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
 			client.prefs.update_preview_icon(1)
 			observer.icon = client.prefs.preview_icon
 			observer.alpha = 127
