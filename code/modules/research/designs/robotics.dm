@@ -41,6 +41,16 @@
 	build_path = /obj/item/organ/eyes/adv_1
 	category = "Robotics"
 
+/datum/design/adv_kidneys
+	name = "Advanced Kidneys"
+	desc = "These kidneys have advanced blood filtering systems to remove toxins from the body."
+	id = "adv_kidneys"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
+	build_type = PROTOLATHE | MECHFAB
+	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
+	build_path = /obj/item/organ/kidneys/filter
+	category = "Robotics"
+
 /datum/design/mmi_radio
 	name = "Radio-enabled Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity. This one comes with a built-in radio."
