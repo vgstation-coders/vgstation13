@@ -35,7 +35,10 @@ mob/proc/get_heart()
 mob/proc/remove_internal_organ()
 	return null
 
-/mob/proc/drag_damage()
+/mob/proc/get_broken_organs()
+	return list()
+	
+/mob/proc/get_bleeding_organs()
 	return list()
 
 /mob/dead/observer/get_screen_colour()
