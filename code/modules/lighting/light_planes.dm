@@ -12,9 +12,35 @@
 /obj/screen/plane/master
 	icon = 'icons/mob/screen1.dmi'
 	appearance_flags = NO_CLIENT_COLOR | PLANE_MASTER | RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
-	color = list(null,null,null,"#0000","#000f")  // Completely black.
+	//list(null,null,null,"#0000","#000F")
+	color = LIGHTING_PLANEMASTER_COLOR  // Completely black.
 	plane = LIGHTING_PLANE_MASTER
 	mouse_opacity = 0
+
+
+
+
+#warn shitcode
+	var/backdrop
+
+/obj/screen/plane/master/New(var/client/C)
+	..()
+	var/obj/O = new
+	O.blend_mode = BLEND_OVERLAY  // this is important so it doesn't inherit
+	O.icon = 'icons/mob/screen1.dmi'  // a black icon using your regular world.icon_size
+	O.icon_state = "black"
+	O.layer = BACKGROUND_LAYER
+	O.screen_loc = "CENTER"
+	var/matrix/M = matrix()
+	M.Scale(world.view*3)
+	O.plane = LIGHTING_PLANE_MASTER
+	O.transform = M
+	backdrop = O
+	C.screen += O
+
+
+
+
 
 /obj/screen/plane/dark
 	blend_mode = BLEND_ADD

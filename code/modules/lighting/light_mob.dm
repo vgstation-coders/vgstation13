@@ -18,5 +18,11 @@
 	if(client)
 		update_darkness()
 
+/mob/dead/observer/proc/update_darkness()
+	if(seedarkness)
+		master_plane.color = LIGHTING_PLANEMASTER_COLOR
+	else
+		master_plane.color = null
+
 /mob/living/carbon/human/update_contained_lights(var/list/specific_contents)
 	. = ..(contents-(internal_organs+organs))

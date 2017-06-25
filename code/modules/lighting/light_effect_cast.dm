@@ -4,7 +4,7 @@
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 
-var/light_power_multiplier = 1
+var/light_power_multiplier = 5
 /client/verb/modify_lighting_multiplier()
 	light_power_multiplier = input("Light Multiplier","Light Multiplier", 1 ) as num
 	for(var/obj/light/L in world)

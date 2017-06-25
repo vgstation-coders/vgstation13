@@ -53,3 +53,18 @@
 		spawn()
 			if(A && !A.gcDestroyed)
 				A.update_all_lights()
+
+/atom/var/dynamic_lighting = 1
+
+/area/proc/set_dynamic_lighting(bool)
+	dynamic_lighting = bool
+	update_dynamic_lighting()
+
+/area/proc/update_dynamic_lighting()
+	if(dynamic_lighting)
+		var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
+		I.plane = LIGHTING_PLANE_MASTER
+		I.blend_mode = BLEND_ADD
+		overlays += I
+	else
+		overlays.Cut()

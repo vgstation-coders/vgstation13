@@ -8,5 +8,7 @@
 #define LIGHT_SOFT_FLICKER     "soft-flicker"
 #define LIGHT_DIRECTIONAL      "directional"
 
+#define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
+
 /turf/shadow_dummy
 	opacity = 0

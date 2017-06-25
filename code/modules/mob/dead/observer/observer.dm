@@ -664,14 +664,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	seedarkness = !seedarkness
 	update_darkness()
 
-/mob/dead/observer/proc/update_darkness()
-	if(seedarkness)
-		client.screen |= dark_plane
-		client.screen |= master_plane
-	else
-		client.screen -= dark_plane
-		client.screen -= master_plane
-
 /mob/dead/observer/verb/become_mouse()
 	set name = "Become mouse"
 	set category = "Ghost"
