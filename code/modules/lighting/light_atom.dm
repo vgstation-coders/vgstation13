@@ -54,7 +54,7 @@
 			if(A && !A.gcDestroyed)
 				A.update_all_lights()
 
-/atom/var/dynamic_lighting = 1
+/atom/var/dynamic_lighting = 0
 
 /area/proc/set_dynamic_lighting(bool)
 	dynamic_lighting = bool

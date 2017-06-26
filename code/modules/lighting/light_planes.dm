@@ -17,29 +17,22 @@
 	plane = LIGHTING_PLANE_MASTER
 	mouse_opacity = 0
 
+#warning poor inheritance shitcode
+/obj/backdrop
+	blend_mode = BLEND_OVERLAY
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "black"
+	layer = BACKGROUND_LAYER
+	screen_loc = "CENTER"
+	plane = LIGHTING_PLANE_MASTER
 
-
-
-#warn shitcode
-	var/backdrop
-
-/obj/screen/plane/master/New(var/client/C)
+/obj/backdrop/New(var/client/C)
 	..()
-	var/obj/O = new
-	O.blend_mode = BLEND_OVERLAY  // this is important so it doesn't inherit
-	O.icon = 'icons/mob/screen1.dmi'  // a black icon using your regular world.icon_size
-	O.icon_state = "black"
-	O.layer = BACKGROUND_LAYER
-	O.screen_loc = "CENTER"
+	if(istype(C)) C.screen += src
 	var/matrix/M = matrix()
 	M.Scale(world.view*3)
-	O.plane = LIGHTING_PLANE_MASTER
-	O.transform = M
-	backdrop = O
-	C.screen += O
-
-
-
+	transform = M
+	verbs.Cut()
 
 
 /obj/screen/plane/dark
