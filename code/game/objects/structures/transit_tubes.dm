@@ -42,7 +42,7 @@
 	icon_state = "pod"
 	animate_movement = FORWARD_STEPS
 	anchored = 1.0
-	density = 0 //This used to be 1. Maybe there was a reason for it, but I couldn't find one, and it caused problems unfixable due to BYOND issues.
+	density = 1
 	var/moving = 0
 	var/datum/gas_mixture/air_contents = new()
 
@@ -98,17 +98,28 @@ obj/structure/transit_tube_pod/ex_act(severity)
 	return TRUE //Otherwise, whatever.
 
 
+/obj/structure/transit_tube/station/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	if(open && get_dir(src, mover) == dir) //This actually isn't necessary right now, but will be if BYOND movecode ever becomes not flaming garbage.
+		return FALSE
+	return ..()
+
+
 /obj/structure/transit_tube/Crossed(atom/movable/mover)
 	if(density && isliving(mover)) //Don't want it showing up for ghosts, etc.
 		to_chat(mover, "<span class='info'>You slip under the tube.</span>")
+
+
+/obj/structure/transit_tube/station/Crossed(atom/movable/mover)
+	if(!open) //Don't show the text if they're getting out of the pod. This also stops them from getting it if they just walk under it from behind while it's open, but oh well. Thanks BYOND.
+		return ..()
 
 
 /obj/structure/transit_tube/Bumped(atom/movable/mover)
 	to_chat(mover, "<span class='warning'>The tube's support pylons block your way.</span>")
 
 
-/obj/structure/transit_tube/station/Crossed(atom/movable/mover)
-	if(!pod_moving && open && isliving(mover))
+/obj/structure/transit_tube/station/Bumped(atom/movable/mover)
+	if(!pod_moving && open && (get_dir(src, mover) == dir) && isliving(mover))
 		var/obj/structure/transit_tube_pod/pod = locate() in loc
 		if(pod && !pod.moving && (pod.dir in directions()))
 			mover.forceMove(pod)
@@ -322,13 +333,13 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			sleep(last_delay)
 			dir = next_dir
 			forceMove(next_loc) // When moving from one tube to another, skip collision and such.
-//			density = current_tube.density
+			density = current_tube.density
 
 			if(current_tube && current_tube.should_stop_pod(src, next_dir))
 				current_tube.pod_stopped(src, dir)
 				break
 
-//		density = 1
+		density = 1
 
 		// If the pod is no longer in a tube, move in a line until stopped or slowed to a halt.
 		//  /turf/inertial_drift appears to only work on mobs, and re-implementing some of the
