@@ -269,6 +269,7 @@
 			module_sprites["Spider"] = "spider-standard"
 			module_sprites["Polar"] = "kodiak-standard"
 			module_sprites["Noble"] = "Noble-STD"
+			module_sprites["R34 - STR4a 'Durin'"] = "durin"
 			speed = 0
 
 		if("Service")
@@ -285,6 +286,7 @@
 			module_sprites["#27"] = "servbot-service"
 			module_sprites["Teddy"] = "kodiak-service"
 			module_sprites["Noble"] = "Noble-SRV"
+			module_sprites["R34 - SRV9a 'Llyod'"] = "lloyd"
 			speed = 0
 
 		if("Supply")
@@ -301,6 +303,7 @@
 			module_sprites["#31"] = "servbot-miner"
 			module_sprites["Kodiak"] = "kodiak-miner"
 			module_sprites["Noble"] = "Noble-SUP"
+			module_sprites["R34 - MIN2a 'Ishimura'"] = "ishimura"
 			speed = -1
 
 		if("Medical")
@@ -318,6 +321,7 @@
 			module_sprites["#17"] = "servbot-medi"
 			module_sprites["Arachne"] = "arachne"
 			module_sprites["Noble"] = "Noble-MED"
+			module_sprites["R34 - MED6a 'Gibbs'"] = "gibbs"
 			speed = -2
 
 		if("Peacekeeper")
@@ -332,6 +336,7 @@
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
 			module_sprites["Noble"] = "Noble-SEC"
+			module_sprites["R34 - SEC10a 'Woody'"] = "woody"
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
 			speed = 0
 
@@ -356,6 +361,7 @@
 			module_sprites["#25"] = "servbot-engi"
 			module_sprites["Kodiak"] = "kodiak-eng"
 			module_sprites["Noble"] = "Noble-ENG"
+			module_sprites["R34 - ENG7a 'Conagher'"] = "conagher"
 			speed = -2
 
 		if("Janitor")
@@ -369,6 +375,7 @@
 			module_sprites["Sleek"] = "sleekjanitor"
 			module_sprites["#29"] = "servbot-jani"
 			module_sprites["Noble"] = "Noble-JAN"
+			module_sprites["R34 - CUS3a 'Flynn'"] = "flynn"
 			speed = -1
 
 		if("Combat")
@@ -379,10 +386,10 @@
 			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
 			module_sprites["Mr. Gutsy"] = "mrgutsy"
 			module_sprites["Marina-CB"] = "marinaCB"
-			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
 			module_sprites["Rottweiler"] = "rottweiler-combat"
+			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			speed = -1
 
 	//Custom_sprite check and entry
