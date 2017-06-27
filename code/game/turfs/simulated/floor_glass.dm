@@ -2,6 +2,10 @@
 	name = "glass floor"
 	desc = "A floor made of reinforced glass, used for looking into the void."
 
+	// Oldspace for people who don't have parallax.
+	icon = 'icons/turf/space.dmi'
+	icon_state = "0"
+
 	plane = PLANE_SPACE_BACKGROUND
 	dynamic_lighting = 0
 	luminosity = 1
@@ -18,7 +22,9 @@
 	..(loc)
 	update_icon()
 
+
 /turf/simulated/floor/glass/update_icon()
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 	overlays.Cut()
 	if(!floor_overlay)
 		floor_overlay = image('icons/turf/overlays.dmi', glass_state)
@@ -53,15 +59,25 @@
 /turf/simulated/floor/glass/proc/break_turf()
 	if(loc)
 		playsound(get_turf(src), "shatter", 70, 1)
-	spawnBrokenPieces()
-	ReplaceWithLattice()
+	//ReplaceWithLattice()
+	// TODO: Break all pipes/wires?
+	var/turf/newT = ChangeTurf(/turf/space)
+	spawnBrokenPieces(newT)
 
-/turf/simulated/floor/glass/proc/spawnBrokenPieces()
-	getFromPool(shardtype, loc, sheetamount)
-	getFromPool(/obj/item/stack/rods, loc, sheetamount)
+/turf/simulated/floor/glass/proc/spawnBrokenPieces(var/turf/T)
+	getFromPool(shardtype, T, sheetamount)
+	getFromPool(/obj/item/stack/rods, T, sheetamount+1) // Includes lattice
 
-/turf/simulated/floor/glass/proc/healthcheck(var/mob/M, var/sound = 1)
+/turf/simulated/floor/glass/proc/healthcheck(var/mob/M, var/sound = 1, var/method="unknown")
 	if(health <= 0)
+		if(M)
+			var/pressure = 0
+			if(src.zone)
+				var/datum/gas_mixture/environment = src.return_air()
+				pressure = environment.return_pressure()
+			if (pressure > 0)
+				message_admins("Glass floor with pressure [pressure]kPa broken (method=[method]) by [M.real_name] ([formatPlayerPanel(M,M.ckey)]) at [formatJumpTo(src)]!")
+				log_admin("Window with pressure [pressure]kPa broken (method=[method]) by [M.real_name] ([M.ckey]) at [src]!")
 		break_turf()
 	else
 		if(sound)
@@ -78,21 +94,21 @@
 /turf/simulated/floor/glass/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
 	..()
-	healthcheck(Proj.firer)
+	healthcheck(Proj.firer, TRUE, "bullet_act")
 	return
 /turf/simulated/floor/glass/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			health -= rand(100, 150)
-			healthcheck()
+			healthcheck(method="ex_act")
 			return
 		if(2.0)
 			health -= rand(20, 50)
-			healthcheck()
+			healthcheck(method="ex_act")
 			return
 		if(3.0)
 			health -= rand(5, 15)
-			healthcheck()
+			healthcheck(method="ex_act")
 			return
 
 /turf/simulated/floor/glass/Entered(var/atom/movable/mover)
@@ -104,25 +120,53 @@
 			"<span class='warning'>You damage \the [src] with your sheer weight!</span>",
 			"<span class='italics'>You hear glass cracking!</span>")
 			health -= rand(5, 20)
-			healthcheck(H)
+			healthcheck(H, FALSE, "body weight")
 	if(istype(mover,/obj/mecha))
 		var/obj/mecha/M = mover
 		M.visible_message("<span class='warning'>\The [M] damages \the [src] with its sheer weight!</span>",
 		"<span class='warning'>You damage \the [src] with your sheer weight!</span>",
 		"<span class='italics'>You hear glass cracking!</span>")
 		health -= rand(20, 40)
-		healthcheck()
+		healthcheck(M.occupant, FALSE, "mech weight")
+	if(isvehicle(mover))
+		var/obj/structure/bed/chair/vehicle/V = mover
+		if(V.is_too_heavy(src))
+			V.visible_message("<span class='warning'>\The [V] damages \the [src] with its sheer weight!</span>",
+			"<span class='warning'>You damage \the [src] with your sheer weight!</span>",
+			"<span class='italics'>You hear glass cracking!</span>")
+			health -= rand(10, 20)
+			healthcheck(V.occupant, FALSE, "vehicle weight")
+	/* Unimplemented
+	if(istype(mover, /obj/vehicle))
+		var/obj/vehicle/V = mover
+		if(V.is_too_heavy(src))
+			V.visible_message("<span class='warning'>\The [V] damages \the [src] with its sheer weight!</span>",
+			"<span class='warning'>You damage \the [src] with your sheer weight!</span>",
+			"<span class='italics'>You hear glass cracking!</span>")
+			health -= rand(10, 20)
+			healthcheck(V.occupant, FALSE, "vehicle weight")
+	*/
+	/* I'm really iffy about players being punished over dumb AI decisions.
+	if(istype(mover, /obj/machinery/bot/mulebot))
+		var/obj/machinery/bot/mulebot/MB = mover
+		V.visible_message("<span class='warning'>\The [MB] damages \the [src] with its sheer weight!</span>",
+		"<span class='warning'>You damage \the [src] with your sheer weight!</span>",
+		"<span class='italics'>You hear glass cracking!</span>")
+		health -= rand(1, 5)
+		healthcheck(MB.integratedpai, FALSE, "mulebot weight")
+	*/
 
 	return 1
 
 //Someone threw something at us, please advise
+// I don't think this shit works on turfs, but it's here just in case.
 /turf/simulated/floor/glass/hitby(AM as mob|obj)
 
 	..()
 	if(ismob(AM))
 		var/mob/M = AM //Duh
 		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
-		healthcheck(M)
+		healthcheck(M, TRUE, "hitby")
 		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
 		"<span class='danger'>You slam into \the [src].</span>")
 	else if(isobj(AM))
@@ -130,6 +174,7 @@
 		health -= I.throwforce
 		healthcheck()
 		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		healthcheck(null, TRUE, "hitby obj")
 
 /turf/simulated/floor/glass/attack_hand(mob/living/user as mob)
 	if(M_HULK in user.mutations)
@@ -137,7 +182,7 @@
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
 		health -= 25
-		healthcheck()
+		healthcheck(user, TRUE, "attack_hand hulk")
 		user.delayNextAttack(8)
 
 	//Bang against the window
@@ -148,6 +193,7 @@
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
+		healthcheck(user, TRUE, "attack_hand hurt")
 
 	//Knock against it
 	else
@@ -156,6 +202,7 @@
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")
+
 	return
 
 /turf/simulated/floor/glass/attack_paw(mob/user as mob)
@@ -168,10 +215,9 @@
 	health -= damage
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
 	"<span class='danger'>You smash into \the [src]!</span>")
-	healthcheck(user)
+	healthcheck(user, TRUE, "attack_generic")
 
 /turf/simulated/floor/glass/attack_alien(mob/user as mob)
-
 	if(islarva(user))
 		return
 	attack_generic(user, 15)
@@ -187,6 +233,52 @@
 	if(!isslimeadult(user))
 		return
 	attack_generic(user, rand(10, 15))
+/turf/simulated/floor/glass/attackby(var/obj/item/W, var/mob/user)
+	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
+		if(handle_grabslam(W, user))
+			return
+	unhandled_attackby(W, user)
+
+/turf/simulated/floor/glass/proc/unhandled_attackby(var/obj/item/W, var/mob/user)
+	user.do_attack_animation(src, W)
+	if(W.damtype == BRUTE || W.damtype == BURN)
+		user.delayNextAttack(10)
+		health -= W.force
+		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
+		"<span class='warning'>You hit \the [src] with \the [W].</span>")
+		healthcheck(user, TRUE, "attackby [W]")
+		return TRUE
+	return FALSE
+
+/turf/simulated/floor/glass/proc/handle_grabslam(var/obj/item/weapon/grab/G, var/mob/user)
+	if(istype(G.affecting, /mob/living))
+		var/mob/living/M = G.affecting
+		var/gstate = G.state
+		returnToPool(G)	//Gotta delete it here because if window breaks, it won't get deleted
+		user.do_attack_animation(src, G)
+		switch(gstate)
+			if(GRAB_PASSIVE)
+				M.apply_damage(5) //Meh, bit of pain, window is fine, just a shove
+				visible_message("<span class='warning'>\The [user] shoves \the [M] into \the [src]!</span>", \
+				"<span class='warning'>You shove \the [M] into \the [src]!</span>")
+			if(GRAB_AGGRESSIVE)
+				M.apply_damage(10) //Nasty, but dazed and concussed at worst
+				health -= 5
+				visible_message("<span class='danger'>\The [user] slams \the [M] into \the [src]!</span>", \
+				"<span class='danger'>You slam \the [M] into \the [src]!</span>")
+			if(GRAB_NECK to GRAB_KILL)
+				M.Knockdown(3) //Almost certainly shoved head or face-first, you're going to need a bit for the lights to come back on
+				M.apply_damage(20) //That got to fucking hurt, you were basically flung into a window, most likely a shattered one at that
+				health -= 20 //Window won't like that
+				visible_message("<span class='danger'>\The [user] crushes \the [M] into \the [src]!</span>", \
+				"<span class='danger'>You crush \the [M] into \the [src]!</span>")
+		healthcheck(user, TRUE, "grabslam [user] -> [M]")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been window slammed by [user.name] ([user.ckey]) ([gstate]).</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Window slammed [M.name] ([gstate]).</font>")
+		msg_admin_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		log_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+		return TRUE
+	return FALSE
 
 /turf/simulated/floor/glass/plasma
 	name = "plasma glass floor"

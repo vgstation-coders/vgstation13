@@ -323,33 +323,32 @@
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
 
-
-	// Special snowflake code for building glass floors.
-	/obj/item/stack/sheet/glass/plasmarglass/afterattack(atom/Target, mob/user, adjacent, params)
-		var/busy = 0
-		if(adjacent)
-			if(isturf(Target) || istype(Target, /obj/structure/lattice))
-				var/turf/T = get_turf(Target)
-				var/obj/structure/lattice/L = T.canBuildCatwalk(src)
-				if(istype(L))
+// Special snowflake code for building glass floors.
+/obj/item/stack/sheet/glass/plasmarglass/afterattack(atom/Target, mob/user, adjacent, params)
+	var/busy = 0
+	if(adjacent)
+		if(isturf(Target) || istype(Target, /obj/structure/lattice))
+			var/turf/T = get_turf(Target)
+			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
+			if(istype(L))
+				if(amount < 1)
+					to_chat(user, "<span class='warning'>You need at least a single sheet of reinforced plasma glass to build a glass floor!</span>")
+					return
+				if(busy) //We are already building a glass floor, avoids stacking catwalks
+					return
+				to_chat(user, "<span class='notice'>You begin to build a glass floor.</span>")
+				busy = 1
+				if(do_after(user, Target, 30))
+					busy = 0
 					if(amount < 1)
-						to_chat(user, "<span class='warning'>You need at least a single sheet of reinforced plasma glass to build a glass floor!</span>")
+						to_chat(user, "<span class='warning'>You ran out of reinforced plasma glass!</span>")
 						return
-					if(busy) //We are already building a glass floor, avoids stacking catwalks
+					if(!istype(L) || L.loc != T)
+						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
 						return
-					to_chat(user, "<span class='notice'>You begin to build a glass floor.</span>")
-					busy = 1
-					if(do_after(user, Target, 30))
-						busy = 0
-						if(amount < 1)
-							to_chat(user, "<span class='warning'>You ran out of reinforced plasma glass!</span>")
-							return
-						if(!istype(L) || L.loc != T)
-							to_chat(user, "<span class='warning'>You need a lattice first!</span>")
-							return
-						playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-						to_chat(user, "<span class='notice'>You build a plasma glass floor!</span>")
-						use(1)
-						T.ChangeTurf(/turf/simulated/floor/glass/plasma)
-						qdel(L)
-						return
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>You build a plasma glass floor!</span>")
+					use(1)
+					T.ChangeTurf(/turf/simulated/floor/glass/plasma)
+					qdel(L)
+					return
