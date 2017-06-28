@@ -2402,7 +2402,7 @@
 		var/mob/living/carbon/human/H = M
 		if(!has_been_hypozined)
 			return
-		var/timedmg = ((data - 60) / 2) 
+		var/timedmg = ((data - 60) / 2)
 		if (timedmg > 0)
 			dehypozine(H, timedmg, 1, 0)
 
@@ -5807,6 +5807,31 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#790D27" //rgb: 121, 13, 39
 
 //End of plant-specific reagents
+
+/datum/reagent/petritricin
+	name = "Petritricin"
+	id = PETRITRICIN
+	description = "Petritricin is a very rare venom, only able to be produced by cockatrices. Extracting it causes a major loss of potency, but it's still able to petrify living beings when ingested."
+	color = "#002000" //rgb: 0, 32, 0
+	dupeable = FALSE
+
+/datum/reagent/petritricin/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(volume >= 1 && prob(30))
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(locate(/datum/disease/petrification) in H.viruses)
+				return
+
+			var/datum/disease/D = new /datum/disease/petrification
+			D.holder = H
+			D.affected_mob = H
+			H.viruses += D
+		else if(!issilicon(M))
+			if(M.turn_into_statue(1)) //Statue forever
+				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
 
 /datum/reagent/hemoscyanine
 	name = "Hemoscyanine"

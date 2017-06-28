@@ -35,7 +35,7 @@
 	species_type = /mob/living/simple_animal/hostile/retaliate/cockatrice
 	childtype = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 	holder_type = null
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/chicken/cockatrice
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/cockatrice
 
 	var/egg_layer = 1
 
