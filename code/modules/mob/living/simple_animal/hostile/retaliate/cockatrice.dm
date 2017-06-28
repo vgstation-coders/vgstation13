@@ -1,16 +1,13 @@
 //Cockatrice
-//Very dangerous chicken-like beast
 //Touching it with any exposed part of your body will result in you turning into a statue (only if it's alive!)
 //That includes bumping, pulling it, picking it up, having it attack you, etc.
-//Dead cockatrices and their meat are fair game
+//Dead cockatrices and their meat = harmless
 
-//They can lay eggs when surrounded by statues. The eggs are unsafe to eat, but can be touched just fine
-
-//http://nethack.wikia.com/wiki/Cockatrice for more info
+//They can lay eggs when surrounded by statues. The eggs are safe to eat, but will hatch into just as dangerous chickatrices
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice
 	name = "cockatrice"
-	desc = "A large chicken-like creature with a reptile's tail, its body is completely covered by tiny poisonous quills. Merely touching it with unprotected skin is enough to receive the lethal dose of the world's most dangerous venom."
+	desc = "A chicken-like beast with a reptile's tail, its body is completely covered by tiny poisonous quills. Any living tissue that comes directly into contact with this creature will die in a matter of seconds."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "cockatrice"
@@ -21,8 +18,8 @@
 	response_disarm = "gently pushes aside"
 	response_harm = "recklessly punches"
 
-	maxHealth = 60
-	health = 60
+	maxHealth = 55
+	health = 55
 	size = SIZE_SMALL
 
 	harm_intent_damage = 8
@@ -31,19 +28,20 @@
 	armor_modifier = 4 //High armor modifier - attacks are less likely to pierce armor
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
+	move_to_delay = 3
 
 	environment_smash = 0
 
 	species_type = /mob/living/simple_animal/hostile/retaliate/cockatrice
 	childtype = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 	holder_type = null
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/cockatrice
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/chicken/cockatrice
 
 	var/egg_layer = 1
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 	name = "chickatrice"
-	desc = "A young cockatrice. Despite being smaller, it's still capable of petrifying anybody that touches it."
+	desc = "The offspring of a cockatrice, this young animal can be described as a chicken with a lizard's tail. Its body is covered by poisonous quills that will rapidly destroy any living tissue they come into direct contact with."
 	maxHealth = 25
 	health = 25
 	size = SIZE_TINY
@@ -60,9 +58,20 @@
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/New()
 	..()
-	gender = pick(MALE, FEMALE)
-	if(egg_layer && (gender != FEMALE))
+	if(gender == NEUTER)
+		gender = pick(MALE, FEMALE)
+	
+	//There are differences between genders!
+	
+	//Females can lay eggs
+	//Males have better combat stats: 12-16dmg (as opposed to 8-12), 70hp (as opposed to 55) and faster movement speed
+	if(gender == MALE)
 		egg_layer = 0
+		melee_damage_lower += 4
+		melee_damage_upper += 4
+		health += 15
+		maxHealth += 15
+		move_to_delay -= 1
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/proc/petrify(mob/living/L, instant = 0)
 	//Turn the mob into a statue forever
@@ -75,8 +84,8 @@
 	if(isDead())
 		return
 
-	var/msg = pick("\The [src] hisses!", "\The [src] hisses angrily!")
-	visible_message("<span class='danger'>[msg]</span>", "<span class='sinister'>\The [L] touches you!</span>", "<span class='sinister'>You hear an eerie hiss.</span>")
+	var/msg = pick("\The [src] hisses at [L]!", "\The [src] hisses angrily at [L]!")
+	visible_message("<span class='userdanger'>[msg]</span>", "<span class='notice'>You touch [L].</span>", "<span class='sinister'>You hear an eerie hiss.</span>")
 
 	if(!ishuman(L) || instant)
 		if(!L.turn_into_statue(1)) //Statue forever
@@ -124,7 +133,7 @@
 /mob/living/simple_animal/hostile/retaliate/cockatrice/bite_act(mob/living/L)
 	.=..()
 
-	//Biting petrifies you instantly, while merely touching takes some itme
+	//Biting petrifies you instantly
 	petrify(L, 1)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/kick_act(mob/living/L)
@@ -151,7 +160,7 @@
 			if(petrify(pulledby))
 				pulledby.stop_pulling()
 
-	if(!stat && egg_layer && prob(1))
+	if(!stat && egg_layer && prob(2))
 		var/statue_amount = 0//Gotta have at least 4 statues around
 		for(var/obj/structure/closet/statue/S in oview(5, src))
 			statue_amount++
@@ -167,7 +176,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6)
 		E.pixel_y = rand(-6,6)
-		if(animal_count[src.species_type] < ANIMAL_CHILD_CAP && prob(10))
+		if(animal_count[src.species_type] < ANIMAL_CHILD_CAP && prob(50))
 			processing_objects.Add(E)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)
