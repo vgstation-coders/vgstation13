@@ -213,3 +213,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 	reagents.add_reagent(OXYGEN, rand(1,5))
 	reagents.add_reagent(ETHANOL, rand(1,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cockatrice
+	name = "cockatrice meat"
+	desc = "A slab of cockatrice meat. Perfectly safe to touch and even eat, despite the myths."

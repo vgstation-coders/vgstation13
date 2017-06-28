@@ -30,6 +30,7 @@
 	treadmill_speed = 0 //It floats!
 	var/nullblock = 0
 
+	mob_property_flags = MOB_CONSTRUCT
 	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
 	mob_push_flags = ALLMOBS
 

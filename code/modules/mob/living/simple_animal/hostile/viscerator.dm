@@ -27,6 +27,7 @@
 	size = SIZE_SMALL
 	meat_type = null
 	held_items = list()
+	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/viscerator/Life()
 	..()
@@ -71,6 +72,7 @@
 	attacktext = "bites"
 
 	faction = "mummy"
+	mob_property_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/hostile/viscerator/flying_skull/AttackingTarget()
 	flick("flying_skull_bite", src)

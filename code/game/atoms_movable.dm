@@ -721,6 +721,10 @@
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
 
+//Called when somebody begins to pull this atom
+/atom/movable/proc/get_pulled(mob/living/L)
+	return
+
 /atom/movable/proc/send_to_future(var/duration)	//don't override this, only call it
 	spawn()
 		actual_send_to_future(duration)

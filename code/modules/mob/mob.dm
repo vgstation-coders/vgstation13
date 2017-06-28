@@ -1035,6 +1035,7 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
+		P.get_pulled(AM)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
