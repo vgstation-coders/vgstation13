@@ -61,7 +61,7 @@
 	return 0
 
 /obj/item/weapon/gun/gatling/can_discharge() //Why is this gun not a child of gun/projectile?
-	if (current_shells)
+	if (current_shells && wielded)
 		return 1
 	
 /obj/item/weapon/gun/gatling/update_icon()

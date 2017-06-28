@@ -91,7 +91,7 @@
 	return in_chamber
 
 /obj/item/weapon/gun/siren/can_discharge()
-	if(reagents.total_volume > 10)
+	if(reagents.total_volume < 10)
 		return 1
 	
 /obj/item/weapon/gun/siren/supersoaker

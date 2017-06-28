@@ -338,9 +338,9 @@
 	if (can_discharge()) //Need to have something to fire but not load it up yet
 		//Point blank shooting if on harm intent or target we were targeting.
 		if(user.a_intent == I_HURT)
-			process_chambered() //Load whatever it is we fire
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-			in_chamber.damage *= 1.3
+			if (process_chambered()) //Load whatever it is we fire
+				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
 			src.Fire(M,user,0,0,1)
 			return
 		else if(target && M in target)
