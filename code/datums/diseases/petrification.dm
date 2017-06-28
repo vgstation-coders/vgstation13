@@ -4,7 +4,7 @@
 	max_stages = 4
 	spread = "Non contagious"
 	spread_type = NON_CONTAGIOUS
-	cure = "Unknown"
+	cure = "Acid-based substances"
 	cure_id = list(SACID, PACID, ACIDSPIT, ACIDTEA) //ssh don't spoil
 	cure_chance = 100
 	curable = TRUE
@@ -31,9 +31,9 @@
 	switch(stage)
 		if(2)
 			//Second message is shown to hallucinating mobs
-			H.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful to you.</span>",\
-			"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in \a foreign body.</span>")
-			H.pain_shock_stage = 300
+			H.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
+			"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in a foreign body.</span>")
+			H.pain_shock_stage += 300
 		if(3)
 			affected_mob.simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
 			"<span class='notice'>You decide to channel your inner Italian sculptor to create a beautiful statue.</span>")
