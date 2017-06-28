@@ -44,6 +44,7 @@
 		appearance = L.appearance
 		dir = L.dir
 
+		name = "statue of [name]"
 		if(iscorgi(L))
 			desc = "If it takes forever, I will wait for you..."
 
