@@ -6,6 +6,7 @@
 	icon_state = "egg"
 	var/amount_grown = 0
 	var/can_color = TRUE
+	var/hatch_type = /mob/living/simple_animal/chick
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
 	..()
@@ -86,7 +87,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
 	visible_message("[src] hatches with a quiet cracking sound.")
-	new /mob/living/simple_animal/chick(get_turf(src))
+	new hatch_type(get_turf(src))
 	processing_objects.Remove(src)
 	qdel(src)
 
@@ -95,21 +96,11 @@
 	desc = "Looks like it came from some genetically engineered chicken"
 	icon_state = "egg-vox"
 	can_color = FALSE
-
-/obj/item/weapon/reagent_containers/food/snacks/egg/vox/hatch()
-	visible_message("[src] hatches with a quiet cracking sound.")
-	new /mob/living/carbon/monkey/vox(get_turf(src))
-	processing_objects.Remove(src)
-	qdel(src)
+	hatch_type = /mob/living/carbon/monkey/vox
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice
 	name = "cockatrice egg"
 	desc = "On the first glance it looks like a rock. Despite the myths, it's perfectly safe to touch and even eat it."
 	icon_state = "egg-cockatrice"
 	can_color = FALSE
-
-/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/hatch()
-	visible_message("\The [src] hatches with a quiet cracking sound.")
-	new /mob/living/simple_animal/hostile/retaliate/cockatrice/chick(get_turf(src))
-	processing_objects.Remove(src)
-	qdel(src)
+	hatch_type = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick

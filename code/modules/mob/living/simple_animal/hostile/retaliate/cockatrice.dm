@@ -60,9 +60,9 @@
 	..()
 	if(gender == NEUTER)
 		gender = pick(MALE, FEMALE)
-	
+
 	//There are differences between genders!
-	
+
 	//Females can lay eggs
 	//Males have better combat stats: 12-16dmg (as opposed to 8-12), 70hp (as opposed to 55) and faster movement speed
 	if(gender == MALE)
@@ -143,7 +143,7 @@
 		petrify(L)
 
 
-/mob/living/simple_animal/hostile/retaliate/cockatrice/get_pulled(mob/living/L)
+/mob/living/simple_animal/hostile/retaliate/cockatrice/on_pull_start(mob/living/L)
 	if(check_petrify(L, HANDS))
 		petrify(L)
 
