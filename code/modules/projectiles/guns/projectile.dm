@@ -124,10 +124,7 @@
 
 /obj/item/weapon/gun/projectile/process_chambered()
 	var/obj/item/ammo_casing/AC = getAC()
-	if(in_chamber)
-		return 1 //{R}
-	if(isnull(AC) || !istype(AC))
-		return
+	can_discharge()
 	if(mag_type && load_method == 2)
 		chambered = null //Remove casing from chamber.
 		chamber_round()

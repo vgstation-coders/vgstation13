@@ -335,7 +335,7 @@
 			mouthshoot = 0
 			return
 
-	if (src.can_discharge()) //Need to have something to fire but not load it up yet
+	if (can_discharge()) //Need to have something to fire but not load it up yet
 		//Point blank shooting if on harm intent or target we were targeting.
 		if(user.a_intent == I_HURT)
 			process_chambered() //Load whatever it is we fire
