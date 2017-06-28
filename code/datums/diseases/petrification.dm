@@ -17,9 +17,10 @@
 	if(!affected_mob)
 		return cure()
 
+	var/mob/living/carbon/H = affected_mob
+
 	switch(stage)
 		if(2)
-			var/mob/living/carbon/human/H = affected_mob
 			//Second message is shown to hallucinating mobs
 			H.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful to you.</span>",\
 			"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in \a [istype(H) ? "[H.species.name]" : "foreign"] body.</span>")

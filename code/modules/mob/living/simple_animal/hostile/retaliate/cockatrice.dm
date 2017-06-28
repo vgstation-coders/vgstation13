@@ -79,11 +79,17 @@
 	visible_message("<span class='danger'>[msg]</span>", "<span class='sinister'>\The [L] touches you!</span>", "<span class='sinister'>You hear an eerie hiss.</span>")
 
 	if(!ishuman(L) || instant)
-		to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
 		if(!L.turn_into_statue(1)) //Statue forever
 			return 0
+
+		to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
+		add_logs(src, L, "instantly petrified", admin = L.ckey ? TRUE : FALSE)
+
 	else if(ishuman(L))
 		var/mob/living/carbon/human/H = L
+
+		add_logs(src, L, "petrified", admin = L.ckey ? TRUE : FALSE)
+
 		for(var/datum/disease/petrification/P in H.viruses) //If already petrifying, speed up the process!
 			P.stage = P.max_stages
 			P.stage_act()
