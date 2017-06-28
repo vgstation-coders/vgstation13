@@ -17,6 +17,7 @@
 	var/shardtype = /obj/item/weapon/shard
 	var/sheettype = /obj/item/stack/sheet/glass/rglass //Used for deconstruction
 	var/glass_state = "glass_floor" // State of the glass itself.
+	var/reinforced = 0
 
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
@@ -56,19 +57,36 @@
 	else
 		to_chat(user, "It's cracked over multiple layers and has many impact marks.")
 
-/turf/simulated/floor/glass/proc/break_turf()
+/turf/simulated/floor/glass/proc/break_turf(var/no_teleport=FALSE)
 	if(loc)
 		playsound(get_turf(src), "shatter", 70, 1)
 	//ReplaceWithLattice()
 	// TODO: Break all pipes/wires?
-	var/turf/newT = ChangeTurf(/turf/space)
-	spawnBrokenPieces(newT)
+	if(!no_teleport)
+		for(var/atom/movable/A in src)
+			if(!istype(A)) continue
+			fall_into_background(A)
+			throw_that_fucker(A)
+
+	// Yes, this leaves shit left when other things are flung into space, but it gives engineering something to work with.
+	spawnBrokenPieces(src)
+	ChangeTurf(/turf/space)
+
+/turf/simulated/floor/glass/proc/throw_that_fucker(var/atom/movable/A)
+	if(!istype(A))
+		return
+
+	var/new_x = rand(25, world.maxx-25)
+	var/new_y = rand(25, world.maxx-25)
+	var/new_z = map.zDeepSpace
+	var/turf/T = locate(new_x,new_y,new_z)
+	A.forceMove(T)
 
 /turf/simulated/floor/glass/proc/spawnBrokenPieces(var/turf/T)
 	getFromPool(shardtype, T, sheetamount)
 	getFromPool(/obj/item/stack/rods, T, sheetamount+1) // Includes lattice
 
-/turf/simulated/floor/glass/proc/healthcheck(var/mob/M, var/sound = 1, var/method="unknown")
+/turf/simulated/floor/glass/proc/healthcheck(var/mob/M, var/sound = 1, var/method="unknown", var/no_teleport=TRUE)
 	if(health <= 0)
 		if(M)
 			var/pressure = 0
@@ -78,7 +96,8 @@
 			if (pressure > 0)
 				message_admins("Glass floor with pressure [pressure]kPa broken (method=[method]) by [M.real_name] ([formatPlayerPanel(M,M.ckey)]) at [formatJumpTo(src)]!")
 				log_admin("Window with pressure [pressure]kPa broken (method=[method]) by [M.real_name] ([M.ckey]) at [src]!")
-		break_turf()
+			M.visible_message("<span class='danger'>[M] falls through the glass!</span>", "<span style='font-size:largest' class='danger'>OH FUCK, YOU FELL THROUGH!</span>", "You hear breaking glass.")
+		break_turf(no_teleport)
 	else
 		if(sound)
 			playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
@@ -100,19 +119,19 @@
 	switch(severity)
 		if(1.0)
 			health -= rand(100, 150)
-			healthcheck(method="ex_act")
+			healthcheck(method="ex_act", no_teleport=TRUE)
 			return
 		if(2.0)
 			health -= rand(20, 50)
-			healthcheck(method="ex_act")
+			healthcheck(method="ex_act", no_teleport=TRUE)
 			return
 		if(3.0)
 			health -= rand(5, 15)
-			healthcheck(method="ex_act")
+			healthcheck(method="ex_act", no_teleport=TRUE)
 			return
 
 /turf/simulated/floor/glass/Entered(var/atom/movable/mover)
-	if(ishuman(mover))
+	if(!reinforced && ishuman(mover))
 		var/mob/living/carbon/human/H = mover
 		// Fatties damage glass.
 		if(M_FAT in H.mutations)
@@ -233,6 +252,7 @@
 	if(!isslimeadult(user))
 		return
 	attack_generic(user, rand(10, 15))
+
 /turf/simulated/floor/glass/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
 		if(handle_grabslam(W, user))
@@ -287,3 +307,4 @@
 	sheettype = /obj/item/stack/sheet/glass/plasmarglass
 	glass_state = "plasma_glass_floor"
 	health = 160
+	reinforced=TRUE
