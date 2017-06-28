@@ -117,7 +117,9 @@
 	.=..()
 
 	//Respond to all unarmed attacks with petrification of the attacker
-	petrify(L)
+	//Humans are already handled in attack_hand
+	if(!ishuman(L))
+		petrify(L)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/bite_act(mob/living/L)
 	.=..()

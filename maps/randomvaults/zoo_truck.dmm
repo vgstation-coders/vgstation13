@@ -50,7 +50,7 @@
 "aX" = (/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/fertilizer/l4z,/turf/simulated/shuttle/floor,/area/vault/automap)
 "aY" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct{dir = 4},/turf/simulated/shuttle/floor,/area/vault/automap)
 "aZ" = (/obj/item/weapon/reagent_containers/chempack/override/fully_loaded,/obj/item/clothing/mask/chemmask,/obj/structure/table/reinforced,/obj/machinery/light/small{dir = 1},/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/weapon/gun/mahoguny,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/automap)
-"ba" = (/obj/effect/decal/warning_stripes{color = "#FF0000"; dir = 8; icon_state = "zoo"; pixel_x = 32},/turf/space,/area)
+"ba" = (/obj/effect/decal/warning_stripes{color = "#FF0000"; dir = 8; icon_state = "zoo"; pixel_x = 0},/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/vault/automap)
 "bb" = (/obj/item/weapon/reagent_containers/glass/fertilizer{name = "empty fertilizer bottle"},/turf/simulated/shuttle/floor,/area/vault/automap)
 "bc" = (/obj/structure/shuttle/window{icon_state = "16"},/obj/structure/grille,/turf/simulated/shuttle/plating,/area/vault/automap)
 "bd" = (/obj/effect/plantsegment/single,/obj/item/stack/sheet/metal,/obj/item/weapon/reagent_containers/glass/fertilizer/ez,/obj/item/weapon/reagent_containers/glass/fertilizer/ez,/obj/item/weapon/reagent_containers/glass/fertilizer/ez,/obj/item/weapon/reagent_containers/glass/fertilizer/ez,/obj/effect/decal/cleanable/dirt,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/vault/automap)
@@ -191,7 +191,7 @@ aaaaaaabafafafahaiajakalamanafafafagaaaa
 aaaaaaaoapaqaraoasatauavawaxaxaxaxaoaaaa
 aaabafahayazafaAaBaCaDaEaFaGaHaIaxaJafag
 aaaKaLaKaMaNaOaPaQaRaSaTaUaVaWaXaYaoaZao
-baaJafahbbbcbdbebcbfbgbhbibjbkavblanbmah
+aabaafahbbbcbdbebcbfbgbhbibjbkavblanbmah
 aaaobnbobpbqbrbsbqbtbubvbwbwbxaGbybzbAbB
 aaaobCaJafaAafafahbDbEbhbwbwaUavbFbGbHao
 aaaobIaobJbKbLbJaobMbNbObPbQavbRaxazafah
@@ -202,7 +202,7 @@ aacybnaJafaBcfczaocAcBaocCcDaocEcFaocGcy
 aaaocHaocfcfcfcIaocJcKaocLcMaocLcNaocOao
 aaaocPcQcRafafafaAcSafaAcTafaAcUafcVcWao
 aaaobncXcYcZcpdadbccdcdddebndfdfbndgbnao
-baaJafafafafdhbndidjdkbCcYdldmafafafafah
+aabaafafafafdhbndidjdkbCcYdldmafafafafah
 aaaodndododpaodqdidrdsdtbCdqaodndododpao
 aadudvdwdwdxaodydzdAdBbndCdyaodvdwdwdxdD
 aaaaaaaaaaaaduafafafafafafafdDaaaaaaaaaa
