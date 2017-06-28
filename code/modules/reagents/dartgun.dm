@@ -116,8 +116,7 @@
 		return cartridge.darts
 
 /obj/item/weapon/gun/dartgun/can_discharge()
-	if(can_fire())
-		return 1
+	return can_fire()
 		
 /obj/item/weapon/gun/dartgun/proc/has_selected_beaker_reagents()
 	return 0
