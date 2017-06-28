@@ -94,8 +94,7 @@
 	return 0
 
 /obj/item/weapon/gun/stickybomb/can_discharge()
-	if(loaded.len)
-		return 1
+	return loaded.len
 	
 /obj/item/stickybomb
 	name = "anti-personnel stickybomb"
