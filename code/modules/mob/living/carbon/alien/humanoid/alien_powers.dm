@@ -228,6 +228,10 @@ Doesn't work on other aliens/AI.*/
 
 	if(powerc(200))
 		if(O in oview(1))
+			if(!O.acidable())
+				to_chat(usr, "<span class='alien'>You cannot dissolve this object.</span>")
+				return
+			AdjustPlasma(-200)
 			acidify(O, usr)
 		else
 			to_chat(usr, "<span class='alien'>Target is too far away.</span>")
