@@ -341,12 +341,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/skellington
 
-/datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	if (prob(0))
-		speech.message += "  ACK ACK!"
-
-	return ..(speech, H)
-
 /datum/species/skellington/can_artifact_revive()
 	return 0
 
