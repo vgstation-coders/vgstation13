@@ -2036,6 +2036,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cowboy = 3,
 		/obj/item/clothing/under/rottensuit = 5,
 		/obj/item/clothing/shoes/rottenshoes = 5,
+		/obj/item/clothing/under/franksuit = 3,
+		/obj/item/clothing/gloves/frankgloves = 3,
+		/obj/item/clothing/shoes/frankshoes =3,
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,

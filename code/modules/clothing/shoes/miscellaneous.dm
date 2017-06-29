@@ -33,13 +33,13 @@
 
 /datum/action/item_action/change_appearance_shoes
 	name = "Change Shoes Appearance"
-	
+
 /datum/action/item_action/change_appearance_shoes/Trigger()
 	var/obj/item/clothing/shoes/syndigaloshes/T = target
 	if(!istype(T))
 		return
 	T.change()
-	
+
 /obj/item/clothing/shoes/syndigaloshes/proc/change()
 	var/obj/item/clothing/shoes/A
 	A = input("Select Colour to change it to", "BOOYEA", A) as null|anything in clothing_choices
@@ -57,7 +57,7 @@
 	_color = A._color
 	step_sound = A.step_sound
 	usr.update_inv_w_uniform()	//so our overlays update.
-	
+
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"
 	icon_state = "mime"
@@ -412,3 +412,9 @@
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/frankshoes
+	name = "Dr. Frank's leggings"
+	desc = "Perfect for wearing out to a late night double feature."
+	icon_state = "frankshoes"
+	item_state = "frankshoes"
