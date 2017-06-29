@@ -337,12 +337,12 @@ var/global/list/whitelisted_species = list("Human")
 		"brain" =    /datum/organ/internal/brain,
 		)
 
-	move_speed_multiplier = 1.5
+	move_speed_multiplier = 1.2
 
 	primitive = /mob/living/carbon/monkey/skellington
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	if (prob(25))
+	if (prob(0))
 		speech.message += "  ACK ACK!"
 
 	return ..(speech, H)
