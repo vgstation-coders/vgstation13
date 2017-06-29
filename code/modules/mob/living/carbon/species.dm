@@ -342,7 +342,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/skellington
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	if (prob(0))
+	if (prob(20))
 		speech.message += "  ACK ACK!"
 
 	return ..(speech, H)
