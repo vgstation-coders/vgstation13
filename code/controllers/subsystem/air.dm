@@ -65,7 +65,7 @@ Class Procs:
 	name          = "Air"
 	init_order    = SS_INIT_AIR
 	priority      = SS_PRIORITY_AIR
-	wait          = 1 SECONDS
+	wait          = 2 SECONDS
 	display_order = SS_DISPLAY_AIR
 
 	var/list/currentrun
