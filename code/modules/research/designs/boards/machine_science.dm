@@ -122,3 +122,13 @@
 	name = "Circuit Design (Isotope Ratio Spectrometer)"
 	id = "isotoperatio"
 	build_path = /obj/item/weapon/circuitboard/anom/iso
+
+/datum/design/ammolathe
+	name = "Circuit Design(Ammolathe)"
+	desc = "The circuit board for an Ammunition Lathe"
+	id = "amlathe"
+	req_tech = list(Tc_COMBAT = 3, Tc_ENGINEERING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/ammolathe
