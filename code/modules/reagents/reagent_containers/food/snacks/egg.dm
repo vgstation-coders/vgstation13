@@ -100,7 +100,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice
 	name = "cockatrice egg"
-	desc = "On the first glance this cockatrice egg looks like a rock. It is safe to handle, but the substance inside is lethal if ingested."
+	desc = "On the first glance this cockatrice egg looks like a rock. It is safe to handle, although it may still contain some poison."
 	icon_state = "egg-cockatrice"
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
@@ -108,4 +108,4 @@
 /obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/New()
 	..()
 
-	reagents.add_reagent(PETRITRICIN, 0.5)
+	reagents.add_reagent(PETRITRICIN, rand(0.5,1.5))
