@@ -62,11 +62,13 @@
 		playsound(get_turf(src), "shatter", 70, 1)
 	//ReplaceWithLattice()
 	// TODO: Break all pipes/wires?
-	if(!no_teleport)
+	if(!no_teleport && src.has_gravity())
 		for(var/atom/movable/A in src)
-			if(!istype(A)) continue
-			fall_into_background(A)
-			throw_that_fucker(A)
+			if(!istype(A))
+				continue
+			fall_into_background(A) // 3 seconds, NONBLOCKING.
+			spawn(30)
+				throw_that_fucker(A)
 
 	// Yes, this leaves shit left when other things are flung into space, but it gives engineering something to work with.
 	spawnBrokenPieces(src)
@@ -134,7 +136,7 @@
 	if(!reinforced && ishuman(mover))
 		var/mob/living/carbon/human/H = mover
 		// Fatties damage glass.
-		if(M_FAT in H.mutations)
+		if(M_FAT in H.mutations && prob(25)) // I REALLY don't like sampling noise this often...
 			H.visible_message("<span class='warning'>[H] damages \the [src] with \his[H] sheer weight!</span>",
 			"<span class='warning'>You damage \the [src] with your sheer weight!</span>",
 			"<span class='italics'>You hear glass cracking!</span>")
