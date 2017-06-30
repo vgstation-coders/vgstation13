@@ -706,11 +706,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		altTitles += "[a]:[player_alt_titles[a]];"
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))
-		if(!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13               14          15                  16
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name,random_name,gender,age,species,language,med_record,sec_record,gen_record,player_alt_titles,disabilities,nanotrasen_relation, random_body) \
-				   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				                        ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, be_random_body)
+	if(check.Execute(db))           // WHEN ADDING NEW COLUMNS, REMEMBER THE BLOCK AT THE END OF THE LINE --->
+		if(!check.NextRow())          //1         2           3         4          5               6       7    8        9         10          11          12          13                 14            15                   16                   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, random_body) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                  //1         2           3         4          5               6       7    8        9         10          11          12          13                 14            15                   16
+                                  ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, be_random_body)
 			if(!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
