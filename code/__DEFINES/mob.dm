@@ -9,3 +9,4 @@
 #define MOB_SWARM 8 //swarm of mobs!
 #define MOB_HOLOGRAPHIC 16 //holocarps
 #define MOB_SUPERNATURAL 32
+#define MOB_NO_PETRIFY 64 //can't get petrified

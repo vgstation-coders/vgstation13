@@ -108,4 +108,4 @@
 /obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/New()
 	..()
 
-	reagents.add_reagent(PETRITRICIN, 3)
+	reagents.add_reagent(PETRITRICIN, 0.5)

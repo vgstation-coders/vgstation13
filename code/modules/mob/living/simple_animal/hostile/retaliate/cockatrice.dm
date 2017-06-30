@@ -21,6 +21,7 @@
 	maxHealth = 55
 	health = 55
 	size = SIZE_SMALL
+	mob_property_flags = MOB_NO_PETRIFY
 
 	harm_intent_damage = 8
 	melee_damage_lower = 8
@@ -79,13 +80,8 @@
 	//Silicons and other cockatrices unaffected
 	if(issilicon(L))
 		return 0
-	if(istype(L, /mob/living/simple_animal/hostile/retaliate/cockatrice))
-		return 0
 	if(isDead())
 		return
-
-	var/msg = pick("\The [src] hisses at [L]!", "\The [src] hisses angrily at [L]!")
-	visible_message("<span class='userdanger'>[msg]</span>", "<span class='notice'>You touch [L].</span>", "<span class='sinister'>You hear an eerie hiss.</span>")
 
 	if(!ishuman(L) || instant)
 		if(!L.turn_into_statue(1)) //Statue forever
@@ -99,15 +95,21 @@
 
 		add_logs(src, L, "petrified", admin = L.ckey ? TRUE : FALSE)
 
+		var/found_virus = FALSE
 		for(var/datum/disease/petrification/P in H.viruses) //If already petrifying, speed up the process!
 			P.stage = P.max_stages
 			P.stage_act()
-			return 1
+			found_virus = TRUE
+			break
 
-		var/datum/disease/D = new /datum/disease/petrification
-		D.holder = H
-		D.affected_mob = H
-		H.viruses += D
+		if(!found_virus)
+			var/datum/disease/D = new /datum/disease/petrification
+			D.holder = H
+			D.affected_mob = H
+			H.viruses += D
+
+	var/msg = pick("\The [src] hisses at [L]!", "\The [src] hisses angrily at [L]!")
+	visible_message("<span class='userdanger'>[msg]</span>", "<span class='notice'>You touch [L].</span>", "<span class='sinister'>You hear an eerie hiss.</span>")
 
 	return 1
 
@@ -155,12 +157,13 @@
 	if(isDead())
 		return
 
+	//Whoever is pulling us is at risk of petrification
 	if(isliving(pulledby))
 		if(check_petrify(pulledby, HANDS))
 			if(petrify(pulledby))
 				pulledby.stop_pulling()
 
-	if(!stat && egg_layer && prob(2))
+	if(!isUnconscious() && egg_layer && prob(2))
 		var/statue_amount = 0//Gotta have at least 4 statues around
 		for(var/obj/structure/closet/statue/S in oview(5, src))
 			statue_amount++

@@ -5811,15 +5811,17 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/petritricin
 	name = "Petritricin"
 	id = PETRITRICIN
-	description = "Petritricin is a very rare venom, only able to be produced by cockatrices. Extracting it causes a major loss of potency, but it's still able to petrify living beings when ingested."
+	description = "Petritricin is a venom produced by cockatrices. The extraction process causes a major potency loss, but a right dose of this can still petrify somebody."
 	color = "#002000" //rgb: 0, 32, 0
 	dupeable = FALSE
+
+	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
 
 /datum/reagent/petritricin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
-	if(volume >= 1 && prob(30))
+	if(volume >= minimal_dosage && prob(30))
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if(locate(/datum/disease/petrification) in H.viruses)

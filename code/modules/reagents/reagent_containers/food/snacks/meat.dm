@@ -40,6 +40,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
 	desc = "Tastes like the tears of the station. Gives off the faint aroma of a valid salad. Just like mom used to make. This revelation horrifies you greatly."
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/lizard/New()
+	..()
+
+	//ACIDSPIT is an alcoholic drink that also cures cockatrice petrification (lizard meat curing petrification is a nethack reference)
+	reagents.add_reagent(ACIDSPIT, 2)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 	name = "synthetic meat"
 	desc = "A synthetic slab of flesh."
@@ -221,5 +227,5 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/cockatrice/New()
 	..()
 
-	reagents.add_reagent(PETRITRICIN, 4)
+	reagents.add_reagent(PETRITRICIN, 3)
 
