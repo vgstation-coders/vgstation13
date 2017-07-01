@@ -296,6 +296,7 @@ SELECT
     players.ooc_notes,
     players.real_name,
     players.random_name,
+    players.random_body,
     players.gender,
     players.age,
     players.species,
