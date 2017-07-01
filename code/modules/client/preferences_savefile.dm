@@ -719,7 +719,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			to_chat(user, "Created Character")
 		else
 			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,random_body=? WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, ckey, slot, be_random_body)
+									  metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, be_random_body, ckey, slot)
 			if(!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")

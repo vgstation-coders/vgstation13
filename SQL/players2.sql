@@ -7,6 +7,7 @@ CREATE TABLE players (
     ooc_notes           TEXT,
     real_name           TEXT,
     random_name         INTEGER,
+    random_body         INTEGER,
     gender              TEXT,
     age                 INTEGER,
     species             TEXT,
@@ -89,8 +90,7 @@ CREATE TABLE limbs (
 
 -- Table: client
 CREATE TABLE client (
-    ID             INTEGER NOT NULL
-                           PRIMARY KEY AUTOINCREMENT,
+    ID             INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ckey           INTEGER UNIQUE,
     ooc_color      TEXT,
     lastchangelog  TEXT,
@@ -104,14 +104,14 @@ CREATE TABLE client (
     special        INTEGER,
     warns          INTEGER,
     warnbans       INTEGER,
-	usewmp         INTEGER,
+    usewmp         INTEGER,
     usenanoui      INTEGER,
-	tooltips       INTEGER,
+    tooltips       INTEGER,
     space_parallax INTEGER,
     space_dust     INTEGER,
     parallax_speed INTEGER,
     stumble        INTEGER,
-	attack_animation INTEGER
+    attack_animation INTEGER
 );
 
 
