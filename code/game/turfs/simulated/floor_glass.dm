@@ -62,6 +62,8 @@
 		playsound(get_turf(src), "shatter", 70, 1)
 	//ReplaceWithLattice()
 	// TODO: Break all pipes/wires?
+	// FIXME: Animations are fucked, controversial, I want to move on to other shit.
+	/*
 	if(!no_teleport && src.has_gravity())
 		for(var/atom/movable/A in src)
 			if(!istype(A))
@@ -69,6 +71,7 @@
 			fall_into_background(A) // 3 seconds, NONBLOCKING.
 			spawn(30)
 				throw_that_fucker(A)
+	*/
 
 	// Yes, this leaves shit left when other things are flung into space, but it gives engineering something to work with.
 	spawnBrokenPieces(src)
