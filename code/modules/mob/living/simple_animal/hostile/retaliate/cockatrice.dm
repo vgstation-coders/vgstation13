@@ -1,7 +1,7 @@
 //Cockatrice
 //Touching it with any exposed part of your body will result in you turning into a statue (only if it's alive!)
 //That includes bumping, pulling it, picking it up, having it attack you, etc.
-//Dead cockatrices and their meat = harmless
+//Meat & eggs contain petritricin, a venom that petrifies you after a short delay (countered by acid)
 
 //They can lay eggs when surrounded by statues. The eggs are safe to eat, but will hatch into just as dangerous chickatrices
 
@@ -78,7 +78,7 @@
 	//Turn the mob into a statue forever
 	//Return 1 on success
 	//Silicons and other cockatrices unaffected
-	if(issilicon(L))
+	if(issilicon(L) || (L.mob_property_flags & MOB_NO_PETRIFY))
 		return 0
 	if(isDead())
 		return

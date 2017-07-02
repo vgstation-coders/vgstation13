@@ -8,7 +8,7 @@
 "ah" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/vault/automap)
 "ai" = (/obj/structure/computerframe,/obj/effect/plantsegment/single,/obj/item/weapon/shard,/turf/simulated/shuttle/floor,/area/vault/automap)
 "aj" = (/obj/structure/bed/chair{dir = 8},/obj/effect/plantsegment/single,/turf/simulated/shuttle/floor,/area/vault/automap)
-"ak" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/fertilizer/rh,/obj/item/weapon/reagent_containers/glass/bottle/ammonia{pixel_x = -10; pixel_y = 2},/turf/simulated/shuttle/floor,/area/vault/automap)
+"ak" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/fertilizer/rh,/obj/item/weapon/reagent_containers/glass/bottle/ammonia{pixel_x = -10; pixel_y = 2},/obj/structure/button{name = "secret button"; pixel_y = -10},/turf/simulated/shuttle/floor,/area/vault/automap)
 "al" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/fertilizer/ez,/obj/item/weapon/reagent_containers/glass/fertilizer/ez{pixel_x = 7; pixel_y = -1},/obj/item/weapon/pen,/turf/simulated/shuttle/floor,/area/vault/automap)
 "am" = (/obj/structure/computerframe,/obj/effect/plantsegment/single,/obj/item/weapon/shard{icon_state = "small"},/obj/item/weapon/circuitboard/blank{name = "melted circuitboard"},/obj/item/stack/cable_coil{amount = 5},/turf/simulated/shuttle/floor,/area/vault/automap)
 "an" = (/turf/simulated/shuttle/floor,/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/vault/automap)

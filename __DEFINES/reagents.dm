@@ -352,6 +352,7 @@
 #define THYMOL			"thymol"
 
 #define PETRITRICIN		"petritricin"
+#define APETRINE		"apetrine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
