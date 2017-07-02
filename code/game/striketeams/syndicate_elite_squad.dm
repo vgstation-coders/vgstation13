@@ -1,7 +1,7 @@
 //ELITE SYNDICATE STRIKE TEAM
 
 /datum/striketeam/syndicate
-	striketeam_name = "Elite Strike Team"
+	striketeam_name = TEAM_ELITE_SYNDIE
 	faction_name = "the Syndicate"
 	mission = "Purify the station."
 	team_size = 6
@@ -36,11 +36,12 @@
 	new_syndicate_commando.mind_initialize()
 	new_syndicate_commando.mind.assigned_role = "MODE"
 	new_syndicate_commando.mind.special_role = "Syndicate Commando"
-	ticker.mode.traitors |= new_syndicate_commando.mind	//Adds them to current traitor list. Which is really the extra antagonist list.
+	ticker.mode.elite_syndie |= new_syndicate_commando.mind
 	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
 	return new_syndicate_commando
 
 /datum/striketeam/syndicate/greet_commando(var/mob/living/carbon/human/H)
+	H << 'sound/music/elite_syndie_squad.ogg'
 	to_chat(H, "<span class='notice'>You are [H.real_name], an Elite commando, in the service of the Syndicate.</span>")
 	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
 

@@ -143,6 +143,8 @@
 		"malfunction",
 		"resteam",
 		"dsquad",
+		"elite",
+		"custom",
 	)
 	var/text = ""
 
@@ -401,10 +403,32 @@
 			text += "<a href='?src=\ref[src];dsquad=dsquad'>yes</a>|<b>NO</b>"
 		sections["dsquad"] = text
 
+	/** ELITE SYNDICATE SQUAD ***/
+	if (istype(current, /mob/living/carbon))
+		text = "Elite Syndicate Squad"
+		text = "<i><b>[text]</b></i>: "
+		if (src in ticker.mode.elite_syndie)
+			text += "<b>YES</b>|<a href='?src=\ref[src];elite=clear'>no</a>"
+		else
+			text += "<a href='?src=\ref[src];elite=elite'>yes</a>|<b>NO</b>"
+		sections["elite"] = text
+
+	/** CUSTOM STRIKE TEAM ***/
+	if (istype(current, /mob/living/carbon))
+		text = "Custom Team"
+		text = "<i><b>[text]</b></i>: "
+		if (src in ticker.mode.custom_team)
+			text += "<b>YES</b>|<a href='?src=\ref[src];custom=clear'>no</a>"
+		else
+			text += "<a href='?src=\ref[src];custom=custom'>yes</a>|<b>NO</b>"
+		sections["custom"] = text
+
 	out += {"<br>
 		<b>Strike Teams:</b><br>
 		[sections["resteam"]]<br>
 		[sections["dsquad"]]<br>
+		[sections["elite"]]<br>
+		[sections["custom"]]<br>
 		<br>"}
 
 	out += {"<br>
@@ -1104,6 +1128,37 @@
 					assigned_role = "MODE"
 					special_role = "Death Commando"
 					log_admin("[key_name(usr)] has deathsquad'ed [key_name(current)].")
+
+	else if (href_list["elite"])
+		switch(href_list["elite"])
+			if ("clear")
+				if(src in ticker.mode.elite_syndie)
+					ticker.mode.elite_syndie -= src
+					special_role = null
+					to_chat(current, "<span class='danger'><FONT size = 3>You have been demoted! You are no longer an Elite Syndicate Squadie!</FONT></span>")
+					log_admin("[key_name_admin(usr)] has de-elite syndie squad'ed [current].")
+			if ("elite")
+				if (!(src in ticker.mode.elite_syndie))
+					ticker.mode.elite_syndie += src
+					assigned_role = "MODE"
+					special_role = "Syndicate Commando"
+					log_admin("[key_name(usr)] has elite syndie squad'ed [key_name(current)].")
+
+	else if (href_list["custom"])
+		var/datum/striketeam/team = sentStrikeTeams[TEAM_CUSTOM]
+		switch(href_list["custom"])
+			if ("clear")
+				if(src in ticker.mode.custom_team)
+					ticker.mode.custom_team -= src
+					special_role = null
+					to_chat(current, "<span class='danger'><FONT size = 3>You have been demoted! You are no longer part of the [team.striketeam_name]!</FONT></span>")
+					log_admin("[key_name_admin(usr)] has de-striketeam'ed [current].")
+			if ("custom")
+				if (!(src in ticker.mode.custom_team))
+					ticker.mode.custom_team += src
+					assigned_role = "MODE"
+					special_role = "Custom Team"
+					log_admin("[key_name(usr)] has striketeam'ed [key_name(current)].")
 
 
 	edit_memory()
