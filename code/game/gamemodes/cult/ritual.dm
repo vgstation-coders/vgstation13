@@ -465,8 +465,11 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 			return
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
+			if(!H.held_items.len)
+				to_chat(user, "<span class='notice'>You have no hands to draw with!</span>")
+				return
 			if(H.species.anatomy_flags & NO_BLOOD) //No blood, going to have to improvise
-				if(H.bloody_hands && H.held_items.len) //Blood on hand to use, and hands on hand to use
+				if(H.bloody_hands) //Blood on hand to use, and hands on hand to use
 					user.visible_message("<span class='warning'>[user] starts to paint drawings on the floor with the blood on their hands, whilst chanting.</span>",\
 					"<span class='warning'>You use the blood smeared on your hands to begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
 					"<span class='warning'>You hear chanting.</span>")
@@ -474,15 +477,14 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				else //We'll have to search around for blood
 					var/turf/T = get_turf(user)
 					var/found = 0
-					if(H.held_items.len)
-						for (var/obj/effect/decal/cleanable/blood/B in T)
-							if(B.amount && B.counts_as_blood)
-								user.visible_message("<span class='warning'>[user] paws at the blood puddles splattered on \the [T], and begins to chant and paint symbols on the floor.</span>",\
-								"<span class='warning'>You use the blood splattered across \the [T], and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
-								"<span class='warning'>You hear chanting.</span>")
-								B.amount--
-								found = 1
-								break
+					for (var/obj/effect/decal/cleanable/blood/B in T)
+						if(B.amount && B.counts_as_blood)
+							user.visible_message("<span class='warning'>[user] paws at the blood puddles splattered on \the [T], and begins to chant and paint symbols on the floor.</span>",\
+							"<span class='warning'>You use the blood splattered across \the [T], and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
+							"<span class='warning'>You hear chanting.</span>")
+							B.amount--
+							found = 1
+							break
 					if(!found)
 						to_chat(user, "<span class='notice'>You have no blood in, on, or around you that you can use to draw a rune!</span>")
 						return
