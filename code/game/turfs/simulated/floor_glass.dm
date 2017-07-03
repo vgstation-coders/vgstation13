@@ -305,6 +305,13 @@
 		return TRUE
 	return FALSE
 
+/turf/simulated/floor/glass/airless
+	icon_state = "floor"
+	name = "airless floor"
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+
 /turf/simulated/floor/glass/plasma
 	name = "plasma glass floor"
 	desc = "A floor made of reinforced plasma glass, used for looking into the void."
@@ -313,3 +320,10 @@
 	glass_state = "plasma_glass_floor"
 	health = 160
 	reinforced=TRUE
+
+/turf/simulated/floor/glass/plasma/airless
+	icon_state = "floor"
+	name = "airless floor"
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB

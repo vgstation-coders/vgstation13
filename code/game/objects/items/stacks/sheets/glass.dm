@@ -274,7 +274,10 @@
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You build a glass floor!</span>")
 					use(1)
-					T.ChangeTurf(/turf/simulated/floor/glass)
+					if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
+						T.ChangeTurf(/turf/simulated/floor/glass/airless)
+					else
+						T.ChangeTurf(/turf/simulated/floor/glass)
 					qdel(L)
 					return
 
@@ -349,6 +352,9 @@
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You build a plasma glass floor!</span>")
 					use(1)
-					T.ChangeTurf(/turf/simulated/floor/glass/plasma)
+					if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
+						T.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
+					else
+						T.ChangeTurf(/turf/simulated/floor/glass/plasma)
 					qdel(L)
 					return
