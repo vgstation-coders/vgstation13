@@ -1,0 +1,202 @@
+*** Begin Log: Mon Apr 10 09:55:50 2017 ***
+Mon Apr 10 09:55:51 2017
+World opened on network port 7777.
+Welcome BYOND! (5.0 Beta Version 511.1379)
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: Type /obj/item/weapon/dnainjector/nofail/randompower does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: DNA-Injector usr: .
+## ERROR: File not found (config/config.txt)
+## ERROR: File not found (config/game_options.txt)
+## ERROR: File not found (config/dbconfig.txt)
+## ERROR: File not found (config/forumdbconfig.txt)
+Database Error: 
+Failed to connect to database in load_admins(). Reverting to legacy system.
+## ERROR: File not found (config/admin_ranks.txt)
+## ERROR: File not found (config/admins.txt)
+Database Error: 
+Database connection failed. Reverting to the legacy ban system.
+Database Error: 
+Database connection failed. Skipping ooc ban loading
+
+Database Error: 
+Your server failed to establish a connection with the feedback database.
+## TESTING: Something wrong with dbcon.
+[Migrations] (mysql): Setup() returned false, will not run migrations for this DBMS.
+[Migrations] (sqlite): Creating _migrations
+[Migrations] Loaded 9 sqlite DB migrations from package ss13_prefs.
+[Migrations] Updating ss13_prefs from 0 to 9...
+[Migrations] Successfully applied ss13_prefs#1 (Initial State)
+[Migrations] Successfully applied ss13_prefs#2 (Add Progress Bars)
+[Migrations] Successfully applied ss13_prefs#3 (Add Space Parallax)
+[Migrations] Successfully applied ss13_prefs#4 (Add Space Dust)
+[Migrations] Successfully applied ss13_prefs#5 (Add Parallax Speed)
+[Migrations] Successfully applied ss13_prefs#6 (Add Tooltips)
+[Migrations] Successfully applied ss13_prefs#7 (Remove flavor text)
+[Migrations] Successfully applied ss13_prefs#8 (Add Stumble)
+[Migrations] Successfully applied ss13_prefs#9 (Add Attack Animations)
+[Migrations] Done!
+[Migrations] *** ss13_prefs is behind 9 versions!
+
+Your server failed to establish a connection with the tgstation database.
+##WARNING: Type /turf/space does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: space usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+
+Webclient users can visit this address to play:
+http://www.byond.com/play/72.192.76.91:7777
+
+Mon Apr 10 09:57:17 2017
+
+Or this code can be embedded:
+&lt;iframe src="http://www.byond.com/play/embed/72.192.76.91:7777" width=640 height=480&gt;&lt;/iframe&gt;
+
+Database Error: 
+##WARNING: Error #:0 -  in code/modules/client/preferences_savefile.dm at line 62 src: /datum/preferences usr: .
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 255,225,1...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 255,229,1...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 114,109,2...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 422,234,2...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 158,228,3...
+##WARNING: Type /obj/item/seeds/random does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: the packet of strange plant nodes usr: .
+## TESTING: DNA2: 0 blocks are unused: nothing
+Placing random space structures...
+Database Error: 
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 285,423,3...
+DEBUG: generating console at 267,420,3 for scanner at 285,423,3
+## WARNING: Invalid f_style for Human: Tajara Pencilstache
+## WARNING: Invalid h_style for Human: Short Unathi Frills
+## WARNING: Invalid f_style for Human: Tajara Smallsatche
+## WARNING: Invalid f_style for Human: Tajara Smallsatche
+##WARNING: Type /obj/effect/landmark/catechizer_spawn does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: the catechizer spawn usr: .
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 411,66,5...
+  Finished placing structures in 9.1s.
+Pomf123 logout
+Stopped server.
+World opened on network port 7777.
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+Database Error: 
+Database connection failed. Skipping ooc ban loading
+
+Database Error: 
+Your server failed to establish a connection with the feedback database.
+## TESTING: Something wrong with dbcon.
+[Migrations] (mysql): Setup() returned false, will not run migrations for this DBMS.
+[Migrations] Loaded 9 sqlite DB migrations from package ss13_prefs.
+[Migrations] ss13_prefs is up to date.
+
+Your server failed to establish a connection with the tgstation database.
+##WARNING: Type /turf/space does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: space usr: .
+
+Webclient users can visit this address to play:
+http://www.byond.com/play/72.192.76.91:7777
+
+
+Or this code can be embedded:
+&lt;iframe src="http://www.byond.com/play/embed/72.192.76.91:7777" width=640 height=480&gt;&lt;/iframe&gt;
+
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+##WARNING: code/game/smoothwall.dmL27: atom/isSmoothableNeighbor given bad atom in code/game/smoothwall.dm at line 27 src: the riveted wall usr: .
+Database Error: 
+##WARNING: Error #:0 -  in code/modules/client/preferences_savefile.dm at line 62 src: /datum/preferences usr: .
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 255,225,1...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 255,229,1...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 114,109,2...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 422,234,2...
+DEBUG: Beginning body scanner console checking/auto-generation for scanner the body scanner at 158,228,3...
+##WARNING: Type /obj/item/seeds/random does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: the packet of strange plant cuttings usr: .
+Database Error: 
+## TESTING: DNA2: 0 blocks are unused: nothing
+Placing random space structures...
+##WARNING: Type /obj/effect/landmark/catechizer_spawn does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler(). in code/game/atoms.dm at line 119 src: the catechizer spawn usr: .
+  Finished placing structures in 4.2s.
+## TESTING: Autolinked Super Juke -> Radio Transmitter
+## TESTING: Autolinked Jukebox -> Radio Transmitter
+Caching damage icons...
+## TESTING: Generating Human, Blood()
+## TESTING: Generating Vox, Blood(#2299FC)
+## TESTING: Generating Diona, Blood(#004400)
+  Finished caching damage icons in 0s.
+Caching space parallax simulation...
+  Finished caching space parallax simulation in 0.1s.
+Generating holominimaps...
+  Finished holominimaps in 3.9s.
+1 has 281 entries
+5 has 30 entries
+## TESTING: Setting up genetics for Grey (needs REMOTETALK)
+## TESTING:   Found REMOTETALK (45)
+## TESTING: Setting up genetics for Muton (needs STRONGBLOCK, LOUDBLOCK and INCREASERUNBLOCK)
+Setting up all shuttles...
+11 shuttles initialized, of them 11 were initialized properly.
+Emergency shuttle has been successfully set up.
+Not generating minimaps - SKIP_MINIMAP_GENERATION found in config/config.txt
+Initializations complete.
+Mon Apr 10 11:00:21 2017
+Pomf123 logout
+Stopped server.

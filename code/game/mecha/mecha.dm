@@ -361,7 +361,7 @@
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
 
-/obj/mecha/Bump(var/atom/obstacle)
+/obj/mecha/to_bump(var/atom/obstacle)
 //	src.inertia_dir = null
 	if(src.throwing)//high velocity mechas in your face!
 		var/breakthrough = 0

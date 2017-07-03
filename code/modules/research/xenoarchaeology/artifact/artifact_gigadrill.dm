@@ -20,7 +20,7 @@
 		icon_state = "gigadrill_mov"
 		to_chat(user, "<span class='notice'>You press a button and [src] shudders to life.</span>")
 
-/obj/machinery/giga_drill/Bump(atom/A)
+/obj/machinery/giga_drill/to_bump(atom/A)
 	if(active && !drilling_turf)
 		if(istype(A,/turf/unsimulated/mineral))
 			var/turf/unsimulated/mineral/M = A

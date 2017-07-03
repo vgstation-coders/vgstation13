@@ -281,7 +281,7 @@
 /mob/living/simple_animal/sculpture/Topic(href, href_list)
 	..()
 
-/mob/living/simple_animal/sculpture/Bump(atom/movable/AM as mob)
+/mob/living/simple_animal/sculpture/to_bump(atom/movable/AM as mob)
 	if(!check_los())
 		snap_neck(AM)
 	..()

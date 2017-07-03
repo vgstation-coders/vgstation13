@@ -41,7 +41,7 @@
 
 	var/stun_attack = 15 //15% chance to stun per attack
 
-/mob/living/simple_animal/hostile/hive_alien/Bump(atom/Obstacle)
+/mob/living/simple_animal/hostile/hive_alien/to_bump(atom/Obstacle)
 	//I haven't found any other way to make aliens NOT kill themselves on supermatter when pathfinding.
 	//This hack makes them invulnerable to supermatter unless they're getting thrown
 	if(istype(Obstacle, /turf/unsimulated/wall/supermatter) && !throwing)
