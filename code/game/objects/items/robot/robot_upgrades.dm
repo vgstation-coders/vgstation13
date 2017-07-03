@@ -93,7 +93,7 @@
 
 /obj/item/borg/upgrade/rename/attack_self(mob/user as mob)
 	heldname = stripped_input(user, "Enter new robot name to force, or leave clear to let the robot pick a name", "Robot Rename", heldname, MAX_NAME_LEN)
-	if (heldname != "")
+	if (heldname)
 		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves. Current selected name is \"[heldname]\"."
 	else
 		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
@@ -102,7 +102,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if (heldname == "")
+	if (!heldname)
 		R.custom_name = null
 		R.updatename()
 		if(R.can_diagnose()) //Few know this verb exists, hence a message
