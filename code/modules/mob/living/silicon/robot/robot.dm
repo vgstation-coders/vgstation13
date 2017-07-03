@@ -460,18 +460,24 @@
 		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
 	namepick_uses--
-	var/newname
-	for(var/i = 1 to 3)
-		newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
-		if(newname == "")
-			continue
-		if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
-			break
+	
+	if(custom_name)
+		return 0
 
-	if (newname != "")
-		custom_name = newname
-	updatename()
-	updateicon()
+	spawn(0)
+	
+		var/newname
+		for(var/i = 1 to 3)
+			newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
+			if(newname == "")
+				continue
+			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+				break
+
+		if (newname != "")
+			custom_name = newname
+		updatename()
+		updateicon()
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
