@@ -348,7 +348,7 @@
 
 /obj/item/weapon/gripper/attack(mob/living/target, mob/living/user, def_zone)
 	// Don't fall through and smack people with gripper
-		return 0
+	return 0
 
 /obj/item/weapon/gripper/attackby(var/atom/thing, var/mob/living/user)
 	if(wrapped)
