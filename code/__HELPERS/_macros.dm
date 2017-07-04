@@ -139,6 +139,10 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define isgripper(G) (istype(G, /obj/item/weapon/gripper))
+
+//Macors for atoms/matrix
+
 #define isclient(A) (istype(A, /client))
 
 #define isatom(A) (istype(A, /atom))
