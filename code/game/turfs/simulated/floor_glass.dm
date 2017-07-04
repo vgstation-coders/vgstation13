@@ -266,27 +266,27 @@
 	switch(construction_state)
 		if(2) // intact
 			if(isscrewdriver(W))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
 				user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 				"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(1)
 			if(isscrewdriver(W))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 75, 1)
 				user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 				"<span class='notice'>You fasten \the [src] to its frame.</span>")
 				construction_state += 1
 				return
 			if(iscrowbar(W))
-				playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
 				user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 				"<span class='notice'>You pry \the [src] from its frame.</span>")
 				construction_state -= 1
 				return
 		if(0)
 			if(iscrowbar(W))
-				playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
 				user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 				"<span class='notice'>You pry \the [src] into its frame.</span>")
 				construction_state += 1
