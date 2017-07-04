@@ -92,7 +92,7 @@
 	icon_state = "cyborg_upgrade1"
 
 /obj/item/borg/upgrade/rename/attack_self(mob/user as mob)
-	heldname = stripped_input(user, "Enter new robot name to force, or leave clear to let the robot pick a name", "Robot Rename", heldname, MAX_NAME_LEN)
+	heldname = reject_bad_name(stripped_input(user, "Enter new robot name to force, or leave clear to let the robot pick a name", "Robot Rename", heldname, MAX_NAME_LEN),1)
 	if (heldname)
 		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves. Current selected name is \"[heldname]\"."
 	else
