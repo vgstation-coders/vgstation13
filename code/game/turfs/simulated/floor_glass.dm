@@ -18,6 +18,7 @@
 	var/sheettype = /obj/item/stack/sheet/glass/rglass //Used for deconstruction
 	var/glass_state = "glass_floor" // State of the glass itself.
 	var/reinforced = 0
+	var/construction_state = 2 // Fully constructed.
 
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
@@ -262,6 +263,53 @@
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
 		if(handle_grabslam(W, user))
 			return
+	switch(construction_state)
+		if(2) // intact
+			if(isscrewdriver(W))
+				playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+				user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
+				"<span class='notice'>You unfasten \the [src] from its frame.</span>")
+				construction_state -= 1
+				return
+		if(1)
+			if(isscrewdriver(W))
+				playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
+				user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
+				"<span class='notice'>You fasten \the [src] to its frame.</span>")
+				construction_state += 1
+				return
+			if(iscrowbar(W))
+				playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+				user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
+				"<span class='notice'>You pry \the [src] from its frame.</span>")
+				construction_state -= 1
+				return
+		if(0)
+			if(iscrowbar(W))
+				playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
+				user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
+				"<span class='notice'>You pry \the [src] into its frame.</span>")
+				construction_state += 1
+				return
+
+			if(iswelder(W))
+				var/obj/item/weapon/weldingtool/WT = W
+				if(WT.remove_fuel(0, user))
+					user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
+					"<span class='notice'>You begin removing \the [src].</span>", \
+					"<span class='warning'>You hear welding noises.</span>")
+					playsound(src, 'sound/items/Welder.ogg', 100, 1)
+					if(do_after(user, src, 40) && construction_state == 0)
+						playsound(src, 'sound/items/Welder.ogg', 100, 1)
+						user.visible_message("<span class='notice'>[user] removes \the [src].</span>", \
+						"<span class='notice'>You remove \the [src].</span>", \
+						"<span class='warning'>You hear welding noises.</span>")
+
+						getFromPool(sheettype, src, sheetamount)
+						src.ReplaceWithLattice()
+				else
+					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+				return
 	unhandled_attackby(W, user)
 
 /turf/simulated/floor/glass/proc/unhandled_attackby(var/obj/item/W, var/mob/user)
