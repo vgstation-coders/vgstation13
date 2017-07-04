@@ -487,7 +487,6 @@
 		/obj/item/weapon/folder,
 		/obj/item/weapon/card/id,
 		/obj/item/weapon/book,
-		/obj/item/weapon/spellbook,
 		/obj/item/weapon/newspaper
 		)
 
