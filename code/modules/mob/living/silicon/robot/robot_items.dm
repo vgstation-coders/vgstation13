@@ -267,3 +267,249 @@
 
 #undef MODE_WALL
 #undef MODE_DOOR
+
+//Port of bay's simple cyborg item handler. SHAMELESS POWERCREEP. SLIPPERY SLOPE PROVEN YET AGAIN
+
+/obj/item/weapon/gripper
+	name = "magnetic gripper"
+	desc = "A simple grasping tool specialized in construction and engineering work."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "gripper"
+	actions_types = list(/datum/action/item_action/magrip_drop)
+	var/obj/item/wrapped = null // Item currently being held.
+	//Has a list of items that it can hold.
+	var/list/can_hold = list(
+		/obj/item/weapon/cell,
+		/obj/item/weapon/stock_parts,
+		/obj/item/weapon/camera_assembly,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/circuitboard
+		)
+
+/obj/item/weapon/gripper/examine(mob/user)
+	. = ..()
+	if(wrapped)
+		to_chat(user, "It is holding \a [wrapped].")
+
+/obj/item/weapon/gripper/attack_self(mob/user as mob)
+	if(wrapped)
+		return wrapped.attack_self(user)
+	return ..()
+
+/datum/action/item_action/magrip_drop
+	name = "Drop Item"
+
+/datum/action/item_action/magrip_drop/Trigger()
+	var/obj/item/weapon/gripper/G = target
+	if(!istype(G))
+		return
+	G.drop_item()
+
+/obj/item/weapon/gripper/proc/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = 0,var/dontsay = null) //Do we care about to_drop at all?
+	if(!wrapped)//There's some weirdness with items being lost inside the thing.
+		for(var/obj/item/thing in src.contents)
+			thing.loc = get_turf(src)
+		return 0
+	if(wrapped.loc != src)//How? don't ask me.
+		wrapped = null
+		update_icon()
+		usr.update_action_buttons()
+		return 0
+	if(to_drop && !istype(wrapped, to_drop))// What the fuck?
+		to_chat(usr, "<span class='danger'>FATAL GRIPPER ERROR, REBOOTING MODULE.</span>")
+		drop_item()
+		return 0
+	if(!target) //Just drop it, baka.
+		target = src.loc
+	if(!dontsay)
+		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
+	wrapped.dropped(usr)
+//	if(force_drop)
+	wrapped.forceMove(target)
+	//else
+//		wrapped.loc = get_turf(target)
+	wrapped = null
+	update_icon()
+	usr.update_action_buttons()
+	return 1
+
+/obj/item/weapon/gripper/update_icon()
+	if(wrapped)
+		overlays = null //remove old overlays
+		var/image/olay = image("icon" = wrapped.icon, "icon_state" = wrapped.icon_state, "layer" = 30 + wrapped.layer, "pixel_x" = null, "pixel_y" = null)
+		olay.overlays = wrapped.overlays
+		olay.appearance_flags = RESET_ALPHA
+		alpha = 128
+		overlays += olay
+	else
+		alpha = initial(alpha)
+		overlays = null
+	..()
+
+/obj/item/weapon/gripper/attack(mob/living/target, mob/living/user, def_zone)
+	// Don't fall through and smack people with gripper
+		return 0
+
+/obj/item/weapon/gripper/attackby(var/atom/thing, var/mob/living/user)
+	if(wrapped)
+		wrapped.attackby(thing,user)
+
+/obj/item/weapon/gripper/AltClick()
+	if(wrapped)
+		wrapped.AltClick()
+
+/obj/item/weapon/gripper/CtrlClick()
+	if(wrapped)
+		wrapped.CtrlClick()
+
+/obj/item/weapon/gripper/preattack(var/atom/target, var/mob/living/user, params)
+	if(!wrapped)
+		for(var/obj/item/thing in src.contents)
+			wrapped = thing
+			update_icon()
+			break
+
+	if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(!wrapped && target.loc == (R || R.module))
+			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevents module disassembling.</span>")
+			return
+
+		if(wrapped) //Already have an item.
+			//Temporary put wrapped into user so target's attackby() checks pass.
+			wrapped.loc = user //should we use forceMove() here? It is a virtual move after all, that is intended to be reset
+
+			//Pass the attack on to the target. This might delete/relocate wrapped.
+			var/resolved = target.attackby(wrapped,user,params)
+			if(!resolved && wrapped && target)
+				wrapped.afterattack(target,user,1,params)
+			update_icon()
+
+			//If wrapped was neither deleted nor put into target, put it back into the gripper.
+			if(wrapped && user && (wrapped.loc == user))
+				wrapped.loc = src
+			else
+				wrapped = null
+				update_icon()
+				return
+
+		else if(istype(target,/obj/item)) //Check that we're not pocketing a mob.
+			//...and that the item is not in a container.
+			if(!isturf(target.loc))
+				return
+			var/obj/item/I = target
+			//Check if the item is blacklisted.
+			var/grab = 0
+			for(var/typepath in can_hold)
+				if(istype(I,typepath))
+					grab = 1
+					break
+			//We can grab the item, finally.
+			if(grab)
+				to_chat(user, "<span class='notice'>You collect \the [I].</span>")
+				I.loc = src
+				wrapped = I
+				wrapped.equipped(user)
+				update_icon()
+				return
+			else
+				to_chat(user, "<span class='danger'>Your gripper cannot hold \the [target].</span>")
+
+		else if(istype(target,/obj/machinery/power/apc))
+			var/obj/machinery/power/apc/A = target
+			if(A.opened)
+				if(A.cell)
+					wrapped = A.cell
+					A.cell.add_fingerprint(user)
+					A.cell.update_icon()
+					A.update_icon()
+					update_icon()
+					A.cell.loc = src
+					A.cell = null
+					user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
+
+		else if(isrobot(target))
+			var/mob/living/silicon/robot/A = target
+			if(A.opened)
+				if(A.cell)
+					wrapped = A.cell
+					A.cell.add_fingerprint(user)
+					A.cell.update_icon()
+					A.updateicon()
+					update_icon()
+					A.cell.loc = src
+					A.cell = null
+					user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
+
+/obj/item/weapon/gripper/chemistry
+	name = "chemistry gripper"
+	icon_state = "gripper-sci"
+	desc = "A simple grasping tool for chemical work."
+
+	can_hold = list(
+		/obj/item/weapon/reagent_containers/glass,
+		/obj/item/weapon/reagent_containers/pill,
+		/obj/item/weapon/storage/pill_bottle
+		)
+
+/obj/item/weapon/gripper/organ //Used to handle organs.
+	name = "organ gripper"
+	icon_state = "gripper-medical"
+	desc = "A simple grasping tool for holding and manipulating organic and mechanical organs, both internal and external."
+
+	can_hold = list(
+	/obj/item/weapon/organ,
+	/obj/item/robot_parts
+	)
+
+/obj/item/weapon/gripper/service //Used to handle food, drinks, and seeds.
+	name = "service gripper"
+	icon_state = "gripper-old"
+	desc = "A simple grasping tool used to perform tasks in the service sector, such as handling food, drinks, and seeds."
+
+	can_hold = list(
+		/obj/item/weapon/reagent_containers/glass,
+		/obj/item/weapon/reagent_containers/food/snacks,
+		/obj/item/seeds,
+		/obj/item/weapon/storage/bag/plants,
+		/obj/item/clothing/head/fedora
+		)
+
+/obj/item/weapon/gripper/paperwork
+	name = "paperwork gripper"
+	icon_state = "gripper-old"
+	desc = "A simple grasping tool for clerical work."
+
+	can_hold = list(
+		/obj/item/weapon/clipboard,
+		/obj/item/weapon/paper,
+		/obj/item/weapon/photo,
+		/obj/item/weapon/folder,
+		/obj/item/weapon/card/id,
+		/obj/item/weapon/book,
+		/obj/item/weapon/spellbook,
+		/obj/item/weapon/newspaper
+		)
+
+/obj/item/weapon/gripper/no_use //Used when you want to hold and put things in other things, but not able to 'use' the item
+
+/obj/item/weapon/gripper/no_use/attack_self(mob/user as mob)
+	return
+
+/obj/item/weapon/gripper/no_use/attackby(var/atom/thing, var/mob/living/user)
+	return
+
+/obj/item/weapon/gripper/no_use/AltClick()
+	return
+
+/obj/item/weapon/gripper/no_use/CtrlClick()
+	return
+
+/obj/item/weapon/gripper/no_use/inserter //This is used to disallow building sheets.
+	name = "sheet inserter"
+	desc = "A specialized loading device, designed to pick up and insert sheets of materials inside machines."
+	icon_state = "gripper-sheet"
+
+	can_hold = list(
+		/obj/item/stack/sheet
+		)

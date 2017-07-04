@@ -42,7 +42,10 @@
 	update_canmove()
 	if(camera)
 		camera.status = 0
-
+	if(module)
+		var/obj/item/weapon/gripper/G = locate(/obj/item/weapon/gripper) in module
+		if(G && G.wrapped)
+			G.drop_item()
 	if(in_contents_of(/obj/machinery/recharge_station))//exit the recharge station
 		var/obj/machinery/recharge_station/RC = loc
 		if(RC.upgrading)
