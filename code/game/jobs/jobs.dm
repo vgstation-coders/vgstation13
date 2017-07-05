@@ -44,7 +44,8 @@ var/const/CHAPLAIN			=(1<<10)
 var/const/CLOWN				=(1<<11)
 var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
-var/const/TRADER			=(1<<14)
+var/const/BARBER			=(1<<14)
+var/const/TRADER			=(1<<15)
 
 
 var/list/assistant_occupations = list(
@@ -100,7 +101,8 @@ var/list/civilian_positions = list(
 	"Chaplain",
 	"Clown",
 	"Mime",
-	"Assistant"
+	"Assistant",
+	"Barber"
 )
 
 var/list/cargo_positions = list(

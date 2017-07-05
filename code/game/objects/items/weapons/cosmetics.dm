@@ -355,16 +355,26 @@
 	icon_state = "razor"
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 340)
-
-/obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
+/obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, mob/user, location = "mouth")
 	if(location == "mouth")
-		H.f_style = "Shaved"
+		var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, H.gender, (H.species.name || null))
+		if(species_facial_hair.len)
+			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
+			if(new_style)
+				H.f_style = new_style
 	else
-		H.h_style = "Skinhead"
+		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null)) //gender intentionally left null so speshul snowflakes can cross-hairdress
+		if(species_hair.len)
+			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
+			if(!Adjacent(user) || user.incapacitated())
+				return
 
+			if(new_style)
+				H.h_style = new_style
+	if(!Adjacent(user) || user.incapacitated())
+		return
 	H.update_hair()
 	playsound(loc, 'sound/items/Welder2.ogg', 20, 1)
-
 
 /obj/item/weapon/razor/attack(mob/M, mob/user)
 	if(ishuman(M))
@@ -374,47 +384,55 @@
 			if(H.check_body_part_coverage(MOUTH))
 				to_chat(user,"<span class='warning'>The mask is in the way!</span>")
 				return
-			if(H.f_style == "Shaved")
+			/*if(H.f_style == "Shaved")
 				to_chat(user,"<span class='warning'>Already clean-shaven!</span>")
-				return
+				return*/
 
 			if(H == user) //shaving yourself
-				user.visible_message("[user] starts to shave their facial hair with [src].", \
-									 "<span class='notice'>You take a moment to shave your facial hair with [src]...</span>")
+				user.visible_message("[user] starts to style their facial hair with [src].", \
+									 "<span class='notice'>You take a moment to style your facial hair with [src]...</span>")
 				if(do_after(user, H, 5))
-					user.visible_message("[user] shaves \his facial hair clean with [src].", \
-										 "<span class='notice'>You finish shaving with [src]. Fast and clean!</span>")
-					shave(H, location)
+					if(!Adjacent(user) || user.incapacitated())
+						return
+					shave(H, user, location)
+					user.visible_message("[user] styles \his facial hair with [src].", \
+										 "<span class='notice'>You finish styling with [src].</span>")
 			else
-				user.visible_message("<span class='warning'>[user] tries to shave [H]'s facial hair with [src].</span>", \
-									 "<span class='notice'>You start shaving [H]'s facial hair...</span>")
+				user.visible_message("<span class='warning'>[user] tries to style [H]'s facial hair with [src].</span>", \
+									 "<span class='notice'>You start styling [H]'s facial hair...</span>")
 				if(do_after(user, H, 50))
-					user.visible_message("<span class='warning'>[user] shaves off [H]'s facial hair with [src].</span>", \
-										 "<span class='notice'>You shave [H]'s facial hair clean off.</span>")
-					shave(H, location)
+					if(!Adjacent(user) || user.incapacitated())
+						return
+					shave(H, user, location)
+					user.visible_message("<span class='warning'>[user] style [H]'s facial hair with [src].</span>", \
+										 "<span class='notice'>You style [H]'s facial hair.</span>")
 
 		else if(location == LIMB_HEAD)
 			if(H.check_body_part_coverage(HEAD))
 				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
 				return
-			if(H.h_style == "Bald" || H.h_style == "Skinhead")
+			/*if(H.h_style == "Bald" || H.h_style == "Skinhead")
 				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
-				return
+				return*/
 
 			if(H == user) //shaving yourself
-				user.visible_message("[user] starts to shave their head with [src].", \
-									 "<span class='notice'>You start to shave your head with [src]...</span>")
+				user.visible_message("[user] starts to style their hair with [src].", \
+									 "<span class='notice'>You start to style your hair with [src]...</span>")
 				if(do_after(user, H, 5))
-					user.visible_message("[user] shaves \his head with [src].", \
-										 "<span class='notice'>You finish shaving with [src].</span>")
-					shave(H, location)
+					if(!Adjacent(user) || user.incapacitated())
+						return
+					shave(H, user, location)
+					user.visible_message("[user] style \his hair with [src].", \
+										 "<span class='notice'>You finish styling with [src].</span>")
 			else
-				user.visible_message("<span class='warning'>[user] tries to shave [H]'s head with [src]!</span>", \
-									 "<span class='notice'>You start shaving [H]'s head...</span>")
+				user.visible_message("<span class='warning'>[user] tries to style [H]'s hair with [src]!</span>", \
+									 "<span class='notice'>You start styling [H]'s hair...</span>")
 				if(do_after(user, H, 50))
-					user.visible_message("<span class='warning'>[user] shaves [H]'s head bald with [src]!</span>", \
-										 "<span class='notice'>You shave [H]'s head bald.</span>")
-					shave(H, location)
+					if(!Adjacent(user) || user.incapacitated())
+						return
+					shave(H, user, location)
+					user.visible_message("<span class='warning'>[user] styles [H]'s hair with [src]!</span>", \
+										 "<span class='notice'>You style [H]'s hair.</span>")
 		else
 			..()
 	else

@@ -2480,14 +2480,15 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
 	desc = "The ultimate vendor for any aspiring space stylist."
-	product_slogans = "Haircuts for everyone!;Choose your own style!;A new look avaliable now!"
+	req_access = list(access_barber)
+	product_slogans = "Haircuts for everyone!;Choose your own style!;A new look available now!;A cut above!"
 	product_ads = "Our new hairdye formula, now avaliable in any color!"
 	vend_reply = "Enjoy your new look!"
 	icon_state = "barber"
 	products = list(
 		/obj/item/weapon/hair_dye = 4,
 		/obj/item/weapon/razor = 4,
-		/obj/item/weapon/pocket_mirror = 4,
+		/obj/item/weapon/pocket_mirror = 1,
 		/obj/item/clothing/mask/fakemoustache = 4,
 		/obj/item/clothing/under/rank/barber = 4,
 		/obj/item/clothing/head/barber = 4,
