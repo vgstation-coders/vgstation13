@@ -11,8 +11,8 @@ use test::Bencher;
 #[bench]
 fn bench_utf8(b: &mut Bencher) {
     let encoding = CString::new("1252".as_bytes()).unwrap();
-    let message =
-        CString::new("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elementum \
+    let message = CString::new(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elementum \
                       mauris eu odio bibendum, ut porttitor libero vulputate. Vivamus et augue \
                       justo. Quisque ut auctor lectus. Vestibulum ante ipsum primis in faucibus \
                       orci luctus et ultrices posuere cubilia Curae; Maecenas non scelerisque \
@@ -25,8 +25,8 @@ fn bench_utf8(b: &mut Bencher) {
                       rutrum sagittis, nibh purus ultrices est, ut efficitur nulla dui vel \
                       felis. Etiam malesuada nec orci in rutrum. Ut consectetur ante vitae arcu \
                       ultricies hendrerit. Etiam a tempor enim."
-                .as_bytes())
-            .unwrap();
+            .as_bytes(),
+    ).unwrap();
 
     let both = [encoding.as_ptr(), message.as_ptr()];
 
@@ -36,8 +36,8 @@ fn bench_utf8(b: &mut Bencher) {
 #[bench]
 fn bench_sanitize(b: &mut Bencher) {
     let encoding = CString::new("1252".as_bytes()).unwrap();
-    let message =
-        CString::new("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elementum \
+    let message = CString::new(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elementum \
                       mauris eu odio bibendum, ut porttitor libero vulputate. Vivamus et augue \
                       justo. Quisque ut auctor lectus. Vestibulum ante ipsum primis in faucibus \
                       orci luctus et ultrices posuere cubilia Curae; Maecenas non scelerisque \
@@ -50,8 +50,8 @@ fn bench_sanitize(b: &mut Bencher) {
                       rutrum sagittis, nibh purus ultrices est, ut efficitur nulla dui vel \
                       felis. Etiam malesuada nec orci in rutrum. Ut consectetur ante vitae arcu \
                       ultricies hendrerit. Etiam a tempor enim."
-                .as_bytes())
-            .unwrap();
+            .as_bytes(),
+    ).unwrap();
     let cap = CString::new("1024".as_bytes()).unwrap();
 
     let both = [encoding.as_ptr(), message.as_ptr(), cap.as_ptr()];
