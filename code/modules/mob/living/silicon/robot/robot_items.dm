@@ -148,23 +148,21 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "inf_deployer"
 	w_class = W_CLASS_MEDIUM
-	var/wall = "/obj/item/inflatable/wall"
-	var/door = "/obj/item/inflatable/door"
+
 	var/list/stored_walls = list()
 	var/list/stored_doors = list()
 	var/max_walls = 4
 	var/max_doors = 3
-	var/list/allowed_types = list()
+	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door)
 	var/mode = MODE_WALL
 
 /obj/item/weapon/inflatable_dispenser/New()
-	allowed_types.Add(wall,door)
 	..()
 	for(var/i = 0 to max(max_walls,max_doors))
 		if(stored_walls.len < max_walls)
-			stored_walls += new wall(src)
+			stored_walls += new /obj/item/inflatable/wall(src)
 		if(stored_doors.len < max_doors)
-			stored_doors += new door(src)
+			stored_doors += new /obj/item/inflatable/door(src)
 
 /obj/item/weapon/inflatable_dispenser/Destroy()
 	stored_walls = null
@@ -266,15 +264,6 @@
 		visible_message("\The [user] picks up \the [A] with \the [src]!")
 		A.forceMove(src)
 		return 1
-
-
-/obj/item/weapon/inflatable_dispenser/xeno
-	name = "inflatable resin dispenser"
-	desc = "A hand-held device which allows rapid deployment and removal of inflatable resin structures."
-	icon = 'icons/obj/borg_items.dmi'
-	icon_state = "resin-dispenser"
-	wall = "/obj/item/inflatable/wall/xeno"
-	door = "/obj/item/inflatable/door/xeno"
 
 #undef MODE_WALL
 #undef MODE_DOOR
