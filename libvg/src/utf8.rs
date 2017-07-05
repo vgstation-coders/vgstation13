@@ -185,7 +185,11 @@ byond!(utf8_trim: string; {
 
 /// Function to get the byte bounds for copytext, findtext and replacetext.
 /// Goes by one-indexing and correctly handles negatives.
-pub(crate) fn byte_bounds(text: &str, start: &str, end: &str) -> Option<(usize, usize)> {
+pub(crate) fn byte_bounds(crate) fn byte_bounds(
+                          text: &str,
+                          start: &str,
+                          end: &str)
+                          -> Option<(usize, usize)> {
     // BYOND uses 1-indexing because of course it does...
     // I would've made sick one liners out of this if the negative index stuff weren't a thing.
     let mut start = start.parse::<isize>().unwrap_or(1);
@@ -224,25 +228,29 @@ pub(crate) fn byte_bounds(text: &str, start: &str, end: &str) -> Option<(usize, 
 }
 
 /// See utf8.dm for what the codes correspond to.
-pub(crate) unsafe fn decode(args: &[*const libc::c_char]) -> String {
+pub(crate) unsafe fn decode(crate) unsafe fn decode(
+                            args: &[*const libc::c_char])
+                            -> String {
     let bytes = CStr::from_ptr(args[1]).to_bytes();
     CStr::from_ptr(args[0])
-    .to_str()
-    .map(|e| e.parse::<usize>().unwrap_or(1252))
-    .map(|e| match e {
-        e @ 874 | e @ 1250 ... 1258 => {
-            encoding_from_windows_code_page(e)
-                .unwrap_or(WINDOWS_1252)
-        },
-        2312 => GB18030,
-        _ => WINDOWS_1252
-    })
-    .unwrap_or(WINDOWS_1252)
-    .decode(bytes, DecoderTrap::Replace)
-    .unwrap()
+        .to_str()
+        .map(|e| e.parse::<usize>().unwrap_or(1252))
+        .map(|e| match e {
+                 e @ 874 | e @ 1250...1258 => {
+                     encoding_from_windows_code_page(e).unwrap_or(WINDOWS_1252)
+                 }
+                 2312 => GB18030,
+                 _ => WINDOWS_1252,
+             })
+        .unwrap_or(WINDOWS_1252)
+        .decode(bytes, DecoderTrap::Replace)
+        .unwrap()
 }
 
-pub(crate) fn sanitize(text: &str, cap: usize) -> String {
+pub(crate) fn sanitize(crate) fn sanitize(
+                       text: &str,
+                       cap: usize)
+                       -> String {
     let mut out = String::with_capacity(text.len());
     let mut count = 0;
     for character in text.chars() {
@@ -274,7 +282,7 @@ mod tests {
         assert_eq!(sanitize("testing\n\n\n<>!", 1024), "testing&lt;&gt;!");
         assert_eq!(sanitize("testing\n\u{0088}\n<>!", 1024), "testing&lt;&gt;!");
         assert_eq!(sanitize("<script src='hacked.js'></script>icky ocky!\n<>!", 1024),
-                "&lt;script src='hacked.js'&gt;&lt;/script&gt;icky ocky!&lt;&gt;!");
+                   "&lt;script src='hacked.js'&gt;&lt;/script&gt;icky ocky!&lt;&gt;!");
         assert_eq!(sanitize("test", 3), "tes");
         assert_eq!(sanitize("\n\n\ntest", 3), "tes");
         assert_eq!(sanitize("\n\n\n>test", 3), "&gt;te");
@@ -315,7 +323,7 @@ mod tests {
         assert_eq!(byte_bounds("abcdefgh", "-2", "0"), Some((6, 8)));
         assert_eq!(byte_bounds("abcdefgh", "-4", "-2"), Some((4, 6)));
         assert_eq!(byte_bounds("abcdefghijklmnopwrstuvwxyz", "-4", "-2"),
-                Some((22, 24)));
+                   Some((22, 24)));
         assert_eq!(byte_bounds("abcdefgh", "-20", "-2"), Some((0, 6)));
         assert_eq!(byte_bounds("abcdefgh", "2", "1"), None);
         assert_eq!(byte_bounds("àbçdéfgh", "1", "0"), Some((0, 11)));
@@ -328,11 +336,11 @@ mod tests {
     #[test]
     fn test_utf8_find() {
         assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "c", "1", "0"]),
-                "3");
+                   "3");
         assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "g", "1", "3"]),
-                "0");
+                   "0");
         assert_eq!(test_byond_call_args(utf8_find, &["abcdefgh", "z", "1", "3"]),
-                "0");
+                   "0");
     }
 
     #[test]
@@ -340,7 +348,7 @@ mod tests {
         assert_eq!(test_byond_call_args(utf8_len, &["abc"]), "3");
         assert_eq!(test_byond_call_args(utf8_len, &[""]), "0");
         assert_eq!(test_byond_call_args(utf8_len, &["👏àbç👏défgh"]),
-                "10");
+                   "10");
     }
 
     #[test]
@@ -359,38 +367,39 @@ mod tests {
     #[test]
     fn test_utf8_copy() {
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "1", "5"]),
-                "abcd");
+                   "abcd");
         assert_eq!(test_byond_call_args(utf8_copy, &["a👏cdefgh", "1", "5"]),
-                "a👏cd");
+                   "a👏cd");
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "-5", "-1"]),
-                "defg");
+                   "defg");
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "120", "200"]),
-                "");
+                   "");
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "1", "2000"]),
-                "abcdefgh");
+                   "abcdefgh");
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "5", "1"]), "");
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "5", "0"]),
-                "efgh");
+                   "efgh");
         assert_eq!(test_byond_call_args(utf8_copy, &["abcdefgh", "5", "-2"]),
-                "ef")
+                   "ef")
     }
 
     #[test]
     fn test_utf8_replace() {
         assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "z", "1", "0"]),
-                "Hellz wzrld!");
+                   "Hellz wzrld!");
         assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "👏", "1", "0"]),
-                "Hell👏 w👏rld!");
-        assert_eq!(test_byond_call_args(utf8_replace, &["Hell👏 w👏rld!", "👏", "a", "1", "0"]),
-                "Hella warld!");
+                   "Hell👏 w👏rld!");
+        assert_eq!(test_byond_call_args(utf8_replace,
+                                        &["Hell👏 w👏rld!", "👏", "a", "1", "0"]),
+                   "Hella warld!");
         assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "👏", "a", "1", "0"]),
-                "Hello world!");
+                   "Hello world!");
         assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "a", "7", "0"]),
-                "Hello warld!");
+                   "Hello warld!");
         assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "o", "aAa", "7", "0"]),
-                "Hello waAarld!");
+                   "Hello waAarld!");
         assert_eq!(test_byond_call_args(utf8_replace, &["Hello world!", "ll", "aAa", "1", "0"]),
-                "HeaAao world!");
+                   "HeaAao world!");
     }
 
     #[test]
@@ -414,24 +423,31 @@ mod tests {
     fn test_utf8_reverse() {
         assert_eq!(test_byond_call_args(utf8_reverse, &["Hello!"]), "!olleH");
         assert_eq!(test_byond_call_args(utf8_reverse, &["Hello!👏"]),
-                "👏!olleH");
+                   "👏!olleH");
     }
 
     #[test]
     fn test_utf8_leftpad() {
-        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "10", " "]), "    Hello!");
-        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "0", " "]), "Hello!");
-        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "🤔", " "]), "Hello!");
-        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "10", "🌭"]), "🌭🌭🌭🌭Hello!");
-        assert_eq!(test_byond_call_args(utf8_leftpad, &["He🌭🌭o!", "20", "!"]), "!!!!!!!!!!!!!!He🌭🌭o!");
+        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "10", " "]),
+                   "    Hello!");
+        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "0", " "]),
+                   "Hello!");
+        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "🤔", " "]),
+                   "Hello!");
+        assert_eq!(test_byond_call_args(utf8_leftpad, &["Hello!", "10", "🌭"]),
+                   "🌭🌭🌭🌭Hello!");
+        assert_eq!(test_byond_call_args(utf8_leftpad, &["He🌭🌭o!", "20", "!"]),
+                   "!!!!!!!!!!!!!!He🌭🌭o!");
     }
 
     #[test]
     fn test_utf8_is_whitespace() {
         assert_eq!(test_byond_call_args(utf8_is_whitespace, &[" "]), "1");
-        assert_eq!(test_byond_call_args(utf8_is_whitespace, &[" \r\n\t\u{A0}"]), "1"); // "\u{A0}" is U+00A0 NO-BREAK SPACE, AKA &nbsp;
+        assert_eq!(test_byond_call_args(utf8_is_whitespace, &[" \r\n\t\u{A0}"]),
+                   "1"); // "\u{A0}" is U+00A0 NO-BREAK SPACE, AKA &nbsp;
         assert_eq!(test_byond_call_args(utf8_is_whitespace, &["  hi  "]), "0");
-        assert_eq!(test_byond_call_args(utf8_is_whitespace, &[" \u{200B} "]), "0"); // U+200B ZERO-WIDTH SPACE is NOT whitespace following Unicode.
+        assert_eq!(test_byond_call_args(utf8_is_whitespace, &[" \u{200B} "]),
+                   "0"); // U+200B ZERO-WIDTH SPACE is NOT whitespace following Unicode.
     }
 
     #[test]
@@ -440,7 +456,9 @@ mod tests {
         assert_eq!(test_byond_call_args(utf8_trim, &[" \r\n\t\u{A0}"]), ""); // "\u{A0}" is U+00A0 NO-BREAK SPACE, AKA &nbsp;
         assert_eq!(test_byond_call_args(utf8_trim, &["  hi  "]), "hi");
         assert_eq!(test_byond_call_args(utf8_trim, &[" \u{200B} "]), "\u{200B}"); // U+200B ZERO-WIDTH SPACE is NOT whitespace following Unicode.
-        assert_eq!(test_byond_call_args(utf8_trim, &[" hi there! "]), "hi there!");
-        assert_eq!(test_byond_call_args(utf8_trim, &[" hi\u{A0}there! "]), "hi\u{A0}there!");
+        assert_eq!(test_byond_call_args(utf8_trim, &[" hi there! "]),
+                   "hi there!");
+        assert_eq!(test_byond_call_args(utf8_trim, &[" hi\u{A0}there! "]),
+                   "hi\u{A0}there!");
     }
 }
