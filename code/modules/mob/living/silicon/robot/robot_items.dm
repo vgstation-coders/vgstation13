@@ -148,21 +148,23 @@
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "inf_deployer"
 	w_class = W_CLASS_MEDIUM
-
+	var/wall = "/obj/item/inflatable/wall"
+	var/door = "/obj/item/inflatable/door"
 	var/list/stored_walls = list()
 	var/list/stored_doors = list()
 	var/max_walls = 4
 	var/max_doors = 3
-	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door)
+	var/list/allowed_types = list()
 	var/mode = MODE_WALL
 
 /obj/item/weapon/inflatable_dispenser/New()
+	allowed_types.Add(wall,door)
 	..()
 	for(var/i = 0 to max(max_walls,max_doors))
 		if(stored_walls.len < max_walls)
-			stored_walls += new /obj/item/inflatable/wall(src)
+			stored_walls += new wall(src)
 		if(stored_doors.len < max_doors)
-			stored_doors += new /obj/item/inflatable/door(src)
+			stored_doors += new door(src)
 
 /obj/item/weapon/inflatable_dispenser/Destroy()
 	stored_walls = null
@@ -265,11 +267,19 @@
 		A.forceMove(src)
 		return 1
 
+
+/obj/item/weapon/inflatable_dispenser/xeno
+	name = "inflatable resin dispenser"
+	desc = "A hand-held device which allows rapid deployment and removal of inflatable resin structures."
+	icon = 'icons/obj/borg_items.dmi'
+	icon_state = "resin-dispenser"
+	wall = "/obj/item/inflatable/wall/xeno"
+	door = "/obj/item/inflatable/door/xeno"
+
 #undef MODE_WALL
 #undef MODE_DOOR
 
-//Port of bay's simple cyborg item handler. SHAMELESS POWERCREEP. SLIPPERY SLOPE PROVEN YET AGAIN
-
+//Simple borg hand. Limited use... SLIPPERY SLOPE POWERCREEP
 /obj/item/weapon/gripper
 	name = "magnetic gripper"
 	desc = "A simple grasping tool specialized in construction and engineering work."
@@ -281,10 +291,27 @@
 	var/list/can_hold = list(
 		/obj/item/weapon/cell,
 		/obj/item/weapon/stock_parts,
-		/obj/item/weapon/camera_assembly,
 		/obj/item/weapon/tank,
 		/obj/item/weapon/circuitboard
 		)
+
+	//TL note: kuro means black.
+	var/list/kurolist = list(
+		/obj/item/weapon/card/emag,
+		/obj/item/weapon/paper/talisman,
+		/obj/item/weapon/tank/jetpack,
+		)
+
+/obj/item/weapon/gripper/proc/safety_check(var/mob/user, var/target)
+	if(issilicon(user))
+		var/mob/living/silicon/robot/A = user
+		if(!A.emagged)
+			to_chat(user, "<span class='danger'>Safety protocols prevent your [src.name] from holding \the [target].</span>")
+			return 1
+		else
+			return 0
+	else //You're a silicon using a gripper and don't give a flying fuck about safety.
+		return 0
 
 /obj/item/weapon/gripper/examine(mob/user)
 	. = ..()
@@ -316,7 +343,7 @@
 		usr.update_action_buttons()
 		return 0
 	if(to_drop && !istype(wrapped, to_drop))// What the fuck?
-		to_chat(usr, "<span class='danger'>FATAL GRIPPER ERROR, REBOOTING MODULE.</span>")
+		to_chat(usr, "<span class='FATAL GRIPPER.EXE ERROR, RESTARTING SOFTWARE.</span>")
 		drop_item()
 		return 0
 	if(!target) //Just drop it, baka.
@@ -324,10 +351,10 @@
 	if(!dontsay)
 		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
 	wrapped.dropped(usr)
-//	if(force_drop)
-	wrapped.forceMove(target)
-	//else
-//		wrapped.loc = get_turf(target)
+	if(force_drop)
+		wrapped.forceMove(target)
+	else
+		wrapped.loc = get_turf(target)
 	wrapped = null
 	update_icon()
 	usr.update_action_buttons()
@@ -339,7 +366,7 @@
 		var/image/olay = image("icon" = wrapped.icon, "icon_state" = wrapped.icon_state, "layer" = 30 + wrapped.layer, "pixel_x" = null, "pixel_y" = null)
 		olay.overlays = wrapped.overlays
 		olay.appearance_flags = RESET_ALPHA
-		alpha = 128
+		alpha = 128 //todo: add half-transparent define
 		overlays += olay
 	else
 		alpha = initial(alpha)
@@ -372,7 +399,7 @@
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(!wrapped && target.loc == (R || R.module))
-			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevents module disassembling.</span>")
+			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevents self-disassembling.</span>")
 			return
 
 		if(wrapped) //Already have an item.
@@ -394,11 +421,14 @@
 				return
 
 		else if(istype(target,/obj/item)) //Check that we're not pocketing a mob.
+			//that our target isn't kurolisted
+			if(target in kurolist)
+				return
 			//...and that the item is not in a container.
 			if(!isturf(target.loc))
 				return
 			var/obj/item/I = target
-			//Check if the item is blacklisted.
+			//Check if the item is whitelisted/blacklisted.
 			var/grab = 0
 			for(var/typepath in can_hold)
 				if(istype(I,typepath))
@@ -413,33 +443,31 @@
 				update_icon()
 				return
 			else
-				to_chat(user, "<span class='danger'>Your gripper cannot hold \the [target].</span>")
+				to_chat(user, "<span class='danger'>Your [src.name] cannot hold \the [target].</span>")
 
 		else if(istype(target,/obj/machinery/power/apc))
 			var/obj/machinery/power/apc/A = target
-			if(A.opened)
-				if(A.cell)
-					wrapped = A.cell
-					A.cell.add_fingerprint(user)
-					A.cell.update_icon()
-					A.update_icon()
-					update_icon()
-					A.cell.loc = src
-					A.cell = null
-					user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
+			if(A.opened && (A.cell && !safety_check(user, A.cell)))
+				wrapped = A.cell
+				A.cell.add_fingerprint(user)
+				A.cell.update_icon()
+				A.update_icon()
+				update_icon()
+				A.cell.loc = src
+				A.cell = null
+				user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
 
 		else if(isrobot(target))
 			var/mob/living/silicon/robot/A = target
-			if(A.opened)
-				if(A.cell)
-					wrapped = A.cell
-					A.cell.add_fingerprint(user)
-					A.cell.update_icon()
-					A.updateicon()
-					update_icon()
-					A.cell.loc = src
-					A.cell = null
-					user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
+			if(A.opened && (A.cell && !safety_check(user, A.cell)))
+				wrapped = A.cell
+				A.cell.add_fingerprint(user)
+				A.cell.update_icon()
+				A.updateicon()
+				update_icon()
+				A.cell.loc = src
+				A.cell = null
+				user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
 
 /obj/item/weapon/gripper/chemistry
 	name = "chemistry gripper"
