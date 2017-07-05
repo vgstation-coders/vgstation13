@@ -58,6 +58,9 @@
 				if (istype(O, /obj/item/weapon/reagent_containers/hypospray/autoinjector)) // stealing the cheap autoinjector doesn't count
 					continue
 
+				if (istype(O, /obj/item/blueprints/construction_permit)) // stealing the all engie access construction permits doesnt count
+					continue
+
 				if (areas.len)
 					if (!is_type_in_list(get_area_master(O), areas))
 						continue
