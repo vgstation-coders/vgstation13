@@ -437,7 +437,7 @@
 	hud_state = "gen_leap"
 	override_base = "genetic"
 
-/spell/targeted/leap/cast(list/targets, mob/user)
+/spell/targeted/leap/after_cast(list/targets)
 	for(var/mob/living/target in targets)
 		if (istype(target.loc,/mob/) || target.lying || target.stunned || target.locked_to)
 			to_chat(target, "<span class='warning'>You can't jump right now!</span>")
@@ -445,6 +445,10 @@
 
 		var/failed_leap = 0
 		if (istype(target.loc,/turf/))
+
+			if(istype(target.loc, /turf/space))
+				to_chat(target, "<span class='warning'>You're in space. No.</span>")
+				return
 
 			if(target.restrained())//Why being pulled while cuffed prevents you from moving
 				for(var/mob/M in range(target, 1))
