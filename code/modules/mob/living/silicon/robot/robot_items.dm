@@ -284,7 +284,7 @@
 		/obj/item/weapon/circuitboard
 		)
 
-	//TL note: kuro means black.
+	//TL note: kuro means black. This is a list of items that can't be held even if their parent is whitelisted.
 	var/list/kurolist = list(
 		/obj/item/weapon/card/emag,
 		/obj/item/weapon/tank/jetpack,
@@ -298,7 +298,7 @@
 			return 1
 		else
 			return 0
-	else //You're a silicon using a gripper and don't give a flying fuck about safety.
+	else //You're not a silicon i don't give a flying fuck about your safety.
 		return 0
 
 /obj/item/weapon/gripper/examine(mob/user)
