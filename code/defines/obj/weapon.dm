@@ -269,7 +269,7 @@
 	if(!thrown_from || !istype(thrown_from, /mob/living)) //in essence, if we don't know whether a person threw it
 		qdel(src) //destroy it, to stop infinite bolases
 
-/obj/item/weapon/legcuffs/bolas/Bump()
+/obj/item/weapon/legcuffs/bolas/to_bump()
 	..()
 	throw_failed() //allows a mech bolas to be destroyed
 

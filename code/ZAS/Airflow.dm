@@ -398,7 +398,7 @@ proc/AirflowSpace(zone/A)
 		if(od)
 			density = 0
 
-/atom/movable/Bump(atom/Obstacle)
+/atom/movable/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
 		airflow_hit(Obstacle)
 	else

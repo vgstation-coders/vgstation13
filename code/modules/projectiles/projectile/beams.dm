@@ -497,7 +497,7 @@ var/list/beam_master = list()
 						else
 							tang += 180
 						icon_state = "[tang]"
-					Bump(original)
+					to_bump(original)
 			first = 0
 			if(broken)
 //				to_chat(world, "breaking")
@@ -533,7 +533,7 @@ var/list/beam_master = list()
 	var/spell/lightning/our_spell
 	weaken = 0
 	stun = 0
-/obj/item/projectile/beam/lightning/spell/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/beam/lightning/spell/to_bump(atom/A as mob|obj|turf|area)
 	. = ..()
 	if(.)
 		our_spell.lastbumped = A
@@ -584,7 +584,7 @@ var/list/beam_master = list()
 	penetration = -1
 	fire_sound = 'sound/weapons/laser3.ogg'
 
-/obj/item/projectile/beam/xray/Bump(atom/A)
+/obj/item/projectile/beam/xray/to_bump(atom/A)
 	if(..())
 		damage -= 3
 		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
@@ -731,7 +731,7 @@ var/list/beam_master = list()
 				if(loc == target)
 					if(!(original in permutated))
 						draw_ray(target)
-						Bump(original)
+						to_bump(original)
 
 	else
 		error = dist_y/2 - dist_x
@@ -767,7 +767,7 @@ var/list/beam_master = list()
 				if(loc == get_turf(original))
 					if(!(original in permutated))
 						draw_ray(target)
-						Bump(original)
+						to_bump(original)
 
 /obj/item/projectile/beam/bison/bullet_die()
 	draw_ray(loc)
@@ -865,7 +865,7 @@ var/list/beam_master = list()
 		if(TT == firer.loc)
 			continue
 
-/obj/item/projectile/beam/bison/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/beam/bison/to_bump(atom/A as mob|obj|turf|area)
 	//Heat Rays go through mobs
 	if(A == firer)
 		loc = A.loc
@@ -971,7 +971,7 @@ var/list/beam_master = list()
 	alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/beam/liquid_stream/Bump(atom/A)
+/obj/item/projectile/beam/liquid_stream/to_bump(atom/A)
 	if(!A)
 		return
 	..()

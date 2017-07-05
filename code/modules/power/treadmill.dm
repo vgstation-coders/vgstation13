@@ -1,7 +1,7 @@
 //The ultimate in green energy, a treadmill generates very low power each time it is bumped, which also updates its icon
 //to move. You can still optimize this, though, by making yourself a workout machine -- be full, have sugar,
 //have sports drink, have a high movespeed, have HULK as a mutation.
-//Doesn't consume any idle power, you must Bump() it from its own square. Bump works like a window.
+//Doesn't consume any idle power, you must to_bump() it from its own square. Bump works like a window.
 //Using a treadmill uses up hunger faster
 
 #define DEFAULT_BUMP_ENERGY 400

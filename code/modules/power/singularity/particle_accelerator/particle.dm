@@ -97,7 +97,7 @@
 		spawn(0)
 			move(1)
 
-/obj/effect/accelerated_particle/Bump(atom/A)
+/obj/effect/accelerated_particle/to_bump(atom/A)
 	if (A)
 		if(ismob(A))
 			toxmob(A)
@@ -123,7 +123,7 @@
 
 /obj/effect/accelerated_particle/Bumped(atom/A)
 	if(ismob(A))
-		Bump(A)
+		to_bump(A)
 	return
 
 /obj/effect/accelerated_particle/ex_act(severity)

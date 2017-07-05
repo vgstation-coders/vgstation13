@@ -25,7 +25,7 @@
 			pixel_y = PixelY
 		sleep(picked_up_speed)
 
-/obj/item/projectile/rocket/Bump(var/atom/A)
+/obj/item/projectile/rocket/to_bump(var/atom/A)
 	explosion(A, 1, 3, 5, 8) //RPGs pack a serious punch and will cause massive structural damage in your average room, but won't punch through reinforced walls
 	if(!gcDestroyed)
 		qdel(src)
@@ -88,7 +88,7 @@
 		nikita.fired = null
 	..()
 
-/obj/item/projectile/nikita/Bump(var/atom/A)
+/obj/item/projectile/nikita/to_bump(var/atom/A)
 	if(bumped)
 		return
 	if(emagged && (A == mob))

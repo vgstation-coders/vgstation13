@@ -584,7 +584,7 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/medbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if ((istype(M, /obj/machinery/door)) && (!isnull(botcard)))
 		var/obj/machinery/door/D = M
 		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))

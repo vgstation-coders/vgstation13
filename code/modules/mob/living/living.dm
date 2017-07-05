@@ -1258,7 +1258,7 @@ Thanks.
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
 
-/mob/living/Bump(atom/movable/AM as mob|obj)
+/mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
 		if (now_pushing || !loc || size <= SIZE_TINY)
 			return

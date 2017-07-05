@@ -484,6 +484,7 @@
 		else
 			to_chat(src, "<span class='warning'>You have reset your name. You can change your name [namepick_uses] more times.<span>")
 
+
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
 	set name = "Show Alerts"

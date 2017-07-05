@@ -243,7 +243,7 @@
 			damage = 10
 			kill_count = 7
 
-/obj/item/projectile/spur/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/spur/to_bump(atom/A as mob|obj|turf|area)
 
 	if(loc)
 		var/turf/T = loc
@@ -372,7 +372,7 @@
 	..()
 	playsound(starting, 'sound/effects/bees.ogg', 75, 1)
 
-/obj/item/projectile/bullet/beegun/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/beegun/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)
 		return 0
 	if((A == firer) && !reflected)
@@ -472,7 +472,7 @@
 		user = null
 	..()
 
-/obj/item/projectile/bullet/vial/Bump(atom/A as mob|obj|turf|area) //to allow vials to splash onto walls
+/obj/item/projectile/bullet/vial/to_bump(atom/A as mob|obj|turf|area) //to allow vials to splash onto walls
 	if(!A)
 		return
 	if(vial)
@@ -746,7 +746,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()

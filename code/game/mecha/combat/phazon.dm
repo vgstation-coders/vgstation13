@@ -29,7 +29,7 @@
 	ME.attach(src)
 	return
 
-/obj/mecha/combat/phazon/Bump(var/atom/obstacle)
+/obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
 	if(phasing && get_charge()>=phasing_energy_drain)
 		spawn()
 			if(can_move)

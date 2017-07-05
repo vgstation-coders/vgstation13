@@ -380,7 +380,7 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/Bump(atom/Obstacle)
+/atom/movable/to_bump(atom/Obstacle)
 	if(src.throwing)
 		src.throw_impact(Obstacle)
 		src.throwing = 0
