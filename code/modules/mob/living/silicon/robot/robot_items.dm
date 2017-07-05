@@ -287,7 +287,6 @@
 	//TL note: kuro means black.
 	var/list/kurolist = list(
 		/obj/item/weapon/card/emag,
-		/obj/item/weapon/paper/talisman,
 		/obj/item/weapon/tank/jetpack,
 		)
 
