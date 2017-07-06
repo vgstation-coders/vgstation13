@@ -632,11 +632,11 @@ var/global/num_vending_terminals = 1
 	if(stat & (BROKEN))
 		to_chat(user, "<span class='notice'>The glass in \the [src] is broken, it refuses to work.</span>")
 		return
-	
+
 	if(stat & (NOPOWER))
 		to_chat(user, "<span class='notice'>\The [src] is dark and unresponsive.</span>")
 		return
-		
+
 	if(user.lying || user.incapacitated())
 		return 0
 
@@ -1287,7 +1287,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/weapon/storage/pill_bottle/time_release = 2,
 		)
-	vouched = list(	
+	vouched = list(
 		/obj/item/weapon/medbot_cube = 2
 		)
 
@@ -1834,6 +1834,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stock_parts/capacitor = 10,
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
+		/obj/item/blueprints/construction_permit = 4, // permits
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
