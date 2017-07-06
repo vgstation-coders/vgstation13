@@ -5,7 +5,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	name = "construction permit"
 	desc = "An electronic permit designed to register a room for the use of APC and air alarms"
 	icon = 'icons/obj/items.dmi'
-	icon_state = "permit1"
+	icon_state = "permit"
 	attack_verb = list("attacks", "baps", "hits")
 	w_class = W_CLASS_TINY
 
