@@ -272,6 +272,8 @@
 
 /turf/proc/is_plating()
 	return 0
+/turf/proc/can_place_cables()
+	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
 /turf/proc/is_plasteel_floor()
@@ -778,4 +780,3 @@
 	spawn(duration)
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
-

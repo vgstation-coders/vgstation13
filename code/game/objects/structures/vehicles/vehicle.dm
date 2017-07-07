@@ -55,6 +55,9 @@
 /obj/structure/bed/chair/vehicle/proc/delayNextMove(var/delay, var/additive=0)
 	move_delayer.delayNext(delay,additive)
 
+/obj/structure/bed/chair/vehicle/proc/is_too_heavy(var/turf/simulated/floor/glass/glassfloor)
+	return !istype(glassfloor, /turf/simulated/floor/glass/plasma)
+
 /obj/structure/bed/chair/vehicle/can_apply_inertia()
 	return 1 //No anchored check - so that vehicles can fly off into space
 
