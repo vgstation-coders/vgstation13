@@ -360,9 +360,9 @@
 		if(adjusted_pressure >= adjusted_max_pressure)
 			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
 			pressure_alert = 2 //oh fuck
-		else if (localpressure >= WARNING_HIGH_PRESSURE)
+		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < adjusted_max_pressure)
 			pressure_alert = 1 //We don't really care, but might help us realize carbons are dying
-		else if (localpressure <= WARNING_LOW_PRESSURE)
+		else if (localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
 			pressure_alert = -1 //same here
 		else if (localpressure <= HAZARD_LOW_PRESSURE)
 			pressure_alert = -2 //same here
@@ -384,9 +384,9 @@
 			if (envirotemp >= adjusted_max_heat)
 				temp_alert = 2
 				return adjustFireLoss (envirotemp / adjusted_max_heat)
-			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT) //carbons
+			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < adjusted_max_heat) //carbons
 				temp_alert = 1 
-			else if (envirotemp <= T0C) //c a r b o n s
+			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT) //c a r b o n s
 				temp_alert = -1 
 			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
 				temp_alert = -2

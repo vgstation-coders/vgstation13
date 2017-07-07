@@ -86,7 +86,7 @@
 	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
-	mymob.healths.screen_loc = ui_health //Used to be ui_borg_health
+	mymob.healths.screen_loc = ui_borg_health 
 
 //Installed Module
 	mymob.hands = getFromPool(/obj/abstract/screen)
@@ -116,14 +116,14 @@
 	mymob.bodytemp.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.bodytemp.icon_state = "temp0"
 	mymob.bodytemp.name = "environment temperature"
-	mymob.bodytemp.screen_loc = ui_temp
+	mymob.bodytemp.screen_loc = ui_borg_temp
 	
 //Pressure
 	mymob.pressure = getFromPool(/obj/abstract/screen)
 	mymob.pressure.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.pressure.icon_state = "pressure0"
-	mymob.pressure.name = "pressure"
-	mymob.pressure.screen_loc = ui_pressure
+	mymob.pressure.name = "environment pressure"
+	mymob.pressure.screen_loc = ui_borg_pressure
 
  //unused, go home
 	mymob.oxygen = getFromPool(/obj/abstract/screen)
