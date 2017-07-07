@@ -22,6 +22,7 @@
 	var/multicolor_skin_b = 0
 
 	var/lip_style = null	//no lipstick by default- arguably misleading, as it could be used for general makeup
+	var/eye_style = null
 
 	mob_bump_flag = HUMAN
 	mob_push_flags = ALLMOBS
@@ -81,6 +82,8 @@
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
 	var/obj/item/weapon/organ/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
+
+	var/datum/component_container/NPC_brain
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"

@@ -146,6 +146,43 @@
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 
+#define TELE_COOLDOWN 5 SECONDS
+
+/obj/item/weapon/bikehorn/rubberducky/quantum
+	desc = "A quantum quacker."
+	var/teleport_range = 5
+	var/last_teleport
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/process()
+	if(world.time > last_teleport + TELE_COOLDOWN)
+		var/visible = FALSE
+
+		for (var/mob/living/M in viewers(src))
+			if(!M.isUnconscious() && !is_blind(M))
+				visible = TRUE
+				break
+
+		if(!visible)
+			do_teleport(src, get_turf(src), teleport_range, asoundin = hitsound)
+			last_teleport = world.time
+
+/obj/item/weapon/bikehorn/rubberducky/quantum/equipped(var/mob/user, var/slot, hand_index = 0)
+	to_chat(user, "<span class = 'warning'>\The [src] disappears from your grasp!</span>")
+	user.drop_item(src)
+	do_teleport(src, get_turf(src), teleport_range, asoundout = hitsound)
+	last_teleport = world.time
+
+#undef TELE_COOLDOWN
+
+
 #define GLUE_WEAROFF_TIME -1 //was 9000: 15 minutes, or 900 seconds. Negative values = infinite glue
 
 /obj/item/weapon/glue

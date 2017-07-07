@@ -568,11 +568,17 @@
 /obj/item/weapon/weldingtool/experimental/empty
 	start_fueled = 0
 
+/obj/item/weapon/weldingtool/experimental/process()
+	..()
+	reagents.add_reagent(FUEL, 5)
+
+/**
 /obj/item/weapon/weldingtool/experimental/proc/fuel_gen()//Proc to make the experimental welder generate fuel, optimized as fuck -Sieve
 	var/gen_amount = ((world.time-last_gen)/25)          //Too bad it's not actually implemented
 	reagents += (gen_amount)
 	if(reagents > max_fuel)
 		reagents = max_fuel
+**/
 
 /*
  * Crowbar
@@ -692,7 +698,7 @@
 
 /obj/item/weapon/solder/update_icon()
 	..()
-	switch(reagents.get_reagent_amount(SACID))
+	switch(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID))
 		if(16 to INFINITY)
 			icon_state = "solder-20"
 		if(11 to 15)
@@ -706,7 +712,7 @@
 
 /obj/item/weapon/solder/examine(mob/user)
 	..()
-	to_chat(user, "It contains [reagents.get_reagent_amount(SACID)]/[src.max_fuel] units of fuel!")
+	to_chat(user, "It contains [reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID)]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/solder/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers/glass/))
@@ -715,7 +721,7 @@
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")
 			return
-		if(!G.reagents.has_reagent(SACID, 1))
+		if(!G.reagents.has_any_reagents(list(SACID, FORMIC_ACID), 1))
 			user.simple_message("<span class='warning'>The tool is not compatible with that.</span>",
 				"<span class='warning'>The tool won't drink that.</span>")
 			return
@@ -728,14 +734,20 @@
 			var/transfer_amount = min(G.amount_per_transfer_from_this,space)
 			user.simple_message("<span class='info'>You transfer [transfer_amount] units to the [src].</span>",
 				"<span class='info'>The tool gulps down your drink!</span>")
-			G.reagents.trans_id_to(src,SACID,transfer_amount)
+			if(G.reagents.has_reagent(SACID, 1))
+				G.reagents.trans_id_to(src,SACID,transfer_amount)
+			else
+				G.reagents.trans_id_to(src,FORMIC_ACID,transfer_amount)
 			update_icon()
 	else
 		return ..()
 
 /obj/item/weapon/solder/proc/remove_fuel(var/amount, mob/user as mob)
-	if(reagents.get_reagent_amount(SACID) >= amount)
+	if(reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID) >= amount)
+		var/facid_amount = amount - reagents.get_reagent_amount(SACID)
 		reagents.remove_reagent(SACID, amount)
+		if(facid_amount > 0)
+			reagents.remove_reagent(FORMIC_ACID, facid_amount)
 		update_icon()
 		return 1
 	else

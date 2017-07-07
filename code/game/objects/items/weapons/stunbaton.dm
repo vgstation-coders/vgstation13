@@ -161,8 +161,8 @@
 		L.lastattacker = user
 
 		L.Stun(stunforce)
+		L.apply_effect(10, STUTTER, 0)
 		L.Knockdown(stunforce)
-		L.apply_effect(STUTTER, stunforce)
 
 		L.visible_message("<span class='danger'>[L] has been stunned with [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with [src] by [user]!</span>",\

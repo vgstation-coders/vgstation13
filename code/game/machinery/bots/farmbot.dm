@@ -67,7 +67,7 @@
 		if ( !tank ) //An admin must have spawned the farmbot! Better give it a tank.
 			tank = new /obj/structure/reagent_dispensers/watertank(src)
 
-/obj/machinery/bot/farmbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/farmbot/to_bump(M as mob|obj) //Leave no door unopened!
 	spawn(0)
 		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 			var/obj/machinery/door/D = M

@@ -43,7 +43,7 @@
 		user.simple_message("<span class='warning'>This organ has a barcode identifying it as printed from a bioprinter.</span>","<span class='warning'>It's got spaghetti sauce on it. Ew.</span>")
 	else
 		user.simple_message("<span class='info'>This organ has no barcode and looks natural.</span>","<span class='info'>Looks all-natural and organically-grown! Sweet.</span>")
-		
+
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
@@ -152,6 +152,14 @@
 	organ_tag = "kidneys"
 	organ_type = /datum/organ/internal/kidney
 
+/obj/item/organ/kidneys/filter
+	name = "toxin filters"
+	icon_state = "advanced-kidneys"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/kidney/filter
+	robotic=2
+
 /obj/item/organ/eyes
 	name = "eyeballs"
 	icon_state = "eyes"
@@ -203,7 +211,7 @@
 /obj/item/organ/liver
 	name = "liver"
 	icon_state = "liver"
-	prosthetic_name = "toxin filter"
+	prosthetic_name = "artificial metabolizer"
 	prosthetic_icon = "liver-prosthetic"
 	organ_tag = "liver"
 	organ_type = /datum/organ/internal/liver

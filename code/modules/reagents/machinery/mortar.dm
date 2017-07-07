@@ -31,6 +31,7 @@
 		/obj/item/weapon/cell                 = list(LITHIUM, 10),
 		/obj/item/clothing/head/butt          = list(MERCURY, 10),
 		/obj/item/weapon/rocksliver           = list(GROUND_ROCK,30),
+		/obj/item/weapon/match                = list(PHOSPHORUS, 2),
 
 		//Recipes must include both variables!
 		/obj/item/weapon/reagent_containers/food = list("generic",0)

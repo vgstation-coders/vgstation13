@@ -165,6 +165,11 @@
 	targetvendomat = /obj/machinery/vending/barber
 	icon_state = "barber"
 
+/obj/structure/vendomatpack/makeup
+	name = "Shuo-Cai Cosmetics recharge pack"
+	targetvendomat = /obj/machinery/vending/makeup
+	icon_state = "makeup"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack

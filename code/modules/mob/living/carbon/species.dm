@@ -328,7 +328,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = IS_WHITELISTED | NO_BREATHE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
 
-	chem_flags = NO_DRINK | NO_EAT | NO_INJECT
+	chem_flags = NO_EAT | NO_INJECT
 
 	default_mutations=list(SKELETON)
 	brute_mod = 2.0
@@ -337,7 +337,7 @@ var/global/list/whitelisted_species = list("Human")
 		"brain" =    /datum/organ/internal/brain,
 		)
 
-	move_speed_mod = 3
+	move_speed_multiplier = 1.5
 
 	primitive = /mob/living/carbon/monkey/skellington
 

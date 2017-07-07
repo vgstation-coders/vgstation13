@@ -5,6 +5,7 @@
 	var/obj/item/weapon/paper/contained_paper
 	var/open = TRUE
 	var/torn = FALSE
+	var/sortTag
 
 /obj/item/weapon/paper/envelope/update_icon()
 	overlays.len = 0
@@ -40,6 +41,20 @@
 			open()
 			user.visible_message("\The [user] slices the top of \the [src] open with \the [P].","You slice the top of \the [src] open with \the [P].")
 			playsound(get_turf(src), 'sound/effects/paper_tear.ogg', 10, 1)
+
+	if(istype(P, /obj/item/device/destTagger))
+		var/obj/item/device/destTagger/O = P
+		if(src.sortTag != O.currTag)
+			if(!O.currTag)
+				to_chat(user, "<span class='notice'>Select a destination first!</span>")
+				return
+			var/tag = uppertext(O.destinations[O.currTag])
+			to_chat(user, "<span class='notice'>*[tag]*</span>")
+			sortTag = tag
+			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			overlays = 0
+			overlays += image(icon = icon, icon_state = "deliverytag")
+			desc = "It has a label reading [tag]."
 
 /obj/item/weapon/paper/envelope/AltClick(mob/user)
 	if(open && contained_paper)

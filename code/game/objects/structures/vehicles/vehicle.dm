@@ -55,6 +55,9 @@
 /obj/structure/bed/chair/vehicle/proc/delayNextMove(var/delay, var/additive=0)
 	move_delayer.delayNext(delay,additive)
 
+/obj/structure/bed/chair/vehicle/proc/is_too_heavy(var/turf/simulated/floor/glass/glassfloor)
+	return !istype(glassfloor, /turf/simulated/floor/glass/plasma)
+
 /obj/structure/bed/chair/vehicle/can_apply_inertia()
 	return 1 //No anchored check - so that vehicles can fly off into space
 
@@ -307,7 +310,7 @@
 	// Transfer salvagables here.
 	return
 
-/obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
+/obj/structure/bed/chair/vehicle/to_bump(var/atom/movable/obstacle)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 		return
 

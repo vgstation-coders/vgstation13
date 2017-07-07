@@ -101,7 +101,6 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 		getFromPool(/obj/effect/decal/cleanable/dirt,src)
 
 turf/simulated/floor/update_icon()
-	overlays -= floor_overlay
 
 	if(lava)
 		return
@@ -596,7 +595,7 @@ turf/simulated/floor/update_icon()
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
 	else if(istype(C, /obj/item/stack/cable_coil))
-		if(is_plating())
+		if(can_place_cables())
 			var/obj/item/stack/cable_coil/coil = C
 			coil.turf_place(src, user)
 		else
@@ -650,7 +649,7 @@ turf/simulated/floor/update_icon()
 					set_light(3)
 					icon_state = "uranium_inactive"
 					for(var/mob/living/L in range(2,src)) //Weak radiation
-						L.apply_effect(3,IRRADIATE,0)
+						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
 					spawn(20)
 						set_light(0)

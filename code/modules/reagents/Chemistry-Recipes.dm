@@ -2030,6 +2030,9 @@
 	required_reagents = list(SOYMILK = 4, SACID = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/soysauce/natural
+	required_reagents = list(SOYMILK = 4, FORMIC_ACID = 1)
+
 /datum/chemical_reaction/vinegar
 	name = "Malt Vinegar"
 	id = VINEGAR
@@ -2818,6 +2821,35 @@
 	id = MEDCORES
 	result = CHEESYGLOOP
 	required_reagents = list(MEDCORES = 0.1, HYPERZINE = 0.1)
+	result_amount = 2
+
+/datum/chemical_reaction/lithotorcrazine
+	name = "Lithotorcrazine"
+	id = LITHOTORCRAZINE
+	result = LITHOTORCRAZINE
+	required_reagents = list(LITHIUM = 1, ARITHRAZINE = 3, URANIUM = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/lithotorcrazine_better
+	name = "Improved Lithotorcrazine recipe"
+	id = LITHOTORCRAZINE
+	result = LITHOTORCRAZINE
+	required_reagents = list(LITHIUM = 1, HYRONALIN = 1, INAPROVALINE = 1)
+	required_catalysts = list(ROACHSHELL = 1, LITHOTORCRAZINE = 1)
+	result_amount = 10
+
+/datum/chemical_reaction/hemoscyanine
+	name = "Hemoscyanine"
+	id = HEMOSCYANINE
+	result = HEMOSCYANINE
+	required_reagents = list(SOLANINE = 1, HYOSCYAMINE = 1, PHENOL = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/anthracene
+	name = "Anthracene"
+	id = ANTHRACENE
+	result = ANTHRACENE
+	required_reagents = list(ZEAXANTHIN = 1, RADIUM = 1)
 	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY

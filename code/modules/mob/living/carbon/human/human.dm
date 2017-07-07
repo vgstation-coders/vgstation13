@@ -75,6 +75,10 @@
 	h_style = "Bald"
 	..(new_loc, "Slime")
 
+/mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc)
+	initialize_basic_NPC_components()
+
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
@@ -302,11 +306,16 @@
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
 	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
+	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
 		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
 			. = pda.id.assignment
 		else
 			. = pda.ownjob
+	else if (istype(wallet))
+		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
+		if(istype(wallet_id))
+			. = wallet_id.assignment
 	else if (istype(id))
 		. = id.assignment
 	else
@@ -1474,7 +1483,7 @@
 				step_towards(I, src)
 				to_chat(src, "<span class = 'warning'>\The [S] pulls \the [I] from your grip!</span>")
 	if(radiations)
-		apply_effect(current_size * radiations, IRRADIATE)
+		apply_radiation(current_size * radiations, RAD_EXTERNAL)
 	if(shoes)
 		if(shoes.clothing_flags & NOSLIP && current_size <= STAGE_FOUR)
 			return 0
@@ -1668,15 +1677,49 @@ mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
 
-/mob/living/carbon/human/drag_damage()
+/mob/living/carbon/human/get_broken_organs()
 	var/mob/living/carbon/human/H = src
-	var/turf/TH = H.loc
 	var/list/return_organs = list()
-	if (TH.has_gravity() && H.lying)
-		for(var/datum/organ/external/damagedorgan in H.organs)
-			if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED) || damagedorgan.status & ORGAN_BLEEDING)
-				return_organs += damagedorgan
-		return return_organs
+	for(var/datum/organ/external/damagedorgan in H.organs)
+		if(damagedorgan.status & ORGAN_BROKEN && !(damagedorgan.status & ORGAN_SPLINTED))
+			return_organs += damagedorgan
+	return return_organs
+
+/mob/living/carbon/human/get_bleeding_organs()
+	var/mob/living/carbon/human/H = src
+	var/list/return_organs = list()
+	for(var/datum/organ/external/damagedorgan in H.organs)
+		if(damagedorgan.status & ORGAN_BLEEDING)
+			return_organs += damagedorgan
+	return return_organs		
+		
+/mob/living/carbon/human/get_heart()
+	return internal_organs_by_name["heart"]
+
+//Moved from internal organ surgery
+//Removes organ from src, places organ object under user
+//example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
+mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+	var/obj/item/organ/extractedorgan
+	if(targetorgan && istype(targetorgan))
+		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
+		if(extractedorgan && istype(extractedorgan))
+			// Stop the organ from continuing to reject.
+			extractedorgan.organ_data.rejecting = null
+
+			// Transfer over some blood data, if the organ doesn't have data.
+			var/datum/reagent/blood/organ_blood = extractedorgan.reagents.reagent_list[BLOOD]
+			var/organstring = targetorgan.organ_type
+			if(!organ_blood || !organ_blood.data["blood_DNA"])
+				vessel.trans_to(extractedorgan, 5, 1, 1)
+
+			internal_organs_by_name[organstring] = null
+			internal_organs_by_name -= organstring
+			internal_organs -= extractedorgan.organ_data
+			affectedarea.internal_organs -= extractedorgan.organ_data
+			extractedorgan.removed(src,user)
+
+			return extractedorgan
 
 /mob/living/carbon/human/feels_pain()
 	if(!species)
@@ -1739,6 +1782,7 @@ mob/living/carbon/human/isincrit()
 		"b_eyes",
 		"s_tone",
 		"lip_style",
+		"eye_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",
@@ -1783,3 +1827,15 @@ mob/living/carbon/human/isincrit()
 	if(M_HULK in mutations)
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
+
+/mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
+	NPC_brain = new (src)
+	NPC_brain.AddComponent(/datum/component/controller/mob)
+	NPC_brain.AddComponent(/datum/component/ai/hand_control)
+
+/mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
+	initialize_barebones_NPC_components()
+	NPC_brain.AddComponent(/datum/component/ai/human_brain)
+	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
+	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
+	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)

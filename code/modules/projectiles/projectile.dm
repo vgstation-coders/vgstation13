@@ -191,7 +191,7 @@ var/list/impact_master = list()
 		msg_admin_attack("UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]. Wait what the fuck?")
 		log_attack("<font color='red'>UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]</font>")
 
-/obj/item/projectile/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)	//This was runtiming if by chance A was null.
 		return 0
 	if((A == firer) && !reflected)
@@ -512,7 +512,7 @@ var/list/impact_master = list()
 	if(!bumped && !isturf(original))
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 				return 1//so laser beams visually stop when they hit their target
 	return 0
 
@@ -553,7 +553,7 @@ var/list/impact_master = list()
 		if(!bumped && !isturf(original))
 			if(loc == get_turf(original))
 				if(!(original in permutated))
-					Bump(original)
+					to_bump(original)
 					sleep(1)
 		while((loc.timestopped || timestopped) && !first)
 			sleep(3)
@@ -642,7 +642,7 @@ var/list/impact_master = list()
 	var/ttarget = null
 	var/result = 0 //To pass the message back to the gun.
 
-/obj/item/projectile/test/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/test/to_bump(atom/A as mob|obj|turf|area)
 	if(A == firer)
 		loc = A.loc
 		return //cannot shoot yourself
@@ -708,7 +708,7 @@ var/list/impact_master = list()
 			return JC.occupant
 	return A
 
-/obj/item/projectile/friendlyCheck/Bump(var/atom/A)
+/obj/item/projectile/friendlyCheck/to_bump(var/atom/A)
 	if(bumped)
 		return 0
 	bumped = 1

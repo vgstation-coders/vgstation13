@@ -132,7 +132,7 @@
 	packet_icon = "seed-gelthi"
 	plant_icon = "gelthi"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1,10),STOXIN = list(0,1),CAPSAICIN = list(0,1))
+	chems = list(NUTRIMENT = list(1,10),VALERENIC_ACID = list(0,1),CAPSAICIN = list(0,1))
 
 	lifespan = 55
 	maturation = 6
@@ -164,7 +164,7 @@
 	packet_icon = "seed-vale"
 	plant_icon = "vale"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1,10),SPORTDRINK = list(0,2),DEXALIN = list(0,5))
+	chems = list(NUTRIMENT = list(1,10),SPORTDRINK = list(0,2),THYMOL = list(0,5))
 
 	lifespan = 100
 	maturation = 6
@@ -195,7 +195,7 @@
 	packet_icon = "seed-surik"
 	plant_icon = "surik"
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1,10),IMPEDREZENE = list(0,3),SYNAPTIZINE = list(0,5))
+	chems = list(NUTRIMENT = list(1,10),HYOSCYAMINE = list(0,3),CYTISINE = list(0,5))
 
 	lifespan = 55
 	maturation = 7

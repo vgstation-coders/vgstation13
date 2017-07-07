@@ -6,6 +6,7 @@
 /datum/organ/internal/lungs
 	name = "lungs"
 	parent_organ = LIMB_CHEST
+	organ_type = "lungs"
 	removed_type = /obj/item/organ/lungs
 
 	min_bruised_damage = 8
@@ -92,12 +93,14 @@
 			owner.audible_cough()		//respitory tract infection
 
 	if(is_bruised())
-		if(prob(((damage-min_bruised_damage)/min_broken_damage)*100))
+		var/chance = min(50, (damage-min_bruised_damage)/min_broken_damage*50)
+		if(prob(chance))
+			spawn owner.emote("me", 1, "gasps for air!")
+			if (owner.losebreath <= 30)
+				owner.losebreath += 5
+		else if(prob(chance))
 			spawn owner.emote("me", 1, "coughs up blood!")
 			owner.drip(10)
-		if(prob(((damage-min_bruised_damage)/min_broken_damage)*150))
-			spawn owner.emote("me", 1, "gasps for air!")
-			owner.losebreath += 5
 
 
 /datum/organ/internal/lungs/vox

@@ -3,7 +3,8 @@
 var/list/potential_theft_objectives=list(
 	"traitor" = typesof(/datum/theft_objective/traitor) - /datum/theft_objective/traitor,
 	"special" = typesof(/datum/theft_objective/special) - /datum/theft_objective/special,
-	"heist"   = typesof(/datum/theft_objective/number/heist) - /datum/theft_objective/number/heist
+	"heist_easy"   = typesof(/datum/theft_objective/number/heist_easy) - /datum/theft_objective/number/heist_easy,
+	"heist_hard"   = typesof(/datum/theft_objective/number/heist_hard) - /datum/theft_objective/number/heist_hard,
 	//"salvage" = typesof(/datum/theft_objective/number/salvage) - /datum/theft_objective/number/salvage
 )
 

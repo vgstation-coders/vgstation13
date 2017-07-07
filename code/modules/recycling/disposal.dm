@@ -376,8 +376,9 @@
 	var/wrapcheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 										// travels through the pipes.
-	for(var/obj/item/delivery/O in src)
-		wrapcheck = 1
+	for(var/obj/item/I in src)
+		if(istype(I, /obj/item/delivery) || istype(I, /obj/item/weapon/paper/envelope))
+			wrapcheck = 1
 
 	if(wrapcheck == 1)
 		H.tomail = 1
@@ -562,6 +563,9 @@
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
 			src.destinationTag = T.sortTag
+		if(istype(AM, /obj/item/weapon/paper/envelope) && !hasmob)
+			var/obj/item/weapon/paper/envelope/E = AM
+			src.destinationTag = E.sortTag
 
 // start the movement process
 // argument is the disposal unit the holder started in

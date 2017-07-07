@@ -182,7 +182,7 @@
 
 	update_mob()
 
-/obj/structure/bed/chair/vehicle/lightcycle/Bump(atom/A)
+/obj/structure/bed/chair/vehicle/lightcycle/to_bump(atom/A)
 	if(occupant)
 		occupant.visible_message("<span class=\"warning\">\The [src] crashes into \the [A] and dissolves into nothing as its rider is blown apart!</span>",\
 		"<span class=\"warning\">As you collide with \the [A], you are blown to pieces.</span>")

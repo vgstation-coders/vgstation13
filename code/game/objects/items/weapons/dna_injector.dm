@@ -96,7 +96,8 @@
 		uses--
 	else
 		if(istype(M,/mob/living))
-			M.radiation += rand(1,10)
+			var/mob/living/L = M
+			L.apply_radiation(rand(1,10), RAD_INTERNAL)
 
 		if(!(M_NOCLONE in M.mutations)) // prevents drained people from having their DNA changed
 			// UI in syringe.

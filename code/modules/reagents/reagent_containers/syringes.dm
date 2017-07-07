@@ -32,6 +32,7 @@
 	                            /obj/item/slime_extract,
 	                            /obj/item/clothing/mask/cigarette,
 	                            /obj/item/weapon/storage/fancy/cigarettes,
+	                            /obj/item/gum,
 	                            /obj/item/weapon/implantcase/chem,
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
 	                            /obj/item/clothing/mask/facehugger/lamarr,
@@ -216,7 +217,12 @@
 		to_chat(user, "<span class='warning'>You cannot directly fill this object.</span>")
 		return
 
-	if (target.reagents.total_volume >= target.reagents.maximum_volume)
+	if(istype(target, /obj/item/gum))
+		var/obj/item/gum/G = target
+		if(G.replacement_chem_volume <= 0)
+			to_chat(user, "<span class='warning'>\The [target] is full.</span>")
+			return
+	else if (target.reagents.total_volume >= target.reagents.maximum_volume)
 		to_chat(user, "<span class='warning'>\The [target] is full.</span>")
 		return
 
@@ -252,7 +258,11 @@
 		// TODO which is pretty irrelevant now but should be fixed
 		reagents.reaction(target, INGEST)
 
-	tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
+	if(istype(target, /obj/item/gum))
+		var/obj/item/gum/G = target
+		tx_amount = G.transfer_some_reagents(src, tx_amount, TRUE, user)
+	else
+		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
 	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
 
 	if (src.is_empty())

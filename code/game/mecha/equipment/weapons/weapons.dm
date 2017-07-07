@@ -208,12 +208,12 @@
 	name = "\improper LBX AC 10 \"Scattershot\""
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
-	projectile = /obj/item/projectile/bullet/midbullet
+	projectile = /obj/item/projectile/bullet/buckshot
 	fire_sound = 'sound/weapons/shotgun.ogg'
-	max_projectiles = 40
+	max_projectiles = 20
 	projectile_energy_cost = 25
-	var/projectiles_per_shot = 4
-//	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
+	var/projectiles_per_shot = 1
+	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
 	if(!action_checks(target))

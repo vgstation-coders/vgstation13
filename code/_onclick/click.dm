@@ -43,7 +43,7 @@
 		return
 	click_delayer.setDelay(1)
 
-	if(client.buildmode)
+	if(client && client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
 

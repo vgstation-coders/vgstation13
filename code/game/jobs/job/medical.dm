@@ -60,7 +60,7 @@
 	idtype = /obj/item/weapon/card/id/medical
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
-	alt_titles = list("Surgeon", "Emergency Physician", "Nurse")
+	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical

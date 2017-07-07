@@ -13,6 +13,7 @@
 	var/attack_text = "bites"
 	var/languagetoadd = LANGUAGE_MONKEY
 	var/namenumbers = TRUE
+	var/flag = 0
 
 	mob_bump_flag = MONKEY
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
@@ -166,7 +167,7 @@
 
 /mob/living/carbon/monkey/base_movement_tally()
 	. = ..()
-	if(reagents.has_reagent(HYPERZINE))
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		return // Hyperzine ignores slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown

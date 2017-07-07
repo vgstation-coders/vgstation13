@@ -708,3 +708,10 @@
 	item_state = "rottensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	_color = "rottensuit"
+
+/obj/item/clothing/under/franksuit
+	name = "Dr. Frank's clothes"
+	desc = "Wearing this makes you feel spaced out on sensation, like you're under sedation."
+	icon_state = "franksuit"
+	item_state = "franksuit"
+	_color = "franksuit"

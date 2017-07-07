@@ -248,6 +248,39 @@
 	glass_quality = 1
 	shealth = 10
 
+// Special snowflake code for building glass floors.
+/obj/item/stack/sheet/glass/rglass/afterattack(atom/Target, mob/user, adjacent, params)
+	var/busy = 0
+	if(adjacent)
+		if(isturf(Target) || istype(Target, /obj/structure/lattice))
+			var/turf/T = get_turf(Target)
+			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
+			if(istype(L))
+				if(amount < 1)
+					to_chat(user, "<span class='warning'>You need at least a single sheet of reinforced glass to build a glass floor!</span>")
+					return
+				if(busy) //We are already building a glass floor, avoids stacking catwalks
+					return
+				to_chat(user, "<span class='notice'>You begin to build a glass floor.</span>")
+				busy = 1
+				if(do_after(user, Target, 30))
+					busy = 0
+					if(amount < 1)
+						to_chat(user, "<span class='warning'>You ran out of reinforced glass!</span>")
+						return
+					if(!istype(L) || L.loc != T)
+						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
+						return
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>You build a glass floor!</span>")
+					use(1)
+					if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
+						T.ChangeTurf(/turf/simulated/floor/glass/airless)
+					else
+						T.ChangeTurf(/turf/simulated/floor/glass)
+					qdel(L)
+					return
+
 /obj/item/stack/sheet/glass/rglass/cyborg
 	starting_materials = null
 
@@ -292,3 +325,36 @@
 	glass_quality = 1.3
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
+
+// Special snowflake code for building glass floors.
+/obj/item/stack/sheet/glass/plasmarglass/afterattack(atom/Target, mob/user, adjacent, params)
+	var/busy = 0
+	if(adjacent)
+		if(isturf(Target) || istype(Target, /obj/structure/lattice))
+			var/turf/T = get_turf(Target)
+			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
+			if(istype(L))
+				if(amount < 1)
+					to_chat(user, "<span class='warning'>You need at least a single sheet of reinforced plasma glass to build a glass floor!</span>")
+					return
+				if(busy) //We are already building a glass floor, avoids stacking catwalks
+					return
+				to_chat(user, "<span class='notice'>You begin to build a glass floor.</span>")
+				busy = 1
+				if(do_after(user, Target, 30))
+					busy = 0
+					if(amount < 1)
+						to_chat(user, "<span class='warning'>You ran out of reinforced plasma glass!</span>")
+						return
+					if(!istype(L) || L.loc != T)
+						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
+						return
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+					to_chat(user, "<span class='notice'>You build a plasma glass floor!</span>")
+					use(1)
+					if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
+						T.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
+					else
+						T.ChangeTurf(/turf/simulated/floor/glass/plasma)
+					qdel(L)
+					return

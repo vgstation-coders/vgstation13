@@ -38,7 +38,7 @@
 		qdel(src)
 	return
 
-/obj/item/projectile/spell_projectile/Bump(var/atom/A)
+/obj/item/projectile/spell_projectile/to_bump(var/atom/A)
 	if(loc)
 		prox_cast(choose_prox_targets(user = carried.holder, spell_holder = src))
 	return
