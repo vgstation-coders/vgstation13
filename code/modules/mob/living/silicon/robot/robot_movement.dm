@@ -14,8 +14,13 @@
  //No longer needed, but I'll leave it here incase we plan to re-use it.
 /mob/living/silicon/robot/movement_tally_multiplier()
 	. = ..()
-	if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
-		. *= 0.75
+	if(is_component_functioning("power cell") && cell)
+		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
+			. *= 0.75
+		if(src.cell.charge <= 0)
+			. += 3
+	else
+		. += 15
 
 /mob/living/silicon/robot/Move(atom/newloc)
 	if(..())
