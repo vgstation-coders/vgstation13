@@ -16,11 +16,11 @@
 	. = ..()
 	if(is_component_functioning("power cell") && cell)
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
-			. *= 0.75
+			. *= CYBORG_MOBILITY_MODULE_MODIFIER
 		if(src.cell.charge <= 0)
-			. += 3
+			. += CYBORG_NO_CHARGE_SLOWDOWN
 	else
-		. += 15
+		. += CYBORG_NO_CELL_SLOWDOWN
 
 /mob/living/silicon/robot/Move(atom/newloc)
 	if(..())
