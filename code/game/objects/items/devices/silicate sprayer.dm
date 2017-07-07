@@ -74,9 +74,36 @@
 	if(get_dist(A, user) > 1) // I purposely don't use proximity_flag so you can get to windows without needing adjacency. (window behind another window for example.)
 		return
 
-	if(!iswindow(A)) // We can only fix windows.
-		return
+	if(iswindow(A)) // We can only fix windows.
+		return preattack_window(A, user)
+	else if(istype(A, /turf/simulated/floor/glass))
+		return preattack_glassfloor(A, user)
+	return 0
 
+/obj/item/device/silicate_sprayer/proc/preattack_glassfloor(var/atom/A, var/mob/user)
+	if(!get_amount())
+		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
+		return 1
+
+	var/turf/simulated/floor/glass/T = A
+
+	var/diff = initial(T.health) - T.health
+	if(!diff) // Not damaged.
+		to_chat(user, "<span class='notice'>\The [T] is already in perfect condition!</span>")
+		return 1
+
+	diff = min(diff, get_amount() / SILICATE_PER_DAMAGE)
+
+	T.health += diff
+	T.healthcheck(user, FALSE)
+
+	user.visible_message("<span class='notice'>[user] repairs \the [T] with their [name]!</span>", "<span class='notice'>You repair \the [T] with your [name].</span>")
+	playsound(get_turf(T), 'sound/effects/refill.ogg', 10, 1, -6)
+
+	remove_silicate(diff * SILICATE_PER_DAMAGE)
+
+	return 1
+/obj/item/device/silicate_sprayer/proc/preattack_window(var/atom/A, var/mob/user)
 	if(!get_amount())
 		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
 		return 1
@@ -146,7 +173,7 @@
 	else if(istype(A, /turf/simulated/floor/glass))
 		return preattack_glassfloor(A, user)
 
-/obj/item/device/silicate_sprayer/advanced/proc/preattack_window(var/atom/A, var/mob/user)
+/obj/item/device/silicate_sprayer/advanced/preattack_window(var/atom/A, var/mob/user)
 	var/obj/structure/window/W = A
 	var/initial_health = initial(W.health)
 
@@ -171,7 +198,7 @@
 
 	return 1
 
-/obj/item/device/silicate_sprayer/advanced/proc/preattack_glassfloor(var/atom/A, var/mob/user)
+/obj/item/device/silicate_sprayer/advanced/preattack_glassfloor(var/atom/A, var/mob/user)
 	var/turf/simulated/floor/glass/G = A
 	var/initial_health = initial(G.health)
 

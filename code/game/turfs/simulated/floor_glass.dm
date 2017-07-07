@@ -263,6 +263,8 @@
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
 		if(handle_grabslam(W, user))
 			return
+	if(issilicatesprayer(W))
+		return // Do nothing. (preattack based)
 	switch(construction_state)
 		if(2) // intact
 			if(isscrewdriver(W))
@@ -362,7 +364,7 @@
 
 /turf/simulated/floor/glass/airless
 	icon_state = "floor"
-	name = "airless floor"
+	name = "airless glass floor"
 	oxygen = 0.01
 	nitrogen = 0.01
 	temperature = TCMB
@@ -378,7 +380,7 @@
 
 /turf/simulated/floor/glass/plasma/airless
 	icon_state = "floor"
-	name = "airless floor"
+	name = "airless plasma glass floor"
 	oxygen = 0.01
 	nitrogen = 0.01
 	temperature = TCMB
