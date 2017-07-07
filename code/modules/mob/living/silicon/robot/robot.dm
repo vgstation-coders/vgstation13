@@ -460,6 +460,7 @@
 		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
 	namepick_uses--
+
 	var/newname
 	for(var/i = 1 to 3)
 		newname = reject_bad_name(copytext(stripped_input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN),1)
@@ -477,6 +478,7 @@
 		to_chat(src, "<span class='warning'>You have changed your name to [newname]. You can change your name [namepick_uses] more times.<span>")
 	else
 		to_chat(src, "<span class='warning'>You have reset your name. You can change your name [namepick_uses] more times.<span>")
+
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
