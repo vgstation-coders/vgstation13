@@ -113,11 +113,19 @@
 
 //Temp
 	mymob.bodytemp = getFromPool(/obj/abstract/screen)
+	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.bodytemp.icon_state = "temp0"
 	mymob.bodytemp.name = "body temperature"
 	mymob.bodytemp.screen_loc = ui_temp
+	
+//Pressure
+	mymob.pressure = getFromPool(/obj/abstract/screen)
+	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.pressure.icon_state = "pressure0"
+	mymob.pressure.name = "pressure"
+	mymob.pressure.screen_loc = ui_pressure
 
-
+ //unused, go home
 	mymob.oxygen = getFromPool(/obj/abstract/screen)
 	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.oxygen.icon_state = "oxy0"

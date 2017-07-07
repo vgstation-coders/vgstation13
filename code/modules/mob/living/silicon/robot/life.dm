@@ -245,8 +245,7 @@
 		else
 			src.cells.icon_state = "charge-empty"
 	
-	var/datum/gas_mixture/environment = src.loc.return_air()
-	if(environment)
+	/*if(bodytemp) //technically wrong, but whatever
 		switch(environment.temperature)
 			if(5000 to INFINITY)
 				src.bodytemp.icon_state = "temp2"
@@ -257,7 +256,9 @@
 			if(200 to 299)
 				src.bodytemp.icon_state = "temp-1"
 			else
-				src.bodytemp.icon_state = "temp-2"
+				src.bodytemp.icon_state = "temp-2"*/
+	if(bodytemp)
+		bodytemp.icon_state = "temp[temp_alert]"
 	if(pressure)
 		pressure.icon_state = "pressure[pressure_alert]"
 
@@ -359,18 +360,47 @@
 // Borgs aren't immune to pressure anymore. Protection depends on module.
 /mob/living/silicon/robot/proc/handle_pressure_damage(datum/gas_mixture/environment)
 	//by the power of Polymorph and Errorage
-	var/pressure = environment.return_pressure()
-	var/adjusted_pressure = pressure - ONE_ATMOSPHERE //REAL pressure
-	if(adjusted_pressure >= module.pressure_level_max)
-		adjustBruteLoss(min((adjusted_pressure/module.pressure_level_max), MAX_HIGH_PRESSURE_DAMAGE))
-		pressure_alert = 2
-	else 
-		pressure_alert = -1	
+	var/adjusted_max_pressure
+	var/localpressure = environment.return_pressure()
+	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
+	//Borgs start without modules!
+	if(!module)
+		adjusted_max_pressure = base_pressure_level_max
+	else
+		adjusted_max_pressure = module.pressure_level_max
+	if(localpressure)
+		if(adjusted_pressure >= adjusted_max_pressure)
+			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
+			pressure_alert = 2 //oh fuck
+		if 	(localpressure > WARNING_HIGH_PRESSURE)
+			pressure_alert = 1 //We don't really care, but might help us realize carbons are dying
+		if 	(localpressure < WARNING_LOW_PRESSURE)
+			pressure_alert = -1 //same here
+		if 	(localpressure < HAZARD_LOW_PRESSURE)
+			pressure_alert = -2 //same here
+		else 
+			pressure_alert = 0 //we aight
 	
 // Not immune to heat anymore either. Same deal. --SonixApache
 /mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
 	var/envirotemp = environment.return_temperature()
-	if (envirotemp >= module.heat_level_max)
-		return adjustFireLoss (envirotemp / module.heat_level_max)
+	var/adjusted_max_heat
+	if(!module)
+		adjusted_max_heat = base_heat_level_max
 	else
-		return 0
+		adjusted_max_heat = module.heat_level_max
+	if(envirotemp)	
+		if (envirotemp >= adjusted_max_heat)
+			temp_alert = 2
+			return adjustFireLoss (envirotemp / adjusted_max_heat)
+		if 	(envirotemp > adjusted_max_heat / 2)
+			temp_alert = 2
+		if 	(envirotemp > BODYTEMP_HEAT_DAMAGE_LIMIT) //carbons
+			temp_alert = 1 
+		if 	(envirotemp < BODYTEMP_COLD_DAMAGE_LIMIT) //c a r b o n s
+			temp_alert = -1 
+		if 	(envirotemp < TCMB ) //space is cold
+			temp_alert = -2
+		else 
+			temp_alert = 0 
+			return 0

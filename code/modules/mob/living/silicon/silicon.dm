@@ -8,7 +8,6 @@
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
-	var/pressure_alert = 0
 
 	immune_to_ssd = 1
 
