@@ -86,7 +86,7 @@
 	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
-	mymob.healths.screen_loc = ui_borg_health
+	mymob.healths.screen_loc = ui_health //Used to be ui_borg_health
 
 //Installed Module
 	mymob.hands = getFromPool(/obj/abstract/screen)
@@ -113,14 +113,14 @@
 
 //Temp
 	mymob.bodytemp = getFromPool(/obj/abstract/screen)
-	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.bodytemp.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.bodytemp.icon_state = "temp0"
-	mymob.bodytemp.name = "body temperature"
+	mymob.bodytemp.name = "environment temperature"
 	mymob.bodytemp.screen_loc = ui_temp
 	
 //Pressure
 	mymob.pressure = getFromPool(/obj/abstract/screen)
-	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.pressure.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.pressure.icon_state = "pressure0"
 	mymob.pressure.name = "pressure"
 	mymob.pressure.screen_loc = ui_pressure
@@ -171,7 +171,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon) //, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.fire, mymob.pressure, mymob.bodytemp, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen)
 	mymob.client.screen += src.adding + src.other
 
 	return
