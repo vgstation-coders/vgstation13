@@ -2579,3 +2579,9 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/custom
+
+/obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
+	if(!account_first_linked)
+		togglePanelOpen(toggleitem, user)
+		return 1
+	return ..()

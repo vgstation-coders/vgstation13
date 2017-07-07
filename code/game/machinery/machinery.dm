@@ -503,7 +503,7 @@ Class Procs:
 	return 1
 
 /obj/machinery/proc/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
-	if(!linked_account || panel_open || !account_first_linked)
+	if(!linked_account || panel_open)
 		togglePanelOpen(toggleitem, user)
 		return 1
 	var/account_try = input(user,"Please enter the already connected account number to unlock the panel","Security measure") as null|num
@@ -513,6 +513,7 @@ Class Procs:
 		to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account. This incident will be reported.</span>")
 		return 0
 	togglePanelOpen(toggleitem, user)
+	return 1
 
 /obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
 	if(!anchored)
