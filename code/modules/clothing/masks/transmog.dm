@@ -123,7 +123,8 @@
 /obj/item/clothing/mask/morphing/amorphous/New()
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid))
+	//Remove cockatrices because they're somewhat OP when player controlled
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice))
 
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"

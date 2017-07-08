@@ -2852,5 +2852,12 @@
 	required_reagents = list(ZEAXANTHIN = 1, RADIUM = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/apetrine
+	name = "Apetrine"
+	id = APETRINE
+	result = APETRINE
+	required_reagents = list(PETRICIN = 2, PACID = 3)
+	result_amount = 1
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

@@ -5,6 +5,7 @@
 	icon_state = "bees1"
 	icon_dead = "bees1"
 
+	mob_property_flags = MOB_SWARM
 	size = SIZE_TINY
 	can_butcher = 0
 
