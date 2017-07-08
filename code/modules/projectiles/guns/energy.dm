@@ -21,10 +21,11 @@
 		return 1
 	if(!power_supply)
 		return 0
-	if(!power_supply.use(charge_cost))
+	if(power_supply.charge < charge_cost)
 		return 0
 	if(!projectile_type)
 		return 0
+	return 1
 	
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)
