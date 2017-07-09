@@ -358,6 +358,8 @@
 		adjusted_max_pressure = module.pressure_level_max
 	if(localpressure)
 		if(adjusted_pressure >= adjusted_max_pressure)
+			if(!(pressure_alert == 2))
+				to_chat(src, "<span class='danger' style=\"font-family:Courier\">Warning: Hazardous pressure levels. Continued exposure will result in extensive damage to chassis.</span>")
 			pressure_alert = 2 //oh fuck
 			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
 		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < adjusted_max_pressure)
@@ -382,6 +384,8 @@
 	if(environment)
 		if(envirotemp)	
 			if (envirotemp >= adjusted_max_heat)
+				if(!(temp_alert == 2))
+					to_chat(src, "<span class='danger' style=\"font-family:Courier\">Warning: Hazardous heat levels. Continued exposure will result in extensive damage to chassis.</span>")
 				temp_alert = 2
 				return adjustFireLoss (envirotemp / adjusted_max_heat)
 			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < adjusted_max_heat) //carbons
