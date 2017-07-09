@@ -950,6 +950,14 @@ var/global/mulebot_count = 0
 	unload(0)
 	qdel(src)
 
+/obj/machinery/bot/mulebot/install_pai(obj/item/device/paicard/P)
+	..()
+	overlays += image('icons/obj/aibots.dmi', "mulebot1_pai")
+
+/obj/machinery/bot/mulebot/eject_integratedpai_if_present()
+	if(..())
+		overlays -= image('icons/obj/aibots.dmi', "mulebot1_pai")
+
 /obj/machinery/bot/mulebot/getpAIMovementDelay()
 	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2
 

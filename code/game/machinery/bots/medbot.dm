@@ -714,6 +714,14 @@
  *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
 */
 
+/obj/machinery/bot/medbot/install_pai(obj/item/device/paicard/P)
+	..()
+	overlays += image('icons/obj/aibots.dmi', "medibot_pai_overlay")
+
+/obj/machinery/bot/medbot/eject_integratedpai_if_present()
+	if(..())
+		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
+
 /obj/machinery/bot/medbot/getpAIMovementDelay()
 	return 1
 

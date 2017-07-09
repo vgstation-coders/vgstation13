@@ -368,6 +368,7 @@
 /obj/item/weapon/gun/energy/laser/smart
 	name = "smart laser gun"
 	desc = "An upgraded model of the basic laser gun. There seems to be some sort of slot in the handle."
+	icon_state = "laser_smart"
 	can_take_pai = TRUE
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=4"
 
