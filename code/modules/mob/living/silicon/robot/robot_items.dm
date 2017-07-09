@@ -275,10 +275,9 @@
 	icon_state = "gripper"
 	actions_types = list(/datum/action/item_action/magrip_drop)
 	var/obj/item/wrapped = null // Item currently being held.
-	//Has a list of items that it can hold.
-	var/list/can_hold = list()
-	//This is a list of items that can't be held even if their parent is whitelisted.
-	var/list/blacklist = list()
+	var/list/can_hold = list() //Has a list of items that it can hold.
+	var/list/blacklist = list() //This is a list of items that can't be held even if their parent is whitelisted.
+
 
 /obj/item/weapon/gripper/proc/safety_check(var/mob/user, var/target)
 	if(issilicon(user))
