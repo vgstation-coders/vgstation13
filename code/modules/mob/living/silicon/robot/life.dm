@@ -358,8 +358,8 @@
 		adjusted_max_pressure = module.pressure_level_max
 	if(localpressure)
 		if(adjusted_pressure >= adjusted_max_pressure)
-			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
 			pressure_alert = 2 //oh fuck
+			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
 		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < adjusted_max_pressure)
 			pressure_alert = 1 //We don't really care, but might help us realize carbons are dying
 		else if (localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
