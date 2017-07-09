@@ -184,6 +184,8 @@
 	intact = 0
 	plane = PLATING_PLANE
 
+	var/deconstruct_stage = 0
+
 /turf/simulated/floor/plating/deck
 	name = "deck"
 	icon_plating = "deck"
@@ -219,6 +221,46 @@
 	if(floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
+
+/turf/simulated/floor/plating/attackby(var/obj/item/W, var/mob/user)
+	if(!broken && !burnt)
+		switch(deconstruct_stage)
+			if(0) // Totally constructed.
+				if(iswelder(W))
+					var/obj/item/weapon/weldingtool/WT = W
+					if (WT.remove_fuel(0, user))
+						user.visible_message("[user] cuts through the welded seams of \the [src].", "You start to cut through the welded seams of \the [src]")
+						playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+						if(do_after(user, src, 40))
+							if(!src || !WT.isOn())
+								return
+							to_chat(user, "<span class='notice'>You cut through the welded seams of \the [src]!</span>")
+							deconstruct_stage++
+							return 1
+			if(1) // Seams unwelded
+				if(iswelder(W))
+					var/obj/item/weapon/weldingtool/WT = W
+					if (WT.remove_fuel(0, user))
+						user.visible_message("[user] starts to weld the seams of \the [src].", "You start to weld the seams of \the [src].")
+						playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+						if(do_after(user, src, 40))
+							if(!src || !WT.isOn())
+								return
+							to_chat(user, "<span class='notice'>You welded the seams of \the [src]!</span>")
+							deconstruct_stage--
+							return 1
+				if(iscrowbar(W))
+					user.visible_message("[user] starts to pry the flooring plates from the underlying supports...", "You start to pry the flooring plates from the underlying supports...")
+					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+					if(do_after(user, src, 10))
+						if(!src)
+							return
+						to_chat(user, "<span class='notice'>You pried the flooring from the lattice!</span>")
+						getFromPool(/obj/item/stack/tile/plasteel, src)
+						src.ReplaceWithLattice()
+						return 1
+
+	..(W, user)
 
 
 /turf/simulated/floor/plating/airless
