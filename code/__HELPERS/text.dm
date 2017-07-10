@@ -291,17 +291,26 @@ proc/checkhtml(var/t)
 
 	return ""
 
+	
+/proc/trimcenter(text) 
+	var/regex/trimcenterregex = regex("[ ]{2,}")
+	return trimcenterregex.Replace(text,"[ ]")
+
+	
 //Returns a string with double spaces removed
+/*
 /proc/trimcenter(text) 
 	var/last_char_group			= 0
-	for(var/i=1, i<=length(t_in), i++)
-		var/ascii_char = text2ascii(t_in,i)
+	var/t_out			= ""
+	for(var/i=1, i<=length(text), i++)
+		var/ascii_char = text2ascii(text,i)
 		switch(ascii_char)
 			if(32)
 				if(last_char_group <= 1)
 					continue	//suppress double-spaces and spaces at start of string
 				t_out += ascii2text(ascii_char)
 				last_char_group = 1
+	return t_out*/
 	
 //Returns a string with reserved characters and spaces before the first word and after the last word removed.
 /proc/trim(text)
