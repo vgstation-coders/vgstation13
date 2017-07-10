@@ -270,14 +270,11 @@
 
 //Simple borg hand. Limited use... SLIPPERY SLOPE POWERCREEP
 /obj/item/weapon/gripper
-	name = "gripper"
 	icon = 'icons/obj/device.dmi'
-	icon_state = "gripper"
 	actions_types = list(/datum/action/item_action/magrip_drop)
 	var/obj/item/wrapped = null // Item currently being held.
 	var/list/can_hold = list() //Has a list of items that it can hold.
 	var/list/blacklist = list() //This is a list of items that can't be held even if their parent is whitelisted.
-
 
 /obj/item/weapon/gripper/proc/safety_check(var/mob/user, var/target)
 	if(issilicon(user))
@@ -302,7 +299,7 @@
 	var/obj/item/weapon/gripper/G = target
 	if(!istype(G))
 		return
-	G.drop_item()
+	G.drop_item(force_drop = 1)
 
 /obj/item/weapon/gripper/proc/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = 0,var/dontsay = null) //Do we care about to_drop at all?
 	if(!wrapped)//There's some weirdness with items being lost inside the thing.
@@ -316,7 +313,7 @@
 		return 0
 	if(to_drop && !istype(wrapped, to_drop))// What the fuck?
 		to_chat(usr, "<span class='danger'>FATAL GRIPPER.EXE ERROR, RESTARTING SOFTWARE.</span>")
-		drop_item()
+		drop_item(force_drop = 1)
 		return 0
 	if(!target) //Just drop it, baka.
 		target = src.loc
@@ -324,9 +321,9 @@
 		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
 	wrapped.dropped(usr)
 	if(force_drop)
-		wrapped.forceMove(target)
-	else
 		wrapped.loc = get_turf(target)
+	else
+		wrapped.forceMove(target)
 	wrapped = null
 	update_icon()
 	usr.update_action_buttons()
@@ -491,6 +488,29 @@
 		/obj/item/clothing/head/fedora,
 		)
 
+/obj/item/weapon/gripper/magnetic
+	name = "magnetic gripper"
+	desc = "A simple grasping tool specialized in construction and engineering work."
+	icon_state = "gripper"
+
+	can_hold = list(
+		/obj/item/weapon/cell,
+		/obj/item/weapon/stock_parts,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/circuitboard,
+		/obj/item/weapon/am_containment,
+		/obj/item/device/am_shielding_container
+		)
+
+	blacklist = list(
+		/obj/item/weapon/tank/jetpack,
+		/obj/item/weapon/cell/infinite,
+		/obj/item/weapon/circuitboard/communications,
+		/obj/item/weapon/circuitboard/card,
+		/obj/item/weapon/circuitboard/aiupload,
+		/obj/item/weapon/circuitboard/borgupload
+		)
+
 /obj/item/weapon/gripper/no_use //Used when you want to hold and put things in other things, but not able to 'use' the item
 
 /obj/item/weapon/gripper/no_use/attack_self(mob/user as mob)
@@ -512,25 +532,4 @@
 
 	can_hold = list(
 		/obj/item/stack/sheet
-		)
-
-/obj/item/weapon/gripper/no_use/magnetic //This is to prevent the use of overpressurized tanks as weapon of flooding.
-	name = "magnetic gripper"
-	desc = "A simple grasping tool specialized in construction and engineering work."
-	icon_state = "gripper"
-
-	can_hold = list(
-		/obj/item/weapon/cell,
-		/obj/item/weapon/stock_parts,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/circuitboard
-		)
-
-	blacklist = list(
-		/obj/item/weapon/tank/jetpack,
-		/obj/item/weapon/cell/infinite,
-		/obj/item/weapon/circuitboard/communications,
-		/obj/item/weapon/circuitboard/card,
-		/obj/item/weapon/circuitboard/aiupload,
-		/obj/item/weapon/circuitboard/borgupload
 		)
