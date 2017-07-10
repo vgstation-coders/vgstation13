@@ -1,2 +1,4 @@
 author: Pomf123
-changes: []
+changes:
+- rscadd: Added a custom vending machine that allows you to sell your own items
+- rscadd: Added price tagger that allows you to price items you sell in the new custom vending machines, credit to Zth for the original PR
