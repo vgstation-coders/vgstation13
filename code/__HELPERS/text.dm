@@ -293,8 +293,8 @@ proc/checkhtml(var/t)
 
 	
 /proc/trimcenter(text) 
-	var/regex/trimcenterregex = regex("[ ]{2,}")
-	return trimcenterregex.Replace(text,"[ ]")
+	var/regex/trimcenterregex = regex("\\s{2,}","g")
+	return trimcenterregex.Replace(text," ")
 
 	
 //Returns a string with double spaces removed
