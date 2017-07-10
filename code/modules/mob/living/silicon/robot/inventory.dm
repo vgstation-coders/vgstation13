@@ -271,7 +271,7 @@
 
 /mob/living/silicon/robot/drop_item_v()		//this is dumb.
 	if(stat == CONSCIOUS && isturf(loc))
-		return drop_item()
+		return drop_item(force_drop = 1)
 	return 0
 
 /mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = 0, dontsay = null)
