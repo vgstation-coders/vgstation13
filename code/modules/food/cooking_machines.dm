@@ -158,7 +158,7 @@ var/global/ingredientLimit = 10
 	else if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
-	else if(istype(user,/mob/living/silicon))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
