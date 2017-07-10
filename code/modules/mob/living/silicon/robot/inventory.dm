@@ -39,7 +39,7 @@
 		module.dropped(src)
 		if(isgripper(module_active))
 			var/obj/item/weapon/gripper/G = module
-			G.drop_item()
+			G.drop_item(force_drop = 1)
 	hud_used.update_robot_modules_display()
 	return 1
 
