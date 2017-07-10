@@ -45,7 +45,7 @@
 	if(module)
 		var/obj/item/weapon/gripper/G = locate(/obj/item/weapon/gripper) in module
 		if(G && G.wrapped)
-			G.drop_item()
+			G.drop_item(force_drop = 1)
 	if(in_contents_of(/obj/machinery/recharge_station))//exit the recharge station
 		var/obj/machinery/recharge_station/RC = loc
 		if(RC.upgrading)
