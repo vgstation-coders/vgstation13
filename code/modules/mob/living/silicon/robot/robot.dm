@@ -463,7 +463,7 @@
 
 	var/newname
 	for(var/i = 1 to 3)
-		newname = reject_bad_name(copytext(stripped_input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN),1)
+		newname = trimcenter(trim(stripped_input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
 		if(newname == null)
 			if(alert(src,"Are you sure you want a default borg name?",,"Yes","No") == "Yes")
 				break
