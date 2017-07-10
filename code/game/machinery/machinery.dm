@@ -506,6 +506,8 @@ Class Procs:
 	if(!linked_account || panel_open)
 		togglePanelOpen(toggleitem, user)
 		return 1
+	if(!user.Adjacent(src))
+		return 0
 	var/account_try = input(user,"Please enter the already connected account number to unlock the panel","Security measure") as null|num
 	if(!user.Adjacent(src))
 		return 0

@@ -456,11 +456,19 @@ var/global/num_vending_terminals = 1
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
 			if(account_first_linked)
+				if(!user.Adjacent(src))
+					return 0
 				var/account_try = input(user,"Please enter the already connected account number","Security measure") as num
+				if(!user.Adjacent(src))
+					return 0
 				if(account_try != linked_account.account_number)
 					to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account.</span>")
 					return
+			if(!user.Adjacent(src))
+				return 0
 			var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
+			if(!user.Adjacent(src))
+				return 0
 			for(var/datum/money_account/D in all_money_accounts)
 				if(D.account_number == new_account)
 					linked_account = D
