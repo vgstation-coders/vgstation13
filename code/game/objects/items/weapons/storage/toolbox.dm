@@ -114,12 +114,4 @@
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/multitool(src)
-
-/obj/item/weapon/storage/toolbox/combat
-	name = "combat toolbox"
-	icon_state = "toolbox_combat"
-	item_state = "toolbox_combat"
-	origin_tech = Tc_COMBAT + "=1"
-	storage_slots = 7
-	max_combined_w_class = 14
-	force = 20
+	

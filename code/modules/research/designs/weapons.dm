@@ -1,13 +1,3 @@
-/datum/design/combat_toolbox
-	name = "Combat Toolbox"
-	desc = "Advances in robustness and combat theory have resulted in this ultimate man-to-man weapon."
-	id = "combat_toolbox"
-	req_tech = list(Tc_COMBAT = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 5000)
-	category = "Weapons"
-	build_path = /obj/item/weapon/storage/toolbox/combat
-
 /datum/design/nuclear_gun
 	name = "Advanced Energy Gun Modkit"
 	desc = "Can be used on an energy gun to grant it the ability to recharge itself over time."
