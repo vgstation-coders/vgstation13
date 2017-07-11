@@ -56,11 +56,11 @@
 			user.whisper("Sas[pick("'","`")]so c'arta forbici!")
 		if(universe.name != "Hell Rising")
 			user.visible_message("<span class='warning'> [user] disappears in a flash of red light!</span>", \
-			"<span class='warning'>You feel as your body gets dragged through the dimension of Nar-Sie!</span>", \
+			"<span class='warning'>You feel a sharp pain as your body gets dragged through the dimension of Nar-Sie!</span>", \
 			"<span class='warning'>You hear a sickening crunch and sloshing of viscera.</span>")
 		else
 			user.visible_message("<span class='warning'> [user] disappears in a flash of red light!</span>", \
-			"<span class='warning'>You feel as your body gets dragged through a tunnel of viscera !</span>", \
+			"<span class='warning'>You feel a sharp pain as your body gets dragged through a tunnel of viscera !</span>", \
 			"<span class='warning'>You hear a sickening crunch and sloshing of viscera.</span>")
 
 		if(istype(src,/obj/effect/rune))
@@ -208,13 +208,24 @@
 						log_admin("[M]([ckey(M.key)]) ghosted/disconnected less than a minute after having been converted to the cult! ([T.x],[T.y],[T.z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>)")
 			return 1
 		else
-			if(jobban_isbanned(M, "cultist"))
-				M.Sleeping(300)//putting them to sleep for 5 minutes.
+			if(is_convertable_to_cult(M.mind) && jobban_isbanned(M, "cultist")) //Not implanted, but cultbanned
+				var/turf/T = get_turf(M)
+				T.turf_animation('icons/effects/effects.dmi',"rune_teleport")
+				M.unequip_everything() //Piñata
+				//death(M) //toggles SPS from going off or not.
+				sleep(1) //Ensure everything has time to drop without getting deleted
+				qdel(M)
+				ticker.mode:grant_runeword(usr) //Chance to get a rune word for sacrificing a live player is 100%, so.
+				if (cult_round)
+					cult_round.revivecounter ++
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>")
-				to_chat(usr, "<span class='notice'>It appears that the ritual at least put the target to sleep. Try to figure a way to deal with them before they wake up.</span>")
+				to_chat(usr, "<span class='notice'>Instead, the ritual has taken the lifeforce of this heretic, to be used for our benefit later.</span>")
 			else if(M.knockdown)
-				to_chat(usr, "<span class='danger'>The ritual didn't work, either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
-				to_chat(usr, "<span class='danger'>You have to restrain him before the talisman's effects wear off!</span>")
+				to_chat(usr, "<span class='danger'>The ritual didn't work! Either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
+				to_chat(usr, "<span class='danger'>You have to restrain [M] before the talisman's effects wear off!</span>")
+			else 
+				to_chat(usr, "<span class='danger'>The ritual didn't work! Either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
+				to_chat(usr, "<span class='danger'>[M] now knows the truth! Stop \him!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='danger'>And you were able to force it out of your mind. You now know the truth, there's something horrible out there, stop it and its minions at all costs.</span>")
 			return 0
@@ -466,10 +477,12 @@
 					M.ghostize(1)	//kick them out of their body
 				break
 	if(!corpse_to_raise)
+		if (cult_round.revivecounter)
+			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [cult_round.revivecounter] of ours to the mortal plane.</span>")
 		if(is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>")
 		return fizzle()
-
+	
 
 	is_sacrifice_target = 0
 	find_sacrifice:
@@ -489,7 +502,7 @@
 								body_to_sacrifice = N
 								break find_sacrifice
 
-	if(!body_to_sacrifice)
+	if(!body_to_sacrifice && !cult_round.revivecounter)
 		if (is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants that corpse for himself.</span>")
 		else
@@ -498,6 +511,8 @@
 
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in loc)
+		if (jobban_isbanned(O, "cultist"))
+			continue
 		if(!O.client)
 			continue
 		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
@@ -514,13 +529,20 @@
 	corpse_to_raise.key = ghost.key	//the corpse will keep its old mind! but a new player takes ownership of it (they are essentially possessed)
 									//This means, should that player leave the body, the original may re-enter
 	usr.say("Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!")
-	corpse_to_raise.visible_message("<span class='warning'>[corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
-	"<span class='warning'>Life... I am alive again...</span>", \
-	"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
-	body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
-	"<span class='warning'>You feel as your blood boils, tearing you apart.</span>", \
-	"<span class='warning'>You hear a thousand voices, all crying in pain.</span>")
-	body_to_sacrifice.gib()
+	if (body_to_sacrifice)
+		corpse_to_raise.visible_message("<span class='warning'>[corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
+		"<span class='warning'>Life? I'm alive? I live, again!.</span>", \
+		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
+		body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
+		"<span class='sinister'>You are ingulfed by pain as your blood boils, tearing you apart.</span>", \
+		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
+		body_to_sacrifice.gib()
+	if(cult_round)
+		if (cult_round.revivecounter && !body_to_sacrifice)
+			corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
+			"<span class='warning'>Life? I'm alive? I live, again!</span>", \
+			"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
+			cult_round.revivecounter --
 
 //	if(cult_round)
 //		cult_round.add_cultist(corpse_to_raise.mind)
@@ -859,6 +881,7 @@
 						if(M.mind)				//living players
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
 							satisfaction = 100
+							cult_round.revivecounter ++
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
 							satisfaction = 50
@@ -871,6 +894,7 @@
 					if(M.mind)					//dead players
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
 						satisfaction = 50
+						cult_round.revivecounter ++
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
 						satisfaction = 10
