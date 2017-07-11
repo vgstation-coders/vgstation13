@@ -141,6 +141,8 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
+#define isAPC(A) istype(A, /obj/machinery/power/apc)
+
 //Macros for atoms/matrix
 
 #define isclient(A) (istype(A, /client))
