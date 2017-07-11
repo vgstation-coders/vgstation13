@@ -511,6 +511,8 @@
 
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in loc)
+		if (jobban_isbanned(O, "cultist"))
+			continue
 		if(!O.client)
 			continue
 		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
@@ -535,11 +537,12 @@
 		"<span class='sinister'>You are ingulfed by pain as your blood boils, tearing you apart.</span>", \
 		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
 		body_to_sacrifice.gib()
-	if (cult_round.revivecounter && !body_to_sacrifice)
-		corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
-		"<span class='warning'>Life? I'm alive? I live, again!</span>", \
-		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
-		cult_round.revivecounter --
+	if(cult_round)
+		if (cult_round.revivecounter && !body_to_sacrifice)
+			corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
+			"<span class='warning'>Life? I'm alive? I live, again!</span>", \
+			"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
+			cult_round.revivecounter --
 
 //	if(cult_round)
 //		cult_round.add_cultist(corpse_to_raise.mind)
