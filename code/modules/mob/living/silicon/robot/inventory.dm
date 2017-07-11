@@ -282,4 +282,4 @@
 		return 0
 
 /mob/living/silicon/robot/drop_from_inventory(var/obj/item/W) //needed for pills, thanks oldcoders.
-	drop_item(dontsay = TRUE)
+	drop_item(force_drop = 1, dontsay = TRUE)
