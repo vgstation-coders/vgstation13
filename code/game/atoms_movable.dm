@@ -287,7 +287,7 @@
 	locked_atoms    -= AM
 	AM.locked_to     = null
 	category.unlock(AM)
-	AM.reset_glide_size()
+	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
 
