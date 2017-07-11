@@ -3,8 +3,8 @@ var/global/vox_tick = 1
 /mob/living/carbon/human/proc/equip_vox_raider()
 
 
-	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/syndicate(src)
-	R.set_frequency(SYND_FREQ) //Same frequency as the syndicate team in Nuke mode.
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
+	R.set_frequency(RAID_FREQ)
 	equip_to_slot_or_del(R, slot_ears)
 
 	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
@@ -55,7 +55,7 @@ var/global/vox_tick = 1
 			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt) // Who needs actual surgical tools?
 			equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/health(src), slot_glasses) // REPLACE WITH CODED VOX ALTERNATIVE.
 			equip_to_slot_or_del(new /obj/item/weapon/circular_saw(src), slot_l_store)
-			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/medical)
+			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/raider(src))
 
 	equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
 	equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
