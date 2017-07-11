@@ -280,7 +280,7 @@
 	if(issilicon(user))
 		var/mob/living/silicon/robot/A = user
 		if(!A.emagged)
-			to_chat(user, "<span class='danger'>Safety protocols prevent your [src.name] from holding \the [target].</span>")
+			to_chat(user, "<span class='danger'>ERROR. Safety protocols prevent your [src.name] from holding \the [target].</span>")
 			return 1
 		else
 			return 0
@@ -312,7 +312,6 @@
 		usr.update_action_buttons()
 		return 0
 	if(to_drop && !istype(wrapped, to_drop))// What the fuck?
-		to_chat(usr, "<span class='danger'>FATAL GRIPPER.EXE ERROR, RESTARTING SOFTWARE.</span>")
 		drop_item(force_drop = 1)
 		return 0
 	if(!target) //Just drop it, baka.
@@ -390,7 +389,6 @@
 				return attack_self(R)
 			//Temporary put wrapped into user so target's attackby() checks pass.
 			wrapped.loc = user //should we use forceMove() here? It is a virtual move after all, that is intended to be reset
-
 			//Pass the attack on to the target. This might delete/relocate wrapped.
 			var/resolved = target.attackby(wrapped,user,params)
 			if(!resolved && wrapped && target)
@@ -403,22 +401,14 @@
 				update_icon()
 				return
 			update_icon()
-		else if(istype(target,/obj/item)) //Check that we're not pocketing a mob.
-			//that our target isn't blacklisted
-			if(target in blacklist)
-				return
-			//...and that the item is not in a container.
+
+		else if(isitem(target)) //Check that we're not pocketing a mob.
+			var/obj/item/I = target
+			//That the item is not in a container.
 			if(!isturf(target.loc))
 				return
-			var/obj/item/I = target
-			//Check if the item is whitelisted/blacklisted.
-			var/grab = 0
-			for(var/typepath in can_hold)
-				if(istype(I,typepath))
-					grab = 1
-					break
-			//We can grab the item, finally.
-			if(grab)
+			//And finally, check if the item is whitelisted/blacklisted.
+			if(is_type_in_list(I, can_hold) && !is_type_in_list(I, blacklist))
 				to_chat(user, "<span class='notice'>You collect \the [I].</span>")
 				I.loc = src
 				wrapped = I
@@ -426,12 +416,12 @@
 				update_icon()
 				return
 			else
-				to_chat(user, "<span class='danger'>Your [src.name] cannot hold \the [target].</span>")
+				to_chat(user, "<span class='danger'>ERROR. Your [src.name] wasn't designed to handle \the [I].</span>")
 				return
 
-		else if(istype(target,/obj/machinery/power/apc))
+		else if(isAPC(target))
 			var/obj/machinery/power/apc/A = target
-			if(A.opened && (A.cell && !safety_check(user, A.cell)))
+			if(!safety_check(user, A.cell) && (A.opened && A.cell))
 				wrapped = A.cell
 				A.cell.add_fingerprint(user)
 				A.cell.update_icon()
@@ -444,7 +434,7 @@
 
 		else if(isrobot(target))
 			var/mob/living/silicon/robot/A = target
-			if(A.opened && (A.cell && !safety_check(user, A.cell)))
+			if(!safety_check(user, A.cell) && (A.opened && A.cell))
 				wrapped = A.cell
 				A.cell.add_fingerprint(user)
 				A.cell.update_icon()
@@ -455,7 +445,7 @@
 				update_icon()
 				return
 
-/obj/item/weapon/gripper/chemistry
+/obj/item/weapon/gripper/chemistry //Used to handle glass containers and pills.
 	name = "chemistry gripper"
 	icon_state = "gripper-sci"
 	desc = "A simple grasping tool for chemical work."
@@ -488,29 +478,6 @@
 		/obj/item/clothing/head/fedora,
 		)
 
-/obj/item/weapon/gripper/magnetic
-	name = "magnetic gripper"
-	desc = "A simple grasping tool specialized in construction and engineering work."
-	icon_state = "gripper"
-
-	can_hold = list(
-		/obj/item/weapon/cell,
-		/obj/item/weapon/stock_parts,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/circuitboard,
-		/obj/item/weapon/am_containment,
-		/obj/item/device/am_shielding_container
-		)
-
-	blacklist = list(
-		/obj/item/weapon/tank/jetpack,
-		/obj/item/weapon/cell/infinite,
-		/obj/item/weapon/circuitboard/communications,
-		/obj/item/weapon/circuitboard/card,
-		/obj/item/weapon/circuitboard/aiupload,
-		/obj/item/weapon/circuitboard/borgupload
-		)
-
 /obj/item/weapon/gripper/no_use //Used when you want to hold and put things in other things, but not able to 'use' the item
 
 /obj/item/weapon/gripper/no_use/attack_self(mob/user as mob)
@@ -532,4 +499,27 @@
 
 	can_hold = list(
 		/obj/item/stack/sheet
+		)
+
+/obj/item/weapon/gripper/no_use/magnetic //No use because they don't need to open held tanks.
+	name = "magnetic gripper"
+	desc = "A simple grasping tool specialized in construction and engineering work."
+	icon_state = "gripper"
+
+	can_hold = list(
+		/obj/item/weapon/cell,
+		/obj/item/weapon/stock_parts,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/circuitboard,
+		/obj/item/weapon/am_containment,
+		/obj/item/device/am_shielding_container
+		)
+
+	blacklist = list(
+		/obj/item/weapon/tank/jetpack,
+		/obj/item/weapon/cell/infinite,
+		/obj/item/weapon/circuitboard/communications,
+		/obj/item/weapon/circuitboard/card,
+		/obj/item/weapon/circuitboard/aiupload,
+		/obj/item/weapon/circuitboard/borgupload
 		)
