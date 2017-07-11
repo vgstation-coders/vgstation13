@@ -2871,6 +2871,22 @@
 				feedback_add_details("admin_secrets_fun_used","PDA")
 				new /datum/event/pda_spam
 
+			if("generic_event")
+				var/answer = alert("Are you sure you want to trigger a custom event?",,"Yes","No")
+				if(answer == "Yes")
+					var/list/potential_events = typesof(/datum/event)
+					potential_events.Remove(/datum/event)
+
+					var/datum/event/chosen = input(usr, "Which event would you like to trigger?", "Event list") as null|anything in potential_events
+
+					if(chosen)
+						answer = alert("Are you sure you want to start the chosen event \"[chosen]\"?",,"Yes","No")
+						if(answer == "Yes")
+							feedback_inc("admin_secrets_fun_used",1)
+							feedback_add_details("admin_secrets_fun_used","[chosen]")
+							new chosen
+							message_admins("[key_name_admin(usr)] triggered random event [chosen].", 1)
+
 			if("carp")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","C")

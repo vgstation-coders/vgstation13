@@ -633,4 +633,17 @@ var/global/list/protected_objects = list(
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine/CheckObject(var/obj/O)
+	if(istype(O, /obj/machinery/vending))
+		return 1
+	..()
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine/Die()
+	for(var/obj/machinery/vending/V in src)
+		V.forceMove(get_turf(src))
+		V.malfunction()
+	..()
+
 /datum/locking_category/mimic
