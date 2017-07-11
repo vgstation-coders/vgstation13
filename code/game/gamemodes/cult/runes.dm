@@ -56,11 +56,11 @@
 			user.whisper("Sas[pick("'","`")]so c'arta forbici!")
 		if(universe.name != "Hell Rising")
 			user.visible_message("<span class='warning'> [user] disappears in a flash of red light!</span>", \
-			"<span class='warning'>You feel as your body gets dragged through the dimension of Nar-Sie!</span>", \
+			"<span class='warning'>You feel a sharp pain as your body gets dragged through the dimension of Nar-Sie!</span>", \
 			"<span class='warning'>You hear a sickening crunch and sloshing of viscera.</span>")
 		else
 			user.visible_message("<span class='warning'> [user] disappears in a flash of red light!</span>", \
-			"<span class='warning'>You feel as your body gets dragged through a tunnel of viscera !</span>", \
+			"<span class='warning'>You feel a sharp pain as your body gets dragged through a tunnel of viscera !</span>", \
 			"<span class='warning'>You hear a sickening crunch and sloshing of viscera.</span>")
 
 		if(istype(src,/obj/effect/rune))
@@ -191,7 +191,6 @@
 		M.visible_message("<span class='warning'>[M] writhes in pain as the markings below \him glow a bloody red.</span>", \
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
-		M.pain_level += 10
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
 			ticker.mode.add_cultist(M.mind)
 			M.mind.special_role = "Cultist"
@@ -530,15 +529,15 @@
 	usr.say("Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!")
 	if (body_to_sacrifice)
 		corpse_to_raise.visible_message("<span class='warning'>[corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
-		"<span class='warning'>Life... I am alive again...</span>", \
+		"<span class='warning'>Life? I'm alive? I live, again!.</span>", \
 		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
 		body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
-		"<span class='warning'>You feel as your blood boils, tearing you apart.</span>", \
-		"<span class='warning'>You hear a thousand voices, all crying in pain.</span>")
+		"<span class='sinister'>You are ingulfed by pain as your blood boils, tearing you apart.</span>", \
+		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
 		body_to_sacrifice.gib()
 	if (cult_round.revivecounter && !body_to_sacrifice)
 		corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
-		"<span class='warning'>Life... I am alive again...</span>", \
+		"<span class='warning'>Life? I'm alive? I live, again!</span>", \
 		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
 		cult_round.revivecounter --
 
