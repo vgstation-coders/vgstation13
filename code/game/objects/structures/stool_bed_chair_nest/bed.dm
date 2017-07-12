@@ -128,7 +128,7 @@
 	anchored = 0
 	var/up_state ="up"
 	var/down_state = "down"
-	var/roller_type = "/obj/item/roller"
+	var/roller_type = /obj/item/roller
 
 	lockflags = DENSE_WHEN_LOCKED
 	lock_type = /datum/locking_category/buckle/bed/roller
@@ -138,7 +138,7 @@
 	desc = "A collapsed roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
-	var/bed_type = "/obj/structure/bed/roller"
+	var/bed_type = /obj/structure/bed/roller
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
 
 /obj/item/roller/attack_self(mob/user)
@@ -233,7 +233,7 @@
 	desc = "A collapsed cyborg hover roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "borgbed_stored"
-	bed_type = "/obj/structure/bed/roller/borg"
+	bed_type = /obj/structure/bed/roller/borg
 
 /obj/structure/bed/roller/borg
 	name = "hover roller bed"
@@ -241,7 +241,7 @@
 	icon_state = "borgbed_down"
 	up_state ="borgbed_up"
 	down_state = "borgbed_down"
-	roller_type = "/obj/item/roller/borg"
+	roller_type = /obj/item/roller/borg
 
 
 /datum/locking_category/buckle/bed
