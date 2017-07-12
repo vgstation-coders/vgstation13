@@ -223,8 +223,9 @@
 	update_icon()
 
 /obj/item/roller_holder/Destroy()
-	qdel(held)
-	held = null
+	if(held)
+		qdel(held)
+		held = null
 	..()
 
 /obj/item/roller/borg
