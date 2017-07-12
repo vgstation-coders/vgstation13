@@ -90,6 +90,20 @@
 /obj/item/weapon/reagent_containers/pill/creatine/New()
 	..()
 	reagents.add_reagent(CREATINE, 50)
+	
+/obj/item/weapon/reagent_containers/pill/laststand
+	name = "Creatine \"Last Stand\" suicide pill"
+	desc = "For when you really want to spend your last moments punching things to death."
+	icon_state = "pill5" //bright red oblong with stripe
+
+/obj/item/weapon/reagent_containers/pill/laststand/New()
+	..()
+	reagents.add_reagent(DEXALINP, 5) //STOP LAYING AROUND
+	reagents.add_reagent(MEDNANOBOTS, 0.4) //GET UP
+	reagents.add_reagent(HYPOZINE, 5) //GO FAST
+	reagents.add_reagent(COMNANOBOTS, 4.6) //FIGHT HARD
+	reagents.add_reagent(OXYCODONE, 5) //NO PAIN
+	reagents.add_reagent(CREATINE, 30) //ONLY FIST
 
 /obj/item/weapon/reagent_containers/pill/antitox
 	name = "Anti-toxins pill"
