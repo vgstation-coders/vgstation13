@@ -37,10 +37,11 @@
 	if(module)
 		module.forceMove(src.module)
 		module.dropped(src)
-		if(isgripper(module_active))
+		if(isgripper(module))
 			var/obj/item/weapon/gripper/G = module
 			G.drop_item(force_drop = 1)
-	hud_used.update_robot_modules_display()
+	if(hud_used)
+		hud_used.update_robot_modules_display()
 	return 1
 
 /mob/living/silicon/robot/proc/uneq_active()
