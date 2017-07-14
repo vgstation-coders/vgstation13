@@ -303,7 +303,7 @@
 				has_tech |= PS
 				return TRUE
 			alreadyhas = "Power Storage"
-			
+
 		if(alreadyhas)
 			to_chat(user, "The holo switchtool already has [alreadyhas] technology!")
 
@@ -355,6 +355,8 @@
 		item_state = "uvsoap"
 	else
 		item_state = "Hswitchtool"
+	if(deployed)
+		deployed.appearance = appearance
 
 	if(istype(loc, /mob))
 		var/mob/M = loc
