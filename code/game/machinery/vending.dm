@@ -224,6 +224,8 @@ var/global/num_vending_terminals = 1
 	for(var/item in products) //We only support the product list for the moment. This means no custom premium/contraband products
 		if(!ispath(item))
 			return TRUE
+	if(!products.len)
+		return TRUE
 
 	return FALSE
 
@@ -2583,9 +2585,7 @@ var/global/num_vending_terminals = 1
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
 	//product_slogans = "Jokes"
-	products = list(
-		/obj/item/clothing/shoes/black = 10,
-		)
+	products = list()
 
 	pack = /obj/structure/vendomatpack/custom
 
