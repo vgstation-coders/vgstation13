@@ -191,7 +191,7 @@
 	if(istype(W,/obj/item/roller_holder))
 		var/obj/item/roller_holder/RH = W
 		if(!RH.held)
-			to_chat(user, "<span class='notice'>You collect the \the [src].</span>")
+			to_chat(user, "<span class='notice'>You collect \the [src].</span>")
 			src.forceMove(RH)
 			RH.held = src
 			RH.update_icon()
