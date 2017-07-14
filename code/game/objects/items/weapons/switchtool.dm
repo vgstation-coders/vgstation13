@@ -135,7 +135,7 @@
 	playsound(get_turf(src), deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	deployed.cant_drop = 1
-	overlays += "holo_[initial(deployed.icon_state)]"
+	overlays += get_module_name(module)
 	w_class = max(w_class, deployed.w_class)
 	update_icon()
 	return TRUE
@@ -334,6 +334,7 @@
 	if(!..())
 		return FALSE
 	set_light(brightness_min)
+	overlays += "holo_[initial(deployed.icon_state)]"
 	if(istype(deployed, /obj/item/device/flashlight))
 		set_light(brightness_max)
 
