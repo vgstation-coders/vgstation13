@@ -135,7 +135,7 @@
 	playsound(get_turf(src), deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	deployed.cant_drop = 1
-	overlays += get_module_name(module)
+	overlays += "holo_[initial(deployed.icon_state)]"
 	w_class = max(w_class, deployed.w_class)
 	update_icon()
 	return TRUE
@@ -314,8 +314,10 @@
 //for the inhand sprite changes
 /obj/item/weapon/switchtool/holo/update_icon()
 	if(deployed)
-		item_state = "holo_[deployed.item_state]"
+		item_state = "holo_[initial(deployed.icon_state)]"
 		deployed.appearance = appearance
+	else
+		item_state = initial(item_state)
 
 	if(istype(loc, /mob))
 		var/mob/M = loc
