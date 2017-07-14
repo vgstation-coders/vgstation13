@@ -225,15 +225,12 @@
 /obj/item/weapon/switchtool/holo
 	name = "holo switchtool"
 	icon_state = "holo_switchtool"
-	item_state = "Hswitchtool"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtools.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtools.dmi')
 	desc = "A switchtool that can take on the form of nearly any tool. Its experimental hardlight emitter requires tech disks to help define its shape."
 	var/brightness_max = 4
 	var/brightness_min = 2
 	deploy_sound = "sound/weapons/switchsound.ogg"
 	undeploy_sound = "sound/weapons/switchsound.ogg"
-	//deploy_sound = "sound/weapons/saberon.ogg"
-	//undeploy_sound = "sound/weapons/saberoff.ogg"
 	light_color =  LIGHT_COLOR_CYAN
 	mech_flags = MECH_SCAN_ILLEGAL
 	removing_item = null
@@ -315,47 +312,9 @@
 #undef PS
 
 //for the inhand sprite changes
-//Big shitty wall of else if quality code
 /obj/item/weapon/switchtool/holo/update_icon()
-	if(istype(deployed, /obj/item/device/flashlight))
-		item_state = "flashlight"
-	else if(istype(deployed, /obj/item/weapon/scalpel))
-		item_state = "scalpel"
-	else if(istype(deployed, /obj/item/weapon/circular_saw))
-		item_state = "circularsaw"
-	else if(istype(deployed, /obj/item/weapon/surgicaldrill))
-		item_state = "drill"
-	else if(istype(deployed, /obj/item/weapon/cautery))
-		item_state = "cautery"
-	else if(istype(deployed, /obj/item/weapon/hemostat))
-		item_state = "hemostat"
-	else if(istype(deployed, /obj/item/weapon/retractor))
-		item_state = "retractor"
-	else if(istype(deployed, /obj/item/weapon/bonesetter))
-		item_state = "bonesetter"
-	else if(istype(deployed, /obj/item/weapon/screwdriver))
-		item_state = "screwdriver"
-	else if(istype(deployed, /obj/item/weapon/wrench))
-		item_state = "wrench"
-	else if(istype(deployed, /obj/item/weapon/wirecutters))
-		item_state = "wirecutters"
-	else if(istype(deployed, /obj/item/weapon/crowbar))
-		item_state = "crowbar"
-	else if(istype(deployed, /obj/item/device/multitool))
-		item_state = "multitool"
-	else if(istype(deployed, /obj/item/weapon/weldingtool))
-		item_state = "weldingtool"
-	else if(istype(deployed, /obj/item/weapon/shield/energy))
-		item_state = "shield"
-	else if(istype(deployed, /obj/item/weapon/melee/energy/sword/activated))
-		item_state = "sword"
-	else if(istype(deployed, /obj/item/weapon/melee/energy/hfmachete/activated))
-		item_state = "sharper sword"
-	else if(istype(deployed, /obj/item/weapon/soap/holo))
-		item_state = "uvsoap"
-	else
-		item_state = "Hswitchtool"
 	if(deployed)
+		item_state = "holo_[deployed.item_state]"
 		deployed.appearance = appearance
 
 	if(istype(loc, /mob))
