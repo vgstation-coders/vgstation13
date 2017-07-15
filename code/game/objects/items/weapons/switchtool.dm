@@ -317,7 +317,7 @@
 		item_state = "holo_[initial(deployed.icon_state)]"
 		deployed.appearance = appearance
 	else
-		item_state = initial(icon_state)
+		item_state = initial(item_state)
 
 	if(istype(loc, /mob))
 		var/mob/M = loc
