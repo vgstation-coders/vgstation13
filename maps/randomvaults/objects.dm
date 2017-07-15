@@ -30,9 +30,9 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
-/area/vault/automap/no_light
+
+/area/vault/automap/light
 	icon_state = "ME_vault_lit"
-	dynamic_lighting = FALSE
 
 /area/vault/icetruck
 
