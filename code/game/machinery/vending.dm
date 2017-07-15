@@ -304,9 +304,12 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.display_color = pick("red", "blue", "green")
+		var/is_custom = FALSE
 		if(check_for_custom_vendor())
+			is_custom = TRUE
 			var/obj/O = R.product_path
 			R.price = O.price
+			R.product_name = "[O.name] (Orig name-[initial(O.name)])"
 		if (hidden)
 			R.category=CAT_HIDDEN
 			hidden_records  += R
@@ -321,7 +324,8 @@ var/global/num_vending_terminals = 1
 			product_records.Add(R)
 
 		var/obj/item/initializer = typepath
-		R.product_name = initial(initializer.name)
+		if(!is_custom)
+			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
 /obj/machinery/vending/proc/get_item_by_type(var/this_type)
