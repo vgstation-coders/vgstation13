@@ -31,8 +31,6 @@
 	new_area.addSorted()
 
 
-/area/vault/automap/light
-	icon_state = "ME_vault_lit"
 
 /area/vault/icetruck
 
