@@ -1922,6 +1922,21 @@
 	var/obj/item/device/camera_film/P = new /obj/item/device/camera_film
 	P.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/slimestop
+	name = "Slime timestop"
+	id = "s_stop"
+	result = null
+	required_reagents = list(PHAZON = 5)
+	result_amount = 1
+	required_container = /obj/item/slime_extract/sepia
+	required_other = 1
+	alert_admins = ALERT_ALL_REAGENTS
+
+/datum/chemical_reaction/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
+	timestop(get_turf(holder.my_atom), 25,5)
+	
 //Pyrite
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
