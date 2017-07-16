@@ -14,6 +14,7 @@ var/global/num_vending_terminals = 1
 	var/display_color = "blue"
 	var/category = CAT_NORMAL//available by default, contraband, or premium (requires a coin)
 	var/subcategory = null
+	var/mini_icon = null
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -304,9 +305,13 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.display_color = pick("red", "blue", "green")
+		var/is_custom = FALSE
 		if(check_for_custom_vendor())
+			is_custom = TRUE
 			var/obj/O = R.product_path
 			R.price = O.price
+			R.product_name = "[O.name]"
+			R.mini_icon = costly_bicon(O)
 		if (hidden)
 			R.category=CAT_HIDDEN
 			hidden_records  += R
@@ -321,7 +326,8 @@ var/global/num_vending_terminals = 1
 			product_records.Add(R)
 
 		var/obj/item/initializer = typepath
-		R.product_name = initial(initializer.name)
+		if(!is_custom)
+			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
 /obj/machinery/vending/proc/get_item_by_type(var/this_type)
@@ -590,7 +596,8 @@ var/global/num_vending_terminals = 1
 	return attack_hand(user)
 
 /obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
-	var/dat = {"<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
+	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
+	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
 		<b>[P.amount]</b> </font>"}
 	if(P.price)
 		dat += " <b>($[P.price])</b>"

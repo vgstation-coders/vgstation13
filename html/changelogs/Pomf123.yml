@@ -1,2 +1,3 @@
 author: Pomf123
-changes: []
+changes:
+- bugfix: Fixed Custom Vending Machines not showing the proper item names, it also shows a mini icon of the item to lower chances of scams by name.
