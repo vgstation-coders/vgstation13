@@ -419,19 +419,6 @@
 				to_chat(user, "<span class='danger'>ERROR. Your [src.name] wasn't designed to handle \the [I].</span>")
 				return
 
-		else if(isAPC(target))
-			var/obj/machinery/power/apc/A = target
-			if(!safety_check(user, A.cell) && (A.opened && A.cell))
-				wrapped = A.cell
-				A.cell.add_fingerprint(user)
-				A.cell.update_icon()
-				A.update_icon()
-				A.cell.loc = src
-				A.cell = null
-				user.visible_message("<span class='danger'>[user] removes the power cell from [A]!</span>", "You remove the power cell.")
-				update_icon()
-				return
-
 		else if(isrobot(target))
 			var/mob/living/silicon/robot/A = target
 			if(!safety_check(user, A.cell) && (A.opened && A.cell))
