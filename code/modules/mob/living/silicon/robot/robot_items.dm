@@ -334,7 +334,7 @@
 		var/image/olay = image("icon" = wrapped.icon, "icon_state" = wrapped.icon_state, "layer" = 30 + wrapped.layer, "pixel_x" = null, "pixel_y" = null)
 		olay.overlays = wrapped.overlays
 		olay.appearance_flags = RESET_ALPHA
-		alpha = 128 //todo: add half-transparent define
+		alpha = SEMI_TRANSPARENT
 		overlays += olay
 	else
 		alpha = initial(alpha)
