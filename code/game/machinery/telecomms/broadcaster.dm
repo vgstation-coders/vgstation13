@@ -123,6 +123,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	machinetype = 6
 	heatgen = 0
 	var/intercept = 0 // if nonzero, broadcasts all messages to syndicate channel
+	var/syndi_allinone = 0
+	var/raider_allinone = 0
 
 /obj/machinery/telecomms/allinone/receive_signal(datum/signal/signal)
 #ifdef SAY_DEBUG
@@ -151,7 +153,14 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		/* ###### Broadcast a message using signal.data ###### */
 
 
-		if(signal.frequency == SYND_FREQ) // if syndicate broadcast, just
+
+		if(signal.frequency == SYND_FREQ && syndi_allinone == 1) // if syndicate broadcast, just
+			var/datum/speech/speech = getFromPool(/datum/speech)
+			speech.from_signal(signal)
+			/* ###### Broadcast a message using signal.data ###### */
+			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], list(0, z))
+
+		if(signal.frequency == RAID_FREQ && raider_allinone == 1) // if raider broadcast, just
 			var/datum/speech/speech = getFromPool(/datum/speech)
 			speech.from_signal(signal)
 			/* ###### Broadcast a message using signal.data ###### */
@@ -316,6 +325,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 					blackbox.msg_ert += blackbox_msg
 				if(1213)
 					blackbox.msg_syndicate += blackbox_msg
+				if(1215)
+					blackbox.msg_raider += blackbox_msg
 				if(1349)
 					blackbox.msg_service += blackbox_msg
 				if(1347)
