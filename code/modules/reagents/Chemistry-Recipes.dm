@@ -873,6 +873,31 @@
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
 	result_amount = 1
 
+//Botany chemicals
+
+/datum/chemical_reaction/eznutrient
+	name = "E-Z-Nutrient"
+	id = EZNUTRIENT
+	result = EZNUTRIENT
+	required_reagents = list(NITROGEN = 1, PHOSPHORUS = 1, POTASSIUM = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/robustharvest
+	name = "Robust Harvest"
+	id = ROBUSTHARVEST
+	result = ROBUSTHARVEST
+	required_reagents = list(EZNUTRIENT = 1)
+	required_catalysts = list(FORMIC_ACID = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/left4zed
+	name = "Left 4 Zed"
+	id = LEFT4ZED
+	result = LEFT4ZED
+	required_reagents = list(EZNUTRIENT = 1)
+	required_catalysts = list(RADIUM = 5)
+	result_amount = 1	
+	
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
