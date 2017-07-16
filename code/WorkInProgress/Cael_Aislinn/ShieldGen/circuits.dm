@@ -16,13 +16,15 @@
 							"/obj/item/weapon/stock_parts/console_screen" = 1,
 							"/obj/item/stack/cable_coil" = 5)
 
+							
+							
 /obj/item/weapon/circuitboard/shield_gen_ex/attackby(var/obj/item/weapon/G, var/mob/user)
 	if(issolder(G))
 		var/obj/item/weapon/solder/S = G
 		if(S.remove_fuel(1,user))
 			to_chat(user, "<span class = 'notice'>You set the shield generator circuit to project normal shields.</span>")
-			qdel(src)
-			new /obj/item/weapon/circuitboard/shield_gen
+			new /obj/item/weapon/circuitboard/shield_gen(user.loc)
+			qdel(src)	
 
 ////////////////////////////////////////
 // Shield Generator
@@ -46,8 +48,8 @@
 		var/obj/item/weapon/solder/S = G
 		if(S.remove_fuel(1,user))
 			to_chat(user, "<span class = 'notice'>You set the shield generator circuit to project external hull shields.</span>")
+			new /obj/item/weapon/circuitboard/shield_gen_ex(user.loc)
 			qdel(src)
-			new /obj/item/weapon/circuitboard/shield_gen_ex
 
 ////////////////////////////////////////
 // Shield Capacitor
