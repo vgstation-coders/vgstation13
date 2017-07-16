@@ -45,7 +45,7 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	var/obj/machinery/vending/V = holder
 	switch(index)
 		if(VENDING_WIRE_THROW)
-			V.shoot_inventory = !V.shoot_inventory
+			V.shoot_inventory = 0
 		if(VENDING_WIRE_CONTRABAND)
 			V.extended_inventory = !V.extended_inventory
 		if(VENDING_WIRE_ELECTRIFY)
@@ -57,7 +57,7 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	var/obj/machinery/vending/V = holder
 	switch(index)
 		if(VENDING_WIRE_THROW)
-			V.shoot_inventory = !mended
+			V.shoot_inventory = 0
 		if(VENDING_WIRE_CONTRABAND)
 			V.extended_inventory = 0
 		if(VENDING_WIRE_ELECTRIFY)

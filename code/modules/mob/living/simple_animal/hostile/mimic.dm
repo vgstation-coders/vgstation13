@@ -632,5 +632,43 @@ var/global/list/protected_objects = list(
 				L.Knockdown(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
+#define MIN_SAFETY_TIME 3 SECONDS
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine
+	var/obj/machinery/vending/rogue_machine
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine/CheckObject(var/obj/O)
+	if(istype(O, /obj/machinery/vending))
+		return 1
+	..()
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine/AttackingTarget()
+	if(rogue_machine && rogue_machine.slogan_list.len)
+		say("[pick(rogue_machine.slogan_list)]")
+	..()
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine/attackby(obj/W, mob/user)
+	..()
+
+	if(istype(W, /obj/item/weapon/spacecash) && !friends.Find(user))
+		var/obj/item/weapon/spacecash/dosh = W
+		user.drop_item(dosh, force_drop = 1)
+		var/safety_time = dosh.worth * dosh.amount
+		if(safety_time > MIN_SAFETY_TIME)
+			say("Thank you for your purchase, [user]. You shall be exempt from forced advertising for [safety_time/10] seconds")
+			friends.Add(user)
+			spawn(safety_time)
+				friends.Remove(user)
+		else
+			say("<span class='warning'>Insufficient funds detected. More monetary compensation required!</span>")
+
+		qdel(dosh)
+
+/mob/living/simple_animal/hostile/mimic/copy/vending_machine/Die()
+	if(rogue_machine)
+		rogue_machine.forceMove(get_turf(src))
+		rogue_machine.malfunction()
+	..()
+
 
 /datum/locking_category/mimic

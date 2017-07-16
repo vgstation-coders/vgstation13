@@ -1021,26 +1021,26 @@ var/global/num_vending_terminals = 1
 
 	if (extended_inventory)
 		throwable += hidden_records
+	if(throwable.len)
+		while (tries)
+			R = pick(throwable)
+			dump_path = R.product_path
 
-	while (tries)
-		R = pick(throwable)
-		dump_path = R.product_path
+			if (R.amount <= 0 || !dump_path)
+				tries--
+				continue
 
-		if (R.amount <= 0 || !dump_path)
-			tries--
-			continue
+			R.amount--
+			throw_item = new dump_path(src.loc)
 
-		R.amount--
-		throw_item = new dump_path(src.loc)
+			if (!throw_item)
+				return 0
 
-		if (!throw_item)
-			return 0
+			spawn(0)
+				throw_item.throw_at(target, 16, 3)
 
-		spawn(0)
-			throw_item.throw_at(target, 16, 3)
-
-		src.visible_message("<span class='danger'>[src] launches [throw_item.name] at [target.name]!</span>")
-		return 1
+			src.visible_message("<span class='danger'>[src] launches [throw_item.name] at [target.name]!</span>")
+			return 1
 
 	return 0
 
