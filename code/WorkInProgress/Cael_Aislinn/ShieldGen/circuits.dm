@@ -19,8 +19,8 @@
 							
 							
 /obj/item/weapon/circuitboard/shield_gen_ex/attackby(var/obj/item/weapon/G, var/mob/user)
-	var/obj/item/weapon/solder/S = G
-	if(isturf(src.loc))
+	if(issolder(G))
+		var/obj/item/weapon/solder/S = G
 		if(S.remove_fuel(1,user))
 			to_chat(user, "<span class = 'notice'>You set the shield generator circuit to project normal shields.</span>")
 			new /obj/item/weapon/circuitboard/shield_gen(user.loc)
