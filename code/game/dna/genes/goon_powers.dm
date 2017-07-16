@@ -169,7 +169,7 @@
 											"<span class='notice'>A cloud of fine ice crystals cover your [H.head]'s visor.</span>")
 					else
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
-											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!.</span>")
+											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!</span>")
 						H.bodytemperature = max(T0C + 31, H.bodytemperature - 3)
 						H.adjustFireLoss(5)
 		if(!handle_suit)
@@ -458,7 +458,7 @@
 							spaced = 0
 							break
 				if(spaced)
-					to_chat(target, "<span class='warning'>There is nothing to leap off of!.</span>")
+					to_chat(target, "<span class='warning'>There is nothing to leap off of!</span>")
 					return
 
 			if(target.restrained())//Why being pulled while cuffed prevents you from moving
