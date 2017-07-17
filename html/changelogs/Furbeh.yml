@@ -1,4 +1,4 @@
 author: Furbeh
 delete-after: false
 changes: 
-- tweak: Multiple wizards can spawn at roundstart during a Wizard round, proportional to number of players
+- rscadd: Multiple wizards can spawn at roundstart during a Wizard round, proportional to number of players
