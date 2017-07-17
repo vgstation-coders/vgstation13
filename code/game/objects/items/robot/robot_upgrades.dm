@@ -227,37 +227,37 @@
 	modules_to_add = list(/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg,/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/storage/bag/food/borg)
 
 //Grippers. All there so admins can bus them if they want/we can actually testmerge on nexis serbia.
-/obj/item/borg/upgrade/magnetic_gripper
+/obj/item/borg/upgrade/service_gripper
 	name = "service gripper module board"
-	desc = "Used to give a service cyborg an service gripper."
+	desc = "Used to give a service cyborg a service gripper."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/butler)
 	modules_to_add = list(/obj/item/weapon/gripper/service)
 
 /obj/item/borg/upgrade/magnetic_gripper
 	name = "magnetic gripper module board"
-	desc = "Used to give a engineering cyborg an magnetic gripper."
+	desc = "Used to give a engineering cyborg a magnetic gripper."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
 
-/obj/item/borg/upgrade/magnetic_gripper
+/obj/item/borg/upgrade/sheet_inserter
 	name = "sheet inserter module board"
-	desc = "Used to give a supply cyborg an sheet inserter."
+	desc = "Used to give a supply cyborg a sheet inserter."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/miner)
 	modules_to_add = list(/obj/item/weapon/gripper/no_use/inserter)
 
 /obj/item/borg/upgrade/organ_gripper
 	name = "organ gripper module board"
-	desc = "Used to give a medical cyborg an organ gripper."
+	desc = "Used to give a medical cyborg a organ gripper."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/medical)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
 
 /obj/item/borg/upgrade/chemistry_gripper
 	name = "chemistry gripper module board"
-	desc = "Used to give a medical cyborg an chemistry gripper."
+	desc = "Used to give a medical cyborg a chemistry gripper."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/medical)
 	modules_to_add = list(/obj/item/weapon/gripper/chemistry)
