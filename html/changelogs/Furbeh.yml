@@ -1,4 +1,3 @@
 author: Furbeh
+changes: []
 delete-after: false
-changes: 
-- rscadd: Multiple wizards can spawn at roundstart during a Wizard round, proportional to number of players

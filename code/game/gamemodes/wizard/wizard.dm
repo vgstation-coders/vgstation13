@@ -28,7 +28,7 @@
 
 /datum/game_mode/wizard/announce()
 	to_chat(world, "<B>The current game mode is - Wizard!</B>")
-	to_chat(world, "<B>There are a number of <span class='danger'>SPACE WIZARDS on the station. You can't let them achieve their objective!</span>")
+	to_chat(world, "<B>There are several <span class='danger'>SPACE WIZARDS on the station. You can't let them achieve their objectives!</span>")
 
 /datum/game_mode/wizard/pre_setup()
 	var/list/datum/mind/possible_wizards = get_players_for_role(ROLE_WIZARD)
@@ -45,6 +45,7 @@
 		var/datum/mind/wizard = pick(possible_wizards)
 		possible_wizards -= wizard
 		if(wizard.special_role || (mixed && (wizard in ticker.mode.modePlayer)))
+			j--
 			continue
 		wizards += wizard
 		modePlayer += wizard
