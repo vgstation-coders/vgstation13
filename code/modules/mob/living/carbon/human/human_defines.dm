@@ -70,6 +70,7 @@
 	var/list/bad_external_organs = list()// organs we check until they are good.
 
 	var/xylophone = 0 //For the spoooooooky xylophone cooldown
+	var/lastpuke = 0
 
 	var/mob/remoteview_target = null
 	var/hand_blood_color
