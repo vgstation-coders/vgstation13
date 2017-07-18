@@ -155,10 +155,9 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 // Returns 1 if patient has virus2 that medHUDs would pick up.
 // Otherwise returns 0
 /proc/has_recorded_virus2(var/mob/living/carbon/patient)
-	if(!foundVirus)
-		for (var/ID in patient.virus2)
-			if (ID in virusDB)
-				return 1
+	for (var/ID in patient.virus2)
+		if (ID in virusDB)
+			return 1
 	return 0
 
 // This one doesn't really belong here, but old disease code has no helpers, so
