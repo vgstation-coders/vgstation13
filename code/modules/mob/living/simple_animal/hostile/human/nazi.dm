@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/humanoid/nazi
-	name = "Nazi"
+	name = "\improper Nazi"
 	desc = "Sieg Heil!"
 	icon = 'icons/mob/hostile_humanoid.dmi'
 	icon_state = "nazi"
@@ -101,7 +101,7 @@
 ///////////////////////////////////////////////////////////////////SOLDIER///////////
 
 /mob/living/simple_animal/hostile/humanoid/nazi/soldier
-	name = "Nazi Soldier"
+	name = "\improper Nazi Soldier"
 
 	icon_state = "nazisoldier"
 	icon_living = "nazisoldier"
@@ -177,7 +177,7 @@
 ///////////////////////////////////////////////////////////////////OFFICER///////////
 
 /mob/living/simple_animal/hostile/humanoid/nazi/officer
-	name = "Nazi Officer"
+	name = "\improper Nazi Officer"
 
 	corpse = /obj/effect/landmark/corpse/nazi/officer
 
@@ -221,7 +221,7 @@
 ///////////////////////////////////////////////////////////////////SPACE TROOPER///////////
 
 /mob/living/simple_animal/hostile/humanoid/nazi/spacetrooper
-	name = "Nazi Trooper"
+	name = "\improper Nazi Trooper"
 
 	corpse = /obj/effect/landmark/corpse/nazi/spacetrooper
 
@@ -364,6 +364,7 @@
 	return 1
 
 /mob/living/simple_animal/hostile/mechahitler/Die()
+	set waitfor = 1
 	dir = 2
 	say("Eva, auf wiedersehen!")
 	sleep(10)
