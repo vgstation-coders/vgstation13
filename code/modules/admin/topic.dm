@@ -3000,14 +3000,7 @@
 					to_chat(world, "<font size='10' color='red'><b>NOT THE BEES!</b></font>")
 					world << sound('sound/effects/bees.ogg')
 					for(var/mob/living/M in player_list)
-						var/mob/living/simple_animal/bee/BEE = new(get_turf(M))
-						for (var/i = 1 to 16)
-							var/datum/bee/B = new()
-							B.toxic = 5
-							B.mut = 2
-							B.state = BEE_OUT_FOR_ENEMIES
-							BEE.addBee(B)
-						BEE.updateState = 1
+						var/mob/living/simple_animal/bee/swarm/BEE = new(get_turf(M))
 						BEE.target = M
 
 			if("virus")
@@ -3394,6 +3387,38 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+			if("vermin_infestation")
+				var/list/locations = list(
+					"RANDOM" = null,
+					"kitchen" = LOC_KITCHEN,
+					"atmospherics" = LOC_ATMOS,
+					"incinerator" = LOC_INCIN,
+					"chapel" = LOC_CHAPEL,
+					"library" = LOC_LIBRARY,
+					"vault" = LOC_VAULT,
+					"technical storage" = LOC_TECH,
+					)
+				var/list/vermins = list(
+					"RANDOM" = null,
+					"mice" = VERM_MICE,
+					"lizards" = VERM_LIZARDS,
+					"spiders" = VERM_SPIDERS,
+					"slimes" = VERM_SLIMES,
+					"bats" = VERM_BATS,
+					"borers" = VERM_BORERS,
+					"mimics" = VERM_MIMICS,
+					"roaches" = VERM_ROACHES,
+					"gremlins" = VERM_GREMLINS,
+					"bees" = VERM_BEES,
+					)
+				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
+				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","VI")
+				message_admins("[key_name_admin(usr)] has triggered an infestation of vermins.", 1)
+				var/datum/event/infestation/infestation_event = new()
+				infestation_event.override_location = ol
+				infestation_event.override_vermin = ov
 			if("hostile_infestation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")

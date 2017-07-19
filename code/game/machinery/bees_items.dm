@@ -35,7 +35,8 @@
 			for (var/datum/bee/BEES in B.bees)
 				caught_bees.Add(BEES)
 				BEES.home = null
-				B.home.bees_outside_hive.Remove(BEES)
+				if (B.home)
+					B.home.bees_outside_hive.Remove(BEES)
 			qdel(B)
 			B = null
 			user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the becalmed bees.</span>")

@@ -1,7 +1,5 @@
 //http://www.youtube.com/watch?v=-1GadTfGFvU
 
-#define HONEYCOMB_COST 15
-
 /obj/machinery/apiary
 	name = "apiary tray"
 	icon = 'icons/obj/hydroponics.dmi'
@@ -10,7 +8,7 @@
 	anchored = 1
 	var/nutrilevel = 0
 	var/yieldmod = 1
-	var/mut = 1
+	var/damage = 1
 	var/toxic = 0
 
 	var/lastcycle = 0
@@ -18,15 +16,17 @@
 	var/beezeez = 0
 	var/list/pollen = list()
 
-	var/list/queen_bees_inside = 0
-	var/list/worker_bees_inside = 0
+	var/queen_bees_inside = 0
+	var/worker_bees_inside = 0
 	var/list/bees_outside_hive = list()
 
 	var/hydrotray_type = /obj/machinery/portable_atmospherics/hydroponics
 
 	var/obj/item/weapon/reagent_containers/glass/consume = null
 
-	machine_flags = FIXED2WORK | WRENCHMOVE
+	var/wild = 0
+
+	machine_flags = WRENCHMOVE
 
 /obj/machinery/apiary/New()
 	..()
@@ -71,9 +71,18 @@
 		if(90 to INFINITY)
 			to_chat(user, "<span class='info'>It's full of honey!</span>")
 
+/obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group || (height==0))
+		return 1
+
+	if(istype(mover) && mover.checkpass(PASSTABLE))
+		return 1
+	else
+		return 0
+
 /obj/machinery/apiary/bullet_act(var/obj/item/projectile/Proj) //Works with the Somatoray to modify plant variables.
 	if(istype(Proj ,/obj/item/projectile/energy/floramut))
-		mut++
+		damage = round(rand(0,3))//0, 1, or 2 brute damage per stings...per bee in a swarm
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(!yieldmod)
 			yieldmod += 1
@@ -87,6 +96,8 @@
 
 /obj/machinery/apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
+		return
+	if (wild)
 		return
 	if(istype(O, /obj/item/queen_bee))
 		if(user.drop_item(O))
@@ -249,22 +260,44 @@
 		queen_bees_inside--
 		lastBees.addBee(new/datum/bee/queen_bee(src))
 
-/obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))
-		return 1
-
-	if(istype(mover) && mover.checkpass(PASSTABLE))
-		return 1
-	else
+/obj/machinery/apiary/proc/exile_swarm(var/obj/machinery/apiary/A)
+	if (A == src)
 		return 0
+	if (A.queen_bees_inside > 0 || is_type_in_list(/datum/bee/queen_bee,A.bees_outside_hive))
+		return 0
+	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
+	var/datum/bee/queen_bee/new_queen = new(src)
+	queen_bees_inside--
+	B_mob.addBee(new_queen)
+	for (var/i = 1 to 10)
+		var/datum/bee/B = new(src)
+		B_mob.addBee(B)
+		worker_bees_inside--
+	new_queen.setHome(A)
+	return 1
+
+/obj/machinery/apiary/proc/angry_swarm(var/mob/M = null)
+	for(var/datum/bee/B in bees_outside_hive)
+		B.angerAt(M)
+
+	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), get_turf(src), src)
+	for (var/i=1 to worker_bees_inside)
+		var/datum/bee/B = new(src)
+		B_mob.addBee(B)
+		worker_bees_inside--
+		bees_outside_hive.Add(B)
+		B.angerAt(M)
+	B_mob.update_icon()
+
 
 /obj/machinery/apiary/process()
-	if(world.time > (lastcycle + cycledelay))
+	if(world.time > (lastcycle + cycledelay))//about 10 seconds by default
 		lastcycle = world.time
-		if(!queen_bees_inside && !worker_bees_inside)
+
+		if(!queen_bees_inside && !worker_bees_inside)//if the apiary is empty, let's not waste time processing it
 			return
 
-		//handle beezeez
+		//HANDLE BEEZEEZ
 		if(beezeez > 0)
 			beezeez -= 1
 
@@ -273,7 +306,7 @@
 			if(toxic > 0)
 				toxic = max(0, toxic - 1)
 
-		//handle nutrients
+		//HANDLE NUTRILEVEL
 		nutrilevel -= worker_bees_inside / 20 + queen_bees_inside /4 + bees_outside_hive.len / 10 //Bees doing work need more nutrients
 
 		nutrilevel += 2 * reagents.trans_to(consume, reagents.total_volume * 2 / 100)
@@ -284,14 +317,19 @@
 				if (R == NUTRIMENT) continue
 				reagents.del_reagent(R.id,update_totals=0)
 
-		// There's currently no queen in the hive, and we've got some spare royal jelly, let's make a new queen
+		nutrilevel = min(max(nutrilevel,-10),100)
+
+
+		//PRODUCING QUEEN BEES
 		if(reagents.get_reagent_amount(ROYALJELLY) >= 5 && nutrilevel > 10 && queen_bees_inside <= 0 && worker_bees_inside > 1)
 			queen_bees_inside++
 			reagents.remove_reagent(ROYALJELLY, 5)
 			worker_bees_inside--
 
-		if(nutrilevel > 10 && queen_bees_inside > 0 && worker_bees_inside < 20)// We got a bunch of nutrients and a queen is here, let's make more bees
-			worker_bees_inside++
+
+		//PRODUCING WORKER BEES
+		if(nutrilevel > 10 && queen_bees_inside > 0 && worker_bees_inside < 20)
+			worker_bees_inside += queen_bees_inside
 		else if (nutrilevel < -5 && worker_bees_inside >= 10)// We're getting in dire need of nutrients, let's starve bees so others can survive
 			nutrilevel += 3
 			worker_bees_inside--
@@ -300,11 +338,8 @@
 				var/datum/bee/B = pick(bees_outside_hive)
 				B.homeCall()
 
-		nutrilevel = min(max(nutrilevel,-10),100)
 
-
-		//handle toxins
-
+		//HANDLE TOXICITY
 		var/list/toxic_reagents = list(
 			TOXIN = 2,
 			STOXIN = 1,
@@ -330,6 +365,8 @@
 		for(var/datum/reagent/R in consume.reagents.reagent_list)
 			if (toxic_reagents.Find(R.id))
 				toxic += R.volume * toxic_reagents[R.id]
+			if (R.id == MUTAGEN)
+				damage = round(rand(0,3))
 
 		if(toxic > 0)
 			toxic = max(0,toxic-0.1)
@@ -364,33 +401,98 @@
 
 		consume.reagents.clear_reagents()
 
-/obj/machinery/apiary/proc/exile_swarm(var/obj/machinery/apiary/A)
-	if (A == src)
-		return 0
-	if (A.queen_bees_inside > 0 || is_type_in_list(/datum/bee/queen_bee,A.bees_outside_hive))
-		return 0
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
-	var/datum/bee/queen_bee/new_queen = new(src)
-	queen_bees_inside--
-	B_mob.addBee(new_queen)
-	for (var/i = 1 to 10)
-		var/datum/bee/B = new(src)
-		B_mob.addBee(B)
-		worker_bees_inside--
-	new_queen.setHome(A)
-	return 1
+///////////////////////////WILD BEEHIVES////////////////////////////
 
-/obj/machinery/apiary/proc/angry_swarm(var/mob/M = null)
-	for(var/datum/bee/B in bees_outside_hive)
-		B.angerAt(M)
+/obj/machinery/apiary/wild
+	name = "angry-bee hive"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "apiary-wild"
+	density = 1
+	anchored = 1
+	nutrilevel = 100
+	damage = 1.5
+	toxic = 2.5
 
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), get_turf(src), src)
-	for (var/i=1 to worker_bees_inside)
-		var/datum/bee/B = new(src)
-		B_mob.addBee(B)
-		worker_bees_inside--
-		bees_outside_hive.Add(B)
-		B.angerAt(M)
-	B_mob.update_icon()
+	cycledelay = 50
 
-#undef HONEYCOMB_COST
+	queen_bees_inside = 1
+	worker_bees_inside = 20
+	wild = 1
+
+	var/health = 100
+
+/obj/machinery/apiary/wild/New()
+	..()
+	reagents.add_reagent(ROYALJELLY,5)
+	reagents.add_reagent(HONEY,75)
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(SUGAR, 16)
+	update_icon()
+
+
+/obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
+	..()
+	if(P.damage && P.damtype != HALLOSS)
+		health -= P.damage
+		updateHealth()
+
+
+/obj/machinery/apiary/wild/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(..())
+		return
+	if(istype(O, /obj/item/queen_bee))
+		to_chat(user, "<span class='warning'>This type of bee hive isn't fit for domesticated bees.</span>")
+	else if(istype(O, /obj/item/beezeez))
+		to_chat(user, "<span class='warning'>Don't you think they're energetic enough?</span>")
+	else if(O.force)
+		user.delayNextAttack(10)
+		if(queen_bees_inside || worker_bees_inside)
+			to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
+			angry_swarm(user)
+
+		playsound(get_turf(src), O.hitsound, 50, 1, -1)
+		health -= O.force
+		updateHealth()
+
+/obj/machinery/apiary/wild/proc/updateHealth()
+	if(health <= 0)
+		visible_message("<span class='notice'>\The [src] falls apart.</span>")
+
+		if (queen_bees_inside || worker_bees_inside)
+			empty_beehive()
+
+		for (var/datum/bee/B in bees_outside_hive)
+			B.home = null
+
+		harvest_honeycombs()
+
+		qdel(src)
+
+/obj/machinery/apiary/wild/process()
+	if(world.time > (lastcycle + cycledelay))
+		lastcycle = world.time
+
+		if(!queen_bees_inside && !worker_bees_inside)
+			return
+
+		//PRODUCING WORKER BEES
+		if(worker_bees_inside < 20)
+			worker_bees_inside += queen_bees_inside
+
+		//making noise
+		if(prob(10))
+			playsound(get_turf(src), 'sound/effects/bees.ogg', min(20+(reagents.total_volume),100), 1)
+
+		//sending out bees to KILL
+		if(worker_bees_inside >= 10 && bees_outside_hive.len < 15)
+			var/turf/T = get_turf(src)
+			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/datum/bee/B = new(src)
+			worker_bees_inside--
+			bees_outside_hive.Add(B)
+			B_mob.addBee(B)
+			B.angerAt()
+
+/obj/machinery/apiary/wild/update_icon()
+	overlays.len = 0
+	return
