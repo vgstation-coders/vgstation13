@@ -674,6 +674,12 @@ SEE_PIXELS	256
 #define HOSTILE_STANCE_ATTACKING 4
 #define HOSTILE_STANCE_TIRED 5
 
+#define BEE_ROAMING 0
+#define BEE_OUT_FOR_PLANTS 1
+#define BEE_OUT_FOR_ENEMIES 2
+#define BEE_HEADING_HOME 3
+#define BEE_SWARM 4
+
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
 
 //Damage things

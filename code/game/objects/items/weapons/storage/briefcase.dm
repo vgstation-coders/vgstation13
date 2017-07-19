@@ -145,16 +145,19 @@
 
 /obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
 	if(!released)
-		release()
+		release(user)
 	..()
 
-/obj/item/weapon/storage/briefcase/bees/proc/release()
-	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
-	var/mob/living/simple_animal/bee/BEE = new(get_turf(src))
-	BEE.strength = 20
-	BEE.toxic = 5
-	BEE.mut = 2
-	BEE.feral = 25
-	BEE.icon_state = "bees_swarm-feral"
-	BEE.newTarget()
+/obj/item/weapon/storage/briefcase/proc/hit_effect(var/mob/living/M, var/mob/living/user)
+	return
+
+/obj/item/weapon/storage/briefcase/bees/hit_effect(var/mob/living/M, var/mob/living/user)
+	if(!released)
+		release(M)
+
+/obj/item/weapon/storage/briefcase/bees/proc/release(var/mob/user)
 	released = TRUE
+	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
+	var/mob/living/simple_animal/bee/swarm/BEES = new(get_turf(src))
+	BEES.forceMove(user.loc)
+	BEES.target = user

@@ -13,7 +13,7 @@
 	item_state = "bee_net"
 	w_class = W_CLASS_MEDIUM
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/beekeeping.dmi', "right_hand" = 'icons/mob/in-hand/right/beekeeping.dmi')
-	var/caught_bees = 0
+	var/list/caught_bees = list()
 
 /obj/item/weapon/bee_net/examine(mob/user)
 	..()
@@ -31,14 +31,17 @@
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
 		caught = 1
-		if(B.feral < 0)
-			caught_bees += B.strength
+		if(B.calmed > 0 || (B.state != BEE_OUT_FOR_ENEMIES && prob(max(0,100-B.bees.len*4))))
+			for (var/datum/bee/BEES in B.bees)
+				caught_bees.Add(BEES)
+				BEES.home = null
+				B.home.bees_outside_hive.Remove(BEES)
 			qdel(B)
 			B = null
 			user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the becalmed bees.</span>")
 		else
 			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
-			B.feral = 5
+			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = user
 	if(!caught)
 		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
@@ -48,14 +51,14 @@
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
 		caught = 1
-		if(B.feral < 0)
-			caught_bees += B.strength
+		if(B.calmed > 0)
+			caught_bees += B.bees.len
 			qdel(B)
 			B = null
 			user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the becalmed bees.</span>")
 		else
 			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
-			B.feral = 5
+			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = user
 	if(!caught)
 		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
@@ -68,21 +71,25 @@
 	if(iscarbon(usr))
 		M = usr
 
-	while(caught_bees > 0)
+	while(caught_bees.len > 0)
 		//release a few super massive swarms
-		while(caught_bees > 5)
+		while(caught_bees.len > 5)
 			var/mob/living/simple_animal/bee/B = new(src.loc)
-			B.feral = 5
+			for (var/i = 1 to 5)
+				var/datum/bee/BEE = pick(caught_bees)
+				caught_bees -= BEE
+				BEE.state = BEE_OUT_FOR_ENEMIES
+				B.addBee(BEE)
 			B.target = M
-			B.strength = 6
-			B.icon_state = "bees_swarm"
-			caught_bees -= 6
+
 
 		//what's left over
 		var/mob/living/simple_animal/bee/B = new(src.loc)
-		B.strength = caught_bees
-		B.icon_state = "bees[B.strength]"
-		B.feral = 5
+		for (var/i = 1 to caught_bees.len)
+			var/datum/bee/BEE = pick(caught_bees)
+			caught_bees -= BEE
+			BEE.state = BEE_OUT_FOR_ENEMIES
+			B.addBee(BEE)
 		B.target = M
 
 		caught_bees = 0
@@ -123,6 +130,14 @@
 	description = "A golden yellow syrup, loaded with sugary sweetness."
 	color = "#FEAE00"
 	alpha = 200
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+
+/datum/reagent/honey/royal_jelly
+	name = "Royal Jelly"
+	id = ROYALJELLY
+	description = "A pale yellow liquid that is both spicy and acidic, yet also sweet."
+	color = "#FFDA6A"
+	alpha = 220
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 
 /datum/reagent/honey/on_mob_life(var/mob/living/M as mob)

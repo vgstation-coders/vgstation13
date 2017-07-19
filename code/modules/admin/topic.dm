@@ -3001,12 +3001,14 @@
 					world << sound('sound/effects/bees.ogg')
 					for(var/mob/living/M in player_list)
 						var/mob/living/simple_animal/bee/BEE = new(get_turf(M))
-						BEE.strength = 16
-						BEE.toxic = 5
-						BEE.mut = 2
-						BEE.feral = 25
+						for (var/i = 1 to 16)
+							var/datum/bee/B = new()
+							B.toxic = 5
+							B.mut = 2
+							B.state = BEE_OUT_FOR_ENEMIES
+							BEE.addBee(B)
+						BEE.updateState = 1
 						BEE.target = M
-						BEE.icon_state = "bees_swarm-feral"
 
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
