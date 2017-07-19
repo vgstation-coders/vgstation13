@@ -429,7 +429,7 @@
 		//REACHING FOR MOBS
 		if(state == BEE_OUT_FOR_ENEMIES)
 			var/turf/target_turf = null
-			if(target && target in view(src,7) && target.stat != DEAD)
+			if(target && (target in view(src,7)) && target.stat != DEAD)
 				target_turf = get_turf(target)
 				wander = 0
 			else
@@ -438,7 +438,7 @@
 				for(var/mob/living/G in view(src,7))
 					if (istype(G,/mob/living/simple_animal/bee))
 						var/mob/living/simple_animal/bee/B = G
-						if (B.home == home || (B.home.wild && home.wild))//we'll allow bees to fight bees from other hives, unless they're both from wild hives
+						if (B.home == home || (home && B.home && B.home.wild && home.wild))//we'll allow bees to fight bees from other hives, unless they're both from wild hives
 							continue
 					if (G.flags & INVULNERABLE) continue
 					if (G.stat != DEAD)

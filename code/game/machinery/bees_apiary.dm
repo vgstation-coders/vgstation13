@@ -37,6 +37,8 @@
 /obj/machinery/apiary/Destroy()
 	for (var/datum/bee/B in bees_outside_hive)
 		B.home = null
+		if (B.mob)
+			B.mob.home = null
 	..()
 
 /obj/machinery/apiary/update_icon()
@@ -373,13 +375,13 @@
 
 		to_chat(world,"toxicity = [toxic]")
 
-		//making noise
+		//NOISE
 		if(prob(2))
 			playsound(get_turf(src), 'sound/effects/bees.ogg', min(20+(reagents.total_volume),100), 1)
 
 		update_icon()
 
-		//sending out bees to pollinate
+		//SENDING OUT BEES TO POLLINATE
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 11)
 			var/turf/T = get_turf(src)
 			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
