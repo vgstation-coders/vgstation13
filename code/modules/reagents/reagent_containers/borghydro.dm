@@ -97,7 +97,7 @@
 	..()
 	var/contents_count = 0
 	for(var/datum/reagents/reagents in reagent_list)
-		to_chat(user, "<span class='info'>It's currently has [reagents.total_volume] units of [reagent_ids[++contents_count]] stored.</span>")
+		to_chat(user, "<span class='info'>It currently has [reagents.total_volume] units of [reagent_ids[++contents_count]] stored.</span>")
 	to_chat(user, "<span class='info'>It's currently producing '[reagent_ids[mode]]'.</span>")
 
 /obj/item/weapon/reagent_containers/borghypo/upgraded

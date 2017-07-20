@@ -4,7 +4,7 @@ client/proc/ZoneTick()
 
 	var/result = air_master.Tick()
 	if(result)
-		to_chat(src, "Sucessfully Processed.")
+		to_chat(src, "Successfully processed.")
 
 	else
 		to_chat(src, "Failed to process! ([air_master.tick_progress])")

@@ -72,7 +72,7 @@
 					if(!AddDesign(loop_design, DA.loaded_designs, user))
 						break
 					i++
-				to_chat(user, "Sucessfully transferred [i] design\s.")
+				to_chat(user, "Successfully transferred [i] design\s.")
 				return 1
 		return
 	if(istype(O, /obj/item/device/pda))
