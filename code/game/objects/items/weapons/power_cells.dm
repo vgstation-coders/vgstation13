@@ -168,11 +168,8 @@
 /obj/item/weapon/cell/infinite/New()
 	..()
 	desc = "This cell is the latest in NT technology, having the capability to perpetually recharge itself. It has a power rating of Infinity!"
-	processing_objects.Add(src)
 
-/obj/item/weapon/cell/infinite/Destroy()
-	processing_objects.Remove(src)
+/obj/item/weapon/cell/infinite/use()
 	..()
-
-/obj/item/weapon/cell/infinite/process()
 	charge = maxcharge
+	return 1
