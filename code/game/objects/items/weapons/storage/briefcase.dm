@@ -38,7 +38,7 @@
 	..()
 
 /obj/item/weapon/storage/briefcase/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
-	if(get_dist(O,user) > 1)
+	if(!proximity_flag)
 		return
 
 	if (!isliving(target))
