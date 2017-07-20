@@ -579,7 +579,7 @@
 //BEE-IEFCASE
 /mob/living/simple_animal/bee/swarm/New(loc, var/obj/machinery/apiary/new_home)
 	..()
-	for (var/i = 1 to 20)
+	for (var/i = 1 to MAX_BEES_PER_SWARM)
 		var/datum/bee/B = new()
 		B.toxic = 5
 		B.damage = 2

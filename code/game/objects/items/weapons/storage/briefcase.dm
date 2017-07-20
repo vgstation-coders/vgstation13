@@ -148,13 +148,18 @@
 		release(user)
 	..()
 
-/obj/item/weapon/storage/briefcase/proc/hit_effect(var/mob/living/M, var/mob/living/user)
-	return
+//You can hit someone with the briefcase, and the bees will swarm at them
+/obj/item/weapon/storage/briefcase/bees/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
+	if(!proximity_flag)
+		return
 
-/obj/item/weapon/storage/briefcase/bees/hit_effect(var/mob/living/M, var/mob/living/user)
+	if (!isliving(target))
+		return
+
 	if(!released)
-		release(M)
+		release(target)
 
+//The bees will attack whoever opens the briefcase
 /obj/item/weapon/storage/briefcase/bees/proc/release(var/mob/user)
 	released = TRUE
 	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
