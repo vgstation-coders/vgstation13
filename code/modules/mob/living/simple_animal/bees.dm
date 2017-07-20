@@ -6,6 +6,8 @@
 
 #define BOREDOM_TO_RETURN	30//once reached, the bee will head back to its hive
 
+#define MAX_BEES_PER_SWARM	20//explicit
+
 
 //////////////////////BEE DATUMS///////////////////////////////////////
 
@@ -225,7 +227,7 @@
 		else
 			amount -= B.health
 			current_physical_damage -= B.damage/2
-			current_poison_damage -= B.toxic/2
+			current_poison_damage -= 0.5 + B.toxic*0.1
 			B.Die()
 
 	if (bees.len <= 0)
@@ -244,7 +246,7 @@
 		total_brute += BEE.damage
 		total_toxic += BEE.toxic
 	current_physical_damage = total_brute/2
-	current_poison_damage = total_toxic/2
+	current_poison_damage = bees.len/2 + total_toxic*0.1
 	update_icon()
 
 /mob/living/simple_animal/bee/proc/panic_attack(mob/damagesource)
@@ -585,3 +587,12 @@
 		addBee(B)
 	state = BEE_OUT_FOR_ENEMIES
 	update_icon()
+
+#undef TIME_TO_POLLINATE
+#undef DURATION_OF_POLLINATION
+#undef FATIGUE_PER_POLLINATIONS
+#undef FATIGUE_TO_RETURN
+
+#undef BOREDOM_TO_RETURN
+
+#undef MAX_BEES_PER_SWARM

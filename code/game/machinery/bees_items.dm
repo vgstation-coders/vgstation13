@@ -102,16 +102,26 @@
 	item_state = "giftbag"
 	w_class = W_CLASS_HUGE
 
-/obj/item/beezeez
+
+/obj/item/weapon/reagent_containers/glass/beezeez
 	name = "bottle of BeezEez"
+	desc = "Delicious nutrients for domesticated bees. Helps jumpstarting a new colony, and purging an existing one from toxins."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle17"
-	flags = FPRINT
+	flags = FPRINT | OPENCONTAINER
+	possible_transfer_amounts = null
+	w_class = W_CLASS_SMALL
 
-/obj/item/beezeez/New()
-	. = ..()
-	pixel_x = rand(-5.0, 5) * PIXEL_MULTIPLIER
-	pixel_y = rand(-5.0, 5) * PIXEL_MULTIPLIER
+	amount_per_transfer_from_this = 20
+	volume = 20
+
+/obj/item/weapon/reagent_containers/glass/beezeez/New()
+	..()
+
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	reagents.add_reagent(BEEZEEZ,20)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb
 	name = "honeycomb"

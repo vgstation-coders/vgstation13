@@ -64,6 +64,7 @@
 #define FERTILIZER 			"fertilizer"
 #define EZNUTRIENT 			"eznutrient"
 #define ROBUSTHARVEST 			"robustharvest"
+#define BEEZEEZ 			"beezeez"
 #define PLANTBGONE 			"plantbgone"
 #define PLASMA 			"plasma"
 #define LEPORAZINE 			"leporazine"

@@ -1877,6 +1877,13 @@
 	description = "Plant-enhancing hormones, good for increasing potency."
 	color = "#3E901C" // rgb: 62, 144, 28
 
+/datum/reagent/beezeez
+	name = "BeezEez"
+	id = BEEZEEZ
+	description = "Delicious nutrients for domesticated bees. Helps jumpstarting a new colony, and purging an existing one from toxins."
+	reagent_state = LIQUID
+	color = "#0066FF" // rgb: 0, 102, 255
+
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
