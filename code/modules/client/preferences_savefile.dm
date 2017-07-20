@@ -514,7 +514,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		src.organ_data = list()
 
 	if(user)
-		to_chat(user, "Sucessfully loaded [real_name].")
+		to_chat(user, "Successfully loaded [real_name].")
 
 	return 1
 

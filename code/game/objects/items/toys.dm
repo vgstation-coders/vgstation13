@@ -203,7 +203,7 @@
 
 /obj/item/toy/ammo/gun/update_icon()
 	src.icon_state = text("357-[]", src.amount_left)
-	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] caps\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
+	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] cap\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
 	return
 
 /obj/item/toy/ammo/gun/examine(mob/user)
