@@ -161,7 +161,7 @@
 /obj/item/weapon/cell/infinite
 	name = "infinite-capacity power cell!"
 	icon_state = "icell"
-	origin_tech = Tc_POWERSTORAGE + "=6;" + Tc_NANOTRASEN + "=5"
+	origin_tech = null
 	maxcharge = 35000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 
