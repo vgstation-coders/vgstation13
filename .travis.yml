@@ -38,7 +38,6 @@ script:
 - python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - cd libvg
-- rm .cargo/config
 # --jobs 1 to prevent threading problems with the BYOND crate.
 - cargo test --jobs 1 --verbose
 - cd -
