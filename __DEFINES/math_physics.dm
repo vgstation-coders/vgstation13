@@ -16,7 +16,7 @@
 #define T20C 293.15					// 20degC
 #define TCMB 2.73					// -270.42degC
 
-#define INFINITY 1.#INF //yeah sure right
+#define INFINITY 1e31 //closer than enough
 
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16
