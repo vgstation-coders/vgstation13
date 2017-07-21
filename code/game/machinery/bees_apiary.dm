@@ -464,6 +464,7 @@
 
 	cycledelay = 50
 
+	//we'll allow those to start pumping out bees right away
 	queen_bees_inside = 1
 	worker_bees_inside = 20
 	wild = 1

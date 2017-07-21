@@ -180,7 +180,7 @@
 	qdel(src)
 
 /mob/living/simple_animal/bee/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover, /obj/item/projectile))
+	if(istype(mover, /obj/item/projectile) && !istype(mover, /obj/item/projectile/bullet/beegun))
 
 		//Projectiles are more likely to hit if there are many bees in the swarm
 		if (prob(min(100,bees.len * 4)))
