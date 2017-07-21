@@ -1068,7 +1068,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//For normal legs, check if the feet are broken or missing.
 	var/feet_usable = FALSE
 	for(var/datum/organ/external/child in children)
-		if(child.can_stand())
+		if(child.is_usable())
 			feet_usable = TRUE
 	if(!feet_usable)
 		return 0
@@ -1104,7 +1104,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//For normal legs, check if the feet are broken or missing.
 	var/feet_usable = FALSE
 	for(var/datum/organ/external/child in children)
-		if(child.can_stand())
+		if(child.is_usable())
 			feet_usable = TRUE
 	if(!feet_usable)
 		return 0
@@ -1183,9 +1183,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 			current_organ = new /obj/item/weapon/organ/l_foot(owner.loc, owner)
 	return current_organ
 
-/datum/organ/external/l_foot/can_stand()
-	return is_usable()
-
 /datum/organ/external/r_foot
 	name = LIMB_RIGHT_FOOT
 	display_name = "right foot"
@@ -1204,9 +1201,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(!is_robotic())
 			current_organ = new /obj/item/weapon/organ/r_foot(owner.loc, owner)
 	return current_organ
-
-/datum/organ/external/r_foot/can_stand()
-	return is_usable()
 
 /datum/organ/external/r_hand
 	name = LIMB_RIGHT_HAND
