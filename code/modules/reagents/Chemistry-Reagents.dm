@@ -1151,6 +1151,7 @@
 	color = "#FEAE00"
 	alpha = 200
 	nutriment_factor = 15 * REAGENTS_METABOLISM
+	var/quality = 2
 
 /datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
 	if(ishuman(M))
@@ -1160,11 +1161,11 @@
 		H.nutrition += nutriment_factor
 		holder.remove_reagent(src.id, 0.4)
 		if(H.getBruteLoss() && prob(60))
-			H.heal_organ_damage(2, 0)
+			H.heal_organ_damage(quality, 0)
 		if(H.getFireLoss() && prob(50))
-			H.heal_organ_damage(0, 2)
+			H.heal_organ_damage(0, quality)
 		if(H.getToxLoss() && prob(50))
-			H.adjustToxLoss(-2)
+			H.adjustToxLoss(-quality)
 		..()
 		return
 
@@ -1175,6 +1176,7 @@
 	color = "#FFDA6A"
 	alpha = 220
 	nutriment_factor = 15 * REAGENTS_METABOLISM
+	quality = 3
 
 /datum/reagent/sacid
 	name = "Sulphuric acid"

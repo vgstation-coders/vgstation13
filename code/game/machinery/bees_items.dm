@@ -30,13 +30,13 @@
 
 /obj/item/weapon/bee_net/examine(mob/user)
 	..()
-	if(caught_bees)
-		to_chat(user, "<span class='info'>There's [caught_bees] caught bee\s in it!</span>")
+	if(caught_bees.len > 0)
+		to_chat(user, "<span class='info'>There's [caught_bees.len] caught bee\s in it!</span>")
 	else
 		to_chat(user, "<span class='info'>It has no bees in it.</span>")
 
-/obj/item/weapon/bee_net/afterattack(atom/A as mob|obj|turf|area, mob/living/user)
-	if(get_dist(A,user) > 1)
+/obj/item/weapon/bee_net/afterattack(var/atom/A, var/mob/user, var/proximity_flag, var/click_parameters)
+	if(!proximity_flag)
 		return
 	if(istype(A,/obj/machinery/apiary))
 		return
@@ -66,52 +66,42 @@
 		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
 
 /obj/item/weapon/bee_net/attack_self(mob/user as mob)
-	var/turf/T = get_step(get_turf(user), user.dir)
-	var/caught = 0
-	for(var/mob/living/simple_animal/bee/B in T)
-		caught = 1
-		if(B.calmed > 0)
-			caught_bees += B.bees.len
-			qdel(B)
-			B = null
-			user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the becalmed bees.</span>")
-		else
-			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
-			B.state = BEE_OUT_FOR_ENEMIES
-			B.target = user
-	if(!caught)
-		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
+	empty_bees()
 
 /obj/item/weapon/bee_net/verb/empty_bees()
 	set src in usr
 	set name = "Empty bee net"
 	set category = "Object"
 	var/mob/living/carbon/M
-	if(iscarbon(usr))
+	if(isliving(usr))
 		M = usr
 
-	while(caught_bees.len > 0)
-		//release a few super massive swarms
+	if (caught_bees.len > 0)
+		to_chat(M, "<span class='warning'>You empty \the [src]! The bees are furious!</span>")
+		//release a few swarms
 		while(caught_bees.len > 5)
-			var/mob/living/simple_animal/bee/B = new(src.loc)
+			var/mob/living/simple_animal/bee/B = new(get_turf(src))
 			for (var/i = 1 to 5)
 				var/datum/bee/BEE = pick(caught_bees)
-				caught_bees -= BEE
+				caught_bees.Remove(BEE)
 				BEE.state = BEE_OUT_FOR_ENEMIES
 				B.addBee(BEE)
+			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = M
 
 
 		//what's left over
-		var/mob/living/simple_animal/bee/B = new(src.loc)
-		for (var/i = 1 to caught_bees.len)
+		var/mob/living/simple_animal/bee/B = new(get_turf(src))
+		while(caught_bees.len > 0)
 			var/datum/bee/BEE = pick(caught_bees)
-			caught_bees -= BEE
+			caught_bees.Remove(BEE)
 			BEE.state = BEE_OUT_FOR_ENEMIES
 			B.addBee(BEE)
+		B.state = BEE_OUT_FOR_ENEMIES
 		B.target = M
+	else
+		to_chat(M, "<span class='warning'>There are no bees inside the net!</span>")
 
-		caught_bees = 0
 
 /obj/item/apiary
 	name = "moveable apiary"
@@ -171,12 +161,13 @@
 				<body>
 				<h3>Raising Bees</h3>
 
-				Bees are loving but fickle creatures. Don't mess with their hive and stay away from any clusters of them, and you'll avoid their ire.
-				Sometimes, you'll need to dig around in there for those delicious sweeties though - in that case make sure you wear sealed protection gear
-				and carry an extinguisher or smoker with you - any bees chasing you, once calmed down, can thusly be netted and returned safely to the hive.
-				Beezeez is a cure-all panacea for them, use it on an apiary to kickstart it, but use it too much and the hive may grow to apocalyptic proportions.
+				Bees are loving but fickle creatures. Don't mess with their hive or annoy them, and you'll avoid their ire.
+				If you must get on their bad side, make sure to equip proper protection gear, or sufficiently impermeable clothing to reduce the chances of getting stung.
+				Bee nets allow you to pick up bees, but if there's a lot of them they might get mad at you, at which point you'll have to calm them first
+				by spraying water over them. For that reason, make sure to carry an extinguisher or water sprayer at all times.
+				Beezeez is a mixture of pollen pellets fit for the nutrition of domesticated bees. Excellent to kickstart a colony, or reduce one's toxicity.
 				Other than that, bees are excellent pets for all the family and are excellent caretakers of one's garden:
-				having a hive or two around will aid in the longevity and growth rate of plants, and aid them in fighting off poisons and disease.
+				having a hive or two around will aid in the longevity and growth rate of plants, but be careful, toxic plants will eventually harm your colony.
 
 				<h3>Dealing with Feral Bees</h3>
 
@@ -194,7 +185,7 @@
 				First you start by deconstructing the apiary with a hatchet. The bees will become aggressive as soon as you begin. Once the apiary is deconstructed, follow the steps in the above
 				section to capture the homeless feral bees and move them to another apiary. Or simply rebuild the apiary that you just deconstructed. The honeycombs harvested this way
 				are full of honey, you can grind them to process the liquid, then place it in a Condimaster to conserve it in a honey pot. Or you can just eat the honeycombs if you feel like it,
-				they are delicious.
+				they are delicious. You can produce a high variety of flavoured honey by having your bees harvest various plants.
 
 
 				</body>

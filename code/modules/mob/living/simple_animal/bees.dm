@@ -296,14 +296,15 @@
 
 	..()
 
-	if (bees.len <= 0)
+	if (!bees || bees.len <= 0)
 		qdel(src)
 		return
 
 	if(stat != DEAD)
 		//SUFFERING FROM HIGH TOXICITY
-		if (((current_poison_damage - bees.len)/bees.len*100) > 66)
-			adjustBruteLoss(2)
+		if (((current_poison_damage - bees.len)/bees.len*100) > 50)
+			if (prob((((current_poison_damage - bees.len)/bees.len*100)-50)*2))
+				adjustBruteLoss(3)
 			if (bees.len <= 0)
 				return
 

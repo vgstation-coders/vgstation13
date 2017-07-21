@@ -21,7 +21,7 @@
 
 	var/lastcycle = 0
 	var/cycledelay = 100
-	var/list/pollen = list()
+	var/list/pollen = list()//mostly unused for now. but might come handy later if we want to check what plants where pollinated by an apiary's bees
 
 	var/queen_bees_inside = 0
 	var/worker_bees_inside = 0
@@ -67,10 +67,29 @@
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
-	if(worker_bees_inside || queen_bees_inside)
-		to_chat(user, "You can hear a loud buzzing coming from the inside.")
+	if(!worker_bees_inside && !queen_bees_inside)
+		to_chat(user, "<span class='info'>There doesn't seem to be any bees in it.</span>")
 	else
-		to_chat(user, "There doesn't seem to be any bees in it.")
+		if(worker_bees_inside < 10)
+			to_chat(user, "<span class='info'>You can hear a few bees buzzing inside.</span>")
+		else
+			to_chat(user, "<span class='info'>You hear a loud buzzing from the inside.</span>")
+
+		if(nutrilevel < 0)
+			to_chat(user, "<span class='danger'>The bees inside appear to be starving.</span>")
+		else if(nutrilevel < 10)
+			to_chat(user, "<span class='warning'>The bees inside appear to be low on food reserves.</span>")
+
+		if(beezeez > 0)
+			to_chat(user, "<span class='info'>The bees are collecting the beezeez pellets.</span>")
+
+		if(toxic > 5)
+			if (toxic < 33)
+				to_chat(user, "<span class='warning'>The bees look a bit on edge, their diet might be toxic.</span>")
+			else if (toxic < 50)
+				to_chat(user, "<span class='warning'>The bees are starting to act violent, the hive's toxicity is rising.</span>")
+			else
+				to_chat(user, "<span class='danger'>The bees are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
 	switch(reagents.total_volume)
 		if(30 to 60)
@@ -105,6 +124,9 @@
 
 /obj/machinery/apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
+		return
+	if(istype(O, /obj/item/device/analyzer/plant_analyzer))
+		to_chat(user, "<span class='warning'>That's not a plant you dummy. You can get basic info about \the [src] by simply examining it.</span>")
 		return
 	if (wild)
 		return
@@ -176,6 +198,7 @@
 		user.visible_message("<span class='warning'>\the [user] hits \the [src] with \the [O]!</span>","<span class='warning'>You hit \the [src] with \the [O]!</span>")
 		angry_swarm(user)
 
+//Called every time a bee enters the hive.
 /obj/machinery/apiary/proc/enterHive(var/datum/bee/B)
 	bees_outside_hive.Remove(B)
 	if (istype(B,/datum/bee/queen_bee))
@@ -222,7 +245,6 @@
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				to_chat(world,"trying to add [rtotal] units of [chemToAdd]")
 				var/amountToAdd = min(1, max(0.25, rtotal/4))
 				var/difference = amountToAdd + 0.25 + reagents.total_volume - reagents.maximum_volume
 				if (difference>0)
@@ -343,11 +365,15 @@
 		//PRODUCING WORKER BEES
 		if(nutrilevel > 10 && queen_bees_inside > 0 && worker_bees_inside < 20)
 			worker_bees_inside += queen_bees_inside
-		else if (nutrilevel < -5 && worker_bees_inside >= 10)// We're getting in dire need of nutrients, let's starve bees so others can survive
+
+		// We're getting in dire need of nutrients, let's starve bees so others can survive
+		else if (nutrilevel < -5 && worker_bees_inside >= 10)
 			nutrilevel += 3
 			worker_bees_inside--
 			new/obj/effect/decal/cleanable/bee(get_turf(src))
-		else if (nutrilevel <= 0 && bees_outside_hive.len > 1) // We're low on nutrients, let's call back some bees to reduce our costs
+
+		//We're low on nutrients, let's call back some bees to reduce our food costs
+		else if (nutrilevel <= 0 && bees_outside_hive.len > 1)
 			for (var/i = 1 to max(1,round(bees_outside_hive.len/3)))
 				var/datum/bee/B = pick(bees_outside_hive)
 				B.homeCall()
