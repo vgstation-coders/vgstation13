@@ -711,7 +711,7 @@
 								step_away(V,location,15)
 								step_away(V,location,15)
 								step_away(V,location,15)
-							if !turf.has_gravity(mob)
+							if (!turf.has_gravity(usr))
 								to_chat(usr, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
 								throw_at(get_edge_target_turf(usr, dir), 5, 5)
 						else
