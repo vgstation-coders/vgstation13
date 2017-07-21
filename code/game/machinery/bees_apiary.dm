@@ -1,11 +1,19 @@
 //http://www.youtube.com/watch?v=-1GadTfGFvU
 
+/*
+
+> apiary tray
+> angry-bee hive
+
+*/
+
 /obj/machinery/apiary
 	name = "apiary tray"
 	icon = 'icons/obj/hydroponics.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
+	var/beezeez = 0
 	var/nutrilevel = 0
 	var/yieldmod = 1
 	var/damage = 1
@@ -102,19 +110,24 @@
 		return
 	if(istype(O, /obj/item/queen_bee))
 		if(user.drop_item(O))
-			nutrilevel = min(15,nutrilevel+15)
+			nutrilevel = max(15,nutrilevel+15)
 			queen_bees_inside++
 			qdel(O)
 			to_chat(user, "<span class='notice'>You carefully insert the queen into [src], she gets busy managing the hive.</span>")
-	else if(istype(O, /obj/item/weapon/reagent_containers))
-		if (O.reagents.trans_id_to(src,BEEZEEZ,20))
+	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
+		var/i = O.reagents.trans_id_to(consume,NUTRIMENT,3)
+		if (i)
+			beezeez += i * 10
 			if(queen_bees_inside || worker_bees_inside)
-				to_chat(user, "<span class='notice'>You transfer some BeezEez into \the [src]. A relaxed humming appears to pick up.</span>")
+				to_chat(user, "<span class='notice'>You pour the BeezEez into \the [src]. A relaxed humming appears to pick up.</span>")
 			else
-				to_chat(user, "<span class='notice'>You transfer some BeezEez into \the [src]. Now it just needs some bees.</span>")
+				to_chat(user, "<span class='notice'>You pour the BeezEez into \the [src]. Now it just needs some bees.</span>")
 		else
 			to_chat(user, "<span class='notice'>There is no BeezEez in \the [O].</span>")
-
+		user.drop_from_inventory(O)
+		var/obj/item/trash/beezeez/TrashItem = new /obj/item/trash/beezeez(user)
+		user.put_in_hands(TrashItem)
+		qdel(O)
 	else if(istype(O, /obj/item/weapon/hatchet))
 		if(reagents.total_volume > 0)
 			user.visible_message("<span class='notice'>\the [user] begins harvesting the honeycombs.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
@@ -169,7 +182,7 @@
 		queen_bees_inside++
 		var/datum/bee/queen_bee/Q = B
 		if (Q.colonizing)
-			nutrilevel = min(15,nutrilevel+15)
+			nutrilevel = max(15,nutrilevel+15)
 	else
 		worker_bees_inside++
 	B.home = src
@@ -193,8 +206,6 @@
 			totalreagents += rtotal
 
 		if(totalreagents)
-			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
 			for(var/chem in S.chems)
 				var/list/reagent_data = list()
 				var/chemToAdd = null
@@ -211,19 +222,19 @@
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				var/amountToAdd = max(1, round(rtotal*coeff, 0.1))
-				var/difference = amountToAdd + 2.5 + reagents.total_volume - reagents.maximum_volume
+				to_chat(world,"trying to add [rtotal] units of [chemToAdd]")
+				var/amountToAdd = min(1, max(0.25, rtotal/4))
+				var/difference = amountToAdd + 0.25 + reagents.total_volume - reagents.maximum_volume
 				if (difference>0)
 					reagents.trans_to(consume, difference)//This allows bees to bring in new reagents even if the hive is full
 				reagents.add_reagent(chemToAdd, amountToAdd)
 		if (!pollen.Find(S))
 			pollen.Add(S)
 		if (istype(B,/datum/bee/queen_bee))
-			reagents.add_reagent(ROYALJELLY,2)
+			reagents.add_reagent(ROYALJELLY,0.5)
 		else
-			reagents.add_reagent(HONEY,2)
-		reagents.add_reagent(NUTRIMENT, 0.1)
-		reagents.add_reagent(SUGAR, 0.4)
+			reagents.add_reagent(HONEY,0.5)
+		reagents.add_reagent(SUGAR, 0.1)
 
 	if (B.toxins > toxic)
 		toxic += B.toxins * 0.1
@@ -245,6 +256,7 @@
 	for (var/i = 1 to number_of_honeycombs)
 		var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H = new(T)
 		H.reagents.clear_reagents()
+		H.reagents.add_reagent(NUTRIMENT, 0.5)
 		H.icon_state = "honeycomb-base"
 		H.overlays += I
 		reagents.trans_to(H,reagents_per_honeycomb)
@@ -299,23 +311,32 @@
 		if(!queen_bees_inside && !worker_bees_inside)//if the apiary is empty, let's not waste time processing it
 			return
 
-		//HANDLE NUTRILEVEL
-		nutrilevel -= worker_bees_inside / 20 + queen_bees_inside /4 + bees_outside_hive.len / 10 //Bees doing work need more nutrients
+		//HANDLE BEEZEEZ
+		if(beezeez)
+			beezeez--
+			nutrilevel++
 
-		nutrilevel += 2 * reagents.trans_to(consume, reagents.total_volume * 2 / 100)
+			if(toxic > 0)
+				toxic--
+
+
+		//HANDLE NUTRILEVEL
+		nutrilevel -= worker_bees_inside / 20 + queen_bees_inside /5 + bees_outside_hive.len / 10 //Bees doing work need more nutrients
+
+		nutrilevel += 5 * reagents.trans_to(consume, reagents.total_volume / 100)
 
 
 		for(var/datum/reagent/R in reagents.reagent_list)
-			if (R.volume < 0.09)
+			if (R.volume < 0.01)
 				if (R == NUTRIMENT) continue
 				reagents.del_reagent(R.id,update_totals=0)
 
 		nutrilevel = min(max(nutrilevel,-10),100)
 
 		//PRODUCING QUEEN BEES
-		if(reagents.get_reagent_amount(ROYALJELLY) >= 5 && nutrilevel > 10 && queen_bees_inside <= 0 && worker_bees_inside > 1)
+		if(reagents.get_reagent_amount(ROYALJELLY) >= 0.5 && nutrilevel > 10 && queen_bees_inside <= 0 && worker_bees_inside > 1)
 			queen_bees_inside++
-			reagents.remove_reagent(ROYALJELLY, 5)
+			reagents.remove_reagent(ROYALJELLY, 0.5)
 			worker_bees_inside--
 
 
@@ -325,6 +346,7 @@
 		else if (nutrilevel < -5 && worker_bees_inside >= 10)// We're getting in dire need of nutrients, let's starve bees so others can survive
 			nutrilevel += 3
 			worker_bees_inside--
+			new/obj/effect/decal/cleanable/bee(get_turf(src))
 		else if (nutrilevel <= 0 && bees_outside_hive.len > 1) // We're low on nutrients, let's call back some bees to reduce our costs
 			for (var/i = 1 to max(1,round(bees_outside_hive.len/3)))
 				var/datum/bee/B = pick(bees_outside_hive)
@@ -352,7 +374,6 @@
 			ZOMBIEPOWDER = 3,
 			MINDBREAKER = 1,
 			PLASTICIDE = 2,
-			BEEZEEZ = -3,
 		)
 
 		for(var/datum/reagent/R in consume.reagents.reagent_list)
@@ -360,14 +381,10 @@
 				toxic += R.volume * toxic_reagents[R.id]
 			if (R.id == MUTAGEN)
 				damage = round(rand(0,3))
-			if (R.id == BEEZEEZ)
-				nutrilevel = max(15,nutrilevel + 2 * R.volume)//BeezEez gives double nutrilevel
 
 		if(toxic > 0)
 			toxic -= 0.1
 		toxic = min(100,max(0,toxic))
-
-		to_chat(world,"toxicity = [toxic]")
 
 		//NOISE
 		if(prob(2))
@@ -375,7 +392,7 @@
 
 		update_icon()
 
-		//SENDING OUT BEES TO POLLINATE
+		//SENDING OUT BEES
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 11)
 			var/turf/T = get_turf(src)
 			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
@@ -388,7 +405,7 @@
 				worker_bees_inside--
 			bees_outside_hive.Add(B)
 			B_mob.addBee(B)
-			if ()
+			if (toxic > 33 && prob(toxic/1.5))//if our beehive is full of toxicity, bees will become ANGRY
 				B.angerAt()
 			else
 				B.goPollinate()
@@ -410,7 +427,7 @@
 	anchored = 1
 	nutrilevel = 100
 	damage = 1.5
-	toxic = 2.5
+	toxic = 25
 
 	cycledelay = 50
 
@@ -435,12 +452,13 @@
 		health -= P.damage
 		updateHealth()
 
-
 /obj/machinery/apiary/wild/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
 		return
 	if(istype(O, /obj/item/queen_bee))
 		to_chat(user, "<span class='warning'>This type of bee hive isn't fit for domesticated bees.</span>")
+	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
+		to_chat(user, "<span class='warning'>These bees don't want your candies, they want your blood!</span>")
 	else if(O.force)
 		user.delayNextAttack(10)
 		if(queen_bees_inside || worker_bees_inside)

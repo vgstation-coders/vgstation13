@@ -1144,6 +1144,38 @@
 
 	M.nutrition += REM
 
+/datum/reagent/honey
+	name = "Honey"
+	id = HONEY
+	description = "A golden yellow syrup, loaded with sugary sweetness."
+	color = "#FEAE00"
+	alpha = 200
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+
+/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.nutrition += nutriment_factor
+		holder.remove_reagent(src.id, 0.4)
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(2, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, 2)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-2)
+		..()
+		return
+
+/datum/reagent/honey/royal_jelly
+	name = "Royal Jelly"
+	id = ROYALJELLY
+	description = "A pale yellow liquid that is both spicy and acidic, yet also sweet."
+	color = "#FFDA6A"
+	alpha = 220
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+
 /datum/reagent/sacid
 	name = "Sulphuric acid"
 	id = SACID
@@ -1876,13 +1908,6 @@
 	id = ROBUSTHARVEST
 	description = "Plant-enhancing hormones, good for increasing potency."
 	color = "#3E901C" // rgb: 62, 144, 28
-
-/datum/reagent/beezeez
-	name = "BeezEez"
-	id = BEEZEEZ
-	description = "Delicious nutrients for domesticated bees. Helps jumpstarting a new colony, and purging an existing one from toxins."
-	reagent_state = LIQUID
-	color = "#0066FF" // rgb: 0, 102, 255
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"

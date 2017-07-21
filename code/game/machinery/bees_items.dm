@@ -1,8 +1,21 @@
+
+/*
+
+> queen bee packet
+> bee net
+> moveable apiary
+> packet of BeezEez
+> empty packet of BeezEez
+> honeycomb
+> The Ins and Outs of Apiculture - A Precise Art
+
+*/
+
 /obj/item/queen_bee
 	name = "queen bee packet"
 	desc = "Place her into an apiary so she can get busy."
-	icon = 'icons/obj/seeds.dmi'
-	icon_state = "seed-bees"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "queen_larvae"
 	w_class = W_CLASS_TINY
 
 /obj/item/weapon/bee_net
@@ -31,17 +44,22 @@
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
 		caught = 1
-		if(B.calmed > 0 || (B.state != BEE_OUT_FOR_ENEMIES && prob(max(0,100-B.bees.len*4))))
-			for (var/datum/bee/BEES in B.bees)
-				caught_bees.Add(BEES)
-				BEES.home = null
-				if (B.home)
-					B.home.bees_outside_hive.Remove(BEES)
-			qdel(B)
-			B = null
-			user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the becalmed bees.</span>")
+		if(B.calmed > 0 || (B.state != BEE_OUT_FOR_ENEMIES))
+			if (prob(max(0,100-B.bees.len*5)))
+				for (var/datum/bee/BEES in B.bees)
+					caught_bees.Add(BEES)
+					BEES.home = null
+					if (B.home)
+						B.home.bees_outside_hive.Remove(BEES)
+				qdel(B)
+				B = null
+				user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the bees.</span>")
+			else
+				user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
+				B.state = BEE_OUT_FOR_ENEMIES
+				B.target = user
 		else
-			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
+			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>The bees are too angry to let themselves get caught.</span>")
 			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = user
 	if(!caught)
@@ -103,24 +121,24 @@
 	w_class = W_CLASS_HUGE
 
 
-/obj/item/weapon/reagent_containers/glass/beezeez
-	name = "bottle of BeezEez"
+/obj/item/weapon/reagent_containers/food/snacks/beezeez
+	name = "packet of BeezEez"
 	desc = "Delicious nutrients for domesticated bees. Helps jumpstarting a new colony, and purging an existing one from toxins."
-	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle17"
-	flags = FPRINT | OPENCONTAINER
-	possible_transfer_amounts = null
-	w_class = W_CLASS_SMALL
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "beezeez"
+	trash = /obj/item/trash/beezeez
+	volume = 3
 
-	amount_per_transfer_from_this = 20
-	volume = 20
-
-/obj/item/weapon/reagent_containers/glass/beezeez/New()
+/obj/item/weapon/reagent_containers/food/snacks/beezeez/New()
 	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 1
 
-	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-	reagents.add_reagent(BEEZEEZ,20)
+
+/obj/item/trash/beezeez
+	name = "empty packet of BeezEez"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "beezeez-empty"
 
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb
@@ -134,38 +152,6 @@
 	reagents.add_reagent(NUTRIMENT, 0.5)
 	reagents.add_reagent(SUGAR, 2)
 	bitesize = 2
-
-/datum/reagent/honey
-	name = "Honey"
-	id = HONEY
-	description = "A golden yellow syrup, loaded with sugary sweetness."
-	color = "#FEAE00"
-	alpha = 200
-	nutriment_factor = 15 * REAGENTS_METABOLISM
-
-/datum/reagent/honey/royal_jelly
-	name = "Royal Jelly"
-	id = ROYALJELLY
-	description = "A pale yellow liquid that is both spicy and acidic, yet also sweet."
-	color = "#FFDA6A"
-	alpha = 220
-	nutriment_factor = 15 * REAGENTS_METABOLISM
-
-/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(!holder)
-			return
-		H.nutrition += nutriment_factor
-		holder.remove_reagent(src.id, 0.4)
-		if(H.getBruteLoss() && prob(60))
-			H.heal_organ_damage(2, 0)
-		if(H.getFireLoss() && prob(50))
-			H.heal_organ_damage(0, 2)
-		if(H.getToxLoss() && prob(50))
-			H.adjustToxLoss(-2)
-		..()
-		return
 
 /obj/item/weapon/book/manual/hydroponics_beekeeping
 	name = "The Ins and Outs of Apiculture - A Precise Art"
