@@ -13,8 +13,8 @@
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
-	var/beezeez = 0
-	var/nutrilevel = 0
+	var/beezeez = 0//beezeez removes 1 toxic and adds 1 nutrilevel per cycle
+	var/nutrilevel = 0//consumed every round based on how many bees the apiary is sustaining.
 	var/yieldmod = 1
 	var/damage = 1
 	var/toxic = 0
@@ -72,6 +72,8 @@
 	else
 		if(worker_bees_inside < 10)
 			to_chat(user, "<span class='info'>You can hear a few bees buzzing inside.</span>")
+		else if(worker_bees_inside > 35)
+			to_chat(user, "<span class='danger'>The bees are over-crowded!</span>")
 		else
 			to_chat(user, "<span class='info'>You hear a loud buzzing from the inside.</span>")
 
@@ -121,6 +123,11 @@
 		if(src)
 			angry_swarm()
 		return
+
+/obj/machinery/apiary/hitby(AM as mob|obj)
+	..()
+	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
+	angry_swarm()
 
 /obj/machinery/apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
@@ -249,14 +256,14 @@
 				var/difference = amountToAdd + 0.25 + reagents.total_volume - reagents.maximum_volume
 				if (difference>0)
 					reagents.trans_to(consume, difference)//This allows bees to bring in new reagents even if the hive is full
-				reagents.add_reagent(chemToAdd, amountToAdd)
+				reagents.add_reagent(chemToAdd, amountToAdd * yieldmod)
 		if (!pollen.Find(S))
 			pollen.Add(S)
 		if (istype(B,/datum/bee/queen_bee))
-			reagents.add_reagent(ROYALJELLY,0.5)
+			reagents.add_reagent(ROYALJELLY,0.5 * yieldmod)
 		else
-			reagents.add_reagent(HONEY,0.5)
-		reagents.add_reagent(SUGAR, 0.1)
+			reagents.add_reagent(HONEY,0.5 * yieldmod)
+		reagents.add_reagent(SUGAR, 0.1 * yieldmod)
 
 	if (B.toxins > toxic)
 		toxic += B.toxins * 0.1

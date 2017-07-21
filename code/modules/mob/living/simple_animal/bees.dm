@@ -181,7 +181,9 @@
 
 /mob/living/simple_animal/bee/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile))
-		if (prob(min(100,bees.len * 4)))//Projectiles are more likely to hit if there are many bees in the swarm
+
+		//Projectiles are more likely to hit if there are many bees in the swarm
+		if (prob(min(100,bees.len * 4)))
 			return 0
 	return 1
 
@@ -196,6 +198,14 @@
 		adjustBruteLoss(damage)
 		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 		panic_attack(user)
+
+/mob/living/simple_animal/bee/hitby(AM as mob|obj)
+	..()
+	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
+	var/mob/M = null
+	if (ismob(AM))
+		M = AM
+	panic_attack(M)
 
 /mob/living/simple_animal/bee/bullet_act(var/obj/item/projectile/P)
 	..()
@@ -283,6 +293,8 @@
 	for(var/mob/living/simple_animal/bee/B in range(src,3))
 		if (B.state == BEE_SWARM || calmed > 0)
 			return
+
+		//only their friends from the same apiary will answer their call. homeless bees will also help each others.
 		if (B.home == home)
 			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = damagesource
