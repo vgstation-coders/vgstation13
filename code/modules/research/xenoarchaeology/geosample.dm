@@ -24,6 +24,9 @@
 	var/source_rock = "/turf/unsimulated/mineral/"
 	var/datum/geosample/geological_data
 
+/obj/item/weapon/rocksliver/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(GROUND_ROCK,30,geological_data)
+
 /obj/item/weapon/rocksliver/New()
 	. = ..()
 	icon_state = "sliver[rand(1,3)]"

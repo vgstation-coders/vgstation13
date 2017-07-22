@@ -177,6 +177,9 @@
 	potency = newValue
 	force = round((5+potency/5), 1)
 
+/obj/item/weapon/grown/nettle/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(FORMIC_ACID,round((5+potency/5), 1))
+
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
 	desc = "A glowing red nettle that incites rage in you just from looking at it."
@@ -247,6 +250,9 @@
 /obj/item/weapon/grown/deathnettle/changePotency(newValue) //-QualityVan
 	potency = newValue
 	force = round((5+potency/2.5), 1)
+
+/obj/item/weapon/grown/deathnettle/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(PHENOL,round((5+potency/5), 1))
 
 /obj/item/weapon/corncob
 	name = "corn cob"

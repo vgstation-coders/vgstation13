@@ -70,6 +70,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			icon_state = "[initial(icon_state)]_burnt"
 			damtype = BRUTE
 
+/obj/item/weapon/match/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(PHOSPHORUS,2)
+
 /obj/item/weapon/match/proc/update_brightness()
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
 		processing_objects.Add(src)

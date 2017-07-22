@@ -27,6 +27,7 @@
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
+	var/special_grind = null //see reagentgrinder; grind_act()
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -36,6 +37,12 @@
 			A.forceMove(T)
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
+	if(!extract && special_grind)
+		RC.reagents.add_reagent(special_grind,1) //Used only for melon slices
+		return
+	reagents.trans_to(RC,ARBITRARILY_LARGE_NUMBER)
 
 //Proc for effects that trigger on eating that aren't directly tied to the reagents.
 /obj/item/weapon/reagent_containers/food/snacks/proc/after_consume(var/mob/user, var/datum/reagents/reagentreference)
@@ -2877,6 +2884,7 @@
 	icon_state = "watermelonslice"
 	bitesize = 2
 	food_flags = FOOD_SWEET
+	special_grind = WATERMELONJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
 	name = "Apple Cake"

@@ -19,6 +19,9 @@
 	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
 
+/obj/item/seeds/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(BLACKPEPPER,5)
+
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
 	if(!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])

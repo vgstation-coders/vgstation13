@@ -15,58 +15,6 @@
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/limit = 10
 	var/speed_multiplier = 1
-	var/list/blend_items = list (
-
-		//Sheets
-		/obj/item/stack/sheet/metal           = list(IRON = 20),
-		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),
-		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = 20),
-		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
-		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
-		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
-		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
-		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
-		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
-		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
-
-		//Blender Stuff
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list(SOYMILK = -10), //I have no fucking idea what most of these numbers mean and I hate them.
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(KETCHUP = -7),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/corn = list(CORNOIL = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat = list(FLOUR = -5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk = list(RICE = -5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries = list(CHERRYJELLY = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium = list(PLASTICIDE = 5),
-
-		/obj/item/seeds = list(BLACKPEPPER = 5),
-
-
-		//archaeology!
-		/obj/item/weapon/rocksliver = list(GROUND_ROCK = 30),
-
-		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
-		/obj/item/weapon/reagent_containers/pill = list(),
-		/obj/item/weapon/reagent_containers/food = list()
-	)
-
-	var/list/juice_items = list (
-
-		//Juicer Stuff
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/apple = list(APPLEJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon = list(LEMONJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/orange = list(ORANGEJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lime = list(LIMEJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
-	)
-
-
 	var/list/holdingitems = list()
 	var/targetMoveKey
 
@@ -184,8 +132,9 @@
 		src.updateUsrDialog()
 		return 0
 
-	if (!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
-		to_chat(user, "Cannot refine into a reagent.")
+	//There used to be a check here to only allow certain whitelisted things to be put inside the mortar. Now we just check size. God help us.
+	if(O.w_class >= W_CLASS_SMALL)
+		to_chat(user, "<span class ='warning'>That's too big to fit inside!</span>")
 		return 1
 
 	if(!user.drop_item(O, src))
@@ -243,8 +192,8 @@
 	"}
 		if (is_beaker_ready && !is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
 
-			dat += {"<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>
-				<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"}
+			dat += {"<A href='?src=\ref[src];action=process'>Process the reagents</a><BR>
+				<A href='?src=\ref[src];action=extract'>Extract the reagents</a><BR><BR>"}
 		if(holdingitems && holdingitems.len > 0)
 			dat += "<A href='?src=\ref[src];action=eject'>Eject the reagents</a><BR>"
 		if (beaker)
@@ -264,13 +213,13 @@
 		return
 	usr.set_machine(src)
 	switch(href_list["action"])
-		if ("grind")
+		if ("process")
 			grind()
-		if("juice")
-			juice()
+		if("extract")
+			grind(1)
 		if("eject")
 			eject()
-		if ("detach")
+		if("detach")
 			detach()
 	src.updateUsrDialog()
 	return
@@ -308,82 +257,12 @@
 		holdingitems -= O
 	holdingitems = list()
 
-/obj/machinery/reagentgrinder/proc/is_allowed(var/obj/item/weapon/reagent_containers/O)
-	for (var/i in blend_items)
-		if(istype(O, i))
-			return 1
-	return 0
-
-/obj/machinery/reagentgrinder/proc/get_allowed_by_id(var/obj/item/weapon/grown/O)
-	for (var/i in blend_items)
-		if (istype(O, i))
-			return blend_items[i]
-
-/obj/machinery/reagentgrinder/proc/get_allowed_snack_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
-	for(var/i in blend_items)
-		if(istype(O, i))
-			return blend_items[i]
-
-/obj/machinery/reagentgrinder/proc/get_allowed_juice_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
-	for(var/i in juice_items)
-		if(istype(O, i))
-			return juice_items[i]
-
-/obj/machinery/reagentgrinder/proc/get_grownweapon_amount(var/obj/item/weapon/grown/O)
-	if (!istype(O))
-		return 5
-	else if (O.potency == -1)
-		return 5
-	else
-		return round(O.potency)
-
-/obj/machinery/reagentgrinder/proc/get_juice_amount(var/obj/item/weapon/reagent_containers/food/snacks/grown/O)
-	if (!istype(O))
-		return 5
-	else if (O.potency == -1)
-		return 5
-	else
-		return round(5*sqrt(O.potency))
-
 /obj/machinery/reagentgrinder/proc/remove_object(var/obj/item/O)
 	holdingitems -= O
 	qdel(O)
 	O = null
 
-/obj/machinery/reagentgrinder/proc/juice()
-	power_change()
-	if(stat & (NOPOWER|BROKEN))
-		return
-	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
-		return
-	playsound(get_turf(src), speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
-	inuse = 1
-	spawn(50/speed_multiplier)
-		inuse = 0
-		interact(usr)
-	//Snacks
-	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			break
-
-		var/allowed = get_allowed_juice_by_id(O)
-		if(isnull(allowed))
-			break
-
-		for (var/r_id in allowed)
-
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = get_juice_amount(O)
-
-			beaker.reagents.add_reagent(r_id, min(amount, space))
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
-
-		remove_object(O)
-
-/obj/machinery/reagentgrinder/proc/grind()
-
+/obj/machinery/reagentgrinder/proc/grind(var/extract=0)
 
 	power_change()
 	if(stat & (NOPOWER|BROKEN))
@@ -395,91 +274,12 @@
 	spawn(60/speed_multiplier)
 		inuse = 0
 		updateUsrDialog()
-	//Snacks and Plants
-	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			break
 
-		var/allowed = get_allowed_snack_by_id(O)
-		if(isnull(allowed))
-			break
-
-		for (var/r_id in allowed)
-
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = allowed[r_id]
-			if(amount <= 0)
-				if(amount == 0)
-					if (O.reagents != null && O.reagents.has_reagent(NUTRIMENT))
-						beaker.reagents.add_reagent(r_id, min(O.reagents.get_reagent_amount(NUTRIMENT), space))
-						O.reagents.remove_reagent(NUTRIMENT, min(O.reagents.get_reagent_amount(NUTRIMENT), space))
-				else
-					if (O.reagents != null && O.reagents.has_reagent(NUTRIMENT))
-						beaker.reagents.add_reagent(r_id, min(round(O.reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
-						O.reagents.remove_reagent(NUTRIMENT, min(O.reagents.get_reagent_amount(NUTRIMENT), space))
-
-			else
-				O.reagents.trans_id_to(beaker, r_id, min(amount, space))
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
-
-		if(O.reagents.reagent_list.len == 0)
-			remove_object(O)
-
-	//Sheets
-	for (var/obj/item/stack/sheet/O in holdingitems)
-		var/allowed = get_allowed_by_id(O)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			break
-		for(var/i = 1; i <= round(O.amount, 1); i++)
-			for (var/r_id in allowed)
-				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-				var/amount = allowed[r_id]
-				beaker.reagents.add_reagent(r_id,min(amount, space))
-				if (space < amount)
-					break
-			if (i == round(O.amount, 1))
-				remove_object(O)
-				break
-
-	//xenoarch
-	for(var/obj/item/weapon/rocksliver/O in holdingitems)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			break
-		var/allowed = get_allowed_by_id(O)
-		for (var/r_id in allowed)
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = allowed[r_id]
-			beaker.reagents.add_reagent(r_id,min(amount, space), O.geological_data)
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
-		remove_object(O)
-
-	//Everything else - Transfers reagents from it into beaker
-	for (var/obj/item/weapon/reagent_containers/O in holdingitems)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			break
-		var/amount = O.reagents.total_volume
-		O.reagents.trans_to(beaker, amount)
-		if(!O.reagents.total_volume)
-			remove_object(O)
-
-	//All other generics
 	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
-		var/allowed = get_allowed_by_id(O)
-		for (var/r_id in allowed)
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = allowed[r_id]
-			if (amount == 0)
-				if (O.reagents != null && O.reagents.has_reagent(r_id))
-					beaker.reagents.add_reagent(r_id,min(O.reagents.get_reagent_amount(r_id), space))
-			else
-				beaker.reagents.add_reagent(r_id,min(amount, space))
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
-		remove_object(O)
+		if(!O.ground_act(src,extract))
+			remove_object(O)
+		else
+			break
+			//What should we do if something ungrindable found its way inside?

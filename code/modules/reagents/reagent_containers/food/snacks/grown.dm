@@ -281,6 +281,11 @@ var/list/special_fruits = list()
 					s.start()
 	return 1
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
+	if(!extract && special_grind)
+		RC.reagents.add_reagent(special_grind,5*sqrt(potency)) //Used only for melon slices
+		return
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn
 	name = "ear of corn"
@@ -290,6 +295,7 @@ var/list/special_fruits = list()
 	potency = 40
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
+	special_grind = CORNOIL
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
@@ -299,6 +305,7 @@ var/list/special_fruits = list()
 	gender = PLURAL
 	plantname = "cherry"
 	slot_flags = SLOT_EARS
+	special_grind = CHERRYJELLY
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cinnamon
 	name = "cinnamon sticks"
@@ -339,6 +346,7 @@ var/list/special_fruits = list()
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
+	special_grind = POTATO
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -391,6 +399,7 @@ var/list/special_fruits = list()
 	icon_state = "berrypile"
 	filling_color = "#C2C9FF"
 	plantname = "berries"
+	special_grind = BERRYJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
@@ -430,6 +439,7 @@ var/list/special_fruits = list()
 	potency = 15
 	filling_color = "#B422C7"
 	plantname = "poisonberries"
+	special_grind = POISONBERRYJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/deathberries
 	name = "bunch of death-berries"
@@ -497,6 +507,7 @@ var/list/special_fruits = list()
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "apple"
+	special_grind = APPLEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned
 	filling_color = "#B3BD5E"
@@ -519,6 +530,7 @@ var/list/special_fruits = list()
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	slices_num = 5
 	plantname = "watermelon"
+	special_grind = WATERMELONJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	name = "pumpkin"
@@ -543,6 +555,7 @@ var/list/special_fruits = list()
 	potency = 20
 	filling_color = "#28FA59"
 	plantname = "lime"
+	special_grind = LIMEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lemon
 	name = "lemon"
@@ -551,6 +564,7 @@ var/list/special_fruits = list()
 	potency = 20
 	filling_color = "#FAF328"
 	plantname = "lemon"
+	special_grind = LEMONJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
@@ -559,6 +573,7 @@ var/list/special_fruits = list()
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
+	special_grind = ORANGEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
@@ -577,6 +592,7 @@ var/list/special_fruits = list()
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+	special_grind = BANANA
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	name = "chili"
@@ -599,6 +615,7 @@ var/list/special_fruits = list()
 	filling_color = "#E6E8B7"
 	icon_state = "soybeans"
 	plantname = "soybean"
+	special_grind = SOYMILK
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/koibeans
 	name = "koibean"
@@ -615,6 +632,7 @@ var/list/special_fruits = list()
 	filling_color = "#FF0000"
 	potency = 10
 	plantname = "tomato"
+	special_grind = TOMATOJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
 	name = "tomato" //"blue-space" is applied on new(), provided it's teleporting trait hasn't been removed
@@ -665,6 +683,12 @@ var/list/special_fruits = list()
 	filling_color = "#F7E186"
 	plantname = "wheat"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/wheat/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
+	if(!extract)
+		RC.reagents.add_reagent(FLOUR,5) //Wheat and rice are special. They always make five units.
+		return
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk
 	name = "rice stalk"
 	desc = "Rice to see you."
@@ -672,6 +696,12 @@ var/list/special_fruits = list()
 	icon_state = "rice"
 	filling_color = "#FFF8DB"
 	plantname = "rice"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
+	if(!extract)
+		RC.reagents.add_reagent(RICE,5) //Wheat and rice are special. They always make five units.
+		return
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 	name = "kudzu pod"
@@ -711,6 +741,7 @@ var/list/special_fruits = list()
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
+	special_grind = CARROTJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi
 	name = "reishi"

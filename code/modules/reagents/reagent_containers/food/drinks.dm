@@ -453,6 +453,9 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(ALUMINUM,10)
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo
 	name = "Grifeo"
 	desc = "A quality drink."
