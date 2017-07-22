@@ -151,7 +151,7 @@ var/list/dispenser_presets = list()
 					to_chat(user,"<span class='warning'>Error. No presets have been set. Place items on top of the dispenser to define them as presets.</span>")
 					return
 				var/no_preset = !preset
-				preset = input("Choose a Preset.", "Suit Dispenser") in dispenser_presets
+				preset = input(user,"Choose a Preset.", "Suit Dispenser") in dispenser_presets
 				if (preset && no_preset)
 					icon_state = "suitdispenser"
 					flick("suitdispenser-fill",src)
