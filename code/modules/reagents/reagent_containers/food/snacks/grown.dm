@@ -283,7 +283,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
 	if(!extract && special_grind)
-		RC.reagents.add_reagent(special_grind,5*sqrt(potency)) //Used only for melon slices
+		RC.reagents.add_reagent(special_grind,5*sqrt(potency))
 		return
 	..()
 

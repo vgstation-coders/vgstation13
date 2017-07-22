@@ -77,7 +77,7 @@
 		reagents.trans_to(M, reagents.total_volume)
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
+/obj/item/weapon/reagent_containers/pill/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract)
 	reagents.trans_to(RC,ARBITRARILY_LARGE_NUMBER)
 
 ////////////////////////////////////////////////////////////////////////////////

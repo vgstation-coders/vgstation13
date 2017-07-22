@@ -26,8 +26,8 @@
 		return 1
 
 	//There used to be a check here to only allow certain whitelisted things to be put inside the mortar. Now we just check size. God help us.
-	if(O.w_class >= W_CLASS_SMALL)
-		to_chat(user, "<span class ='warning'>That's too big to fit inside!</span>")
+	if(O.w_class > W_CLASS_SMALL)
+		to_chat(user, "<span class ='warning'>\The [O] is too big to fit inside!</span>")
 		return 1
 
 	if(istype(O, /obj/item/stack/))
