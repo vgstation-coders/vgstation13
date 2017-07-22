@@ -11,6 +11,8 @@
 //Always call parent on reaction_mob, reaction_obj, reaction_turf, on_mob_life and Destroy() so that the sanities can be handled
 //Failure to do so will lead to serious problems
 
+//Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
+
 /datum/reagent
 	var/name = "Reagent"
 	var/id = REAGENT

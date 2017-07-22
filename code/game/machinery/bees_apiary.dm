@@ -495,8 +495,8 @@
 		to_chat(user, "<span class='warning'>These bees don't want your candies, they want your blood!</span>")
 	else if(O.force)
 		user.delayNextAttack(10)
+		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
 		if(queen_bees_inside || worker_bees_inside)
-			to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
 			angry_swarm(user)
 
 		playsound(get_turf(src), O.hitsound, 50, 1, -1)
