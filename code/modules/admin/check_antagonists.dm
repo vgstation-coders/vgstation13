@@ -291,7 +291,7 @@
 					dat += "<tr><td><i>Emergency Responder not found!</i></td></tr>"
 			dat += "</table>"
 			dat += "<br><B>ERT Objectives:</B>"
-			var/datum/striketeam/team = sentStrikeTeams[TEAM_ERT]
+			var/datum/striketeam/team = sent_strike_teams[TEAM_ERT]
 			var/objective_count = 1
 			for(var/datum/objective/objective in team.objectives)
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
@@ -309,7 +309,7 @@
 					dat += "<tr><td><i>Death Commando not found!</i></td></tr>"
 			dat += "</table>"
 			dat += "<br><B>Deathsquad Objectives:</B>"
-			var/datum/striketeam/team = sentStrikeTeams[TEAM_DEATHSQUAD]
+			var/datum/striketeam/team = sent_strike_teams[TEAM_DEATHSQUAD]
 			var/objective_count = 1
 			for(var/datum/objective/objective in team.objectives)
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
@@ -327,7 +327,7 @@
 					dat += "<tr><td><i>Elite Squadie not found!</i></td></tr>"
 			dat += "</table>"
 			dat += "<br><B>Elite Syndie Objectives:</B>"
-			var/datum/striketeam/team = sentStrikeTeams[TEAM_ELITE_SYNDIE]
+			var/datum/striketeam/team = sent_strike_teams[TEAM_ELITE_SYNDIE]
 			var/objective_count = 1
 			for(var/datum/objective/objective in team.objectives)
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
@@ -345,7 +345,7 @@
 					dat += "<tr><td><i>Team member not found!</i></td></tr>"
 			dat += "</table>"
 			dat += "<br><B>Team Objectives:</B>"
-			var/datum/striketeam/team = sentStrikeTeams[TEAM_CUSTOM]
+			var/datum/striketeam/team = sent_strike_teams[TEAM_CUSTOM]
 			var/objective_count = 1
 			for(var/datum/objective/objective in team.objectives)
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"

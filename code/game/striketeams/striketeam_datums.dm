@@ -86,6 +86,10 @@ var/list/sent_strike_teams = list()
 			log_admin("[striketeam_name] received no applications.")
 			message_admins("[striketeam_name] received no applications.")
 			failure()
+			if (custom)
+				sent_strike_teams -= TEAM_CUSTOM
+			else
+				sent_strike_teams -= striketeam_name
 			qdel(src)
 			return
 
@@ -120,6 +124,7 @@ var/list/sent_strike_teams = list()
 			spawn()//not waiting for players to customize their characters to move on
 				var/mob/living/carbon/human/new_commando = create_commando(L, leader, applicant.key)
 				team_composition |= new_commando
+
 				new_commando.key = applicant.key
 
 				if (leader)
@@ -180,37 +185,67 @@ var/list/sent_strike_teams = list()
 
 ///////////////////////////////////////CUSTOM STRIKE TEAMS///////////////////////////////////
 
+/datum/striketeam/custom
+	var/can_customize_name = 0
+	var/can_customize_appearance = 0
+	var/defaultname = "Commando"
+
 /datum/striketeam/custom/trigger_strike(var/mob/user)
 	custom = 1
+	var/turf/T = null
+	for(var/obj/effect/landmark/L in landmarks_list)
+		if (L.name == spawns_name)
+			T = get_turf(L)
+			break
+	if (!T)
+		to_chat(user,"<span class='danger'>This map has no areas for custom strike teams to set up!</span>")
+		return
 	striketeam_name = input(user, "Name your strike team.", "Custom Strike Team", "")
 	faction_name = input(user, "Name the organization sending this strike team.", "Custom Strike Team", "")
 	team_size = input(user, "Set the maximum amount of commandos in your squad", "Custom Strike Team", "") as num
 	min_size_for_leader = -1
 	spawns_name = "Striketeam"
-	can_customize_name = 0
-	can_customize_appearance = 0
+
 	if(alert("Let the team members choose their name?",,"Yes", "No") == "Yes")
 		can_customize_name = 1
+
+	if(!can_customize_name)
+		defaultname = input(user, "What should their names be then? Keep Commando for random names.", "Custom Strike Team", "Commando")
 
 	if(alert("Let the team members choose their appearance?",,"Yes", "No") == "Yes")
 		can_customize_appearance = 1
 	//logo = input(user, "Got a custom logo for your strike team?", "Custom Strike Team", "nano-logo")
-	to_chat(user,"<span class='notice'>Remember to set up your team's spawn and dispensers.</span>")
+	to_chat(user,"<span class='notice'>Remember to set up your team's spawn and dispensers.(<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>)</span>")
 	..()
+
+/datum/striketeam/custom/Topic(var/href, var/list/href_list)
+	..()
+	if(href_list["jump"])
+		var/mob/dead/observer/O = usr
+		if(!O || !istype(O))
+			return
 
 /datum/striketeam/custom/create_commando(var/obj/spawn_location,var/leader_selected=0,var/mob_key = "")
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
-	var/commando_name = default_name
+
+	var/mob/user = null
+	for(var/mob/MO in player_list)
+		if(MO.key == mob_key)
+			user = MO
+
+	to_chat(user, "<span class='notice'>Congratulations, you've been selected to be part of \the [striketeam_name]. You can customize your character, but don't take too long, time is of the essence!</span>")
+
+	var/commando_name = defaultname
 
 	if(can_customize_name)
 		var/new_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
 		if(!new_name)
-			new_name = default_name
+			new_name = defaultname
 		commando_name = new_name
-	else
+	else if (defaultname == "Commando")
 		var/commando_leader_rank = pick("Lieutenant", "Captain", "Major")
 		var/commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
-		var/commando_name = pick(last_names)
+		commando_name = pick(last_names)
 		commando_name = "[!leader_selected ? commando_rank : commando_leader_rank] [commando_name]"
 
 	new_commando.real_name = commando_name
@@ -278,11 +313,11 @@ var/list/sent_strike_teams = list()
 	//M.rebuild_appearance()
 	new_commando.update_hair()
 	new_commando.update_body()
-	new_commando.check_dna(M)
+	new_commando.check_dna(new_commando)
 
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
 
-	new_commando.dna.ready_dna(M)//Creates DNA.
+	new_commando.dna.ready_dna(new_commando)//Creates DNA.
 
 	//Creates mind stuff.
 	new_commando.mind = new

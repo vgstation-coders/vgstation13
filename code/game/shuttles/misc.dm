@@ -61,6 +61,7 @@ var/global/datum/shuttle/transport/transport_shuttle = new(starting_area = /area
 
 /obj/docking_port/destination/transport/centcom
 	areaname = "central command"
+	require_admin_permission = 1
 
 
 //ERT SHUTTLE
@@ -102,6 +103,7 @@ var/global/datum/shuttle/ert/ert_shuttle = new(starting_area = /area/shuttle/ert
 
 /obj/docking_port/destination/ert/centcom
 	areaname = "central command"
+	require_admin_permission = 1
 
 
 //DEATHSQUAD SHUTTLE
@@ -147,6 +149,7 @@ var/global/datum/shuttle/deathsquad/deathsquad_shuttle = new(starting_area = /ar
 
 /obj/docking_port/destination/deathsquad/centcom
 	areaname = "central command"
+	require_admin_permission = 1
 
 
 //ELITE SYNDIE SHUTTLE
@@ -194,6 +197,7 @@ var/global/datum/shuttle/elite_syndie/elite_syndie_shuttle = new(starting_area =
 
 /obj/docking_port/destination/elite_syndie/motherbase
 	areaname = "syndicate motherbase"
+	require_admin_permission = 1
 
 
 //CUSTOM STRIKE TEAM SHUTTLE
@@ -241,6 +245,7 @@ var/global/datum/shuttle/striketeam/strike_team_shuttle = new(starting_area = /a
 
 /obj/docking_port/destination/striketeam/base
 	areaname = "base"
+	require_admin_permission = 1
 
 
 //ADMIN SHUTTLE
@@ -265,6 +270,7 @@ var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle
 
 /obj/docking_port/destination/admin/centcom
 	areaname = "centcom hangar bay"
+	require_admin_permission = 1
 
 /obj/machinery/computer/shuttle_control/admin_shuttle
 	machine_flags = 0 //No screwtoggle / emaggable to prevent mortals from fucking with shit

@@ -1105,6 +1105,7 @@
 				if(src in ticker.mode.ert)
 					ticker.mode.ert -= src
 					special_role = null
+					response_team_members -= current
 					to_chat(current, "<span class='danger'><FONT size = 3>You have been demoted! You are no longer an Emergency Responder!</FONT></span>")
 					log_admin("[key_name_admin(usr)] has de-ERT'ed [current].")
 			if ("resteam")
@@ -1112,6 +1113,7 @@
 					ticker.mode.ert += src
 					assigned_role = "MODE"
 					special_role = "Response Team"
+					response_team_members |= current
 					log_admin("[key_name(usr)] has ERT'ed [key_name(current)].")
 
 	else if (href_list["dsquad"])
@@ -1145,7 +1147,7 @@
 					log_admin("[key_name(usr)] has elite syndie squad'ed [key_name(current)].")
 
 	else if (href_list["custom"])
-		var/datum/striketeam/team = sentStrikeTeams[TEAM_CUSTOM]
+		var/datum/striketeam/team = sent_strike_teams[TEAM_CUSTOM]
 		switch(href_list["custom"])
 			if ("clear")
 				if(src in ticker.mode.custom_team)
