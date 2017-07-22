@@ -291,6 +291,11 @@ proc/checkhtml(var/t)
 
 	return ""
 
+//Returns a string with double spaces removed	
+/proc/trimcenter(text) 
+	var/regex/trimcenterregex = regex("\\s{2,}","g")
+	return trimcenterregex.Replace(text," ")
+	
 //Returns a string with reserved characters and spaces before the first word and after the last word removed.
 /proc/trim(text)
 	return trim_left(trim_right(text))

@@ -584,7 +584,7 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/medbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if ((istype(M, /obj/machinery/door)) && (!isnull(botcard)))
 		var/obj/machinery/door/D = M
 		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
@@ -713,6 +713,14 @@
 /*
  *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
 */
+
+/obj/machinery/bot/medbot/install_pai(obj/item/device/paicard/P)
+	..()
+	overlays += image('icons/obj/aibots.dmi', "medibot_pai_overlay")
+
+/obj/machinery/bot/medbot/eject_integratedpai_if_present()
+	if(..())
+		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
 
 /obj/machinery/bot/medbot/getpAIMovementDelay()
 	return 1

@@ -182,7 +182,7 @@ var/global/list/bombermangear = list()
 
 
 
-/obj/structure/bomberman/Bump(atom/obstacle)
+/obj/structure/bomberman/to_bump(atom/obstacle)
 	kicked = 0
 	..()
 
@@ -341,7 +341,7 @@ obj/structure/bomberflame/Destroy()
 		new /obj/structure/bomberflame(get_turf(src),0,fuel-1,dir,destroy_environnement,hurt_players)
 
 
-/obj/structure/bomberflame/Bump(atom/obstacle)	//if an explosion reaches a bomb, it detonates
+/obj/structure/bomberflame/to_bump(atom/obstacle)	//if an explosion reaches a bomb, it detonates
 	if(istype(obstacle, /obj/structure/bomberman/))
 		var/obj/structure/bomberman/chained_explosion = obstacle
 		chained_explosion.detonate()

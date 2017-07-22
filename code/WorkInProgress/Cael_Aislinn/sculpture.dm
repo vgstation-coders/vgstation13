@@ -14,6 +14,8 @@
 	response_harm   = "hits the"
 	meat_type = null
 	see_in_dark = 8 //Needs to see in darkness to snap in darkness
+	mob_property_flags = MOB_SUPERNATURAL|MOB_CONSTRUCT
+
 	var/response_snap = "snapped the neck of" //Past tense because it "happened before you could see it"
 	var/response_snap_target = "In the blink of an eye, something grabs you and snaps your neck!"
 	var/snap_sound = list('sound/scp/firstpersonsnap.ogg','sound/scp/firstpersonsnap2.ogg','sound/scp/firstpersonsnap3.ogg')
@@ -281,7 +283,7 @@
 /mob/living/simple_animal/sculpture/Topic(href, href_list)
 	..()
 
-/mob/living/simple_animal/sculpture/Bump(atom/movable/AM as mob)
+/mob/living/simple_animal/sculpture/to_bump(atom/movable/AM as mob)
 	if(!check_los())
 		snap_neck(AM)
 	..()

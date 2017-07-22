@@ -2,7 +2,8 @@
 	gender = NEUTER
 	voice_name = "synthesized voice"
 	can_butcher = 0
-	
+	mob_property_flags = MOB_ROBOTIC
+
 	var/flashed = 0
 	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
@@ -34,7 +35,7 @@
 
 /mob/living/silicon/proc/can_diagnose()
 	return null
-	
+
 /mob/living/silicon/proc/cancelAlarm()
 	return
 

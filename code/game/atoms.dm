@@ -820,3 +820,6 @@ its easier to just keep the beam vertical.
 		return FALSE
 	else
 		return TRUE
+
+/atom/proc/to_bump()
+	return

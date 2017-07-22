@@ -715,13 +715,13 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T))
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-							
+
 							/* Drag damage is here!*/
 							var/mob/living/carbon/human/HM = M
 							var/list/damaged_organs = HM.get_broken_organs()
 							var/list/bleeding_organs = HM.get_bleeding_organs()
 							if (T.has_gravity() && HM.lying)
-							
+
 								if (damaged_organs.len)
 									if(!HM.isincrit())
 										if(prob(HM.getBruteLoss() / 5)) //Chance for damage based on current damage
@@ -738,7 +738,7 @@ Thanks.
 													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
 													add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
 													HM.UpdateDamageIcon()
-								
+
 								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
 									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
 									/*Sometimes species with NO_BLOOD get blood, hence weird check*/
@@ -1258,7 +1258,7 @@ Thanks.
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
 
-/mob/living/Bump(atom/movable/AM as mob|obj)
+/mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
 		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
@@ -1541,7 +1541,18 @@ Thanks.
 /mob/proc/CheckSlip()
 	return 0
 
+/mob/living/proc/turn_into_statue(forever = 0, force)
+	if(!force)
+		if(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC|MOB_SUPERNATURAL))
+			return 0
 
+	spawn()
+		if(forever)
+			new /obj/structure/closet/statue/eternal(get_turf(src), src)
+		else
+			new /obj/structure/closet/statue(get_turf(src), src)
+
+	return 1
 
 /*
 	How this proc that I took from /tg/ works:

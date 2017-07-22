@@ -64,7 +64,7 @@ obj/structure/windoor_assembly/Destroy()
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
 			if(density)
-				mover.Bump(src)
+				mover.to_bump(src)
 			return !density
 	return 1
 

@@ -2,6 +2,7 @@
 	var/mob/creator
 	var/unique_name = 0
 	faction = "necro"
+	mob_property_flags = MOB_UNDEAD
 
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
 	..()

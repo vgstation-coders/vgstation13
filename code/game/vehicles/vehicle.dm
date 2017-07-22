@@ -80,6 +80,8 @@
 	loc.Entered(src)
 	return
 
+/obj/vehicle/proc/is_too_heavy(var/turf/simulated/floor/glass/glassfloor)
+	return !istype(glassfloor, /turf/simulated/floor/glass/plasma)
 
 //################ Helpers ###########################################################
 

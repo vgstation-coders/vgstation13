@@ -348,7 +348,7 @@
 
 		sleep(sleeptime)
 
-/obj/item/projectile/hookshot/flesh/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/hookshot/flesh/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return 0
 	bumped = 1

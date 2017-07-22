@@ -20,7 +20,7 @@
 	..()
 	update_icon()
 
-/obj/structure/bed/chair/vehicle/gigadrill/Bump()
+/obj/structure/bed/chair/vehicle/gigadrill/to_bump()
 	..()
 	if(occupant)
 		occupant.pixel_y += 2

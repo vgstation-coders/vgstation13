@@ -37,6 +37,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	maxbodytemp = T0C+1768 //Melting point of platinum
 
 	wander = 0
+	mob_property_flags = MOB_CONSTRUCT
 
 	var/following //Who are we following
 	var/scan_time = 3 SECONDS

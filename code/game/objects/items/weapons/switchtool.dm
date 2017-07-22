@@ -38,7 +38,7 @@
 				if(stored_modules[module] == deployed)
 					stored_modules[module] = null
 			undeploy()
-		return 1
+		return TRUE
 
 /obj/item/weapon/switchtool/New()
 	..()
@@ -61,13 +61,10 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && /obj/item/weapon/switchtool/holo)
-		to_chat(user, "You can't remove modules from this.")
-		return
 	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
 		return remove_module(user)
 	if(add_module(used_item, user))
-		return 1
+		return TRUE
 	else
 		return ..()
 
@@ -104,7 +101,7 @@
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
 					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
-					return 1
+					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
 	deployed.cant_drop = 0
@@ -116,7 +113,7 @@
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
 	playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
 	undeploy()
-	return 1
+	return TRUE
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(get_turf(src), undeploy_sound, 10, 1)
@@ -156,7 +153,7 @@
 	else if(potential_modules.len == 1)
 		deploy(potential_modules[1])
 		to_chat(user, "You deploy \the [potential_modules[1]]")
-		return 1
+		return TRUE
 
 	else
 		var/chosen_module = input(user,"What do you want to deploy?", "[src]", "Cancel") as anything in potential_modules
@@ -168,7 +165,7 @@
 					break
 			if(deploy(true_module))
 				to_chat(user, "You deploy \the [deployed].")
-			return 1
+			return TRUE
 		return
 
 /obj/item/weapon/switchtool/surgery
@@ -216,6 +213,14 @@
 		lighter.lit = 1
 		..()
 
+
+#define BT 1
+#define ENGI 2
+#define CB 4
+#define SYNDI 8
+#define NT 16
+#define PS 32
+
 //Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
 /obj/item/weapon/switchtool/holo
 	name = "holo switchtool"
@@ -231,54 +236,83 @@
 	//undeploy_sound = "sound/weapons/saberoff.ogg"
 	light_color =  LIGHT_COLOR_CYAN
 	mech_flags = MECH_SCAN_ILLEGAL
+	removing_item = null
+	var/has_tech = 0
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
 						"/obj/item/device/flashlight:Light" = null,
 						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null)
 
 //Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
-/obj/item/weapon/switchtool/holo/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
-	if(..())
-		return
+/obj/item/weapon/switchtool/holo/add_module(var/obj/item/D, mob/user)
 	if(istype(D, /obj/item/weapon/disk/tech_disk))
+		var/alreadyhas
 		var/obj/item/weapon/disk/tech_disk/T = D
 		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/biotech) && disk_tech.level >= 3)
-			stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
-			stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
-			stored_modules["/obj/item/weapon/cautery:Cautery"] = new /obj/item/weapon/cautery(src)
-			stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
-			stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
-			stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
-			to_chat(user, "The holo switchtool has medical designs now!")
-			return
+			if(!(has_tech & BT))
+				stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
+				stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
+				stored_modules["/obj/item/weapon/cautery:Cautery"] = new /obj/item/weapon/cautery(src)
+				stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
+				stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
+				stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
+				to_chat(user, "The holo switchtool has medical designs now!")
+				has_tech |= BT
+				return TRUE
+			alreadyhas = "Biotech"
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
-			stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
-			stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
-			stored_modules["/obj/item/weapon/wirecutters:Wirecutters"] = new /obj/item/weapon/wirecutters(src)
-			stored_modules["/obj/item/weapon/crowbar:Crowbar"] = new /obj/item/weapon/crowbar(src)
-			stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
-			stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
-			to_chat(user, "The holo switchtool has engineering designs now!")
-			return
+			if(!(has_tech & ENGI))
+				stored_modules["/obj/item/weapon/screwdriver:Screwdriver"] = new /obj/item/weapon/screwdriver(src)
+				stored_modules["/obj/item/weapon/wrench:Wrench"] = new /obj/item/weapon/wrench(src)
+				stored_modules["/obj/item/weapon/wirecutters:Wirecutters"] = new /obj/item/weapon/wirecutters(src)
+				stored_modules["/obj/item/weapon/crowbar:Crowbar"] = new /obj/item/weapon/crowbar(src)
+				stored_modules["/obj/item/device/multitool:Multitool"] = new /obj/item/device/multitool(src)
+				stored_modules["/obj/item/weapon/weldingtool/experimental:Weldingtool"] = new /obj/item/weapon/weldingtool/experimental(src)
+				to_chat(user, "The holo switchtool has engineering designs now!")
+				has_tech |= ENGI
+				return TRUE
+			alreadyhas = "Engineering"
 		if(istype(disk_tech, /datum/tech/combat) && disk_tech.level >= 5)
-			stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
-			to_chat(user, "The holo switchtool has a defensive design now!")
-			return
+			if(!(has_tech & CB))
+				stored_modules["/obj/item/weapon/shield/energy:Shield"] = new /obj/item/weapon/shield/energy(src)
+				to_chat(user, "The holo switchtool has a defensive design now!")
+				has_tech |= CB
+				return TRUE
+			alreadyhas = "Combat"
 		if(istype(disk_tech, /datum/tech/syndicate) && disk_tech.level >= 3)
-			stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
-			to_chat(user, "The holo switchtool has an offensive design now!")
-			return
+			if(!(has_tech & SYNDI))
+				stored_modules["/obj/item/weapon/melee/energy/sword/activated:Sword"] = new /obj/item/weapon/melee/energy/sword/activated(src)
+				to_chat(user, "The holo switchtool has an offensive design now!")
+				has_tech |= SYNDI
+				return TRUE
+			alreadyhas = "Syndicate"
 		if(istype(disk_tech, /datum/tech/nanotrasen) && disk_tech.level >= 5)
-			stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
-			to_chat(user, "The holo switchtool has a secret offensive design now!")
-			return
+			if(!(has_tech & NT))
+				stored_modules["/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword"] = new /obj/item/weapon/melee/energy/hfmachete/activated(src)
+				to_chat(user, "The holo switchtool has a secret offensive design now!")
+				has_tech |= NT
+				return TRUE
+			alreadyhas = "Nanotrasen"
 	//Joke module about power[clean/creep], this is dumb but exists.
 	//How does a UV light clean even? It just sterilizes. I guess it works because it's like suit storages with their UV suit cleaner.
 		if(istype(disk_tech, /datum/tech/powerstorage) && disk_tech.level >= 4)
-			stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
-			to_chat(user, "The holo switchtool has a power clean design now!")
-			return
+			if(!(has_tech & PS))
+				stored_modules["/obj/item/weapon/soap/holo:UV sterilizer"] = new /obj/item/weapon/soap/holo(src)
+				to_chat(user, "The holo switchtool has a power clean design now!")
+				has_tech |= PS
+				return TRUE
+			alreadyhas = "Power Storage"
+			
+		if(alreadyhas)
+			to_chat(user, "The holo switchtool already has [alreadyhas] technology!")
+
+#undef BT
+#undef ENGI
+#undef CB
+#undef SYNDI
+#undef NT
+#undef PS
 
 //for the inhand sprite changes
 //Big shitty wall of else if quality code
@@ -328,7 +362,7 @@
 
 /obj/item/weapon/switchtool/holo/IsShield()
 	if(istype(deployed, /obj/item/weapon/shield/energy))
-		return 1
+		return TRUE
 	else
 		return 0
 

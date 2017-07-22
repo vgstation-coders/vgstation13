@@ -194,6 +194,7 @@
 	species_type = /mob/living/simple_animal/hostile/carp/holocarp
 	can_breed = 0
 	pheromones_act = PHEROMONES_NO_EFFECT
+	mob_property_flags = MOB_HOLOGRAPHIC
 	holder_type = null
 
 /mob/living/simple_animal/hostile/carp/holocarp/Die()

@@ -230,7 +230,7 @@ var/MAX_EXPLOSION_RANGE = 14
 	These defines are used specifically with the atom/movable/languages bitmask.
 	They are used in atom/movable/Hear() and atom/movable/say() to determine whether hearers can understand a message.
 
-	They also have a secondary use in Bump() code for living mobs, in the mob_bump_flag and mob_swap_flags/mob_push_flags vars
+	They also have a secondary use in to_bump() code for living mobs, in the mob_bump_flag and mob_swap_flags/mob_push_flags vars
 */
 
 #define HUMAN 1
@@ -1026,6 +1026,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PURCHASER		256 //it connects to the centcom database at roundstart
 #define WIREJACK		512 //can we wirejack it? if flagged, machine calls wirejack()
 #define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
+#define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 

@@ -32,6 +32,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
+	mob_property_flags = MOB_CONSTRUCT
 	faction = "mannequin"
 
 	var/list/clothing = list()

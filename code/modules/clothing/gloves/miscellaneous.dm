@@ -303,3 +303,9 @@
 	update_icon()
 
 	return TRUE
+
+/obj/item/clothing/gloves/frankgloves
+	desc = "These gloves chill you, thrill you, and fulfill you; like a creature of the night."
+	name = "Dr. Frank's gloves"
+	icon_state = "frankgloves"
+	item_state = "frankgloves"

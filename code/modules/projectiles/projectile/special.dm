@@ -8,7 +8,7 @@
 	flag = "energy"
 	fire_sound = 'sound/weapons/ion.ogg'
 
-/obj/item/projectile/ion/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ion/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
 		empulse(get_turf(A), 1, 1)
 	..()
@@ -23,7 +23,7 @@
 	flag = "energy"
 	fire_sound = 'sound/weapons/ion.ogg'
 
-/obj/item/projectile/ionsmall/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ionsmall/to_bump(atom/A as mob|obj|turf|area)
 	if(!bumped && ((A != firer) || reflected))
 		empulse(src, 0, 1)
 	..()
@@ -34,7 +34,7 @@
 	damage = 50
 	flag = "bullet"
 
-/obj/item/projectile/bullet/gyro/Bump(var/atom/target) //The bullets lose their ability to penetrate (which was pitiful for these ones) but now explode when hitting anything instead of only some things.
+/obj/item/projectile/bullet/gyro/to_bump(var/atom/target) //The bullets lose their ability to penetrate (which was pitiful for these ones) but now explode when hitting anything instead of only some things.
 	explosion(target, -1, 0, 2)
 	qdel(src)
 
@@ -116,7 +116,7 @@
 	nodamage = 1
 	flag = "bullet"
 
-/obj/item/projectile/simple_fireball/Bump(atom/A)
+/obj/item/projectile/simple_fireball/to_bump(atom/A)
 	explosion(get_turf(src), -1, -1, 2, 2)
 	return qdel(src)
 
@@ -240,7 +240,7 @@ obj/item/projectile/kinetic/New()
 	new /obj/item/effect/kinetic_blast(target_turf)
 	..(target,blocked)
 
-/obj/item/projectile/kinetic/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/kinetic/to_bump(atom/A as mob|obj|turf|area)
 	if(!loc)
 		return
 	if(A == firer)
@@ -284,7 +284,7 @@ obj/item/projectile/kinetic/New()
 	var/obj/item/stickybomb/sticky = null
 
 
-/obj/item/projectile/stickybomb/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/stickybomb/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return 0
 	bumped = 1
@@ -304,7 +304,7 @@ obj/item/projectile/kinetic/New()
 	if(!bumped)
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 
 /obj/item/projectile/portalgun
 	name = "portal gun shot"
@@ -319,9 +319,9 @@ obj/item/projectile/kinetic/New()
 	if(!bumped)
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 
-/obj/item/projectile/portalgun/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/portalgun/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return
 	bumped = 1

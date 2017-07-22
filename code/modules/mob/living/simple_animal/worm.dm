@@ -108,7 +108,7 @@
 				previous.Move(attachementNextPosition)
 			update_icon()
 
-	Bump(atom/obstacle)
+	to_bump(atom/obstacle)
 		if(currentlyEating != obstacle)
 			currentlyEating = obstacle
 			eatingDuration = 0

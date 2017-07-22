@@ -15,6 +15,7 @@
 	maxHealth = 20
 	health = 20
 	flying = 1
+	mob_property_flags = MOB_SWARM
 
 	harm_intent_damage = 8
 	melee_damage_lower = 10

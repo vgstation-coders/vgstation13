@@ -28,6 +28,7 @@
 	melee_damage_lower = 3
 	melee_damage_upper = 6
 	stat_attack = UNCONSCIOUS //Attack unconscious dudes too
+	mob_property_flags = MOB_UNDEAD
 
 	faction = "mummy"
 	corpse = /obj/effect/landmark/corpse/mummy

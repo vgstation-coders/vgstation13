@@ -33,8 +33,8 @@
 * around us, then checks the difference.
 */
 /proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
-	var/minp=16777216; //What is even the significance of this number?
-	var/maxp=0;
+	var/minp=16777216; // Lowest recorded pressure.
+	var/maxp=0;        // Highest recorded pressure.
 	for(var/turf/simulated/T in turf_list)
 		var/cp = 0
 		if(T.zone)
@@ -43,9 +43,9 @@
 		else
 			if(istype(T,/turf/simulated))
 				continue
-		if(cp<minp)
-			minp=cp
-		if(cp>maxp)
+		if(cp<minp) // If lower than the lowest pressure we've seen,
+			minp=cp   // set it to our lowest recorded pressure
+		if(cp>maxp) // Same, but for highest pressure.
 			maxp=cp
 	return abs(minp-maxp)
 

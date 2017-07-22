@@ -3171,7 +3171,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MS")
 				var/choice = input("Are you sure you want to summon an unending hail of meteors and force station evacuation? This will only work properly if the shuttle is not in use. Misuse of this could result in removal of flags or hilarity.") in list("BRING ME MY FRIDGE", "Cancel")
-				if(choice == "BRING ME MY FRIDGE, WORKED FOR INDIANA JONES")
+				if(choice == "BRING ME MY FRIDGE")
 					SetUniversalState(/datum/universal_state/meteor_storm, 1, 1)
 					message_admins("[key_name_admin(usr)] has summoned an unending meteor storm upon the station. Go ahead and ask him for the details, don't forget to scream at him.")
 			if("mobswarm")

@@ -36,7 +36,7 @@
 /obj/item/weapon/stool/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(iswrench(W) && sheet_path)
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		getFromPool(sheet_path, get_turf(src), 1)
+		drop_stack(sheet_path, loc, 1, user)
 		qdel(src)
 
 	. = ..()
