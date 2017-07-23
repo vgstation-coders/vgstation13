@@ -9,6 +9,7 @@
 			{{if data.unlocked}}
 				{{:helper.link('Dump', 'trash', {'dump_contents' : 1})}}
 				{{:helper.link('Force Reaction', 'transferthick-e-w', {'force' : 1})}}
+				{{:helper.link('Collapse', 'suitcase', {'collapse' : 1})}}
 			{{/if}}
 			{{:helper.link('Back', 'eject', {'prepare_dump' : 1})}}
 		</div>
@@ -21,6 +22,14 @@
 		</div>
 		<div class="itemContent">
 			{{:data.powered ? '<span class="good">Good</span>' : '<span class="average">No External Power</span>'}}
+		</div>
+	</div>
+	<div class="item">
+		<div class="itemLabel">
+			Power Consumption:
+		</div>
+		<div class="itemContent">
+			{{:data.powerConsumption}} watts
 		</div>
 	</div>
 

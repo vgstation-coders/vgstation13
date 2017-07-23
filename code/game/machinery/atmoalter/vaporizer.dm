@@ -3,12 +3,13 @@
 	desc = "A vaporizer which uses power to synthesize liquid oxygen and nitrogen when supplied with vapor salts."
 
 	icon = 'icons/obj/atmos.dmi'
-	icon_state = "psiphon:0"
+	icon_state = "vaporizer_big-unsecured"
 
 	use_power = 1
 	density = 1
-	machine_flags = WRENCHMOVE | FIXED2WORK
+	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	flags = OPENCONTAINER | NOREACT
+	stat = NOPOWER
 	req_access = list(access_atmospherics)
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/noreact/large/mixing_chamber = null //We can't just use a holder because the machine is NOREACT,
@@ -20,10 +21,6 @@
 	var/waiting_for_ID = 0
 	var/unlocked = 0
 	var/power_use_this_tick = 0
-
-	//TODO: Loadable cell for on-the-go synthesis?
-	//Expected Energy Cost Per Second (EECPS)?
-	//Allow delimiting via maintenance panel?
 
 /obj/machinery/vaporizer/New()
 	..()
@@ -40,8 +37,16 @@
 	if(stat & (BROKEN|NOPOWER))
 		on = FALSE
 		visible_message("<span class='warning'>The [src] buzzes and shuts off.</span>")
+	update_icon()
+
+/obj/machinery/vaporizer/update_icon()
+	if(!anchored)
+		icon_state = "vaporizer_big-unsecured"
+	else
+		icon_state = "vaporizer_big-[on ? "on" : "off"]"
 
 /obj/machinery/vaporizer/process()
+	power_use_this_tick = 0
 	if(!on)
 		return
 	if(!anchored || (stat & (BROKEN|NOPOWER)))
@@ -50,7 +55,6 @@
 	if(mixrate)
 		reagents.trans_id_to(mixing_chamber,VAPORSALT,mixrate)
 		nanomanager.update_uis(src)
-	power_use_this_tick = 0
 	if(mixing_chamber.reagents.get_reagent_amount(VAPORSALT)>50)
 		//We're not supposed to have more than 50u
 		visible_message("<span class='notice'>The [src]'s centrifugal limiter begins to whirr...</span>")
@@ -106,13 +110,13 @@
 
 /obj/machinery/vaporizer/attackby(obj/item/weapon/W, mob/living/user)
 	..()
-	if(waiting_for_ID && istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda) && allowed(user) && !unlocked)
+	if(waiting_for_ID && istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda) && (emagged || allowed(user)) && !unlocked)
 		unlocked = 1
-		to_chat(user,"<span class='notice'>You authorize the dump protocol.</span>")
+		to_chat(user,"<span class='notice'>The interface accepts your verification.</span>")
 	nanomanager.update_uis(src)
 
 /obj/machinery/vaporizer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if (gcDestroyed || !get_turf(src))
+	if (gcDestroyed || !get_turf(src) || !anchored)
 		if(!ui)
 			ui = nanomanager.get_open_ui(user, src, ui_key)
 		if(ui)
@@ -129,6 +133,7 @@
 	data["valveOpen"] = on
 	data["awaiting_ID"] = waiting_for_ID
 	data["unlocked"] = unlocked
+	data["powerConsumption"] = power_use_this_tick
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
@@ -146,7 +151,7 @@
 /obj/machinery/vaporizer/Topic(href, href_list)
 	if(..())
 		return
-	if(!allowed(usr))
+	if(!allowed(usr) && !emagged)
 		to_chat(usr,"<span class='warning'>Access denied.</span>")
 		return
 
@@ -168,7 +173,47 @@
 		waiting_for_ID = 0
 	if(href_list["force"])
 		force_reaction()
+	if(href_list["collapse"])
+		if(on)
+			to_chat(usr,"<span class='warning'>\The [src] must be off to collapse.</span>")
+		else
+			collapse()
 	add_fingerprint(usr)
 	update_icon()
 	nanomanager.update_uis(src)
 	return 1
+
+/obj/machinery/vaporizer/wrenchAnchor(mob/user)
+	..()
+	power_change()
+	update_icon()
+
+/obj/machinery/vaporizer/proc/collapse()
+	if(on || stat & BROKEN)
+		return
+	var/obj/item/vaporizer/V = new /obj/item/vaporizer(get_turf(src))
+	forceMove(V)
+	V.folded = src
+	stat |= NOPOWER
+	waiting_for_ID = 0 //Return to main screen
+
+/obj/item/vaporizer
+	name = "collapsed industrial vaporizer"
+	desc = "A vaporizer which has been collapsed to conserve space. In space, space is the realest estate."
+	icon = 'icons/obj/atmos.dmi'
+	icon_state = "vaporizer_small-unsecured"
+	item_state = "toolbox_yellow"
+	var/obj/machinery/vaporizer/folded
+
+/obj/item/vaporizer/attack_self(mob/user)
+	unfold()
+
+/obj/item/vaporizer/CtrlClick(mob/user)
+	unfold()
+
+/obj/item/vaporizer/proc/unfold()
+	if(!folded)
+		folded = new /obj/machinery/vaporizer(src)
+	folded.forceMove(get_turf(src))
+	folded = null
+	qdel(src)

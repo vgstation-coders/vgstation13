@@ -87,7 +87,7 @@ var/global/num_vending_terminals = 1
 	var/machine_id = "#"
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
-	
+
 	var/account_first_linked = 0
 
 /obj/machinery/vending/cultify()
@@ -945,7 +945,7 @@ var/global/num_vending_terminals = 1
 		else
 			if(istype(R.product_path, /obj))
 				var/obj/A = R.product_path
-				A.forceMove(get_turf(src))		
+				A.forceMove(get_turf(src))
 		src.vend_ready = 1
 		return
 
@@ -1891,6 +1891,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
+		/obj/item/vaporizer = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2582,7 +2583,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/hairflower = 3,
 		)
 	pack = /obj/structure/vendomatpack/makeup
-	
+
 
 
 /obj/machinery/vending/sale
