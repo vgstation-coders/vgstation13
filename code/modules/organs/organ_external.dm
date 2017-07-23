@@ -653,7 +653,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Handles dismemberment
 //Returns the organ item
-/datum/organ/external/proc/droplimb(var/override = 0, var/no_explode = 0, var/spawn_limb = 1)
+/datum/organ/external/proc/droplimb(var/override = 0, var/no_explode = 0, var/spawn_limb = 1, var/display_message = TRUE)
 	if(destspawn)
 		return
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
@@ -688,7 +688,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			//If any organs are attached to this, attach them to the dropped organ item
 			for(var/datum/organ/external/O in children)
-				var/obj/item/weapon/organ/child_organ = O.droplimb(1)
+				var/obj/item/weapon/organ/child_organ = O.droplimb(1, display_message = FALSE)
 				organ.add_child(child_organ)
 		else
 			//If any organs are attached to this, destroy them
@@ -726,15 +726,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 				spark_system = null
 
 		if(organ)
-			owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
-			"<span class='danger'>Your [display_name] goes flying off!</span>", \
-			"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
-
-			//Here, we assign the organ health facts from its old position on the body
-			//Type check to avoid to rewrite everything else, for now
-			if(istype(organ, /obj/item/weapon/organ))
-				var/obj/item/weapon/organ/O = organ
-				O.cancer_stage = cancer_stage
+			if(display_message)
+				owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
+				"<span class='danger'>Your [display_name] goes flying off!</span>", \
+				"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
 
 			//Throw organs around
 			var/randomdir = pick(cardinal)
@@ -786,6 +781,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/obj/item/weapon/organ/O = organ_item
 
 		O.w_class = src.w_class
+		O.cancer_stage = src.cancer_stage
 
 		if(src.species)
 			O.species = src.species
