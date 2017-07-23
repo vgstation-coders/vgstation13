@@ -287,7 +287,7 @@
 		else
 			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
 			one_way = 0
-			getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1)
+			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			overlays -= oneway_overlay
 			return
 
@@ -386,7 +386,7 @@
 							playsound(src, 'sound/items/Welder.ogg', 100, 1)
 							user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 							"<span class='notice'>You disassemble \the [src].</span>")
-							getFromPool(sheettype, get_turf(src), sheetamount)
+							drop_stack(sheettype, get_turf(src), sheetamount, user)
 							qdel(src)
 							return
 					else
@@ -416,7 +416,7 @@
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 					"<span class='notice'>You disassemble \the [src].</span>")
-					getFromPool(sheettype, get_turf(src), sheetamount)
+					drop_stack(sheettype, get_turf(src), sheetamount, user)
 					Destroy()
 					return
 			else
@@ -489,9 +489,9 @@
 	..()
 
 /obj/structure/window/proc/spawnBrokenPieces()
-	getFromPool(shardtype, loc, sheetamount)
+	new shardtype(loc, sheetamount)
 	if(reinforced)
-		getFromPool(/obj/item/stack/rods, loc, sheetamount)
+		new /obj/item/stack/rods(loc, sheetamount)
 
 /obj/structure/window/Move()
 
