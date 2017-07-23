@@ -13,7 +13,7 @@
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
 	throwforce = 15.0
-	
+
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
@@ -117,14 +117,14 @@
 				var/mob/living/carbon/human/H = AM
 				var/danger = FALSE
 
-				if(!H.mutations.Find(M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
-					var/datum/organ/external/affecting = H.get_organ(pick(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
-					if(affecting.is_organic())
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
 						danger = TRUE
 
 						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
-						if(affecting.take_damage(5, 0))
+						if(foot.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()
 

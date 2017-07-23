@@ -91,11 +91,12 @@
 		brute *= 0.66 //~2/3 damage for ROBOLIMBS
 		burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
 	else
-		if(owner.species)
-			if(owner.species.brute_mod)
-				brute *= owner.species.brute_mod
-			if(owner.species.burn_mod)
-				burn *= owner.species.burn_mod
+		var/datum/species/species = src.species || owner.species
+		if(species)
+			if(species.brute_mod)
+				brute *= species.brute_mod
+			if(species.burn_mod)
+				burn *= species.burn_mod
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
@@ -247,6 +248,8 @@
 	if(!damage || damage < 0) //We weren't passed a damage value, or it's negative for some reason
 		return
 
+	var/datum/species/species = src.species || owner.species
+
 	//First check whether we can widen an existing wound
 	if(wounds.len > 0 && prob(max(50 + owner.number_wounds * 10, 100)))
 		if((type == CUT || type == BRUISE) && damage >= 5)
@@ -278,7 +281,7 @@
 
 	//Possibly trigger an internal wound, too.
 	var/local_damage = brute_dam + burn_dam + damage
-	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && is_organic() && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
+	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && is_organic() && !(species && species.anatomy_flags & NO_BLOOD))
 		var/internal_bleeding = 0
 		for(var/datum/wound/Wound in wounds)
 			if(Wound.internal)
@@ -343,7 +346,8 @@
 			return
 
 	//Bone fracurtes
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(owner.species.anatomy_flags & NO_BONES))
+	var/datum/species/species = src.species || owner.species
+	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && !(status & (ORGAN_ROBOT|ORGAN_PEG)) && !(species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -502,9 +506,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(!is_organic()) //Non-organic limbs don't heal or get worse
 		return
 
+	var/datum/species/species = src.species || owner.species
+
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
-		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
+		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(species && species.anatomy_flags & NO_BLOOD))
 			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
@@ -560,13 +566,15 @@ Note that amputating the affected organ does in fact remove the infection from t
 	burn_dam = 0
 	status &= ~ORGAN_BLEEDING
 	var/clamped = 0
+	var/datum/species/species = src.species || owner.species
+
 	for(var/datum/wound/W in wounds)
 		if(W.damage_type == CUT || W.damage_type == BRUISE)
 			brute_dam += W.damage
 		else if(W.damage_type == BURN)
 			burn_dam += W.damage
 
-		if(is_organic() && W.bleeding() && !(owner.species.anatomy_flags & NO_BLOOD))
+		if(is_organic() && W.bleeding() && !(species.anatomy_flags & NO_BLOOD))
 			W.bleed_timer--
 			if(!owner.reagents.has_reagent(CLOTTING_AGENT))
 				status |= ORGAN_BLEEDING
@@ -574,7 +582,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		clamped |= W.clamped
 		number_wounds += W.amount
 
-	if(open && !clamped && is_organic() && !(owner.species.anatomy_flags & NO_BLOOD)) //Things tend to bleed if they are CUT OPEN
+	if(open && !clamped && is_organic() && !(species.anatomy_flags & NO_BLOOD)) //Things tend to bleed if they are CUT OPEN
 		if(!owner.reagents.has_reagent(CLOTTING_AGENT))
 			status |= ORGAN_BLEEDING
 
@@ -655,6 +663,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
+	var/datum/species/species = src.species || owner.species
 	if(override)
 		status |= ORGAN_DESTROYED
 	if(status & ORGAN_DESTROYED)
@@ -741,7 +750,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(vital)
 			owner.death()
 
-		if(owner.species.anatomy_flags & NO_STRUCTURE)
+		if(species.anatomy_flags & NO_STRUCTURE)
 			status |= ORGAN_ATTACHABLE
 			amputated = 1
 			setAmputatedTree()
@@ -835,7 +844,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/fracture()
-	if(owner.species.anatomy_flags & NO_BONES)
+	var/datum/species/species = src.species || owner.species
+	if(species.anatomy_flags & NO_BONES)
 		return
 	if(status & ORGAN_BROKEN)
 		return
