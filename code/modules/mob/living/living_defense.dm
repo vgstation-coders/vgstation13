@@ -178,7 +178,6 @@
 /mob/living/kick_act(mob/living/carbon/human/M)
 	//Pick a random usable foot to perform the kick with
 	var/datum/organ/external/foot_organ = M.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
-	foot_species = foot_organ.species || M.species //Foot's species is either that of the organ, or (if it's null), the mob's species
 
 	M.delayNextAttack(20) //Kicks are slow
 
