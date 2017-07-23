@@ -1308,7 +1308,6 @@ obj/item/weapon/organ
 	//Store health facts. Right now limited exclusively to cancer, but should likely include all limb stats eventually
 	var/cancer_stage = 0
 
-
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
 	if(!istype(H))
@@ -1368,14 +1367,6 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	else if(species)
 		base = icon(species.icobase)
 
-	//Display organs attached to this one
-	if(children.len)
-		for(var/obj/item/weapon/organ/attached in children)
-			attached.update_icon() //This works recursively, ensuring all children are drawn
-			attached.transform = matrix() //Remove any rotation
-
-			base.Blend(attached.icon, ICON_OVERLAY)
-
 	if(base)
 		//Changing limb's skin tone to match owner
 		if(H)
@@ -1387,7 +1378,6 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 
 		icon = base
 		dir = SOUTH
-
 		src.transform = turn(src.transform, rand(70, 130))
 
 /****************************************************
