@@ -316,3 +316,19 @@
 
 /mob/living/simple_animal/mouse/plague
 	disease_carrier = 1
+
+/mob/living/simple_animal/mouse/plague/random_virus/New()
+	..()
+
+	//Give the mouse either a random virus existing in the world, or a brand new one
+	if(disease2_list.len) //There are already existing viruses
+
+		//The disease2_list list contains IDs associated with the viruses
+		var/datum/disease2/disease/virus = disease2_list[pick(disease2_list)]
+
+		virus2["[virus.uniqueID]"] = virus
+	else //Make a random one
+		var/datum/disease2/disease/new_virus = new /datum/disease2/disease("Introduced to the station by a plague rat.")
+		new_virus.makerandom()
+
+		virus2["[new_virus.uniqueID]"] = new_virus
