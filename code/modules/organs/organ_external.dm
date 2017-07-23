@@ -689,7 +689,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 			//If any organs are attached to this, attach them to the dropped organ item
 			for(var/datum/organ/external/O in children)
 				var/obj/item/weapon/organ/child_organ = O.droplimb(1, display_message = FALSE)
-				organ.add_child(child_organ)
+				if(child_organ)
+					organ.add_child(child_organ)
 		else
 			//If any organs are attached to this, destroy them
 			for(var/datum/organ/external/O in children)
