@@ -22,7 +22,7 @@
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)
 
-	if(M_BEAK in M.mutations) //Beaks = stronger bites
+	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		armor_modifier = 5
 		damage += 4
 
@@ -61,6 +61,12 @@
 
 //KICKS
 /mob/living/carbon/human/kick_act(mob/living/carbon/human/M)
+	var/datum/species/foot_species
+
+	//Pick a random usable foot to perform the kick with
+	var/datum/organ/external/foot_organ = pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+	foot_species = foot_organ.species || src.species //Foot's species is either that of the organ, or (if it's null), the mob's species
+
 	M.delayNextAttack(20) //Kicks are slow
 
 	if((src == M) || (M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
@@ -101,7 +107,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(M_TALONS in M.mutations) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)
