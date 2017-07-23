@@ -61,8 +61,6 @@
 
 //KICKS
 /mob/living/carbon/human/kick_act(mob/living/carbon/human/M)
-	var/datum/species/foot_species
-
 	//Pick a random usable foot to perform the kick with
 	var/datum/organ/external/foot_organ = pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	foot_species = foot_organ.species || src.species //Foot's species is either that of the organ, or (if it's null), the mob's species
