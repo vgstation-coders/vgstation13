@@ -176,7 +176,6 @@
 
 //KICKS
 /mob/living/kick_act(mob/living/carbon/human/M)
-	var/datum/species/foot_species
 	//Pick a random usable foot to perform the kick with
 	var/datum/organ/external/foot_organ = M.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 	foot_species = foot_organ.species || M.species //Foot's species is either that of the organ, or (if it's null), the mob's species
@@ -213,7 +212,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(M.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)

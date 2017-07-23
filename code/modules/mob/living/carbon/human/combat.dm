@@ -72,9 +72,6 @@
 
 	return (OE.species || src.species) //Return either organ's species, or mob's species (organ's species is null if it's the same as the mob's)
 
-/mob/living/carbon/human/proc/get_active_hand_organ()
-	return src.find_organ_by_grasp_index(active_hand)
-
 /mob/living/carbon/human/proc/get_active_arm_organ()
 	var/datum/organ/external/hand = get_active_hand_organ()
 
