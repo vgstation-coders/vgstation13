@@ -221,14 +221,9 @@
 		if (3)
 			adjustBruteLoss(20)
 
-/mob/living/simple_animal/bee/attack_hand(mob/living/carbon/human/M as mob)//punching bees!
+/mob/living/simple_animal/bee/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	..()
-	if((M.a_intent == I_HURT) || (M.a_intent == I_DISARM))
-		panic_attack(M)
-
-/mob/living/simple_animal/bee/attack_animal(var/mob/M)
-	..()
-	panic_attack(M)
+	panic_attack(attacker)
 
 /mob/living/simple_animal/bee/attack_paw(var/mob/M)
 	..()
