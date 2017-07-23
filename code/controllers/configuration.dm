@@ -23,6 +23,7 @@
 	var/log_adminwarn = 0				// log warnings admins get about bomb construction and such
 	var/log_adminghost = 1				// log warnings admins get about bomb construction and such
 	var/log_pda = 0						// log pda messages
+	var/log_rc = 0						// log requests consoles
 	var/log_hrefs = 0					// logs all links clicked in-game. Could be used for debugging and tracking down exploits
 	var/log_runtimes = 0                // Logs all runtimes.
 	var/sql_enabled = 1					// for sql switching
@@ -304,6 +305,9 @@
 
 				if ("log_pda")
 					config.log_pda = 1
+				
+				if ("log_rc")
+					config.log_rc = 1
 
 				if ("log_hrefs")
 					config.log_hrefs = 1
