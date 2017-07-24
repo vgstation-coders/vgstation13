@@ -1180,7 +1180,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 
-	grasp_id = GRASP_RIGHT_HAND
 	w_class = W_CLASS_SMALL
 
 //This proc is same as l_leg/can_stand()
@@ -1218,8 +1217,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_arm"
 	max_damage = 75
 	min_broken_damage = 30
-	body_part = LEG_RIGHT
-	icon_position = RIGHT
 	w_class = W_CLASS_SMALL
 	body_part = ARM_LEFT
 
