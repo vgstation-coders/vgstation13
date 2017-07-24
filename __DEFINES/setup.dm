@@ -1354,7 +1354,10 @@ var/proccalls = 1
 #define log_adminsay(text) diary << html_decode("\[[time_stamp()]]ADMINSAY: [text]")
 
 #define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
+
 #define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+
+#define log_rc(text) diary << html_decode("\[[time_stamp()]]RC: [text]")
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")

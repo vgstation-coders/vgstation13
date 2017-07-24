@@ -642,12 +642,12 @@
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		var/mob/living/carbon/human/h = user
+		var/mob/living/carbon/human/H = user
 		user.flash_eyes(visual = 1)
-		for(var/datum/organ/external/l_leg/E in h.organs)
+
+		for(var/datum/organ/external/E in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 			E.droplimb(1)
-		for(var/datum/organ/external/r_leg/E in h.organs)
-			E.droplimb(1)
+
 		to_chat(user, "<span class = 'warning'>Your legs fall off!</span>")
 		qdel(src)
 
