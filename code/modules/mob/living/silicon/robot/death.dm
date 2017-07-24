@@ -38,11 +38,11 @@
 		return
 	if(!gibbed)
 		emote("deathgasp")
+		updateicon()
 	stat = DEAD
 	update_canmove()
 	if(camera)
 		camera.status = 0
-
 	if(in_contents_of(/obj/machinery/recharge_station))//exit the recharge station
 		var/obj/machinery/recharge_station/RC = loc
 		if(RC.upgrading)
@@ -53,7 +53,6 @@
 	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	updateicon()
 
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)

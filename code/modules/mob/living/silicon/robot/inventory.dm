@@ -3,7 +3,14 @@
 
 //Returns the thing in our active hand (whatever is in our active module-slot, in this case)
 /mob/living/silicon/robot/get_active_hand()
-	return module_active
+	if(isgripper(module_active))
+		var/obj/item/weapon/gripper/G = module_active
+		if(G.wrapped)
+			return G.wrapped
+		else
+			return module_active
+	else
+		return module_active
 
 /mob/living/silicon/robot/get_inactive_hand()
 	return
@@ -30,7 +37,11 @@
 	if(module)
 		module.forceMove(src.module)
 		module.dropped(src)
-	hud_used.update_robot_modules_display()
+		if(isgripper(module))
+			var/obj/item/weapon/gripper/G = module
+			G.drop_item(force_drop = 1)
+	if(hud_used)
+		hud_used.update_robot_modules_display()
 	return 1
 
 /mob/living/silicon/robot/proc/uneq_active()
@@ -69,31 +80,31 @@
 	updateicon()
 	hud_used.update_robot_modules_display()
 
-/mob/living/silicon/robot/proc/activate_module(var/obj/item/O)
-	if(!(locate(O) in src.module.modules) && O != src.module.emag)
+/mob/living/silicon/robot/proc/activate_module(var/obj/item/I)
+	if(!(locate(I) in src.module.modules) && I != src.module.emag)
 		return
-	if(activated(O))
+	if(activated(I))
 		to_chat(src, "<span class='notice'>Already activated</span>")
 		return
-	O.equipped(src)
+	I.equipped(src)
 	if(!module_state_1)
-		O.mouse_opacity = initial(O.mouse_opacity)
-		module_state_1 = O
-		O.hud_layerise()
-		O.screen_loc = inv1.screen_loc
-		O.forceMove(src)
+		I.mouse_opacity = initial(I.mouse_opacity)
+		module_state_1 = I
+		I.hud_layerise()
+		I.screen_loc = inv1.screen_loc
+		I.forceMove(src)
 	else if(!module_state_2)
-		O.mouse_opacity = initial(O.mouse_opacity)
-		module_state_2 = O
-		O.hud_layerise()
-		O.screen_loc = inv2.screen_loc
-		O.forceMove(src)
+		I.mouse_opacity = initial(I.mouse_opacity)
+		module_state_2 = I
+		I.hud_layerise()
+		I.screen_loc = inv2.screen_loc
+		I.forceMove(src)
 	else if(!module_state_3)
-		O.mouse_opacity = initial(O.mouse_opacity)
-		module_state_3 = O
-		O.hud_layerise()
-		O.screen_loc = inv3.screen_loc
-		O.forceMove(src)
+		I.mouse_opacity = initial(I.mouse_opacity)
+		module_state_3 = I
+		I.hud_layerise()
+		I.screen_loc = inv3.screen_loc
+		I.forceMove(src)
 	else
 		to_chat(src, "<span class='notice'>You need to disable a module first!</span>")
 
@@ -140,7 +151,6 @@
 /mob/living/silicon/robot/proc/module_active(var/module) //Module is 1-3
 	if(module < 1 || module > 3)
 		return 0
-
 	switch(module)
 		if(1)
 			if(module_state_1)
@@ -200,7 +210,6 @@
 /mob/living/silicon/robot/proc/deselect_module(var/module) //Module is 1-3
 	if(module < 1 || module > 3)
 		return
-
 	switch(module)
 		if(1)
 			if(module_active == module_state_1)
@@ -260,3 +269,18 @@
 	..()
 	if(W.loc == src.module)
 		src.module.modules -= W //maybe fix the cable issues.
+
+/mob/living/silicon/robot/drop_item_v()		//this is dumb.
+	if(stat == CONSCIOUS && isturf(loc))
+		return drop_item(force_drop = 1)
+	return 0
+
+/mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = 0, dontsay = null)
+	if(isgripper(module_active))
+		var/obj/item/weapon/gripper/G = module_active
+		return G.drop_item(to_drop, target, force_drop, dontsay)
+	else
+		return 0
+
+/mob/living/silicon/robot/drop_from_inventory(var/obj/item/W) //needed for pills, thanks oldcoders.
+	drop_item(force_drop = 1, dontsay = TRUE)
