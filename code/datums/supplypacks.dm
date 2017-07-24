@@ -114,6 +114,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "janitorial supplies crate"
 	group = "Supplies"
 
+/datum/supply_packs/trashcompactor
+	name = "Trash compactor"
+	contains = list(/obj/machinery/disposal/compactor/unplugged)
+	cost = 100
+	containertype = /obj/structure/largecrate
+	containername = "trash compactor crate"
+	group = "Supplies"
+
 /datum/supply_packs/lightbulbs
 	name = "Replacement lights"
 	contains = list(/obj/item/weapon/storage/box/lights/mixed,
