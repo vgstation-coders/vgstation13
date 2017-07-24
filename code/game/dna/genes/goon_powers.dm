@@ -240,14 +240,9 @@
 /spell/targeted/eat/proc/doHeal(var/mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H=user
-		for(var/name in H.organs_by_name)
-			var/datum/organ/external/affecting = null
-			if(!H.organs[name])
-				continue
-			affecting = H.organs[name]
-			if(!istype(affecting, /datum/organ/external))
-				continue
+		for(var/datum/organ/external/affecting in H.organs)
 			affecting.heal_damage(4, 0)
+
 		H.UpdateDamageIcon()
 		H.updatehealth()
 

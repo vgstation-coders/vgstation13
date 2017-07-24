@@ -458,6 +458,11 @@
 /mob/living/proc/get_organ(zone)
 	return
 
+//A proc that turns organ strings into a list of organ datums
+//The organ strings can be fed in as arguments, or as a list
+/mob/living/proc/get_organs(organs)
+	return list()
+
 /mob/living/proc/get_organ_target()
 	var/t = src.zone_sel.selecting
 	if ((t in list( "eyes", "mouth" )))
