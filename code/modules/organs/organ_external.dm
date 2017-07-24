@@ -664,6 +664,26 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(override)
 		status |= ORGAN_DESTROYED
 	if(status & ORGAN_DESTROYED)
+		destspawn = 1
+		//If your whole leg is missing, then yes, your foot is considered as "cleanly amputated".
+		setAmputatedTree()
+
+		if(spawn_limb)
+			organ = get_organ_item()
+
+			//If any organs are attached to this, attach them to the dropped organ item
+			for(var/datum/organ/external/O in children)
+				var/obj/item/weapon/organ/child_organ = O.droplimb(1, display_message = FALSE)
+
+				if(istype(child_organ) && istype(organ))
+					organ.add_child(child_organ)
+		else
+			//If any organs are attached to this, destroy them
+			for(var/datum/organ/external/O in children)
+				O.droplimb(1)
+
+		for(var/implant in implants)
+			qdel(implant)
 
 		src.status &= ~ORGAN_BROKEN
 		src.status &= ~ORGAN_BLEEDING
@@ -677,27 +697,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		for(var/datum/wound/W in wounds)
 			wounds -= W
 			number_wounds -= W.amount
-			returnToPool(W)
-
-		//If your whole leg is missing, then yes, your foot is considered as "cleanly amputated".
-		setAmputatedTree()
-
-
-		if(spawn_limb)
-			organ = get_organ_item()
-
-			//If any organs are attached to this, attach them to the dropped organ item
-			for(var/datum/organ/external/O in children)
-				var/obj/item/weapon/organ/child_organ = O.droplimb(1, display_message = FALSE)
-				if(child_organ)
-					organ.add_child(child_organ)
-		else
-			//If any organs are attached to this, destroy them
-			for(var/datum/organ/external/O in children)
-				O.droplimb(1)
-
-		for(var/implant in implants)
-			qdel(implant)
+			//Don't delete the wounds because they're transferred to the organ item. If they aren't, garbage collecting will take care of it
 
 		src.species = null
 
@@ -711,7 +711,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(owner.held_items[grasp_id])
 				owner.u_equip(owner.held_items[grasp_id], 1)
 
-		destspawn = 1
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
 			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>", \
@@ -783,10 +782,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		O.w_class = src.w_class
 		O.cancer_stage = src.cancer_stage
+		O.wounds = src.wounds.Copy()
+		O.burn_dam = src.burn_dam
+		O.brute_dam = src.brute_dam
+
+		//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
+		O.status = src.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
 
 		if(src.species)
 			O.species = src.species
 			O.update_icon()
+	else if(istype(organ_item, /obj/item/robot_parts))
+		var/obj/item/robot_parts/O = organ_item
+
+		O.burn_dam = src.burn_dam
+		O.brute_dam = src.brute_dam
 
 	return organ_item
 
@@ -926,6 +936,52 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_PEG
 	src.status &= ~ORGAN_ROBOT
 	src.destspawn = 0
+
+/datum/organ/external/proc/attach(obj/item/I)
+	if(istype(I, /obj/item/weapon/organ)) //Attaching an organic limb
+		var/obj/item/weapon/organ/organ = I
+
+		src.fleshify()
+
+		//Transfer properties (species, damage, ...)
+		src.species = organ.species
+		src.cancer_stage = organ.cancer_stage
+		src.wounds = organ.wounds
+		src.status = organ.status
+		src.brute_dam = organ.brute_dam
+		src.burn_dam = organ.burn_dam
+
+		//Process attached parts (i.e. if attaching an arm with a hand, this will process the hand)
+		for(var/obj/item/weapon/organ/attached in organ.children)
+			organ.remove_child(attached)
+
+			//Get the organ datum of the attached organ
+			var/datum/organ/external/OE = owner.get_organ(attached.part)
+
+			OE.attach(attached)
+
+	else if(istype(I, /obj/item/stack/sheet/wood)) //Attaching a plank
+		var/obj/item/stack/sheet/wood/peg = I
+		if(peg.use(1))
+			src.peggify()
+
+	else if(istype(I, /obj/item/robot_parts)) //Robotic limb
+		var/obj/item/robot_parts/R = I
+
+		src.robotize()
+
+		src.sabotaged = R.sabotaged
+		src.brute_dam = R.brute_dam
+		src.burn_dam = R.burn_dam
+
+	else
+		throw EXCEPTION("Bad item passed to attach(): '[I]'")
+
+	qdel(I)
+
+	owner.update_body()
+	owner.updatehealth()
+	owner.UpdateDamageIcon()
 
 /datum/organ/external/proc/mutate()
 	src.status |= ORGAN_MUTATED
@@ -1333,6 +1389,10 @@ obj/item/weapon/organ
 
 	//Store health facts. Right now limited exclusively to cancer, but should likely include all limb stats eventually
 	var/cancer_stage = 0
+	var/list/wounds = list()
+	var/brute_dam
+	var/burn_dam
+	var/status
 
 	//List of attached organs
 	//It doesn't contain the whole tree, only the organs attached to this one
@@ -1426,6 +1486,9 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 
 	if(upd_icon)
 		update_icon()
+
+/obj/item/weapon/organ/proc/remove_child(obj/item/weapon/organ/O)
+	children.Remove(O)
 
 /obj/item/weapon/organ/attackby(obj/item/W, mob/user)
 	if(W.is_sharp()) //Allow cutting attached parts off
