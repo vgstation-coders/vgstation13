@@ -1043,6 +1043,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/proc/is_broken()
 	return ((status & ORGAN_BROKEN) && !(status & ORGAN_SPLINTED))
 
+/datum/organ/external/proc/is_healthy()
+	return (is_usable() && !is_broken())
+
 //Is the limb robotic and malfunctioning
 /datum/organ/external/proc/is_malfunctioning()
 	return ((status & ORGAN_ROBOT) && prob(brute_dam + burn_dam))
@@ -1050,6 +1053,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Can we use advanced tools (no pegs or hook-hands)
 /datum/organ/external/proc/can_use_advanced_tools()
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_PEG|ORGAN_CUT_AWAY))
+
+/datum/organ/external/proc/can_stand()
+	return 0
 
 /datum/organ/external/proc/can_grasp()
 	return (can_grasp && grasp_id)
@@ -1147,6 +1153,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		else
 			current_organ= new /obj/item/weapon/organ/l_arm(owner.loc, owner)
 	return current_organ
+  
+//=====Legs======
 
 /datum/organ/external/l_leg
 	name = LIMB_LEFT_LEG
@@ -1158,6 +1166,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_position = LEFT
 	w_class = W_CLASS_SMALL
 
+/datum/organ/external/l_leg/can_stand()
+	//Peg legs don't require an attached foot
+	if(is_peg())
+		return 1
+
+	//For normal legs, check if the feet are broken or missing.
+	var/feet_usable = FALSE
+	for(var/datum/organ/external/child in children)
+		if(child.is_usable())
+			feet_usable = TRUE
+	if(!feet_usable)
+		return 0
+
+	//If the feet are OK, return 1 if this leg is usable
+	return is_usable()
+
 /datum/organ/external/l_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
 		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
@@ -1166,6 +1190,70 @@ Note that amputating the affected organ does in fact remove the infection from t
 			current_organ = new /obj/item/robot_parts/l_leg(owner.loc)
 		else
 			current_organ = new /obj/item/weapon/organ/l_leg(owner.loc, owner)
+	return current_organ
+
+/datum/organ/external/r_leg
+	name = LIMB_RIGHT_LEG
+	display_name = "right leg"
+	icon_name = "r_leg"
+	max_damage = 75
+	min_broken_damage = 30
+	body_part = LEG_RIGHT
+	icon_position = RIGHT
+
+	grasp_id = GRASP_RIGHT_HAND
+	w_class = W_CLASS_SMALL
+
+//This proc is same as l_leg/can_stand()
+/datum/organ/external/r_leg/can_stand()
+	//Peg legs don't require an attached foot
+	if(is_peg())
+		return 1
+
+	//For normal legs, check if the feet are broken or missing.
+	var/feet_usable = FALSE
+	for(var/datum/organ/external/child in children)
+		if(child.is_usable())
+			feet_usable = TRUE
+	if(!feet_usable)
+		return 0
+
+	//If the feet are OK, return 1 if this leg is usable
+	return is_usable()
+
+/datum/organ/external/r_leg/generate_dropped_organ(current_organ)
+	if(is_peg())
+		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(is_robotic())
+			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
+		else
+			current_organ = new /obj/item/weapon/organ/r_leg(owner.loc, owner)
+	return current_organ
+
+//======Arms=======
+
+/datum/organ/external/l_arm
+	name = LIMB_LEFT_ARM
+	display_name = "left arm"
+	icon_name = "l_arm"
+	max_damage = 75
+	min_broken_damage = 30
+	body_part = LEG_RIGHT
+	icon_position = RIGHT
+	w_class = W_CLASS_SMALL
+	body_part = ARM_LEFT
+
+	grasp_id = GRASP_LEFT_HAND
+
+/datum/organ/external/l_arm/generate_dropped_organ(current_organ)
+	if(status & ORGAN_PEG)
+		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(!current_organ)
+		if(status & ORGAN_ROBOT)
+			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
+		else
+			current_organ= new /obj/item/weapon/organ/l_arm(owner.loc, owner)
 	return current_organ
 
 /datum/organ/external/r_arm
@@ -1177,7 +1265,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = ARM_RIGHT
 
 	grasp_id = GRASP_RIGHT_HAND
-	w_class = W_CLASS_SMALL
 
 /datum/organ/external/r_arm/generate_dropped_organ(current_organ)
 	if(is_peg())
@@ -1187,26 +1274,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 			current_organ = new /obj/item/robot_parts/r_arm(owner.loc)
 		else
 			current_organ = new /obj/item/weapon/organ/r_arm(owner.loc, owner)
-	return current_organ
-
-/datum/organ/external/r_leg
-	name = LIMB_RIGHT_LEG
-	display_name = "right leg"
-	icon_name = "r_leg"
-	max_damage = 75
-	min_broken_damage = 30
-	body_part = LEG_RIGHT
-	icon_position = RIGHT
-	w_class = W_CLASS_SMALL
-
-/datum/organ/external/r_leg/generate_dropped_organ(current_organ)
-	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
-	if(!current_organ)
-		if(is_robotic())
-			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
-		else
-			current_organ = new /obj/item/weapon/organ/r_leg(owner.loc, owner)
 	return current_organ
 
 /datum/organ/external/l_foot

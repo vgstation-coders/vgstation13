@@ -22,6 +22,7 @@
 	var/flush_every_ticks = 30 //Every 30 ticks it will look whether it is ready to flush
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
+	var/template_path = "disposalsbin.tmpl"
 
 	holomap = TRUE
 	auto_holomap = TRUE
@@ -31,21 +32,25 @@
 /obj/machinery/disposal/New()
 	..()
 	spawn(5)
-		for(var/obj/structure/disposalpipe/trunk/O in loc.contents)//This is more efficient than locate()
-			trunk = O
+		handle_trunk()
 
-		if(trunk)
-			if(trunk.disposal != src)
-				trunk.disposal = src
 
-			if(trunk.linked != trunk.disposal)
-				trunk.linked = trunk.disposal
-		else
-			mode = 0
-			flush = 0
+/obj/machinery/disposal/proc/handle_trunk()
+	for(var/obj/structure/disposalpipe/trunk/O in loc.contents)//This is more efficient than locate()
+		trunk = O
 
-		air_contents = new/datum/gas_mixture()
-		//gas.volume = 1.05 * CELLSTANDARD
+	if(trunk)
+		if(trunk.disposal != src)
+			trunk.disposal = src
+
+		if(trunk.linked != trunk.disposal)
+			trunk.linked = trunk.disposal
+	else
+		mode = 0
+		flush = 0
+
+	air_contents = new/datum/gas_mixture()
+	//gas.volume = 1.05 * CELLSTANDARD
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
@@ -220,17 +225,19 @@
 /obj/machinery/disposal/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/list/data[0]
 
-	data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
+	if(air_contents)
+		data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
 	data["flush"] = flush
 	data["mode"] = mode
 	data["isAI"] = isAI(user)
+	data["charge"] = round(100 * flush_count / flush_every_ticks) //This is only used by the compactor
 
 	// update the ui with data if it exists, returns null if no ui is passed/found or if force_open is 1/true
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
 		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "disposalsbin.tmpl", "Waste Disposal Unit", 430, 150)
+		ui = new(user, src, ui_key, template_path, "Waste Disposal Unit", 430, 150)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
