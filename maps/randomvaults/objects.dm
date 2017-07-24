@@ -30,9 +30,7 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
-/area/vault/automap/no_light
-	icon_state = "ME_vault_lit"
-	dynamic_lighting = FALSE
+
 
 /area/vault/icetruck
 
@@ -579,3 +577,47 @@
 	name = "\improper Firelock"
 	desc = "Emergency air-tight shutter, for keeping fires contained."
 	icon = 'icons/obj/doors/Doorfire.dmi'
+
+/obj/effect/landmark/stonefier
+	name = "STONIFIER"
+	desc = "Turns all mobs on this turf into statues forever. Used for map editing!"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "statue"
+
+	layer = 100
+	plane = 100
+	//So that it's more visible in the map editor
+
+/obj/effect/landmark/stonefier/New()
+	var/turf/T = get_turf(src)
+
+	spawn()
+		for(var/mob/living/L in T)
+			L.turn_into_statue(1, 1)
+
+	qdel(src)
+
+/obj/item/weapon/paper/feeding_schedule
+	name = "note"
+	info = {"
+	Reminder to wear full body coverage when being anywhere near the cockatrice pen. As Forrest has already shown you (may he forever bloom in the black peat), shorts are NOT a substitute for pants - borrow your friend's if yours are damaged or lost.
+	<br>
+	And remember to update the computer database after feeding!<br>
+	"}
+
+/obj/effect/trap/cockatrice_notice //When triggered, cockatrices turn and hiss at you
+	name = "cockatrice trigger"
+
+/obj/effect/trap/cockatrice_notice/can_activate(atom/movable/AM)
+	if(istype(AM, /mob/living/simple_animal/hostile/retaliate/cockatrice))
+		return 0
+
+	return ..()
+
+/obj/effect/trap/cockatrice_notice/activate(atom/movable/AM)
+	for(var/mob/living/simple_animal/hostile/retaliate/cockatrice/CO in view(7))
+		if(CO.isDead())
+			continue
+
+		CO.face_atom(AM)
+		CO.visible_message("<span class='notice'>\The [CO] looks at \the [AM] and hisses angrily!</span>")

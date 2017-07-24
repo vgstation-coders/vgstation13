@@ -257,7 +257,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
 	return (..() + 1) //Somewhat slower
 
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/Bump(var/atom/A)
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
 		if(isrobot(L))

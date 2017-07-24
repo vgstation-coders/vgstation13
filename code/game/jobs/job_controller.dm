@@ -221,6 +221,9 @@ var/global/datum/controller/occupations/job_master
 		for(var/datum/job/ai/A in occupations)
 			if(ticker.triai)
 				A.spawn_positions = 3
+		for(var/datum/job/cyborg/C in occupations)
+			if(ticker.triai)
+				C.spawn_positions = 3
 
 	//Get the players who are ready
 	for(var/mob/new_player/player in player_list)

@@ -38,7 +38,7 @@
 
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		getFromPool(sheet_type, get_turf(src), sheet_amt)
+		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
 

@@ -321,6 +321,9 @@
 #define ROACHSHELL		"roach_shell"
 #define GREYVODKA		"grey_vodka"
 #define MEDCORES		"medium cores"
+#define LITHOTORCRAZINE "lithotorcrazine"
+#define HEMOSCYANINE	"hemoscyanine"
+#define ANTHRACENE		"anthracene"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -347,6 +350,9 @@
 #define HYOSCYAMINE		"hyoscyamine"
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
+
+#define PETRITRICIN		"petritricin"
+#define APETRINE		"apetrine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

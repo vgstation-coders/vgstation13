@@ -114,26 +114,45 @@
 	stun = 0
 	weaken = 0
 
-/obj/item/projectile/bullet/fourtyfive //secgun ammo!
-	damage = 13
-	drowsy = 1 //stopping power
+/obj/item/projectile/bullet/fourtyfive
+	damage = 35 //buffed up for antag usage
+	drowsy = 2
+	agony = 2
+	penetration = 3
+
+/obj/item/projectile/bullet/fourtyfive/practice
+	damage = 3
+	drowsy = 1
+	agony = 1
+	embed = 0
+	penetration = 0
+
+/obj/item/projectile/bullet/fourtyfive/rubber
+	damage = 10
+	stun = 5
+	weaken = 5
+	penetration = 1
+
+/obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
+	damage = 15 
+	drowsy = 1
 	agony = 1
 	penetration = 2
 
-/obj/item/projectile/bullet/fourtyfive/practice
+/obj/item/projectile/bullet/auto380/practice
 	damage = 2
 	drowsy = 0
 	agony = 0
 	embed = 0
 	penetration = 0
 
-/obj/item/projectile/bullet/fourtyfive/rubber
+/obj/item/projectile/bullet/auto380/rubber
 	damage = 8
 	stun = 5
 	weaken = 5
 	embed = 0
 	penetration = 0
-
+	
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
 	damage = 20
@@ -224,7 +243,7 @@
 			damage = 10
 			kill_count = 7
 
-/obj/item/projectile/spur/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/spur/to_bump(atom/A as mob|obj|turf|area)
 
 	if(loc)
 		var/turf/T = loc
@@ -353,7 +372,7 @@
 	..()
 	playsound(starting, 'sound/effects/bees.ogg', 75, 1)
 
-/obj/item/projectile/bullet/beegun/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/beegun/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)
 		return 0
 	if((A == firer) && !reflected)
@@ -453,7 +472,7 @@
 		user = null
 	..()
 
-/obj/item/projectile/bullet/vial/Bump(atom/A as mob|obj|turf|area) //to allow vials to splash onto walls
+/obj/item/projectile/bullet/vial/to_bump(atom/A as mob|obj|turf|area) //to allow vials to splash onto walls
 	if(!A)
 		return
 	if(vial)
@@ -727,7 +746,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()

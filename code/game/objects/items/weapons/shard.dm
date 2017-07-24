@@ -83,7 +83,7 @@
 /obj/item/weapon/shard/resetVariables()
 	..("icon_state", "pixel_y", "pixel_x")
 
-/obj/item/weapon/shard/Bump()
+/obj/item/weapon/shard/to_bump()
 
 	spawn( 0 )
 		if (prob(20))

@@ -11,6 +11,7 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
+	hitsound = "swing_hit"
 
 /obj/item/weapon/storage/briefcase/centcomm
 	icon_state = "briefcase-centcomm"
@@ -28,43 +29,38 @@
 	new /obj/item/weapon/paper/commendation_key(src)
 
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
-	//..()
-
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
+		playsound(get_turf(src), "swing_hit", 50, 1, -1)
+		return
+	..()
+
+/obj/item/weapon/storage/briefcase/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
+	if(!proximity_flag)
 		return
 
+	if (!isliving(target))
+		return
 
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
-	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
+	var/mob/living/M = target
 
-	if (M.stat < 2 && M.health < 50 && prob(90))
-		var/mob/H = M
-		// ******* Check
-		if ((istype(H, /mob/living/carbon/human) && istype(H, /obj/item/clothing/head) && H.flags & 8 && prob(80)))
-			to_chat(M, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
-			return
-		var/time = rand(2, 6)
-		if (prob(75))
-			M.Paralyse(time)
+	if (M.stat == CONSCIOUS && M.health < 50)
+		if(prob(90))
+			if ((istype(M, /mob/living/carbon/human) && istype(M, /obj/item/clothing/head) && M.flags & 8 && prob(80)))
+				to_chat(M, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
+				return
+			var/time = rand(2, 6)
+			if (prob(75))
+				M.Paralyse(time)
+			else
+				M.Stun(time)
+			M.stat = UNCONSCIOUS
+			M.visible_message("<span class='danger'>\The [M] has been knocked unconscious by \the [user]!</span>", "<span class='danger'>You have been knocked unconscious!</span>", "<span class='warning'>You hear someone fall.</span>")
 		else
-			M.Stun(time)
-		if(M.stat != 2)
-			M.stat = 1
-		for(var/mob/O in viewers(M, null))
-			O.show_message(text("<span class='danger'>[] has been knocked unconscious!</span>", M), 1, "<span class='warning'>You hear someone fall.</span>", 2)
-	else
-		to_chat(M, text("<span class='warning'>[] tried to knock you unconcious!</span>",user))
-		M.eye_blurry += 3
-
-	return
+			M.visible_message("<span class='warning'>\The [user] tried to knock \the [M] unconcious!</span>", "<span class='warning'>\The [user] tried to knock you unconcious!</span>")
+			M.eye_blurry += 3
 
 /obj/item/weapon/storage/briefcase/false_bottomed
 	name = "briefcase"

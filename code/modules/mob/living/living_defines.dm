@@ -28,6 +28,8 @@
 	var/being_butchered = 0 //To prevent butchering an animal almost instantly
 	var/list/butchering_drops //See code/datums/butchering.dm, stuff like skinning goes here
 
+	var/mob_property_flags
+
 	var/list/image/static_overlays
 
 	var/t_plasma = null

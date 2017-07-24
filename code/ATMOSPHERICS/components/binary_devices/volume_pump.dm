@@ -28,6 +28,8 @@ Thus, the two variables affect pump operation are set in New():
 	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
+	machine_flags = MULTITOOL_MENU
+
 /obj/machinery/atmospherics/binary/volume_pump/on
 	on = 1
 	icon_state = "intact_on"
@@ -107,18 +109,25 @@ Thus, the two variables affect pump operation are set in New():
 
 	set_frequency(frequency)
 
+/obj/machinery/atmospherics/binary/volume_pump/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag","set_id")]</a></li>
+	</ul>
+	"}
+
 /obj/machinery/atmospherics/binary/volume_pump/receive_signal(datum/signal/signal)
-	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
+	if(!CHECK_ATMOS_COMMAND_SIGNAL(SIGNAL_TYPE_ATMOS_VOLUME_PUMP))
 		return 0
-	var/old_on=on
-	if("power" in signal.data)
-		on = text2num(signal.data["power"])
 
-	if("power_toggle" in signal.data)
-		on = !on
-
-	if("set_transfer_rate" in signal.data)
-		transfer_rate = Clamp(text2num(signal.data["set_transfer_rate"]), 0, air1.volume)
+	var/old_on = on
+	switch(signal.data["command"])
+		if("power")
+			on = text2num(signal.data["value"])
+		if("set_transfer_rate")
+			transfer_rate = Clamp(text2num(signal.data["value"]), 0, MAX_TRANSFER_RATE)
+			investigation_log(I_ATMOS, "was set to [transfer_rate] L/s by a remote signal.")
 
 	if("status" in signal.data)
 		spawn(2)
@@ -128,9 +137,8 @@ Thus, the two variables affect pump operation are set in New():
 	spawn(2)
 		broadcast_status()
 	update_icon()
-	if(old_on!=on)
-		investigation_log(I_ATMOS,"was powered [on ? "on" : "off"] by a remote signal")
-
+	if(old_on != on)
+		investigation_log(I_ATMOS,"was powered [on ? "on" : "off"] by a remote signal.")
 
 /obj/machinery/atmospherics/binary/volume_pump/attack_hand(user as mob)
 	if(..())
@@ -156,7 +164,30 @@ Thus, the two variables affect pump operation are set in New():
 	usr.set_machine(src)
 	src.update_icon()
 	src.updateUsrDialog()
-	return
+
+/obj/machinery/atmospherics/binary/volume_pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
+	if("set_id" in href_list)
+		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
+		if(newid)
+			id_tag = newid
+			initialize()
+		return MT_UPDATE
+		
+	if("set_freq" in href_list)
+		var/newfreq=frequency
+		if(href_list["set_freq"]!="-1")
+			newfreq=text2num(href_list["set_freq"])
+		else
+			newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
+		if(newfreq)
+			if(findtext(num2text(newfreq), "."))
+				newfreq *= 10 // shift the decimal one place
+			if(newfreq < 10000)
+				frequency = newfreq
+				initialize()
+		return MT_UPDATE
+
+	return ..()
 
 /obj/machinery/atmospherics/binary/volume_pump/power_change()
 	..()

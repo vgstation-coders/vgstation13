@@ -71,6 +71,7 @@
 	var/spilled_blood = 0	//set to 1 if the bloodspill objective has been accomplised once that round
 	var/max_spilled_blood = 0	//highest quantity of blood covered tiles during the round
 	var/bonus = 0	//set to 1 if the cult has completed the bonus (third phase) objective (harvest, hijack, massacre)
+	var/revivecounter = 0 //used for sacrifice and raise runes
 
 	var/harvest_target = 10
 	var/massacre_target = 5

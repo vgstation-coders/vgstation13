@@ -203,7 +203,7 @@
 
 /obj/item/toy/ammo/gun/update_icon()
 	src.icon_state = text("357-[]", src.amount_left)
-	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] caps\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
+	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] cap\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
 	return
 
 /obj/item/toy/ammo/gun/examine(mob/user)
@@ -405,6 +405,8 @@
 	desc = "A bright-colored plastic clock, commemorating 20 years of Nanotrasen's Plasma division. Comes with permanent snooze button, just twist the valve!"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "valve"
+	item_state = "ttv"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	var/image/rendered
 
 /obj/item/toy/bomb/New()

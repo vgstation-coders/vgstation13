@@ -12,6 +12,7 @@
 	maxHealth = 25
 	health = 25
 	size = SIZE_SMALL
+	mob_property_flags = MOB_CONSTRUCT
 
 	harm_intent_damage = 8
 	melee_damage_lower = 15

@@ -1097,8 +1097,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/potentham,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/mounted/frame/painting,
-		/obj/item/voucher/free_item
+		/obj/item/mounted/frame/painting
 )
 
 /obj/abstract/map/spawner/safe/medical
@@ -1112,7 +1111,7 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/gun/syringe/rapidsyringe,
-	/obj/item/voucher/free_item
+	/obj/item/voucher/free_item/medical_safe
 )
 
 
@@ -1120,7 +1119,7 @@
 	name = "safe food spawner"
 	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
-	/obj/item/voucher/free_item,
+	/obj/item/voucher/free_item/snack,
 	/obj/item/voucher/free_item/hot_drink,
 	/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 	/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
@@ -1143,7 +1142,6 @@
 	/obj/item/weapon/storage/box/emps,
 	/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 	/obj/item/weapon/melee/energy/axe/rusty,
-	/obj/item/voucher/free_item,
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
@@ -1157,7 +1155,6 @@
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
-	/obj/item/voucher/free_item,
 	/obj/item/clothing/accessory/holster,
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,

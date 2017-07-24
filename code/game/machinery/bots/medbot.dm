@@ -3,6 +3,19 @@
 //MEDBOT ASSEMBLY
 #define INJECTION_TIME 30
 
+/obj/item/weapon/medbot_cube
+	name = "advanced medibot cube"
+	desc = "Compressed Nanotrasen Advanced Medibot, ready for deployment. Just unwrap the cube!"
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "medbotcube"
+
+/obj/item/weapon/medbot_cube/attack_self(mob/user)
+	user.visible_message("<span class='warning'>\The [src] suddenly expands into a fully functional medibot!</span>", \
+	"<span class='warning'>You carefully unwrap \the [src] and it suddenly expands into a fully functional medibot!</span>")
+	new /obj/machinery/bot/medbot/mysterious/nanotrasen(get_turf(src))
+	qdel(src)
+
+
 /obj/machinery/bot/medbot
 	name = "Medibot"
 	desc = "A little medical robot. He looks somewhat underwhelmed. It has a slot for pAIs."
@@ -55,6 +68,11 @@
 	treatment_brute = BICARIDINE
 	treatment_fire = KELOTANE
 	treatment_tox = ANTI_TOXIN
+
+/obj/machinery/bot/medbot/mysterious/nanotrasen
+	name = "Nanotrasen Advanced Medibot"
+	desc = "Not entirely a replacement for a real doctor."
+	skin = "nanotrasen"
 
 /obj/item/weapon/firstaid_arm_assembly
 	name = "first aid/robot arm assembly"
@@ -566,7 +584,7 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/medbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if ((istype(M, /obj/machinery/door)) && (!isnull(botcard)))
 		var/obj/machinery/door/D = M
 		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(botcard))
@@ -695,6 +713,14 @@
 /*
  *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
 */
+
+/obj/machinery/bot/medbot/install_pai(obj/item/device/paicard/P)
+	..()
+	overlays += image('icons/obj/aibots.dmi', "medibot_pai_overlay")
+
+/obj/machinery/bot/medbot/eject_integratedpai_if_present()
+	if(..())
+		overlays -= image('icons/obj/aibots.dmi', "medibot_pai_overlay")
 
 /obj/machinery/bot/medbot/getpAIMovementDelay()
 	return 1

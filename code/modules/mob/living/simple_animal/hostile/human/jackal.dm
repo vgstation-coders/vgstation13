@@ -25,6 +25,7 @@
 	melee_damage_upper = 7
 	attacktext = "claws"
 
+	mob_property_flags = MOB_SUPERNATURAL
 	stat_attack = UNCONSCIOUS
 	heat_damage_per_tick = 0
 

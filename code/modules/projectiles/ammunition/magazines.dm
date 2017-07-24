@@ -121,6 +121,39 @@
 /obj/item/ammo_storage/magazine/c45/practice/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/m380auto
+	name = "pistol magazine (.380AUTO)"
+	desc = "A magazine designed for common .380AUTO pistols. Holds 10 rounds."
+	icon_state = "m380AUTO"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/c380auto"
+	exact = 0
+	caliber = ".380AUTO"
+	max_ammo = 10
+	multiple_sprites = 1
+	sprite_modulo = 2
+
+/obj/item/ammo_storage/magazine/m380auto/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/m380auto/rubber
+	name = "magazine (.380AUTO rubber)"
+	desc = "A magazine designed for common .380AUTO pistols. This one has a blue marking to indicate it should contain rubber bullets. Holds 10 rounds."
+	icon_state = "m380AUTO-R"
+	ammo_type = "/obj/item/ammo_casing/c380auto/rubber"
+
+/obj/item/ammo_storage/magazine/m380auto/rubber/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/m380auto/practice
+	name = "magazine (.380AUTO practice)"
+	desc = "A magazine designed for common .380AUTO pistols. This one has a white marking to indicate it should contain practice bullets.  Holds 10 rounds."
+	icon_state = "m380AUTO-P"
+	ammo_type = "/obj/item/ammo_casing/c380auto/practice"
+
+/obj/item/ammo_storage/magazine/m380auto/practice/empty
+	starting_ammo = 0
+	
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"

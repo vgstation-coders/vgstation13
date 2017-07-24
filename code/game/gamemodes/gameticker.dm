@@ -203,7 +203,13 @@ var/datum/controller/gameticker/ticker
 				'sound/AI/vox_reminder6.ogg',
 				'sound/AI/vox_reminder7.ogg',
 				'sound/AI/vox_reminder8.ogg',
-				'sound/AI/vox_reminder9.ogg')
+				'sound/AI/vox_reminder9.ogg',
+				'sound/AI/vox_reminder10.ogg',
+				'sound/AI/vox_reminder11.ogg',
+				'sound/AI/vox_reminder12.ogg',
+				'sound/AI/vox_reminder13.ogg',
+				'sound/AI/vox_reminder14.ogg',
+				'sound/AI/vox_reminder15.ogg')
 			for(var/sound in welcome_sentence)
 				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn

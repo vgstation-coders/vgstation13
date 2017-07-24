@@ -187,6 +187,8 @@ var/global/list/organ_damage_overlays = list(
 	if(update_overlays)
 		update_overlays = 0
 		UpdateDamageIcon()
+	if(NPC_brain)
+		NPC_brain.SendSignal(COMSIG_LIFE,list())
 	cycle++
 	..()
 

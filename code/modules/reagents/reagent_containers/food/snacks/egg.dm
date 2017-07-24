@@ -5,6 +5,8 @@
 	desc = "An egg!"
 	icon_state = "egg"
 	var/amount_grown = 0
+	var/can_color = TRUE
+	var/hatch_type = /mob/living/simple_animal/chick
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
 	..()
@@ -68,7 +70,7 @@
 			to_chat(user, "You make some dough.")
 			qdel(src)
 			return 1
-	else if (istype(W, /obj/item/toy/crayon) && !(istype(src, /obj/item/weapon/reagent_containers/food/snacks/egg/vox)))
+	else if (istype(W, /obj/item/toy/crayon) && can_color)
 
 		var/obj/item/toy/crayon/C = W
 		var/clr = C.colourName
@@ -85,7 +87,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
 	visible_message("[src] hatches with a quiet cracking sound.")
-	new /mob/living/simple_animal/chick(get_turf(src))
+	new hatch_type(get_turf(src))
 	processing_objects.Remove(src)
 	qdel(src)
 
@@ -93,9 +95,17 @@
 	name = "green egg"
 	desc = "Looks like it came from some genetically engineered chicken"
 	icon_state = "egg-vox"
+	can_color = FALSE
+	hatch_type = /mob/living/carbon/monkey/vox
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/vox/hatch()
-	visible_message("[src] hatches with a quiet cracking sound.")
-	new /mob/living/carbon/monkey/vox(get_turf(src))
-	processing_objects.Remove(src)
-	qdel(src)
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice
+	name = "cockatrice egg"
+	desc = "On the first glance this cockatrice egg looks like a rock. It is safe to handle, although it may still contain some poison."
+	icon_state = "egg-cockatrice"
+	can_color = FALSE
+	hatch_type = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/New()
+	..()
+
+	reagents.add_reagent(PETRITRICIN, rand(0.5,1.5))

@@ -226,6 +226,19 @@ proc/move_mining_shuttle()
 	desc = "Cracks rocks with sonic blasts, perfect for killing cave lizards."
 	drill_verb = "hammering"
 
+/obj/item/weapon/pickaxe/jackhammer/combat
+	name = "impact hammer"
+	hitsound = "sound/weapons/tablehitslow.ogg"
+	force = 30.0
+	sharpness = 0
+	sharpness_flags = null
+	digspeed = 40 //not really for digging
+	desc = "Re-purposed mining equipment, built to kill."
+	attack_verb = list("hits", "hammers", "impacts", "attacks")
+
+/obj/item/weapon/pickaxe/jackhammer/combat/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
+	user.delayNextAttack(25)
+
 /obj/item/weapon/pickaxe/gold
 	name = "golden pickaxe"
 	icon_state = "gpickaxe"
@@ -558,6 +571,7 @@ proc/move_mining_shuttle()
 	projectilesound = 'sound/weapons/Laser.ogg'
 	wanted_objects = list(/obj/item/weapon/ore)
 	meat_type = null
+	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/weldingtool))

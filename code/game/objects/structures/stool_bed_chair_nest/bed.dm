@@ -126,6 +126,9 @@
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "down"
 	anchored = 0
+	var/up_state ="up"
+	var/down_state = "down"
+	var/roller_type = /obj/item/roller
 
 	lockflags = DENSE_WHEN_LOCKED
 	lock_type = /datum/locking_category/buckle/bed/roller
@@ -135,10 +138,11 @@
 	desc = "A collapsed roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
+	var/bed_type = /obj/structure/bed/roller
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
 
 /obj/item/roller/attack_self(mob/user)
-	var/obj/structure/bed/roller/R = new /obj/structure/bed/roller(user.loc)
+	var/obj/structure/bed/roller/R = new bed_type(user.loc)
 	R.add_fingerprint(user)
 	qdel(src)
 
@@ -147,14 +151,14 @@
 	if(!.)
 		return
 
-	icon_state = "up"
+	icon_state = up_state
 
 /obj/structure/bed/roller/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	if(!.)
 		return
 
-	icon_state = "down"
+	icon_state = down_state
 
 /obj/structure/bed/roller/MouseDrop(over_object, src_location, over_location)
 	..()
@@ -167,7 +171,7 @@
 
 		visible_message("[usr] collapses \the [src.name].")
 
-		new/obj/item/roller(get_turf(src))
+		new roller_type(get_turf(src))
 
 		qdel(src)
 
@@ -176,7 +180,7 @@
 		manual_unbuckle(user)
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		getFromPool(sheet_type, get_turf(src), 2)
+		drop_stack(sheet_type, loc, 2, user)
 		qdel(src)
 		return
 
@@ -187,16 +191,20 @@
 	if(istype(W,/obj/item/roller_holder))
 		var/obj/item/roller_holder/RH = W
 		if(!RH.held)
-			to_chat(user, "<span class='notice'>You collect the roller bed.</span>")
+			to_chat(user, "<span class='notice'>You collect \the [src].</span>")
 			src.forceMove(RH)
 			RH.held = src
+			RH.update_icon()
 
 /obj/item/roller_holder
 	name = "roller bed rack"
 	desc = "A rack for carrying a collapsed roller bed."
 	icon = 'icons/obj/rollerbed.dmi'
-	icon_state = "folded"
-	var/obj/structure/bed/roller/held
+	icon_state = "borgbed_stored"
+	var/obj/structure/bed/roller/borg/held
+
+/obj/item/roller_holder/update_icon()
+	icon_state = "borgbed_[held ? "stored" : "deployed"]"
 
 /obj/item/roller_holder/New()
 	..()
@@ -205,13 +213,36 @@
 /obj/item/roller_holder/attack_self(mob/user as mob)
 
 	if(!held)
-		to_chat(user, "<span class='notice'>The rack is empty.</span>")
+		to_chat(user, "<span class='notice'>The [src.name] is empty.</span>")
 		return
 
-	to_chat(user, "<span class='notice'>You deploy the roller bed.</span>")
+	to_chat(user, "<span class='notice'>You deploy \the [held].</span>")
 	held.add_fingerprint(user)
 	held.forceMove(get_turf(src))
 	held = null
+	update_icon()
+
+/obj/item/roller_holder/Destroy()
+	if(held)
+		qdel(held)
+		held = null
+	..()
+
+/obj/item/roller/borg
+	name = "hover roller bed"
+	desc = "A collapsed cyborg hover roller bed that can be carried around."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "borgbed_stored"
+	bed_type = /obj/structure/bed/roller/borg
+
+/obj/structure/bed/roller/borg
+	name = "hover roller bed"
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "borgbed_down"
+	up_state ="borgbed_up"
+	down_state = "borgbed_down"
+	roller_type = /obj/item/roller/borg
+
 
 /datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE

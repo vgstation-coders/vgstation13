@@ -138,7 +138,7 @@ var/list/blob_looks
 		return 1
 	if(istype(mover) && mover.checkpass(PASSBLOB))
 		return 1
-	mover.Bump(src) //Only automatic for dense objects
+	mover.to_bump(src) //Only automatic for dense objects
 	return 0
 
 /obj/effect/blob/beam_connect(var/obj/effect/beam/B)

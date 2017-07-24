@@ -110,9 +110,9 @@
 		else
 			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))
 
-/obj/item/weapon/gun/projectile/sec
+/obj/item/weapon/gun/projectile/NTUSP
 	name = "\improper NT USP"
-	desc = "The NT USP is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
+	desc = "The NT USP is a relatively rare sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
 	icon = 'icons/obj/biggun.dmi' //for silencer compatibility
 	icon_state = "secguncomp"
 	ammo_type = "/obj/item/ammo_casing/c45"
@@ -122,17 +122,46 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
-	gun_flags = SILENCECOMP
+	gun_flags = SILENCECOMP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/NTUSP/update_icon()
+	..()
+	icon_state = "secguncomp[silenced ? "-s" : ""][chambered ? "" : "-e"]"
+	
+/obj/item/weapon/gun/projectile/NTUSP/fancy
+	desc = "The NT USP is a relatively rare sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds.<br><span class='notice'>This one has a sweet pearl finish!</span>"
+	name = "\improper NT USP Custom"
+	icon_state = "secgunfancy"
+
+/obj/item/weapon/gun/projectile/NTUSP/fancy/update_icon()
+	..()
+	icon_state = "secguncompfancy[silenced ? "-s" : ""][chambered ? "" : "-e"]"
+	
+
+			
+/obj/item/weapon/gun/projectile/sec
+	name = "\improper NT Glock"
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
+	icon = 'icons/obj/biggun.dmi'
+	icon_state = "secglockfancy"
+	ammo_type = "/obj/item/ammo_casing/c380auto"
+	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
+	max_shells = 8
+	caliber = list(".45"  = 1)
+	origin_tech = Tc_COMBAT + "=3"
+	fire_sound = 'sound/weapons/semiauto.ogg'
+	load_method = 2
+	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
-	icon_state = "secguncomp[silenced ? "-s" : ""][chambered ? "" : "-e"]"
-
+	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+	
 /obj/item/weapon/gun/projectile/sec/fancy
-	desc = "The NT USP is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet pearl finish. Uses .45 rounds."
-	name = "\improper NT USP Custom"
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
+	name = "\improper NT Glock Custom"
 	icon_state = "secgunfancy"
 
 /obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
-	icon_state = "secguncompfancy[silenced ? "-s" : ""][chambered ? "" : "-e"]"
+	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"

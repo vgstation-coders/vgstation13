@@ -1234,10 +1234,7 @@
 /datum/global_iterator/mecha_generator/nuclear/process(var/obj/item/mecha_parts/mecha_equipment/generator/nuclear/EG)
 	if(..())
 		for(var/mob/living/carbon/M in view(EG.chassis))
-			if(istype(M,/mob/living/carbon/human))
-				M.apply_effect((EG.rad_per_cycle*3),IRRADIATE,0)
-			else
-				M.radiation += EG.rad_per_cycle
+			M.apply_radiation(EG.rad_per_cycle*3, RAD_EXTERNAL)
 	return 1
 
 

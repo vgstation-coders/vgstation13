@@ -59,6 +59,10 @@
 		qdel(vessel)
 		vessel = null
 
+	if(NPC_brain)
+		qdel(NPC_brain)
+		NPC_brain = null
+
 	..()
 
 	for(var/obj/abstract/Overlays/O in obj_overlays)

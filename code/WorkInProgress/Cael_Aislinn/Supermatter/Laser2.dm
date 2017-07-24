@@ -96,7 +96,7 @@
 		else
 			UpdateDamage()
 
-/obj/beam/e_beam/Bump(atom/Obstacle)
+/obj/beam/e_beam/to_bump(atom/Obstacle)
 	Obstacle.laser_act(src)
 	qdel(src)
 	return

@@ -46,6 +46,9 @@
 /obj/item/weapon/gun/syringe/can_fire()
 	return syringes.len
 
+/obj/item/weapon/gun/syringe/can_discharge()
+	return can_fire()
+	
 /obj/item/weapon/gun/syringe/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
 	return 1		//SHOOT AND LET THE GOD GUIDE IT (probably will hit a wall anyway)
 

@@ -2,6 +2,8 @@
 	icon = 'icons/obj/assemblies.dmi'
 	name = "tank transfer valve"
 	icon_state = "valve_1"
+	item_state = "ttv"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	desc = "Regulates the transfer of air between two tanks"
 	var/obj/item/weapon/tank/tank_one
 	var/obj/item/weapon/tank/tank_two
@@ -11,6 +13,8 @@
 	var/toggle = 1
 
 	var/damaged = 0
+	
+	w_class = W_CLASS_LARGE
 
 	flags = FPRINT | PROXMOVE
 
@@ -236,3 +240,8 @@
 // eventually maybe have it update icon to show state (timer, prox etc.) like old bombs
 /obj/item/device/transfer_valve/proc/c_state()
 	return
+
+/obj/item/device/transfer_valve/mediumsize
+	name = "modified tank transfer valve"
+	desc = "Regulates the transfer of air between two tanks. This one was modified to be smaller."
+	w_class = W_CLASS_MEDIUM

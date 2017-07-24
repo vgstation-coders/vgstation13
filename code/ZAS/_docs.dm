@@ -26,10 +26,3 @@ Notes for people who used ZAS before:
 		var/zone/connected_zone = edge.get_connected_zone(zone)
 
 */
-
-//#define ZASDBG
-//#define ZLEVELS
-
-#define AIR_BLOCKED 1
-#define ZONE_BLOCKED 2
-#define BLOCKED 3

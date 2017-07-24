@@ -78,7 +78,7 @@
 		A.forceMove(src.loc)
 	del(src)
 
-/obj/machinery/vehicle/Bump(var/atom/A)
+/obj/machinery/vehicle/to_bump(var/atom/A)
 //	to_chat(world, "[src] bumped into [A]")
 	spawn (0)
 		..()
@@ -224,7 +224,7 @@
 			return src.internal_tank.return_temperature()
 		return 0
 
-	Bump(var/atom/movable/A)
+	to_bump(var/atom/movable/A)
 		if(istype(A))
 			step(A, src.dir)
 		else

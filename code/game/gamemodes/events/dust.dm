@@ -89,7 +89,7 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 		return
 
 
-	Bump(atom/A)
+	to_bump(atom/A)
 		spawn(0)
 			if(prob(50))
 				for(var/mob/M in range(10, src))
@@ -113,7 +113,7 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 
 
 	Bumped(atom/A)
-		Bump(A)
+		to_bump(A)
 		return
 
 

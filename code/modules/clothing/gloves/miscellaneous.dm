@@ -298,8 +298,14 @@
 
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
-		H.apply_effect(radiation_per_punch, IRRADIATE)
+		H.apply_radiation(radiation_per_punch, RAD_INTERNAL) //Direct contact with skin
 
 	update_icon()
 
 	return TRUE
+
+/obj/item/clothing/gloves/frankgloves
+	desc = "These gloves chill you, thrill you, and fulfill you; like a creature of the night."
+	name = "Dr. Frank's gloves"
+	icon_state = "frankgloves"
+	item_state = "frankgloves"

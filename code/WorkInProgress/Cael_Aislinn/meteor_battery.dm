@@ -23,7 +23,7 @@
 			step_towards(src,target)
 			sleep(MISSILE_SPEED)
 
-/obj/item/projectile/missile/Bump(atom/A)
+/obj/item/projectile/missile/to_bump(atom/A)
 	spawn(0)
 		if(istype(A,/obj/effect/meteor))
 			del(A)

@@ -86,24 +86,38 @@
 	R.updateicon()
 
 /obj/item/borg/upgrade/rename
-	name = "robot reclassification board"
-	desc = "Used to rename a cyborg."
+	var/heldname = ""
+	name = "robot rename board"
+	desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
 	icon_state = "cyborg_upgrade1"
-	var/heldname = "default name"
 
 /obj/item/borg/upgrade/rename/attack_self(mob/user as mob)
-	heldname = stripped_input(user, "Enter new robot name", "Robot Reclassification", heldname, MAX_NAME_LEN)
+	heldname = reject_bad_name(stripped_input(user, "Enter new robot name to force, or leave clear to let the robot pick a name", "Robot Rename", heldname, MAX_NAME_LEN),1)
+	if (heldname)
+		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves. Current selected name is \"[heldname]\"."
+	else
+		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
 
 /obj/item/borg/upgrade/rename/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	R.name = ""
-	R.custom_name = null
-	R.real_name = ""
-	R.updatename()
-	R.updateicon()
-	to_chat(R, "<span class='warning'>You may now change your name.</span>")
+	if (!heldname)
+		R.custom_name = null
+		R.updatename()
+		if(R.can_diagnose()) //Few know this verb exists, hence a message
+			to_chat(R, "<span class='info' style=\"font-family:Courier\">You may now change your name through the Namepick verb, under Robot Commands.</span>")
+		R.namepick_uses ++
+		R.module.upgrades -= /obj/item/borg/upgrade/rename //So you can rename more than once
+	else
+		R.name = heldname
+		R.custom_name = heldname
+		R.real_name = heldname
+		R.updatename()
+		R.updateicon()
+		if(R.can_diagnose())
+			to_chat(R, "<span class='info' style=\"font-family:Courier\">Your name has been changed to \"[heldname]\".</span>")
+		R.module.upgrades -= /obj/item/borg/upgrade/rename
 
 /obj/item/borg/upgrade/restart
 	name = "robot emergency restart module"

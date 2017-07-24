@@ -411,9 +411,9 @@
 	if(target.op_stage.current_organ)
 		var/datum/organ/external/affectedarea = target.get_organ(target_zone)
 		var/datum/organ/internal/targetorgan = target.internal_organs_by_name[target.op_stage.current_organ]
-		
+
 		target.remove_internal_organ(user, targetorgan, affectedarea)
-		
+
 		target.op_stage.current_organ = null
 
 /datum/surgery_step/internal/remove_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

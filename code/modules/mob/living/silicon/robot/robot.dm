@@ -6,7 +6,7 @@
 	maxHealth = 300
 	health = 300
 	flashed = 0
-	
+
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
@@ -269,6 +269,7 @@
 			module_sprites["Spider"] = "spider-standard"
 			module_sprites["Polar"] = "kodiak-standard"
 			module_sprites["Noble"] = "Noble-STD"
+			module_sprites["R34 - STR4a 'Durin'"] = "durin"
 			speed = 0
 
 		if("Service")
@@ -285,6 +286,7 @@
 			module_sprites["#27"] = "servbot-service"
 			module_sprites["Teddy"] = "kodiak-service"
 			module_sprites["Noble"] = "Noble-SRV"
+			module_sprites["R34 - SRV9a 'Llyod'"] = "lloyd"
 			speed = 0
 
 		if("Supply")
@@ -301,6 +303,7 @@
 			module_sprites["#31"] = "servbot-miner"
 			module_sprites["Kodiak"] = "kodiak-miner"
 			module_sprites["Noble"] = "Noble-SUP"
+			module_sprites["R34 - MIN2a 'Ishimura'"] = "ishimura"
 			speed = -1
 
 		if("Medical")
@@ -318,6 +321,7 @@
 			module_sprites["#17"] = "servbot-medi"
 			module_sprites["Arachne"] = "arachne"
 			module_sprites["Noble"] = "Noble-MED"
+			module_sprites["R34 - MED6a 'Gibbs'"] = "gibbs"
 			speed = -2
 
 		if("Peacekeeper")
@@ -332,6 +336,7 @@
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
 			module_sprites["Noble"] = "Noble-SEC"
+			module_sprites["R34 - SEC10a 'Woody'"] = "woody"
 			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
 			speed = 0
 
@@ -356,6 +361,7 @@
 			module_sprites["#25"] = "servbot-engi"
 			module_sprites["Kodiak"] = "kodiak-eng"
 			module_sprites["Noble"] = "Noble-ENG"
+			module_sprites["R34 - ENG7a 'Conagher'"] = "conagher"
 			speed = -2
 
 		if("Janitor")
@@ -369,6 +375,7 @@
 			module_sprites["Sleek"] = "sleekjanitor"
 			module_sprites["#29"] = "servbot-jani"
 			module_sprites["Noble"] = "Noble-JAN"
+			module_sprites["R34 - CUS3a 'Flynn'"] = "flynn"
 			speed = -1
 
 		if("Combat")
@@ -379,10 +386,10 @@
 			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
 			module_sprites["Mr. Gutsy"] = "mrgutsy"
 			module_sprites["Marina-CB"] = "marinaCB"
-			module_sprites["Squadbot"] = "squats"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
 			module_sprites["Rottweiler"] = "rottweiler-combat"
+			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			speed = -1
 
 	//Custom_sprite check and entry
@@ -453,18 +460,25 @@
 		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
 	namepick_uses--
+
 	var/newname
 	for(var/i = 1 to 3)
-		newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
-		if(newname == "")
-			continue
-		if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
-			break
+		newname = trimcenter(trim(stripped_input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		if(newname == null)
+			if(alert(src,"Are you sure you want a default borg name?",,"Yes","No") == "Yes")
+				break
+		else 
+			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+				break
 
-	if (newname != "")
-		custom_name = newname
+	custom_name = newname
 	updatename()
 	updateicon()
+	if(newname)
+		to_chat(src, "<span class='warning'>You have changed your name to [newname]. You can change your name [namepick_uses] more times.<span>")
+	else
+		to_chat(src, "<span class='warning'>You have reset your name. You can change your name [namepick_uses] more times.<span>")
+
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
@@ -503,8 +517,8 @@
 	src << browse(dat, "window=robotalerts&can_close=0")
 
 /mob/living/silicon/robot/can_diagnose()
-	return is_component_functioning("diagnosis unit") 
-	
+	return is_component_functioning("diagnosis unit")
+
 /mob/living/silicon/robot/proc/self_diagnosis()
 	if(!can_diagnose())
 		return null
@@ -1056,7 +1070,7 @@
 
 /mob/living/silicon/robot/disarm_mob(mob/living/disarmer)
 	var/rotate = dir
-	
+
 	if (lying)
 		return
 	if (!flashed || !stat == DEAD)
@@ -1066,7 +1080,7 @@
 
 	add_logs(disarmer, src, "tipped over", admin = (src.ckey && disarmer.ckey) ? TRUE : FALSE)
 	do_attack_animation(src, disarmer)
-	
+
 	if(prob(40))
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [disarmer] has attempted to tip over \the [src]!</span>")
@@ -1096,7 +1110,7 @@
 		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
 		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
 	lying = 0
-				
+
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
 
