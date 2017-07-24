@@ -1913,9 +1913,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("1")		// Configure pAI device
 						pai.attack_self(U)
 					if("2")		// Eject pAI device
-						var/turf/T = get_turf(src.loc)
-						if(T)
-							pai.forceMove(T)
+						U.put_in_hands(pai)
 
 //LINK FUNCTIONS===================================
 

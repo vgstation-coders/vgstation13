@@ -292,11 +292,11 @@
 				src.hacktarget = null
 		if("chemsynth")
 			if(href_list["chem"])
-				if(!istype(src.loc.loc,/mob/living/carbon))
+				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
 				else if(chargeloop("chemsynth"))
-					if(istype(src.loc.loc,/mob/living/carbon)) //Sanity
-						var/mob/living/M = src.loc.loc
+					var/mob/M = get_holder_of_type(loc, /mob)
+					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
 						playsound(get_turf(src.loc), 'sound/effects/bubbles.ogg', 50, 1)
 				else
@@ -311,7 +311,7 @@
 						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
 					else
 						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
-				var/mob/M = get_holder_of_type(src, /mob)
+				var/mob/M = get_holder_of_type(loc, /mob)
 				if(M)
 					M.put_in_hands(F)
 				playsound(get_turf(src.loc), 'sound/machines/foodsynth.ogg', 50, 1)
