@@ -1,8 +1,7 @@
 /obj/machinery/disposal/compactor
 	name = "trash compactor"
 	desc = "A machine used to alleviate recycling problems in the absence of a disposal network."
-	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "largebins" //New sprite indicating fullness?
+	icon_state = "compactor_on" //New sprite indicating fullness?
 	machine_flags = WRENCHMOVE | FIXED2WORK
 	flags = FPRINT
 	req_access = list(access_janitor)
@@ -15,7 +14,8 @@
 		return
 	playsound(get_turf(src),'sound/machines/compactor.ogg', 30, 1) //Placeholder
 	flush = 1
-	spawn(30)
+	flick("compactor_running",src)
+	spawn(41)
 		flush = 0
 		var/obj/item/trashcube/T =  new /obj/item/trashcube(get_turf(src))
 		for(var/obj/item/O in src)
@@ -23,10 +23,17 @@
 			if(istype(O,/obj/item/trashcube) || O.w_class > W_CLASS_LARGE)
 				visible_message("<span class='warning'>\The [src] groans and spits out \the [O], prematurely ending the cycle.</span>")
 				launch(O)
+				flick("compactor_jobcancel",src)
 				break
 			O.forceMove(T)
 			T.w_class = max(T.w_class,O.w_class-1) //Make a cube starting at SMALL size, but increase it to medium if there is a large item inside.
 			T.update_icon()
+		if(emagged)
+			for(var/mob/M in src)
+				var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube/H = new(src)
+				H.contained_mob = M
+				M.forceMove(H)
+				launch(H)
 		if(!T.contents.len)
 			qdel(T) //If somehow we ended up with nothing inside
 
@@ -39,7 +46,7 @@
 	return
 
 /obj/machinery/disposal/compactor/update_icon()
-	//icon_state = "" Awaiting more interesting icon
+	icon_state = "compactor_[stat & NOPOWER ? "off" : "on"]"
 
 /obj/machinery/disposal/compactor/Topic(href, href_list)
 	if(usr.loc == src)
@@ -64,6 +71,7 @@
 			for(var/mob/M in src)
 				if(!emagged) //Currently cannot be emagged, add code here if desired
 					visible_message("<span class='warning'>The safety light flashes on \the [src].</span>")
+					flick("compactor_error",src)
 					return
 			compact()
 			update_icon()
@@ -74,9 +82,8 @@
 
 /obj/machinery/disposal/compactor/process()
 	updateDialog()
-	if(stat & NOPOWER)
-		return
-	if(stat & BROKEN)
+	update_icon()
+	if(stat & NOPOWER || stat & BROKEN)
 		return
 	if(!anchored)
 		return
@@ -89,6 +96,12 @@
 	add_fingerprint(user)
 	if(iswrench(I)) //We want this to be a high level operation, before any of the place in bin code or disassemble bin code
 		wrenchAnchor(user, 30)
+		power_change()
+		return
+	if(!emagged && istype(I,/obj/item/weapon/card/emag))
+		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		emagged = 1
+		to_chat(user, "<span class='notice'>You you disable the safety features.</span>")
 		return
 	..()
 
@@ -100,11 +113,15 @@
 			launch(AM)
 			visible_message("<span class='warning'>\The [AM] topples out of \the [src].</span>")
 
+/obj/machinery/disposal/compactor/unplugged
+	anchored = 0
+	stat = NOPOWER
+
 /obj/item/trashcube
 	name = "trash cube"
 	desc = "This is a cube of compacted trash, ready for the recycling furnace."
 	w_class = W_CLASS_SMALL
-	w_type = RECYK_METAL
+	w_type = RECYK_MISC
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "BLANK" //So it doesn't gain visibility until after it is filled
 
