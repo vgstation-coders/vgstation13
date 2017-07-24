@@ -1473,6 +1473,24 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 /obj/item/weapon/organ/examine(mob/user)
 	..()
 
+	//TODO: wound datums should be handling this (they aren't because they're awful)
+
+	//Brute damage can be either cuts or bruises
+	if(brute_dam)
+		if(locate(/datum/wound/cut) in wounds)
+			to_chat(user, "<span class='warning'>It has some cuts on it.</span>")
+		if(locate(/datum/wound/bruise) in wounds)
+			to_chat(user, "<span class='warning'>It has some bruises on it.</span>")
+
+	//Burn damage is straightforward
+	switch(burn_dam)
+		if(1 to 10)
+			to_chat(user, "<span class='warning'>It has some minor burns on it.</span>")
+		if(10 to 50)
+			to_chat(user, "<span class='warning'>It is covered in major burns.</span>")
+		if(50 to INFINITY)
+			to_chat(user, "<span class='warning'>It is covered in large carbonised areas.</span>")
+
 	for(var/obj/item/weapon/organ/E in children)
 		to_chat(user, "<span class='info'>There's \a [E] attached to it.</span>")
 
