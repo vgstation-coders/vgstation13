@@ -1133,27 +1133,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 	w_class = W_CLASS_MEDIUM
 
-/datum/organ/external/l_arm
-	name = LIMB_LEFT_ARM
-	display_name = "left arm"
-	icon_name = "l_arm"
-	max_damage = 75
-	min_broken_damage = 30
-	body_part = ARM_LEFT
-
-	grasp_id = GRASP_LEFT_HAND
-	w_class = W_CLASS_SMALL
-
-/datum/organ/external/l_arm/generate_dropped_organ(current_organ)
-	if(status & ORGAN_PEG)
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
-	if(!current_organ)
-		if(status & ORGAN_ROBOT)
-			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
-		else
-			current_organ= new /obj/item/weapon/organ/l_arm(owner.loc, owner)
-	return current_organ
-  
 //=====Legs======
 
 /datum/organ/external/l_leg
