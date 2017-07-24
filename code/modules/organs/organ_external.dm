@@ -1430,6 +1430,9 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 /obj/item/weapon/organ/examine(mob/user)
 	..()
 
+	for(var/obj/item/weapon/organ/E in children)
+		to_chat(user, "<span class='info'>There's \a [E] attached to it.</span>")
+
 	//Add information about teeth and the such
 
 	var/butchery
