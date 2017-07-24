@@ -1026,6 +1026,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PURCHASER		256 //it connects to the centcom database at roundstart
 #define WIREJACK		512 //can we wirejack it? if flagged, machine calls wirejack()
 #define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
+#define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
@@ -1353,7 +1354,10 @@ var/proccalls = 1
 #define log_adminsay(text) diary << html_decode("\[[time_stamp()]]ADMINSAY: [text]")
 
 #define log_adminwarn(text) diary << html_decode("\[[time_stamp()]]ADMINWARN: [text]")
+
 #define log_pda(text) diary << html_decode("\[[time_stamp()]]PDA: [text]")
+
+#define log_rc(text) diary << html_decode("\[[time_stamp()]]RC: [text]")
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")

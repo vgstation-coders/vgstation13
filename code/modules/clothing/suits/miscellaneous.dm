@@ -270,6 +270,7 @@
 	icon_state = "mankini"
 	_color = "mankini"
 	siemens_coefficient = 1
+	body_parts_covered = 0
 
 /obj/item/clothing/suit/xenos
 	name = "xenos suit"
@@ -504,13 +505,13 @@
 	max_combined_w_class = 28
 	storage_slots = 14
 	actions_types = list(/datum/action/item_action/show_wares)
-	
+
 /datum/action/item_action/show_wares/Trigger()
 	var/obj/item/clothing/suit/storage/trader/T = target
 	if(!istype(T))
 		return
 	T.show_wares()
-	
+
 /obj/item/clothing/suit/storage/trader/proc/show_wares()
 	var/mob/M = loc
 	if(!istype(M) || M.incapacitated())

@@ -28,6 +28,7 @@
 	var/stat_exclusive = 0 //Mobs with this set to 1 will exclusively attack things defined by stat_attack, stat_attack 2 means they will only attack corpses
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
+	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
 
 /mob/living/simple_animal/hostile/resetVariables()
 	..("wanted_objects", "friends", args)
@@ -201,7 +202,7 @@
 			if(canmove && space_check())
 				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
-				A.attack_animal(src)
+				UnarmedAttack(A)
 			return
 		else
 			LostTarget()
@@ -242,7 +243,7 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	target.attack_animal(src)
+	UnarmedAttack(target)
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -362,18 +363,18 @@
 		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
-				T.attack_animal(src)
+				UnarmedAttack(T)
 			for(var/atom/A in T)
 				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
-					A.attack_animal(src)
+					UnarmedAttack(A)
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(locked_to)
-		locked_to.attack_animal(src)
+		UnarmedAttack(locked_to)
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
-		A.attack_animal(src)//Bang on it till we get out
+		UnarmedAttack(A) //Bang on it till we get out
 	return
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
@@ -394,3 +395,6 @@
 		OpenFire(A)
 
 	return ..()
+
+/mob/living/simple_animal/hostile/get_armor_modifier(mob/living/target)
+	return armor_modifier

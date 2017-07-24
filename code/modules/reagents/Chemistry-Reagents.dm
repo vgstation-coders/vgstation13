@@ -2402,7 +2402,7 @@
 		var/mob/living/carbon/human/H = M
 		if(!has_been_hypozined)
 			return
-		var/timedmg = ((data - 60) / 2) 
+		var/timedmg = ((data - 60) / 2)
 		if (timedmg > 0)
 			dehypozine(H, timedmg, 1, 0)
 
@@ -5807,6 +5807,57 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#790D27" //rgb: 121, 13, 39
 
 //End of plant-specific reagents
+
+//Petritricin = cockatrice juice
+//Lore explanation for it affecting worn items (like hardsuits), but not items dropped on the ground that it was splashed over:
+//Pure petritricin can stonify any matter, organic or unorganic. However, if it's outside of a living organism, it rapidly deterogates
+//until it is only strong enough to affect organic matter.
+//When introduced to organic matter, petritricin converts living cells to produce more of itself, and the freshly produced substance
+//can affect items worn close enough to the body
+/datum/reagent/petritricin
+	name = "Petritricin"
+	id = PETRITRICIN
+	description = "Petritricin is a venom produced by cockatrices. The extraction process causes a major potency loss, but a right dose of this can still petrify somebody."
+	color = "#002000" //rgb: 0, 32, 0
+	dupeable = FALSE
+
+	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+
+/datum/reagent/petritricin/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(volume >= minimal_dosage && prob(30))
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(locate(/datum/disease/petrification) in H.viruses)
+				return
+
+			var/datum/disease/D = new /datum/disease/petrification
+			D.holder = H
+			D.affected_mob = H
+			H.viruses += D
+		else if(!issilicon(M))
+			if(M.turn_into_statue(1)) //Statue forever
+				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
+
+//A chemical for curing petrification. It only works after you've been fully petrified
+//Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning
+/datum/reagent/apetrine
+	name = "Apetrine"
+	id = APETRINE
+	description = "Apetrine is a chemical used to partially reverse the post-mortem effects of petritricin."
+	color = "#240080" //rgb: 36, 0, 128
+	dupeable = FALSE
+
+/datum/reagent/apetrine/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O, /obj/structure/closet/statue))
+		var/obj/structure/closet/statue/statue = O
+
+		statue.dissolve()
 
 /datum/reagent/hemoscyanine
 	name = "Hemoscyanine"

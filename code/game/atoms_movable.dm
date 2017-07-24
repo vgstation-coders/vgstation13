@@ -287,7 +287,7 @@
 	locked_atoms    -= AM
 	AM.locked_to     = null
 	category.unlock(AM)
-	AM.reset_glide_size()
+	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
 
@@ -741,6 +741,10 @@
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
+
+//Called when somebody begins to pull this atom
+/atom/movable/proc/on_pull_start(mob/living/L)
+	return
 
 /atom/movable/proc/send_to_future(var/duration)	//don't override this, only call it
 	spawn()

@@ -70,9 +70,10 @@ obj/item/device/mmi/Destroy()
 			return
 		M.invisibility = 0
 		//M.custom_name = created_name
+		
+		brainmob.mind.transfer_to(M)
 		M.Namepick()
 		M.updatename()
-		brainmob.mind.transfer_to(M)
 
 		if(M.mind && M.mind.special_role)
 			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")

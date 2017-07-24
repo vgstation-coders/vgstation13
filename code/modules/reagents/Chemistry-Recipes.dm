@@ -581,7 +581,7 @@
 /datum/chemical_reaction/vaporize
 	name = "Vaporize"
 	id = "vaporize"
-	result_amount = 52
+	result_amount = 104
 	result = null
 
 /datum/chemical_reaction/vaporize/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -616,7 +616,7 @@
 /datum/chemical_reaction/vaporize/plasma
 	name = "Vaporize Plasma"
 	id = "vaporizeplasma"
-	result_amount = 5 //Let's not go overboard with the plasma, alright?
+	result_amount = 10 //Let's not go overboard with the plasma, alright?
 	required_reagents = list(VAPORSALT = 1, PLASMA = 1)
 
 /datum/chemical_reaction/vaporize/plasma/disperse(turf/T,datum/gas_mixture/G,var/vol)
@@ -873,6 +873,31 @@
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
 	result_amount = 1
 
+//Botany chemicals
+
+/datum/chemical_reaction/eznutrient
+	name = "E-Z-Nutrient"
+	id = EZNUTRIENT
+	result = EZNUTRIENT
+	required_reagents = list(NITROGEN = 1, PHOSPHORUS = 1, POTASSIUM = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/robustharvest
+	name = "Robust Harvest"
+	id = ROBUSTHARVEST
+	result = ROBUSTHARVEST
+	required_reagents = list(EZNUTRIENT = 1)
+	required_catalysts = list(FORMIC_ACID = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/left4zed
+	name = "Left 4 Zed"
+	id = LEFT4ZED
+	result = LEFT4ZED
+	required_reagents = list(EZNUTRIENT = 1)
+	required_catalysts = list(RADIUM = 5)
+	result_amount = 1	
+	
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
@@ -1922,6 +1947,21 @@
 	var/obj/item/device/camera_film/P = new /obj/item/device/camera_film
 	P.forceMove(get_turf(holder.my_atom))
 
+/datum/chemical_reaction/slimestop
+	name = "Slime timestop"
+	id = "s_stop"
+	result = null
+	required_reagents = list(PHAZON = 5)
+	result_amount = 1
+	required_container = /obj/item/slime_extract/sepia
+	required_other = 1
+	alert_admins = ALERT_ALL_REAGENTS
+
+/datum/chemical_reaction/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
+	timestop(get_turf(holder.my_atom), 25,5)
+	
 //Pyrite
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
@@ -2851,6 +2891,13 @@
 	result = ANTHRACENE
 	required_reagents = list(ZEAXANTHIN = 1, RADIUM = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/apetrine
+	name = "Apetrine"
+	id = APETRINE
+	result = APETRINE
+	required_reagents = list(PETRICIN = 2, PACID = 3)
+	result_amount = 1
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

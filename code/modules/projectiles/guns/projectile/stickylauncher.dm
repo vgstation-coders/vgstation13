@@ -93,7 +93,9 @@
 		return 1
 	return 0
 
-
+/obj/item/weapon/gun/stickybomb/can_discharge()
+	return loaded.len
+	
 /obj/item/stickybomb
 	name = "anti-personnel stickybomb"
 	desc = "Ammo for a stickybomb launcher. Only affects living beings, produces a decent amount of knockback."

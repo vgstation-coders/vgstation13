@@ -25,8 +25,8 @@
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
-		/obj/item/weapon/grown/nettle         = list(SACID = 0),
-		/obj/item/weapon/grown/deathnettle    = list(PACID = 0),
+		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
+		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
 
 		//Blender Stuff
