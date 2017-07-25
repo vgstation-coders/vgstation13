@@ -18,7 +18,7 @@
 	var/current_instruction = DDR_STAND
 	var/current_dir = NORTH
 	var/progress_counter = 0
-	var/max_progress = 90
+	var/max_progress = 70
 
 	var/list/direction_effects = list()
 	var/list/instruction_effects = list()
