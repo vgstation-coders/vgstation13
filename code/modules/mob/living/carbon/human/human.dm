@@ -1521,6 +1521,14 @@
 	else
 		to_chat(src, "<b><font color='[pick("red","orange","yellow","green","blue")]'>[pick(boo_phrases_drugs)]</font></b>")
 
+/mob/living/carbon/human/proc/seizure(paralyse_duration = 10, jitter_duration = 1000)
+	forcesay(epilepsy_appends)
+	visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
+					"<span class='warning'>You have a seizure!</span>", \
+					drugged_message = "<span class='info'>\The [src] starts raving.</span>")
+	Paralyse(paralyse_duration)
+	Jitter(jitter_duration)
+
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
 	for(var/datum/organ/external/O in src.organs)
@@ -1691,8 +1699,8 @@ mob/living/carbon/human/isincrit()
 	for(var/datum/organ/external/damagedorgan in H.organs)
 		if(damagedorgan.status & ORGAN_BLEEDING)
 			return_organs += damagedorgan
-	return return_organs		
-		
+	return return_organs
+
 /mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
 

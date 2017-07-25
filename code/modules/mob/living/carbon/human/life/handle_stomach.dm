@@ -95,10 +95,8 @@
 
 				else if(paralysis<1 && prob(5)) //Mini seizure (25% duration and strength of a normal seizure)
 
-					visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
-							"<span class='warning'>You have a seizure!</span>")
-					Paralyse(5)
-					Jitter(500)
+					seizure(5, 500)
+
 					adjustOxyLoss(rand(1,25))
 					eye_blurry += 20
 
