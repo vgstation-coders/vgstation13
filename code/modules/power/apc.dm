@@ -856,7 +856,7 @@
 		return 1
 	if(!can_use(usr, 1))
 		return 0
-	if(!istype(usr, /mob/living/silicon) && locked)
+	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
 	// Shouldn't happen, this is here to prevent href exploits
 		to_chat(usr, "You must unlock the panel to use this!")
 		return 1
