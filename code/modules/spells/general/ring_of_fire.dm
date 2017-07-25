@@ -34,18 +34,18 @@
 	if(isliving(user))
 		var/mob/living/L = user
 
-		if(!L.mutations.Find(M_RESIST_HEAT))
-			to_chat(L, "<span class='info'>You feel resistant to fire.</span>")
+		if(!L.mutations.Find(M_RESIST_HEAT) || !L.mutations.Find(M_UNBURNABLE))
+			to_chat(L, "<span class='info'>You feel completely resistant to fire.</span>")
 
-		L.mutations.Add(M_RESIST_HEAT)
+		L.mutations.Add(M_RESIST_HEAT, M_UNBURNABLE)
 		L.update_mutations()
 
 		spawn(duration)
-			L.mutations.Remove(M_RESIST_HEAT)
+			L.mutations.Remove(M_RESIST_HEAT, M_UNBURNABLE)
 			L.update_mutations()
 
-			if(!L.mutations.Find(M_RESIST_HEAT))
-				to_chat(L, "<span class='info'>You are no longer resistant to fire.</span>")
+			if(!L.mutations.Find(M_UNBURNABLE))
+				to_chat(L, "<span class='info'>You are no longer fully resistant to fire.</span>")
 
 	..()
 

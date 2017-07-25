@@ -420,6 +420,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_FINGERPRINTS	108 	// no fingerprints
 #define M_NO_SHOCK		109 	// insulated hands
 #define M_DWARF			110 	// table climbing
+#define M_UNBURNABLE	111		// can't get set on fire
 
 // Goon muts
 #define M_OBESITY       200		// Decreased metabolism

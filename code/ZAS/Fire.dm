@@ -198,6 +198,9 @@ Attach to transfer valve and open. BOOM.
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
 	for(var/mob/living/carbon/human/M in loc)
+		if(M.mutations.Find(M_UNBURNABLE))
+			continue
+
 		M.FireBurn(firelevel, air_contents.temperature, air_contents.return_pressure() ) //Burn the humans!
 
 	for(var/atom/A in loc)
