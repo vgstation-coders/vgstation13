@@ -3,6 +3,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
+			forcesay(epilepsy_appends)
 			visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
 							"<span class='warning'>You have a seizure!</span>")
 			Paralyse(10)
