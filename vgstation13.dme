@@ -2220,6 +2220,7 @@
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
 #include "maps\defficiency\pipes.dm"
+#include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\spessmart.dm"
