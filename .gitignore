@@ -59,3 +59,5 @@ players2.sqlite
 /data/investigate/*
 
 cfg
+
+.vscode
