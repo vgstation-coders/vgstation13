@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Checks the map files for bad strings like step_x, step_y and layer.
 # Isn't smart enough to ignore string contents, however.
+from __future__ import print_function
 import sys
 import os
 import re
