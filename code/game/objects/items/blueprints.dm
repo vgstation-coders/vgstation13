@@ -14,6 +14,7 @@
 # define ROOM_ERR_SPACE    -1
 # define ROOM_ERR_TOOLARGE -2
 
+
 /obj/item/blueprints
 	name = "station blueprints"
 	desc = "Blueprints of the station. There is a \"Classified\" stamp and several coffee stains on it."
@@ -23,13 +24,32 @@
 
 	var/can_create_areas_in = list(AREA_SPACE)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
+	var/can_edit_areas = list(AREA_BLUEPRINTS)
 	var/can_delete_areas = list(AREA_BLUEPRINTS)
+
+	var/area/currently_edited
+	var/image/edited_overlay
+
+	//Amount of turfs in the edited area. Exists to minimize performance impact of calling get_area_turfs()
+	var/turf_amount_cache
+
+	//Maximum amount of turfs
+	var/max_room_size = 300
+
+	var/mob/editor
 
 /obj/item/blueprints/attack_self(mob/M as mob)
 	if (!istype(M,/mob/living/carbon/human))
 		to_chat(M, "This stack of blue paper means nothing to you.")//monkeys cannot into projecting
 
 		return
+
+	if(currently_edited)
+		if(editor && editor.client)
+			rename_edited_area()
+			stop_editing()
+			return
+
 	interact()
 	return
 
@@ -48,7 +68,7 @@
 			if (!(get_area_type() in can_rename_areas))
 				interact()
 				return 1
-			edit_area()
+			edit_area(usr)
 		if ("delete_area")
 			if (!(get_area_type() in can_delete_areas))
 				interact()
@@ -152,25 +172,106 @@ move an amendment</a> to the drawing.</p>
 	sleep(5)
 	interact()
 
-/obj/item/blueprints/proc/edit_area()
-	var/area/areachanged = get_area()
-//	to_chat(world, "DEBUG: edit_area")
-	var/prevname = "[areachanged.name]"
-	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", prevname, MAX_NAME_LEN))
+/obj/item/blueprints/proc/stop_editing()
+	if(editor && editor.client)
+		editor.client.images.Remove(edited_overlay)
+
+	editor = null
+	edited_overlay = null
+	currently_edited = null
+	processing_objects.Remove(src)
+
+/obj/item/blueprints/proc/edit_area(mob/user)
+	if(!user || !user.client)
+		return
+
+	if(currently_edited)
+		stop_editing()
+
+	editor = user
+
+	currently_edited = get_area()
+
+	if(get_area_type() in can_edit_areas) //Area is allowed to be edited
+		//var/list/edited_turfs = currently_edited.get_area_turfs()
+		//turf_amount_cache = edited_turfs.len
+
+		//Create a visual effect over the edited area
+		edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")
+		editor.client.images.Add(edited_overlay)
+
+		to_chat(editor, "<span class='info'>In this mode, you can add or modify tiles to the [currently_edited] area. When you're done, bring up the blueprints or leave the area to get an option to rename it.</span>")
+		processing_objects.Add(src)
+
+	else if(get_area_type() in can_rename_areas) //Area can only be renamed
+		attack_self(user)
+
+/obj/item/blueprints/process()
+	//Blueprints must be in hands to be usable
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor))
+		return stop_editing()
+
+/obj/item/blueprints/afterattack(atom/A, mob/user, proximity)
+	if(!currently_edited)
+		return
+
+	//Click on a turf = add it to the edited area or remove it from the edited area
+	var/turf/T = get_turf(A)
+	if(isturf(A))
+		var/area/space = get_space_area()
+		var/area/target_area = T.loc
+
+		if(target_area == currently_edited)
+			T.set_area(space) //Remove from current area
+			turf_amount_cache--
+		else if(target_area == space)
+			T.set_area(currently_edited) //Add to current area
+			turf_amount_cache++
+		else
+			#define error_flash_dur 30
+			//Create a temporary image that marks the conflicting area's borders
+			var/image/bad_area = image('icons/turf/areas.dmi', target_area, "purple")
+			animate(bad_area, alpha = 0, time = error_flash_dur)
+
+			var/client/C = editor.client
+			C.images.Add(bad_area)
+			//The 'editor' might change in two seconds. This will pretty much guarantee the image is removed
+			spawn(error_flash_dur)
+				C.images.Remove(bad_area)
+
+			#undef error_flash_dur
+
+		//to_chat(editor, "[turf_amount_cache] / [max_room_size] turfs in [currently_edited]")
+
+/obj/item/blueprints/proc/rename_edited_area()
+	var/area/A = currently_edited
+	var/mob/user = editor
+
+	if(!istype(A) || !istype(user))
+		return
+
+	var/prevname = "[A.name]"
+	var/str = trim(stripped_input(user, "New area name:","Blueprint Editing", prevname, MAX_NAME_LEN))
 	if(!str || !length(str) || str==prevname) //cancel
 		return
-	if(length(str) > 50)
-		to_chat(usr, "<span class='warning'>Text too long.</span>")
+	if(!istype(A) || !istype(user) || (A != currently_edited) || (user != editor))
 		return
-	areachanged.name = str
-	for(var/atom/allthings in areachanged.contents)
+	if(!Adjacent(user))
+		return
+
+	if(length(str) > 50)
+		to_chat(user, "<span class='warning'>Name too long.</span>")
+		return
+
+	A.name = str
+	for(var/atom/allthings in A.contents)
 		allthings.change_area_name(prevname,str)
-	to_chat(usr, "<span class='notice'>You set the area '[prevname]' title to '[str]'.</span>")
-	interact()
+
+	to_chat(user, "<span class='notice'>You change \the [prevname]'s title to '[str]'.</span>")
 
 /obj/item/blueprints/proc/delete_area(var/mob/user) //This functionality is currently commented out!
 	var/area/station/custom/areadeleted = get_area()
-	var/area/space = get_area(locate(1,1,2)) //xd
+	var/area/space = get_space_area()
 
 	if(alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
 		return
@@ -224,7 +325,7 @@ move an amendment</a> to the drawing.</p>
 	var/list/turf/found = new
 	var/list/turf/pending = list(first)
 	while(pending.len)
-		if (found.len+pending.len > 300)
+		if (found.len+pending.len > max_room_size)
 			return ROOM_ERR_TOOLARGE
 		var/turf/T = pending[1] //why byond havent list::pop()?
 		pending -= T
