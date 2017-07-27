@@ -292,8 +292,8 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	var/turf/bomb_location = get_turf(src)
 	explosion(bomb_location, 30, 60, 120, 120, 10)
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
-		var/map_center_x = world.maxx * .5
-		var/map_center_y = world.maxy * .5
+		var/map_center_x = world.maxx * 0.5
+		var/map_center_y = world.maxy * 0.5
 		
 		if( (bomb_location.x < (map_center_x-NUKERANGE)) || (bomb_location.x > (map_center_x+NUKERANGE)) || (bomb_location.y < (map_center_y-NUKERANGE)) || (bomb_location.y > (map_center_y+NUKERANGE)) )
 			off_station = 1
