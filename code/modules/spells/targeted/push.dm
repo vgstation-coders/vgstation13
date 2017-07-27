@@ -21,6 +21,9 @@
 	var/list/options = ..()
 	for(var/atom/movable/target in options)
 		valid_targets += target
+	if(!holder.z)
+		to_chat(holder, "<span class='warning'>You can't seem to get enough leverage for a push from here.</span>")
+		valid_targets = list()
 	return valid_targets
 
 /spell/targeted/push/cast(var/list/targets)
