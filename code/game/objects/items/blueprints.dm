@@ -44,9 +44,6 @@
 /obj/item/blueprints/mommiprints
 	name = "MoMMI station blueprints"
 	desc = "Blueprints of the station, designed for the passive aggressive spider bots aboard."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "blueprints"
-	attack_verb = list("attacks", "baps", "hits")
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
 	can_delete_areas = list()
@@ -60,7 +57,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	desc = "An electronic permit designed to register a room for the use of APC and air alarms"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "permit"
-	attack_verb = list("attacks", "baps", "hits")
+
 	w_class = W_CLASS_TINY
 
 	can_rename_areas = list(AREA_BLUEPRINTS)
@@ -174,7 +171,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/process()
 	//Blueprints must be in hands to be usable
 	//Editor must be in the edited area
-	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (get_area(src) != get_area(editor)))
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (!currently_edited.contents.Find(get_turf(editor))) )
 		if(editor)
 			to_chat(editor, "<span class='info'>You finish modifying \the [src].</span>")
 
