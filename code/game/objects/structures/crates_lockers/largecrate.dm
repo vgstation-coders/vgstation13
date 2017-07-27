@@ -104,7 +104,6 @@
 	..()
 
 /obj/structure/largecrate/cat
-	name = "cat crate"
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/cat/attackby(obj/item/weapon/W, mob/user)
