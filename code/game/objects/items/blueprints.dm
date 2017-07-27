@@ -46,7 +46,6 @@
 
 	if(currently_edited)
 		if(editor && editor.client)
-			rename_edited_area()
 			stop_editing()
 			return
 
@@ -59,20 +58,19 @@
 		return
 
 	switch(href_list["action"])
-		if ("create_area")
-			if (!(get_area_type() in can_create_areas_in))
-				interact()
-				return 1
-			create_area()
-		if ("edit_area")
-			if (!(get_area_type() in can_rename_areas))
-				interact()
-				return 1
+		if("create_room")
+			create_room(usr)
+
+		if("create_area")
+			create_area(usr)
+
+		if("rename_area")
+			rename_area(usr)
+
+		if("edit_area")
 			edit_area(usr)
-		if ("delete_area")
-			if (!(get_area_type() in can_delete_areas))
-				interact()
-				return 1
+
+		if("delete_area")
 			delete_area(usr)
 
 /obj/item/blueprints/interact()
@@ -81,29 +79,33 @@
 <h2>[station_name()] blueprints</h2>
 <small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small><hr>
 "}
-	switch (get_area_type())
+
+	var/area_type = get_area_type()
+	switch (area_type)
 		if (AREA_SPACE)
-			text += {"
-<p>According to the blueprints, you are now in <b>outer space</b>.  Hold your breath.</p>
-<p><a href='?src=\ref[src];action=create_area'>Mark this place as new area.</a></p>
-"}
+			text += "<p>According to the blueprints, you are now in <b>outer space</b>.  Hold your breath.</p>"
 		if (AREA_STATION)
-			text += {"
-<p>According to the blueprints, you are now in <b>\"[A.name]\"</b>.</p>
-<p>You may <a href='?src=\ref[src];action=edit_area'>
-move an amendment</a> to the drawing.</p>
-"}
+			text += "<p>According to the blueprints, you are now in <b>\"[A.name]\"</b>.</p>"
 		if (AREA_SPECIAL)
-			text += {"
-<p>This place isn't noted on the blueprint.</p>
-"}
+			text += "<p>This place isn't noted on the blueprint.</p>"
 		if (AREA_BLUEPRINTS)
-			text += {"
-<p>According to the blueprints, you are now in <b>\"[A.name]\"</b> This place seems to be relatively new on the blueprints.</p>"}
-			text += "<p>You may <a href='?src=\ref[src];action=edit_area'>move an amendment</a> to the drawing.</p>"//, or <a href='?src=\ref[src];action=delete_area'>erase</a> this place from the blueprints."
+			text += "<p>According to the blueprints, you are now in <b>\"[A.name]\"</b> This drawing seems to be relatively new.</p>"
 
 		else
 			return
+
+	text += "<br>"
+
+	if(area_type in can_create_areas_in)
+		text += "<p><a href='?src=\ref[src];action=create_room'>Create a new room</a></p>"
+		text += "<p><a href='?src=\ref[src];action=create_area'>Start a new drawing</a></p>"
+	if(area_type in can_rename_areas)
+		text += "<p><a href='?src=\ref[src];action=rename_area'>Change the drawing's name</a></p>"
+	if(area_type in can_edit_areas)
+		text += "<p><a href='?src=\ref[src];action=edit_area'>Move an amendment to the drawing</a></p>"
+	if(area_type in can_delete_areas)
+		text += "<p><a href='?src=\ref[src];action=delete_area'>Erase this drawing</a></p>"
+
 	text += "</BODY></HTML>"
 	usr << browse(text, "window=blueprints")
 	onclose(usr, "blueprints")
@@ -137,40 +139,16 @@ move an amendment</a> to the drawing.</p>
 			return AREA_SPECIAL
 	return AREA_STATION
 
-/obj/item/blueprints/proc/create_area()
-//	to_chat(world, "DEBUG: create_area")
-	var/res = detect_room(get_turf(usr))
-	if(!istype(res,/list))
-		switch(res)
-			if(ROOM_ERR_SPACE)
-				to_chat(usr, "<span class='warning'>The new area must be completely airtight!</span>")
-				return
-			if(ROOM_ERR_TOOLARGE)
-				to_chat(usr, "<span class='warning'>The new area too large!</span>")
-				return
-			else
-				to_chat(usr, "<span class='warning'>Error! Please notify administration!</span>")
-				return
-	var/list/turf/turfs = res
-	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", "", MAX_NAME_LEN))
-	if(!str || !length(str)) //cancel
-		return
-	if(length(str) > 50)
-		to_chat(usr, "<span class='warning'>Name too long.</span>")
-		return
-	var/area/station/custom/newarea = new
-	newarea.name = str
-	newarea.tag = "[newarea.type]/[md5(str)]"
 
-	for(var/turf/T in turfs)
-		T.set_area(newarea)
+/obj/item/blueprints/process()
+	//Blueprints must be in hands to be usable
+	//Editor must be in the edited area
+	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor) || (get_area(src) != get_area(editor)))
+		if(editor)
+			to_chat(editor, "<span class='info'>You finish modifying \the [src].</span>")
 
-	newarea.addSorted()
+		return stop_editing()
 
-	ghostteleportlocs[newarea.name] = newarea
-
-	sleep(5)
-	interact()
 
 /obj/item/blueprints/proc/stop_editing()
 	if(editor && editor.client)
@@ -180,36 +158,6 @@ move an amendment</a> to the drawing.</p>
 	edited_overlay = null
 	currently_edited = null
 	processing_objects.Remove(src)
-
-/obj/item/blueprints/proc/edit_area(mob/user)
-	if(!user || !user.client)
-		return
-
-	if(currently_edited)
-		stop_editing()
-
-	editor = user
-
-	currently_edited = get_area()
-
-	if(get_area_type() in can_edit_areas) //Area is allowed to be edited
-		//var/list/edited_turfs = currently_edited.get_area_turfs()
-		//turf_amount_cache = edited_turfs.len
-
-		//Create a visual effect over the edited area
-		edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")
-		editor.client.images.Add(edited_overlay)
-
-		to_chat(editor, "<span class='info'>In this mode, you can add or modify tiles to the [currently_edited] area. When you're done, bring up the blueprints or leave the area to get an option to rename it.</span>")
-		processing_objects.Add(src)
-
-	else if(get_area_type() in can_rename_areas) //Area can only be renamed
-		attack_self(user)
-
-/obj/item/blueprints/process()
-	//Blueprints must be in hands to be usable
-	if(!istype(editor) || !editor.client || !currently_edited || (loc != editor))
-		return stop_editing()
 
 /obj/item/blueprints/afterattack(atom/A, mob/user, proximity)
 	if(!currently_edited)
@@ -243,9 +191,91 @@ move an amendment</a> to the drawing.</p>
 
 		//to_chat(editor, "[turf_amount_cache] / [max_room_size] turfs in [currently_edited]")
 
-/obj/item/blueprints/proc/rename_edited_area()
-	var/area/A = currently_edited
-	var/mob/user = editor
+//Creates a new area and spreads it to cover the current room
+/obj/item/blueprints/proc/create_room(mob/user)
+	if(!(get_area_type() in can_create_areas_in))
+		to_chat(user, "There is no space on \the [src] for another drawing.")
+		return
+
+	var/res = detect_room(get_turf(usr))
+	if(!istype(res,/list))
+		switch(res)
+			if(ROOM_ERR_SPACE)
+				to_chat(usr, "<span class='warning'>The new area must be completely airtight!</span>")
+				return
+			if(ROOM_ERR_TOOLARGE)
+				to_chat(usr, "<span class='warning'>The new area too large!</span>")
+				return
+			else
+				to_chat(usr, "<span class='warning'>Error! Please notify administration!</span>")
+				return
+
+	create_area(user, res)
+
+//Creates a new area
+/obj/item/blueprints/proc/create_area(mob/user, list/new_turfs = null)
+	if(!(get_area_type() in can_create_areas_in))
+		to_chat(user, "There is no space on \the [src] for another drawing.")
+		return
+
+	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", "", MAX_NAME_LEN))
+	if(!str || !length(str) || !Adjacent(user)) //cancel
+		return
+	if(length(str) > 50)
+		to_chat(usr, "<span class='warning'>Name too long.</span>")
+		return
+
+	var/area/station/custom/newarea = new
+	newarea.name = str
+	newarea.tag = "[newarea.type]/[md5(str)]"
+
+	if(islist(new_turfs))
+		for(var/turf/T in new_turfs)
+			T.set_area(newarea)
+	else
+		//Enter editing mode immediately, if not given an initial list of turfs
+		var/turf/T = get_turf(user)
+		T.set_area(newarea)
+
+		edit_area(user)
+
+	newarea.addSorted()
+
+	ghostteleportlocs[newarea.name] = newarea
+
+	sleep(5)
+	interact()
+
+/obj/item/blueprints/proc/edit_area(mob/user)
+	if(!user || !user.client)
+		return
+	if(!(get_area_type() in can_edit_areas))
+		to_chat(user, "You can't edit this drawing.")
+		return
+
+	if(currently_edited)
+		stop_editing()
+
+	editor = user
+
+	currently_edited = get_area()
+	processing_objects.Add(src)
+
+	//var/list/edited_turfs = currently_edited.get_area_turfs()
+	//turf_amount_cache = edited_turfs.len
+
+	//Create a visual effect over the edited area
+	edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")
+	editor.client.images.Add(edited_overlay)
+
+	to_chat(editor, "<span class='info'>In this mode, you can add or modify tiles to the [currently_edited] area. When you're done, bring up the blueprints or leave the area.</span>")
+
+/obj/item/blueprints/proc/rename_area(mob/user)
+	if(!(get_area_type() in can_rename_areas))
+		to_chat(user, "This drawing was already signed, and can't be renamed.")
+		return
+
+	var/area/A = get_area()
 
 	if(!istype(A) || !istype(user))
 		return
@@ -254,7 +284,7 @@ move an amendment</a> to the drawing.</p>
 	var/str = trim(stripped_input(user, "New area name:","Blueprint Editing", prevname, MAX_NAME_LEN))
 	if(!str || !length(str) || str==prevname) //cancel
 		return
-	if(!istype(A) || !istype(user) || (A != currently_edited) || (user != editor))
+	if(!istype(A) || !istype(user))
 		return
 	if(!Adjacent(user))
 		return
@@ -291,6 +321,8 @@ move an amendment</a> to the drawing.</p>
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(areadeleted,space)
 	to_chat(usr, "You've erased the \"[areadeleted]\" from the blueprints.")
+
+//Room auto-fill procs
 
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
 	if (istype(T2, /turf/space))
