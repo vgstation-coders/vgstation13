@@ -280,6 +280,9 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/proc/edit_area(mob/user)
 	if(!user || !user.client)
 		return
+	if(currently_edited)
+		stop_editing()
+		return
 	if(!(get_area_type() in can_edit_areas))
 		to_chat(user, "You can't edit this drawing.")
 		return
