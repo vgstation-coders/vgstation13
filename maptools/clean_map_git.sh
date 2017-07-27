@@ -6,9 +6,7 @@ MAPFILES=(
 	$MAPROOT"tgstation.dmm"
 #	$MAPROOT"vgstation.dmm"
 	$MAPROOT"defficiency.dmm"
-	$MAPROOT"taxistation.dmm"
 	$MAPROOT"metaclub.dmm"
-	$MAPROOT"busstation.dmm"
 	$MAPROOT"bagelstation.dmm"
 	$MAPROOT"packedstation.dmm"
 )
