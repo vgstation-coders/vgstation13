@@ -22,6 +22,8 @@
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
 
+	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
+
 	var/can_create_areas_in = list(AREA_SPACE)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
 	var/can_edit_areas = list(AREA_BLUEPRINTS)
@@ -38,8 +40,37 @@
 
 	var/mob/editor
 
-/obj/item/blueprints/attack_self(mob/M as mob)
-	if (!istype(M,/mob/living/carbon/human))
+//MoMMI blueprints
+/obj/item/blueprints/mommiprints
+	name = "MoMMI station blueprints"
+	desc = "Blueprints of the station, designed for the passive aggressive spider bots aboard."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "blueprints"
+	attack_verb = list("attacks", "baps", "hits")
+
+	can_rename_areas = list(AREA_BLUEPRINTS)
+	can_delete_areas = list()
+
+	header = "<small>These blueprints are for the creation of new rooms only; you cannot change existing rooms.</small>"
+
+/* construction permits. Think blueprints but accessible to all engies and does NOT count as the antag steal objective
+these cannot rename rooms that are in by default BUT can rename rooms that are created via blueprints/permit  */
+/obj/item/blueprints/construction_permit
+	name = "construction permit"
+	desc = "An electronic permit designed to register a room for the use of APC and air alarms"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "permit"
+	attack_verb = list("attacks", "baps", "hits")
+	w_class = W_CLASS_TINY
+
+	can_rename_areas = list(AREA_BLUEPRINTS)
+	can_delete_areas = list()
+
+	header = "<small>This permit is for the creation of new rooms only; you cannot change existing rooms.</small>"
+
+
+/obj/item/blueprints/attack_self(mob/living/M)
+	if (!ishuman(M) && !issilicon(M))
 		to_chat(M, "This stack of blue paper means nothing to you.")//monkeys cannot into projecting
 
 		return
@@ -77,7 +108,7 @@
 	var/area/A = get_area()
 	var/text = {"<HTML><head><title>[src]</title></head><BODY>
 <h2>[station_name()] blueprints</h2>
-<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small><hr>
+<hr>
 "}
 
 	var/area_type = get_area_type()
