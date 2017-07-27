@@ -7,6 +7,8 @@
 #define WINDOWUNSECUREFRAME 2
 #define WINDOWSECURE 3
 
+var/list/one_way_windows
+
 /obj/structure/window
 	name = "window"
 	desc = "A silicate barrier, used to keep things out and in sight. Fragile."
@@ -45,6 +47,11 @@
 	update_nearby_icons()
 	update_icon()
 	oneway_overlay = image('icons/obj/structures.dmi', src, "one_way_overlay")
+	if(one_way)
+		if(!one_way_windows)
+			one_way_windows = list()
+		one_way_windows.Add(src)
+		overlays += oneway_overlay
 
 /obj/structure/window/projectile_check()
 	return PROJREACT_WINDOWS
@@ -287,6 +294,7 @@
 		else
 			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
 			one_way = 0
+			one_way_windows.Remove(src)
 			getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1)
 			overlays -= oneway_overlay
 			return
@@ -297,13 +305,11 @@
 			return
 		var/obj/item/stack/sheet/mineral/plastic/P = W
 		one_way = 1
+		if(!one_way_windows)
+			one_way_windows = list()
+		one_way_windows.Add(src)
 		P.use(1)
 		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
-//		if(!oneway_overlay)
-//			oneway_overlay = new(src)
-//			oneway_overlay.icon = icon('icons/obj/structures.dmi')
-//			oneway_overlay.dir = src.dir
-//			oneway_overlay.icon_state = "one_way_overlay"
 		overlays += oneway_overlay
 		return
 
@@ -486,6 +492,8 @@
 		if(loc)
 			playsound(get_turf(src), "shatter", 70, 1)
 		spawnBrokenPieces()
+	if(one_way)
+		one_way_windows.Remove(src)
 	..()
 
 /obj/structure/window/proc/spawnBrokenPieces()
