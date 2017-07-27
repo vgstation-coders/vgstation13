@@ -32,9 +32,6 @@
 	var/area/currently_edited
 	var/image/edited_overlay
 
-	//Amount of turfs in the edited area. Exists to minimize performance impact of calling get_area_turfs()
-	var/turf_amount_cache
-
 	//Maximum amount of turfs
 	var/max_room_size = 300
 
@@ -65,6 +62,14 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	header = "<small>This permit is for the creation of new rooms only; you cannot change existing rooms.</small>"
 
+//Special blueprints that can edit station areas
+/obj/item/blueprints/admin
+	name = "universe blueprints"
+	desc = "Blueprints of the universe. There is a \"Classified\" stamp and several coffee stains on it."
+	
+	can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS, AREA_SPECIAL)
+	can_edit_areas = list(AREA_BLUEPRINTS, AREA_STATION, AREA_SPECIAL)
+	can_delete_areas = list(AREA_BLUEPRINTS, AREA_STATION, AREA_SPECIAL)
 
 /obj/item/blueprints/attack_self(mob/living/M)
 	if (!ishuman(M) && !issilicon(M))
@@ -199,10 +204,8 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 		if(target_area == currently_edited)
 			T.set_area(space) //Remove from current area
-			turf_amount_cache--
 		else if(target_area == space)
 			T.set_area(currently_edited) //Add to current area
-			turf_amount_cache++
 		else
 			#define error_flash_dur 30
 			//Create a temporary image that marks the conflicting area's borders
@@ -216,8 +219,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 				C.images.Remove(bad_area)
 
 			#undef error_flash_dur
-
-		//to_chat(editor, "[turf_amount_cache] / [max_room_size] turfs in [currently_edited]")
 
 //Creates a new area and spreads it to cover the current room
 /obj/item/blueprints/proc/create_room(mob/user)
@@ -291,9 +292,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	currently_edited = get_area()
 	processing_objects.Add(src)
-
-	//var/list/edited_turfs = currently_edited.get_area_turfs()
-	//turf_amount_cache = edited_turfs.len
 
 	//Create a visual effect over the edited area
 	edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")
