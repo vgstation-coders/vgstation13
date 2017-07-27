@@ -998,3 +998,20 @@ var/list/beam_master = list()
 		travel_range = t_range
 	else
 		travel_range = 0
+
+/obj/item/projectile/beam/combustion
+	name = "combustion beam"
+	icon_state = "heavylaser"
+	damage = 0
+	fire_sound = 'sound/weapons/railgun_highpower.ogg'
+
+/obj/item/projectile/beam/combustion/Bump(atom/A)
+	if(!A)
+		return
+	..()
+	var/turf/T = get_turf(A)
+	explosion(T,0,0,5)
+	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	smoke.set_up(3, 0, T)
+	smoke.start()
+	return 1
