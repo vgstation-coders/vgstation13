@@ -814,8 +814,8 @@
 
 ///// ANCIENT SPELLBOOK /////
 
-/obj/item/weapon/spellbook/oneuse/ancient
-	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph)
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
 	spell = null
 	icon_state = "book"
 	desc = "A book of lost and forgotten knowledge"
