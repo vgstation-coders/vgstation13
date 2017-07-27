@@ -102,3 +102,12 @@
 	if(iscrowbar(W))
 		new /obj/structure/anomaly_container(loc)
 	..()
+
+/obj/structure/largecrate/cat
+	name = "cat crate"
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/cat/attackby(obj/item/weapon/W, mob/user)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/cat/Proc(loc)
+	..()

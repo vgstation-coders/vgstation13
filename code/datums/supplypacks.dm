@@ -1758,6 +1758,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "corgi Crate"
 	group = "Hydroponics"
 
+/datum/supply_packs/cat
+	name = "Cat"
+	contains = list()
+	cost = 30
+	containertype = /obj/structure/largecrate/cat
+	containername = "cat crate"
+	group = "Hydroponics"
+
 /datum/supply_packs/weedcontrol
 	name = "Weed control equipment"
 	contains = list(/obj/item/weapon/scythe,
