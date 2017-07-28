@@ -7,15 +7,15 @@
 	invocation = "MAHNSTUR MACH!"
 	invocation_type = SpI_SHOUT
 	range = 1
-	spell_flags = WAIT_FOR_CLICK //SELECTABLE hinders you here, since the spell has a range of 1 and only works on adjacent guys. Having the TARGETTED flag here makes it easy for your target to run away from you!
-
-	hud_state = "b_mutate"
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
+	hud_state = "wiz_bmutate"
 
 
 /spell/targeted/balefulmutate/cast/(var/list/targets)
 	for(var/mob/living/carbon/human/target in targets)
+		target.flash_eyes(visual = 1)
 		var/list/valid_species = (all_species - list("Krampus", "Horror"))
 		for(var/datum/organ/external/E in target.organs)
 			E.species = all_species[pick(valid_species)]
 			target.regenerate_icons()
-			to_chat(target, "<span class=danger><B>The baleful mutation warps your body! </span></B>")
+			to_chat(target, "<span class=danger><B>Powerful magic warps your body! </span></B>")

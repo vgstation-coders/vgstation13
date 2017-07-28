@@ -5,7 +5,7 @@
 	summon_type = list(/obj/item/weapon/card/id/captains_spare)
 	summon_amt = 5
 
-	range = 2
+	range = 1
 
 	school = "conjuration"
 	invocation = "W'ZZ GO' T'E S'RE!"
