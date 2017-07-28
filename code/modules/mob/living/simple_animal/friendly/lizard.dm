@@ -18,3 +18,10 @@
 	mob_property_flags = MOB_NO_PETRIFY //Can't get petrified (nethack references)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/lizard
 	held_items = list()
+
+/mob/living/simple_animal/lizard/wizard
+	name = "Wizard"
+
+	icon_state = "lizardwizard"
+	icon_living = "lizardwizard"
+	icon_dead = "lizardwizard_dead"
