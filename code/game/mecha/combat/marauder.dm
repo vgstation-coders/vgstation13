@@ -14,7 +14,10 @@
 	var/smoke = 5
 	var/smoke_ready = 1
 	var/smoke_cooldown = 100
+	var/dash_ready = 1
+	var/dash_cooldown = 30
 	var/datum/effect/effect/system/smoke_spread/smoke_system = new
+	var/image/rockets = null
 	operation_req_access = list(access_cent_specops)
 	wreckage = /obj/effect/decal/mecha_wreckage/marauder
 	add_req_access = 0
@@ -56,6 +59,9 @@
 	ME.attach(src)
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
+	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
+	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
+	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
 	return
 
 /obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
@@ -128,6 +134,36 @@
 		return 1
 	return 0
 
+/obj/mecha/combat/marauder/stopMechWalking()
+	overlays -= rockets
+	if(throwing)
+		icon_state = initial_icon + "-dash"
+		overlays |= rockets
+	else
+		icon_state = initial_icon
+
+/obj/mecha/combat/marauder/to_bump(var/atom/obstacle)
+	..()
+	overlays -= rockets
+	if(throwing)
+		icon_state = initial_icon + "-dash"
+		overlays |= rockets
+	else
+		icon_state = initial_icon
+
+/obj/mecha/combat/marauder/throw_at(var/atom/obstacle)
+	if (!throwing)
+		icon_state = initial_icon + "-dash"
+		overlays |= rockets
+		playsound(src, 'sound/weapons/rocket.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
+	..()
+	overlays -= rockets
+	if(throwing)
+		icon_state = initial_icon + "-dash"
+		overlays |= rockets
+	else
+		icon_state = initial_icon
+
 
 /obj/mecha/combat/marauder/verb/toggle_thrusters()
 	set category = "Exosuit Interface"
@@ -143,6 +179,26 @@
 			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
 	return
 
+/obj/mecha/combat/marauder/verb/dash()
+	set category = "Exosuit Interface"
+	set name = "Perform Rocket-Dash"
+	set src = usr.loc
+	set popup_menu = 0
+	if(usr!=src.occupant)
+		return
+	if(src.occupant)
+		if(dash_ready && get_charge() > 0)
+			crashing = null
+
+			var/landing = get_distant_turf(get_turf(src), dir, 5)
+			throw_at(landing, 5 , 2)
+
+			dash_ready = 0
+			spawn(dash_cooldown)
+				dash_ready = 1
+			src.log_message("Performed Rocket-Dash.")
+			src.occupant_message("Triggered Rocket-Dash sub-routine")
+	return
 
 /obj/mecha/combat/marauder/verb/smoke()
 	set category = "Exosuit Interface"
@@ -191,6 +247,8 @@
 	output += {"<b>Smoke:</b> [smoke]
 					<br>
 					<b>Thrusters:</b> [thrusters?"on":"off"]
+					<br>
+					<b>Roclet-Dash:</b> [dash_ready?"ready":"recharging"]
 					"}
 	return output
 
@@ -201,7 +259,8 @@
 						<div class='links'>
 						<a href='?src=\ref[src];toggle_thrusters=1'>Toggle thrusters</a><br>
 						<a href='?src=\ref[src];toggle_zoom=1'>Toggle zoom mode</a><br>
-						<a href='?src=\ref[src];smoke=1'>Smoke</a>
+						<a href='?src=\ref[src];smoke=1'>Smoke</a><br>
+						<a href='?src=\ref[src];dash=1'>Rocket-Dash</a>
 						</div>
 						</div>
 						"}
@@ -216,4 +275,6 @@
 		src.smoke()
 	if (href_list["toggle_zoom"])
 		src.zoom()
+	if (href_list["dash"])
+		src.dash()
 	return

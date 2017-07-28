@@ -67,7 +67,7 @@
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
-
+	var/dash_dir = null
 	var/wreckage
 
 	var/list/equipment = new
@@ -415,7 +415,7 @@
 					src.throw_at(crashing, 50, src.throw_speed)
 			else
 				spawn(1)
-					crashing = get_distant_turf(get_turf(src), dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
+					crashing = get_distant_turf(get_turf(src), dash_dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
 					src.throw_at(crashing, 50, src.throw_speed)
 
 	if(istype(obstacle, /obj))

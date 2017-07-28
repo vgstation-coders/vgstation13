@@ -58,6 +58,9 @@ var/list/mass_drivers = list()
 	for(var/atom/movable/O in loc)
 		if(!O.anchored||istype(O, /obj/mecha))//Mechs need their launch platforms.
 			O_limit++
+			if(istype(O,/obj/mecha))
+				var/obj/mecha/M = O
+				M.crashing = null
 			if(O_limit >= 20)//so no more than 20 items are sent at a time, probably for counter-lag purposes
 				break
 			use_power(500)
