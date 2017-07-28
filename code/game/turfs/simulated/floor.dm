@@ -360,6 +360,9 @@ turf/simulated/floor/update_icon()
 					if(istype(get_step(src,direction),/turf/simulated/floor))
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
+	else if(is_light_floor())
+		//Remove the light tile overlay
+		overlays.Cut()
 
 	if(floor_tile)
 		//qdel(floor_tile)
