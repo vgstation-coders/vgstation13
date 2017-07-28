@@ -16,7 +16,7 @@
 	processing_objects.Add(src)
 
 /obj/machinery/singularity/narsie/large/exit/update_icon()
-	overlays = 0
+	overlays.Cut()
 
 /obj/machinery/singularity/narsie/large/exit/process()
 	for(var/mob/M in player_list)
