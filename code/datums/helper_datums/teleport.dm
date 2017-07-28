@@ -12,7 +12,7 @@
 	var/soundin //soundfile to play before teleportation
 	var/soundout //soundfile to play after teleportation
 	var/force_teleport = TRUE //if false, teleport will use Move() proc (dense objects will prevent teleportation)
-	var/ignore_jamming = FALSE
+	var/ignore_jamming = FALSE//if true, teleport will ignore area jamming
 
 
 /datum/teleport/New(ateleatom, adestination, aprecision=FALSE, afteleport=TRUE, aeffectin=null, aeffectout=null, asoundin=null, asoundout=null, aijamming=FALSE)
