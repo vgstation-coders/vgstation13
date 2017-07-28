@@ -286,8 +286,8 @@
 
 			update_icon()
 
-			if(istype(loc, /obj/item/weapon/clipboard))
-				var/obj/item/weapon/clipboard/C = loc
+			if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+				var/obj/item/weapon/storage/bag/clipboard/C = loc
 				C.update_icon()
 
 	if(href_list["help"])
@@ -309,7 +309,6 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-		//if((!in_range(src, user) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P)) return //What the actual FUCK
 
 		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
 			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")

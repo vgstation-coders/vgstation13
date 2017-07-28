@@ -170,7 +170,7 @@
 	cost=75
 	id="clipboard"
 	name="Clipboard"
-	result=/obj/item/weapon/clipboard
+	result=/obj/item/weapon/storage/bag/clipboard
 
 /datum/biogen_recipe/paper/cardboard
 	cost=25
