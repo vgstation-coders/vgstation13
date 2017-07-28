@@ -173,20 +173,11 @@
 	"You start attaching [tool] where [target]'s [affected.display_name] used to be.")
 
 /datum/surgery_step/limb/attach/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/obj/item/robot_parts/L = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
-	affected.robotize()
-	if(L.sabotaged)
-		affected.sabotaged = 1
-	else
-		affected.sabotaged = 0
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
-	qdel(tool)
-	tool = null
+
+	affected.attach(tool)
 
 /datum/surgery_step/limb/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -223,12 +214,8 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
-	affected.peggify()
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
-	var/obj/item/stack/sheet/wood/peg = tool
-	peg.use(1)
+
+	affected.attach(tool)
 
 /datum/surgery_step/limb/attach_plank/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -274,16 +261,7 @@
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 
-	var/obj/item/weapon/organ/O = tool
-	if(istype(O))
-		affected.species = O.species
-
-	affected.fleshify()
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
-	qdel(tool)
-	tool = null
+	affected.attach(tool)
 
 /datum/surgery_step/limb/attach_flesh/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

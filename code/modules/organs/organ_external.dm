@@ -54,6 +54,8 @@
 	var/grasp_id = 0 //Does this organ affect other grasping organs?
 	var/can_grasp = 0 //Can this organ actually grasp something?
 
+	var/w_class = W_CLASS_LARGE
+
 
 /datum/organ/external/New(var/datum/organ/external/P)
 	if(P)
@@ -650,14 +652,38 @@ Note that amputating the affected organ does in fact remove the infection from t
 		O.setAmputatedTree()
 
 //Handles dismemberment
-/datum/organ/external/proc/droplimb(var/override = 0, var/no_explode = 0, var/spawn_limb = 1)
+//Returns the organ item
+/datum/organ/external/proc/droplimb(var/override = 0, var/no_explode = 0, var/spawn_limb = 1, var/display_message = TRUE)
 	if(destspawn)
 		return
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
+
+	var/obj/item/weapon/organ/organ //Dropped limb object
+
 	if(override)
 		status |= ORGAN_DESTROYED
 	if(status & ORGAN_DESTROYED)
+		destspawn = 1
+		//If your whole leg is missing, then yes, your foot is considered as "cleanly amputated".
+		setAmputatedTree()
+
+		if(spawn_limb)
+			organ = get_organ_item()
+
+			//If any organs are attached to this, attach them to the dropped organ item
+			for(var/datum/organ/external/O in children)
+				var/obj/item/weapon/organ/child_organ = O.droplimb(1, display_message = FALSE)
+
+				if(istype(child_organ) && istype(organ))
+					organ.add_child(child_organ)
+		else
+			//If any organs are attached to this, destroy them
+			for(var/datum/organ/external/O in children)
+				O.droplimb(1)
+
+		for(var/implant in implants)
+			qdel(implant)
 
 		src.status &= ~ORGAN_BROKEN
 		src.status &= ~ORGAN_BLEEDING
@@ -671,24 +697,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		for(var/datum/wound/W in wounds)
 			wounds -= W
 			number_wounds -= W.amount
-			returnToPool(W)
-
-		//If any organs are attached to this, destroy them
-		for(var/datum/organ/external/O in children)
-			O.droplimb(1)
-
-		//If your whole leg is missing, then yes, your foot is considered as "cleanly amputated".
-		setAmputatedTree()
-
-		var/obj/item/weapon/organ/organ //Dropped limb object
-		if(spawn_limb)
-			organ = generate_dropped_organ(organ_item)
-			if(species) //Transfer species to the generated organ
-				organ.species = src.species
-				organ.update_icon()
-
-		for(var/implant in implants)
-			qdel(implant)
+			//Don't delete the wounds because they're transferred to the organ item. If they aren't, garbage collecting will take care of it
 
 		src.species = null
 
@@ -702,7 +711,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(owner.held_items[grasp_id])
 				owner.u_equip(owner.held_items[grasp_id], 1)
 
-		destspawn = 1
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
 			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>", \
@@ -718,15 +726,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 				spark_system = null
 
 		if(organ)
-			owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
-			"<span class='danger'>Your [display_name] goes flying off!</span>", \
-			"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
-
-			//Here, we assign the organ health facts from its old position on the body
-			//Type check to avoid to rewrite everything else, for now
-			if(istype(organ, /obj/item/weapon/organ))
-				var/obj/item/weapon/organ/O = organ
-				O.cancer_stage = cancer_stage
+			if(display_message)
+				owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
+				"<span class='danger'>Your [display_name] goes flying off!</span>", \
+				"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
 
 			//Throw organs around
 			var/randomdir = pick(cardinal)
@@ -767,7 +770,37 @@ Note that amputating the affected organ does in fact remove the infection from t
 					O.removed(owner,owner)
 					O.loc = headloc
 				qdel(organ)
+				organ = null
 
+	return organ
+
+/datum/organ/external/proc/get_organ_item()
+	var/organ_item = generate_dropped_organ(src.organ_item)
+
+	if(istype(organ_item, /obj/item/weapon/organ))
+		var/obj/item/weapon/organ/O = organ_item
+
+		O.w_class = src.w_class
+		O.cancer_stage = src.cancer_stage
+		O.wounds = src.wounds.Copy()
+		O.burn_dam = src.burn_dam
+		O.brute_dam = src.brute_dam
+
+		//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
+		O.status = src.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
+
+		if(src.species)
+			O.species = src.species
+			O.update_icon()
+	else if(istype(organ_item, /obj/item/robot_parts))
+		var/obj/item/robot_parts/O = organ_item
+
+		O.burn_dam = src.burn_dam
+		O.brute_dam = src.brute_dam
+
+	return organ_item
+
+//Don't use this proc, use get_organ_item
 /datum/organ/external/proc/generate_dropped_organ(var/obj/item/current_organ)
 	return current_organ
 
@@ -903,6 +936,52 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_PEG
 	src.status &= ~ORGAN_ROBOT
 	src.destspawn = 0
+
+/datum/organ/external/proc/attach(obj/item/I)
+	if(istype(I, /obj/item/weapon/organ)) //Attaching an organic limb
+		var/obj/item/weapon/organ/organ = I
+
+		src.fleshify()
+
+		//Transfer properties (species, damage, ...)
+		src.species = organ.species
+		src.cancer_stage = organ.cancer_stage
+		src.wounds = organ.wounds
+		src.status = organ.status
+		src.brute_dam = organ.brute_dam
+		src.burn_dam = organ.burn_dam
+
+		//Process attached parts (i.e. if attaching an arm with a hand, this will process the hand)
+		for(var/obj/item/weapon/organ/attached in organ.children)
+			organ.remove_child(attached)
+
+			//Get the organ datum of the attached organ
+			var/datum/organ/external/OE = owner.get_organ(attached.part)
+
+			OE.attach(attached)
+
+	else if(istype(I, /obj/item/stack/sheet/wood)) //Attaching a plank
+		var/obj/item/stack/sheet/wood/peg = I
+		if(peg.use(1))
+			src.peggify()
+
+	else if(istype(I, /obj/item/robot_parts)) //Robotic limb
+		var/obj/item/robot_parts/R = I
+
+		src.robotize()
+
+		src.sabotaged = R.sabotaged
+		src.brute_dam = R.brute_dam
+		src.burn_dam = R.burn_dam
+
+	else
+		throw EXCEPTION("Bad item passed to attach(): '[I]'")
+
+	qdel(I)
+
+	owner.update_body()
+	owner.updatehealth()
+	owner.UpdateDamageIcon()
 
 /datum/organ/external/proc/mutate()
 	src.status |= ORGAN_MUTATED
@@ -1042,6 +1121,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	has_fat = 1
 	vital = 1
 	encased = "ribcage"
+	w_class = W_CLASS_MEDIUM
 
 /datum/organ/external/groin
 	name = LIMB_GROIN
@@ -1051,6 +1131,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
 	vital = 1
+	w_class = W_CLASS_MEDIUM
 
 //=====Legs======
 
@@ -1062,6 +1143,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LEG_LEFT
 	icon_position = LEFT
+	w_class = W_CLASS_SMALL
 
 /datum/organ/external/l_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1098,6 +1180,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 
+	w_class = W_CLASS_SMALL
+
 //This proc is same as l_leg/can_stand()
 /datum/organ/external/r_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1133,6 +1217,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_arm"
 	max_damage = 75
 	min_broken_damage = 30
+	w_class = W_CLASS_SMALL
 	body_part = ARM_LEFT
 
 	grasp_id = GRASP_LEFT_HAND
@@ -1176,6 +1261,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = FOOT_LEFT
 	icon_position = LEFT
 
+	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
@@ -1195,6 +1281,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	body_part = FOOT_RIGHT
 	icon_position = RIGHT
 
+	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
@@ -1215,6 +1302,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_RIGHT_HAND
 	can_grasp = 1
 
+	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
@@ -1235,6 +1323,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_LEFT_HAND
 	can_grasp = 1
 
+	w_class = W_CLASS_TINY
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
@@ -1256,6 +1345,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 	encased = "skull"
 
+	w_class = W_CLASS_SMALL
 	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
 
 /datum/organ/external/head/generate_dropped_organ(current_organ)
@@ -1342,6 +1432,15 @@ obj/item/weapon/organ
 
 	//Store health facts. Right now limited exclusively to cancer, but should likely include all limb stats eventually
 	var/cancer_stage = 0
+	var/list/wounds = list()
+	var/brute_dam
+	var/burn_dam
+	var/status
+
+	//List of attached organs
+	//It doesn't contain the whole tree, only the organs attached to this one
+	var/list/obj/item/weapon/organ/children = list()
+
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
@@ -1374,6 +1473,27 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 /obj/item/weapon/organ/examine(mob/user)
 	..()
 
+	//TODO: wound datums should be handling this (they aren't because they're awful)
+
+	//Brute damage can be either cuts or bruises
+	if(brute_dam)
+		if(locate(/datum/wound/cut) in wounds)
+			to_chat(user, "<span class='warning'>It has some cuts on it.</span>")
+		if(locate(/datum/wound/bruise) in wounds)
+			to_chat(user, "<span class='warning'>It has some bruises on it.</span>")
+
+	//Burn damage is straightforward
+	switch(burn_dam)
+		if(1 to 10)
+			to_chat(user, "<span class='warning'>It has some minor burns on it.</span>")
+		if(10 to 50)
+			to_chat(user, "<span class='warning'>It is covered in major burns.</span>")
+		if(50 to INFINITY)
+			to_chat(user, "<span class='warning'>It is covered in large carbonised areas.</span>")
+
+	for(var/obj/item/weapon/organ/E in children)
+		to_chat(user, "<span class='info'>There's \a [E] attached to it.</span>")
+
 	//Add information about teeth and the such
 
 	var/butchery
@@ -1402,6 +1522,14 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	else if(species)
 		base = icon(species.icobase)
 
+	//Display organs attached to this one
+	if(children.len)
+		for(var/obj/item/weapon/organ/attached in children)
+			attached.update_icon() //This works recursively, ensuring all children are drawn
+			attached.transform = matrix() //Remove any rotation
+
+			base.Blend(attached.icon, ICON_OVERLAY)
+
 	if(base)
 		//Changing limb's skin tone to match owner
 		if(H)
@@ -1413,7 +1541,28 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 
 		icon = base
 		dir = SOUTH
+
 		src.transform = turn(src.transform, rand(70, 130))
+
+/obj/item/weapon/organ/proc/add_child(obj/item/weapon/organ/O, upd_icon = TRUE)
+	children.Add(O)
+	O.forceMove(src)
+
+	if(upd_icon)
+		update_icon()
+
+/obj/item/weapon/organ/proc/remove_child(obj/item/weapon/organ/O)
+	children.Remove(O)
+
+/obj/item/weapon/organ/attackby(obj/item/W, mob/user)
+	if(W.is_sharp()) //Allow cutting attached parts off
+		for(var/obj/item/weapon/organ/O in children)
+			children.Remove(O)
+			O.forceMove(get_turf(src))
+
+			update_icon()
+
+	..()
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS DEFINES
