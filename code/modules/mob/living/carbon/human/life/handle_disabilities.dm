@@ -3,10 +3,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
-			visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
-							"<span class='warning'>You have a seizure!</span>")
-			Paralyse(10)
-			Jitter(1000) //Godness
+			seizure(10, 1000)
 
 	//If we have the gene for being crazy, have random events.
 	if(dna.GetSEState(HALLUCINATIONBLOCK))
