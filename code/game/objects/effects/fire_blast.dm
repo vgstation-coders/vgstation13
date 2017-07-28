@@ -75,6 +75,8 @@
 			for(var/mob/living/L in get_turf(src))
 				if(issilicon(L))
 					continue
+				if(L.mutations.Find(M_UNBURNABLE))
+					continue
 
 				if(!L.on_fire)
 					L.adjust_fire_stacks(0.5)

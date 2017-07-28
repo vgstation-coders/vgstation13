@@ -280,6 +280,9 @@
 	location.hotspot_expose(700, 50, 1,surfaces=1)
 
 /mob/living/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(mutations.Find(M_UNBURNABLE))
+		return
+
 	adjust_fire_stacks(0.5)
 	IgniteMob()
 
