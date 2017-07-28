@@ -93,6 +93,26 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="imageadd">Fixed the AME's sprites so AME shield parts don't appear invisible or badly oriented anymore.</li>
 				<li class="bugfix">Admin Ghosts can now access APCs like silicons, like they are supposed to.</li>
 				<li class="rscadd">Marauders, Seraph and Maulers can now perform rocket dashes. Let's them throw themselves forward without the need for a Mass Driver, though it has a short range indoors.</li>
+				<li class="experiment">BEEKEEPING 3.0!!! Rewrote bee code basically from scratch.</li>
+				<li class="rscadd">Bees now reach for plants to pollinate them. After a few pollens have been gathered or some time has passed, the bee will return to the apiary and the pollen it brought is then processed into honey.</li>
+				<li class="rscadd">As previously, benefits are applied to plants when bees hover over them, except now they'll be aiming for them specifically.</li>
+				<li class="rscadd">Chemicals usually found in the fruits of the pollinated plants will find their way into the honey, which means you can produce apple-flavoured honey, cacao-flavoured honey, plasticide-flavoured honey, etc...</li>
+				<li class="rscadd">Bees periodically consume some of the reagents in their apiary to keep their nutrition level up. Should they end up consuming toxic reagents (because you let your bees pollinate amanitas, plasticide, or other dangerous plants) the colony's toxic level will rise. At 30 percent toxicity, bees that come out to pollinate might instead come to kill.  At 50 percent toxicity, bees will start taking damage from their own toxicity. As toxicity rises, the odds of either effect increase. Oh, and the toxic portion of the damage they deal also increases. Bees deal up to double toxic damage at 100 percent toxicity.</li>
+				<li class="rscadd">Bees will group up/disband depending on the situation/their whims. 20 bees is the maximum that can gather in a single swarm.</li>
+				<li class="rscadd">Individual bees are now tracked when outside the hive. If you net some bees and release them elsewhere, they'll keep their pollens and damage values.</li>
+				<li class="rscadd">Queen bees will now come outside the hive to pollinate as well. Instead of creating honey when they come back, they'll create royal jelly, which allows workers to turn into queens if there are no queens inside the hive at a time. Royal Jelly has the same medicinal properties as honey, only a little more efficient. Both reagents stack very well.</li>
+				<li class="rscadd">Should there be multiple queens inside the hive, and an empty apiary nearby, a queen will swarm out with a dozen of workers to go claim that apiary.</li>
+				<li class="rscadd">When you deal damage to a swarm of bees, the damage will be taken by the individual bees that make it up, killing them one by one. Thus you can see the swarm thin out as you kill more and more bees, and its damage going down as well. Also, non-precisely aimed gunshots are more likely to hit large swarms.</li>
+				<li class="rscadd">Bees now leave corpses when they die. These can be cleaned up.</li>
+				<li class="rscadd">The color of the honey dripping from apiaries, and the honeycombs extracted from them now depends on the reagents inside the apiary.</li>
+				<li class="rscadd">Beezeez packets now have their own sprites, and can be eaten like chips if you wish.</li>
+				<li class="rscadd">Added bees to the vermin infestation event. They spawn from wild beehives, which can be broken for some honeycombs.</li>
+				<li class="rscadd">Admins can now force vermin infestation events (for debug purposes, mostly)</li>
+				<li class="rscadd">You can now hit a mob with the Briefcase Full of Bees to make the bees attack them. Opening the briefcase makes them attack YOU.</li>
+				<li class="rscadd">Impermeable clothing raises your chances to avoid bee stings, thus spacesuits offer almost complete protection from bees.</li>
+				<li class="rscadd">When calmed by getting sprayed with water, bees will remain in place for a while, then they'll head back to their hive by themselves if they have one.</li>
+				<li class="bugfix">Emptying a net full of bees outside a beehive no longer empties it INSIDE YOUR OWN BODY</li>
+				<li class="tweak">As bees need to come back alive to produce honey, Vox can no longer raise bees on their outposts. That is until we introduce N2 breathing mutant bees.</li>
 			</ul>
 			<h3 class="author">unid15 updated:</h3>
 			<ul class="changes bgimages16">
