@@ -11,6 +11,8 @@
 //Always call parent on reaction_mob, reaction_obj, reaction_turf, on_mob_life and Destroy() so that the sanities can be handled
 //Failure to do so will lead to serious problems
 
+//Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
+
 /datum/reagent
 	var/name = "Reagent"
 	var/id = REAGENT
@@ -1143,6 +1145,40 @@
 		return 1
 
 	M.nutrition += REM
+
+/datum/reagent/honey
+	name = "Honey"
+	id = HONEY
+	description = "A golden yellow syrup, loaded with sugary sweetness."
+	color = "#FEAE00"
+	alpha = 200
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	var/quality = 2
+
+/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!holder)
+			return
+		H.nutrition += nutriment_factor
+		holder.remove_reagent(src.id, 0.4)
+		if(H.getBruteLoss() && prob(60))
+			H.heal_organ_damage(quality, 0)
+		if(H.getFireLoss() && prob(50))
+			H.heal_organ_damage(0, quality)
+		if(H.getToxLoss() && prob(50))
+			H.adjustToxLoss(-quality)
+		..()
+		return
+
+/datum/reagent/honey/royal_jelly
+	name = "Royal Jelly"
+	id = ROYALJELLY
+	description = "A pale yellow liquid that is both spicy and acidic, yet also sweet."
+	color = "#FFDA6A"
+	alpha = 220
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	quality = 3
 
 /datum/reagent/sacid
 	name = "Sulphuric acid"
