@@ -22,3 +22,4 @@
 	var/base_insulation = 0
 	var/unslippable = 0 //Whether the mob can be slipped
 	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
+	var/coughedtime = null
