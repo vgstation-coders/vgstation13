@@ -1793,8 +1793,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/bee_keeper
 	name = "Beekeeping kit"
 	contains = list(
-		/obj/item/weapon/reagent_containers/food/snacks/beezeez,
-		/obj/item/weapon/reagent_containers/food/snacks/beezeez,
+		/obj/item/beezeez,
+		/obj/item/beezeez,
 		/obj/item/weapon/bee_net,
 		/obj/item/weapon/extinguisher/mini,
 		/obj/item/apiary,
