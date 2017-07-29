@@ -294,6 +294,12 @@
 			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = damagesource
 
+/mob/living/simple_animal/bee/proc/add_plants(var/list/new_plants)
+	if(!new_plants || new_plants.len <= 0) return
+
+	for (var/obj/machinery/portable_atmospherics/hydroponics/new_plant in new_plants)
+		if (!visited_plants.Find(new_plant))
+			visited_plants.Add(new_plant)
 
 ////////////////////////////////LIFE////////////////////////////////////////
 
@@ -461,7 +467,7 @@
 					for (var/datum/bee/B in B_mob.bees)
 						addBee(B)
 					B_mob.bees = list()
-					visited_plants.Add(B_mob.visited_plants)
+					add_plants(B_mob.visited_plants)
 					if(!target)
 						target = B_mob.target
 					qdel(B_mob)
@@ -471,7 +477,7 @@
 				for (var/datum/bee/B in B_mob.bees)
 					addBee(B)
 				B_mob.bees = list()
-				visited_plants.Add(B_mob.visited_plants)
+				add_plants(B_mob.visited_plants)
 				qdel(B_mob)
 				updateDamage()
 
@@ -486,7 +492,7 @@
 			B_mob.target = target
 			B_mob.update_icon()
 			B_mob.home = home
-			B_mob.visited_plants.Add(visited_plants)
+			B_mob.add_plants(visited_plants)
 			B_mob.Move(get_turf(pick(orange(src,1))))
 			updateDamage()
 
