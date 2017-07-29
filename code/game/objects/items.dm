@@ -1202,3 +1202,8 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/on_restraint_apply(var/mob/living/carbon/C)
 	return
+
+//What should it do if blended in a mortar or grinder? Passes src from mortar or beaker from grinder
+//If extract is 1, ignore special results and just get the contents. Useful for some things like Wheat that could give flour or nutriment.
+/obj/item/proc/ground_act(var/obj/item/weapon/reagent_containers/RC, var/extract = 0)
+	return 1

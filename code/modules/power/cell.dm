@@ -12,6 +12,9 @@
 	spawn(5)
 		updateicon()
 
+/obj/item/weapon/cell/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(LITHIUM,10)
+
 /obj/item/weapon/cell/proc/updateicon()
 	overlays.len = 0
 

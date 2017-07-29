@@ -2003,6 +2003,13 @@
 	required_reagents = list(SODIUMCHLORIDE = 1, NUTRIMENT = 1, BLOOD = 1)
 	result_amount = 1
 
+/datum/chemical_reaction/ketchup
+	name = "Ketchup"
+	id = KETCHUP
+	result = KETCHUP
+	required_reagents = list(TOMATOJUICE = 3, SUGAR = 1)
+	result_amount = 4
+
 /datum/chemical_reaction/tofu
 	name = "Tofu"
 	id = "tofu"

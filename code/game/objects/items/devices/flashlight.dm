@@ -216,6 +216,9 @@
 	else
 		update_brightness()
 
+/obj/item/device/flashlight/flare/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(SULFUR,10)
+
 /obj/item/device/flashlight/flare/ever_bright/New()
 	. = ..()
 	fuel = INFINITY

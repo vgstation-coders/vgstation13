@@ -201,6 +201,9 @@
 	var/s_tone = 0.0
 	var/created_name = "Buttbot"
 
+/obj/item/clothing/head/butt/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(MERCURY,10)
+
 /obj/item/clothing/head/butt/proc/transfer_buttdentity(var/mob/living/carbon/H)
 	name = "[H.real_name]'s butt"
 	return

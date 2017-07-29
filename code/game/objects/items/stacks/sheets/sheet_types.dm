@@ -49,6 +49,9 @@
 	returnToPool(src)
 	return 2
 
+/obj/item/stack/sheet/metal/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(IRON,20)
+
 // Diet metal.
 /obj/item/stack/sheet/metal/cyborg
 	starting_materials = null
@@ -159,3 +162,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes
 		return ..()
+
+/obj/item/stack/sheet/charcoal/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(CHARCOAL,20)
+

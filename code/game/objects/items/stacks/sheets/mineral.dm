@@ -120,6 +120,9 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 	recipes = uranium_recipes
 	..()
 
+/obj/item/stack/sheet/mineral/uranium/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(URANIUM,20)
+
 /*
  * Plasma
  */
@@ -147,6 +150,9 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	recipes = plasma_recipes
 
 	..()
+
+/obj/item/stack/sheet/mineral/plasma/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(PLASMA,20)
 
 /obj/item/stack/sheet/mineral/plastic
 	name = "plastic"
@@ -220,6 +226,9 @@ var/list/datum/stack_recipe/gold_recipes = list ( \
 	recipes = gold_recipes
 	..()
 
+/obj/item/stack/sheet/mineral/gold/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(GOLD,20)
+
 /*
  * Phazon
  */
@@ -245,6 +254,9 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 /obj/item/stack/sheet/mineral/phazon/New(var/loc, var/amount=null)
 		recipes = phazon_recipes
 		return ..()
+
+/obj/item/stack/sheet/mineral/phazon/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(PHAZON,1)
 
 /*
  * Silver
@@ -272,6 +284,9 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	recipes = silver_recipes
 	..()
 
+/obj/item/stack/sheet/mineral/silver/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(SILVER,20)
+
 /*
  * Clown
  */
@@ -296,6 +311,9 @@ var/list/datum/stack_recipe/clown_recipes = list ( \
 /obj/item/stack/sheet/mineral/clown/New(var/loc, var/amount=null)
 	recipes = clown_recipes
 	..()
+
+/obj/item/stack/sheet/mineral/clown/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(BANANA,20)
 
 /****************************** Others ****************************/
 /*

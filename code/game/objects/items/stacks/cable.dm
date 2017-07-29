@@ -266,6 +266,9 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 		C.denode() //This call may have disconnected some cables that terminated on the centre of the turf, if so split the powernets.
 
+/obj/item/stack/cable_coil/ground_act(var/obj/item/weapon/reagent_containers/RC)
+	RC.reagents.add_reagent(COPPER,10)
+
 //////////////////////////////
 // Misc.
 /////////////////////////////
