@@ -79,7 +79,7 @@
 	id="beez"
 	name="Bottle of BeezEez"
 	other_amounts=list(5)
-	result=/obj/item/weapon/reagent_containers/food/snacks/beezeez
+	result=/obj/item/beezeez
 
 /datum/biogen_recipe/leather
 	category="Leather"

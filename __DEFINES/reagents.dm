@@ -135,7 +135,6 @@
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
-#define ROYALJELLY			"royaljelly"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
