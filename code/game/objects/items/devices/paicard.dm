@@ -186,3 +186,7 @@
 	for(var/mob/M in src)
 		M.emp_act(severity)
 	..()
+
+/obj/item/device/paicard/dropped(mob/user)
+	if(pai && pai.holomap_device)
+		pai.holomap_device.stopWatching()
