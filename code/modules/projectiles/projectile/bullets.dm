@@ -134,7 +134,7 @@
 	penetration = 1
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
-	damage = 15
+	damage = 15 
 	drowsy = 1
 	agony = 1
 	penetration = 2
@@ -152,7 +152,7 @@
 	weaken = 5
 	embed = 0
 	penetration = 0
-
+	
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
 	damage = 20
@@ -383,7 +383,13 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new(T)
+	var/mob/living/simple_animal/bee/BEE = new(T)
+	BEE.strength = 1
+	BEE.toxic = 5
+	BEE.mut = 2
+	BEE.feral = 25
+	BEE.icon_state = "bees1-feral"
+
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
@@ -391,6 +397,8 @@
 		admin_warn(M)
 		BEE.forceMove(M.loc)
 		BEE.target = M
+	else
+		BEE.newTarget()
 	bullet_die()
 
 /obj/item/projectile/bullet/APS //Armor-piercing sabot round. Metal rods become this when fired from a railgun.
