@@ -1,4 +1,21 @@
+#define LOC_KITCHEN 0
+#define LOC_ATMOS 1
+#define LOC_INCIN 2
+#define LOC_CHAPEL 3
+#define LOC_LIBRARY 4
+#define LOC_HYDRO 5
+#define LOC_VAULT 6
+#define LOC_TECH 7
 
+#define VERM_MICE    0
+#define VERM_LIZARDS 1
+#define VERM_SPIDERS 2
+#define VERM_SLIMES  3
+#define VERM_BATS    4
+#define VERM_BORERS  5
+#define VERM_MIMICS  6
+#define VERM_ROACHES 7
+#define VERM_GREMLINS 8
 
 /datum/event/infestation
 	announceWhen = 15
@@ -6,15 +23,10 @@
 	var/locstring
 	var/vermstring
 	var/vermin = VERM_MICE
-	var/override_location = null
-	var/override_vermin = null
 
 /datum/event/infestation/start()
 
 	var/location = pick(LOC_KITCHEN, LOC_ATMOS, LOC_INCIN, LOC_CHAPEL, LOC_LIBRARY, LOC_HYDRO, LOC_VAULT, LOC_TECH)
-	if (override_location)
-		location = override_location
-
 	var/spawn_area_type
 
 	//TODO:  These locations should be specified by the map datum or by the area. //Area datums, any day now
@@ -48,10 +60,7 @@
 	var/list/spawn_types = list()
 	var/max_number = 4
 
-	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES)
-
-	if (override_vermin)
-		vermin = override_vermin
+	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS)
 
 	switch(vermin)
 		if(VERM_MICE)
@@ -87,10 +96,6 @@
 			spawn_types = /mob/living/simple_animal/hostile/gremlin
 			vermstring = "gremlins"
 			max_number = 4 //2 to 4
-		if(VERM_BEES)
-			spawn_types = /obj/machinery/apiary/wild
-			vermstring = "angry bees"
-			max_number = 2
 
 	var/number = rand(2, max_number)
 
@@ -116,3 +121,20 @@
 		warning = "Drive them away!" //DF reference
 
 	command_alert(new /datum/command_alert/vermin(vermstring, locstring, warning))
+
+#undef LOC_KITCHEN
+#undef LOC_ATMOS
+#undef LOC_INCIN
+#undef LOC_CHAPEL
+#undef LOC_LIBRARY
+#undef LOC_HYDRO
+#undef LOC_VAULT
+#undef LOC_TECH
+
+#undef VERM_MICE
+#undef VERM_LIZARDS
+#undef VERM_SPIDERS
+#undef VERM_SLIMES
+#undef VERM_BATS
+#undef VERM_MIMICS
+#undef VERM_GREMLINS
