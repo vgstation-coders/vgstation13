@@ -37,20 +37,6 @@
 		/obj/item/weapon/reagent_containers/food = list("generic",0)
 	)
 
-	var/list/juice_items = list (
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon = list(LEMONJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/orange = list(ORANGEJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lime = list(LIMEJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE,0),
-	)
-
 
 	var/obj/item/crushable = null
 

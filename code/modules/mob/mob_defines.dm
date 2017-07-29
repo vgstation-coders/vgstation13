@@ -100,7 +100,6 @@
 	var/lying_prev = 0
 	var/canmove = 1
 	var/candrop = 1
-	var/lastpuke = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -163,8 +162,6 @@
 	var/list/mapobjs = list()
 
 	var/in_throw_mode = 0
-
-	var/coughedtime = null
 
 	var/job = null//Living
 
@@ -233,8 +230,6 @@
 
 	var/force_compose = 0 //If this is nonzero, the mob will always compose it's own hear message instead of using the one given in the arguments.
 
-
-
 	var/obj/control_object = null	//Used by admins to possess objects. All mobs should have this var
 
 	var/obj/orient_object = null	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
@@ -247,8 +242,6 @@
 
 	var/has_limbs = 1 //Whether this mob have any limbs he can move with
 	var/can_stand = 1 //Whether this mob have ability to stand
-
-	var/immune_to_ssd = 0
 
 	var/turf/listed_turf = null  //the current turf being examined in the stat panel
 

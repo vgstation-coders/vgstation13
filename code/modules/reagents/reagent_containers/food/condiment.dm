@@ -179,6 +179,11 @@
 				desc = "Sweet and healthy!"
 				icon_state = HONEY
 				item_state = null
+			if(ROYALJELLY)
+				name = "royal jelly pot"
+				desc = "Spicy and healthy!"
+				icon_state = ROYALJELLY
+				item_state = HONEY
 			if(CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."

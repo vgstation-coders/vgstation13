@@ -126,8 +126,10 @@
 /obj/machinery/power/am_control_unit/blob_act()
 	stability -= 20
 	if(prob(100-stability))//Might infect the rest of the machine
+		for(var/obj/machinery/am_shielding/AMS in linked_cores)
+			AMS.blob_act(2)
 		for(var/obj/machinery/am_shielding/AMS in linked_shielding)
-			AMS.blob_act()
+			AMS.blob_act(1)
 		qdel(src)
 		return
 	check_stability()

@@ -2896,7 +2896,7 @@
 	name = "Apetrine"
 	id = APETRINE
 	result = APETRINE
-	required_reagents = list(PETRICIN = 2, PACID = 3)
+	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
 
 #undef ALERT_AMOUNT_ONLY

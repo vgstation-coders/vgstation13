@@ -420,6 +420,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_FINGERPRINTS	108 	// no fingerprints
 #define M_NO_SHOCK		109 	// insulated hands
 #define M_DWARF			110 	// table climbing
+#define M_UNBURNABLE	111		// can't get set on fire
 
 // Goon muts
 #define M_OBESITY       200		// Decreased metabolism
@@ -673,6 +674,32 @@ SEE_PIXELS	256
 #define HOSTILE_STANCE_ATTACK 3
 #define HOSTILE_STANCE_ATTACKING 4
 #define HOSTILE_STANCE_TIRED 5
+
+#define BEE_ROAMING 0
+#define BEE_OUT_FOR_PLANTS 1
+#define BEE_OUT_FOR_ENEMIES 2
+#define BEE_HEADING_HOME 3
+#define BEE_SWARM 4
+
+#define LOC_KITCHEN 0
+#define LOC_ATMOS 1
+#define LOC_INCIN 2
+#define LOC_CHAPEL 3
+#define LOC_LIBRARY 4
+#define LOC_HYDRO 5
+#define LOC_VAULT 6
+#define LOC_TECH 7
+
+#define VERM_MICE    0
+#define VERM_LIZARDS 1
+#define VERM_SPIDERS 2
+#define VERM_SLIMES  3
+#define VERM_BATS    4
+#define VERM_BORERS  5
+#define VERM_MIMICS  6
+#define VERM_ROACHES 7
+#define VERM_GREMLINS 8
+#define VERM_BEES 9
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
 
