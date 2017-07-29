@@ -346,8 +346,8 @@
 		return
 
 	if(!src.open())
-		to_chat(user, "<span class='notice'>It won't budge!</span>")
 		if(!lastbang)
+			to_chat(user, "<span class='notice'>It won't budge!</span>")
 			lastbang = 1
 			for (var/mob/M in hearers(src, null))
 				to_chat(M, text("<FONT size=[]>BANG, bang!</FONT>", max(0, 5 - get_dist(src, M))))
