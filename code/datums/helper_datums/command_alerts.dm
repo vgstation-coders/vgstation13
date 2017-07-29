@@ -371,15 +371,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	message = "One or more hostile creatures have entered the station in [localestring]. External security cameras indicate that the creature has [monsterstring]."
 
-/datum/command_alert/vermin
-	name = "Vermin Alert"
-	alert_title = "Vermin infestation"
-
-/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels", warning = "Clear them out, before this starts to affect productivity.")
-	..()
-
-	message = "Bioscans indicate that [vermstring] have been breeding in [locstring]. [warning]"
-
 /datum/command_alert/mob_swarm
 	name = "Mob Swarm"
 
