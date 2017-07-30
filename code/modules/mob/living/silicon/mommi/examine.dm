@@ -37,10 +37,10 @@
 
 	to_chat(user, msg)
 
-	if(laws && isobserver(user))//As a bastard child of robots, we don't call our parent's examine()
+	if(laws && isobserver(user))
 		var/mob/dead/observer/fag = user
-		if(fag.mind)
-			if(isAdminGhost(fag) || !(fag.mind.isScrying || fag.mind.current.ajourn))// Scrying or astral travel, fuck them.
-				to_chat(fag, "<b>[src] has the following laws:</b>")
-				laws.show_laws(fag)
-				investigation_log(I_GHOST, "|| had its laws checked by [key_name(fag)][fag.locked_to ? ", who was haunting [fag.locked_to]" : ""]")
+		if(!isAdminGhost(fag) && fag.mind && (fag.mind.isScrying || fag.mind.current.ajourn))// Scrying or astral travel and not even a badmin, fuck them.
+			return
+		to_chat(fag, "<b>[src] has the following laws:</b>")
+		laws.show_laws(fag)
+		investigation_log(I_GHOST, "|| had its laws checked by [key_name(fag)][fag.locked_to ? ", who was haunting [fag.locked_to]" : ""]")
