@@ -119,7 +119,7 @@ var/list/sent_strike_teams = list()
 				continue
 
 			if (leader)
-				leader_key = new_commando.key
+				leader_key = applicant.key
 				leader = FALSE
 
 			var/obj/effect/landmark/L = pick(commando_spawns)
@@ -127,7 +127,7 @@ var/list/sent_strike_teams = list()
 
 			spawn()//not waiting for players to customize their characters to move on
 				var/isLeader = FALSE
-				if(leader_key == new_commando.key)
+				if(leader_key == applicant.key)
 					isLeader = TRUE
 
 				var/mob/living/carbon/human/new_commando = create_commando(L, isLeader, applicant.key)
