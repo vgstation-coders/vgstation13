@@ -241,7 +241,7 @@
 
 //Fire blasts from this trap fire in a straight line, without expanding at the end
 /obj/structure/fire_trap/no_spread
-	fire_projectile = /obj/effect/fire_blast/no_spread
+	fire_projectile = /obj/item/projectile/fire_breath/straight
 
 /obj/structure/fire_trap/New()
 	..()
