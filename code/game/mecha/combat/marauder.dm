@@ -248,7 +248,7 @@
 					<br>
 					<b>Thrusters:</b> [thrusters?"on":"off"]
 					<br>
-					<b>Roclet-Dash:</b> [dash_ready?"ready":"recharging"]
+					<b>Rocket-Dash:</b> [dash_ready?"ready":"recharging"]
 					"}
 	return output
 
