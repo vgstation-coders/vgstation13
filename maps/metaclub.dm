@@ -8,7 +8,7 @@
 	nameLong = "Meta Club"
 	map_dir = "metaclub"
 	tDomeX = 128
-	tDomeY = 69
+	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,

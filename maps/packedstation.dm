@@ -8,7 +8,7 @@
 	nameLong = "Packed Station"
 	map_dir = "packedstation"
 	tDomeX = 128
-	tDomeY = 69
+	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
