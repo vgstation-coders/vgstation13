@@ -365,7 +365,12 @@
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
 				UnarmedAttack(T)
 			for(var/atom/A in T)
-				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
+				if((istype(A, /obj/structure/window)\
+				 || istype(A, /obj/structure/closet)\
+				 || istype(A, /obj/structure/table)\
+				 || istype(A, /obj/structure/grille)\
+				 || istype(A, /obj/structure/rack)\
+				 || istype(A, /obj/machinery/door/window)) && Adjacent(A))
 					UnarmedAttack(A)
 	return
 
