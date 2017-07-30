@@ -258,6 +258,15 @@
 
 	..()
 
+/obj/item/weapon/reagent_containers/food/drinks/attackby(obj/item/I, mob/user, params)
+	if(I.is_hot())
+		var/added_heat = (I.is_hot() / 100) //ishot returns a temperature
+		if(reagents)
+			reagents.chem_temp += added_heat
+			to_chat(user, "<span class='notice'>You heat [src] with [I].</span>")
+			reagents.handle_reactions()
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
 
