@@ -112,6 +112,10 @@ var/list/sent_strike_teams = list()
 			for(var/mob/M in player_list)
 				if(M.key == pick(applicants))
 					applicant = M
+
+			if(!applicant || !applicant.key)
+				continue
+
 			applicants -= applicant.key
 
 			if(!isobserver(applicant))
