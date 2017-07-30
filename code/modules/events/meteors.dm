@@ -60,7 +60,7 @@ var/global/list/thing_storm_types = list(
 		/obj/item/organ/heart,
 		/obj/item/organ/liver,
 		/obj/effect/decal/cleanable/blood/gibs,
-		/obj/effect/meteor/gib,
+		/obj/item/projectile/meteor/gib,
 		/obj/item/weapon/organ/r_arm,
 		/obj/item/weapon/organ/l_arm,
 		/obj/item/weapon/organ/r_leg,
