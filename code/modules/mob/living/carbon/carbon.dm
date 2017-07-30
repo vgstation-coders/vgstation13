@@ -243,7 +243,7 @@
 				if (istype(T, /obj/item/clothing/gloves))
 					shock_damage = T.siemens_coefficient * shock_damage
 
-				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient > 0)
+				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && (!T || T.siemens_coefficient > 0))
 					shock_time = U.cell.charge/STUNGLOVES_CHARGE_COST
 					shock_damage = shock_damage * shock_time
 
@@ -254,7 +254,7 @@
 						H = src
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
-			
+
 					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
