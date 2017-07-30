@@ -9,7 +9,7 @@
 	throw_range = 10
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 3
-	storage_slots = 21
+	storage_slots = 28
 	can_only_hold = list("/obj/item/weapon/photo", "/obj/item/weapon/paper", "/obj/item/weapon/pen")
 	var/obj/item/weapon/paper/toppaper = null
 
