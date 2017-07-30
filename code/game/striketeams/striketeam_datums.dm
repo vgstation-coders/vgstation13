@@ -118,18 +118,22 @@ var/list/sent_strike_teams = list()
 				//Making sure we don't recruit people who got back into the game since they applied
 				continue
 
+			if (leader)
+				leader_key = applicant.key
+				leader = FALSE
+
 			var/obj/effect/landmark/L = pick(commando_spawns)
 			commando_spawns -= L
 
 			spawn()//not waiting for players to customize their characters to move on
-				var/mob/living/carbon/human/new_commando = create_commando(L, leader, applicant.key)
+				var/isLeader = FALSE
+				if(leader_key == applicant.key)
+					isLeader = TRUE
+
+				var/mob/living/carbon/human/new_commando = create_commando(L, isLeader, applicant.key)
 				team_composition |= new_commando
 
 				new_commando.key = applicant.key
-
-				if (leader)
-					leader_key = new_commando.key
-					leader = FALSE
 
 				new_commando.update_action_buttons(1)
 				new_commando.mind.store_memory("<B>Mission:</B> <span class='warning'>[mission].</span>")
