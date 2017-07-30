@@ -201,7 +201,7 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 							WOOD RECIPES
 ==================================================================== */
 var/list/datum/stack_recipe/wood_recipes = list (
-	new/datum/stack_recipe("clipboard",			/obj/item/weapon/clipboard,				1													),
+	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,				1													),
 	new/datum/stack_recipe("wooden sandals",	/obj/item/clothing/shoes/sandal																),
 	new/datum/stack_recipe("wood floor tile",	/obj/item/stack/tile/wood,				1,4,20												),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),

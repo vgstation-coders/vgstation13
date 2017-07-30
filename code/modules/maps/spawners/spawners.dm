@@ -513,7 +513,7 @@
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
 		/obj/item/weapon/cigbutt/cigarbutt,
-		/obj/item/weapon/clipboard,
+		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
 		/obj/item/weapon/coin/adamantine,
