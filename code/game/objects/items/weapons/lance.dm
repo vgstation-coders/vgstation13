@@ -9,6 +9,9 @@
 	icon_state = "lance"
 
 	force = 3
+	var/force_per_turf_traveled = 3
+	var/max_damage = 72
+
 	w_class = 8
 
 	attack_verb = list("bludgeons", "whacks")
@@ -135,7 +138,7 @@
 	if(!L)
 		return
 	amount_of_turfs_charged++
-	L.force += 3
+	L.force += L.force_per_turf_traveled
 
 	if(amount_of_turfs_charged > 0)
 		if(istype(new_loc))
@@ -157,9 +160,9 @@
 	if(O != owner && isliving(O))
 		var/mob/living/victim = O
 		if(!victim.lying)
-			var/base_damage = 3
+			var/base_damage = L.force_per_turf_traveled
 
-			base_damage = min(base_damage * amount_of_turfs_charged, 72) //Max damage potential is reached at 34 turfs
+			base_damage = min(base_damage * amount_of_turfs_charged, L.max_damage)
 
 			if(ishuman(victim))
 				var/mob/living/carbon/human/H = victim
@@ -175,7 +178,7 @@
 
 			to_chat(owner, "<span class='danger'><i>DELIVERED COUCHED LANCE DAMAGE!</i></span>")
 			victim.visible_message("<span class='danger'>[victim] has been impaled by [owner]'s [src.L.name]!</span>", "<span class='userdanger'>You were impaled by [owner]'s [src.L.name]!</span>")
-
+			add_logs(owner, victim, "delivered couched lance damage ([base_damage] dmg)", admin = (owner.ckey && victim.ckey) ? TRUE : FALSE)
 
 			if(amount_of_turfs_charged >= 5)
 				victim.Knockdown(min(amount_of_turfs_charged-5, 5))//Stun begins at 5 charged turfs. Maximum effect at 10 charged turfs
