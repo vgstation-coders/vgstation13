@@ -1521,6 +1521,7 @@
 #include "code\modules\mob\living\carbon\slime\subtypes.dm"
 #include "code\modules\mob\living\carbon\slime\update_icons.dm"
 #include "code\modules\mob\living\silicon\death.dm"
+#include "code\modules\mob\living\silicon\examine.dm"
 #include "code\modules\mob\living\silicon\login.dm"
 #include "code\modules\mob\living\silicon\say.dm"
 #include "code\modules\mob\living\silicon\silicon.dm"
