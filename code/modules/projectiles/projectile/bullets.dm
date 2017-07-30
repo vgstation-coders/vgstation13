@@ -542,7 +542,7 @@
 		if(medium_damage_range)
 			if(heavy_damage_range)
 				for(var/atom/movable/A in T.contents)
-					if(!istype(A, /obj/item/weapon/organ/head))
+					if(!istype(A, /obj/item/organ/external/head))
 						A.ex_act(1)
 				T.ex_act(1)
 				heavy_damage_range -= 1

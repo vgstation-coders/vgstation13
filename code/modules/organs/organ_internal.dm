@@ -14,7 +14,7 @@
 	var/removed_type //When removed, forms this object.
 	var/list/transplant_data // Blood DNA and colour of donor
 	var/rejecting            // Is this organ already being rejected?
-	var/obj/item/organ/organ_holder
+	var/obj/item/organ/internal/organ_holder
 	var/datum/dna/owner_dna
 
 
@@ -198,32 +198,32 @@
 	name = "heart"
 	parent_organ = LIMB_CHEST
 	organ_type = "heart"
-	removed_type = /obj/item/organ/heart
+	removed_type = /obj/item/organ/internal/heart
 
 /datum/organ/internal/kidney
 	name = "kidneys"
 	parent_organ = LIMB_GROIN
 	organ_type = "kidneys"
-	removed_type = /obj/item/organ/kidneys
+	removed_type = /obj/item/organ/internal/kidneys
 
 /datum/organ/internal/brain
 	name = "brain"
 	parent_organ = LIMB_HEAD
 	organ_type = "brain"
-	removed_type = /obj/item/organ/brain
+	removed_type = /obj/item/organ/internal/brain
 	vital = 1
 
 /datum/organ/internal/brain/ash
-	removed_type = /obj/item/organ/brain/ash
+	removed_type = /obj/item/organ/internal/brain/ash
 
 /datum/organ/internal/brain/slime_core
-	removed_type = /obj/item/organ/brain/slime_core
+	removed_type = /obj/item/organ/internal/brain/slime_core
 
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = LIMB_GROIN
 	organ_type = "appendix"
-	removed_type = /obj/item/organ/appendix
+	removed_type = /obj/item/organ/internal/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
 
@@ -231,7 +231,7 @@
 	if(!removed_type)
 		return 0
 
-	var/obj/item/organ/removed_organ = new removed_type(get_turf(user))
+	var/obj/item/organ/internal/removed_organ = new removed_type(get_turf(user))
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src

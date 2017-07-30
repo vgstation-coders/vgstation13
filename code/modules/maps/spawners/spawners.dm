@@ -742,10 +742,10 @@
 		/obj/item/clothing/suit/space/syndicate/black/engie,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/accessory/storage/brown_vest,
-		/obj/item/weapon/organ/head,
-		/obj/item/weapon/organ/r_leg,
-		/obj/item/weapon/organ/l_arm,
-		/obj/item/weapon/organ/l_foot,
+		/obj/item/organ/external/head,
+		/obj/item/organ/external/r_leg,
+		/obj/item/organ/external/l_arm,
+		/obj/item/organ/external/l_foot,
 		)
 
 /obj/abstract/map/spawner/space/supply

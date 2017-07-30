@@ -251,7 +251,7 @@
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/weapon/organ/head"
+ 		"/obj/item/organ/external/head"
  	)
 
 

@@ -1,7 +1,7 @@
 // Lung upgrade
 /datum/organ/internal/lungs/filter
 	name = "advanced lungs"
-	removed_type = /obj/item/organ/lungs/filter
+	removed_type = /obj/item/organ/internal/lungs/filter
 
 	min_bruised_damage = 15
 	min_broken_damage = 30
