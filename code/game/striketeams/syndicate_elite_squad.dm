@@ -68,12 +68,8 @@
 
 	//Mask & Armor
 	equip_to_slot_or_del(new /obj/item/clothing/mask/gas/syndicate(src), slot_wear_mask)
-	if (leader)
-		equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/syndicate/black/red(src), slot_head)
-		equip_to_slot_or_del(new /obj/item/clothing/suit/space/syndicate/black/red(src), slot_wear_suit)
-	else
-		equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/syndicate/black(src), slot_head)
-		equip_to_slot_or_del(new /obj/item/clothing/suit/space/syndicate/black(src), slot_wear_suit)
+	equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndicate_elite(src), slot_head)
+	equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndicate_elite(src), slot_wear_suit)
 	equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(src), slot_s_store)
 
 	//Backpack
@@ -95,7 +91,7 @@
 
 	var/obj/item/weapon/card/id/syndicate/W = new(src) //Untrackable by AI
 	W.name = "[real_name]'s ID Card"
-	W.icon_state = "id"
+	W.icon_state = "syndie"
 	W.access = get_all_accesses()//They get full station access because obviously the syndicate has HAAAX, and can make special IDs for their most elite members.
 	W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)//Let's add their forged CentCom access and syndicate access.
 	W.assignment = "Syndicate Commando"
