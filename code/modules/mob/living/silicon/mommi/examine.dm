@@ -37,7 +37,7 @@
 
 	to_chat(user, msg)
 
-	if(laws && isobserver(user))
+	if(laws && isobserver(user)) //As a bastard child of robots, we don't call our parent's examine()
 		var/mob/dead/observer/fag = user
 		if(!isAdminGhost(fag) && fag.mind && (fag.mind.isScrying || fag.mind.current.ajourn))// Scrying or astral travel and not even a badmin, fuck them.
 			return
