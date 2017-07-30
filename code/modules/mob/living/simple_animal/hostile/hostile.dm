@@ -300,7 +300,7 @@
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 		if(casingtype)
-			new casingtype(get_turf(src))
+			new casingtype(get_turf(src),1)// empty casing
 
 /mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(target == start)
