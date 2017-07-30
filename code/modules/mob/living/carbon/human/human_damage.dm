@@ -298,6 +298,32 @@ This function restores all organs.
 		zone = LIMB_HEAD
 	return organs_by_name[zone]
 
+
+//Picks a random usable organ from the organs passed to the arguments
+//You can feed organ references, or organ strings into this obj
+//So this is valid: pick_usable_organ(LIMB_LEFT_LEG, new /datum/organ/external/r_leg)
+/mob/living/carbon/human/proc/pick_usable_organ()
+	var/list/organs = args.Copy()
+
+	ASSERT(organs.len) //this proc should always be called with arguments
+
+	//Convert list of strings to list of organ objects
+	for(var/organ_ in organs)
+		if(istext(organ_))
+			organs.Add(get_organ(organ_))
+			organs.Remove(organ_)
+		else if(!istype(organ_, /datum/organ/external))
+			organs.Remove(organ_)
+
+	var/datum/organ/external/result
+
+	while(!result && organs.len)
+		result = pick_n_take(organs)
+		if(!result.is_usable())
+			result = null
+
+	return result
+
 //Proc that returns a list of organs converted from string IDs
 //get_organs("l_leg", "r_leg") will return a list with left and right leg datums
 //It will also accept lists with string IDs
