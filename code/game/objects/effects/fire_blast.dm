@@ -117,6 +117,9 @@
 	spread_start = 0
 	spread_chance = 30
 
+/obj/effect/fire_blast/no_spread
+	spread = 0
+
 /obj/effect/gas_puff
 	name = "gas puff"
 	desc = "A small puff of gas."
