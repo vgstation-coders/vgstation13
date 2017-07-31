@@ -78,7 +78,7 @@
 
 /obj/item/device/paicard/Topic(href, href_list)
 
-	if(!usr || usr.stat)
+	if(!usr || usr.stat || !in_range(src, usr))
 		return
 
 	if(href_list["setdna"])
