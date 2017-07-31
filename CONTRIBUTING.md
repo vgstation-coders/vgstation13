@@ -12,8 +12,8 @@ CONTRIBUTING TO VGSTATION
 
 # Balance changes
  * **Balance changes must require that feedback be sought out from the players.** For example, server polls. This does not mean you pop into #code-talk in Discord and ask about it once. Good examples include:
-  * Server polls
-  * bringing attention to your PR via in-game OOC, ideally over several time slots.
+   * Server polls
+   * bringing attention to your PR via in-game OOC, ideally over several time slots.
  * **Balance change PRs need changelogs. Always.**
 
 It is also suggested that you hop into irc.rizon.net #vgstation to discuss your changes, or if you need help.
