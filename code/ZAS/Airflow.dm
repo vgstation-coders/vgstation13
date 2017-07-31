@@ -54,7 +54,7 @@ mob/proc/airflow_stun()
 		return 0
 	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return 0
-	if(!(status_flags & CANSTUN) && !(status_flags & CANAIRFLOWKNOCKDOWN))
+	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 
@@ -78,7 +78,7 @@ mob/living/carbon/human/airflow_stun()
 	if(shoes)
 		if(CheckSlip() < 1)
 			return 0
-	if(!(status_flags & CANSTUN) && !(status_flags & CANAIRFLOWKNOCKDOWN))
+	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 

@@ -221,7 +221,7 @@
 
 	var/update_icon = 1 //Set to 1 to trigger update_icons() at the next life() call
 
-	var/status_flags = CANSTUN|CANKNOCKDOWN|CANAIRFLOWKNOCKDOWN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces CANKNOCKDOWN, canstun, etc)
+	var/status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces CANKNOCKDOWN, canstun, etc)
 
 	var/digitalcamo = 0 // Can they be tracked by the AI?
 

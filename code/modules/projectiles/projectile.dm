@@ -138,8 +138,7 @@ var/list/impact_master = list()
 	var/mob/living/L = atarget
 	if(L.flags & INVULNERABLE)
 		return 0
-	if(!isalienadult(atarget))
-		L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
+	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
 	if(!isnull(hitsound))
