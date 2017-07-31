@@ -111,7 +111,7 @@
 //////////////////////BEE MOB///////////////////////////////////////
 
 /mob/living/simple_animal/bee
-	name = "bees"
+	name = "swarm of bees"
 	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "bees1"
 	icon_dead = "bee_dead"
@@ -135,6 +135,7 @@
 	pass_flags = PASSTABLE
 	turns_per_move = 6
 	density = 0
+	gender = PLURAL
 
 	// Allow final solutions.
 	min_oxy = 5
@@ -506,9 +507,11 @@
 				target = null
 				var/list/nearbyMobs = list()
 				for(var/mob/living/G in view(src,7))
-					if (istype(G,/mob/living/simple_animal/bee))
+					//Bees will only attack other bees if they're crazy from high toxicity
+					if (istype(G,/mob/living/simple_animal/bee) && (((current_poison_damage - bees.len)/bees.len*100) > 51))
 						var/mob/living/simple_animal/bee/B = G
-						if (B.home == home || (home && B.home && B.home.wild && home.wild))//we'll allow bees to fight bees from other hives, unless they're both from wild hives
+						//even then, they won't attack bees from their own hives.
+						if (B.home == home || (home && B.home && B.home.wild && home.wild))
 							continue
 					if (G.flags & INVULNERABLE) continue
 					if (G.stat != DEAD)
@@ -625,6 +628,29 @@
 
 	animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 10, easing = SINE_EASING)
 
+	//updating name
+	var/prefix = ""
+
+	switch (state)
+		if (BEE_ROAMING)
+			prefix = "homeless "
+		if (BEE_OUT_FOR_ENEMIES)
+			if (((current_poison_damage - bees.len)/bees.len*100) > 51)
+				prefix = "crazy "
+			else
+				prefix = "angry "
+
+
+	if(bees.len <= 1)
+		gender = NEUTER
+		name = "[prefix]bee"
+		for (var/D in bees)
+			if (istype(D,/datum/bee/queen_bee))
+				name = "[prefix] queen bee"
+
+	else
+		gender = PLURAL
+		name = "swarm of [prefix]bees"
 
 
 ////////////////////////////BEE PRESETS/////////////////////////////////////
