@@ -9,7 +9,7 @@
 	var/body_part = null
 	var/icon_position = 0
 
-	var/obj/item/organ/internal_item = null //The actual item used to make the organ
+	var/obj/item/organ_item = null //The actual item used to make the organ
 	var/list/slots_to_drop
 
 	var/damage_state = "00"
