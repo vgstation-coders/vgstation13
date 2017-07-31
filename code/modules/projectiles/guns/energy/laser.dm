@@ -376,7 +376,7 @@
 /obj/item/weapon/gun/energy/laser/rainbow
 
 	name = "rainbow laser"
-	desc = "The NanoTrasen iniative to develop a laser weapon for clowns was a failure as the intended users were to clumsy to operate them."
+	desc = "The NanoTrasen iniative to develop a laser weapon for clowns was a failure as the intended users were too clumsy to operate them."
 	projectile_type = "/obj/item/projectile/beam/white"
 	var/current_color = 1
 	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
