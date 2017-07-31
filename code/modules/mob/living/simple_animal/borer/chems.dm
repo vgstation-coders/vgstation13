@@ -41,19 +41,13 @@
 
 /datum/borer_chem/chest/oxycodone
 	name = OXYCODONE
-
-/datum/borer_chem/chest/radium
-	name = RADIUM
-
-/datum/borer_chem/chest/leporazine
-	name = LEPORAZINE
+	
+/datum/borer_chem/chest/hyperzine
+	name = HYPERZINE
 
 /datum/borer_chem/chest/charcoal
 	name = CHARCOAL
 	cost = 2
-
-/datum/borer_chem/chest/anti_toxin
-	name = ANTI_TOXIN
 
 /datum/borer_chem/chest/inaprovaline
 	name = INAPROVALINE
@@ -66,9 +60,12 @@
 /datum/borer_chem/arm/kelotane
 	name = KELOTANE
 	cost = 2
-
-/datum/borer_chem/leg/hyperzine
-	name = HYPERZINE
+	
+/datum/borer_chem/leg/anti_toxin
+	name = ANTI_TOXIN
+	
+/datum/borer_chem/leg/leporazine
+	name = LEPORAZINE
 
 ////////////////////////////
 // UNLOCKABLES
@@ -145,10 +142,6 @@
 /datum/borer_chem/arm/unlockable/iron
 	name = IRON
 	cost = 1
-
-/datum/borer_chem/leg/unlockable/bustanut
-	name = BUSTANUT
-	cost = 2
 
 /datum/borer_chem/leg/unlockable/synaptizine
 	name = SYNAPTIZINE
