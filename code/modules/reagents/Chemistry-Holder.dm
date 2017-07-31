@@ -31,8 +31,9 @@ var/const/INGEST = 2
 		// chemical_reaction_list[PLASMA] is a list of all reactions relating to plasma
 
 		chemical_reactions_list = list()
+		var/list/blacklisted_chemical_reactions = list(/datum/chemical_reaction) + typesof(/datum/chemical_reaction/random) //Random is handled elsewhere
 
-		for (var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
+		for (var/path in typesof(/datum/chemical_reaction) - blacklisted_chemical_reactions)
 
 			var/datum/chemical_reaction/D = new path()
 			var/list/reaction_ids = list()

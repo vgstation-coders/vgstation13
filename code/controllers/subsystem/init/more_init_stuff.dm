@@ -26,6 +26,11 @@ var/datum/subsystem/more_init/SSmore_init
 	generateHoloMinimaps()
 	log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
 
+	watch=start_watch()
+	log_startup_progress("Generating random chemical recipes...")
+	generate_random_recipes()
+	log_startup_progress("Finished generating chemical recipes in [stop_watch(watch)]s.")
+
 	buildcamlist()
 
 	if(config.media_base_url)
