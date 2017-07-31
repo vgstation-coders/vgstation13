@@ -196,6 +196,7 @@ var/list/spider_queens = list()
 	projectiletype = /obj/item/projectile/web
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
+	size = SIZE_HUGE
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/New()
 	..()
