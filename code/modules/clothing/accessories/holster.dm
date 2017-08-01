@@ -35,6 +35,10 @@
 	if(!holstered)
 		return
 
+	if(user.stat || user.resting)
+		to_chat(user, "<span class='warning'>You can't hold \the [holstered] like this!</span>")
+		return
+
 	if(user.put_in_hands(holstered))
 		unholster_message(user)
 		holstered.add_fingerprint(user)
