@@ -51,9 +51,7 @@
 			RC.upgrade_finished = -1
 		RC.go_out()
 
-	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-	see_in_dark = 8
-	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	handle_sensor_modes()
 
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)
