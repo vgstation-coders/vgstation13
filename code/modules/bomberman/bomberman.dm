@@ -1143,7 +1143,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	for(var/obj/item/clothing/C in arena)
 		qdel(C)
 
-	for(var/obj/item/weapon/organ/O in arena)//gibs
+	for(var/obj/item/organ/external/O in arena)//gibs
 		qdel(O)
 
 	for(var/mob/living/M in gladiators)
@@ -1235,7 +1235,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
-	for(var/obj/item/weapon/organ/O in arena)//gibs
+	for(var/obj/item/organ/external/O in arena)//gibs
 		qdel(O)
 
 	for(var/obj/effect/decal/cleanable/C in arena)

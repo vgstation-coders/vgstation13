@@ -980,7 +980,7 @@
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/weapon/organ/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
@@ -1708,7 +1708,7 @@ mob/living/carbon/human/isincrit()
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
-	var/obj/item/organ/extractedorgan
+	var/obj/item/organ/internal/extractedorgan
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
 		if(extractedorgan && istype(extractedorgan))

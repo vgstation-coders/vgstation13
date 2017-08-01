@@ -158,7 +158,7 @@
 					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like their head has been grafted on another body.</span>")
 					return
 				else
-					var/obj/item/weapon/organ/head/humanHead = humanTarget.decapitated
+					var/obj/item/organ/external/head/humanHead = humanTarget.decapitated
 					if((humanHead.z != humanTarget.z) || (get_dist(humanTarget,humanHead) > 5))//F I V E   T I L E S
 						to_chat(user, "<span class='warning'>The soul stone isn't reacting, the head needs to be closer from the body.</span>")
 						return
@@ -181,8 +181,8 @@
 		//TODO: add a few snowflake checks to specific simple_animals that could be soulstoned.
 
 /obj/item/proc/capture_soul_head(var/target, var/mob/user as mob)//called either when using a soulstone on a head, or on a decapitated body
-	if(istype(target, /obj/item/weapon/organ/head))
-		var/obj/item/weapon/organ/head/humanHead = target
+	if(istype(target, /obj/item/organ/external/head))
+		var/obj/item/organ/external/head/humanHead = target
 		if(!humanHead.organ_data)
 			to_chat(user, "<span class='rose'>The soul stone isn't reacting, looks like their brain was separated from their head.</span>")
 			return
@@ -263,8 +263,8 @@
 			var/mob/M = target
 			true_name = M.real_name
 			new /obj/effect/decal/cleanable/ash(get_turf(target))
-		else if(istype(target,/obj/item/weapon/organ/head))
-			var/obj/item/weapon/organ/head/H = target
+		else if(istype(target,/obj/item/organ/external/head))
+			var/obj/item/organ/external/head/H = target
 			var/mob/living/carbon/brain/BM = H.brainmob
 			true_name = BM.real_name
 			new /obj/item/weapon/skull(get_turf(target))

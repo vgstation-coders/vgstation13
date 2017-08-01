@@ -1698,7 +1698,7 @@
 "aGI" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/floor{icon_state = "green"; dir = 4},/area/crew_quarters/fitness)
 "aGJ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/crew_quarters/fitness)
 "aGK" = (/obj/structure/table,/obj/item/weapon/paper{info = "Bruises sustained in the holodeck can be healed simply by sleeping."; name = "Holodeck Disclaimer"},/turf/simulated/floor,/area/crew_quarters/fitness)
-"aGL" = (/obj/item/organ/liver,/obj/structure/closet/crate,/turf/simulated/floor/plating,/area/maintenance/fsmaint2)
+"aGL" = (/obj/item/organ/internal/liver,/obj/structure/closet/crate,/turf/simulated/floor/plating,/area/maintenance/fsmaint2)
 "aGM" = (/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/maintenance/ghettotheatre)
 "aGN" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/wood,/area/maintenance/ghettotheatre)
 "aGO" = (/obj/structure/window/reinforced,/obj/item/weapon/extinguisher,/turf/simulated/floor/plating,/area/maintenance/ghettotheatre)

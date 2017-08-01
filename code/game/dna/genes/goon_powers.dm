@@ -344,7 +344,7 @@
 	var/atom/movable/the_item = targets[1]
 	if(!the_item || !the_item.Adjacent(user))
 		return
-	// if(istype(the_item, /obj/item/weapon/organ/head))
+	// if(istype(the_item, /obj/item/organ/external/head))
 	// 	to_chat(user, "<span class='warning'>You try to put the [the_item] in your mouth, but the ears tickle your throat!</span>")
 	// 	return 0
 	// else if(isbrain(the_item))

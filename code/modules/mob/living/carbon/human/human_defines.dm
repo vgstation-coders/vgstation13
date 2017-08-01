@@ -82,7 +82,7 @@
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
-	var/obj/item/weapon/organ/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
+	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
 
 	var/datum/component_container/NPC_brain
 
