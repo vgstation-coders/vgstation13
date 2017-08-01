@@ -232,6 +232,11 @@
 					"<span class='notice'>[M] pats [src]'s head.</span>", \
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.pixel_y = 7
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 20)
+
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
