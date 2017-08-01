@@ -3,6 +3,7 @@
 	voice_name = "synthesized voice"
 	can_butcher = 0
 	mob_property_flags = MOB_ROBOTIC
+	status_flags = CANSTUN|CANPARALYSE|CANPUSH
 
 	var/flashed = 0
 	var/syndicate = 0

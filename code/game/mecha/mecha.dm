@@ -395,7 +395,7 @@
 
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
-			if (!(L.status_flags & CANKNOCKDOWN) || (L.flags & INVULNERABLE))
+			if (!(L.status_flags & CANKNOCKDOWN) || (L.flags & INVULNERABLE) || (M_HULK in L.mutations))
 				src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 				src.crashing = null
 			else
