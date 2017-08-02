@@ -30,9 +30,11 @@
 	add_logs(src, target, "disarmed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
 	var/datum/organ/external/S = target.get_organ(src.zone_sel.selecting)
+	if(!istype(S))
+		return
 	if(src.zone_sel.selecting == "mouth" && !(S.status & ORGAN_DESTROYED) && ishuman(target))
 		var/mob/living/carbon/human/T = target
-		T.forcesay("")
+		T.forcesay("-")
 		target.visible_message( 
 			"<span class='danger'>[src] places a finger over [target]'s mouth and shushes them.</span>",
 			"<span class='danger'>You place a finger over [target]'s mouth and shush them.</span>", 
