@@ -41,9 +41,6 @@
 
 /datum/borer_chem/chest/oxycodone
 	name = OXYCODONE
-	
-/datum/borer_chem/chest/hyperzine
-	name = HYPERZINE
 
 /datum/borer_chem/chest/charcoal
 	name = CHARCOAL
@@ -66,6 +63,9 @@
 	
 /datum/borer_chem/leg/leporazine
 	name = LEPORAZINE
+	
+/datum/borer_chem/leg/hyperzine
+	name = HYPERZINE
 
 ////////////////////////////
 // UNLOCKABLES
