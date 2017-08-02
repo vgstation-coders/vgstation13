@@ -198,7 +198,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	//Click on a turf = add it to the edited area or remove it from the edited area
 	var/turf/T = get_turf(A)
-	if(isturf(A))
+	if(isturf(T))
 		var/area/space = get_space_area()
 		var/area/target_area = T.loc
 
