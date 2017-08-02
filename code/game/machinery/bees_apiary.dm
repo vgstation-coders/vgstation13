@@ -382,7 +382,7 @@
 		//We're low on nutrients, let's call back some bees to reduce our food costs
 		else if (nutrilevel <= 0 && bees_outside_hive.len > 1)
 			for (var/i = 1 to max(1,round(bees_outside_hive.len/3)))
-				var/datum/bee/B = pick(bees_outside_hive)
+				var/datum/bee/B = locate() in bees_outside_hive
 				B.homeCall()
 
 
