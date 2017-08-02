@@ -186,6 +186,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/set_teleport_pref,
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
+	/client/proc/check_striketeams,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,

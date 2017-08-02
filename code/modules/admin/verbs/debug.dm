@@ -1348,6 +1348,18 @@ client/proc/check_convertables()
 	else
 		spiral_block(epicenter,max_range,0,1)
 
+/client/proc/check_striketeams()
+	set name = "Check StrikeTeams"
+	set category = "Debug"
+
+	if(!sent_strike_teams || sent_strike_teams.len <= 0)
+		to_chat(usr, "<span class='warning'>No strike teams have been sent so far!</span>")
+		return
+
+	var/teamToDebug = input(usr,"Choose a Strike Team.", "Check StrikeTeams") in sent_strike_teams
+
+	debug_variables(sent_strike_teams[teamToDebug])
+
 /client/proc/view_runtimes()
 	set category = "Debug"
 	set name = "View Runtimes"

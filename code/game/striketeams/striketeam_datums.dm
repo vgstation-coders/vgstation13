@@ -93,6 +93,9 @@ var/list/sent_strike_teams = list()
 			qdel(src)
 			return
 
+		log_admin("[applicants.len] players volunteered for [striketeam_name].")
+		message_admins("[applicants.len] players volunteered for [striketeam_name].")
+
 		var/list/commando_spawns = list_commando_spawns()
 		var/commando_count = min(applicants.len,team_size)
 		var/leader = FALSE
@@ -114,12 +117,14 @@ var/list/sent_strike_teams = list()
 					applicant = M
 
 			if(!applicant || !applicant.key)
+				i++
 				continue
 
 			applicants -= applicant.key
 
 			if(!isobserver(applicant))
 				//Making sure we don't recruit people who got back into the game since they applied
+				i++
 				continue
 
 			if (leader)
