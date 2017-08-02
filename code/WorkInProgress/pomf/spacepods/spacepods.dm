@@ -13,6 +13,8 @@
 	infra_luminosity = 15
 	internal_gravity = 1 // Can move in 0-gravity
 	var/mob/living/carbon/occupant
+	var/passenger_limit = 1
+	var/list/passengers = list()
 	var/datum/spacepod/equipment/equipment_system
 	var/obj/item/weapon/cell/battery
 	var/datum/gas_mixture/cabin_air
@@ -113,6 +115,12 @@
 				H.forceMove(get_turf(src))
 				H.ex_act(severity + 1)
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
+			if(passengers.len)
+				for(var/mob/living/L in passengers)
+					L.forceMove(get_turf(src))
+					L.ex_act(severity + 1)
+					to_chat(L, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
+					passengers.Remove(L)
 			qdel(ion_trail)
 			ion_trail = null // Should be nulled by qdel src in next line but OH WELL
 			qdel(src)
@@ -336,14 +344,18 @@
 		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
 
 /obj/spacepod/verb/move_inside()
-	set category = "Object"
+	set category = "Spacepod"
 	set name = "Enter / Exit Pod"
 	set src in oview(1)
 
 	if(occupant)
 		if(occupant == usr)
 			move_outside(usr)
-		else
+			return
+		else if(passengers.len && passengers.Find(usr))
+			move_passenger_outside(usr)
+			return
+		else if (!passenger_limit || passengers.len > passenger_limit)
 			to_chat(usr, "<span class='notice'><B>\The [src] is already occupied!</B></span>")
 			return
 
@@ -368,6 +380,9 @@
 		if(!src.occupant)
 			moved_inside(usr)
 		else if(src.occupant!=usr)
+			if(passengers.len < passenger_limit)
+				move_passenger_inside(usr)
+				return
 			to_chat(usr, "[src.occupant] was faster. Better luck next time, loser.")
 	else
 		to_chat(usr, "You stop entering the pod.")
@@ -447,6 +462,8 @@
 	return 1
 
 /obj/spacepod/relaymove(mob/user, direction)
+	if(passengers.Find(user))
+		return 0 //Stop hogging the wheel!
 	if(move_delayer.blocked())
 		return 0
 	var/moveship = 1
@@ -513,6 +530,31 @@
 
 /obj/spacepod/acidable()
 	return 0
+
+/obj/spacepod/proc/move_passenger_inside(var/mob/living/carbon/human/H as mob)
+	if(H && H.client && H in range(1))
+		H.reset_view(src)
+		/*
+		H.client.perspective = EYE_PERSPECTIVE
+		H.client.eye = src
+		*/
+		H.stop_pulling()
+		H.forceMove(src)
+		src.passengers.Add(H)
+		src.add_fingerprint(H)
+		//dir = dir_in
+		to_chat(usr, "<span class='notice'>You climb into a passenger seat within \the [src].</span>")
+		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
+		return 1
+	else
+		return 0
+
+/obj/spacepod/proc/move_passenger_outside(mob/living/user, turf/exit_loc = src.loc)
+	if(passengers.len && passengers.Find(user))
+		user.forceMove(exit_loc)
+		passengers.Remove(user)
+		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
+
 
 #undef DAMAGE
 #undef FIRE
