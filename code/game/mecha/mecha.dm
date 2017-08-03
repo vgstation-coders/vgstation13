@@ -404,12 +404,12 @@
 				src.crashing = null
 				L.take_overall_damage(5,0)
 				if(L.locked_to)
-					L.locked_to = 0
+					L.locked_to.unlock_atom(L)
 			else
 				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
 				L.take_overall_damage(5,0)
 				if(L.locked_to)
-					L.locked_to = 0
+					L.locked_to.unlock_atom(L)
 				L.Stun(5)
 				L.Knockdown(5)
 				L.apply_effect(STUTTER, 5)
