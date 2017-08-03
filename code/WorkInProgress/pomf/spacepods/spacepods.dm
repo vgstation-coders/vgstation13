@@ -13,7 +13,8 @@
 	infra_luminosity = 15
 	internal_gravity = 1 // Can move in 0-gravity
 	var/mob/living/carbon/occupant
-	var/passenger_limit = 1
+	var/passenger_limit = 1 //Upper limit for how many passengers are allowed
+	var/passengers_allowed = 1 //If the pilot allows people to jump in the side seats.
 	var/list/passengers = list()
 	var/datum/spacepod/equipment/equipment_system
 	var/obj/item/weapon/cell/battery
@@ -30,6 +31,7 @@
 	appearance_flags = 0
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
+	var/passenger_fire = 0 //Whether or not a passenger can fire weapons attached to this pod
 	var/movement_delay = 0.4 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
 /obj/spacepod/New()
@@ -237,7 +239,7 @@
 
 /obj/spacepod/verb/toggle_internal_tank()
 	set name = "Toggle internal airtank usage"
-	set category = "Object"
+	set category = "Spacepod"
 	set src = usr.loc
 	set popup_menu = 0
 	if(usr!=src.occupant)
@@ -324,7 +326,7 @@
 /obj/spacepod/MouseDrop(atom/over)
 	if(!usr || !over)
 		return
-	if(!occupant == usr)
+	if(occupant != usr && !passengers.Find(usr))
 		return ..() //Handle mousedrop T
 	var/turf/T = get_turf(over)
 	if(!Adjacent(T) || T.density)
@@ -334,7 +336,10 @@
 			if((A == src) || istype(A, /mob))
 				continue
 			return
-	move_outside(usr, T)
+	if(occupant == usr)
+		move_outside(usr, T)
+	else if(passengers.Find(usr))
+		move_passenger_outside(usr, T)
 
 /obj/spacepod/proc/move_outside(mob/living/user, turf/exit_loc = src.loc)
 	if(occupant)
@@ -447,6 +452,7 @@
 	. = ..()
 	if(dir && (oldloc != NewLoc))
 		src.loc.Entered(src, oldloc)
+
 /obj/spacepod/Process_Spacemove(var/check_drift = 0, mob/user)
 	var/dense_object = 0
 	if(!user)
@@ -533,6 +539,9 @@
 
 /obj/spacepod/proc/move_passenger_inside(var/mob/living/carbon/human/H as mob)
 	if(H && H.client && H in range(1))
+		if(!passengers_allowed)
+			to_chat(H, "<span class='notice'>Error: Passengers forbidden.</span>")
+			return 0
 		H.reset_view(src)
 		/*
 		H.client.perspective = EYE_PERSPECTIVE
@@ -543,7 +552,7 @@
 		src.passengers.Add(H)
 		src.add_fingerprint(H)
 		//dir = dir_in
-		to_chat(usr, "<span class='notice'>You climb into a passenger seat within \the [src].</span>")
+		to_chat(H, "<span class='notice'>You climb into a passenger seat within \the [src].</span>")
 		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		return 1
 	else
@@ -555,6 +564,24 @@
 		passengers.Remove(user)
 		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
 
-
+/obj/spacepod/verb/toggle_passengers()
+	set category = "Spacepod"
+	set name = "Toggle passenger allowance"
+	set src = usr.loc
+	if(usr!=src.occupant)
+		return
+	src.passengers_allowed = !passengers_allowed
+	to_chat(src.occupant, "<span class='notice'>Now [passengers_allowed?"allowing passengers":"disallowing passengers, and ejecting any current passengers"].</span>")
+	if(!passengers_allowed && passengers.len)
+		for(var/mob/living/L in passengers)
+			to_chat(L, "<span class='warning'>Ejection sequence activated: Ejecting in 3 seconds</span>")
+			spawn(30)
+				if(passengers.Find(L) && L.loc == src)
+					var/turf/T = get_turf(src)
+					var/turf/target_turf
+					L.forceMove(T)
+					target_turf = get_edge_target_turf(T, WEST)
+					L.throw_at(target_turf,100,3)
+					passengers.Remove(L)
 #undef DAMAGE
 #undef FIRE

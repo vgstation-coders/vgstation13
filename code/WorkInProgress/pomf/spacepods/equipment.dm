@@ -119,4 +119,7 @@
 	//set desc = SPE.verb_desc
 	set src = usr.loc
 
+	if(S.passengers.Find(usr) && !S.passenger_fire)
+		to_chat(usr, "<span class = 'warning'>Passenger gunner system disabled.</span>")
+		return
 	SPE.fire_weapons()
