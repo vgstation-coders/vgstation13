@@ -25,3 +25,28 @@
 	icon_state = "lizardwizard"
 	icon_living = "lizardwizard"
 	icon_dead = "lizardwizard_dead"
+
+	var/jaunting = FALSE
+
+/mob/living/simple_animal/lizard/wizard/Life()
+	..()
+
+	if(!jaunting && prob(2))
+		jaunt()
+
+/mob/living/simple_animal/lizard/wizard/proc/jaunt()
+	jaunting = TRUE
+	flick("lizardwizard_liquify", src)
+
+	#define liquify_anim_duration 8.4
+
+	spawn(liquify_anim_duration)
+		invisibility = INVISIBILITY_MAXIMUM
+
+		sleep (5 SECONDS)
+
+		invisibility = initial(invisibility)
+		flick("lizardwizard_reappear", src)
+		jaunting = FALSE
+
+	#undef liquify_anim_duration
