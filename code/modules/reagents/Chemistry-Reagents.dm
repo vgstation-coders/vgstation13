@@ -26,8 +26,9 @@
 	var/sport = 1 //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
-	var/overdose = 0
-	var/overdose_dam = 1
+	var/overdose_am = 0
+	var/overdose_tick = 0
+	var/tick
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
@@ -104,6 +105,7 @@
 	src = null
 
 /datum/reagent/proc/metabolize(var/mob/living/M)
+	tick++
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
@@ -121,8 +123,8 @@
 		M = holder.my_atom //Try to find the mob through the holder
 	if(!istype(M)) //Still can't find it, abort
 		return 1
-	if(overdose && volume >= overdose) //This is the current overdose system
-		M.adjustToxLoss(overdose_dam)
+	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
+		on_overdose(M)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -151,6 +153,10 @@
 /datum/reagent/proc/on_removal(var/data)
 	return 1
 
+/datum/reagent/proc/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+
+
 /datum/reagent/send_to_past(var/duration)
 	var/static/list/resettable_vars = list(
 		"being_sent_to_past",
@@ -161,7 +167,8 @@
 		"reagent_state",
 		"data",
 		"volume",
-		"gcDestroyed")
+		"gcDestroyed",
+		"tick")
 
 	reset_vars_after_duration(resettable_vars, duration, TRUE)
 
@@ -497,7 +504,7 @@
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
 	reagent_state = LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -649,7 +656,7 @@
 	description = "A corruptive toxin produced by slimes."
 	reagent_state = LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/slimetoxin/on_mob_life(var/mob/living/M)
 
@@ -673,7 +680,7 @@
 	description = "An advanced corruptive toxin produced by slimes."
 	reagent_state = LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/aslimetoxin/on_mob_life(var/mob/living/M)
 
@@ -743,7 +750,7 @@
 	description = "Put people to sleep, and heals them."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 	custom_metabolism = 0.2
 	data = 1 //Used as a tally
 
@@ -799,7 +806,7 @@
 	reagent_state = LIQUID
 	color = "#60A584" //rgb: 96, 165, 132
 	custom_metabolism = 0.5
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
@@ -922,7 +929,7 @@
 	reagent_state = LIQUID
 	color = "#202040" //rgb: 20, 20, 40
 	custom_metabolism = 0.25
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/serotrotium/on_mob_life(var/mob/living/M)
 
@@ -940,7 +947,7 @@
 	description = "A compound that can be used to repair and reinforce glass."
 	reagent_state = LIQUID
 	color = "#C7FFFF" //rgb: 199, 255, 255
-	overdose = 0
+	overdose_am = 0
 
 /datum/reagent/oxygen
 	name = "Oxygen"
@@ -1004,7 +1011,7 @@
 	description = "A chemical element."
 	reagent_state = LIQUID
 	color = "#484848" //rgb: 72, 72, 72
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/mercury/on_mob_life(var/mob/living/M)
 
@@ -1050,7 +1057,7 @@
 	description = "A chemical element with a characteristic odour."
 	reagent_state = GAS
 	color = "#808080" //rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/chlorine/on_mob_life(var/mob/living/M)
 
@@ -1065,7 +1072,7 @@
 	description = "A highly-reactive chemical element."
 	reagent_state = GAS
 	color = "#808080" //rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/fluorine/on_mob_life(var/mob/living/M)
 
@@ -1080,7 +1087,7 @@
 	description = "A chemical compound consisting of chlorine and ammonia. Very dangerous when inhaled."
 	reagent_state = GAS
 	color = "#808080" //rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/chloramine/on_mob_life(var/mob/living/M)
 
@@ -1120,7 +1127,7 @@
 	description = "A chemical element, used as antidepressant."
 	reagent_state = SOLID
 	color = "#808080" //rgb: 128, 128, 128
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/lithium/on_mob_life(var/mob/living/M)
 
@@ -1426,7 +1433,7 @@
 	description = "Ryetalyn can cure all genetic abnomalities."
 	reagent_state = SOLID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M)
 
@@ -1511,8 +1518,6 @@
 	reagent_state = LIQUID
 	color = "#C855DC"
 	pain_resistance = 60
-	overdose_dam = 0
-	overdose = 0
 
 /datum/reagent/mutagen
 	name = "Unstable mutagen"
@@ -2224,7 +2229,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.01
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 40
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
@@ -2248,7 +2253,7 @@
 	description = "Impedrezene is a narcotic that impedes one's ability by slowing down the higher brain cell functions."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/impedrezene/on_mob_life(var/mob/living/M)
 
@@ -2270,7 +2275,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 
@@ -2286,7 +2291,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M)
 
@@ -2313,7 +2318,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 10
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M)
@@ -2350,7 +2355,7 @@
 	description = "Rapidly heals ear damage"
 	reagent_state = LIQUID
 	color = "#6600FF" //rgb: 100, 165, 255
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/inacusiate/on_mob_life(var/mob/living/M)
 
@@ -2366,7 +2371,7 @@
 	description = "Used to encourage recovery of internal organs and nervous systems. Medicate cautiously."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose = 10
+	overdose_am = 10
 
 /datum/reagent/peridaxon/on_mob_life(var/mob/living/M)
 
@@ -2386,7 +2391,9 @@
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
+
+
 
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
 
@@ -2396,6 +2403,15 @@
 	if(alien != IS_DIONA)
 		M.heal_organ_damage(2 * REM,0)
 
+
+/datum/reagent/bicaridine/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		for(var/datum/organ/external/E in H.organs)
+			for(var/datum/wound/W in E.wounds)
+				W.heal_damage(0.2, TRUE)
+
 /datum/reagent/hyperzine
 	name = "Hyperzine"
 	id = HYPERZINE
@@ -2403,7 +2419,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.03
-	overdose = REAGENTS_OVERDOSE/2
+	overdose_am = REAGENTS_OVERDOSE/2
 
 /datum/reagent/hyperzine/on_mob_life(var/mob/living/M)
 
@@ -2589,7 +2605,8 @@
 	description = "A powder derived from fish toxin, this substance can effectively treat genetic damage in humanoids, though excessive consumption has side effects."
 	reagent_state = SOLID
 	color = "#669900" //rgb: 102, 153, 0
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
+	overdose_tick = 35
 	data = 1 //Used as a tally
 
 /datum/reagent/rezadone/on_mob_life(var/mob/living/M)
@@ -2605,11 +2622,13 @@
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
 			M.status_flags &= ~DISFIGURED
-		if(35 to INFINITY)
-			M.adjustToxLoss(1)
-			M.Dizzy(5)
-			M.Jitter(5)
+
 	data++
+
+/datum/reagent/rezadone/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	M.Dizzy(5)
+	M.Jitter(5)
 
 /datum/reagent/spaceacillin
 	name = "Spaceacillin"
@@ -2618,7 +2637,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.01
-	overdose = REAGENTS_OVERDOSE
+	overdose_am = REAGENTS_OVERDOSE
 
 /datum/reagent/carpotoxin
 	name = "Carpotoxin"
@@ -2711,7 +2730,7 @@
 	reagent_state = LIQUID
 	color = "#CC1122"
 	custom_metabolism = 0.03
-	overdose = REAGENTS_OVERDOSE/2
+	overdose_am = REAGENTS_OVERDOSE/2
 
 /datum/reagent/methylin/on_mob_life(var/mob/living/M)
 
@@ -2720,8 +2739,10 @@
 
 	if(prob(5))
 		M.emote(pick("twitch", "blink_r", "shiver"))
-	if(volume > REAGENTS_OVERDOSE)
-		M.adjustBrainLoss(1)
+
+/datum/reagent/methylin/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	M.adjustBrainLoss(1)
 
 /datum/reagent/bicarodyne
 	name = "Bicarodyne"
@@ -2729,7 +2750,7 @@
 	description = "Not to be confused with Bicaridine, Bicarodyne is a volatile chemical that reacts violently in the presence of most human endorphins."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	overdose = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
+	overdose_am = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
 
 /datum/reagent/stabilizine
@@ -5651,8 +5672,15 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "This fatty, viscous substance is found only within the cheesiest of cheeses. Has the potential to cause heart stoppage."
 	reagent_state = SOLID
 	color = "#FFFF00" //rgb: 255, 255, 0
-	overdose = 5
+	overdose_am = 5
 	custom_metabolism = 0 //does not leave your body, clogs your arteries! puke or otherwise clear your system ASAP
+
+/datum/reagent/cheesygloop/on_overdose(var/mob/living/M)
+	M.adjustToxLoss(1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/internal/heart/damagedheart = H.get_heart()
+		damagedheart.damage++
 
 /datum/reagent/maplesyrup
 	name = "Maple Syrup"

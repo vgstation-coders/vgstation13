@@ -522,10 +522,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
-			//overdose of bicaridine begins healing IB
-			if(owner.reagents.get_reagent_amount(BICARIDINE) >= 30)
-				W.heal_damage(0.2, TRUE)
-
 		// slow healing
 		var/heal_amt = 0
 
