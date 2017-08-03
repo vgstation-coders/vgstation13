@@ -395,16 +395,21 @@
 
 		else if(istype(obstacle, /mob/living))
 			var/mob/living/L = obstacle
-			if (!(L.status_flags & CANKNOCKDOWN) || (L.flags & INVULNERABLE))
-				src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
+			if (L.flags & INVULNERABLE)
+				src.throwing = 0
 				src.crashing = null
-			else
-				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
-				if(L.flags & INVULNERABLE)
-					return
+			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+				//can't be knocked down? you'll still take the damage.
+				src.throwing = 0
+				src.crashing = null
 				L.take_overall_damage(5,0)
 				if(L.locked_to)
-					L.locked_to = 0
+					L.locked_to.unlock_atom(L)
+			else
+				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
 				L.Stun(5)
 				L.Knockdown(5)
 				L.apply_effect(STUTTER, 5)
