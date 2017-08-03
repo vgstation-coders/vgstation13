@@ -323,7 +323,7 @@
 	if(!istype(W))
 		return 0
 	if(usr)
-		usr.u_equip(W,0)
+		usr.u_equip(W,1)
 		usr.update_icons()	//update our overlays
 	W.forceMove(src)
 	W.on_enter_storage(src)
