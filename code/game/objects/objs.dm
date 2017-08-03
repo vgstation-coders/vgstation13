@@ -1,4 +1,9 @@
 var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE)
+
+// obj.honorable flags.
+#define HONORABLE_BOMBERMAN 1
+#define HONORABLE_HIGHLANDER 2
+
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
@@ -39,6 +44,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/can_affix_to_dense_turf=0
 
 	var/has_been_invisible_sprayed = FALSE
+
+	// Tells is_honorable() which special_roles to respect.
+	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER
 
 /obj/New()
 	..()
@@ -549,6 +557,20 @@ a {
 	if(istype(user))
 		return (M_CLUMSY in user.mutations)
 	return 0
+
+/**
+ * Honor check
+ * Returns TRUE if user is BOMBERMAN, HIGHLANDER...
+ * Respects honorable.
+ */
+/obj/proc/is_honorable(var/mob/living/user)
+	if(istype(user))
+		if(user.mind)
+			if(user.mind.special_role == BOMBERMAN && (honorable & HONORABLE_BOMBERMAN))
+				return TRUE
+			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
+				return TRUE
+	return FALSE
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.
 //Return NPC_TAMPER_ACT_FORGET if there's no interaction (the NPC won't try to tamper with this again)

@@ -1,0 +1,17 @@
+# Your name.
+author: N3X15
+
+# Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
+delete-after: True
+
+# Any changes you've made.  See valid prefix list above.
+# There needs to be a space after the - and before the prefix. Don't use tabs anywhere in this file.
+# Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
+# If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
+# SCREW ANY OF THIS UP AND IT WON'T WORK.
+changes:
+- rscadd: Trying to disarm someone as highlander will result in YOU being disarmed.
+- rscadd: Trying to disarm someone as bomberman will result in being disqualified.
+- rscadd: All humans are changed to the default human race during highlander.
+- rscadd: Chemicals can be marked DISHONORABLE to just not work on particular special roles like highlander.  This currently includes chloral and cyanide.
+- rscadd: Guns with honor_check will blow up if a highlander or bomberman tries to use them, taking their active hand with them.

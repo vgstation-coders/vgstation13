@@ -1483,6 +1483,7 @@ var/proccalls = 1
 #define EVENT_PROC_INDEX "p"
 
 #define HIGHLANDER "highlander"
+#define BOMBERMAN "bomberman"
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 

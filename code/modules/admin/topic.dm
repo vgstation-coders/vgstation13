@@ -3322,6 +3322,7 @@
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
 						M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
 						M.update_icons()
+						M.mind.special_role = BOMBERMAN // CHEAT CHECKS
 						to_chat(M, "Wait...what?")
 						spawn(50)
 							to_chat(M, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
