@@ -340,7 +340,7 @@
 	icon_state = "kneesock"
 	item_state = "kneesock"
 
-/obj/item/clothing/shoes/kneesocks/pinkknee
+/obj/item/clothing/shoes/kneesocks/pink
 	name = "pink kneesocks"
 	desc = "A pair of girly programming socks."
 	icon_state = "pinkknee"
