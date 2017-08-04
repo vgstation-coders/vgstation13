@@ -21,6 +21,7 @@
 
 /mob/living/simple_animal/lizard/wizard
 	name = "Wizard"
+	desc = "A very rare lizard species often said to possess supernatural powers. Very cute and tiny."
 
 	icon_state = "lizardwizard"
 	icon_living = "lizardwizard"
