@@ -12,7 +12,7 @@
 	layer = ABOVE_DOOR_LAYER
 	infra_luminosity = 15
 	internal_gravity = 1 // Can move in 0-gravity
-	var/mob/living/carbon/occupant
+	var/mob/living/carbon/occupant //The pilot
 	var/passenger_limit = 1 //Upper limit for how many passengers are allowed
 	var/passengers_allowed = 1 //If the pilot allows people to jump in the side seats.
 	var/list/passengers = list()
@@ -301,18 +301,8 @@
 	return
 
 /obj/spacepod/proc/moved_inside(var/mob/living/carbon/human/H as mob)
-	if(H && H.client && H in range(1))
-		H.reset_view(src)
-		/*
-		H.client.perspective = EYE_PERSPECTIVE
-		H.client.eye = src
-		*/
-		H.stop_pulling()
-		H.forceMove(src)
-		src.occupant = H
-		src.add_fingerprint(H)
-		src.forceMove(src.loc)
-		//dir = dir_in
+	if(move_into_pod(H))
+		occupant = H
 		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		return 1
 	else
@@ -347,6 +337,22 @@
 		occupant.forceMove(exit_loc)
 		occupant = null
 		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
+		if(passengers.len)
+			for(var/mob/living/L in passengers.len)
+				if(!occupant)
+
+					var/answer = alert(L,"The pilot has evacuated \the [src]. Do you wish to take over?",,"Yes","No")
+					if(answer == "Yes")
+						spawn(rand(5,25))
+							if(!occupant)
+								passengers.Remove(L)
+								occupant = L
+								to_chat(L, "<span class='notice'>You have assumed control of \the [src]</span>")
+								continue
+							else
+								to_chat(L, "<span class='notice'>\The [occupant] assumed control before you.</span>")
+				else
+					break
 
 /obj/spacepod/verb/move_inside()
 	set category = "Spacepod"
@@ -468,7 +474,7 @@
 	return 1
 
 /obj/spacepod/relaymove(mob/user, direction)
-	if(passengers.Find(user))
+	if(user != occupant)
 		return 0 //Stop hogging the wheel!
 	if(move_delayer.blocked())
 		return 0
@@ -537,20 +543,21 @@
 /obj/spacepod/acidable()
 	return 0
 
-/obj/spacepod/proc/move_passenger_inside(var/mob/living/carbon/human/H as mob)
-	if(H && H.client && H in range(1))
-		if(!passengers_allowed)
-			to_chat(H, "<span class='notice'>Error: Passengers forbidden.</span>")
-			return 0
-		H.reset_view(src)
-		/*
-		H.client.perspective = EYE_PERSPECTIVE
-		H.client.eye = src
-		*/
-		H.stop_pulling()
-		H.forceMove(src)
+/obj/spacepod/proc/move_into_pod(var/mob/living/L)
+	if(L && L.client && L in range(1))
+		L.reset_view(src)
+		L.stop_pulling()
+		L.forceMove(src)
+		src.add_fingerprint(L)
+		return 1
+	return 0
+
+/obj/spacepod/proc/move_passenger_inside(var/mob/living/carbon/human/H)
+	if(!passengers_allowed)
+		to_chat(H, "<span class='notice'>Error: Passengers forbidden.</span>")
+		return 0
+	if(move_into_pod(H))
 		src.passengers.Add(H)
-		src.add_fingerprint(H)
 		//dir = dir_in
 		to_chat(H, "<span class='notice'>You climb into a passenger seat within \the [src].</span>")
 		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
@@ -568,6 +575,7 @@
 	set category = "Spacepod"
 	set name = "Toggle passenger allowance"
 	set src = usr.loc
+	set popup_menu = 0
 	if(usr!=src.occupant)
 		return
 	src.passengers_allowed = !passengers_allowed
@@ -577,11 +585,24 @@
 			to_chat(L, "<span class='warning'>Ejection sequence activated: Ejecting in 3 seconds</span>")
 			spawn(30)
 				if(passengers.Find(L) && L.loc == src)
+					playsound(src, 'sound/weapons/rocket.ogg', 50, 1)
 					var/turf/T = get_turf(src)
 					var/turf/target_turf
 					L.forceMove(T)
 					target_turf = get_edge_target_turf(T, WEST)
 					L.throw_at(target_turf,100,3)
 					passengers.Remove(L)
+
+/obj/spacepod/verb/toggle_passenger_guns()
+	set category = "Spacepod"
+	set name = "Toggle passenger weapon allowance"
+	set src = usr.loc
+	set popup_menu = 0
+	if(usr!=src.occupant)
+		return
+	src.passenger_fire = !passenger_fire
+	to_chat(src.occupant, "<span class='notice'>Now [passenger_fire?"allowing passengers to fire spacepod weaponry":"disallowing passengers to fire spacepod weaponry"].</span>")
+	playsound(src, 'sound/items/flashlight_on.ogg', 50, 1)
+
 #undef DAMAGE
 #undef FIRE
