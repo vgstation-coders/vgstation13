@@ -1485,6 +1485,11 @@ var/proccalls = 1
 #define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
+// /proc/is_honorable() flags.
+#define HONORABLE_BOMBERMAN  1
+#define HONORABLE_HIGHLANDER 2
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER
+
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
 //Grasp indexes
