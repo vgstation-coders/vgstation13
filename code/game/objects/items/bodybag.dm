@@ -39,7 +39,8 @@
 	icon_closed = "bodybag_closed"
 	icon_opened = "bodybag_open"
 	density = 0
-
+	var/cryobag_reg = 0
+	var/cryobag_adv = 0
 
 /obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
@@ -81,7 +82,14 @@
 		if(contents.len)
 			return 0
 		visible_message("[usr] folds up the [src.name]")
-		new/obj/item/bodybag(get_turf(src))
+
+		if((cryobag_adv)&&(!cryobag_reg))
+			new/obj/item/bodybag/cryobag/advanced(get_turf(src))
+
+		else if((cryobag_reg)&&(!cryobag_adv))
+			new/obj/item/bodybag/cryobag(get_turf(src))
+		else
+			new/obj/item/bodybag(get_turf(src))
 		spawn(0)
 			qdel(src)
 		return
@@ -92,13 +100,15 @@
 	else
 		icon_state = icon_opened
 
-//Cryobag (statis bag) below, not currently functional it seems
+//Cryobag (statis bag) below, now functional
 
 /obj/item/bodybag/cryobag
 	name = "stasis bag"
 	desc = "A folded, non-reusable bag designed for the preservation of an occupant's brain by stasis."
 	icon = 'icons/obj/cryobag.dmi'
 	icon_state = "bodybag_folded"
+
+
 
 /obj/item/bodybag/cryobag/attack_self(mob/user)
 	var/obj/structure/closet/body_bag/cryobag/R = new /obj/structure/closet/body_bag/cryobag(user.loc)
@@ -113,17 +123,39 @@
 	icon_closed = "bodybag_closed"
 	icon_opened = "bodybag_open"
 	density = 0
-
 	var/used = 0
+	cryobag_reg = 1
+
+/*/obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
+	..()
+	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
+		if(opened)
+			return 0
+		if(contents.len)
+			return 0
+		visible_message("[usr] folds up the [src.name]")
+		new/obj/item/bodybag/cryobag(get_turf(src))
+		spawn(0)
+			qdel(src)
+		return*/
 
 /obj/structure/closet/body_bag/cryobag/open()
 	. = ..()
-	if(used)
+	if((used)&&(cryobag_reg))
 		var/obj/item/O = new/obj/item(src.loc)
 		O.name = "used stasis bag"
 		O.icon = src.icon
 		O.icon_state = "bodybag_used"
 		O.desc = "Pretty useless now.."
+		qdel(src)
+	if((used)&&(cryobag_adv))
+		var/obj/item/O = new/obj/item(src.loc)
+		O.name = "used advanced stasis bag"
+		O.icon = src.icon
+		O.icon_state = "bodybag_used_adv"
+		O.desc = "Despite how high tech it is its pretty useless now.."
 		qdel(src)
 
 /obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
@@ -132,3 +164,62 @@
 			return
 		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")
 	..()
+
+
+/obj/item/bodybag/cryobag/advanced
+	name = "advanced stasis bag"
+	desc = "A folded, non-reusable bag designed for the preservation of an occupant's brain by stasis. This one looks like it is a bit more high tech"
+	icon = 'icons/obj/cryobag.dmi'
+	icon_state = "bodybag_folded_adv"
+
+/obj/structure/closet/body_bag/cryobag/advanced
+	name = "advanced stasis bag"
+	desc = "A non-reusable plastic bag designed for the preservation of an occupant's brain by stasis. This one looks like it is a bit more high tech"
+	icon = 'icons/obj/cryobag.dmi'
+	icon_state = "bodybag_closed_adv"
+	icon_closed = "bodybag_closed_adv"
+	icon_opened = "bodybag_open_adv"
+	density = 0
+
+	var/no_brain_damage = 1 // so the adv bag doesnt brain damage
+	cryobag_adv = 1
+	cryobag_reg = 0
+
+
+/obj/structure/closet/body_bag/cryobag/advanced/open()
+	. = ..()
+	if(used)
+		var/obj/item/O = new/obj/item(src.loc)
+		O.name = "used advanced stasis bag"
+		O.icon = src.icon
+		O.icon_state = "bodybag_used"
+		O.desc = "Pretty useless now.."
+		qdel(src)
+
+/obj/item/bodybag/cryobag/advanced/attack_self(mob/user)
+	var/obj/structure/closet/body_bag/cryobag/advanced/R = new /obj/structure/closet/body_bag/cryobag/advanced(user.loc)
+	R.add_fingerprint(user)
+	qdel(src)
+
+/obj/structure/closet/body_bag/cryobag/advanced/MouseDrop(over_object, src_location, over_location)
+	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
+		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")
+	..()
+
+
+/*/obj/structure/closet/body_bag/cryobag/advanced/MouseDrop(over_object, src_location, over_location)
+	..()
+	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
+		if(opened)
+			return 0
+		if(contents.len)
+			return 0
+		visible_message("[usr] folds up the [src.name]")
+		new/obj/item/bodybag/cryobag/advanced(get_turf(src))
+		spawn(0)
+			qdel(src)
+		return*/
