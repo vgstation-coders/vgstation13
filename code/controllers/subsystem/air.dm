@@ -131,6 +131,10 @@ Class Procs:
 
 
 /datum/subsystem/air/Initialize(timeofday)
+	#ifndef ZASDBG
+	set background = 1 //The for loop later is sufficiently long to trip BYOND's infinite loop detection.
+	#endif
+
 	to_chat(world, "<span class='danger'>Processing Geometry...</span>")
 	sleep(-1)
 
