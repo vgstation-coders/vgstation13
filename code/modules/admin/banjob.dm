@@ -18,6 +18,8 @@ var/jobban_keylist[0]		//to store the keys & ranks
 //returns a reason if M is banned from rank, returns 0 otherwise
 /proc/jobban_isbanned(mob/M, rank)
 	if(M && rank)
+		if(is_cluwne_banned(M.ckey) && rank != "Assistant")
+			return "NO [rank] ONLY CLUWNE"
 		/*
 		if(_jobban_isbanned(M, rank))
 			return "Reason Unspecified"	//for old jobban

@@ -71,6 +71,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];newban=\ref[M]'>Ban</A> |
 		<A href='?src=\ref[src];jobban2=\ref[M]'>Jobban</A> |
 		<A href='?src=\ref[src];oocban=\ref[M]'>OOC Ban</A> |
+		<A href='?src=\ref[src];cluwneban=\ref[M]'>Cluwne Ban</A> |
 		<A href='?_src_=holder;appearanceban=\ref[M]'>Identity Ban</A> |
 		<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
 	"}

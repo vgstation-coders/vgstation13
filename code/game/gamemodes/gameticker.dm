@@ -363,14 +363,17 @@ var/datum/controller/gameticker/ticker
 			if(player.mind.assigned_role != "MODE")
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
-	if(captainless)
-		for(var/mob/M in player_list)
-			if(!istype(M,/mob/new_player))
-				to_chat(M, "Captainship not forced on anyone.")
 
+	var/event_args/player_spawn/evargs
 	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
+			// Moved here for less loopz
+			if(captainless)
+				to_chat(M, "Captainship not forced on anyone.")
 			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
+
+			evargs=new /event_args/player_spawn(character=M, late=TRUE)
+			INVOKE_EVENT(on_post_equip_char, evargs)
 
 /datum/controller/gameticker/proc/process()
 	if(current_state != GAME_STATE_PLAYING)

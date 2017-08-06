@@ -323,7 +323,12 @@
 		to_chat(src, alert("[rank] is not available. Please try another."))
 		return 0
 
-	job_master.AssignRole(src, rank, 1)
+	//@event global.on_pre_assignrole(new_player=/mob/new_player, rank=string, late=boolean)
+	var/event_args/player_spawn/evargs=new /event_args/player_spawn(new_player=src, rank=rank, late=TRUE)
+	INVOKE_EVENT(on_pre_assignrole, evargs)
+	if(!evargs.cancel)
+		rank = evargs.rank
+		job_master.AssignRole(src, rank, 1)
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
@@ -337,8 +342,12 @@
 
 	character.store_position()
 
+	// @event global.on_post_equip_char(character=/mob/living, late=boolean)
+	evargs=new /event_args/player_spawn(character=character, late=TRUE)
+	INVOKE_EVENT(on_post_equip_char, evargs)
+
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS
+	// FOR GOD'S SAKE USE EVENTS (USE on_post_equip_char)
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
@@ -359,6 +368,12 @@
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
 	ticker.mode.latespawn(character)
+
+	// @event global.on_post_latespawn(character=/mob/living, character=/mob/living, rank=string, late=boolean)
+	evargs=new /event_args/player_spawn(new_player=src, character=character, rank=rank, late=TRUE)
+	INVOKE_EVENT(on_post_latespawn, evargs)
+	character=evargs.character
+	rank=evargs.rank
 
 	if(character.mind.assigned_role != "Cyborg")
 		data_core.manifest_inject(character)

@@ -272,6 +272,9 @@ var/list/decals = list()
 var/global/event/on_login
 var/global/event/on_ban
 var/global/event/on_unban
+var/global/event/on_post_equip_char
+var/global/event/on_post_latespawn
+var/global/event/on_pre_assignrole
 
 // List of /plugins
 var/global/list/plugins = list()

@@ -991,6 +991,7 @@
 #include "code\modules\admin\admin_ranks.dm"
 #include "code\modules\admin\admin_verbs.dm"
 #include "code\modules\admin\banappearance.dm"
+#include "code\modules\admin\bancluwne.dm"
 #include "code\modules\admin\banjob.dm"
 #include "code\modules\admin\banooc.dm"
 #include "code\modules\admin\check_antagonists.dm"
