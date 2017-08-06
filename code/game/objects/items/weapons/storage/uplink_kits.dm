@@ -121,13 +121,14 @@
 			if("ocelot")
 				new /obj/item/weapon/gun/projectile/colt(src)
 				new /obj/item/weapon/gun/projectile/colt(src)
-				new /obj/item/ammo_storage/box/a357(src)
-				new /obj/item/ammo_storage/box/a357(src)
+				new /obj/item/ammo_storage/speedloader/a357(src)
+				new /obj/item/ammo_storage/speedloader/a357(src)
 				new /obj/item/clothing/mask/scarf/red(src)
 				new /obj/item/clothing/under/color/black(src)
 				new /obj/item/clothing/shoes/jackboots(src)
 				new /obj/item/clothing/head/beret/sec/ocelot(src)
 				new /obj/item/clothing/gloves/red(src)
+				new /obj/item/clothing/accessory/storage/bandolier(src)
 		tag = tagname
 
 
