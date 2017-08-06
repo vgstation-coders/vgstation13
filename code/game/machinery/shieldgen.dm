@@ -33,7 +33,7 @@
 
 //Looks like copy/pasted code... I doubt 'need_rebuild' is even used here - Nodrak
 /obj/machinery/shield/proc/update_nearby_tiles()
-	if (isnull(SSair))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc

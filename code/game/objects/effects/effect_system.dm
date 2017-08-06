@@ -948,7 +948,7 @@ steam.start() -- spawns the effect
 
 /obj/structure/foamedmetal/proc/update_nearby_tiles()
 
-	if (isnull(SSair))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc

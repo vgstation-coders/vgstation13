@@ -302,7 +302,7 @@ obj/structure/windoor_assembly/Destroy()
 	return
 
 /obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if (isnull(SSair))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc

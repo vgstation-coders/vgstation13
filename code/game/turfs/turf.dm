@@ -407,7 +407,7 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(SSair)
+		if(SS_READY(SSair))
 			SSair.mark_for_update(src)
 
 		W.levelupdate()
@@ -425,7 +425,7 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(SSair)
+		if(SS_READY(SSair))
 			SSair.mark_for_update(src)
 
 		W.levelupdate()

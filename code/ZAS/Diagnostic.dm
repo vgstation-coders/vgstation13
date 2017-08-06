@@ -132,7 +132,7 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		client.images -= client.zone_debug_images[src]
 		client.zone_debug_images.Remove(src)
 
-	if(SSair)
+	if(SS_READY(SSair))
 		for(var/zone/Z in SSair.zones)
 			if(Z.air == air && Z != src)
 				var/turf/zloc = pick(Z.contents)

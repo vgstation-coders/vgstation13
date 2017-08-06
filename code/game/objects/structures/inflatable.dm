@@ -195,7 +195,7 @@
 	deflate()
 
 /obj/structure/inflatable/proc/update_nearby_tiles(var/turf/T)
-	if(isnull(SSair))
+	if(!SS_READY(SSair))
 		return 0
 
 	if(!T)

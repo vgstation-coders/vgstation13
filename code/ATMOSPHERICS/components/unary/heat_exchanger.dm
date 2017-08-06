@@ -24,7 +24,7 @@
 
 /obj/machinery/atmospherics/unary/heat_exchanger/process()
 	. = ..()
-	if(!partner || !SSair || SSair.current_cycle <= update_cycle)
+	if(!partner || !SS_READY(SSair) || SSair.current_cycle <= update_cycle)
 		return
 
 	update_cycle = SSair.current_cycle

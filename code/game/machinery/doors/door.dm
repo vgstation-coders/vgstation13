@@ -366,7 +366,7 @@ var/list/all_doors = list()
 	return 1
 
 /obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
-	if(!SSair)
+	if(!SS_READY(SSair))
 		return 0
 
 	if(!T)
