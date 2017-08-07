@@ -174,7 +174,8 @@ var/list/forbidden_varedit_object_types = list(
 				to_chat(user, "Unknown type: [selected_type]")
 
 	if(istype(edited_datum))
-		edited_datum.variable_edited(edited_variable, var_value, result)
+		if(edited_datum.variable_edited(edited_variable, var_value, result))
+			return var_value //Return the old value if variable_edited blocked the edit
 
 	return result
 
