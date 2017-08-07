@@ -67,13 +67,11 @@
 
 /obj/spacepod/Destroy()
 	if(src.occupant)
-		src.occupant.forceMove(src.loc)
+		move_pilot_outside(occupant)
 		src.occupant.gib()
-		src.occupant = null
 	if(passengers.len)
 		for(var/mob/living/L in passengers)
-			L.forceMove(loc)
-			passengers.Remove(L)
+			move_passenger_outside(L)
 			L.gib()
 	if(actions.len)
 		for(var/datum/action/A in actions)
@@ -632,10 +630,9 @@
 					playsound(src, 'sound/weapons/rocket.ogg', 50, 1)
 					var/turf/T = get_turf(src)
 					var/turf/target_turf
-					L.forceMove(T)
+					move_passenger_outside(L,T)
 					target_turf = get_edge_target_turf(T, WEST)
 					L.throw_at(target_turf,100,3)
-					passengers.Remove(L)
 
 /obj/spacepod/proc/toggle_passenger_guns()
 	if(usr!=src.occupant)
