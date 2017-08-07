@@ -198,7 +198,7 @@ var/list/forbidden_varedit_object_types = list(
 	if (ticker == null)
 		to_chat(src, "Game hasn't started yet.")
 	else
-		src.modify_variables(ticker)
+		debug_variables(ticker)
 		feedback_add_details("admin_verb","ETV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 //Select and add a value to list L
