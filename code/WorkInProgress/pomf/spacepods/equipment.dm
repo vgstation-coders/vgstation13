@@ -53,6 +53,7 @@
 
 /datum/spacepod/equipment
 	var/obj/spacepod/my_atom
+	var/weapons_allowed = 1
 	var/obj/item/device/spacepod_equipment/weaponry/weapon_system // weapons system
 	//var/obj/item/device/spacepod_equipment/engine/engine_system // engine system
 	//var/obj/item/device/spacepod_equipment/shield/shield_system // shielding system
