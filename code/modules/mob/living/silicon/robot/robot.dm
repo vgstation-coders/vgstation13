@@ -405,11 +405,11 @@
 
 	var/picked  = pick(module_sprites)
 	icon_state = module_sprites[picked]
+	base_icon = icon_state
 
 	if(!forced_module)
 		choose_icon(6, module_sprites)
 
-	base_icon = icon_state
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
@@ -467,7 +467,7 @@
 		if(newname == null)
 			if(alert(src,"Are you sure you want a default borg name?",,"Yes","No") == "Yes")
 				break
-		else 
+		else
 			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
 				break
 
