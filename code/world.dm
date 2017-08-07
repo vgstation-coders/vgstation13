@@ -25,6 +25,11 @@ var/savefile/panicfile
 	on_ban   = new ()
 	on_unban = new ()
 
+	// Player spawn things (used for cluwne/catbeast bans)
+	on_post_equip_char = new ()
+	on_post_latespawn = new ()
+	on_pre_assignrole = new ()
+
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
@@ -83,6 +88,7 @@ var/savefile/panicfile
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	oocban_loadbanfile()
+	cluwneban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()

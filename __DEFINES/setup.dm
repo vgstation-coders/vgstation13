@@ -623,6 +623,7 @@ var/list/liftable_structures = list(\
 #define BANTYPE_APPEARANCE	6
 #define BANTYPE_OOC_PERMA	7
 #define BANTYPE_OOC_TEMP	8
+#define BANTYPE_CLUWNE      9
 
 #define SEE_INVISIBLE_MINIMUM 5
 
@@ -1391,6 +1392,9 @@ var/proccalls = 1
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
+
+// Is this nerd doomed to be a cluwne for the rest of their existance?
+#define is_cluwne_banned(key) cluwneban_keylist.Find("[ckey(key)]")
 
 //message modes. you're not supposed to mess with these.
 #define MODE_HEADSET "headset"

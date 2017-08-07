@@ -37,6 +37,10 @@
 		if(BANTYPE_OOC_TEMP)
 			bantype_str = "OOC_TEMPBAN"
 			bantype_pass = 1
+		if(BANTYPE_CLUWNE)
+			bantype_str = "CLUWNEBAN"
+			duration = -1
+			bantype_pass = 1
 	if( !bantype_pass )
 		return
 	if( !istext(reason) )
@@ -332,6 +336,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		<option value='[BANTYPE_APPEARANCE]'>APPEARANCE BAN</option>
 		<option value='[BANTYPE_OOC_PERMA]'>OOC_PERMABAN</option>
 		<option value='[BANTYPE_OOC_TEMP]'>OOC_TEMPBAN</option>
+		<option value='[BANTYPE_CLUWNE]'>CLUWNEBAN</option>
 		</select></td>
 		<td><b>Ckey:</b> <input type='text' name='dbbanaddckey'></td></tr>
 		<tr><td><b>Duration:</b> <input type='text' name='dbbaddduration'></td>
@@ -423,6 +428,8 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 					typedesc = "<b>PERMA OOCBAN</b>"
 				if("OOC_TEMPBAN")
 					typedesc = "<b>TEMP OOCBAN</b>"
+				if("CLUWNEBAN")
+					typedesc = "<b>CLUWNE BAN</b>"
 
 
 			output += {"<tr bgcolor='[dcolor]'>

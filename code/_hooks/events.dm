@@ -50,3 +50,30 @@
 		args["event"] = src
 		if(call(objRef,procName)(args, holder)) //An intercept value so whatever code section knows we mean business
 			. = 1
+
+
+/**
+* This is used to hold arguments fed to events so they can be read afterwards.
+*
+* var/event_args/subtype/myargs = new (ass=blast, usa=1)
+* INVOKE_EVENT(myevent, myargs)
+* if(myargs.usa)...
+*/
+/event_args
+	// Common stuff
+	var/cancel = FALSE // Used to cancel some action afterwards
+
+/**
+ * Used in player spawning things. (new_player.dm)
+ */
+/event_args/player_spawn
+	var/mob/new_player/new_player = null
+	var/mob/living/character = null
+	var/rank = ""
+	var/late = FALSE
+
+/event_args/player_spawn/New(var/mob/new_player/new_player=null, var/mob/living/character=null, var/rank="", var/late=FALSE)
+	src.new_player=new_player
+	src.character=character
+	src.rank=rank
+	src.late=late
