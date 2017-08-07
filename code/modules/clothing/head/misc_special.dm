@@ -240,7 +240,6 @@
 	desc = "Ocelot's signature red beret"
 
 /obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
-	var/mob/living/carbon/human/W = wearer
-	if(W.head == src)
+	if(wearer.head == src)
 		if(prob(5))
-			W.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
+			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
