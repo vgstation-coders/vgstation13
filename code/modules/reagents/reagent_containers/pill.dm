@@ -23,7 +23,7 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(user, "<span class='notice'><B>Remove your [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
 			return 0
 
 	return attack(user, user) //Dealt with in attack code
@@ -33,7 +33,7 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(user, "<span class='notice'><B>Remove their [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
 			return 0
 	if (user != M && (ishuman(M) || ismonkey(M)))
 		user.visible_message("<span class='warning'>[user] attempts to force [M] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [M] to swallow \the [src].</span>")
