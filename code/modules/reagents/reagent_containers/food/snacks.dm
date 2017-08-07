@@ -114,7 +114,7 @@
 			if(ishuman(target))
 				var/mob/living/carbon/human/H = target
 				if(H.check_body_part_coverage(MOUTH))
-					to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
+					to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
 					return 0
 
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
@@ -137,7 +137,7 @@
 			if(ishuman(target))
 				var/mob/living/carbon/human/H = target
 				if(H.check_body_part_coverage(MOUTH))
-					to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
+					to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
 					return 0
 
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25)
@@ -171,7 +171,7 @@
 	if(ishuman(eater))
 		var/mob/living/carbon/human/H = eater
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(eater, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			to_chat(eater, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
 			return 0
 		
 	if(!eatverb)

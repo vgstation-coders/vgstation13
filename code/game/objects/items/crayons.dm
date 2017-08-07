@@ -214,7 +214,7 @@ var/global/list/all_graffitis = list(
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(H.check_body_part_coverage(MOUTH))
-				to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
+				to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
 				return
 		user.visible_message("<span class='notice'>[user] bites a chunk out of \the [src].</span>", \
 			"<span class='notice'>You bite a chunk out of \the [src].</span>")

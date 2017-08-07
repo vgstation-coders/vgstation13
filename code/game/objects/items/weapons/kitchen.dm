@@ -87,7 +87,7 @@
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				if(H.check_body_part_coverage(MOUTH))
-					to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
+					to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
 					return
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 			feed_to(user, user)
@@ -96,7 +96,7 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.check_body_part_coverage(MOUTH))
-					to_chat(user, "<span class='notice'><B>Remove [H.get_body_part_coverage(MOUTH)]!</B></span>")
+					to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
 					return
 			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
 			if(do_mob(user, M))
