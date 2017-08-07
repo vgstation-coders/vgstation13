@@ -310,6 +310,14 @@ var/list/ai_list = list()
 			icon_state = "ai-pres"
 		if("Fort")
 			icon_state = "ai-boxfort"
+		if("Mothman")
+			icon_state = "ai-mothman"
+		if("Dancing Hotdog")
+			icon_state = "ai-hotdog"
+		if("Diagnosis")
+			icon_state = "ai-atlantiscze"
+		if("Drink It!")
+			icon_state = "ai-silveryferret"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
