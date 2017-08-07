@@ -321,7 +321,7 @@
 		<b>C</b> - Change, asks you for the var type first.<br>
 		<b>M</b> - Mass modify: changes this variable for all objects of this type.</font><br>
 		<hr><table width='100%'><tr><td width='20%'><div align='center'><b>Search:</b></div></td><td width='80%'><input type='text' id='filter' name='filter_text' value='' style='width:100%;'></td></tr></table><hr>
-		<ol id='vars'>"}
+		<ul id='vars'>"}
 	var/list/names = list()
 	for (var/V in D.vars)
 		names += V
@@ -331,7 +331,7 @@
 	for (var/V in names)
 		body += debug_variable(V, D.vars[V], 0, D)
 
-	body += "</ol>"
+	body += "</ul>"
 	body = jointext(body,"")
 
 	var/html = "<html><head>"
@@ -369,7 +369,12 @@ body
 	var/html = ""
 
 	if(DA)
-		html += "<li style='backgroundColor:white'>(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>) (<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>) (<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>) "
+		html += {"
+		<li style='backgroundColor:white'>
+		(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
+		(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
+		(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
+		(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
 	else
 		html += "<li>"
 
@@ -491,8 +496,7 @@ body
 			to_chat(usr, "This can only be used on instances of types /client or /datum")
 			return
 
-		modify_variables(D, href_list["varnameedit"], 1)
-
+		variable_set(src, D, href_list["varnameedit"], TRUE)
 	else if(href_list["togbit"])
 		if(!check_rights(R_VAREDIT))
 			return
@@ -517,7 +521,7 @@ body
 			to_chat(usr, "This can only be used on instances of types /client or /datum")
 			return
 
-		modify_variables(D, href_list["varnamechange"], 0)
+		variable_set(src, D, href_list["varnameedit"])
 
 	else if(href_list["varnamemass"] && href_list["datummass"])
 		if(!check_rights(R_VAREDIT))
@@ -528,7 +532,18 @@ body
 			to_chat(usr, "This can only be used on instances of type /atom")
 			return
 
-		cmd_mass_modify_object_variables(A, href_list["varnamemass"])
+		cmd_mass_modify_object_variables(A.type, href_list["varnamemass"])
+	else if(href_list["varnamesave"] && href_list["datumsave"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumsave"])
+
+		if(A)
+			var/saved_value = A.vars[href_list["varnamesave"]]
+
+			holder.marked_datum = saved_value
+			to_chat(usr, "Your marked datum is now: [holder.marked_datum]")
 
 	else if(href_list["mob_player_panel"])
 		if(!check_rights(0))

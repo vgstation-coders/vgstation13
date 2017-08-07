@@ -139,6 +139,8 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define isdatum(A) (istype(A, /datum))
+
 #define isclient(A) (istype(A, /client))
 
 #define isatom(A) (istype(A, /atom))

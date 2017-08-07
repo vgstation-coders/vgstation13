@@ -4,6 +4,17 @@
 /mob
 	plane = MOB_PLANE
 
+/mob/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("stat")
+			if((old_value == 2) && (new_value < 2))//Bringing the dead back to life
+				resurrect()
+			else if((old_value < 2) && (new_value == 2))//Kill he
+				living_mob_list.Remove(src)
+				dead_mob_list.Add(src)
+
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 

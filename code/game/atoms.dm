@@ -61,6 +61,19 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/handle_beams()
 	return 1
 
+/atom/variable_edited(variable_name, old_value, new_value)
+	.=..()
+
+	switch(variable_name)
+		if("light_color")
+			set_light(l_color = new_value)
+			return 1
+		if("light_range")
+			set_light(new_value)
+			return 1
+		if("light_power")
+			set_light(l_power = new_value)
+
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
