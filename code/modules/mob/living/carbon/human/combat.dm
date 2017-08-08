@@ -36,8 +36,8 @@
 	if(src.zone_sel.selecting == "mouth" && !(S.status & ORGAN_DESTROYED) && ishuman(target) && !(T.check_body_part_coverage(MOUTH)))
 		T.forcesay("-")
 		target.visible_message( 
-			"<span class='danger'>[src] places a finger over [target]'s mouth and shushes them.</span>",
-			"<span class='danger'>You place a finger over [target]'s mouth and shush them.</span>", 
+			"<span class='danger'>[src] places a hand over [target]'s mouth!</span>",
+			"<span class='danger'>You place a hand over [target]'s mouth!</span>", 
 			)
 		return
 
