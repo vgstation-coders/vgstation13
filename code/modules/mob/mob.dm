@@ -2015,9 +2015,8 @@ mob/proc/on_foot()
 /mob/proc/covered_mouth_consumables_check(var/mob/feedee)
 	if(ishuman(feedee))
 		var/mob/living/carbon/human/H = feedee
-		if(H.check_body_part_coverage(MOUTH))
-			if(H.species.breath_type == "oxygen")
-				to_chat(src, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-				return TRUE
-			else
-				return FALSE 
+		if(H.check_body_part_coverage(MOUTH) && H.species.breath_type == "oxygen" && !(H.job in list("Clown", "Mime")))
+			to_chat(src, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
+			return TRUE
+		else
+			return FALSE 
