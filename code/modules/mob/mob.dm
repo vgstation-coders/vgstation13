@@ -2016,7 +2016,8 @@ mob/proc/on_foot()
 	if(ishuman(feedee))
 		var/mob/living/carbon/human/H = feedee
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(src, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-			return TRUE
-		else
-			return FALSE 
+			if(H.species.breath_type == "oxygen")
+				to_chat(src, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
+				return TRUE
+			else
+				return FALSE 
