@@ -2202,7 +2202,6 @@
 #include "code\ZAS\Connection.dm"
 #include "code\ZAS\ConnectionGroup.dm"
 #include "code\ZAS\ConnectionManager.dm"
-#include "code\ZAS\Controller.dm"
 #include "code\ZAS\Debug.dm"
 #include "code\ZAS\Diagnostic.dm"
 #include "code\ZAS\Fire.dm"

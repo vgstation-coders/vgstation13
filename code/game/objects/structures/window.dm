@@ -500,18 +500,18 @@
 	dir = ini_dir
 	update_nearby_tiles()
 
-//This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_tiles().
+//This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_icons().
 /obj/structure/window/proc/update_nearby_tiles(var/turf/T)
 
 
-	if(isnull(air_master))
+	if(!SS_READY(SSair))
 		return 0
 
 	if(!T)
 		T = get_turf(src)
 
 	if(isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1
 

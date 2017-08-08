@@ -17,8 +17,6 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 	priority      = SS_PRIORITY_LIGHTING
 	flags         = SS_TICKER
 
-	var/initialized = FALSE
-
 	var/list/currentrun_lights
 	var/list/currentrun_corners
 	var/list/currentrun_overlays
@@ -36,7 +34,6 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 /datum/subsystem/lighting/Initialize(timeofday)
 	create_all_lighting_overlays()
-	initialized = TRUE
 
 	..()
 

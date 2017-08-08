@@ -49,7 +49,7 @@ Class Procs:
 	var/datum/gas_mixture/air = new
 
 /zone/New()
-	air_master.add_zone(src)
+	SSair.add_zone(src)
 	air.temperature = TCMB
 	air.group_multiplier = 1
 	air.volume = CELL_VOLUME
@@ -58,7 +58,7 @@ Class Procs:
 #ifdef ZASDBG
 	ASSERT(!invalid)
 	ASSERT(istype(T))
-	ASSERT(!air_master.has_valid_zone(T))
+	ASSERT(!SSair.has_valid_zone(T))
 #endif
 
 	var/datum/gas_mixture/turf_air = T.return_air()
@@ -98,7 +98,7 @@ Class Procs:
 
 /zone/proc/c_invalidate()
 	invalid = 1
-	air_master.remove_zone(src)
+	SSair.remove_zone(src)
 	#ifdef ZASDBG
 	for(var/turf/simulated/T in contents)
 		T.dbg(invalid_zone)
@@ -111,7 +111,7 @@ Class Procs:
 	for(var/turf/simulated/T in contents)
 		//T.dbg(invalid_zone)
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 /zone/proc/add_tile_air(datum/gas_mixture/tile_air)
 	//air.volume += CELL_VOLUME

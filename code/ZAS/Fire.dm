@@ -256,10 +256,10 @@ Attach to transfer valve and open. BOOM.
 	. = ..()
 	dir = pick(cardinal)
 	set_light(3)
-	air_master.active_hotspots.Add(src)
+	SSair.add_hotspot(src)
 
 /obj/effect/fire/Destroy()
-	air_master.active_hotspots.Remove(src)
+	SSair.remove_hotspot(src)
 
 	set_light(0)
 	..()
