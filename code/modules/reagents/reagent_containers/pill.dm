@@ -20,21 +20,15 @@
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		if(H.check_body_part_coverage(MOUTH))
-			to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-			return 0
+	if(user.covered_mouth_consumables_check(user))
+		return 0
 
 	return attack(user, user) //Dealt with in attack code
 
 /obj/item/weapon/reagent_containers/pill/attack(mob/M as mob, mob/user as mob, def_zone)
 	// Feeding others needs time to succeed
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.check_body_part_coverage(MOUTH))
-			to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-			return 0
+	if(user.covered_mouth_consumables_check(M))
+		return 0
 	if (user != M && (ishuman(M) || ismonkey(M)))
 		user.visible_message("<span class='warning'>[user] attempts to force [M] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [M] to swallow \the [src].</span>")
 

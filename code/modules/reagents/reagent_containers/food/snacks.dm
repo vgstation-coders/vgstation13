@@ -111,11 +111,8 @@
 			if(!can_consume(M, user))
 				return 0
 				
-			if(ishuman(target))
-				var/mob/living/carbon/human/H = target
-				if(H.check_body_part_coverage(MOUTH))
-					to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-					return 0
+			if(user.covered_mouth_consumables_check(target))
+				return 0
 
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
 
@@ -134,11 +131,8 @@
 
 		else //Feeding someone else, target is eating, user is feeding
 		
-			if(ishuman(target))
-				var/mob/living/carbon/human/H = target
-				if(H.check_body_part_coverage(MOUTH))
-					to_chat(user, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-					return 0
+			if(user.covered_mouth_consumables_check(target))
+				return 0
 
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25)
 
@@ -168,11 +162,8 @@
 	if(!istype(eater))
 		return
 		
-	if(ishuman(eater))
-		var/mob/living/carbon/human/H = eater
-		if(H.check_body_part_coverage(MOUTH))
-			to_chat(eater, "<span class='notice'><B>Remove \the [H.get_body_part_coverage(MOUTH)]!</B></span>")
-			return 0
+	if(eater.covered_mouth_consumables_check(eater))
+		return 0
 		
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
