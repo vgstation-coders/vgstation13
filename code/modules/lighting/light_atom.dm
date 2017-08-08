@@ -31,12 +31,11 @@
 		if(light_obj && !light_obj.gcDestroyed)
 			light_obj.follow_holder()
 
-#warn setdir
-/*
-/atom/set_dir()
+
+/atom/movable/change_dir()
 	. = ..()
 	update_contained_lights()
-*/
+
 /atom/movable/Move()
 	. = ..()
 	update_contained_lights()

@@ -327,7 +327,6 @@
 /turf/proc/add_dust()
 	return
 
-#warn redo changeturf from scratch for new lights
 //Creates a new turf
 /turf/proc/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	if(loc)
@@ -428,6 +427,12 @@
 		W.levelupdate()
 
 		. = W
+
+	if (SSlighting && SSlighting.initialized)
+		if(old_opacity != opacity)
+			for(var/obj/light/L in range(5, src)) //view(world.view, dview_mob))
+				lighting_update_lights |= L
+
 
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.

@@ -34,18 +34,7 @@
 		color = light_color
 	..(get_turf(holder))
 
-#warn what the fuck is the equivalent for all of these
 /obj/light/Destroy()
-//	if(moved_event)
-//		moved_event.unregister(holder, src)
-#warn setdir
-/*
-	if(dir_set_event)
-		dir_set_event.unregister(holder, src)
-*/
-//	if(destroyed_event)
-//		destroyed_event.unregister(holder, src)
-
 	transform = null
 	appearance = null
 	overlays = null
@@ -74,8 +63,6 @@
 	if(!isnull(newrange) && current_power != newrange)
 		current_power = newrange
 
-#warn setdir
-/*
 // Orients the light to the holder's (or the holder's holder) current dir.
 // Also updates rotation for directional lights when appropriate.
 /obj/light/proc/follow_holder_dir()
@@ -83,30 +70,29 @@
 		set_dir(holder.loc.dir)
 	else
 		set_dir(holder.dir)
-*/
+
 // Moves the light overlay to the holder's turf and updates bleeding values accordingly.
 /obj/light/proc/follow_holder()
 	if(lighting_update_lights)
 		if(holder && holder.loc)
+			follow_holder_dir()
+
 			if(holder.loc.loc && ismob(holder.loc))
 				forceMove(holder.loc.loc)
 			else
 				forceMove(holder.loc)
-			#warn setdir
-/*
-			follow_holder_dir()
-*/
-			#warn test and integrate into MC better
-			cast_light() //lights_master.queue_light(src)
+
+			lighting_update_lights |= src
 	else
 		init_lights |= src
 
 /obj/light/proc/is_directional_light()
 	return (holder.light_type == LIGHT_DIRECTIONAL)
-#warn setdir
-/*
-/obj/light/set_dir()
-	..()
+
+/obj/light/proc/set_dir(new_dir)
+	if(dir == new_dir)
+		return
+	dir = new_dir
 	switch(dir)
 		if(NORTH)
 			pixel_x = -(world.icon_size * light_range) + world.icon_size / 2
@@ -120,6 +106,6 @@
 		if(WEST)
 			pixel_x = -(world.icon_size * light_range) - (world.icon_size * light_range) + world.icon_size
 			pixel_y = -(world.icon_size * light_range) + (world.icon_size / 2)
-*/
+
 /obj/light/proc/light_off()
 	alpha = 0

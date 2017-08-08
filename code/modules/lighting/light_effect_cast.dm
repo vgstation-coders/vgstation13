@@ -15,6 +15,14 @@ var/light_power_multiplier = 5
 /obj/light/proc/cast_light()
 	temp_appearance = list()
 
+	//cap light range to 5
+	light_range = min(5, light_range)
+
+	alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
+
+	for(var/turf/T in range(light_range, src))
+		affecting_turfs |= T
+
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
 			T.lumcount = -1
@@ -22,10 +30,9 @@ var/light_power_multiplier = 5
 		affecting_turfs.Cut()
 		return
 
-	//cap light range to 5
-	light_range = min(5, light_range)
+	for(var/turf/T in affecting_turfs)
+		T.affecting_lights |= src
 
-	alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
 
 	if(is_directional_light())
 		icon = 'icons/lighting/directional_overlays.dmi'
@@ -126,7 +133,6 @@ var/light_power_multiplier = 5
 
 	//and add it to the lights overlays
 	temp_appearance += I
-
 
 	var/targ_dir = get_dir(target_turf, src)
 
