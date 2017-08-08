@@ -93,19 +93,20 @@
 	if(dir == new_dir)
 		return
 	dir = new_dir
-	switch(dir)
-		if(NORTH)
-			pixel_x = -(world.icon_size * light_range) + world.icon_size / 2
-			pixel_y = 0
-		if(SOUTH)
-			pixel_x = -(world.icon_size * light_range) + world.icon_size / 2
-			pixel_y = -(world.icon_size * light_range) - world.icon_size * light_range + world.icon_size
-		if(EAST)
-			pixel_x = 0
-			pixel_y = -(world.icon_size * light_range) + world.icon_size / 2
-		if(WEST)
-			pixel_x = -(world.icon_size * light_range) - (world.icon_size * light_range) + world.icon_size
-			pixel_y = -(world.icon_size * light_range) + (world.icon_size / 2)
+	if(is_directional_light())
+		switch(dir)
+			if(NORTH)
+				pixel_x = -(world.icon_size * light_range) + world.icon_size / 2
+				pixel_y = 0
+			if(SOUTH)
+				pixel_x = -(world.icon_size * light_range) + world.icon_size / 2
+				pixel_y = -(world.icon_size * light_range) - world.icon_size * light_range + world.icon_size
+			if(EAST)
+				pixel_x = 0
+				pixel_y = -(world.icon_size * light_range) + world.icon_size / 2
+			if(WEST)
+				pixel_x = -(world.icon_size * light_range) - (world.icon_size * light_range) + world.icon_size
+				pixel_y = -(world.icon_size * light_range) + (world.icon_size / 2)
 
 /obj/light/proc/light_off()
 	alpha = 0
