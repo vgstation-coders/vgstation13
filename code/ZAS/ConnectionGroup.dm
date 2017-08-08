@@ -1,78 +1,57 @@
 /*
-
 Overview:
 	These are what handle gas transfers between zones and into space.
 	They are found in a zone's edges list and in SSair.edges.
 	Each edge updates every air tick due to their role in gas transfer.
 	They come in two flavors, /connection_edge/zone and /connection_edge/unsimulated.
 	As the type names might suggest, they handle inter-zone and spacelike connections respectively.
-
 Class Vars:
-
 	A - This always holds a zone. In unsimulated edges, it holds the only zone.
-
 	connecting_turfs - This holds a list of connected turfs, mainly for the sake of airflow.
-
 	coefficent - This is a marker for how many connections are on this edge. Used to determine the ratio of flow.
-
 	connection_edge/zone
-
 		B - This holds the second zone with which the first zone equalizes.
-
 		direct - This counts the number of direct (i.e. with no doors) connections on this edge.
 		         Any value of this is sufficient to make the zones mergeable.
-
 	connection_edge/unsimulated
-
 		B - This holds an unsimulated turf which has the gas values this edge is mimicing.
-
 		air - Retrieved from B on creation and used as an argument for the legacy ShareSpace() proc.
-
 Class Procs:
-
 	add_connection(connection/c)
 		Adds a connection to this edge. Usually increments the coefficient and adds a turf to connecting_turfs.
-
 	remove_connection(connection/c)
 		Removes a connection from this edge. This works even if c is not in the edge, so be careful.
 		If the coefficient reaches zero as a result, the edge is erased.
-
 	contains_zone(zone/Z)
 		Returns true if either A or B is equal to Z. Unsimulated connections return true only on A.
-
 	erase()
 		Removes this connection from processing and zone edge lists.
-
 	tick()
 		Called every air tick on edges in the processing list. Equalizes gas.
-
 	flow(list/movable, differential, repelled)
 		Airflow proc causing all objects in movable to be checked against a pressure differential.
 		If repelled is true, the objects move away from any turf in connecting_turfs, otherwise they approach.
 		A check against vsc.lightest_airflow_pressure should generally be performed before calling this.
-
 	get_connected_zone(zone/from)
 		Helper proc that allows getting the other zone of an edge given one of them.
 		Only on /connection_edge/zone, otherwise use A.
-
 */
 
 
-/connection_edge/var/zone/A
+/connection_edge
+	var/zone/A
 
-/connection_edge/var/list/connecting_turfs = list()
+	var/list/connecting_turfs = list()
 
-/connection_edge/var/coefficient = 0
+	var/coefficient = 0
 
 /connection_edge/New()
 	CRASH("Cannot make connection edge without specifications.")
 
 /connection_edge/proc/add_connection(connection/c)
 	coefficient++
-//	to_chat(world, "Connection added: [type] Coefficient: [coefficient]")
 
 /connection_edge/proc/remove_connection(connection/c)
-//	to_chat(world, "Connection removed: [type] Coefficient: [coefficient-1]")
 	coefficient--
 	if(coefficient <= 0)
 		erase()
@@ -81,7 +60,6 @@ Class Procs:
 
 /connection_edge/proc/erase()
 	SSair.remove_edge(src)
-//	to_chat(world, "[type] Erased.")
 
 /connection_edge/proc/tick()
 
@@ -144,7 +122,6 @@ Class Procs:
 	A.edges.Add(src)
 	B.edges.Add(src)
 	//id = edge_id(A,B)
-//	to_chat(world, "New edge between [A] and [B]")
 
 /connection_edge/zone/add_connection(connection/c)
 	. = ..()
@@ -170,20 +147,15 @@ Class Procs:
 	if(A.invalid || B.invalid)
 		erase()
 		return
-//	to_chat(world, "[id]: Tick [SSair.current_cycle]: \...")
 	if(direct)
 		if(SSair.equivalent_pressure(A, B))
-//			to_chat(world, "merged.")
 			erase()
 			SSair.merge(A, B)
-//			to_chat(world, "zones merged.")
 			return
 
-	//SSair.equalize(A, B)
 	ShareRatio(A.air,B.air,coefficient)
 	SSair.mark_zone_update(A)
 	SSair.mark_zone_update(B)
-//	to_chat(world, "equalized.")
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
 	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
@@ -219,7 +191,6 @@ Class Procs:
 	A.edges.Add(src)
 	air = B.return_air()
 	//id = 52*A.id
-//	to_chat(world, "New edge from [A] to [B].")
 
 /connection_edge/unsimulated/add_connection(connection/c)
 	. = ..()
