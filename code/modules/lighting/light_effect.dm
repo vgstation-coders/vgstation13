@@ -24,6 +24,8 @@
 	var/list/affecting_turfs = list()
 	var/list/temp_appearance
 
+	var/DEBUG_MESSAGES = FALSE
+
 /obj/light/New(var/newholder)
 	holder = newholder
 	if(istype(holder, /atom))

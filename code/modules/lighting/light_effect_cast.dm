@@ -93,13 +93,49 @@ var/light_power_multiplier = 5
 	if(abs(x_offset) > abs(y_offset))
 		xy_swap = 1
 
-	var/image/I = image(icon)
+	var/shadowoffset
+	switch(light_range)
+		if(2)
+			shadowoffset = 80
+		if(3)
+			shadowoffset = 112
+		if(4)
+			shadowoffset = 144
+		if(5)
+			shadowoffset = 176
+		else
+			return
 
 	//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
+
+	//for optimization purposes, shadows are only as big as either a fourth of the light or half of the light
+	//the shadow has to be offset to the correct position
+
+	var/image/I = image(icon)
+
+	var/num
 	if(xy_swap)
+		if(y_offset == 0)
+			num = 2
+		else
+			num = 1
 		I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 	else
+		if(x_offset == 0)
+			num = 2
+		else
+			num = 1
 		I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+
+	switch(light_range)
+		if(2)
+			I = image("icons/lighting/light_range_2_shadows[num].dmi")
+		if(3)
+			I = image("icons/lighting/light_range_3_shadows[num].dmi")
+		if(4)
+			I = image("icons/lighting/light_range_4_shadows[num].dmi")
+		if(5)
+			I = image("icons/lighting/light_range_5_shadows[num].dmi")
 
 	var/matrix/M = matrix()
 
@@ -117,6 +153,11 @@ var/light_power_multiplier = 5
 		x_flip = x_offset < 0 ? -1 : 1
 		y_flip = y_offset < 0 ? -1 : 1
 
+	if(num == 1)
+		M.Translate(shadowoffset, shadowoffset)
+	else
+		M.Translate(0, shadowoffset)
+
 	M.Scale(x_flip, y_flip)
 
 	//here we do the actual rotate if needed
@@ -129,6 +170,9 @@ var/light_power_multiplier = 5
 
 	//and add it to the lights overlays
 	temp_appearance += I
+
+	if(DEBUG_MESSAGES)
+		world << "iconstate: [I.icon_state] icon: [I.icon]"
 
 	var/targ_dir = get_dir(target_turf, src)
 
