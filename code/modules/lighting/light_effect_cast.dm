@@ -90,7 +90,7 @@ var/light_power_multiplier = 5
 
 	var/num = 2
 	if(x_offset || y_offset)
-		var/num = 1
+		num = 1
 
 
 	//due to only having one set of shadow templates, we need to rotate and flip them for up to 8 different directions
