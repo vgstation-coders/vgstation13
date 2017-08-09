@@ -1898,7 +1898,6 @@
 #include "code\modules\research\rdconsole.dm"
 #include "code\modules\research\rdmachines.dm"
 #include "code\modules\research\research.dm"
-#include "code\modules\research\research_shuttle.dm"
 #include "code\modules\research\server.dm"
 #include "code\modules\research\designs\AI_modules.dm"
 #include "code\modules\research\designs\anomaly.dm"
