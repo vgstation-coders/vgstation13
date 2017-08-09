@@ -78,3 +78,109 @@
 			if(isvampire(H) && !(VAMP_UNDYING in H.mind.vampire.powers))
 				H.mind.vampire.smitecounter += 60
 				to_chat(H, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
+
+/obj/item/weapon/nullrod/attack_self(mob/user)
+	if(reskinned)
+		return
+	if(user.mind && (user.mind.assigned_role == "Chaplain"))
+		reskin_holy_weapon(user)
+
+/obj/item/weapon/nullrod/proc/reskin_holy_weapon(mob/living/M)
+	var/list/holy_weapons_list = typesof(/obj/item/weapon/nullrod)
+	for(var/entry in holy_weapons_list)
+		var/obj/item/weapon/nullrod/variant = entry
+		if(!initial(variant.reskin_selectable))
+			holy_weapons_list -= variant
+	if(fluff_transformations.len)
+		for(var/thing in fluff_transformations)
+			holy_weapons_list += thing
+	var/list/display_names = list()
+	for(var/V in holy_weapons_list)
+		var/atom/A = V
+		display_names += initial(A.name)
+
+	var/choice = input(M,"What theme would you like for your holy weapon?","Holy Weapon Theme") as null|anything in display_names
+	if(!src || !choice || !in_range(M, src) || M.incapacitated() || reskinned)
+		return
+
+	var/index = display_names.Find(choice)
+	var/A = holy_weapons_list[index]
+
+	var/obj/item/weapon/nullrod/holy_weapon = new A
+
+	feedback_set_details("chaplain_weapon","[choice]")
+
+	if(holy_weapon)
+		visible_message("<span class='notice'>[M.name] invokes the power of [ticker.Bible_deity_name] to transform \the [src] into \a [holy_weapon.name]!</span>")
+		holy_weapon.reskinned = TRUE
+		M.drop_item(src, force_drop = 1)
+		M.put_in_active_hand(holy_weapon)
+		qdel(src)
+
+/obj/item/weapon/nullrod/sword
+	name = "holy avenger"
+	icon_state = "avenger"
+	item_state = "avenger"
+	desc = "DEUS VULT!"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK|SLOT_BELT
+	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	hitsound = 'sound/weapons/bladeslice.ogg'
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+
+/obj/item/weapon/nullrod/sword/IsShield()
+	return prob(10) //Only TRIES to block 10% of the attacks. SO MANY LAYERS OF RNG but hey.
+
+/obj/item/weapon/nullrod/sword/cult //Muh cult religion.
+	name = "cult blade"
+	desc = "Spread the glory of the blood god!"
+	icon_state = "cultblade"
+	item_state = "cultblade"
+
+/obj/item/weapon/nullrod/sword/katana //*tips fedora*
+	name = "saint katana"
+	desc = "This weapon can cut clean through plasteel because its blade was folded over a thousand times, making it vastly superior to any other holy weapon."
+	icon_state = "katana"
+	item_state = "katana"
+	force = 5 //Katanas are actually underpowered holy weapons
+	sharpness = 2 //GLORIOUS NIPPON STEEL
+
+/obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
+	name = "nullbox"
+	desc = "The holder of nothingness. If you holy book isn't working, try this one instead."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "toolbox_syndi"
+	item_state = "toolbox_syndi"
+	hitsound = 'sound/weapons/toolbox.ogg'
+	attack_verb = list("robusts", "batters", "staves in")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
+	w_class = W_CLASS_LARGE
+
+/obj/item/weapon/nullrod/spear
+	name = "divine brass spear"
+	desc = "A holy, bronze weapon of ancient design."
+	hitsound = 'sound/weapons/bladeslice.ogg'
+	icon_state = "clockwork0"
+	item_state = "clockwork0"
+	attack_verb = list("stabs", "pokes", "pierces", "cuts")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	w_class = W_CLASS_LARGE
+	flags = TWOHANDABLE
+	force = 8
+	sharpness = 1
+	sharpness_flags = SHARP_TIP
+
+/obj/item/weapon/nullrod/spear/update_wield(var/mob/user)
+	icon_state = "clockwork[wielded ? 1 : 0]"
+	item_state = "clockwork[wielded ? 1 : 0]"
+	force = wielded ? 16 : initial(force)
+	if(user)
+		user.update_inv_hands()
+
+/obj/item/weapon/nullrod/spear/attack_self(mob/user)
+	if(wielded)
+		unwield(user)
+	else
+		wield(user)
