@@ -357,7 +357,7 @@ obj/effect/bmode/buildholder/New()
 							for(var/atom/thing in T.contents)
 								if(thing==usr)
 									continue
-								if(istype(thing, /atom/movable/lighting_overlay))
+								if(thing.invisibility > usr.see_invisible)
 									continue
 
 								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
@@ -677,8 +677,11 @@ obj/effect/bmode/buildholder/New()
 			A.appearance = C.holder.marked_appearance.appearance
 
 		else if(A.vars.Find(varname))
-			log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
-			A.vars[varname] = varvalue
+
+			if(!A.variable_edited(varname, A.vars[varname], varvalue))
+				log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
+				A.vars[varname] = varvalue
+
 	else
 		if(A.vars.Find(varname))
 			log_admin("[key_name(usr)] modified [A.name]'s [varname] to initial")

@@ -231,10 +231,10 @@ var/list/forbidden_varedit_object_types = list(
 	var/variable = input("Select a variable to remove from the list, or select (ADD VAR) to add a new one","Var") as null|anything in L + "(ADD VAR)"
 
 	if(!variable)
-		return
+		return L
 	else if(variable == "(ADD VAR)")
 		mod_list_add(L)
-		return
+		return L
 	else
 		L.Remove(variable)
 

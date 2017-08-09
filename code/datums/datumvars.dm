@@ -554,6 +554,9 @@ body
 			else if(variable_contains_protected_list(variable_name)) //Checks for lists like 'vars', 'contents' and 'locs' that can't be edited
 				to_chat(usr, "<span class='notice'>The list [variable_name] is protected, and can't be saved. Saving a copy of it...</span>")
 				var/list/L = saved_value
+
+				sanitize_contents_list(L)
+
 				holder.marked_datum = L.Copy()
 
 			else if(islist(saved_value))

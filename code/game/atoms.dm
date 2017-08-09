@@ -74,6 +74,15 @@ var/global/list/ghdel_profiling = list()
 		if("light_power")
 			set_light(l_power = new_value)
 
+		if("contents")
+			if(islist(new_value))
+				if(length(new_value) == 0) //empty list
+					return 0 //Replace the contents list with an empty list, nullspacing everything
+				else
+					//If the new value is a list with objects, don't nullspace the old objects, and merge the two lists together peacefully
+					contents.Add(new_value)
+					return 1
+
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
