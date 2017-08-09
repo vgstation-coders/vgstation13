@@ -7,11 +7,12 @@
 		return
 
 	if(istext(target_type))
-		target_type = input("Select an object type to mass-modify", "Mass-editing") as null|anything in matching_type_list(target_type, /atom)
+		target_type = input("Select an object type to mass-modify", "Mass-editing") as null|anything in get_matching_types(target_type, /atom)
 
 		//get_vars_from_type() fails on turf and area objects. If you want to mass-edit a turf, you have to do it through the varedit window
 		if(ispath(target_type, /atom) && !ispath(target_type, /atom/movable))
 			to_chat(src, "<span class='warning'>It's impossible to perform this task on objects of type [target_type] through the verb. Use the mass edit function from View Variables instead.")
+			return
 	if(!target_type)
 		return
 
@@ -40,15 +41,15 @@
 		if("Set new value")
 			new_value = variable_set(usr)
 
-	mass_modify_variable(target_type, variable_name, new_value, reset_to_initial, include_subtypes)
-
-	feedback_add_details("admin_verb","MEV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	//Log the action before actually performing it, in case it crashes the server
+	feedback_add_details("admin_verb","MEV")
 	log_admin("[key_name(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [new_value] "]")
 	message_admins("[key_name_admin(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [new_value] "]", 1)
 
+	mass_modify_variable(target_type, variable_name, new_value, reset_to_initial, include_subtypes)
+
 //Mass-modifies all atoms of type [type], changing their variable [var_name] to [new_value]
 //If reset_to_initial is TRUE, the variables will be reset to their initial values, instead of getting a new value
-
 /proc/mass_modify_variable(type, var_name, new_value, reset_to_initial = FALSE, include_subtypes = TRUE)
 
 	var/base_path
@@ -62,10 +63,10 @@
 
 	if(!ispath(base_path, /atom))
 		to_chat(usr, "Mass-editing is not supported for objects of type [base_path]")
+		return
 
+	//BYOND's internal optimisation makes this work better than cycling through every atom
 	#define is_valid_atom(atom) (atom.type == base_path || (include_subtypes && istype(atom, base_path)))
-
-
 	if(ispath(base_path, /turf))
 		for(var/turf/A in world)
 			if(is_valid_atom(A))

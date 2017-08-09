@@ -538,12 +538,27 @@ body
 			return
 
 		var/atom/A = locate(href_list["datumsave"])
+		var/variable_name = href_list["varnamesave"]
 
 		if(A)
-			var/saved_value = A.vars[href_list["varnamesave"]]
+			var/saved_value = A.vars[variable_name]
 
-			holder.marked_datum = saved_value
-			to_chat(usr, "Your marked datum is now: [holder.marked_datum]")
+			if(variable_contains_protected_list(variable_name)) //Checks for lists like 'vars', 'contents' and 'locs' that can't be edited
+				to_chat(usr, "<span class='notice'>The list [variable_name] is protected, and can't be saved. Saving a copy of it...</span>")
+				var/list/L = saved_value
+				holder.marked_datum = L.Copy()
+
+			else if(islist(saved_value))
+				if(alert("Save this exact list, or a copy of it? A copy is independent, and changing it will not affect the original list.", "Datum saving", "Save Copy", "Save Exact") == "Save Copy")
+					var/list/L = saved_value
+					holder.marked_datum = L.Copy()
+					to_chat(usr, "Saved a copy of the [variable_name] list as your marked datum.")
+				else
+					holder.marked_datum = saved_value
+					to_chat(usr, "Saved the original [variable_name] list as your marked datum.")
+			else
+				holder.marked_datum = saved_value
+				to_chat(usr, "Your marked datum is now: [holder.marked_datum]")
 
 	else if(href_list["mob_player_panel"])
 		if(!check_rights(0))

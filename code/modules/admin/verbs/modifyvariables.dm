@@ -5,16 +5,11 @@ var/list/forbidden_varedit_object_types = list(
 										/datum/configuration,	//prevents people from fucking with logging.
 									)
 
-/*
-/client/proc/cmd_modify_object_variables(obj/O as obj|mob|turf|area in world)
-	set category = "Debug"
-	set name = "Edit Variables"
-	set desc="(target) Edit a target item's variables"
-	src.modify_variables(O)
-	feedback_add_details("admin_verb","EDITV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-*/
-
-/proc/variable_set(mob/user, datum/edited_datum, edited_variable, autoselect_var_type = FALSE)
+//Interface for editing a variable. It doesn't change the variable - just returns its new value.
+//If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
+//If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
+//In addition to that, if [autoselect_var_type] is TRUE, the proc will attempt to
+/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE)
 	var/client/C
 
 	if(ismob(user))
@@ -39,112 +34,111 @@ var/list/forbidden_varedit_object_types = list(
 	#define V_CANCEL "cancel"
 	#define V_MATRIX "matrix"
 
-	var/list/choices = list(\
-	"text" = V_TEXT,
-	"num"  = V_NUM,
-	"type" = V_TYPE,
-	"empty list"      = V_LIST,
-	"object (nearby)" = V_OBJECT,
-	"icon"   = V_ICON,
-	"file"   = V_FILE,
-	"client" = V_CLIENT,
-	"matrix" = V_MATRIX,
-	"null"   = V_NULL,
-	)
-
-	if(C.holder.marked_datum)
-		var/list_item_name
-		if(isdatum(C.holder.marked_datum))
-			list_item_name = "marked datum ([C.holder.marked_datum.type])"
-
-		else if(isfile(C.holder.marked_datum))
-			list_item_name = "marked datum (file)"
-
-		else if(isicon(C.holder.marked_datum))
-			list_item_name = "marked datum (icon)"
-
-		else
-			list_item_name = "marked datum ([C.holder.marked_datum])"
-
-		choices[list_item_name] = V_MARKED_DATUM
+	var/new_variable_type
+	var/old_value = null //Old value of the variable
+	var/new_value //New value of the variable
 
 	if(istype(edited_datum) && edited_variable)
-		choices["restore to default"] = V_RESET
+		old_value = edited_datum.vars[edited_variable]
 
-	//Cancel belongs at the end
-	choices["CANCEL"] = V_CANCEL
-
-
-	var/class
-	var/var_value = null //Old value of the variable
-	var/result //New value of the variable
-
-	if(autoselect_var_type && istype(edited_datum) && edited_variable)
-		var_value = edited_datum.vars[edited_variable]
-
-		if(isnull(var_value))
-			to_chat(usr, "Unable to determine variable type.")
-		else if(isnum(var_value))
-			to_chat(usr, "Variable appears to be <b>NUM</b>.")
-			class = V_NUM
-		else if(istext(var_value))
-			to_chat(usr, "Variable appears to be <b>TEXT</b>.")
-			class = V_TEXT
-		else if(isloc(var_value))
-			to_chat(usr, "Variable appears to be <b>REFERENCE</b>. Selecting from nearby objects...")
-			class = V_OBJECT
-		else if(isicon(var_value))
-			to_chat(usr, "Variable appears to be <b>ICON</b>.")
-			class = V_ICON
-		else if(ispath(var_value))
-			to_chat(usr, "Variable appears to be <b>TYPE</b>.")
-			class = V_TYPE
-		else if(istype(var_value,/client))
-			to_chat(usr, "Variable appears to be <b>CLIENT</b>.")
-			class = V_CLIENT
-		else if(isfile(var_value))
-			to_chat(usr, "Variable appears to be <b>FILE</b>.")
-			class = V_FILE
-		else if(islist(var_value))
-			to_chat(usr, "Variable appears to be <b>LIST</b>.")
-			result = C.mod_list(var_value)
-		else if(ismatrix(var_value))
-			to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
-			result = C.modify_matrix_menu(var_value)
+		if(autoselect_var_type)
+			if(isnull(old_value))
+				to_chat(usr, "Unable to determine variable type.")
+			else if(isnum(old_value))
+				to_chat(usr, "Variable appears to be <b>NUM</b>.")
+				new_variable_type = V_NUM
+			else if(istext(old_value))
+				to_chat(usr, "Variable appears to be <b>TEXT</b>.")
+				new_variable_type = V_TEXT
+			else if(isloc(old_value))
+				to_chat(usr, "Variable appears to be <b>REFERENCE</b>. Selecting from nearby objects...")
+				new_variable_type = V_OBJECT
+			else if(isicon(old_value))
+				to_chat(usr, "Variable appears to be <b>ICON</b>.")
+				new_variable_type = V_ICON
+			else if(ispath(old_value))
+				to_chat(usr, "Variable appears to be <b>TYPE</b>.")
+				new_variable_type = V_TYPE
+			else if(istype(old_value,/client))
+				to_chat(usr, "Variable appears to be <b>CLIENT</b>.")
+				new_variable_type = V_CLIENT
+			else if(isfile(old_value))
+				to_chat(usr, "Variable appears to be <b>FILE</b>.")
+				new_variable_type = V_FILE
+			else if(islist(old_value))
+				to_chat(usr, "Variable appears to be <b>LIST</b>.")
+				new_value = C.mod_list(old_value) //Use a custom interface for list editing
+			else if(ismatrix(old_value))
+				to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+				new_value = C.modify_matrix_menu(old_value) //Use a custom interface for matrix editing
 
 
-	if(!class && !result)
-		class = input("What kind of variable?","Variable Type") in choices
-	var/selected_type = choices[class]
+	if(!new_value) //If a custom interface hasn't already set the value
 
-	if(!result)
+		//Build the choices list
+		var/list/choices = list(\
+		"text" = V_TEXT,
+		"num"  = V_NUM,
+		"type" = V_TYPE,
+		"empty list"      = V_LIST,
+		"object (nearby)" = V_OBJECT,
+		"icon"   = V_ICON,
+		"file"   = V_FILE,
+		"client" = V_CLIENT,
+		"matrix" = V_MATRIX,
+		"null"   = V_NULL,
+		)
+
+		if(C.holder.marked_datum) //Add the marked datum option
+			var/list_item_name
+			if(isdatum(C.holder.marked_datum))
+				list_item_name = "marked datum ([C.holder.marked_datum.type])"
+			else if(isfile(C.holder.marked_datum))
+				list_item_name = "marked datum (file)"
+			else if(isicon(C.holder.marked_datum))
+				list_item_name = "marked datum (icon)"
+			else
+				list_item_name = "marked datum ([C.holder.marked_datum])"
+			choices[list_item_name] = V_MARKED_DATUM
+
+		if(istype(edited_datum) && edited_variable) //Add the restore to default option
+			choices["restore to default"] = V_RESET
+
+		//Add the cancel option
+		choices["CANCEL"] = V_CANCEL
+
+		if(!new_variable_type)
+			new_variable_type = input("What kind of variable?","Variable Type") in choices
+		var/selected_type = choices[new_variable_type]
+		var/window_title = "Varedit [edited_datum]"
+
 		switch(selected_type)
 			if(V_CANCEL)
 				return
 
 			if(V_TEXT)
-				result = input("Enter new text:","Text",null) as text
+				new_value = input("Enter new text:", window_title, old_value) as text
 
 			if(V_NUM)
-				result = input("Enter new number:","Num",0) as num
+				new_value = input("Enter new number:", window_title, old_value) as num
 
 			if(V_TYPE)
-				var/partial_type = input("Enter type, or leave blank to see all types", "Type") as text|null
+				var/partial_type = input("Enter type, or leave blank to see all types", window_title, "[old_value]") as text|null
 
-				var/list/matches = matching_type_list(partial_type, /datum)
-				result = input("Select type","Type") as null|anything in matches
+				var/list/matches = get_matching_types(partial_type, /datum)
+				new_value = input("Select type", window_title) as null|anything in matches
 
 			if(V_LIST)
-				result = list()
+				new_value = list()
 
 			if(V_OBJECT)
-				result = input("Select reference:","Reference",src) as mob|obj|turf|area in range(8, get_turf(user))
+				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
 
 			if(V_FILE)
-				result = input("Pick file:","File") as file
+				new_value = input("Pick file:", window_title) as file
 
 			if(V_ICON)
-				result = input("Pick icon:","Icon") as icon
+				new_value = input("Pick icon:", window_title) as icon
 
 			if(V_CLIENT)
 				var/list/keys = list()
@@ -152,32 +146,32 @@ var/list/forbidden_varedit_object_types = list(
 					if(M.client)
 						keys += M.client
 
-				result = input("Please, select a player!", "Selection", null, null) as null|anything in keys
+				new_value = input("Please, select a player!", window_title, null, null) as null|anything in keys
 
 			if(V_MARKED_DATUM)
-				result = C.holder.marked_datum
+				new_value = C.holder.marked_datum
 
 			if(V_RESET)
 				if(istype(edited_datum) && edited_variable)
-					result = initial(edited_datum.vars[edited_variable])
+					new_value = initial(edited_datum.vars[edited_variable])
 
-					edited_datum.vars[edited_variable] = result
-					to_chat(user, "Restored '[edited_variable]' to original value - [result]")
+					edited_datum.vars[edited_variable] = new_value
+					to_chat(user, "Restored '[edited_variable]' to original value - [new_value]")
 
 			if(V_NULL)
-				result = null
+				new_value = null
 
 			if(V_MATRIX)
-				result = matrix()
+				new_value = matrix()
 
 			else
 				to_chat(user, "Unknown type: [selected_type]")
 
 	if(istype(edited_datum))
-		if(edited_datum.variable_edited(edited_variable, var_value, result))
-			return var_value //Return the old value if variable_edited blocked the edit
+		if(edited_datum.variable_edited(edited_variable, old_value, new_value))
+			return old_value //Return the old value if the variable_edited proc blocked the edit
 
-	return result
+	return new_value
 
 	#undef V_MARKED_DATUM
 	#undef V_RESET

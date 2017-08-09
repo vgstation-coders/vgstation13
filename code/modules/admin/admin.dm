@@ -1279,7 +1279,7 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = matching_type_list(object, /atom)
+	var/list/matches = get_matching_types(object, /atom)
 
 	if(matches.len==0)
 		return

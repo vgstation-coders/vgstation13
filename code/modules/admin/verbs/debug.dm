@@ -1210,7 +1210,7 @@ client/proc/check_convertables()
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = matching_type_list(object, /datum) - typesof(/turf)
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area)
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
