@@ -128,8 +128,6 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BACK|SLOT_BELT
-	sharpness = 1
-	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
@@ -147,8 +145,6 @@
 	desc = "This weapon can cut clean through plasteel because its blade was folded over a thousand times, making it vastly superior to any other holy weapon."
 	icon_state = "katana"
 	item_state = "katana"
-	force = 5 //Katanas are actually underpowered holy weapons
-	sharpness = 2 //GLORIOUS NIPPON STEEL
 
 /obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
 	name = "nullbox"
@@ -171,14 +167,10 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	w_class = W_CLASS_LARGE
 	flags = TWOHANDABLE | FPRINT
-	force = 8 //Have you tried to using a lance with only one hand? Shit's hard.
-	sharpness = 1
-	sharpness_flags = SHARP_TIP
 
 /obj/item/weapon/nullrod/spear/update_wield(var/mob/user)
 	icon_state = "clockwork[wielded ? 1 : 0]"
 	item_state = icon_state
-	force = wielded ? 16 : initial(force) //We're using both hands so let's give it +1 force
 	if(user)
 		user.update_inv_hands()
 
