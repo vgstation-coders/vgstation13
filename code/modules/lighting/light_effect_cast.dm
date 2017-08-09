@@ -83,9 +83,15 @@ var/light_power_multiplier = 5
 	temp_appearance = null
 
 /obj/light/proc/CastShadow(var/turf/target_turf)
+	world << "DEBUG: cast shadow called"
 	//get the x and y offsets for how far the target turf is from the light
 	var/x_offset = target_turf.x - x
 	var/y_offset = target_turf.y - y
+
+	var/num = 2
+	if(x_offset || y_offset)
+		var/num = 1
+
 
 	//due to only having one set of shadow templates, we need to rotate and flip them for up to 8 different directions
 	//first check is to see if we will need to "rotate" the shadow template
@@ -111,31 +117,13 @@ var/light_power_multiplier = 5
 	//for optimization purposes, shadows are only as big as either a fourth of the light or half of the light
 	//the shadow has to be offset to the correct position
 
-	var/image/I = image(icon)
+	var/image/I = image("icons/lighting/light_range_[light_range]_shadows[num].dmi")
 
-	var/num
 	if(xy_swap)
-		if(y_offset == 0)
-			num = 2
-		else
-			num = 1
 		I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 	else
-		if(x_offset == 0)
-			num = 2
-		else
-			num = 1
 		I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
 
-	switch(light_range)
-		if(2)
-			I = image("icons/lighting/light_range_2_shadows[num].dmi")
-		if(3)
-			I = image("icons/lighting/light_range_3_shadows[num].dmi")
-		if(4)
-			I = image("icons/lighting/light_range_4_shadows[num].dmi")
-		if(5)
-			I = image("icons/lighting/light_range_5_shadows[num].dmi")
 
 	var/matrix/M = matrix()
 
@@ -172,7 +160,7 @@ var/light_power_multiplier = 5
 	temp_appearance += I
 
 	if(DEBUG_MESSAGES)
-		world << "iconstate: [I.icon_state] icon: [I.icon]"
+		world << "DEBUG: icon state: [I.icon_state] icon: [I.icon]"
 
 	var/targ_dir = get_dir(target_turf, src)
 
