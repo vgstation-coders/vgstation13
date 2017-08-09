@@ -369,12 +369,17 @@ body
 	var/html = ""
 
 	if(DA)
-		html += {"
-		<li style='backgroundColor:white'>
-		(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
-		(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
-		(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
-		(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
+		html += "<li style='backgroundColor:white'>"
+		if(name == "appearance")
+			html += {"
+			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
+			<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>load</a>) "}
+		else
+			html += {"
+			(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
+			(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
+			(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
+			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
 	else
 		html += "<li>"
 
@@ -543,7 +548,10 @@ body
 		if(A)
 			var/saved_value = A.vars[variable_name]
 
-			if(variable_contains_protected_list(variable_name)) //Checks for lists like 'vars', 'contents' and 'locs' that can't be edited
+			if(variable_name == "appearance" && (isimage(A) || isatom(A))) //Appearance is a special case
+				holder.marked_appearance = A
+				to_chat(usr, "Saved [A] as your stored appearance.")
+			else if(variable_contains_protected_list(variable_name)) //Checks for lists like 'vars', 'contents' and 'locs' that can't be edited
 				to_chat(usr, "<span class='notice'>The list [variable_name] is protected, and can't be saved. Saving a copy of it...</span>")
 				var/list/L = saved_value
 				holder.marked_datum = L.Copy()

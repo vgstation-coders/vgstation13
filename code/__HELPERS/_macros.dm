@@ -139,6 +139,8 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define isimage(A) (istype(A, /image))
+
 #define isdatum(A) (istype(A, /datum))
 
 #define isclient(A) (istype(A, /client))

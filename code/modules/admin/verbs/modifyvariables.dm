@@ -20,6 +20,18 @@ var/list/forbidden_varedit_object_types = list(
 	if(!C || !C.holder)
 		return
 
+	//Special case for "appearance", because appearance values can't be stored anywhere.
+	//It's impossible for this proc to return an appearance value, so just set it directly here
+	if((isimage(edited_datum) || isatom(edited_datum)) && edited_variable == "appearance")
+		if(!C.holder.marked_appearance)
+			to_chat(usr, "You don't have a saved appearance!")
+			return
+		else
+			var/atom/A = edited_datum
+			A.appearance = C.holder.marked_appearance.appearance
+			to_chat(usr, "Changed [edited_datum]'s appearance to [C.holder.marked_appearance]")
+			return
+
 	#define V_MARKED_DATUM "marked_datum"
 	#define V_RESET "reset"
 	#define V_TEXT "text"

@@ -196,23 +196,13 @@ obj/effect/bmode/buildholder/New()
 			if(3)
 				var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "viruses", "cuffed", "ka", "last_eaten", "urine")
 
-				master.buildmode.varholder = input(usr,"Enter variable name:" ,"Name", "name")
-				if(master.buildmode.varholder in locked && !check_rights(R_DEBUG,0))
+				var/edit_variable = input(usr,"Enter variable name:" ,"Name", "name")
+				if(edit_variable in locked && !check_rights(R_DEBUG,0))
 					return 1
-				var/thetype = input(usr,"Select variable type:" ,"Type") in list("text","number","mob-reference","obj-reference","turf-reference")
-				if(!thetype)
-					return 1
-				switch(thetype)
-					if("text")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", "value") as text
-					if("number")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", 123) as num
-					if("mob-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as mob in mob_list
-					if("obj-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as obj in world
-					if("turf-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as turf in world
+
+				master.buildmode.varholder = edit_variable
+				if(edit_variable != "appearance") //Special case for appearance
+					master.buildmode.valueholder = variable_set(usr)
 	return 1
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
 	return Click(object,location,control,params)
@@ -367,6 +357,9 @@ obj/effect/bmode/buildholder/New()
 							for(var/atom/thing in T.contents)
 								if(thing==usr)
 									continue
+								if(istype(thing, /atom/movable/lighting_overlay))
+									continue
+
 								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset)
 									edits++
@@ -626,17 +619,18 @@ obj/effect/bmode/buildholder/New()
 
 		if(3)
 			if(pa.Find("left")) //I cant believe this shit actually compiles.
-				if(object.vars.Find(holder.buildmode.varholder))
-					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
-					object.vars[holder.buildmode.varholder] = holder.buildmode.valueholder
-				else
+				if(!object.vars.Find(holder.buildmode.varholder))
 					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
+					return
+
+				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 0)
+
 			if(pa.Find("right"))
-				if(object.vars.Find(holder.buildmode.varholder))
-					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
-					object.vars[holder.buildmode.varholder] = initial(object.vars[holder.buildmode.varholder])
-				else
+				if(!object.vars.Find(holder.buildmode.varholder))
 					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
+					return
+
+				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 1) //Reset the var to its initial value
 
 		if(4)
 			if(pa.Find("left"))
@@ -671,8 +665,18 @@ obj/effect/bmode/buildholder/New()
 	return chosen
 
 /proc/setvar(varname, varvalue, atom/A, reset = 0)
-	if(!reset) //I cant believe this shit actually compiles.
-		if(A.vars.Find(varname))
+	if(!reset)
+		if(varname == "appearance") //Special case for "appearance"
+			var/client/C = usr.client
+			if(!C || !C.holder)
+				return
+			if(!C.holder.marked_appearance)
+				to_chat(usr, "You don't have a saved appearance!")
+				return
+
+			A.appearance = C.holder.marked_appearance.appearance
+
+		else if(A.vars.Find(varname))
 			log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
 			A.vars[varname] = varvalue
 	else
