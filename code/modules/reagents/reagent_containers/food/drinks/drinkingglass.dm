@@ -409,7 +409,7 @@
 					icon_state = SOY_LATTE
 					item_state = SOY_LATTE
 					name = "soy latte"
-					desc = "A nice and refrshing beverage while you are reading."
+					desc = "A nice and refreshing beverage while you are reading."
 				if(CAFE_LATTE)
 					icon_state = CAFE_LATTE
 					item_state = CAFE_LATTE
