@@ -9,6 +9,8 @@ var/light_power_multiplier = 5
 // Casts shadows from occluding objects for a given light.
 
 /obj/light/proc/cast_light()
+	light_color = null
+
 	temp_appearance = list()
 
 	//cap light range to 5
@@ -83,7 +85,8 @@ var/light_power_multiplier = 5
 	temp_appearance = null
 
 /obj/light/proc/CastShadow(var/turf/target_turf)
-	world << "DEBUG: cast shadow called"
+	if(DEBUG_MESSAGES)
+		to_chat(world, "DEBUG: cast shadow called")
 	//get the x and y offsets for how far the target turf is from the light
 	var/x_offset = target_turf.x - x
 	var/y_offset = target_turf.y - y
@@ -150,7 +153,9 @@ var/light_power_multiplier = 5
 	temp_appearance += I
 
 	if(DEBUG_MESSAGES)
-		world << "DEBUG: icon state: [I.icon_state] icon: [I.icon]"
+		to_chat(world, "DEBUG: icon state: [I.icon_state] icon: [I.icon]")
+
+	/*
 
 	var/targ_dir = get_dir(target_turf, src)
 
@@ -167,6 +172,8 @@ var/light_power_multiplier = 5
 	I.layer = 3
 
 	temp_appearance += I
+
+	*/
 
 /obj/light/proc/CheckOcclusion(var/turf/T)
 	if(!istype(T))
