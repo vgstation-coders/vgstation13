@@ -668,30 +668,9 @@ obj/effect/bmode/buildholder/New()
 
 /proc/setvar(varname, varvalue, atom/A, reset = 0, log = TRUE)
 	if(!reset)
-		if(varname == "appearance") //Special case for "appearance"
-			var/client/C = usr.client
-			if(!C || !C.holder)
-				return
-			if(!C.holder.marked_appearance)
-				to_chat(usr, "You don't have a saved appearance!")
-				return
-
-			A.appearance = C.holder.marked_appearance.appearance
-
-		else if(A.vars.Find(varname))
-
-			if(!A.variable_edited(varname, A.vars[varname], varvalue))
-				if(log)
-					log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
-
-				A.vars[varname] = varvalue
-
+		variable_set(usr, A, varname, value_override = varvalue, logging = log)
 	else
-		if(A.vars.Find(varname))
-			if(log)
-				log_admin("[key_name(usr)] modified [A.name]'s [varname] to initial")
-
-			A.vars[varname] = initial(A.vars[varname])
+		variable_set(usr, A, varname, value_override = initial(A.vars[varname]), logging = log)
 
 #undef BOTTOM_LEFT
 #undef TOP_RIGHT

@@ -496,12 +496,14 @@ body
 		if(!check_rights(R_VAREDIT))
 			return
 
-		var/D = locate(href_list["datumedit"])
+		var/datum/D = locate(href_list["datumedit"])
 		if(!istype(D,/datum) && !istype(D,/client))
 			to_chat(usr, "This can only be used on instances of types /client or /datum")
 			return
 
-		variable_set(src, D, href_list["varnameedit"], TRUE)
+		var/var_name = href_list["varnameedit"]
+		var/new_value = variable_set(src, D, href_list["varnameedit"], TRUE)
+		D.vars[var_name] = new_value
 	else if(href_list["togbit"])
 		if(!check_rights(R_VAREDIT))
 			return
@@ -521,13 +523,14 @@ body
 		if(!check_rights(R_VAREDIT))
 			return
 
-		var/D = locate(href_list["datumchange"])
+		var/datum/D = locate(href_list["datumchange"])
 		if(!istype(D,/datum) && !istype(D,/client))
 			to_chat(usr, "This can only be used on instances of types /client or /datum")
 			return
 
-		variable_set(src, D, href_list["varnameedit"])
-
+		var/var_name = href_list["varnameedit"]
+		var/new_value = variable_set(src, D, var_name)
+		D.vars[var_name] = new_value
 	else if(href_list["varnamemass"] && href_list["datummass"])
 		if(!check_rights(R_VAREDIT))
 			return

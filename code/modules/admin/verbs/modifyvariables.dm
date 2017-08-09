@@ -5,11 +5,10 @@ var/list/forbidden_varedit_object_types = list(
 										/datum/configuration,	//prevents people from fucking with logging.
 									)
 
-//Interface for editing a variable. It doesn't change the variable - just returns its new value.
+//Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
 //If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
 //If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
-//In addition to that, if [autoselect_var_type] is TRUE, the proc will attempt to
-/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE)
+/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE)
 	var/client/C
 
 	if(ismob(user))
@@ -27,6 +26,9 @@ var/list/forbidden_varedit_object_types = list(
 			to_chat(usr, "You don't have a saved appearance!")
 			return
 		else
+			if(logging)
+				log_admin("[key_name(usr)] modified [edited_datum]'s appearance to [C.holder.marked_appearance]")
+
 			var/atom/A = edited_datum
 			A.appearance = C.holder.marked_appearance.appearance
 			to_chat(usr, "Changed [edited_datum]'s appearance to [C.holder.marked_appearance]")
@@ -48,11 +50,16 @@ var/list/forbidden_varedit_object_types = list(
 
 	var/new_variable_type
 	var/old_value = null //Old value of the variable
-	var/new_value //New value of the variable
+	var/new_value = value_override //New value of the variable
 
-	if(istype(edited_datum) && edited_variable)
+	if(edited_datum && edited_variable)
+		//Check if the variable actually exists
+		if(!edited_datum.vars.Find(edited_variable))
+			return
+
 		old_value = edited_datum.vars[edited_variable]
 
+	if(!new_value)
 		if(autoselect_var_type)
 			if(isnull(old_value))
 				to_chat(usr, "Unable to determine variable type.")
@@ -86,7 +93,6 @@ var/list/forbidden_varedit_object_types = list(
 
 
 	if(!new_value) //If a custom interface hasn't already set the value
-
 		//Build the choices list
 		var/list/choices = list(\
 		"text" = V_TEXT,
@@ -113,7 +119,7 @@ var/list/forbidden_varedit_object_types = list(
 				list_item_name = "marked datum ([C.holder.marked_datum])"
 			choices[list_item_name] = V_MARKED_DATUM
 
-		if(istype(edited_datum) && edited_variable) //Add the restore to default option
+		if(edited_datum && edited_variable) //Add the restore to default option
 			choices["restore to default"] = V_RESET
 
 		//Add the cancel option
@@ -164,7 +170,7 @@ var/list/forbidden_varedit_object_types = list(
 				new_value = C.holder.marked_datum
 
 			if(V_RESET)
-				if(istype(edited_datum) && edited_variable)
+				if(edited_datum && edited_variable)
 					new_value = initial(edited_datum.vars[edited_variable])
 
 					edited_datum.vars[edited_variable] = new_value
@@ -179,9 +185,14 @@ var/list/forbidden_varedit_object_types = list(
 			else
 				to_chat(user, "Unknown type: [selected_type]")
 
-	if(istype(edited_datum))
+	if(edited_datum && edited_variable)
+		if(logging)
+			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [new_value]")
+
 		if(edited_datum.variable_edited(edited_variable, old_value, new_value))
-			return old_value //Return the old value if the variable_edited proc blocked the edit
+			new_value = old_value //Return the old value if the variable_edited proc blocked the edit
+
+		edited_datum.vars[edited_variable] = new_value
 
 	return new_value
 
