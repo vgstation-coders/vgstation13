@@ -531,7 +531,7 @@ body
 			return
 
 		var/original_name = "[D]"
-		var/edited_variable = href_list["varnameedit"]
+		var/edited_variable = href_list["varnamechange"]
 		var/new_value = variable_set(src, D, edited_variable)
 		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
 		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
