@@ -359,9 +359,11 @@ obj/effect/bmode/buildholder/New()
 									continue
 								if(thing.invisibility > usr.see_invisible)
 									continue
+								if(!istype(thing, /mob) && !istype(thing, /obj)) //Checks if thing is either an object or a mob. Ignore other /atom/movable subtypes (such as lighting overlays)
+									continue
 
 								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
-									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset)
+									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset, log = FALSE)
 									edits++
 								CHECK_TICK
 						edits++
@@ -664,7 +666,7 @@ obj/effect/bmode/buildholder/New()
 			return
 	return chosen
 
-/proc/setvar(varname, varvalue, atom/A, reset = 0)
+/proc/setvar(varname, varvalue, atom/A, reset = 0, log = TRUE)
 	if(!reset)
 		if(varname == "appearance") //Special case for "appearance"
 			var/client/C = usr.client
@@ -679,12 +681,16 @@ obj/effect/bmode/buildholder/New()
 		else if(A.vars.Find(varname))
 
 			if(!A.variable_edited(varname, A.vars[varname], varvalue))
-				log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
+				if(log)
+					log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
+
 				A.vars[varname] = varvalue
 
 	else
 		if(A.vars.Find(varname))
-			log_admin("[key_name(usr)] modified [A.name]'s [varname] to initial")
+			if(log)
+				log_admin("[key_name(usr)] modified [A.name]'s [varname] to initial")
+
 			A.vars[varname] = initial(A.vars[varname])
 
 #undef BOTTOM_LEFT
