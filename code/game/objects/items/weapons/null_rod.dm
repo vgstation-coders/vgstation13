@@ -161,7 +161,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/nullrod/spear
+/obj/item/weapon/nullrod/spear //Ratvar? How!
 	name = "divine brass spear"
 	desc = "A holy, bronze weapon of ancient design."
 	hitsound = 'sound/weapons/bladeslice.ogg'
@@ -170,15 +170,15 @@
 	attack_verb = list("stabs", "pokes", "pierces", "cuts")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	w_class = W_CLASS_LARGE
-	flags = TWOHANDABLE
-	force = 8
+	flags = TWOHANDABLE | FPRINT
+	force = 8 //Have you tried to using a lance with only one hand? Shit's hard.
 	sharpness = 1
 	sharpness_flags = SHARP_TIP
 
 /obj/item/weapon/nullrod/spear/update_wield(var/mob/user)
 	icon_state = "clockwork[wielded ? 1 : 0]"
-	item_state = "clockwork[wielded ? 1 : 0]"
-	force = wielded ? 16 : initial(force)
+	item_state = icon_state
+	force = wielded ? 16 : initial(force) //We're using both hands so let's give it +1 force
 	if(user)
 		user.update_inv_hands()
 
