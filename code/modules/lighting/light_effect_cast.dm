@@ -99,18 +99,8 @@ var/light_power_multiplier = 5
 	if(abs(x_offset) > abs(y_offset))
 		xy_swap = 1
 
-	var/shadowoffset
-	switch(light_range)
-		if(2)
-			shadowoffset = 80
-		if(3)
-			shadowoffset = 112
-		if(4)
-			shadowoffset = 144
-		if(5)
-			shadowoffset = 176
-		else
-			return
+	var/shadowoffset = (0.5 + light_range) * WORLD_ICON_SIZE
+
 
 	//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
 
