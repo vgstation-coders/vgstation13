@@ -17,7 +17,7 @@
 	plane = LIGHTING_PLANE_MASTER
 	mouse_opacity = 0
 
-#warning poor inheritance shitcode
+//poor inheritance shitcode
 /obj/backdrop
 	blend_mode = BLEND_OVERLAY
 	icon = 'icons/mob/screen1.dmi'
@@ -33,7 +33,6 @@
 	M.Scale(world.view*3)
 	transform = M
 	verbs.Cut()
-
 
 /obj/screen/plane/dark
 	blend_mode = BLEND_ADD

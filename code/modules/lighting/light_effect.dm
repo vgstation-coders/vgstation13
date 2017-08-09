@@ -82,7 +82,7 @@
 			else
 				forceMove(holder.loc)
 
-			lighting_update_lights |= src
+			cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
 	else
 		init_lights |= src
 
