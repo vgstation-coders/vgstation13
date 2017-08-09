@@ -364,9 +364,10 @@
 	return 1
 
 /mob/living/simple_animal/hostile/mechahitler/Die()
-	set waitfor = 1
+	set waitfor = 0
 	dir = 2
 	say("Eva, auf wiedersehen!")
+	ranged = 0
 	sleep(10)
 	explosion(loc,1,2,3)
 	new/obj/item/weapon/gun/gatling(loc)
