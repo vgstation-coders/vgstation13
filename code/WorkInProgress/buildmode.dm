@@ -552,48 +552,12 @@ obj/effect/bmode/buildholder/New()
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
-							T.icon = holder.buildmode.copycat.icon
-							T.icon_state = holder.buildmode.copycat.icon_state
-							T.dir = holder.builddir.dir
-							if(holder.buildmode.copycat.overlays.len)
-								T.overlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.overlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.overlays[i]
-									T.overlays += thing
-							if(holder.buildmode.copycat.underlays.len)
-								T.underlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.underlays[i]
-									T.underlays += thing
+							T.appearance = holder.buildmode.copycat.appearance
 					else
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
+							A.appearance = holder.buildmode.copycat.appearance
 							A.dir = holder.builddir.dir
-							A.icon = holder.buildmode.copycat.icon
-							A.gender = holder.buildmode.copycat.gender
-							A.name = holder.buildmode.copycat.name
-							A.icon_state = holder.buildmode.copycat.icon_state
-							A.alpha = holder.buildmode.copycat.alpha
-							A.color = holder.buildmode.copycat.color
-							A.maptext = holder.buildmode.copycat.maptext
-							A.maptext_height = holder.buildmode.copycat.maptext_height
-							A.maptext_width = holder.buildmode.copycat.maptext_width
-							A.light_color = holder.buildmode.copycat.light_color
-							A.luminosity = holder.buildmode.copycat.luminosity
-							A.molten = holder.buildmode.copycat.molten
-							A.pixel_x = holder.buildmode.copycat.pixel_x
-							A.pixel_y = holder.buildmode.copycat.pixel_y
-							A.invisibility = holder.buildmode.copycat.invisibility
-							if(holder.buildmode.copycat.overlays.len)
-								A.overlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.overlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.overlays[i]
-									A.overlays += thing
-							if(holder.buildmode.copycat.underlays.len)
-								A.underlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.underlays[i]
-									A.underlays += thing
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(ispath(holder.buildmode.objholder,/turf))
