@@ -435,7 +435,7 @@
 	return ffuu
 
 /obj/machinery/microwave/CtrlClick(mob/user)
-    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
+    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored && !issilicon(user))
         cook() //Cook checks for power, brokenness, and contents internally
         return
     return ..()
@@ -444,7 +444,7 @@
 	if(operating)
 		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
 		return
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && !issilicon(user))
 		dispose()
 		return
 	return ..()
