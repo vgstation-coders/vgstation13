@@ -711,19 +711,19 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		altTitles += "[a]:[player_alt_titles[a]];"
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))           // WHEN ADDING NEW COLUMNS, REMEMBER THE BLOCK AT THE END OF THE LINE --->
-		if(!check.NextRow())          //1         2           3         4          5               6       7    8        9         10          11          12          13                 14            15                   16                   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, random_body) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                  //1         2           3         4          5               6       7    8        9         10          11          12          13                 14            15                   16
-                                  ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, be_random_body)
+	if(check.Execute(db))
+		if(!check.NextRow())
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, random_body)\
+			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?)",
+			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, be_random_body)
 			if(!q.Execute(db))
 				message_admins("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
-			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,random_body=? WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, be_random_body, ckey, slot)
+			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,random_body=?   WHERE player_ckey = ? AND player_slot = ?",\
+									  metadata,   real_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  be_random_body,       ckey,               slot)
 			if(!q.Execute(db))
 				message_admins("UpdatePlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("UpdatePlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -737,16 +737,17 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	check.Add("SELECT player_ckey FROM body WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT INTO body (player_ckey,player_slot,hair_red,hair_green,hair_blue,facial_red,facial_green,facial_blue,skin_tone,hair_style_name,facial_style_name,eyes_red,eyes_green,eyes_blue,underwear,backbag) \
-					VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ckey, slot, r_hair, g_hair, b_hair, r_facial, g_facial, b_facial, s_tone, h_style, f_style, r_eyes, g_eyes, b_eyes, underwear, backbag)
+			q.Add("INSERT INTO body (player_ckey, player_slot, hair_red, hair_green, hair_blue, facial_red, facial_green, facial_blue, skin_tone, hair_style_name, facial_style_name, eyes_red, eyes_green, eyes_blue, underwear, backbag) \
+			                 VALUES (?,           ?,           ?,        ?,          ?,         ?,          ?,            ?,           ?,         ?,               ?,                 ?,        ?,          ?,         ?,         ?)",
+			                         ckey,        slot,        r_hair,   g_hair,     b_hair,    r_facial,   g_facial,     b_facial,    s_tone,    h_style,         f_style,           r_eyes,   g_eyes,     b_eyes,    underwear, backbag)
 			if(!q.Execute(db))
 				message_admins("InsertBody: Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("InsertBody: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Body")
 		else
-			q.Add("UPDATE body SET hair_red=?,hair_green=?,hair_blue=?,facial_red=?,facial_green=?,facial_blue=?,skin_tone=?,hair_style_name=?,facial_style_name=?,eyes_red=?,eyes_green=?,eyes_blue=?,underwear=?,backbag=? WHERE player_ckey = ? AND player_slot = ?",\
-									r_hair, g_hair, b_hair, r_facial, g_facial, b_facial, s_tone, h_style, f_style, r_eyes, g_eyes, b_eyes, underwear, backbag, ckey, slot)
+			q.Add("UPDATE body SET hair_red=?, hair_green=?, hair_blue=?, facial_red=?, facial_green=?, facial_blue=?, skin_tone=?, hair_style_name=?, facial_style_name=?, eyes_red=?, eyes_green=?, eyes_blue=?, underwear=?, backbag=? WHERE player_ckey = ? AND player_slot = ?",\
+			                       r_hair,     g_hair,       b_hair,      r_facial,     g_facial,       b_facial,      s_tone,      h_style,           f_style,             r_eyes,     g_eyes,       b_eyes,      underwear,   backbag,        ckey,               slot)
 			if(!q.Execute(db))
 				message_admins("UpdateBody: Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("UpdateBody: Error #:[q.Error()] - [q.ErrorMsg()]")
