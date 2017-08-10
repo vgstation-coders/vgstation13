@@ -41,6 +41,12 @@ log transactions
 	if(ticker)
 		initialize()
 
+/obj/machinery/atm/Destroy()
+	if(scan)
+		scan.forceMove(get_turf(src))
+		scan = null
+	..()
+
 /obj/machinery/atm/process()
 	if(stat & NOPOWER)
 		return
