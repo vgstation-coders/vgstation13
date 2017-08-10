@@ -43,7 +43,7 @@ log transactions
 
 /obj/machinery/atm/Destroy()
 	if(scan)
-		scan.forceMove(get_turf(src))
+		qdel(scan)
 		scan = null
 	..()
 
@@ -89,6 +89,9 @@ log transactions
 			user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			new /obj/item/stack/sheet/metal (src.loc,2)
+			if(scan)
+				scan.forceMove(get_turf(src))
+				scan = null
 			qdel(src)
 			return
 	if(istype(I, /obj/item/weapon/card/id))
