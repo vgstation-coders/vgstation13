@@ -89,9 +89,9 @@ var/light_power_multiplier = 5
 	var/x_offset = target_turf.x - x
 	var/y_offset = target_turf.y - y
 
-	var/num = 2
-	if(x_offset || y_offset)
-		num = 1
+	var/num = 1
+	if((abs(x_offset) > 0 && !y_offset) || (abs(y_offset) > 0 && !x_offset))
+		num = 2
 
 
 	//due to only having one set of shadow templates, we need to rotate and flip them for up to 8 different directions
@@ -100,13 +100,10 @@ var/light_power_multiplier = 5
 	if(abs(x_offset) > abs(y_offset))
 		xy_swap = 1
 
-	var/shadowoffset = (0.5 + light_range) * WORLD_ICON_SIZE
+	var/shadowoffset = 16 + 32 * light_range
 
 
 	//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-
-	//for optimization purposes, shadows are only as big as either a fourth of the light or half of the light
-	//the shadow has to be offset to the correct position
 
 	var/shadowicon
 	switch(light_range)
@@ -161,10 +158,25 @@ var/light_power_multiplier = 5
 	if(xy_swap)
 		M.Turn(90)
 
+	//warning: you are approaching shitcode (this is where we move the shadow to the correct quadrant based on its rotation and flipping)
+	//shadows are only as big as a quarter or half of the light for optimization
+
+	//please for the love of god change this if there's a better way
+
 	if(num == 1)
-		M.Translate(shadowoffset, shadowoffset)
+		if((x_flip == 1 && y_flip == 1 && xy_swap == 0) || (x_flip == 0 && y_flip == 1 && x_flip == 1) || (x_flip == -1 && y_flip == 1 && xy_swap == 1))
+			M.Translate(shadowoffset, shadowoffset)
+		else if((x_flip == 1 && y_flip == -1 && xy_swap == 0) || (x_flip == 1 && y_flip == 1 && xy_swap == 1))
+			M.Translate(shadowoffset, 0)
+		else if((x_flip == 1 && y_flip == -1 && xy_swap == 0) || (xy_swap == 1 && x_flip == -1 && y_flip == -1) || (x_flip == -1 && y_flip == 1 && xy_swap == 0))
+			M.Translate(0, shadowoffset)
 	else
-		M.Translate(0, shadowoffset)
+		if(x_flip == 1 && y_flip == 1 && xy_swap == 0)
+			M.Translate(0, shadowoffset)
+		else if(x_flip == 1 && y_flip == 1 && xy_swap == 1)
+			M.Translate(shadowoffset / 2, shadowoffset / 2)
+		else if(x_flip == 1 && y_flip == -1 && xy_swap == 1)
+			M.Translate(-shadowoffset / 2, shadowoffset / 2)
 
 	//apply the transform matrix
 	I.transform = M
@@ -188,8 +200,6 @@ var/light_power_multiplier = 5
 	I.layer = 3
 
 	temp_appearance += I
-
-	*/
 
 /obj/light/proc/CheckOcclusion(var/turf/T)
 	if(!istype(T))
