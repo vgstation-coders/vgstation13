@@ -53,7 +53,7 @@
 "ba" = (/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bb" = (/turf/simulated/shuttle/wall{tag = "icon-bswall1"; icon_state = "bswall1"},/area/vault/syndiecargo)
 "bc" = (/obj/machinery/vending/medical,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
-"bd" = (/obj/structure/table,/obj/item/weapon/switchtool/surgery,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"bd" = (/obj/structure/table,/obj/item/weapon/switchtool/surgery,/obj/item/clothing/accessory/stethoscope,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
 "be" = (/obj/structure/closet/crate/freezer/surgery,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
 "bf" = (/obj/machinery/light{tag = "icon-ltube1 (WEST)"; icon_state = "ltube1"; dir = 8},/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bg" = (/obj/machinery/door/airlock/glass_medical{name = "Medical Area"},/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
