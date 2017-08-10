@@ -927,7 +927,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.wounds.len = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
-			if(body_part == ARM_LEFT || body_part == ARM_RIGHT)
+			if(body_part == ARM_LEFT || body_part == ARM_RIGHT || body_part == LEG_RIGHT || body_part == LEG_LEFT)
 				T.peggify()
 			else
 				T.droplimb(1, 1)
