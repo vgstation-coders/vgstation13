@@ -106,13 +106,13 @@
 		for(var/turf/T1 in range(src,1))
 			findNullRod(T1)
 		if(nullblock)
-			user.visible_message("<span class='warning'>A nearby null rod seems to be blocking the transfer.</span>")
+			user.visible_message("<span class='warning'>A nearby holy item seems to be blocking the transfer.</span>")
 			return
 
 		for(var/turf/T2 in range(IP,1))
 			findNullRod(T2)
 		if(nullblock)
-			user.visible_message("<span class='warning'>A null rod seems to be blocking the transfer on the other side.</span>")
+			user.visible_message("<span class='warning'>A holy item seems to be blocking the transfer on the other side.</span>")
 			return
 
 		user.visible_message("<span class='warning'>You feel air moving from the rune - like as it was swapped with somewhere else.</span>", \
