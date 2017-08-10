@@ -127,3 +127,8 @@
 	icon = 'icons/pods/pod_parts.dmi'
 	icon_state = "pod_armor_civ"
 	desc = "Spacepod armor. This is the civilian version. It looks rather flimsy."
+
+/obj/item/pod_parts/armor/taxi
+	name = "taxi pod armor"
+	icon_state = "pod_armor_taxi"
+	desc = "Spacepod armor. This is a version for taxi pods. It looks tacky."
