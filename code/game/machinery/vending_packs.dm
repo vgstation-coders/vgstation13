@@ -197,6 +197,11 @@
 	name = "Shuo-Cai Cosmetics recharge pack"
 	targetvendomat = /obj/machinery/vending/makeup
 	icon_state = "makeup"
+	
+/obj/structure/vendomatpack/offlicence
+	name = "Offworld Off-Licence recharge pack"
+	targetvendomat = /obj/machinery/vending/offlicence
+	icon_state = "offlicence"
 
 //////EMPTY PACKS//////
 
