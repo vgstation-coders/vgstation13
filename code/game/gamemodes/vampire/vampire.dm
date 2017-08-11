@@ -362,6 +362,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		owner.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		owner.see_in_dark = 8
 		owner.see_invisible = SEE_INVISIBLE_MINIMUM
+		owner.seedarkness = FALSE
 
 	else if(VAMP_VISION in powers)
 		owner.change_sight(adding = SEE_MOBS)

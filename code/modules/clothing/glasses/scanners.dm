@@ -18,7 +18,7 @@
 			var/client/C = user.client
 			C.color = initial(C.color)
 
-/obj/item/clothing/glasses/scanner/equipped(M as mob, glasses)
+/obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M
 		if(O.glasses != src)
@@ -31,6 +31,7 @@
 		return
 	if(on)
 		if(iscarbon(M))
+			M.update_darkness()
 			apply_color(M)
 	..()
 
@@ -39,6 +40,7 @@
 		if(on)
 			if(iscarbon(user))
 				remove_color(user)
+		user.seedarkness = TRUE
 		user.update_darkness()
 	..()
 

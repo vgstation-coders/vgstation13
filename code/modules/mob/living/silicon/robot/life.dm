@@ -157,18 +157,26 @@
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		src.see_in_dark = 8
 		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+		seedarkness = FALSE
+		update_darkness()
 	else
 		if (M_XRAY in mutations || src.sight_mode & BORGXRAY)
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			src.see_in_dark = 8
 			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+			seedarkness = FALSE
+			update_darkness()
 		if ((src.sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
 			change_sight(adding = SEE_MOBS)
 			src.see_in_dark = 4
 			src.see_invisible = SEE_INVISIBLE_MINIMUM
+			src.seedarkness = FALSE
+			update_darkness()
 		if (sensor_mode == NIGHT)
 			see_invisible = SEE_INVISIBLE_MINIMUM
 			see_in_dark = 8
+			seedarkness = FALSE
+			update_darkness()
 			if(client)
 				client.color = list(0.33,0.33,0.33,0,
 									0.33,0.33,0.33,0,
@@ -179,6 +187,8 @@
 			change_sight(adding = SEE_TURFS)
 			src.see_in_dark = 8
 			see_invisible = SEE_INVISIBLE_MINIMUM
+			seedarkness = FALSE
+			update_darkness()
 
 
 /mob/living/silicon/robot/proc/handle_regular_hud_updates()

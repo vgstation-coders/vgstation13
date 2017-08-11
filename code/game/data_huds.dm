@@ -137,6 +137,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 				see_invisible = SEE_INVISIBLE_MINIMUM
 		if(G.see_invisible)
 			see_invisible = G.see_invisible
+
 		seedarkness = G.seedarkness
 		update_darkness()
 

@@ -428,6 +428,7 @@ var/list/blob_candidates = list()
 		blob_candidate.perspective = EYE_PERSPECTIVE
 		blob_candidate.eye = src
 		blob_candidate.mob.see_invisible = SEE_INVISIBLE_MINIMUM
+		blob_candidate.mob.seedarkness = FALSE
 
 /obj/item/projectile/meteor/blob/core/Destroy()
 	if(blob_candidate)
