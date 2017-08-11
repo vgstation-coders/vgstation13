@@ -424,6 +424,12 @@
 		if(SS_READY(SSair))
 			SSair.mark_for_update(src)
 
+		if (W.dynamic_lighting == 0 && W.loc.type != /area)
+			var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
+			I.plane = LIGHTING_PLANE_MASTER
+			I.blend_mode = BLEND_ADD
+			W.overlays += I
+
 		W.levelupdate()
 
 		. = W
