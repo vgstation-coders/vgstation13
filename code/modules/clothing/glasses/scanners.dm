@@ -39,6 +39,7 @@
 		if(on)
 			if(iscarbon(user))
 				remove_color(user)
+		user.update_darkness()
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()

@@ -8,7 +8,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube-construct-stage1"
 	anchored = 1
-	plane = LIGHTING_PLANE
+	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHTBULB_LAYER
 	var/stage = 1
 	var/fixture_type = "tube"
@@ -90,7 +90,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "bulb-construct-stage1"
 	anchored = 1
-	plane = LIGHTING_PLANE
+	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHTBULB_LAYER
 	stage = 1
 	fixture_type = "bulb"
@@ -106,7 +106,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
-	plane = LIGHTING_PLANE
+	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHTBULB_LAYER
 	use_power = 2
 	idle_power_usage = 2
