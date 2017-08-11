@@ -164,11 +164,11 @@ var/light_power_multiplier = 5
 	//please for the love of god change this if there's a better way
 
 	if(num == 1)
-		if((x_flip == 1 && y_flip == 1 && xy_swap == 0) || (x_flip == 0 && y_flip == 1 && x_flip == 1) || (x_flip == -1 && y_flip == 1 && xy_swap == 1))
+		if((x_flip == 1 && y_flip == 1 && xy_swap == 0) || (x_flip == -1 && y_flip == 1 && xy_swap == 1))
 			M.Translate(shadowoffset, shadowoffset)
 		else if((x_flip == 1 && y_flip == -1 && xy_swap == 0) || (x_flip == 1 && y_flip == 1 && xy_swap == 1))
 			M.Translate(shadowoffset, 0)
-		else if((x_flip == 1 && y_flip == -1 && xy_swap == 0) || (xy_swap == 1 && x_flip == -1 && y_flip == -1) || (x_flip == -1 && y_flip == 1 && xy_swap == 0))
+		else if((xy_swap == 0 && x_flip == -y_flip) || (xy_swap == 1 && x_flip == -1 && y_flip == -1))
 			M.Translate(0, shadowoffset)
 	else
 		if(x_flip == 1 && y_flip == 1 && xy_swap == 0)

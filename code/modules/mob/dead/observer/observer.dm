@@ -22,7 +22,6 @@
 	layer = GHOST_LAYER
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
-	var/seedarkness = 1
 
 	// Holomaps for ghosts
 	var/obj/item/device/station_map/station_holomap = null

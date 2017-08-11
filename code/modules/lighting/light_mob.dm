@@ -2,6 +2,7 @@
 	var/obj/screen/plane/master/master_plane
 	var/obj/screen/plane/dark/dark_plane
 	var/obj/backdrop/backdrop
+	var/seedarkness = 1
 
 /mob/Login()
 	. = ..()
@@ -17,13 +18,10 @@
 		backdrop = new(client)
 	else
 		client.screen |= backdrop
-
-/mob/dead/observer/Login()
-	. = ..()
 	if(client)
 		update_darkness()
 
-/mob/dead/observer/proc/update_darkness()
+/mob/proc/update_darkness()
 	if(seedarkness)
 		master_plane.color = LIGHTING_PLANEMASTER_COLOR
 	else
