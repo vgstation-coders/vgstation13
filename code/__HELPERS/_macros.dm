@@ -119,6 +119,10 @@
 
 #define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
 
+#define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
+
+#define ispowercell(A) istype(A, /obj/item/weapon/cell)
+
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
 #define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
@@ -138,10 +142,6 @@
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
-
-#define isimage(A) (istype(A, /image))
-
-#define isdatum(A) (istype(A, /datum))
 
 #define isclient(A) (istype(A, /client))
 
@@ -201,8 +201,6 @@ proc/get_space_area()
 //y is the minimum
 //z is the maximum
 
-//Returns 1 if the variable contains a protected list that can't be edited
-#define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
 
 #define CLAMP01(x) 		(Clamp(x, 0, 1))
 
