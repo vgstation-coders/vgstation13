@@ -1253,6 +1253,37 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/cola
+	
+/obj/machinery/vending/offlicence
+	name = "\improper Offworld Off-Licence"
+	desc = "A vendor containing all you need to drown your sorrows and your finances."
+	icon_state = "offlicence"
+	product_slogans = "Offworld Off-Licence: Think outcider the box!;People may abandon you, but alcohol will always be there for you.;Recommended by 8 out of 10 chavs!"
+	product_ads = "The best mistake you've ever made.;Made with real imitation Karmotrine!;Dan-free since 2561!"
+	vend_reply = "Drink irresponsibly."
+	products = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 6,
+		)
+	contraband = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 40,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 50,
+		)
+
+	pack = /obj/structure/vendomatpack/offlicence
 
 //This one's from bay12
 /obj/machinery/vending/cart

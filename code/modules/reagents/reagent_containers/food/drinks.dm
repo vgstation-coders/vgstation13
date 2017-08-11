@@ -792,6 +792,75 @@
 	reagents.add_reagent(DANS_WHISKEY, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	
+//Beer cans for the Off Licence
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser
+	name = "Blebweiser"
+	desc = "Based on an American classic, this lager has seen little improvement over the years."
+	icon_state = "blebweiser"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser/New()
+	..()
+	reagents.add_reagent(BEER, 50)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon
+	name = "Bluespace Ribbon"
+	desc = "A cheap lager brewed in enormous bluespace pockets, the brewing process has done little for the flavour."
+	icon_state = "bluespaceribbon"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon/New()
+	..()
+	reagents.add_reagent(BEER, 50)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone
+	name = "Code One"
+	desc = "The Code One Brewery prides itself on creating the very best beer for cracking open with the boys."
+	icon_state = "codeone"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone/New()
+	..()
+	reagents.add_reagent(BEER, 50)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness
+	name = "Gibness"
+	desc = "Derived from a classic Irish recipe, there's a strong taste of starch in this dry stout."
+	icon_state = "gibness"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness/New()
+	..()
+	reagents.add_reagent(BEER, 25)
+	reagents.add_reagent(POTATO, 25)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka
+	name = "Greyshit Vodka"
+	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
+	icon_state = "greyshitvodka"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka/New()
+	..()
+	reagents.add_reagent(GREYVODKA, 50)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides
+	name = "Orchard Tides"
+	desc = "A sweet apple cider that might quench that kleptomania if only for a while."
+	icon_state = "orchardtides"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides/New()
+	..()
+	reagents.add_reagent(BEER, 20)
+	reagents.add_reagent(APPLEJUICE, 30)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
+	name = "Sleimiken"
+	desc = "This Belgium original has been enhanced over the years with the delicious taste of DNA-dissolving slime extract."
+	icon_state = "sleimiken"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken/New()
+	..()
+	reagents.add_reagent(BEER, 45)
+	reagents.add_reagent(SLIMEJELLY, 5)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow
+	name = "Strong-eBow"
+	desc = "A Syndicate favourite, the sharp flavour of this Cider has been compared to getting shot by an Energy Bow."
+	icon_state = "strongebow"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow/New()
+	..()
+	reagents.add_reagent(BEER, 30)
+	reagents.add_reagent(APPLEJUICE, 20)
 
 
 //////////////////////////drinkingglass and shaker//
