@@ -154,6 +154,7 @@
 	w_class = W_CLASS_SMALL
 	brightness_on = 4 // Pretty bright.
 	light_power = 2.5
+	light_type = LIGHT_SOFT
 	icon_state = "flare"
 	item_state = "flare"
 	actions_types = list(/datum/action/item_action/toggle_light)

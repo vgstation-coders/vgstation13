@@ -153,25 +153,27 @@
 		client.color = initial(client.color)
 	src.see_in_dark = 8
 	src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+	src.seedarkness = TRUE
+	src.update_darkness()
 	if (src.stat == DEAD)
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		src.see_in_dark = 8
 		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-		seedarkness = FALSE
-		update_darkness()
+		src.seedarkness = FALSE
+		src.update_darkness()
 	else
 		if (M_XRAY in mutations || src.sight_mode & BORGXRAY)
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			src.see_in_dark = 8
 			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			seedarkness = FALSE
-			update_darkness()
+			src.seedarkness = FALSE
+			src.update_darkness()
 		if ((src.sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
 			change_sight(adding = SEE_MOBS)
 			src.see_in_dark = 4
 			src.see_invisible = SEE_INVISIBLE_MINIMUM
 			src.seedarkness = FALSE
-			update_darkness()
+			src.update_darkness()
 		if (sensor_mode == NIGHT)
 			see_invisible = SEE_INVISIBLE_MINIMUM
 			see_in_dark = 8
