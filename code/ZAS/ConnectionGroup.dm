@@ -43,6 +43,7 @@ Class Procs:
 
 	var/list/connecting_turfs = list()
 	var/direct = 0
+	var/sleeping = 1
 
 	var/coefficient = 0
 
@@ -67,6 +68,8 @@ Class Procs:
 	SSair.remove_edge(src)
 
 /connection_edge/proc/tick()
+
+/connection_edge/proc/recheck()
 
 	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
@@ -163,6 +166,9 @@ Class Procs:
 	SSair.mark_zone_update(A)
 	SSair.mark_zone_update(B)
 
+/connection_edge/zone/recheck()
+	if(!A.air.compare(B.air))
+		SSair.mark_edge_active(src)
 
 //Helper proc to get connections for a zone.
 /connection_edge/zone/proc/get_connected_zone(zone/from)
@@ -406,6 +412,9 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 
 	return abs(old_pressure - A.return_pressure())
 
+/connection_edge/unsimulated/recheck()
+	if(!A.air.compare(air))
+		SSair.mark_edge_active(src)
 
 proc/ShareHeat(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	//This implements a simplistic version of the Stefan-Boltzmann law.
