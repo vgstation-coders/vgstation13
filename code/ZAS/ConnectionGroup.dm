@@ -71,12 +71,10 @@ Class Procs:
 
 /connection_edge/proc/recheck()
 
+/connection_edge/proc/flow(list/movable, differential, repelled)
 	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
-/connection_edge/proc/flow(list/movable, differential, repelled)
 	for(var/atom/movable/M in movable)
-		if(!M.AirflowCanPush())
-			continue
 		//If they're already being tossed, don't do it again.
 		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 			continue
@@ -85,8 +83,6 @@ Class Procs:
 
 		//Check for knocking people over
 		if(ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
-			if(M:status_flags & GODMODE)
-				continue
 			M:airflow_stun()
 
 		if(M.check_airflow_movable(differential))
