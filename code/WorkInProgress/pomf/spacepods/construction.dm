@@ -19,6 +19,11 @@
 
 	dir = EAST
 
+/obj/structure/spacepod_frame/Destroy()
+	qdel(construct)
+	construct = null
+	..()
+
 /obj/structure/spacepod_frame/attackby(obj/item/W as obj, mob/user as mob)
 	if(!construct || !construct.action(W, user))
 		return ..()
@@ -40,9 +45,9 @@
 /obj/structure/spacepod_frame/attackby(obj/item/W, mob/user)
 	if(!construct)
 		if(istype(W,/obj/item/pod_parts/armor/civ))
-			construct = new /datum/construction/reversible/pod/civ(src)
+			construct = new /datum/construction/reversible/pod/unarmored/civ(src)
 		else if(istype(W, /obj/item/pod_parts/armor/taxi))
-			construct = new /datum/construction/reversible/pod/taxi(src)
+			construct = new /datum/construction/reversible/pod/unarmored/taxi(src)
 	..()
 
 /////////////////////////////////
@@ -184,7 +189,15 @@
 /////////////////////////////////
 // PODS
 /////////////////////////////////
-/datum/construction/reversible/pod/civ
+/datum/construction/reversible/pod/unarmored/custom_action(index, diff, atom/used_atom, mob/user)
+	if(!..())
+		return 0
+
+	holder.icon_state = "pod_[9 + (steps.len - index + 1 - diff)]"
+	return 1
+
+
+/datum/construction/reversible/pod/unarmored/civ
 	result = /obj/spacepod/civilian
 	//taskpath = /datum/job_objective/make_pod
 	steps = list(
@@ -230,7 +243,7 @@
 			)
 		)
 
-/datum/construction/reversible/pod/taxi
+/datum/construction/reversible/pod/unarmored/taxi
 	result = /obj/spacepod/taxi
 	//taskpath = /datum/job_objective/make_pod
 	steps = list(
