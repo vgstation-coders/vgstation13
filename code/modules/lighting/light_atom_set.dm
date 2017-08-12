@@ -58,9 +58,13 @@
 	if(update_cast)
 		light_obj.follow_holder()
 
+	update_contained_lights()
+
 	// Rare enough that we can probably get away with calling animate().
 	if(fadeout)
 		animate(light_obj, alpha = 0, time = fadeout)
+
+
 
 /obj/light/set_light()
 	return

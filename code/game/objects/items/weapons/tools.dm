@@ -214,6 +214,8 @@
 	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
+	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 	//Amount of OUCH when it's thrown
 	force = 3.0
@@ -439,6 +441,7 @@
 			src.damtype = "fire"
 			update_icon()
 			processing_objects.Add(src)
+			set_light(2)
 		else
 			if(user && istype(user))
 				to_chat(user, "<span class='notice'>Need more fuel!</span>")
@@ -453,6 +456,7 @@
 		src.damtype = "brute"
 		update_icon()
 		src.welding = 0
+		kill_light()
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob

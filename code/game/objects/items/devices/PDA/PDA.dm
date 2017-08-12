@@ -1702,7 +1702,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					kill_light()
 				else
 					fon = 1
-					set_light(f_lum, l_type = LIGHT_SOFT_FLICKER)
+					set_light(f_lum, l_type = LIGHT_DIRECTIONAL)
 			if("Medical Scan")
 				if(scanmode == SCANMODE_MEDICAL)
 					scanmode = SCANMODE_NONE

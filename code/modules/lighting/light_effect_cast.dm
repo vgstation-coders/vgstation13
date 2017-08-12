@@ -35,7 +35,6 @@ var/light_power_multiplier = 5
 	if(light_type == LIGHT_DIRECTIONAL)
 		icon = 'icons/lighting/directional_overlays.dmi'
 		light_range = 2.5
-		follow_holder_dir()
 	else
 		pixel_x = pixel_y = -(world.icon_size * light_range)
 		switch(light_range)
