@@ -80,6 +80,11 @@
 
 #define END_FOR_DVIEW dview_mob.loc = null
 
+//Lighting types.
+#define LIGHT_SOFT             "soft"
+#define LIGHT_SOFT_FLICKER     "soft-flicker"
+#define LIGHT_DIRECTIONAL      "directional"
+
 // Lighting temperatures.
 #define COLOUR_LTEMP_CANDLE        rgb(255, 147, 41)
 #define COLOUR_LTEMP_40W_TUNGSTEN  rgb(255, 197, 143)

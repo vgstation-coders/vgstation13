@@ -32,9 +32,10 @@ var/light_power_multiplier = 5
 		T.affecting_lights |= src
 
 
-	if(is_directional_light())
+	if(light_type == LIGHT_DIRECTIONAL)
 		icon = 'icons/lighting/directional_overlays.dmi'
 		light_range = 2.5
+		follow_holder_dir()
 	else
 		pixel_x = pixel_y = -(world.icon_size * light_range)
 		switch(light_range)
@@ -57,17 +58,21 @@ var/light_power_multiplier = 5
 	var/image/I = image(icon)
 	I.layer = 4
 	I.icon_state = "overlay"
-	if(is_directional_light())
+	if(light_type == LIGHT_DIRECTIONAL)
 		var/turf/next_turf = get_step(src, dir)
 		for(var/i = 1 to 3)
 			if(CheckOcclusion(next_turf))
 				I.icon_state = "[I.icon_state]_[i]"
 				break
 			next_turf = get_step(next_turf, dir)
+
+	if(light_type == LIGHT_SOFT_FLICKER)
+		animate(src, alpha = initial(alpha) - rand(0, 60), time = 2, loop = -1, easing = SINE_EASING)
+
 	temp_appearance += I
 
 	//no shadows
-	if(light_range < 2 || is_directional_light())
+	if(light_range < 2 || light_type == LIGHT_DIRECTIONAL)
 		overlays = temp_appearance
 		temp_appearance = null
 		return

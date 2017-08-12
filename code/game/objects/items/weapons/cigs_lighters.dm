@@ -31,6 +31,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 /obj/item/weapon/match/New()
 	..()
@@ -616,6 +617,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_BELT
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 	var/lit = 0
 
 /obj/item/weapon/lighter/New()

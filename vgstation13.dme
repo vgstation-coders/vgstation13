@@ -1300,7 +1300,6 @@
 #include "code\modules\lighting\light_effect.dm"
 #include "code\modules\lighting\light_effect_cast.dm"
 #include "code\modules\lighting\light_mob.dm"
-#include "code\modules\lighting\light_obj_types.dm"
 #include "code\modules\lighting\light_planes.dm"
 #include "code\modules\lighting\light_turf.dm"
 #include "code\modules\lighting\effects\effects_drugs.dm"

@@ -29,6 +29,7 @@
 	light_power_on = 1.5
 	light_range_on = 2
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 	set_temperature = 35
 	nocell = 1
 	anchored = 1

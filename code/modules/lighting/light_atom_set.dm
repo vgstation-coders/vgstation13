@@ -7,7 +7,7 @@
 
 // Updates all appropriate lighting values and then applies all changed values
 // to the objects light_obj overlay atom.
-/atom/proc/set_light(var/l_range, var/l_power, var/l_color, var/fadeout)
+/atom/proc/set_light(var/l_range, var/l_power, var/l_color, var/l_type, var/fadeout)
 
 	if(!loc)
 		if(light_obj)
@@ -28,6 +28,10 @@
 		l_color = light_color
 	else
 		light_color = l_color
+	if(isnull(l_type))
+		l_type = light_type
+	else
+		light_type = l_type
 
 	// Apply data and update light casting/bleed masking.
 	var/update_cast
@@ -43,6 +47,10 @@
 		update_cast = 1
 		light_obj.update_transform(l_range)
 
+	if(light_obj.light_type != l_type)
+		update_cast = 1
+		light_obj.light_type = l_type
+
 	if(!light_obj.alpha)
 		update_cast = 1
 
@@ -50,8 +58,9 @@
 	if(update_cast)
 		light_obj.follow_holder()
 
-	// Rare enough that we can probably get away with calling animate(). Currently used by muzzle flashes and sparks.
-//	if(fadeout) animate(light_obj.light_overlay, time=fadeout, alpha=0)
+	// Rare enough that we can probably get away with calling animate().
+	if(fadeout)
+		animate(light_obj, alpha = 0, time = fadeout)
 
 /obj/light/set_light()
 	return

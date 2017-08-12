@@ -249,13 +249,11 @@
 
 /obj/item/clothing/glasses/thermal/equipped(mob/user)
 	seedarkness = FALSE
-	user.update_darkness()
 	..()
 
 /obj/item/clothing/glasses/thermal/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		seedarkness = TRUE
-		user.update_darkness()
 	..()
 
 

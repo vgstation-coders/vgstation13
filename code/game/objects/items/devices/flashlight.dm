@@ -13,6 +13,7 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
 	actions_types = list(/datum/action/item_action/toggle_light)
+	light_type = LIGHT_DIRECTIONAL
 	var/on = 0
 	var/brightness_on = 4 //luminosity when on
 	var/has_sound = 1 //The CLICK sound when turning on/off
@@ -122,6 +123,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
+	light_type = LIGHT_SOFT
 	on = 1
 
 /obj/item/device/flashlight/lamp/cultify()

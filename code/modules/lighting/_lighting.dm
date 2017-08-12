@@ -4,9 +4,7 @@
 // BordListian on Reddit for more advice and discussion, and whoever else was involved that I have forgotten.
 // Also thanks to Lummox for BYOND 510's awesome new features.
 
-#define LIGHT_SOFT             "soft"
-#define LIGHT_SOFT_FLICKER     "soft-flicker"
-#define LIGHT_DIRECTIONAL      "directional"
+// Ported to /vg/station by Clusterfack and Unusual Crow.
 
 #define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
 

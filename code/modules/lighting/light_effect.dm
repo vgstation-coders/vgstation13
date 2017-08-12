@@ -31,6 +31,7 @@
 		light_range = A.light_range
 		light_color = A.light_color
 		light_power = A.light_power
+		light_type	= A.light_type
 		color = light_color
 	..(get_turf(holder))
 
@@ -86,14 +87,11 @@
 	else
 		init_lights |= src
 
-/obj/light/proc/is_directional_light()
-	return (holder.light_type == LIGHT_DIRECTIONAL)
-
 /obj/light/proc/set_dir(new_dir)
 	if(dir == new_dir)
 		return
 	dir = new_dir
-	if(is_directional_light())
+	if(light_type == LIGHT_DIRECTIONAL)
 		switch(dir)
 			if(NORTH)
 				pixel_x = -(world.icon_size * light_range) + world.icon_size / 2

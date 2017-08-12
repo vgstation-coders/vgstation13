@@ -7,6 +7,7 @@
 	w_class = W_CLASS_TINY
 	heat_production = 1000
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 	var/wax = 200
 	var/lit = 0
