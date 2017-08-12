@@ -209,17 +209,6 @@ Class Procs:
 	if(A.invalid)
 		erase()
 		return
-//	to_chat(world, "[id]: Tick [SSair.current_cycle]: To [B]!")
-	//A.air.mimic(B, coefficient)
-	ShareSpace(A.air,air,dbg_out)
-	SSair.mark_zone_update(A)
-
-	var/differential = A.air.return_pressure() - air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		return
-
-	var/list/attracted = A.movables()
-	flow(attracted, abs(differential), differential < 0)
 
 var/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
@@ -240,11 +229,16 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 
 		full_heat_capacity = A.heat_capacity() * size
 
+	var/equiv = A.air.share_space(air)
 		s_full_oxy = B.oxygen * share_size
 		s_full_nitro = B.nitrogen * share_size
 		s_full_co2 = B.carbon_dioxide * share_size
 		s_full_plasma = B.toxins * share_size
 
+	var/differential = A.air.return_pressure() - air.return_pressure()
+	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+		var/list/attracted = A.movables()
+		flow(attracted, abs(differential), differential < 0)
 		s_full_heat_capacity = B.heat_capacity() * share_size
 
 		oxy_avg = (full_oxy + s_full_oxy) / (size + share_size)
@@ -252,6 +246,9 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		co2_avg = (full_co2 + s_full_co2) / (size + share_size)
 		plasma_avg = (full_plasma + s_full_plasma) / (size + share_size)
 
+	if(equiv)
+		A.air.copy_from(air)
+		SSair.mark_edge_sleeping(src)
 		temp_avg = (A.temperature * full_heat_capacity + B.temperature * s_full_heat_capacity) / (full_heat_capacity + s_full_heat_capacity)
 
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
@@ -279,6 +276,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 			var/G_avg = (G.moles*size + H.moles*share_size) / (size+share_size)
 			G.moles = (G.moles - G_avg) * (1-ratio) + G_avg
 
+	SSair.mark_zone_update(A)
 			H.moles = (H.moles - G_avg) * (1-ratio) + G_avg
 		else
 			H = new G.type
