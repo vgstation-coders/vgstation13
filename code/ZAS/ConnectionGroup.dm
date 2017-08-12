@@ -111,8 +111,9 @@ Class Procs:
 
 
 
+/connection_edge/zone
+	var/zone/B
 
-/connection_edge/zone/var/zone/B
 /connection_edge/zone/var/direct = 0
 
 /connection_edge/zone/New(zone/A, zone/B)
