@@ -177,8 +177,9 @@ Class Procs:
 	else
 		return A
 
-/connection_edge/unsimulated/var/turf/B
-/connection_edge/unsimulated/var/datum/gas_mixture/air
+/connection_edge/unsimulated
+	var/turf/B
+	var/datum/gas_mixture/air
 
 /connection_edge/unsimulated/New(zone/A, turf/B)
 	src.A = A
