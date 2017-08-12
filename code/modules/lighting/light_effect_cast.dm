@@ -66,7 +66,7 @@ var/light_power_multiplier = 5
 			next_turf = get_step(next_turf, dir)
 
 	if(light_type == LIGHT_SOFT_FLICKER)
-		animate(src, alpha = initial(alpha) - rand(0, 60), time = 2, loop = -1, easing = SINE_EASING)
+		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
 
 	temp_appearance += I
 
