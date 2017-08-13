@@ -219,7 +219,7 @@
 					Co_DESC = "A space pod with unsecured armor.",
 					Co_BACKSTEP = list(
 						Co_KEY      = /obj/item/weapon/crowbar,
-						Co_VIS_MSG  = "{USER} prie{s} off {HOLDER}'s armor."
+						Co_VIS_MSG  = "{USER} remove{s} {HOLDER}'s armor."
 					),
 					Co_NEXTSTEP = list(
 						Co_KEY      = /obj/item/weapon/wrench,
@@ -265,7 +265,7 @@
 					Co_DESC = "A space pod with unsecured armor.",
 					Co_BACKSTEP = list(
 						Co_KEY      = /obj/item/weapon/crowbar,
-						Co_VIS_MSG  = "{USER} prie{s} off {HOLDER}'s armor."
+						Co_VIS_MSG  = "{USER} remove{s} {HOLDER}'s armor."
 					),
 					Co_NEXTSTEP = list(
 						Co_KEY      = /obj/item/weapon/wrench,
