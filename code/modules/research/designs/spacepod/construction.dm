@@ -26,7 +26,7 @@
 	id = "podarmor_civ"
 	build_type = PODFAB
 	req_tech = list(Tc_MATERIALS = 3, Tc_PLASMATECH = 3)
-	build_path = /obj/item/pod_parts/armor
+	build_path = /obj/item/pod_parts/armor/civ
 	category = "Pod_Armor"
 	materials = list(MAT_IRON=15000,MAT_GLASS=5000,MAT_PLASMA=10000)
 
