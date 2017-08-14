@@ -23,6 +23,8 @@
 #define T20C 293.15					// 20degC
 #define TCMB 2.73					// -270.42degC
 
+#define QUANTIZE(variable)		(round(variable, 0.0001))
+
 #define INFINITY 1e31 //closer than enough
 
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!

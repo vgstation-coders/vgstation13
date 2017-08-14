@@ -11,7 +11,6 @@ What are the archived variables for?
 	max(0, carbon_dioxide * SPECIFIC_HEAT_CDO + (oxygen + nitrogen) * SPECIFIC_HEAT_AIR + toxins * SPECIFIC_HEAT_TOXIN)
 
 #define MINIMUM_HEAT_CAPACITY	0.0003
-#define QUANTIZE(variable)		(round(variable,0.0001))
 #define TRANSFER_FRACTION 5 //What fraction (1/#) of the air difference to try and transfer
 
 // /vg/ SHIT
@@ -53,7 +52,7 @@ What are the archived variables for?
 
 	var/moles_archived = 0
 
-/datum/gas_mixture/
+/datum/gas_mixture
 	var/oxygen = 0		//Holds the "moles" of each of the four gases.
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
