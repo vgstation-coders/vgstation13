@@ -17,7 +17,7 @@
 
 /obj/item/blueprints
 	name = "station blueprints"
-	desc = "Blueprints of the station. There is a \"Classified\" stamp and several coffee stains on it."
+	desc = "Blueprints of the station."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
@@ -34,6 +34,9 @@
 
 	//Maximum amount of turfs
 	var/max_room_size = 300
+
+	//Radius of the circle around APCs and air alarms, inside of which area editing can't be done
+	var/area_protection_buffer = 4
 
 	var/mob/editor
 
@@ -66,10 +69,19 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/admin
 	name = "universe blueprints"
 	desc = "Blueprints of the universe. There is a \"Classified\" stamp and several coffee stains on it."
-	
+
 	can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS, AREA_SPECIAL)
 	can_edit_areas = list(AREA_BLUEPRINTS, AREA_STATION, AREA_SPECIAL)
 	can_delete_areas = list(AREA_BLUEPRINTS, AREA_STATION, AREA_SPECIAL)
+	area_protection_buffer = -1
+
+//Chief engineer's blueprints
+/obj/item/blueprints/primary
+	name = "station blueprints"
+	desc = "Blueprints of the station. There is a \"Classified\" stamp and several coffee stains on it."
+
+	can_edit_areas = list(AREA_BLUEPRINTS, AREA_STATION)
+	can_delete_areas = list(AREA_BLUEPRINTS, AREA_STATION)
 
 /obj/item/blueprints/attack_self(mob/living/M)
 	if (!ishuman(M) && !issilicon(M))
@@ -192,6 +204,22 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	currently_edited = null
 	processing_objects.Remove(src)
 
+//Air alarms and APCs have a zone around them, in which turfs can't be removed from the area
+//This proc returns either the air alarm, or the APC that obstruct the editing
+/obj/item/blueprints/proc/get_removal_obstruction(turf/T, area/A)
+	if(area_protection_buffer >= 0)
+		//Check for nearby air alarms
+		for(var/obj/machinery/alarm/air_alarm in A)
+			if(get_dist(T, air_alarm) <= area_protection_buffer)
+				return air_alarm
+
+		//Check for nearby APCs
+		for(var/obj/machinery/power/apc/apc in A)
+			if(get_dist(T, apc) <= area_protection_buffer)
+				return apc
+
+	return null
+
 /obj/item/blueprints/afterattack(atom/A, mob/user, proximity)
 	if(!currently_edited)
 		return
@@ -202,8 +230,14 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		var/area/space = get_space_area()
 		var/area/target_area = T.loc
 
-		if(target_area == currently_edited)
-			T.set_area(space) //Remove from current area
+		if(target_area == currently_edited) //Removing the turf from the current area
+			//Check if there are any APCs or air alarms nearby
+			var/atom/obstacle = get_removal_obstruction(T, target_area)
+			if(!obstacle)
+				T.set_area(space)
+			else
+				to_chat(user, "<span class='notice'>A nearby [obstacle.name] prevents you from doing that.</span>")
+
 		else if(target_area == space)
 			T.set_area(currently_edited) //Add to current area
 		else
@@ -328,27 +362,33 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	to_chat(user, "<span class='notice'>You change \the [prevname]'s title to '[str]'.</span>")
 
-/obj/item/blueprints/proc/delete_area(var/mob/user) //This functionality is currently commented out!
-	var/area/station/custom/areadeleted = get_area()
+/obj/item/blueprints/proc/delete_area(var/mob/user)
+	if(!(get_area_type() in can_delete_areas))
+		to_chat(user, "This drawing can't be erased.")
+		return
+
+	var/area/areadeleted = get_area()
+
+	if(area_protection_buffer >= 0)
+		for(var/obj/machinery/alarm/air_alarm in areadeleted)
+			to_chat(user, "<span class='notice'>You can't erase an area with an air alarm in it!</span>")
+			return
+		for(var/obj/machinery/power/apc/apc in areadeleted)
+			to_chat(user, "<span class='notice'>You can't erase an area with an APC in it!</span>")
+			return
+
 	var/area/space = get_space_area()
 
 	if(alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
 		return
-	else
-		if(!Adjacent(user))
-			return
-		if(!(areadeleted == get_area()))
-			return //if the blueprints are no longer in the area, return
-		if(!istype(areadeleted))
-			return //to make sure AGAIN that the area we're deleting is blueprint
+	if(!Adjacent(user))
+		return
+	if(!(areadeleted == get_area()))
+		return //if the blueprints are no longer in the area, return
 
-	var/list/C = areadeleted.contents.Copy() //because areadeleted.contents is slow
-	for(var/turf/T in C)
-		space.contents.Add(T)
-		T.change_area(areadeleted,space)
+	for(var/turf/T in areadeleted)
+		T.set_area(space)
 
-		for(var/atom/movable/AM in T.contents)
-			AM.change_area(areadeleted,space)
 	to_chat(usr, "You've erased the \"[areadeleted]\" from the blueprints.")
 
 //Room auto-fill procs

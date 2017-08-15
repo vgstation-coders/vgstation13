@@ -280,7 +280,7 @@
 
 		res.Blend(img, blendMode2iconMode(A.blend_mode), offX, offY)
 
-		if(istype(A, /obj/item/blueprints))
+		if(istype(A, /obj/item/blueprints/primary))
 			blueprints = 1
 
 	/*
@@ -330,7 +330,7 @@
 
 		res.Blend(img, blendMode2iconMode(A.blend_mode), offX, offY)
 
-		if(istype(A, /obj/item/blueprints))
+		if(istype(A, /obj/item/blueprints/primary))
 			blueprints = 1
 
 	/*
