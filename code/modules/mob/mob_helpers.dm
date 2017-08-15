@@ -28,16 +28,16 @@
 
 mob/proc/isincrit()
 	return 0
-	
+
 mob/proc/get_heart()
 	return null
-	
+
 mob/proc/remove_internal_organ()
 	return null
 
 /mob/proc/get_broken_organs()
 	return list()
-	
+
 /mob/proc/get_bleeding_organs()
 	return list()
 
@@ -509,3 +509,17 @@ proc/is_blind(A)
 
 /mob/proc/get_survive_objective()
 	return new /datum/objective/survive
+
+/**
+* Honor check
+* Returns TRUE if user is BOMBERMAN, HIGHLANDER...
+* Respects honorable.
+*/
+/proc/is_honorable(var/mob/living/user, var/honorable = HONORABLE_ALL)
+	if(istype(user))
+		if(user.mind)
+			if(user.mind.special_role == BOMBERMAN && (honorable & HONORABLE_BOMBERMAN))
+				return TRUE
+			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
+				return TRUE
+	return FALSE

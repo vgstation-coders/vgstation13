@@ -5,6 +5,9 @@
 #define REAGENTS_OVERDOSE 30
 #define REM REAGENTS_EFFECT_MULTIPLIER
 
+// Use in chem.flags.
+#define CHEMFLAG_DISHONORABLE 1
+
 //The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
 //so that it can continue working when the reagent is deleted while the proc is still active.
 
@@ -33,6 +36,7 @@
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
 	var/dupeable = TRUE	//whether the reagent can be duplicated by standard reagent duplication methods such as a service borg shaker or odysseus
+	var/flags = 0
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -123,6 +127,11 @@
 		M = holder.my_atom //Try to find the mob through the holder
 	if(!istype(M)) //Still can't find it, abort
 		return 1
+	if(M.mind)
+		if((M.mind.special_role == HIGHLANDER || M.mind.special_role == BOMBERMAN) && src.flags & CHEMFLAG_DISHONORABLE)
+			// TODO: HONORABLE_* checks.
+			return 1
+
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
 
@@ -606,6 +615,7 @@
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.4
+	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 
 /datum/reagent/cyanide/on_mob_life(var/mob/living/M)
 
@@ -3062,9 +3072,9 @@
 	reagent_state = SOLID
 	color = "#000067" //rgb: 0, 0, 103
 	data = 1 //Used as a tally
+	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 	switch(data)
@@ -6003,4 +6013,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
-
