@@ -1283,6 +1283,9 @@
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
+	else if(istype(O,/obj/effect/dummy/chameleon))
+		var/obj/effect/dummy/chameleon/projection = O
+		projection.disrupt()
 
 /datum/reagent/pacid
 	name = "Polytrinic acid"
@@ -1377,6 +1380,9 @@
 		I.desc = "Looks like these were some [O.name] some time ago."
 		var/obj/effect/plantsegment/K = O
 		K.die_off()
+	else if(istype(O,/obj/effect/dummy/chameleon))
+		var/obj/effect/dummy/chameleon/projection = O
+		projection.disrupt()
 
 /datum/reagent/glycerol
 	name = "Glycerol"
@@ -6003,4 +6009,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
-
