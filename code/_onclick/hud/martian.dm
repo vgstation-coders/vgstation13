@@ -1,7 +1,9 @@
-/datum/hud/proc/martian_hud(var/ui_style='icons/mob/screen1_old.dmi')
+/datum/hud/proc/martian_hud(var/ui_style='icons/mob/screen1_martian.dmi')
 
 	src.adding = list()
 	src.other = list()
+
+	ui_style = 'icons/mob/screen1_martian.dmi'
 
 	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
