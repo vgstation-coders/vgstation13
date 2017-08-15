@@ -38,10 +38,9 @@
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
+			user.seedarkness = TRUE
 			if(iscarbon(user))
 				remove_color(user)
-		user.seedarkness = TRUE
-		user.update_darkness()
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
