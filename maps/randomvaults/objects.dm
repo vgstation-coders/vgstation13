@@ -65,6 +65,8 @@
 
 /area/vault/hive_shuttle
 
+/area/vault/syndiecargo
+
 //prison vault
 
 /area/vault/prison_ship
