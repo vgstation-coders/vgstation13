@@ -345,52 +345,35 @@
 		canmove = 1
 	return canmove
 
-// Borgs aren't immune to pressure anymore. Protection depends on module.
+// This handles the pressure sensor hud element. Values based on human values.
 /mob/living/silicon/robot/proc/handle_pressure_damage(datum/gas_mixture/environment)
 	//by the power of Polymorph and Errorage
-	var/adjusted_max_pressure
 	var/localpressure = environment.return_pressure()
 	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
-	//Borgs start without modules!
-	if(!module)
-		adjusted_max_pressure = base_pressure_level_max
-	else
-		adjusted_max_pressure = module.pressure_level_max
 	if(localpressure)
-		if(adjusted_pressure >= adjusted_max_pressure)
-			if(!(pressure_alert == 2))
-				to_chat(src, "<span class='danger' style=\"font-family:Courier\">Warning: Hazardous pressure levels. Continued exposure will result in extensive damage to chassis.</span>")
-			pressure_alert = 2 //oh fuck
-			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
-		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < adjusted_max_pressure)
-			pressure_alert = 1 //We don't really care, but might help us realize carbons are dying
+		if(adjusted_pressure >= HAZARD_HIGH_PRESSURE)
+			pressure_alert = 2 
+		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < WARNING_HIGH_PRESSURE)
+			pressure_alert = 1 
 		else if (localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
-			pressure_alert = -1 //same here
+			pressure_alert = -1 
 		else if (localpressure <= HAZARD_LOW_PRESSURE)
-			pressure_alert = -2 //same here
+			pressure_alert = -2 
 		else 
-			pressure_alert = 0 //we aight
+			pressure_alert = 0 
 	else //there ain't no air, we're in a vacuum
 		pressure_alert = -2 
 	
-// Not immune to heat anymore either. Same deal. --SonixApache
+// This handles the temp sensor hud element
 /mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
 	var/envirotemp = environment.return_temperature()
-	var/adjusted_max_heat
-	if(!module)
-		adjusted_max_heat = base_heat_level_max
-	else
-		adjusted_max_heat = module.heat_level_max
 	if(environment)
 		if(envirotemp)	
-			if (envirotemp >= adjusted_max_heat)
-				if(!(temp_alert == 2))
-					to_chat(src, "<span class='danger' style=\"font-family:Courier\">Warning: Hazardous heat levels. Continued exposure will result in extensive damage to chassis.</span>")
+			if (envirotemp >= 1000 ) //1000 is the heat_level_3 for humans
 				temp_alert = 2
-				return adjustFireLoss (envirotemp / adjusted_max_heat)
-			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < adjusted_max_heat) //carbons
+			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < 1000 )
 				temp_alert = 1 
-			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT) //c a r b o n s
+			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT) 
 				temp_alert = -1 
 			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
 				temp_alert = -2

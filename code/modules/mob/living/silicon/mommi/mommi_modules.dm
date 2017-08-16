@@ -5,10 +5,6 @@
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
 
-	//crabs are cute and therefor exempt from burning to death
-	heat_level_max = INFINITY
-	pressure_level_max = INFINITY
-
 	languages = list(	LANGUAGE_GALACTIC_COMMON = 0, LANGUAGE_TRADEBAND = 0, LANGUAGE_VOX = 0,
 						LANGUAGE_ROOTSPEAK = 0, LANGUAGE_GREY = 0, LANGUAGE_CLATTER = 0,
 						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_CATBEAST = 0,

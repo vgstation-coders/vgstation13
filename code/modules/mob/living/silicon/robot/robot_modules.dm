@@ -16,8 +16,6 @@
 	var/languages
 	var/list/added_languages
 	var/list/upgrades = list()
-	var/pressure_level_max = 40 * ONE_ATMOSPHERE //Same as a regular hardsuit
-	var/heat_level_max = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE 
 
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
@@ -146,8 +144,6 @@
 /obj/item/weapon/robot_module/medical/New()
 	..()
 	
-	pressure_level_max = 80 * ONE_ATMOSPHERE //Hardsuit level x2
-	
 	src.modules += new /obj/item/device/healthanalyzer(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
@@ -214,10 +210,6 @@
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
-	
-	heat_level_max = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE //Atmos hardsuit level
-	pressure_level_max = 200 * ONE_ATMOSPHERE
-	
 	
 	src.emag = new /obj/item/borg/stun(src)
 	src.modules += new /obj/item/device/rcd/borg/engineering(src)
@@ -291,7 +283,6 @@
 
 /obj/item/weapon/robot_module/security/New()
 	..()
-	pressure_resistance = 80 * ONE_ATMOSPHERE
 	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
 	src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
@@ -375,7 +366,6 @@
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
-	pressure_resistance = 80 * ONE_ATMOSPHERE
 	src.emag = new /obj/item/borg/stun(src)
 	src.modules += new /obj/item/weapon/storage/bag/ore(src)
 	src.modules += new /obj/item/weapon/pickaxe/drill/borg(src)
@@ -415,8 +405,6 @@
 
 
 /obj/item/weapon/robot_module/syndicate/New()
-	pressure_resistance = 80 * ONE_ATMOSPHERE
-	
 	src.modules += new /obj/item/weapon/melee/energy/sword(src)
 	src.modules += new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(src)
 	src.modules += new /obj/item/weapon/card/emag(src)
@@ -428,8 +416,6 @@
 	name = "combat robot module"
 
 /obj/item/weapon/robot_module/combat/New()
-	pressure_resistance = 80 * ONE_ATMOSPHERE
-	
 	src.modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	src.modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	src.modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
