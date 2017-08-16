@@ -100,9 +100,12 @@
 	var/mob/living/carbon/human/H = ..(M)
 
 	ticker.mode.traitors += H.mind
-	H.mind.special_role = HIGHLANDER
+	H.mind.special_role = HIGHLANDER // NEEDED FOR CHEAT CHECKS!
 
 	H.mutations.Add(M_HULK) //all highlanders are permahulks
+	H.set_species("Human", force_organs=TRUE) // No Dionae
+	H.a_intent = I_HURT
+
 	H.update_mutations()
 	H.update_body()
 
@@ -152,7 +155,7 @@
 	H.equip_to_slot_or_del(W, slot_wear_id)
 
 	return H
-	
+
 
 //MAGIC MISSILE
 /datum/only_one/wizardwars

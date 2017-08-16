@@ -173,6 +173,43 @@
 //		log_debug("No gloves, [M] is truing to infect [src]")
 		spread_disease_to(M, src, "Contact")
 
+	// CHEATER CHECKS
+	if(M.mind)
+		var/punishment = FALSE
+		var/bad_behavior = FALSE
+		if(M.mind.special_role == HIGHLANDER)
+			switch(M.a_intent)
+				if(I_DISARM)
+					bad_behavior = "disarm"
+				//if(I_HURT)
+				//	bad_behavior = "punch/kick"
+				//if(I_GRAB)
+				//	bad_behavior = "grab"
+			if(bad_behavior)
+				// In case we change our minds later...
+				//M.set_species("Tajaran")
+				//M.Cluwneize()
+				for(var/datum/organ/external/arm in M.organs)
+					if(istype(arm, /datum/organ/external/r_arm) || istype(arm, /datum/organ/external/l_arm))
+						arm.droplimb(1)
+				M.emote("scream", auto=TRUE)
+				visible_message("<span class='sinister'>[M] tried to [bad_behavior] [src]! [ticker.Bible_deity_name] has frowned upon the disgrace!</span>")
+				punishment = "disarmed"
+		if(M.mind.special_role == BOMBERMAN)
+			switch(M.a_intent)
+				if(I_DISARM)
+					bad_behavior = "disarm"
+				//if(I_HURT)
+				//	bad_behavior = "punch/kick"
+				//if(I_GRAB)
+				//	bad_behavior = "grab"
+			if(bad_behavior)
+				M.gib()
+				visible_message("<span class='sinister'>[M] tried to [bad_behavior] [src]! DISQUALIFIED!</span>")
+				punishment = "gibbed"
+		if(punishment)
+			message_admins("[M] tried to disarm [src] as a [M.mind.special_role] and was [punishment].")
+			return
 
 	switch(M.a_intent)
 		if(I_HELP)
