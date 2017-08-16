@@ -25,6 +25,9 @@
 	handle_beams()
 	if(locked_to_z)
 		check_locked_zlevel()
+	var/datum/gas_mixture/environment = src.loc.return_air()
+	handle_pressure_damage(environment)
+	handle_heat_damage(environment)
 
 
 
@@ -133,7 +136,7 @@
 		src.druggy = max(0, src.druggy)
 
 	return 1
-/
+
 /mob/living/silicon/robot/mommi/handle_regular_hud_updates()
 	handle_sensor_modes()
 
@@ -198,18 +201,10 @@
 		else
 			src.cells.icon_state = "charge-empty"
 
-	if(bodytemp)
-		switch(src.bodytemperature) //310.055 optimal body temp
-			if(335 to INFINITY)
-				src.bodytemp.icon_state = "temp2"
-			if(320 to 335)
-				src.bodytemp.icon_state = "temp1"
-			if(300 to 320)
-				src.bodytemp.icon_state = "temp0"
-			if(260 to 300)
-				src.bodytemp.icon_state = "temp-1"
-			else
-				src.bodytemp.icon_state = "temp-2"
+	if(bodytemp) //actually environment temperature but fuck it
+		bodytemp.icon_state = "temp[temp_alert]"
+	if(pressure)
+		pressure.icon_state = "pressure[pressure_alert]"
 
 
 	update_pull_icon()
@@ -281,4 +276,11 @@
 				mmi = null
 			gib()
 
+			
+/mob/living/silicon/robot/mommi/handle_pressure_damage(datum/gas_mixture/environment)
+	..()
+	
+/mob/living/silicon/robot/mommi/handle_heat_damage(datum/gas_mixture/environment)
+	..()
+			
 #undef MOMMI_LOW_POWER

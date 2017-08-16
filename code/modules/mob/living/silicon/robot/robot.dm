@@ -12,6 +12,10 @@
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
+	var/base_pressure_level_max = 40 * ONE_ATMOSPHERE //Same as a regular hardsuit
+	var/base_heat_level_max = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE 
+	var/pressure_alert = 0
+	var/temp_alert = 0
 	//var/crisis //Admin-settable for combat module use.
 
 	var/obj/item/device/station_map/station_holomap = null
@@ -23,6 +27,8 @@
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
 	var/obj/abstract/screen/sensor = null
+	
+	
 
 	var/shown_robot_modules = 0
 	var/obj/abstract/screen/robot_modules_background

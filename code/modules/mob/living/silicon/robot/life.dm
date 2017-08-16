@@ -26,6 +26,9 @@
 	update_canmove()
 	handle_fire()
 	handle_beams()
+	var/datum/gas_mixture/environment = src.loc.return_air()
+	handle_pressure_damage(environment)
+	handle_heat_damage(environment)
 
 /mob/living/silicon/robot/proc/clamp_values()
 
@@ -241,25 +244,18 @@
 					src.cells.icon_state = "charge0"
 		else
 			src.cells.icon_state = "charge-empty"
-
-	if(bodytemp)
-		switch(src.bodytemperature) //310.055 optimal body temp
-			if(335 to INFINITY)
-				src.bodytemp.icon_state = "temp2"
-			if(320 to 335)
-				src.bodytemp.icon_state = "temp1"
-			if(300 to 320)
-				src.bodytemp.icon_state = "temp0"
-			if(260 to 300)
-				src.bodytemp.icon_state = "temp-1"
-			else
-				src.bodytemp.icon_state = "temp-2"
-
+	
+	if(bodytemp) //actually environment temperature but fuck it
+		bodytemp.icon_state = "temp[temp_alert]"
+	if(pressure)
+		pressure.icon_state = "pressure[pressure_alert]"
 
 	update_pull_icon()
-//Oxygen and fire does nothing yet!!
-//	if (src.oxygen) src.oxygen.icon_state = "oxy[src.oxygen_alert ? 1 : 0]"
-//	if (src.fire) src.fire.icon_state = "fire[src.fire_alert ? 1 : 0]"
+//Oxygen indicator exists, but unused
+//	if (oxygen) oxygen.icon_state = "oxy[src.oxygen_alert ? 1 : 0]"
+
+	if (on_fire) 
+		fire.icon_state = "fire[on_fire ? 1 : 0]"
 
 	if(src.eye_blind || blinded)
 		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
@@ -340,7 +336,7 @@
 	if(!on_fire) //Silicons don't gain stacks from hotspots, but hotspots can ignite them
 		IgniteMob()
 
-//Robots on fire
+// end robots on fire
 
 /mob/living/silicon/robot/update_canmove()
 	if(paralysis || stunned || knockdown || locked_to || lockcharge)
@@ -348,3 +344,58 @@
 	else
 		canmove = 1
 	return canmove
+
+// Borgs aren't immune to pressure anymore. Protection depends on module.
+/mob/living/silicon/robot/proc/handle_pressure_damage(datum/gas_mixture/environment)
+	//by the power of Polymorph and Errorage
+	var/adjusted_max_pressure
+	var/localpressure = environment.return_pressure()
+	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
+	//Borgs start without modules!
+	if(!module)
+		adjusted_max_pressure = base_pressure_level_max
+	else
+		adjusted_max_pressure = module.pressure_level_max
+	if(localpressure)
+		if(adjusted_pressure >= adjusted_max_pressure)
+			if(!(pressure_alert == 2))
+				to_chat(src, "<span class='danger' style=\"font-family:Courier\">Warning: Hazardous pressure levels. Continued exposure will result in extensive damage to chassis.</span>")
+			pressure_alert = 2 //oh fuck
+			adjustBruteLoss(min((adjusted_pressure/adjusted_max_pressure), MAX_HIGH_PRESSURE_DAMAGE))
+		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < adjusted_max_pressure)
+			pressure_alert = 1 //We don't really care, but might help us realize carbons are dying
+		else if (localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
+			pressure_alert = -1 //same here
+		else if (localpressure <= HAZARD_LOW_PRESSURE)
+			pressure_alert = -2 //same here
+		else 
+			pressure_alert = 0 //we aight
+	else //there ain't no air, we're in a vacuum
+		pressure_alert = -2 
+	
+// Not immune to heat anymore either. Same deal. --SonixApache
+/mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
+	var/envirotemp = environment.return_temperature()
+	var/adjusted_max_heat
+	if(!module)
+		adjusted_max_heat = base_heat_level_max
+	else
+		adjusted_max_heat = module.heat_level_max
+	if(environment)
+		if(envirotemp)	
+			if (envirotemp >= adjusted_max_heat)
+				if(!(temp_alert == 2))
+					to_chat(src, "<span class='danger' style=\"font-family:Courier\">Warning: Hazardous heat levels. Continued exposure will result in extensive damage to chassis.</span>")
+				temp_alert = 2
+				return adjustFireLoss (envirotemp / adjusted_max_heat)
+			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < adjusted_max_heat) //carbons
+				temp_alert = 1 
+			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT) //c a r b o n s
+				temp_alert = -1 
+			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
+				temp_alert = -2
+			else 
+				temp_alert = 0 
+				return 0
+	else //vacuums are cold
+		temp_alert = -2
