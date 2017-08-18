@@ -1232,14 +1232,25 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Holodeck - Rage Cage"
 	jammed=SUPER_JAMMED
 
+/area/holodeck/source_panic
+	name = "\improper Holodeck - Panic Bunker"
+	jammed=SUPER_JAMMED
 
+/area/holodeck/source_medieval
+	name = "\improper Holodeck - Medieval Times"
+	jammed=SUPER_JAMMED
 
+/area/holodeck/source_checkers
+	name = "\improper Holodeck - Checkers"
+	jammed=SUPER_JAMMED
 
+/area/holodeck/source_gym
+	name = "\improper Holodeck - Gym"
+	jammed=SUPER_JAMMED
 
-
-
-
-
+/area/holodeck/source_catnip
+	name = "\improper Holodeck - Club Catnip"
+	jammed=SUPER_JAMMED
 
 
 //Engineering
