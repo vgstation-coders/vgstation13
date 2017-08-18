@@ -47,7 +47,8 @@
 
 /mob/living/carbon/martian/New()
 	create_reagents(200)
-
+	name = pick("martian","scootaloo","squid","rootmarian","phoronitian","sepiida","octopodiforme",\
+	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo")
 	..()
 
 /mob/living/carbon/martian/Destroy()
