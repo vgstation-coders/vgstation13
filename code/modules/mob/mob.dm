@@ -1992,7 +1992,11 @@ mob/proc/on_foot()
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
-		var/spell/change_back = new /spell/aoe_turf/revert_form
+		var/spell/change_back
+		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
+			change_back = new offer_revert_spell
+		else
+			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
 	C.set_contained_mob(src)
 	timestopped = 1
@@ -2012,6 +2016,9 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/spell/aoe_turf/revert_form/no_z2 //Used if you don't want it reverting on Z2. So far only important for ghosts.
+	spell_flags = GHOSTCAST | Z2NOCAST
 
 /obj/transmog_body_container
 	name = "transmog body container"
