@@ -119,6 +119,10 @@
 
 #define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
 
+#define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
+
+#define ispowercell(A) istype(A, /obj/item/weapon/cell)
+
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
 #define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
