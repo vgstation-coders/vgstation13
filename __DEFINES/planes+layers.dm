@@ -201,6 +201,7 @@ What is the naming convention for planes or layers?
 	#define GHOST_LAYER 			1
 	#define LIGHTING_LAYER 			2
 	#define ABOVE_LIGHTING_LAYER 	3
+	#define HIGHEST_LIGHTING_LAYER	4
 	#define SUPERMATTER_WALL_LAYER 	4
 	#define SUPER_PORTAL_LAYER		5
 	#define NARSIE_GLOW 			6

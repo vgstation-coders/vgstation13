@@ -18,6 +18,10 @@ var/light_power_multiplier = 5
 
 	alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
 
+	if(light_type == LIGHT_SOFT_FLICKER)
+		alpha = initial(alpha)
+		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
+
 	for(var/turf/T in range(light_range, src))
 		affecting_turfs |= T
 
@@ -55,7 +59,7 @@ var/light_power_multiplier = 5
 	icon_state = "white"
 
 	var/image/I = image(icon)
-	I.layer = 4
+	I.layer = HIGHEST_LIGHTING_LAYER
 	I.icon_state = "overlay"
 	if(light_type == LIGHT_DIRECTIONAL)
 		var/turf/next_turf = get_step(src, dir)
@@ -64,9 +68,6 @@ var/light_power_multiplier = 5
 				I.icon_state = "[I.icon_state]_[i]"
 				break
 			next_turf = get_step(next_turf, dir)
-
-	if(light_type == LIGHT_SOFT_FLICKER)
-		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
 
 	temp_appearance += I
 
@@ -184,7 +185,7 @@ var/light_power_multiplier = 5
 
 	//apply the transform matrix
 	I.transform = M
-	I.layer = 2
+	I.layer = LIGHTING_LAYER
 
 	//and add it to the lights overlays
 	temp_appearance += I
@@ -201,7 +202,7 @@ var/light_power_multiplier = 5
 	I.icon_state = "[blocking_dirs]-[targ_dir]"
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-	I.layer = 3
+	I.layer = ABOVE_LIGHTING_LAYER
 
 	temp_appearance += I
 

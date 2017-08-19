@@ -1,7 +1,7 @@
 /mob
-	var/obj/screen/plane/master/master_plane
-	var/obj/screen/plane/dark/dark_plane
-	var/obj/backdrop/backdrop
+	var/obj/abstract/screen/plane/master/master_plane
+	var/obj/abstract/screen/plane/dark/dark_plane
+	var/obj/abstract/screen/backdrop/backdrop
 	var/seedarkness = 1
 
 /mob/Login()
