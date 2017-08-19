@@ -212,7 +212,7 @@ var/list/ai_list = list()
 	*/
 		//if(icon_state == initial(icon_state))
 	/* Nuked your hidden shit.*/
-	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President", "Fort", "Mothman", "Dancing Hotdog", "Diagnosis", "Drink It!", "Metaclub")
+	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President", "Fort", "Mothman", "Dancing Hotdog", "Diagnosis", "Drink It!", "Metaclub", "Jack Frost")
 	switch(icontype)
 		if("Clown")
 			icon_state = "ai-clown2"
@@ -320,6 +320,8 @@ var/list/ai_list = list()
 			icon_state = "ai-silveryferret"
 		if("Metaclub")
 			icon_state = "ai-terminal"
+		if("Jack Frost")
+			icon_state = "ai-jack"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
