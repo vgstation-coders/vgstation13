@@ -9,7 +9,7 @@
 /datum/rcd_schematic/decon/attack(var/atom/A, var/mob/user)
 	if(istype(A, /turf/simulated/wall))
 		var/turf/simulated/wall/T = A
-		if(istype(T, /turf/simulated/wall/r_wall) && !can_r_wall)
+		if((istype(T, /turf/simulated/wall/r_wall) && !can_r_wall) || istype(T, /turf/simulated/wall/invulnerable))
 			return "it cannot deconstruct reinforced walls!"
 
 		to_chat(user, "Deconstructing \the [T]...")

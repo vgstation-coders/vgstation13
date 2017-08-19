@@ -4,6 +4,17 @@
 /mob
 	plane = MOB_PLANE
 
+/mob/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("stat")
+			if((old_value == 2) && (new_value < 2))//Bringing the dead back to life
+				resurrect()
+			else if((old_value < 2) && (new_value == 2))//Kill he
+				living_mob_list.Remove(src)
+				dead_mob_list.Add(src)
+
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
@@ -1156,6 +1167,20 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
+/mob/proc/print_flavor_text(user)
+    if(flavor_text)
+        var/msg = replacetext(flavor_text, "\n", "<br />")
+        if (ishuman(src))
+            var/mob/living/carbon/human/H = src
+            var/datum/organ/external/head/limb_head = H.get_organ(LIMB_HEAD)
+            if((wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE))) || (H.head && (is_slot_hidden(H.head.body_parts_covered,HIDEFACE))) || !limb_head || limb_head.disfigured || (limb_head.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) ) //Wearing a mask, having no head, being disfigured, or being a husk means no flavor text for you.
+                return
+
+            if(length(msg) <= 32)
+                return "<font color='#ffa000'><b>[msg]</b></font>"
+            else
+                return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[user];flavor_text=[flavor_text];target_name=[name]'>More</a></b></font>"
+
 /mob/verb/abandon_mob()
 	set name = "Respawn"
 	set category = "OOC"
@@ -1220,7 +1245,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1370,6 +1395,11 @@ var/list/slot_equipment_priority = list( \
 	//	if(usr.client)
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
+
+	if((href_list["flavor_text"]) && (href_list["target_name"]))
+		var/datum/browser/popup = new(src, "\ref[src]", href_list["target_name"], 500, 200)
+		popup.set_content(replacetext(href_list["flavor_text"], "\n", "<br>"))
+		popup.open()
 
 /mob/MouseDrop(mob/M as mob)
 	..()
@@ -1898,7 +1928,6 @@ mob/proc/on_foot()
 		"lying_prev",
 		"canmove",
 		"candrop",
-		"lastpuke",
 		"cpr_time",
 		"bodytemperature",
 		"drowsyness",
@@ -1963,7 +1992,11 @@ mob/proc/on_foot()
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
-		var/spell/change_back = new /spell/aoe_turf/revert_form
+		var/spell/change_back
+		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
+			change_back = new offer_revert_spell
+		else
+			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
 	C.set_contained_mob(src)
 	timestopped = 1
@@ -1983,6 +2016,9 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/spell/aoe_turf/revert_form/no_z2 //Used if you don't want it reverting on Z2. So far only important for ghosts.
+	spell_flags = GHOSTCAST | Z2NOCAST
 
 /obj/transmog_body_container
 	name = "transmog body container"

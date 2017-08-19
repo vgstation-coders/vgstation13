@@ -186,7 +186,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/quartermaster(H), slot_belt)
 //		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
-		H.put_in_hands(new /obj/item/weapon/clipboard(H))
+		H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 		if(H.backbag == 1)
 			H.put_in_hands(new H.species.survival_gear(H))
 		else

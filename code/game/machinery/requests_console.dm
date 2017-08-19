@@ -295,6 +295,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				if(!MS.is_functioning())
 					continue
 				MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
+				log_rc("[key_name(usr)] sent a message through \the [src] ([department]) to [href_list["department"]]. Message: \"[log_msg]\". Stamped: [msgStamped || "No"]. Verified: [msgVerified || "No"]. Prority: [priority]")
 				pass = 1
 
 			if(pass)

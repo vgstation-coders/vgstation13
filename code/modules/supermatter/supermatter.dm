@@ -431,7 +431,7 @@
 	power += 200
 
 		//Some poor sod got eaten, go ahead and irradiate people nearby.
-	for(var/mob/living/l in range(10))
+	for(var/mob/living/l in range(10,src))
 		if(l in view())
 			l.show_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find your skin covered in new radiation burns.</span>", 1,\
 				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)

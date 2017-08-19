@@ -19,14 +19,16 @@
 
 	var/finished = 0
 
+	var/const/players_per_wizard = 10
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
+	var/wizard_amount= 1
 
 	can_be_mixed = TRUE
 
 /datum/game_mode/wizard/announce()
 	to_chat(world, "<B>The current game mode is - Wizard!</B>")
-	to_chat(world, "<B>There is a <span class='danger'>SPACE WIZARD on the station. You can't let him achieve his objective!</span>")
+	to_chat(world, "<B>There are several <span class='danger'>SPACE WIZARDS on the station. You can't let them achieve their objectives!</span>")
 
 /datum/game_mode/wizard/pre_setup()
 	var/list/datum/mind/possible_wizards = get_players_for_role(ROLE_WIZARD)
@@ -34,29 +36,30 @@
 		log_admin("Failed to set-up a round of wizard. Couldn't find any volunteers to be wizards.")
 		message_admins("Failed to set-up a round of wizard. Couldn't find any volunteers to be wizards.")
 		return 0
-	var/datum/mind/wizard
-	while(possible_wizards.len)
-		wizard = pick(possible_wizards)
-		if(wizard.special_role || (mixed && (wizard in ticker.mode.modePlayer)))
-			possible_wizards -= wizard
-			wizard = null
-			continue
-		else
+
+	wizard_amount= max(round(num_players()/players_per_wizard, 1), 1)
+
+	for(var/j = 0, j < wizard_amount, j++)
+		if(!possible_wizards.len)
 			break
-	if(isnull(wizard))
-		log_admin("COULD NOT MAKE A WIZARD, Mixed mode is [mixed ? "enabled" : "disabled"]")
-		message_admins("COULD NOT MAKE A WIZARD, Mixed mode is [mixed ? "enabled" : "disabled"]")
-		return 0
-	wizards += wizard
-	modePlayer += wizard
+		var/datum/mind/wizard = pick(possible_wizards)
+		possible_wizards -= wizard
+		if(wizard.special_role || (mixed && (wizard in ticker.mode.modePlayer)))
+			j--
+			continue
+		wizards += wizard
+		modePlayer += wizard
+		wizard.assigned_role = "MODE" //So they aren't chosen for other jobs.
+		wizard.special_role = "Wizard"
+		wizard.original = wizard.current
+
 	if(mixed)
 		ticker.mode.modePlayer += wizards //merge into master antag list
 		ticker.mode.wizards += wizards
-	wizard.assigned_role = "MODE" //So they aren't chosen for other jobs.
-	wizard.special_role = "Wizard"
-	wizard.original = wizard.current
+
 	if(wizardstart.len == 0)
-		to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
+		for(var/datum/mind/wwwizard in wizards)
+			to_chat(wwwizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		return 0
@@ -142,7 +145,7 @@
 	var/wizard_name_second = pick(wizard_second)
 	var/randomname = "[wizard_name_first] [wizard_name_second]"
 	spawn(0)
-		var/newname = copytext(sanitize(input(wizard_mob, "You are the Space Wizard. Would you like to change your name to something else?", "Name change", randomname) as null|text),1,MAX_NAME_LEN)
+		var/newname = copytext(sanitize(input(wizard_mob, "You are a Space Wizard. Would you like to change your name to something else?", "Name change", randomname) as null|text),1,MAX_NAME_LEN)
 
 		if (!newname)
 			newname = randomname
@@ -154,7 +157,7 @@
 /datum/game_mode/proc/greet_wizard(var/datum/mind/wizard, var/you_are=1)
 	if (you_are)
 		var/wikiroute = role_wiki[ROLE_WIZARD]
-		to_chat(wizard.current, "<span class='danger'>You are the Space Wizard!</span> <span class='info'><a HREF='?src=\ref[wizard.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+		to_chat(wizard.current, "<span class='danger'>You are a Space Wizard!</span> <span class='info'><a HREF='?src=\ref[wizard.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(wizard.current, "<B>The Space Wizards Federation has given you the following tasks:</B>")
 
 	var/obj_count = 1

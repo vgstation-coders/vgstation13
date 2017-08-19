@@ -944,6 +944,7 @@
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
 					databuf.dna.real_name=connected.occupant.name
+					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier"
 				src.buffers[bufferId] = databuf
 			return 1
@@ -958,6 +959,7 @@
 				databuf.dna = src.connected.occupant.dna.Clone()
 				if(ishuman(connected.occupant))
 					databuf.dna.real_name=connected.occupant.name
+					databuf.dna.flavor_text=connected.occupant.flavor_text
 				databuf.name = "Unique Identifier + Unique Enzymes"
 				src.buffers[bufferId] = databuf
 			return 1
@@ -1009,6 +1011,7 @@
 				if ((buf.types & DNA2_BUF_UE))
 					src.connected.occupant.real_name = buf.dna.real_name
 					src.connected.occupant.name = buf.dna.real_name
+					src.connected.occupant.flavor_text = buf.dna.flavor_text
 				src.connected.occupant.UpdateAppearance(buf.dna.UI.Copy())
 			else if (buf.types & DNA2_BUF_SE)
 				src.connected.occupant.dna.SE = buf.dna.SE

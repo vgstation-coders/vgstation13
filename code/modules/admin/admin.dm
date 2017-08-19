@@ -784,6 +784,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
 			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
+			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Spawn a vermin infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=carp'>Trigger a Carp migration</A><BR>
 			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
@@ -1278,19 +1279,7 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = new()
-
-	if(text_ends_with(object, ".")) //Path ends with a dot - DO NOT include subtypes
-		object = copytext(object, 1, length(object)) //Remove the dot
-
-		for(var/path in typesof(/atom))
-			if(text_ends_with("[path]", object))
-				matches += path
-	else //Include subtypes
-		for(var/path in typesof(/atom))
-			if(findtext("[path]", object))
-				matches += path
-
+	var/list/matches = get_matching_types(object, /atom)
 
 	if(matches.len==0)
 		return

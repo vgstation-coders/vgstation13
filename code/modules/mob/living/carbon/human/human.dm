@@ -178,6 +178,7 @@
 
 	if(dna)
 		dna.real_name = real_name
+		dna.flavor_text = flavor_text
 
 	prev_gender = gender // Debug for plural genders
 	make_blood()
@@ -250,7 +251,7 @@
 
 		if(istype(loc, /obj/spacepod)) // Spacdpods!
 			var/obj/spacepod/S = loc
-			stat("Spacepod Charge", "[istype(S.battery) ? "[(S.battery.charge / S.battery.maxcharge) * 100]" : "No cell detected"]")
+			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
 /mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
@@ -980,7 +981,7 @@
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/weapon/organ/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
@@ -1521,6 +1522,14 @@
 	else
 		to_chat(src, "<b><font color='[pick("red","orange","yellow","green","blue")]'>[pick(boo_phrases_drugs)]</font></b>")
 
+/mob/living/carbon/human/proc/seizure(paralyse_duration = 10, jitter_duration = 1000)
+	forcesay(epilepsy_appends)
+	visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
+					"<span class='warning'>You have a seizure!</span>", \
+					drugged_message = "<span class='info'>\The [src] starts raving.</span>")
+	Paralyse(paralyse_duration)
+	Jitter(jitter_duration)
+
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
 	for(var/datum/organ/external/O in src.organs)
@@ -1691,8 +1700,8 @@ mob/living/carbon/human/isincrit()
 	for(var/datum/organ/external/damagedorgan in H.organs)
 		if(damagedorgan.status & ORGAN_BLEEDING)
 			return_organs += damagedorgan
-	return return_organs		
-		
+	return return_organs
+
 /mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
 
@@ -1700,7 +1709,7 @@ mob/living/carbon/human/isincrit()
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
-	var/obj/item/organ/extractedorgan
+	var/obj/item/organ/internal/extractedorgan
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
 		if(extractedorgan && istype(extractedorgan))

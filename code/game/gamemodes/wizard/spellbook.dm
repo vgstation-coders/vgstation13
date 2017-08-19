@@ -642,12 +642,12 @@
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		var/mob/living/carbon/human/h = user
+		var/mob/living/carbon/human/H = user
 		user.flash_eyes(visual = 1)
-		for(var/datum/organ/external/l_leg/E in h.organs)
+
+		for(var/datum/organ/external/E in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 			E.droplimb(1)
-		for(var/datum/organ/external/r_leg/E in h.organs)
-			E.droplimb(1)
+
 		to_chat(user, "<span class = 'warning'>Your legs fall off!</span>")
 		qdel(src)
 
@@ -811,3 +811,23 @@
 			break
 	if(!success)
 		user.forceMove(pick(L))
+
+///// ANCIENT SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	spell = null
+	icon_state = "book"
+	desc = "A book of lost and forgotten knowledge"
+	spellname = "forgotten knowledge"
+
+/obj/item/weapon/spellbook/oneuse/ancient/New()
+	..()
+	spell = pick(possible_spells)
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal ancient knowledge!</span>")
+	user.gib()
+	qdel(src)
+
+

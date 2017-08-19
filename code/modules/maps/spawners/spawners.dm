@@ -513,7 +513,7 @@
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
 		/obj/item/weapon/cigbutt/cigarbutt,
-		/obj/item/weapon/clipboard,
+		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
 		/obj/item/weapon/coin/adamantine,
@@ -742,10 +742,10 @@
 		/obj/item/clothing/suit/space/syndicate/black/engie,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/accessory/storage/brown_vest,
-		/obj/item/weapon/organ/head,
-		/obj/item/weapon/organ/r_leg,
-		/obj/item/weapon/organ/l_arm,
-		/obj/item/weapon/organ/l_foot,
+		/obj/item/organ/external/head,
+		/obj/item/organ/external/r_leg,
+		/obj/item/organ/external/l_arm,
+		/obj/item/organ/external/l_foot,
 		)
 
 /obj/abstract/map/spawner/space/supply
@@ -1223,5 +1223,19 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
-
+//Syndiecargo loot spawners////////////////////////
+/obj/abstract/map/spawner/misc/syndiecargo
+	name = "syndiecargo loot spawner"
+	icon_state = "syndicargo"
+	amount = 2
+	jiggle = 5
+	to_spawn = list (/obj/item/clothing/mask/gas/voice,
+	/obj/item/weapon/melee/classic_baton,
+	/obj/item/clothing/gloves/knuckles,
+	/obj/item/ammo_storage/magazine/a12mm/ops,
+	/obj/item/weapon/storage/pill_bottle/random,
+	/obj/item/weapon/gun/projectile/automatic/lockbox,
+	/obj/item/weapon/handcuffs,
+	/obj/item/clothing/accessory/holomap_chip/operative
+)
 

@@ -275,21 +275,21 @@
 		search += recursive_type_check(B, typepath)
 	var/valid_organs=0
 	for(var/atom/A in search)
-		if(!istype(A,/obj/item/organ))
-			var/obj/item/organ/O = A
+		if(!istype(A,/obj/item/organ/internal))
+			var/obj/item/organ/internal/O = A
 			if(O && istype(O, typepath) && !O.is_printed && O.had_mind)
 				valid_organs++
 	return (valid_organs >= required_amount)
 
 /datum/theft_objective/number/heist_hard/organs/appendix
 	name = "appendixes"
-	typepath = /obj/item/organ/appendix
+	typepath = /obj/item/organ/internal/appendix
 	min = 3
 	max = 6
 
 /datum/theft_objective/number/heist_hard/organs/eyes
 	name = "eyes"
-	typepath = /obj/item/organ/eyes
+	typepath = /obj/item/organ/internal/eyes
 	min = 3
 	max = 6
 

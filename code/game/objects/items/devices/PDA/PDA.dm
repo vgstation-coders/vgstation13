@@ -1913,9 +1913,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("1")		// Configure pAI device
 						pai.attack_self(U)
 					if("2")		// Eject pAI device
-						var/turf/T = get_turf(src.loc)
-						if(T)
-							pai.forceMove(T)
+						U.put_in_hands(pai)
 
 //LINK FUNCTIONS===================================
 
@@ -2077,7 +2075,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)) //Give the AI a chance of intercepting the message
@@ -2105,7 +2103,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(L)
 			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
-		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
+		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else

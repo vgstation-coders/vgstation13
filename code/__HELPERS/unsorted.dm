@@ -1067,9 +1067,9 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 			for(var/obj/machinery/door/D2 in T1)
 				doors += D2
 			/*if(T1.parent)
-				air_master.groups_to_rebuild += T1.parent
+				SSair.groups_to_rebuild += T1.parent
 			else
-				air_master.mark_for_update(T1)*/
+				SSair.mark_for_update(T1)*/
 
 	for(var/obj/O in doors)
 		O:update_nearby_tiles()
@@ -1556,9 +1556,10 @@ Game Mode config tags:
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
+	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
 		if(C.prefs.special_popup)
-			C << output("\[[time_stamp()]] [msg]", "window1.msay_output")
+			C << output("\[[time_stamp()]] [sane_msg]", "window1.msay_output")
 		else
 			to_chat(C, msg)
 

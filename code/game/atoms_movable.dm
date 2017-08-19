@@ -497,6 +497,11 @@
 		if(M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
 
+	if(istype(src,/obj/mecha))
+		var/obj/mecha/M = src
+		M.dash_dir = dir
+		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
+
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
 

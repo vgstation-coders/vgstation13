@@ -21,15 +21,15 @@
 	var/stored_matter = 200
 	var/loaded_dna //Blood sample for DNA hashing.
 	var/list/products = list(
-		"heart"            = list(/obj/item/organ/heart,  50),
-		"human lungs"      = list(/obj/item/organ/lungs,  30),
-		"vox lungs"        = list(/obj/item/organ/lungs/vox,  30),
-		"plasmaman lungs"  = list(/obj/item/organ/lungs/plasmaman,  30),
-		"kidneys"          = list(/obj/item/organ/kidneys,20),
-		"human eyes"       = list(/obj/item/organ/eyes,   30),
-		"grey eyes"        = list(/obj/item/organ/eyes/grey,   30),
-		"vox eyes"         = list(/obj/item/organ/eyes/vox,   30),
-		"liver"            = list(/obj/item/organ/liver,  50),
+		"heart"            = list(/obj/item/organ/internal/heart,  50),
+		"human lungs"      = list(/obj/item/organ/internal/lungs,  30),
+		"vox lungs"        = list(/obj/item/organ/internal/lungs/vox,  30),
+		"plasmaman lungs"  = list(/obj/item/organ/internal/lungs/plasmaman,  30),
+		"kidneys"          = list(/obj/item/organ/internal/kidneys,20),
+		"human eyes"       = list(/obj/item/organ/internal/eyes,   30),
+		"grey eyes"        = list(/obj/item/organ/internal/eyes/grey,   30),
+		"vox eyes"         = list(/obj/item/organ/internal/eyes/vox,   30),
+		"liver"            = list(/obj/item/organ/internal/liver,  50),
 		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)
 
@@ -70,8 +70,8 @@
 		stored_matter -= products[choice][2]
 		var/new_organ = products[choice][1]
 		var/printed_organ = new new_organ(get_turf(src))
-		if(istype(printed_organ, /obj/item/organ))
-			var/obj/item/organ/O = printed_organ
+		if(istype(printed_organ, /obj/item/organ/internal))
+			var/obj/item/organ/internal/O = printed_organ
 			O.is_printed = TRUE // Heist stuff.
 
 			if(prints_prosthetics)

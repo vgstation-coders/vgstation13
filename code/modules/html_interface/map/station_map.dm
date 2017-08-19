@@ -106,7 +106,6 @@
 			allowed_areas = list(
 				/area/centcom/specops,
 				/area/centcom/control,
-				/area/centcom/creed,
 				/area/centcom/test,
 				/area/centcom/ferry,
 				/area/centcom/holding,
@@ -114,9 +113,8 @@
 				)
 		if(HOLOMAP_FILTER_ERT)
 			allowed_areas = list(
-				/area/centcom/specops,
+				/area/centcom/ert,
 				/area/centcom/control,
-				/area/centcom/creed,
 				/area/centcom/test,
 				/area/centcom/ferry,
 				/area/centcom/holding,

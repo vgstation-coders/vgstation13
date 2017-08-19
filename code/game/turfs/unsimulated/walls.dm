@@ -16,6 +16,13 @@
 	opacity = 0
 	canSmoothWith = null
 
+/turf/unsimulated/wall/blastdoor
+	name = "Shuttle Bay Blast Door"
+	desc = "Why it no open!"
+	icon = 'icons/obj/doors/rapid_pdoor.dmi'
+	icon_state = "pdoor1"
+	canSmoothWith = null
+
 /turf/unsimulated/wall/rock
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'

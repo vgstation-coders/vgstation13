@@ -61,6 +61,28 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/handle_beams()
 	return 1
 
+/atom/variable_edited(variable_name, old_value, new_value)
+	.=..()
+
+	switch(variable_name)
+		if("light_color")
+			set_light(l_color = new_value)
+			return 1
+		if("light_range")
+			set_light(new_value)
+			return 1
+		if("light_power")
+			set_light(l_power = new_value)
+
+		if("contents")
+			if(islist(new_value))
+				if(length(new_value) == 0) //empty list
+					return 0 //Replace the contents list with an empty list, nullspacing everything
+				else
+					//If the new value is a list with objects, don't nullspace the old objects, and merge the two lists together peacefully
+					contents.Add(new_value)
+					return 1
+
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
@@ -603,6 +625,7 @@ its easier to just keep the beam vertical.
 			if(!istype(H.dna, /datum/dna))
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
+				H.dna.flavor_text = H.flavor_text
 		H.check_dna()
 
 		//Now, deal with gloves.

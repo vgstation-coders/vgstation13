@@ -87,7 +87,7 @@ var/global/num_vending_terminals = 1
 	var/machine_id = "#"
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
-	
+
 	var/account_first_linked = 0
 
 /obj/machinery/vending/cultify()
@@ -945,7 +945,7 @@ var/global/num_vending_terminals = 1
 		else
 			if(istype(R.product_path, /obj))
 				var/obj/A = R.product_path
-				A.forceMove(get_turf(src))		
+				A.forceMove(get_turf(src))
 		src.vend_ready = 1
 		return
 
@@ -1253,6 +1253,37 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/cola
+	
+/obj/machinery/vending/offlicence
+	name = "\improper Offworld Off-Licence"
+	desc = "A vendor containing all you need to drown your sorrows and your finances."
+	icon_state = "offlicence"
+	product_slogans = "Offworld Off-Licence: Think outcider the box!;People may abandon you, but alcohol will always be there for you.;Recommended by 8 out of 10 chavs!"
+	product_ads = "The best mistake you've ever made.;Made with real imitation Karmotrine!;Dan-free since 2561!"
+	vend_reply = "Drink irresponsibly."
+	products = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 6,
+		)
+	contraband = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 40,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 50,
+		)
+
+	pack = /obj/structure/vendomatpack/offlicence
 
 //This one's from bay12
 /obj/machinery/vending/cart
@@ -1650,7 +1681,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "nutri"
 	icon_deny = "nutri-deny"
 	products = list(
-		/obj/item/beezeez = 45,
+		/obj/item/weapon/reagent_containers/food/snacks/beezeez = 20,
 		/obj/item/weapon/reagent_containers/glass/fertilizer/ez = 35,
 		/obj/item/weapon/reagent_containers/glass/fertilizer/l4z = 25,
 		/obj/item/weapon/reagent_containers/glass/fertilizer/rh = 15,
@@ -1891,6 +1922,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
+		/obj/item/vaporizer = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2582,7 +2614,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/hairflower = 3,
 		)
 	pack = /obj/structure/vendomatpack/makeup
-	
+
 
 
 /obj/machinery/vending/sale

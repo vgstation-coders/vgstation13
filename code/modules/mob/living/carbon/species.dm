@@ -1046,7 +1046,7 @@ var/global/list/whitelisted_species = list("Human")
 		var/datum/organ/external/head = slime_person.get_organ(LIMB_HEAD)
 		var/datum/organ/internal/I = slime_person.internal_organs_by_name["brain"]
 
-		var/obj/item/organ/O
+		var/obj/item/organ/internal/O
 		if(I && istype(I))
 			O = I.remove(user)
 			if(O && istype(O))
@@ -1065,13 +1065,13 @@ var/global/list/whitelisted_species = list("Human")
 
 /mob/living/slime_pile/attackby(obj/item/I, mob/user)
 	if(slime_person)
-		if(istype(I, /obj/item/organ/brain/slime_core))
+		if(istype(I, /obj/item/organ/internal/brain/slime_core))
 			if(slime_person.internal_organs_by_name["brain"])
 				to_chat(user, "<span class='notice'>There is already \a [I] in \the [src].</span>")
 				return
 			if(user.drop_item(I))
 				var/datum/organ/external/head = slime_person.get_organ(LIMB_HEAD)
-				var/obj/item/organ/O = I
+				var/obj/item/organ/internal/O = I
 
 				if(istype(O))
 					O.organ_data.transplant_data = list()

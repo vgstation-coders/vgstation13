@@ -99,6 +99,7 @@
 		vox.fully_replace_character_name(vox.real_name, vox.generate_name())
 		//vox.languages = HUMAN // Removing language from chargen.
 		vox.default_language = all_languages[LANGUAGE_VOX]
+		vox.flavor_text = ""
 		vox.species.default_language = LANGUAGE_VOX
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"

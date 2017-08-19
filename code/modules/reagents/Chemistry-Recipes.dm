@@ -581,7 +581,7 @@
 /datum/chemical_reaction/vaporize
 	name = "Vaporize"
 	id = "vaporize"
-	result_amount = 52
+	result_amount = 104
 	result = null
 
 /datum/chemical_reaction/vaporize/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -616,7 +616,7 @@
 /datum/chemical_reaction/vaporize/plasma
 	name = "Vaporize Plasma"
 	id = "vaporizeplasma"
-	result_amount = 5 //Let's not go overboard with the plasma, alright?
+	result_amount = 10 //Let's not go overboard with the plasma, alright?
 	required_reagents = list(VAPORSALT = 1, PLASMA = 1)
 
 /datum/chemical_reaction/vaporize/plasma/disperse(turf/T,datum/gas_mixture/G,var/vol)
@@ -2896,7 +2896,7 @@
 	name = "Apetrine"
 	id = APETRINE
 	result = APETRINE
-	required_reagents = list(PETRICIN = 2, PACID = 3)
+	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
 
 #undef ALERT_AMOUNT_ONLY

@@ -109,7 +109,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		qdel(src)
 		return
 	else if(istype(I, /obj/item/weapon/nullrod))
-		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of the null rod!</span>")
+		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		stat_collection.cult.runes_nulled++
 		return

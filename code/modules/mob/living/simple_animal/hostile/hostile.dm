@@ -300,7 +300,7 @@
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 		if(casingtype)
-			new casingtype(get_turf(src))
+			new casingtype(get_turf(src),1)// empty casing
 
 /mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(target == start)
@@ -365,7 +365,12 @@
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
 				UnarmedAttack(T)
 			for(var/atom/A in T)
-				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
+				if((istype(A, /obj/structure/window)\
+				 || istype(A, /obj/structure/closet)\
+				 || istype(A, /obj/structure/table)\
+				 || istype(A, /obj/structure/grille)\
+				 || istype(A, /obj/structure/rack)\
+				 || istype(A, /obj/machinery/door/window)) && Adjacent(A))
 					UnarmedAttack(A)
 	return
 

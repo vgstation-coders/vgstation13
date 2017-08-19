@@ -143,6 +143,7 @@
 #define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
+	
 	src.modules += new /obj/item/device/healthanalyzer(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
@@ -209,6 +210,7 @@
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
+	
 	src.emag = new /obj/item/borg/stun(src)
 	src.modules += new /obj/item/device/rcd/borg/engineering(src)
 	src.modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
@@ -277,7 +279,7 @@
 
 
 /obj/item/weapon/robot_module/security
-	name = "peacekeeper robot module"
+	name = "security robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()

@@ -22,7 +22,7 @@
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)
 
-	if(M_BEAK in M.mutations) //Beaks = stronger bites
+	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		armor_modifier = 5
 		damage += 4
 
@@ -61,6 +61,9 @@
 
 //KICKS
 /mob/living/carbon/human/kick_act(mob/living/carbon/human/M)
+	//Pick a random usable foot to perform the kick with
+	var/datum/organ/external/foot_organ = pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+
 	M.delayNextAttack(20) //Kicks are slow
 
 	if((src == M) || (M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
@@ -101,7 +104,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(M_TALONS in M.mutations) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)
@@ -170,6 +173,43 @@
 //		log_debug("No gloves, [M] is truing to infect [src]")
 		spread_disease_to(M, src, "Contact")
 
+	// CHEATER CHECKS
+	if(M.mind)
+		var/punishment = FALSE
+		var/bad_behavior = FALSE
+		if(M.mind.special_role == HIGHLANDER)
+			switch(M.a_intent)
+				if(I_DISARM)
+					bad_behavior = "disarm"
+				//if(I_HURT)
+				//	bad_behavior = "punch/kick"
+				//if(I_GRAB)
+				//	bad_behavior = "grab"
+			if(bad_behavior)
+				// In case we change our minds later...
+				//M.set_species("Tajaran")
+				//M.Cluwneize()
+				for(var/datum/organ/external/arm in M.organs)
+					if(istype(arm, /datum/organ/external/r_arm) || istype(arm, /datum/organ/external/l_arm))
+						arm.droplimb(1)
+				M.emote("scream", auto=TRUE)
+				visible_message("<span class='sinister'>[M] tried to [bad_behavior] [src]! [ticker.Bible_deity_name] has frowned upon the disgrace!</span>")
+				punishment = "disarmed"
+		if(M.mind.special_role == BOMBERMAN)
+			switch(M.a_intent)
+				if(I_DISARM)
+					bad_behavior = "disarm"
+				//if(I_HURT)
+				//	bad_behavior = "punch/kick"
+				//if(I_GRAB)
+				//	bad_behavior = "grab"
+			if(bad_behavior)
+				M.gib()
+				visible_message("<span class='sinister'>[M] tried to [bad_behavior] [src]! DISQUALIFIED!</span>")
+				punishment = "gibbed"
+		if(punishment)
+			message_admins("[M] tried to disarm [src] as a [M.mind.special_role] and was [punishment].")
+			return
 
 	switch(M.a_intent)
 		if(I_HELP)

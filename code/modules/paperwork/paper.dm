@@ -286,8 +286,8 @@
 
 			update_icon()
 
-			if(istype(loc, /obj/item/weapon/clipboard))
-				var/obj/item/weapon/clipboard/C = loc
+			if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+				var/obj/item/weapon/storage/bag/clipboard/C = loc
 				C.update_icon()
 
 	if(href_list["help"])
@@ -309,7 +309,6 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-		//if((!in_range(src, user) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P)) return //What the actual FUCK
 
 		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
 			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
@@ -501,6 +500,10 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/voxresearch/voxresearchescape
 	name = "paper- 'Recent Attack'"
 	info = "We still do not know who were responsible for the recent attack and escape of several test subjects.  The initial investigation points to the Syndicate but we cannot say for sure at this time.  This has violated our contract with REDACTED and REDACTED.  We may have to close the facility. "
+
+/obj/item/weapon/paper/suitdispenser
+	name = "paper- 'Suit Dispenser Manual - How to use them?'"
+	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
 
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"

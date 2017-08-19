@@ -67,7 +67,7 @@
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
-
+	var/dash_dir = null
 	var/wreckage
 
 	var/list/equipment = new
@@ -302,6 +302,8 @@
 			src.occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0
+	if(throwing)
+		return 0
 	if(state)
 		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
 		return
@@ -391,20 +393,28 @@
 		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
 			obstacle.ex_act(1)
 
-		else if(istype(obstacle, /mob/living/carbon))
-			var/mob/living/carbon/C = obstacle
-			var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
-			if(C.flags & INVULNERABLE)
-				return
-			C.take_overall_damage(5,0)
-			if(C.locked_to)
-				C.locked_to = 0
-			C.Stun(5)
-			C.Knockdown(5)
-			C.apply_effect(STUTTER, 5)
-			playsound(src, pick(hit_sound), 50, 0, 0)
-			breakthrough = 1
-
+		else if(istype(obstacle, /mob/living))
+			var/mob/living/L = obstacle
+			if (L.flags & INVULNERABLE)
+				src.throwing = 0
+				src.crashing = null
+			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+				//can't be knocked down? you'll still take the damage.
+				src.throwing = 0
+				src.crashing = null
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+			else
+				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+				L.Stun(5)
+				L.Knockdown(5)
+				L.apply_effect(STUTTER, 5)
+				playsound(src, pick(hit_sound), 50, 0, 0)
+				breakthrough = 1
 		else
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
@@ -415,7 +425,7 @@
 					src.throw_at(crashing, 50, src.throw_speed)
 			else
 				spawn(1)
-					crashing = get_distant_turf(get_turf(src), dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
+					crashing = get_distant_turf(get_turf(src), dash_dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
 					src.throw_at(crashing, 50, src.throw_speed)
 
 	if(istype(obstacle, /obj))

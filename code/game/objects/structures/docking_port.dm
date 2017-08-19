@@ -10,6 +10,8 @@ var/global/list/all_docking_ports = list()
 	anchored = 1
 	invisibility = 60 //Only ghosts can see
 
+	var/require_admin_permission = 0
+
 	var/areaname = "space"
 
 	var/obj/docking_port/docked_with

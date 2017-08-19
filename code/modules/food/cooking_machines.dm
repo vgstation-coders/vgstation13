@@ -190,8 +190,8 @@ var/global/ingredientLimit = 10
 		. = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
-	else if(istype(I,/obj/item/organ))
-		var/obj/item/organ/organ = I
+	else if(istype(I,/obj/item/organ/internal))
+		var/obj/item/organ/internal/organ = I
 		if(organ.robotic)
 			. = "That's a prosthetic. It wouldn't taste very good."
 		else

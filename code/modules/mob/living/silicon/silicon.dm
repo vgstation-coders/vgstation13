@@ -10,8 +10,6 @@
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
 
-	immune_to_ssd = 1
-
 	var/obj/item/device/radio/borg/radio = null //AIs dont use this but this is at the silicon level to advoid copypasta in say()
 	var/list/speech_synthesizer_langs = list()	//which languages can be vocalized by the speech synthesizer
 	var/sensor_mode = 0 //Determines the current HUD.

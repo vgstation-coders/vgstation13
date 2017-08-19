@@ -114,6 +114,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "janitorial supplies crate"
 	group = "Supplies"
 
+/datum/supply_packs/trashcompactor
+	name = "Trash compactor"
+	contains = list(/obj/machinery/disposal/compactor/unplugged)
+	cost = 100
+	containertype = /obj/structure/largecrate
+	containername = "trash compactor crate"
+	group = "Supplies"
+
 /datum/supply_packs/lightbulbs
 	name = "Replacement lights"
 	contains = list(/obj/item/weapon/storage/box/lights/mixed,
@@ -1750,6 +1758,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "corgi Crate"
 	group = "Hydroponics"
 
+/datum/supply_packs/cat
+	name = "Cat"
+	contains = list()
+	cost = 30
+	containertype = /obj/structure/largecrate/cat
+	containername = "cat crate"
+	group = "Hydroponics"
+
 /datum/supply_packs/weedcontrol
 	name = "Weed control equipment"
 	contains = list(/obj/item/weapon/scythe,
@@ -1785,8 +1801,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/bee_keeper
 	name = "Beekeeping kit"
 	contains = list(
-		/obj/item/beezeez,
-		/obj/item/beezeez,
+		/obj/item/weapon/reagent_containers/food/snacks/beezeez,
+		/obj/item/weapon/reagent_containers/food/snacks/beezeez,
 		/obj/item/weapon/bee_net,
 		/obj/item/weapon/extinguisher/mini,
 		/obj/item/apiary,
@@ -1946,6 +1962,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Cosmetics stack of packs"
+	group = "Vending Machine packs"
+	
+/datum/supply_packs/offlicencemachines
+	name = "Off-Licence packs"
+	contains = list(/obj/structure/vendomatpack/offlicence,
+					/obj/structure/vendomatpack/offlicence)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Off-Licence stack of packs"
 	group = "Vending Machine packs"
 
 

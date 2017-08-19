@@ -325,7 +325,7 @@
 	max_duration = 70
 
 /datum/surgery_step/butt_replace/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == 3
+	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == 3 && target.op_stage.butt_replace
 
 /datum/surgery_step/butt_replace/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] begins to cauterize [target]'s ass with \the [tool].", \

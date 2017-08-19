@@ -12,6 +12,8 @@
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
+	var/pressure_alert = 0
+	var/temp_alert = 0
 	//var/crisis //Admin-settable for combat module use.
 
 	var/obj/item/device/station_map/station_holomap = null
@@ -23,6 +25,8 @@
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
 	var/obj/abstract/screen/sensor = null
+	
+	
 
 	var/shown_robot_modules = 0
 	var/obj/abstract/screen/robot_modules_background
@@ -233,7 +237,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -324,7 +328,7 @@
 			module_sprites["R34 - MED6a 'Gibbs'"] = "gibbs"
 			speed = -2
 
-		if("Peacekeeper")
+		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
@@ -337,7 +341,7 @@
 			module_sprites["Kodiak"] = "kodiak-sec"
 			module_sprites["Noble"] = "Noble-SEC"
 			module_sprites["R34 - SEC10a 'Woody'"] = "woody"
-			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
 			speed = 0
 
 		if("TG17355")
@@ -405,11 +409,11 @@
 
 	var/picked  = pick(module_sprites)
 	icon_state = module_sprites[picked]
+	base_icon = icon_state
 
 	if(!forced_module)
 		choose_icon(6, module_sprites)
 
-	base_icon = icon_state
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
@@ -467,7 +471,7 @@
 		if(newname == null)
 			if(alert(src,"Are you sure you want a default borg name?",,"Yes","No") == "Yes")
 				break
-		else 
+		else
 			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
 				break
 

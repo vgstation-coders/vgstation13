@@ -343,7 +343,7 @@
 		for(var/obj/effect/landmark/zcontroller/c in controller)
 			if(c.down)
 				var/turf/below = locate(src.x, src.y, c.down_target)
-				if((air_master.has_valid_zone(below) || air_master.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
+				if((SSair.has_valid_zone(below) || SSair.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
 					var/turf/W = src.ChangeTurf(/turf/simulated/floor/open)
 					var/list/temp = list()
 					temp += W
@@ -407,8 +407,8 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(air_master)
-			air_master.mark_for_update(src)
+		if(SS_READY(SSair))
+			SSair.mark_for_update(src)
 
 		W.levelupdate()
 
@@ -425,8 +425,8 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(air_master)
-			air_master.mark_for_update(src)
+		if(SS_READY(SSair))
+			SSair.mark_for_update(src)
 
 		W.levelupdate()
 
