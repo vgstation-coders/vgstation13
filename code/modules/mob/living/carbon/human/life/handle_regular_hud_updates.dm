@@ -120,8 +120,6 @@
 			see_in_dark = 8
 			if(!druggy)
 				see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			seedarkness = FALSE
-			update_darkness()
 
 		if(seer == 1)
 			var/obj/effect/rune/R = locate() in loc

@@ -166,8 +166,6 @@
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			src.see_in_dark = 8
 			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			src.seedarkness = FALSE
-			src.update_darkness()
 		if ((src.sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
 			change_sight(adding = SEE_MOBS)
 			src.see_in_dark = 4
