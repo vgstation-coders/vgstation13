@@ -140,10 +140,12 @@
 	if(src.magpulse)
 		src.clothing_flags &= ~NOSLIP
 		src.magpulse = 0
+		src.slowdown = NO_SLOWDOWN
 		to_chat(usr, "You relax your deathgrip on the flooring.")
 	else
 		src.clothing_flags |= NOSLIP
 		src.magpulse = 1
+		src.slowdown = mag_slow
 		to_chat(usr, "You dig your claws deeply into the flooring, bracing yourself.")
 
 
