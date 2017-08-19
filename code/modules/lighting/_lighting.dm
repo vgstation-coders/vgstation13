@@ -5,6 +5,7 @@
 // Also thanks to Lummox for BYOND 510's awesome new features.
 
 // Ported to /vg/station by Clusterfack and Unusual Crow.
+// Thanks a ton to Bilgecrank for his wonderful sprite work.
 
 #define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
 
