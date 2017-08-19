@@ -403,29 +403,20 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light/proc/has_power()
 	return areaMaster.lightswitch && areaMaster.power_light
 
-/obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
-	if(flickering)
-		return
-	flickering = 1
-	spawn(0)
-		if(on && status == LIGHT_OK)
-			for(var/i = 0; i < amount; i++)
-				if(status != LIGHT_OK)
-					break
-				on = !on
-				update(0)
-				sleep(rand(5, 15))
-			on = (status == LIGHT_OK)
-			update(0)
-		flickering = 0
-		on = has_power()
-		update(0)
+/obj/machinery/light/proc/flicker(var/duration = rand(20, 60))
+	if(on && status == LIGHT_OK && light_type == LIGHT_SOFT)
+		light_type = LIGHT_SOFT_FLICKER
+		set_light()
+		spawn(duration)
+			light_type = LIGHT_SOFT
+			animate(light_obj)
+			set_light()
 
 /obj/machinery/light/attack_ghost(mob/user)
 	if(blessed)
 		return
 	src.add_hiddenprint(user)
-	src.flicker(1)
+	src.flicker(10)
 	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
 	return
 
@@ -435,7 +426,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(isMoMMI(user))
 		return attack_hand(user)
 	src.add_hiddenprint(user)
-	src.flicker(1)
+	src.flicker(10)
 	return
 
 /obj/machinery/light/attack_robot(mob/user)
