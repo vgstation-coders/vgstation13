@@ -11,7 +11,6 @@
 <a href=\"javascript:switchTo(1);\">Switch to text-based</a> \
 Z-Level: \
 <a href='javascript:changezlevels(1);'>1</a> \
-<a href='javascript:changezlevels(2);'>2</a> \
 <a href='javascript:changezlevels(3);'>3</a> \
 <a href='javascript:changezlevels(4);'>4</a> \
 <a href='javascript:changezlevels(5);'>5</a> \
