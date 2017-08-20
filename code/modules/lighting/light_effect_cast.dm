@@ -71,6 +71,9 @@ var/light_power_multiplier = 5
 
 	temp_appearance += I
 
+	if(light_type == LIGHT_DIRECTIONAL)
+		follow_holder_dir()
+
 	//no shadows
 	if(light_range < 2 || light_type == LIGHT_DIRECTIONAL)
 		overlays = temp_appearance

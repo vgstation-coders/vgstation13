@@ -88,9 +88,9 @@
 		init_lights |= src
 
 /obj/light/proc/set_dir(new_dir)
-	if(dir == new_dir)
-		return
-	dir = new_dir
+	if(dir != new_dir)
+		dir = new_dir
+		
 	if(light_type == LIGHT_DIRECTIONAL)
 		switch(dir)
 			if(NORTH)
