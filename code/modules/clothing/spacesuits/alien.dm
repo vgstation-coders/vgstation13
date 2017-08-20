@@ -146,12 +146,12 @@
 		src.clothing_flags &= ~NOSLIP
 		src.magpulse = 0
 		src.slowdown = NO_SLOWDOWN
-		to_chat(usr, "You relax your deathgrip on the flooring.")
+		to_chat(usr, "You retract the razor-sharp talons of your boots.")
 	else
 		src.clothing_flags |= NOSLIP
 		src.magpulse = 1
 		src.slowdown = mag_slow
-		to_chat(usr, "You dig your claws deeply into the flooring, bracing yourself.")
+		to_chat(usr, "You extend the razor-sharp talons of your boots.")
 
 
 // Vox Trader -- Same stats as civ gear, but looks like raiders. ///////////////////////////////
