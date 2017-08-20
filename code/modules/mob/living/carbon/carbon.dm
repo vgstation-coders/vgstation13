@@ -589,7 +589,7 @@
 		return 0
 
 /mob/living/carbon/is_muzzled()
-	return(istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
+	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
 
 
 /mob/living/carbon/proc/isInCrit()

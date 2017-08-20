@@ -144,13 +144,19 @@
 	var/m_intent = "run"//Living
 	var/lastKnownIP = null
 
+	//Tank used as internals
+	var/obj/item/weapon/tank/internal = null
+
+	//Active storage item (i.e. the backpack or cardboard box that you're looking inside of)
+	var/obj/item/weapon/storage/s_active = null
+
+	//Inventory
+
 	var/active_hand = 1 //Current active hand. Contains an index of the held_items list
 	var/list/obj/item/held_items = list(null, null) //Contains items held in hands
 
-	var/obj/item/weapon/back = null//Human/Monkey
-	var/obj/item/weapon/tank/internal = null//Human/Monkey
-	var/obj/item/weapon/storage/s_active = null//Carbon
-	var/obj/item/clothing/mask/wear_mask = null//Carbon
+	var/obj/item/weapon/back = null
+	var/obj/item/clothing/mask/wear_mask = null
 
 	var/seer = 0 //for cult//Carbon, probably Human
 

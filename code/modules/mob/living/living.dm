@@ -1433,13 +1433,8 @@ Thanks.
 			speed_mod = 0.0
 
 		if(H.organ_has_mutation(LIMB_HEAD, M_BEAK))
-			if(istype(H.wear_mask))
-				var/obj/item/clothing/mask/M = H.wear_mask
-				if(!(M.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
-					speed_mod += 0.25
-					if(!tool_name)
-						tool_name = "beak"
-			else
+			var/obj/item/mask = H.get_item_by_slot(slot_wear_mask)
+			if(!mask || !(mask.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
 				speed_mod += 0.25
 				if(!tool_name)
 					tool_name = "beak"

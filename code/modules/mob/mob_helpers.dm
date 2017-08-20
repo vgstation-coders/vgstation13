@@ -391,8 +391,12 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 		return 1
 
-	if(full_body && (src.back || src.wear_mask))
-		return 1
+	if(full_body)
+		for(var/obj/item/I in get_equipped_items())
+			if(I.abstract)
+				continue
+
+			return 1
 
 	return 0
 

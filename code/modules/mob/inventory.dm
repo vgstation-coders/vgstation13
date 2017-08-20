@@ -409,6 +409,20 @@
 /mob/proc/has_organ_for_slot(slot)
 	return TRUE
 
+//Returns true if mob is wearing the item in any of the inventory slots (NOT hands). If slot is specified, only checks if the item is in that slot
+//Item can be either an object or a path. In the second case, the proc checks if there is a worn item of that type (in that slot), and returns the item
+/mob/proc/is_wearing_item(obj/item/I, slot = null)
+	if(slot)
+		if(ispath(I))
+			var/obj/item/item = get_item_by_slot(slot)
+			if(istype(item, I))
+				return item
+		return (get_item_by_slot(slot) == I)
+	else
+		if(ispath(I))
+			return (locate(I) in get_equipped_items())
+		return (I in get_equipped_items())
+
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/W, slot, act_on_fail = EQUIP_FAILACTION_DELETE) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//warning: icky code
 	var/equipped = 0
