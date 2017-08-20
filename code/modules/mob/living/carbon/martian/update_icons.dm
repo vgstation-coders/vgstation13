@@ -16,6 +16,8 @@
 	else
 		icon_state = icon_state_standing
 
+	update_inv_head(0)
+	update_inv_hand(update_icons=0)
 //INVENTORY ICONS
 
 #define HAT_LAYER 1
@@ -27,8 +29,6 @@
 
 /mob/living/carbon/martian/regenerate_icons()
 	..()
-
-	update_inv_head(0)
 
 	for(var/i = 1 to held_items.len)
 		update_inv_hand(i)
