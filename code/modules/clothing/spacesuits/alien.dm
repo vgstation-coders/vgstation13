@@ -129,7 +129,12 @@
 	icon_state = "boots-vox"
 	species_restricted = list(VOX_SHAPED)
 
-	stomp_attack_power = 0
+	mag_slow = MAGBOOTS_SLOWDOWN_MED
+
+	stomp_attack_power = 30
+	stomp_delay = 2 SECONDS
+	stomp_boot = "clawed boot"
+	stomp_hit = "gouges"
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
