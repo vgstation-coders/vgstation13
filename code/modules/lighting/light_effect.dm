@@ -78,7 +78,9 @@
 		if(holder && holder.loc)
 			follow_holder_dir()
 
-			if(holder.loc.loc && ismob(holder.loc))
+			if(isturf(holder))
+				forceMove(holder)
+			else if(holder.loc.loc && ismob(holder.loc))
 				forceMove(holder.loc.loc)
 			else
 				forceMove(holder.loc)
@@ -90,7 +92,7 @@
 /obj/light/proc/set_dir(new_dir)
 	if(dir != new_dir)
 		dir = new_dir
-		
+
 	if(light_type == LIGHT_DIRECTIONAL)
 		switch(dir)
 			if(NORTH)
