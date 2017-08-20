@@ -1,7 +1,6 @@
 # vgstation
 
-[![Build Status](https://travis-ci.org/vgstation-coders/vgstation13.svg?branch=master)](https://travis-ci.org/vgstation-coders/vgstation13) [![Krihelimeter](http://www.krihelinator.xyz/badge/vgstation-coders/vgstation13)](http://www.krihelinator.xyz/repositories/vgstation-coders/vgstation13)
-
+[![Build Status](https://travis-ci.org/vgstation-coders/vgstation13.svg?branch=master)](https://travis-ci.org/vgstation-coders/vgstation13) [![Krihelimeter](http://www.krihelinator.xyz/badge/vgstation-coders/vgstation13)](http://www.krihelinator.xyz/repositories/vgstation-coders/vgstation13)  
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/vgstation-coders/vgstation13.svg)](http://isitmaintained.com/project/vgstation-coders/vgstation13 "Percentage of issues still open") [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/vgstation-coders/vgstation13.svg)](http://isitmaintained.com/project/vgstation-coders/vgstation13 "Average time to resolve an issue") ![Coverage](https://s3.amazonaws.com/assets.coveralls.io/badges/coveralls_1.svg)  
 [![forthebadge](http://forthebadge.com/images/badges/built-with-resentment.svg)](http://forthebadge.com)
 
