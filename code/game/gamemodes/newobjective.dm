@@ -754,7 +754,7 @@ datum
 
 
 			blueprints
-				steal_target = /obj/item/blueprints
+				steal_target = /obj/item/blueprints/primary
 				explanation_text = "Steal the station's blueprints."
 				weight = 20
 

@@ -1223,5 +1223,19 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
-
+//Syndiecargo loot spawners////////////////////////
+/obj/abstract/map/spawner/misc/syndiecargo
+	name = "syndiecargo loot spawner"
+	icon_state = "syndicargo"
+	amount = 2
+	jiggle = 5
+	to_spawn = list (/obj/item/clothing/mask/gas/voice,
+	/obj/item/weapon/melee/classic_baton,
+	/obj/item/clothing/gloves/knuckles,
+	/obj/item/ammo_storage/magazine/a12mm/ops,
+	/obj/item/weapon/storage/pill_bottle/random,
+	/obj/item/weapon/gun/projectile/automatic/lockbox,
+	/obj/item/weapon/handcuffs,
+	/obj/item/clothing/accessory/holomap_chip/operative
+)
 

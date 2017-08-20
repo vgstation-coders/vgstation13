@@ -515,3 +515,4 @@
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e","f",)
 	M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	M.name = "Bomberman #[rand(1,999)]"
+	M.mind.special_role = BOMBERMAN // NEEDED FOR CHEAT CHECKS!

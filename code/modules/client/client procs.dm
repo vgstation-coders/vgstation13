@@ -460,9 +460,9 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
-	for(var/obj/structure/window/W in view(view,mob))
-		if(W.one_way)
-			update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in view.
+	for(var/obj/structure/window/W in one_way_windows)
+		if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+			update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
 			break
 
 /client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.

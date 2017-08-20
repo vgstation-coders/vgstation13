@@ -389,8 +389,11 @@
 		O.forceMove(src.loc)
 	if (src.reagents.total_volume)
 		src.dirty++
-	if(reagent_disposal)
-		reagents.clear_reagents()
+		if(reagent_disposal)
+			if(scanning_power >= 1) //You get one bottle, don't fuck it up
+				var/obj/item/weapon/reagent_containers/food/condiment/C = new(get_turf(src))
+				reagents.trans_to(C, reagents.total_volume)
+			reagents.clear_reagents()
 	to_chat(usr, "<span class='notice'>You dispose of the microwave contents.</span>")
 	src.updateUsrDialog()
 

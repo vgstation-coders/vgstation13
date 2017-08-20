@@ -1963,6 +1963,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Cosmetics stack of packs"
 	group = "Vending Machine packs"
+	
+/datum/supply_packs/offlicencemachines
+	name = "Off-Licence packs"
+	contains = list(/obj/structure/vendomatpack/offlicence,
+					/obj/structure/vendomatpack/offlicence)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Off-Licence stack of packs"
+	group = "Vending Machine packs"
 
 
 /*

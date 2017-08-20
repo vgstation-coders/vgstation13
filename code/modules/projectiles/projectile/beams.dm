@@ -585,12 +585,12 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/laser3.ogg'
 
 /obj/item/projectile/beam/xray/to_bump(atom/A)
+	if((istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters))) || damage <=0)	//if we hit an rwall or blast doors, but not shutters, the beam dies
+		bullet_die()
+		return 0
 	if(..())
 		damage -= 3
-		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
-			bullet_die()
-		if(damage <= 0)
-			bullet_die()
+
 
 /obj/item/projectile/beam/pulse
 	name = "pulse"

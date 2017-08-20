@@ -123,7 +123,18 @@
 	link_angle = 270
 
 /obj/item/pod_parts/armor
+	name = "pod armor"
+	icon = 'icons/pods/pod_parts.dmi'
+	icon_state = "pod_armor_civ"
+	desc = "Spacepod armor. This one seems unfinished, best to report how you got this and put it back."
+
+/obj/item/pod_parts/armor/civ
 	name = "civilian pod armor"
 	icon = 'icons/pods/pod_parts.dmi'
 	icon_state = "pod_armor_civ"
 	desc = "Spacepod armor. This is the civilian version. It looks rather flimsy."
+
+/obj/item/pod_parts/armor/taxi
+	name = "taxi pod armor"
+	icon_state = "pod_armor_taxi"
+	desc = "Spacepod armor. This is a version for taxi pods. It looks tacky."
