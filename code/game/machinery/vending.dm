@@ -1254,7 +1254,6 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/cola
 
-
 /obj/machinery/vending/offlicence
 	name = "\improper Offworld Off-Licence"
 	desc = "A vendor containing all you need to drown your sorrows and your finances."
