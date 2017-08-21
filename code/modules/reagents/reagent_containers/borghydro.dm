@@ -74,7 +74,9 @@
 	if(!ismob(M))
 		return
 
-	to_chat(user, "<span class='info'>You inject [M] with the injector.<span>")
+	user.visible_message(\
+		"<span class='warning'>[user] injects [M] with [src].</span>",\
+		"<span class='info'>You inject [M] with with [src].<span>")
 	to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
 	reagents.reaction(M, INGEST)
 
