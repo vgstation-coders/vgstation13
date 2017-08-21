@@ -85,12 +85,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			hi.updateContent("content", \
 			"<div id='switches'><a href=\"javascript:switchTo(0);\">Switch to mini map</a> \
 			<a href=\"javascript:switchTo(1);\">Switch to text-based</a> \
-			Z-Level: \
-			<a href='javascript:changezlevels(1);'>1</a> \
-			<a href='javascript:changezlevels(3);'>3</a> \
-			<a href='javascript:changezlevels(4);'>4</a> \
-			<a href='javascript:changezlevels(5);'>5</a> \
-			<a href='javascript:changezlevels(6);'>6</a> \
+			[get_zlevel_ui_buttons_js()] \
 			<a href='byond://?src=\ref[hi]&cancel=1'>Cancel Viewing</a></div> \
 			<div id=\"uiMapContainer\"><div id=\"uiMap\" unselectable=\"on\"></div></div>\
 			<div id=\"textbased\"></div>")

@@ -9,16 +9,19 @@
 "<div id='switches'>\
 <a href=\"javascript:switchTo(0);\">Switch to mini map</a> \
 <a href=\"javascript:switchTo(1);\">Switch to text-based</a> \
-Z-Level: \
-<a href='javascript:changezlevels(1);'>1</a> \
-<a href='javascript:changezlevels(3);'>3</a> \
-<a href='javascript:changezlevels(4);'>4</a> \
-<a href='javascript:changezlevels(5);'>5</a> \
-<a href='javascript:changezlevels(6);'>6</a> \
+[get_zlevel_ui_buttons_js()] \
 </div> \
 <div id=\"uiMapContainer\">\
 <div id=\"uiMap\" unselectable=\"on\"></div></div>\
 <div id=\"textbased\"></div>"
+
+/proc/get_zlevel_ui_buttons_js()
+	var/list/s = list("Z-Level:")
+	for(var/i in 1 to world.maxz)
+		if(i == map.zCentcomm) continue
+		s += "<a href='javascript:changezlevel([i]);'>[i]</a>"
+	return s.Join()
+
 // Base datum for html_interface interactive maps.
 var/const/MAX_ICON_DIMENSION = 2000
 var/const/ICON_SIZE = 4
