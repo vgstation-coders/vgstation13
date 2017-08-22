@@ -418,3 +418,9 @@
 	desc = "Perfect for wearing out to a late night double feature."
 	icon_state = "frankshoes"
 	item_state = "frankshoes"
+
+/obj/item/clothing/shoes/clockwork_boots
+	name = "clockwork boots"
+	desc = "A pair of boots worn by the followers of Ratvar."
+	icon_state = "clockwork"
+	item_state = "clockwork"

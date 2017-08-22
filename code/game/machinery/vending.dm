@@ -1253,7 +1253,7 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/cola
-	
+
 /obj/machinery/vending/offlicence
 	name = "\improper Offworld Off-Licence"
 	desc = "A vendor containing all you need to drown your sorrows and your finances."
@@ -2155,6 +2155,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/darkholme = 3,
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
 		/obj/item/clothing/head/wizard/magician = 3,
+		/obj/item/clothing/suit/sakura_kimono = 3,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2516,6 +2517,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/backpack/cultpack = 2,
 		/obj/item/weapon/storage/fancy/candle_box = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/eucharist = 7,
+		)
+	contraband = list(
+		/obj/item/clothing/head/clockwork_hood = 2,
+		/obj/item/clothing/suit/clockwork_robes = 2,
+		/obj/item/clothing/shoes/clockwork_boots = 2,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater = 1,
