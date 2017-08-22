@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1,"ocelot" = 100))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -117,6 +117,17 @@
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
+
+			if("ocelot")
+				new /obj/item/weapon/gun/projectile/colt(src)
+				new /obj/item/weapon/gun/projectile/colt(src)
+				new /obj/item/ammo_storage/speedloader/a357(src)
+				new /obj/item/clothing/mask/scarf/red(src)
+				new /obj/item/clothing/under/color/black(src)
+				new /obj/item/clothing/shoes/jackboots(src)
+				new /obj/item/clothing/head/beret/sec/ocelot(src)
+				new /obj/item/clothing/gloves/red(src)
+				new /obj/item/clothing/accessory/storage/bandolier(src)
 		tag = tagname
 
 
@@ -242,8 +253,8 @@
 	..()
 	new /obj/item/weapon/reagent_containers/glass/bottle/hypozine(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
-	return	
-	
+	return
+
 /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
