@@ -907,16 +907,6 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-/obj/item/projectile/beam/rainbow/braindamage
-	damage = 5
-	icon_state = "whitelaser"
-
-/obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
-	if(ishuman(target))
-		var/mob/living/carbon/human/victim = target
-		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
-			victim.adjustBrainLoss(20)
-			victim.hallucination += 20
 
 /obj/item/projectile/beam/bullwhip
 	name = "bullwhip"
