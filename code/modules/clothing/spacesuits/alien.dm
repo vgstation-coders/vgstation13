@@ -582,6 +582,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 				playsound(src,'sound/effects/refill.ogg',50,1)
 				to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src]!</span>")
 				tank = W
+				item_state = "[initial(item_state)]_mask"
 				return
 	..()
 
@@ -592,6 +593,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 			playsound(src,'sound/effects/refill.ogg',50,1)
 			to_chat(user, "<span class = 'notice'>You detach \the [tank] from \the [src]!</span>")
 			user.put_in_hands(tank)
+			item_state = initial(item_state)
 			tank = null
 	..()
 

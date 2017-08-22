@@ -6,7 +6,7 @@
 		if(2,5)
 			return list("x"=0, "y"=10)
 		if(3,4)
-			return list("x"=0, "y"=18)
+			return list("x"=0, "y"=16)
 
 	return list()
 
@@ -147,3 +147,11 @@
 	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
 	popup.set_content(dat)
 	popup.open()
+
+
+// Return the item currently in the slot ID
+/mob/living/carbon/martian/get_item_by_slot(slot_id)
+	switch(slot_id)
+		if(slot_head)
+			return head
+	return null

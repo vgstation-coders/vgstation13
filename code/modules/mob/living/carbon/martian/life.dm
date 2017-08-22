@@ -434,17 +434,17 @@ mob/living/carbon/martian/proc/handle_regular_status_updates()
 	if (healths)
 		if (stat != 2)
 			switch(health)
-				if(maxHealth to INFINITY)
+				if(150 to INFINITY)
 					healths.icon_state = "health0"
-				if((maxHealth/6*5) to maxHealth)
+				if((150/6*5) to 150)
 					healths.icon_state = "health1"
-				if((maxHealth/6*4) to (maxHealth/6*5))
+				if((150/6*4) to (150/6*5))
 					healths.icon_state = "health2"
-				if((maxHealth/6*3) to (maxHealth/6*4))
+				if((150/6*3) to (150/6*4))
 					healths.icon_state = "health3"
-				if((maxHealth/6*2) to (maxHealth/6*3))
+				if((150/6*2) to (150/6*3))
 					healths.icon_state = "health4"
-				if((maxHealth/6) to (maxHealth/6*2))
+				if(0 to (150/6*2))
 					healths.icon_state = "health5"
 				else
 					healths.icon_state = "health6"

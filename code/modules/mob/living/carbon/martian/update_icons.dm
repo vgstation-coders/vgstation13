@@ -15,9 +15,6 @@
 		icon_state = icon_state_lying
 	else
 		icon_state = icon_state_standing
-
-	update_inv_head(0)
-	update_inv_hand(update_icons=0)
 //INVENTORY ICONS
 
 #define HAT_LAYER 1
@@ -83,6 +80,13 @@
 		if(client)
 			client.screen |= head
 			head.screen_loc = ui_monkey_hat
+
+
+
+/mob/living/carbon/martian/update_hud()
+	if(client)
+		update_internals()
+		client.screen |= contents
 
 #undef HAT_LAYER
 #undef MAX_LAYERS

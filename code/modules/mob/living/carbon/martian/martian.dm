@@ -132,8 +132,6 @@
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
 /mob/living/carbon/martian/Stat()
-	..()
-
 	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
 		var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
 		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
@@ -145,4 +143,4 @@
 
 /mob/living/carbon/martian/Login()
 	..()
-	update_icons()
+	update_hud()
