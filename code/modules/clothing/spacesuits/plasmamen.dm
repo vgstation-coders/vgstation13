@@ -35,11 +35,11 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list("Plasmaman")
 	eyeprot = 0
+	light_range = 4
 
 	icon_state = "plasmaman_helmet0"
 	item_state = "plasmaman_helmet0"
 	var/base_state = "plasmaman_helmet"
-	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
@@ -50,7 +50,7 @@
 	on = !on
 	icon_state = "[base_state][on]"
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
 		kill_light()
 	user.update_inv_head()

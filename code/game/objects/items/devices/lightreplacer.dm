@@ -331,9 +331,9 @@
 		var/obj/item/weapon/light/L1 = new target.light_type(target.loc)
 		L1.status = target.status
 		L1.rigged = target.rigged
-		L1.brightness_range = target.brightness_range
-		L1.brightness_power = target.brightness_power
-		L1.brightness_color = target.brightness_color
+		L1.light_range = target.light_range
+		L1.light_power = target.light_power
+		L1.light_color = target.light_color
 		L1.cost = target.cost
 		L1.base_state = target.base_state
 		L1.switchcount = target.switchcount
@@ -350,9 +350,9 @@
 	target.status = best_light.status
 	target.switchcount = best_light.switchcount
 	target.rigged = emagged || best_light.rigged
-	target.brightness_range = best_light.brightness_range
-	target.brightness_power = best_light.brightness_power
-	target.brightness_color = best_light.brightness_color
+	target.light_range = best_light.light_range
+	target.light_power = best_light.light_power
+	target.light_color = best_light.light_color
 	target.cost = best_light.cost
 	target.base_state = best_light.base_state
 	target.light_type = best_light.type

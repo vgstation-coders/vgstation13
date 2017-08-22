@@ -15,7 +15,7 @@
 	actions_types = list(/datum/action/item_action/toggle_light)
 	light_type = LIGHT_DIRECTIONAL
 	var/on = 0
-	var/brightness_on = 4 //luminosity when on
+	light_range = 4
 	var/has_sound = 1 //The CLICK sound when turning on/off
 	var/sound_on = 'sound/items/flashlight_on.ogg'
 	var/sound_off = 'sound/items/flashlight_off.ogg'
@@ -24,7 +24,7 @@
 	..()
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
+		set_light()
 	else
 		icon_state = initial(icon_state)
 		kill_light()
@@ -32,7 +32,7 @@
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null, var/playsound = 1)
 	if(on)
 		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
+		set_light()
 		if(playsound && has_sound)
 			if(get_turf(src))
 				playsound(get_turf(src), sound_on, 50, 1)
@@ -103,7 +103,7 @@
 	item_state = ""
 	flags = FPRINT
 	siemens_coefficient = 1
-	brightness_on = 2
+	light_range = 2
 	has_sound = 0
 
 /obj/item/device/flashlight/tactical
@@ -118,7 +118,7 @@
 	desc = "A desk lamp with an adjustable mount."
 	icon_state = "lamp"
 	item_state = "lamp"
-	brightness_on = 5
+	light_range = 5
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -135,7 +135,7 @@
 	desc = "A classic green-shaded desk lamp."
 	icon_state = "lampgreen"
 	item_state = "lampgreen"
-	brightness_on = 5
+	light_range = 5
 
 
 /obj/item/device/flashlight/lamp/verb/toggle_light()
@@ -152,8 +152,8 @@
 	name = "flare"
 	desc = "A red Nanotrasen issued flare. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = W_CLASS_SMALL
-	brightness_on = 4 // Pretty bright.
-	light_power = 2.5
+	light_range = 4
+	light_power = 2.5 // Pretty bright.
 	light_type = LIGHT_SOFT
 	icon_state = "flare"
 	item_state = "flare"

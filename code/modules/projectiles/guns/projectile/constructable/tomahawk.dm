@@ -202,7 +202,7 @@
 			C.name = name
 			C.attackby(W,user)
 			C.update_brightness()
-			set_light(C.brightness_on)
+			set_light(C.light_range)
 			if(ismetal)
 				icon_state = "pipe_tomahawk_metal_on"
 				item_state = "pipe_tomahawk_metal_on"
@@ -345,7 +345,7 @@
 			C.name = name
 			C.attackby(W,user)
 			C.update_brightness()
-			set_light(C.brightness_on)
+			set_light(C.light_range)
 			icon_state = "pipe_tomahawk_broken_on"
 			item_state = "pipe_tomahawk_broken_on"
 			is_lit = 1
