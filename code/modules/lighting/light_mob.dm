@@ -4,8 +4,7 @@
 	var/obj/abstract/screen/backdrop/backdrop
 	var/seedarkness = 1
 
-/mob/Login()
-	. = ..()
+/mob/proc/create_lighting_planes()
 	if(!dark_plane)
 		dark_plane = new(client)
 	else
@@ -20,6 +19,10 @@
 		client.screen |= backdrop
 	if(client)
 		update_darkness()
+
+/mob/Login()
+	. = ..()
+	create_lighting_planes()
 
 /mob/proc/update_darkness()
 	if(seedarkness)
