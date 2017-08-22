@@ -78,11 +78,11 @@
 		var/dist = get_dist(loc, target.loc)
 		if(dist > 4)
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
-		if(target.wear_mask && istype(target.wear_mask, /obj/item/clothing/mask/facehugger))
-			var/obj/item/clothing/mask/facehugger/F = target.wear_mask
-			if(F.sterile) // Toy's won't prevent real huggers
-				findtarget()
-				return
+
+		var/obj/item/clothing/mask/facehugger/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
+		if(F && F.sterile) // Toy's won't prevent real huggers
+			findtarget()
+			return
 		else
 			step_towards(src, target, 0)
 			if(dist <= 1)
@@ -242,7 +242,7 @@
 		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
 		if(!real && mouth_protection)
 			return //Toys really shouldn't be forcefully removing gear
-		var/obj/item/clothing/mask/facehugger/hugger = H.wear_mask
+		var/obj/item/clothing/mask/facehugger/hugger = H.get_item_by_slot(slot_wear_mask)
 		if(istype(hugger) && !hugger.sterile && !sterile) // Lamarr won't fight over faces and neither will normal huggers.
 			return
 
@@ -269,7 +269,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/target = L
 
-		if(target.wear_mask)
+		if(target.get_item_by_slot(slot_wear_mask))
 			if(prob(CHANCE_TO_NOT_REMOVE_MASKS))
 				return FALSE
 			var/obj/item/clothing/W = target.wear_mask

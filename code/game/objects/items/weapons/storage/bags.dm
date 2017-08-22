@@ -81,18 +81,11 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		return CANNOT_EQUIP
 
 /obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
-	if(ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		if(H.head == src) //If worn
+	if(isliving(loc))
+		var/mob/living/L = loc
+		if(L.is_wearing_item(src, slot_head)) //Wearing the bag on the head
 			return FALSE
-	if(ismonkey(loc))
-		var/mob/living/carbon/monkey/M = loc
-		if(M.hat == src) //If worn
-			return FALSE
-	if(isMoMMI(loc))
-		var/mob/living/silicon/robot/mommi/MoM = loc
-		if(MoM.head_state == src) //If worn
-			return FALSE
+
 	return ..()
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)

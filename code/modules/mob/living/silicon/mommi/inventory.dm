@@ -247,6 +247,12 @@
 /mob/living/silicon/robot/mommi/cycle_modules()
 	return
 
+/mob/living/silicon/robot/mommi/get_item_by_slot(slot_id)
+	switch(slot_id)
+		if(slot_head)
+			return head_state
+	return null
+
 // Equip an item to the MoMMI. Currently the only thing you can equip is hats
 // Returns a 0 or 1 based on whether or not the equipping worked
 /mob/living/silicon/robot/mommi/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
