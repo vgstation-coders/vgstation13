@@ -66,4 +66,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/machinery/cooking/deepfryer/confectionator
+	build_path = /obj/item/weapon/circuitboard/confectionator
