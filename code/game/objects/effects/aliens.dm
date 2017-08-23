@@ -550,6 +550,15 @@
 	src.health -= damage
 	src.healthcheck()
 
+/obj/effect/alien/egg/ex_act(var/severity)
+	switch(severity)
+		if(1)
+			health -= 70
+		if(2)
+			health -= 25
+		if(3)
+			health -= 15
+	healthcheck()
 
 /obj/effect/alien/egg/proc/healthcheck()
 	if(health <= 0)
