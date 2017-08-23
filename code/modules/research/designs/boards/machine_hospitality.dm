@@ -64,4 +64,4 @@
 	id = "confectionator"
 	req_tech = list(Tc_BIOTECH = 2)
 	category = "Machine Boards"
-	build_path = /obj/machinery/cooking/deepfryer/confectionator
+	build_path = /obj/item/weapon/circuitboard/confectionator
