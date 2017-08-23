@@ -74,6 +74,9 @@
 	if(!ismob(M))
 		return
 
+	if(issilicon(M))
+		return
+
 	user.do_attack_animation(M, src)
 	user.visible_message(\
 		"<span class='warning'>[user] injects [M] with [src].</span>",\
