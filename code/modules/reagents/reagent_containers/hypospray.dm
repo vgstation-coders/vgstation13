@@ -49,6 +49,7 @@
 		M = user
 
 	if (reagents.total_volume)
+		user.do_attack_animation(M, src)
 		user.visible_message("<span class='warning'>[M == user ? "[user] injects \himself" : "[user] injects [M]"] with [src].</span>", \
 		"[inject_message]")
 		to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
