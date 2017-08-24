@@ -288,6 +288,9 @@ var/global/list/loopModeNames=list(
 	t += "<h1>Jukebox Interface</h1>"
 	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
 	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[allowed_modes[loop_mode]]</a><br />"
+	if(isAdminGhost(user))
+		t += "<a href='?src=\ref[src];add_custom=1'>Add new song</a><br>"
+
 	if(playlist == null)
 		t += "\[DOWNLOADING PLAYLIST, PLEASE WAIT\]"
 	else
@@ -517,6 +520,35 @@ var/global/list/loopModeNames=list(
 					change_access = list()
 
 				screen=POS_SCREEN_SETTINGS
+
+	if(href_list["add_custom"])
+		if(isAdminGhost(usr))
+			var/choice = input(usr, "Enter the song's URL, length (in seconds!), title, artist and album in that exact order, separated by a semicolon. Artist and album may be omitted. Example: http://music.com/song.mp3;192;Song Name;Artist;Album", "Custom Jukebox") as null|text
+			if(!choice)
+				return
+
+			var/list/L = params2list(choice)
+			if(L.len >= 3)
+				var/list/params = list()
+				params["url"]   = L[1]
+				params["length"]= text2num(L[2])*10 //The song_info datum stores this value in deciseconds
+				params["title"] = L[3]
+
+				if(L.len >= 4)
+					params["artist"]= L[4]
+				if(L.len >= 5)
+					params["album"] = L[5]
+
+				//Initialize playlist if needed
+				if(!playlist)
+					playlist = list()
+				playlist.Add(new /datum/song_info(params))
+
+				to_chat(usr, "The song has been added to the jukebox's current playlist.")
+			else
+				to_chat(usr, "URL, length and title are mandatory!")
+		else
+			to_chat(usr, "Only admin ghosts can do this.")
 
 	if (href_list["playlist"])
 		if(isobserver(usr) && !canGhostWrite(usr,src,""))
