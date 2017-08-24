@@ -523,30 +523,38 @@ var/global/list/loopModeNames=list(
 
 	if(href_list["add_custom"])
 		if(isAdminGhost(usr))
-			var/choice = input(usr, "Enter the song's URL, length (in seconds!), title, artist and album in that exact order, separated by a semicolon. Artist and album may be omitted. Example: http://music.com/song.mp3;192;Song Name;Artist;Album", "Custom Jukebox") as null|text
+			var/choice = input(usr, "Enter the song's URL, length (in seconds!), title, artist and album in that exact order, separated by a semicolon. Artist and album may be omitted. Example: http://music.com/song.mp3;192;Song Name;Artist;Album. If adding more than one song, each song has to be on its own line.", "Custom Jukebox") as null|message
 			if(!choice)
 				return
 
-			var/list/L = params2list(choice)
-			if(L.len >= 3)
-				var/list/params = list()
-				params["url"]   = L[1]
-				params["length"]= text2num(L[2])*10 //The song_info datum stores this value in deciseconds
-				params["title"] = L[3]
+			var/success = 0
+			var/error = 0
+			for(var/lpos=1; lpos<length(choice) && lpos != findtext(choice,"\n",lpos,0)+1; lpos=findtext(choice,"\n",lpos,0)+1)
+				var/tline = copytext(choice, lpos, findtext(choice,"\n",lpos,0))
 
-				if(L.len >= 4)
-					params["artist"]= L[4]
-				if(L.len >= 5)
-					params["album"] = L[5]
+				var/list/L = params2list(tline)
+				if(L.len >= 3)
+					var/list/params = list()
+					params["url"]   = L[1]
+					params["length"]= text2num(L[2])*10 //The song_info datum stores this value in deciseconds
+					params["title"] = L[3]
+					params["artist"]= ""
+					params["album"] = ""
 
-				//Initialize playlist if needed
-				if(!playlist)
-					playlist = list()
-				playlist.Add(new /datum/song_info(params))
+					if(L.len >= 4)
+						params["artist"]= L[4]
+					if(L.len >= 5)
+						params["album"] = L[5]
 
-				to_chat(usr, "The song has been added to the jukebox's current playlist.")
-			else
-				to_chat(usr, "URL, length and title are mandatory!")
+					//Initialize playlist if needed
+					if(!playlist)
+						playlist = list()
+					playlist.Add(new /datum/song_info(params))
+					success++
+				else
+					error++
+
+			to_chat(usr, "Added [success] songs successfully. Encountered [error] errors.")
 		else
 			to_chat(usr, "Only admin ghosts can do this.")
 
