@@ -553,6 +553,15 @@
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/toy/snappop(src)
 
+/obj/item/weapon/storage/box/syndicatefake/space
+	name = "Space Suit and Helmet Replica"
+	icon_state = "box_of_doom"
+
+/obj/item/weapon/storage/box/syndicatefake/space/New()
+	..()
+	new /obj/item/clothing/suit/syndicatefake(src)
+	new /obj/item/clothing/head/syndicatefake(src)
+
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"
 	desc = "Contains autoinjectors."
