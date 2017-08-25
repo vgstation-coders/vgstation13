@@ -527,12 +527,15 @@ var/global/list/loopModeNames=list(
 			if(!choice)
 				return
 
+			log_admin("[key_name(usr)] is adding some songs to the jukebox [formatJumpTo(src)]:")
+			log_admin("[choice]")
+
 			var/success = 0
 			var/error = 0
-			for(var/lpos=1; lpos<length(choice) && lpos != findtext(choice,"\n",lpos,0)+1; lpos=findtext(choice,"\n",lpos,0)+1)
-				var/tline = copytext(choice, lpos, findtext(choice,"\n",lpos,0))
 
-				var/list/L = params2list(tline)
+			//Loop through each line
+			forLineInText(choice)
+				var/list/L = params2list(line)
 				if(L.len >= 3)
 					var/list/params = list()
 					params["url"]   = L[1]
@@ -555,6 +558,7 @@ var/global/list/loopModeNames=list(
 					error++
 
 			to_chat(usr, "Added [success] songs successfully. Encountered [error] errors.")
+			message_admins("[key_name(usr)] has added [success] songs to the jukebox [formatJumpTo(src)]")
 		else
 			to_chat(usr, "Only admin ghosts can do this.")
 
