@@ -1,4 +1,17 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
+
+//Loops through every line in (text). The 'line' variable holds the current line
+//Example use:
+/*
+var/text = {"Line 1
+Line 2
+Line 3
+"}
+forLineInText(text)
+	world.log << line
+*/
+#define forLineInText(text) for({var/__index=1;var/line=copytext(text, __index, findtext(text, "\n", __index))} ; {__index != 0} ; {__index = findtext(text, "\n", __index+1) ; line = copytext(text, __index+1, findtext(text, "\n", __index+1))})
+
 /*
  * Holds procs designed to help with filtering text
  * Contains groups:
@@ -291,11 +304,11 @@ proc/checkhtml(var/t)
 
 	return ""
 
-//Returns a string with double spaces removed	
-/proc/trimcenter(text) 
+//Returns a string with double spaces removed
+/proc/trimcenter(text)
 	var/regex/trimcenterregex = regex("\\s{2,}","g")
 	return trimcenterregex.Replace(text," ")
-	
+
 //Returns a string with reserved characters and spaces before the first word and after the last word removed.
 /proc/trim(text)
 	return trim_left(trim_right(text))
