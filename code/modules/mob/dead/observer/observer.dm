@@ -327,11 +327,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 // Check for last poltergeist activity.
 /mob/dead/observer/proc/can_poltergeist(var/start_cooldown=1)
+	if(isAdminGhost(src))
+		return TRUE
 	if(world.time >= next_poltergeist)
 		if(start_cooldown)
 			start_poltergeist_cooldown()
-		return 1
-	return 0
+		return TRUE
+	return FALSE
 
 /mob/dead/observer/proc/start_poltergeist_cooldown()
 	next_poltergeist=world.time + POLTERGEIST_COOLDOWN

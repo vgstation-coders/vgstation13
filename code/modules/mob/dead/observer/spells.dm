@@ -56,7 +56,7 @@ var/global/list/boo_phrases_silicon=list(
 /spell/aoe_turf/boo/cast(list/targets)
 	for(var/turf/T in targets)
 		for(var/atom/A in T.contents)
-			if(A.can_spook())
+			if(A.can_spook(0))
 				A.spook(holder)
 
 /* FIXME
