@@ -70,6 +70,19 @@
 	item_state = "tophat"
 	siemens_coefficient = 0.8
 
+/obj/item/clothing/head/wizard/lich
+	name = "crown of the Lich"
+	desc = "Get the Lich a crown, Liches love crowns."
+	icon_state = "lichcrown_fancy"
+	item_state = "lichcrown_fancy"
+	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/skelelich
+	name = "tarnished crown of the Lich"
+	desc = "Turns out you CAN take it with you."
+	icon_state = "lichcrown"
+	item_state = "lichcrown"
+	siemens_coefficient = 0.8
 
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"
