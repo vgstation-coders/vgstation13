@@ -131,6 +131,8 @@
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)
 
+#define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
+
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
