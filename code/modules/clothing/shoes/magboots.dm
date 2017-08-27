@@ -18,7 +18,7 @@
 
 	var/turf/T = get_turf(src)
 	var/datum/organ/external/affecting = victim.get_organ(user.get_unarmed_damage_zone(victim))
-	
+
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
@@ -102,8 +102,6 @@
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)
-<<<<<<< Updated upstream
-=======
 
 //Captain
 /obj/item/clothing/shoes/magboots/captain
@@ -136,4 +134,3 @@
 		state = "enabled"
 	to_chat(user, "<span class='info'>Its anchoring spikes appear to be [state].</span>")
 
->>>>>>> Stashed changes

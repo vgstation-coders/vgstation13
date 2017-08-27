@@ -36,8 +36,6 @@
 	_color = "tactifool"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	siemens_coefficient = 1
-<<<<<<< Updated upstream
-=======
 
 /obj/item/clothing/under/syndicate/executive
 	name = "syndicate executive suit"
@@ -45,4 +43,4 @@
 	icon_state = "syndiexec"
 	_color = "syndiexec"
 	species_fit = list(GREY_SHAPED)
->>>>>>> Stashed changes
+

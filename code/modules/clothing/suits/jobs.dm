@@ -220,8 +220,6 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
-<<<<<<< Updated upstream
-=======
 
 //Syndicate exec
 /obj/item/clothing/suit/storage/syndicateexec
@@ -253,4 +251,3 @@
 				to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
 				return
 		usr.update_inv_wear_suit()	//so our overlays update
->>>>>>> Stashed changes

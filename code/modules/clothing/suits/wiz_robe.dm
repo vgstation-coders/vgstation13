@@ -162,8 +162,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
 
-<<<<<<< Updated upstream
-=======
+
 /obj/item/clothing/suit/wizrobe/lich
 	name = "Lich robe"
 	desc = "A set of fancy purple robes. They smell slightly of formaldehyde."
@@ -175,4 +174,4 @@
 	desc = "A threadbare grey robe. Even masters of the dead have laundry day."
 	icon_state = "lichrobe"
 	item_state = "lichrobe"
->>>>>>> Stashed changes
+
