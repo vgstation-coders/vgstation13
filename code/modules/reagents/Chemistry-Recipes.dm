@@ -66,7 +66,7 @@
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
-	e.set_up(round (created_volume/10, 1), holder.my_atom, 0, 0)
+	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
