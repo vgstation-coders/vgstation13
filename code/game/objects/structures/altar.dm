@@ -14,35 +14,19 @@
 	var/on = 1
 	light_range = 4
 	light_color = LIGHT_COLOR_ORANGE
-	var/last_check = 0
-
-/obj/structure/altar/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/structure/altar/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 
 /obj/structure/altar/attack_hand(mob/M as mob)
 
-	if(on == 0)
-		on = 1
-		update_icon()
-		set_light(4)
+	on = !on
+	set_light(on*light_range) //Sets the lightrange multiplied by a true (1) false (0)
+	update_icon()
 
-	else
-		on = 0
-		update_icon()
-		set_light(0)
 
 /obj/structure/altar/update_icon()
-	if (on)
-		icon_state = "altar2_on"
-	else
-		icon_state = "altar2_off"
+	icon_state = "altar2_[on ? "on" : "off"]"
 
+
+//Altars are holy relics, invulnerable to the actions of those around them.
 /obj/structure/altar/cultify()
 	return
 
@@ -57,15 +41,27 @@ obj/structure/altar/ex_act(severity)
 	name = "preachers podium"
 	desc = "For whatever reason, you feel obliged to listen to whoever speaks at this, no matter how ridiculous."
 	icon_state = "podium_on"
-	light_range = 2
-	density = 0
-	plane = ABOVE_HUMAN_PLANE
+	light_range = 2 //small candles
+	density = 0 //Density zero so people can walk on the same tile and preach.
+	plane = ABOVE_HUMAN_PLANE //Said person is BEHIND this object.
 
 /obj/structure/altar/podium/update_icon()
-	if (on)
-		icon_state = "podium_on"
-	else
-		icon_state = "podium_off"
+	icon_state = "podium_[on ? "on" : "off"]"
+
+
+//podiums however, are not.
+/obj/structure/altar/podium/cultify()
+	if(prob(66))
+		qdel(src)
+
+/obj/structure/altar/podium/blob_act()
+	if(prob(66))
+		qdel(src)
+
+obj/structure/altar/podium/ex_act(severity)
+	if(prob(10*severity))
+		qdel(src)
+
 
 /obj/structure/altar/wood
 	name = "altar"
@@ -73,8 +69,5 @@ obj/structure/altar/ex_act(severity)
 	icon_state = "altar1_on"
 
 /obj/structure/altar/wood/update_icon()
-	if (on)
-		icon_state = "altar1_on"
-	else
-		icon_state = "altar1_off"
+	icon_state = "altar1_[on ? "on" : "off"]"
 
