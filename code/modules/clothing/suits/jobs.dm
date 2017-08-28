@@ -238,7 +238,7 @@
 	set src in usr
 
 	if(usr.incapacitated())
-			return 0
+		return 0
 
 	switch(icon_state)
 		if("ia_jacket_open")
@@ -249,5 +249,5 @@
 			to_chat(usr, "You unbutton the jacket.")
 		else
 			to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
-				return
+			return
 		usr.update_inv_wear_suit()	//so our overlays update
