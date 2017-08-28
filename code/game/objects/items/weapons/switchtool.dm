@@ -361,6 +361,7 @@
 /obj/item/weapon/switchtool/holo/update_icon()
 	if(deployed)
 		item_state = "[hmodule]"
+		deployed.appearance = appearance
 	else
 		item_state = "Hswitchtool"
 
