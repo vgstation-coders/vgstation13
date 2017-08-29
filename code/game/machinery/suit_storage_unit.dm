@@ -41,6 +41,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/atmos
+	name = "Atmospheric Suit Storage Unit"
 	department = "atmos"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/atmos
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/atmos
@@ -48,6 +49,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/atmos
 
 /obj/machinery/suit_storage_unit/prison
+	name = "Prisoner Suit Storage Unit"
 	department = "jail"
 	SUIT_TYPE = /obj/item/clothing/suit/space/prison
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/prison
@@ -55,6 +57,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/engie
+	name = "Engineering Suit Storage Unit"
 	department = "engie"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig
@@ -62,6 +65,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/elite
+	name = "Advanced Suit Storage Unit"
 	department = "ce"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/elite
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/elite
@@ -69,6 +73,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/elite
 
 /obj/machinery/suit_storage_unit/mining
+	name = "Miners Suit Storage Unit"
 	department = "mine"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/mining
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/mining
@@ -76,6 +81,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/excavation
+	name = "Excavation Suit Storage Unit"
 	department = "sci"
 	SUIT_TYPE = /obj/item/clothing/suit/space/anomaly
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/anomaly
@@ -83,6 +89,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/security
+	name = "Security Suit Storage Unit"
 	department = "sec"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/security
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/security
@@ -90,6 +97,7 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/medical
+	name = "Medical Suit Storage Unit"
 	department = "med"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/medical
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/medical
@@ -104,6 +112,7 @@
 	BOOT_TYPE = null
 
 /obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
+	name = "Bomb Suit Storage Unit"
 	SUIT_TYPE = /obj/item/clothing/suit/bomb_suit
 	HELMET_TYPE = /obj/item/clothing/head/bomb_hood
 	MASK_TYPE = /obj/item/clothing/mask/gas
