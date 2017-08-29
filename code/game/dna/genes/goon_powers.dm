@@ -689,6 +689,7 @@
 
 ////////////////////////////////////////////////////////////////////////
 
+/* Removed by order of Chicken
 // WAS: /datum/bioEffect/superfart
 /datum/dna/gene/basic/superfart
 	name = "High-Pressure Intestines"
@@ -704,6 +705,7 @@
 	New()
 		..()
 		block = SUPERFARTBLOCK
+*/
 
 // WAS: /datum/bioEffect/strong
 /datum/dna/gene/basic/strong

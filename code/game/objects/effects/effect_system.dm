@@ -489,6 +489,7 @@ steam.start() -- spawns the effect
 					src.total_smoke--
 
 // Goon compat.
+/*
 /datum/effect/effect/system/smoke_spread/chem/fart
 	set_up(var/mob/M, n = 5, c = 0, loca, direct)
 		if(n > 20)
@@ -514,7 +515,7 @@ steam.start() -- spawns the effect
 		var/more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
 		message_admins("[M][more] produced a toxic fart in ([whereLink])[contained].", 0, 1)
 		log_game("[M][more] produced a toxic fart in ([where])[contained].")
-
+*/
 
 /////////////////////////////////////////////
 //////// Attach an Ion trail to any object, that spawns when it moves (like for the jetpack)

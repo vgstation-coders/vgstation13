@@ -1,4 +1,4 @@
-/mob/living/carbon/
+/mob/living/carbon
 	gender = MALE
 	var/list/stomach_contents = list()
 	var/list/datum/disease2/disease/virus2 = list()

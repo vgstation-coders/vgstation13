@@ -1813,7 +1813,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		"xylophone",
 		"meatleft",
 		"check_mutations",
-		"lastFart",
+		//"lastFart",
 		"last_emote_sound",
 		"decapitated",
 		"organs",
