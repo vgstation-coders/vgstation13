@@ -121,7 +121,7 @@
 
 /obj/structure/bed/chair/wood/pew
 	name = "pew"
-	desc = "Uncomfortable looking, but home-y."
+	desc = "Uncomfortable."
 	sheet_amt = 2
 	anchored = 1
 	noghostspin = 1
