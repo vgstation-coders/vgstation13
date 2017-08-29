@@ -18,7 +18,7 @@
 
 	var/turf/T = get_turf(src)
 	var/datum/organ/external/affecting = victim.get_organ(user.get_unarmed_damage_zone(victim))
-	
+
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
@@ -102,3 +102,35 @@
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)
+
+//Captain
+/obj/item/clothing/shoes/magboots/captain
+	desc = "A relic predating magboots, these ornate greaves have retractable spikes in the soles to maintain grip."
+	name = "captain's greaves"
+	icon_state = "capboots0"
+	base_state = "capboots"
+
+/obj/item/clothing/shoes/magboots/captain/toggle()
+	//set name = "Toggle Floor Grip"
+	if(usr.isUnconscious())
+		return
+	if(src.magpulse)
+		src.clothing_flags &= ~NOSLIP
+		src.slowdown = NO_SLOWDOWN
+		src.magpulse = 0
+		icon_state = "[base_state]0"
+		to_chat(usr, "You stop ruining the carpet.")
+	else
+		src.clothing_flags |= NOSLIP
+		src.slowdown = mag_slow
+		src.magpulse = 1
+		icon_state = "[base_state]1"
+		to_chat(usr, "Small spikes shoot from your shoes and dig into the flooring, bracing you.")
+
+/obj/item/clothing/shoes/magboots/captain/examine(mob/user)
+	..()
+	var/state = "disabled"
+	if(src.clothing_flags&NOSLIP)
+		state = "enabled"
+	to_chat(user, "<span class='info'>Its anchoring spikes appear to be [state].</span>")
+
