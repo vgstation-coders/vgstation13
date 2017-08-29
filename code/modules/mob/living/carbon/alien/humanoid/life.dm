@@ -454,8 +454,8 @@
 				if(M.stat == DEAD)
 					M.death(0)
 					M.ghostize(1)
-					drop_stomach_contents()
 					M.drop_all()
+					drop_stomach_contents()
 					qdel(M)
 					continue
 				/* Removed by order of Chicken
