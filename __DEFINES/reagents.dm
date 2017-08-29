@@ -130,7 +130,6 @@
 #define SPRINKLES 			"sprinkles"
 #define SYNDICREAM 			"syndicream"
 #define CORNOIL 			"cornoil"
-#define DEEPFRYINGOIL 			"deepfryingoil"
 #define ENZYME 			"enzyme"
 #define FLOUR 			"flour"
 #define RICE 			"rice"

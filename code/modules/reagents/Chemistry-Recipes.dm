@@ -408,7 +408,7 @@
 	name = "Glycerol"
 	id = GLYCEROL
 	result = GLYCEROL
-	required_reagents = list(CORNOIL = 3, SACID = 1)
+	required_reagents = list(CORNOIL = 3, FORMIC_ACID = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/nitroglycerin

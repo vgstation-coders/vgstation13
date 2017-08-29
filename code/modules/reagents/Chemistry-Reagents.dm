@@ -3671,11 +3671,6 @@
 		T.assume_air(lowertemp)
 		qdel(hotspot)
 
-/datum/reagent/cornoil/deepfryingoil 
-	name = "Deep-frying Oil" 
-	description = "A special oil bio-chemically engineered for perfect deep-frying."
-	id = DEEPFRYINGOIL
-		
 /datum/reagent/enzyme
 	name = "Universal Enzyme"
 	id = ENZYME
