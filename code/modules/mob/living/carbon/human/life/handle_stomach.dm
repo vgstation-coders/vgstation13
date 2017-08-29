@@ -38,7 +38,7 @@
 				continue
 			if(SSair.current_cycle % 3 == 1)
 				if(!(M.status_flags & GODMODE))
-					M.adjustBruteLoss(5)
+					M.adjustBruteLoss(15)
 				nutrition += 10
 
 	//I put the nutriment stuff here
