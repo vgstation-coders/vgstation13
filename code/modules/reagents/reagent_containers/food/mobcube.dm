@@ -34,7 +34,7 @@
 
 	if (istype(M, /mob/living/carbon/human))
 		//Do not try to understand.
-		var/obj/item/weapon/surprise = new/obj/item/weapon(M)
+		var/obj/item/weapon/surprise = new/obj/item/weapon(get_turf(M))
 		surprise.icon = contained_mob.icon
 		surprise.icon_state = contained_mob.icon_state
 		surprise.name = "malformed [contained_mob.name]"
@@ -42,18 +42,8 @@
 		qdel(contained_mob)
 		surprise.transform *= 0.6
 		surprise.add_blood(M)
-		var/mob/living/carbon/human/H = M
-		var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
-		E.fracture()
-		for (var/datum/organ/internal/I in E.internal_organs)
-			I.take_damage(rand(I.min_bruised_damage, I.min_broken_damage+1))
+		M.gib()
 
-		if (!E.hidden && prob(60)) //set it snuggly
-			E.hidden = surprise
-			E.cavity = 0
-		else 		//someone is having a bad day
-			E.createwound(CUT, 30)
-			E.embed(surprise)
 	else if (ismonkey(M))
 		M.visible_message("<span class='danger'>[M] suddenly tears in half!</span>")
 		contained_mob.forceMove(get_turf(M))
