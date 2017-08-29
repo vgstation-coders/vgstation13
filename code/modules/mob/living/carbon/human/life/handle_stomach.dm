@@ -10,6 +10,7 @@
 			if(M.stat == DEAD)//Only digest if mob inside is dead
 				M.death(0)
 				M.ghostize(1)
+				M.drop_all()
 				drop_stomach_contents()
 				qdel(M)
 				/* Removed by order of Chicken

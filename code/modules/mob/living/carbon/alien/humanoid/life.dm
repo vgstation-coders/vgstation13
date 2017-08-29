@@ -455,6 +455,7 @@
 					M.death(0)
 					M.ghostize(1)
 					drop_stomach_contents()
+					M.drop_all()
 					qdel(M)
 					continue
 				/* Removed by order of Chicken

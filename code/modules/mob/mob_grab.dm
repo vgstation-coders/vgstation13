@@ -268,6 +268,7 @@
 			user.visible_message("<span class='danger'>[user] devours [affecting]!</span>", \
 				drugged_message="<span class='danger'>[affecting] vanishes in disgust.</span>")
 			if(just_gib)
+				affecting.drop_all()
 				affecting.gib()
 				qdel(affecting)
 				attacker.nutrition += nutriadd
