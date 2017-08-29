@@ -102,34 +102,6 @@
 		ui.set_auto_update(TRUE)
 		ui.open()
 
-/*/obj/machinery/shield_capacitor/interact(mob/user)
-	if ( (get_dist(src, user) > 1 ) || (stat & (BROKEN|NOPOWER)) )
-		if (!istype(user, /mob/living/silicon))
-			user.unset_machine()
-			user << browse(null, "window=shield_capacitor")
-			return
-	var/t = "<B>Shield Capacitor Control Console</B><br><br>"
-	if(locked)
-		t += "<i>Swipe your ID card to begin.</i>"
-	else
-		t += {"This capacitor is: [active ? "<font color=green>Online</font>" : "<font color=red>Offline</font>" ] <a href='?src=\ref[src];toggle=1'>[active ? "\[Deactivate\]" : "\[Activate\]"]</a><br>
-			[time_since_fail > 2 ? "<font color=green>Charging stable.</font>" : "<font color=red>Warning, low charge!</font>"]<br>
-			Charge: [stored_charge] Watts ([100 * stored_charge/max_charge]%)<br>
-			Charge rate:
-		<a href='?src=\ref[src];charge_rate=[-max_charge_rate]'>\[min\]</a>
-		<a href='?src=\ref[src];charge_rate=-1000'>\[--\]</a>
-		<a href='?src=\ref[src];charge_rate=-100'>\[-\]</a>[charge_rate] Watts/sec
-		<a href='?src=\ref[src];charge_rate=100'>\[+\]</a>
-		<a href='?src=\ref[src];charge_rate=1000'>\[++\]</a>
-		<a href='?src=\ref[src];charge_rate=[max_charge_rate]'>\[max\]</a><br>"}
-
-	t += {"<hr>
-		<A href='?src=\ref[src]'>Refresh</A>
-		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
-	user << browse(t, "window=shield_capacitor;size=500x800")
-	user.set_machine(src)
-*/
-
 /obj/machinery/shield_capacitor/process()
 	if(active)
 		use_power = 2
