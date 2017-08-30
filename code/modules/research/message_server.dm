@@ -197,6 +197,7 @@ var/obj/machinery/blackbox_recorder/blackbox
 	var/list/msg_syndicate = list()
 	var/list/msg_service = list()
 	var/list/msg_cargo = list()
+	var/list/msg_raider = list()
 
 	var/list/datum/feedback_variable/feedback = new()
 
@@ -222,6 +223,7 @@ var/obj/machinery/blackbox_recorder/blackbox
 		BR.msg_deathsquad = msg_deathsquad
 		BR.msg_ert = msg_ert
 		BR.msg_syndicate = msg_syndicate
+		BR.msg_raider = msg_raider
 		BR.msg_service = msg_service
 		BR.msg_cargo = msg_cargo
 		BR.feedback = feedback
@@ -270,7 +272,7 @@ var/obj/machinery/blackbox_recorder/blackbox
 	feedback_add_details("radio_usage","OTH-[messages.len]")
 	feedback_add_details("radio_usage","PDA-[pda_msg_amt]")
 	feedback_add_details("radio_usage","RC-[rc_msg_amt]")
-
+	feedback_add_details("radio_usage","RDR-[msg_raider]")
 
 	feedback_set_details("round_end","[time2text(world.realtime)]") //This one MUST be the last one that gets set.
 
