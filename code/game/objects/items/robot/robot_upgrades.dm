@@ -71,7 +71,7 @@
 	if(!C)
 		return FAILED_TO_ADD
 
-	C.can_hold |= list (/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
+	C.can_hold += list (/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
 
 /obj/item/borg/upgrade/reset
 	name = "robotic module reset board"
@@ -258,8 +258,7 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold -= /obj/item/weapon/reagent_containers/food/drinks
-	G.can_hold |= list (/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food)
+	G.can_hold += list (/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food)
 
 /obj/item/borg/upgrade/magnetic_gripper
 	name = "magnetic gripper module board"
