@@ -66,7 +66,15 @@
 		W.attack_self(src, params)
 		return
 
-	if(!isturf(loc) && !is_holder_of(src, A)) // Can't touch anything from inside a locker/cyborg recharging station etc, unless it's inside our inventory.
+	//Handling grippercreep
+	if (isgripper(W))
+		var/obj/item/weapon/gripper/G = W
+		//If the gripper contains something, then we will use its contents to attack
+		if (G.wrapped && (G.wrapped.loc == G))
+			GripperClickOn(A, params, G)
+			return
+
+	if(!isturf(loc) && !is_holder_of(src, A)) // Can't touch anything from inside things, unless it's inside our inventory.
 		return
 
 	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
@@ -89,6 +97,39 @@
 		W.afterattack(A, src, 0, params)
 		return
 	return
+
+//Gripper Handling
+//This is used when a gripper is used on anything. It does all the handling for it.
+//Lots of sanity checking because i don't want runtimes.
+
+/mob/living/silicon/robot/proc/GripperClickOn(var/atom/A, var/params, var/obj/item/weapon/gripper/G)
+	var/obj/item/W = G.wrapped
+	if(!gripper_sanity_check(G))
+		return
+	G.force_holder = W.force
+	W.force = 0
+	if(A.Adjacent(src, MAX_ITEM_DEPTH))
+		var/resolved = W.preattack(A, src, 1, params)
+		if(!gripper_sanity_check(G))//Check if the thing inside our gripper is still there, just to be sure.
+			return
+		if(!resolved && A && W)
+			resolved = A.attackby(W,src,params)
+			if(ismob(A) || istype(A, /obj/mecha))
+				delayNextAttack(10)
+			if(!gripper_sanity_check(G))//Check it, again.
+				return
+			if(!resolved && A && W)
+				W.afterattack(A,src,1,params)//1 indicates adjacency. Thanks, magic number.
+			else
+				delayNextAttack(10)
+			if(!gripper_sanity_check(G))//If we're parsing again, we're checking it again.
+				return
+			W.force = G.force_holder
+			G.update_icon()
+			return
+	if(!isturf(loc))
+		W.force = G.force_holder
+		return
 
 //Middle click cycles through selected modules.
 /mob/living/silicon/robot/MiddleClickOn(var/atom/A)

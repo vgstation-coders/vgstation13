@@ -1,0 +1,9 @@
+{
+    "cmd": "C:/Program Files (x86)/BYOND/bin/dm.exe",
+    "args": [ "C:/Dropbox/Dropbox/SS13/qwilfish-on-head-retard/vgstation13.dme" ],
+    "sh": false,
+    "errorMatch":
+    [
+        "\n(?<file>[\\\\\/0-9a-zA-Z\\._]+):(?<line>\\d+).*"
+    ]
+}

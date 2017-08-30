@@ -210,26 +210,7 @@
 		return
 
 	// Attempt to transfer from our glass
-	var/refill_id = reagents.get_master_reagent_id()
-	var/refill_name = reagents.get_master_reagent_name()
-	var/datum/reagent/R = reagents.get_reagent(refill_id)
-
-	var/sent_amount = transfer(target, user, can_send = TRUE, can_receive = FALSE)
-
-	// Service borgs regenerate the amount transferred after a while
-	// TODO Why doesn't the borg module handle this nonsense?
-	if (sent_amount > 0 && isrobot(user) && R.dupeable)
-		var/mob/living/silicon/robot/borg = user
-		if (!istype(borg.module, /obj/item/weapon/robot_module/butler) || !borg.cell)
-			return
-
-		var/charge_amount = max(30, 4*sent_amount)
-		borg.cell.use(charge_amount)
-
-		to_chat(user, "Now synthesizing [sent_amount] units of [refill_name]...")
-		spawn(300)
-			reagents.add_reagent(refill_id, sent_amount)
-			to_chat(user, "<span class='notice'>Cyborg [src] refilled with [refill_name] ([sent_amount] units).</span>")
+	transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
 
@@ -792,7 +773,7 @@
 	reagents.add_reagent(DANS_WHISKEY, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
-	
+
 //Beer cans for the Off Licence
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser
 	name = "Blebweiser"
@@ -801,7 +782,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser/New()
 	..()
 	reagents.add_reagent(BEER, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon
 	name = "Bluespace Ribbon"
 	desc = "A cheap lager brewed in enormous bluespace pockets, the brewing process has done little for the flavour."
@@ -809,7 +790,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon/New()
 	..()
 	reagents.add_reagent(BEER, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone
 	name = "Code One"
 	desc = "The Code One Brewery prides itself on creating the very best beer for cracking open with the boys."
@@ -817,7 +798,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone/New()
 	..()
 	reagents.add_reagent(BEER, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness
 	name = "Gibness"
 	desc = "Derived from a classic Irish recipe, there's a strong taste of starch in this dry stout."
@@ -826,7 +807,7 @@
 	..()
 	reagents.add_reagent(BEER, 25)
 	reagents.add_reagent(POTATO, 25)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka
 	name = "Greyshit Vodka"
 	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
@@ -834,7 +815,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka/New()
 	..()
 	reagents.add_reagent(GREYVODKA, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides
 	name = "Orchard Tides"
 	desc = "A sweet apple cider that might quench that kleptomania if only for a while."
@@ -843,7 +824,7 @@
 	..()
 	reagents.add_reagent(BEER, 20)
 	reagents.add_reagent(APPLEJUICE, 30)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken
 	name = "Sleimiken"
 	desc = "This Belgium original has been enhanced over the years with the delicious taste of DNA-dissolving slime extract."
@@ -852,7 +833,7 @@
 	..()
 	reagents.add_reagent(BEER, 45)
 	reagents.add_reagent(SLIMEJELLY, 5)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow
 	name = "Strong-eBow"
 	desc = "A Syndicate favourite, the sharp flavour of this Cider has been compared to getting shot by an Energy Bow."

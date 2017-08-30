@@ -143,10 +143,10 @@
 #define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
-	
+
 	src.modules += new /obj/item/device/healthanalyzer(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
-	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
+	src.modules += new /obj/item/weapon/gripper/chemistry(src)
 	src.modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 	src.modules += new /obj/item/weapon/reagent_containers/syringe(src)
 	src.modules += new /obj/item/weapon/storage/bag/chem(src)
@@ -210,7 +210,7 @@
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
-	
+
 	src.emag = new /obj/item/borg/stun(src)
 	src.modules += new /obj/item/device/rcd/borg/engineering(src)
 	src.modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
@@ -329,34 +329,18 @@
 					LANGUAGE_MONKEY		= 1,
 					)
 	..()
-	src.modules += new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	src.modules += new /obj/item/weapon/reagent_containers/food/condiment/enzyme(src)
+	src.modules += new /obj/item/weapon/gripper/service(src)
+	src.modules += new /obj/item/weapon/crowbar(src)
 	src.modules += new /obj/item/weapon/pen/robopen(src)
-
+	src.modules += new /obj/item/weapon/dice/borg(src)
 	src.modules += new /obj/item/device/rcd/borg/rsf(src)
-
 	src.modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
-
+	src.modules += new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg(src)
 	var/obj/item/weapon/lighter/zippo/L = new /obj/item/weapon/lighter/zippo(src)
 	L.lit = 1
 	L.update_brightness()
 	src.modules += L
-
-	src.modules += new /obj/item/weapon/tray/robotray(src)
-
-	src.modules += new /obj/item/weapon/reagent_containers/food/drinks/shaker(src)
-
-	src.modules += new /obj/item/weapon/dice/borg(src)
-
-	src.modules += new /obj/item/weapon/crowbar(src)
-
-	src.emag = new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-
-	var/datum/reagents/R = new/datum/reagents(50)
-	src.emag.reagents = R
-	R.my_atom = src.emag
-	R.add_reagent(BEER2, 50)
-	src.emag.name = "Mickey Finn's Special Brew"
+	src.emag = new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked(src)
 	fix_modules()
 
 
@@ -373,18 +357,16 @@
 	src.modules += new /obj/item/device/mining_scanner(src)
 	src.modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
-	sensor_augs = list("Mesons", "Disable")
-//		src.modules += new /obj/item/weapon/pickaxe/shovel(src) Uneeded due to buffed drill
-
 	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
 	tag.mode = 1 //For editing the tag list
 	src.modules += tag
-
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
 	W.amount = 24
 	W.max_amount = 24
 	src.modules += W
+	src.modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 
+	sensor_augs = list("Mesons", "Disable")
 	fix_modules()
 
 /obj/item/weapon/robot_module/miner/respawn_consumable(var/mob/living/silicon/robot/R)

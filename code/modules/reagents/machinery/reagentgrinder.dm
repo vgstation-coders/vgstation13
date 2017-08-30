@@ -67,7 +67,6 @@ var/global/list/juice_items = list (
 
 
 	var/list/holdingitems = list()
-	var/targetMoveKey
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -88,21 +87,6 @@ var/global/list/juice_items = list (
 	RefreshParts()
 
 	return
-
-/obj/machinery/reagentgrinder/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 
 /obj/machinery/reagentgrinder/RefreshParts()
 	var/T = 0
@@ -154,10 +138,6 @@ var/global/list/juice_items = list (
 				return
 
 			src.beaker =  O
-			if(user.type == /mob/living/silicon/robot)
-				var/mob/living/silicon/robot/R = user
-				R.uneq_active()
-				targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
 			update_icon()
 			src.updateUsrDialog()
@@ -278,9 +258,6 @@ var/global/list/juice_items = list (
 	if (!beaker)
 		return
 	beaker.forceMove(src.loc)
-	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-		var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-		borgbeak.return_to_modules()
 	beaker = null
 	update_icon()
 

@@ -5,3 +5,8 @@
 //supermatter_act() severity values
 #define SUPERMATTER_DELETE 0
 #define SUPERMATTER_DUST   1
+
+//Alpha
+#define TRANSPARENT 0
+#define SEMI_TRANSPARENT 128
+#define NON_TRANSPARENT 255

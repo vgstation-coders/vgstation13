@@ -1622,3 +1622,9 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
+
+//Prevents robots dropping their modules.
+/proc/dropsafety(var/atom/movable/A)
+	if (istype(A.loc, /mob/living/silicon))
+		return FALSE
+	return TRUE
