@@ -126,15 +126,20 @@
 
 	//Clicked on a non-adjacent atom
 	else
-		var/view_range = get_view_range() + 2 //Extend clickable zone by 2 tiles to allow clicking on the edge of the screen while moving
-		var/atom_distance = get_dist(A, src) //Distance from the clicker to the clickee
+		//If the player's view is not centered on the mob, check how far the clicked object is from the mob
+		//This is to prevent abuse with remote view / camera consoles
+		if(client && client.eye && client.eye != client.mob)
+			var/view_range = get_view_range() + 2 //Extend clickable zone by 2 tiles to allow clicking on the edge of the screen while the camera is moving
+			var/atom_distance = get_dist(A, src)  //Distance from the player's mob to the clicked atom
 
-		if(atom_distance <= view_range)
-			//Clicked on a non-adjacent atom in view
-			RangedClickOn(A, params, held_item)
+			if(atom_distance <= view_range)
+				//Clicked on a non-adjacent atom in view
+				RangedClickOn(A, params, held_item)
+			else
+				//Clicked on a non-adjacent atom that is not in view
+				RemoteClickOn(A, params, held_item, client.eye)
 		else
-			//Clicked on a non-adjacent atom that is not in view
-			RemoteClickOn(A, params, held_item)
+			RangedClickOn(A, params, held_item)
 
 /mob/proc/RangedClickOn(atom/A, params, obj/item/held_item)
 	if(held_item)
@@ -151,8 +156,9 @@
 		RangedAttack(A, params)
 
 //By default, do nothing if clicked on something that is not in view
-/mob/proc/RemoteClickOn(atom/A, params, obj/item/held_item)
-	return
+/mob/proc/RemoteClickOn(atom/A, params, obj/item/held_item, atom/movable/eye)
+	if(held_item)
+		held_item.remote_attack(A, src, eye)
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
