@@ -267,13 +267,6 @@
 	required_module = list(/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
 
-/obj/item/borg/upgrade/sheet_inserter
-	name = "sheet inserter module board"
-	desc = "Used to give a supply cyborg a sheet inserter."
-	icon_state = "cyborg_upgrade"
-	required_module = list(/obj/item/weapon/robot_module/miner)
-	modules_to_add = list(/obj/item/weapon/gripper/no_use/inserter)
-
 /obj/item/borg/upgrade/organ_gripper
 	name = "organ gripper module board"
 	desc = "Used to give a medical cyborg a organ gripper."
