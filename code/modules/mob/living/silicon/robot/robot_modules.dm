@@ -357,6 +357,7 @@
 	src.modules += new /obj/item/device/mining_scanner(src)
 	src.modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
+	src.modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
 	tag.mode = 1 //For editing the tag list
 	src.modules += tag
