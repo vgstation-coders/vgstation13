@@ -26,7 +26,7 @@
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
 	if(istype(O))
-		if(istype(I, /obj/item/weapon/disk/nuclear))
+		if(istype(O, /obj/item/weapon/disk/nuclear))
 			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
 		else if(user.drop_item(O, src))
 			stock.Add(O)
