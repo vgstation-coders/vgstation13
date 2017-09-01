@@ -26,7 +26,9 @@
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
 	if(istype(O))
-		if(user.drop_item(O, src))
+		if(istype(I, /obj/item/weapon/disk/nuclear))
+			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
+		else if(user.drop_item(O, src))
 			stock.Add(O)
 
 /obj/structure/vendomatpack/custom/attack_hand(mob/user)
@@ -35,10 +37,9 @@
 	if(I != null && loc)
 		if(!Adjacent(user))
 			return
-		if(istype(I, /obj/item/weapon/disk/nuclear))
-			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
-			return
+		
 		I.forceMove(get_turf(src))
+		stock.Remove(I)
 
 
 /obj/structure/vendomatpack/undefined
