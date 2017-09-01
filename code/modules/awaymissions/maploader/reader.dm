@@ -137,7 +137,8 @@ var/list/map_dimension_cache = list()
 
 			ycrd--
 
-			sleep(-1)
+			if(ticker) //If the game has already started, perform some lag reduction procedures.
+				CHECK_TICK
 
 		if(map_element)
 			map_element.height = y_depth
