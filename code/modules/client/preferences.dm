@@ -909,7 +909,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/role_id = href_list["role_id"]
 //	to_chat(user, "<span class='info'>Toggling role [role_id] (currently at [roles[role_id]])...</span>")
 	if(!(role_id in special_roles))
-		to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
+		to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id] in special_roles.</span>")
 		return 0
 
 	if(roles[role_id] == null || roles[role_id] == "")
