@@ -295,11 +295,6 @@ var/list/DummyCache = list()
 /proc/get_active_candidates(var/role_id=null, var/buffer=ROLE_SELECT_AFK_BUFFER, var/poll=0)
 	var/list/candidates = list() //List of candidate mobs to assume control of the new larva ~fuck you
 	var/i = 0
-
-	// Sanity check
-	if(!(role_id in special_roles))
-		message_admins("<span class='danger'>BUG: get_active_candidates() has been passed role_id=[role_id], which doesn't exist in special_roles! Aborting to avoid breaking shit...</span>")
-		return candidates // empty list
 	while(candidates.len <= 0 && i < 5)
 		roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Player list is [player_list.len] items long.")
 		for(var/mob/dead/observer/G in player_list)
@@ -322,9 +317,6 @@ var/list/DummyCache = list()
 
 /proc/get_candidates(var/role_id=null)
 	. = list()
-	if(!(role_id in special_roles))
-		message_admins("<span class='danger'>BUG: get_candidates() has been passed role_id=[role_id], which doesn't exist in special_roles! Aborting to avoid breaking shit...</span>")
-		return // empty list
 	for(var/mob/dead/observer/G in player_list)
 		if(!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
 			if(!G.client.is_afk() && (role_id==null || G.client.desires_role(role_id)))
