@@ -13,7 +13,7 @@
 
 	//TODO LATER
 	@faction_icon_state: String: The image name of the icon that appears next to people of this faction
-	@faction_icon: icon file reference: Where the icon is stored
+	@faction_icon: icon file reference: Where the icon is stored (currently most are stored in mob.dmi)
 */
 
 /datum/faction
@@ -87,4 +87,15 @@
 /datum/faction/wizard/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	return header
+
+/datum/faction/cult
+	name = "Cult of Nar-Sie"
+	desc = "A group of shady blood-obsessed individuals whose souls are devoted to Nar-Sie, the Geometer of Blood.\
+	From his teachings, they were granted the ability to perform blood magic rituals allowing them to fight and grow their ranks, and given the goal of pushing his agenda.\
+	Nar-Sie's ultimate goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
+
+/datum/faction/cult/GetObjectivesMenuHeader()
+	var/icon/logo = icon('icons/mob/mob.dmi', "cult-logo")
+	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
