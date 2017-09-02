@@ -510,7 +510,7 @@
 	selection_color = "#dddddd"
 	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
-	alt_titles = list("Lawyer")
+	alt_titles = list("Lawyer", "Bridge Officer")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/lawyer
@@ -533,12 +533,19 @@
 					H.equip_or_collect(new /obj/item/clothing/under/lawyer/bluesuit(H), slot_w_uniform)
 					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
 					H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
+				if("Bridge Officer")
+					H.equip_or_collect (new /obj/item/clothing/shoes/centcom(H), slot_shoes)
+					H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/under/darkblue, slot_w_uniform)
+					H.equip_or_collect(new /obj/item/device/radio/headset/headset_com, slot_ears)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		//H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
 		H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+				
 		if(H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
