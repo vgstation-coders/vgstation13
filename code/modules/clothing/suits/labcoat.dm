@@ -6,7 +6,7 @@
 	//icon_state = "labcoat_open"
 	item_state = "labcoat"
 	blood_overlay_type = "coat"
-	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/minihoe)
+	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/minihoe,/obj/item/weapon/switchtool)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 50, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -45,6 +45,7 @@
 	desc = "Bluer than the standard model."
 	base_icon_state = "labcoat_cmo"
 	item_state = "labcoat_cmo"
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 70, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/storage/labcoat/mad
@@ -84,4 +85,11 @@
 	desc = "A suit that protects against minor radiation exposure. Offers slightly more protection against radiation than the standard model. Has a black stripe on the shoulder."
 	base_icon_state = "labcoat_onc"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 60)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/suit/storage/labcoat/rd
+	name = "Research director's Labcoat"
+	desc = "It smells like weird science."
+	base_icon_state = "labcoat_rd"
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 20, bio = 50, rad = 50)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)

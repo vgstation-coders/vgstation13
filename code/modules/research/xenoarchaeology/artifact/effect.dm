@@ -109,6 +109,8 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 		protected += 0.6
 	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/anomaly))
 		protected += 0.5
+	else if(istype(H.wear_suit,/obj/item/clothing/suit/storage/labcoat/rd)
+		protected += 0.5
 
 	if(istype(H.head,/obj/item/clothing/head/bio_hood/anomaly))
 		protected += 0.3
