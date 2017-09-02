@@ -28,7 +28,8 @@ var/list/ladders = list()
 
 	switch(variable_name)
 		if("down", "up", "height", "id")
-			update_links()
+			spawn()
+				update_links()
 
 /obj/structure/ladder/Destroy()
 	..()
