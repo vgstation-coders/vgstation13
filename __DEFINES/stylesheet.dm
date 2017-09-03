@@ -24,6 +24,7 @@ em						{font-style: normal;	font-weight: bold;}
 .comradio				{color: #193A7A;}
 .syndradio				{color: #6d3f40;}
 .dsquadradio			{color: #686868;}
+.raiderradio			{color: #6d3f40;}
 .resteamradio			{color: #18BC46;}
 .aiprivradio			{color: #ff00ff;}
 .centradio				{color: #5C5C8A;}

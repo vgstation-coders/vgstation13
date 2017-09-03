@@ -63,6 +63,10 @@
 		if(!(src.syndie))
 			return -1//Prevents broadcast of messages over devices lacking the encryption
 
+	if(freq == RAID_FREQ)
+		if(!(src.raider))
+			return -1//Prevents broadcast of messages over devices lacking the encryption, birb edition
+
 	return canhear_range
 
 
