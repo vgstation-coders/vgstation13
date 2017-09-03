@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	charge_max = 300
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = Z2NOCAST | WAIT_FOR_CLICK
 	invocation = "P'SH IT RE'L GUD"
 	invocation_type = SpI_SHOUT
 	range = 1
