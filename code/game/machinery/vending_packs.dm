@@ -119,6 +119,11 @@
 	targetvendomat = /obj/machinery/vending/engivend
 	icon_state = "engivend"
 
+/obj/structure/vendomatpack/building
+	name = "Habitat Depot recharge pack"
+	targetvendomat = /obj/machinery/vending/building
+	icon_state = "building"
+
 /obj/structure/vendomatpack/autodrobe
 	name = "AutoDrobe recharge pack"
 	targetvendomat = /obj/machinery/vending/autodrobe
@@ -198,11 +203,16 @@
 	name = "Shuo-Cai Cosmetics recharge pack"
 	targetvendomat = /obj/machinery/vending/makeup
 	icon_state = "makeup"
-	
+
 /obj/structure/vendomatpack/offlicence
 	name = "Offworld Off-Licence recharge pack"
 	targetvendomat = /obj/machinery/vending/offlicence
 	icon_state = "offlicence"
+
+/obj/structure/vendomatpack/circus
+	name = "Circus of Values recharge pack"
+	targetvendomat = /obj/machinery/vending/circus
+	icon_state = "circus"
 
 //////EMPTY PACKS//////
 

@@ -1935,6 +1935,59 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/engivend
 
+/obj/machinery/vending/building
+	name = "\improper Habitat Depot"
+	desc = "Habitat, sweet habitat. All you need for remodeling."
+	icon_state = "building"
+	products = list(
+		/obj/item/stack/sheet/metal/bigstack = 10,
+		/obj/item/stack/sheet/glass/glass/bigstack = 10,
+		/obj/item/stack/sheet/wood/bigstack = 10,
+		/obj/item/stack/tile/carpet/bigstack = 10,
+		/obj/item/stack/tile/arcade/bigstack = 10,
+		/obj/item/mounted/poster = 6,
+		/obj/item/weapon/storage/box/lights/mixed = 4
+	)
+	contraband = list(
+		/obj/item/stack/sheet/glass/plasmaglass/bigstack = 1,
+		/obj/item/stack/sheet/mineral/plastic/bigstack = 1,
+		/obj/item/weapon/storage/box/lights/he = 2
+	)
+	premium = list(
+		/obj/item/device/rcd/rpd = 1,
+		/obj/item/device/rcd/matter/rsf = 1,
+		/obj/item/device/rcd/tile_painter = 1,
+	)
+	prices = list(
+		/obj/item/stack/sheet/metal/bigstack = 10,
+		/obj/item/stack/sheet/glass/glass/bigstack = 10,
+		/obj/item/stack/sheet/wood/bigstack = 20,
+		/obj/item/stack/tile/carpet/bigstack = 20,
+		/obj/item/stack/tile/arcade/bigstack = 20,
+		/obj/item/mounted/poster = 5,
+		/obj/item/weapon/storage/box/lights/mixed = 5,
+		/obj/item/stack/sheet/glass/plasmaglass/bigstack = 40,
+		/obj/item/stack/sheet/mineral/plastic/bigstack = 40,
+		/obj/item/weapon/storage/box/lights/he = 20
+	)
+
+	pack = /obj/structure/vendomatpack/building
+
+/obj/item/stack/sheet/metal/bigstack
+	amount = 20
+/obj/item/stack/sheet/glass/glass/bigstack
+	amount = 20
+/obj/item/stack/sheet/glass/plasmaglass/bigstack
+	amount = 20
+/obj/item/stack/sheet/wood/bigstack
+	amount = 20
+/obj/item/stack/tile/carpet/bigstack
+	amount = 20
+/obj/item/stack/tile/arcade/bigstack
+	amount = 20
+/obj/item/stack/sheet/mineral/plastic/bigstack
+	amount = 20
+
 //This one's from bay12
 /obj/machinery/vending/engineering
 	name = "\improper Robco Tool Maker"
@@ -2621,7 +2674,57 @@ var/global/num_vending_terminals = 1
 		)
 	pack = /obj/structure/vendomatpack/makeup
 
-
+/obj/machinery/vending/circus
+	name = "\improper Circus of Values"
+	desc = "The Circus of Values Vending Machine offers a variety of items for sale. Most Vending Machines have items at the bottom that will only become available if you successfully hack the machine."
+	//Desc text is a direct quote from the Bioshock description
+	product_slogans = "Hahahahahahaha!;Welcome to the Circus of Values!;Come back when you get some money, buddy!;Hey, I've got a family to feed!;No refunds, no returns!"
+	vend_reply = "Tell your friends about the Circus of Values!"
+	icon_state = "circus"
+	products = list(
+		/obj/item/toy/balloon = 20,
+		/obj/item/toy/waterballoon = 20,
+		/obj/item/toy/blink = 6,
+		/obj/item/toy/spinningtoy = 6,
+		/obj/item/toy/bomb = 2,
+		/obj/item/toy/minimeteor = 2,
+		/obj/item/toy/snappop = 4,
+		/obj/item/toy/syndicateballoon/ntballoon = 1,
+		/obj/item/toy/sword = 2,
+		/obj/item/toy/katana = 2,
+		/obj/item/toy/foamblade = 2,
+		/obj/item/weapon/capsule = 20,
+		/obj/item/toy/cards = 2,
+	)
+	contraband = list(
+		/obj/item/toy/gun = 2,
+		/obj/item/toy/ammo/gun = 10,
+		/obj/item/toy/crossbow = 2,
+		/obj/item/toy/ammo/crossbow = 20,
+	)
+	premium = list(
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 1
+	)
+	prices = list(
+		/obj/item/toy/balloon = 5,
+		/obj/item/toy/waterballoon = 5,
+		/obj/item/toy/blink = 10,
+		/obj/item/toy/spinningtoy = 20,
+		/obj/item/toy/bomb = 20,
+		/obj/item/toy/minimeteor = 20,
+		/obj/item/toy/snappop = 35,
+		/obj/item/toy/gun = 50,
+		/obj/item/toy/ammo/gun = 5,
+		/obj/item/toy/crossbow = 50,
+		/obj/item/toy/ammo/crossbow = 2,
+		/obj/item/toy/sword = 50,
+		/obj/item/toy/katana = 50,
+		/obj/item/toy/foamblade = 50,
+		/obj/item/toy/syndicateballoon/ntballoon = 100,
+		/obj/item/weapon/capsule = 10,
+		/obj/item/toy/cards = 35
+	)
+	pack = /obj/structure/vendomatpack/circus
 
 /obj/machinery/vending/sale
 	name = "Sales"
