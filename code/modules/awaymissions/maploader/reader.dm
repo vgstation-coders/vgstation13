@@ -61,6 +61,14 @@ var/list/map_dimension_cache = list()
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
+	//If this is true, the lag is reduced at the cost of slower loading speed, and tiny atmos leaks during loading
+	var/remove_lag
+	if(map_element.load_at_once)
+		remove_lag = FALSE
+	else if(ticker && ticker.current_state > GAME_STATE_PREGAME)
+		//Lag doesn't matter before the game
+		remove_lag = TRUE
+
 	var/list/spawned_atoms = list()
 
 	var/quote = ascii2text(34)
@@ -137,7 +145,10 @@ var/list/map_dimension_cache = list()
 
 			ycrd--
 
-			sleep(-1)
+			if(remove_lag)
+				CHECK_TICK
+			else
+				sleep(-1)
 
 		if(map_element)
 			map_element.height = y_depth
