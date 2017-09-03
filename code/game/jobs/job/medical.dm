@@ -37,7 +37,7 @@
 		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
+		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/genetics(H), slot_wear_suit)
 		H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
 		if(H.backbag == 1)
