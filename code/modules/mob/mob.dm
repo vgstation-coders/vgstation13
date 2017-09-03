@@ -1879,6 +1879,11 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/get_view_range()
+	if(client)
+		return client.view
+	return world.view
+
 /mob/proc/apply_vision_overrides()
 	if(see_in_dark_override)
 		see_in_dark = see_in_dark_override

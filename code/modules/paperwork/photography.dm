@@ -576,6 +576,10 @@
 			icon_state = icon_on
 			on = 1
 
+/obj/item/device/camera/remote_attack(atom/target, mob/user, atom/movable/eye)
+	if(istype(eye, /obj/machinery/camera))
+		return afterattack(target, user) //Allow taking photos when looking through cameras
+
 /obj/item/device/camera/ai_camera/proc/toggle_camera_mode()
 	if(in_camera_mode)
 		camera_mode_off()

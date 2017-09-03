@@ -202,6 +202,9 @@
 			receive(target,user)
 			return
 
+/obj/item/weapon/subspacetunneler/remote_attack(atom/target, mob/user, atom/movable/eye)
+	return afterattack(target, user) //Allow using the tunneler through cameras and remote view
+
 /obj/item/weapon/subspacetunneler/proc/send(turf/T as turf, mob/living/user as mob|obj)
 	if(!T)
 		T = get_random_nearby_turf()
