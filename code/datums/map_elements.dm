@@ -52,6 +52,12 @@ var/list/datum/map_element/map_elements = list()
 
 	return list(width, height)
 
+/datum/map_element/proc/assign_dimensions()
+	var/list/dimensions = get_dimensions()
+
+	width = dimensions[1]
+	height = dimensions[2]
+
 //Return a list with strings associated with points
 //For example: list("Discovered a vault!" = 500) will add 500 points to the crew's score for discovering a vault
 /datum/map_element/proc/process_scoreboard()
