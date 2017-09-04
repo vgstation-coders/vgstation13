@@ -44,8 +44,8 @@ proc/load_dungeon(dungeon_type)
 	//Highest dungeon in the current row
 
 	for(var/datum/map_element/dungeon in existing_dungeons) //Go through all dungeons in the order they were created
-		if(!dungeon.location)
-			continue
+		//if(!dungeon.location)
+		//	continue
 
 		if(dungeon.height > tallest_dungeon_height)
 			tallest_dungeon_height = dungeon.height
