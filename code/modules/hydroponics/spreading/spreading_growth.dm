@@ -12,8 +12,6 @@
 	// Update our list of valid neighboring turfs.
 	neighbors = list()
 	for(var/turf/simulated/floor in get_cardinal_neighbors())
-		if(get_dist(epicenter, floor) > spread_distance)
-			continue
 		if(locate(/obj/effect/plantsegment) in floor.contents)
 			continue
 		if(floor.density)
@@ -99,7 +97,7 @@
 				if(gcDestroyed || !neighbors.len)
 					break
 				var/turf/target_turf = pick(neighbors)
-				var/obj/effect/plantsegment/child = new(get_turf(src),seed,epicenter)
+				var/obj/effect/plantsegment/child = new(get_turf(src),seed)
 				// Update neighboring squares.
 				for(var/obj/effect/plantsegment/neighbor in range(1,target_turf))
 					neighbor.neighbors -= target_turf
