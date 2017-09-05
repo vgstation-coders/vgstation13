@@ -2,7 +2,7 @@
 // Processes vines/spreading plants.
 
 #define PLANTS_PER_TICK 500 // Cap on number of plant segments processed.
-#define PLANT_TICK_TIME 50  // Number of ticks between the plant processor cycling.
+#define PLANT_TICK_TIME 30  // Number of ticks between the plant processor cycling.
 
 var/global/datum/controller/plants/plant_controller // Set in New().
 
