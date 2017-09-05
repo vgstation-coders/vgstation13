@@ -104,7 +104,6 @@ mob/proc/remove_internal_organ()
 			return 1
 	return 0
 
-
 /proc/canGhostRead(var/mob/A, var/obj/target, var/flags=PERMIT_ALL)
 	if(isAdminGhost(A))
 		return 1
