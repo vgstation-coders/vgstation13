@@ -170,7 +170,7 @@ var/global/ingredientLimit = 10
 	set category = "Object"
 	set src in oview(1)
 
-	if(ghostCheck(usr))
+	if(isjustobserver(usr))
 		return
 
 	if(cooks_in_reagents)

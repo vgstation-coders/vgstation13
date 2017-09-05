@@ -93,6 +93,8 @@
 
 #define isobserver(A) istype(A, /mob/dead/observer)
 
+#define isjustobserver(A) (isobserver(A) && !isAdminGhost(A))
+
 #define isnewplayer(A) istype(A, /mob/new_player)
 
 #define isovermind(A) istype(A, /mob/camera/blob)
