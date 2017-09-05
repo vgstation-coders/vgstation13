@@ -62,6 +62,8 @@
 		limited_growth = 1
 	mature_time = Ceiling(seed.maturation/2)
 	spread_chance = round(40 + triangular_seq(seed.potency*2, 30)) // Diminishing returns formula, see maths.dm
+	if(limited_growth)
+		spread_chance = spread_chance / 2
 	update_icon()
 
 	if(start_fully_mature)
