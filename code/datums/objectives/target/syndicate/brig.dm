@@ -6,8 +6,6 @@
 	..()
 	if(target && target.current)
 		explanation_text = "Have [target.current.real_name], the [target.assigned_role] brigged for 10 minutes."
-	else
-		explanation_text = "Free Objective"
 	return target
 
 
@@ -15,15 +13,12 @@
 	..(role, role_type)
 	if(target && target.current)
 		explanation_text = "Have [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role] brigged for 10 minutes."
-	else
-		explanation_text = "Free Objective"
 	return target
 
 /datum/objective/target/brig/IsFulfilled()
 	..()
 	if(already_completed)
 		return TRUE
-
 	if(target && target.current)
 		if(target.current.stat == DEAD)
 			return FALSE
