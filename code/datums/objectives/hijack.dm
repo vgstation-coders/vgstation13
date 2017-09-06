@@ -5,7 +5,7 @@
 	..()
 	if(!owner.current || owner.current.stat)
 		return FALSE
-	if(emergency_shuttle.location<2)
+	if(emergency_shuttle.location != map.zCentcomm)
 		return FALSE
 	if(issilicon(owner.current))
 		return FALSE
