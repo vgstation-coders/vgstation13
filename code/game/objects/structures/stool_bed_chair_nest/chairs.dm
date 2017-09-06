@@ -257,7 +257,7 @@
 		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
-	if(user.isStunned() || user.isUnconscious() || !user.has_limbs)
+	if(user.isIncapacitated() || !user.has_limbs)
 		return 0
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
