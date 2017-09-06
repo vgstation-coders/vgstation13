@@ -16,3 +16,7 @@
 		if((possible_target != owner) && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) && !(possible_target.assigned_role in bad_assassinate_targets))
 			target = possible_target
 			break
+
+/datum/objective/target/IsFulfilled()
+	if(!target) //BE YOURSELF
+		return TRUE
