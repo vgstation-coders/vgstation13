@@ -3,7 +3,7 @@
 
 /datum/objective/silence/IsFulfilled()
 	..()
-	if(emergency_shuttle.location < 2)
+	if(emergency_shuttle.location != map.zCentcomm)
 		return FALSE
 	for(var/mob/living/player in player_list)
 		if(player == owner.current)
