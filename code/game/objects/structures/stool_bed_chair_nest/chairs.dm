@@ -257,7 +257,7 @@
 		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
-	if(user.isIncapacitated() || !user.has_limbs)
+	if(user.Incapacitated() || !user.has_limbs)
 		return 0
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
