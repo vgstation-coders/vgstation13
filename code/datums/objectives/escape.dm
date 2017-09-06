@@ -7,7 +7,7 @@
 		return FALSE
 	if(isbrain(owner.current) || isborer(owner.current))
 		return FALSE
-	if(emergency_shuttle.location != map.zCentcomm)
+	if(emergency_shuttle.location != CENTCOMM_Z)
 		return FALSE
 	if(!owner.current || owner.current.isDead())
 		return FALSE
