@@ -300,6 +300,89 @@
 	icon_state = "gold"
 	item_state = "gold_id"
 
+/obj/item/weapon/card/id/nt_disguise
+	name = "\improper Nanotrasen undercover ID"
+	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
+	registered_name = null
+
+	var/registered_user = null
+	var/static/list/gimmick_names = list(
+		"A. N. Other",
+		"Guy Incognito",
+		"Hugh Zasking",
+		"Ivan Gottasecret"
+	)
+
+/obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
+
+	if(!src.registered_name)
+
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			SetOwnerInfo(H)
+			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
+
+		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
+		if(!n)
+			return
+		if (!Adjacent(user) || user.incapacitated())
+			return
+		src.registered_name = n
+
+		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+		if(!u)
+			alert("Invalid assignment.")
+			src.registered_name = null
+			return
+		if (!Adjacent(user) || user.incapacitated())
+			src.registered_name = null
+			return
+		src.assignment = u
+		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+		to_chat(user, "<span class='notice'>You successfully configured the NT ID card.</span>")
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			registered_user = H.dna.unique_enzymes
+
+	else if (!registered_user || user.dna && registered_user == user.dna.unique_enzymes)
+		if (!registered_user)
+			if(ishuman(user))
+				var/mob/living/carbon/human/H = user
+				registered_user = H.dna.unique_enzymes
+
+		switch(alert(user,"Would you like to display \the [src] or edit it?","Nanotrasen undercover ID","Show","Edit"))
+
+			if ("Show")
+				return ..()
+
+			if ("Edit")
+				switch(alert(user,"What would you like to edit on \the [src]?", "Nanotrasen undercover ID", "Name", "Occupation"))
+
+					if ("Name")
+						var/new_name = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
+						if (!Adjacent(user) || user.incapacitated())
+							return
+						if (!new_name)
+							return
+						src.registered_name = new_name
+						UpdateName()
+						to_chat(user, "Name changed to [new_name].")
+
+					if("Occupation")
+						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+						if (!Adjacent(user) || user.incapacitated())
+							return
+						if (!new_job)
+							alert("Invalid assignment.")
+							return
+						src.assignment = new_job
+						UpdateName()
+						to_chat(user, "Occupation changed to [new_job].")
+
+	else
+		..()
+
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
 	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
@@ -609,3 +692,105 @@
 	icon_state = "trader"
 	access = list(access_trade)
 	base_access = list(access_trade)
+
+/obj/item/weapon/card/id/tunnel_clown
+	name = "Tunnel Clown ID card"
+	assignment = "Tunnel Clown!"
+
+/obj/item/weapon/card/id/tunnel_clown/New()
+	..()
+	access = get_all_accesses()
+
+/obj/item/weapon/card/id/syndicate/assassin
+	name = "Reaper ID card"
+	assignment = "Reaper"
+
+/obj/item/weapon/card/id/syndicate/assassin/New()
+	..()
+	access = get_all_accesses()
+
+/obj/item/weapon/card/id/death_commando
+	name = "Reaper ID card"
+	assignment = "Death Commando"
+	icon_state = "deathsquad"
+
+/obj/item/weapon/card/id/death_commando/New()
+	..()
+	access = get_centcom_access("Death Commando")
+
+/obj/item/weapon/card/id/syndicate/commando
+	name = "Syndicate Commando ID card"
+	assignment = "Syndicate Commando"
+	icon_state = "id"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	access = get_all_accesses()
+	access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)
+
+/obj/item/weapon/card/id/nt_rep
+	name = "Nanotrasen Navy Representative ID card"
+	assignment = "Nanotrasen Navy Representative"
+	icon_state = "centcom"
+	item_state = "id_inv"
+
+/obj/item/weapon/card/id/nt_rep/New()
+	..()
+	access = get_all_accesses()
+	access += list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer")
+
+/obj/item/weapon/card/id/centcom/nt_officer
+	name = "Nanotrasen Navy Officer ID card"
+	assignment = "Nanotrasen Navy Officer"
+
+/obj/item/weapon/card/id/centcom/nt_officer/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/centcom/nt_captain
+	name = "Nanotrasen Navy Captain ID card"
+	assignment = "Nanotrasen Navy Captain"
+
+/obj/item/weapon/card/id/centcom/nt_captain/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/admin/nt_supreme
+	name = "Nanotrasen Supreme Commander ID card"
+	assignment = "Nanotrasen Supreme Commander"
+
+/obj/item/weapon/card/id/admin/nt_supreme/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/emergency_responder
+	name = "Emergency Responder ID card"
+	assignment = "Emergency Responder"
+	icon_state = "ERT_empty"
+
+/obj/item/weapon/card/id/emergency_responder/New()
+	..()
+	access = get_centcom_access("Emergency Responder")
+
+/obj/item/weapon/card/id/special_operations
+	name = "Special Operations Officer ID card"
+	assignment = "Special Operations Officer"
+	icon_state = "centcom"
+
+/obj/item/weapon/card/id/special_operations/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/soviet_admiral
+	name = "Admiral ID card"
+	assignment = "Admiral"
+	icon_state = "centcom"
+
+/obj/item/weapon/card/id/soviet_admiral/New()
+	..()
+	access = get_all_accesses()
+	access += get_all_centcom_access()

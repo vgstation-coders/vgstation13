@@ -6,7 +6,11 @@
 /datum/organ/internal/lungs
 	name = "lungs"
 	parent_organ = LIMB_CHEST
-	removed_type = /obj/item/organ/lungs
+	organ_type = "lungs"
+	removed_type = /obj/item/organ/internal/lungs
+
+	min_bruised_damage = 8
+	min_broken_damage = 15
 
 	// /vg/ now delegates breathing to the appropriate organ.
 
@@ -47,12 +51,12 @@
 				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
 		else if(breath.temperature > H.species.heat_level_1)
 			if(prob(20))
-				if(H.dna.mutantrace == "slime")
+				if(isslimeperson(H))
 					H << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
 				else
 					H << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
 
-		if(H.dna.mutantrace == "slime")
+		if(isslimeperson(H))
 			if(breath.temperature < H.species.cold_level_1)
 				H.adjustToxLoss(round(H.species.cold_level_1 - breath.temperature))
 				H.fire_alert = max(H.fire_alert, 1)
@@ -89,17 +93,19 @@
 			owner.audible_cough()		//respitory tract infection
 
 	if(is_bruised())
-		if(prob(2))
+		var/chance = min(50, (damage-min_bruised_damage)/min_broken_damage*50)
+		if(prob(chance))
+			spawn owner.emote("me", 1, "gasps for air!")
+			if (owner.losebreath <= 30)
+				owner.losebreath += 5
+		else if(prob(chance))
 			spawn owner.emote("me", 1, "coughs up blood!")
 			owner.drip(10)
-		if(prob(4))
-			spawn owner.emote("me", 1, "gasps for air!")
-			owner.losebreath += 5
 
 
 /datum/organ/internal/lungs/vox
 	name = "\improper Vox lungs"
-	removed_type = /obj/item/organ/lungs/vox
+	removed_type = /obj/item/organ/internal/lungs/vox
 
 	gasses = list(
 		new /datum/lung_gas/metabolizable("nitrogen",          min_pp=16, max_pp=140),
@@ -111,7 +117,7 @@
 
 /datum/organ/internal/lungs/plasmaman
 	name = "\improper Plasmaman lungs"
-	removed_type = /obj/item/organ/lungs/plasmaman
+	removed_type = /obj/item/organ/internal/lungs/plasmaman
 
 	gasses = list(
 		new /datum/lung_gas/metabolizable("toxins", min_pp=16, max_pp=140),

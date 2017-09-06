@@ -273,3 +273,34 @@
 		..()
 		cocked = FALSE
 		update_icon()
+
+/obj/item/weapon/gun/projectile/banana
+	name = "banana"
+	desc = "It's an excellent prop for a comedy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "banana"
+	item_state = "banana"
+	max_shells = 1
+	gun_flags = 0
+	conventional_firearm = 0
+	clumsy_check = 0
+
+/obj/item/weapon/gun/projectile/banana/proc/make_peel(mob/user)
+	user.drop_item(src, force_drop = 1)
+	var/obj/item/weapon/bananapeel/B = new(get_turf(src))
+	user.put_in_hands(B)
+	qdel(src)
+
+/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
+	. = ..()
+	make_peel(user)
+
+/obj/item/weapon/gun/projectile/banana/attack_self(mob/living/user)
+	if(process_chambered())
+		playsound(user, fire_sound, fire_volume, 1)
+		in_chamber.on_hit(user)
+		user.apply_damage(in_chamber.damage*1.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
+		qdel(in_chamber)
+		in_chamber = null
+		make_peel(user)
+		user.visible_message("<span class='danger'>\The [src] explodes as \the [user] bites into it!</span>","<span class='danger'>\The [src] explodes as you bite into it!</span>")

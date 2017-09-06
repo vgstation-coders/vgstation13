@@ -28,7 +28,7 @@
 	H.put_in_hands(B)
 	H.equip_or_collect(new /obj/item/clothing/under/rank/chaplain(H), slot_w_uniform)
 	//H.equip_or_collect(new /obj/item/device/pda/chaplain(H), slot_belt)
-	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
 	if(H.backbag == 1)
 		H.put_in_hands(new H.species.survival_gear(H))
 	else
@@ -71,7 +71,7 @@
 				else
 					J = "Magister"
 				deity_name = "Satan"
-			if("cthulhu", "outer gods", "elder gods", "esoteric order of dagon")
+			if("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
 				B.name = pick("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 				deity_name = "Cthulhu" //I hope it's spelt correctly
 			if("islam", "muslim")
@@ -410,6 +410,26 @@
 				H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
 				J = "..."
 				deity_name = "Silence"
+			if("ancap", "ancapistan", "NAP")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
+				B.name = "Bitcoin Wallet"
+				J = "Bitcoin Miner" //Worst part coming up with job name
+				deity_name = "Murray Rothbard"
+				H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
+			if("samurai", "honor", "bushido", "weaboo")
+				B.name = "Kojiki"//Japan's oldest book, the origin "muh honor" and "muh katana"
+				J = "Samurai"
+				deity_name = "The Way of the Warrior"
+				H.equip_or_collect(new /obj/item/clothing/suit/sakura_kimono(H), slot_wear_suit)
+			if("ratvar", "clockwork", "ratvarism")
+				B.name = "clockwork slab"
+				H.equip_or_collect(new /obj/item/clothing/head/clockwork_hood(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/suit/clockwork_robes(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/shoes/clockwork_boots(H), slot_shoes)
+				J = "Servant of Ratvar"
+				deity_name = "Ratvar"
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)
@@ -448,7 +468,7 @@
 		while(!accepted)
 			if(!B)
 				break //Prevents possible runtime errors
-			new_book_style = input(H, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "Tome", "The King in Yellow", "Ithaqua", "Scientology", \
+			new_book_style = input(H, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[B.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
 																				   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
 			switch(new_book_style)
 				if("Koran")
@@ -536,6 +556,10 @@
 				if("The Guide")
 					B.icon_state = "guide"
 					B.item_state = "guide"
+				if("Slab")
+					B.icon_state = "slab"
+					B.item_state = "slab"
+					B.desc = "A bizarre, ticking device... That looks broken."
 				else
 					//If christian bible, revert to default
 					B.icon_state = "bible"

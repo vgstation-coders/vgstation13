@@ -169,7 +169,7 @@
 	else
 		return ..() //Refer to atom/proc/Cross
 
-/obj/item/projectile/meteor/Bump(atom/A)
+/obj/item/projectile/meteor/to_bump(atom/A)
 
 	if(loc == null)
 		return
@@ -188,13 +188,13 @@
 	desc = "The Engineer's bane"
 	icon_state = "medium_radioactive"
 
-/obj/item/projectile/meteor/radioactive/Bump(atom/a)
+/obj/item/projectile/meteor/radioactive/to_bump(atom/a)
 
 	if(loc == null)
 		return
 
 	for(var/mob/living/M in viewers(src, null))
-		M.radiation += rand(5, 10)
+		M.apply_radiation(rand(5, 10), RAD_EXTERNAL)
 
 	..()
 
@@ -204,7 +204,7 @@
 	icon_state = "small"
 	pass_flags = PASSTABLE
 
-/obj/item/projectile/meteor/small/Bump(atom/A)
+/obj/item/projectile/meteor/small/to_bump(atom/A)
 	if(loc == null)
 		return
 
@@ -216,7 +216,7 @@
 	desc = "A absolutely stunning rock specimen of blinding beauty."
 	icon_state = "small_flash"
 
-/obj/item/projectile/meteor/small/flash/Bump(atom/A)
+/obj/item/projectile/meteor/small/flash/to_bump(atom/A)
 
 	if(loc == null)
 		return
@@ -277,7 +277,7 @@
 	icon_state = "medium_piercing"
 	var/pierce_health = 1 //When 0, piercing meteor explodes like normal
 
-/obj/item/projectile/meteor/piercing/Bump(atom/A)
+/obj/item/projectile/meteor/piercing/to_bump(atom/A)
 
 	if(loc == null)
 		return
@@ -294,7 +294,7 @@
 	desc = "It might look large, but it is only a small splinter of a much bigger thing."
 	icon_state = "big"
 
-/obj/item/projectile/meteor/big/Bump(atom/A)
+/obj/item/projectile/meteor/big/to_bump(atom/A)
 
 	if(loc == null)
 		return
@@ -307,7 +307,7 @@
 	desc = "Makes up for its lack of explosiveness by splitting into multiple, fairly explosive meteors."
 	icon_state = "big_cluster"
 
-/obj/item/projectile/meteor/big/cluster/Bump(atom/A)
+/obj/item/projectile/meteor/big/cluster/to_bump(atom/A)
 
 	if(loc == null)
 		return
@@ -335,11 +335,11 @@
 /obj/item/projectile/meteor/Destroy()
 	..()
 
-/obj/effect/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
+/obj/item/projectile/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
 	name = "human corpse"
 	icon_state = "human"
 
-/obj/effect/meteor/gib/Bump(atom/A)
+/obj/item/projectile/meteor/gib/to_bump(atom/A)
 
 	if(loc == null)
 		return
@@ -355,7 +355,7 @@
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -16 * PIXEL_MULTIPLIER
 
-/obj/item/projectile/meteor/blob/Bump(atom/A)
+/obj/item/projectile/meteor/blob/to_bump(atom/A)
 	if(!loc)
 		return
 

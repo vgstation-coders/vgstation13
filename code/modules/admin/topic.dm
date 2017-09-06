@@ -237,6 +237,7 @@
 					return
 				admin_datums -= adm_ckey
 				D.disassociate()
+				update_byond_admin(adm_ckey)
 
 				message_admins("[key_name_admin(usr)] removed [adm_ckey] from the admins list")
 				log_admin("[key_name(usr)] removed [adm_ckey] from the admins list")
@@ -282,6 +283,7 @@
 
 			var/client/C = directory[adm_ckey]						//find the client with the specified ckey (if they are logged in)
 			D.associate(C)											//link up with the client and add verbs
+			update_byond_admin(adm_ckey)
 
 			message_admins("[key_name_admin(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
 			log_admin("[key_name(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
@@ -297,6 +299,9 @@
 			if(!new_permission)
 				return
 			D.rights ^= permissionlist[new_permission]
+
+			update_byond_admin(adm_ckey)
+			D.update_menu_items()
 
 			message_admins("[key_name_admin(usr)] toggled the [new_permission] permission of [adm_ckey]")
 			log_admin("[key_name(usr)] toggled the [new_permission] permission of [adm_ckey]")
@@ -902,11 +907,11 @@
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
-		//ERT
-		if(jobban_isbanned(M, "Emergency Response Team") || isbanned_dept)
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'><font color=red>Emergency Response Team</font></a></td>"
+		//Strike Team
+		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'>Emergency Response Team</a></td>"
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
 
 
 		//Vox Raider
@@ -2037,6 +2042,34 @@
 		sleep(2)
 		C.jumptocoord(x,y,z)
 
+	else if(href_list["shuttlepermission"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/shuttle/shuttle = locate(href_list["shuttle"])
+		var/obj/docking_port/D = locate(href_list["docking_port"])
+		var/obj/machinery/computer/shuttle_control/broadcast = locate(href_list["broadcast"])
+		var/mob/user = locate(href_list["user"])
+		var/answer = text2num(href_list["answer"])
+
+		var/reason = input(user, "State the reasons for your choice (optional).", "Request Answer", "")
+
+		if (answer)
+			if(broadcast)
+				broadcast.announce( "Permission Granted. [reason]" )
+			else if(user)
+				to_chat(user, "Permission Granted. [reason]")
+			shuttle.actually_travel_to(D,broadcast,user)
+			log_admin("[key_name_admin(usr)] granted permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+			message_admins("[key_name_admin(usr)] granted permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+		else
+			if(broadcast)
+				broadcast.announce( "Permission Denied. [reason]" )
+			else if(user)
+				to_chat(user, "Permission Denied. [reason]")
+			log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+			message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+
 	else if(href_list["adminchecklaws"])
 		output_ai_laws()
 
@@ -2554,10 +2587,26 @@
 				for(var/mob/living/carbon/human/H in mob_list)
 					spawn(0)
 						H.corgize()
-			if("striketeam")
-				if(usr.client.strike_team())
-					feedback_inc("admin_secrets_fun_used",1)
-					feedback_add_details("admin_secrets_fun_used","Strike")
+			if("striketeam-deathsquad")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","DeathQuad")
+				var/datum/striketeam/deathsquad/team = new /datum/striketeam/deathsquad()
+				team.trigger_strike(usr)
+			if("striketeam-ert")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ERT")
+				var/datum/striketeam/ert/team = new /datum/striketeam/ert()
+				team.trigger_strike(usr)
+			if("striketeam-syndi")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SyndiStrikeTeam")
+				var/datum/striketeam/syndicate/team = new /datum/striketeam/syndicate()
+				team.trigger_strike(usr)
+			if("striketeam-custom")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CustomStrikeTeam")
+				var/datum/striketeam/custom/team = new /datum/striketeam/custom()
+				team.trigger_strike(usr)
 			if("tripleAI")
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
@@ -2979,13 +3028,8 @@
 					to_chat(world, "<font size='10' color='red'><b>NOT THE BEES!</b></font>")
 					world << sound('sound/effects/bees.ogg')
 					for(var/mob/living/M in player_list)
-						var/mob/living/simple_animal/bee/BEE = new(get_turf(M))
-						BEE.strength = 16
-						BEE.toxic = 5
-						BEE.mut = 2
-						BEE.feral = 25
+						var/mob/living/simple_animal/bee/swarm/BEE = new(get_turf(M))
 						BEE.target = M
-						BEE.icon_state = "bees_swarm-feral"
 
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3031,24 +3075,49 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","CA")
 				var/answer = alert("Are you sure you want to create a custom artifact?",,"Yes","No")
+
 				if(answer == "Yes")
 					//Either have them as all random, or have custom artifacts
 					var/list/effects = typesof(/datum/artifact_effect)
+					var/list/triggers = typesof(/datum/artifact_trigger)
 					effects.Remove(/datum/artifact_effect)
+					triggers.Remove(/datum/artifact_trigger)
+
 					var/answer1 = alert("Just a primary, or primary and secondary effects?",,"Primary only","Primary and Secondary")
-					var/primary_effect = input(usr, "Which primary effect would you like?", "Primary effect") as null|anything in effects
-					var/secondary_effect
+					var/answer2 = alert("Randomly generated triggers (safer), or manually picked (might break certain effects)?",,"Random","Manual")
+
+					var/custom_primary_effect = input(usr, "Which primary effect would you like?", "Primary effect") as null|anything in effects
+					var/custom_primary_trigger
+					if(answer2 == "Manual")
+						custom_primary_trigger = input(usr, "Which trigger would you like for the primary effect?", "Primary trigger") as null|anything in triggers
+
+					var/custom_secondary_effect
+					var/custom_secondary_trigger
 					if(answer1 == "Primary and Secondary")
-						secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
-					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr))
-					qdel(custom.primary_effect); custom.primary_effect = null
-					custom.primary_effect = new primary_effect(custom)
-					custom.primary_effect.GenerateTrigger()
-					qdel(custom.secondary_effect); custom.secondary_effect = null
-					if(secondary_effect)
-						custom.secondary_effect = new secondary_effect(custom)
-						custom.secondary_effect.GenerateTrigger()
+						custom_secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
+						if(answer2 == "Manual")
+							custom_secondary_trigger = input(usr, "Which trigger would you like for the secondary effect?", "Secondary trigger") as null|anything in triggers
+
+					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr), null, 0)
+					custom.primary_effect = new custom_primary_effect(custom)
+					if(answer2 == "Random")
+						custom.primary_effect.GenerateTrigger()
+					else
+						custom.primary_effect.trigger = new custom_primary_trigger(custom.primary_effect)
+
+					custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a primary effect [custom.primary_effect.artifact_id]: [custom.primary_effect] || range: [custom.primary_effect.effectrange] || charge time: [custom.primary_effect.chargelevelmax] || trigger: [custom.primary_effect.trigger].")
+
+					if(custom_secondary_effect)
+						custom.secondary_effect = new custom_secondary_effect(custom)
+						if(answer2 == "Random")
+							custom.secondary_effect.GenerateTrigger()
+						else
+							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
+						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
+
+
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
+
 
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3125,7 +3194,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MS")
 				var/choice = input("Are you sure you want to summon an unending hail of meteors and force station evacuation? This will only work properly if the shuttle is not in use. Misuse of this could result in removal of flags or hilarity.") in list("BRING ME MY FRIDGE", "Cancel")
-				if(choice == "BRING ME MY FRIDGE, WORKED FOR INDIANA JONES")
+				if(choice == "BRING ME MY FRIDGE")
 					SetUniversalState(/datum/universal_state/meteor_storm, 1, 1)
 					message_admins("[key_name_admin(usr)] has summoned an unending meteor storm upon the station. Go ahead and ask him for the details, don't forget to scream at him.")
 			if("mobswarm")
@@ -3253,6 +3322,7 @@
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
 						M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
 						M.update_icons()
+						M.mind.special_role = BOMBERMAN // CHEAT CHECKS
 						to_chat(M, "Wait...what?")
 						spawn(50)
 							to_chat(M, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
@@ -3346,6 +3416,38 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+			if("vermin_infestation")
+				var/list/locations = list(
+					"RANDOM" = null,
+					"kitchen" = LOC_KITCHEN,
+					"atmospherics" = LOC_ATMOS,
+					"incinerator" = LOC_INCIN,
+					"chapel" = LOC_CHAPEL,
+					"library" = LOC_LIBRARY,
+					"vault" = LOC_VAULT,
+					"technical storage" = LOC_TECH,
+					)
+				var/list/vermins = list(
+					"RANDOM" = null,
+					"mice" = VERM_MICE,
+					"lizards" = VERM_LIZARDS,
+					"spiders" = VERM_SPIDERS,
+					"slimes" = VERM_SLIMES,
+					"bats" = VERM_BATS,
+					"borers" = VERM_BORERS,
+					"mimics" = VERM_MIMICS,
+					"roaches" = VERM_ROACHES,
+					"gremlins" = VERM_GREMLINS,
+					"bees" = VERM_BEES,
+					)
+				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
+				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","VI")
+				message_admins("[key_name_admin(usr)] has triggered an infestation of vermins.", 1)
+				var/datum/event/infestation/infestation_event = new()
+				infestation_event.override_location = ol
+				infestation_event.override_vermin = ov
 			if("hostile_infestation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")

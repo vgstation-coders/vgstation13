@@ -9,7 +9,7 @@
 /datum/rcd_schematic/decon/attack(var/atom/A, var/mob/user)
 	if(istype(A, /turf/simulated/wall))
 		var/turf/simulated/wall/T = A
-		if(istype(T, /turf/simulated/wall/r_wall) && !can_r_wall)
+		if((istype(T, /turf/simulated/wall/r_wall) && !can_r_wall) || istype(T, /turf/simulated/wall/invulnerable))
 			return "it cannot deconstruct reinforced walls!"
 
 		to_chat(user, "Deconstructing \the [T]...")
@@ -367,7 +367,7 @@
 	var/build_type
 	var/icon_state
 	var/icon
-	var/obj/screen/ourobj
+	var/obj/abstract/screen/ourobj
 	var/datum/rcd_schematic/master
 
 /datum/selection_schematic/proc/clicked(var/mob/user)
@@ -376,7 +376,7 @@
 /datum/selection_schematic/New(var/master)
 	..()
 	src.master = master
-	ourobj = getFromPool(/obj/screen/schematics, null, src)
+	ourobj = getFromPool(/obj/abstract/screen/schematics, null, src)
 
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)

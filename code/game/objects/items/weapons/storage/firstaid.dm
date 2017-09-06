@@ -163,10 +163,10 @@
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
 		var/mob/M = usr //I don't see how this is necessary
-		if (!( istype(over_object, /obj/screen/inventory) ))
+		if (!( istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
 		if (!M.incapacitated() && Adjacent(M))
-			var/obj/screen/inventory/SI = over_object
+			var/obj/abstract/screen/inventory/SI = over_object
 
 			if(SI.hand_index && M.put_in_hand_check(src, SI.hand_index))
 				M.u_equip(src, 0)
@@ -227,7 +227,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/kelotane
-	name = "Pill bottle (kelotane)"
+	name = "pill bottle (kelotane)"
 	desc = "Contains pills used to treat burns."
 
 /obj/item/weapon/storage/pill_bottle/kelotane/New()
@@ -237,7 +237,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/antitox
-	name = "Pill bottle (Anti-toxin)"
+	name = "pill bottle (Anti-toxin)"
 	desc = "Contains pills used to counter toxins."
 
 /obj/item/weapon/storage/pill_bottle/antitox/New()
@@ -247,7 +247,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline
-	name = "Pill bottle (inaprovaline)"
+	name = "pill bottle (inaprovaline)"
 	desc = "Contains pills used to stabilize patients."
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline/New()
@@ -276,7 +276,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
-	name = "Pill bottle (hyperzine)"
+	name = "pill bottle (hyperzine)"
 	desc = "Contains pills used to keep you active."
 
 /obj/item/weapon/storage/pill_bottle/hyperzine/New()
@@ -304,6 +304,16 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		..()
 		for (var/i = 1 to 5)
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+
+/obj/item/weapon/storage/pill_bottle/radiation
+	name = "pill bottle (radiation treatment)"
+	desc = "Contains pills used to treat radiation sickness."
+
+/obj/item/weapon/storage/pill_bottle/radiation/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/weapon/reagent_containers/pill/hyronalin(src)
+		new /obj/item/weapon/reagent_containers/pill/arithrazine(src)
 
 /obj/item/weapon/storage/pill_bottle/sweets
 	name = "bag of sweets"

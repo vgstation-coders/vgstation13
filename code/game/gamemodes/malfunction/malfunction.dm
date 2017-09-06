@@ -138,7 +138,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		to_chat(AI_mind.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		AI_mind.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+		AI_mind.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	spawn (600)
 		to_nuke_or_not_to_nuke = 0
 	return

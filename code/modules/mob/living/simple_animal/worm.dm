@@ -32,7 +32,7 @@
 
 	environment_smash = 2
 
-	speed = -1
+	speed = 1
 
 	var/mob/living/simple_animal/space_worm/previous //next/previous segments, correspondingly
 	var/mob/living/simple_animal/space_worm/next     //head is the nextest segment
@@ -108,7 +108,7 @@
 				previous.Move(attachementNextPosition)
 			update_icon()
 
-	Bump(atom/obstacle)
+	to_bump(atom/obstacle)
 		if(currentlyEating != obstacle)
 			currentlyEating = obstacle
 			eatingDuration = 0

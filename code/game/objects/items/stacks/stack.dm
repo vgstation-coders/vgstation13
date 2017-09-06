@@ -26,7 +26,7 @@
 	if (amount)
 		src.amount=amount
 	update_materials()
-	return
+	forceMove(loc) // So that Crossed gets called, so that stacks can be merged
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
@@ -222,8 +222,14 @@
 	src.amount += amount
 	update_materials()
 
+/obj/item/stack/proc/set_amount(new_amount)
+	amount = new_amount
+	update_materials()
+
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
 	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
+		return
+	if(!can_stack_with(S))
 		return
 	var/transfer = min(amount, S.max_amount - S.amount)
 	if(transfer <= 0)
@@ -324,7 +330,7 @@
 
  */
 
-/proc/drop_stack(new_stack_type = /obj/item/stack, turf/loc, add_amount = 1, mob/user)
+/proc/drop_stack(new_stack_type = /obj/item/stack, atom/loc, add_amount = 1, mob/user)
 	for(var/obj/item/stack/S in loc)
 		if(S.can_stack_with(new_stack_type))
 			if(S.max_amount >= S.amount + add_amount)
@@ -333,7 +339,7 @@
 				to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
 				return S
 
-	var/obj/item/stack/S = getFromPool(new_stack_type, loc)
+	var/obj/item/stack/S = new new_stack_type(loc)
 	S.amount = add_amount
 	return S
 

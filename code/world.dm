@@ -233,10 +233,22 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
-	if(reason == 1)
-		if(usr && usr.client)
-			if(!usr.client.holder)
-				return 0
+	if(reason == REBOOT_HOST)
+		if(usr)
+			if (!check_rights(R_SERVER))
+				log_admin("[key_name(usr)] Attempted to reboot world via client debug tools, but they do not have +SERVER and were denied.")
+				message_admins("[key_name_admin(usr)] Attempted to reboot world via client debug tools, but they do not have +SERVER and were denied.")
+				return
+
+			log_admin("[key_name(usr)] Has requested an immediate world restart via client side debugging tools.")
+			message_admins("[key_name_admin(usr)] Has requested an immediate world restart via client side debugging tools.")
+			// To prevent the server shutting down before logs get to the admins or some nonsense.
+			sleep(1)
+
+		to_chat(world, "<span class='danger big'>Rebooting World immediately due to host request!</span>")
+		..()
+		return
+
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
 	if(config.map_voting)

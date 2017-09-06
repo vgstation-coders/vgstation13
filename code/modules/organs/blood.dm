@@ -35,7 +35,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(B.id == BLOOD)
 			B.data = list(	"donor"=src,"viruses"=null,"blood_DNA"=dna.unique_enzymes,"blood_colour"= species.blood_color,"blood_type"=dna.b_type,	\
 							"resistances"=null,"trace_chem"=null, "virus2" = null, "antibodies" = null)
-			B.color = B.data["blood_color"]
+			B.color = B.data["blood_colour"]
 
 // Takes care blood loss and regeneration
 /mob/living/carbon/human/proc/handle_blood()
@@ -77,6 +77,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				blood_volume *= 0.8
 			else if(heart.damage >= heart.min_bruised_damage && heart.damage < heart.min_broken_damage)
 				blood_volume *= 0.6
+			else if(heart.damage >= heart.min_broken_damage)
+				blood_volume *= 0.2 //no heart, no blood
 
 		vessel.update_total()
 
@@ -172,14 +174,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 
 	if(species && species.anatomy_flags & NO_BLOOD) //TODO: Make drips come from the reagents instead.
-		return
+		return 0
 
 	if(!amt)
-		return
+		return 0
 
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
+	return 1
 
 /****************************************************
 				BLOOD TRANSFERS

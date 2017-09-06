@@ -77,7 +77,7 @@
 	..()
 
 
-/obj/structure/mirror/attackby(obj/item/I as obj, mob/user as mob)
+/obj/structure/mirror/attackby(obj/item/I as obj, mob/living/user as mob)
 	if ((shattered) && (istype(I, /obj/item/stack/sheet/glass/glass)))
 		var/obj/item/stack/sheet/glass/glass/stack = I
 		if ((stack.amount - 2) < 0)
@@ -88,21 +88,23 @@
 			icon_state = "mirror"
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
 
-	else if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-		return
-
-	else if(prob(I.force * 2))
-		visible_message("<span class='warning'>[user] smashes [src] with [I]!</span>")
-		shatter()
 	else
-		visible_message("<span class='warning'>[user] hits [src] with [I]!</span>")
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
+		user.do_attack_animation(src, I)
+		if(shattered)
+			playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+			return
+		else if(prob(I.force * 2))
+			visible_message("<span class='warning'>[user] smashes [src] with [I]!</span>")
+			shatter()
+		else
+			visible_message("<span class='warning'>[user] hits [src] with [I]!</span>")
+			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
 
 
-/obj/structure/mirror/attack_alien(mob/user as mob)
+/obj/structure/mirror/attack_alien(mob/living/user as mob)
 	if(islarva(user))
 		return
+	user.do_attack_animation(src, user)
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
@@ -110,12 +112,13 @@
 	shatter()
 
 
-/obj/structure/mirror/attack_animal(mob/user as mob)
+/obj/structure/mirror/attack_animal(mob/living/user as mob)
 	if(!isanimal(user))
 		return
 	var/mob/living/simple_animal/M = user
 	if(M.melee_damage_upper <= 0)
 		return
+	user.do_attack_animation(src, user)
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
@@ -123,9 +126,10 @@
 	shatter()
 
 
-/obj/structure/mirror/attack_slime(mob/user as mob)
+/obj/structure/mirror/attack_slime(mob/living/user as mob)
 	if(!isslimeadult(user))
 		return
+	user.do_attack_animation(src, user)
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return

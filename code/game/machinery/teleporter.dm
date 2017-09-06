@@ -256,7 +256,7 @@
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	if(istype(AM,/obj/effect/beam))
-		src.Bump(AM)
+		src.to_bump(AM)
 		return
 	spawn()
 		if (src.engaged)
@@ -410,7 +410,7 @@ obj/machinery/teleport/station/New()
 	return
 
 
-/obj/effect/laser/Bump()
+/obj/effect/laser/to_bump()
 	src.range--
 	return
 

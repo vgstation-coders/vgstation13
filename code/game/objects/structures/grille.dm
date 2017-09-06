@@ -33,14 +33,14 @@
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		density = 0 //Not blocking anything anymore
-		getFromPool(/obj/item/stack/rods, get_turf(src)) //One rod set
+		new /obj/item/stack/rods(get_turf(src)) //One rod set
 	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		density = 1
 	if(health <= 0) //Dead
-		getFromPool(/obj/item/stack/rods, get_turf(src)) //Drop the second set of rods
-		returnToPool(src)
+		new /obj/item/stack/rods(get_turf(src)) //Drop the second set of rods
+		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
 	switch(severity)
@@ -66,6 +66,7 @@
 	attack_hand(user)
 
 /obj/structure/grille/attack_hand(mob/user as mob)
+	user.do_attack_animation(src, user)
 	var/humanverb = pick(list("kick", "slam", "elbow")) //Only verbs with a third person "s", thank you
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [humanverb]s \the [src].</span>", \
@@ -81,6 +82,7 @@
 /obj/structure/grille/attack_alien(mob/user as mob)
 	if(istype(user, /mob/living/carbon/alien/larva))
 		return
+	user.do_attack_animation(src, user)
 	var/alienverb = pick(list("slam", "rip", "claw")) //See above
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [alienverb]s \the [src].</span>", \
@@ -93,6 +95,7 @@
 /obj/structure/grille/attack_slime(mob/user as mob)
 	if(!istype(user, /mob/living/carbon/slime/adult))
 		return
+	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] smashes against \the [src].</span>", \
 						 "<span class='warning'>You smash against \the [src].</span>", \
@@ -106,6 +109,7 @@
 	M.delayNextAttack(8)
 	if(M.melee_damage_upper == 0)
 		return
+	M.do_attack_animation(src, M)
 	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
 					  "<span class='warning'>You smash against \the [src].</span>", \
 					  "You hear twisting metal.")
@@ -142,8 +146,8 @@
 	if(iswirecutter(W))
 		if(!shock(user, 100)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
-			getFromPool(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2) //Drop the rods, taking account on whenever the grille is broken or not !
-			returnToPool(src)
+			drop_stack(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
 	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
@@ -213,6 +217,8 @@
 	if(!(W.sharpness_flags & INSULATED_EDGE))
 		shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
 
+	if(dam)
+		user.do_attack_animation(src, W)
 	health -= dam
 	healthcheck(hitsound = 1)
 	..()

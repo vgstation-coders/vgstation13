@@ -15,7 +15,6 @@
 	icon_state = "offhand"
 	name = "offhand"
 	abstract = 1
-	flags = SLOWDOWN_WHEN_CARRIED
 	var/obj/item/wielding = null
 
 /obj/item/offhand/dropped(user)
@@ -69,7 +68,8 @@
 	force = 10
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
-	flags = FPRINT | TWOHANDABLE
+	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
+	slowdown = FIREAXE_SLOWDOWN
 
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
@@ -220,6 +220,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
+	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
@@ -271,7 +272,7 @@
 
 /obj/item/weapon/spear/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/organ/head))
+	if(istype(W, /obj/item/organ/external/head))
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 		var/obj/structure/headpole/H = new (get_turf(src), W, src)
@@ -335,6 +336,7 @@
 	attack_delay = 25 // Heavy.
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
+	mech_flags = MECH_SCAN_ILLEGAL
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")

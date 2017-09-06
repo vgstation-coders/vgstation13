@@ -1,24 +1,58 @@
 var/list/shop_prices = list( //Cost in space credits
 //Misc objects
-/obj/item/weapon/soap = 20,
+
+/obj/item/weapon/soap = 5,
+/obj/item/weapon/soap/syndie = 25,
+/obj/item/weapon/soap/nanotrasen = 25,
+/obj/item/weapon/soap/deluxe = 30,
+
 /obj/item/weapon/phone = 30,
-/obj/item/weapon/mop = 20,
+/obj/item/weapon/mop = 10,
 /obj/item/weapon/lipstick/random = 30,
 /obj/item/weapon/lazarus_injector = 500,
+/obj/item/weapon/lazarus_injector/advanced = 750,
 /obj/item/weapon/kitchen/rollingpin = 20,
 /obj/item/weapon/hand_labeler = 10,
-/obj/item/weapon/extinguisher = 20,
+
+/obj/item/weapon/extinguisher = 10,
+/obj/item/weapon/extinguisher/mini = 5,
+/obj/item/weapon/extinguisher/foam = 20,
+
 /obj/item/weapon/crowbar/red = 5,
 /obj/item/weapon/bikehorn/rubberducky = 5,
 /obj/item/weapon/bikehorn = 5,
 /obj/item/weapon/lighter/zippo = 20,
-/obj/item/weapon/screwdriver = 3,
-/obj/item/weapon/wrench = 3,
+/obj/item/weapon/screwdriver = 5,
+/obj/item/weapon/wrench = 5,
+/obj/item/weapon/wrench/socket = 150,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
 /obj/item/mounted/poster = 20,
-/obj/item/candle = 5,
+/obj/item/candle = 1,
 
+/obj/item/asteroid/goliath_hide = 50,
+
+/obj/item/weapon/storage/backpack/clown = 20,
+/obj/item/weapon/storage/backpack/captain = 50,
+/obj/item/weapon/storage/briefcase/centcomm = 100,
+
+//Medicine and chemistry
+/obj/item/weapon/reagent_containers/pill/cyanide = 400,
+/obj/item/weapon/reagent_containers/pill/happy = 20,
+/obj/item/weapon/reagent_containers/pill/nanobot = 500,
+/obj/item/weapon/reagent_containers/pill/creatine_safe = 700,
+/obj/item/weapon/reagent_containers/chempack = 350,
+/obj/item/clothing/mask/chemmask = 350,
+
+//DNA injectors with powers
+/obj/item/weapon/dnainjector/nofail/elvis = 50,
+/obj/item/weapon/dnainjector/nofail/sweedish = 50,
+/obj/item/weapon/dnainjector/nofail/jumpy = 250,
+/obj/item/weapon/dnainjector/nofail/mattereater = 250,
+/obj/item/weapon/dnainjector/nofail/hulkmut = 500,
+
+//disk leading to a random vault. If there doesn't exist a valid vault, it shows up as a blank disk
+/obj/item/weapon/disk/shuttle_coords/vault/random = 90,
 
 //tools
 /obj/item/weapon/surgicaldrill = 100,
@@ -32,16 +66,21 @@ var/list/shop_prices = list( //Cost in space credits
 
 /obj/item/weapon/switchtool/surgery = 250,
 /obj/item/weapon/switchtool/swiss_army_knife = 500,
-/obj/item/weapon/rcl = 100,
+/obj/item/weapon/rcl = 50,
 /obj/item/weapon/glue = 500,
 /obj/item/weapon/chisel = 20,
 /obj/item/weapon/scythe = 50,
 /obj/item/bluespace_crystal/flawless = 10000,
-/obj/item/bluespace_crystal/artificial = 1000,
-/obj/item/bluespace_crystal = 750,
+/obj/item/bluespace_crystal/artificial = 500,
+/obj/item/bluespace_crystal = 1000,
 /obj/item/device/assembly_frame = 50,
+
 /obj/item/device/camera = 30,
+/obj/item/device/camera/big_photos = 300,
+
 /obj/item/device/flash = 20,
+/obj/item/device/flash/synthetic = 1,
+
 /obj/item/device/robotanalyzer = 5,
 /obj/item/device/soundsynth = 20,
 /obj/item/device/transfer_valve = 500, //What could go wrong
@@ -52,16 +91,16 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/taperecorder = 30,
 /obj/item/device/rcd/tile_painter = 30,
 /obj/item/device/rcd/matter/engineering = 30,
-/obj/item/device/paicard = 10,
+/obj/item/device/paicard = 20,
 /obj/item/device/megaphone = 25,
 /obj/item/device/hailer = 10,
 /obj/item/broken_device = 1,
 /obj/item/toy/balloon = 1,
-/obj/item/toy/syndicateballoon = 700,
-/obj/item/weapon/am_containment = 60,
+/obj/item/toy/syndicateballoon = 300,
+/obj/item/weapon/am_containment = 10,
 /obj/item/weapon/cane = 5,
-/obj/item/weapon/legcuffs/beartrap = 100,
-/obj/item/weapon/rcd_ammo = 20,
+/obj/item/weapon/legcuffs/beartrap = 50,
+/obj/item/weapon/rcd_ammo = 10,
 /obj/item/weapon/storage/pneumatic = 40,
 /obj/item/weapon/resonator = 100,
 /obj/item/weapon/gun/energy/kinetic_accelerator = 80,
@@ -76,26 +115,81 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 200,
 /obj/item/weapon/solder = 10,
+/obj/item/supermatter_shielding = 300,
+/obj/item/weapon/cell/hyper = 50,
+/obj/item/weapon/weldingtool/gatling/empty = 150,
 
 
 //weapons
 /obj/item/weapon/melee/classic_baton = 100,
 /obj/item/weapon/melee/lance = 200,
 /obj/item/weapon/melee/telebaton = 500,
-/obj/item/weapon/claymore = 600,
+/obj/item/weapon/claymore = 400,
 /obj/item/weapon/fireaxe  = 200,
-/obj/item/weapon/spear/wooden = 200,
+/obj/item/weapon/spear/wooden = 100,
 /obj/item/weapon/spear = 30,
 /obj/item/weapon/crossbow = 100,
 /obj/item/weapon/hatchet = 20,
-/obj/item/weapon/harpoon = 125,
+/obj/item/weapon/harpoon = 100,
 /obj/item/weapon/boomerang/toy = 5,
 /obj/item/weapon/boomerang = 30,
-/obj/item/weapon/batteringram = 1000,
-/obj/item/weapon/shield/riot = 250,
+/obj/item/weapon/batteringram = 500,
+/obj/item/weapon/shield/riot = 150,
+/obj/item/weapon/shield/riot/buckler = 50,
+/obj/item/weapon/shield/riot/roman = 150,
+/obj/item/weapon/shield/energy = 1000,
+/obj/item/weapon/bullwhip = 200,
+/obj/item/weapon/melee/morningstar = 300,
+/obj/item/weapon/subspacetunneler = 500,
+/obj/item/weapon/dualsaber = 3200,
+
+//mischievous items
+/obj/item/device/powersink = 700,
+/obj/item/weapon/card/emag = 1500,
+/obj/item/weapon/cloakingcloak = 800,
+/obj/item/weapon/pen/sleepypen = 1200,
+/obj/item/weapon/reagent_containers/spray/chemsprayer = 600,
+/obj/item/device/device_analyser/syndicate = 15000,
 
 //No guns sorry
 )
+
+
+/datum/map_element/vault/supermarket
+	name = "Spessmart"
+	file_path = "maps/randomvaults/spessmart.dmm"
+
+	var/customer_has_entered = FALSE
+
+	//Statistics gathering!
+	var/credits_spent   = 0
+	var/goods_purchased = 0
+	var/alarm_activated = "" //Holds the explanation for alarm's activation
+
+/datum/map_element/vault/supermarket/process_scoreboard()
+	var/list/L = list()
+
+	if(credits_spent || goods_purchased || alarm_activated)
+		L += "Credits spent: $[credits_spent]"
+		L += "Goods purchased: [goods_purchased]"
+
+		if(alarm_activated)
+			L += "Alarm activated: [alarm_activated]"
+
+	return L
+
+/datum/map_element/vault/supermarket/proc/set_stats_alarm_activated(msg)
+	if(alarm_activated)
+		return
+
+	alarm_activated = msg
+
+/datum/map_element/vault/supermarket/initialize(list/objects)
+	..()
+
+	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
+	S.initialize()
+
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
@@ -105,6 +199,14 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /area/vault/supermarket
 	name = "Spessmart"
 	flags = NO_PORTALS | NO_TELEPORT
+
+	var/datum/map_element/vault/supermarket/map_element
+
+/area/vault/supermarket/spawned_by_map_element(datum/map_element/ME)
+	if(istype(ME, /datum/map_element/vault/supermarket))
+		map_element = ME
+
+	..()
 
 /area/vault/supermarket/entrance
 	name = "Spessmart Entrance"
@@ -118,7 +220,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/list/items = list()
 	var/lockdown = 0
 	var/destination_disks = 1	//number of complimentary Spessmart destination disks left to give
-	var/customer_has_entered = FALSE
 
 /area/vault/supermarket/restricted
 	name = "Spessmart Maintenance"
@@ -163,28 +264,45 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		return
 
 	if(items.Find(AM))
-		return on_theft()
+		return on_theft(AM)
 	else
 		var/list/AM_contents = get_contents_in_object(AM, /obj/item)
 
 		for(var/obj/item/I in AM_contents)
 			if(items.Find(I))
-				return on_theft()
+				return on_theft(I)
 
-/area/vault/supermarket/shop/proc/purchased(obj/item/I)
+/area/vault/supermarket/shop/proc/purchased(obj/item/I, price)
 	items.Remove(I)
 	I.name = initial(I.name)
 
-/area/vault/supermarket/shop/proc/item_destroyed()
-	for(var/obj/item/I in items)
-		if(isnull(I.loc) || I.gcDestroyed)
-			items.Remove(I)
-			message_admins("Spessmart has entered lockdown due to the destruction of \a [I]!")
+	if(map_element)
+		map_element.goods_purchased++
+		map_element.credits_spent += price
 
-	if(customer_has_entered)
+/area/vault/supermarket/shop/proc/item_destroyed(list/params)
+	var/atom/destroyed = params["atom"]
+
+	if(istype(destroyed, /obj/item))
+		if(items.Find(destroyed))
+			map_element.set_stats_alarm_activated("Destruction of an unpurchased item ([destroyed])[usr ? " by [usr]" : ""]")
+			items.Remove(destroyed)
+		else
+			return //Destroying store items only angers the shopkeepers if the items weren't purchased (still in the items list)
+	else
+		map_element.set_stats_alarm_activated("Destruction of property ([destroyed])[usr ? " by [usr]" : ""]")
+
+	if(!lockdown && map_element.customer_has_entered)
+		message_admins("Spessmart has entered lockdown due to the destruction of \a [destroyed]!")
 		on_theft()
 
-/area/vault/supermarket/shop/proc/on_theft()
+/area/vault/supermarket/shop/proc/on_robot_kill()
+	if(map_element)
+		map_element.set_stats_alarm_activated("Destruction of a robot[usr ? " by [usr]" : ""]")
+
+	on_theft()
+
+/area/vault/supermarket/shop/proc/on_theft(obj/item/I)
 	if(lockdown)
 		return
 
@@ -192,8 +310,10 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	var/list/all_contents = src.contents.Copy()
 	var/area/entrance = locate(/area/vault/supermarket/entrance)
+	var/area/restricted = locate(/area/vault/supermarket/restricted)
 
 	all_contents += entrance.contents
+	all_contents += restricted.contents
 
 	for(var/obj/machinery/door/poddoor/shutters/S in all_contents)
 		spawn()
@@ -204,6 +324,9 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	src.firealert()
 	entrance.firealert()
+
+	if(map_element)
+		map_element.set_stats_alarm_activated("Theft of [I ? "\a [I]" : "an unknown item"]")
 
 ///////ROBOTS
 /mob/living/simple_animal/robot
@@ -220,6 +343,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/robot/New()
 	..()
@@ -244,7 +368,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /obj/effect/spessmart_entrance/Crossed(atom/movable/AM)
 	if(isliving(AM))
 		var/area/vault/supermarket/shop/A = get_area(src)
-		A.customer_has_entered = TRUE
+		A.map_element.customer_has_entered = TRUE
 		spawn(1)
 			for(var/cdir in alldirs)
 				for(var/mob/living/simple_animal/robot/robot_greeter/G in get_step(src, cdir))
@@ -330,7 +454,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 /mob/living/simple_animal/robot/robot_cashier/Die()
 	var/area/vault/supermarket/shop/A = get_area(src)
 	if(istype(A))
-		A.on_theft()
+		A.on_robot_kill()
 
 	return ..()
 
@@ -366,7 +490,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 					else
 						say("[found_items.len] items for $[price].00 space credits. Change: $[loaded_cash - price].00 space credits. Thank you for shopping at Spessmart!")
 						for(var/obj/item/I in found_items)
-							shop.purchased(I)
+							shop.purchased(I, shop.items[I])
 						if(shop.destination_disks > 0)
 							say("Please take this complimentary Spessmart shuttle destination disk as well. Shop smart, shop Spessmart!")
 							new /obj/item/weapon/disk/shuttle_coords/vault/supermarket(input_loc)
@@ -535,6 +659,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	minbodytemp = 0
 
 	faction = "spessmart"
+	mob_property_flags = MOB_ROBOTIC
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
 
@@ -569,25 +694,30 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			var/phrase = pick("Spessmart law was broken. The punishment is death.", "Spessmart law is above everything. Prepare to die.", "Spessmart law is sacred. Die, heretic.", "Threat to Spessmart detected. Extermination protocol started.")
 			say(phrase)
 
-	var/area/vault/supermarket/A = get_area(src)
-	if(istype(A))
-		var/area/vault/supermarket/shop/AS = locate(/area/vault/supermarket/shop)
-		AS.on_theft()
-
 /mob/living/simple_animal/hostile/spessmart_guardian/secure_area/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
 		say("[user.gender == FEMALE ? "Miss" : "Sir"], only Spessmart employees with level 5 access may access this area. If you are a Spessmart employee, please show me your ID card.")
 	else
 		return ..()
 
+/mob/living/simple_animal/hostile/spessmart_guardian/recharging
+	var/introduced = FALSE
+
+/mob/living/simple_animal/hostile/spessmart_guardian/recharging/Aggro()
+	if(!introduced)
+		say("The tank was labeled and scanned as drinking water, not welding fuel. It was not my fault that it was fed to the human. It is nonsense that you're punishing me instead of... Wait. You are not EPSILON. Unknown intruder detected. Extermination protocol started.")
+		introduced = TRUE
+
+	return ..()
+
 ///////SPAWNER
-/obj/map/spawner/supermarket
+/obj/abstract/map/spawner/supermarket
 	name = "Spessmart spawner"
 	amount = 4
 	chance = 50
 	jiggle = 10
 
-/obj/map/spawner/supermarket/CreateItem(new_item_type)
+/obj/abstract/map/spawner/supermarket/CreateItem(new_item_type)
 	var/obj/item/I = ..()
 
 	spawn()
@@ -602,27 +732,27 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	return I
 
-/obj/map/spawner/supermarket/tools
+/obj/abstract/map/spawner/supermarket/tools
 	icon_state = "ass_tools"
 	amount = 4
 	chance = 50
 	jiggle = 10
 
-/obj/map/spawner/supermarket/tools/New()
+/obj/abstract/map/spawner/supermarket/tools/New()
 	to_spawn = shop_prices
 	return ..()
 
-/obj/map/spawner/supermarket/circuits/New()
+/obj/abstract/map/spawner/supermarket/circuits/New()
 	if(!circuitboard_prices.len)
 		for(var/C in circuitboards)
 			circuitboard_prices[C] = 75
 	to_spawn = circuitboard_prices
 	return ..()
 
-/obj/map/spawner/supermarket/clothing
+/obj/abstract/map/spawner/supermarket/clothing
 	amount = 6
 
-/obj/map/spawner/supermarket/clothing/New()
+/obj/abstract/map/spawner/supermarket/clothing/New()
 	if(!clothing_prices.len)
 		for(var/C in clothing)
 			clothing_prices[C] = 150

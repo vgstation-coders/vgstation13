@@ -53,6 +53,7 @@
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
+		new /obj/item/weapon/storage/toolbox(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
@@ -92,6 +93,7 @@
 		new /obj/item/ammo_casing/shotgun/flare(), \
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/box/c38(), \
+		new /obj/item/toy/ammo/gun(), \
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \
@@ -106,6 +108,7 @@
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
 		new /obj/item/device/destTagger, \
+		new /obj/item/device/priceTagger, \
 
 		),
 		"Misc_Other"=list(

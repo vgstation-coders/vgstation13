@@ -1,4 +1,4 @@
-/obj/item/organ/brain
+/obj/item/organ/internal/brain
 	name = "brain"
 	health = 400 //They need to live awhile longer than other organs.
 	desc = "A piece of juicy meat found in a person's head."
@@ -19,13 +19,13 @@
 
 	var/mob/living/carbon/brain/brainmob = null
 
-/obj/item/organ/brain/New()
+/obj/item/organ/internal/brain/New()
 	..()
 	spawn(5)
 		if(brainmob && brainmob.client)
 			brainmob.client.screen.len = null //clear the hud
 
-/obj/item/organ/brain/proc/transfer_identity(var/mob/living/carbon/H)
+/obj/item/organ/internal/brain/proc/transfer_identity(var/mob/living/carbon/H)
 	name = "[H]'s brain"
 	brainmob = new(src)
 	brainmob.name = H.real_name
@@ -39,7 +39,7 @@
 	to_chat(brainmob, "<span class='notice'>You feel slightly disoriented. That's normal when you're just a brain.</span>")
 	callHook("debrain", list(brainmob))
 
-/obj/item/organ/brain/examine(mob/user)
+/obj/item/organ/internal/brain/examine(mob/user)
 	..()
 	if(brainmob)
 		if(brainmob.client)
@@ -52,17 +52,17 @@
 		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
 		return
 
-/obj/item/organ/brain/removed(var/mob/living/target,var/mob/living/user)
+/obj/item/organ/internal/brain/removed(var/mob/living/target,var/mob/living/user)
 
 	..()
 
 	var/mob/living/carbon/human/H = target
 	H.dropBorers()
-	var/obj/item/organ/brain/B = src
+	var/obj/item/organ/internal/brain/B = src
 	if(istype(B) && istype(H))
 		B.transfer_identity(target)
 
-/obj/item/organ/brain/replaced(var/mob/living/target)
+/obj/item/organ/internal/brain/replaced(var/mob/living/target)
 
 	if(target.key)
 		target.ghostize()
@@ -73,8 +73,17 @@
 		else
 			target.key = brainmob.key
 
-/obj/item/organ/brain/ash/removed(var/mob/living/target,var/mob/living/user)
+/obj/item/organ/internal/brain/ash/removed(var/mob/living/target,var/mob/living/user)
 	..()
 	visible_message("<span class = 'sinister'>\The [src] suddenly turns to ash, unable to exist detached from its host.</span>")
 	new /obj/effect/decal/cleanable/ash(loc)
 	qdel(src)
+
+/obj/item/organ/internal/brain/slime_core
+	name = "crystallized slime core"
+	desc = "The crystallized core of a slime person."
+	icon_state = "slime_person_core"
+	organ_type = /datum/organ/internal/brain/slime_core
+
+/obj/item/organ/internal/brain/slime_core/process()
+	processing_objects -= src

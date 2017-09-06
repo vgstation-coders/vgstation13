@@ -73,7 +73,7 @@
 //		src.jetpack.name = "Placeholder Upgrade Item"
 	return
 
-obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
+/obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
 	for(var/obj/item/I in modules)
 		I.mouse_opacity = 2
 	if(emag)
@@ -91,7 +91,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
-	
+
 #define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
@@ -143,6 +143,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 #define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
+	
 	src.modules += new /obj/item/device/healthanalyzer(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
@@ -162,6 +163,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.modules += new /obj/item/weapon/revivalprod(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
 	src.modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
+	src.modules += new /obj/item/roller_holder(src)
 	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
 	sensor_augs = list("Medical", "Disable")
 
@@ -208,6 +210,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
+	
 	src.emag = new /obj/item/borg/stun(src)
 	src.modules += new /obj/item/device/rcd/borg/engineering(src)
 	src.modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
@@ -276,7 +279,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 
 /obj/item/weapon/robot_module/security
-	name = "peacekeeper robot module"
+	name = "security robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -415,6 +418,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 /obj/item/weapon/robot_module/combat/New()
 	src.modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	src.modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
+	src.modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
 	src.modules += new /obj/item/borg/combat/shield(src)
 	src.modules += new /obj/item/borg/combat/mobility(src)
 	src.modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?
@@ -422,6 +426,21 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
 
+	fix_modules()
+
+/obj/item/weapon/robot_module/tg17355
+	name = "tg17355 robot module"
+
+/obj/item/weapon/robot_module/tg17355/New()
+	..()
+	src.modules += new /obj/item/weapon/cookiesynth(src)
+	src.modules += new /obj/item/device/harmalarm(src)
+	src.modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
+	src.modules += new /obj/item/weapon/inflatable_dispenser(src)
+	src.modules += new /obj/item/borg/cyborghug(src)
+	src.modules += new /obj/item/weapon/extinguisher(src)
+	src.emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
+	sensor_augs = list("Medical", "Disable")
 	fix_modules()
 
 /obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
@@ -433,6 +452,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for(var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0
-	
+
 #undef STANDARD_MAX_KIT
 #undef MEDBORG_MAX_KIT

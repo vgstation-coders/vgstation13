@@ -70,7 +70,7 @@ var/global/list/falltempoverlays = list()
 		for(i = -x, i <= x, i++)
 			. += "[x],[y]"
 
-/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
+/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE) //if recharge is started is important for the trigger spells
 	if(!holder)
 		holder = user //just in case
 	if(!cast_check(skipcharge, user))
@@ -91,11 +91,11 @@ var/global/list/falltempoverlays = list()
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
-			cast(targets, user)
+			cast(targets, user, ignore_timeless)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/cast(list/targets, mob/user)
+/spell/aoe_turf/fall/cast(list/targets, mob/user, var/ignore_timeless = FALSE)
 	var/turf/ourturf = get_turf(user)
 
 	var/list/potentials = circlerangeturfs(user, range)
@@ -125,14 +125,16 @@ var/global/list/falltempoverlays = list()
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything
-				if(L == holder || L.flags & TIMELESS)
+				if(L == holder)
+					continue
+				if(!ignore_timeless && L.flags & TIMELESS)
 					continue
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
 				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 			else
-				if(everything.flags & TIMELESS)
+				if(!ignore_timeless && everything.flags & TIMELESS)
 					continue
 				spawn() recursive_timestop(everything)
 				if(everything.ignoreinvert)
@@ -145,7 +147,7 @@ var/global/list/falltempoverlays = list()
 
 		affected += T
 	return
-/spell/aoe_turf/fall/proc/recursive_timestop(var/atom/O)
+/spell/aoe_turf/fall/proc/recursive_timestop(var/atom/O, var/ignore_timeless = FALSE)
 	var/list/processing_list = list(O)
 	var/list/processed_list = new/list()
 
@@ -156,7 +158,7 @@ var/global/list/falltempoverlays = list()
 		affected |= A
 
 		if(A != holder)
-			if(!(A.flags & TIMELESS))
+			if(ignore_timeless || !(A.flags & TIMELESS))
 				A.timestopped = 1
 
 		for (var/atom/B in A)
@@ -218,7 +220,7 @@ var/global/list/falltempoverlays = list()
 						0,0,-1,
 						1,1,1)
 
-/proc/timestop(atom/A, var/duration, var/range)
+/proc/timestop(atom/A, var/duration, var/range, var/ignore_timeless = FALSE)
 	if(!A || !duration)
 		return
 	var/mob/caster = new
@@ -235,5 +237,5 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1)
+		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
 		qdel(caster)

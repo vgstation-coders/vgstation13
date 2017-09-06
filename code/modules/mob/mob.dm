@@ -4,6 +4,17 @@
 /mob
 	plane = MOB_PLANE
 
+/mob/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("stat")
+			if((old_value == 2) && (new_value < 2))//Bringing the dead back to life
+				resurrect()
+			else if((old_value < 2) && (new_value == 2))//Kill he
+				living_mob_list.Remove(src)
+				dead_mob_list.Add(src)
+
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
@@ -20,6 +31,8 @@
 		on_uattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
+	if(on_irradiate)
+		on_irradiate.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -30,12 +43,12 @@
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
 		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
-			var/obj/screen/screenobj = AM
+			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
@@ -63,11 +76,13 @@
 	qdel(on_uattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
+	qdel(on_irradiate)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 	on_clickon = null
+	on_irradiate = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -241,6 +256,7 @@
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
+	on_irradiate = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -401,6 +417,18 @@
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
 	for(var/mob/virtualhearer/hearer in viewers(location))
+		var/mob/M
+		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/holo = hearer.attached
+			if(holo.master)
+				M = holo.master
+		if(istype(hearer.attached, /mob))
+			M = hearer.attached
+		if(M)
+			if(M.client)
+				var/client/C = M.client
+				if(get_turf(src) in C.ObscuredTurfs)
+					continue
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
@@ -409,15 +437,12 @@
 			return M
 	return 0
 
-/mob/proc/movement_delay()
-	return 0
-
 /mob/proc/Life()
 	set waitfor = FALSE
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
 	return
 
@@ -647,6 +672,58 @@ var/list/slot_equipment_priority = list( \
 			openslot = 1
 			break
 	return openslot
+
+/mob/proc/unequip_everything()
+	var/list/unequipped_items = list()
+	for(var/slot in slot_equipment_priority)
+		var/obj/item/I = get_item_by_slot(slot)
+		if(I)
+			unequipped_items.Add(I)
+			u_equip(I)
+	return unequipped_items
+
+/mob/proc/recursive_list_equip(list/L)	//Used for equipping a list of items to a mob without worrying about the order (like needing to put a jumpsuit before a belt)
+	if(!L || !L.len)
+		return
+
+	for(var/obj/item/O in L)
+		O.forceMove(get_turf(src))	//At the very least, all the stuff should be on our tile
+
+	var/has_succeeded_once = TRUE
+	while(has_succeeded_once)
+		has_succeeded_once = FALSE
+		for(var/obj/item/I in L)
+			if(equip_to_appropriate_slot(I))
+				has_succeeded_once = TRUE
+				L.Remove(I)
+	if(L.len)
+		var/obj/item/weapon/storage/B = back
+		for(var/obj/item/I in L)
+			if(istype(B))
+				B.handle_item_insertion(I,1)
+	regenerate_icons()
+
+/mob/proc/equip_loadout(var/type, var/unequip_current = TRUE)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
+	if(type)
+		if(ispath(type, /obj/abstract/loadout))
+			new type(get_turf(src), src, unequip_current)
+	else
+		var/turf/T = get_turf(usr)
+		if(T)
+			if(unequip_current)
+				unequip_everything()	//unequip everything before equipping loadout
+			var/list/to_equip = list()
+			for(var/obj/item/I in T.contents)
+				to_equip.Add(new I.type(get_turf(src)))
+			recursive_list_equip(to_equip)
+			var/loadout_list = ""
+			for(var/obj/item/O in to_equip)
+				if(O == to_equip[to_equip.len])
+					loadout_list += "[O.type]"
+				else
+					loadout_list += "[O.type], "
+			log_admin("[key_name(src)] has been equipped with a custom loadout consisting of [loadout_list].")
+
 
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M)
@@ -969,6 +1046,7 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
+		P.on_pull_start(AM)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
@@ -976,6 +1054,13 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
+				/*if(ishuman(AM))
+					var/mob/living/carbon/human/HM = AM
+					if (HM.drag_damage())
+						if (HM.isincrit())
+							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
+							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
+// Commented out till I can figure out how to fix people still pulling when they're pulled --snx
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1082,6 +1167,20 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
+/mob/proc/print_flavor_text(user)
+    if(flavor_text)
+        var/msg = replacetext(flavor_text, "\n", "<br />")
+        if (ishuman(src))
+            var/mob/living/carbon/human/H = src
+            var/datum/organ/external/head/limb_head = H.get_organ(LIMB_HEAD)
+            if((wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE))) || (H.head && (is_slot_hidden(H.head.body_parts_covered,HIDEFACE))) || !limb_head || limb_head.disfigured || (limb_head.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) ) //Wearing a mask, having no head, being disfigured, or being a husk means no flavor text for you.
+                return
+
+            if(length(msg) <= 32)
+                return "<font color='#ffa000'><b>[msg]</b></font>"
+            else
+                return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[user];flavor_text=[flavor_text];target_name=[name]'>More</a></b></font>"
+
 /mob/verb/abandon_mob()
 	set name = "Respawn"
 	set category = "OOC"
@@ -1146,7 +1245,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1292,22 +1391,15 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
-	if (href_list["joinresponseteam"])
-		if(usr.client)
-			var/client/C = usr.client
-			C.JoinResponseTeam()
+	//if (href_list["joinresponseteam"])
+	//	if(usr.client)
+	//		var/client/C = usr.client
+	//		C.JoinResponseTeam()
 
-/mob/proc/pull_damage()
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		if(H.health - H.halloss <= config.health_threshold_softcrit)
-			for(var/name in H.organs_by_name)
-				var/datum/organ/external/e = H.organs_by_name[name]
-				if(H.lying)
-					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
-						return 1
-						break
-		return 0
+	if((href_list["flavor_text"]) && (href_list["target_name"]))
+		var/datum/browser/popup = new(src, "\ref[src]", href_list["target_name"], 500, 200)
+		popup.set_content(replacetext(href_list["flavor_text"], "\n", "<br>"))
+		popup.open()
 
 /mob/MouseDrop(mob/M as mob)
 	..()
@@ -1742,6 +1834,21 @@ mob/proc/on_foot()
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
 
+/mob/supermatter_act(atom/source, severity)
+	var/contents = get_contents_in_object(src)
+
+	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
+	if(SS)
+		SS.supermatter_act(source)
+	else
+
+		if(severity == SUPERMATTER_DUST)
+			dust()
+			return 1
+		else
+			qdel(src)
+			return 1
+
 /mob/proc/remove_jitter()
 	if(jitteriness)
 		jitteriness = 0
@@ -1772,6 +1879,11 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/get_view_range()
+	if(client)
+		return client.view
+	return world.view
+
 /mob/proc/apply_vision_overrides()
 	if(see_in_dark_override)
 		see_in_dark = see_in_dark_override
@@ -1782,7 +1894,7 @@ mob/proc/on_foot()
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
 	var/init_deaf = ear_deaf
-	overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+	overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 	blinded = 1
 	eye_blind = 1
 	ear_deaf = 1
@@ -1821,7 +1933,6 @@ mob/proc/on_foot()
 		"lying_prev",
 		"canmove",
 		"candrop",
-		"lastpuke",
 		"cpr_time",
 		"bodytemperature",
 		"drowsyness",
@@ -1841,9 +1952,14 @@ mob/proc/on_foot()
 		"wear_mask",
 		"radiation",
 		"stat",
-		"suiciding")
+		"monkeyizing",
+		"key")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration - 1)
+		for(var/atom/movable/AM in contents)
+			drop_item(AM, force_drop = 1)
 
 	spawn(duration + 1)
 		regenerate_icons()
@@ -1851,53 +1967,50 @@ mob/proc/on_foot()
 /mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
-			transmogged_from.forceMove(loc)
-			if(key)
-				transmogged_from.key = key
-			transmogged_from.timestopped = 0
-			if(istype(transmogged_from, /mob/living/carbon))
-				var/mob/living/carbon/C = transmogged_from
-				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
-					C.drop_item(C.wear_mask, force_drop = 1)
-			var/mob/returned_mob = transmogged_from
-			returned_mob.transmogged_to = null
-			transmogged_from = null
-			for(var/atom/movable/AM in contents)
-				AM.forceMove(get_turf(src))
-			forceMove(null)
-			qdel(src)
-			return returned_mob
+			var/obj/transmog_body_container/tC = transmogged_from
+			if(tC.contained_mob)
+				tC.contained_mob.forceMove(loc)
+				if(key)
+					tC.contained_mob.key = key
+				tC.contained_mob.timestopped = 0
+				if(istype(tC.contained_mob, /mob/living/carbon))
+					var/mob/living/carbon/C = tC.contained_mob
+					if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
+						C.drop_item(C.wear_mask, force_drop = 1)
+				var/mob/returned_mob = tC.contained_mob
+				returned_mob.transmogged_to = null
+				tC.get_rid_of()
+				transmogged_from = null
+				for(var/atom/movable/AM in contents)
+					AM.forceMove(get_turf(src))
+				forceMove(null)
+				qdel(src)
+				return returned_mob
 		return
 	if(!ispath(target_type, /mob))
 		EXCEPTION(target_type)
 		return
 	var/mob/M = new target_type(loc)
-	M.transmogged_from = src
+	var/obj/transmog_body_container/C = new (M)
+	M.transmogged_from = C
 	transmogged_to = M
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
-		var/spell/change_back = new /spell/aoe_turf/revert_form
+		var/spell/change_back
+		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
+			change_back = new offer_revert_spell
+		else
+			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
-	var/static/list/drop_on_transmog = list(
-		/obj/item/weapon/disk/nuclear,
-		/obj/item/weapon/holder,
-		/obj/item/device/paicard,
-		/obj/item/device/soulstone,
-		/obj/item/device/mmi,
-		)
-	for(var/i in drop_on_transmog)
-		var/list/L = search_contents_for(i)
-		if(L.len)
-			for(var/A in L)
-				drop_item(A, force_drop = 1)
-	src.forceMove(null)
+	C.set_contained_mob(src)
 	timestopped = 1
 	return M
 
 /spell/aoe_turf/revert_form
 	name = "Revert Form"
 	desc = "Morph back into your previous form."
+	spell_flags = GHOSTCAST
 	abbreviation = "RF"
 	charge_max = 1
 	invocation = "none"
@@ -1908,6 +2021,35 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/spell/aoe_turf/revert_form/no_z2 //Used if you don't want it reverting on Z2. So far only important for ghosts.
+	spell_flags = GHOSTCAST | Z2NOCAST
+
+/obj/transmog_body_container
+	name = "transmog body container"
+	desc = "You should not be seeing this."
+	flags = TIMELESS
+	var/mob/contained_mob
+
+/obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
+	ASSERT(M)
+	M.forceMove(src)
+	contained_mob = M
+
+/obj/transmog_body_container/proc/get_rid_of()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	contained_mob = null
+	qdel(src)
+
+/obj/transmog_body_container/Destroy()
+	contained_mob = null
+	for(var/i in contents)
+		qdel(i)
+	..()
+
+/mob/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

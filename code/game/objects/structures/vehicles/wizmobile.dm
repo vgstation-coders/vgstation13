@@ -28,6 +28,7 @@
 	layer = FLY_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/firebird
 
 	var/datum/effect/effect/system/trail/firebird/ion_trail
 
@@ -70,14 +71,14 @@
 /obj/structure/bed/chair/vehicle/wizmobile/handle_layer()
 	return
 
-/obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/wizmobile/to_bump(var/atom/obstacle)
 	if(throwing)
 		return ..()
 	else
 		return obstacle.bumped_by_firebird(src) //Yep
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
-/obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/wizmobile/to_bump(var/atom/obstacle)
 	if(can_move)
 		can_move = 0
 		alpha=128
@@ -98,3 +99,10 @@
 	name = "snowmobile"
 	desc = "After a complaint from space PETA, santa's been forced to take a less elegant ride."
 	icon_state = "snowmobile"
+
+/obj/effect/decal/mecha_wreckage/vehicle/firebird
+	// TODO: SPRITE PLS
+	//icon = 'icons/obj/vehicles.dmi'
+	//icon_state = "gokart_wreck"
+	name = "\improper Firebird wreckage"
+	desc = "The magic is gone."

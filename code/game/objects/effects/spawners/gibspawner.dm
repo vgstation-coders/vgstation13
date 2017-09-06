@@ -37,7 +37,7 @@
 	..()
 
 /obj/effect/gibspawner/blood
-	gibtypes = list(/obj/effect/decal/cleanable/blood/gibs/blood,/obj/effect/decal/cleanable/blood/gibs/blood,/obj/effect/decal/cleanable/blood/gibs/drips,/obj/effect/decal/cleanable/blood/gibs/drips)
+	gibtypes = list(/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/drip)
 	gibamounts = list(1,1,1,1)
 
 /obj/effect/gibspawner/blood/New()
@@ -45,7 +45,7 @@
 	..()
 
 /obj/effect/gibspawner/blood_drip
-	gibtypes = list(/obj/effect/decal/cleanable/blood/gibs/drips,/obj/effect/decal/cleanable/blood/gibs/drips,/obj/effect/decal/cleanable/blood/gibs/drips)
+	gibtypes = list(/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/drip)
 	gibamounts = list(1,1,1)
 
 /obj/effect/gibspawner/blood_drip/New()

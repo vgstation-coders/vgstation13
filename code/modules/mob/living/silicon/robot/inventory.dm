@@ -29,6 +29,7 @@
 	contents -= module
 	if(module)
 		module.forceMove(src.module)
+		module.dropped(src)
 	hud_used.update_robot_modules_display()
 	return 1
 
@@ -74,6 +75,7 @@
 	if(activated(O))
 		to_chat(src, "<span class='notice'>Already activated</span>")
 		return
+	O.equipped(src)
 	if(!module_state_1)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_1 = O

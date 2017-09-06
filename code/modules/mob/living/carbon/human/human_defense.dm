@@ -210,6 +210,7 @@ emp_act
 			affecting.sabotaged = 1
 		return 0
 
+	user.do_attack_animation(src, I)
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")
@@ -403,6 +404,23 @@ emp_act
 			if (prob(50) && !shielded)
 				if (!prob((gotarmor-100)*-1))
 					Paralyse(10)
+
+
+	//Deal damage
+
+	//The on_damaged event returns 1 if the damage should be blocked
+	//There are two types of damage at once (brute & burn), so do it through bitflags, because
+	//if(INVOKE_EVENT(brute) || INVOKE_EVENT(burn)) won't call the second proc if the first one returns 1
+	//This way both of the events are called, and the damage is blocked if either of them return 1
+	var/damage_blocked = 0
+
+	//INVOKE_EVENT may return null sometimes - this doesn't work nice with bitflags (which is what's being done here). Hence the !! operator - it turns a null into a 0.
+	var/brute_resolved = !!INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = b_loss))
+	var/burn_resolved = !!INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = f_loss))
+	damage_blocked |= (brute_resolved | burn_resolved)
+
+	if(damage_blocked)
+		return
 
 	var/update = 0
 

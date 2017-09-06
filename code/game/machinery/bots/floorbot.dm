@@ -109,7 +109,7 @@ var/global/list/floorbot_targets=list()
 	dat += "Status: <A href='?src=\ref[src];operation=start'>[src.on ? "On" : "Off"]</A><BR>"
 	dat += "Maintenance panel panel is [src.open ? "opened" : "closed"]<BR>"
 	dat += "Tiles left: [src.amount]<BR>"
-	dat += "Behvaiour controls are [src.locked ? "locked" : "unlocked"]<BR>"
+	dat += "Behaviour controls are [src.locked ? "locked" : "unlocked"]<BR>"
 	if(!src.locked || issilicon(user))
 		dat += "Improves floors: <A href='?src=\ref[src];operation=improve'>[src.improvefloors ? "Yes" : "No"]</A><BR>"
 		dat += "Finds tiles: <A href='?src=\ref[src];operation=tiles'>[src.eattiles ? "Yes" : "No"]</A><BR>"
@@ -597,7 +597,7 @@ var/global/list/floorbot_targets=list()
 	find_patrol_target()
 	return
 
-/obj/machinery/bot/floorbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/floorbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 		var/obj/machinery/door/D = M
 		if(!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))

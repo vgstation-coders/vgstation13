@@ -8,14 +8,9 @@
 	heal_rate = 5
 	plasma_rate = 20
 
-/mob/living/carbon/alien/humanoid/queen/movement_delay()
-	var/tally = 5 + move_delay_add + config.alien_delay //Queens are slow as fuck
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-	return tally
+/mob/living/carbon/alien/humanoid/queen/movement_tally_multiplier()
+	. = ..()
+	. *= 5 // Queens are slow as fuck
 
 /mob/living/carbon/alien/humanoid/queen/New()
 	create_reagents(100)
@@ -37,10 +32,10 @@
 
 /mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
 	..()
-	add_spell(new /spell/aoe_turf/conjure/alienegg, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/targeted/projectile/alienneurotoxin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
-	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/alienegg, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/alienacid, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/projectile/alienneurotoxin, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/choice/alienresin, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)
 	verbs.Add(/mob/living/carbon/alien/humanoid/proc/corrosive_acid)
 	verbs -= /mob/living/carbon/alien/verb/ventcrawl
 

@@ -12,7 +12,7 @@
 	var/orient = "LEFT"
 	var/scanning = 1
 	var/obj/machinery/body_scanconsole/connected = null //This will save us a lot of locates
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/fullbodyscanner,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -320,6 +320,7 @@
 	density = 1
 	anchored = 1
 	var/orient = "LEFT"
+	flags = FPRINT | HEAR
 
 /obj/machinery/body_scanconsole/New()
 	..()
@@ -653,9 +654,11 @@
 /obj/machinery/body_scanconsole/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!src.connected || src.connected.scanning<3)
 		return
-	if(speech.speaker && speech.speaker in range(src,3) && findtext(speech.message, "scanner, print"))
-		if(!src.connected.occupant||!istype(src.connected.occupant,/mob/living/carbon/human))
-			return
-		var/obj/item/weapon/paper/R = new(src.loc)
-		R.name = "paper - 'body scan report'"
-		R.info = format_occupant_data(src.connected.get_occupant_data())
+	if(speech.speaker && !speech.frequency)
+		if(findtext(speech.message, "print"))
+			if(!src.connected.occupant||!istype(src.connected.occupant,/mob/living/carbon/human))
+				return
+			say("Now outputting diagnostic.")
+			var/obj/item/weapon/paper/R = new(src.loc)
+			R.name = "paper - 'body scan report'"
+			R.info = format_occupant_data(src.connected.get_occupant_data())

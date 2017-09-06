@@ -2,6 +2,7 @@
 //todo
 /datum/artifact_effect/celldrain
 	effecttype = "celldrain"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 3
 	var/next_message
 

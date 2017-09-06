@@ -23,6 +23,9 @@
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
 
+	// Holomaps for ghosts
+	var/obj/item/device/station_map/station_holomap = null
+
 	var/can_reenter_corpse
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
@@ -45,6 +48,7 @@
 
 	// Our new boo spell.
 	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
+	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
 
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
 	started_as_observer = flags & GHOST_IS_OBSERVER
@@ -100,6 +104,8 @@
 	if(!T)
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T
+
+	station_holomap = new(src)
 
 	if(!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
@@ -217,6 +223,8 @@ Works together with spawning an observer, noted above.
 	for(var/mob/living/carbon/human/patient in oview(M))
 		var/foundVirus = 0
 		if(patient && patient.virus2 && patient.virus2.len)
+			foundVirus = 1
+		else if (patient && patient.viruses && patient.viruses.len)
 			foundVirus = 1
 		if(!C)
 			return
@@ -799,6 +807,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		mouse_opacity = 1
 		to_chat(src, "<span class='info'>Sprite shown.</span>")
 
+/mob/dead/observer/verb/toggle_station_map()
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+	set category = "Ghost"
+
+	src.station_holomap.toggleHolomap(src, FALSE) // We don't need client.eye.
 
 /mob/dead/observer/verb/become_mommi()
 	set name = "Become MoMMI"
@@ -936,3 +950,20 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	movespeed = 1/speed
 
 /datum/locking_category/observer
+
+/mob/dead/observer/deafmute/say(var/message)	//A ghost without access to ghostchat. An IC ghost, if you will.
+	to_chat(src, "<span class='notice'>You have no lungs with which to speak.</span>")
+
+/mob/dead/observer/deafmute/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if (isnull(client) || !speech.speaker)
+		return
+
+	var/source = speech.speaker.GetSource()
+	var/source_turf = get_turf(source)
+
+	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
+
+	if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
+		if (source_turf in view(src))
+			rendered_speech = "<B>[rendered_speech]</B>"
+			to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")

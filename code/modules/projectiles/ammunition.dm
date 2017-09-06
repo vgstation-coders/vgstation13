@@ -16,9 +16,9 @@
 	shrapnel_size = 1
 
 
-/obj/item/ammo_casing/New()
+/obj/item/ammo_casing/New(var/loc,var/empty = 0)
 	..()
-	if(projectile_type)
+	if(projectile_type && !empty)
 		BB = new projectile_type(src)
 	update_icon()
 

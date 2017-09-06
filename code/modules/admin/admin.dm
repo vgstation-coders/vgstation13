@@ -727,12 +727,13 @@ var/global/floorIsLava = 0
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
 			<BR>
+			<BR>
 			"}
 
 	if(check_rights(R_ADMIN,0))
 		dat += {"
 			<B>Admin Secrets</B><BR>
-			<BR><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
 			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
 			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
@@ -749,6 +750,20 @@ var/global/floorIsLava = 0
 			<BR>
 			<BR>
 			"}
+
+
+	if(check_rights(R_ADMIN,0))
+		dat += {"
+			<B>Strike Teams</B><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<BR>
+			<BR>
+			"}
+
 
 	if(check_rights(R_FUN,0))
 		dat += {"
@@ -769,6 +784,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
 			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
+			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Spawn a vermin infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=carp'>Trigger a Carp migration</A><BR>
 			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
@@ -805,7 +821,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=striketeam'>Send in a strike team</A><BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
@@ -1264,19 +1279,7 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = new()
-
-	if(text_ends_with(object, ".")) //Path ends with a dot - DO NOT include subtypes
-		object = copytext(object, 1, length(object)) //Remove the dot
-
-		for(var/path in typesof(/atom))
-			if(text_ends_with("[path]", object))
-				matches += path
-	else //Include subtypes
-		for(var/path in typesof(/atom))
-			if(findtext("[path]", object))
-				matches += path
-
+	var/list/matches = get_matching_types(object, /atom)
 
 	if(matches.len==0)
 		return

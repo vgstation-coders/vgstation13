@@ -135,6 +135,26 @@
 
 	..()
 
+/atom/movable/proc/get_move_delay()
+	// Copied from Move().
+	if(ismob(src))
+		var/mob/M = src
+		if(M.client)
+			return (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
+	return max(5 * world.tick_lag, 1)
+
+// This is designed to only be used occasionally, since procs add overhead.
+/atom/movable/proc/reset_glide_size()
+	glide_size = Ceiling(WORLD_ICON_SIZE / src.get_move_delay() * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
+	//glide_size = WORLD_ICON_SIZE / max(move_delay, world.tick_lag) * world.tick_lag // Updated calc from http://www.byond.com/forum/?post=1573076
+
+/mob/verb/fix_gliding()
+	set category = "OOC"
+	set name = "Fix Movement"
+	set desc = "Fixes jerky movement caused by BYOND being dumb."
+	reset_glide_size()
+
+
 /atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
 	if(!loc || !newLoc)
 		return 0
@@ -267,6 +287,7 @@
 	locked_atoms    -= AM
 	AM.locked_to     = null
 	category.unlock(AM)
+	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
 
@@ -359,7 +380,7 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/Bump(atom/Obstacle)
+/atom/movable/to_bump(atom/Obstacle)
 	if(src.throwing)
 		src.throw_impact(Obstacle)
 		src.throwing = 0
@@ -402,17 +423,18 @@
 
 /atom/movable/proc/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
-		for(var/client/C in parallax_on_clients)
+		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
-				C.mob.hud_used.update_parallax_values()
+				C.update_special_views()
 
 /mob/update_client_hook(atom/destination)
 	if(locate(/mob) in src)
-		for(var/client/C in parallax_on_clients)
+		for(var/client/C in clients)
 			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
-				C.mob.hud_used.update_parallax_values()
+				C.update_special_views()
 	else if(client && hud_used)
-		hud_used.update_parallax_values()
+		var/client/C = client
+		C.update_special_views()
 
 /atom/movable/proc/forceEnter(atom/destination)
 	if(destination)
@@ -474,6 +496,11 @@
 		user = usr
 		if(M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
+
+	if(istype(src,/obj/mecha))
+		var/obj/mecha/M = src
+		M.dash_dir = dir
+		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -720,6 +747,10 @@
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
 
+//Called when somebody begins to pull this atom
+/atom/movable/proc/on_pull_start(mob/living/L)
+	return
+
 /atom/movable/proc/send_to_future(var/duration)	//don't override this, only call it
 	spawn()
 		actual_send_to_future(duration)
@@ -841,3 +872,68 @@
 					vars[x] = list()
 					continue
 			vars[x] = stored_vars[x]
+
+/atom/proc/attack_icon()
+	return appearance
+
+/atom/movable/proc/do_attack_animation(atom/target, atom/tool)
+	set waitfor = 0
+
+	ASSERT(tool) //If no tool, shut down the proc and call the coder police
+
+	if(target == src)
+		return
+	var/horizontal = 0
+	var/vertical = 0
+
+	var/direction = get_dir(src, target)
+
+	if(direction & NORTH)
+		vertical = 1
+	else if(direction & SOUTH)
+		vertical = -1
+
+	if(direction & EAST)
+		horizontal = 1
+	else if(direction & WEST)
+		horizontal = -1
+
+//Attack animation that looks like person being pixel shifted
+	spawn()
+		var/image/override_image = image(icon = icon, icon_state = icon_state) //only because byond will not create an image if you do not give it some values
+		override_image.appearance = appearance
+		override_image.override = 1
+		override_image.loc = src
+		override_image.pixel_x = pixel_x
+		override_image.pixel_y = pixel_y
+		override_image.dir = dir
+
+		var/adjusted_x = pixel_x + horizontal * 3 * PIXEL_MULTIPLIER
+		var/adjusted_y = pixel_y + vertical * 3 * PIXEL_MULTIPLIER
+		var/viewers = person_animation_viewers.Copy()
+		for(var/client/C in viewers)
+			C.images += override_image
+
+		animate(override_image, pixel_x = adjusted_x, pixel_y = adjusted_y, time = 1)
+		animate(pixel_x = pixel_x, pixel_y = pixel_y, time = 1)
+		sleep(2)
+		for(var/client/C in viewers)
+			C.images -= override_image
+
+//Attack Animation for ghost object being pixel shifted onto person
+	var/image/item = image(icon=tool.icon, icon_state = tool.icon_state)
+	item.appearance = tool.attack_icon()
+	item.alpha = 128
+	item.loc = target
+	item.pixel_x = target.pixel_x - horizontal * 0.5 * WORLD_ICON_SIZE
+	item.pixel_y = target.pixel_y - vertical * 0.5 * WORLD_ICON_SIZE
+	item.mouse_opacity = 0
+
+	var/viewers = item_animation_viewers.Copy()
+	for(var/client/C in viewers)
+		C.images += item
+
+	animate(item, pixel_x = target.pixel_x, pixel_y = target.pixel_y, time = 3)
+	sleep(3)
+	for(var/client/C in viewers)
+		C.images -= item

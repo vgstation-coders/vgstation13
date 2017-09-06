@@ -15,7 +15,7 @@
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
-	speed = -1
+	speed = 1
 	maxHealth = 25
 	health = 25
 	size = SIZE_SMALL
@@ -194,6 +194,7 @@
 	species_type = /mob/living/simple_animal/hostile/carp/holocarp
 	can_breed = 0
 	pheromones_act = PHEROMONES_NO_EFFECT
+	mob_property_flags = MOB_HOLOGRAPHIC
 	holder_type = null
 
 /mob/living/simple_animal/hostile/carp/holocarp/Die()

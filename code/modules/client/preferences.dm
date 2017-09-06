@@ -23,6 +23,7 @@ var/global/list/special_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+	ROLE_COMMANDO	  = 1,
 )
 
 var/list/antag_roles = list(
@@ -37,6 +38,7 @@ var/list/antag_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+	ROLE_COMMANDO	  = 1,
 //	"infested monkey" = IS_MODE_COMPILED("monkey"),
 )
 
@@ -158,6 +160,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/list/player_alt_titles = new()		// the default name of a job like "Medical Doctor"
 
+	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -180,6 +183,9 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/usewmp = 0 //whether to use WMP or VLC
 
 	var/list/roles=list() // "role" => ROLEPREF_*
+
+	//attack animation type
+	var/attack_animation = NO_ANIMATION
 
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 
@@ -204,7 +210,7 @@ var/const/MAX_SAVE_SLOTS = 8
 			while(!speciesinit)
 				sleep(1)
 			randomize_appearance_for()
-			real_name = random_name(gender)
+			real_name = random_name(gender, species)
 			save_character_sqlite(theckey, C, default_slot)
 			saveloaded = 1
 
@@ -215,7 +221,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		attempts++
 	if(attempts >= 5)//failsafe so people don't get locked out of the round forever
 		randomize_appearance_for()
-		real_name = random_name(gender)
+		real_name = random_name(gender, species)
 		log_debug("Player [theckey] FAILED to load save 5 times and has been randomized.")
 		log_admin("Player [theckey] FAILED to load save 5 times and has been randomized.")
 		if(theclient)
@@ -250,7 +256,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
 	<b>Underwear:</b> [gender == MALE ? "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</a>" : "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_f[underwear]]</a>"]<br>
 	<b>Backpack:</b> <a href ='?_src_=prefs;preference=bag;task=input'><b>[backbaglist[backbag]]</a><br>
-	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a>
+	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a><br>
+	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -352,6 +359,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Character Records:<b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
+	<b>Attack Animations:<b>
+	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
   </div>
 </div>"}
 
@@ -628,6 +637,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_EPILEPTIC,  "Seizures")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_DEAF,       "Deaf")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_BLIND,      "Blind")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_MUTE,       "Mute")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -932,7 +942,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
 		return
-
+	//testing("preference=[href_list["preference"]]")
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
 			if("close")
@@ -1249,6 +1259,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_relation)
 						nanotrasen_relation = new_relation
 
+				if("flavor_text")
+					var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
+					if(msg != null)
+						msg = copytext(msg, 1, MAX_MESSAGE_LEN)
+						msg = html_encode(msg)
+
+						flavor_text = msg
 				if("limbs")
 					var/list/limb_input = list(
 						"Left Leg [organ_data[LIMB_LEFT_LEG]]" = LIMB_LEFT_LEG,
@@ -1488,6 +1505,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
 						lastPolled = world.timeofday
@@ -1511,9 +1529,24 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					load_save_sqlite(user.ckey, user, num)
 					default_slot = num
 					close_load_dialog(user)
+
 				if("tab")
 					if(href_list["tab"])
 						current_tab = text2num(href_list["tab"])
+
+				if("attack_animation")
+					if(attack_animation == NO_ANIMATION)
+						item_animation_viewers |= client
+						attack_animation = ITEM_ANIMATION
+
+					else if(attack_animation == ITEM_ANIMATION)
+						attack_animation = PERSON_ANIMATION
+						person_animation_viewers |= client
+						item_animation_viewers -= client
+
+					else if(attack_animation == PERSON_ANIMATION)
+						attack_animation = NO_ANIMATION
+						person_animation_viewers -= client
 
 			if(user.client.holder)
 				switch(href_list["preference"])
@@ -1538,10 +1571,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/copy_to(mob/living/carbon/human/character, safety = 0)
 	if(be_random_name)
 		real_name = random_name(gender,species)
-
-	if(be_random_body)
-		random_character(gender)
-
 	if(config.humans_need_surnames && species == "Human")
 		var/firstspace = findtext(real_name, " ")
 		var/name_length = length(real_name)
@@ -1552,32 +1581,39 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 	character.real_name = real_name
 	character.name = character.real_name
+	character.flavor_text = flavor_text
 	if(character.dna)
 		character.dna.real_name = character.real_name
+		character.dna.flavor_text = character.flavor_text
 
 	character.med_record = med_record
 	character.sec_record = sec_record
 	character.gen_record = gen_record
 
-	character.setGender(gender)
-	character.age = age
 
-	character.r_eyes = r_eyes
-	character.g_eyes = g_eyes
-	character.b_eyes = b_eyes
+	if(be_random_body)
+		//random_character(gender) - This just selects a random character from the OLD character database.
+		randomize_appearance_for() // Correct.
+	else
+		character.setGender(gender)
+		character.age = age
 
-	character.r_hair = r_hair
-	character.g_hair = g_hair
-	character.b_hair = b_hair
+		character.r_eyes = r_eyes
+		character.g_eyes = g_eyes
+		character.b_eyes = b_eyes
 
-	character.r_facial = r_facial
-	character.g_facial = g_facial
-	character.b_facial = b_facial
+		character.r_hair = r_hair
+		character.g_hair = g_hair
+		character.b_hair = b_hair
 
-	character.s_tone = s_tone
+		character.r_facial = r_facial
+		character.g_facial = g_facial
+		character.b_facial = b_facial
 
-	character.h_style = h_style
-	character.f_style = f_style
+		character.s_tone = s_tone
+
+		character.h_style = h_style
+		character.f_style = f_style
 
 
 	character.skills = skills

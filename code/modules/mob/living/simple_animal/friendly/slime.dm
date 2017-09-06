@@ -126,6 +126,6 @@
 				severity = 6
 
 		if(severity > 0)
-			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("brute", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")

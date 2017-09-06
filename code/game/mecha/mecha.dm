@@ -67,7 +67,7 @@
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
-
+	var/dash_dir = null
 	var/wreckage
 
 	var/list/equipment = new
@@ -87,7 +87,6 @@
 /obj/mecha/New()
 	..()
 	events = new
-	icon_state += "-open"
 	add_radio()
 	add_cabin()
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
@@ -104,6 +103,7 @@
 	loc.Entered(src)
 	mechas_list += src //global mech list
 	reset_icon()
+	icon_state += "-open"
 	return
 
 /obj/mecha/Destroy()
@@ -232,8 +232,8 @@
 
 		if(!istype(object, /atom))
 			return
-		if(istype(object, /obj/screen))
-			var/obj/screen/using = object
+		if(istype(object, /obj/abstract/screen))
+			var/obj/abstract/screen/using = object
 			if(using.screen_loc == ui_acti || using.screen_loc == ui_iarrowleft || using.screen_loc == ui_iarrowright)//ignore all HUD objects save 'intent' and its arrows
 				return ..()
 			else
@@ -302,6 +302,8 @@
 			src.occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0
+	if(throwing)
+		return 0
 	if(state)
 		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
 		return
@@ -361,7 +363,7 @@
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
 
-/obj/mecha/Bump(var/atom/obstacle)
+/obj/mecha/to_bump(var/atom/obstacle)
 //	src.inertia_dir = null
 	if(src.throwing)//high velocity mechas in your face!
 		var/breakthrough = 0
@@ -391,20 +393,28 @@
 		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
 			obstacle.ex_act(1)
 
-		else if(istype(obstacle, /mob/living/carbon))
-			var/mob/living/carbon/C = obstacle
-			var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
-			if(C.flags & INVULNERABLE)
-				return
-			C.take_overall_damage(5,0)
-			if(C.locked_to)
-				C.locked_to = 0
-			C.Stun(5)
-			C.Knockdown(5)
-			C.apply_effect(STUTTER, 5)
-			playsound(src, pick(hit_sound), 50, 0, 0)
-			breakthrough = 1
-
+		else if(istype(obstacle, /mob/living))
+			var/mob/living/L = obstacle
+			if (L.flags & INVULNERABLE)
+				src.throwing = 0
+				src.crashing = null
+			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+				//can't be knocked down? you'll still take the damage.
+				src.throwing = 0
+				src.crashing = null
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+			else
+				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+				L.Stun(5)
+				L.Knockdown(5)
+				L.apply_effect(STUTTER, 5)
+				playsound(src, pick(hit_sound), 50, 0, 0)
+				breakthrough = 1
 		else
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
@@ -415,7 +425,7 @@
 					src.throw_at(crashing, 50, src.throw_speed)
 			else
 				spawn(1)
-					crashing = get_distant_turf(get_turf(src), dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
+					crashing = get_distant_turf(get_turf(src), dash_dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
 					src.throw_at(crashing, 50, src.throw_speed)
 
 	if(istype(obstacle, /obj))
@@ -507,9 +517,9 @@
 		src.destroy()
 	return
 
-/obj/mecha/attack_hand(mob/user as mob)
+/obj/mecha/attack_hand(mob/living/user as mob)
 	src.log_message("Attack by hand/paw. Attacker - [user].",1)
-
+	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
@@ -524,7 +534,8 @@
 	return src.attack_hand(user)
 
 
-/obj/mecha/attack_alien(mob/user as mob)
+/obj/mecha/attack_alien(mob/living/user as mob)
+	user.do_attack_animation(src, user)
 	src.log_message("Attack by alien. Attacker - [user].",1)
 	if(!prob(src.deflect_chance))
 		src.take_damage(15)
@@ -542,6 +553,7 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_animal(mob/living/simple_animal/user as mob)
+	user.do_attack_animation(src, user)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)
 	if(user.melee_damage_upper == 0)
 		user.emote("[user.friendly] [src]")
@@ -719,8 +731,9 @@
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 	return
 
-/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	user.delayNextAttack(8)
+	user.do_attack_animation(src, W)
 	src.log_message("Attacked by [W]. Attacker - [user]")
 	if(prob(src.deflect_chance))
 		to_chat(user, "<span class='attack'>The [W] bounces off [src.name] armor.</span>")

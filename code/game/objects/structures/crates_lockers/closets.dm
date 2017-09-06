@@ -32,6 +32,11 @@
 	else
 		density = 0
 
+/obj/structure/closet/spawned_by_map_element()
+	..()
+
+	initialize()
+
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
 	dump_contents()
@@ -258,6 +263,7 @@
 
 /obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
 	if(user.environment_smash)
+//		user.do_attack_animation(src, user) //This will look stupid
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
@@ -314,7 +320,7 @@
 	return 0
 
 /obj/structure/closet/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob, var/needs_opened = 1, var/show_message = 1, var/move_them = 1)
-	if(istype(O, /obj/screen))	//fix for HUD elements making their way into the world	-Pete
+	if(istype(O, /obj/abstract/screen))	//fix for HUD elements making their way into the world	-Pete
 		return 0
 	if(!isturf(O.loc))
 		return 0
@@ -340,8 +346,8 @@
 		return
 
 	if(!src.open())
-		to_chat(user, "<span class='notice'>It won't budge!</span>")
 		if(!lastbang)
+			to_chat(user, "<span class='notice'>It won't budge!</span>")
 			lastbang = 1
 			for (var/mob/M in hearers(src, null))
 				to_chat(M, text("<FONT size=[]>BANG, bang!</FONT>", max(0, 5 - get_dist(src, M))))

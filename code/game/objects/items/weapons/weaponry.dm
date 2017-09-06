@@ -99,6 +99,20 @@
 	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
 	return ..()
 
+/obj/item/weapon/katana/magic
+	name = "enchanted sword"
+	desc = "Capable of cutting through anything except the things it can't cut through."
+	icon_state = "cultblade"
+	item_state = "cultblade"
+
+/obj/item/weapon/katana/magic/dropped(mob/user)
+	..()
+	qdel(src)
+
+/obj/item/weapon/katana/magic/equipped(mob/living/carbon/human/H, slot)
+	if(slot)
+		qdel(src)
+
 /obj/item/weapon/harpoon
 	name = "harpoon"
 	sharpness = 1.2
@@ -358,11 +372,12 @@ obj/item/weapon/banhammer/admin
 		to_chat(user, "<span class='info'>It has [blades_left] blade\s left.</span>")
 
 /obj/item/weapon/macuahuitl/proc/update_blades()
-	if(blades.len)
+	var/blades_left = get_current_blade_count()
+	if(blades_left)
 		name = "macuahuitl"
 		desc = "Though the blades are sharp, they are also fragile."
 		hitsound = "sound/weapons/bloodyslice.ogg"
-		force = get_current_blade_count() * 2
+		force = blades_left * 2
 		sharpness = 2
 		attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
 		sharpness_flags = SHARP_BLADE | INSULATED_EDGE

@@ -58,7 +58,7 @@
 // Departmental Mining Surprises! -- Dorf Fort
 //**************************************************************
 /obj/item/toy/gooncode
-	origin_tech = MATERIALS + "=10;" + PLASMATECH + "=5;" + SYNDICATE + "=3;" + PROGRAMMING + "=10;" + BLUESPACE + "=5;" + POWERSTORAGE + "=5"
+	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=5;" + Tc_SYNDICATE + "=3;" + Tc_PROGRAMMING + "=10;" + Tc_BLUESPACE + "=5;" + Tc_POWERSTORAGE + "=5"
 
 
 
@@ -78,7 +78,7 @@
 		/obj/machinery/chem_master						= 6,
 		/obj/machinery/atmospherics/unary/cryo_cell		= 5,
 		/obj/machinery/dna_scannernew					= 5,
-		/obj/machinery/clonepod							= 1,
+		/obj/machinery/cloning/clonepod							= 1,
 		/obj/machinery/bioprinter						= 2,
 		/obj/machinery/computer/cloning					= 3,
 		/obj/machinery/bot/medbot/mysterious			= 1,
@@ -151,8 +151,8 @@
 		/obj/item/weapon/circuitboard/smes								= 1,
 		/obj/structure/closet/secure_closet/engineering_electrical		= 1,
 		/obj/structure/closet/secure_closet/engineering_welding			= 2,
-		/obj/item/weapon/rcd											= 1,
-		/obj/item/weapon/pipe_dispenser									= 1,
+		/obj/item/device/rcd											= 1,
+		/obj/item/device/rcd/rpd									= 1,
 	)
 
 	complex_max_size=2

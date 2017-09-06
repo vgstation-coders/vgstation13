@@ -103,9 +103,10 @@
 
 	return src.attack_hand(user)
 
-/turf/simulated/wall/attack_hand(mob/user as mob)
+/turf/simulated/wall/attack_hand(mob/living/user as mob)
 	user.delayNextAttack(8)
 	if(M_HULK in user.mutations)
+		user.do_attack_animation(src, user)
 		if(prob(100 - hardness) || rotting)
 			dismantle_wall(1)
 			user.visible_message("<span class='danger'>[user] smashes through \the [src].</span>", \
@@ -354,7 +355,7 @@
 	if(istype(user,/mob/living/simple_animal/construct/builder))
 		var/spell/aoe_turf/conjure/wall/S = locate() in user.spell_list
 		S.perform(user, 0, list(src))
-		//var/obj/screen/spell/SS = S.connected_button
+		//var/obj/abstract/screen/spell/SS = S.connected_button
 		//SS.update_charge(1)
 		return 1
 	return 0

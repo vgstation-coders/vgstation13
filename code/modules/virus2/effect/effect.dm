@@ -253,7 +253,7 @@
 	mob.say("*cough")
 	for(var/mob/living/M in oview(2,mob))
 		if(can_be_infected(M))
-			spread_disease_to(src, M)
+			spread_disease_to(mob, M)
 
 
 /datum/disease2/effect/hungry
@@ -941,6 +941,38 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				mob.apply_damage(10)
 
 
+/datum/disease2/effect/thick_blood
+	name = "Hyper-Fibrinogenesis"
+	stage = 3
+	var/skip = FALSE
+
+/datum/disease2/effect/thick_blood/activate(var/mob/living/carbon/mob)
+	if(skip)
+		return
+	var/mob/living/carbon/human/H = mob
+	if(ishuman(H))
+		if(H.species && (H.species.anatomy_flags & NO_BLOOD))	//Can't have thick blood if you don't have blood at all.
+			skip = TRUE
+			return
+	if (H.reagents.get_reagent_amount(CLOTTING_AGENT) < 5)
+		H.reagents.add_reagent(CLOTTING_AGENT, 5)
+		if (ishuman(H))
+			for (var/datum/organ/external/E in H.organs)
+				if (E.status & ORGAN_BLEEDING)
+					to_chat(mob, "<span class = 'notice'>You feel your wounds rapidly scabbing over.</span>")
+					break
+
+
+/datum/disease2/effect/teratoma
+	name = "Teratoma Syndrome"
+	stage = 3
+
+/datum/disease2/effect/teratoma/activate(var/mob/living/carbon/mob)
+	var/organ_type = pick(existing_typesof(/obj/item/organ/internal) + /obj/item/stack/teeth)
+	var/obj/item/spawned_organ = new organ_type(get_turf(mob))
+	mob.visible_message("<span class='warning'>\A [spawned_organ.name] is extruded from \the [mob]'s body and falls to the ground!</span>","<span class='warning'>\A [spawned_organ.name] is extruded from your body and falls to the ground!</span>")
+
+
 ////////////////////////STAGE 4/////////////////////////////////
 
 
@@ -1023,14 +1055,11 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	badness = 2
 
 /datum/disease2/effect/suicide/activate(var/mob/living/carbon/mob)
-	mob.suiciding = 1
-	//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-	to_chat(viewers(mob), "<span class='danger'>[mob.name] is holding \his breath. It looks like \he's trying to commit suicide.</span>")
-	mob.adjustOxyLoss(175 - mob.getToxLoss() - mob.getFireLoss() - mob.getBruteLoss() - mob.getOxyLoss())
-	mob.updatehealth()
-	spawn(200) //in case they get revived by cryo chamber or something stupid like that, let them suicide again in 20 seconds
-		mob.suiciding = 0
 
+	if(mob.stat != CONSCIOUS || !mob.canmove || mob.restrained()) //Try as we might, we still can't snap our neck when we are KO or restrained, even if forced.
+		return
+
+	mob.attempt_suicide(1, 0)
 
 /datum/disease2/effect/killertoxins
 	name = "Toxification Syndrome"
@@ -1433,6 +1462,36 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				H.species.anatomy_flags |= HAS_SWEAT_GLANDS
 		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
 	..()
+
+/datum/disease2/effect/heart_attack
+	name = "Heart Attack Syndrome"
+	stage = 4
+	max_count = 1
+
+/datum/disease2/effect/heart_attack/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.get_heart())
+			H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
+			var/obj/item/organ/internal/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
+			var/list/spawn_turfs = list()
+			for(var/turf/T in orange(1, H))
+				if(!T.density)
+					spawn_turfs.Add(T)
+			if(!spawn_turfs.len)
+				spawn_turfs.Add(get_turf(H))
+			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
+			heart_attack.appearance = blown_heart.appearance
+			heart_attack.icon_dead = "heart-off"
+			heart_attack.environment_smash = 0
+			heart_attack.melee_damage_lower = 15
+			heart_attack.melee_damage_upper = 15
+			heart_attack.health = 50
+			heart_attack.maxHealth = 50
+			heart_attack.stat_attack = 1
+			qdel(blown_heart)
+
+
 ////////////////////////SPECIAL/////////////////////////////////
 
 

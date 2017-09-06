@@ -33,7 +33,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	light_color = LIGHT_COLOR_FIRE
 
 /obj/item/weapon/match/New()
-
 	..()
 	update_brightness() //Useful if you want to spawn burnt matches, or burning ones you maniac
 
@@ -43,7 +42,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	processing_objects -= src
 
 /obj/item/weapon/match/examine(mob/user)
-
 	..()
 	switch(lit)
 		if(1)
@@ -55,7 +53,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/weapon/match/update_icon()
-
 	switch(lit)
 		if(1)
 			name = "lit [initial(name)]"
@@ -74,8 +71,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			damtype = BRUTE
 
 /obj/item/weapon/match/proc/update_brightness()
-
-
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
 		processing_objects.Add(src)
 		set_light(brightness_on)
@@ -85,12 +80,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	update_icon()
 
 /obj/item/weapon/match/process()
+	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	var/turf/location = get_turf(src)
 	smoketime--
+	var/datum/gas_mixture/env = location.return_air()
 	if(smoketime <= 0)
 		lit = -1
 		update_brightness()
 		return
+	if(env.oxygen < 5)
+		lit = -1
+		update_brightness()
+		if(M)
+			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
 	if(location)
 		location.hotspot_expose(heat_production, 5, surfaces = istype(loc, /turf))
 		return
@@ -183,7 +185,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	..()
 	to_chat(user, "\The [src] is [lit ? "":"un"]lit.")//Shared with all cigarette sub-types
 
-
 //Also updates the name, the damage and item_state for good measure
 /obj/item/clothing/mask/cigarette/update_icon()
 
@@ -200,8 +201,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			damtype = BRUTE
 
 /obj/item/clothing/mask/cigarette/proc/update_brightness()
-
-
 	if(lit)
 		processing_objects.Add(src)
 		set_light(brightness_on)
@@ -257,7 +256,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else if(W.is_hot())
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
 	return
-
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob)
 	..()
@@ -341,14 +339,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(isliving(loc))
 		M.IgniteMob()
 	smoketime--
-	if(smoketime <= 0)
+	var/datum/gas_mixture/env = location.return_air()
+	if(smoketime <= 0 | env.oxygen < 5)
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
 		lit = 0 //Actually unlight the cigarette so that the lighting can update correctly
 		update_brightness()
 		if(ismob(loc))
-			to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
+			if(env.oxygen < 5)
+				to_chat(M, "<span class='notice'>\The [src] suddenly goes out in a weak fashion.</span>")
+			else
+				to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
 			M.u_equip(src, 0)	//Un-equip it so the overlays can update
 		qdel(src)
 		return
@@ -591,20 +593,21 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "cobpipe"
 	smoketime = 400
 
-/////////
-//ZIPPO//
-/////////
+/////////////////
+//CHEAP LIGHTER//
+/////////////////
 
 /obj/item/weapon/lighter
 	name = "cheap lighter"
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "lighter-g"
-	item_state = "lighter-g"
+	icon_state = "lighter"
+	item_state = "lighter"
 	w_class = W_CLASS_TINY
 	throwforce = 4
 	flags = null
 	siemens_coefficient = 1
+	var/color_suffix = "-g" // Determines the sprite used
 	var/brightness_on = 2 //Sensibly better than a match or a cigarette
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
@@ -615,49 +618,47 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
 
+/obj/item/weapon/lighter/New()
+	..()
+	update_icon()
+
 /obj/item/weapon/lighter/Destroy()
 	. = ..()
 
 	processing_objects -= src
 
-/obj/item/weapon/lighter/zippo
-	name = "Zippo lighter"
-	desc = "The Zippo lighter. Need to light a smoke ? Zippo !"
-	icon_state = "zippo"
-	item_state = "zippo"
-	var/open_sound = list('sound/items/zippo_open.ogg')
-	var/close_sound = list('sound/items/zippo_close.ogg')
-	fuel = 100 //Zippos da bes
+/obj/item/weapon/lighter/red
+	color_suffix = "-r"
+/obj/item/weapon/lighter/cyan
+	color_suffix = "-c"
+/obj/item/weapon/lighter/yellow
+	color_suffix = "-y"
+/obj/item/weapon/lighter/green
+	color_suffix = "-g"
 
 /obj/item/weapon/lighter/random/New()
-	. = ..()
-	var/color = pick("r","c","y","g")
-	icon_state = "lighter-[color]"
-	update_brightness()
+	color_suffix = "-[pick("r","c","y","g")]"
+	..()
 
 /obj/item/weapon/lighter/examine(mob/user)
-
 	..()
 	to_chat(user, "The lighter is [lit ? "":"un"]lit")
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/weapon/lighter/update_icon()
-
 	switch(lit)
 		if(1)
 			name = "lit [initial(name)]"
-			item_state = "[initial(item_state)]on"
-			icon_state = "[initial(icon_state)]-on"
+			item_state = "[initial(item_state)][color_suffix]on"
+			icon_state = "[initial(icon_state)][color_suffix]-on"
 			damtype = BURN
 		if(0)
 			name = "[initial(name)]"
-			item_state = "[initial(item_state)]off"
-			icon_state = "[initial(icon_state)]"
+			item_state = "[initial(item_state)][color_suffix]off"
+			icon_state = "[initial(icon_state)][color_suffix]"
 			damtype = BRUTE
 
 /obj/item/weapon/lighter/proc/update_brightness()
-
-
 	if(lit)
 		processing_objects.Add(src)
 		set_light(brightness_on)
@@ -675,12 +676,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		"<span class='notice'>You refuel \the [src].</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return
-/obj/item/weapon/lighter/attack_self(mob/living/user)
 
+/obj/item/weapon/lighter/attack_self(mob/living/user)
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel)
+	if(!fuel | env.oxygen < 5)
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
-		"<span class='notice'>\The [src] doesn't have enough fuel to ignite</span>")
+		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
 	if(!lit) //Lighting the lighter
 		playsound(get_turf(src), pick(lightersound), 50, 1)
@@ -701,25 +704,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		user.visible_message("<span class='notice'>[user] quietly shuts off \the [src].</span>", \
 		"<span class='notice'>You quietly shut off \the [src].</span>")
 		update_brightness()
-
-/obj/item/weapon/lighter/zippo/attack_self(mob/living/user)
-	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel)
-		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
-		"<span class='notice'>\The [src] doesn't have enough fuel to ignite</span>")
-		return
-	lit = !lit
-	if(lit) //Was lit
-		playsound(get_turf(src), pick(open_sound), 50, 1)
-		user.visible_message("<span class='rose'>Without even breaking stride, [user] flips open and lights \the [src] in one smooth movement.</span>", \
-		"<span class='rose'>Without even breaking stride, you flip open and light \the [src] in one smooth movement.</span>")
-		--fuel
-	else //Was shut off
-		fueltime = null
-		playsound(get_turf(src), pick(close_sound), 50, 1)
-		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
-		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
-	update_brightness()
 
 /obj/item/weapon/lighter/is_hot()
 	if(lit)
@@ -753,3 +737,43 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			update_brightness()
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
+	var/datum/gas_mixture/env = location.return_air()
+	if(env.oxygen < 5)
+		lit = 0
+		update_brightness()
+		visible_message("<span class='warning'>Without warning, the flame on \the [src] suddenly goes out in a weak fashion.</span>")
+
+/////////
+//ZIPPO//
+/////////
+
+/obj/item/weapon/lighter/zippo
+	name = "Zippo lighter"
+	desc = "The Zippo lighter. Need to light a smoke? Zippo!"
+	icon_state = "zippo"
+	item_state = "zippo"
+	color_suffix = null
+	var/open_sound = list('sound/items/zippo_open.ogg')
+	var/close_sound = list('sound/items/zippo_close.ogg')
+	fuel = 100 //Zippos da bes
+
+/obj/item/weapon/lighter/zippo/attack_self(mob/living/user)
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/env = T.return_air()
+	user.delayNextAttack(5) //Hold on there cowboy
+	if(!fuel | env.oxygen < 5)
+		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
+		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
+		return
+	lit = !lit
+	if(lit) //Was lit
+		playsound(get_turf(src), pick(open_sound), 50, 1)
+		user.visible_message("<span class='rose'>Without even breaking stride, [user] flips open and lights \the [src] in one smooth movement.</span>", \
+		"<span class='rose'>Without even breaking stride, you flip open and light \the [src] in one smooth movement.</span>")
+		--fuel
+	else //Was shut off
+		fueltime = null
+		playsound(get_turf(src), pick(close_sound), 50, 1)
+		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
+		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
+	update_brightness()

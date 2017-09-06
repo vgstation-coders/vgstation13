@@ -11,10 +11,11 @@
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 4
+	speed = 5
 	maxHealth = 20
 	health = 20
 	flying = 1
+	mob_property_flags = MOB_SWARM
 
 	harm_intent_damage = 8
 	melee_damage_lower = 10
@@ -145,7 +146,7 @@
 	response_help = "pats the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 4
+	speed = 5
 	maxHealth = 15
 	health = 15
 	var/book_cover

@@ -30,13 +30,13 @@
 				switch(R.id)*/
 		viewcontents = 1
 		overlays.len = 0
+		flammable = 0
+		if(!molotov)
+			lit = 0
+		light_color = null
+		set_light(0)
 		if (reagents.reagent_list.len > 0)
 			//mrid = R.get_master_reagent_id()
-			flammable = 0
-			if(!molotov)
-				lit = 0
-			light_color = null
-			set_light(0)
 			isGlass = 1
 			item_state = "glass_empty"
 			switch(reagents.get_master_reagent_id())
@@ -409,7 +409,7 @@
 					icon_state = SOY_LATTE
 					item_state = SOY_LATTE
 					name = "soy latte"
-					desc = "A nice and refrshing beverage while you are reading."
+					desc = "A nice and refreshing beverage while you are reading."
 				if(CAFE_LATTE)
 					icon_state = CAFE_LATTE
 					item_state = CAFE_LATTE
@@ -542,6 +542,11 @@
 					item_state = DANS_WHISKEY
 					name = "Discount Dan's 'Malt' Whiskey"
 					desc = "The very cheapest and most sickening method of liver failure."
+				if(GREYVODKA)
+					icon_state = "ginvodkaglass"
+					item_state = "ginvodkaglass"
+					name = "glass of Grey vodka"
+					desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"

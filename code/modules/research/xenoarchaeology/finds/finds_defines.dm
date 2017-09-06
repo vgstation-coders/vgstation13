@@ -80,8 +80,6 @@
 			return "carbon"
 		if(ARCHAEO_REMAINS_HUMANOID)
 			return "carbon"
-		if(ARCHAEO_REMAINS_ROBOT)
-			return "carbon"
 		if(ARCHAEO_REMAINS_XENO)
 			return "carbon"
 		if(ARCHAEO_MASK)
@@ -92,6 +90,12 @@
 			return "potassium"
 		if(ARCHAEO_LANCE)
 			return "iron"
+		if(ARCHAEO_REMAINS_ROBOT)
+			return "iron"
+		if(ARCHAEO_ROBOT)
+			return "iron"
+		if(ARCHAEO_TOY)
+			return "potassium"
 	return "plasma"
 
 //see /turf/unsimulated/mineral/New() in code/modules/mining/mine_turfs.dm
@@ -108,6 +112,7 @@
 			100;ARCHAEO_PLANT,\
 			25;ARCHAEO_SHELL,\
 			25;ARCHAEO_FOSSIL,\
+			5;ARCHAEO_REMAINS_XENO,\
 			5;ARCHAEO_BEARTRAP\
 			)
 		if(DIGSITE_ANIMAL)
@@ -115,7 +120,8 @@
 			100;ARCHAEO_FOSSIL,\
 			50;ARCHAEO_SHELL,\
 			50;ARCHAEO_PLANT,\
-			25;ARCHAEO_BEARTRAP\
+			25;ARCHAEO_BEARTRAP,\
+			5;ARCHAEO_REMAINS_XENO\
 			)
 		if(DIGSITE_HOUSE)
 			find_type = pick(\
@@ -127,12 +133,14 @@
 			100;ARCHAEO_PEN,\
 			100;ARCHAEO_LIGHTER,\
 			100;ARCHAEO_BOX,\
-			75; ARCHAEO_DICE,\
+			75;ARCHAEO_DICE,\
 			75;ARCHAEO_COIN,\
 			75;ARCHAEO_UNKNOWN,\
 			50;ARCHAEO_SHARD,\
 			50;ARCHAEO_RODS,\
-			25;ARCHAEO_METAL\
+			50;ARCHAEO_TOY,\
+			25;ARCHAEO_METAL,\
+			5;ARCHAEO_REMAINS_HUMANOID\
 			)
 		if(DIGSITE_TECHNICAL)
 			find_type = pick(\
@@ -147,6 +155,8 @@
 			50;ARCHAEO_HANDCUFFS,\
 			50;ARCHAEO_BEARTRAP,\
 			25;ARCHAEO_SPACESUIT,\
+			10;ARCHAEO_ROBOT,\
+			5;ARCHAEO_REMAINS_ROBOT\
 			)
 		if(DIGSITE_TEMPLE)
 			find_type = pick(\
@@ -180,7 +190,9 @@
 			50;ARCHAEO_CULTBLADE,\
 			25;ARCHAEO_HANDCUFFS,\
 			25;ARCHAEO_BEARTRAP,\
-			25;ARCHAEO_TOOL\
+			25;ARCHAEO_TOOL,\
+			10;ARCHAEO_ROBOT,\
+			5;ARCHAEO_REMAINS_ROBOT\
 			)
 	return find_type
 

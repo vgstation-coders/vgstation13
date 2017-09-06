@@ -109,7 +109,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		qdel(src)
 		return
 	else if(istype(I, /obj/item/weapon/nullrod))
-		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of the null rod!</span>")
+		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		stat_collection.cult.runes_nulled++
 		return
@@ -463,10 +463,42 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 
 		if(usr.get_active_hand() != src)
 			return
-		for (var/mob/V in viewers(src))
-			V.show_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>", 1, "<span class='warning'>You hear chanting.</span>", 2)
-		to_chat(user, "<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>")
-		user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(!H.held_items.len)
+				to_chat(user, "<span class='notice'>You have no hands to draw with!</span>")
+				return
+			if(H.species.anatomy_flags & NO_BLOOD) //No blood, going to have to improvise
+				if(H.bloody_hands) //Blood on hand to use, and hands on hand to use
+					user.visible_message("<span class='warning'>[user] starts to paint drawings on the floor with the blood on their hands, whilst chanting.</span>",\
+					"<span class='warning'>You use the blood smeared on your hands to begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
+					"<span class='warning'>You hear chanting.</span>")
+					H.bloody_hands = max(0, H.bloody_hands - 1)
+				else //We'll have to search around for blood
+					var/turf/T = get_turf(user)
+					var/found = 0
+					for (var/obj/effect/decal/cleanable/blood/B in T)
+						if(B.amount && B.counts_as_blood)
+							user.visible_message("<span class='warning'>[user] paws at the blood puddles splattered on \the [T], and begins to chant and paint symbols on the floor.</span>",\
+							"<span class='warning'>You use the blood splattered across \the [T], and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
+							"<span class='warning'>You hear chanting.</span>")
+							B.amount--
+							found = 1
+							break
+					if(!found)
+						to_chat(user, "<span class='notice'>You have no blood in, on, or around you that you can use to draw a rune!</span>")
+						return
+			else
+				user.visible_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>",\
+				"<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
+				"<span class='warning'>You hear chanting.</span>")
+				H.vessel.remove_reagent(BLOOD, rand(9)+2)
+				user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
+		else //Monkeys, diona, let's just assume it's normal apefoolery
+			user.visible_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>",\
+			"<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>",\
+			"<span class='warning'>You hear chanting.</span>")
+			user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
 		if(do_after(user, user.loc, 50))
 			if(usr.get_active_hand() != src)
 				return
@@ -487,13 +519,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 /obj/item/weapon/tome/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
 	if(istype(T, /obj/item/weapon/tome) && iscultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
-			if("cancel")
+			if("Cancel")
 				return
-//		var/list/nearby = viewers(1,src) //- Fuck this as well. No clue why this doesnt work. -K0000
-//			if (T.loc != user)
-//				return
-//		for(var/mob/M in nearby)
-//			if(M == user)
 		for(var/w in words)
 			words[w] = T.words[w]
 		to_chat(user, "You copy the translation notes from your tome.")

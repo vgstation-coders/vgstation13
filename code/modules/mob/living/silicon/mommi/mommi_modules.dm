@@ -4,11 +4,12 @@
 
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
+
 	languages = list(	LANGUAGE_GALACTIC_COMMON = 0, LANGUAGE_TRADEBAND = 0, LANGUAGE_VOX = 0,
 						LANGUAGE_ROOTSPEAK = 0, LANGUAGE_GREY = 0, LANGUAGE_CLATTER = 0,
 						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_CATBEAST = 0,
 						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
-						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0)
+						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0, LANGUAGE_GOLEM = 0, LANGUAGE_SLIME = 0)
 	add_languages(R)
 	src.emag = new /obj/item/borg/stun(src)
 	//src.modules += new /obj/item/weapon/rcd/borg(src)     // Too OP

@@ -2,12 +2,13 @@
 	gender = NEUTER
 	voice_name = "synthesized voice"
 	can_butcher = 0
+	mob_property_flags = MOB_ROBOTIC
+
+	var/flashed = 0
 	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
-
-	immune_to_ssd = 1
 
 	var/obj/item/device/radio/borg/radio = null //AIs dont use this but this is at the silicon level to advoid copypasta in say()
 	var/list/speech_synthesizer_langs = list()	//which languages can be vocalized by the speech synthesizer
@@ -29,6 +30,9 @@
 
 /mob/living/silicon/feels_pain()
 	return FALSE
+
+/mob/living/silicon/proc/can_diagnose()
+	return null
 
 /mob/living/silicon/proc/cancelAlarm()
 	return
@@ -137,7 +141,7 @@
 		if(2)
 			src.take_organ_damage(10)
 			Stun(rand(5,7))
-	flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
+	flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
 	to_chat(src, "<span class='danger'>*BZZZT*</span>")
 	to_chat(src, "<span class='warning'>Warning: Electromagnetic pulse detected.</span>")
 	..()
@@ -324,7 +328,7 @@
 	else
 		to_chat(H, "<span class='info'>Your self-preservation instinct prevents you from breaking your teeth on \the [src].</span>")
 
-/mob/living/silicon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash/noise)
+/mob/living/silicon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash/noise)
 	if(affect_silicon)
 		return ..()
 

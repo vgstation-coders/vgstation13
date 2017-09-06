@@ -89,6 +89,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("stool",              /obj/item/weapon/stool												   ),
 		new/datum/stack_recipe/chair("bar stool",          /obj/item/weapon/stool/bar                                              ),
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
@@ -174,6 +175,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("airlock sensor frame",      /obj/item/mounted/frame/airlock_sensor,       1, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("mass driver button frame",  /obj/item/mounted/frame/driver_button,        1, time = 50, one_per_turf = 0, on_floor = 1),
 		new/datum/stack_recipe("lantern hook",              /obj/item/mounted/frame/hanging_lantern_hook, 1, time = 25, one_per_turf = 0, on_floor = 0),
+		new/datum/stack_recipe("extinguisher cabinet", 		/obj/item/mounted/frame/extinguisher_cabinet, 2, time = 50, one_per_turf = 0, on_floor = 0),
 		)),
 	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
@@ -199,7 +201,7 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 							WOOD RECIPES
 ==================================================================== */
 var/list/datum/stack_recipe/wood_recipes = list (
-	new/datum/stack_recipe("clipboard",			/obj/item/weapon/clipboard,				1													),
+	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,				1													),
 	new/datum/stack_recipe("wooden sandals",	/obj/item/clothing/shoes/sandal																),
 	new/datum/stack_recipe("wood floor tile",	/obj/item/stack/tile/wood,				1,4,20												),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
@@ -226,21 +228,22 @@ var/list/datum/stack_recipe/wood_recipes = list (
 							CARDBOARD RECIPES
 ========================================================================= */
 var/list/datum/stack_recipe/cardboard_recipes = list (
-	new/datum/stack_recipe("box",				/obj/item/weapon/storage/box							),
-	new/datum/stack_recipe("large box",			/obj/item/weapon/storage/box/large,					4	),
-	new/datum/stack_recipe("light tubes box",	/obj/item/weapon/storage/box/lights/tubes				),
-	new/datum/stack_recipe("light bulbs box",	/obj/item/weapon/storage/box/lights/bulbs				),
-	new/datum/stack_recipe("mouse traps box",	/obj/item/weapon/storage/box/mousetraps					),
-	new/datum/stack_recipe("candle box",		/obj/item/weapon/storage/fancy/candle_box/empty			),
-	new/datum/stack_recipe("crayon box",		/obj/item/weapon/storage/fancy/crayons/empty			),
-	new/datum/stack_recipe("cardborg suit",		/obj/item/clothing/suit/cardborg,					3	),
-	new/datum/stack_recipe("cardborg helmet",	/obj/item/clothing/head/cardborg						),
-	new/datum/stack_recipe("pizza box",			/obj/item/pizzabox										),
-	new/datum/stack_recipe("folder",			/obj/item/weapon/folder									),
-	new/datum/stack_recipe("flare box",			/obj/item/weapon/storage/fancy/flares/empty				),
-	new/datum/stack_recipe("donut box",			/obj/item/weapon/storage/fancy/donut_box/empty			),
-	new/datum/stack_recipe("eggbox",			/obj/item/weapon/storage/fancy/egg_box/empty			),
-	new/datum/stack_recipe("paper bin",			/obj/item/weapon/paper_bin/empty						),
+	new/datum/stack_recipe("box",                           /obj/item/weapon/storage/box                            ),
+	new/datum/stack_recipe("large box",                     /obj/item/weapon/storage/box/large,                  4  ),
+	new/datum/stack_recipe("light tubes box",               /obj/item/weapon/storage/box/lights/tubes               ),
+	new/datum/stack_recipe("light bulbs box",               /obj/item/weapon/storage/box/lights/bulbs               ),
+	new/datum/stack_recipe("mouse traps box",               /obj/item/weapon/storage/box/mousetraps                 ),
+	new/datum/stack_recipe("candle box",                    /obj/item/weapon/storage/fancy/candle_box/empty         ),
+	new/datum/stack_recipe("crayon box",                    /obj/item/weapon/storage/fancy/crayons/empty            ),
+	new/datum/stack_recipe("cardborg suit",                 /obj/item/clothing/suit/cardborg,                    3  ),
+	new/datum/stack_recipe("cardborg helmet",               /obj/item/clothing/head/cardborg                        ),
+	new/datum/stack_recipe("pizza box",                     /obj/item/pizzabox                                      ),
+	new/datum/stack_recipe("folder",                        /obj/item/weapon/folder                                 ),
+	new/datum/stack_recipe("flare box",                     /obj/item/weapon/storage/fancy/flares/empty             ),
+	new/datum/stack_recipe("donut box",                     /obj/item/weapon/storage/fancy/donut_box/empty          ),
+	new/datum/stack_recipe("eggbox",                        /obj/item/weapon/storage/fancy/egg_box/empty            ),
+	new/datum/stack_recipe("paper bin",                     /obj/item/weapon/paper_bin/empty                        ),
+	new/datum/stack_recipe("empty recharge pack",           /obj/structure/vendomatpack/custom,                  4  ),
 	)
 
 /* ========================================================================

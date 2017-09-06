@@ -251,6 +251,17 @@
 			to_chat(user, "The shuttle can't move ([D.areaname] is used by another shuttle)")
 		return 0
 
+	if(D.require_admin_permission && !isAdminGhost(user))
+		if(broadcast)
+			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
+		else if(user)
+			to_chat(user, "Waiting for permission...")
+		var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
+		message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
+	else
+		actually_travel_to(D, broadcast, user)
+
+/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	//Handle the message
 	var/time = "as soon as possible"
 	switch(pre_flight_delay)
@@ -279,7 +290,14 @@
 				spawn()
 					P.shoot_exhaust()
 
+	current_port.start_warning_lights()
+	destination_port.start_warning_lights()
+
 	spawn(get_pre_flight_delay())
+		if(current_port)
+			current_port.stop_warning_lights()
+		if(destination_port)
+			destination_port.stop_warning_lights()
 		//If moving to another zlevel, check for items which can't leave the zlevel (nuke disk, primarily)
 		if(linked_port.z != D.z)
 			var/atom/A = forbid_movement()

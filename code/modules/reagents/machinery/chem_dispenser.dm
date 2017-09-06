@@ -275,6 +275,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(isrobot(user))
 		if(!can_use(user))
+			to_chat(user, "Your programming forbids interaction with this device.")
 			return
 
 	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))

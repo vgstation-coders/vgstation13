@@ -284,7 +284,7 @@
 /obj/machinery/recharge_station/proc/mob_enter(mob/living/silicon/robot/R)
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
-	if (R.stat == 2)
+	if (R.stat == 2 || !R.canmove)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO
 		return
 	if (!(istype(R, /mob/living/silicon/)))

@@ -174,7 +174,7 @@
 //////ATTACH//////
 /datum/surgery_step/head/attach
 	allowed_tools = list(
-		/obj/item/weapon/organ/head = 100,
+		/obj/item/organ/external/head = 100,
 		)
 
 	can_infect = 0
@@ -198,14 +198,14 @@
 	affected.amputated = 0
 	affected.destspawn = 0
 
-	var/obj/item/weapon/organ/O = tool
+	var/obj/item/organ/external/O = tool
 	if(istype(O))
 		affected.species = O.species
 
 	target.update_body()
 	target.updatehealth()
 	target.UpdateDamageIcon()
-	var/obj/item/weapon/organ/head/B = tool
+	var/obj/item/organ/external/head/B = tool
 	if (B.brainmob.mind)
 		B.brainmob.mind.transfer_to(target)
 	target.languages = B.brainmob.languages

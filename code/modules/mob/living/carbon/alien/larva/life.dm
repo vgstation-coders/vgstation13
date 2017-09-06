@@ -27,7 +27,7 @@
 			growth++
 
 		//First, resolve location and get a breath
-		if(air_master.current_cycle%4==2)
+		if(SSair.current_cycle%4==2)
 			//Only try to take a breath every 4 seconds, unless suffocating
 			spawn(0) breathe()
 		else //Still give containing object the chance to interact
@@ -137,7 +137,9 @@
 	if(internal)
 		if (!contents.Find(internal))
 			internal = null
-		if (!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS) )
+
+		var/obj/item/mask = get_item_by_slot(slot_wear_mask)
+		if (!mask || !(mask.clothing_flags & MASKINTERNALS) )
 			internal = null
 		if(internal)
 			if (internals)
@@ -347,13 +349,13 @@
 		clear_fullscreens()
 
 		if(src.eye_blind || src.blinded)
-			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
+			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
 		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/screen/fullscreen/blurry)
+			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		if (src.druggy)
-			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
 
 	if (stat != 2)
 		if (machine)

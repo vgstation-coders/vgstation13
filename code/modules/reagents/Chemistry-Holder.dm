@@ -537,30 +537,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			update_total()
 			my_atom.on_reagent_change()
 
-			// mix dem viruses
-			if(R.id == BLOOD && reagent == BLOOD)
-				if(R.data && data)
-
-					if(R.data["viruses"] || data["viruses"])
-
-						var/list/mix1 = R.data["viruses"]
-						var/list/mix2 = data["viruses"]
-
-						// Stop issues with the list changing during mixing.
-						var/list/to_mix = list()
-
-						for(var/datum/disease/advance/AD in mix1)
-							to_mix += AD
-						for(var/datum/disease/advance/AD in mix2)
-							to_mix += AD
-
-						var/datum/disease/advance/AD = Advance_Mix(to_mix)
-						if(AD)
-							var/list/preserve = list(AD)
-							for(var/D in R.data["viruses"])
-								if(!istype(D, /datum/disease/advance))
-									preserve += D
-							R.data["viruses"] = preserve
+			if(!isnull(data))
+				if (reagent == BLOOD)
+				//to do: add better ways for blood colors to interact with each other
+				//right now we don't support blood mixing or something similar at all.
+					if(R.data["virus2"] && data["virus2"])
+						R.data["virus2"] |= virus_copylist(data["virus2"])
+				else
+					R.data = data //just in case someone adds a new reagent with a data var
 
 			handle_reactions()
 			return 0
@@ -572,13 +556,17 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		reagent_list += R
 		R.holder = src
 		R.volume = amount
-		SetViruses(R, data) // Includes setting data
 
-		//debug
-//					to_chat(world, "Adding data")
-		//for(var/D in R.data)
-//						to_chat(world, "Container data: [D] = [R.data[D]]")
-		//debug
+		if(!isnull(data))
+			if (reagent == BLOOD)
+				R.data = data.Copy()
+				if(data["virus2"])
+					R.data["virus2"] |= virus_copylist(data["virus2"])
+				if(data["blood_colour"])
+					R.color = data["blood_colour"]
+			else
+				R.data = data
+
 		update_total()
 		my_atom.on_reagent_change()
 		handle_reactions()

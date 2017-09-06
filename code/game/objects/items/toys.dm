@@ -99,6 +99,12 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
+/obj/item/toy/syndicateballoon/ntballoon
+    name = "nanotrasen balloon"
+    desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
+    icon_state = "ntballoon"
+    item_state = "ntballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */
@@ -183,7 +189,7 @@
 		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
-	name = "ammo-caps"
+	name = "box of cap gun caps"
 	desc = "There are 7 caps left! Make sure to recyle the box in an autolathe when it gets empty."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "357-7"
@@ -197,7 +203,7 @@
 
 /obj/item/toy/ammo/gun/update_icon()
 	src.icon_state = text("357-[]", src.amount_left)
-	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] caps\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
+	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] cap\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
 	return
 
 /obj/item/toy/ammo/gun/examine(mob/user)
@@ -399,6 +405,8 @@
 	desc = "A bright-colored plastic clock, commemorating 20 years of Nanotrasen's Plasma division. Comes with permanent snooze button, just twist the valve!"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "valve"
+	item_state = "ttv"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	var/image/rendered
 
 /obj/item/toy/bomb/New()
@@ -754,6 +762,24 @@
 	name = "toy nuke-op"
 	desc = "Mildly explosive."
 	icon_state = "newcop"
+	var/emagged = 0
+
+/obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
+	if(isEmag(I) && !emagged)
+		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
+		emagged = 1
+
+		playsound(get_turf(src), 'sound/effects/kirakrik.ogg', 100, 1)
+
+		sleep(50)
+		say("Someone pass the boombox.")
+		sleep(5)
+		explosion(get_turf(src), -1,1,4)
+		qdel(src)
+	else
+		return
+
+
 
 /obj/item/toy/gasha/jani
 	name = "toy janitor"

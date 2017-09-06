@@ -57,3 +57,8 @@ players2.sqlite
 
 # Investigate logs that have an annoying tendency to generate during testing
 /data/investigate/*
+
+cfg
+
+.vscode
+/byond

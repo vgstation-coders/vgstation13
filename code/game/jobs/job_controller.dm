@@ -221,6 +221,9 @@ var/global/datum/controller/occupations/job_master
 		for(var/datum/job/ai/A in occupations)
 			if(ticker.triai)
 				A.spawn_positions = 3
+		for(var/datum/job/cyborg/C in occupations)
+			if(ticker.triai)
+				C.spawn_positions = 3
 
 	//Get the players who are ready
 	for(var/mob/new_player/player in player_list)
@@ -483,14 +486,12 @@ var/global/datum/controller/occupations/job_master
 			var/obj/item/clothing/glasses/G = H.glasses
 			G.prescription = 1
 //		H.update_icons()
-	//Gives wheelchair to those missing both of their feet
-	var/datum/organ/external/left_leg = H.get_organ(LIMB_LEFT_FOOT)
-	var/datum/organ/external/right_leg = H.get_organ(LIMB_RIGHT_FOOT)
 
-	if(!joined_late) //late joins get their location set elsewhere
-		if( (!left_leg || left_leg.status & ORGAN_DESTROYED) && (!right_leg || right_leg.status & ORGAN_DESTROYED) ) //If the character is missing both of his feet
-			var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
-			W.buckle_mob(H,H)
+	//If a character can't stand because of missing limbs, equip them with a wheelchair
+	if(!H.check_stand_ability())
+		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
+		W.buckle_mob(H,H)
+
 	return 1
 
 

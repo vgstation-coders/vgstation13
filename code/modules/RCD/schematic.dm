@@ -7,13 +7,13 @@
 	var/obj/item/device/rcd/master	//Okay all of the vars here are obvious...
 	var/icon
 	var/icon_state
-	var/obj/screen/schematics/ourobj
+	var/obj/abstract/screen/schematics/ourobj
 	var/datum/selection_schematic/selected
 
 /datum/rcd_schematic/New(var/obj/item/device/rcd/n_master)
 	master = n_master
 	. = ..()
-	ourobj = getFromPool(/obj/screen/schematics, null, src)
+	ourobj = getFromPool(/obj/abstract/screen/schematics, null, src)
 
 /datum/rcd_schematic/Destroy()
 	master = null

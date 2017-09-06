@@ -3,12 +3,14 @@
 		return
 
 	if(prob(80))
+		do_attack_animation(target, src)
 		playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 		target.Knockdown(rand(3,4))
 
 		visible_message("<span class='danger'>[src] has tackled down [target]!</span>")
 
 	else if (prob(80))
+		do_attack_animation(target, src)
 		playsound(loc, get_unarmed_hit_sound(), 25, 1, -1)
 		target.drop_item()
 		break_pulls(target)

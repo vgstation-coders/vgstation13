@@ -44,7 +44,7 @@
 	)
 	spawntypes = list(
 		/mob/living/simple_animal/hostile/creature=1,
-		// /obj/item/organ/heart=2,
+		// /obj/item/organ/internal/heart=2,
 		/obj/item/device/soulstone=1
 	)
 	fluffitems = list(

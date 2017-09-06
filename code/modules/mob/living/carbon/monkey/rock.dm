@@ -5,6 +5,7 @@
 	icon_state = "rock1"
 	meat_type = /obj/item/weapon/ore/diamond
 	species_type = /mob/living/carbon/monkey/rock
+	flag = NO_BREATHE
 
 	mob_bump_flag = MONKEY
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
@@ -15,3 +16,6 @@
 	canWearGlasses = 1
 	greaterform = "Golem"
 	languagetoadd = LANGUAGE_GOLEM
+
+/mob/living/carbon/monkey/rock/passive_emote()
+	emote(pick("scratch","jump","roll"))

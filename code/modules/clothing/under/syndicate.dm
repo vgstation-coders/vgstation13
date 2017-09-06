@@ -24,6 +24,10 @@
 	..()
 	attach_accessory(new/obj/item/clothing/accessory/holomap_chip/operative(src))
 
+/obj/item/clothing/under/syndicate/commando/New()
+	..()
+	attach_accessory(new/obj/item/clothing/accessory/holomap_chip/elite(src))
+
 /obj/item/clothing/under/syndicate/tacticool
 	name = "\improper Tacticool turtleneck"
 	desc = "Just looking at it makes you want to buy an SKS, go into the woods, and -operate-."
@@ -32,3 +36,11 @@
 	_color = "tactifool"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	siemens_coefficient = 1
+
+/obj/item/clothing/under/syndicate/executive
+	name = "syndicate executive suit"
+	desc = "A snappy black suit worn by syndicate executives. The shirt is either a tacky red or soaked in blood. Or possibly both."
+	icon_state = "syndiexec"
+	_color = "syndiexec"
+	species_fit = list(GREY_SHAPED)
+

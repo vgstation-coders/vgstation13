@@ -7,16 +7,8 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
-
-
-/obj/item/weapon/storage/belt/proc/can_use()
-	if(!ismob(loc))
-		return 0
-	var/mob/M = loc
-	if(src in M.get_equipped_items())
-		return 1
-	else
-		return 0
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 /obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
@@ -32,6 +24,9 @@
 	w_class = W_CLASS_LARGE
 	storage_slots = 14
 	max_combined_w_class = 200 //This actually doesn't matter as long as it is arbitrarily high, bar will be set by storage slots
+	fits_ignoring_w_class = list(
+		"/obj/item/device/lightreplacer"
+		)
 	can_only_hold = list(
 		"/obj/item/weapon/crowbar",
 		"/obj/item/weapon/screwdriver",
@@ -256,7 +251,7 @@
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/weapon/organ/head"
+ 		"/obj/item/organ/external/head"
  	)
 
 
@@ -364,3 +359,23 @@
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
+
+/obj/item/weapon/storage/belt/janitor
+	name = "janibelt"
+	desc = "A belt used to hold most janitorial supplies."
+	icon_state = "janibelt"
+	item_state = "janibelt"
+	storage_slots = 8
+	fits_max_w_class = 5
+	can_only_hold = list(
+		"/obj/item/weapon/grenade/chem_grenade",
+		"/obj/item/device/lightreplacer",
+		"/obj/item/device/flashlight",
+		"/obj/item/weapon/reagent_containers/spray",
+		"/obj/item/weapon/soap",
+		"/obj/item/key/janicart",
+		"/obj/item/clothing/gloves",
+		"/obj/item/weapon/caution",
+		"/obj/item/weapon/mop",
+		"/obj/item/weapon/storage/bag/trash")
+

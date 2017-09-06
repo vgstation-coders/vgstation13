@@ -1,12 +1,12 @@
 /datum/artifact_effect/menagerie
 	effecttype = "menagerie"
-	effect_type = 5
 	effect = EFFECT_PULSE
+	effect_type = 5
 	var/static/list/possible_types = list()
 
 /datum/artifact_effect/menagerie/New()
 	..()
-	possible_types = existing_typesof(/mob/living) - existing_typesof(/mob/living/silicon)
+	possible_types = existing_typesof(/mob/living) - (existing_typesof(/mob/living/silicon) + existing_typesof(/mob/living/simple_animal/hostile/humanoid))
 
 /datum/artifact_effect/menagerie/DoEffectPulse()
 	if(holder)

@@ -23,7 +23,7 @@
 "aw" = (/obj/item/weapon/tank/oxygen,/turf/unsimulated/floor/asteroid,/area/vault/spacepond)
 "ax" = (/obj/item/clothing/shoes/black,/turf/unsimulated/floor/asteroid,/area/vault/spacepond)
 "ay" = (/obj/effect/decal/cleanable/blood/gibs/limb,/turf/unsimulated/floor/asteroid,/area/vault/spacepond)
-"az" = (/obj/map/spawner/space/drinks,/turf/simulated/floor/carpet,/area/vault/spacepond)
+"az" = (/obj/abstract/map/spawner/space/drinks,/turf/simulated/floor/carpet,/area/vault/spacepond)
 "aA" = (/turf/simulated/floor/carpet,/area/vault/spacepond)
 "aB" = (/obj/structure/bed,/obj/effect/decal/cleanable/blood/tracks/footprints{tag = "icon-human2 (NORTH)"; icon_state = "human2"; dir = 1},/obj/item/weapon/bedsheet/brown,/turf/simulated/floor/wood,/area/vault/spacepond)
 "aC" = (/obj/structure/window/full/reinforced,/turf/simulated/floor/wood,/area/vault/spacepond)

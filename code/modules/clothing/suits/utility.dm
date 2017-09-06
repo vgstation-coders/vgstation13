@@ -20,7 +20,7 @@
 	permeability_coefficient = 0.50
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
-	slowdown = 1.0
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -35,13 +35,13 @@
 	..()
 	if(istype(W,/obj/item/clothing/suit/spaceblanket) && !stage)
 		stage = 1
-		to_chat(user,"<span class='notice'>you add \the [W] to \the [src]</span>")
+		to_chat(user,"<span class='notice'>You add \the [W] to \the [src]</span>")
 		qdel(W)
 	if(istype(W,/obj/item/stack/cable_coil) && stage == 1)
 		var/obj/item/stack/cable_coil/C = W
 		if(C.amount <= 4)
 			return
-		to_chat(user,"<span class='notice'>you tie up \the [src] with some of \the [C]</span>")
+		to_chat(user,"<span class='notice'>You tie up \the [src] with some of \the [C]</span>")
 		C.use(4)
 		var/obj/ghetto = new /obj/item/clothing/suit/space/ghettorig (src.loc)
 		qdel(src)
@@ -53,7 +53,7 @@
 	//icon_state = "thermal"
 	item_state = "ro_suit"
 	w_class = W_CLASS_LARGE//bulky item
-	slowdown = 1.5
+	slowdown = HARDSUIT_SLOWDOWN_MED
 
 /*
  * Bomb protection
@@ -77,7 +77,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
-	slowdown = 2
+	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
@@ -115,7 +115,7 @@
 	permeability_coefficient = 0.01
 	flags = FPRINT
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
-	slowdown = 6
+	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 80, bullet = 80, laser = 40,energy = 20, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list("exclude",VOX_SHAPED)

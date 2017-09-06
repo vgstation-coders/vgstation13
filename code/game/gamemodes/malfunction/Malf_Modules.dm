@@ -31,22 +31,22 @@ rcd light flash thingy on matter drain
 
 /datum/AI_Module/small/
 	uses = 5
-	
+
 /datum/AI_Module/proc/on_purchase(mob/living/silicon/ai/user) //What happens when a module is purchased, by default gives the AI the spell/adds charges to their existing spell if they have it
 	if(power_type)
 		for(var/spell/S in user.spell_list)
 			if (istype(S,power_type))
 				S.charge_counter += uses
 				return
-		user.add_spell(new power_type, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
-	
+		user.add_spell(new power_type, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+
 /datum/AI_Module/large/fireproof_core
 	module_name = "Core upgrade"
 	mod_pick_name = "coreup"
 	description = "An upgrade to improve core resistance, making it immune to fire and heat. This effect is permanent."
 	cost = 50
 	one_time = 1
-	
+
 /datum/AI_Module/large/fireproof_core/on_purchase(mob/living/silicon/ai/user)
 	user.ai_flags |= COREFIRERESIST
 	to_chat(user, "<span class='warning'>Core fireproofed.</span>")
@@ -63,7 +63,7 @@ rcd light flash thingy on matter drain
 		turret.health += 30
 		turret.shot_delay = 20
 	to_chat(user, "<span class='warning' Turrets upgraded.</span>")
-	
+
 /datum/AI_Module/large/disable_rcd
 	module_name = "RCD disable"
 	mod_pick_name = "rcd"
@@ -79,7 +79,7 @@ rcd light flash thingy on matter drain
 	charge_max = 1
 	hud_state = "rcd_disable"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
 		rcd.disabled = 1
@@ -94,7 +94,7 @@ rcd light flash thingy on matter drain
 	uses = 2
 	cost = 15
 	power_type = /spell/targeted/overload_machine
-	
+
 /spell/targeted/overload_machine
 	name = "Overload Machine"
 	panel = MALFUNCTION
@@ -104,14 +104,14 @@ rcd light flash thingy on matter drain
 	charge_max = 2
 	hud_state = "overload"
 	override_base = "grey"
-	
+
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
 	if (istype(target, /obj/machinery))
 		var/obj/machinery/M = target
 		return M.can_overload()
 	else
 		to_chat(holder, "That is not a machine.")
-	
+
 /spell/targeted/overload_machine/cast(var/list/targets, mob/user)
 	var/obj/machinery/M = targets[1]
 	M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
@@ -124,9 +124,9 @@ rcd light flash thingy on matter drain
 	mod_pick_name = "cyborgtransformer"
 	description = "Build a machine anywhere, using expensive nanomachines, that can convert a living human into a loyal cyborg slave when placed inside."
 	cost = 100
-	
+
 	power_type = /spell/aoe_turf/conjure/place_transformer
-	
+
 /spell/aoe_turf/conjure/place_transformer
 	name = "Place Robotic Factory"
 	panel = MALFUNCTION
@@ -137,7 +137,7 @@ rcd light flash thingy on matter drain
 	summon_type = list(/obj/machinery/transformer/conveyor)
 	hud_state = "autoborger"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
 	if(!istype(A))
@@ -145,7 +145,7 @@ rcd light flash thingy on matter drain
 	if(!isturf(A.loc)) // AI must be in it's core.
 		return 1
 	return 0
-	
+
 /spell/aoe_turf/conjure/place_transformer/is_valid_target(var/atom/target)
 	// Make sure there is enough room.
 	if(!isturf(target))
@@ -168,7 +168,7 @@ rcd light flash thingy on matter drain
 		alert(holder, "We cannot get camera vision of this location.")
 		return 0
 	return 1
-	
+
 /spell/aoe_turf/conjure/place_transformer/cast(var/list/targets,mob/user)
 	// All clear, place the transformer
 	..()
@@ -205,7 +205,7 @@ rcd light flash thingy on matter drain
 	charge_max = 3
 	hud_state = "blackout"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
 		if(prob(30*apc.overload))
@@ -228,7 +228,7 @@ rcd light flash thingy on matter drain
 	charge_max = 3
 	hud_state = "fakemessage"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
 	//Create a list which looks like this
@@ -271,7 +271,7 @@ rcd light flash thingy on matter drain
 	hud_state = "camera_reactivate"
 	override_base = "grey"
 	var/list/camera_images = list()
-	
+
 /spell/targeted/reactivate_camera/before_channel(mob/user)
 	for(var/obj/machinery/camera/C in cameranet.cameras)
 		if(C.status)
@@ -283,7 +283,7 @@ rcd light flash thingy on matter drain
 		I.loc = C
 		camera_images += I
 	user.client.images += camera_images
-	
+
 /spell/targeted/reactivate_camera/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!..())
 		return 0
@@ -292,7 +292,7 @@ rcd light flash thingy on matter drain
 			user.client.images -= camera_images
 			camera_images.len = 0
 	return 1
-	
+
 /spell/targeted/reactivate_camera/is_valid_target(var/atom/target)
 	if(!istype (target, /obj/machinery/camera))
 		to_chat(holder, "That's not a camera.")
@@ -303,14 +303,14 @@ rcd light flash thingy on matter drain
 			to_chat(holder, "This camera is either active, or not repairable.")
 			return 0
 	return 1
-	
+
 /spell/targeted/reactivate_camera/cast(var/list/targets,mob/user)
 	var/obj/machinery/camera/C = targets[1]
 	C.deactivate(user)
 	if(user.client)
 		user.client.images -= camera_images
 	camera_images.len = 0
-	
+
 /datum/AI_Module/small/upgrade_camera
 	module_name = "Upgrade Camera"
 	mod_pick_name = "upgradecam"
@@ -328,7 +328,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	hud_state = "camera_upgrade"
 	override_base = "grey"
-	
+
 /spell/targeted/upgrade_camera/is_valid_target(var/atom/target)
 	if(!istype(target, /obj/machinery/camera))
 		to_chat(holder, "That is not a camera.")
@@ -340,14 +340,14 @@ rcd light flash thingy on matter drain
 		to_chat(holder, "This camera is already upgraded!")
 		return 0
 	return 1
-	
+
 /spell/targeted/upgrade_camera/cast(var/list/targets,mob/user)
 	var/obj/machinery/camera/C = targets[1]
 	if(!C.isXRay())
 		C.upgradeXRay()
 		//Update what it can see.
 		cameranet.updateVisibility(C, 0)
-		
+
 	if(!C.isEmpProof())
 		C.upgradeEmpProof()
 
@@ -366,19 +366,19 @@ rcd light flash thingy on matter drain
 	charge_max = 10
 	hud_state = "choose_module"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/module_picker/New()
 	..()
 	MP = new /datum/module_picker
-	
+
 /spell/aoe_turf/module_picker/Destroy()
 	qdel(MP)
 	MP = null
 	..()
-	
+
 /spell/aoe_turf/module_picker/cast(var/list/targets, mob/user)
 	MP.use(user)
-	
+
 /datum/module_picker
 	var/temp = null
 	var/processing_time = 100
@@ -411,7 +411,7 @@ rcd light flash thingy on matter drain
 	if(!isAI(usr))
 		return
 	var/mob/living/silicon/ai/A = usr
-	
+
 	if(href_list["buy"])
 		var/datum/AI_Module/AM = locate(href_list["module"])
 		if(AM.cost > src.processing_time)

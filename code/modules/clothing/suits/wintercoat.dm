@@ -35,7 +35,7 @@
 		coat = wc
 	else if(!coat)
 		qdel(src)
-		
+
 /obj/item/clothing/suit/wintercoat/captain
 	name = "captain's winter coat"
 	icon_state = "coatcaptain"
@@ -57,7 +57,7 @@
 	icon_state = "coatwarden"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
 	nohood = 1
-	
+
 /obj/item/clothing/suit/wintercoat/medical
 	name = "medical winter coat"
 	icon_state = "coatmedical"
@@ -88,7 +88,7 @@
 /obj/item/clothing/suit/wintercoat/prisoner
 	name = "prisoner winter coat"
 	icon_state = "coatprisoner"
-	
+
 /obj/item/clothing/suit/wintercoat/hop
 	name = "Head of Personnel's winter coat"
 	icon_state = "coathop"
@@ -99,7 +99,7 @@
 	name = "mining winter coat"
 	icon_state = "coatminer"
 	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
-	
+
 /obj/item/clothing/suit/wintercoat/clown
 	name = "Elfen winter coat"
 	icon_state = "coatclown"
@@ -111,7 +111,7 @@
 /obj/item/clothing/suit/wintercoat/cmo
 	name = "Chief Medical Officer's winter coat"
 	icon_state = "coatcmo"
-	
+
 #define HAS_HOOD 1
 #define NO_HOOD 0
 /obj/item/clothing/suit/wintercoat/proc/togglehood()
@@ -140,7 +140,7 @@
 
 /obj/item/clothing/suit/wintercoat/attack_self()
 	togglehood()
-	
+
 /obj/item/clothing/suit/wintercoat/proc/hoodup(var/mob/living/carbon/human/user)
 	user.equip_to_slot(hood, slot_head)
 	icon_state = "[initial(icon_state)]_t"
@@ -163,4 +163,3 @@
 		coat.hooddown(user,unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(coat)
-	

@@ -6,10 +6,10 @@
 	density = 0
 	anchored = 1
 	var/obj/item/weapon/spear/spear = null
-	var/obj/item/weapon/organ/head/head = null
+	var/obj/item/organ/external/head/head = null
 	var/image/display_head = null
 
-/obj/structure/headpole/New(atom/A, var/obj/item/weapon/organ/head/H, var/obj/item/weapon/spear/S)
+/obj/structure/headpole/New(atom/A, var/obj/item/organ/external/head/H, var/obj/item/weapon/spear/S)
 	..(A)
 	if(istype(H))
 		head = H
@@ -63,7 +63,7 @@
 	..()
 
 /obj/structure/headpole/with_head/New(atom/A)
-	var/obj/item/weapon/organ/head/H = new (src)
+	var/obj/item/organ/external/head/H = new (src)
 	H.name = "severed head"
 	spear = new (src)
 	..(A, H)

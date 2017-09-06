@@ -97,6 +97,9 @@
 	desc = "An untrustworthy bar of soap. Smells of fear."
 	icon_state = "soapsyndie"
 
+/obj/item/weapon/soap/holo
+	name = "UV sterilizer"
+	desc = "This shouldn't exist."
 
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
@@ -266,7 +269,7 @@
 	if(!thrown_from || !istype(thrown_from, /mob/living)) //in essence, if we don't know whether a person threw it
 		qdel(src) //destroy it, to stop infinite bolases
 
-/obj/item/weapon/legcuffs/bolas/Bump()
+/obj/item/weapon/legcuffs/bolas/to_bump()
 	..()
 	throw_failed() //allows a mech bolas to be destroyed
 
@@ -568,48 +571,13 @@
 					qdel(src)
 
 /obj/item/weapon/caution/proximity_sign/proc/dead_legs(mob/living/carbon/human/H as mob)
-	var/datum/organ/external/l = H.organs_by_name[LIMB_LEFT_LEG]
-	var/datum/organ/external/r = H.organs_by_name[LIMB_RIGHT_LEG]
-	if(l && !(l.status & ORGAN_DESTROYED))
-		l.status |= ORGAN_DESTROYED
-	if(r && !(r.status & ORGAN_DESTROYED))
-		r.status |= ORGAN_DESTROYED
+	for(var/datum/organ/external/OE in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
+		OE.droplimb()
 
 /obj/item/weapon/caution/cone
 	desc = "This cone is trying to warn you of something!"
 	name = "warning cone"
 	icon_state = "cone"
-
-/obj/item/weapon/rack_parts
-	name = "rack parts"
-	desc = "Parts of a rack."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "rack_parts"
-	flags = FPRINT
-	siemens_coefficient = 1
-	starting_materials = list(MAT_IRON = 3750)
-	w_type = RECYK_METAL
-	melt_temperature=MELTPOINT_STEEL
-
-/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/weapon/weldingtool))
-		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
-			to_chat(user, "You begin slicing through \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(do_after(user, src, 60))
-				to_chat(user, "You cut \the [src] into a gun stock.")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
-					user.put_in_hands(I)
-					qdel(src)
-				else
-					new /obj/item/weapon/metal_gun_stock(get_turf(src.loc))
-					qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 
 /obj/item/weapon/SWF_uplink
 	name = "station-bounced radio"
@@ -712,58 +680,6 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
-
-/obj/item/weapon/table_parts
-	name = "table parts"
-	desc = "Parts of a table. Poor table."
-	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "table_parts"
-	starting_materials = list(MAT_IRON = 3750)
-	w_type = RECYK_METAL
-	melt_temperature=MELTPOINT_STEEL
-	flags = FPRINT
-	siemens_coefficient = 1
-	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
-
-/obj/item/weapon/table_parts/cultify()
-	new /obj/item/weapon/table_parts/wood(loc)
-	..()
-
-/obj/item/weapon/table_parts/reinforced
-	name = "reinforced table parts"
-	desc = "Hard table parts. Well...harder..."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "reinf_tableparts"
-	starting_materials = list(MAT_IRON = 7500)
-	w_type = RECYK_METAL
-	melt_temperature=MELTPOINT_STEEL
-	flags = FPRINT
-	siemens_coefficient = 1
-
-/obj/item/weapon/table_parts/glass
-	name = "glass table parts"
-	desc = "Glass table parts for the spaceman with style."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "glass_tableparts"
-	starting_materials = list(MAT_GLASS = 3750)
-	w_type = RECYK_GLASS
-	melt_temperature=MELTPOINT_GLASS
-	flags = FPRINT
-	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
-
-/obj/item/weapon/table_parts/wood
-	name = "wooden table parts"
-	desc = "Keep away from fire."
-	icon_state = "wood_tableparts"
-	flags = 0
-
-/obj/item/weapon/table_parts/wood/poker
-	name = "gambling table parts"
-	icon_state = "gambling_tableparts"
-
-/obj/item/weapon/table_parts/wood/cultify()
-	return
 
 /obj/item/weapon/wire
 	desc = "This is just a simple piece of regular insulated wire."

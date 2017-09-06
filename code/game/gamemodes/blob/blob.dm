@@ -43,7 +43,8 @@ var/list/blob_overminds = list()
 		message_admins("Failed to set-up a round of blob. Couldn't find any volunteers to be blob.")
 		return 0
 
-	cores_to_spawn = max(round(num_players()/players_per_core, 1), 1)
+    // Playtesting revealed that more than one blob at roundstart is too much to handle, even with summerpop.
+	cores_to_spawn = 1 //max(round(num_players()/players_per_core, 1), 1)
 
 	blobwincount = initial(blobwincount) * cores_to_spawn
 

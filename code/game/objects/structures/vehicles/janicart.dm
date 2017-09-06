@@ -16,6 +16,7 @@
 	keytype = /obj/item/key/janicart
 	flags = OPENCONTAINER
 	noghostspin = 0
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
 
@@ -28,7 +29,7 @@
 /obj/structure/bed/chair/vehicle/janicart/examine(mob/user)
 	..()
 	if(in_range(src, user) && reagents.has_reagent(LUBE))
-		to_chat(user, "<span class='warning'> Something is very off about this water.</span>")
+		to_chat(user, "<span class='warning'>Something is very off about this water.</span>")
 	switch(health)
 		if(75 to 99)
 			to_chat(user, "<span class='info'>It appears slightly dented.</span>")
@@ -43,7 +44,7 @@
 
 /obj/structure/bed/chair/vehicle/janicart/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded && !destroyed)
+	if(istype(W, /obj/item/mecha_parts/janicart_upgrade) && !upgraded)
 		if(user.drop_item(W))
 			qdel(W)
 			to_chat(user, "<span class='notice'>You upgrade \the [nick].</span>")
@@ -76,6 +77,16 @@
 	if(mybag && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
 		mybag.forceMove(get_turf(usr))
 		usr.put_in_hands(mybag)
+		mybag = null
+
+/obj/structure/bed/chair/vehicle/janicart/setup_wreckage(var/obj/effect/decal/mecha_wreckage/wreck)
+	// Add janicart upgrade to wreck, if it passes the roll.
+	if(upgraded)
+		wreck.add_salvagable(new /obj/item/mecha_parts/janicart_upgrade(src)) // 30% chance
+
+	// Same with the bag
+	if(mybag)
+		wreck.add_salvagable(mybag, 75)
 		mybag = null
 
 /obj/structure/bed/chair/vehicle/janicart/attack_hand(mob/user)
@@ -123,3 +134,9 @@
 						cleaned_human.clean_blood()
 						to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
 	return
+
+/obj/effect/decal/mecha_wreckage/vehicle/janicart
+	icon = 'icons/obj/vehicles.dmi'
+	icon_state = "pussywagon_destroyed"
+	name = "janicart wreckage"
+	desc = "Guess it's back to the mop."

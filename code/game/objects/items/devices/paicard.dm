@@ -78,7 +78,7 @@
 
 /obj/item/device/paicard/Topic(href, href_list)
 
-	if(!usr || usr.stat)
+	if(!usr || usr.stat || !in_range(src, usr))
 		return
 
 	if(href_list["setdna"])
@@ -186,3 +186,7 @@
 	for(var/mob/M in src)
 		M.emp_act(severity)
 	..()
+
+/obj/item/device/paicard/dropped(mob/user)
+	if(pai && pai.holomap_device)
+		pai.holomap_device.stopWatching()

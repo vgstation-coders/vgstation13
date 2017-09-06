@@ -70,9 +70,10 @@ obj/item/device/mmi/Destroy()
 			return
 		M.invisibility = 0
 		//M.custom_name = created_name
+
+		brainmob.mind.transfer_to(M)
 		M.Namepick()
 		M.updatename()
-		brainmob.mind.transfer_to(M)
 
 		if(M.mind && M.mind.special_role)
 			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
@@ -106,13 +107,13 @@ obj/item/device/mmi/Destroy()
 /obj/item/device/mmi/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(try_handling_mommi_construction(O,user))
 		return
-	if(istype(O,/obj/item/organ/brain) && !brainmob) //Time to stick a brain in it --NEO
+	if(istype(O,/obj/item/organ/internal/brain) && !brainmob) //Time to stick a brain in it --NEO
 		// MaMIs inherit from brain, but they shouldn't be insertable into a MMI
-		if (istype(O, /obj/item/organ/brain/mami))
+		if (istype(O, /obj/item/organ/internal/brain/mami))
 			to_chat(user, "<span class='warning'>You are only able to fit organic brains on a MMI. [src] won't work.</span>")
 			return TRUE
 
-		var/obj/item/organ/brain/BO = O
+		var/obj/item/organ/internal/brain/BO = O
 		if(!BO.brainmob)
 			to_chat(user, "<span class='warning'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>")
 			return TRUE
@@ -174,7 +175,7 @@ obj/item/device/mmi/Destroy()
 		to_chat(user, "<span class='warning'>You upend \the [src], but the brain is clamped into place.")
 	else
 		to_chat(user, "<span class='notice'>You upend \the [src], spilling the brain onto the floor.</span>")
-		var/obj/item/organ/brain/brain = new(user.loc)
+		var/obj/item/organ/internal/brain/brain = new(user.loc)
 		brain.transfer_identity(brainmob)
 		qdel(brainmob)
 		brainmob = null//Set mmi brainmob var to null

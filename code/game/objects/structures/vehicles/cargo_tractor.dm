@@ -8,6 +8,7 @@
 	icon = 'goon/icons/vehicles.dmi'
 	icon_state = "tractor"
 	keytype = /obj/item/key/tractor
+	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/tractor
 
 /obj/structure/bed/chair/vehicle/tractor/update_mob()
 	if(!occupant)
@@ -34,3 +35,10 @@
 	else
 		plane = ABOVE_HUMAN_PLANE
 		layer = VEHICLE_LAYER
+
+/obj/effect/decal/mecha_wreckage/vehicle/tractor
+	// TODO: SPRITE PLS
+	//icon = 'goon/icons/vehicles.dmi'
+	//icon_state="tractor_destroyed"
+	name = "tractor wreckage"
+	desc = "The quartermaster sobs quietly on a pile of guns."

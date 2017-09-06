@@ -12,40 +12,40 @@
 	var/list/datum/action/actions = list()
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 
-	var/obj/screen/hands = null
-	var/obj/screen/pullin = null
-	var/obj/screen/kick_icon = null
-	var/obj/screen/bite_icon = null
-	var/obj/screen/visible = null
-	var/obj/screen/purged = null
-	var/obj/screen/internals = null
-	var/obj/screen/oxygen = null
-	var/obj/screen/i_select = null
-	var/obj/screen/m_select = null
-	var/obj/screen/toxin = null
-	var/obj/screen/fire = null
-	var/obj/screen/bodytemp = null
-	var/obj/screen/healths = null
-	var/obj/screen/throw_icon = null
-	var/obj/screen/nutrition_icon = null
-	var/obj/screen/pressure = null
-	var/obj/screen/damageoverlay = null
-	var/obj/screen/pain = null
-	var/obj/screen/gun/item/item_use_icon = null
-	var/obj/screen/gun/move/gun_move_icon = null
-	var/obj/screen/gun/run/gun_run_icon = null
-	var/obj/screen/gun/mode/gun_setting_icon = null
+	var/obj/abstract/screen/hands = null
+	var/obj/abstract/screen/pullin = null
+	var/obj/abstract/screen/kick_icon = null
+	var/obj/abstract/screen/bite_icon = null
+	var/obj/abstract/screen/visible = null
+	var/obj/abstract/screen/purged = null
+	var/obj/abstract/screen/internals = null
+	var/obj/abstract/screen/oxygen = null
+	var/obj/abstract/screen/i_select = null
+	var/obj/abstract/screen/m_select = null
+	var/obj/abstract/screen/toxin = null
+	var/obj/abstract/screen/fire = null
+	var/obj/abstract/screen/bodytemp = null
+	var/obj/abstract/screen/healths = null
+	var/obj/abstract/screen/throw_icon = null
+	var/obj/abstract/screen/nutrition_icon = null
+	var/obj/abstract/screen/pressure = null
+	var/obj/abstract/screen/damageoverlay = null
+	var/obj/abstract/screen/pain = null
+	var/obj/abstract/screen/gun/item/item_use_icon = null
+	var/obj/abstract/screen/gun/move/gun_move_icon = null
+	var/obj/abstract/screen/gun/run/gun_run_icon = null
+	var/obj/abstract/screen/gun/mode/gun_setting_icon = null
 
 	//monkey inventory icons
-	var/obj/screen/m_suitclothes = null
-	var/obj/screen/m_suitclothesbg = null
-	var/obj/screen/m_hat = null
-	var/obj/screen/m_hatbg = null
-	var/obj/screen/m_glasses = null
-	var/obj/screen/m_glassesbg = null
+	var/obj/abstract/screen/m_suitclothes = null
+	var/obj/abstract/screen/m_suitclothesbg = null
+	var/obj/abstract/screen/m_hat = null
+	var/obj/abstract/screen/m_hatbg = null
+	var/obj/abstract/screen/m_glasses = null
+	var/obj/abstract/screen/m_glassesbg = null
 
 	//spells hud icons - this interacts with add_spell and remove_spell
-	var/list/obj/screen/movable/spell_master/spell_masters = null
+	var/list/obj/abstract/screen/movable/spell_master/spell_masters = null
 
 	//thou shall always be able to see the Geometer of Blood
 	var/image/narsimage = null
@@ -60,7 +60,7 @@
 	I'll make some notes on where certain variable defines should probably go.
 	Changing this around would probably require a good look-over the pre-existing code.
 	*/
-	var/obj/screen/zone_sel/zone_sel = null
+	var/obj/abstract/screen/zone_sel/zone_sel = null
 
 	var/use_me = 1 //Allows all mobs to use the me verb by default, will have to manually specify they cannot
 	var/damageoverlaytemp = 0
@@ -85,6 +85,7 @@
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
 	var/real_name = null
+	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -100,7 +101,6 @@
 	var/lying_prev = 0
 	var/canmove = 1
 	var/candrop = 1
-	var/lastpuke = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -144,13 +144,19 @@
 	var/m_intent = "run"//Living
 	var/lastKnownIP = null
 
+	//Tank used as internals
+	var/obj/item/weapon/tank/internal = null
+
+	//Active storage item (i.e. the backpack or cardboard box that you're looking inside of)
+	var/obj/item/weapon/storage/s_active = null
+
+	//Inventory
+
 	var/active_hand = 1 //Current active hand. Contains an index of the held_items list
 	var/list/obj/item/held_items = list(null, null) //Contains items held in hands
 
-	var/obj/item/weapon/back = null//Human/Monkey
-	var/obj/item/weapon/tank/internal = null//Human/Monkey
-	var/obj/item/weapon/storage/s_active = null//Carbon
-	var/obj/item/clothing/mask/wear_mask = null//Carbon
+	var/obj/item/weapon/back = null
+	var/obj/item/clothing/mask/wear_mask = null
 
 	var/seer = 0 //for cult//Carbon, probably Human
 
@@ -164,12 +170,11 @@
 
 	var/in_throw_mode = 0
 
-	var/coughedtime = null
-
 	var/job = null//Living
 
 	var/datum/dna/dna = null//Carbon
 	var/radiation = 0.0//Carbon
+	var/rad_tick = 0.0//Carbon
 
 	var/list/mutations = list() //Carbon -- Doohl
 	//see: setup.dm for list of mutations
@@ -216,7 +221,7 @@
 
 //List of active diseases
 
-	var/viruses = list() // replaces var/datum/disease/virus
+	var/list/datum/disease/viruses = list() // replaces var/datum/disease/virus
 	var/list/resistances = list()
 
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
@@ -232,8 +237,6 @@
 
 	var/force_compose = 0 //If this is nonzero, the mob will always compose it's own hear message instead of using the one given in the arguments.
 
-
-
 	var/obj/control_object = null	//Used by admins to possess objects. All mobs should have this var
 
 	var/obj/orient_object = null	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
@@ -246,8 +249,6 @@
 
 	var/has_limbs = 1 //Whether this mob have any limbs he can move with
 	var/can_stand = 1 //Whether this mob have ability to stand
-
-	var/immune_to_ssd = 0
 
 	var/turf/listed_turf = null  //the current turf being examined in the stat panel
 
@@ -275,6 +276,7 @@
 	var/event/on_uattack
 	var/event/on_logout
 	var/event/on_damaged
+	var/event/on_irradiate
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
@@ -284,7 +286,7 @@
 	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
 	var/see_invisible_override = 0
 
-	var/mob/transmogged_from	//holds a reference to the mob that this mob used to be before being transmogrified
+	var/obj/transmog_body_container/transmogged_from	//holds a reference to the container holding the mob that this mob used to be before being transmogrified
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 /mob/resetVariables()

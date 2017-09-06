@@ -23,25 +23,40 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	return 1
 
 /datum/shuttle/vox/initialize()
-	.=..()
-	dock_home = add_dock(/obj/docking_port/destination/vox/station)
-	add_dock(/obj/docking_port/destination/vox/northeast_solars)
-	add_dock(/obj/docking_port/destination/vox/southeast_solars)
-	add_dock(/obj/docking_port/destination/vox/southwest_solars)
-	add_dock(/obj/docking_port/destination/vox/mining)
+	.=..() // adjust all the docking ports
+	dock_home = add_dock(/obj/docking_port/destination/vox/station) // round ender
+	add_dock(/obj/docking_port/destination/vox/north_station) // all z1 until tradepost
+	add_dock(/obj/docking_port/destination/vox/east_station)
+	add_dock(/obj/docking_port/destination/vox/south_station)
+	add_dock(/obj/docking_port/destination/vox/west_station)
+	add_dock(/obj/docking_port/destination/vox/northeast_station)
+	add_dock(/obj/docking_port/destination/vox/northwest_station)
+	add_dock(/obj/docking_port/destination/vox/southeast_station)
+	add_dock(/obj/docking_port/destination/vox/southwest_station)
+	add_dock(/obj/docking_port/destination/vox/tradepost) // below this all z5
+	add_dock(/obj/docking_port/destination/vox/mining_north)
+	add_dock(/obj/docking_port/destination/vox/mining_east)
+	add_dock(/obj/docking_port/destination/vox/mining_south)
+	add_dock(/obj/docking_port/destination/vox/mining_west)
+	add_dock(/obj/docking_port/destination/vox/goonsat) //z3 comms sat
+	add_dock(/obj/docking_port/destination/vox/deepspace) //z6 middle of nowhere so vox can hide
 
 	set_transit_dock(/obj/docking_port/destination/vox/transit)
 
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	if(D == dock_home)
-		if(ticker && istype(ticker.mode, /datum/game_mode/heist))
-			switch(alert(usr,"Returning to the deep space will end your raid and report your success or failure. Are you sure?","Vox Skipjack","Yes","No"))
-				if("Yes")
-					var/location = get_turf(user)
-					message_admins("[key_name_admin(user)] attempts to end the raid - [formatJumpTo(location)]")
-					log_admin("[key_name(user)] attempts to end the raid - [formatLocation(location)]")
-				if("No")
-					return
+		if(world.time < 6000)
+			to_chat(user, "<span class='notice'>Error: Bluespace engines are still cooling. We will be ready to return home in: [round(((6000 - world.time) / 10) / 60)] minutes.</span>")
+			return
+		else
+			if(ticker && istype(ticker.mode, /datum/game_mode/heist))
+				switch(alert(usr,"Returning to the deep space will end your raid and report your success or failure. Are you sure?","Vox Skipjack","Yes","No"))
+					if("Yes")
+						var/location = get_turf(user)
+						message_admins("[key_name_admin(user)] attempts to end the raid - [formatJumpTo(location)]")
+						log_admin("[key_name(user)] attempts to end the raid - [formatLocation(location)]")
+					if("No")
+						return
 	.=..()
 
 /datum/shuttle/vox/after_flight()
@@ -85,23 +100,53 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 //code/game/objects/structures/docking_port.dm
 
-/obj/docking_port/destination/vox/station
-	areaname = "deep space"
+/obj/docking_port/destination/vox/station // ends the round
+	areaname = "home base"
 
-/obj/docking_port/destination/vox/northeast_solars
+/obj/docking_port/destination/vox/northeast_station
 	areaname = "north east solars"
 
-/obj/docking_port/destination/vox/northwest_solars
+/obj/docking_port/destination/vox/northwest_station
 	areaname = "north west solars"
 
-/obj/docking_port/destination/vox/southeast_solars
+/obj/docking_port/destination/vox/southeast_station
 	areaname = "south east solars"
 
-/obj/docking_port/destination/vox/southwest_solars
+/obj/docking_port/destination/vox/southwest_station
 	areaname = "south west solars"
 
-/obj/docking_port/destination/vox/mining
+/obj/docking_port/destination/vox/north_station
+	areaname = "north of station"
+
+/obj/docking_port/destination/vox/east_station
+	areaname = "east of station"
+
+/obj/docking_port/destination/vox/south_station
+	areaname = "south of station"
+
+/obj/docking_port/destination/vox/west_station
+	areaname = "west of station"
+
+/obj/docking_port/destination/vox/tradepost
 	areaname = "vox trading outpost"
+
+/obj/docking_port/destination/vox/mining_north
+	areaname = "north of asteroid"
+
+/obj/docking_port/destination/vox/mining_east
+	areaname = "east of asteroid"
+
+/obj/docking_port/destination/vox/mining_south
+	areaname = "south of asteroid"
+
+/obj/docking_port/destination/vox/mining_west
+	areaname = "west of asteroid"
+
+/obj/docking_port/destination/vox/goonsat
+	areaname = "abandoned satellite"
+
+/obj/docking_port/destination/vox/deepspace // does NOT end the round
+	areaname = "deep space"
 
 /obj/docking_port/destination/vox/transit
 	areaname = "hyperspace (vox skipjack)"

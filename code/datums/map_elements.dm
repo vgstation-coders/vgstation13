@@ -8,6 +8,7 @@ var/list/datum/map_element/map_elements = list()
 	var/type_abbreviation //Very short string that determines the map element's type (whether it's an away mission, a small vault, or something else)
 
 	var/file_path = "maps/randomvaults/new.dmm"
+	var/load_at_once = FALSE //If true, lag reduction methods will not be applied when this is loaded, freezing atmos and mob simulations until the map element is loaded.
 
 	var/turf/location //Lower left turf of the map element
 
@@ -51,3 +52,46 @@ var/list/datum/map_element/map_elements = list()
 		return maploader.get_map_dimensions(file)
 
 	return list(width, height)
+
+/datum/map_element/proc/assign_dimensions()
+	var/list/dimensions = get_dimensions()
+
+	width = dimensions[1]
+	height = dimensions[2]
+
+//Return a list with strings associated with points
+//For example: list("Discovered a vault!" = 500) will add 500 points to the crew's score for discovering a vault
+/datum/map_element/proc/process_scoreboard()
+	return
+
+//Proc for statskeeping and tracking objects. Cleans references afterwards - very safe to use. Use it to assign objects as values to variables
+//Example use:
+//  boss_enemy = track_atom(new /mob/living/simple_animal/corgi)
+
+/datum/map_element/proc/track_atom(atom/A)
+	if(!istype(A))
+		return
+
+	A.on_destroyed.Add(src, "clear_references")
+
+	return A
+
+
+/datum/map_element/proc/clear_references(list/params)
+	var/atom/A = params["atom"]
+	if(!A)
+		return
+
+	//Remove instances by brute force (there aren't that many vars in map element datums)
+	for(var/key in vars)
+		if(key == "vars")
+			continue
+
+		if(vars[key] == A)
+			vars[key] = null
+		else if(istype(vars[key], /list))
+			var/list/L = vars[key]
+
+			//Remove all instances from the list
+			while(L.Remove(A))
+				continue

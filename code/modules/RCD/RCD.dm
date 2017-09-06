@@ -34,7 +34,7 @@
 	var/datum/html_interface/rcd/interface
 	var/datum/effect/effect/system/spark_spread/spark_system
 
-	var/obj/screen/close/closer
+	var/obj/abstract/screen/close/closer
 
 /obj/item/device/rcd/New()
 	. = ..()

@@ -1,3 +1,9 @@
+// Note about encodings:
+//  Encodings are passed by number as it's simplest to do it like this (citation needed)
+//  This may cause some confusion with what codes correspond how.
+//
+// 874 and 1250-1258 are Windows CodePage encodings. The number corresponds to the CodePage.
+// 2312 is gb2312 (Chinese)
 /proc/_determine_encoding(var/mob_or_client)
 	. = "1252"
 	if (isclient(mob_or_client))
@@ -21,7 +27,8 @@
 /proc/utf8_len(var/message)
 	return text2num(LIBVG("utf8_len", message))
 
-#define utf8_byte_len(a) (length(a))
+/proc/utf8_byte_len(var/a)
+	return length(a)
 
 /proc/utf8_find(var/haystack, var/needle, var/start=1, var/end=0)
 	return text2num(LIBVG("utf8_find", haystack, needle, "[start]", "[end]"))
@@ -41,7 +48,7 @@
 /proc/utf8_lowercase(var/text)
 	return LIBVG("utf8_lowercase", text)
 
-// Stricts non-ASCII characters.
+// Removes non-7-bit ASCII characters.
 // Useful for things which BYOND touches itself like object names.
 /proc/strict_ascii(var/text)
 	return LIBVG("strict_ascii", text)
@@ -51,3 +58,12 @@
 
 /proc/utf8_reverse(var/text)
 	return LIBVG("utf8_reverse", text)
+
+/proc/utf8_leftpad(var/text, var/count, var/with=" ")
+	return LIBVG("utf8_leftpad", text, "[count]", with)
+
+/proc/utf8_is_whitespace(var/text)
+	return text2num(LIBVG("utf8_is_whitespace", text))
+
+/proc/utf8_trim(var/text)
+	return LIBVG("utf8_trim", text)

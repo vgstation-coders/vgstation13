@@ -208,13 +208,13 @@
 
 /datum/action/item_action/tip_fedora
 	name = "Tip Fedora"
-	
+
 /datum/action/item_action/tip_fedora/Trigger()
 	var/obj/item/clothing/head/fedora/T = target
 	if(!istype(T))
 		return
 	T.tip_fedora()
-		
+
 /obj/item/clothing/head/fedora/white
 	name = "white fedora"
 	icon_state = "fedora_white"
@@ -428,3 +428,10 @@
 	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
 	icon_state = "snakehead"
 	item_state = "snakehead"
+
+/obj/item/clothing/head/clockwork_hood
+	name = "clockwork hood"
+	icon_state = "clockwork"
+	item_state = "clockwork"
+	desc = "A hood worn by the followers of Ratvar."
+	flags = FPRINT

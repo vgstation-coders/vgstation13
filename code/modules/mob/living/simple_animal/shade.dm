@@ -21,7 +21,7 @@
 	min_oxy = 0
 	max_co2 = 0
 	max_tox = 0
-	speed = -1
+	speed = 1
 	stop_automated_movement = 1
 	status_flags = 0
 	faction = "cult"
@@ -29,6 +29,7 @@
 	supernatural = 1
 	flying = 1
 	meat_type = /obj/item/weapon/ectoplasm
+	mob_property_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/shade/gib()
 	death(1)
@@ -123,3 +124,8 @@
 				healths.icon_state = "shade_health6"
 			else
 				healths.icon_state = "shade_health7"
+
+/mob/living/simple_animal/shade/happiest/Die()
+	transmogrify()
+	if(!gcDestroyed)
+		qdel(src)

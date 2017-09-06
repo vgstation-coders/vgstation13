@@ -31,6 +31,10 @@
 	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(istype(affected, /datum/organ/external/head))
+		if(target.species && (target.species.anatomy_flags & NO_BONES))
+			to_chat(user, "<span class='info'>\The [target] has no skull!</span>")
+			return 0
 	return ..() && (affected.open == 2 || (target.species.anatomy_flags & NO_SKIN))
 
 /datum/surgery_step/open_encased/saw/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

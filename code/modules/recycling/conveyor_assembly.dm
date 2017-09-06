@@ -21,7 +21,7 @@
 
 /obj/item/stack/conveyor_assembly/attack_self(mob/user)
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/screen/draggable, src, user)
+		active = getFromPool(/obj/abstract/screen/draggable, src, user)
 		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
 		return
 	else
@@ -64,7 +64,7 @@
 		new /obj/structure/conveyor_assembly(placelocation, direction)
 	if(amount && !disposed)
 		spawn()
-			active = getFromPool(/obj/screen/draggable, src, user)
+			active = getFromPool(/obj/abstract/screen/draggable, src, user)
 
 /obj/item/stack/conveyor_assembly/end_drag_use(mob/user)
 	if(placeimage && user && user.client)

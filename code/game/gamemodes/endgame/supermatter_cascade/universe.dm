@@ -160,12 +160,12 @@
 
 /datum/universal_state/supermatter_cascade/proc/convert_all_parallax()
 	for(var/client/C in clients)
-		var/obj/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
+		var/obj/abstract/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
 		if(PS)
 			convert_parallax(PS)
 		CHECK_TICK
 
-/datum/universal_state/supermatter_cascade/convert_parallax(obj/screen/plane_master/parallax_spacemaster/PS)
+/datum/universal_state/supermatter_cascade/convert_parallax(obj/abstract/screen/plane_master/parallax_spacemaster/PS)
 	PS.color = list(
 	0,0,0,0,
 	0,0,0,0,

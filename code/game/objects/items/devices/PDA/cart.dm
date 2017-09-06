@@ -24,6 +24,7 @@
 	var/access_status_display = 0
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
+	var/access_trader = 0
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -244,6 +245,11 @@
 	name = "Doorman Cartridge"
 	access_remote_door = 1
 	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
+
+/obj/item/weapon/cartridge/trader
+	name = "Trader Cartridge"
+	icon_state = "cart-vox"
+	access_trader = 1
 
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
@@ -503,12 +509,14 @@ Code:
 			if (istype(active3, /datum/data/record) && (active3 in data_core.security))
 
 				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
-					Minor Crimes: [active3.fields["mi_crim"]]<br>
-					Details: [active3.fields["mi_crim"]]<br><br>
-					Major Crimes: [active3.fields["ma_crim"]]<br>
-					Details: [active3.fields["ma_crim_d"]]<br><br>
 					Important Notes:<br>
-					[active3.fields["notes"]]"}
+					[active3.fields["notes"]]
+					Comments/Log:<br>"}
+				var/counter = 1
+				while(active3.fields["com_[counter]"])
+					menu += "[active3.fields["com_[counter]"]]<BR>"
+					counter++
+
 			else
 				menu += "<b>Record Lost!</b><br>"
 

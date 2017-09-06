@@ -401,6 +401,9 @@
 	return
 
 /obj/machinery/computer/cloning/proc/scan_mob(mob/living/carbon/human/subject as mob)
+	if(istype(subject, /mob/living/slime_pile))
+		var/mob/living/slime_pile/S = subject
+		subject = S.slime_person
 	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return

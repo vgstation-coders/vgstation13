@@ -16,6 +16,13 @@
 	opacity = 0
 	canSmoothWith = null
 
+/turf/unsimulated/wall/blastdoor
+	name = "Shuttle Bay Blast Door"
+	desc = "Why it no open!"
+	icon = 'icons/obj/doors/rapid_pdoor.dmi'
+	icon_state = "pdoor1"
+	canSmoothWith = null
+
 /turf/unsimulated/wall/rock
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'
@@ -71,3 +78,16 @@ turf/unsimulated/wall/splashscreen
 /turf/unsimulated/wall/cult/cultify()
 	return
 
+/turf/unsimulated/wall/evil
+	name = "alien wall"
+	desc = "You feel a sense of dread from just looking at this wall. Its surface seems to be constantly moving, as if it were breathing."
+	icon_state = "evilwall_1"
+	opacity = 1
+	density = 1
+	canSmoothWith = null
+
+/turf/unsimulated/wall/evil/New()
+	..()
+
+	if(prob(80))
+		icon_state = "evilwall_[rand(1,8)]"

@@ -10,6 +10,8 @@ var/global/list/all_docking_ports = list()
 	anchored = 1
 	invisibility = 60 //Only ghosts can see
 
+	var/require_admin_permission = 0
+
 	var/areaname = "space"
 
 	var/obj/docking_port/docked_with
@@ -77,6 +79,17 @@ var/global/list/all_docking_ports = list()
 
 /obj/docking_port/proc/get_docking_turf()
 	return get_step(get_turf(src),src.dir)
+
+/obj/docking_port/destination/proc/start_warning_lights()
+	for(var/obj/machinery/door/airlock/A in range(1,src))
+		if(!A.shuttle_warning_lights)
+			A.shuttle_warning_lights = image('icons/obj/doors/Doorint.dmi', src, "warning_lights")
+		A.overlays += A.shuttle_warning_lights
+
+/obj/docking_port/destination/proc/stop_warning_lights()
+	for(var/obj/machinery/door/airlock/A in range(1,src))
+		if(A.shuttle_warning_lights)
+			A.overlays -= A.shuttle_warning_lights
 
 //SHUTTLE PORTS
 

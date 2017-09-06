@@ -10,20 +10,12 @@
 															SOFT_CS = 30,
 															SOFT_FS = 30,
 															SOFT_UT = 30,
-
-															//"departmental assistance package" = 55
-															//Medical: access crew monitor, med records, gain med hud
-															//Sec: access sec records, gain sec hud
-															//Engineering: access station alerts, central atmos, gain atmos sensor
-															//Cargo: access supply shuttle console
-
-															//"autonomous movement system" = 55
-															//maybe later
-
-															//legacy, until the departmental is ready
 															SOFT_MS = 30, //records + HUD
 															SOFT_SS = 30, //records + HUD
-															SOFT_AS = 5
+															SOFT_AS = 5,
+															SOFT_PS = 10,
+															SOFT_HM = 25
+
 															)
 
 
@@ -73,6 +65,10 @@
 				left_part = src.softwareShield()
 			if("flashlight")
 				left_part = src.softwareLight()
+			if("pps")
+				left_part = src.softwarepPS()
+			if("holomap")
+				left_part = src.softwareHolomap()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -289,11 +285,11 @@
 				src.hacktarget = null
 		if("chemsynth")
 			if(href_list["chem"])
-				if(!istype(src.loc.loc,/mob/living/carbon))
+				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
 				else if(chargeloop("chemsynth"))
-					if(istype(src.loc.loc,/mob/living/carbon)) //Sanity
-						var/mob/living/M = src.loc.loc
+					var/mob/M = get_holder_of_type(loc, /mob)
+					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
 						playsound(get_turf(src.loc), 'sound/effects/bubbles.ogg', 50, 1)
 				else
@@ -308,7 +304,7 @@
 						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
 					else
 						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
-				var/mob/M = get_holder_of_type(src, /mob)
+				var/mob/M = get_holder_of_type(loc, /mob)
 				if(M)
 					M.put_in_hands(F)
 				playsound(get_turf(src.loc), 'sound/machines/foodsynth.ogg', 50, 1)
@@ -319,6 +315,29 @@
 					card.set_light(4) //Equal to flashlight
 				else
 					card.set_light(0)
+		if("pps")
+			if(href_list["tag"])
+				var/tag = input("Please enter desired tag.", name, ppstag) as text|null
+				if (!tag) //what a check
+					return
+				tag = strict_ascii(tag)
+				if(length(tag) != 4)
+					to_chat(src, "<span class = 'caution'>The tag must be four characters long!</span>")
+					return
+				else
+					ppstag = tag
+		if("holomap")
+			if(href_list["switch_target"])
+				if(holo_target == initial(holo_target))
+					holo_target = "show_user"
+				else
+					holo_target = initial(holo_target)
+			if(href_list["show_user"])
+				var/mob/M = get_holder_of_type(loc, /mob)
+				if(M) //Sanity
+					holomap_device.toggleHolomap(M)
+			if(href_list["show_map"])
+				holomap_device.toggleHolomap(src)
 	src.paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
@@ -370,11 +389,13 @@
 			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
 	dat += "<br>"
 
-	// Advanced
-	dat += "<b>Advanced</b> <br>"
+	// Navigation
+	dat += "<b>Navigation</b> <br>"
 	for(var/s in src.software)
-		//This is where the computer interface software will go
-
+		if(s == SOFT_PS)
+			dat += "<a href='byond://?src=\ref[src];software=pps;sub=0'>pAI Positioning System</a> <br>"
+		if(s == SOFT_HM)
+			dat += "<a href='byond://?src=\ref[src];software=holomap;sub=0'>Holomap Viewer</a> <br>"
 	dat += {"<br>
 		<br>
 		<a href='byond://?src=\ref[src];software=buy;sub=0'>Download additional software</a>"}
@@ -536,7 +557,12 @@
 		else
 			dat += "<pre>Requested security record not found,</pre><BR>"
 		if ((istype(src.securityActive2, /datum/data/record) && data_core.security.Find(src.securityActive2)))
-			dat += text("<BR>\nSecurity Data<BR>\nCriminal Status: []<BR>\n<BR>\nMinor Crimes: <A href='?src=\ref[];field=mi_crim'>[]</A><BR>\nDetails: <A href='?src=\ref[];field=mi_crim_d'>[]</A><BR>\n<BR>\nMajor Crimes: <A href='?src=\ref[];field=ma_crim'>[]</A><BR>\nDetails: <A href='?src=\ref[];field=ma_crim_d'>[]</A><BR>\n<BR>\nImportant Notes:<BR>\n\t<A href='?src=\ref[];field=notes'>[]</A><BR>\n<BR>\n<CENTER><B>Comments/Log</B></CENTER><BR>", src.securityActive2.fields["criminal"], src, src.securityActive2.fields["mi_crim"], src, src.securityActive2.fields["mi_crim_d"], src, src.securityActive2.fields["ma_crim"], src, src.securityActive2.fields["ma_crim_d"], src, src.securityActive2.fields["notes"])
+			dat += text("<BR>\nSecurity Data<BR>\nCriminal Status: []<BR>\n<BR>\nImportant Notes:<BR>\n\t<A href='?src=\ref[];field=notes'>[]</A><BR>\n<BR>\n<CENTER><B>Comments/Log</B></CENTER><BR>", src.securityActive2.fields["criminal"], src, src.securityActive2.fields["notes"])
+			var/counter = 1
+			while(src.securityActive2.fields["com_[counter]"])
+				dat += "[securityActive2.fields["com_[counter]"]]<BR>"
+				counter++
+
 		else
 			dat += "<pre>Requested security record not found,</pre><BR>"
 		dat += text("<BR>\n<A href='?src=\ref[];software=securitysupplement;sub=0'>Back</A><BR>", src)
@@ -713,4 +739,45 @@ Target Machine: "}
 	dat += {"</ul>
 		<br><br>
 		Messages: <hr> [pda.tnote]"}
+	return dat
+
+/mob/living/silicon/pai/proc/softwarepPS()
+	if(!pPS) // Are we a GPS yet?
+		GPS_list.Add(src)
+		pPS = 1
+	var/list/locallist = null
+	locallist = GPS_list.Copy()
+	var/dat = "<h3>pAI Positioning System</h3>"
+	dat+= "<br>Tag: [ppstag]"
+	dat+= "<br><a href='byond://?src=\ref[src];software=pps;tag=1;sub=0'>Set Tag</a> <br>"
+	for(var/A in locallist)
+		var/turf/pos = get_turf(A)
+		var/area/area = get_area(A)
+		var/tag = null
+		var/rip = null
+		if(ispAI(A))
+			var/mob/living/silicon/pai/P = A
+			tag = P.ppstag
+			rip = P.silence_time
+		else
+			var/obj/item/device/gps/G = A
+			tag = G.gpstag
+			rip = G.emped
+		if(rip)
+			dat += "<BR>[tag]: ERROR"
+		else if(!pos || !area)
+			dat += "<BR>[tag]: UNKNOWN"
+		else if(pos.z > WORLD_X_OFFSET.len)
+			dat += "<BR>[tag]: [format_text(area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
+		else
+			dat += "<BR>[tag]: [format_text(area.name)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z])"
+	return dat
+
+/mob/living/silicon/pai/proc/softwareHolomap()
+	if(!holomap_device)
+		holomap_device = new()
+	var/dat = "<h2>Holomap Viewer</h2>"
+	dat+= "Creates a virtual map of the surrounding area.<BR>"
+	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=holomap;switch_target=1;sub=0'>Switch Type</a><BR>"
+	dat+= "<BR><a href='byond://?src=\ref[src];software=holomap;[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
 	return dat

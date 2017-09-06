@@ -2,14 +2,16 @@
 //---------- external shield generator
 //generates an energy field that loops around any built up area in space (is useless inside) halts movement and airflow, is blocked by walls, windows, airlocks etc
 
-/obj/machinery/shield_gen/external/New()
-	..()
+/obj/machinery/shield_gen/external
+	name = "\improper Starscreen-EX external shield generator"
+	desc = "Generates a hull-hugging wall of energy when active. Place near space."
+	board_path = /obj/item/weapon/circuitboard/shield_gen_ex
+	icon_state = "generator_external_off"
+	icon_prefix = "external"
 
 /obj/machinery/shield_gen/external/get_shielded_turfs()
-	var
-		list
-			open = list(get_turf(src))
-			closed = list()
+	var/list/open = list(get_turf(src))
+	var/list/closed = list()
 
 	while(open.len)
 		for(var/turf/T in open)

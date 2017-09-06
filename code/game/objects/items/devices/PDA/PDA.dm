@@ -285,6 +285,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
+/obj/item/device/pda/heads/assassin
+	name = "Reaper PDA"
+	ownjob = "Reaper"
+
+/obj/item/device/pda/heads/nt_rep
+	name = "Nanotrasen Navy Representative PDA"
+	ownjob = "Nanotrasen Navy Representative"
+
+/obj/item/device/pda/heads/nt_officer
+	name = "Nanotrasen Navy Officer PDA"
+	ownjob = "Nanotrasen Navy Officer"
+
+/obj/item/device/pda/heads/nt_captain
+	name = "Nanotrasen Navy Captain PDA"
+	ownjob = "Nanotrasen Navy Captain"
+
+/obj/item/device/pda/heads/nt_supreme
+	name = "Nanotrasen Supreme Commander PDA"
+	ownjob = "Nanotrasen Supreme Commander"
+
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop
@@ -413,6 +433,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	icon_state = "pda-transp"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a special edition with a transparent case."
 	note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
+
+/obj/item/device/pda/trader
+	name = "Trader PDA"
+	desc = "Much good for trade."
+	note = "Congratulations, your station ãplU‰%ZÃ’67ÕEz4Æ¦U¦ŸÉ8¥E1ÀÓÐ‹îöÈ~±šÞ@¡ÐT¥u1B¤Õkñ@iž8÷NJŠó"
+	icon_state = "pda-trader"
+	default_cartridge = /obj/item/weapon/cartridge/trader
 
 /obj/item/device/pda/chef
 	name = "Chef PDA"
@@ -610,7 +637,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/MouseDrop(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
-	if((!istype(over_object, /obj/screen)) && can_use(M))
+	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)
 	return
 
@@ -741,6 +768,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
 					if (cartridge.access_remote_door)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
+					if (cartridge.access_trader)
+						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
 
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
@@ -1810,6 +1839,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					return
 
 
+//TRADER FUNCTIONS======================================
+			if("Send Shuttle")
+				if(cartridge && cartridge.access_trader && id && can_access(id.access,list(access_trade)))
+					var/obj/machinery/computer/shuttle_control/C = global.trade_shuttle.control_consoles[1] //There should be exactly one
+					if(C)
+						global.trade_shuttle.travel_to(pick(global.trade_shuttle.docking_ports - global.trade_shuttle.current_port),C,U) //Just send it; this has all relevant checks
+
+
 //SYNDICATE FUNCTIONS===================================
 
 			if("Toggle Door")
@@ -1876,9 +1913,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("1")		// Configure pAI device
 						pai.attack_self(U)
 					if("2")		// Eject pAI device
-						var/turf/T = get_turf(src.loc)
-						if(T)
-							pai.forceMove(T)
+						U.put_in_hands(pai)
 
 //LINK FUNCTIONS===================================
 
@@ -1990,9 +2025,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		id = null
 
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
-
-
-	var/t = input(U, "Please enter message", name, null) as text
+	var/t = input(U, "Please enter message", "Message to [P]", null) as text|null
 	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 	if (!t || !istype(P))
 		return
@@ -2042,7 +2075,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)) //Give the AI a chance of intercepting the message
@@ -2069,12 +2102,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 		if(L)
 			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
-
-		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
+		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
+		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
-		to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
+		to_chat(U, "[bicon(src)] <span class='notice'>ERROR: Messaging server is not responding.</span>")
 
 
 /obj/item/device/pda/verb/verb_remove_id()

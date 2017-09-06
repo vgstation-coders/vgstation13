@@ -22,11 +22,16 @@
 	colour = "black"
 
 
+/obj/item/weapon/lipstick/blue
+	name = "blue lipstick"
+	colour = "blue"
+
+
 /obj/item/weapon/lipstick/random
 	name = "lipstick"
 
 /obj/item/weapon/lipstick/random/New()
-	colour = pick("red","purple","jade","black")
+	colour = pick("red","purple","jade","black","blue")
 	name = "[colour] lipstick"
 	..()
 
@@ -86,6 +91,81 @@
 					user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
 										 "<span class='notice'>You wipe off [H]'s lipstick.</span>")
 					H.lip_style = null
+					H.update_body()
+	else
+		..()
+
+/obj/item/weapon/eyeshadow
+	name = "black eyeshadow"
+	desc = "A generic brand of eyeshadow."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "eyeshadow_brush"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+	var/colour = "black"
+	var/open = 0
+
+
+/obj/item/weapon/eyeshadow/purple
+	name = "purple eyeshadow"
+	colour = "purple"
+
+/obj/item/weapon/eyeshadow/jade
+	name = "jade eyeshadow"
+	colour = "jade"
+
+/obj/item/weapon/eyeshadow/random
+	name = "eyeshadow"
+
+/obj/item/weapon/eyeshadow/random/New()
+	colour = pick("purple","jade","black")
+	name = "[colour] eyeshadow"
+	..()
+
+/obj/item/weapon/eyeshadow/attack(mob/M, mob/user)
+	if(!istype(M, /mob))
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.eye_style)	//if they already have eyeshadow on
+			to_chat(user, "<span class='notice'>You need to wipe off the old eyeshadow first!</span>")
+			return
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] does their eyes with \the [src].</span>", \
+								 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
+			H.eye_style = colour
+			H.update_body()
+		else
+			user.visible_message("<span class='warning'>[user] begins to do [H]'s eyes with \the [src].</span>", \
+								 "<span class='notice'>You begin to apply \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] does [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You apply \the [src].</span>")
+				H.eye_style = colour
+				H.update_body()
+	else
+		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
+
+//you can wipe off eyeshadow with paper!
+/obj/item/weapon/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	if(user.zone_sel.selecting == "eyes")
+		if(!istype(M, /mob))
+			return
+
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H == user)
+				to_chat(user, "<span class='notice'>You wipe off the eyeshadow with [src].</span>")
+				H.eye_style = null
+				H.update_body()
+			else
+				user.visible_message("<span class='warning'>[user] begins to wipe [H]'s eyeshadow off with \the [src].</span>", \
+								 	 "<span class='notice'>You begin to wipe off [H]'s eyeshadow.</span>")
+				if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+					user.visible_message("<span class='notice'>[user] wipes [H]'s eyeshadow off with \the [src].</span>", \
+										 "<span class='notice'>You wipe off [H]'s eyeshadow.</span>")
+					H.eye_style = null
 					H.update_body()
 	else
 		..()
@@ -267,7 +347,7 @@
 /obj/item/weapon/invisible_spray/permanent
 	desc = "A can of... invisibility?"
 	permanent = 1
-	
+
 /obj/item/weapon/razor
 	name = "electric razor"
 	desc = "The latest and greatest power razor born from the science of shaving."
@@ -339,3 +419,69 @@
 			..()
 	else
 		..()
+
+/obj/item/weapon/pocket_mirror //shamelessly copypasted from [mirror.dm]
+	name = "pocket mirror"
+	desc = "Mirror mirror on the wall, who's the most robust of them all? Touching the mirror will bring out Nanotrasen's state of the art hair modification system."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "pocket_mirror"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+
+	var/shattered = 0
+
+/obj/item/weapon/pocket_mirror/attack_self(mob/user)
+	if (shattered)
+		return
+
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (isvampire(H))
+			if (!(VAMP_MATURE in H.mind.vampire.powers))
+				to_chat(H, "<span class='notice'>You don't see anything.</span>")
+				return
+
+		if (user.hallucinating())
+			switch(rand(1,100))
+				if (1 to 20)
+					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
+					H.Knockdown(4)
+					return
+				if (21 to 40)
+					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
+					H.emote("scream", auto=1)
+					H.dir = turn(H.dir, 180)
+					return
+				if (41 to 50)
+					to_chat(H, "<span class='notice'>You don't see anything.</span>")
+					return
+
+		//handle normal hair
+		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
+		//gender intentionally left null so speshul snowflakes can cross-hairdress
+		if (species_hair.len)
+			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
+			if (!Adjacent(user) || user.incapacitated())
+				return
+			if (new_style)
+				H.h_style = new_style
+				H.update_hair()
+
+/obj/item/weapon/pocket_mirror/proc/shatter()
+	if (shattered)
+		return
+	shattered = 1
+	icon_state = "pocket_mirror_broke"
+	playsound(src, "shatter", 70, 1)
+	desc = "Oh no, seven years of bad luck!"
+
+/obj/item/weapon/pocket_mirror/kick_act()
+	shatter()
+	..()
+
+/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom)
+	..()
+	if(!isturf(hit_atom))
+		return
+	if (prob(25))
+		shatter()

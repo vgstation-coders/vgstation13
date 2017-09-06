@@ -16,5 +16,11 @@
 		qdel(mind)
 	mind = null
 	living_mob_list -= src
+	if(pPS) // Removes it from the GPS List.
+		GPS_list.Remove(src)
+	if(holomap_device)
+		holomap_device.stopWatching()
+		qdel(holomap_device)
+		holomap_device = null
 	ghostize()
 	qdel(src)

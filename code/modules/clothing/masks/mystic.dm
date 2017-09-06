@@ -52,6 +52,8 @@
 	flick("happiest_flash", src)
 	canremove = 1
 
+var/list/has_been_shade = list()
+
 /obj/item/clothing/mask/happy/proc/RaiseShade(var/mob/living/carbon/human/H)
 	for(var/mob/living/carbon/human/M in view(4, H))
 		if(!M)
@@ -60,16 +62,20 @@
 			continue
 		if(M.client == null)
 			continue
+		if(!M.mind)
+			continue
+		if(M.mind in has_been_shade)
+			continue
 		flick("happiest_flash", src)
-		var/mob/living/simple_animal/shade/S = new /mob/living/simple_animal/shade( M.loc )
+		has_been_shade.Add(M.mind)
+		var/mob/dead/observer/G = M.ghostize(1)
+		var/mob/living/simple_animal/shade/happiest/S = G.transmogrify(/mob/living/simple_animal/shade/happiest, TRUE)
 		S.name = "Shade of [M.real_name]"
 		S.real_name = "Shade of [M.real_name]"
-		if (M.client)
-			M.client.mob = S
 		S.cancel_camera()
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")
-		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and cause joyful chaos for [H.real_name]!</span>")
+		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and carry out [H.real_name]'s bidding with joy!</span>")
 
 /obj/item/clothing/mask/happy/acidable()
 	return 0

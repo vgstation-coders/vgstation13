@@ -505,6 +505,25 @@
 	icon_state = "chocolatebar"
 	wrapped = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	name = "Valentine's Day chocolate bar"
+	desc = "Made (or bought) with love!"
+	icon_state = "valentinebar"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/New()
+	..()
+	if(time2text(world.realtime, "MM/DD") != "02/14")
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	desc = "Bought (or made) with love!"
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
+	..()
+	reagents.add_reagent(BICARODYNE, 3)
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."
@@ -523,6 +542,21 @@
 	desc = "Goes great with Robust Coffee."
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL //eggs are used
+	var/soggy = 0
+
+//Called in drinks.dm attackby
+/obj/item/weapon/reagent_containers/food/snacks/donut/proc/dip(var/obj/item/weapon/reagent_containers/R, mob/user)
+	var/probability = 15*soggy
+	to_chat(user, "<span class='notice'>You dip \the [src] into \the [R]</span>")
+	if(prob(probability))
+		to_chat(user, "<span class='danger'>\The [src] breaks off into \the [R]!</span>")
+		src.reagents.trans_to(R,reagents.maximum_volume)
+		qdel(src)
+		return
+	R.reagents.trans_to(src, rand(3,12))
+	if(!soggy)
+		name = "soggy [name]"
+	soggy += 1
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	name = "donut"
@@ -948,6 +982,17 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SILENCER, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadoburger
+	name = "avocado burger"
+	desc = "Blurring the line between ingredient and condiment."
+	icon_state = "avocadoburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadoburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -1682,6 +1727,19 @@
 		src.desc = "A wish come true!"
 		reagents.add_reagent(NUTRIMENT, 8)
 
+/obj/item/weapon/reagent_containers/food/snacks/avocadosoup
+	name = "Vegetable soup"
+	desc = "May be served either hot or cold."
+	icon_state = "avocadosoup"
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_LIQUID
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadosoup/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(WATER, 5)
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/hotchili
 	name = "Hot Chili"
 	desc = "A five alarm Texan Chili!"
@@ -1725,113 +1783,6 @@
 			baconbeacon.forceMove(usr)
 			baconbeacon.digest_delay()
 */
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube
-	name = "monkey cube"
-	desc = "Just add water!"
-	icon_state = "monkeycube"
-	bitesize = 12
-	//var/wrapped = 0
-	food_flags = FOOD_MEAT
-
-	var/monkey_type = /mob/living/carbon/monkey
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/New()
-	..()
-	reagents.add_reagent(NUTRIMENT,10)
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)
-	if(!proximity)
-		return
-	if(istype(O,/obj/structure/sink) && !wrapped)
-		to_chat(user, "<span class='notice'>You place [src] under a stream of water...</span>")
-		return Expand()
-	..()
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/attack_self(mob/user)
-	if(wrapped)
-		Unwrap(user)
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/after_consume(var/mob/M)
-
-	to_chat(M, "<span class = 'warning'>Something inside of you suddently expands!</span>")
-
-	if (istype(M, /mob/living/carbon/human))
-		//Do not try to understand.
-		var/obj/item/weapon/surprise = new/obj/item/weapon(M)
-		var/mob/living/carbon/monkey/ook = new monkey_type(null) //no other way to get access to the vars, alas
-		surprise.icon = ook.icon
-		surprise.icon_state = ook.icon_state
-		surprise.name = "malformed [ook.name]"
-		surprise.desc = "Looks like \a very deformed [ook.name], a little small for its kind. It shows no signs of life."
-		qdel(ook)	//rip nullspace monkey
-		surprise.transform *= 0.6
-		surprise.add_blood(M)
-		var/mob/living/carbon/human/H = M
-		var/datum/organ/external/E = H.get_organ(LIMB_CHEST)
-		E.fracture()
-		for (var/datum/organ/internal/I in E.internal_organs)
-			I.take_damage(rand(I.min_bruised_damage, I.min_broken_damage+1))
-
-		if (!E.hidden && prob(60)) //set it snuggly
-			E.hidden = surprise
-			E.cavity = 0
-		else 		//someone is having a bad day
-			E.createwound(CUT, 30)
-			E.embed(surprise)
-	else if (ismonkey(M))
-		M.visible_message("<span class='danger'>[M] suddenly tears in half!</span>")
-		var/mob/living/carbon/monkey/ook = new monkey_type(M.loc)
-		ook.name = "malformed [ook.name]"
-		ook.transform *= 0.6
-		ook.add_blood(M)
-		M.gib()
-	..()
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/proc/Expand()
-
-	for(var/mob/M in viewers(src,7))
-		to_chat(M, "<span class='warning'>\The [src] expands!</span>")
-	new monkey_type(get_turf(src))
-	qdel(src)
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/proc/Unwrap(mob/user as mob)
-
-	icon_state = "monkeycube"
-	desc = "Just add water!"
-	to_chat(user, "You unwrap the cube.")
-	wrapped = 0
-	return
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped
-	desc = "Still wrapped in some paper."
-	icon_state = "monkeycubewrap"
-	wrapped = 1
-
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/farwacube
-	name = "farwa cube"
-	monkey_type =/mob/living/carbon/monkey/tajara
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/farwacube
-	name = "farwa cube"
-	monkey_type =/mob/living/carbon/monkey/tajara
-
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/stokcube
-	name = "stok cube"
-	monkey_type =/mob/living/carbon/monkey/unathi
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/stokcube
-	name = "stok cube"
-	monkey_type =/mob/living/carbon/monkey/unathi
-
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube
-	name = "neaera cube"
-	monkey_type =/mob/living/carbon/monkey/skrell
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube
-	name = "neaera cube"
-	monkey_type =/mob/living/carbon/monkey/skrell
-
 
 /obj/item/weapon/reagent_containers/food/snacks/spellburger
 	name = "Spell Burger"
@@ -2020,6 +1971,17 @@
 /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadotoast
+	name = "avocado toast"
+	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
+	icon_state = "avocadotoast"
+	trash = /obj/item/trash/plate
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/jellyburger
 	name = "Jelly Burger"
@@ -4038,6 +4000,20 @@
 	reagents.add_reagent(ICE, 5)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
+	name = "avocado milkshake"
+	desc = "Strange, but good."
+	icon_state = "avocadomilkshake"
+	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL //milk
+	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
+
+/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(SUGAR, 5)
+	reagents.add_reagent(ICE, 5)
+	bitesize = 4
+
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad
 	name = "Potato Salad"
 	desc = "With 21st century technology, it could take as long as three days to make this."
@@ -4900,6 +4876,51 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous
+	name = "dangerously cheesy poutine"
+	desc = "Fries, cheese, gravy & more cheese. Be careful with this, it's dangerous!"
+	icon_state = "poutinedangerous"
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous/New()
+	..()
+	reagents.add_reagent(CHEESYGLOOP, 3) //need 2+ wheels to reach overdose, which will stop the heart until all is removed
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+	name = "dangerously cheesy poutine barrel"
+	desc = "Four cheese wheels full of gravy, fries and cheese curds, arranged like a barrel. This is degeneracy, Canadian style."
+	icon_state = "poutinebarrel"
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel/New()
+	..()
+	reagents.add_reagent(CHEESYGLOOP, 5)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/mapleleaf
+	name = "maple leaf"
+	desc = "A large maple leaf."
+	icon_state = "mapleleaf"
+
+/obj/item/weapon/reagent_containers/food/snacks/mapleleaf/New()
+	..()
+	reagents.add_reagent(MAPLESYRUP, 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
+	name = "maple syrup poutine"
+	desc = "French fries lathered with Canadian maple syrup and cheese curds. Delightful, eh?"
+	icon_state = "poutinesyrup"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutinesyrup/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(MAPLESYRUP, 5)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/bleachkipper
 	name = "bleach kipper"
 	desc = "Baby blue and very fishy."
@@ -4912,3 +4933,34 @@
 /obj/item/weapon/reagent_containers/food/snacks/bleachkipper/New()
 	..()
 	reagents.add_reagent(FISHBLEACH, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
+	name = "mud pie"
+	desc = "While not looking very appetizing, it at least looks like somebody had fun making it."
+	icon_state = "mud_pie"
+	filling_color = "#462B20"
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(NUTRIMENT, rand(0,2))
+	reagents.add_reagent(TOXIN, rand(1,5))
+	if(prob(15))
+		name = "exceptional " + initial(name)
+		desc = "The crème de la pire of culinary arts."
+		reagents.add_reagent(SUGAR, 2)
+		reagents.add_reagent(TOXIN, rand(3,8))
+		reagents.add_reagent(COCO, 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/magbites
+	name = "mag-bites"
+	desc = "Tiny boot-shaped cheese puffs. Made with real magnets!\
+	<br>Warning: not suitable for those with heart conditions or on medication, consult your doctor before consuming this product. Cheese dust may stain or dissolve fabrics."
+	icon_state = "magbites"
+
+/obj/item/weapon/reagent_containers/food/snacks/magbites/New()
+	..()
+	reagents.add_reagent(MEDCORES, 6)
+	reagents.add_reagent(SODIUMCHLORIDE, 6)
+	reagents.add_reagent(NUTRIMENT, 4)

@@ -1,0 +1,13 @@
+# http://editorconfig.org/
+# Atom: Install the editorconfig addon.
+root = True
+
+[*]
+indent_size = 4
+indent_style = tab
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.py]
+indent_style = space

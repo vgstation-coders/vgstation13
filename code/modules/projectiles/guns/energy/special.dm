@@ -16,6 +16,18 @@
 /obj/item/weapon/gun/energy/ionrifle/emp_act(severity)
 	return
 
+/obj/item/weapon/gun/energy/ionrifle/ionpistol
+	name = "ion pistol"
+	desc = "A small, low capacity ion weapon designed to disable mechanical threats"
+	icon_state = "ionpistol"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+	cell_type = "/obj/item/weapon/cell/crap"
+	projectile_type = "/obj/item/projectile/ionsmall"
+
+/obj/item/weapon/gun/energy/ionrifle/ionpistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/decloner
 	name = "biological demolecularisor"
 	desc = "A gun that discharges high amounts of controlled radiation to slowly break a target into component elements."
@@ -29,7 +41,7 @@
 
 /obj/item/weapon/gun/energy/decloner/failure_check(var/mob/living/carbon/human/M)
 	if(prob(15))
-		M.apply_effect(rand(15,30), IRRADIATE)
+		M.apply_radiation(rand(15,30), RAD_EXTERNAL)
 		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
 		return 1
 	if(prob(15))
@@ -37,7 +49,7 @@
 		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
 		return 1
 	if(prob(3))
-		M.apply_effect(rand(60,80), IRRADIATE)
+		M.apply_radiation(rand(60,80), RAD_EXTERNAL)
 		M.adjustCloneLoss(rand(30,50))
 		to_chat(M, "<span class='danger'>\The [src] breaks apart!.</span>")
 		M.drop_item(src, force_drop = 1)
@@ -114,7 +126,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		to_chat(user, "<span class='danger'>You monster.</span>")
 	else
 		to_chat(user, "<span class='info'>You have selected to make your next victim have a [selected] form.</span>")
-
+	add_gamelogs(user, "set \the [src] to \ [selected]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "warning")
 	switch(selected)
 		if("random")
 			changetype=null
@@ -181,13 +193,33 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	var/mob/living/carbon/human/H = target
 	if(!H.stat || H.health > config.health_threshold_crit)
 		return 0
+
+	//Pretty particles
+	make_tracker_effects(get_turf(H), user)
+	//Not so pretty manical laughter
+	if(iswizard(user) || isapprentice(user))
+		user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
+		"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
+		"G'T T'FUK UP.",\
+		"IF YOU DIE, YOU DIE FOR ME.",\
+		"EVEN IN DEATH YOU MAY SERVE.",\
+		"YOUR SUFFERING IS MY ENJOYMENT.",\
+		"A NEW PLAYTHING FOR MY COLLECTION.",\
+		"YOUR TIME HAS NOT COME, YET.",\
+		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
+
+	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+
 	switch(raisetype)
 		if(ZOMBIE)
-			new /mob/living/simple_animal/hostile/necro/zombie(get_turf(target), user, H.mind)
+			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H.mind)
+			T.get_clothes(H, T)
+			T.name = H.real_name
+			T.host = H
+			H.loc = null
 		if(SKELETON)
 			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
-
-	H.gib()
+			H.gib()
 	charges--
 
 

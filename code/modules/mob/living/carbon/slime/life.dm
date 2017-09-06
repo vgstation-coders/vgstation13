@@ -372,6 +372,8 @@
 						newslime = primarytype
 					else
 						newslime = slime_mutation[rand(1,4)]
+					if(i == 4)
+						newslime = slime_mutation[rand(1,4)]
 
 					var/mob/living/carbon/slime/M = new newslime(loc)
 					M.powerlevel = round(powerlevel/4)
@@ -489,9 +491,8 @@
 
 						if(istype(L, /mob/living/carbon/human)) //Ignore slime(wo)men
 							var/mob/living/carbon/human/H = L
-							if(H.dna)
-								if(H.dna.mutantrace == "slime")
-									continue
+							if(isslimeperson(H))
+								continue
 
 						if(!istype(src, /mob/living/carbon/slime/adult)) //Non-starving diciplined adult slimes wont eat things
 							if(!starving && Discipline > 0)
@@ -590,6 +591,6 @@
 				severity = 6
 
 		if(severity > 0)
-			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+			overlay_fullscreen("brute", /obj/abstract/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")

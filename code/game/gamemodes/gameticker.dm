@@ -203,7 +203,13 @@ var/datum/controller/gameticker/ticker
 				'sound/AI/vox_reminder6.ogg',
 				'sound/AI/vox_reminder7.ogg',
 				'sound/AI/vox_reminder8.ogg',
-				'sound/AI/vox_reminder9.ogg')
+				'sound/AI/vox_reminder9.ogg',
+				'sound/AI/vox_reminder10.ogg',
+				'sound/AI/vox_reminder11.ogg',
+				'sound/AI/vox_reminder12.ogg',
+				'sound/AI/vox_reminder13.ogg',
+				'sound/AI/vox_reminder14.ogg',
+				'sound/AI/vox_reminder15.ogg')
 			for(var/sound in welcome_sentence)
 				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn
@@ -234,7 +240,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker
 	//station_explosion used to be a variable for every mob's hud. Which was a waste!
 	//Now we have a general cinematic centrally held within the gameticker....far more efficient!
-	var/obj/screen/cinematic = null
+	var/obj/abstract/screen/cinematic = null
 
 	//Plus it provides an easy way to make cinematics for other events. Just use this as a template :)
 /datum/controller/gameticker/proc/station_explosion_cinematic(var/station_missed=0, var/override = null)

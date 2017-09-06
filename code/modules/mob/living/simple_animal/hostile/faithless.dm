@@ -9,11 +9,12 @@
 	response_help = "passes through"
 	response_disarm = "shoves"
 	response_harm = "hits"
-	speed = -1
+	speed = 1
 	maxHealth = 80
 	health = 80
 	can_butcher = 0
 
+	mob_property_flags = MOB_SUPERNATURAL
 	harm_intent_damage = 10
 	melee_damage_lower = 15
 	melee_damage_upper = 15
@@ -29,7 +30,7 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	speed = 4
+	speed = 5
 
 	supernatural = 1
 

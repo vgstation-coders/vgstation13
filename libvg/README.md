@@ -5,9 +5,9 @@ This is a [Rust](https://www.rust-lang.org)-based library that is invoked throug
 * UTF-8 handling.
 
 # Building
-First of all, you're gonna need to install Rust. The website (linked above) has the Rustup installer which you can use to easily install the Rust toolchain. If you are on a 64-bit system it'll probably install `x86_64` for you, though because BYOND is stuck in the stone age you need to compile for `i686` instead. To install the `i686` version of the toolchain, simple run:
+First of all, you're gonna need to install **nightly** Rust. The website (linked above) has the Rustup installer which you can use to easily install the Rust toolchain. If you are on a 64-bit system it'll probably install `x86_64` for you, though because BYOND is stuck in the stone age you need to compile for `i686` instead. To install the `i686` version of the toolchain, simply run:
 ```powershell
-rustup default stable-i686
+rustup default nightly-i686
 ```
 
 Easiest way to build on both Windows and Linux is to run `build.ps1` with Powershell.

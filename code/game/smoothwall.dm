@@ -71,7 +71,7 @@
 	if(canSmoothWith)
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
-			if(isSmoothableNeighbor(T))
+			if(isSmoothableNeighbor(T) && T.canSmoothWith)
 				T.relativewall()
 			for(var/atom/A in T)
 				if(isSmoothableNeighbor(A))

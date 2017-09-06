@@ -7,26 +7,21 @@
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
-	var/obj/machinery/camera/camera
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	var/id_suffix = "ERT_empty"
 
-/obj/item/clothing/head/helmet/space/ert/attack_self(mob/user)
-	if(camera)
-		..(user)
-	else
-		camera = new /obj/machinery/camera(src)
-		camera.network = list("ERT")
-		cameranet.removeCamera(camera)
-		camera.c_tag = user.name
-		to_chat(user, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")
-
-/obj/item/clothing/head/helmet/space/ert/examine(mob/user)
-	..()
-	if(get_dist(user,src) <= 1)
-		to_chat(user, "This helmet has a built-in camera. It's [camera ? "" : "in"]active.")
+/obj/item/clothing/head/helmet/space/ert/equipped(var/mob/M)
+	var/mob/living/carbon/human/H = M
+	if(!istype(H))
+		return
+	if(H.get_item_by_slot(slot_head) == src)
+		var/obj/item/weapon/card/id/worn_id = H.get_item_by_slot(slot_wear_id)
+		if(istype(worn_id))
+			if(findtextEx(worn_id.icon_state,"ERT_")!=0)
+				worn_id.icon_state = id_suffix
 
 /obj/item/clothing/suit/space/ert
 	name = "emergency response team suit"
@@ -34,7 +29,7 @@
 	icon_state = "ert_commander"
 	item_state = "suit-command"
 	w_class = W_CLASS_LARGE
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 60)
 	clothing_flags = PLASMAGUARD
 	pressure_resistance = 200 * ONE_ATMOSPHERE
@@ -55,13 +50,14 @@
 	item_state = "helm-command"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	id_suffix = "ERT_leader"
 
 /obj/item/clothing/suit/space/ert/commander
 	name = "emergency response team commander suit"
 	desc = "A suit worn by the commander of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_commander"
 	item_state = "suit-command"
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 
 //Security
 /obj/item/clothing/head/helmet/space/ert/security
@@ -71,6 +67,7 @@
 	item_state = "syndicate-helm-black-red"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	id_suffix = "ERT_security"
 
 /obj/item/clothing/suit/space/ert/security
 	name = "emergency response team security suit"
@@ -86,6 +83,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 50, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 100)
+	id_suffix = "ERT_engineering"
 
 /obj/item/clothing/suit/space/ert/engineer
 	name = "emergency response team engineer suit"
@@ -100,6 +98,7 @@
 	icon_state = "ert_medical"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	id_suffix = "ERT_medical"
 
 /obj/item/clothing/suit/space/ert/medical
 	name = "emergency response team medical suit"

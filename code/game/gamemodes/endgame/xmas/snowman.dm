@@ -110,7 +110,7 @@
 	weaken = 1
 	stutter = 1
 
-/obj/item/projectile/snowball/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/snowball/to_bump(atom/A as mob|obj|turf|area)
 	.=..()
 	if(.)
 		playsound(A.loc, "swing_hit", 50, 1)

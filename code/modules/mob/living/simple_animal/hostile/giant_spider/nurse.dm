@@ -192,10 +192,11 @@ var/list/spider_queens = list()
 	health = 500
 	melee_damage_lower = 30
 	melee_damage_upper = 40
-	speed = 5
+	speed = 6
 	projectiletype = /obj/item/projectile/web
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
+	size = SIZE_HUGE
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/New()
 	..()
@@ -213,7 +214,7 @@ var/list/spider_queens = list()
 	damage = 5
 	damage_type = BRUTE
 
-/obj/item/projectile/web/Bump(atom/A)
+/obj/item/projectile/web/to_bump(atom/A)
 	if(!(locate(/obj/effect/spider/stickyweb) in get_turf(src)))
 		new /obj/effect/spider/stickyweb(get_turf(src))
 	qdel(src)

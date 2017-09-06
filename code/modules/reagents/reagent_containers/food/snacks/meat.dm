@@ -40,6 +40,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
 	desc = "Tastes like the tears of the station. Gives off the faint aroma of a valid salad. Just like mom used to make. This revelation horrifies you greatly."
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/lizard/New()
+	..()
+
+	//ACIDSPIT is an alcoholic drink that also cures cockatrice petrification (lizard meat curing petrification is a nethack reference)
+	reagents.add_reagent(ACIDSPIT, 2)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 	name = "synthetic meat"
 	desc = "A synthetic slab of flesh."
@@ -153,6 +159,12 @@
 	desc = "A cockroach's severed abdomen, small but nonetheless nutritious."
 	icon_state = "roachmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, rand(5,12))
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
@@ -190,3 +202,30 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive
+	name = "alien tissue"
+	desc = "A long piece of rough, black tissue."
+	icon_state = "hivemeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/New()
+	..()
+
+	reagents.add_reagent(CARBON, 5)
+	reagents.add_reagent(pick(IRON, GOLD, SILVER, URANIUM), rand(0,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/New()
+	..()
+
+	reagents.add_reagent(OXYGEN, rand(1,5))
+	reagents.add_reagent(ETHANOL, rand(1,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/cockatrice
+	name = "cockatrice meat"
+	desc = "A slab of cockatrice meat. It may still contain traces of a cockatrice's venom, making it very unsafe to eat."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/cockatrice/New()
+	..()
+
+	reagents.add_reagent(PETRITRICIN, 3)
+

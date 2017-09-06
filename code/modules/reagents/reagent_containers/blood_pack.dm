@@ -58,18 +58,22 @@
 
 		var/percent = round((reagents.total_volume / volume) * 100)
 		switch(percent)
-			if(1 to 20)
+			if(0 to 9)
+				filling.icon_state = "[icon_state]-10"
+			if(10 to 24)
 				filling.icon_state = "[icon_state]10"
-			if(21 to 40)
+			if(25 to 49)
 				filling.icon_state = "[icon_state]25"
-			if(41 to 60)
+			if(50 to 74)
 				filling.icon_state = "[icon_state]50"
-			if(61 to 85)
+			if(75 to 79)
 				filling.icon_state = "[icon_state]75"
-			if(86 to INFINITY)
+			if(80 to 90)
+				filling.icon_state = "[icon_state]80"
+			if(91 to INFINITY)
 				filling.icon_state = "[icon_state]100"
 
-		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.icon *= mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
@@ -210,7 +214,7 @@
 
 	if (holes)
 		for(var/number_holes = 1 to holes)
-			var/A //since I'm handling blood & reagents in different places, I don't blood to be emptied twice as fast.
+			var/A //since I'm handling blood & reagents in different places, I don't want blood to be emptied twice as fast.
 			if(reagents.reagent_list.len>1 && reagents.has_reagent(BLOOD))
 				A = 5
 			else

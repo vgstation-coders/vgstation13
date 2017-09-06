@@ -19,7 +19,7 @@
 	stop_automated_movement_when_pulled = 0
 	health = 300
 	maxHealth = 300
-	speed = 8
+	speed = 9
 	projectiletype = /obj/item/projectile/beam/drone
 	projectilesound = 'sound/weapons/laser3.ogg'
 	environment_smash = 2
@@ -29,6 +29,7 @@
 	meat_type = null
 
 	flying = 1
+	mob_property_flags = MOB_ROBOTIC
 
 	var/datum/effect/effect/system/trail/ion_trail
 	var/hostile_time = 0

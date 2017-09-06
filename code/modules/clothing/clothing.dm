@@ -323,6 +323,12 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/Touch(var/atom/A, mob/user, proximity)
 	return 0 // return 1 to cancel attack_hand()
 
+/obj/item/clothing/gloves/proc/get_damage_added()
+	return damage_added
+
+/obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
 //Head
 /obj/item/clothing/head
 	name = "head"
@@ -343,16 +349,16 @@ BLIND     // can't see anything
 	var/ignore_flip = 0
 	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
-	
+
 /datum/action/item_action/toggle_mask
 	name = "Toggle Mask"
-	
+
 /datum/action/item_action/toggle_mask/Trigger()
 	var/obj/item/clothing/mask/T = target
 	if(!istype(T))
 		return
 	T.togglemask()
-	
+
 /obj/item/clothing/mask/proc/togglemask()
 	if(ignore_flip)
 		return
@@ -408,7 +414,7 @@ BLIND     // can't see anything
 	slot_flags = SLOT_FEET
 	heat_conductivity = SHOE_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.50
-	slowdown = SHOES_SLOWDOWN
+
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
 	var/stepstaken = 1
@@ -477,7 +483,7 @@ BLIND     // can't see anything
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = 3
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
@@ -573,7 +579,7 @@ BLIND     // can't see anything
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
-		
+
 /datum/action/item_action/toggle_minimap
 	name = "Toggle Minimap"
 
@@ -583,7 +589,7 @@ BLIND     // can't see anything
 		return
 	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
 		HC.togglemap()
-		
+
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
@@ -595,5 +601,5 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
-	
+
 

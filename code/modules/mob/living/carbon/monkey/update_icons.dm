@@ -18,7 +18,7 @@
 
 /mob/living/carbon/monkey/regenerate_icons()
 	..()
-	var/icon/opacity_icon = new(icon, icon_state)
+	var/icon/opacity_icon = new(icon)
 	if(body_alphas.len)
 		opacity_icon.ChangeOpacity(ARBITRARILY_LARGE_NUMBER)
 		var/lowest_alpha = get_lowest_body_alpha()

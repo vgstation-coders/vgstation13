@@ -95,7 +95,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		// 1 = view feed channels
 		// 2 = create feed channel
 		// 3 = create feed story
-		// 4 = feed story submited sucessfully
+		// 4 = feed story submited successfully
 		// 5 = feed channel created successfully
 		// 6 = ERROR: Cannot create feed story
 		// 7 = ERROR: Cannot create feed channel
@@ -959,6 +959,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )
 						playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
 					else
+						user.do_attack_animation(src, W)
 						src.hitstaken++
 						if(src.hitstaken==3)
 							visible_message("[user.name] smashes the [src]!")

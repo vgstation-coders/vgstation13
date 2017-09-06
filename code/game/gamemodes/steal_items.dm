@@ -103,7 +103,7 @@
 
 /datum/theft_objective/traitor/blueprints
 	name = "the station blueprints"
-	typepath = /obj/item/blueprints
+	typepath = /obj/item/blueprints/primary
 	protected_jobs = list("Chief Engineer")
 
 /datum/theft_objective/traitor/voidsuit
@@ -180,6 +180,11 @@
 	name = "a tank transfer valve"
 	typepath = /obj/item/device/transfer_valve
 	protected_jobs = list("Research Director", "Scientist")
+
+/datum/theft_objective/traitor/Holotool
+	name = "the holo switchtool"
+	typepath = /obj/item/weapon/switchtool/holo
+	protected_jobs = list("Research Director")
 
 
 /datum/theft_objective/number

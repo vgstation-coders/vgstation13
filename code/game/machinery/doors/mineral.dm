@@ -99,12 +99,17 @@
 		ore = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 	else
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
-		ore = new P(get_turf(src))
-	ore.amount = oreAmount
-	if(devastated)
-		ore.amount -= 2
+		if(P)
+			ore = new P(get_turf(src))
+
+	if(ore)
+		var/new_amount = oreAmount
+		if(devastated)
+			new_amount -= 2
+
+		ore.set_amount(new_amount)
+
 	qdel(src)
-	return
 
 /obj/machinery/door/mineral/ex_act(severity = 1)
 	switch(severity)
@@ -119,8 +124,6 @@
 		if(3)
 			hardness -= 0.1
 			CheckHardness()
-	return
-
 
 /obj/machinery/door/mineral/iron
 	prefix = "metal"
@@ -237,6 +240,18 @@
 
 /obj/machinery/door/mineral/resin/acidable()
 	return 0
+
+/obj/machinery/door/mineral/hive
+	prefix = ""
+	icon = 'icons/obj/doors/morgue.dmi'
+	icon_state = "door_closed"
+	hardness = 1 //very weak
+
+/obj/machinery/door/mineral/hive/New()
+	..()
+
+	dir = pick(cardinal)
+	//Random direction for a more chaotic look
 
 /obj/machinery/door/mineral/transparent/icicle
 	name = "icicle door"

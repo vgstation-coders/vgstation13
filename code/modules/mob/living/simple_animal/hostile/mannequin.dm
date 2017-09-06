@@ -12,7 +12,7 @@
 	response_help = "touches"
 	response_disarm = "pushes"
 	response_harm = "hits"
-	speed = -1
+	speed = 1
 	maxHealth = 90
 	health = 90
 
@@ -32,6 +32,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
+	mob_property_flags = MOB_CONSTRUCT
 	faction = "mannequin"
 
 	var/list/clothing = list()

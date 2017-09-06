@@ -54,7 +54,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 	.=..()
 
-/obj/effect/effect/water/Bump(atom/A)
+/obj/effect/effect/water/to_bump(atom/A)
 	if(reagents)
 		reagents.reaction(A)
 	return ..()
@@ -907,9 +907,10 @@ steam.start() -- spawns the effect
 	attack_hand(user)
 	return
 
-/obj/structure/foamedmetal/attack_hand(var/mob/user)
+/obj/structure/foamedmetal/attack_hand(var/mob/living/user)
 	user.delayNextAttack(10)
 	if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
+		user.do_attack_animation(src, user)
 		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src].</span>")
 		qdel(src)
 	else
@@ -922,7 +923,8 @@ steam.start() -- spawns the effect
 	if(prob(75 - metal*25))
 		qdel(src)
 
-/obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/user)
+/obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/living/user)
+	user.do_attack_animation(src, I)
 	user.delayNextAttack(10)
 	if (istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
@@ -946,13 +948,13 @@ steam.start() -- spawns the effect
 
 /obj/structure/foamedmetal/proc/update_nearby_tiles()
 
-	if (isnull(air_master))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc
 
 	if (isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1
 
@@ -972,21 +974,23 @@ steam.start() -- spawns the effect
 	icon_plating = "foamedmetal"
 	can_exist_under_lattice = 1
 
-/turf/simulated/floor/foamedmetal/attack_hand(mob/user as mob)
+/turf/simulated/floor/foamedmetal/attack_hand(mob/living/user as mob)
 	user.delayNextAttack(10)
 	if ((M_HULK in user.mutations) || (prob(50)))
+		user.do_attack_animation(src, user)
 		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src].</span>")
 		src.ChangeTurf(get_base_turf(src.z))
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
 
-/turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/user as mob)
+/turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/living/user as mob)
 	if(!(locate(/obj/structure/lattice) in contents))
 		if(istype(C, /obj/item/stack/rods))
 			return
 	else if(istype(C, /obj/item/stack/tile))
 		return
 	user.delayNextAttack(10)
+	user.do_attack_animation(src, C)
 	if (istype(C, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = C
 		G.affecting.forceMove(src.loc)

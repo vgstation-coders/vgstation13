@@ -133,7 +133,7 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
-	eyeprot = 2
+	eyeprot = initial(eyeprot)
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
 //	body_parts_covered |= EYES
@@ -178,9 +178,11 @@
 
 /obj/item/clothing/glasses/scanner/material/unequipped(var/mob/M)
 	update_mob()
+	..()
 
 /obj/item/clothing/glasses/scanner/material/equipped(var/mob/M)
 	update_mob(M)
+	..()
 
 /obj/item/clothing/glasses/scanner/material/OnMobLife(var/mob/living/carbon/human/M)
 	update_mob(M.glasses == src ? M : null)

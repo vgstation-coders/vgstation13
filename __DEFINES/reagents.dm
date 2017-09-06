@@ -85,6 +85,7 @@
 #define PERIDAXON 			"peridaxon"
 #define BICARIDINE 			"bicaridine"
 #define HYPERZINE 			"hyperzine"
+#define HYPOZINE 			"hypozine"
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
@@ -134,6 +135,7 @@
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
+#define ROYALJELLY			"royaljelly"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
@@ -315,6 +317,14 @@
 #define SANGRIA			"sangria"
 #define BLOCKIZINE		"blockizine"
 #define FISHBLEACH		"fishbleach"
+#define CHEESYGLOOP		"cheesy_gloop"
+#define MAPLESYRUP		"maple_syrup"
+#define ROACHSHELL		"roach_shell"
+#define GREYVODKA		"grey_vodka"
+#define MEDCORES		"medium cores"
+#define LITHOTORCRAZINE "lithotorcrazine"
+#define HEMOSCYANINE	"hemoscyanine"
+#define ANTHRACENE		"anthracene"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -323,6 +333,27 @@
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
 
+//Plant-specific reagents
+#define TANNIC_ACID		"tannic_acid"
+#define KATHALAI		"kathalai"
+#define OPIUM			"opium"
+#define MESCALINE		"mescaline"
+#define CYTISINE		"cytisine"
+#define COCAINE			"cocaine"
+#define ZEAXANTHIN		"zeaxanthin"
+#define VALERENIC_ACID	"valerenic_acid"
+#define ALLICIN			"allicin"
+#define FORMIC_ACID		"formic_acid"
+#define PHENOL			"phenol"
+#define CURARE			"curare"
+#define SOLANINE		"solanine"
+#define PHYSOSTIGMINE	"physostigmine"
+#define HYOSCYAMINE		"hyoscyamine"
+#define CORIAMYRTIN		"coriamyrtin"
+#define THYMOL			"thymol"
+
+#define PETRITRICIN		"petritricin"
+#define APETRINE		"apetrine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -332,7 +363,7 @@
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 //Pulse related bullshit
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE)	//increase heart rate
-var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN)					//decrease heart rate
+var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE)	//increase heart rate
+var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
-var/list/cheartstopper = list(/*"potassium_chloride"*/) //this stops the heart when overdose is met -- c = conditional
+var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional
