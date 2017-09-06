@@ -259,10 +259,6 @@
 /obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated() || !user.has_limbs)
 		return 0
-	if(iscarbon(user))
-		var/mob/living/carbon/C = user
-		if(C.legcuffed)
-			return 0
 
 	//If we're in space or our area has no gravity...
 	var/turf/T = get_turf(loc)
