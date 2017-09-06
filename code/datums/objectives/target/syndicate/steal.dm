@@ -29,8 +29,6 @@ var/list/potential_theft_objectives=list(
 		explanation_text = format_explanation()
 		return
 
-	explanation_text = "Free Objective."
-
 /datum/objective/target/steal/proc/format_explanation()
 	return "Steal [steal_target.name]."
 
