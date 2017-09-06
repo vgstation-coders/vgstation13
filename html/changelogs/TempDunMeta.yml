@@ -1,4 +1,4 @@
 author: Duny
 delete-after: true
 changes:
-- tweak: Swapped around Medbay Storage, Chemistry and the Paramedics Office on Metaclub to allow for a better placement of paramedics and the fridge, in order to reduce the crowding near the entrance.
+- tweak: Reworked the top half of Metaclubs medbay (chemistry, paramedics, storage, hallway and reception), mainly in order to reduce the crowding near the entrance.
