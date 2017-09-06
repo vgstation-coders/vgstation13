@@ -12,8 +12,6 @@
 
 /datum/objective/target/debrain/IsFulfilled()
 	..()
-	if(!target)//If it's a free objective.
-		return TRUE
 	if(!owner.current || owner.current.isDead())//If you're otherwise dead.
 		return FALSE
 	if(!target.current || !isbrain(target.current))
