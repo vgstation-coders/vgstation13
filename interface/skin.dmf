@@ -886,7 +886,7 @@ window "rpane"
 		is-vert = false
 	elem "github"
 		type = BUTTON
-		pos = 455,0
+		pos = 468,0
 		size = 60x16
 		anchor1 = none
 		anchor2 = none
@@ -895,7 +895,7 @@ window "rpane"
 		command = "Github-Report"
 	elem "special_button"
 		type = BUTTON
-		pos = 518,0
+		pos = 531,0
 		size = 60x16
 		anchor1 = none
 		anchor2 = none
@@ -907,7 +907,7 @@ window "rpane"
 	elem "map"
 		type = BUTTON
 		pos = 386,0
-		size = 67x16
+		size = 80x16
 		anchor1 = none
 		anchor2 = none
 		saved-params = "is-checked"
