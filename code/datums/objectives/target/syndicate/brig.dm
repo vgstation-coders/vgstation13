@@ -23,7 +23,7 @@
 		if(target.current.stat == DEAD)
 			return FALSE
 		// Make the actual required time a bit shorter than the official time
-		if(target.is_brigged(10 * 60 * 5))
+		if(target.is_brigged(5 MINUTES))
 			already_completed = TRUE
 			return TRUE
 		return FALSE
