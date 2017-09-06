@@ -256,7 +256,34 @@
 		layer = OBJ_LAYER
 		plane = OBJ_PLANE
 
+/obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
+	if(user.isStunned() || user.isUnconscious() || !user.has_limbs)
+		return 0
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if(C.legcuffed)
+			return 0
 
+	//If we're in space or our area has no gravity...
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
+	if(!T.has_gravity())
+		// Block relaymove() if needed.
+		if(!Process_Spacemove(0))
+			return 0
+	if(istype(T, /turf/simulated))
+		var/turf/simulated/ST = T
+		if(ST.wet == TURF_WET_LUBE)
+			user.unlock_from(src)
+			ST.Entered(user) //bye bye
+
+	if(direction != dir)
+		change_dir(direction)
+		user.delayNextMove(3)
+	else
+		step(src, direction)
+		user.delayNextMove(10)
 
 /obj/structure/bed/chair/office/light
 	icon_state = "officechair_white"
