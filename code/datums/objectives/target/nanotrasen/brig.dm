@@ -22,7 +22,7 @@
 	if(target && target.current)
 		if(target.current.isDead())
 			return FALSE
-		if(target.is_brigged(10 * 60 * 10))
+		if(target.is_brigged(20 MINUTES))
 			already_completed = TRUE
 			return TRUE
 		return FALSE
