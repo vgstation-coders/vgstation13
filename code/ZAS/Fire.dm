@@ -133,6 +133,7 @@ Attach to transfer valve and open. BOOM.
 	plane = ABOVE_TURF_PLANE
 
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 /obj/effect/fire/proc/Extinguish()
 	var/turf/simulated/S=loc
@@ -261,7 +262,7 @@ Attach to transfer valve and open. BOOM.
 /obj/effect/fire/Destroy()
 	SSair.remove_hotspot(src)
 
-	set_light(0)
+	kill_light()
 	..()
 
 turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.

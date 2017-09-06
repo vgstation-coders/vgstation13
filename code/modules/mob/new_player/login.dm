@@ -16,6 +16,8 @@
 	change_sight(adding = SEE_TURFS)
 	player_list |= src
 
+	create_lighting_planes()
+
 /*
 	var/list/watch_locations = list()
 	for(var/obj/effect/landmark/landmark in landmarks_list)

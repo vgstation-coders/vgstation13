@@ -660,10 +660,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Toggle Darkness"
 	set category = "Ghost"
 
-	if (see_invisible == SEE_INVISIBLE_OBSERVER_NOLIGHTING)
-		see_invisible = SEE_INVISIBLE_OBSERVER
-	else
-		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+	seedarkness = !seedarkness
+	update_darkness()
 
 /mob/dead/observer/verb/become_mouse()
 	set name = "Become mouse"

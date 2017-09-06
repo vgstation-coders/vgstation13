@@ -96,6 +96,8 @@
 		return
 	else
 		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		seedarkness = TRUE
+		update_darkness()
 
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)

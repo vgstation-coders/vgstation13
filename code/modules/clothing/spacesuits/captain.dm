@@ -10,7 +10,7 @@
 	armor = list(melee = 65, bullet = 50, laser = 50,energy = 25, bomb = 50, bio = 100, rad = 50)
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
-	var/brightness_on = 4
+	light_range = 4
 	var/on = 0
 	var/no_light = 0
 	actions_types = list(/datum/action/item_action/toggle_light)
@@ -22,9 +22,9 @@
 	user.update_inv_head()
 
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
-		set_light(0)
+		kill_light()
 
 //Captain's space suit This is not the proper path but I don't currently know enough about how this all works to mess with it.
 /obj/item/clothing/suit/armor/captain

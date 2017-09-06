@@ -574,7 +574,7 @@
 			. += MOB_RUN_TALLY+config.run_speed
 		if("walk")
 			. += MOB_WALK_TALLY+config.walk_speed
-	
+
 	var/obj/item/weapon/grab/Findgrab = locate() in src
 	if(Findgrab)
 		. += 7

@@ -231,6 +231,7 @@
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 	invisa_view = 2
 	eyeprot = -2 //prepare for your eyes to get shit on
 
@@ -245,6 +246,16 @@
 			spawn(100)
 				M.disabilities &= ~NEARSIGHTED
 	..()
+
+/obj/item/clothing/glasses/thermal/equipped(mob/user)
+	seedarkness = FALSE
+	..()
+
+/obj/item/clothing/glasses/thermal/unequipped(mob/user, var/from_slot = null)
+	if(from_slot == slot_glasses)
+		seedarkness = TRUE
+	..()
+
 
 /obj/item/clothing/glasses/thermal/syndi	//These are now a traitor item, concealed as mesons.	-Pete
 	name = "optical meson scanner"
@@ -264,10 +275,12 @@
 	if(harm_labeled < min_harm_label)
 		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
+		seedarkness = FALSE
 		invisa_view = 2
 	else
 		vision_flags &= ~SEE_MOBS
 		see_invisible &= ~SEE_INVISIBLE_MINIMUM
+		seedarkness = TRUE
 		invisa_view = 0
 
 /obj/item/clothing/glasses/thermal/eyepatch

@@ -7,6 +7,7 @@
 	w_class = W_CLASS_TINY
 	heat_production = 1000
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 	var/wax = 200
 	var/lit = 0
@@ -41,7 +42,7 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.oxygen < 5)
 		src.lit = 0
-		set_light(0)
+		kill_light()
 		processing_objects.Remove(src)
 		update_icon()
 		return
@@ -59,7 +60,7 @@
 	if(lit)
 		lit = 0
 		update_icon()
-		set_light(0)
+		kill_light()
 
 /obj/item/candle/is_hot()
 	if(lit)

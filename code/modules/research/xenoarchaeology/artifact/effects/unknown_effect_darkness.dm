@@ -16,4 +16,4 @@
 		if(!activated)
 			holder.set_light(effectrange, -dark_level)
 		else
-			holder.set_light(0)
+			holder.kill_light()

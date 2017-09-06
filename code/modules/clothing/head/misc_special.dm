@@ -102,7 +102,7 @@
 		src.force = null
 		src.damtype = "brute"
 		src.icon_state = "cake0"
-		set_light(0)
+		kill_light()
 	return
 
 
@@ -139,7 +139,7 @@
 	_color = "pumpkin"
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
-	var/brightness_on = 2 //luminosity when on
+	light_range = 2
 	var/on = 0
 
 	attack_self(mob/user)
@@ -152,9 +152,9 @@
 		item_state = "hardhat[on]_[_color]"
 
 		if(on)
-			set_light(brightness_on)
+			set_light()
 		else
-			set_light(0)
+			kill_light()
 
 /*
  * Kitty ears

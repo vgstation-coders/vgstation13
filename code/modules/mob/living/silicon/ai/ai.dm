@@ -842,7 +842,7 @@ var/list/ai_list = list()
 		to_chat(src, "Camera lights deactivated.")
 
 		for (var/obj/machinery/camera/C in lit_cameras)
-			C.set_light(0)
+			C.kill_light()
 			lit_cameras = list()
 
 		return
@@ -877,7 +877,7 @@ var/list/ai_list = list()
 	remove = lit_cameras - visible
 
 	for (var/obj/machinery/camera/C in remove)
-		C.set_light(0)
+		C.kill_light()
 		lit_cameras -= C
 	for (var/obj/machinery/camera/C in add)
 		C.set_light(AI_CAMERA_LUMINOSITY)

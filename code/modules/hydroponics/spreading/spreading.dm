@@ -148,7 +148,7 @@
 		set_light(1+round(seed.potency/20), l_color = seed.biolum_colour)
 		return
 	else
-		set_light(0)
+		kill_light()
 
 /obj/effect/plantsegment/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))

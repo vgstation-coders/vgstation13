@@ -315,6 +315,8 @@
 		change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
 		see_in_dark = 4
 		see_invisible = SEE_INVISIBLE_MINIMUM
+		seedarkness = FALSE
+		update_darkness()
 
 	if (healths)
 		if (stat != 2)

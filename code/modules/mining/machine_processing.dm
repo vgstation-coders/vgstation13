@@ -83,7 +83,7 @@
 
 	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
 		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
-	
+
 	dat += {"</div>
 	<div style="float:left;" class="block">
 	<table>
@@ -302,7 +302,7 @@
 /obj/machinery/mineral/processing_unit/update_icon()
 	if(stat & (NOPOWER | BROKEN) || !on)
 		icon_state = "furnace_o"
-		set_light(0)
+		kill_light()
 	else if(on)
 		icon_state = "furnace"
 		set_light(light_range_on, light_power_on)

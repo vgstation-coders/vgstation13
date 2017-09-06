@@ -25,12 +25,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "cig"
 	var/lit = 0
 	var/smoketime = 10
-	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
+	light_range = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 /obj/item/weapon/match/New()
 	..()
@@ -73,10 +74,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/match/proc/update_brightness()
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
 		processing_objects.Add(src)
-		set_light(brightness_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/weapon/match/process()
@@ -158,12 +159,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("burns", "singes")
 	heat_production = 1000
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 	slot_flags = SLOT_MASK|SLOT_EARS
+	light_range = 1
 	var/lit = 0
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/weapon/cigbutt
 	var/lastHolder = null
-	var/brightness_on = 1 //Barely enough to see where you're standing, it's a boring old cigarette
 	var/smoketime = 300
 	var/chem_volume = 15
 	var/inside_item = 0 //For whether the cigarette is contained inside another item.
@@ -203,10 +205,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/proc/update_brightness()
 	if(lit)
 		processing_objects.Add(src)
-		set_light(brightness_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/mask/cigarette/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -608,14 +610,15 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	flags = null
 	siemens_coefficient = 1
 	var/color_suffix = "-g" // Determines the sprite used
-	var/brightness_on = 2 //Sensibly better than a match or a cigarette
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
 	var/fueltime
 	heat_production = 1500
 	slot_flags = SLOT_BELT
 	attack_verb = list("burns", "singes")
+	light_range = 2 //Sensibly better than a match or a cigarette
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 	var/lit = 0
 
 /obj/item/weapon/lighter/New()
@@ -661,10 +664,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/proc/update_brightness()
 	if(lit)
 		processing_objects.Add(src)
-		set_light(brightness_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)

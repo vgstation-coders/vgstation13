@@ -314,7 +314,7 @@
 				if(lighted)
 					card.set_light(4) //Equal to flashlight
 				else
-					card.set_light(0)
+					card.kill_light()
 		if("pps")
 			if(href_list["tag"])
 				var/tag = input("Please enter desired tag.", name, ppstag) as text|null

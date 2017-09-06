@@ -18,7 +18,7 @@
 			var/client/C = user.client
 			C.color = initial(C.color)
 
-/obj/item/clothing/glasses/scanner/equipped(M as mob, glasses)
+/obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M
 		if(O.glasses != src)
@@ -31,16 +31,18 @@
 		return
 	if(on)
 		if(iscarbon(M))
+			M.update_darkness()
 			apply_color(M)
 	..()
-	
+
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
+			user.seedarkness = TRUE
 			if(iscarbon(user))
 				remove_color(user)
 	..()
-	
+
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
 
@@ -98,7 +100,8 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+	see_invisible = SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 	see_in_dark = 8
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -112,12 +115,14 @@
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_invisible = initial(see_invisible)
 	see_in_dark = initial(see_in_dark)
+	seedarkness = FALSE
 	eyeprot = initial(eyeprot)
 	..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
 	see_invisible = 0
 	see_in_dark = 0
+	seedarkness = TRUE
 	eyeprot = 0
 	..()
 
@@ -129,6 +134,7 @@
 	vision_flags = SEE_TURFS
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(GREY_SHAPED)
 
@@ -136,6 +142,7 @@
 	eyeprot = initial(eyeprot)
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 //	body_parts_covered |= EYES
 	..()
 
@@ -144,6 +151,7 @@
 //	body_parts_covered &= ~EYES
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
+	seedarkness = TRUE
 	..()
 
 /obj/item/clothing/glasses/scanner/material

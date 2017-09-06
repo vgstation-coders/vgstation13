@@ -1292,9 +1292,11 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		cell.use(20);
 		spawn(0)
 			for(var/obj/machinery/light/L in areaMaster)
-				L.on = 1
-				L.broken()
-				sleep(1)
+				L.flicker(5)
+				spawn(5)
+					L.on = 1
+					L.broken()
+					sleep(1)
 
 /obj/machinery/power/apc/Destroy()
 	if(areaMaster.areaapc == src)
