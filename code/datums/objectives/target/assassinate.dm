@@ -2,8 +2,6 @@
 	..()
 	if(target && target.current)
 		explanation_text = "Assassinate [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
-	else
-		explanation_text = "Free Objective"
 	return target
 
 
