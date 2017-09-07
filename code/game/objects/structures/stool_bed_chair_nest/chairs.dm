@@ -279,7 +279,17 @@
 		user.delayNextMove(3)
 	else
 		step(src, direction)
-		user.delayNextMove(10)
+		user.delayNextMove(max(6, user.movement_delay()))
+
+/obj/structure/bed/chair/office/airflow_hit(atom/A)
+	. = ..()
+	if(!is_locking(lock_type))
+		return
+	var/mob/M = get_locked(lock_type)[1]
+	if(!M)
+		return
+	M.unlock_from(src)
+	M.airflow_hit(A)
 
 /obj/structure/bed/chair/office/light
 	icon_state = "officechair_white"
