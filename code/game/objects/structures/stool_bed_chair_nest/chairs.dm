@@ -277,7 +277,6 @@
 			return 0
 
 	if(airflow_dest) //ugly hack: "are we currently being flung by ZAS?"
-		user.unlock_from(src)
 		return 0
 
 	if(direction != dir)
