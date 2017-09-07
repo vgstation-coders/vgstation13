@@ -1,0 +1,4 @@
+author: Duny
+delete-after: true
+changes:
+- tweak: Reworked the top half of Metaclubs medbay (chemistry, paramedics, storage, hallway and reception), mainly in order to reduce the crowding near the entrance.
