@@ -268,28 +268,24 @@
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
 			return 0
+
 	if(istype(T, /turf/simulated))
 		var/turf/simulated/ST = T
 		if(ST.wet == TURF_WET_LUBE)
 			user.unlock_from(src)
 			ST.Entered(user) //bye bye
+			return 0
+
+	if(airflow_dest) //ugly hack: "are we currently being flung by ZAS?"
+		user.unlock_from(src)
+		return 0
 
 	if(direction != dir)
 		change_dir(direction)
 		user.delayNextMove(3)
 	else
 		step(src, direction)
-		user.delayNextMove(max(6, user.movement_delay()))
-
-/obj/structure/bed/chair/office/airflow_hit(atom/A)
-	. = ..()
-	if(!is_locking(lock_type))
-		return
-	var/mob/M = get_locked(lock_type)[1]
-	if(!M)
-		return
-	M.unlock_from(src)
-	M.airflow_hit(A)
+		user.delayNextMove(max(5, user.movement_delay()))
 
 /obj/structure/bed/chair/office/light
 	icon_state = "officechair_white"
