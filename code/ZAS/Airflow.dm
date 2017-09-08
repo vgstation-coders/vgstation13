@@ -108,7 +108,7 @@ atom/movable/RepelAirflowDest(n)
 	return 0
 
 
-obj/item/check_airflow_movable(n)
+/obj/item/check_airflow_movable(n)
 	. = ..()
 	switch(w_class)
 		if(2)
