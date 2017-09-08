@@ -330,11 +330,3 @@ mob/living/carbon/human/airflow_hit(atom/A)
 			stunned += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2)
 
 	. = ..()
-
-zone/proc/movables()
-	. = list()
-	for(var/turf/T in contents)
-		for(var/atom/A in T)
-			if(istype(A, /obj/effect) || isobserver(A) || isAIEye(A))
-				continue
-			. += A

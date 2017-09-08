@@ -71,21 +71,16 @@ Class Procs:
 
 /connection_edge/proc/recheck()
 
-/connection_edge/proc/flow(list/movable, differential, repelled)
+/connection_edge/proc/flow(list/blown, differential, repelled)
 	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
-	for(var/atom/movable/M in movable)
-		//If they're already being tossed, don't do it again.
-		if(M.world.time < last_airflow + zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
-			continue
-		if(M.airflow_speed)
-			continue
-
+	for(var/atom/movable/AM in blown)
 		//Check for knocking people over
-		if(ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
-			M:airflow_stun()
+		if(ismob(AM) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
+			var/mob/M = AM
+			M.airflow_stun()
 
-		if(M.check_airflow_movable(differential))
+		if(AM.check_airflow_movable(differential))
 			//Check for things that are in range of the midpoint turfs.
 			var/list/close_turfs = list()
 			for(var/turf/U in connecting_turfs)
@@ -94,12 +89,12 @@ Class Procs:
 			if(!close_turfs.len)
 				continue
 
-			M.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
+			AM.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
 			if(repelled)
-				M.RepelAirflowDest(differential/5)
+				AM.RepelAirflowDest(differential/5)
 			else
-				M.GotoAirflowDest(differential/10)
+				AM.GotoAirflowDest(differential/10)
 
 
 /connection_edge/zone
@@ -141,11 +136,11 @@ Class Procs:
 		var/list/attracted
 		var/list/repelled
 		if(differential > 0)
-			attracted = A.movables()
-			repelled = B.movables()
+			attracted = A.contents
+			repelled = B.contents
 		else
-			attracted = B.movables()
-			repelled = A.movables()
+			attracted = B.contents
+			repelled = A.contents
 
 		flow(attracted, abs(differential), 0)
 		flow(repelled, abs(differential), 1)
@@ -210,7 +205,7 @@ Class Procs:
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		var/list/attracted = A.movables()
+		var/list/attracted = A.contents
 		flow(attracted, abs(differential), differential < 0)
 
 	if(equiv)
