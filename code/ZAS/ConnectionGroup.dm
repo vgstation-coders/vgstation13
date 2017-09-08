@@ -76,7 +76,7 @@ Class Procs:
 		return
 	for(var/atom/movable/M in movable)
 		//If they're already being tossed, don't do it again.
-		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
+		if(M.world.time < last_airflow + zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 			continue
 		if(M.airflow_speed)
 			continue

@@ -52,7 +52,7 @@ atom/movable/RepelAirflowDest(n)
 /mob/proc/airflow_stun()
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
 		return 0
-	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
+	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
@@ -69,7 +69,7 @@ atom/movable/RepelAirflowDest(n)
 	return
 
 /mob/living/carbon/human/airflow_stun()
-	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
+	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return 0
 	if(locked_to || (flags & INVULNERABLE))
 		return 0
