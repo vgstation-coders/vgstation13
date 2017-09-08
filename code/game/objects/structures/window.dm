@@ -25,6 +25,7 @@ var/list/one_way_windows
 	var/sheettype = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
+	var/obj/machinery/smartglass_electronics/smartwindow //For opaque/transparent windows. Also holds the internal machinery.
 	penetration_dampening = 1
 
 	var/obj/abstract/Overlays/damage_overlay
@@ -256,6 +257,14 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
+/obj/structure/window/proc/smart_toggle(var/state) //For "smart" windows
+	if(state) //Power on, visibility 0
+		animate(src, color="#FFFFFF", time=5)
+		set_opacity(0)
+	else
+		animate(src, color="#222222", time=5)
+		set_opacity(1)
+	
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
@@ -298,7 +307,7 @@ var/list/one_way_windows
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			overlays -= oneway_overlay
 			return
-
+	
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
 			to_chat(user, "<span class='notice'>This [src] already has one-way tint on it.</span>")
@@ -309,10 +318,29 @@ var/list/one_way_windows
 			one_way_windows = list()
 		one_way_windows.Add(src)
 		P.use(1)
-		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
+		to_chat(user, "<span class='notice'>You place a sheet of plastic over the [src].</span>")
 		overlays += oneway_overlay
 		return
 
+	
+	if(istype(W, /obj/item/stack/light_w))
+		var/obj/item/stack/light_w/LT = W
+		if (smartwindow)
+			to_chat(user, "<span class='notice'>This [src] already has electronics in it.</span>")
+			return
+		LT.use(1)
+		to_chat(user, "<span class='notice'>You add some electronics to the [src].</span>")	
+		smartwindow = new /obj/machinery/smartglass_electronics
+		return
+		
+		
+	if(ismultitool(W) && smartwindow)
+		//has to relay to machine inside the window
+		smart_toggle(opacity) //debug option to just toggle the transparency
+		
+		//smartwindow.multitool_menu(user)
+		return
+		
 	//Start construction and deconstruction, absolute priority over the other object interactions to avoid hitting the window
 
 	if(reinforced) //Steps for all reinforced window types
@@ -612,7 +640,7 @@ var/list/one_way_windows
 	icon_state = "fwindow"
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
-
+	
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(

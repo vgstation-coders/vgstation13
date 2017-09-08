@@ -470,6 +470,7 @@
 #include "code\game\machinery\scp_294.dm"
 #include "code\game\machinery\shieldgen.dm"
 #include "code\game\machinery\Sleeper.dm"
+#include "code\game\machinery\smartglass.dm"
 #include "code\game\machinery\station_map.dm"
 #include "code\game\machinery\status_display.dm"
 #include "code\game\machinery\suit_dispenser.dm"
