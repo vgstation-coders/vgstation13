@@ -205,8 +205,7 @@ Class Procs:
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		var/list/attracted = A.contents
-		flow(attracted, abs(differential), differential < 0)
+		flow(A.contents, abs(differential), differential < 0)
 
 	if(equiv)
 		A.air.copy_from(air)
