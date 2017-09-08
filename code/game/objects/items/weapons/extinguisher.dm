@@ -160,7 +160,8 @@
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
-					step(B, movementdirection)
+					if(!step(B, movementdirection))
+						break
 					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
 
@@ -247,7 +248,8 @@
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
-					step(B, movementdirection)
+					if(!step(B, movementdirection))
+						break
 					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
 
