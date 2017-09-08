@@ -145,6 +145,11 @@ var/list/one_way_windows
 	healthcheck()
 
 /obj/structure/window/kick_act(mob/living/carbon/human/H)
+	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)
+		var/obj/O = H.locked_to
+		if(O.onBuckledUserKick(H, src))
+			return //don't return 1! we will do the normal "touch" action if so!
+
 	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 
 	H.do_attack_animation(src, H)
