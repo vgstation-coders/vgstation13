@@ -48,7 +48,7 @@ atom/movable/RepelAirflowDest(n)
 
 */
 
-mob/var/tmp/last_airflow_stun = 0
+/mob/var/tmp/last_airflow_stun = 0
 mob/proc/airflow_stun()
 	if(stat == 2 || (flags & INVULNERABLE))
 		return 0
