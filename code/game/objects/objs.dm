@@ -576,3 +576,21 @@ a {
 		"integratedpai")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+//Called when a mob in our locked atoms list kicks another object. Return 1 if successful, to abort the rest of the kicking action.
+/obj/proc/onBuckledUserKick(var/mob/living/user, var/atom/A)
+	if(!anchored && !user.incapacitated() && user.has_limbs) //if you're buckled onto a non-anchored object (like office chairs) you harmlessly push yourself away with your legs
+		spawn() //return 1 first thing
+			var/movementdirection = turn(get_dir(src,A),180)
+			if(user.get_strength() > 1) //hulk KICK!
+				user.visible_message("<span class='danger'>[user] puts \his foot to \the [A] and kicks \himself away!</span>", \
+					"<span class='warning'>You put your foot to \the [A] and kick as hard as you can! [pick("RAAAAAAAARGH!", "HNNNNNNNNNGGGGGGH!", "GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", "AAAAAAARRRGH!")]</span>")
+				var/turf/T = get_edge_target_turf(src, movementdirection)
+				src.throw_at(T,8,20,fly_speed = 2)
+			else
+				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
+				for(var/i in list(1,2,2,3))
+					Move(get_step(src,movementdirection))
+					change_dir(turn(movementdirection, 180)) //turn away from the thing we kicked (implicitly giving a dir argument to Move caused wrong directions on diagonals)
+					sleep(i)
+		return 1
