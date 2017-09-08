@@ -160,7 +160,7 @@ atom/movable/RepelAirflowDest(n)
 				if(H.CheckSlip() < 0)
 					return
 		to_chat(src, "<SPAN CLASS='warning'>You are sucked away by airflow!</SPAN>")
-	var/airflow_falloff = 9 - ul_FalloffAmount(airflow_dest) //It's a fast falloff calc.  Very useful.
+	var/airflow_falloff = 9 - sqrt((x - airflow_dest.x) ** 2 + (y - airflow_dest.y) ** 2)
 	if(airflow_falloff < 1)
 		airflow_dest = null
 		return
@@ -225,7 +225,7 @@ atom/movable/RepelAirflowDest(n)
 					return
 		to_chat(src, "<SPAN CLASS='warning'>You are pushed away by airflow!</SPAN>")
 		last_airflow = world.time
-	var/airflow_falloff = 9 - ul_FalloffAmount(airflow_dest) //It's a fast falloff calc.  Very useful.
+	var/airflow_falloff = 9 - sqrt((x - airflow_dest.x) ** 2 + (y - airflow_dest.y) ** 2)
 	if(airflow_falloff < 1)
 		airflow_dest = null
 		return
