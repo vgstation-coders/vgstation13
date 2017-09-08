@@ -91,12 +91,7 @@ atom/movable/RepelAirflowDest(n)
 	last_airflow_stun = world.time
 
 /atom/movable/proc/check_airflow_movable(n)
-	if(anchored && !ismob(src))
-		return 0
-	if(!istype(src,/obj/item) && n < zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure))
-		return 0
-
-	return 1
+	return (!anchored && n >= zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure))
 
 /mob/check_airflow_movable(n)
 	if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure))
@@ -112,20 +107,18 @@ atom/movable/RepelAirflowDest(n)
 /mob/virtualhearer/check_airflow_movable()
 	return 0
 
-
 /obj/item/check_airflow_movable(n)
-	. = ..()
-	switch(w_class)
-		if(2)
-			if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-				return 0
-		if(3)
-			if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_light_pressure))
-				return 0
-		if(4,5)
-			if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_medium_pressure))
-				return 0
-
+	if(anchored)
+		return 0
+	switch(w_class) //Note that switch() evaluates the FIRST matching case, so the case that executes for a given w_class is the one for which it is the UPPER bound.
+		if(0 to W_CLASS_TINY)
+			return 1
+		if(W_CLASS_TINY to W_CLASS_SMALL)
+			return (n >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+		if(W_CLASS_SMALL to W_CLASS_MEDIUM)
+			return (n >= zas_settings.Get(/datum/ZAS_Setting/airflow_light_pressure))
+		if(W_CLASS_MEDIUM to INFINITY)
+			return (n >= zas_settings.Get(/datum/ZAS_Setting/airflow_medium_pressure))
 
 /atom/movable/var/tmp/turf/airflow_dest
 /atom/movable/var/tmp/airflow_speed = 0
