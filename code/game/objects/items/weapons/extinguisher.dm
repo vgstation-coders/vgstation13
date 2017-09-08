@@ -159,9 +159,9 @@
 			spawn()
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
-				B.change_dir(movementdirection)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
-					B.Move(get_step(user,movementdirection))
+					step(B, movementdirection)
+					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
 
 		for(var/obj/thing in src)
@@ -246,9 +246,9 @@
 			spawn(0)
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
-				B.change_dir(movementdirection)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
-					B.Move(get_step(user,movementdirection), movementdirection)
+					step(B, movementdirection)
+					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
 
 		var/turf/T = get_turf(target)

@@ -285,11 +285,12 @@
 
 	//forwards, scoot slow
 	if(direction == dir)
-		Move(get_step(src,direction), direction)
+		step(src, direction)
 		user.delayNextMove(user.movement_delay()*6)
 	//backwards, scoot fast
 	else if(direction == turn(dir, 180))
-		Move(get_step(src,direction), dir) //conserve our current dir
+		step(src, direction)
+		change_dir(turn(direction, 180)) //face away from where we're going
 		user.delayNextMove(user.movement_delay()*3)
 	//sideways, swivel to face
 	else
