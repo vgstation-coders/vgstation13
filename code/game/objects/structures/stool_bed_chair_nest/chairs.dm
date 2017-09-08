@@ -78,6 +78,13 @@
 
 	spin()
 
+/obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
+	if(!config.ghost_interaction || !can_spook())
+		if(user.isUnconscious() || user.restrained())
+			return
+	change_dir(direction)
+	return 1
+
 /obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return
@@ -259,7 +266,6 @@
 /obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated() || !user.has_limbs)
 		return 0
-
 	//If we're in space or our area has no gravity...
 	var/turf/T = get_turf(loc)
 	if(!T)
@@ -268,7 +274,8 @@
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
 			return 0
-
+	if(airflow_dest) //ugly hack: "are we currently being flung by ZAS?"
+		return 0
 	if(istype(T, /turf/simulated))
 		var/turf/simulated/ST = T
 		if(ST.wet == TURF_WET_LUBE)
@@ -276,15 +283,18 @@
 			ST.Entered(user) //bye bye
 			return 0
 
-	if(airflow_dest) //ugly hack: "are we currently being flung by ZAS?"
-		return 0
-
-	if(direction != dir)
-		change_dir(direction)
-		user.delayNextMove(3)
+	//forwards, scoot slow
+	if(direction == dir)
+		Move(get_step(src,direction), direction)
+		user.delayNextMove(user.movement_delay()*6)
+	//backwards, scoot fast
+	else if(direction == turn(dir, 180))
+		Move(get_step(src,direction), dir) //conserve our current dir
+		user.delayNextMove(user.movement_delay()*3)
+	//sideways, swivel to face
 	else
-		step(src, direction)
-		user.delayNextMove(max(5, user.movement_delay()))
+		change_dir(direction)
+		user.delayNextMove(1)
 
 /obj/structure/bed/chair/office/light
 	icon_state = "officechair_white"
