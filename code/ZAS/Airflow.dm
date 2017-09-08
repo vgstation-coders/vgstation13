@@ -50,7 +50,7 @@ atom/movable/RepelAirflowDest(n)
 
 /mob/var/tmp/last_airflow_stun = 0
 /mob/proc/airflow_stun()
-	if(stat == 2 || (flags & INVULNERABLE))
+	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
 		return 0
 	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return 0
