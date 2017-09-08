@@ -1,6 +1,0 @@
-author: Duny
-delete-after: true
-changes: 
-- bugfix: (Meta) Fixed the access requirements to open the windoors in the bridge.
-- rscadd: "(Meta) Added a filling cabinet to the QM's office."
-- tweak: "(Meta) Reworked the IAA office/courtroom region, mainly to drastically improve IAA player quality of life, and to make the courtroom a bit more welcoming for all the future trials which we all know are never going to happen."
