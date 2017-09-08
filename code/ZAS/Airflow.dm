@@ -54,6 +54,11 @@ atom/movable/RepelAirflowDest(n)
 		return 0
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return 0
+//	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push) || !(M_HARDCORE in mutations)) //This block was added in the original XGM PR, but, again, I don't want to bundle balance with system.
+//		return 0
+//	if(locked_to)
+//		to_chat(src, "<span class='notice'>Air suddenly rushes past you!</span>")
+//		return 0
 	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
