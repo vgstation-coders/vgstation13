@@ -324,9 +324,9 @@ mob/living/carbon/human/airflow_hit(atom/A)
 
 	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
 		if(airflow_speed > 10)
-			paralysis += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun))
-			stunned = max(stunned,paralysis + 3)
+			Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
+			Stun(paralysis + 3)
 		else
-			stunned += round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2)
+			Stun(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2))
 
 	. = ..()
