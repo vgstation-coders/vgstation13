@@ -25,28 +25,32 @@
 
 /obj/effect/biomass/attackby(var/obj/item/weapon/W, mob/user)
 	if(W.sharpness_flags & SHARP_BLADE && prob(50)) //Not a guarantee
-		user.visible_message("<span class = 'warning'>\The [user] cuts through \the [src] with \the [W]'s sharp edge.</span>",\
-		"<span class = 'notice'>You cut through \the [src] with \the [W]'s sharp edge.</span>")
+		if(prob(30))
+			user.visible_message("<span class = 'warning'>\The [user] cuts through \the [src] with \the [W]'s sharp edge.</span>",\
+			"<span class = 'notice'>You cut through \the [src] with \the [W]'s sharp edge.</span>")
 		qdel(src)
 		return
 	if(W.sharpness_flags & (SERRATED_BLADE|CHOPWOOD)) //Guaranteed, but takes some work
 		if(do_after(user, src, rand(10,30)))
-			user.visible_message("<span class = 'warning'>\The [user] chops through \the [src] with \the [W].</span>",\
-			"<span class = 'notice'>You saw through \the [src].</span>")
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] chops through \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You saw through \the [src].</span>")
 			qdel(src)
 			return
 	if(W.sharpness_flags & HOT_EDGE)
 		if(do_after(user, src, rand(5,15))) //Guaranteed, rarer sharpness flag so less time taken
-			user.visible_message("<span class = 'warning'>\The [user] sears through \the [src] with \the [W].</span>",\
-			"<span class = 'notice'>You use \the [src]'s hot edge to burn through \the [src].</span>")
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] sears through \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You use \the [W]'s hot edge to burn through \the [src].</span>")
 			qdel(src)
 			return
 	var/weapon_temp = W.is_hot()
 	if(weapon_temp >= AUTOIGNITION_WOOD)//Yes it's not technically wood, but fibrous chitin's pretty close when held above a flame
 		var/coeff = 1*weapon_temp/AUTOIGNITION_WOOD //The hotter it is, the less time it takes
 		if(do_after(user, src, (rand(30,60)/coeff)))
-			user.visible_message("<span class = 'warning'>\The [user] burns away \the [src] with \the [W].</span>",\
-			"<span class = 'notice'>You use \the [src] to burn away \the [src].</span>")
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] burns away \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You use \the [W] to burn away \the [src].</span>")
 			qdel(src)
 			return
 	..()
