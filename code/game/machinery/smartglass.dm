@@ -76,7 +76,7 @@
 	return smart_power
 
 /obj/machinery/smartglass_electronics/proc/toggle_oneway_power()
-	if(!GLASS.one_way)
+	if(!GLASS.one_way && !GLASS.one_way_smart)
 		return
 	if (one_way_power)
 		one_way_power = 0
@@ -111,6 +111,9 @@
 		ghost_flags |= PERMIT_ALL
 	if(!canGhostWrite(usr,src,"",ghost_flags))
 		if(usr.restrained() || usr.lying || usr.stat)
+			return 1
+		if ((!in_range(GLASS, usr) || !istype(GLASS.loc, /turf)) && !istype(usr, /mob/living/silicon))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
 		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
@@ -154,3 +157,10 @@
 			
 		if("toggle_oneway")
 			toggle_oneway_power()
+			
+			
+/obj/machinery/smartglass_electronics/Destroy()
+	..()
+	radio_controller.remove_object(src, frequency)
+	qdel(radio_connection)
+	radio_connection = null

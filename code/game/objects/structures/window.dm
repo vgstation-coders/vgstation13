@@ -25,7 +25,6 @@ var/list/one_way_windows
 	var/sheettype = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
-	var/obj/machinery/smartglass_electronics/smartwindow //For opaque/transparent windows. Also holds the internal machinery.
 	penetration_dampening = 1
 
 	var/obj/abstract/Overlays/damage_overlay
@@ -37,6 +36,8 @@ var/list/one_way_windows
 	var/fire_volume_mod = 100
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
+	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
+	var/one_way_smart = 0
 
 /obj/structure/window/New(loc)
 
@@ -65,7 +66,7 @@ var/list/one_way_windows
 	if(!anchored)
 		to_chat(user, "It appears to be completely loose and movable.")
 	if(smartwindow)
-		to_chat(user, "It is NT-15925 SmartGlass compliant.")
+		to_chat(user, "It's NT-15925 SmartGlass™ compliant.")
 	if(one_way)
 		to_chat(user, "It has a plastic coating.")
 	//switch most likely can't take inequalities, so here's that if block
@@ -272,16 +273,20 @@ var/list/one_way_windows
 		return opacity
 
 /obj/structure/window/proc/oneway_toggle() //For "smart" windows
-	if (!one_way)
+	if (!one_way && !one_way_smart)
 		return
-	if(src in one_way_windows) 
+	if(one_way) 
+		one_way_smart = 1
+		one_way = 0
 		one_way_windows.Remove(src)
 		overlays -= oneway_overlay
-		return 1
+		return "ON"
 	else 
 		one_way_windows.Add(src)
 		overlays += oneway_overlay
-		return 0
+		one_way = 1
+		one_way_smart = 0
+		return "OFF"
 		
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -324,6 +329,8 @@ var/list/one_way_windows
 			one_way_windows.Remove(src)
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			overlays -= oneway_overlay
+			if (one_way_smart)
+				one_way_smart = 0
 			return
 	
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
