@@ -23,45 +23,36 @@
 		master.vines -= src
 		master = null
 
-/obj/effect/biomass/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!W || !user || !W.type)
+/obj/effect/biomass/attackby(var/obj/item/weapon/W, mob/user)
+	if(W.sharpness_flags & SHARP_BLADE && prob(50)) //Not a guarantee
+		if(prob(30))
+			user.visible_message("<span class = 'warning'>\The [user] cuts through \the [src] with \the [W]'s sharp edge.</span>",\
+			"<span class = 'notice'>You cut through \the [src] with \the [W]'s sharp edge.</span>")
+		qdel(src)
 		return
-
-	switch(W.type) //This is absolutely terrible
-		if(/obj/item/weapon/circular_saw)
+	if(W.sharpness_flags & (SERRATED_BLADE|CHOPWOOD)) //Guaranteed, but takes some work
+		if(do_after(user, src, rand(10,30)))
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] chops through \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You saw through \the [src].</span>")
 			qdel(src)
-		if(/obj/item/weapon/kitchen/utensil/knife)
+			return
+	if(W.sharpness_flags & HOT_EDGE)
+		if(do_after(user, src, rand(5,15))) //Guaranteed, rarer sharpness flag so less time taken
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] sears through \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You use \the [W]'s hot edge to burn through \the [src].</span>")
 			qdel(src)
-		if(/obj/item/weapon/fireaxe)
+			return
+	var/weapon_temp = W.is_hot()
+	if(weapon_temp >= AUTOIGNITION_WOOD)//Yes it's not technically wood, but fibrous chitin's pretty close when held above a flame
+		var/coeff = 1*weapon_temp/AUTOIGNITION_WOOD //The hotter it is, the less time it takes
+		if(do_after(user, src, (rand(30,60)/coeff)))
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] burns away \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You use \the [W] to burn away \the [src].</span>")
 			qdel(src)
-		if(/obj/item/weapon/hatchet)
-			qdel(src)
-		if(/obj/item/weapon/melee/energy)
-			qdel(src)
-		if(/obj/item/weapon/pickaxe/plasmacutter)
-			qdel(src)
-
-		// less effective weapons
-		if(/obj/item/weapon/wirecutters)
-			if(prob(25))
-				qdel(src)
-		if(/obj/item/weapon/shard)
-			if(prob(25))
-				qdel(src)
-
-		else // weapons with subtypes
-			if(istype(W, /obj/item/weapon/melee/energy/sword))
-				qdel(src)
-			else if(istype(W, /obj/item/weapon/scalpel))
-				qdel(src)
-			else if(istype(W, /obj/item/weapon/weldingtool))
-				var/obj/item/weapon/weldingtool/WeldingTool = W
-
-				if(WeldingTool.remove_fuel(0, user))
-					qdel(src)
-			else
-				return
-
+			return
 	..()
 
 /obj/effect/biomass/proc/grow()
