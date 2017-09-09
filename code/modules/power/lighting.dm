@@ -422,7 +422,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 
 /obj/machinery/light/attack_ghost(mob/user)
-	if(blessed)
+	if(!can_spook())
 		return
 	src.add_hiddenprint(user)
 	src.flicker(1)
