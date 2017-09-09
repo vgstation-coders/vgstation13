@@ -274,7 +274,7 @@
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
 			return 0
-	if(airflow_dest) //ugly hack: "are we currently being flung by ZAS?"
+	if(last_airflow + 5 SECONDS > world.time) //ugly hack: can't scoot during ZAS
 		return 0
 	if(istype(T, /turf/simulated))
 		var/turf/simulated/ST = T
