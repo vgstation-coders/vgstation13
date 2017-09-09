@@ -64,6 +64,10 @@ var/list/one_way_windows
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
 		to_chat(user, "It appears to be completely loose and movable.")
+	if(smartwindow)
+		to_chat(user, "It is NT-15925 SmartGlass compliant.")
+	if(one_way)
+		to_chat(user, "It has a plastic coating.")
 	//switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
 		to_chat(user, "It's in perfect shape without a single scratch.")
@@ -268,6 +272,8 @@ var/list/one_way_windows
 		return opacity
 
 /obj/structure/window/proc/oneway_toggle() //For "smart" windows
+	if (!one_way)
+		return
 	if(src in one_way_windows) 
 		one_way_windows.Remove(src)
 		overlays -= oneway_overlay
@@ -339,12 +345,15 @@ var/list/one_way_windows
 		var/obj/item/stack/light_w/LT = W
 		if (smartwindow)
 			to_chat(user, "<span class='notice'>This window already has electronics in it.</span>")
-			return
+			return 0
 		LT.use(1)
 		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
-		smartwindow = new /obj/machinery/smartglass_electronics(src.contents)
+		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		smartwindow.GLASS = src
-		return
+		smart_toggle()
+		if (one_way)
+			oneway_toggle()
+		return 1
 		
 		
 	if(ismultitool(W) && smartwindow)
