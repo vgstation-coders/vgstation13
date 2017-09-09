@@ -40,7 +40,7 @@ var/FATBLOCK = 0
 var/CHAVBLOCK = 0
 var/SWEDEBLOCK = 0
 var/SCRAMBLEBLOCK = 0
-var/TOXICFARTBLOCK = 0
+//var/TOXICFARTBLOCK = 0
 var/STRONGBLOCK = 0
 var/HORNSBLOCK = 0
 var/SMILEBLOCK = 0
@@ -57,7 +57,7 @@ var/EATBLOCK = 0
 var/JUMPBLOCK = 0
 var/MELTBLOCK = 0
 var/EMPATHBLOCK = 0
-var/SUPERFARTBLOCK = 0
+//var/SUPERFARTBLOCK = 0
 var/IMMOLATEBLOCK = 0
 var/POLYMORPHBLOCK = 0
 
@@ -145,7 +145,7 @@ var/NOIRBLOCK = 0
 	CHAVBLOCK      = getAssignedBlock("CHAV",       numsToAssign)
 	SWEDEBLOCK     = getAssignedBlock("SWEDE",      numsToAssign)
 	SCRAMBLEBLOCK  = getAssignedBlock("SCRAMBLE",   numsToAssign)
-	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, good=1)
+	//TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, good=1)
 	STRONGBLOCK    = getAssignedBlock("STRONG",     numsToAssign, good=1)
 	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
 	SMILEBLOCK     = getAssignedBlock("SMILE",      numsToAssign)
@@ -163,7 +163,7 @@ var/NOIRBLOCK = 0
 	MELTBLOCK      = getAssignedBlock("MELT",       numsToAssign, good=1)
 	IMMOLATEBLOCK  = getAssignedBlock("IMMOLATE",   numsToAssign)
 	EMPATHBLOCK    = getAssignedBlock("EMPATH",     numsToAssign, DNA_HARD_BOUNDS, good=1)
-	SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
+	//SUPERFARTBLOCK = getAssignedBlock("SUPERFART",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 	POLYMORPHBLOCK = getAssignedBlock("POLYMORPH",  numsToAssign, DNA_HARDER_BOUNDS, good=1)
 
 	//

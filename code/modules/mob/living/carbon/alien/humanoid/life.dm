@@ -446,30 +446,38 @@
 		return 1
 
 	proc/handle_stomach()
-		spawn(0)
-			for(var/mob/living/M in stomach_contents)
-				if(M.loc != src)
-					stomach_contents.Remove(M)
+		for(var/mob/living/M in stomach_contents)
+			if(M.loc != src)
+				stomach_contents.Remove(M)
+				continue
+			if(istype(M, /mob/living/carbon) && stat & stat != DEAD)
+				if(M.stat == DEAD)
+					M.death(0)
+					M.ghostize(1)
+					M.drop_all()
+					drop_stomach_contents()
+					qdel(M)
 					continue
-				if(istype(M, /mob/living/carbon) && stat & stat != 2)
-					var/digest = 0
-					if(M.stat == 2)
-						if(prob(5))
-							switch(digest)
-								if(0)
-									to_chat(src, "<span class='warning'>\The [M] shifts around in your stomach cavity as digestion begins.</span>")
-								if(1)
-									to_chat(src, "<span class='warning'>\The [M] feels a little bit lighter in your stomach cavity.</span>")
-								if(2)
-									to_chat(src, "<span class='danger'>You barely feel the weight of [M] in your stomach cavity anymore.</span>")
-								if(3 to INFINITY)
-									to_chat(src, "<span class='warning'>The weight of [M] is no longer there. Digestion has completed.</span>")
-									M.ghostize(1)
-									drop_stomach_contents()
-									qdel(M)
-							digest++
-						continue
-					if(SSair.current_cycle%3==1)
-						if(!(M.status_flags & GODMODE))
-							M.adjustBruteLoss(5)
-						nutrition += 10
+				/* Removed by order of Chicken
+				var/digest = 0
+				if(M.stat == DEAD)
+					if(prob(5))
+						switch(digest)
+							if(0)
+								to_chat(src, "<span class='warning'>\The [M] shifts around in your stomach cavity as digestion begins.</span>")
+							if(1)
+								to_chat(src, "<span class='warning'>\The [M] feels a little bit lighter in your stomach cavity.</span>")
+							if(2)
+								to_chat(src, "<span class='danger'>You barely feel the weight of [M] in your stomach cavity anymore.</span>")
+							if(3 to INFINITY)
+								to_chat(src, "<span class='warning'>The weight of [M] is no longer there. Digestion has completed.</span>")
+								M.ghostize(1)
+								drop_stomach_contents()
+								qdel(M)
+						digest++
+					continue
+				*/
+				if(SSair.current_cycle%3==1)
+					if(!(M.status_flags & GODMODE))
+						M.adjustBruteLoss(5) // Left this at 5 for tactical vore.  Subject to change.
+					nutrition += 10

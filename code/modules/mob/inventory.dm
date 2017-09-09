@@ -285,10 +285,17 @@
 		return 1
 
 // Drops all and only equipped items, including items in hand
-/mob/proc/drop_all()
+// Returns items dropped.
+/mob/proc/drop_all(var/atom/Target=null)
+	if(!Target)
+		Target = loc
+	. = list()
 	for (var/obj/item/I in get_all_slots())
-		drop_from_inventory(I)
-	drop_hands()
+		drop_from_inventory(I, Target)
+		. += I
+	for (var/obj/item/I in drop_hands(Target))
+		. += I
+
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
@@ -315,6 +322,9 @@
 		return 0
 
 	to_drop.forceMove(Target) //calls the Entered procs
+
+	// This is so when a mob that's gibbed inside of a mob drops its shit,
+	//  That shit is added to stomach_contents.
 	if(ismob(Target))
 		var/mob/M = Target
 		if(iscarbon(M))
@@ -328,8 +338,10 @@
 	return 0
 
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
+	. = list()
 	for(var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
+		. += I
 
 //TODO: phase out this proc
 /mob/proc/before_take_item(var/obj/item/W)	//TODO: what is this?

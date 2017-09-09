@@ -669,7 +669,7 @@
 /obj/item/weapon/dnainjector/nofail/antiempath/New()
 	block = EMPATHBLOCK
 	..()
-
+/*
 /obj/item/weapon/dnainjector/nofail/superfart
 	name = "DNA-Injector (Super Fart)"
 	desc = "Really?"
@@ -691,6 +691,7 @@
 /obj/item/weapon/dnainjector/nofail/antisuperfart/New()
 	block = SUPERFARTBLOCK
 	..()
+*/
 
 /////////////////////////////////////
 /obj/item/weapon/dnainjector/nofail/antiglasses
@@ -1331,7 +1332,7 @@
         /obj/item/weapon/dnainjector/nofail/jumpy,
         /obj/item/weapon/dnainjector/nofail/polymorph,
         /obj/item/weapon/dnainjector/nofail/empath,
-        /obj/item/weapon/dnainjector/nofail/superfart,
+        ///obj/item/weapon/dnainjector/nofail/superfart,
         /obj/item/weapon/dnainjector/nofail/epimut,
         /obj/item/weapon/dnainjector/nofail/strong,
         /obj/item/weapon/dnainjector/nofail/immolate,

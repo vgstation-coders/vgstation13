@@ -237,14 +237,21 @@
 
 	if(M == assailant && state >= GRAB_AGGRESSIVE)
 		var/can_eat = FALSE
+		// Anti-vore act of 2017
+		var/just_gib = FALSE
+		var/nutriadd = 0
 		if(ishuman(user) && (M_FAT in user.mutations) && ismonkey(affecting))
 			can_eat = TRUE
+			just_gib = TRUE //by order of Chicken
+			nutriadd = 100 //TODO: Adjust to fit what they'd get via the old handle_stomach proc
 		else if(isalien(user) && iscarbon(affecting))
 			can_eat = TRUE
 		else if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			if(ishorrorform(H) && iscarbon(affecting))
 				can_eat = TRUE
+				just_gib = TRUE //by order of Chicken
+				nutriadd = 100 //TODO: Adjust to fit what they'd get via the old stomach proc
 		if(can_eat)
 			var/mob/living/carbon/attacker = user
 			if(locate(/mob) in attacker.stomach_contents)
@@ -260,8 +267,14 @@
 					return
 			user.visible_message("<span class='danger'>[user] devours [affecting]!</span>", \
 				drugged_message="<span class='danger'>[affecting] vanishes in disgust.</span>")
-			affecting.forceMove(user)
-			attacker.stomach_contents.Add(affecting)
+			if(just_gib)
+				affecting.drop_all()
+				affecting.gib()
+				qdel(affecting)
+				attacker.nutrition += nutriadd
+			else
+				affecting.forceMove(user)
+				attacker.stomach_contents.Add(affecting)
 			returnToPool(src)
 
 

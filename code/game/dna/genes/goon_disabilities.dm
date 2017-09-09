@@ -274,6 +274,7 @@
 		speech.message = "[prefix][uppertext(jointext(rearranged," "))]!!"
 
 // WAS: /datum/bioEffect/toxic_farts
+/*
 /datum/dna/gene/disability/toxic_farts
 	name = "Toxic Farts"
 	desc = "Causes the subject's digestion to create a significant amount of noxious gas."
@@ -286,6 +287,7 @@
 	New()
 		..()
 		block=TOXICFARTBLOCK
+*/
 
 //////////////////
 // USELESS SHIT //
