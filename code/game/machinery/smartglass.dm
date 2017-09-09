@@ -34,6 +34,7 @@
 	
 /obj/machinery/smartglass_electronics/New()
 	..()
+	GLASS = loc
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 	
 //Multitool menu needs to communicate with the glass the electronics are inside
@@ -45,27 +46,15 @@
 			<li><a href='?src=\ref[src];transparentoggle=1'>Toggle Transparency</a></li>
 			<li><a href='?src=\ref[src];onewaytoggle=1'>Toggle One-way mode</a></li>
 		</ul>
-		"}
-	
-	
-/*
-	var/dat = "[format_tag("ID Tag", "id_tag","set_id")]</a>"
-	dat += "<A href='?src=\ref[src];transparentoggle=1`>Toggle_Transparency</a>"
-	if (GLASS.one_way)
-		dat += "<A href='?src=\ref[src];onewaytoggle=1`>Toggle_Oneway</a>"
-	return dat
-*/
-/*	
-//			[format_tag("ID Tag","id_tag")]
-			
-			<li>[format_tag("Transparency", "smart_power","toggle_smart_power")]</a></li></br>
-			<li>[format_tag("One-way", "one_way_power","toggle_oneway_power")]</a></li></br>
-*/			
+		"}	
 
 /obj/machinery/smartglass_electronics/proc/toggle_smart_power()
+	if(stat & (NOPOWER | BROKEN))
+		power_change()
 	if (smart_power)
 		smart_power = 0
-		active_power_usage -= 5
+		if (active_power_usage > 5)
+			active_power_usage -= 5
 		if (!one_way_power)
 			use_power = 0
 	else
@@ -76,11 +65,14 @@
 	return smart_power
 
 /obj/machinery/smartglass_electronics/proc/toggle_oneway_power()
+	if(stat & (NOPOWER | BROKEN))
+		power_change()
 	if(!GLASS.one_way && !GLASS.one_way_smart)
 		return
 	if (one_way_power)
 		one_way_power = 0
-		active_power_usage -= 5
+		if (active_power_usage > 5)
+			active_power_usage -= 5
 		if (!smart_power)
 			use_power = 0
 	else
@@ -99,6 +91,10 @@
 		if (one_way_power)
 			one_way_power = 0
 			GLASS.oneway_toggle()
+		if (use_power)
+			use_power = 0
+		if (active_power_usage > 5)
+			active_power_usage = 5
 		
 // This is here to allow access to the electronics.
 /obj/machinery/smartglass_electronics/Topic(href, href_list)

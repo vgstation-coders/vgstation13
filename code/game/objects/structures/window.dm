@@ -266,11 +266,10 @@ var/list/one_way_windows
 	if(opacity)
 		animate(src, color="#FFFFFF", time=5)
 		set_opacity(0)
-		return opacity
 	else
 		animate(src, color="#222222", time=5)
 		set_opacity(1)
-		return opacity
+	return opacity
 
 /obj/structure/window/proc/oneway_toggle() //For "smart" windows
 	if (!one_way && !one_way_smart)
@@ -280,13 +279,12 @@ var/list/one_way_windows
 		one_way = 0
 		one_way_windows.Remove(src)
 		overlays -= oneway_overlay
-		return "ON"
 	else 
 		one_way_windows.Add(src)
 		overlays += oneway_overlay
 		one_way = 1
 		one_way_smart = 0
-		return "OFF"
+	return one_way_smart
 		
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -356,7 +354,6 @@ var/list/one_way_windows
 		LT.use(1)
 		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
-		smartwindow.GLASS = src
 		smart_toggle()
 		if (one_way)
 			oneway_toggle()
@@ -364,11 +361,8 @@ var/list/one_way_windows
 		
 		
 	if(ismultitool(W) && smartwindow)
-		//has to relay to machine inside the window
-		//smart_toggle(opacity) //debug option to just toggle the transparency
-		
 		smartwindow.update_multitool_menu(user)
-		return
+		return 
 		
 	//Start construction and deconstruction, absolute priority over the other object interactions to avoid hitting the window
 
@@ -419,6 +413,11 @@ var/list/one_way_windows
 					update_nearby_tiles() //Needed if it's a full window, since unanchored windows don't link
 					update_nearby_icons()
 					update_icon()
+					qdel(smartwindow)
+					smartwindow = null
+					if (opacity)
+						smart_toggle()
+					drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					//Perform pressure check since window no longer blocks air
 					var/pdiff = performWallPressureCheck(src.loc)
 					if(pdiff > 0)
@@ -437,6 +436,11 @@ var/list/one_way_windows
 					update_nearby_tiles() //Ditto above, but in reverse
 					update_nearby_icons()
 					update_icon()
+					qdel(smartwindow)
+					smartwindow = null
+					if (opacity)
+						smart_toggle()
+					drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					return
 
 				if(istype(W, /obj/item/weapon/weldingtool))
