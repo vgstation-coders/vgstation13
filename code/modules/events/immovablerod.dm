@@ -171,7 +171,7 @@
 		if(prob(50))
 			clong()
 
-/obj/item/projectile/immovablerod/forceMove(atom/destination,var/no_tp=0)
+/obj/item/projectile/immovablerod/forceMove(atom/destination,var/no_tp=1)
 	..()
 	if(z != starting.z)
 		qdel(src)
