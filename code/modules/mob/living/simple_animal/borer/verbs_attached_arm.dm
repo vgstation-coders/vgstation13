@@ -43,6 +43,16 @@
 	if(!istype(B))
 		return
 	B.abandon_host()
+	
+/obj/item/verbs/borer/attached_arm/verb/analyze_host()
+	set category = "Alien"
+	set name = "Analyze Health"
+	set desc = "Check your host for damage."
+
+	var/mob/living/simple_animal/borer/B=loc
+	if(!istype(B))
+		return
+	B.analyze_host()
 
 //////////OFFENSE TREE/////////////////////
 /obj/item/verbs/borer/attached_arm/bone_sword/verb/bone_sword()

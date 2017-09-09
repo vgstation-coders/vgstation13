@@ -228,14 +228,6 @@
 	borer.unlocked_chems_leg[C.name]=C
 	to_chat(borer, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
-/datum/unlockable/borer/leg/chem_unlock/bustanut
-	id = "bustanut"
-	name = "Hardcores Secretion"
-	desc = "Learn how to synthesize hardcores."
-	cost = 50
-	time = 20 SECONDS
-	chem_type = /datum/borer_chem/leg/unlockable/bustanut
-
 /datum/unlockable/borer/leg/chem_unlock/synaptizine
 	id = "synaptizine"
 	name = "Synaptizine Secretion"
