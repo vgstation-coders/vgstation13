@@ -257,14 +257,26 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
-/obj/structure/window/proc/smart_toggle(var/state) //For "smart" windows
-	if(state) //Power on, visibility 0
+/obj/structure/window/proc/smart_toggle() //For "smart" windows
+	if(opacity)
 		animate(src, color="#FFFFFF", time=5)
 		set_opacity(0)
+		return opacity
 	else
 		animate(src, color="#222222", time=5)
 		set_opacity(1)
-	
+		return opacity
+
+/obj/structure/window/proc/oneway_toggle() //For "smart" windows
+	if(src in one_way_windows) 
+		one_way_windows.Remove(src)
+		overlays -= oneway_overlay
+		return 1
+	else 
+		one_way_windows.Add(src)
+		overlays += oneway_overlay
+		return 0
+		
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
@@ -310,7 +322,7 @@ var/list/one_way_windows
 	
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
-			to_chat(user, "<span class='notice'>This [src] already has one-way tint on it.</span>")
+			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
 			return
 		var/obj/item/stack/sheet/mineral/plastic/P = W
 		one_way = 1
@@ -318,7 +330,7 @@ var/list/one_way_windows
 			one_way_windows = list()
 		one_way_windows.Add(src)
 		P.use(1)
-		to_chat(user, "<span class='notice'>You place a sheet of plastic over the [src].</span>")
+		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
 		overlays += oneway_overlay
 		return
 
@@ -326,19 +338,20 @@ var/list/one_way_windows
 	if(istype(W, /obj/item/stack/light_w))
 		var/obj/item/stack/light_w/LT = W
 		if (smartwindow)
-			to_chat(user, "<span class='notice'>This [src] already has electronics in it.</span>")
+			to_chat(user, "<span class='notice'>This window already has electronics in it.</span>")
 			return
 		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to the [src].</span>")	
-		smartwindow = new /obj/machinery/smartglass_electronics
+		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
+		smartwindow = new /obj/machinery/smartglass_electronics(src.contents)
+		smartwindow.GLASS = src
 		return
 		
 		
 	if(ismultitool(W) && smartwindow)
 		//has to relay to machine inside the window
-		smart_toggle(opacity) //debug option to just toggle the transparency
+		//smart_toggle(opacity) //debug option to just toggle the transparency
 		
-		//smartwindow.multitool_menu(user)
+		smartwindow.update_multitool_menu(user)
 		return
 		
 	//Start construction and deconstruction, absolute priority over the other object interactions to avoid hitting the window
