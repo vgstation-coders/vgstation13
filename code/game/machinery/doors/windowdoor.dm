@@ -21,6 +21,7 @@
 	penetration_dampening = 2
 	animation_delay = 7
 	var/obj/machinery/smartglass_electronics/smartwindow
+	var/was_opaque
 
 /obj/machinery/door/window/New()
 	..()
@@ -125,8 +126,9 @@
 
 	explosion_resistance = 0
 	density = 0
-	if (smartwindow)
-		set_opacity(1) //Else we'd get opaque open windoors!
+	if (smartwindow && opacity)
+		set_opacity(0) //Else we'd get opaque open windoors!
+		was_opaque = 1
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -143,8 +145,9 @@
 
 	density = 1
 	explosion_resistance = initial(explosion_resistance)
-//	if(src.visible)
-//		SetOpacity(1)	//TODO: why is this here? Opaque windoors? ~Carn
+	if (smartwindow && was_opaque)
+		set_opacity(1)
+		was_opaque = 0
 	update_nearby_tiles()
 
 	sleep(animation_delay)
