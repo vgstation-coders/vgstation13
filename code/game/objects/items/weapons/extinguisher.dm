@@ -161,6 +161,7 @@
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
 					if(!step(B, movementdirection))
+						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
 						break
 					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
@@ -249,6 +250,7 @@
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
 					if(!step(B, movementdirection))
+						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
 						break
 					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)

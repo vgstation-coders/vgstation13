@@ -591,7 +591,8 @@ a {
 				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
 				for(var/i in list(2,2,3,3))
 					if(!step(src, movementdirection))
+						change_dir(turn(movementdirection, 180)) //stop, but don't turn around when hitting a wall
 						break
-					change_dir(turn(movementdirection, 180)) //turn away from the thing we kicked (implicitly giving a dir argument to Move caused wrong directions on diagonals)
+					change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
 		return 1
