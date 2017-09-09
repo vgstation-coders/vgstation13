@@ -5,7 +5,7 @@
 /datum/objective/target/brig/find_target()
 	..()
 	if(target && target.current)
-		explanation_text = "Have [target.current.real_name], the [target.assigned_role] brigged for 10 minutes."
+		explanation_text = "Have [target.current.real_name], the [target.assigned_role] brigged for 5 minutes."
 	return target
 
 
