@@ -37,7 +37,6 @@ var/list/one_way_windows
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
-	var/one_way_smart = 0
 
 /obj/structure/window/New(loc)
 
@@ -270,21 +269,6 @@ var/list/one_way_windows
 		animate(src, color="#222222", time=5)
 		set_opacity(1)
 	return opacity
-
-/obj/structure/window/proc/oneway_toggle() //For "smart" windows
-	if (!one_way && !one_way_smart)
-		return
-	if(one_way) 
-		one_way_smart = 1
-		one_way = 0
-		one_way_windows.Remove(src)
-		overlays -= oneway_overlay
-	else 
-		one_way_windows.Add(src)
-		overlays += oneway_overlay
-		one_way = 1
-		one_way_smart = 0
-	return one_way_smart
 		
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -327,8 +311,6 @@ var/list/one_way_windows
 			one_way_windows.Remove(src)
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			overlays -= oneway_overlay
-			if (one_way_smart)
-				one_way_smart = 0
 			return
 	
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
@@ -355,8 +337,6 @@ var/list/one_way_windows
 		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		smart_toggle()
-		if (one_way)
-			oneway_toggle()
 		return 1
 		
 		

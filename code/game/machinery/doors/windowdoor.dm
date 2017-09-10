@@ -38,10 +38,10 @@
 
 /obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
 	if(opacity)
-		animate(src, color="#FFFFFF", time=5)
+		animate(src, color="#FFFFFF", alpha=255, time=5)
 		set_opacity(0)
 	else
-		animate(src, color="#222222", time=5)
+		animate(src, color="#222222", alpha=0, time=5)
 		set_opacity(1)
 	return opacity
 	
@@ -56,14 +56,14 @@
 	if (!ismob(AM))
 		var/obj/machinery/bot/bot = AM
 		if(istype(bot))
-			if(density && src.check_access(bot.botcard))
+			if(density && check_access(bot.botcard))
 				open()
 				sleep(50)
 				close()
 		else if(istype(AM, /obj/mecha))
 			var/obj/mecha/mecha = AM
 			if(density)
-				if(mecha.occupant && src.allowed(mecha.occupant))
+				if(mecha.occupant && allowed(mecha.occupant))
 					open()
 					sleep(50)
 					close()
@@ -72,10 +72,10 @@
 		return
 	if (operating)
 		return
-	if (density && src.allowed(AM))
+	if (density && allowed(AM))
 		open()
 		// What.
-		if(src.check_access(null))
+		if(check_access(null))
 			sleep(50)
 		else //secure doors close faster
 			sleep(20)
@@ -119,9 +119,9 @@
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
-	flick(text("[]opening", src.base_state), src)
+	flick(text("[]opening", base_state), src)
 	playsound(get_turf(src), soundeffect, 100, 1)
-	src.icon_state = text("[]open", src.base_state)
+	icon_state = text("[]open", src.base_state)
 	sleep(animation_delay)
 
 	explosion_resistance = 0
@@ -233,7 +233,7 @@
 		if (do_after(user, src, 40) && src && !density && !operating)
 			to_chat(user, "<span class='notice'>You removed the windoor electronics!</span>")
 			make_assembly(user)
-			src.dismantled = 1 // Don't play the glass shatter sound
+			dismantled = 1 // Don't play the glass shatter sound
 			qdel(smartwindow)
 			smartwindow = null
 			if (opacity)
@@ -256,6 +256,8 @@
 		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")	
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		smart_toggle()
+		if (!density) //if it's open, keep it see-through
+			opacity = 1
 		return smartwindow
 	
 	//If its a multitool and our windoor is smart, open the menu
