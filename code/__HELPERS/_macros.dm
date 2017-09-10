@@ -178,6 +178,7 @@
 #define ismalf(H) (H.mind in ticker.mode.malf_ai)
 
 #define isnukeop(H) (H.mind in ticker.mode.syndicates)
+#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
 
 #define iswizard(H) (H.mind in ticker.mode.wizards)
 
