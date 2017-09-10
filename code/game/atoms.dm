@@ -797,8 +797,12 @@ its easier to just keep the beam vertical.
 		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
 
-/atom/proc/can_spook()
-	return !blessed
+/atom/proc/can_spook(var/msg = 1)
+	if(blessed)
+		if(msg)
+			to_chat(usr, "Your hand goes right through \the [src]... Is that some holy water dripping from it?")
+		return FALSE
+	return TRUE
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()

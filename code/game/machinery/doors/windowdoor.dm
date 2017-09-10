@@ -8,6 +8,8 @@
 	visible = 0.0
 	use_power = 0
 	flags = ON_BORDER
+	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
+	layer = WINDOOR_LAYER //Below curtains
 	opacity = 0
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/dismantled = 0 // To avoid playing the glass shatter sound on Destroy()

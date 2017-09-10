@@ -11,6 +11,9 @@
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 
 	var/stomp_attack_power = 45
+	var/stomp_delay = 3 SECONDS
+	var/stomp_boot = "magboot"
+	var/stomp_hit = "crushes"
 
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
 	if(!stomp_attack_power)
@@ -22,10 +25,10 @@
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
-		user.visible_message("<span class='danger'>\The [user] slowly raises \his foot above the lying [victim.name], preparing to stomp on \him.</span>")
+		user.visible_message("<span class='danger'>\The [user] slowly raises \his [stomp_boot] above the lying [victim.name], preparing to stomp on \him.</span>")
 		toggle()
 
-		if(do_after(user, src, 3 SECONDS))
+		if(do_after(user, src, stomp_delay))
 			if(magpulse)
 				return //Magboots enabled
 			if(!victim.lying || (victim.loc != T))
@@ -34,7 +37,7 @@
 			user.attack_log += "\[[time_stamp()]\] Magboot-stomped <b>[user] ([user.ckey])</b>"
 			victim.attack_log += "\[[time_stamp()]\] Was magboot-stomped by <b>[src] ([victim.ckey])</b>"
 
-			victim.visible_message("<span class='danger'>\The [user] crushes \the [victim] with the activated [src.name]!", "<span class='userdanger'>\The [user] crushes you with \his [src.name]!</span>")
+			victim.visible_message("<span class='danger'>\The [user] [stomp_hit] \the [victim] with the activated [src.name]!", "<span class='userdanger'>\The [user] [stomp_hit] you with \his [src.name]!</span>")
 			victim.apply_damage(stomp_attack_power, BRUTE, affecting)
 			playsound(get_turf(victim), 'sound/effects/gib3.ogg', 100, 1)
 		else
