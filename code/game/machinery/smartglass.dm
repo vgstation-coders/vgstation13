@@ -39,7 +39,7 @@
 	..()
 	GLASS = loc
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
-	electromagic=new(src,src)
+	electromagic=new(GLASS,GLASS)
 	electromagic.idle_usage=idle_power_usage
 	electromagic.active_usage=active_power_usage
 

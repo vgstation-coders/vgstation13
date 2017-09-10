@@ -38,10 +38,10 @@
 
 /obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
 	if(opacity)
-		animate(src, color="#FFFFFF", alpha=255, time=5)
+		animate(src, color="#FFFFFF", time=5)
 		set_opacity(0)
 	else
-		animate(src, color="#222222", alpha=0, time=5)
+		animate(src, color="#222222", time=5)
 		set_opacity(1)
 	return opacity
 	
