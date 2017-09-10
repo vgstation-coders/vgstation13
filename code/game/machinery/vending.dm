@@ -1973,20 +1973,27 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/building
 
-/obj/item/stack/sheet/metal/bigstack
-	amount = 20
-/obj/item/stack/sheet/glass/glass/bigstack
-	amount = 20
-/obj/item/stack/sheet/glass/plasmaglass/bigstack
-	amount = 20
-/obj/item/stack/sheet/wood/bigstack
-	amount = 20
-/obj/item/stack/tile/carpet/bigstack
-	amount = 20
-/obj/item/stack/tile/arcade/bigstack
-	amount = 20
-/obj/item/stack/sheet/mineral/plastic/bigstack
-	amount = 20
+/obj/item/stack/sheet/metal/bigstack/New()
+	getFromPool(/obj/item/stack/sheet/metal, loc, 20)
+	qdel(src)
+/obj/item/stack/sheet/glass/glass/bigstack/New()
+	getFromPool(/obj/item/stack/sheet/glass/glass, loc, 20)
+	qdel(src)
+/obj/item/stack/sheet/glass/plasmaglass/bigstack/New()
+	getFromPool(/obj/item/stack/sheet/glass/plasmaglass, loc, 20)
+	qdel(src)
+/obj/item/stack/sheet/wood/bigstack/New()
+	getFromPool(/obj/item/stack/sheet/wood, loc, 20)
+	qdel(src)
+/obj/item/stack/tile/carpet/bigstack/New()
+	getFromPool(/obj/item/stack/tile/carpet, loc, 20)
+	qdel(src)
+/obj/item/stack/tile/arcade/bigstack/New()
+	getFromPool(/obj/item/stack/tile/arcade, loc, 20)
+	qdel(src)
+/obj/item/stack/sheet/mineral/plastic/bigstack/New()
+	getFromPool(/obj/item/stack/sheet/mineral/plastic, loc, 20)
+	qdel(src)
 
 //This one's from bay12
 /obj/machinery/vending/engineering
