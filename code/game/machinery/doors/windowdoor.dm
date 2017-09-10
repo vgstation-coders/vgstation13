@@ -25,9 +25,9 @@
 
 /obj/machinery/door/window/New()
 	..()
-	if ((istype(src.req_access) && src.req_access.len) || istext(req_access))
-		src.icon_state = "[src.icon_state]"
-		src.base_state = src.icon_state
+	if ((istype(req_access) && req_access.len) || istext(req_access))
+		icon_state = "[icon_state]"
+		base_state = icon_state
 	return
 
 /obj/machinery/door/window/Destroy()
@@ -121,7 +121,7 @@
 		operating = 1
 	flick(text("[]opening", base_state), src)
 	playsound(get_turf(src), soundeffect, 100, 1)
-	icon_state = text("[]open", src.base_state)
+	icon_state = text("[]open", base_state)
 	sleep(animation_delay)
 
 	explosion_resistance = 0
@@ -139,9 +139,9 @@
 	if (operating)
 		return 0
 	operating = 1
-	flick(text("[]closing", src.base_state), src)
+	flick(text("[]closing", base_state), src)
 	playsound(get_turf(src), soundeffect, 100, 1)
-	src.icon_state = src.base_state
+	icon_state = base_state
 
 	density = 1
 	explosion_resistance = initial(explosion_resistance)
@@ -156,10 +156,10 @@
 	return 1
 
 /obj/machinery/door/window/proc/take_damage(var/damage)
-	src.health = max(0, src.health - damage)
-	if (src.health <= 0)
+	health = max(0, health - damage)
+	if (health <= 0)
 		getFromPool(shard, loc)
-		getFromPool(/obj/item/stack/cable_coil,src.loc,2)
+		getFromPool(/obj/item/stack/cable_coil,loc,2)
 		eject_electronics()
 		qdel(src)
 		return
@@ -185,7 +185,7 @@
 	return
 
 /obj/machinery/door/window/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	return src.attack_hand(user)
 
 /obj/machinery/door/window/attack_paw(mob/living/user as mob)
@@ -194,10 +194,10 @@
 			return
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		src.health = max(0, src.health - 25)
+		health = max(0, health - 25)
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='warning'>\The [user] smashes against \the [src.name].</span>", 1)
-		if (src.health <= 0)
+		if (health <= 0)
 			getFromPool(shard, loc)
 			getFromPool(/obj/item/stack/cable_coil, loc, 2)
 			qdel(src)
@@ -213,10 +213,10 @@
 		return
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
-	src.health = max(0, src.health - M.melee_damage_upper)
+	health = max(0, health - M.melee_damage_upper)
 	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [src.name].</span>", 1)
-	if (src.health <= 0)
+	if (health <= 0)
 		getFromPool(shard, loc)
 		getFromPool(/obj/item/stack/cable_coil, loc, 2)
 		qdel(src)
@@ -257,7 +257,7 @@
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		smart_toggle()
 		if (!density) //if it's open, keep it see-through
-			opacity = 1
+			opacity = 0
 		return smartwindow
 	
 	//If its a multitool and our windoor is smart, open the menu
@@ -271,17 +271,17 @@
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
 		if(I.damtype == BRUTE || I.damtype == BURN)
-			src.health = max(0, src.health - aforce)
+			health = max(0, health - aforce)
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='danger'>[src] was hit by [I].</span>")
-		if (src.health <= 0)
+		if (health <= 0)
 			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, src.loc, 2)
+			getFromPool(/obj/item/stack/cable_coil, loc, 2)
 			qdel(src)
 		return
 
-	src.add_fingerprint(user)
-	if (!src.requiresID())
+	add_fingerprint(user)
+	if (!requiresID())
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
 
@@ -291,8 +291,8 @@
 		else
 			return close()
 
-	if (!src.allowed(user) && density)
-		flick(text("[]deny", src.base_state), src)
+	if (!allowed(user) && density)
+		flick(text("[]deny", base_state), src)
 
 	return ..()
 
@@ -303,10 +303,10 @@
 /obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
 	operating = -1
 
-	if (src.electronics)
-		src.electronics.icon_state = "door_electronics_smoked"
+	if (electronics)
+		electronics.icon_state = "door_electronics_smoked"
 
-	flick("[src.base_state]spark", src)
+	flick("[base_state]spark", src)
 	sleep(6)
 	open()
 	return 1
@@ -319,7 +319,7 @@
  * w.r.t. the tile it is on.
  */
 /obj/machinery/door/window/proc/is_left_opening()
-	return src.base_state == "left" || src.base_state == "leftsecure"
+	return base_state == "left" || base_state == "leftsecure"
 
 /**
  * Deconstructs a windoor properly. You probably want to delete
@@ -328,41 +328,41 @@
  */
 /obj/machinery/door/window/proc/make_assembly(mob/user as mob)
 	// Windoor assembly
-	var/obj/structure/windoor_assembly/WA = new /obj/structure/windoor_assembly(src.loc)
+	var/obj/structure/windoor_assembly/WA = new /obj/structure/windoor_assembly(loc)
 	set_assembly(user, WA)
 	return WA
 
 /obj/machinery/door/window/proc/set_assembly(mob/user as mob, var/obj/structure/windoor_assembly/WA)
 	WA.name = "Near finished Windoor Assembly"
-	WA.dir = src.dir
+	WA.dir = dir
 	WA.anchored = 1
 	WA.facing = (is_left_opening() ? "l" : "r")
 	WA.secure = ""
 	WA.state = "02"
 	WA.update_icon()
 
-	WA.fingerprints += src.fingerprints
-	WA.fingerprintshidden += src.fingerprints
+	WA.fingerprints += fingerprints
+	WA.fingerprintshidden += fingerprints
 	WA.fingerprintslast = user.ckey
 
 	// Pop out electronics
 	eject_electronics()
 
 /obj/machinery/door/window/proc/eject_electronics()
-	var/obj/item/weapon/circuitboard/airlock/AE = (src.electronics ? src.electronics : new /obj/item/weapon/circuitboard/airlock(src.loc))
-	if (src.electronics)
-		src.electronics = null
+	var/obj/item/weapon/circuitboard/airlock/AE = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(loc))
+	if (electronics)
+		electronics = null
 		AE.installed = 0
 	else
 		if(operating == -1)
 			AE.icon_state = "door_electronics_smoked"
 		// Straight from /obj/machinery/door/airlock/attackby()
-		if (src.req_access && src.req_access.len > 0)
-			AE.conf_access = src.req_access
-		else if (src.req_one_access && src.req_one_access.len > 0)
-			AE.conf_access = src.req_one_access
+		if (req_access && req_access.len > 0)
+			AE.conf_access = req_access
+		else if (req_one_access && req_one_access.len > 0)
+			AE.conf_access = req_one_access
 			AE.one_access = 1
-	AE.forceMove(src.loc)
+	AE.forceMove(loc)
 
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"
@@ -391,7 +391,7 @@
 
 /obj/machinery/door/window/plasma/make_assembly(mob/user as mob)
 	// Windoor assembly
-	var/obj/structure/windoor_assembly/plasma/WA = new /obj/structure/windoor_assembly/plasma(src.loc)
+	var/obj/structure/windoor_assembly/plasma/WA = new /obj/structure/windoor_assembly/plasma(loc)
 	set_assembly(user, WA)
 	return WA
 

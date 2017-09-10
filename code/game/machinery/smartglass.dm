@@ -42,6 +42,9 @@
 	electromagic=new(GLASS,GLASS)
 	electromagic.idle_usage=idle_power_usage
 	electromagic.active_usage=active_power_usage
+	electromagic.power_changed.Add(src,"power_change")
+	electromagic.use = 2
+	electromagic.set_enabled()
 
 /obj/machinery/smartglass_electronics/Destroy()
 	radio_controller.remove_object(src, frequency)
@@ -56,12 +59,6 @@
 // POWER SHIT
 **********************/
 	
-/obj/machinery/smartglass_electronics/initialize()
-	electromagic.power_changed.Add(src,"power_change")
-	electromagic.use = 2
-	electromagic.set_enabled()
-
-
 /obj/machinery/smartglass_electronics/emp_act(severity)
 	if(stat & (BROKEN|NOPOWER))
 		..(severity)
