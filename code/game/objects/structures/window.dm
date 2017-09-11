@@ -330,6 +330,9 @@ var/list/one_way_windows
 	
 	if(istype(W, /obj/item/stack/light_w))
 		var/obj/item/stack/light_w/LT = W
+		if (!anchored)
+			to_chat(user, "<span class='notice'>Secure the window before trying this.</span>")
+			return 0
 		if (smartwindow)
 			to_chat(user, "<span class='notice'>This window already has electronics in it.</span>")
 			return 0

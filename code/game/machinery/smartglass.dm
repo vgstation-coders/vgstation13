@@ -36,8 +36,7 @@
 	..()
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 	GLASS = loc
-	testing("[src] now located at [GLASS]")
-	power_change()
+	GLASS.smart_toggle()
 
 /obj/machinery/smartglass_electronics/Destroy()
 	radio_controller.remove_object(src, frequency)
@@ -45,39 +44,6 @@
 	radio_connection = null
 	..()
 	
-/**********************
-// POWER SHIT
-**********************/
-	
-/obj/machinery/smartglass_electronics/emp_act(severity)
-	switch(severity)
-		if(1)
-			if(prob(90))
-				GLASS.smart_toggle()
-				if(prob(60))
-					GLASS.smart_toggle()
-					if(prob(30))
-						GLASS.smart_toggle()
-		if(2)
-			if(prob(50))
-				GLASS.smart_toggle()
-	
-	
-/obj/machinery/smartglass_electronics/power_change()
-	testing("[src] running power_change()")
-	if(stat & (NOPOWER | BROKEN) || !use_power() || !auto_use_power())
-		if (!smart_transparency)
-			smart_transparency = !smart_transparency
-			GLASS.smart_toggle()
-			testing("[src] switched modes during power_change()")
-	testing("[src] power_change() complete")
-	
-
-/obj/machinery/smartglass_electronics/use_power()
-	areaMaster = GLASS.areaMaster
-	testing("setting areaMaster [areaMaster] on [src]()")
-	return ..()
-		
 /**********************
 // SMARTGLASS PROCS
 **********************/
@@ -125,6 +91,13 @@
 
 	return handle_multitool_topic(href,href_list,usr)
 	
+/obj/machinery/smartglass_electronics/canClone(var/obj/CLONE)
+	return istype(CLONE, /obj/machinery/smartglass_electronics)
+	
+/obj/machinery/smartglass_electronics/clone(var/obj/machinery/smartglass_electronics/CLONE)
+	id_tag = CLONE.id_tag
+	return 1
+
 /*************************************
 // RADIO SHIT
 *************************************/

@@ -258,6 +258,7 @@
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		if (!density) //if it's open, keep it see-through
 			opacity = 0
+			was_opaque = 1
 		return smartwindow
 	
 	//If its a multitool and our windoor is smart, open the menu
