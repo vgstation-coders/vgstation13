@@ -226,6 +226,40 @@
 
 	RefreshParts()
 
+/obj/machinery/smartfridge/bloodbank
+	name = "\improper Refrigerated Blood Bank"
+	desc = "A refrigerated storage unit for blood packs"
+	icon_state = "bloodbank"
+	icon_on = "bloodbank"
+
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
+
+/obj/machinery/smartfridge/bloodbank/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/smartfridge/bloodbank,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
+
+	insert_item(new /obj/item/weapon/reagent_containers/blood/APlus)
+	insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus)
+	insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus)
+	insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus)
+	insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus)
+	insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus)
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty)
+
 
 /obj/machinery/smartfridge/power_change()
 	if( powered() )
@@ -246,7 +280,7 @@
 
 // Returns TRUE on success
 /obj/machinery/smartfridge/proc/insert_item(var/obj/item/O, var/mob/user = null)
-	if(accept_check(O))	
+	if(accept_check(O))
 		if(user && !user.drop_item(O, src))
 			return FALSE
 		O.forceMove(src)
@@ -368,7 +402,7 @@
 				if(display_miniicons)
 					dat += "<td class='fridgeIcon [display_miniicons == MINIICONS_UNCROPPED ? "" : "cropped"]'>[P.mini_icon]</td>"
 				dat += "<td class='pileName'><TT>"
-				dat += "<FONT color = 'blue'><B>[capitalize(P.name)]</B>: [P.amount] </font>"
+				dat += "<FONT color = 'blue'><B>[sanitize(P.name)]</B>: [P.amount] </font>"
 				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
 				if(P.amount > 5)
 					dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=5'>x5</A>)"

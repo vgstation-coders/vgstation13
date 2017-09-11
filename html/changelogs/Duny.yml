@@ -1,2 +1,4 @@
 author: Duny
-changes: []
+changes: 
+- rscadd: Added the Refrigerated Blood Bank, essentially a smartfridge for blood packs.
+- tweak: "(Deff) Completely reworked medbay to get rid of the cramped abomination it was before. Moved toxins a bit further away from it to make room. Removed telescience from science for more room too and gave the telepad to paramedics. Includes the new blood bank."
