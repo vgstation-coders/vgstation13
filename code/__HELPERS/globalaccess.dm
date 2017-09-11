@@ -1894,8 +1894,6 @@
 			global.all_lighting_corners=newval
 		if("LIGHTING_CORNER_DIAGONAL")
 			global.LIGHTING_CORNER_DIAGONAL=newval
-		if("all_lighting_overlays")
-			global.all_lighting_overlays=newval
 		if("validartifactprojectiles")
 			global.validartifactprojectiles=newval
 		if("cargo_telepads")
