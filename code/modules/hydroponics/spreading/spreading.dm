@@ -1,4 +1,5 @@
 #define DEFAULT_SEED "glowshroom"
+#define CREEPER_GROWTH_DISTANCE 4
 
 /obj/effect/plantsegment
 	name = "space vines"
@@ -15,9 +16,11 @@
 	var/health = 10
 	var/max_health = 100
 	var/list/turf/simulated/floor/neighbors = list()
+	var/turf/epicenter
 	var/datum/seed/seed
 	var/sampled = 0
 	var/spread_chance
+	var/spread_distance_limit //Maximum distance allowed to grow from the tile from which we were born (radius, not diameter). If 0, no limit. Set in New()
 	var/mature_time
 	var/tmp/last_tick = 0
 	var/tmp/last_special = 0
@@ -39,8 +42,13 @@
 		plant_controller.add_plant(neighbor)
 	..()
 
-/obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/start_fully_mature = 0)
+/obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/var/start_fully_mature = 0)
 	..()
+
+	if(!newepicenter)
+		epicenter = get_turf(src)
+	else
+		epicenter = newepicenter
 
 	if(!plant_controller)
 		sleep(250) // ugly hack, should mean roundstart plants are fine.
@@ -64,6 +72,7 @@
 	spread_chance = round(40 + triangular_seq(seed.potency*2, 30)) // Diminishing returns formula, see maths.dm
 	if(limited_growth)
 		spread_chance = spread_chance / 2
+	spread_distance_limit = limited_growth ? (CREEPER_GROWTH_DISTANCE) : 0
 	update_icon()
 
 	if(start_fully_mature)
@@ -109,6 +118,13 @@
 			arbitrary_measurement_of_how_lush_I_am_right_now = 2
 	else
 		arbitrary_measurement_of_how_lush_I_am_right_now = 1
+
+	if(spread_distance_limit)
+		var/at_fringe = get_dist(src,epicenter)
+		if(at_fringe >= round(spread_distance_limit*0.9))
+			arbitrary_measurement_of_how_lush_I_am_right_now--
+		if(at_fringe >= round(spread_distance_limit*0.7))
+			arbitrary_measurement_of_how_lush_I_am_right_now--
 
 	if(health < max_health)
 		arbitrary_measurement_of_how_lush_I_am_right_now -= round(-(health - max_health)/(max_health/3))
@@ -206,3 +222,5 @@
 
 /obj/effect/plantsegment/proc/is_mature()
 	return (health >= (max_health/2) && age > mature_time)
+
+#undef CREEPER_GROWTH_DISTANCE
