@@ -234,11 +234,12 @@
 			to_chat(user, "<span class='notice'>You removed the windoor electronics!</span>")
 			make_assembly(user)
 			dismantled = 1 // Don't play the glass shatter sound
-			qdel(smartwindow)
-			smartwindow = null
-			if (opacity)
-				smart_toggle()
-			drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
+			if(smartwindow)
+				qdel(smartwindow)
+				smartwindow = null
+				if (opacity)
+					smart_toggle()
+				drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 			qdel(src)
 		return
 

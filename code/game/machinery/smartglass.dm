@@ -2,7 +2,7 @@
 // Machine that makes glass 'smart'
 // Held within a pane of glass
 // used for linking to buttons 'n shit
-// made when a floor light is attached to a window
+// made when a floor light tile is attached to a window
 /////////////////////////////////////////
 
 /obj/machinery/smartglass_electronics
@@ -12,23 +12,20 @@
 	icon_state = "access_control_standby"
 	anchored = 0
 	density = 0
-	use_power = 0 //Apparently we use power_connection for this
-	idle_power_usage = 0
+	use_power = 1
+	idle_power_usage = 1
 	active_power_usage = 50
 	power_channel = ENVIRON
 	machine_flags = MULTITOOL_MENU
 	
 	//Smartglass vars
-	var/smart_power = 0
+	var/smart_transparency = 0
 	var/obj/structure/window/GLASS //Ref to the window we're in
 	
 	//Radio vars
 	var/id_tag	
 	var/frequency = 1449
 	var/datum/radio_frequency/radio_connection
-	
-	//power vars
-	var/datum/power_connection/consumer/electromagic = null
 	
 	
 /obj/machinery/smartglass_electronics/cultify()
@@ -37,22 +34,12 @@
 	
 /obj/machinery/smartglass_electronics/New()
 	..()
-	GLASS = loc
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
-	electromagic=new(GLASS,GLASS)
-	electromagic.idle_usage=idle_power_usage
-	electromagic.active_usage=active_power_usage
-	electromagic.power_changed.Add(src,"power_change")
-	electromagic.use = 2
-	electromagic.set_enabled()
 
 /obj/machinery/smartglass_electronics/Destroy()
 	radio_controller.remove_object(src, frequency)
 	qdel(radio_connection)
 	radio_connection = null
-	if(electromagic)
-		qdel(electromagic)
-		electromagic = null
 	..()
 	
 /**********************
@@ -69,21 +56,22 @@
 	
 /obj/machinery/smartglass_electronics/power_change()
 	if(stat & (NOPOWER | BROKEN))
-		if (smart_power)
-			smart_power = 0
+		if (smart_transparency)
+			smart_transparency = !smart_transparency
 			GLASS.smart_toggle()
 
 /**********************
 // SMARTGLASS PROCS
 **********************/
 			
-/obj/machinery/smartglass_electronics/proc/toggle_smart_power()
-	if (smart_power)
-		smart_power = 0
-	else
-		smart_power = 1
+/obj/machinery/smartglass_electronics/proc/toggle_smart_transparency()
+	smart_transparency = !smart_transparency
 	GLASS.smart_toggle()
-	return smart_power
+	if (use_power == 1)
+		use_power = 2
+	else
+		use_power = 1
+	return smart_transparency
 
 
 /**********************
@@ -132,7 +120,7 @@
 		return MT_UPDATE
 	
 	if("transparentoggle" in href_list)
-		toggle_smart_power()
+		toggle_smart_transparency()
 		return MT_UPDATE	
 	
 	return ..()
@@ -147,6 +135,6 @@
 	switch(signal.data["command"])
 		
 		if("toggle_transparency")
-			toggle_smart_power()
+			toggle_smart_transparency()
 
 			

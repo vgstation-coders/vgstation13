@@ -335,7 +335,8 @@ var/list/one_way_windows
 			return 0
 		LT.use(1)
 		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
-		smartwindow = new /obj/machinery/smartglass_electronics(src)
+		smartwindow = new /obj/machinery/smartglass_electronics(src.loc)
+		smartwindow.GLASS = src
 		smart_toggle()
 		return 1
 		
@@ -393,11 +394,12 @@ var/list/one_way_windows
 					update_nearby_tiles() //Needed if it's a full window, since unanchored windows don't link
 					update_nearby_icons()
 					update_icon()
-					qdel(smartwindow)
-					smartwindow = null
-					if (opacity)
-						smart_toggle()
-					drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
+					if(smartwindow)
+						qdel(smartwindow)
+						smartwindow = null
+						if (opacity)
+							smart_toggle()
+						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					//Perform pressure check since window no longer blocks air
 					var/pdiff = performWallPressureCheck(src.loc)
 					if(pdiff > 0)
