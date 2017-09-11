@@ -25,9 +25,6 @@ Changes from TG DAL:
 /*
 Relevant vars/procs:
 
-global: (uh, I placed the only one in lighting_system.dm)
-  - var/list/all_lighting_overlays; Just a list of ALL of the lighting overlays.
-
 atom: (lighting_atom.dm)
   - var/light_range; range in tiles of the light, used for calculating falloff
   - var/light_power; multiplier for the brightness of lights
