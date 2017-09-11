@@ -94,6 +94,18 @@
 /obj/machinery/singularity/Crossed(atom/movable/A)
 	consume(A)
 
+/obj/machinery/singularity/attack_tk(mob/user)
+	to_chat(user, "<span class = 'notice'>You attempt to comprehend \the [src]...</span>")
+	spawn(rand(50,110))
+		if(!user.gcDestroyed)
+			to_chat(user, "<span class = 'danger'>...and fail to do so.</span>")
+			if(prob(50))
+				playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+				make_tracker_effects(get_turf(user), get_turf(src))
+				user.dust()
+			else
+				..()
+
 /obj/machinery/singularity/process()
 	dissipate()
 	check_energy()
