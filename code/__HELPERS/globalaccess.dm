@@ -33,8 +33,6 @@
 			return global.all_lighting_corners;
 		if("LIGHTING_CORNER_DIAGONAL")
 			return global.LIGHTING_CORNER_DIAGONAL;
-		if("all_lighting_overlays")
-			return global.all_lighting_overlays;
 		if("validartifactprojectiles")
 			return global.validartifactprojectiles;
 		if("cargo_telepads")
