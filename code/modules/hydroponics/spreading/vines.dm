@@ -1,4 +1,4 @@
-// SPACE VINES (Note that this code is very similar to Biomass code)
+/*// SPACE VINES (Note that this code is very similar to Biomass code)
 /obj/effect/plantsegment
 	name = "space vines"
 	desc = "An extremely expansionistic species of vine."
@@ -423,3 +423,4 @@
 			break
 
 	growth_queue = growth_queue + queue_end
+*/
