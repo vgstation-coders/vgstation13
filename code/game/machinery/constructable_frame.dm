@@ -700,6 +700,7 @@ obj/item/weapon/circuitboard/rdserver
 		"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
 		"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
 		"Drinks smartfridge" = /obj/item/weapon/circuitboard/smartfridge/drinks,
+		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
 	var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
@@ -737,6 +738,11 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Drinks Showcase)"
 	desc = "A circuit board used to run a machine that will hold glasses, drinks and condiments."
 	build_path = "/obj/machinery/smartfridge/drinks"
+
+/obj/item/weapon/circuitboard/smartfridge/bloodbank
+	name = "Circuit Board (Refrigerated Blood Bank)"
+	desc = "A circuit board used to run a machine that will hold blood packs."
+	build_path = "/obj/machinery/smartfridge/bloodbank"
 
 /obj/item/weapon/circuitboard/hydroponics
 	name = "Circuit Board (Hydroponics Tray)"
