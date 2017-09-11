@@ -253,8 +253,6 @@
 	RefreshParts()
 
 //Separate subtype for mapping so that all newly constructed blood banks don't get filled with blood packs
-/obj/machinery/smartfridge/bloodbank/filled
-
 /obj/machinery/smartfridge/bloodbank/filled/New()
 	. = ..()
 
