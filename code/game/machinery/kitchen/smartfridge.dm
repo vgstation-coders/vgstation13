@@ -204,7 +204,7 @@
 
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
-	desc = "A refrigerated storage unit for slime extracts"
+	desc = "A refrigerated storage unit for slime extracts."
 
 	accepted_types = list(/obj/item/slime_extract)
 
@@ -228,7 +228,7 @@
 
 /obj/machinery/smartfridge/bloodbank
 	name = "\improper Refrigerated Blood Bank"
-	desc = "A refrigerated storage unit for blood packs"
+	desc = "A refrigerated storage unit for blood packs."
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
