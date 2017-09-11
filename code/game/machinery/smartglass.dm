@@ -91,11 +91,11 @@
 
 	return handle_multitool_topic(href,href_list,usr)
 	
-/obj/machinery/smartglass_electronics/canClone(var/obj/CLONE)
-	return istype(CLONE, /obj/machinery/smartglass_electronics)
+/obj/machinery/smartglass_electronics/canClone(var/obj/O)
+	return istype(O, /obj/machinery/smartglass_electronics)
 	
-/obj/machinery/smartglass_electronics/clone(var/obj/machinery/smartglass_electronics/CLONE)
-	id_tag = CLONE.id_tag
+/obj/machinery/smartglass_electronics/clone(var/obj/machinery/smartglass_electronics/O)
+	id_tag = O.id_tag
 	return 1
 
 /*************************************
