@@ -35,6 +35,9 @@
 /obj/machinery/smartglass_electronics/New()
 	..()
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
+	GLASS = loc
+	testing("[src] now located at [GLASS]")
+	power_change()
 
 /obj/machinery/smartglass_electronics/Destroy()
 	radio_controller.remove_object(src, frequency)
@@ -47,19 +50,34 @@
 **********************/
 	
 /obj/machinery/smartglass_electronics/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
-		..(severity)
-		return
-	power_change()
-	..(severity)	
-	//should add randomized window states here	
+	switch(severity)
+		if(1)
+			if(prob(90))
+				GLASS.smart_toggle()
+				if(prob(60))
+					GLASS.smart_toggle()
+					if(prob(30))
+						GLASS.smart_toggle()
+		if(2)
+			if(prob(50))
+				GLASS.smart_toggle()
+	
 	
 /obj/machinery/smartglass_electronics/power_change()
-	if(stat & (NOPOWER | BROKEN))
-		if (smart_transparency)
+	testing("[src] running power_change()")
+	if(stat & (NOPOWER | BROKEN) || !use_power() || !auto_use_power())
+		if (!smart_transparency)
 			smart_transparency = !smart_transparency
 			GLASS.smart_toggle()
+			testing("[src] switched modes during power_change()")
+	testing("[src] power_change() complete")
+	
 
+/obj/machinery/smartglass_electronics/use_power()
+	areaMaster = GLASS.areaMaster
+	testing("setting areaMaster [areaMaster] on [src]()")
+	return ..()
+		
 /**********************
 // SMARTGLASS PROCS
 **********************/

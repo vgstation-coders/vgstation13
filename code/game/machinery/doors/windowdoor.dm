@@ -256,7 +256,6 @@
 		LT.use(1)
 		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")	
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
-		smart_toggle()
 		if (!density) //if it's open, keep it see-through
 			opacity = 0
 		return smartwindow
