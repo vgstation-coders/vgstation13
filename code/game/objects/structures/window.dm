@@ -420,11 +420,12 @@ var/list/one_way_windows
 					update_nearby_tiles() //Ditto above, but in reverse
 					update_nearby_icons()
 					update_icon()
-					qdel(smartwindow)
-					smartwindow = null
-					if (opacity)
-						smart_toggle()
-					drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
+					if(smartwindow)
+						qdel(smartwindow)
+						smartwindow = null
+						if (opacity)
+							smart_toggle()
+						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					return
 
 				if(istype(W, /obj/item/weapon/weldingtool))
