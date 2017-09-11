@@ -42,7 +42,7 @@
 		plant_controller.add_plant(neighbor)
 	..()
 
-/obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/var/start_fully_mature = 0)
+/obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
 	..()
 
 	if(!newepicenter)
