@@ -252,6 +252,12 @@
 
 	RefreshParts()
 
+//Separate subtype for mapping so that all newly constructed blood banks don't get filled with blood packs
+/obj/machinery/smartfridge/bloodbank/filled
+
+/obj/machinery/smartfridge/bloodbank/filled/New()
+	. = ..()
+
 	insert_item(new /obj/item/weapon/reagent_containers/blood/APlus)
 	insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus)
 	insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus)
