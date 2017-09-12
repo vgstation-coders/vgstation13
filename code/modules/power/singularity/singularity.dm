@@ -98,13 +98,24 @@
 	to_chat(user, "<span class = 'notice'>You attempt to comprehend \the [src]...</span>")
 	spawn(rand(50,110))
 		if(!user.gcDestroyed)
-			to_chat(user, "<span class = 'danger'>...and fail to do so.</span>")
-			if(prob(50))
-				playsound(get_turf(user), get_sfx("soulstone"), 50,1)
-				make_tracker_effects(get_turf(user), get_turf(src))
-				user.dust()
+			if(prob(90))
+				to_chat(user, "<span class = 'danger'>...and fail to do so.</span>")
+				if(prob(50))
+					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
+					playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+					make_tracker_effects(get_turf(user), get_turf(src))
+					user.dust()
+				else
+					user.visible_message("<span class = 'danger'>\The [user] explodes!</span>")
+					..()
 			else
-				..()
+				to_chat(user, "<span class = 'notice'>...and manage to grab onto something from the depths of \the [src]!</span>")
+				if(do_after(user, src, 30))
+					to_chat(user, "<span class = notice'>You manage to pull something from beyond to within normal space!</span>")
+					var/obj/structure/losetta_stone/L = new
+					L.alpha = 0
+					L.forceMove(get_turf(user))
+					animate(L, alpha = 255, time = 30)
 
 /obj/machinery/singularity/process()
 	dissipate()
