@@ -12,7 +12,7 @@
 	// Update our list of valid neighboring turfs.
 	neighbors = list()
 	for(var/turf/simulated/floor in get_cardinal_neighbors())
-		if(get_dist(epicenter, floor) > spread_distance_limit)
+		if(spread_distance_limit && get_dist(epicenter, floor) > spread_distance_limit)
 			continue
 		if(locate(/obj/effect/plantsegment) in floor.contents)
 			continue
