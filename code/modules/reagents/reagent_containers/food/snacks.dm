@@ -110,7 +110,30 @@
 		if(target == user)	//If you're eating it yourself
 			if(!can_consume(M, user))
 				return 0
-
+			target.visible_message("You start moving your hand holding the food towards your mouth.")
+			if(!do_mob(target, target, 30))
+				target.visible_message("You fail to move your hand holding the food towards your mouth.")
+				return 0
+			target.visible_message("You start opening your mouth.")
+			if(!do_mob(target, target, 30))
+				target.visible_message("You fail to open your mouth.")
+				return 0
+			target.visible_message("You start moving the food into your mouth.")
+			if(!do_mob(target, target, 30))
+				target.visible_message("You fail to move the food into your mouth.")
+				return 0
+			target.visible_message("You start closing your mouth.")
+			if(!do_mob(target, target, 30))
+				target.visible_message("You fail to close your mouth.")
+				return 0
+			target.visible_message("You start chewing your food.")
+			if(!do_mob(target, target, 30))
+				target.visible_message("You fail to chew your food. Idiot.")
+				return 0
+			target.visible_message("You start swallowing your food.")
+			if(!do_mob(target, target, 30))
+				target.visible_message("You fail to swallow your food.")
+				return 0
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
 
 			if(fullness <= 50)
