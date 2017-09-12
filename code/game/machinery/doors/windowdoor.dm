@@ -22,6 +22,8 @@
 	var/shard = /obj/item/weapon/shard
 	penetration_dampening = 2
 	animation_delay = 7
+	var/obj/machinery/smartglass_electronics/smartwindow
+	var/was_opaque
 
 /obj/machinery/door/window/New()
 	..()
@@ -36,8 +38,19 @@
 		playsound(src, "shatter", 70, 1)
 	..()
 
+/obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
+	if(opacity)
+		animate(src, color="#FFFFFF", time=5)
+		set_opacity(0)
+	else
+		animate(src, color="#222222", time=5)
+		set_opacity(1)
+	return opacity
+	
 /obj/machinery/door/window/examine(mob/user as mob)
 	..()
+	if(smartwindow)
+		to_chat(user, "It's NT-15925 SmartGlass™ compliant.")
 	if(secure)
 		to_chat(user, "It is a secure windoor, it is stronger and closes more quickly.")
 
@@ -115,7 +128,9 @@
 
 	explosion_resistance = 0
 	src.density = 0
-//	src.sd_SetOpacity(0)	//TODO: why is this here? Opaque windoors? ~Carn
+	if (smartwindow && opacity)
+		set_opacity(0) //Else we'd get opaque open windoors!
+		was_opaque = 1
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -132,8 +147,9 @@
 
 	src.density = 1
 	explosion_resistance = initial(explosion_resistance)
-//	if(src.visible)
-//		SetOpacity(1)	//TODO: why is this here? Opaque windoors? ~Carn
+	if (smartwindow && was_opaque)
+		set_opacity(1)
+		was_opaque = 0
 	update_nearby_tiles()
 
 	sleep(animation_delay)
@@ -220,6 +236,12 @@
 			to_chat(user, "<span class='notice'>You removed the windoor electronics!</span>")
 			make_assembly(user)
 			src.dismantled = 1 // Don't play the glass shatter sound
+			if(smartwindow)
+				qdel(smartwindow)
+				smartwindow = null
+				if (opacity)
+					smart_toggle()
+				drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 			qdel(src)
 		return
 
@@ -227,6 +249,25 @@
 	if (src.operating)
 		return
 
+	//If it's Smartglass shit, smartglassify it.
+	if(istype(I, /obj/item/stack/light_w) && !operating)
+		var/obj/item/stack/light_w/LT = I
+		if (smartwindow)
+			to_chat(user, "<span class='notice'>This windoor already has electronics in it.</span>")
+			return 0
+		LT.use(1)
+		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")	
+		smartwindow = new /obj/machinery/smartglass_electronics(src)
+		if (!density) //if it's open, keep it see-through
+			opacity = 0
+			was_opaque = 1
+		return smartwindow
+	
+	//If its a multitool and our windoor is smart, open the menu
+	if(ismultitool(I) && smartwindow)
+		smartwindow.update_multitool_menu(user)
+		return
+		
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
 	if(src.density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
 		var/aforce = I.force

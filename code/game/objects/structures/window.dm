@@ -36,6 +36,7 @@ var/list/one_way_windows
 	var/fire_volume_mod = 100
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
+	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 
 /obj/structure/window/New(loc)
 
@@ -63,6 +64,10 @@ var/list/one_way_windows
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
 		to_chat(user, "It appears to be completely loose and movable.")
+	if(smartwindow)
+		to_chat(user, "It's NT-15925 SmartGlass™ compliant.")
+	if(one_way)
+		to_chat(user, "It has a plastic coating.")
 	//switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
 		to_chat(user, "It's in perfect shape without a single scratch.")
@@ -261,6 +266,15 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
+/obj/structure/window/proc/smart_toggle() //For "smart" windows
+	if(opacity)
+		animate(src, color="#FFFFFF", time=5)
+		set_opacity(0)
+	else
+		animate(src, color="#222222", time=5)
+		set_opacity(1)
+	return opacity
+		
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
@@ -303,10 +317,10 @@ var/list/one_way_windows
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			overlays -= oneway_overlay
 			return
-
+	
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
-			to_chat(user, "<span class='notice'>This [src] already has one-way tint on it.</span>")
+			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
 			return
 		var/obj/item/stack/sheet/mineral/plastic/P = W
 		one_way = 1
@@ -318,6 +332,26 @@ var/list/one_way_windows
 		overlays += oneway_overlay
 		return
 
+	
+	if(istype(W, /obj/item/stack/light_w))
+		var/obj/item/stack/light_w/LT = W
+		if (!anchored)
+			to_chat(user, "<span class='notice'>Secure the window before trying this.</span>")
+			return 0
+		if (smartwindow)
+			to_chat(user, "<span class='notice'>This window already has electronics in it.</span>")
+			return 0
+		LT.use(1)
+		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
+		smartwindow = new /obj/machinery/smartglass_electronics(src)
+		smartwindow.Ourwindow = src
+		return 1
+		
+		
+	if(ismultitool(W) && smartwindow)
+		smartwindow.update_multitool_menu(user)
+		return 
+		
 	//Start construction and deconstruction, absolute priority over the other object interactions to avoid hitting the window
 
 	if(reinforced) //Steps for all reinforced window types
@@ -367,6 +401,12 @@ var/list/one_way_windows
 					update_nearby_tiles() //Needed if it's a full window, since unanchored windows don't link
 					update_nearby_icons()
 					update_icon()
+					if(smartwindow)
+						qdel(smartwindow)
+						smartwindow = null
+						if (opacity)
+							smart_toggle()
+						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					//Perform pressure check since window no longer blocks air
 					var/pdiff = performWallPressureCheck(src.loc)
 					if(pdiff > 0)
@@ -385,6 +425,12 @@ var/list/one_way_windows
 					update_nearby_tiles() //Ditto above, but in reverse
 					update_nearby_icons()
 					update_icon()
+					if(smartwindow)
+						qdel(smartwindow)
+						smartwindow = null
+						if (opacity)
+							smart_toggle()
+						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					return
 
 				if(istype(W, /obj/item/weapon/weldingtool))
@@ -617,7 +663,7 @@ var/list/one_way_windows
 	icon_state = "fwindow"
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
-
+	
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
