@@ -18,6 +18,17 @@
 	..()
 	handle_layer()
 
+//For unanchored/moving chairs: We aren't dense, so let's be a little pickier on what we can and can't pass through. Mobs can't walk through us, so let's not walk through them.
+//NOTE: Vehicles are "moving chairs", but they shouldn't be able to move through people either! The firebird can do this, because pass_flags override cantpass_flags.
+/obj/structure/bed/chair/lock_atom(var/atom/movable/AM)
+	. = ..()
+	cantpass_flags |= PASSMOB
+
+
+/obj/structure/bed/chair/unlock_atom(var/atom/movable/AM)
+	. = ..()
+	cantpass_flags &= ~PASSMOB
+
 /obj/structure/bed/chair/can_spook()
 	. = ..()
 	if(.)
