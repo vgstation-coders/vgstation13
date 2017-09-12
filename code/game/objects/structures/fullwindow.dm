@@ -149,7 +149,7 @@
 	base_state = "fwindow"
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
-	
+
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME
 #undef WINDOWUNSECUREFRAME

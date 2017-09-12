@@ -339,7 +339,7 @@ var/list/one_way_windows
 		LT.use(1)
 		to_chat(user, "<span class='notice'>You add some electronics to the window.</span>")	
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
-		smartwindow.GLASS = src
+		smartwindow.Ourwindow = src
 		return 1
 		
 		

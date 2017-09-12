@@ -20,7 +20,7 @@
 	
 	//Smartglass vars
 	var/smart_transparency = 0
-	var/obj/structure/window/GLASS //Ref to the window we're in
+	var/obj/structure/window/Ourwindow //Ref to the window we're in
 	
 	//Radio vars
 	var/id_tag	
@@ -35,8 +35,8 @@
 /obj/machinery/smartglass_electronics/New()
 	..()
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
-	GLASS = loc
-	GLASS.smart_toggle()
+	Ourwindow = loc
+	Ourwindow.smart_toggle()
 
 /obj/machinery/smartglass_electronics/Destroy()
 	radio_controller.remove_object(src, frequency)
@@ -45,12 +45,12 @@
 	..()
 	
 /**********************
-// SMARTGLASS PROCS
+// SMARTOurwindow PROCS
 **********************/
 			
 /obj/machinery/smartglass_electronics/proc/toggle_smart_transparency()
 	smart_transparency = !smart_transparency
-	GLASS.smart_toggle()
+	Ourwindow.smart_toggle()
 	if (use_power == 1)
 		use_power = 2
 	else
@@ -83,7 +83,7 @@
 	if(!canGhostWrite(usr,src,"",ghost_flags))
 		if(usr.restrained() || usr.lying || usr.stat)
 			return 1
-		if ((!in_range(GLASS, usr) || !istype(GLASS.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		if ((!in_range(Ourwindow, usr) || !istype(Ourwindow.loc, /turf)) && !istype(usr, /mob/living/silicon))
 			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
@@ -102,7 +102,7 @@
 // RADIO SHIT
 *************************************/
 		
-/obj/machinery/smartglass_electronics/multitool_topic(var/mob/user, var/list/href_list, var/obj/structure/window/GLASS)
+/obj/machinery/smartglass_electronics/multitool_topic(var/mob/user, var/list/href_list, var/obj/structure/window/Ourwindow)
 	if("set_id" in href_list)
 		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
 		if(newid)
