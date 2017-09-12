@@ -435,6 +435,11 @@ its easier to just keep the beam vertical.
 /atom/proc/relaymove()
 	return
 
+// Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
+// Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
+/atom/proc/relayface()
+	return
+
 // Severity is actually "distance".
 // 1 is pretty much just del(src).
 // 2 is moderate damage.

@@ -1543,6 +1543,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/eastface()
 	set hidden = 1
+	if(loc && loc.relayface(src, EAST))
+		return 1
+	if(locked_to && locked_to.relayface(src, EAST))
+		return 1
 	if(!canface())
 		return 0
 	dir = EAST
@@ -1553,6 +1557,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/westface()
 	set hidden = 1
+	if(loc && loc.relayface(src, WEST))
+		return 1
+	if(locked_to && locked_to.relayface(src, WEST))
+		return 1
 	if(!canface())
 		return 0
 	dir = WEST
@@ -1563,6 +1571,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/northface()
 	set hidden = 1
+	if(loc && loc.relayface(src, NORTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, NORTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = NORTH
@@ -1573,6 +1585,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/southface()
 	set hidden = 1
+	if(loc && loc.relayface(src, SOUTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, SOUTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = SOUTH

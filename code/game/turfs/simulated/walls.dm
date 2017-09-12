@@ -370,6 +370,11 @@
 			dismantle_wall()
 
 /turf/simulated/wall/kick_act(mob/living/carbon/human/H)
+	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)
+		var/obj/O = H.locked_to
+		if(O.onBuckledUserKick(H, src))
+			return //don't return 1! we will do the normal "touch" action if so!
+
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
 	if(prob(70))
