@@ -766,6 +766,9 @@ its easier to just keep the beam vertical.
 /atom/movable/proc/checkpass(passflag)
 	return pass_flags&passflag
 
+/atom/movable/proc/check_cantpass(passflag) //Currently only implemented for PASSMOB (mob_movement.dm)
+	return cantpass_flags&passflag
+
 /datum/proc/setGender(gend = FEMALE)
 	if(!("gender" in vars))
 		CRASH("Oh shit you stupid nigger the [src] doesn't have a gender variable.")
