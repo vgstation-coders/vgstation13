@@ -11,7 +11,11 @@
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
 
-	return (!mover.density || !density || lying)
+	if(!density || lying)
+		return 1
+
+	if(!mover.density && !mover.check_cantpass(PASSMOB))
+		return 1
 
 /client/Northeast()
 	treat_hotkeys(NORTHEAST)
@@ -574,7 +578,7 @@
 			. += MOB_RUN_TALLY+config.run_speed
 		if("walk")
 			. += MOB_WALK_TALLY+config.walk_speed
-	
+
 	var/obj/item/weapon/grab/Findgrab = locate() in src
 	if(Findgrab)
 		. += 7
