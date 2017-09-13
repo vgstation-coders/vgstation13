@@ -32,17 +32,8 @@ atom/movable/airflow_hit(atom/A)
 
 AUTOMATIC PROCS:
 
-Airflow(zone/A, zone/B)
-	Causes objects to fly along a pressure gradient.
-	Called by zone updates. A and B are two connected zones.
-
-AirflowSpace(zone/A)
-	Causes objects to fly into space.
-	Called by zone updates. A is a zone connected to space.
-
 atom/movable/GotoAirflowDest(n)
-atom/movable/RepelAirflowDest(n)
-	Called by main airflow procs to cause the object to fly to or away from destination at speed n.
+	Called by main airflow procs to cause the object to fly to (n > 0) or away from (n < 0) destination at speed scaled by abs(n).
 	Probably shouldn't call this directly unless you know what you're
 	doing and have set airflow_dest. airflow_hit() will be called if the object collides with an obstacle.
 
