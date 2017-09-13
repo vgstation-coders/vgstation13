@@ -322,7 +322,7 @@ mob/living/carbon/human/airflow_hit(atom/A)
 		T.add_blood(src)
 		bloody_body(src)
 
-	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanPush())
+	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanMove())
 		if(airflow_speed > 10)
 			Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
 			Stun(paralysis + 3)
