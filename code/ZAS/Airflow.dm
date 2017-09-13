@@ -236,6 +236,7 @@ atom/movable/RepelAirflowDest(n)
 	if(!density)
 		density = 1
 		od = 1
+
 	spawn(0)
 		while(airflow_speed > 0)
 			airflow_speed = min(airflow_speed,15)
@@ -270,14 +271,13 @@ atom/movable/RepelAirflowDest(n)
 		. = ..()
 	sound_override = 0
 
-atom/movable/proc/airflow_hit(atom/A)
+/atom/movable/proc/airflow_hit(atom/A)
 	airflow_speed = 0
 	airflow_dest = null
 
-mob/airflow_hit(atom/A)
+/mob/airflow_hit(atom/A)
 	if(size == SIZE_TINY)
 		return //Slamming into a mouse/roach doesn't make much sense
-
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='danger'>You hear a loud slam!</span>")
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
@@ -288,17 +288,17 @@ mob/airflow_hit(atom/A)
 		SetKnockdown(rand(1,5))
 	. = ..()
 
-obj/airflow_hit(atom/A)
+/obj/airflow_hit(atom/A)
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='warning'>You hear a loud slam!</span>")
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	. = ..()
 
-obj/item/airflow_hit(atom/A)
+/obj/item/airflow_hit(atom/A)
 	airflow_speed = 0
 	airflow_dest = null
 
-mob/living/carbon/human/airflow_hit(atom/A)
+/mob/living/carbon/human/airflow_hit(atom/A)
 	var/b_loss = airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_damage)
 
 	for(var/i in contents)
