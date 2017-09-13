@@ -71,7 +71,7 @@ Class Procs:
 
 /connection_edge/proc/recheck()
 
-/connection_edge/proc/flow(list/blown, differential, repelled)
+/connection_edge/proc/flow(list/blown, differential)
 	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
 	for(var/atom/movable/AM in blown)
@@ -91,10 +91,7 @@ Class Procs:
 
 			AM.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
-			if(repelled)
-				AM.RepelAirflowDest(differential/5)
-			else
-				AM.GotoAirflowDest(differential/10)
+			AM.GotoAirflowDest(differential/10)
 
 
 /connection_edge/zone
@@ -133,17 +130,8 @@ Class Procs:
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		var/list/attracted
-		var/list/repelled
-		if(differential > 0)
-			attracted = A.contents
-			repelled = B.contents
-		else
-			attracted = B.contents
-			repelled = A.contents
-
-		flow(attracted, abs(differential), 0)
-		flow(repelled, abs(differential), 1)
+		flow(A.contents, differential)
+		flow(B.contents, -differential)
 
 	if(equiv)
 		if(direct)

@@ -96,6 +96,7 @@ atom/movable/RepelAirflowDest(n)
 /mob/check_airflow_movable(n)
 	if(M_HARDCORE in mutations)
 		return 1 //It really is hardcore
+
 	if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure))
 		return 0
 	if(status_flags & GODMODE || (flags & INVULNERABLE))
@@ -107,6 +108,7 @@ atom/movable/RepelAirflowDest(n)
 
 	if (grabbed_by.len)
 		return FALSE
+
 	return 1
 
 /mob/living/carbon/human/check_airflow_movable(n)
@@ -155,9 +157,16 @@ atom/movable/RepelAirflowDest(n)
 	var/yo = airflow_dest.y - y
 
 	var/airflow_falloff = 9 - sqrt(xo ** 2 + yo ** 2)
+
 	if(airflow_falloff < 1)
 		airflow_dest = null
 		return
+
+	if(n < 0)
+		n *= -2 //Back when GotoAirflowDest() and RepelAirflowDest() were separate procs, the latter was called with differential/5 rather than differential/10. This is to maintain consistency.
+		xo *= -1
+		yo *= -1
+
 	airflow_speed = Clamp(n * (9 / airflow_falloff), 1, 9)
 
 	airflow_dest = null
@@ -168,6 +177,7 @@ atom/movable/RepelAirflowDest(n)
 		od = 1
 
 	last_airflow = world.time
+
 	spawn(0)
 		while(airflow_speed > 0 && Process_Spacemove(1))
 			airflow_speed = min(airflow_speed,15)
@@ -192,66 +202,6 @@ atom/movable/RepelAirflowDest(n)
 			step_towards(src, src.airflow_dest)
 			var/mob/M = src
 			if(istype(M) && M.client)
-				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
-		airflow_dest = null
-		airflow_speed = 0
-		airflow_time = 0
-		if(od)
-			density = 0
-
-
-/atom/movable/proc/RepelAirflowDest(n)
-	if(pulledby)
-		return
-	if(airflow_dest == loc)
-		step_away(src,loc)
-	if(ismob(src))
-		var/mob/M = src
-		if(M.status_flags & GODMODE || (flags & INVULNERABLE))
-			return
-		if(M.grabbed_by.len)
-			return
-		if(istype(src, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = src
-			if(H.locked_to)
-				return
-			if(H.shoes)
-				if(H.CheckSlip() < 0)
-					return
-		to_chat(src, "<SPAN CLASS='warning'>You are pushed away by airflow!</SPAN>")
-		last_airflow = world.time
-	var/airflow_falloff = 9 - sqrt((x - airflow_dest.x) ** 2 + (y - airflow_dest.y) ** 2)
-	if(airflow_falloff < 1)
-		airflow_dest = null
-		return
-	airflow_speed = Clamp(n * (9 / airflow_falloff), 1, 9)
-	var
-		xo = -(airflow_dest.x - src.x)
-		yo = -(airflow_dest.y - src.y)
-		od = 0
-	airflow_dest = null
-	if(!density)
-		density = 1
-		od = 1
-
-	spawn(0)
-		while(airflow_speed > 0)
-			airflow_speed = min(airflow_speed,15)
-			airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
-			if(airflow_speed > 7)
-				if(airflow_time++ >= airflow_speed - 7)
-					sleep(tick_multiplier)
-			else
-				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
-			if((!( src.airflow_dest ) || src.loc == src.airflow_dest))
-				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
-			if((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
-				break
-			if(!isturf(loc))
-				break
-			step_towards(src, src.airflow_dest)
-			if(ismob(src) && src:client)
-				var/mob/M = src
 				M.delayNextMove(zas_settings.Get(/datum/ZAS_Setting/airflow_mob_slowdown))
 		airflow_dest = null
 		airflow_speed = 0
