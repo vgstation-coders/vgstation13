@@ -94,8 +94,8 @@ atom/movable/RepelAirflowDest(n)
 	return (!anchored && n >= zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure))
 
 /mob/check_airflow_movable(n)
-	if(M_HARDCORE in mutations)
-		return TRUE //It really is hardcore
+//	if(M_HARDCORE in mutations)
+//		return TRUE //It really is hardcore //TOO hardcore, probably
 
 	if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure))
 		return FALSE
