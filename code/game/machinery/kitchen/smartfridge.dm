@@ -306,7 +306,7 @@
 		return FALSE
 	var/objects_loaded = 0
 	for(var/obj/G in B.contents)
-		if(insert_item(G, user))
+		if(insert_item(G)) //User arg omitted to avoid messages
 			objects_loaded++
 	if(user && objects_loaded)
 		user.visible_message("<span class='notice'>[user] loads \the [src] with \the [B].</span>", \
