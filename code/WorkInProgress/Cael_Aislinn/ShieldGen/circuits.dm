@@ -51,7 +51,7 @@
 	build_path = "/obj/machinery/shield_capacitor"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
+							"/obj/item/weapon/stock_parts/capacitor" = 2,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/treatment" = 1,
 							"/obj/item/weapon/stock_parts/subspace/analyzer" = 1,
