@@ -19,7 +19,7 @@ What are the archived variables for?
 
 #define GRAPHICS_PLASMA   1
 #define GRAPHICS_N2O      2
-#define GRAPHICS_REAGENTS 4  // Not used.  Yet.
+#define GRAPHICS_REAGENTS 4 //Not used. Yet.
 #define GRAPHICS_COLD     8
 // END /vg/SHIT
 
@@ -270,7 +270,7 @@ What are the archived variables for?
 	// If configured and cold, maek ice
 	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
 		if(temperature <= TEMPERATURE_ICE_FORMATION && return_pressure()>MIN_PRESSURE_ICE_FORMATION)
-			// If we're just forming, do a probability check.  Otherwise, KEEP IT ON~
+			// If we're just forming, do a probability check. Otherwise, KEEP IT ON~
 			// This ordering will hopefully keep it from sampling random noise every damn tick.
 			//if(was_icy || (!was_icy && prob(25)))
 			graphics |= GRAPHICS_COLD
@@ -373,7 +373,7 @@ What are the archived variables for?
 
 	oxygen_archived = oxygen
 	carbon_dioxide_archived = carbon_dioxide
-	nitrogen_archived =  nitrogen
+	nitrogen_archived = nitrogen
 	toxins_archived = toxins
 
 	if(trace_gases.len)
@@ -391,7 +391,7 @@ What are the archived variables for?
 	//	that group processing is still accurate for source (aborts if not)
 	//Called by: airgroups/machinery expelling air, ?
 	//Inputs: The gas to try and merge
-	//Outputs: 1 on successful merge.  0 otherwise.
+	//Outputs: 1 on successful merge. 0 otherwise.
 
 	if(!giver)
 		return 0
@@ -1015,7 +1015,7 @@ What are the archived variables for?
 		var/self_heat_capacity = heat_capacity_archived()
 		var/sharer_heat_capacity = sharer.heat_capacity_archived()
 		if(!group_multiplier)
-			message_admins("Error!  The gas mixture (ref \ref[src]) has no group multiplier!")
+			message_admins("Error! The gas mixture (ref \ref[src]) has no group multiplier!")
 			return
 
 		if((sharer_heat_capacity > MINIMUM_HEAT_CAPACITY) && (self_heat_capacity > MINIMUM_HEAT_CAPACITY))
@@ -1030,7 +1030,7 @@ What are the archived variables for?
 	if(abs(delta_temperature) > MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
 		var/self_heat_capacity = heat_capacity()//_archived()
 		if(!group_multiplier)
-			message_admins("Error!  The gas mixture (ref \ref[src]) has no group multiplier!")
+			message_admins("Error! The gas mixture (ref \ref[src]) has no group multiplier!")
 			return
 
 		if((model.heat_capacity > MINIMUM_HEAT_CAPACITY) && (self_heat_capacity > MINIMUM_HEAT_CAPACITY))
