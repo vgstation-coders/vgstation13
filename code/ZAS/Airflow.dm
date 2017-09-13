@@ -142,26 +142,32 @@ atom/movable/RepelAirflowDest(n)
 /atom/movable/var/tmp/last_airflow = 0
 
 /atom/movable/proc/GotoAirflowDest(n)
-	last_airflow = world.time
-	if(pulledby)
+	if(!airflow_dest || pulledby)
+		return
+	if(world.time < last_airflow + zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 		return
 	if(airflow_dest == loc)
 		return
 	if(ismob(src))
 		to_chat(src, "<span class='warning'>You are sucked away by airflow!</span>")
-	var/airflow_falloff = 9 - sqrt((x - airflow_dest.x) ** 2 + (y - airflow_dest.y) ** 2)
+
+	var/xo = airflow_dest.x - x
+	var/yo = airflow_dest.y - y
+
+	var/airflow_falloff = 9 - sqrt(xo ** 2 + yo ** 2)
 	if(airflow_falloff < 1)
 		airflow_dest = null
 		return
 	airflow_speed = Clamp(n * (9 / airflow_falloff), 1, 9)
-	var
-		xo = airflow_dest.x - src.x
-		yo = airflow_dest.y - src.y
-		od = 0
+
 	airflow_dest = null
+
+	var/od = 0
 	if(!density)
 		density = 1
 		od = 1
+
+	last_airflow = world.time
 	spawn(0)
 		while(airflow_speed > 0 && Process_Spacemove(1))
 			airflow_speed = min(airflow_speed,15)
