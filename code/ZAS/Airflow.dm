@@ -269,7 +269,7 @@ atom/movable/RepelAirflowDest(n)
 		T.add_blood(src)
 		bloody_body(src)
 
-	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || check_airflow_movable())
+	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || (M_HARDCORE in mutations))
 		if(airflow_speed > 10)
 			Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
 			Stun(paralysis + 3)
