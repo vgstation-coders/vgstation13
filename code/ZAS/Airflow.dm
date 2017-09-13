@@ -94,9 +94,25 @@ atom/movable/RepelAirflowDest(n)
 	return (!anchored && n >= zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure))
 
 /mob/check_airflow_movable(n)
+	if(M_HARDCORE in mutations)
+		return 1 //It really is hardcore
 	if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure))
 		return 0
+	if(status_flags & GODMODE || (flags & INVULNERABLE))
+		return 0
+	if(locked_to)
+		return 0
+	if(CheckSlip() < 0)
+		return 0
+
+	if (grabbed_by.len)
+		return FALSE
 	return 1
+
+/mob/living/carbon/human/check_airflow_movable(n)
+	if(reagents.has_reagent(MEDCORES))
+		return 0
+	return ..()
 
 /mob/dead/observer/check_airflow_movable()
 	return 0
@@ -125,19 +141,6 @@ atom/movable/RepelAirflowDest(n)
 /atom/movable/var/tmp/airflow_time = 0
 /atom/movable/var/tmp/last_airflow = 0
 
-// Mainly for bustanuts.
-
-/atom/movable/proc/AirflowCanPush()
-	return 1
-
-/mob/AirflowCanPush()
-	return 1
-
-/mob/living/carbon/human/AirflowCanPush()
-	if(reagents.has_reagent(MEDCORES))
-		return 0
-	return ..()
-
 /atom/movable/proc/GotoAirflowDest(n)
 	last_airflow = world.time
 	if(pulledby)
@@ -145,19 +148,7 @@ atom/movable/RepelAirflowDest(n)
 	if(airflow_dest == loc)
 		return
 	if(ismob(src))
-		var/mob/M = src
-		if(M.status_flags & GODMODE || (flags & INVULNERABLE))
-			return
-		if(M.grabbed_by.len)
-			return
-		if(istype(src, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = src
-			if(H.locked_to)
-				return
-			if(H.shoes)
-				if(H.CheckSlip() < 0)
-					return
-		to_chat(src, "<SPAN CLASS='warning'>You are sucked away by airflow!</SPAN>")
+		to_chat(src, "<span class='warning'>You are sucked away by airflow!</span>")
 	var/airflow_falloff = 9 - sqrt((x - airflow_dest.x) ** 2 + (y - airflow_dest.y) ** 2)
 	if(airflow_falloff < 1)
 		airflow_dest = null
@@ -322,7 +313,7 @@ atom/movable/RepelAirflowDest(n)
 		T.add_blood(src)
 		bloody_body(src)
 
-	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || AirflowCanMove())
+	if(zas_settings.Get(/datum/ZAS_Setting/airflow_push) || check_airflow_movable())
 		if(airflow_speed > 10)
 			Paralyse(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)))
 			Stun(paralysis + 3)
