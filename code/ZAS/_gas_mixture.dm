@@ -84,18 +84,11 @@ What are the archived variables for?
 	var/tmp/graphics_archived = 0
 	var/tmp/fuel_burnt = 0
 
-	//var/datum/reagents/aerosols
-/*
-/datum/gas_mixture/New()
-	//create_reagents(10)
-*/
-
-//FOR THE LOVE OF GOD PLEASE USE THIS PROC
-//Call it with negative numbers to remove gases.
-
+//Turns out that most of the time, people only want to adjust a single gas at a time, and using a proc set up like this just encourages bad behavior.
+//To be purged along with the trace gas system later.
 /datum/gas_mixture/proc/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces = list())
 	//Purpose: Adjusting the gases within a airmix
-	//Called by: Nothing, yet!
+	//Called by: Fucking everything!
 	//Inputs: The values of the gases to adjust
 	//Outputs: null
 
@@ -114,29 +107,22 @@ What are the archived variables for?
 	update_values()
 	return
 
-//Takes a gas string, and the amount of moles to adjust by.  Calls update_values() if update isn't 0.
-/datum/gas_mixture/proc/adjust_gas(gasid, moles, update = 1)
-	if(moles == 0)
+
+//Takes a gas string, and the number of moles to adjust by. Calls update_values() if update isn't 0.
+/datum/gas_mixture/proc/adjust_gas(gasid, moles, update = TRUE)
+	if(!moles)
 		return
 	switch(gasid)
 		if("oxygen")
-			if (group_multiplier != 1)
-				oxygen += moles/group_multiplier
-			else
-				oxygen += moles
+			oxygen += moles / group_multiplier
 		if("plasma")
-			if (group_multiplier != 1)
-				toxins += moles/group_multiplier
-			else
-				toxins += moles
+			toxins += moles / group_multiplier
 		if("carbon_dioxide")
-			if (group_multiplier != 1)
-				carbon_dioxide += moles/group_multiplier
-			else
-				carbon_dioxide += moles
+			carbon_dioxide += moles / group_multiplier
 		if("nitrogen")
-			if (group_multiplier != 1)
-				nitrogen += moles/group_multiplier
+			nitrogen += moles / group_multiplier
+		else
+			CRASH("Invalid gasid!")
 			else
 				nitrogen += moles
 
@@ -144,13 +130,7 @@ What are the archived variables for?
 	if(update)
 		update_values()
 
-/*
-/datum/gas_mixture/proc/create_reagents(var/max_vol)
-	aerosols = new /datum/reagents(max_vol)
-	aerosols.my_atom = src
-*/
 
-//tg seems to like using these a lot
 /datum/gas_mixture/proc/return_temperature()
 	return temperature
 
@@ -180,6 +160,7 @@ What are the archived variables for?
 
 	return max(MINIMUM_HEAT_CAPACITY,heat_capacity)
 
+
 /datum/gas_mixture/proc/heat_capacity_archived()
 	//Purpose: Returning the archived heat capacity of the gas mix
 	//Called by: UNKNOWN
@@ -194,14 +175,10 @@ What are the archived variables for?
 
 	return max(MINIMUM_HEAT_CAPACITY,heat_capacity_archived)
 
+
 /datum/gas_mixture/proc/total_moles()
 	return total_moles
-	/*var/moles = oxygen + carbon_dioxide + nitrogen + toxins
 
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			moles += trace_gas.moles
-	return moles*/
 
 /datum/gas_mixture/proc/return_pressure()
 	//Purpose: Calculating Current Pressure
@@ -210,26 +187,6 @@ What are the archived variables for?
 	//Outputs: Gas pressure.
 	return pressure
 
-//		proc/return_temperature()
-			//Purpose:
-			//Inputs:
-			//Outputs:
-
-//			return temperature
-
-//		proc/return_volume()
-			//Purpose:
-			//Inputs:
-			//Outputs:
-
-//			return max(0, volume)
-
-//		proc/thermal_energy()
-			//Purpose:
-			//Inputs:
-			//Outputs:
-
-//			return temperature*heat_capacity()
 
 /datum/gas_mixture/proc/update_values()
 	//Purpose: Calculating and storing values which were normally called CONSTANTLY
@@ -242,11 +199,6 @@ What are the archived variables for?
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
 			total_moles += trace_gas.moles
-
-/*
-	if(aerosols.total_volume)
-		total_moles += aerosols.total_volume
-*/
 
 	if(volume>0)
 		pressure = total_moles()*R_IDEAL_GAS_EQUATION*temperature/volume
@@ -445,14 +397,8 @@ What are the archived variables for?
 				corresponding = new trace_gas.type()
 				trace_gases += corresponding
 			corresponding.moles += trace_gas.moles*giver.group_multiplier/group_multiplier
-/*
-	if(giver.aerosols.total_volume > 1)
-		giver.aerosols.trans_to_atmos(src,aerosols.total_volume)
-*/
 	update_values()
 
-	// Let the garbage collector handle it, faster according to /tg/ testers
-	//del(giver)
 	return 1
 
 /datum/gas_mixture/proc/remove(amount)
