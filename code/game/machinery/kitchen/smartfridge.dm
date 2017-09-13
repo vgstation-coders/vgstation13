@@ -294,7 +294,7 @@
 			thisPile.addAmount(1)
 		else
 			piles[O.name] = new /datum/fridge_pile(O.name, src, 1, costly_bicon(O))
-		if(!quiet)
+		if(user && !quiet)
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								"<span class='notice'>You add \the [O] to \the [src].")
 		return TRUE
