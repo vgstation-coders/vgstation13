@@ -2,7 +2,7 @@
 // Processes vines/spreading plants.
 
 #define PLANTS_PER_TICK 500 // Cap on number of plant segments processed.
-#define PLANT_TICK_TIME 50  // Number of ticks between the plant processor cycling.
+#define PLANT_TICK_TIME 30  // Number of ticks between the plant processor cycling.
 
 var/global/datum/controller/plants/plant_controller // Set in New().
 
@@ -60,8 +60,8 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 		if(seed.consume_gasses)
 			seed.consume_gasses["plasma"] = null //PHORON DOES NOT EXIST
 			seed.consume_gasses["carbon_dioxide"] = null
-		if(seed.chems && !isnull(seed.chems[PACID]))
-			seed.chems[PACID] = null // Eating through the hull will make these plants completely inviable, albeit very dangerous.
+		if(seed.chems && !isnull(seed.chems[PHENOL]))
+			seed.chems[PHENOL] = null // Eating through the hull will make these plants completely inviable, albeit very dangerous.
 			seed.chems -= null // Setting to null does not actually remove the entry, which is weird.
 		seed.ideal_heat = initial(seed.ideal_heat)
 		seed.heat_tolerance = initial(seed.heat_tolerance)
