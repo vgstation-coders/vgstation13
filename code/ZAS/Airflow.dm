@@ -51,17 +51,17 @@ atom/movable/RepelAirflowDest(n)
 /mob/var/tmp/last_airflow_stun = 0
 /mob/proc/airflow_stun()
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
-		return 0
+		return FALSE
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
-		return 0
+		return FALSE
 //	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push) || !(M_HARDCORE in mutations)) //This block was added in the original XGM PR, but, again, I don't want to bundle balance with system.
-//		return 0
+//		return FALSE
 //	if(locked_to)
 //		to_chat(src, "<span class='notice'>Air suddenly rushes past you!</span>")
-//		return 0
+//		return FALSE
 	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
-		return 0
+		return FALSE
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
 	SetKnockdown(5)
@@ -75,15 +75,15 @@ atom/movable/RepelAirflowDest(n)
 
 /mob/living/carbon/human/airflow_stun()
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
-		return 0
+		return FALSE
 	if(locked_to || (flags & INVULNERABLE))
-		return 0
+		return FALSE
 	if(shoes)
 		if(CheckSlip() < 1)
-			return 0
+			return FALSE
 	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
-		return 0
+		return FALSE
 
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
@@ -95,42 +95,42 @@ atom/movable/RepelAirflowDest(n)
 
 /mob/check_airflow_movable(n)
 	if(M_HARDCORE in mutations)
-		return 1 //It really is hardcore
+		return TRUE //It really is hardcore
 
 	if(n < zas_settings.Get(/datum/ZAS_Setting/airflow_heavy_pressure))
-		return 0
+		return FALSE
 	if(status_flags & GODMODE || (flags & INVULNERABLE))
-		return 0
+		return FALSE
 	if(locked_to)
-		return 0
+		return FALSE
 	if(CheckSlip() < 0)
-		return 0
+		return FALSE
 
 	if (grabbed_by.len)
 		return FALSE
 
-	return 1
+	return TRUE
 
 /mob/living/carbon/human/check_airflow_movable(n)
 	if(reagents.has_reagent(MEDCORES))
-		return 0
+		return FALSE
 	return ..()
 
 /mob/dead/observer/check_airflow_movable()
-	return 0
+	return FALSE
 
 /mob/living/silicon/check_airflow_movable()
-	return 0
+	return FALSE
 
 /mob/virtualhearer/check_airflow_movable()
-	return 0
+	return FALSE
 
 /obj/item/check_airflow_movable(n)
 	if(anchored)
-		return 0
+		return FALSE
 	switch(w_class) //Note that switch() evaluates the FIRST matching case, so the case that executes for a given w_class is the one for which it is the UPPER bound.
 		if(0 to W_CLASS_TINY)
-			return 1
+			return TRUE
 		if(W_CLASS_TINY to W_CLASS_SMALL)
 			return (n >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		if(W_CLASS_SMALL to W_CLASS_MEDIUM)
@@ -171,10 +171,10 @@ atom/movable/RepelAirflowDest(n)
 
 	airflow_dest = null
 
-	var/od = 0
+	var/od = FALSE
 	if(!density)
-		density = 1
-		od = 1
+		density = TRUE
+		od = TRUE
 
 	last_airflow = world.time
 
@@ -185,14 +185,14 @@ atom/movable/RepelAirflowDest(n)
 			if(airflow_speed > 7)
 				if(airflow_time++ >= airflow_speed - 7)
 					if(od)
-						density = 0
+						density = FALSE
 					sleep(tick_multiplier)
 			else
 				if(od)
-					density = 0
+					density = FALSE
 				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
 			if(od)
-				density = 1
+				density = TRUE
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
@@ -207,7 +207,7 @@ atom/movable/RepelAirflowDest(n)
 		airflow_speed = 0
 		airflow_time = 0
 		if(od)
-			density = 0
+			density = FALSE
 
 /atom/movable/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
