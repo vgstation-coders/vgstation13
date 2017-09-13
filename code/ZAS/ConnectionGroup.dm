@@ -84,7 +84,7 @@ Class Procs:
 			//Check for things that are in range of the midpoint turfs.
 			var/list/close_turfs = list()
 			for(var/turf/U in connecting_turfs)
-				if(get_dist(M,U) < world.view)
+				if(get_dist(AM,U) < world.view)
 					close_turfs += U
 			if(!close_turfs.len)
 				continue
