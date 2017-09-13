@@ -283,7 +283,7 @@
 
 
 // Returns TRUE on success
-/obj/machinery/smartfridge/proc/insert_item(var/obj/item/O, var/mob/user = null)
+/obj/machinery/smartfridge/proc/insert_item(var/obj/item/O, var/mob/user = null, var/quiet = 0)
 	if(accept_check(O))
 		if(user && !user.drop_item(O, src))
 			return FALSE
@@ -294,7 +294,7 @@
 			thisPile.addAmount(1)
 		else
 			piles[O.name] = new /datum/fridge_pile(O.name, src, 1, costly_bicon(O))
-		if(user)
+		if(!quiet)
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								"<span class='notice'>You add \the [O] to \the [src].")
 		return TRUE
@@ -306,7 +306,7 @@
 		return FALSE
 	var/objects_loaded = 0
 	for(var/obj/G in B.contents)
-		if(insert_item(G, user))
+		if(insert_item(G, user, 1)) //Don't send a message for each item when loading from a bag
 			objects_loaded++
 	if(user && objects_loaded)
 		user.visible_message("<span class='notice'>[user] loads \the [src] with \the [B].</span>", \
