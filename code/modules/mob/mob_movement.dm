@@ -8,8 +8,12 @@
 	if(ismob(mover))
 		var/mob/moving_mob = mover
 
-		if ((other_mobs && moving_mob.other_mobs))
+		if ((other_mobs && moving_mob.other_mobs)) //I have no fucking idea what this is. I think it's for dragging via grab, but only if 2+ mobs are being grabbed?
 			return 1
+
+	for(var/atom/movable/passenger in mover.locked_atoms) //If we're being crossed by something with locked atoms, like a chair or something, have ALL of them try to cross us.
+		if(!Cross(passenger, target, height, air_group))
+			return 0
 
 	return (!mover.density || !density || lying)
 
@@ -574,7 +578,7 @@
 			. += MOB_RUN_TALLY+config.run_speed
 		if("walk")
 			. += MOB_WALK_TALLY+config.walk_speed
-	
+
 	var/obj/item/weapon/grab/Findgrab = locate() in src
 	if(Findgrab)
 		. += 7
