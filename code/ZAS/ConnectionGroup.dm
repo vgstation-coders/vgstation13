@@ -170,11 +170,9 @@ Class Procs:
 /connection_edge/unsimulated/add_connection(connection/c)
 	. = ..()
 	connecting_turfs.Add(c.B)
-	air.group_multiplier = coefficient
 
 /connection_edge/unsimulated/remove_connection(connection/c)
 	connecting_turfs.Remove(c.B)
-	air.group_multiplier = coefficient
 	. = ..()
 
 /connection_edge/unsimulated/erase()
@@ -189,7 +187,7 @@ Class Procs:
 		erase()
 		return
 
-	var/equiv = A.air.share_space(air)
+	var/equiv = A.air.share_space(air, coefficient)
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
@@ -208,11 +206,11 @@ Class Procs:
 proc/ShareHeat(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	//This implements a simplistic version of the Stefan-Boltzmann law.
 	var/energy_delta = ((A.temperature - B.temperature) ** 4) * STEFAN_BOLTZMANN_CONSTANT * connecting_tiles * 2.5
-	var/maximum_energy_delta = max(0, min(A.temperature * A.heat_capacity() * A.group_multiplier, B.temperature * B.heat_capacity() * B.group_multiplier))
+	var/maximum_energy_delta = max(0, min(A.temperature * A.heat_capacity(), B.temperature * B.heat_capacity()))
 	if(maximum_energy_delta > abs(energy_delta))
 		if(energy_delta < 0)
 			maximum_energy_delta *= -1
 		energy_delta = maximum_energy_delta
 
-	A.temperature -= energy_delta / (A.heat_capacity() * A.group_multiplier)
-	B.temperature += energy_delta / (B.heat_capacity() * B.group_multiplier)
+	A.temperature -= energy_delta / A.heat_capacity()
+	B.temperature += energy_delta / B.heat_capacity()

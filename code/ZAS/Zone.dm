@@ -28,9 +28,6 @@ Class Procs:
 	rebuild()
 		Invalidates the zone and marks all its former tiles for updates.
 
-	add_tile_air(turf/simulated/T)
-		Adds the air contained in T.air to the zone's air supply. Called when adding a turf.
-
 	tick()
 		Called only when the gas content is changed. Archives values and changes gas graphics.
 
@@ -51,7 +48,6 @@ Class Procs:
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
-	air.group_multiplier = 1
 	air.volume = CELL_VOLUME
 
 /zone/proc/add(turf/simulated/T)
@@ -62,7 +58,8 @@ Class Procs:
 #endif
 
 	var/datum/gas_mixture/turf_air = T.return_air()
-	add_tile_air(turf_air)
+	air.volume += turf_air.volume
+	air.merge(turf_air)
 	T.zone = src
 	contents.Add(T)
 	T.set_graphic(air.graphics)
@@ -74,12 +71,14 @@ Class Procs:
 	ASSERT(T.zone == src)
 	soft_assert(T in contents, "Lists are weird broseph")
 #endif
-	contents.Remove(T)
+
 	T.zone = null
+	var/datum/gas_mixture/turf_air = T.return_air()
+	air.volume -= turf_air.volume
+	air.divide(1 + turf_air.volume / air.volume)
+	contents.Remove(T)
 	T.set_graphic(0)
-	if(contents.len)
-		air.group_multiplier = contents.len
-	else
+	if(!contents.len)
 		c_invalidate()
 
 /zone/proc/c_merge(zone/into)
@@ -113,14 +112,6 @@ Class Procs:
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
 
-/zone/proc/add_tile_air(datum/gas_mixture/tile_air)
-	//air.volume += CELL_VOLUME
-	air.group_multiplier = 1
-	air.multiply(contents.len)
-	air.merge(tile_air)
-	air.divide(contents.len+1)
-	air.group_multiplier = contents.len+1
-
 /zone/proc/tick()
 	air.archive()
 	if(air.check_tile_graphic())
@@ -132,7 +123,7 @@ Class Procs:
 	to_chat(M, "O2: [air.oxygen] N2: [air.nitrogen] CO2: [air.carbon_dioxide] P: [air.toxins]")
 	to_chat(M, "P: [air.return_pressure()] kPa V: [air.volume]L T: [air.temperature]�K ([air.temperature - T0C]�C)")
 	to_chat(M, "O2 per N2: [(air.nitrogen ? air.oxygen/air.nitrogen : "N/A")] Moles: [air.total_moles]")
-	to_chat(M, "Simulated: [contents.len] ([air.group_multiplier])")
+	to_chat(M, "Simulated: [contents.len] ([air.volume / CELL_VOLUME])")
 //	to_chat(M, "Unsimulated: [unsimulated_contents.len]")
 //	to_chat(M, "Edges: [edges.len]")
 	if(invalid)

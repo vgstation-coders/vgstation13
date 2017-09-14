@@ -214,7 +214,7 @@
 			air.temperature += self_temperature_delta
 
 			if(modeled_location.zone)
-				modeled_location.zone.air.temperature += sharer_temperature_delta/modeled_location.zone.air.group_multiplier
+				modeled_location.zone.air.temperature += sharer_temperature_delta
 			else
 				modeled_location.air.temperature += sharer_temperature_delta
 
