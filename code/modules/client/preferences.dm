@@ -1224,14 +1224,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if(new_s_tone)
 							s_tone = 35 - max(min(round(new_s_tone),220),1)
 					else if(species == "Vox")//Can't reference species flags here, sorry.
-						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green, 5 = Azure, 6 = Emerald)", "Character Preference") as num|null
+						var/skin_c = input(user, "Choose your Vox's skin color:\n(1 = Green, 2 = Brown, 3 = Gray, 4 = Light Green)", "Character Preference") as num|null
 						if(skin_c)
-							s_tone = max(min(round(skin_c),6),1)
+							s_tone = max(min(round(skin_c),4),1)
 							switch(s_tone)
-								if(6)
-									to_chat(user,"Your vox will now be emerald.")
-								if(5)
-									to_chat(user,"Your vox will now be azure.")
 								if(4)
 									to_chat(user,"Your vox will now be light green.")
 								if(3)
