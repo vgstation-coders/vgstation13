@@ -127,5 +127,11 @@
 		
 		if("toggle_transparency")
 			toggle_smart_transparency()
+			
+		if("toggle")
+			toggle_smart_transparency()
+			
+		if("cycle")
+			toggle_smart_transparency()
 
 			
