@@ -900,39 +900,23 @@ var/list/special_fruits = list()
 	set category = "Object"
 	set src in range(1)
 
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
+	var/mob/user = usr
+	if(!user.Adjacent(src))
+		return
+	if(user.isUnconscious())
+		to_chat(user, "You can't do that while unconscious.")
 		return
 
-	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+	if(!switching)
+		randomize()
+	else
+		getnofruit(user, user.get_active_hand())
 
-	randomize()
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/AltClick(mob/user)
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
-	if(switching)
-		if(!current_path)
-			return
-		switching = 0
-		var/N = rand(1,3)
-		if(get_turf(user))
-			switch(N)
-				if(1)
-					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
-				if(2)
-					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
-				if(3)
-					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
-		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
-			user.put_in_hands(I)
-		else
-			new current_path(get_turf(src))
-		qdel(src)
-	else
-		pick_leaf()
-
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
 	switching = 1
@@ -947,6 +931,32 @@ var/list/special_fruits = list()
 				counter = 0
 				available_fruits = shuffle(available_fruits)
 			counter++
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/getnofruit(mob/user, obj/item/weapon/W)
+	if(!switching || !current_path)
+		return
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+	switching = 0
+	var/N = rand(1,3)
+	if(get_turf(user))
+		switch(N)
+			if(1)
+				playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
+	if(W)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+	else
+		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
+	if(src.loc == user)
+		user.drop_item(src, force_drop = 1)
+		var/I = new current_path(get_turf(user))
+		user.put_in_hands(I)
+	else
+		new current_path(get_turf(src))
+	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado
 	name = "avocado"
