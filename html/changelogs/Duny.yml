@@ -1,2 +1,6 @@
 author: Duny
-changes: []
+changes: 
+- bugfix: (Deff) Added rollerbeds to the new medbay.
+- bugfix: (Deff) Fixed research outpost disposals throwing you into the o2 miner rather than outside.
+- rscadd: (Deff) Added a tile painter to the theatre backroom.
+- bugfix: (Deff) Fixed costume spawners in the theatre not spawning anything.
