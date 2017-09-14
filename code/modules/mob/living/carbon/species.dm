@@ -757,12 +757,6 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/vox/updatespeciescolor(var/mob/living/carbon/human/H)
 	switch(H.s_tone)
-		if(6)
-			icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
-			deform = 'icons/mob/human_races/vox/r_def_voxemrl.dmi'
-		if(5)
-			icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
-			deform = 'icons/mob/human_races/vox/r_def_voxazu.dmi'
 		if(4)
 			icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxlgrn.dmi'
