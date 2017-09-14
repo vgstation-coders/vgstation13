@@ -4336,6 +4336,8 @@
 		else
 			new current_path(get_turf(src))
 		qdel(src)
+	else
+		pick_leaf()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
