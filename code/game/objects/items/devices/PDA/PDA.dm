@@ -7,6 +7,7 @@
 #define SCANMODE_HALOGEN	4
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
+#define SCANMODE_ROBOTICS	7
 
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
@@ -57,6 +58,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/device/analyzer/atmos_analys = new
+	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/device_analyser/dev_analys = null
 
 	var/MM = null
@@ -420,6 +422,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/roboticist
 	name = "Robotics PDA"
+	default_cartridge = /obj/item/weapon/cartridge/robotics
 	icon_state = "pda-robot"
 
 /obj/item/device/pda/librarian
@@ -770,6 +773,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
 					if (cartridge.access_trader)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
+					if (cartridge.access_robotics)
+						dat += "<li><a href='byond://?src=\ref[src];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
 
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
@@ -1736,6 +1741,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dev_analys.cant_drop = 1
 						dev_analys.max_designs = 5
 					scanmode = SCANMODE_DEVICE
+			if("Cyborg Analyzer")
+				if(scanmode == SCANMODE_ROBOTICS)
+					scanmode = SCANMODE_NONE
+				else if((!isnull(cartridge)) && (cartridge.access_robotics))
+					scanmode = SCANMODE_ROBOTICS
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
@@ -2298,6 +2308,13 @@ obj/item/device/pda/AltClick()
 		note = A:info
 		to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
 
+/obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
+	if(scanmode == SCANMODE_ROBOTICS)
+		if(robo_analys)
+			robo_analys.cant_drop = 1
+			if(A.Adjacent(user))
+				if(!A.attackby(robo_analys, user))
+					robo_analys.afterattack(A, user, 1)
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
@@ -2356,6 +2373,10 @@ obj/item/device/pda/AltClick()
 	if(atmos_analys)
 		qdel(atmos_analys)
 		atmos_analys = null
+
+	if(robo_analys)
+		qdel(robo_analys)
+		robo_analys = null
 
 	if(dev_analys)
 		qdel(dev_analys)

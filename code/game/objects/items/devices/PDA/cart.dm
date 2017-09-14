@@ -25,6 +25,7 @@
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
 	var/access_trader = 0
+	var/access_robotics = 0
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -131,6 +132,11 @@
 	icon_state = "cart-b"
 	access_flora = 1
 */
+/obj/item/weapon/cartridge/robotics
+	name = "R.O.B.U.T.T. Cartridge"
+	desc = "Allows you to use your pda as a cyborg analyzer"
+	icon_state = "cart-robo"
+	access_robotics = 1
 
 /obj/item/weapon/cartridge/signal
 	name = "generic signaler cartridge"
@@ -214,6 +220,7 @@
 	access_manifest = 1
 	access_status_display = 1
 	access_reagent_scanner = 1
+	access_robotics = 1
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/rd/New()
