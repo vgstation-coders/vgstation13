@@ -125,13 +125,5 @@
 
 	switch(signal.data["command"])
 		
-		if("toggle_transparency")
-			toggle_smart_transparency()
-			
-		if("toggle")
-			toggle_smart_transparency()
-			
-		if("cycle")
-			toggle_smart_transparency()
-
-			
+		if("toggle_transparency", "toggle", "cycle")
+			toggle_smart_transparency()	
