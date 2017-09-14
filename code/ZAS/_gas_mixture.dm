@@ -284,31 +284,6 @@
 //////////////////////////////////////////////
 
 
-/datum/gas_mixture/proc/check_then_merge(datum/gas_mixture/giver)
-	//Purpose: Similar to merge(...) but first checks to see if the amount of air assumed is small enough
-	//	that group processing is still accurate for source (aborts if not)
-	//Called by: airgroups/machinery expelling air, ?
-	//Inputs: The gas to try and merge
-	//Outputs: 1 on successful merge. 0 otherwise.
-
-	if(!giver)
-		return 0
-	if(((giver.oxygen > MINIMUM_AIR_TO_SUSPEND) && (giver.oxygen >= oxygen*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
-		|| ((giver.carbon_dioxide > MINIMUM_AIR_TO_SUSPEND) && (giver.carbon_dioxide >= carbon_dioxide*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
-		|| ((giver.nitrogen > MINIMUM_AIR_TO_SUSPEND) && (giver.nitrogen >= nitrogen*MINIMUM_AIR_RATIO_TO_SUSPEND)) \
-		|| ((giver.toxins > MINIMUM_AIR_TO_SUSPEND) && (giver.toxins >= toxins*MINIMUM_AIR_RATIO_TO_SUSPEND)))
-		return 0
-	if(abs(giver.temperature - temperature) > MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND)
-		return 0
-
-	if(giver.trace_gases.len)
-		for(var/datum/gas/trace_gas in giver.trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
-			if((trace_gas.moles > MINIMUM_AIR_TO_SUSPEND) && (!corresponding || (trace_gas.moles >= corresponding.moles*MINIMUM_AIR_RATIO_TO_SUSPEND)))
-				return 0
-
-	return merge(giver)
-
 /datum/gas_mixture/proc/merge(datum/gas_mixture/giver)
 	//Purpose: Merges all air from giver into self. Deletes giver.
 	//Called by: Machinery expelling air, check_then_merge, ?
@@ -425,20 +400,6 @@
 	removed.update_values()
 
 	return removed
-
-/datum/gas_mixture/proc/check_then_remove(amount)
-	//Purpose: Similar to remove(...) but first checks to see if the amount of air removed is small enough
-	//	that group processing is still accurate for source (aborts if not)
-	//Called by: ?
-	//Inputs: Number of moles to remove
-	//Outputs: Removed air or 0 if it can remove air or not.
-
-	amount = min(amount,total_moles()) //Can not take more air than tile has!
-
-	if((amount > MINIMUM_AIR_RATIO_TO_SUSPEND) && (amount > total_moles()*MINIMUM_AIR_RATIO_TO_SUSPEND))
-		return 0
-
-	return remove(amount)
 
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
 	//Purpose: Duplicates the sample air mixture.
