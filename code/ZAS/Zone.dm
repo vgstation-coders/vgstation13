@@ -29,7 +29,7 @@ Class Procs:
 		Invalidates the zone and marks all its former tiles for updates.
 
 	tick()
-		Called only when the gas content is changed. Archives values and changes gas graphics.
+		Called only when the gas content is changed. Changes gas graphics.
 
 	dbg_data(mob/M)
 		Sends M a printout of important figures for the zone.
@@ -113,7 +113,6 @@ Class Procs:
 		SSair.mark_for_update(T)
 
 /zone/proc/tick()
-	air.archive()
 	if(air.check_tile_graphic())
 		for(var/turf/simulated/T in contents)
 			T.set_graphic(air.graphics)
