@@ -8,7 +8,7 @@
 
 
 /obj/machinery/computer/telecomms/monitor
-	name = "Telecommunications Monitor"
+	name = "telecommunications network monitoring console"
 	icon_state = "comm_monitor"
 	circuit = "/obj/item/weapon/circuitboard/comm_monitor"
 

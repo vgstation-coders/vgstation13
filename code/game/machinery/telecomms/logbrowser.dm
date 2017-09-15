@@ -4,7 +4,7 @@
 	light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/telecomms/server
-	name = "Telecommunications Server Monitor"
+	name = "telecommunications server monitoring console"
 	icon_state = "comm_serv"
 
 

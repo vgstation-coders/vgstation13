@@ -1,5 +1,5 @@
 /obj/machinery/computer/telecomms/traffic
-	name = "Telecommunications Traffic Control"
+	name = "telecommunication traffic control console"
 	icon_state = "computer_generic"
 	circuit = "/obj/item/weapon/circuitboard/comm_traffic"
 
