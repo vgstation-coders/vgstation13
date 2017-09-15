@@ -73,7 +73,10 @@
 	var/state = "disabled"
 	if(src.clothing_flags&NOSLIP)
 		state = "enabled"
-	to_chat(user, "<span class='info'>Its mag-pulse traction system appears to be [state].</span>")
+	if(base_state == "capboots")
+		to_chat(user, "<span class='info'>Its anchoring spikes appear to be [state].</span>")
+	else
+		to_chat(user, "<span class='info'>Its mag-pulse traction system appears to be [state].</span>")
 
 //CE
 /obj/item/clothing/shoes/magboots/elite
@@ -129,11 +132,4 @@
 		src.magpulse = 1
 		icon_state = "[base_state]1"
 		to_chat(usr, "Small spikes shoot from your shoes and dig into the flooring, bracing you.")
-
-/obj/item/clothing/shoes/magboots/captain/examine(mob/user)
-	..()
-	var/state = "disabled"
-	if(src.clothing_flags&NOSLIP)
-		state = "enabled"
-	to_chat(user, "<span class='info'>Its anchoring spikes appear to be [state].</span>")
 
