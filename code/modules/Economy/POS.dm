@@ -440,7 +440,7 @@ var/const/POS_HEADER = {"<html>
 			if("Add Product")
 				var/line_item/LI = new
 				LI.name=sanitize(href_list["name"])
-				LI.price=text2num(href_list["price"])
+				LI.price=max(1, text2num(href_list["price"]))
 				products["[products.len+1]"]=LI
 			if("Add to Order")
 				AddToOrder(href_list["preset"],text2num(href_list["units"]))
@@ -453,7 +453,7 @@ var/const/POS_HEADER = {"<html>
 						return
 					var/line_item/LI = new
 					LI.name=sanitize(cells[1])
-					LI.price=text2num(cells[2])
+					LI.price=max(1, text2num(cells[2]))
 					products["[products.len+1]"]=LI
 			if("Export Products")
 				screen=POS_SCREEN_EXPORT
@@ -491,7 +491,7 @@ var/const/POS_HEADER = {"<html>
 			products[pid]=LI
 	else if("setprice" in href_list)
 		var/newprice = input(usr,"Enter the product's price.") as num
-		if(!newprice)
+		if(newprice<=0)
 			return
 		var/pid = href_list["setprice"]
 		var/line_item/LI = products[pid]
