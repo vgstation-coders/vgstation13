@@ -544,6 +544,7 @@ var/const/POS_HEADER = {"<html>
 			return
 		var/obj/item/weapon/spacecash/C=A
 		credits_held += C.worth*C.amount
+		qdel(C)
 		if(credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
 			PrintReceipt()
@@ -551,7 +552,7 @@ var/const/POS_HEADER = {"<html>
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
-			if(credits_held)
+			if(credits_held>0)
 				var/obj/item/weapon/storage/box/B = new(loc)
 				dispense_cash(credits_held,B)
 				B.name="change"
