@@ -98,13 +98,22 @@
 	to_chat(user, "<span class = 'notice'>You attempt to comprehend \the [src]...</span>")
 	spawn(rand(50,110))
 		if(!user.gcDestroyed)
-			if(prob(90))
+			if(prob(95))
 				to_chat(user, "<span class = 'danger'>...and fail to do so.</span>")
-				if(prob(50))
+				if(prob(50)) //50/50 of becoming unrecoverable
 					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
-					playsound(get_turf(user), get_sfx("soulstone"), 50,1)
-					make_tracker_effects(get_turf(user), get_turf(src))
-					user.dust()
+					if(prob(50))
+						user.emote("scream",auto=1)
+						var/matrix/M = matrix()
+						M.Scale(0)
+						animate(user, alpha = 0, transform = M, time = 3 SECONDS, easing = SINE_EASING)
+						spawn(3 SECONDS)
+							new /obj/effect/gibspawner/generic(get_turf(user))
+							qdel(user)
+					else
+						playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+						make_tracker_effects(get_turf(user), get_turf(src))
+						user.dust()
 				else
 					user.visible_message("<span class = 'danger'>\The [user] explodes!</span>")
 					..()
@@ -115,7 +124,7 @@
 					var/obj/structure/losetta_stone/L = new
 					L.alpha = 0
 					L.forceMove(get_turf(user))
-					animate(L, alpha = 255, time = 30)
+					animate(L, alpha = 255, time = 3 SECONDS)
 
 /obj/machinery/singularity/process()
 	dissipate()
