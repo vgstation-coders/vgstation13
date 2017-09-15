@@ -503,7 +503,8 @@ var/const/POS_HEADER = {"<html>
 	if(istype(A,/obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = A
 		if(!logged_in)
-			user.visible_message("<span class='notice'>The machine beeps, and logs you in</span>","You hear a beep.")
+			// /atom/mob/visible_message(all_message, self_message, blind_message,...)
+			user.visible_message("<span class='notice'>The machine beeps, and logs [user] in.</span>", "<span class='notice'>The machine beeps, and logs you in.</span>", "You hear a beep.")
 			logged_in = user
 			screen=POS_SCREEN_ORDER
 			update_icon()
