@@ -20,7 +20,7 @@
 
 /datum/design/adv_bruise_pack
 	name = "Advanced trauma kit"
-	desc = "Used to treat those nasty burns."
+	desc = "Used to treat those nasty bruises."
 	id = "adv_bruise_pack"
 	req_tech = list(Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
@@ -109,6 +109,26 @@
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250, MAT_SILVER = 500)
 	category = "Medical"
 	build_path = /obj/item/weapon/retractor/manager
+
+/datum/design/bonemender
+	name = "Bone Mender"
+	desc = "A favortie among skeletons, it even sounds like one too."
+	id = "bonemender"
+	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_GOLD = 500, MAT_SILVER = 250)
+	category = "Medical"
+	build_path = /obj/item/weapon/bonesetter/bone_mender
+
+/datum/design/plasmasaw
+	name = "Plasma Saw"
+	desc = "Perfect for cutting through ice."
+	id = "plasmasaw"
+	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5, Tc_PLASMATECH = 3)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 500)
+	category = "Medical"
+	build_path = /obj/item/weapon/circular_saw/plasmasaw
 
 /datum/design/health_hud
 	name = "Health Scanner HUD"
