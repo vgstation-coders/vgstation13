@@ -186,8 +186,6 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] fuses [target]'s [affected.display_name] bone with \the [tool].</span>"  , \
 		"<span class='notice'>You fuse the bone in [target]'s [affected.display_name] with \the [tool].</span>" )
-	affected.stage = 1
-	affected.stage = 2
 	affected.status &= ~ORGAN_BROKEN
 	affected.status &= ~ORGAN_SPLINTED
 	affected.stage = 0
