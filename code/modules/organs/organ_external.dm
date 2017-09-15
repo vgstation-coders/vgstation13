@@ -1806,6 +1806,21 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	else if(istype(W,/obj/item/device/soulstone))
 		W.capture_soul_head(src,user)
 		return
+	else if(istype(W,/obj/item/device/healthanalyzer))
+		to_chat(user, "<span class='notice'>You use \the [W] to induce a small electric shock into \the [src].</span>")
+		if(!organ_data)
+			to_chat(user, "<span class='warning'>\The [src] has no brain!</span>")
+			return
+		if(brainmob && brainmob.mind)
+			if(brainmob.mind.active)
+				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
+			else if(get_ghost_from_mind(brainmob.mind)) //Lights are on but no-one's home
+				to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
+			else
+				to_chat(user, "<span class='danger'>\The [src] seems unresponsive to shock stimuli.</span>")
+		else
+			to_chat(user, "<span class='danger'>\The [src] seems unresponsive to shock stimuli.</span>")
+		return
 	else
 		..()
 
