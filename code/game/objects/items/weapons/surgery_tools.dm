@@ -245,7 +245,7 @@
 //allows you to replace the bone setter in switchtools with it being a setter child rather than a bonegel child
 /obj/item/weapon/bonesetter/bone_mender
 	name = "bone mender"
-	desc = "A favorite among skeletons, it even sounds like one too."
+	desc = "A favorite among skeletons. It even sounds like a skeleton too."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "bone-mender"
 	item_state = "bonemender"

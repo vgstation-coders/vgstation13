@@ -196,6 +196,6 @@
 
 /datum/surgery_step/bone_mender/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("<span class='warning'>The [tool] in [user]'s hand skips, jabbing the bone edges into the sides of [target]'s [affected.display_name]!</span>" , \
-	"<span class='warning'>Your hand jolts and the [tool] skips, jabbing the bone edges into [target]'s [affected.display_name] with \the [tool]!</span>")
+	user.visible_message("<span class='warning'>\The [tool] in [user]'s hand skips, jabbing the bone edges into the sides of [target]'s [affected.display_name]!</span>" , \
+	"<span class='warning'>Your hand jolts and \the [tool] skips, jabbing the bone edges into [target]'s [affected.display_name] with \the [tool]!</span>")
 	affected.createwound(BRUISE, 10)
