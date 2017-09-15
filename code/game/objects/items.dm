@@ -2,7 +2,7 @@
 	name = "item"
 	icon = 'icons/obj/items.dmi'
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
-	var/abstract = 0
+	var/abstract = FALSE
 	var/item_state = null
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
@@ -34,8 +34,8 @@
 	siemens_coefficient = 1 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
 	var/slowdown = NO_SLOWDOWN // How much each piece of clothing is slowing you down. Works as a MULTIPLIER, i.e. 0.8 slowdown makes you go 20% faster, 1.5 slowdown makes you go 50% slower.
 
-	var/canremove = 1 //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
-	var/cant_drop = 0 //If 1, can't drop it from hands!
+	var/canremove = TRUE //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
+	var/cant_drop = FALSE //If 1, can't drop it from hands!
 	var/cant_drop_msg = " sticks to your hand!"
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -62,7 +62,7 @@
 	var/restraint_apply_sound = null
 
 /obj/item/proc/return_thermal_protection()
-	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
+	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
 /obj/item/New()
 	..()
@@ -70,8 +70,8 @@
 		new path(src)
 
 /obj/item/Destroy()
-	if(istype(src.loc, /mob))
-		var/mob/H = src.loc
+	if(istype(loc, /mob))
+		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
 	if(hasvar(src, "holder"))
 		src:holder = null
@@ -117,16 +117,16 @@
 		return
 
 	if(usr.incapacitated())
-		return 1
+		return TRUE
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 1
+		return TRUE
 	if (!in_range(src, usr))
-		return 1
+		return TRUE
 
-	src.add_fingerprint(usr)
-	src.add_hiddenprint(usr)
-	return 0
+	add_fingerprint(usr)
+	add_hiddenprint(usr)
+	return FALSE
 
 /obj/item/proc/restock() //used for borg recharging
 	return
@@ -149,51 +149,51 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!istype(src.loc, /turf) || usr.isUnconscious() || usr.restrained())
+	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
 		return
 
-	var/turf/T = src.loc
+	var/turf/T = loc
 
-	src.forceMove(null)
+	forceMove(null)
 
-	src.forceMove(T)
+	forceMove(T)
 
 /obj/item/examine(mob/user)
 	var/size
-	switch(src.w_class)
-		if(1.0)
+	switch(w_class)
+		if(W_CLASS_TINY)
 			size = "tiny"
-		if(2.0)
+		if(W_CLASS_SMALL)
 			size = "small"
-		if(3.0)
+		if(W_CLASS_MEDIUM)
 			size = "normal-sized"
-		if(4.0)
+		if(W_CLASS_LARGE)
 			size = "bulky"
-		if(5.0 to INFINITY)
+		if(W_CLASS_HUGE to INFINITY)
 			size = "huge"
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
-	if (src.gender == PLURAL)
+	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
 	..(user, " [pronoun] a [size] item.")
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
-	if((cant_drop > 0) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
+	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
 
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
 	if(isMoMMI(user))
-		var/in_range = in_range(src, user) || src.loc == user
+		var/in_range = in_range(src, user) || loc == user
 		if(in_range)
 			if(src == user:tool_state)
-				return 0
+				return FALSE
 			attack_hand(user)
 	else if(isrobot(user))
-		if(!istype(src.loc, /obj/item/weapon/robot_module))
+		if(!istype(loc, /obj/item/weapon/robot_module))
 			return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
@@ -203,25 +203,25 @@
 	if (!user)
 		return
 
-	if (istype(src.loc, /obj/item/weapon/storage))
+	if (istype(loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
-		var/obj/item/weapon/storage/S = src.loc
+		var/obj/item/weapon/storage/S = loc
 		S.remove_from_storage(src, user)
 
-	src.throwing = 0
-	if (src.loc == user)
+	throwing = FALSE
+	if (loc == user)
 		if(src == user.get_inactive_hand())
-			if(src.flags & TWOHANDABLE)
-				return src.wield(user)
+			if(flags & TWOHANDABLE)
+				return wield(user)
 			if(!user.put_in_hand_check(src, user.get_active_hand()))
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(!src.canremove)
+		if(!canremove)
 			return
 
-		user.u_equip(src,0)
+		user.u_equip(src,FALSE)
 	else
-		if(isliving(src.loc))
+		if(isliving(loc))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
@@ -231,7 +231,7 @@
 	return
 
 /obj/item/requires_dexterity(mob/user)
-	return 1
+	return TRUE
 
 /obj/item/attack_paw(mob/user as mob)
 
@@ -244,13 +244,13 @@
 			to_chat(user, "Your claws aren't capable of such fine manipulation.")
 			return
 
-	if (istype(src.loc, /obj/item/weapon/storage))
-		for(var/mob/M in range(1, src.loc))
-			if (M.s_active == src.loc)
+	if (istype(loc, /obj/item/weapon/storage))
+		for(var/mob/M in range(1, loc))
+			if (M.s_active == loc)
 				if (M.client)
 					M.client.screen -= src
-	src.throwing = 0
-	if (src.loc == user)
+	throwing = FALSE
+	if (loc == user)
 		if(!user.put_in_hand_check(src, user.get_active_hand()))
 			return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
@@ -259,7 +259,7 @@
 		else
 			user.u_equip(src,0)
 	else
-		if(istype(src.loc, /mob/living))
+		if(istype(loc, /mob/living))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 
@@ -651,7 +651,7 @@
 					if(!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return CANNOT_EQUIP
-				if(src.w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
+				if(w_class > W_CLASS_MEDIUM && !H.wear_suit.allowed.len)
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return CANNOT_EQUIP
@@ -739,19 +739,6 @@
 		//START ALIEN HUMANOID
 		var/mob/living/carbon/alien/humanoid/AH = M
 		switch(slot)
-			//Maybe when someone sprites an "alien lying down" version of every exosuit and hat in the game.
-			/*if(slot_head)
-				if(AH.head)
-					return CANNOT_EQUIP
-				if( !(slot_flags & SLOT_HEAD) )
-					return CANNOT_EQUIP
-				return CAN_EQUIP
-			if(slot_wear_suit)
-				if(AH.wear_suit)
-					return CANNOT_EQUIP
-				if( !(slot_flags & SLOT_OCLOTHING) )
-					return CANNOT_EQUIP
-				return CAN_EQUIP*/
 			if(slot_l_store)
 				if(slot_flags & SLOT_DENYPOCKET)
 					return CANNOT_EQUIP
@@ -784,18 +771,18 @@
 
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
-		return 0
+		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
-		return 0
+		return FALSE
 	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
 		to_chat(user, "You can't pick things up!")
-	if(src.anchored) //Object isn't anchored
+	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
-		return 0
-	if(!istype(src.loc, /turf)) //Object is not on a turf
+		return FALSE
+	if(!istype(loc, /turf)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /obj/item/verb_pickup(mob/living/user)
 	//set src in oview(1)
@@ -803,7 +790,7 @@
 	//set name = "Pick up"
 
 	if(!can_pickup(user))
-		return 0
+		return FALSE
 
 	if(user.get_active_hand())
 		to_chat(user, "<span class='warning'>Your [user.get_index_limb_name(user.active_hand)] is full.</span>")
@@ -820,17 +807,17 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/h_user = user
 		if(h_user.can_use_hand())
-			src.attack_hand(h_user)
+			attack_hand(h_user)
 		else
-			src.attack_stump(h_user)
+			attack_stump(h_user)
 	if(istype(user, /mob/living/carbon/alien))
-		src.attack_alien(user)
+		attack_alien(user)
 	if(istype(user, /mob/living/carbon/monkey))
-		src.attack_paw(user)
+		attack_paw(user)
 	return
 
 //Used in twohanding
-/obj/item/proc/wield(mob/user, var/inactive = 0)
+/obj/item/proc/wield(mob/user, var/inactive = FALSE)
 	if(!user.can_wield())
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
@@ -847,7 +834,7 @@
 		//The second half is the same, except that the proc assumes that the wielded item is held in the INACTIVE hand. So the INACTIVE hand is checked for holding either nothing or wielded item.
 		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
 
-		for(var/i = 1 to user.held_items.len)
+		for(var/i = TRUE to user.held_items.len)
 			if(user.held_items[i])
 				continue
 			if(user.active_hand == i)
@@ -856,7 +843,7 @@
 			if(user.put_in_hand(i, wielded))
 				wielded.attach_to(src)
 				update_wield(user)
-				return 1
+				return TRUE
 
 		unwield(user)
 		return
@@ -875,16 +862,16 @@
 /obj/item/proc/update_wield(mob/user)
 
 /obj/item/proc/IsShield()
-	return 0
+	return FALSE
 
 //Called when the item blocks an attack. Return 1 to stop the hit, return 0 to let the hit go through
 /obj/item/proc/on_block(damage, attack_text = "the attack")
 	if(ismob(loc))
 		if(prob(50 - round(damage / 3)))
 			visible_message("<span class='danger'>[loc] blocks [attack_text] with \the [src]!</span>")
-			return 1
+			return TRUE
 
-	return 0
+	return FALSE
 
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
@@ -908,16 +895,16 @@
 		to_chat(user, "<span class='warning'>You cannot locate any eyes on [M]!</span>")
 		return
 
-	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
-	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
+	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
+	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 	if(!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
 
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
 	//	M = user
 		/*
@@ -977,7 +964,7 @@
 
 /obj/item/add_blood(mob/living/carbon/human/M as mob)
 	if (!..())
-		return 0
+		return FALSE
 	if(istype(src, /obj/item/weapon/melee/energy))
 		return
 
@@ -999,9 +986,9 @@
 	if(!M)
 		return
 	if(blood_DNA[M.dna.unique_enzymes])
-		return 0 //already bloodied with this blood. Cannot add more.
+		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
-	return 1 //we applied blood to the item
+	return TRUE //we applied blood to the item
 
 var/global/list/image/blood_overlays = list()
 /obj/item/proc/generate_blood_overlay()
@@ -1041,7 +1028,7 @@ var/global/list/image/blood_overlays = list()
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
 		if(anchored)
 			if(current_size >= STAGE_FIVE)
-				anchored = 0
+				anchored = FALSE
 			else
 				return
 		if(current_size >= STAGE_FOUR)
@@ -1056,7 +1043,7 @@ var/global/list/image/blood_overlays = list()
 
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
-	return 0
+	return FALSE
 
 // Like the above, but used for RPED sorting of parts.
 /obj/item/proc/rped_rating()
@@ -1072,7 +1059,7 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/kick_dir = get_dir(H, src)
-	if(H.loc == src.loc)
+	if(H.loc == loc)
 		kick_dir = H.dir
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
@@ -1114,7 +1101,7 @@ var/global/list/image/blood_overlays = list()
 	if(shrapnel_type)
 		return new shrapnel_type(src)
 	else
-		return 0
+		return FALSE
 
 
 // IMPORTANT DISTINCTION FROM MouseWheel:
@@ -1136,7 +1123,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/restraint_apply_intent_check(mob/user)
 	if(user.a_intent == I_GRAB)
-		return 1
+		return TRUE
 
 /obj/item/proc/restraint_apply_check(mob/living/carbon/M, mob/user)
 	if(!istype(M))
@@ -1160,7 +1147,7 @@ var/global/list/image/blood_overlays = list()
 		M.LAssailant = user
 
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
-	return 1
+	return TRUE
 
 /obj/item/proc/attempt_apply_restraints(mob/living/carbon/C, mob/user)
 	if(!istype(C)) //Sanity doesn't hurt, right ?
@@ -1201,8 +1188,4 @@ var/global/list/image/blood_overlays = list()
 	return
 
 /obj/item/proc/on_restraint_apply(var/mob/living/carbon/C)
-	return
-
-//Called when user clicks on an object while looking through a camera (passed to the proc as [eye])
-/obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
