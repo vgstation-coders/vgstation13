@@ -112,7 +112,7 @@
 
 /datum/design/bonemender
 	name = "Bone Mender"
-	desc = "A favortie among skeletons, it even sounds like one too."
+	desc = "A favorite among skeletons, it even sounds like one too."
 	id = "bonemender"
 	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
 	build_type = PROTOLATHE
