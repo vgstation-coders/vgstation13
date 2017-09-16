@@ -183,8 +183,8 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 		new/datum/stack_recipe("privacy curtains", /obj/structure/curtain/open/privacy, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("shower curtains", /obj/structure/curtain/open/shower, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("engineering shower curtains", /obj/structure/curtain/open/shower/engineering, 4, one_per_turf = 1, on_floor = 1), \
-		new/datum/stack_recipe("security shower curtains", /obj/structure/curtain/open/shower/medical, 4, one_per_turf = 1, on_floor = 1), \
-		new/datum/stack_recipe("medical shower curtains", /obj/structure/curtain/open/shower/security, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("security shower curtains", /obj/structure/curtain/open/shower/security, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("medical shower curtains", /obj/structure/curtain/open/shower/medical, 4, one_per_turf = 1, on_floor = 1), \
 		), 4),
 	)
 
