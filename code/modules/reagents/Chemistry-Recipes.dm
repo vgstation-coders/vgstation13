@@ -896,8 +896,8 @@
 	result = LEFT4ZED
 	required_reagents = list(EZNUTRIENT = 1)
 	required_catalysts = list(RADIUM = 5)
-	result_amount = 1	
-	
+	result_amount = 1
+
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
@@ -1961,7 +1961,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
-	
+
 //Pyrite
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
@@ -2704,7 +2704,7 @@
 	name = "Brown Star"
 	id = BROWNSTAR
 	result = BROWNSTAR
-	required_reagents = list(KAHLUA = 1, "irish_cream" = 4)
+	required_reagents = list(KAHLUA = 1, IRISHCREAM = 4)
 	result_amount = 5
 
 /datum/chemical_reaction/milkshake
