@@ -147,3 +147,41 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/energy/gun
 	finished[1] = /obj/item/weapon/gun/energy/gun/nuclear
+
+
+/obj/item/device/modkit/paintkit
+	name = "welding helmet stencil kit"
+	desc = "A kit for automatically painting welding helmets with preset designs"
+	icon_state = "modkit"
+
+
+	var/obj/item/device/modkit/paintkit/active_paint = /obj/item/clothing/head/welding/engie
+
+	var/paints = list("engineering" = /obj/item/clothing/head/welding/engie,
+	"carp" = /obj/item/clothing/head/welding/carp,
+	"fancy" = /obj/item/clothing/head/welding/fancy,
+	"knightly" = /obj/item/clothing/head/welding/knight,
+	"demonic" = /obj/item/clothing/head/welding/demon,
+	"fiery" = /obj/item/clothing/head/welding/fire,
+	"red" = /obj/item/clothing/head/welding/red,
+	"white" = /obj/item/clothing/head/welding/white,
+	"blue" = /obj/item/clothing/head/welding/blue)
+
+
+/obj/item/device/modkit/paintkit/attack_self(mob/user)
+	if(paints)
+		var/selection = paints[input("Select the design you would like to paint", "Change Material Type") as null|anything in paints]
+		if(selection)
+			active_paint = selection
+			to_chat(user, "<span class='notice'>You switch \the [src] to paint the [initial(active_paint.name)] design</span>")
+	else
+		active_paint = null
+		return
+
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	1
+	original[1] = /obj/item/clothing/head/welding
+	finished[1] = active_paint
