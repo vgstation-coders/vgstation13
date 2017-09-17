@@ -122,36 +122,7 @@ datum/emergency_shuttle/proc/setdirection(var/dirn)
 	var/ticksleft = endtime - world.timeofday
 	endtime = world.timeofday + (SHUTTLEARRIVETIME*10 - ticksleft)
 	return
-/*
-datum/emergency_shuttle/proc/move_pod(var/start_type,var/end_type,var/direction,var/open_doors)
-	var/area/start_location=locate(start_type)
-	var/area/end_location=locate(end_type)
 
-	for(var/obj/structure/shuttle/engine/propulsion/P in start_location)
-		spawn()
-			P.shoot_exhaust()
-
-	start_location.move_contents_to(end_location, null, direction)
-
-	for(var/obj/machinery/door/D in all_doors)
-		if( get_area(D) == end_location )
-			spawn(0)
-				if(open_doors)
-					D.open()
-				else
-					D.close()
-
-	for(var/mob/M in end_location)
-		if(M.client)
-			spawn()
-				if(M.locked_to)
-					shake_camera(M, 4, 1) // locked_to, not a lot of shaking
-				else
-					shake_camera(M, 10, 2) // unlocked_to, HOLY SHIT SHAKE THE ROOM
-		if(istype(M, /mob/living/carbon))
-			if(!M.locked_to)
-				M.Knockdown(5)
-*/
 datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 	if (!pod || !destination)
 		return
