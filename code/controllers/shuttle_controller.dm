@@ -29,7 +29,7 @@ datum/emergency_shuttle
 
 	var/can_recall = 1
 
-	var/datum/shuttle/shuttle
+	var/datum/shuttle/escape/shuttle
 
 	var/list/escape_pods = list()
 
@@ -192,6 +192,36 @@ datum/emergency_shuttle/proc/vote_preload()
 			spawn
 				vote.interface.sendAssets(C)
 
+datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
+	var/frequency = get_rand_frequency()
+
+	switch (phase)
+		if ("dock")
+			for (var/mob/M in player_list)
+				if(M && M.client)
+					var/turf/M_turf = get_turf(M)
+					if (M_turf.z == shuttle.dock_station.z)
+						M.playsound_local(shuttle.dock_station, 'sound/machines/hyperspace_end.ogg', 100 - (get_dist(shuttle.dock_station,M_turf)*2), 1, frequency, falloff = 5)
+		if ("begin")
+			for (var/mob/M in player_list)
+				if(M && M.client)
+					var/turf/M_turf = get_turf(M)
+					if (M_turf.z == shuttle.dock_station.z)
+						M.playsound_local(shuttle.dock_station, 'sound/machines/hyperspace_begin.ogg', 100 - (get_dist(shuttle.dock_station,M_turf)*2), 1, frequency, falloff = 5)
+		if ("progression")
+			for (var/mob/M in player_list)
+				if(M && M.client)
+					var/turf/M_turf = get_turf(M)
+					if (M_turf.z == shuttle.linked_port.z)
+						M.playsound_local(shuttle.linked_port, 'sound/machines/hyperspace_progress.ogg', 100 - (get_dist(shuttle.linked_port,M_turf)*2), 1, frequency, falloff = 5)
+		if ("end")
+			for (var/mob/M in player_list)
+				if(M && M.client)
+					var/turf/M_turf = get_turf(M)
+					if (M_turf.z == shuttle.linked_port.z)
+						M.playsound_local(shuttle.linked_port, 'sound/machines/hyperspace_end.ogg', 100 - (get_dist(shuttle.linked_port,M_turf)*2), 1, frequency, falloff = 5)
+					if (M_turf.z == shuttle.dock_centcom.z)
+						M.playsound_local(shuttle.dock_centcom, 'sound/machines/hyperspace_end.ogg', 100 - (get_dist(shuttle.dock_centcom,M_turf)*2), 1, frequency, falloff = 5)
 
 datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
@@ -230,7 +260,6 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 			else
 				departed = 1 // It's going!
 				direction = 2 // heading to centcom
-
 				settimeleft(SHUTTLETRANSITTIME)
 
 				// Shuttle Radio
@@ -251,6 +280,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO TRANSIT! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
+			hyperspace_sounds("progression")
 
 
 		if ("centcom")
@@ -303,7 +333,7 @@ datum/emergency_shuttle/proc/process()
 					for (var/pod in escape_pods)
 						move_pod(pod, "centcom")
 
-
+					hyperspace_sounds("end")
 					return 1
 
 			/* --- Shuttle has docked centcom after being recalled --- */
@@ -321,11 +351,14 @@ datum/emergency_shuttle/proc/process()
 
 			/* --- Shuttle has docked with the station - begin countdown to transit --- */
 			else if(timeleft <= 0)
+				hyperspace_sounds("dock")
 				shuttle_phase("station",0)
 				return 1
 
 		if(1)
 
+			if(timeleft == 5)
+				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
 			if(timeleft == 2 || timeleft == 1)
 				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
@@ -344,6 +377,8 @@ datum/emergency_shuttle/proc/process()
 
 				//main shuttle
 				shuttle_phase ("transit",0)
+
+				hyperspace_sounds("transit")
 
 				//pods
 				for (var/pod in escape_pods)
