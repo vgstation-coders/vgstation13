@@ -2243,14 +2243,10 @@ obj/item/device/pda/AltClick()
 		T.date = current_date_string
 		T.time = worldtime2text()
 		id.virtual_wallet.transaction_log.Add(T)
-		if(T.amount == 1)
-			to_chat(user, "<span class='info'>You insert [T.amount] credit into the PDA.</span>")
-			qdel(dosh)
-			updateUsrDialog()
-		else
-			to_chat(user, "<span class='info'>You insert [T.amount] credits into the PDA.</span>")
-			qdel(dosh)
-			updateUsrDialog()
+		to_chat(user, "<span class='info'>You insert [T.amount] credit\s into the PDA.</span>")
+		qdel(dosh)
+		updateUsrDialog()
+
 	return
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
