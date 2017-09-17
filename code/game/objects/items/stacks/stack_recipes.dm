@@ -222,6 +222,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50),
+	new/datum/stack_recipe("crossbow frame",		/obj/item/weapon/crossbowframe,			5,		time = 50),
 	)
 
 /* =========================================================================
