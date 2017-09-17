@@ -33,6 +33,8 @@ datum/emergency_shuttle
 
 	var/list/escape_pods = list()
 
+	var/voting_cache = 0
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
@@ -180,6 +182,16 @@ datum/emergency_shuttle/proc/force_shutdown()
 		online = 0
 
 
+// "preload" the assets for when they're needed for the map vote.
+datum/emergency_shuttle/proc/vote_preload()
+	if (voting_cache)
+		return
+	voting_cache = 1
+	if(config.map_voting && vote)
+		for(var/client/C in clients)
+			spawn
+				vote.interface.sendAssets(C)
+
 
 datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
@@ -190,7 +202,9 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				var/datum/shuttle/escape/E = shuttle
 				E.open_all_doors()
 				if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
-					message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND THE STATION! PANIC PANIC PANIC")
+					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO THE STATION! PANIC PANIC PANIC")
+			else
+				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
 
 			if (!casual)
 				settimeleft(SHUTTLELEAVETIME)
@@ -223,6 +237,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				CallHook("EmergencyShuttleDeparture", list())
 
 				captain_announce("The Emergency Shuttle has left the station. Estimate [round(timeleft()/60,1)] minutes until the shuttle docks at Central Command.")
+				vote_preload()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
@@ -233,28 +248,24 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 						P.shoot_exhaust(backward = 3)
 
 				if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
-					message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND TRANSIT! PANIC PANIC PANIC")
+					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO TRANSIT! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
 
 
-			// "preload" the assets for when they're needed for the map vote.
-			if(config.map_voting && vote)
-				for(var/client/C in clients)
-					spawn
-						vote.interface.sendAssets(C)
 		if ("centcom")
 			if (casual)
 				location = 0
 				direction = 0
 			else
+				vote_preload()
 				location = 2
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
 				E.open_all_doors()
 				if(!E.move_to_dock(E.dock_centcom, 0, E.dir)) //Throw everything forward
-					message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND CENTCOMM! PANIC PANIC PANIC")
+					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO CENTCOMM! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
 
