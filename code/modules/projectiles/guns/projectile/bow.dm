@@ -216,7 +216,7 @@
 
 
 /* construction*/
-/obj/item/weapon/crossbowframe
+/obj/item/crossbowframe
 	name = "crossbow frame"
 	desc = "A half-finished crossbow."
 	icon_state = "crossbowframe0"
@@ -224,11 +224,11 @@
 
 	var/buildstate = 0
 
-/obj/item/weapon/crossbowframe/update_icon()
+/obj/item/crossbowframe/update_icon()
 	icon_state = "crossbowframe[buildstate]"
 
-/obj/item/weapon/crossbowframe/examine(mob/user)
-	. = ..(user)
+/obj/item/crossbowframe/examine(mob/user)
+	. = ..()
 	switch(buildstate)
 		if(1) to_chat(user, "It has a loose rod frame in place.")
 		if(2) to_chat(user, "It has a steel backbone welded in place.")
@@ -236,7 +236,7 @@
 		if(4) to_chat(user, "It has a steel backbone, plastic lath and a cell mount installed.")
 		if(5) to_chat(user, "It has a steel cable loosely strung across the lath.")
 
-/obj/item/weapon/crossbowframe/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/crossbowframe/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/rods))
 		if(buildstate == 0)
 			var/obj/item/stack/rods/R = W
