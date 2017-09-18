@@ -20,10 +20,15 @@
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 
+	if(user.covered_mouth_consumables_check(user))
+		return 0
+
 	return attack(user, user) //Dealt with in attack code
 
 /obj/item/weapon/reagent_containers/pill/attack(mob/M as mob, mob/user as mob, def_zone)
 	// Feeding others needs time to succeed
+	if(user.covered_mouth_consumables_check(M))
+		return 0
 	if (user != M && (ishuman(M) || ismonkey(M)))
 		user.visible_message("<span class='warning'>[user] attempts to force [M] to swallow \the [src].</span>", "<span class='notice'>You attempt to force [M] to swallow \the [src].</span>")
 

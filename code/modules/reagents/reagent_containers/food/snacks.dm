@@ -110,6 +110,9 @@
 		if(target == user)	//If you're eating it yourself
 			if(!can_consume(M, user))
 				return 0
+				
+			if(user.covered_mouth_consumables_check(target))
+				return 0
 
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25) //This reminds me how unlogical mob nutrition is
 
@@ -127,6 +130,9 @@
 				"<span class='notice'>You unwillingly [eatverb] some of \the [src].</span>")
 
 		else //Feeding someone else, target is eating, user is feeding
+		
+			if(user.covered_mouth_consumables_check(target))
+				return 0
 
 			var/fullness = target.nutrition + (target.reagents.get_reagent_amount(NUTRIMENT) * 25)
 
@@ -155,6 +161,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0)
 	if(!istype(eater))
 		return
+		
+	if(eater.covered_mouth_consumables_check(eater))
+		return 0
+		
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
 

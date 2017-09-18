@@ -211,6 +211,8 @@ var/global/list/all_graffitis = list(
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
 	if(M == user)
+		if(user.covered_mouth_consumables_check(user))
+			return
 		user.visible_message("<span class='notice'>[user] bites a chunk out of \the [src].</span>", \
 			"<span class='notice'>You bite a chunk out of \the [src].</span>")
 		user.nutrition += 5

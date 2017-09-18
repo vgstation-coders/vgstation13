@@ -84,10 +84,14 @@
 	if (src.loaded_food)
 		reagents.update_total()
 		if(M == user)
+			if(user.covered_mouth_consumables_check(user))
+				return
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 			feed_to(user, user)
 			return
 		else
+			if(user.covered_mouth_consumables_check(M))
+				return
 			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
 			if(do_mob(user, M))
 				if(!loaded_food)

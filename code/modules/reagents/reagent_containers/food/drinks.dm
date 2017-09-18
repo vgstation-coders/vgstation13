@@ -39,6 +39,9 @@
 		viewcontents = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user as mob)
+	if(user.covered_mouth_consumables_check(user))
+		return 0
+
 	if(!is_open_container())
 		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
 
@@ -156,6 +159,8 @@
 		return 0
 
 	else if(istype(M, /mob/living/carbon/human))
+		if(user.covered_mouth_consumables_check(M))
+			return 0
 
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 

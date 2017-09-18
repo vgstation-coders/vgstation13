@@ -105,7 +105,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		imbibe(user)
 		return 1
 
-	else if(ishuman(M))
+	else if(user.covered_mouth_consumables_check(M))
+		return 0
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 
 		if(!do_mob(user, M, 30))
@@ -338,6 +339,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return 0
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+	if(user.covered_mouth_consumables_check(user))
+		return 0
+
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
