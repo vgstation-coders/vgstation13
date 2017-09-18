@@ -216,16 +216,8 @@
 	return max(MINIMUM_HEAT_CAPACITY,heat_capacity)
 
 
-/datum/gas_mixture/proc/total_moles()
-	return total_moles
 
 
-/datum/gas_mixture/proc/return_pressure()
-	//Purpose: Calculating Current Pressure
-	//Called by:
-	//Inputs: None
-	//Outputs: Gas pressure.
-	return pressure
 
 
 /datum/gas_mixture/proc/update_values()
@@ -282,6 +274,8 @@
 
 	return graphics != old_graphics
 
+/datum/gas_mixture/proc/total_moles()
+	return total_moles
 /datum/gas_mixture/proc/react(atom/dump_location)
 	//Purpose: Calculating if it is possible for a fire to occur in the airmix
 	//Called by: Air mixes updating?
@@ -292,10 +286,15 @@
 
 	return zburn(null) // ? (was: return reacting)
 
+/datum/gas_mixture/proc/return_pressure()
+	//Purpose: Calculating Current Pressure
+	//Called by:
 /datum/gas_mixture/proc/fire()
 	//Purpose: Calculating any fire reactions.
 	//Called by: react() (See above)
 	//Inputs: None
+	//Outputs: Gas pressure.
+	return pressure
 	//Outputs: How much fuel burned
 
 	return zburn(null)
