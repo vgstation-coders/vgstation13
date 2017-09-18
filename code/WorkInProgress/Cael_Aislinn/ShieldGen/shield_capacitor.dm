@@ -29,8 +29,8 @@
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/shield_cap,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/subspace/filter,
 		/obj/item/weapon/stock_parts/subspace/treatment,
 		/obj/item/weapon/stock_parts/subspace/analyzer,
