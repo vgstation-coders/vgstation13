@@ -165,7 +165,7 @@
 		/obj/item/weapon/bonesetter/bone_mender = 100,
 		)
 
-	priority = 0.1 //so it trys to do this before /glue_bone
+	priority = 0.1 //so it tries to do this before /glue_bone
 
 	min_duration = 80
 	max_duration = 90
