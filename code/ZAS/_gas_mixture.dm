@@ -64,6 +64,11 @@
 
 	var/tmp/fuel_burnt = 0
 
+/datum/gas_mixture/New(datum/gas_mixture/to_copy)
+	..()
+	if(to_copy)
+		copy_from(to_copy)
+
 //Turns out that most of the time, people only want to adjust a single gas at a time, and using a proc set up like this just encourages bad behavior.
 //To be purged along with the trace gas system later.
 /datum/gas_mixture/proc/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces = list())
@@ -458,9 +463,11 @@
 	carbon_dioxide = sample.carbon_dioxide
 	nitrogen = sample.nitrogen
 	toxins = sample.toxins
-	total_moles = sample.total_moles()
 
-	trace_gases.len=null
+	temperature = sample.temperature
+	volume = sample.volume
+
+	trace_gases.len = 0
 	if(sample.trace_gases.len > 0)
 		for(var/datum/gas/trace_gas in sample.trace_gases)
 			var/datum/gas/corresponding = new trace_gas.type()
@@ -468,8 +475,7 @@
 
 			corresponding.moles = trace_gas.moles
 
-	temperature = sample.temperature
-
+	update_values()
 	return 1
 
 /datum/gas_mixture/proc/compare(datum/gas_mixture/sample)
@@ -603,6 +609,9 @@ var/static/list/sharing_lookup_table = list(0.15, 0.20, 0.24, 0.27, 0.30, 0.33)
 	var/ratio = sharing_lookup_table[6]
 	if(sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 66% of air moved per tick.
 		ratio = sharing_lookup_table[connecting_tiles]
+
+	if(one_way)
+		other = new(other) //TODO: Make an unsimulated gas_mixture subtype whose rremove procs don't actualy remove so this is unnecessary.
 
 	var/datum/gas_mixture/holder = remove_ratio(ratio)
 	merge(other.remove_ratio(ratio))
