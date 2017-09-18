@@ -56,7 +56,6 @@
 
 	var/temperature = 0 //in Kelvin, use calculate_temperature() to modify
 
-
 	var/graphics=0
 
 	var/pressure=0
@@ -104,12 +103,87 @@
 			nitrogen += moles
 		else
 			CRASH("Invalid gasid!")
-			else
-				nitrogen += moles
-
 
 	if(update)
 		update_values()
+
+
+//Same as adjust_gas(), but takes a temperature which is mixed in with the gas.
+/datum/gas_mixture/proc/adjust_gas_temp(gasid, moles, temp, update = TRUE)
+	if(moles > 0 && abs(temperature - temp) > MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
+		var/self_heat_capacity = heat_capacity()
+
+		var/giver_heat_capacity = moles
+		switch(gasid)
+			if("oxygen", "nitrogen")
+				giver_heat_capacity *= SPECIFIC_HEAT_AIR
+			if("plasma")
+				giver_heat_capacity *= SPECIFIC_HEAT_TOXIN
+			if("carbon_dioxide")
+				giver_heat_capacity *= SPECIFIC_HEAT_CDO
+			else
+				CRASH("Invalid gasid!")
+
+		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
+		temperature = (temp * giver_heat_capacity + temperature * self_heat_capacity) / combined_heat_capacity
+
+	adjust_gas(gasid, moles, update)
+
+	if(update)
+		update_values()
+
+
+//Variadic version of adjust_gas(). Takes any number of gas and mole pairs and applies them.
+/datum/gas_mixture/proc/adjust_multi()
+	ASSERT(!(args.len % 2))
+
+	for(var/i = 1; i < args.len; i += 2)
+		adjust_gas(args[i], args[i + 1], update = FALSE)
+
+	update_values()
+
+
+//Variadic version of adjust_gas_temp(). Takes any number of gas, mole and temperature associations and applies them.
+/datum/gas_mixture/proc/adjust_multi_temp()
+	ASSERT(!(args.len % 3))
+
+	for(var/i = 1; i < args.len; i += 3)
+		adjust_gas_temp(args[i], args[i + 1], args[i + 2], update = FALSE)
+
+	update_values()
+
+
+//Merges all the gas from another mixture into this one. Adjusts temperature correctly.
+//Does not modify giver in any way.
+/datum/gas_mixture/proc/merge(datum/gas_mixture/giver)
+	if(!giver)
+		return 0
+
+	adjust_multi_temp(\
+		"oxygen", giver.oxygen, giver.temperature,\
+		"nitrogen", giver.nitrogen, giver.temperature,\
+		"plasma", giver.toxins, giver.temperature,\
+		"carbon_dioxide", giver.carbon_dioxide, giver.temperature)
+
+	if(giver.trace_gases.len) //This really should use adjust(), but I think it would break things, and I don't care enough to fix a system I'm removing soon anyway.
+		for(var/datum/gas/trace_gas in giver.trace_gases)
+			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
+			if(!corresponding)
+				corresponding = new trace_gas.type()
+				trace_gases += corresponding
+			corresponding.moles += trace_gas.moles
+		update_values()
+
+	return 1
+
+
+//Equalizes this mixture's gases with another's, changing both mixtures. Essentially, fully mixes the two, but keeps them separate.
+//Modifies sharer as well as src. (I'll laugh if someone poorly regexes out src. and this comment becomes incomprehensible)
+/datum/gas_mixture/proc/equalize(datum/gas_mixture/sharer)
+	merge(sharer)
+	sharer.multiply(0) //Empty it out.
+	sharer.merge(remove_ratio(sharer.volume / (volume + sharer.volume)))
+	return 1
 
 
 /datum/gas_mixture/proc/return_temperature()
