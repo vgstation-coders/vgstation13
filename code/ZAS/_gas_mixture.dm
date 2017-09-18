@@ -276,52 +276,10 @@
 
 	return
 
-////////////////////////////////////////////
-//Procedures used for very specific events//
-////////////////////////////////////////////
-
-/datum/gas_mixture/proc/check_tile_graphic()
-	//Purpose: Calculating the graphic for a tile
-	//Called by: Turfs updating
-	//Inputs: None
-	//Outputs: 1 if graphic changed, 0 if unchanged
-
-	var/old_graphics = graphics
-	graphics = 0
-
-	// If configured and cold, maek ice
-	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
-		if(temperature <= TEMPERATURE_ICE_FORMATION && return_pressure()>MIN_PRESSURE_ICE_FORMATION)
-			// If we're just forming, do a probability check. Otherwise, KEEP IT ON~
-			// This ordering will hopefully keep it from sampling random noise every damn tick.
-			//if(was_icy || (!was_icy && prob(25)))
-			graphics |= GRAPHICS_COLD
-
-	if(toxins > MOLES_PLASMA_VISIBLE)
-		graphics |= GRAPHICS_PLASMA
-
-	if(length(trace_gases))
-		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in trace_gases
-		if(sleeping_agent && (sleeping_agent.moles > 1))
-			graphics |= GRAPHICS_N2O
-/*
-	if(aerosols && aerosols.total_volume >= 1)
-		graphics |= GRAPHICS_REAGENTS
-*/
-
-	return graphics != old_graphics
 
 /datum/gas_mixture/proc/total_moles()
 	return total_moles
-/datum/gas_mixture/proc/react(atom/dump_location)
-	//Purpose: Calculating if it is possible for a fire to occur in the airmix
-	//Called by: Air mixes updating?
-	//Inputs: None
-	//Outputs: If a fire occured
 
-	 //set to 1 if a notable reaction occured (used by pipe_network)
-
-	return zburn(null) // ? (was: return reacting)
 
 /datum/gas_mixture/proc/return_pressure()
 	//Purpose: Calculating Current Pressure
@@ -329,12 +287,6 @@
 	//Inputs: None
 	//Outputs: Gas pressure.
 	return pressure
-
-
-//////////////////////////////////////////////
-//Procs for general gas spread calculations.//
-//////////////////////////////////////////////
-
 
 
 /datum/gas_mixture/proc/remove(amount)
@@ -415,6 +367,58 @@
 	removed.update_values()
 
 	return removed
+
+////////////////////////////////////////////
+//Procedures used for very specific events//
+////////////////////////////////////////////
+
+/datum/gas_mixture/proc/check_tile_graphic()
+	//Purpose: Calculating the graphic for a tile
+	//Called by: Turfs updating
+	//Inputs: None
+	//Outputs: 1 if graphic changed, 0 if unchanged
+
+	var/old_graphics = graphics
+
+	graphics = 0
+
+	// If configured and cold, maek ice
+	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
+		if(temperature <= TEMPERATURE_ICE_FORMATION && return_pressure()>MIN_PRESSURE_ICE_FORMATION)
+			// If we're just forming, do a probability check. Otherwise, KEEP IT ON~
+			// This ordering will hopefully keep it from sampling random noise every damn tick.
+			//if(was_icy || (!was_icy && prob(25)))
+			graphics |= GRAPHICS_COLD
+
+	if(toxins > MOLES_PLASMA_VISIBLE)
+		graphics |= GRAPHICS_PLASMA
+
+	if(length(trace_gases))
+		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in trace_gases
+		if(sleeping_agent && (sleeping_agent.moles > 1))
+			graphics |= GRAPHICS_N2O
+/*
+	if(aerosols && aerosols.total_volume >= 1)
+		graphics |= GRAPHICS_REAGENTS
+*/
+
+	return graphics != old_graphics
+
+/datum/gas_mixture/proc/react(atom/dump_location)
+	//Purpose: Calculating if it is possible for a fire to occur in the airmix
+	//Called by: Air mixes updating?
+	//Inputs: None
+	//Outputs: If a fire occured
+
+	 //set to 1 if a notable reaction occured (used by pipe_network)
+
+	return zburn(null) // ? (was: return reacting)
+
+
+//////////////////////////////////////////////
+//Procs for general gas spread calculations.//
+//////////////////////////////////////////////
+
 
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
 	//Purpose: Duplicates the sample air mixture.
