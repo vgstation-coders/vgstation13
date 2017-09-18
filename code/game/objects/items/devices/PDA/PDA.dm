@@ -2296,25 +2296,24 @@ obj/item/device/pda/AltClick()
 				else
 					user.show_message("<span class='notice'>No radiation detected.</span>")
 
-/obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
+/obj/item/device/pda/afterattack(atom/A, mob/user, proximity_flag)
 	if(scanmode == SCANMODE_ATMOS)
-		if(atmos_analys)
-			atmos_analys.cant_drop = 1
-			if(A.Adjacent(user))
-				if(!A.attackby(atmos_analys, user))
-					atmos_analys.afterattack(A, user, 1)
+		if(!atmos_analys || !proximity_flag)
+			return
+		atmos_analys.cant_drop = 1
+		if(!A.attackby(atmos_analys, user))
+			atmos_analys.afterattack(A, user, 1)
 
-	if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
+	else if(scanmode == SCANMODE_ROBOTICS)
+		if(!robo_analys || !proximity_flag)
+			return
+		robo_analys.cant_drop = 1
+		if(!A.attackby(robo_analys, user))
+			robo_analys.afterattack(A, user, 1)
+
+	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
 		note = A:info
 		to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
-
-/obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
-	if(scanmode == SCANMODE_ROBOTICS)
-		if(robo_analys)
-			robo_analys.cant_drop = 1
-			if(A.Adjacent(user))
-				if(!A.attackby(robo_analys, user))
-					robo_analys.afterattack(A, user, 1)
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
