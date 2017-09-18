@@ -590,6 +590,26 @@
 	update_values()
 	return 1
 
+
+//Each value in this list corresponds to the proportion of gas moved from each gas mixture to the other in share_ratio() when connecting_tiles is equal to its index.
+//(If connecting_tiles is greater than 6, it still uses the sixth one.)
+//NOTE: This table used to mean what percentage of the gas was shared between the mixtures.
+//The new values are half the old ones, which makes the result exactly equivalent.
+//Don't put a value above .5 in here. Ever.
+var/static/list/sharing_lookup_table = list(0.15, 0.20, 0.24, 0.27, 0.30, 0.33)
+
+//Shares gas with another gas_mixture based on the number of connecting tiles and the above fixed lookup table.
+/datum/gas_mixture/proc/share_ratio(datum/gas_mixture/other, connecting_tiles, one_way = FALSE)
+	var/ratio = sharing_lookup_table[6]
+	if(sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 66% of air moved per tick.
+		ratio = sharing_lookup_table[connecting_tiles]
+
+	var/datum/gas_mixture/holder = remove_ratio(ratio)
+	merge(other.remove_ratio(ratio))
+	other.merge(holder)
+
+	return compare(other)
+
 /datum/gas_mixture/proc/english_contents_list()
 	var/all_contents = list()
 	if(oxygen)
