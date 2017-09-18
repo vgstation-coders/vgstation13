@@ -38,13 +38,14 @@
 							 "plasteel" = /obj/item/stack/sheet/plasteel)
 	can_scan = list(/obj/item/stack/tile/carpet, /obj/item/stack/tile/arcade, /obj/item/stack/sheet/wood, /obj/item/stack/sheet/mineral/plastic)
 
-/obj/item/device/material_synth/robot/mommi //MoMMI version, more materials and has scanning to help avoid interaction.
+/obj/item/device/material_synth/robot/mommi //MoMMI version, more materials but has very restricted scanning.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
 							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
 							 "plasteel" = /obj/item/stack/sheet/plasteel)
+	can_scan = list(/obj/item/stack/tile/carpet, /obj/item/stack/tile/arcade, /obj/item/stack/sheet/wood, /obj/item/stack/sheet/mineral/plastic)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
