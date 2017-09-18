@@ -280,7 +280,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO TRANSIT! PANIC PANIC PANIC")
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
-			//hyperspace_sounds("progression")
+			hyperspace_sounds("progression")
 
 
 		if ("centcom")
@@ -333,7 +333,7 @@ datum/emergency_shuttle/proc/process()
 					for (var/pod in escape_pods)
 						move_pod(pod, "centcom")
 
-					//hyperspace_sounds("end")
+					hyperspace_sounds("end")
 					return 1
 
 			/* --- Shuttle has docked centcom after being recalled --- */
@@ -351,14 +351,14 @@ datum/emergency_shuttle/proc/process()
 
 			/* --- Shuttle has docked with the station - begin countdown to transit --- */
 			else if(timeleft <= 0)
-				//hyperspace_sounds("dock")
+				hyperspace_sounds("dock")
 				shuttle_phase("station",0)
 				return 1
 
 		if(1)
 
 			if(timeleft == 5)
-				//hyperspace_sounds("begin")
+				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
 			if(timeleft == 2 || timeleft == 1)
 				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
@@ -378,7 +378,7 @@ datum/emergency_shuttle/proc/process()
 				//main shuttle
 				shuttle_phase ("transit",0)
 
-				//hyperspace_sounds("transit")
+				hyperspace_sounds("transit")
 
 				//pods
 				for (var/pod in escape_pods)
