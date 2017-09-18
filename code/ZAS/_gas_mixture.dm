@@ -394,43 +394,6 @@
 //////////////////////////////////////////////
 
 
-/datum/gas_mixture/proc/merge(datum/gas_mixture/giver)
-	//Purpose: Merges all air from giver into self. Deletes giver.
-	//Called by: Machinery expelling air, check_then_merge, ?
-	//Inputs: The gas to merge.
-	//Outputs: 1
-
-	if(!giver)
-		return 0
-
-	if(abs(temperature-giver.temperature)>MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
-		var/self_heat_capacity = heat_capacity()*group_multiplier
-		var/giver_heat_capacity = giver.heat_capacity()*giver.group_multiplier
-		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
-		if(combined_heat_capacity != 0)
-			temperature = (giver.temperature*giver_heat_capacity + temperature*self_heat_capacity)/combined_heat_capacity
-
-	if((group_multiplier>1)||(giver.group_multiplier>1))
-		oxygen += giver.oxygen*giver.group_multiplier/group_multiplier
-		carbon_dioxide += giver.carbon_dioxide*giver.group_multiplier/group_multiplier
-		nitrogen += giver.nitrogen*giver.group_multiplier/group_multiplier
-		toxins += giver.toxins*giver.group_multiplier/group_multiplier
-	else
-		oxygen += giver.oxygen
-		carbon_dioxide += giver.carbon_dioxide
-		nitrogen += giver.nitrogen
-		toxins += giver.toxins
-
-	if(giver.trace_gases.len)
-		for(var/datum/gas/trace_gas in giver.trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
-			if(!corresponding)
-				corresponding = new trace_gas.type()
-				trace_gases += corresponding
-			corresponding.moles += trace_gas.moles*giver.group_multiplier/group_multiplier
-	update_values()
-
-	return 1
 
 /datum/gas_mixture/proc/remove(amount)
 	//Purpose: Removes a certain number of moles from the air.
