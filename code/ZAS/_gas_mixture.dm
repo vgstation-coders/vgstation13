@@ -216,6 +216,24 @@
 	return max(MINIMUM_HEAT_CAPACITY,heat_capacity)
 
 
+//Adds or removes thermal energy. Returns the actual thermal energy change, as in the case of removing energy we can't go below TCMB.
+/datum/gas_mixture/proc/add_thermal_energy(var/thermal_energy)
+	if (total_moles == 0)
+		return 0
+
+	var/heat_capacity = heat_capacity()
+	if (thermal_energy < 0)
+		if (temperature < TCMB)
+			return 0
+		var/thermal_energy_limit = -(temperature - TCMB)*heat_capacity	//ensure temperature does not go below TCMB
+		thermal_energy = max( thermal_energy, thermal_energy_limit )	//thermal_energy and thermal_energy_limit are negative here.
+	temperature += thermal_energy/heat_capacity
+	return thermal_energy
+
+
+//Returns the thermal energy change required to get to a new temperature
+/datum/gas_mixture/proc/get_thermal_energy_change(var/new_temperature)
+	return heat_capacity()*(max(new_temperature, 0) - temperature)
 
 
 //The below wasn't even implemented yet in the big XGM PR. Just saving it here for later.
@@ -331,6 +349,7 @@
 
 	return removed
 
+
 /datum/gas_mixture/proc/remove_ratio(ratio)
 	//Purpose: Removes a certain ratio of the air.
 	//Called by: ?
@@ -367,6 +386,15 @@
 	removed.update_values()
 
 	return removed
+
+
+//Removes a volume of gas from the mixture and returns a gas_mixture containing the removed air with the given volume.
+/datum/gas_mixture/proc/remove_volume(removed_volume)
+	var/datum/gas_mixture/removed = remove_ratio(removed_volume/volume)
+	removed.volume = removed_volume
+	removed.update_values()
+	return removed
+
 
 ////////////////////////////////////////////
 //Procedures used for very specific events//
