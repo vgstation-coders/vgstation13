@@ -205,6 +205,12 @@
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(H.species && (H.species.chem_flags & NO_INJECT))
+			user.visible_message("<span class='warning'>\The [user] attempts to poke \the [H] with \the [src] but it won't go in!</span>", "<span class='notice'>You fail to pierce \the [H] with \the [src]</span>")
+			return
+
 	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr))
 		var/obj/item/clothing/mask/facehugger/lamarr/L = target
 		if(!user.is_holding_item(target))
