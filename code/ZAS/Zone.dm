@@ -48,7 +48,7 @@ Class Procs:
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
-	air.volume = CELL_VOLUME
+	air.volume = 0
 
 /zone/proc/add(turf/simulated/T)
 #ifdef ZASDBG

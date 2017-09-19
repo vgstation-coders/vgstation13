@@ -66,7 +66,7 @@
 
 /datum/gas_mixture/New(datum/gas_mixture/to_copy)
 	..()
-	if(to_copy)
+	if(istype(to_copy))
 		copy_from(to_copy)
 
 //Turns out that most of the time, people only want to adjust a single gas at a time, and using a proc set up like this just encourages bad behavior.
@@ -597,12 +597,9 @@
 	return 1
 
 
-//Each value in this list corresponds to the proportion of gas moved from each gas mixture to the other in share_ratio() when connecting_tiles is equal to its index.
+//Each value in this list corresponds to the proportion of gas shared between the gas_mixtures in share_ratio() when connecting_tiles is equal to its index.
 //(If connecting_tiles is greater than 6, it still uses the sixth one.)
-//NOTE: This table used to mean what percentage of the gas was shared between the mixtures.
-//The new values are half the old ones, which makes the result exactly equivalent.
-//Don't put a value above .5 in here. Ever.
-var/static/list/sharing_lookup_table = list(0.15, 0.20, 0.24, 0.27, 0.30, 0.33)
+var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 //Shares gas with another gas_mixture based on the number of connecting tiles and the above fixed lookup table.
 /datum/gas_mixture/proc/share_ratio(datum/gas_mixture/other, connecting_tiles, one_way = FALSE)
@@ -611,11 +608,14 @@ var/static/list/sharing_lookup_table = list(0.15, 0.20, 0.24, 0.27, 0.30, 0.33)
 		ratio = sharing_lookup_table[connecting_tiles]
 
 	if(one_way)
-		other = new(other) //TODO: Make an unsimulated gas_mixture subtype whose rremove procs don't actualy remove so this is unnecessary.
+		other = new(other) //TODO: Make an unsimulated gas_mixture subtype whose remove procs don't actualy remove so this is unnecessary.
 
-	var/datum/gas_mixture/holder = remove_ratio(ratio)
-	merge(other.remove_ratio(ratio))
-	other.merge(holder)
+	var/total_volume = volume + other.volume
+
+	var/datum/gas_mixture/holder = remove_ratio(ratio * other.volume / total_volume)
+	merge(other.remove_ratio(ratio * volume / total_volume))
+	if(!one_way)
+		other.merge(holder)
 
 	return compare(other)
 
