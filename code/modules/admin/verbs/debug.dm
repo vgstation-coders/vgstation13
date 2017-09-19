@@ -1278,3 +1278,13 @@ client/proc/check_convertables()
 		return
 
 	error_cache.show_to(src)
+
+/client/proc/emergency_shuttle_panel()
+	set name = "Emergency Shuttle Panel"
+	set category = "Debug"
+	if(holder)
+		holder.emergency_shuttle_panel()
+		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
+	feedback_add_details("admin_verb","ESP")
+	return
+

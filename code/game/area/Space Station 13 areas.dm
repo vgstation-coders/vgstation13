@@ -241,6 +241,8 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/escape_pod5/transit
 	icon_state = "shuttle"
 
+//SHOULD YOU ADD NEW ESCAPE PODS, REMEMBER TO UPDATE shuttle_controller.dm
+
 /area/shuttle/supply
 	name = "supply shuttle"
 	icon_state = "shuttle3"
