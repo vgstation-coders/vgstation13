@@ -708,36 +708,6 @@ About the new airlock wires panel:
 			usr.unset_machine()
 			return
 
-	var/am_in_range=in_range(src, usr)
-	var/turf_ok = istype(src.loc, /turf)
-	//testing("in range: [am_in_range], turf ok: [turf_ok]")
-	if(am_in_range && turf_ok)
-		usr.set_machine(src)
-		if(!panel_open)
-			var/obj/item/device/multitool/P = get_multitool(usr)
-			if(P && istype(P))
-				if("set_id" in href_list)
-					var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text),1,MAX_MESSAGE_LEN)
-					if(newid)
-						id_tag = newid
-						initialize()
-				if("set_freq" in href_list)
-					var/newfreq=frequency
-					if(href_list["set_freq"]!="-1")
-						newfreq=text2num(href_list["set_freq"])
-					else
-						newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
-					if(newfreq)
-						if(findtext(num2text(newfreq), "."))
-							newfreq *= 10 // shift the decimal one place
-						if(newfreq < 10000)
-							frequency = newfreq
-							initialize()
-
-				usr.set_machine(src)
-				update_multitool_menu(usr)
-
-
 	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
 		//AI
 		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
