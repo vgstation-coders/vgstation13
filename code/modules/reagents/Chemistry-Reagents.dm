@@ -1712,7 +1712,7 @@
 		return 1
 
 	M.apply_radiation(5, RAD_INTERNAL)
-	if(prob(20))
+	if(prob(20) && !istype(M, /mob/living/carbon/slime))
 		M.advanced_mutate()
 
 /datum/reagent/aluminum
