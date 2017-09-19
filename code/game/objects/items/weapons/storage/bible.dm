@@ -147,7 +147,9 @@
 	return //Nothing else to add
 
 //We're done working on mobs, let's check if we're blessing something else
-/obj/item/weapon/storage/bible/afterattack(atom/A, mob/user as mob)
+/obj/item/weapon/storage/bible/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
+	if(!proximity_flag)
+		return
 	user.delayNextAttack(5)
 	if(user.mind && (user.mind.assigned_role == "Chaplain")) //Make sure we still are a Chaplain, just in case
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
