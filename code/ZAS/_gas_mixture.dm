@@ -478,58 +478,65 @@
 	update_values()
 	return 1
 
+//The general form of the calculation used in compare() to check if two numbers are separated by at least a given abslute value AND relative value.
+//Not guaranteed to produce the same result if the order of the vars to check is switched, but since its purpose is approximation anyway, it should be fine.
+#define FAIL_SIMILARITY_CHECK(ownvar, samplevar, absolute, relative) (abs((ownvar) - (samplevar)) > (absolute) && \
+	(((ownvar) < (1 - (relative)) * (samplevar)) || ((ownvar) > (1 + (relative)) * (samplevar))))
+
+//The above except for gases specifically.
+#define FAIL_AIR_SIMILARITY_CHECK(ownvar, samplevar) (FAIL_SIMILARITY_CHECK((ownvar), (samplevar), MINIMUM_AIR_TO_SUSPEND, MINIMUM_AIR_RATIO_TO_SUSPEND))
+
 /datum/gas_mixture/proc/compare(datum/gas_mixture/sample)
 	//Purpose: Compares sample to self to see if within acceptable ranges that group processing may be enabled
 	//Called by: Airgroups trying to rebuild
 	//Inputs: Gas mix to compare
 	//Outputs: 1 if can rebuild, 0 if not.
-	if(!sample)
+	if(!istype(sample))
 		return 0
 
-	if((abs(oxygen-sample.oxygen) > MINIMUM_AIR_TO_SUSPEND) && \
-		((oxygen < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.oxygen) || (oxygen > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.oxygen)))
+	if(FAIL_SIMILARITY_CHECK(temperature, sample.temperature, MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND, MINIMUM_TEMPERATURE_RATIO_TO_SUSPEND))
 		return 0
-	if((abs(nitrogen-sample.nitrogen) > MINIMUM_AIR_TO_SUSPEND) && \
-		((nitrogen < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.nitrogen) || (nitrogen > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.nitrogen)))
-		return 0
-	if((abs(carbon_dioxide-sample.carbon_dioxide) > MINIMUM_AIR_TO_SUSPEND) && \
-		((carbon_dioxide < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.carbon_dioxide) || (carbon_dioxide > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.carbon_dioxide)))
-		return 0
-	if((abs(toxins-sample.toxins) > MINIMUM_AIR_TO_SUSPEND) && \
-		((toxins < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.toxins) || (toxins > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.toxins)))
+	if(FAIL_SIMILARITY_CHECK(pressure, sample.pressure, MINIMUM_PRESSURE_DELTA_TO_SUSPEND, MINIMUM_PRESSURE_RATIO_TO_SUSPEND))
 		return 0
 
-	if(total_moles() > MINIMUM_AIR_TO_SUSPEND)
-		if((abs(temperature-sample.temperature) > MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND) && \
-			((temperature < (1-MINIMUM_TEMPERATURE_RATIO_TO_SUSPEND)*sample.temperature) || (temperature > (1+MINIMUM_TEMPERATURE_RATIO_TO_SUSPEND)*sample.temperature)))
-//			to_chat(world, "temp fail [temperature] & [sample.temperature]")
-			return 0
+	var/volume_ratio = volume / sample.volume //We want to compare the number of moles per unit volume, not total.
+
+	if(FAIL_AIR_SIMILARITY_CHECK(oxygen, sample.oxygen * volume_ratio))
+		return 0
+	if(FAIL_AIR_SIMILARITY_CHECK(nitrogen, sample.nitrogen * volume_ratio))
+		return 0
+	if(FAIL_AIR_SIMILARITY_CHECK(carbon_dioxide, sample.carbon_dioxide * volume_ratio))
+		return 0
+	if(FAIL_AIR_SIMILARITY_CHECK(toxins, sample.toxins * volume_ratio))
+		return 0
+
 	var/check_moles
 	if(sample.trace_gases.len)
 		for(var/datum/gas/trace_gas in sample.trace_gases)
 			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
 			if(corresponding)
-				check_moles = corresponding.moles
+				check_moles = corresponding.moles / volume_ratio
 			else
 				check_moles = 0
 
-			if((abs(trace_gas.moles - check_moles) > MINIMUM_AIR_TO_SUSPEND) && \
-				((check_moles < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*trace_gas.moles) || (check_moles > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*trace_gas.moles)))
+			if(FAIL_AIR_SIMILARITY_CHECK(check_moles, trace_gas.moles))
 				return 0
 
 	if(trace_gases.len)
 		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
+			var/datum/gas/corresponding = locate(trace_gas.type) in sample.trace_gases
 			if(corresponding)
-				check_moles = corresponding.moles
+				check_moles = corresponding.moles * volume_ratio
 			else
 				check_moles = 0
 
-			if((abs(trace_gas.moles - check_moles) > MINIMUM_AIR_TO_SUSPEND) && \
-				((trace_gas.moles < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*check_moles) || (trace_gas.moles > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*check_moles)))
+			if(FAIL_AIR_SIMILARITY_CHECK(trace_gas.moles, check_moles))
 				return 0
 
 	return 1
+
+#undef FAIL_AIR_SIMILARITY_CHECK
+#undef FAIL_SIMILARITY_CHECK
 
 /datum/gas_mixture/proc/add(datum/gas_mixture/right_side)
 	if(!right_side)
