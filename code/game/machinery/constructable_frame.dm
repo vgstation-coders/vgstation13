@@ -912,7 +912,6 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 2,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
 
 /obj/item/weapon/circuitboard/telecomms/relay
@@ -923,7 +922,6 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 2,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
 
 /obj/item/weapon/circuitboard/telecomms/bus
@@ -934,7 +932,6 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/processor
@@ -948,7 +945,6 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/treatment" = 2,
 							"/obj/item/weapon/stock_parts/subspace/analyzer" = 1,
-							"/obj/item/stack/cable_coil" = 2,
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/server
@@ -959,7 +955,6 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/broadcaster
@@ -970,7 +965,6 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=2"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)

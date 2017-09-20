@@ -20,9 +20,21 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	use_power = 1
 	idle_power_usage = 25
 	machinetype = 5
-	heatgen = 0
 	delay = 7
-	circuitboard = "/obj/item/weapon/circuitboard/telecomms/broadcaster"
+
+/obj/machinery/telecomms/broadcaster/New()
+	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/telecomms/broadcaster,
+		/obj/item/weapon/stock_parts/subspace/filter,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/subspace/crystal,
+		/obj/item/weapon/stock_parts/micro_laser/high,
+		/obj/item/weapon/stock_parts/micro_laser/high
+	)
+
+	RefreshParts()
 
 /obj/machinery/telecomms/broadcaster/receive_information(var/datum/signal/signal, var/obj/machinery/telecomms/machine_from)
 	// Don't broadcast rejected signals
@@ -121,7 +133,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	use_power = 0
 	idle_power_usage = 0
 	machinetype = 6
-	heatgen = 0
+	heating_power = 0
 	var/intercept = 0 // if nonzero, broadcasts all messages to syndicate channel
 	var/syndi_allinone = 0
 	var/raider_allinone = 0
