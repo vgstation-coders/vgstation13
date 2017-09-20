@@ -236,9 +236,7 @@
 		//playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
 
 		if(prob(35))
-			var/datum/effect/effect/system/spark_spread/Sparks = new
-			Sparks.set_up(5, 1, src)
-			Sparks.start()
+			spark(src, 5)
 
 		//A.dumbfire()
 

@@ -47,17 +47,11 @@
 	var/on = 1				// determines if the turret is on
 	var/disabled = 0
 
-	var/datum/effect/effect/system/spark_spread/spark_system // the spark system, used for generating... sparks?
-
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
 /obj/machinery/porta_turret/New()
 	..()
 	icon_state = "[lasercolor]grey_target_prism"
-	// Sets up a spark system
-	spark_system = new /datum/effect/effect/system/spark_spread
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
 	power_change()
 	cover = new /obj/machinery/porta_turret_cover(loc)
 	cover.Parent_Turret = src
@@ -301,7 +295,7 @@ Status: []<BR>"},
 	src.health -= Proj.damage
 	..()
 	if(prob(45) && Proj.damage > 0)
-		src.spark_system.start()
+		spark(src, 5, FALSE)
 	if (src.health <= 0)
 		src.die() // the death process :(
 	if((src.lasercolor == "b") && (src.disabled == 0))
@@ -351,7 +345,7 @@ Status: []<BR>"},
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "[lasercolor]destroyed_target_prism"
 	invisibility=0
-	src.spark_system.start() // creates some sparks because they look cool
+	spark(src, 5, 0)
 	src.density=1
 	qdel(cover) // deletes the cover - no need on keeping it there!
 

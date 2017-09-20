@@ -638,9 +638,7 @@ Class Procs:
 		return 0
 	if(!prob(prb))
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start()
+	spark(src, 5)
 	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
 		siemenspassed = 0.7
 	if (electrocute_mob(user, get_area(src), src, siemenspassed))
