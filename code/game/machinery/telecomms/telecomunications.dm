@@ -312,6 +312,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	else
 		say_testing(mob, "bad transmission method")
 
+	flick("receiver_receive", src)
+
 /obj/machinery/telecomms/receiver/proc/check_receive_level(datum/signal/signal)
 
 
