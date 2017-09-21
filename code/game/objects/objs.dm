@@ -250,7 +250,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					_using.Remove(M)
 					continue
 
-				if(!M in nearby) // NOT NEARBY
+				if(!(M in nearby)) // NOT NEARBY
 					// AIs/Robots can do shit from afar.
 					if (isAI(M) || isrobot(M))
 						is_in_use = 1
