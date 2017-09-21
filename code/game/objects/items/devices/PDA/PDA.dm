@@ -2243,8 +2243,7 @@ obj/item/device/pda/AltClick()
 		T.date = current_date_string
 		T.time = worldtime2text()
 		id.virtual_wallet.transaction_log.Add(T)
-
-		to_chat(user, "<span class='info'>You insert [dosh] into the PDA.</span>")
+		to_chat(user, "<span class='info'>You insert [T.amount] credit\s into the PDA.</span>")
 		qdel(dosh)
 		updateUsrDialog()
 
