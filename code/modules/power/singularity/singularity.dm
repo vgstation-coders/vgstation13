@@ -94,6 +94,38 @@
 /obj/machinery/singularity/Crossed(atom/movable/A)
 	consume(A)
 
+/obj/machinery/singularity/attack_tk(mob/user)
+	to_chat(user, "<span class = 'notice'>You attempt to comprehend \the [src]...</span>")
+	spawn(rand(50,110))
+		if(!user.gcDestroyed)
+			if(prob(95))
+				to_chat(user, "<span class = 'danger'>...and fail to do so.</span>")
+				if(prob(50)) //50/50 of becoming unrecoverable
+					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
+					if(prob(50))
+						user.emote("scream",auto=1)
+						var/matrix/M = matrix()
+						M.Scale(0)
+						animate(user, alpha = 0, transform = M, time = 3 SECONDS, easing = SINE_EASING)
+						spawn(3 SECONDS)
+							new /obj/effect/gibspawner/generic(get_turf(user))
+							qdel(user)
+					else
+						playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+						make_tracker_effects(get_turf(user), get_turf(src))
+						user.dust()
+				else
+					user.visible_message("<span class = 'danger'>\The [user] explodes!</span>")
+					..()
+			else
+				to_chat(user, "<span class = 'notice'>...and manage to grab onto something from the depths of \the [src]!</span>")
+				if(do_after(user, src, 30))
+					to_chat(user, "<span class = notice'>You manage to pull something from beyond to within normal space!</span>")
+					var/obj/structure/losetta_stone/L = new
+					L.alpha = 0
+					L.forceMove(get_turf(user))
+					animate(L, alpha = 255, time = 3 SECONDS)
+
 /obj/machinery/singularity/process()
 	dissipate()
 	check_energy()
