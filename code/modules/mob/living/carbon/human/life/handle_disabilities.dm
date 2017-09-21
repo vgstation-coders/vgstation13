@@ -60,7 +60,7 @@
 						"SARAH HALE DID IT!!!", \
 						"Don't tell Chase", \
 						"not so tough now huh", \
-						"If you faggots don't like the PR's why don't you just code your own?", \
+						"IF YOU FAGGETS DONT LIKE THE PEEARES WHY DONT YOU CODE YER OWN?!", \
 						"WERE NOT BAY!!", \
 						"BLAME HOSHI!!!", \
 						"ARRPEE IZ DED!!!", \
