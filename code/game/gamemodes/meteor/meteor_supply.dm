@@ -13,8 +13,6 @@
 
 	var/area/initial_supply_area = locate(/area/crew_quarters/bar)
 
-	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
-
 	//One loop for each crate
 	for(var/meteor_supplypaths in meteor_initial_drop)
 		var/list/turf/simulated/floor/valid = list()
@@ -24,9 +22,7 @@
 				valid.Add(F)
 
 		var/picked = pick(valid)
-		spark_system.attach(picked)
-		spark_system.set_up(5, 0, picked)
-		spark_system.start()
+		spark(picked, 5, FALSE)
 		new meteor_supplypaths(picked)
 
 /*

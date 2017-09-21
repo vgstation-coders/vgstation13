@@ -211,9 +211,7 @@
 	if(!T)
 		return
 	if(stored_items.len)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(3, 1, src)
-		s.start()
+		spark(src)
 		var/choose = (stored_items.len > 1 ? rand(1,stored_items.len) : 1)
 		var/obj/O = stored_items[choose]
 		O.forceMove(T)
@@ -245,9 +243,7 @@
 	var/list/mobcheck = search_contents_for(/mob/living)
 	for(var/mob/living/M in mobcheck)
 		if(M == captive)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(3, 1, src)
-			s.start()
+			spark(src)
 			captive.forceMove(T)
 			src.visible_message("<span class='warning'>\The [captive] breaks free from the storage bin of \the [src]!</span>")
 			playsound(captive, 'sound/effects/phasein.ogg', 50, 1)
@@ -330,9 +326,7 @@
 	update_icon()
 
 /obj/item/weapon/subspacetunneler/proc/consume_crystal(mob/user)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	var/obj/item/bluespace_crystal/B = loaded_crystal
 	if(istype(B, /obj/item/bluespace_crystal/artificial))
 		qdel(B)

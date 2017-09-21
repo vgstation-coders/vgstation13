@@ -448,9 +448,7 @@
 /datum/chemical_reaction/flash_powder/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(2, 1, location)
-		s.start()
+		spark(location, 2)
 
 		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
 

@@ -411,9 +411,7 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/broke()
-	var/datum/effect/effect/system/spark_spread/s = new
-	s.set_up(2, 1, src)
-	s.start()
+	spark(src, 2)
 	src.icon_state = "mwb" // Make it look all busted up and shit
 	src.visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
 	src.broken = 2 // Make it broken so it can't be used util fixed

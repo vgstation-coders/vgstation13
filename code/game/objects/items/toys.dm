@@ -478,9 +478,7 @@
 			pop()
 
 /obj/item/toy/snappop/proc/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(2, 0, src)
-	s.start()
+	spark(src, 2, FALSE)
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -500,9 +498,7 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/virus/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -516,9 +512,7 @@
 	flags = FPRINT | NO_THROW_MSG
 
 /obj/item/toy/snappop/smokebomb/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(2, 0, src)
-	s.start()
+	spark(src, 2, FALSE)
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls

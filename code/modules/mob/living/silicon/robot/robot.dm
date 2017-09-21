@@ -69,7 +69,6 @@
 	var/lower_mod = 0
 	var/jetpack = 0
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
-	var/datum/effect/effect/system/spark_spread/spark_system//So they can initialize sparks whenever/N
 	var/jeton = 0
 
 	var/killswitch = 0
@@ -86,10 +85,6 @@
 
 
 /mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0,var/startup_sound='sound/voice/liveagain.ogg')
-	spark_system = new /datum/effect/effect/system/spark_spread()
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
-
 	if(isMoMMI(src))
 		wires = new /datum/wires/robot/mommi(src)
 	else
@@ -717,7 +712,7 @@
 	..(Proj)
 	updatehealth()
 	if(prob(75) && Proj.damage > 0)
-		spark_system.start()
+		spark(src, 5, FALSE)
 	return 2
 
 
@@ -1031,7 +1026,7 @@
 		return 0
 
 	else
-		spark_system.start()
+		spark(src, 5, FALSE)
 		return ..()
 
 /mob/living/silicon/robot/verb/unlock_own_cover()
@@ -1094,7 +1089,7 @@
 		uneq_all()
 		AdjustKnockdown(5)
 		animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
-		spark_system.start()
+		spark(src, 5, FALSE)
 		visible_message("<span class='danger'>\The [disarmer] has tipped over \the [src]!</span>")
 		if (prob(2))
 			locked = 0

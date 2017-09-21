@@ -112,9 +112,7 @@
 			else if(src == P.red_portal)
 				P.red_portal = null
 				P.sync_portals()
-	var/datum/effect/effect/system/spark_spread/aeffect = new
-	aeffect.set_up(5, 1, loc)
-	aeffect.start()
+	spark(loc, 5)
 	..()
 
 /obj/effect/portal/cultify()

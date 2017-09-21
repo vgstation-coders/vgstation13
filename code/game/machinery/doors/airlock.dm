@@ -462,9 +462,7 @@ About the new airlock wires panel:
 		return 0	//Already shocked someone recently?
 	if(!prob(prb))
 		return 0 //you lucked out, no shock for you
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start() //sparks always.
+	spark(src, 5)
 	if(electrocute_mob(user, get_area(src), src))
 		hasShocked = 1
 		spawn(10)
@@ -684,9 +682,7 @@ About the new airlock wires panel:
 		if (istype(mover, /obj/item))
 			var/obj/item/I = mover
 			if (I.siemens_coefficient > 0)
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
+				spark(src, 5)
 	return ..()
 
 /obj/machinery/door/airlock/Topic(href, href_list, var/nowindow = 0)
