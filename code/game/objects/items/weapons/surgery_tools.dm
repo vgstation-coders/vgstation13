@@ -169,6 +169,7 @@
 	desc = "For heavy duty cutting."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "saw3"
+	item_state = "saw3"
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -183,6 +184,18 @@
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
+
+
+/obj/item/weapon/circular_saw/plasmasaw //Orange transparent chainsaw!
+	name = "plasma saw"
+	desc = "Perfect for cutting through ice."
+	icon_state = "plasmasaw"
+	item_state = "plasmasaw"
+	force = 18.0
+	sharpness = 1.3
+	surgery_speed = 0.5
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 
 
 /obj/item/weapon/circular_saw/suicide_act(mob/user)
@@ -227,6 +240,17 @@
 	throw_speed = 3
 	throw_range = 5
 	attack_verb = list("attacks", "hits", "bludgeons")
+
+
+//allows you to replace the bone setter in switchtools with it being a setter child rather than a bonegel child
+/obj/item/weapon/bonesetter/bone_mender
+	name = "bone mender"
+	desc = "A favorite among skeletons. It even sounds like a skeleton too."
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "bone-mender"
+	item_state = "bonemender"
+	surgery_speed = 0.5
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 
 
 /obj/item/weapon/revivalprod
