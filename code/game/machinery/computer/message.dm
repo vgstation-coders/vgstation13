@@ -7,9 +7,10 @@
 /obj/machinery/computer/message_monitor
 	name = "Message Monitor Console"
 	desc = "Used to Monitor the crew's messages, that are sent via PDA. Can also be used to view Request Console messages."
-	icon_state = "comm_logs"
-	var/hack_icon = "comm_logsc"
-	var/normal_icon = "comm_logs"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "message_monitor"
+	var/hack_icon = "message_monitor_hacked"
+	var/normal_icon = "message_monitor"
 	circuit = "/obj/item/weapon/circuitboard/message_monitor"
 	//Server linked to.
 	var/obj/machinery/message_server/linkedServer = null
