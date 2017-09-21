@@ -25,8 +25,8 @@
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
 	var/obj/abstract/screen/sensor = null
-	
-	
+
+
 
 	var/shown_robot_modules = 0
 	var/obj/abstract/screen/robot_modules_background
