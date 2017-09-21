@@ -19,6 +19,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 	</div>
 </div>
 <div style="float: right; width: 33%; margin-top: 3px;">
+	<div class="line">
+		{{:helper.link('Permissions', 'key', {'permissions' : 1})}}
+	</div>
 	{{if !data.moving && !data.at_station}}
 		{{:helper.link('Call Shuttle', 'circle-triangle-e', data.send, null)}}
 	{{else !data.moving && data.at_station}}
@@ -27,35 +30,54 @@ Used In File(s): \code\game\supplyshuttle.dm
 		<div class="line">Shuttle is en route.</div>
 	{{/if}}
 </div>
-<div style="float: right; width: 67%;">
-	<div class="itemLabel">
-		Supply Crates
+{{if data.show_permissions}}
+	<div class="item">
+		<div class="itemLabel">
+			Order Approval:
+		</div>
+		<div class="itemContent">
+			{{:helper.link('Any', '', {'access_restriction' : 0}, data.restriction ? null : 'selected')}}{{:helper.link('Allowed', '', {'access_restriction' : 1}, data.restriction==1 ? 'selected' : null)}}{{:helper.link('ID Only', '', {'access_restriction' : 2}, data.restriction==2 ? 'selected' : null)}}{{:helper.link('Enter PIN', '', {'access_restriction' : 3}, data.restriction==3 ? 'selected' : null)}}
+		</div>
 	</div>
-	<div class="itemContentWide" style="width: 95%;">
-		<div class="statusDisplay">
-			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 184px">
-				{{for data.supply_packs}}
-					<div class="line">
-						<div class="statusValue">
-							{{:helper.link(value.name, null, value.command1, null, 'fixedLeftWide noOverflow')}}
-							{{:helper.link('#', null, value.command2, null)}}${{:value.cost}}
+	<div class="item">
+		<div class="itemLabel">
+			Requisitions Status:
+		</div>
+		<div class="itemContent">
+			{{:helper.link('Never', '', {'requisition_status' : 0}, data.requisition ? null : 'selected')}}{{:helper.link('Always', '', {'requisition_status' : 1}, data.requisition==1 ? 'selected' : null)}}
+		</div>
+	</div>
+{{else}}
+	<div style="float: left; width: 32%;">
+		<div class="itemLabel" style="margin-bottom: 3px;margin-top: 12px">
+			Categories
+		</div>
+		{{for data.all_supply_groups}}
+		<div class="line">
+			{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
+		</div>
+		{{/for}}
+	</div>
+	<div style="float: right; width: 66%;">
+		<div class="itemLabel">
+			Supply Crates
+		</div>
+		<div class="itemContentWide" style="width: 95%;">
+			<div class="statusDisplay">
+				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 184px">
+					{{for data.supply_packs}}
+						<div class="line">
+							<div class="statusValue">
+								{{:helper.link(value.name, null, value.command1, null, 'fixedLeftWide noOverflow')}}
+								{{:helper.link('#', null, value.command2, null)}}${{:value.cost}}
+							</div>
 						</div>
-					</div>
-				{{/for}}
+					{{/for}}
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div style="float: left; width: 32%;">
-	<div class="itemLabel" style="margin-bottom: 3px;">
-		Categories
-	</div>
-	{{for data.all_supply_groups}}
-	<div class="line">
-		{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
-	</div>
-	{{/for}}
-</div>
+{{/if}}
 <div class="item">
 	<div class="itemLabel">
 		Supply Orders

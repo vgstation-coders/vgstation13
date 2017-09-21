@@ -508,3 +508,6 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
+
+/obj/item/weapon/paper/manifest
+	name = "Supply Manifest"
