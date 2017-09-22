@@ -39,9 +39,7 @@
 				user.apply_damage(5, BURN, OE.name)
 				time = 150
 				to_chat(user, "<span class='warning'>[src] overload\s from the massive current, shocking you in the process!")
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, user)
-			s.start()
+			spark(user, 5)
 		if(L.damage <= 0)
 			returnToPool(L)
 			//del(L)

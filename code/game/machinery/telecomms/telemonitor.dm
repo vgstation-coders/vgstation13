@@ -9,7 +9,8 @@
 
 /obj/machinery/computer/telecomms/monitor
 	name = "telecommunications network monitoring console"
-	icon_state = "comm_monitor"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "network_monitor"
 	circuit = "/obj/item/weapon/circuitboard/comm_monitor"
 
 	var/screen = 0				// the screen number:

@@ -29,8 +29,8 @@
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/shield_cap,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor,
 		/obj/item/weapon/stock_parts/subspace/filter,
 		/obj/item/weapon/stock_parts/subspace/treatment,
 		/obj/item/weapon/stock_parts/subspace/analyzer,
@@ -48,9 +48,7 @@
 /obj/machinery/shield_capacitor/emag(var/mob/user)
 	if(prob(75))
 		toggle_lock(user)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
+		spark(src, 5)
 		return 1
 	else
 		to_chat(user, "You fail to hack \the [src]'s controls.")

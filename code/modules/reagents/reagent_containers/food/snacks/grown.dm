@@ -238,7 +238,6 @@ var/list/special_fruits = list()
 	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
 	if(inner_teleport_radius < 1)
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 
 	var/list/turfs = new/list()
 	//This could likely use some standardization but I have no idea how to not break it.
@@ -263,22 +262,18 @@ var/list/special_fruits = list()
 		return 0
 	switch(rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
 		if(1) //Teleports the person who threw the fruit
-			s.set_up(3, 1, M)
-			s.start()
+			spark(M)
 			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
 			M.forceMove(picked) //Send then to that location we picked previously
 			spawn()
-				s.set_up(3, 1, M)
-				s.start() //Two set of sparks, one before the teleport and one after. //Sure then ?
+				spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 		if(2) //Teleports the target instead.
-			s.set_up(3, 1, hit_atom)
-			s.start()
+			spark(hit_atom)
 			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
 			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
 				A.forceMove(picked) //And teleport them to the chosen location.
 				spawn()
-					s.set_up(3, 1, A)
-					s.start()
+					spark(A)
 	return 1
 
 

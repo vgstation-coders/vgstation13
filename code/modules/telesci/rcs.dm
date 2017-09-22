@@ -108,9 +108,7 @@
 /obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
 	if(isEmag(W) && !emagged)
 		emagged = 1
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
+		spark(src, 5)
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
 
 /obj/item/weapon/rcs/preattack(var/obj/structure/closet/crate/target, var/mob/user, var/proximity_flag, var/click_parameters)
@@ -161,9 +159,7 @@
 
 	teleporting = FALSE
 	do_teleport(target, teleport_target)
-	/*var/datum/effect/system/spark_spread/s = new /datum/effect/system/spark_spread
-	s.set_up(5, 1, get_turf(src))
-	s.start()*/
+	/*spark(src, 5)*/
 	cell.use(send_cost)
 	to_chat(user, "<span class='notice'>Teleport successful. [round(cell.charge / send_cost)] charge\s left.</span>")
 	return 1

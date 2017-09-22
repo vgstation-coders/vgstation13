@@ -37,10 +37,7 @@
 	if(src.zone_sel.selecting == "mouth" && !(S.status & ORGAN_DESTROYED) && ishuman(target) && !(T.check_body_part_coverage(MOUTH)) && last_shush + shushcooldown <= world.time)
 		last_shush = world.time
 		T.forcesay("-")
-		target.visible_message( 
-			"<span class='danger'>[src] places a hand over [target]'s mouth!</span>",
-			"<span class='danger'>You place a hand over [target]'s mouth!</span>", 
-			)
+		visible_message("<span class='danger'>[src] places a hand over [target]'s mouth!</span>")
 		return
 
 	if(target.disarmed_by(src))

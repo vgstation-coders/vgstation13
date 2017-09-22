@@ -448,9 +448,7 @@
 /datum/chemical_reaction/flash_powder/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(2, 1, location)
-		s.start()
+		spark(location, 2)
 
 		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
 
@@ -896,8 +894,8 @@
 	result = LEFT4ZED
 	required_reagents = list(EZNUTRIENT = 1)
 	required_catalysts = list(RADIUM = 5)
-	result_amount = 1	
-	
+	result_amount = 1
+
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
@@ -1961,7 +1959,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
-	
+
 //Pyrite
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
@@ -2704,7 +2702,7 @@
 	name = "Brown Star"
 	id = BROWNSTAR
 	result = BROWNSTAR
-	required_reagents = list(KAHLUA = 1, "irish_cream" = 4)
+	required_reagents = list(KAHLUA = 1, IRISHCREAM = 4)
 	result_amount = 5
 
 /datum/chemical_reaction/milkshake

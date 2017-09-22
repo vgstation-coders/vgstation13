@@ -1,5 +1,5 @@
 /obj/mecha/combat/phazon
-	desc = "An exosuit which can only be described as 'WTF?'."
+	desc = "An exosuit which can only be described as 'What the Fuck?'."
 	name = "Phazon"
 	icon_state = "phazon"
 	initial_icon = "phazon"

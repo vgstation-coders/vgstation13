@@ -22,7 +22,6 @@
 	anchored = 1
 	density = 1
 	noghostspin = 1 //You guys are no fun
-	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 
 	var/empstun = 0
 	var/health = 100
@@ -244,9 +243,7 @@
 		if(2)
 			src.empstun = (rand(1,5))
 	src.visible_message("<span class='danger'>The [src.name]'s motor short circuits!</span>")
-	spark_system.attach(src)
-	spark_system.set_up(5, 0, src)
-	spark_system.start()
+	spark(src, 5)
 
 /obj/structure/bed/chair/vehicle/bullet_act(var/obj/item/projectile/Proj)
 	var/hitrider = 0

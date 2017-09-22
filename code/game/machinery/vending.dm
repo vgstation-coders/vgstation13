@@ -1305,6 +1305,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/cartridge/mechanic = 5,
 		/obj/item/weapon/cartridge/rd = 3,
 		/obj/item/weapon/cartridge/signal/toxins = 5,
+		/obj/item/weapon/cartridge/robotics = 5,
 		/obj/item/weapon/cartridge/hos = 3,
 		/obj/item/weapon/cartridge/security = 5,
 		/obj/item/weapon/cartridge/detective = 5,

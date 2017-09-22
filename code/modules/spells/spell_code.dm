@@ -302,9 +302,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(istype(target,/mob/living) && message)
 			to_chat(target, text("[message]"))
 		if(sparks_spread)
-			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-			sparks.set_up(sparks_amt, 0, location) //no idea what the 0 is
-			sparks.start()
+			spark(location, sparks_amt, FALSE)
 		if(smoke_spread)
 			if(smoke_spread == 1)
 				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
