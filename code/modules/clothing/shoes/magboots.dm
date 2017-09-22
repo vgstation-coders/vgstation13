@@ -14,7 +14,7 @@
 	var/stomp_delay = 3 SECONDS
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
-	var/anchoring_system = "mag-pulse traction system"
+	var/anchoring_system_examine = "<span class='info'>Its mag-pulse traction system appears to be</span>"
 
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
 	if(!stomp_attack_power)
@@ -71,10 +71,10 @@
 
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	..()
-	var/state = "disabled"
+	var/state = " disabled."
 	if(src.clothing_flags&NOSLIP)
-		state = "enabled"
-	to_chat(user, "<span class='info'>Its [anchoring_system] appear\s to be [state].</span>")
+		state = " enabled."
+	to_chat(user, anchoring_system_examine + "<span class='info'>[state]</span>")
 
 //CE
 /obj/item/clothing/shoes/magboots/elite
@@ -113,7 +113,7 @@
 	name = "captain's greaves"
 	icon_state = "capboots0"
 	base_state = "capboots"
-	anchoring_system = "anchoring spikes"
+	anchoring_system_examine = "<span class='info'>Its anchoring spikes appear to be</span>"
 
 /obj/item/clothing/shoes/magboots/captain/toggle()
 	//set name = "Toggle Floor Grip"
