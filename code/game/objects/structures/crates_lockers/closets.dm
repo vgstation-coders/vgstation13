@@ -115,7 +115,7 @@
 		return -1
 
 	// Prevent AIs from being crammed into lockers. /vg/ Redmine #153 - N3X
-	if(istype(AM, /mob/living/silicon/ai) || istype(AM, /mob/living/simple_animal/sculpture))
+	if(istype(AM, /mob/living/silicon/ai) || istype(AM, /mob/living/simple_animal/scp_173))
 		return 0
 
 	if(istype(AM, /mob/living))
