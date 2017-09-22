@@ -610,9 +610,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 //Shares gas with another gas_mixture based on the number of connecting tiles and the above fixed lookup table.
 /datum/gas_mixture/proc/share_ratio(datum/gas_mixture/other, connecting_tiles, one_way = FALSE)
-	var/ratio = sharing_lookup_table[6]
-	if(sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 66% of air moved per tick.
-		ratio = sharing_lookup_table[connecting_tiles]
+	var/ratio = sharing_lookup_table[min(connecting_tiles, sharing_lookup_table.len)] //6 or more interconnecting tiles will max at 66% of air moved per tick.
 
 	if(one_way)
 		other = new(other) //TODO: Make an unsimulated gas_mixture subtype whose remove procs don't actualy remove so this is unnecessary.
