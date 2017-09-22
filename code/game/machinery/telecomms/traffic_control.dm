@@ -1,5 +1,5 @@
 /obj/machinery/computer/telecomms/traffic
-	name = "Telecommunications Traffic Control"
+	name = "telecommunications traffic control console"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "traffic_control"
 	circuit = "/obj/item/weapon/circuitboard/comm_traffic"

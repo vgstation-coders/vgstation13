@@ -270,7 +270,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 */
 
 /obj/machinery/telecomms/receiver
-	name = "Subspace Receiver"
+	name = "telecommunications subspace receiver"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "receiver"
 	desc = "This machine has a dish-like shape and green lights. It is designed to detect and process subspace radio activity."
@@ -340,7 +340,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 */
 
 /obj/machinery/telecomms/hub
-	name = "Telecommunication Hub"
+	name = "telecommunications hub"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "hub"
 	desc = "A mighty piece of hardware used to send/receive massive amounts of data."
@@ -375,7 +375,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 */
 
 /obj/machinery/telecomms/relay
-	name = "Telecommunication Relay"
+	name = "telecommunications relay"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "relay"
 	desc = "A mighty piece of hardware used to send massive amounts of data far away."
@@ -427,7 +427,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 */
 
 /obj/machinery/telecomms/bus
-	name = "Bus Mainframe"
+	name = "telecommunications bus"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "bus"
 	desc = "A mighty piece of hardware used to send massive amounts of data quickly."
@@ -480,7 +480,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 */
 
 /obj/machinery/telecomms/processor
-	name = "Processor Unit"
+	name = "telecommunications processor"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "processor"
 	desc = "This machine is used to process large quantities of information."
@@ -519,7 +519,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 
 /obj/machinery/telecomms/server
-	name = "Telecommunication Server"
+	name = "telecommunications server"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "server"
 	desc = "A machine used to store data and network statistics."
