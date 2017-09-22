@@ -169,14 +169,13 @@
 
 
 /obj/item/device/modkit/paintkit/attack_self(mob/user)
-	if(paints)
-		var/selection = paints[input("Select the design you would like to paint", "Change Material Type") as null|anything in paints]
-		if(selection)
-			active_paint = selection
-			to_chat(user, "<span class='notice'>You switch \the [src] to paint the [initial(active_paint.name)] design</span>")
-	else
+	var/selection = paints[input("Select the design you would like to paint", "Change Material Type") as null|anything in paints]
+	if(selection)
+		active_paint = selection
+		to_chat(user, "<span class='notice'>You switch \the [src] to paint the [initial(active_paint.name)] design</span>")
+/*	else
 		active_paint = null
-		return
+		return*/
 
 	parts = new/list(1)
 	original = new/list(1)
