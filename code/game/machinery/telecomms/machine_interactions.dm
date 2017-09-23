@@ -17,7 +17,7 @@
 	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
-	C.integrity = new_integrity
+	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
@@ -288,17 +288,20 @@
 	updateUsrDialog()
 
 // NOTE: A user won't be provided if unlinked by deletion!
-/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/mob/O)
+/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/O)
+	var/obj/machinery/telecomms/T=O
 	if(O && O in links)
-		var/obj/machinery/telecomms/T=O
 		if(T.links)
 			T.links.Remove(src)
 		links.Remove(O)
-		temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
-		return 1
+		. = 1
 	else
-		temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
-		return 0
+		. = 0
+	if(user) // This was a manual unlink, update the status display
+		if(.)
+			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
+		else
+			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
 
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))

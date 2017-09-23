@@ -164,6 +164,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 
 /obj/machinery/telecomms/Destroy()
+	for(var/link in links)
+		unlinkFrom(null, link)
 	telecomms_list -= src
 	..()
 
@@ -231,7 +233,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	// Checks heat from the environment and applies any integrity damage
 	var/datum/gas_mixture/environment = loc.return_air()
 	if(environment.temperature > T20C + 20)
-		set_integrity(max(0, get_integrity() - 1))
+		set_integrity(get_integrity() - 1)
 		if(get_integrity() <= 0)
 			update_power()
 	if(delay > 0)
@@ -244,7 +246,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 /obj/machinery/telecomms/proc/produce_heat()
 	if(!heating_power)
 		return
-
 	if(!(stat & (NOPOWER|BROKEN))) //Blatently stolen from space heater.
 		var/turf/simulated/L = loc
 		if(istype(L))
@@ -256,7 +257,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				var/heat_capacity = removed.heat_capacity() || 1 // Prevent division by zero
 				removed.temperature += heating_power/heat_capacity
 				L.assume_air(removed)
-				use_power(heating_power / 1000)
+				use_power(heating_power / 1000) // This doesn't work?
 /*
 	The receiver idles and receives messages from subspace-compatible radio equipment;
 	primarily headsets. They then just relay this information to all linked devices,
