@@ -640,7 +640,7 @@ turf/simulated/floor/update_icon()
 				else
 					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 
-/turf/simulated/floor/Enter(mob/AM)
+/turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()
 
 	if(AM && istype(AM,/mob/living))
