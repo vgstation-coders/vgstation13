@@ -390,7 +390,7 @@
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
-	var/turf/old_loc = loc
+	var/atom/old_loc = loc
 	loc = destination
 	last_moved = world.time
 
