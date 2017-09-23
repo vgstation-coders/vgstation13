@@ -393,7 +393,8 @@
 
 	if(loc)
 		loc.Exited(src)
-
+		for(var/atom/movable/AM in loc)
+			AM.Uncrossed(src)
 	last_moved = world.time
 
 	var/old_loc = loc
