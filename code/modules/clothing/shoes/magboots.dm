@@ -14,7 +14,7 @@
 	var/stomp_delay = 3 SECONDS
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
-	var/anchoring_system_examine = "<span class='info'>Its mag-pulse traction system appears to be</span>"
+	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
 
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
 	if(!stomp_attack_power)
@@ -113,7 +113,7 @@
 	name = "captain's greaves"
 	icon_state = "capboots0"
 	base_state = "capboots"
-	anchoring_system_examine = "<span class='info'>Its anchoring spikes appear to be</span>"
+	anchoring_system_examine = "Its anchoring spikes appear to be"
 
 /obj/item/clothing/shoes/magboots/captain/toggle()
 	//set name = "Toggle Floor Grip"
