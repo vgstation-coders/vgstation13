@@ -392,7 +392,7 @@
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
 
 	if(loc)
-		loc.Exited(src)
+		loc.Exited(src, destination)
 
 	last_moved = world.time
 
