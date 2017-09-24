@@ -77,7 +77,7 @@
 			if(activated)
 				display_msg = pick("rumbles slightly for a moment!","begins to shake!","blinks slightly!","starts to whirr!","sparks!")
 			else
-				display_msg = pick("quietens down!","settles to a stop!","lets out a single beep!","goes dark!")
+				display_msg = pick("quiets down!","settles to a stop!","lets out a single beep!","goes dark!")
 			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 
