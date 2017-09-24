@@ -126,6 +126,23 @@
 	name = "wooden chair"
 	desc = "Old is never too old to not be in fashion."
 
+/obj/structure/bed/chair/wood/pew
+	name = "pew"
+	desc = "Uncomfortable."
+	sheet_amt = 2
+	anchored = 1
+	noghostspin = 1
+
+/obj/structure/bed/chair/wood/pew/left
+	icon_state = "bench_left"
+
+/obj/structure/bed/chair/wood/pew/right/
+	icon_state = "bench_right"
+
+/obj/structure/bed/chair/wood/pew/mid/ // mid refers to a straight couch part
+	icon_state = "bench_mid"
+
+
 /obj/structure/bed/chair/wood/wings
 	icon_state = "wooden_chair_wings"
 	name = "wooden chair"
