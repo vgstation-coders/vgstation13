@@ -390,14 +390,14 @@
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
-
-	if(loc)
-		loc.Exited(src, destination)
-
+	var/atom/old_loc = loc
+	loc = destination
 	last_moved = world.time
 
-	var/old_loc = loc
-	loc = destination
+	if(old_loc)
+		old_loc.Exited(src, destination)
+		for(var/atom/movable/AM in old_loc)
+			AM.Uncrossed(src)
 
 	if(loc)
 		last_move = get_dir(old_loc, loc)
