@@ -395,7 +395,7 @@
 	last_moved = world.time
 
 	if(old_loc)
-		old_loc.Exited(src)
+		old_loc.Exited(src, destination)
 		for(var/atom/movable/AM in old_loc)
 			AM.Uncrossed(src)
 
