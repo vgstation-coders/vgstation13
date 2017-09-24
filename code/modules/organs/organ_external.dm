@@ -919,6 +919,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status |= ORGAN_PEG
 	src.species = null
 	src.wounds.len = 0
+	src.destspawn = 0
 	for (var/datum/organ/external/T in children)
 		if(T)
 			if(body_part == ARM_LEFT || body_part == ARM_RIGHT || body_part == LEG_RIGHT || body_part == LEG_LEFT)
@@ -933,6 +934,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				T.status &= ~ORGAN_DESTROYED
 				T.status &= ~ORGAN_ROBOT
 				T.wounds.len = 0
+				T.destspawn = 0
 
 /datum/organ/external/proc/fleshify()
 	src.status &= ~ORGAN_BROKEN
