@@ -74,7 +74,7 @@
 	var/state = " disabled."
 	if(src.clothing_flags&NOSLIP)
 		state = " enabled."
-	to_chat(user, anchoring_system_examine + "<span class='info'>[state]</span>")
+	to_chat(user, "<span class='info'>[anchoring_system_examine][state]</span>")
 
 //CE
 /obj/item/clothing/shoes/magboots/elite
