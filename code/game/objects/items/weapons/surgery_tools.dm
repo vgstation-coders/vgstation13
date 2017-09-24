@@ -3,6 +3,7 @@
 	desc = "Retracts stuff."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "retractor"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "retractor"
 	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
 	melt_temperature = MELTPOINT_STEEL
@@ -35,6 +36,7 @@
 	desc = "You think you have seen this before."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "hemostat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "hemostat"
 	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
 	w_type = RECYK_METAL
@@ -55,6 +57,7 @@
 	desc = "This stops bleeding."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "cautery"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "cautery"
 	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
 	w_type = RECYK_ELECTRONIC
@@ -77,6 +80,7 @@
 	desc = "You can drill using this item. You dig?"
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "drill"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "surgicaldrill"
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	starting_materials = list(MAT_IRON = 15000, MAT_GLASS = 10000)
@@ -99,6 +103,8 @@
 	desc = "Cut, cut, and once more cut."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "scalpel"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
+	item_state = "scalpel"
 	hitsound = "sound/weapons/bladeslice.ogg"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -169,6 +175,7 @@
 	desc = "For heavy duty cutting."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "saw3"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "saw3"
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	flags = FPRINT
@@ -207,6 +214,7 @@
 	name = "bone gel"
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "bone-gel"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "bonegel"
 	force = 0
 	throwforce = 1.0
@@ -222,6 +230,7 @@
 	name = "FixOVein"
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "fixovein"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "fixovein"
 	force = 0
 	throwforce = 1.0
@@ -233,6 +242,7 @@
 	name = "bone setter"
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "bone setter"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "bonesetter"
 	force = 8.0
 	throwforce = 9.0
@@ -248,6 +258,7 @@
 	desc = "A favorite among skeletons. It even sounds like a skeleton too."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "bone-mender"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "bonemender"
 	surgery_speed = 0.5
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
