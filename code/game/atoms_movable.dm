@@ -402,10 +402,10 @@
 	if(loc)
 		last_move = get_dir(old_loc, loc)
 
-		loc.Entered(src)
+		loc.Entered(src, old_loc)
 		if(isturf(loc))
 			var/area/A = get_area_master(loc)
-			A.Entered(src)
+			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
 				AM.Crossed(src,no_tp)
