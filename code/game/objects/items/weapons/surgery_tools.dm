@@ -204,6 +204,9 @@
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 
+/obj/item/weapon/circular_saw/plasmasaw/is_hot()
+	return 1
+
 
 /obj/item/weapon/circular_saw/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
