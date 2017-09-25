@@ -185,7 +185,9 @@
 	overlays.len = 0
 	updateinfolinks()
 	update_icon()
-
+	if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+		var/obj/C = loc
+		C.update_icon()
 
 /obj/item/weapon/paper/proc/parsepencode(var/mob/user,var/obj/item/i, var/t)
 	if(istype(i,/obj/item/weapon/pen))
@@ -327,6 +329,10 @@
 		overlays += stampoverlay
 
 		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
+
+		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+			var/obj/C = loc
+			C.update_icon()
 
 	else if(istype(P, /obj/item/weapon/photo))
 		if(user.drop_item(P, src))
