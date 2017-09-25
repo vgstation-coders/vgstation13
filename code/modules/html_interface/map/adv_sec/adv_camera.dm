@@ -41,7 +41,6 @@ var/global/datum/interactive_map/camera/adv_camera = new
 */
 
 /datum/interactive_map/camera
-	var/list/zlevel_data
 	var/list/zlevels
 	var/list/camerasbyzlevel
 	var/initialized = 0
@@ -50,7 +49,6 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	. = ..()
 
 	zlevels = list(1,5)
-	zlevel_data = list("1" = list(),"5" = list())
 
 /obj/machinery/computer/camera/Destroy()
 	..()
@@ -63,8 +61,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	sendResources(mob.client)
 
 	if (!(z in zlevels))
-		to_chat(mob, "zlevel([z]) good levels: [jointext(zlevels, " ")]")
-		to_chat(mob, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
+		to_chat(mob, "<span class='danger'>Unable to establish a connection: </span>Target is too far away from the station!")
 		return
 
 	if (src.interfaces)
@@ -90,10 +87,8 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			<div id=\"uiMapContainer\"><div id=\"uiMap\" unselectable=\"on\"></div></div>\
 			<div id=\"textbased\"></div>")
 
-			src.update(z, TRUE)
-		else
-			hi = src.interfaces["[z]"]
 
+		src.update(z, TRUE)
 		hi = src.interfaces["[z]"]
 		hi.show(mob, currui)
 		src.updateFor(mob, hi, z)
@@ -102,7 +97,6 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	//copy pasted code but given so many cameras i dont want to iterate over the entire worlds worth of cams, so we save our data based on zlevel
 	if(!single)
 		hi.callJavaScript("clearAll", new/list(), hclient_or_mob)
-	data = zlevel_data["[z]"]
 	for (var/list/L in data)
 		hi.callJavaScript("add", L, hclient_or_mob)
 
@@ -174,8 +168,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 				see_y = pos.y - WORLD_Y_OFFSET[z]
 				results[++results.len]=list(ID, status, name,area,pos_x,pos_y,pos_z,see_x,see_y,adding)
 
-			//src.data = results
-			zlevel_data["[z]"] = results
+			data = results
 			src.updateFor(null, hi, z, single) // updates for everyone
 #undef toAdd
 #undef toRemove
