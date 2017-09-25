@@ -18,7 +18,7 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 	adv_camera.show(user, (current ? current.z : z))
-	if(current)
+	if(current && current.can_use())
 		user.reset_view(current)
 	user.machine = src
 	return
@@ -220,7 +220,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		current = null
 	if(href_list["view"])
 		var/obj/machinery/camera/cam = locate(href_list["view"])
-		if(cam)
+		if(cam && cam.can_use())
 			if(isAI(usr))
 				var/mob/living/silicon/ai/A = usr
 				A.eyeobj.forceMove(get_turf(cam))
