@@ -242,7 +242,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(L.is_hot())
 			light("<span class='notice'>After some fiddling, [user] manages to light \his [name] with \the [W].</span>")
 
-	else if(istype(W, /obj/item/weapon/melee/energy/sword))
+	else if(istype(W, /obj/item/weapon/melee/energy))
 		var/obj/item/weapon/melee/energy/sword/S = W
 		if(S.is_hot())
 			light("<span class='warning'>[user] raises \his [W.name], lighting \the [src]. Holy fucking shit.</span>")
@@ -253,7 +253,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			light("<span class='notice'>[user] fiddles with \his [W.name], and manages to light their [name].</span>")
 
 	//All other items are included here, any item that is hot can light the cigarette
-	else if(W.is_hot())
+	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
 		light("<span class='notice'>[user] lights \his [name] with \the [W].</span>")
 	return
 

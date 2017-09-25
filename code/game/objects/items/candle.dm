@@ -23,7 +23,7 @@
 
 /obj/item/candle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(W.is_hot())
+	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 
 /obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>")
