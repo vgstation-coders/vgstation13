@@ -58,19 +58,26 @@ $(window).on("onUpdateContent", function(){
 
 var updateMap = true;
 
-function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
+function add(ID, status, name, area, pos_x, pos_y, pos_z, see_pos_x, see_pos_y, adding)
 {
 	if(adding > 0 && !(adding & 1)){ //let additions fall through.
 		if(adding & 2){ //removal
 			var toRemove = document.getElementById(ID);
-			if(toRemove) toRemove.remove();
-			return;
+			if(toRemove && toRemove.parentNode)
+			{
+				toRemove.parentNode.removeChild(toRemove);
+				return;
+			}
 		}
 		else if(adding & 4) //status change!
 			var toChange = document.getElementById(ID);
 			if(toChange){
-				toChange.removeClass((status == 1 ? "good" : "average")); //remove the coloring
-				toChange.addClass((status == 1 ? "average" : "good"));
+				if(status == 1){
+					toChange.className = toChange.className.replace("average", "good");
+				}
+				else{
+					toChange.className = toChange.className.replace("good", "average");
+				}
 				return;
 			}
 	}
@@ -78,7 +85,7 @@ function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
 	{
 		var translated = tileToMapCoords(pos_x,pos_y);
 		var href = "byond://?src="+hSrc+"&view="+ID;
-		var dotElem				= $("<div id=\""+ID+"\" class=\"mapIcon mapIcon16 icon-camera " +  (status == 1 ? "average" : "good") + "\" style =\"top:" + translated.yy +"px; left: " + translated.xx + "px;\" z-index: 2; unselectable=\"off\"><div class=\"tooltip hidden\">" + name  + (status == 1 ? " <span class='average'>Alarming</span>" : "") + " (" + area + ": "+see_pos_x+", "+see_pos_y+")</div></div>");
+		var dotElem				= $("<div id=\""+ID+"\" class=\"mapIcon mapIcon16 icon-camera " +  (status == 1 ? "average" : "good") + "\" style =\"top:" + translated.yy +"px; left: " + translated.xx + "px; z-index: 2;\" unselectable=\"off\"><div class=\"tooltip hidden\">" + name  + (status == 1 ? " <span class='average'>Alarming</span>" : "") + " (" + area + ": "+see_pos_x+", "+see_pos_y+")</div></div>");
 		//$("#uiMap").append("<div class=\"dot\" style=\"top: " + ty + "px; left: " + tx + "px; background-color: " + color + "; z-index: " + 999 + ";\"></div>");
 		dotElem.data("href",href);
 		$("#uiMap").append(dotElem);
@@ -87,7 +94,7 @@ function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
 		//alert($("#uiMap").html());
 		//$("#textbased").html(dotElem);
 
-		
+
 		function enable()
 		{
 			dotElem.addClass("active").css({ "border-color": color });
@@ -134,4 +141,3 @@ function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
 
 
 }
-
