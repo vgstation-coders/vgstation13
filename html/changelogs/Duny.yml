@@ -1,2 +1,3 @@
 author: Duny
-changes: []
+changes: 
+ - rscadd: "(Deff) Added scrubbers to the research outpost. The waste pipes empty directly in space by default, the pump can be found in the atmospherics room."
