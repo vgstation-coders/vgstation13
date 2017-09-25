@@ -169,7 +169,7 @@
 		to_chat(user, "<span class ='notice'>You feel [deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
-		if(isvampire(H) && (!VAMP_UNDYING in H.mind.vampire.powers)) //We are a Vampire, we aren't very smart
+		if(isvampire(H) && (!(VAMP_UNDYING in H.mind.vampire.powers))) //We are a Vampire, we aren't very smart
 			to_chat(H, "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			H.mind.vampire.smitecounter += 10
 		if(iscult(H)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us

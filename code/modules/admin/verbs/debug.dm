@@ -736,7 +736,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	var/list/machineinstances = list()
 	for(var/atom/typepath in machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -749,7 +749,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	machineinstances.len = 0
 	for(var/atom/typepath in power_machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
