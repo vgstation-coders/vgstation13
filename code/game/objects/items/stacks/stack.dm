@@ -26,7 +26,7 @@
 	if (amount)
 		src.amount=amount
 	update_materials()
-	forceMove(loc) // So that Crossed gets called, so that stacks can be merged
+	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
