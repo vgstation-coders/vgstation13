@@ -49,8 +49,6 @@ var/global/datum/interactive_map/camera/adv_camera = new
 /datum/interactive_map/camera/New()
 	. = ..()
 	zlevels = list(1,5)
-	//data["1"] = list()
-	//data["5"] = list()
 	for(var/i in zlevels)
 		data["[i]"] = new/list()
 
@@ -159,7 +157,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 				data["[zz]"] -= data["[zz]"][ID]
 			if(hi.isUsed() && !silent)
 				var/list/finishedCamera = list(ID)
-				src.updateFor(null, hi, z, list("[ID]" = finishedCamera), TRUE)
+				src.updateFor(null, hi, z, list(finishedCamera), TRUE)
 			continue
 
 		status = C.alarm_on //1 = alarming 0 = all is well
@@ -176,7 +174,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		var/list/finishedCamera = list(ID, status, name, area, pos_x, pos_y, pos_z, see_x, see_y)
 		data["[zz]"][ID] = finishedCamera
 		if(hi.isUsed() && !silent)
-			src.updateFor(null, hi, z, list("[ID]" = finishedCamera))
+			src.updateFor(null, hi, z, list(finishedCamera))
 
 /datum/interactive_map/camera/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
 	. = ..()
