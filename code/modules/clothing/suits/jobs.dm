@@ -146,6 +146,14 @@
 	item_state = "suitjacket_purp"
 	blood_overlay_type = "coat"
 
+//Bridge Officer
+/obj/item/clothing/suit/storage/lawyer/bridgeofficer
+	name = "bridge officer dress jacket"
+	desc = "A classy dress jacket, for special occasions."
+	icon_state = "bridgeofficer_jacket"
+	item_state = "bridgeofficer_jacket"
+	blood_overlay_type = "coat"
+
 //Internal Affairs
 /obj/item/clothing/suit/storage/internalaffairs
 	name = "Internal Affairs Jacket"
