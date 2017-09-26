@@ -54,6 +54,10 @@
 /obj/structure/bed/chair/vehicle/proc/delayNextMove(var/delay, var/additive=0)
 	move_delayer.delayNext(delay,additive)
 
+//Just a copypaste of atom/movable/Cross(). Vehicles are children of beds for some fucking reason and none of the current movement code has any inheritance, so whatever.
+/obj/structure/bed/chair/vehicle/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	return (!density || !height || air_group)
+
 /obj/structure/bed/chair/vehicle/proc/is_too_heavy(var/turf/simulated/floor/glass/glassfloor)
 	return !istype(glassfloor, /turf/simulated/floor/glass/plasma)
 
