@@ -243,3 +243,81 @@
 	if(wearer.head == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
+
+
+
+/obj/item/clothing/head/welding/white
+	name = "white welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one is painted white with a red mark on it."
+	icon_state = "yuki_matsuda_1"
+	item_state = "yuki_matsuda_1"
+
+/obj/item/clothing/head/welding/red
+	name = "red welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one is pained red with a blue stripe on it."
+	icon_state = "paintedwelding"
+	item_state = "paintedwelding"
+
+/obj/item/clothing/head/welding/blue
+	name = "blue welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one has a low quality blue paint job."
+	icon_state = "norah_briggs_1"
+	item_state = "norah_briggs_1"
+
+/obj/item/clothing/head/welding/fire
+	name = "fiery welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one has a fiery paint design on it."
+	icon_state = "alice_mccrea_1"
+	item_state = "alice_mccrea_1"
+
+/obj/item/clothing/head/welding/demon
+	name = "demonic welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one looks like a demons face."
+	icon_state = "demonwelding"
+	item_state = "demonwelding"
+
+/obj/item/clothing/head/welding/knight
+	name = "knightly welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one looks chivalrous."
+	icon_state = "knightwelding"
+	item_state = "knightwelding"
+
+/obj/item/clothing/head/welding/fancy
+	name = "fancy welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one looks fancy."
+	icon_state = "fancywelding"
+	item_state = "fancywelding"
+
+/obj/item/clothing/head/welding/engie
+	name = "engineering welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one is painted in the engineering colours."
+	icon_state = "engiewelding"
+	item_state = "engiewelding"
+
+/obj/item/clothing/head/welding/carp
+	name = "carp welding helmet"
+	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye. This one looks like a carp face."
+	icon_state = "carpwelding"
+	item_state = "carpwelding"
+
+
+/*/obj/item/device/paintkit
+	name = "welding helmet stencil kit"
+	desc = "A kit for automatically painting welding helmets with preset designs"
+	icon_state = "modkit"
+	var/obj/item/device/paintkit/active_paint = /obj/item/clothing/head/welding/engie
+
+	var/paints = list("hotrod" = /obj/item/clothing/head/welding/engie,
+	"penis" = /obj/item/clothing/head/welding/carp)
+
+/obj/item/device/paintkit/attack_self(mob/user)
+	if(paints)
+		var/selection = paints[input("Select the material you'd like to synthesize", "Change Material Type") as null|anything in paints]
+		if(selection)
+			active_paint = selection
+			to_chat(user, "<span class='notice'>You switch \the [src] to synthesize [initial(active_paint.name)]</span>")
+	else
+		active_paint = null
+		return
+
+*/
