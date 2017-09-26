@@ -29,6 +29,13 @@
 	I.dir = dir
 	. = ..()
 
+/obj/structure/bed/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group || (height==0))
+		return 1
+	if(istype(mover) && mover.checkpass(PASSTABLE)) //NOTE: This includes ALL chairs as well! Vehicles have their own override.
+		return 1
+	return ..()
+
 /obj/structure/bed/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
