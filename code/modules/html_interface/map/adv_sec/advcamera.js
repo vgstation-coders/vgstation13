@@ -55,33 +55,20 @@ $(window).on("onUpdateContent", function(){
 	});
 }
 )
-
-var updateMap = true;
-
-function add(ID, status, name, area, pos_x, pos_y, pos_z, see_pos_x, see_pos_y, adding)
+function deleteCamera(ID)
 {
-	if(adding > 0 && !(adding & 1)){ //let additions fall through.
-		if(adding & 2){ //removal
-			var toRemove = document.getElementById(ID);
-			if(toRemove && toRemove.parentNode)
-			{
-				toRemove.parentNode.removeChild(toRemove);
-				return;
-			}
-		}
-		else if(adding & 4) //status change!
-			var toChange = document.getElementById(ID);
-			if(toChange){
-				if(status == 1){
-					toChange.className = toChange.className.replace("average", "good");
-				}
-				else{
-					toChange.className = toChange.className.replace("good", "average");
-				}
-				return;
-			}
+	var existingCamera = document.getElementById(ID);
+	if(existingCamera && existingCamera.parentNode)
+	{
+		existingCamera.parentNode.removeChild(existingCamera);
 	}
-	if (updateMap && pos_x && pos_y)
+}
+
+function updateCamera(ID, status, name, area, pos_x, pos_y, pos_z, see_pos_x, see_pos_y, removing)
+{
+	deleteCamera(ID)//rather than updating all of this shit just delete it and draw a new one
+
+	if(pos_x && pos_y)
 	{
 		var translated = tileToMapCoords(pos_x,pos_y);
 		var href = "byond://?src="+hSrc+"&view="+ID;
