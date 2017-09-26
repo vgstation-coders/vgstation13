@@ -126,6 +126,7 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
+		adv_camera.update(z, list(src))
 		set_light(0)
 		triggerCameraAlarm()
 		update_icon()
