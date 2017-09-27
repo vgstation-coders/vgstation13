@@ -45,7 +45,6 @@
 		/obj/item/weapon/storage/belt/lazarus = 500,
 		/obj/item/device/mobcapsule = 250,
 		/obj/item/weapon/lazarus_injector = 1000,
-		/obj/item/weapon/pickaxe/hand = 500,
 		/obj/item/weapon/pickaxe/jackhammer = 500,
 		/obj/item/weapon/mining_drone_cube = 500,
 		/obj/item/device/wormhole_jaunter = 250,
