@@ -61,3 +61,9 @@
 	freebies = list(/obj/item/weapon/medbot_cube)
 	vend_amount = 1
 	single_items = 1 
+	
+/obj/item/voucher/free_item/hand_pickaxe
+	name = "hand pickaxe voucher"
+	desc = "Can be exchanged at a Dwarven Mining Equipment machine."
+	freebies = list(/obj/item/weapon/pickaxe/hand)
+	vend_amount = 1

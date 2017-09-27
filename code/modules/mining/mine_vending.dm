@@ -34,6 +34,9 @@
 		/obj/item/weapon/pickaxe/gold = 1,
 		/obj/item/weapon/pickaxe/diamond = 1,
 		)
+	vouched = list(
+		/obj/item/weapon/pickaxe/hand = 1,
+		)
 	prices = list(
 		/obj/item/toy/canary = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 100,
@@ -45,7 +48,6 @@
 		/obj/item/weapon/storage/belt/lazarus = 500,
 		/obj/item/device/mobcapsule = 250,
 		/obj/item/weapon/lazarus_injector = 1000,
-		/obj/item/weapon/pickaxe/hand = 500,
 		/obj/item/weapon/pickaxe/jackhammer = 500,
 		/obj/item/weapon/mining_drone_cube = 500,
 		/obj/item/device/wormhole_jaunter = 250,
