@@ -1262,6 +1262,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks,
 		/obj/item/weapon/reagent_containers/food/snacks/snackbar,
 		/obj/item/weapon/reagent_containers/food/snacks/grown,
+		/obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 		)
 	blocked += typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) //Silver-slime spawned customizable food is borked
 
