@@ -908,7 +908,7 @@
 	id = PLANTBGONE
 	result = PLANTBGONE
 	required_reagents = list(SOLANINE = 1, WATER = 4)
-	result_amount = 5	
+	result_amount = 5
 
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 /datum/chemical_reaction/mimicshift
