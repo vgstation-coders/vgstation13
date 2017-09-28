@@ -42,13 +42,22 @@
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
 	if(construction_state >= 3)
 		if(user.honor && user.honor.apply_punishment(DISHONOR_ALWAYS, "interact with \the [src]"))
-			user.visible_message("<span class=\"sinister\">\The [user] starts to screw with \the [src], but his hands painfully fall off!</span>",\
-				"<span class='sinister'>As you begin to log into the console, your hands fall off!  You hear [ticker.Bible_deity_name] laughing.</span>",\
-				"<span class=\"sinister\">You hear unearthly laughter, accompanied by the sound of two hands falling.</span>")
-			message_admins("[user] tried to activate \the [src] and was dishanded. (honor violation)")
-			for(var/datum/organ/external/arm in user.organs)
-				if(istype(arm, /datum/organ/external/r_hand) || istype(arm, /datum/organ/external/l_hand))
-					arm.droplimb(1)
+			if(ishuman(user))
+				var/mob/living/carbon/human/H = user
+				user.visible_message("<span class=\"sinister\">\The [user] starts to screw with \the [src], but \his[user] hands painfully fall off!</span>",\
+					"<span class='sinister'>As you begin to log into the console, your hands fall off!  You hear [ticker.Bible_deity_name] laughing.</span>",\
+					"<span class=\"sinister\">You hear unearthly laughter, accompanied by the sound of bones snapping.</span>")
+				message_admins("[user] tried to activate \the [src] and was dishanded. (honor violation)")
+				for(var/datum/organ/external/arm in H.organs)
+					if(istype(arm, /datum/organ/external/r_hand) || istype(arm, /datum/organ/external/l_hand))
+						arm.droplimb(1)
+			else
+				user.visible_message("<span class=\"sinister\">\The [user] starts to screw with \the [src], but \he[user] suddenly clutches \his[user] chest!</span>",\
+					"<span class='sinister'>As you begin to log into the console, you clutch your chest!  You hear [ticker.Bible_deity_name] laughing.</span>",\
+					"<span class=\"sinister\">You hear unearthly laughter, accompanied by a pained groan.</span>")
+				message_admins("[user] tried to activate \the [src] and was killed. (honor violation)")
+				user.death(FALSE)
+
 
 			return
 		interact(user)

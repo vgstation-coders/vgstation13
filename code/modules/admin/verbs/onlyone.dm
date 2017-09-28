@@ -106,7 +106,7 @@
 	H.honor = new
 	H.honor.dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM
 	H.honor.punishment = DISHON_PUNISH_EYE4EYE
-	H.disable_dishonorable_chems = TRUE
+	H.honor.disable_dishonorable_chems = TRUE
 	H.honor.setup(H, silent=TRUE)
 
 

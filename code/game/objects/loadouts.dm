@@ -520,5 +520,5 @@
 	M.honor = new
 	M.honor.dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM|DISHONOR_GRAB|DISHONOR_MELEE
 	M.honor.punishment = DISHON_PUNISH_DEATH
-	M.disable_dishonorable_chems = TRUE
-	M.honor.setup(H, silent=TRUE)
+	M.honor.disable_dishonorable_chems = TRUE
+	M.honor.setup(M, silent=TRUE)

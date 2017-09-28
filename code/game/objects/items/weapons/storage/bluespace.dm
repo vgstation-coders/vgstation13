@@ -45,8 +45,8 @@
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
 	if(user.honor)
 		if(user.honor.apply_punishment(DISHONOR_ALWAYS, "create a baguloth"))
-			user.visible_message("<span class=\"sinister\">Thinking \himself clever, [user] starts to cram [src] into [H].  Something far worse happens.</span>",\
-				"<span class='sinister'>Your smug thoughts about your cleverness are quickly dashed as [ticker.Bible_deity_name] you suddenly find yourself flattened against the floor under immense, unexplained gravity!</span>",\
+			user.visible_message("<span class=\"sinister\">[user], thinking \himself clever, starts to cram [src] into [H].  Something far worse happens.</span>",\
+				"<span class='sinister'>Your smug thoughts about your cleverness are quickly interrupted as you suddenly find yourself flattened against the floor under immense, unexplained gravity!</span>",\
 				"<span class=\"sinister\">You hear someone's spine snap, followed by many, many other horrible noises.</span>")
 			message_admins("[user] tried to make a baguloth and was murderized. (honor violation)")
 			qdel(H)
