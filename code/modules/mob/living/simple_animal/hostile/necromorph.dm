@@ -184,8 +184,8 @@
 	visible_message("<span class='warning'>\The [src] explodes!</span>")
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/generic(T)
-	explosion(T, -1, 1, 4)
 	qdel(src)
+	explosion(T, -1, 1, 4)
 
 /mob/living/simple_animal/hostile/necromorph/puker
 	desc = "A twisted, engorged husk of what was once human. It reaks of stomach acid."
