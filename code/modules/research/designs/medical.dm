@@ -176,6 +176,6 @@
 	id = "plasmabeaker"
 	req_tech = list(Tc_PLASMATECH = 4, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 3750, MAT_PLASMA = 18000)
+	materials = list(MAT_IRON = 3750, MAT_PLASMA = 12000)
 	category = "Medical"
 	build_path = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma

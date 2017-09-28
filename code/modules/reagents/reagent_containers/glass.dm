@@ -230,9 +230,6 @@
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/plasma/update_icon()
-	return
-
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
