@@ -256,6 +256,12 @@
 
 /area/vault/research
 
+/area/vault/spy_sat
+	name = "\improper Donk Co. Comm-sniffer satelite C-VI"
+
+/area/vault/spy_sat/deployment
+	name = "\improper Undocumented interstellar satelite deployment"
+
 
 /area/vault/rattlemebones
 	jammed = 2
@@ -649,3 +655,213 @@
 
 		CO.face_atom(AM)
 		CO.visible_message("<span class='notice'>\The [CO] looks at \the [AM] and hisses angrily!</span>")
+
+
+/* Spy Sat stuff */
+
+/obj/machinery/power/magtape_deck
+	name = "magnetic tape drive"
+	desc = "A primitive way of storing information. Used because of its longevity over most digital counterparts."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "blackbox"
+
+	active_power_usage = 500
+	density = 1
+	var/last_check
+
+/obj/machinery/power/magtape_deck/New()
+	..()
+	connect_to_network()
+
+	last_check = world.time
+
+/obj/machinery/power/magtape_deck/power_change()
+	if(get_powernet() && avail(active_power_usage))
+		stat &= ~NOPOWER
+	else
+		stat |= NOPOWER
+	update_icon()
+
+	if(stat & NOPOWER)
+		return 0
+
+/obj/machinery/power/magtape_deck/update_icon()
+	if(stat & (BROKEN|NOPOWER))
+		icon_state = "[initial(icon_state)]0"
+	else
+		icon_state = "[initial(icon_state)]1"
+
+/obj/machinery/power/magtape_deck/emp_act(severity)
+	if(prob(50/severity))
+		set_broken()
+
+/obj/machinery/power/magtape_deck/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+		if(2.0)
+			if (prob(50))
+				set_broken()
+		if(3.0)
+			if (prob(25))
+				set_broken()
+
+/obj/machinery/power/magtape_deck/proc/set_broken()
+	if(stat & BROKEN)
+		return
+	stat |= BROKEN
+	update_icon()
+
+/obj/machinery/power/magtape_deck/blob_act()
+	if (prob(75))
+		set_broken()
+
+/obj/machinery/power/magtape_deck/process()
+	if(stat & BROKEN)
+		return
+
+	if(world.time > last_check + 10 SECONDS)
+		last_check = world.time
+		if(!power_change())
+			return
+
+
+/obj/machinery/power/magtape_deck/syndicate
+	desc = "A primitive way of storing information. Used because of its longevity over most digital counterparts.\
+	It appears to have a microphone and speaker attached."
+	var/codephrase
+	var/encrypted_codephrase
+	var/triggered
+	flags = FPRINT | HEAR
+
+/obj/machinery/power/magtape_deck/syndicate/New()
+	..()
+	generate_codephrase()
+
+/obj/machinery/power/magtape_deck/syndicate/proc/generate_codephrase()
+	triggered = 0
+	codephrase = pick(adjectives)
+	var/offset = rand(1,5)
+	for(var/i = 1;i < length(codephrase)+1; i++)
+		var/char_value = (text2ascii(codephrase,i)|0x20) - 96
+		var/new_char = ascii2text(((char_value+offset)%25)+96)
+		encrypted_codephrase += new_char
+
+/obj/machinery/power/magtape_deck/syndicate/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if(speech.speaker && !speech.frequency)
+		if(findtext(speech.message, codephrase))
+			if(!triggered)
+				triggered = TRUE
+				say("Codephrase accepted. Welcome, Agent. Releasing gathered information and current co-ordinates of home base.")
+				new /obj/item/weapon/disk/tech_disk/random(get_turf(src))
+				new /obj/item/weapon/disk/shuttle_coords/vault/satelite_deployment
+
+/obj/machinery/power/magtape_deck/syndicate/attack_hand(mob/user)
+	if(stat & (BROKEN|NOPOWER))
+		return
+	say(encrypted_codephrase)
+
+
+/obj/machinery/power/magtape_deck/syndicate/attack_ghost(mob/user)
+	if(isjustobserver(user))
+		return
+	..()
+
+/obj/item/weapon/disk/tech_disk/random
+
+/obj/item/weapon/disk/tech_disk/random/New()
+	..()
+	var/possible_research = pick(typesof(/datum/tech) - /datum/tech)
+	stored = new possible_research
+	stored.level = rand(1,stored.max_level)
+
+/obj/item/weapon/disk/shuttle_coords/vault/satelite_deployment
+	destination = /obj/docking_port/destination/vault/satelite_deployment
+
+/obj/docking_port/destination/vault/satelite_deployment
+	areaname = "satelite deployment base"
+
+
+/obj/machinery/door/poddoor/satelite_deployment
+	id_tag = "spacetime"
+
+/obj/machinery/door/poddoor/preopen/satelite_deployment
+	id_tag = "spacetime"
+
+/obj/machinery/access_button/satelite_deployment
+	command = "spacetime"
+
+/obj/item/weapon/paper/satelite_deployment/no_smoking
+	name = "Note to all would-be smokers"
+	info = {"If you'll take a minute to look around, you'll notice we don't have<br>
+			any regular atmospheric regulation like most station, and due to our predicament of <br>
+			being on an asteroid lodged in bluespace, we can't afford to install atmospheric regulation.<br>
+			So from now on smoking is prohibited except for in the pod bay<br>
+			When you're done, toggle the pod bay doors to get that stink out of here.<br>
+			<br>
+			P.S. Make sure there's nobody still standing in the pod bay when you do vent it.<br>
+			We can't afford regular replacement staff, so try not to kill one another.<br>
+			~ Ensign Willhelm
+			"}
+
+/obj/item/weapon/paper/satelite_deployment/space_saving
+	name = "Discussion on space allocation"
+	info = {"As you are aware we don't have much in the ways of room, but the engineer insists that<br>
+		despite engineering consisting of 2 glorified petrol engines and an SMES, he needs all the space<br>
+		he can get.<br>
+		For now, let's just focus on the feng-shui of the place. I've placed an order for some nice carpets,<br>
+		and plant pots for the relaxation rooms.<br>
+		~ Ensign Willhelm
+		"}
+
+/obj/item/weapon/paper/satelite_deployment/complaints
+	name = "Complaints"
+	info = {"Getting real tired of Willhelm's shit.<br>
+		The pod bay doors only have a button on the outside, how does he expect us to trust one another smoking?<br>
+		Engineering is bigger than most other rooms and it has barely anything functional in it<br>
+		Medical is undersupplied as fuck, we don't even have a defibrilator<br>
+		Where the hell are we supposed to sleep anyway? We've got two break rooms and no beds!<br>
+		And don't get me started on the fucking weapon distribution.<br>
+		Why does the chef get a minigun while medical gets a syringe gun?
+		"}
+
+/obj/item/weapon/paper/satelite_deployment/complaints_reply
+	name = "Regarding complaints"
+	info = {"Complaining is not good for crew morale.<br>
+		It draws unwanted attention towards the negative side of serving here. Look on the bright side.<br>
+		After an extended investigation, the station medical doctor has been forced to resign over his outburst<br>
+		and all paper-usage is now under lockdown.<br>
+		Let's keep working. Comms are offline for the time-being as we pass close to NT space.<br>
+		~ Ensign Willhelm
+		"}
+
+/obj/item/weapon/paper/satelite_deployment/further_complaints
+	name = "Further complaints"
+	info = {"It wasn't the medical doctor, you half-witted clown.<br>
+		Now what do we do if somebody gets hurt?<br>
+		You'd best watch your step around the pod bay, Ensign. Lest you find out.
+		"}
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
+	name = "acid pie"
+	desc = "Tangy tasting"
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
+	..()
+	reagents.clear_reagents()
+	var/room_remaining = reagents.maximum_volume
+	var/poly_to_add = rand(room_remaining/10,room_remaining/2)
+	reagents.add_reagent(PACID, poly_to_add)
+	room_remaining -= poly_to_add
+	var/sulph_to_add = rand(room_remaining/10,room_remaining/2)
+	reagents.add_reagent(SACID, sulph_to_add)
+	room_remaining -= sulph_to_add
+	reagents.add_reagent(NUTRIMENT, room_remaining)
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/lube
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/lube/New()
+	..()
+	reagents.add_reagent(LUBE, rand(50,volume))

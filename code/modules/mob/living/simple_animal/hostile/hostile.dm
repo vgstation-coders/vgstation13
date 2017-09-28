@@ -41,7 +41,7 @@
 	. = ..()
 	//Cooldowns
 	if(ranged)
-		ranged_cooldown--
+		ranged_cooldown = max(0,ranged_cooldown--)
 
 	if(istype(loc, /obj/item/device/mobcapsule))
 		return 0
