@@ -1022,7 +1022,7 @@ var/list/slot_equipment_priority = list( \
 	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
 		return
 
-	if(honor.dishonors & DISHONOR_PULL)
+	if(honor && (honor.dishonors & DISHONOR_PULL))
 		to_chat(src,"<span class='warning'>You cannot pull, it is dishonorable.</span>")
 		return
 

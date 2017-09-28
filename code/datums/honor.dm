@@ -33,6 +33,7 @@
 			H.update_body()
 
 /datum/honor
+	var/battle_name = "this battle" // Used in get_rules()
 	var/mob/holder = null
 	var/dishonors = 0 // bitfield of DISHONOR_*, indicates what would be considered dishonorable.
 	var/disable_dishonorable_chems=FALSE
@@ -53,26 +54,29 @@
 		returnToPool(G)
 
 	if(!silent)
-		var/rules = "<span class='notice'>The rules of this battle: <ol>"
-		if(DISHONOR_FIREARMS & dishonors)
-			rules += "<li>No firearms or other ranged weapons.</li>"
-		if(DISHONOR_MELEE & dishonors)
-			rules += "<li>No unarmed melee attacks.</li>"
-		if(DISHONOR_DISARM & dishonors)
-			rules += "<li>No pushing or disarming.</li>"
-		if(DISHONOR_GRAB & dishonors)
-			rules += "<li>No grabbing.</li>"
-		if(DISHONOR_PULL & dishonors)
-			rules += "<li>No pulling.</li>"
-		rules += "</ol> This fight will be monitored by [ticker.Bible_deity_name].</span>"
-		if(max_marks==0)
-			rules += " <span class='danger'>There will be no warnings for infractions.</span>"
-		switch(punishment)
-			if(DISHON_PUNISH_EYE4EYE,DISHON_PUNISH_DEATH)
-				rules += " <span class='danger'>Dishonor will be met with death.</span>"
-			if(DISHON_PUNISH_CATBEAST,DISHON_PUNISH_CLUWNE)
-				rules += " <span class='sinister'>Dishonor will be met with a fate worse than death.</span>"
-		to_chat(holder, rules)
+		to_chat(holder, get_rules())
+
+/datum/honor/proc/get_rules()
+	var/rules = "<span class='notice'>The rules of [battle_name]: <ol>"
+	if(DISHONOR_FIREARMS & dishonors)
+		rules += "<li>No firearms or other ranged weapons.</li>"
+	if(DISHONOR_MELEE & dishonors)
+		rules += "<li>No unarmed melee attacks.</li>"
+	if(DISHONOR_DISARM & dishonors)
+		rules += "<li>No pushing or disarming.</li>"
+	if(DISHONOR_GRAB & dishonors)
+		rules += "<li>No grabbing.</li>"
+	if(DISHONOR_PULL & dishonors)
+		rules += "<li>No pulling.</li>"
+	rules += "</ol> This fight will be monitored by [ticker.Bible_deity_name].</span>"
+	if(max_marks==0)
+		rules += " <span class='danger'>There will be no warnings for infractions.</span>"
+	switch(punishment)
+		if(DISHON_PUNISH_EYE4EYE,DISHON_PUNISH_DEATH)
+			rules += " <span class='danger'>Dishonor will be met with death.</span>"
+		if(DISHON_PUNISH_CATBEAST,DISHON_PUNISH_CLUWNE)
+			rules += " <span class='sinister'>Dishonor will be met with a fate worse than death.</span>"
+	return rules
 
 /* Acts like a flash without the eyecheck. */
 /datum/honor/proc/stun()
