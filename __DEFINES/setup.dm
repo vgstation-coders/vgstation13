@@ -1486,10 +1486,21 @@ var/proccalls = 1
 #define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
-// /proc/is_honorable() flags.
-#define HONORABLE_BOMBERMAN  1
-#define HONORABLE_HIGHLANDER 2
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER
+// Honor flags.  Used in highlander, bomberman, and duels.
+#define DISHONOR_ALWAYS   1 // Always counts as dishonorable in apply_punishment.
+#define DISHONOR_DISARM   2 // Disarm is dishonorable
+#define DISHONOR_MELEE    4 // Melee is dishonorable (bombermen?)
+#define DISHONOR_FIREARMS 8 // Weapons are dishonorable (bombermen?)
+#define DISHONOR_PULL     16 // Pulling is dishonorable
+#define DISHONOR_GRAB     32 // Grabs are dishonorable
+
+#define DISHON_PUNISH_STUN     1 // Duels?
+#define DISHON_PUNISH_DEATH    2 // Bomberman
+#define DISHON_PUNISH_EYE4EYE  3 // Disarm "disarms", grab paralyzes, trying to pull SME ashes?
+//FATES WORSE THAN DEATH:
+#define DISHON_PUNISH_CATBEAST 4
+#define DISHON_PUNISH_CLUWNE   5
+
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 

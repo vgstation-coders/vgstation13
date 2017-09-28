@@ -51,6 +51,8 @@
 	var/image/narsimage = null
 	var/image/narglow = null
 
+	var/datum/honor/honor = null // Battle rule enforcement
+
 	//thou shall always be able to see the Bluespace Rift
 	var/image/riftimage = null
 

@@ -515,4 +515,10 @@
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e","f",)
 	M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	M.name = "Bomberman #[rand(1,999)]"
-	M.mind.special_role = BOMBERMAN // NEEDED FOR CHEAT CHECKS!
+	M.mind.special_role = BOMBERMAN
+
+	M.honor = new
+	M.honor.dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM|DISHONOR_GRAB|DISHONOR_MELEE
+	M.honor.punishment = DISHON_PUNISH_DEATH
+	M.disable_dishonorable_chems = TRUE
+	M.honor.setup(H, silent=TRUE)

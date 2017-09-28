@@ -41,6 +41,16 @@
 
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
 	if(construction_state >= 3)
+		if(user.honor && user.honor.apply_punishment(DISHONOR_ALWAYS, "interact with \the [src]"))
+			user.visible_message("<span class=\"sinister\">\The [user] starts to screw with \the [src], but his hands painfully fall off!</span>",\
+				"<span class='sinister'>As you begin to log into the console, your hands fall off!  You hear [ticker.Bible_deity_name] laughing.</span>",\
+				"<span class=\"sinister\">You hear unearthly laughter, accompanied by the sound of two hands falling.</span>")
+			message_admins("[user] tried to activate \the [src] and was dishanded. (honor violation)")
+			for(var/datum/organ/external/arm in user.organs)
+				if(istype(arm, /datum/organ/external/r_hand) || istype(arm, /datum/organ/external/l_hand))
+					arm.droplimb(1)
+
+			return
 		interact(user)
 	else if(construction_state == 2) // Wires exposed
 		wires.Interact(user)

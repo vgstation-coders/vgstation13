@@ -428,6 +428,7 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#AFA59E"
 
 	var/datum/speech_filter/filter = new
+	var/no_speech_mods=FALSE // Set this for adminbus without filters.
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -453,7 +454,7 @@ var/global/list/whitelisted_species = list("Human")
 		)
 	)
 	filter.addWordReplacement("me","meow")
-	filter.addWordReplacement("I","meow") // Should replace with player's first name.
+	filter.addWordReplacement("I","meow")
 	filter.addReplacement("fuck","yiff")
 	filter.addReplacement("shit","scat")
 	filter.addReplacement("scratch","scritch")
@@ -462,6 +463,8 @@ var/global/list/whitelisted_species = list("Human")
 	filter.addWordReplacement("(ass|butt)", "rump")
 
 /datum/species/tajaran/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	if(no_speech_mods)
+		return ..()
 	if (prob(15))
 		speech.message = ""
 

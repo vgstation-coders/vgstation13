@@ -468,3 +468,12 @@
 	id_tag = O.id_tag
 	set_frequency(O.frequency)
 	return 1
+
+/obj/machinery/power/supermatter/can_be_pulled_by(var/mob/M)
+	if(M.honor)
+		if(M.honor.apply_punishment(DISHONOR_ALWAYS, "pull \the [src]"))
+			user.visible_message("<span class=\"sinister\">\The [M] starts to drag \the [src], but \his smugness is interrupted as [ticker.Bible_deity_name] nudges \him in an undesirable direction.</span>",\
+				"<span class='sinister'>Your smug thoughts about your cleverness are quickly dashed as [ticker.Bible_deity_name] reaches into the universe to gleefully nudge you in an undesirable direction.</span>",\
+				"<span class=\"sinister\">You hear an unearthly giggling, followed by a brief, squelched scream.</span>")
+			message_admins("[holder] tried to pull \the [src] and was ashed.")
+			Bumped(M)
