@@ -52,6 +52,9 @@
 					M.put_in_hand(OI.hand_index, src)
 					M.update_inv_wear_suit()
 					src.add_fingerprint(usr)
-				return //don't let us take the coat's abstract internal storage though
-		else
-			hold.MouseDrop(over_object)
+				return
+		else if(over_object == usr) //show container to user
+			return hold.MouseDrop(over_object)
+		else if(istype(over_object, /obj/structure/table)) //empty on table
+			return hold.MouseDrop(over_object)
+	return ..() //don't let us move the coat's abstract internal storage!
