@@ -7,6 +7,8 @@
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 	var/subjectname = ""
 	var/subjectjob = null
+	var/rotten = FALSE
+	var/cold = 50
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 	New()
@@ -16,6 +18,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..(A)
+	processing_objects.Add(src)
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] meat"
@@ -26,9 +29,29 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
+	processing_objects.Remove(src)
 	if(poisonsacs)
 		qdel(poisonsacs)
 		poisonsacs = null
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/process()
+	if(rotten)
+		if(prob(80))
+			new /mob/living/simple_animal/fly(src.loc, src, 5)
+			var/area/aarea = get_area(locked)
+			desc += "You can see tiny worms. Gross."
+			to_chat(world, "nueva mosca en [aarea.name]")
+			processing_objects.Remove(src)
+			//new flies
+		return
+
+	if(istype(loc, /obj/structure/closet/secure_closet/freezer))
+		return
+	cold--
+	to_chat(world, cold)
+
+	if(cold <= 0)
+		rotten = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal //This meat spawns when an animal is butchered, and its name is set to '[animal.species_name] meat' (like "cat meat")
 	var/animal_name = "animal"
@@ -228,4 +251,3 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	..()
 
 	reagents.add_reagent(PETRITRICIN, 3)
-
