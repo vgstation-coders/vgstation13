@@ -102,9 +102,6 @@
 /obj/item/weapon/screwdriver/New()
 	. = ..()
 
-	var/mob/living/simple_animal/fly/F = new /mob/living/simple_animal/fly(src.loc)
-	F.target = src
-
 	switch(pick("red","blue","purple","brown","green","cyan","yellow"))
 		if ("red")
 			icon_state = "screwdriver2"
