@@ -192,8 +192,9 @@ var/list/one_way_windows
 
 //Someone threw something at us, please advise
 /obj/structure/window/hitby(AM as mob|obj)
-
-	..()
+	. = ..()
+	if(.)
+		return
 	if(ismob(AM))
 		var/mob/M = AM //Duh
 		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable

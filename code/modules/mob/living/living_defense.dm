@@ -68,6 +68,9 @@
 	return absorb
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
+	. = ..()
+	if(.)
+		return
 	if(flags & INVULNERABLE)
 		return
 	if(istype(AM,/obj/))
