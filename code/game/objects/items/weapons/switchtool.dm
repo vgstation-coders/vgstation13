@@ -396,3 +396,41 @@
 /obj/item/weapon/switchtool/holo/undeploy()
 	..()
 	set_light(0)
+
+
+//switchtools maxed out intended for testing/spawning and maybe as loot. Don't forget to add any more tools added to these lists later
+/obj/item/weapon/switchtool/holo/maxed
+	stored_modules = list(
+						"/obj/item/device/flashlight:Light" = null,
+						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null,
+						"/obj/item/weapon/circular_saw:Circular saw" = null,
+						"/obj/item/weapon/surgicaldrill:Surgical drill" = null,
+						"/obj/item/weapon/cautery:Cautery" = null,
+						"/obj/item/weapon/hemostat:Hemostat" = null,
+						"/obj/item/weapon/retractor:Retractor" = null,
+						"/obj/item/weapon/bonesetter:Bonesetter" = null,
+						"/obj/item/weapon/screwdriver:Screwdriver" = null,
+						"/obj/item/weapon/wrench:Wrench" = null,
+						"/obj/item/weapon/wirecutters:Wirecutters" = null,
+						"/obj/item/weapon/crowbar:Crowbar" = null,
+						"/obj/item/device/multitool:Multitool" = null,
+						"/obj/item/weapon/weldingtool/experimental:Weldingtool" = null,
+						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
+						"/obj/item/weapon/shield/energy:Shield" = null,
+						"/obj/item/weapon/melee/energy/sword/activated:Sword" = null,
+						"/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword" = null
+						)
+
+/obj/item/weapon/switchtool/holo/maxed/add_module()
+	return
+
+/obj/item/weapon/switchtool/surgery/maxed
+	stored_modules = list(
+						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
+						"/obj/item/weapon/circular_saw/plasmasaw:circular saw" = null,
+						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
+						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
+						"/obj/item/weapon/hemostat:hemostat" = null,
+						"/obj/item/weapon/retractor/manager:retractor" = null,
+						"/obj/item/weapon/bonesetter/bone_mender:bonesetter" = null
+						)

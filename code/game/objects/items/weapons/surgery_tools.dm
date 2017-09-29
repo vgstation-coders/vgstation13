@@ -74,6 +74,51 @@
 /obj/item/weapon/cautery/is_hot()
 	return 1
 
+/obj/item/weapon/cautery/laser
+	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
+	damtype = "fire"
+	force = 10.0
+	throwforce = 5.0
+	throw_speed = 3
+	throw_range = 5
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	hitsound = "sound/weapons/bladeslice.ogg"
+	var/flip = /obj/item/weapon/scalpel/laser
+
+/obj/item/weapon/cautery/laser/attack_self(mob/user)
+	var/old_loc = loc
+	if(loc == user)
+		user.drop_from_inventory(src)
+	else if(ismob(loc))
+		var/mob/holder = loc
+		holder.drop_from_inventory(src)
+	if(flip)
+		if(ispath(flip, /obj/item))
+			var/obj/item/FlipItem = new flip(old_loc)
+			if(ismob(old_loc))
+				var/mob/M = old_loc
+				M.put_in_hands(FlipItem)
+	to_chat(user, "You return the scalpel to cutting mode.")
+	qdel(src)
+
+/obj/item/weapon/cautery/laser/tier1
+	name = "basic laser scalpel"
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved. Cutting mode is disabled."
+	icon_state = "scalpel_laser1_off"
+	item_state = "laserscalpel1"
+	surgery_speed = 0.6
+	flip = /obj/item/weapon/scalpel/laser/tier1
+
+/obj/item/weapon/cautery/laser/tier2
+	name = "high-precision laser scalpel"
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks to be the pinnacle of precision energy cutlery! Cutting mode is disabled."
+	icon_state = "scalpel_laser2_off"
+	item_state = "laserscalpel2"
+	force = 15.0
+	surgery_speed = 0.4
+	flip = /obj/item/weapon/scalpel/laser/tier2
+
 
 /obj/item/weapon/surgicaldrill
 	name = "surgical drill"
@@ -128,30 +173,33 @@
 
 
 /obj/item/weapon/scalpel/laser
-	heat_production = 0
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
-	var/cauterymode = 0 //1 = cautery enabled
+	var/flip = /obj/item/weapon/cautery/laser
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
-	if(!cauterymode)
-		to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
-		heat_production = 1600
-		sharpness = 0
-		sharpness_flags = 0
-	else
-		to_chat(user, "You return the scalpel to cutting mode.")
-		heat_production = 0
-		sharpness = initial(sharpness)
-		sharpness_flags = initial(sharpness_flags)
-	cauterymode = !cauterymode
+	var/old_loc = loc
+	if(loc == user)
+		user.drop_from_inventory(src)
+	else if(ismob(loc))
+		var/mob/holder = loc
+		holder.drop_from_inventory(src)
+	if(flip)
+		if(ispath(flip, /obj/item))
+			var/obj/item/FlipItem = new flip(old_loc)
+			if(ismob(old_loc))
+				var/mob/M = old_loc
+				M.put_in_hands(FlipItem)
+	to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
+	qdel(src)
 
 /obj/item/weapon/scalpel/laser/tier1
 	name = "basic laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved. Cutting mode is enabled."
 	icon_state = "scalpel_laser1"
 	item_state = "laserscalpel1"
 	surgery_speed = 0.6
+	flip = /obj/item/weapon/cautery/laser/tier1
 
 /obj/item/weapon/scalpel/laser/tier1/New()
 	..()
@@ -159,11 +207,12 @@
 
 /obj/item/weapon/scalpel/laser/tier2
 	name = "high-precision laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks to be the pinnacle of precision energy cutlery!"
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks to be the pinnacle of precision energy cutlery! Cutting mode is enabled."
 	icon_state = "scalpel_laser2"
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
+	flip = /obj/item/weapon/cautery/laser/tier2
 
 /obj/item/weapon/scalpel/laser/tier2/New()
 	..()
