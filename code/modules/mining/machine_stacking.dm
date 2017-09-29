@@ -3,7 +3,7 @@
 /obj/machinery/computer/stacking_unit
 	name = "stacking machine console"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "computer_generic"
+	icon_state = "stacking_machine_console"
 	light_color = LIGHT_COLOR_GREEN
 	circuit = "/obj/item/weapon/circuitboard/stacking_machine_console"
 
