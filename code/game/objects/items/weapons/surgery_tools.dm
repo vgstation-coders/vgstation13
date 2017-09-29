@@ -66,6 +66,7 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("burns")
+	hitsound = "sound/weapons/welderattack.ogg"
 
 /obj/item/weapon/cautery/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -76,14 +77,10 @@
 
 /obj/item/weapon/cautery/laser
 	sharpness = 1.5
-	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
+	sharpness_flags = HOT_EDGE
 	damtype = "fire"
 	force = 10.0
 	throwforce = 5.0
-	throw_speed = 3
-	throw_range = 5
-	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-	hitsound = "sound/weapons/bladeslice.ogg"
 	var/flip = /obj/item/weapon/scalpel/laser
 
 /obj/item/weapon/cautery/laser/attack_self(mob/user)
