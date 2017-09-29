@@ -20,7 +20,7 @@
 
 /datum/surgery_step/glue_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 0
+	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 0 && affected.status & ORGAN_BROKEN
 
 /datum/surgery_step/glue_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -172,7 +172,7 @@
 
 /datum/surgery_step/bone_mender/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage <= 5
+	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage <= 5 && affected.status & ORGAN_BROKEN
 
 /datum/surgery_step/bone_mender/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
