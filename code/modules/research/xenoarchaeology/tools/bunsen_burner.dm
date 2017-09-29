@@ -21,13 +21,19 @@
 				to_chat(user, "<span class='notice'>You put the [held_container] onto the [src].</span>")
 				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER)
 				underlays += I
-				if(heating)
-					spawn(heat_time)
-						try_heating()
-
 				return 1 // avoid afterattack() being called
 	else
 		to_chat(user, "<span class='warning'>You can't put the [W] onto the [src].</span>")
+
+/obj/machinery/bunsen_burner/process()
+	if(held_container)
+		held_container.reagents.chem_temp += max(1, (1833.15 - held_container.reagents.chem_temp) * 0.01) //Highest temperature of a bunsen burner is 1560 C
+		held_container.reagents.chem_temp = round(held_container.reagents.chem_temp)
+		held_container.reagents.handle_reactions()
+
+/obj/machinery/bunsen_burner/update_icon()
+	icon_state = "bunsen[heating]"
+
 
 /obj/machinery/bunsen_burner/attack_hand(mob/user as mob)
 	if(held_container)
@@ -39,22 +45,14 @@
 	else
 		to_chat(user, "<span class='warning'>There is nothing on the [src].</span>")
 
-/obj/machinery/bunsen_burner/proc/try_heating()
-	src.visible_message("<span class='notice'>[bicon(src)] [src] hisses.</span>")
-	if(held_container && heating)
-		heated = 1
-		held_container.reagents.handle_reactions()
-		heated = 0
-		spawn(heat_time)
-			try_heating()
-
 /obj/machinery/bunsen_burner/verb/toggle()
 	set src in view(1)
 	set name = "Toggle bunsen burner"
 	set category = "Object"
 
 	heating = !heating
-	icon_state = "bunsen[heating]"
+	update_icon()
 	if(heating)
-		spawn(heat_time)
-			try_heating()
+		processing_objects.Add(src)
+	else
+		processing_objects.Remove(src)
