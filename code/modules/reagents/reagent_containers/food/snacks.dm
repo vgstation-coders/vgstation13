@@ -13,6 +13,8 @@
 					//FOOD_MEAT		- stuff that is made from (or contains) meat. Anything that vegetarians won't eat!
 					//FOOD_ANIMAL	- stuff that is made from (or contains) animal products other than meat (eggs, honey, ...). Anything that vegans won't eat!
 					//FOOD_SWEET	- sweet stuff like chocolate and candy
+					//FOOD_SKELETON_FRIENDLY 16 - can be eaten by skeletons
+					//FOOD_NEEDS_COLD - stuff that will rot if not in a freezer or cold environments
 
 					//Example: food_flags = FOOD_SWEET | FOOD_ANIMAL
 					//Unfortunately, food created by cooking doesn't inherit food_flags!
@@ -26,6 +28,8 @@
 	var/wrapped = 0 //Is the food wrapped (preventing one from eating until unwrapped)
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
+	var/rotten = 0 //Is the food rotten ?
+	var/cold = 50 //How much time until it starts decomposing. Timer stops if inside a cold environment
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
@@ -92,8 +96,27 @@
 		consume(user, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/New()
-
 	..()
+	if(food_flags & FOOD_NEEDS_COLD)
+		processing_objects.Add(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/Rot()
+	rotten = 1
+	return
+
+/obj/item/weapon/reagent_containers/food/snacks/process()
+	if(istype(loc, /obj/structure/closet/secure_closet/freezer))
+		return
+	cold--
+
+	if(cold <= 0)
+		var/area/A = get_area(src.loc)
+		Rot()
+		cold = 0
+		name = "rotten [src.name]"
+		if(prob(100))
+			new /obj/item/weapon/reagent_containers/food/snacks/fly_eggs(src)
+		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/living/M, mob/user, def_zone, eat_override = 0)	//M is target of attack action, user is the one initiating it
 	if(!eatverb)
