@@ -1325,11 +1325,12 @@
 /obj/item/toy/balloon/decoy
 	name = "inflatable decoy"
 	desc = "Use this to fool your enemies into thinking you're a balloon!"
-	icon_state = "decoy_balloon_deflated"
+	icon_state = "decoy_baslloon_deflated"
 	w_class = W_CLASS_TINY
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/decoy
 	volume = 120	//liters
+	origin_tech = Tc_SYNDICATE + "=1;" + Tc_MATERIALS + "=1"
 	var/decoy_phrase = null
 
 /obj/item/toy/balloon/decoy/verb/record_phrase()
