@@ -102,18 +102,18 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/Rot()
 	rotten = 1
+	cold = 0
+	name = "rotten [src.name]"
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/process()
+	var/area/A = get_area(src.loc)
 	if(istype(loc, /obj/structure/closet/secure_closet/freezer))
 		return
 	cold--
 
 	if(cold <= 0)
-		var/area/A = get_area(src.loc)
 		Rot()
-		cold = 0
-		name = "rotten [src.name]"
 		if(prob(100))
 			new /obj/item/weapon/reagent_containers/food/snacks/fly_eggs(src)
 		processing_objects.Remove(src)

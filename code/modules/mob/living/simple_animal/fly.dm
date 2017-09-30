@@ -22,7 +22,7 @@
 	desc = "Annoying piece of shit."
 	gender = PLURAL
 	icon = 'icons/obj/apiary_bees_etc.dmi'
-	icon_state = "bee_dead"
+	icon_state = "fly_dead"
 	anchored = 0
 	mouse_opacity = 1
 	plane = LYING_MOB_PLANE
@@ -41,8 +41,6 @@
 	icon_state = "borer egg-growing"
 	bitesize = 3
 	var/time_left_to_hatch = 0
-	var/grown = 0
-	var/hatching = 0 // So we don't spam ghosts.
 
 /obj/item/weapon/reagent_containers/food/snacks/fly_eggs/New()
 	..()
