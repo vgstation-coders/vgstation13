@@ -43,6 +43,7 @@ var/global/num_vending_terminals = 1
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
 	var/shoot_chance = 2 //How often do we throw items?
+	var/ads_chance = 50 // Chance of an ad appearing on screen
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	// To be filled out at compile time
 	var/list/accepted_coins	= list()	// Accepted coins by the machine.
@@ -53,14 +54,12 @@ var/global/num_vending_terminals = 1
 	var/list/prices     = list()	// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/list/vouched     = list()	//For voucher-only items. These aren't available in any way without the appropriate voucher.
 
-	var/product_slogans = ""	//String of slogans separated by semicolons, optional
-	var/product_ads = ""		//String of small ad messages in the vending screen - random chance
+	var/list/product_slogans = list()	// List of slogans the machine will yell at random intervals, optional
+	var/list/product_ads = list()		// List of small ad messages displayed in the vending screen, random chance, optional
 	var/list/product_records = list()
 	var/list/hidden_records = list()
 	var/list/coin_records = list()
 	var/list/voucher_records = list()
-	var/list/slogan_list = list()
-	var/list/small_ads = list()	//Small ad messages in the vending screen - random chance of popping up whenever you open it
 	var/vend_reply				//Thank you for shopping!
 	var/last_reply = 0
 	var/last_slogan = 0			//When did we last pitch?
@@ -117,8 +116,6 @@ var/global/num_vending_terminals = 1
 
 	wires = new(src)
 	spawn(4)
-		src.slogan_list = splittext(src.product_slogans, ";")
-
 		// So not all machines speak at the exact same time.
 		// The first time this machine says something will be at slogantime + this random value,
 		// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
@@ -718,8 +715,10 @@ var/global/num_vending_terminals = 1
 		onclose(user, "")
 		return
 
-	var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>" //display the name, and added a horizontal rule
-	dat += "<b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
+	var/dat = "<TT><center><b>[vendorname]</b></center><hr/>" //display the name, and added a horizontal rule
+	if(product_ads.len && prob(ads_chance))
+		dat += "<marquee>[pick(product_ads)]</marquee><hr/>"
+	dat += "<br><b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
 
 	if (premium.len > 0)
 		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
@@ -962,8 +961,8 @@ var/global/num_vending_terminals = 1
 		src.seconds_electrified--
 
 	//Pitch to the people!  Really sell it!
-	if(((src.last_slogan + src.slogan_delay) <= world.time) && (src.slogan_list.len > 0) && (!src.shut_up) && prob(5))
-		var/slogan = pick(src.slogan_list)
+	if(((src.last_slogan + src.slogan_delay) <= world.time) && (src.product_ads.len > 0) && (!src.shut_up) && prob(5))
+		var/slogan = pick(src.product_ads)
 		src.speak(slogan)
 		src.last_slogan = world.time
 
@@ -1126,8 +1125,30 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/mug = 10
 		)
-	product_slogans = "I hope nobody asks me for a bloody cup o' tea...;Alcohol is humanity's friend. Would you abandon a friend?;Quite delighted to serve you!;Is nobody thirsty on this station?"
-	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
+	product_slogans = list(
+		"I hope nobody asks me for a bloody cup o' tea...",
+		"Alcohol is humanity's friend. Would you abandon a friend?",
+		"Quite delighted to serve you!",
+		"Is nobody thirsty on this station?"
+	)
+	product_ads = list(
+		"Drink up!",
+		"Booze is good for you!",
+		"Alcohol is humanity's best friend.",
+		"Quite delighted to serve you!",
+		"Care for a nice, cold beer?",
+		"Nothing cures you like booze!",
+		"Have a sip!",
+		"Have a drink!",
+		"Have a beer!",
+		"Beer is good for you!",
+		"Only the finest alcohol!",
+		"Best quality booze since 2053!",
+		"Award-winning wine!",
+		"Maximum alcohol!",
+		"Man loves beer.",
+		"A toast for progress!"
+	)
 	pack = /obj/structure/vendomatpack/boozeomat
 
 /obj/machinery/vending/assist
@@ -1161,13 +1182,32 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/glowstick/yellow = 2,
 		/obj/item/weapon/glowstick/magenta = 2
 		)
-	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
+	product_ads = list(
+		"Only the finest!",
+		"Have some tools.",
+		"The most robust equipment.",
+		"The finest gear in space!"
+	)
 	pack = /obj/structure/vendomatpack/assist
 
 /obj/machinery/vending/coffee
 	name = "\improper Hot Drinks machine"
 	desc = "A vending machine that dispenses hot drinks."
-	product_ads = "Have a drink!;Drink up!;It's good for you!;Would you like a hot joe?;I'd kill for some coffee!;The best beans in the galaxy.;Only the finest brew for you.;Mmmm. Nothing like a coffee.;I like coffee, don't you?;Coffee helps you work!;Try some tea.;We hope you like the best!;Try our new chocolate!;Admin conspiracies"
+	product_ads = list(
+		"Have a drink!",
+		"Drink up!",
+		"It's good for you!",
+		"Would you like a hot joe?",
+		"I'd kill for some coffee!",
+		"The best beans in the galaxy.",
+		"Only the finest brew for you.",
+		"Mmmm. Nothing like a coffee.",
+		"I like coffee, don't you?",
+		"Coffee helps you work!",
+		"Try some tea.",
+		"We hope you like the best!",
+		"Try our new chocolate!"
+	)
 	icon_state = COFFEE
 	icon_vend = "coffee-vend"
 	vend_delay = 34
@@ -1192,8 +1232,23 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/snack
 	name = "\improper Getmore Chocolate Corp"
 	desc = "A vending machine containing snacks."
-	product_slogans = "Try our new nougat bar!;Half the calories for double the price!;It's better than Dan's!"
-	product_ads = "The healthiest!;Award-winning chocolate bars!;Mmm! So good!;Oh my god it's so juicy!;Have a snack.;Snacks are good for you!;Have some more Getmore!;Best quality snacks straight from mars.;We love chocolate!;Try our new jerky!"
+	product_slogans = list(
+		"Try our new nougat bar!",
+		"Half the calories for double the price!",
+		"It's better than Dan's!"
+	)
+	product_ads = list(
+		"The healthiest!",
+		"Award-winning chocolate bars!",
+		"Mmm! So good!",
+		"Oh my god it's so juicy!",
+		"Have a snack.",
+		"Snacks are good for you!",
+		"Have some more Getmore!",
+		"Best quality snacks straight from Mars.",
+		"We love chocolate!",
+		"Try our new jerky!"
+	)
 	icon_state = "snack"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 6,
@@ -1232,8 +1287,19 @@ var/global/num_vending_terminals = 1
 	name = "\improper Robust Softdrinks"
 	desc = "A softdrink vendor provided by Robust Industries, LLC."
 	icon_state = "Cola_Machine"
-	product_slogans = "Robust Softdrinks: More robust than a toolbox to the head!;At least we aren't Dan!"
-	product_ads = "Refreshing!;Hope you're thirsty!;Over 1 million drinks sold!;Thirsty? Why not cola?;Please, have a drink!;Drink up!;The best drinks in space."
+	product_slogans = list(
+		"Robust Softdrinks: More robust than a toolbox to the head!",
+		"At least we aren't Dan!"
+	)
+	product_ads = list(
+		"Refreshing!",
+		"Hope you're thirsty!",
+		"Over 1 million drinks sold!",
+		"Thirsty? Why not cola?",
+		"Please, have a drink!",
+		"Drink up!",
+		"The best drinks in space."
+	)
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 10,
@@ -1258,8 +1324,16 @@ var/global/num_vending_terminals = 1
 	name = "\improper Offworld Off-Licence"
 	desc = "A vendor containing all you need to drown your sorrows and your finances."
 	icon_state = "offlicence"
-	product_slogans = "Offworld Off-Licence: Think outcider the box!;People may abandon you, but alcohol will always be there for you.;Recommended by 8 out of 10 chavs!"
-	product_ads = "The best mistake you've ever made.;Made with real imitation Karmotrine!;Dan-free since 2561!"
+	product_slogans = list(
+		"Offworld Off-Licence: Think outcider the box!",
+		"People may abandon you, but alcohol will always be there for you.",
+		"Recommended by 8 out of 10 chavs!"
+	)
+	product_ads = list(
+		"The best mistake you've ever made.",
+		"Made with real imitation Karmotrine!",
+		"Dan-free since 2561!"
+	)
 	vend_reply = "Drink irresponsibly."
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 6,
@@ -1290,7 +1364,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper PTech"
 	desc = "A vending machine containing Personal Data Assistant cartridges."
 	req_access = list(access_change_ids)
-	product_slogans = "Carts to go!"
+	product_slogans = list("Carts to go!")
 	icon_state = "cart"
 	icon_deny = "cart-deny"
 	products = list(
@@ -1322,8 +1396,22 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/cigarette
 	name = "\improper Cigarette machine" //OCD had to be uppercase to look nice with the new formating
 	desc = "A vending machine containing smoking supplies."
-	product_slogans = "Space cigs taste good like a cigarette should.;I'd rather toolbox than switch.;Smoke!;Don't believe the reports - smoke today!"
-	product_ads = "Probably not bad for you!;Don't believe the scientists!;It's good for you!;Don't quit, buy more!;Smoke!;Nicotine heaven.;Best cigarettes since 2150.;Award-winning cigs."
+	product_slogans = list(
+		"Space cigs taste good like a cigarette should.",
+		"I'd rather toolbox than switch.",
+		"Smoke!",
+		"Don't believe the reports - smoke today!"
+	)
+	product_ads = list(
+		"Probably not bad for you!",
+		"Don't believe the scientists!",
+		"It's good for you!",
+		"Don't quit, buy more!",
+		"Smoke!",
+		"Nicotine heaven.",
+		"Best cigarettes since 2150.",
+		"Award-winning cigs."
+	)
 	icon_state = "cigs"
 	products = list(
 		/obj/item/weapon/storage/fancy/cigarettes = 10,
@@ -1351,7 +1439,15 @@ var/global/num_vending_terminals = 1
 	req_access = list(access_medical)
 	icon_state = "med"
 	icon_deny = "med-deny"
-	product_ads = "Go save some lives!;The best stuff for your medbay.;Only the finest tools.;Natural chemicals!;This stuff saves lives.;Don't you want some?;Ping!"
+	product_ads = list(
+		"Go save some lives!",
+		"The best stuff for your medbay.",
+		"Only the finest tools.",
+		"Natural chemicals!",
+		"This stuff saves lives.",
+		"Don't you want some?",
+		"Ping!"
+	)
 	products = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/antitoxin = 4,
 		/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline = 4,
@@ -1402,7 +1498,14 @@ var/global/num_vending_terminals = 1
 	name = "\improper NanoMed"
 	desc = "Wall-mounted medical equipment dispenser."
 	//req_access = list(access_medical)
-	product_ads = "Go save some lives!;The best stuff for your medbay.;Only the finest tools.;Natural chemicals!;This stuff saves lives.;Don't you want some?"
+	product_ads = list(
+		"Go save some lives!",
+		"The best stuff for your medbay.",
+		"Only the finest tools.",
+		"Natural chemicals!",
+		"This stuff saves lives.",
+		"Don't you want some?"
+	)
 	icon_state = "wallmed"
 	icon_deny = "wallmed-deny"
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
@@ -1633,7 +1736,16 @@ var/global/num_vending_terminals = 1
 	name = "\improper SecTech"
 	desc = "A vending machine containing Security equipment. A label reads \"SECURITY PERSONNEL ONLY\"."
 	req_access = list(access_security)
-	product_ads = "Crack capitalist skulls!;Beat some heads in!;Don't forget - harm is good!;Your weapons are right here.;Handcuffs!;Freeze, scumbag!;Tase them, bro.;Why not have a donut?"
+	product_ads = list(
+		"Crack capitalist skulls!",
+		"Beat some heads in!",
+		"Don't forget - harm is good!",
+		"Your weapons are right here.",
+		"Handcuffs!",
+		"Freeze, scumbag!",
+		"Tase them, bro.",
+		"Why not have a donut?"
+	)
 	icon_state = "sec"
 	icon_deny = "sec-deny"
 	products = list(
@@ -1677,8 +1789,18 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/hydronutrients
 	name = "\improper NutriMax"
 	desc = "A vending machine containing nutritional substances for plants and botanical tools."
-	product_slogans = "Aren't you glad you don't have to fertilize the natural way?;Now with 50% less stink!;Plants are people too!"
-	product_ads = "We like plants!;Don't you want some?;The greenest thumbs ever.;We like big plants.;Soft soil..."
+	product_slogans = list(
+		"Aren't you glad you don't have to fertilize the natural way?",
+		"Now with 50% less stink!",
+		"Plants are people too!"
+	)
+	product_ads = list(
+		"We like plants!",
+		"Don't you want some?",
+		"The greenest thumbs ever.",
+		"We like big plants.",
+		"Soft soil..."
+	)
 	icon_state = "nutri"
 	icon_deny = "nutri-deny"
 	products = list(
@@ -1701,8 +1823,17 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/hydroseeds
 	name = "\improper MegaSeed Servitor"
 	desc = "A vending machine containing plant seeds."
-	product_slogans = "THIS'S WHERE TH' SEEDS LIVE! GIT YOU SOME!;Hands down the best seed selection on the station!;Also certain mushroom varieties available, more for experts! Get certified today!"
-	product_ads = "We like plants!;Grow some crops!;Grow, baby, growww!;Aw h'yeah son!"
+	product_slogans = list(
+		"THIS'S WHERE TH' SEEDS LIVE! GIT YOU SOME!",
+		"Hands down the best seed selection on the station!",
+		"Also certain mushroom varieties available, more for experts! Get certified today!"
+	)
+	product_ads = list(
+		"We like plants!",
+		"Grow some crops!",
+		"Grow, baby, growww!",
+		"Aw h'yeah son!"
+	)
 	icon_state = "seeds"
 	products = list(
 		/obj/item/seeds/bananaseed = 3,
@@ -1757,8 +1888,17 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/voxseeds
 	name = "\improper Vox Seed 'n' Feed"
 	desc = "A vending machine containing exotic seeds. A label reads: \"When not having time to get human seeds!\""
-	product_slogans = "SEEDS LIVING HERE! GETTING SOME!;Claws down, best seed selection on Vox Outpost.;Sell, sell!"
-	product_ads = "Making more gravy soon?;Growing profits!;Is good!;Vox food being best."
+	product_slogans = list(
+		"SEEDS LIVING HERE! GETTING SOME!",
+		"Claws down, best seed selection on Vox Outpost.",
+		"Sell, sell!"
+	)
+	product_ads = list(
+		"Making more gravy soon?",
+		"Growing profits!",
+		"Is good!",
+		"Vox food being best."
+	)
 	icon_state = "voxseed"
 	products = list(
 		/obj/item/seeds/breadfruit = 3,
@@ -1783,10 +1923,25 @@ var/global/num_vending_terminals = 1
 	name = "\improper MagiVend"
 	desc = "A mystical vending machine containing magical garments and magic supplies."
 	icon_state = "MagiVend"
-	product_slogans = "Sling spells the proper way with MagiVend!;Be your own Houdini! Use MagiVend!"
+	product_slogans = list(
+		"Sling spells the proper way with MagiVend!",
+		"Be your own Houdini! Use MagiVend!"
+	)
 	vend_delay = 15
 	vend_reply = "Have an enchanted evening!"
-	product_ads = "FJKLFJSD;AJKFLBJAKL;1234 LOONIES LOL!;>MFW;Kill them fuckers!;GET DAT FUKKEN DISK;HONK!;EI NATH!;Destroy the station!;Admin conspiracies since forever!;Space-time bending hardware!"
+	product_ads = list(
+		"FJKLFJSD",
+		"AJKFLBJAKL",
+		"1234 LOONIES LOL!",
+		">MFW",
+		"Kill them fuckers!",
+		"GET DAT FUKKEN DISK",
+		"HONK!",
+		"EI NATH!",
+		"Destroy the station!",
+		"Admin conspiracies since forever!",
+		"Space-time bending hardware!"
+	)
 	products = list(
 		/obj/item/clothing/head/wizard = 5,
 		/obj/item/clothing/suit/wizrobe = 5,
@@ -1826,7 +1981,15 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/dinnerware
 	name = "\improper Dinnerware"
 	desc = "A vending machine containing kitchen and restaurant equipment."
-	product_ads = "Mm, food stuffs!;Food and food accessories.;Get your plates!;You like forks?;I like forks.;Woo, utensils.;You don't really need these..."
+	product_ads = list(
+		"Mm, food stuffs!",
+		"Food and food accessories.",
+		"Get your plates!",
+		"You like forks?",
+		"I like forks.",
+		"Woo, utensils.",
+		"You don't really need these..."
+	)
 	icon_state = "dinnerware"
 	products = list(
 		/obj/item/weapon/tray = 8,
@@ -1855,8 +2018,18 @@ var/global/num_vending_terminals = 1
 	name = "\improper BODA"
 	desc = "An old vending machine containing sweet water."
 	icon_state = "sovietsoda"
-	product_slogans = "BODA: We sell drink.;BODA: Drink today.;BODA: We're better then Comrade Dan."
-	product_ads = "For Tsar and Country.;Have you fulfilled your nutrition quota today?;Very nice!;We are simple people, for this is all we eat.;If there is a person, there is a problem. If there is no person, then there is no problem."
+	product_slogans = list(
+		"BODA: We sell drink.",
+		"BODA: Drink today.",
+		"BODA: We're better then Comrade Dan."
+	)
+	product_ads = list(
+		"For Tsar and Country.",
+		"Have you fulfilled your nutrition quota today?",
+		"Very nice!",
+		"We are simple people, for this is all we eat.",
+		"If there is a person, there is a problem. If there is no person, then there is no problem."
+	)
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small = 20,
@@ -2085,7 +2258,12 @@ var/global/num_vending_terminals = 1
 	icon_state = "theater"
 	icon_deny = "theater-deny"
 	req_access = list(access_theatre)
-	product_slogans = "Dress for success!;Suited and booted!;It's show time!;Why leave style up to fate? Use AutoDrobe!"
+	product_slogans = list(
+		"Dress for success!",
+		"Suited and booted!",
+		"It's show time!",
+		"Why leave style up to fate? Use AutoDrobe!"
+	)
 	vend_delay = 15
 	vend_reply = "Thank you for using AutoDrobe!"
 	products = list(
@@ -2226,8 +2404,16 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing hats."
 	icon_state = "hats"
 	vend_reply = "Take care now!"
-	product_ads = "Buy some hats!;A bare head is absoloutly ASKING for a robusting!"
-	product_slogans = "Warning, not all hats are dog/monkey compatable. Apply forcefully with care.;Apply directly to the forehead.;Who doesn't love spending cash on hats?!;From the people that brought you collectable hat crates, Hatlord!"
+	product_ads = list(
+		"Buy some hats!",
+		"A bare head is absolutely ASKING for a robusting!"
+	)
+	product_slogans = list(
+		"Warning, not all hats are dog/monkey compatible. Apply forcefully with care.",
+		"Apply directly to the forehead.",
+		"Who doesn't love spending cash on hats?!",
+		"From the people that brought you collectable hat crates, Hatlord!"
+	)
 	products = list(
 		/obj/item/clothing/head/bowlerhat = 10,
 		/obj/item/clothing/head/beaverhat = 10,
@@ -2256,8 +2442,17 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing jumpsuits and dress garments."
 	icon_state = "suits"
 	vend_reply = "Come again!"
-	product_ads = "Skinny? Looking for some clothes? Suitlord is the machine for you!;BUY MY PRODUCT!"
-	product_slogans = "Pre-Ironed, Pre-Washed, Pre-Wor-*BZZT*;Blood of your enemies washes right out!;Who are YOU wearing?;Look dapper! Look like an idiot!;Don't carry your size? How about you shave off some pounds you fat lazy- *BZZT*"
+	product_ads = list(
+		"Skinny? Looking for some clothes? Suitlord is the machine for you!",
+		"BUY MY PRODUCT!"
+	)
+	product_slogans = list(
+		"Pre-Ironed, Pre-Washed, Pre-Wor-*BZZT*",
+		"Blood of your enemies washes right out!",
+		"Who are YOU wearing?",
+		"Look dapper! Look like an idiot!",
+		"Don't carry your size? How about you shave off some pounds you fat lazy- *BZZT*"
+	)
 	products = list(
 		/obj/item/clothing/under/color/black = 10,
 		/obj/item/clothing/under/color/blue = 10,
@@ -2305,8 +2500,17 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing footwear."
 	icon_state = "shoes"
 	vend_reply = "Enjoy your pair!"
-	product_ads = "Dont be a hobbit: Choose Shoelord.;Shoes snatched? Get on it with Shoelord."
-	product_slogans = "Put your foot down!;One size fits all!;IM WALKING ON SUNSHINE!;No hobbits allowed.;NO PLEASE WILLY, DONT HURT ME- *BZZT*"
+	product_ads = list(
+		"Dont be a hobbit: Choose Shoelord.",
+		"Shoes snatched? Get on it with Shoelord."
+	)
+	product_slogans = list(
+		"Put your foot down!",
+		"One size fits all!",
+		"IM WALKING ON SUNSHINE!",
+		"No hobbits allowed.",
+		"NO PLEASE WILLY, DONT HURT ME- *BZZT*"
+	)
 	products = list(
 		/obj/item/clothing/shoes/black = 10,
 		/obj/item/clothing/shoes/brown = 10,
@@ -2335,8 +2539,17 @@ var/global/num_vending_terminals = 1
 	desc = "A vending machine containing Nazi German supplies. A label reads: \"Remember the gorrilions lost.\""
 	icon_state = "nazi"
 	vend_reply = "SIEG HEIL!"
-	product_ads = "BESTRAFEN die Juden.;BESTRAFEN die Alliierten."
-	product_slogans = "Das Vierte Reich wird zuruckkehren!;ENTFERNEN JUDEN!;Billiger als die Juden jemals geben!;Rader auf dem adminbus geht rund und rund.;Warten Sie, warum wir wieder hassen Juden?- *BZZT*"
+	product_ads = list(
+		"BESTRAFEN die Juden.",
+		"BESTRAFEN die Alliierten."
+	)
+	product_slogans = list(
+		"Das Vierte Reich wird zuruckkehren!",
+		"ENTFERNEN JUDEN!",
+		"Billiger als die Juden jemals geben!",
+		"Rader auf dem adminbus geht rund und rund.",
+		"Warten Sie, warum wir wieder hassen Juden?- *BZZT*"
+	)
 	products = list(
 		/obj/item/clothing/head/stalhelm = 20,
 		/obj/item/clothing/head/panzer = 20,
@@ -2405,8 +2618,15 @@ var/global/num_vending_terminals = 1
 	desc = "Rodina-mat' zovyot!"
 	icon_state = "soviet"
 	vend_reply = "The fascist and capitalist svin'ya shall fall, komrade!"
-	product_ads = "Quality worth waiting in line for!; Get Hammer and Sickled!; Sosvietsky soyuz above all!; With capitalist pigsky, you would have paid a fortunetink!"
-	product_slogans = "Craftink in Motherland herself!"
+	product_ads = list(
+		"Quality worth waiting in line for!",
+		"Get Hammer and Sickled!",
+		"Sosvietsky soyuz above all!",
+		"With capitalist pigsky, you would have paid a fortunetink!"
+	)
+	product_slogans = list(
+		"Craftink in Motherland herself!"
+	)
 	products = list(
 		/obj/item/clothing/under/soviet = 20,
 		/obj/item/clothing/head/ushanka = 20,
@@ -2480,8 +2700,18 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/discount
 	name = "\improper Discount Dan's"
 	desc = "A vending machine containing discount snacks. It is owned by the infamous 'Discount Dan' franchise."
-	product_slogans = "Discount Dan, he's the man!;There 'aint nothing better in this world than a bite of mystery.;Don't listen to those other machines, buy my product!;Quantity over Quality!;Don't listen to those eggheads at the CDC, buy now!;Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.;Discount Dan's: Only the best quality produ-*BZZT*"
-	product_ads = "Discount Dan(tm) is not responsible for any damages caused by misuse of his product."
+	product_slogans = list(
+		"Discount Dan, he's the man!",
+		"There 'aint nothing better in this world than a bite of mystery.",
+		"Don't listen to those other machines, buy my product!",
+		"Quantity over Quality!",
+		"Don't listen to those eggheads at the CDC, buy now!",
+		"Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.",
+		"Discount Dan's: Only the best quality produ-*BZZT*"
+	)
+	product_ads = list(
+		"Discount Dan(tm) is not responsible for any damages caused by misuse of his product."
+	)
 	vend_reply = "No refunds."
 	icon_state = DISCOUNT
 	products = list(
@@ -2512,8 +2742,15 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/groans
 	name = "\improper Groans Soda"
 	desc = "A vending machine containing discount drinks. It is owned by the infamous 'Groans' franchise."
-	product_slogans = "Groans: Drink up!;Sponsored by Discount Dan!;Take a sip!;Just one sip, do it!"
-	product_ads = "Try our new 'Double Dan' flavor!"
+	product_slogans = list(
+		"Groans: Drink up!",
+		"Sponsored by Discount Dan!",
+		"Take a sip!",
+		"Just one sip, do it!"
+	)
+	product_ads = list(
+		"Try our new 'Double Dan' flavor!"
+	)
 	vend_reply = "No refunds."
 	icon_state = "groans"
 	products = list(
@@ -2540,8 +2777,14 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/nuka
 	name = "\improper Nuka Cola Machine"
 	desc = "A vending machine filled to the brim with ice cold Nuka Cola!"
-	product_slogans = "A refreshing burst of atomic energy!;Drink like there's no tomorrow!;Take the leap... enjoy a Quantum!"
-	product_ads = "Wouldn't you enjoy an ice cold Nuka Cola right about now?"
+	product_slogans = list(
+		"A refreshing burst of atomic energy!",
+		"Drink like there's no tomorrow!",
+		"Take the leap... enjoy a Quantum!"
+	)
+	product_ads = list(
+		"Wouldn't you enjoy an ice cold Nuka Cola right about now?"
+	)
 	vend_reply = "Enjoy a Nuka break!"
 	icon_state = "nuka"
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 15)
@@ -2554,8 +2797,14 @@ var/global/num_vending_terminals = 1
 	name = "\improper PietyVend"
 	desc = "A vending machine containing religious supplies and clothing. A label reads: \"A holy vendor for a pious man.\""
 	req_access = list(access_chapel_office)
-	product_slogans = "Bene orasse est bene studuisse.;Beati pauperes spiritu.;Di immortales virtutem approbare, non adhibere debent."
-	product_ads = "Deus tecum."
+	product_slogans = list(
+		"Bene orasse est bene studuisse.",
+		"Beati pauperes spiritu.",
+		"Di immortales virtutem approbare, non adhibere debent."
+	)
+	product_ads = list(
+		"Deus tecum."
+	)
 	vend_reply = "Deus vult!"
 	icon_state = "chapel"
 	products = list(
@@ -2595,8 +2844,12 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "\improper Trader Supply"
 	desc = "Its coin groove has been modified."
-	product_slogans = "Profits."
-	product_ads = "When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
+	product_slogans = list(
+		"Profits."
+	)
+	product_ads = list(
+		"When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
+	)
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
 	products = list (
@@ -2636,8 +2889,14 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
 	desc = "The ultimate vendor for any aspiring space stylist."
-	product_slogans = "Haircuts for everyone!;Choose your own style!;A new look avaliable now!"
-	product_ads = "Our new hairdye formula, now avaliable in any color!"
+	product_slogans = list(
+		"Haircuts for everyone!",
+		"Choose your own style!",
+		"A new look avaliable now!"
+	)
+	product_ads = list(
+		"Our new hairdye formula, now avaliable in any color!"
+	)
 	vend_reply = "Enjoy your new look!"
 	icon_state = "barber"
 	products = list(
@@ -2659,8 +2918,14 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/makeup
 	name = "\improper Sapphire Cosmetics"
 	desc = "A vending machine full of cosmetics and beauty products."
-	product_slogans = "There is no such thing as natural beauty.; Wear the look of the future.;Be the beauty in the eye of every beholder."
-	product_ads = "Why be yourself when you can be perfection?"
+	product_slogans = list(
+		"There is no such thing as natural beauty.",
+		"Wear the look of the future.",
+		"Be the beauty in the eye of every beholder."
+	)
+	product_ads = list(
+		"Why be yourself when you can be perfection?"
+	)
 	vend_reply = "The other girls will be so envious."
 	icon_state = "makeup"
 	products = list(
@@ -2686,7 +2951,13 @@ var/global/num_vending_terminals = 1
 	name = "\improper Circus of Values"
 	desc = "The Circus of Values Vending Machine offers a variety of items for sale. Most Vending Machines have items at the bottom that will only become available if you successfully hack the machine."
 	//Desc text is a direct quote from the Bioshock description
-	product_slogans = "Hahahahahahaha!;Welcome to the Circus of Values!;Come back when you get some money, buddy!;Hey, I've got a family to feed!;No refunds, no returns!"
+	product_slogans = list(
+		"Hahahahahahaha!",
+		"Welcome to the Circus of Values!",
+		"Come back when you get some money, buddy!",
+		"Hey, I've got a family to feed!",
+		"No refunds, no returns!"
+	)
 	vend_reply = "Tell your friends about the Circus of Values!"
 	icon_state = "circus"
 	products = list(
