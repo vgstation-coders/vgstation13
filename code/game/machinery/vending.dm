@@ -716,7 +716,7 @@ var/global/num_vending_terminals = 1
 		return
 
 	var/dat = "<TT><center><b>[vendorname]</b></center><hr/>" //display the name, and added a horizontal rule
-	if(prob(ads_chance))
+	if(product_ads.len && prob(ads_chance))
 		dat += "<marquee>[pick(product_ads)]</marquee><hr/>"
 	dat += "<br><b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
 
@@ -1206,8 +1206,7 @@ var/global/num_vending_terminals = 1
 		"Coffee helps you work!",
 		"Try some tea.",
 		"We hope you like the best!",
-		"Try our new chocolate!",
-		"Admin conspiracies"
+		"Try our new chocolate!"
 	)
 	icon_state = COFFEE
 	icon_vend = "coffee-vend"
@@ -1246,7 +1245,7 @@ var/global/num_vending_terminals = 1
 		"Have a snack.",
 		"Snacks are good for you!",
 		"Have some more Getmore!",
-		"Best quality snacks straight from mars.",
+		"Best quality snacks straight from Mars.",
 		"We love chocolate!",
 		"Try our new jerky!"
 	)
