@@ -464,11 +464,19 @@ var/global/list/loopModeNames=list(
 	update_icon()
 	update_music()
 
-/obj/machinery/media/jukebox/wrenchAnchor(mob/user)
-	if(..())
-		playing = emagged
-		update_music()
-		update_icon()
+/obj/machinery/media/jukebox/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	playing = emagged
+	update_music()
+	update_icon()
+
+	// Needed, or jukeboxes will fail to unhook from previous areas.
+	if(!anchored)
+		disconnect_media_source()
+	else
+		update_media_source()
 
 /obj/machinery/media/jukebox/proc/successful_purchase()
 		next_song = selected_song

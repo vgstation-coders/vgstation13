@@ -19,8 +19,6 @@
 	. = ..()
 	laws = new base_law_type
 
-/obj/structure/AIcore/wrenchAnchor/wrenchAnchor(var/mob/user)
-
 /obj/structure/AIcore/attackby(obj/item/P as obj, mob/user as mob)
 	if(iswrench(P))
 		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
