@@ -23,7 +23,7 @@
 	penetration_dampening = 2
 	animation_delay = 7
 	var/obj/machinery/smartglass_electronics/smartwindow
-	var/window_is_opaque = 0 //The var that helps darken the glass when the door opens/closes
+	var/window_is_opaque = false //The var that helps darken the glass when the door opens/closes
 
 /obj/machinery/door/window/New()
 	..()
@@ -47,10 +47,10 @@
 	if(density) //window is CLOSED
 		if(window_is_opaque) //Is it dark?
 			set_opacity(0) //Make it light.
-			window_is_opaque = 0
+			window_is_opaque = false
 		else
 			set_opacity(1) // Else, make it dark.
-			window_is_opaque = 1
+			window_is_opaque = true
 	else //Window is OPEN!
 		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
 	return opacity
