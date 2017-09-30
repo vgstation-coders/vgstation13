@@ -2406,10 +2406,10 @@ var/global/num_vending_terminals = 1
 	vend_reply = "Take care now!"
 	product_ads = list(
 		"Buy some hats!",
-		"A bare head is absoloutly ASKING for a robusting!"
+		"A bare head is absolutely ASKING for a robusting!"
 	)
 	product_slogans = list(
-		"Warning, not all hats are dog/monkey compatable. Apply forcefully with care.",
+		"Warning, not all hats are dog/monkey compatible. Apply forcefully with care.",
 		"Apply directly to the forehead.",
 		"Who doesn't love spending cash on hats?!",
 		"From the people that brought you collectable hat crates, Hatlord!"
