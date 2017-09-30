@@ -334,7 +334,7 @@
 			var/obj/C = loc
 			C.update_icon()
 
-	else if(istype(P, /obj/item/weapon/photo))
+	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(user.drop_item(P, src))
 			if(img)
 				to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
