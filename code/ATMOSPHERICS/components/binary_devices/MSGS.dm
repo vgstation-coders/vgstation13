@@ -246,8 +246,10 @@
 		if(on)
 			overlays += image(icon = icon, icon_state = "i")
 
-/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(mob/user)
-	..()
+/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user) 
+	. = ..()
+	if(!.)
+		return
 	if(anchored)
 		if(dir & (NORTH|SOUTH))
 			initialize_directions = NORTH|SOUTH

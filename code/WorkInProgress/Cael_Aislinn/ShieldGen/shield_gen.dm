@@ -86,13 +86,14 @@
 	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 
 /obj/machinery/shield_gen/wrenchAnchor(var/mob/user)
-	if(..())
-		if(anchored)
-			find_capacitor()
-		else if(owned_capacitor)
-			owned_capacitor = null
-		nanomanager.update_uis(src)
-		return 1
+	. = ..()
+	if(!.)
+		return
+	if(anchored)
+		find_capacitor()
+	else if(owned_capacitor)
+		owned_capacitor = null
+	nanomanager.update_uis(src)
 
 /obj/machinery/shield_gen/attackby(var/obj/item/W, var/mob/user)
 	if(..())

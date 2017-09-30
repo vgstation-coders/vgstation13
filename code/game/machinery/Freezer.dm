@@ -66,19 +66,14 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(mob/user)
+/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(var/mob/user)
 	if(on)
 		to_chat(user, "You have to turn off \the [src] first!")
-		return -1
+		return FALSE
 	. = ..()
-	if(!anchored)
-		verbs += rotate_verbs
-		if(node)
-			node.disconnect(src)
-			qdel(network)
-			network = null
-			node = null
-	else if(anchored)
+	if(!.)
+		return
+	if(anchored)
 		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
@@ -86,6 +81,14 @@
 		if (node)
 			node.initialize()
 			node.build_network()
+	else
+		verbs += rotate_verbs
+		if(node)
+			node.disconnect(src)
+			qdel(network)
+			network = null
+			node = null
+		
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -235,19 +238,14 @@
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(mob/user)
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(var/mob/user)
 	if(on)
 		to_chat(user, "You have to turn off \the [src] first!")
-		return -1
+		return FALSE
 	. = ..()
-	if(!anchored)
-		verbs += rotate_verbs
-		if(node)
-			node.disconnect(src)
-			qdel(network)
-			network = null
-			node = null
-	else if(anchored)
+	if(!.)
+		return
+	if(anchored)
 		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
@@ -255,6 +253,13 @@
 		if (node)
 			node.initialize()
 			node.build_network()
+		verbs += rotate_verbs
+	else
+		node.disconnect(src)
+		qdel(network)
+		network = null
+		node = null
+		
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)
 	user.set_machine(src)
