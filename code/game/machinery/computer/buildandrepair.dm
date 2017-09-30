@@ -373,7 +373,7 @@
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(iswrench(P) && wrenchAnchor(user))
+			if(iswrench(P) && wrenchAnchor(user) == 1)
 				src.state = 1
 				return 1
 			if(iswelder(P))
@@ -390,7 +390,7 @@
 						qdel(src)
 				return 1
 		if(1)
-			if(iswrench(P) && wrenchAnchor(user))
+			if(iswrench(P) && wrenchAnchor(user) == 1)
 				src.state = 0
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
