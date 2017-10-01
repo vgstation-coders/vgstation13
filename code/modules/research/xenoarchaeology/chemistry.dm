@@ -6,6 +6,7 @@ datum/reagent/tungsten
 	description = "A chemical element, and a strong oxidising agent."
 	reagent_state = SOLID
 	color = "#DCDCDC"  // rgb: 220, 220, 220, silver
+	density = 19.25
 
 datum/reagent/lithiumsodiumtungstate
 	name = "Lithium Sodium Tungstate"

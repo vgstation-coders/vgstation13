@@ -316,7 +316,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 */
 
 /datum/reagents/proc/metabolize(var/mob/M, var/alien)
-	if(M)
+	if(M && chem_temp != M.bodytemperature)
 		chem_temp = M.bodytemperature
 		handle_reactions()
 	for(var/A in reagent_list)
@@ -730,6 +730,42 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 /datum/reagents/proc/is_full()
 	return total_volume >= maximum_volume
+
+/datum/reagents/proc/get_heatcapacity()
+	var/heat_capacity = 0
+
+	if(reagent_list.len)
+		for(var/datum/reagent/R in reagent_list)
+			heat_capacity += R.volume*R.specheatcap
+
+	return heat_capacity
+
+/datum/reagents/proc/get_overall_mass()
+	//M = DV
+
+	var/overall_mass = 0
+
+	if(reagent_list.len)
+		for(var/datum/reagent/R in reagent_list)
+			overall_mass += R.density*R.volume
+
+	return overall_mass
+
+/datum/reagents/proc/heating(var/received_temperature)
+	/*
+	Q/mc = deltaT
+	Q = heat energy transferred (Joules)
+	m = mass of the liquid
+	c = specific heat capacity of the liquid
+	deltaT = change in temperature of the liquid
+	*/
+
+	var/heat_capacity = get_heatcapacity()
+	var/energy = received_temperature //Not strictly correct, but couldn't find an easy way to convert temperature to joules
+	var/mass = get_overall_mass()
+	var/temp_change = energy / (total_volume * heat_capacity)
+	chem_temp = min(chem_temp + temp_change, received_temperature)
+	handle_reactions()
 ///////////////////////////////////////////////////////////////////////////////////
 
 

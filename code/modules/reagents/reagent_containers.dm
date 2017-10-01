@@ -366,6 +366,5 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return 1
 
 /obj/item/weapon/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	reagents.chem_temp = min(exposed_temperature, reagents.chem_temp+30)
-	reagents.handle_reactions()
+	reagents.heating(exposed_temperature)
 	..()

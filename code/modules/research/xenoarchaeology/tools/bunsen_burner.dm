@@ -11,6 +11,10 @@
 	pixel_y = 15 * PIXEL_MULTIPLIER
 	ghost_read = 0
 
+/obj/machinery/bunsen_burner/New()
+	..()
+	processing_objects.Remove(src)
+
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		if(held_container)
@@ -26,10 +30,8 @@
 		to_chat(user, "<span class='warning'>You can't put the [W] onto the [src].</span>")
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container)
-		held_container.reagents.chem_temp += max(1, (1833.15 - held_container.reagents.chem_temp) * 0.01) //Highest temperature of a bunsen burner is 1560 C
-		held_container.reagents.chem_temp = round(held_container.reagents.chem_temp)
-		held_container.reagents.handle_reactions()
+	if(held_container && heating)
+		held_container.reagents.heating(1833.15)//Highest temperature of a bunsen burner is 1560 C
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
