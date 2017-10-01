@@ -23,7 +23,7 @@
 	penetration_dampening = 2
 	animation_delay = 7
 	var/obj/machinery/smartglass_electronics/smartwindow
-	var/was_opaque
+	var/window_is_opaque = TRUE //The var that helps darken the glass when the door opens/closes
 
 /obj/machinery/door/window/New()
 	..()
@@ -39,12 +39,20 @@
 	..()
 
 /obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
-	if(opacity)
+	if(window_is_opaque) //Start with coloring the windoor. Always.
 		animate(src, color="#FFFFFF", time=5)
-		set_opacity(0)
 	else
 		animate(src, color="#222222", time=5)
-		set_opacity(1)
+	
+	if(density) //window is CLOSED
+		if(window_is_opaque) //Is it dark?
+			set_opacity(0) //Make it light.
+			window_is_opaque = TRUE
+		else
+			set_opacity(1) // Else, make it dark.
+			window_is_opaque = FALSE
+	else //Window is OPEN!
+		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
 	return opacity
 	
 /obj/machinery/door/window/examine(mob/user as mob)
@@ -128,9 +136,8 @@
 
 	explosion_resistance = 0
 	density = 0
-	if (smartwindow && opacity)
-		set_opacity(0) //Else we'd get opaque open windoors!
-		was_opaque = 1
+	if (smartwindow && window_is_opaque)
+		set_opacity(0) //You can see through open windows
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -147,9 +154,8 @@
 
 	density = 1
 	explosion_resistance = initial(explosion_resistance)
-	if (smartwindow && was_opaque)
+	if (smartwindow && window_is_opaque)
 		set_opacity(1)
-		was_opaque = 0
 	update_nearby_tiles()
 
 	sleep(animation_delay)
@@ -239,7 +245,8 @@
 			if(smartwindow)
 				qdel(smartwindow)
 				smartwindow = null
-				if (opacity)
+				if (window_is_opaque)
+					window_is_opaque = !window_is_opaque
 					smart_toggle()
 				drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 			qdel(src)
@@ -258,9 +265,6 @@
 		LT.use(1)
 		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")	
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
-		if (!density) //if it's open, keep it see-through
-			opacity = 0
-			was_opaque = 1
 		return smartwindow
 	
 	//If its a multitool and our windoor is smart, open the menu
