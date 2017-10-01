@@ -169,7 +169,7 @@
 		sharpness = 0
 		sharpness_flags = 0
 	else if(!held)
-		to_chat(user, "\The [src] lacks a cautery attatchment.")
+		to_chat(user, "\The [src] lacks a cautery attachment.")
 		return
 	else
 		to_chat(user, "You return the scalpel to cutting mode.")
