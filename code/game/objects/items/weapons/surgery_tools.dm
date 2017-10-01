@@ -81,40 +81,21 @@
 	damtype = "fire"
 	force = 10.0
 	throwforce = 5.0
-	var/flip = /obj/item/weapon/scalpel/laser
-
-/obj/item/weapon/cautery/laser/attack_self(mob/user)
-	var/old_loc = loc
-	if(loc == user)
-		user.drop_from_inventory(src)
-	else if(ismob(loc))
-		var/mob/holder = loc
-		holder.drop_from_inventory(src)
-	if(flip)
-		if(ispath(flip, /obj/item))
-			var/obj/item/FlipItem = new flip(old_loc)
-			if(ismob(old_loc))
-				var/mob/M = old_loc
-				M.put_in_hands(FlipItem)
-	to_chat(user, "You return the scalpel to cutting mode.")
-	qdel(src)
 
 /obj/item/weapon/cautery/laser/tier1
-	name = "basic laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved. Cutting mode is disabled."
-	icon_state = "scalpel_laser1_off"
+	name = "basic laser cautery"
+	desc = "A laser cautery module detached from a basic laser scalpel. You can attatch it to a laser scalpel."
+	icon_state = "cautery_T1"
 	item_state = "laserscalpel1"
 	surgery_speed = 0.6
-	flip = /obj/item/weapon/scalpel/laser/tier1
 
 /obj/item/weapon/cautery/laser/tier2
-	name = "high-precision laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks to be the pinnacle of precision energy cutlery! Cutting mode is disabled."
-	icon_state = "scalpel_laser2_off"
+	name = "high-precision laser cautery"
+	desc = "A laser cautery module detached from a high-precision laser scalpel. You can attatch it to a laser scalpel."
+	icon_state = "cautery_T2"
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
-	flip = /obj/item/weapon/scalpel/laser/tier2
 
 
 /obj/item/weapon/surgicaldrill
@@ -170,50 +151,84 @@
 
 
 /obj/item/weapon/scalpel/laser
+	icon_state = "stabslash"
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
-	var/flip = /obj/item/weapon/cautery/laser
+	var/cauterymode = 0 //1 = cautery enabled
+	var/obj/item/weapon/scalpel/laser/held
+
+/obj/item/weapon/scalpel/laser/New()
+	..()
+	icon_state = "scalpel"
+	held = new /obj/item/weapon/cautery/laser(src)
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
-	var/old_loc = loc
-	if(loc == user)
-		user.drop_from_inventory(src)
-	else if(ismob(loc))
-		var/mob/holder = loc
-		holder.drop_from_inventory(src)
-	if(flip)
-		if(ispath(flip, /obj/item))
-			var/obj/item/FlipItem = new flip(old_loc)
-			if(ismob(old_loc))
-				var/mob/M = old_loc
-				M.put_in_hands(FlipItem)
-	to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
-	qdel(src)
+	if(!cauterymode && held)
+		to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
+		heat_production = 1600
+		sharpness = 0
+		sharpness_flags = 0
+	else if(!held)
+		to_chat(user, "\The [src] lacks a cautery attatchment.")
+		return
+	else
+		to_chat(user, "You return the scalpel to cutting mode.")
+		heat_production = 0
+		sharpness = initial(sharpness)
+		sharpness_flags = initial(sharpness_flags)
+	cauterymode = !cauterymode
+
+/obj/item/weapon/scalpel/laser/examine()
+	..()
+	if(!cauterymode)
+		to_chat(usr, "\The [src] is in cutting mode.")
+	else
+		to_chat(usr, "\The [src] is in cautery mode.")
+
+/obj/item/weapon/scalpel/laser/attackby(var/obj/item/used_item, mob/user)
+	if(istype(used_item, /obj/item/weapon/screwdriver) && cauterymode)
+		if(held)
+			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
+			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			held.add_fingerprint(user)
+			held.forceMove(get_turf(src))
+			held = null
+			heat_production = 0
+			sharpness = initial(sharpness)
+			sharpness_flags = initial(sharpness_flags)
+			cauterymode = 0
+	else if(istype(used_item, /obj/item/weapon/cautery/laser))
+		if(!held)
+			to_chat(user, "<span class='notice'>You attach \the [used_item] into \the [src].</span>")
+			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			user.drop_item(used_item, src)
+			src.held = used_item
+
 
 /obj/item/weapon/scalpel/laser/tier1
 	name = "basic laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved. Cutting mode is enabled."
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
 	icon_state = "scalpel_laser1"
 	item_state = "laserscalpel1"
 	surgery_speed = 0.6
-	flip = /obj/item/weapon/cautery/laser/tier1
 
 /obj/item/weapon/scalpel/laser/tier1/New()
 	..()
 	icon_state = "scalpel_laser1_off"
+	held = new /obj/item/weapon/cautery/laser/tier1(src)
 
 /obj/item/weapon/scalpel/laser/tier2
 	name = "high-precision laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks to be the pinnacle of precision energy cutlery! Cutting mode is enabled."
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks to be the pinnacle of precision energy cutlery!"
 	icon_state = "scalpel_laser2"
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
-	flip = /obj/item/weapon/cautery/laser/tier2
 
 /obj/item/weapon/scalpel/laser/tier2/New()
 	..()
 	icon_state = "scalpel_laser2_off"
+	held = new /obj/item/weapon/cautery/laser/tier2(src)
 
 
 /obj/item/weapon/circular_saw

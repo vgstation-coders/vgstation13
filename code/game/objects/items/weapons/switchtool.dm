@@ -255,7 +255,7 @@
 			if(!(has_tech & BT))
 				stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
 				stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
-				stored_modules["/obj/item/weapon/cautery:Cautery"] = new /obj/item/weapon/cautery(src)
+				stored_modules["/obj/item/weapon/cautery/laser/tier1:Cautery"] = new /obj/item/weapon/cautery(src)
 				stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
 				stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
 				stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
@@ -405,7 +405,7 @@
 						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null,
 						"/obj/item/weapon/circular_saw:Circular saw" = null,
 						"/obj/item/weapon/surgicaldrill:Surgical drill" = null,
-						"/obj/item/weapon/cautery:Cautery" = null,
+						"/obj/item/weapon/cautery/laser/tier1:Cautery" = null,
 						"/obj/item/weapon/hemostat:Hemostat" = null,
 						"/obj/item/weapon/retractor:Retractor" = null,
 						"/obj/item/weapon/bonesetter:Bonesetter" = null,
