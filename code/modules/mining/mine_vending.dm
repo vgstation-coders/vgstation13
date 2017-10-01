@@ -34,6 +34,9 @@
 		/obj/item/weapon/pickaxe/gold = 1,
 		/obj/item/weapon/pickaxe/diamond = 1,
 		)
+	vouched = list(
+		/obj/item/weapon/pickaxe/hand = 1,
+		)
 	prices = list(
 		/obj/item/toy/canary = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 100,
