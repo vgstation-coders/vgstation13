@@ -2005,3 +2005,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Strange and Bright stack of packs"
 	group = "Vending Machine packs"
 	hidden = 1
+
+/datum/supply_packs/miningmachines
+	name = "Dwarven Mining Equipment stack of packs"
+	contains = list(/obj/structure/vendomatpack/mining,
+					/obj/structure/vendomatpack/mining)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Mining stack of packs"
+	group = "Vending Machine packs"
