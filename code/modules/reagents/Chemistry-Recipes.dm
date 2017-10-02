@@ -910,6 +910,31 @@
 	required_reagents = list(SOLANINE = 1, WATER = 4)
 	result_amount = 5
 
+// Special Reactions for Plasma Beaker
+/datum/chemical_reaction/plasmabeakerdexalin
+	name = "Plasma Beaker Dexalin"
+	id = DEXALIN
+	result = DEXALIN
+	required_reagents = list(OXYGEN = 2)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerleporazine
+	name = "Leporazine"
+	id = LEPORAZINE
+	result = LEPORAZINE
+	required_reagents = list(SILICON = 1, COPPER = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerclonexadone
+	name = "Clonexadone"
+	id = CLONEXADONE
+	result = CLONEXADONE
+	required_reagents = list(CRYOXADONE = 1, SODIUM = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 /datum/chemical_reaction/mimicshift
 	name = "Shapeshift"
