@@ -94,7 +94,7 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
-		
+
 		if(Subject.eyecheck() > 0)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else
@@ -254,3 +254,4 @@
 
 /obj/item/device/flash/revsquad
 	limited_conversions = REVSQUAD_FLASH_USES
+	mech_flags = MECH_SCAN_FAIL
