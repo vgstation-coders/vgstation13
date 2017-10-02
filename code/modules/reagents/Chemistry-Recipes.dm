@@ -452,9 +452,8 @@
 
 		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
 
-		var/eye_safety = 0
-
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
+			var/eye_safety = 0
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
 
