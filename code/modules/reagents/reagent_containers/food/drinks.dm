@@ -258,13 +258,6 @@
 
 	..()
 
-/obj/item/weapon/reagent_containers/food/drinks/attackby(obj/item/I, mob/user, params)
-	var/added_heat = I.is_hot()
-	if(added_heat && reagents)
-		reagents.heating(added_heat)
-		to_chat(user, "<span class='notice'>You heat [src] with [I].</span>")
-	..()
-
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
 
@@ -1314,6 +1307,7 @@
 		slot_flags = SLOT_BELT
 		return 1
 	else if(I.is_hot())
+		attempt_heating(I, user)
 		light(user,I)
 		update_brightness(user)
 	else if(istype(I, /obj/item/device/assembly/igniter))

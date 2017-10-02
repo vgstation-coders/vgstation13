@@ -751,7 +751,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return overall_mass
 
-/datum/reagents/proc/heating(var/received_temperature)
+/datum/reagents/proc/heating(var/power_transfer, var/received_temperature)
 	/*
 	Q/mc = deltaT
 	Q = heat energy transferred (Joules)
@@ -759,12 +759,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	c = specific heat capacity of the liquid
 	deltaT = change in temperature of the liquid
 	*/
-
+	if(!total_volume || !reagent_list.len)
+		return
 	var/heat_capacity = get_heatcapacity()
-	var/energy = received_temperature //Not strictly correct, but couldn't find an easy way to convert temperature to joules
+	var/energy = power_transfer
 	var/mass = get_overall_mass()
-	var/temp_change = energy / (total_volume * heat_capacity)
-	chem_temp = min(chem_temp + temp_change, received_temperature)
+	var/temp_change = energy / (mass * heat_capacity)
+	if(power_transfer > 0)
+		chem_temp = min(chem_temp + temp_change, received_temperature)
+	else
+		chem_temp = max(chem_temp + temp_change, received_temperature)
 	handle_reactions()
 ///////////////////////////////////////////////////////////////////////////////////
 

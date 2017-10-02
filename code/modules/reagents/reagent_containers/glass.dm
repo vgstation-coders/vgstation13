@@ -94,6 +94,7 @@
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
+	attempt_heating(W, user)
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
@@ -370,6 +371,7 @@
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
+	attempt_heating(D, user)
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()

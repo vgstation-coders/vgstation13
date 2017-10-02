@@ -31,7 +31,7 @@
 
 /obj/machinery/bunsen_burner/process()
 	if(held_container && heating)
-		held_container.reagents.heating(1833.15)//Highest temperature of a bunsen burner is 1560 C
+		held_container.reagents.heating(2500, 1833.15)//Highest temperature of a bunsen burner is 1560 C
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
