@@ -1330,6 +1330,7 @@
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/decoy
 	volume = 120	//liters
+	origin_tech = Tc_MATERIALS + "=3"
 	var/decoy_phrase = null
 
 /obj/item/toy/balloon/decoy/verb/record_phrase()
