@@ -108,6 +108,9 @@
 
 
 /obj/machinery/shield/hitby(AM as mob|obj)
+	. = ..()
+	if(.)
+		return
 	//Let everyone know we've been hit!
 	visible_message("<span class='danger'>[src] was hit by [AM].</span>")
 
@@ -132,10 +135,6 @@
 	//The shield becomes dense to absorb the blow.. purely asthetic.
 	opacity = 1
 	spawn(20) if(src) opacity = 0
-
-	return ..()
-
-
 
 /obj/machinery/shieldgen
 		name = "Emergency shield projector"

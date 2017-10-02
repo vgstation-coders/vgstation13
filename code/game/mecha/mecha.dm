@@ -571,9 +571,11 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/hitby(atom/movable/A as mob|obj) //wrapper
+	. = ..()
+	if(.)
+		return
 	src.log_message("Hit by [A].",1)
 	call((proc_res["dynhitby"]||src), "dynhitby")(A)
-	return
 
 /obj/mecha/proc/dynhitby(atom/movable/A)
 	if(istype(A, /obj/item/mecha_parts/mecha_tracking) && !tracking && prob(25))

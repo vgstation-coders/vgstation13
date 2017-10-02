@@ -146,7 +146,9 @@
 		Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/hitby(atom/movable/AM)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(istype(AM, /obj/item))
 		var/obj/item/T = AM
 		if(T.throwforce)
