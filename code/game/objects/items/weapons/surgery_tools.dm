@@ -178,15 +178,15 @@
 		sharpness_flags = initial(sharpness_flags)
 	cauterymode = !cauterymode
 
-/obj/item/weapon/scalpel/laser/examine()
+/obj/item/weapon/scalpel/laser/examine(mob/user)
 	..()
 	if(!cauterymode)
-		to_chat(usr, "\The [src] is in cutting mode.")
+		to_chat(user, "\The [src] is in cutting mode.")
 	else
-		to_chat(usr, "\The [src] is in cautery mode.")
+		to_chat(user, "\The [src] is in cautery mode.")
 
 /obj/item/weapon/scalpel/laser/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, /obj/item/weapon/screwdriver) && cauterymode)
+	if(isscrewdriver(used_item) && cauterymode)
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
 			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)

@@ -47,9 +47,9 @@
 		var/new_type = text2path(get_module_type(module))
 		stored_modules[module] = new new_type(src)
 
-/obj/item/weapon/switchtool/examine()
+/obj/item/weapon/switchtool/examine(mob/user)
 	..()
-	to_chat(usr, "This one is capable of holding [get_formatted_modules()].")
+	to_chat(user, "This one is capable of holding [get_formatted_modules()].")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
 	if(!user)
