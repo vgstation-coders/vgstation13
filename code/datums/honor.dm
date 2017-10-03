@@ -186,12 +186,14 @@ var/global/datum/honor/honor_highlander = new /datum/honor/highlander()
 // DEFAULTS FOR VARIOUS MODES
 // honor_bomberman
 /datum/honor/bomberman
+	battle_name = "Bomberman Arenas"
 	dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM|DISHONOR_GRAB|DISHONOR_MELEE
 	punishment = DISHON_PUNISH_DEATH
 	disable_dishonorable_chems = TRUE
 
 // honor_highlander
 /datum/honor/highlander
+	battle_name = "Highlander"
 	dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM
 	punishment = DISHON_PUNISH_EYE4EYE
 	disable_dishonorable_chems = TRUE
@@ -218,7 +220,7 @@ var/global/datum/honor/honor_highlander = new /datum/honor/highlander()
 <p>Checked items are considered dishonorable and will be punished.</p>
 <ul>"}
 	for(var/key in all_dishonors)
-		c = (dishonors & all_dishonors[key]) ? "#006600" : "#ff0000"
+		c = (dishonors & all_dishonors[key]) ? "#00ff00" : "#ff0000"
 		html += {"<li><a href="?src=\ref[src];toggledishonor=[all_dishonors[key]]" style="color:[c];">[key]</a></li>"}
 	html += {"
 	</ul>
@@ -226,9 +228,9 @@ var/global/datum/honor/honor_highlander = new /datum/honor/highlander()
 <fieldset>
 	<legend>Toggles</legend>
 	<ul>"}
-	c = (disable_dishonorable_chems) ? "#006600" : "#ff0000"
+	c = (disable_dishonorable_chems) ? "#00ff00" : "#ff0000"
 	html += {"<li><a href="?src=\ref[src];togglechems=1" style="color:[c];">Disable Chems</a></li>"}
-	c = (disable_grab) ? "#006600" : "#ff0000"
+	c = (disable_grab) ? "#00ff00" : "#ff0000"
 	html += {"<li><a href="?src=\ref[src];togglegrabs=1" style="color:[c];">Disable Grabs</a></li>
 	</ul>
 </fieldset>
@@ -237,7 +239,7 @@ var/global/datum/honor/honor_highlander = new /datum/honor/highlander()
 	<p>The selected item will be the punishment applied to the dishonorable.</p>
 	<ul>"}
 	for(var/key in all_dishonor_punishments)
-		c = (punishment == all_dishonor_punishments[key]) ? "#006600" : "#ff0000"
+		c = (punishment == all_dishonor_punishments[key]) ? "#00ff00" : "#ff0000"
 		html += {"<li><a href="?src=\ref[src];setpunishment=[all_dishonor_punishments[key]]" style="color:[c];">[key]</a></li>"}
 	html += {"
 	</ul>
@@ -264,24 +266,33 @@ var/global/datum/honor/honor_highlander = new /datum/honor/highlander()
 				punishment = 0
 				disable_dishonorable_chems = FALSE
 				disable_grab = FALSE
+				message_admins("[key_name_admin(usr)] disabled all dishonors and punishments for honor battle [battle_name].")
 			if("bomberman")
 				dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM|DISHONOR_GRAB|DISHONOR_MELEE
 				punishment = DISHON_PUNISH_DEATH
 				disable_dishonorable_chems = TRUE
 				disable_grab = TRUE
+				message_admins("[key_name_admin(usr)] set the \"bomberman\" preset for honor battle [battle_name].")
 			if("highlander")
 				dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM
 				punishment = DISHON_PUNISH_EYE4EYE
 				disable_dishonorable_chems = TRUE
 				disable_grab = TRUE
+				message_admins("[key_name_admin(usr)] set the \"highlander\" preset for honor battle [battle_name].")
 	else if(href_list["toggledishonor"])
-		dishonors ^= text2num(href_list["toggledishonor"])
+		var/dishonor_flag = text2num(href_list["toggledishonor"])
+		dishonors ^= dishonor_flag
+		message_admins("[key_name_admin(usr)] toggled dishonor [dishonor_flag] for battle [battle_name].")
 	else if(href_list["setpunishment"])
 		punishment = text2num(href_list["setpunishment"])
+		message_admins("[key_name_admin(usr)] set dishonor punishment to [punishment] for battle [battle_name].")
 	else if(href_list["incmaxwarns"])
 		max_marks += text2num(href_list["incmaxwarns"])
+		message_admins("[key_name_admin(usr)] set maximum black marks to [max_marks] for battle [battle_name].")
 	else if(href_list["togglechems"])
 		disable_dishonorable_chems = !disable_dishonorable_chems
+		message_admins("[key_name_admin(usr)] toggled dishonorable chems to [disable_dishonorable_chems ? "off" : "on"] for battle [battle_name].")
 	else if(href_list["togglegrabs"])
 		disable_grab = !disable_grab
+		message_admins("[key_name_admin(usr)] toggled grabs to [disable_dishonorable_chems ? "off" : "on"] for battle [battle_name].")
 	edit(usr)
