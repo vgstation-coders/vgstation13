@@ -117,6 +117,10 @@ Class Procs:
 		for(var/turf/simulated/T in contents)
 			T.set_graphic(air.graphics)
 
+	for(var/connection_edge/E in edges)
+		if(E.sleeping)
+			E.recheck()
+
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)
 	to_chat(M, "O2: [air.oxygen] N2: [air.nitrogen] CO2: [air.carbon_dioxide] P: [air.toxins]")

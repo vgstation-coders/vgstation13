@@ -248,8 +248,6 @@
 			SSair.mark_zone_update(zone)
 			return zone.air
 		else
-			if(!air)
-				make_air()
 			c_copy_air()
 			return air
 	else

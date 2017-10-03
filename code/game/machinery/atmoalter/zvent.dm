@@ -26,4 +26,4 @@
 //						if (!my_air.compare(conn_air))
 //							myturf.reset_delay()
 //							zturf_conn.reset_delay()
-						my_air.share_ratio(conn_air, 1)
+						my_air.share_tiles(conn_air, 1)

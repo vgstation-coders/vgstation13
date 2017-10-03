@@ -23,7 +23,8 @@
 /obj/machinery/atmospherics/miner/New()
 	..()
 	air_contents = new
-	air_contents.volume=1000
+	air_contents.volume = 1000
+	pumping.volume = 1000 //Same as above so copying works correctly
 	air_contents.temperature = T20C
 	AddAir()
 	air_contents.update_values()

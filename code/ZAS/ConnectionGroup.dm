@@ -126,7 +126,7 @@ Class Procs:
 		erase()
 		return
 
-	var/equiv = A.air.share_ratio(B.air, coefficient)
+	var/equiv = A.air.share_tiles(B.air, coefficient)
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
@@ -187,7 +187,7 @@ Class Procs:
 		erase()
 		return
 
-	var/equiv = A.air.share_ratio(air, coefficient, one_way = TRUE)
+	var/equiv = A.air.share_space(air, coefficient)
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))

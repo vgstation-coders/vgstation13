@@ -67,6 +67,7 @@
 /datum/gas_mixture/New(datum/gas_mixture/to_copy)
 	..()
 	if(istype(to_copy))
+		volume = to_copy.volume
 		copy_from(to_copy)
 
 //Turns out that most of the time, people only want to adjust a single gas at a time, and using a proc set up like this just encourages bad behavior.
@@ -454,7 +455,7 @@
 
 
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
-	//Purpose: Duplicates the sample air mixture.
+	//Purpose: Copies the per unit volume properties of sample.
 	//Called by: airgroups splitting, ?
 	//Inputs: Gas to copy
 	//Outputs: 1
@@ -465,7 +466,6 @@
 	toxins = sample.toxins
 
 	temperature = sample.temperature
-	volume = sample.volume
 
 	trace_gases.len = 0
 	if(sample.trace_gases.len > 0)
@@ -475,7 +475,7 @@
 
 			corresponding.moles = trace_gas.moles
 
-	update_values()
+	multiply(volume / sample.volume)
 	return 1
 
 //The general form of the calculation used in compare() to check if two numbers are separated by at least a given abslute value AND relative value.
@@ -563,10 +563,10 @@
 	//Inputs: Gas mix to remove
 	//Outputs: 1
 
-	oxygen = max(oxygen - right_side.oxygen)
-	carbon_dioxide = max(carbon_dioxide - right_side.carbon_dioxide)
-	nitrogen = max(nitrogen - right_side.nitrogen)
-	toxins = max(toxins - right_side.toxins)
+	oxygen = max(0, oxygen - right_side.oxygen)
+	carbon_dioxide = max(0, carbon_dioxide - right_side.carbon_dioxide)
+	nitrogen = max(0, nitrogen - right_side.nitrogen)
+	toxins = max(0, toxins - right_side.toxins)
 
 	if(trace_gases.len || right_side.trace_gases.len)
 		for(var/datum/gas/trace_gas in right_side.trace_gases)
@@ -604,25 +604,32 @@
 	return 1
 
 
-//Each value in this list corresponds to the proportion of gas shared between the gas_mixtures in share_ratio() when connecting_tiles is equal to its index.
-//(If connecting_tiles is greater than 6, it still uses the sixth one.)
-var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
-
-//Shares gas with another gas_mixture based on the number of connecting tiles and the above fixed lookup table.
-/datum/gas_mixture/proc/share_ratio(datum/gas_mixture/other, connecting_tiles, one_way = FALSE)
-	var/ratio = sharing_lookup_table[min(connecting_tiles, sharing_lookup_table.len)] //6 or more interconnecting tiles will max at 66% of air moved per tick.
-
-	if(one_way)
-		other = new(other) //TODO: Make an unsimulated gas_mixture subtype whose remove procs don't actualy remove so this is unnecessary.
-
+//Mixes the given ratio of the two gas_mixtures.
+//Ratio should always be between 0 and 1, of course.
+//The exact values 0 and 1 won't break, but are useless, as they are respectively equivalent to doing nothing and using equalize().
+/datum/gas_mixture/proc/share_ratio(datum/gas_mixture/other, ratio)
 	var/total_volume = volume + other.volume
 
 	var/datum/gas_mixture/holder = remove_ratio(ratio * other.volume / total_volume)
 	merge(other.remove_ratio(ratio * volume / total_volume))
-	if(!one_way)
-		other.merge(holder)
+	other.merge(holder)
 
+
+//Each value in this list corresponds to the proportion of gas shared between the gas_mixtures in share_tiles() when connecting_tiles is equal to its index.
+//(If connecting_tiles is greater than 6, it still uses the sixth one.)
+var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
+
+//Shares gas with another gas_mixture based on the number of connecting tiles and the above fixed lookup table.
+/datum/gas_mixture/proc/share_tiles(datum/gas_mixture/other, connecting_tiles)
+	var/ratio = sharing_lookup_table[min(connecting_tiles, sharing_lookup_table.len)] //6 or more interconnecting tiles will max at 66% of air moved per tick.
+	share_ratio(other, ratio)
 	return compare(other)
+
+/datum/gas_mixture/proc/share_space(datum/gas_mixture/unsim_air, connecting_tiles)
+	unsim_air = new(unsim_air) //First, copy unsim_air so it doesn't get changed.
+	unsim_air.volume += volume + 3 * CELL_VOLUME //Then increase the copy's volume so larger rooms don't drain slowly as fuck.
+		//Why add the 3 * CELL_VOLUME, you ask? To mirror the old behavior. Why did the old behavior add three tiles to the total? I have no idea.
+	return share_tiles(unsim_air, connecting_tiles)
 
 /datum/gas_mixture/proc/english_contents_list()
 	var/all_contents = list()
