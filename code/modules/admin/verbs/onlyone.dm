@@ -103,11 +103,7 @@
 	H.mind.special_role = HIGHLANDER
 
 	// HONOR SYSTEM
-	H.honor = new
-	H.honor.dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM
-	H.honor.punishment = DISHON_PUNISH_EYE4EYE
-	H.honor.disable_dishonorable_chems = TRUE
-	H.honor.setup(H, silent=TRUE)
+	honor_highlander.setup(H, silent=TRUE)
 
 
 	H.mutations.Add(M_HULK) //all highlanders are permahulks

@@ -190,7 +190,7 @@
 			if(I_HURT)
 				dishonor_verb = "punch" // ???
 				dishonor_type = DISHONOR_MELEE
-		if(M.honor.apply_punishment(dishonor_type, dishonor_verb, target=src))
+		if(M.honor.apply_punishment(M, dishonor_type, dishonor_verb, target=src))
 			// EYE4EYE
 			for(var/datum/organ/external/arm in M.organs)
 				if(istype(arm, /datum/organ/external/r_arm) || istype(arm, /datum/organ/external/l_arm))

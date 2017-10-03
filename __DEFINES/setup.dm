@@ -1483,10 +1483,12 @@ var/proccalls = 1
 #define EVENT_OBJECT_INDEX "o"
 #define EVENT_PROC_INDEX "p"
 
+// special_roles.  Was used in honor 1, not any longer.
 #define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
 
 // Honor flags.  Used in highlander, bomberman, and duels.
+// Remember to change all_dishonors!
 #define DISHONOR_ALWAYS   1 // Always counts as dishonorable in apply_punishment.
 #define DISHONOR_DISARM   2 // Disarm is dishonorable
 #define DISHONOR_MELEE    4 // Melee is dishonorable (bombermen?)

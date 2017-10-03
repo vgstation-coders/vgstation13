@@ -44,7 +44,7 @@
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
 	if(user.honor)
-		if(user.honor.apply_punishment(DISHONOR_ALWAYS, "create a baguloth"))
+		if(user.honor.apply_punishment(user, DISHONOR_ALWAYS, "create a baguloth"))
 			user.visible_message("<span class=\"sinister\">[user], thinking \himself clever, starts to cram [src] into [H].  Something far worse happens.</span>",\
 				"<span class='sinister'>Your smug thoughts about your cleverness are quickly interrupted as you suddenly find yourself flattened against the floor under immense, unexplained gravity!</span>",\
 				"<span class=\"sinister\">You hear someone's spine snap, followed by many, many other horrible noises.</span>")

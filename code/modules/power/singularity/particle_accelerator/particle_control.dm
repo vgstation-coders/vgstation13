@@ -41,7 +41,7 @@
 
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
 	if(construction_state >= 3)
-		if(user.honor && user.honor.apply_punishment(DISHONOR_ALWAYS, "interact with \the [src]"))
+		if(user.honor && user.honor.apply_punishment(user, DISHONOR_ALWAYS, "interact with \the [src]"))
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				user.visible_message("<span class=\"sinister\">\The [user] starts to screw with \the [src], but \his[user] hands painfully fall off!</span>",\

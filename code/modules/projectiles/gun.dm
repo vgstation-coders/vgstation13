@@ -142,7 +142,7 @@
 		if(clumsy_check && clumsy_check(M) && prob(50))
 			explode = TRUE
 		if(M.honor)
-			if(M.honor.apply_punishment(DISHONOR_FIREARMS, "discharged a weapon", target))
+			if(M.honor.apply_punishment(M, DISHONOR_FIREARMS, "discharged a weapon", target))
 				message_admins("[M] tried to shoot target=[target] and had their [src] explode. (honor violation)")
 				explode=TRUE
 				dehand=TRUE

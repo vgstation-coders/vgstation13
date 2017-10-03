@@ -52,6 +52,7 @@
 	var/image/narglow = null
 
 	var/datum/honor/honor = null // Battle rule enforcement
+	var/marks = 0 // Number of marks on honor.  AKA: warnings. Manifest as stuns. Work in concert with honor.maxwarns.
 
 	//thou shall always be able to see the Bluespace Rift
 	var/image/riftimage = null

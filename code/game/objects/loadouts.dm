@@ -517,8 +517,4 @@
 	M.name = "Bomberman #[rand(1,999)]"
 	M.mind.special_role = BOMBERMAN
 
-	M.honor = new
-	M.honor.dishonors = DISHONOR_PULL|DISHONOR_FIREARMS|DISHONOR_DISARM|DISHONOR_GRAB|DISHONOR_MELEE
-	M.honor.punishment = DISHON_PUNISH_DEATH
-	M.honor.disable_dishonorable_chems = TRUE
-	M.honor.setup(M, silent=TRUE)
+	honor_bomberman.setup(M, silent=TRUE)
