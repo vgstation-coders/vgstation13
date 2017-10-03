@@ -1021,6 +1021,9 @@ var/global/num_vending_terminals = 1
 	if (extended_inventory)
 		throwable += hidden_records
 
+	if(!throwable.len)
+		return 0
+
 	while (tries)
 		R = pick(throwable)
 		dump_path = R.product_path
