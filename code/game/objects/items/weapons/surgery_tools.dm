@@ -75,23 +75,27 @@
 /obj/item/weapon/cautery/is_hot()
 	return 1
 
-/obj/item/weapon/cautery/laser
-	sharpness = 1.5
+/obj/item/weapon/cautery/laser //Not obtainable normally. Used for the laser scalpel parent.
+	name = "laser cautery"
+	desc = "A laser cautery"
+	icon_state = "cautery_T2old"
+	item_state = "laserscalpel2old"
 	sharpness_flags = HOT_EDGE
 	damtype = "fire"
 	force = 10.0
 	throwforce = 5.0
+	surgery_speed = 0.5
 
 /obj/item/weapon/cautery/laser/tier1
 	name = "basic laser cautery"
-	desc = "A laser cautery module detached from a basic laser scalpel. You can attatch it to a laser scalpel."
+	desc = "A laser cautery module detached from a basic laser scalpel. You can attach it to a laser scalpel."
 	icon_state = "cautery_T1"
 	item_state = "laserscalpel1"
 	surgery_speed = 0.6
 
 /obj/item/weapon/cautery/laser/tier2
 	name = "high-precision laser cautery"
-	desc = "A laser cautery module detached from a high-precision laser scalpel. You can attatch it to a laser scalpel."
+	desc = "A laser cautery module detached from a high-precision laser scalpel. You can attach it to a laser scalpel."
 	icon_state = "cautery_T2"
 	item_state = "laserscalpel2"
 	force = 15.0
@@ -150,16 +154,20 @@
 	return (BRUTELOSS)
 
 
-/obj/item/weapon/scalpel/laser
-	icon_state = "stabslash"
+/obj/item/weapon/scalpel/laser //Not obtainable normally. More to just be a parent to laser scalpels. Three of them were intended it seems but one was dropped so I used the middle tier sprite here.
+	name = "laser scalpel"
+	desc = "A laser scalpel."
+	icon_state = "scalpel_laser2old"
+	item_state = "laserscalpel2old"
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
+	surgery_speed = 0.5
 	var/cauterymode = 0 //1 = cautery enabled
-	var/obj/item/weapon/scalpel/laser/held
+	var/obj/item/weapon/cautery/laser/held
 
 /obj/item/weapon/scalpel/laser/New()
 	..()
-	icon_state = "scalpel"
+	icon_state = "scalpel_laser2old_off"
 	held = new /obj/item/weapon/cautery/laser(src)
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
@@ -198,11 +206,16 @@
 			sharpness_flags = initial(sharpness_flags)
 			cauterymode = 0
 	else if(istype(used_item, /obj/item/weapon/cautery/laser))
-		if(!held)
-			to_chat(user, "<span class='notice'>You attach \the [used_item] into \the [src].</span>")
+		if(held)
+			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
+			return
+		if(!held && user.drop_item(used_item, src))
+			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
 			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
-			user.drop_item(used_item, src)
 			src.held = used_item
+		else
+			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
+			return
 
 
 /obj/item/weapon/scalpel/laser/tier1
@@ -314,6 +327,9 @@
 	throw_speed = 3
 	throw_range = 5
 	attack_verb = list("attacks", "hits", "bludgeons")
+	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+	w_type = RECYK_METAL
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 
 
 //allows you to replace the bone setter in switchtools with it being a setter child rather than a bonegel child
