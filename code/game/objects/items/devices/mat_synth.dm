@@ -32,7 +32,11 @@
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 							 "floor tiles" = /obj/item/stack/tile/plasteel,
-							 "metal rods" = /obj/item/stack/rods)
+							 "metal rods" = /obj/item/stack/rods,
+							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
+							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
+							 "plasteel" = /obj/item/stack/sheet/plasteel)
+	can_scan = list(/obj/item/stack/tile/carpet, /obj/item/stack/tile/arcade, /obj/item/stack/sheet/wood, /obj/item/stack/sheet/mineral/plastic)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
