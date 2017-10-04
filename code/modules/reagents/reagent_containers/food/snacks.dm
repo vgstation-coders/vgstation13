@@ -106,10 +106,20 @@
 	name = "rotten [src.name]"
 	return
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/check_coldness()
+	if(isfreezer(loc)) //Ideally we'll need a better system for freezers
+		return TRUE
+
+	var/turf/simulated/L = loc
+	if(istype(L))
+		var/datum/gas_mixture/env = L.return_air()
+		if(env.temperature < T0C)
+			return TRUE
+
 /obj/item/weapon/reagent_containers/food/snacks/process()
-	var/area/A = get_area(src.loc)
-	if(istype(loc, /obj/structure/closet/secure_closet/freezer))
+	if(check_coldness())
 		return
+
 	cold--
 
 	if(cold <= 0)
