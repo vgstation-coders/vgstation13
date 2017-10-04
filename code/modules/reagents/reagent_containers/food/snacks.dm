@@ -31,6 +31,7 @@
 	var/rotten = FALSE//Is the food rotten ?
 	var/cold = 50 //How much time until it starts decomposing. Timer stops if inside a cold environment
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
+	var/list/valid_freezers = list(/obj/structure/closet/secure_closet/freezer, /obj/structure/closet/crate/freezer/surgery, /obj/machinery/smartfridge)
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -107,7 +108,7 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/check_coldness()
-	if(isfreezer(loc)) //Ideally we'll need a better system for freezers
+	if(is_type_in_list(loc, valid_freezers)) //Ideally we'll need a better system for freezers
 		return TRUE
 
 	var/turf/simulated/L = loc
