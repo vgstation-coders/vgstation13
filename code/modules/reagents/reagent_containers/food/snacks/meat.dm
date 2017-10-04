@@ -9,15 +9,15 @@
 	var/subjectjob = null
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Rot()
 	..()
-	reagents.add_reagent(TOXIN, 6)
-	animate(src, color = grayscale, time = 60)
+	animate(src, color = grayscale, time = 3 SECONDS)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..(A)

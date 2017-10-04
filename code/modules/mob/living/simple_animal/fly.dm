@@ -21,7 +21,7 @@
 	name = "dead fly"
 	desc = "Annoying piece of shit."
 	gender = PLURAL
-	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon = 'icons/obj/bees_and_flies.dmi'
 	icon_state = "fly_dead"
 	anchored = 0
 	mouse_opacity = 1
@@ -37,14 +37,14 @@
 /obj/item/weapon/reagent_containers/food/snacks/fly_eggs
 	name = "fly eggs"
 	desc = "You're not thinking of eating these... are you?"
-	icon = 'icons/mob/mob.dmi'
-	icon_state = "borer egg-growing"
+	icon = 'icons/obj/bees_and_flies.dmi'
+	icon_state = "fly_eggs"
 	bitesize = 3
 	var/time_left_to_hatch = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/fly_eggs/New()
 	..()
-	time_left_to_hatch = rand(10,20)
+	time_left_to_hatch = rand(40,80)
 	processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/fly_eggs/process()
@@ -66,7 +66,7 @@
 
 /mob/living/simple_animal/fly
 	name = "swarm of flies"
-	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon = 'icons/obj/bees_and_flies.dmi'
 	icon_state = "flies1"
 	icon_dead = "bee_dead"
 

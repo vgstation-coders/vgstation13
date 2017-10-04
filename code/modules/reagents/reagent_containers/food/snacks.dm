@@ -29,7 +29,7 @@
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/rotten = FALSE//Is the food rotten ?
-	var/cold = 50 //How much time until it starts decomposing. Timer stops if inside a cold environment
+	var/cold = 200 //How much time until it starts decomposing. Timer stops if inside a cold environment
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	var/list/valid_freezers = list(/obj/structure/closet/secure_closet/freezer, /obj/structure/closet/crate/freezer/surgery, /obj/machinery/smartfridge)
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
@@ -105,6 +105,10 @@
 	rotten = TRUE
 	cold = 0
 	name = "rotten [src.name]"
+	reagents.add_reagent(TOXIN, 6)
+	if(prob(25))
+		new /obj/item/weapon/reagent_containers/food/snacks/fly_eggs(src)
+	processing_objects.Remove(src)
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/check_coldness()
@@ -125,9 +129,6 @@
 
 	if(cold <= 0)
 		Rot()
-		if(prob(100))
-			new /obj/item/weapon/reagent_containers/food/snacks/fly_eggs(src)
-		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/living/M, mob/user, def_zone, eat_override = 0)	//M is target of attack action, user is the one initiating it
 	if(!eatverb)
