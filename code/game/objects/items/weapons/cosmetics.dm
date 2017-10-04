@@ -342,6 +342,8 @@
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
 		return 0
+	if(istype(target, /obj/machinery/singularity))
+		return 0
 	return 1
 
 /obj/item/weapon/invisible_spray/permanent
