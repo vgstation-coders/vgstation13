@@ -179,8 +179,9 @@
 
 //When an object is thrown at the window
 /obj/machinery/door/window/hitby(AM as mob|obj)
-
-	..()
+	. = ..()
+	if(.)
+		return
 	visible_message("<span class='warning'>The glass door was hit by [AM].</span>", 1)
 	var/tforce = 0
 	if(ismob(AM))
@@ -189,8 +190,6 @@
 		tforce = AM:throwforce
 	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
 	take_damage(tforce)
-	//..() //Does this really need to be here twice? The parent proc doesn't even do anything yet. - Nodrak
-	return
 
 /obj/machinery/door/window/attack_ai(mob/user as mob)
 	add_hiddenprint(user)

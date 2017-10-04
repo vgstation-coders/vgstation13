@@ -39,6 +39,9 @@
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/hitby(atom/movable/AM, speed)//No floor tiling them to death, wiseguy
+	. = ..()
+	if(.)
+		return
 	if(istype(AM, /obj/item))
 		var/obj/item/T = AM
 		if(!stat)

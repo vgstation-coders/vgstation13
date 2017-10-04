@@ -563,8 +563,9 @@ its easier to just keep the beam vertical.
 	qdel(src)
 	return 1
 
-/atom/proc/hitby(atom/movable/AM as mob|obj)
-	return
+// Returns TRUE if it's been handled, children should return if parent has already handled
+/atom/proc/hitby(var/atom/movable/AM)
+	. = isobserver(AM)
 
 /*
 /atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
