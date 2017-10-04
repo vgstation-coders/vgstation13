@@ -329,6 +329,16 @@ var/list/one_way_windows
 		if(one_way)
 			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
 			return
+		if(is_fulltile())
+			update_nearby_tiles()
+			dir = turn(get_dir(get_turf(user),get_turf(src)),180)
+			if(!(dir % 3) || !(dir % 5))	//if its direction is diagonal
+				if(prob(50))
+					dir = turn(dir,45)
+				else
+					dir = turn(dir,315)
+			update_nearby_tiles()
+			ini_dir = dir
 		var/obj/item/stack/sheet/mineral/plastic/P = W
 		one_way = 1
 		if(!one_way_windows)
