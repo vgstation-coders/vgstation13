@@ -264,22 +264,21 @@
 
 // Human ///////////////////////////////////////////////////////
 
-/datum/recipe/human //Parent datum only
-	make_food(var/obj/container as obj)
-		var/human_name
-		var/human_job
-		for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
-			if(HM.subjectname)
-				human_name = HM.subjectname
-				human_job = HM.subjectjob
-				break
-		var/lastname_index = findtext(human_name, " ")
-		if(lastname_index)
-			human_name = copytext(human_name,lastname_index+1)
-		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
-		HB.name = human_name+HB.name
-		HB.job = human_job
-		return HB
+/datum/recipe/human/make_food(var/obj/container as obj)
+	var/human_name
+	var/human_job
+	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
+		if(HM.subjectname)
+			human_name = HM.subjectname
+			human_job = HM.subjectjob
+			break
+	var/lastname_index = findtext(human_name, " ")
+	if(lastname_index)
+		human_name = copytext(human_name,lastname_index+1)
+	var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
+	HB.name = human_name+HB.name
+	HB.job = human_job
+	return HB
 
 /datum/recipe/human/burger
 	reagents = list(FLOUR = 5)
@@ -2327,4 +2326,3 @@
 		)
 	result = /obj/item/weapon/cell/crepe
 	time = 300
-

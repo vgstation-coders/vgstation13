@@ -16,7 +16,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Rot()
 	..()
-	animate(src, color = grayscale)
+	reagents.add_reagent(TOXIN, 6)
+	animate(src, color = grayscale, time = 60)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
 	..(A)

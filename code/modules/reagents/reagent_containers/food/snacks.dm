@@ -28,7 +28,7 @@
 	var/wrapped = 0 //Is the food wrapped (preventing one from eating until unwrapped)
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
-	var/rotten = 0 //Is the food rotten ?
+	var/rotten = FALSE//Is the food rotten ?
 	var/cold = 50 //How much time until it starts decomposing. Timer stops if inside a cold environment
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
@@ -101,7 +101,7 @@
 		processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/Rot()
-	rotten = 1
+	rotten = TRUE
 	cold = 0
 	name = "rotten [src.name]"
 	return

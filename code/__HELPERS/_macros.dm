@@ -137,7 +137,7 @@
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
-#define isfreezer(A) is_type_in_list(A, list(/obj/structure/closet/secure_closet/freezer, /obj/structure/closet/crate/freezer/surgery))
+#define isfreezer(A) is_type_in_list(A, list(/obj/structure/closet/secure_closet/freezer, /obj/structure/closet/crate/freezer/surgery, /obj/machinery/smartfridge))
 
 #define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
 
