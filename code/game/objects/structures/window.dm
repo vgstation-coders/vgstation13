@@ -331,12 +331,12 @@ var/list/one_way_windows
 			return
 		if(is_fulltile())
 			update_nearby_tiles()
-			dir = turn(get_dir(get_turf(user),get_turf(src)),180)
-			if(!(dir % 3) || !(dir % 5))	//if its direction is diagonal
+			change_dir(turn(get_dir(get_turf(user),get_turf(src)),180))
+			if(!test_bitflag(dir))	//if its direction is diagonal
 				if(prob(50))
-					dir = turn(dir,45)
+					change_dir(turn(dir,45))
 				else
-					dir = turn(dir,315)
+					change_dir(turn(dir,315))
 			update_nearby_tiles()
 			ini_dir = dir
 		var/obj/item/stack/sheet/mineral/plastic/P = W
