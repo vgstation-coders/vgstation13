@@ -5362,6 +5362,13 @@
 					H.adjustToxLoss(3)
 				H.adjustToxLoss(0.3)
 
+/datum/reagent/ethanol/deadrumm/pintpointer
+	name = "Pintpointer"
+	id = PINTPOINTER
+	description = "An attempt to create a navigation system which even a drunk spaceman can use."
+	reagent_state = LIQUID
+	color = "#664300" //rgb: 102, 67, 0
+
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar

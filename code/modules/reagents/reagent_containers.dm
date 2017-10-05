@@ -348,7 +348,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(can_drink(user))
 			reagents.reaction(user, INGEST)
 			spawn(5)
-				reagents.trans_to(user, amount_per_imbibe)
+				if(reagents)
+					reagents.trans_to(user, amount_per_imbibe)
 
 	return 1
 
