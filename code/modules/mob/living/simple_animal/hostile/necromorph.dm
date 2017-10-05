@@ -93,7 +93,7 @@
 					else
 						if(prob(30))
 							step_towards(src, vent)//Step towards it
-							if(environment_smash)
+							if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 								EscapeConfinement()
 						break
 

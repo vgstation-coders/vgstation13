@@ -430,7 +430,7 @@
 
 /obj/structure/cultgirder/attack_animal(var/mob/living/simple_animal/M)
 	M.delayNextAttack(8)
-	if(M.environment_smash >= 2)
+	if(M.environment_smash_flags & SMASH_WALLS)
 		new /obj/effect/decal/remains/human(get_turf(src))
 		M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 		"<span class='attack'>You smash through \the [src].</span>")

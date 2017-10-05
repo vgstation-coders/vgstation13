@@ -31,6 +31,7 @@
 #include "__DEFINES\research_levels.dm"
 #include "__DEFINES\security.dm"
 #include "__DEFINES\setup.dm"
+#include "__DEFINES\simple_animal_defines.dm"
 #include "__DEFINES\striketeam_defines.dm"
 #include "__DEFINES\stylesheet.dm"
 #include "__DEFINES\subsystem.dm"
