@@ -330,6 +330,7 @@
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		return 1
 	if(try_insert_item(O, user))
+		piles = sortList(piles)
 		return 1
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		var/list/params_list = params2list(params)
@@ -343,7 +344,6 @@
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
 		return 1
-	piles = sortList(piles)
 	updateUsrDialog()
 	return 1
 
