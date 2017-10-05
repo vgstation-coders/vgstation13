@@ -30,10 +30,14 @@
 
 
 //////CUT WITH LASER(cut+clamp)//////////
+/datum/surgery_step/generic/cut_with_laser/tool_quality(obj/item/tool)
+	. = ..()
+	if(!tool.is_sharp())
+		return 0
+
 /datum/surgery_step/generic/cut_with_laser
 	allowed_tools = list(
-		/obj/item/weapon/scalpel/laser/tier2 = 100,
-		/obj/item/weapon/scalpel/laser/tier1 = 100,
+		/obj/item/weapon/scalpel/laser = 100,
 		/obj/item/weapon/melee/energy/sword = 5 //haha, oh god what
 		)
 
