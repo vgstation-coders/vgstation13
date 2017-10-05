@@ -93,6 +93,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	return TRUE
 
 /mob/living/carbon/alien/can_ventcrawl()
+	if(handcuffed)
+		to_chat(src, "<span class='warning'>You can't vent crawl while you're restrained!</span>")
+		return FALSE
 	return TRUE
 
 /mob/living/carbon/alien/ventcrawl_carry()

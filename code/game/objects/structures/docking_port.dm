@@ -137,7 +137,7 @@ var/global/list/all_docking_ports = list()
 
 /obj/docking_port/destination //this guy is installed on stations and connects to shuttles
 	icon_state = "docking_station"
-
+	var/turf/origin_turf = null
 	var/list/disk_references = list() //List of shuttle destination disks that know about this docking port
 
 	var/base_turf_type			= /turf/space
@@ -147,6 +147,7 @@ var/global/list/all_docking_ports = list()
 /obj/docking_port/destination/New()
 	.=..()
 
+	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
 	if(src.z in (1 to map.zLevels.len))
 		base_turf_type = get_base_turf(src.z)

@@ -186,8 +186,9 @@
 //Someone threw something at us, please advise
 // I don't think this shit works on turfs, but it's here just in case.
 /turf/simulated/floor/glass/hitby(AM as mob|obj)
-
-	..()
+	. =  ..()
+	if(.)
+		return
 	if(ismob(AM))
 		var/mob/M = AM //Duh
 		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable

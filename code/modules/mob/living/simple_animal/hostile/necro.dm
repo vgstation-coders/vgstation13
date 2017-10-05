@@ -65,7 +65,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	meat_type = null
 /*
 #define EVOLVING 1
@@ -115,7 +115,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse

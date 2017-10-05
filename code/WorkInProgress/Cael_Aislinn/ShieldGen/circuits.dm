@@ -13,18 +13,12 @@
 							"/obj/item/weapon/stock_parts/subspace/transmitter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,
-							"/obj/item/stack/cable_coil" = 5)
+							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
-							
-							
-/obj/item/weapon/circuitboard/shield_gen_ex/attackby(var/obj/item/weapon/G, var/mob/user)
-	if(issolder(G))
-		var/obj/item/weapon/solder/S = G
-		if(S.remove_fuel(1,user))
-			to_chat(user, "<span class = 'notice'>You set the shield generator circuit to project normal shields.</span>")
-			new /obj/item/weapon/circuitboard/shield_gen(user.loc)
-			qdel(src)	
+/obj/item/weapon/circuitboard/shield_gen_ex/solder_improve(var/mob/user)
+	to_chat(user, "<span class='notice'>You set the shield generator circuit to project normal shields.</span>")
+	new /obj/item/weapon/circuitboard/shield_gen(user.loc)
+	qdel(src)
 
 ////////////////////////////////////////
 // Shield Generator
@@ -40,16 +34,12 @@
 							"/obj/item/weapon/stock_parts/subspace/transmitter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,
-							"/obj/item/stack/cable_coil" = 5)
+							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
-/obj/item/weapon/circuitboard/shield_gen/attackby(var/obj/item/weapon/G, var/mob/user)
-	if(issolder(G))
-		var/obj/item/weapon/solder/S = G
-		if(S.remove_fuel(1,user))
-			to_chat(user, "<span class = 'notice'>You set the shield generator circuit to project external hull shields.</span>")
-			new /obj/item/weapon/circuitboard/shield_gen_ex(user.loc)
-			qdel(src)
+/obj/item/weapon/circuitboard/shield_gen/solder_improve(var/mob/user)
+	to_chat(user, "<span class='notice'>You set the shield generator circuit to project external hull shields.</span>")
+	new /obj/item/weapon/circuitboard/shield_gen_ex(user.loc)
+	qdel(src)
 
 ////////////////////////////////////////
 // Shield Capacitor
@@ -61,9 +51,8 @@
 	build_path = "/obj/machinery/shield_capacitor"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
+							"/obj/item/weapon/stock_parts/capacitor" = 2,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/treatment" = 1,
 							"/obj/item/weapon/stock_parts/subspace/analyzer" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,
-							"/obj/item/stack/cable_coil" = 5)
+							"/obj/item/weapon/stock_parts/console_screen" = 1)

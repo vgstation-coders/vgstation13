@@ -1,4 +1,4 @@
-#define GAS_CONSUME_TO_WASTE_DENOMINATOR 0.3
+#define GAS_CONSUME_TO_WASTE_DENOMINATOR 2
 /*
 	Datum-based species. Should make for much cleaner and easier to maintain mutantrace code.
 */
@@ -391,12 +391,10 @@ var/global/list/whitelisted_species = list("Human")
 	)
 
 /datum/species/skellington/skelevox/makeName(var/gender,var/mob/living/carbon/human/H=null)
-	var/sounds = rand(2,8)
-	var/i = 0
+	var/sounds = rand(3,8)
 	var/newname = ""
 
-	while(i<=sounds)
-		i++
+	for(var/i = 1 to sounds)
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
 
@@ -740,12 +738,10 @@ var/global/list/whitelisted_species = list("Human")
 		H.internals.icon_state = "internal1"
 
 /datum/species/vox/makeName(var/gender,var/mob/living/carbon/human/H=null)
-	var/sounds = rand(2,8)
-	var/i = 0
+	var/sounds = rand(3,8)
 	var/newname = ""
 
-	while(i<=sounds)
-		i++
+	for(var/i = 1 to sounds)
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
 

@@ -232,7 +232,7 @@
 	if (!istype(targloc) || !istype(curloc))
 		return
 
-	var/fire_force = fuel_level + (fuel_level * (1/(fuel_level/10)))
+	var/fire_force = fuel_level + 10
 
 	var/speed
 	if(loaded_item.w_class > W_CLASS_TINY)

@@ -12,6 +12,11 @@
 	material = /obj/item/stack/sheet/wood
 	construction_length = 20
 
+/obj/structure/girder/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover) && mover.checkpass(PASSGIRDER))
+		return 1
+	return ..()
+
 /obj/structure/girder/wood/attackby(var/obj/item/W, var/mob/user)
 	if(W.sharpness_flags & CHOPWOOD)
 		playsound(get_turf(src), 'sound/effects/woodcuttingshort.ogg', 50, 1)
@@ -425,7 +430,7 @@
 
 /obj/structure/cultgirder/attack_animal(var/mob/living/simple_animal/M)
 	M.delayNextAttack(8)
-	if(M.environment_smash >= 2)
+	if(M.environment_smash_flags & SMASH_WALLS)
 		new /obj/effect/decal/remains/human(get_turf(src))
 		M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 		"<span class='attack'>You smash through \the [src].</span>")

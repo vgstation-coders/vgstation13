@@ -174,7 +174,7 @@
 	set category = "Object"
 	set src in view(1)
 
-	if(!istype(usr, /mob/living))
+	if(!istype(usr, /mob/living) || istype(usr, /mob/living/simple_animal))
 		to_chat(usr, "<span class='warning'>You can't do that.</span>")
 		return
 

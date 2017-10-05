@@ -201,7 +201,9 @@
 		panic_attack(user)
 
 /mob/living/simple_animal/bee/hitby(AM as mob|obj)
-	..()
+	. = ..()
+	if(.)
+		return
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
 	var/mob/M = null
 	if (ismob(AM))
@@ -507,13 +509,14 @@
 				target = null
 				var/list/nearbyMobs = list()
 				for(var/mob/living/G in view(src,7))
+					if (G == src) continue
+					if (G.flags & INVULNERABLE) continue
 					//Bees will only attack other bees if they're crazy from high toxicity
 					if (istype(G,/mob/living/simple_animal/bee) && (((current_poison_damage - bees.len)/bees.len*100) > 51))
 						var/mob/living/simple_animal/bee/B = G
 						//even then, they won't attack bees from their own hives.
 						if (B.home == home || (home && B.home && B.home.wild && home.wild))
 							continue
-					if (G.flags & INVULNERABLE) continue
 					if (G.stat != DEAD)
 						nearbyMobs += G
 				if (nearbyMobs.len > 0)
@@ -607,6 +610,9 @@
 
 /mob/living/simple_animal/bee/update_icon()
 	overlays.len = 0
+
+	if(bees.len <= 0)
+		return
 
 	var/queen = 0
 	for (var/D in bees)

@@ -131,6 +131,7 @@ var/list/radiochannels = list(
 	"Service" = 1349,
 	"Supply" = 1347,
 	"Response Team" = 1345,
+	"Raider" = 1215,
 	"Syndicate" = 1213,
 	"DJ" = 1201
 )
@@ -138,6 +139,7 @@ var/list/radiochannels = list(
 var/list/radiochannelsreverse = list(
 	"1201" = "DJ",
 	"1213" = "Syndicate",
+	"1215" = "Raider",
 	"1345" = "Response Team",
 	"1347" = "Supply",
 	"1349" = "Service",
@@ -166,6 +168,7 @@ var/list/CENT_FREQS = list(1345, 1441)
 
 var/const/COMM_FREQ = 1353 //command, colored gold in chat window
 var/const/SYND_FREQ = 1213
+var/const/RAID_FREQ = 1215 // for raiders
 
 // department channels
 var/const/SEC_FREQ = 1359

@@ -282,9 +282,7 @@ var/global/list/battery_online =	list(
 			return
 		else if(prob(15)) //Power drain
 			message_admins("<span class='warning'>SMES power drain in [get_area(src)]</span>")
-			var/datum/effect/effect/system/spark_spread/s = new
-			s.set_up(3, 1, src)
-			s.start()
+			spark(src)
 			if(prob(50))
 				emp_act(1)
 			else

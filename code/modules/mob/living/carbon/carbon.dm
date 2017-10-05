@@ -129,9 +129,7 @@
 	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
 	//if(src.knockdown < 20*siemens_coeff)	src.SetKnockdown(20*siemens_coeff)
 
-	var/datum/effect/effect/system/spark_spread/SparkSpread = new
-	SparkSpread.set_up(5, 1, loc)
-	SparkSpread.start()
+	spark(loc, 5)
 
 	return damage
 
@@ -238,7 +236,6 @@
 				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
 				var/obj/item/clothing/gloves/T = src.get_item_by_slot(slot_gloves)
 				var/mob/living/carbon/human/H
-				var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 
 				if (istype(T, /obj/item/clothing/gloves))
 					shock_damage = T.siemens_coefficient * shock_damage
@@ -258,8 +255,7 @@
 					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
-					sparks.set_up(3, 0, H)
-					sparks.start()
+					spark(H, 3, FALSE)
 
 					H.Stun(shock_time SECONDS)
 					M.Stun(shock_time SECONDS)

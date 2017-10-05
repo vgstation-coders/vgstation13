@@ -41,7 +41,8 @@
 			"oxygen",
 			"toxins",
 			"nitrogen",
-			"carbon_dioxide"
+			"carbon_dioxide",
+			"nitrous_oxide"
 		)
 		parent.updateUsrDialog()
 		return 1

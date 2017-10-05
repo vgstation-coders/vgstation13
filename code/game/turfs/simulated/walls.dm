@@ -85,9 +85,9 @@
 
 /turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
 	M.delayNextAttack(8)
-	if(M.environment_smash >= 2)
+	if(M.environment_smash_flags & SMASH_WALLS)
 		if(istype(src, /turf/simulated/wall/r_wall))
-			if(M.environment_smash == 3)
+			if(M.environment_smash_flags & SMASH_RWALLS)
 				dismantle_wall(1)
 				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 				"<span class='attack'>You smash through \the [src].</span>")
@@ -370,6 +370,11 @@
 			dismantle_wall()
 
 /turf/simulated/wall/kick_act(mob/living/carbon/human/H)
+	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)
+		var/obj/O = H.locked_to
+		if(O.onBuckledUserKick(H, src))
+			return //don't return 1! we will do the normal "touch" action if so!
+
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
 	if(prob(70))

@@ -23,7 +23,7 @@
 	if(!c_tag || c_tag == "")
 		to_chat(user, "<span class='notice'>Set the tag first dumbass</span>")
 		return 0
-	if(is_type_in_list(src.excludes))
+	if(is_type_in_list(A, excludes))
 		to_chat(user, "<span class='warning'>\The [src] won't stick!</span>")
 		return 0
 	if(istype(A, /obj/item))

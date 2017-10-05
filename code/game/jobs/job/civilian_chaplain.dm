@@ -430,6 +430,11 @@
 				H.equip_or_collect(new /obj/item/clothing/shoes/clockwork_boots(H), slot_shoes)
 				J = "Servant of Ratvar"
 				deity_name = "Ratvar"
+			if("dune", "spice", "sandworms", "sandworm", "muad dib", "muad'dib", "arrakis", "shai hulud", "shai-hulud")
+				B.name = "Manual of Muad'Dib"
+				J = "Muad'Dib"
+				deity_name = "Shai-Hulud"
+				H.equip_or_collect(new /obj/item/clothing/under/stilsuit(H), slot_w_uniform)
 			else //Boring, give them a stock name
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)

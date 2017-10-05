@@ -222,8 +222,9 @@ var/MAX_EXPLOSION_RANGE = 14
 #define PASSBLOB	16
 #define PASSMACHINE	32 //computers, vending machines, rnd machines
 #define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
+#define PASSGIRDER	128 //not just airlocks, but also firelocks, windoors etc
 
-#define PASSALL 127
+#define PASSALL 191 //really ugly, shouldn't this be PASSTABLE|PASSGLASS|PASSGRILLE etc?
 
 
 /*

@@ -40,7 +40,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
 		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/head/hardhat/white(H), slot_head)
-		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/full(H), slot_belt)
+		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
 		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		if(H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))

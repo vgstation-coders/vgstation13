@@ -132,7 +132,7 @@
 
 	if(!(frequency in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
 		return
-	if(!code in (1 to 100))
+	if(!(code in (1 to 100)))
 		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)

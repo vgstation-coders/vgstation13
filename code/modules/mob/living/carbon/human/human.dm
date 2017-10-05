@@ -1814,6 +1814,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"last_shush",
 		"last_emote_sound",
 		"decapitated",
 		"organs",

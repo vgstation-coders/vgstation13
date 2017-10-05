@@ -435,6 +435,11 @@ its easier to just keep the beam vertical.
 /atom/proc/relaymove()
 	return
 
+// Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
+// Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
+/atom/proc/relayface()
+	return
+
 // Severity is actually "distance".
 // 1 is pretty much just del(src).
 // 2 is moderate damage.
@@ -558,8 +563,9 @@ its easier to just keep the beam vertical.
 	qdel(src)
 	return 1
 
-/atom/proc/hitby(atom/movable/AM as mob|obj)
-	return
+// Returns TRUE if it's been handled, children should return if parent has already handled
+/atom/proc/hitby(var/atom/movable/AM)
+	. = isobserver(AM)
 
 /*
 /atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -797,8 +803,12 @@ its easier to just keep the beam vertical.
 		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
 
-/atom/proc/can_spook()
-	return !blessed
+/atom/proc/can_spook(var/msg = 1)
+	if(blessed)
+		if(msg)
+			to_chat(usr, "Your hand goes right through \the [src]... Is that some holy water dripping from it?")
+		return FALSE
+	return TRUE
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()

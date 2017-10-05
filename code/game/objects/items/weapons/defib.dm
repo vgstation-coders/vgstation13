@@ -13,14 +13,11 @@
 	throwforce = 5
 	origin_tech = Tc_BIOTECH + "=3"
 
-	var/datum/effect/effect/system/spark_spread/sparks = new
 	var/charges = 10
 	var/ready = 0
 	var/emagged = 0
 
 /obj/item/weapon/melee/defibrillator/New()
-	sparks.set_up(5,0,src)
-	sparks.attach(src)
 	return ..()
 
 /obj/item/weapon/melee/defibrillator/suicide_act(mob/user)
@@ -49,7 +46,7 @@
 	if(charges || ready)
 		if(clumsy_check(user) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
-			sparks.start()
+			spark(src, 5)
 			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 			user.Knockdown(5)
 			var/mob/living/carbon/human/H = user
@@ -122,7 +119,7 @@
 			target.LAssailant = null
 		else
 			target.LAssailant = user
-	sparks.start()
+	spark(src, 5, FALSE)
 	playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
@@ -132,7 +129,7 @@
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
 	if(do_after(user,target,30))
-		sparks.start()
+		spark(src, 5, FALSE)
 		playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 		charges--
 		update_icon()

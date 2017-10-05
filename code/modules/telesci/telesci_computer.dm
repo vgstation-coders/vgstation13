@@ -215,10 +215,7 @@
 			target = telepad
 		else
 			return
-	var/L = get_turf(target)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, L)
-	s.start()
+	spark(target, 5)
 
 /obj/machinery/computer/telescience/proc/telefail()
 	if(prob(95))
@@ -323,15 +320,10 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 				qdel(telepad.amplifier)
 				telepad.amplifier = null
 				src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, telepad)
-		s.start()
+		spark(telepad, 5)
 		flick("pad-beam", telepad)
 		to_chat(user, "<span class='caution'>Teleport successful.</span>")
-		var/sparks = get_turf(target)
-		var/datum/effect/effect/system/spark_spread/y = new /datum/effect/effect/system/spark_spread
-		y.set_up(5, 1, sparks)
-		y.start()
+		sparks(target, 5)
 		var/turf/source = target
 		var/turf/dest = get_turf(telepad)
 		if(sending)
