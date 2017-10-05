@@ -526,7 +526,7 @@
 				if(do_after_cooldown(target))
 					if(disabled)
 						return
-					chassis.spark_system.start()
+					spark(chassis, 2, FALSE)
 					target:ChangeTurf(/turf/simulated/floor/plating)
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 					chassis.use_power(energy_drain)
@@ -536,7 +536,7 @@
 				if(do_after_cooldown(target))
 					if(disabled)
 						return
-					chassis.spark_system.start()
+					spark(chassis, 2, FALSE)
 					target:ChangeTurf(get_base_turf(target.z))
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 					chassis.use_power(energy_drain)
@@ -546,7 +546,7 @@
 				if(do_after_cooldown(target))
 					if(disabled)
 						return
-					chassis.spark_system.start()
+					spark(chassis, 2, FALSE)
 					qdel(target)
 					target = null
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -560,7 +560,7 @@
 						return
 					target:ChangeTurf(/turf/simulated/floor/plating/airless)
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.spark_system.start()
+					spark(chassis, 2, FALSE)
 					chassis.use_power(energy_drain*2)
 			else if(istype(target, /turf/simulated/floor))
 				occupant_message("Building Wall...")
@@ -570,7 +570,7 @@
 						return
 					target:ChangeTurf(/turf/simulated/wall)
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.spark_system.start()
+					spark(chassis, 2, FALSE)
 					chassis.use_power(energy_drain*2)
 		if(2)
 			if(istype(target, /turf/simulated/floor))
@@ -579,7 +579,7 @@
 				if(do_after_cooldown(target))
 					if(disabled)
 						return
-					chassis.spark_system.start()
+					spark(chassis, 2, FALSE)
 					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
 					T.autoclose = 1
 					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)

@@ -28,7 +28,7 @@
 /obj/item/weapon/table_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/metal, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/metal, user.loc, 1, user)
 		qdel(src)
 		return
 	if (istype(W, /obj/item/stack/rods))
@@ -68,8 +68,8 @@
 
 /obj/item/weapon/table_parts/reinforced/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/metal, loc, 1, user)
-		drop_stack(/obj/item/stack/rods, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/metal, user.loc, 1, user)
+		drop_stack(/obj/item/stack/rods, user.loc, 1, user)
 		qdel(src)
 
 /obj/item/weapon/table_parts/reinforced/attack_self(mob/user)
@@ -90,7 +90,7 @@
 
 /obj/item/weapon/table_parts/wood/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/wood, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/wood, user.loc, 1, user)
 		qdel(src)
 		return
 	if (istype(W, /obj/item/stack/tile/grass))
@@ -99,7 +99,7 @@
 		if(!Grass.use(1))
 			return
 
-		new /obj/item/weapon/table_parts/wood/poker(loc)
+		new /obj/item/weapon/table_parts/wood/poker(user.loc)
 		visible_message("<span class='notice'>[user] adds grass to the wooden table parts.</span>")
 		qdel(src)
 
@@ -115,8 +115,8 @@
 
 /obj/item/weapon/table_parts/wood/poker/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/wood, loc, 1, user)
-		drop_stack(/obj/item/stack/tile/grass, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/wood, user.loc, 1, user)
+		drop_stack(/obj/item/stack/tile/grass, user.loc, 1, user)
 		qdel(src)
 
 /obj/item/weapon/table_parts/wood/poker/attack_self(mob/user)
@@ -160,7 +160,7 @@
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/metal, loc, 1, user)
+		drop_stack(/obj/item/stack/sheet/metal, user.loc, 1, user)
 		qdel(src)
 		return
 	if(istype(W, /obj/item/weapon/weldingtool))

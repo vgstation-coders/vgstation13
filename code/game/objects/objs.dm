@@ -250,7 +250,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					_using.Remove(M)
 					continue
 
-				if(!M in nearby) // NOT NEARBY
+				if(!(M in nearby)) // NOT NEARBY
 					// AIs/Robots can do shit from afar.
 					if (isAI(M) || isrobot(M))
 						is_in_use = 1
@@ -450,34 +450,33 @@ a {
 	return TRUE
 
 /** Anchors shit to the deck via wrench.
- * NOTE: WHOEVER CODED THIS IS AN ABSOLUTE FUCKING RETARD AND USES -1 AS FAIL INSTEAD OF 0.
  * @param user The mob doing the wrenching
  * @param time_to_wrench The time to complete the wrenchening
- * @returns 1 on success, -1 on fail
+ * @returns TRUE on success, FALSE on fail
  */
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
 	if(!canAffixHere(user))
-		return -1
+		return FALSE
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
 			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
-				return -1
+				return FALSE
 			if(istype(src.loc, /turf/space)) //if on a space tile
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to space!</span>")
-				return -1
+				return FALSE
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	if(do_after(user, src, time_to_wrench))
 		if(!canAffixHere(user))
-			return -1
+			return FALSE
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
 								"<span class='notice'>You hear a ratchet.</span>")
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
 /obj/item/proc/updateSelfDialog()
 	var/mob/M = src.loc
@@ -576,3 +575,23 @@ a {
 		"integratedpai")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+//Called when a mob in our locked atoms list kicks another object. Return 1 if successful, to abort the rest of the kicking action.
+/obj/proc/onBuckledUserKick(var/mob/living/user, var/atom/A)
+	if(!anchored && !user.incapacitated() && user.has_limbs) //if you're buckled onto a non-anchored object (like office chairs) you harmlessly push yourself away with your legs
+		spawn() //return 1 first thing
+			var/movementdirection = turn(get_dir(src,A),180)
+			if(user.get_strength() > 1) //hulk KICK!
+				user.visible_message("<span class='danger'>[user] puts \his foot to \the [A] and kicks \himself away!</span>", \
+					"<span class='warning'>You put your foot to \the [A] and kick as hard as you can! [pick("RAAAAAAAARGH!", "HNNNNNNNNNGGGGGGH!", "GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", "AAAAAAARRRGH!")]</span>")
+				var/turf/T = get_edge_target_turf(src, movementdirection)
+				src.throw_at(T,8,20,fly_speed = 2)
+			else
+				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
+				for(var/i in list(2,2,3,3))
+					if(!step(src, movementdirection))
+						change_dir(turn(movementdirection, 180)) //stop, but don't turn around when hitting a wall
+						break
+					change_dir(turn(movementdirection, 180)) //face away from where we're going
+					sleep(i)
+		return 1

@@ -79,6 +79,7 @@
 
 	var/check_mutations=0 // Check mutations on next life tick
 
+	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 

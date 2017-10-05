@@ -93,6 +93,8 @@
 
 #define isobserver(A) istype(A, /mob/dead/observer)
 
+#define isjustobserver(A) (isobserver(A) && !isAdminGhost(A))
+
 #define isnewplayer(A) istype(A, /mob/new_player)
 
 #define isovermind(A) istype(A, /mob/camera/blob)
@@ -130,6 +132,8 @@
 #define iswire(O) istype(O, /obj/item/stack/cable_coil)
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)
+
+#define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
@@ -174,6 +178,7 @@
 #define ismalf(H) (H.mind in ticker.mode.malf_ai)
 
 #define isnukeop(H) (H.mind in ticker.mode.syndicates)
+#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
 
 #define iswizard(H) (H.mind in ticker.mode.wizards)
 

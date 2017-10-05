@@ -11,6 +11,10 @@
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 
 	var/stomp_attack_power = 45
+	var/stomp_delay = 3 SECONDS
+	var/stomp_boot = "magboot"
+	var/stomp_hit = "crushes"
+	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
 
 /obj/item/clothing/shoes/magboots/on_kick(mob/living/carbon/human/user, mob/living/victim)
 	if(!stomp_attack_power)
@@ -18,14 +22,14 @@
 
 	var/turf/T = get_turf(src)
 	var/datum/organ/external/affecting = victim.get_organ(user.get_unarmed_damage_zone(victim))
-	
+
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
-		user.visible_message("<span class='danger'>\The [user] slowly raises \his foot above the lying [victim.name], preparing to stomp on \him.</span>")
+		user.visible_message("<span class='danger'>\The [user] slowly raises \his [stomp_boot] above the lying [victim.name], preparing to stomp on \him.</span>")
 		toggle()
 
-		if(do_after(user, src, 3 SECONDS))
+		if(do_after(user, src, stomp_delay))
 			if(magpulse)
 				return //Magboots enabled
 			if(!victim.lying || (victim.loc != T))
@@ -34,7 +38,7 @@
 			user.attack_log += "\[[time_stamp()]\] Magboot-stomped <b>[user] ([user.ckey])</b>"
 			victim.attack_log += "\[[time_stamp()]\] Was magboot-stomped by <b>[src] ([victim.ckey])</b>"
 
-			victim.visible_message("<span class='danger'>\The [user] crushes \the [victim] with the activated [src.name]!", "<span class='userdanger'>\The [user] crushes you with \his [src.name]!</span>")
+			victim.visible_message("<span class='danger'>\The [user] [stomp_hit] \the [victim] with the activated [src.name]!", "<span class='userdanger'>\The [user] [stomp_hit] you with \his [src.name]!</span>")
 			victim.apply_damage(stomp_attack_power, BRUTE, affecting)
 			playsound(get_turf(victim), 'sound/effects/gib3.ogg', 100, 1)
 		else
@@ -67,10 +71,10 @@
 
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	..()
-	var/state = "disabled"
+	var/state = " disabled."
 	if(src.clothing_flags&NOSLIP)
-		state = "enabled"
-	to_chat(user, "<span class='info'>Its mag-pulse traction system appears to be [state].</span>")
+		state = " enabled."
+	to_chat(user, "<span class='info'>[anchoring_system_examine][state]</span>")
 
 //CE
 /obj/item/clothing/shoes/magboots/elite
@@ -102,3 +106,28 @@
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)
+
+//Captain
+/obj/item/clothing/shoes/magboots/captain
+	desc = "A relic predating magboots, these ornate greaves have retractable spikes in the soles to maintain grip."
+	name = "captain's greaves"
+	icon_state = "capboots0"
+	base_state = "capboots"
+	anchoring_system_examine = "Its anchoring spikes appear to be"
+
+/obj/item/clothing/shoes/magboots/captain/toggle()
+	//set name = "Toggle Floor Grip"
+	if(usr.isUnconscious())
+		return
+	if(src.magpulse)
+		src.clothing_flags &= ~NOSLIP
+		src.slowdown = NO_SLOWDOWN
+		src.magpulse = 0
+		icon_state = "[base_state]0"
+		to_chat(usr, "You stop ruining the carpet.")
+	else
+		src.clothing_flags |= NOSLIP
+		src.slowdown = mag_slow
+		src.magpulse = 1
+		icon_state = "[base_state]1"
+		to_chat(usr, "Small spikes shoot from your shoes and dig into the flooring, bracing you.")

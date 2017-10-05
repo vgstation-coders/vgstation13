@@ -46,7 +46,7 @@
 			src.updateUsrDialog()
 			return
 		var/mob/M = usr
-		if(M.mind.special_role)
+		if(M.mind.special_role || jobban_isbanned(M, "Syndicate") || jobban_isbanned(M, "traitor"))
 			temptext = "<i>We have no need for you at this time. Have a pleasant day.</i><br>"
 			src.updateUsrDialog()
 			return
@@ -197,12 +197,13 @@
 		to_chat(user, "<span class='warning'>\The [src] doesn't work on the fly, wrench it down first.</span>")
 		return
 
-/obj/machinery/singularity_beacon/wrenchAnchor(mob/user)
-
+/obj/machinery/singularity_beacon/wrenchAnchor(var/mob/user)
 	if(active)
 		to_chat(user, "<span class='warning'>Turn off \the [src] first.</span>")
+		return FALSE
+	. = ..()
+	if(!.)
 		return
-	..()
 	if(attached)
 		attached = null //Reset attached cable
 

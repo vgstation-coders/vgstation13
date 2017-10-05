@@ -27,7 +27,9 @@
 
 /obj/machinery/computer/rust_gyrotron_controller/wrenchAnchor(var/mob/user)
 	. = ..()
-	if(. == 1 && state) //We're set to anchored again.
+	if(!.)
+		return
+	if(state) //We're set to anchored again.
 		for(var/obj/machinery/rust/gyrotron/gyro in linked_gyrotrons)
 			if(get_dist(src, gyro) > RUST_GYROTRON_RANGE) //We've been moved so far we're out of range.
 				linked_gyrotrons -= gyro

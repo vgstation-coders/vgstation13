@@ -13,12 +13,14 @@
 	can_infect = 1
 	blood_level = 1
 
+	priority = 0
+
 	min_duration = 50
 	max_duration = 60
 
 /datum/surgery_step/glue_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 0
+	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage == 0 && affected.status & ORGAN_BROKEN
 
 /datum/surgery_step/glue_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -154,3 +156,46 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='warning'>[user]'s hand slips, smearing [tool] in the incision in [target]'s [affected.display_name]!</span>" , \
 	"<span class='warning'>Your hand slips, smearing [tool] in the incision in [target]'s [affected.display_name]!</span>")
+
+
+
+//////BONE MENDER/////////
+/datum/surgery_step/bone_mender
+	allowed_tools = list(
+		/obj/item/weapon/bonesetter/bone_mender = 100,
+		)
+
+	priority = 0.1 //so it tries to do this before /glue_bone
+
+	min_duration = 80
+	max_duration = 90
+
+/datum/surgery_step/bone_mender/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage <= 5 && affected.status & ORGAN_BROKEN
+
+/datum/surgery_step/bone_mender/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (affected.stage <= 5)
+		user.visible_message("[user] starts grasping the damaged bone edges in [target]'s [affected.display_name] with \the [tool]." , \
+		"You start grasping the bone edges and fusing them in [target]'s [affected.display_name] with \the [tool].")
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!", 1)
+	..()
+
+/datum/surgery_step/bone_mender/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='notice'>[user] fuses [target]'s [affected.display_name] bone with \the [tool].</span>"  , \
+		"<span class='notice'>You fuse the bone in [target]'s [affected.display_name] with \the [tool].</span>" )
+	affected.status &= ~ORGAN_BROKEN
+	affected.status &= ~ORGAN_SPLINTED
+	affected.stage = 0
+	affected.perma_injury = 0
+	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
+		affected.heal_damage(affected.brute_dam - (affected.min_broken_damage - rand(3,5)) * config.organ_health_multiplier)
+		//Put the limb's brute damage just under the bone breaking threshold, to prevent it from instabreaking again.
+
+/datum/surgery_step/bone_mender/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='warning'>\The [tool] in [user]'s hand skips, jabbing the bone edges into the sides of [target]'s [affected.display_name]!</span>" , \
+	"<span class='warning'>Your hand jolts and \the [tool] skips, jabbing the bone edges into [target]'s [affected.display_name] with \the [tool]!</span>")
+	affected.createwound(BRUISE, 10)

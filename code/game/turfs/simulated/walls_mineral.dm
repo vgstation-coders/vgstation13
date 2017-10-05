@@ -181,9 +181,7 @@
 /*
 /turf/simulated/wall/mineral/proc/shock()
 	if (electrocute_mob(user, C, src))
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
+		spark(src, 5)
 		return 1
 	else
 		return 0

@@ -33,11 +33,11 @@
 
 	cached_power_avail = avail()
 
-/obj/machinery/power/rust_fuel_injector/wrenchAnchor(mob/user)
+/obj/machinery/power/rust_fuel_injector/wrenchAnchor(var/mob/user)
 	if(injecting)
-		to_chat(user, "Turn off the [src] first.")
-		return -1
-	return ..()
+		to_chat(user, "Turn off \the [src] first.")
+		return FALSE
+	. =  ..()
 
 /obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
 	if(..() == 1)

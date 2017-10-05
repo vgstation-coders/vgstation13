@@ -76,6 +76,8 @@
 	Victim = null
 	Target = null
 
+/mob/living/carbon/slime/advanced_mutate()
+	return
 
 /mob/living/carbon/slime/New()
 	var/datum/reagents/R = new/datum/reagents(100)
