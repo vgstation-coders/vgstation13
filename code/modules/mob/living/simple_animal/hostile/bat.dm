@@ -36,7 +36,7 @@
 
 	holder_type = null //Can't pick a SWARM OF BATS up
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	size = SIZE_TINY
 
 	faction = "scarybat"
@@ -175,7 +175,7 @@ mob/living/simple_animal/hostile/scarybat/book/New()
 	icon_dead = "bookbat_woody_dead"
 	icon_gib = "bookbat_woody_dead"
 	book_cover = "woody"
-	environment_smash = 0
+	environment_smash_flags = 0
 	harm_intent_damage = 0
 	melee_damage_lower = 0
 	melee_damage_upper = 0

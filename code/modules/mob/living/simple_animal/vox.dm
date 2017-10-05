@@ -14,7 +14,7 @@
 	melee_damage_upper = 40
 	attacktext = "slammed its enormous claws into"
 	speed = 1
-	environment_smash = 2 // WALLS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS // WALLS
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	status_flags = 0
 

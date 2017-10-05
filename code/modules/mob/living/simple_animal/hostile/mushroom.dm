@@ -21,7 +21,7 @@
 	attack_same = 2
 	attacktext = "chomps"
 	faction = "mushroom"
-	environment_smash = 0
+	environment_smash_flags = 0
 	stat_attack = 2
 	speed = 2
 	var/powerlevel = 0 //Tracks our general strength level gained from eating other shrooms
