@@ -85,6 +85,8 @@
 	force = 10.0
 	throwforce = 5.0
 	surgery_speed = 0.6
+	heat_production = 1500
+	source_temperature = TEMPERATURE_PLASMA
 
 /*
 /obj/item/weapon/cautery/laser/old //unused laser cautery. For the laser scalpel
