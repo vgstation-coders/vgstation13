@@ -75,28 +75,31 @@
 /obj/item/weapon/cautery/is_hot()
 	return 1
 
-/obj/item/weapon/cautery/laser //Not obtainable normally. Used for the laser scalpel parent.
-	name = "laser cautery"
-	desc = "A laser cautery"
-	icon_state = "cautery_T2old"
-	item_state = "laserscalpel2old"
+/obj/item/weapon/cautery/laser
+	name = "basic laser cautery"
+	desc = "A laser cautery module detached from a basic laser scalpel. You can attach it to a laser scalpel."
+	icon_state = "lasercautery_T1"
+	item_state = "laserscalpel1"
 	sharpness_flags = HOT_EDGE
 	damtype = "fire"
 	force = 10.0
 	throwforce = 5.0
-	surgery_speed = 0.5
-
-/obj/item/weapon/cautery/laser/tier1
-	name = "basic laser cautery"
-	desc = "A laser cautery module detached from a basic laser scalpel. You can attach it to a laser scalpel."
-	icon_state = "cautery_T1"
-	item_state = "laserscalpel1"
 	surgery_speed = 0.6
+
+/*
+/obj/item/weapon/cautery/laser/old //unused laser cautery. For the laser scalpel
+	name = "laser cautery"
+	desc = "A laser cautery"
+	icon_state = "lasercautery_old"
+	item_state = "laserscalpel2old"
+	force = 12.0
+	surgery_speed = 0.5
+*/
 
 /obj/item/weapon/cautery/laser/tier2
 	name = "high-precision laser cautery"
 	desc = "A laser cautery module detached from a high-precision laser scalpel. You can attach it to a laser scalpel."
-	icon_state = "cautery_T2"
+	icon_state = "lasercautery_T2"
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
@@ -154,21 +157,22 @@
 	return (BRUTELOSS)
 
 
-/obj/item/weapon/scalpel/laser //Not obtainable normally. More to just be a parent to laser scalpels. Three of them were intended it seems but one was dropped so I used the middle tier sprite here.
-	name = "laser scalpel"
-	desc = "A laser scalpel."
-	icon_state = "scalpel_laser2old"
-	item_state = "laserscalpel2old"
+/obj/item/weapon/scalpel/laser
+	name = "basic laser scalpel"
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
+	icon_state = "scalpel_laser1"
+	item_state = "laserscalpel1"
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
-	surgery_speed = 0.5
+	surgery_speed = 0.6
 	var/cauterymode = 0 //1 = cautery enabled
 	var/obj/item/weapon/cautery/laser/held
 
 /obj/item/weapon/scalpel/laser/New()
 	..()
-	icon_state = "scalpel_laser2old_off"
+	icon_state = "scalpel_laser1_off"
 	held = new /obj/item/weapon/cautery/laser(src)
+
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
 	if(!cauterymode && held)
@@ -215,18 +219,19 @@
 		else
 			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
 
+/*
+/obj/item/weapon/scalpel/laser/old //unused laser scalpel
+	name = "laser scalpel"
+	desc = "A laser scalpel."
+	icon_state = "scalpel_laser_old"
+	item_state = "laserscalpel2old"
+	surgery_speed = 0.5
 
-/obj/item/weapon/scalpel/laser/tier1
-	name = "basic laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
-	icon_state = "scalpel_laser1"
-	item_state = "laserscalpel1"
-	surgery_speed = 0.6
-
-/obj/item/weapon/scalpel/laser/tier1/New()
+/obj/item/weapon/scalpel/laser/old/New()
 	..()
-	icon_state = "scalpel_laser1_off"
-	held = new /obj/item/weapon/cautery/laser/tier1(src)
+	icon_state = "scalpel_laser_old_off"
+	held = new /obj/item/weapon/cautery/laser/old(src)
+*/
 
 /obj/item/weapon/scalpel/laser/tier2
 	name = "high-precision laser scalpel"

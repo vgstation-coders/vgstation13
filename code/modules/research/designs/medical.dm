@@ -88,7 +88,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
 	category = "Medical"
-	build_path = /obj/item/weapon/scalpel/laser/tier1
+	build_path = /obj/item/weapon/scalpel/laser
 
 /datum/design/laserscalpel2
 	name = "High Precision Laser Scalpel"

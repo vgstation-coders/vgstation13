@@ -243,7 +243,7 @@
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
 						"/obj/item/device/flashlight:Light" = null,
-						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null)
+						"/obj/item/weapon/scalpel/laser:Scalpel" = null)
 
 //Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
 /obj/item/weapon/switchtool/holo/add_module(var/obj/item/D, mob/user)
@@ -255,7 +255,7 @@
 			if(!(has_tech & BT))
 				stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
 				stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
-				stored_modules["/obj/item/weapon/cautery/laser/tier1:Cautery"] = new /obj/item/weapon/cautery(src)
+				stored_modules["/obj/item/weapon/cautery/laser:Cautery"] = new /obj/item/weapon/cautery(src)
 				stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
 				stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
 				stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
@@ -402,10 +402,10 @@
 /obj/item/weapon/switchtool/holo/maxed
 	stored_modules = list(
 						"/obj/item/device/flashlight:Light" = null,
-						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null,
+						"/obj/item/weapon/scalpel/laser:Scalpel" = null,
 						"/obj/item/weapon/circular_saw:Circular saw" = null,
 						"/obj/item/weapon/surgicaldrill:Surgical drill" = null,
-						"/obj/item/weapon/cautery/laser/tier1:Cautery" = null,
+						"/obj/item/weapon/cautery/laser:Cautery" = null,
 						"/obj/item/weapon/hemostat:Hemostat" = null,
 						"/obj/item/weapon/retractor:Retractor" = null,
 						"/obj/item/weapon/bonesetter:Bonesetter" = null,
