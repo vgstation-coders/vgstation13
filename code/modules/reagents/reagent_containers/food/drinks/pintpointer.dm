@@ -5,6 +5,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	item_state = "electronic"
 	var/mob/creator
+	var/smashed
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/New()
 	..()
@@ -41,7 +42,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/on_reagent_change()
 	update_icon()
-	if(reagents.get_master_reagent_id() != PINTPOINTER)
+	if(reagents.get_master_reagent_id() != PINTPOINTER && !smashed)
 		var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new (get_turf(src))
 		reagents.trans_to(D, reagents.total_volume)
 		qdel(src)
@@ -49,4 +50,12 @@
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/Destroy()
 	creator = null
 	processing_objects.Remove(src)
+	..()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/smash(mob/living/M, mob/living/user)
+	smashed = TRUE
+	..()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/throw_impact(atom/hit_atom)
+	smashed = TRUE
 	..()
