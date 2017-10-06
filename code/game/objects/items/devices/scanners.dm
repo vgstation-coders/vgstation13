@@ -311,16 +311,17 @@ Subject's pulse: ??? BPM"})
 	icon_state = "atmos_scope"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 
-/obj/item/device/analyzer/scope/afterattack(turf/T, mob/user)
+/obj/item/device/analyzer/scope/afterattack(atom/A, mob/user)
 	. = ..()
 	if(.)
 		return
-	if(!istype(T))
+	if(!isturf(A))
 		return
 
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
+	var/turf/T = A
 	var/datum/gas_mixture/environment = T.return_air()
 	to_chat(user, output_gas_scan(environment, T, 1))
 	add_fingerprint(user)

@@ -533,75 +533,75 @@
 	//meh
 	if(device)
 		RPD.afterattack(target, chassis.occupant)
-	else
-		playsound(chassis, 'sound/machines/click.ogg', 50, 1)
-		switch(mode)
-			if(0)
-				if (istype(target, /turf/simulated/wall))
-					occupant_message("Deconstructing [target]...")
-					set_ready_state(0)
-					if(do_after_cooldown(target))
-						if(disabled)
-							return
-						spark(chassis, 2, FALSE)
-						target:ChangeTurf(/turf/simulated/floor/plating)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						chassis.use_power(energy_drain)
-				else if (istype(target, /turf/simulated/floor))
-					occupant_message("Deconstructing [target]...")
-					set_ready_state(0)
-					if(do_after_cooldown(target))
-						if(disabled)
-							return
-						spark(chassis, 2, FALSE)
-						target:ChangeTurf(get_base_turf(target.z))
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						chassis.use_power(energy_drain)
-				else if (istype(target, /obj/machinery/door/airlock))
-					occupant_message("Deconstructing [target]...")
-					set_ready_state(0)
-					if(do_after_cooldown(target))
-						if(disabled)
-							return
-						spark(chassis, 2, FALSE)
-						qdel(target)
-						target = null
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						chassis.use_power(energy_drain)
-			if(1)
-				if(istype(target, /turf/space))
-					occupant_message("Building Floor...")
-					set_ready_state(0)
-					if(do_after_cooldown(target))
-						if(disabled)
-							return
-						target:ChangeTurf(/turf/simulated/floor/plating/airless)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						spark(chassis, 2, FALSE)
-						chassis.use_power(energy_drain*2)
-				else if(istype(target, /turf/simulated/floor))
-					occupant_message("Building Wall...")
-					set_ready_state(0)
-					if(do_after_cooldown(target))
-						if(disabled)
-							return
-						target:ChangeTurf(/turf/simulated/wall)
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						spark(chassis, 2, FALSE)
-						chassis.use_power(energy_drain*2)
-			if(2)
-				if(istype(target, /turf/simulated/floor))
-					occupant_message("Building Airlock...")
-					set_ready_state(0)
-					if(do_after_cooldown(target))
-						if(disabled)
-							return
-						spark(chassis, 2, FALSE)
-						var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
-						T.autoclose = 1
-						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
-						chassis.use_power(energy_drain*2)
+		return
+	playsound(chassis, 'sound/machines/click.ogg', 50, 1)
+	switch(mode)
+		if(0)
+			if (istype(target, /turf/simulated/wall))
+				occupant_message("Deconstructing [target]...")
+				set_ready_state(0)
+				if(do_after_cooldown(target))
+					if(disabled)
+						return
+					spark(chassis, 2, FALSE)
+					target:ChangeTurf(/turf/simulated/floor/plating)
+					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+					chassis.use_power(energy_drain)
+			else if (istype(target, /turf/simulated/floor))
+				occupant_message("Deconstructing [target]...")
+				set_ready_state(0)
+				if(do_after_cooldown(target))
+					if(disabled)
+						return
+					spark(chassis, 2, FALSE)
+					target:ChangeTurf(get_base_turf(target.z))
+					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+					chassis.use_power(energy_drain)
+			else if (istype(target, /obj/machinery/door/airlock))
+				occupant_message("Deconstructing [target]...")
+				set_ready_state(0)
+				if(do_after_cooldown(target))
+					if(disabled)
+						return
+					spark(chassis, 2, FALSE)
+					qdel(target)
+					target = null
+					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+					chassis.use_power(energy_drain)
+		if(1)
+			if(istype(target, /turf/space))
+				occupant_message("Building Floor...")
+				set_ready_state(0)
+				if(do_after_cooldown(target))
+					if(disabled)
+						return
+					target:ChangeTurf(/turf/simulated/floor/plating/airless)
+					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+					spark(chassis, 2, FALSE)
+					chassis.use_power(energy_drain*2)
+			else if(istype(target, /turf/simulated/floor))
+				occupant_message("Building Wall...")
+				set_ready_state(0)
+				if(do_after_cooldown(target))
+					if(disabled)
+						return
+					target:ChangeTurf(/turf/simulated/wall)
+					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+					spark(chassis, 2, FALSE)
+					chassis.use_power(energy_drain*2)
+		if(2)
+			if(istype(target, /turf/simulated/floor))
+				occupant_message("Building Airlock...")
+				set_ready_state(0)
+				if(do_after_cooldown(target))
+					if(disabled)
+						return
+					spark(chassis, 2, FALSE)
+					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
+					T.autoclose = 1
+					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
+					chassis.use_power(energy_drain*2)
 
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Topic(href,href_list)
@@ -1341,74 +1341,72 @@
 	energy_drain = 50
 	range = MELEE|RANGED
 	var/datum/global_iterator/pr_switchtool
-	var/obj/item/weapon/switchtool/engineering/mech/S
+	var/obj/item/weapon/switchtool/engineering/mech/switchtool
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/New()
 	..()
-	S = new(src)
+	switchtool = new(src)
 	pr_switchtool = new /datum/global_iterator/mecha_switchtool(list(src),0)
 	pr_switchtool.set_delay(equip_cooldown)
 	pr_switchtool.toggle()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
-	qdel(S)
-	S = null
+	qdel(switchtool)
+	switchtool = null
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
-	if(S.deployed)
-		S.preattack(target, chassis.occupant, chassis.Adjacent(target))
+	if(switchtool.deployed)
+		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
 		chassis.use_power(energy_drain)
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
 	..()
 	if(href_list["change"])
-		if(S.deployed)
-			S.attack_self(chassis.occupant)
-		S.attack_self(chassis.occupant)
+		if(switchtool.deployed)
+			switchtool.attack_self(chassis.occupant)
+		switchtool.attack_self(chassis.occupant)
 	if(href_list["refill"])
 		pr_switchtool.toggle()
 		occupant_message("<span class='notice'>Automatic tool refilling activated.</span>")
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
-	return "[..()] Current tool: [S.deployed ? "[S.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
+	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
 
-/datum/global_iterator/mecha_switchtool/process(var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/ST)
-	if(!ST.chassis || ST.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
-		if(ST.chassis)
-			ST.occupant_message("<span class='warning'>Electrical systems compromised. Automatic tool refilling deactivated.</span>")
+/datum/global_iterator/mecha_switchtool/process(var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/mech_switchtool)
+	if(!mech_switchtool.chassis || mech_switchtool.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
+		if(mech_switchtool.chassis)
+			mech_switchtool.occupant_message("<span class='warning'>Electrical systems compromised. Automatic tool refilling deactivated.</span>")
 		stop()
-		ST.set_ready_state(1)
+		mech_switchtool.set_ready_state(1)
 		return
-	var/cur_charge = ST.chassis.get_charge()
-	if(isnull(cur_charge) || !ST.chassis.cell)
+	if(!mech_switchtool.chassis.get_charge())
 		stop()
-		ST.set_ready_state(1)
-		ST.occupant_message("No powercell detected.")
+		mech_switchtool.set_ready_state(1)
+		mech_switchtool.occupant_message("No powercell detected.")
 		return
-	else
-		for(var/obj/item/I in ST.S.stored_modules)
-			if(istype(I, /obj/item/weapon/weldingtool))
-				var/obj/item/weapon/weldingtool/W = I
-				if(W.reagents.total_volume <= W.max_fuel-10)
-					W.reagents.add_reagent(FUEL, 10)
-					ST.chassis.use_power(ST.energy_drain/2)
-			if(istype(I, /obj/item/stack/cable_coil))
-				var/obj/item/stack/cable_coil/C = I
-				if(C.amount <= C.max_amount-5)
-					C.add(5)
-					ST.chassis.use_power(ST.energy_drain/2)
-			if(istype(I, /obj/item/weapon/solder))
-				var/obj/item/weapon/solder/SO = I
-				if(SO.reagents.total_volume < SO.max_fuel-5)
-					SO.reagents.add_reagent(SACID, 5)
-					ST.chassis.use_power(ST.energy_drain)
-			if(istype(I, /obj/item/device/silicate_sprayer))
-				var/obj/item/device/silicate_sprayer/SI = I
-				if(SI.reagents.total_volume < SI.max_silicate-5)
-					SI.reagents.add_reagent(SILICATE, 5)
-					ST.chassis.use_power(ST.energy_drain/2)
+	for(var/obj/item/I in mech_switchtool.switchtool.stored_modules)
+		if(iswelder(I))
+			var/obj/item/weapon/weldingtool/W = I
+			if(W.reagents.total_volume <= W.max_fuel-10)
+				W.reagents.add_reagent(FUEL, 10)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+		else if(iscoil(I))
+			var/obj/item/stack/cable_coil/C = I
+			if(C.amount <= C.max_amount-5)
+				C.add(5)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+		else if(issolder(I))
+			var/obj/item/weapon/solder/S = I
+			if(S.reagents.total_volume < SO.max_fuel-5)
+				S.reagents.add_reagent(SACID, 5)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
+		else if(issilicatesprayer(I))
+			var/obj/item/device/silicate_sprayer/SI = I
+			if(SI.reagents.total_volume < SI.max_silicate-5)
+				SI.reagents.add_reagent(SILICATE, 5)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 
 
 

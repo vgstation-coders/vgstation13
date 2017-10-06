@@ -441,18 +441,18 @@
 	name = "\improper Engineering switchtool"
 	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
 	stored_modules = list(
-						"/obj/item/weapon/crowbar:crowbar" = null,
-						"/obj/item/weapon/screwdriver:screwdriver" = null,
-						"/obj/item/weapon/weldingtool/hugetank:welding tool" = null,
-						"/obj/item/weapon/wirecutters:wirecutters" = null,
-						"/obj/item/weapon/wrench:wrench" = null,
-						"/obj/item/device/multitool:multitool" = null,
-						"/obj/item/stack/cable_coil/persistent:cable" = null,
-						"/obj/item/device/t_scanner:T-ray scanner" = null,
-						"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
-						"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
-						"/obj/item/device/silicate_sprayer:silicate sprayer" = null
-						)
+		"/obj/item/weapon/crowbar:crowbar" = null,
+		"/obj/item/weapon/screwdriver:screwdriver" = null,
+		"/obj/item/weapon/weldingtool/hugetank:welding tool" = null,
+		"/obj/item/weapon/wirecutters:wirecutters" = null,
+		"/obj/item/weapon/wrench:wrench" = null,
+		"/obj/item/device/multitool:multitool" = null,
+		"/obj/item/stack/cable_coil/persistent:cable" = null,
+		"/obj/item/device/t_scanner:T-ray scanner" = null,
+		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
+		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
+		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
+		)
 
 /obj/item/weapon/switchtool/engineering/deploy(var/module)
 	if(!..())
@@ -473,15 +473,15 @@
 
 /obj/item/weapon/switchtool/engineering/mech
 	stored_modules = list(
-						"/obj/item/weapon/crowbar:crowbar" = null,
-						"/obj/item/weapon/screwdriver:screwdriver" = null,
-						"/obj/item/weapon/weldingtool/hugetank/mech:welding tool" = null,
-						"/obj/item/weapon/wirecutters:wirecutters" = null,
-						"/obj/item/weapon/wrench:wrench" = null,
-						"/obj/item/device/multitool:multitool" = null,
-						"/obj/item/stack/cable_coil/persistent:cable" = null,
-						"/obj/item/device/t_scanner:T-ray scanner" = null,
-						"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
-						"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
-						"/obj/item/device/silicate_sprayer:silicate sprayer" = null
-						)
+		"/obj/item/weapon/crowbar:crowbar" = null,
+		"/obj/item/weapon/screwdriver:screwdriver" = null,
+		"/obj/item/weapon/weldingtool/hugetank/mech:welding tool" = null,
+		"/obj/item/weapon/wirecutters:wirecutters" = null,
+		"/obj/item/weapon/wrench:wrench" = null,
+		"/obj/item/device/multitool:multitool" = null,
+		"/obj/item/stack/cable_coil/persistent:cable" = null,
+		"/obj/item/device/t_scanner:T-ray scanner" = null,
+		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
+		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
+		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
+		)

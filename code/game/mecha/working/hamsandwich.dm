@@ -28,12 +28,10 @@
 		overlays += thruster_overlay
 	else
 		overlays -= thruster_overlay
-	var/result = step(src,direction)
-	return result
+	return step(src,direction)
 
 /obj/mecha/working/hamsandwich/mechsteprand()
-	var/result = step_rand(src)
-	return result
+	return step_rand(src)
 
 /obj/mecha/working/hamsandwich/Process_Spacemove(var/check_drift = 0)
 	return TRUE
