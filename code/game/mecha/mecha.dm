@@ -1273,6 +1273,14 @@
 /obj/mecha/proc/go_out(var/exit = loc)
 	if(!src.occupant)
 		return
+
+	if(exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
+		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
+		for(var/turf/simulated/T in turf_candidates)
+			if(!is_blocked_turf(T) && Adjacent(T))
+				exit = T
+				break
+
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = src.occupant
