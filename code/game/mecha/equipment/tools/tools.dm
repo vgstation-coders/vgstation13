@@ -499,7 +499,7 @@
 	wait = 0
 	return 1
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd
+/obj/item/mecha_parts/mecha_equipment/tool/red
 	name = "\improper Exosuit-Mounted RED"
 	desc = "An exosuit-mounted Rapid Engineering Device. (Can be attached to: Any exosuit)"
 	icon_state = "mecha_rcd"
@@ -512,16 +512,16 @@
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/RPD
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/New()
+/obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
 	RPD = new(src)
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/Destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
 	RPD = null
 	..()
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/action(atom/target)
+/obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
 	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
 		disabled = 1
 	else
@@ -543,7 +543,7 @@
 					if(do_after_cooldown(target))
 						if(disabled)
 							return
-						chassis.spark_system.start()
+						spark(chassis, 2, FALSE)
 						target:ChangeTurf(/turf/simulated/floor/plating)
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 						chassis.use_power(energy_drain)
@@ -553,7 +553,7 @@
 					if(do_after_cooldown(target))
 						if(disabled)
 							return
-						chassis.spark_system.start()
+						spark(chassis, 2, FALSE)
 						target:ChangeTurf(get_base_turf(target.z))
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
 						chassis.use_power(energy_drain)
@@ -563,7 +563,7 @@
 					if(do_after_cooldown(target))
 						if(disabled)
 							return
-						chassis.spark_system.start()
+						spark(chassis, 2, FALSE)
 						qdel(target)
 						target = null
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -577,7 +577,7 @@
 							return
 						target:ChangeTurf(/turf/simulated/floor/plating/airless)
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						chassis.spark_system.start()
+						spark(chassis, 2, FALSE)
 						chassis.use_power(energy_drain*2)
 				else if(istype(target, /turf/simulated/floor))
 					occupant_message("Building Wall...")
@@ -587,7 +587,7 @@
 							return
 						target:ChangeTurf(/turf/simulated/wall)
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-						chassis.spark_system.start()
+						spark(chassis, 2, FALSE)
 						chassis.use_power(energy_drain*2)
 			if(2)
 				if(istype(target, /turf/simulated/floor))
@@ -596,7 +596,7 @@
 					if(do_after_cooldown(target))
 						if(disabled)
 							return
-						chassis.spark_system.start()
+						spark(chassis, 2, FALSE)
 						var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
 						T.autoclose = 1
 						playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -604,7 +604,7 @@
 						chassis.use_power(energy_drain*2)
 
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/Topic(href,href_list)
+/obj/item/mecha_parts/mecha_equipment/tool/red/Topic(href,href_list)
 	..()
 	if(href_list["mode"])
 		mode = text2num(href_list["mode"])
@@ -621,7 +621,7 @@
 		RPD.attack_self(chassis.occupant)
 	update_equip_info()
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/get_equip_info()
+/obj/item/mecha_parts/mecha_equipment/tool/red/get_equip_info()
 	if(device)
 		return "[..()] \[<a href='?src=\ref[src];menu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
 	else
@@ -1331,6 +1331,63 @@
 		chassis.use_power(energy_drain)
 		do_after_cooldown()
 	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool
+	name = "\improper Exosuit-Mounted Engineering Switchtool"
+	desc = "An exosuit-mounted Engineering switchtool. (Can be attached to: Any exosuit)"
+	icon_state = "mecha_rcd"	//blorf
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=4"	//blorf
+	equip_cooldown = 10
+	energy_drain = 50
+	range = MELEE
+	var/obj/item/weapon/switchtool/S
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/New()
+	..()
+	S = new(src)
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
+	qdel(S)
+	S = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
+	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
+		disabled = 1
+	else
+		disabled = 0
+	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock))
+		target = get_turf(target)
+	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
+		return
+	//meh
+	if(device)
+		S.afterattack(target, chassis.occupant)
+		chassis.use_power(energy_drain)
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
+	..()
+	if(href_list["mode"])
+		mode = text2num(href_list["mode"])
+		switch(mode)
+			if(0)
+				occupant_message("Switched RED to Deconstruct.")
+			if(1)
+				occupant_message("Switched RED to Construct.")
+			if(2)
+				occupant_message("Switched RED to Construct Airlock.")
+	if(href_list["swap"])
+		device = !device
+	if(href_list["menu"])
+		S.attack_self(chassis.occupant)
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
+	if(device)
+		return "[..()] \[<a href='?src=\ref[src];menu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
+	else
+		return "[..()] \[<a href='?src=\ref[src];mode=0'>D</a>|<a href='?src=\ref[src];mode=1'>C</a>|<a href='?src=\ref[src];mode=2'>A</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
+
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

@@ -19,12 +19,12 @@
 	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_rcd
-	name = "Module Design (RCD Module)"
-	desc = "An exosuit-mounted Rapid Construction Device."
+	name = "Module Design (RED Module)"
+	desc = "An exosuit-mounted Rapid Engineering Device."
 	id = "mech_rcd"
 	build_type = MECHFAB
 	req_tech = list(Tc_MATERIALS = 4, Tc_BLUESPACE = 3, Tc_MAGNETS = 4, Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
-	build_path = /obj/item/mecha_parts/mecha_equipment/tool/rcd
+	build_path = /obj/item/mecha_parts/mecha_equipment/tool/red
 	category = "Exosuit_Tools"
 	materials = list(MAT_IRON=30000,MAT_PLASMA=25000,MAT_SILVER=20000,MAT_GOLD=20000)
 
