@@ -313,3 +313,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	..()
 	_color = pick("red","yellow","green","blue","pink")
 	icon_state = "coil_[_color]"
+
+/obj/item/stack/cable_coil/persistent/use(var/amount)	//for cable coil that needs to not be capable of being used up entirely
+	if(src.amount <= 1)
+		return

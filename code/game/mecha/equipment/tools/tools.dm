@@ -1335,16 +1335,20 @@
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool
 	name = "\improper Exosuit-Mounted Engineering Switchtool"
 	desc = "An exosuit-mounted Engineering switchtool. (Can be attached to: Any exosuit)"
-	icon_state = "mecha_rcd"	//blorf
-	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=4"	//blorf
+	icon_state = "mecha_rcd"	//needtochange
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_POWERSTORAGE + "=2"
 	equip_cooldown = 10
 	energy_drain = 50
-	range = MELEE
-	var/obj/item/weapon/switchtool/S
+	range = MELEE|RANGED
+	var/datum/global_iterator/pr_switchtool
+	var/obj/item/weapon/switchtool/engineering/mech/S
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/New()
 	..()
 	S = new(src)
+	pr_switchtool = new /datum/global_iterator/mecha_switchtool(list(src),0)
+	pr_switchtool.set_delay(equip_cooldown)
+	pr_switchtool.toggle()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
 	qdel(S)
@@ -1352,41 +1356,60 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
-	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
-		disabled = 1
-	else
-		disabled = 0
-	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock))
-		target = get_turf(target)
-	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
-		return
-	//meh
-	if(device)
-		S.afterattack(target, chassis.occupant)
+	if(S.deployed)
+		S.preattack(target, chassis.occupant, chassis.Adjacent(target))
 		chassis.use_power(energy_drain)
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
 	..()
-	if(href_list["mode"])
-		mode = text2num(href_list["mode"])
-		switch(mode)
-			if(0)
-				occupant_message("Switched RED to Deconstruct.")
-			if(1)
-				occupant_message("Switched RED to Construct.")
-			if(2)
-				occupant_message("Switched RED to Construct Airlock.")
-	if(href_list["swap"])
-		device = !device
-	if(href_list["menu"])
+	if(href_list["change"])
+		if(S.deployed)
+			S.attack_self(chassis.occupant)
 		S.attack_self(chassis.occupant)
+	if(href_list["refill"])
+		pr_switchtool.toggle()
+		occupant_message("<span class='notice'>Automatic tool refilling activated.</span>")
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
-	if(device)
-		return "[..()] \[<a href='?src=\ref[src];menu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
+	return "[..()] Current tool: [S.deployed ? "[S.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
+
+/datum/global_iterator/mecha_switchtool/process(var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/ST)
+	if(!ST.chassis || ST.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
+		if(ST.chassis)
+			ST.occupant_message("<span class='warning'>Electrical systems compromised. Automatic tool refilling deactivated.</span>")
+		stop()
+		ST.set_ready_state(1)
+		return
+	var/cur_charge = ST.chassis.get_charge()
+	if(isnull(cur_charge) || !ST.chassis.cell)
+		stop()
+		ST.set_ready_state(1)
+		ST.occupant_message("No powercell detected.")
+		return
 	else
-		return "[..()] \[<a href='?src=\ref[src];mode=0'>D</a>|<a href='?src=\ref[src];mode=1'>C</a>|<a href='?src=\ref[src];mode=2'>A</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
+		for(var/obj/item/I in ST.S.stored_modules)
+			if(istype(I, /obj/item/weapon/weldingtool))
+				var/obj/item/weapon/weldingtool/W = I
+				if(W.reagents.total_volume <= W.max_fuel-10)
+					W.reagents.add_reagent(FUEL, 10)
+					ST.chassis.use_power(ST.energy_drain/2)
+			if(istype(I, /obj/item/stack/cable_coil))
+				var/obj/item/stack/cable_coil/C = I
+				if(C.amount <= C.max_amount-5)
+					C.add(5)
+					ST.chassis.use_power(ST.energy_drain/2)
+			if(istype(I, /obj/item/weapon/solder))
+				var/obj/item/weapon/solder/SO = I
+				if(SO.reagents.total_volume < SO.max_fuel-5)
+					SO.reagents.add_reagent(SACID, 5)
+					ST.chassis.use_power(ST.energy_drain)
+			if(istype(I, /obj/item/device/silicate_sprayer))
+				var/obj/item/device/silicate_sprayer/SI = I
+				if(SI.reagents.total_volume < SI.max_silicate-5)
+					SI.reagents.add_reagent(SILICATE, 5)
+					ST.chassis.use_power(ST.energy_drain/2)
+
 
 
 #undef MECHDRILL_SAND_SPEED

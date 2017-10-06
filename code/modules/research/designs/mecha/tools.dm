@@ -18,10 +18,10 @@
 	category = "Exosuit_Tools"
 	materials = list(MAT_IRON=10000)
 
-/datum/design/mech_rcd
+/datum/design/mech_red
 	name = "Module Design (RED Module)"
 	desc = "An exosuit-mounted Rapid Engineering Device."
-	id = "mech_rcd"
+	id = "mech_red"
 	build_type = MECHFAB
 	req_tech = list(Tc_MATERIALS = 4, Tc_BLUESPACE = 3, Tc_MAGNETS = 4, Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/red
@@ -218,3 +218,13 @@
 	build_path = /obj/item/mecha_parts/mecha_tracking
 	category = "Misc"
 	materials = list(MAT_IRON=500)
+
+/datum/design/mech_switchtool
+	name = "Module Design (Engineering Switchtool)"
+	desc = "An exosuit-mounted Engineering switchtool."
+	id = "mech_switchtool"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 3, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/tool/red
+	category = "Exosuit_Tools"
+	materials = list(MAT_IRON=15000,MAT_SILVER=10000,MAT_GOLD=10000)
