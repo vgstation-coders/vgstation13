@@ -105,9 +105,9 @@
 /mob/living/silicon/robot/proc/GripperClickOn(var/atom/A, var/params, var/obj/item/weapon/gripper/G)
 	if(!gripper_sanity_check(G))
 		return
-	G.force_holder = G.wrapped.force
-	G.wrapped.force = 0
 	if(A.Adjacent(src, MAX_ITEM_DEPTH) && isturf(loc))
+		G.force_holder = G.wrapped.force
+		G.wrapped.force = 0
 		var/resolved = G.wrapped.preattack(A, src, 1, params)
 		if(!gripper_sanity_check(G))//Check if the thing inside our gripper is still there, just to be sure.
 			return
@@ -125,7 +125,6 @@
 				return
 			G.wrapped.force = G.force_holder
 			G.update_icon()
-			return
 
 //Middle click cycles through selected modules.
 /mob/living/silicon/robot/MiddleClickOn(var/atom/A)
