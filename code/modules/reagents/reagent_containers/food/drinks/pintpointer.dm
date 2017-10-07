@@ -1,6 +1,6 @@
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer
 	name = "\improper Pintpointer"
-	desc = "A little help finding the bartender."
+	desc = "An attempt to create a navigation system which even a drunk spaceman can use."
 	icon_state = "pintdist5"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	item_state = "electronic"

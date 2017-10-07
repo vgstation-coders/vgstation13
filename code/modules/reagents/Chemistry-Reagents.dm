@@ -5365,7 +5365,7 @@
 /datum/reagent/ethanol/deadrumm/pintpointer
 	name = "Pintpointer"
 	id = PINTPOINTER
-	description = "An attempt to create a navigation system which even a drunk spaceman can use."
+	description = "A little help finding the bartender."
 	reagent_state = LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
