@@ -232,7 +232,7 @@
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(I.loc == (R || R.module))// Don't remove your own modules
-			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevents self-disassembling.</span>")
+			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevent self-disassembling.</span>")
 			return FALSE
 	if (!wrapped)
 		if(is_type_in_list(I, can_hold) && !is_type_in_list(I, blacklist))
@@ -274,7 +274,7 @@
 	if(issilicon(user))
 		var/mob/living/silicon/robot/A = user
 		if(!A.emagged)
-			to_chat(user, "<span class='danger'>ERROR. Safety protocols prevent your [src.name] from [ismob(target)? "completing this action." : "holding \the [target]."]</span>")
+			to_chat(user, "<span class='danger'>ERROR. Safety protocols prevent your [src.name] from [ismob(target) ? "completing this action." : "holding \the [target]."]</span>")
 			return TRUE
 
 /proc/gripper_sanity_check(var/obj/item/weapon/gripper/G)
