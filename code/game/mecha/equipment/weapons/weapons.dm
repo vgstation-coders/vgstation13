@@ -365,18 +365,18 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/grenade/flashbang/F = new projectile(chassis.loc)
+	var/obj/item/weapon/grenade/G = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
 		target = get_inaccuracy(originaltarget, 3, chassis)
-	F.throw_at(target, missile_range, missile_speed)
+	G.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	spawn(det_time)
-		F.prime()
+		G.prime()
 	do_after_cooldown()
 	return
 

@@ -1408,7 +1408,14 @@
 				SI.reagents.add_reagent(SILICATE, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
+	name = "\improper Metal Foam Grenade Launcher"
+	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/hamsandwich/M)
+	if(istype(M))
+		return 1
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
