@@ -1399,7 +1399,7 @@
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 		else if(issolder(I))
 			var/obj/item/weapon/solder/S = I
-			if(S.reagents.total_volume < SO.max_fuel-5)
+			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
 		else if(issilicatesprayer(I))
