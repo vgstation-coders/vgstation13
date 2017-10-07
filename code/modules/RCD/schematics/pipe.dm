@@ -25,6 +25,8 @@
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 	if(!do_after(user, AM, 5))
 		return 1
+	if(!A.Adjacent(get_turf(user)))
+		return 1
 
 	if(!AM)
 		return 1
@@ -155,6 +157,8 @@
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 	if(!do_after(user, A, 20))
 		return 1
+	if(!A.Adjacent(get_turf(user)))
+		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 	new /obj/item/pipe_gsensor(A)
@@ -171,6 +175,8 @@
 	to_chat(user, "Building pipe meter...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 	if(!do_after(user, A, 20))
+		return 1
+	if(!A.Adjacent(get_turf(user)))
 		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -378,6 +384,8 @@
 	var/thisdir = selected_dir
 	if(!do_after(user, A, 20))
 		return 1
+	if(!A.Adjacent(get_turf(user)))
+		return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
 
@@ -420,6 +428,8 @@
 	to_chat(user, "Building Pipes ...")
 	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
 	if(!do_after(user, A, 20))
+		return 1
+	if(!A.Adjacent(get_turf(user)))
 		return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)

@@ -510,7 +510,7 @@
 	var/device = 0	//0 - RCD, 1 - RPD
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
-	var/obj/item/device/rcd/rpd/RPD
+	var/obj/item/device/rcd/rpd/mech/RPD
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
