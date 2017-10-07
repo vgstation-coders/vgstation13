@@ -1343,6 +1343,11 @@
 	var/datum/global_iterator/pr_switchtool
 	var/obj/item/weapon/switchtool/engineering/mech/switchtool
 
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/hamsandwich/M)
+	if(..())
+		if(istype(M))
+			return 1
+
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/New()
 	..()
 	switchtool = new(src)
