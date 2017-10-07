@@ -325,6 +325,7 @@
 #define LITHOTORCRAZINE "lithotorcrazine"
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
+#define PINTPOINTER		"pintpointer"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
