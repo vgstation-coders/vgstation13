@@ -38,7 +38,10 @@
 	return 1
 
 /mob/living/silicon/robot/proc/uneq_active()
-	if((module_active:loc != src) || isnull(module_active))
+	if(!module_active)
+		return
+	var/obj/item/MA = module_active
+	if(MA.loc != src)
 		to_chat(src, "<span class='warning'>Can't store something you're not holding!</span>")
 		return
 
@@ -255,7 +258,7 @@
 //Grippershit
 
 /mob/living/silicon/robot/drop_item_v()//this is still dumb.
-	if(stat == CONSCIOUS && isturf(loc))
+	if(!incapacitated() && isturf(loc))
 		return drop_item(force_drop = 1)
 	return 0
 
