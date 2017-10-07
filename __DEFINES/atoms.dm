@@ -9,4 +9,4 @@
 //Alpha
 #define TRANSPARENT 0
 #define SEMI_TRANSPARENT 128
-#define NON_TRANSPARENT 255
+#define OPAQUE 255
