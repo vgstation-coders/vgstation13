@@ -103,32 +103,31 @@
 //Lots of sanity checking because i don't want runtimes.
 
 /mob/living/silicon/robot/proc/GripperClickOn(var/atom/A, var/params, var/obj/item/weapon/gripper/G)
-	var/obj/item/W = G.wrapped
 	if(!gripper_sanity_check(G))
 		return
-	G.force_holder = W.force
-	W.force = 0
+	G.force_holder = G.wrapped.force
+	G.wrapped.force = 0
 	if(A.Adjacent(src, MAX_ITEM_DEPTH))
-		var/resolved = W.preattack(A, src, 1, params)
+		var/resolved = G.wrapped.preattack(A, src, 1, params)
 		if(!gripper_sanity_check(G))//Check if the thing inside our gripper is still there, just to be sure.
 			return
-		if(!resolved && A && W)
-			resolved = A.attackby(W,src,params)
+		if(!resolved && A && G.wrapped)
+			resolved = A.attackby(G.wrapped,src,params)
 			if(ismob(A) || istype(A, /obj/mecha))
 				delayNextAttack(10)
 			if(!gripper_sanity_check(G))//Check it, again.
 				return
-			if(!resolved && A && W)
-				W.afterattack(A,src,1,params)//1 indicates adjacency. Thanks, magic number.
+			if(!resolved && A && G.wrapped)
+				G.wrapped.afterattack(A,src,TRUE,params)//TRUE indicates adjacency.
 			else
 				delayNextAttack(10)
 			if(!gripper_sanity_check(G))//If we're parsing again, we're checking it again.
 				return
-			W.force = G.force_holder
+			G.wrapped.force = G.force_holder
 			G.update_icon()
 			return
 	if(!isturf(loc))
-		W.force = G.force_holder
+		G.wrapped.force = G.force_holder
 		return
 
 //Middle click cycles through selected modules.
