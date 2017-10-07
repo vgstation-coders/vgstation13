@@ -47,3 +47,58 @@
 /obj/item/weapon/rcd_ammo/attackby(var/obj/O, mob/user)
 	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
 		return O.attackby(src, user)
+
+/obj/item/device/rcd/matter/engineering/mech
+	matter = 30
+
+/obj/item/device/rcd/matter/engineering/mech/use_energy(var/amount, var/mob/user)
+	return	//handled in mech code
+
+/obj/item/device/rcd/matter/engineering/mech/use_energy(var/amount, var/mob/user)
+	return	//handled in mech code
+/*
+/obj/item/device/rcd/matter/engineering/mech/Topic(var/href, var/list/href_list)
+	..()
+	if (usr.incapacitated() || usr.isStunned() || usr.loc != src.loc.loc)
+		return 1
+
+	if (href_list["schematic"])
+		var/datum/rcd_schematic/C = find_schematic(href_list["schematic"])
+
+		if (!istype(C))
+			return 1
+
+		switch (href_list["act"])
+			if ("select")
+				try_switch(usr, C)
+
+			if ("fav")
+				favorites |= C
+				rebuild_ui()
+
+			if ("defav")
+				favorites -= C
+				rebuild_ui()
+
+			if ("favorder")
+				var/index = favorites.Find(C)
+				if (href_list["order"] == "up")
+					if (index == favorites.len)
+						return 1
+
+					favorites.Swap(index, index + 1)
+
+				else
+					if (index == 1)
+						return 1
+
+					favorites.Swap(index, index - 1)
+
+				rebuild_favs()
+
+		return 1
+
+	// The href didn't get handled by us so we pass it down to the selected schematic.
+	if (selected)
+		return selected.Topic(href, href_list)
+*/

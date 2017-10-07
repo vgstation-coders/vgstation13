@@ -317,9 +317,9 @@
 	energy_drain = 0
 	range = MELEE|RANGED
 
-/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/ripley/firefighter/M as obj)
+/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
-		if(istype(M))
+		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/hamsandwich))
 			return 1
 	return 0
 
@@ -511,14 +511,18 @@
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
+	var/obj/item/device/rcd/matter/engineering/mech/RCD
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
 	RPD = new(src)
+	RCD = new(src)
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
 	RPD = null
+	qdel(RCD)
+	RCD = null
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
@@ -530,102 +534,36 @@
 		target = get_turf(target)
 	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
 		return
-	//meh
+	var/obj/item/device/rcd/R = RCD
 	if(device)
-		RPD.afterattack(target, chassis.occupant)
-		return
-	playsound(chassis, 'sound/machines/click.ogg', 50, 1)
-	switch(mode)
-		if(0)
-			if (istype(target, /turf/simulated/wall))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					target:ChangeTurf(/turf/simulated/floor/plating)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-			else if (istype(target, /turf/simulated/floor))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					target:ChangeTurf(get_base_turf(target.z))
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-			else if (istype(target, /obj/machinery/door/airlock))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					qdel(target)
-					target = null
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-		if(1)
-			if(istype(target, /turf/space))
-				occupant_message("Building Floor...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					target:ChangeTurf(/turf/simulated/floor/plating/airless)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					spark(chassis, 2, FALSE)
-					chassis.use_power(energy_drain*2)
-			else if(istype(target, /turf/simulated/floor))
-				occupant_message("Building Wall...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					target:ChangeTurf(/turf/simulated/wall)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					spark(chassis, 2, FALSE)
-					chassis.use_power(energy_drain*2)
-		if(2)
-			if(istype(target, /turf/simulated/floor))
-				occupant_message("Building Airlock...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					spark(chassis, 2, FALSE)
-					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
-					T.autoclose = 1
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
-					chassis.use_power(energy_drain*2)
+		R = RPD
+	R.busy  = TRUE // Busy to prevent switching schematic while it's in use.
+	var/t = R.selected.attack(target, chassis.occupant)
+	if(!t) // No errors
+		if(device)
+			chassis.use_power(energy_drain)
+		else
+			chassis.use_power(energy_drain/5)
+	else
+		occupant_message("<span class='warning'>\the [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
+	R.busy = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Topic(href,href_list)
 	..()
-	if(href_list["mode"])
-		mode = text2num(href_list["mode"])
-		switch(mode)
-			if(0)
-				occupant_message("Switched RED to Deconstruct.")
-			if(1)
-				occupant_message("Switched RED to Construct.")
-			if(2)
-				occupant_message("Switched RED to Construct Airlock.")
+	if(href_list["RCDmenu"])
+		RCD.attack_self(chassis.occupant)
+	if(href_list["RPDmenu"])
+		RPD.attack_self(chassis.occupant)
 	if(href_list["swap"])
 		device = !device
-	if(href_list["menu"])
-		RPD.attack_self(chassis.occupant)
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/get_equip_info()
 	if(device)
-		return "[..()] \[<a href='?src=\ref[src];menu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
+		return "[..()] \[<a href='?src=\ref[src];RPDmenu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
 	else
-		return "[..()] \[<a href='?src=\ref[src];mode=0'>D</a>|<a href='?src=\ref[src];mode=1'>C</a>|<a href='?src=\ref[src];mode=2'>A</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
+		return "[..()] \[<a href='?src=\ref[src];RCDmenu=0'>Open construction menu</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
 
 
 
@@ -1412,15 +1350,6 @@
 			if(SI.reagents.total_volume < SI.max_silicate-5)
 				SI.reagents.add_reagent(SILICATE, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
-	name = "\improper Metal Foam Grenade Launcher"
-	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
-	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/hamsandwich/M)
-	if(istype(M))
-		return 1
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

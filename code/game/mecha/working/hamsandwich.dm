@@ -9,6 +9,7 @@
 	health = 100
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
 	max_equip = 4
+	cargo_capacity = 30
 	var/image/thruster_overlay
 
 /obj/mecha/working/hamsandwich/New()

@@ -390,6 +390,15 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/rearm()
 	return//Extra bit of security
 
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
+	name = "\improper Metal Foam Grenade Launcher"
+	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/hamsandwich/M)
+	if(istype(M))
+		return 1
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"
 	icon_state = "mecha_bananamrtr"

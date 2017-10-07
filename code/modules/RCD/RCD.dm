@@ -35,8 +35,6 @@
 
 	var/obj/abstract/screen/close/closer
 
-	var/ranged = FALSE	//whether the user has to be adjacent to the tile for the RCD to function in general.
-
 /obj/item/device/rcd/New()
 	. = ..()
 
@@ -193,7 +191,7 @@
 	if(!selected)
 		return 1
 
-	if(~selected.flags & (RCD_SELF_SANE | RCD_RANGE) && (!(user.Adjacent(A) && A.Adjacent(user)) && !ranged)) // If RCD_SELF_SANE and RCD_RANGE are disabled we use adjacency.
+	if(~selected.flags & (RCD_SELF_SANE | RCD_RANGE) && !(user.Adjacent(A) && A.Adjacent(user))) // If RCD_SELF_SANE and RCD_RANGE are disabled we use adjacency.
 		return 1
 
 	if(selected.flags & RCD_RANGE && ~selected.flags & RCD_SELF_SANE && get_dist(A, user) > 1) // RCD_RANGE is used AND we're NOT SELF_SANE, use range(1)

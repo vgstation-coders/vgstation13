@@ -95,9 +95,6 @@
 	var/list/modifiers = event_args["modifiers"]
 	modifiers -= list("alt", "shift", "ctrl")
 
-/obj/item/device/rcd/rpd/mech
-	ranged = TRUE
-
 /obj/item/device/rcd/rpd/mech/Topic(var/href, var/list/href_list)
 	..()
 	if(href_list["close"])
