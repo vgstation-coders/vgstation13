@@ -547,6 +547,14 @@
 					item_state = "ginvodkaglass"
 					name = "glass of Grey vodka"
 					desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
+				if(PINTPOINTER)
+					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
+					reagents.trans_to(P, reagents.total_volume)
+					var/mob/M = get_holder_at_turf_level(src)
+					if(istype(M))
+						P.creator = M
+					spawn(1)
+						qdel(src)
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"
