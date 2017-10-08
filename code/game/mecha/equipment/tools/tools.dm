@@ -511,7 +511,7 @@
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
-	var/obj/item/device/rcd/matter/engineering/mech/RCD
+	var/obj/item/device/rcd/mech/RCD
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -865,8 +865,9 @@
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
 	chassis.overlays -= droid_overlay
+	qdel(pr_repair_droid)
+	pr_repair_droid = null
 	..()
-	return
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/detach()
 	chassis.overlays -= droid_overlay
@@ -941,6 +942,11 @@
 	pr_energy_relay = new /datum/global_iterator/mecha_energy_relay(list(src),0)
 	pr_energy_relay.set_delay(equip_cooldown)
 	return
+
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
+	qdel(pr_energy_relay)
+	pr_energy_relay = null
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/detach()
 	pr_energy_relay.stop()
@@ -1054,6 +1060,11 @@
 	..()
 	init()
 	return
+
+/obj/item/mecha_parts/mecha_equipment/generator/Destroy()
+	qdel(pr_mech_generator)
+	pr_mech_generator = null
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/generator/proc/init()
 	fuel = new /obj/item/stack/sheet/mineral/plasma(src)
@@ -1296,6 +1307,8 @@
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
 	qdel(switchtool)
 	switchtool = null
+	qdel(pr_switchtool)
+	pr_switchtool = null
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
