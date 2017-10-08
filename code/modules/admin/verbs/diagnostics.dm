@@ -247,3 +247,50 @@
 		else
 			str += "\n|''(Check [R.type]/on_reaction()!)''"
 	text2file(str+"\n|}","chemistry-recipes.wiki")
+
+// For /vg/ Wiki docs
+/client/proc/dump_chems()
+	set category = "Debug"
+	set name = "Dump Chemicals"
+
+	var/paths = typesof(/datum/reagent) - /datum/reagent
+	var/num = 0
+	var/subtypes = 0
+	var/normal_shc = 0
+	var/normal_density = 0
+	var/str = {"
+{| class="wikitable"
+|-
+! Name
+! Reactants
+! Result"}
+	for(var/path in paths)
+		var/datum/reagent/R = new path()
+		num++
+		str += {"
+|-
+! [num]: [R.name]"}
+		if(R.id)
+			str += "\n|<ul>"
+			str += "\n|<li>{{ID = [R.id]}}</li>"
+			if(R.parent_type != /datum/reagent)
+				subtypes++
+				str += "\n|<li>{{Child of [R.parent_type]}}</li>"
+			if(R.density == 1 && !istype(R, /datum/reagent/water))
+				normal_density++
+			if(R.specheatcap == 1)
+				normal_shc++
+			str += "\n|<li>{{Density = [R.density]}}</li>"
+			str += "\n|<li>{{Specific Heat Capacity = [R.specheatcap]}}</li>"
+			if(R.overdose_am)
+				str += "\n|<li>{{Overdose amount = [R.overdose_am]}}</li>"
+			if(R.overdose_tick)
+				str += "\n|<li>{{Time in system to overdose = [R.overdose_tick/10] seconds}}</li>"
+			str += "</ul>"
+	if(subtypes)
+		str += "\n|Number of subtypes = [subtypes]"
+	if(normal_density)
+		str += "\n|Number of non-unique densities = [normal_density]"
+	if(normal_shc)
+		str += "\n|Number of non-unique SHCs = [normal_shc]"
+	text2file(str+"\n|}","chemistry-reagents.wiki")
