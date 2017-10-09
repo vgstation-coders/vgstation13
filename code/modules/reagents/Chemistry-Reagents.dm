@@ -252,6 +252,7 @@
 	reagent_state = LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
+	specheatcap = 3.49
 
 	data = new/list("donor"= null, "viruses" = null, "blood_DNA" = null, "blood_type" = null, \
 	"blood_colour" = DEFAULT_BLOOD, "resistances" = null, "trace_chem" = null, "antibodies" = null)
@@ -367,6 +368,7 @@
 	reagent_state = LIQUID
 	color = "#C81040" //rgb: 200, 16, 64
 	density = 1.05
+	specheatcap = 3.49
 
 /datum/reagent/vaccine/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -521,6 +523,8 @@
 	reagent_state = LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
 	overdose_am = REAGENTS_OVERDOSE
+	density = 0.941
+	specheatcap = 1.925
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -604,7 +608,8 @@
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
-	density = 0.76
+	density = 0.4
+	specheatcap = 1.67
 
 /datum/reagent/plasticide/on_mob_life(var/mob/living/M)
 
@@ -624,6 +629,7 @@
 	custom_metabolism = 0.4
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 0.699
+	specheatcap = 1.328
 
 /datum/reagent/cyanide/on_mob_life(var/mob/living/M)
 
@@ -644,6 +650,7 @@
 	custom_metabolism = 0.01
 	data = 1 //Used as a tally
 	density = 0.687 //Let's assume it's a compound of cyanide
+	specheatcap = 1.335
 
 /datum/reagent/chefspecial/on_mob_life(var/mob/living/M, var/alien)
 
@@ -661,6 +668,8 @@
 	description = "Useful for dealing with undesirable customers."
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
+	density = 0.898
+	specheatcap = 3.58
 
 /datum/reagent/minttoxin/on_mob_life(var/mob/living/M, var/alien)
 
@@ -677,6 +686,8 @@
 	reagent_state = LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	overdose_am = REAGENTS_OVERDOSE
+	density = 1.245
+	specheatcap = 0.25
 
 /datum/reagent/slimetoxin/on_mob_life(var/mob/living/M)
 
@@ -701,6 +712,8 @@
 	reagent_state = LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	overdose_am = REAGENTS_OVERDOSE
+	density = 1.35
+	specheatcap = 0.135
 
 /datum/reagent/aslimetoxin/on_mob_life(var/mob/living/M)
 
@@ -749,6 +762,7 @@
 	custom_metabolism = 0.1
 	data = 1 //Used as a tally
 	density = 1.564
+	specheatcap = 1.725
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 
@@ -775,6 +789,7 @@
 	custom_metabolism = 0.2
 	data = 1 //Used as a tally
 	density = 1.564
+	specheatcap = 1.725
 
 /datum/reagent/srejuvenate/on_mob_life(var/mob/living/M)
 
@@ -809,6 +824,8 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.5
 	pain_resistance = 25
+	density = 1.35
+	specheatcap = 5.9
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M, var/alien)
 
@@ -829,6 +846,8 @@
 	color = "#60A584" //rgb: 96, 165, 132
 	custom_metabolism = 0.5
 	overdose_am = REAGENTS_OVERDOSE
+	density = 1.1
+	specheatcap = 2.35
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
@@ -851,6 +870,7 @@
 	reagent_state = LIQUID
 	color = "#0064C8" //rgb: 0, 100, 200
 	custom_metabolism = 5 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
+	specheatcap = 4.183
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 
@@ -952,6 +972,8 @@
 	color = "#202040" //rgb: 20, 20, 40
 	custom_metabolism = 0.25
 	overdose_am = REAGENTS_OVERDOSE
+	density = 1.8
+	specheatcap = 2.84
 
 /datum/reagent/serotrotium/on_mob_life(var/mob/living/M)
 
@@ -971,6 +993,7 @@
 	color = "#C7FFFF" //rgb: 199, 255, 255
 	overdose_am = 0
 	density = 2.648
+	specheatcap =  0.712
 
 /datum/reagent/oxygen
 	name = "Oxygen"
@@ -980,6 +1003,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	custom_metabolism = 0.01
 	density = 1.429
+	specheatcap = 0.911
 
 /datum/reagent/oxygen/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1006,6 +1030,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	custom_metabolism = 0.01
 	density = 1.251
+	specheatcap = 1.040
 
 /datum/reagent/nitrogen/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1024,6 +1049,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	custom_metabolism = 0.01
 	density = 0.08988
+	specheatcap = 13.83
 
 /datum/reagent/potassium
 	name = "Potassium"
@@ -1095,6 +1121,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.214
+	specheatcap = 1.34
 
 /datum/reagent/chlorine/on_mob_life(var/mob/living/M)
 
@@ -1111,6 +1138,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.696
+	specheatcap = 0.824
 
 /datum/reagent/fluorine/on_mob_life(var/mob/living/M)
 
@@ -1127,6 +1155,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.4
+	specheatcap = 1.667
 
 /datum/reagent/chloramine/on_mob_life(var/mob/living/M)
 
@@ -1162,6 +1191,7 @@
 	color = "#832828" //rgb: 131, 40, 40
 	custom_metabolism = 0.01
 	density = 1.823
+	specheatcap = 0.769
 
 /datum/reagent/lithium
 	name = "Lithium"
@@ -1190,6 +1220,7 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	sport = 1.2
 	density = 1.59
+	specheatcap = 1.244
 
 /datum/reagent/sugar/on_mob_life(var/mob/living/M)
 
@@ -1207,6 +1238,7 @@
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	var/quality = 2
 	density = 1.59
+	specheatcap = 1.244
 
 /datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
 	if(ishuman(M))
@@ -1240,6 +1272,7 @@
 	reagent_state = LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
 	density = 1.84
+	specheatcap = 1.38
 
 /datum/reagent/sacid/on_mob_life(var/mob/living/M)
 
@@ -1339,6 +1372,8 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
+	density = 1.84
+	specheatcap = 1.38
 
 /datum/reagent/pacid/on_mob_life(var/mob/living/M)
 
@@ -1438,6 +1473,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	custom_metabolism = 0.01
 	density = 1.26
+	specheatcap = 2.43
 
 /datum/reagent/nitroglycerin
 	name = "Nitroglycerin"
@@ -1447,6 +1483,7 @@
 	color = "#808080" //rgb: 128, 128, 128
 	custom_metabolism = 0.01
 	density = 1.6
+	specheatcap = 4.98
 
 /datum/reagent/radium
 	name = "Radium"
@@ -1455,6 +1492,7 @@
 	reagent_state = SOLID
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
+	specheatcap = 94
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1490,6 +1528,8 @@
 	reagent_state = SOLID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
+	density = 8.45
+	specheatcap = 5.96
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M)
 
@@ -1549,6 +1589,8 @@
 	description = "Thermite produces an aluminothermic reaction known as a thermite reaction. Can be used to melt walls."
 	reagent_state = SOLID
 	color = "#673910" //rgb: 103, 57, 16
+	density = 3.25
+	specheatcap = 0.48
 
 /datum/reagent/thermite/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -1583,6 +1625,7 @@
 	reagent_state = LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 5
+	specheatcap = 110
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1617,6 +1660,8 @@
 	color = "#C8A5DC"
 	pain_resistance = 80
 	custom_metabolism = 0.1
+	density = 2.36
+	specheatcap = 3.4
 
 /datum/reagent/tramadol/on_mob_life(var/mob/living/M)
 
@@ -1635,6 +1680,8 @@
 	reagent_state = LIQUID
 	color = "#C805DC"
 	custom_metabolism = 0.05
+	density = 3.59
+	specheatcap = 0.98
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 
@@ -1662,6 +1709,8 @@
 	reagent_state = LIQUID
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#899613" //rgb: 137, 150, 19
+	density = 1.3
+	specheatcap = 4.5
 
 /datum/reagent/virus_food/on_mob_life(var/mob/living/M)
 
@@ -1676,6 +1725,8 @@
 	description = "Sterilizes wounds in preparation for surgery."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 0.76
+	specheatcap = 0.89
 
 /datum/reagent/vaporsalt
 	name = "Vapor Salts"
@@ -1732,6 +1783,7 @@
 	reagent_state = SOLID
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
+	specheatcap = 124
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 
@@ -1757,6 +1809,11 @@
 	color = "#5E02F8" //rgb: 94, 2, 248
 	dupeable = FALSE
 
+/datum/reagent/phazon/New()
+	..()
+	density = rand(1,250)/rand(1,35)
+	specheatcap = rand(1,250)/rand(1,35)
+
 /datum/reagent/phazon/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -1781,6 +1838,7 @@
 	reagent_state = SOLID
 	color = "#A8A8A8" //rgb: 168, 168, 168
 	density = 2.33
+	specheatcap = 0.712
 
 /datum/reagent/fuel
 	name = "Welding fuel"
@@ -1789,6 +1847,7 @@
 	reagent_state = LIQUID
 	color = "#660000" //rgb: 102, 0, 0
 	density = 1.1
+	specheatcap = 0.68
 
 /datum/reagent/fuel/reaction_obj(var/obj/O, var/volume)
 
@@ -1821,6 +1880,8 @@
 	description = "Stomach acid mixed with partially digested chunks of food."
 	reagent_state = LIQUID
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
+	density = 1.35
+	specheatcap = 5.2
 
 /datum/reagent/vomit/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1842,6 +1903,8 @@
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
 	reagent_state = LIQUID
 	color = "#A5F0EE" //rgb: 165, 240, 238
+	density = 1.125
+	specheatcap = 4.25
 
 /datum/reagent/space_cleaner/reaction_obj(var/obj/O, var/volume)
 
@@ -1972,6 +2035,8 @@
 	description = "A chemical mix good for growing plants with."
 	reagent_state = LIQUID
 	color = "#664330" // rgb: 102, 67, 48
+	density = 5.4
+	specheatcap = 15
 
 /datum/reagent/fertilizer/eznutrient
 	name = "EZ Nutrient"
@@ -2065,6 +2130,11 @@
 	reagent_state = LIQUID
 	color = "#500064" //rgb: 80, 0, 100
 
+/datum/reagent/plasma/New()
+	..()
+	specheatcap = rand(1,150)/rand(1,25)
+	density = rand(1,150)/rand(1,25)
+
 /datum/reagent/plasma/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -2102,6 +2172,8 @@
 	description = "Leporazine can be use to stabilize an individuals body temperature."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 3.5
+	specheatcap = ARBITRARILY_LARGE_NUMBER //Good fucking luck heating something with leporazine in it
 
 /datum/reagent/leporazine/on_mob_life(var/mob/living/M)
 
@@ -2120,6 +2192,8 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.5
+	density = 2.85
+	specheatcap = 6.7
 
 /datum/reagent/cryptobiolin/on_mob_life(var/mob/living/M)
 
@@ -2135,6 +2209,8 @@
 	description = "Lexorin temporarily stops respiration. Causes tissue damage."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 0.54
+	specheatcap = 2.31
 
 /datum/reagent/lexorin/on_mob_life(var/mob/living/M)
 
@@ -2153,6 +2229,8 @@
 	description = "Kelotane is a drug used to treat burns."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 0.95
+	specheatcap = 12.5
 
 /datum/reagent/kelotane/on_mob_life(var/mob/living/M)
 
@@ -2167,6 +2245,8 @@
 	description = "Dermaline is the next step in burn medication. Works twice as good as kelotane and enables the body to restore even the direst heat-damaged tissue."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 0.59
+	specheatcap = 23
 
 /datum/reagent/dermaline/on_mob_life(var/mob/living/M)
 
@@ -2181,6 +2261,8 @@
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 0.13
+	specheatcap = 5.3
 
 /datum/reagent/dexalin/on_mob_life(var/mob/living/M)
 
@@ -2198,6 +2280,8 @@
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 0.25
+	specheatcap = 7.64
 
 /datum/reagent/dexalinp/on_mob_life(var/mob/living/M)
 
@@ -2215,6 +2299,8 @@
 	description = "Tricordrazine is a highly potent stimulant, originally derived from cordrazine. Can be used to treat a wide range of injuries."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 1.12
+	specheatcap = 2.5
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 
@@ -2237,6 +2323,8 @@
 	description = "It's magic. We don't have to explain it."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
 
 /datum/reagent/adminordrazine/on_mob_life(var/mob/living/carbon/M)
 
@@ -2303,6 +2391,8 @@
 	custom_metabolism = 0.01
 	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 40
+	density = 0.87
+	specheatcap = 1.475
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 
@@ -2326,6 +2416,8 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
+	density = 4.65
+	specheatcap = 1.2
 
 /datum/reagent/impedrezene/on_mob_life(var/mob/living/M)
 
@@ -2348,6 +2440,8 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
+	density = 9.78
+	specheatcap = 53.6
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 
@@ -2364,6 +2458,8 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
+	density = 14.98
+	specheatcap = 76.53
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M)
 
@@ -2382,6 +2478,8 @@
 	reagent_state = SOLID
 	color = "#C0C0C0"
 	custom_metabolism = 0.2
+	density = 18.53
+	specheatcap = 64.3
 
 /datum/reagent/alkysine
 	name = "Alkysine"
@@ -2392,6 +2490,8 @@
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 10
+	density = 1.59
+	specheatcap = 3.532
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M)
 
@@ -2406,6 +2506,8 @@
 	description = "Heals eye damage"
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 1.1255
+	specheatcap = 4.534
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 
@@ -2428,6 +2530,8 @@
 	reagent_state = LIQUID
 	color = "#6600FF" //rgb: 100, 165, 255
 	overdose_am = REAGENTS_OVERDOSE
+	density = 2.09
+	specheatcap = 1.209
 
 /datum/reagent/inacusiate/on_mob_life(var/mob/living/M)
 

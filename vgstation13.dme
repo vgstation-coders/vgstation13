@@ -1863,6 +1863,7 @@
 #include "code\modules\reagents\machinery\mortar.dm"
 #include "code\modules\reagents\machinery\pandemic.dm"
 #include "code\modules\reagents\machinery\reagentgrinder.dm"
+#include "code\modules\reagents\machinery\thermometer.dm"
 #include "code\modules\reagents\reagent_containers\blood_pack.dm"
 #include "code\modules\reagents\reagent_containers\borghydro.dm"
 #include "code\modules\reagents\reagent_containers\chempack.dm"

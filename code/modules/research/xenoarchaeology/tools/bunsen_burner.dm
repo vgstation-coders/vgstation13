@@ -9,31 +9,31 @@
 	var/list/possible_fuels = list(
 		PLASMA = list(
 				"max_temperature" = TEMPERATURE_PLASMA,
-				"thermal_energy_transfer" = 40000,
+				"thermal_energy_transfer" = 6000,
 				"consumption_rate" = 0.1,
 				"o2_cons" = 0.01,
 				"co2_cons" = 0,
 				"unsafety" = 0),
 		GLYCEROL = list(
 				"max_temperature" = 1833.15,
-				"thermal_energy_transfer" = 25000,
+				"thermal_energy_transfer" = 4000,
 				"consumption_rate" = 0.25,
 				"o2_cons" = 0.05,
-				"co2_cons" = 0,
+				"co2_cons" = -0.025,
 				"unsafety" = 5),
 		FUEL = list(
 				"max_temperature" = TEMPERATURE_WELDER,
-				"thermal_energy_transfer" = 32000,
+				"thermal_energy_transfer" = 3600,
 				"consumption_rate" = 0.5,
 				"o2_cons" = 0.2,
 				"co2_cons" = -0.2,
 				"unsafety" = 25),
 		ETHANOL = list(
 				"max_temperature" = 1833.15,
-				"thermal_energy_transfer" = 19000,
+				"thermal_energy_transfer" = 2600,
 				"consumption_rate" = 0.5,
 				"o2_cons" = 0.08,
-				"co2_cons" = 0,
+				"co2_cons" = -0.04,
 				"unsafety" = 10))
 	pixel_y = 15 * PIXEL_MULTIPLIER
 	ghost_read = 0
@@ -97,6 +97,12 @@
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
 				break
+
+		if(!max_temperature)
+			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
+			toggle()
+			return
+
 		/*
 		if(reagents.has_reagent(PLASMA))
 			reagents.remove_reagent(PLASMA, 0.1)
@@ -137,7 +143,7 @@
 		held_container.attack_hand(user)
 		held_container = null
 	else
-		to_chat(user, "<span class='warning'>There is nothing on the [src].</span>")
+		toggle()
 
 /obj/machinery/bunsen_burner/verb/toggle()
 	set src in view(1)
