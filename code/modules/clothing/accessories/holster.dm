@@ -167,13 +167,15 @@
 
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
-		/obj/item/weapon/hatchet/unathiknife, \
 		/obj/item/weapon/screwdriver, \
 		/obj/item/weapon/wirecutters, \
 		/obj/item/weapon/reagent_containers/syringe, \
 		/obj/item/weapon/reagent_containers/hypospray/autoinjector, \
 		/obj/item/weapon/pen, \
-		/obj/item/weapon/scalpel
+		/obj/item/weapon/scalpel, \
+		/obj/item/weapon/minihoe, \
+		/obj/item/weapon/hatchet, \
+		/obj/item/weapon/pickaxe/shovel/spade
 		))
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
