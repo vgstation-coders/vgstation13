@@ -160,11 +160,21 @@
 		return
 	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch))
 		return
+	if(istype(W, /obj/item/weapon/melee/energy/sword))
+		var/obj/item/weapon/melee/energy/sword/S = W
+		if(S.active == 0)
+			return 1
+
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
 		/obj/item/weapon/hatchet/unathiknife, \
 		/obj/item/weapon/screwdriver, \
-		/obj/item/weapon/wirecutters))
+		/obj/item/weapon/wirecutters, \
+		/obj/item/weapon/reagent_containers/syringe, \
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector, \
+		/obj/item/weapon/pen, \
+		/obj/item/weapon/scalpel
+		))
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
 	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from its holster!</span>", \
