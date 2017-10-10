@@ -43,7 +43,13 @@
 	processing_objects.Remove(src)
 	create_reagents(50)
 
-/obj/machinery/bunsen_burner/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bunsen_burner/Destroy()
+	if(held_container)
+		held_container.forceMove(get_turf(src))
+		held_container = null
+	..()
+
+/obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
 		if(held_container)
@@ -62,8 +68,15 @@
 				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER)
 				underlays += I
 				return 1 // avoid afterattack() being called
+	if(iswrench(W))
+		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
+		if(do_after(user, src, 5 SECONDS))
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			drop_stack(/obj/item/stack/sheet/metal, loc, rand(3,4), user)
+			qdel(src)
+			return
 	else
-		to_chat(user, "<span class='warning'>You can't put the [W] onto the [src].</span>")
+		..()
 
 /obj/machinery/bunsen_burner/process()
 	if(held_container && heating)
@@ -135,7 +148,7 @@
 	icon_state = "bunsen[heating]"
 
 
-/obj/machinery/bunsen_burner/attack_hand(mob/user as mob)
+/obj/machinery/bunsen_burner/attack_hand(mob/user)
 	if(held_container)
 		underlays = null
 		to_chat(user, "<span class='notice'>You remove the [held_container] from the [src].</span>")
