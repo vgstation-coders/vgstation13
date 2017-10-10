@@ -417,6 +417,7 @@
 			P.roll_and_drop(src)
 
 	ChangeTurf(dismantle_type)
+	update_near_walls()
 
 /turf/simulated/wall/r_wall/ex_act(severity)
 	if(rotting)
