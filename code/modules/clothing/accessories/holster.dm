@@ -169,14 +169,14 @@
 		/obj/item/weapon/kitchen/utensil, \
 		/obj/item/weapon/screwdriver, \
 		/obj/item/weapon/wirecutters, \
-		/obj/item/weapon/reagent_containers/syringe, \
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector, \
 		/obj/item/weapon/pen, \
 		/obj/item/weapon/scalpel, \
 		/obj/item/weapon/minihoe, \
 		/obj/item/weapon/hatchet, \
-		/obj/item/weapon/pickaxe/shovel/spade
-		))
+		/obj/item/weapon/pickaxe/shovel/spade, \
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana, \
+		/obj/item/weapon/bikehorn
+		)) //honk
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
 	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from its holster!</span>", \
@@ -193,7 +193,7 @@
 
 /obj/item/clothing/accessory/holster/knife/boot/update_icon()
 	if(holstered)
-		if(holstered.icon_state in list("skinningknife", "tacknife", "knife", "smallknife", "fork"))
+		if(holstered.icon_state in list("skinningknife", "tacknife", "knife", "smallknife", "fork", "pen", "scalpel", "banana", "bike_horn", "sword0"))
 			icon_state = "[initial(icon_state)]_[holstered.icon_state]"
 			_color = "[initial(_color)]_[holstered.icon_state]"
 		else
