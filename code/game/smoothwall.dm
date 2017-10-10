@@ -98,9 +98,6 @@
 	relativewall_neighbours()
 
 /turf/simulated/wall/Destroy()
-
-	to_chat(world, "Se esta llamando el SEGUNDO destroy")
-
 	var/temploc = src.loc
 
 	if(!del_suppress_resmoothing)
