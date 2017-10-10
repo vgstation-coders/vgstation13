@@ -769,6 +769,17 @@
 		return CANNOT_EQUIP //Unsupported slot
 		//END MOMMI
 
+	else if(ismartian(M))
+		//why
+		var/mob/living/carbon/martian/MA = M
+		switch(slot)
+			if(slot_head)
+				if(MA.head)
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+
+		return CANNOT_EQUIP
+
 /obj/item/can_pickup(mob/living/user)
 	if(!(user) || !isliving(user)) //BS12 EDIT
 		return FALSE
