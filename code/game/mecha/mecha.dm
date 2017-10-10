@@ -104,7 +104,7 @@
 	return
 
 /obj/mecha/Destroy()
-	src.go_out()
+	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
 	..()
 	return
@@ -623,7 +623,7 @@
 
 /obj/mecha/proc/destroy()
 	spawn()
-		go_out()
+		go_out(loc, TRUE)
 		var/turf/T = get_turf(src)
 		tag = "\ref[src]" //better safe then sorry
 		if(loc)
@@ -1270,11 +1270,11 @@
 			O.forceMove(src.loc)
 	return
 
-/obj/mecha/proc/go_out(var/exit = loc)
+/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!src.occupant)
 		return
 
-	if(exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
+	if(!exploding && exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
 		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
 		for(var/turf/simulated/T in turf_candidates)
 			if(!is_blocked_turf(T) && Adjacent(T))
