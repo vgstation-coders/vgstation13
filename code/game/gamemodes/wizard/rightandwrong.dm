@@ -1,9 +1,9 @@
 
 
-/mob/proc/rightandwrong(var/summon_type) //0 = Summon Guns, 1 = Summon Magic
-	to_chat(usr, "<B>You summoned [summon_type ? "magic" : "guns"]!</B>")
-	message_admins("[key_name_admin(usr, 1)] summoned [summon_type ? "magic" : "guns"]!")
-	log_game("[key_name(usr)] summoned [summon_type ? "magic" : "guns"]!")
+/mob/proc/rightandwrong(var/summon_type) //0 = Summon Guns, 1 = Summon Magic, 2 = Summon Swords
+	to_chat(usr, "<B>You summoned [summon_type]!</B>")
+	message_admins("[key_name_admin(usr, 1)] summoned [summon_type]!")
+	log_game("[key_name(usr)] summoned [summon_type]!")
 	for(var/mob/living/carbon/human/H in player_list)
 		if(H.stat == DEAD || !(H.client))
 			continue
@@ -23,7 +23,9 @@
 				obj_count++
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
-		if(!summon_type)
+		var/randomizeswords = pick("unlucky", "misc", "glass", "hatchet", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
+		var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar")
+		if(summon_type == "guns")
 			switch (randomizeguns)
 				if("taser")
 					new /obj/item/weapon/gun/energy/taser(get_turf(H))
@@ -86,7 +88,8 @@
 				if("beegun")
 					new /obj/item/weapon/gun/gatling/beegun(get_turf(H))
 			playsound(get_turf(H),'sound/effects/summon_guns.ogg', 50, 1)
-		else
+
+		else if(summon_type == "magic")
 			switch (randomizemagic)
 				if("fireball")
 					new /obj/item/weapon/spellbook/oneuse/fireball(get_turf(H))
@@ -143,3 +146,117 @@
 						H.see_in_dark = 8
 						H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 						to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
+
+		else if(summon_type == "swords")
+			switch (randomizeknightcolor) //everyone gets some armor as well
+				if("green")
+					new /obj/item/clothing/suit/armor/knight(get_turf(H))
+					new /obj/item/clothing/head/helmet/knight(get_turf(H))
+				if("yellow")
+					new /obj/item/clothing/suit/armor/knight/yellow(get_turf(H))
+					new /obj/item/clothing/head/helmet/knight/yellow(get_turf(H))
+				if("blue")
+					new /obj/item/clothing/suit/armor/knight/blue(get_turf(H))
+					new /obj/item/clothing/head/helmet/knight/blue(get_turf(H))
+				if("red")
+					new /obj/item/clothing/suit/armor/knight/red(get_turf(H))
+					new /obj/item/clothing/head/helmet/knight/red(get_turf(H))
+				if("templar")
+					new /obj/item/clothing/suit/armor/knight/templar(get_turf(H))
+					new /obj/item/clothing/head/helmet/knight/templar(get_turf(H))
+
+			switch (randomizeswords)
+				if("unlucky") //so the chance to get an unlucky item does't clutter the main pool of swords
+					var/noluck = pick(/obj/item/weapon/kitchen/utensil/knife/plastic, /obj/item/weapon/screwdriver, /obj/item/weapon/wirecutters, /obj/item/toy/foamblade, /obj/item/toy/sword)
+					new noluck(get_turf(H))
+				if("misc")
+					var/miscpick = pick(/obj/item/weapon/scythe, /obj/item/weapon/harpoon, /obj/item/weapon/sword, /obj/item/weapon/claymore, )
+					new miscpick(get_turf(H))
+				if("glass")
+					if(prob(50))
+						new /obj/item/weapon/shard(get_turf(H))
+					else
+						new /obj/item/weapon/shard/plasma(get_turf(H))
+				if("hatchet")
+					new /obj/item/weapon/hatchet(get_turf(H))
+				if("armblade") // good luck getting it off. Maybe cut your own arm off :^)
+					new /obj/item/weapon/armblade(get_turf(H))
+				if("pickaxe")
+					var/pickedaxe = pick(/obj/item/weapon/pickaxe, /obj/item/weapon/pickaxe/silver, /obj/item/weapon/pickaxe/gold, /obj/item/weapon/pickaxe/diamond)
+					new pickedaxe(get_turf(H))
+				if("pcutter")
+					new /obj/item/weapon/pickaxe/plasmacutter(get_turf(H))
+				if("esword")
+					new /obj/item/weapon/melee/energy/sword(get_turf(H))
+					if(prob(70)) //chance for a second one to make a double esword
+						new /obj/item/weapon/melee/energy/sword(get_turf(H))
+				if("alt-esword")
+					if(prob(75))
+						new /obj/item/weapon/melee/energy/sword/pirate(get_turf(H))
+						if(prob(70))
+							new /obj/item/weapon/melee/energy/sword/pirate(get_turf(H))
+					else //hope you're the clown
+						new /obj/item/weapon/melee/energy/sword/bsword(get_turf(H))
+						if(prob(70))
+							new /obj/item/weapon/melee/energy/sword/bsword(get_turf(H))
+				if("machete")
+					new /obj/item/weapon/melee/energy/hfmachete(get_turf(H))
+					if(prob(70))
+						new /obj/item/weapon/melee/energy/hfmachete(get_turf(H))
+				if("kitchen")
+					if(prob(60))
+						if(prob(25))
+							new /obj/item/weapon/kitchen/utensil/knife/large(get_turf(H))
+						else
+							new /obj/item/weapon/kitchen/utensil/knife/large/butch(get_turf(H))
+					else
+						new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(get_turf(H))
+				if("spear")
+					if(prob(50))
+						new /obj/item/weapon/spear(get_turf(H))
+					else
+						new /obj/item/weapon/melee/lance(get_turf(H))
+				if("katana") //feeling lucky?
+					if(prob(5))
+						new /obj/item/weapon/katana/hfrequency(get_turf(H))
+					else
+						new /obj/item/weapon/katana(get_turf(H))
+				if("axe")
+					if(prob(50))
+						if(prob(5))
+							new /obj/item/weapon/melee/energy/axe(get_turf(H))
+						else
+							new /obj/item/weapon/melee/energy/axe/rusty(get_turf(H))
+					else
+						new /obj/item/weapon/fireaxe(get_turf(H))
+				if("venom")
+					new /obj/item/weapon/sword/venom(get_turf(H))
+				if("boot")
+					if(prob(50))
+						new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(get_turf(H))
+					else
+						new /obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning(get_turf(H))
+				if("saw")
+					if(prob(40))
+						new /obj/item/weapon/circular_saw/plasmasaw(get_turf(H))
+					else
+						new /obj/item/weapon/circular_saw(get_turf(H))
+				if("scalpel")
+					if(prob(60))
+						if(prob(50))
+							new /obj/item/weapon/scalpel/laser(get_turf(H))
+						else
+							new /obj/item/weapon/scalpel/laser/tier2(get_turf(H))
+					else
+						new /obj/item/weapon/scalpel(get_turf(H))
+				if("bottle")
+					new /obj/abstract/map/spawner/space/drinks(get_turf(H))
+				if("switchtool")
+					if(prob(40))
+						if(prob(50))
+							new /obj/item/weapon/switchtool(get_turf(H))
+						else
+							new /obj/item/weapon/switchtool/surgery(get_turf(H))
+					else
+						new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(H))
+			playsound(get_turf(H),'sound/items/zippo_open.ogg', 50, 1)
