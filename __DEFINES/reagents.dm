@@ -359,7 +359,7 @@
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
 
-//Amount of energy given during heating
+//Temperatures of things
 #define TEMPERATURE_HOTMETAL 300
 #define TEMPERATURE_LASER ARBITRARILY_LARGE_NUMBER //Lasers technically have no upper limit
 #define TEMPERATURE_FLAME 700

@@ -3,6 +3,14 @@
 	desc = "A device that measures temperature using the expansion of mercury when exposed to heat."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "therm_mercury"
+	flags = FPRINT
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_GLASS = 500)
+	w_type = RECYK_GLASS
+	melt_temperature = MELTPOINT_GLASS
+	origin_tech = Tc_BIOTECH + "=2"
+
 	var/last_temperature
 	var/last_temperature_string
 
@@ -79,6 +87,11 @@
 	name = "electronic thermometer"
 	desc = "An electronic thermal probe, boasting greater precision and less mercury than its analogue counterparts."
 	icon_state = "therm_digi_1"
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3"
+
+	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 400)
+	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_GLASS
 
 /obj/item/weapon/thermometer/electronic/initial_thermometer()
 	return
