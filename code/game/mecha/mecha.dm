@@ -81,7 +81,8 @@
 						/obj/item/mecha_parts,
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack)
+						/obj/item/device/radio/electropack,
+						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
 	..()

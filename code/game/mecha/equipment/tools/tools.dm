@@ -123,7 +123,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill
 	name = "\improper Exosuit-Mounted Drill"
-	desc = "This is the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
+	desc = "This is the drill that'll pierce the heavens! (Can be attached to: Combat and Mining Exosuits)"
 	icon_state = "mecha_drill"
 	equip_cooldown = 45
 	energy_drain = 10
@@ -231,7 +231,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill
 	name = "\improper Exosuit-Mounted Diamond Drill"
-	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
+	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Mining Exosuits)"
 	icon_state = "mecha_diamond_drill"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
 	equip_cooldown = 15
@@ -244,7 +244,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe
 	name = "\improper Heavy Duty Pneumatic Scythe"
-	desc = "An extremely heavy-duty pneumatic scythe. The \"giant robot\" approach to weed control. (Can be attached to: Engineering Exosuits)"
+	desc = "An extremely heavy-duty pneumatic scythe. The \"giant robot\" approach to weed control. (Can be attached to: Maintenance Exosuits)"
 	icon_state = "mecha_extremelylazyscythecopypaste"
 	equip_cooldown = 20
 	energy_drain = 15
@@ -310,7 +310,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher
 	name = "\improper Exosuit-Mounted Foam Extinguisher"
-	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting exosuits)"
+	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting and Engineering exosuits)"
 	icon_state = "mecha_exting"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=2"
 	equip_cooldown = 15
@@ -1382,9 +1382,6 @@
 	energy_drain = 50
 	range = MELEE
 	var/active = FALSE
-
-/obj/item/mecha_parts/mecha_equipment/tool/tiler/action(atom/target)
-	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
 	..()
