@@ -757,3 +757,36 @@
 		var/health_deficiency = (100 - health - halloss)
 		if(health_deficiency >= 40)
 			. += (health_deficiency / 25)
+
+/mob/living/carbon/proc/can_mind_interact(var/mob/M)
+	//	to_chat(world, "Starting can interact on [M]")
+	if(!iscarbon(M))
+		return 0 //Can't see non humans with your fancy human mind.
+//	to_chat(world, "[M] is a human")
+	var/turf/temp_turf = get_turf(M)
+	var/turf/our_turf = get_turf(src)
+	if(!temp_turf)
+//		to_chat(world, "[M] is in null space")
+		return 0
+	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
+//		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
+		if(temp_turf.z != map.zCentcomm)
+			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
+
+		return 0
+	if(M_PSY_RESIST in M.mutations)
+//		to_chat(world, "[M] has psy resist")
+		to_chat(src, "The mind of [M] is resisting!")
+		return 0
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+			return 0
+	if(ismartian(M))
+		var/mob/living/carbon/martian/MR = M
+		if(MR.head)
+			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
+				to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+				return 0
+	return 1
