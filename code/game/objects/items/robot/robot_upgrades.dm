@@ -248,7 +248,7 @@
 	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle beakers, food and seeds."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/plants)
+	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/plants, /obj/item/weapon/storage/bag/food/borg)
 
 /obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
