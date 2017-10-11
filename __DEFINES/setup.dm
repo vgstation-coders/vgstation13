@@ -1348,6 +1348,7 @@ var/proccalls = 1
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
+#define FOOD_NEEDS_COLD 32
 
 /*
  *
