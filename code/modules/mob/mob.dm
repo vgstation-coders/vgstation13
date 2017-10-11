@@ -1177,7 +1177,7 @@ var/list/slot_equipment_priority = list( \
 	if(!can_show_flavor_text())
 		return
 	var/msg = strip_html(flavor_text)
-	if(findtext(msg, "http:") || findtext(msg, "https:"))
+	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
 		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
 	if(length(msg) <= 32)
 		return "<font color='#ffa000'><b>[msg]</b></font>"
