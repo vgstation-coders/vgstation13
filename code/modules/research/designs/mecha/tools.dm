@@ -225,7 +225,7 @@
 	id = "mech_switchtool"
 	build_type = MECHFAB
 	req_tech = list(Tc_MATERIALS = 3, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 3)
-	build_path = /obj/item/mecha_parts/mecha_equipment/tool/red
+	build_path = /obj/item/mecha_parts/mecha_equipment/tool/switchtool
 	category = "Exosuit_Tools"
 	materials = list(MAT_IRON=15000,MAT_SILVER=5000,MAT_GOLD=5000)
 
@@ -238,3 +238,13 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
 	category = "Exosuit_Tools"
 	materials = list(MAT_IRON=20000)
+
+/datum/design/mech_tiler
+	name = "Module Design (Automatic Floor Tiler)"
+	desc = "An exosuit-mounted Automatic Floor Tiler."
+	id = "mech_tiler"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 3, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 3, Tc_MAGNETS = 2)
+	build_path = /obj/item/mecha_parts/mecha_equipment/tool/tiler
+	category = "Exosuit_Tools"
+	materials = list(MAT_IRON=15000)

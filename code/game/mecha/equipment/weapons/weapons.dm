@@ -360,12 +360,14 @@
 	projectile_energy_cost = 800
 	equip_cooldown = 60
 	var/det_time = 20
+	var/obj/item/weapon/grenade/grenade
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
 	var/obj/item/weapon/grenade/G = new projectile(chassis.loc)
+	grenade = G
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
@@ -376,7 +378,9 @@
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	spawn(det_time)
-		G.prime()
+		if(grenade)
+			grenade = null
+			G.prime()
 	do_after_cooldown()
 	return
 
@@ -394,6 +398,12 @@
 	name = "\improper Metal Foam Grenade Launcher"
 	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/action(target)
+	..()
+	if(grenade)
+		grenade.prime()
+		grenade = null
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/hamsandwich/M)
 	if(istype(M))

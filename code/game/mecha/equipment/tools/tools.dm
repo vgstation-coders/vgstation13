@@ -1292,9 +1292,9 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool
 	name = "\improper Exosuit-Mounted Engineering Switchtool"
-	desc = "An exosuit-mounted Engineering switchtool. (Can be attached to: Any exosuit)"
+	desc = "An exosuit-mounted Engineering switchtool. (Can be attached to: Engineering exosuits)"
 	icon_state = "mecha_rcd"	//needtochange
-	origin_tech = Tc_MATERIALS + "=3;" + Tc_POWERSTORAGE + "=2"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=2"
 	equip_cooldown = 10
 	energy_drain = 50
 	range = MELEE|RANGED
@@ -1372,6 +1372,53 @@
 			if(SI.reagents.total_volume < SI.max_silicate-5)
 				SI.reagents.add_reagent(SILICATE, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler
+	name = "\improper Automatic Floor Tiler"
+	desc = "An exosuit-mounted Automatic Floor Tiler. (Can be attached to: Any exosuit)"
+	icon_state = "mecha_rcd"	//needtochange
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=2"
+	equip_cooldown = 10
+	energy_drain = 50
+	range = MELEE
+	var/active = FALSE
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/action(atom/target)
+	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
+	..()
+	if(href_list["toggle"])
+		active = !active
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()
+	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/on_mech_step()
+	if(!active)
+		return
+	var/turf/T = get_turf(src)
+	if(T.is_plating())
+		T.ChangeTurf(/turf/simulated/floor)
+		playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
+		return
+	var/canbuild = T.canBuildPlating()
+	if(istype(T, /turf/simulated/floor/foamedmetal))
+		canbuild = BUILD_IGNORE
+	if(canbuild == BUILD_SUCCESS)
+		var/obj/structure/lattice/L = locate(/obj/structure/lattice) in T
+		if(!istype(L))
+			return
+		qdel(L)
+	else if(canbuild != BUILD_IGNORE)
+		return
+
+	playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
+	if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
+		T.ChangeTurf(/turf/simulated/floor/plating/airless)
+	else
+		T.ChangeTurf(/turf/simulated/floor/plating)
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED
