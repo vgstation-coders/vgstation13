@@ -320,7 +320,7 @@
 		return FALSE
 	if(W.w_class > W_CLASS_SMALL)
 		return FALSE
-	if(W.w_class < src.w_class)
+	if(W.w_class >= src.w_class)
 		return FALSE
 	if(istype(W, /obj/item/device/analyzer/plant_analyzer)) //ugly hack but what can you do
 		return FALSE
@@ -5022,14 +5022,17 @@
 	icon_state = "lasagna"
 	bitesize = 3
 	storage_slots = 1
+	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_ANIMAL //cheese
 
 /obj/item/weapon/reagent_containers/food/snacks/lasagna/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(TOMATOJUICE, 15)
 
+var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/plastique, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)
+
 /obj/item/weapon/reagent_containers/food/snacks/lasagna/can_hold(obj/item/weapon/W) //GREAT SCOTT!
-	if(is_type_in_list(W, list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/plastique, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)))
+	if(is_type_in_list(W, bomb_like_items))
 		return TRUE
-	return ..()
+	return ..(W)
