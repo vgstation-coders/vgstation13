@@ -5029,7 +5029,7 @@
 	reagents.add_reagent(NUTRIMENT, 12)
 	reagents.add_reagent(TOMATOJUICE, 15)
 
-/obj/item/weapon/reagent_containers/food/snacks/lasagna/can_hold(obj/item/weapon/W)
+/obj/item/weapon/reagent_containers/food/snacks/lasagna/can_hold(obj/item/weapon/W) //GREAT SCOTT!
 	if(is_type_in_list(W, list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/plastique, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)))
 		return TRUE
 	return ..()
