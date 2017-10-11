@@ -267,30 +267,36 @@
 		return
 
 	//Food slicing
-	if(slice_path && (W.sharpness_flags & (SHARP_BLADE|CHOPWOOD|SERRATED_BLADE)) && slices_num && slices_num > 0)
+	if(W.sharpness_flags & (SHARP_BLADE|CHOPWOOD|SERRATED_BLADE))
 		if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
 			to_chat(user, "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>")
 			return 1
-		var/slices_lost = 0
-		if(W.sharpness_flags & SHARP_BLADE)
-			user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
-			"<span class='notice'>You slice \the [src].</span>")
-		else
-			user.visible_message("<span class='notice'>[user] inaccurately slices \the [src] with \the [W]!</span>", \
-			"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
-			slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
-		var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
-		for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-			var/obj/slice = new slice_path(src.loc)
-			if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
-				var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
-				var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
-				S.name = "[C.name][S.name]"
-				S.filling.color = C.filling.color
-				S.overlays += S.filling
-			reagents.trans_to(slice, reagents_per_slice)
-		qdel(src) //So long and thanks for all the fish
-		return 1
+		if(slice_path && slices_num && slices_num > 0)
+			var/slices_lost = 0
+			if(W.is_sharp() >= 1.2)
+				user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
+				"<span class='notice'>You slice \the [src].</span>")
+			else
+				user.visible_message("<span class='notice'>[user] inaccurately slices \the [src] with \the [W]!</span>", \
+				"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
+				slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
+			var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
+			for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
+				var/obj/slice = new slice_path(src.loc)
+				if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
+					var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
+					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
+					S.name = "[C.name][S.name]"
+					S.filling.color = C.filling.color
+					S.overlays += S.filling
+				reagents.trans_to(slice, reagents_per_slice)
+			qdel(src) //So long and thanks for all the fish
+			return 1
+		if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
+			for(var/atom/movable/A in src)
+				A.forceMove(get_turf(src))
+			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
+			return 1
 
 	//Slipping items into food. Because this is below slicing, sharp items can't go into food. No knife-bread, sorry.
 	if(can_hold(W))
@@ -5008,3 +5014,22 @@
 	reagents.add_reagent(MEDCORES, 6)
 	reagents.add_reagent(SODIUMCHLORIDE, 6)
 	reagents.add_reagent(NUTRIMENT, 4)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/lasagna
+	name = "lasagna"
+	desc = "A carefully stacked trayful of meat, tomato, cheese, and pasta. Favorite of cats."
+	icon_state = "lasagna"
+	bitesize = 3
+	storage_slots = 1
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/lasagna/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(TOMATOJUICE, 15)
+
+/obj/item/weapon/reagent_containers/food/snacks/lasagna/can_hold(obj/item/weapon/W)
+	if(is_type_in_list(W, list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/plastique, /obj/item/device/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)))
+		return TRUE
+	return ..()
