@@ -133,6 +133,8 @@
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)
 
+#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
 #define iscamera(A) istype(A, /obj/machinery/camera)

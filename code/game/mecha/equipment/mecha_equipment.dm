@@ -144,3 +144,9 @@
 	if(chassis)
 		chassis.log_message("<i>[src]:</i> [message]")
 	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/on_mech_step()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/on_mech_turn()
+	return

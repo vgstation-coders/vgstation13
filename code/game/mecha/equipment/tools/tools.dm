@@ -512,17 +512,21 @@
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
 	var/obj/item/device/rcd/mech/RCD
+	var/obj/item/weapon/wrench/socket/sock
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
 	RPD = new(src)
 	RCD = new(src)
+	sock = new(src)
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
 	RPD = null
 	qdel(RCD)
 	RCD = null
+	qdel(sock)
+	sock = null
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
@@ -530,20 +534,25 @@
 		disabled = 1
 	else
 		disabled = 0
-	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock))
+	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock) && !istype(target, /obj/machinery/atmospherics) && !istype(target, /obj/item/pipe))
 		target = get_turf(target)
 	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
 		return
 	var/obj/item/device/rcd/R = RCD
 	if(device)
 		R = RPD
+		if((istype(target, /obj/machinery/atmospherics) && !istype(R.selected, /datum/rcd_schematic/paint_pipes)) || (istype(target, /obj/item/pipe) && !istype(R.selected, /datum/rcd_schematic/decon_pipes)))
+			target.attackby(sock, chassis.occupant)
+			return
+	if(!R.selected)
+		return
 	R.busy  = TRUE // Busy to prevent switching schematic while it's in use.
 	var/t = R.selected.attack(target, chassis.occupant)
 	if(!t) // No errors
 		if(device)
-			chassis.use_power(energy_drain)
-		else
 			chassis.use_power(energy_drain/5)
+		else
+			chassis.use_power(energy_drain)
 	else
 		occupant_message("<span class='warning'>\the [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
