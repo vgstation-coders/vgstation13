@@ -22,7 +22,7 @@
 	speed = 9
 	projectiletype = /obj/item/projectile/beam/drone
 	projectilesound = 'sound/weapons/laser3.ogg'
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	minimum_distance = 3
 	retreat_distance = 2
 	can_butcher = 0

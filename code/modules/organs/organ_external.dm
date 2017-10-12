@@ -919,11 +919,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status |= ORGAN_PEG
 	src.species = null
 	src.wounds.len = 0
-	src.destspawn = 0
+
 	for (var/datum/organ/external/T in children)
 		if(T)
 			if(body_part == ARM_LEFT || body_part == ARM_RIGHT || body_part == LEG_RIGHT || body_part == LEG_LEFT)
 				T.peggify()
+				src.destspawn = 0
 			else
 				T.droplimb(1, 1)
 				T.status &= ~ORGAN_BROKEN
@@ -934,7 +935,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				T.status &= ~ORGAN_DESTROYED
 				T.status &= ~ORGAN_ROBOT
 				T.wounds.len = 0
-				T.destspawn = 0
+
 
 /datum/organ/external/proc/fleshify()
 	src.status &= ~ORGAN_BROKEN
@@ -970,10 +971,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			OE.attach(attached)
 
-	else if(istype(I, /obj/item/stack/sheet/wood)) //Attaching a plank
-		var/obj/item/stack/sheet/wood/peg = I
-		if(peg.use(1))
-			src.peggify()
+	else if(istype(I, /obj/item/weapon/peglimb)) //Attaching a peg limb
+		src.peggify()
 
 	else if(istype(I, /obj/item/robot_parts)) //Robotic limb
 		var/obj/item/robot_parts/R = I
@@ -1167,7 +1166,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/l_leg(owner.loc)
@@ -1205,7 +1204,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
@@ -1228,7 +1227,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_arm/generate_dropped_organ(current_organ)
 	if(status & ORGAN_PEG)
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(status & ORGAN_ROBOT)
 			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
@@ -1248,7 +1247,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_arm/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/r_arm(owner.loc)
@@ -1270,7 +1269,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/l_foot(owner.loc, owner)
@@ -1290,7 +1289,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/r_foot(owner.loc, owner)
@@ -1311,7 +1310,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/r_hand(owner.loc, owner)
@@ -1332,7 +1331,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/l_hand(owner.loc, owner)

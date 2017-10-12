@@ -55,6 +55,7 @@
 			P.roll_and_drop(src)
 
 	ChangeTurf(dismantle_type)
+	update_near_walls()
 
 /turf/simulated/wall/ex_act(severity)
 	if(rotting)
@@ -85,9 +86,9 @@
 
 /turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
 	M.delayNextAttack(8)
-	if(M.environment_smash >= 2)
+	if(M.environment_smash_flags & SMASH_WALLS)
 		if(istype(src, /turf/simulated/wall/r_wall))
-			if(M.environment_smash == 3)
+			if(M.environment_smash_flags & SMASH_RWALLS)
 				dismantle_wall(1)
 				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 				"<span class='attack'>You smash through \the [src].</span>")

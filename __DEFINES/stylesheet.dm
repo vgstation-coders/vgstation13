@@ -80,7 +80,7 @@ h1.alert, h2.alert		{color: #000000;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
 .gutter					{color: #61380B; font-style: italic;}
 .golem					{color: #B4DBCB; font-weight: bold;}
-.slime					{color: #96FFC5;}
+.slime					{color: #34A7Af;}
 .orange					{color: #ffa500;}
 .maroon					{color: #800000;}
 /* If you're adding a new class here, add it to browserOutput.css too! */

@@ -1,4 +1,4 @@
-#define GAS_CONSUME_TO_WASTE_DENOMINATOR 0.3
+#define GAS_CONSUME_TO_WASTE_DENOMINATOR 2
 /*
 	Datum-based species. Should make for much cleaner and easier to maintain mutantrace code.
 */

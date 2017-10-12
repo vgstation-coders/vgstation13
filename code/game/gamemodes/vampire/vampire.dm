@@ -764,6 +764,10 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		if(generate_objectives)
 			ticker.mode.forge_vampire_objectives(src)
+			var/obj_count = 1
+			for(var/datum/objective/objective in objectives)
+				to_chat(current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
+				obj_count++
 		return 1
 	return 0
 

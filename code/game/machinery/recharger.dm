@@ -71,14 +71,16 @@
 		update_icon()
 		return 1
 
-/obj/machinery/recharger/wrenchAnchor(mob/user)
+/obj/machinery/recharger/wrenchAnchor(var/mob/user)
 	if(charging)
 		to_chat(user, "<span class='notice'>Remove the charging item first!</span>")
+		return FALSE
+	. = ..()
+	if(!.)
 		return
-	if(..() == 1)
-		pixel_x = 0
-		pixel_y = 0
-		update_icon()
+	pixel_x = 0
+	pixel_y = 0
+	update_icon()
 
 /obj/machinery/recharger/attack_hand(mob/user)
 	if(issilicon(user) || ..())

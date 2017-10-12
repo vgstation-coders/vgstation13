@@ -265,12 +265,39 @@
 	if (..())
 		return
 
-	//If we have reached this point, then we're either trying to slice the fooditem or trying to slip something inside it. Both require us to be sliceable.
-	if((slices_num <= 0 || !slices_num) || !slice_path)
-		return 0
+	//Food slicing
+	if(slice_path && (W.sharpness_flags & (SHARP_BLADE|CHOPWOOD|SERRATED_BLADE)) && slices_num && slices_num > 0)
+		if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
+			to_chat(user, "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>")
+			return 1
+		var/slices_lost = 0
+		if(W.sharpness_flags & SHARP_BLADE)
+			user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
+			"<span class='notice'>You slice \the [src].</span>")
+		else
+			user.visible_message("<span class='notice'>[user] inaccurately slices \the [src] with \the [W]!</span>", \
+			"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
+			slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
+		var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
+		for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
+			var/obj/slice = new slice_path(src.loc)
+			if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
+				var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
+				var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
+				S.name = "[C.name][S.name]"
+				S.filling.color = C.filling.color
+				S.overlays += S.filling
+			reagents.trans_to(slice, reagents_per_slice)
+		qdel(src) //So long and thanks for all the fish
+		return 1
 
-	if(W.w_class <= W_CLASS_SMALL && (W.w_class < w_class) && !(W.sharpness_flags & SHARP_BLADE) && !istype(W,/obj/item/device/analyzer/plant_analyzer)) //Make sure the item is valid to attempt slipping shit into it
-		if(!iscarbon(user))
+	//Slipping items into food. Because this is below slicing, sharp items can't go into food. No knife-bread, sorry.
+	if(W.w_class <= W_CLASS_SMALL && (W.w_class < w_class))
+		if((slices_num <= 0 || !slices_num) || !slice_path)
+			return 0
+		if(!iscarbon(user)) //Presumably so robots can't put their modules inside?
+			return 0
+		if(istype(W,/obj/item/device/analyzer/plant_analyzer)) //ugly hack but what can you do
 			return 0
 
 		if(contents.len > slices_num/2) //There's a rational limit to this madness people
@@ -283,34 +310,6 @@
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
-
-	if(!(W.sharpness_flags & SHARP_BLADE)) //At this point we are slicing food, so if our item isn't sharp enough, just abort
-		return 0
-
-	if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
-		to_chat(user, "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>")
-		return 1
-
-	var/slices_lost = 0
-	if(W.sharpness_flags & SHARP_BLADE) //Actually sharp things are this sharp, yes
-		user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
-		"<span class='notice'>You slice \the [src].</span>")
-	else //We're above 0.8 //The magic threshold of pizza slicing
-		user.visible_message("<span class='notice'>[user] inaccurately slices \the [src] with \the [W]!</span>", \
-		"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
-		slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
-	var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
-	for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-		var/obj/slice = new slice_path(src.loc)
-		if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
-			var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
-			var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
-			S.name = "[C.name][S.name]"
-			S.filling.color = C.filling.color
-			S.overlays += S.filling
-		reagents.trans_to(slice, reagents_per_slice)
-	qdel(src) //So long and thanks for all the fish
-	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
@@ -4307,36 +4306,23 @@
 	set category = "Object"
 	set src in range(1)
 
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
+	var/mob/user = usr
+	if(!user.Adjacent(src))
+		return
+	if(user.isUnconscious())
+		to_chat(user, "You can't do that while unconscious.")
 		return
 
-	verbs -= /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf
+	if(!switching)
+		randomize()
+	else
+		getnofruit(user, user.get_active_hand())
 
-	randomize()
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/AltClick(mob/user)
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/attackby(obj/item/weapon/W, mob/user)
-	if(switching)
-		if(!current_path)
-			return
-		switching = 0
-		var/N = rand(1,3)
-		switch(N)
-			if(1)
-				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
-			if(2)
-				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
-			if(3)
-				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
-		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
-			user.put_in_hands(I)
-		else
-			new current_path(get_turf(src))
-		qdel(src)
-
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
 	switching = 1
@@ -4351,6 +4337,32 @@
 				counter = 0
 				available_snacks = shuffle(available_snacks)
 			counter++
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/getnofruit(mob/user, obj/item/weapon/W = null)
+	if(!switching || !current_path)
+		return
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf
+	switching = 0
+	var/N = rand(1,3)
+	if(get_turf(user))
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+	if(W)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+	else
+		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
+	if(src.loc == user)
+		user.drop_item(src, force_drop = 1)
+		var/I = new current_path(get_turf(user))
+		user.put_in_hands(I)
+	else
+		new current_path(get_turf(src))
+	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
 	name = "Sunday roast"

@@ -452,9 +452,8 @@
 
 		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
 
-		var/eye_safety = 0
-
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
+			var/eye_safety = 0
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
 
@@ -908,7 +907,32 @@
 	id = PLANTBGONE
 	result = PLANTBGONE
 	required_reagents = list(SOLANINE = 1, WATER = 4)
-	result_amount = 5	
+	result_amount = 5
+
+// Special Reactions for Plasma Beaker
+/datum/chemical_reaction/plasmabeakerdexalin
+	name = "Plasma Beaker Dexalin"
+	id = DEXALIN
+	result = DEXALIN
+	required_reagents = list(OXYGEN = 2)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerleporazine
+	name = "Leporazine"
+	id = LEPORAZINE
+	result = LEPORAZINE
+	required_reagents = list(SILICON = 1, COPPER = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerclonexadone
+	name = "Clonexadone"
+	id = CLONEXADONE
+	result = CLONEXADONE
+	required_reagents = list(CRYOXADONE = 1, SODIUM = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
 
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 /datum/chemical_reaction/mimicshift
@@ -1262,6 +1286,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks,
 		/obj/item/weapon/reagent_containers/food/snacks/snackbar,
 		/obj/item/weapon/reagent_containers/food/snacks/grown,
+		/obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 		)
 	blocked += typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) //Silver-slime spawned customizable food is borked
 
@@ -2524,6 +2549,13 @@
 	id = DANS_WHISKEY
 	result = DANS_WHISKEY
 	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/pintpointer
+	name = "Pintpointer"
+	id = PINTPOINTER
+	result = PINTPOINTER
+	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
 	result_amount = 2
 
 

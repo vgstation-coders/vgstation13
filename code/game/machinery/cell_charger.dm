@@ -112,11 +112,11 @@
 		chargelevel = -1
 		updateicon()
 
-/obj/machinery/cell_charger/wrenchAnchor(mob/user)
+/obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
 	if(charging)
 		to_chat(user, "<span class='warning'>Remove the cell first!</span>")
-		return
-	..()
+		return FALSE
+	. = ..()
 
 /obj/machinery/cell_charger/attack_ai(mob/user)
 	return

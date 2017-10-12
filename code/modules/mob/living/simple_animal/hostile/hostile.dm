@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile
 	faction = "hostile"
 	stop_automated_movement_when_pulled = 0
-	environment_smash = 1 //Set to 1 to break closets,tables,racks, etc; 2 for walls; 3 for rwalls
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS	//defines are in simple_animal_defines.dm
 
 	var/stance = HOSTILE_STANCE_IDLE	//Used to determine behavior
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
@@ -60,7 +60,7 @@
 
 		switch(stance)
 			if(HOSTILE_STANCE_IDLE)
-				if(environment_smash)
+				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
@@ -197,7 +197,7 @@
 			return
 
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
-		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
+		if(FindHidden(target) && (environment_smash_flags & SMASH_LIGHT_STRUCTURES))//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
 			if(canmove && space_check())
 				Goto(A,move_to_delay,minimum_distance)
@@ -352,7 +352,7 @@
 	return 1
 
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
-	if(environment_smash)
+	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		EscapeConfinement()
 		var/list/smash_dirs = list(0)
 		if(!target || !CanAttack(target))

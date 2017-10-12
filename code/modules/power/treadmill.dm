@@ -101,8 +101,10 @@
 	else
 		return 1
 
-/obj/machinery/power/treadmill/wrenchAnchor(mob/user)
-	..()
+/obj/machinery/power/treadmill/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
 	if(anchored)
 		connect_to_network()
 	else

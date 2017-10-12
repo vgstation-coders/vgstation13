@@ -201,7 +201,9 @@
 		panic_attack(user)
 
 /mob/living/simple_animal/bee/hitby(AM as mob|obj)
-	..()
+	. = ..()
+	if(.)
+		return
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
 	var/mob/M = null
 	if (ismob(AM))
