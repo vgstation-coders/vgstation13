@@ -1380,7 +1380,7 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=2"
 	equip_cooldown = 10
 	energy_drain = 50
-	range = MELEE
+	range = 0
 	var/active = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
@@ -1416,6 +1416,55 @@
 		T.ChangeTurf(/turf/simulated/floor/plating/airless)
 	else
 		T.ChangeTurf(/turf/simulated/floor/plating)
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector
+	name = "\improper Exosuit-Mounted Radiation Collector Array"
+	desc = "An exosuit-mounted Radiation Collector Array. (Can be attached to: Any exosuit)"
+	icon_state = "mecha_rcd"	//needtochange
+	origin_tech = Tc_PLASMATECH + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=4"
+	equip_cooldown = 10
+	energy_drain = 0
+	range = MELEE
+	var/active = FALSE
+	var/obj/machinery/power/rad_collector/mech/collector
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/New()
+	..()
+	collector = new(src)
+	collector.connected_module = src
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/Destroy()
+	collector.connected_module = null
+	qdel(collector)
+	collector = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
+	var/obj/item/weapon/tank/plasma/plas = target
+	if(istype(plas))
+		if(collector.P)
+			occupant_message("There is already a tank in the radiation collector array.")
+			return
+		plas.forceMove(collector)
+		collector.P = target
+		occupant_message("You insert \the [target] into the radiation collector array.")
+		update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/Topic(href,href_list)
+	..()
+	if(href_list["toggle"])
+		collector.toggle_power()
+		occupant_message("Radiation collector array [collector.active ? "activated" : "deactivated"].")
+	if(href_list["eject"])
+		collector.eject()
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/get_equip_info()
+	if(!collector.P)
+		return "[..()] No tank loaded."
+	if(collector.P.air_contents.toxins <= 0)
+		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
+	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

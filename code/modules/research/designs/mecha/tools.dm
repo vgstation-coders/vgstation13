@@ -237,7 +237,7 @@
 	req_tech = list(Tc_MATERIALS = 3, Tc_MAGNETS = 2, Tc_ENGINEERING = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
 	category = "Exosuit_Tools"
-	materials = list(MAT_IRON=20000)
+	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_tiler
 	name = "Module Design (Automatic Floor Tiler)"
@@ -247,7 +247,7 @@
 	req_tech = list(Tc_MATERIALS = 3, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 3, Tc_MAGNETS = 2)
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/tiler
 	category = "Exosuit_Tools"
-	materials = list(MAT_IRON=15000)
+	materials = list(MAT_IRON=10000)
 
 /datum/design/mech_inflatable
 	name = "Module Design (Inflatable Barrier Launcher)"
@@ -257,4 +257,14 @@
 	req_tech = list(Tc_MATERIALS = 2, Tc_MAGNETS = 1, Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2)
 	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
 	category = "Exosuit_Tools"
-	materials = list(MAT_IRON=20000)
+	materials = list(MAT_IRON=10000)
+
+/datum/design/mech_collector
+	name = "Module Design (Radiation Collector Array)"
+	desc = "Allows for the construction of Radiation Collector Array."
+	id = "mech_collector"
+	build_type = MECHFAB
+	req_tech = list(Tc_PLASMATECH = 3, Tc_MAGNETS = 2, Tc_POWERSTORAGE = 4)
+	build_path = /obj/item/mecha_parts/mecha_equipment/tool/collector
+	category = "Exosuit_Modules"
+	materials = list(MAT_IRON=10000,MAT_PLASMA=10000)
