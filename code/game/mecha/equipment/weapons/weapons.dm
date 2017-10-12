@@ -361,8 +361,13 @@
 	equip_cooldown = 60
 	var/det_time = 20
 	var/obj/item/weapon/grenade/grenade
+	var/can_pre_detonate = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
+	if(can_pre_detonate && grenade)
+		grenade.prime()
+		grenade = null
+		return
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
@@ -399,14 +404,62 @@
 	desc = "An exosuit-mounted Metal Foam Grenade Launcher. (Can be attached to: Engineering exosuits)"
 	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/action(target)
-	..()
-	if(grenade)
-		grenade.prime()
-		grenade = null
+	can_pre_detonate = TRUE
+	equip_cooldown = 30
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/hamsandwich/M)
+	if(istype(M))
+		return 1
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
+	name = "\improper Inflatable Barrier Launcher"
+	desc = "An exosuit-mounted Inflatable Barrier Launcher. (Can be attached to: Engineering exosuits)"
+	projectile = /obj/item/weapon/grenade/inflatable
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=1;" + Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
+	can_pre_detonate = TRUE
+	equip_cooldown = 10
+	range = RANGED | MELEE
+	var/mode = 0
+	var/inflatable_type = 0
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/Topic(href,href_list)
+	..()
+	if(href_list["inflatable_type"])
+		inflatable_type = !inflatable_type
+		if(inflatable_type)
+			projectile = /obj/item/weapon/grenade/inflatable/door
+			occupant_message("Now set to launch inflatable doors.")
+		else
+			projectile = /obj/item/weapon/grenade/inflatable
+			occupant_message("Now set to launch inflatable walls.")
+	if(href_list["mode"])
+		mode = !mode
+		if(mode)
+			occupant_message("Now set to deflate inflatable barriers.")
+		else
+			occupant_message("Now set to deploy inflatable barriers.")
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/get_equip_info()
+	return "[..()] \n[mode ? "" : "Current projectile: inflatable [inflatable_type ? "door" : "wall"]\[<a href='?src=\ref[src];inflatable_type=0'>change</a>\]"]\[<a href='?src=\ref[src];mode=0'>switch to [mode ? "deploy" : "deflate"] mode</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/action(target)
+	if(mode)
+		if(istype(target, /obj/structure/inflatable))
+			if(!chassis.Adjacent(target))
+				occupant_message("You must be next to \the [target] in order to deflate it.")
+				return
+			var/obj/structure/inflatable/I = target
+			I.deflate()
+		return
+	else if(chassis.Adjacent(target))
+		if(istype(target, /obj/structure/inflatable/door))
+			var/obj/structure/inflatable/door/D = target
+			D.toggle(chassis.occupant)
+		return
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/hamsandwich/M)
 	if(istype(M))
 		return 1
 

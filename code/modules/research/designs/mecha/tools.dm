@@ -248,3 +248,13 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/tiler
 	category = "Exosuit_Tools"
 	materials = list(MAT_IRON=15000)
+
+/datum/design/mech_inflatable
+	name = "Module Design (Inflatable Barrier Launcher)"
+	desc = "Allows for the construction of Inflatable Barrier Launcher."
+	id = "mech_inflatable"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 2, Tc_MAGNETS = 1, Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
+	category = "Exosuit_Tools"
+	materials = list(MAT_IRON=20000)
