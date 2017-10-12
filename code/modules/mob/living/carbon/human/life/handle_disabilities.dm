@@ -73,7 +73,17 @@
 						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
-					emote("drool")
+					// We need to find a mob in range for that ; could be useful for custom emotes that take one random mob at random as an argument, maybe ?
+					var/list/L
+					var/retardation
+					for(var/mob/M in range(1, src))
+    					L.Add(M)
+    				var/mob/mob1 = L[1]
+    				if(!list.len)
+    					retardation = "pecks \the [mob1]."
+    				else
+    					retardation = "squeaks." // If we have nothing
+    				pick(emote("drool"), custom_emote(VISIBLE, retardation))
 
 	if(species.name == "Tajaran")
 		if(prob(1)) //Was 3
