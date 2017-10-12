@@ -1254,9 +1254,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 						else
 							if(!(extend_o_arm.hook || extend_o_arm.chain_datum || extend_o_arm.rewinding))
 								chemicals -= 10
-				if(!attack_delayer.blocked())
-					extend_o_arm.afterattack(A, host)
-					delayNextAttack(4)
+				extend_o_arm.afterattack(A, host)
 
 /mob/living/simple_animal/borer/proc/check_attack_cooldown()
 	var/datum/delay_controller/host_attack_delayer = host.attack_delayer
