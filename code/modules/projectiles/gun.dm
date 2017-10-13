@@ -48,6 +48,7 @@
 						//1 for keep shooting until aim is lowered
 	var/fire_delay = 2
 	var/last_fired = 0
+	var/delay_user = 4	//how much to delay the user's next attack by after firing
 
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
 	var/jammed = 0
@@ -255,7 +256,7 @@
 	in_chamber.forceMove(get_turf(user))
 	in_chamber.starting = get_turf(user)
 	in_chamber.shot_from = src
-	user.delayNextAttack(4) // TODO: Should be delayed per-gun.
+	user.delayNextAttack(delay_user) // TODO: Should be delayed per-gun.
 	in_chamber.silenced = silenced
 	in_chamber.current = curloc
 	in_chamber.OnFired()
