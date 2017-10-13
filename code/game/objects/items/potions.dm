@@ -21,7 +21,9 @@
 	if(full)
 		icon_state = initial(icon_state)
 	else
-		icon_state = "[copytext("[initial(icon_state)]",findtext("[initial(icon_state)]","_")+1)]"
+		var/empty_state_position = findtext(icon_state,"_")+1	//records the character position starting just after the _ in the icon_state
+		var/empty_state = copytext(icon_state,empty_state_position)	//copies the text from the icon_state starting after the _
+		icon_state = empty_state
 		name = "empty bottle"
 		desc = "An empty potion bottle."
 

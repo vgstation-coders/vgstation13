@@ -83,7 +83,7 @@
 	return available_artifacts
 
 /obj/item/weapon/spellbook/proc/get_available_potions()
-	return available_potions.Copy()
+	return available_potions
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
