@@ -457,9 +457,11 @@
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
-	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor))
+	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass))
 		for(var/obj/effect/plantsegment/B in range(user,1))
 			B.take_damage(src)
+		for(var/obj/effect/biomass/BM in range(user,1))
+			BM.adjust_health(rand(15,45))
 		user.delayNextAttack(10)
 		/*var/olddir = user.dir
 		spawn for(var/i=-2, i<=2, i++) //hheeeehehe i'm so dumb

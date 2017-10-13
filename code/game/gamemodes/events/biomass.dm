@@ -12,6 +12,7 @@
 	pass_flags = PASSTABLE | PASSGRILLE
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null
+	var/health = 15
 
 /obj/effect/biomass/Destroy()
 	unreferenceMaster()
@@ -28,21 +29,21 @@
 		if(prob(30))
 			user.visible_message("<span class = 'warning'>\The [user] cuts through \the [src] with \the [W]'s sharp edge.</span>",\
 			"<span class = 'notice'>You cut through \the [src] with \the [W]'s sharp edge.</span>")
-		qdel(src)
+		adjust_health(rand(5,15))
 		return
 	if(W.sharpness_flags & (SERRATED_BLADE|CHOPWOOD)) //Guaranteed, but takes some work
 		if(do_after(user, src, rand(10,30)))
 			if(prob(30))
 				user.visible_message("<span class = 'warning'>\The [user] chops through \the [src] with \the [W].</span>",\
 				"<span class = 'notice'>You saw through \the [src].</span>")
-			qdel(src)
+			adjust_health(rand(25,50))
 			return
 	if(W.sharpness_flags & HOT_EDGE)
 		if(do_after(user, src, rand(5,15))) //Guaranteed, rarer sharpness flag so less time taken
 			if(prob(30))
 				user.visible_message("<span class = 'warning'>\The [user] sears through \the [src] with \the [W].</span>",\
 				"<span class = 'notice'>You use \the [W]'s hot edge to burn through \the [src].</span>")
-			qdel(src)
+			adjust_health(rand(20,35))
 			return
 	var/weapon_temp = W.is_hot()
 	if(weapon_temp >= AUTOIGNITION_WOOD)//Yes it's not technically wood, but fibrous chitin's pretty close when held above a flame
@@ -51,7 +52,7 @@
 			if(prob(30))
 				user.visible_message("<span class = 'warning'>\The [user] burns away \the [src] with \the [W].</span>",\
 				"<span class = 'notice'>You use \the [W] to burn away \the [src].</span>")
-			qdel(src)
+			adjust_health(rand(40,70))
 			return
 	..()
 
@@ -59,10 +60,17 @@
 	if(energy <= 0)
 		icon_state = "stage2"
 		energy = 1
+		adjust_health(-30)
 	else
 		icon_state = "stage3"
 		density = 1
 		energy = 2
+		adjust_health(-30)
+
+/obj/effect/biomass/proc/adjust_health(var/amount)
+	health -= amount
+	if(health <= 0)
+		qdel(src)
 
 /obj/effect/biomass/proc/spread()
 	var/location = get_step_rand(src)
@@ -80,16 +88,15 @@
 /obj/effect/biomass/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			qdel(src)
+			adjust_health(100)
 		if(2.0)
-			if(prob(90))
-				qdel(src)
+			adjust_health(65)
 		if(3.0)
-			if(prob(50))
-				qdel(src)
+			adjust_health(25)
 
 /obj/effect/biomass/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume) //hotspots kill biomass
-	qdel(src)
+	if(exposed_temperature >= AUTOIGNITION_WOOD)
+		adjust_health(70)
 
 /obj/effect/biomass_controller
 	invisibility = 60 // ghost only
