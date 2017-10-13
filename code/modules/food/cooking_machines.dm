@@ -129,6 +129,8 @@ var/global/ingredientLimit = 10
 		to_chat(user, "Your ghostly hand goes straight through.")
 	else if(issilicon(user))
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
+	else if (ismouse(user))
+		to_chat(user, "You claws don't have the dexterity to do this.")
 
 	else if(src.active)
 		if(alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
