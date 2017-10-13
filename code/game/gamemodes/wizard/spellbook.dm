@@ -49,13 +49,13 @@
 	var/list/available_artifacts = list()
 
 	var/list/available_potions = list(
-		/obj/item/potion/healing = 20,
-		/obj/item/potion/invisibility = 10,
-		/obj/item/potion/stoneskin = 10,
-		/obj/item/potion/light = 5,
-		/obj/item/potion/speed = 5,
-		/obj/item/potion/speed/major = 10,
-		/obj/item/potion/transform = 15)
+		/obj/item/potion/healing = Sp_BASE_PRICE,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/light = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.75)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
