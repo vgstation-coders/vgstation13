@@ -122,14 +122,12 @@ var/list/mass_drivers = list()
 
 /obj/machinery/mass_driver_frame/proc/check_competition(var/turf/T = get_turf(src))
 	var/competition_found = 0
-	for(var/obj/machinery/mass_driver_frame/M in T)
+	for(var/obj/machinery/M in T)
 		if(M == src)
 			continue
-		competition_found=1
-		break
-	if(!competition_found)
-		for(var/obj/machinery/mass_driver/M in T)
+		if(istype(M, /obj/machinery/mass_driver_frame) || istype(M, /obj/machinery/mass_driver))
 			competition_found=1
+			break
 
 	return competition_found
 
