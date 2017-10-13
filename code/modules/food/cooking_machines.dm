@@ -130,7 +130,7 @@ var/global/ingredientLimit = 10
 	else if(issilicon(user))
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
-	else if(src.active && !ismouse(user))
+	else if(src.active)
 		if(alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
 			if(src.ingredient && (get_turf(src.ingredient)==get_turf(src)))
 				if(Adjacent(user))
