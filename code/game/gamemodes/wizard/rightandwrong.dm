@@ -15,15 +15,20 @@
 			var/datum/objective/survive/survive = new
 			survive.owner = H.mind
 			H.mind.objectives += survive
-			H.attack_log += "\[[time_stamp()]\] <font color='red'>Was made into a survivor, and trusts no one!</font>"
-			to_chat(H, "<B>You are the survivor! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
+			var/survivor_type = "survivor"
+			if(summon_type == "swords") //snowflake survivor name
+				survivor_type = "crusader"
+			else
+				survivor_type = "survivor"
+			H.attack_log += "\[[time_stamp()]\] <font color='red'>Was made into a [survivor_type], and trusts no one!</font>"
+			to_chat(H, "<B>You are a [survivor_type]! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
 			var/obj_count = 1
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
-		var/randomizeswords = pick("unlucky", "misc", "glass", "hatchet", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
+		var/randomizeswords = pick("unlucky", "misc", "glass", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
 		var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar")
 		if(summon_type == "guns")
 			switch (randomizeguns)
@@ -177,8 +182,11 @@
 						new /obj/item/weapon/shard(get_turf(H))
 					else
 						new /obj/item/weapon/shard/plasma(get_turf(H))
-				if("hatchet")
-					new /obj/item/weapon/hatchet(get_turf(H))
+				if("throw")
+					if(prob(20))
+						new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(H))
+					else
+						new /obj/item/weapon/hatchet(get_turf(H))
 				if("armblade") // good luck getting it off. Maybe cut your own arm off :^)
 					new /obj/item/weapon/armblade(get_turf(H))
 				if("pickaxe")
@@ -216,11 +224,15 @@
 						new /obj/item/weapon/spear(get_turf(H))
 					else
 						new /obj/item/weapon/melee/lance(get_turf(H))
-				if("katana") //feeling lucky?
+				if("katana")
+					new /obj/item/weapon/katana(get_turf(H))
+					//No fun allowed, maybe nerf later and readd
+					/*
 					if(prob(5))
 						new /obj/item/weapon/katana/hfrequency(get_turf(H))
 					else
 						new /obj/item/weapon/katana(get_turf(H))
+					*/
 				if("axe")
 					if(prob(50))
 						if(prob(5))
