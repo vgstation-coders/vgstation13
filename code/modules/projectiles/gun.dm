@@ -57,9 +57,6 @@
 
 	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
 
-	// Tells is_honorable() which special_roles to respect.
-	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER
-
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
@@ -145,9 +142,11 @@
 		var/mob/living/M = user
 		if(clumsy_check && clumsy_check(M) && prob(50))
 			explode = TRUE
-		if(honor_check && is_honorable(M, honorable))
-			explode = TRUE
-			dehand = TRUE
+		if(M.honor)
+			if(M.honor.apply_punishment(M, DISHONOR_FIREARMS, "discharged a weapon", target))
+				message_admins("[M] tried to shoot target=[target] and had their [src] explode. (honor violation)")
+				explode=TRUE
+				dehand=TRUE
 		if(explode)
 			if(dehand)
 				var/limb_index = user.is_holding_item(src)

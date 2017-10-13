@@ -128,8 +128,7 @@
 	if(!istype(M)) //Still can't find it, abort
 		return 1
 	if(M.mind)
-		if((M.mind.special_role == HIGHLANDER || M.mind.special_role == BOMBERMAN) && src.flags & CHEMFLAG_DISHONORABLE)
-			// TODO: HONORABLE_* checks.
+		if((M.honor && M.honor.disable_dishonorable_chems) && src.flags & CHEMFLAG_DISHONORABLE)
 			return 1
 
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long

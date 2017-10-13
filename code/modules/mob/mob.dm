@@ -1022,6 +1022,10 @@ var/list/slot_equipment_priority = list( \
 	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
 		return
 
+	if(honor && (honor.dishonors & DISHONOR_PULL))
+		to_chat(src,"<span class='warning'>You cannot pull, it is dishonorable.</span>")
+		return
+
 	if(!has_hand_check())
 		to_chat(src,"<span class='notice'>You don't have any hands to pull with!</span>")
 		return
@@ -1035,6 +1039,10 @@ var/list/slot_equipment_priority = list( \
 
 	if (!P.anchored)
 		P.add_fingerprint(src)
+
+
+		if(!P.can_be_pulled_by(src))
+			return
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
 		if(pulling)

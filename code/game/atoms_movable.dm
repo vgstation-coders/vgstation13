@@ -937,3 +937,6 @@
 	sleep(3)
 	for(var/client/C in viewers)
 		C.images -= item
+
+/atom/movable/proc/can_be_pulled_by(var/mob/M)
+	return TRUE

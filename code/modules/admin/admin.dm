@@ -690,6 +690,15 @@ var/global/floorIsLava = 0
 			</li>
 		</ul>
 		<hr />
+		<ul>
+			<li>
+				<a href="?src=\ref[honor_bomberman]"><b>Edit Bomberman Honor Rules</b></a>
+			</li>
+			<li>
+				<a href="?src=\ref[honor_highlander]"><b>Edit Highlander Honor Rules</b></a>
+			</li>
+		</ul>
+		<hr />
 		<A href='?src=\ref[src];create_object=1'>Create Object</A><br>
 		<A href='?src=\ref[src];quick_create_object=1'>Quick Create Object</A><br>
 		<A href='?src=\ref[src];create_turf=1'>Create Turf</A><br>

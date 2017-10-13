@@ -100,7 +100,11 @@
 	var/mob/living/carbon/human/H = ..(M)
 
 	ticker.mode.traitors += H.mind
-	H.mind.special_role = HIGHLANDER // NEEDED FOR CHEAT CHECKS!
+	H.mind.special_role = HIGHLANDER
+
+	// HONOR SYSTEM
+	honor_highlander.setup(H, silent=TRUE)
+
 
 	H.mutations.Add(M_HULK) //all highlanders are permahulks
 	H.set_species("Human", force_organs=TRUE) // No Dionae
