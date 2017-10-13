@@ -129,10 +129,8 @@ var/global/ingredientLimit = 10
 		to_chat(user, "Your ghostly hand goes straight through.")
 	else if(issilicon(user))
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
-	else if (ismouse(user))
-		to_chat(user, "You claws don't have the dexterity to do this.")
 
-	else if(src.active)
+	else if(src.active && !ismouse(user))
 		if(alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
 			if(src.ingredient && (get_turf(src.ingredient)==get_turf(src)))
 				if(Adjacent(user))
@@ -172,7 +170,7 @@ var/global/ingredientLimit = 10
 	set category = "Object"
 	set src in oview(1)
 
-	if(isjustobserver(usr))
+	if(isjustobserver(usr) || ismouse(usr))
 		return
 
 	if(cooks_in_reagents)
