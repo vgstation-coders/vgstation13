@@ -251,6 +251,8 @@
 
 /obj/item/weapon/weldingtool/examine(mob/user)
 	..()
+	if (!status)
+		to_chat(user, "<span class='notice'>The welder is unsecured.</span>")
 	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
@@ -429,6 +431,7 @@
 //Toggles the welder off and on
 /obj/item/weapon/weldingtool/proc/toggle(var/mob/user)
 	if(!status)
+		to_chat(user, "<span class='notice'>You need to secure the [src] first.</span>")
 		return
 	src.welding = !( src.welding )
 	if (src.welding)
