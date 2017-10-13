@@ -35,10 +35,12 @@
 	for(var/datum/faction/F in factions)
 		dat += F.GetObjectivesMenuHeader()
 		dat += F.CheckAllObjectives(individuals)
+		dat += "\n\n"
 	return dat
 
 /datum/gamemode/proc/GetScoreboard()
 	var/dat =""
 	for(var/datum/faction/F in factions)
 		dat += F.GetScoreboard()
+		dat += "\n\n"
 	return dat
