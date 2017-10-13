@@ -18,6 +18,8 @@
 			var/survivor_type = "survivor"
 			if(summon_type == "swords") //snowflake survivor name
 				survivor_type = "crusader"
+			else if(summon_type == "magic")
+				survivor_type = "magician"
 			else
 				survivor_type = "survivor"
 			H.attack_log += "\[[time_stamp()]\] <font color='red'>Was made into a [survivor_type], and trusts no one!</font>"
