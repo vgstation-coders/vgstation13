@@ -26,7 +26,7 @@
 		desc = "An empty potion bottle."
 
 /obj/item/potion/proc/imbibe(mob/user)
-	if(full!)
+	if(!full)
 		return
 	full = FALSE
 	update_icon()
@@ -103,7 +103,7 @@
 	user.make_invisible(INVISIBLEPOTION, 1 MINUTES)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
-	if(ismovableatom(target))
+	if(isatommovable(target))
 		var/atom/movable/AM = target
 		AM.make_invisible(INVISIBLEPOTION, 1 MINUTES)
 

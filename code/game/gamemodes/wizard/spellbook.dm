@@ -207,7 +207,7 @@
 
 	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
-	for(var/P in get_available_potions)
+	for(var/P in get_available_potions())
 		var/obj/item/potion/potion = P
 		var/potion_name = initial(potion.name)
 		var/potion_desc = initial(potion.desc)
