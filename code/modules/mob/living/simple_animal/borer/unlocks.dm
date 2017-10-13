@@ -658,7 +658,6 @@
 	give_when_attached=1
 	antirequisites=list("bone_sword","bone_shield")
 
-// FIXME - Removed October 2, 2017 due to server crashes that persist after multiple attempts at fixing, and inability to reproduce locally.
 /datum/unlockable/borer/arm/extend_o_arm_unlock
 	remove_on_detach = 0 // Borer-side, so we don't lose it.
 

@@ -5,7 +5,7 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 	w_class = 5
 	fire_sound = 'sound/effects/flesh_squelch.ogg'
-//	empty_sound = null FOR DEBUGGING
+	empty_sound = null
 	silenced = 1
 	fire_volume = 250
 	maxlength = 10
