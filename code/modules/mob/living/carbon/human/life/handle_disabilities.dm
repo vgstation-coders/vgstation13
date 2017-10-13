@@ -31,7 +31,7 @@
 
 	if(getBrainLoss() >= 60 && stat != DEAD)
 		if(prob(3))
-			switch(pick(1,2,3)) //All of those REALLY ought to be variable lists, but that would be too smart I guess
+			switch(pick(1,2,3, 4)) //All of those REALLY ought to be variable lists, but that would be too smart I guess
 				if(1)
 					say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 					"without oxigen blob don't evoluate?", \
@@ -73,17 +73,17 @@
 						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
-					// We need to find a mob in range for that ; could be useful for custom emotes that take one random mob at random as an argument, maybe ?
-					var/list/L
-					var/retardation
+					emote("drool")
+				if(4)
+					var/list/L = list()
+					var/retardation = ""
 					for(var/mob/M in range(1, src))
-    					L.Add(M)
-    				var/mob/mob1 = L[1]
-    				if(!list.len)
-    					retardation = "pecks \the [mob1]."
-    				else
-    					retardation = "squeaks." // If we have nothing
-    				pick(emote("drool"), custom_emote(VISIBLE, retardation))
+						L.Add(M)
+					if(L.len)
+						retardation = "pecks \the [pick(L)]."
+					else
+						retardation = "squeaks." // If we have nothing
+					custom_emote(VISIBLE, retardation)
 
 	if(species.name == "Tajaran")
 		if(prob(1)) //Was 3
