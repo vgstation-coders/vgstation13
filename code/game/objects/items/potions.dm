@@ -9,12 +9,13 @@
 	var/fail_message = "<span class='notice'>Nothing happens, though your stomach is a little unsettled. It seems the potion isn't agreeing with you.</span>"
 
 /obj/item/potion/attack_self(mob/user)
-	if(full)
-		user.visible_message("<span class='danger'>\The [user] drinks \the [src].</span>", "<span class='notice'>You drink \the [src].</span>")
-		playsound(get_turf(src),'sound/items/uncorking.ogg', rand(10,50), 1)
-		spawn(6)
-			playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
-		imbibe(user)
+	if(!full)
+		return
+	user.visible_message("<span class='danger'>\The [user] drinks \the [src].</span>", "<span class='notice'>You drink \the [src].</span>")
+	playsound(get_turf(src),'sound/items/uncorking.ogg', rand(10,50), 1)
+	spawn(6)
+		playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
+	imbibe(user)
 
 /obj/item/potion/update_icon()
 	if(full)
@@ -25,29 +26,31 @@
 		desc = "An empty potion bottle."
 
 /obj/item/potion/proc/imbibe(mob/user)
-	if(full)
-		full = FALSE
-		update_icon()
-		if(imbibe_check(user))
-			imbibe_effect(user)
+	if(full!)
+		return
+	full = FALSE
+	update_icon()
+	if(imbibe_check(user))
+		imbibe_effect(user)
+	else
+		to_chat(user, fail_message)
 
 /obj/item/potion/proc/imbibe_check(mob/user)
-	return 1
+	return TRUE
 
 /obj/item/potion/attack(mob/M, mob/user, def_zone)
-	if(full)
-		if (user != M && (ishuman(M) || ismonkey(M)))
-			user.visible_message("<span class='danger'>\The [user] attempts to feed \the [M] \the [src].</span>", "<span class='danger'>You attempt to feed \the [M] \the [src].</span>")
-			if(!do_mob(user, M))
-				return
-			playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
-			user.visible_message("<span class='danger'>\The [user] feeds \the [M] \the [src].</span>", "<span class='danger'>You feed \the [M] \the [src].</span>")
+	if(full && user != M && (ishuman(M || ismonkey(M))))
+		user.visible_message("<span class='danger'>\The [user] attempts to feed \the [M] \the [src].</span>", "<span class='danger'>You attempt to feed \the [M] \the [src].</span>")
+		if(!do_mob(user, M))
+			return
+		playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
+		user.visible_message("<span class='danger'>\The [user] feeds \the [M] \the [src].</span>", "<span class='danger'>You feed \the [M] \the [src].</span>")
 
-			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey])</font>")
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [src.name] to [M.name] ([M.ckey])</font>")
-			log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [src.name] to [M.name] ([M.ckey])</font>")
+		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-			imbibe(M)
+		imbibe(M)
 
 /obj/item/potion/throw_impact(atom/hit_atom)
 	..()
@@ -84,8 +87,8 @@
 
 /obj/item/potion/healing/imbibe_check(mob/user)
 	if(isliving(user))
-		return 1
-	to_chat(user, fail_message)
+		return TRUE
+	return FALSE
 
 /obj/item/potion/healing/imbibe_effect(mob/living/user)
 	user.rejuvenate(1)
@@ -100,7 +103,7 @@
 	user.make_invisible(INVISIBLEPOTION, 1 MINUTES)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
-	if(istype(target, /atom/movable))
+	if(ismovableatom(target))
 		var/atom/movable/AM = target
 		AM.make_invisible(INVISIBLEPOTION, 1 MINUTES)
 
@@ -159,7 +162,7 @@
 	name = "potion of transformation"
 	desc = "Transform into a fearsome creature for five minutes."
 	icon_state = "heart_orb"
-	var/list/possible_types = list(
+	var/static/list/possible_types = list(
 		/mob/living/simple_animal/construct/armoured,
 		/mob/living/simple_animal/hostile/gremlin,
 		/mob/living/simple_animal/hostile/necromorph,

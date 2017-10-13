@@ -607,9 +607,8 @@ a {
 		M.regenerate_icons()
 	if(time > 0)
 		spawn(time)
-			if(src)
-				alpha = initial(alpha)
-				has_been_invisible_sprayed = FALSE
-				if(ismob(loc))
-					var/mob/M = loc
-					M.regenerate_icons()
+			alpha = initial(alpha)
+			has_been_invisible_sprayed = FALSE
+			if(ismob(loc))
+				var/mob/M = loc
+				M.regenerate_icons()

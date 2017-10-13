@@ -10,7 +10,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/list/available_spells = list(
+	var/static/list/available_spells = list(
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
 	/spell/targeted/projectile/dumbfire/fireball/firebreath,
@@ -46,9 +46,9 @@
 	)
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/list/available_artifacts = list()
+	var/static/list/available_artifacts = list()
 
-	var/list/available_potions = list(
+	var/static/list/available_potions = list(
 		/obj/item/potion/healing = Sp_BASE_PRICE,
 		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
@@ -207,7 +207,7 @@
 
 	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
-	for(var/P in available_potions)
+	for(var/P in get_available_potions)
 		var/obj/item/potion/potion = P
 		var/potion_name = initial(potion.name)
 		var/potion_desc = initial(potion.desc)
