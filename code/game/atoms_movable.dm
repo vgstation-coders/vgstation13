@@ -937,3 +937,7 @@
 	sleep(3)
 	for(var/client/C in viewers)
 		C.images -= item
+
+/atom/movable/proc/make_invisible(var/source_define, var/time)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
+	if(invisibility || alpha <= 1)	//already invisible
+		return 1

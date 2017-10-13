@@ -48,6 +48,15 @@
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
 	var/list/available_artifacts = list()
 
+	var/list/available_potions = list(
+		/obj/item/potion/healing = 20,
+		/obj/item/potion/invisibility = 10,
+		/obj/item/potion/stoneskin = 10,
+		/obj/item/potion/light = 5,
+		/obj/item/potion/speed = 5,
+		/obj/item/potion/speed/major = 10,
+		/obj/item/potion/transform = 15)
+
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
 
@@ -72,6 +81,9 @@
 
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
+
+/obj/item/weapon/spellbook/proc/get_available_potions()
+	return available_potions.Copy()
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
@@ -193,6 +205,17 @@
 		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
 
+	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+
+	for(var/P in available_potions)
+		var/obj/item/potion/potion = P
+		var/potion_name = initial(potion.name)
+		var/potion_desc = initial(potion.desc)
+		var/potion_price = available_potions[P]
+
+		dat += "<strong>[potion_name]</strong> ([buy_href_link(P, potion_price, "buy for [potion_price] point\s")])<br>"
+		dat += "<em>[potion_desc]</em><br><br>"
+
 	dat += "</body>"
 
 	user << browse(dat, "window=spellbook;size=[book_window_size]")
@@ -288,6 +311,12 @@
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
+
+		else if(ispath(buy_type, /obj/item/potion))
+			if(buy_type in get_available_potions())
+				if(use(available_potions[buy_type]))
+					new buy_type(get_turf(usr))
+					feedback_add_details("wizard_spell_learned", "PT")
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])

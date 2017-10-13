@@ -595,3 +595,21 @@ a {
 					change_dir(turn(movementdirection, 180)) //face away from where we're going
 					sleep(i)
 		return 1
+
+/obj/make_invisible(var/source_define, var/time)
+	if(..() || !source_define)
+		return
+	alpha = 1
+	if(source_define == INVISIBLESPRAY)
+		has_been_invisible_sprayed = TRUE
+	if(ismob(loc))
+		var/mob/M = loc
+		M.regenerate_icons()
+	if(time > 0)
+		spawn(time)
+			if(src)
+				alpha = initial(alpha)
+				has_been_invisible_sprayed = FALSE
+				if(ismob(loc))
+					var/mob/M = loc
+					M.regenerate_icons()
