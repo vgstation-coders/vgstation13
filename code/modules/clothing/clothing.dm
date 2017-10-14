@@ -218,7 +218,7 @@
 			armor[A] -= rand(armor[A]/3, armor[A])
 
 // Redefines the attack proc so that when we attack somebody on fire on help intent with a piece of clothing, we have a small chance of putting out the fire.
-/obj/item/clothing/attack(mob/living/M as mob, mob/living/user as mob, def_zone, var/originator = null)
+/obj/item/clothing/attack(mob/living/M, mob/living/user, def_zone, var/originator = null)
 	if(iscarbon(user)) // First, we check if it's a a carbon.
 		if(user.a_intent == I_HELP) // Then we check if he wants to help.
 			if(istype(src, /obj/item/clothing/under) || (istype(src, /obj/item/clothing/suit) && !istype(src, /obj/item/clothing/suit/space))) // Then we check if the item is either a jumpsuit or suit-but-not-a-spacesut
@@ -622,3 +622,4 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
+
