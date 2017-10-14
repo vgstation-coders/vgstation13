@@ -96,6 +96,16 @@
 	user.rejuvenate(1)
 	user.suiciding = 0
 
+/obj/item/potion/mana
+	name = "potion of mana"
+	desc = "Refresh your spell cooldowns."
+	icon_state = "star_roundbottle"
+
+/obj/item/potion/mana/imbibe_effect(mob/user)
+	for(var/spell/SP in user.spell_list)
+		if(SP.panel == "Spells")
+			SP.charge_counter = SP.charge_max
+
 /obj/item/potion/invisibility
 	name = "potion of invisibility"
 	desc = "Become completely invisible for one minute."
@@ -194,3 +204,44 @@
 			top_level = top_level.transmogrify()
 		if(T2)
 			playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
+
+/obj/item/potion/toxin
+	name = "draught of toad"
+	desc = "Become immune to toxins."
+	icon_state = "green_emflask"
+
+/obj/item/potion/toxin/imbibe_effect(mob/user)
+	user.tox_damage_modifier = 0
+
+/obj/item/potion/zombie
+	name = "phial of exanimis"
+	desc = "Turn the dead into undead."
+	icon_state = "necro_flask2"
+
+/obj/item/potion/zombie/imbibe_check(mob/user)
+	if(ishuman(user))
+		return TRUE
+	return FALSE
+
+/obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
+	user.become_zombie_after_death = TRUE
+	spawn(20)
+		to_chat(user, "<span class='notice'>Nothing seems to happen.</span>")
+
+/obj/item/potion/zombie/impact_atom(atom/target)
+	var/client/thrower = directory[ckey(fingerprintslast)]
+	var/mob/M
+	if(thrower && thrower.mob)
+		M = thrower.mob
+	var/list/L = get_all_mobs_in_dview(get_turf(src))
+	for(var/mob/living/carbon/human/H in L)
+		if(H.stat || H.health <= config.health_threshold_crit)
+			if(prob(50))
+				var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), M, H.mind)
+				T.get_clothes(H, T)
+				T.name = H.real_name
+				T.host = H
+				H.forceMove(null)
+			else
+				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
+				H.gib()

@@ -115,6 +115,14 @@
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
+	if(become_zombie_after_death)
+		spawn(300)
+			if(!gcDestroyed)
+				var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), Controller = src.mind)
+				T.get_clothes(src, T)
+				T.name = src.real_name
+				T.host = src
+				src.forceMove(null)
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()

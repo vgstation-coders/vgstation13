@@ -50,12 +50,15 @@
 
 	var/static/list/available_potions = list(
 		/obj/item/potion/healing = Sp_BASE_PRICE,
+		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/light = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/transform = Sp_BASE_PRICE*0.75)
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/toxin = Sp_BASE_PRICE,
+		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
