@@ -170,6 +170,22 @@ var/datum/controller/gameticker/ticker
 	//here to initialize the random events nicely at round start
 	setup_economy()
 
+	// The true spirit of /vg/
+	spawn(10 SECONDS)
+		var/datum/only_one/event = new ()
+		if(event.event_setup_start())
+			var/list/mobs_to_convert = list()
+			for(var/mob/M in event.eligible_mobs)
+				if(event.check_eligibility(M))
+					mobs_to_convert += M
+
+			for(var/mob/M in mobs_to_convert)
+				event.convert_mob(M)
+
+			event.event_setup_end(mobs_to_convert)
+
+		qdel(event)
+
 	spawn(0)//Forking here so we dont have to wait for this to finish
 		mode.post_setup()
 		//Cleanup some stuff
