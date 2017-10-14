@@ -226,15 +226,13 @@
 					var/mob/living/carbon/human/target = M
 					if(isplasmaman(target)) // Cannot put out plasmamen, else they could just go around with a jumpsuit and not need a space suit.
 						visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target], but plasmafires are too hot. It is no use.</span>")
-						return
 					else
 						visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
 						if(prob(extinguishingProb))
 							M.ExtinguishMob()
 							visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
-						return
+					return
 	..()
-	return
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
