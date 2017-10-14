@@ -233,7 +233,7 @@
 						visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
 						if(prob(15) || (istype(src, /obj/item/clothing/suit/spaceblanket) && prob(70)))
 							M.ExtinguishMob()
-							visible_message("<span class='notice'>\The [user] have put out the fire on \the [target].</span>")
+							visible_message("<span class='notice'>\The [user] has put out the fire on \the [target].</span>")
 						return
 	..()
 	return
