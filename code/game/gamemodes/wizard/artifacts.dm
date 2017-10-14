@@ -112,7 +112,7 @@
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
 
-	H.rightandwrong(0)
+	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
 
 //SUMMON MAGIC
@@ -128,8 +128,24 @@
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
 
-	H.rightandwrong(1)
+	H.rightandwrong("magic")
 	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
+
+//SUMMON SWORDS
+/datum/spellbook_artifact/summon_swords
+	name = "Summon Swords"
+	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
+	abbreviation = "SS"
+
+/datum/spellbook_artifact/summon_magic/can_buy()
+	//Can't summon swords during ragin' mages
+	return !ticker.mode.rage
+
+/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong("swords")
+	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
 
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"
