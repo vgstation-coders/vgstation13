@@ -13,6 +13,7 @@
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
 	var/extinguishingProb = 15
+	var/can_extinguish = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -221,7 +222,7 @@
 /obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
 	if (!(iscarbon(user)  \
 	&& user.a_intent == I_HELP \
-	&& (istype(src, /obj/item/clothing/under) || (istype(src, /obj/item/clothing/suit) && !istype(src, /obj/item/clothing/suit/space))) \
+	&& can_extinguish \
 	&& ishuman(M) && M.on_fire))
 		..()
 	else
@@ -469,6 +470,7 @@ BLIND     // can't see anything
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
+	can_extinguish = TRUE
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
@@ -506,6 +508,7 @@ BLIND     // can't see anything
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	can_extinguish = FALSE
 
 //Under clothing
 /obj/item/clothing/under
@@ -526,6 +529,7 @@ BLIND     // can't see anything
 		3 = Report location
 		*/
 	var/displays_id = 1
+	can_extinguish = TRUE
 
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)
