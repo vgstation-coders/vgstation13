@@ -2,11 +2,11 @@
 	name = "potion"
 	desc = "This doesn't look like it does anything."
 	icon = 'icons/obj/potions.dmi'
-	icon_state = "red_minibottle"
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
 	var/full = TRUE
 	var/fail_message = "<span class='notice'>Nothing happens, though your stomach is a little unsettled. It seems the potion isn't agreeing with you.</span>"
+	var/imbibe_message = ""
 
 /obj/item/potion/attack_self(mob/user)
 	if(!full)
@@ -32,10 +32,12 @@
 		return
 	full = FALSE
 	update_icon()
-	if(imbibe_check(user))
-		imbibe_effect(user)
-	else
-		to_chat(user, fail_message)
+	spawn(2 SECONDS)
+		if(imbibe_check(user))
+			imbibe_effect(user)
+			to_chat(user, imbibe_message)
+		else
+			to_chat(user, fail_message)
 
 /obj/item/potion/proc/imbibe_check(mob/user)
 	return TRUE
@@ -88,9 +90,7 @@
 	icon_state = "heart_squarebottle"
 
 /obj/item/potion/healing/imbibe_check(mob/user)
-	if(isliving(user))
-		return TRUE
-	return FALSE
+	return isliving(user)
 
 /obj/item/potion/healing/imbibe_effect(mob/living/user)
 	user.rejuvenate(1)
@@ -155,6 +155,7 @@
 	name = "potion of minor speed"
 	desc = "Increase your speed for five minutes."
 	icon_state = "green_smallbottle"
+	imbibe_message = "<span class='notice'>You feel faster.</span>"
 	var/to_increase = 0.25
 	var/time = 5 MINUTES
 
@@ -208,6 +209,7 @@
 /obj/item/potion/toxin
 	name = "draught of toad"
 	desc = "Become immune to toxins."
+	imbibe_message = "<span class='notice'>You feel less toxic.</span>"
 	icon_state = "green_emflask"
 
 /obj/item/potion/toxin/imbibe_effect(mob/user)
@@ -217,16 +219,13 @@
 	name = "phial of exanimis"
 	desc = "Turn the dead into undead."
 	icon_state = "necro_flask2"
+	imbibe_message = "<span class='notice'>Nothing seems to happen.</span>"
 
 /obj/item/potion/zombie/imbibe_check(mob/user)
-	if(ishuman(user))
-		return TRUE
-	return FALSE
+	return ishuman(user)
 
 /obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
 	user.become_zombie_after_death = TRUE
-	spawn(20)
-		to_chat(user, "<span class='notice'>Nothing seems to happen.</span>")
 
 /obj/item/potion/zombie/impact_atom(atom/target)
 	var/client/thrower = directory[ckey(fingerprintslast)]
@@ -235,7 +234,7 @@
 		M = thrower.mob
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
-		if(H.stat || H.health <= config.health_threshold_crit)
+		if(H.isDeadorDying())
 			if(prob(50))
 				var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), M, H.mind)
 				T.get_clothes(H, T)
@@ -245,3 +244,115 @@
 			else
 				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
 				H.gib()
+
+/obj/item/potion/fullness
+	name = "potion of fullness"
+	desc = "Sate your hunger."
+	icon_state = "green_minibottle"
+	imbibe_message = "<span class='notice'>You feel full.</span>"
+	w_class = W_CLASS_TINY
+
+/obj/item/potion/fullness/imbibe_effect(mob/user)
+	if(user.nutrition < 400)
+		user.nutrition = 400
+
+/obj/item/potion/transparency
+	name = "potion of reduced visibility"
+	desc = "Become slightly transparent for ten minutes."
+	icon_state = "blue_minibottle"
+
+/obj/item/potion/transparency/imbibe_effect(mob/user)
+	user.alphas[TRANSPARENCYPOTION] = 125
+	spawn(10 MINUTES)
+		user.alphas -= TRANSPARENCYPOTION
+
+/obj/item/potion/transparency/impact_atom(atom/target)
+	if(!isatommovable(target))
+		return
+	target.alpha = 125
+	spawn(10 MINUTES)
+		target.alpha = initial(target.alpha)
+
+/obj/item/potion/paralysis
+	name = "potion of minor paralysis"
+	desc = "Become paralyzed for six seconds."
+	icon_state = "yellow_minibottle"
+
+/obj/item/potion/paralysis/imbibe_effect(mob/user)
+	user.Stun(3)
+	user.Knockdown(3)
+
+/obj/item/potion/sword
+	name = "potion of sword"
+	desc = "A sword in a bottle."
+	icon_state = "yellow_smallbottle"
+
+/obj/item/potion/sword/imbibe_check(mob/user)
+	return isliving(user)
+
+/obj/item/potion/sword/imbibe_effect(mob/living/user)
+	playsound(user,'sound/weapons/bloodyslice.ogg', 50, 1)
+	to_chat(user, "<span class='danger'>You feel something pierce your insides!</span>")
+	user.adjustBruteLoss(30)
+
+/obj/item/potion/sword/impact_atom(atom/target)
+	new /obj/item/weapon/claymore(get_turf(src))
+
+/obj/item/potion/random
+	name = "potion of unpredictability"
+	desc = "Cheap and unreliable."
+	icon_state = "murky_emflask"
+	var/potiontype
+	var/obj/item/potion/chosen_potion
+
+/obj/item/potion/random/New()
+	..()
+	potiontype = pick(existing_typesof(/obj/item/potion))
+	name = "murky potion"
+	desc = "You can't quite tell what this is supposed to do."
+
+/obj/item/potion/random/imbibe_effect(mob/user)
+	chosen_potion = new potiontype()
+	chosen_potion.imbibe_effect(user)
+	qdel(chosen_potion)
+	chosen_potion = null
+
+/obj/item/potion/random/impact_mob(atom/target)
+	chosen_potion = new potiontype()
+	chosen_potion.impact_mob(target)
+	qdel(chosen_potion)
+	chosen_potion = null
+
+/obj/item/potion/random/impact_atom(atom/target)
+	chosen_potion = new potiontype()
+	chosen_potion.impact_atom(target)
+	qdel(chosen_potion)
+	chosen_potion = null
+
+/obj/item/potion/strength
+	name = "potion of minor strength"
+	desc = "Gain incredible strength for ten seconds."
+	imbibe_message = "<span class='notice'>You feel strong!</span>"
+	icon_state = "red_minibottle"
+
+/obj/item/potion/strength/imbibe_check(mob/user)
+	return ishuman(user)
+
+/obj/item/potion/strength/imbibe_effect(mob/living/carbon/human/user)
+	if(user.mutations.Find(M_HULK))
+		return
+	user.mutations.Add(M_HULK)
+	spawn(10 SECONDS)
+		user.mutations.Remove(M_HULK)
+
+/obj/item/potion/strength/major
+	name = "potion of major strength"
+	desc = "Gain incredible strength for three minutes."
+	icon_state = "red_smallbottle"
+
+/obj/item/potion/strength/major/imbibe_effect(mob/living/carbon/human/user)
+	if(user.mutations.Find(M_HULK))
+		return
+	user.mutations.Add(M_HULK)
+	spawn(3 MINUTES)
+		user.mutations.Remove(M_HULK)

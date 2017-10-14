@@ -116,7 +116,7 @@
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
 	if(become_zombie_after_death)
-		spawn(300)
+		spawn(30 SECONDS)
 			if(!gcDestroyed)
 				var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), Controller = src.mind)
 				T.get_clothes(src, T)

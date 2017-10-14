@@ -58,7 +58,14 @@
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
 		/obj/item/potion/toxin = Sp_BASE_PRICE,
-		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5)
+		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/strength/major = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/random = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/strength = Sp_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
