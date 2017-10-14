@@ -223,34 +223,20 @@
 		if(user.a_intent == I_HELP) // Then we check if he wants to help.
 			if(istype(src, /obj/item/clothing/under) || (istype(src, /obj/item/clothing/suit) && !istype(src, /obj/item/clothing/suit/space))) // Then we check if the item is either a jumpsuit or suit-but-not-a-spacesut
 				if(ishuman(M) && M.on_fire) // If he is on fire
-					/var/mob/living/carbon/human/target = new/mob/living/carbon/human()
-					target = M
+					var/mob/living/carbon/human/target = M
 					// Good old polymorphism. We are allowed to do that because we checked if M was a human before.
 					// This allows us to check for their species
 					if(isplasmaman(target)) // Cannot put out plasmamen, else they could just go arround with a jumpsuit and not need a space suit.
-						for(var/mob/spectator in view())
-							to_chat(spectator, "<span class='warning'>\the [user] attempts to put out the fire on \the [target], but plasmafires are too hot. It is no use.</span>")
+						visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target], but plasmafires are too hot. It is no use.</span>")
 						return
 					else
-						for(var/mob/spectator in view())
-							to_chat(spectator, "<span class='warning'>\the [user] attempts to put out the fire on \the [target].</span>")
+						visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target].</span>")
 						if(prob(15))
 							M.ExtinguishMob()
-							for(var/mob/spectator in view())
-								to_chat(spectator, "<span class='notice'>\the [user] have put out the fire on \the [target].</span>")
+							visible_message("<span class='notice'>\The [user] have put out the fire on \the [target].</span>")
 						return
-				else
-					..()
-					return
-			else
-				..()
-				return
-		else
-			..()
-			return
-	else
-		..()
-		return
+	..()
+	return
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
@@ -636,5 +622,3 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
-
-
