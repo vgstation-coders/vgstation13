@@ -12,6 +12,7 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
+	var/extinguishingProb = 15
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -217,7 +218,7 @@
 		for(var/A in armor)
 			armor[A] -= rand(armor[A]/3, armor[A])
 
-/obj/item/clothing/attack(mob/living/M, mob/living/user, def_zone, var/originator = null)
+/obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
 	if(iscarbon(user))
 		if(user.a_intent == I_HELP)
 			if(istype(src, /obj/item/clothing/under) || (istype(src, /obj/item/clothing/suit) && !istype(src, /obj/item/clothing/suit/space)))
@@ -228,11 +229,12 @@
 						return
 					else
 						visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
-						if(prob(15) || (istype(src, /obj/item/clothing/suit/spaceblanket) && prob(70))) // Blankets are better at putting out fire
+						if(prob(extinguishingProb))
 							M.ExtinguishMob()
 							visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 						return
 	..()
+	return
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
