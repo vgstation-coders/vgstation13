@@ -387,9 +387,9 @@ BLIND     // can't see anything
 		usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/New()
-	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
 		actions_types = null
+	..()
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -601,5 +601,3 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
-
-
