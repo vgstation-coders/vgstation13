@@ -198,7 +198,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if (href_list["rearm"])
 		src.rearm()
 	return
@@ -407,7 +408,7 @@
 	can_pre_detonate = TRUE
 	equip_cooldown = 30
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/hamsandwich/M)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
 		return 1
 
@@ -423,7 +424,8 @@
 	var/inflatable_type = 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["inflatable_type"])
 		inflatable_type = !inflatable_type
 		if(inflatable_type)
@@ -459,7 +461,7 @@
 		return
 	..()
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/hamsandwich/M)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
 		return 1
 

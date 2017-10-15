@@ -41,6 +41,7 @@
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
 	var/lights = 0
 	var/lights_power = 6
+	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
 
 	//inner atmos
 	var/use_internal_tank = 0

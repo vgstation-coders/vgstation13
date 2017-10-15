@@ -1,8 +1,8 @@
-/obj/mecha/working/hamsandwich
+/obj/mecha/working/clarke
 	desc = "Combining man and machine for a better, stronger engineer."
-	name = "Hamsandwich"
-	icon_state = "hamsandwich"
-	initial_icon = "hamsandwich"
+	name = "Clarke"
+	icon_state = "clarke"
+	initial_icon = "clarke"
 	step_in = 1
 	step_energy_drain = 2
 	max_temperature = 100000
@@ -10,44 +10,47 @@
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley
 	max_equip = 4
 	cargo_capacity = 20
+	rad_protection = 100
 	var/image/thruster_overlay
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
 
-/obj/mecha/working/hamsandwich/New()
+/obj/mecha/working/clarke/New()
 	..()
 	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial(icon_state)]-thruster_overlay")
 	scrubber = new(src)
 
-/obj/mecha/working/hamsandwich/Destroy()
+/obj/mecha/working/clarke/Destroy()
 	qdel(scrubber)
 	scrubber = null
 	..()
 
-/obj/mecha/working/hamsandwich/check_for_support()
+/obj/mecha/working/clarke/check_for_support()
 	return 1
 
-/obj/mecha/working/hamsandwich/mechturn(direction)
+/obj/mecha/working/clarke/mechturn(direction)
 	dir = direction
 	playsound(src,'sound/mecha/mechmove01.ogg',40,1)
 	return 1
 
-/obj/mecha/working/hamsandwich/mechstep(direction)
+/obj/mecha/working/clarke/mechstep(direction)
 	if(istype(get_turf(src), /turf/space))
-		overlays += thruster_overlay
+		if(!(thruster_overlay in overlays))
+			overlays += thruster_overlay
 	else
-		overlays -= thruster_overlay
+		if(thruster_overlay in overlays)
+			overlays -= thruster_overlay
 	return step(src,direction)
 
-/obj/mecha/working/hamsandwich/mechsteprand()
+/obj/mecha/working/clarke/mechsteprand()
 	return step_rand(src)
 
-/obj/mecha/working/hamsandwich/Process_Spacemove(var/check_drift = 0)
+/obj/mecha/working/clarke/Process_Spacemove(var/check_drift = 0)
 	return TRUE
 
-/obj/mecha/working/hamsandwich/startMechWalking()
+/obj/mecha/working/clarke/startMechWalking()
 	icon_state = initial_icon + "-move"
 
-/obj/mecha/working/hamsandwich/get_commands()
+/obj/mecha/working/clarke/get_commands()
 	var/output = {"<div class='wr'>
 						<div class='header'>Special</div>
 						<div class='links'>
@@ -58,7 +61,7 @@
 	output += ..()
 	return output
 
-/obj/mecha/working/hamsandwich/Topic(href, href_list)
+/obj/mecha/working/clarke/Topic(href, href_list)
 	..()
 	if (href_list["scrubbing"])
 		scrubber.on = !scrubber.on

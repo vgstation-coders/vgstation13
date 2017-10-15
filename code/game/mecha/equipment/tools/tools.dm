@@ -99,7 +99,7 @@
 		if(M.stat == DEAD)
 			return
 		if(chassis.occupant.a_intent == I_HURT)
-			if(istype(chassis, /obj/mecha/working/hamsandwich))
+			if(istype(chassis, /obj/mecha/working/clarke))
 				to_chat(chassis.occupant, "<span class='warning'>WARNING: OSHA regulations prohibit use of \the [src] in that way.</span>")
 				return
 			M.take_overall_damage(dam_force)
@@ -225,7 +225,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/can_attach(obj/mecha/M as obj)
 	if(..())
-		if((istype(M, /obj/mecha/working) || istype(M, /obj/mecha/combat)) && !istype(M, /obj/mecha/working/hamsandwich))
+		if((istype(M, /obj/mecha/working) || istype(M, /obj/mecha/combat)) && !istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -252,7 +252,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
-		if(istype(M) && !istype(M, /obj/mecha/working/hamsandwich))
+		if(istype(M) && !istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -319,7 +319,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
-		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/hamsandwich))
+		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -490,7 +490,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		toggle()
 
@@ -559,7 +560,8 @@
 	R.busy = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["RCDmenu"])
 		RCD.attack_self(chassis.occupant)
 	if(href_list["RPDmenu"])
@@ -717,7 +719,8 @@
 	return "[..()] [mode==1?"([locked||"Nothing"])":null] \[<a href='?src=\ref[src];mode=1'>S</a>|<a href='?src=\ref[src];mode=2'>P</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["mode"])
 		mode = text2num(href_list["mode"])
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
@@ -737,7 +740,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/hamsandwich))
+		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
 			if(!M.proc_res["dynattackby"])
 				return 1
 	return 0
@@ -788,7 +791,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/hamsandwich))
+		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
 			if(!M.proc_res["dynbulletdamage"] && !M.proc_res["dynhitby"])
 				return 1
 	return 0
@@ -890,7 +893,8 @@
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_repairs=1'>[pr_repair_droid.active()?"Dea":"A"]ctivate</a>"
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle_repairs"])
 		chassis.overlays -= droid_overlay
 		if(pr_repair_droid.toggle())
@@ -998,7 +1002,8 @@
 	return pow_chan
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle_relay"])
 		if(pr_energy_relay.toggle())
 			set_ready_state(0)
@@ -1089,7 +1094,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/generator/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		if(pr_mech_generator.toggle())
 			set_ready_state(0)
@@ -1301,7 +1307,7 @@
 	var/datum/global_iterator/pr_switchtool
 	var/obj/item/weapon/switchtool/engineering/mech/switchtool
 
-/obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/hamsandwich/M)
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)
 	if(..())
 		if(istype(M))
 			return 1
@@ -1326,7 +1332,8 @@
 		chassis.use_power(energy_drain)
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["change"])
 		if(switchtool.deployed)
 			switchtool.attack_self(chassis.occupant)
@@ -1381,24 +1388,28 @@
 	equip_cooldown = 10
 	energy_drain = 50
 	range = 0
-	var/active = FALSE
+	var/plating_active = FALSE
+	var/tiling_active = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
-	..()
-	if(href_list["toggle"])
-		active = !active
+	if(..())
+		return TRUE
+	if(href_list["toggle_plating"])
+		plating_active = !plating_active
+	if(href_list["toggle_tiling"])
+		tiling_active = !tiling_active
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()
-	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
+	return "[..()] \[<a href='?src=\ref[src];toggle_plating=0'>[plating_active ? "Deactivate" : "Activate"] automatic plating</a>\]\[<a href='?src=\ref[src];toggle_tiling=0'>[tiling_active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/on_mech_step()
-	if(!active)
-		return
 	var/turf/T = get_turf(src)
-	if(T.is_plating())
+	if(T.is_plating() && tiling_active)
 		T.ChangeTurf(/turf/simulated/floor)
 		playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
+		return
+	if(!plating_active)
 		return
 	var/canbuild = T.canBuildPlating()
 	if(istype(T, /turf/simulated/floor/foamedmetal))
@@ -1434,7 +1445,6 @@
 	collector.connected_module = src
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/Destroy()
-	collector.connected_module = null
 	qdel(collector)
 	collector = null
 	..()
@@ -1451,7 +1461,8 @@
 		update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		collector.toggle_power()
 		occupant_message("Radiation collector array [collector.active ? "activated" : "deactivated"].")

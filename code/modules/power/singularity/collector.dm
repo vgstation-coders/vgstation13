@@ -167,14 +167,13 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/mech/process()
 	if(P)
+		if(!active)
+			return
 		if(P.air_contents.toxins <= 0)
 			connected_module.occupant_message("<span class='warning>Warning: Radiation collector array tank empty.</span>")
 			P.air_contents.toxins = 0
-			if(active)
-				toggle_power()
+			toggle_power()
 			connected_module.update_equip_info()
-		else if(!active)
-			return
 		else
 			P.air_contents.toxins -= (0.001 * drain_ratio)
 			P.air_contents.update_values()
