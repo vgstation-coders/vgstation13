@@ -31,6 +31,16 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 		var/mob/living/simple_animal/mouse/MM = M
 		if(MM.disease_carrier)
 			return 1
+
+	if(istype(M, /mob/living/carbon/martian)) //Martians are incredibly susceptible to viruses
+		var/mob/living/carbon/martian/MR = M
+		if (vector == "Airborne")
+			if(MR.head && istype(MR.head, /obj/item/clothing/head/helmet/space/martian))
+				score += 40
+				var/obj/item/clothing/head/helmet/space/martian/fishbowl = MR.head
+				if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
+					score += 60
+
 	if(prob((min(score, 100) - 100) ** 2 / 100))
 //		log_debug("Infection got through")
 		return 1

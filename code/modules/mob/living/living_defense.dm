@@ -155,8 +155,10 @@
 	return 0
 
 //eyecheck(): retuns 0 for no protection, 1 for partial protection, 2 for full protection
+//EYECHECK_NO_PROTECTION, EYECHECK_PARTIAL_PROTECTION, EYECHECK_FULL_PROTECTION
+
 /mob/living/proc/eyecheck()
-	return 0
+	return EYECHECK_NO_PROTECTION
 
 
 //BITES
