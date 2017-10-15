@@ -200,6 +200,7 @@
 	var/wiki_page       // Title of the book's wiki page.
 	var/forbidden = 0     // Prevent ordering of this book. (0=no, 1=yes, 2=emag only)
 	var/obj/item/store	// What's in the book?
+	var/runestun = 0	//Does it have a stun talisman in it?
 
 /obj/item/weapon/book/New()
 	..()
@@ -234,6 +235,14 @@
 		store.forceMove(get_turf(src))
 		store = null
 		return
+	if(runestun)
+		var/mob/living/carbon/human/M = user
+		M.flash_eyes(visual = 1)
+		if (!(M_HULK in user.mutations))
+			M.silent += 15
+		M.Knockdown(25)
+		M.Stun(25)
+		runestun = 0
 	read_a_motherfucking_book(user)
 
 /obj/item/weapon/book/examine(mob/user)
@@ -323,6 +332,20 @@
 			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
 			carved = 1
 			return
+
+	else if(istype(W, /obj/item/weapon/paper/talisman))
+		var/obj/item/weapon/paper/talisman/talisman = W
+		if(runestun)
+			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
+			return()
+		if(talisman.imbue == "runestun")
+			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
+			qdel(talisman)
+			runestun = 1
+
+
+
+
 	else
 		..()
 

@@ -130,10 +130,8 @@
 		call(src,triggerproc)(M)
 
 /obj/effect/meatgrinder/proc/triggerrad1(mob)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	for(var/mob/O in viewers(world.view, src.loc))
-		s.set_up(3, 1, src)
-		s.start()
+		spark(src)
 		explosion(mob, 1, 0, 0, 0)
 		spawn(0)
 			del(src)

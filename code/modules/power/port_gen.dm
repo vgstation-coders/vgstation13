@@ -220,14 +220,14 @@ display round(lastgen) and plasmatank amount
 		return 1
 	return -1
 
-/obj/machinery/power/port_gen/pacman/wrenchAnchor(mob/user)
-	if(..() == 1)
-		if(anchored)
-			connect_to_network()
-		else
-			disconnect_from_network()
-		return 1
-	return -1
+/obj/machinery/power/port_gen/pacman/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	if(anchored)
+		connect_to_network()
+	else
+		disconnect_from_network()
 
 /obj/machinery/power/port_gen/pacman/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, sheet_path))

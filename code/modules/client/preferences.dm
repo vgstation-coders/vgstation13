@@ -942,7 +942,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
 		return
-
+	//testing("preference=[href_list["preference"]]")
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
 			if("close")
@@ -1261,10 +1261,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("flavor_text")
 					var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
-					if(msg != null)
-						msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-						msg = html_encode(msg)
-
+					if(msg)
 						flavor_text = msg
 				if("limbs")
 					var/list/limb_input = list(
@@ -1505,6 +1502,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
 						lastPolled = world.timeofday

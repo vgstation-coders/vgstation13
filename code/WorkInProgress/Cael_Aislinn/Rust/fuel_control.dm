@@ -134,23 +134,23 @@
 			active_stages.Remove(cur_stage)
 			for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 				if(I.id_tag == cur_stage && check_injector_status(I))
-					I.StopInjecting()
+					I.stop_injecting()
 		else
 			active_stages.Add(cur_stage)
 			for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 				if(I.id_tag == cur_stage && check_injector_status(I))
-					I.BeginInjecting()
+					I.begin_injecting()
 
 	if( href_list["cooldown"] )
 		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 			if(check_injector_status(I))
-				I.StopInjecting()
+				I.stop_injecting()
 		active_stages = list()
 
 	if( href_list["warmup"] )
 		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 			if(check_injector_status(I))
-				I.BeginInjecting()
+				I.begin_injecting()
 			if(!active_stages.Find(I.id_tag))
 				active_stages.Add(I.id_tag)
 

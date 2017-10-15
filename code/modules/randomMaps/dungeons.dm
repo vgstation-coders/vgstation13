@@ -44,8 +44,8 @@ proc/load_dungeon(dungeon_type)
 	//Highest dungeon in the current row
 
 	for(var/datum/map_element/dungeon in existing_dungeons) //Go through all dungeons in the order they were created
-		if(!dungeon.location)
-			continue
+		//if(!dungeon.location)
+		//	continue
 
 		if(dungeon.height > tallest_dungeon_height)
 			tallest_dungeon_height = dungeon.height
@@ -63,8 +63,11 @@ proc/load_dungeon(dungeon_type)
 				spawn_y = spawn_y + tallest_dungeon_height + 1 //So that nothing in the new row overlaps with the previous one
 				spawn_x = dungeon_area.x
 
+	if(!ME.width) //If the map element doesn't have its width/height calculated yet, do it now and add the map element to the dungeon list
+		ME.assign_dimensions()
+	existing_dungeons.Add(ME) //Add it now, to prevent issues occuring when two dungeons are loaded at once
+
 	//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
 	var/result = ME.load(spawn_x - 1, spawn_y - 1, dungeon_area.z)
-	existing_dungeons.Add(ME)
 
 	return result

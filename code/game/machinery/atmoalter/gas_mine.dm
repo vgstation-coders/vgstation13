@@ -29,11 +29,13 @@
 	air_contents.update_values()
 	update_icon()
 
-/obj/machinery/atmospherics/miner/wrenchAnchor(mob/user)
+/obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
 	if(on)
 		on = 0
 		update_icon()
-	..()
 
 // Critical equipment.
 /obj/machinery/atmospherics/miner/ex_act(severity)

@@ -185,7 +185,9 @@
 	overlays.len = 0
 	updateinfolinks()
 	update_icon()
-
+	if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+		var/obj/C = loc
+		C.update_icon()
 
 /obj/item/weapon/paper/proc/parsepencode(var/mob/user,var/obj/item/i, var/t)
 	if(istype(i,/obj/item/weapon/pen))
@@ -328,7 +330,11 @@
 
 		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
 
-	else if(istype(P, /obj/item/weapon/photo))
+		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+			var/obj/C = loc
+			C.update_icon()
+
+	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(user.drop_item(P, src))
 			if(img)
 				to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
@@ -508,3 +514,6 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
+
+/obj/item/weapon/paper/manifest
+	name = "Supply Manifest"

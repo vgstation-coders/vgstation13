@@ -232,7 +232,7 @@
 	canremove = 0
 	muted = 1
 
-/obj/item/clothing/mask/gas/mime/acidable()
+/obj/item/clothing/mask/gas/mime/stickymagic/acidable()
 	return 0
 
 /obj/item/clothing/mask/gas/monkeymask

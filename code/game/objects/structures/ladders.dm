@@ -19,6 +19,18 @@ var/list/ladders = list()
 	spawn(10)
 		update_links()
 
+/obj/structure/ladder/spawned_by_map_element(datum/map_element/ME, list/objects)
+	..()
+	update_links()
+
+/obj/structure/ladder/variable_edited(variable_name, old_value, new_value)
+	..()
+
+	switch(variable_name)
+		if("down", "up", "height", "id")
+			spawn()
+				update_links()
+
 /obj/structure/ladder/Destroy()
 	..()
 

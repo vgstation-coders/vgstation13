@@ -12,6 +12,7 @@
 	pass_flags = PASSTABLE | PASSGRILLE
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null
+	var/health = 15
 
 /obj/effect/biomass/Destroy()
 	unreferenceMaster()
@@ -23,55 +24,53 @@
 		master.vines -= src
 		master = null
 
-/obj/effect/biomass/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!W || !user || !W.type)
+/obj/effect/biomass/attackby(var/obj/item/weapon/W, mob/user)
+	if(W.sharpness_flags & SHARP_BLADE && prob(50)) //Not a guarantee
+		if(prob(30))
+			user.visible_message("<span class = 'warning'>\The [user] cuts through \the [src] with \the [W]'s sharp edge.</span>",\
+			"<span class = 'notice'>You cut through \the [src] with \the [W]'s sharp edge.</span>")
+		adjust_health(rand(5,15))
 		return
-
-	switch(W.type) //This is absolutely terrible
-		if(/obj/item/weapon/circular_saw)
-			qdel(src)
-		if(/obj/item/weapon/kitchen/utensil/knife)
-			qdel(src)
-		if(/obj/item/weapon/fireaxe)
-			qdel(src)
-		if(/obj/item/weapon/hatchet)
-			qdel(src)
-		if(/obj/item/weapon/melee/energy)
-			qdel(src)
-		if(/obj/item/weapon/pickaxe/plasmacutter)
-			qdel(src)
-
-		// less effective weapons
-		if(/obj/item/weapon/wirecutters)
-			if(prob(25))
-				qdel(src)
-		if(/obj/item/weapon/shard)
-			if(prob(25))
-				qdel(src)
-
-		else // weapons with subtypes
-			if(istype(W, /obj/item/weapon/melee/energy/sword))
-				qdel(src)
-			else if(istype(W, /obj/item/weapon/scalpel))
-				qdel(src)
-			else if(istype(W, /obj/item/weapon/weldingtool))
-				var/obj/item/weapon/weldingtool/WeldingTool = W
-
-				if(WeldingTool.remove_fuel(0, user))
-					qdel(src)
-			else
-				return
-
+	if(W.sharpness_flags & (SERRATED_BLADE|CHOPWOOD)) //Guaranteed, but takes some work
+		if(do_after(user, src, rand(10,30)))
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] chops through \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You saw through \the [src].</span>")
+			adjust_health(rand(25,50))
+			return
+	if(W.sharpness_flags & HOT_EDGE)
+		if(do_after(user, src, rand(5,15))) //Guaranteed, rarer sharpness flag so less time taken
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] sears through \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You use \the [W]'s hot edge to burn through \the [src].</span>")
+			adjust_health(rand(20,35))
+			return
+	var/weapon_temp = W.is_hot()
+	if(weapon_temp >= AUTOIGNITION_WOOD)//Yes it's not technically wood, but fibrous chitin's pretty close when held above a flame
+		var/coeff = 1*weapon_temp/AUTOIGNITION_WOOD //The hotter it is, the less time it takes
+		if(do_after(user, src, (rand(30,60)/coeff)))
+			if(prob(30))
+				user.visible_message("<span class = 'warning'>\The [user] burns away \the [src] with \the [W].</span>",\
+				"<span class = 'notice'>You use \the [W] to burn away \the [src].</span>")
+			adjust_health(rand(40,70))
+			return
 	..()
 
 /obj/effect/biomass/proc/grow()
 	if(energy <= 0)
 		icon_state = "stage2"
 		energy = 1
+		adjust_health(-30)
 	else
 		icon_state = "stage3"
 		density = 1
 		energy = 2
+		adjust_health(-30)
+
+/obj/effect/biomass/proc/adjust_health(var/amount)
+	health -= amount
+	if(health <= 0)
+		qdel(src)
 
 /obj/effect/biomass/proc/spread()
 	var/location = get_step_rand(src)
@@ -89,16 +88,15 @@
 /obj/effect/biomass/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			qdel(src)
+			adjust_health(100)
 		if(2.0)
-			if(prob(90))
-				qdel(src)
+			adjust_health(65)
 		if(3.0)
-			if(prob(50))
-				qdel(src)
+			adjust_health(25)
 
 /obj/effect/biomass/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume) //hotspots kill biomass
-	qdel(src)
+	if(exposed_temperature >= AUTOIGNITION_WOOD)
+		adjust_health(70)
 
 /obj/effect/biomass_controller
 	invisibility = 60 // ghost only

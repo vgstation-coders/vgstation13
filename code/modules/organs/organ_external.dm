@@ -722,13 +722,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			"<span class='danger'>Your [display_name] explodes violently!</span>", \
 			"<span class='danger'>You hear an explosion followed by a scream!</span>")
 			explosion(get_turf(owner), -1, -1, 2, 3)
-			var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-			spark_system.set_up(5, 0, owner)
-			spark_system.attach(owner)
-			spark_system.start()
-			spawn(10)
-				qdel(spark_system)
-				spark_system = null
+			spark(src, 5, FALSE)
 
 		if(organ)
 			if(display_message)
@@ -925,10 +919,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status |= ORGAN_PEG
 	src.species = null
 	src.wounds.len = 0
+
 	for (var/datum/organ/external/T in children)
 		if(T)
 			if(body_part == ARM_LEFT || body_part == ARM_RIGHT || body_part == LEG_RIGHT || body_part == LEG_LEFT)
 				T.peggify()
+				src.destspawn = 0
 			else
 				T.droplimb(1, 1)
 				T.status &= ~ORGAN_BROKEN
@@ -939,6 +935,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				T.status &= ~ORGAN_DESTROYED
 				T.status &= ~ORGAN_ROBOT
 				T.wounds.len = 0
+
 
 /datum/organ/external/proc/fleshify()
 	src.status &= ~ORGAN_BROKEN
@@ -974,10 +971,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			OE.attach(attached)
 
-	else if(istype(I, /obj/item/stack/sheet/wood)) //Attaching a plank
-		var/obj/item/stack/sheet/wood/peg = I
-		if(peg.use(1))
-			src.peggify()
+	else if(istype(I, /obj/item/weapon/peglimb)) //Attaching a peg limb
+		src.peggify()
 
 	else if(istype(I, /obj/item/robot_parts)) //Robotic limb
 		var/obj/item/robot_parts/R = I
@@ -1087,13 +1082,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")
-		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-		spark_system.set_up(5, 0, owner)
-		spark_system.attach(owner)
-		spark_system.start()
-		spawn(10)
-			qdel(spark_system)
-			spark_system = null
+		spark(src, 5, FALSE)
 		owner.drop_item(c_hand)
 
 /datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
@@ -1177,7 +1166,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/l_leg(owner.loc)
@@ -1215,7 +1204,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
@@ -1238,7 +1227,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_arm/generate_dropped_organ(current_organ)
 	if(status & ORGAN_PEG)
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(status & ORGAN_ROBOT)
 			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
@@ -1258,7 +1247,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_arm/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/r_arm(owner.loc)
@@ -1280,7 +1269,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/l_foot(owner.loc, owner)
@@ -1300,7 +1289,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/r_foot(owner.loc, owner)
@@ -1321,7 +1310,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/r_hand(owner.loc, owner)
@@ -1342,7 +1331,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/l_hand(owner.loc, owner)
@@ -1805,6 +1794,32 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
 	else if(istype(W,/obj/item/device/soulstone))
 		W.capture_soul_head(src,user)
+		return
+	else if(istype(W,/obj/item/device/healthanalyzer))
+		to_chat(user, "<span class='notice'>You use \the [W] to induce a small electric shock into \the [src].</span>")
+		playsound(get_turf(src),'sound/weapons/electriczap.ogg',50,1)
+		animate(src, pixel_x = pixel_x + rand(-2,2), pixel_y = pixel_y + rand(-2,2) , time = 0.5 SECONDS, easing = BOUNCE_EASING) //Give it a little shake
+		animate(src, pixel_x = initial(pixel_x), pixel_y = initial(pixel_y), time = 0.5 SECONDS, easing = LINEAR_EASING) //Then calm it down
+		if(!organ_data)
+			to_chat(user, "<span class='warning'>\The [src] has no brain!</span>")
+			return
+		if(brainmob && brainmob.mind)
+			var/mind_found = 0
+			if(brainmob.mind.active)
+				mind_found = 1
+				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
+			else
+				var/mob/dead/observer/ghost = get_ghost_from_mind(brainmob.mind)
+				if(ghost && ghost.client && ghost.can_reenter_corpse)//Lights are on but no-one's home
+					mind_found = 1
+					to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
+					ghost << 'sound/effects/adminhelp.ogg'
+					to_chat(ghost, "<span class='interface big'><span class='bold'>Someone has found your head. Return to it if you want to be resurrected!</span> \
+						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+			if(!mind_found)
+				to_chat(user, "<span class='danger'>\The [src] seems unresponsive to shock stimuli.</span>")
+		else
+			to_chat(user, "<span class='danger'>\The [src] seems unresponsive to shock stimuli.</span>")
 		return
 	else
 		..()

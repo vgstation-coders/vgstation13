@@ -28,6 +28,12 @@
 	objective_holder = new
 	forgeObjectives()
 
+
+//Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
+
+/datum/faction/proc/can_setup()
+	return TRUE
+
 /datum/faction/proc/forgeObjectives()
 
 
@@ -41,9 +47,18 @@
 	ASSERT(O)
 	objective_holder.AddObjective(O)
 
-/datum/faction/proc/checkAllObjectives()
+/datum/faction/proc/CheckAllObjectives(var/individuals = FALSE)
+	var/dat
+	dat += GetObjectivesMenuHeader()
+	dat += {"<BR><FONT size = 2><B>Faction Objectives</B></FONT>"}
 	for(var/datum/objective/O in objective_holder.objectives)
-		O.Isfullfilled()
+		dat += {"<BR>[O.explanation_text]<BR>[O.isfullfilled() ? "Success" : "Failed"]"}
+
+	if(individuals)
+		//for(var/datum/role/R in members)
+			//Get their character description, and their individual objectives
+	return dat
+
 
 /datum/faction/proc/GetScoreboard()
 	var/list/score_results = list()
@@ -66,6 +81,15 @@
 	var/icon/logo = icon('icons/mob/mob.dmi', "synd-logo")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Syndicate</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
+
+/datum/faction/syndicate/traitor
+	name = "Traitors to NT"
+	desc = "Operatives of the syndicate, implanted into the crew in one way or another."
+
+/datum/faction/syndicate/nuke_op
+	name = "Syndicate nuclear operatives"
+	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
+	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 
 /datum/faction/changeling
 	name = "Changeling Hivemind"
@@ -98,4 +122,24 @@
 /datum/faction/cult/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "cult-logo")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	return header
+
+/datum/faction/vampire
+	name = "Space Vampires"
+	desc = "Beings cursed to wander the galaxy to satiate their lust for blood, \
+	usually pointed towards NT station by the syndicate in exchange for causing chaos and completing objectives for them.\
+	Vampirism is still not fully understood, but those afflicted can quickly become a force to be reckoned with if allowed to indulge."
+
+/datum/faction/vampire/GetObjectivesMenuHeader()
+	var/icon/logo = icon('icons/mob/mob.dmi', "vampire-logo")
+	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Vampiric wanderers</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	return header
+
+/datum/faction/revolution
+	name = "Revolutionaries"
+	desc = "Viva!"
+
+/datum/faction/revolution/GetObjectivesMenuHeader()
+	var/icon/logo = icon('icons/mob/mob.dmi', "rev-logo")
+	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header

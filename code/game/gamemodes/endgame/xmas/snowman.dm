@@ -22,7 +22,7 @@
 	minimum_distance = 3
 	projectilesound = 'sound/weapons/punchmiss.ogg'
 	projectiletype = /obj/item/projectile/snowball
-	environment_smash = 0
+	environment_smash_flags = 0
 
 	can_butcher = 0
 

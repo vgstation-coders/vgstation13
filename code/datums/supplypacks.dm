@@ -1928,7 +1928,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/toolsmachines
 	name = "Tools n Engineering stack of packs"
 	contains = list(/obj/structure/vendomatpack/tool,
-					/obj/structure/vendomatpack/tool,
+					/obj/structure/vendomatpack/building,
 					/obj/structure/vendomatpack/assist,
 					/obj/structure/vendomatpack/engivend)
 	cost = 20
@@ -1963,7 +1963,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Cosmetics stack of packs"
 	group = "Vending Machine packs"
-	
+
 /datum/supply_packs/offlicencemachines
 	name = "Off-Licence packs"
 	contains = list(/obj/structure/vendomatpack/offlicence,
@@ -1971,6 +1971,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/stackopacks
 	containername = "\improper Off-Licence stack of packs"
+	group = "Vending Machine packs"
+
+/datum/supply_packs/circus
+	name = "Toy packs"
+	contains = list(/obj/structure/vendomatpack/circus,
+					/obj/structure/vendomatpack/circus)
+	cost = 15
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Toy stack of packs"
 	group = "Vending Machine packs"
 
 
@@ -1996,3 +2005,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper Strange and Bright stack of packs"
 	group = "Vending Machine packs"
 	hidden = 1
+
+/datum/supply_packs/miningmachines
+	name = "Dwarven Mining Equipment stack of packs"
+	contains = list(/obj/structure/vendomatpack/mining,
+					/obj/structure/vendomatpack/mining)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Mining stack of packs"
+	group = "Vending Machine packs"

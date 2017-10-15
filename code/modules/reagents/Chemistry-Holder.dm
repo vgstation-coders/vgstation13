@@ -11,6 +11,7 @@ var/const/INGEST = 2
 	var/total_volume = 0
 	var/maximum_volume = 100
 	var/atom/my_atom = null
+	var/last_ckey_transferred_to_this = ""	//The ckey of the last player who transferred reagents into this reagent datum.
 
 /datum/reagents/New(maximum=100)
 	maximum_volume = maximum
@@ -150,6 +151,8 @@ var/const/INGEST = 2
 	//R.update_total()
 	R.handle_reactions()
 	src.handle_reactions()
+	if(whodunnit)
+		R.last_ckey_transferred_to_this = key_name(whodunnit, include_name = FALSE)
 
 	if(log_transfer && logged_message.len)
 		var/turf/T = get_turf(my_atom)

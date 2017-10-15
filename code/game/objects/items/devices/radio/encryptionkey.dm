@@ -8,6 +8,7 @@
 	var/translate_binary = 0
 	var/translate_hive = 0
 	var/syndie = 0
+	var/raider = 0
 	var/list/channels = list()
 
 /obj/item/device/encryptionkey/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -17,6 +18,13 @@
 	channels = list("Syndicate" = 1)
 	origin_tech = Tc_SYNDICATE + "=3"
 	syndie = 1//Signifies that it de-crypts Syndicate transmissions
+
+/obj/item/device/encryptionkey/raider
+	icon_state = "cypherkey"
+	channels = list("Raider" = 1)
+	//origin_tech = Tc_SYNDICATE + "=3"
+	raider = 1//Signifies that it de-crypts bird pirate transmissions
+
 
 /obj/item/device/encryptionkey/binary
 	icon_state = "cypherkey"

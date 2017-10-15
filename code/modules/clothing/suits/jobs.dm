@@ -146,6 +146,14 @@
 	item_state = "suitjacket_purp"
 	blood_overlay_type = "coat"
 
+//Bridge Officer
+/obj/item/clothing/suit/storage/lawyer/bridgeofficer
+	name = "bridge officer dress jacket"
+	desc = "A classy dress jacket, for special occasions."
+	icon_state = "bridgeofficer_jacket"
+	item_state = "bridgeofficer_jacket"
+	blood_overlay_type = "coat"
+
 //Internal Affairs
 /obj/item/clothing/suit/storage/internalaffairs
 	name = "Internal Affairs Jacket"
@@ -220,3 +228,34 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+
+//Syndicate exec
+/obj/item/clothing/suit/storage/syndicateexec
+	name = "syndicate executive jacket"
+	desc = "A flash black jacket, it seems oddly heavy."
+	icon_state = "ia_jacket_open"
+	item_state = "ia_jacket"
+	blood_overlay_type = "coat"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
+	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/storage/syndicateexec/verb/toggle()
+	set name = "Toggle Coat Buttons"
+	set category = "Object"
+	set src in usr
+
+	if(usr.incapacitated())
+		return 0
+
+	switch(icon_state)
+		if("ia_jacket_open")
+			src.icon_state = "ia_jacket"
+			to_chat(usr, "You button up the jacket.")
+		if("ia_jacket")
+			src.icon_state = "ia_jacket_open"
+			to_chat(usr, "You unbutton the jacket.")
+		else
+			to_chat(usr, "You attempt to button-up the velcro on your [src], before promptly realising how retarded you are.")
+			return
+		usr.update_inv_wear_suit()	//so our overlays update

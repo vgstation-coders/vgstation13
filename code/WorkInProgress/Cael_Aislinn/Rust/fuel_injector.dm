@@ -1,45 +1,85 @@
 
 /obj/machinery/power/rust_fuel_injector
-	name = "Fuel Injector"
+	name = "\improper R-UST fuel injector"
+	desc = "A bulky machine featuring a slot for the insertion of a fuel rod coupled with a small screen on the back and a huge cannon-shaped structure on the front."
 	icon = 'code/WorkInProgress/Cael_Aislinn/Rust/rust.dmi'
 	icon_state = "injector0"
 
 	density = 1
 	anchored = 0
-	var/locked = 0
+	var/locked = FALSE
 	req_access = list(access_engine)
 
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
-	var/id_tag = "One"
-	var/injecting = 0
-	var/trying_to_swap_fuel = 0
+	var/id_tag
+	var/injecting = FALSE
 
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 500
-	var/remote_access_enabled = 1
+	var/remote_access_enabled = TRUE
 	var/cached_power_avail = 0
-	var/emergency_insert_ready = 0
+	var/emergency_insert_ready = FALSE
 
-	machine_flags = WRENCHMOVE | FIXED2WORK | WELD_FIXED | EMAGGABLE
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL | WELD_FIXED
+
+/obj/machinery/power/rust_fuel_injector/initialize()
+	if(!id_tag)
+		assign_uid()
+		id_tag = uid
+
+	. = ..()
+
+/obj/machinery/power/rust_fuel_injector/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/rust_injector,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/weapon/stock_parts/matter_bin/adv/super,
+		/obj/item/weapon/stock_parts/console_screen,
+	)
+
+	if(ticker)
+		initialize()
+
+/obj/machinery/power/rust_fuel_injector/examine(var/mob/user)
+	..()
+	var/out = list()
+	out += "Its interface "
+	if(emagged)
+		out += "has been shorted.<br>"
+	else
+		out += "is [locked ? "locked" : "unlocked"].<br>"
+	if(stat & NOPOWER || state != 2)
+		out += "It seems to be powered down.<br>"
+	else if(injecting)
+		out += "It's actively injecting fuel.<br>"
+	if(cur_assembly)
+		out += "A fuel rod assembly is inserted into it."
+	else if(emergency_insert_ready)
+		out += "The fuel rod slot cover is open."
+	to_chat(user, jointext(out, ""))
 
 /obj/machinery/power/rust_fuel_injector/process()
 	if(injecting)
 		if(stat & (BROKEN|NOPOWER))
-			StopInjecting()
+			stop_injecting()
 		else
-			Inject()
+			inject()
 
 	cached_power_avail = avail()
 
-/obj/machinery/power/rust_fuel_injector/wrenchAnchor(mob/user)
+/obj/machinery/power/rust_fuel_injector/wrenchAnchor(var/mob/user)
 	if(injecting)
-		to_chat(user, "Turn off the [src] first.")
-		return -1
-	return ..()
+		to_chat(user, "Turn off \the [src] first.")
+		return FALSE
+	. =  ..()
 
-/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, var/mob/user)
 	if(..() == 1)
 		switch(state)
 			if(1)
@@ -49,24 +89,24 @@
 		return 1
 	return -1
 
-/obj/machinery/power/rust_fuel_injector/emag(mob/user)
+/obj/machinery/power/rust_fuel_injector/emag(var/mob/user)
 	if(!emagged)
-		locked = 0
-		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
-		return 1
-	return -1
-/obj/machinery/power/rust_fuel_injector/attackby(obj/item/W, mob/user)
+		locked = FALSE
+		emagged = TRUE
+		user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
+
+/obj/machinery/power/rust_fuel_injector/attackby(var/obj/item/W, var/mob/user)
 	if(..())
 		return 1
 
 	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
-			to_chat(user, "<span class='warning'>The lock seems to be broken</span>")
+			to_chat(user, "<span class='warning'>The lock seems to be broken.</span>")
 			return
-		if(src.allowed(user))
-			src.locked = !src.locked
-			to_chat(user, "The controls are now [src.locked ? "locked." : "unlocked."]")
+		if(allowed(user))
+			locked = !locked
+			to_chat(user, "The controls are now [locked ? "locked." : "unlocked."]")
+			nanomanager.update_uis(src)
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
@@ -75,89 +115,80 @@
 		if(emergency_insert_ready)
 			if(user.drop_item(W, src))
 				cur_assembly = W
-				emergency_insert_ready = 0
-				return
+				emergency_insert_ready = FALSE
+				nanomanager.update_uis(src)
 
-	..()
-	return
-
-/obj/machinery/power/rust_fuel_injector/attack_ai(mob/user)
-	attack_hand(user)
-
-/obj/machinery/power/rust_fuel_injector/attack_hand(mob/user)
-	add_fingerprint(user)
-	interact(user)
-
-/obj/machinery/power/rust_fuel_injector/interact(mob/user)
-	if(stat & BROKEN)
-		user.unset_machine()
-		user << browse(null, "window=fuel_injector")
+/obj/machinery/power/rust_fuel_injector/attack_hand(var/mob/user)
+	. = ..()
+	if(.)
 		return
-	if(get_dist(src, user) > 1 )
-		if (!istype(user, /mob/living/silicon))
-			user.unset_machine()
-			user << browse(null, "window=fuel_injector")
-			return
+	if(stat & NOPOWER || state != 2)
+		to_chat(user, "<span class='warning'>It's completely unresponsive.</span>")
+		return
+	ui_interact(user)
 
-	var/dat = ""
-	if (stat & NOPOWER || locked || state != 2)
-		dat += "<i>The console is dark and nonresponsive.</i>"
-	else
+/obj/machinery/power/rust_fuel_injector/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null)
+	var/data[0]
+	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
+	data["id_tag"] = id_tag
+	data["injecting"] = injecting
+	data["fuel_usage"] = fuel_usage * 100 // Rounded client-side
+	data["has_assembly"] = !!cur_assembly
+	data["emergency_insert_ready"] = emergency_insert_ready
+	data["power_status_class"] = "good"
+	if(cached_power_avail < active_power_usage)
+		data["power_status_class"] = "bad"
+	else if(cached_power_avail < active_power_usage * 2)
+		data["power_status_class"] = "average"
+	data["active_power_usage"] = round(active_power_usage)
+	data["cached_power_avail"] = round(cached_power_avail)
+	data["remote_access_enabled"] = remote_access_enabled
 
-		dat += {"<B>Reactor Core Fuel Injector</B><hr>
-			<b>Device ID tag:</b> [id_tag] <a href='?src=\ref[src];modify_tag=1'>\[Modify\]</a><br>
-			<b>Status:</b> [injecting ? "<font color=green>Active</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Disable\]</a>" : "<font color=blue>Standby</font> <a href='?src=\ref[src];toggle_injecting=1'>\[Enable\]</a>"]<br>
-			<b>Fuel usage:</b> [fuel_usage*100]% <a href='?src=\ref[src];fuel_usage=1'>\[Modify\]</a><br>
-			<b>Fuel assembly port:</b>
-			<a href='?src=\ref[src];fuel_assembly=1'>\[[cur_assembly ? "Eject assembly to port" : "Draw assembly from port"]\]</a> "}
-		if(cur_assembly)
-			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[Emergency eject\]</a><br>"
-		else
-			dat += "<a href='?src=\ref[src];emergency_fuel_assembly=1'>\[[emergency_insert_ready ? "Cancel emergency insertion" : "Emergency insert"]\]</a><br>"
-		var/font_colour = "green"
-		if(cached_power_avail < active_power_usage)
-			font_colour = "red"
-		else if(cached_power_avail < active_power_usage * 2)
-			font_colour = "orange"
-
-		dat += {"<b>Power status:</b> <font color=[font_colour]>[active_power_usage]/[cached_power_avail] W</font><br>
-			<a href='?src=\ref[src];toggle_remote=1'>\[[remote_access_enabled ? "Disable remote access" : "Enable remote access"]\]</a><br>
-			<hr>
-			<A href='?src=\ref[src];refresh=1'>Refresh</A>
-			<A href='?src=\ref[src];close=1'>Close</A><BR>"}
-	user << browse(dat, "window=fuel_injector;size=500x300")
-	onclose(user, "fuel_injector")
-	user.set_machine(src)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	if (!ui)
+		ui = new(user, src, ui_key, "r-ust_fuel_injector.tmpl", name, 500, 360)
+		ui.set_initial_data(data)
+		ui.open()
 
 /obj/machinery/power/rust_fuel_injector/Topic(href, href_list)
 	if(..())
 		return 1
 
-	if( href_list["modify_tag"] )
-		id_tag = input("Enter new ID tag", "Modifying ID tag") as text|null
+	if (stat & NOPOWER || locked || state != 2)
+		return 1
 
-	if( href_list["fuel_assembly"] )
+	if(href_list["modify_tag"])
+		var/new_id = reject_bad_text(input("Enter new ID tag:", name) as text|null, MAX_NAME_LEN)
+		if(!new_id)
+			return
+		id_tag = new_id
+		return 1
+
+	if(href_list["fuel_assembly"])
 		attempt_fuel_swap()
-
-	if( href_list["emergency_fuel_assembly"] )
+		return 1
+	
+	if(href_list["emergency_fuel_assembly"])
 		if(cur_assembly)
 			cur_assembly.forceMove(src.loc)
 			cur_assembly = null
-			//irradiate!
 		else
 			emergency_insert_ready = !emergency_insert_ready
+		return 1
 
-	if( href_list["toggle_injecting"] )
+	if(href_list["toggle_injecting"])
 		if(injecting)
-			StopInjecting()
+			stop_injecting()
 		else
-			BeginInjecting()
-
-	if( href_list["toggle_remote"] )
+			begin_injecting()
+		return 1
+	
+	if(href_list["toggle_remote"])
 		remote_access_enabled = !remote_access_enabled
-
-	if( href_list["fuel_usage"] )
-		var/new_usage = text2num(input("Enter new fuel usage (0.01% - 100%)", "Modifying fuel usage", fuel_usage * 100))
+		return 1
+	
+	if(href_list["fuel_usage"])
+		var/new_usage = text2num(input("Enter new fuel usage (0.01% - 100%):", name, fuel_usage * 100))
 		if(!new_usage)
 			to_chat(usr, "<span class='warning'>That's not a valid number.</span>")
 			return
@@ -165,31 +196,34 @@
 		new_usage = min(new_usage, 100)
 		fuel_usage = new_usage / 100
 		active_power_usage = 500 + 1000 * fuel_usage
-
-	if( href_list["update_extern"] )
+		return 1
+	
+	if(href_list["update_extern"])
 		var/obj/machinery/computer/rust_fuel_control/C = locate(href_list["update_extern"])
 		if(C)
 			C.updateDialog()
+		return 1
 
-	if( href_list["close"] )
-		usr << browse(null, "window=fuel_injector")
+	if(href_list["close"])
 		usr.unset_machine()
 
-	updateDialog()
+/obj/machinery/power/rust_fuel_injector/update_icon()
+	icon_state = injecting ? "injector1" : "injector0"
 
-/obj/machinery/power/rust_fuel_injector/proc/BeginInjecting()
+/obj/machinery/power/rust_fuel_injector/proc/begin_injecting()
 	if(!injecting && cur_assembly)
-		icon_state = "injector1"
-		injecting = 1
+		injecting = TRUE
 		use_power = 1
+		update_icon()
 
-/obj/machinery/power/rust_fuel_injector/proc/StopInjecting()
+/obj/machinery/power/rust_fuel_injector/proc/stop_injecting()
 	if(injecting)
-		injecting = 0
+		injecting = FALSE
 		icon_state = "injector0"
 		use_power = 0
+		update_icon()
 
-/obj/machinery/power/rust_fuel_injector/proc/Inject()
+/obj/machinery/power/rust_fuel_injector/proc/inject()
 	if(!injecting)
 		return
 	if(cur_assembly)
@@ -217,7 +251,7 @@
 		cur_assembly.percent_depleted = amount_left / 300
 		flick("injector-emitting",src)
 	else
-		StopInjecting()
+		stop_injecting()
 
 /obj/machinery/power/rust_fuel_injector/proc/attempt_fuel_swap()
 	var/rev_dir = reverse_direction(dir)
@@ -241,27 +275,27 @@
 
 		break
 	if(success)
-		src.visible_message("<span class='notice'>[bicon(src)] a green light flashes on [src].</span>")
+		visible_message("<span class='notice'>[bicon(src)] A green light flashes on \the [src].</span>")
 		updateDialog()
 	else
-		src.visible_message("<span class='warning'>[bicon(src)] a red light flashes on [src].</span>")
+		visible_message("<span class='warning'>[bicon(src)] A red light flashes on \the [src].</span>")
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_clock()
 	set category = "Object"
-	set name = "Rotate Generator (Clockwise)"
+	set name = "Rotate injector (Clockwise)"
 	set src in view(1)
 
-	if (usr.isUnconscious() || usr.restrained()  || anchored)
+	if (anchored || usr.incapacitated())
 		return
 
 	src.dir = turn(src.dir, -90)
 
 /obj/machinery/power/rust_fuel_injector/verb/rotate_anticlock()
 	set category = "Object"
-	set name = "Rotate Generator (Counter-clockwise)"
+	set name = "Rotate injector (Counter-clockwise)"
 	set src in view(1)
 
-	if (usr.isUnconscious() || usr.restrained()  || anchored)
+	if (anchored || usr.incapacitated())
 		return
 
 	src.dir = turn(src.dir, 90)

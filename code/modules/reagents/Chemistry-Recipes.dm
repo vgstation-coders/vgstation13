@@ -66,7 +66,7 @@
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
-	e.set_up(round (created_volume/10, 1), holder.my_atom, 0, 0)
+	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
@@ -408,7 +408,7 @@
 	name = "Glycerol"
 	id = GLYCEROL
 	result = GLYCEROL
-	required_reagents = list(CORNOIL = 3, SACID = 1)
+	required_reagents = list(CORNOIL = 3, FORMIC_ACID = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/nitroglycerin
@@ -448,15 +448,12 @@
 /datum/chemical_reaction/flash_powder/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(2, 1, location)
-		s.start()
+		spark(location, 2)
 
 		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
 
-		var/eye_safety = 0
-
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
+			var/eye_safety = 0
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
 
@@ -896,14 +893,46 @@
 	result = LEFT4ZED
 	required_reagents = list(EZNUTRIENT = 1)
 	required_catalysts = list(RADIUM = 5)
-	result_amount = 1	
-	
+	result_amount = 1
+
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
 	result = PLANTBGONE
 	required_reagents = list(TOXIN = 1, WATER = 4)
 	result_amount = 5
+
+/datum/chemical_reaction/plantbgonesolanine
+	name = "Plant-B-Gone"
+	id = PLANTBGONE
+	result = PLANTBGONE
+	required_reagents = list(SOLANINE = 1, WATER = 4)
+	result_amount = 5
+
+// Special Reactions for Plasma Beaker
+/datum/chemical_reaction/plasmabeakerdexalin
+	name = "Plasma Beaker Dexalin"
+	id = DEXALIN
+	result = DEXALIN
+	required_reagents = list(OXYGEN = 2)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerleporazine
+	name = "Leporazine"
+	id = LEPORAZINE
+	result = LEPORAZINE
+	required_reagents = list(SILICON = 1, COPPER = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerclonexadone
+	name = "Clonexadone"
+	id = CLONEXADONE
+	result = CLONEXADONE
+	required_reagents = list(CRYOXADONE = 1, SODIUM = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
 
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 /datum/chemical_reaction/mimicshift
@@ -1257,6 +1286,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks,
 		/obj/item/weapon/reagent_containers/food/snacks/snackbar,
 		/obj/item/weapon/reagent_containers/food/snacks/grown,
+		/obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 		)
 	blocked += typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) //Silver-slime spawned customizable food is borked
 
@@ -1961,7 +1991,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
-	
+
 //Pyrite
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
@@ -2521,6 +2551,13 @@
 	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/pintpointer
+	name = "Pintpointer"
+	id = PINTPOINTER
+	result = PINTPOINTER
+	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
+	result_amount = 2
+
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
@@ -2704,7 +2741,7 @@
 	name = "Brown Star"
 	id = BROWNSTAR
 	result = BROWNSTAR
-	required_reagents = list(KAHLUA = 1, "irish_cream" = 4)
+	required_reagents = list(KAHLUA = 1, IRISHCREAM = 4)
 	result_amount = 5
 
 /datum/chemical_reaction/milkshake

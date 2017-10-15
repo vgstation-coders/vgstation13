@@ -39,7 +39,6 @@
 	var/maint_access = 1
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
-	var/datum/effect/effect/system/spark_spread/spark_system = new
 	var/lights = 0
 	var/lights_power = 6
 
@@ -92,8 +91,6 @@
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
-	spark_system.set_up(2, 0, src)
-	spark_system.attach(src)
 	add_cell()
 	if(starts_with_tracking_beacon)
 		add_tracking_beacon()
@@ -107,7 +104,7 @@
 	return
 
 /obj/mecha/Destroy()
-	src.go_out()
+	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
 	..()
 	return
@@ -512,7 +509,7 @@
 
 /obj/mecha/proc/update_health()
 	if(src.health > 0)
-		src.spark_system.start()
+		spark(src, 2, FALSE)
 	else
 		src.destroy()
 	return
@@ -574,9 +571,11 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/hitby(atom/movable/A as mob|obj) //wrapper
+	. = ..()
+	if(.)
+		return
 	src.log_message("Hit by [A].",1)
 	call((proc_res["dynhitby"]||src), "dynhitby")(A)
-	return
 
 /obj/mecha/proc/dynhitby(atom/movable/A)
 	if(istype(A, /obj/item/mecha_parts/mecha_tracking) && !tracking && prob(25))
@@ -624,7 +623,7 @@
 
 /obj/mecha/proc/destroy()
 	spawn()
-		go_out()
+		go_out(loc, TRUE)
 		var/turf/T = get_turf(src)
 		tag = "\ref[src]" //better safe then sorry
 		if(loc)
@@ -1271,9 +1270,17 @@
 			O.forceMove(src.loc)
 	return
 
-/obj/mecha/proc/go_out(var/exit = loc)
+/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!src.occupant)
 		return
+
+	if(!exploding && exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
+		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
+		for(var/turf/simulated/T in turf_candidates)
+			if(!is_blocked_turf(T) && Adjacent(T))
+				exit = T
+				break
+
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = src.occupant
@@ -1340,7 +1347,7 @@
 	return
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
-	spark_system.start()
+	spark(src, 2, FALSE)
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
 		occupant.Knockdown(10)
@@ -2002,7 +2009,7 @@
 					leaked_gas = null
 		if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 			if(mecha.get_charge())
-				mecha.spark_system.start()
+				spark(mecha, 2, FALSE)
 				mecha.cell.charge -= min(20,mecha.cell.charge)
 				mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)
 		return

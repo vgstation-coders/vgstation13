@@ -204,7 +204,7 @@
 
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
-	desc = "A refrigerated storage unit for slime extracts"
+	desc = "A refrigerated storage unit for slime extracts."
 
 	accepted_types = list(/obj/item/slime_extract)
 
@@ -226,6 +226,44 @@
 
 	RefreshParts()
 
+/obj/machinery/smartfridge/bloodbank
+	name = "\improper Refrigerated Blood Bank"
+	desc = "A refrigerated storage unit for blood packs."
+	icon_state = "bloodbank"
+	icon_on = "bloodbank"
+
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
+
+/obj/machinery/smartfridge/bloodbank/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/smartfridge/bloodbank,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
+
+//Separate subtype for mapping so that all newly constructed blood banks don't get filled with blood packs
+/obj/machinery/smartfridge/bloodbank/filled/New()
+	. = ..()
+
+	insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+
 
 /obj/machinery/smartfridge/power_change()
 	if( powered() )
@@ -242,6 +280,45 @@
 *   Item Adding
 ********************/
 
+
+
+// Returns TRUE on success
+/obj/machinery/smartfridge/proc/try_insert_item(var/obj/item/O, var/mob/user)
+	if(accept_check(O))
+		if(!user.drop_item(O, src))
+			return FALSE
+		insert_item(O)
+		user.visible_message(	"<span class='notice'>[user] has added \the [O] to \the [src].", \
+								"<span class='notice'>You add \the [O] to \the [src].")
+		return TRUE
+	else
+		return dump_bag(O, user)
+
+/obj/machinery/smartfridge/proc/insert_item(var/obj/item/O)
+	var/datum/fridge_pile/thisPile = piles[O.name]
+	if(istype(thisPile))
+		thisPile.addAmount(1)
+	else
+		piles[O.name] = new/datum/fridge_pile(O.name, src, 1, costly_bicon(O))
+
+/obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
+	if(!istype(B))
+		return FALSE
+	var/objects_loaded = 0
+	for(var/obj/G in B.contents)
+		if(!accept_check(G))
+			continue
+		if(!B.remove_from_storage(G, src))
+			continue
+		insert_item(G)
+		objects_loaded++
+	if(objects_loaded)
+		user.visible_message("<span class='notice'>[user] loads \the [src] with \the [B].</span>", \
+							"<span class='notice'>You load \the [src] with \the [B].</span>")
+		if(B.contents.len > 0)
+			to_chat(user, "<span class='notice'>Some items are refused.</span>")
+	return TRUE
+
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(stat & NOPOWER)
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
@@ -249,46 +326,12 @@
 
 	if(..())
 		return 1
-
-	if(accept_check(O))
-		if(contents.len >= MAX_N_OF_ITEMS)
-			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
-			return 1
-		else
-			if(!user.drop_item(O, src))
-				return 1
-
-			var/datum/fridge_pile/thisPile = piles[O.name]
-			if(istype(thisPile))
-				thisPile.addAmount(1)
-			else
-				piles[O.name] = getFromPool(/datum/fridge_pile, O.name, src, 1, costly_bicon(O))
-			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
-								 "<span class='notice'>You add \the [O] to \the [src].")
-
-	else if(istype(O, /obj/item/weapon/storage/bag))
-		var/obj/item/weapon/storage/bag/bag = O
-		var/objects_loaded = 0
-		for(var/obj/G in bag.contents)
-			if(accept_check(G))
-				if(contents.len >= MAX_N_OF_ITEMS)
-					to_chat(user, "<span class='notice'>\The [src] is full.</span>")
-					return 1
-				else
-					bag.remove_from_storage(G,src)
-					var/datum/fridge_pile/thisPile = piles[G.name]
-					if(istype(thisPile))
-						thisPile.addAmount(1)
-					else
-						piles[G.name] = new/datum/fridge_pile(G.name, src, 1, costly_bicon(G))
-					objects_loaded++
-		if(objects_loaded)
-
-			user.visible_message("<span class='notice'>[user] loads \the [src] with \the [bag].</span>", \
-								 "<span class='notice'>You load \the [src] with \the [bag].</span>")
-			if(bag.contents.len > 0)
-				to_chat(user, "<span class='notice'>Some items are refused.</span>")
-
+	if(contents.len >= MAX_N_OF_ITEMS)
+		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
+		return 1
+	if(try_insert_item(O, user))
+		piles = sortList(piles)
+		return 1
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		var/list/params_list = params2list(params)
 		if(O.loc == src.loc && params_list.len)
@@ -301,7 +344,6 @@
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
 		return 1
-	piles = sortList(piles)
 	updateUsrDialog()
 	return 1
 
@@ -368,7 +410,7 @@
 				if(display_miniicons)
 					dat += "<td class='fridgeIcon [display_miniicons == MINIICONS_UNCROPPED ? "" : "cropped"]'>[P.mini_icon]</td>"
 				dat += "<td class='pileName'><TT>"
-				dat += "<FONT color = 'blue'><B>[capitalize(P.name)]</B>: [P.amount] </font>"
+				dat += "<FONT color = 'blue'><B>[sanitize(P.name)]</B>: [P.amount] </font>"
 				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
 				if(P.amount > 5)
 					dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=5'>x5</A>)"

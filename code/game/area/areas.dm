@@ -45,6 +45,11 @@ var/area/space_area
 //	spawn(15)
 	power_change()		// all machines set to current power level, also updates lighting icon
 
+/area/spawned_by_map_element(datum/map_element/ME, list/objects)
+	..()
+
+	power_change()
+
 /area/Destroy()
 	..()
 	areaapc = null

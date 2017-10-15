@@ -25,7 +25,7 @@
 		new /obj/item/clothing/shoes/brown(src)
 		new /obj/item/device/radio/headset/heads/captain(src)
 		new /obj/item/clothing/gloves/captain(src)
-		new /obj/item/clothing/shoes/magboots(src)
+		new /obj/item/clothing/shoes/magboots/captain(src)
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/clothing/suit/armor/captain(src)
 		new /obj/item/weapon/melee/telebaton(src)
@@ -276,6 +276,8 @@
 		new /obj/item/clothing/accessory/holster/handgun/wornout(src)
 		new /obj/item/device/gps/secure(src)
 		new /obj/item/binoculars(src)
+		new /obj/item/weapon/storage/box/surveillance(src)
+		new /obj/item/device/handtv(src)
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()

@@ -90,18 +90,18 @@ var/global/list/rad_collectors = list()
 	else
 		return
 
-/obj/machinery/power/rad_collector/wrenchAnchor(mob/user)
+/obj/machinery/power/rad_collector/wrenchAnchor(var/mob/user)
 	if(P)
 		to_chat(user, "<span class='warning'>Remove the plasma tank first.</span>")
+		return FALSE
+	. = ..()
+	if(!.)
 		return
-	if(..() == 1)
-		if(anchored)
-			connect_to_network()
-		else
-			disconnect_from_network()
-			last_power = 0
-		return 1
-	return -1
+	if(anchored)
+		connect_to_network()
+	else
+		disconnect_from_network()
+		last_power = 0
 
 /obj/machinery/power/rad_collector/ex_act(severity)
 	switch(severity)

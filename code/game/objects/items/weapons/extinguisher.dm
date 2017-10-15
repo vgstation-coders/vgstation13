@@ -159,23 +159,12 @@
 			spawn()
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(1)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(1)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(1)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(2)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(2)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(3)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(3)
-				B.Move(get_step(user,movementdirection), movementdirection)
-				sleep(3)
-				B.Move(get_step(user,movementdirection), movementdirection)
+				for(var/i in list(1,1,1,1,2,2,3,3,3))
+					if(!step(B, movementdirection))
+						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
+						break
+					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
+					sleep(i)
 
 		for(var/obj/thing in src)
 			thing.forceMove(get_turf(src))
@@ -255,27 +244,16 @@
 
 		var/direction = get_dir(src,target)
 
-		if(usr.locked_to && isobj(usr.locked_to) && !usr.locked_to.anchored )
+		if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
 			spawn(0)
-				var/obj/B = usr.locked_to
+				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(1)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(1)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(1)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(2)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(2)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(3)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(3)
-				B.Move(get_step(usr,movementdirection), movementdirection)
-				sleep(3)
-				B.Move(get_step(usr,movementdirection), movementdirection)
+				for(var/i in list(1,1,1,1,2,2,3,3,3))
+					if(!step(B, movementdirection))
+						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
+						break
+					B.change_dir(turn(movementdirection, 180)) //face away from where we're going
+					sleep(i)
 
 		var/turf/T = get_turf(target)
 		var/turf/T1 = get_step(T,turn(direction, 90))

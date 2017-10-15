@@ -13,7 +13,7 @@ $(window).on("onUpdateContent", function(){
 		html5compat = i.type !== "text";
 	}
 	if(html5compat){
-	$("#switches").append("<div id='zoomcontainer' style='position: static; z-index: 9999; margin-bottom: -75px;'>Zoom: <div id='zoomslider' style='width: 75px; position: relative; top: -31px; right: -50px; z-index: 9999;'><input type=\"range\" onchange=\"setzoom(value);\" value=\"4\" step=\"0.5\" max=\"16\" min=\"0.5\" id=\"zoom\"></div><div id=\"zoomval\" style='position:relative; z-index: 9999; right: -135px; top: -80px; color: white;'>100%</div></div>");
+	$("#switches").append("<div id='zoomcontainer' style='position: static; z-index: 9999; margin-bottom: -75px;'>Zoom: <div id='zoomslider' style='width: 75px; position: relative; top: -31px; right: -50px; z-index: 9999;'><input type=\"range\" onchange=\"setzoom(value);\" value=\"4\" step=\"0.5\" max=\"16\" min=\"0.5\" id=\"zoom\" style='border-style:none; background-color:transparent;'></div><div id=\"zoomval\" style='position:relative; z-index: 9999; right: -135px; top: -80px; color: white;'>100%</div></div>");
 	}
 	else{
 			$("#switches").append(" Zoom: <a href='javascript:changeZoom(-2);'>--</a> <a href='javascript:changeZoom(2);'>++</a> <span id=\"zoomval\" style='color: white;'>100%</span>");
@@ -55,30 +55,24 @@ $(window).on("onUpdateContent", function(){
 	});
 }
 )
-
-var updateMap = true;
-
-function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
+function deleteCamera(ID)
 {
-	if(adding > 0 && !(adding & 1)){ //let additions fall through.
-		if(adding & 2){ //removal
-			var toRemove = document.getElementById(ID);
-			if(toRemove) toRemove.remove();
-			return;
-		}
-		else if(adding & 4) //status change!
-			var toChange = document.getElementById(ID);
-			if(toChange){
-				toChange.removeClass((status == 1 ? "good" : "average")); //remove the coloring
-				toChange.addClass((status == 1 ? "average" : "good"));
-				return;
-			}
+	var existingCamera = document.getElementById(ID);
+	if(existingCamera && existingCamera.parentNode)
+	{
+		existingCamera.parentNode.removeChild(existingCamera);
 	}
-	if (updateMap && pos_x && pos_y)
+}
+
+function updateCamera(ID, status, name, area, pos_x, pos_y, pos_z, see_pos_x, see_pos_y, removing)
+{
+	deleteCamera(ID)//rather than updating all of this shit just delete it and draw a new one
+
+	if(pos_x && pos_y)
 	{
 		var translated = tileToMapCoords(pos_x,pos_y);
 		var href = "byond://?src="+hSrc+"&view="+ID;
-		var dotElem				= $("<div id=\""+ID+"\" class=\"mapIcon mapIcon16 icon-camera " +  (status == 1 ? "average" : "good") + "\" style =\"top:" + translated.yy +"px; left: " + translated.xx + "px;\" z-index: 2; unselectable=\"off\"><div class=\"tooltip hidden\">" + name  + (status == 1 ? " <span class='average'>Alarming</span>" : "") + " (" + area + ": "+see_pos_x+", "+see_pos_y+")</div></div>");
+		var dotElem				= $("<div id=\""+ID+"\" class=\"mapIcon mapIcon16 icon-camera " +  (status == 1 ? "average" : "good") + "\" style =\"top:" + translated.yy +"px; left: " + translated.xx + "px; z-index: 2;\" unselectable=\"off\"><div class=\"tooltip hidden\">" + name  + (status == 1 ? " <span class='average'>Alarming</span>" : "") + " (" + area + ": "+see_pos_x+", "+see_pos_y+")</div></div>");
 		//$("#uiMap").append("<div class=\"dot\" style=\"top: " + ty + "px; left: " + tx + "px; background-color: " + color + "; z-index: " + 999 + ";\"></div>");
 		dotElem.data("href",href);
 		$("#uiMap").append(dotElem);
@@ -87,7 +81,7 @@ function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
 		//alert($("#uiMap").html());
 		//$("#textbased").html(dotElem);
 
-		
+
 		function enable()
 		{
 			dotElem.addClass("active").css({ "border-color": color });
@@ -134,4 +128,3 @@ function add(ID, status, name, area, pos_x, pos_y, see_pos_x, see_pos_y, adding)
 
 
 }
-

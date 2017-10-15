@@ -147,7 +147,9 @@
 	return //Nothing else to add
 
 //We're done working on mobs, let's check if we're blessing something else
-/obj/item/weapon/storage/bible/afterattack(atom/A, mob/user as mob)
+/obj/item/weapon/storage/bible/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
+	if(!proximity_flag)
+		return
 	user.delayNextAttack(5)
 	if(user.mind && (user.mind.assigned_role == "Chaplain")) //Make sure we still are a Chaplain, just in case
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
@@ -167,7 +169,7 @@
 		to_chat(user, "<span class ='notice'>You feel [deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
-		if(isvampire(H) && (!VAMP_UNDYING in H.mind.vampire.powers)) //We are a Vampire, we aren't very smart
+		if(isvampire(H) && (!(VAMP_UNDYING in H.mind.vampire.powers))) //We are a Vampire, we aren't very smart
 			to_chat(H, "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			H.mind.vampire.smitecounter += 10
 		if(iscult(H)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us

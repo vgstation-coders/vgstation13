@@ -31,7 +31,7 @@
 							/obj/item/toy/bomb								= 1,
 							/obj/item/toy/gun								= 2,
 							/obj/item/toy/crossbow							= 2,
-							/obj/item/clothing/suit/syndicatefake			= 2,
+							/obj/item/weapon/storage/box/syndicatefake/space = 2,
 							/obj/item/weapon/storage/fancy/crayons			= 2,
 							/obj/item/toy/spinningtoy						= 2,
 							/obj/item/toy/minimeteor						= 2,

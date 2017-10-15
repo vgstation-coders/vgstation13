@@ -103,8 +103,10 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/circulator/wrenchAnchor(mob/user)
+/obj/machinery/atmospherics/binary/circulator/wrenchAnchor(var/mob/user)
 	. = ..()
+	if(!.)
+		return
 	if(anchored)
 		if(dir & (NORTH|SOUTH))
 			initialize_directions = NORTH|SOUTH
@@ -123,7 +125,6 @@
 		var/gendir = turn(dir, -90)
 		for(var/obj/machinery/power/generator/pot_gen in get_step(src, gendir))
 			pot_gen.reconnect()
-
 	else
 		if(node1)
 			node1.disconnect(src)
@@ -138,7 +139,6 @@
 		node2 = null
 
 		linked_generator.reconnect()
-
 
 /obj/machinery/atmospherics/binary/circulator/verb/rotate_clockwise()
 	set category = "Object"
