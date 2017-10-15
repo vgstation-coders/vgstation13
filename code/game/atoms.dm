@@ -856,3 +856,9 @@ its easier to just keep the beam vertical.
 
 /atom/proc/to_bump()
 	return
+
+/atom/proc/get_last_player_touched()	//returns a reference to the mob of the ckey that last touched the atom
+	for(var/client/C in clients)
+		testing("CHECKING IF [C] LAST TOUCHED [src]. CKEY: [C.ckey], PRINTS: [fingerprintslast]")
+		if(C.ckey == fingerprintslast)
+			return C.mob

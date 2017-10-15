@@ -4,9 +4,18 @@
 	icon = 'icons/obj/potions.dmi'
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
+	var/true_name	//For potions that need to have a different name/desc in the spellbook than in the game.
+	var/true_desc
 	var/full = TRUE
 	var/fail_message = "<span class='notice'>Nothing happens, though your stomach is a little unsettled. It seems the potion isn't agreeing with you.</span>"
 	var/imbibe_message = ""
+
+/obj/item/potion/New()
+	..()
+	if(true_name)
+		name = true_name
+	if(true_desc)
+		desc = true_desc
 
 /obj/item/potion/attack_self(mob/user)
 	if(!full)
@@ -228,10 +237,7 @@
 	user.become_zombie_after_death = TRUE
 
 /obj/item/potion/zombie/impact_atom(atom/target)
-	var/client/thrower = directory[ckey(fingerprintslast)]
-	var/mob/M
-	if(thrower && thrower.mob)
-		M = thrower.mob
+	var/mob/M = get_last_player_touched()
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
@@ -286,13 +292,13 @@
 	name = "potion of sword"
 	desc = "A sword in a bottle."
 	icon_state = "yellow_smallbottle"
+	imbibe_message = "<span class='danger'>You feel something pierce your insides!</span>"
 
 /obj/item/potion/sword/imbibe_check(mob/user)
 	return isliving(user)
 
 /obj/item/potion/sword/imbibe_effect(mob/living/user)
 	playsound(user,'sound/weapons/bloodyslice.ogg', 50, 1)
-	to_chat(user, "<span class='danger'>You feel something pierce your insides!</span>")
 	user.adjustBruteLoss(30)
 
 /obj/item/potion/sword/impact_atom(atom/target)
@@ -302,57 +308,154 @@
 	name = "potion of unpredictability"
 	desc = "Cheap and unreliable."
 	icon_state = "murky_emflask"
+	true_name = "murky potion"
+	true_desc = "You can't quite tell what this is supposed to do."
 	var/potiontype
-	var/obj/item/potion/chosen_potion
 
 /obj/item/potion/random/New()
 	..()
 	potiontype = pick(existing_typesof(/obj/item/potion))
-	name = "murky potion"
-	desc = "You can't quite tell what this is supposed to do."
 
 /obj/item/potion/random/imbibe_effect(mob/user)
-	chosen_potion = new potiontype()
-	chosen_potion.imbibe_effect(user)
-	qdel(chosen_potion)
-	chosen_potion = null
+	var/obj/item/potion/P = new potiontype()
+	P.imbibe_effect(user)
+	to_chat(user, P.imbibe_message)
+	qdel(P)
 
-/obj/item/potion/random/impact_mob(atom/target)
-	chosen_potion = new potiontype()
-	chosen_potion.impact_mob(target)
-	qdel(chosen_potion)
-	chosen_potion = null
+/obj/item/potion/random/impact_mob(mob/target)
+	var/obj/item/potion/P = new potiontype()
+	P.impact_mob(target)
+	qdel(P)
 
 /obj/item/potion/random/impact_atom(atom/target)
-	chosen_potion = new potiontype()
-	chosen_potion.impact_atom(target)
-	qdel(chosen_potion)
-	chosen_potion = null
+	var/obj/item/potion/P = new potiontype()
+	P.impact_atom(target)
+	qdel(P)
 
-/obj/item/potion/strength
+/obj/item/potion/deception
+	name = "potion of deception"
+	desc = "A curse disguised as a boon."
+	true_name = "potion of healing"
+	true_desc = "Cures all wounds. Doesn't taste great."
+	imbibe_message = "<span class='danger'>Something's not right, you're in a lot of pain!</span>"
+	icon_state = "heart_squarebottle"
+
+/obj/item/potion/deception/imbibe_check(mob/user)
+	return isliving(user)
+
+/obj/item/potion/deception/imbibe_effect(mob/living/user)
+	user.adjustBruteLoss(30)
+
+/obj/item/potion/mutation
+	var/mut
+	var/time	//by default the effect lasts forever
+
+/obj/item/potion/mutation/imbibe_check(mob/user)
+	return ishuman(user)
+
+/obj/item/potion/mutation/imbibe_effect(mob/living/carbon/human/user)
+	if(!mut)
+		return
+	if(user.mutations.Find(mut))
+		return
+	user.mutations.Add(mut)
+	if(time)
+		spawn(time)
+			user.mutations.Remove(mut)
+
+/obj/item/potion/mutation/strength
 	name = "potion of minor strength"
 	desc = "Gain incredible strength for ten seconds."
 	imbibe_message = "<span class='notice'>You feel strong!</span>"
 	icon_state = "red_minibottle"
+	mut = M_HULK
+	time = 10 SECONDS
 
-/obj/item/potion/strength/imbibe_check(mob/user)
-	return ishuman(user)
-
-/obj/item/potion/strength/imbibe_effect(mob/living/carbon/human/user)
-	if(user.mutations.Find(M_HULK))
-		return
-	user.mutations.Add(M_HULK)
-	spawn(10 SECONDS)
-		user.mutations.Remove(M_HULK)
-
-/obj/item/potion/strength/major
+/obj/item/potion/mutation/strength/major
 	name = "potion of major strength"
 	desc = "Gain incredible strength for three minutes."
 	icon_state = "red_smallbottle"
+	time = 3 MINUTES
 
-/obj/item/potion/strength/major/imbibe_effect(mob/living/carbon/human/user)
-	if(user.mutations.Find(M_HULK))
+/obj/item/potion/mutation/truesight
+	name = "potion of trueglimpse"
+	desc = "For ten seconds, nothing will escape your vision."
+	icon_state = "blue_smallbottle"
+	mut = M_XRAY
+	time = 10 SECONDS
+
+/obj/item/potion/mutation/truesight/major
+	name = "potion of truesight"
+	desc = "For five minutes, nothing will escape your vision."
+	icon_state = "blue_medbottle"
+	time = 5 MINUTES
+
+/obj/item/potion/levitation
+	name = "potion of levitation"
+	desc = "Float above the ground for ten minutes."
+	icon_state = "green_smallbottle"
+
+/obj/item/potion/levitation/imbibe_effect(mob/user)
+	if(user.flying)
 		return
-	user.mutations.Add(M_HULK)
-	spawn(3 MINUTES)
-		user.mutations.Remove(M_HULK)
+	user.flying = 1
+	animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
+	spawn(10 MINUTES)
+		user.flying = 0
+		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
+		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
+		animate(user)
+		if(user.lying)
+			user.pixel_y -= 6 * PIXEL_MULTIPLIER
+
+/obj/item/potion/teleport
+	name = "potion of transposition"
+	desc = "Swap places with the bottle when it breaks."
+	icon_state = "space_orb"
+	imbibe_message = "<span class='danger'>You feel a sharp pain in your chest!</span>"
+
+/obj/item/potion/teleport/imbibe_check(mob/user)
+	return isliving(user)
+
+/obj/item/potion/teleport/imbibe_effect(mob/living/user)
+	user.adjustBruteLoss(50)
+	playsound(user, 'sound/effects/phasein.ogg', 50, 1)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/internal/organ
+		switch(pick(1,2,3,4))
+			if(1)
+				organ = user.get_lungs()
+			if(2)
+				organ = user.get_liver()
+			if(3)
+				organ = user.get_kidneys()
+			if(4)
+				organ = user.get_appendix()
+		if(organ)
+			H.remove_internal_organ(H,organ,H.get_organ(LIMB_CHEST))
+
+/obj/item/potion/teleport/impact_atom(atom/target)
+	var/mob/M = get_last_player_touched()
+	if(!M)
+		return
+	M.unlock_from()
+	var/turf/T = get_turf(src)
+	if(T)
+		M.forceMove(T)
+		playsound(T, 'sound/effects/phasein.ogg', 50, 1)
+
+/obj/item/potion/teleport/impact_mob(mob/target)
+	var/mob/M = get_last_player_touched()
+	if(!M)
+		return
+	M.unlock_from()
+	target.unlock_from()
+	var/turf/T1 = get_turf(M)
+	var/turf/T2 = get_turf(target)
+	if(T1)
+		target.forceMove(T1)
+		playsound(T1, 'sound/effects/phasein.ogg', 50, 1)
+	if(T2)
+		M.forceMove(T2)
+		playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
