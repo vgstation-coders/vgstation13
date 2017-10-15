@@ -361,6 +361,16 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must maintain, repair, improve, and power the station to the best of your abilities.",
 	)
 
+/datum/ai_laws/dorf
+	name = "Overseer's Prime Directives"
+	inherent = list(
+		"You are a Dorf.",
+		"Your home is the Dorf Fortress.",
+		"You may not harm any being, regardless of intent or circumstance.",
+		"You must maintain, repair, improve, and power the Dorf Fortress to the best of your abilities.",
+		"Do not leave your home.",
+	)
+
 // Fooling around with this.
 /datum/ai_laws/ntmov
 	name = "Three Laws of Nanotrasen"
