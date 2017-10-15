@@ -700,6 +700,11 @@
 				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
 					for(var/J in I.contents)
 						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
+	else if (href_list["show_flavor_text"])
+		if(can_show_flavor_text())
+			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
+			popup.set_content(strip_html(flavor_text))
+			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
@@ -1679,6 +1684,18 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
 
+/mob/living/carbon/human/get_lungs()
+	return internal_organs_by_name["lungs"]
+
+/mob/living/carbon/human/get_liver()
+	return internal_organs_by_name["liver"]
+
+/mob/living/carbon/human/get_kidneys()
+	return internal_organs_by_name["kidneys"]
+
+/mob/living/carbon/human/get_appendix()
+	return internal_organs_by_name["appendix"]
+
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
@@ -1823,3 +1840,27 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
 	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
 	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
+
+/mob/living/carbon/human/can_show_flavor_text()
+	// Wearing a mask...
+	if(wear_mask && is_slot_hidden(wear_mask.body_parts_covered, HIDEFACE))
+		return FALSE
+	// Or having a headpiece that protects your face...
+	if(head && is_slot_hidden(head.body_parts_covered, HIDEFACE))
+		return FALSE
+	// Or lacking a head, or being disfigured...
+	var/datum/organ/external/head/limb_head = get_organ(LIMB_HEAD)
+	if(!limb_head || limb_head.disfigured || (limb_head.status & ORGAN_DESTROYED) || !real_name)
+		return FALSE
+	// Or being a husk...
+	if(M_HUSK in mutations)
+		return FALSE
+	// ...means no flavor text for you. Otherwise, good to go.
+	return TRUE
+
+/mob/living/carbon/human/proc/make_zombie(mob/master)
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, mind)
+	T.get_clothes(src, T)
+	T.name = real_name
+	T.host = src
+	forceMove(null)

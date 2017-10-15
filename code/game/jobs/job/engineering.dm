@@ -132,7 +132,7 @@
 			if(4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/atmospheric_technician(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/atmos(H), slot_l_store)

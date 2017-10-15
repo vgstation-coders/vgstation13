@@ -20,9 +20,8 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/rig/New()
+	check_light() //Needed to properly handle helmets with no lights
 	..()
-	//Needed to properly handle helmets with no lights
-	check_light()
 	//Useful for helmets with special starting conditions (namely, starts lit)
 	update_brightness()
 	update_icon()

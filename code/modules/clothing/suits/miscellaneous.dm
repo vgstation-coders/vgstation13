@@ -474,6 +474,8 @@
 	heat_conductivity = 0 // Good luck losing heat in this!
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
+	extinguishingProb = 70
+
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
 	..()

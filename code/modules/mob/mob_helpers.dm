@@ -32,6 +32,18 @@ mob/proc/isincrit()
 mob/proc/get_heart()
 	return null
 
+/mob/proc/get_lungs()
+	return null
+
+/mob/proc/get_liver()
+	return null
+
+/mob/proc/get_kidneys()
+	return null
+
+/mob/proc/get_appendix()
+	return null
+
 mob/proc/remove_internal_organ()
 	return null
 

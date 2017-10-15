@@ -12,6 +12,8 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
+	var/extinguishingProb = 15
+	var/can_extinguish = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -216,6 +218,23 @@
 		..()
 		for(var/A in armor)
 			armor[A] -= rand(armor[A]/3, armor[A])
+
+/obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
+	if (!(iscarbon(user)  \
+	&& user.a_intent == I_HELP \
+	&& can_extinguish \
+	&& ishuman(M) && M.on_fire))
+		..()
+	else
+		var/mob/living/carbon/human/target = M
+		if(isplasmaman(target)) // Cannot put out plasmamen, else they could just go around with a jumpsuit and not need a space suit.
+			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target], but plasmafires are too hot. It is no use.</span>")
+		else
+			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
+			if(prob(extinguishingProb))
+				M.ExtinguishMob()
+				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
+		return
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
@@ -451,6 +470,7 @@ BLIND     // can't see anything
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
+	can_extinguish = TRUE
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
@@ -488,6 +508,7 @@ BLIND     // can't see anything
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	can_extinguish = FALSE
 
 //Under clothing
 /obj/item/clothing/under
@@ -508,6 +529,7 @@ BLIND     // can't see anything
 		3 = Report location
 		*/
 	var/displays_id = 1
+	can_extinguish = TRUE
 
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)
