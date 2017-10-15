@@ -65,11 +65,13 @@
 		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
-		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05)
+		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES

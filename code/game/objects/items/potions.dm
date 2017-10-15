@@ -78,6 +78,7 @@
 			impact_mob(hit_atom)
 		else
 			impact_atom(hit_atom)
+		full = FALSE
 
 	qdel(src)
 
@@ -242,11 +243,7 @@
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
 			if(prob(50))
-				var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), M, H.mind)
-				T.get_clothes(H, T)
-				T.name = H.real_name
-				T.host = H
-				H.forceMove(null)
+				H.make_zombie(M)
 			else
 				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)
 				H.gib()
@@ -289,7 +286,7 @@
 	user.Knockdown(3)
 
 /obj/item/potion/sword
-	name = "potion of sword"
+	name = "bottled sword"
 	desc = "A sword in a bottle."
 	icon_state = "yellow_smallbottle"
 	imbibe_message = "<span class='danger'>You feel something pierce your insides!</span>"
@@ -459,3 +456,14 @@
 	if(T2)
 		M.forceMove(T2)
 		playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
+
+/obj/item/potion/fireball
+	name = "bottled fireball"
+	desc = "A fireball in a bottle."
+	icon_state = "fireball_flask"
+
+/obj/item/potion/fireball/imbibe_effect(mob/living/user)
+	explosion(get_turf(user), -1, 1, 2, 5)
+
+/obj/item/potion/fireball/impact_atom(atom/target)
+	explosion(get_turf(target), -1, 1, 2, 5)

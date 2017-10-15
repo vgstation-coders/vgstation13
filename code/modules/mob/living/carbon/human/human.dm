@@ -1883,3 +1883,10 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		return FALSE
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
+
+/mob/living/carbon/human/proc/make_zombie(mob/master)
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, mind)
+	T.get_clothes(src, T)
+	T.name = real_name
+	T.host = src
+	forceMove(null)

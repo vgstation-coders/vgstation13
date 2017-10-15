@@ -118,11 +118,7 @@
 	if(become_zombie_after_death)
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
-				var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), Controller = src.mind)
-				T.get_clothes(src, T)
-				T.name = src.real_name
-				T.host = src
-				src.forceMove(null)
+				make_zombie()
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
