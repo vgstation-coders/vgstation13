@@ -90,3 +90,5 @@
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
+
+	var/become_zombie_after_death = FALSE

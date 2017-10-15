@@ -2065,5 +2065,16 @@ mob/proc/on_foot()
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
+/mob/make_invisible(var/source_define, var/time)
+	if(..() || !source_define)
+		return
+	alpha = 1	//to cloak immediately instead of on the next Life() tick
+	alphas[source_define] = 1
+	if(time > 0)
+		spawn(time)
+			if(src)
+				alpha = initial(alpha)
+				alphas.Remove(source_define)
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

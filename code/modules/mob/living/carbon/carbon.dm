@@ -757,3 +757,14 @@
 		var/health_deficiency = (100 - health - halloss)
 		if(health_deficiency >= 40)
 			. += (health_deficiency / 25)
+
+/mob/living/carbon/make_invisible(var/source_define, var/time)
+	if(invisibility || alpha <= 1 || !source_define)
+		return
+	body_alphas[source_define] = 1
+	regenerate_icons()
+	if(time > 0)
+		spawn(time)
+			if(src)
+				body_alphas.Remove(source_define)
+				regenerate_icons()
