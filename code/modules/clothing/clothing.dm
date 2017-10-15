@@ -624,3 +624,4 @@ BLIND     // can't see anything
 	throwforce = 2
 	slot_flags = SLOT_BACK
 
+
