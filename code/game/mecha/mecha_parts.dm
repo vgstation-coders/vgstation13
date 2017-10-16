@@ -409,7 +409,7 @@
 
 /obj/item/mecha_parts/part/clarke_right_tread
 	name="Clarke Right Tread"
-	desc="A Clarke right leg. Contains a powerful engine."
+	desc="A Clarke right tread. Contains a powerful engine."
 	icon_state = "clarke_r_tread"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 
