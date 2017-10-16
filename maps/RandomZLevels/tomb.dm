@@ -239,6 +239,10 @@
 
 	var/default_dir = SOUTH
 
+//Fire blasts from this trap fire in a straight line, without expanding at the end
+/obj/structure/fire_trap/no_spread
+	fire_projectile = /obj/item/projectile/fire_breath/straight
+
 /obj/structure/fire_trap/New()
 	..()
 
@@ -267,7 +271,7 @@
 		shoot()
 
 /obj/structure/fire_trap/proc/shoot()
-	var/obj/item/projectile/A = new fire_projectile(get_step(src, turn(dir, 180)))
+	var/obj/item/projectile/A = new fire_projectile(get_turf(src))
 
 	if(!A)
 		return 0
@@ -275,7 +279,7 @@
 	playsound(get_turf(src), fire_sound, 50, 1)
 
 
-	var/turf/T = get_step(src, turn(dir, 180)) //One turf behind us
+	var/turf/T = get_step(src, get_turf(src))
 	var/turf/U = get_step(src, dir) //Turf in front of us
 	A.original = U
 	A.target = U
@@ -388,3 +392,33 @@
 	if(istype(AM, /obj/item) || istype(AM, /obj/machinery) || istype(AM, /obj/structure) || istype(AM, /obj/mecha) || istype(AM, /obj/spacepod) || isliving(AM))
 		AM.visible_message("<span class='danger'>\The [AM] falls into \the [src]!</span>")
 		AM.forceMove(teleport_destination)
+
+
+//REWARD ITEMS
+
+//Artifact horse
+/obj/item/weapon/staff/broom/horsebroom/charger
+	name = "Spirit Charger"
+	desc = "When the magician struck down the warlord's most beloved horse, he cut its head off, stuck it to a broom and mounted it high up for everybody in the village to see. Some say the horse's spirit still lives on in this somewhat comical artifact."
+
+	slowdown = -30 //Sonic speed when wielded
+
+/obj/item/weapon/staff/broom/horsebroom/update_wield(mob/user)
+	..()
+	item_state = "horsebroom[wielded ? 1 : 0]"
+	if(wielded)
+		flags |= SLOWDOWN_WHEN_CARRIED
+	else
+		flags &= ~SLOWDOWN_WHEN_CARRIED
+
+//Artifact lance
+/obj/item/weapon/melee/lance/dire
+	name = "Dire Lance"
+	desc = "A legendary lance that once belonged to a merciless warlord. It has been enchanted with blood magic, preventing it from breaking or corroding, and keeping it as powerful as it was thousands of years ago."
+
+	force = 10
+	force_per_turf_traveled = 7
+	max_damage = 100
+
+//The artifacts are to be used together with the red ribbon arm
+//Dual wield the horse with two hands, and use the lance in the third one

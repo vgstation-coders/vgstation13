@@ -4,6 +4,17 @@
 /mob
 	plane = MOB_PLANE
 
+/mob/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("stat")
+			if((old_value == 2) && (new_value < 2))//Bringing the dead back to life
+				resurrect()
+			else if((old_value < 2) && (new_value == 2))//Kill he
+				living_mob_list.Remove(src)
+				dead_mob_list.Add(src)
+
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
@@ -1156,6 +1167,23 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
+// See carbon/human
+/mob/proc/can_show_flavor_text()
+	return FALSE
+
+/mob/proc/print_flavor_text()
+	if(!flavor_text)
+		return
+	if(!can_show_flavor_text())
+		return
+	var/msg = strip_html(flavor_text)
+	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
+		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
+	if(length(msg) <= 32)
+		return "<font color='#ffa000'><b>[msg]</b></font>"
+	else
+		return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];show_flavor_text=1'>More</a></b></font>"
+
 /mob/verb/abandon_mob()
 	set name = "Respawn"
 	set category = "OOC"
@@ -1220,7 +1248,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1513,6 +1541,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/eastface()
 	set hidden = 1
+	if(loc && loc.relayface(src, EAST))
+		return 1
+	if(locked_to && locked_to.relayface(src, EAST))
+		return 1
 	if(!canface())
 		return 0
 	dir = EAST
@@ -1523,6 +1555,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/westface()
 	set hidden = 1
+	if(loc && loc.relayface(src, WEST))
+		return 1
+	if(locked_to && locked_to.relayface(src, WEST))
+		return 1
 	if(!canface())
 		return 0
 	dir = WEST
@@ -1533,6 +1569,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/northface()
 	set hidden = 1
+	if(loc && loc.relayface(src, NORTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, NORTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = NORTH
@@ -1543,6 +1583,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/southface()
 	set hidden = 1
+	if(loc && loc.relayface(src, SOUTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, SOUTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = SOUTH
@@ -1552,13 +1596,13 @@ var/list/slot_equipment_priority = list( \
 
 
 /mob/proc/Facing()
-    var/datum/listener
-    for(. in src.callOnFace)
-        listener = locate(.)
-        if(listener)
-            call(listener,src.callOnFace[.])(src)
-        else
-            src.callOnFace -= .
+	var/datum/listener
+	for(. in src.callOnFace)
+		listener = locate(.)
+		if(listener)
+			call(listener,src.callOnFace[.])(src)
+		else
+			src.callOnFace -= .
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -1849,6 +1893,11 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/proc/get_view_range()
+	if(client)
+		return client.view
+	return world.view
+
 /mob/proc/apply_vision_overrides()
 	if(see_in_dark_override)
 		see_in_dark = see_in_dark_override
@@ -1898,7 +1947,6 @@ mob/proc/on_foot()
 		"lying_prev",
 		"canmove",
 		"candrop",
-		"lastpuke",
 		"cpr_time",
 		"bodytemperature",
 		"drowsyness",
@@ -1963,7 +2011,11 @@ mob/proc/on_foot()
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
-		var/spell/change_back = new /spell/aoe_turf/revert_form
+		var/spell/change_back
+		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
+			change_back = new offer_revert_spell
+		else
+			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
 	C.set_contained_mob(src)
 	timestopped = 1
@@ -1983,6 +2035,9 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/spell/aoe_turf/revert_form/no_z2 //Used if you don't want it reverting on Z2. So far only important for ghosts.
+	spell_flags = GHOSTCAST | Z2NOCAST
 
 /obj/transmog_body_container
 	name = "transmog body container"
@@ -2009,6 +2064,17 @@ mob/proc/on_foot()
 
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
+
+/mob/make_invisible(var/source_define, var/time)
+	if(..() || !source_define)
+		return
+	alpha = 1	//to cloak immediately instead of on the next Life() tick
+	alphas[source_define] = 1
+	if(time > 0)
+		spawn(time)
+			if(src)
+				alpha = initial(alpha)
+				alphas.Remove(source_define)
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

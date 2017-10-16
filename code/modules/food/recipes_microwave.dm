@@ -56,7 +56,7 @@
 
 /datum/recipe/brainburger
 	reagents = list(FLOUR = 5)
-	items = list(/obj/item/organ/brain)
+	items = list(/obj/item/organ/internal/brain)
 	result = /obj/item/weapon/reagent_containers/food/snacks/brainburger
 
 /datum/recipe/roburger
@@ -257,7 +257,7 @@
 
 /datum/recipe/valentinebar
 	items = list(
-		/obj/item/organ/heart,
+		/obj/item/organ/internal/heart,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
@@ -697,7 +697,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/organ/brain
+		/obj/item/organ/internal/brain
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
 
@@ -2328,3 +2328,14 @@
 	result = /obj/item/weapon/cell/crepe
 	time = 300
 
+/datum/recipe/lasagna
+	reagents = list(TOMATOJUICE = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lasagna

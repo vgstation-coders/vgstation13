@@ -30,6 +30,7 @@ proc/cardinalrange(var/center)
 	var/coredirs = 0
 	var/dirs = 0
 	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
+	var/getting_blobbed = 0
 
 // Stupidly easy way to use it in maps
 /obj/machinery/am_shielding/map
@@ -117,13 +118,16 @@ proc/cardinalrange(var/center)
 	return 0
 
 
-/obj/machinery/am_shielding/blob_act()
+/obj/machinery/am_shielding/blob_act(var/override = 0)
+	if (getting_blobbed)
+		return
 	stability -= 20
-	if(prob(100-stability))
-		if(prob(10))//Might create a node
-			new /obj/effect/blob/node(get_turf(src),150)
+	if(prob(100-stability) || override)
+		getting_blobbed = 1
+		if(override == 2)
+			new /obj/effect/blob/node(get_turf(src),"AME_new",1)
 		else
-			new /obj/effect/blob(get_turf(src),60)
+			new /obj/effect/blob(get_turf(src),"AME_new",1)
 		qdel(src)
 		return
 	check_stability()

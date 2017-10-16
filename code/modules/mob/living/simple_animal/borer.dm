@@ -520,7 +520,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	var/datum/reagent/C = chemical_reagents_list[chemID] //we need to get the datum for this reagent to read the overdose threshold
-	if(units >= C.overdose - host.reagents.get_reagent_amount(chemID) && C.overdose > 0)
+	if(units >= C.overdose_am - host.reagents.get_reagent_amount(chemID) && C.overdose_am > 0)
 		if(alert("Secreting that much [chemID] would cause an overdose in your host. Are you sure?", "Secrete Chemicals", "Yes", "No") != "Yes")
 			return
 		add_gamelogs(src, "intentionally overdosed \the [host] with '[chemID]'", admin = TRUE, tp_link = TRUE, span_class = "danger")
@@ -543,7 +543,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	chemicals -= chem.cost*units
 
 // We've been moved to someone's head.
-/mob/living/simple_animal/borer/proc/infest_limb(var/obj/item/weapon/organ/limb)
+/mob/living/simple_animal/borer/proc/infest_limb(var/obj/item/organ/external/limb)
 	detach()
 	limb.borer=src
 	forceMove(limb)
@@ -555,7 +555,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	set name = "Abandon Host"
 	set desc = "Slither out of your host."
 
-	var/severed = istype(loc, /obj/item/weapon/organ)
+	var/severed = istype(loc, /obj/item/organ/external)
 	if(!host && !severed)
 		to_chat(src, "<span class='warning'>You are not inside a host body.</span>")
 		return
@@ -584,7 +584,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(severed)
-		if(istype(loc, /obj/item/weapon/organ/head))
+		if(istype(loc, /obj/item/organ/external/head))
 			to_chat(src, "<span class='info'>You begin disconnecting from \the [loc]'s synapses and prodding at its internal ear canal.</span>")
 		else
 			to_chat(src, "<span class='info'>You begin disconnecting from \the [loc]'s nerve endings and prodding at the surface of its skin.</span>")
@@ -620,7 +620,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 
 		if(severed)
-			if(istype(loc, /obj/item/weapon/organ/head))
+			if(istype(loc, /obj/item/organ/external/head))
 				to_chat(src, "<span class='info'>You wiggle out of the ear of \the [loc] and plop to the ground.</span>")
 			else
 				to_chat(src, "<span class='info'>You wiggle out of \the [loc] and plop to the ground.</span>")

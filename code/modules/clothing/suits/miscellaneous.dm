@@ -474,6 +474,8 @@
 	heat_conductivity = 0 // Good luck losing heat in this!
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
+	extinguishingProb = 70
+
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
 	..()
@@ -517,3 +519,20 @@
 	if(!istype(M) || M.incapacitated())
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
+
+/obj/item/clothing/suit/sakura_kimono
+	name = "sakura kimono"
+	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
+	icon_state = "sakura_kimono"
+	item_state = "sakura_kimono"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+
+/obj/item/clothing/suit/clockwork_robes
+	name = "clockwork robes"
+	desc = "A set of armored robes worn by the followers of Ratvar"
+	icon_state = "clockwork"
+	item_state = "clockwork"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)

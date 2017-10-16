@@ -1,9 +1,10 @@
 //ERT
 
 var/list/response_team_members = list()
+var/list/distributed_ert_suits = list()
 
 /datum/striketeam/ert
-	striketeam_name = "Emergency Response Team"
+	striketeam_name = TEAM_ERT
 	faction_name = "Nanotrasen"
 	mission = "Ensure the station's return to working order, or organize its evacuation if judged necessary."
 	team_size = 6
@@ -26,7 +27,15 @@ var/list/response_team_members = list()
 	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
 
 /datum/striketeam/ert/create_commando(obj/spawn_location, leader_selected = 0, key = "")
-	var/mob/living/carbon/human/M = new(spawn_location.loc)
+	var/mob/living/carbon/human/M = new(spawn_location)
+
+	var/obj/machinery/ert_cryo_cell/spawner = locate() in get_step(spawn_location,NORTH)
+
+	if(spawner)
+		spawner.occupant = M
+		M.forceMove(spawner)
+		spawner.update_icon()
+
 	response_team_members |= M
 
 	var/mob/user = null
@@ -34,7 +43,13 @@ var/list/response_team_members = list()
 		if(MO.key == key)
 			user = MO
 
+	if (spawner)
+		user.forceMove(spawner.loc)
+	else
+		user.forceMove(spawn_location.loc)
+
 	to_chat(user, "<span class='notice'>Congratulations, you've been selected to be part of an ERT. You can customize your character, but don't take too long, time is of the essence!</span>")
+	user << 'sound/music/ERT.ogg'
 
 	var/commando_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
 
@@ -111,8 +126,16 @@ var/list/response_team_members = list()
 	M.mind.special_role = "Response Team"
 	if(!(M.mind in ticker.minds))
 		ticker.minds += M.mind//Adds them to regular mind list.
-	M.forceMove(spawn_location.loc)
+
+	ticker.mode.ert |= M.mind
 	M.equip_response_team(leader_selected)
+
+	if(spawner)
+		spawner.occupant = null
+		spawner.update_icon()
+
+	M.forceMove(spawn_location.loc)
+
 	return M
 
 /mob/living/carbon/human/proc/equip_response_team(leader_selected = 0)
@@ -121,7 +144,7 @@ var/list/response_team_members = list()
 
 	//Adding Camera Network
 	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = "CREED"
+	camera.network = list("ERT")
 	camera.c_tag = real_name
 
 	//Basic Uniform
@@ -163,3 +186,73 @@ var/list/response_team_members = list()
 	L.part = affected
 
 	return 1
+
+//stealing that sweet bobbing animation from cryo.dm
+/obj/machinery/ert_cryo_cell
+	name = "cryo cell"
+	icon = 'icons/obj/cryogenics.dmi'
+	icon_state = "pod0"
+	density = 1
+	anchored = 1.0
+	layer = ABOVE_WINDOW_LAYER
+	plane = OBJ_PLANE
+	light_color = LIGHT_COLOR_HALOGEN
+	light_range_on = 1
+	light_power_on = 2
+	use_auto_lights = 1
+	machine_flags = null
+	var/mob/living/carbon/occupant = null
+	var/running_bob_animation = 0
+
+/obj/machinery/ert_cryo_cell/examine(mob/user)
+	..()
+	if(Adjacent(user))
+		if(occupant)
+			to_chat(user, "A figure floats in the depths, they appear to be [occupant.real_name]")
+		else
+			to_chat(user, "<span class='info'>The chamber appears devoid of anything but its biotic fluids.</span>")
+	else
+		to_chat(user, "<span class='notice'>Too far away to view contents.</span>")
+
+
+/obj/machinery/ert_cryo_cell/update_icon()
+	overlays.len = 0
+
+	if(!occupant)
+		overlays += "lid0"
+		return
+
+	if(occupant)
+		var/image/pickle = image(occupant.icon, occupant.icon_state)
+		pickle.overlays = occupant.overlays
+		pickle.pixel_y = 20
+
+		overlays += pickle
+		overlays += "lid1"
+		if(!running_bob_animation)
+			var/up = 0
+			spawn()
+				running_bob_animation = 1
+				while(occupant)
+					overlays.len = 0
+
+					switch(pickle.pixel_y)
+						if(21)
+							switch(up)
+								if(2)
+									pickle.pixel_y = 22
+
+								if(1)
+									pickle.pixel_y = 20
+						if(20)
+							pickle.pixel_y = 21
+							up = 2
+						if(22)
+							pickle.pixel_y = 21
+							up = 1
+
+					pickle.overlays = occupant.overlays
+					overlays += pickle
+					overlays += "lid1"
+					sleep(7)
+				running_bob_animation = 0

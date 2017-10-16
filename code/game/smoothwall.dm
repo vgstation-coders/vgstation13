@@ -71,11 +71,22 @@
 	if(canSmoothWith)
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
-			if(isSmoothableNeighbor(T))
+			if(isSmoothableNeighbor(T) && T.canSmoothWith)
 				T.relativewall()
 			for(var/atom/A in T)
 				if(isSmoothableNeighbor(A))
 					A.relativewall()
+
+/atom/proc/update_near_walls(var/at)
+	if(!at)
+		at = get_turf(src)
+
+	for(var/cdir in cardinal)
+		var/turf/T = get_step(src,cdir)
+		if(istype(T, /turf))
+			T.relativewall()
+			for(var/atom/A in T)
+				A.relativewall()
 
 /turf/simulated/wall/New()
 	..()
@@ -87,7 +98,6 @@
 	relativewall_neighbours()
 
 /turf/simulated/wall/Destroy()
-
 	var/temploc = src.loc
 
 	if(!del_suppress_resmoothing)

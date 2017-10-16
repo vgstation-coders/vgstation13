@@ -26,22 +26,22 @@
 	health = 5
 	plane = ABOVE_OBJ_PLANE
 	layer = FACEHUGGER_LAYER
-	var/real = 1 //Facehuggers are real, toys are not.
+	var/real = TRUE //Facehuggers are real, toys are not.
 
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
 
-	var/sterile = 0
+	var/sterile = FALSE
 
 	var/strength = 5
 
-	var/attached = 0
+	var/attached = FALSE
 	var/target_time = 0.5 // seconds
 	var/walk_speed = 1
-	var/nextwalk = 0
+	var/nextwalk = FALSE
 	var/mob/living/carbon/target = null
 
 /obj/item/clothing/mask/facehugger/can_contaminate()
-	return 0
+	return FALSE
 
 /obj/item/clothing/mask/facehugger/Destroy()
 	processing_objects.Remove(src)
@@ -63,7 +63,7 @@
 			continue
 		if(T && (T.stat != DEAD && T.stat != UNCONSCIOUS) )
 
-			if(get_dist(src.loc, T.loc) <= 4)
+			if(get_dist(loc, T.loc) <= 4)
 				target = T
 
 
@@ -73,16 +73,16 @@
 	if(!target || target.stat == DEAD || target.stat == UNCONSCIOUS || target.status_flags & XENO_HOST)
 		findtarget()
 		return
-	if(src.loc && src.loc == get_turf(src) && attached == 0 && stat == 0 && nextwalk <= world.time)
+	if(loc && loc == get_turf(src) && !attached && !stat && nextwalk <= world.time)
 		nextwalk = world.time + walk_speed
-		var/dist = get_dist(src.loc, target.loc)
+		var/dist = get_dist(loc, target.loc)
 		if(dist > 4)
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
-		if(target.wear_mask && istype(target.wear_mask, /obj/item/clothing/mask/facehugger))
-			var/obj/item/clothing/mask/facehugger/F = target.wear_mask
-			if(F.sterile) // Toy's won't prevent real huggers
-				findtarget()
-				return
+
+		var/obj/item/clothing/mask/facehugger/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
+		if(F && F.sterile) // Toy's won't prevent real huggers
+			findtarget()
+			return
 		else
 			step_towards(src, target, 0)
 			if(dist <= 1)
@@ -189,12 +189,12 @@
 /obj/item/clothing/mask/facehugger/on_found(mob/finder as mob)
 	if(stat == CONSCIOUS)
 		return HasProximity(finder)
-	return 0
+	return FALSE
 
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
 	if(CanHug(AM))
 		return Attach(AM)
-	return 0
+	return FALSE
 
 /obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
 	..()
@@ -213,25 +213,25 @@
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/M as mob)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
 	if( (!iscorgi(M) && !iscarbon(M)) || isalien(M))
-		return 0
+		return FALSE
 	if(iscarbon(M) && M.status_flags & XENO_HOST)
 		visible_message("<span class='danger'>An alien tries to place a facehugger on [M] but it refuses sloppy seconds!</span>")
 		return
 	if(attached)
-		return 0
-	if(!src.Adjacent(M))
-		return 0
+		return FALSE
+	if(!Adjacent(M))
+		return FALSE
 	else
 		attached++
 		spawn(MAX_IMPREGNATION_TIME)
-			attached = 0
+			attached = FALSE
 
 	var/mob/living/L = M //just so I don't need to use :
 
 	if(loc == L)
-		return 0
+		return FALSE
 	if(stat != CONSCIOUS)
-		return 0
+		return FALSE
 	if(!sterile)
 		L.take_organ_damage(strength, 0) //done here so that even borgs and humans in helmets take damage
 
@@ -242,8 +242,8 @@
 		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
 		if(!real && mouth_protection)
 			return //Toys really shouldn't be forcefully removing gear
-		var/obj/item/clothing/mask/facehugger/hugger = H.wear_mask
-		if(istype(hugger) && !hugger.sterile && !src.sterile) // Lamarr won't fight over faces and neither will normal huggers.
+		var/obj/item/clothing/mask/facehugger/hugger = H.get_item_by_slot(slot_wear_mask)
+		if(istype(hugger) && !hugger.sterile && !sterile) // Lamarr won't fight over faces and neither will normal huggers.
 			return
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
@@ -258,7 +258,7 @@
 				return
 			else
 				H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
-				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && sterile == 0)
+				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
 					Die()
 					return
 				else
@@ -269,17 +269,17 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/target = L
 
-		if(target.wear_mask)
+		if(target.get_item_by_slot(slot_wear_mask))
 			if(prob(CHANCE_TO_NOT_REMOVE_MASKS))
-				return 0
+				return FALSE
 			var/obj/item/clothing/W = target.wear_mask
 			if(!W.canremove)
-				return 0
+				return FALSE
 			target.drop_from_inventory(W)
 
 			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s face!</span>")
 
-		src.forceMove(target)
+		forceMove(target)
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
 
@@ -287,7 +287,7 @@
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(M))
 		var/mob/living/simple_animal/corgi/C = M
-		src.forceMove(C)
+		forceMove(C)
 		C.facehugger = src
 		C.wear_mask = src
 		//C.regenerate_icons()
@@ -297,7 +297,7 @@
 	spawn(preggers)
 		Impregnate(L)
 
-	return 0
+	return FALSE
 
 /obj/item/clothing/mask/facehugger/proc/Impregnate(mob/living/target as mob)
 	if(!target || target.wear_mask != src || target.stat == DEAD) //was taken off or something
@@ -318,7 +318,7 @@
 
 		if(iscorgi(target))
 			var/mob/living/simple_animal/corgi/C = target
-			src.forceMove(get_turf(C))
+			forceMove(get_turf(C))
 			C.facehugger = null
 	else
 		target.visible_message("<span class='danger'>\The [src] violates [target]'s face !</span>")
@@ -347,15 +347,16 @@
 	return
 
 /obj/item/clothing/mask/facehugger/proc/Die()
-	if(stat == DEAD || real == 0)
+	if(stat == DEAD || !real)
 		return
 	target = null
 /*		RemoveActiveIndicators()	*/
 	processing_objects.Remove(src)
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
+	sterile = TRUE //Dead huggers can't make people pregnant, duh. This also makes them acidable to avoid acid cheesers AND prevents people from using dead huggers to avoid getting hugged.
 
-	src.visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
+	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
 
 	return
 
@@ -363,15 +364,15 @@
 
 
 	if(iscorgi(M))
-		return 1
+		return TRUE
 
 	if(!iscarbon(M) || isalien(M) || isslime(M))
-		return 0
+		return FALSE
 
 	var/mob/living/carbon/C = M
 	if(C && (istype(C.wear_mask, /obj/item/clothing/mask/facehugger) || C.status_flags & XENO_HOST))
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /obj/item/clothing/mask/facehugger/acidable()
 	return sterile

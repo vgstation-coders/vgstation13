@@ -35,6 +35,10 @@
 	if(!holstered)
 		return
 
+	if(user.stat || user.resting)
+		to_chat(user, "<span class='warning'>You can't hold \the [holstered] like this!</span>")
+		return
+
 	if(user.put_in_hands(holstered))
 		unholster_message(user)
 		holstered.add_fingerprint(user)
@@ -156,11 +160,23 @@
 		return
 	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch))
 		return
+	if(istype(W, /obj/item/weapon/melee/energy/sword))
+		var/obj/item/weapon/melee/energy/sword/S = W
+		if(S.active == 0)
+			return 1
+
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
-		/obj/item/weapon/hatchet/unathiknife, \
 		/obj/item/weapon/screwdriver, \
-		/obj/item/weapon/wirecutters))
+		/obj/item/weapon/wirecutters, \
+		/obj/item/weapon/pen, \
+		/obj/item/weapon/scalpel, \
+		/obj/item/weapon/minihoe, \
+		/obj/item/weapon/hatchet, \
+		/obj/item/weapon/pickaxe/shovel/spade, \
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana, \
+		/obj/item/weapon/bikehorn
+		)) //honk
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
 	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from its holster!</span>", \
@@ -177,7 +193,7 @@
 
 /obj/item/clothing/accessory/holster/knife/boot/update_icon()
 	if(holstered)
-		if(holstered.icon_state in list("skinningknife", "tacknife", "knife", "smallknife", "fork"))
+		if(holstered.icon_state in list("skinningknife", "tacknife", "knife", "smallknife", "fork", "pen", "scalpel", "banana", "bike_horn", "sword0"))
 			icon_state = "[initial(icon_state)]_[holstered.icon_state]"
 			_color = "[initial(_color)]_[holstered.icon_state]"
 		else

@@ -183,8 +183,10 @@
 	nanomanager.update_uis(src)
 	return 1
 
-/obj/machinery/vaporizer/wrenchAnchor(mob/user)
-	..()
+/obj/machinery/vaporizer/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
 	power_change()
 	update_icon()
 

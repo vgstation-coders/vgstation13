@@ -179,6 +179,11 @@
 				desc = "Sweet and healthy!"
 				icon_state = HONEY
 				item_state = null
+			if(ROYALJELLY)
+				name = "royal jelly pot"
+				desc = "Spicy and healthy!"
+				icon_state = ROYALJELLY
+				item_state = HONEY
 			if(CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
@@ -306,7 +311,15 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/honey/New()
 	..()
-	reagents.add_reagent("honey", 50)
+	reagents.add_reagent(HONEY, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/royaljelly
+	name = "royal jelly pot"
+	desc = "Spicy and healthy!"
+
+/obj/item/weapon/reagent_containers/food/condiment/royaljelly/New()
+	..()
+	reagents.add_reagent(ROYALJELLY, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/cinnamon
 	name = "cinnamon shaker"
@@ -377,7 +390,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,KETCHUP=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,COCO=10)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()

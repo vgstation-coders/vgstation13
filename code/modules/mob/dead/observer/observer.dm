@@ -23,6 +23,9 @@
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
 
+	// Holomaps for ghosts
+	var/obj/item/device/station_map/station_holomap = null
+
 	var/can_reenter_corpse
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
@@ -45,6 +48,7 @@
 
 	// Our new boo spell.
 	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
+	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
 
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
 	started_as_observer = flags & GHOST_IS_OBSERVER
@@ -100,6 +104,8 @@
 	if(!T)
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T
+
+	station_holomap = new(src)
 
 	if(!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
@@ -218,6 +224,8 @@ Works together with spawning an observer, noted above.
 		var/foundVirus = 0
 		if(patient && patient.virus2 && patient.virus2.len)
 			foundVirus = 1
+		else if (patient && patient.viruses && patient.viruses.len)
+			foundVirus = 1
 		if(!C)
 			return
 		holder = patient.hud_list[HEALTH_HUD]
@@ -319,11 +327,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 // Check for last poltergeist activity.
 /mob/dead/observer/proc/can_poltergeist(var/start_cooldown=1)
+	if(isAdminGhost(src))
+		return TRUE
 	if(world.time >= next_poltergeist)
 		if(start_cooldown)
 			start_poltergeist_cooldown()
-		return 1
-	return 0
+		return TRUE
+	return FALSE
 
 /mob/dead/observer/proc/start_poltergeist_cooldown()
 	next_poltergeist=world.time + POLTERGEIST_COOLDOWN
@@ -799,6 +809,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		mouse_opacity = 1
 		to_chat(src, "<span class='info'>Sprite shown.</span>")
 
+/mob/dead/observer/verb/toggle_station_map()
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+	set category = "Ghost"
+
+	src.station_holomap.toggleHolomap(src, FALSE) // We don't need client.eye.
 
 /mob/dead/observer/verb/become_mommi()
 	set name = "Become MoMMI"

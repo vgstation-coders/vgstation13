@@ -23,7 +23,7 @@
 	if(!c_tag || c_tag == "")
 		to_chat(user, "<span class='notice'>Set the tag first dumbass</span>")
 		return 0
-	if(is_type_in_list(src.excludes))
+	if(is_type_in_list(A, excludes))
 		to_chat(user, "<span class='warning'>\The [src] won't stick!</span>")
 		return 0
 	if(istype(A, /obj/item))
@@ -44,9 +44,9 @@
 				removed(message = "<span class='notice'>\The [src] deactivates and falls off!</span>", catastrophic = prob(1))
 		if(2)
 			if(prob(40))
-				removed(message = "<span class='notice'>\The [src] deactivates and falls off!</span>", catastrohpic = prob(5))
+				removed(message = "<span class='notice'>\The [src] deactivates and falls off!</span>", catastrophic = prob(5))
 		if(1)
-			removed(message = "<span class='notice'>\The [src] deactivates and falls off!</span>", catastrohpic = prob(30))
+			removed(message = "<span class='notice'>\The [src] deactivates and falls off!</span>", catastrophic = prob(30))
 
 /*
   user is who removed it if possible

@@ -65,6 +65,8 @@
 
 /area/vault/hive_shuttle
 
+/area/vault/syndiecargo
+
 //prison vault
 
 /area/vault/prison_ship
@@ -541,7 +543,7 @@
 	update_icon()
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/vault
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	speak_chance = 1
 
 /obj/machinery/atmospherics/unary/vent/visible

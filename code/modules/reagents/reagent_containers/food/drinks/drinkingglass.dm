@@ -409,7 +409,7 @@
 					icon_state = SOY_LATTE
 					item_state = SOY_LATTE
 					name = "soy latte"
-					desc = "A nice and refrshing beverage while you are reading."
+					desc = "A nice and refreshing beverage while you are reading."
 				if(CAFE_LATTE)
 					icon_state = CAFE_LATTE
 					item_state = CAFE_LATTE
@@ -547,6 +547,16 @@
 					item_state = "ginvodkaglass"
 					name = "glass of Grey vodka"
 					desc = "A questionable concoction of objects found within maintenance. Tastes just like you'd expect."
+				if(PINTPOINTER)
+					var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
+					if(reagents.last_ckey_transferred_to_this)
+						for(var/client/C in clients)
+							if(C.ckey == reagents.last_ckey_transferred_to_this)
+								var/mob/M = C.mob
+								P.creator = M
+					reagents.trans_to(P, reagents.total_volume)
+					spawn(1)
+						qdel(src)
 				else
 					icon_state ="glass_colour"
 					item_state ="glass_colour"

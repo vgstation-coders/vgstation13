@@ -27,7 +27,6 @@
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 30 //3 seconds between shots
-	var/datum/effect/effect/system/spark_spread/spark_system
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
@@ -38,9 +37,6 @@
 
 
 /obj/machinery/turret/New()
-	spark_system = new /datum/effect/effect/system/spark_spread
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
 //	targets = new
 	..()
 	return
@@ -272,7 +268,7 @@
 	src.health -= Proj.damage
 	..()
 	if(prob(45) && Proj.damage > 0)
-		src.spark_system.start()
+		spark(src, 5, FALSE)
 
 	if (src.health <= 0)
 		src.die()
@@ -284,7 +280,7 @@
 	if(..())
 		return 1
 	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
-	src.spark_system.start()
+	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
 	visible_message("<span class='danger'>[user] attacked \the [src] with \the [W]!</span>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src] with [W]</font>")

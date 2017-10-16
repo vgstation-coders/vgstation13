@@ -32,6 +32,7 @@ var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Al
 
 // This is stupid as fuck.
 var/list/hit_appends = list("-OOF", "-ACK", "-UGH", "-HRNK", "-HURGH", "-GLORF")
+var/list/epilepsy_appends = list("-HRNK", "-HURGH", "-ABLRGH", "-GLORF", "-BLARGH")
 
 //*-hud user lists
 var/global/list/table_recipes = list() //list of all table craft recipes

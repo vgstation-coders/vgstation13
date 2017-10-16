@@ -145,16 +145,24 @@
 
 /obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
 	if(!released)
-		release()
+		release(user)
 	..()
 
-/obj/item/weapon/storage/briefcase/bees/proc/release()
-	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
-	var/mob/living/simple_animal/bee/BEE = new(get_turf(src))
-	BEE.strength = 20
-	BEE.toxic = 5
-	BEE.mut = 2
-	BEE.feral = 25
-	BEE.icon_state = "bees_swarm-feral"
-	BEE.newTarget()
+//You can hit someone with the briefcase, and the bees will swarm at them
+/obj/item/weapon/storage/briefcase/bees/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
+	if(!proximity_flag)
+		return
+
+	if (!isliving(target))
+		return
+
+	if(!released)
+		release(target)
+
+//The bees will attack whoever opens the briefcase
+/obj/item/weapon/storage/briefcase/bees/proc/release(var/mob/user)
 	released = TRUE
+	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
+	var/mob/living/simple_animal/bee/swarm/BEES = new(get_turf(src))
+	BEES.forceMove(user.loc)
+	BEES.target = user

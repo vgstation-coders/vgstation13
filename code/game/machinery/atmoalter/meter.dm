@@ -7,7 +7,7 @@
 	var/target_layer = PIPING_LAYER_DEFAULT
 	anchored = 1.0
 	power_channel = ENVIRON
-	var/frequency = 0
+	var/frequency = 1439
 	var/id_tag
 	use_power = 1
 	idle_power_usage = 2

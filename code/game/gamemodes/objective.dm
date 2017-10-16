@@ -519,10 +519,7 @@ var/list/potential_theft_objectives=list(
 
 		var/mob/living/carbon/human/H = target.current
 		for(var/datum/organ/external/E in H.organs)
-			if(E.status & ORGAN_BROKEN)
-				already_completed = 1
-				return 1
-			if(E.status & ORGAN_DESTROYED && !E.amputated)
+			if(!E.is_healthy())
 				already_completed = 1
 				return 1
 

@@ -1,5 +1,21 @@
-/obj/machinery/reagentgrinder
 
+
+var/global/list/juice_items = list (
+	/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/apple = list(APPLEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/lemon = list(LEMONJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/orange = list(ORANGEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/lime = list(LIMEJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
+	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
+	)
+
+/obj/machinery/reagentgrinder
 	name = "All-In-One Grinder"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "juicer1"
@@ -47,23 +63,6 @@
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/weapon/reagent_containers/pill = list(),
 		/obj/item/weapon/reagent_containers/food = list()
-	)
-
-	var/list/juice_items = list (
-
-		//Juicer Stuff
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/apple = list(APPLEJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon = list(LEMONJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/orange = list(ORANGEJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lime = list(LIMEJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
 	)
 
 

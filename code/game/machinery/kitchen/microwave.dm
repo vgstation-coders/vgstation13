@@ -389,8 +389,11 @@
 		O.forceMove(src.loc)
 	if (src.reagents.total_volume)
 		src.dirty++
-	if(reagent_disposal)
-		reagents.clear_reagents()
+		if(reagent_disposal)
+			if(scanning_power >= 1) //You get one bottle, don't fuck it up
+				var/obj/item/weapon/reagent_containers/food/condiment/C = new(get_turf(src))
+				reagents.trans_to(C, reagents.total_volume)
+			reagents.clear_reagents()
 	to_chat(usr, "<span class='notice'>You dispose of the microwave contents.</span>")
 	src.updateUsrDialog()
 
@@ -408,9 +411,7 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/broke()
-	var/datum/effect/effect/system/spark_spread/s = new
-	s.set_up(2, 1, src)
-	s.start()
+	spark(src, 2)
 	src.icon_state = "mwb" // Make it look all busted up and shit
 	src.visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
 	src.broken = 2 // Make it broken so it can't be used util fixed
@@ -435,16 +436,20 @@
 	return ffuu
 
 /obj/machinery/microwave/CtrlClick(mob/user)
-    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
-        cook() //Cook checks for power, brokenness, and contents internally
-        return
-    return ..()
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
+		if(issilicon(user) && !attack_ai(user))
+			return ..()
+		cook() //Cook checks for power, brokenness, and contents internally
+		return
+	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
 	if(operating)
 		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
 		return
 	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		if(issilicon(user) && !attack_ai(user))
+			return ..()
 		dispose()
 		return
 	return ..()

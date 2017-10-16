@@ -115,7 +115,7 @@
 		return -1
 
 	// Prevent AIs from being crammed into lockers. /vg/ Redmine #153 - N3X
-	if(istype(AM, /mob/living/silicon/ai) || istype(AM, /mob/living/simple_animal/sculpture))
+	if(istype(AM, /mob/living/silicon/ai) || istype(AM, /mob/living/simple_animal/scp_173))
 		return 0
 
 	if(istype(AM, /mob/living))
@@ -262,7 +262,7 @@
 	..(user)
 
 /obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
-	if(user.environment_smash)
+	if(user.environment_smash_flags & SMASH_CONTAINERS)
 //		user.do_attack_animation(src, user) //This will look stupid
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
 		for(var/atom/movable/A as mob|obj in src)
@@ -346,8 +346,8 @@
 		return
 
 	if(!src.open())
-		to_chat(user, "<span class='notice'>It won't budge!</span>")
 		if(!lastbang)
+			to_chat(user, "<span class='notice'>It won't budge!</span>")
 			lastbang = 1
 			for (var/mob/M in hearers(src, null))
 				to_chat(M, text("<FONT size=[]>BANG, bang!</FONT>", max(0, 5 - get_dist(src, M))))

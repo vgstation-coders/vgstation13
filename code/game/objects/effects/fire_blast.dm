@@ -75,6 +75,8 @@
 			for(var/mob/living/L in get_turf(src))
 				if(issilicon(L))
 					continue
+				if(L.mutations.Find(M_UNBURNABLE))
+					continue
 
 				if(!L.on_fire)
 					L.adjust_fire_stacks(0.5)
@@ -114,6 +116,9 @@
 	..(T, damage, current_step, age, pressure, blast_temperature, fire_duration)
 	spread_start = 0
 	spread_chance = 30
+
+/obj/effect/fire_blast/no_spread
+	spread = 0
 
 /obj/effect/gas_puff
 	name = "gas puff"

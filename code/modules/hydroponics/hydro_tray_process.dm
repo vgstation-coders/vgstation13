@@ -12,11 +12,12 @@
 		return
 	lastcycle = world.time
 
-	var/mob/living/simple_animal/bee/BEE = locate() in loc
-	if(BEE && (BEE.feral < 1))
-		bees = 1
-	else
+	if (pollination <= 0)
 		bees = 0
+	else
+		pollination--
+		bees = 1
+
 
 	// Weeds like water and nutrients, there's a chance the weed population will increase.
 	// Bonus chance if the tray is unoccupied.
@@ -214,9 +215,6 @@
 		if(toxins > seed.toxins_tolerance)
 			health -= toxin_uptake
 		toxins -= toxin_uptake * (1+bees)
-		if(BEE && BEE.parent)
-			var/obj/machinery/apiary/A = BEE.parent
-			A.toxic = Clamp(A.toxic + toxin_uptake/2, 0, 25) //gotta be careful where you let your bees hang around
 		if(draw_warnings)
 			update_icon_after_process = 1
 

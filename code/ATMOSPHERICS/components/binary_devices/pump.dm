@@ -223,4 +223,12 @@ Thus, the two variables affect pump operation are set in New():
 	src.update_icon()
 	src.updateUsrDialog()
 
+/obj/machinery/atmospherics/binary/pump/canClone(var/obj/O)
+	return istype(O, /obj/machinery/atmospherics/binary/pump)
+
+/obj/machinery/atmospherics/binary/pump/clone(var/obj/machinery/atmospherics/binary/pump/O)
+	id_tag = O.id_tag
+	set_frequency(O.frequency)
+	return 1
+
 #undef MAX_PRESSURE

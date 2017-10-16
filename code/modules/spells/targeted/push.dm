@@ -5,7 +5,7 @@
 
 	school = "evocation"
 	charge_max = 300
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = Z2NOCAST | WAIT_FOR_CLICK
 	invocation = "P'SH IT RE'L GUD"
 	invocation_type = SpI_SHOUT
 	range = 1
@@ -20,7 +20,14 @@
 	var/list/valid_targets = list()
 	var/list/options = ..()
 	for(var/atom/movable/target in options)
+		if(target == holder.locked_to)
+			to_chat(holder, "<span class='warning'>You can't push something away if you're attached to it.</span>")
+			valid_targets = list()
+			break
 		valid_targets += target
+	if(!holder.z)
+		to_chat(holder, "<span class='warning'>You can't seem to get enough leverage for a push from here.</span>")
+		valid_targets = list()
 	return valid_targets
 
 /spell/targeted/push/cast(var/list/targets)
@@ -48,6 +55,7 @@
 		to_chat(holder, "The spell matrix was unable to locate a suitable destination for an unknown reason. Sorry.")
 		return
 
+	var/list/backup_L = L
 	for(var/atom/movable/target in targets)
 		target.unlock_from()
 		var/attempt = null
@@ -60,7 +68,7 @@
 			else
 				break
 		if(!success)
-			target.forceMove(pick(L))
+			target.forceMove(pick(backup_L))
 
 /spell/targeted/push/get_upgrade_price(upgrade_type)
 	return price / 2

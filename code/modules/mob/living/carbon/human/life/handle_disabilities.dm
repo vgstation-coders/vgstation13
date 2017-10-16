@@ -3,10 +3,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
-			visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
-							"<span class='warning'>You have a seizure!</span>")
-			Paralyse(10)
-			Jitter(1000) //Godness
+			seizure(10, 1000)
 
 	//If we have the gene for being crazy, have random events.
 	if(dna.GetSEState(HALLUCINATIONBLOCK))
@@ -64,6 +61,9 @@
 						"Don't tell Chase", \
 						"not so tough now huh", \
 						"WERE NOT BAY!!", \
+						"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+						"DONT TALK TO ME ABOUT BALANCE!!!!", \
+						"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
 						"BLAME HOSHI!!!", \
 						"ARRPEE IZ DED!!!", \
 						"THERE ALL JUS MEATAFRIENDS!", \

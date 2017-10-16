@@ -67,7 +67,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/attacktext = "attacks"
 	var/attack_sound = null
 	var/friendly = "nuzzles" //If the mob does no damage with it's attack
-	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
+//	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
+	var/environment_smash_flags = 0
 
 	var/speed = 1 //Higher speed is slower, decimal speed is faster. DO NOT SET THIS TO NEGATIVES OR 0. MAKING THIS SMALLER THAN 1 MAKES YOUR MOB SUPER FUCKING FAST BE WARNED.
 

@@ -7,8 +7,8 @@
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 	var/list/icon/current = list() //the current hud icons
 
-	proc
-		process_hud(var/mob/M)	return
+/obj/item/clothing/glasses/hud/proc/process_hud(var/mob/M)
+	return
 
 /obj/item/clothing/glasses/hud/harm_label_update()
 	return

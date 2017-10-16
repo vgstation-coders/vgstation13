@@ -121,6 +121,11 @@
 	for(var/key in pooledvariables[type])
 		vars[key] = pooledvariables[type][key]
 
+//Called when a variable is edited by admin powers
+//Return 1 to block the varedit!
+/datum/proc/variable_edited(variable_name, old_value, new_value)
+	return
+
 /proc/isInTypes(atom/Object, types)
 	if(!Object)
 		return 0

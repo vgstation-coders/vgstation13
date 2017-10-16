@@ -15,13 +15,12 @@
 
 //  Generic non-item
 /obj/item/weapon/storage/bag
-	allow_quick_gather = 1
-	allow_quick_empty = 1
-	display_contents_with_number = 0 // UNStABLE AS FuCK, turn on when it stops crashing clients
-	use_to_pickup = 1
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	display_contents_with_number = FALSE // UNStABLE AS FuCK, turn on when it stops crashing clients
+	use_to_pickup = TRUE
 	slot_flags = SLOT_BELT
 	flags = FPRINT
-
 
 // -----------------------------
 //          Trash bag
@@ -37,7 +36,7 @@
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
 	can_only_hold = list() // any
-	cant_hold = list("/obj/item/weapon/disk/nuclear")
+	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
 
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
@@ -82,14 +81,11 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		return CANNOT_EQUIP
 
 /obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
-	if(ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		if(H.head == src) //If worn
-			return 0
-	else if(isMoMMI(loc))
-		var/mob/living/silicon/robot/mommi/MoM = loc
-		if(MoM.head_state == src) //If worn
-			return 0
+	if(isliving(loc))
+		var/mob/living/L = loc
+		if(L.is_wearing_item(src, slot_head)) //Wearing the bag on the head
+			return FALSE
+
 	return ..()
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
@@ -206,29 +202,29 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		//verbs -= /obj/item/weapon/storage/verb/quick_empty
 		//verbs += /obj/item/weapon/storage/bag/sheetsnatcher/quick_empty
 
-	can_be_inserted(obj/item/W as obj, stop_messages = 0)
+	can_be_inserted(obj/item/W as obj, stop_messages = FALSE)
 		if(!istype(W,/obj/item/stack/sheet) || istype(W,/obj/item/stack/sheet/mineral/sandstone) || istype(W,/obj/item/stack/sheet/wood))
 			if(!stop_messages)
 				to_chat(usr, "The snatcher does not accept [W].")
-			return 0 //I don't care, but the existing code rejects them for not being "sheets" *shrug* -Sayu
+			return FALSE //I don't care, but the existing code rejects them for not being "sheets" *shrug* -Sayu
 		var/current = 0
 		for(var/obj/item/stack/sheet/S in contents)
 			current += S.amount
 		if(capacity == current)//If it's full, you're done
 			if(!stop_messages)
 				to_chat(usr, "<span class='warning'>The snatcher is full.</span>")
-			return 0
-		return 1
+			return FALSE
+		return TRUE
 
 
 // Modified handle_item_insertion.  Would prefer not to, but...
-	handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	handle_item_insertion(obj/item/W as obj, prevent_warning = FALSE)
 		var/obj/item/stack/sheet/S = W
 		if(!istype(S))
-			return 0
+			return FALSE
 
 		var/amount
-		var/inserted = 0
+		var/inserted = FALSE
 		var/current = 0
 		for(var/obj/item/stack/sheet/S2 in contents)
 			current += S2.amount
@@ -241,7 +237,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 			if(S.type == sheet.type) // we are violating the amount limitation because these are not sane objects
 				sheet.amount += amount	// they should only be removed through procs in this file, which split them up.
 				S.amount -= amount
-				inserted = 1
+				inserted = TRUE
 				break
 
 		if(!inserted || !S.amount)
@@ -260,7 +256,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)
 		update_icon()
-		return 1
+		return TRUE
 
 
 // Sets up numbered display to show the stack size of each stored mineral
@@ -308,7 +304,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	remove_from_storage(obj/item/W as obj, atom/new_location)
 		var/obj/item/stack/sheet/S = W
 		if(!istype(S))
-			return 0
+			return FALSE
 
 		//I would prefer to drop a new stack, but the item/attack_hand code
 		// that calls this can't recieve a different object than you clicked on.
@@ -375,6 +371,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	storage_slots = 300
 	fits_max_w_class = 300 //There is no way this could go wrong, right?
 	max_combined_w_class = 300
-	display_contents_with_number = 1 //With lods of emone, you're gonna need some compression
+	display_contents_with_number = TRUE //With lods of emone, you're gonna need some compression
 	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/weapon/ore", "/obj/item/weapon/spacecash")
 	cant_hold = list()

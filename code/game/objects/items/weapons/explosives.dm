@@ -124,10 +124,10 @@
 			target:dismantle_wall(1)
 		else
 			target.ex_act(1)
-		if (isobj(target))
-			if (target)
-				qdel(target)
-				target = null
+		//if (isobj(target))
+		//	if (target)
+		//		qdel(target)	If it survives ex_act(1) it's possible that it's not something that's meant to be destroyable.
+		//		target = null
 	qdel(src)
 
 /obj/item/weapon/plastique/attack(mob/M as mob, mob/user as mob, def_zone)

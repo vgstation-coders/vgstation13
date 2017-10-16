@@ -263,8 +263,10 @@
 		if ((src.anchored))
 			src.flash()
 
-/obj/machinery/detector/wrenchAnchor(mob/user)
-	if(..() == 1)
-		overlays.len = 0
-		if(anchored)
-			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
+/obj/machinery/detector/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	overlays.len = 0
+	if(anchored)
+		src.overlays += image(icon = icon, icon_state = "[base_state]-s")

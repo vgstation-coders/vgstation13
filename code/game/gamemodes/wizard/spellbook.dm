@@ -10,7 +10,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/list/available_spells = list(
+	var/static/list/available_spells = list(
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
 	/spell/targeted/projectile/dumbfire/fireball/firebreath,
@@ -46,7 +46,32 @@
 	)
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/list/available_artifacts = list()
+	var/static/list/available_artifacts = list()
+
+	var/static/list/available_potions = list(
+		/obj/item/potion/healing = Sp_BASE_PRICE,
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
+		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
@@ -72,6 +97,9 @@
 
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
+
+/obj/item/weapon/spellbook/proc/get_available_potions()
+	return available_potions
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
@@ -193,6 +221,17 @@
 		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
 
+	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+
+	for(var/P in get_available_potions())
+		var/obj/item/potion/potion = P
+		var/potion_name = initial(potion.name)
+		var/potion_desc = initial(potion.desc)
+		var/potion_price = available_potions[P]
+
+		dat += "<strong>[potion_name]</strong> ([buy_href_link(P, potion_price, "buy for [potion_price] point\s")])<br>"
+		dat += "<em>[potion_desc]</em><br><br>"
+
 	dat += "</body>"
 
 	user << browse(dat, "window=spellbook;size=[book_window_size]")
@@ -288,6 +327,12 @@
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
+
+		else if(ispath(buy_type, /obj/item/potion))
+			if(buy_type in get_available_potions())
+				if(use(available_potions[buy_type]))
+					new buy_type(get_turf(usr))
+					feedback_add_details("wizard_spell_learned", "PT")
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
@@ -642,12 +687,12 @@
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		var/mob/living/carbon/human/h = user
+		var/mob/living/carbon/human/H = user
 		user.flash_eyes(visual = 1)
-		for(var/datum/organ/external/l_leg/E in h.organs)
+
+		for(var/datum/organ/external/E in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 			E.droplimb(1)
-		for(var/datum/organ/external/r_leg/E in h.organs)
-			E.droplimb(1)
+
 		to_chat(user, "<span class = 'warning'>Your legs fall off!</span>")
 		qdel(src)
 
@@ -811,3 +856,23 @@
 			break
 	if(!success)
 		user.forceMove(pick(L))
+
+///// ANCIENT SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	spell = null
+	icon_state = "book"
+	desc = "A book of lost and forgotten knowledge"
+	spellname = "forgotten knowledge"
+
+/obj/item/weapon/spellbook/oneuse/ancient/New()
+	..()
+	spell = pick(possible_spells)
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal ancient knowledge!</span>")
+	user.gib()
+	qdel(src)
+
+

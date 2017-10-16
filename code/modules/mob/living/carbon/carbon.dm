@@ -129,9 +129,7 @@
 	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
 	//if(src.knockdown < 20*siemens_coeff)	src.SetKnockdown(20*siemens_coeff)
 
-	var/datum/effect/effect/system/spark_spread/SparkSpread = new
-	SparkSpread.set_up(5, 1, loc)
-	SparkSpread.start()
+	spark(loc, 5)
 
 	return damage
 
@@ -238,12 +236,11 @@
 				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
 				var/obj/item/clothing/gloves/T = src.get_item_by_slot(slot_gloves)
 				var/mob/living/carbon/human/H
-				var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 
 				if (istype(T, /obj/item/clothing/gloves))
 					shock_damage = T.siemens_coefficient * shock_damage
 
-				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient > 0)
+				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && (!T || T.siemens_coefficient > 0))
 					shock_time = U.cell.charge/STUNGLOVES_CHARGE_COST
 					shock_damage = shock_damage * shock_time
 
@@ -254,12 +251,11 @@
 						H = src
 						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
 						add_logs(H, M, "stungloved", admin = TRUE)
-			
+
 					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
 					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
 
-					sparks.set_up(3, 0, H)
-					sparks.start()
+					spark(H, 3, FALSE)
 
 					H.Stun(shock_time SECONDS)
 					M.Stun(shock_time SECONDS)
@@ -589,7 +585,7 @@
 		return 0
 
 /mob/living/carbon/is_muzzled()
-	return(istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
+	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
 
 
 /mob/living/carbon/proc/isInCrit()
@@ -761,3 +757,49 @@
 		var/health_deficiency = (100 - health - halloss)
 		if(health_deficiency >= 40)
 			. += (health_deficiency / 25)
+
+
+/mob/living/carbon/proc/can_mind_interact(var/mob/M)
+	//	to_chat(world, "Starting can interact on [M]")
+	if(!iscarbon(M))
+		return 0 //Can't see non humans with your fancy human mind.
+//	to_chat(world, "[M] is a human")
+	var/turf/temp_turf = get_turf(M)
+	var/turf/our_turf = get_turf(src)
+	if(!temp_turf)
+//		to_chat(world, "[M] is in null space")
+		return 0
+	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
+//		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
+		if(temp_turf.z != map.zCentcomm)
+			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
+
+		return 0
+	if(M_PSY_RESIST in M.mutations)
+//		to_chat(world, "[M] has psy resist")
+		to_chat(src, "The mind of [M] is resisting!")
+		return 0
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+			return 0
+	if(ismartian(M))
+		var/mob/living/carbon/martian/MR = M
+		if(MR.head)
+			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
+				to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+				return 0
+	return 1
+
+/mob/living/carbon/make_invisible(var/source_define, var/time)
+	if(invisibility || alpha <= 1 || !source_define)
+		return
+	body_alphas[source_define] = 1
+	regenerate_icons()
+	if(time > 0)
+		spawn(time)
+			if(src)
+				body_alphas.Remove(source_define)
+				regenerate_icons()
+

@@ -321,7 +321,7 @@
 		<b>C</b> - Change, asks you for the var type first.<br>
 		<b>M</b> - Mass modify: changes this variable for all objects of this type.</font><br>
 		<hr><table width='100%'><tr><td width='20%'><div align='center'><b>Search:</b></div></td><td width='80%'><input type='text' id='filter' name='filter_text' value='' style='width:100%;'></td></tr></table><hr>
-		<ol id='vars'>"}
+		<ul id='vars'>"}
 	var/list/names = list()
 	for (var/V in D.vars)
 		names += V
@@ -331,7 +331,7 @@
 	for (var/V in names)
 		body += debug_variable(V, D.vars[V], 0, D)
 
-	body += "</ol>"
+	body += "</ul>"
 	body = jointext(body,"")
 
 	var/html = "<html><head>"
@@ -369,7 +369,17 @@ body
 	var/html = ""
 
 	if(DA)
-		html += "<li style='backgroundColor:white'>(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>) (<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>) (<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>) "
+		html += "<li style='backgroundColor:white'>"
+		if(name == "appearance")
+			html += {"
+			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
+			<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>load</a>) "}
+		else
+			html += {"
+			(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
+			(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
+			(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
+			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
 	else
 		html += "<li>"
 
@@ -486,13 +496,16 @@ body
 		if(!check_rights(R_VAREDIT))
 			return
 
-		var/D = locate(href_list["datumedit"])
+		var/datum/D = locate(href_list["datumedit"])
 		if(!istype(D,/datum) && !istype(D,/client))
 			to_chat(usr, "This can only be used on instances of types /client or /datum")
 			return
 
-		modify_variables(D, href_list["varnameedit"], 1)
-
+		var/original_name = "[D]"
+		var/edited_variable = href_list["varnameedit"]
+		var/new_value = variable_set(src, D, edited_variable, TRUE)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["togbit"])
 		if(!check_rights(R_VAREDIT))
 			return
@@ -512,13 +525,16 @@ body
 		if(!check_rights(R_VAREDIT))
 			return
 
-		var/D = locate(href_list["datumchange"])
+		var/datum/D = locate(href_list["datumchange"])
 		if(!istype(D,/datum) && !istype(D,/client))
 			to_chat(usr, "This can only be used on instances of types /client or /datum")
 			return
 
-		modify_variables(D, href_list["varnamechange"], 0)
-
+		var/original_name = "[D]"
+		var/edited_variable = href_list["varnamechange"]
+		var/new_value = variable_set(src, D, edited_variable)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["varnamemass"] && href_list["datummass"])
 		if(!check_rights(R_VAREDIT))
 			return
@@ -528,7 +544,39 @@ body
 			to_chat(usr, "This can only be used on instances of type /atom")
 			return
 
-		cmd_mass_modify_object_variables(A, href_list["varnamemass"])
+		cmd_mass_modify_object_variables(A.type, href_list["varnamemass"])
+	else if(href_list["varnamesave"] && href_list["datumsave"])
+		if(!check_rights(R_VAREDIT))
+			return
+
+		var/atom/A = locate(href_list["datumsave"])
+		var/variable_name = href_list["varnamesave"]
+
+		if(A)
+			var/saved_value = A.vars[variable_name]
+
+			if(variable_name == "appearance" && (isimage(A) || isatom(A))) //Appearance is a special case
+				holder.marked_appearance = A
+				to_chat(usr, "Saved [A] as your stored appearance.")
+			else if(variable_contains_protected_list(variable_name)) //Checks for lists like 'vars', 'contents' and 'locs' that can't be edited
+				to_chat(usr, "<span class='notice'>The list [variable_name] is protected, and can't be saved. Saving a copy of it...</span>")
+				var/list/L = saved_value
+
+				sanitize_contents_list(L)
+
+				holder.marked_datum = L.Copy()
+
+			else if(islist(saved_value))
+				if(alert("Save this exact list, or a copy of it? A copy is independent, and changing it will not affect the original list.", "Datum saving", "Save Copy", "Save Exact") == "Save Copy")
+					var/list/L = saved_value
+					holder.marked_datum = L.Copy()
+					to_chat(usr, "Saved a copy of the [variable_name] list as your marked datum.")
+				else
+					holder.marked_datum = saved_value
+					to_chat(usr, "Saved the original [variable_name] list as your marked datum.")
+			else
+				holder.marked_datum = saved_value
+				to_chat(usr, "Your marked datum is now: [holder.marked_datum]")
 
 	else if(href_list["mob_player_panel"])
 		if(!check_rights(0))

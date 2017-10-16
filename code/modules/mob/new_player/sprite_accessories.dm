@@ -486,6 +486,10 @@
 	halfshave
 		name = "Half-shave"
 		icon_state = "hair_halfshave"
+		
+	nightcrawler
+		name = "Nightcrawler"
+		icon_state = "hair_nightcrawler"
 
 	manbun
 		name = "Manbun"

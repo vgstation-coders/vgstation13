@@ -178,6 +178,7 @@
 
 	if(dna)
 		dna.real_name = real_name
+		dna.flavor_text = flavor_text
 
 	prev_gender = gender // Debug for plural genders
 	make_blood()
@@ -250,7 +251,7 @@
 
 		if(istype(loc, /obj/spacepod)) // Spacdpods!
 			var/obj/spacepod/S = loc
-			stat("Spacepod Charge", "[istype(S.battery) ? "[(S.battery.charge / S.battery.maxcharge) * 100]" : "No cell detected"]")
+			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
 /mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
@@ -699,6 +700,11 @@
 				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
 					for(var/J in I.contents)
 						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
+	else if (href_list["show_flavor_text"])
+		if(can_show_flavor_text())
+			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
+			popup.set_content(strip_html(flavor_text))
+			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
@@ -917,32 +923,6 @@
 	check_dna()
 
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
-/mob/living/carbon/human/proc/can_mind_interact(var/mob/M)
-//	to_chat(world, "Starting can interact on [M]")
-	if(!ishuman(M))
-		return 0 //Can't see non humans with your fancy human mind.
-//	to_chat(world, "[M] is a human")
-	var/turf/temp_turf = get_turf(M)
-	var/turf/our_turf = get_turf(src)
-	if(!temp_turf)
-//		to_chat(world, "[M] is in null space")
-		return 0
-	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
-//		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
-		if(temp_turf.z != map.zCentcomm)
-			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
-
-
-		return 0
-	if(M_PSY_RESIST in M.mutations)
-//		to_chat(world, "[M] has psy resist")
-		to_chat(src, "The mind of [M] is resisting!")
-		return 0
-	var/mob/living/carbon/human/H = M
-	if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-		to_chat(src, "Interference is disrupting the connection with the mind of [M].")
-		return 0
-	return 1
 
 /mob/living/carbon/human/can_wield()
 	return 1
@@ -980,7 +960,7 @@
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
-		var/obj/item/weapon/organ/head/B = decapitated
+		var/obj/item/organ/external/head/B = decapitated
 		if(B)
 			var/datum/organ/internal/brain/copied
 			if(B.organ_data)
@@ -1521,6 +1501,14 @@
 	else
 		to_chat(src, "<b><font color='[pick("red","orange","yellow","green","blue")]'>[pick(boo_phrases_drugs)]</font></b>")
 
+/mob/living/carbon/human/proc/seizure(paralyse_duration = 10, jitter_duration = 1000)
+	forcesay(epilepsy_appends)
+	visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
+					"<span class='warning'>You have a seizure!</span>", \
+					drugged_message = "<span class='info'>\The [src] starts raving.</span>")
+	Paralyse(paralyse_duration)
+	Jitter(jitter_duration)
+
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
 	for(var/datum/organ/external/O in src.organs)
@@ -1691,16 +1679,28 @@ mob/living/carbon/human/isincrit()
 	for(var/datum/organ/external/damagedorgan in H.organs)
 		if(damagedorgan.status & ORGAN_BLEEDING)
 			return_organs += damagedorgan
-	return return_organs		
-		
+	return return_organs
+
 /mob/living/carbon/human/get_heart()
 	return internal_organs_by_name["heart"]
+
+/mob/living/carbon/human/get_lungs()
+	return internal_organs_by_name["lungs"]
+
+/mob/living/carbon/human/get_liver()
+	return internal_organs_by_name["liver"]
+
+/mob/living/carbon/human/get_kidneys()
+	return internal_organs_by_name["kidneys"]
+
+/mob/living/carbon/human/get_appendix()
+	return internal_organs_by_name["appendix"]
 
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
-	var/obj/item/organ/extractedorgan
+	var/obj/item/organ/internal/extractedorgan
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
 		if(extractedorgan && istype(extractedorgan))
@@ -1805,6 +1805,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"last_shush",
 		"last_emote_sound",
 		"decapitated",
 		"organs",
@@ -1839,3 +1840,27 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
 	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
 	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
+
+/mob/living/carbon/human/can_show_flavor_text()
+	// Wearing a mask...
+	if(wear_mask && is_slot_hidden(wear_mask.body_parts_covered, HIDEFACE))
+		return FALSE
+	// Or having a headpiece that protects your face...
+	if(head && is_slot_hidden(head.body_parts_covered, HIDEFACE))
+		return FALSE
+	// Or lacking a head, or being disfigured...
+	var/datum/organ/external/head/limb_head = get_organ(LIMB_HEAD)
+	if(!limb_head || limb_head.disfigured || (limb_head.status & ORGAN_DESTROYED) || !real_name)
+		return FALSE
+	// Or being a husk...
+	if(M_HUSK in mutations)
+		return FALSE
+	// ...means no flavor text for you. Otherwise, good to go.
+	return TRUE
+
+/mob/living/carbon/human/proc/make_zombie(mob/master)
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, mind)
+	T.get_clothes(src, T)
+	T.name = real_name
+	T.host = src
+	forceMove(null)

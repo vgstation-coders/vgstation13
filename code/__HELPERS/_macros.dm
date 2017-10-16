@@ -9,6 +9,8 @@
 
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)
 
+#define ismartian(A) istype(A, /mob/living/carbon/martian)
+
 #define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
 
 #define isdiona(A) (ishuman(A) && A.species && istype(A.species, /datum/species/diona))
@@ -93,6 +95,8 @@
 
 #define isobserver(A) istype(A, /mob/dead/observer)
 
+#define isjustobserver(A) (isobserver(A) && !isAdminGhost(A))
+
 #define isnewplayer(A) istype(A, /mob/new_player)
 
 #define isovermind(A) istype(A, /mob/camera/blob)
@@ -119,6 +123,10 @@
 
 #define isscrewdriver(A) istype(A, /obj/item/weapon/screwdriver)
 
+#define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
+
+#define ispowercell(A) istype(A, /obj/item/weapon/cell)
+
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
 #define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
@@ -126,6 +134,8 @@
 #define iswire(O) istype(O, /obj/item/stack/cable_coil)
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)
+
+#define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
@@ -138,6 +148,10 @@
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
+
+#define isimage(A) (istype(A, /image))
+
+#define isdatum(A) (istype(A, /datum))
 
 #define isclient(A) (istype(A, /client))
 
@@ -166,6 +180,7 @@
 #define ismalf(H) (H.mind in ticker.mode.malf_ai)
 
 #define isnukeop(H) (H.mind in ticker.mode.syndicates)
+#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
 
 #define iswizard(H) (H.mind in ticker.mode.wizards)
 
@@ -197,6 +212,8 @@ proc/get_space_area()
 //y is the minimum
 //z is the maximum
 
+//Returns 1 if the variable contains a protected list that can't be edited
+#define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
 
 #define CLAMP01(x) 		(Clamp(x, 0, 1))
 

@@ -241,6 +241,8 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/escape_pod5/transit
 	icon_state = "shuttle"
 
+//SHOULD YOU ADD NEW ESCAPE PODS, REMEMBER TO UPDATE shuttle_controller.dm
+
 /area/shuttle/supply
 	name = "supply shuttle"
 	icon_state = "shuttle3"
@@ -267,6 +269,10 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "shuttle"
 	name = "\improper Transport Shuttle"
 
+/area/shuttle/ert/centcom
+	icon_state = "shuttle"
+	name = "\improper ERT Shuttle Centcom"
+
 /area/shuttle/alien/base
 	icon_state = "shuttle"
 	name = "\improper Alien Shuttle Base"
@@ -288,6 +294,10 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/specops/centcom
 	name = "\improper Special Ops Shuttle"
+	icon_state = "shuttlered"
+
+/area/shuttle/striketeam/centcom
+	name = "\improper Strike Team Shuttle"
 	icon_state = "shuttlered"
 
 /area/shuttle/specops/station
@@ -502,12 +512,14 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/evac
 	name = "\improper Centcom Emergency Shuttle"
+	icon_state = "centcom-evac"
 
 /area/centcom/suppy
 	name = "\improper Centcom Supply Shuttle"
 
 /area/centcom/ferry
 	name = "\improper Centcom Transport Shuttle"
+	icon_state = "centcom-ferry"
 
 /area/centcom/shuttle
 	name = "\improper Centcom Administration Shuttle"
@@ -520,12 +532,25 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/specops
 	name = "\improper Centcom Special Ops"
+	icon_state = "centcom-specops"
+	dynamic_lighting = 1
+
+/area/centcom/striketeam
+	name = "\improper Custom Strike Team"
+	icon_state = "centcom-specops"
+	dynamic_lighting = 1
 
 /area/centcom/creed
 	name = "Creed's Office"
 
 /area/centcom/holding
 	name = "\improper Holding Facility"
+	icon_state = "centcom-hold"
+
+/area/centcom/ert
+	name = "\improper ERT Preparation Center"
+	icon_state = "centcom-ert"
+	dynamic_lighting = 1
 
 //SYNDICATES
 
@@ -1209,14 +1234,25 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Holodeck - Rage Cage"
 	jammed=SUPER_JAMMED
 
+/area/holodeck/source_panic
+	name = "\improper Holodeck - Panic Bunker"
+	jammed=SUPER_JAMMED
 
+/area/holodeck/source_medieval
+	name = "\improper Holodeck - Medieval Times"
+	jammed=SUPER_JAMMED
 
+/area/holodeck/source_checkers
+	name = "\improper Holodeck - Checkers"
+	jammed=SUPER_JAMMED
 
+/area/holodeck/source_gym
+	name = "\improper Holodeck - Gym"
+	jammed=SUPER_JAMMED
 
-
-
-
-
+/area/holodeck/source_catnip
+	name = "\improper Holodeck - Club Catnip"
+	jammed=SUPER_JAMMED
 
 
 //Engineering

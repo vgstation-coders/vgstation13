@@ -28,7 +28,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 12000, MAT_GLASS = 52500, MAT_GOLD = 24000, MAT_SILVER = 12000, MAT_PLASTIC = 2000) //yes it's expensive
 	category = "Nanotrasen"
-	build_path = /obj/item/organ/brain/mami
+	build_path = /obj/item/organ/internal/brain/mami
 
 /datum/design/gravitywell
 	name = "Gravity Well Gun"

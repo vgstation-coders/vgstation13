@@ -52,8 +52,8 @@
 /mob/living/simple_animal/hologram/chicken
 	atom_to_mimic = /mob/living/simple_animal/chicken
 
-/mob/living/simple_animal/hologram/tajaran
-	atom_to_mimic = /mob/living/simple_animal/hostile/humanoid/tajaran
-
 /mob/living/simple_animal/hologram/cow
 	atom_to_mimic = /mob/living/simple_animal/cow
+
+/mob/living/simple_animal/hologram/tajaran_dancer
+	atom_to_mimic = /mob/living/simple_animal/hostile/humanoid/tajaran/dancer

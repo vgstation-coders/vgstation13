@@ -25,7 +25,7 @@
 
 		//First, resolve location and get a breath
 
-		if(air_master.current_cycle%4==2)
+		if(SSair.current_cycle%4==2)
 			//Only try to take a breath every 4 seconds, unless suffocating
 			spawn(0) breathe()
 
@@ -157,7 +157,8 @@
 		if(internal)
 			if(!contents.Find(internal))
 				internal = null
-			if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS) )
+			var/obj/item/mask = get_item_by_slot(slot_wear_mask)
+			if(!mask || !(mask.clothing_flags & MASKINTERNALS) )
 				internal = null
 			if(internal)
 				if(internals)
@@ -468,7 +469,7 @@
 									qdel(M)
 							digest++
 						continue
-					if(air_master.current_cycle%3==1)
+					if(SSair.current_cycle%3==1)
 						if(!(M.status_flags & GODMODE))
 							M.adjustBruteLoss(5)
 						nutrition += 10

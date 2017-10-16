@@ -160,6 +160,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/list/player_alt_titles = new()		// the default name of a job like "Medical Doctor"
 
+	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -255,7 +256,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
 	<b>Underwear:</b> [gender == MALE ? "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</a>" : "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_f[underwear]]</a>"]<br>
 	<b>Backpack:</b> <a href ='?_src_=prefs;preference=bag;task=input'><b>[backbaglist[backbag]]</a><br>
-	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a>
+	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a><br>
+	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -940,7 +942,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
 		return
-
+	//testing("preference=[href_list["preference"]]")
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
 			if("close")
@@ -1257,6 +1259,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_relation)
 						nanotrasen_relation = new_relation
 
+				if("flavor_text")
+					var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
+					if(msg)
+						flavor_text = msg
 				if("limbs")
 					var/list/limb_input = list(
 						"Left Leg [organ_data[LIMB_LEFT_LEG]]" = LIMB_LEFT_LEG,
@@ -1496,6 +1502,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
 						lastPolled = world.timeofday
@@ -1571,8 +1578,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 	character.real_name = real_name
 	character.name = character.real_name
+	character.flavor_text = flavor_text
 	if(character.dna)
 		character.dna.real_name = character.real_name
+		character.dna.flavor_text = character.flavor_text
 
 	character.med_record = med_record
 	character.sec_record = sec_record

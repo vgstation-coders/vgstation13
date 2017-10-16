@@ -99,9 +99,7 @@
 /obj/machinery/cell_charger/attack_hand(mob/user)
 	if(charging)
 		if(emagged) //Oh shit nigger what are you doing
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, src)
-			s.start()
+			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
 				Destroy(src) //It exploded, rip
@@ -114,11 +112,11 @@
 		chargelevel = -1
 		updateicon()
 
-/obj/machinery/cell_charger/wrenchAnchor(mob/user)
+/obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
 	if(charging)
 		to_chat(user, "<span class='warning'>Remove the cell first!</span>")
-		return
-	..()
+		return FALSE
+	. = ..()
 
 /obj/machinery/cell_charger/attack_ai(mob/user)
 	return

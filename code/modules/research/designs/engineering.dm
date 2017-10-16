@@ -99,7 +99,7 @@
 	id = "rped"
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 60000, MAT_GLASS = 30000)
+	materials = list(MAT_IRON = 7000, MAT_GLASS = 3500, MAT_GOLD = 600)
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
 	category = "Engineering"
 

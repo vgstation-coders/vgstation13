@@ -91,15 +91,6 @@
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/infinite
-	name = "infinite-capacity power cell!"
-	icon_state = "icell"
-	origin_tech =  null
-	maxcharge = 30000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
-	use()
-		return 1
-
 /obj/item/weapon/cell/potato
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
@@ -166,3 +157,19 @@
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+
+/obj/item/weapon/cell/infinite
+	name = "infinite-capacity power cell!"
+	icon_state = "icell"
+	origin_tech = null
+	maxcharge = 35000
+	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+
+/obj/item/weapon/cell/infinite/New()
+	..()
+	desc = "This cell is the latest in NT technology, having the capability to perpetually recharge itself. It has a power rating of Infinity!"
+
+/obj/item/weapon/cell/infinite/use()
+	..()
+	charge = maxcharge
+	return 1

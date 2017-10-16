@@ -106,13 +106,13 @@
 		for(var/turf/T1 in range(src,1))
 			findNullRod(T1)
 		if(nullblock)
-			user.visible_message("<span class='warning'>A nearby null rod seems to be blocking the transfer.</span>")
+			user.visible_message("<span class='warning'>A nearby holy item seems to be blocking the transfer.</span>")
 			return
 
 		for(var/turf/T2 in range(IP,1))
 			findNullRod(T2)
 		if(nullblock)
-			user.visible_message("<span class='warning'>A null rod seems to be blocking the transfer on the other side.</span>")
+			user.visible_message("<span class='warning'>A holy item seems to be blocking the transfer on the other side.</span>")
 			return
 
 		user.visible_message("<span class='warning'>You feel air moving from the rune - like as it was swapped with somewhere else.</span>", \
@@ -223,7 +223,7 @@
 			else if(M.knockdown)
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='danger'>You have to restrain [M] before the talisman's effects wear off!</span>")
-			else 
+			else
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='danger'>[M] now knows the truth! Stop \him!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
@@ -482,7 +482,7 @@
 		if(is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>")
 		return fizzle()
-	
+
 
 	is_sacrifice_target = 0
 	find_sacrifice:
@@ -944,9 +944,9 @@
 					invocation("rune_sac")
 					I.on_fire = 1
 					I.ashify()
-//Brain
-		else if(istype(A, /obj/item/organ/brain))
-			var/obj/item/organ/brain/R = A
+//Brain & Head
+		else if(istype(A, /obj/item/organ/internal/brain))
+			var/obj/item/organ/internal/brain/R = A
 			var/mob/living/carbon/brain/N = R.brainmob
 			if(N)//the brain is a player's
 				if(cult_round && (N.mind == cult_round.sacrifice_target))
@@ -957,6 +957,19 @@
 					invocation("rune_sac")
 					R.on_fire = 1
 					R.ashify()
+
+		else if(istype(A, /obj/item/organ/external/head/)) //Literally the same as the brain check
+			var/obj/item/organ/external/head/H = A
+			var/mob/living/carbon/brain/N = H.brainmob
+			if(N)//the brain is a player's
+				if(cult_round && (N.mind == cult_round.sacrifice_target))
+					ritualresponse += "You need to place that head back on a body before you can complete your objective."
+				else
+					ritualresponse += "The Geometer of Blood accepts to destroy the head."
+					sacrificedone = 1
+					invocation("rune_sac")
+					H.on_fire = 1
+					H.ashify()
 //Carded AIs
 		else if(istype(A, /obj/item/device/aicard))
 			var/obj/item/device/aicard/D = A

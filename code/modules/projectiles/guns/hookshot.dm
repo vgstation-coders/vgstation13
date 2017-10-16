@@ -92,11 +92,14 @@
 		return //we're placing gun on a table or in backpack
 	if(check_tether())
 		if(istype(chain_datum.extremity_B,/mob/living/carbon))
-			var/mob/living/carbon/C = chain_datum.extremity_B
-			to_chat(C, "<span class='warning'>\The [src] reels you in!</span>")
+			display_reel_message()
 		chain_datum.rewind_chain()
 		return
 	..()
+
+/obj/item/weapon/gun/hookshot/proc/display_reel_message()
+	var/mob/living/carbon/C = chain_datum.extremity_B
+	to_chat(C, "<span class='warning'>\The [src] reels you in!</span>")
 
 /obj/item/weapon/gun/hookshot/dropped(mob/user as mob)
 	if(!clockwerk && !rewinding)
@@ -148,25 +151,40 @@
 		return
 	rewinding = 1
 	for(var/j = 1; j <= maxlength; j++)
-		var/pause = 0
-		for(var/i = maxlength; i > 0; i--)
-			var/obj/effect/overlay/hookchain/HC = links["[i]"]
-			if(!HC)
-				cancel_chain()
-				return
-			if(HC.loc == src)
-				continue
-			pause = 1
-			var/obj/effect/overlay/hookchain/HC0 = links["[i-1]"]
-			if(!HC0)
-				cancel_chain()
-				return
-			HC.forceMove(HC0.loc)
-			HC.pixel_x = HC0.pixel_x
-			HC.pixel_y = HC0.pixel_y
-		sleep(pause)
+		rewind_loop()
 	rewinding = 0
 	update_icon()
+
+/obj/item/weapon/gun/hookshot/proc/rewind_loop()
+	var/pause = 0
+	for(var/i = maxlength; i > 0; i--)
+		var/obj/effect/overlay/hookchain/HC = links["[i]"]
+		if(!HC)
+			cancel_chain()
+			return
+		if(HC.loc == src)
+			continue
+		reset_hookchain_overlays(HC)
+		pause = 1
+		set_end_of_chain(i)
+		var/obj/effect/overlay/hookchain/HC0 = links["[i-1]"]
+		if(!HC0)
+			cancel_chain()
+			return
+		HC.forceMove(HC0.loc)
+		HC.pixel_x = HC0.pixel_x
+		HC.pixel_y = HC0.pixel_y
+	apply_item_overlay()
+	sleep(pause)
+
+/obj/item/weapon/gun/hookshot/proc/reset_hookchain_overlays(var/obj/effect/overlay/hookchain/HC)	//fleshshot only
+	return
+
+/obj/item/weapon/gun/hookshot/proc/set_end_of_chain(var/i)	//fleshshot only
+	return
+
+/obj/item/weapon/gun/hookshot/proc/apply_item_overlay()	//fleshshot only
+	return
 
 /obj/item/weapon/gun/hookshot/proc/cancel_chain()//instantly sends all the links back into the hookshot. replaces those that got destroyed.
 	for(var/j = 1; j <= maxlength; j++)
@@ -213,6 +231,7 @@
 	var/undergoing_deletion = 0
 	var/snap = 0
 	var/rewinding = 0
+	var/name = "chain"
 
 /datum/chain/New()
 	spawn(20)
@@ -238,11 +257,11 @@
 	undergoing_deletion = 1
 	if(extremity_A)
 		if(snap)
-			extremity_A.visible_message("The chain snaps and lets go of \the [extremity_A].")
+			extremity_A.visible_message("The [name] snaps and lets go of \the [extremity_A].")
 		extremity_A.tether = null
 	if(extremity_B)
 		if(snap)
-			extremity_B.visible_message("The chain snaps and lets go of \the [extremity_B].")
+			extremity_B.visible_message("The [name] snaps and lets go of \the [extremity_B].")
 		extremity_B.tether = null
 	for(var/i = 1; i<= links.len ;i++)
 		var/obj/effect/overlay/chain/C = links["[i]"]
@@ -287,12 +306,16 @@
 
 				if(istype(extremity_A,/mob/living))
 					var/mob/living/L = extremity_A
-					C2.CtrlClick(L)
+					if(!(istype(C2, /obj/item) && pick_up_item(L, C2)))
+						C2.CtrlClick(L)
 		C1.rewinding = 1
 		qdel(C1)
 		sleep(1)
 
 	Delete_Chain()
+
+/datum/chain/proc/pick_up_item(var/mob/living/M, var/obj/item/I)	//fleshshot only
+	return
 
 //THE CHAIN THAT APPEARS WHEN YOU FIRE THE HOOKSHOT
 /obj/effect/overlay/hookchain
@@ -318,6 +341,7 @@
 	var/atom/movable/extremity_B = null
 	var/datum/chain/chain_datum = null
 	var/rewinding = 0
+	var/overlay_name = "chain"
 
 /obj/effect/overlay/chain/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	return 1
@@ -326,7 +350,7 @@
 	overlays.len = 0
 	for(var/atom/movable/extremity in list(extremity_A,extremity_B))
 		if(extremity && (loc != extremity.loc))
-			var/image/chain_img = image(icon,src,"chain",dir=get_dir(src,extremity))
+			var/image/chain_img = image(icon,src,"[overlay_name]",dir=get_dir(src,extremity))
 			chain_img.plane = OBJ_PLANE
 			overlays += chain_img
 

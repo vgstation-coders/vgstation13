@@ -235,6 +235,7 @@
 
 	//Get the clone body ready
 	H.dna = R.dna.Clone()
+	H.dna.flavor_text = R.dna.flavor_text
 	H.dna.species = R.dna.species
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, 1)
@@ -284,6 +285,7 @@
 	for(var/datum/language/L in R.languages)
 		H.add_language(L.name)
 	H.real_name = H.dna.real_name
+	H.flavor_text = H.dna.flavor_text
 
 	H.suiciding = 0
 	return 1

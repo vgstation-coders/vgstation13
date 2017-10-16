@@ -127,10 +127,10 @@
 		if(DPV.id_tag == tag_airpump)
 			tag_airpump = null
 			return 1
-		
+
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/isLinkedWith(var/obj/O)
-	
+
 	var/obj/machinery/door/airlock/D = O
 	if(istype(D))
 		if(tag_interior_door  == D.id_tag)
@@ -153,7 +153,7 @@
 		return 1
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
-	
+
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
 	if(istype(DP) && DP.id_tag == tag_airpump)
 		tag_airpump = DP.id_tag
@@ -162,7 +162,7 @@
 	if(istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = UV.id_tag
 		return 1
-	
+
 	var/obj/machinery/door/airlock/D = O
 	if(istype(D))
 		if(context["slot"] == "int")
@@ -171,7 +171,7 @@
 		if(context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1
-	
+
 	var/obj/machinery/airlock_sensor/S = O
 	if(istype(S))
 		if(context["slot"] == "int")
@@ -320,7 +320,7 @@
 		return 1
 
 /obj/machinery/embedded_controller/radio/airlock_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
-	
+
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
 	if(istype(DP) && DP.id_tag == tag_airpump)
 		tag_airpump = DP.id_tag
@@ -329,7 +329,7 @@
 	if(istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = UV.id_tag
 		return 1
-	
+
 	var/obj/machinery/door/airlock/D = O
 	if(istype(D))
 		if(context["slot"] == "int")
@@ -338,7 +338,7 @@
 		if(context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1
-	
+
 	var/obj/machinery/airlock_sensor/S = O
 	if(istype(S))
 		if(context["slot"] == "chamber")
@@ -468,4 +468,125 @@
 			return 1
 		if(context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
+			return 1
+
+
+//Pressure regulator, just a dumbed down airlock controller with a simpler interface that only allows depressurizing/repressurizing a room on demand.
+/obj/machinery/embedded_controller/radio/pressure_regulator
+	name = "Pressure Regulator"
+	tag_secure = 1
+
+	multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+		return {"
+		<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1449]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag")]</li>
+		<li>[format_tag("Pump ID","tag_airpump")]</li>
+		</ul>
+		<b>Sensors:</b>
+		<ul>
+		<li>[format_tag("Chamber","tag_chamber_sensor")]</li>
+		</ul>"}
+
+/obj/machinery/embedded_controller/radio/pressure_regulator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+	if(!program)//we need to initialize the controller to get a program
+		initialize()
+	var/data[0]
+
+	data = list(
+		"chamber_pressure" = round(program.memory["chamber_sensor_pressure"]),
+		"exterior_status" = program.memory["exterior_status"],
+		"interior_status" = program.memory["interior_status"],
+		"processing" = program.memory["processing"],
+	)
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+
+	if (!ui)
+		ui = new(user, src, ui_key, "pressure_regulator.tmpl", name, 470, 290)
+
+		ui.set_initial_data(data)
+
+		ui.open()
+
+		ui.set_auto_update(1)
+
+/obj/machinery/embedded_controller/radio/pressure_regulator/Topic(href, href_list)
+	if(..())
+		return 1
+	var/clean = 0
+	switch(href_list["command"])	//anti-HTML-hacking checks
+		if("cycle_ext")
+			clean = 1
+		if("cycle_int")
+			clean = 1
+		if("abort")
+			clean = 1
+
+	if(clean)
+		program.receive_user_command(href_list["command"])
+
+	return 1
+
+/obj/machinery/embedded_controller/radio/pressure_regulator/linkMenu(var/obj/O)
+	var/dat = ""
+	if(istype(O, /obj/machinery/airlock_sensor))
+		dat += "<a href='?src=\ref[src];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
+	else if(istype(O, /obj/machinery/atmospherics/unary/vent_pump))
+		dat += "<a href='?src=\ref[src];link=1'>\[Link @ pump\]</a>"
+	return dat
+
+/obj/machinery/embedded_controller/radio/pressure_regulator/canLink(var/obj/O, var/list/context)
+	if(istype(O, /obj/machinery/atmospherics))
+		return 1
+
+	if(istype(O, /obj/machinery/airlock_sensor))
+		if(context["slot"] == "chamber")
+			return 1
+
+	return 0
+
+/obj/machinery/embedded_controller/radio/pressure_regulator/unlinkFrom(var/mob/user, var/obj/O)
+	var/obj/machinery/airlock_sensor/S = O
+	if(istype(S))
+		if(tag_chamber_sensor == S.id_tag)
+			tag_chamber_sensor = null
+			return 1
+	var/obj/machinery/atmospherics/unary/vent_pump/UV
+	if(istype(UV) && UV.id_tag == tag_airpump)
+		tag_airpump = null
+		return 1
+	var/obj/machinery/atmospherics/binary/dp_vent_pump/DPV
+	if(istype(DPV))
+		if(DPV.id_tag == tag_airpump)
+			tag_airpump = null
+			return 1
+/obj/machinery/embedded_controller/radio/pressure_regulator/isLinkedWith(var/obj/O)
+	var/obj/machinery/airlock_sensor/S = O
+	if(istype(S))
+		if(tag_chamber_sensor  == S.id_tag)
+			return 1
+	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
+	if(istype(DP) && DP.id_tag == tag_airpump)
+		return 1
+	var/obj/machinery/atmospherics/unary/vent_pump/UV
+	if(istype(UV) && UV.id_tag == tag_airpump)
+		return 1
+
+/obj/machinery/embedded_controller/radio/pressure_regulator/linkWith(var/mob/user, var/obj/O, var/list/context)
+
+	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
+	if(istype(DP) && DP.id_tag == tag_airpump)
+		tag_airpump = DP.id_tag
+		return 1
+	var/obj/machinery/atmospherics/unary/vent_pump/UV
+	if(istype(UV) && UV.id_tag == tag_airpump)
+		tag_airpump = UV.id_tag
+		return 1
+
+	var/obj/machinery/airlock_sensor/S = O
+	if(istype(S))
+		if(context["slot"] == "chamber")
+			tag_chamber_sensor = S.id_tag
+			O:master_tag = id_tag
 			return 1

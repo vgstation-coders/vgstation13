@@ -1,7 +1,7 @@
 //ELITE SYNDICATE STRIKE TEAM
 
 /datum/striketeam/syndicate
-	striketeam_name = "Elite Strike Team"
+	striketeam_name = TEAM_ELITE_SYNDIE
 	faction_name = "the Syndicate"
 	mission = "Purify the station."
 	team_size = 6
@@ -36,11 +36,12 @@
 	new_syndicate_commando.mind_initialize()
 	new_syndicate_commando.mind.assigned_role = "MODE"
 	new_syndicate_commando.mind.special_role = "Syndicate Commando"
-	ticker.mode.traitors |= new_syndicate_commando.mind	//Adds them to current traitor list. Which is really the extra antagonist list.
+	ticker.mode.elite_syndie |= new_syndicate_commando.mind
 	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
 	return new_syndicate_commando
 
 /datum/striketeam/syndicate/greet_commando(var/mob/living/carbon/human/H)
+	H << 'sound/music/elite_syndie_squad.ogg'
 	to_chat(H, "<span class='notice'>You are [H.real_name], an Elite commando, in the service of the Syndicate.</span>")
 	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
 
@@ -67,12 +68,8 @@
 
 	//Mask & Armor
 	equip_to_slot_or_del(new /obj/item/clothing/mask/gas/syndicate(src), slot_wear_mask)
-	if (leader)
-		equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/syndicate/black/red(src), slot_head)
-		equip_to_slot_or_del(new /obj/item/clothing/suit/space/syndicate/black/red(src), slot_wear_suit)
-	else
-		equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/syndicate/black(src), slot_head)
-		equip_to_slot_or_del(new /obj/item/clothing/suit/space/syndicate/black(src), slot_wear_suit)
+	equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/syndicate_elite(src), slot_head)
+	equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/syndicate_elite(src), slot_wear_suit)
 	equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(src), slot_s_store)
 
 	//Backpack
@@ -94,7 +91,7 @@
 
 	var/obj/item/weapon/card/id/syndicate/W = new(src) //Untrackable by AI
 	W.name = "[real_name]'s ID Card"
-	W.icon_state = "id"
+	W.icon_state = "syndie"
 	W.access = get_all_accesses()//They get full station access because obviously the syndicate has HAAAX, and can make special IDs for their most elite members.
 	W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)//Let's add their forged CentCom access and syndicate access.
 	W.assignment = "Syndicate Commando"

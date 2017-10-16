@@ -130,6 +130,9 @@
 	return
 
 /obj/machinery/disposal/deliveryChute/Bumped(var/atom/movable/AM) //Go straight into the chute
+	if(AM.anchored)
+		return
+		
 	if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))
 		return
 

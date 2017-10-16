@@ -692,32 +692,28 @@ obj/item/weapon/circuitboard/rdserver
 
 
 
-/obj/item/weapon/circuitboard/smartfridge/attackby(var/obj/item/weapon/G, var/mob/user)
-	if(issolder(G))
-		var/obj/item/weapon/solder/S = G
-		var/list/static/smartfridge_choices = list(
-			"Food smartfridge" = /obj/item/weapon/circuitboard/smartfridge/,
-			"Secure chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/medbay,
-			"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
-			"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
-			"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
-			"Drinks smartfridge" = /obj/item/weapon/circuitboard/smartfridge/drinks,
-		)
+/obj/item/weapon/circuitboard/smartfridge/solder_improve(mob/user)
+	var/list/static/smartfridge_choices = list(
+		"Food smartfridge" = /obj/item/weapon/circuitboard/smartfridge/,
+		"Secure chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/medbay,
+		"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
+		"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
+		"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
+		"Drinks smartfridge" = /obj/item/weapon/circuitboard/smartfridge/drinks,
+		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
+	)
 
-		var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
-		if(choice)
-			var/obj/item/weapon/circuitboard/smartfridge/to_spawn = smartfridge_choices[choice]
-			if(istype(src, to_spawn))
-				to_chat(user, "<span class = 'notice'>This board is already this type</span>")
-				return
-			if(do_after(user, src, 25))
-				if(S.remove_fuel(1,user))
-					playsound(user.loc, 'sound/items/Welder.ogg', 25, 1)
-					visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [to_spawn]</span>")
-					build_path = initial(to_spawn.build_path)
-					name = initial(to_spawn.name)
-					return
-	..()
+	var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
+	if(choice)
+		var/to_spawn = smartfridge_choices[choice]
+		if(src.type == to_spawn)
+			to_chat(user, "<span class = 'notice'>This board is already this type</span>")
+			return
+		if(do_after(user, src, 25))
+			var/spawned = new to_spawn(get_turf(src))
+			visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned]</span>")
+			qdel(src)
+
 /obj/item/weapon/circuitboard/smartfridge/medbay
 	name = "Circuit Board (Medbay SmartFridge)"
 	desc = "A circuit board used to run a machine that will hold beakers, pills and pill bottles."
@@ -742,6 +738,11 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Drinks Showcase)"
 	desc = "A circuit board used to run a machine that will hold glasses, drinks and condiments."
 	build_path = "/obj/machinery/smartfridge/drinks"
+
+/obj/item/weapon/circuitboard/smartfridge/bloodbank
+	name = "Circuit Board (Refrigerated Blood Bank)"
+	desc = "A circuit board used to run a machine that will hold blood packs."
+	build_path = "/obj/machinery/smartfridge/bloodbank"
 
 /obj/item/weapon/circuitboard/hydroponics
 	name = "Circuit Board (Hydroponics Tray)"
@@ -892,8 +893,8 @@ obj/item/weapon/circuitboard/rdserver
 // Telecomms circuit boards:
 
 /obj/item/weapon/circuitboard/telecomms/receiver
-	name = "Circuit Board (Subspace Receiver)"
-	desc = "A circuit board used to run a machine that recieves subspace transmissions in telecommunications systems."
+	name = "Circuit Board (telecommunications subspace receiver)"
+	desc = "A circuit board used to run a machine that receives subspace transmissions in telecommunications systems."
 	build_path = "/obj/machinery/telecomms/receiver"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
@@ -904,40 +905,37 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/micro_laser" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/hub
-	name = "Circuit Board (Hub Mainframe)"
+	name = "Circuit Board (telecommunications hub)"
 	desc = "A circuit board used to run a machine that works as a hub for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/hub"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 2,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
 
 /obj/item/weapon/circuitboard/telecomms/relay
-	name = "Circuit Board (Relay Mainframe)"
+	name = "Circuit Board (telecommunications relay)"
 	desc = "A circuit board used to run a machine that works as a relay for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/relay"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 2,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
 
 /obj/item/weapon/circuitboard/telecomms/bus
-	name = "Circuit Board (Bus Mainframe)"
+	name = "Circuit Board (telecommunications bus)"
 	desc = "A circuit board used to run a machine that works as a bus for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/bus"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/processor
-	name = "Circuit Board (Processor Unit)"
+	name = "Circuit Board (telecommunications processor)"
 	desc = "A circuit board used to run a machine that works as a processing unit for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/processor"
 	board_type = MACHINE
@@ -947,29 +945,26 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/treatment" = 2,
 							"/obj/item/weapon/stock_parts/subspace/analyzer" = 1,
-							"/obj/item/stack/cable_coil" = 2,
 							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/server
-	name = "Circuit Board (Telecommunication Server)"
+	name = "Circuit Board (telecommunications server)"
 	desc = "A circuit board used to run a machine that works as a frequency server for a telecommunications system."
 	build_path = "/obj/machinery/telecomms/server"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/broadcaster
-	name = "Circuit Board (Subspace Broadcaster)"
+	name = "Circuit Board (telecommunications subspace broadcaster)"
 	desc = "A circuit board used to run a machine that sends subspace transmissions in telecommunications systems."
 	build_path = "/obj/machinery/telecomms/broadcaster"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=2"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/stack/cable_coil" = 1,
 							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
 							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
 							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)

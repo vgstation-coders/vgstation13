@@ -301,6 +301,7 @@ SELECT
     players.age,
     players.species,
     players.language,
+    players.flavor_text,
     players.med_record,
     players.sec_record,
     players.gen_record,
@@ -390,6 +391,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	age 				= text2num(preference_list["age"])
 	species				= preference_list["species"]
 	language			= preference_list["language"]
+	flavor_text			= preference_list["flavor_text"]
 	med_record			= preference_list["med_record"]
 	sec_record			= preference_list["sec_record"]
 	gen_record			= preference_list["gen_record"]
@@ -564,6 +566,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	S["job_engsec_low"]		>> job_engsec_low
 
 	//Miscellaneous
+	S["flavor_text"]		>> flavor_text
 	S["med_record"]			>> med_record
 	S["sec_record"]			>> sec_record
 	S["gen_record"]			>> gen_record
@@ -703,77 +706,82 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	var/altTitles
 
+	// The FUCK is this shit
 	for(var/a in player_alt_titles)
 		altTitles += "[a]:[player_alt_titles[a]];"
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))           // WHEN ADDING NEW COLUMNS, REMEMBER THE BLOCK AT THE END OF THE LINE --->
-		if(!check.NextRow())          //1         2           3         4          5               6       7    8        9         10          11          12          13                 14            15                   16                   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, random_body) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                                  //1         2           3         4          5               6       7    8        9         10          11          12          13                 14            15                   16
-                                  ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, be_random_body)
+	if(check.Execute(db))
+		if(!check.NextRow())
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, random_body)\
+			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?)",
+			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, be_random_body)
 			if(!q.Execute(db))
-				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
-			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,random_body=? WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, be_random_body, ckey, slot)
+			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,  gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=?,random_body=?   WHERE player_ckey = ? AND player_slot = ?",\
+									  metadata,   real_name,  be_random_name, gender,  age,  species,  language,  flavor_text,  med_record,  sec_record,  gen_record,  altTitles,          disabilities,  nanotrasen_relation,  be_random_body,       ckey,               slot)
 			if(!q.Execute(db))
-				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("UpdatePlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("UpdatePlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Character")
 	else
-		message_admins("Error #:[check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("SelectPlayer: Error #:[check.Error()] - [check.ErrorMsg()]")
+		WARNING("SelectPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM body WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT INTO body (player_ckey,player_slot,hair_red,hair_green,hair_blue,facial_red,facial_green,facial_blue,skin_tone,hair_style_name,facial_style_name,eyes_red,eyes_green,eyes_blue,underwear,backbag) \
-					VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ckey, slot, r_hair, g_hair, b_hair, r_facial, g_facial, b_facial, s_tone, h_style, f_style, r_eyes, g_eyes, b_eyes, underwear, backbag)
+			q.Add("INSERT INTO body (player_ckey, player_slot, hair_red, hair_green, hair_blue, facial_red, facial_green, facial_blue, skin_tone, hair_style_name, facial_style_name, eyes_red, eyes_green, eyes_blue, underwear, backbag) \
+			                 VALUES (?,           ?,           ?,        ?,          ?,         ?,          ?,            ?,           ?,         ?,               ?,                 ?,        ?,          ?,         ?,         ?)",
+			                         ckey,        slot,        r_hair,   g_hair,     b_hair,    r_facial,   g_facial,     b_facial,    s_tone,    h_style,         f_style,           r_eyes,   g_eyes,     b_eyes,    underwear, backbag)
 			if(!q.Execute(db))
-				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("InsertBody: Error #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("InsertBody: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Body")
 		else
-			q.Add("UPDATE body SET hair_red=?,hair_green=?,hair_blue=?,facial_red=?,facial_green=?,facial_blue=?,skin_tone=?,hair_style_name=?,facial_style_name=?,eyes_red=?,eyes_green=?,eyes_blue=?,underwear=?,backbag=? WHERE player_ckey = ? AND player_slot = ?",\
-									r_hair, g_hair, b_hair, r_facial, g_facial, b_facial, s_tone, h_style, f_style, r_eyes, g_eyes, b_eyes, underwear, backbag, ckey, slot)
+			q.Add("UPDATE body SET hair_red=?, hair_green=?, hair_blue=?, facial_red=?, facial_green=?, facial_blue=?, skin_tone=?, hair_style_name=?, facial_style_name=?, eyes_red=?, eyes_green=?, eyes_blue=?, underwear=?, backbag=? WHERE player_ckey = ? AND player_slot = ?",\
+			                       r_hair,     g_hair,       b_hair,      r_facial,     g_facial,       b_facial,      s_tone,      h_style,           f_style,             r_eyes,     g_eyes,       b_eyes,      underwear,   backbag,        ckey,               slot)
 			if(!q.Execute(db))
-				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("UpdateBody: Error #:[q.Error()] - [q.ErrorMsg()]")
+				WARNING("UpdateBody: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Body")
 	else
-		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("SelectBody: Error #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("SelectBody: Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM jobs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
+		    //                       1           2           3                4                 5                6                7               8              9              10              11             12
 			q.Add("INSERT INTO jobs (player_ckey,player_slot,alternate_option,job_civilian_high,job_civilian_med,job_civilian_low,job_medsci_high,job_medsci_med,job_medsci_low,job_engsec_high,job_engsec_med,job_engsec_low) \
-					VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", ckey, slot, alternate_option, job_civilian_high, job_civilian_med, job_civilian_low, job_medsci_high, job_medsci_med, job_medsci_low, job_engsec_high, job_engsec_med, job_engsec_low)
+					         VALUES (?,          ?,          ?,               ?,                ?,               ?,               ?,              ?,             ?,             ?,              ?,             ?)", \
+							        ckey,        slot,       alternate_option,job_civilian_high,job_civilian_med,job_civilian_low,job_medsci_high,job_medsci_med,job_medsci_low,job_engsec_high,job_engsec_med,job_engsec_low)
 			if(!q.Execute(db))
-				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("InsertJob: Error #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("InsertJob: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Job list")
 		else
+		    //                     1                  2                   3                  4                  5                 6                7                8                 9                10
 			q.Add("UPDATE jobs SET alternate_option=?,job_civilian_high=?,job_civilian_med=?,job_civilian_low=?,job_medsci_high=?,job_medsci_med=?,job_medsci_low=?,job_engsec_high=?,job_engsec_med=?,job_engsec_low=? WHERE player_ckey = ? AND player_slot = ?",\
-									alternate_option, job_civilian_high, job_civilian_med, job_civilian_low, job_medsci_high, job_medsci_med, job_medsci_low, job_engsec_high, job_engsec_med, job_engsec_low, ckey, slot)
+								   alternate_option,  job_civilian_high,  job_civilian_med,  job_civilian_low,  job_medsci_high,  job_medsci_med,  job_medsci_low,  job_engsec_high,  job_engsec_med,  job_engsec_low,        ckey,               slot)
 			if(!q.Execute(db))
-				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("UpdateJob: Error #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("UpdateJob: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Job List")
 	else
-		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("SelectJobs: Error #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("SelectJobs: Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM limbs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
@@ -781,44 +789,38 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		if(!check.NextRow())
 			q.Add("INSERT INTO limbs (player_ckey, player_slot) VALUES (?,?)", ckey, slot)
 			if(!q.Execute(db))
-				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+				message_admins("InsertLimb: Error #: [q.Error()] - [q.ErrorMsg()]")
+				WARNING("InsertLimb: Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			for(var/stuff in organ_data)
 				q.Add("UPDATE limbs SET [stuff]=? WHERE player_ckey = ? AND player_slot = ?", organ_data[stuff], ckey, slot)
 				if(!q.Execute(db))
-					message_admins("Error #; [q.Error()] - [q.ErrorMsg()]")
-					WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+					message_admins("UpdateLimb: Error #; [q.Error()] - [q.ErrorMsg()]")
+					WARNING("UpdateLimb: Error #:[q.Error()] - [q.ErrorMsg()]")
 					return 0
 			to_chat(user, "Created Limbs")
 		else
 			for(var/stuff in organ_data)
 				q.Add("UPDATE limbs SET [stuff] = ? WHERE player_ckey = ? AND player_slot = ?", organ_data[stuff], ckey, slot)
 				if(!q.Execute(db))
-					message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-					WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+					message_admins("UpdateOnlyLimb: Error #: [q.Error()] - [q.ErrorMsg()]")
+					WARNING("UpdateOnlyLimb: Error #:[q.Error()] - [q.ErrorMsg()]")
 					return 0
 			to_chat(user, "Updated Limbs")
 	else
-		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
-		return 0
-
-	check.Add("DELETE FROM client_roles WHERE ckey=? AND slot=?", ckey, slot)
-	if(!check.Execute(db))
-		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("SelectPlayerLimbsForSave: Error #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("SelectPlayerLimbsForSave: Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	for(var/role_id in roles)
 		if(!(roles[role_id] & ROLEPREF_SAVE))
 			continue
 		q = new
-		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_VALMASK))
-		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_VALMASK])")
+		q.Add("INSERT OR REPLACE INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_VALMASK))
+		//testing("INSERT OR REPLACE INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_VALMASK])")
 		if(!q.Execute(db)) // This never triggers on error, for some reason.
-			message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
-			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
+			message_admins("ClientRoleInsert: Error #: [q.Error()] - [q.ErrorMsg()]")
+			WARNING("ClientRoleInsert: Error #:[q.Error()] - [q.ErrorMsg()]")
 			return 0
 
 	return 1
@@ -843,6 +845,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	S["age"]                   << age
 	S["species"]               << species
 	S["language"]              << language
+	S["flavor_text"]           << flavor_text
 	S["med_record"]            << med_record
 	S["sec_record"]            << sec_record
 	S["gen_record"]            << gen_record

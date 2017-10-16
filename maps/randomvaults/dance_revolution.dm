@@ -24,6 +24,7 @@
 	var/list/instruction_effects = list()
 
 	var/process_delay = 15 //in deciseconds
+	var/min_process_delay = 10
 
 	//Stats!
 	var/attempts = 0
@@ -68,11 +69,11 @@
 	wins++
 
 	spawn()
-		for(var/obj/effect/ddr_loot/E in range(7, src))
-			var/turf/T = get_turf(E)
-			T.visible_message("<span class='danger'>\The [T] melts away!</span>")
-			T.ChangeTurf(/turf/simulated/floor/plating)
-			qdel(E)
+		for(var/turf/T in trange(2, src))
+			if(T.density)
+				T.visible_message("<span class='danger'>\The [T] melts away!</span>")
+				T.ChangeTurf(/turf/simulated/floor/plating)
+
 			sleep(10)
 
 /obj/structure/dance_dance_revolution/proc/lose()
@@ -126,7 +127,7 @@
 		return win()
 
 	if((progress_counter % 10) == 0)
-		process_delay = max(process_delay-1, 10)
+		process_delay = max(process_delay-1, min_process_delay)
 		visible_message("<span class='info'>\The [src] speeds up!</span>")
 
 	//Give new task
@@ -153,6 +154,11 @@
 	if(dancer)
 		to_chat(user, "<span class='info'>It's [dancer]'s turn! Wait until \he is done dancing.</span>")
 		return
+	var/obj/machinery/media/jukebox/juke = locate(/obj/machinery/media/jukebox) in range(2)
+	if(istype(juke))
+		if(!juke.playing)
+			to_chat(user, "<span class='info'>It's no fun dancing without music. Turn on that [juke]!</span>")
+			return
 
 	dancer = user
 	user.visible_message("<span class='notice'>[user] activates \the [src]!</span>", "<span class='info'>You activate \the [src].</span>")

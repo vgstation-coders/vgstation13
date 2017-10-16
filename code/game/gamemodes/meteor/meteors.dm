@@ -335,11 +335,11 @@
 /obj/item/projectile/meteor/Destroy()
 	..()
 
-/obj/effect/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
+/obj/item/projectile/meteor/gib    //non explosive meteor, appears to be a corpse spinning in space before impacting something and spraying gibs everywhere
 	name = "human corpse"
 	icon_state = "human"
 
-/obj/effect/meteor/gib/to_bump(atom/A)
+/obj/item/projectile/meteor/gib/to_bump(atom/A)
 
 	if(loc == null)
 		return

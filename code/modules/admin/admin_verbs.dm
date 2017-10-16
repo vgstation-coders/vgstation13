@@ -153,7 +153,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
-	/client/proc/kill_air,
 	/client/proc/cmd_debug_make_powernets,
 	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
@@ -186,10 +185,13 @@ var/list/admin_verbs_debug = list(
 	/client/proc/set_teleport_pref,
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
+	/client/proc/check_striketeams,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,
-	/client/proc/view_runtimes
+	/client/proc/view_runtimes,
+	/client/proc/cmd_mass_modify_object_variables,
+	/client/proc/emergency_shuttle_panel,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -258,7 +260,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/callproc,
 	/client/proc/Debug2,
 	/client/proc/reload_admins,
-	/client/proc/kill_air,
 	/client/proc/cmd_debug_make_powernets,
 	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
@@ -752,20 +753,6 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z] say \"[message]\"")
 	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>", 1)
 	feedback_add_details("admin_verb","OT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/kill_air() // -- TLE
-	set category = "Debug"
-	set name = "Kill Air"
-	set desc = "Toggle Air Processing"
-	if(air_processing_killed)
-		air_processing_killed = 0
-		to_chat(usr, "<b>Enabled air processing.</b>")
-	else
-		air_processing_killed = 1
-		to_chat(usr, "<b>Disabled air processing.</b>")
-	feedback_add_details("admin_verb","KA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] used 'kill air'.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] used 'kill air'.</span>", 1)
 
 /client/proc/deadmin_self()
 	set name = "De-admin self"

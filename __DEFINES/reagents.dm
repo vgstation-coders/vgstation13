@@ -135,6 +135,7 @@
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
+#define ROYALJELLY			"royaljelly"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
@@ -324,6 +325,7 @@
 #define LITHOTORCRAZINE "lithotorcrazine"
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
+#define PINTPOINTER		"pintpointer"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

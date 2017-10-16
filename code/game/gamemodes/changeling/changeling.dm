@@ -305,6 +305,10 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		if(generate_objectives)
 			ticker.mode.forge_changeling_objectives(src)
+			var/obj_count = 1
+			for(var/datum/objective/objective in objectives)
+				to_chat(current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
+				obj_count++
 		return 1
 	return 0
 

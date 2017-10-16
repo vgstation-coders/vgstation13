@@ -8,6 +8,8 @@
 #define START_PROCESSING(Processor, Datum) if (!Datum.isprocessing) {Datum.isprocessing = 1;Processor.processing += Datum}
 #define STOP_PROCESSING(Processor, Datum) Datum.isprocessing = 0;Processor.processing -= Datum
 
+#define SS_READY(SS) (SS && SS.initialized) //Checks if the given subsystem is initialized, without the possibility of runtiming if it hasn't been created yet.
+
 //SubSystem flags (Please design any new flags so that the default is off, to make adding flags to subsystems easier)
 
 //subsystem should fire during pre-game lobby.

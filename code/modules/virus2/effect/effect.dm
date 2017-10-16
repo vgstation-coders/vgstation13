@@ -968,7 +968,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	stage = 3
 
 /datum/disease2/effect/teratoma/activate(var/mob/living/carbon/mob)
-	var/organ_type = pick(existing_typesof(/obj/item/organ) + /obj/item/stack/teeth)
+	var/organ_type = pick(existing_typesof(/obj/item/organ/internal) + /obj/item/stack/teeth)
 	var/obj/item/spawned_organ = new organ_type(get_turf(mob))
 	mob.visible_message("<span class='warning'>\A [spawned_organ.name] is extruded from \the [mob]'s body and falls to the ground!</span>","<span class='warning'>\A [spawned_organ.name] is extruded from your body and falls to the ground!</span>")
 
@@ -1473,7 +1473,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		var/mob/living/carbon/human/H = mob
 		if(H.get_heart())
 			H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
-			var/obj/item/organ/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
+			var/obj/item/organ/internal/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
 			var/list/spawn_turfs = list()
 			for(var/turf/T in orange(1, H))
 				if(!T.density)
@@ -1483,7 +1483,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
 			heart_attack.appearance = blown_heart.appearance
 			heart_attack.icon_dead = "heart-off"
-			heart_attack.environment_smash = 0
+			heart_attack.environment_smash_flags = 0
 			heart_attack.melee_damage_lower = 15
 			heart_attack.melee_damage_upper = 15
 			heart_attack.health = 50

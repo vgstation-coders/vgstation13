@@ -9,6 +9,8 @@
 	w_type=RECYK_ELECTRONIC
 	var/list/part = null
 	var/sabotaged = 0 //Emagging limbs can have repercussions when installed as prosthetics.
+	var/brute_dam = 0
+	var/burn_dam = 0
 
 /*
 /obj/item/robot_parts/recycle(var/datum/materials/rec)

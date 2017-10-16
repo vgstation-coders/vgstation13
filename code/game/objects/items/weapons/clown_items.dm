@@ -97,6 +97,7 @@
 	var/honk_delay = 20
 	var/last_honk_time = 0
 	var/vary_pitch = 1
+	var/can_honk_baton = 1
 
 /obj/item/weapon/bikehorn/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
@@ -145,7 +146,17 @@
 	attack_verb = list("quacks")
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
+	can_honk_baton = 0
 
+/obj/item/weapon/bikehorn/baton
+	name = "honk baton"
+	desc = "A stun baton for honking people with."
+	icon = 'icons/obj/weapons.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "honkbaton"
+	item_state = "honkbaton"
+	can_honk_baton = 0
+	
 #define TELE_COOLDOWN 5 SECONDS
 
 /obj/item/weapon/bikehorn/rubberducky/quantum

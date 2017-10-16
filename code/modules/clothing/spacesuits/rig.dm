@@ -8,6 +8,7 @@
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
 	var/brightness_on = 4 //Luminosity when on. If modified, do NOT run update_brightness() directly
+	var/color_on = null //Color when on.
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
@@ -19,9 +20,8 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/rig/New()
+	check_light() //Needed to properly handle helmets with no lights
 	..()
-	//Needed to properly handle helmets with no lights
-	check_light()
 	//Useful for helmets with special starting conditions (namely, starts lit)
 	update_brightness()
 	update_icon()
@@ -50,7 +50,7 @@
 
 
 	if(on)
-		set_light(brightness_on)
+		set_light(brightness_on,0,color_on)
 	else
 		set_light(0)
 	update_icon()
@@ -176,6 +176,36 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 	species_restricted = null
+
+//Elite Strike Team rig
+/obj/item/clothing/head/helmet/space/rig/syndicate_elite
+	name = "syndicate elite hardsuit helmet"
+	desc = "The result of reverse-engineered deathsquad technology combined with nuclear operative hardsuit."
+	icon_state = "rig0-syndicate_elite"
+	item_state = "syndicate-helm-black"
+	_color = "syndicate_elite"
+	armor = list(melee = 62, bullet = 52, laser = 32,energy = 17, bomb = 37, bio = 100, rad = 60)
+	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	siemens_coefficient = 0.4
+	clothing_flags = PLASMAGUARD
+
+	species_restricted = null
+
+/obj/item/clothing/suit/space/rig/syndicate_elite
+	icon_state = "rig-syndicate_elite"
+	name = "syndicate elite hardsuit"
+	desc = "The result of reverse-engineered deathsquad technology combined with nuclear operative hardsuit."
+	item_state = "syndicate-black"
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	w_class = W_CLASS_MEDIUM
+	armor = list(melee = 70, bullet = 55, laser = 40, energy = 20, bomb = 47, bio = 100, rad = 60)
+	allowed = list(/obj/item/weapon/gun/osipr,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
+	siemens_coefficient = 0.5
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	clothing_flags = PLASMAGUARD
+
+	species_restricted = null
+
 
 //Wizard Rig
 /obj/item/clothing/head/helmet/space/rig/wizard
@@ -336,6 +366,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "nazi"
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	color_on = "#FF2222"
 
 /obj/item/clothing/suit/space/rig/nazi
 	name = "nazi hardsuit"

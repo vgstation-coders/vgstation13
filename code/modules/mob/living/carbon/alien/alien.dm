@@ -82,7 +82,7 @@ In all, this is a lot like the monkey code. /N
 	return plasma
 
 /mob/living/carbon/alien/eyecheck()
-	return 2
+	return EYECHECK_FULL_PROTECTION
 
 /mob/living/carbon/alien/earprot()
 	return 1
@@ -266,9 +266,7 @@ In all, this is a lot like the monkey code. /N
 
 	Knockdown(10)
 
-	var/datum/effect/effect/system/spark_spread/SparkSpread = new
-	SparkSpread.set_up(5, 1, loc)
-	SparkSpread.start()
+	spark(loc, 5)
 
 	return damage/2 //Fuck this I'm not reworking your abortion of a proc, here's a copy-paste with not fucked code
 

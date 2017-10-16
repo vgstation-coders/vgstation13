@@ -54,7 +54,7 @@
 
 
 	if(powerlevel > 0)
-		if(isalien(target) || ishuman(target) || ismonkey(target))
+		if(isalien(target) || ishuman(target) || ismonkey(target) || ismartian(target))
 			var/stunprob = get_stun_chance()
 			var/power = powerlevel + rand(0,3)
 
@@ -63,9 +63,7 @@
 
 				stun_mob(target, power)
 
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, target)
-				s.start()
+				spark(src, 5)
 
 				if (prob(stunprob) && powerlevel >= 8)
 					target.adjustFireLoss(powerlevel * rand(6,10))

@@ -82,50 +82,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		var/i
 		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-
-			// Make a list with each index containing one variable, to be given to the proc
-			class = input("What kind of variable?","Variable Type") in list("text","num","type","reference","mob reference","icon","file","client","mob's area", holder.marked_datum ? "marked datum ([holder.marked_datum.type])" : null, "CANCEL")
-
-			if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-				class = "marked_datum"
-
-			switch(class)
-				if("CANCEL")
-					return
-
-				if("text")
-					lst[i] = input("Enter new text:","Text",null) as text
-
-				if("num")
-					lst[i] = input("Enter new number:","Num",0) as num
-
-				if("type")
-					lst[i] = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
-
-				if("reference")
-					lst[i] = input("Select reference:","Reference",src) as mob|obj|turf|area in world
-
-				if("mob reference")
-					lst[i] = input("Select reference:","Reference",usr) as mob in world
-
-				if("file")
-					lst[i] = input("Pick file:","File") as file
-
-				if("icon")
-					lst[i] = input("Pick icon:","Icon") as icon
-
-				if("client")
-					var/list/keys = list()
-					for(var/mob/M in mob_list)
-						keys += M.client
-					lst[i] = input("Please, select a player!", "Selection", null, null) as null|anything in keys
-
-				if("mob's area")
-					var/mob/temp = input("Select mob", "Selection", usr) as mob in world
-					lst[i] = temp.loc
-
-				if("marked_datum")
-					lst[i] = holder.marked_datum
+			lst[i] = variable_set(src)
 
 		if(targetselected)
 			if(!target)
@@ -153,7 +110,6 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		var/lst[] // List reference
 		lst = new/list() // Make the list
 		var/returnval = null
-		var/class = null
 
 		var/procname = input("Proc path, eg: /proc/fake_blood","Path:", null) as text|null
 		if(!procname)
@@ -173,50 +129,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		var/i
 		for(i = 1, i < argnum + 1, i++) // Lists indexed from 1 forwards in byond
-
-			// Make a list with each index containing one variable, to be given to the proc
-			class = input("What kind of variable?","Variable Type") in list("text", "num", "type", "reference", "mob reference", "icon", "file", "client", "mob's area", holder.marked_datum ? "marked datum ([holder.marked_datum.type])" : null, "CANCEL")
-
-			if(holder.marked_datum && class == "marked datum ([holder.marked_datum.type])")
-				class = "marked_datum"
-
-			switch(class)
-				if("CANCEL")
-					return
-
-				if("text")
-					lst[i] = input("Enter new text:","Text",null) as text
-
-				if("num")
-					lst[i] = input("Enter new number:","Num",0) as num
-
-				if("type")
-					lst[i] = input("Enter type:","Type") in typesof(/obj,/mob,/area,/turf)
-
-				if("reference")
-					lst[i] = input("Select reference:","Reference",src) as mob|obj|turf|area in world
-
-				if("mob reference")
-					lst[i] = input("Select reference:","Reference",usr) as mob in world
-
-				if("file")
-					lst[i] = input("Pick file:","File") as file
-
-				if("icon")
-					lst[i] = input("Pick icon:","Icon") as icon
-
-				if("client")
-					var/list/keys = list()
-					for(var/mob/M in mob_list)
-						keys += M.client
-					lst[i] = input("Please, select a player!", "Selection", null, null) as null|anything in keys
-
-				if("mob's area")
-					var/mob/temp = input("Select mob", "Selection", usr) as mob in world
-					lst[i] = temp.loc
-
-				if("marked_datum")
-					lst[i] = holder.marked_datum
+			lst[i] = variable_set(src)
 
 		log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
 		returnval = call(target,procname)(arglist(lst)) // Pass the lst as an argument list to the proc
@@ -823,7 +736,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	var/list/machineinstances = list()
 	for(var/atom/typepath in machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -836,7 +749,7 @@ Pressure: [env.return_pressure()]"}
 	F << "type,count"
 	machineinstances.len = 0
 	for(var/atom/typepath in power_machines)
-		if(!typepath.type in machineinstances)
+		if(!(typepath.type in machineinstances))
 			machineinstances["[typepath.type]"] = 0
 		machineinstances["[typepath.type]"] += 1
 	for(var/T in machineinstances)
@@ -1297,11 +1210,7 @@ client/proc/check_convertables()
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches[0]
-
-	for(var/path in typesof(/datum) - typesof(/turf))
-		if(findtext("[path]", object))
-			matches += path
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area)
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1348,6 +1257,18 @@ client/proc/check_convertables()
 	else
 		spiral_block(epicenter,max_range,0,1)
 
+/client/proc/check_striketeams()
+	set name = "Check StrikeTeams"
+	set category = "Debug"
+
+	if(!sent_strike_teams || sent_strike_teams.len <= 0)
+		to_chat(usr, "<span class='warning'>No strike teams have been sent so far!</span>")
+		return
+
+	var/teamToDebug = input(usr,"Choose a Strike Team.", "Check StrikeTeams") in sent_strike_teams
+
+	debug_variables(sent_strike_teams[teamToDebug])
+
 /client/proc/view_runtimes()
 	set category = "Debug"
 	set name = "View Runtimes"
@@ -1357,3 +1278,13 @@ client/proc/check_convertables()
 		return
 
 	error_cache.show_to(src)
+
+/client/proc/emergency_shuttle_panel()
+	set name = "Emergency Shuttle Panel"
+	set category = "Debug"
+	if(holder)
+		holder.emergency_shuttle_panel()
+		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
+	feedback_add_details("admin_verb","ESP")
+	return
+

@@ -73,7 +73,7 @@
 /var/const/Mostly for admin fun times.*/
 /var/const/access_cent_general = 101//General facilities.
 /var/const/access_cent_thunder = 102//Thunderdome.
-/var/const/access_cent_specops = 103//Death Commando.
+/var/const/access_cent_specops = 103//Deathsquad.
 /var/const/access_cent_medical = 104//Medical/Research
 /var/const/access_cent_living = 105//Living quarters.
 /var/const/access_cent_storage = 106//Generic storage areas.

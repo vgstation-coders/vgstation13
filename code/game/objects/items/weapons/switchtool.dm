@@ -16,6 +16,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=5"
+	var/hmodule = null
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
@@ -46,9 +47,9 @@
 		var/new_type = text2path(get_module_type(module))
 		stored_modules[module] = new new_type(src)
 
-/obj/item/weapon/switchtool/examine()
+/obj/item/weapon/switchtool/examine(mob/user)
 	..()
-	to_chat(usr, "This one is capable of holding [get_formatted_modules()].")
+	to_chat(user, "This one is capable of holding [get_formatted_modules()].")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
 	if(!user)
@@ -134,6 +135,7 @@
 
 	playsound(get_turf(src), deploy_sound, 10, 1)
 	deployed = stored_modules[module]
+	hmodule = get_module_name(module)
 	deployed.cant_drop = 1
 	overlays += get_module_name(module)
 	w_class = max(w_class, deployed.w_class)
@@ -213,7 +215,6 @@
 		lighter.lit = 1
 		..()
 
-
 #define BT 1
 #define ENGI 2
 #define CB 4
@@ -224,24 +225,25 @@
 //Unique RD switchtool, modules cannot be removed nor inserted to upgrade, but require techdisks to aquire new modules.
 /obj/item/weapon/switchtool/holo
 	name = "holo switchtool"
+	icon = 'icons/obj/Htool_cyan.dmi'
 	icon_state = "holo_switchtool"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/HTool_cyan.dmi', "right_hand" = 'icons/mob/in-hand/right/HTool_cyan.dmi')
 	item_state = "Hswitchtool"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtools.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtools.dmi')
 	desc = "A switchtool that can take on the form of nearly any tool. Its experimental hardlight emitter requires tech disks to help define its shape."
 	var/brightness_max = 4
 	var/brightness_min = 2
 	deploy_sound = "sound/weapons/switchsound.ogg"
 	undeploy_sound = "sound/weapons/switchsound.ogg"
-	//deploy_sound = "sound/weapons/saberon.ogg"
-	//undeploy_sound = "sound/weapons/saberoff.ogg"
 	light_color =  LIGHT_COLOR_CYAN
 	mech_flags = MECH_SCAN_ILLEGAL
 	removing_item = null
 	var/has_tech = 0
+	var/hcolor = "CYAN"
+	starting_materials = null
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
 						"/obj/item/device/flashlight:Light" = null,
-						"/obj/item/weapon/scalpel/laser/tier1:Scalpel" = null)
+						"/obj/item/weapon/scalpel/laser:Scalpel" = null)
 
 //Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
 /obj/item/weapon/switchtool/holo/add_module(var/obj/item/D, mob/user)
@@ -253,7 +255,7 @@
 			if(!(has_tech & BT))
 				stored_modules["/obj/item/weapon/circular_saw:Circular saw"] = new /obj/item/weapon/circular_saw(src)
 				stored_modules["/obj/item/weapon/surgicaldrill:Surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
-				stored_modules["/obj/item/weapon/cautery:Cautery"] = new /obj/item/weapon/cautery(src)
+				stored_modules["/obj/item/weapon/cautery/laser:Cautery"] = new /obj/item/weapon/cautery(src)
 				stored_modules["/obj/item/weapon/hemostat:Hemostat"] = new /obj/item/weapon/hemostat(src)
 				stored_modules["/obj/item/weapon/retractor:Retractor"] = new /obj/item/weapon/retractor(src)
 				stored_modules["/obj/item/weapon/bonesetter:Bonesetter"] = new /obj/item/weapon/bonesetter(src)
@@ -303,7 +305,7 @@
 				has_tech |= PS
 				return TRUE
 			alreadyhas = "Power Storage"
-			
+
 		if(alreadyhas)
 			to_chat(user, "The holo switchtool already has [alreadyhas] technology!")
 
@@ -314,45 +316,52 @@
 #undef NT
 #undef PS
 
+/obj/item/weapon/switchtool/holo/verb/togglecolor()
+	set name = "Toggle Color"
+	set category = "Object"
+
+	if(hcolor == "CYAN")
+		hcolor = "PINK"
+		colorchange()
+	else if(hcolor == "PINK")
+		hcolor = "GREEN"
+		colorchange()
+	else if(hcolor == "GREEN")
+		hcolor = "ORANGE"
+		colorchange()
+	else if(hcolor == "ORANGE")
+		hcolor = "CYAN"
+		colorchange()
+
+/obj/item/weapon/switchtool/holo/proc/colorchange()
+	if(hcolor == "CYAN")
+		icon = 'icons/obj/Htool_cyan.dmi'
+		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/HTool_cyan.dmi', "right_hand" = 'icons/mob/in-hand/right/HTool_cyan.dmi')
+		light_color =  LIGHT_COLOR_CYAN
+	else if(hcolor == "PINK")
+		icon = 'icons/obj/Htool_pink.dmi'
+		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/HTool_pink.dmi', "right_hand" = 'icons/mob/in-hand/right/HTool_pink.dmi')
+		light_color =  LIGHT_COLOR_PINK
+	else if(hcolor == "GREEN")
+		icon = 'icons/obj/Htool_green.dmi'
+		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/HTool_green.dmi', "right_hand" = 'icons/mob/in-hand/right/HTool_green.dmi')
+		light_color =  LIGHT_COLOR_GREEN
+	else if(hcolor == "ORANGE")
+		icon = 'icons/obj/Htool_orange.dmi'
+		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/HTool_orange.dmi', "right_hand" = 'icons/mob/in-hand/right/HTool_orange.dmi')
+		light_color =  LIGHT_COLOR_ORANGE
+
+	if(istype(loc, /mob))
+		var/mob/M = loc
+		M.update_inv_hands()
+	update_icon()
+	set_light()
+
 //for the inhand sprite changes
-//Big shitty wall of else if quality code
 /obj/item/weapon/switchtool/holo/update_icon()
-	if(istype(deployed, /obj/item/device/flashlight))
-		item_state = "flashlight"
-	else if(istype(deployed, /obj/item/weapon/scalpel))
-		item_state = "scalpel"
-	else if(istype(deployed, /obj/item/weapon/circular_saw))
-		item_state = "circularsaw"
-	else if(istype(deployed, /obj/item/weapon/surgicaldrill))
-		item_state = "drill"
-	else if(istype(deployed, /obj/item/weapon/cautery))
-		item_state = "cautery"
-	else if(istype(deployed, /obj/item/weapon/hemostat))
-		item_state = "hemostat"
-	else if(istype(deployed, /obj/item/weapon/retractor))
-		item_state = "retractor"
-	else if(istype(deployed, /obj/item/weapon/bonesetter))
-		item_state = "bonesetter"
-	else if(istype(deployed, /obj/item/weapon/screwdriver))
-		item_state = "screwdriver"
-	else if(istype(deployed, /obj/item/weapon/wrench))
-		item_state = "wrench"
-	else if(istype(deployed, /obj/item/weapon/wirecutters))
-		item_state = "wirecutters"
-	else if(istype(deployed, /obj/item/weapon/crowbar))
-		item_state = "crowbar"
-	else if(istype(deployed, /obj/item/device/multitool))
-		item_state = "multitool"
-	else if(istype(deployed, /obj/item/weapon/weldingtool))
-		item_state = "weldingtool"
-	else if(istype(deployed, /obj/item/weapon/shield/energy))
-		item_state = "shield"
-	else if(istype(deployed, /obj/item/weapon/melee/energy/sword/activated))
-		item_state = "sword"
-	else if(istype(deployed, /obj/item/weapon/melee/energy/hfmachete/activated))
-		item_state = "sharper sword"
-	else if(istype(deployed, /obj/item/weapon/soap/holo))
-		item_state = "uvsoap"
+	if(deployed)
+		item_state = "[hmodule]"
+		deployed.appearance = appearance
 	else
 		item_state = "Hswitchtool"
 
@@ -371,6 +380,7 @@
 	if(!..())
 		return FALSE
 	set_light(brightness_min)
+	overlays += "[hmodule]"
 	if(istype(deployed, /obj/item/device/flashlight))
 		set_light(brightness_max)
 
@@ -387,3 +397,40 @@
 	..()
 	set_light(0)
 
+
+//switchtools maxed out intended for testing/spawning and maybe as loot. Don't forget to add any more tools added to these lists later
+/obj/item/weapon/switchtool/holo/maxed
+	stored_modules = list(
+						"/obj/item/device/flashlight:Light" = null,
+						"/obj/item/weapon/scalpel/laser:Scalpel" = null,
+						"/obj/item/weapon/circular_saw:Circular saw" = null,
+						"/obj/item/weapon/surgicaldrill:Surgical drill" = null,
+						"/obj/item/weapon/cautery/laser:Cautery" = null,
+						"/obj/item/weapon/hemostat:Hemostat" = null,
+						"/obj/item/weapon/retractor:Retractor" = null,
+						"/obj/item/weapon/bonesetter:Bonesetter" = null,
+						"/obj/item/weapon/screwdriver:Screwdriver" = null,
+						"/obj/item/weapon/wrench:Wrench" = null,
+						"/obj/item/weapon/wirecutters:Wirecutters" = null,
+						"/obj/item/weapon/crowbar:Crowbar" = null,
+						"/obj/item/device/multitool:Multitool" = null,
+						"/obj/item/weapon/weldingtool/experimental:Weldingtool" = null,
+						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
+						"/obj/item/weapon/shield/energy:Shield" = null,
+						"/obj/item/weapon/melee/energy/sword/activated:Sword" = null,
+						"/obj/item/weapon/melee/energy/hfmachete/activated:Sharper sword" = null
+						)
+
+/obj/item/weapon/switchtool/holo/maxed/add_module()
+	return
+
+/obj/item/weapon/switchtool/surgery/maxed
+	stored_modules = list(
+						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
+						"/obj/item/weapon/circular_saw/plasmasaw:circular saw" = null,
+						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
+						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
+						"/obj/item/weapon/hemostat:hemostat" = null,
+						"/obj/item/weapon/retractor/manager:retractor" = null,
+						"/obj/item/weapon/bonesetter/bone_mender:bonesetter" = null
+						)

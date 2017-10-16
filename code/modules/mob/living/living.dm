@@ -458,6 +458,11 @@
 /mob/living/proc/get_organ(zone)
 	return
 
+//A proc that turns organ strings into a list of organ datums
+//The organ strings can be fed in as arguments, or as a list
+/mob/living/proc/get_organs(organs)
+	return list()
+
 /mob/living/proc/get_organ_target()
 	var/t = src.zone_sel.selecting
 	if ((t in list( "eyes", "mouth" )))
@@ -1427,19 +1432,14 @@ Thanks.
 		else
 			speed_mod = 0.0
 
-		if(M_BEAK in H.mutations)
-			if(istype(H.wear_mask))
-				var/obj/item/clothing/mask/M = H.wear_mask
-				if(!(M.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
-					speed_mod += 0.25
-					if(!tool_name)
-						tool_name = "beak"
-			else
+		if(H.organ_has_mutation(LIMB_HEAD, M_BEAK))
+			var/obj/item/mask = H.get_item_by_slot(slot_wear_mask)
+			if(!mask || !(mask.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
 				speed_mod += 0.25
 				if(!tool_name)
 					tool_name = "beak"
 
-		if(M_CLAWS in H.mutations)
+		if(H.organ_has_mutation(H.get_active_hand_organ(), M_CLAWS))
 			if(!istype(H.gloves))
 				speed_mod += 0.25
 				if(!tool_name)

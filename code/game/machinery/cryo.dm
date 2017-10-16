@@ -662,3 +662,4 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /datum/data/function/proc/display()
 	return
+

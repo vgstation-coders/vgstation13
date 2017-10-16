@@ -1,7 +1,7 @@
 //DEATH SQUAD
 
 /datum/striketeam/deathsquad
-	striketeam_name = "Death Squad"
+	striketeam_name = TEAM_DEATHSQUAD
 	faction_name = "Nanotrasen"
 	mission = "Clean up the Station of all enemies of Nanotrasen. Avoid damage to Nanotrasen assets, unless you judge it necessary."
 	team_size = 6
@@ -30,13 +30,13 @@
 	new_commando.mind_initialize()
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Death Commando"
-	ticker.mode.traitors |= new_commando.mind//Adds them to current traitor list. Which is really the extra antagonist list.
+	ticker.mode.deathsquad |= new_commando.mind
 	new_commando.equip_death_commando(leader_selected)
 
-	ticker.mode.deathsquad += new_commando.mind
 	return new_commando
 
 /datum/striketeam/deathsquad/greet_commando(var/mob/living/carbon/human/H)
+	H << 'sound/music/deathsquad.ogg'
 	if(H.key == leader_key)
 		to_chat(H, "<span class='notice'>You are [H.real_name], a tactical genius and the leader of the Death Squad, in the service of Nanotrasen.</span>")
 	else
@@ -51,7 +51,7 @@
 
 	//Adding Camera Network
 	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = "CREED"
+	camera.network = list("CREED")
 	camera.c_tag = real_name
 
 	//Basic Uniform

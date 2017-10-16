@@ -341,7 +341,7 @@
 						log_admin("[key_name(usr)] sent the Emergency Shuttle back")
 						message_admins("<span class='notice'>[key_name_admin(usr)] sent the Emergency Shuttle back</span>", 1)
 
-		href_list["secretsadmin"] = "check_antagonist"
+		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["edit_shuttle_time"])
 		if(!check_rights(R_SERVER))
@@ -351,7 +351,110 @@
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]")
 		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]</span>", 1)
-		href_list["secretsadmin"] = "check_antagonist"
+
+		href_list["secretsadmin"] = "emergency_shuttle_panel"
+
+	else if(href_list["move_emergency_shuttle"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+		var/casual = 1
+		switch (href_list["move_emergency_shuttle"])
+			if ("station")
+				switch(alert("Trigger departure countdown and announcement?","Emergency Shuttle Panel","Yes","No","Cancel"))
+					if("Cancel")
+						return
+					if("Yes")
+						emergency_shuttle.online = 1
+						emergency_shuttle.shuttle_phase("station",0)
+						casual = 0
+					if("No")
+						emergency_shuttle.online = 0
+						emergency_shuttle.direction = 0
+						emergency_shuttle.endtime = null
+						emergency_shuttle.shuttle_phase("station",1)
+
+			if ("transit")
+				switch(alert("Trigger arrival countdown and announcement?","Emergency Shuttle Panel","Yes","No","Cancel"))
+					if("Cancel")
+						return
+					if("Yes")
+						emergency_shuttle.online = 1
+						emergency_shuttle.shuttle_phase("transit",0)
+						casual = 0
+					if("No")
+						emergency_shuttle.online = 0
+						emergency_shuttle.direction = 1
+						emergency_shuttle.endtime = null
+						emergency_shuttle.shuttle_phase("transit",1)
+			if ("centcom")
+				switch(alert("Trigger round end?","Emergency Shuttle Panel","Yes","No","Cancel"))
+					if("Cancel")
+						return
+					if("Yes")
+						emergency_shuttle.shuttle_phase("centcom",0)
+						casual = 0
+					if("No")
+						emergency_shuttle.shuttle_phase("centcom",1)
+		var/obj/docking_port/shuttle/P = emergency_shuttle.shuttle.linked_port
+		log_admin("[key_name(usr)] moved the emergency shuttle to [href_list["move_emergency_shuttle"]][casual?" (no round triggers)":""].</span>")
+		message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle to <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[P.x];Y=[P.y];Z=[P.z]'>[href_list["move_emergency_shuttle"]]</a>[casual?" (no round triggers)":""].</span>", 1)
+		href_list["secretsadmin"] = "emergency_shuttle_panel"
+
+	else if(href_list["move_emergency_dock"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+		var/obj/docking_port/destination/port
+		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		switch (href_list["move_emergency_dock"])
+			if ("station")
+				port = E.dock_station
+			if ("transit")
+				port = E.transit_port
+			if ("centcom")
+				port = E.dock_centcom
+		if (!port) return
+		port.forceMove(get_turf(usr.loc))
+		log_admin("[key_name(usr)] moved the emergency shuttle's [href_list["move_emergency_dock"]] port.</span>")
+		message_admins("<span class='notice'>[key_name_admin(usr)] moved the emergency shuttle's <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[port.x];Y=[port.y];Z=[port.z]'>[href_list["move_emergency_dock"]] port</a>.</span>", 1)
+		href_list["secretsadmin"] = "emergency_shuttle_panel"
+
+	else if(href_list["reset_emergency_dock"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+		var/obj/docking_port/destination/port
+		var/datum/shuttle/escape/E = emergency_shuttle.shuttle
+		switch (href_list["reset_emergency_dock"])
+			if ("station")
+				port = E.dock_station
+			if ("transit")
+				port = E.transit_port
+			if ("centcom")
+				port = E.dock_centcom
+		if (!port) return
+		port.forceMove(port.origin_turf)
+		log_admin("[key_name(usr)] reset the emergency shuttle's [href_list["reset_emergency_dock"]] port's position.</span>")
+		message_admins("<span class='notice'>[key_name_admin(usr)] reset the emergency shuttle's <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[port.x];Y=[port.y];Z=[port.z]'>[href_list["reset_emergency_dock"]] port's position</a>.</span>", 1)
+		href_list["secretsadmin"] = "emergency_shuttle_panel"
+
+	else if(href_list["move_escape_pod"])
+		if(!check_rights(R_ADMIN) || !check_rights(R_DEBUG))
+			return
+
+		if (href_list["move_escape_pod"] == "all")
+			for (var/pod in emergency_shuttle.escape_pods)
+				if (emergency_shuttle.escape_pods[pod] == href_list["move_destination"])
+					continue
+				emergency_shuttle.move_pod(pod,href_list["move_destination"])
+			log_admin("[key_name(usr)] moved all escape pods to [href_list["move_destination"]]")
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved all escape pods to [href_list["move_destination"]]</span>", 1)
+		else
+			var/old_loc = emergency_shuttle.escape_pods[href_list["move_escape_pod"]]
+			emergency_shuttle.move_pod(href_list["move_escape_pod"],href_list["move_destination"])
+			var/area/pod_area = locate(text2path("/area/shuttle/escape_pod[href_list["move_escape_pod"]]/[emergency_shuttle.escape_pods[href_list["move_escape_pod"]]]"))
+			var/turf/T = pick(pod_area.area_turfs)
+			log_admin("[key_name(usr)] moved [pod_area.name] from [old_loc] to [href_list["move_destination"]]")
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[pod_area.name]</a> from [old_loc] to [href_list["move_destination"]]</span>", 1)
+		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
@@ -1980,6 +2083,9 @@
 		if(C)
 			C.jumptomob(M)
 
+	else if(href_list["emergency_shuttle_panel"])
+		emergency_shuttle_panel()
+
 	else if(href_list["check_antagonist"])
 		check_antagonists()
 
@@ -2041,6 +2147,34 @@
 			C.admin_ghost()
 		sleep(2)
 		C.jumptocoord(x,y,z)
+
+	else if(href_list["shuttlepermission"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/shuttle/shuttle = locate(href_list["shuttle"])
+		var/obj/docking_port/D = locate(href_list["docking_port"])
+		var/obj/machinery/computer/shuttle_control/broadcast = locate(href_list["broadcast"])
+		var/mob/user = locate(href_list["user"])
+		var/answer = text2num(href_list["answer"])
+
+		var/reason = input(user, "State the reasons for your choice (optional).", "Request Answer", "")
+
+		if (answer)
+			if(broadcast)
+				broadcast.announce( "Permission Granted. [reason]" )
+			else if(user)
+				to_chat(user, "Permission Granted. [reason]")
+			shuttle.actually_travel_to(D,broadcast,user)
+			log_admin("[key_name_admin(usr)] granted permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+			message_admins("[key_name_admin(usr)] granted permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+		else
+			if(broadcast)
+				broadcast.announce( "Permission Denied. [reason]" )
+			else if(user)
+				to_chat(user, "Permission Denied. [reason]")
+			log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
+			message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 
 	else if(href_list["adminchecklaws"])
 		output_ai_laws()
@@ -3000,13 +3134,8 @@
 					to_chat(world, "<font size='10' color='red'><b>NOT THE BEES!</b></font>")
 					world << sound('sound/effects/bees.ogg')
 					for(var/mob/living/M in player_list)
-						var/mob/living/simple_animal/bee/BEE = new(get_turf(M))
-						BEE.strength = 16
-						BEE.toxic = 5
-						BEE.mut = 2
-						BEE.feral = 25
+						var/mob/living/simple_animal/bee/swarm/BEE = new(get_turf(M))
 						BEE.target = M
-						BEE.icon_state = "bees_swarm-feral"
 
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3299,6 +3428,7 @@
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
 						M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
 						M.update_icons()
+						M.mind.special_role = BOMBERMAN // CHEAT CHECKS
 						to_chat(M, "Wait...what?")
 						spawn(50)
 							to_chat(M, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
@@ -3392,6 +3522,38 @@
 						hardcore_mode = 0
 						to_chat(world, "<h5><span class='danger'>Hardcore mode has been disabled</span></h5>")
 						to_chat(world, "<span class='info'>Starvation will no longer kill player-controlled characters.</span>")
+			if("vermin_infestation")
+				var/list/locations = list(
+					"RANDOM" = null,
+					"kitchen" = LOC_KITCHEN,
+					"atmospherics" = LOC_ATMOS,
+					"incinerator" = LOC_INCIN,
+					"chapel" = LOC_CHAPEL,
+					"library" = LOC_LIBRARY,
+					"vault" = LOC_VAULT,
+					"technical storage" = LOC_TECH,
+					)
+				var/list/vermins = list(
+					"RANDOM" = null,
+					"mice" = VERM_MICE,
+					"lizards" = VERM_LIZARDS,
+					"spiders" = VERM_SPIDERS,
+					"slimes" = VERM_SLIMES,
+					"bats" = VERM_BATS,
+					"borers" = VERM_BORERS,
+					"mimics" = VERM_MIMICS,
+					"roaches" = VERM_ROACHES,
+					"gremlins" = VERM_GREMLINS,
+					"bees" = VERM_BEES,
+					)
+				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
+				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","VI")
+				message_admins("[key_name_admin(usr)] has triggered an infestation of vermins.", 1)
+				var/datum/event/infestation/infestation_event = new()
+				infestation_event.override_location = ol
+				infestation_event.override_vermin = ov
 			if("hostile_infestation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")
@@ -3438,7 +3600,7 @@
 		if(usr)
 			log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 
-	else if(href_list["secretsadmin"])
+	if(href_list["secretsadmin"])
 		if(!check_rights(R_ADMIN))
 			return
 
@@ -3502,6 +3664,8 @@
 				usr << browse(dat, "window=manifest;size=440x410")
 			if("check_antagonist")
 				check_antagonists()
+			if("emergency_shuttle_panel")
+				emergency_shuttle_panel()
 			if("DNA")
 				var/dat = "<B>Showing DNA from blood.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>DNA</th><th>Blood Type</th></tr>"

@@ -8,7 +8,7 @@ env:
   global:
   - BYOND_MAJOR="511"
   - BYOND_MINOR="1363"
-  - ALL_MAPS="tgstation metaclub defficiency taxistation test_box test_tiny"
+  - ALL_MAPS="tgstation metaclub defficiency packedstation test_box test_tiny"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
 
@@ -27,13 +27,14 @@ addons:
     - libstdc++6:i386
 
 install:
-- pip install --user PyYaml beautifulsoup4 subprocess32 -q
+- pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
 
 before_script:
 - tools/travis/install-byond.sh
 
 script:
-- find maps/ -name '*.dmm' -exec cat {} \; | awk '/(step_[xy]|layer) =/ { exit 1 }'
+# Has to use Python 2 instead of 3 because else it won't find colorama.
+- python tools/travis/check_map_files.py maps/
 - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
 - python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup

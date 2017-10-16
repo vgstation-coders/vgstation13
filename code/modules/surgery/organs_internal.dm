@@ -427,7 +427,7 @@
 /////REPLACE ORGAN//////
 /datum/surgery_step/internal/replace_organ
 	allowed_tools = list(
-		/obj/item/organ = 100,
+		/obj/item/organ/internal = 100,
 		)
 
 	min_duration = 60
@@ -435,7 +435,7 @@
 
 /datum/surgery_step/internal/replace_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	var/obj/item/organ/O = tool
+	var/obj/item/organ/internal/O = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
 	var/organ_compatible
@@ -487,7 +487,7 @@
 	user.visible_message("<span class='notice'>[user] has transplanted \the [tool] into [target]'s [affected.display_name].</span>", \
 	"<span class='notice'>You have transplanted \the [tool] into [target]'s [affected.display_name].</span>")
 	user.drop_item()
-	var/obj/item/organ/O = tool
+	var/obj/item/organ/internal/O = tool
 
 	if(istype(O))
 
@@ -517,7 +517,7 @@
 /datum/surgery_step/internal/replace_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging \the [tool]!</span>", \
 	"<span class='warning'>Your hand slips, damaging \the [tool]!</span>")
-	var/obj/item/organ/I = tool
+	var/obj/item/organ/internal/I = tool
 	if(istype(I))
 		I.organ_data.take_damage(rand(3,5),0)
 

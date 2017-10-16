@@ -33,14 +33,14 @@
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		density = 0 //Not blocking anything anymore
-		getFromPool(/obj/item/stack/rods, get_turf(src)) //One rod set
+		new /obj/item/stack/rods(get_turf(src)) //One rod set
 	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		density = 1
 	if(health <= 0) //Dead
-		getFromPool(/obj/item/stack/rods, get_turf(src)) //Drop the second set of rods
-		returnToPool(src)
+		new /obj/item/stack/rods(get_turf(src)) //Drop the second set of rods
+		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
 	switch(severity)
@@ -146,8 +146,8 @@
 	if(iswirecutter(W))
 		if(!shock(user, 100)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
-			getFromPool(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2) //Drop the rods, taking account on whenever the grille is broken or not !
-			returnToPool(src)
+			drop_stack(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
 	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
@@ -239,9 +239,7 @@
 	var/obj/structure/cable/C = T.get_cable_node()
 	if(C)
 		if(electrocute_mob(user, C, src))
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(3, 1, src)
-			s.start()
+			spark(src)
 			return 1
 		else
 			return 0

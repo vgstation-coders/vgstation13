@@ -561,7 +561,7 @@ proc/move_mining_shuttle()
 	maxHealth = 100
 	melee_damage_lower = 15
 	melee_damage_upper = 15
-	environment_smash = 0
+	environment_smash_flags = 0
 	attacktext = "drills"
 	attack_sound = 'sound/weapons/circsawhit.ogg'
 	ranged = 1

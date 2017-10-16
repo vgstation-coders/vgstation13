@@ -123,6 +123,7 @@ turf/simulated/floor/update_icon()
 		else
 			set_light(0)
 			icon_state = "light_off"
+			overlays -= floor_overlay //Removes overlay when off without removing other overlays.
 	else if(is_grass_floor())
 		if(!broken && !burnt)
 			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
@@ -523,6 +524,13 @@ turf/simulated/floor/update_icon()
 		else
 			if(is_wood_floor())
 				to_chat(user, "<span class='warning'>You forcefully pry off the planks, destroying them in the process.</span>")
+			else if(is_light_floor())
+				to_chat(user, "<span class='notice'>You remove the light floor.</span>")
+				var/obj/item/stack/tile/light/T = floor_tile
+				floor_overlay = T.get_turf_image()
+				overlays -= floor_overlay // This removes the light floor overlay, but not other floor overlays.
+				floor_tile.forceMove(src)
+				floor_tile = null
 			else
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
 				floor_tile.forceMove(src)
@@ -632,7 +640,7 @@ turf/simulated/floor/update_icon()
 				else
 					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 
-/turf/simulated/floor/Enter(mob/AM)
+/turf/simulated/floor/Entered(var/atom/movable/AM)
 	.=..()
 
 	if(AM && istype(AM,/mob/living))

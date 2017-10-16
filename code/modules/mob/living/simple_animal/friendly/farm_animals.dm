@@ -21,6 +21,7 @@
 	melee_damage_lower = 1
 	melee_damage_upper = 2
 	size = SIZE_BIG
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 
 	var/datum/reagents/udder = null
 

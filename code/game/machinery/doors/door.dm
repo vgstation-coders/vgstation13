@@ -357,16 +357,14 @@ var/list/all_doors = list()
 				qdel(src)
 		if(3.0)
 			if(prob(80))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(2, 1, src)
-				s.start()
+				spark(src, 2)
 	return
 
 /obj/machinery/door/proc/requiresID()
 	return 1
 
 /obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
-	if(!air_master)
+	if(!SS_READY(SSair))
 		return 0
 
 	if(!T)
@@ -375,7 +373,7 @@ var/list/all_doors = list()
 		return 0
 
 	update_heat_protection(T)
-	air_master.mark_for_update(T)
+	SSair.mark_for_update(T)
 
 	update_freelok_sight()
 	return 1

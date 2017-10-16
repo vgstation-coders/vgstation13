@@ -114,10 +114,12 @@
 		"It prefers kippin' on it's back.", \
 		"It's a beautiful bird, lovely plumage, innit?")
 
+	var/has_headset = 1 //excluding parrotmorph parrots from gaining headsets when a mob is transformed into a parrot via wizard.
+
 
 /mob/living/simple_animal/parrot/New()
 	..()
-	if(!ears)
+	if(!ears && has_headset)
 		var/headset = pick(/obj/item/device/radio/headset/headset_sec, \
 						/obj/item/device/radio/headset/headset_eng, \
 						/obj/item/device/radio/headset/headset_med, \

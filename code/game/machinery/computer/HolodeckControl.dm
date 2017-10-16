@@ -31,24 +31,26 @@
 
 	dat += {"<B>Holodeck Control System</B><BR>
 		<HR>Current Loaded Programs:<BR>
-		<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>
-		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
-		<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
+		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
+		<A href='?src=\ref[src];checkers=1'>((Checkers Board)</font>)</A><BR>
+		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
 		<A href='?src=\ref[src];desert=1'>((Desert)</font>)</A><BR>
-		<A href='?src=\ref[src];space=1'>((Space)</font>)</A><BR>
+		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
+		<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>
+		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=\ref[src];gym=1'>((Gym)</font>)</A><BR>
+		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
+		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
+		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>
+		<A href='?src=\ref[src];panic=1'>((Panic Bunker)</font>)</A><BR>
 		<A href='?src=\ref[src];picnicarea=1'>((Picnic Area)</font>)</A><BR>
 		<A href='?src=\ref[src];snowfield=1'>((Snow Field)</font>)</A><BR>
 		<A href='?src=\ref[src];theatre=1'>((Theatre)</font>)</A><BR>
-		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
 		<A href='?src=\ref[src];wildride=1'>((Wild Ride)</font>)</A><BR>
-		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
-		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
-		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
-		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
-		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>
-		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>"}
+		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>"}
 //	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
@@ -56,11 +58,17 @@
 		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
-			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Begin Combat Arena Simulation</font>)</A><BR>
-			Ensure the holodeck is empty before testing.<BR>
-			<BR>
 			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
+			<BR>
+			<A href='?src=\ref[src];catnip=1'>(<font color=red>Club Catnip</font>)</A><BR>
+			Ensure the holodeck is full before testing.<BR>
+			<BR>
+			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Combat Arena</font>)</A><BR>
+			Safety protocols disabled - weapons are not for recreation.<BR>
+			<BR>
+			<A href='?src=\ref[src];medieval=1'>(<font color=red>Medieval Tournament</font>)</A><BR>
+			Safety protocols disabled - weapons are not for recreation.<BR>
 			<BR>"}
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
@@ -91,6 +99,31 @@
 			if(target)
 				loadProgram(target)
 
+		else if(href_list["panic"])
+			target = locate(/area/holodeck/source_panic)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["gym"])
+			target = locate(/area/holodeck/source_gym)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["medieval"])
+			target = locate(/area/holodeck/source_medieval)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["catnip"])
+			target = locate(/area/holodeck/source_catnip)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["checkers"])
+			target = locate(/area/holodeck/source_checkers)
+			if(target)
+				loadProgram(target)
+
 		else if(href_list["basketball"])
 			target = locate(/area/holodeck/source_basketball)
 			if(target)
@@ -108,11 +141,6 @@
 
 		else if(href_list["desert"])
 			target = locate(/area/holodeck/source_desert)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["space"])
-			target = locate(/area/holodeck/source_space)
 			if(target)
 				loadProgram(target)
 
@@ -269,9 +297,7 @@
 
 			for(var/turf/T in linkedholodeck)
 				if(prob(30))
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(2, 1, T)
-					s.start()
+					spark(src)
 				T.ex_act(3)
 				T.hotspot_expose(1000,500,1,surfaces=1)
 
@@ -314,9 +340,7 @@
 				if(L.name=="Atmospheric Test Start")
 					spawn(20)
 						var/turf/T = get_turf(L)
-						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-						s.set_up(2, 1, T)
-						s.start()
+						spark(T, 2)
 						if(T)
 							T.temperature = 5000
 							T.hotspot_expose(50000,50000,1,surfaces=1)
@@ -363,9 +387,7 @@
 			if(L.name=="Atmospheric Test Start")
 				spawn(20)
 					var/turf/T = get_turf(L)
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(2, 1, T)
-					s.start()
+					spark(T, 2)
 					if(T)
 						T.temperature = 5000
 						T.hotspot_expose(50000,50000,1,surfaces=1)

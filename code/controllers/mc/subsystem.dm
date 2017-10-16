@@ -13,17 +13,18 @@
 	var/can_fire = TRUE
 
 	// Bookkeeping variables; probably shouldn't mess with these.
-	var/last_fire = 0     // Last world.time we called fire()
-	var/next_fire = 0     // Scheduled world.time for next fire()
-	var/cost = 0          // Average time to execute
-	var/tick_usage = 0    // Average tick usage
-	var/state = SS_IDLE   // Tracks the current state of the ss. Running, paused, etc.
-	var/paused_ticks = 0  // Ticks this ss is taking to run right now.
-	var/paused_tick_usage // Total tick_usage of all of our runs while pausing this run
-	var/ticks = 1         // How many ticks does this ss take to run on avg.
-	var/times_fired = 0   // Number of times we have called fire()
-	var/queued_time = 0   // Time we entered the queue, (for timing and priority reasons)
-	var/queued_priority   // We keep a running total to make the math easier, if it changes priority mid-fire that would break our running total, so we store it here
+	var/initialized = FALSE // Tracks if Initialize() has been called yet.
+	var/last_fire = 0       // Last world.time we called fire()
+	var/next_fire = 0       // Scheduled world.time for next fire()
+	var/cost = 0            // Average time to execute
+	var/tick_usage = 0      // Average tick usage
+	var/state = SS_IDLE     // Tracks the current state of the ss. Running, paused, etc.
+	var/paused_ticks = 0    // Ticks this ss is taking to run right now.
+	var/paused_tick_usage   // Total tick_usage of all of our runs while pausing this run
+	var/ticks = 1           // How many ticks does this ss take to run on avg.
+	var/times_fired = 0     // Number of times we have called fire()
+	var/queued_time = 0     // Time we entered the queue, (for timing and priority reasons)
+	var/queued_priority     // We keep a running total to make the math easier, if it changes priority mid-fire that would break our running total, so we store it here
 	// Linked list stuff for the queue
 	var/datum/subsystem/queue_next
 	var/datum/subsystem/queue_prev
@@ -155,6 +156,7 @@
 	var/time = (world.timeofday - start_timeofday) / 10
 	var/msg = "Initialized [name] subsystem within [time] seconds!"
 	to_chat(world, "<span class='danger'>[msg]</span>")
+	initialized = TRUE
 	return time
 
 //hook for printing stats to the "MC" statuspanel for admins to see performance and related stats etc.

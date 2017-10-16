@@ -179,8 +179,6 @@
 
 /obj/item/projectile/energy/osipr/Destroy()
 	var/turf/T = loc
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(4, 0, T)
-	s.start()
+	spark(T, 4, FALSE)
 	T.turf_animation('icons/obj/projectiles_impacts.dmi',"dark_explosion",0, 0, 13, 'sound/weapons/osipr_altexplosion.ogg')
 	..()
