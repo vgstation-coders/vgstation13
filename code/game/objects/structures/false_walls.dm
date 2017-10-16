@@ -99,13 +99,13 @@
 	icon = 'icons/turf/walls.dmi'
 	var/mineral = "metal"
 	var/opening = 0
+	var/blocks_air = 1
 
 	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
 	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
 
 /obj/structure/falsewall/closed
 	density = 1
-
 /obj/structure/falsewall/New()
 	..()
 	relativewall()
@@ -153,6 +153,7 @@
 		src.density = 0
 		set_opacity(0)
 		opening = 0
+		blocks_air = 0
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
@@ -162,6 +163,7 @@
 		set_opacity(1)
 		src.relativewall()
 		opening = 0
+		blocks_air = 1
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
