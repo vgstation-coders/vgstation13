@@ -163,6 +163,8 @@
 		src.relativewall()
 		opening = 0
 
+	update_nearby_tiles()
+
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
 	if(density)
@@ -395,3 +397,6 @@
 	icon_state = ""
 	mineral = "sandstone"
 //------------wtf?------------end
+
+/obj/structure/falsewall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	return !density
