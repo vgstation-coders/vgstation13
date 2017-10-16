@@ -178,12 +178,12 @@
 
 //        CLARKE         //
 /datum/construction/mecha_chassis/clarke
-	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/odysseus_torso),//1
-					 list(Co_KEY=/obj/item/mecha_parts/part/odysseus_head),//2
-					 list(Co_KEY=/obj/item/mecha_parts/part/odysseus_left_arm),//3
-					 list(Co_KEY=/obj/item/mecha_parts/part/odysseus_right_arm),//4
-					 list(Co_KEY=/obj/item/mecha_parts/part/odysseus_left_leg),//5
-					 list(Co_KEY=/obj/item/mecha_parts/part/odysseus_right_leg)//6
+	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/clarke_torso),//1
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_head),//2
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_left_arm),//3
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_right_arm),//4
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_left_tread),//5
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_right_tread)//6
 					)
 
 /datum/construction/mecha_chassis/clarke/spawn_result(mob/user as mob)

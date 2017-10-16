@@ -1939,6 +1939,7 @@
 #include "code\modules\research\designs\boards\machine_telecomms.dm"
 #include "code\modules\research\designs\boards\misc.dm"
 #include "code\modules\research\designs\mecha\boards.dm"
+#include "code\modules\research\designs\mecha\clarke.dm"
 #include "code\modules\research\designs\mecha\durand.dm"
 #include "code\modules\research\designs\mecha\gygax.dm"
 #include "code\modules\research\designs\mecha\honker.dm"

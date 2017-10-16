@@ -696,5 +696,5 @@
 	result = "/obj/mecha/working/clarke"
 	base_icon = "clarke"
 
-	mainboard = /obj/item/weapon/circuitboard/mecha/odysseus/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/odysseus/peripherals
+	mainboard = /obj/item/weapon/circuitboard/mecha/clarke/main
+	peripherals = /obj/item/weapon/circuitboard/mecha/clarke/peripherals

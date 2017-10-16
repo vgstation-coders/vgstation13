@@ -12,6 +12,7 @@
 	cargo_capacity = 20
 	rad_protection = 100
 	var/image/thruster_overlay
+	var/overlay_applied = FALSE
 	var/obj/machinery/portable_atmospherics/scrubber/mech/scrubber
 
 /obj/mecha/working/clarke/New()
@@ -34,11 +35,13 @@
 
 /obj/mecha/working/clarke/mechstep(direction)
 	if(istype(get_turf(src), /turf/space))
-		if(!(thruster_overlay in overlays))
+		if(!overlay_applied)
 			overlays += thruster_overlay
+			overlay_applied = TRUE
 	else
-		if(thruster_overlay in overlays)
+		if(overlay_applied)
 			overlays -= thruster_overlay
+			overlay_applied = FALSE
 	return step(src,direction)
 
 /obj/mecha/working/clarke/mechsteprand()
