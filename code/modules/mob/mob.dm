@@ -2065,7 +2065,7 @@ mob/proc/on_foot()
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/make_invisible(var/source_define, var/time)
+/mob/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(..() || !source_define)
 		return
 	alpha = 1	//to cloak immediately instead of on the next Life() tick

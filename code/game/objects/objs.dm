@@ -596,7 +596,7 @@ a {
 					sleep(i)
 		return 1
 
-/obj/make_invisible(var/source_define, var/time)
+/obj/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(..() || !source_define)
 		return
 	alpha = 1

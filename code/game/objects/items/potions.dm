@@ -122,7 +122,7 @@
 	icon_state = "mass_orb"
 
 /obj/item/potion/invisibility/imbibe_effect(mob/user)
-	user.make_invisible(INVISIBLEPOTION, 1 MINUTES)
+	user.make_invisible(INVISIBLEPOTION, 1 MINUTES, TRUE)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
 	if(isatommovable(target))
