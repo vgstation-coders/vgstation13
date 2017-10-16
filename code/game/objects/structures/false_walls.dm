@@ -150,6 +150,7 @@
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
 		sleep(15)
+		update_nearby_tiles()
 		src.density = 0
 		set_opacity(0)
 		opening = 0
@@ -159,6 +160,7 @@
 		icon_state = "[mineral]0"
 		density = 1
 		sleep(15)
+		update_nearby_tiles()
 		set_opacity(1)
 		src.relativewall()
 		opening = 0
