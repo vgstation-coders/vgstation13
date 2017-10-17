@@ -32,7 +32,7 @@
 	name = "service module cooking upgrade board"
 	desc = "Used to give a service cyborg cooking tools."
 	id = "borg_service_module"
-	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2, Tc_ANOMALY = 1)
+	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2, Tc_ANOMALY = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON = 60000, MAT_GLASS = 10000, MAT_GOLD=5000)
 	build_path = /obj/item/borg/upgrade/service
