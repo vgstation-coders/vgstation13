@@ -1299,7 +1299,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool
 	name = "\improper Exosuit-Mounted Engineering Switchtool"
 	desc = "An exosuit-mounted Engineering switchtool. (Can be attached to: Engineering exosuits)"
-	icon_state = "mecha_rcd"	//needtochange
+	icon_state = "mecha_switchtool"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=2"
 	equip_cooldown = 10
 	energy_drain = 50
@@ -1383,7 +1383,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/tiler
 	name = "\improper Automatic Floor Tiler"
 	desc = "An exosuit-mounted Automatic Floor Tiler. (Can be attached to: Any exosuit)"
-	icon_state = "mecha_rcd"	//needtochange
+	icon_state = "mecha_tiler"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=2"
 	equip_cooldown = 10
 	energy_drain = 50
@@ -1431,7 +1431,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/collector
 	name = "\improper Exosuit-Mounted Radiation Collector Array"
 	desc = "An exosuit-mounted Radiation Collector Array. (Can be attached to: Any exosuit)"
-	icon_state = "mecha_rcd"	//needtochange
+	icon_state = "mecha_collector"
 	origin_tech = Tc_PLASMATECH + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=4"
 	equip_cooldown = 10
 	energy_drain = 0
