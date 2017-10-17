@@ -158,13 +158,13 @@ steam.start() -- spawns the effect
 /obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
 	energy=rand(1,max_energy)
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	var/turf/T = loc
 	if (istype(T, /turf))
 		T.hotspot_expose(1000, 100, surfaces = 1)
 
 /obj/effect/effect/sparks/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	var/turf/T = src.loc
 
 	if (istype(T, /turf))
@@ -181,7 +181,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/sparks/process()
 	if(energy==0)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		returnToPool(src)
 		return
 	else
@@ -718,7 +718,7 @@ steam.start() -- spawns the effect
 	spawn(3 + metal*3)
 		process()
 	spawn(120)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		sleep(30)
 
 		if(metal)
@@ -754,7 +754,7 @@ steam.start() -- spawns the effect
 	spawn(3)
 		process()
 	spawn(120)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		sleep(30)
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/local_air = T.return_air()

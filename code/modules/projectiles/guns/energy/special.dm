@@ -84,11 +84,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/staff/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/staff/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 
@@ -158,11 +158,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	var/next_change = 0
 /obj/item/weapon/gun/energy/staff/necro/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/staff/necro/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 
@@ -350,11 +350,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/floragun/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/floragun/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 
@@ -444,11 +444,11 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/meteorgun/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/meteorgun/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/meteorgun/process()
@@ -542,11 +542,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
@@ -589,11 +589,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/radgun/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/radgun/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/radgun/process()
@@ -773,11 +773,11 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 
 /obj/item/weapon/gun/energy/polarstar/spur/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/polarstar/spur/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/polarstar/spur/process()

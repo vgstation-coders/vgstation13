@@ -29,11 +29,11 @@
 	..()
 	to_chat(user, "<span class='warning'>\The [src] latches tightly onto your arm!</span>")
 	user.update_inv_hands()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/gun/projectile/hivehand/dropped(mob/user as mob)
 	..()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/gun/projectile/hivehand/update_icon()
 	overlays.len = 0

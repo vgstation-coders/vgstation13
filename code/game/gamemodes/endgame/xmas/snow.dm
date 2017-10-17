@@ -38,6 +38,10 @@
 	if(prob(17))
 		overlays += image('icons/obj/flora/snowflora.dmi',pick(foliage))
 
+/obj/structure/snow/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	..()
+
 /obj/structure/snow/attackby(obj/item/W,mob/user)
 	if(istype(W,/obj/item/weapon/pickaxe/shovel))//using a shovel or spade harvests some snow and let's you click on the lower layers
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
@@ -52,8 +56,7 @@
 			return
 
 		// Start process(), if we need to.
-		if(!(src in processing_objects))
-			processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 /obj/structure/snow/process()
 	..()
@@ -67,7 +70,7 @@
 		if(SNOWCOVERING_MEDIUM)
 			icon_state = "snow"
 			snow_amount = SNOWCOVERING_FULL
-			processing_objects.Remove(src)
+			STOP_PROCESSING(SSobj, src)
 	next_update=world.time + TICK_JIGGLE(300) // 30 seconds
 
 
@@ -87,8 +90,7 @@
 			return
 
 		// Start process(), if we need to.
-		if(!(src in processing_objects))
-			processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 	return
 
 //////COSMIC SNOW(the one that spreads everywhere)//////

@@ -206,12 +206,12 @@ Frequency:
 	charge = max(charge - HANDTELE_PORTAL_COST,0)
 	if(!recharging)
 		recharging = 1
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)
 	if(charge >= HANDTELE_MAX_CHARGE)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		recharging = 0
 	return 1
 

@@ -21,7 +21,7 @@
 
 /obj/item/weapon/gun/gravitywell/Destroy()
 	if(charge < maxcharge)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/gravitywell/process_chambered()
@@ -31,7 +31,7 @@
 		charge = 0
 		update_icon()
 		in_chamber = new/obj/item/projectile/gravitywell()
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		return 1
 	return 0
 
@@ -42,7 +42,7 @@
 		if(istype(loc,/mob))
 			var/mob/M = loc
 			M.regenerate_icons()
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	return 1
 
 /obj/item/weapon/gun/gravitywell/update_icon()

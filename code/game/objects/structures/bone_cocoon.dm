@@ -21,7 +21,7 @@
 	if(!parent_borer)
 		qdel(src)
 	else
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 /obj/structure/bone_cocoon/Destroy()
 	if(parent_borer)
@@ -30,7 +30,7 @@
 		if(parent_borer.channeling)
 			parent_borer.channeling = 0
 		parent_borer = null
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	for(var/atom/movable/I in contents)
 		I.forceMove(get_turf(src))
 	src.visible_message("<span class='notice'>\The [src] crumbles into nothing.</span>")

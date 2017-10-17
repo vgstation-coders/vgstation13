@@ -166,10 +166,10 @@
 
 /obj/item/weapon/bikehorn/rubberducky/quantum/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/bikehorn/rubberducky/quantum/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/bikehorn/rubberducky/quantum/process()

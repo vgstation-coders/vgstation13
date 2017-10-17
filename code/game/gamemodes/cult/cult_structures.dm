@@ -28,10 +28,10 @@
 
 /obj/structure/cult/pylon/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/structure/cult/pylon/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 

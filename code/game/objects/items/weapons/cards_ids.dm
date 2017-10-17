@@ -124,7 +124,7 @@
 		nticks ++
 	else
 		nticks = 0
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/card/emag/proc/canUse(var/mob/user, var/obj/machinery/M)
 	// We've already checked for emaggability.  All we do here is check cost.
@@ -144,8 +144,7 @@
 
 		// Start recharging, if we're supposed to.
 		if(energy < max_energy && recharge_rate && recharge_ticks)
-			if(!(src in processing_objects))
-				processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 
 		return 1
 

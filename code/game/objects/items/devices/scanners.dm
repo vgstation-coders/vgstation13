@@ -26,7 +26,7 @@ REAGENT SCANNER
 
 /obj/item/device/t_scanner/Destroy()
 	if(on)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/device/t_scanner/attack_self(mob/user)
@@ -35,12 +35,12 @@ REAGENT SCANNER
 	icon_state = "[base_state][on]"
 
 	if(on)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 
 /obj/item/device/t_scanner/process()
 	if(!on)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return null
 
 	for(var/turf/T in trange(ray_range, get_turf(src)))

@@ -44,15 +44,15 @@ var/global/cockroach_egg_amount = 0
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/hatch()
 	new /mob/living/simple_animal/cockroach(get_turf(src))
 
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/fertilize()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
-	amount_grown = 1 //So there's a way of checking if the egg is fertilized without doing processing_objects.Find(src)
+	amount_grown = 1 //So there's a way of checking if the egg is fertilized without doing process() - ???
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/die()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 	amount_grown = 0

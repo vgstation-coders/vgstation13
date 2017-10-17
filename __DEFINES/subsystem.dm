@@ -10,7 +10,6 @@
 #define SS_INIT_GENETICS           21
 #define SS_INIT_MAP                20
 #define SS_INIT_POWER              19
-#define SS_INIT_OBJECT             18
 #define SS_INIT_PIPENET            17.5
 #define SS_INIT_XENOARCH           17
 #define SS_INIT_MORE_INIT          16
@@ -28,7 +27,7 @@
 #define SS_PRIORITY_MOB            150
 #define SS_PRIORITY_NANOUI         120
 #define SS_PRIORITY_VOTE           110
-#define SS_PRIORITY_OBJECTS        100
+#define SS_PRIORITY_PROCESSING     100
 #define SS_PRIORITY_POWER          95
 #define SS_PRIORITY_MACHINERY      90
 #define SS_PRIORITY_PIPENET        85
@@ -47,7 +46,7 @@
 #define SS_DISPLAY_AIR            -90
 #define SS_DISPLAY_LIGHTING       -80
 #define SS_DISPLAY_MOB            -70
-#define SS_DISPLAY_OBJECTS        -60
+#define SS_DISPLAY_PROCESSING     -60
 #define SS_DISPLAY_MACHINERY      -50
 #define SS_DISPLAY_PIPENET        -40
 #define SS_DISPLAY_FAST_MACHINERY -30

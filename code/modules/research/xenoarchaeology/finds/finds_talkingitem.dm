@@ -12,7 +12,7 @@
 
 /obj/item/weapon/process()
 	if(!speaking_to_players)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return
 	if(prob(10) && world.timeofday >= lastsaid && heard_words.len >= 1)
 		SaySomething()

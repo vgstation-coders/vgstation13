@@ -145,9 +145,8 @@ var/list/blob_looks
 	..()
 	last_beamchecks["\ref[B]"]=world.time+1
 	apply_beam_damage(B) // Contact damage for larger beams (deals 1/10th second of damage)
-	if(!custom_process && !(src in processing_objects))
-		processing_objects.Add(src)
-
+	if(!custom_process)
+		START_PROCESSING(SSobj, src)
 
 /obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
 	..()
@@ -156,8 +155,8 @@ var/list/blob_looks
 	update_health()
 	update_icon()
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
-			processing_objects.Remove(src)
+		if(!custom_process)
+			STOP_PROCESSING(SSobj, src)
 
 /obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]

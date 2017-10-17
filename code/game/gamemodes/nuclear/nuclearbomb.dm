@@ -364,10 +364,10 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	..()
 	if(!nukedisk)
 		nukedisk = src
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/disk/nuclear/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 	replace_disk()
 
@@ -375,7 +375,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
  * NOTE: Don't change it to Destroy().
  */
 /obj/item/weapon/disk/nuclear/Del()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	replace_disk()
 	..()
 

@@ -675,7 +675,7 @@
 			new_item.heard_words = list()
 			if(prob(25))
 				new_item.speaking_to_players = 1
-				processing_objects.Add(new_item)
+				START_PROCESSING(SSobj, new_item)
 
 		if(!findtext(new_item.origin_tech, Tc_ANOMALY))
 			new_item.origin_tech += "[new_item.origin_tech ? ";" : ""]"+Tc_ANOMALY+"=[anomaly_factor]"
@@ -695,4 +695,4 @@
 				if(!heard_words)
 					heard_words = list()
 				speaking_to_players = 1
-				processing_objects.Add(src)
+				START_PROCESSING(SSobj, src)

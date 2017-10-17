@@ -180,7 +180,7 @@
 		E.pixel_x = rand(-6,6)
 		E.pixel_y = rand(-6,6)
 		if(animal_count[src.species_type] < ANIMAL_CHILD_CAP && prob(50))
-			processing_objects.Add(E)
+			STOP_PROCESSING(SSobj, E)
 
 /mob/living/simple_animal/hostile/retaliate/cockatrice/Cross(mob/living/L)
 	movement_touch_check(L)

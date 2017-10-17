@@ -23,7 +23,7 @@
 	dynamic_lighting = 0
 
 /turf/unsimulated/wall/supermatter/New()
-	processing_objects |= src
+	START_PROCESSING(SSobj, src)
 #ifndef BLUESPACELEAK_FLAT
 	icon_state = "bluespacecrystal[rand(1,3)]"
 	var/nturns=pick(0,3)
@@ -35,7 +35,7 @@
 	return ..()
 
 /turf/unsimulated/wall/supermatter/Destroy()
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 	return ..()
 
 /turf/unsimulated/wall/supermatter/process()
@@ -45,7 +45,7 @@
 
 	// No more available directions? Shut down process().
 	if(avail_dirs.len==0)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return 1
 
 	// We're checking, reset the timer.

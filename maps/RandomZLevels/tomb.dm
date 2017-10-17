@@ -246,15 +246,14 @@
 /obj/structure/fire_trap/New()
 	..()
 
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	default_dir = dir
 	movement_dir = turn(dir, pick(90, 270))
 
 	fire_cooldown = rand(30,60)
 
 /obj/structure/fire_trap/Destroy()
-	processing_objects.Remove(src)
-
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/structure/fire_trap/process()

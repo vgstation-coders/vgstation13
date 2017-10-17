@@ -52,8 +52,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	for(var/mob/user in _using)
 		user.unset_machine()
 
-	if(src in processing_objects)
-		processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 
 	if(integratedpai)
 		qdel(integratedpai)
@@ -204,10 +203,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/is_hot()
 	return heat_production
-
-/obj/proc/process()
-	set waitfor = FALSE
-	processing_objects.Remove(src)
 
 /obj/assume_air(datum/gas_mixture/giver)
 	if(loc)

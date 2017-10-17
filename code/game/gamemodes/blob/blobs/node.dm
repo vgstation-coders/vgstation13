@@ -15,7 +15,7 @@
 
 /obj/effect/blob/node/New(loc,newlook = "new",no_morph = 0)
 	blob_nodes += src
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	..(loc, newlook)
 
 	if((icon_size == 64) && !no_morph)
@@ -32,7 +32,7 @@
 		overmind.update_specialblobs()
 	if(overmind)
 		overmind.max_blob_points -= BLOBNDPOINTINC
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/effect/blob/node/Life()

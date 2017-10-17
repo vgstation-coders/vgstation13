@@ -34,7 +34,7 @@
 
 /obj/item/weapon/anodevice/New()
 	. = ..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/anodevice/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I, /obj/item/weapon/anobattery))
@@ -204,5 +204,5 @@
 	icon_state = "anodev[round(p,25)]"
 
 /obj/item/weapon/anodevice/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()

@@ -237,7 +237,8 @@
 	spawn(20)
 		process()
 
-/datum/chain/proc/process()//checking every 2 seconds if the links are still adjacent to each others, if not, break the tether.
+// Move to SSprocessing???
+/datum/chain/process()//checking every 2 seconds if the links are still adjacent to each others, if not, break the tether.
 	while(!undergoing_deletion)
 		if(!Check_Integrity())
 			snap = 1

@@ -12,10 +12,10 @@
 
 /obj/item/weapon/cookiesynth/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/cookiesynth/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/cookiesynth/examine(mob/user)

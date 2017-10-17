@@ -103,16 +103,15 @@
 	create_reagents(10)
 	reagents.add_reagent(VOMIT, rand(2,5))
 
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/effect/decal/cleanable/vomit/active/Destroy()
 	..()
-
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 /obj/effect/decal/cleanable/vomit/active/process()
 	if(--dry_state <= 0) //Decrease dry_state by 1. Check if it's equal to zero
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 
 		qdel(reagents)
 		reagents = null

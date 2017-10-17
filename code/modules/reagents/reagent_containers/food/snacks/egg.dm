@@ -19,7 +19,7 @@
 		if(amount_grown >= 100)
 			hatch()
 	else
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom)
 	..()
@@ -88,7 +88,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
 	visible_message("[src] hatches with a quiet cracking sound.")
 	new hatch_type(get_turf(src))
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/vox

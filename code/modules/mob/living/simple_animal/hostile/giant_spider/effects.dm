@@ -107,9 +107,9 @@
 		..()
 		pixel_x = rand(3,-3) * PIXEL_MULTIPLIER
 		pixel_y = rand(3,-3) * PIXEL_MULTIPLIER
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 	Destroy()
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		..()
 
 /obj/effect/spider/eggcluster/process()
@@ -135,7 +135,7 @@
 		..()
 		pixel_x = rand(6,-6)
 		pixel_y = rand(6,-6)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		//50% chance to grow up
 		if(prob(50))
 			amount_grown = 1

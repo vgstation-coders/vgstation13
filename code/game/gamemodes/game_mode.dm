@@ -91,8 +91,6 @@
 
 ///process()
 ///Called by the gameticker
-/datum/game_mode/proc/process()
-	return 0
 
 
 /datum/game_mode/proc/check_finished() //to be called by ticker

@@ -69,7 +69,7 @@ var/global/datum/controller/vote/vote = new()
 //datum/controller/vote/proc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 //	return
 
-/datum/controller/vote/proc/process()	//called by master_controller
+/datum/controller/vote/process()	//called by master_controller
 	if (lock)
 		return
 	if(mode)

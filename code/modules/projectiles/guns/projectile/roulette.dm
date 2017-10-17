@@ -39,10 +39,10 @@
 /obj/item/weapon/gun/projectile/roulette_revolver/New()
 	..()
 	available_projectiles = existing_typesof(/obj/item/projectile)
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/gun/projectile/roulette_revolver/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/projectile/roulette_revolver/process()

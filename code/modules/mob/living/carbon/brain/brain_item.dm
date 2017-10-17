@@ -86,4 +86,4 @@
 	organ_type = /datum/organ/internal/brain/slime_core
 
 /obj/item/organ/internal/brain/slime_core/process()
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)

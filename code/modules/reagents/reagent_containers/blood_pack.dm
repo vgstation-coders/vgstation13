@@ -167,7 +167,7 @@
 	if (W.sharpness_flags & (SHARP_BLADE|SHARP_TIP|HOT_EDGE))
 
 		if(!holes)
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 
 		if (user.a_intent == I_HELP)
 			holes += 1
@@ -207,7 +207,7 @@
 	var/turf/T = get_turf(src)
 
 	if(mode == BLOODPACK_CUT)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return
 	if(reagents.total_volume == 0)
 		return
@@ -232,5 +232,5 @@
 					reagents.remove_reagent(R.id, A)
 
 /obj/item/weapon/reagent_containers/blood/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()

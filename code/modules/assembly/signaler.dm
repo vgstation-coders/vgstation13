@@ -207,14 +207,14 @@
 		if(A.timestopped)
 			return
 	if(!deadman)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	var/mob/M = src.loc
 
 	if(!M || !ismob(M))
 		if(prob(5))
 			signal()
 		deadman = 0
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	else if(prob(5))
 		M.visible_message("[M]'s finger twitches a bit over [src]'s signal button!")
 	return
@@ -227,7 +227,7 @@
 	if(usr)
 		var/mob/user = usr
 		deadman = 1
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		user.visible_message("<span class='warning'>[user] moves their finger over [src]'s signal button...</span>")
 
 ///Mounted Signaler Button///

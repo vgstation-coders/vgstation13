@@ -109,9 +109,6 @@ Data storage vars:
 			CRASH("The global_iterator loop \ref[src] failed to terminate in designated timeframe. This may be caused by server lagging.")
 	return 1
 
-/datum/global_iterator/proc/process()
-	return
-
 /datum/global_iterator/proc/active()
 	return control_switch
 

@@ -305,23 +305,23 @@ obj/item/asteroid/basilisk_hide/New()
 	..()
 	create_reagents(5)
 	last_process = world.time
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/asteroid/hivelord_core/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/asteroid/hivelord_core/process()
 	if(reagents && reagents.has_reagent(FROSTOIL, 5))
 		playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
 		desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return
 
 	if(time_left <= 0)
 		inert = 1
 		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return
 
 	if(loc && (istype(loc, /obj/structure/closet/crate/freezer) || istype(loc, /obj/structure/closet/secure_closet/freezer)))
