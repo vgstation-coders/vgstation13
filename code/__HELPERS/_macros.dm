@@ -163,7 +163,7 @@
 
 //Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
+#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
 
 #define iscult(H) (H.mind in ticker.mode.cult)
 
