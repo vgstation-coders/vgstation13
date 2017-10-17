@@ -410,6 +410,18 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/manipulator" = 2,
 							"/obj/item/weapon/stock_parts/micro_laser" = 2)
 
+/obj/item/weapon/circuitboard/ammolathe
+	name = "Circuit board (Ammunition Lathe)"
+	desc = "A circuit board used to run a ammolathe."
+	build_path = "/obj/machinery/r_n_d/fabricator/ammolathe"
+	board_type = MACHINE
+	origin_tech = Tc_COMBAT + "=3;" + Tc_ENGINEERING + "=3"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/matter_bin" = 2,
+							"/obj/item/weapon/stock_parts/manipulator" = 2,
+							"/obj/item/weapon/stock_parts/micro_laser" = 2,
+							"/obj/item/weapon/stock_parts/console_screen" = 1)
+
 /obj/item/weapon/circuitboard/defib_recharger
 	name = "Circuit Board (Defib Recharger)"
 	desc = "A circuit board used to run a defibrillator recharger."

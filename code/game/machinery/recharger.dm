@@ -251,3 +251,17 @@
 					icon_state = "wrecharger2"
 			else
 				icon_state = "wrecharger3"
+
+/obj/item/device/recharger_kit // help me with the semantics on this one as so it doesnt sound like a retard coded it
+	name = "recharger kit"
+	desc = "Use to build a recharger."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "recharger4"
+	origin_tech = Tc_BLUESPACE + "=3"
+
+/obj/item/device/recharger_kit/attack_self(mob/user as mob)
+	if(user)
+		to_chat(user, "<span class = 'caution'> Locked In</span>")
+		new /obj/machinery/recharger(user.loc)
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)
+		qdel(src)

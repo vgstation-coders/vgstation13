@@ -42,6 +42,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/obj/machinery/r_n_d/destructive_analyzer/linked_destroy = null	//Linked Destructive Analyzer
 	var/obj/machinery/r_n_d/fabricator/protolathe/linked_lathe = null				//Linked Protolathe
 	var/obj/machinery/r_n_d/fabricator/circuit_imprinter/linked_imprinter = null	//Linked Circuit Imprinter
+	var/obj/machinery/r_n_d/fabricator/ammolathe/linked_amlathe = null	//Linked Circuit Imprinter
+
 
 	var/list/obj/machinery/linked_machines = list()
 	var/list/research_machines = list(
@@ -53,7 +55,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		/obj/machinery/r_n_d/fabricator/mechanic_fab,
 		/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker,
 		/obj/machinery/r_n_d/reverse_engine,
-		/obj/machinery/r_n_d/blueprinter
+		/obj/machinery/r_n_d/blueprinter,
+		/obj/machinery/r_n_d/fabricator/ammolathe
 		)
 	var/screen = 1.0	//Which screen is currently showing.
 	var/id = 0			//ID of the computer (for server restrictions).
@@ -61,7 +64,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	var/list/filtered = list( //Filters categories in the protolathe menu
 		"protolathe" = list(),
-		"imprinter" = list()
+		"imprinter" = list(),
+		"ammolathe" = list()
 	)
 	var/autorefresh = 1 //Prevents the window from being updated while queueing items
 
@@ -106,6 +110,11 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		linked_lathe.linked_console		= null
 		linked_lathe.update_icon()
 		linked_lathe					= null
+
+	if(linked_amlathe)
+		linked_amlathe.linked_console	= null
+		linked_amlathe.update_icon()
+		linked_amlathe					= null
 
 /obj/machinery/computer/rdconsole/proc/Maximize()
 	files.known_tech = tech_list.Copy()
@@ -153,7 +162,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			D.linked_console = src
 			D.update_icon()
 	for(var/obj/machinery/r_n_d/D in linked_machines)
-		if(linked_lathe && linked_destroy && linked_imprinter)
+		if(linked_lathe && linked_destroy && linked_imprinter && linked_amlathe)
 			break // stop if we have all of our linked
 		switch(D.type)
 			if(/obj/machinery/r_n_d/fabricator/protolathe)
@@ -165,8 +174,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(/obj/machinery/r_n_d/fabricator/circuit_imprinter)
 				if(!linked_imprinter)
 					linked_imprinter = D
+			if(/obj/machinery/r_n_d/fabricator/ammolathe)
+				if(!linked_amlathe) // litecoin @ 45.77
+					linked_amlathe = D
+
 	if(linked_lathe)
 		linked_lathe.part_sets = part_sets
+
 	return
 
 //Have it automatically push research to the centcomm server so wild griffins can't fuck up R&D's work --NEO
@@ -473,6 +487,36 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(href_list["now"]=="1")
 					linked_imprinter.stopped=0
 
+	else if(href_list["ambuild"]) //Causes the ammolathe to build something.
+		if (!autorefresh)
+			updateAfter = 0 //STOP
+		if(linked_amlathe)
+			var/datum/design/being_built = null
+			for(var/datum/design/D in files.known_designs)
+				if(D.id == href_list["ambuild"])
+					being_built = D
+					break
+			if(being_built)
+				var/power = 2000
+				for(var/M in being_built.materials)
+					power += round(being_built.materials[M] / 5)
+				power = max(2000, power)
+				//screen = 0.3
+				var/n
+				if (href_list["customamt"])
+					n = round(input("Queue how many? (Maximum [RESEARCH_MAX_Q_LEN - linked_amlathe.queue.len])", "Ammolathe Queue") as num|null)
+					if (!linked_amlathe)
+						return //in case the 'lathe gets unlinked or destroyed or someshit while the popup is open
+				else
+					n = text2num(href_list["n"])
+				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_amlathe.queue.len)
+				for(var/i=1;i<=n;i++)
+					use_power(power)
+					linked_amlathe.queue += being_built
+				if(href_list["now"]=="1")
+					linked_amlathe.stopped=0
+
+
 	else if(href_list["disposeI"] && linked_imprinter)  //Causes the circuit imprinter to dispose of a single reagent (all of it)
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
@@ -494,6 +538,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if("imprinter")
 				if(linked_imprinter)
 					linked_imprinter.queue.Cut(i,i+1)
+			if("ammolathe")
+				if(linked_amlathe)
+					linked_lathe.queue.Cut(i,i+1)
 
 	else if(href_list["clearQ"]) //Causes the protolathe to dispose of all it's reagents.
 		switch(href_list["device"])
@@ -503,12 +550,17 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if("imprinter")
 				if(linked_imprinter)
 					linked_imprinter.queue.len = 0
-
+			if("ammolathe")
+				if(linked_amlathe)
+					linked_amlathe.queue.len = 0
 	else if(href_list["setProtolatheStopped"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
 		linked_lathe.stopped=(href_list["setProtolatheStopped"]=="1")
 
 	else if(href_list["setImprinterStopped"] && linked_imprinter) //Causes the protolathe to dispose of all it's reagents.
 		linked_imprinter.stopped=(href_list["setImprinterStopped"]=="1")
+
+	else if(href_list["setAmmolatheStopped"] && linked_amlathe) //Causes the protolathe to dispose of all it's reagents.
+		linked_amlathe.stopped=(href_list["setAmmolatheStopped"]=="1")
 
 	else if(href_list["lathe_ejectsheet"] && linked_lathe) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
@@ -551,6 +603,27 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				qdel (sheet)
 				sheet = null
 
+	else if(href_list["amlathe_ejectsheet"] && linked_amlathe) //Causes the ammolathe to eject a sheet of material
+		if(!src.allowed(usr))
+			to_chat(usr, "Unauthorized Access.")
+			return
+		var/desired_num_sheets = text2num(href_list["amlathe_ejectsheet_amt"])
+		if (desired_num_sheets <= 0)
+			return
+		var/matID=href_list["amlathe_ejectsheet"]
+		var/datum/material/M=linked_amlathe.materials.getMaterial(matID)
+		if(!istype(M))
+			warning("AMMOLATHE: Unknown material [matID]! ([href])")
+		else
+			var/obj/item/stack/sheet/sheet = new M.sheettype(linked_amlathe.get_output())
+			var/available_num_sheets = round(linked_amlathe.materials.storage[matID]/sheet.perunit)
+			if(available_num_sheets>0)
+				sheet.amount = min(available_num_sheets, desired_num_sheets)
+				linked_amlathe.materials.removeAmount(matID, sheet.amount * sheet.perunit)
+			else
+				qdel (sheet)
+				sheet = null
+
 	else if(href_list["find_device"]) //The R&D console looks for devices nearby to link up with.
 		screen = 0.0
 		spawn(20)
@@ -572,6 +645,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				linked_imprinter.linked_console = null
 				linked_imprinter.update_icon()
 				linked_imprinter = null
+			if("amlathe")
+				linked_amlathe.linked_console = null
+				linked_amlathe.update_icon()
+				linked_amlathe = null
 
 	else if(href_list["reset"]) //Reset the R&D console's database.
 		griefProtection()
@@ -595,7 +672,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["toggleAllCategories"]) //Filter all categories, if all are filtered, clear filter.
 		var/machine = href_list["machine"]
 		var/list/tempfilter = filtered[machine] //t-thanks BYOND
-		if(tempfilter.len == (machine == "protolathe" ? linked_lathe.part_sets.len : linked_imprinter.part_sets.len))
+		if (tempfilter.len == (machine == "protolathe" ? linked_lathe.part_sets.len : (machine == "imprinter" ? linked_imprinter.part_sets.len : linked_amlathe.part_sets.len)))
 			filtered[machine] = list()
 		else
 			filtered[machine] = list()
@@ -637,6 +714,17 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
 	<div class=\"header\">[jointext(options," || ")]</div><hr />"}
 
+/obj/machinery/computer/rdconsole/proc/ammolathe_header()
+	var/list/options=list()
+	if(screen!=5.1)
+		options += "<A href='?src=\ref[src];menu=5.1'>Design Selection</A>"
+	if(screen!=5.2)
+		options += "<A href='?src=\ref[src];menu=5.2'>Material Storage</A>"
+	if(screen!=5.4)
+		options += "<A href='?src=\ref[src];menu=5.4'>Production Queue</A> ([linked_amlathe.queue.len])"
+	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
+	<div class="header">[jointext(options," || ")]</div><hr />"}
+
 /obj/machinery/computer/rdconsole/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -658,6 +746,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		if(4 to 4.9)
 			if(linked_imprinter == null)
 				screen = 4.0
+		if(5 to 5.9)
+			if(linked_amlathe == null)
+				screen = 5.0
 
 	switch(screen)
 
@@ -677,6 +768,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(0.4)
 			dat += "Imprinting Circuit. Please Wait..."
+		if(0.5)
+			dat += "Building Ammunition. Please Wait..."
 
 		if(1.0) //Main Menu
 
@@ -694,6 +787,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				dat += "<A href='?src=\ref[src];menu=3.1'>Protolathe Construction Menu</A><BR>"
 			if(linked_imprinter != null)
 				dat += "<A href='?src=\ref[src];menu=4.1'>Circuit Construction Menu</A><BR>"
+			if(linked_amlathe != null)
+				dat += "<A href='?src=\ref[src];menu=5.1'>Ammolathe Construction Menu</A><BR>"
 			if(user.client.holder)
 				dat += "<A href='?src=\ref[src];hax=1'>MAXIMUM SCIENCE</A><BR>"
 			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
@@ -812,6 +907,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				remain_link -= linked_imprinter
 			else
 				dat += "* (No Circuit Imprinter Linked)<BR>"
+			if(linked_amlathe)
+				dat += "* Ammolathe <A href='?src=\ref[src];disconnect=amlathe'>(Disconnect)</A><BR>"
+				remain_link -= linked_amlathe
 			if(remain_link)
 				for(var/obj/machinery/r_n_d/R in remain_link)
 					dat += "* [R.name] <BR>"
@@ -1001,9 +1099,86 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 				dat += "<A href='?src=\ref[src];setImprinterStopped=1' style='color:red'>Stop Production</A>"
 
+					/////////////////////AMMOLATHE SCREENS/////////////////////////
+		if(5.0)
+
+			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
+				NO AMMOLATHE LINKED TO CONSOLE<BR><BR>"} // i cant be stopped
+		if(5.1)
+
+			dat += ammolathe_header()+{"Ammolathe Construction Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<HR>"}
+			dat += "Filter: "
+			for(var/name_set in linked_amlathe.part_sets)
+				if (name_set in filtered["ammolathe"])
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["ammolathe"]' style='color: #A66300'>[name_set]</a> / "
+				else
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["ammolathe"]' style='color: #0066CC'>[name_set]</a> / "
+			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["ammolathe"]' style='color: #0066CC'>Filter All</a><HR>"
+
+			for(var/name_set in linked_amlathe.part_sets)// aaaiiiii
+				if(name_set in filtered["ammolathe"]) // aaaaaahhh iiiiii
+					continue
+				dat += "<h2>[name_set]</h2><ul>"
+				for(var/datum/design/D in files.known_designs)
+					if(!(D.build_type & AMLATHE) || D.category != name_set)
+						continue
+					var/temp_dat = "[D.name] [linked_amlathe.output_part_cost(D)]"
+					var/upTo=10
+					for(var/M in D.materials)
+						var/num_units_avail=linked_amlathe.check_mat(D,M)
+						if(num_units_avail)
+							upTo = min(upTo, num_units_avail)
+						else
+							break
+					if (upTo)
+						dat += {"<li>
+							<A href='?src=\ref[src];ambuild=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
+						if(upTo>=5)
+							dat += "<A href='?src=\ref[src];ambuild=[D.id];n=5'>(&times;5)</A>"
+						if(upTo>=10)
+							dat += "<A href='?src=\ref[src];ambuild=[D.id];n=10'>(&times;10)</A>"
+						dat += "<A href='?src=\ref[src];ambuild=[D.id];customamt=1'>(Custom)</A>"
+						dat += "</li>"
+					else
+						dat += "<li>[temp_dat]</li>"
+				dat += "</ul>"
+
+		if(5.2) //ammolathe Material Storage Sub-menu
+
+			dat += ammolathe_header()+{"Material Storage<ul>"}
+
+
+			for(var/matID in linked_amlathe.materials.storage)
+				var/datum/material/M=linked_amlathe.materials.getMaterial(matID)
+				dat += "<li>[linked_amlathe.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]" // its all copy paste code
+				if(linked_amlathe.materials.storage[matID] >= M.cc_per_sheet)
+					dat += " - <A href='?src=\ref[src];amlathe_ejectsheet=[matID];amlathe_ejectsheet_amt=1'>(1 Sheet)</A> "
+					if(linked_amlathe.materials.storage[matID] >= (M.cc_per_sheet*5))
+						dat += "<A href='?src=\ref[src];amlathe_ejectsheet=[matID];amlathe_ejectsheet_amt=5'>(5 Sheets)</A> "
+					dat += "<A href='?src=\ref[src];amlathe_ejectsheet=[matID];amlathe_ejectsheet_amt=50'>(Max Sheets)</A>" // TAKE ME INTO YOUR HEART
+				else // ACCEPT ME AS YOUR SAVIOR
+					dat += " - <em>(Empty)</em>" // NAIL ME TO YOUR FUCKING CROSS
+				dat += "</li>"// AND LET ME BE REBORN
+			dat += "</ul>"
+
+		if(5.4) //ammolathe Queue Management
+			dat += ammolathe_header()+"Production Queue<BR><HR><ul>"
+			for(var/i=1;i<=linked_amlathe.queue.len;i++)
+				var/datum/design/I=linked_amlathe.queue[i]
+				dat += "<li>Name: [I.name]"
+				if(linked_amlathe.stopped)
+					dat += "<A href='?src=\ref[src];removeQItem=[i];device=ammolathe'>(Remove)</A></li>"
+			dat += "</ul><A href='?src=\ref[src];clearQ=1;device=ammolathe'>Remove All Queued Items</A><br />" // im supprised this shit compiles
+			if(linked_amlathe.stopped)
+				dat += "<A href='?src=\ref[src];setAmmolatheStopped=0' style='color:green'>Start Production</A>"
+			else
+				dat += "<A href='?src=\ref[src];setAmmolatheStopped=1' style='color:red'>Stop Production</A>"
+
+
 	dat = jointext(dat,"")
 	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
 	onclose(user, "rdconsole")
+
 
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that

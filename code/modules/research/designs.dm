@@ -52,6 +52,7 @@ The required techs are the following:
 #define PODFAB		32  //Used by the spacepod part fabricator. Same idea as the mechfab
 #define FLATPACKER	64  //This design creates a machine, not an item.
 #define GENFAB		128 //Generic item.
+#define AMLATHE		256 //Used by the ammolathe. makes ammo and grenades
 //Note: More then one of these can be added to a design but imprinter and lathe designs are incompatable.
 
 /datum/design							//Datum for object designs, used in construction

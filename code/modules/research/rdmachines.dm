@@ -116,6 +116,8 @@ var/global/list/rnd_machines = list()
 					linked_console.linked_destroy = null
 				if(/obj/machinery/r_n_d/fabricator/circuit_imprinter)
 					linked_console.linked_imprinter = null
+				if(/obj/machinery/r_n_d/fabricator/ammolathe)
+					linked_console.linked_amlathe = null
 			linked_console = null
 			overlays -= image(icon = icon, icon_state = "[base_state]_link")
 		return 1
