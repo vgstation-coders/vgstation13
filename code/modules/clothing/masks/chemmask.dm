@@ -61,11 +61,11 @@
 
 /obj/item/clothing/mask/chemmask/New() //Doing this so that these verbs don't show up before there's actually a beaker in the pack.
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	update_verbs()
 
 /obj/item/clothing/mask/chemmask/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/clothing/mask/chemmask/equipped(M as mob, wear_mask)

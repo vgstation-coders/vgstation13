@@ -18,7 +18,7 @@
 
 /obj/item/weapon/pinpointer/Destroy()
 	..()
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/pinpointer/acidable()
 	return FALSE
@@ -29,12 +29,12 @@
 		workdisk()
 		to_chat(usr,"<span class='notice'>You activate \the [src]</span>")
 		playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 30, 1)
-		processing_objects += src
+		START_PROCESSING(SSobj, src)
 	else
 		active = FALSE
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate \the [src]</span>")
-		processing_objects -= src
+		STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/pinpointer/proc/workdisk()
 	process()
@@ -97,11 +97,11 @@
 /obj/item/weapon/pinpointer/advpinpointer/attack_self()
 	if(!active)
 		active = TRUE
-		processing_objects += src
+		START_PROCESSING(SSobj, src)
 		process()
 		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
 	else
-		processing_objects -= src
+		STOP_PROCESSING(SSobj, src)
 		active = FALSE
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
@@ -200,12 +200,12 @@
 		else
 			to_chat(user,"<span class='notice'>Shuttle Locator active.</span>")
 		process()
-		processing_objects += src
+		START_PROCESSING(SSobj, src)
 	else
 		active = FALSE
 		icon_state = "pinoff"
 		to_chat(user,"<span class='notice'>You deactivate the pinpointer.</span>")
-		processing_objects -= src
+		STOP_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/pinpointer/nukeop/process()
@@ -247,11 +247,11 @@
 	if(!active)
 		active = TRUE
 		process()
-		processing_objects += src
+		START_PROCESSING(SSobj, src)
 		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
 	else
 		active = FALSE
-		processing_objects -= src
+		STOP_PROCESSING(SSobj, src)
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
 

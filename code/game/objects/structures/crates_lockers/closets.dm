@@ -226,8 +226,8 @@
 	return
 
 /obj/structure/closet/beam_connect(var/obj/effect/beam/B)
-	if(!processing_objects.Find(src))
-		processing_objects.Add(src)
+	if(!isprocessing)
+		START_PROCESSING(SSobj, src)
 		testing("Connected [src] with [B]!")
 	return ..()
 
@@ -235,7 +235,7 @@
 	..()
 	if(beams.len==0)
 		// I hope to christ this doesn't break shit.
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 
 /obj/structure/closet/process()
 	//..()

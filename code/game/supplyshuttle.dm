@@ -45,7 +45,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	ordernum = rand(1,9000)
 
 	//Supply shuttle ticker - handles supply point regenertion and shuttle travelling between centcomm and the station
-/datum/controller/supply_shuttle/proc/process()
+/datum/controller/supply_shuttle/process()
 	for(var/typepath in (typesof(/datum/supply_packs) - /datum/supply_packs))
 		var/datum/supply_packs/P = new typepath()
 		supply_packs[P.name] = P

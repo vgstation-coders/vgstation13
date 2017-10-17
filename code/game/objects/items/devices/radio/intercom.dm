@@ -23,7 +23,7 @@
 	..()
 	buildstage = building
 	if(buildstage)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 	else
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
@@ -33,7 +33,7 @@
 	update_icon()
 
 /obj/item/device/radio/intercom/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/device/radio/intercom/attack_ai(mob/user as mob)
@@ -87,7 +87,7 @@
 					b_stat = 1
 					buildstage = 1
 					update_icon()
-					processing_objects.Remove(src)
+					STOP_PROCESSING(SSobj, src)
 				return 1
 			else
 				return ..()
@@ -101,7 +101,7 @@
 					buildstage = 3
 					to_chat(user, "<span class='notice'>You secure the electronics!</span>")
 					update_icon()
-					processing_objects.Add(src)
+					START_PROCESSING(SSobj, src)
 					for(var/i, i<= 5, i++)
 						wires.UpdateCut(i,1)
 				return 1

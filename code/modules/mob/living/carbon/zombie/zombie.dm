@@ -97,11 +97,7 @@
 	trg_idle = null
 	frustration = 0
 
-/mob/living/carbon/human/zombie/proc/process()
-	if(timestopped)
-		sleep(1)
-		continue
-	//set background = 1
+/mob/living/carbon/human/zombie/process()
 	var/quick_move = 1
 	var/slow_move = 0
 

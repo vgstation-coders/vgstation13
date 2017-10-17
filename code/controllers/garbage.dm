@@ -47,7 +47,7 @@ var/soft_dels = 0
 world/loop_checks = 0
 #endif
 
-/datum/garbage_collector/proc/process()
+/datum/garbage_collector/process()
 	var/remainingCollectionPerTick = GC_COLLECTIONS_PER_TICK
 	var/remainingForceDelPerTick = GC_FORCE_DEL_PER_TICK
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT

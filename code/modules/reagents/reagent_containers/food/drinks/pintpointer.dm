@@ -10,7 +10,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/New()
 	..()
 	update_icon()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/process()
 	..()
@@ -49,7 +49,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/Destroy()
 	creator = null
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/smash(mob/living/M, mob/living/user)

@@ -90,7 +90,7 @@
 /obj/effect/lance_trigger/New(loc, owner, lance)
 	..()
 
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	src.owner = owner
 	L = lance
 	src.owner.lock_atom(src, /datum/locking_category/lance) //1 turf in front of the player
@@ -99,7 +99,7 @@
 		amount_of_turfs_charged = 0
 
 /obj/effect/lance_trigger/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	owner = null
 
 	if(L)

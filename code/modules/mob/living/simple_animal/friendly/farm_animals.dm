@@ -263,7 +263,7 @@
 		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
-			processing_objects.Add(E)
+			START_PROCESSING(SSobj, src)
 
 #define BOX_GROWTH_BAR 200
 /mob/living/simple_animal/hostile/retaliate/box

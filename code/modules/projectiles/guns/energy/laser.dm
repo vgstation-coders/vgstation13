@@ -141,11 +141,11 @@
 
 /obj/item/weapon/gun/energy/laser/captain/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/laser/captain/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 
@@ -178,11 +178,11 @@
 
 /obj/item/weapon/gun/energy/laser/cyborg/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/laser/cyborg/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/laser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg

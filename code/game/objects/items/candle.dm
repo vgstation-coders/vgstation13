@@ -12,6 +12,9 @@
 	var/lit = 0
 	var/flavor_text
 
+/obj/item/candle/Destroy()
+	STOP_PROCESSING(SSobj, src)
+
 /obj/item/candle/update_icon()
 	var/i
 	if(wax > 150)
@@ -31,7 +34,7 @@
 		src.lit = 1
 		visible_message(flavor_text)
 		set_light(CANDLE_LUM)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 /obj/item/candle/process()
 	if(!lit)
@@ -42,7 +45,7 @@
 	if(env.oxygen < 5)
 		src.lit = 0
 		set_light(0)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		update_icon()
 		return
 	if(!wax)

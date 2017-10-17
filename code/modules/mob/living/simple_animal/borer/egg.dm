@@ -31,7 +31,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Grow()
 	grown = 1
 	icon_state = "borer egg-grown"
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 	if(!recruiter)
 		recruiter = new(src)
@@ -49,7 +49,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Hatch()
 	if(hatching)
 		return
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	icon_state="borer egg-triggered"
 	hatching=1
 	src.visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")

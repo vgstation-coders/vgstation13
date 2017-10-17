@@ -144,7 +144,7 @@ var/list/holomap_cache = list()
 		to_chat(H, "<span class='notice'>You disable the holomap.</span>")
 	else
 		activator = H
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		process()
 		to_chat(H, "<span class='notice'>You enable the holomap.</span>")
 
@@ -401,7 +401,7 @@ var/list/holomap_cache = list()
 		animate(I)
 
 	holomap_images.len = 0
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 
 /obj/item/clothing/accessory/holomap_chip/process()

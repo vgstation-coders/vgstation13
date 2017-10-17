@@ -168,6 +168,9 @@
 	fuel = rand(300, 500) // Sorry for changing this so much but I keep under-estimating how long X number of ticks last in seconds.
 	..()
 
+/obj/item/device/flashlight/flare/Destroy()
+	STOP_PROCESSING(SSobj, src)
+
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
 	if(pos)
@@ -177,7 +180,7 @@
 		turn_off()
 		if(!fuel)
 			src.icon_state = "[initial(icon_state)]-empty"
-		processing_objects -= src
+		STOP_PROCESSING(SSobj, src)
 
 /obj/item/device/flashlight/flare/proc/turn_off()
 	on = 0
@@ -210,7 +213,7 @@
 	on = 1
 	src.force = on_damage
 	src.damtype = "fire"
-	processing_objects += src
+	START_PROCESSING(SSobj, src)
 	if(user)
 		update_brightness(user)
 	else

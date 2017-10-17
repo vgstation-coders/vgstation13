@@ -65,7 +65,7 @@
 		if(timer < 0) //No timer - the guy's going to be in there forever, just kill him
 			L.death(FALSE) //not gibbed
 		else
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 
 	if(health == 0) //meaning if the statue didn't find a valid target
 		qdel(src)
@@ -75,8 +75,7 @@
 
 /obj/structure/closet/statue/Destroy()
 	..()
-
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 
 /obj/structure/closet/statue/proc/dissolve()
@@ -85,7 +84,7 @@
 
 	visible_message("<span class='notice'>The statue's surface begins cracking and dissolving!</span>")
 
-	processing_objects.Remove(src) //Disable the statue's processing (otherwise it may heal the occupants or something like that)
+	STOP_PROCESSING(SSobj, src) //Disable the statue's processing (otherwise it may heal the occupants or something like that)
 	dissolving = TRUE
 
 	//Kill and husk the occupants over the course of 6 seconds, then dump them out (they won't be cloneable but their brains will be OK)

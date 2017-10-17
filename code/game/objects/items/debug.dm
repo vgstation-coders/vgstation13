@@ -23,9 +23,9 @@
 
 /obj/item/debug/screamer/update_icon()
 	if(on)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 	else
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	icon_state = "candle1[on ? "_lit" : ""]"
 
 

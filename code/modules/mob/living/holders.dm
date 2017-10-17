@@ -12,7 +12,7 @@
 
 /obj/item/weapon/holder/New(loc, mob/M)
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	if(M)
 		M.forceMove(src)
 
@@ -30,7 +30,7 @@
 		if(M.client)
 			M.client.eye = M
 
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/holder/process()

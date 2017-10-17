@@ -52,13 +52,17 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 /datum/controller/master/New()
 	// Highlander-style: there can only be one! Kill off the old and replace it with the new.
-	subsystems = list()
+	var/list/_subsystems = list()
+	subsystems = _subsystems
 	if (Master != src)
 		if (istype(Master))
 			Recover()
 			qdel(Master)
 		else
-			init_subtypes(/datum/subsystem, subsystems)
+			var/list/subsystem_types = subtypesof(/datum/subsystem)
+			sortTim(subsystem_types, /proc/cmp_subsystem_init)
+			for(var/I in subsystem_types)
+				_subsystems += new I
 		Master = src
 
 /*

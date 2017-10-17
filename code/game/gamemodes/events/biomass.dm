@@ -118,14 +118,14 @@
 		qdel(src)
 
 	spawn_biomass_piece(loc)
-	processing_objects += src
+	START_PROCESSING(SSobj, src)
 
 /obj/effect/biomass_controller/Destroy() // controller is kill, no!!!111
 	if(vines && vines.len > 0)
 		for(var/obj/effect/biomass/Biomass in vines)
 			Biomass.unreferenceMaster()
 
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/effect/biomass_controller/proc/spawn_biomass_piece(var/turf/location)

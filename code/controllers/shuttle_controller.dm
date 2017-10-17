@@ -301,7 +301,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 			online = 0
 
-datum/emergency_shuttle/proc/process()
+datum/emergency_shuttle/process()
 	if(!online || shutdown)
 		return
 

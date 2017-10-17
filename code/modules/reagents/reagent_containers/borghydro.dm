@@ -27,7 +27,7 @@
 		reagents.add_reagent(reagent, volume)
 		reagent_list += reagents
 
-	processing_objects += src
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/reagent_containers/borghypo/Destroy()
 	for(var/datum/reagents/reagents in reagent_list)
@@ -35,7 +35,7 @@
 
 	reagent_list = null
 
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/reagent_containers/borghypo/process() //Every [recharge_time] seconds, recharge some reagents for the cyborg

@@ -818,13 +818,13 @@
 		warm = 0
 		name = initial(name)
 		reagents.del_reagent(TRICORDRAZINE)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return
 
 	warm--
 
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 	..()
 
@@ -833,7 +833,7 @@
 	reagents.add_reagent(TRICORDRAZINE, 5)
 	bitesize = 6
 	name = "warm [name]"
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/reagent_containers/food/snacks/brainburger
 	name = "brainburger"

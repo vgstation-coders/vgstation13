@@ -75,9 +75,6 @@
 /datum/power_connection/proc/excess(var/netexcess)
 	return
 
-/datum/power_connection/proc/process()
-	return // auto_use_power() :^)
-
 // common helper procs for all power machines
 /datum/power_connection/proc/add_avail(var/amount)
 	if(get_powernet())

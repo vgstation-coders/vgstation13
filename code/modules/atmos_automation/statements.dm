@@ -30,9 +30,6 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 /datum/automation/proc/OnRemove()
 	return
 
-/datum/automation/proc/process()
-	return
-
 /datum/automation/proc/Evaluate()
 	return 0
 

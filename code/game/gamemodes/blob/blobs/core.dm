@@ -23,7 +23,7 @@
 /obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)
 	looks = newlook
 	blob_cores += src
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	creator = C
 	if((icon_size == 64) && !no_morph)
 		if(new_overmind)
@@ -53,7 +53,7 @@
 				R.update_icon()
 		qdel(overmind)
 		overmind = null
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/effect/blob/core/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

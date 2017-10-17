@@ -284,12 +284,6 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	..()
 	return
 
-
-/obj/item/device/assembly/process()
-	processing_objects.Remove(src)
-	return
-
-
 /obj/item/device/assembly/examine(mob/user)
 	..()
 	if(show_status)

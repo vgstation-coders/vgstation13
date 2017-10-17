@@ -103,10 +103,10 @@
 
 /obj/item/stack/sheet/wetleather/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/stack/sheet/wetleather/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/stack/sheet/leather

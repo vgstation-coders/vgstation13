@@ -372,7 +372,7 @@ var/datum/controller/gameticker/ticker
 		if(!istype(M,/mob/new_player))
 			M.store_position()//updates the players' origin_ vars so they retain their location when the round starts.
 
-/datum/controller/gameticker/proc/process()
+/datum/controller/gameticker/process()
 	if(current_state != GAME_STATE_PLAYING)
 		return 0
 

@@ -110,7 +110,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		attached.set_light(0)
 		attached.icon_state = "powersink0"
 		attached.mode = 0
-		processing_objects.Remove(attached)
+		STOP_PROCESSING(SSobj, attached)
 		attached.anchored = 0
 		attached.attached = null
 

@@ -7,7 +7,7 @@ var/list/datum/puddle/puddles = list()
 datum/puddle
 	var/list/obj/effect/liquid/liquid_objects = list()
 
-datum/puddle/proc/process()
+datum/puddle/process()
 //	to_chat(world, "DEBUG: Puddle process!")
 	for(var/obj/effect/liquid/L in liquid_objects)
 		L.spread()

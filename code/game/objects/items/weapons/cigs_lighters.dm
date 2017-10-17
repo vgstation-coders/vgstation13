@@ -38,8 +38,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/Destroy()
 	. = ..()
-
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/match/examine(mob/user)
 	..()
@@ -72,10 +71,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/proc/update_brightness()
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		set_light(brightness_on)
 	else
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		set_light(0)
 	update_icon()
 
@@ -177,8 +176,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/Destroy()
 	. = ..()
-
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 
 /obj/item/clothing/mask/cigarette/examine(mob/user)
 
@@ -202,10 +200,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/proc/update_brightness()
 	if(lit)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		set_light(brightness_on)
 	else
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		set_light(0)
 	update_icon()
 
@@ -263,7 +261,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(glass.reagents.has_reagent(SACID) || glass.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
 			var/atom/new_butt = new type_butt(get_turf(glass))
 			transfer_fingerprints_to(new_butt)
-			processing_objects.Remove(src)
+			STOP_PROCESSING(SSobj, src)
 			to_chat(user, "<span class='warning'>Half of \the [src] dissolves with a nasty fizzle as you dip it into \the [glass].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
@@ -271,7 +269,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(glass.reagents.has_reagent(WATER) && lit) //Dumping a lit cigarette into water, the result is obvious
 			var/atom/new_butt = new type_butt(get_turf(glass))
 			transfer_fingerprints_to(new_butt)
-			processing_objects.Remove(src)
+			STOP_PROCESSING(SSobj, src)
 			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [glass].</span>")
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
@@ -624,8 +622,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/Destroy()
 	. = ..()
-
-	processing_objects -= src
+	STOP_PROCESSING(SSobj, src)
 
 /obj/item/weapon/lighter/red
 	color_suffix = "-r"
@@ -660,10 +657,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/proc/update_brightness()
 	if(lit)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		set_light(brightness_on)
 	else
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		set_light(0)
 	update_icon()
 

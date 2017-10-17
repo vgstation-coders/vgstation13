@@ -58,7 +58,7 @@
 	create_reagents(5000)
 	reagents.add_reagent(BANANA, 175)
 
-	processing_objects |= src
+	START_PROCESSING(SSobj, src)
 
 /obj/structure/bed/chair/vehicle/clowncart/examine(mob/user)
 	..()

@@ -495,10 +495,10 @@ var/list/hive_pylons = list()
 	..()
 
 	hive_pylons.Add(src)
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/structure/hive/pylon/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	hive_pylons.Remove(src)
 
 	..()
@@ -513,7 +513,7 @@ var/list/hive_pylons = list()
 /obj/structure/hive/pylon/proc/turn_offline()
 	health = 1
 	icon_state = "hive_pylon_inactive"
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	desc = initial(desc) + " It is inactive."
 	active = FALSE
 
@@ -559,11 +559,10 @@ var/list/hive_pylons = list()
 
 /obj/structure/hive/cloner/New()
 	..()
-
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 /obj/structure/hive/cloner/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 	for(var/obj/effect/narration/hive/cloning/C in range(7, src)) //The narration effect mentions the replicator when you enter the room. Once you destroy the replicator, silence the narration
 		qdel(C)

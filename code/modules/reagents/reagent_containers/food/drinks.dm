@@ -1325,7 +1325,7 @@
 	if(!lit && molotov == 1)
 		lit = 1
 		visible_message(flavor_text)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		update_icon()
 	if(!lit && flammable)
 		lit = 1

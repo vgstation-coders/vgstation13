@@ -66,7 +66,7 @@
 
 /obj/structure/bed/chair/vehicle/New()
 	..()
-	processing_objects |= src
+	START_PROCESSING(SSobj, src)
 
 	if(!nick)
 		nick=name

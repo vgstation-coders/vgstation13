@@ -21,7 +21,7 @@
 	color_overlay = image('icons/obj/items.dmi', src, "gum_chewed_full")
 
 /obj/item/gum/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/gum/examine(mob/user)
@@ -118,7 +118,7 @@
 	if(!chewed)
 		flags &= ~NOREACT //Allow reagents to react after being chewed
 		reagents.handle_reactions()
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 		chewed = TRUE
 	user.visible_message("\The [user] puts \the [src] in \his mouth.","You start chewing \the [src].")
 	update_icon()
@@ -144,7 +144,7 @@
 	else
 		if(ismob(loc))
 			to_chat(M, "<span class='notice'>Your [name] has lost all flavor.</span>")
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	update_icon()
 
 /obj/item/gum/attack_self(mob/user)

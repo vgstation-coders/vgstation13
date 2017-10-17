@@ -303,7 +303,7 @@
 				update_icon()
 				src.hitsound = "sound/weapons/toolhit.ogg"
 				src.welding = 0
-			processing_objects.Remove(src)
+			STOP_PROCESSING(SSobj, src)
 			return
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
@@ -407,7 +407,7 @@
 			src.force = 15
 			src.damtype = "fire"
 			update_icon()
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 		else
 			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
 			src.welding = 0
@@ -441,7 +441,7 @@
 			src.force = 15
 			src.damtype = "fire"
 			update_icon()
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 		else
 			if(user && istype(user))
 				to_chat(user, "<span class='notice'>Need more fuel!</span>")

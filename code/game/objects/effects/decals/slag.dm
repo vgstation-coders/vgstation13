@@ -22,17 +22,17 @@
 		if(!molten)
 			molten=1
 			icon_state="slaghot"
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 			set_light(2)
 
 /obj/effect/decal/slag/Destroy()
 	set_light(0)
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/effect/decal/slag/process()
 	if(!molten)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return
 	var/turf/T=loc
 	var/datum/gas_mixture/env = T.return_air()

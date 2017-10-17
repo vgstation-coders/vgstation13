@@ -264,7 +264,7 @@ obj/item/weapon/banhammer/admin
 	if(!parent_borer)
 		qdel(src)
 	else
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/melee/bone_hammer/Destroy()
 	if(parent_borer)
@@ -273,7 +273,7 @@ obj/item/weapon/banhammer/admin
 		if(parent_borer.channeling)
 			parent_borer.channeling = 0
 		parent_borer = null
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/melee/bone_hammer/process()

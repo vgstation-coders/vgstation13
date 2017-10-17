@@ -25,11 +25,11 @@
 
 /obj/item/weapon/gun/energy/taser/cyborg/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/taser/cyborg/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/taser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
@@ -114,11 +114,11 @@
 
 /obj/item/weapon/gun/energy/crossbow/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/crossbow/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 
@@ -159,7 +159,7 @@
 		power_supply.maxcharge = 0
 		power_supply.charge = 0
 		in_chamber = null
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		to_chat(M, "<span class='warning'>\The [src] fizzles.</span>")
 		return 0
 	return ..()

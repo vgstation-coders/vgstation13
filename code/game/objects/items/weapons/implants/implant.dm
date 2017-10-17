@@ -410,6 +410,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 <b>Integrity:</b> Implant will occasionally be degraded by the body's immune system and thus will occasionally malfunction."}
 		return dat
 
+/obj/item/weapon/implant/death_alarm/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	..()
+
 /obj/item/weapon/implant/death_alarm/process()
 	if (!implanted || timestopped)
 		return
@@ -443,13 +447,13 @@ the implant may become unstable and either pre-maturely inject the subject or si
 				speech.message="[mobname] has died in Space!"
 			else
 				speech.message="[mobname] has died in [t.name]!"
-			processing_objects.Remove(src)
+			STOP_PROCESSING(SSobj, src)
 		if ("emp")
 			var/name = prob(50) ? t.name : pick(teleportlocs)
 			speech.message="[mobname] has died in [name]!"
 		else
 			speech.message="[mobname] has died-zzzzt in-in-in..."
-			processing_objects.Remove(src)
+			STOP_PROCESSING(SSobj, src)
 	Broadcast_Message(speech, vmask=0, data=0, compression=0, level=list(0,1))
 	returnToPool(speech)
 
@@ -464,14 +468,14 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			meltdown()
 		else if (prob(60))	//but more likely it will just quietly die
 			malfunction = MALFUNCTION_PERMANENT
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 
 	spawn(20)
 		malfunction--
 
 /obj/item/weapon/implant/death_alarm/implanted(mob/source as mob)
 	mobname = source.real_name
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	return 1
 
 /obj/item/weapon/implant/compressed

@@ -52,7 +52,7 @@
 
 /obj/item/weapon/gun/projectile/flamethrower/process()
 	if(!lit)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		return null
 	var/turf/location = loc
 	if(istype(location, /mob/))
@@ -220,7 +220,7 @@
 			return
 		lit = !lit
 		if(lit)
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 	if(href_list["amount"])
 		throw_percent = throw_percent + text2num(href_list["amount"])
 		throw_percent = max(20, min(100, throw_percent))

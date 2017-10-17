@@ -247,7 +247,7 @@
 	if(!parent_borer)
 		qdel(src)
 	else
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 /obj/item/weapon/melee/bone_sword/Destroy()
 	if(parent_borer)
@@ -256,7 +256,7 @@
 		if(parent_borer.channeling)
 			parent_borer.channeling = 0
 		parent_borer = null
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/melee/bone_sword/process()

@@ -202,7 +202,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	editor = null
 	edited_overlay = null
 	currently_edited = null
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 
 //Air alarms and APCs have a zone around them, in which turfs can't be removed from the area
 //This proc returns either the air alarm, or the APC that obstruct the editing
@@ -325,7 +325,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	editor = user
 
 	currently_edited = get_area()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 	//Create a visual effect over the edited area
 	edited_overlay = image('icons/turf/areas.dmi', currently_edited, "yellow")

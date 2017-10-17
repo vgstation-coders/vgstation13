@@ -28,7 +28,7 @@
 	src.air_contents.volume = volume //liters
 	src.air_contents.temperature = T20C
 
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	return
 
 /obj/item/weapon/tank/Destroy()
@@ -40,8 +40,7 @@
 		var/obj/machinery/portable_atmospherics/holder = loc
 		holder.holding = null
 
-	processing_objects.Remove(src)
-
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/tank/examine(mob/user)

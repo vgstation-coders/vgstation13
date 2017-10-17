@@ -81,11 +81,11 @@
 
 /obj/item/weapon/gun/energy/tag/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 	makeLaser()
 
 /obj/item/weapon/gun/energy/tag/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 /obj/item/weapon/gun/energy/tag/process()

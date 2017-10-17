@@ -13,7 +13,11 @@
 
 /obj/machinery/singularity/narsie/large/exit/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
+
+/obj/machinery/singularity/narsie/large/exit/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	..()
 
 /obj/machinery/singularity/narsie/large/exit/update_icon()
 	overlays.Cut()

@@ -52,11 +52,11 @@
 
 /obj/item/weapon/gun/energy/gun/nuclear/New()
 	..()
-	processing_objects.Add(src)
+	START_PROCESSING(SSobj, src)
 
 
 /obj/item/weapon/gun/energy/gun/nuclear/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	..()
 
 
@@ -94,7 +94,7 @@
 			to_chat(M, "<span class='warning'>You feel a wave of heat wash over you.</span>")
 			M.apply_radiation(300, RAD_EXTERNAL)
 		crit_fail = 1 //break the gun so it stops recharging
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		update_icon()
 	return 0
 

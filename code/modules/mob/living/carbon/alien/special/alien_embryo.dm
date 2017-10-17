@@ -14,7 +14,7 @@
 /obj/item/alien_embryo/New()
 	if(istype(loc, /mob/living))
 		affected_mob = loc
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 
 		for(var/mob/dead/observer/O in get_active_candidates(ROLE_ALIEN,poll="[affected_mob] has been infected by \a [src]!"))
 			if(O.client && O.client.desires_role(ROLE_ALIEN))
@@ -71,7 +71,7 @@
 		return
 	if(loc != affected_mob)
 		affected_mob.status_flags &= ~(XENO_HOST)
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 		spawn(0)
 			RemoveInfectionImages(affected_mob)
 			affected_mob = null

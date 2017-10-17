@@ -44,7 +44,7 @@
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	target = null
 	..()
 
@@ -146,7 +146,7 @@
 	if(aliens_allowed)
 		..()
 		if(real) // Lamarr still tries to couple with heads, but toys won't
-			processing_objects.Add(src)
+			START_PROCESSING(SSobj, src)
 
 	else if(!sterile)
 		qdel(src)
@@ -351,7 +351,7 @@
 		return
 	target = null
 /*		RemoveActiveIndicators()	*/
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
 	sterile = TRUE //Dead huggers can't make people pregnant, duh. This also makes them acidable to avoid acid cheesers AND prevents people from using dead huggers to avoid getting hugged.

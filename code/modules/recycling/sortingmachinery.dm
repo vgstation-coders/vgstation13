@@ -117,7 +117,7 @@
 
 /obj/machinery/disposal/deliveryChute/New()
 	..()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
 	spawn(5)
 		trunk = locate() in src.loc
 		if(trunk)

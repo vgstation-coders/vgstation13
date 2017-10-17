@@ -145,7 +145,7 @@
 		signalPump(tag_airpump, 0)		//send a signal to stop pressurizing
 
 
-/datum/computer/file/embedded_program/proc/process()
+/datum/computer/file/embedded_program/process()
 	if(!state && target_state)
 		switch(target_state)
 			if(TARGET_INOPEN)

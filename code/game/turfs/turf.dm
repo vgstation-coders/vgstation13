@@ -71,8 +71,7 @@
 	if(bullet_marks)
 		to_chat(user, "It has bullet markings on it.")
 
-/turf/proc/process()
-	set waitfor = FALSE
+/turf/process()
 	universe.OnTurfTick(src)
 
 /turf/New()

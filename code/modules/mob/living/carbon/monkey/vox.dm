@@ -90,7 +90,7 @@
 		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(prob(25))
-			processing_objects.Add(E)
+			START_PROCESSING(SSobj, src)
 
 /mob/living/carbon/monkey/vox/verb/layegg()
 	set name = "Lay egg"

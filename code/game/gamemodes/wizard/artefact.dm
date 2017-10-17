@@ -57,8 +57,10 @@
 	var/cowsleft = 20
 
 /obj/effect/rend/cow/New()
-	processing_objects.Add(src)
-	return
+	START_PROCESSING(SSobj, src)
+
+/obj/effect/rend/Cow/Destroy()
+	STOP_PROCESSING(SSobj, src)
 
 /obj/effect/rend/cow/process()
 	if(locate(/mob) in loc)
