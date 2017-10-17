@@ -95,16 +95,19 @@
 	else
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
-/mob/living/carbon/martian/Stat()
-	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
-		var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
-		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
-			var/obj/item/weapon/tank/internal = fishbowl.tank
-			stat("Internal Atmosphere Info", internal.name)
-			stat("Tank Pressure", internal.air_contents.return_pressure())
-			stat("Distribution Pressure", internal.distribute_pressure)
-
-
 /mob/living/carbon/martian/Login()
 	..()
 	update_hud()
+
+/mob/living/carbon/martian/Stat()
+	..()
+	if(statpanel("Status"))
+		stat(null, "Intent: [a_intent]")
+		stat(null, "Move Mode: [m_intent]")
+		if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
+			var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
+			if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
+				var/obj/item/weapon/tank/internal = fishbowl.tank
+				stat("Internal Atmosphere Info", internal.name)
+				stat("Tank Pressure", internal.air_contents.return_pressure())
+				stat("Distribution Pressure", internal.distribute_pressure)

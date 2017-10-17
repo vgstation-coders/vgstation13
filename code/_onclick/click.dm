@@ -270,7 +270,7 @@
 	return
 
 /atom/proc/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && ishuman(src) && user.Adjacent(src))
+	if(!(user == src) && !(isrobot(user)) && iscarbon(src) && user.Adjacent(src))
 		src:give_item(user)
 		return
 	var/turf/T = get_turf(src)
