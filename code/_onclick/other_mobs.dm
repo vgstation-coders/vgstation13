@@ -227,4 +227,4 @@
 			A.attack_tk(src)
 
 /atom/proc/attack_martian(mob/user)
-	return attack_paw(user)
+	return attack_hand(user)

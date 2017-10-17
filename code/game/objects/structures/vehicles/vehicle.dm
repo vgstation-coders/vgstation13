@@ -165,7 +165,7 @@
 	return 1
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
-	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
+	if(M != user || !ishigherbeing(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
 		return 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M

@@ -11,6 +11,8 @@
 
 #define ismartian(A) istype(A, /mob/living/carbon/martian)
 
+#define ishigherbeing(A) (ismartian(A) || ishuman(A))
+
 #define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
 
 #define isdiona(A) (ishuman(A) && A.species && istype(A.species, /datum/species/diona))
