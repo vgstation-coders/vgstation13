@@ -576,8 +576,8 @@ var/list/uplink_items = list()
 	cost = 1
 
 /datum/uplink_item/device_tools/bugdetector
-	name = "Bug Detector"
-	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. "
+	name = "Bug Detector w/Camera Disabler built-in"
+	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. Activating it will disable cameras nearby, plus the ones far away randomly, causing massive disruptions to the AI."
 	item = /obj/item/device/multitool/ai_detect
 	cost = 3
 
