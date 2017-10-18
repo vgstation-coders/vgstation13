@@ -852,6 +852,8 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/golem/makeName()
 	return capitalize(pick(golem_names))
 
+var/list/has_died_as_golem = list()
+
 /datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isgolem(H))
 		return
@@ -869,8 +871,11 @@ var/global/list/whitelisted_species = list("Human")
 		if(H.real_name)
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
+		var/golem_key = H.key
+		has_died_as_golem.Add(golem_key)
+		spawn(GOLEM_RESPAWN_TIME)
+			has_died_as_golem.Remove(golem_key)
 		A.key = H.key
-		H.key = null
 	qdel(H)
 
 /datum/species/golem/can_artifact_revive()

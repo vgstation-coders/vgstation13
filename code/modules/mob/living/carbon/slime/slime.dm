@@ -1034,7 +1034,10 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
 	else
 		if(!check_observer(O))
-			to_chat(O, "<span class='warning'>You are not eligable.</span>")
+			to_chat(O, "<span class='warning'>You are not eligible.</span>")
+			return
+		if(O.key in has_died_as_golem)
+			to_chat(O, "<span class='warning'>You have died as a golem too recently. You must wait longer before you can become a golem again.</span>")
 			return
 		ghosts.Add(O)
 		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
