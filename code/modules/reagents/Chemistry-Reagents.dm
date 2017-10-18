@@ -1715,6 +1715,9 @@
 	if(prob(20))
 		M.advanced_mutate()
 
+/datum/reagent/phazon/reaction_animal(var/mob/living/M)
+	on_mob_life(M)
+
 /datum/reagent/aluminum
 	name = "Aluminum"
 	id = ALUMINUM
