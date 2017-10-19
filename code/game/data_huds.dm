@@ -14,7 +14,7 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 		sec_hud_users -= src
 
 proc/check_HUD_visibility(var/mob/living/carbon/human/target, var/mob/user)
-	if(M.see_invisible < target.invisibility)
+	if(user.see_invisible < target.invisibility)
 		return FALSE
 	if(target.alpha <= 1)
 		return FALSE
