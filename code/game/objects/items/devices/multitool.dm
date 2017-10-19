@@ -151,7 +151,7 @@ obj/item/device/multitool/ai_detect/examine(mob/user)
 		to_chat(user, "<span class='info'>\The [src] seems to be charging. Is it wireless?</span>")
 
 /obj/item/device/multitool/ai_detect/attack_self()
-	var/EPI_RANGE = 5 //range to turn off cameras nearby
+	var/EPI_RANGE = 7 //range to turn off cameras nearby
 	var/PROB_DC_CAMS = 25 //probability to turn off cameras far away
 	var/turf/T = get_turf(src)
 
