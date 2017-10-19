@@ -1803,9 +1803,9 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(!organ_data)
 			to_chat(user, "<span class='warning'>\The [src] has no brain!</span>")
 			return
-		if(brainmob && brainmob.mind)
+		if(brainmob)
 			var/mind_found = 0
-			if(brainmob.mind.active)
+			if(brainmob.client)
 				mind_found = 1
 				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
 			else
