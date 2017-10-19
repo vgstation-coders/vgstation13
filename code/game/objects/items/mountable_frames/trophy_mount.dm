@@ -35,7 +35,7 @@
 	temp.dir = SOUTH
 	temp.plane = FLOAT_PLANE
 	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		temp.pixel_y = -6 * PIXEL_MULTIPLIER
+		temp.pixel_y = -8 * PIXEL_MULTIPLIER
 	overlays += temp.appearance
 
 /obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user)
@@ -136,5 +136,5 @@
 	temp.dir = SOUTH
 	temp.plane = FLOAT_PLANE
 	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		temp.pixel_y = -6 * PIXEL_MULTIPLIER
+		temp.pixel_y = -8 * PIXEL_MULTIPLIER
 	overlays += temp.appearance
