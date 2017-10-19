@@ -34,6 +34,8 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 			continue
 		if(M.see_invisible < patient.invisibility)
 			continue
+		if(patient.alpha <= 1)
+			continue
 		if(!C)
 			continue
 
@@ -75,6 +77,8 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		T = get_turf(M)
 	for(var/mob/living/carbon/human/perp in range(T))
 		if(M.see_invisible < perp.invisibility)
+			continue
+		if(perp.alpha <= 1)
 			continue
 		holder = perp.hud_list[ID_HUD]
 		if(!holder)
