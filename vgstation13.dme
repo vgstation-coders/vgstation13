@@ -733,6 +733,7 @@
 #include "code\game\objects\items\mountable_frames\paintings.dm"
 #include "code\game\objects\items\mountable_frames\sound_system.dm"
 #include "code\game\objects\items\mountable_frames\station_map.dm"
+#include "code\game\objects\items\mountable_frames\trophy_mount.dm"
 #include "code\game\objects\items\mountable_frames\wallmed.dm"
 #include "code\game\objects\items\mountable_frames\wreath.dm"
 #include "code\game\objects\items\mountable_frames\posters\poster.dm"
