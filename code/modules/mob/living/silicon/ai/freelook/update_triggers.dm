@@ -64,14 +64,19 @@
 
 /mob/living/silicon/robot/Move()
 	var/oldLoc = src.loc
+	var/oldZ = src.loc.z
 	. = ..()
 	if(.)
 		if(src.camera)
+			to_chat(world, "boi we're updating this!")
 			if(!updating)
 				updating = 1
 				spawn(BORG_CAMERA_BUFFER)
 					if(oldLoc != src.loc)
 						cameranet.updatePortableCamera(src.camera)
+						if(oldZ != src.z)
+							adv_camera.queueUpdate(oldZ, FALSE, list(src.camera))
+						adv_camera.queueUpdate(src.z, FALSE, list(src.camera))
 					updating = 0
 
 // CAMERA
