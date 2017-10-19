@@ -758,6 +758,31 @@
 		return CANNOT_EQUIP //Unsupported slot
 		//END ALIEN HUMANOID
 
+	else if(ishologram(M))
+		//START HOLOGRAM
+		var/mob/living/simple_animal/hologram/advanced/HM = M
+		switch(slot)
+			if(slot_head)
+				if(HM.head)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_HEAD) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+			if(slot_w_uniform)
+				if(HM.w_uniform)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_ICLOTHING) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+			if(slot_wear_suit)
+				if(HM.wear_suit)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_OCLOTHING) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+		return CANNOT_EQUIP //Unsupported slot
+		//END HOLOGRAM
+
 	else if(isMoMMI(M))
 		//START MOMMI ALSO THIS SO FUCKING SILLY
 		var/mob/living/silicon/robot/mommi/MoM = M

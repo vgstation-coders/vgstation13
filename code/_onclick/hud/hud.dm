@@ -230,6 +230,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		pai_hud()
 	else if(ismartian(mymob))
 		martian_hud()
+	else if(ishologram(mymob))
+		hologram_hud()
 
 	if(isliving(mymob))
 		var/obj/abstract/screen/using

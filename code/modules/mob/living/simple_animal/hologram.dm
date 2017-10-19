@@ -57,3 +57,100 @@
 
 /mob/living/simple_animal/hologram/tajaran_dancer
 	atom_to_mimic = /mob/living/simple_animal/hostile/humanoid/tajaran/dancer
+
+/mob/living/simple_animal/hologram/advanced
+	name = "hologram"
+	desc = "A holographic image of a person."
+	icon_state = "holo3"
+	icon_living = "holo3"
+	held_items = list(null, null)
+	health = 50
+	maxHealth = 50
+	melee_damage_lower = 5
+	melee_damage_upper = 5
+	attacktext = "punches"
+	var/obj/item/head
+	var/obj/item/w_uniform
+	var/obj/item/wear_suit
+	var/list/obj/abstract/Overlays/obj_overlays[TOTAL_LAYERS]
+
+/mob/living/simple_animal/hologram/advanced/New()
+	..()
+	name = "[name] ([rand(1, 1000)])"
+	real_name = name
+	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
+	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
+	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
+	spawn(5)
+		to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck. <span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>")
+		if(transmogged_from)
+			to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
+
+/mob/living/simple_animal/hologram/advanced/Destroy()
+	head = null
+	w_uniform = null
+	wear_suit = null
+	transmogrify()
+	..()
+
+/mob/living/simple_animal/hologram/RangedAttack(var/atom/A)
+	return
+
+/mob/living/simple_animal/hologram/advanced/UnarmedAttack(var/atom/A)
+	if(ismob(A))
+		delayNextAttack(10)
+	A.attack_hand(src)
+
+/mob/living/simple_animal/hologram/advanced/Life()
+	..()
+	regular_hud_updates()
+	if(!istype(get_area(src), /area/holodeck))
+		dissipate()
+
+/mob/living/simple_animal/hologram/proc/dissipate()
+	transmogrify()
+	qdel(src)
+
+/mob/living/simple_animal/hologram/advanced/can_wield()
+	return 1
+
+/mob/living/simple_animal/hologram/advanced/attack_hand(mob/living/M)
+	switch(M.a_intent)
+		if(I_HELP)
+			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			M.visible_message( \
+				"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
+				"<span class='notice'>You hug [src].</span>", \
+				)
+
+		if(I_HURT)
+			M.unarmed_attack_mob(src)
+
+		if(I_GRAB)
+			M.grab_mob(src)
+
+		if(I_DISARM)
+			M.disarm_mob(src)
+
+/mob/living/simple_animal/hologram/advanced/attack_alien(mob/living/M)
+	switch(M.a_intent)
+		if (I_HELP)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
+
+		if (I_HURT)
+			return M.unarmed_attack_mob(src)
+
+		if (I_GRAB)
+			return M.grab_mob(src)
+
+		if (I_DISARM)
+			return M.disarm_mob(src)
+
+/mob/living/simple_animal/hologram/advanced/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
+
+/mob/living/simple_animal/hologram/advanced/attack_martian(mob/M)
+	return attack_hand(M)
+
+/mob/living/simple_animal/hologram/advanced/attack_paw(mob/M)
+	return attack_hand(M)
