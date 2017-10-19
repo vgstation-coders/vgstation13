@@ -86,7 +86,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 	else
 		T = get_turf(M)
 	for(var/mob/living/carbon/human/perp in range(T))
-		if(!check_HUD_visibility(patient, M))
+		if(!check_HUD_visibility(perp, M))
 			continue
 		holder = perp.hud_list[ID_HUD]
 		if(!holder)
