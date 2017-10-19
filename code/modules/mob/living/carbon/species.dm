@@ -865,16 +865,16 @@ var/list/has_died_as_golem = list()
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
 	var/mob/living/adamantine_dust/A = new(H.loc)
 	if(golemmind)
+		var/golem_key = H.mind.key
+		has_died_as_golem.Add(golem_key)
+		spawn(GOLEM_RESPAWN_TIME)
+			has_died_as_golem.Remove(golem_key)
 		A.mind = golemmind
 		H.mind = null
 		golemmind.current = A
 		if(H.real_name)
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
-		var/golem_key = H.key
-		has_died_as_golem.Add(golem_key)
-		spawn(GOLEM_RESPAWN_TIME)
-			has_died_as_golem.Remove(golem_key)
 		A.key = H.key
 	qdel(H)
 
