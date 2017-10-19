@@ -87,28 +87,28 @@
 
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	var/damage = get_unarmed_damage(target)
-
+//	to_chat(world, "LINE 90")
 	if(!damage)
 		if(miss_unarmed_attack(target))
 			return
-
+//	to_chat(world, "LINE 94")
 	var/zone = ran_zone(get_unarmed_damage_zone(target))
 	var/datum/organ/external/affecting = target.get_organ(zone)
 	var/armor_block = target.run_armor_check(affecting, "melee", modifier = get_armor_modifier(target))
 	var/damage_type = get_unarmed_damage_type(target)
 	var/attack_verb = get_unarmed_verb(target)
 	var/attack_sound = get_unarmed_hit_sound(target)
-
+//	to_chat(world, "LINE 101")
 	if(attack_sound)
 		playsound(loc, attack_sound, 25, 1, -1)
-
+//	to_chat(world, "LINE 104")
 	visible_message(get_attack_message(target, attack_verb))
 	do_attack_animation(target, src)
-
+//	to_chat(world, "LINE 107, [damage] damage")
 	var/damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
-
+//	to_chat(world, "LINE 111, [damage_done] damage done")
 	add_logs(src, target, "attacked ([damage_done]dmg)", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
 	return damage_done

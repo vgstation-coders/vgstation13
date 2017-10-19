@@ -2114,6 +2114,7 @@
 #include "code\modules\spells\targeted\disorient.dm"
 #include "code\modules\spells\targeted\ethereal_jaunt.dm"
 #include "code\modules\spells\targeted\feint.dm"
+#include "code\modules\spells\targeted\fist.dm"
 #include "code\modules\spells\targeted\flesh_to_coal.dm"
 #include "code\modules\spells\targeted\flesh_to_stone.dm"
 #include "code\modules\spells\targeted\genetic.dm"
