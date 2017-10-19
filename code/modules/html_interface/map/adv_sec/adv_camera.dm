@@ -165,10 +165,10 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			deleting = TRUE
 		if(pos.z != zz)
 			camerasbyzlevel["[zz]"] -= C //bad zlevel
+			deleting = TRUE
 			if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
 				camerasbyzlevel["[zz]"] |= C //try to fix the zlevel list.
-			else
-				deleting = TRUE
+
 		if(!C.can_use() || C.network.len < 1) //I originally checked if "SS13" was in the camera's networks but apparently sec cameras can see into engi cameras just fine or whatever.
 			deleting = TRUE
 
