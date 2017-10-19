@@ -39,10 +39,10 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 				continue
 			for(var/i in patient.alphas)
 				if(patient.alphas[i] <= 1)
-				continue mob_loop
+					continue mob_loop
 			for(var/i in patient.body_alphas)
 				if(patient.body_alphas[i] <= 1)
-				continue mob_loop
+					continue mob_loop
 			if(!C)
 				continue
 
@@ -90,10 +90,10 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 				continue
 			for(var/i in perp.alphas)
 				if(perp.alphas[i] <= 1)
-				continue mob_loop
+					continue mob_loop
 			for(var/i in perp.body_alphas)
 				if(perp.body_alphas[i] <= 1)
-				continue mob_loop
+					continue mob_loop
 			holder = perp.hud_list[ID_HUD]
 			if(!holder)
 				continue
