@@ -68,7 +68,6 @@
 	. = ..()
 	if(.)
 		if(src.camera)
-			to_chat(world, "boi we're updating this!")
 			if(!updating)
 				updating = 1
 				spawn(BORG_CAMERA_BUFFER)

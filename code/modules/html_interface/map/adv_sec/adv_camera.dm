@@ -155,7 +155,6 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	var/see_y
 
 	if(!ignore_unused && !(hi.isUsed()))
-		to_chat(world, "bepis")
 		return
 
 	for(var/obj/machinery/camera/C in camerasToUpdate)
