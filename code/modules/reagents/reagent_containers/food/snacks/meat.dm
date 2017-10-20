@@ -207,6 +207,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "pork"
 	desc = "A slab of pig meat."
 	icon_state = "meat"
+	gender = PLURAL
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive
 	name = "alien tissue"

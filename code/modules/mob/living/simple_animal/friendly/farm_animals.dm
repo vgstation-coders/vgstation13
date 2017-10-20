@@ -315,7 +315,7 @@
 	..()
 	switch(size)
 		if(SIZE_SMALL)
-			to_chat(user, "<span class='info'>It's a box baby.</span>")
+			to_chat(user, "<span class='info'>It's a [name] baby.</span>")
 		if(SIZE_NORMAL)
 			to_chat(user, "<span class='info'>It's a respectable size.</span>")
 		if(SIZE_BIG)
@@ -361,3 +361,6 @@
 	icon_living = "pig"
 	icon_dead = "pig"
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	min_oxy = 5
+	max_oxy = 0
+	min_n2 = 0
