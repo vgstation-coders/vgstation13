@@ -269,9 +269,9 @@
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
 	desc = "A distant descendent of the common domesticated Earth pig, corrupted by generations of splicing and genetic decay."
-	icon_state = "box_2"
-	icon_living = "box_2"
-	icon_dead = "box_2_dead"
+	icon_state = "box"
+	icon_living = "box"
+	icon_dead = "box"
 	speak = list("SQUEEEEE!","Oink...","Oink, oink", "Oink, oink, oink", "Oink!", "Oiiink.")
 	emote_hear = list("squeals hauntingly")
 	emote_see = list("roots about","squeals hauntingly")
@@ -293,6 +293,12 @@
 	treadmill_speed = 1.5
 	var/fat = 0
 
+/mob/living/simple_animal/hostile/retaliate/box/New()
+	..()
+	icon_state = "[initial(icon_state)]_2"
+	icon_living = "[initial(icon_living)]_2"
+	icon_dead = "[initial(icon_dead)]_2_dead"
+
 /mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
 	if(size<SIZE_BIG)
 		size++
@@ -301,9 +307,9 @@
 	update_icon()
 
 /mob/living/simple_animal/hostile/retaliate/box/update_icon()
-	icon_state = "box_[size]"
-	icon_living = "box_[size]"
-	icon_dead = "box_[size]_dead"
+	icon_state = "[initial(icon_state)]_[size]"
+	icon_living = "[initial(icon_living)]_[size]"
+	icon_dead = "[initial(icon_dead)]_[size]_dead"
 
 /mob/living/simple_animal/hostile/retaliate/box/examine(mob/user)
 	..()
@@ -347,3 +353,11 @@
 			fat += rand(15,25)
 	else
 		..()
+
+/mob/living/simple_animal/hostile/retaliate/box/pig
+	name = "pig"
+	desc = "A common pig, not useful for much besides meat."
+	icon_state = "pig"
+	icon_living = "pig"
+	icon_dead = "pig"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
