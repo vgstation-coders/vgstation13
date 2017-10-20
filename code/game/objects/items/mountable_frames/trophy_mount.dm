@@ -25,15 +25,13 @@
 		return
 	name = "[held_item.name]"
 	desc = "\A [held_item] mounted on a wooden trophy mount for display."
-	var/image/temp = new (src)
-	var/mutable_appearance/MA = new(held_item.appearance)
-	MA.transform = matrix()
-	MA.dir = SOUTH
-	MA.plane = FLOAT_PLANE
+	var/mutable_appearance/temp = new(held_item.appearance)
+	temp.transform = matrix()
+	temp.dir = SOUTH
+	temp.plane = FLOAT_PLANE
 	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		MA.pixel_y = -8 * PIXEL_MULTIPLIER
-	temp.appearance = MA
-	overlays += temp.appearance
+		temp.pixel_y = -8 * PIXEL_MULTIPLIER
+	overlays += temp
 
 /obj/item/mounted/frame/trophy_mount/examine(mob/user)
 	..()
@@ -127,19 +125,13 @@
 		return
 	name = "[held_item.name]"
 	desc = "\A [held_item] mounted on a wooden trophy mount for display."
-	var/datum/log/L = new
-	held_item.examine(L)
-	desc += "\n[L.log]"
-	qdel(L)
-	var/image/temp = new (src)
-	var/mutable_appearance/MA = new(held_item.appearance)
-	MA.transform = matrix()
-	MA.dir = SOUTH
-	MA.plane = FLOAT_PLANE
+	var/mutable_appearance/temp = new(held_item.appearance)
+	temp.transform = matrix()
+	temp.dir = SOUTH
+	temp.plane = FLOAT_PLANE
 	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		MA.pixel_y = -8 * PIXEL_MULTIPLIER
-	temp.appearance = MA
-	overlays += temp.appearance
+		temp.pixel_y = -8 * PIXEL_MULTIPLIER
+	overlays += temp
 
 /obj/structure/trophy_mount/examine(mob/user)
 	..()
