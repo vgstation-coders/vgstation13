@@ -829,7 +829,7 @@
 			return ..() //Sanity
 
 		if(1)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 5)
 					to_chat(user, "You need more cable for this!")
@@ -989,7 +989,7 @@ FIRE ALARM
 						update_icon()
 						getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
 			if(1)
-				if(iscoil(W))
+				if(iscablecoil(W))
 					var/obj/item/stack/cable_coil/coil = W
 					if(coil.amount < 5)
 						to_chat(user, "You need more cable for this!")
