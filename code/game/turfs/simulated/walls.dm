@@ -156,7 +156,7 @@
 		return
 
 	//Get the user's location
-	if(!istype(user.loc, /turf))
+	if(!istype(user.loc, /turf) && !istype(user.loc, /obj/mecha))
 		return	//Can't do this stuff whilst inside objects and such
 
 	if(rotting)

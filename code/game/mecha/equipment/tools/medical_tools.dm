@@ -115,7 +115,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 	if(filter.get("eject"))
 		go_out()
@@ -288,7 +289,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		set_ready_state(!equip_ready)
 		occupant_message("[src] [equip_ready?"dea":"a"]ctivated.")
@@ -498,7 +500,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	var/datum/topic_input/filter = new (href,href_list)
 	if(filter.get("toggle_mode"))
 		mode = !mode

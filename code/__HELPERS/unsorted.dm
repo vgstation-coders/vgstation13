@@ -755,6 +755,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	var/delayfraction = round(delay/numticks)
 	var/Location
+	if(istype(user.loc, /obj/mecha))
+		use_user_turf = TRUE
 	if(use_user_turf)	//When this is true, do_after() will check whether the user's turf has changed, rather than the user's loc.
 		Location = get_turf(user)
 	else

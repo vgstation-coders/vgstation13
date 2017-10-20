@@ -238,6 +238,7 @@
 	var/status = 1 		//Whether the welder is secured or unsecured (able to attach rods to it to make a flamethrower)
 	var/max_fuel = 20 	//The max amount of fuel the welder can hold
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
+	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -471,7 +472,7 @@
 		if(E.welding_proof)
 			user.simple_message("<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
 			return
-		if(safety < 2)
+		if(safety < 2 && eye_damaging)
 			switch(safety)
 				if(1)
 					user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
@@ -545,6 +546,10 @@
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
+
+/obj/item/weapon/weldingtool/hugetank/mech
+	name = "welding tool"
+	eye_damaging = FALSE
 
 /obj/item/weapon/weldingtool/gatling
 	name = "gatling welder"
