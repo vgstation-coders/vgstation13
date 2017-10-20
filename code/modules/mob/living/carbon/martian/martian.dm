@@ -1,11 +1,24 @@
+#define MARTIANS_AMBIDEXTROUS //Comment out to prevent martians from being able to do multiple do_afters at once
+
 //WORK IN PROGRESS - Martians (name may be changed)
 //Like octopuses but with 6 hands
-//In current state they don't inherit anything from monkeys or humans. Might be better if they did
-//
+
+/*
+ DESIGN:
+
+ + tentacles provide better grasp than hands. Martians are more resistant to winds, disarms and other hazards that would stun a human
+ + are ambidextrous
+
+ * breathe oxygen and exhale CO2 like humans do
+
+ - their unique shape means they can't fit into any human clothing, and can only put on hats
+ - toxins are very dangerous to them
+
+*/
 
 /mob/living/carbon/martian
 	name = "martian"
-	desc = "An alien creature resembling an octopus."
+	desc = "An alien resembling an overgrown octopus."
 	voice_name = "martian"
 
 	icon = 'icons/mob/martian.dmi'
@@ -15,132 +28,119 @@
 
 	held_items = list(null, null, null, null, null, null) //6 hands
 
-	var/obj/item/head //Item worn on head
+	unslippable = TRUE
+	size = SIZE_BIG
+
+	fire_dmi = 'icons/mob/OnFire.dmi'
+	fire_sprite = "Standing"
+	plane = HUMAN_PLANE
+
+	maxHealth = 150
+	health = 150
+
+	//Inventory slots
+	var/obj/item/head //hat
+
+	var/icon_state_standing = "martian"
+	var/icon_state_lying = "lying"
+	var/icon_state_dead = "dead"
+
+	var/flag = 0
 
 /mob/living/carbon/martian/New()
 	create_reagents(200)
+	name = pick("martian","scootaloo","squid","rootmarian","phoronitian","sepiida","octopodiforme",\
+	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo")
+	..()
+
+/mob/living/carbon/martian/Destroy()
+	head = null
 
 	..()
 
-/mob/living/carbon/martian/get_item_offset_by_index(index)
-	switch(index)
-		if(1,6)
-			return list("x"=0, "y"=0)
-		if(2,5)
-			return list("x"=0, "y"=10)
-		if(3,4)
-			return list("x"=0, "y"=18)
+#ifdef MARTIANS_AMBIDEXTROUS
+/mob/living/carbon/martian/do_after_hand_check(held_item)
+	//Normally do_after breaks if you switch hands. With martians, it will only break if the used item is dropped
+	//This lets them do multiple things at once.
+	return (held_items.Find(held_item))
+#endif
 
-	return list()
+/mob/living/carbon/martian/eyecheck()
+	var/obj/item/clothing/head/headwear = src.head
 
-/mob/living/carbon/martian/get_held_item_ui_location(index)
-	if(!is_valid_hand_index(index))
-		return
+	var/protection = headwear.eyeprot
 
-	switch(index)
-		if(1)
-			return "CENTER-3:16,SOUTH:5"
-		if(2)
-			return "CENTER-2:16,SOUTH:5:4"
-		if(3)
-			return "CENTER-1:16,SOUTH:5:10"
-		if(4)
-			return "CENTER+1:16,SOUTH:5:10"
-		if(5)
-			return "CENTER+2:16,SOUTH:5:4"
-		if(6)
-			return "CENTER+3:16,SOUTH:5"
-		else
-			return ..()
+	return Clamp(protection, -2, 2)
 
-/mob/living/carbon/martian/get_index_limb_name(index)
-	if(!index)
-		index = active_hand
+/mob/living/carbon/martian/earprot()
+	return 1
 
-	switch(index)
-		if(1)
-			return "right lower tentacle"
-		if(2)
-			return "right middle tentacle"
-		if(3)
-			return "right upper tentacle"
-		if(4)
-			return "left upper tentacle"
-		if(5)
-			return "left middle tentacle"
-		if(6)
-			return "left lower tentacle"
-		else
-			return "tentacle"
-
-/mob/living/carbon/martian/get_direction_by_index(index)
-	if(index <= 3)
-		return "right_hand"
-	else
-		return "left_hand"
-
+/mob/living/carbon/martian/dexterity_check()
+	return TRUE
 
 /mob/living/carbon/martian/IsAdvancedToolUser()
-	return 1
+	return TRUE
 
-/mob/living/carbon/martian/GetAccess()
-	var/list/ACL=list()
+/mob/living/carbon/martian/Process_Spaceslipping()
+	return 0 //No slipping
 
-	for(var/obj/item/I in held_items)
-		ACL |= I.GetAccess()
+/mob/living/carbon/martian/has_eyes()
+	return FALSE
 
-	return ACL
+/mob/living/carbon/martian/attack_hand(mob/living/M)
+	switch(M.a_intent)
+		if(I_HELP)
+			help_shake_act(M)
 
-/mob/living/carbon/martian/get_visible_id()
-	var/id = null
-	for(var/obj/item/I in held_items)
-		id = I.GetID()
-		if(id)
-			break
-	return id
+		if(I_HURT)
+			M.unarmed_attack_mob(src)
 
-/mob/living/carbon/martian/can_wield()
-	return 1
+		if(I_GRAB)
+			M.grab_mob(src)
 
-/mob/living/carbon/martian/u_equip(obj/item/W as obj, dropped = 1)
-	var/success = 0
+		if(I_DISARM)
+			M.disarm_mob(src)
 
-	if(!W)
-		return 0
+/mob/living/carbon/martian/attack_alien(mob/living/M)
+	switch(M.a_intent)
+		if (I_HELP)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 
-	if (W == head)
-		head = null
-		success = 1
-		update_inv_head()
+		if (I_HURT)
+			return M.unarmed_attack_mob(src)
+
+		if (I_GRAB)
+			return M.grab_mob(src)
+
+		if (I_DISARM)
+			return M.disarm_mob(src)
+
+/mob/living/carbon/martian/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
+
+/mob/living/carbon/martian/attack_martian(mob/M)
+	return attack_hand(M)
+
+/mob/living/carbon/martian/attack_paw(mob/M)
+	return attack_hand(M)
+
+/mob/living/carbon/martian/updatehealth()
+	if(status_flags & GODMODE)
+		health = maxHealth
+		stat = CONSCIOUS
 	else
-		..()
+		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
-	if(success)
-		if (W)
-			if(client)
-				client.screen -= W
-			W.forceMove(loc)
-			W.unequipped(src)
-			if(dropped)
-				W.dropped(src)
-			if(W)
-				W.reset_plane_and_layer()
+/mob/living/carbon/martian/Stat()
+	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
+		var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
+		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
+			var/obj/item/weapon/tank/internal = fishbowl.tank
+			stat("Internal Atmosphere Info", internal.name)
+			stat("Tank Pressure", internal.air_contents.return_pressure())
+			stat("Distribution Pressure", internal.distribute_pressure)
 
-	return
 
-/mob/living/carbon/martian/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!istype(W))
-		return
-
-	if(src.is_holding_item(W))
-		src.u_equip(W)
-
-	if(slot == slot_head)
-		head = W
-		update_inv_head(redraw_mob)
-
-	W.hud_layerise()
-	W.equipped(src, slot)
-	W.forceMove(src)
-	if(client)
-		client.screen |= W
+/mob/living/carbon/martian/Login()
+	..()
+	update_hud()

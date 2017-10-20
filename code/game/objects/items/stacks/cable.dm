@@ -313,3 +313,15 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	..()
 	_color = pick("red","yellow","green","blue","pink")
 	icon_state = "coil_[_color]"
+
+/obj/item/stack/cable_coil/persistent/turf_place(turf/simulated/floor/F, mob/user, var/dirnew)	//for cable coil that needs to not be capable of being used up entirely
+	if(amount > 1)
+		return ..()
+
+/obj/item/stack/cable_coil/persistent/cable_join(obj/structure/cable/C, mob/user)
+	if(amount > 1)
+		return ..()
+
+/obj/item/stack/cable_coil/persistent/attack(mob/M, mob/user)
+	if(amount > 1)
+		return ..()

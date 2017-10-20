@@ -513,6 +513,7 @@ var/list/special_fruits = list()
 	filling_color = "#FA2863"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	slices_num = 5
+	storage_slots = 3
 	plantname = "watermelon"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
@@ -819,6 +820,7 @@ var/list/special_fruits = list()
 	desc = "A hard-shelled fruit with precious juice inside. Even the shell may find use, if properly sliced."
 	slice_path = /obj/item/stack/sheet/wood
 	slices_num = 1
+	storage_slots = 1 //seems less intended and more like an artifact of old code where if something was sliceable, it should also hold items inside, but keeping consistency
 	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"

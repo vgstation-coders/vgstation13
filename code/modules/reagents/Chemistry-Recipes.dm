@@ -2551,6 +2551,13 @@
 	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/pintpointer
+	name = "Pintpointer"
+	id = PINTPOINTER
+	result = PINTPOINTER
+	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
+	result_amount = 2
+
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 

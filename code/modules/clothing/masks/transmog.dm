@@ -107,7 +107,7 @@
 /obj/item/clothing/mask/morphing/xeno
 	name = "mask of the xenomorph"
 	desc = "It appears to be modeled after a xenomorph."
-	target_type = /mob/living/carbon/alien/humanoid
+	target_type = /mob/living/carbon/alien/humanoid/hunter
 	icon_state = "xeno_mask"
 
 /obj/item/clothing/mask/morphing/human
@@ -125,7 +125,7 @@
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
 	//Remove cockatrices because they're somewhat OP when player controlled
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice))
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice) - typesof(/mob/living/simple_animal/hostile/giant_spider/hunter/dead) - typesof(/mob/living/simple_animal/hostile/asteroid/hivelordbrood))
 
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"

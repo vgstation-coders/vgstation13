@@ -21,6 +21,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 #define	MECH_SCREEN_HONK		35
 #define	MECH_SCREEN_PHAZON		36
 #define	MECH_SCREEN_NANOTRASEN	37
+#define	MECH_SCREEN_CLARKE		38
 
 #define	MECH_SCREEN_MISC		41
 
@@ -92,11 +93,14 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 	<div class="line">
 		{{:helper.link('Ripley',	 'gear',{'screen':31},(data.screen==31)?'linkOn':'', 'fixedLeft')}}
 		{{:helper.link('Odysseus',	 'gear',{'screen':32},(data.screen==32)?'linkOn':'', 'fixedLeft')}}
-		{{:helper.link('Gygax',		 'gear',{'screen':33},(data.screen==33)?'linkOn':'', 'fixedLeft')}}
+		{{:helper.link('Clarke',	 'gear',{'screen':38},(data.screen==38)?'linkOn':'', 'fixedLeft')}}
 	</div>
 	<div class="line">
+		{{:helper.link('Gygax',		 'gear',{'screen':33},(data.screen==33)?'linkOn':'', 'fixedLeft')}}
 		{{:helper.link('Durand',	 'gear',{'screen':34},(data.screen==34)?'linkOn':'', 'fixedLeft')}}
 		{{:helper.link('H.O.N.K',	 'gear',{'screen':35},(data.screen==35)?'linkOn':'', 'fixedLeft')}}
+	</div>
+	<div class="line">
 		{{:helper.link('Phazon',	 'gear',{'screen':36},(data.screen==36)?'linkOn':'', 'fixedLeft')}}
 	</div>
 	{{if data.parts.Nanotrasen.length > 1}}
@@ -516,6 +520,34 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 					{{empty}}
 						<i>No parts in memory</i>
 					{{/for}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/if}}
+
+{{if data.screen == 38}}
+	<div class="item">
+		<div class="itemLabel">
+			Clarke Parts
+		</div>
+		<div class="line">
+			{{:helper.link('Quick Clarke', 'gear', {'queue_part_set':'Clarke'}, null, 'fixedLeftWidest')}}
+	</div>
+	<div class="itemContentWide" style="width:100%;">
+		<div class="statusDisplay">
+			<div class="line">
+				{{for data.parts.Clarke}}
+					<div class="line">
+						<div class="statusValue">
+							{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+							{{:helper.link(value.cost, null, null, null, null, 'cost')}}
+							{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+						</div>
+					</div>
+				{{empty}}
+					<i>No parts in memory</i>
+				{{/for}}
 				</div>
 			</div>
 		</div>

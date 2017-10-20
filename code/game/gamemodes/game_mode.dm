@@ -254,7 +254,7 @@
 	// Ultimate randomizing code right here
 	for(var/mob/new_player/player in player_list)
 		if(player.client && player.ready)
-			players += player
+			players |= player
 
 	// Shuffling, the players list is now ping-independent!!!
 	// Goodbye antag dante

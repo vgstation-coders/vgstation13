@@ -9,6 +9,8 @@
 
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)
 
+#define ismartian(A) istype(A, /mob/living/carbon/martian)
+
 #define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
 
 #define isdiona(A) (ishuman(A) && A.species && istype(A.species, /datum/species/diona))
@@ -133,6 +135,8 @@
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)
 
+#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
@@ -165,7 +169,7 @@
 
 //Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
+#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
 
 #define iscult(H) (H.mind in ticker.mode.cult)
 

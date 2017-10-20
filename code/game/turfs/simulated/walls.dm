@@ -55,6 +55,7 @@
 			P.roll_and_drop(src)
 
 	ChangeTurf(dismantle_type)
+	update_near_walls()
 
 /turf/simulated/wall/ex_act(severity)
 	if(rotting)
@@ -155,7 +156,7 @@
 		return
 
 	//Get the user's location
-	if(!istype(user.loc, /turf))
+	if(!istype(user.loc, /turf) && !istype(user.loc, /obj/mecha))
 		return	//Can't do this stuff whilst inside objects and such
 
 	if(rotting)

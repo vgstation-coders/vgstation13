@@ -41,6 +41,7 @@
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
 	var/lights = 0
 	var/lights_power = 6
+	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
 
 	//inner atmos
 	var/use_internal_tank = 0
@@ -81,7 +82,8 @@
 						/obj/item/mecha_parts,
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack)
+						/obj/item/device/radio/electropack,
+						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
 	..()
@@ -104,7 +106,7 @@
 	return
 
 /obj/mecha/Destroy()
-	src.go_out()
+	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
 	..()
 	return
@@ -319,13 +321,20 @@
 		return 0
 	var/move_result = 0
 	startMechWalking()
+	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
 		move_result = mechturn(direction)
+		stepped = FALSE
 	else
 		move_result	= mechstep(direction)
 	if(move_result)
+		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+			if(stepped)
+				ME.on_mech_step()
+			else
+				ME.on_mech_turn()
 		can_move = 0
 		use_power(step_energy_drain)
 		if(istype(src.loc, /turf/space))
@@ -623,7 +632,7 @@
 
 /obj/mecha/proc/destroy()
 	spawn()
-		go_out()
+		go_out(loc, TRUE)
 		var/turf/T = get_turf(src)
 		tag = "\ref[src]" //better safe then sorry
 		if(loc)
@@ -1270,9 +1279,17 @@
 			O.forceMove(src.loc)
 	return
 
-/obj/mecha/proc/go_out(var/exit = loc)
+/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!src.occupant)
 		return
+
+	if(!exploding && exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
+		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
+		for(var/turf/simulated/T in turf_candidates)
+			if(!is_blocked_turf(T) && Adjacent(T))
+				exit = T
+				break
+
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = src.occupant

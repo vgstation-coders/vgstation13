@@ -54,7 +54,7 @@
 
 
 	if(powerlevel > 0)
-		if(isalien(target) || ishuman(target) || ismonkey(target))
+		if(isalien(target) || ishuman(target) || ismonkey(target) || ismartian(target))
 			var/stunprob = get_stun_chance()
 			var/power = powerlevel + rand(0,3)
 

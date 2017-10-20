@@ -123,6 +123,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/Topic(href,href_list)
+	if(usr.incapacitated() || usr != chassis.occupant)
+		return TRUE
 	testing("[src] topic")
 	if(href_list["detach"])
 		detach()
@@ -143,4 +145,10 @@
 /obj/item/mecha_parts/mecha_equipment/proc/log_message(message)
 	if(chassis)
 		chassis.log_message("<i>[src]:</i> [message]")
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/on_mech_step()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/on_mech_turn()
 	return

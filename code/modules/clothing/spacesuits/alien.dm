@@ -565,3 +565,46 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
 	species_restricted = list("Grey")
+
+
+//Martian Fishbowl
+
+/obj/item/clothing/head/helmet/space/martian
+	name = "alien pressure helmet"
+	icon_state = "bubblehelm"
+	icon = 'icons/obj/clothing/martian.dmi'
+	item_state = "bubblehelm"
+	desc = "A very spacious container, with a slot on the back for pressurized tanks to sustain an internal atmosphere."
+	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	body_parts_covered = FULL_HEAD|IGNORE_INV
+	species_restricted = list("Martian")
+	var/obj/item/weapon/tank/tank
+
+/obj/item/clothing/head/helmet/space/martian/attackby(obj/item/W,mob/user)
+	if(istype(W, /obj/item/weapon/tank) && !tank)
+		to_chat(user, "<span class = 'notice'>You start attaching \the [W] to \the [src].</span>")
+		if(do_after(user,src, 50))
+			if(user.drop_item(W, src))
+				playsound(src,'sound/effects/refill.ogg',50,1)
+				to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src]!</span>")
+				tank = W
+				item_state = "[initial(item_state)]_mask"
+				return
+	..()
+
+/obj/item/clothing/head/helmet/space/martian/attack_self(mob/user)
+	if(tank)
+		to_chat(user, "<span class = 'notice'>You start detaching \the [tank] from \the [src].</span>")
+		if(do_after(user,src, 50))
+			playsound(src,'sound/effects/refill.ogg',50,1)
+			to_chat(user, "<span class = 'notice'>You detach \the [tank] from \the [src]!</span>")
+			user.put_in_hands(tank)
+			item_state = initial(item_state)
+			tank = null
+	..()
+
+/obj/item/clothing/head/helmet/space/martian/examine(mob/user)
+	..()
+	if(tank)
+		to_chat(user, "<span class = 'notice'>It has a [bicon(tank)][tank] attached to the back.</span>")

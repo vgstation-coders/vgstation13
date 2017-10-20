@@ -66,6 +66,7 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("burns")
+	hitsound = "sound/weapons/welderattack.ogg"
 
 /obj/item/weapon/cautery/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -73,6 +74,35 @@
 
 /obj/item/weapon/cautery/is_hot()
 	return 1
+
+/obj/item/weapon/cautery/laser
+	name = "basic laser cautery"
+	desc = "A laser cautery module detached from a basic laser scalpel. You can attach it to a laser scalpel."
+	icon_state = "lasercautery_T1"
+	item_state = "laserscalpel1"
+	sharpness_flags = HOT_EDGE
+	damtype = "fire"
+	force = 10.0
+	throwforce = 5.0
+	surgery_speed = 0.6
+
+/*
+/obj/item/weapon/cautery/laser/old //unused laser cautery. For the laser scalpel
+	name = "laser cautery"
+	desc = "A laser cautery"
+	icon_state = "lasercautery_old"
+	item_state = "laserscalpel2old"
+	force = 12.0
+	surgery_speed = 0.5
+*/
+
+/obj/item/weapon/cautery/laser/tier2
+	name = "high-precision laser cautery"
+	desc = "A laser cautery module detached from a high-precision laser scalpel. You can attach it to a laser scalpel."
+	icon_state = "lasercautery_T2"
+	item_state = "laserscalpel2"
+	force = 15.0
+	surgery_speed = 0.4
 
 
 /obj/item/weapon/surgicaldrill
@@ -128,17 +158,31 @@
 
 
 /obj/item/weapon/scalpel/laser
-	heat_production = 0
+	name = "basic laser scalpel"
+	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
+	icon_state = "scalpel_laser1"
+	item_state = "laserscalpel1"
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
+	surgery_speed = 0.6
 	var/cauterymode = 0 //1 = cautery enabled
+	var/obj/item/weapon/cautery/laser/held
+
+/obj/item/weapon/scalpel/laser/New()
+	..()
+	icon_state = "scalpel_laser1_off"
+	held = new /obj/item/weapon/cautery/laser(src)
+
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
-	if(!cauterymode)
+	if(!cauterymode && held)
 		to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
 		heat_production = 1600
 		sharpness = 0
 		sharpness_flags = 0
+	else if(!held)
+		to_chat(user, "\The [src] lacks a cautery attachment.")
+		return
 	else
 		to_chat(user, "You return the scalpel to cutting mode.")
 		heat_production = 0
@@ -146,16 +190,48 @@
 		sharpness_flags = initial(sharpness_flags)
 	cauterymode = !cauterymode
 
-/obj/item/weapon/scalpel/laser/tier1
-	name = "basic laser scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
-	icon_state = "scalpel_laser1"
-	item_state = "laserscalpel1"
-	surgery_speed = 0.6
-
-/obj/item/weapon/scalpel/laser/tier1/New()
+/obj/item/weapon/scalpel/laser/examine(mob/user)
 	..()
-	icon_state = "scalpel_laser1_off"
+	if(!cauterymode)
+		to_chat(user, "\The [src] is in cutting mode.")
+	else
+		to_chat(user, "\The [src] is in cautery mode.")
+
+/obj/item/weapon/scalpel/laser/attackby(var/obj/item/used_item, mob/user)
+	if(isscrewdriver(used_item) && cauterymode)
+		if(held)
+			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
+			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			held.add_fingerprint(user)
+			held.forceMove(get_turf(src))
+			held = null
+			heat_production = 0
+			sharpness = initial(sharpness)
+			sharpness_flags = initial(sharpness_flags)
+			cauterymode = 0
+	else if(istype(used_item, /obj/item/weapon/cautery/laser))
+		if(held)
+			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
+		else if(!held && user.drop_item(used_item, src))
+			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
+			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			src.held = used_item
+		else
+			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
+
+/*
+/obj/item/weapon/scalpel/laser/old //unused laser scalpel
+	name = "laser scalpel"
+	desc = "A laser scalpel."
+	icon_state = "scalpel_laser_old"
+	item_state = "laserscalpel2old"
+	surgery_speed = 0.5
+
+/obj/item/weapon/scalpel/laser/old/New()
+	..()
+	icon_state = "scalpel_laser_old_off"
+	held = new /obj/item/weapon/cautery/laser/old(src)
+*/
 
 /obj/item/weapon/scalpel/laser/tier2
 	name = "high-precision laser scalpel"
@@ -168,6 +244,7 @@
 /obj/item/weapon/scalpel/laser/tier2/New()
 	..()
 	icon_state = "scalpel_laser2_off"
+	held = new /obj/item/weapon/cautery/laser/tier2(src)
 
 
 /obj/item/weapon/circular_saw
@@ -253,6 +330,9 @@
 	throw_speed = 3
 	throw_range = 5
 	attack_verb = list("attacks", "hits", "bludgeons")
+	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+	w_type = RECYK_METAL
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 
 
 //allows you to replace the bone setter in switchtools with it being a setter child rather than a bonegel child

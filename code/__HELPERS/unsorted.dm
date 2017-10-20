@@ -755,6 +755,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	var/delayfraction = round(delay/numticks)
 	var/Location
+	if(istype(user.loc, /obj/mecha))
+		use_user_turf = TRUE
 	if(use_user_turf)	//When this is true, do_after() will check whether the user's turf has changed, rather than the user's loc.
 		Location = get_turf(user)
 	else
@@ -802,7 +804,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !(user.get_active_hand() == holding))	//Sometimes you don't want the user to have to keep their active hand
+		if(needhand && !user.do_after_hand_check(holding))	//Sometimes you don't want the user to have to keep their active hand
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)

@@ -25,7 +25,7 @@
 			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/check_evolve()
-	if(spider_queens.len < MAX_SQUEENS)
+	if(spider_queens.len < MAX_SQUEENS && !key)	//don't evolve if there's a player inside
 		var/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/NQ = new(src.loc)
 		NQ.inherit_mind(src)
 		qdel(src)

@@ -1261,10 +1261,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("flavor_text")
 					var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
-					if(msg != null)
-						msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-						msg = html_encode(msg)
-
+					if(msg)
 						flavor_text = msg
 				if("limbs")
 					var/list/limb_input = list(

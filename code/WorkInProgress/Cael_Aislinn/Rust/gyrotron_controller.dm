@@ -1,12 +1,24 @@
-#define RUST_GYROTRON_RANGE 25
-
 /obj/machinery/computer/rust_gyrotron_controller
 	name = "Gyrotron Remote Controller"
 	icon_state = "engine"
 	circuit = /obj/item/weapon/circuitboard/rust_gyrotron_control
 	light_color = LIGHT_COLOR_BLUE
 
+	var/id_tag // Required for multitool buffering
 	var/list/linked_gyrotrons[0] //List of linked gyrotrons.
+
+/obj/machinery/computer/rust_gyrotron_controller/initialize()
+	if(!id_tag)
+		assign_uid()
+		id_tag = uid
+
+	. = ..()
+
+/obj/machinery/computer/rust_gyrotron_controller/New()
+	. = ..()
+
+	if(ticker)
+		initialize()
 
 /obj/machinery/computer/rust_gyrotron_controller/Topic(href, href_list)
 	. =..()
