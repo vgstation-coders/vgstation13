@@ -76,7 +76,7 @@
 /mob/living/carbon/martian/can_wield()
 	return 1
 
-/mob/living/carbon/martian/u_equip(obj/item/W, dropped = 1)
+/mob/living/carbon/martian/u_equip(obj/item/W, dropped = 1, var/slot = null)
 	var/success = 0
 
 	if(!W)
@@ -94,7 +94,7 @@
 			if(client)
 				client.screen -= W
 			W.forceMove(loc)
-			W.unequipped(src)
+			W.unequipped(src, slot)
 			if(dropped)
 				W.dropped(src)
 			if(W)
