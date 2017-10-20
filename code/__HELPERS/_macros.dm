@@ -131,8 +131,6 @@
 
 #define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
 
-#define iswire(O) istype(O, /obj/item/stack/cable_coil)
-
 #define issolder(A) istype(A, /obj/item/weapon/solder)
 
 #define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
