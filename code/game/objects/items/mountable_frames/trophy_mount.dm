@@ -25,18 +25,19 @@
 		return
 	name = "[held_item.name]"
 	desc = "\A [held_item] mounted on a wooden trophy mount for display."
-	var/datum/log/L = new
-	held_item.examine(L)
-	desc += "\n[L.log]"
-	qdel(L)
 	var/image/temp = new (src)
-	temp.appearance = held_item.appearance
-	temp.transform = matrix()
-	temp.dir = SOUTH
-	temp.plane = FLOAT_PLANE
+	var/mutable_appearance/MA = new(held_item.appearance)
+	MA.transform = matrix()
+	MA.dir = SOUTH
+	MA.plane = FLOAT_PLANE
 	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		temp.pixel_y = -8 * PIXEL_MULTIPLIER
+		MA.pixel_y = -8 * PIXEL_MULTIPLIER
+	temp.appearance = MA
 	overlays += temp.appearance
+
+/obj/item/mounted/frame/trophy_mount/examine(mob/user)
+	..()
+	to_chat(user, held_item.desc)
 
 /obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -98,10 +99,10 @@
 
 /obj/structure/trophy_mount/attackby(obj/item/weapon/W, mob/user)
 	if(iscrowbar(W))
-		to_chat(user, "You begin prying \the [initial(name)] off the wall.")
+		to_chat(user, "You begin prying the [initial(name)] off the wall.")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src,10))
-			to_chat(user, "You pry \the [initial(name)] off of the wall.")
+			to_chat(user, "You pry the [initial(name)] off of the wall.")
 			add_fingerprint(user)
 			var/obj/item/mounted/frame/trophy_mount/T = new(get_turf(user))
 			if(held_item)
@@ -131,10 +132,15 @@
 	desc += "\n[L.log]"
 	qdel(L)
 	var/image/temp = new (src)
-	temp.appearance = held_item.appearance
-	temp.transform = matrix()
-	temp.dir = SOUTH
-	temp.plane = FLOAT_PLANE
+	var/mutable_appearance/MA = new(held_item.appearance)
+	MA.transform = matrix()
+	MA.dir = SOUTH
+	MA.plane = FLOAT_PLANE
 	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		temp.pixel_y = -8 * PIXEL_MULTIPLIER
+		MA.pixel_y = -8 * PIXEL_MULTIPLIER
+	temp.appearance = MA
 	overlays += temp.appearance
+
+/obj/structure/trophy_mount/examine(mob/user)
+	..()
+	to_chat(user, held_item.desc)
