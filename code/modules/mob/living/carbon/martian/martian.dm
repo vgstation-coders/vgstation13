@@ -35,7 +35,6 @@
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
-
 	maxHealth = 150
 	health = 150
 
@@ -52,6 +51,8 @@
 	create_reagents(200)
 	name = pick("martian","scootaloo","squid","rootmarian","phoronitian","sepiida","octopodiforme",\
 	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo","kalamarian")
+	add_language(LANGUAGE_MARTIAN)
+	default_language = all_languages[LANGUAGE_MARTIAN]
 	..()
 
 /mob/living/carbon/martian/Destroy()
