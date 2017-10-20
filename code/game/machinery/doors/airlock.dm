@@ -1036,7 +1036,6 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, 1, -6)
 		update_icon()
 		return 1
 	return
