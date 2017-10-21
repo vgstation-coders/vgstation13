@@ -18,9 +18,8 @@
 	..()
 
 /obj/abstract/mover/transporter/process()
-	if(host)
-		if(host.gcDestroyed)
-			qdel(src)
+	if(host && host.gcDestroyed)
+		qdel(src)
 
 /obj/abstract/mover/transporter/New()
 	..()
