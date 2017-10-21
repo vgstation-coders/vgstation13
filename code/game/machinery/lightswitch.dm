@@ -64,7 +64,7 @@
 					buildstage = 0
 				return
 		if(0)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 3)
 					to_chat(user, "<span class='warning'>You need at least two wire pieces for this!</span>")

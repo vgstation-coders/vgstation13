@@ -113,7 +113,7 @@
 
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
-#define iscoil(A) istype(A, /obj/item/stack/cable_coil)
+#define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 
@@ -130,8 +130,6 @@
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
 #define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
-
-#define iswire(O) istype(O, /obj/item/stack/cable_coil)
 
 #define issolder(A) istype(A, /obj/item/weapon/solder)
 

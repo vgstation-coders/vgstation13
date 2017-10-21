@@ -106,7 +106,7 @@
 						wires.UpdateCut(i,1)
 				return 1
 		if(1)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 5)
 					to_chat(user, "<span class='warning'>You need more cable for this!</span>")

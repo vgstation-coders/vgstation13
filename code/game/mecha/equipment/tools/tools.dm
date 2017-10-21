@@ -1364,7 +1364,7 @@
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
-		else if(iscoil(I))
+		else if(iscablecoil(I))
 			var/obj/item/stack/cable_coil/C = I
 			if(C.amount <= C.max_amount-5)
 				C.add(5)
