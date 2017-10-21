@@ -10,6 +10,12 @@
 	sheets_refunded = 2
 	autoignition_temperature = AUTOIGNITION_WOOD
 	var/obj/item/held_item
+	var/list/params_list
+	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
+
+/obj/item/mounted/frame/trophy_mount/New()
+	..()
+	update_icon()
 
 /obj/item/mounted/frame/trophy_mount/Destroy()
 	if(held_item)
@@ -22,25 +28,41 @@
 		overlays.len = 0
 		name = initial(name)
 		desc = initial(desc)
-		return
-	name = "[held_item.name]"
-	desc = "\A [held_item] mounted on a wooden trophy mount for display."
-	var/mutable_appearance/temp = new(held_item.appearance)
-	temp.transform = matrix()
-	temp.dir = SOUTH
-	temp.plane = FLOAT_PLANE
-	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		temp.pixel_y = -8 * PIXEL_MULTIPLIER
-	overlays += temp
+	else
+		name = "[held_item.name]"
+		desc = "\A [held_item] mounted on a wooden trophy mount for display."
+		var/mutable_appearance/temp = new(held_item.appearance)
+		temp.transform = matrix()
+		temp.dir = SOUTH
+		temp.plane = FLOAT_PLANE
+		if(params_list && params_list.len)
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			temp.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			temp.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+
+		overlays += temp
+
+	clicked = new/icon(src.icon, src.icon_state, src.dir)
 
 /obj/item/mounted/frame/trophy_mount/examine(mob/user)
 	..()
 	to_chat(user, held_item.desc)
 
-/obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user)
+/obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user, params)
 	..()
+	params_list = params2list(params)
 	if(iswrench(W))
 		return
+	mount_item(W, user)
+
+/obj/item/mounted/frame/trophy_mount/AltClick(mob/user)
+	var/obj/item/I = user.get_active_hand()
+	if(I && I != src)
+		params_list = list()
+		mount_item(I, user)
+
+/obj/item/mounted/frame/trophy_mount/proc/mount_item(obj/item/weapon/W, mob/user)
 	if(held_item)
 		to_chat(user, "This [initial(name)] already has \a [held_item] mounted on it.")
 		return
@@ -49,12 +71,14 @@
 		held_item = W
 		update_icon()
 
+
 /obj/item/mounted/frame/trophy_mount/attack_self(mob/user)
 	if(held_item)
 		var/obj/item/I = held_item
 		held_item.forceMove(get_turf(src))
 		user.put_in_hands(held_item)
 		held_item = null
+		params_list = list()
 		update_icon()
 		user.visible_message("\The [user] removes \the [I] from \the [src].", "You remove \the [I] from \the [src].")
 
@@ -65,11 +89,14 @@
 	user.visible_message("\The [user] hangs \the [src] on \the [on_wall].", "You hang \the [src] on \the [on_wall].")
 	add_fingerprint(user)
 	var/obj/structure/trophy_mount/T = new(get_turf(src))
+	T.name = name
+	T.desc = desc
 	if(held_item)
 		held_item.forceMove(T)
 		T.held_item = held_item
 		held_item = null
-	T.update_icon()
+		T.params_list = params_list
+	T.overlays += appearance
 	transfer_fingerprints(src, T)
 	var/direction = get_dir(user,on_wall)
 	if(direction & NORTH)
@@ -91,6 +118,7 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	anchored = 1
 	var/obj/item/held_item
+	var/list/params_list
 
 /obj/structure/trophy_mount/attack_hand(mob/user)
 	to_chat(user, "<span class='notice'>\The [src] is mounted securely. You'll need something to pry it off the wall.</span>")
@@ -107,6 +135,7 @@
 				held_item.forceMove(T)
 				T.held_item = held_item
 				held_item = null
+				T.params_list = params_list
 			T.update_icon()
 			transfer_fingerprints(src, T)
 			qdel(src)
@@ -116,22 +145,6 @@
 		qdel(held_item)
 		held_item = null
 	..()
-
-/obj/structure/trophy_mount/update_icon()
-	if(!held_item)
-		overlays.len = 0
-		name = initial(name)
-		desc = initial(desc)
-		return
-	name = "[held_item.name]"
-	desc = "\A [held_item] mounted on a wooden trophy mount for display."
-	var/mutable_appearance/temp = new(held_item.appearance)
-	temp.transform = matrix()
-	temp.dir = SOUTH
-	temp.plane = FLOAT_PLANE
-	if(istype(held_item, /obj/item/organ/external/head))	//not every item can be tailored to fit well, but heads get special consideration
-		temp.pixel_y = -8 * PIXEL_MULTIPLIER
-	overlays += temp
 
 /obj/structure/trophy_mount/examine(mob/user)
 	..()
