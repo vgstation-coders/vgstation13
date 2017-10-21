@@ -105,6 +105,7 @@
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
+	#undef ui_equip_hologram
 	#undef ui_swaphand_hologram1
 	#undef ui_swaphand_hologram2
 

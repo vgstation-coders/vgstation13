@@ -81,10 +81,11 @@
 	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
 	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
 	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
-	spawn(5)
-		to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck. <span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>")
-		if(transmogged_from)
-			to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
+
+/mob/living/simple_animal/hologram/advanced/Login()
+	to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck. <span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>")
+	if(transmogged_from)
+		to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
 
 /mob/living/simple_animal/hologram/advanced/Destroy()
 	head = null
