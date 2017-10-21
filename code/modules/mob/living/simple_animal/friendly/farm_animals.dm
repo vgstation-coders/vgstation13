@@ -322,12 +322,17 @@
 			to_chat(user, "<span class='info'>It's huge - a prize winning porker!</span>")
 
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
+	if(!target_check(A))
+		return FALSE
+	else
+		..()
+
+/mob/living/simple_animal/hostile/retaliate/box/proc/target_check(atom/A)
 	if(ishuman(A))
 		var/mob/living/carbon/human/H = A
 		if(isvox(H))
-			return 0 //Won't attack Vox
-	else
-		..()
+			return FALSE //Won't attack Vox
+	return TRUE
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
 	if(!..())
@@ -364,3 +369,6 @@
 	min_oxy = 5
 	max_oxy = 0
 	min_n2 = 0
+
+/mob/living/simple_animal/hostile/retaliate/box/pig/target_check(atom/A)
+	return TRUE	//Will attack anyone.
