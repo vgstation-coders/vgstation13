@@ -378,7 +378,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		lit = 0 //Needed for proper update
 		update_brightness()
 		qdel(src)
-	return
 
 /obj/item/clothing/mask/cigarette/attack(mob/living/carbon/M, mob/living/carbon/user)
 	if(!istype(M))
