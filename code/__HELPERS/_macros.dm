@@ -159,6 +159,8 @@
 
 #define isatommovable(A) (istype(A, /atom/movable))
 
+#define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
+
 #define ismatrix(A) (istype(A, /matrix))
 
 //Macros for antags

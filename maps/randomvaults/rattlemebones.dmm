@@ -1,0 +1,64 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/simulated/wall/invulnerable,/area/vault/rattlemebones)
+"c" = (/obj/abstract/mover/redirector/east,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"d" = (/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"e" = (/obj/abstract/mover/redirector/south,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"f" = (/mob/living/simple_animal/hostile/rattlemebones,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"g" = (/obj/abstract/mover/redirector/west,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"h" = (/obj/abstract/mover/transporter{dir = 1},/mob/living/simple_animal/hostile/rattlemebones,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"i" = (/obj/abstract/mover/transporter,/mob/living/simple_animal/hostile/rattlemebones,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"j" = (/obj/abstract/mover/redirector/north,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"k" = (/obj/abstract/mover/transporter{dir = 8},/mob/living/simple_animal/hostile/rattlemebones,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"l" = (/mob/living/simple_animal/hostile/humanoid/skellington{wander = 0},/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"m" = (/turf/simulated/floor/wood{light_power = 100; light_range = 100},/area/vault/rattlemebones)
+"n" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"o" = (/obj/abstract/mover/redirector/southwest,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"p" = (/obj/abstract/mover/redirector/northwest,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"q" = (/obj/abstract/mover/redirector/southeast,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"r" = (/obj/abstract/mover/redirector/northeast,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"s" = (/obj/structure/disposalpipe/trunk{dir = 4},/obj/structure/disposaloutlet{dir = 8},/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"t" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/invulnerable,/area/vault/rattlemebones)
+"u" = (/obj/structure/disposalpipe/trunk{dir = 8},/obj/machinery/disposal/deliveryChute{dir = 4},/turf/simulated/floor/wood,/area/vault/rattlemebones)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaa
+aabcdddeddcdddebcdedddffffffffffbaa
+aabddddddddddddbdddddddeddgddedgbaa
+aabhdcddddddeddbdcddedddddddddddbaa
+aabddddddddddddbdddddddddddddiddbaa
+aabjdddgddjdkdgbddddddddddddddldbaa
+aabddddddmddiddndhidddddddddddddbaa
+aabcdddeddcdddebddddddddddjddgddbaa
+aabddddddddddddbdddddddcdddddddjbaa
+aabddjddddhdgddbdjddgddfffffddddbaa
+aabddddddddddddbddddddffddofddddbaa
+aabjdkdgddjdddgbjdgddffdddddddddbaa
+aabbnnbbbbbbbbbbddddffedddddpdddbaa
+aablddlbbbceecebfffffdddddddjdddbaa
+aabddddbbbdddddbffffdddddddddpddbaa
+aabddmdbdnddmdibfffdddddmddddjddbaa
+aabddddbdbdddddbffddddddddddfdddbaa
+aabddddbdbdddddbfddddddddddpfddpbaa
+aabddddbdbddhddbdddddfqdddddfdddbaa
+aabddddbdbddjddbdddldffdddddfrddbaa
+aabddddndbddeddbqdddddddddddddddbaa
+aabbbbbbbbddiddbhddddddddddddddpbaa
+aabfffdddbdddddbddddddddldddddddbaa
+aabfffdfdbdddddbhdddddddddddddddbaa
+aabfdddfdnhddddbddddrdddddddrdddbaa
+aabfdffffbdddddbhfffffffffffffffbaa
+aabfdmddfbjgjjgbjkdkdkdkffffffffbaa
+aabffffdfbbbbbbbbbbbbbbnbbbbbbbbbaa
+aabffdddfbddfddbddbbbdddddddddddbaa
+aabfddfffbdddddbddbbbdddmdddddddbaa
+aabfdffddnddmddnddstudddddddddddbaa
+aabfdffdfbdddddbddbbbdddddddddddbaa
+aabfddddfbdddddbddbbbdddddddddddbaa
+aabbbbbbbbbbnbbbbbbbbbbbbbbbbbbbbaa
+aaaaaaaaaaabdbaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaabnbaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}
