@@ -63,9 +63,7 @@
 			continue
 		if(M == usr)
 			continue
-		if(see_invisible < M.invisibility) //cloaked
-			continue
-		if(M.alpha <= 1) //fully transparent
+		if(!check_camera_visibility(M, src))
 			continue
 		if(M.digitalcamo)
 			continue
@@ -99,6 +97,21 @@
 
 	var/list/targets = sortList(track.humans) + sortList(track.others)
 	return targets
+
+/mob/living/silicon/ai/proc/check_camera_visibility(var/mob/living/target, var/mob/user)
+	if(user.see_invisible < target.invisibility)
+		return FALSE
+	if(target.alpha <= 1)
+		return FALSE
+	for(var/i in target.alphas)
+		if(target.alphas[i] <= 1)
+			return FALSE
+	if(iscarbon(target))
+		var/mob/living/carbon/C = target
+		for(var/i in C.body_alphas)
+			if(C.body_alphas[i] <= 1)
+				return FALSE
+	return TRUE
 
 /mob/living/silicon/ai/verb/ai_camera_track(var/target_name as null|anything in trackable_mobs())
 	set name = "track"
