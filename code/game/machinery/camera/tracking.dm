@@ -63,9 +63,7 @@
 			continue
 		if(M == usr)
 			continue
-		if(see_invisible < M.invisibility) //cloaked
-			continue
-		if(M.alpha <= 1) //fully transparent
+		if(!check_HUD_visibility(M, src))
 			continue
 		if(M.digitalcamo)
 			continue
