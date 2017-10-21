@@ -407,6 +407,7 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
 	can_pre_detonate = TRUE
 	equip_cooldown = 30
+	range = RANGED | MELEE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
@@ -458,6 +459,8 @@
 		if(istype(target, /obj/structure/inflatable/door))
 			var/obj/structure/inflatable/door/D = target
 			D.toggle(chassis.occupant)
+		if(isturf(target))
+			..()
 		return
 	..()
 
