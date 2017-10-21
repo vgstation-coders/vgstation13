@@ -27,7 +27,7 @@
 	return
 
 /mob/living/proc/disarmed_by(mob/living/disarmer) //For if you want to do something specific on disarm and nothing else.
-	return 0
+	return FALSE
 
 /mob/living/proc/break_grabs(mob/living/target)
 	for(var/obj/item/weapon/grab/G in target.held_items)

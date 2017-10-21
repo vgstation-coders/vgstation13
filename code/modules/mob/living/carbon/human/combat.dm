@@ -26,7 +26,7 @@
 			var/turf/target = pick(turfs)
 			return G.afterattack(target, src, "struggle" = 1)
 
-	return 0
+	return FALSE
 
 /mob/living/carbon/human/disarm_mob(mob/living/target)
 	add_logs(src, target, "disarmed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
