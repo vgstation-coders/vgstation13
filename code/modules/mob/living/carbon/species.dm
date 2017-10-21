@@ -852,6 +852,8 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/golem/makeName()
 	return capitalize(pick(golem_names))
 
+var/list/has_died_as_golem = list()
+
 /datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isgolem(H))
 		return
@@ -863,6 +865,7 @@ var/global/list/whitelisted_species = list("Human")
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
 	var/mob/living/adamantine_dust/A = new(H.loc)
 	if(golemmind)
+		has_died_as_golem.Add(H.mind.key = world.time)
 		A.mind = golemmind
 		H.mind = null
 		golemmind.current = A
@@ -870,7 +873,6 @@ var/global/list/whitelisted_species = list("Human")
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
 		A.key = H.key
-		H.key = null
 	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
