@@ -31,7 +31,7 @@
 		icon_state = "therm_mercury"
 
 /obj/item/weapon/thermometer/proc/crit_fail(mob/living/carbon/human/C, mob/user)
-	user.visible_message("<span class = 'attack'>\The [user] smashes \the [src] over \the [C]!</span>",\
+	user.visible_message("<span class = 'attack'>\The [user] smashes \the [src] over \the [C]'s head!</span>",\
 			"<span class = 'warning'>You smash \the [src] over \the [C]'s head.</span>")
 	splash_sub(reagents, C, -1, user)
 	user.drop_item(src)

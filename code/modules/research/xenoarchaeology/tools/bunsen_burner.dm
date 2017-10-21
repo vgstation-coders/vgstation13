@@ -74,7 +74,6 @@
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(/obj/item/stack/sheet/metal, loc, rand(3,4), user)
 			qdel(src)
-			return
 	else
 		..()
 
@@ -114,35 +113,6 @@
 		if(!max_temperature)
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
-			return
-
-		/*
-		if(reagents.has_reagent(PLASMA))
-			reagents.remove_reagent(PLASMA, 0.1)
-			max_temperature = TEMPERATURE_PLASMA
-			thermal_energy_transfer = 8000
-			G.adjust(o2 = -0.01)
-		else if(reagents.has_reagent(ETHANOL) && !max_temperature)
-			reagents.remove_reagent(ETHANOL, 0.5)
-			max_temperature = 1833.15
-			thermal_energy_transfer = 3500
-			G.adjust(o2 = -0.08)
-			unsafety = 10
-		else if(reagents.has_reagent(GLYCEROL) && !max_temperature)
-			reagents.remove_reagent(GLYCEROL, 0.25)
-			max_temperature = 1833.15 //Highest temperature of a bunsen burner is 1560 C
-			thermal_energy_transfer = 5000
-			G.adjust(o2 = -0.05)
-			unsafety = 5
-		else if(reagents.has_reagent(FUEL) && !max_temperature)
-			reagents.remove_reagent(FUEL, 0.5)
-			max_temperature = TEMPERATURE_WELDER
-			thermal_energy_transfer = 6400
-			G.adjust(o2 = -0.2,co2 = 0.2)
-			unsafety = 25
-		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
-		if(prob(unsafety) && T)
-			T.hotspot_expose(max_temperature, 5)*/
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"

@@ -145,7 +145,6 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/dump_chems,
 	/client/proc/save_coordinates
 	)
 var/list/admin_verbs_debug = list(

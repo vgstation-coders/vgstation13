@@ -248,7 +248,8 @@
 			str += "\n|''(Check [R.type]/on_reaction()!)''"
 	text2file(str+"\n|}","chemistry-recipes.wiki")
 
-// For /vg/ Wiki docs
+/*
+// For ~~/vg/ Wiki docs~~ another day.
 /client/proc/dump_chems()
 	set category = "Debug"
 	set name = "Dump Chemicals"
@@ -294,3 +295,4 @@
 	if(normal_shc)
 		str += "\n|Number of non-unique SHCs = [normal_shc]"
 	text2file(str+"\n|}","chemistry-reagents.wiki")
+*/
