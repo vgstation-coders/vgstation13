@@ -13,7 +13,7 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 	if(src in sec_hud_users)
 		sec_hud_users -= src
 
-proc/check_HUD_visibility(var/mob/living/carbon/human/target, var/mob/user)
+proc/check_HUD_visibility(var/mob/living/target, var/mob/user)
 	if(user.see_invisible < target.invisibility)
 		return FALSE
 	if(target.alpha <= 1)
@@ -21,9 +21,11 @@ proc/check_HUD_visibility(var/mob/living/carbon/human/target, var/mob/user)
 	for(var/i in target.alphas)
 		if(target.alphas[i] <= 1)
 			return FALSE
-	for(var/i in target.body_alphas)
-		if(target.body_alphas[i] <= 1)
-			return FALSE
+	if(iscarbon(target))
+		var/mob/living/carbon/C = target
+		for(var/i in C.body_alphas)
+			if(C.body_alphas[i] <= 1)
+				return FALSE
 	return TRUE
 
 //Medical HUD outputs. Called by the Life() proc of the mob using it, usually.
