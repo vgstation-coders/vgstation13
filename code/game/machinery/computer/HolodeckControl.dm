@@ -28,14 +28,10 @@
 	var/turf/spawnturf
 	var/list/L = get_area_turfs(linkedholodeck.type)
 	L = shuffle(L)
-	looping_turfs:
-		for(var/turf/T in L)
-			if(!T.density)
-				for(var/obj/O in T)
-					if(O.density)
-						continue looping_turfs
-				spawnturf = T
-				break
+	for(var/turf/T in L)
+		if(!is_blocked_turf(T))
+			spawnturf = T
+			break
 	if(spawnturf)
 		user.forceMove(spawnturf)
 		user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
