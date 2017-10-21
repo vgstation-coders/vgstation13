@@ -865,10 +865,7 @@ var/list/has_died_as_golem = list()
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
 	var/mob/living/adamantine_dust/A = new(H.loc)
 	if(golemmind)
-		var/golem_key = H.mind.key
-		has_died_as_golem.Add(golem_key)
-		spawn(GOLEM_RESPAWN_TIME)
-			has_died_as_golem.Remove(golem_key)
+		has_died_as_golem.Add(H.mind.key = world.time)
 		A.mind = golemmind
 		H.mind = null
 		golemmind.current = A
