@@ -1,3 +1,3 @@
-/datum/faction/revolution
+/datum/gamemode/revolution
 	name = "Revolution"
-	factions_allowed = list(datum/faction/revolution)
+	factions_allowed = list(/datum/faction/revolution)
