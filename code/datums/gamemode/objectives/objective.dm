@@ -14,3 +14,10 @@
 
 /datum/objective_holder
 	var/list/datum/objective/objectives = list()
+
+/datum/objective_holder/proc/AddObjective(var/datum/objective/O)
+	ASSERT(!objectives.Find(O))
+	objectives.Add(O)
+
+/datum/objective_holder/proc/GetObjectives()
+	return objectives
