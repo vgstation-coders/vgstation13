@@ -2101,6 +2101,7 @@
 #include "code\modules\spells\aoe_turf\conjure\arcane_golem.dm"
 #include "code\modules\spells\aoe_turf\conjure\conjure.dm"
 #include "code\modules\spells\aoe_turf\conjure\construct.dm"
+#include "code\modules\spells\aoe_turf\conjure\doppelganger.dm"
 #include "code\modules\spells\aoe_turf\conjure\forcewall.dm"
 #include "code\modules\spells\aoe_turf\conjure\pontiac.dm"
 #include "code\modules\spells\aoe_turf\conjure\snakes.dm"
