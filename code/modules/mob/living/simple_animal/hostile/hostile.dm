@@ -328,12 +328,13 @@
 		returnToPool(fC)
 	//Friendly Fire check - End
 
-	var/obj/item/projectile/A = new projectiletype(user.loc)
+	var/obj/item/projectile/A = new create_projectile(user)
 
 	if(!A)
 		return 0
 
-	playsound(user, projectilesound, 100, 1)
+	if(projectilesound)
+		playsound(user, projectilesound, 100, 1)
 
 	A.current = target
 
@@ -350,6 +351,9 @@
 		A.process()
 
 	return 1
+
+/mob/living/simple_animal/hostile/proc/create_projectile(var/mob/user)
+	return new projectiletype(user.loc)
 
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)

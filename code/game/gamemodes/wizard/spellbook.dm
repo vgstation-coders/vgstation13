@@ -43,6 +43,7 @@
 	/spell/targeted/push,
 	/spell/targeted/feint,
 	/spell/targeted/fist,
+	/spell/aoe_turf/conjure/doppelganger,
 	/spell/noclothes
 	)
 
