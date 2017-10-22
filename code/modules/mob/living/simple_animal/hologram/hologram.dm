@@ -64,6 +64,7 @@
 	icon_state = "holo3"
 	icon_living = "holo3"
 	held_items = list(null, null)
+	flags = HEAR_ALWAYS
 	health = 50
 	maxHealth = 50
 	melee_damage_lower = 5
@@ -83,6 +84,7 @@
 	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
 
 /mob/living/simple_animal/hologram/advanced/Login()
+	..()
 	to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck. <span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>")
 	if(transmogged_from)
 		to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
