@@ -411,6 +411,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(mind && mind.current && mind.current.ajourn)
 		mind.current.ajourn.ajourn = null
 		mind.current.ajourn = null
+	completely_untransmogrify()
 	mind.current.key = key
 	mind.isScrying = 0
 	return 1

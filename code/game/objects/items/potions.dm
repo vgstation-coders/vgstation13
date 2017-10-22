@@ -206,13 +206,7 @@
 		playsound(T, 'sound/effects/phasein.ogg', 50, 1)
 	user.visible_message("<span class='danger'>\The [user] transforms into \a [new_mob]!</span>", "<span class='notice'>You transform into \a [new_mob].</span>")
 	spawn(5 MINUTES)
-		var/mob/top_level = new_mob
-		if(top_level.transmogged_to)
-			while(top_level.transmogged_to)
-				top_level = top_level.transmogged_to
-		var/turf/T2 = get_turf(top_level)
-		while(top_level)
-			top_level = top_level.transmogrify()
+		var/turf/T2 = get_turf(new_mob.completely_untransmogrify())
 		if(T2)
 			playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
 

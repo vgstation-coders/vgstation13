@@ -445,7 +445,10 @@
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
 		var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
-		if(ghost && ghost.client && ghost.can_reenter_corpse) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
+		var/mob/ghostmob
+		if(ghost)
+			ghostmob = ghost.get_top_transmogrification()
+		if(ghost && ghostmob.client && ghost.can_reenter_corpse) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
 			scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
 			ghost << 'sound/effects/adminhelp.ogg'
 			to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
