@@ -113,8 +113,8 @@
 			if(ismob(A))
 				var/mob/M = A
 				if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
-					var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-					if(ghost && ghost.client)
+					var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+					if(ghost)
 						to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
 							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
@@ -144,8 +144,8 @@
 /obj/structure/morgue/on_login(var/mob/M)
 	update()
 	if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
-		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-		if(ghost && ghost.client)
+		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+		if(ghost)
 			to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
 				Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 

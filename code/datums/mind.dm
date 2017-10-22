@@ -1528,6 +1528,8 @@ proc/clear_memory(var/silent = 1)
 
 /proc/mind_can_reenter(var/datum/mind/mind)
 	var/mob/dead/observer/G = get_ghost_from_mind(mind)
-	if(G && G.client && G.can_reenter_corpse)
-		return TRUE
-	return FALSE
+	var/mob/M
+	if(G)
+		M = G.get_top_transmogrification()
+		if(M.client && G.can_reenter_corpse)
+			return G

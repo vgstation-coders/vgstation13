@@ -1809,8 +1809,8 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 				mind_found = 1
 				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
 			else
-				var/mob/dead/observer/ghost = get_ghost_from_mind(brainmob.mind)
-				if(ghost && ghost.client && ghost.can_reenter_corpse)//Lights are on but no-one's home
+				var/mob/dead/observer/ghost = mind_can_reenter(brainmob.mind)
+				if(ghost)//Lights are on but no-one's home
 					mind_found = 1
 					to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
 					ghost << 'sound/effects/adminhelp.ogg'

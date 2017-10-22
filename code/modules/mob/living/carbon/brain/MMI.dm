@@ -120,8 +120,8 @@ obj/item/device/mmi/Destroy()
 		// Checking to see if the ghost has been moused/borer'd/etc since death.
 		var/mob/living/carbon/brain/BM = BO.brainmob
 		if(!BM.client)
-			var/mob/dead/observer/ghost = get_ghost_from_mind(BM.mind)
-			if(ghost && ghost.client && ghost.can_reenter_corpse)
+			var/mob/dead/observer/ghost = mind_can_reenter(BM.mind)
+			if(ghost)
 				to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
 				ghost << 'sound/effects/adminhelp.ogg'
 				to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
