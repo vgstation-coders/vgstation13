@@ -80,6 +80,7 @@ var/global/list/organ_damage_overlays = list(
 	var/prev_gender = null // Debug for plural genders
 	var/temperature_alert = 0
 	var/in_stasis = 0
+	var/adv_stasis = 0 //for the adv cryobag
 	var/do_deferred_species_setup=0
 	var/exposedtimenow = 0
 	var/firstexposed = 0
@@ -128,6 +129,7 @@ var/global/list/organ_damage_overlays = list(
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	in_stasis = istype(loc, /obj/structure/closet/body_bag/cryobag) && loc:opened == 0 //Nice runtime operator
+	adv_stasis = istype(loc, /obj/structure/closet/body_bag/cryobag/advanced) && loc:opened == 0
 
 	if(in_stasis)
 		loc:used++ //Ditto above
@@ -167,7 +169,11 @@ var/global/list/organ_damage_overlays = list(
 		handle_pain()
 		handle_medical_side_effects()
 		handle_equipment()
-	handle_stasis_bag()
+	if(!adv_stasis)
+		handle_stasis_bag()
+	else
+		return
+
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		cycle = "DEAD"
 		return //We go ahead and process them 5 times for HUD images and other stuff though.

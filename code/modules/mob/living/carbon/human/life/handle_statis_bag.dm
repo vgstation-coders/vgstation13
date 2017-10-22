@@ -4,8 +4,8 @@
 	// Handle side effects from stasis bag
 	if(in_stasis)
 		// First off, there's no oxygen supply, so the mob will slowly take brain damage
-		adjustBrainLoss(0.1)
+		adjustBrainLoss(0.2) // comment above makes no sense since youd be suffocating if your in the bag. How about for lore the bags stasis effect isnt flawless and causes brain cell death
 
 		// Next, the method to induce stasis has some adverse side-effects, manifesting
 		// as cloneloss
-		adjustCloneLoss(0.1)
+		//adjustCloneLoss(0.1)
