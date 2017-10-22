@@ -26,19 +26,23 @@
 			var/turf/target = pick(turfs)
 			return G.afterattack(target, src, "struggle" = 1)
 
+	return FALSE
+
 /mob/living/carbon/human/disarm_mob(mob/living/target)
 	add_logs(src, target, "disarmed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
-	var/mob/living/carbon/human/T = target
-	var/datum/organ/external/S = target.get_organ(src.zone_sel.selecting)
-	var/shushcooldown = 10 SECONDS
-	
-	if(!istype(S))
-		return
-	if(src.zone_sel.selecting == "mouth" && !(S.status & ORGAN_DESTROYED) && ishuman(target) && !(T.check_body_part_coverage(MOUTH)) && last_shush + shushcooldown <= world.time)
-		last_shush = world.time
-		T.forcesay("-")
-		visible_message("<span class='danger'>[src] places a hand over [target]'s mouth!</span>")
-		return
+
+	if(ishuman(target))
+		var/mob/living/carbon/human/T = target
+		var/datum/organ/external/S = target.get_organ(src.zone_sel.selecting)
+		var/shushcooldown = 10 SECONDS
+		if(!istype(S))
+			return
+
+		if(src.zone_sel.selecting == "mouth" && !(S.status & ORGAN_DESTROYED) && ishuman(target) && !(T.check_body_part_coverage(MOUTH)) && last_shush + shushcooldown <= world.time)
+			last_shush = world.time
+			T.forcesay("-")
+			visible_message("<span class='danger'>[src] places a hand over [target]'s mouth!</span>")
+			return
 
 	if(target.disarmed_by(src))
 		return

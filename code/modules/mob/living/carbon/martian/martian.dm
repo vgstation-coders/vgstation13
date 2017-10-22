@@ -25,6 +25,7 @@
 	icon_state = "martian"
 
 	species_type = /mob/living/carbon/martian
+	speak_emote = list("blorbles","burbles")
 
 	held_items = list(null, null, null, null, null, null) //6 hands
 
@@ -50,7 +51,7 @@
 /mob/living/carbon/martian/New()
 	create_reagents(200)
 	name = pick("martian","scootaloo","squid","rootmarian","phoronitian","sepiida","octopodiforme",\
-	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo")
+	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo","kalamarian")
 	..()
 
 /mob/living/carbon/martian/Destroy()
@@ -86,43 +87,6 @@
 
 /mob/living/carbon/martian/has_eyes()
 	return FALSE
-
-/mob/living/carbon/martian/attack_hand(mob/living/M)
-	switch(M.a_intent)
-		if(I_HELP)
-			help_shake_act(M)
-
-		if(I_HURT)
-			M.unarmed_attack_mob(src)
-
-		if(I_GRAB)
-			M.grab_mob(src)
-
-		if(I_DISARM)
-			M.disarm_mob(src)
-
-/mob/living/carbon/martian/attack_alien(mob/living/M)
-	switch(M.a_intent)
-		if (I_HELP)
-			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
-
-		if (I_HURT)
-			return M.unarmed_attack_mob(src)
-
-		if (I_GRAB)
-			return M.grab_mob(src)
-
-		if (I_DISARM)
-			return M.disarm_mob(src)
-
-/mob/living/carbon/martian/attack_slime(mob/living/carbon/slime/M)
-	M.unarmed_attack_mob(src)
-
-/mob/living/carbon/martian/attack_martian(mob/M)
-	return attack_hand(M)
-
-/mob/living/carbon/martian/attack_paw(mob/M)
-	return attack_hand(M)
 
 /mob/living/carbon/martian/updatehealth()
 	if(status_flags & GODMODE)
