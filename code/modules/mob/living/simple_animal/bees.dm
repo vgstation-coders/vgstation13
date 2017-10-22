@@ -511,12 +511,17 @@
 				for(var/mob/living/G in view(src,7))
 					if (G == src) continue
 					if (G.flags & INVULNERABLE) continue
-					//Bees will only attack other bees if they're crazy from high toxicity
+					/*//Bees will only attack other bees if they're crazy from high toxicity
+					//TODO: Remake/rethink this. Currently they just cascade into killing one another from the same
 					if (istype(G,/mob/living/simple_animal/bee) && (((current_poison_damage - bees.len)/bees.len*100) > 51))
 						var/mob/living/simple_animal/bee/B = G
 						//even then, they won't attack bees from their own hives.
 						if (B.home == home || (home && B.home && B.home.wild && home.wild))
-							continue
+							continue*/
+					if(istype(G, /mob/living/simple_animal/bee))
+						continue
+					if(istype(G, /mob/living/silicon/robot/mommi)) //Do not bully the crab
+						continue
 					if (G.stat != DEAD)
 						nearbyMobs += G
 				if (nearbyMobs.len > 0)
