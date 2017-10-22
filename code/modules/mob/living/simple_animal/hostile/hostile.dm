@@ -328,7 +328,7 @@
 		returnToPool(fC)
 	//Friendly Fire check - End
 
-	var/obj/item/projectile/A = new create_projectile(user)
+	var/obj/item/projectile/A = create_projectile(user)
 
 	if(!A)
 		return 0
