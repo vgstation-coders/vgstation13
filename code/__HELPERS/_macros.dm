@@ -37,6 +37,8 @@
 
 #define isgrue(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grue))
 
+#define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
+
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 
 #define isalien(A) istype(A, /mob/living/carbon/alien)
