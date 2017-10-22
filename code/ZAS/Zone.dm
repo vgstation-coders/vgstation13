@@ -112,6 +112,21 @@ Class Procs:
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
 
+//Gets a list of the gas_mixtures of all zones connected to this one through arbitrarily many sleeping edges.
+//This is to cut down somewhat on differentials across open doors.
+//Yes, recursion is slow, but this will generally not be called very often, and will rarely have to recurse more than a few levels deep.
+//That said, feel free to optimize it if you want.
+//
+//At the top level, just call it with no arg. The arg generally is for internal use.
+/zone/proc/get_equalized_zone_air(list/found = list())
+	found += air
+	. = found //I want to minimize the call stack left over after the recursive call. Honestly the implicit return is probably the same as an explicit one, but I'd rather play it safe.
+	for(var/connection_edge/zone/E in edges)
+		if(E.sleeping)
+			var/zone/Z = E.get_connected_zone(src)
+			if(!(Z.air in found))
+				Z.get_equalized_zone_air(found)
+
 /zone/proc/tick()
 	if(air.check_tile_graphic())
 		for(var/turf/simulated/T in contents)

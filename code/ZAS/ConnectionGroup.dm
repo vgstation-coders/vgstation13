@@ -139,8 +139,8 @@ Class Procs:
 			SSair.merge(A, B)
 			return
 		else
-			A.air.equalize(B.air)
 			SSair.mark_edge_sleeping(src)
+			equalize_gases(A.get_equalized_zone_air())
 
 	SSair.mark_zone_update(A)
 	SSair.mark_zone_update(B)
