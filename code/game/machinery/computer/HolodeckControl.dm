@@ -23,6 +23,9 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/attack_ghost(mob/dead/observer/user)
+	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
+		return
 	if(!linkedholodeck)
 		return
 	var/turf/spawnturf
