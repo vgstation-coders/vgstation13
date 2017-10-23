@@ -113,7 +113,7 @@
 /mob/living/simple_animal/hologram/advanced/Life()
 	..()
 	regular_hud_updates()
-	if(!istype(get_area(src), /area/holodeck))
+	if(!istype(get_area(src), /area/holodeck) || (mind && !client))
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()
