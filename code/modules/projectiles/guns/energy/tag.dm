@@ -9,6 +9,10 @@
 	origin_tech = Tc_MAGNETS + "=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
+	advanced_tool_user_check = 0
+	nymph_check = 0
+	hulk_check = 0
+	golem_check = 0
 	var/charge_tick = 0
 	var/score = 0
 
