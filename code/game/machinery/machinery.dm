@@ -274,6 +274,12 @@ Class Procs:
 			if(newfreq < 10000)
 				src:frequency = newfreq
 				return MT_UPDATE|MT_REINIT
+	if("toggle_broadcast" in href_list)
+		if(!("broadcasting" in vars))
+			warning("toggle_broadcast: [type] has no broadcasting var.")
+			return 0
+		src:broadcasting = !src:broadcasting
+		return MT_UPDATE|MT_REINIT
 	return 0
 
 /obj/machinery/proc/handle_multitool_topic(var/href, var/list/href_list, var/mob/user)

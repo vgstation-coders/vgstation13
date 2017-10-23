@@ -9,6 +9,7 @@
 	power_channel = ENVIRON
 	var/frequency = 1439
 	var/id_tag
+	var/broadcasting = FALSE
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 4
@@ -72,7 +73,7 @@
 	else
 		icon_state = "meter4"
 
-	if(frequency)
+	if(broadcasting && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
 		if(!radio_connection)
@@ -144,7 +145,7 @@
 	return {"
 	<b>Main</b>
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)(<a href="?src=\ref[src];toggle_broadcast=0">Turn broadcasting [broadcasting ? "off" : "on"]</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 	</ul>"}
 
