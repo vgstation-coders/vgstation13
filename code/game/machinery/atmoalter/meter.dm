@@ -149,6 +149,13 @@
 		<li>[format_tag("ID Tag","id_tag")]</li>
 	</ul>"}
 
+/obj/machinery/meter/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
+	. = ..()
+	if("toggle_broadcast" in href_list)
+		broadcasting = !broadcasting
+		return MT_UPDATE|MT_REINIT
+	return 0
+
 /obj/machinery/meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if (!iswrench(W))
 		return ..()
