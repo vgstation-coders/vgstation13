@@ -279,7 +279,7 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && iscarbon(src) && user.Adjacent(src))
+	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
 		src.give_item(user)
 		return
 	..()
