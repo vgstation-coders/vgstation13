@@ -274,7 +274,7 @@
 		if(C)
 			C.update_icon()
 			if(!M.client && M.mind)
-				var/mob/dead/observer/ghost = mind_can_reenter(mind)
+				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
 				if(ghost)
 					ghost << 'sound/effects/adminhelp.ogg'
 					to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
