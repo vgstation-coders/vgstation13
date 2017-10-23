@@ -76,9 +76,16 @@
     else
         makeTaser(user)
 
-/obj/item/weapon/gun/energy/tag/special_check(var/mob/living/carbon/human/M)
-	if(ishuman(M))
-		if(istype(M.wear_suit, needed_vest))
+/obj/item/weapon/gun/energy/tag/special_check(var/mob/living/M)
+	var/suit
+	if(ishuman(M) || ishologram(M))
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			suit = H.wear_suit
+		if(ishologram(M))
+			var/mob/living/simple_animal/hologram/advanced/H = M
+			suit = H.wear_suit
+		if(istype(suit, needed_vest))
 			return 1
 		to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
 	return 0
