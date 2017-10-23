@@ -22,22 +22,22 @@
 /obj/machinery/computer/HolodeckControl/attack_paw(var/mob/user as mob)
 	return
 
-/obj/machinery/computer/HolodeckControl/attack_ghost(mob/dead/observer/user)
-	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
-		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
-		return
-	if(!linkedholodeck)
-		return
-	var/turf/spawnturf
-	var/list/L = get_area_turfs(linkedholodeck.type)
-	L = shuffle(L)
-	for(var/turf/T in L)
-		if(!is_blocked_turf(T))
-			spawnturf = T
-			break
-	if(spawnturf)
-		user.forceMove(spawnturf)
-		user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
+///obj/machinery/computer/HolodeckControl/attack_ghost(mob/dead/observer/user)
+//	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
+//		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
+//		return
+//	if(!linkedholodeck)
+//		return
+//	var/turf/spawnturf
+//	var/list/L = get_area_turfs(linkedholodeck.type)
+//	L = shuffle(L)
+//	for(var/turf/T in L)
+//		if(!is_blocked_turf(T))
+//			spawnturf = T
+//			break
+//	if(spawnturf)
+//		user.forceMove(spawnturf)
+//		user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
 
 /obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
 
