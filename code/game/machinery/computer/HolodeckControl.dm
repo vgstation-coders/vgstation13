@@ -118,15 +118,15 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)
+	usr.set_machine(src)
+
+	if(href_list["spawn_holoperson"])
+		spawn_holoperson(usr)
+
 	if(..())
 		return 1
 	else
-		usr.set_machine(src)
-
-		if(href_list["spawn_holoperson"])
-			spawn_holoperson(usr)
-
-		else if(href_list["emptycourt"])
+		if(href_list["emptycourt"])
 			target = locate(/area/holodeck/source_emptycourt)
 			if(target)
 				loadProgram(target)
