@@ -20,7 +20,7 @@
 	fire_sound = 'sound/weapons/Laser.ogg'
 	var/laser_projectile = /obj/item/projectile/beam/lasertag/blue
 	var/taser_projectile = /obj/item/projectile/beam/lasertag/omni
-	var/needed_vest = /obj/item/clothing/suit/bluetag
+	var/needed_vest = /obj/item/clothing/suit/tag/bluetag
 
 /obj/item/weapon/gun/energy/tag/isHandgun()
 	return TRUE
@@ -50,13 +50,13 @@
 	icon_state = "bluetag"
 	laser_projectile = /obj/item/projectile/beam/lasertag/blue
 	taser_projectile = /obj/item/projectile/energy/tag/blue
-	needed_vest = /obj/item/clothing/suit/bluetag
+	needed_vest = /obj/item/clothing/suit/tag/bluetag
 
 /obj/item/weapon/gun/energy/tag/red
 	icon_state = "redtag"
 	laser_projectile = /obj/item/projectile/beam/lasertag/red
 	taser_projectile = /obj/item/projectile/energy/tag/red
-	needed_vest = /obj/item/clothing/suit/redtag
+	needed_vest = /obj/item/clothing/suit/tag/redtag
 
 /obj/item/weapon/gun/energy/tag/proc/makeLaser(var/mob/user)
 	projectile_type = laser_projectile
@@ -77,17 +77,9 @@
         makeTaser(user)
 
 /obj/item/weapon/gun/energy/tag/special_check(var/mob/living/M)
-	var/suit
-	if(ishuman(M) || ishologram(M))
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			suit = H.wear_suit
-		if(ishologram(M))
-			var/mob/living/simple_animal/hologram/advanced/H = M
-			suit = H.wear_suit
-		if(istype(suit, needed_vest))
-			return 1
-		to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
+	if(istype(get_tag_armor(M), needed_vest))
+		return 1
+	to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
 	return 0
 
 /obj/item/weapon/gun/energy/tag/New()

@@ -107,6 +107,12 @@
 
 #define isitem(A) istype(A, /obj/item)
 
+#define isclothing(A) istype(A, /obj/item/clothing)
+
+#define iswearingredtag(A) istype(get_tag_armor(A), /obj/item/clothing/suit/tag/redtag)
+
+#define iswearingbluetag(A) istype(get_tag_armor(A), /obj/item/clothing/suit/tag/bluetag)
+
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
 #define istool(A) is_type_in_list(A, common_tools)
