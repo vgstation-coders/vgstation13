@@ -123,7 +123,7 @@
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
-		camera.network = list("SS13","Robots")
+		camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -291,8 +291,8 @@
 		if("Supply")
 			module = new /obj/item/weapon/robot_module/miner(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_cargo(radio))
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("MINE")
+			if(camera && CAMERANET_ROBOTS in camera.network)
+				camera.network.Add(CAMERANET_MINE)
 			module_sprites["Basic"] = "Miner_old"
 			module_sprites["Advanced Droid"] = "droid-miner"
 			module_sprites["Treadhead"] = "Miner"
@@ -308,7 +308,7 @@
 		if("Medical")
 			module = new /obj/item/weapon/robot_module/medical(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_med(radio))
-			if(camera && "Robots" in camera.network)
+			if(camera && CAMERANET_ROBOTS in camera.network)
 				camera.network.Add("Medical")
 			module_sprites["Basic"] = "Medbot"
 			module_sprites["Advanced Droid"] = "droid-medical"
@@ -348,8 +348,8 @@
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_eng(radio))
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Engineering")
+			if(camera && CAMERANET_ROBOTS in camera.network)
+				camera.network.Add(CAMERANET_ENGI)
 			module_sprites["Basic"] = "Engineering"
 			module_sprites["Antique"] = "engineerrobot"
 			module_sprites["Engiseer"] = "Engiseer"

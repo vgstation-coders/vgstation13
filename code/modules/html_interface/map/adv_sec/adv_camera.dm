@@ -169,7 +169,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
 				camerasbyzlevel["[zz]"] |= C //try to fix the zlevel list.
 
-		if(!C.can_use() || C.network.len < 1) //I originally checked if "SS13" was in the camera's networks but apparently sec cameras can see into engi cameras just fine or whatever.
+		if(!C.can_use() || C.network.len < 1) //I originally checked if CAMERANET_SS13 was in the camera's networks but apparently sec cameras can see into engi cameras just fine or whatever.
 			deleting = TRUE
 
 		ID = "\ref[C]"
@@ -186,7 +186,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		name = C.c_tag
 		var/area/AA = get_area(C)
 		area = format_text(AA.name)
-		if("Robots" in C.network)
+		if(CAMERANET_ROBOTS in C.network)
 			icon = "icon-android"
 		else
 			icon = "icon-camera"

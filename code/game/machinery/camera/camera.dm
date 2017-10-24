@@ -10,7 +10,7 @@ var/list/camera_names=list()
 	plane = ABOVE_HUMAN_PLANE
 
 	var/datum/wires/camera/wires = null // Wires datum
-	var/list/network = list("SS13")
+	var/list/network = list(CAMERANET_SS13)
 	var/c_tag = null
 	var/c_tag_order = 999
 	var/status = 1.0

@@ -80,7 +80,7 @@
 		R.hands.icon_state = "nomod"
 	R.icon_state = "robot"
 	R.base_icon = "robot"
-	R.camera.network.Remove(list("Engineering","Medical","MINE"))
+	R.camera.network.Remove(list(CAMERANET_ENGI,CAMERANET_MEDBAY,CAMERANET_MINE))
 	R.updatename("Default")
 	R.status_flags |= CANPUSH
 	R.updateicon()
