@@ -9,7 +9,6 @@
 	power_channel = ENVIRON
 	var/frequency = 1439
 	var/id_tag
-	var/broadcasting = FALSE
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 4
@@ -73,7 +72,7 @@
 	else
 		icon_state = "meter4"
 
-	if(broadcasting && frequency)
+	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
 		if(!radio_connection)
@@ -145,16 +144,9 @@
 	return {"
 	<b>Main</b>
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)(<a href="?src=\ref[src];toggle_broadcast=0">Turn broadcasting [broadcasting ? "off" : "on"]</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 	</ul>"}
-
-/obj/machinery/meter/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
-	. = ..()
-	if("toggle_broadcast" in href_list)
-		broadcasting = !broadcasting
-		return MT_UPDATE|MT_REINIT
-	return 0
 
 /obj/machinery/meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if (!iswrench(W))
