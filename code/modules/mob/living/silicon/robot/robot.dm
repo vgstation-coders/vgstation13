@@ -309,7 +309,7 @@
 			module = new /obj/item/weapon/robot_module/medical(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_med(radio))
 			if(camera && CAMERANET_ROBOTS in camera.network)
-				camera.network.Add("Medical")
+				camera.network.Add(CAMERANET_MEDBAY)
 			module_sprites["Basic"] = "Medbot"
 			module_sprites["Advanced Droid"] = "droid-medical"
 			module_sprites["Needles"] = "medicalrobot"

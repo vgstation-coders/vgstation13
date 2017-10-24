@@ -137,7 +137,7 @@ var/global/list/tv_monitors = list()
 	name = "Outpost Cameras"
 	desc = "Used to access the various cameras on the outpost."
 	icon_state = "miningcameras"
-	network = list("MINE")
+	network = list(CAMERANET_MINE)
 	circuit = "/obj/item/weapon/circuitboard/mining"
 
 	light_color = LIGHT_COLOR_PINK
@@ -146,7 +146,7 @@ var/global/list/tv_monitors = list()
 	name = "Engineering Cameras"
 	desc = "Used to monitor fires and breaches."
 	icon_state = "engineeringcameras"
-	network = list("Power Alarms","Atmosphere Alarms","Fire Alarms")
+	network = list(CAMERANET_POWERALARMS,CAMERANET_ATMOSALARMS,CAMERANET_FIREALARMS)
 	circuit = "/obj/item/weapon/circuitboard/security/engineering"
 
 	light_color = LIGHT_COLOR_YELLOW

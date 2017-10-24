@@ -84,7 +84,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
-		camera.network = list(CAMERANET_SS13)
+		camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
