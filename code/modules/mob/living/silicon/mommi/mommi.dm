@@ -415,7 +415,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	if (href_list["mod"])
 		var/obj/item/O = locate(href_list["mod"])
-		if (O)
+		if (O && O == tool_state)
 			O.attack_self(src)
 
 	if (href_list["act"])
