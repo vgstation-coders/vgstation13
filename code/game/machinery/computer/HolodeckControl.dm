@@ -32,16 +32,14 @@
 		return
 	if(!linkedholodeck)
 		return
-	if(connected_holopeople.len >=4)
+	if(connected_holopeople.len >= maximum_holopeople)
 		to_chat(user, "<span class='notice'>\The [src] cannot sustain any additional advanced holograms. Please try again when there are fewer advanced holograms on the holodeck.</span>")
 		return
 	var/turf/spawnturf
 	var/list/L = get_area_turfs(linkedholodeck.type)
-	L = shuffle(L)
-	for(var/turf/T in L)
-		if(!is_blocked_turf(T))
-			spawnturf = T
-			break
+	var/turf/T = pick(L)
+	while(is_blocked_turf(T))
+		T = pick(L)
 	if(spawnturf)
 		user.forceMove(spawnturf)
 		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
@@ -63,8 +61,7 @@
 	dat += {"<B>Holodeck Control System</B><BR>"}
 //	if(isobserver(user))
 //		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
-	dat += {"<B>Holodeck Control System</B><BR>
-		<HR>Current Loaded Programs:<BR>
+	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
 		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
