@@ -102,9 +102,9 @@ var/area/space_area
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
 				if(state == 1)
-					C.network.Remove("Power Alarms")
+					C.network.Remove(CAMERANET_POWERALARMS)
 				else
-					C.network.Add("Power Alarms")
+					C.network.Add(CAMERANET_POWERALARMS)
 			for (var/mob/living/silicon/aiPlayer in player_list)
 				if(aiPlayer.z == source.z)
 					if (state == 1)
@@ -151,7 +151,7 @@ var/area/space_area
 			//updateicon()
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
-				C.network.Add("Atmosphere Alarms")
+				C.network.Add(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.triggerAlarm("Atmosphere", src, cameras, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -162,7 +162,7 @@ var/area/space_area
 		// Dropping from danger level 2.
 		else if (atmosalm == 2)
 			for(var/obj/machinery/camera/C in src)
-				C.network.Remove("Atmosphere Alarms")
+				C.network.Remove(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.cancelAlarm("Atmosphere", src, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -240,7 +240,7 @@ var/area/space_area
 		var/list/cameras = list()
 		for (var/obj/machinery/camera/C in src)
 			cameras.Add(C)
-			C.network.Add("Fire Alarms")
+			C.network.Add(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.triggerAlarm("Fire", src, cameras, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -257,7 +257,7 @@ var/area/space_area
 		mouse_opacity = 0
 		updateicon()
 		for (var/obj/machinery/camera/C in src)
-			C.network.Remove("Fire Alarms")
+			C.network.Remove(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.cancelAlarm("Fire", src, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)

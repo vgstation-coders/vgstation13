@@ -64,7 +64,7 @@ function deleteCamera(ID)
 	}
 }
 
-function updateCamera(ID, status, name, area, pos_x, pos_y, pos_z, see_pos_x, see_pos_y, removing)
+function updateCamera(ID, status, name, area, icon, pos_x, pos_y, pos_z, see_pos_x, see_pos_y, removing)
 {
 	deleteCamera(ID)//rather than updating all of this shit just delete it and draw a new one
 
@@ -72,7 +72,7 @@ function updateCamera(ID, status, name, area, pos_x, pos_y, pos_z, see_pos_x, se
 	{
 		var translated = tileToMapCoords(pos_x,pos_y);
 		var href = "byond://?src="+hSrc+"&view="+ID;
-		var dotElem				= $("<div id=\""+ID+"\" class=\"mapIcon mapIcon16 icon-camera " +  (status == 1 ? "average" : "good") + "\" style =\"top:" + translated.yy +"px; left: " + translated.xx + "px; z-index: 2;\" unselectable=\"off\"><div class=\"tooltip hidden\">" + name  + (status == 1 ? " <span class='average'>Alarming</span>" : "") + " (" + area + ": "+see_pos_x+", "+see_pos_y+")</div></div>");
+		var dotElem				= $("<div id=\""+ID+"\" class=\"mapIcon mapIcon16 " + icon + " " +  (status == 1 ? "average" : "good") + "\" style =\"top:" + translated.yy +"px; left: " + translated.xx + "px; z-index: 2;\" unselectable=\"off\"><div class=\"tooltip hidden\">" + name  + (status == 1 ? " <span class='average'>Alarming</span>" : "") + " (" + area + ": "+see_pos_x+", "+see_pos_y+")</div></div>");
 		//$("#uiMap").append("<div class=\"dot\" style=\"top: " + ty + "px; left: " + tx + "px; background-color: " + color + "; z-index: " + 999 + ";\"></div>");
 		dotElem.data("href",href);
 		$("#uiMap").append(dotElem);

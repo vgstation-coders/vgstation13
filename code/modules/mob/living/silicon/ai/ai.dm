@@ -22,7 +22,7 @@ var/list/ai_list = list()
 	force_compose = 1
 	size = SIZE_BIG
 
-	var/list/network = list("SS13")
+	var/list/network = list(CAMERANET_SS13)
 	var/obj/machinery/camera/current = null
 	var/list/connected_robots = list()
 	var/aiRestorePowerRoutine = 0

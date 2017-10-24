@@ -93,12 +93,25 @@ var/global/datum/interactive_map/camera/adv_camera = new
 
 		initializeZLevel("[z]")
 
+	updateMovableCameras(z)
+
 	hi = src.interfaces["[z]"]
 	hi.show(mob, currui)
 	src.updateFor(mob, hi, z)
 
 /datum/interactive_map/camera/proc/initializeZLevel(z)
-	return src.update(z, camerasbyzlevel["[z]"], TRUE)
+	return src.update(z, TRUE, camerasbyzlevel["[z]"], TRUE)
+
+//Cameras are updated in two ways: Stationary cameras are updated only when something about them changes, like wires being cut.
+//To avoid having to update all of them every time the interface is shown, their updates go to our local data even if nobody's watching the console.
+//Movable cameras, like cyborgs, are updated periodically, but ONLY if someone's watching the cameras, for optimization's sake.
+//This will cause outdated local data when updates happen and nobody was watching. So we gotta update them here.
+/datum/interactive_map/camera/proc/updateMovableCameras(z)
+	var/list/movableCameras = list()
+	for(var/mob/living/silicon/robot/R in mob_list)
+		if(R.camera)
+			movableCameras |= R.camera
+	return src.update(z, TRUE, movableCameras, TRUE)
 
 /datum/interactive_map/camera/updateFor(hclient_or_mob, datum/html_interface/hi, z, var/list/updateData = list(), var/deleting = FALSE)
 	if(updateData.len <= 0)
@@ -117,8 +130,13 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		else
 			hi.callJavaScript("deleteCamera", L, hclient_or_mob)
 
-
-/datum/interactive_map/camera/update(z, var/list/camerasToUpdate = list(), var/silent = FALSE)
+//Update our local records, if necessary, send the updates to the HTMLUI clients.
+//z: z-level to update (only 1 z-level at a time)
+//ignore_unused: If FALSE, proc will abort unless someone is actively watching the cameras at the time.
+//camerasToUpdate: List of /obj/machinery/camera/ that will be updated at this time. If no list, you fucked up.
+//silent: Update local records only, don't send updates to clients that are watching.
+//If updating these parameters please update queueUpdate() down below.
+/datum/interactive_map/camera/update(z, ignore_unused = TRUE, var/list/camerasToUpdate = list(), var/silent = FALSE)
 	//is this even necessary?
 	var/zz = text2num(z)
 	if(!zz)
@@ -129,11 +147,15 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	var/status
 	var/name
 	var/area
+	var/icon
 	var/pos_x
 	var/pos_y
 	var/pos_z
 	var/see_x
 	var/see_y
+
+	if(!ignore_unused && !(hi.isUsed()))
+		return
 
 	for(var/obj/machinery/camera/C in camerasToUpdate)
 		var/deleting = FALSE
@@ -143,11 +165,11 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			deleting = TRUE
 		if(pos.z != zz)
 			camerasbyzlevel["[zz]"] -= C //bad zlevel
+			deleting = TRUE
 			if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
 				camerasbyzlevel["[zz]"] |= C //try to fix the zlevel list.
-			else
-				deleting = TRUE
-		if(!C.can_use())
+
+		if(!C.can_use() || C.network.len < 1) //I originally checked if CAMERANET_SS13 was in the camera's networks but apparently sec cameras can see into engi cameras just fine or whatever.
 			deleting = TRUE
 
 		ID = "\ref[C]"
@@ -164,6 +186,10 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		name = C.c_tag
 		var/area/AA = get_area(C)
 		area = format_text(AA.name)
+		if(CAMERANET_ROBOTS in C.network)
+			icon = "icon-android"
+		else
+			icon = "icon-camera"
 		pos_x = pos.x
 		pos_y = pos.y
 		pos_z = pos.z
@@ -171,7 +197,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		see_y = pos.y - WORLD_Y_OFFSET[z]
 
 		//now updating
-		var/list/finishedCamera = list(ID, status, name, area, pos_x, pos_y, pos_z, see_x, see_y)
+		var/list/finishedCamera = list(ID, status, name, area, icon, pos_x, pos_y, pos_z, see_x, see_y)
 		data["[zz]"][ID] = finishedCamera
 		if(hi.isUsed() && !silent)
 			src.updateFor(null, hi, z, list(finishedCamera))
@@ -197,8 +223,8 @@ var/global/datum/interactive_map/camera/adv_camera = new
 					A.Topic(href, href_list, hclient)
 					break
 
-/datum/interactive_map/camera/queueUpdate(z)
-	SShtml_ui.queue(crewmonitor, "update", z) //crewmonitor??
+/datum/interactive_map/camera/queueUpdate(z, ignore_unused = TRUE, var/list/camerasToUpdate = list())
+	SShtml_ui.queue(adv_camera, "update", z, ignore_unused, camerasToUpdate)
 
 /datum/interactive_map/camera/sendResources(client/C)
 	..()
