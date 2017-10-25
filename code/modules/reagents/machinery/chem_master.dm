@@ -162,6 +162,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		src.updateUsrDialog()
 		return 1
 
+	else if(istype(B, /obj/item/weapon/reagent_containers/pill/time_release))
+		var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)") as null|text)
+		if(name)
+			B.name = "[name] pill"
+		B.icon_state = "pill"+pillsprite
+
 /obj/machinery/chem_master/Topic(href, href_list)
 
 	if(..())
