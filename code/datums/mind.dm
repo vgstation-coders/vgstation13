@@ -1520,8 +1520,7 @@ proc/clear_memory(var/silent = 1)
 	if(!mind)
 		return
 	for(var/mob/M in player_list)
-		while(M.transmogged_from)	//set M equal to the base-level mob, before all transmogrifications
-			M = M.transmogged_from
+		M = M.get_bottom_transmogrification()
 		if(isobserver(M))
 			if(M.mind == mind)
 				return M

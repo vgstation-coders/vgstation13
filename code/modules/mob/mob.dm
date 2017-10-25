@@ -2034,6 +2034,12 @@ mob/proc/on_foot()
 		M = M.transmogged_to
 	return M
 
+/mob/proc/get_bottom_transmogrification()	//Returns the mob at the lowest level of transmogrification, the original mob.
+	var/mob/M = src
+	while(M.transmogged_from)
+		M = M.transmogged_from.contained_mob
+	return M
+
 /spell/aoe_turf/revert_form
 	name = "Revert Form"
 	desc = "Morph back into your previous form."
