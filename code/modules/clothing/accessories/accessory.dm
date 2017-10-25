@@ -95,6 +95,10 @@
 /obj/item/clothing/accessory/pinksquare/can_attach_to(obj/item/clothing/C)
 	return 1
 
+/obj/item/clothing/accessory/tie
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
+
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
 		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
@@ -124,6 +128,8 @@
 	icon_state = "stethoscope"
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))

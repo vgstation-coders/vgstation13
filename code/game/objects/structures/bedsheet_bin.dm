@@ -18,6 +18,8 @@ LINEN BINS
 	throw_range = 2
 	w_class = W_CLASS_TINY
 	_color = "white"
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
