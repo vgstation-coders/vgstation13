@@ -167,6 +167,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(name)
 			B.name = "[name] pill"
 		B.icon_state = "pill"+pillsprite
+		return 1
 
 /obj/machinery/chem_master/Topic(href, href_list)
 
