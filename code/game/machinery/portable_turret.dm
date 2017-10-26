@@ -127,9 +127,9 @@ Neutralize All Unidentified Life Signs: []<BR>"},
 	else
 		if(istype(user,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = user
-			if(((src.lasercolor) == "b") && (istype(get_tag_armor(H), /obj/item/clothing/suit/tag/redtag)))
+			if(((src.lasercolor) == "b") && iswearingredtag(H))
 				return
-			if(((src.lasercolor) == "r") && (istype(get_tag_armor(H), /obj/item/clothing/suit/tag/bluetag)))
+			if(((src.lasercolor) == "r") && iswearingbluetag(H))
 				return
 		dat += text({"
 <TT><B>Automatic Portable Turret Installation</B></TT><BR><BR>

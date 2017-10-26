@@ -187,9 +187,9 @@ Auto Patrol: []"},
 	src.add_fingerprint(usr)
 	if(lasercolor && (istype(usr,/mob/living/carbon/human)))
 		var/mob/living/carbon/human/H = usr
-		if((lasercolor == "b") && (istype(get_tag_armor(H), /obj/item/clothing/suit/tag/redtag)))//Opposing team cannot operate it
+		if((lasercolor == "b") && iswearingredtag(H))//Opposing team cannot operate it
 			return
-		else if((lasercolor == "r") && (istype(get_tag_armor(H), /obj/item/clothing/suit/tag/bluetag)))
+		else if((lasercolor == "r") && iswearingbluetag(H))
 			return
 	if ((href_list["power"]) && (src.allowed(usr)))
 		if (src.on)
