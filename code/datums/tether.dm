@@ -62,7 +62,7 @@
 		event_key_effective_master = effective_master.on_moved.Add(src, "master_moved")
 		effective_master.current_tethers.Add(src)
 
-	reign_in_slave()
+	rein_in_slave()
 
 /datum/tether/proc/slave_moved()
 	if(effective_slave != slave)
@@ -75,7 +75,7 @@
 		event_key_effective_slave = effective_slave.on_moved.Add(src, "slave_moved")
 		effective_slave.current_tethers.Add(src)
 
-/datum/tether/proc/reign_in_slave()
+/datum/tether/proc/rein_in_slave()
 	while(!check_distance())
 		if(!step_to(effective_slave,effective_master))
 			break_tether()
@@ -98,9 +98,9 @@
 
 /datum/tether/equal/slave_moved()
 	..()
-	reign_in_master()
+	rein_in_master()
 
-/datum/tether/equal/proc/reign_in_master()
+/datum/tether/equal/proc/rein_in_master()
 	while(!check_distance())
 		if(!step_to(effective_master,effective_slave))
 			break_tether()
@@ -115,26 +115,28 @@
 
 proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/restrictive = FALSE)
 	if(!istype(first) || !istype(second) || !distance)
-		return
+		return FALSE
 	if(first.tether_master || second.tether_master)	//an atom can only have a single master or equal tether
-		return
+		return FALSE
 	var/datum/tether/equal/E
 	if(restrictive)
 		E = new /datum/tether/equal/restrictive()
 	else
 		E = new()
 	E.make_tether(first,second,distance)
+	return TRUE
 
 proc/tether_equal_restrictive(atom/movable/first, atom/movable/second, var/distance)
-	tether_equal(first, second, distance, TRUE)
+	return tether_equal(first, second, distance, TRUE)
 
 proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
 	if(!istype(M) || !istype(S) || !distance)
-		return
+		return FALSE
 	if(S.tether_master)	//an atom can only have a single master or equal tether
-		return
+		return FALSE
 	var/datum/tether/master_slave/T = new()
 	T.make_tether(M,S,distance)
+	return TRUE
 
 /obj/item/tether_maker
 	name = "tether maker"
