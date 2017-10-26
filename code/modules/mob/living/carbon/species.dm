@@ -278,7 +278,7 @@ var/global/list/whitelisted_species = list("Human")
 		"[slot_head]"		=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_shoes]"		=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_wear_suit]"	=	list("pixel_x" = 0, "pixel_y" = 0),
-		"[slot_w_uniform]"	=	list("pixel_x" = 11, "pixel_y" = 11),
+		"[slot_w_uniform]"	=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_s_store]"	=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_legcuffed]"	=	list("pixel_x" = 0, "pixel_y" = 0)
 		)
