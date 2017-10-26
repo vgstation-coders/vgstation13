@@ -952,5 +952,4 @@
 		T.break_tether()
 
 /atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
-	to_chat(world, "TETHER BETWEEN [src] AND [other_end] BROKEN")
 	return
