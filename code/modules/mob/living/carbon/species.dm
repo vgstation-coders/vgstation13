@@ -139,7 +139,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/gender	//For races with only one or neither
 
-	var/static/list/inventory_offsets
+	var/list/inventory_offsets
 
 
 /datum/species/New()
