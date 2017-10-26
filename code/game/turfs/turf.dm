@@ -131,6 +131,20 @@
 	if (!mover)
 		return 1
 
+	if(mover.current_tethers.len)
+		for(var/datum/tether/master_slave/T in mover.current_tethers)
+			if(T.effective_slave == mover)
+				if(get_exact_dist(T.effective_master, src) > T.tether_distance)
+					return 0
+		for(var/datum/tether/equal/restrictive/R in mover.current_tethers)
+			var/atom/movable/AM
+			if(R.effective_slave == mover)
+				AM = R.effective_master
+			else
+				AM = R.effective_slave
+			if(get_exact_dist(AM, src) > R.tether_distance)
+				return 0
+
 	var/list/large_dense = list()
 	//Next, check objects to block entry that are on the border
 	for(var/atom/movable/border_obstacle in src)

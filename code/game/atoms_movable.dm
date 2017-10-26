@@ -50,6 +50,10 @@
 	// When this object moves. (args: loc)
 	var/event/on_moved
 
+	var/atom/movable/tether_master
+	var/list/tether_slaves = list()
+	var/list/current_tethers = list()
+
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
@@ -93,6 +97,8 @@
 
 	locking_categories      = null
 	locking_categories_name = null
+
+	break_all_tethers()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -940,3 +946,11 @@
 
 /atom/movable/proc/make_invisible(var/source_define, var/time)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible
+
+/atom/movable/proc/break_all_tethers()	//Breaks all tethers
+	for(var/datum/tether/T in current_tethers)
+		T.break_tether()
+
+/atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
+	to_chat(world, "TETHER BETWEEN [src] AND [other_end] BROKEN")
+	return
