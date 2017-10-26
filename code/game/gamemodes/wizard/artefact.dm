@@ -115,7 +115,6 @@
 	var/event_key
 
 /obj/item/weapon/cloakingcloak/proc/mob_moved(var/list/event_args, var/mob/holder)
-	to_chat(world, "MOVED")
 	if(iscarbon(holder) && wielded)
 		var/mob/living/carbon/C = holder
 		if(C.m_intent == "run" && prob(10))
