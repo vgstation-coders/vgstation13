@@ -562,8 +562,9 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
-		O.pixel_x = species.inventory_offsets["slot_w_uniform"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_w_uniform"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_w_uniform]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_w_uniform]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,UNIFORM_LAYER)
 		//overlays_standing[UNIFORM_LAYER]	= standing
 	else if (!check_hidden_body_flags(HIDEJUMPSUIT))
@@ -596,8 +597,9 @@ var/global/list/damage_icon_parts = list()
 				if(wear_id.dynamic_overlay["[ID_LAYER]"])
 					var/image/dyn_overlay = wear_id.dynamic_overlay["[ID_LAYER]"]
 					O.overlays += dyn_overlay
-			O.pixel_x = species.inventory_offsets["slot_wear_id"]["pixel_x"] * PIXEL_MULTIPLIER
-			O.pixel_y = species.inventory_offsets["slot_wear_id"]["pixel_y"] * PIXEL_MULTIPLIER
+			var/list/offsets = species.get_inventory_offsets()
+			O.pixel_x = offsets["[slot_wear_id]"]["pixel_x"] * PIXEL_MULTIPLIER
+			O.pixel_y = offsets["[slot_wear_id]"]["pixel_y"] * PIXEL_MULTIPLIER
 			obj_to_plane_overlay(O,ID_LAYER)
 			//overlays_standing[ID_LAYER]	= image("icon" = 'icons/mob/mob.dmi', "icon_state" = "id")
 		//else
@@ -653,8 +655,9 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
-		O.pixel_x = species.inventory_offsets["slot_gloves"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_gloves"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_gloves]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
 		//overlays_standing[GLOVES_LAYER]	= standing
 	else
@@ -710,8 +713,9 @@ var/global/list/damage_icon_parts = list()
 				if(glasses.dynamic_overlay["[GLASSES_LAYER]"])
 					var/image/dyn_overlay = glasses.dynamic_overlay["[GLASSES_LAYER]"]
 					O.overlays += dyn_overlay
-			O.pixel_x = species.inventory_offsets["slot_glasses"]["pixel_x"] * PIXEL_MULTIPLIER
-			O.pixel_y = species.inventory_offsets["slot_glasses"]["pixel_y"] * PIXEL_MULTIPLIER
+			var/list/offsets = species.get_inventory_offsets()
+			O.pixel_x = offsets["[slot_glasses]"]["pixel_x"] * PIXEL_MULTIPLIER
+			O.pixel_y = offsets["[slot_glasses]"]["pixel_y"] * PIXEL_MULTIPLIER
 			obj_to_plane_overlay(O,GLASSES_LAYER)
 			//overlays_standing[GLASSES_LAYER]	= standing
 
@@ -748,8 +752,9 @@ var/global/list/damage_icon_parts = list()
 			if(ears.dynamic_overlay["[EARS_LAYER]"])
 				var/image/dyn_overlay = ears.dynamic_overlay["[EARS_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["slot_ears"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_ears"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_ears]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_ears]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,EARS_LAYER)
 		//overlays_standing[EARS_LAYER] = standing
 	//else
@@ -792,8 +797,9 @@ var/global/list/damage_icon_parts = list()
 
 		shoes.generate_accessory_overlays(O)
 
-		O.pixel_x = species.inventory_offsets["slot_shoes"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_shoes"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_shoes]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_shoes]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SHOES_LAYER)
 	//else
 		//overlays_standing[SHOES_LAYER]		= null
@@ -814,8 +820,9 @@ var/global/list/damage_icon_parts = list()
 			if(s_store.dynamic_overlay["[SUIT_STORE_LAYER]"])
 				var/image/dyn_overlay = s_store.dynamic_overlay["[SUIT_STORE_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["slot_s_store"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_s_store"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_s_store]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_s_store]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_STORE_LAYER)
 		//overlays_standing[SUIT_STORE_LAYER]	= image("icon" = 'icons/mob/belt_mirror.dmi', "icon_state" = "[t_state]")
 		s_store.screen_loc = ui_sstore1		//TODO
@@ -863,8 +870,9 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
-		O.pixel_x = species.inventory_offsets["slot_head"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_head"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_head]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_head]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HEAD_LAYER)
 		//overlays_standing[HEAD_LAYER]	= standing
 	//else
@@ -902,8 +910,9 @@ var/global/list/damage_icon_parts = list()
 			if(belt.dynamic_overlay["[BELT_LAYER]"])
 				var/image/dyn_overlay = belt.dynamic_overlay["[BELT_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["slot_belt"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_belt"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_belt]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_belt]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,BELT_LAYER)
 		//overlays_standing[BELT_LAYER]	= standing
 	//else
@@ -957,8 +966,9 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
-		O.pixel_x = species.inventory_offsets["slot_wear_suit"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_wear_suit"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_wear_suit]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_wear_suit]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_LAYER)
 		//overlays_standing[SUIT_LAYER]	= standing
 		update_tail_showing(0)
@@ -1014,8 +1024,9 @@ var/global/list/damage_icon_parts = list()
 
 		O.icon = standing
 		O.icon_state = standing.icon_state
-		O.pixel_x = species.inventory_offsets["slot_wear_mask"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_wear_mask"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_wear_mask]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_wear_mask]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,FACEMASK_LAYER)
 		//overlays_standing[FACEMASK_LAYER]	= standing
 	//else
@@ -1050,8 +1061,9 @@ var/global/list/damage_icon_parts = list()
 			if(back.dynamic_overlay["[BACK_LAYER]"])
 				var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["slot_back"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_back"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_back]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_back]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,BACK_LAYER)
 
 		//overlays_standing[BACK_LAYER]	= standing
@@ -1077,8 +1089,9 @@ var/global/list/damage_icon_parts = list()
 		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
 		O.icon = 'icons/mob/mob.dmi'
 		O.icon_state = "handcuff1"
-		O.pixel_x = species.inventory_offsets["slot_handcuffed"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_handcuffed"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HANDCUFF_LAYER)
 
 	if(update_icons)
@@ -1090,8 +1103,9 @@ var/global/list/damage_icon_parts = list()
 		var/obj/abstract/Overlays/O = obj_overlays[LEGCUFF_LAYER]
 		O.icon = 'icons/mob/mob.dmi'
 		O.icon_state = "legcuff1"
-		O.pixel_x = species.inventory_offsets["slot_legcuffed"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["slot_legcuffed"]["pixel_y"] * PIXEL_MULTIPLIER
+		var/list/offsets = species.get_inventory_offsets()
+		O.pixel_x = offsets["[slot_legcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
+		O.pixel_y = offsets["[slot_legcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,LEGCUFF_LAYER)
 		//overlays_standing[LEGCUFF_LAYER]	= image("icon" = 'icons/mob/mob.dmi', "icon_state" = "legcuff1")
 		if(src.m_intent != "walk")
