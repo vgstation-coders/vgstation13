@@ -29,22 +29,20 @@
 	if(effective_master != master)
 		effective_master.on_moved.Remove(event_key_effective_master)
 		effective_master.current_tethers.Remove(src)
-		event_key_effective_master = null
 		effective_master = null
+		event_key_effective_master = null
 	master.on_moved.Remove(event_key_master)
 	master.current_tethers.Remove(src)
-	event_key_master = null
 	master = null
+	event_key_master = null
 	if(effective_slave != slave)
 		effective_slave.on_moved.Remove(event_key_effective_slave)
 		effective_slave.current_tethers.Remove(src)
-		event_key_effective_slave = null
 		effective_slave = null
+		event_key_effective_slave = null
 	slave.on_moved.Remove(event_key_slave)
 	slave.current_tethers.Remove(src)
-	event_key_slave = null
 	slave = null
-	event_key_master = null
 	event_key_slave = null
 	..()
 
