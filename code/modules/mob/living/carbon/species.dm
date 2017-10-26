@@ -139,6 +139,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/gender	//For races with only one or neither
 
+	var/static/list/inventory_offsets
+
 
 /datum/species/New()
 	..()
@@ -146,6 +148,7 @@ var/global/list/whitelisted_species = list("Human")
 		var/datum/species/globalspeciesholder = all_species[name]
 		default_blocks = globalspeciesholder.default_blocks.Copy()
 		default_mutations = globalspeciesholder.default_mutations.Copy()
+	inventory_offsets = get_inventory_offsets()
 
 /datum/species/Destroy()
 	if(myhuman)
@@ -262,7 +265,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
-/datum/species/proc/get_inventory_offsets()
+/datum/species/proc/get_inventory_offsets()	//This is what you override if you want to give your species unique inventory offsets.
 	return list(
 		"[slot_back]"		=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_wear_mask]"	=	list("pixel_x" = 0, "pixel_y" = 0),
@@ -275,7 +278,7 @@ var/global/list/whitelisted_species = list("Human")
 		"[slot_head]"		=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_shoes]"		=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_wear_suit]"	=	list("pixel_x" = 0, "pixel_y" = 0),
-		"[slot_w_uniform]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_w_uniform]"	=	list("pixel_x" = 11, "pixel_y" = 11),
 		"[slot_s_store]"	=	list("pixel_x" = 0, "pixel_y" = 0),
 		"[slot_legcuffed]"	=	list("pixel_x" = 0, "pixel_y" = 0)
 		)
