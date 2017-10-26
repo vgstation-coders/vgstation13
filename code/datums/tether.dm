@@ -62,8 +62,7 @@
 		event_key_effective_master = effective_master.on_moved.Add(src, "master_moved")
 		effective_master.current_tethers.Add(src)
 
-	if(!check_distance())
-		reign_in_slave()
+	reign_in_slave()
 
 /datum/tether/proc/slave_moved()
 	if(effective_slave != slave)
@@ -99,8 +98,7 @@
 
 /datum/tether/equal/slave_moved()
 	..()
-	if(!check_distance())
-		reign_in_master()
+	reign_in_master()
 
 /datum/tether/equal/proc/reign_in_master()
 	while(!check_distance())
