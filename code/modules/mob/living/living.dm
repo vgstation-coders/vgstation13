@@ -1629,7 +1629,7 @@ Thanks.
 /mob/proc/throw_item(var/atom/target,var/atom/movable/what=null)
 	return
 
-/mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
+/mob/living/throw_item(var/atom/target,var/atom/movable/what=null)	//Returns 1 if the user throws something, returns -1 if the user throws nothing, and returns 0 if the user fails to throw at all.
 	src.throw_mode_off()
 	if(usr.stat || !target)
 		return
