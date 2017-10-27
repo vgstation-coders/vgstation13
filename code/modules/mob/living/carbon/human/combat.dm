@@ -106,6 +106,9 @@
 	return S.attack_verb
 
 /mob/living/carbon/human/get_unarmed_hit_sound()
+	if(istype(gloves))
+		var/obj/item/clothing/gloves/G = gloves
+		return G.get_hitsound_added()
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 	return (S.attack_verb == "punches" ? "punch" : 'sound/weapons/slice.ogg')
 
@@ -135,6 +138,18 @@
 		G.on_punch(src, victim)
 
 	return damage
+
+/mob/living/carbon/human/get_unarmed_sharpness(mob/living/victim)
+	var/datum/species/S = get_organ_species(get_active_hand_organ())
+
+	var/sharpness = S.punch_sharpness
+	if(organ_has_mutation(get_active_hand_organ(), M_CLAWS) && !istype(gloves))
+		sharpness = max(sharpness, 1.5)
+	if(istype(gloves))
+		var/obj/item/clothing/gloves/G = gloves
+		sharpness = G.get_sharpness_added()
+
+	return sharpness
 
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
 	var/base_chance = 8

@@ -1646,7 +1646,7 @@ Thanks.
 		item=what
 
 	if(!item)
-		return
+		return -1
 
 	if (istype(item, /obj/item/offhand))
 		var/obj/item/offhand/offhand = item
@@ -1708,6 +1708,7 @@ Thanks.
 			if(M_HULK in H.mutations || M_STRONG in H.mutations)
 				throw_mult+=0.5
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
+		return 1
 
 /mob/living/send_to_past(var/duration)
 	..()
