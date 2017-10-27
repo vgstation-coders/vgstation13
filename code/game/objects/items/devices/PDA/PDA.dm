@@ -2029,7 +2029,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (ismob(loc))
 			var/mob/M = loc
 			M.put_in_hands(id)
-			to_chat(usr, "<span class='notice'>You remove the ID from the [name].</span>")
+			to_chat(usr, "<span class='notice'>You remove \the [id] from the [name].</span>")
 		else
 			id.forceMove(get_turf(src))
 		id = null
@@ -2216,7 +2216,7 @@ obj/item/device/pda/AltClick()
 			if(((src in user.contents) && (C in user.contents)) || (istype(loc, /turf) && in_range(src, user) && (C in user.contents)) )
 				if( can_use(user) )//If they can still act.
 					id_check(user, 2)
-					to_chat(user, "<span class='notice'>You put the ID into \the [src]'s slot.</span>")
+					to_chat(user, "<span class='notice'>You put \the [C] into \the [src]'s slot.</span>")
 					if(incoming_transactions.len)
 						receive_incoming_transactions(id)
 					updateSelfDialog()//Update self dialog on success.
