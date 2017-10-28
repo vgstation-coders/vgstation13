@@ -22,7 +22,7 @@
 	name = "medical module board"
 	desc = "Used to give a medical cyborg surgery tools."
 	id = "medical_module_surgery"
-	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3, Tc_ANOMALY = 1)
+	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3, Tc_ANOMALY = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON = 80000, MAT_GLASS = 20000, MAT_SILVER=5000)
 	build_path = /obj/item/borg/upgrade/medical/surgery
