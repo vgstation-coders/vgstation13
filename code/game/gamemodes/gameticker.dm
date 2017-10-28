@@ -166,6 +166,10 @@ var/datum/controller/gameticker/ticker
 	equip_characters()
 	data_core.manifest()
 	current_state = GAME_STATE_PLAYING
+	// Update new player panels so they say join instead of ready up.
+	for(var/mob/new_player/player in player_list)
+		player.new_player_panel_proc()
+
 
 	//here to initialize the random events nicely at round start
 	setup_economy()
