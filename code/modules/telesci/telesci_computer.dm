@@ -52,7 +52,15 @@
 		cell = new/obj/item/weapon/cell(src)
 		cell.charge = 0
 
-	telepad = locate() in range(src, 7)
+	var/possible_telepad = locate() in range(src, 7)
+	if (!possible_telepad.linked)
+		telepad = possible_telepad
+		telepad.linked = src
+
+/obj/machinery/computer/telescience/Destroy()
+	if (telepad)
+		telepad.linked = null
+		telepad = null
 
 /obj/machinery/computer/telescience/process()
 	if(!cell || (stat & (BROKEN|NOPOWER)) || !anchored)
