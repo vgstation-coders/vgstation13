@@ -52,7 +52,7 @@
 		cell = new/obj/item/weapon/cell(src)
 		cell.charge = 0
 
-	var/possible_telepad = locate() in range(src, 7)
+	var/obj/machinery/telepad/possible_telepad = locate() in range(src, 7)
 	if (!possible_telepad.linked)
 		telepad = possible_telepad
 		telepad.linked = src
