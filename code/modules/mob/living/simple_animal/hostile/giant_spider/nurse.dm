@@ -197,7 +197,7 @@ var/list/spider_queens = list()
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
 	size = SIZE_HUGE
-	delimbable_icon = 0
+	delimbable_icon = FALSE
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/New()
 	..()
