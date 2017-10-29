@@ -10,6 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
+#include "__DEFINES\accessories.dm"
 #include "__DEFINES\archaeo_defines.dm"
 #include "__DEFINES\areas.dm"
 #include "__DEFINES\atmos.dm"

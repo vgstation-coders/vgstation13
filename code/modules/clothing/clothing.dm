@@ -110,6 +110,11 @@
 		H.update_inv_by_slot(slot_flags)
 	update_verbs()
 
+/obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)
+	for(var/obj/item/clothing/accessory/A in accessories)
+		if(A.accessory_exclusion = exclusion)
+			return A
+
 /obj/item/clothing/verb/removeaccessory()
 	set name = "Remove Accessory"
 	set category = "Object"

@@ -385,7 +385,7 @@
 		/obj/item/clothing/suit/monkeysuit,
 		/obj/item/clothing/suit/pirate,
 		/obj/item/clothing/suit/radiation,
-		/obj/item/clothing/suit/redtag,
+		/obj/item/clothing/suit/tag/redtag,
 		/obj/item/clothing/suit/storage/fr_jacket,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/clothing/suit/storage/lawyer/purpjacket,
