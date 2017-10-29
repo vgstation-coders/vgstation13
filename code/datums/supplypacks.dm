@@ -1482,7 +1482,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/under/rank/medical/green,
 					/obj/item/clothing/under/rank/medical/green,
 					/obj/item/weapon/storage/box/masks,
-					/obj/item/weapon/storage/box/gloves)
+					/obj/item/weapon/storage/box/gloves,
+					/obj/item/weapon/storage/box/bodybags)
 	cost = 15
 	containertype = "/obj/structure/closet/crate"
 	containername = "sterile equipment crate"
