@@ -1,7 +1,7 @@
 
 
 /obj/item/device/mmi
-	name = "Man-Machine Interface"
+	name = "\improper Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity."
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
