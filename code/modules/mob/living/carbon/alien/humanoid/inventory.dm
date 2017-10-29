@@ -42,12 +42,7 @@
 	if(!W)
 		return 0
 	var/success = 0
-	var/index = is_holding_item(W)
-	if(index)
-		held_items[index] = null
-		success = 1
-		update_inv_hand(index)
-	else if (W == r_store)
+	if (W == r_store)
 		r_store = null
 		success = 1
 		slot = slot_r_store
