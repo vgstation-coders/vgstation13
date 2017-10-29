@@ -197,7 +197,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 					count++
 				else
 					to_chat(user, "A figure floats in the depths, they appear to be [floater.name]")
-			
+
 			if (count)
 				// Let's just assume you can only have observers if there's a mob too.
 				to_chat(user, "<i>...[count] shape\s float behind them...</i>")
@@ -635,6 +635,20 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if (usr.isUnconscious() || stat & (NOPOWER|BROKEN))
 		return
 	put_mob(usr)
+	return
+
+/obj/machinery/atmospherics/unary/cryo_cell/verb/remove_beaker()
+	set name = "Remove beaker"
+	set category = "Object"
+	set src in oview(1)
+	if(usr.incapacitated() || usr.lying || usr.locked_to || !(iscarbon(usr) || issilicon(usr))) //are you cuffed, dying, lying, stunned or other
+		return
+	if(panel_open)
+		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
+	if(beaker)// If there is, effectively, a beaker
+		detach()
+	add_fingerprint(usr)
 	return
 
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
