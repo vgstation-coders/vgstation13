@@ -67,7 +67,6 @@
 				W.reset_plane_and_layer()
 	return 1
 
-
 //Literally copypasted /mob/proc/attack_ui(slot, hand_index) while replacing attack_hand with attack_alien
 /mob/living/carbon/alien/humanoid/attack_ui(slot, hand_index)
 	var/obj/item/W = get_active_hand()
