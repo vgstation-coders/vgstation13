@@ -142,6 +142,9 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	if(!zz)
 		zz = z
 
+	if(!src.interfaces["[zz]"])
+		return //Nobody has looked at the cameras yet so there's no point updating, we'll catch any changes later when we initialize them
+
 	var/datum/html_interface/hi = src.interfaces["[zz]"]
 	var/ID
 	var/status
