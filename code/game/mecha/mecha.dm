@@ -765,11 +765,14 @@
 /obj/mecha/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 
-	if(istype(W, /obj/item/device/mmi) || istype(W, /obj/item/device/mmi/posibrain))
-		if(mmi_move_inside(W,user))
-			to_chat(user, "[src]-MMI interface initialized successfuly")
+	if(istype(W, /obj/item/device/mmi))
+		var/device_name = "MMI"
+		if(istype(W, /obj/item/device/mmi/posibrain))
+			device_name = "positronic"
+		if(mmi_move_inside(W, user))
+			to_chat(user, "[src]-[device_name] interface initialized successfuly")
 		else
-			to_chat(user, "[src]-MMI interface initialization failed.")
+			to_chat(user, "[src]-[device_name] interface initialization failed.")
 		return
 
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
@@ -1183,7 +1186,6 @@
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
-	visible_message("<span class='notice'>[usr] starts to insert an MMI into [src.name]</span>")
 
 	if(enter_after(40,user))
 		if(!occupant)
@@ -1191,7 +1193,7 @@
 		else
 			to_chat(user, "Occupant detected.")
 	else
-		to_chat(user, "You stop inserting the MMI.")
+		to_chat(user, "You stop inserting \the [mmi_as_oc].")
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
