@@ -263,6 +263,9 @@
 	insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 
 /obj/machinery/smartfridge/power_change()
