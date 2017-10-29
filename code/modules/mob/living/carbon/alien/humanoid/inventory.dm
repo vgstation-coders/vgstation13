@@ -38,7 +38,7 @@
 			return handcuffed
 	return null
 	
-/mob/living/carbon/alien/humanoid/u_equip(obj/item/W as obj, dropped = 1, var/slot = null)
+/mob/living/carbon/alien/humanoid/u_equip(obj/item/W, dropped = 1, var/slot = null)
 	if(!W)
 		return 0
 	var/success = 0
