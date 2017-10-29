@@ -130,14 +130,8 @@
 				new /obj/item/clothing/accessory/storage/bandolier(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
-				var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
-				O.imp = new /obj/item/weapon/implant/traitor(O)
-				O.update()
-				O.name= "Greytide Conversion Kit"
-				var/obj/item/weapon/implanter/O2 = new /obj/item/weapon/implanter(src)
-				O2.imp = new /obj/item/weapon/implant/traitor(O)
-				O2.update()
-				O.name= "Greytide Conversion Kit"
+				new /obj/item/weapon/implanter/traitor(src)
+				new /obj/item/weapon/implanter/traitor(src)
 				new /obj/item/clothing/mask/bandana/red(src)
 				new /obj/item/clothing/mask/bandana/red(src)
 				new /obj/item/clothing/mask/bandana/red(src)
