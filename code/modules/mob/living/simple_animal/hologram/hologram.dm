@@ -74,6 +74,7 @@
 	var/obj/item/w_uniform
 	var/obj/item/wear_suit
 	var/list/obj/abstract/Overlays/obj_overlays[TOTAL_LAYERS]
+	var/obj/machinery/computer/HolodeckControl/connected_holoconsole
 
 /mob/living/simple_animal/hologram/advanced/New()
 	..()
@@ -85,7 +86,9 @@
 
 /mob/living/simple_animal/hologram/advanced/Login()
 	..()
-	to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck. <span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>")
+	to_chat(src, "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck.\
+		\n<span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>\
+		\n<span class='danger'>Do not damage the holodeck. Do not harm crew members without their consent.</span>")
 	if(transmogged_from)
 		to_chat(src, "Use the spell in the top-right corner of the screen to go back to being a ghost.")
 
@@ -93,6 +96,9 @@
 	head = null
 	w_uniform = null
 	wear_suit = null
+	if(connected_holoconsole)
+		connected_holoconsole.connected_holopeople.Remove(src)
+		connected_holoconsole = null
 	transmogrify()
 	..()
 
@@ -107,7 +113,7 @@
 /mob/living/simple_animal/hologram/advanced/Life()
 	..()
 	regular_hud_updates()
-	if(!istype(get_area(src), /area/holodeck))
+	if(!istype(get_area(src), /area/holodeck) || (mind && !client))
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()
