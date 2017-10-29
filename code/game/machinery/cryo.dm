@@ -649,7 +649,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(beaker)// If there is, effectively, a beaker
 		detach()
 	add_fingerprint(usr)
-	return
 
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
 	return air_contents
