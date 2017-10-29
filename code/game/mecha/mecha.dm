@@ -770,7 +770,7 @@
 		if(istype(W, /obj/item/device/mmi/posibrain))
 			device_name = "positronic"
 		if(mmi_move_inside(W, user))
-			to_chat(user, "[src]-[device_name] interface initialized successfuly")
+			to_chat(user, "[src]-[device_name] interface initialized successfully")
 		else
 			to_chat(user, "[src]-[device_name] interface initialization failed.")
 		return
