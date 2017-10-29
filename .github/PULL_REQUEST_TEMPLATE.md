@@ -12,7 +12,7 @@ Merging your own PRs is considered bad practice, as it generally means you bypas
 It is also suggested that you hop into irc.rizon.net #vgstation to discuss your changes, or if you need help.
 
 When working with in body changelogs, the syntax is as follows:
-:cl: (as the emoji)
+:cl:
  * rscadd: Did stuff!
  * rscdel: did other stuff!
 
