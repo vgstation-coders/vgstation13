@@ -1210,7 +1210,18 @@ client/proc/check_convertables()
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area)
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
+
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
+
+		object = copytext(object, 1, variables_start)
+
+
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1224,12 +1235,16 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen()
+	holder.marked_datum = new chosen
 
-	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum.</span>")
-
+	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
 	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+	if(varchanges.len)
+		_preloader = new(varchanges, chosen)
+		//_preloaded calls load() automatically on atom/New(). However, this proc can also create datums, which don't do that - call load() manually
+		_preloader.load(holder.marked_datum)
 
 /client/proc/vv_marked_datum()
 	set category	= "Debug"
