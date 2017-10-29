@@ -1186,6 +1186,7 @@
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
+	visible_message("<span class='notice'>\The [user] starts to insert \the [mmi_as_oc] into \the [src].</span>")
 
 	if(enter_after(40,user))
 		if(!occupant)
