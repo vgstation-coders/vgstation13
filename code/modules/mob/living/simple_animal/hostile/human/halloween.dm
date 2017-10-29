@@ -26,16 +26,16 @@
 
 /mob/living/simple_animal/hostile/humanoid/kitchen/poutine/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/beam))
-		P.damage /= rand(1.2,3)
+		P.damage /= (rand(12,30)/10)
 		if(prob(45))
 			visible_message("<span class = 'warning'>\The [P] has a reduced effect on \the [src]!</span>")
 
-	return (..(P))
+	return ..(P)
 
 /mob/living/simple_animal/hostile/humanoid/kitchen/poutine/Die()
-	for(var/i=0;i<3;i++)
+	for(var/i=1 to 3)
 		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/poutine, /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,\
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel)
+							/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel)
 		new to_spawn (src.loc)
 
 	new /obj/item/weapon/reagent_containers/food/snacks/mapleleaf(src.loc)
@@ -139,7 +139,7 @@
 			lock_atom(H, /datum/locking_category/vampire_latch)
 		if(H.locked_to == src)
 			if(H.vessel.get_reagent_amount(BLOOD) < 50)
-				unlock_from()
+				unlock_atom(H)
 			else
 				H.vessel.remove_reagent(BLOOD, rand(5,10))
 				health = max(maxHealth*2, health+=rand(5,10)) //Can overheal
@@ -306,7 +306,7 @@
 
 /mob/living/simple_animal/hostile/gremlin/greytide/adjustBruteLoss()
 	..()
-	if(prob(30*(maxHealth/health)))
+	if(!isDead() && prob(30*(maxHealth/health)))
 		visible_message("<span class = 'warning'>\The [src] looks to be annoyed!</span>")
 		annoyed = 1
 		spawn(rand(15 SECONDS, 45 SECONDS))
@@ -354,10 +354,11 @@
 	if(isliving(the_target))
 		var/mob/living/M = the_target
 		M.apply_radiation(rand(melee_damage_lower,melee_damage_upper), RAD_EXTERNAL)
-	..()
+	..(the_target)
 
 /mob/living/simple_animal/hostile/humanoid/supermatter/UnarmedAttack(atom/A)
 	if(isliving(A))
+		visible_message("<span class = 'warning'>\The [src] [attacktext] \the [A]</span>")
 		var/mob/living/M = A
 		M.apply_radiation(rand(melee_damage_lower*2,melee_damage_upper*3), RAD_EXTERNAL)
 		switch(M.radiation)
@@ -375,10 +376,12 @@
 					if(prob(50))
 						visible_message("<span class = 'warning'>\The [src] grabs onto \the [M]!</span>")
 						spawn(rand(15 SECONDS, 35 SECONDS))
-							if(!M.gcDestroyed)
+							if(M && !M.gcDestroyed)
+								var/turf/T = get_turf(M)
+								empulse(T, 2, 4, 1)
+								new /turf/unsimulated/wall/supermatter/no_spread/lake(T)
 								M.supermatter_act(src, SUPERMATTER_DUST)
-								empulse(get_turf(M), 2, 4, 1)
-								new /turf/unsimulated/wall/supermatter/no_spread/lake(get_turf(M))
+
 
 /mob/living/simple_animal/hostile/humanoid/supermatter/to_bump(atom/Obstacle)
 	if((istype(Obstacle, /turf/unsimulated/wall/supermatter) || istype(Obstacle, /obj/machinery/power/supermatter)) && !throwing)
@@ -387,9 +390,134 @@
 	return ..()
 
 /mob/living/simple_animal/hostile/humanoid/supermatter/Die()
+	set waitfor = 0
 	animate(src, alpha = 0, time = 2 SECONDS, easing = SINE_EASING)
-	spawn(2 SECONDS)
-		empulse(get_turf(src), 6, 12, 1)
-		qdel(src)
+	sleep(3 SECONDS)
+	empulse(get_turf(src), 6, 12, 1)
+	qdel(src)
+
+
+/mob/living/simple_animal/hostile/syphoner
+	name = "syphoner"
+	desc = "What happens when a roboticist gets impatient with their cell recharger. This mixture of scrap metal, wires, and light bulbs\
+	 latches itself onto any bare cable it can find, and inefficiently syphons from the power grid to charge the cell it carries."
+
+	icon_state = "syphoner"
+	icon_living = "syphoner"
+	icon_dead = "syphoner_dead"
+
+	health = 30
+	maxHealth = 120
+
+	move_to_delay = 15
+	speed = 4
+
+	search_objects = 1
+	var/obj/item/weapon/cell/cell = null
+	var/latched = 0
+
+/mob/living/simple_animal/hostile/syphoner/New()
+	..()
+	cell = new /obj/item/weapon/cell/super/empty(src)
+
+/mob/living/simple_animal/hostile/syphoner/update_icon()
+	if(latched)
+		icon_living = "syphoner_syphoning"
+		icon_state = "syphoner_syphoning"
+	else
+		icon_living = "syphoner"
+		icon_state = "syphoner"
+
+/mob/living/simple_animal/hostile/syphoner/Move()
+	..()
+	if(prob(30))
+		if(istype(src.loc, /turf/simulated/floor))
+			var/turf/simulated/floor/F = src.loc
+			if(F.is_plating())
+				return
+			if(prob(15))
+				visible_message("<span class = 'warning'>\The [src] pries up \the [F]!</span>")
+			F.floor_tile.forceMove(src)
+			F.floor_tile = null
+			F.make_plating()
+
+/mob/living/simple_animal/hostile/syphoner/CanAttack(var/atom/the_target)
+	if(!cell && istype(the_target, /obj/item/weapon/cell))
+		to_chat(world, "checking cell")
+		var/obj/item/weapon/cell/C = the_target
+		if(C.percent() < 100)
+			to_chat(world, "Cell is below fully charged, consuming.")
+			return 1
+	if(cell && cell.percent() >= 100)
+		to_chat(world, "Cell percentage maximum")
+		visible_message("<span class = 'notice'>\The [src] ejects \the [cell]!</span>")
+		cell.forceMove(get_turf(src))
+		cell = null
+	if(istype(the_target, /obj/structure/cable))
+		to_chat(world, "Checking a cable")
+		var/obj/structure/cable/C = the_target
+		if(C.powernet && C.powernet.avail > 0)
+			if(latched && locked_to && locked_to == C)
+				to_chat(world, "Latched, locked to [C]")
+				return 1
+			if(!latched)
+				to_chat(world, "Not latched to anything")
+				to_chat(world, "<SPAN CLASS='warning'>[C.powernet.avail]W in power network.</SPAN>")
+				return 1
+
+	return 0
+
+/mob/living/simple_animal/hostile/syphoner/AttackingTarget()
+	to_chat(world, "Attacking [target]")
+	if(istype(target, /obj/structure/cable))
+		var/obj/structure/cable/C = target
+		if(latched && locked_to && locked_to == C)
+			var/datum/powernet/PN = C.get_powernet()
+			if(PN && PN.avail > 0 && cell.percent() < 100)
+				var/drained = min (rand(500,1500), PN.avail )
+				PN.load += drained
+				cell.give(drained/10)
+			else
+				visible_message("<span class = 'notice'>\The [src] detaches from \the [C]</span>")
+				unlock_from()
+				latched = 0
+		else if(!latched)
+			visible_message("<span class = 'warning'>\The [src] attaches itself to \the [C]</span>")
+			C.lock_atom(src, /datum/locking_category/cable_lock)
+			latched = 1
+		else if (latched)
+			//How did we get here? Let's just quietly unlock and forget all about this
+			unlock_from()
+			latched = 0
+	if(istype(target, /obj/item/weapon/cell))
+		var/obj/item/weapon/cell/C = target
+		if(C.percent() < 100)
+			visible_message("<span class = 'notice'>\The [src] scoops up \the [C] into its battery compartment.</span>")
+			C.forceMove(src)
+			cell = C
+
+/mob/living/simple_animal/hostile/syphoner/proc/unlatch()
+	latched = 0
+	unlock_from()
+	update_icon()
+
+/mob/living/simple_animal/hostile/syphoner/proc/latch_onto(var/atom/A)
+	latched = 1
+	lock_atom(A, /datum/locking_category/cable_lock)
+	update_icon()
+
+/mob/living/simple_animal/hostile/syphoner/Die()
+	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
+	var/turf/T = get_turf(src)
+	new /obj/effect/gibspawner/robot(T)
+	if(prob(50))
+		cell.forceMove(T)
+	else
+		qdel(cell)
+	cell = null
+	qdel(src)
+
+
+/datum/locking_category/cable_lock
 
 

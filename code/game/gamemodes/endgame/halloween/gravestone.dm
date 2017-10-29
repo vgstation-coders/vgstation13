@@ -15,7 +15,7 @@
 /obj/effect/gravestone/stone
 	icon_state = "gravestone_stone"
 
-var/global/list/halloween_spawns = list(
+var/list/halloween_spawns = list(
 	"default" = list(/mob/living/simple_animal/hostile/humanoid/skellington),
 
 	"cargo" = list(/mob/living/simple_animal/hostile/humanoid/mummy, /mob/living/simple_animal/hostile/mimic/crate/chest,\
@@ -47,12 +47,13 @@ var/global/list/halloween_spawns = list(
 	flick("[icon_state]_new", src)
 
 /obj/effect/gravestone/halloween/proc/spawn_enemies()
+	set waitfor = 0
 	var/our_area = get_area_string()
 
 	if(our_area == "space" || our_area == "chapel")
 		animate(src, alpha = 0, time = 1 SECONDS)
-		spawn(1 SECONDS)
-			qdel(src)
+		sleep(1 SECONDS)
+		qdel(src)
 
 	var/list/possible_spawns = halloween_spawns["default"] + halloween_spawns[our_area]
 
@@ -65,25 +66,22 @@ var/global/list/halloween_spawns = list(
 			qdel(src)
 
 /obj/effect/gravestone/halloween/proc/get_area_string()
-	var/our_area_type = "default"
+	. = "default"
 
 	var/area/A = get_area(src)
 	if(isspace(A))
-		our_area_type = "space"
+		. = "space"
 	else if(istype(A,/area/engine) || istype(A,/area/engineering) || istype(A,/area/construction))
-		our_area_type = "engineering"
+		. = "engineering"
 	else if(istype(A,/area/medical/medbay))
-		our_area_type = "medbay"
+		. = "medbay"
 	else if(istype(A,/area/chapel))
-		our_area_type = "chapel"
+		. = "chapel"
 	else if(istype(A,/area/library))
-		our_area_type = "library"
+		. = "library"
 	else if(istype(A, /area/maintenance))
-		our_area_type = "maintenance"
+		. = "maintenance"
 	else if(istype(A, /area/supply))
-		our_area_type = "cargo"
+		. = "cargo"
 	else if(istype(A,/area/crew_quarters/kitchen) || istype(A,/area/hydroponics))
-		our_area_type = "kitchen"
-
-
-	return our_area_type
+		. = "kitchen"
