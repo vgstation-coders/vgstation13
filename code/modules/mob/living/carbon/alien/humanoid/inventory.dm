@@ -37,6 +37,35 @@
 		if(slot_handcuffed)
 			return handcuffed
 	return null
+	
+/mob/living/carbon/alien/humanoid/u_equip(obj/item/W, dropped = 1, var/slot = null)
+	if(!W)
+		return 0
+	var/success = 0
+	if (W == r_store)
+		r_store = null
+		success = 1
+		slot = slot_r_store
+		update_inv_pockets()
+	else if (W == l_store)
+		l_store = null
+		success = 1
+		slot = slot_l_store
+		update_inv_pockets()
+	else
+		..()
+
+	if(success)
+		if (W)
+			if (client)
+				client.screen -= W
+			W.unequipped(src, slot)
+			if(dropped)
+				W.forceMove(loc)
+				W.dropped(src)
+			if(W)
+				W.reset_plane_and_layer()
+	return 1
 
 //Literally copypasted /mob/proc/attack_ui(slot, hand_index) while replacing attack_hand with attack_alien
 /mob/living/carbon/alien/humanoid/attack_ui(slot, hand_index)
