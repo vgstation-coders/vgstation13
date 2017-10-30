@@ -411,7 +411,6 @@
 		scantemp = "Error: No signs of intelligence detected." //Self explainatory
 		return
 	if(!subject.mind) //This human was never controlled by a player, so they can't be cloned
-		to_chat(world, "[subject] HAS NO MIND")
 		scantemp = "Error: Mental interface failure."
 		return
 
