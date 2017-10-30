@@ -455,6 +455,15 @@ nanoui is used to open and update nano browser uis
 	nanomanager.ui_opened(src)
 
  /**
+  * Move window up front.
+  *
+  * @return nothing
+  */
+/datum/nanoui/proc/focus()
+	winset(user, window_id, "focus=true")
+	winset(user, "mapwindow.map", "focus=true") // return keyboard focus to map
+
+ /**
   * Close this UI
   *
   * @return nothing

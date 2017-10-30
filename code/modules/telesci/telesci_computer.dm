@@ -102,7 +102,7 @@
   *
   * @return nothing
   */
-/obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(user.stat || user.restrained())

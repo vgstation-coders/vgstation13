@@ -81,7 +81,7 @@
 		return
 	ui_interact(user)
 
-/obj/machinery/shield_capacitor/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/shield_capacitor/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["active"] = active
@@ -94,7 +94,7 @@
 	data["min_charge_rate"] = min_charge_rate
 	data["max_charge_rate"] = max_charge_rate
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "shield_capacitor.tmpl", name, 480, 250)
 		ui.set_initial_data(data)
