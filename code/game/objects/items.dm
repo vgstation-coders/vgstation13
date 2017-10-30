@@ -158,7 +158,7 @@
 
 	forceMove(T)
 
-/obj/item/examine(mob/user)
+/obj/item/examine(mob/user, var/show_name = TRUE)
 	var/size
 	switch(w_class)
 		if(W_CLASS_TINY)
@@ -177,7 +177,7 @@
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	..(user, " [pronoun] a [size] item.")
+	..(user, " [pronoun] a [size] item.", show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!

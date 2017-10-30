@@ -47,7 +47,8 @@
 
 /obj/item/mounted/frame/trophy_mount/examine(mob/user)
 	..()
-	to_chat(user, held_item.desc)
+	if(held_item)
+		held_item.examine(user, show_name = FALSE)
 
 /obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user, params)
 	..()
@@ -148,4 +149,5 @@
 
 /obj/structure/trophy_mount/examine(mob/user)
 	..()
-	to_chat(user, held_item.desc)
+	if(held_item)
+		held_item.examine(user, show_name = FALSE)
