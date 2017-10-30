@@ -1517,6 +1517,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("open_load_dialog")
 					if(!IsGuestKey(user.key))
 						open_load_dialog(user)
+						// DO NOT update window as it'd steal focus.
+						return
 
 				if("close_load_dialog")
 					close_load_dialog(user)
