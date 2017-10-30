@@ -31,7 +31,7 @@ var/list/halloween_spawns = list(
 	"maintenance" = list(/mob/living/simple_animal/hostile/humanoid/vampire, /mob/living/simple_animal/hostile/gremlin/greytide,\
 	/mob/living/simple_animal/hostile/gremlin, /mob/living/simple_animal/hostile/necro/zombie/putrid),
 
-	"engineering" = list(/mob/living/simple_animal/hostile/humanoid/supermatter),
+	"engineering" = list(/mob/living/simple_animal/hostile/humanoid/supermatter, /mob/living/simple_animal/hostile/syphoner),
 
 )
 
@@ -54,6 +54,7 @@ var/list/halloween_spawns = list(
 		animate(src, alpha = 0, time = 1 SECONDS)
 		sleep(1 SECONDS)
 		qdel(src)
+		return
 
 	var/list/possible_spawns = halloween_spawns["default"] + halloween_spawns[our_area]
 
@@ -73,8 +74,8 @@ var/list/halloween_spawns = list(
 		. = "space"
 	else if(istype(A,/area/engine) || istype(A,/area/engineering) || istype(A,/area/construction))
 		. = "engineering"
-	else if(istype(A,/area/medical/medbay))
-		. = "medbay"
+	else if(istype(A,/area/medical))
+		. = "medical"
 	else if(istype(A,/area/chapel))
 		. = "chapel"
 	else if(istype(A,/area/library))
