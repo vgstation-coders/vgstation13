@@ -155,6 +155,13 @@
 /mob/living/silicon/ai/proc/ai_actual_track(mob/living/target as mob)
 	if(!istype(target))
 		return
+
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if((H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate)) || H.is_wearing_item(/obj/item/clothing/mask/gas/voice))
+			to_chat(usr, "Target is not near any active cameras.")
+			return
+
 	var/mob/living/silicon/ai/U = usr
 
 	U.cameraFollow = target

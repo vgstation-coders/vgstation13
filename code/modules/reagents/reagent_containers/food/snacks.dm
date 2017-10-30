@@ -2058,6 +2058,7 @@
 	desc = "A plain dish of noodles, this sucks."
 	icon_state = "spaghettiboiled"
 	trash = /obj/item/trash/plate
+	restraint_resist_time = 1 SECONDS
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/New()
 	..()

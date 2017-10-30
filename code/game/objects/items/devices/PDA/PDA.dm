@@ -1793,7 +1793,33 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if("transferFunds")
 				if(!id)
 					return
+				var/obj/machinery/message_server/useMS = null
+				if(message_servers)
+					for (var/obj/machinery/message_server/MS in message_servers)
+						if(MS.is_functioning())
+							useMS = MS
+							break
+				if(!useMS)
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Messaging server is not responding.'</span>")
+					return
 				var/obj/item/device/pda/P = locate(href_list["target"])
+				var/datum/signal/signal = src.telecomms_process()
+
+				var/useTC = 0
+				if(signal)
+					if(signal.data["done"])
+						useTC = 1
+						var/turf/pos = get_turf(P)
+						if(pos.z in signal.data["level"])
+							useTC = 2
+
+				if(!useTC) // only send the message if it's stable
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Unable to receive signal from local subspace comms. PDA outside of comms range.'</span>")
+					return
+				if(useTC != 2) // Does our recepient have a broadcaster on their level?
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Unable to receive handshake signal from recipient PDA. Recipient PDA outside of comms range.'</span>")
+					return
+
 				var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
 				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
 					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")

@@ -247,6 +247,10 @@
 /area/vault/research
 
 
+/area/vault/rattlemebones
+	jammed = 2
+
+
 /obj/machinery/door/poddoor/droneship
 	name = "\improper OSIPR Pod-Door"
 	id_tag = "denied"

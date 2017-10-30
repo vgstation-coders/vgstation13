@@ -329,8 +329,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
 	<b>Streaming Volume</b>
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
-	<b>UI Display:</b>
-	<a href='?_src_=prefs;preference=nanoui'><b>[(usenanoui) ? "NanoUI" : "HTML"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
@@ -1470,8 +1468,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						user.client.media.open()
 						user.client.media.update_music()
 
-				if("nanoui")
-					usenanoui = !usenanoui
 				if("tooltips")
 					tooltips = !tooltips
 				if("progbar")

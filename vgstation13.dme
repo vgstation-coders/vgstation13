@@ -10,6 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
+#include "__DEFINES\accessories.dm"
 #include "__DEFINES\archaeo_defines.dm"
 #include "__DEFINES\areas.dm"
 #include "__DEFINES\atmos.dm"
@@ -363,6 +364,8 @@
 #include "code\game\gamemodes\cult\talisman.dm"
 #include "code\game\gamemodes\cult\trash_machinery.dm"
 #include "code\game\gamemodes\endgame\endgame.dm"
+#include "code\game\gamemodes\endgame\halloween\gravestone.dm"
+#include "code\game\gamemodes\endgame\halloween\halloween.dm"
 #include "code\game\gamemodes\endgame\supermatter_cascade\blob.dm"
 #include "code\game\gamemodes\endgame\supermatter_cascade\portal.dm"
 #include "code\game\gamemodes\endgame\supermatter_cascade\universe.dm"
@@ -1320,6 +1323,7 @@
 #include "code\modules\lighting\~lighting_undefs.dm"
 #include "code\modules\liquid\splash_simulation.dm"
 #include "code\modules\maps\map_objects.dm"
+#include "code\modules\maps\movers.dm"
 #include "code\modules\maps\nests.dm"
 #include "code\modules\maps\spawners\set_spawners.dm"
 #include "code\modules\maps\spawners\spawners.dm"
@@ -1657,6 +1661,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\mushroom.dm"
 #include "code\modules\mob\living\simple_animal\hostile\necro.dm"
 #include "code\modules\mob\living\simple_animal\hostile\necromorph.dm"
+#include "code\modules\mob\living\simple_animal\hostile\rattlemebones.dm"
 #include "code\modules\mob\living\simple_animal\hostile\slime.dm"
 #include "code\modules\mob\living\simple_animal\hostile\tree.dm"
 #include "code\modules\mob\living\simple_animal\hostile\viscerator.dm"
@@ -1671,6 +1676,7 @@
 #include "code\modules\mob\living\simple_animal\hostile\human\diona.dm"
 #include "code\modules\mob\living\simple_animal\hostile\human\frostgolem.dm"
 #include "code\modules\mob\living\simple_animal\hostile\human\grey.dm"
+#include "code\modules\mob\living\simple_animal\hostile\human\halloween.dm"
 #include "code\modules\mob\living\simple_animal\hostile\human\jackal.dm"
 #include "code\modules\mob\living\simple_animal\hostile\human\mummy.dm"
 #include "code\modules\mob\living\simple_animal\hostile\human\nazi.dm"

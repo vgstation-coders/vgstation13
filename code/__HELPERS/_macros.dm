@@ -107,6 +107,12 @@
 
 #define isitem(A) istype(A, /obj/item)
 
+#define isclothing(A) istype(A, /obj/item/clothing)
+
+#define iswearingredtag(A) istype(get_tag_armor(A), /obj/item/clothing/suit/tag/redtag)
+
+#define iswearingbluetag(A) istype(get_tag_armor(A), /obj/item/clothing/suit/tag/bluetag)
+
 #define isEmag(A) istype(A, /obj/item/weapon/card/emag)
 
 #define istool(A) is_type_in_list(A, common_tools)
@@ -160,6 +166,8 @@
 #define isatom(A) (istype(A, /atom))
 
 #define isatommovable(A) (istype(A, /atom/movable))
+
+#define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
 #define ismatrix(A) (istype(A, /matrix))
 

@@ -374,3 +374,12 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	display_contents_with_number = TRUE //With lods of emone, you're gonna need some compression
 	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/weapon/ore", "/obj/item/weapon/spacecash")
 	cant_hold = list()
+
+/obj/item/weapon/storage/bag/money/treasure
+	name = "bag of treasure"
+	desc = "Some pirate must have spent a long time collecting this."
+
+/obj/item/weapon/storage/bag/money/treasure/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/coin/gold(src)
