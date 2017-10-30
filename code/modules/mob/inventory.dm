@@ -236,7 +236,6 @@
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
-
 /mob/proc/put_in_empty_hands(var/obj/item/W) // This proc won't put things on the grounds in case of failure. Useful for holsters
 	if(!W)
 		return 0
