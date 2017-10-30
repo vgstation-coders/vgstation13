@@ -97,6 +97,16 @@
 	friendly_fire = 0
 	canmove = 1
 
+/mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/Die()
+	for(var/i=1 to 3)
+		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/spaghetti, /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti,\
+							/obj/item/weapon/reagent_containers/food/snacks/copypasta)
+		new to_spawn (src.loc)
+
+	new /obj/item/weapon/reagent_containers/food/snacks/faggot(src.loc)
+	visible_message("<span class='warning'>\The [src] falls apart, revealing a solitary faggot among the remains.</span>")
+	qdel (src)
+
 /*
 	Vampire
 		Employs use of glare to stun enemies, grabs them, then feeds.
@@ -463,7 +473,7 @@
 				return 1
 			if(!latched)
 				return 1
-		else if(C.powernet.avail <= 0 && locked_to == C)
+		else if((!C.powernet || C.powernet.avail <= 0) && locked_to == C)
 			unlatch()
 
 	return 0
@@ -522,7 +532,7 @@
 
 
 
-/mob/living/simple_animal/hostile/humanoid/skeleton/lich
+/mob/living/simple_animal/hostile/humanoid/skellington/lich
 	name = "lich"
 	desc = "A being that has become one with his own art, that of Necromancy. Come to consume the souls of those still living \
 	in an effort to preserve itself, lest it be consumed by the magic that binds it."
@@ -543,10 +553,10 @@
 
 	var/magic_range = 5
 
-/mob/living/simple_animal/hostile/humanoid/skeleton/lich/Life()
+/mob/living/simple_animal/hostile/humanoid/skellington/lich/Life()
 	..()
 	if(!isDead()) //It's a skeleton, how
-		for(var/mob/living/simple_animal/hostile/humanoid/skeleton/S in view(src, magic_range))
+		for(var/mob/living/simple_animal/hostile/humanoid/skellington/S in view(src, magic_range))
 			if(S == src)
 				continue
 			if(S.health < maxHealth)
@@ -566,7 +576,7 @@
 			if(target && S.target != target)
 				S.GiveTarget(target)
 
-/mob/living/simple_animal/hostile/humanoid/skeleton/lich/Shoot(atom/a, params)
+/mob/living/simple_animal/hostile/humanoid/skellington/lich/Shoot(atom/a, params)
 	var/spell = rand(1,5)
 	var/diceroll = roll("1d20")
 	var/list/victims = list()
@@ -589,15 +599,14 @@
 				if(diceroll >= 20)
 					H.dizziness += rand(5,25)
 		if(2) //Disarm
-			var/list/spec_victims = victims.Copy()
-			var/number_of_disarmed = min(3, spec_victims.len)
+			var/number_of_disarmed = min(3, victims.len)
 			for(var/i = 0 to number_of_disarmed)
-				var/mob/living/carbon/human/H = pick(spec_victims)
+				var/mob/living/carbon/human/H = pick(victims)
 				for(var/obj/item/I in held_items)
 					H.drop_item(I, force_drop = 1)
 					to_chat(H, "<span class = 'warning'>\The [I] is pulled from your grasp!</span>")
 					I.throw_at(get_edge_target_turf(target, pick(alldirs)),15,1)
-				spec_victims.Remove(H)
+				victims.Remove(H)
 		/*if(3) //Soul Swarm
 			visible_message("<span class = 'warning'>\The [src] starts to float above the ground!</span>")
 			animate(src, pixel_y = 8, time = 1 SECONDS, easing = ELASTIC_EASING)
@@ -624,7 +633,7 @@
 					new /obj/effect/gibspawner/generic(get_turf(H))
 				H.drop_all()
 				H.visible_message("<span class = 'warning'>\The [H] raises from the dead!</span>")
-				new /mob/living/simple_animal/hostile/humanoid/skeleton(H.loc)
+				new /mob/living/simple_animal/hostile/humanoid/skellington(H.loc)
 				qdel(H)
 		if(5) //Fall
 			var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
