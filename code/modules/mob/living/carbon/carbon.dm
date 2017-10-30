@@ -688,9 +688,11 @@
 				return 0
 	return 1
 
-/mob/living/carbon/make_invisible(var/source_define, var/time)
+/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(invisibility || alpha <= 1 || !source_define)
 		return
+	if(include_clothing)
+		return ..()
 	body_alphas[source_define] = 1
 	regenerate_icons()
 	if(time > 0)
