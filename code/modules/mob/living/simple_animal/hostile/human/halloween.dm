@@ -24,6 +24,10 @@
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	corpse = null
 
+/mob/living/simple_animal/hostile/humanoid/kitchen/poutine/New()
+	..()
+	icon_state = pick("cheese_zombie", "poutinegolem_maple", "poutinegolem_gravy", "poutinegolem_jumper")
+
 /mob/living/simple_animal/hostile/humanoid/kitchen/poutine/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/beam))
 		P.damage /= (rand(12,30)/10)
@@ -459,6 +463,8 @@
 				return 1
 			if(!latched)
 				return 1
+		else if(C.powernet.avail <= 0 && locked_to == C)
+			unlatch()
 
 	return 0
 
@@ -514,3 +520,140 @@
 /datum/locking_category/cable_lock
 
 
+
+
+/mob/living/simple_animal/hostile/humanoid/skeleton/lich
+	name = "lich"
+	desc = "A being that has become one with his own art, that of Necromancy. Come to consume the souls of those still living \
+	in an effort to preserve itself, lest it be consumed by the magic that binds it."
+
+	icon = 'icons/mob/hostile_humanoid.dmi'
+	icon_state = "lich"
+
+	health = 300
+	maxHealth = 300
+
+	ranged = 1
+
+	retreat_distance = 3
+
+	faction = "skeleton"
+	corpse = null
+	items_to_drop = list(/obj/item/clothing/head/wizard/skelelich, /obj/effect/decal/remains/human)
+
+	var/magic_range = 5
+
+/mob/living/simple_animal/hostile/humanoid/skeleton/lich/Life()
+	..()
+	if(!isDead()) //It's a skeleton, how
+		for(var/mob/living/simple_animal/hostile/humanoid/skeleton/S in view(src, magic_range))
+			if(S == src)
+				continue
+			if(S.health < maxHealth)
+				if(prob(10))
+					playsound(get_turf(S), get_sfx("soulstone"), 50,1)
+				if(prob(35))
+					make_tracker_effects(src, S)
+				S.health = max(S.maxHealth, S.health+rand(3,6))
+
+			if(health < maxHealth/2)
+				visible_message("<span class = 'warning'>\The [src] makes a fist with its skeletal hands, and [S] turns to dust.</span>")
+				health = max(maxHealth, health+S.health)
+				make_tracker_effects(S, src)
+				playsound(get_turf(S), get_sfx("soulstone"), 50,1)
+				S.dust()
+
+			if(target && S.target != target)
+				S.GiveTarget(target)
+
+/mob/living/simple_animal/hostile/humanoid/skeleton/lich/Shoot(atom/a, params)
+	var/spell = rand(1,5)
+	var/diceroll = roll("1d20")
+	var/list/victims = list()
+	for(var/mob/living/carbon/human/H in view(src, magic_range))
+		victims.Add(H)
+
+	if(!victims.len)
+		return
+	switch(spell)
+		if(1) //Mass Hallucination
+			for(var/mob/living/carbon/human/H in victims)
+				if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+					continue
+				if(M_PSY_RESIST in H.mutations)
+					continue
+				to_chat(H, "<span class = 'warning'>You feel [diceroll>15 ? "incredibly" : ""] disorientated.</span>")
+				H.hallucination += rand(10,20)*diceroll
+				if(diceroll > 15)
+					H.confused += rand(15,35)*diceroll
+				if(diceroll >= 20)
+					H.dizziness += rand(5,25)
+		if(2) //Disarm
+			var/list/spec_victims = victims.Copy()
+			var/number_of_disarmed = min(3, spec_victims.len)
+			for(var/i = 0 to number_of_disarmed)
+				var/mob/living/carbon/human/H = pick(spec_victims)
+				for(var/obj/item/I in held_items)
+					H.drop_item(I, force_drop = 1)
+					to_chat(H, "<span class = 'warning'>\The [I] is pulled from your grasp!</span>")
+					I.throw_at(get_edge_target_turf(target, pick(alldirs)),15,1)
+				spec_victims.Remove(H)
+		/*if(3) //Soul Swarm
+			visible_message("<span class = 'warning'>\The [src] starts to float above the ground!</span>")
+			animate(src, pixel_y = 8, time = 1 SECONDS, easing = ELASTIC_EASING)
+			animate(pixel_y = rand(8,19), pixel_x = rand(-8,8), time = 3 SECONDS, easing = SINE_EASING, loop = 5)
+			for(var/i = 0 to round(diceroll,4))
+				var/mob/living/carbon/human/mtarget = pick(victims)
+				if(mtarget.isDead())
+					continue
+				to_chat(mtarget, "<span class = 'warning'>\The [src] sets its gaze upon you, and fires a soul swarm at you!</span>")
+				new /obj/item/projectile/soul_swarm(get_turf(src), targetmob = mtarget)
+			animate(src, pixel_y = 0, pixel_x = 0, time = 3 SECONDS, easing = SINE_EASING)*/
+		if(4) //Raise undead
+			visible_message("<span class = 'warning'>\The [src] raises both hands, and clasps them togheter.</span>")
+			var/number_of_raised = round(diceroll/3)
+			for(var/mob/living/carbon/human/H in victims)
+				if(!H.isDead())
+					continue
+				if(H.blessed)
+					continue
+				if(number_of_raised <= 0)
+					break
+				number_of_raised--
+				if(!isskellington(H))
+					new /obj/effect/gibspawner/generic(get_turf(H))
+				H.drop_all()
+				H.visible_message("<span class = 'warning'>\The [H] raises from the dead!</span>")
+				new /mob/living/simple_animal/hostile/humanoid/skeleton(H.loc)
+				qdel(H)
+		if(5) //Fall
+			var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
+			fall.spell_flags = 0
+			fall.invocation_type = SpI_NONE
+			fall.the_world_chance = 0
+			fall.range = magic_range
+			fall.sleeptime = 8*diceroll
+			fall.perform(src, skipcharge = 1)
+			qdel(fall)
+
+/*/obj/item/projectile/soul_swarm
+	name = "soul swarm"
+	desc = "It flickers with some rudimentary form of intelligence, but conversation doesn't seem to be the strong point of a magical projectile."
+	icon_state = "soul"
+	damage = 15
+	travel_range = 30
+
+	var/mob/mobtarget = null
+
+/obj/item/projectile/soul_swarm/New(var/mob/targetmob)
+	..()
+	stun = rand(0,25)
+	weaken = rand(0,25)
+	paralyze = rand(0,25)
+	irradiate = rand(0,25)
+	stutter = rand(0,25)
+	eyeblur = rand(0,25)
+	drowsy = rand(0,25)
+	agony = rand(0,25)
+	jittery = rand(0,25)
+	mobtarget = targetmob*/
