@@ -112,7 +112,7 @@
 
 /obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)
 	for(var/obj/item/clothing/accessory/A in accessories)
-		if(A.accessory_exclusion = exclusion)
+		if(A.accessory_exclusion == exclusion)
 			return A
 
 /obj/item/clothing/verb/removeaccessory()
