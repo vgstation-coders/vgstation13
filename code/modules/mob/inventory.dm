@@ -241,7 +241,7 @@
 /mob/proc/put_in_hands(var/obj/item/W)
 	if(!W)
 		return 0
-	for (var/i = 1; i <= held_items.len; i++)
+	for (var/i = 1 to held_items.len)
 		if (held_items[i] == W)
 			return 0 // If it's already in your hands and you move it, it's in a superposition and breaks everything.
 	if(put_in_active_hand(W))
