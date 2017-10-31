@@ -22,7 +22,11 @@
 	effective_slave = slave
 	event_key_master = master.on_moved.Add(src, "master_moved")
 	event_key_slave = slave.on_moved.Add(src, "slave_moved")
+	if(!master.current_tethers)
+		master.current_tethers = list()
 	master.current_tethers.Add(src)
+	if(!slave.current_tethers)
+		slave.current_tethers = list()
 	slave.current_tethers.Add(src)
 
 /datum/tether/Destroy()
@@ -51,6 +55,11 @@
 		return 0
 	return 1
 
+/datum/tether/proc/check_breakage_distance()
+	if(get_exact_dist(effective_master, effective_slave) > tether_distance+5)	//A small buffer is added to account for the master moving before the slave catches up and such.
+		return 0
+	return 1
+
 /datum/tether/proc/master_moved()
 	if(effective_master != master)
 		if(!isturf(effective_master.loc) || isturf(master.loc))
@@ -60,7 +69,11 @@
 	if(!isturf(master.loc) && effective_master == master)
 		effective_master = get_holder_at_turf_level(master)
 		event_key_effective_master = effective_master.on_moved.Add(src, "master_moved")
+		if(!effective_master.current_tethers)
+			effective_master.current_tethers = list()
 		effective_master.current_tethers.Add(src)
+	if(!check_breakage_distance())
+		break_tether()
 
 	rein_in_slave()
 
@@ -73,7 +86,11 @@
 	if(!isturf(slave.loc) && effective_slave == slave)
 		effective_slave = get_holder_at_turf_level(slave)
 		event_key_effective_slave = effective_slave.on_moved.Add(src, "slave_moved")
+		if(!effective_slave.current_tethers)
+			effective_slave.current_tethers = list()
 		effective_slave.current_tethers.Add(src)
+	if(!check_breakage_distance())
+		break_tether()
 
 /datum/tether/proc/rein_in_slave()
 	while(!check_distance())
@@ -83,6 +100,8 @@
 
 /datum/tether/master_slave/make_tether(atom/movable/M, atom/movable/S, var/distance)	//With a master-slave tether, the slave is incapable of moving or being moved farther from its master than the tether allows.
 	S.tether_master = M																	//If its master moves out of range, the slave is pulled along.
+	if(!M.tether_slaves)
+		M.tether_slaves = list()
 	M.tether_slaves.Add(S)
 	..()
 
