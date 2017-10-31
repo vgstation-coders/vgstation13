@@ -157,6 +157,8 @@ proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
 	T.make_tether(M,S,distance)
 	return TRUE
 
+//Uncomment for easy testing of tethers.
+/*
 /obj/item/tether_maker
 	name = "tether maker"
 	icon_state = "spacecash20"
@@ -195,3 +197,4 @@ proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
 	if(mode == 4)
 		tether_master_slave(A, user, 7)
 		to_chat(user, "You are now tethered to \the [A].")
+*/
