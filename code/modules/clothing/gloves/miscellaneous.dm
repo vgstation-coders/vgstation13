@@ -320,7 +320,7 @@
 	hitsound_added = 'sound/weapons/slice.ogg'
 
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
-	return 0
+	return FALSE
 
 /obj/item/clothing/gloves/warping_claws/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)
 	if(target && !thrown)
