@@ -230,8 +230,11 @@
 	return put_in_hand(active_hand, W)
 
 //Puts the item into our inactive hand if possible. returns 1 on success.
-/mob/proc/put_in_inactive_hand(var/obj/item/W)
-	return put_in_hand(get_inactive_hand_index(), W)
+/mob/proc/put_in_inactive_hand(var/obj/item/W) // The technology has advanced, we can now handle lifeforms with more than 2 hands.
+	for (var/i = get_inactive_hand_index(); i > 0; i--) // Get inactive hand index returns us to the last available hand. We iterate until we come to 0.
+		if (put_in_hand(i, W))
+			return 1
+	return 0
 
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
