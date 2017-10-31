@@ -224,6 +224,7 @@
 	sharpness = 0.8
 	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
 	heat_production = 3800
+	source_temperature = TEMPERATURE_WELDER
 
 	//Cost to make in the autolathe
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
@@ -331,7 +332,7 @@
 		if(M.is_holding_item(src))
 			location = get_turf(M)
 	if (istype(location, /turf))
-		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
+		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
 
 
 /obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
@@ -353,7 +354,7 @@
 		remove_fuel(1)
 		var/turf/location = get_turf(user)
 		if (istype(location, /turf))
-			location.hotspot_expose(700, 50, 1,surfaces=1)
+			location.hotspot_expose(source_temperature, 50, 1,surfaces=1)
 			if(isliving(O))
 				var/mob/living/L = O
 				L.IgniteMob()
@@ -389,7 +390,7 @@
 
 /obj/item/weapon/weldingtool/is_hot()
 	if(isOn())
-		return heat_production
+		return source_temperature
 	return 0
 
 

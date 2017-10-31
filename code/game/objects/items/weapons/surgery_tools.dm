@@ -67,13 +67,13 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("burns")
 	hitsound = "sound/weapons/welderattack.ogg"
+	heat_production = 500
+	source_temperature = TEMPERATURE_HOTMETAL
 
 /obj/item/weapon/cautery/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (BRUTELOSS)
 
-/obj/item/weapon/cautery/is_hot()
-	return 1
 
 /obj/item/weapon/cautery/laser
 	name = "basic laser cautery"
@@ -85,6 +85,8 @@
 	force = 10.0
 	throwforce = 5.0
 	surgery_speed = 0.6
+	heat_production = 1500
+	source_temperature = TEMPERATURE_PLASMA
 
 /*
 /obj/item/weapon/cautery/laser/old //unused laser cautery. For the laser scalpel
@@ -103,7 +105,6 @@
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
-
 
 /obj/item/weapon/surgicaldrill
 	name = "surgical drill"
@@ -162,6 +163,8 @@
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
 	icon_state = "scalpel_laser1"
 	item_state = "laserscalpel1"
+	heat_production = 0
+	source_temperature = TEMPERATURE_PLASMA //Even if it's laser based, it depends on plasma
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
 	surgery_speed = 0.6
@@ -280,10 +283,8 @@
 	surgery_speed = 0.5
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
-
-/obj/item/weapon/circular_saw/plasmasaw/is_hot()
-	return 1
-
+	heat_production = 3000
+	source_temperature = TEMPERATURE_PLASMA
 
 /obj/item/weapon/circular_saw/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [src.name]! It looks like \he's  trying to commit suicide!</span>")

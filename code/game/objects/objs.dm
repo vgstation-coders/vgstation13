@@ -10,6 +10,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sharpness = 0 //not a binary - rough guide is 0.8 cutting, 1 cutting well, 1.2 specifically sharp (knives, etc) 1.5 really sharp (scalpels, e-weapons)
 	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
+	var/source_temperature = 0
 	var/price = 0
 
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
@@ -202,8 +203,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/is_sharp()
 	return sharpness
 
-/obj/proc/is_hot()
-	return heat_production
+/obj/proc/is_hot() //This returns the temperature of the object if possible
+	return source_temperature
+
+/obj/proc/thermal_energy_transfer()
+	if(is_hot())
+		return heat_production
+	return 0
 
 /obj/proc/process()
 	set waitfor = FALSE

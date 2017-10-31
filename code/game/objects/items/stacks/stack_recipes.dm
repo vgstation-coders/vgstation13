@@ -158,6 +158,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("meat spike",      /obj/structure/kitchenspike,                    2, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("grenade casing",  /obj/item/weapon/grenade/chem_grenade                                                       ),
 	new/datum/stack_recipe("desk bell shell", /obj/item/device/deskbell_assembly,             2                                           ),
+	new/datum/stack_recipe("bunsen burner",   /obj/machinery/bunsen_burner,                   4, time = 50, one_per_turf = 1, on_floor = 1),
 	null,
 	new/datum/stack_recipe_list("mounted frames", list(
 		new/datum/stack_recipe("apc frame",                 /obj/item/mounted/frame/apc_frame,            2                                           ),

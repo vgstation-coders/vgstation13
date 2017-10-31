@@ -27,6 +27,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
+	source_temperature = TEMPERATURE_FLAME
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("burns", "singes")
@@ -94,12 +95,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(M)
 			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
 	if(location)
-		location.hotspot_expose(heat_production, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 		return
 
 /obj/item/weapon/match/is_hot()
 	if(lit == 1)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -157,6 +158,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	body_parts_covered = 0
 	attack_verb = list("burns", "singes")
 	heat_production = 1000
+	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
 	var/lit = 0
@@ -216,7 +218,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/is_hot()
 	if(lit)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -355,7 +357,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		qdel(src)
 		return
 	if(location)
-		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
@@ -559,7 +561,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		return
 	if(location)
-		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 	return
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob) //Refills the pipe. Can be changed to an attackby later, if loose tobacco is added to vendors or something. //Later meaning never
@@ -612,6 +614,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/fuel = 20
 	var/fueltime
 	heat_production = 1500
+	source_temperature = TEMPERATURE_FLAME
 	slot_flags = SLOT_BELT
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
@@ -706,7 +709,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/is_hot()
 	if(lit)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/lighter/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -725,7 +728,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
 	if(location)
-		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 	if(!fueltime)
 		fueltime = world.time + 100
 	if(world.time > fueltime)

@@ -202,9 +202,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					var/A = G.name
 					var/B = G.data["blood_type"]
 					var/C = G.data["blood_DNA"]
-					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 				else
-					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			else
 				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			//usr << browse(dat, "window=chem_master;size=575x400")
@@ -491,7 +491,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(?)</A>
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name];density=[G.density];specheatcap=[G.specheatcap]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -529,7 +529,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(?)</A>
+						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name];density=[N.density];specheatcap=[N.specheatcap]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>

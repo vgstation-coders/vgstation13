@@ -80,6 +80,16 @@
 	category = "Medical"
 	build_path = /obj/item/device/healthanalyzer
 
+/datum/design/electricthermometer
+	name = "Electronic thermometer"
+	desc = "An electronic thermal probe used to accurately read the temperature of an object."
+	id = "electricthermometer"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_BIOTECH = 2)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
+	category = "Medical"
+	build_path = /obj/item/weapon/thermometer/electronic
+
 /datum/design/laserscalpel1
 	name = "Laser Scalpel"
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
