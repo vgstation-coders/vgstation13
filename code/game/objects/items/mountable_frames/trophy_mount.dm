@@ -11,7 +11,7 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	var/obj/item/held_item
 	var/list/params_list
-	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
+	var/icon/clicked
 
 /obj/item/mounted/frame/trophy_mount/New()
 	..()
@@ -48,13 +48,12 @@
 /obj/item/mounted/frame/trophy_mount/examine(mob/user)
 	..()
 	if(held_item)
-		held_item.examine(user, show_name = FALSE)
+		held_item.examine(user, FALSE)
 
 /obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user, params)
-	..()
-	params_list = params2list(params)
-	if(iswrench(W))
+	if(..())
 		return
+	params_list = params2list(params)
 	mount_item(W, user)
 
 /obj/item/mounted/frame/trophy_mount/AltClick(mob/user)
@@ -126,10 +125,10 @@
 
 /obj/structure/trophy_mount/attackby(obj/item/weapon/W, mob/user)
 	if(iscrowbar(W))
-		to_chat(user, "You begin prying the [initial(name)] off the wall.")
+		to_chat(user, "You begin prying \the [initial(name)] off the wall.")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src,10))
-			to_chat(user, "You pry the [initial(name)] off of the wall.")
+			to_chat(user, "You pry \the [initial(name)] off of the wall.")
 			add_fingerprint(user)
 			var/obj/item/mounted/frame/trophy_mount/T = new(get_turf(user))
 			if(held_item)
@@ -150,4 +149,4 @@
 /obj/structure/trophy_mount/examine(mob/user)
 	..()
 	if(held_item)
-		held_item.examine(user, show_name = FALSE)
+		held_item.examine(user, FALSE)
