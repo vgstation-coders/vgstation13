@@ -642,7 +642,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		message_admins("[key_name(L)] has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
 		go_out()
 
-/obj/machinery/atmospherics/unary/cryo_cell/AltClick(mob/user as mob) // AltClick = most common action = removing the patient
+/obj/machinery/atmospherics/unary/cryo_cell/AltClick(mob/user) // AltClick = most common action = removing the patient
 	if(!Adjacent(user))
 		return
 	if(panel_open)
@@ -662,8 +662,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		go_out()
 	add_fingerprint(user)
 
-/obj/machinery/atmospherics/unary/cryo_cell/CtrlClick(mob/user as mob) // CtrlClick = less common action = retrieving the beaker
-	if(!Adjacent(user) || user.incapacitated() || user.lying || user.locked_to || !(iscarbon(user) || issilicon(user))) //are you cuffed, dying, lying, stunned or other
+/obj/machinery/atmospherics/unary/cryo_cell/CtrlClick(mob/user) // CtrlClick = less common action = retrieving the beaker
+	if(!Adjacent(user) || user.incapacitated() || user.lying || user.locked_to || user == occupant || !(iscarbon(user) || issilicon(user))) //are you cuffed, dying, lying, stunned or other
 		return
 	if(panel_open)
 		to_chat(user, "<span class='bnotice'>Close the maintenance panel first.</span>")
