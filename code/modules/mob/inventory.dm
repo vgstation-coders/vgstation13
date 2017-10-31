@@ -236,19 +236,14 @@
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
-/mob/proc/put_in_empty_hands(var/obj/item/W) // This proc won't put things on the grounds in case of failure. Useful for holsters
+/mob/proc/put_in_hands(var/obj/item/W)
 	if(!W)
 		return 0
 	if(put_in_active_hand(W))
 		return 1
 	else if(put_in_inactive_hand(W))
 		return 1
-	else return 0
-
-/mob/proc/put_in_hands(var/obj/item/W)
-	if(!W)
-		return 0
-	if(!put_in_empty_hands(W))
+	else
 		W.forceMove(get_turf(src))
 		W.reset_plane_and_layer()
 		W.dropped()
