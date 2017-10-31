@@ -1,3 +1,88 @@
+// A special tray for the service droid. Allow droid to pick up and drop items as if they were using the tray normally
+// Click on table to unload, click on item to load. Otherwise works identically to a tray.
+// Unlike the base item "tray", robotrays ONLY pick up food, drinks and condiments.
+
+/obj/item/weapon/tray/robotray
+	name = "RoboTray"
+	desc = "An autoloading tray specialized for carrying refreshments."
+
+/obj/item/weapon/tray/robotray/afterattack(atom/target, mob/user as mob, proximity_flag)
+	if(!target)
+		return
+
+	if(!proximity_flag)
+		return
+
+	//Pick up items, mostly copied from base tray pickup proc
+	//See code\game\objects\items\weapons\kitchen.dm line 241
+	if(istype(target,/obj/item))
+		if(!isturf(target.loc)) // Don't load up stuff if it's inside a container or mob!
+			return
+
+		var/turf/pickup = target.loc
+		var/addedSomething = 0
+
+		for(var/obj/item/weapon/reagent_containers/food/I in pickup)
+			if(I != src && !I.anchored && !istype(I, /obj/item/clothing/under) && !istype(I, /obj/item/clothing/suit) && !istype(I, /obj/item/projectile))
+				var/add = 0
+				if(I.w_class > W_CLASS_TINY)
+					add = 1
+				else if(I.w_class == W_CLASS_SMALL)
+					add = 3
+				else
+					add = 5
+				if(calc_carry() + add >= max_carry)
+					break
+
+				I.forceMove(src)
+				carrying.Add(I)
+				overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
+				addedSomething = 1
+		if (addedSomething)
+			user.visible_message("<span class='notice'>[user] load some items onto their service tray.</span>")
+
+		return
+
+	//Unloads the tray, copied from base item's proc dropped() and altered
+	//See code\game\objects\items\weapons\kitchen.dm line 263
+	if(isturf(target) || istype(target,/obj/structure/table))
+		var foundtable = istype(target,/obj/structure/table/)
+		if(!foundtable) //It must be a turf!
+			for(var/obj/structure/table/T in target)
+				foundtable = 1
+				break
+
+		var/turf/dropspot
+		if(!foundtable) //Don't unload things onto walls or other silly places.
+			dropspot = user.loc
+		else if(isturf(target)) //They clicked on a turf with a table in it
+			dropspot = target
+		else					//They clicked on a table
+			dropspot = target.loc
+
+		overlays = null
+
+		var droppedSomething = 0
+
+		for(var/obj/item/I in carrying)
+			I.forceMove(dropspot)
+			carrying.Remove(I)
+			droppedSomething = 1
+			if(!foundtable && isturf(dropspot))
+				//If no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
+				spawn()
+					for(var/i = 1, i <= rand(1,2), i++)
+						if(I)
+							step(I, pick(NORTH,SOUTH,EAST,WEST))
+							sleep(rand(2,4))
+		if(droppedSomething)
+			if(foundtable)
+				user.visible_message("<span class='notice'>[user] unloads their service tray.</span>")
+			else
+				user.visible_message("<span class='notice'>[user] drops all the items on their tray.</span>")
+
+	return ..()
+
 //A special pen for service droids. Can be toggled to switch between normal writting mode, and paper rename mode
 //Allows service droids to rename paper items.
 /obj/item/weapon/pen/robopen
@@ -150,20 +235,20 @@
 	if(istype(A, /obj/structure/inflatable))
 		var/obj/structure/inflatable/I = A
 		I.deflate(0,5)
-		return 1
+		return TRUE
 	if(A.type in allowed_types)
 		var/obj/item/inflatable/I = A
 		if(I.inflating)
-			return 0
+			return FALSE
 		if(istype(I, /obj/item/inflatable/wall))
 			if(stored_walls.len >= max_walls)
 				to_chat(user, "\The [src] can't hold more walls.")
-				return 0
+				return FALSE
 			stored_walls += I
 		else if(istype(I, /obj/item/inflatable/door))
 			if(stored_doors.len >= max_doors)
 				to_chat(usr, "\The [src] can't hold more doors.")
-				return 0
+				return FALSE
 			stored_doors += I
 		if(istype(I.loc, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = I.loc
@@ -174,11 +259,11 @@
 				to_chat(user, "<span class='notice'>You can't let go of \the [I]!</span>")
 				stored_doors -= I
 				stored_walls -= I
-				return 0
+				return FALSE
 		user.delayNextAttack(8)
 		visible_message("\The [user] picks up \the [A] with \the [src]!")
 		A.forceMove(src)
-		return 1
+		return TRUE
 
 #undef MODE_WALL
 #undef MODE_DOOR
@@ -244,10 +329,10 @@
 			update_icon()
 			return TRUE
 		if(feedback)
-			to_chat(user, "<span class='danger'>ERROR. Your [src.name] wasn't designed to handle \the [I].</span>")
+			to_chat(user, "<span class='danger'>ERROR. Your [name] wasn't designed to handle \the [I].</span>")
 		return FALSE
 	if(feedback)
-		to_chat(user, "<span class='danger'>ERROR. Your [src.name] is already holding \the [wrapped].</span>")
+		to_chat(user, "<span class='danger'>ERROR. Your [name] is already holding \the [wrapped].</span>")
 	return FALSE
 
 
@@ -258,7 +343,7 @@
 		drop_item(force_drop = 1)
 		return FALSE
 	if(!target) //Just drop it, baka.
-		target = src.loc
+		target = loc
 	if(!dontsay)
 		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
 	wrapped.dropped(usr)
@@ -274,7 +359,7 @@
 	if(issilicon(user))
 		var/mob/living/silicon/robot/A = user
 		if(!A.emagged)
-			to_chat(user, "<span class='danger'>ERROR. Safety protocols prevent your [src.name] from [ismob(target) ? "completing this action." : "holding \the [target]."]</span>")
+			to_chat(user, "<span class='danger'>ERROR. Safety protocols prevent your [name] from [ismob(target) ? "completing this action." : "holding \the [target]."]</span>")
 			return TRUE
 
 /proc/gripper_sanity_check(var/obj/item/weapon/gripper/G)
@@ -371,7 +456,7 @@
 		return // This will prevent them using guns at range but adminbuse can add them directly to modules, so eh.
 
 	if(!wrapped)//There's some weirdness with items being lost inside the arm. Trying to fix all cases. ~Z
-		for(var/obj/item/thing in src.contents)
+		for(var/obj/item/thing in contents)
 			wrapped = thing
 			break
 
