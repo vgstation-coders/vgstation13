@@ -47,6 +47,7 @@
 	if(held_container)
 		held_container.forceMove(get_turf(src))
 		held_container = null
+	processing_objects.Remove(src)
 	..()
 
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
@@ -133,9 +134,15 @@
 	set name = "Toggle bunsen burner"
 	set category = "Object"
 
+	if (!usr.Adjacent(src) || usr.incapacitated())
+		return
+
 	heating = !heating
 	update_icon()
 	if(heating)
 		processing_objects.Add(src)
 	else
 		processing_objects.Remove(src)
+
+/obj/machinery/bunsen_burner/AltClick()
+	toggle()
