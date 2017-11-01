@@ -1302,6 +1302,7 @@ var/global/floorIsLava = 0
 		if(!chosen)
 			return
 
+	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
 	_preloader = new(varchanges, chosen)
 
 	if(ispath(chosen,/turf))
