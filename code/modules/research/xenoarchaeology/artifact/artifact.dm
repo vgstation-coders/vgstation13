@@ -20,6 +20,7 @@
 	5;/obj/item/changeling_vial,\
 	10;/obj/structure/constructshell,\
 	25;/obj/machinery/power/supermatter,\
+	100;/obj/item/clothing/gloves/warping_claws,\
 	100;/obj/machinery/auto_cloner,\
 	100;/obj/structure/bed/chair/vehicle/gigadrill,\
 	100;/obj/mecha/working/hoverpod,\

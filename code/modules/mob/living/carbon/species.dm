@@ -44,6 +44,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
 	var/attack_verb = "punches"									// Empty hand hurt intent verb.
 	var/punch_damage = 0										// Extra empty hand attack damage.
+	var/punch_sharpness = 0										// Slicing/cutting force of punches. Independent of the sharpness added by claws.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
 	var/mutantrace											// Safeguard due to old code.

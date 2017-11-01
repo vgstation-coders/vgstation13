@@ -330,6 +330,8 @@ BLIND     // can't see anything
 
 	var/bonus_knockout = 0 //Knockout chance is multiplied by (1 + bonus_knockout) and is capped at 1/2. 0 = 1/12 chance, 1 = 1/6 chance, 2 = 1/4 chance, 3 = 1/3 chance, etc.
 	var/damage_added = 0 //Added to unarmed damage, doesn't affect knockout chance
+	var/sharpness_added = 0 //Works like weapon sharpness for unarmed attacks, affects bleeding and limb severing.
+	var/hitsound_added = "punch"	//The sound that plays for an unarmed attack while wearing these gloves.
 
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
@@ -350,7 +352,16 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/get_damage_added()
 	return damage_added
 
+/obj/item/clothing/gloves/proc/get_sharpness_added()
+	return sharpness_added
+
+/obj/item/clothing/gloves/proc/get_hitsound_added()
+	return hitsound_added
+
 /obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
+/obj/item/clothing/gloves/proc/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)	//Called when the mob wearing the gloves successfully throws either something or nothing.
 	return
 
 //Head
