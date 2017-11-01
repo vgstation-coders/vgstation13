@@ -129,7 +129,7 @@
 	else
 		toggle()
 
-/obj/machinery/bunsen_burner/verb/toggle()
+/obj/machinery/bunsen_burner/verb/verb_toggle()
 	set src in view(1)
 	set name = "Toggle bunsen burner"
 	set category = "Object"
@@ -137,6 +137,9 @@
 	if (!usr.Adjacent(src) || usr.incapacitated())
 		return
 
+	toggle()
+
+/obj/machinery/bunsen_burner/proc/toggle()
 	heating = !heating
 	update_icon()
 	if(heating)

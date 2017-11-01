@@ -59,6 +59,10 @@
 	var/datum/gas_mixture/env = loc.return_air()
 	var/environmental_temp = env.temperature
 	if(scan_process)
+		// Shouldn't be reachable, still can't hurt.
+		if(stat & NOPOWER)
+			stop()
+
 		if(scan_process++ > target_scan_ticks)
 			FinishScan()
 		else if(temperature > XENOARCH_MAX_TEMP)
@@ -193,13 +197,16 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 
 /obj/machinery/anomaly/AltClick(var/mob/user)
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container)
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
 		return
 
 	eject()
 
 /obj/machinery/anomaly/CtrlClick(var/mob/user)
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container)
+	if (!anchored)
+		return ..()
+
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
 		return
 
 	start(user)
@@ -218,6 +225,9 @@ obj/machinery/anomaly/Topic(href, href_list)
 	return specifity
 
 /obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
+	if (stat & NOPOWER)
+		return
+
 	var/list/data[0]
 	data["max_temperature"] = XENOARCH_MAX_TEMP
 	data["safety_temperature"] = XENOARCH_SAFETY_TEMP
