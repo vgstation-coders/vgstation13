@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1,"ocelot" = 100))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -128,6 +128,24 @@
 				new /obj/item/clothing/head/beret/sec/ocelot(src)
 				new /obj/item/clothing/gloves/red(src)
 				new /obj/item/clothing/accessory/storage/bandolier(src)
+
+			if("anarchist")//14+14+6=34, plus molotovs
+				new /obj/item/weapon/implanter/traitor(src)
+				new /obj/item/weapon/implanter/traitor(src)
+				new /obj/item/clothing/mask/bandana/red(src)
+				new /obj/item/clothing/mask/bandana/red(src)
+				new /obj/item/clothing/mask/bandana/red(src)
+				new /obj/item/weapon/card/emag(src)
+				new /obj/item/weapon/storage/box/syndie_kit/molotovs(src)
+
+			if("emagsandglue")//(4+6+4+6+4+6+4)*5=memes
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+
+
 		tag = tagname
 
 
@@ -267,3 +285,26 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/toy/snappop/smokebomb(src)
+
+/obj/item/weapon/storage/box/syndie_kit/molotovs/
+	name = "box (molotovs)"
+
+/obj/item/weapon/storage/box/syndie_kit/molotovs/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/drinks/molotov(src)
+	new /obj/item/weapon/lighter/red(src)
+
+/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ //Exactly what it sounds like.
+	name = "box (E&G)"
+
+/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/New()
+	..()
+	new /obj/item/weapon/glue(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/glue(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/glue(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/glue(src)
+	return

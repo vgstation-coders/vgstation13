@@ -1298,13 +1298,14 @@
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
 		qdel(I)
 		I = null //??
-		molotov = 1
-		flags ^= OPENCONTAINER
-		name = "incendiary cocktail"
-		smashtext = ""
-		desc = "A rag stuffed into a bottle."
+		var/obj/item/weapon/reagent_containers/food/drinks/dummy = /obj/item/weapon/reagent_containers/food/drinks/molotov
+		molotov = initial(dummy.molotov)
+		flags = initial(dummy.flags)
+		name = initial(dummy.name)
+		smashtext = initial(dummy.smashtext)
+		desc = initial(dummy.desc)
+		slot_flags = initial(dummy.slot_flags)
 		update_icon()
-		slot_flags = SLOT_BELT
 		return 1
 	else if(I.is_hot())
 		attempt_heating(I, user)
@@ -1320,6 +1321,21 @@
 		if(reagents.total_volume)
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
+
+/obj/item/weapon/reagent_containers/food/drinks/molotov
+	name = "incendiary cocktail"
+	smashtext = ""
+	desc = "A rag stuffed into a bottle."
+	slot_flags = SLOT_BELT
+	flags = FPRINT
+	molotov = 1
+	isGlass = 1
+	icon_state = "vodkabottle" //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
+
+/obj/item/weapon/reagent_containers/food/drinks/molotov/New()
+	..()
+	reagents.add_reagent(FUEL, 100) //not strictly necessary for the "abstract" molotov type that the molotov-making-process copies variables from, but is used for pre-spawned molotovs
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/light(mob/user,obj/item/I)
 	var/flavor_text = "<span  class='rose'>[user] lights \the [name] with \the [I].</span>"
