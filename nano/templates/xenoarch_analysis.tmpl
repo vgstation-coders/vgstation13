@@ -13,7 +13,7 @@
 		Scan Status:
 	</div>
 	<div class="itemContent">
-		{{:helper.displayBar(data.scan_process, 0, data.target_ticks)}}
+		{{:helper.displayBar(data.scan_process-1, 0, data.target_ticks)}}
 		<div style="clear: both; padding-top: 4px;">
 			{{:helper.link("start", "check", {"begin": 1}, (data.scan_process || !data.beaker) ? "disabled" : null)}}
 			{{:helper.link("abort", "cancel", {"stop": 1}, data.scan_process ? null : "disabled", data.scan_process ? "redBackground" : null)}}

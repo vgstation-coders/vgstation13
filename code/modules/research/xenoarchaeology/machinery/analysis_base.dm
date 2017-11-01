@@ -26,33 +26,33 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 	var/obj/item/weapon/reagent_containers/glass/held_container
-	var/obj/item/weapon/tank/fuel_container
 	var/target_scan_ticks = 30
 	var/report_num = 0
+	// How far into a scan we are.
+	// If it's zero we're not scanning.
 	var/scan_process = 0
-	var/temperature = 273	//measured in kelvin, if this exceeds 1200, the machine is damaged and requires repairs
-							//if this exceeds 600 and safety is enabled it will shutdown
-							//temp greater than 600 also requires a safety prompt to initiate scanning
+
+	//measured in kelvin, if this exceeds 1200, the machine is damaged and requires repairs
+	//if this exceeds 600 and safety is enabled it will shutdown
+	//temp greater than 600 also requires a safety prompt to initiate scanning
+	var/temperature = T0C
 	var/max_temp = 450
 
-/obj/machinery/anomaly/New()
-	..()
-
-	//for analysis debugging
-	/*var/obj/item/weapon/reagent_containers/glass/solution_tray/S = new(src.loc)
-	var/turf/unsimulated/mineral/diamond/D
-	for(var/turf/unsimulated/mineral/diamond/M in world)
-		D = M
-		break
-	S.reagents.add_reagent(ANALYSIS_SAMPLE, 1, D.geological_data)
-	S.reagents.add_reagent(CHLORINE, 1, null)*/
 
 /obj/machinery/anomaly/RefreshParts()
 	var/scancount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
-			scancount += SP.rating-1
+	for(var/obj/item/weapon/stock_parts/scanning_module/SP in component_parts)
+		scancount += SP.rating-1
+
 	target_scan_ticks = initial(target_scan_ticks) - scancount*4
+
+/obj/machinery/anomaly/power_change()
+	..()
+	if (stat & NOPOWER && scan_process)
+		stop()
+
+	else
+		update_icon()
 
 /obj/machinery/anomaly/process()
 	//not sure if everything needs to heat up, or just the GLPC
@@ -62,23 +62,19 @@
 		if(scan_process++ > target_scan_ticks)
 			FinishScan()
 		else if(temperature > XENOARCH_MAX_TEMP)
-			src.visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>", 2)
+			visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>")
 			scan_process = 0
 		else if(temperature > XENOARCH_SAFETY_TEMP && prob(10))
-			src.visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>", 2)
+			visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>")
 
 		//show we're busy
 		if(prob(5))
-			src.visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>", 2)
+			visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>")
 
 		use_power = 2
 
-		icon_state = "analyser_processing"
 	else
 		use_power = 1
-		icon_state = "analyser"
-		if(prob(10))
-			flick(src, "analyser_processing")
 
 	//Add 3000 joules when active.  This is about 0.6 degrees per tick.
 	//May need adjustment
@@ -100,7 +96,7 @@
 			removed.temperature = max(TCMB, removed.temperature + heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", 2)
+				visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", "You hear a soft hiss.")
 
 		else
 			//heat up to match the air
@@ -108,60 +104,48 @@
 			removed.temperature = max(TCMB, removed.temperature - heat_added/heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				src.visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", 2)
+				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a soft hiss.")
 
 		env.merge(removed)
-	
+
 	nanomanager.update_uis(src)
 
-//this proc should be overriden by each individual machine
 /obj/machinery/anomaly/attack_hand(var/mob/user)
 	ui_interact(user)
 
-obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
-		//var/obj/item/weapon/reagent_containers/glass/G = W
 		if(held_container)
-			to_chat(user, "<span class='warning'>You must remove the [held_container] first.</span>")
-		else
-			if(user.drop_item(W, src))
-				to_chat(user, "<span class='notice'>You put the [W] into the [src].</span>")
+			to_chat(user, "<span class='warning'>You must remove \the [held_container] first.</span>")
+			return TRUE
 
-				held_container = W
-				nanomanager.update_uis(src)
+		if(user.drop_item(W, src))
+			to_chat(user, "<span class='notice'>You put \the [W] into the [src].</span>")
 
-		return 1 // avoid afterattack() being called
-	/*else if(istype(W, /obj/item/weapon/tank))
-		//var/obj/item/weapon/reagent_containers/glass/G = W
-		if(fuel_container)
-			to_chat(user, "<span class='warning'>You must remove the [fuel_container] first.</span>")
-		else
-			to_chat(user, "<span class='notice'>You put the [fuel_container] into the [src].</span>")
-			user.drop_item(W, src)
-			fuel_container.forceMove(src)
-			fuel_container = W
-			updateDialog()*/
-	else
-		return ..()
+			held_container = W
+			nanomanager.update_uis(src)
 
-obj/machinery/anomaly/proc/ScanResults()
-	//instantiate in children to produce unique scan behaviour
+		return TRUE
+
+	return ..()
+
+/obj/machinery/anomaly/proc/ScanResults()
+	// Override in children to produce unique scan behaviour.
 	return "<span class='warning'>Error initialising scanning components.</span>"
 
-obj/machinery/anomaly/proc/FinishScan()
-	scan_process = 0
-	updateDialog()
+/obj/machinery/anomaly/proc/FinishScan()
+	stop()
 
 	//determine the results and print a report
 	if(held_container)
-		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", 2)
-		var/obj/item/weapon/paper/P = new(src.loc)
+		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", "You hear an insistent chime.")
+		var/obj/item/weapon/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
 		P.stamped = list(/obj/item/weapon/stamp)
-		P.overlays = list("paper_stamp-qm")
+		P.overlays += "paper_stamp-qm"
 	else
-		src.visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", 2)
+		visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", "You hear a low buzz.")
 
 obj/machinery/anomaly/Topic(href, href_list)
 	. = ..()
@@ -177,31 +161,47 @@ obj/machinery/anomaly/Topic(href, href_list)
 		. = 1
 
 	if (href_list["stop"] && scan_process)
-		scan_process = 0
+		stop()
 		. = 1
 
 /obj/machinery/anomaly/proc/eject()
 	held_container.forceMove(loc)
 	held_container = null
+	nanomanager.update_uis(src)
 
 /obj/machinery/anomaly/proc/start(var/mob/user)
 	if (temperature >= XENOARCH_SAFETY_TEMP)
 		var/proceed = input("Unsafe internal temperature detected, enter YES below to continue.","Warning")
-		if (proceed == "YES" && !user.incapacitated() && user.Adjacent(src)) //call parent again to run distance and power checks again.
-			scan_process = 1
+		if (proceed != "YES" || user.incapacitated() || !user.Adjacent(src))
+			return FALSE
+
+	scan_process = 1
+	update_icon()
+	nanomanager.update_uis(src)
+
+/obj/machinery/anomaly/proc/stop()
+	scan_process = 0
+	update_icon()
+	nanomanager.update_uis(src)
+
+/obj/machinery/anomaly/update_icon()
+	if (scan_process)
+		icon_state = "analyser_processing"
+
 	else
-		scan_process = 1
+		icon_state = "analyser"
+
 
 /obj/machinery/anomaly/AltClick(var/mob/user)
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process)
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container)
 		return
-	
+
 	eject()
 
 /obj/machinery/anomaly/CtrlClick(var/mob/user)
-	if (user.incapacitated() || !user.Adjacent(src) || scan_process)
+	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container)
 		return
-	
+
 	start(user)
 
 //whether the carrier sample matches the possible finds
@@ -217,7 +217,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 	return specifity
 
-/obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/anomaly/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	var/list/data[0]
 	data["max_temperature"] = XENOARCH_MAX_TEMP
 	data["safety_temperature"] = XENOARCH_SAFETY_TEMP
@@ -238,7 +238,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 		data["beaker_contents"] = beaker_contents
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
 		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
