@@ -15,6 +15,7 @@ var/area/space_area
 	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
+	flags = 0
 
 /area/New()
 	area_turfs = list()
@@ -43,6 +44,11 @@ var/area/space_area
 
 //	spawn(15)
 	power_change()		// all machines set to current power level, also updates lighting icon
+
+/area/spawned_by_map_element(datum/map_element/ME, list/objects)
+	..()
+
+	power_change()
 
 /area/Destroy()
 	..()
@@ -96,9 +102,9 @@ var/area/space_area
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
 				if(state == 1)
-					C.network.Remove("Power Alarms")
+					C.network.Remove(CAMERANET_POWERALARMS)
 				else
-					C.network.Add("Power Alarms")
+					C.network.Add(CAMERANET_POWERALARMS)
 			for (var/mob/living/silicon/aiPlayer in player_list)
 				if(aiPlayer.z == source.z)
 					if (state == 1)
@@ -145,7 +151,7 @@ var/area/space_area
 			//updateicon()
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
-				C.network.Add("Atmosphere Alarms")
+				C.network.Add(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.triggerAlarm("Atmosphere", src, cameras, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -156,7 +162,7 @@ var/area/space_area
 		// Dropping from danger level 2.
 		else if (atmosalm == 2)
 			for(var/obj/machinery/camera/C in src)
-				C.network.Remove("Atmosphere Alarms")
+				C.network.Remove(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.cancelAlarm("Atmosphere", src, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -234,7 +240,7 @@ var/area/space_area
 		var/list/cameras = list()
 		for (var/obj/machinery/camera/C in src)
 			cameras.Add(C)
-			C.network.Add("Fire Alarms")
+			C.network.Add(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.triggerAlarm("Fire", src, cameras, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -251,7 +257,7 @@ var/area/space_area
 		mouse_opacity = 0
 		updateicon()
 		for (var/obj/machinery/camera/C in src)
-			C.network.Remove("Fire Alarms")
+			C.network.Remove(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.cancelAlarm("Fire", src, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -553,7 +559,7 @@ var/area/space_area
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(old_area,src)
 
-var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
+var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
 var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 
@@ -733,18 +739,18 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 			for(var/obj/machinery/door/D2 in T1)
 				doors += D2
 			/*if(T1.parent)
-				air_master.groups_to_rebuild += T1.parent
+				SSair.groups_to_rebuild += T1.parent
 			else
-				air_master.mark_for_update(T1)*/
+				SSair.mark_for_update(T1)*/
 
 	if(fromupdate.len)
 		for(var/turf/simulated/T2 in fromupdate)
 			for(var/obj/machinery/door/D2 in T2)
 				doors += D2
 			/*if(T2.parent)
-				air_master.groups_to_rebuild += T2.parent
+				SSair.groups_to_rebuild += T2.parent
 			else
-				air_master.mark_for_update(T2)*/
+				SSair.mark_for_update(T2)*/
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()

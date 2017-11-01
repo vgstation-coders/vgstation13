@@ -94,6 +94,7 @@
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
+	attempt_heating(W, user)
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
@@ -223,6 +224,12 @@
 		forceMove(R)
 	else
 		forceMove(holder)
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+	name = "plasma beaker"
+	desc = "A beaker with plasma lining, designed to act as a catalyst for some particular reactions."
+	icon_state = "beakerplasma"
+	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
@@ -364,6 +371,11 @@
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
+	attempt_heating(D, user)
+
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
+	..()
+	reagents.add_reagent(WATER, 150)
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug

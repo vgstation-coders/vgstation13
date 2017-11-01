@@ -434,3 +434,12 @@
 		slime_mutation[2] = /mob/living/carbon/slime/sepia
 		slime_mutation[3] = /mob/living/carbon/slime/sepia
 		slime_mutation[4] = /mob/living/carbon/slime/sepia
+
+////////////////Other
+
+/mob/living/carbon/slime/pygmy
+	colour = "pygmy"
+	icon_state = "rainbow baby slime"
+	primarytype = /mob/living/carbon/slime/pygmy
+	adulttype = null
+	coretype = /obj/item/slime_extract/grey

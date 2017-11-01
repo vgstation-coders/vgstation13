@@ -99,6 +99,20 @@
 	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
 	return ..()
 
+/obj/item/weapon/katana/magic
+	name = "enchanted sword"
+	desc = "Capable of cutting through anything except the things it can't cut through."
+	icon_state = "cultblade"
+	item_state = "cultblade"
+
+/obj/item/weapon/katana/magic/dropped(mob/user)
+	..()
+	qdel(src)
+
+/obj/item/weapon/katana/magic/equipped(mob/living/carbon/human/H, slot)
+	if(slot)
+		qdel(src)
+
 /obj/item/weapon/harpoon
 	name = "harpoon"
 	sharpness = 1.2

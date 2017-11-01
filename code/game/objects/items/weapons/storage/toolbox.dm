@@ -2,8 +2,9 @@
 	name = "toolbox"
 	desc = "Danger. Very robust."
 	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "red"
-	item_state = "toolbox_red"
+	icon_state = "toolbox_grey"
+	item_state = "toolbox_grey"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 15
@@ -47,7 +48,7 @@
 
 /obj/item/weapon/storage/toolbox/emergency
 	name = "emergency toolbox"
-	icon_state = "red"
+	icon_state = "toolbox_red"
 	item_state = "toolbox_red"
 
 /obj/item/weapon/storage/toolbox/emergency/New()
@@ -65,7 +66,7 @@
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"
-	icon_state = "blue"
+	icon_state = "toolbox_blue"
 	item_state = "toolbox_blue"
 
 /obj/item/weapon/storage/toolbox/mechanical/New()
@@ -79,7 +80,7 @@
 
 /obj/item/weapon/storage/toolbox/electrical
 	name = "electrical toolbox"
-	icon_state = "yellow"
+	icon_state = "toolbox_yellow"
 	item_state = "toolbox_yellow"
 
 /obj/item/weapon/storage/toolbox/electrical/New()
@@ -98,7 +99,7 @@
 
 /obj/item/weapon/storage/toolbox/syndicate
 	name = "suspicious looking toolbox"
-	icon_state = "syndicate"
+	icon_state = "toolbox_syndi"
 	item_state = "toolbox_syndi"
 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
 	force = 20
@@ -113,3 +114,4 @@
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/multitool(src)
+	

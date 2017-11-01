@@ -3,7 +3,7 @@
 	desc = "95% Polyester, 5% Spandex!"
 	gender = PLURAL
 	clothing_flags = ONESIZEFITSALL
-	body_parts_covered = LEGS
+	body_parts_covered = LOWER_TORSO
 
 /obj/item/clothing/under/shorts/red
 	icon_state = "redshorts"

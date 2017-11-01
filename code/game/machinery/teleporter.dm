@@ -256,7 +256,7 @@
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	if(istype(AM,/obj/effect/beam))
-		src.Bump(AM)
+		src.to_bump(AM)
 		return
 	spawn()
 		if (src.engaged)
@@ -282,10 +282,7 @@
 			com.one_time_use = 0
 			com.locked = null
 	else
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
-
+		spark(src, 5)
 
 
 /obj/machinery/teleport/station
@@ -410,7 +407,7 @@ obj/machinery/teleport/station/New()
 	return
 
 
-/obj/effect/laser/Bump()
+/obj/effect/laser/to_bump()
 	src.range--
 	return
 

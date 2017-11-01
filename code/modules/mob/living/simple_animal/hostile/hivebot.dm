@@ -31,6 +31,8 @@
 	size = SIZE_BIG
 	meat_type = null
 
+	mob_property_flags = MOB_ROBOTIC
+
 /mob/living/simple_animal/hostile/hivebot/range
 	name = "Ranged Hivebot"
 	desc = "A biggish robot. This one has a gun!"

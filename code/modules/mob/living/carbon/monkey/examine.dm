@@ -4,8 +4,12 @@
 
 	if (src.handcuffed &&  handcuffed.is_visible())
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
+	if (src.hat && hat.is_visible())
+		msg += "It is wearing [bicon(src.hat)] \a [src.hat] on its head.\n"
 	if (src.wear_mask && !(wear_mask.invisibility || wear_mask.alpha <= 1))
-		msg += "It has [bicon(src.wear_mask)] \a [src.wear_mask] on its head.\n"
+		msg += "It has [bicon(src.wear_mask)] \a [src.wear_mask] over its face.\n"
+	if (src.glasses && glasses.is_visible())
+		msg += "It is wearing [bicon(src.glasses)] \a [src.glasses] over its eyes.\n"
 
 	for(var/obj/item/I in held_items)
 		if(I.is_visible())

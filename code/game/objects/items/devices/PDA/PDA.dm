@@ -7,6 +7,8 @@
 #define SCANMODE_HALOGEN	4
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
+#define SCANMODE_ROBOTICS	7
+#define SCANMODE_HAILER		8
 
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
@@ -57,6 +59,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/device/analyzer/atmos_analys = new
+	var/obj/item/device/robotanalyzer/robo_analys = new
+	var/obj/item/device/hailer/integ_hailer = new
 	var/obj/item/device/device_analyser/dev_analys = null
 
 	var/MM = null
@@ -285,6 +289,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
+/obj/item/device/pda/heads/assassin
+	name = "Reaper PDA"
+	ownjob = "Reaper"
+
+/obj/item/device/pda/heads/nt_rep
+	name = "Nanotrasen Navy Representative PDA"
+	ownjob = "Nanotrasen Navy Representative"
+
+/obj/item/device/pda/heads/nt_officer
+	name = "Nanotrasen Navy Officer PDA"
+	ownjob = "Nanotrasen Navy Officer"
+
+/obj/item/device/pda/heads/nt_captain
+	name = "Nanotrasen Navy Captain PDA"
+	ownjob = "Nanotrasen Navy Captain"
+
+/obj/item/device/pda/heads/nt_supreme
+	name = "Nanotrasen Supreme Commander PDA"
+	ownjob = "Nanotrasen Supreme Commander"
+
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop
@@ -400,6 +424,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/roboticist
 	name = "Robotics PDA"
+	default_cartridge = /obj/item/weapon/cartridge/robotics
 	icon_state = "pda-robot"
 
 /obj/item/device/pda/librarian
@@ -717,7 +742,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 						dat += {"<h4>Security Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>"}
+							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>
+							<li><a href='byond://?src=\ref[src];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
+							"}
 					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
 						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
@@ -750,6 +777,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
 					if (cartridge.access_trader)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
+					if (cartridge.access_robotics)
+						dat += "<li><a href='byond://?src=\ref[src];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
 
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
@@ -1698,6 +1727,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					scanmode = SCANMODE_NONE
 				else if((!isnull(cartridge)) && (cartridge.access_engine))
 					scanmode = SCANMODE_HALOGEN
+			if("Integrated Hailer")
+				if(scanmode == SCANMODE_HAILER)
+					scanmode = SCANMODE_NONE
+				else if((!isnull(cartridge)) && (cartridge.access_security))
+					scanmode = SCANMODE_HAILER
 			if("Honk")
 				if ( !(last_honk && world.time < last_honk + 20) )
 					playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
@@ -1716,6 +1750,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dev_analys.cant_drop = 1
 						dev_analys.max_designs = 5
 					scanmode = SCANMODE_DEVICE
+			if("Cyborg Analyzer")
+				if(scanmode == SCANMODE_ROBOTICS)
+					scanmode = SCANMODE_NONE
+				else if((!isnull(cartridge)) && (cartridge.access_robotics))
+					scanmode = SCANMODE_ROBOTICS
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
@@ -1763,7 +1802,33 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if("transferFunds")
 				if(!id)
 					return
+				var/obj/machinery/message_server/useMS = null
+				if(message_servers)
+					for (var/obj/machinery/message_server/MS in message_servers)
+						if(MS.is_functioning())
+							useMS = MS
+							break
+				if(!useMS)
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Messaging server is not responding.'</span>")
+					return
 				var/obj/item/device/pda/P = locate(href_list["target"])
+				var/datum/signal/signal = src.telecomms_process()
+
+				var/useTC = 0
+				if(signal)
+					if(signal.data["done"])
+						useTC = 1
+						var/turf/pos = get_turf(P)
+						if(pos.z in signal.data["level"])
+							useTC = 2
+
+				if(!useTC) // only send the message if it's stable
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Unable to receive signal from local subspace comms. PDA outside of comms range.'</span>")
+					return
+				if(useTC != 2) // Does our recepient have a broadcaster on their level?
+					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Unable to receive handshake signal from recipient PDA. Recipient PDA outside of comms range.'</span>")
+					return
+
 				var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
 				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
 					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
@@ -1893,9 +1958,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("1")		// Configure pAI device
 						pai.attack_self(U)
 					if("2")		// Eject pAI device
-						var/turf/T = get_turf(src.loc)
-						if(T)
-							pai.forceMove(T)
+						U.put_in_hands(pai)
 
 //LINK FUNCTIONS===================================
 
@@ -2001,7 +2064,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (ismob(loc))
 			var/mob/M = loc
 			M.put_in_hands(id)
-			to_chat(usr, "<span class='notice'>You remove the ID from the [name].</span>")
+			to_chat(usr, "<span class='notice'>You remove \the [id] from the [name].</span>")
 		else
 			id.forceMove(get_turf(src))
 		id = null
@@ -2057,7 +2120,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)) //Give the AI a chance of intercepting the message
@@ -2085,7 +2148,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(L)
 			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
-		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
+		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
@@ -2188,7 +2251,7 @@ obj/item/device/pda/AltClick()
 			if(((src in user.contents) && (C in user.contents)) || (istype(loc, /turf) && in_range(src, user) && (C in user.contents)) )
 				if( can_use(user) )//If they can still act.
 					id_check(user, 2)
-					to_chat(user, "<span class='notice'>You put the ID into \the [src]'s slot.</span>")
+					to_chat(user, "<span class='notice'>You put \the [C] into \the [src]'s slot.</span>")
 					if(incoming_transactions.len)
 						receive_incoming_transactions(id)
 					updateSelfDialog()//Update self dialog on success.
@@ -2225,8 +2288,7 @@ obj/item/device/pda/AltClick()
 		T.date = current_date_string
 		T.time = worldtime2text()
 		id.virtual_wallet.transaction_log.Add(T)
-
-		to_chat(user, "<span class='info'>You insert [dosh] into the PDA.</span>")
+		to_chat(user, "<span class='info'>You insert [T.amount] credit\s into the PDA.</span>")
 		qdel(dosh)
 		updateUsrDialog()
 
@@ -2268,18 +2330,30 @@ obj/item/device/pda/AltClick()
 				else
 					user.show_message("<span class='notice'>No radiation detected.</span>")
 
-/obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
+/obj/item/device/pda/afterattack(atom/A, mob/user, proximity_flag)
 	if(scanmode == SCANMODE_ATMOS)
-		if(atmos_analys)
-			atmos_analys.cant_drop = 1
-			if(A.Adjacent(user))
-				if(!A.attackby(atmos_analys, user))
-					atmos_analys.afterattack(A, user, 1)
+		if(!atmos_analys || !proximity_flag)
+			return
+		atmos_analys.cant_drop = 1
+		if(!A.attackby(atmos_analys, user))
+			atmos_analys.afterattack(A, user, 1)
 
-	if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
+	else if(scanmode == SCANMODE_ROBOTICS)
+		if(!robo_analys || !proximity_flag)
+			return
+		robo_analys.cant_drop = 1
+		if(!A.attackby(robo_analys, user))
+			robo_analys.afterattack(A, user, 1)
+
+	else if(scanmode == SCANMODE_HAILER)
+		if(!integ_hailer)
+			return
+		integ_hailer.cant_drop = 1
+		integ_hailer.afterattack(A, user, proximity_flag)
+
+	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
 		note = A:info
 		to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
-
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
@@ -2338,6 +2412,10 @@ obj/item/device/pda/AltClick()
 	if(atmos_analys)
 		qdel(atmos_analys)
 		atmos_analys = null
+
+	if(robo_analys)
+		qdel(robo_analys)
+		robo_analys = null
 
 	if(dev_analys)
 		qdel(dev_analys)

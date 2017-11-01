@@ -2,12 +2,13 @@
 	gender = NEUTER
 	voice_name = "synthesized voice"
 	can_butcher = 0
+	mob_property_flags = MOB_ROBOTIC
+
+	var/flashed = 0
 	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
-
-	immune_to_ssd = 1
 
 	var/obj/item/device/radio/borg/radio = null //AIs dont use this but this is at the silicon level to advoid copypasta in say()
 	var/list/speech_synthesizer_langs = list()	//which languages can be vocalized by the speech synthesizer
@@ -29,6 +30,9 @@
 
 /mob/living/silicon/feels_pain()
 	return FALSE
+
+/mob/living/silicon/proc/can_diagnose()
+	return null
 
 /mob/living/silicon/proc/cancelAlarm()
 	return
@@ -249,9 +253,7 @@
 		if(prob(20))
 			Stun(2)
 
-		var/datum/effect/effect/system/spark_spread/SparkSpread = new
-		SparkSpread.set_up(5, 1, loc)
-		SparkSpread.start()
+		spark(loc, 5)
 
 		return damage
 

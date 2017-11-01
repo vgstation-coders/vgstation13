@@ -1,3 +1,11 @@
+//Barber
+/obj/item/clothing/head/barber
+	name = "barber's hat"
+	desc = "a stylish hat for a stylish stylist."
+	icon_state = "barber"
+	item_state = "barber"
+	flags = FPRINT
+	siemens_coefficient = 0.9
 
 //Bartender
 /obj/item/clothing/head/chefhat

@@ -288,6 +288,9 @@ var/global/list/loopModeNames=list(
 	t += "<h1>Jukebox Interface</h1>"
 	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
 	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[allowed_modes[loop_mode]]</a><br />"
+	if(isAdminGhost(user))
+		t += "<a href='?src=\ref[src];add_custom=1'>Add new song</a><br>"
+
 	if(playlist == null)
 		t += "\[DOWNLOADING PLAYLIST, PLEASE WAIT\]"
 	else
@@ -461,11 +464,19 @@ var/global/list/loopModeNames=list(
 	update_icon()
 	update_music()
 
-/obj/machinery/media/jukebox/wrenchAnchor(mob/user)
-	if(..())
-		playing = emagged
-		update_music()
-		update_icon()
+/obj/machinery/media/jukebox/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	playing = emagged
+	update_music()
+	update_icon()
+
+	// Needed, or jukeboxes will fail to unhook from previous areas.
+	if(!anchored)
+		disconnect_media_source()
+	else
+		update_media_source()
 
 /obj/machinery/media/jukebox/proc/successful_purchase()
 		next_song = selected_song
@@ -475,10 +486,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/proc/rad_pulse() //Called by pulsing the transmit wire
 	for(var/mob/living/carbon/M in view(src,3))
 		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful
-		if(istype(M,/mob/living/carbon/human))
-			M.apply_effect((rads*2),IRRADIATE)
-		else
-			M.radiation += rads
+		M.apply_radiation((rads*2),RAD_EXTERNAL)
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
 	if(isobserver(usr) && !isAdminGhost(usr))
@@ -520,6 +528,47 @@ var/global/list/loopModeNames=list(
 					change_access = list()
 
 				screen=POS_SCREEN_SETTINGS
+
+	if(href_list["add_custom"])
+		if(isAdminGhost(usr))
+			var/choice = input(usr, "Enter the song's URL, length (in seconds!), title, artist and album in that exact order, separated by a semicolon. Artist and album may be omitted. Example: http://music.com/song.mp3;192;Song Name;Artist;Album. If adding more than one song, each song has to be on its own line.", "Custom Jukebox") as null|message
+			if(!choice)
+				return
+
+			log_admin("[key_name(usr)] is adding some songs to the jukebox [formatJumpTo(src)]:")
+			log_admin("[choice]")
+
+			var/success = 0
+			var/error = 0
+
+			//Loop through each line
+			forLineInText(choice)
+				var/list/L = params2list(line)
+				if(L.len >= 3)
+					var/list/params = list()
+					params["url"]   = L[1]
+					params["length"]= text2num(L[2])*10 //The song_info datum stores this value in deciseconds
+					params["title"] = L[3]
+					params["artist"]= ""
+					params["album"] = ""
+
+					if(L.len >= 4)
+						params["artist"]= L[4]
+					if(L.len >= 5)
+						params["album"] = L[5]
+
+					//Initialize playlist if needed
+					if(!playlist)
+						playlist = list()
+					playlist.Add(new /datum/song_info(params))
+					success++
+				else
+					error++
+
+			to_chat(usr, "Added [success] songs successfully. Encountered [error] errors.")
+			message_admins("[key_name(usr)] has added [success] songs to the jukebox [formatJumpTo(src)]")
+		else
+			to_chat(usr, "Only admin ghosts can do this.")
 
 	if (href_list["playlist"])
 		if(isobserver(usr) && !canGhostWrite(usr,src,""))

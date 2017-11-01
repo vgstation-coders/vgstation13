@@ -140,7 +140,7 @@
 		if(prob(50))
 			amount_grown = 1
 
-/obj/effect/spider/spiderling/Bump(atom/user)
+/obj/effect/spider/spiderling/to_bump(atom/user)
 	if(istype(user, /obj/structure/table))
 		src.forceMove(user.loc)
 	else

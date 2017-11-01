@@ -22,7 +22,6 @@
 	anchored = 1
 	density = 1
 	noghostspin = 1 //You guys are no fun
-	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 
 	var/empstun = 0
 	var/health = 100
@@ -54,6 +53,13 @@
 
 /obj/structure/bed/chair/vehicle/proc/delayNextMove(var/delay, var/additive=0)
 	move_delayer.delayNext(delay,additive)
+
+//Just a copypaste of atom/movable/Cross(). Vehicles are children of beds for some fucking reason and none of the current movement code has any inheritance, so whatever.
+/obj/structure/bed/chair/vehicle/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	return (!density || !height || air_group)
+
+/obj/structure/bed/chair/vehicle/proc/is_too_heavy(var/turf/simulated/floor/glass/glassfloor)
+	return !istype(glassfloor, /turf/simulated/floor/glass/plasma)
 
 /obj/structure/bed/chair/vehicle/can_apply_inertia()
 	return 1 //No anchored check - so that vehicles can fly off into space
@@ -241,9 +247,7 @@
 		if(2)
 			src.empstun = (rand(1,5))
 	src.visible_message("<span class='danger'>The [src.name]'s motor short circuits!</span>")
-	spark_system.attach(src)
-	spark_system.set_up(5, 0, src)
-	spark_system.start()
+	spark(src, 5)
 
 /obj/structure/bed/chair/vehicle/bullet_act(var/obj/item/projectile/Proj)
 	var/hitrider = 0
@@ -307,7 +311,7 @@
 	// Transfer salvagables here.
 	return
 
-/obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
+/obj/structure/bed/chair/vehicle/to_bump(var/atom/movable/obstacle)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 		return
 

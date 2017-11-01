@@ -78,7 +78,7 @@
 		A.forceMove(src.loc)
 	del(src)
 
-/obj/machinery/vehicle/Bump(var/atom/A)
+/obj/machinery/vehicle/to_bump(var/atom/A)
 //	to_chat(world, "[src] bumped into [A]")
 	spawn (0)
 		..()
@@ -186,15 +186,12 @@
 	var/last_relay = 0
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/health = 100
-	var/datum/effects/system/spark_spread/spark_system = new
 
 	New()
 		..()
 		internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
 		pr_inertial_movement = new /datum/global_iterator/space_ship_inertial_movement(list(src),0)
 		pr_speed_increment = new /datum/global_iterator/space_ship_speed_increment(list(src),0)
-		src.spark_system.set_up(2, 0, src)
-		src.spark_system.attach(src)
 		return
 
 	proc/inspace()
@@ -224,7 +221,7 @@
 			return src.internal_tank.return_temperature()
 		return 0
 
-	Bump(var/atom/movable/A)
+	to_bump(var/atom/movable/A)
 		if(istype(A))
 			step(A, src.dir)
 		else
@@ -238,7 +235,7 @@
 		if(isnum(value))
 			src.health -= value
 			if(src.health>0)
-				src.spark_system.start()
+				spark(src, 2, FALSE)
 //				to_chat(world, "[src] health is [health]")
 			else
 				src.ex_act(1)

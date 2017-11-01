@@ -85,6 +85,7 @@
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
 	var/real_name = null
+	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -100,7 +101,6 @@
 	var/lying_prev = 0
 	var/canmove = 1
 	var/candrop = 1
-	var/lastpuke = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -144,13 +144,19 @@
 	var/m_intent = "run"//Living
 	var/lastKnownIP = null
 
+	//Tank used as internals
+	var/obj/item/weapon/tank/internal = null
+
+	//Active storage item (i.e. the backpack or cardboard box that you're looking inside of)
+	var/obj/item/weapon/storage/s_active = null
+
+	//Inventory
+
 	var/active_hand = 1 //Current active hand. Contains an index of the held_items list
 	var/list/obj/item/held_items = list(null, null) //Contains items held in hands
 
-	var/obj/item/weapon/back = null//Human/Monkey
-	var/obj/item/weapon/tank/internal = null//Human/Monkey
-	var/obj/item/weapon/storage/s_active = null//Carbon
-	var/obj/item/clothing/mask/wear_mask = null//Carbon
+	var/obj/item/weapon/back = null
+	var/obj/item/clothing/mask/wear_mask = null
 
 	var/seer = 0 //for cult//Carbon, probably Human
 
@@ -163,8 +169,6 @@
 	var/list/mapobjs = list()
 
 	var/in_throw_mode = 0
-
-	var/coughedtime = null
 
 	var/job = null//Living
 
@@ -217,7 +221,7 @@
 
 //List of active diseases
 
-	var/viruses = list() // replaces var/datum/disease/virus
+	var/list/datum/disease/viruses = list() // replaces var/datum/disease/virus
 	var/list/resistances = list()
 
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
@@ -233,8 +237,6 @@
 
 	var/force_compose = 0 //If this is nonzero, the mob will always compose it's own hear message instead of using the one given in the arguments.
 
-
-
 	var/obj/control_object = null	//Used by admins to possess objects. All mobs should have this var
 
 	var/obj/orient_object = null	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
@@ -247,8 +249,6 @@
 
 	var/has_limbs = 1 //Whether this mob have any limbs he can move with
 	var/can_stand = 1 //Whether this mob have ability to stand
-
-	var/immune_to_ssd = 0
 
 	var/turf/listed_turf = null  //the current turf being examined in the stat panel
 
@@ -276,6 +276,7 @@
 	var/event/on_uattack
 	var/event/on_logout
 	var/event/on_damaged
+	var/event/on_irradiate
 	// Allows overiding click modifiers and such.
 	var/event/on_clickon
 
@@ -285,7 +286,7 @@
 	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
 	var/see_invisible_override = 0
 
-	var/mob/transmogged_from	//holds a reference to the mob that this mob used to be before being transmogrified
+	var/obj/transmog_body_container/transmogged_from	//holds a reference to the container holding the mob that this mob used to be before being transmogrified
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 /mob/resetVariables()

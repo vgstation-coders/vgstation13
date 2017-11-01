@@ -18,72 +18,16 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
-	var/cuffing_sound = 'sound/weapons/handcuffs.ogg'
-	var/breakouttime = 2 MINUTES
+	restraint_apply_sound = 'sound/weapons/handcuffs.ogg'
+	restraint_resist_time = 2 MINUTES
 
-/obj/item/weapon/handcuffs/attack(var/mob/living/carbon/M, var/mob/user, var/def_zone)
-	if(!istype(M))
-		return
-
-	if(!user.dexterity_check())
-		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return
-
-	if(M.handcuffed)
-		return
-
-	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</span>")
-	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to handcuff [M.name] ([M.ckey])</span>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-
-	log_attack("[user.name] ([user.ckey]) Attempted to handcuff [M.name] ([M.ckey])")
-
-	handcuffs_apply(M, user)
-
-//Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go //There's no real reason for this to be a separate proc now but whatever
-/obj/item/weapon/handcuffs/proc/handcuffs_apply(var/mob/living/carbon/C, var/mob/user, var/clumsy = FALSE)
-	if(!istype(C)) //Sanity doesn't hurt, right ?
-		return FALSE
-
-	if(ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if (!H.has_organ_for_slot(slot_handcuffed))
-			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
-			return
-
-	playsound(get_turf(src), cuffing_sound, 30, 1, -2)
-	user.visible_message("<span class='danger'>[user] is trying to handcuff \the [C]!</span>",
-						 "<span class='danger'>You try to handcuff \the [C]!</span>")
-
-	if(do_after(user, C, 3 SECONDS))
-		if(istype(src, /obj/item/weapon/handcuffs/cable))
-			feedback_add_details("handcuffs", "C")
-		else
-			feedback_add_details("handcuffs", "H")
-
-		if(clumsy_check(user) && prob(50))
-			to_chat(user, "<span class='warning'>Uh... how do these things work?!</span>")
-			C = user
-
-		user.visible_message("<span class='danger'>\The [user] has put \the [src] on \the [C]!</span>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \the [src] on [C.name] ([C.ckey])</font>")
-		C.attack_log += text("\[[time_stamp()]\] <font color='red'>Handcuffed with \the [src] by [user.name] ([user.ckey])</font>")
-		log_attack("[user.name] ([user.ckey]) has cuffed [C.name] ([C.ckey]) with \the [src]")
-
-		var/obj/item/weapon/handcuffs/cuffs = src
-		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
-			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(user))
-		else
-			user.drop_from_inventory(cuffs)
-		C.equip_to_slot(cuffs, slot_handcuffed)
+/obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
+	return 1
 
 /obj/item/weapon/handcuffs/cyborg
 //This space intentionally left blank
 
-/obj/item/weapon/handcuffs/cyborg/on_remove(var/mob/living/carbon/C)
+/obj/item/weapon/handcuffs/cyborg/on_restraint_removal(var/mob/living/carbon/C)
 	spawn(1)
 		qdel(src)
 
@@ -109,10 +53,7 @@
 	if(slot == slot_handcuffed && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
 		detonate(1)
 
-/obj/item/weapon/handcuffs/proc/on_remove(var/mob/living/carbon/C) //Needed for syndicuffs
-	return
-
-/obj/item/weapon/handcuffs/syndicate/on_remove(mob/living/carbon/C)
+/obj/item/weapon/handcuffs/syndicate/on_restraint_removal(mob/living/carbon/C)
 	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
 		detonate(0) //This handles cleaning up the inventory already
 		return //Don't clean up twice, we don't want runtimes
@@ -164,8 +105,8 @@
 	desc = "Looks like some cables tied together. Could be used to tie something up."
 	icon_state = "cuff_red"
 	_color = "red"
-	breakouttime = 300 //Deciseconds = 30s
-	cuffing_sound = 'sound/weapons/cablecuff.ogg'
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = 'sound/weapons/cablecuff.ogg'
 
 /obj/item/weapon/handcuffs/cable/red
 	icon_state = "cuff_red"

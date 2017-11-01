@@ -1,5 +1,6 @@
 /datum/game_mode
 	var/list/datum/mind/syndicates = list()
+	var/datum/mind/nukeop_leader = null // Used for setup and teardown of HUD icons and names.
 
 
 /datum/game_mode/nuclear
@@ -62,7 +63,6 @@
 /datum/game_mode/nuclear/pre_setup()
 	return 1
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 /datum/game_mode/proc/update_all_synd_icons()
@@ -71,7 +71,7 @@
 			if(synd_mind.current)
 				if(synd_mind.current.client)
 					for(var/image/I in synd_mind.current.client.images)
-						if(I.icon_state == "synd")
+						if(I.icon_state == "synd" || I.icon_state == "synd-L")
 							synd_mind.current.client.images -= I
 
 		for(var/datum/mind/synd_mind in syndicates)
@@ -82,7 +82,7 @@
 							var/imageloc = synd_mind_1.current
 							if(istype(synd_mind_1.current.loc,/obj/mecha))
 								imageloc = synd_mind_1.current.loc
-							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = (synd_mind_1 == ticker.mode.nukeop_leader) ? "synd-L" : "synd")
 							I.plane = SYNDIE_ANTAG_HUD_PLANE
 							synd_mind.current.client.images += I
 
@@ -96,7 +96,7 @@
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = (synd_mind == ticker.mode.nukeop_leader)?"synd-L":"synd")
 					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd.current.client.images += I
 			if(synd_mind.current)
@@ -104,7 +104,7 @@
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = (synd_mind == ticker.mode.nukeop_leader)?"synd-L":"synd")
 					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd_mind.current.client.images += I
 
@@ -116,14 +116,14 @@
 			if(synd.current)
 				if(synd.current.client)
 					for(var/image/I in synd.current.client.images)
-						if(I.icon_state == "synd" && ((I.loc == synd_mind.current) || (I.loc == synd_mind.current.loc)))
+						if((I.icon_state == "synd" ||I.icon_state == "synd-L") && ((I.loc == synd_mind.current) || (I.loc == synd_mind.current.loc)))
 							//del(I)
 							synd.current.client.images -= I
 
 		if(synd_mind.current)
 			if(synd_mind.current.client)
 				for(var/image/I in synd_mind.current.client.images)
-					if(I.icon_state == "synd")
+					if(I.icon_state == "synd" || I.icon_state == "synd-L")
 						//del(I)
 						synd_mind.current.client.images -= I
 		update_all_synd_icons()
@@ -156,7 +156,6 @@
 		synd_mind.current.forceMove(synd_spawn[spawnpos])
 
 		forge_syndicate_objectives(synd_mind)
-		greet_syndicate(synd_mind)
 		equip_syndicate(synd_mind.current)
 
 		if(!leader_selected)
@@ -165,6 +164,7 @@
 		else
 			synd_mind.current.real_name = "[syndicate_name()] Operative #[agent_number]"
 			agent_number++
+		greet_syndicate(synd_mind) // Moved here to check for leadership
 		spawnpos++
 		update_synd_icons_added(synd_mind)
 
@@ -193,6 +193,7 @@
 	spawn(1)
 		NukeNameAssign(nukelastname(synd_mind.current),syndicates) //allows time for the rest of the syndies to be chosen
 	synd_mind.current.real_name = "[syndicate_name()] [leader_title]"
+	nukeop_leader = synd_mind
 	if (nuke_code)
 		synd_mind.store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", 0, 0)
 		to_chat(synd_mind.current, "The nuclear authorization code is: <B>[nuke_code]</B>")
@@ -225,6 +226,10 @@
 	for(var/datum/objective/objective in syndicate.objectives)
 		to_chat(syndicate.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 		obj_count++
+	if(!isnukeopleader(syndicate.current))
+		to_chat(syndicate.current, "<span class='danger'>REMEMBER: You must follow your Leader's plans. Insubordination can lead to severe punishment, including a jobban from Nukeops.  Remember: This is all about teamwork.</span>")
+	else
+		to_chat(syndicate.current, "<span class='danger'>As Leader, you have sole authority in creating plans.  Stun and adminhelp (F1) if someone is being disobedient. Create a plan, distribute the nuke code, and bring your family to victory.</span>")
 	syndicate.current << sound('sound/voice/syndicate_intro.ogg')
 	return
 
@@ -291,7 +296,7 @@
 	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm/ops(synd_mob), slot_in_backpack)
 	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm/ops(synd_mob), slot_in_backpack)
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), slot_in_backpack) // For those who hate fun
-	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/creatine(synd_mob), slot_in_backpack) // HOOOOOO HOOHOHOHOHOHO - N3X
+	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/laststand(synd_mob), slot_in_backpack) // HOOOOOO HOOHOHOHOHOHO - N3X
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/c20r(synd_mob), slot_belt)
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(synd_mob.back), slot_in_backpack)
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(synd_mob)
@@ -429,7 +434,7 @@
 
 /proc/nukelastname(var/mob/M as mob) //--All praise goes to NEO|Phyte, all blame goes to DH, and it was Cindi-Kate's idea. Also praise Urist for copypasta ho.
 	var/randomname = pick(last_names)
-	var/newname = copytext(sanitize(input(M,"You are the nuke operative [pick("Czar", "Boss", "Commander", "Chief", "Kingpin", "Director", "Overlord")]. Please choose a last name for your family.", "Name change",randomname)),1,MAX_NAME_LEN)
+	var/newname = copytext(sanitize(input(M,"You are the nuke operative Leader. Please choose a last name for your family.", "Name change",randomname)),1,MAX_NAME_LEN)
 
 	if (!newname)
 		newname = randomname
@@ -443,9 +448,12 @@
 
 /proc/NukeNameAssign(var/lastname,var/list/syndicates)
 	for(var/datum/mind/synd_mind in syndicates)
+		var/title = ""
+		if(ticker.mode.nukeop_leader == synd_mind)
+			title = pick("Czar", "Boss", "Commander", "Chief", "Kingpin", "Director", "Overlord")+" "
 		switch(synd_mind.current.gender)
 			if(MALE)
-				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[pick(first_names_male)] [lastname]")
+				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[title][pick(first_names_male)] [lastname]")
 			if(FEMALE)
-				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[pick(first_names_female)] [lastname]")
+				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[title][pick(first_names_female)] [lastname]")
 	return

@@ -1,5 +1,5 @@
 /obj/item/weapon/cartridge
-	name = "generic cartridge"
+	name = "\improper Generic cartridge"
 	desc = "A data cartridge for portable microcomputers."
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "cart"
@@ -25,6 +25,7 @@
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
 	var/access_trader = 0
+	var/access_robotics = 0
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -55,38 +56,38 @@
 	..()
 
 /obj/item/weapon/cartridge/engineering
-	name = "Power-ON Cartridge"
+	name = "\improper Power-ON Cartridge"
 	icon_state = "cart-e"
 	access_engine = 1
 
 /obj/item/weapon/cartridge/atmos
-	name = "BreatheDeep Cartridge"
+	name = "\improper BreatheDeep Cartridge"
 	icon_state = "cart-a"
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/mechanic
-	name = "Screw-E Cartridge"
+	name = "\improper Screw-E Cartridge"
 	icon_state = "cart-mech"
 	access_mechanic = 1
 	access_engine = 1 //for the power monitor, but may remove later
 
 /obj/item/weapon/cartridge/medical
-	name = "Med-U Cartridge"
+	name = "\improper Med-U Cartridge"
 	icon_state = "cart-m"
 	access_medical = 1
 
 /obj/item/weapon/cartridge/chemistry
-	name = "ChemWhiz Cartridge"
+	name = "\improper ChemWhiz Cartridge"
 	icon_state = "cart-chem"
 	access_reagent_scanner = 1
 
 /obj/item/weapon/cartridge/chef
-	name = "ChefBuddy Cartridge"
+	name = "\improper ChefBuddy Cartridge"
 	icon_state = "cart-chef"
 	access_reagent_scanner = 1
 
 /obj/item/weapon/cartridge/security
-	name = "R.O.B.U.S.T. Cartridge"
+	name = "\improper R.O.B.U.S.T. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 
@@ -96,7 +97,7 @@
 		radio = new /obj/item/radio/integrated/beepsky(src)
 
 /obj/item/weapon/cartridge/detective
-	name = "D.E.T.E.C.T. Cartridge"
+	name = "\improper D.E.T.E.C.T. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 	access_medical = 1
@@ -104,40 +105,45 @@
 
 
 /obj/item/weapon/cartridge/janitor
-	name = "CustodiPRO Cartridge"
+	name = "\improper CustodiPRO Cartridge"
 	desc = "The ultimate in clean-room design."
 	icon_state = "cart-j"
 	access_janitor = 1
 
 /obj/item/weapon/cartridge/lawyer
-	name = "P.R.O.V.E. Cartridge"
+	name = "\improper P.R.O.V.E. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
 
 /obj/item/weapon/cartridge/clown
-	name = "Honkworks 5.0"
+	name = "\improper Honkworks 5.0"
 	icon_state = "cart-clown"
 	access_clown = 1
 	var/honk_charges = 5
 
 /obj/item/weapon/cartridge/mime
-	name = "Gestur-O 1000"
+	name = "\improper Gestur-O 1000"
 	icon_state = "cart-mi"
 	access_mime = 1
 	var/mime_charges = 5
 /*
 /obj/item/weapon/cartridge/botanist
-	name = "Green Thumb v4.20"
+	name = "\improper Green Thumb v4.20"
 	icon_state = "cart-b"
 	access_flora = 1
 */
+/obj/item/weapon/cartridge/robotics
+	name = "\improper R.O.B.U.T.T. Cartridge"
+	desc = "Allows you to use your pda as a cyborg analyzer"
+	icon_state = "cart-robo"
+	access_robotics = 1
 
 /obj/item/weapon/cartridge/signal
-	name = "generic signaler cartridge"
+	name = "\improper Generic signaler cartridge"
 	desc = "A data cartridge with an integrated radio signaler module."
 
 /obj/item/weapon/cartridge/signal/toxins
-	name = "Signal Ace 2"
+	name = "\improper Signal Ace 2"
 	desc = "Complete with integrated radio signaler!"
 	icon_state = "cart-tox"
 	access_reagent_scanner = 1
@@ -149,10 +155,10 @@
 		radio = new /obj/item/radio/integrated/signal(src)
 
 /obj/item/weapon/cartridge/quartermaster
-		name = "Space Parts & Space Vendors Cartridge"
-		desc = "Perfect for the Quartermaster on the go!"
-		icon_state = "cart-q"
-		access_quartermaster = 1
+	name = "\improper Space Parts & Space Vendors Cartridge"
+	desc = "Perfect for the Quartermaster on the go!"
+	icon_state = "cart-q"
+	access_quartermaster = 1
 
 /obj/item/weapon/cartridge/quartermaster/New()
 	..()
@@ -160,13 +166,13 @@
 		radio = new /obj/item/radio/integrated/mule(src)
 
 /obj/item/weapon/cartridge/head
-	name = "Easy-Record DELUXE"
+	name = "\improper Easy-Record DELUXE"
 	icon_state = "cart-h"
 	access_manifest = 1
 	access_status_display = 1
 
 /obj/item/weapon/cartridge/hop
-	name = "HumanResources9001"
+	name = "\improper HumanResources9001"
 	icon_state = "cart-h"
 	access_manifest = 1
 	access_status_display = 1
@@ -180,7 +186,7 @@
 		radio = new /obj/item/radio/integrated/mule(src)
 
 /obj/item/weapon/cartridge/hos
-	name = "R.O.B.U.S.T. DELUXE"
+	name = "\improper R.O.B.U.S.T. DELUXE"
 	icon_state = "cart-hos"
 	access_manifest = 1
 	access_status_display = 1
@@ -192,7 +198,7 @@
 		radio = new /obj/item/radio/integrated/beepsky(src)
 
 /obj/item/weapon/cartridge/ce
-	name = "Power-On DELUXE"
+	name = "\improper Power-On DELUXE"
 	icon_state = "cart-ce"
 	access_manifest = 1
 	access_mechanic = 1
@@ -201,7 +207,7 @@
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/cmo
-	name = "Med-U DELUXE"
+	name = "\improper Med-U DELUXE"
 	icon_state = "cart-cmo"
 	access_manifest = 1
 	access_status_display = 1
@@ -209,11 +215,12 @@
 	access_medical = 1
 
 /obj/item/weapon/cartridge/rd
-	name = "Signal Ace DELUXE"
+	name = "\improper Signal Ace DELUXE"
 	icon_state = "cart-rd"
 	access_manifest = 1
 	access_status_display = 1
 	access_reagent_scanner = 1
+	access_robotics = 1
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/rd/New()
@@ -222,7 +229,7 @@
 		radio = new /obj/item/radio/integrated/signal(src)
 
 /obj/item/weapon/cartridge/captain
-	name = "Value-PAK Cartridge"
+	name = "\improper Value-PAK Cartridge"
 	desc = "Now with 200% more value!"
 	icon_state = "cart-c"
 	access_manifest = 1
@@ -235,19 +242,19 @@
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/syndicate
-	name = "Detomatix Cartridge"
+	name = "\improper Detomatix Cartridge"
 	icon_state = "cart"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/shock_charges = 4
 
 /obj/item/weapon/cartridge/syndicatedoor
-	name = "Doorman Cartridge"
+	name = "\improper Doorman Cartridge"
 	access_remote_door = 1
 	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
 
 /obj/item/weapon/cartridge/trader
-	name = "Trader Cartridge"
+	name = "\improper Trader Cartridge"
 	icon_state = "cart-vox"
 	access_trader = 1
 
@@ -509,12 +516,14 @@ Code:
 			if (istype(active3, /datum/data/record) && (active3 in data_core.security))
 
 				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
-					Minor Crimes: [active3.fields["mi_crim"]]<br>
-					Details: [active3.fields["mi_crim"]]<br><br>
-					Major Crimes: [active3.fields["ma_crim"]]<br>
-					Details: [active3.fields["ma_crim_d"]]<br><br>
 					Important Notes:<br>
-					[active3.fields["notes"]]"}
+					[active3.fields["notes"]]
+					Comments/Log:<br>"}
+				var/counter = 1
+				while(active3.fields["com_[counter]"])
+					menu += "[active3.fields["com_[counter]"]]<BR>"
+					counter++
+
 			else
 				menu += "<b>Record Lost!</b><br>"
 

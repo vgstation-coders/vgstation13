@@ -113,6 +113,12 @@
 
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
+
+	if(areaMaster.areaapc)
+		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+		qdel(src)
+		return
+
 	wires = new(src)
 	// offset 24 pixels in direction of dir
 	// this allows the APC to be embedded in a wall, yet still inside an area
@@ -121,10 +127,6 @@
 	src.tdir = dir		// to fix Vars bug
 	dir = SOUTH
 
-	if(areaMaster.areaapc)
-		world.log << "Secondary APC detected in area: [areaMaster.name], deleting the second APC"
-		qdel(src)
-		return
 	areaMaster.set_apc(src)
 
 	if(src.tdir & 3)
@@ -519,9 +521,7 @@
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 50) && opened && terminal && has_electronics != 2 && !T.intact)
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
+				spark(src, 5)
 				return
 			getFromPool(/obj/item/stack/cable_coil, get_turf(user), 10)
 			user.visible_message(\
@@ -703,7 +703,7 @@
 	else
 		return 0 // 0 = User is not a Malf AI
 
-/obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!user)
 		return
 
@@ -754,7 +754,7 @@
 	)
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -854,7 +854,7 @@
 		return 1
 	if(!can_use(usr, 1))
 		return 0
-	if(!istype(usr, /mob/living/silicon) && locked)
+	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
 	// Shouldn't happen, this is here to prevent href exploits
 		to_chat(usr, "You must unlock the panel to use this!")
 		return 1
@@ -1019,9 +1019,7 @@
 				smoke.set_up(3, 0, src.loc)
 				smoke.attach(src)
 				smoke.start()
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(3, 1, src)
-				s.start()
+				spark(src)
 				for(var/mob/M in viewers(src))
 					M.show_message("<span class='warning'>The [src.name] suddenly lets out a blast of smoke and some sparks!</span>", 1, "<span class='warning'>You hear sizzling electronics.</span>", 2)
 
@@ -1295,25 +1293,24 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 				sleep(1)
 
 /obj/machinery/power/apc/Destroy()
-	areaMaster.remove_apc(src)
-	if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				ticker.mode:apcs--
-	areaMaster.power_light = 0
-	areaMaster.power_equip = 0
-	areaMaster.power_environ = 0
-	areaMaster.power_change()
+	if(areaMaster.areaapc == src)
+		areaMaster.remove_apc(src)
+		if(malfai && operating)
+			if (ticker.mode.config_tag == "malfunction")
+				if (STATION_Z == z)
+					var/datum/game_mode/malfunction/M = ticker.mode
+					M.apcs--
+		areaMaster.power_light = 0
+		areaMaster.power_equip = 0
+		areaMaster.power_environ = 0
+		areaMaster.power_change()
+
 	if(occupant)
 		malfvacate(1)
 
 	if(cell)
 		cell.forceMove(loc)
 		cell = null
-
-	if(terminal)
-		terminal.master = null
-		terminal = null
 
 	if(wires)
 		qdel(wires)

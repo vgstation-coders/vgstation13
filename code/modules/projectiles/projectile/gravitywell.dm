@@ -14,7 +14,7 @@
 	else
 		return 0
 
-/obj/item/projectile/gravitywell/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/gravitywell/to_bump(atom/A as mob|obj|turf|area)
 	if(loc == target)
 		spawnGravityWell()
 
@@ -41,7 +41,7 @@
 	if(!bumped)
 		if(loc == get_turf(original))
 			if(!(original in permutated))
-				Bump(original)
+				to_bump(original)
 
 /obj/item/projectile/gravitywell/cultify()
 	return

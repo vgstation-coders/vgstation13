@@ -28,7 +28,7 @@
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE | MECHFAB
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
-	build_path = /obj/item/organ/lungs/filter
+	build_path = /obj/item/organ/internal/lungs/filter
 	category = "Robotics"
 
 /datum/design/adv_eyes
@@ -38,7 +38,17 @@
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE | MECHFAB
 	materials = list(MAT_IRON = 500, MAT_GLASS = 2000)
-	build_path = /obj/item/organ/eyes/adv_1
+	build_path = /obj/item/organ/internal/eyes/adv_1
+	category = "Robotics"
+
+/datum/design/adv_kidneys
+	name = "Advanced Kidneys"
+	desc = "These kidneys have advanced blood filtering systems to remove toxins from the body."
+	id = "adv_kidneys"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
+	build_type = PROTOLATHE | MECHFAB
+	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
+	build_path = /obj/item/organ/internal/kidneys/filter
 	category = "Robotics"
 
 /datum/design/mmi_radio

@@ -64,7 +64,7 @@ obj/structure/windoor_assembly/Destroy()
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
 			if(density)
-				mover.Bump(src)
+				mover.to_bump(src)
 			return !density
 	return 1
 
@@ -302,12 +302,12 @@ obj/structure/windoor_assembly/Destroy()
 	return
 
 /obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if (isnull(air_master))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc
 
 	if (isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1

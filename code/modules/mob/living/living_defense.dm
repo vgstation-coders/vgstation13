@@ -68,6 +68,9 @@
 	return absorb
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
+	. = ..()
+	if(.)
+		return
 	if(flags & INVULNERABLE)
 		return
 	if(istype(AM,/obj/))
@@ -152,15 +155,17 @@
 	return 0
 
 //eyecheck(): retuns 0 for no protection, 1 for partial protection, 2 for full protection
+//EYECHECK_NO_PROTECTION, EYECHECK_PARTIAL_PROTECTION, EYECHECK_FULL_PROTECTION
+
 /mob/living/proc/eyecheck()
-	return 0
+	return EYECHECK_NO_PROTECTION
 
 
 //BITES
 /mob/living/bite_act(mob/living/carbon/human/M as mob)
 	var/damage = rand(1, 5)
 
-	if(M_BEAK in M.mutations) //Beaks = stronger bites
+	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		damage += 4
 
 	if(!damage)
@@ -176,6 +181,9 @@
 
 //KICKS
 /mob/living/kick_act(mob/living/carbon/human/M)
+	//Pick a random usable foot to perform the kick with
+	var/datum/organ/external/foot_organ = M.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+
 	M.delayNextAttack(20) //Kicks are slow
 
 	if((M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
@@ -208,7 +216,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(M_TALONS in M.mutations) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(M.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)
@@ -256,7 +264,7 @@
 	return
 
 /mob/living/proc/adjust_fire_stacks(add_fire_stacks) //Adjusting the amount of fire_stacks we have on person
-    fire_stacks = Clamp(fire_stacks + add_fire_stacks, -20, 20)
+	fire_stacks = Clamp(fire_stacks + add_fire_stacks, -20, 20)
 
 /mob/living/proc/handle_fire()
 	if((flags & INVULNERABLE) && on_fire)
@@ -280,6 +288,9 @@
 	location.hotspot_expose(700, 50, 1,surfaces=1)
 
 /mob/living/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(mutations.Find(M_UNBURNABLE))
+		return
+
 	adjust_fire_stacks(0.5)
 	IgniteMob()
 

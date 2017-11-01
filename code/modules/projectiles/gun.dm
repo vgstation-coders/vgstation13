@@ -31,6 +31,7 @@
 	var/ejectshell = 1
 
 	var/clumsy_check = 1				//Whether the gun disallows clumsy users from firing it.
+	var/honor_check = 1                 // Same, but highlanders and bombermen.
 	var/advanced_tool_user_check = 1	//Whether the gun disallows users that cannot use advanced tools from firing it.
 	var/MoMMI_check = 1					//Whether the gun disallows MoMMIs from firing it.
 	var/nymph_check = 1					//Whether the gun disallows diona nymphs from firing it.
@@ -47,6 +48,7 @@
 						//1 for keep shooting until aim is lowered
 	var/fire_delay = 2
 	var/last_fired = 0
+	var/delay_user = 4	//how much to delay the user's next attack by after firing
 
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
 	var/jammed = 0
@@ -54,6 +56,9 @@
 	var/projectile_color = null
 
 	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
+
+	// Tells is_honorable() which special_roles to respect.
+	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -74,6 +79,9 @@
 /obj/item/weapon/gun/emp_act(severity)
 	for(var/obj/O in contents)
 		O.emp_act(severity)
+
+/obj/item/weapon/gun/proc/can_discharge() //because process_chambered() is an atrocity
+	return 0
 
 /obj/item/weapon/gun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)
@@ -131,15 +139,27 @@
 
 /obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)//TODO: go over this
 	//Exclude lasertag guns from the M_CLUMSY check.
-	if(clumsy_check)
-		if(istype(user, /mob/living))
-			var/mob/living/M = user
-			if (clumsy_check(M) && prob(50))
+	var/explode = FALSE
+	var/dehand = FALSE
+	if(istype(user, /mob/living))
+		var/mob/living/M = user
+		if(clumsy_check && clumsy_check(M) && prob(50))
+			explode = TRUE
+		if(honor_check && is_honorable(M, honorable))
+			explode = TRUE
+			dehand = TRUE
+		if(explode)
+			if(dehand)
+				var/limb_index = user.is_holding_item(src)
+				var/datum/organ/external/L = M.find_organ_by_grasp_index(limb_index)
+				visible_message("<span class='sinister'>[src] blows up in [M]'s [L.display_name]!</span>")
+				L.droplimb(1)
+			else
 				to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
 				M.take_organ_damage(0,20)
-				M.drop_item(src, force_drop = 1)
-				qdel(src)
-				return
+			M.drop_item(src, force_drop = 1)
+			qdel(src)
+			return
 
 	if(!can_Fire(user, 1))
 		return
@@ -236,7 +256,7 @@
 	in_chamber.forceMove(get_turf(user))
 	in_chamber.starting = get_turf(user)
 	in_chamber.shot_from = src
-	user.delayNextAttack(4) // TODO: Should be delayed per-gun.
+	user.delayNextAttack(delay_user) // TODO: Should be delayed per-gun.
 	in_chamber.silenced = silenced
 	in_chamber.current = curloc
 	in_chamber.OnFired()
@@ -332,14 +352,16 @@
 			mouthshoot = 0
 			return
 
-	if (src.process_chambered())
+	if (can_discharge()) //Need to have something to fire but not load it up yet
 		//Point blank shooting if on harm intent or target we were targeting.
 		if(user.a_intent == I_HURT)
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-			in_chamber.damage *= 1.3
+			if (process_chambered()) //Load whatever it is we fire
+				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
 			src.Fire(M,user,0,0,1)
 			return
 		else if(target && M in target)
+			process_chambered()
 			src.Fire(M,user,0,0,1) ///Otherwise, shoot!
 			return
 		else

@@ -14,7 +14,7 @@
 	shotloc = get_turf(shot_from)
 	..()
 
-/obj/item/projectile/flare/Bump()
+/obj/item/projectile/flare/to_bump()
 	..()
 	if(src)
 		var/newloc = get_step(src.loc, get_dir(src.loc, shotloc)) //basically puts it back one tile in its movement

@@ -302,9 +302,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(istype(target,/mob/living) && message)
 			to_chat(target, text("[message]"))
 		if(sparks_spread)
-			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-			sparks.set_up(sparks_amt, 0, location) //no idea what the 0 is
-			sparks.start()
+			spark(location, sparks_amt, FALSE)
 		if(smoke_spread)
 			if(smoke_spread == 1)
 				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
@@ -376,6 +374,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return 1
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
+	//Arcane golems have no cooldowns on their spells
+	if(istype(user, /mob/living/simple_animal/hostile/arcane_golem))
+		return 1
+
 	if(!skipcharge)
 		if(charge_type & Sp_RECHARGE)
 			if(charge_counter < charge_max)
@@ -544,4 +546,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/on_removed(mob/user)
+	return
+
+/spell/proc/on_holder_death(mob/user)
 	return

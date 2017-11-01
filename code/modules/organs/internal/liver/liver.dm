@@ -2,13 +2,14 @@
 /datum/organ/internal/liver
 	name = "liver"
 	parent_organ = LIMB_CHEST
+	organ_type = "liver"
 	var/process_accuracy = 10
 	var/efficiency = 1
 
 	var/reagent_efficiencies=list(
 		// REAGENT = 2,
 	)
-	removed_type = /obj/item/organ/liver
+	removed_type = /obj/item/organ/internal/liver
 
 /datum/organ/internal/liver/Copy()
 	var/datum/organ/internal/liver/I = ..()

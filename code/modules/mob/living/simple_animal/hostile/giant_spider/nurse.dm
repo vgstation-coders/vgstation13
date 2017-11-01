@@ -25,7 +25,7 @@
 			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/check_evolve()
-	if(spider_queens.len < MAX_SQUEENS)
+	if(spider_queens.len < MAX_SQUEENS && !key)	//don't evolve if there's a player inside
 		var/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/NQ = new(src.loc)
 		NQ.inherit_mind(src)
 		qdel(src)
@@ -192,10 +192,12 @@ var/list/spider_queens = list()
 	health = 500
 	melee_damage_lower = 30
 	melee_damage_upper = 40
-	speed = 5
+	speed = 6
 	projectiletype = /obj/item/projectile/web
 	projectilesound = 'sound/weapons/pierce.ogg'
 	ranged = 1
+	size = SIZE_HUGE
+	delimbable_icon = FALSE
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/New()
 	..()
@@ -213,7 +215,7 @@ var/list/spider_queens = list()
 	damage = 5
 	damage_type = BRUTE
 
-/obj/item/projectile/web/Bump(atom/A)
+/obj/item/projectile/web/to_bump(atom/A)
 	if(!(locate(/obj/effect/spider/stickyweb) in get_turf(src)))
 		new /obj/effect/spider/stickyweb(get_turf(src))
 	qdel(src)

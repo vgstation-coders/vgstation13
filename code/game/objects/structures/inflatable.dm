@@ -97,6 +97,7 @@
 	icon_state = "wall"
 
 	var/undeploy_path = null
+	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
 	var/health = 30
 
@@ -171,7 +172,8 @@
 	var/obj/item/inflatable/remains
 	if(violent)
 		visible_message("[src] rapidly deflates!")
-		remains = new /obj/item/inflatable/torn(loc)
+		if(spawn_undeployed)
+			remains = new /obj/item/inflatable/torn(loc)
 	else
 		if(!undeploy_path || deflating)
 			return
@@ -179,8 +181,10 @@
 		deflating = 1
 		sleep(deflatespeed)
 		visible_message("\The [src] fully deflates.")
-		remains = new undeploy_path(loc)
-	transfer_fingerprints_to(remains)
+		if(spawn_undeployed)
+			remains = new undeploy_path(loc)
+	if(remains)
+		transfer_fingerprints_to(remains)
 	qdel(src)
 
 /obj/structure/inflatable/verb/hand_deflate()
@@ -195,13 +199,13 @@
 	deflate()
 
 /obj/structure/inflatable/proc/update_nearby_tiles(var/turf/T)
-	if(isnull(air_master))
+	if(!SS_READY(SSair))
 		return 0
 
 	if(!T)
 		T = get_turf(src)
 	if(isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 	return 1
 
 /obj/structure/inflatable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)

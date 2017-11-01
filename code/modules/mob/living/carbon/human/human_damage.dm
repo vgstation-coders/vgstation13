@@ -11,8 +11,9 @@
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-	//TODO: fix husking
-	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
+
+	if((maxHealth - total_burn) < config.health_threshold_dead)
+		death(FALSE)
 		ChangeToHusk()
 	return
 
@@ -124,6 +125,8 @@
 	..()
 
 	amount = amount * clone_damage_modifier
+	if(isslimeperson(src))
+		amount = 0
 
 	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
 		return 0
@@ -295,6 +298,48 @@ This function restores all organs.
 		zone = LIMB_HEAD
 	return organs_by_name[zone]
 
+
+//Picks a random usable organ from the organs passed to the arguments
+//You can feed organ references, or organ strings into this obj
+//So this is valid: pick_usable_organ(LIMB_LEFT_LEG, new /datum/organ/external/r_leg)
+/mob/living/carbon/human/proc/pick_usable_organ()
+	var/list/organs = args.Copy()
+
+	ASSERT(organs.len) //this proc should always be called with arguments
+
+	//Convert list of strings to list of organ objects
+	for(var/organ_ in organs)
+		if(istext(organ_))
+			organs.Add(get_organ(organ_))
+			organs.Remove(organ_)
+		else if(!istype(organ_, /datum/organ/external))
+			organs.Remove(organ_)
+
+	var/datum/organ/external/result
+
+	while(!result && organs.len)
+		result = pick_n_take(organs)
+		if(!result.is_usable())
+			result = null
+
+	return result
+
+//Proc that returns a list of organs converted from string IDs
+//get_organs("l_leg", "r_leg") will return a list with left and right leg datums
+//It will also accept lists with string IDs
+/mob/living/carbon/human/get_organs()
+	var/list/organ_list = list()
+
+	for(var/O in args)
+		if(islist(O))
+			for(var/organ_id in O)
+				organ_list.Add(src.get_organ(organ_id))
+
+		else if(istext(O))
+			organ_list.Add(src.get_organ(O))
+
+	return organ_list
+
 /mob/living/carbon/human/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/edge = 0, var/obj/used_weapon = null, ignore_events = 0)
 
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
@@ -427,3 +472,12 @@ This function restores all organs.
 	apply_effect(10, EYE_BLUR)
 	apply_effect(10, WEAKEN)
 	update_canmove()
+
+/mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(application == RAD_EXTERNAL)
+		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+
+	if(reagents)
+		if(reagents.has_reagent(LITHOTORCRAZINE))
+			rads = rads/2
+	..()

@@ -31,6 +31,16 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 		var/mob/living/simple_animal/mouse/MM = M
 		if(MM.disease_carrier)
 			return 1
+
+	if(istype(M, /mob/living/carbon/martian)) //Martians are incredibly susceptible to viruses
+		var/mob/living/carbon/martian/MR = M
+		if (vector == "Airborne")
+			if(MR.head && istype(MR.head, /obj/item/clothing/head/helmet/space/martian))
+				score += 40
+				var/obj/item/clothing/head/helmet/space/martian/fishbowl = MR.head
+				if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
+					score += 60
+
 	if(prob((min(score, 100) - 100) ** 2 / 100))
 //		log_debug("Infection got through")
 		return 1
@@ -54,7 +64,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	if(!istype(disease))
 //		log_debug("Bad virus")
 		return 0
-	if(!can_be_infected())
+	if(!can_be_infected(M))
 //		log_debug("Bad mob")
 		return 0
 	if ("[disease.uniqueID]" in M.virus2)
@@ -151,3 +161,28 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 				if(V && V.spreadtype != vector)
 					continue
 				infect_virus2(infector,V, notes="(Contact with [key_name(victim)])")
+
+// Returns 1 if patient has virus2 that medHUDs would pick up.
+// Otherwise returns 0
+/proc/has_recorded_virus2(var/mob/living/carbon/patient)
+	for (var/ID in patient.virus2)
+		if (ID in virusDB)
+			return 1
+	return 0
+
+// This one doesn't really belong here, but old disease code has no helpers, so
+// Returns 1 if patient has old-style disease that medHUDs would pick up.
+// Otherwise returns 0
+/proc/has_recorded_disease(var/mob/living/carbon/patient)
+	for(var/datum/disease/D in patient.viruses)
+		if(!D.hidden[SCANNER])
+			return 1
+	return 0
+
+// combination of above two procs
+/proc/has_any_recorded_disease(var/mob/living/carbon/patient)
+	if(has_recorded_disease(patient))
+		return 1
+	else if (has_recorded_virus2(patient))
+		return 1
+	return 0

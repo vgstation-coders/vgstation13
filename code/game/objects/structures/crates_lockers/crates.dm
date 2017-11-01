@@ -137,6 +137,12 @@
 			newgas.temperature = target_temp
 		return newgas
 
+/obj/structure/closet/crate/freezer/surgery
+	desc = "A freezer specifically designed to store organic material."
+	name = "surgery freezer"
+	icon_state = "surgeryfreezer"
+	icon_opened = "surgeryfreezeropen"
+	icon_closed = "surgeryfreezer"
 
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
@@ -146,6 +152,13 @@
 	density = 1
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
+/obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
+    if(iswrench(W) && wrenchable())
+        return wrenchAnchor(user)
+    ..()
+
+/obj/structure/closet/crate/bin/wrenchable()
+    return TRUE
 
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
@@ -202,6 +215,13 @@
 	greenlight = "largebing"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
+/obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
+    if(iswrench(W) && wrenchable())
+        return wrenchAnchor(user)
+    ..()
+
+/obj/structure/closet/crate/secure/bin/wrenchable()
+    return TRUE
 
 /obj/structure/closet/crate/secure/large
 	name = "large crate"
@@ -431,9 +451,7 @@
 			if(isliving(user))
 				var/mob/living/L = user
 				if(L.electrocute_act(17, src))
-					//var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					//s.set_up(5, 1, src)
-					//s.start()
+					//spark(src, 5)
 					return
 		open()
 	return

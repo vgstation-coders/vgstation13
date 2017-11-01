@@ -79,3 +79,15 @@
 		name = "[parent_species_name] teeth"
 		singular_name = "[parent_species_name] tooth"
 		animal_type = parent_species
+
+/obj/item/stack/teeth/gold
+	name = "gold teeth"
+	singular_name = "gold tooth"
+	irregular_plural = "gold teeth"
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "tooth-gold"
+	amount = 1
+	max_amount = 50
+	w_class = W_CLASS_TINY
+	throw_speed = 4
+	throw_range = 10

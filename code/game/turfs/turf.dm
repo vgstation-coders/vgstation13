@@ -64,6 +64,8 @@
 	// Map element which spawned this turf
 	var/datum/map_element/map_element
 
+	var/image/viewblock
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -109,12 +111,56 @@
 	..()
 	return 0
 
-/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
+/turf/Exit(atom/movable/mover, atom/target)
 	if(!mover)
 		return 1
-	. = ..()
-	if(.)
-		return !density //Nothing found to block so return success!
+	// First, make sure it can leave its square
+	if(mover.loc == src)
+		// Nothing but border objects stop you from leaving a tile, only one loop is needed
+		for(var/obj/obstacle in src)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
+			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
+				/*if(ismob(mover) && mover:client)
+					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
+				mover.to_bump(obstacle, 1)
+				return 0
+	return 1
+
+/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
+	if (!mover)
+		return 1
+
+	var/list/large_dense = list()
+	//Next, check objects to block entry that are on the border
+	for(var/atom/movable/border_obstacle in src)
+		if(border_obstacle.flags&ON_BORDER)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>ENTER</span>Target(border): checking Cross of [border_obstacle]"*/
+			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
+				/*if(ismob(mover) && mover:client)
+					world << "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]"*/
+				mover.to_bump(border_obstacle, 1)
+				return 0
+		else
+			large_dense += border_obstacle
+
+	//Then, check the turf itself
+	if (!src.Cross(mover, src))
+		mover.to_bump(src, 1)
+		return 0
+
+	//Finally, check objects/mobs to block entry that are not on the border
+	for(var/atom/movable/obstacle in large_dense)
+		/*if(ismob(mover) && mover:client)
+			world << "<span class='danger'>ENTER</span>target(large_dense): [mover] checking Cross of [obstacle]"*/
+		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
+			/*if(ismob(mover) && mover:client)
+				world << "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]"*/
+			mover.to_bump(obstacle, 1)
+			return 0
+	return 1 //Nothing found to block so return success!
+
 
 /turf/Entered(atom/movable/A as mob|obj)
 	if(movement_disabled)
@@ -226,6 +272,8 @@
 
 /turf/proc/is_plating()
 	return 0
+/turf/proc/can_place_cables()
+	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
 /turf/proc/is_plasteel_floor()
@@ -239,6 +287,8 @@
 /turf/proc/is_carpet_floor()
 	return 0
 /turf/proc/is_arcade_floor()
+	return 0
+/turf/proc/is_slime_floor()
 	return 0
 /turf/proc/is_mineral_floor()
 	return 0
@@ -293,7 +343,7 @@
 		for(var/obj/effect/landmark/zcontroller/c in controller)
 			if(c.down)
 				var/turf/below = locate(src.x, src.y, c.down_target)
-				if((air_master.has_valid_zone(below) || air_master.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
+				if((SSair.has_valid_zone(below) || SSair.has_valid_zone(src)) && !istype(below, /turf/space)) // dont make open space into space, its pointless and makes people drop out of the station
 					var/turf/W = src.ChangeTurf(/turf/simulated/floor/open)
 					var/list/temp = list()
 					temp += W
@@ -357,8 +407,8 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(air_master)
-			air_master.mark_for_update(src)
+		if(SS_READY(SSair))
+			SSair.mark_for_update(src)
 
 		W.levelupdate()
 
@@ -375,8 +425,8 @@
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
-		if(air_master)
-			air_master.mark_for_update(src)
+		if(SS_READY(SSair))
+			SSair.mark_for_update(src)
 
 		W.levelupdate()
 
@@ -684,8 +734,9 @@
 
 #undef PLANE_FOR
 
-// Return -1 to make movement instant for the mob
-// Return high values to make movement slower
+// This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
+// Return a high number to make the mob move slower.
+// Return a low number to make the mob move superfast.
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
 
@@ -729,4 +780,3 @@
 	spawn(duration)
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
-

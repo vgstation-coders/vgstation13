@@ -49,7 +49,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 	origin_tech = Tc_BIOTECH + "=1"
 
@@ -69,7 +69,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 
 	material = "wood"
@@ -123,7 +123,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 
 	material = "fabric"
@@ -139,7 +139,27 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 
 	material = "fabric"
+
+obj/item/stack/tile/slime
+	name = "tile of slime"
+	desc = "A flat piece of slime made through xenobiology"
+	icon_state = "tile-slime"
+	w_class = W_CLASS_MEDIUM
+	force = 1
+	throwforce = 1.0
+	throw_speed = 5
+	throw_range = 20
+	flags = FPRINT
+	siemens_coefficient = 1
+	max_amount = 30
+
+/obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		if(isslimeperson(H))
+			return -1
+	return current_slowdown+5

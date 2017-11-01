@@ -22,11 +22,16 @@
 	colour = "black"
 
 
+/obj/item/weapon/lipstick/blue
+	name = "blue lipstick"
+	colour = "blue"
+
+
 /obj/item/weapon/lipstick/random
 	name = "lipstick"
 
 /obj/item/weapon/lipstick/random/New()
-	colour = pick("red","purple","jade","black")
+	colour = pick("red","purple","jade","black","blue")
 	name = "[colour] lipstick"
 	..()
 
@@ -86,6 +91,81 @@
 					user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
 										 "<span class='notice'>You wipe off [H]'s lipstick.</span>")
 					H.lip_style = null
+					H.update_body()
+	else
+		..()
+
+/obj/item/weapon/eyeshadow
+	name = "black eyeshadow"
+	desc = "A generic brand of eyeshadow."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "eyeshadow_brush"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+	var/colour = "black"
+	var/open = 0
+
+
+/obj/item/weapon/eyeshadow/purple
+	name = "purple eyeshadow"
+	colour = "purple"
+
+/obj/item/weapon/eyeshadow/jade
+	name = "jade eyeshadow"
+	colour = "jade"
+
+/obj/item/weapon/eyeshadow/random
+	name = "eyeshadow"
+
+/obj/item/weapon/eyeshadow/random/New()
+	colour = pick("purple","jade","black")
+	name = "[colour] eyeshadow"
+	..()
+
+/obj/item/weapon/eyeshadow/attack(mob/M, mob/user)
+	if(!istype(M, /mob))
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.eye_style)	//if they already have eyeshadow on
+			to_chat(user, "<span class='notice'>You need to wipe off the old eyeshadow first!</span>")
+			return
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] does their eyes with \the [src].</span>", \
+								 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
+			H.eye_style = colour
+			H.update_body()
+		else
+			user.visible_message("<span class='warning'>[user] begins to do [H]'s eyes with \the [src].</span>", \
+								 "<span class='notice'>You begin to apply \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] does [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You apply \the [src].</span>")
+				H.eye_style = colour
+				H.update_body()
+	else
+		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
+
+//you can wipe off eyeshadow with paper!
+/obj/item/weapon/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	if(user.zone_sel.selecting == "eyes")
+		if(!istype(M, /mob))
+			return
+
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H == user)
+				to_chat(user, "<span class='notice'>You wipe off the eyeshadow with [src].</span>")
+				H.eye_style = null
+				H.update_body()
+			else
+				user.visible_message("<span class='warning'>[user] begins to wipe [H]'s eyeshadow off with \the [src].</span>", \
+								 	 "<span class='notice'>You begin to wipe off [H]'s eyeshadow.</span>")
+				if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+					user.visible_message("<span class='notice'>[user] wipes [H]'s eyeshadow off with \the [src].</span>", \
+										 "<span class='notice'>You wipe off [H]'s eyeshadow.</span>")
+					H.eye_style = null
 					H.update_body()
 	else
 		..()
@@ -191,8 +271,6 @@
 	H.update_hair()
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
 
-#define INVISIBLESPRAY "invisiblespray"
-
 /obj/item/weapon/invisible_spray
 	name = "can of invisible spray"
 	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
@@ -206,10 +284,10 @@
 	var/static/list/prohibited_objects = list( //For fun removal
 		)
 
-/obj/item/weapon/invisible_spray/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/weapon/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
-	if(istype(target, /turf))
+	if(!istype(target))
 		return
 	if(!sprays_left)
 		to_chat(user, "\The [src] is empty.")
@@ -220,6 +298,10 @@
 	if(is_type_in_list(target,prohibited_objects))
 		to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
 		return 1
+	if(permanent)
+		invisible_time = 0
+	target.make_invisible(INVISIBLESPRAY, invisible_time)
+	/*
 	if(istype(target, /mob))
 		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
 			var/mob/living/carbon/C = target
@@ -254,6 +336,7 @@
 						if(ismob(O.loc))
 							var/mob/M = O.loc
 							M.regenerate_icons()
+	*/
 	if(target == user)
 		to_chat(user, "You spray yourself with \the [src].")
 	else
@@ -261,6 +344,9 @@
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
+		return 0
+	if(istype(target, /obj/machinery/singularity))
+		animate(target, color = grayscale, time = 6 SECONDS)
 		return 0
 	return 1
 

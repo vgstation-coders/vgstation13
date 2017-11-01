@@ -12,22 +12,15 @@
 	return 0
 
  //No longer needed, but I'll leave it here incase we plan to re-use it.
-/mob/living/silicon/robot/movement_delay()
-	var/tally = 0 //Incase I need to add stuff other than "speed" later
-
-	tally = speed
-
-	if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
-		tally-=3 // JESUS FUCKING CHRIST WHY
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	return tally+config.robot_delay
+/mob/living/silicon/robot/movement_tally_multiplier()
+	. = ..()
+	if(is_component_functioning("power cell") && cell)
+		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
+			. *= CYBORG_MOBILITY_MODULE_MODIFIER
+		if(src.cell.charge <= 0)
+			. += CYBORG_NO_CHARGE_SLOWDOWN
+	else
+		. += CYBORG_NO_CELL_SLOWDOWN
 
 /mob/living/silicon/robot/Move(atom/newloc)
 	if(..())

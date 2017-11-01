@@ -22,30 +22,39 @@
 	var/flush_every_ticks = 30 //Every 30 ticks it will look whether it is ready to flush
 	var/flush_count = 0 //this var adds 1 once per tick. When it reaches flush_every_ticks it resets and tries to flush.
 	var/last_sound = 0
+	var/template_path = "disposalsbin.tmpl"
+	var/deconstructable = TRUE	//Set to FALSE for disposal machinery that can be used for transporting players or things, but not tinkered with by players.
 
 	holomap = TRUE
 	auto_holomap = TRUE
+
+/obj/machinery/disposal/no_deconstruct
+	deconstructable = FALSE
 
 // create a new disposal
 // find the attached trunk (if present) and init gas resvr.
 /obj/machinery/disposal/New()
 	..()
 	spawn(5)
-		for(var/obj/structure/disposalpipe/trunk/O in loc.contents)//This is more efficient than locate()
-			trunk = O
+		handle_trunk()
 
-		if(trunk)
-			if(trunk.disposal != src)
-				trunk.disposal = src
 
-			if(trunk.linked != trunk.disposal)
-				trunk.linked = trunk.disposal
-		else
-			mode = 0
-			flush = 0
+/obj/machinery/disposal/proc/handle_trunk()
+	for(var/obj/structure/disposalpipe/trunk/O in loc.contents)//This is more efficient than locate()
+		trunk = O
 
-		air_contents = new/datum/gas_mixture()
-		//gas.volume = 1.05 * CELLSTANDARD
+	if(trunk)
+		if(trunk.disposal != src)
+			trunk.disposal = src
+
+		if(trunk.linked != trunk.disposal)
+			trunk.linked = trunk.disposal
+	else
+		mode = 0
+		flush = 0
+
+	air_contents = new/datum/gas_mixture()
+	//gas.volume = 1.05 * CELLSTANDARD
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
@@ -78,7 +87,7 @@
 
 // attack by item places it in to disposal
 /obj/machinery/disposal/attackby(var/obj/item/I, var/mob/user)
-	if(stat & BROKEN || !I || !user)
+	if(stat & BROKEN || !I || !user || !deconstructable)
 		return
 
 	if(!user.has_hand_check())
@@ -217,20 +226,22 @@
 	ui_interact(user)
 
 // user interaction
-/obj/machinery/disposal/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/disposal/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	var/list/data[0]
 
-	data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
+	if(air_contents)
+		data["pressure"] = round(100 * air_contents.return_pressure() / (SEND_PRESSURE))
 	data["flush"] = flush
 	data["mode"] = mode
 	data["isAI"] = isAI(user)
+	data["charge"] = round(100 * flush_count / flush_every_ticks) //This is only used by the compactor
 
 	// update the ui with data if it exists, returns null if no ui is passed/found or if force_open is 1/true
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
 		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "disposalsbin.tmpl", "Waste Disposal Unit", 430, 150)
+		ui = new(user, src, ui_key, template_path, "Waste Disposal Unit", 430, 150)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -376,8 +387,9 @@
 	var/wrapcheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 										// travels through the pipes.
-	for(var/obj/item/delivery/O in src)
-		wrapcheck = 1
+	for(var/obj/item/I in src)
+		if(istype(I, /obj/item/delivery) || istype(I, /obj/item/weapon/paper/envelope))
+			wrapcheck = 1
 
 	if(wrapcheck == 1)
 		H.tomail = 1
@@ -562,6 +574,9 @@
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
 			src.destinationTag = T.sortTag
+		if(istype(AM, /obj/item/weapon/paper/envelope) && !hasmob)
+			var/obj/item/weapon/paper/envelope/E = AM
+			src.destinationTag = E.sortTag
 
 // start the movement process
 // argument is the disposal unit the holder started in
@@ -681,6 +696,7 @@
 	layer = DISPOSALS_PIPE_LAYER
 	plane = ABOVE_PLATING_PLANE
 	var/base_icon_state	// initial icon state on map
+	var/deconstructable = TRUE
 
 	// new pipe, set the icon_state as on map
 /obj/structure/disposalpipe/New()
@@ -898,6 +914,8 @@
 	if(T.intact) 	//has a floortile attached
 		return		// prevent interaction with T-scanner revealed pipes
 
+	if(!deconstructable)
+		return
 	src.add_fingerprint(user)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
@@ -952,6 +970,9 @@
 /obj/structure/disposalpipe/segment
 	icon_state = "pipe-s"
 
+/obj/structure/disposalpipe/segment/no_deconstruct
+	deconstructable = FALSE
+
 /obj/structure/disposalpipe/segment/New()
 	..()
 	if(icon_state == "pipe-s")
@@ -964,6 +985,9 @@
 //a three-way junction with dir being the dominant direction
 /obj/structure/disposalpipe/junction
 	icon_state = "pipe-j1"
+
+/obj/structure/disposalpipe/junction/no_deconstruct
+	deconstructable = FALSE
 
 /obj/structure/disposalpipe/junction/New()
 	..()
@@ -1324,6 +1348,9 @@
 	var/obj/structure/disposaloutlet/disposaloutlet
 	var/obj/linked
 
+/obj/structure/disposalpipe/trunk/no_deconstruct
+	deconstructable = FALSE
+
 /obj/structure/disposalpipe/trunk/New()
 	. = ..()
 	dpdir = dir
@@ -1392,6 +1419,8 @@
 	var/turf/T = src.loc
 	if(T.intact)
 		return		// prevent interaction with T-scanner revealed pipes
+	if(!deconstructable)
+		return
 	src.add_fingerprint(user)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
@@ -1471,9 +1500,13 @@
 	var/turf/target	// this will be where the output objects are 'thrown' to.
 	var/mode = 0
 	var/obj/structure/disposalpipe/trunk/trunk
+	var/deconstructable = TRUE
 
 	holomap = TRUE
 	auto_holomap = TRUE
+
+/obj/structure/disposaloutlet/no_deconstruct
+	deconstructable = FALSE
 
 /obj/structure/disposaloutlet/New()
 	. = ..()
@@ -1524,7 +1557,7 @@
 		qdel(H)
 
 /obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
-	if(!I || !user)
+	if(!I || !user || !deconstructable)
 		return
 	src.add_fingerprint(user)
 	if(isscrewdriver(I))

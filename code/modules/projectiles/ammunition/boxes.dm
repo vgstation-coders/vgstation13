@@ -52,6 +52,7 @@
 /obj/item/ammo_storage/box/c12mm/assault
 	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 
+
 /obj/item/ammo_storage/box/c45
 	name = "pistol ammo box (.45)"
 	desc = "A box of .45 bullets. Holds 24 rounds."
@@ -73,6 +74,27 @@
 	icon_state = "9mmblue"
 	ammo_type = "/obj/item/ammo_casing/c45/rubber"
 
+/obj/item/ammo_storage/box/b380auto
+	name = "pistol ammo box (.380AUTO)"
+	desc = "A box of .380AUTO bullets. Holds 30 rounds."
+	icon_state = "9mmred"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/c380auto"
+	caliber = ".380AUTO"
+	max_ammo = 30
+
+/obj/item/ammo_storage/box/b380auto/practice
+	name = "pistol ammo box (.380AUTO practice)"
+	desc = "A box of .380AUTO practice bullets. Holds 30 rounds."
+	icon_state = "9mmwhite"
+	ammo_type = "/obj/item/ammo_casing/c380auto/practice"
+
+/obj/item/ammo_storage/box/b380auto/rubber
+	name = "pistol ammo box (.380AUTO rubber)"
+	desc = "A box of .380AUTO rubber bullets. Holds 30 rounds."
+	icon_state = "9mmblue"
+	ammo_type = "/obj/item/ammo_casing/c380auto/rubber"
+	
 /obj/item/ammo_storage/box/BMG50
 	name = "ammo box (.50 BMG)"
 	icon_state = "50BMG"

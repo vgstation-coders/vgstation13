@@ -234,3 +234,12 @@
 		if(~initial(user.species.flags) & HYPOTHERMIA_IMMUNE)
 			user.species.flags &= ~HYPOTHERMIA_IMMUNE
 		user.faction = initial(user.faction)
+
+/obj/item/clothing/head/beret/sec/ocelot
+	name = "Ocelot's beret"
+	desc = "Ocelot's signature red beret"
+
+/obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
+	if(wearer.head == src)
+		if(prob(5))
+			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))

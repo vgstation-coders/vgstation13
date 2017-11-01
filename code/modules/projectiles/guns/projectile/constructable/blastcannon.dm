@@ -42,6 +42,7 @@
 		bomb_appearance = null
 		name = "pipe gun"
 		desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
+		w_class = W_CLASS_MEDIUM
 	update_icon()
 
 /obj/item/weapon/gun/projectile/blastcannon/pickup(mob/user as mob)
@@ -83,6 +84,7 @@
 		user.visible_message("[user] attaches \the [W] to \the [src].","You attach \the [W] to \the [src].")
 		name = "blast cannon"
 		desc = "A weapon of devastating force, the explosive power from the tank transfer valve is funneled straight out of its barrel."
+		w_class = W_CLASS_LARGE
 	update_icon()
 
 /obj/item/weapon/gun/projectile/blastcannon/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)

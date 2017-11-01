@@ -198,7 +198,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if (href_list["rearm"])
 		src.rearm()
 	return
@@ -208,12 +209,12 @@
 	name = "\improper LBX AC 10 \"Scattershot\""
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
-	projectile = /obj/item/projectile/bullet/midbullet
+	projectile = /obj/item/projectile/bullet/buckshot
 	fire_sound = 'sound/weapons/shotgun.ogg'
-	max_projectiles = 40
+	max_projectiles = 20
 	projectile_energy_cost = 25
-	var/projectiles_per_shot = 4
-//	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
+	var/projectiles_per_shot = 1
+	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
 	if(!action_checks(target))
@@ -360,23 +361,32 @@
 	projectile_energy_cost = 800
 	equip_cooldown = 60
 	var/det_time = 20
+	var/obj/item/weapon/grenade/grenade
+	var/can_pre_detonate = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
+	if(can_pre_detonate && grenade)
+		grenade.prime()
+		grenade = null
+		return
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/grenade/flashbang/F = new projectile(chassis.loc)
+	var/obj/item/weapon/grenade/G = new projectile(chassis.loc)
+	grenade = G
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
 		target = get_inaccuracy(originaltarget, 3, chassis)
-	F.throw_at(target, missile_range, missile_speed)
+	G.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	spawn(det_time)
-		F.prime()
+		if(grenade)
+			grenade = null
+			G.prime()
 	do_after_cooldown()
 	return
 
@@ -389,6 +399,74 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/rearm()
 	return//Extra bit of security
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
+	name = "\improper Metal Foam Grenade Launcher"
+	desc = "An exosuit-mounted Metal Foam Grenade Launcher. (Can be attached to: Engineering exosuits)"
+	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
+	can_pre_detonate = TRUE
+	equip_cooldown = 30
+	range = RANGED | MELEE
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
+	if(istype(M))
+		return 1
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
+	name = "\improper Inflatable Barrier Launcher"
+	desc = "An exosuit-mounted Inflatable Barrier Launcher. (Can be attached to: Engineering exosuits)"
+	projectile = /obj/item/weapon/grenade/inflatable
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=1;" + Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
+	can_pre_detonate = TRUE
+	equip_cooldown = 10
+	range = RANGED | MELEE
+	var/mode = 0
+	var/inflatable_type = 0
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["inflatable_type"])
+		inflatable_type = !inflatable_type
+		if(inflatable_type)
+			projectile = /obj/item/weapon/grenade/inflatable/door
+			occupant_message("Now set to launch inflatable doors.")
+		else
+			projectile = /obj/item/weapon/grenade/inflatable
+			occupant_message("Now set to launch inflatable walls.")
+	if(href_list["mode"])
+		mode = !mode
+		if(mode)
+			occupant_message("Now set to deflate inflatable barriers.")
+		else
+			occupant_message("Now set to deploy inflatable barriers.")
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/get_equip_info()
+	return "[..()] \n[mode ? "" : "Current projectile: inflatable [inflatable_type ? "door" : "wall"]\[<a href='?src=\ref[src];inflatable_type=0'>change</a>\]"]\[<a href='?src=\ref[src];mode=0'>switch to [mode ? "deploy" : "deflate"] mode</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/action(target)
+	if(mode)
+		if(istype(target, /obj/structure/inflatable))
+			if(!chassis.Adjacent(target))
+				occupant_message("You must be next to \the [target] in order to deflate it.")
+				return
+			var/obj/structure/inflatable/I = target
+			I.deflate()
+		return
+	else if(chassis.Adjacent(target))
+		if(istype(target, /obj/structure/inflatable/door))
+			var/obj/structure/inflatable/door/D = target
+			D.toggle(chassis.occupant)
+		if(isturf(target))
+			..()
+		return
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/clarke/M)
+	if(istype(M))
+		return 1
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"

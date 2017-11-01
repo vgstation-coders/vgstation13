@@ -26,7 +26,7 @@
 	stop_automated_movement_when_pulled = 1
 	maxHealth = 30
 	health = 30
-	speed = 10
+	speed = 11
 
 	var/brain_op_stage = 0.0 // Faking it
 
@@ -266,7 +266,7 @@
 				M.show_message("<span class='danger'>[src] has been attacked with the [O] by [user].</span>")
 	*/
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Bump(atom/movable/AM as mob|obj)
+/mob/living/simple_animal/hostile/retaliate/cluwne/to_bump(atom/movable/AM as mob|obj)
 	if(now_pushing)
 		return
 	if(ismob(AM))
@@ -329,8 +329,9 @@
 	maxHealth = 100
 	health = 100
 	size = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 
-	speed = -1
+	speed = 1
 	turns_per_move = 1
 
 	melee_damage_type = "BRAIN"

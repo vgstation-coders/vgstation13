@@ -5,12 +5,15 @@
 
 	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 300
-	charge_max = 100
+	charge_max = 10 SECONDS
+	cooldown_min = 2 SECONDS
 	spell_flags = 0
 	range = 0
 	cast_sound = null
 
 	hud_state = "wiz_shield"
+
+	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
 
 /spell/aoe_turf/conjure/forcewall/mime
 	name = "Invisible wall"
@@ -56,7 +59,7 @@
 	if(istype(mover, /obj/item/projectile/bullet/invisible))
 		return 1
 	..()
-	
+
 /obj/effect/forcefield/cultify()
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)

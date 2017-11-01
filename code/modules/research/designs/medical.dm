@@ -20,7 +20,7 @@
 
 /datum/design/adv_bruise_pack
 	name = "Advanced trauma kit"
-	desc = "Used to treat those nasty burns."
+	desc = "Used to treat those nasty bruises."
 	id = "adv_bruise_pack"
 	req_tech = list(Tc_BIOTECH = 2)
 	build_type = PROTOLATHE
@@ -80,6 +80,16 @@
 	category = "Medical"
 	build_path = /obj/item/device/healthanalyzer
 
+/datum/design/electricthermometer
+	name = "Electronic thermometer"
+	desc = "An electronic thermal probe used to accurately read the temperature of an object."
+	id = "electricthermometer"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_BIOTECH = 2)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
+	category = "Medical"
+	build_path = /obj/item/weapon/thermometer/electronic
+
 /datum/design/laserscalpel1
 	name = "Laser Scalpel"
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
@@ -88,7 +98,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
 	category = "Medical"
-	build_path = /obj/item/weapon/scalpel/laser/tier1
+	build_path = /obj/item/weapon/scalpel/laser
 
 /datum/design/laserscalpel2
 	name = "High Precision Laser Scalpel"
@@ -109,6 +119,26 @@
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250, MAT_SILVER = 500)
 	category = "Medical"
 	build_path = /obj/item/weapon/retractor/manager
+
+/datum/design/bonemender
+	name = "Bone Mender"
+	desc = "A favorite among skeletons. It even sounds like a skeleton too."
+	id = "bonemender"
+	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_GOLD = 500, MAT_SILVER = 250)
+	category = "Medical"
+	build_path = /obj/item/weapon/bonesetter/bone_mender
+
+/datum/design/plasmasaw
+	name = "Plasma Saw"
+	desc = "Perfect for cutting through ice."
+	id = "plasmasaw"
+	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5, Tc_PLASMATECH = 3)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 500)
+	category = "Medical"
+	build_path = /obj/item/weapon/circular_saw/plasmasaw
 
 /datum/design/health_hud
 	name = "Health Scanner HUD"
@@ -149,3 +179,13 @@
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
 	category = "Medical"
 	build_path = /obj/item/weapon/switchtool/surgery
+
+/datum/design/plasmabeaker
+	name = "Plasma Beaker"
+	desc = "A beaker designed to act as a catalyst in some reactions."
+	id = "plasmabeaker"
+	req_tech = list(Tc_PLASMATECH = 4, Tc_MATERIALS = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 3750, MAT_PLASMA = 12000)
+	category = "Medical"
+	build_path = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma

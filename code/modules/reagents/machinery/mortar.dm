@@ -15,8 +15,8 @@
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA,20),
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER,20),
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD,20),
-		/obj/item/weapon/grown/nettle         = list(SACID,10),
-		/obj/item/weapon/grown/deathnettle    = list(PACID,10),
+		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID,10),
+		/obj/item/weapon/grown/deathnettle    = list(PHENOL,10),
 		/obj/item/stack/sheet/charcoal        = list("charcoal",20),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans   = list(SOYMILK,1),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato     = list(KETCHUP,2),
@@ -31,23 +31,10 @@
 		/obj/item/weapon/cell                 = list(LITHIUM, 10),
 		/obj/item/clothing/head/butt          = list(MERCURY, 10),
 		/obj/item/weapon/rocksliver           = list(GROUND_ROCK,30),
+		/obj/item/weapon/match                = list(PHOSPHORUS, 2),
 
 		//Recipes must include both variables!
 		/obj/item/weapon/reagent_containers/food = list("generic",0)
-	)
-
-	var/list/juice_items = list (
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon = list(LEMONJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/orange = list(ORANGEJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lime = list(LIMEJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE,0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE,0),
 	)
 
 

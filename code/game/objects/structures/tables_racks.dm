@@ -280,7 +280,7 @@
 	destroy()
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash>0)
+	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
@@ -354,7 +354,7 @@
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
 			if(density)
-				mover.Bump(src)
+				mover.to_bump(src)
 			return !density
 	return 1
 
@@ -810,7 +810,7 @@
 	destroy()
 
 /obj/structure/rack/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash>0)
+	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()

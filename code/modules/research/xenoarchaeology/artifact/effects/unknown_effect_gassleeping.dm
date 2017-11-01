@@ -1,13 +1,13 @@
 
 /datum/artifact_effect/gassleeping
 	effecttype = "gassleeping"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA)
 	var/max_pressure
 	var/target_percentage
 	copy_for_battery = list("max_pressure")
 
 /datum/artifact_effect/gassleeping/New()
 	..()
-	effect = pick(EFFECT_TOUCH, EFFECT_AURA)
 	max_pressure = rand(115,1000)
 	effect_type = pick(6,7)
 

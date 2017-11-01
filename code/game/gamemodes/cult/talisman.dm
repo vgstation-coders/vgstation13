@@ -4,6 +4,17 @@
 	var/uses = 0
 	var/nullblock = 0
 
+/obj/item/weapon/paper/talisman/update_icon()
+	var/suffix = ""
+	if(imbue)
+		suffix = imbue
+		if(imbue in list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri"))
+			suffix = "travel" // if the imbue is one of the words, it means it's a travel rune. a single "travel" sprite is used, instead of one per-word.
+	if(suffix)
+		icon_state = "[initial(icon_state)]_[suffix]"
+	else
+		icon_state = "[initial(icon_state)]"
+
 /obj/item/weapon/paper/talisman/examine(mob/user)
 	..()
 	if(iscultist(user) || isobserver(user))

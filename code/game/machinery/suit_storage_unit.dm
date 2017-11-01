@@ -25,6 +25,9 @@
 	var/issuperUV = 0
 	var/safetieson = 1
 	var/cycletime_left = 0
+	var/department = "null"
+	var/image/openimage
+	var/image/closeimage
 
 	machine_flags = SCREWTOGGLE
 
@@ -38,42 +41,64 @@
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/atmos
+	name = "Atmospheric Suit Storage Unit"
+	department = "atmos"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/atmos
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/atmos
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/atmos
 
+/obj/machinery/suit_storage_unit/prison
+	name = "Prisoner Suit Storage Unit"
+	department = "jail"
+	SUIT_TYPE = /obj/item/clothing/suit/space/prison
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/prison
+	MASK_TYPE = /obj/item/clothing/mask/breath
+	BOOT_TYPE = /obj/item/clothing/shoes/magboots
+
 /obj/machinery/suit_storage_unit/engie
+	name = "Engineering Suit Storage Unit"
+	department = "engie"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/elite
+	name = "Advanced Suit Storage Unit"
+	department = "ce"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/elite
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/elite
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots/elite
 
 /obj/machinery/suit_storage_unit/mining
+	name = "Miners Suit Storage Unit"
+	department = "mine"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/mining
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/mining
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/excavation
+	name = "Excavation Suit Storage Unit"
+	department = "sci"
 	SUIT_TYPE = /obj/item/clothing/suit/space/anomaly
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/anomaly
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/security
+	name = "Security Suit Storage Unit"
+	department = "sec"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/security
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/security
 	MASK_TYPE = /obj/item/clothing/mask/breath
 	BOOT_TYPE = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/medical
+	name = "Medical Suit Storage Unit"
+	department = "med"
 	SUIT_TYPE = /obj/item/clothing/suit/space/rig/medical
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/medical
 	MASK_TYPE = /obj/item/clothing/mask/breath
@@ -87,6 +112,7 @@
 	BOOT_TYPE = null
 
 /obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
+	name = "Bomb Suit Storage Unit"
 	SUIT_TYPE = /obj/item/clothing/suit/bomb_suit
 	HELMET_TYPE = /obj/item/clothing/head/bomb_hood
 	MASK_TYPE = /obj/item/clothing/mask/gas
@@ -94,6 +120,8 @@
 
 /obj/machinery/suit_storage_unit/New()
 	. = ..()
+	openimage = image(icon,src, "[department]_open")
+	closeimage = image(icon,src, "[department]_close")
 	src.update_icon()
 	if(SUIT_TYPE)
 		SUIT = new SUIT_TYPE(src)
@@ -105,13 +133,20 @@
 		BOOTS = new BOOT_TYPE(src)
 
 /obj/machinery/suit_storage_unit/update_icon()
+	overlays.len = 0
 	if((stat & NOPOWER) || (stat & BROKEN))
 		icon_state = "suitstorage-off"
+		if(department != "null")
+			overlays += openimage
 		return
 	if(!isopen)
 		icon_state = "suitstorage-closed-[issuperUV][isUV]"
+		if(department != "null")
+			overlays += closeimage
 	else
 		icon_state = "suitstorage-open-[HELMET ? "1" : "0"][SUIT ? "1" : "0"]"
+		if(department != "null")
+			overlays += openimage
 
 /obj/machinery/suit_storage_unit/power_change()
 	if( powered() )

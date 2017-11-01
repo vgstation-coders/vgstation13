@@ -185,7 +185,9 @@
 	overlays.len = 0
 	updateinfolinks()
 	update_icon()
-
+	if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+		var/obj/C = loc
+		C.update_icon()
 
 /obj/item/weapon/paper/proc/parsepencode(var/mob/user,var/obj/item/i, var/t)
 	if(istype(i,/obj/item/weapon/pen))
@@ -286,8 +288,8 @@
 
 			update_icon()
 
-			if(istype(loc, /obj/item/weapon/clipboard))
-				var/obj/item/weapon/clipboard/C = loc
+			if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+				var/obj/item/weapon/storage/bag/clipboard/C = loc
 				C.update_icon()
 
 	if(href_list["help"])
@@ -309,7 +311,6 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-		//if((!in_range(src, user) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P)) return //What the actual FUCK
 
 		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
 			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
@@ -329,7 +330,11 @@
 
 		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
 
-	else if(istype(P, /obj/item/weapon/photo))
+		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
+			var/obj/C = loc
+			C.update_icon()
+
+	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(user.drop_item(P, src))
 			if(img)
 				to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
@@ -380,6 +385,7 @@ var/global/list/paper_folding_results = list ( \
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
 	"origami heart" = /obj/item/weapon/p_folded/folded_heart,
+	"envelope" = /obj/item/weapon/paper/envelope,
 	)
 
 /obj/item/weapon/paper/verb/fold()
@@ -396,14 +402,20 @@ var/global/list/paper_folding_results = list ( \
 		return //second check in case some chucklefuck moves the paper or falls down while the menu is open
 
 	usr.drop_item(src, force_drop = 1)	//Drop the original paper to free our hand and call proper inventory handling code
-	var/obj/item/weapon/p_folded/P = new foldtype(get_turf(src), unfolds_into = src) //Let's make a new item that unfolds into the original paper
+	var/obj/item/P
+	if(ispath(foldtype, /obj/item/weapon/p_folded))
+		P = new foldtype(get_turf(src), unfolds_into = src) //Let's make a new item that unfolds into the original paper
+	else
+		P = new foldtype(get_turf(src))
 	src.forceMove(P)	//and also contains it, for good measure.
 	usr.put_in_hands(P)
 	P.pixel_y = src.pixel_y
 	P.pixel_x = src.pixel_x
 	if (istype(src, /obj/item/weapon/paper/nano))
 		P.color = "#9A9A9A"
-		P.nano = 1
+		if(istype(P, /obj/item/weapon/p_folded))
+			var/obj/item/weapon/p_folded/pf = P
+			pf.nano = 1
 	usr.visible_message("<span class='notice'>[usr] folds \the [src.name] into a [P.name].</span>", "<span class='notice'>You fold \the [src.name] into a [P.name].</span>")
 	transfer_fingerprints(src, P)
 	return
@@ -495,6 +507,13 @@ var/global/list/paper_folding_results = list ( \
 	name = "paper- 'Recent Attack'"
 	info = "We still do not know who were responsible for the recent attack and escape of several test subjects.  The initial investigation points to the Syndicate but we cannot say for sure at this time.  This has violated our contract with REDACTED and REDACTED.  We may have to close the facility. "
 
+/obj/item/weapon/paper/suitdispenser
+	name = "paper- 'Suit Dispenser Manual - How to use them?'"
+	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
+
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
+
+/obj/item/weapon/paper/manifest
+	name = "Supply Manifest"

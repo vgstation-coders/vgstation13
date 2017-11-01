@@ -20,7 +20,7 @@
 	attacktext = "slashes"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	faction = "marker"
-	speed = 4
+	speed = 5
 	size = SIZE_BIG
 	move_to_delay = 4
 	canRegenerate = 1
@@ -65,7 +65,7 @@
 	src.throw_at(get_turf(target),7,1)
 	return 1
 
-/mob/living/simple_animal/hostile/necromorph/leaper/Bump(atom/A)
+/mob/living/simple_animal/hostile/necromorph/leaper/to_bump(atom/A)
 	if(throwing && isliving(A) && CanAttack(A))
 		attach(A)
 	..()
@@ -93,7 +93,7 @@
 					else
 						if(prob(30))
 							step_towards(src, vent)//Step towards it
-							if(environment_smash)
+							if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 								EscapeConfinement()
 						break
 
@@ -184,8 +184,8 @@
 	visible_message("<span class='warning'>\The [src] explodes!</span>")
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/generic(T)
-	explosion(T, -1, 1, 4)
 	qdel(src)
+	explosion(T, -1, 1, 4)
 
 /mob/living/simple_animal/hostile/necromorph/puker
 	desc = "A twisted, engorged husk of what was once human. It reaks of stomach acid."

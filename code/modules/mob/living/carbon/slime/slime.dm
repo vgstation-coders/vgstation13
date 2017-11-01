@@ -76,6 +76,8 @@
 	Victim = null
 	Target = null
 
+/mob/living/carbon/slime/advanced_mutate()
+	return
 
 /mob/living/carbon/slime/New()
 	var/datum/reagents/R = new/datum/reagents(100)
@@ -100,39 +102,25 @@
 	slime_mutation[4] = /mob/living/carbon/slime/purple
 
 /mob/living/carbon/slime/movement_delay()
-	var/tally = 0
-
-	var/turf/T = loc
-	if(istype(T))
-		tally = T.adjust_slowdown(src, tally)
-
-		if(tally == -1)
-			return tally
-
-	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45)
-		tally += (health_deficiency / 25)
-
-	if (bodytemperature < 183.222)
-		tally += (283.222 - bodytemperature) / 10 * 1.75
-
-	if(reagents)
-		if(reagents.has_reagent(HYPERZINE)) // hyperzine slows slimes down
-			tally *= 2 // moves twice as slow
-
-		if(reagents.has_reagent(FROSTOIL)) // frostoil also makes them move VEEERRYYYYY slow
-			tally *= 5
-
-	if(health <= 0) // if damaged, the slime moves twice as slow
-		tally *= 2
-
 	if (bodytemperature >= 330.23) // 135 F
-		return -1	// slimes become supercharged at high temperatures
+		return min(..(), 1) // Slimes become supercharged at high temperatures
+	return ..()
 
-	return tally+config.slime_delay
+/mob/living/carbon/slime/base_movement_tally()
+	. = ..()
+	if (bodytemperature < 183.222)
+		. += (283.222 - bodytemperature) / 10 * 1.75
 
+/mob/living/carbon/slime/movement_tally_multiplier()
+	. = ..()
+	if(health <= 0) // if damaged, the slime moves twice as slow
+		. *= 2
+	if(reagents.has_reagent(HYPERZINE)) // Hyperzine slows slimes down
+		. *= 2
+	if(reagents.has_reagent(FROSTOIL)) // Frostoil also makes them move VERY slowly
+		. *= 5
 
-/mob/living/carbon/slime/Bump(atom/movable/AM as mob|obj)
+/mob/living/carbon/slime/to_bump(atom/movable/AM as mob|obj)
 	if(now_pushing)
 		return
 	now_pushing = 1
@@ -1046,8 +1034,12 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
 	else
 		if(!check_observer(O))
-			to_chat(O, "<span class='warning'>You are not eligable.</span>")
+			to_chat(O, "<span class='warning'>You are not eligible.</span>")
 			return
+		if(O.key in has_died_as_golem)
+			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
+				to_chat(O, "<span class='warning'>You have died as a golem too recently. You must wait longer before you can become a golem again.</span>")
+				return
 		ghosts.Add(O)
 		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
 

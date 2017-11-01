@@ -323,10 +323,12 @@
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
 				if(!welded)
 					user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
+					investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 					welded = 1
 					update_icon()
 				else
 					user.visible_message("[user] unwelds the vent.", "You unweld the vent.", "You hear welding.")
+					investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 					welded = 0
 					update_icon()
 			else

@@ -280,7 +280,7 @@
 
 		res.Blend(img, blendMode2iconMode(A.blend_mode), offX, offY)
 
-		if(istype(A, /obj/item/blueprints))
+		if(istype(A, /obj/item/blueprints/primary))
 			blueprints = 1
 
 	/*
@@ -330,7 +330,7 @@
 
 		res.Blend(img, blendMode2iconMode(A.blend_mode), offX, offY)
 
-		if(istype(A, /obj/item/blueprints))
+		if(istype(A, /obj/item/blueprints/primary))
 			blueprints = 1
 
 	/*
@@ -575,6 +575,10 @@
 		spawn(64)
 			icon_state = icon_on
 			on = 1
+
+/obj/item/device/camera/remote_attack(atom/target, mob/user, atom/movable/eye)
+	if(istype(eye, /obj/machinery/camera))
+		return afterattack(target, user) //Allow taking photos when looking through cameras
 
 /obj/item/device/camera/ai_camera/proc/toggle_camera_mode()
 	if(in_camera_mode)

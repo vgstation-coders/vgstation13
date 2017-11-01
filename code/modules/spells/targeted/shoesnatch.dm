@@ -34,7 +34,7 @@
 			user.put_in_active_hand(old_shoes)
 
 		else if(spawn_shards) //Spawn shards if the target isn't wearing shoes
-			to_chat("<span class='danger'>You conjure several glass shards around \the [target].</span>")
+			to_chat(user, "<span class='danger'>You conjure several glass shards around \the [target].</span>")
 			target.show_message("<span class='danger'>You are surrounded by glass shards!</span>", MESSAGE_SEE)
 			summon_shards(get_turf(target), cardinal)
 

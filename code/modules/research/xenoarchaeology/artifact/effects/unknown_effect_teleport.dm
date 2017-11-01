@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/teleport
 	effecttype = "teleport"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	effect_type = 6
 
 /datum/artifact_effect/teleport/DoEffectTouch(var/mob/user)
@@ -13,13 +14,9 @@
 			to_chat(user, "<span class='warning'>You are suddenly zapped away elsewhere!</span>")
 			user.unlock_from()
 
-			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-			sparks.set_up(3, 0, get_turf(user))
-			sparks.start()
+			spark(user, 3, FALSE)
 			user.forceMove(pick(randomturfs))
-			sparks = new /datum/effect/effect/system/spark_spread()
-			sparks.set_up(3, 0, get_turf(user))
-			sparks.start()
+			spark(user, 3, FALSE)
 
 /datum/artifact_effect/teleport/DoEffectAura()
 	if(holder)
@@ -32,14 +29,9 @@
 				if(randomturfs.len > 0)
 					to_chat(M, "<span class='warning'>You are displaced by a strange force!</span>")
 					M.unlock_from()
-
-					var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-					sparks.set_up(3, 0, get_turf(M))
-					sparks.start()
+					spark(M, 3, FALSE)
 					M.forceMove(pick(randomturfs))
-					sparks = new /datum/effect/effect/system/spark_spread()
-					sparks.set_up(3, 0, get_turf(M))
-					sparks.start()
+					spark(M, 3, FALSE)
 
 /datum/artifact_effect/teleport/DoEffectPulse()
 	if(holder)
@@ -52,11 +44,7 @@
 				if(randomturfs.len > 0)
 					to_chat(M, "<span class='warning'>You are displaced by a strange force!</span>")
 
-					var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-					sparks.set_up(3, 0, get_turf(M))
-					sparks.start()
+					spark(M, 3, FALSE)
 					M.unlock_from()
 					M.forceMove(pick(randomturfs))
-					sparks = new /datum/effect/effect/system/spark_spread()
-					sparks.set_up(3, 0, get_turf(M))
-					sparks.start()
+					spark(M, 3, FALSE)

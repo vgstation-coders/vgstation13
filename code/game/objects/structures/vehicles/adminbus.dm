@@ -253,7 +253,7 @@
 /obj/structure/bed/chair/vehicle/adminbus/HealthCheck()
 	health = 9001//THE ADMINBUS HAS NO BRAKES
 
-/obj/structure/bed/chair/vehicle/adminbus/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/adminbus/to_bump(var/atom/obstacle)
 	if(istype(obstacle,/obj/machinery/teleport/hub))
 		var/obj/machinery/teleport/hub/H = obstacle
 		spawn()

@@ -96,7 +96,7 @@
 	if(new_item_type)
 		find_type = new_item_type
 	else
-		find_type = rand(1,39)	//update this when you add new find types
+		find_type = rand(1,MAX_ARCHAEO)
 
 	var/anomaly_factor = 1		//anomaly origin_tech
 	var/item_type = "object"
@@ -200,7 +200,7 @@
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along part of it")]."
 		if(ARCHAEO_LIGHTER)
 			item_type = "[pick("cylinder","tank","chamber")]"
-			new_item = new /obj/item/weapon/lighter(src.loc)
+			new_item = new /obj/item/weapon/lighter/random(src.loc)
 			additional_desc = "There is a tiny device attached."
 			if(prob(30))
 				apply_image_decorations = 1
@@ -454,6 +454,8 @@
 			//completely unknown alien device
 			anomaly_factor = 2
 			if(prob(50))
+				new_item = new /obj/item/weapon/glow_orb(loc)
+			if(prob(50))
 				apply_image_decorations = 0
 		if(ARCHAEO_FOSSIL)
 			//fossil bone/skull
@@ -542,7 +544,7 @@
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/clothing/mask/morphing
 			possible_spawns += /obj/item/clothing/mask/morphing/amorphous
-			//possible_spawns += /obj/item/clothing/mask/happy PENDING REWORK
+			possible_spawns += /obj/item/clothing/mask/happy
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_DICE)
@@ -586,6 +588,28 @@
 			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
+		if(ARCHAEO_SASH)
+			//red ribbon arm
+			anomaly_factor = 2
+			apply_material_decorations = 0
+			var/list/possible_spawns=list()
+			possible_spawns += /obj/item/red_ribbon_arm
+			var/new_type = pick(possible_spawns)
+			new_item = new new_type(src.loc)
+		if(ARCHAEO_TOY)
+			apply_material_decorations = 1
+			apply_image_decorations = 0
+			apply_prefix = 1
+			if(prob(50))
+				anomaly_factor = 0
+				new_item = new /obj/item/weapon/bikehorn/rubberducky/quantum(loc)
+			else
+				anomaly_factor = 1
+				var/list/possible_spawns=list()
+				possible_spawns = existing_typesof(/obj/item/toy)
+				var/new_type = pick(possible_spawns)
+				new_item = new new_type(src.loc)
+
 
 	var/decorations = ""
 	if(apply_material_decorations)

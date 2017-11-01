@@ -21,9 +21,9 @@
 	attack_same = 2
 	attacktext = "chomps"
 	faction = "mushroom"
-	environment_smash = 0
+	environment_smash_flags = 0
 	stat_attack = 2
-	speed = 1
+	speed = 2
 	var/powerlevel = 0 //Tracks our general strength level gained from eating other shrooms
 	var/bruised = 0 //If someone tries to cheat the system by attacking a shroom to lower its health, punish them so that it wont award levels to shrooms that eat it
 	var/recovery_cooldown = 0 //So you can't repeatedly revive it during a fight
@@ -146,7 +146,9 @@
 		Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/hitby(atom/movable/AM)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(istype(AM, /obj/item))
 		var/obj/item/T = AM
 		if(T.throwforce)

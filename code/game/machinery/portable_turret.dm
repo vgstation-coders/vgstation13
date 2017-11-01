@@ -47,17 +47,11 @@
 	var/on = 1				// determines if the turret is on
 	var/disabled = 0
 
-	var/datum/effect/effect/system/spark_spread/spark_system // the spark system, used for generating... sparks?
-
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
 /obj/machinery/porta_turret/New()
 	..()
 	icon_state = "[lasercolor]grey_target_prism"
-	// Sets up a spark system
-	spark_system = new /datum/effect/effect/system/spark_spread
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
 	power_change()
 	cover = new /obj/machinery/porta_turret_cover(loc)
 	cover.Parent_Turret = src
@@ -133,9 +127,9 @@ Neutralize All Unidentified Life Signs: []<BR>"},
 	else
 		if(istype(user,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = user
-			if(((src.lasercolor) == "b") && (istype(H.wear_suit, /obj/item/clothing/suit/redtag)))
+			if(((src.lasercolor) == "b") && iswearingredtag(H))
 				return
-			if(((src.lasercolor) == "r") && (istype(H.wear_suit, /obj/item/clothing/suit/bluetag)))
+			if(((src.lasercolor) == "r") && iswearingbluetag(H))
 				return
 		dat += text({"
 <TT><B>Automatic Portable Turret Installation</B></TT><BR><BR>
@@ -301,7 +295,7 @@ Status: []<BR>"},
 	src.health -= Proj.damage
 	..()
 	if(prob(45) && Proj.damage > 0)
-		src.spark_system.start()
+		spark(src, 5, FALSE)
 	if (src.health <= 0)
 		src.die() // the death process :(
 	if((src.lasercolor == "b") && (src.disabled == 0))
@@ -351,7 +345,7 @@ Status: []<BR>"},
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "[lasercolor]destroyed_target_prism"
 	invisibility=0
-	src.spark_system.start() // creates some sparks because they look cool
+	spark(src, 5, 0)
 	src.density=1
 	qdel(cover) // deletes the cover - no need on keeping it there!
 
@@ -549,7 +543,7 @@ Status: []<BR>"},
 
 	if((src.lasercolor) == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//But does not target anyone else
-		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
+		if(iswearingredtag(perp))
 			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST
@@ -558,7 +552,7 @@ Status: []<BR>"},
 
 	if((src.lasercolor) == "r")
 		threatcount = 0
-		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
+		if(iswearingbluetag(perp))
 			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST

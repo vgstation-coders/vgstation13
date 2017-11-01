@@ -224,6 +224,15 @@
 
 		return*/
 
+/obj/item/weapon/storage/secure/briefcase/assassin/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/weapon/spacecash/c1000(src)
+	new /obj/item/weapon/gun/energy/crossbow(src)
+	new /obj/item/weapon/gun/projectile/mateba(src)
+	new /obj/item/ammo_storage/box/a357(src)
+	new /obj/item/weapon/plastique(src)
+
 // -----------------------------
 //        Secure Safe
 // -----------------------------

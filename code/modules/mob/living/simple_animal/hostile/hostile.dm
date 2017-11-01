@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile
 	faction = "hostile"
 	stop_automated_movement_when_pulled = 0
-	environment_smash = 1 //Set to 1 to break closets,tables,racks, etc; 2 for walls; 3 for rwalls
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS	//defines are in simple_animal_defines.dm
 
 	var/stance = HOSTILE_STANCE_IDLE	//Used to determine behavior
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
@@ -28,6 +28,7 @@
 	var/stat_exclusive = 0 //Mobs with this set to 1 will exclusively attack things defined by stat_attack, stat_attack 2 means they will only attack corpses
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
+	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
 
 /mob/living/simple_animal/hostile/resetVariables()
 	..("wanted_objects", "friends", args)
@@ -59,7 +60,7 @@
 
 		switch(stance)
 			if(HOSTILE_STANCE_IDLE)
-				if(environment_smash)
+				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
@@ -147,9 +148,8 @@
 				return 0
 			if(ishuman(L))
 				var/mob/living/carbon/human/H = L
-				if(H.dna)
-					if((H.dna.mutantrace == "slime") || (isgolem(H)))
-						return 0
+				if((isslimeperson(H)) || (isgolem(H)))
+					return 0
 		//IF WE ARE MOBS SPAWNED BY THE ADMINBUS THEN WE DON'T ATTACK TEST DUMMIES OR IAN (wait what? man that's snowflaky as fuck)
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
@@ -197,12 +197,12 @@
 			return
 
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
-		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
+		if(FindHidden(target) && (environment_smash_flags & SMASH_LIGHT_STRUCTURES))//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
 			if(canmove && space_check())
 				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
-				A.attack_animal(src)
+				UnarmedAttack(A)
 			return
 		else
 			LostTarget()
@@ -243,7 +243,7 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	target.attack_animal(src)
+	UnarmedAttack(target)
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -300,7 +300,7 @@
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
 		if(casingtype)
-			new casingtype(get_turf(src))
+			new casingtype(get_turf(src),1)// empty casing
 
 /mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(target == start)
@@ -328,12 +328,13 @@
 		returnToPool(fC)
 	//Friendly Fire check - End
 
-	var/obj/item/projectile/A = new projectiletype(user.loc)
+	var/obj/item/projectile/A = create_projectile(user)
 
 	if(!A)
 		return 0
 
-	playsound(user, projectilesound, 100, 1)
+	if(projectilesound)
+		playsound(user, projectilesound, 100, 1)
 
 	A.current = target
 
@@ -351,8 +352,11 @@
 
 	return 1
 
+/mob/living/simple_animal/hostile/proc/create_projectile(var/mob/user)
+	return new projectiletype(user.loc)
+
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
-	if(environment_smash)
+	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		EscapeConfinement()
 		var/list/smash_dirs = list(0)
 		if(!target || !CanAttack(target))
@@ -363,18 +367,23 @@
 		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
-				T.attack_animal(src)
+				UnarmedAttack(T)
 			for(var/atom/A in T)
-				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
-					A.attack_animal(src)
+				if((istype(A, /obj/structure/window)\
+				 || istype(A, /obj/structure/closet)\
+				 || istype(A, /obj/structure/table)\
+				 || istype(A, /obj/structure/grille)\
+				 || istype(A, /obj/structure/rack)\
+				 || istype(A, /obj/machinery/door/window)) && Adjacent(A))
+					UnarmedAttack(A)
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
 	if(locked_to)
-		locked_to.attack_animal(src)
+		UnarmedAttack(locked_to)
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
-		A.attack_animal(src)//Bang on it till we get out
+		UnarmedAttack(A) //Bang on it till we get out
 	return
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
@@ -395,3 +404,6 @@
 		OpenFire(A)
 
 	return ..()
+
+/mob/living/simple_animal/hostile/get_armor_modifier(mob/living/target)
+	return armor_modifier

@@ -45,14 +45,18 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	if(D == dock_home)
-		if(ticker && istype(ticker.mode, /datum/game_mode/heist))
-			switch(alert(usr,"Returning to the deep space will end your raid and report your success or failure. Are you sure?","Vox Skipjack","Yes","No"))
-				if("Yes")
-					var/location = get_turf(user)
-					message_admins("[key_name_admin(user)] attempts to end the raid - [formatJumpTo(location)]")
-					log_admin("[key_name(user)] attempts to end the raid - [formatLocation(location)]")
-				if("No")
-					return
+		if(world.time < 6000)
+			to_chat(user, "<span class='notice'>Error: Bluespace engines are still cooling. We will be ready to return home in: [round(((6000 - world.time) / 10) / 60)] minutes.</span>")
+			return
+		else
+			if(ticker && istype(ticker.mode, /datum/game_mode/heist))
+				switch(alert(usr,"Returning to the deep space will end your raid and report your success or failure. Are you sure?","Vox Skipjack","Yes","No"))
+					if("Yes")
+						var/location = get_turf(user)
+						message_admins("[key_name_admin(user)] attempts to end the raid - [formatJumpTo(location)]")
+						log_admin("[key_name(user)] attempts to end the raid - [formatLocation(location)]")
+					if("No")
+						return
 	.=..()
 
 /datum/shuttle/vox/after_flight()

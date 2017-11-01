@@ -9,7 +9,7 @@
 	response_disarm = "flails at"
 	response_harm   = "punches"
 	icon_dead = "shade_dead"
-	speed = -1
+	speed = 1
 	a_intent = I_HURT
 	stop_automated_movement = 1
 	status_flags = CANPUSH
@@ -30,6 +30,7 @@
 	treadmill_speed = 0 //It floats!
 	var/nullblock = 0
 
+	mob_property_flags = MOB_CONSTRUCT
 	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
 	mob_push_flags = ALLMOBS
 
@@ -139,7 +140,7 @@
 /mob/living/simple_animal/construct/armoured
 	name = "\improper Juggernaut"
 	real_name = "\improper Juggernaut"
-	desc = "A possessed suit of armour driven by the will of the restless dead"
+	desc = "A possessed suit of armour driven by the will of the restless dead."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "behemoth"
 	icon_living = "behemoth"
@@ -150,8 +151,8 @@
 	melee_damage_lower = 30
 	melee_damage_upper = 30
 	attacktext = "smashes their armoured gauntlet into"
-	speed = 3
-	environment_smash = 2
+	speed = 4
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
@@ -211,8 +212,8 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "slashes"
-	speed = -1
-	environment_smash = 1
+	speed = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
@@ -237,8 +238,8 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 5
 	attacktext = "rams"
-	speed = 0
-	environment_smash = 1
+	speed = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/aoe_turf/conjure/construct/lesser,
 							/spell/aoe_turf/conjure/wall,
@@ -267,8 +268,8 @@
 	melee_damage_lower = 50
 	melee_damage_upper = 50
 	attacktext = "brutally crushes"
-	speed = 5
-	environment_smash = 2
+	speed = 6
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	var/energy = 0
 	var/max_energy = 1000
@@ -312,8 +313,8 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "violently stabs"
-	speed = -1
-	environment_smash = 1
+	speed = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
 

@@ -100,9 +100,9 @@
 			M.add_spell(new /spell/targeted/shoesnatch, iswizard = TRUE)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned the venerable and ancient art of Clown Magic. You are able to cast the clown curse and shoe snatch.")
 		if("misdirection")
-			M.add_spell(new /spell/targeted/subjugation, iswizard = TRUE)
+			M.add_spell(new /spell/targeted/disorient, iswizard = TRUE)
 			M.add_spell(new /spell/targeted/genetic/blind, iswizard = TRUE)
-			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned spells for misdirection and trickery. You are able to cast subjugate and blind.")
+			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned spells for misdirection and trickery. You are able to cast disorient and blind.")
 		if("muscle")
 			M.add_spell(new /spell/targeted/genetic/mutate, iswizard = TRUE)
 			M.add_spell(new /spell/aoe_turf/blink, iswizard = TRUE)
@@ -161,9 +161,7 @@
 		to_chat(user, "<span class='notice'>Unable to connect to Syndicate Command. Please wait and try again later or use the teleporter on your uplink to get your points refunded.</span>")
 
 /obj/item/weapon/antag_spawner/borg_tele/spawn_antag(var/client/C, var/turf/T, var/type = "")
-	var/datum/effect/effect/system/spark_spread/S = new /datum/effect/effect/system/spark_spread
-	S.set_up(4, 1, src)
-	S.start()
+	spark(src, 4)
 	var/mob/living/silicon/robot/R = new /mob/living/silicon/robot/syndicate(T)
 	R.key = C.key
 	ticker.mode.syndicates += R.mind

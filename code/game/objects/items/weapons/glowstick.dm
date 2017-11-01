@@ -3,7 +3,7 @@
 #define GLOW_BLUE "#0000FF"
 
 /obj/item/weapon/glowstick
-	name = "glowstick"
+	name = "green glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is green."
 	color = GLOW_GREEN
 	icon = 'icons/obj/weapons.dmi'
@@ -22,24 +22,28 @@
 	set_light(2, l_color = light_color)
 
 /obj/item/weapon/glowstick/red
+	name = "red glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is red."
 	color = GLOW_RED
 
 	light_color = GLOW_RED
 
 /obj/item/weapon/glowstick/blue
+	name = "blue glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is blue."
 	color = GLOW_BLUE
 
 	light_color = GLOW_BLUE
 
 /obj/item/weapon/glowstick/yellow
+	name = "yellow glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is yellow."
 	color = "#FFFF00"
 
 	light_color = "#FFFF00"
 
 /obj/item/weapon/glowstick/magenta
+	name = "magenta glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is magenta."
 	color = "#FF00FF"
 

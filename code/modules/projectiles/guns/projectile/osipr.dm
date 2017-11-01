@@ -36,6 +36,12 @@
 		to_chat(user, "<span class='info'>It has no pulse magazine inserted!</span>")
 	to_chat(user, "<span class='info'>Has [energy_balls] dark energy core\s remaining.</span>")
 
+/obj/item/weapon/gun/osipr/can_discharge()
+	if (mode & OSIPR_PRIMARY_FIRE && magazine.bullets)
+		return 1
+	if (mode & OSIPR_SECONDARY_FIRE && energy_balls)
+		return 1
+	
 /obj/item/weapon/gun/osipr/process_chambered()
 	if(in_chamber)
 		return 1

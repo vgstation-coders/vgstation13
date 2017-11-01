@@ -45,7 +45,7 @@
 		plane = OBJ_PLANE
 
 
-/obj/structure/bed/chair/vehicle/secway/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/secway/to_bump(var/atom/obstacle)
 	..()
 
 	if(!occupant)

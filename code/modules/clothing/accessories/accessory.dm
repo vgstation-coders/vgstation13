@@ -1,10 +1,3 @@
-#define DECORATION	0
-#define HOLSTER		1
-#define STORAGE		2
-#define ARMBAND		4
-#define TIE			8
-#define HOLOMAP		16
-
 /obj/item/clothing/accessory
 	name = "tie"
 	desc = "A neosilk clip-on tie."
@@ -95,6 +88,10 @@
 /obj/item/clothing/accessory/pinksquare/can_attach_to(obj/item/clothing/C)
 	return 1
 
+/obj/item/clothing/accessory/tie
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
+
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
 		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
@@ -124,6 +121,8 @@
 	icon_state = "stethoscope"
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
+	restraint_resist_time = 30 SECONDS
+	restraint_apply_sound = "rustle"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -263,7 +262,7 @@
 			var/obj/item/device/pda/pda = O
 			id_card = pda.id
 
-		if(access_security in id_card.access || emagged)
+		if ((access_security in id_card.access) || emagged)
 			to_chat(user, "You imprint your ID details onto the badge.")
 			stored_name = id_card.registered_name
 			name = "holobadge ([stored_name])"
@@ -276,4 +275,45 @@
 /obj/item/clothing/accessory/holobadge/attack(mob/living/carbon/human/M, mob/living/user)
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
+
+/obj/item/clothing/accessory/lasertag
+	name = "laser tag vest"
+	desc = "A vest for player laser tag."
+	icon = null
+	icon_state = null
+	accessory_exclusion = LASERTAG
+	inv_overlay
+	var/obj/item/clothing/suit/tag/source_vest
+
+/obj/item/clothing/accessory/lasertag/can_attach_to(obj/item/clothing/C)
+	return ..() || istype(C, /obj/item/clothing/monkeyclothes)
+
+/obj/item/clothing/accessory/lasertag/update_icon()
+	if(source_vest)
+		appearance = source_vest.appearance
+		if(attached_to)
+			var/image/vestoverlay = image('icons/mob/suit.dmi', src, icon_state)
+			attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = vestoverlay
+			if(ismob(attached_to.loc))
+				var/mob/M = attached_to.loc
+				M.regenerate_icons()
+	..()
+
+/obj/item/clothing/accessory/lasertag/on_removed(mob/user)
+	if(!attached_to)
+		return
+	attached_to.dynamic_overlay["[UNIFORM_LAYER]"] = null
+	attached_to.overlays -= inv_overlay
+	if(ismob(attached_to.loc))
+		var/mob/M = attached_to.loc
+		M.regenerate_icons()
+	attached_to = null
+	if(source_vest)
+		source_vest.forceMove(get_turf(src))
+		if(user)
+			user.put_in_hands(source_vest)
+		add_fingerprint(user)
+		transfer_fingerprints(src,source_vest)
+		source_vest = null
+	qdel(src)
 

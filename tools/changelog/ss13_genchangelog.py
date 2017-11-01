@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 '''
 Usage:
     $ python ss13_genchangelog.py [--dry-run] html/changelog.html html/changelogs/

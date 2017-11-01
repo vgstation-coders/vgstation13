@@ -183,8 +183,8 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 		new/datum/stack_recipe("privacy curtains", /obj/structure/curtain/open/privacy, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("shower curtains", /obj/structure/curtain/open/shower, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("engineering shower curtains", /obj/structure/curtain/open/shower/engineering, 4, one_per_turf = 1, on_floor = 1), \
-		new/datum/stack_recipe("security shower curtains", /obj/structure/curtain/open/shower/medical, 4, one_per_turf = 1, on_floor = 1), \
-		new/datum/stack_recipe("medical shower curtains", /obj/structure/curtain/open/shower/security, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("security shower curtains", /obj/structure/curtain/open/shower/security, 4, one_per_turf = 1, on_floor = 1), \
+		new/datum/stack_recipe("medical shower curtains", /obj/structure/curtain/open/shower/medical, 4, one_per_turf = 1, on_floor = 1), \
 		), 4),
 	)
 
@@ -213,6 +213,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
 	new/datum/stack_recipe("golden door", /obj/machinery/door/mineral/gold, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("gold tooth", /obj/item/stack/teeth/gold, 1, 1, 20), \
 	)
 
 /obj/item/stack/sheet/mineral/gold/New(var/loc, var/amount=null)

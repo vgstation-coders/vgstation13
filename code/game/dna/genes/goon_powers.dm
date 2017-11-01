@@ -169,7 +169,7 @@
 											"<span class='notice'>A cloud of fine ice crystals cover your [H.head]'s visor.</span>")
 					else
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
-											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!.</span>")
+											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!</span>")
 						H.bodytemperature = max(T0C + 31, H.bodytemperature - 3)
 						H.adjustFireLoss(5)
 		if(!handle_suit)
@@ -240,14 +240,9 @@
 /spell/targeted/eat/proc/doHeal(var/mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H=user
-		for(var/name in H.organs_by_name)
-			var/datum/organ/external/affecting = null
-			if(!H.organs[name])
-				continue
-			affecting = H.organs[name]
-			if(!istype(affecting, /datum/organ/external))
-				continue
+		for(var/datum/organ/external/affecting in H.organs)
 			affecting.heal_damage(4, 0)
+
 		H.UpdateDamageIcon()
 		H.updatehealth()
 
@@ -349,7 +344,7 @@
 	var/atom/movable/the_item = targets[1]
 	if(!the_item || !the_item.Adjacent(user))
 		return
-	// if(istype(the_item, /obj/item/weapon/organ/head))
+	// if(istype(the_item, /obj/item/organ/external/head))
 	// 	to_chat(user, "<span class='warning'>You try to put the [the_item] in your mouth, but the ears tickle your throat!</span>")
 	// 	return 0
 	// else if(isbrain(the_item))
@@ -437,7 +432,8 @@
 	hud_state = "gen_leap"
 	override_base = "genetic"
 
-/spell/targeted/leap/cast(list/targets, mob/user)
+/spell/targeted/leap/cast(list/targets)
+	set waitfor = FALSE
 	for(var/mob/living/target in targets)
 		if (istype(target.loc,/mob/) || target.lying || target.stunned || target.locked_to)
 			to_chat(target, "<span class='warning'>You can't jump right now!</span>")
@@ -445,6 +441,20 @@
 
 		var/failed_leap = 0
 		if (istype(target.loc,/turf/))
+
+			if(istype(target.loc, /turf/space))
+				var/spaced = 1
+				for(var/turf/T in oview(1,target))
+					if(T.has_gravity(target))
+						spaced = 0
+						break
+					for(var/obj/O in T.contents)
+						if((O) && (O.density) && (O.anchored))
+							spaced = 0
+							break
+				if(spaced)
+					to_chat(target, "<span class='warning'>There is nothing to leap off of!</span>")
+					return
 
 			if(target.restrained())//Why being pulled while cuffed prevents you from moving
 				for(var/mob/M in range(target, 1))

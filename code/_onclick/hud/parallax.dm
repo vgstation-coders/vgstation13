@@ -120,8 +120,8 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	var/client/C = mymob.client
 	if(!parallax_initialized)
 		return
-
-	if(!(locate(/turf/space) in trange(C.view,get_turf(C.eye))))
+	var/list/everything_in_sight = trange(C.view,get_turf(C.eye))
+	if(!(locate(/turf/space) in everything_in_sight) && !(locate(/turf/simulated/floor/glass) in everything_in_sight))
 		return
 
 	//ACTUALLY MOVING THE PARALLAX

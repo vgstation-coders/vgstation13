@@ -59,6 +59,10 @@
 		qdel(vessel)
 		vessel = null
 
+	if(NPC_brain)
+		qdel(NPC_brain)
+		NPC_brain = null
+
 	..()
 
 	for(var/obj/abstract/Overlays/O in obj_overlays)
@@ -111,6 +115,10 @@
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
+	if(become_zombie_after_death)
+		spawn(30 SECONDS)
+			if(!gcDestroyed)
+				make_zombie()
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()

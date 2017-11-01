@@ -22,6 +22,7 @@
 	melee_damage_upper = 15
 
 	stat_attack = UNCONSCIOUS
+	mob_property_flags = MOB_CONSTRUCT
 
 	faction = "frost"
 	corpse = null

@@ -8,8 +8,12 @@
 	if(ismob(mover))
 		var/mob/moving_mob = mover
 
-		if ((other_mobs && moving_mob.other_mobs))
+		if ((other_mobs && moving_mob.other_mobs)) //I have no fucking idea what this is. I think it's for dragging via grab, but only if 2+ mobs are being grabbed?
 			return 1
+
+	for(var/atom/movable/passenger in mover.locked_atoms) //If we're being crossed by something with locked atoms, like a chair or something, have ALL of them try to cross us.
+		if(!Cross(passenger, target, height, air_group))
+			return 0
 
 	return (!mover.density || !density || lying)
 
@@ -48,9 +52,9 @@
 			if(pai_override)
 				pai_container.throwkey_integrated_pai(pai_override)
 				return
-			if(iscarbon(usr))
-				var/mob/living/carbon/C = usr
-				C.toggle_throw_mode()
+			if(isliving(usr))
+				var/mob/living/L = usr
+				L.toggle_throw_mode()
 			else
 				to_chat(usr, "<span class='warning'>This mob type cannot throw items.</span>")
 		if(NORTHWEST)
@@ -60,7 +64,7 @@
 			if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
 				to_chat(usr, "<span class='notice'>You cease waiting to use your power")
 				return
-			if(iscarbon(usr))
+			if(iscarbon(usr) || ishologram(usr))
 				var/mob/living/carbon/C = usr
 				if(!C.get_active_hand())
 					to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
@@ -120,8 +124,6 @@
 
 /client/verb/swap_hand()
 	set hidden = 1
-	if(istype(mob, /mob/living/carbon))
-		mob:swap_hand()
 	if(istype(mob,/mob/living/silicon/robot/mommi))
 		return // MoMMIs only have one tool slot.
 	if(istype(mob,/mob/living/silicon/robot))//Oh nested logic loops, is there anything you can't do? -Sieve
@@ -191,8 +193,7 @@
 					R:module_active = R:module_state_1
 			else
 				return
-	return
-
+	mob.swap_hand()
 
 
 /client/verb/attack_self() //Called when pagedown or Z is pressed
@@ -339,30 +340,14 @@
 			to_chat(src, "<span class='notice'>You're pinned to a wall by [mob.pinned[1]]!</span>")
 			return 0
 
-		// COMPLEX MOVE DELAY SHIT
-		////////////////////////////
-		var/move_delay=0 // set move delay
-		mob.last_move_intent = world.time + 10
-		switch(mob.m_intent)
-			if("run")
-				if(mob.drowsyness > 0)
-					move_delay += 6
-				move_delay += 1+config.run_speed
-			if("walk")
-				move_delay += 7+config.walk_speed
-		move_delay += mob.movement_delay()
-
-		var/obj/item/weapon/grab/Findgrab = locate() in mob
-		if(Findgrab)
-			move_delay += 7
-
-		//We are now going to move
+		var/move_delay = mob.movement_delay()
 		var/old_dir = mob.dir
-		move_delay = max(move_delay,1)
-		if(mob.movement_speed_modifier)
-			move_delay *= (1/mob.movement_speed_modifier)
+
 		mob.delayNextMove(move_delay)
-		//Something with pulling things
+		mob.last_move_intent = world.time + 10
+
+		// Something with pulling things
+		var/obj/item/weapon/grab/Findgrab = locate() in src
 		if(Findgrab)
 			var/list/L = mob.ret_grab()
 			if(istype(L, /list))
@@ -375,8 +360,7 @@
 							step(mob, dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
-								if ((diag - 1) & diag)
-								else
+								if (!((diag - 1) & diag))
 									diag = null
 								if ((get_dist(mob, M) > 1 || diag))
 									step(M, get_dir(M.loc, T))
@@ -579,3 +563,28 @@
 	else
 		step(pulling, get_dir(pulling.loc, A))
 	return
+
+/mob/proc/movement_delay()
+	return (base_movement_tally() * movement_tally_multiplier())
+
+/mob/proc/base_movement_tally()
+	switch(m_intent)
+		if("run")
+			if(drowsyness > 0)
+				. += 6
+			. += MOB_RUN_TALLY+config.run_speed
+		if("walk")
+			. += MOB_WALK_TALLY+config.walk_speed
+
+	var/obj/item/weapon/grab/Findgrab = locate() in src
+	if(Findgrab)
+		. += 7
+
+/mob/proc/movement_tally_multiplier()
+	. = 1
+	if(!flying)
+		var/turf/T = loc
+		if(istype(T))
+			. = T.adjust_slowdown(src, .)
+		if(movement_speed_modifier)
+			. *= (1/movement_speed_modifier)

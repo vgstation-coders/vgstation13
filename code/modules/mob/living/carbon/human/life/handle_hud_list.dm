@@ -17,14 +17,6 @@
 		hud_list[HEALTH_HUD] = holder
 
 	if(hud_updateflag & 1 << STATUS_HUD)
-		var/foundVirus = 0
-		for(var/datum/disease/D in viruses)
-			if(!D.hidden[SCANNER])
-				foundVirus++
-		for(var/ID in virus2)
-			if(ID in virusDB)
-				foundVirus = 1
-				break
 
 		var/image/holder = hud_list[STATUS_HUD]
 		var/image/holder2 = hud_list[STATUS_HUD_OOC]
@@ -34,7 +26,7 @@
 		else if(status_flags & XENO_HOST)
 			holder.icon_state = "hudxeno"
 			holder2.icon_state = "hudxeno"
-		else if(foundVirus)
+		else if(has_any_recorded_disease(src))
 			holder.icon_state = "hudill"
 		else if(has_brain_worms())
 			var/mob/living/simple_animal/borer/B = has_brain_worms()

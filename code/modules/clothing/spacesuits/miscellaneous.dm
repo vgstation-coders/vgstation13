@@ -15,7 +15,7 @@
 	item_state = "paramedic-eva"
 	desc = "A paramedic space suit. Used in the recovery of bodies from space."
 	species_restricted = list("exclude",VOX_SHAPED)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 //Space santa outfit suit
 /obj/item/clothing/head/helmet/space/santahat
@@ -29,7 +29,7 @@
 	desc = "Festive!"
 	icon_state = "santa"
 	item_state = "santa"
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	clothing_flags = ONESIZEFITSALL
 	allowed = list(/obj/item) //for stuffing exta special presents
 
@@ -50,38 +50,9 @@
 	item_state = "pirate"
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
-
-/obj/item/clothing/suit/space/ghettorig
-	name = "jury-rigged space-proof firesuit"
-	icon_state = "ghettorig"
-	item_state = "ghettorig"
-	desc = "A firesuit jury-rigged into being 'space-proof' somehow."
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
-	pressure_resistance = 4 * ONE_ATMOSPHERE
-	slowdown = 5 //just wear a firesuit instead if you want to go fast
-	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	heat_conductivity = 0 //thanks, blanket
-	gas_transfer_coefficient = 0.60
-	permeability_coefficient = 0.30
-
-/obj/item/clothing/head/hardhat/red/ghettorig //yes, it's actually just a hardhat
-	name = "jury-rigged space-proof fire helmet"
-	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
-	icon = 'icons/mob/head.dmi'
-	icon_state = "hardhat0_ghetto"
-	item_state = "hardhat0_ghetto"
-	_color = "ghetto"
-	pressure_resistance = 4 * ONE_ATMOSPHERE
-	body_parts_covered = FULL_HEAD|BEARD
-	heat_conductivity = 0
-	gas_transfer_coefficient = 0.01
-	permeability_coefficient = 0.01
-	eyeprot = 0
-	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/ancient //slightly better then an anomalist's space suit
 	name = "ancient space suit"
@@ -115,7 +86,7 @@
 	item_state = "clown-eva"
 	species_restricted = list("exclude",VOX_SHAPED)
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana, /obj/item/weapon/bananapeel, /obj/item/weapon/soap, /obj/item/weapon/reagent_containers/spray, /obj/item/weapon/tank)
-	slowdown = 1
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
@@ -132,3 +103,16 @@
 				footstep++
 		else
 			playsound(H, step_sound, 20, 1)
+
+//Prisoner Softsuits. Syndi-sprite merely cosmetic and has shit stats
+/obj/item/clothing/head/helmet/space/prison
+	name = "Prisoner Helmet"
+	icon_state = "syndicate-helm-orange"
+	item_state = "syndicate-helm-orange"
+	desc = "A Orange Space Helmet meant to provide minimal space protection."
+
+/obj/item/clothing/suit/space/prison
+	name = "Prisoner Space Suit"
+	icon_state = "syndicate-orange"
+	item_state = "syndicate-orange"
+	desc = "A Orange Space Suit meant to provide minimal space protection."

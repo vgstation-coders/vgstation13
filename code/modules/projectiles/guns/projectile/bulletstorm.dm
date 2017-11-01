@@ -30,5 +30,9 @@
 
 	Fire(A,user,params, "struggle" = struggle)
 
+/obj/item/weapon/gun/bulletstorm/can_discharge()
+	if(in_chamber)
+		return 1
+	
 /obj/item/weapon/gun/bulletstorm/process_chambered()
 	return in_chamber

@@ -106,16 +106,17 @@
 	if(!connected)
 		return
 	for(var/atom/movable/A as mob|obj in connected.loc)
-		if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
+		if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 			continue
 		if(!A.anchored)
 			A.forceMove(src)
 			if(ismob(A))
 				var/mob/M = A
 				if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
-					var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-					if(ghost && ghost.client)
-						to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
+					var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+					var/mob/ghostmob = ghost.get_top_transmogrification()
+					if(ghostmob)
+						to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
 							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
 
@@ -144,9 +145,10 @@
 /obj/structure/morgue/on_login(var/mob/M)
 	update()
 	if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
-		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-		if(ghost && ghost.client)
-			to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
+		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+		var/mob/ghostmob = ghost.get_top_transmogrification()
+		if(ghostmob)
+			to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
 				Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 
 /obj/structure/morgue/on_logout(var/mob/M)
@@ -328,8 +330,8 @@
 		if (locate(/obj/item/weapon/disk/nuclear) in inside)
 			to_chat(user, "<SPAN CLASS='warning'>You get the feeling that you shouldn't cremate one of the items in the cremator.</SPAN>")
 			return
-		if(locate(/mob/living/simple_animal/sculpture) in inside)
-			to_chat(user, "<span class='warning'>You try to toggle the crematorium on, but all you hear is scrapping stone.</span>")
+		if(locate(/mob/living/simple_animal/scp_173) in inside)
+			to_chat(user, "<span class='warning'>You try to toggle the crematorium on, but all you hear is scraping stone.</span>")
 			return
 		for (var/mob/M in viewers(src))
 			if(!M.hallucinating())

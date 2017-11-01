@@ -25,7 +25,7 @@
 		new /obj/item/clothing/shoes/brown(src)
 		new /obj/item/device/radio/headset/heads/captain(src)
 		new /obj/item/clothing/gloves/captain(src)
-		new /obj/item/clothing/shoes/magboots(src)
+		new /obj/item/clothing/shoes/magboots/captain(src)
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/clothing/suit/armor/captain(src)
 		new /obj/item/weapon/melee/telebaton(src)
@@ -201,7 +201,10 @@
 		new /obj/item/weapon/grenade/flashbang(src)
 		new /obj/item/weapon/melee/baton/loaded(src)
 		new /obj/item/weapon/gun/energy/taser(src)
-		new /obj/item/clothing/glasses/sunglasses/sechud(src)
+		if(prob(50))
+			new /obj/item/clothing/glasses/sunglasses/sechud/prescription(src)
+		else
+			new /obj/item/clothing/glasses/sunglasses/sechud(src)
 		new /obj/item/taperoll/police(src)
 		new /obj/item/device/hailer(src) //wonder if vg would spam this
 		new /obj/item/clothing/gloves/black(src)
@@ -273,6 +276,8 @@
 		new /obj/item/clothing/accessory/holster/handgun/wornout(src)
 		new /obj/item/device/gps/secure(src)
 		new /obj/item/binoculars(src)
+		new /obj/item/weapon/storage/box/surveillance(src)
+		new /obj/item/device/handtv(src)
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()

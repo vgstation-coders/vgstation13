@@ -150,6 +150,9 @@
 			observer.forceMove(O.loc)
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
+			// Has to be done here so we can get our random icon.
+			if(client.prefs.be_random_body)
+				client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
 			client.prefs.update_preview_icon(1)
 			observer.icon = client.prefs.preview_icon
 			observer.alpha = 127
@@ -325,18 +328,13 @@
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
-	job_master.EquipRank(character, rank, 1)					//equips the human
-	EquipCustomItems(character)
 
 	// TODO:  Job-specific latejoin overrides.
 	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
-	//Give them their fucking wheelchair where they spawn instead of inside of the splash screen
-	var/datum/organ/external/left_leg = character.get_organ(LIMB_LEFT_FOOT)
-	var/datum/organ/external/right_leg = character.get_organ(LIMB_RIGHT_FOOT)
 
-	if( (!left_leg || left_leg.status & ORGAN_DESTROYED) && (!right_leg || right_leg.status & ORGAN_DESTROYED) ) //If the character is missing both of his feet
-		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(character.loc)
-		W.buckle_mob(character,character)
+	job_master.EquipRank(character, rank, 1)					//equips the human
+	EquipCustomItems(character)
+
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
@@ -438,8 +436,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			new_character.add_language("[client.prefs.language]")
 	if(ticker.random_players || appearance_isbanned(src)) //disabling ident bans for now
 		new_character.setGender(pick(MALE, FEMALE))
-		client.prefs.real_name = random_name(new_character.gender)
+		client.prefs.real_name = random_name(new_character.gender, new_character.species.name)
 		client.prefs.randomize_appearance_for(new_character)
+		client.prefs.flavor_text = ""
 	else
 		client.prefs.copy_to(new_character)
 
@@ -474,7 +473,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_DEAF)
 		new_character.dna.SetSEState(DEAFBLOCK,1,1)
 		new_character.sdisabilities |= DEAF
-		
+
 	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE

@@ -62,7 +62,7 @@
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
 
-#define APPRENTICE_PRICE 5
+#define APPRENTICE_PRICE Sp_BASE_PRICE
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
 	desc = "A magical contract binding an apprentice wizard to your service, using it will summon them to your side."
@@ -112,7 +112,7 @@
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
 
-	H.rightandwrong(0)
+	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
 
 //SUMMON MAGIC
@@ -128,8 +128,33 @@
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
 
-	H.rightandwrong(1)
+	H.rightandwrong("magic")
 	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
+
+//SUMMON SWORDS
+/datum/spellbook_artifact/summon_swords
+	name = "Summon Swords"
+	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
+	abbreviation = "SS"
+
+/datum/spellbook_artifact/summon_magic/can_buy()
+	//Can't summon swords during ragin' mages
+	return !ticker.mode.rage
+
+/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong("swords")
+	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
+
+/datum/spellbook_artifact/glow_orbs
+	name = "Bundle of glow orbs"
+	desc = "Useful for lighting up the dark so you can read more books, touch-sensitive to assign a user. Warning - Do not expose to electricity."
+	abbreviation = "GO"
+	spawned_items = list(/obj/item/weapon/glow_orb,\
+						/obj/item/weapon/glow_orb,\
+						/obj/item/weapon/glow_orb,\
+						)
 
 //SANTA BUNDLE
 

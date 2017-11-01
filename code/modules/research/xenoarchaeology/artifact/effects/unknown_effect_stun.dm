@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/stun
 	effecttype = "stun"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 
 /datum/artifact_effect/stun/New()
 	..()

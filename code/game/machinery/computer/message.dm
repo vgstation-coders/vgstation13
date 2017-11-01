@@ -7,14 +7,13 @@
 /obj/machinery/computer/message_monitor
 	name = "Message Monitor Console"
 	desc = "Used to Monitor the crew's messages, that are sent via PDA. Can also be used to view Request Console messages."
-	icon_state = "comm_logs"
-	var/hack_icon = "comm_logsc"
-	var/normal_icon = "comm_logs"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "message_monitor"
+	var/hack_icon = "message_monitor_hacked"
+	var/normal_icon = "message_monitor"
 	circuit = "/obj/item/weapon/circuitboard/message_monitor"
 	//Server linked to.
 	var/obj/machinery/message_server/linkedServer = null
-	//Sparks effect - For emag
-	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 	//Messages - Saves me time if I want to change something.
 	var/noserver = "<span class='alert'>ALERT: No server detected.</span>"
 	var/incorrectkey = "<span class='warning'>ALERT: Incorrect decryption key!</span>"
@@ -53,8 +52,7 @@
 			icon_state = hack_icon // An error screen I made in the computers.dmi
 			emagged = 1
 			screen = 2
-			spark_system.set_up(5, 0, src)
-			src.spark_system.start()
+			spark(src, 5, FALSE)
 			var/obj/item/weapon/paper/monitorkey/MK = new/obj/item/weapon/paper/monitorkey
 			MK.forceMove(src.loc)
 			// Will help make emagging the console not so easy to get away with.
@@ -458,7 +456,7 @@
 									var/mob/living/carbon/human/H = customrecepient.loc
 									to_chat(H, "[bicon(customrecepient)] <b>Message from [customsender] ([customjob]), </b>\"[custommessage]\" (<a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)")
 
-								log_pda("[usr] (PDA: [customsender]) sent \"[custommessage]\" to [customrecepient.owner]")
+								log_pda("[key_name(usr)] (PDA: [customsender]) sent \"[custommessage]\" to [customrecepient.owner]")
 								customrecepient.overlays.len = 0
 								customrecepient.overlays += image('icons/obj/pda.dmi', "pda-r")
 						//Sender is faking as someone who exists
@@ -473,7 +471,7 @@
 									var/mob/living/carbon/human/H = customrecepient.loc
 									to_chat(H, "[bicon(customrecepient)] <b>Message from [PDARec.owner] ([customjob]), </b>\"[custommessage]\" (<a href='byond://?src=\ref[customrecepient];choice=Message;skiprefresh=1;target=\ref[PDARec]'>Reply</a>)")
 
-								log_pda("[usr] (PDA: [PDARec.owner]) sent \"[custommessage]\" to [customrecepient.owner]")
+								log_pda("[key_name(usr)] (PDA: [PDARec.owner]) sent \"[custommessage]\" to [customrecepient.owner]")
 								customrecepient.overlays.len = 0
 								customrecepient.overlays += image('icons/obj/pda.dmi', "pda-r")
 						//Finally..

@@ -23,7 +23,7 @@
 			step_towards(src,target)
 			sleep(MISSILE_SPEED)
 
-/obj/item/projectile/missile/Bump(atom/A)
+/obj/item/projectile/missile/to_bump(atom/A)
 	spawn(0)
 		if(istype(A,/obj/effect/meteor))
 			del(A)
@@ -60,7 +60,6 @@
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 50
-	var/datum/effect/effect/system/spark_spread/spark_system
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
@@ -71,9 +70,6 @@
 	var/list/fired_missiles
 
 /obj/machinery/meteor_battery/New()
-	spark_system = new /datum/effect/effect/system/spark_spread
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
 	fired_missiles = new/list()
 //	targets = new
 	..()
@@ -218,7 +214,7 @@
 	src.health -= Proj.damage
 	..()
 	if(prob(45) && Proj.damage > 0)
-		src.spark_system.start()
+		spark(src, 5, FALSE)
 	if (src.health <= 0)
 		src.die()
 	return
@@ -226,7 +222,7 @@
 /obj/machinery/meteor_battery/attackby(obj/item/weapon/W, mob/user)//I can't believe no one added this before/N
 	..()
 	playsound(src.loc, 'sound/weapons/smash.ogg', 60, 1)
-	src.spark_system.start()
+	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
 	if (src.health <= 0)
 		src.die()

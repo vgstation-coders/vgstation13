@@ -7,7 +7,7 @@
 	var/target_layer = PIPING_LAYER_DEFAULT
 	anchored = 1.0
 	power_channel = ENVIRON
-	var/frequency = 0
+	var/frequency = 1439
 	var/id_tag
 	use_power = 1
 	idle_power_usage = 2
@@ -72,7 +72,7 @@
 	else
 		icon_state = "meter4"
 
-	if(frequency)
+	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
 		if(!radio_connection)

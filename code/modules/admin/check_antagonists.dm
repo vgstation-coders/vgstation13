@@ -4,18 +4,8 @@
 
 		dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
 			Round Duration: <B>[round(world.time / 36000)]:[add_zero(world.time / 600 % 60, 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
-			<B>Emergency shuttle</B><BR>"}
-		if (!emergency_shuttle.online)
-			dat += "<a href='?src=\ref[src];call_shuttle=1'>Call Shuttle</a><br>"
-		else
-			var/timeleft = emergency_shuttle.timeleft()
-			switch(emergency_shuttle.location)
-				if(0)
+			<A HREF='?src=\ref[src];emergency_shuttle_panel=1'><B>Emergency Shuttle Panel</B></A><BR>"}
 
-					dat += {"ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>
-						<a href='?src=\ref[src];call_shuttle=2'>Send Back</a><br>"}
-				if(1)
-					dat += "ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
 		dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
 		if(ticker.mode.syndicates.len)
 			dat += "<br><table cellspacing=5><tr><td><B>Syndicates</B></td><td></td></tr>"
@@ -279,7 +269,7 @@
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
 
 		if(ticker.mode.ert.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>ERT</B></td><td></td><td></td></tr>"
+			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_ERT]</B></td><td></td><td></td></tr>"
 			for(var/datum/mind/ert in ticker.mode.ert)
 				var/mob/M = ert.current
 				if(M)
@@ -290,9 +280,14 @@
 				else
 					dat += "<tr><td><i>Emergency Responder not found!</i></td></tr>"
 			dat += "</table>"
+			dat += "<br><B>ERT Objectives:</B>"
+			var/datum/striketeam/team = sent_strike_teams[TEAM_ERT]
+			var/objective_count = 1
+			for(var/datum/objective/objective in team.objectives)
+				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
 
 		if(ticker.mode.deathsquad.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Deathsquad</B></td><td></td><td></td></tr>"
+			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_DEATHSQUAD]</B></td><td></td><td></td></tr>"
 			for(var/datum/mind/deathsquad in ticker.mode.deathsquad)
 				var/mob/M = deathsquad.current
 				if(M)
@@ -303,6 +298,47 @@
 				else
 					dat += "<tr><td><i>Death Commando not found!</i></td></tr>"
 			dat += "</table>"
+			dat += "<br><B>Deathsquad Objectives:</B>"
+			var/datum/striketeam/team = sent_strike_teams[TEAM_DEATHSQUAD]
+			var/objective_count = 1
+			for(var/datum/objective/objective in team.objectives)
+				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
+
+		if(ticker.mode.elite_syndie.len > 0)
+			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_ELITE_SYNDIE]</B></td><td></td><td></td></tr>"
+			for(var/datum/mind/elite_syndie in ticker.mode.elite_syndie)
+				var/mob/M = elite_syndie.current
+				if(M)
+
+					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+
+				else
+					dat += "<tr><td><i>Elite Squadie not found!</i></td></tr>"
+			dat += "</table>"
+			dat += "<br><B>Elite Syndie Objectives:</B>"
+			var/datum/striketeam/team = sent_strike_teams[TEAM_ELITE_SYNDIE]
+			var/objective_count = 1
+			for(var/datum/objective/objective in team.objectives)
+				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
+
+		if(ticker.mode.custom_team.len > 0)
+			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_CUSTOM]</B></td><td></td><td></td></tr>"
+			for(var/datum/mind/custom_team in ticker.mode.custom_team)
+				var/mob/M = custom_team.current
+				if(M)
+
+					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+
+				else
+					dat += "<tr><td><i>Team member not found!</i></td></tr>"
+			dat += "</table>"
+			dat += "<br><B>Team Objectives:</B>"
+			var/datum/striketeam/team = sent_strike_teams[TEAM_CUSTOM]
+			var/objective_count = 1
+			for(var/datum/objective/objective in team.objectives)
+				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
 
 		dat += "</body></html>"
 		usr << browse(dat, "window=roundstatus;size=440x500")

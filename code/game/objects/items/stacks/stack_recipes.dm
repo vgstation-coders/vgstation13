@@ -89,6 +89,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("stool",              /obj/item/weapon/stool												   ),
 		new/datum/stack_recipe/chair("bar stool",          /obj/item/weapon/stool/bar                                              ),
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
@@ -157,6 +158,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("meat spike",      /obj/structure/kitchenspike,                    2, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("grenade casing",  /obj/item/weapon/grenade/chem_grenade                                                       ),
 	new/datum/stack_recipe("desk bell shell", /obj/item/device/deskbell_assembly,             2                                           ),
+	new/datum/stack_recipe("bunsen burner",   /obj/machinery/bunsen_burner,                   4, time = 50, one_per_turf = 1, on_floor = 1),
 	null,
 	new/datum/stack_recipe_list("mounted frames", list(
 		new/datum/stack_recipe("apc frame",                 /obj/item/mounted/frame/apc_frame,            2                                           ),
@@ -200,7 +202,7 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 							WOOD RECIPES
 ==================================================================== */
 var/list/datum/stack_recipe/wood_recipes = list (
-	new/datum/stack_recipe("clipboard",			/obj/item/weapon/clipboard,				1													),
+	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,	1													),
 	new/datum/stack_recipe("wooden sandals",	/obj/item/clothing/shoes/sandal																),
 	new/datum/stack_recipe("wood floor tile",	/obj/item/stack/tile/wood,				1,4,20												),
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
@@ -221,27 +223,29 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50),
+	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50)
 	)
 
 /* =========================================================================
 							CARDBOARD RECIPES
 ========================================================================= */
 var/list/datum/stack_recipe/cardboard_recipes = list (
-	new/datum/stack_recipe("box",				/obj/item/weapon/storage/box							),
-	new/datum/stack_recipe("large box",			/obj/item/weapon/storage/box/large,					4	),
-	new/datum/stack_recipe("light tubes box",	/obj/item/weapon/storage/box/lights/tubes				),
-	new/datum/stack_recipe("light bulbs box",	/obj/item/weapon/storage/box/lights/bulbs				),
-	new/datum/stack_recipe("mouse traps box",	/obj/item/weapon/storage/box/mousetraps					),
-	new/datum/stack_recipe("candle box",		/obj/item/weapon/storage/fancy/candle_box/empty			),
-	new/datum/stack_recipe("crayon box",		/obj/item/weapon/storage/fancy/crayons/empty			),
-	new/datum/stack_recipe("cardborg suit",		/obj/item/clothing/suit/cardborg,					3	),
-	new/datum/stack_recipe("cardborg helmet",	/obj/item/clothing/head/cardborg						),
-	new/datum/stack_recipe("pizza box",			/obj/item/pizzabox										),
-	new/datum/stack_recipe("folder",			/obj/item/weapon/folder									),
-	new/datum/stack_recipe("flare box",			/obj/item/weapon/storage/fancy/flares/empty				),
-	new/datum/stack_recipe("donut box",			/obj/item/weapon/storage/fancy/donut_box/empty			),
-	new/datum/stack_recipe("eggbox",			/obj/item/weapon/storage/fancy/egg_box/empty			),
-	new/datum/stack_recipe("paper bin",			/obj/item/weapon/paper_bin/empty						),
+	new/datum/stack_recipe("box",                           /obj/item/weapon/storage/box                            ),
+	new/datum/stack_recipe("large box",                     /obj/item/weapon/storage/box/large,                  4  ),
+	new/datum/stack_recipe("light tubes box",               /obj/item/weapon/storage/box/lights/tubes               ),
+	new/datum/stack_recipe("light bulbs box",               /obj/item/weapon/storage/box/lights/bulbs               ),
+	new/datum/stack_recipe("mouse traps box",               /obj/item/weapon/storage/box/mousetraps                 ),
+	new/datum/stack_recipe("candle box",                    /obj/item/weapon/storage/fancy/candle_box/empty         ),
+	new/datum/stack_recipe("crayon box",                    /obj/item/weapon/storage/fancy/crayons/empty            ),
+	new/datum/stack_recipe("cardborg suit",                 /obj/item/clothing/suit/cardborg,                    3  ),
+	new/datum/stack_recipe("cardborg helmet",               /obj/item/clothing/head/cardborg                        ),
+	new/datum/stack_recipe("pizza box",                     /obj/item/pizzabox                                      ),
+	new/datum/stack_recipe("folder",                        /obj/item/weapon/folder                                 ),
+	new/datum/stack_recipe("flare box",                     /obj/item/weapon/storage/fancy/flares/empty             ),
+	new/datum/stack_recipe("donut box",                     /obj/item/weapon/storage/fancy/donut_box/empty          ),
+	new/datum/stack_recipe("eggbox",                        /obj/item/weapon/storage/fancy/egg_box/empty            ),
+	new/datum/stack_recipe("paper bin",                     /obj/item/weapon/paper_bin/empty                        ),
+	new/datum/stack_recipe("empty recharge pack",           /obj/structure/vendomatpack/custom,                  4  ),
 	)
 
 /* ========================================================================

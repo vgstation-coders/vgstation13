@@ -2,14 +2,14 @@
 	set category = "Debug"
 	set name = "Show Air Report"
 
-	/*(!master_controller || !air_master)
-		alert(usr,"Master_controller or air_master not found.","Air Report")
+	/*(!master_controller || !SSair)
+		alert(usr,"Master_controller or SSair not found.","Air Report")
 		return 0
 
 	var/active_groups = 0
 	var/inactive_groups = 0
 	var/active_tiles = 0
-	for(var/datum/air_group/group in air_master.air_groups)
+	for(var/datum/air_group/group in SSair.air_groups)
 		if(group.group_processing)
 			active_groups++
 		else
@@ -22,20 +22,20 @@
 
 	var/output = {"<B>AIR SYSTEMS REPORT</B><HR>
 <B>General Processing Data</B><BR>
-<B># of Groups:</B> [air_master.air_groups.len]<BR>
+<B># of Groups:</B> [SSair.air_groups.len]<BR>
 ---- <I>Active:</I> [active_groups]<BR>
 ---- <I>Inactive:</I> [inactive_groups]<BR>
 -------- <I>Tiles:</I> [active_tiles]<BR>
-<B># of Active Singletons:</B> [air_master.active_singletons.len]<BR>
+<B># of Active Singletons:</B> [SSair.active_singletons.len]<BR>
 <BR>
 <B>Special Processing Data</B><BR>
 <B>Hotspot Processing:</B> [hotspots]<BR>
-<B>High Temperature Processing:</B> [air_master.active_super_conductivity.len]<BR>
-<B>High Pressure Processing:</B> [air_master.high_pressure_delta.len] (not yet implemented)<BR>
+<B>High Temperature Processing:</B> [SSair.active_super_conductivity.len]<BR>
+<B>High Pressure Processing:</B> [SSair.high_pressure_delta.len] (not yet implemented)<BR>
 <BR>
 <B>Geometry Processing Data</B><BR>
-<B>Group Rebuild:</B> [air_master.groups_to_rebuild.len]<BR>
-<B>Tile Update:</B> [air_master.tiles_to_update.len]<BR>
+<B>Group Rebuild:</B> [SSair.groups_to_rebuild.len]<BR>
+<B>Tile Update:</B> [SSair.tiles_to_update.len]<BR>
 "}
 
 	usr << browse(output,"window=airreport")
@@ -155,11 +155,11 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(!air_master)
+	if(!SSair)
 		to_chat(usr, "Cannot find air_system")
 		return
 	var/datum/air_group/dead_groups = list()
-	for(var/datum/air_group/group in air_master.air_groups)
+	for(var/datum/air_group/group in SSair.air_groups)
 		if (!group.group_processing)
 			dead_groups += group
 	var/datum/air_group/dest_group = pick(dead_groups)
@@ -178,7 +178,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(!air_master)
+	if(!SSair)
 		to_chat(usr, "Cannot find air_system")
 		return
 

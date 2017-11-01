@@ -36,10 +36,11 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
 		return
-	if(!gibbed)
-		emote("deathgasp")
 	stat = DEAD
 	update_canmove()
+	if(!gibbed)
+		emote("deathgasp")
+		updateicon() //Don't call updateicon if you're already null.
 	if(camera)
 		camera.status = 0
 
@@ -50,10 +51,7 @@
 			RC.upgrade_finished = -1
 		RC.go_out()
 
-	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-	see_in_dark = 8
-	see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	updateicon()
+	handle_sensor_modes()
 
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)

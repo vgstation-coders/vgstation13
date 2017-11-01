@@ -28,10 +28,35 @@
 
 mob/proc/isincrit()
 	return 0
-	
-/mob/proc/drag_damage()
+
+mob/proc/get_heart()
+	return null
+
+/mob/proc/get_lungs()
+	return null
+
+/mob/proc/get_liver()
+	return null
+
+/mob/proc/get_kidneys()
+	return null
+
+/mob/proc/get_appendix()
+	return null
+
+mob/proc/remove_internal_organ()
+	return null
+
+/mob/proc/get_broken_organs()
 	return list()
-	
+
+/mob/proc/get_bleeding_organs()
+	return list()
+
+//Helper proc for do_after. Checks if the user is holding 'held_item' in his active arm. Return 0 to stop the do_after
+/mob/proc/do_after_hand_check(held_item)
+	return (get_active_hand() == held_item)
+
 /mob/dead/observer/get_screen_colour()
 	return default_colour_matrix
 
@@ -94,7 +119,6 @@ mob/proc/isincrit()
 		if(O.check_rights(R_ADMIN|R_FUN))
 			return 1
 	return 0
-
 
 /proc/canGhostRead(var/mob/A, var/obj/target, var/flags=PERMIT_ALL)
 	if(isAdminGhost(A))
@@ -382,8 +406,12 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 		return 1
 
-	if(full_body && (src.back || src.wear_mask))
-		return 1
+	if(full_body)
+		for(var/obj/item/I in get_equipped_items())
+			if(I.abstract)
+				continue
+
+			return 1
 
 	return 0
 
@@ -500,3 +528,17 @@ proc/is_blind(A)
 
 /mob/proc/get_survive_objective()
 	return new /datum/objective/survive
+
+/**
+* Honor check
+* Returns TRUE if user is BOMBERMAN, HIGHLANDER...
+* Respects honorable.
+*/
+/proc/is_honorable(var/mob/living/user, var/honorable = HONORABLE_ALL)
+	if(istype(user))
+		if(user.mind)
+			if(user.mind.special_role == BOMBERMAN && (honorable & HONORABLE_BOMBERMAN))
+				return TRUE
+			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
+				return TRUE
+	return FALSE

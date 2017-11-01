@@ -77,6 +77,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				blood_volume *= 0.8
 			else if(heart.damage >= heart.min_bruised_damage && heart.damage < heart.min_broken_damage)
 				blood_volume *= 0.6
+			else if(heart.damage >= heart.min_broken_damage)
+				blood_volume *= 0.2 //no heart, no blood
 
 		vessel.update_total()
 

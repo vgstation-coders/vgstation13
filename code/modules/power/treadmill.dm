@@ -1,7 +1,7 @@
 //The ultimate in green energy, a treadmill generates very low power each time it is bumped, which also updates its icon
 //to move. You can still optimize this, though, by making yourself a workout machine -- be full, have sugar,
 //have sports drink, have a high movespeed, have HULK as a mutation.
-//Doesn't consume any idle power, you must Bump() it from its own square. Bump works like a window.
+//Doesn't consume any idle power, you must to_bump() it from its own square. Bump works like a window.
 //Using a treadmill uses up hunger faster
 
 #define DEFAULT_BUMP_ENERGY 400
@@ -86,13 +86,9 @@
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			powerwalk(mover)
-			return !density
+	if((flags & ON_BORDER) && (mover.dir == dir))
+		powerwalk(mover)
+		return !density
 	return 1
 
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -105,8 +101,10 @@
 	else
 		return 1
 
-/obj/machinery/power/treadmill/wrenchAnchor(mob/user)
-	..()
+/obj/machinery/power/treadmill/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
 	if(anchored)
 		connect_to_network()
 	else

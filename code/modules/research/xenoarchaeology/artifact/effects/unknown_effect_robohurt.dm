@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/robohurt
 	effecttype = "robohurt"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 
 /datum/artifact_effect/robohurt/New()
 	..()

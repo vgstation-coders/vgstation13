@@ -193,6 +193,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		SS.queued_time = 0
 		SS.queue_next = null
 		SS.queue_prev = null
+		SS.state = SS_IDLE
 		if (SS.flags & SS_TICKER)
 			tickersubsystems += SS
 			timer += world.tick_lag * rand(1, 5)
@@ -301,7 +302,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		if (!thing)
 			subsystemstocheck -= thing
 		SS = thing
-		if (SS.queued_time) //already in the queue
+		if (SS.state != SS_IDLE) //already in the queue
 			continue
 		if (SS.can_fire <= 0)
 			continue
@@ -310,6 +311,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		SS_flags = SS.flags
 		if (SS_flags & SS_NO_FIRE)
 			subsystemstocheck -= SS
+			continue
 		if (!(SS_flags & SS_TICKER) && (SS_flags & SS_KEEP_TIMING) && SS.last_fire + (SS.wait * 0.75) > world.time)
 			continue
 
@@ -380,19 +382,23 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 				ran_non_ticker = TRUE
 			ran = TRUE
 			tick_usage = world.tick_usage
-			queue_node_paused = queue_node.paused
-			queue_node.paused = FALSE
+			queue_node_paused = (queue_node.state == SS_PAUSED || queue_node.state == SS_PAUSING)
 			last_type_processed = queue_node
 
-			queue_node.fire(queue_node_paused)
+			queue_node.state = SS_RUNNING
 
+			var/state = queue_node.ignite(queue_node_paused)
+			if (state == SS_RUNNING)
+				state = SS_IDLE
 			current_tick_budget -= queue_node_priority
 			tick_usage = world.tick_usage - tick_usage
 
 			if (tick_usage < 0)
 				tick_usage = 0
 
-			if (queue_node.paused)
+			queue_node.state = state
+
+			if (state == SS_PAUSED)
 				queue_node.paused_ticks++
 				queue_node.paused_tick_usage += tick_usage
 				queue_node = queue_node.queue_next
@@ -461,7 +467,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 		SS.queue_prev = null
 		SS.queued_priority = 0
 		SS.queued_time = 0
-		SS.paused = 0
+		SS.state = SS_IDLE
 	if (queue_head && !istype(queue_head))
 		world.log << "MC: SoftReset: Found bad data in subsystem queue, queue_head = '[queue_head]'"
 	queue_head = null

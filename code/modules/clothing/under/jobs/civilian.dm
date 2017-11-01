@@ -1,4 +1,11 @@
 //Alphabetical order of civilian jobs.
+/obj/item/clothing/under/rank/barber
+	desc = "This outfit comes in packs of four."
+	name = "barber's uniform"
+	icon_state = "barber"
+	item_state = "barber"
+	_color = "barber"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/bartender
 	desc = "It looks like it could use some more flair."
@@ -223,3 +230,11 @@
 	_color = "miner"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/under/bridgeofficer
+	name = "bridge officer uniform"
+	desc = "A jumpsuit for those ranked high enough to stand at the bridge, but not high enough to touch any buttons."
+	icon_state = "bridgeofficer"
+	item_state = "bridgeofficer"
+	_color = "bridgeofficer"
+	clothing_flags = ONESIZEFITSALL

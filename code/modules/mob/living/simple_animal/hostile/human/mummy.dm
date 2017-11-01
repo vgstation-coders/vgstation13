@@ -23,11 +23,12 @@
 	maxHealth = 70
 
 	move_to_delay = 20
-	speed = 4
+	speed = 5
 
 	melee_damage_lower = 3
 	melee_damage_upper = 6
 	stat_attack = UNCONSCIOUS //Attack unconscious dudes too
+	mob_property_flags = MOB_UNDEAD
 
 	faction = "mummy"
 	corpse = /obj/effect/landmark/corpse/mummy
@@ -176,7 +177,7 @@
 	ranged = 1
 
 	move_to_delay = 15 //Faster than normal mummies
-	speed = 2
+	speed = 3
 
 	ranged_message = "invokes a powerful curse"
 	stat_attack = 0 //Only attack living dudes

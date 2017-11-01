@@ -28,10 +28,10 @@
 		environment = loc.return_air()
 
 	if (stat != DEAD) //still breathing
-		//Is not a Diona Nymph or Rock - Snowflake Code
-		if(!istype(src,/mob/living/carbon/monkey/diona) && !istype(src,/mob/living/carbon/monkey/rock))
+		//Lungs required beyond this point
+		if(flag != NO_BREATHE)
 			//First, resolve location and get a breath
-			if(air_master.current_cycle%4==2)
+			if(SSair.current_cycle%4==2)
 				//Only try to take a breath every 4 seconds, unless suffocating
 				breathe()
 			else //Still give containing object the chance to interact

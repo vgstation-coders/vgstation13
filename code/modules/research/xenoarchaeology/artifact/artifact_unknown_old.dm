@@ -157,7 +157,7 @@
 		if (istype(W, /obj/item/weapon/lighter) && W:lit)
 			src.Artifact_Activate()
 
-	//Bump(atom/A)
+	//to_bump(atom/A)
 
 /obj/machinery/artifact/Bumped(M as mob|obj)
 	if (istype(M,/obj/item/weapon/) && my_effect.trigger == "force" && M:throwforce >= 10)

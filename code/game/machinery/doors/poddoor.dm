@@ -117,22 +117,24 @@ var/list/poddoors = list()
 			if(prob(80))
 				qdel(src)
 			else
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(2, 1, src)
-				s.start()
+				spark(src, 2)
 		if(2.0)
 			if(prob(20))
 				qdel(src)
 			else
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(2, 1, src)
-				s.start()
+				spark(src, 2)
 		if(3.0)
 			if(prob(80))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(2, 1, src)
-				s.start()
+				spark(src, 2)
 	return
+
+/obj/machinery/door/poddoor/admin
+	name = "Explosion-proof Podlock"
+	desc = "Why it no open!!!"
+	explosion_block = 50
+	penetration_dampening = 200
+
+/obj/machinery/door/poddoor/admin/ex_act(severity)
 
 /*
 /obj/machinery/door/poddoor/two_tile_hor/open()

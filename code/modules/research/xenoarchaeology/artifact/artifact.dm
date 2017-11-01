@@ -20,6 +20,7 @@
 	5;/obj/item/changeling_vial,\
 	10;/obj/structure/constructshell,\
 	25;/obj/machinery/power/supermatter,\
+	100;/obj/item/clothing/gloves/warping_claws,\
 	100;/obj/machinery/auto_cloner,\
 	100;/obj/structure/bed/chair/vehicle/gigadrill,\
 	100;/obj/mecha/working/hoverpod,\
@@ -71,12 +72,7 @@
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
 		user.visible_message("<span class='notice>[user] extends [P] towards [src].","<span class='notice'>You extend [P] towards [src].</span></span>")
-		busy = 1
-		if(do_after(user, src, 40))
-			busy = 0
-			to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*src.excavation_level]cm.</span>")
-		else
-			busy = 0
+		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*src.excavation_level]cm.</span>")
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))

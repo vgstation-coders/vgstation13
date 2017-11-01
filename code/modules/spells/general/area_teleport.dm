@@ -70,6 +70,8 @@
 	if(!success)
 		user.forceMove(pick(L))
 
+	log_game("[key_name(user)] teleported to [thearea.name] using the teleportation spell.")
+
 /spell/area_teleport/after_cast()
 	return
 

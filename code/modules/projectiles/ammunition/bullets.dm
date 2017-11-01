@@ -68,6 +68,23 @@
 	projectile_type = "/obj/item/projectile/bullet/fourtyfive/rubber"
 	icon_state = "s-r-casing"
 
+/obj/item/ammo_casing/c380auto
+	desc = "A .380AUTO bullet casing."
+	caliber = ".380AUTO"
+	projectile_type = "/obj/item/projectile/bullet/auto380"
+
+/obj/item/ammo_casing/c380auto/practice
+	desc = "A .380AUTO practice bullet casing."
+	caliber = ".380AUTO"
+	projectile_type = "/obj/item/projectile/bullet/auto380/practice"
+	icon_state = "s-p-casing"
+
+/obj/item/ammo_casing/c380auto/rubber
+	desc = "A .380AUTO rubber bullet casing."
+	caliber = ".380AUTO"
+	projectile_type = "/obj/item/projectile/bullet/auto380/rubber"
+	icon_state = "s-r-casing"
+	
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
 	caliber = "12mm"

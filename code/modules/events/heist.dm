@@ -87,6 +87,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.set_species("Vox")
 		vox.fully_replace_character_name(vox.real_name, vox.generate_name())
 		//vox.languages = HUMAN // Removing language from chargen.
+		vox.flavor_text = ""
 		vox.add_language(LANGUAGE_VOX)
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"
@@ -155,11 +156,15 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	objs += new /datum/objective/heist/inviolate_crew
 	objs += new /datum/objective/heist/inviolate_death */
 
-	if(prob(25)) // This is an asspain.
-		raid_objectives += new /datum/objective/heist/kidnap
-	raid_objectives += new /datum/objective/steal/heist
-	//raid_objectives += new /datum/objective/steal/salvage
-	raid_objectives += new /datum/objective/heist/inviolate_crew
+
+	if(prob(50))
+		raid_objectives += new/datum/objective/heist/kidnap
+	else
+		raid_objectives += new/datum/objective/steal/heist_easy
+		raid_objectives += new/datum/objective/steal/heist_easy
+	raid_objectives += new/datum/objective/steal/heist_hard
+	//raid_objectives += new/datum/objective/steal/salvage
+	raid_objectives += new/datum/objective/heist/inviolate_crew
 	raid_objectives += new /datum/objective/heist/inviolate_death
 
 	for(var/datum/objective/heist/O in raid_objectives)

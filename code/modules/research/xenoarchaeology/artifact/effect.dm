@@ -2,7 +2,7 @@
 //override procs in children as necessary
 /datum/artifact_effect
 	var/effecttype = "unknown"		//purely used for admin checks ingame, not needed any more
-	var/effect = EFFECT_TOUCH
+	var/effect = EFFECT_TOUCH //Define this as a specific value if the effect only supports that one, or a list of the supported values if it supports multiple.
 	var/effectrange = 4
 	var/datum/artifact_trigger/trigger
 	var/atom/holder
@@ -27,7 +27,7 @@
 /datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0)
 	..()
 	holder = location
-	effect = rand(0,MAX_EFFECT)
+	effect = pick(effect) //If effect is defined as a list, pick one of the options from the list. If it's defined specifically, pick that.
 
 	//this will be replaced by the excavation code later, but it's here just in case
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
@@ -77,7 +77,7 @@
 			if(activated)
 				display_msg = pick("rumbles slightly for a moment!","begins to shake!","blinks slightly!","starts to whirr!","sparks!")
 			else
-				display_msg = pick("quietens down!","settles to a stop!","lets out a single beep!","goes dark!")
+				display_msg = pick("quiets down!","settles to a stop!","lets out a single beep!","goes dark!")
 			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 
@@ -108,6 +108,8 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	if(istype(H.wear_suit,/obj/item/clothing/suit/bio_suit/anomaly))
 		protected += 0.6
 	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/anomaly))
+		protected += 0.5
+	else if(istype(H.wear_suit,/obj/item/clothing/suit/storage/labcoat/rd))
 		protected += 0.5
 
 	if(istype(H.head,/obj/item/clothing/head/bio_hood/anomaly))

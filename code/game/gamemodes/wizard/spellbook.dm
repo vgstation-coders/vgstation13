@@ -10,15 +10,16 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/list/available_spells = list(
+	var/static/list/available_spells = list(
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
+	/spell/targeted/projectile/dumbfire/fireball/firebreath,
 	/spell/lightning,
 	/spell/aoe_turf/ring_of_fire,
 	/spell/aoe_turf/disable_tech,
 	/spell/aoe_turf/smoke,
 	/spell/targeted/genetic/blind,
-	/spell/targeted/subjugation,
+	/spell/targeted/disorient,
 	/spell/targeted/mind_transfer,
 	/spell/aoe_turf/conjure/forcewall,
 	/spell/aoe_turf/blink,
@@ -38,11 +39,42 @@
 	/spell/aoe_turf/conjure/pontiac,
 	/spell/aoe_turf/conjure/arcane_golem,
 	/spell/targeted/bound_object,
+	/spell/aoe_turf/conjure/snakes,
+	/spell/targeted/push,
+	/spell/targeted/feint,
+	/spell/targeted/fist,
+	/spell/aoe_turf/conjure/doppelganger,
 	/spell/noclothes
 	)
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/list/available_artifacts = list()
+	var/static/list/available_artifacts = list()
+
+	var/static/list/available_potions = list(
+		/obj/item/potion/healing = Sp_BASE_PRICE,
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
+		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
@@ -68,6 +100,9 @@
 
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
+
+/obj/item/weapon/spellbook/proc/get_available_potions()
+	return available_potions
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
@@ -189,6 +224,17 @@
 		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
 
+	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+
+	for(var/P in get_available_potions())
+		var/obj/item/potion/potion = P
+		var/potion_name = initial(potion.name)
+		var/potion_desc = initial(potion.desc)
+		var/potion_price = available_potions[P]
+
+		dat += "<strong>[potion_name]</strong> ([buy_href_link(P, potion_price, "buy for [potion_price] point\s")])<br>"
+		dat += "<em>[potion_desc]</em><br><br>"
+
 	dat += "</body>"
 
 	user << browse(dat, "window=spellbook;size=[book_window_size]")
@@ -284,6 +330,12 @@
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
+
+		else if(ispath(buy_type, /obj/item/potion))
+			if(buy_type in get_available_potions())
+				if(use(available_potions[buy_type]))
+					new buy_type(get_turf(usr))
+					feedback_add_details("wizard_spell_learned", "PT")
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
@@ -618,13 +670,13 @@
 		to_chat(user, "<span class = 'warning'>You feel like you've been pushing yourself too hard! </span>")
 		qdel(src)
 
-/obj/item/weapon/spellbook/oneuse/subjugate
-	spell = /spell/targeted/subjugation
-	spellname = "subjugation"
-	icon_state = "booksubjugate"
+/obj/item/weapon/spellbook/oneuse/disorient
+	spell = /spell/targeted/disorient
+	spellname = "disorient"
+	icon_state = "bookdisorient"
 	desc = "This book makes you feel dizzy."
 
-/obj/item/weapon/spellbook/oneuse/subjugate/recoil(mob/living/carbon/user as mob)
+/obj/item/weapon/spellbook/oneuse/disorient/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
 		user.reagents.add_reagent(RUM, 200)
 		to_chat(user, "<span class = 'warning'>You feel very drunk all of a sudden.</span>")
@@ -638,12 +690,12 @@
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		var/mob/living/carbon/human/h = user
+		var/mob/living/carbon/human/H = user
 		user.flash_eyes(visual = 1)
-		for(var/datum/organ/external/l_leg/E in h.organs)
+
+		for(var/datum/organ/external/E in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 			E.droplimb(1)
-		for(var/datum/organ/external/r_leg/E in h.organs)
-			E.droplimb(1)
+
 		to_chat(user, "<span class = 'warning'>Your legs fall off!</span>")
 		qdel(src)
 
@@ -742,3 +794,88 @@
 			sleep(1)
 			I.throw_at(user, 16, 2)
 			counter++
+
+/obj/item/weapon/spellbook/oneuse/arcane_golem
+	spell = /spell/aoe_turf/conjure/arcane_golem
+	spellname = "forge arcane golem"
+	icon_state = "bookgolem"
+	desc = "This book has several completely blank pages."
+
+/obj/item/weapon/spellbook/oneuse/firebreath
+	spell = /spell/targeted/projectile/dumbfire/fireball/firebreath
+	spellname = "fire breath"
+	icon_state = "bookfirebreath"
+	desc = "This book's pages are singed."
+
+/obj/item/weapon/spellbook/oneuse/firebreath/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You burst into flames!</span>")
+	user.adjust_fire_stacks(0.5)
+	user.IgniteMob()
+
+/obj/item/weapon/spellbook/oneuse/snakes
+	spell = /spell/aoe_turf/conjure/snakes
+	spellname = "become snakes"
+	icon_state = "booksnakes"
+	desc = "This book is bound in snake skin."
+
+/obj/item/weapon/spellbook/oneuse/snakes/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You transform into a snake!</span>")
+	user.transmogrify(/mob/living/simple_animal/cat/snek/wizard, TRUE)
+	spawn(600)
+		user.transmogrify()
+
+/obj/item/weapon/spellbook/oneuse/push
+	spell = /spell/targeted/push
+	spellname = "dimensional push"
+	icon_state = "bookpush"
+	desc = "This book seems like it moves away as you get closer to it."
+
+/obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
+	var/area/thearea = pick(areas)
+	var/list/L = list()
+	for(var/turf/T in get_area_turfs(thearea.type))
+		if(!T.density)
+			var/clear = 1
+			for(var/obj/O in T)
+				if(O.density)
+					clear = 0
+					break
+			if(clear)
+				L+=T
+	if(!L.len)
+		to_chat(user, "Oh wait, nothing happened.")
+		return
+
+	user.unlock_from()
+	var/attempt = null
+	var/success = 0
+	while(L.len)
+		attempt = pick(L)
+		success = user.Move(attempt)
+		if(!success)
+			L.Remove(attempt)
+		else
+			break
+	if(!success)
+		user.forceMove(pick(L))
+
+///// ANCIENT SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	spell = null
+	icon_state = "book"
+	desc = "A book of lost and forgotten knowledge"
+	spellname = "forgotten knowledge"
+
+/obj/item/weapon/spellbook/oneuse/ancient/New()
+	..()
+	spell = pick(possible_spells)
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal ancient knowledge!</span>")
+	user.gib()
+	qdel(src)
+
+

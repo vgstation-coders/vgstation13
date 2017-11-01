@@ -238,7 +238,6 @@ var/list/special_fruits = list()
 	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
 	if(inner_teleport_radius < 1)
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 
 	var/list/turfs = new/list()
 	//This could likely use some standardization but I have no idea how to not break it.
@@ -263,22 +262,18 @@ var/list/special_fruits = list()
 		return 0
 	switch(rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
 		if(1) //Teleports the person who threw the fruit
-			s.set_up(3, 1, M)
-			s.start()
+			spark(M)
 			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
 			M.forceMove(picked) //Send then to that location we picked previously
 			spawn()
-				s.set_up(3, 1, M)
-				s.start() //Two set of sparks, one before the teleport and one after. //Sure then ?
+				spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 		if(2) //Teleports the target instead.
-			s.set_up(3, 1, hit_atom)
-			s.start()
+			spark(hit_atom)
 			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
 			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
 				A.forceMove(picked) //And teleport them to the chosen location.
 				spawn()
-					s.set_up(3, 1, A)
-					s.start()
+					spark(A)
 	return 1
 
 
@@ -518,6 +513,7 @@ var/list/special_fruits = list()
 	filling_color = "#FA2863"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	slices_num = 5
+	storage_slots = 3
 	plantname = "watermelon"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
@@ -824,6 +820,7 @@ var/list/special_fruits = list()
 	desc = "A hard-shelled fruit with precious juice inside. Even the shell may find use, if properly sliced."
 	slice_path = /obj/item/stack/sheet/wood
 	slices_num = 1
+	storage_slots = 1 //seems less intended and more like an artifact of old code where if something was sliceable, it should also hold items inside, but keeping consistency
 	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"
@@ -900,37 +897,23 @@ var/list/special_fruits = list()
 	set category = "Object"
 	set src in range(1)
 
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
+	var/mob/user = usr
+	if(!user.Adjacent(src))
+		return
+	if(user.isUnconscious())
+		to_chat(user, "You can't do that while unconscious.")
 		return
 
-	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+	if(!switching)
+		randomize()
+	else
+		getnofruit(user, user.get_active_hand())
 
-	randomize()
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/AltClick(mob/user)
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
-	if(switching)
-		if(!current_path)
-			return
-		switching = 0
-		var/N = rand(1,3)
-		if(get_turf(user))
-			switch(N)
-				if(1)
-					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
-				if(2)
-					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
-				if(3)
-					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
-		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
-			user.put_in_hands(I)
-		else
-			new current_path(get_turf(src))
-		qdel(src)
-
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
 	switching = 1
@@ -945,3 +928,83 @@ var/list/special_fruits = list()
 				counter = 0
 				available_fruits = shuffle(available_fruits)
 			counter++
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/getnofruit(mob/user, obj/item/weapon/W)
+	if(!switching || !current_path)
+		return
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+	switching = 0
+	var/N = rand(1,3)
+	if(get_turf(user))
+		switch(N)
+			if(1)
+				playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
+	if(W)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+	else
+		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
+	if(src.loc == user)
+		user.drop_item(src, force_drop = 1)
+		var/I = new current_path(get_turf(user))
+		user.put_in_hands(I)
+	else
+		new current_path(get_turf(src))
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado
+	name = "avocado"
+	desc = "An unusually fatty fruit containing a single large seed."
+	icon_state = "avocado"
+	filling_color = "#EAE791"
+	plantname = "avocado"
+	var/cant_eat_msg = "'s skin is much too tough to chew."
+	var/cut = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/can_consume(mob/living/carbon/eater, mob/user)
+	if(cant_eat_msg)
+		to_chat(user, "<span class='notice'>This [name][cant_eat_msg]</span>")
+	else
+		return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(W.sharpness_flags & SHARP_BLADE)
+		if(cut && cant_eat_msg)
+			user.visible_message("\The [user] removes the pit from \the [src] with \the [W].","You remove the pit from \the [src] with \the [W].")
+			new /obj/item/seeds/avocadoseed/whole(get_turf(user))
+			if(loc == user)
+				if(src in user.held_items)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/P = new(get_turf(src))
+					user.put_in_hands(P)
+					qdel(src)
+					return
+			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src))
+			qdel(src)
+		else if(!cut)
+			user.visible_message("\The [user] slices \the [src] in half with \the [W].","You slice \the [src] in half with \the [W].")
+			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
+			if(loc == user)
+				if(src in user.held_items)
+					user.drop_item(src, force_drop = 1)
+					user.put_in_hands(pick(halves))
+					qdel(src)
+					return
+			qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
+	name = "avocado half"
+	desc = "This half still has the seed embedded in it."
+	icon_state = "avocado_cut"
+	cant_eat_msg = "'s seed is too large to eat."
+	cut = TRUE
+	plantname = null	//So people can't use the pit as a seed AND feed each half to the seed extractor
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
+	desc = "An unusually fatty fruit, it can be used in both savory and sweet dishes."
+	icon_state = "avocado_pitted"
+	cant_eat_msg = null

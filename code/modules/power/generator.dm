@@ -247,6 +247,8 @@
 
 /obj/machinery/power/generator/wrenchAnchor()
 	. = ..()
+	if(!.)
+		return
 	reconnect()
 
 /obj/machinery/power/generator/proc/operable()

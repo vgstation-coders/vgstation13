@@ -13,7 +13,7 @@
 	languagetoadd = LANGUAGE_CLATTER
 	brute_damage_modifier = 2
 	movement_speed_modifier = 0.23
-	safe_oxygen_min = 0
+	flag = NO_BREATHE
 	greaterform = "Skellington"
 
 /mob/living/carbon/monkey/skellington/say(var/message)

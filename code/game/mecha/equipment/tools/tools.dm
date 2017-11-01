@@ -99,6 +99,9 @@
 		if(M.stat == DEAD)
 			return
 		if(chassis.occupant.a_intent == I_HURT)
+			if(istype(chassis, /obj/mecha/working/clarke))
+				to_chat(chassis.occupant, "<span class='warning'>WARNING: OSHA regulations prohibit use of \the [src] in that way.</span>")
+				return
 			M.take_overall_damage(dam_force)
 			if(!M)
 				return //we killed some sort of simple animal and the corpse was deleted.
@@ -120,7 +123,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill
 	name = "\improper Exosuit-Mounted Drill"
-	desc = "This is the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
+	desc = "This is the drill that'll pierce the heavens! (Can be attached to: Combat and Mining Exosuits)"
 	icon_state = "mecha_drill"
 	equip_cooldown = 45
 	energy_drain = 10
@@ -222,13 +225,13 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(istype(M, /obj/mecha/working) || istype(M, /obj/mecha/combat))
+		if((istype(M, /obj/mecha/working) || istype(M, /obj/mecha/combat)) && !istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill
 	name = "\improper Exosuit-Mounted Diamond Drill"
-	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Engineering Exosuits)"
+	desc = "This is an upgraded version of the drill that'll pierce the heavens! (Can be attached to: Combat and Mining Exosuits)"
 	icon_state = "mecha_diamond_drill"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=3"
 	equip_cooldown = 15
@@ -241,7 +244,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe
 	name = "\improper Heavy Duty Pneumatic Scythe"
-	desc = "An extremely heavy-duty pneumatic scythe. The \"giant robot\" approach to weed control. (Can be attached to: Engineering Exosuits)"
+	desc = "An extremely heavy-duty pneumatic scythe. The \"giant robot\" approach to weed control. (Can be attached to: Maintenance Exosuits)"
 	icon_state = "mecha_extremelylazyscythecopypaste"
 	equip_cooldown = 20
 	energy_drain = 15
@@ -249,7 +252,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
-		if(istype(M))
+		if(istype(M) && !istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -307,16 +310,16 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/extinguisher
 	name = "\improper Exosuit-Mounted Foam Extinguisher"
-	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting exosuits)"
+	desc = "A fire extinguisher module for an exosuit. (Can be attached to: Firefighting and Engineering exosuits)"
 	icon_state = "mecha_exting"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=2"
 	equip_cooldown = 15
 	energy_drain = 0
 	range = MELEE|RANGED
 
-/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/ripley/firefighter/M as obj)
+/obj/item/mecha_parts/mecha_equipment/tool/extinguisher/can_attach(obj/mecha/working/M)
 	if(..())
-		if(istype(M))
+		if(istype(M, /obj/mecha/working/ripley/firefighter) || istype(M, /obj/mecha/working/clarke))
 			return 1
 	return 0
 
@@ -487,7 +490,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		toggle()
 
@@ -496,113 +500,81 @@
 	wait = 0
 	return 1
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd
-	name = "\improper Exosuit-Mounted RCD"
-	desc = "An exosuit-mounted Rapid Construction Device. (Can be attached to: Any exosuit)"
+/obj/item/mecha_parts/mecha_equipment/tool/red
+	name = "\improper Exosuit-Mounted RED"
+	desc = "An exosuit-mounted Rapid Engineering Device. (Can be attached to: Any exosuit)"
 	icon_state = "mecha_rcd"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_MAGNETS + "=4;" + Tc_POWERSTORAGE + "=4"
 	equip_cooldown = 10
 	energy_drain = 250
 	range = MELEE|RANGED
+	var/device = 0	//0 - RCD, 1 - RPD
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 	var/disabled = 0 //malf
+	var/obj/item/device/rcd/rpd/mech/RPD
+	var/obj/item/device/rcd/mech/RCD
+	var/obj/item/weapon/wrench/socket/sock
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/action(atom/target)
+/obj/item/mecha_parts/mecha_equipment/tool/red/New()
+	..()
+	RPD = new(src)
+	RCD = new(src)
+	sock = new(src)
+
+/obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
+	qdel(RPD)
+	RPD = null
+	qdel(RCD)
+	RCD = null
+	qdel(sock)
+	sock = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
 	if(istype(target,/area/shuttle)||istype(target, /turf/space/transit))//>implying these are ever made -Sieve
 		disabled = 1
 	else
 		disabled = 0
-	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock))
+	if(!istype(target, /turf) && !istype(target, /obj/machinery/door/airlock) && !istype(target, /obj/machinery/atmospherics) && !istype(target, /obj/item/pipe))
 		target = get_turf(target)
 	if(!action_checks(target) || disabled || get_dist(chassis, target)>3)
 		return
-	playsound(chassis, 'sound/machines/click.ogg', 50, 1)
-	//meh
-	switch(mode)
-		if(0)
-			if (istype(target, /turf/simulated/wall))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					chassis.spark_system.start()
-					target:ChangeTurf(/turf/simulated/floor/plating)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-			else if (istype(target, /turf/simulated/floor))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					chassis.spark_system.start()
-					target:ChangeTurf(get_base_turf(target.z))
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-			else if (istype(target, /obj/machinery/door/airlock))
-				occupant_message("Deconstructing [target]...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					chassis.spark_system.start()
-					qdel(target)
-					target = null
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.use_power(energy_drain)
-		if(1)
-			if(istype(target, /turf/space))
-				occupant_message("Building Floor...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					target:ChangeTurf(/turf/simulated/floor/plating/airless)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.spark_system.start()
-					chassis.use_power(energy_drain*2)
-			else if(istype(target, /turf/simulated/floor))
-				occupant_message("Building Wall...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					target:ChangeTurf(/turf/simulated/wall)
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					chassis.spark_system.start()
-					chassis.use_power(energy_drain*2)
-		if(2)
-			if(istype(target, /turf/simulated/floor))
-				occupant_message("Building Airlock...")
-				set_ready_state(0)
-				if(do_after_cooldown(target))
-					if(disabled)
-						return
-					chassis.spark_system.start()
-					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
-					T.autoclose = 1
-					playsound(target, 'sound/items/Deconstruct.ogg', 50, 1)
-					playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
-					chassis.use_power(energy_drain*2)
-	return
+	var/obj/item/device/rcd/R = RCD
+	if(device)
+		R = RPD
+		if((istype(target, /obj/machinery/atmospherics) && !istype(R.selected, /datum/rcd_schematic/paint_pipes)) || (istype(target, /obj/item/pipe) && !istype(R.selected, /datum/rcd_schematic/decon_pipes)))
+			target.attackby(sock, chassis.occupant)
+			return
+	if(!R.selected)
+		return
+	R.busy  = TRUE // Busy to prevent switching schematic while it's in use.
+	var/t = R.selected.attack(target, chassis.occupant)
+	if(!t) // No errors
+		if(device)
+			chassis.use_power(energy_drain/5)
+		else
+			chassis.use_power(energy_drain)
+	else
+		occupant_message("<span class='warning'>\the [src]'s error light flickers[istext(t) ? ": [t]" : "."]</span>")
 
+	R.busy = FALSE
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/Topic(href,href_list)
-	..()
-	if(href_list["mode"])
-		mode = text2num(href_list["mode"])
-		switch(mode)
-			if(0)
-				occupant_message("Switched RCD to Deconstruct.")
-			if(1)
-				occupant_message("Switched RCD to Construct.")
-			if(2)
-				occupant_message("Switched RCD to Construct Airlock.")
-	return
+/obj/item/mecha_parts/mecha_equipment/tool/red/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["RCDmenu"])
+		RCD.attack_self(chassis.occupant)
+	if(href_list["RPDmenu"])
+		RPD.attack_self(chassis.occupant)
+	if(href_list["swap"])
+		device = !device
+	update_equip_info()
 
-/obj/item/mecha_parts/mecha_equipment/tool/rcd/get_equip_info()
-	return "[..()] \[<a href='?src=\ref[src];mode=0'>D</a>|<a href='?src=\ref[src];mode=1'>C</a>|<a href='?src=\ref[src];mode=2'>A</a>\]"
+/obj/item/mecha_parts/mecha_equipment/tool/red/get_equip_info()
+	if(device)
+		return "[..()] \[<a href='?src=\ref[src];RPDmenu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
+	else
+		return "[..()] \[<a href='?src=\ref[src];RCDmenu=0'>Open construction menu</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
 
 
 
@@ -747,7 +719,8 @@
 	return "[..()] [mode==1?"([locked||"Nothing"])":null] \[<a href='?src=\ref[src];mode=1'>S</a>|<a href='?src=\ref[src];mode=2'>P</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["mode"])
 		mode = text2num(href_list["mode"])
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
@@ -767,7 +740,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(!istype(M, /obj/mecha/combat/honker))
+		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
 			if(!M.proc_res["dynattackby"])
 				return 1
 	return 0
@@ -818,7 +791,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
-		if(!istype(M, /obj/mecha/combat/honker))
+		if(!istype(M, /obj/mecha/combat/honker) && !istype(M, /obj/mecha/working/clarke))
 			if(!M.proc_res["dynbulletdamage"] && !M.proc_res["dynhitby"])
 				return 1
 	return 0
@@ -904,8 +877,9 @@
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
 	chassis.overlays -= droid_overlay
+	qdel(pr_repair_droid)
+	pr_repair_droid = null
 	..()
-	return
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/detach()
 	chassis.overlays -= droid_overlay
@@ -919,7 +893,8 @@
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_repairs=1'>[pr_repair_droid.active()?"Dea":"A"]ctivate</a>"
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle_repairs"])
 		chassis.overlays -= droid_overlay
 		if(pr_repair_droid.toggle())
@@ -981,6 +956,11 @@
 	pr_energy_relay.set_delay(equip_cooldown)
 	return
 
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()
+	qdel(pr_energy_relay)
+	pr_energy_relay = null
+	..()
+
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/detach()
 	pr_energy_relay.stop()
 //		chassis.proc_res["dynusepower"] = null
@@ -1022,7 +1002,8 @@
 	return pow_chan
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle_relay"])
 		if(pr_energy_relay.toggle())
 			set_ready_state(0)
@@ -1094,6 +1075,11 @@
 	init()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/generator/Destroy()
+	qdel(pr_mech_generator)
+	pr_mech_generator = null
+	..()
+
 /obj/item/mecha_parts/mecha_equipment/generator/proc/init()
 	fuel = new /obj/item/stack/sheet/mineral/plasma(src)
 	fuel.amount = 0
@@ -1108,7 +1094,8 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/generator/Topic(href, href_list)
-	..()
+	if(..())
+		return TRUE
 	if(href_list["toggle"])
 		if(pr_mech_generator.toggle())
 			set_ready_state(0)
@@ -1234,10 +1221,7 @@
 /datum/global_iterator/mecha_generator/nuclear/process(var/obj/item/mecha_parts/mecha_equipment/generator/nuclear/EG)
 	if(..())
 		for(var/mob/living/carbon/M in view(EG.chassis))
-			if(istype(M,/mob/living/carbon/human))
-				M.apply_effect((EG.rad_per_cycle*3),IRRADIATE,0)
-			else
-				M.radiation += EG.rad_per_cycle
+			M.apply_radiation(EG.rad_per_cycle*3, RAD_EXTERNAL)
 	return 1
 
 
@@ -1311,6 +1295,187 @@
 		chassis.use_power(energy_drain)
 		do_after_cooldown()
 	return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool
+	name = "\improper Exosuit-Mounted Engineering Switchtool"
+	desc = "An exosuit-mounted Engineering switchtool. (Can be attached to: Engineering exosuits)"
+	icon_state = "mecha_switchtool"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=2"
+	equip_cooldown = 10
+	energy_drain = 50
+	range = MELEE|RANGED
+	var/datum/global_iterator/pr_switchtool
+	var/obj/item/weapon/switchtool/engineering/mech/switchtool
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)
+	if(..())
+		if(istype(M))
+			return 1
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/New()
+	..()
+	switchtool = new(src)
+	pr_switchtool = new /datum/global_iterator/mecha_switchtool(list(src),0)
+	pr_switchtool.set_delay(equip_cooldown)
+	pr_switchtool.toggle()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/Destroy()
+	qdel(switchtool)
+	switchtool = null
+	qdel(pr_switchtool)
+	pr_switchtool = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/action(atom/target)
+	if(switchtool.deployed)
+		switchtool.preattack(target, chassis.occupant, chassis.Adjacent(target))
+		chassis.use_power(energy_drain)
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["change"])
+		if(switchtool.deployed)
+			switchtool.attack_self(chassis.occupant)
+		switchtool.attack_self(chassis.occupant)
+	if(href_list["refill"])
+		pr_switchtool.toggle()
+		occupant_message("<span class='notice'>Automatic tool refilling activated.</span>")
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
+	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
+
+/datum/global_iterator/mecha_switchtool/process(var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/mech_switchtool)
+	if(!mech_switchtool.chassis || mech_switchtool.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
+		if(mech_switchtool.chassis)
+			mech_switchtool.occupant_message("<span class='warning'>Electrical systems compromised. Automatic tool refilling deactivated.</span>")
+		stop()
+		mech_switchtool.set_ready_state(1)
+		return
+	if(!mech_switchtool.chassis.get_charge())
+		stop()
+		mech_switchtool.set_ready_state(1)
+		mech_switchtool.occupant_message("No powercell detected.")
+		return
+	for(var/obj/item/I in mech_switchtool.switchtool.stored_modules)
+		if(iswelder(I))
+			var/obj/item/weapon/weldingtool/W = I
+			if(W.reagents.total_volume <= W.max_fuel-10)
+				W.reagents.add_reagent(FUEL, 10)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+		else if(iscablecoil(I))
+			var/obj/item/stack/cable_coil/C = I
+			if(C.amount <= C.max_amount-5)
+				C.add(5)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+		else if(issolder(I))
+			var/obj/item/weapon/solder/S = I
+			if(S.reagents.total_volume < S.max_fuel-5)
+				S.reagents.add_reagent(SACID, 5)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
+		else if(issilicatesprayer(I))
+			var/obj/item/device/silicate_sprayer/SI = I
+			if(SI.reagents.total_volume < SI.max_silicate-5)
+				SI.reagents.add_reagent(SILICATE, 5)
+				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler
+	name = "\improper Automatic Floor Tiler"
+	desc = "An exosuit-mounted Automatic Floor Tiler. (Can be attached to: Any exosuit)"
+	icon_state = "mecha_tiler"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=2"
+	equip_cooldown = 10
+	energy_drain = 50
+	range = 0
+	var/plating_active = FALSE
+	var/tiling_active = FALSE
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["toggle_plating"])
+		plating_active = !plating_active
+	if(href_list["toggle_tiling"])
+		tiling_active = !tiling_active
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()
+	return "[..()] \[<a href='?src=\ref[src];toggle_plating=0'>[plating_active ? "Deactivate" : "Activate"] automatic plating</a>\]\[<a href='?src=\ref[src];toggle_tiling=0'>[tiling_active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/on_mech_step()
+	var/turf/T = get_turf(src)
+	if(T.is_plating() && tiling_active)
+		T.ChangeTurf(/turf/simulated/floor)
+		playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
+		return
+	if(!plating_active)
+		return
+	var/canbuild = T.canBuildPlating()
+	if(istype(T, /turf/simulated/floor/foamedmetal))
+		canbuild = BUILD_IGNORE
+	if(canbuild == BUILD_SUCCESS)
+		var/obj/structure/lattice/L = locate(/obj/structure/lattice) in T
+		if(!istype(L))
+			return
+		qdel(L)
+	else if(canbuild != BUILD_IGNORE)
+		return
+
+	playsound(T, 'sound/weapons/Genhit.ogg', 50, 1)
+	if(istype(T,/turf/space) || istype(T,/turf/unsimulated))
+		T.ChangeTurf(/turf/simulated/floor/plating/airless)
+	else
+		T.ChangeTurf(/turf/simulated/floor/plating)
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector
+	name = "\improper Exosuit-Mounted Radiation Collector Array"
+	desc = "An exosuit-mounted Radiation Collector Array. (Can be attached to: Any exosuit)"
+	icon_state = "mecha_collector"
+	origin_tech = Tc_PLASMATECH + "=3;" + Tc_MAGNETS + "=2;" + Tc_POWERSTORAGE + "=4"
+	equip_cooldown = 10
+	energy_drain = 0
+	range = MELEE
+	var/active = FALSE
+	var/obj/machinery/power/rad_collector/mech/collector
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/New()
+	..()
+	collector = new(src)
+	collector.connected_module = src
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/Destroy()
+	qdel(collector)
+	collector = null
+	..()
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
+	var/obj/item/weapon/tank/plasma/plas = target
+	if(istype(plas))
+		if(collector.P)
+			occupant_message("There is already a tank in the radiation collector array.")
+			return
+		plas.forceMove(collector)
+		collector.P = target
+		occupant_message("You insert \the [target] into the radiation collector array.")
+		update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/Topic(href,href_list)
+	if(..())
+		return TRUE
+	if(href_list["toggle"])
+		collector.toggle_power()
+		occupant_message("Radiation collector array [collector.active ? "activated" : "deactivated"].")
+	if(href_list["eject"])
+		collector.eject()
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/collector/get_equip_info()
+	if(!collector.P)
+		return "[..()] No tank loaded."
+	if(collector.P.air_contents.toxins <= 0)
+		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
+	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

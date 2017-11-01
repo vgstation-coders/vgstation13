@@ -164,7 +164,8 @@ What is the naming convention for planes or layers?
 
 	#define VEHICLE_LAYER 			0
 	#define CHAIR_ARMREST_LAYER 	0
-	#define OPEN_CURTAIN_LAYER		1
+	#define WINDOOR_LAYER 			1
+	#define OPEN_CURTAIN_LAYER		2
 	// BELOW_OBJ_LAYER				2
 	// OBJ_LAYER 	 				3
 	// ABOVE_OBJ_LAYER				4

@@ -203,7 +203,7 @@
 
 /obj/item/toy/ammo/gun/update_icon()
 	src.icon_state = text("357-[]", src.amount_left)
-	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] caps\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
+	src.desc = text("There [amount_left == 1 ? "is" : "are"] [] cap\s left! Make sure to recycle the box in an autolathe when it gets empty.", src.amount_left)
 	return
 
 /obj/item/toy/ammo/gun/examine(mob/user)
@@ -405,6 +405,8 @@
 	desc = "A bright-colored plastic clock, commemorating 20 years of Nanotrasen's Plasma division. Comes with permanent snooze button, just twist the valve!"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "valve"
+	item_state = "ttv"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
 	var/image/rendered
 
 /obj/item/toy/bomb/New()
@@ -476,9 +478,7 @@
 			pop()
 
 /obj/item/toy/snappop/proc/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(2, 0, src)
-	s.start()
+	spark(src, 2, FALSE)
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -498,9 +498,7 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/virus/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
@@ -514,9 +512,7 @@
 	flags = FPRINT | NO_THROW_MSG
 
 /obj/item/toy/snappop/smokebomb/pop()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(2, 0, src)
-	s.start()
+	spark(src, 2, FALSE)
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls
@@ -760,6 +756,24 @@
 	name = "toy nuke-op"
 	desc = "Mildly explosive."
 	icon_state = "newcop"
+	var/emagged = 0
+
+/obj/item/toy/gasha/newcop/attackby(obj/item/I, mob/user)
+	if(isEmag(I) && !emagged)
+		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
+		emagged = 1
+
+		playsound(get_turf(src), 'sound/effects/kirakrik.ogg', 100, 1)
+
+		sleep(50)
+		say("Someone pass the boombox.")
+		sleep(5)
+		explosion(get_turf(src), -1,1,4)
+		qdel(src)
+	else
+		return
+
+
 
 /obj/item/toy/gasha/jani
 	name = "toy janitor"
@@ -1316,6 +1330,7 @@
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/decoy
 	volume = 120	//liters
+	origin_tech = Tc_MATERIALS + "=3"
 	var/decoy_phrase = null
 
 /obj/item/toy/balloon/decoy/verb/record_phrase()

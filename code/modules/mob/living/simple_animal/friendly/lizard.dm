@@ -1,5 +1,5 @@
 /mob/living/simple_animal/lizard
-	name = "Lizard"
+	name = "lizard"
 	desc = "A cute tiny lizard."
 	icon_state = "lizard"
 	icon_living = "lizard"
@@ -15,4 +15,6 @@
 	response_harm   = "stomps on"
 
 	size = SIZE_TINY
+	mob_property_flags = MOB_NO_PETRIFY //Can't get petrified (nethack references)
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/lizard
 	held_items = list()

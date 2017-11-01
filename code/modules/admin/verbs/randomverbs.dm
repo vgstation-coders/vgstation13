@@ -1075,3 +1075,46 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	usr << ftp(F)
 
 	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/cmd_admin_equip_loadout(mob/M as mob in mob_list)
+	set category = "Fun"
+	set name = "Equip Loadout"
+
+	if(!holder)
+		to_chat(src, "Only administrators may use this command.")
+		return
+	if(!check_rights(R_SPAWN))
+		to_chat(src, "You do not have the required permissions to use this command.")
+		return
+	if(!mob)
+		return
+	var/list/dropped_items
+	var/delete_items
+	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Loadout","") as null|anything in list("Yes","No")
+	if(!strip_items)
+		return
+	if(strip_items == "Yes")
+		delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
+		if(!delete_items)
+			return
+	var/list/loadouts = list() + "USE ITEMS ON MY TURF" + (typesof(/obj/abstract/loadout) - /obj/abstract/loadout)
+	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
+	if(!loadout_type)
+		return
+	if(strip_items == "Yes")
+		dropped_items = M.unequip_everything()
+		if(delete_items == "Yes")
+			for(var/atom/A in dropped_items)
+				qdel(A)
+	if(loadout_type == "USE ITEMS ON MY TURF")
+		M.equip_loadout(null, FALSE)
+	else
+		if(!ispath(loadout_type))
+			alert("ERROR: No such loadout type found.")
+			return
+		M.equip_loadout(loadout_type, FALSE)
+
+	log_admin("[key_name(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].")
+	message_admins("<span class='notice'>[key_name_admin(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].</span>", 1)
+
+	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

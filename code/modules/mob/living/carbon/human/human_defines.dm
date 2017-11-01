@@ -17,8 +17,12 @@
 	var/b_eyes = 0
 
 	var/s_tone = 0	//Skin tone
+	var/multicolor_skin_r = 0	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
+	var/multicolor_skin_g = 0
+	var/multicolor_skin_b = 0
 
 	var/lip_style = null	//no lipstick by default- arguably misleading, as it could be used for general makeup
+	var/eye_style = null
 
 	mob_bump_flag = HUMAN
 	mob_push_flags = ALLMOBS
@@ -66,6 +70,7 @@
 	var/list/bad_external_organs = list()// organs we check until they are good.
 
 	var/xylophone = 0 //For the spoooooooky xylophone cooldown
+	var/lastpuke = 0
 
 	var/mob/remoteview_target = null
 	var/hand_blood_color
@@ -74,11 +79,16 @@
 
 	var/check_mutations=0 // Check mutations on next life tick
 
+	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
-	var/obj/item/weapon/organ/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
+	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
+
+	var/datum/component_container/NPC_brain
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
+
+	var/become_zombie_after_death = FALSE

@@ -127,7 +127,7 @@
 	if(in_chamber)
 		return 1 //{R}
 	if(isnull(AC) || !istype(AC))
-		return
+		return 0
 	if(mag_type && load_method == 2)
 		chambered = null //Remove casing from chamber.
 		chamber_round()
@@ -143,6 +143,16 @@
 		return 1
 	return 0
 
+/obj/item/weapon/gun/projectile/can_discharge()
+	var/obj/item/ammo_casing/AC = getAC()
+	if(in_chamber)
+		return 1 
+	if(isnull(AC) || !istype(AC))
+		return 0
+	else
+		return 1
+	
+	
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
 		if(!user.is_holding_item(src))	//if we're not in his hands

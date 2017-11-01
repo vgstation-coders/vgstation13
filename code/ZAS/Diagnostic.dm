@@ -1,15 +1,3 @@
-client/proc/ZoneTick()
-	set category = "Debug"
-	set name = "Process Atmos"
-
-	var/result = air_master.Tick()
-	if(result)
-		to_chat(src, "Sucessfully Processed.")
-
-	else
-		to_chat(src, "Failed to process! ([air_master.tick_progress])")
-
-
 client/proc/Zone_Info(turf/T as null|turf)
 	set category = "Debug"
 	if(T)
@@ -113,7 +101,6 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		to_chat(client, "Pressure: [air.return_pressure()] KPa")
 		to_chat(client, "")
 		to_chat(client, "Unsimulated Zone(space/catwalk) Tiles: [length(unsimulated_tiles)]")
-		to_chat(client, "Movable Objects: [length(movables())]")
 		to_chat(client, "<u>Connections: [length(connections)]</u>")
 
 		for(var/connection/C in connections)
@@ -144,8 +131,8 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		client.images -= client.zone_debug_images[src]
 		client.zone_debug_images.Remove(src)
 
-	if(air_master)
-		for(var/zone/Z in air_master.zones)
+	if(SS_READY(SSair))
+		for(var/zone/Z in SSair.zones)
 			if(Z.air == air && Z != src)
 				var/turf/zloc = pick(Z.contents)
 				to_chat(client, "<span class='warning'>Illegal air datum shared by: [zloc.loc.name]</span>")

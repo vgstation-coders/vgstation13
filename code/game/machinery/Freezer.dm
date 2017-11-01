@@ -2,7 +2,7 @@
 #define FREEZER_MAX_TEMPERATURE T20C
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer
-	name = "Freezer"
+	name = "freezer"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
@@ -53,40 +53,27 @@
 	else
 		icon_state = "freezer_0"
 	..()
-/obj/machinery/atmospherics/unary/cold_sink/freezer/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
-/obj/machinery/atmospherics/unary/cold_sink/freezer/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user)
-	if(src.on || anchored)
+	if(on)
+		to_chat(user, "You have to turn off the \[src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(anchored)
-		to_chat(user, "You have to unanchor the [src] first!")
-		return
-	if(src.on)
-		to_chat(user, "You have to turn off the [src]!")
+	if(on)
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(mob/user)
-	if(src.on)
-		to_chat(user, "You have to turn off the [src] first!")
+/obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(var/mob/user)
+	if(on)
+		to_chat(user, "You have to turn off \the [src] first!")
+		return FALSE
+	. = ..()
+	if(!.)
 		return
-	..()
-	if(!anchored)
-		verbs += rotate_verbs
-		if(node)
-			node.disconnect(src)
-			qdel(network)
-			network = null
-			node = null
-	else if(anchored)
+	if(anchored)
 		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
@@ -94,11 +81,14 @@
 		if (node)
 			node.initialize()
 			node.build_network()
-	return
-
-/obj/machinery/atmospherics/unary/cold_sink/freezer/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	..()
-
+	else
+		verbs += rotate_verbs
+		if(node)
+			node.disconnect(src)
+			qdel(network)
+			network = null
+			node = null
+		
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -184,7 +174,7 @@
 #define HEATER_MAX_TEMPERATURE T20C + 280
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater
-	name = "Heater"
+	name = "heater"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "freezer_0"
 	density = 1
@@ -236,40 +226,26 @@
 	..()
 	return
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
-
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user)
-	if(src.on || anchored)
+	if(on)
+		to_chat(user, "You have to turn off the \[src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(anchored)
-		to_chat(user, "You have to unanchor the [src] first!")
-		return
-	if(src.on)
-		to_chat(user, "You have to turn off the [src]!")
+	if(on)
+		to_chat(user, "You have to turn off the \[src]!")
 		return
 	return ..()
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(mob/user)
-	if(src.on)
-		to_chat(user, "You have to turn off the [src] first!")
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(var/mob/user)
+	if(on)
+		to_chat(user, "You have to turn off \the [src] first!")
+		return FALSE
+	. = ..()
+	if(!.)
 		return
-	..()
-	if(!anchored)
-		verbs += rotate_verbs
-		if(node)
-			node.disconnect(src)
-			qdel(network)
-			network = null
-			node = null
-	else if(anchored)
+	if(anchored)
 		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
@@ -277,10 +253,13 @@
 		if (node)
 			node.initialize()
 			node.build_network()
-	return
-
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	..()
+		verbs += rotate_verbs
+	else
+		node.disconnect(src)
+		qdel(network)
+		network = null
+		node = null
+		
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)
 	user.set_machine(src)

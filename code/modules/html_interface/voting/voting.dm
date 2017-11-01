@@ -185,11 +185,11 @@ var/global/datum/controller/vote/vote = new()
 			else
 				feedback_set("map vote tie", "[feedbackanswer] chosen: [.]")
 
-		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null]</b>"
+		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] won with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null].</b>"
 		for(var/choice in choices)
 			if(. == choice)
 				continue
-			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]\s"
+			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote\s[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]."
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	log_vote(text)
@@ -308,7 +308,7 @@ var/global/datum/controller/vote/vote = new()
 			if(istype(usr) && usr.client)
 				interact(usr.client)
 
-		to_chat(world, "<font color='purple'><b>[text]</b><br>Type vote to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
+		to_chat(world, "<font color='purple'><b>[text]</b><br> <a href='?src=\ref[vote]'>Click here</a> or type 'vote' to place your votes.<br>You have [ismapvote && ismapvote.len ? "60" : config.vote_period/10] seconds to vote.</font>")
 		switch(vote_type)
 			if("crew_transfer")
 				world << sound('sound/voice/Serithi/Shuttlehere.ogg')

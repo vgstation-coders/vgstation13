@@ -5,7 +5,7 @@
 
 	emote_type = 2		// pAIs emotes are heard, not seen, so they can be seen through a container (eg. person)
 
-	var/network = list("SS13")
+	var/network = list(CAMERANET_SS13)
 	var/obj/machinery/camera/current = null
 
 	var/ram = 100	// Used as currency to purchase different abilities
@@ -51,6 +51,9 @@
 
 	var/pPS = 0 //Are we a pPS in the GPS list?
 	var/ppstag = "PAI0" // Our pPS tag
+
+	var/obj/item/device/station_map/holomap_device // Our holomap device.
+	var/holo_target = "show_map" // Our holomap target.
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)

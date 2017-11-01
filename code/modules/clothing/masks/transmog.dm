@@ -9,6 +9,7 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/target_type = null
 	var/cursed = FALSE
+	var/revert_spell_type //The path of the revert spell to use if not cursed, in case extra checks are necessary, etc. Leave undefined for the universal default.
 	var/list/skin_to_mask = list(
 		/obj/item/asteroid/goliath_hide         =   /obj/item/clothing/mask/morphing/goliath,
 		/obj/item/clothing/head/bearpelt/real   =   /obj/item/clothing/mask/morphing/bear,
@@ -33,7 +34,7 @@
 				if(cursed)
 					C.transmogrify(target_type)
 				else
-					C.transmogrify(target_type, TRUE)
+					C.transmogrify(target_type, revert_spell_type || TRUE)
 
 /obj/item/clothing/mask/morphing/attackby(obj/item/weapon/W, mob/user)
 	if(!target_type)
@@ -106,7 +107,7 @@
 /obj/item/clothing/mask/morphing/xeno
 	name = "mask of the xenomorph"
 	desc = "It appears to be modeled after a xenomorph."
-	target_type = /mob/living/carbon/alien/humanoid
+	target_type = /mob/living/carbon/alien/humanoid/hunter
 	icon_state = "xeno_mask"
 
 /obj/item/clothing/mask/morphing/human
@@ -123,13 +124,15 @@
 /obj/item/clothing/mask/morphing/amorphous/New()
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
-	target_type = pick(existing_typesof(/mob/living/simple_animal))
+	//Remove cockatrices because they're somewhat OP when player controlled
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice) - typesof(/mob/living/simple_animal/hostile/giant_spider/hunter/dead) - typesof(/mob/living/simple_animal/hostile/asteroid/hivelordbrood))
 
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
 	desc = "It appears to be modeled after a ghost. It looks as though it might disappear at any moment."
 	target_type = /mob/dead/observer/deafmute
 	icon_state = "ghost_mask"
+	revert_spell_type = /spell/aoe_turf/revert_form/no_z2 //Don't
 
 /obj/item/clothing/mask/morphing/ghost/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
@@ -141,7 +144,7 @@
 				if(cursed)
 					M = C.transmogrify(target_type)
 				else
-					M = C.transmogrify(target_type, TRUE)
+					M = C.transmogrify(target_type, revert_spell_type || TRUE)
 				M.forceMove(T)
 				to_chat(M, "<span class='warning'>\The [src] dissipates into thin air!</span>")
 				qdel(src)

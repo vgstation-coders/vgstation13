@@ -41,7 +41,7 @@
 
 	var/stun_attack = 15 //15% chance to stun per attack
 
-/mob/living/simple_animal/hostile/hive_alien/Bump(atom/Obstacle)
+/mob/living/simple_animal/hostile/hive_alien/to_bump(atom/Obstacle)
 	//I haven't found any other way to make aliens NOT kill themselves on supermatter when pathfinding.
 	//This hack makes them invulnerable to supermatter unless they're getting thrown
 	if(istype(Obstacle, /turf/unsimulated/wall/supermatter) && !throwing)
@@ -261,7 +261,7 @@
 	icon_dead = "hive_executioner_dead"
 
 	move_to_delay = 5
-	speed = -1
+	speed = 1
 
 	size = SIZE_BIG
 	health = 280
@@ -289,13 +289,14 @@
 	sleep(rand(transformation_delay_min, transformation_delay_max))
 
 	anchored = FALSE
-	speed = -1
+	speed = 1
 	move_to_delay = 8
 	attack_mode = FALSE
 
 	aggro_vision_range = initial(aggro_vision_range)
 	idle_vision_range = initial(aggro_vision_range)
 	vision_range = initial(aggro_vision_range)
+	brute_damage_modifier = initial(brute_damage_modifier)
 
 	//Immediately find a target so that we're not useless for 1 Life() tick!
 	FindTarget()
@@ -313,6 +314,7 @@
 	aggro_vision_range = 1
 	idle_vision_range = 1
 	vision_range = 1
+	brute_damage_modifier = 3 * initial(brute_damage_modifier)
 
 	walk(src, 0)
 

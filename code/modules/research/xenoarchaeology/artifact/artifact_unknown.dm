@@ -2,7 +2,6 @@
 #define EFFECT_TOUCH 0
 #define EFFECT_AURA 1
 #define EFFECT_PULSE 2
-#define MAX_EFFECT 2
 
 /obj/machinery/artifact
 	name = "alien artifact"

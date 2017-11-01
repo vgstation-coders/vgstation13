@@ -3,7 +3,7 @@
 	update_hud()
 	return
 
-/mob/living/carbon/Bump(var/atom/movable/AM)
+/mob/living/carbon/to_bump(var/atom/movable/AM)
 	if(now_pushing)
 		return
 	..()
@@ -103,7 +103,8 @@
 	if(damage <= 0)
 		damage = 0
 
-	if(dna.mutantrace == "slime")
+	var/mob/living/carbon/human/H = src
+	if(istype(H) && H.species && (H.species.flags & ELECTRIC_HEAL))
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
@@ -128,9 +129,7 @@
 	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
 	//if(src.knockdown < 20*siemens_coeff)	src.SetKnockdown(20*siemens_coeff)
 
-	var/datum/effect/effect/system/spark_spread/SparkSpread = new
-	SparkSpread.set_up(5, 1, loc)
-	SparkSpread.start()
+	spark(loc, 5)
 
 	return damage
 
@@ -232,11 +231,52 @@
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
-				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				M.visible_message( \
-					"<span class='notice'>[M] shakes hands with [src].</span>", \
-					"<span class='notice'>You shake hands with [src].</span>", \
-					)
+				var/shock_damage = 5
+				var/shock_time = 0
+				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
+				var/obj/item/clothing/gloves/T = src.get_item_by_slot(slot_gloves)
+				var/mob/living/carbon/human/H
+
+				if (istype(T, /obj/item/clothing/gloves))
+					shock_damage = T.siemens_coefficient * shock_damage
+
+				if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && (!T || T.siemens_coefficient > 0))
+					shock_time = U.cell.charge/STUNGLOVES_CHARGE_COST
+					shock_damage = shock_damage * shock_time
+
+					if ((M_CLUMSY in M.mutations) && prob(10))
+						to_chat(M, "<span class='warning'>You accidentally shake hands with yourself!</span>")
+						H = M
+					else
+						H = src
+						visible_message("<span class='danger'>\The [H] can't seem to let go from \the [M]'s shocking handshake!</span>")
+						add_logs(H, M, "stungloved", admin = TRUE)
+
+					playsound(H,(H.gender == MALE) ? pick(male_scream_sound) : pick(female_scream_sound),50,1)
+					H.apply_damage(damage = shock_damage, damagetype = BURN, def_zone = (M.zone_sel.selecting == "r_hand") ? "r_hand" : "l_hand" )
+
+					spark(H, 3, FALSE)
+
+					H.Stun(shock_time SECONDS)
+					M.Stun(shock_time SECONDS)
+					H.Jitter(shock_time SECONDS)
+
+					spawn(shock_time SECONDS)
+						U.cell.charge = 0
+						H.remove_jitter()
+						H.SetStunned(0)
+						H.SetKnockdown(5)
+						M.SetStunned(0)
+						to_chat(M, "<span class='notice'>Your gloves run out of power.</span>")
+				else
+					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient == 0)
+						to_chat(M, "<span class='notice'>\The [src]'s insulated gloves prevent them from being shocked.</span>")
+
+					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					M.visible_message( \
+						"<span class='notice'>[M] shakes hands with [src].</span>", \
+						"<span class='notice'>You shake hands with [src].</span>", \
+						)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
@@ -272,110 +312,6 @@
 				H.update_inv_gloves(0)
 			H.germ_level = 0
 	update_icons()	//apply the now updated overlays to the mob
-
-
-//Throwing stuff
-
-/mob/living/carbon/proc/toggle_throw_mode()
-	if (in_throw_mode)
-		throw_mode_off()
-	else
-		throw_mode_on()
-
-/mob/living/carbon/proc/throw_mode_off()
-	in_throw_mode = 0
-	if(throw_icon)
-		throw_icon.icon_state = "act_throw_off"
-
-/mob/living/carbon/proc/throw_mode_on()
-	if(gcDestroyed)
-		return
-	in_throw_mode = 1
-	if(throw_icon)
-		throw_icon.icon_state = "act_throw_on"
-
-/mob/proc/throw_item(var/atom/target,var/atom/movable/what=null)
-	return
-
-/mob/living/carbon/throw_item(var/atom/target,var/atom/movable/what=null)
-	src.throw_mode_off()
-	if(usr.stat || !target)
-		return
-
-	if(!istype(loc,/turf))
-		to_chat(src, "<span class='warning'>You can't do that now!</span>")
-		return
-
-	if(target.type == /obj/abstract/screen)
-		return
-
-	var/atom/movable/item = src.get_active_hand()
-	if(what)
-		item=what
-
-	if(!item)
-		return
-
-	if (istype(item, /obj/item/offhand))
-		var/obj/item/offhand/offhand = item
-		if(offhand.wielding)
-			src.throw_item(target, offhand.wielding)
-			return
-
-	else if (istype(item, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = item
-		item = G.toss() //throw the person instead of the grab
-		if(ismob(item))
-			var/turf/start_T = get_turf(loc) //Get the start and target tile for the descriptors
-			var/turf/end_T = get_turf(target)
-			if(start_T && end_T)
-				var/mob/M = item
-				var/start_T_descriptor = "<font color='#6b5d00'>tile at [start_T.x], [start_T.y], [start_T.z] in area [get_area(start_T)]</font>"
-				var/end_T_descriptor = "<font color='#6b4400'>tile at [end_T.x], [end_T.y], [end_T.z] in area [get_area(end_T)]</font>"
-
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been thrown by [usr.name] ([usr.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-
-				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-				returnToPool(G)
-	if(!item)
-		return //Grab processing has a chance of returning null
-
-	var/obj/item/I = item
-	if(istype(I) && I.cant_drop > 0)
-		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
-		return
-
-	remove_from_mob(item)
-
-	//actually throw it!
-	if (item)
-		item.forceMove(get_turf(src))
-		if(!(item.flags & NO_THROW_MSG))
-			src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
-				drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
-
-		src.apply_inertia(get_dir(target, src))
-
-
-/*
-		if(istype(src.loc, /turf/space) || (src.flags & NOGRAV)) //they're in space, move em one space in the opposite direction
-			src.inertia_dir = get_dir(target, src)
-			step(src, inertia_dir)
-*/
-
-
-		var/throw_mult=1
-		if(istype(src,/mob/living/carbon/human))
-			var/mob/living/carbon/human/H=src
-			throw_mult = H.species.throw_mult
-			if(M_HULK in H.mutations || M_STRONG in H.mutations)
-				throw_mult+=0.5
-		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
 
 /*mob/living/carbon/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
@@ -545,7 +481,7 @@
 		return 0
 
 /mob/living/carbon/is_muzzled()
-	return(istype(src.wear_mask, /obj/item/clothing/mask/muzzle))
+	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
 
 
 /mob/living/carbon/proc/isInCrit()
@@ -690,3 +626,78 @@
 		"pulse")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/carbon/movement_tally_multiplier()
+	. = ..()
+	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		for(var/obj/item/I in get_clothing_items())
+			if(I.slowdown <= 0)
+				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
+			else
+				. *= I.slowdown
+
+		for(var/obj/item/I in held_items)
+			if(I.flags & SLOWDOWN_WHEN_CARRIED)
+				. *= I.slowdown
+
+/mob/living/carbon/base_movement_tally()
+	. = ..()
+	if(flying)
+		return // Calculate none of the following because we're technically on a vehicle
+	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+		return // Hyperzine ignores slowdown
+	if(istype(loc, /turf/space))
+		return // Space ignores slowdown
+
+	if(feels_pain() && !has_painkillers())
+		var/health_deficiency = (100 - health - halloss)
+		if(health_deficiency >= 40)
+			. += (health_deficiency / 25)
+
+
+/mob/living/carbon/proc/can_mind_interact(var/mob/M)
+	//	to_chat(world, "Starting can interact on [M]")
+	if(!iscarbon(M))
+		return 0 //Can't see non humans with your fancy human mind.
+//	to_chat(world, "[M] is a human")
+	var/turf/temp_turf = get_turf(M)
+	var/turf/our_turf = get_turf(src)
+	if(!temp_turf)
+//		to_chat(world, "[M] is in null space")
+		return 0
+	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
+//		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
+		if(temp_turf.z != map.zCentcomm)
+			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
+
+		return 0
+	if(M_PSY_RESIST in M.mutations)
+//		to_chat(world, "[M] has psy resist")
+		to_chat(src, "The mind of [M] is resisting!")
+		return 0
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+			return 0
+	if(ismartian(M))
+		var/mob/living/carbon/martian/MR = M
+		if(MR.head)
+			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
+				to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+				return 0
+	return 1
+
+/mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
+	if(invisibility || alpha <= 1 || !source_define)
+		return
+	if(include_clothing)
+		return ..()
+	body_alphas[source_define] = 1
+	regenerate_icons()
+	if(time > 0)
+		spawn(time)
+			if(src)
+				body_alphas.Remove(source_define)
+				regenerate_icons()
+

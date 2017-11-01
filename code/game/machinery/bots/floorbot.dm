@@ -597,7 +597,7 @@ var/global/list/floorbot_targets=list()
 	find_patrol_target()
 	return
 
-/obj/machinery/bot/floorbot/Bump(M as mob|obj) //Leave no door unopened!
+/obj/machinery/bot/floorbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 		var/obj/machinery/door/D = M
 		if(!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
@@ -700,9 +700,7 @@ var/global/list/floorbot_targets=list()
 			T.amount = src.amount
 			amount = 0
 
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	qdel(src)
 	return
 

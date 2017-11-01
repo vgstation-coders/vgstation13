@@ -166,6 +166,10 @@ var/datum/controller/gameticker/ticker
 	equip_characters()
 	data_core.manifest()
 	current_state = GAME_STATE_PLAYING
+	// Update new player panels so they say join instead of ready up.
+	for(var/mob/new_player/player in player_list)
+		player.new_player_panel_proc()
+
 
 	//here to initialize the random events nicely at round start
 	setup_economy()
@@ -203,7 +207,13 @@ var/datum/controller/gameticker/ticker
 				'sound/AI/vox_reminder6.ogg',
 				'sound/AI/vox_reminder7.ogg',
 				'sound/AI/vox_reminder8.ogg',
-				'sound/AI/vox_reminder9.ogg')
+				'sound/AI/vox_reminder9.ogg',
+				'sound/AI/vox_reminder10.ogg',
+				'sound/AI/vox_reminder11.ogg',
+				'sound/AI/vox_reminder12.ogg',
+				'sound/AI/vox_reminder13.ogg',
+				'sound/AI/vox_reminder14.ogg',
+				'sound/AI/vox_reminder15.ogg')
 			for(var/sound in welcome_sentence)
 				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn

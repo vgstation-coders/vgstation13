@@ -74,8 +74,8 @@
 
 /datum/surgery_step/limb/mend/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("[user] is beginning reposition flesh and nerve endings where where [target]'s [affected.display_name] used to be with [tool].", \
-	"You start repositioning flesh and nerve endings where where [target]'s [affected.display_name] used to be with [tool].")
+	user.visible_message("[user] is beginning to reposition flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].", \
+	"You start repositioning flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].")
 	..()
 
 /datum/surgery_step/limb/mend/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -120,7 +120,7 @@
 /datum/surgery_step/limb/prepare/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts adjusting area around [target]'s [affected.display_name] with \the [tool].", \
-	"You start adjusting area around [target]'s [affected.display_name] with \the [tool]..")
+	"You start adjusting area around [target]'s [affected.display_name] with \the [tool].")
 	..()
 
 /datum/surgery_step/limb/prepare/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -162,6 +162,9 @@
 	if (p.part)
 		if (!(target_zone in p.part))
 			return 0
+	if(isslimeperson(target))
+		to_chat(user, "<span class='info'>You're not even sure how to secure this to \the [target].</span>")
+		return 0
 	return ..()
 
 /datum/surgery_step/limb/attach/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -170,20 +173,11 @@
 	"You start attaching [tool] where [target]'s [affected.display_name] used to be.")
 
 /datum/surgery_step/limb/attach/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/obj/item/robot_parts/L = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
-	affected.robotize()
-	if(L.sabotaged)
-		affected.sabotaged = 1
-	else
-		affected.sabotaged = 0
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
-	qdel(tool)
-	tool = null
+
+	affected.attach(tool)
 
 /datum/surgery_step/limb/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -196,7 +190,7 @@
 ///////ATTACH PLANK///////
 /datum/surgery_step/limb/attach_plank
 	allowed_tools = list(
-		/obj/item/stack/sheet/wood=100,
+		/obj/item/weapon/peglimb=100,
 		)
 
 	can_infect = 0
@@ -206,6 +200,9 @@
 
 /datum/surgery_step/limb/attach_plank/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(isslimeperson(target))
+		to_chat(user, "<span class='info'>You're not even sure how to secure this to \the [target].</span>")
+		return 0
 	return ..() && affected.status & ORGAN_ATTACHABLE
 
 /datum/surgery_step/limb/attach_plank/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -217,12 +214,8 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
-	affected.peggify()
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
-	var/obj/item/stack/sheet/wood/peg = tool
-	peg.use(1)
+
+	affected.attach(tool)
 
 /datum/surgery_step/limb/attach_plank/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -235,7 +228,7 @@
 ///////ATTACH FLESH///////
 /datum/surgery_step/limb/attach_flesh
 	allowed_tools = list(
-		/obj/item/weapon/organ = 100,
+		/obj/item/organ/external = 100,
 		)
 
 	can_infect = 0
@@ -245,12 +238,16 @@
 
 /datum/surgery_step/limb/attach_flesh/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	var/obj/item/weapon/organ/o = tool
+	var/obj/item/organ/external/o = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if(!(affected.status & ORGAN_ATTACHABLE) || !istype(o))
 		return 0
 	if (o.part)
 		if (!(target_zone == o.part))
+			return 0
+	if(isslimeperson(target))
+		if(!o.species || !istype(o.species, /datum/species/slime))
+			to_chat(user, "<span class='info'>You're not even sure how to secure this to \the [target].</span>")
 			return 0
 	return ..()
 
@@ -264,16 +261,7 @@
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 
-	var/obj/item/weapon/organ/O = tool
-	if(istype(O))
-		affected.species = O.species
-
-	affected.fleshify()
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
-	qdel(tool)
-	tool = null
+	affected.attach(tool)
 
 /datum/surgery_step/limb/attach_flesh/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

@@ -20,41 +20,42 @@
 	future_rift(src, duration, radius)
 	qdel(src)
 
-/proc/future_rift(atom/A, var/duration, var/range = 7)	//Sends all non-timeless atoms in range duration time into the future.
+/proc/future_rift(atom/A, var/duration, var/range = 7, var/ignore_timeless = FALSE, var/single_target = FALSE)	//Sends all non-timeless atoms in range duration time into the future.
 	if(!A || !duration)
 		return
 
 	var/turf/ourturf = get_turf(A)
 	var/list/targets = circlerangeturfs(A, range)
 	spawn()
-		for(var/client/C in clients)
-			if(C.mob)
-				C.mob.see_fall(ourturf, range)
-		spawn(10)
-			for(var/client/C in clients)
-				if(C.mob)
-					C.mob.see_fall()
+		showrift(ourturf, range)
 
 	playsound(A, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
 
-	for(var/turf/T in targets)
-		for(var/atom/movable/everything in T)
-			if(everything.flags & TIMELESS || everything.being_sent_to_past)	//allowing future grenades to interact with past-tethered atoms would be a nightmare
-				continue
-			everything.send_to_future(duration)
-			if(ismob(everything))
-				var/mob/M = everything
-				M.playsound_local(everything, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+	if(single_target)
+		if(istype(A, /atom/movable))
+			var/atom/movable/AM = A
+			AM.attempt_future_send(duration, ignore_timeless)
+	else
+		for(var/turf/T in targets)
+			for(var/atom/movable/everything in T)
+				everything.attempt_future_send(duration, ignore_timeless)
 	spawn(duration)
 		spawn(1)	//so that mobs deafened by the effect will still hear the sound when it ends
 			playsound(ourturf, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
-		for(var/client/C in clients)
-			if(C.mob)
-				C.mob.see_fall(ourturf, range)
-		spawn(10)
-			for(var/client/C in clients)
-				if(C.mob)
-					C.mob.see_fall()
+		showrift(ourturf, range)
+
+/atom/movable/proc/attempt_future_send(var/duration, var/ignore_timeless = FALSE)
+	if(!duration)
+		return
+	if(!ignore_timeless && flags & TIMELESS)
+		return
+	if(being_sent_to_past)	//allowing future grenades to interact with past-tethered atoms would be a nightmare
+		return
+	send_to_future(duration)
+	if(ismob(src))
+		var/mob/M = src
+		M.playsound_local(M, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+
 
 /obj/item/weapon/grenade/chronogrenade/past
 	desc = "This experimental weapon will, 30 seconds after detonation, reset everything in the local area at the time of detonation to its state at the time of detonation."
@@ -65,39 +66,46 @@
 	past_rift(src, duration, radius)
 	qdel(src)
 
-/proc/past_rift(atom/A, var/duration, var/range = 7)	//After duration time, resets all non-timeless atoms in range at detonation to their current state.
+/proc/past_rift(atom/A, var/duration, var/range = 7, var/ignore_timeless = FALSE, var/single_target = FALSE)	//After duration time, resets all non-timeless atoms in range at detonation to their current state.
 	if(!A || !duration)
 		return
 
 	var/turf/ourturf = get_turf(A)
 	var/list/targets = circlerangeturfs(A, range)
 	spawn()
-		for(var/client/C in clients)
-			if(C.mob)
-				C.mob.see_fall(ourturf, range)
-		spawn(10)
-			for(var/client/C in clients)
-				if(C.mob)
-					C.mob.see_fall()
+		showrift(ourturf, range)
 
 	playsound(A, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
 
-	for(var/turf/T in targets)
-		for(var/atom/movable/everything in T)
-			if(everything.flags & TIMELESS || everything.being_sent_to_past)	//no stacking past-tethering
-				continue
-			everything.send_to_past(duration)
-			if(ismob(everything))
-				var/mob/M = everything
-				M.playsound_local(everything, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
-		T.send_to_past(duration)
+	if(single_target)
+		A.attempt_past_send(duration, ignore_timeless)
+	else
+		for(var/turf/T in targets)
+			for(var/atom/movable/everything in T)
+				everything.attempt_past_send(duration, ignore_timeless)
+			T.send_to_past(duration)
 	spawn(duration)
 		spawn(1)
 			playsound(ourturf, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
+		showrift(ourturf, range)
+
+/atom/proc/attempt_past_send(var/duration, var/ignore_timeless = FALSE)
+	if(!duration)
+		return
+	if(!ignore_timeless && flags & TIMELESS)
+		return
+	if(being_sent_to_past)	//no stacking past-tethering
+		return
+	send_to_past(duration)
+	if(ismob(src))
+		var/mob/M = src
+		M.playsound_local(M, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+
+/proc/showrift(var/turf/T, var/range)
+	for(var/client/C in clients)
+		if(C.mob)
+			C.mob.see_fall(T, range)
+	spawn(10)
 		for(var/client/C in clients)
 			if(C.mob)
-				C.mob.see_fall(ourturf, range)
-		spawn(10)
-			for(var/client/C in clients)
-				if(C.mob)
-					C.mob.see_fall()
+				C.mob.see_fall()

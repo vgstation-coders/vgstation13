@@ -61,6 +61,28 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/handle_beams()
 	return 1
 
+/atom/variable_edited(variable_name, old_value, new_value)
+	.=..()
+
+	switch(variable_name)
+		if("light_color")
+			set_light(l_color = new_value)
+			return 1
+		if("light_range")
+			set_light(new_value)
+			return 1
+		if("light_power")
+			set_light(l_power = new_value)
+
+		if("contents")
+			if(islist(new_value))
+				if(length(new_value) == 0) //empty list
+					return 0 //Replace the contents list with an empty list, nullspacing everything
+				else
+					//If the new value is a list with objects, don't nullspace the old objects, and merge the two lists together peacefully
+					contents.Add(new_value)
+					return 1
+
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
@@ -413,6 +435,11 @@ its easier to just keep the beam vertical.
 /atom/proc/relaymove()
 	return
 
+// Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
+// Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
+/atom/proc/relayface()
+	return
+
 // Severity is actually "distance".
 // 1 is pretty much just del(src).
 // 2 is moderate damage.
@@ -536,8 +563,9 @@ its easier to just keep the beam vertical.
 	qdel(src)
 	return 1
 
-/atom/proc/hitby(atom/movable/AM as mob|obj)
-	return
+// Returns TRUE if it's been handled, children should return if parent has already handled
+/atom/proc/hitby(var/atom/movable/AM)
+	. = isobserver(AM)
 
 /*
 /atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -603,6 +631,7 @@ its easier to just keep the beam vertical.
 			if(!istype(H.dna, /datum/dna))
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
+				H.dna.flavor_text = H.flavor_text
 		H.check_dna()
 
 		//Now, deal with gloves.
@@ -749,7 +778,9 @@ its easier to just keep the beam vertical.
 	gender = gend
 
 /mob/living/carbon/human/setGender(gend = FEMALE)
-	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
+	if(species.gender)	//species-level gender override
+		gend = species.gender
+	else if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
 		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
 	// var/old_gender = src.gender
 	src.gender = gend
@@ -772,8 +803,12 @@ its easier to just keep the beam vertical.
 		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
 
-/atom/proc/can_spook()
-	return !blessed
+/atom/proc/can_spook(var/msg = 1)
+	if(blessed)
+		if(msg)
+			to_chat(usr, "Your hand goes right through \the [src]... Is that some holy water dripping from it?")
+		return FALSE
+	return TRUE
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
@@ -818,3 +853,11 @@ its easier to just keep the beam vertical.
 		return FALSE
 	else
 		return TRUE
+
+/atom/proc/to_bump()
+	return
+
+/atom/proc/get_last_player_touched()	//returns a reference to the mob of the ckey that last touched the atom
+	for(var/client/C in clients)
+		if(uppertext(C.ckey) == uppertext(fingerprintslast))
+			return C.mob

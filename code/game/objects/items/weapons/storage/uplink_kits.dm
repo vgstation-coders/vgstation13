@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/box/syndicate/
 	New()
 		..()
-		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
+		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10))
 
 		switch (tagname)
 			if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -117,6 +117,35 @@
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
+
+			if("ocelot")
+				new /obj/item/weapon/gun/projectile/colt(src)
+				new /obj/item/weapon/gun/projectile/colt(src)
+				new /obj/item/ammo_storage/speedloader/a357(src)
+				new /obj/item/clothing/mask/scarf/red(src)
+				new /obj/item/clothing/under/color/black(src)
+				new /obj/item/clothing/shoes/jackboots(src)
+				new /obj/item/clothing/head/beret/sec/ocelot(src)
+				new /obj/item/clothing/gloves/red(src)
+				new /obj/item/clothing/accessory/storage/bandolier(src)
+
+			if("anarchist")//14+14+6=34, plus molotovs
+				new /obj/item/weapon/implanter/traitor(src)
+				new /obj/item/weapon/implanter/traitor(src)
+				new /obj/item/clothing/mask/bandana/red(src)
+				new /obj/item/clothing/mask/bandana/red(src)
+				new /obj/item/clothing/mask/bandana/red(src)
+				new /obj/item/weapon/card/emag(src)
+				new /obj/item/weapon/storage/box/syndie_kit/molotovs(src)
+
+			if("emagsandglue")//(4+6+4+6+4+6+4)*5=memes
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+				new /obj/item/weapon/storage/box/syndie_kit/emags_and_glue(src)
+
+
 		tag = tagname
 
 
@@ -235,6 +264,15 @@
 	new /obj/item/weapon/reagent_containers/syringe(src)
 	return
 
+/obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	name = "box (C)"
+
+/obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/bottle/hypozine(src)
+	new /obj/item/weapon/reagent_containers/syringe(src)
+	return
+
 /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
@@ -247,3 +285,26 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/toy/snappop/smokebomb(src)
+
+/obj/item/weapon/storage/box/syndie_kit/molotovs/
+	name = "box (molotovs)"
+
+/obj/item/weapon/storage/box/syndie_kit/molotovs/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/drinks/molotov(src)
+	new /obj/item/weapon/lighter/red(src)
+
+/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/ //Exactly what it sounds like.
+	name = "box (E&G)"
+
+/obj/item/weapon/storage/box/syndie_kit/emags_and_glue/New()
+	..()
+	new /obj/item/weapon/glue(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/glue(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/glue(src)
+	new /obj/item/weapon/card/emag(src)
+	new /obj/item/weapon/glue(src)
+	return

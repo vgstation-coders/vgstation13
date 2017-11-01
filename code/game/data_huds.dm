@@ -13,6 +13,20 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 	if(src in sec_hud_users)
 		sec_hud_users -= src
 
+proc/check_HUD_visibility(var/mob/living/target, var/mob/user)
+	if(user.see_invisible < target.invisibility)
+		return FALSE
+	if(target.alpha <= 1)
+		return FALSE
+	for(var/i in target.alphas)
+		if(target.alphas[i] <= 1)
+			return FALSE
+	if(iscarbon(target))
+		var/mob/living/carbon/C = target
+		for(var/i in C.body_alphas)
+			if(C.body_alphas[i] <= 1)
+				return FALSE
+	return TRUE
 
 //Medical HUD outputs. Called by the Life() proc of the mob using it, usually.
 proc/process_med_hud(var/mob/M, var/mob/eye)
@@ -32,12 +46,8 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 	for(var/mob/living/carbon/human/patient in range(T))
 		if(patient.head && istype(patient.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			continue
-		if(M.see_invisible < patient.invisibility)
+		if(!check_HUD_visibility(patient, M))
 			continue
-		var/foundVirus = 0
-		for(var/datum/disease/D in patient.viruses)
-			if(!D.hidden[SCANNER])
-				foundVirus++
 		if(!C)
 			continue
 
@@ -55,7 +65,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(foundVirus)
+			else if(has_any_recorded_disease(patient))
 				holder.icon_state = "hudill"
 			else
 				holder.icon_state = "hudhealthy"
@@ -78,7 +88,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 	else
 		T = get_turf(M)
 	for(var/mob/living/carbon/human/perp in range(T))
-		if(M.see_invisible < perp.invisibility)
+		if(!check_HUD_visibility(perp, M))
 			continue
 		holder = perp.hud_list[ID_HUD]
 		if(!holder)

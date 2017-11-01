@@ -85,14 +85,14 @@
 				to_chat(M, "<span class='warning'>Your gun feels pleasantly warm for a moment.</span>")
 			else
 				to_chat(M, "<span class='warning'>You feel a warm sensation.</span>")
-			M.apply_effect(rand(3,120), IRRADIATE)
+			M.apply_radiation(rand(3,120), RAD_EXTERNAL)
 		lightfail = 1
 	else
 		for (var/mob/living/M in range(rand(1,4),src)) //Big failure, TIME FOR RADIATION BITCHES
 			if (src in M.contents)
 				to_chat(M, "<span class='warning'>Your gun's reactor overloads!</span>")
 			to_chat(M, "<span class='warning'>You feel a wave of heat wash over you.</span>")
-			M.apply_effect(300, IRRADIATE)
+			M.apply_radiation(300, RAD_EXTERNAL)
 		crit_fail = 1 //break the gun so it stops recharging
 		processing_objects.Remove(src)
 		update_icon()

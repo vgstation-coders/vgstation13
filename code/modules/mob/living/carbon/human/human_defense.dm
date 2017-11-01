@@ -71,6 +71,9 @@ emp_act
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.armor[type]
+	if(istype(loc, /obj/mecha))
+		var/obj/mecha/M = loc
+		protection += M.rad_protection
 	return protection
 
 /mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
@@ -111,18 +114,22 @@ emp_act
 	return body_coverage
 
 
-/mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
+/mob/living/carbon/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
 	if(!incapacitated())
 		for(var/obj/item/weapon/I in held_items)
 			if(I.IsShield() && I.on_block(damage, attack_text))
 				return 1
 
-	if(istype(wear_suit, /obj/item/)) //Check armor
+	return 0
+
+/mob/living/carbon/human/check_shields(damage, attack_text = "the attack")
+	if(..())
+		return 1
+
+	if(istype(wear_suit, /obj/item)) //Check armor
 		var/obj/item/I = wear_suit
 		if(I.IsShield() && I.on_block(damage, attack_text))
 			return 1
-
-	return 0
 
 /mob/living/carbon/human/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)

@@ -741,7 +741,7 @@ var/global/mulebot_count = 0
 	return
 
 // called when bot bumps into anything
-/obj/machinery/bot/mulebot/Bump(var/atom/obs)
+/obj/machinery/bot/mulebot/to_bump(var/atom/obs)
 	if(!wires.MobAvoid())		//usually just bumps, but if avoidance disabled knock over mobs
 		var/mob/M = obs
 		if(ismob(M))
@@ -941,14 +941,20 @@ var/global/mulebot_count = 0
 		cell.update_icon()
 		cell = null
 
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 
 	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 	O.New(O.loc)
 	unload(0)
 	qdel(src)
+
+/obj/machinery/bot/mulebot/install_pai(obj/item/device/paicard/P)
+	..()
+	overlays += image('icons/obj/aibots.dmi', "mulebot1_pai")
+
+/obj/machinery/bot/mulebot/eject_integratedpai_if_present()
+	if(..())
+		overlays -= image('icons/obj/aibots.dmi', "mulebot1_pai")
 
 /obj/machinery/bot/mulebot/getpAIMovementDelay()
 	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2

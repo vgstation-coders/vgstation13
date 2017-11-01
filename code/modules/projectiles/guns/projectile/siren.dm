@@ -90,6 +90,10 @@
 /obj/item/weapon/gun/siren/process_chambered()
 	return in_chamber
 
+/obj/item/weapon/gun/siren/can_discharge()
+	if(reagents.total_volume < 10)
+		return 1
+	
 /obj/item/weapon/gun/siren/supersoaker
 	name = "super soaker"
 	desc = "For ages 10 and up."

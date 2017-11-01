@@ -158,10 +158,10 @@ var/shuttle_call/shuttle_calls[0]
 			if (istype(I, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = I
 				I = pda.id
-			if (I && istype(I))
-				if(access_captain in I.access)
-					authenticated = 2
-			if(authenticated != 2)
+			//if (I && istype(I))
+			//	if(access_captain in I.access)
+			//		authenticated = 2
+			if(!authenticated)
 				to_chat(usr, "<span class='warning'>You do not have clearance to use this function.</span>")
 				return
 			setMenuState(usr,COMM_SCREEN_ERT)
@@ -192,13 +192,13 @@ var/shuttle_call/shuttle_calls[0]
 			//	to_chat(usr, "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>")
 			//	return
 
-			if(emergency_shuttle.online)
-				to_chat(usr, "The emergency shuttle is already on its way.")
-				return
+			//if(emergency_shuttle.online)
+			//	to_chat(usr, "The emergency shuttle is already on its way.")
+			//	return
 			if(!(get_security_level() in list("red", "delta")))
 				to_chat(usr, "<span class='notice'>The station must be in an emergency to request a Response Team.</span>")
 				return
-			if(authenticated != 2 || issilicon(usr))
+			if(!authenticated || issilicon(usr))
 				to_chat(usr, "<span class='warning'>\The [src.name]'s screen flashes, \"Access Denied\".</span>")
 				return
 
@@ -362,7 +362,7 @@ var/shuttle_call/shuttle_calls[0]
 
 
 
-/obj/machinery/computer/communications/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/communications/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(user.stat)
 		return
 
@@ -420,7 +420,7 @@ var/shuttle_call/shuttle_calls[0]
 	data["shuttle"]=shuttle
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm

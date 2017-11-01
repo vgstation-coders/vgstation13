@@ -50,6 +50,10 @@
 			update_icon()
 			return 0
 
+/obj/item/weapon/melee/baton/proc/canbehonkified()
+	return 1
+	
+			
 /obj/item/weapon/melee/baton/update_icon()
 	if(status)
 		icon_state = "[initial(name)]_active"
@@ -74,7 +78,7 @@
 		to_chat(user, "<span class='warning'>The baton does not have a power source installed.</span>")
 
 /obj/item/weapon/melee/baton/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/cell))
+	if(ispowercell(W))
 		if(!bcell)
 			if(user.drop_item(W, src))
 				bcell = W
@@ -93,7 +97,28 @@
 			update_icon()
 			return
 		..()
+	else if(isbikehorn(W) && canbehonkified(src))
+		var/obj/item/weapon/bikehorn/HONKER = W
+		if(HONKER.can_honk_baton)
+			user.visible_message("<span class='notice'>[user] starts jamming \the [src] into the mouth of \the [HONKER].</span>",\
+			"<span class='info'>You do your best to jam \the [src] into the mouth of \the [HONKER].</span>")
 
+			if(do_after(user, src, 5 SECONDS))
+				if(!W || !src)
+					return
+
+				if(!user.drop_item(HONKER))
+					to_chat(user, "<span class='warning'>You fail to push \the [HONKER] hard enough, and it falls off \the [src].</span>")
+					return
+
+				var/obj/item/weapon/bikehorn/baton/B = new /obj/item/weapon/bikehorn/baton
+
+				user.put_in_hands(B)
+				user.visible_message("<span class='notice'>[user] jams \the [src] into the mouth of \the [HONKER].</span>",\
+				"<span class='notice'>You jam \the [src] into the mouth of \the [HONKER]. Honk!</span>")
+				qdel(HONKER)
+				qdel(src)
+		
 /obj/item/weapon/melee/baton/attack_self(mob/user)
 	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
@@ -161,8 +186,8 @@
 		L.lastattacker = user
 
 		L.Stun(stunforce)
+		L.apply_effect(10, STUTTER, 0)
 		L.Knockdown(stunforce)
-		L.apply_effect(STUTTER, stunforce)
 
 		L.visible_message("<span class='danger'>[L] has been stunned with [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with [src] by [user]!</span>",\
@@ -240,6 +265,9 @@
 	hitcost = 2500
 	slot_flags = null
 
+/obj/item/weapon/melee/baton/cattleprod/canbehonkified()
+	return 0
+	
 // Yes, loaded, this is so attack_self() works.
 // In the unlikely event somebody manages to get a hold of this item, don't allow them to fuck with the nonexistant cell.
 /obj/item/weapon/melee/baton/loaded/borg/attackby(var/obj/item/W, var/mob/user)

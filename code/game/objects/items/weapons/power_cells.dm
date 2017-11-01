@@ -25,6 +25,10 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (FIRELOSS)
 
+/obj/item/weapon/cell/empty/New()
+	..()
+	charge = 0
+
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
@@ -76,6 +80,7 @@
 	icon_state = "scell"
 	maxcharge = 20000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 70)
+
 /obj/item/weapon/cell/super/empty/New()
 	..()
 	charge = 0
@@ -91,15 +96,6 @@
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/infinite
-	name = "infinite-capacity power cell!"
-	icon_state = "icell"
-	origin_tech =  null
-	maxcharge = 1.#INF
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
-	use()
-		return 1
-
 /obj/item/weapon/cell/potato
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
@@ -112,6 +108,31 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 
+/obj/item/weapon/cell/crepe
+	name = "power crêpe"
+	desc = "Warning: May contain dairy products, 12,000kJ of searing death, gluten."
+	origin_tech = Tc_POWERSTORAGE + "=3"
+	icon_state = "power_crepe"
+	maxcharge = 12000
+	charge = 12000
+	w_type = RECYK_BIOLOGICAL
+	minor_fault = 1
+
+/obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
+	if(charge)
+		user.visible_message("<span class = 'notice'>\The [user] takes a bite out of \the [src]</span>", "<span class = 'warning'>You take a bite out of \the [src]</span>")
+		spawn(rand(1,3) SECONDS)
+			var/power_to_use = min(charge, rand(800,1200))
+			playsound(loc, 'sound/effects/eleczap.ogg', 80, 1)
+			if(use(power_to_use))
+				user.adjustFireLoss(power_to_use/100) //So 8 to 12 damage
+				user.visible_message("<span class = 'notice'>\The [user] is electrocuted by \the [src]</span>", "<span class = 'warning'>You are [pick("frazzled","electrocuted","zapped")] by \the [src]!</span>")
+				if(!user.light_range)
+					user.set_light(2,2,"#ffff00")
+					spawn(power_to_use/100 SECONDS)
+						user.set_light(0)
+	else
+		to_chat(user, "<span class = 'notice'>\The [src] doesn't seem to have much of a tingle to it.</span>")
 
 /obj/item/weapon/cell/slime
 	name = "charged slime core"
@@ -141,3 +162,19 @@
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+
+/obj/item/weapon/cell/infinite
+	name = "infinite-capacity power cell!"
+	icon_state = "icell"
+	origin_tech = null
+	maxcharge = 35000
+	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+
+/obj/item/weapon/cell/infinite/New()
+	..()
+	desc = "This cell is the latest in NT technology, having the capability to perpetually recharge itself. It has a power rating of Infinity!"
+
+/obj/item/weapon/cell/infinite/use()
+	..()
+	charge = maxcharge
+	return 1

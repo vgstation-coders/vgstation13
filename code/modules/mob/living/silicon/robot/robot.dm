@@ -5,12 +5,15 @@
 	icon_state = "robot"
 	maxHealth = 300
 	health = 300
+	flashed = 0
 
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
+	var/pressure_alert = 0
+	var/temp_alert = 0
 	//var/crisis //Admin-settable for combat module use.
 
 	var/obj/item/device/station_map/station_holomap = null
@@ -22,6 +25,8 @@
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
 	var/obj/abstract/screen/sensor = null
+
+
 
 	var/shown_robot_modules = 0
 	var/obj/abstract/screen/robot_modules_background
@@ -64,7 +69,6 @@
 	var/lower_mod = 0
 	var/jetpack = 0
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
-	var/datum/effect/effect/system/spark_spread/spark_system//So they can initialize sparks whenever/N
 	var/jeton = 0
 
 	var/killswitch = 0
@@ -81,10 +85,6 @@
 
 
 /mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0,var/startup_sound='sound/voice/liveagain.ogg')
-	spark_system = new /datum/effect/effect/system/spark_spread()
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
-
 	if(isMoMMI(src))
 		wires = new /datum/wires/robot/mommi(src)
 	else
@@ -123,7 +123,7 @@
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
-		camera.network = list("SS13","Robots")
+		camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -163,6 +163,8 @@
 	add_language(LANGUAGE_GUTTER, 0)
 	add_language(LANGUAGE_MONKEY, 0)
 	add_language(LANGUAGE_MOUSE, 0)
+	add_language(LANGUAGE_GOLEM, 0)
+	add_language(LANGUAGE_SLIME, 0)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 // setup the PDA and its name
@@ -230,7 +232,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Peacekeeper")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
@@ -265,6 +267,8 @@
 			module_sprites["#11"] = "servbot"
 			module_sprites["Spider"] = "spider-standard"
 			module_sprites["Polar"] = "kodiak-standard"
+			module_sprites["Noble"] = "Noble-STD"
+			module_sprites["R34 - STR4a 'Durin'"] = "durin"
 			speed = 0
 
 		if("Service")
@@ -280,13 +284,15 @@
 			module_sprites["Sleek"] = "sleekservice"
 			module_sprites["#27"] = "servbot-service"
 			module_sprites["Teddy"] = "kodiak-service"
+			module_sprites["Noble"] = "Noble-SRV"
+			module_sprites["R34 - SRV9a 'Llyod'"] = "lloyd"
 			speed = 0
 
 		if("Supply")
 			module = new /obj/item/weapon/robot_module/miner(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_cargo(radio))
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("MINE")
+			if(camera && CAMERANET_ROBOTS in camera.network)
+				camera.network.Add(CAMERANET_MINE)
 			module_sprites["Basic"] = "Miner_old"
 			module_sprites["Advanced Droid"] = "droid-miner"
 			module_sprites["Treadhead"] = "Miner"
@@ -295,13 +301,15 @@
 			module_sprites["Sleek"] = "sleekminer"
 			module_sprites["#31"] = "servbot-miner"
 			module_sprites["Kodiak"] = "kodiak-miner"
+			module_sprites["Noble"] = "Noble-SUP"
+			module_sprites["R34 - MIN2a 'Ishimura'"] = "ishimura"
 			speed = -1
 
 		if("Medical")
 			module = new /obj/item/weapon/robot_module/medical(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_med(radio))
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Medical")
+			if(camera && CAMERANET_ROBOTS in camera.network)
+				camera.network.Add(CAMERANET_MEDBAY)
 			module_sprites["Basic"] = "Medbot"
 			module_sprites["Advanced Droid"] = "droid-medical"
 			module_sprites["Needles"] = "medicalrobot"
@@ -311,9 +319,11 @@
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
 			module_sprites["Arachne"] = "arachne"
+			module_sprites["Noble"] = "Noble-MED"
+			module_sprites["R34 - MED6a 'Gibbs'"] = "gibbs"
 			speed = -2
 
-		if("Peacekeeper")
+		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
 			module_sprites["Basic"] = "secborg"
@@ -324,7 +334,9 @@
 			module_sprites["Marina-SC"] = "marinaSC"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
-			to_chat(src, "<span class='warning'><big><b>Just a reminder, by default you do not follow space law, you follow your lawset</b></big></span>")
+			module_sprites["Noble"] = "Noble-SEC"
+			module_sprites["R34 - SEC10a 'Woody'"] = "woody"
+			to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
 			speed = 0
 
 		if("TG17355")
@@ -336,8 +348,8 @@
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_eng(radio))
-			if(camera && "Robots" in camera.network)
-				camera.network.Add("Engineering")
+			if(camera && CAMERANET_ROBOTS in camera.network)
+				camera.network.Add(CAMERANET_ENGI)
 			module_sprites["Basic"] = "Engineering"
 			module_sprites["Antique"] = "engineerrobot"
 			module_sprites["Engiseer"] = "Engiseer"
@@ -347,6 +359,8 @@
 			module_sprites["Sleek"] = "sleekengineer"
 			module_sprites["#25"] = "servbot-engi"
 			module_sprites["Kodiak"] = "kodiak-eng"
+			module_sprites["Noble"] = "Noble-ENG"
+			module_sprites["R34 - ENG7a 'Conagher'"] = "conagher"
 			speed = -2
 
 		if("Janitor")
@@ -359,6 +373,8 @@
 			module_sprites["Marina-JN"] = "marinaJN"
 			module_sprites["Sleek"] = "sleekjanitor"
 			module_sprites["#29"] = "servbot-jani"
+			module_sprites["Noble"] = "Noble-JAN"
+			module_sprites["R34 - CUS3a 'Flynn'"] = "flynn"
 			speed = -1
 
 		if("Combat")
@@ -369,10 +385,10 @@
 			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
 			module_sprites["Mr. Gutsy"] = "mrgutsy"
 			module_sprites["Marina-CB"] = "marinaCB"
-			module_sprites["Squadbot"] = "squats"
 			module_sprites["#41"] = "servbot-combat"
 			module_sprites["Grizzly"] = "kodiak-combat"
 			module_sprites["Rottweiler"] = "rottweiler-combat"
+			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			speed = -1
 
 	//Custom_sprite check and entry
@@ -388,11 +404,11 @@
 
 	var/picked  = pick(module_sprites)
 	icon_state = module_sprites[picked]
+	base_icon = icon_state
 
 	if(!forced_module)
 		choose_icon(6, module_sprites)
 
-	base_icon = icon_state
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
@@ -443,18 +459,25 @@
 		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return 0
 	namepick_uses--
+
 	var/newname
 	for(var/i = 1 to 3)
-		newname = copytext(sanitize(input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [3-i] [0-i != 1 ? "tries":"try"] left","") as text),1,MAX_NAME_LEN)
-		if(newname == "")
-			continue
-		if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
-			break
+		newname = trimcenter(trim(stripped_input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		if(newname == null)
+			if(alert(src,"Are you sure you want a default borg name?",,"Yes","No") == "Yes")
+				break
+		else
+			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+				break
 
-	if (newname != "")
-		custom_name = newname
+	custom_name = newname
 	updatename()
 	updateicon()
+	if(newname)
+		to_chat(src, "<span class='warning'>You have changed your name to [newname]. You can change your name [namepick_uses] more times.<span>")
+	else
+		to_chat(src, "<span class='warning'>You have reset your name. You can change your name [namepick_uses] more times.<span>")
+
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
@@ -492,8 +515,11 @@
 	viewalerts = 1
 	src << browse(dat, "window=robotalerts&can_close=0")
 
+/mob/living/silicon/robot/can_diagnose()
+	return is_component_functioning("diagnosis unit")
+
 /mob/living/silicon/robot/proc/self_diagnosis()
-	if(!is_component_functioning("diagnosis unit"))
+	if(!can_diagnose())
 		return null
 
 	var/dat = "<HEAD><TITLE>[src.name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
@@ -508,7 +534,7 @@
 	set category = "Robot Commands"
 	set name = "Self Diagnosis"
 
-	if(!is_component_functioning("diagnosis unit"))
+	if(!can_diagnose())
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
 
 	var/dat = self_diagnosis()
@@ -686,7 +712,7 @@
 	..(Proj)
 	updatehealth()
 	if(prob(75) && Proj.damage > 0)
-		spark_system.start()
+		spark(src, 5, FALSE)
 	return 2
 
 
@@ -743,7 +769,7 @@
 				else
 					to_chat(user, "You fail to emag the cover lock.")
 					if(prob(25))
-						to_chat(src, "Hack attempt detected.")
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
 			else
 				to_chat(user, "The cover is already open.")
 		else
@@ -790,7 +816,7 @@
 				else
 					to_chat(user, "You fail to unlock [src]'s interface.")
 					if(prob(25))
-						to_chat(src, "Hack attempt detected.")
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
 	return 1
 
 
@@ -809,6 +835,8 @@
 				W.forceMove(null)
 
 				to_chat(usr, "<span class='notice'>You install the [W.name].</span>")
+				if(can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">New [W.name] installed.</span>")
 
 				return
 
@@ -842,11 +870,15 @@
 		if(opened)
 			if(cell)
 				to_chat(user, "You close the cover.")
+				if(can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Cover closed.</span>")
 				opened = 0
 				updateicon()
 			else if(mmi && wiresexposed && wires.IsAllCut())
 				//Cell is out, wires are exposed, remove MMI, produce damaged chassis, baleet original mob.
 				to_chat(user, "You jam the crowbar into the robot and begin levering [mmi].")
+				if(can_diagnose())
+					to_chat(src, "<span class='alert' style=\"font-family:Courier\">Chassis disassembly in progress.</span>")
 				if (do_after(user, src,3))
 					to_chat(user, "You damage some parts of the chassis, but eventually manage to rip out [mmi]!")
 					var/obj/item/robot_parts/robot_suit/C = new/obj/item/robot_parts/robot_suit(loc)
@@ -874,12 +906,16 @@
 				if(istype(C.wrapped, /obj/item/broken_device))
 					var/obj/item/broken_device/I = C.wrapped
 					to_chat(user, "You remove \the [I].")
+					if(can_diagnose())
+						to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed [C] removed.</span>")
 					I.forceMove(src.loc)
 				else
 					var/obj/item/robot_parts/robot_component/I = C.wrapped
 					I.brute_damage = C.brute_damage
 					I.electronics_damage = C.electronics_damage
 					to_chat(user, "You remove \the [I].")
+					if(can_diagnose())
+						to_chat(src, "<span class='info' style=\"font-family:Courier\">Functional [I.name] removed.</span>")
 					I.forceMove(src.loc)
 
 				if(C.installed == 1)
@@ -891,6 +927,8 @@
 				to_chat(user, "The cover is locked and cannot be opened.")
 			else
 				to_chat(user, "You open the cover.")
+				if(can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Cover opened.</span>")
 				opened = 1
 				updateicon()
 
@@ -908,11 +946,15 @@
 			oldpowercell.brute_damage = C.brute_damage
 			user.drop_item(W, src)
 			user.put_in_hands(oldpowercell)
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 			C.installed = 1
 			C.wrapped = W
 			C.electronics_damage = cell.electronics_damage
 			C.brute_damage = cell.brute_damage
 			C.install()
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
 		else
 			user.drop_item(W, src)
 			cell = W
@@ -923,6 +965,8 @@
 			C.electronics_damage = cell.electronics_damage
 			C.brute_damage = cell.brute_damage
 			C.install()
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
 
 	else if (iswiretool(W))
 		if (wiresexposed)
@@ -933,11 +977,15 @@
 	else if(isscrewdriver(W) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+		if(can_diagnose())
+			to_chat(src, "<span class='info' style=\"font-family:Courier\">Internal wiring [wiresexposed ? "exposed" : "unexposed"].</span>")
 		updateicon()
 
 	else if(isscrewdriver(W) && opened && cell)	// radio
 		if(radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Radio encryption keys modified.</span>")
 		else
 			to_chat(user, "Unable to locate a radio.")
 		updateicon()
@@ -945,6 +993,8 @@
 	else if(istype(W, /obj/item/device/encryptionkey/) && opened)
 		if(radio)//sanityyyyyy
 			radio.attackby(W,user)//GTFO, you have your own procs
+			if (can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Radio encryption key installed.</span>")
 		else
 			to_chat(user, "Unable to locate a radio.")
 
@@ -957,20 +1007,26 @@
 			if(allowed(usr))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
+				if(can_diagnose())
+					to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
-		U.attempt_action(src,user)
-
+		if (U.attempt_action(src,user))
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Installation of [U.name] failed.</span>")
+		else
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Installation of [U.name] succeeded.</span>")
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return 0
 
 	else
-		spark_system.start()
+		spark(src, 5, FALSE)
 		return ..()
 
 /mob/living/silicon/robot/verb/unlock_own_cover()
@@ -1011,7 +1067,48 @@
 					visible_message("<span class='danger'>[M] attempted to force back [src]!</span>")
 	return
 
+/mob/living/silicon/robot/disarm_mob(mob/living/disarmer)
+	var/rotate = dir
 
+	if (lying)
+		return
+	if (!flashed || !stat == DEAD)
+		return
+	if (get_dir(disarmer, src) in(list(4,8)))
+		rotate = pick(1,2)
+
+	add_logs(disarmer, src, "tipped over", admin = (src.ckey && disarmer.ckey) ? TRUE : FALSE)
+	do_attack_animation(src, disarmer)
+
+	if(prob(40))
+		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+		visible_message("<span class='danger'>\The [disarmer] has attempted to tip over \the [src]!</span>")
+		return
+	else
+		lying = 1
+		uneq_all()
+		AdjustKnockdown(5)
+		animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
+		spark(src, 5, FALSE)
+		visible_message("<span class='danger'>\The [disarmer] has tipped over \the [src]!</span>")
+		if (prob(2))
+			locked = 0
+			opened = 1
+			updateicon()
+			playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
+			visible_message("<span class='danger'>\The [src]'s cover flies open!</span>")
+		else
+			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		to_chat(src, "<span class='notice'>Starting self-righting mechanism.</span>")
+		spawn(knockdown SECONDS)
+			if (stat != DEAD)
+				wakeup()
+
+/mob/living/silicon/robot/proc/wakeup()
+	if (lying)
+		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
+		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
+	lying = 0
 
 /mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
@@ -1033,6 +1130,8 @@
 			user.put_in_active_hand(cell)
 			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
 			src.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
 			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [src.name] ([src.ckey])</font>"
 			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([src.ckey])</font>")
@@ -1046,13 +1145,25 @@
 			var/obj/item/broken_device = cell_component.wrapped
 			to_chat(user, "You remove \the [broken_device].")
 			user.put_in_active_hand(broken_device)
+			if(can_diagnose())
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed power cell removed.</span>")
 			return
 
 	switch(user.a_intent)
 		if(I_HELP)
-			help_shake_act(user)
+			if (src.lying)
+				if (src.stat != DEAD)
+					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [src.name]!</span>")
+					AdjustKnockdown(-3)
+					if (knockdown <= 0)
+						wakeup()
+			else
+				help_shake_act(user)
 		if(I_HURT)
 			user.unarmed_attack_mob(src)
+		if(I_DISARM)
+			disarm_mob(user)
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all

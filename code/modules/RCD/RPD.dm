@@ -46,6 +46,8 @@
 		/datum/rcd_schematic/pipe/he_bent,
 		/datum/rcd_schematic/pipe/juntion,
 		/datum/rcd_schematic/pipe/heat_exchanger,
+		/datum/rcd_schematic/pipe/he_manifold,
+		/datum/rcd_schematic/pipe/he_manifold4w,
 
 		/* Insulated Pipes */
 		/datum/rcd_schematic/pipe/insulated,
@@ -74,7 +76,7 @@
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-	
+
 	hook_key = L.on_clickon.Add(src, "mob_onclickon")
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
@@ -89,7 +91,54 @@
 /obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
 	if (L.get_active_hand() != src)
 		return
-	
+
 	var/list/modifiers = event_args["modifiers"]
 	modifiers -= list("alt", "shift", "ctrl")
-	
+
+/obj/item/device/rcd/rpd/mech/Topic(var/href, var/list/href_list)
+	..()
+	if(href_list["close"])
+		return
+	if(usr.incapacitated() || usr.isStunned() || usr.loc != src.loc.loc)
+		return TRUE
+
+	if (href_list["schematic"])
+		var/datum/rcd_schematic/C = find_schematic(href_list["schematic"])
+
+		if (!istype(C))
+			return 1
+
+		switch (href_list["act"])
+			if ("select")
+				try_switch(usr, C)
+
+			if ("fav")
+				favorites |= C
+				rebuild_ui()
+
+			if ("defav")
+				favorites -= C
+				rebuild_ui()
+
+			if ("favorder")
+				var/index = favorites.Find(C)
+				if (href_list["order"] == "up")
+					if (index == favorites.len)
+						return 1
+
+					favorites.Swap(index, index + 1)
+
+				else
+					if (index == 1)
+						return 1
+
+					favorites.Swap(index, index - 1)
+
+				rebuild_favs()
+
+		return 1
+
+	// The href didn't get handled by us so we pass it down to the selected schematic.
+	if (selected)
+		return selected.Topic(href, href_list)
+

@@ -23,17 +23,20 @@
 /obj/machinery/atmospherics/miner/New()
 	..()
 	air_contents = new
-	air_contents.volume=1000
+	air_contents.volume = 1000
+	pumping.volume = 1000 //Same as above so copying works correctly
 	air_contents.temperature = T20C
 	AddAir()
 	air_contents.update_values()
 	update_icon()
 
-/obj/machinery/atmospherics/miner/wrenchAnchor(mob/user)
+/obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
 	if(on)
 		on = 0
 		update_icon()
-	..()
 
 // Critical equipment.
 /obj/machinery/atmospherics/miner/ex_act(severity)

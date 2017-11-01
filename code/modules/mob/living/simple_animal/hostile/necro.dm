@@ -2,16 +2,18 @@
 	var/mob/creator
 	var/unique_name = 0
 	faction = "necro"
+	mob_property_flags = MOB_UNDEAD
 
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
 	..()
+	if(Controller)
+		mind = Controller
+		ckey = ckey(mind.key)
 	if(Owner)
 		faction = "\ref[Owner]"
 		friends.Add(Owner)
 		creator = Owner
 		if(Controller)
-			mind = Controller
-			ckey = ckey(mind.key)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
 		var/ref = "\ref[Owner.mind]"
 		var/list/necromancers
@@ -41,7 +43,7 @@
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 8
+	speed = 9
 	move_to_delay = 3
 	maxHealth = 50
 	health = 50
@@ -64,7 +66,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	meat_type = null
 /*
 #define EVOLVING 1
@@ -88,7 +90,7 @@
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 2
+	speed = 3
 	move_to_delay = 6
 	maxHealth = 100
 	health = 100
@@ -114,7 +116,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse
@@ -253,8 +255,8 @@
 			stop_automated_movement = 0
 			walk(src,0)
 */
-/mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
-	if(busy) //Already smashing a door or eating something
+/mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D, busy_override = 0)
+	if(busy && !busy_override) //Already smashing a door or eating something
 		return 0
 	if((istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window)) && !client)
 		return 0
@@ -298,7 +300,8 @@
 	var/self_loc = src.loc
 	spawn(10 SECONDS*time_mult)
 		if(D.loc == target_loc && self_loc == src.loc) //Not moved
-			if(can_open_door(D))//Let's see if nobody quickly bolted it
+			to_chat(src, "<span class = 'notice'>You get a grip of \the [D], and...</span>")
+			if(can_open_door(D, 1))//Let's see if nobody quickly bolted it
 				if(break_doors == CANPLUS) //Guaranteed
 					D.visible_message("<span class='warning'>\The [D] breaks open under the pressure</span>")
 					if(istype(D, /obj/machinery/door/airlock/))
@@ -312,9 +315,10 @@
 						D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
 						D.open(1)
 					else
+						to_chat(src, "<span class = 'notice'>You fail to open \the [D]</span>")
 						playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
 						D.shake(1, 8)
-	busy = FALSE
+		busy = FALSE
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
@@ -333,7 +337,6 @@
 /mob/living/simple_animal/hostile/necro/zombie/proc/eat(var/mob/living/carbon/human/target)
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
 	visible_message("<span class='warning'>\The [src] takes a bite out of \the [target].</span>")
-	busy = TRUE
 	stop_automated_movement = 1
 	playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
@@ -342,7 +345,6 @@
 		maxHealth += 5 //A well fed zombie is a scary zombie
 	health = min(maxHealth, health+damage)
 	times_eaten += 1
-	busy = FALSE
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_evolve()
@@ -429,7 +431,10 @@
 		if(can_open_door(A))
 			force_door(A)
 		else
-			visible_message("\The [src] looks over \the [A] for a moment.", "<span class='notice'>You don't think you can get \the [A] open.</span>")
+			if(busy)
+				to_chat(src, "<span class='notice'>You're busy with something else.</span>")
+			else
+				to_chat(src, "<span class='notice'>You don't think you can get \the [A] open.</span>")
 	if(istype(A, /mob/living/carbon/human))
 		if(check_edibility(A))
 			eat(A)
@@ -542,6 +547,13 @@
 	var/zombify_chance = 25 //Down with hardcoding
 	break_doors = CAN
 
+/mob/living/simple_animal/hostile/necro/zombie/putrid/check_edibility(var/mob/living/carbon/human/target)
+	if(busy)
+		return 0
+	if(isjusthuman(target))
+		return 1
+	..()
+
 /mob/living/simple_animal/hostile/necro/zombie/putrid/eat(mob/living/carbon/human/target)
 	..()
 	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
@@ -611,6 +623,83 @@
 	can_evolve = 0
 	unique_name = 1
 
+/mob/living/simple_animal/hostile/necro/zombie/ghoul
+	name = "ghoul"
+	icon_state = "ghoul"
+	icon_dead = "ghoul"
+	icon_living = "ghoul"
+	desc = "Suffering from onset decay from radiation exposure, this one has lost their mind, their soul, but not their hunger."
+	can_evolve = 0
+	canRegenerate = 0
+
+	health = 150
+	maxHealth = 150
+
+	melee_damage_lower = 10
+	melee_damage_upper = 20
+	attacktext = "punches"
+	attack_sound = "sound/weapons/punch1.ogg"
+	break_doors = CAN
+
+/mob/living/simple_animal/hostile/necro/zombie/ghoul/Life()
+	..()
+	if(radiation && health < maxHealth)
+		health++
+		radiation--
+
+/mob/living/simple_animal/hostile/necro/zombie/ghoul/unarmed_attack_mob(mob/living/target)
+	..()
+	target.apply_radiation(rand(melee_damage_lower, melee_damage_upper)/5, RAD_EXTERNAL)
+
+#define RAD_COST 100
+
+/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one
+	name = "glowing one"
+	icon_state = "glowing_one"
+	icon_dead = "glowing_one"
+	icon_living = "glowing_one"
+	desc = "Some poor fool having been caught in an incident involving radiation has now suffered it binding to their very essence."
+
+	health = 200
+	maxHealth = 200
+	health_cap = 400
+
+	melee_damage_lower = 15
+	melee_damage_upper = 25
+
+	var/last_rad_blast = 0
+
+/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/Life()
+	..()
+
+
+	if(world.time > last_rad_blast+20 SECONDS)
+		rad_blast()
+	radiation+=5
+
+/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/proc/rad_blast()
+	if(radiation > RAD_COST)
+		if(prob(30))
+			visible_message("<span class = 'blob'>\The [src] glows with a brilliant light!</span>")
+		set_light(vision_range/2, vision_range, "#a1d68b")
+		spawn(1 SECONDS)
+			var/list/can_see = view(src, vision_range)
+			for(var/mob/living/carbon/human/H in can_see)
+				var/rad_cost = min(radiation, rand(10,20))
+				H.apply_radiation(rad_cost, RAD_EXTERNAL)
+				radiation -= rad_cost
+			for(var/mob/living/simple_animal/hostile/necro/zombie/ghoul/G in can_see)
+				if(G.isDead() && radiation > 100)
+					G.revive()
+					radiation -= 100
+				if(radiation > 25)
+					var/rad_cost = min(radiation, rand(10,20))
+					G.apply_radiation(10, RAD_EXTERNAL)
+					radiation -= rad_cost
+			last_rad_blast = world.time
+			spawn(3 SECONDS)
+				set_light(1, 2, "#5dca31")
+
 #undef EVOLVING
 #undef MOVING_TO_TARGET
 #undef EATING
@@ -618,3 +707,4 @@
 #undef CAN
 #undef CANT
 #undef CANPLUS
+#undef RAD_COST

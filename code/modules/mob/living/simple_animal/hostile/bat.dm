@@ -11,10 +11,11 @@
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 4
+	speed = 5
 	maxHealth = 20
 	health = 20
 	flying = 1
+	mob_property_flags = MOB_SWARM
 
 	harm_intent_damage = 8
 	melee_damage_lower = 10
@@ -35,7 +36,7 @@
 
 	holder_type = null //Can't pick a SWARM OF BATS up
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	size = SIZE_TINY
 
 	faction = "scarybat"
@@ -145,7 +146,7 @@
 	response_help = "pats the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
-	speed = 4
+	speed = 5
 	maxHealth = 15
 	health = 15
 	var/book_cover
@@ -174,7 +175,7 @@ mob/living/simple_animal/hostile/scarybat/book/New()
 	icon_dead = "bookbat_woody_dead"
 	icon_gib = "bookbat_woody_dead"
 	book_cover = "woody"
-	environment_smash = 0
+	environment_smash_flags = 0
 	harm_intent_damage = 0
 	melee_damage_lower = 0
 	melee_damage_upper = 0

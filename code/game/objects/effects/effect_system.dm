@@ -54,7 +54,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 	.=..()
 
-/obj/effect/effect/water/Bump(atom/A)
+/obj/effect/effect/water/to_bump(atom/A)
 	if(reagents)
 		reagents.reaction(A)
 	return ..()
@@ -214,6 +214,13 @@ steam.start() -- spawns the effect
 		if(nextdir)
 			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
 			sparks.start(nextdir)
+
+// This sparks.
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE)
+	loc = get_turf(loc)
+	var/datum/effect/effect/system/spark_spread/S = new
+	S.set_up(amount, cardinals, loc)
+	S.start()
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS
@@ -948,13 +955,13 @@ steam.start() -- spawns the effect
 
 /obj/structure/foamedmetal/proc/update_nearby_tiles()
 
-	if (isnull(air_master))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc
 
 	if (isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1
 
@@ -1047,9 +1054,7 @@ steam.start() -- spawns the effect
 
 	start()
 		if (amount <= 2)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 1, location)
-			s.start()
+			spark(location, 2)
 
 			for(var/mob/M in viewers(5, location))
 				to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
@@ -1066,9 +1071,9 @@ steam.start() -- spawns the effect
 			var/range = 0
 			// Clamp all values to MAX_EXPLOSION_RANGE
 			range = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-			devastation = round(min(1, range * 0.25)) // clamps to 1 devestation for grenades
-			heavy = round(min(3, range * 0.5)) // clamps to 3 heavy range for grenades
-			light = min(6, range) // clamps to 6 light range for grenades
+			devastation = round(min(3, range * 0.25)) // clamps to 3 devastation for grenades
+			heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
+			light = min(7, range) // clamps to 7 light range for grenades
 			flash = range * 1.5
 			/*
 			if (round(amount/12) > 0)

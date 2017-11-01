@@ -27,6 +27,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/chem_board = /obj/item/weapon/circuitboard/chemmaster3000
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
+	var/max_pill_size = 50
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -78,6 +79,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
 	handle_new_reservoir(scancount*25+100)
+	max_pill_size = initial(max_pill_size)+manipcount*25 // i suck at math
+
 
 /obj/machinery/chem_master/proc/handle_new_reservoir(var/newvol)
 	if(reagents.maximum_volume == newvol)
@@ -159,6 +162,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		src.updateUsrDialog()
 		return 1
 
+	else if(istype(B, /obj/item/weapon/reagent_containers/pill))
+		var/name = reject_bad_text(input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)") as null|text)
+		if(name)
+			B.name = "[name] pill"
+		B.icon_state = "pill"+pillsprite
+		return 1
+
 /obj/machinery/chem_master/Topic(href, href_list)
 
 	if(..())
@@ -192,9 +202,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					var/A = G.name
 					var/B = G.data["blood_type"]
 					var/C = G.data["blood_DNA"]
-					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 				else
-					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			else
 				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			//usr << browse(dat, "window=chem_master;size=575x400")
@@ -310,8 +320,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				return
 
 			var/amount_per_pill = reagents.total_volume/count
-			if(amount_per_pill > 50)
-				amount_per_pill = 50
+			if(amount_per_pill > max_pill_size)
+				amount_per_pill = max_pill_size
 			if(href_list["createempty"])
 				amount_per_pill = 0 //If "createempty" is 1, pills are empty and no reagents are used.
 
@@ -481,7 +491,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(?)</A>
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name];density=[G.density];specheatcap=[G.specheatcap]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -519,7 +529,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(?)</A>
+						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name];density=[N.density];specheatcap=[N.specheatcap]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>
@@ -554,8 +564,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// BUTTONS
 			//
-			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill (50 units max)</A><BR>
-					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills (50 units max each; [max_pill_count] max)</A><BR>
+			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>
+					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>
 					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
 					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
 					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}

@@ -19,6 +19,9 @@
 	health = 50
 	var/oneuse = 0
 
+/obj/item/weapon/storage/lockbox/can_use()
+	return broken || !locked
+
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/ID = W

@@ -48,7 +48,7 @@
 			if(L == owner)
 				continue
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-			L.radiation += 5
+			L.apply_radiation(5, RAD_INTERNAL)
 		return
 
 	OnDrawUnderlays(var/mob/M,var/g,var/fat)

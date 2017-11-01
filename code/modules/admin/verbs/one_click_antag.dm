@@ -71,7 +71,13 @@ client/proc/one_click_antag()
 
 		var/mob/living/carbon/human/candidate
 
-		for (var/i = 1 to min(candidates.len, 3))
+		var/antag_number = input("How many antags would you like to create?","Create Antagonists") as num|null
+
+		if (!antag_number)
+			to_chat(usr, "<span class='warning'>0 traitors selected. Aborting.</span>")
+			return
+
+		for (var/i = 1 to min(candidates.len, antag_number))
 			candidate = pick_n_take(candidates)
 
 			if (candidate)

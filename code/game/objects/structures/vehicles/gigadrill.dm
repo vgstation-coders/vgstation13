@@ -20,7 +20,7 @@
 	..()
 	update_icon()
 
-/obj/structure/bed/chair/vehicle/gigadrill/Bump()
+/obj/structure/bed/chair/vehicle/gigadrill/to_bump()
 	..()
 	if(occupant)
 		occupant.pixel_y += 2
@@ -35,6 +35,20 @@
 		plane = ABOVE_HUMAN_PLANE
 		layer = VEHICLE_LAYER
 
+/obj/structure/bed/chair/vehicle/gigadrill/update_mob()
+	if(occupant && dir == SOUTH)
+		occupant.pixel_x = 0
+		occupant.pixel_y = 18 * PIXEL_MULTIPLIER
+	else if(occupant && dir == NORTH)
+		occupant.pixel_x = 0
+		occupant.pixel_y = 7 * PIXEL_MULTIPLIER
+	else if(occupant && dir == WEST)
+		occupant.pixel_x = 18 * PIXEL_MULTIPLIER
+		occupant.pixel_y = 9 * PIXEL_MULTIPLIER
+	else if(occupant && dir == EAST)
+		occupant.pixel_x = -18 * PIXEL_MULTIPLIER
+		occupant.pixel_y = 9 * PIXEL_MULTIPLIER
+
 /obj/structure/bed/chair/vehicle/gigadrill/update_icon()
   if(occupant)
     icon_state = "gigadrill_mov"
@@ -47,6 +61,13 @@
 
 	if(istype(target, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = target
+		if(M.finds && M.finds.len) //Shameless copypaste. TODO: Make an actual proc for this then apply it to mechs as well.
+			if(prob(5))
+				M.excavate_find(5, M.finds[1])
+			else if(prob(50))
+				M.finds.Remove(M.finds[1])
+				if(prob(50))
+					M.artifact_debris()
 		M.GetDrilled()
 
 /obj/effect/decal/mecha_wreckage/vehicle/gigadrill

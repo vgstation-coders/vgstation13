@@ -4,6 +4,7 @@
 	var/sharpness_on = 1.5 //so badmins can VV this!
 	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
+	source_temperature = TEMPERATURE_PLASMA
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
@@ -12,7 +13,7 @@
 
 /obj/item/weapon/melee/energy/is_hot()
 	if(active)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/melee/energy/is_sharp()
@@ -286,3 +287,15 @@
 		qdel(src)
 		var/B = new /obj/item/weapon/bloodlust(user.loc)
 		user.put_in_hands(B)
+
+/obj/item/weapon/melee/energy/hfmachete/activated/New()
+	..()
+	active = 1
+	force = 25
+	throwforce = 6
+	throw_speed = 3
+	sharpness = 1.7
+	w_class = W_CLASS_LARGE
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD | HOT_EDGE
+	hitsound = get_sfx("machete_hit")
+	update_icon()

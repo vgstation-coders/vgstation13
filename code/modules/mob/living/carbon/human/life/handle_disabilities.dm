@@ -3,10 +3,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
-			visible_message("<span class='danger'>\The [src] starts having a seizure!</span>", \
-							"<span class='warning'>You have a seizure!</span>")
-			Paralyse(10)
-			Jitter(1000) //Godness
+			seizure(10, 1000)
 
 	//If we have the gene for being crazy, have random events.
 	if(dna.GetSEState(HALLUCINATIONBLOCK))
@@ -42,7 +39,8 @@
 					"can u give me [pick("telikesis","halk","eppilapse")]?", \
 					"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
 					"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
-					"SOTP IT#"))
+					"SOTP IT#", \
+					"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
 				if(2)
 					say(pick("FUS RO DAH", \
 						"fucking 4rries!", \
@@ -63,6 +61,9 @@
 						"Don't tell Chase", \
 						"not so tough now huh", \
 						"WERE NOT BAY!!", \
+						"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+						"DONT TALK TO ME ABOUT BALANCE!!!!", \
+						"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
 						"BLAME HOSHI!!!", \
 						"ARRPEE IZ DED!!!", \
 						"THERE ALL JUS MEATAFRIENDS!", \
@@ -72,6 +73,7 @@
 						"How do we engiener=", \
 						"try to live freely and automatically good bye", \
 						"why woud i take a pin pointner??", \
+						"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
 					emote("drool")

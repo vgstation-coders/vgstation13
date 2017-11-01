@@ -12,6 +12,8 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
+	var/extinguishingProb = 15
+	var/can_extinguish = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -107,6 +109,11 @@
 		var/mob/living/carbon/human/H = user
 		H.update_inv_by_slot(slot_flags)
 	update_verbs()
+
+/obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)
+	for(var/obj/item/clothing/accessory/A in accessories)
+		if(A.accessory_exclusion == exclusion)
+			return A
 
 /obj/item/clothing/verb/removeaccessory()
 	set name = "Remove Accessory"
@@ -217,6 +224,23 @@
 		for(var/A in armor)
 			armor[A] -= rand(armor[A]/3, armor[A])
 
+/obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
+	if (!(iscarbon(user)  \
+	&& user.a_intent == I_HELP \
+	&& can_extinguish \
+	&& ishuman(M) && M.on_fire))
+		..()
+	else
+		var/mob/living/carbon/human/target = M
+		if(isplasmaman(target)) // Cannot put out plasmamen, else they could just go around with a jumpsuit and not need a space suit.
+			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target], but plasmafires are too hot. It is no use.</span>")
+		else
+			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
+			if(prob(extinguishingProb))
+				M.ExtinguishMob()
+				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
+		return
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
@@ -306,6 +330,8 @@ BLIND     // can't see anything
 
 	var/bonus_knockout = 0 //Knockout chance is multiplied by (1 + bonus_knockout) and is capped at 1/2. 0 = 1/12 chance, 1 = 1/6 chance, 2 = 1/4 chance, 3 = 1/3 chance, etc.
 	var/damage_added = 0 //Added to unarmed damage, doesn't affect knockout chance
+	var/sharpness_added = 0 //Works like weapon sharpness for unarmed attacks, affects bleeding and limb severing.
+	var/hitsound_added = "punch"	//The sound that plays for an unarmed attack while wearing these gloves.
 
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
@@ -326,7 +352,16 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/get_damage_added()
 	return damage_added
 
+/obj/item/clothing/gloves/proc/get_sharpness_added()
+	return sharpness_added
+
+/obj/item/clothing/gloves/proc/get_hitsound_added()
+	return hitsound_added
+
 /obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
+/obj/item/clothing/gloves/proc/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)	//Called when the mob wearing the gloves successfully throws either something or nothing.
 	return
 
 //Head
@@ -387,9 +422,9 @@ BLIND     // can't see anything
 		usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/New()
-	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
 		actions_types = null
+	..()
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -414,7 +449,7 @@ BLIND     // can't see anything
 	slot_flags = SLOT_FEET
 	heat_conductivity = SHOE_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.50
-	slowdown = SHOES_SLOWDOWN
+
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
 	var/stepstaken = 1
@@ -451,6 +486,7 @@ BLIND     // can't see anything
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
+	can_extinguish = TRUE
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
@@ -483,11 +519,12 @@ BLIND     // can't see anything
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = 3
+	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	can_extinguish = FALSE
 
 //Under clothing
 /obj/item/clothing/under
@@ -508,6 +545,7 @@ BLIND     // can't see anything
 		3 = Report location
 		*/
 	var/displays_id = 1
+	can_extinguish = TRUE
 
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)
@@ -601,5 +639,3 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
-
-

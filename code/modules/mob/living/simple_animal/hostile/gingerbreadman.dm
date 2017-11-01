@@ -19,7 +19,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 25
 	attack_sound = "sound/weapons/pierce.ogg"
-
+	mob_property_flags = MOB_CONSTRUCT
 	//This dough's hard baked
 	min_oxy = 0
 	max_oxy = 0
@@ -30,4 +30,4 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	speed = 4
+	speed = 5

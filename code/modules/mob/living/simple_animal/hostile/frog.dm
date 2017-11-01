@@ -32,7 +32,7 @@
 	ranged_message = "leaps"
 
 	move_to_delay = 6
-	speed = 2
+	speed = 3
 
 	harm_intent_damage = 6
 	melee_damage_lower = 1
@@ -67,7 +67,7 @@
 	src.throw_at(get_turf(target), 7, 1)
 	return 1
 
-/mob/living/simple_animal/hostile/frog/Bump(atom/A)
+/mob/living/simple_animal/hostile/frog/to_bump(atom/A)
 	if(throwing && isliving(A) && CanAttack(A)) //Hit somebody when flying
 		attach(A)
 

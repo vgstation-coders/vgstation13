@@ -148,9 +148,7 @@
 
 /obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/card/emag/E)
 	if(!src.emagged)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(1, 1, src)
-		s.start()
+		spark(src, 1)
 		src.emagged = 1
 		icon_state = "chefbot-anim1"
 		if(user)
@@ -175,27 +173,27 @@
 		src.explode()
 
 /obj/machinery/bot/chefbot/attack_hand(mob/living/carbon/human/M)
-	..()
-	switch(M.a_intent)
-		if (I_HELP)
-			visible_message("[M] tries to turn \the [src] off, but there's no switch!")
-		else
-			var/damage = rand(2, 9)
-			if (prob(90))
-				if (M_HULK in M.mutations)
-					damage += 5
-				playsound(loc, "punch", 25, 1, -1)
-				visible_message("<span class='danger'>[M] has punched [src]!</span>")
-				health -= damage
-				if(prob(1))
-					emag_act(M) // Shit son
+	if(Adjacent(M) && !M.incapacitated() && !M.lying)
+		switch(M.a_intent)
+			if (I_HELP)
+				visible_message("[M] tries to turn \the [src] off, but there's no switch!")
 			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
-			if(src.health <= 0)
-				src.explode()
-		M.delayNextAttack(10)
-	return
+				var/damage = rand(2, 9)
+				if (prob(90))
+					if (M_HULK in M.mutations)
+						damage += 5
+					playsound(loc, "punch", 25, 1, -1)
+					visible_message("<span class='danger'>[M] has punched [src]!</span>")
+					health -= damage
+					if(prob(1))
+						emag_act(M) // Shit son
+				else
+					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+					visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
+				if(src.health <= 0)
+					src.explode()
+			M.delayNextAttack(10)
+	..()
 
 /obj/machinery/bot/chefbot/kick_act()
 	..()
@@ -216,9 +214,7 @@
 
 /obj/machinery/bot/chefbot/explode()
 	src.on = 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	src.visible_message("<span class = 'warning'><B>[src] blows apart!</B></span>", 1)
 	if(src.emagged)
 		explosion(get_turf(src), -1, 0, 2)

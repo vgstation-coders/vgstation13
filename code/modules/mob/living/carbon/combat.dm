@@ -9,7 +9,7 @@
 		if(can_catch(I, speed) && put_in_hands(I))
 			visible_message("<span class='warning'>\The [src] catches \the [I][speed > EMBED_THROWING_SPEED ? ". Wow!" : "!"]</span>")
 			throw_mode_off()
-			return 1
+			return TRUE
 		else
 			to_chat(src, "<span class='warning'>You fail to catch \the [I]!")
 	return ..()

@@ -25,11 +25,14 @@
 /datum/robot_component/proc/destroy()
 	var/obj/item/broken_device/G = new/obj/item/broken_device
 	G.component = wrapped.type // the broken component now "remembers" the component it used to be, now it's scrap. This is used to fix the scrap into the component it was.
+	var/brokenpartname = wrapped.name
 	wrapped = G
 
 	// The thing itself isn't there anymore, but some fried remains are.
 	installed = -1
 	uninstall()
+	if(owner.can_diagnose())
+		to_chat(owner, "<span class='alert' style=\"font-family:Courier\">Warning: Critical damage to [brokenpartname] sustained. Component offline.</span>")
 
 /datum/robot_component/proc/take_damage(brute, electronics, sharp)
 	if(installed != 1)
@@ -205,6 +208,7 @@
 		to_chat(user, "<span class='warning'>You can't analyze non-robotic things!</span>")
 		return
 
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	user.visible_message("<span class='notice'> [user] has analyzed [M]'s components.","<span class='notice'>You have analyzed [M]'s components.")
 	var/BU = M.getFireLoss() > 50 	? 	"<b>[M.getFireLoss()]</b>" 		: M.getFireLoss()
 	var/BR = M.getBruteLoss() > 50 	? 	"<b>[M.getBruteLoss()]</b>" 	: M.getBruteLoss()

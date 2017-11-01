@@ -12,7 +12,7 @@
 	maxHealth = 140
 
 	move_to_delay = 30
-	speed = 5
+	speed = 6
 
 	min_oxy = 0
 	max_oxy = 0
@@ -57,7 +57,7 @@
 	maxHealth = 180
 
 	move_to_delay = 2
-	speed = -1
+	speed = 1
 
 	attacktext = "chops"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
@@ -87,8 +87,9 @@
 	toxin_dmg = 1300
 
 /obj/effect/landmark/corpse/diona/junkie/New()
-	..()
 
 	var/turf/T = get_turf(src)
 	T.visible_message("<span class='danger'>Some green fluid flows out of the chemical pack!</span>") //because the pack spawns empty
 	getFromPool(/obj/effect/decal/cleanable/greenglow, T)
+	..()
+

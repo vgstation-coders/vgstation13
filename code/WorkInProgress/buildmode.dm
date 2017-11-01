@@ -196,23 +196,13 @@ obj/effect/bmode/buildholder/New()
 			if(3)
 				var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "viruses", "cuffed", "ka", "last_eaten", "urine")
 
-				master.buildmode.varholder = input(usr,"Enter variable name:" ,"Name", "name")
-				if(master.buildmode.varholder in locked && !check_rights(R_DEBUG,0))
+				var/edit_variable = input(usr,"Enter variable name:" ,"Name", "name")
+				if(edit_variable in locked && !check_rights(R_DEBUG,0))
 					return 1
-				var/thetype = input(usr,"Select variable type:" ,"Type") in list("text","number","mob-reference","obj-reference","turf-reference")
-				if(!thetype)
-					return 1
-				switch(thetype)
-					if("text")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", "value") as text
-					if("number")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", 123) as num
-					if("mob-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as mob in mob_list
-					if("obj-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as obj in world
-					if("turf-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as turf in world
+
+				master.buildmode.varholder = edit_variable
+				if(edit_variable != "appearance") //Special case for appearance
+					master.buildmode.valueholder = variable_set(usr)
 	return 1
 /obj/effect/bmode/buildmode/DblClick(object,location,control,params)
 	return Click(object,location,control,params)
@@ -367,8 +357,13 @@ obj/effect/bmode/buildholder/New()
 							for(var/atom/thing in T.contents)
 								if(thing==usr)
 									continue
+								if(thing.invisibility > usr.see_invisible)
+									continue
+								if(!istype(thing, /mob) && !istype(thing, /obj)) //Checks if thing is either an object or a mob. Ignore other /atom/movable subtypes (such as lighting overlays)
+									continue
+
 								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
-									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset)
+									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset, log = FALSE)
 									edits++
 								CHECK_TICK
 						edits++
@@ -557,48 +552,12 @@ obj/effect/bmode/buildholder/New()
 						var/turf/T = get_turf(object)
 						T.ChangeTurf(holder.buildmode.copycat.type)
 						spawn(1)
-							T.icon = holder.buildmode.copycat.icon
-							T.icon_state = holder.buildmode.copycat.icon_state
-							T.dir = holder.builddir.dir
-							if(holder.buildmode.copycat.overlays.len)
-								T.overlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.overlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.overlays[i]
-									T.overlays += thing
-							if(holder.buildmode.copycat.underlays.len)
-								T.underlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.underlays[i]
-									T.underlays += thing
+							T.appearance = holder.buildmode.copycat.appearance
 					else
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
+							A.appearance = holder.buildmode.copycat.appearance
 							A.dir = holder.builddir.dir
-							A.icon = holder.buildmode.copycat.icon
-							A.gender = holder.buildmode.copycat.gender
-							A.name = holder.buildmode.copycat.name
-							A.icon_state = holder.buildmode.copycat.icon_state
-							A.alpha = holder.buildmode.copycat.alpha
-							A.color = holder.buildmode.copycat.color
-							A.maptext = holder.buildmode.copycat.maptext
-							A.maptext_height = holder.buildmode.copycat.maptext_height
-							A.maptext_width = holder.buildmode.copycat.maptext_width
-							A.light_color = holder.buildmode.copycat.light_color
-							A.luminosity = holder.buildmode.copycat.luminosity
-							A.molten = holder.buildmode.copycat.molten
-							A.pixel_x = holder.buildmode.copycat.pixel_x
-							A.pixel_y = holder.buildmode.copycat.pixel_y
-							A.invisibility = holder.buildmode.copycat.invisibility
-							if(holder.buildmode.copycat.overlays.len)
-								A.overlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.overlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.overlays[i]
-									A.overlays += thing
-							if(holder.buildmode.copycat.underlays.len)
-								A.underlays.len = 0
-								for(var/i = 1; i <= holder.buildmode.copycat.underlays.len; i++)
-									var/datum/thing = holder.buildmode.copycat.underlays[i]
-									A.underlays += thing
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(ispath(holder.buildmode.objholder,/turf))
@@ -626,17 +585,18 @@ obj/effect/bmode/buildholder/New()
 
 		if(3)
 			if(pa.Find("left")) //I cant believe this shit actually compiles.
-				if(object.vars.Find(holder.buildmode.varholder))
-					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
-					object.vars[holder.buildmode.varholder] = holder.buildmode.valueholder
-				else
+				if(!object.vars.Find(holder.buildmode.varholder))
 					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
+					return
+
+				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 0)
+
 			if(pa.Find("right"))
-				if(object.vars.Find(holder.buildmode.varholder))
-					log_admin("[key_name(usr)] modified [object.name]'s [holder.buildmode.varholder] to [holder.buildmode.valueholder]")
-					object.vars[holder.buildmode.varholder] = initial(object.vars[holder.buildmode.varholder])
-				else
+				if(!object.vars.Find(holder.buildmode.varholder))
 					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
+					return
+
+				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 1) //Reset the var to its initial value
 
 		if(4)
 			if(pa.Find("left"))
@@ -670,15 +630,11 @@ obj/effect/bmode/buildholder/New()
 			return
 	return chosen
 
-/proc/setvar(varname, varvalue, atom/A, reset = 0)
-	if(!reset) //I cant believe this shit actually compiles.
-		if(A.vars.Find(varname))
-			log_admin("[key_name(usr)] modified [A.name]'s [varname] to [varvalue]")
-			A.vars[varname] = varvalue
+/proc/setvar(varname, varvalue, atom/A, reset = 0, log = TRUE)
+	if(!reset)
+		variable_set(usr, A, varname, value_override = varvalue, logging = log)
 	else
-		if(A.vars.Find(varname))
-			log_admin("[key_name(usr)] modified [A.name]'s [varname] to initial")
-			A.vars[varname] = initial(A.vars[varname])
+		variable_set(usr, A, varname, value_override = initial(A.vars[varname]), logging = log)
 
 #undef BOTTOM_LEFT
 #undef TOP_RIGHT

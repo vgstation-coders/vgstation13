@@ -9,11 +9,12 @@
 	var/min_bruised_damage = 10
 	var/min_broken_damage = 30
 	var/parent_organ = LIMB_CHEST
+	var/organ_type //What organ type it is (lungs, heart) keep it lower case
 	var/robotic = 0 //For being a robot
 	var/removed_type //When removed, forms this object.
 	var/list/transplant_data // Blood DNA and colour of donor
 	var/rejecting            // Is this organ already being rejected?
-	var/obj/item/organ/organ_holder
+	var/obj/item/organ/internal/organ_holder
 	var/datum/dna/owner_dna
 
 
@@ -22,6 +23,7 @@
 	I.damage = damage
 	I.min_bruised_damage = min_bruised_damage
 	I.min_broken_damage = min_broken_damage
+	I.organ_type = organ_type
 	I.parent_organ = parent_organ
 	I.robotic = robotic
 	I.removed_type = removed_type
@@ -195,26 +197,33 @@
 /datum/organ/internal/heart //This is not set to vital because death immediately occurs in blood.dm if it is removed.
 	name = "heart"
 	parent_organ = LIMB_CHEST
-	removed_type = /obj/item/organ/heart
+	organ_type = "heart"
+	removed_type = /obj/item/organ/internal/heart
 
 /datum/organ/internal/kidney
 	name = "kidneys"
 	parent_organ = LIMB_GROIN
-	removed_type = /obj/item/organ/kidneys
+	organ_type = "kidneys"
+	removed_type = /obj/item/organ/internal/kidneys
 
 /datum/organ/internal/brain
 	name = "brain"
 	parent_organ = LIMB_HEAD
-	removed_type = /obj/item/organ/brain
+	organ_type = "brain"
+	removed_type = /obj/item/organ/internal/brain
 	vital = 1
 
 /datum/organ/internal/brain/ash
-	removed_type = /obj/item/organ/brain/ash
+	removed_type = /obj/item/organ/internal/brain/ash
+
+/datum/organ/internal/brain/slime_core
+	removed_type = /obj/item/organ/internal/brain/slime_core
 
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = LIMB_GROIN
-	removed_type = /obj/item/organ/appendix
+	organ_type = "appendix"
+	removed_type = /obj/item/organ/internal/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
 
@@ -222,14 +231,14 @@
 	if(!removed_type)
 		return 0
 
-	var/obj/item/organ/removed_organ = new removed_type(get_turf(user))
+	var/obj/item/organ/internal/removed_organ = new removed_type(get_turf(user))
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
-		removed_organ.had_mind = !isnull(owner.mind)
+		if(owner)
+			removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
 		organ_holder = removed_organ
-
 	return removed_organ
 
 /datum/organ/internal/send_to_past(var/duration)

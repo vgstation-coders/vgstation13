@@ -64,7 +64,7 @@
 			var/turf/T = get_turf(src)
 			AM:forceMove(T)
 
-/mob/living/carbon/human/zombie/Bump(atom/A)
+/mob/living/carbon/human/zombie/to_bump(atom/A)
 	if(istype(A, /mob/living/carbon/human/zombie))
 		return
 	if(ismob(A) && (ishuman(A) || ismonkey(A)))

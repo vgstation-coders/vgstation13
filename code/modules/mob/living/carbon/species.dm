@@ -1,4 +1,4 @@
-#define GAS_CONSUME_TO_WASTE_DENOMINATOR 0.3
+#define GAS_CONSUME_TO_WASTE_DENOMINATOR 2
 /*
 	Datum-based species. Should make for much cleaner and easier to maintain mutantrace code.
 */
@@ -44,6 +44,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
 	var/attack_verb = "punches"									// Empty hand hurt intent verb.
 	var/punch_damage = 0										// Extra empty hand attack damage.
+	var/punch_sharpness = 0										// Slicing/cutting force of punches. Independent of the sharpness added by claws.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
 	var/mutantrace											// Safeguard due to old code.
@@ -78,6 +79,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
+	var/tox_mod			// toxin multiplier
 
 	var/body_temperature = 310.15
 
@@ -136,6 +138,10 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
 
+	var/gender	//For races with only one or neither
+
+	var/list/inventory_offsets
+
 
 /datum/species/New()
 	..()
@@ -143,6 +149,7 @@ var/global/list/whitelisted_species = list("Human")
 		var/datum/species/globalspeciesholder = all_species[name]
 		default_blocks = globalspeciesholder.default_blocks.Copy()
 		default_mutations = globalspeciesholder.default_mutations.Copy()
+	inventory_offsets = get_inventory_offsets()
 
 /datum/species/Destroy()
 	if(myhuman)
@@ -259,6 +266,25 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
+/datum/species/proc/get_inventory_offsets()	//This is what you override if you want to give your species unique inventory offsets.
+	var/static/list/offsets = list(
+		"[slot_back]"		=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_wear_mask]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_handcuffed]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_belt]"		=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_wear_id]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_ears]"		=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_glasses]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_gloves]"		=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_head]"		=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_shoes]"		=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_wear_suit]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_w_uniform]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_s_store]"	=	list("pixel_x" = 0, "pixel_y" = 0),
+		"[slot_legcuffed]"	=	list("pixel_x" = 0, "pixel_y" = 0)
+		)
+	return offsets
+
 /datum/species/human
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
@@ -325,7 +351,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = IS_WHITELISTED | NO_BREATHE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
 
-	chem_flags = NO_DRINK | NO_EAT | NO_INJECT
+	chem_flags = NO_EAT | NO_INJECT
 
 	default_mutations=list(SKELETON)
 	brute_mod = 2.0
@@ -334,7 +360,7 @@ var/global/list/whitelisted_species = list("Human")
 		"brain" =    /datum/organ/internal/brain,
 		)
 
-	move_speed_mod = 3
+	move_speed_multiplier = 1.5
 
 	primitive = /mob/living/carbon/monkey/skellington
 
@@ -355,7 +381,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
-	primitive = /mob/living/carbon/monkey/vox //for now
+	primitive = /mob/living/carbon/monkey/vox/skeletal
 
 	warning_low_pressure = 50
 	hazard_low_pressure = 0
@@ -388,12 +414,10 @@ var/global/list/whitelisted_species = list("Human")
 	)
 
 /datum/species/skellington/skelevox/makeName(var/gender,var/mob/living/carbon/human/H=null)
-	var/sounds = rand(2,8)
-	var/i = 0
+	var/sounds = rand(3,8)
 	var/newname = ""
 
-	while(i<=sounds)
-		i++
+	for(var/i = 1 to sounds)
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
 
@@ -582,9 +606,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/vox
 
-	warning_low_pressure = 50
-	hazard_low_pressure = 0
-
 	cold_level_1 = 80
 	cold_level_2 = 50
 	cold_level_3 = 0
@@ -737,12 +758,10 @@ var/global/list/whitelisted_species = list("Human")
 		H.internals.icon_state = "internal1"
 
 /datum/species/vox/makeName(var/gender,var/mob/living/carbon/human/H=null)
-	var/sounds = rand(2,8)
-	var/i = 0
+	var/sounds = rand(3,8)
 	var/newname = ""
 
-	while(i<=sounds)
-		i++
+	for(var/i = 1 to sounds)
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
 
@@ -814,10 +833,12 @@ var/global/list/whitelisted_species = list("Human")
 	attack_verb = "punches"
 
 	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
-	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY | NO_STRUCTURE
 
 	uniform_icons = 'icons/mob/uniform_fat.dmi'
 	primitive = /mob/living/carbon/monkey/rock
+
+	gender = NEUTER
 
 	blood_color = "#B4DBCB"
 	flesh_color = "#B4DBCB"
@@ -851,6 +872,8 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/golem/makeName()
 	return capitalize(pick(golem_names))
 
+var/list/has_died_as_golem = list()
+
 /datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isgolem(H))
 		return
@@ -862,6 +885,7 @@ var/global/list/whitelisted_species = list("Human")
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
 	var/mob/living/adamantine_dust/A = new(H.loc)
 	if(golemmind)
+		has_died_as_golem.Add(H.mind.key = world.time)
 		A.mind = golemmind
 		H.mind = null
 		golemmind.current = A
@@ -869,7 +893,6 @@ var/global/list/whitelisted_species = list("Human")
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
 		A.key = H.key
-		H.key = null
 	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
@@ -893,10 +916,11 @@ var/global/list/whitelisted_species = list("Human")
 			else
 				if(!client)
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it shudders briefly, but falls still.</span>")
-					var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
-					if(ghost && ghost.client && ghost.can_reenter_corpse)
-						ghost << 'sound/effects/adminhelp.ogg'
-						to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to resurrect you. Return to your body if you want to live again!</span> \
+					var/mob/dead/observer/ghost = mind_can_reenter(mind)
+					var/mob/ghostmob = ghost.get_top_transmogrification()
+					if(ghostmob)
+						ghostmob << 'sound/effects/adminhelp.ogg'
+						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to resurrect you. Return to your body if you want to live again!</span> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				else
 					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
@@ -963,3 +987,124 @@ var/global/list/whitelisted_species = list("Human")
 	move_speed_multiplier = 2
 
 	blood_color = "#7FFF00"
+
+/datum/species/slime
+	name = "Slime"
+	icobase = 'icons/mob/human_races/r_slime.dmi'
+	deform = 'icons/mob/human_races/r_def_slime.dmi'
+	known_languages = list(LANGUAGE_SLIME)
+	meat_type = /obj/item/slime_heart
+	attack_verb = "glomps"
+
+	flags = IS_WHITELISTED | NO_BREATHE
+	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
+
+	spells = list(/spell/regen_limbs)
+
+	gender = NEUTER
+
+	tox_mod = 2
+
+	primitive = /mob/living/carbon/slime/pygmy
+
+	blood_color = "#96FFC5"
+	flesh_color = "#96FFC5"
+
+	cold_level_1 = T0C  	// Cold damage level 1 below this point.
+	cold_level_2 = T0C-23	// Cold damage level 2 below this point.
+	cold_level_3 = T0C-43	// Cold damage level 3 below this point.
+
+	heat_level_1 = T0C+57	// Heat damage level 1 above this point.
+	heat_level_2 = T0C+77	// Heat damage level 2 above this point.
+	heat_level_3 = T0C+100	// Heat damage level 3 above this point.
+
+	has_mutant_race = 0
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain/slime_core,
+		)
+
+/datum/species/slime/xenobio
+	name = "Evolved Slime"
+	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
+
+/datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+	for(var/atom/movable/I in H.contents)
+		I.forceMove(H.loc)
+	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
+	var/mob/living/slime_pile/S = new(H.loc)
+	if(H.real_name)
+		S.real_name = H.real_name
+		S.desc = "The remains of what used to be [S.real_name]."
+	S.slime_person = H
+	H.forceMove(S)
+
+/mob/living/slime_pile //serves as the corpse of slime people
+	name = "puddle of slime"
+	desc = "The remains of a slime person."
+	stat = DEAD
+	icon = null //'icons/mob/human_races/r_slime.dmi'
+	icon_state = null //"slime_puddle"
+	density = 0
+	meat_type = /obj/item/slime_heart
+	var/mob/living/carbon/human/slime_person
+
+/mob/living/slime_pile/New()
+	..()
+	spawn(1)
+		update_icon()
+
+/mob/living/slime_pile/update_icon()
+	if(slime_person)
+		var/icon/I = new ('icons/mob/human_races/r_slime.dmi', "slime_puddle")
+		I.Blend(rgb(slime_person.multicolor_skin_r, slime_person.multicolor_skin_g, slime_person.multicolor_skin_b), ICON_ADD)
+		overlays += I
+
+/mob/living/slime_pile/attack_hand(mob/user)
+	if(slime_person)
+		var/datum/organ/external/head = slime_person.get_organ(LIMB_HEAD)
+		var/datum/organ/internal/I = slime_person.internal_organs_by_name["brain"]
+
+		var/obj/item/organ/internal/O
+		if(I && istype(I))
+			O = I.remove(user)
+			if(O && istype(O))
+
+				O.organ_data.rejecting = null
+
+				slime_person.internal_organs_by_name["brain"] = null
+				slime_person.internal_organs_by_name -= "brain"
+				slime_person.internal_organs -= O.organ_data
+				head.internal_organs -= O.organ_data
+				O.removed(slime_person,user)
+				user.put_in_hands(O)
+				to_chat(user, "<span class='notice'>You remove \the [O] from \the [src].</span>")
+		else
+			to_chat(user, "<span class='notice'>You root around inside \the [src], but find nothing.</span>")
+
+/mob/living/slime_pile/attackby(obj/item/I, mob/user)
+	if(slime_person)
+		if(istype(I, /obj/item/organ/internal/brain/slime_core))
+			if(slime_person.internal_organs_by_name["brain"])
+				to_chat(user, "<span class='notice'>There is already \a [I] in \the [src].</span>")
+				return
+			if(user.drop_item(I))
+				var/datum/organ/external/head = slime_person.get_organ(LIMB_HEAD)
+				var/obj/item/organ/internal/O = I
+
+				if(istype(O))
+					O.organ_data.transplant_data = list()
+					O.organ_data.transplant_data["species"] =    slime_person.species.name
+					O.organ_data.transplant_data["blood_type"] = slime_person.dna.b_type
+					O.organ_data.transplant_data["blood_DNA"] =  slime_person.dna.unique_enzymes
+
+					O.organ_data.organ_holder = null
+					O.organ_data.owner = slime_person
+					slime_person.internal_organs |= O.organ_data
+					head.internal_organs |= O.organ_data
+					slime_person.internal_organs_by_name[O.organ_tag] = O.organ_data
+					O.organ_data.status |= ORGAN_CUT_AWAY
+					O.replaced(slime_person)
+
+				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
+				qdel(O)

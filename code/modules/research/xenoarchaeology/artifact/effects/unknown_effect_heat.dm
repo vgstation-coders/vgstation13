@@ -2,17 +2,14 @@
 //inverse of /datum/artifact_effect/cold, the two effects split up for neatness' sake
 /datum/artifact_effect/heat
 	effecttype = "heat"
+	effect = list(EFFECT_TOUCH, EFFECT_AURA)
 	var/target_temp
 	copy_for_battery = list("target_temp")
 
 /datum/artifact_effect/heat/New()
 	..()
 	effect_type = pick(5,6,7)
-
-/datum/artifact_effect/heat/New()
-	..()
 	target_temp = rand(300,600)
-	effect = pick(EFFECT_TOUCH, EFFECT_AURA)
 
 /datum/artifact_effect/heat/DoEffectTouch(var/mob/user)
 	if(holder)

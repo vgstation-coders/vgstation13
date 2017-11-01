@@ -55,6 +55,16 @@
 		if(user)
 			user.update_inv_hands()
 
+/obj/item/weapon/holder/kick_act(mob/user)
+	..()
+
+	if(stored_mob)
+		stored_mob.kick_act(user)
+
+/obj/item/weapon/holder/bite_act(mob/user)
+	if(stored_mob)
+		stored_mob.bite_act(user)
+
 //
 
 /obj/item/weapon/holder/diona
@@ -104,7 +114,7 @@
 		var/mob/living/simple_animal/mouse/mouse = M
 
 		item_state = initial(mouse.icon_state) //Initial icon states are "mouse_gray", "mouse_white", etc
-		if(!item_state in list("mouse_white", "mouse_brown", "mouse_gray"))
+		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray")))
 			item_state = "mouse_gray"
 
 //CORGI

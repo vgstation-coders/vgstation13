@@ -133,6 +133,7 @@
 	force = 10
 	origin_tech = null
 	var/charge_tick = 0
+	var/charge_wait = 4
 	projectile_type = "/obj/item/projectile/beam/captain"
 
 /obj/item/weapon/gun/energy/laser/captain/isHandgun()
@@ -150,7 +151,7 @@
 
 /obj/item/weapon/gun/energy/laser/captain/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if(charge_tick < charge_wait)
 		return 0
 	charge_tick = 0
 	if(!power_supply)
@@ -233,8 +234,7 @@
 		return 1
 	if(isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
-			R.cell.use(250)
+		if(R && R.cell && R.cell.use(250))
 			in_chamber = new/obj/item/projectile/beam/heavylaser(src)
 			return 1
 	return 0
@@ -270,9 +270,7 @@
 /obj/item/weapon/gun/energy/plasma/failure_check(var/mob/living/carbon/human/M)
 	if(prob(15))
 		fire_delay += rand(2, 6)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(3, 1, src)
-		s.start()
+		spark(src)
 		to_chat(M, "<span class='warning'>\The [src] sparks violently.</span>")
 		return 1
 	if(prob(5))
@@ -369,35 +367,20 @@
 /obj/item/weapon/gun/energy/laser/smart
 	name = "smart laser gun"
 	desc = "An upgraded model of the basic laser gun. There seems to be some sort of slot in the handle."
+	icon_state = "laser_smart"
 	can_take_pai = TRUE
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=4"
 
 /obj/item/weapon/gun/energy/laser/rainbow
 
 	name = "rainbow laser"
-	desc = "A fearsome gun used by clown special forces. Its design is flawed however as clumsy users find it hard to operate."
+	desc = "The NanoTrasen iniative to develop a laser weapon for clowns was a failure as the intended users were too clumsy to operate them."
 	projectile_type = "/obj/item/projectile/beam/white"
 	var/current_color = 1
 	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
-	var/fire_mode = 1 // 1 = laser, 0 = braindamage.
 	icon_state = "rainbow_laser"
-/obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/living/user)
-
-	switch(fire_mode)
-		if(0)
-			fire_mode = 1
-			to_chat(user, "<span class='warning'>\The [src.name] is now set to kill.</span>")
-			projectile_type = "/obj/item/projectile/beam/white"
-			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
-			fire_sound = 'sound/weapons/Laser.ogg'
-		if(1)
-			fire_mode = 0
-			to_chat(user, "<span class='warning'>\The [src.name] is now set to mindflay.</span>")
-			projectile_type = "/obj/item/projectile/beam/rainbow/braindamage"
-			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
-			fire_sound = 'sound/items/quack.ogg'
-
-
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 
 /obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 
@@ -407,3 +390,34 @@
 	else
 		current_color = 1
 	..()
+
+/obj/item/weapon/gun/energy/laser/captain/combustion
+	name = "combustion cannon"
+	icon_state = "combustion_cannon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	desc = "An odd-looking metallic pillar, nearly featureless apart from a small number of lights. There is an opening in the back just large enough for your arm."
+	force = 12
+	charge_cost = 1000	//one shot per charge
+	fire_sound = null
+	projectile_type = "/obj/item/projectile/beam/combustion"
+	charge_wait = 2	//40 seconds to fully charge
+	slot_flags = 0
+	w_class = W_CLASS_HUGE
+	var/charged = TRUE
+
+/obj/item/weapon/gun/energy/laser/captain/combustion/isHandgun()
+	return FALSE
+
+/obj/item/weapon/gun/energy/laser/captain/combustion/process()
+	. = ..()
+	if(power_supply.charge >= power_supply.maxcharge)
+		if(!charged)
+			charged = TRUE
+			var/turf/T = get_turf(src)
+			if(T)
+				playsound(T,'sound/mecha/powerup.ogg',100)
+
+/obj/item/weapon/gun/energy/laser/captain/combustion/process_chambered()
+	. = ..()
+	if(.)
+		charged = FALSE

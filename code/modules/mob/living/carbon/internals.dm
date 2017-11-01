@@ -1,5 +1,5 @@
 /mob/living/carbon/proc/has_breathing_mask()
-	return istype(wear_mask, /obj/item/clothing/mask)
+	return is_wearing_item(/obj/item/clothing/mask, slot_wear_mask)
 
 /mob/living/carbon/proc/internals_candidates() //These are checked IN ORDER.
 	return get_all_slots() + held_items

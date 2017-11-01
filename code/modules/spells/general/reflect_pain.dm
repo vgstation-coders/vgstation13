@@ -33,8 +33,10 @@
 
 /spell/mirror_of_pain/cast(list/targets, mob/user)
 	for(var/mob/living/L in targets)
-		L.visible_message("<span class='sinister'>An unholy charm binds your life to [L]. While the spell is active, any pain \he receive\s will be redirected to you.</span>",\
-		"<span class='sinister'>You bind your life essence to this plane. Any pain you endure will be also felt by everybody around you.</span>")
+		to_chat(L, "<span class='sinister'>You bind your life essence to this plane. Any pain you endure will be also felt by everybody around you.</span>")
+		for(var/mob/living/T in view(L))
+			if(!T.isDead() && (T != L))
+				to_chat(T, "<span class='sinister'>An unholy charm binds your life to [L]. While the spell is active, any pain \he receive\s will be redirected to you.</span>")
 		var/event_key = L.on_damaged.Add(src, "reflect")
 		L.overlays.Add(user_overlay)
 		playsound(get_turf(L), 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)

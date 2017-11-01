@@ -38,7 +38,7 @@
 
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		getFromPool(sheet_type, get_turf(src), sheet_amt)
+		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
 
@@ -77,6 +77,13 @@
 		ghost.lastchairspin = world.time
 
 	spin()
+
+/obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
+	if(!config.ghost_interaction || !can_spook())
+		if(user.isUnconscious() || user.restrained())
+			return
+	change_dir(direction)
+	return 1
 
 /obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M))
@@ -118,6 +125,23 @@
 	icon_state = "wooden_chair"
 	name = "wooden chair"
 	desc = "Old is never too old to not be in fashion."
+
+/obj/structure/bed/chair/wood/pew
+	name = "pew"
+	desc = "Uncomfortable."
+	sheet_amt = 2
+	anchored = 1
+	noghostspin = 1
+
+/obj/structure/bed/chair/wood/pew/left
+	icon_state = "bench_left"
+
+/obj/structure/bed/chair/wood/pew/right/
+	icon_state = "bench_right"
+
+/obj/structure/bed/chair/wood/pew/mid/ // mid refers to a straight couch part
+	icon_state = "bench_mid"
+
 
 /obj/structure/bed/chair/wood/wings
 	icon_state = "wooden_chair_wings"
@@ -256,7 +280,39 @@
 		layer = OBJ_LAYER
 		plane = OBJ_PLANE
 
+/obj/structure/bed/chair/office/relaymove(var/mob/living/user, direction)
+	if(user.incapacitated() || !user.has_limbs)
+		return 0
+	//If we're in space or our area has no gravity...
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
+	if(!T.has_gravity())
+		// Block relaymove() if needed.
+		if(!Process_Spacemove(0))
+			return 0
+	if(last_airflow + 5 SECONDS > world.time) //ugly hack: can't scoot during ZAS
+		return 0
+	if(istype(T, /turf/simulated))
+		var/turf/simulated/ST = T
+		if(ST.wet == TURF_WET_LUBE)
+			user.unlock_from(src)
+			ST.Entered(user) //bye bye
+			return 0
 
+	//forwards, scoot slow
+	if(direction == dir)
+		step(src, direction)
+		user.delayNextMove(user.movement_delay()*6)
+	//backwards, scoot fast
+	else if(direction == turn(dir, 180))
+		step(src, direction)
+		change_dir(turn(direction, 180)) //face away from where we're going
+		user.delayNextMove(user.movement_delay()*3)
+	//sideways, swivel to face
+	else
+		change_dir(direction)
+		user.delayNextMove(1)
 
 /obj/structure/bed/chair/office/light
 	icon_state = "officechair_white"
@@ -405,3 +461,70 @@
 	color = "#c94c4c"
 /obj/structure/bed/chair/comfy/couch/turn/outward/red
 	color = "#c94c4c"
+
+//Folding chair
+
+/obj/structure/bed/chair/folding
+	name = "folding chair"
+	icon_state = "folding_chair"
+	anchored = 0
+	var/obj/item/folding_chair/folded
+
+/obj/structure/bed/chair/folding/New(turf/T, var/chair)
+	..(T)
+	if(!folded)
+		if(chair)
+			folded = chair
+		else
+			folded = new(src, src)
+
+/obj/structure/bed/chair/folding/Destroy()
+	if(folded)
+		folded.unfolded = null
+		qdel(folded)
+		folded = null
+	..()
+
+/obj/item/folding_chair
+	name = "folding chair"
+	desc = "A collapsed folding chair that can be carried around."
+	icon = 'icons/obj/stools-chairs-beds.dmi'
+	icon_state = "folded_chair"
+	w_class = W_CLASS_LARGE
+	var/obj/structure/bed/chair/folding/unfolded
+
+/obj/item/folding_chair/New(turf/T, var/chair)
+	..(T)
+	if(!unfolded)
+		if(chair)
+			unfolded = chair
+		else
+			unfolded = new(src, src)
+
+/obj/item/folding_chair/Destroy()
+	if(unfolded)
+		unfolded.folded = null
+		qdel(unfolded)
+		unfolded = null
+	..()
+
+/obj/item/folding_chair/attack_self(mob/user)
+	unfolded.forceMove(user.loc)
+	unfolded.add_fingerprint(user)
+	unfolded.dir = user.dir
+	user.drop_item(src, force_drop = 1)
+	forceMove(unfolded)
+
+/obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
+	..()
+	if(over_object == usr && Adjacent(usr))
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
+
+		if(is_locking(lock_type))
+			return 0
+
+		visible_message("[usr] folds up \the [src].")
+
+		folded.forceMove(get_turf(src))
+		forceMove(folded)

@@ -17,9 +17,7 @@
 			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
 			sleep(rand(10,15))
 			src.visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
-			var/obj/item/weapon/capsule/b = new(src.loc)
-			b.icon_state = "capsule[rand(1,12)]"
-
+			new /obj/item/weapon/capsule(src.loc)
 			if(istype(O, /obj/item/weapon/coin/))
 				var/obj/item/weapon/coin/real_coin = O
 				if(real_coin.string_attached)
@@ -47,6 +45,7 @@
 
 /obj/item/weapon/capsule/New()
 	..()
+	icon_state = "capsule[rand(1,12)]"
 	pixel_x = rand(-10,10) * PIXEL_MULTIPLIER
 	pixel_y = rand(-10,10) * PIXEL_MULTIPLIER
 

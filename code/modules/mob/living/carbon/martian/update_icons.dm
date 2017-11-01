@@ -1,3 +1,22 @@
+//MOB ICONS
+
+/mob/living/carbon/martian/update_icons()
+	update_hud()
+
+	overlays.len = 0
+	for(var/image/I in item_overlays)
+		overlays += I
+
+	lying_prev = lying
+
+	if(isDead())
+		icon_state = icon_state_dead
+	else if(lying)
+		icon_state = icon_state_lying
+	else
+		icon_state = icon_state_standing
+//INVENTORY ICONS
+
 #define HAT_LAYER 1
 //2-7 are used for hands
 #define MAX_LAYERS 7
@@ -8,31 +27,11 @@
 /mob/living/carbon/martian/regenerate_icons()
 	..()
 
-	update_inv_head(0)
-
 	for(var/i = 1 to held_items.len)
 		update_inv_hand(i)
 
 	update_fire()
 	update_icons()
-	return
-
-/mob/living/carbon/martian/update_icons()
-	update_hud()
-
-	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
-	overlays.len = 0
-	for(var/image/I in item_overlays)
-		overlays += I
-
-	if(lying)
-		var/matrix/M = matrix()
-		M.Turn(90)
-		M.Translate(1,-6)
-		src.transform = M
-	else
-		var/matrix/M = matrix()
-		src.transform = M
 
 /mob/living/carbon/martian/update_inv_hand(index, var/update_icons=1)
 	var/obj/item/I = get_held_item_by_index(index)
@@ -81,6 +80,13 @@
 		if(client)
 			client.screen |= head
 			head.screen_loc = ui_monkey_hat
+
+
+
+/mob/living/carbon/martian/update_hud()
+	if(client)
+		update_internals()
+		client.screen |= contents
 
 #undef HAT_LAYER
 #undef MAX_LAYERS

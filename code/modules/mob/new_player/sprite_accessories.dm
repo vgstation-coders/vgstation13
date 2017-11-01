@@ -56,7 +56,7 @@
 		name = "Bald"
 		icon_state = "bald"
 		gender = MALE
-		species_allowed = list("Human","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul")
+		species_allowed = list("Human","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime")
 
 	short
 		name = "Short Hair"	  // try to capatilize the names please~
@@ -483,6 +483,19 @@
 		icon_state = "hair_shinobu"
 		gender = FEMALE
 
+	halfshave
+		name = "Half-shave"
+		icon_state = "hair_halfshave"
+		
+	nightcrawler
+		name = "Nightcrawler"
+		icon_state = "hair_nightcrawler"
+
+	manbun
+		name = "Manbun"
+		icon_state = "hair_manbun"
+		gender = MALE
+
 	bald
 		name = "Bald"
 		icon_state = "bald"
@@ -503,7 +516,7 @@
 		name = "Shaved"
 		icon_state = "bald"
 		gender = NEUTER
-		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul")
+		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime")
 
 	watson
 		name = "Watson Mustache"
@@ -779,6 +792,12 @@
 		name = "Vox Nights"
 		icon_state = "vox_nights"
 		species_allowed = list(VOX_SHAPED)
+		do_colouration = 0
+
+	diona_popcorn
+		name = "Popped Hair"
+		icon_state = "hair_popcorn"
+		species_allowed = list("Diona")
 		do_colouration = 0
 
 /datum/sprite_accessory/facial_hair

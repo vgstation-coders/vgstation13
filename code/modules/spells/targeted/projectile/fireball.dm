@@ -82,7 +82,7 @@
 	animate_movement = 2
 	linear_movement = 0
 
-/obj/item/projectile/spell_projectile/fireball/Bump(var/atom/A)
+/obj/item/projectile/spell_projectile/fireball/to_bump(var/atom/A)
 	if(!isliving(A))
 		forceMove(get_turf(A))
 	return ..()

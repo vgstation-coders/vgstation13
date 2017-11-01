@@ -166,9 +166,7 @@
 		if(use_mmi)
 			M.mmi = use_mmi
 			use_mmi.forceMove(M)
-		M.Namepick()
-		M.updatename()
-
+		
 		if(!use_mmi)
 			M.key = user.key
 			qdel(user)
@@ -178,6 +176,8 @@
 		update_icon()
 		M.cell.maxcharge = 15000
 		M.cell.charge = 15000
+		M.Namepick()
+		M.updatename()
 
 /obj/machinery/mommi_spawner/update_icon()
 	if(stat & NOPOWER)

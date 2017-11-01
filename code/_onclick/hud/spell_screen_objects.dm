@@ -140,6 +140,10 @@
 	for(var/obj/abstract/screen/spell/spell in spell_objects)
 		spell.update_charge(forced)
 
+/obj/abstract/screen/movable/spell_master/proc/on_holder_death(mob/user)
+	for(var/obj/abstract/screen/spell/spell in spell_objects)
+		spell.spell.on_holder_death(user)
+
 
 /obj/abstract/screen/movable/spell_master/genetic
 	name = "Mutant Powers"
@@ -175,6 +179,15 @@
 
 	open_state = "genetics_open"
 	closed_state = "genetics_closed"
+
+	screen_loc = ui_racial_master
+
+/obj/abstract/screen/movable/spell_master/time
+	name = "Time Powers"
+	icon_state = "time_spell_ready"
+
+	open_state = "time_open"
+	closed_state = "time_closed"
 
 	screen_loc = ui_alien_master
 

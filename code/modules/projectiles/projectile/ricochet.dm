@@ -224,7 +224,7 @@
 		returnToPool(src)
 		OnDeath()
 
-/obj/item/projectile/ricochet/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/ricochet/to_bump(atom/A as mob|obj|turf|area)
 	if(bumped)
 		return 0
 	bumped = 1

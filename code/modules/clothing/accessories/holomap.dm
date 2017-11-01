@@ -60,10 +60,6 @@ var/list/holomap_cache = list()
 	holomap_filter = HOLOMAP_FILTER_ELITESYNDICATE
 	holomap_color = "#E30000"
 
-	prefix_update = list(
-		"/obj/item/clothing/head/helmet/space/syndicate/black/red" = "syndileader",
-		)
-
 
 /obj/item/clothing/accessory/holomap_chip/raider
 	name = "nuclear operative holomap chip"
@@ -122,7 +118,7 @@ var/list/holomap_cache = list()
 			qdel(A)
 	..()
 	user.update_action_buttons()
-	
+
 /obj/item/clothing/accessory/holomap_chip/proc/togglemap()
 	if(usr.isUnconscious())
 		return

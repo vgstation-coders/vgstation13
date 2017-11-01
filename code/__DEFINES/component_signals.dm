@@ -31,6 +31,11 @@
  */
 #define COMSIG_MOVE "move"
 
+/** Sent when a mob wants to take a single step.
+ * @param dir integer: NORTH/SOUTH/WEST/EAST/etc to move in that direction.
+ */
+#define COMSIG_STEP "step"
+
 
 /** BLURB
  * @param temp decimal: Adds value to body temperature
@@ -70,3 +75,35 @@
  * @param component /datum/component: Component being removed.
  */
 #define COMSIG_COMPONENT_REMOVING "component removing"
+
+/** Sent when a mob wants to drop the item in its active hand. No arguments.
+ */
+#define COMSIG_DROP "drop"
+
+/** Sent when a mob wants to click on something.
+ * @param target /atom: The thing to be clicked on.
+ */
+#define COMSIG_CLICKON "clickon"
+
+/** Sent when a mob wants to activate a hand which is holding a specific item.
+ * @param target /atom: The item in question.
+ */
+#define COMSIG_ACTVHANDBYITEM "actvhandbyitem"
+
+/** Sent when a mob wants to activate an empty hand. No arguments.
+ */
+#define COMSIG_ACTVEMPTYHAND "actvemptyhand"
+
+/** Sent when a mob wants to throw the item in its active hand at something.
+ * @param target /atom: The atom at which to throw.
+ */
+#define COMSIG_THROWAT "throwat"
+
+/** Sent when a mob wants to call attack_self() on the item in its active hand. No arguments.
+ */
+#define COMSIG_ITMATKSELF "itmatkself"
+
+/** Sent when a mob wants to quick-equip the item in its active hand. No arguments.
+ */
+#define COMSIG_EQUIPACTVHAND "equipactvhand"
+

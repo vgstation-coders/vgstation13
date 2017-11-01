@@ -71,14 +71,14 @@
 /obj/structure/bed/chair/vehicle/wizmobile/handle_layer()
 	return
 
-/obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/wizmobile/to_bump(var/atom/obstacle)
 	if(throwing)
 		return ..()
 	else
 		return obstacle.bumped_by_firebird(src) //Yep
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
-/obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
+/obj/structure/bed/chair/vehicle/wizmobile/to_bump(var/atom/obstacle)
 	if(can_move)
 		can_move = 0
 		alpha=128

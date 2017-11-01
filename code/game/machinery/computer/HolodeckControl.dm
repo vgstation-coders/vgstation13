@@ -12,6 +12,8 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+	var/list/connected_holopeople = list()
+	var/maximum_holopeople = 4
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -22,6 +24,33 @@
 /obj/machinery/computer/HolodeckControl/attack_paw(var/mob/user as mob)
 	return
 
+/obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
+	if(stat & (NOPOWER|BROKEN|MAINT))
+		return
+	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
+		return
+	if(!linkedholodeck)
+		return
+	if(connected_holopeople.len >= maximum_holopeople)
+		to_chat(user, "<span class='notice'>\The [src] cannot sustain any additional advanced holograms. Please try again when there are fewer advanced holograms on the holodeck.</span>")
+		return
+	var/turf/spawnturf
+	var/list/L = get_area_turfs(linkedholodeck.type)
+	var/turf/T = pick(L)
+	while(is_blocked_turf(T))
+		T = pick(L)
+	if(spawnturf)
+		user.forceMove(spawnturf)
+		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
+		connected_holopeople.Add(H)
+		H.connected_holoconsole = src
+		var/list/N = hologram_names.Copy()
+		for(var/mob/M in connected_holopeople)
+			N.Remove(M.name)
+		H.name = capitalize(pick(N))
+		H.real_name = H.name
+
 /obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
 
 	if(..())
@@ -29,26 +58,30 @@
 	user.set_machine(src)
 	var/dat
 
-	dat += {"<B>Holodeck Control System</B><BR>
-		<HR>Current Loaded Programs:<BR>
-		<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>
-		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
+	dat += {"<B>Holodeck Control System</B><BR>"}
+//	if(isobserver(user))
+//		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
+	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
-		<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
+		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
+		<A href='?src=\ref[src];checkers=1'>((Checkers Board)</font>)</A><BR>
+		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
 		<A href='?src=\ref[src];desert=1'>((Desert)</font>)</A><BR>
-		<A href='?src=\ref[src];space=1'>((Space)</font>)</A><BR>
+		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
+		<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>
+		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=\ref[src];gym=1'>((Gym)</font>)</A><BR>
+		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
+		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
+		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>
+		<A href='?src=\ref[src];panic=1'>((Panic Bunker)</font>)</A><BR>
 		<A href='?src=\ref[src];picnicarea=1'>((Picnic Area)</font>)</A><BR>
 		<A href='?src=\ref[src];snowfield=1'>((Snow Field)</font>)</A><BR>
 		<A href='?src=\ref[src];theatre=1'>((Theatre)</font>)</A><BR>
-		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
 		<A href='?src=\ref[src];wildride=1'>((Wild Ride)</font>)</A><BR>
-		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
-		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
-		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
-		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
-		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>
-		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>"}
+		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>"}
 //	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
@@ -56,11 +89,17 @@
 		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
-			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Begin Combat Arena Simulation</font>)</A><BR>
-			Ensure the holodeck is empty before testing.<BR>
-			<BR>
 			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
+			<BR>
+			<A href='?src=\ref[src];catnip=1'>(<font color=red>Club Catnip</font>)</A><BR>
+			Ensure the holodeck is full before testing.<BR>
+			<BR>
+			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Combat Arena</font>)</A><BR>
+			Safety protocols disabled - weapons are not for recreation.<BR>
+			<BR>
+			<A href='?src=\ref[src];medieval=1'>(<font color=red>Medieval Tournament</font>)</A><BR>
+			Safety protocols disabled - weapons are not for recreation.<BR>
 			<BR>"}
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
@@ -76,11 +115,14 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)
+	usr.set_machine(src)
+
+	if(href_list["spawn_holoperson"])
+		spawn_holoperson(usr)
+
 	if(..())
 		return 1
 	else
-		usr.set_machine(src)
-
 		if(href_list["emptycourt"])
 			target = locate(/area/holodeck/source_emptycourt)
 			if(target)
@@ -88,6 +130,31 @@
 
 		else if(href_list["boxingcourt"])
 			target = locate(/area/holodeck/source_boxingcourt)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["panic"])
+			target = locate(/area/holodeck/source_panic)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["gym"])
+			target = locate(/area/holodeck/source_gym)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["medieval"])
+			target = locate(/area/holodeck/source_medieval)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["catnip"])
+			target = locate(/area/holodeck/source_catnip)
+			if(target)
+				loadProgram(target)
+
+		else if(href_list["checkers"])
+			target = locate(/area/holodeck/source_checkers)
 			if(target)
 				loadProgram(target)
 
@@ -108,11 +175,6 @@
 
 		else if(href_list["desert"])
 			target = locate(/area/holodeck/source_desert)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["space"])
-			target = locate(/area/holodeck/source_space)
 			if(target)
 				loadProgram(target)
 
@@ -269,9 +331,7 @@
 
 			for(var/turf/T in linkedholodeck)
 				if(prob(30))
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(2, 1, T)
-					s.start()
+					spark(src)
 				T.ex_act(3)
 				T.hotspot_expose(1000,500,1,surfaces=1)
 
@@ -314,9 +374,7 @@
 				if(L.name=="Atmospheric Test Start")
 					spawn(20)
 						var/turf/T = get_turf(L)
-						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-						s.set_up(2, 1, T)
-						s.start()
+						spark(T, 2)
 						if(T)
 							T.temperature = 5000
 							T.hotspot_expose(50000,50000,1,surfaces=1)
@@ -363,9 +421,7 @@
 			if(L.name=="Atmospheric Test Start")
 				spawn(20)
 					var/turf/T = get_turf(L)
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-					s.set_up(2, 1, T)
-					s.start()
+					spark(T, 2)
 					if(T)
 						T.temperature = 5000
 						T.hotspot_expose(50000,50000,1,surfaces=1)
@@ -376,6 +432,8 @@
 	//Get rid of any items
 	for(var/item in holographic_items)
 		derez(item)
+	for(var/mob/living/simple_animal/hologram/advanced/H in connected_holopeople)
+		H.dissipate()
 	//Turn it back to the regular non-holographic room
 	target = locate(/area/holodeck/source_plating)
 	if(target)

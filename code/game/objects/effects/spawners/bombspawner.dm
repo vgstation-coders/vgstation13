@@ -126,7 +126,7 @@
 /obj/effect/spawner/newbomb/New()
 	..()
 
-	var/obj/item/device/transfer_valve/V = new(src.loc)
+	var/obj/item/device/transfer_valve/mediumsize/V = new(src.loc)
 	var/obj/item/weapon/tank/plasma/PT = new(V)
 	var/obj/item/weapon/tank/oxygen/OT = new(V)
 

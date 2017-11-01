@@ -61,8 +61,9 @@
 	var/obj/item/device/radio/radio
 
 	// Monitoring shit
-	var/frequency = 0
+	var/frequency = 1439
 	var/id_tag
+	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
 	var/list/message_exclusions = list(/obj/effect/effect/sparks)
@@ -91,11 +92,14 @@
 /obj/machinery/power/supermatter/New()
 	. = ..()
 	radio = new (src)
-
+	if(frequency)
+		set_frequency(frequency)
 
 /obj/machinery/power/supermatter/Destroy()
 	qdel(radio)
 	radio = null
+	qdel(radio_connection)
+	radio_connection = null
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
@@ -120,13 +124,15 @@
 			return explode()
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
+	var/super = FALSE
 	var/prints = ""
 	if(src.fingerprintshidden)
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	if(current_size == STAGE_FIVE)
 		S.expand(STAGE_SUPER, 1)
-		log_admin("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
-		message_admins("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
+		super = TRUE
+	log_admin("[super ? "New super singularity made" : "Singularity gained 15000 energy"] by eating a SM shard with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("[super ? "New super singularity made" : "Singularity gained 15000 energy"] by eating a SM shard with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 15000
 
@@ -136,8 +142,8 @@
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
 	S.expand(STAGE_SUPER, 1)
-	log_admin("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
+	log_admin("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 20000
 
@@ -145,6 +151,9 @@
 	if(istype(mover,/obj/structure/closet/crate/secure/large/reinforced))
 		return 1
 	. = ..()
+
+/obj/machinery/power/supermatter/proc/stability()
+	return round((damage / explosion_point) * 100)
 
 /obj/machinery/power/supermatter/process()
 
@@ -162,7 +171,7 @@
 	for(var/obj/effect/beam/emitter/B in beams)
 		power += B.get_damage() * config_bullet_energy
 
-	var/stability = round((damage / explosion_point) * 100)
+	var/stability = stability()
 	if(damage > warning_point) // while the core is still damaged and it's still worth noting its status
 
 		var/list/audio_sounds = list('sound/AI/supermatter_integrity_before.ogg')
@@ -212,28 +221,11 @@
 					//Hilariously enough, running into a closet should make you get hit the hardest.
 					mob:hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
 				var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(mob, src) + 1) )
-				mob.apply_effect(rads, IRRADIATE)
+				mob.apply_radiation(rads, RAD_EXTERNAL)
 
 			explode()
 
-	if(frequency)
-		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
-
-		if(!radio_connection)
-			return
-
-		var/datum/signal/signal = getFromPool(/datum/signal)
-		signal.source = src
-		signal.transmission_method = 1
-		signal.data = list(
-			"tag" = id_tag,
-			"device" = "SM",
-			"instability" = stability,
-			"damage" = damage,
-			"power" = power,
-			"sigtype" = "status"
-		)
-		radio_connection.post_signal(src, signal)
+	broadcast_status()
 
 	//Ok, get the air from the turf
 	var/datum/gas_mixture/env = L.return_air()
@@ -298,7 +290,7 @@
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
 		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
-		l.apply_effect(rads, IRRADIATE)
+		l.apply_radiation(rads, RAD_EXTERNAL)
 
 	power -= (power/500)**3
 
@@ -393,7 +385,7 @@
 	user.drop_from_inventory(W)
 	Consume(W)
 
-	user.apply_effect(150, IRRADIATE)
+	user.apply_radiation(150, RAD_EXTERNAL)
 
 
 /obj/machinery/power/supermatter/Bumped(atom/AM as mob|obj)
@@ -431,15 +423,48 @@
 	power += 200
 
 		//Some poor sod got eaten, go ahead and irradiate people nearby.
-	for(var/mob/living/l in range(10))
+	for(var/mob/living/l in range(10,src))
 		if(l in view())
 			l.show_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find your skin covered in new radiation burns.</span>", 1,\
 				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
 		else
 			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
 		var/rads = 500 * sqrt( 1 / (get_dist(l, src) + 1) )
-		l.apply_effect(rads, IRRADIATE, 0) // Permit blocking
+		l.apply_radiation(rads, RAD_EXTERNAL) // Permit blocking
 
 
 /obj/machinery/power/supermatter/blob_act()
 	explode()
+
+/obj/machinery/power/supermatter/proc/set_frequency(new_frequency)
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	if(frequency)
+		radio_connection = radio_controller.add_object(src, frequency, filter = RADIO_ATMOSIA)
+
+/obj/machinery/power/supermatter/proc/broadcast_status()
+	if(!radio_connection)
+		return 0
+
+	var/datum/signal/signal = new()
+	signal.transmission_method = SIGNAL_RADIO
+	signal.source = src
+
+	signal.data = list(
+		"tag" = id_tag,
+		"device" = "SM",
+		"instability" = stability(),
+		"damage" = damage,
+		"power" = power,
+		"sigtype" = "status"
+	)
+	radio_connection.post_signal(src, signal)
+	return 1
+
+/obj/machinery/power/supermatter/canClone(var/obj/O)
+	return istype(O, /obj/machinery/power/supermatter)
+
+/obj/machinery/power/supermatter/clone(var/obj/machinery/power/supermatter/O)
+	id_tag = O.id_tag
+	set_frequency(O.frequency)
+	return 1

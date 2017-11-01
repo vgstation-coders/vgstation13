@@ -20,6 +20,12 @@ var/list/uplink_items = list()
 			if(I.last)
 				last += I
 				continue
+			if(I.only_on_month)
+				if(time2text(world.realtime,"MM") != I.only_on_month)
+					continue
+			if(I.only_on_day)
+				if(time2text(world.realtime,"DD") != I.only_on_day)
+					continue
 
 			if(!uplink_items[I.category])
 				uplink_items[I.category] = list()
@@ -48,6 +54,8 @@ var/list/uplink_items = list()
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
 	var/list/job = null
+	var/only_on_month	//two-digit month as string
+	var/only_on_day		//two-digit day as string
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -113,6 +121,17 @@ var/list/uplink_items = list()
 */
 //Work in Progress, job specific antag tools
 
+/datum/uplink_item/valentine
+	category = "Valentine's Day Special!"
+	only_on_month = "02"
+	only_on_day = "14"
+
+/datum/uplink_item/valentine/explosivechocolate
+	name = "Explosive Chocolate Bar"
+	desc = "A special Valentine's Day chocolate bar chock-full of Bicarodyne. For adding that little extra oompf to your hugs."
+	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
+	cost = 8
+
 /datum/uplink_item/jobspecific
 	category = "Job Specific Tools"
 
@@ -174,18 +193,25 @@ var/list/uplink_items = list()
 	cost = 6
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/bananagun
+	name = "Banana Gun"
+	desc = "One shot only, appears to be a banana until fired. Do not attempt to eat."
+	item = /obj/item/weapon/gun/projectile/banana
+	cost = 2
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
 	item = /obj/item/weapon/glue
-	cost = 6
+	cost = 4
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
 	desc = "Spray something to render it permanently invisible! One-time use. Permanence not guaranteed when exposed to water."
 	item = /obj/item/weapon/invisible_spray/permanent
-	cost = 5
+	cost = 4
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
@@ -302,6 +328,13 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 12
 	job = list("Medical Doctor", "Chief Medical Officer")
+
+/datum/uplink_item/jobspecific/hypozinebottle
+	name = "Lethal Speed Chemical"
+	desc = "30 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
+	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	cost = 12
+	job = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
 //Engineer
 /datum/uplink_item/jobspecific/powergloves
@@ -543,10 +576,10 @@ var/list/uplink_items = list()
 	cost = 1
 
 /datum/uplink_item/device_tools/bugdetector
-	name = "Bug Detector"
-	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. "
+	name = "Bug Detector & Camera Disabler"
+	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Conspicuous if currently detecting something. Examine it to see everything it detects. Activating it will disable cameras nearby, plus the ones far away randomly, causing massive disruptions to the AI and anyone using them."
 	item = /obj/item/device/multitool/ai_detect
-	cost = 3
+	cost = 5
 
 /datum/uplink_item/device_tools/space_suit
 	name = "Space Suit"
@@ -595,6 +628,12 @@ var/list/uplink_items = list()
 	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls, attach it to organisms to destroy them, or connect a signaler to its wiring to make it remotely detonable. It has a modifiable timer with a minimum setting of 10 seconds."
 	item = /obj/item/weapon/plastique
 	cost = 4
+
+/datum/uplink_item/device_tools/explosive_gum
+	name = "Explosive Chewing Gum"
+	desc = "A single stick of explosive chewing gum, detonates five seconds after you start chewing. Can be stuck to walls and objects."
+	item = /obj/item/gum/explosive
+	cost = 8
 
 /datum/uplink_item/device_tools/powersink
 	name = "Power Sink"

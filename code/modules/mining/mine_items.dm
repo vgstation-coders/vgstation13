@@ -226,6 +226,19 @@ proc/move_mining_shuttle()
 	desc = "Cracks rocks with sonic blasts, perfect for killing cave lizards."
 	drill_verb = "hammering"
 
+/obj/item/weapon/pickaxe/jackhammer/combat
+	name = "impact hammer"
+	hitsound = "sound/weapons/tablehitslow.ogg"
+	force = 30.0
+	sharpness = 0
+	sharpness_flags = null
+	digspeed = 40 //not really for digging
+	desc = "Re-purposed mining equipment, built to kill."
+	attack_verb = list("hits", "hammers", "impacts", "attacks")
+
+/obj/item/weapon/pickaxe/jackhammer/combat/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
+	user.delayNextAttack(25)
+
 /obj/item/weapon/pickaxe/gold
 	name = "golden pickaxe"
 	icon_state = "gpickaxe"
@@ -241,6 +254,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
 	heat_production = 3800
+	source_temperature = TEMPERATURE_PLASMA
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
@@ -249,9 +263,6 @@ proc/move_mining_shuttle()
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
-
-/obj/item/weapon/pickaxe/plasmacutter/is_hot()
-	return 1
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
@@ -548,7 +559,7 @@ proc/move_mining_shuttle()
 	maxHealth = 100
 	melee_damage_lower = 15
 	melee_damage_upper = 15
-	environment_smash = 0
+	environment_smash_flags = 0
 	attacktext = "drills"
 	attack_sound = 'sound/weapons/circsawhit.ogg'
 	ranged = 1
@@ -558,6 +569,7 @@ proc/move_mining_shuttle()
 	projectilesound = 'sound/weapons/Laser.ogg'
 	wanted_objects = list(/obj/item/weapon/ore)
 	meat_type = null
+	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/weldingtool))

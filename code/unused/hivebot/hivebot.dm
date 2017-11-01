@@ -148,7 +148,7 @@
 
 
 
-/mob/living/silicon/hivebot/Bump(atom/movable/AM as mob|obj, yes)
+/mob/living/silicon/hivebot/to_bump(atom/movable/AM as mob|obj, yes)
 	spawn( 0 )
 		if ((!( yes ) || src.now_pushing))
 			return

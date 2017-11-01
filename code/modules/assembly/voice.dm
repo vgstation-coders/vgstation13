@@ -17,7 +17,7 @@
 
 	accessible_values = list(\
 		VALUE_RECORDING = "listening;"+VT_NUMBER,\
-		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_NUMBER,\
+		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_TEXT,\
 		VALUE_MUTED = "muted;"+VT_NUMBER)
 
 /obj/item/device/assembly/voice/Hear(var/datum/speech/speech, var/rendered_speech="")
@@ -29,6 +29,9 @@
 		say("Activation message is '[html_encode(speech.message)]'.")
 	else
 		if(!recorded || findtext(speech.message, recorded))
+			var/mob/living/L = speech.speaker
+			if(istype(L) && L.stuttering)
+				return
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else

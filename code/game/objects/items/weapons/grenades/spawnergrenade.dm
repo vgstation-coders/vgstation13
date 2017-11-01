@@ -77,7 +77,7 @@
 /obj/item/weapon/grenade/spawnergrenade/beenade
 	name = "bee-nade"
 	icon_state = "beenade"
-	spawner_type = /mob/living/simple_animal/bee
+	spawner_type = /mob/living/simple_animal/bee/angry
 	deliveryamt = 15
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 
@@ -86,13 +86,4 @@
 	if(!spawned_atoms || !spawned_atoms.len)
 		return
 	playsound(get_turf(src), 'sound/effects/bees.ogg', 100, 1)
-	for(var/A in spawned_atoms)
-		var/mob/living/simple_animal/bee/BEE = A
-		if(!istype(BEE))
-			continue
-		BEE.strength = 1
-		BEE.toxic = 5
-		BEE.mut = 2
-		BEE.feral = 25
-		BEE.icon_state = "bees1-feral"
-		BEE.newTarget()
+

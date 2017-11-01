@@ -7,6 +7,7 @@ var/list/admin_datums = list()
 	var/fakekey			= null
 
 	var/datum/marked_datum
+	var/atom/marked_appearance //Reference to an atom or an image
 
 	var/admincaster_screen = 0	//See newscaster.dm under machinery for a full description
 	var/datum/feed_message/admincaster_feed_message = new /datum/feed_message   //These two will act as holders.

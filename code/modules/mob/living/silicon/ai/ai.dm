@@ -22,7 +22,7 @@ var/list/ai_list = list()
 	force_compose = 1
 	size = SIZE_BIG
 
-	var/list/network = list("SS13")
+	var/list/network = list(CAMERANET_SS13)
 	var/obj/machinery/camera/current = null
 	var/list/connected_robots = list()
 	var/aiRestorePowerRoutine = 0
@@ -81,6 +81,8 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_GOLEM, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_MOUSE, 1)
+	add_language(LANGUAGE_GOLEM, 1)
+	add_language(LANGUAGE_SLIME, 1)
 	add_language(LANGUAGE_HUMAN, 1)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName
@@ -210,7 +212,7 @@ var/list/ai_list = list()
 	*/
 		//if(icon_state == initial(icon_state))
 	/* Nuked your hidden shit.*/
-	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President", "Fort")
+	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President", "Fort", "Mothman", "Dancing Hotdog", "Diagnosis", "Drink It!", "Metaclub", "Jack Frost")
 	switch(icontype)
 		if("Clown")
 			icon_state = "ai-clown2"
@@ -308,6 +310,18 @@ var/list/ai_list = list()
 			icon_state = "ai-pres"
 		if("Fort")
 			icon_state = "ai-boxfort"
+		if("Mothman")
+			icon_state = "ai-mothman"
+		if("Dancing Hotdog")
+			icon_state = "ai-hotdog"
+		if("Diagnosis")
+			icon_state = "ai-atlantiscze"
+		if("Drink It!")
+			icon_state = "ai-silveryferret"
+		if("Metaclub")
+			icon_state = "ai-terminal"
+		if("Jack Frost")
+			icon_state = "ai-jack"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
@@ -754,7 +768,9 @@ var/list/ai_list = list()
 		"Yotsuba",
 		"Girl",
 		"Boy",
-		"SHODAN"
+		"SHODAN",
+		"Corgi",
+		"Mothman"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -783,6 +799,10 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo10"))
 				if("SHODAN")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo11"))
+				if("Corgi")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo12"))
+				if("Mothman")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo13"))
 
 	return
 

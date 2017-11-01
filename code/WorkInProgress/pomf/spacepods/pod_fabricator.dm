@@ -19,7 +19,8 @@
 			/obj/item/pod_parts/pod_frame/aft_starboard
 		),
 		"Pod_Armor" = list(
-			/obj/item/pod_parts/armor
+			/obj/item/pod_parts/armor/civ,
+			/obj/item/pod_parts/armor/taxi,
 		),
 		"Pod_Parts" = list(
 			/obj/item/pod_parts/core

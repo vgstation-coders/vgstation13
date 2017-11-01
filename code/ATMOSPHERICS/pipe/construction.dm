@@ -35,6 +35,8 @@ Buildable meters
 #define PIPE_INSUL_MANIFOLD4W	28
 #define PIPE_LAYER_MANIFOLD		29
 #define PIPE_LAYER_ADAPTER      30
+#define PIPE_HE_MANIFOLD		31
+#define PIPE_HE_MANIFOLD4W      32
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -49,7 +51,7 @@ Buildable meters
 #define DISP_SORT_WRAP_JUNCTION	9
 
 var/global/list/unstackable_pipes = list(PIPE_LAYER_MANIFOLD)
-var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION)
+var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION, PIPE_HE_MANIFOLD, PIPE_HE_MANIFOLD4W)
 
 /obj/item/pipe_spawner
 	name = "Pipe Spawner"
@@ -129,6 +131,10 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 			is_bent = 1
 		if     (istype(make_from, /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction))
 			src.pipe_type = PIPE_JUNCTION
+		else if(istype(make_from, /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w))
+			src.pipe_type = PIPE_HE_MANIFOLD4W
+		else if(istype(make_from, /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold))
+			src.pipe_type = PIPE_HE_MANIFOLD
 		else if(istype(make_from, /obj/machinery/atmospherics/pipe/simple/heat_exchanging))
 			src.pipe_type = PIPE_HE_STRAIGHT + is_bent
 		else if(istype(make_from, /obj/machinery/atmospherics/pipe/simple/insulated))
@@ -243,6 +249,8 @@ var/global/list/pipeID2State = list(
 	"insulated_manifold4w",
 	"manifoldlayer",
 	"layeradapter",
+	"he_manifold",
+	"he_manifold4w",
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -276,6 +284,8 @@ var/global/list/nlist = list( \
 	"insulated 4-way manifold", \
 	"pipe alignment converter", \
 	"pipe alignment adapter",
+	"h/e manifold", \
+	"h/e 4-way manifold", \
 )
 /obj/item/pipe/proc/update()
 
@@ -294,7 +304,7 @@ var/global/list/nlist = list( \
 // rotate the pipe item clockwise
 var/list/straight_pipes = list(PIPE_SIMPLE_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_INSULATED_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE)
 var/list/bent_pipes = list(PIPE_SIMPLE_BENT, PIPE_HE_BENT, PIPE_INSULATED_BENT)
-var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W)
+var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_MANIFOLD4W)
 /obj/item/pipe/verb/rotate()
 	set category = "Object"
 	set name = "Rotate Pipe"
@@ -349,9 +359,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W)
 			return dir //dir|acw
 		if(PIPE_CONNECTOR,PIPE_UVENT,PIPE_PASV_VENT,PIPE_SCRUBBER,PIPE_HEAT_EXCHANGE,PIPE_THERMAL_PLATE,PIPE_INJECTOR)
 			return dir
-		if(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W)
+		if(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_MANIFOLD4W)
 			return dir|flip|cw|acw
-		if(PIPE_MANIFOLD, PIPE_INSUL_MANIFOLD)
+		if(PIPE_MANIFOLD, PIPE_INSUL_MANIFOLD, PIPE_HE_MANIFOLD)
 			return flip|cw|acw
 		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE)
 			return dir|flip|cw
@@ -386,6 +396,10 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W)
 		if(PIPE_HE_STRAIGHT)
 			return get_pipe_dir()
 		if(PIPE_HE_BENT)
+			return get_pipe_dir()
+		if (PIPE_HE_MANIFOLD)
+			return get_pipe_dir()
+		if (PIPE_HE_MANIFOLD4W)
 			return get_pipe_dir()
 		if(PIPE_JUNCTION)
 			return dir
@@ -424,6 +438,12 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W)
 
 		if(PIPE_HE_STRAIGHT, PIPE_HE_BENT)
 			P=new/obj/machinery/atmospherics/pipe/simple/heat_exchanging(loc)
+
+		if(PIPE_HE_MANIFOLD4W)
+			P=new/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w( src.loc )
+
+		if(PIPE_HE_MANIFOLD)
+			P=new/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold( src.loc )
 
 		if(PIPE_CONNECTOR)		// connector
 			P=new/obj/machinery/atmospherics/unary/portables_connector(loc)

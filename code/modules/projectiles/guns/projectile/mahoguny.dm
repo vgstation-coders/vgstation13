@@ -19,6 +19,10 @@
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")
 
+/obj/item/weapon/gun/mahoguny/can_discharge()
+	if (current_ammo)
+		return 1
+	
 /obj/item/weapon/gun/mahoguny/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack

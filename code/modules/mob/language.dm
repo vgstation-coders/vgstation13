@@ -207,11 +207,24 @@
 	ask_verb = "groans"
 	exclaim_verb = "cracks"
 	whisper_verb = "grumbles"
-	colour = "brown"
+	colour = "golem"
 	native = 1
-	key = "p"
+	key = "8"
 	flags = RESTRICTED
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
+
+/datum/language/slime
+	name = LANGUAGE_SLIME
+	desc = "A tonal language produced by the bubbling of the ambient atmosphere through a slime's surface."
+	speech_verb = "bubbles"
+	ask_verb = "gurgles"
+	exclaim_verb = "froths"
+	whisper_verb = "burbles"
+	colour = "slime"
+	native = 1
+	key = "f"
+	flags = RESTRICTED
+	syllables = list("ba","ab","be","eb","bi","ib","bo","ob","bu","ub")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"

@@ -1,4 +1,4 @@
-/obj/item/organ/brain/mami
+/obj/item/organ/internal/brain/mami
 	name = "Machine-Man Interface"
 	desc = "A complex socket-system of electrodes and neurons intended to give silicon-based minds control of organic tissue."
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_PROGRAMMING + "=4"
@@ -6,7 +6,7 @@
 	icon_state = "mami_empty"
 	var/obj/item/device/mmi/posibrain/posibrain = null
 
-/obj/item/organ/brain/mami/attackby(obj/item/O, mob/user)
+/obj/item/organ/internal/brain/mami/attackby(obj/item/O, mob/user)
 	if(istype(O,/obj/item/device/mmi/posibrain) && !brainmob)
 		posibrain = O
 		if(!posibrain.brainmob || !posibrain.brainmob.mind || !posibrain.brainmob.ckey)
@@ -33,7 +33,7 @@
 		return 1
 	return ..()
 
-/obj/item/organ/brain/mami/attack_self(mob/user)
+/obj/item/organ/internal/brain/mami/attack_self(mob/user)
 	if(brainmob && !posibrain)
 		posibrain = new(src)
 		posibrain.reset_search()

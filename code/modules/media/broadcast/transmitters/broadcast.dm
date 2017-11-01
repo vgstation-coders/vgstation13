@@ -62,16 +62,16 @@
 	power_connection.connect()
 	update_icon()
 
-/obj/machinery/media/transmitter/broadcast/wrenchAnchor(mob/user)
-	if(..())
-		if(anchored) // We are now anchored
-			power_connection.connect() // Connect to the powernet
-		else // We are now NOT anchored
-			power_connection.disconnect() // Ditch powernet.
-			on=0
-			update_on()
-		return 1
-	return
+/obj/machinery/media/transmitter/broadcast/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	if(anchored) // We are now anchored
+		power_connection.connect() // Connect to the powernet
+	else // We are now NOT anchored
+		power_connection.disconnect() // Ditch powernet.
+		on=0
+		update_on()
 
 /obj/machinery/media/transmitter/broadcast/proc/hook_media_sources()
 	if(!sources.len)
@@ -222,10 +222,7 @@
 		// Radiation
 		for(var/mob/living/carbon/M in view(src,3))
 			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) )
-			if(istype(M,/mob/living/carbon/human))
-				M.apply_effect((rads*count_rad_wires()),IRRADIATE)
-			else
-				M.radiation += rads
+			M.apply_radiation((rads*count_rad_wires()),RAD_EXTERNAL)
 
 		// Heat output
 		var/turf/simulated/L = loc

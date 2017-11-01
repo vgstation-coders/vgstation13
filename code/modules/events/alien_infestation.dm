@@ -9,7 +9,7 @@
 
 
 /datum/event/alien_infestation/setup()
-	announceWhen = rand(300, 600)
+	announceWhen = rand(1500, 3000)
 	player_factor = round(player_list.len/10) //One bonus starting alium for 10 players
 	spawncount = rand(1, 2)+player_factor
 	sent_aliens_to_station = 1

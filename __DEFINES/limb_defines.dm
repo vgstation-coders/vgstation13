@@ -9,3 +9,4 @@
 #define LIMB_RIGHT_LEG		"r_leg"
 #define LIMB_LEFT_FOOT		"l_foot"
 #define LIMB_RIGHT_FOOT		"r_foot"
+#define TARGET_MOUTH		"mouth"

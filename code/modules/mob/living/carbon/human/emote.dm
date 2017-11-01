@@ -239,6 +239,8 @@
 			else
 				if(isgolem(src))
 					msg = "<B>[src]</B> crumbles into dust..."
+				else if(isslimeperson(src))
+					msg = "<B>[src]</B> collapses into a puddle..."
 				else
 					msg = "<B>[src]</B> seizes up and falls limp, \his eyes dead and lifeless..."
 			m_type = VISIBLE
@@ -698,18 +700,21 @@
 						if(do_after(usr,usr,30))
 							visible_message("<span class = 'warning'><b>[name]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
 							playsound(location, 'sound/effects/superfart.ogg', 50, 0)
-							if(!wearing_suit)
-								for(var/mob/living/V in view(src,aoe_range))
-									if(!airborne_can_reach(location,get_turf(V),aoe_range))
-										continue
-									shake_camera(V,10,5)
-									if (V == src)
-										continue
-									to_chat(V, "<span class = 'danger'>You're sent flying!</span>")
-									V.Knockdown(5) // why the hell was this set to 12 christ
-									step_away(V,location,15)
-									step_away(V,location,15)
-									step_away(V,location,15)
+							for(var/mob/living/V in view(src,aoe_range))
+								if(!airborne_can_reach(location,get_turf(V),aoe_range))
+									continue
+								shake_camera(V,10,5)
+								if (V == src)
+									continue
+								to_chat(V, "<span class = 'danger'>You're sent flying!</span>")
+								V.Knockdown(5) // why the hell was this set to 12 christ
+								step_away(V,location,15)
+								step_away(V,location,15)
+								step_away(V,location,15)
+							var/turf/T = get_turf(usr)
+							if (!T.has_gravity(usr))
+								to_chat(usr, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
+								throw_at(get_edge_target_turf(usr, dir), 5, 5)
 						else
 							to_chat(usr, "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>")
 

@@ -143,6 +143,7 @@
 #define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
+	
 	src.modules += new /obj/item/device/healthanalyzer(src)
 	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
@@ -209,6 +210,7 @@
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
+	
 	src.emag = new /obj/item/borg/stun(src)
 	src.modules += new /obj/item/device/rcd/borg/engineering(src)
 	src.modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
@@ -277,7 +279,7 @@
 
 
 /obj/item/weapon/robot_module/security
-	name = "peacekeeper robot module"
+	name = "security robot module"
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -416,6 +418,7 @@
 /obj/item/weapon/robot_module/combat/New()
 	src.modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	src.modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
+	src.modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
 	src.modules += new /obj/item/borg/combat/shield(src)
 	src.modules += new /obj/item/borg/combat/mobility(src)
 	src.modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?

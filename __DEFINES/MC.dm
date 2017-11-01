@@ -1,4 +1,4 @@
-#define MC_TICK_CHECK ( world.tick_usage > CURRENT_TICKLIMIT ? pause() : 0 )
+#define MC_TICK_CHECK ( ( world.tick_usage > CURRENT_TICKLIMIT || src.state != SS_RUNNING ) ? pause() : 0 )
 // Used to smooth out costs to try and avoid oscillation.
 #define MC_AVERAGE_FAST(average, current) (0.7 * (average) + 0.3 * (current))
 #define MC_AVERAGE(average, current) (0.8 * (average) + 0.2 * (current))
@@ -7,6 +7,8 @@
 
 #define START_PROCESSING(Processor, Datum) if (!Datum.isprocessing) {Datum.isprocessing = 1;Processor.processing += Datum}
 #define STOP_PROCESSING(Processor, Datum) Datum.isprocessing = 0;Processor.processing -= Datum
+
+#define SS_READY(SS) (SS && SS.initialized) //Checks if the given subsystem is initialized, without the possibility of runtiming if it hasn't been created yet.
 
 //SubSystem flags (Please design any new flags so that the default is off, to make adding flags to subsystems easier)
 
@@ -44,6 +46,14 @@
 //	This flag overrides SS_KEEP_TIMING
 #define SS_POST_FIRE_TIMING 128
 
+//SUBSYSTEM STATES
+#define SS_IDLE 0     // aint doing shit.
+#define SS_QUEUED 1   // queued to run
+#define SS_RUNNING 2  // actively running
+#define SS_PAUSED 3   // paused by mc_tick_check
+#define SS_SLEEPING 4 // fire() slept.
+#define SS_PAUSING 5  // in the middle of pausing
+
 //Timing subsystem
-#define TIMER_NORMAL	"normal"
-#define TIMER_UNIQUE	"unique"
+#define TIMER_NORMAL "normal"
+#define TIMER_UNIQUE "unique"

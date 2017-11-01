@@ -74,14 +74,20 @@
 	if(!ismob(M))
 		return
 
-	to_chat(user, "<span class='info'>You inject [M] with the injector.<span>")
+	if(issilicon(M))
+		return
+
+	user.do_attack_animation(M, src)
+	user.visible_message(\
+		"<span class='warning'>[user] injects [M] with [src].</span>",\
+		"<span class='info'>You inject [M] with with [src].<span>")
 	to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
 	reagents.reaction(M, INGEST)
 
 	if(M.reagents)
 		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>")
-		add_logs(user, M, "injected [transferred]u [reagents] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
+		add_logs(user, M, "injected [transferred]u [reagent_ids[mode]] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
 	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
@@ -97,7 +103,7 @@
 	..()
 	var/contents_count = 0
 	for(var/datum/reagents/reagents in reagent_list)
-		to_chat(user, "<span class='info'>It's currently has [reagents.total_volume] units of [reagent_ids[++contents_count]] stored.</span>")
+		to_chat(user, "<span class='info'>It currently has [reagents.total_volume] units of [reagent_ids[++contents_count]] stored.</span>")
 	to_chat(user, "<span class='info'>It's currently producing '[reagent_ids[mode]]'.</span>")
 
 /obj/item/weapon/reagent_containers/borghypo/upgraded

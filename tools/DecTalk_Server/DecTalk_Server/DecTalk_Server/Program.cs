@@ -60,7 +60,7 @@ namespace DecTalk
 
             listener = new HttpListener();
             listener.Prefixes.Add(entirePath);
-           
+
             try
             {
                 listener.Start();
@@ -189,10 +189,9 @@ namespace DecTalk
                         }
                     }
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     Console.WriteLine("Key Not Located: " + context.Request.Url.LocalPath);
-
                 }
             }
         }

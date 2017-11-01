@@ -1,7 +1,7 @@
 /obj/item/stack/light_w
-	name = "wired glass tiles"
-	singular_name = "wired glass floor tile"
-	desc = "A glass tile, which is wired, somehow."
+	name = "wired glass sheets"
+	singular_name = "wired glass sheet"
+	desc = "A sheet of glass with wire attached."
 	icon_state = "glass_wire"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
 	w_class = W_CLASS_MEDIUM

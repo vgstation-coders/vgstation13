@@ -7,7 +7,7 @@
 	icon_living = "arcane_golem"
 	treadmill_speed = 0
 
-
+	mob_property_flags = MOB_CONSTRUCT
 	health = 50
 	maxHealth = 50
 

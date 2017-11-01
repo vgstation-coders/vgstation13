@@ -88,7 +88,9 @@
 #define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[15*PIXEL_MULTIPLIER]"
 #define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+1:[17*PIXEL_MULTIPLIER]"
 									//borgs
-#define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //borgs have the health display where humans have the pressure damage indicator.
+#define ui_borg_temp "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //same as humans
+#define ui_borg_pressure "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[15*PIXEL_MULTIPLIER]" //borg pressure-o-meter goes in the health slot
+#define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-5:[21*PIXEL_MULTIPLIER]" //borgs have the health display where humans have the pressure damage indicator.
 #define ui_alien_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //aliens have the health display where humans have the pressure damage indicator.
 
 #define ui_construct_health "EAST,CENTER:[15*PIXEL_MULTIPLIER]" //same height as humans, hugging the right border
@@ -99,6 +101,7 @@
 #define ui_spell_master "EAST-1:16,NORTH-1:16" //Used as compile time value
 #define ui_genetic_master "EAST-1:16,NORTH-3:16" //Used as compile time value
 #define ui_alien_master "EAST-0:-4,NORTH-0:-6" //Used as compile time value
+#define ui_racial_master "EAST-0:-4,NORTH-2:-6" //Used as compile time value
 
 //Pop-up inventory
 #define ui_shoes "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"

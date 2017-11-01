@@ -79,7 +79,7 @@
 	id="beez"
 	name="Bottle of BeezEez"
 	other_amounts=list(5)
-	result=/obj/item/beezeez
+	result=/obj/item/weapon/reagent_containers/food/snacks/beezeez
 
 /datum/biogen_recipe/leather
 	category="Leather"
@@ -170,7 +170,7 @@
 	cost=75
 	id="clipboard"
 	name="Clipboard"
-	result=/obj/item/weapon/clipboard
+	result=/obj/item/weapon/storage/bag/clipboard
 
 /datum/biogen_recipe/paper/cardboard
 	cost=25
@@ -183,14 +183,14 @@
 	cost=25
 	id="giftwrap"
 	name="Gift Wrap"
-	other_amounts=list(5,10)
+	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap/gift
 
 /datum/biogen_recipe/paper/packagewrap
 	cost=30
 	id="packagewrap"
 	name="Package Wrap"
-	other_amounts=list(5,10)
+	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap
 
 /datum/biogen_recipe/paper/paperbin

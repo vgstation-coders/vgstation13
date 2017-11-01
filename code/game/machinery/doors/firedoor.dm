@@ -512,7 +512,7 @@ var/global/list/alert_overlays_global = list()
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
 			if(density)
-				mover.Bump(src)
+				mover.to_bump(src)
 			return !density
 	return 1
 
@@ -546,7 +546,7 @@ var/global/list/alert_overlays_global = list()
 				return 1
 			var/current_turf = get_turf(src)
 			var/turf_face = get_step(current_turf,user.dir)
-			if(air_master.air_blocked(current_turf, turf_face))
+			if(SSair.air_blocked(current_turf, turf_face))
 				to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
 				return 1
 			var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)

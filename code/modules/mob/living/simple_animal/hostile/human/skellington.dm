@@ -5,6 +5,8 @@
 	icon = 'icons/mob/hostile_humanoid.dmi'
 	icon_state = "skellington"
 
+	faction = "skeleton"
+
 	corpse = /obj/effect/landmark/corpse/skellington
 
 	melee_damage_lower = 2
@@ -71,7 +73,7 @@
 	desc = "A skeleton carrying a bunch of bombs. Highly explosive."
 
 	icon_state = "petard"
-	speed = 8
+	speed = 9
 
 	faction = "pirate"
 	attacktext = "blows up"

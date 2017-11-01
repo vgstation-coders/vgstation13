@@ -76,7 +76,7 @@
 	icon_living = "syndicatemeleespace"
 	name = "Syndicate Commando"
 	corpse = /obj/effect/landmark/corpse/syndicatecommando
-	speed = 0
+	speed = 1
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/space/Process_Spacemove(var/check_drift = 0)
 	return 1
@@ -114,7 +114,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 	corpse = /obj/effect/landmark/corpse/syndicatecommando
-	speed = 0
+	speed = 1
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space/Process_Spacemove(var/check_drift = 0)
 	return 1

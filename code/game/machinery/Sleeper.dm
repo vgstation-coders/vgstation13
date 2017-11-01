@@ -280,7 +280,8 @@
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+	if(!ishuman(user) && !isrobot(user) && !ismartian(user)) //No ghosts or mice putting people into the sleeper
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
@@ -815,6 +816,14 @@
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 		connected.on = 0
 		if(connected.occupant)
+			if(ishuman(connected.occupant))
+				var/mob/living/carbon/human/H = connected.occupant
+				if(isdiona(H))
+					if(H.h_style != "Popped Hair")
+						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
+						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 1)
+						H.h_style = "Popped Hair"
+						H.update_hair()
 			connected.go_out()
 		connected.update_icon()
 

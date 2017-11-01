@@ -9,7 +9,7 @@
 	minimum_temperature_difference = 20
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 
-	var/const/RADIATION_CAPACITY = 32000 // Radiation isn't particularly effective (TODO BALANCE)
+	var/RADIATION_CAPACITY = 32000       // Radiation isn't particularly effective (TODO BALANCE)
 	                                     //  Plate value is 30000, increased it a bit because of additional surface area. - N3X
 	var/const/ENERGY_MULT        = 6.4   // Not sure what this is, keeping it the same as plates.
 
@@ -209,3 +209,106 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/hidden
 	level=1
 	icon_state="intact-f"
+
+/////////////////////////////////
+// Manifold
+/////////////////////////////////
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold
+	icon = 'icons/obj/pipe-item.dmi'
+	icon_state = "he_manifold"
+	var/obj/machinery/atmospherics/node3
+	RADIATION_CAPACITY = 24000
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/New()
+	.. ()
+	switch(dir)
+		if(NORTH)
+			initialize_directions_he = EAST|SOUTH|WEST
+		if(SOUTH)
+			initialize_directions_he = NORTH|EAST|WEST
+		if(EAST)
+			initialize_directions_he = NORTH|SOUTH|WEST
+		if(WEST)
+			initialize_directions_he = NORTH|EAST|SOUTH
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+	dir = pipe.dir
+	initialize_directions_he = pipe.get_hdir()
+	initialize(1)
+	if (!node1 && !node2 && !node3)
+		to_chat(usr, "There's nothing to connect this manifold to!")
+		return 0
+	build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
+	if (node2)
+		node2.initialize()
+		node2.build_network()
+	if (node3)
+		node3.initialize()
+		node3.build_network()
+	return 1
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/update_icon()
+	if(!node1&&!node2&&!node3)
+		qdel(src)
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/pipeline_expansion()
+	return list(node1, node2, node3)
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold/initialize(var/suppress_icon_check=0)
+	findAllConnections(initialize_directions_he)
+
+	if(!suppress_icon_check)
+		update_icon()
+
+/////////////////////////////////
+// 4-Way Manifold
+/////////////////////////////////
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w
+	icon = 'icons/obj/pipe-item.dmi'
+	icon_state = "he_manifold4w"
+	var/obj/machinery/atmospherics/node3
+	var/obj/machinery/atmospherics/node4
+	RADIATION_CAPACITY = 24000
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/New()
+	.. ()
+	initialize_directions_he = NORTH|SOUTH|EAST|WEST
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+	dir = pipe.dir
+	initialize_directions_he = pipe.get_hdir()
+	initialize(1)
+	if (!node1 && !node2 && !node3 && !node4)
+		to_chat(usr, "There's nothing to connect this manifold to!")
+		return 0
+	build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
+	if (node2)
+		node2.initialize()
+		node2.build_network()
+	if (node3)
+		node3.initialize()
+		node3.build_network()
+	if (node4)
+		node4.initialize()
+		node4.build_network()
+	return 1
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/update_icon()
+	if(!node1&&!node2&&!node3&&!node4)
+		qdel(src)
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/pipeline_expansion()
+	return list(node1, node2, node3, node4)
+
+
+/obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w/initialize(var/suppress_icon_check=0)
+	findAllConnections(initialize_directions_he)
+
+	if(!suppress_icon_check)
+		update_icon()

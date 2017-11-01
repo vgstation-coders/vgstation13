@@ -30,9 +30,9 @@
 
 	a_intent = I_HURT //so they don't get pushed around
 
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 
-	speed = -1
+	speed = 1
 
 	var/mob/living/simple_animal/space_worm/previous //next/previous segments, correspondingly
 	var/mob/living/simple_animal/space_worm/next     //head is the nextest segment
@@ -108,7 +108,7 @@
 				previous.Move(attachementNextPosition)
 			update_icon()
 
-	Bump(atom/obstacle)
+	to_bump(atom/obstacle)
 		if(currentlyEating != obstacle)
 			currentlyEating = obstacle
 			eatingDuration = 0

@@ -54,7 +54,7 @@
 				if(T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 
-				var/applied_rads = (H.apply_effect(irradiationThisBurst,IRRADIATE,0) > (irradiationThisBurst/4))
+				var/applied_rads = (H.apply_radiation(irradiationThisBurst,RAD_EXTERNAL) > (irradiationThisBurst/4))
 				if(randomMutation && applied_rads)
 					if (badMutation)
 						//H.apply_effect((rand(25,50)),IRRADIATE,0)

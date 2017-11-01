@@ -39,9 +39,9 @@
 	var/maint_access = 1
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
-	var/datum/effect/effect/system/spark_spread/spark_system = new
 	var/lights = 0
 	var/lights_power = 6
+	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
 
 	//inner atmos
 	var/use_internal_tank = 0
@@ -67,7 +67,7 @@
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
-
+	var/dash_dir = null
 	var/wreckage
 
 	var/list/equipment = new
@@ -82,7 +82,8 @@
 						/obj/item/mecha_parts,
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack)
+						/obj/item/device/radio/electropack,
+						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
 	..()
@@ -92,8 +93,6 @@
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
-	spark_system.set_up(2, 0, src)
-	spark_system.attach(src)
 	add_cell()
 	if(starts_with_tracking_beacon)
 		add_tracking_beacon()
@@ -107,7 +106,7 @@
 	return
 
 /obj/mecha/Destroy()
-	src.go_out()
+	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
 	..()
 	return
@@ -302,6 +301,8 @@
 			src.occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0
+	if(throwing)
+		return 0
 	if(state)
 		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
 		return
@@ -320,13 +321,20 @@
 		return 0
 	var/move_result = 0
 	startMechWalking()
+	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
 		move_result = mechturn(direction)
+		stepped = FALSE
 	else
 		move_result	= mechstep(direction)
 	if(move_result)
+		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+			if(stepped)
+				ME.on_mech_step()
+			else
+				ME.on_mech_turn()
 		can_move = 0
 		use_power(step_energy_drain)
 		if(istype(src.loc, /turf/space))
@@ -361,7 +369,7 @@
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
 
-/obj/mecha/Bump(var/atom/obstacle)
+/obj/mecha/to_bump(var/atom/obstacle)
 //	src.inertia_dir = null
 	if(src.throwing)//high velocity mechas in your face!
 		var/breakthrough = 0
@@ -391,20 +399,28 @@
 		else if(istype(obstacle, /obj/structure/reagent_dispensers/fueltank))
 			obstacle.ex_act(1)
 
-		else if(istype(obstacle, /mob/living/carbon))
-			var/mob/living/carbon/C = obstacle
-			var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
-			if(C.flags & INVULNERABLE)
-				return
-			C.take_overall_damage(5,0)
-			if(C.locked_to)
-				C.locked_to = 0
-			C.Stun(5)
-			C.Knockdown(5)
-			C.apply_effect(STUTTER, 5)
-			playsound(src, pick(hit_sound), 50, 0, 0)
-			breakthrough = 1
-
+		else if(istype(obstacle, /mob/living))
+			var/mob/living/L = obstacle
+			if (L.flags & INVULNERABLE)
+				src.throwing = 0
+				src.crashing = null
+			else if (!(L.status_flags & CANKNOCKDOWN) || (M_HULK in L.mutations) || istype(L,/mob/living/silicon))
+				//can't be knocked down? you'll still take the damage.
+				src.throwing = 0
+				src.crashing = null
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+			else
+				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
+				L.take_overall_damage(5,0)
+				if(L.locked_to)
+					L.locked_to.unlock_atom(L)
+				L.Stun(5)
+				L.Knockdown(5)
+				L.apply_effect(STUTTER, 5)
+				playsound(src, pick(hit_sound), 50, 0, 0)
+				breakthrough = 1
 		else
 			src.throwing = 0//so mechas don't get stuck when landing after being sent by a Mass Driver
 			src.crashing = null
@@ -415,7 +431,7 @@
 					src.throw_at(crashing, 50, src.throw_speed)
 			else
 				spawn(1)
-					crashing = get_distant_turf(get_turf(src), dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
+					crashing = get_distant_turf(get_turf(src), dash_dir, 3)//don't use get_dir(src, obstacle) or the mech will stop if he bumps into a one-direction window on his tile.
 					src.throw_at(crashing, 50, src.throw_speed)
 
 	if(istype(obstacle, /obj))
@@ -502,7 +518,7 @@
 
 /obj/mecha/proc/update_health()
 	if(src.health > 0)
-		src.spark_system.start()
+		spark(src, 2, FALSE)
 	else
 		src.destroy()
 	return
@@ -564,9 +580,11 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/hitby(atom/movable/A as mob|obj) //wrapper
+	. = ..()
+	if(.)
+		return
 	src.log_message("Hit by [A].",1)
 	call((proc_res["dynhitby"]||src), "dynhitby")(A)
-	return
 
 /obj/mecha/proc/dynhitby(atom/movable/A)
 	if(istype(A, /obj/item/mecha_parts/mecha_tracking) && !tracking && prob(25))
@@ -614,7 +632,7 @@
 
 /obj/mecha/proc/destroy()
 	spawn()
-		go_out()
+		go_out(loc, TRUE)
 		var/turf/T = get_turf(src)
 		tag = "\ref[src]" //better safe then sorry
 		if(loc)
@@ -747,11 +765,14 @@
 /obj/mecha/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 
-	if(istype(W, /obj/item/device/mmi) || istype(W, /obj/item/device/mmi/posibrain))
-		if(mmi_move_inside(W,user))
-			to_chat(user, "[src]-MMI interface initialized successfuly")
+	if(istype(W, /obj/item/device/mmi))
+		var/device_name = "MMI"
+		if(istype(W, /obj/item/device/mmi/posibrain))
+			device_name = "positronic"
+		if(mmi_move_inside(W, user))
+			to_chat(user, "[src]-[device_name] interface initialized successfully")
 		else
-			to_chat(user, "[src]-MMI interface initialization failed.")
+			to_chat(user, "[src]-[device_name] interface initialization failed.")
 		return
 
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
@@ -1165,7 +1186,7 @@
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
-	visible_message("<span class='notice'>[usr] starts to insert an MMI into [src.name]</span>")
+	visible_message("<span class='notice'>\The [user] starts to insert \the [mmi_as_oc] into \the [src].</span>")
 
 	if(enter_after(40,user))
 		if(!occupant)
@@ -1173,7 +1194,7 @@
 		else
 			to_chat(user, "Occupant detected.")
 	else
-		to_chat(user, "You stop inserting the MMI.")
+		to_chat(user, "You stop inserting \the [mmi_as_oc].")
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
@@ -1261,9 +1282,17 @@
 			O.forceMove(src.loc)
 	return
 
-/obj/mecha/proc/go_out(var/exit = loc)
+/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!src.occupant)
 		return
+
+	if(!exploding && exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
+		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
+		for(var/turf/simulated/T in turf_candidates)
+			if(!is_blocked_turf(T) && Adjacent(T))
+				exit = T
+				break
+
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = src.occupant
@@ -1330,7 +1359,7 @@
 	return
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
-	spark_system.start()
+	spark(src, 2, FALSE)
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
 		occupant.Knockdown(10)
@@ -1992,7 +2021,7 @@
 					leaked_gas = null
 		if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 			if(mecha.get_charge())
-				mecha.spark_system.start()
+				spark(mecha, 2, FALSE)
 				mecha.cell.charge -= min(20,mecha.cell.charge)
 				mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)
 		return

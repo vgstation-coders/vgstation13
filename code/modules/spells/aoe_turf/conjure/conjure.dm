@@ -63,7 +63,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 			spawn_place.ChangeTurf(summoned_object_type)
 			summoned_object = spawn_place
 		else
-			summoned_object = new summoned_object_type(spawn_place)
+			summoned_object = summon_object(summoned_object_type,spawn_place)
 
 		on_creation(summoned_object, user)
 
@@ -107,3 +107,6 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		return 1
 	summon_type = list(full_list[choice])
 	return ..()
+
+/spell/aoe_turf/conjure/proc/summon_object(var/type, var/location)	//for overriding in case a spell needs to summon with specific arguments
+	return new type(location)

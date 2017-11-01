@@ -385,7 +385,7 @@
 		/obj/item/clothing/suit/monkeysuit,
 		/obj/item/clothing/suit/pirate,
 		/obj/item/clothing/suit/radiation,
-		/obj/item/clothing/suit/redtag,
+		/obj/item/clothing/suit/tag/redtag,
 		/obj/item/clothing/suit/storage/fr_jacket,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/clothing/suit/storage/lawyer/purpjacket,
@@ -513,7 +513,7 @@
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/camera_assembly,
 		/obj/item/weapon/cigbutt/cigarbutt,
-		/obj/item/weapon/clipboard,
+		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
 		/obj/item/weapon/coin/adamantine,
@@ -742,10 +742,10 @@
 		/obj/item/clothing/suit/space/syndicate/black/engie,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/accessory/storage/brown_vest,
-		/obj/item/weapon/organ/head,
-		/obj/item/weapon/organ/r_leg,
-		/obj/item/weapon/organ/l_arm,
-		/obj/item/weapon/organ/l_foot,
+		/obj/item/organ/external/head,
+		/obj/item/organ/external/r_leg,
+		/obj/item/organ/external/l_arm,
+		/obj/item/organ/external/l_foot,
 		)
 
 /obj/abstract/map/spawner/space/supply
@@ -1087,8 +1087,8 @@
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/item/complete/rig/soviet,
-		/obj/item/complete/rig/nazi,
+		/obj/abstract/loadout/soviet_rigsuit,
+		/obj/abstract/loadout/nazi_rigsuit,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1097,8 +1097,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/potentham,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/mounted/frame/painting,
-		/obj/item/voucher/free_item
+		/obj/item/mounted/frame/painting
 )
 
 /obj/abstract/map/spawner/safe/medical
@@ -1112,7 +1111,7 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/gun/syringe/rapidsyringe,
-	/obj/item/voucher/free_item
+	/obj/item/voucher/free_item/medical_safe
 )
 
 
@@ -1120,7 +1119,7 @@
 	name = "safe food spawner"
 	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
-	/obj/item/voucher/free_item,
+	/obj/item/voucher/free_item/snack,
 	/obj/item/voucher/free_item/hot_drink,
 	/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 	/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
@@ -1143,7 +1142,6 @@
 	/obj/item/weapon/storage/box/emps,
 	/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 	/obj/item/weapon/melee/energy/axe/rusty,
-	/obj/item/voucher/free_item,
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
@@ -1157,7 +1155,6 @@
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
-	/obj/item/voucher/free_item,
 	/obj/item/clothing/accessory/holster,
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
@@ -1165,9 +1162,9 @@
 	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/item/complete/rig/soviet,
-	/obj/item/complete/rig/nazi,
-	/obj/item/complete/outfit/dredd
+	/obj/abstract/loadout/soviet_rigsuit,
+	/obj/abstract/loadout/nazi_rigsuit,
+	/obj/abstract/loadout/dredd_gear
 )
 
 /obj/abstract/map/spawner/safe/medal
@@ -1226,5 +1223,113 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
+//Syndiecargo loot spawners////////////////////////
+/obj/abstract/map/spawner/misc/syndiecargo
+	name = "syndiecargo loot spawner"
+	icon_state = "syndicargo"
+	amount = 2
+	jiggle = 5
+	to_spawn = list (/obj/item/clothing/mask/gas/voice,
+	/obj/item/weapon/melee/classic_baton,
+	/obj/item/clothing/gloves/knuckles,
+	/obj/item/ammo_storage/magazine/a12mm/ops,
+	/obj/item/weapon/storage/pill_bottle/random,
+	/obj/item/weapon/gun/projectile/automatic/lockbox,
+	/obj/item/weapon/handcuffs,
+	/obj/item/clothing/accessory/holomap_chip/operative
+)
 
+//Theater///////////////////////////////////////////
 
+/obj/abstract/map/spawner/theater/costumes
+	name = "theater costume spawner"
+	icon_state = "costumes"
+
+/obj/abstract/map/spawner/theater/costumes/perform_spawn()
+	var/i = rand(1, 22)
+	switch (i)
+		if (1)
+			new /obj/item/clothing/suit/chickensuit(src.loc)
+			new	/obj/item/clothing/head/chicken(src.loc)
+			new	/obj/item/weapon/reagent_containers/food/snacks/egg(src.loc)
+
+		if (2)
+			new /obj/item/clothing/under/gladiator(src.loc)
+			new	/obj/item/clothing/head/helmet/gladiator(src.loc)
+		if (3)
+			new /obj/item/clothing/under/gimmick/rank/captain/suit(src.loc)
+			new	/obj/item/clothing/head/flatcap(src.loc)
+			new	/obj/item/clothing/suit/storage/labcoat/mad(src.loc)
+			new	/obj/item/clothing/glasses/gglasses(src.loc)
+		if (4)
+			new /obj/item/clothing/under/gimmick/rank/captain/suit(src.loc)
+			new	/obj/item/clothing/head/flatcap(src.loc)
+			new	/obj/item/clothing/mask/cigarette/cigar/havana(src.loc)
+			new	/obj/item/clothing/shoes/jackboots(src.loc)
+		if (5)
+			new	/obj/item/clothing/under/schoolgirl(src.loc)
+			new	/obj/item/clothing/head/kitty(src.loc)
+		if (6)
+			new /obj/item/clothing/under/blackskirt(src.loc)
+			new	/obj/item/clothing/head/rabbitears(src.loc)
+			new	/obj/item/clothing/glasses/sunglasses/blindfold(src.loc)
+		if (7)
+			new /obj/item/clothing/suit/wcoat(src.loc)
+			new	/obj/item/clothing/under/suit_jacket(src.loc)
+			new	/obj/item/clothing/head/that(src.loc)
+		if (8)
+			new /obj/item/clothing/gloves/white(src.loc)
+			new	/obj/item/clothing/shoes/white(src.loc)
+			new	/obj/item/clothing/under/scratch(src.loc)
+			new	/obj/item/clothing/head/cueball(src.loc)
+		if (9)
+			new /obj/item/clothing/under/kilt(src.loc)
+			new	/obj/item/clothing/head/beret(src.loc)
+		if (10)
+			new /obj/item/clothing/suit/wcoat(src.loc)
+			new	/obj/item/clothing/glasses/monocle(src.loc)
+			new	/obj/item/clothing/head/that(src.loc)
+			new	/obj/item/clothing/shoes/black(src.loc)
+			new	/obj/item/weapon/cane(src.loc)
+			new	/obj/item/clothing/under/sl_suit(src.loc)
+			new	/obj/item/clothing/mask/fakemoustache(src.loc)
+		if (11)
+			new /obj/item/clothing/suit/bio_suit/plaguedoctorsuit(src.loc)
+			new	/obj/item/clothing/head/plaguedoctorhat(src.loc)
+		if (12)
+			new /obj/item/clothing/under/owl(src.loc)
+			new	/obj/item/clothing/mask/gas/owl_mask(src.loc)
+		if (13)
+			new /obj/item/clothing/under/waiter(src.loc)
+			new	/obj/item/clothing/head/kitty(src.loc)
+			new	/obj/item/clothing/suit/apron(src.loc)
+		if (14)
+			new /obj/item/clothing/under/pirate(src.loc)
+			new	/obj/item/clothing/suit/pirate(src.loc)
+			new	/obj/item/clothing/head/pirate(src.loc)
+			new	/obj/item/clothing/glasses/eyepatch(src.loc)
+		if (15)
+			new /obj/item/clothing/under/soviet(src.loc)
+			new	/obj/item/clothing/head/ushanka(src.loc)
+		if (16)
+			new /obj/item/clothing/suit/imperium_monk(src.loc)
+			new	/obj/item/clothing/mask/gas/cyborg(src.loc)
+		if (17)
+			new /obj/item/clothing/suit/holidaypriest(src.loc)
+		if (18)
+			new /obj/item/clothing/head/wizard/marisa/fake(src.loc)
+			new	/obj/item/clothing/suit/wizrobe/marisa/fake(src.loc)
+		if (19)
+			new /obj/item/clothing/under/sundress(src.loc)
+			new	/obj/item/clothing/head/witchwig(src.loc)
+			new	/obj/item/weapon/staff/broom(src.loc)
+		if (20)
+			new /obj/item/clothing/suit/wizrobe/fake(src.loc)
+			new	/obj/item/clothing/head/wizard/fake(src.loc)
+			new	/obj/item/weapon/staff(src.loc)
+		if (21)
+			new /obj/item/clothing/mask/gas/sexyclown(src.loc)
+			new	/obj/item/clothing/under/sexyclown(src.loc)
+		if (22)
+			new /obj/item/clothing/mask/gas/sexymime(src.loc)
+			new	/obj/item/clothing/under/sexymime(src.loc)

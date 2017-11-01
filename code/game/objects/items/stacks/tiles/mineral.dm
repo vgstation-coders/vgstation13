@@ -140,4 +140,4 @@
 	material = "phazon"
 
 /obj/item/stack/tile/mineral/phazon/adjust_slowdown(mob/living/L, current_slowdown)
-	return -1
+	return current_slowdown * 0.75
