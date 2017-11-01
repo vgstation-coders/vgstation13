@@ -424,12 +424,12 @@
 			//if(was_icy || (!was_icy && prob(25)))
 			graphics |= GRAPHICS_COLD
 
-	if(toxins > MOLES_PLASMA_VISIBLE)
+	if((toxins / volume * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
 		graphics |= GRAPHICS_PLASMA
 
 	if(length(trace_gases))
 		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in trace_gases
-		if(sleeping_agent && (sleeping_agent.moles > 1))
+		if(sleeping_agent && ((sleeping_agent.moles / volume * CELL_VOLUME) > 1))
 			graphics |= GRAPHICS_N2O
 /*
 	if(aerosols && aerosols.total_volume >= 1)
