@@ -115,7 +115,7 @@
 		to_chat(user,"<span class='notice'>The interface accepts your verification.</span>")
 	nanomanager.update_uis(src)
 
-/obj/machinery/vaporizer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/vaporizer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if (gcDestroyed || !get_turf(src) || !anchored)
 		if(!ui)
 			ui = nanomanager.get_open_ui(user, src, ui_key)
@@ -136,7 +136,7 @@
 	data["powerConsumption"] = power_use_this_tick
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
