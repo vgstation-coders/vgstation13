@@ -206,9 +206,6 @@ obj/effect/bmode/buildholder/New()
 					master.buildmode.valueholder = variable_set(usr)
 	return 1
 
-///obj/effect/bmode/buildmode/DblClick(object,location,control,params)
-//	return Click(object,location,control,params)
-
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
 		if(delta_y > 0)
