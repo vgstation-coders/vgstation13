@@ -8,6 +8,7 @@
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
 #define SCANMODE_ROBOTICS	7
+#define SCANMODE_HAILER		8
 
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
@@ -59,6 +60,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
+	var/obj/item/device/hailer/integ_hailer = new
 	var/obj/item/device/device_analyser/dev_analys = null
 
 	var/MM = null
@@ -740,7 +742,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 						dat += {"<h4>Security Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>"}
+							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>
+							<li><a href='byond://?src=\ref[src];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
+							"}
 					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
 						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
@@ -1723,6 +1727,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					scanmode = SCANMODE_NONE
 				else if((!isnull(cartridge)) && (cartridge.access_engine))
 					scanmode = SCANMODE_HALOGEN
+			if("Integrated Hailer")
+				if(scanmode == SCANMODE_HAILER)
+					scanmode = SCANMODE_NONE
+				else if((!isnull(cartridge)) && (cartridge.access_security))
+					scanmode = SCANMODE_HAILER
 			if("Honk")
 				if ( !(last_honk && world.time < last_honk + 20) )
 					playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
@@ -2335,6 +2344,12 @@ obj/item/device/pda/AltClick()
 		robo_analys.cant_drop = 1
 		if(!A.attackby(robo_analys, user))
 			robo_analys.afterattack(A, user, 1)
+
+	else if(scanmode == SCANMODE_HAILER)
+		if(!integ_hailer)
+			return
+		integ_hailer.cant_drop = 1
+		integ_hailer.afterattack(A, user, proximity_flag)
 
 	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
 		note = A:info
