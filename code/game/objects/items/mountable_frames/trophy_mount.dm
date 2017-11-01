@@ -48,7 +48,7 @@
 /obj/item/mounted/frame/trophy_mount/examine(mob/user)
 	..()
 	if(held_item)
-		held_item.examine(user, FALSE)
+		held_item.examine(user, "", FALSE)
 
 /obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user, params)
 	if(..())
@@ -149,4 +149,4 @@
 /obj/structure/trophy_mount/examine(mob/user)
 	..()
 	if(held_item)
-		held_item.examine(user, FALSE)
+		held_item.examine(user, "", FALSE)
