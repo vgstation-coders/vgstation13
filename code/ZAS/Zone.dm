@@ -74,8 +74,8 @@ Class Procs:
 
 	T.zone = null
 	var/datum/gas_mixture/turf_air = T.return_air()
+	air.multiply(1 - turf_air.volume / air.volume)
 	air.volume -= turf_air.volume
-	air.divide(1 + turf_air.volume / air.volume)
 	contents.Remove(T)
 	T.set_graphic(0)
 	if(!contents.len)
