@@ -50,6 +50,10 @@
 	// When this object moves. (args: loc)
 	var/event/on_moved
 
+	var/atom/movable/tether_master
+	var/list/tether_slaves
+	var/list/current_tethers
+
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
@@ -93,6 +97,8 @@
 
 	locking_categories      = null
 	locking_categories_name = null
+
+	break_all_tethers()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -162,6 +168,27 @@
 	//ensure this is a step, not a jump
 
 	//. = ..(NewLoc,Dir,step_x,step_y)
+	if(current_tethers && current_tethers.len)
+		for(var/datum/tether/master_slave/T in current_tethers)
+			if(T.effective_slave == src)
+				if(get_exact_dist(T.effective_master, src) > T.tether_distance)
+					T.break_tether()
+					break
+				if(get_exact_dist(T.effective_master, newLoc) > T.tether_distance)
+					change_dir(Dir)
+					return 0
+		for(var/datum/tether/equal/restrictive/R in current_tethers)
+			var/atom/movable/AM
+			if(R.effective_slave == src)
+				AM = R.effective_master
+			else
+				AM = R.effective_slave
+			if(get_exact_dist(AM, src) > R.tether_distance)
+				R.break_tether()
+				break
+			if(get_exact_dist(AM, newLoc) > R.tether_distance)
+				change_dir(Dir)
+				return 0
 	if(timestopped)
 		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
 			return 0
@@ -940,3 +967,11 @@
 
 /atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible
+
+/atom/movable/proc/break_all_tethers()	//Breaks all tethers
+	if(current_tethers)
+		for(var/datum/tether/T in current_tethers)
+			T.break_tether()
+
+/atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
+	return
