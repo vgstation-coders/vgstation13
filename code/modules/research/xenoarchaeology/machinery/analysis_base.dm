@@ -92,7 +92,7 @@
 		var/datum/gas_mixture/removed = loc.remove_air(env.total_moles*0.25)
 		var/heat_capacity = removed.heat_capacity()
 
-		heat_added = max(temperature_difference*heat_capacity, XENOARCH_MAX_ENERGY_TRANSFER)
+		heat_added = min(temperature_difference*heat_capacity, XENOARCH_MAX_ENERGY_TRANSFER)
 
 		if(temperature > environmental_temp)
 			//cool down to match the air
