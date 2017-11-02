@@ -1274,11 +1274,21 @@ var/global/floorIsLava = 0
 */
 /datum/admins/proc/spawn_atom(var/object as text)
 	set category = "Debug"
-	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes"
+	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes, include any variable changes at the end like so: {name=\"Test\";amount=50}"
 	set name = "Spawn"
 
 	if(!check_rights(R_SPAWN))
 		return
+
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
+
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
+
+		object = copytext(object, 1, variables_start)
 
 	var/list/matches = get_matching_types(object, /atom)
 
@@ -1292,6 +1302,9 @@ var/global/floorIsLava = 0
 		chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
 		if(!chosen)
 			return
+
+	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
+	_preloader = new(varchanges, chosen)
 
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)

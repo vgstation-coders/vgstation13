@@ -111,6 +111,7 @@
 				to_chat(usr, "<span class='notice'>Right Mouse Button on buildmode button = Select var(type) & value</span>")
 				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj/mob      = Set var(type) & value</span>")
 				to_chat(usr, "<span class='notice'>Right Mouse Button on turf/obj/mob     = Reset var's value</span>")
+				to_chat(usr, "<span class='notice'>Middle Mouse Button on turf/obj/mob    = Copy value from object</span>")
 				to_chat(usr, "<span class='notice'>***********************************************************</span>")
 			if(4)
 				to_chat(usr, "<span class='notice'>***********************************************************</span>")
@@ -204,8 +205,6 @@ obj/effect/bmode/buildholder/New()
 				if(edit_variable != "appearance") //Special case for appearance
 					master.buildmode.valueholder = variable_set(usr)
 	return 1
-/obj/effect/bmode/buildmode/DblClick(object,location,control,params)
-	return Click(object,location,control,params)
 
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
@@ -584,19 +583,23 @@ obj/effect/bmode/buildholder/New()
 						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")
 
 		if(3)
-			if(pa.Find("left")) //I cant believe this shit actually compiles.
-				if(!object.vars.Find(holder.buildmode.varholder))
-					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
-					return
+			if(!object.vars.Find(holder.buildmode.varholder))
+				to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
+				return
 
+			if(pa.Find("left")) //I cant believe this shit actually compiles.
 				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 0)
 
 			if(pa.Find("right"))
-				if(!object.vars.Find(holder.buildmode.varholder))
-					to_chat(usr, "<span class='warning'>[initial(object.name)] does not have a var called '[holder.buildmode.varholder]'</span>")
-					return
-
 				setvar(holder.buildmode.varholder, holder.buildmode.valueholder, object, 1) //Reset the var to its initial value
+
+			if(pa.Find("middle"))
+				if(holder.buildmode.varholder == "appearance") //Special case for appearance, as it doesn't behave like other varialbes
+					user.client.holder.marked_appearance = object
+				else
+					holder.buildmode.valueholder = object.vars[holder.buildmode.varholder]
+
+				to_chat(usr, "Copied '[holder.buildmode.varholder]' from [object].")
 
 		if(4)
 			if(pa.Find("left"))
@@ -634,7 +637,11 @@ obj/effect/bmode/buildholder/New()
 	if(!reset)
 		variable_set(usr, A, varname, value_override = varvalue, logging = log)
 	else
-		variable_set(usr, A, varname, value_override = initial(A.vars[varname]), logging = log)
+		var/init_value = initial(A.vars[varname])
+		if(varname == "appearance") //Appearance doesn't play by the rules
+			init_value = "initial"
+
+		variable_set(usr, A, varname, value_override = init_value, logging = log)
 
 #undef BOTTOM_LEFT
 #undef TOP_RIGHT

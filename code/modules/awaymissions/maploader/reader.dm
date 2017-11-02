@@ -315,7 +315,7 @@ var/list/map_dimension_cache = list()
 
 //text trimming (both directions) helper proc
 //optionally removes quotes before and after the text (for variable name)
-/dmm_suite/proc/trim_text(var/what as text,var/trim_quotes=0)
+/proc/trim_text(var/what as text,var/trim_quotes=0)
 	while(length(what) && (findtext(what," ",1,2)))
 		what=copytext(what,2,0)
 	while(length(what) && (findtext(what," ",length(what),0)))
@@ -329,7 +329,7 @@ var/list/map_dimension_cache = list()
 
 //find the position of the next delimiter,skipping whatever is comprised between opening_escape and closing_escape
 //returns 0 if reached the last delimiter
-/dmm_suite/proc/find_next_delimiter_position(var/text as text,var/initial_position as num, var/delimiter=",",var/opening_escape=quote,var/closing_escape=quote)
+/proc/find_next_delimiter_position(var/text as text,var/initial_position as num, var/delimiter=",",var/opening_escape=quote,var/closing_escape=quote)
 	var/position = initial_position
 	var/next_delimiter = findtext(text,delimiter,position,0)
 	var/next_opening = findtext(text,opening_escape,position,0)
@@ -344,7 +344,7 @@ var/list/map_dimension_cache = list()
 
 //build a list from variables in text form (e.g {var1="derp"; var2; var3=7} => list(var1="derp", var2, var3=7))
 //return the filled list
-/dmm_suite/proc/readlist(var/text as text,var/delimiter=",")
+/proc/readlist(var/text as text,var/delimiter=",")
 
 
 	var/list/to_return = list()

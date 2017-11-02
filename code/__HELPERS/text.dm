@@ -463,6 +463,9 @@ var/list/number_units=list(
 	"billion"
 )
 
+// The " character
+var/quote = ascii2text(34)
+
 /proc/num2words(var/number, var/zero="zero", var/minus="minus", var/hundred="hundred", var/list/digits=number_digits, var/list/tens=number_tens, var/list/units=number_units, var/recursion=0)
 	if(!isnum(number))
 		warning("num2words fed a non-number: [number]")
