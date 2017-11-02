@@ -203,6 +203,12 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	name = "pork"
+	desc = "A slab of pig meat."
+	icon_state = "meat"
+	gender = PLURAL
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive
 	name = "alien tissue"
 	desc = "A long piece of rough, black tissue."

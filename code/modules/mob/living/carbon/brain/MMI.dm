@@ -1,7 +1,7 @@
 
 
 /obj/item/device/mmi
-	name = "Man-Machine Interface"
+	name = "\improper Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity."
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
@@ -120,11 +120,12 @@ obj/item/device/mmi/Destroy()
 		// Checking to see if the ghost has been moused/borer'd/etc since death.
 		var/mob/living/carbon/brain/BM = BO.brainmob
 		if(!BM.client)
-			var/mob/dead/observer/ghost = get_ghost_from_mind(BM.mind)
-			if(ghost && ghost.client && ghost.can_reenter_corpse)
+			var/mob/dead/observer/ghost = mind_can_reenter(BM.mind)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
 				to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
-				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
 					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				return TRUE
 			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] is completely unresponsive; there's no point.</span>")

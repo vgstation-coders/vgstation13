@@ -5,7 +5,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 1)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 50)
-	build_path = /obj/item/weapon/cell
+	build_path = /obj/item/weapon/cell/empty
 	category = "Engineering"
 
 /datum/design/high_cell
@@ -15,7 +15,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 60)
-	build_path = /obj/item/weapon/cell/high
+	build_path = /obj/item/weapon/cell/high/empty
 	category = "Engineering"
 
 /datum/design/super_cell
@@ -26,7 +26,7 @@
 	reliability_base = 75
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 70)
-	build_path = /obj/item/weapon/cell/super
+	build_path = /obj/item/weapon/cell/super/empty
 	category = "Engineering"
 
 /datum/design/hyper_cell
@@ -37,7 +37,7 @@
 	reliability_base = 70
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 150, MAT_SILVER = 150, MAT_GLASS = 70)
-	build_path = /obj/item/weapon/cell/hyper
+	build_path = /obj/item/weapon/cell/hyper/empty
 	category = "Engineering"
 
 /datum/design/light_replacer

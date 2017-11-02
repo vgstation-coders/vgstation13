@@ -45,8 +45,9 @@
 		if(brainmob.client)
 			to_chat(user, "<span class='notice'>You can feel the small spark of life still left in this one.</span>")
 			return
-		var/mob/dead/observer/ghost = get_ghost_from_mind(brainmob.mind)
-		if(ghost && ghost.client && ghost.can_reenter_corpse)
+		var/mob/dead/observer/ghost = mind_can_reenter(brainmob.mind)
+		var/mob/ghostmob = ghost.get_top_transmogrification()
+		if(ghostmob)
 			to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
 			return
 		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.

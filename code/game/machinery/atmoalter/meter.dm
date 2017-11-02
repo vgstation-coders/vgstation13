@@ -72,7 +72,7 @@
 	else
 		icon_state = "meter4"
 
-	if(frequency)
+	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
 		if(!radio_connection)

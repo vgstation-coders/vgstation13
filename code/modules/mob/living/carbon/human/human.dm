@@ -1379,14 +1379,14 @@
 	//Lasertag
 	if(lasercolor)
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
-			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
+			if(iswearingredtag(src))
 				threatcount += 4
 			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
 			if(istype(belt, /obj/item/weapon/gun/energy/tag/red))
 				threatcount += 2
 		if(lasercolor == "r")
-			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
+			if(iswearingbluetag(src))
 				threatcount += 4
 			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
@@ -1864,3 +1864,13 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	T.name = real_name
 	T.host = src
 	forceMove(null)
+
+/mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
+	var/atom/movable/item = get_active_hand()
+	if(what)
+		item=what
+	var/success = ..()
+	if(success)
+		if(istype(gloves))
+			var/obj/item/clothing/gloves/G = gloves
+			G.on_wearer_threw_item(src,target,item)

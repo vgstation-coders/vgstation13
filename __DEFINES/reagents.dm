@@ -359,6 +359,13 @@
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
 
+//Temperatures of things (Kelvin)
+#define TEMPERATURE_HOTMETAL 300
+#define TEMPERATURE_LASER ARBITRARILY_LARGE_NUMBER //Lasers technically have no upper limit
+#define TEMPERATURE_FLAME 700
+#define TEMPERATURE_WELDER 3480
+#define TEMPERATURE_PLASMA 4500
+
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4

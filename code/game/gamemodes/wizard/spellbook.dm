@@ -42,6 +42,8 @@
 	/spell/aoe_turf/conjure/snakes,
 	/spell/targeted/push,
 	/spell/targeted/feint,
+	/spell/targeted/fist,
+	/spell/aoe_turf/conjure/doppelganger,
 	/spell/noclothes
 	)
 
@@ -53,7 +55,7 @@
 		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
 		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
 		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
@@ -65,6 +67,7 @@
 		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,

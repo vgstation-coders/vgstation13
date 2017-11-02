@@ -96,7 +96,7 @@
 	if(new_item_type)
 		find_type = new_item_type
 	else
-		find_type = rand(1,39)	//update this when you add new find types
+		find_type = rand(1,MAX_ARCHAEO)
 
 	var/anomaly_factor = 1		//anomaly origin_tech
 	var/item_type = "object"

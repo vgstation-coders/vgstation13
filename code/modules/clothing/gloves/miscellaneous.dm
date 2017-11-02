@@ -309,3 +309,27 @@
 	name = "Dr. Frank's gloves"
 	icon_state = "frankgloves"
 	item_state = "frankgloves"
+
+/obj/item/clothing/gloves/warping_claws
+	name = "warping claws"
+	desc = "These enchanted blades are capable of cutting through space itself. To use them, equip them and then throw at wherever you wish to go with an empty hand."
+	icon_state = "warping_claws"
+	item_state = "warping_claws"
+	damage_added = 17
+	sharpness_added = 2
+	hitsound_added = 'sound/weapons/slice.ogg'
+
+/obj/item/clothing/gloves/warping_claws/dexterity_check()
+	return FALSE
+
+/obj/item/clothing/gloves/warping_claws/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)
+	if(target && !thrown)
+		var/obj/effect/portal/tear/P1 = new (get_turf(user),5 SECONDS)
+		var/obj/effect/portal/tear/P2 = new (get_turf(target),5 SECONDS)
+		P1.target = P2
+		P2.target = P1
+		P1.blend_icon(P2)
+		P2.blend_icon(P1)
+		P1.owner = user
+		P2.owner = user
+		P1.teleport(user)

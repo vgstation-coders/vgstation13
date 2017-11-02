@@ -71,6 +71,9 @@ emp_act
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.armor[type]
+	if(istype(loc, /obj/mecha))
+		var/obj/mecha/M = loc
+		protection += M.rad_protection
 	return protection
 
 /mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)

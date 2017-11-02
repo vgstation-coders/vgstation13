@@ -12,6 +12,8 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+	var/list/connected_holopeople = list()
+	var/maximum_holopeople = 4
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -22,6 +24,33 @@
 /obj/machinery/computer/HolodeckControl/attack_paw(var/mob/user as mob)
 	return
 
+/obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
+	if(stat & (NOPOWER|BROKEN|MAINT))
+		return
+	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
+		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")
+		return
+	if(!linkedholodeck)
+		return
+	if(connected_holopeople.len >= maximum_holopeople)
+		to_chat(user, "<span class='notice'>\The [src] cannot sustain any additional advanced holograms. Please try again when there are fewer advanced holograms on the holodeck.</span>")
+		return
+	var/turf/spawnturf
+	var/list/L = get_area_turfs(linkedholodeck.type)
+	var/turf/T = pick(L)
+	while(is_blocked_turf(T))
+		T = pick(L)
+	if(spawnturf)
+		user.forceMove(spawnturf)
+		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
+		connected_holopeople.Add(H)
+		H.connected_holoconsole = src
+		var/list/N = hologram_names.Copy()
+		for(var/mob/M in connected_holopeople)
+			N.Remove(M.name)
+		H.name = capitalize(pick(N))
+		H.real_name = H.name
+
 /obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
 
 	if(..())
@@ -29,8 +58,10 @@
 	user.set_machine(src)
 	var/dat
 
-	dat += {"<B>Holodeck Control System</B><BR>
-		<HR>Current Loaded Programs:<BR>
+	dat += {"<B>Holodeck Control System</B><BR>"}
+//	if(isobserver(user))
+//		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
+	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
 		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
@@ -84,11 +115,14 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)
+	usr.set_machine(src)
+
+	if(href_list["spawn_holoperson"])
+		spawn_holoperson(usr)
+
 	if(..())
 		return 1
 	else
-		usr.set_machine(src)
-
 		if(href_list["emptycourt"])
 			target = locate(/area/holodeck/source_emptycourt)
 			if(target)
@@ -398,6 +432,8 @@
 	//Get rid of any items
 	for(var/item in holographic_items)
 		derez(item)
+	for(var/mob/living/simple_animal/hologram/advanced/H in connected_holopeople)
+		H.dissipate()
 	//Turn it back to the regular non-holographic room
 	target = locate(/area/holodeck/source_plating)
 	if(target)

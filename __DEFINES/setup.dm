@@ -893,10 +893,10 @@ SEE_PIXELS	256
 #define GETPULSE_TOOL	1	//more accurate (med scanner, sleeper, etc)
 
 var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accessed by preexisting terminals. AIs and new terminals can't use them.
-	"thunder",
-	"ERT",
-	"NUKE",
-	"CREED"
+	CAMERANET_THUNDER,
+	CAMERANET_ERT,
+	CAMERANET_NUKE,
+	CAMERANET_CREED
 	)
 
 //Generic species flags.
@@ -1543,3 +1543,6 @@ var/proccalls = 1
 #define NO_ANIMATION 0
 #define ITEM_ANIMATION 1
 #define PERSON_ANIMATION 2
+
+
+#define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again

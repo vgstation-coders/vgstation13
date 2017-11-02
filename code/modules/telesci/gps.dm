@@ -60,7 +60,7 @@ var/list/SPS_list = list()
 	else
 		..()
 
-/obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	if(emped)
 		data["emped"] = TRUE
@@ -94,7 +94,7 @@ var/list/SPS_list = list()
 			devices += list(device_data)
 		data["devices"] = devices
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "gps.tmpl", "[src]", 530, 600)
 		ui.set_initial_data(data)
@@ -104,7 +104,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/Topic(href, href_list)
 	if(..())
 		return 0
-	
+
 	if(href_list["tag"])
 		if (isobserver(usr))
 			to_chat(usr, "No way.")

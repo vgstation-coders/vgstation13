@@ -2021,6 +2021,25 @@ mob/proc/on_foot()
 	timestopped = 1
 	return M
 
+/mob/proc/completely_untransmogrify()	//Reverts a mob through all layers of transmogrification, back down to the base mob. Returns this mob.
+	var/mob/top_level = get_top_transmogrification()
+	while(top_level)
+		top_level = top_level.transmogrify()
+		if(top_level)
+			. = top_level
+
+/mob/proc/get_top_transmogrification()	//Returns the mob at the highest level of transmogrification, the one which contains the player.
+	var/mob/M = src
+	while(M.transmogged_to)
+		M = M.transmogged_to
+	return M
+
+/mob/proc/get_bottom_transmogrification()	//Returns the mob at the lowest level of transmogrification, the original mob.
+	var/mob/M = src
+	while(M.transmogged_from)
+		M = M.transmogged_from.contained_mob
+	return M
+
 /spell/aoe_turf/revert_form
 	name = "Revert Form"
 	desc = "Morph back into your previous form."
@@ -2065,7 +2084,7 @@ mob/proc/on_foot()
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/make_invisible(var/source_define, var/time)
+/mob/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(..() || !source_define)
 		return
 	alpha = 1	//to cloak immediately instead of on the next Life() tick

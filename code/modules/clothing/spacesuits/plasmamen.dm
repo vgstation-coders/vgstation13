@@ -43,7 +43,7 @@
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
-	
+
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
 		return
@@ -69,6 +69,7 @@
 	name = "plasmaman atmospheric suit"
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -83,6 +84,7 @@
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -354,7 +356,7 @@
 		..(user)
 	else
 		camera = new /obj/machinery/camera(src)
-		camera.network = list("NUKE")
+		camera.network = list(CAMERANET_NUKE)
 		cameranet.removeCamera(camera)
 		camera.c_tag = user.name
 		to_chat(user, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")

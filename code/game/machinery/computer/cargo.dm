@@ -126,7 +126,7 @@ For vending packs, see vending_packs.dm*/
 	else
 		return ..()
 
-/obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	// data to send to ui
 	var/data[0]
 	// make assoc list for supply groups because either I'm retarded or nanoui is retarded
@@ -171,7 +171,7 @@ For vending packs, see vending_packs.dm*/
 	data["restriction"] = supply_shuttle.restriction
 	data["requisition"] = supply_shuttle.requisition
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "supply_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
 		ui.set_initial_data(data)
@@ -372,7 +372,7 @@ For vending packs, see vending_packs.dm*/
 	onclose(user, "computer")
 	return
 
-/obj/machinery/computer/ordercomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/ordercomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	// ui data
 	var/data[0]
 	// make assoc list for supply groups because either I'm retarded or nanoui is retarded
@@ -413,7 +413,7 @@ For vending packs, see vending_packs.dm*/
 	data["orders"] = orders_list
 	data["money"] = current_acct.fmtBalance()
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "order_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
 		ui.set_initial_data(data)

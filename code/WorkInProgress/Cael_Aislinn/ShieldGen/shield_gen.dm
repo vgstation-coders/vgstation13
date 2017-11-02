@@ -110,7 +110,7 @@
 		return
 	ui_interact(user)
 
-/obj/machinery/shield_gen/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/shield_gen/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["capacitor"] = !!owned_capacitor
@@ -131,7 +131,7 @@
 	data["min_field_strength_cap"] = MIN_FIELD_STRENGTH_CAP
 	data["max_field_strength_cap"] = MAX_FIELD_STRENGTH_CAP
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "shield_gen.tmpl", name, 500, 450)
 		ui.set_initial_data(data)
@@ -228,7 +228,7 @@
 
 	flick("generator_[icon_prefix]_stop", src)
 
-	destroy_field()	
+	destroy_field()
 	visible_message("<span class='notice'>\The [src] shuts down, the droning noise fading out.</span>", "<span class='notice'>You hear heavy droning fade out.</span>")
 	active = FALSE
 

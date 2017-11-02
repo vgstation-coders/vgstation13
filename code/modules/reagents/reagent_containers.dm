@@ -364,3 +364,18 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 
 	return 1
+
+/obj/item/weapon/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	reagents.heating(1000, exposed_temperature)
+	..()
+
+/obj/item/weapon/reagent_containers/attackby(obj/item/I, mob/user, params)
+	..()
+	attempt_heating(I, user)
+
+/obj/item/weapon/reagent_containers/proc/attempt_heating(obj/item/I, mob/user)
+	var/temperature = I.is_hot()
+	var/thermal_energy = I.thermal_energy_transfer()
+	if(temperature && reagents)
+		reagents.heating(thermal_energy, temperature)
+		to_chat(user, "<span class='notice'>You heat [src] with [I].</span>")

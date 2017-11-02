@@ -71,7 +71,7 @@
 				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
-			if(iscoil(P))
+			if(iscablecoil(P))
 				var/obj/item/stack/cable_coil/cable_coil = P
 				if(cable_coil.amount >= 5)
 					playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
