@@ -26,7 +26,7 @@
 	100;/obj/mecha/working/hoverpod,\
 	100;/obj/machinery/replicator,\
 	100;/obj/machinery/communication,\
-	150;/obj/structure/crystal,\
+	// 150;/obj/structure/crystal,\
 	1000;/obj/machinery/artifact)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
