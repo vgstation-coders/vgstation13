@@ -19,8 +19,9 @@
 "s" = (/turf/simulated/floor/beach/sand{light_power = 10; light_range = 12},/area/vault/beach_party)
 "t" = (/obj/item/weapon/gun/siren/supersoaker,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
 "u" = (/obj/item/weapon/gun/siren/supersoaker/pistol,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
-"v" = (/turf/simulated/floor/beach/sand{light_power = 10; light_range = 6},/area/vault/beach_party)
-"w" = (/turf/simulated/floor/beach/coastline,/area/vault/beach_party)
+"v" = (/obj/item/clothing/under/shorts/red,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"w" = (/turf/simulated/floor/beach/sand{light_power = 10; light_range = 6},/area/vault/beach_party)
+"x" = (/turf/simulated/floor/beach/coastline,/area/vault/beach_party)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -60,13 +61,13 @@ aaabbbbbbghiiiiiqiriiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
 aaabbbbbbghiimiiiisitiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
 aaabbbbbbghiiiiiiiiiiiiirjdbbbbbbaaaaaaaaaaaaaaaaaaa
 aaabbbbbbghiiiiiiniiiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
-aaabbbbbbghiiuiciiiiiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiuiciiviiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
 aaabbbbbbghiiiicciiiimiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
 aaaabbbbbghiiiiicciiiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
-aaaabbbbbghiiiiivcciiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiiiiiwcciiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
 aaaabbbbbghiriiiiiiiiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
 aaaaabbbbcchhhhhhhhhhhhhhccbbbbaaaaaaaaaaaaaaaaaaaaa
-aaaaaabbbccwwwwwwwwwwwwwwccbbbaaaaaaaaaaaaaaaaaaaaaa
+aaaaaabbbccxxxxxxxxxxxxxxccbbbaaaaaaaaaaaaaaaaaaaaaa
 aaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaabbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaabbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaa
