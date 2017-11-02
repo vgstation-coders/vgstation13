@@ -653,7 +653,7 @@
 								return
 							if(mins >= 525600)
 								mins = 525599
-							var/reason = input(usr,"Reason?","reason","Shinposting") as text|null
+							var/reason = input(usr,"Reason?","reason","Shitposting") as text|null
 							if(!reason)
 								return
 							ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
@@ -670,7 +670,7 @@
 							message_admins("<span class='warning'>[usr.client.ckey] has ooc banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
 
 						if("No")
-							var/reason = input(usr,"Reason?","reason","Shinposting") as text|null
+							var/reason = input(usr,"Reason?","reason","Shitposting") as text|null
 							if(!reason)
 								return
 							to_chat(M, "<span class='warning'><BIG><B>You have been ooc banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
