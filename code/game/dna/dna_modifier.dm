@@ -275,11 +275,12 @@
 			C.update_icon()
 			if(!M.client && M.mind)
 				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				if(ghost)
+					var/mob/ghostmob = ghost.get_top_transmogrification()
+					if(ghostmob)
+						ghostmob << 'sound/effects/adminhelp.ogg'
+						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
+							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
 	return
@@ -316,11 +317,12 @@
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
 	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
 		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-		var/mob/ghostmob = ghost.get_top_transmogrification()
-		if(ghostmob)
-			ghostmob << 'sound/effects/adminhelp.ogg'
-			to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.

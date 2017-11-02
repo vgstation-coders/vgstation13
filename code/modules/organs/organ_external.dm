@@ -1810,13 +1810,14 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 				to_chat(user, "<span class='notice'>[pick("The eyes","The jaw","The ears")] of \the [src] twitch ever so slightly.</span>")
 			else
 				var/mob/dead/observer/ghost = mind_can_reenter(brainmob.mind)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)//Lights are on but no-one's home
-					mind_found = 1
-					to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone has found your head. Return to it if you want to be resurrected!</span> \
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				if(ghost)
+					var/mob/ghostmob = ghost.get_top_transmogrification()
+					if(ghostmob)//Lights are on but no-one's home
+						mind_found = 1
+						to_chat(user, "<span class='notice'>\The [src] stares blankly forward. The pupils dilate but otherwise it does not react to stimuli.</span>")
+						ghostmob << 'sound/effects/adminhelp.ogg'
+						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone has found your head. Return to it if you want to be resurrected!</span> \
+							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 			if(!mind_found)
 				to_chat(user, "<span class='danger'>\The [src] seems unresponsive to shock stimuli.</span>")
 		else
