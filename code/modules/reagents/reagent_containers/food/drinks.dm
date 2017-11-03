@@ -210,26 +210,7 @@
 		return
 
 	// Attempt to transfer from our glass
-	var/refill_id = reagents.get_master_reagent_id()
-	var/refill_name = reagents.get_master_reagent_name()
-	var/datum/reagent/R = reagents.get_reagent(refill_id)
-
-	var/sent_amount = transfer(target, user, can_send = TRUE, can_receive = FALSE)
-
-	// Service borgs regenerate the amount transferred after a while
-	// TODO Why doesn't the borg module handle this nonsense?
-	if (sent_amount > 0 && isrobot(user) && R.dupeable)
-		var/mob/living/silicon/robot/borg = user
-		if (!istype(borg.module, /obj/item/weapon/robot_module/butler) || !borg.cell)
-			return
-
-		var/charge_amount = max(30, 4*sent_amount)
-		borg.cell.use(charge_amount)
-
-		to_chat(user, "Now synthesizing [sent_amount] units of [refill_name]...")
-		spawn(300)
-			reagents.add_reagent(refill_id, sent_amount)
-			to_chat(user, "<span class='notice'>Cyborg [src] refilled with [refill_name] ([sent_amount] units).</span>")
+	transfer(target, user, can_send = TRUE, can_receive = FALSE)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
 

@@ -135,7 +135,7 @@
 				to_chat(user, "You need more welding fuel to complete this task.")
 				return
 
-	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !istype(user,/mob/living/silicon/robot/mommi) )
+	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
 
 	if(istype(I, /obj/item/weapon/storage/bag/))

@@ -152,7 +152,7 @@
 			if(B)
 				update_icon()
 
-/obj/machinery/iv_drip/attack_hand(mob/user as mob)
+/obj/machinery/iv_drip/attack_hand(mob/user)
 	if(isobserver(usr) || user.incapacitated())
 		return
 	if(attached)
@@ -161,14 +161,13 @@
 		src.update_icon()
 	else if(src.beaker)
 		src.beaker.forceMove(get_turf(src))
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-			borgbeak.return_to_modules()
 		src.beaker = null
 		update_icon()
 	else
 		return ..()
 
+/obj/machinery/iv_drip/attack_ai(mob/living/user)
+	attack_hand(user)
 
 /obj/machinery/iv_drip/verb/toggle_mode()
 	set name = "Toggle Mode"

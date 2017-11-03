@@ -211,20 +211,6 @@
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg
-	var/obj/item/weapon/robot_module/holder
-
-/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/New(loc,_holder)
-	..()
-	holder = _holder
-
-/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/proc/return_to_modules()
-	var/mob/living/silicon/robot/R = holder.loc
-	if(R.module_state_1 == src || R.module_state_2 == src || R.module_state_3 == src)
-		forceMove(R)
-	else
-		forceMove(holder)
-
 /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
 	name = "plasma beaker"
 	desc = "A beaker with plasma lining, designed to act as a catalyst for some particular reactions."

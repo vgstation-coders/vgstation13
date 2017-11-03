@@ -157,6 +157,10 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
+#define isgripper(G) (istype(G, /obj/item/weapon/gripper))
+
+#define isAPC(A) istype(A, /obj/machinery/power/apc)
+
 #define isimage(A) (istype(A, /image))
 
 #define isdatum(A) (istype(A, /datum))
