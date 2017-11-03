@@ -44,12 +44,12 @@
 "aR" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "aS" = (/obj/machinery/vending/tool,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "aT" = (/obj/structure/sign/vacuum,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
-"aU" = (/obj/machinery/access_button/satelite_deployment,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"aU" = (/obj/machinery/access_button/satellite_deployment,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
 "aV" = (/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "aW" = (/obj/machinery/door/airlock,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "aX" = (/obj/machinery/power/apc{dir = 8; pixel_x = -24},/obj/machinery/power/terminal{dir = 8},/obj/structure/cable,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "aY" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor,/area/vault/spy_sat/deployment)
-"aZ" = (/obj/machinery/door/poddoor/preopen/satelite_deployment,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
+"aZ" = (/obj/machinery/door/poddoor/preopen/satellite_deployment,/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
 "ba" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
 "bb" = (/turf/simulated/floor/airless,/area/vault/spy_sat/deployment)
 "bc" = (/obj/machinery/door/poddoor,/turf/simulated/floor,/area/vault/spy_sat/deployment)
@@ -96,7 +96,7 @@
 "bR" = (/obj/machinery/r_n_d/fabricator/pod,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "bS" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/electrical,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/clothing/glasses/welding,/obj/machinery/light,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "bT" = (/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit,/turf/simulated/floor,/area/vault/spy_sat/deployment)
-"bU" = (/obj/structure/noticeboard,/obj/item/weapon/paper/satelite_deployment/space_saving,/obj/item/weapon/paper/satelite_deployment/no_smoking,/obj/item/weapon/paper/satelite_deployment/complaints,/obj/item/weapon/paper/satelite_deployment/complaints_reply,/obj/item/weapon/paper/satelite_deployment/further_complaints,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
+"bU" = (/obj/structure/noticeboard,/obj/item/weapon/paper/satellite_deployment/space_saving,/obj/item/weapon/paper/satellite_deployment/no_smoking,/obj/item/weapon/paper/satellite_deployment/further_complaints,/obj/item/weapon/paper/satellite_deployment/complaints_reply,/obj/item/weapon/paper/satellite_deployment/complaints,/turf/unsimulated/wall/rock,/area/vault/spy_sat/deployment)
 "bV" = (/turf/simulated/floor/carpet,/area/vault/spy_sat/deployment)
 "bW" = (/obj/machinery/door/airlock,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
 "bX" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/snacks/sundae,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/spy_sat/deployment)
@@ -143,7 +143,7 @@
 "cM" = (/obj/structure/reagent_dispensers/beerkeg,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "cN" = (/obj/item/weapon/reagent_containers/food/snacks/sweet/strange,/turf/simulated/floor,/area/vault/spy_sat/deployment)
 "cO" = (/obj/structure/closet/secure_closet/freezer/fridge,/turf/simulated/floor,/area/vault/spy_sat/deployment)
-"cP" = (/obj/docking_port/destination/vault/satelite_deployment{tag = "icon-docking_station"; icon_state = "docking_station"; dir = 2},/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/spy_sat/deployment)
+"cP" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/satellite_deployment{tag = "icon-docking_station"; icon_state = "docking_station"; dir = 2},/turf/simulated/floor,/area/vault/spy_sat/deployment)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

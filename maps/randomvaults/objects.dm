@@ -49,7 +49,7 @@
 /area/vault/tommyboyasteroid
 	requires_power = 1
 
-/area/vault/satelite
+/area/vault/satellite
 
 /area/vault/factory
 
@@ -257,10 +257,10 @@
 /area/vault/research
 
 /area/vault/spy_sat
-	name = "\improper Donk Co. Comm-sniffer satelite C-VI"
+	name = "\improper Donk Co. Comm-sniffer satellite C-VI"
 
 /area/vault/spy_sat/deployment
-	name = "\improper Undocumented interstellar satelite deployment"
+	name = "\improper Undocumented interstellar satellite deployment"
 
 
 /area/vault/rattlemebones
@@ -756,7 +756,7 @@
 				triggered = TRUE
 				say("Codephrase accepted. Welcome, Agent. Releasing gathered information and current co-ordinates of home base.")
 				new /obj/item/weapon/disk/tech_disk/random(get_turf(src))
-				new /obj/item/weapon/disk/shuttle_coords/vault/satelite_deployment
+				new /obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment
 
 /obj/machinery/power/magtape_deck/syndicate/attack_hand(mob/user)
 	if(stat & (BROKEN|NOPOWER))
@@ -777,23 +777,23 @@
 	stored = new possible_research
 	stored.level = rand(1,stored.max_level)
 
-/obj/item/weapon/disk/shuttle_coords/vault/satelite_deployment
-	destination = /obj/docking_port/destination/vault/satelite_deployment
+/obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment
+	destination = /obj/docking_port/destination/vault/satellite_deployment
 
-/obj/docking_port/destination/vault/satelite_deployment
-	areaname = "satelite deployment base"
+/obj/docking_port/destination/vault/satellite_deployment
+	areaname = "satellite deployment base"
 
 
-/obj/machinery/door/poddoor/satelite_deployment
+/obj/machinery/door/poddoor/satellite_deployment
 	id_tag = "spacetime"
 
-/obj/machinery/door/poddoor/preopen/satelite_deployment
+/obj/machinery/door/poddoor/preopen/satellite_deployment
 	id_tag = "spacetime"
 
-/obj/machinery/access_button/satelite_deployment
+/obj/machinery/access_button/satellite_deployment
 	command = "spacetime"
 
-/obj/item/weapon/paper/satelite_deployment/no_smoking
+/obj/item/weapon/paper/satellite_deployment/no_smoking
 	name = "Note to all would-be smokers"
 	info = {"If you'll take a minute to look around, you'll notice we don't have<br>
 			any regular atmospheric regulation like most station, and due to our predicament of <br>
@@ -806,7 +806,7 @@
 			~ Ensign Willhelm
 			"}
 
-/obj/item/weapon/paper/satelite_deployment/space_saving
+/obj/item/weapon/paper/satellite_deployment/space_saving
 	name = "Discussion on space allocation"
 	info = {"As you are aware we don't have much in the ways of room, but the engineer insists that<br>
 		despite engineering consisting of 2 glorified petrol engines and an SMES, he needs all the space<br>
@@ -816,7 +816,7 @@
 		~ Ensign Willhelm
 		"}
 
-/obj/item/weapon/paper/satelite_deployment/complaints
+/obj/item/weapon/paper/satellite_deployment/complaints
 	name = "Complaints"
 	info = {"Getting real tired of Willhelm's shit.<br>
 		The pod bay doors only have a button on the outside, how does he expect us to trust one another smoking?<br>
@@ -827,7 +827,7 @@
 		Why does the chef get a minigun while medical gets a syringe gun?
 		"}
 
-/obj/item/weapon/paper/satelite_deployment/complaints_reply
+/obj/item/weapon/paper/satellite_deployment/complaints_reply
 	name = "Regarding complaints"
 	info = {"Complaining is not good for crew morale.<br>
 		It draws unwanted attention towards the negative side of serving here. Look on the bright side.<br>
@@ -837,7 +837,7 @@
 		~ Ensign Willhelm
 		"}
 
-/obj/item/weapon/paper/satelite_deployment/further_complaints
+/obj/item/weapon/paper/satellite_deployment/further_complaints
 	name = "Further complaints"
 	info = {"It wasn't the medical doctor, you half-witted clown.<br>
 		Now what do we do if somebody gets hurt?<br>

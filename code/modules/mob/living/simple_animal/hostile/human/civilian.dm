@@ -13,7 +13,7 @@
 	speak = list("You'll look good with some fava beans and onions!","The bullets are just extra seasoning!","Try some pie!")
 	speak_chance = 15
 
-	environment_smash = 0
+	environment_smash_flags = 0
 	ranged = 1
 	rapid = 1
 	minimum_distance = 3
@@ -50,7 +50,7 @@
 	speak_chance = 15
 	faction = "syndicate"
 
-	environment_smash = 0
+	environment_smash_flags = 0
 	ranged = 1
 	minimum_distance = 3
 	projectiletype = /obj/item/projectile/bullet/midbullet2
@@ -130,7 +130,7 @@
 
 	faction = "syndicate"
 
-	environment_smash = 0
+	environment_smash_flags = 0
 	ranged = 1
 	minimum_distance = 3
 	projectiletype = /obj/item/projectile/bullet
