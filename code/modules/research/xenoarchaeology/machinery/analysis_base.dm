@@ -11,6 +11,8 @@
 
 #define XENOARCH_SAFETY_TEMP 350
 #define XENOARCH_MAX_TEMP 400
+// I literally don't even know why this one is different from XENOARCH_MAX_TEMP.
+#define XENOARCH_MAX_HEAT_INCREASE_TEMP 450
 
 /obj/machinery/anomaly
 	name = "Analysis machine"
@@ -36,7 +38,6 @@
 	//if this exceeds 600 and safety is enabled it will shutdown
 	//temp greater than 600 also requires a safety prompt to initiate scanning
 	var/temperature = T0C
-	var/max_temp = 450
 
 
 /obj/machinery/anomaly/RefreshParts()
@@ -85,7 +86,7 @@
 	if(use_power == 1)
 		var/heat_added = active_power_usage *XENOARCH_HEAT_COEFFICIENT
 
-		if(temperature < max_temp)
+		if(temperature < XENOARCH_MAX_HEAT_INCREASE_TEMP)
 			temperature += heat_added/XENOARCH_HEAT_CAPACITY
 
 		var/temperature_difference = abs(environmental_temp-temperature)
@@ -117,7 +118,7 @@
 /obj/machinery/anomaly/attack_hand(var/mob/user)
 	ui_interact(user)
 
-/obj/machinery/anomaly/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
 		if(held_container)
 			to_chat(user, "<span class='warning'>You must remove \the [held_container] first.</span>")
