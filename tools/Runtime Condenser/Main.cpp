@@ -21,6 +21,7 @@ using namespace std;
 	//What we use to read input
 	string currentLine = "Blank";
 	string nextLine = "Blank";
+	string tempLine = "Blank";
 
 	//Stores lines we want to keep to print out
 	string storedRuntime[maxStorage+1];
@@ -64,7 +65,7 @@ bool readFromFile()
 				getline(inputFile, nextLine);
 
 				//If we find this, we have new stuff to store
-				if(nextLine.find("usr:") != std::string::npos)
+				if(nextLine.find("proc name:") != std::string::npos)
 				{
 					//Store more info
 					storedSource[storedIterator] = currentLine;
@@ -110,13 +111,19 @@ bool readFromFile()
 				}
 			}
 			//Found a runtime!
-			else if(currentLine.find("runtime error:") != std::string::npos)
+			else if(currentLine.find("Runtime in") != std::string::npos)
 			{
 				totalRuntimes++;
 				for(int i=0; i <= maxStorage; i++)
 				{
+					// example runtime string:
+					// [02:00:37] Runtime in global cache.dm,33: Cannot read null.cache
+					// We only care about the characters after the timestamp.
+					tempLine = currentLine;
+					tempLine.erase(0, 11);
+
 					//We've already encountered this
-					if(currentLine == storedRuntime[i])
+					if(tempLine == storedRuntime[i])
 					{
 						numRuntime[i]++;
 						break;
@@ -125,7 +132,8 @@ bool readFromFile()
 					//We've never encoutnered this
 					if(storedRuntime[i] == "Blank")
 					{
-						storedRuntime[i] = currentLine;
+						storedRuntime[i] = tempLine;
+						cout << tempLine << '\n';
 						storedProc[i] = nextLine;
 						numRuntime[i] = 1;
 						checkNextLines = true;
