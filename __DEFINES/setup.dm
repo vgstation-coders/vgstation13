@@ -1276,6 +1276,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
+#define LANGUAGE_MARTIAN "Martian"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG

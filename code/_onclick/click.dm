@@ -268,9 +268,6 @@
 	return
 
 /atom/proc/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && ishuman(src) && user.Adjacent(src))
-		src:give_item(user)
-		return
 	var/turf/T = get_turf(src)
 	if(T && T.Adjacent(user))
 		if(user.listed_turf == T)
@@ -278,7 +275,12 @@
 		else
 			user.listed_turf = T
 			user.client.statpanel = T.name
-	return
+
+/mob/living/carbon/AltClick(var/mob/user)
+	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
+		src.give_item(user)
+		return
+	..()
 
 /*
 	Misc helpers

@@ -4,6 +4,12 @@
 /mob/living/carbon/martian/knockout_chance_modifier()
 	return 0 //Punches don't stun
 
+/mob/living/carbon/martian/bullet_act(var/obj/item/projectile/P, var/def_zone)
+	if(check_shields(P.damage, "the [P.name]"))
+		P.on_hit(src, 2)
+		return 2
+	return (..(P , def_zone))
+
 /mob/living/carbon/martian/getarmor(var/def_zone, var/type)
 
 	var/armorscore = 0
