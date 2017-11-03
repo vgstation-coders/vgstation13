@@ -381,7 +381,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "")
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -391,7 +391,8 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "[bicon(src)] That's [f_name]" + size)
+	if(show_name)
+		to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 

@@ -158,26 +158,27 @@
 
 	forceMove(T)
 
-/obj/item/examine(mob/user)
-	var/size
-	switch(w_class)
-		if(W_CLASS_TINY)
-			size = "tiny"
-		if(W_CLASS_SMALL)
-			size = "small"
-		if(W_CLASS_MEDIUM)
-			size = "normal-sized"
-		if(W_CLASS_LARGE)
-			size = "bulky"
-		if(W_CLASS_HUGE to INFINITY)
-			size = "huge"
+/obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
+	if(!size)
+		switch(w_class)
+			if(W_CLASS_TINY)
+				size = "tiny"
+			if(W_CLASS_SMALL)
+				size = "small"
+			if(W_CLASS_MEDIUM)
+				size = "normal-sized"
+			if(W_CLASS_LARGE)
+				size = "bulky"
+			if(W_CLASS_HUGE to INFINITY)
+				size = "huge"
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	..(user, " [pronoun] a [size] item.")
+	size = " [pronoun] a [size] item."
+	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
