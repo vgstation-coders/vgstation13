@@ -1,0 +1,79 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/unsimulated/beach/water,/area/vault/beach_party)
+"c" = (/turf/unsimulated/mineral/air,/area/vault/beach_party)
+"d" = (/turf/unsimulated/beach/water{icon_state = ""},/area/vault/beach_party)
+"e" = (/turf/simulated/floor/beach/coastline/north,/area/vault/beach_party)
+"f" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/beach/coastline/north,/area/vault/beach_party)
+"g" = (/turf/simulated/floor/beach/coastline/west,/area/vault/beach_party)
+"h" = (/turf/simulated/floor/beach/sand{icon_state = ""},/area/vault/beach_party)
+"i" = (/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"j" = (/turf/simulated/floor/beach/coastline/east,/area/vault/beach_party)
+"k" = (/turf/simulated/floor/beach/sand{light_power = 10; light_range = 4},/area/vault/beach_party)
+"l" = (/obj/item/clothing/under/swimsuit/blue,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"m" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"n" = (/mob/living/simple_animal/crab,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"o" = (/obj/item/weapon/stool,/obj/machinery/media/receiver/boombox,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"p" = (/obj/item/weapon/beach_ball,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"q" = (/obj/item/clothing/glasses/sunglasses,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"r" = (/obj/effect/overlay/palmtree_l,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"s" = (/turf/simulated/floor/beach/sand{light_power = 10; light_range = 12},/area/vault/beach_party)
+"t" = (/obj/item/weapon/gun/siren/supersoaker,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"u" = (/obj/item/weapon/gun/siren/supersoaker/pistol,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"v" = (/obj/item/clothing/under/shorts/red,/turf/simulated/floor/beach/sand,/area/vault/beach_party)
+"w" = (/turf/simulated/floor/beach/sand{light_power = 10; light_range = 6},/area/vault/beach_party)
+"x" = (/turf/simulated/floor/beach/coastline,/area/vault/beach_party)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbaaaaabbbbbaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbaaaabbbbbaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbaaaabbbaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaabbbbbbbbaaaaaabbbaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaabbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaabbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaabbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
+aaaaaabbbccddddddddddddddccbbbaaaaaaaaaaaaaaaaaaaaaa
+aaaaabbbbccefeeeeeeeeeeeeccbbbbaaaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiiiiiiiiiiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiikiiiiiliimiijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiniicciiiiiinijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiiccoiiiipiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiiiiiiiiiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiiiiqiriiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiimiiiisitiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiiiiiiiiiiiirjdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiiiiiniiiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiuiciiviiiiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaabbbbbbghiiiicciiiimiiijdbbbbbbaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiiiiicciiiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiiiiiwcciiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaaabbbbbghiriiiiiiiiiiiijdbbbbbaaaaaaaaaaaaaaaaaaaa
+aaaaabbbbcchhhhhhhhhhhhhhccbbbbaaaaaaaaaaaaaaaaaaaaa
+aaaaaabbbccxxxxxxxxxxxxxxccbbbaaaaaaaaaaaaaaaaaaaaaa
+aaaaaabbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaabbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaabbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaabbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaabbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}

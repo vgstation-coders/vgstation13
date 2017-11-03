@@ -251,6 +251,9 @@
 	jammed = 2
 
 
+/area/vault/beach_party
+
+
 /obj/machinery/door/poddoor/droneship
 	name = "\improper OSIPR Pod-Door"
 	id_tag = "denied"
