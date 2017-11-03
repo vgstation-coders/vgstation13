@@ -110,7 +110,7 @@ bool readFromFile()
 				}
 			}
 			//Found a runtime!
-			else if(currentLine.find("runtime error:") != std::string::npos)
+			else if(currentLine.find("Runtime in") != std::string::npos)
 			{
 				totalRuntimes++;
 				for(int i=0; i <= maxStorage; i++)
