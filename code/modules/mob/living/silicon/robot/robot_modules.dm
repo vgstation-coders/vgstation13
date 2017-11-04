@@ -364,7 +364,6 @@
 	W.amount = 24
 	W.max_amount = 24
 	modules += W
-	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 
 	sensor_augs = list("Mesons", "Disable")
 	fix_modules()
