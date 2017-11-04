@@ -505,7 +505,7 @@
 					if(automatic)
 						if(H.check_for_open_slot(src))
 							return CANNOT_EQUIP
-					if(H.belt.canremove && !istype(H.belt, /obj/item/weapon/storage/belt))
+					if(H.belt.canremove && !istype(H.belt, /obj/item/weapon/storage/belt) && !istype(H.belt, /obj/item/red_ribbon_arm))
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
