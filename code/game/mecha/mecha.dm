@@ -1514,6 +1514,7 @@
 						<span id="rfreq">[format_frequency(radio.frequency)]</span>
 						<a href='?src=\ref[src];rfreq=2'>+</a>
 						<a href='?src=\ref[src];rfreq=10'>+</a><br>
+						<a href='?src=\ref[src];subspace=1'>Toggle Broadcast Mode</a><br>
 						</div>
 						</div>
 						<div class='wr'>
@@ -1706,6 +1707,11 @@
 		radio.set_frequency(new_frequency)
 		send_byjax(src.occupant,"exosuit.browser","rfreq","[format_frequency(radio.frequency)]")
 		return
+	if (href_list["subspace"])
+		if(usr != src.occupant)
+			return
+		subspace_transmission = !subspace_transmission
+		to_chat(usr, "Subspace Transmission is [(radio.subspace_transmission) ? "enabled" : "disabled"]")
 	if(href_list["port_disconnect"])
 		if(usr != src.occupant)
 			return
