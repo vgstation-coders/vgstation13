@@ -158,7 +158,7 @@
 	else
 		new /obj/item/weapon/tome(usr.loc)
 	qdel(src)
-	stat_collection.cult.tomes_created++
+	stat_collection.cult_tomes_created++
 	return
 
 /////////////////////////////////////////THIRD RUNE
@@ -327,7 +327,7 @@
 			summonturfs = list()
 			summoning = 0
 			new /obj/machinery/singularity/narsie/large(src.loc)
-			stat_collection.cult.narsie_summoned = 1
+			stat_collection.cult_narsie_summoned = 1
 		return
 
 	currentCountdown--

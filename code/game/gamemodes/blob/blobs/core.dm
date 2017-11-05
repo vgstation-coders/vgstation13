@@ -175,7 +175,7 @@
 
 
 
-		stat_collection.blobblob.spawned_blob_players++
+		stat_collection.blob_spawned_blob_players++
 
 		if(istype(ticker.mode, /datum/game_mode/blob))
 			var/datum/game_mode/blob/mode = ticker.mode

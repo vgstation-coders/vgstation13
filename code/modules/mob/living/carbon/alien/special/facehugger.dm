@@ -247,7 +247,7 @@
 			return
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
-			stat_collection.xeno.proper_head_protection++
+			stat_collection.xeno_faces_protected++
 			var/rng = CHANCE_TO_REMOVE_HEADWEAR
 			if(istype(mouth_protection, /obj/item/clothing/head/helmet/space/rig))
 				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
@@ -311,7 +311,7 @@
 			var/datum/organ/external/chest/affected = T.get_organ(LIMB_CHEST)
 			affected.implants += E
 		target.visible_message("<span class='danger'>\The [src] falls limp after violating [target]'s face !</span>")
-		stat_collection.xeno.faces_hugged++
+		stat_collection.xeno_faces_hugged++
 
 		Die()
 		icon_state = "[initial(icon_state)]_impregnated"

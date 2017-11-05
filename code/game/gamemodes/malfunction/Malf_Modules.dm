@@ -431,7 +431,7 @@ rcd light flash thingy on matter drain
 		src.processing_time -= AM.cost
 		if(AM.one_time)
 			possible_modules -= AM
-		stat_collection.malf.bought_modules += AM.module_name
+		stat_collection.malf_modules += AM.module_name
 
 	if(href_list["desc"])
 		var/datum/AI_Module/AM = locate(href_list["module"])
