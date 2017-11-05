@@ -6,12 +6,13 @@
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "The God(s), the Head of Personnel too."
+	supervisors = "The God(s), the Head of Personnel too"
 	selection_color = "#dddddd"
 	access = list(access_morgue, access_chapel_office, access_crematorium, access_maint_tunnels)
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	pdaslot = slot_belt
 	pdatype = /obj/item/device/pda/chaplain
+	var/datum/religion/chap_religion = new /datum/religion // He gets the default one
 
 /datum/job/chaplain/equip(var/mob/living/carbon/human/H)
 	switch(H.backbag)
@@ -24,8 +25,6 @@
 		if(5)
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
 	H.add_language("Spooky") //SPOOK
-	var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(H) //BS12 EDIT
-	H.put_in_hands(B)
 	H.equip_or_collect(new /obj/item/clothing/under/rank/chaplain(H), slot_w_uniform)
 	//H.equip_or_collect(new /obj/item/device/pda/chaplain(H), slot_belt)
 	H.equip_or_collect(new /obj/item/clothing/shoes/laceup(H), slot_shoes)
@@ -34,11 +33,41 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
-	var/religion_name = "Christianity" //Default
-	var/deity_name = "Space Jesus" //Also default, set below
+	var/obj/item/weapon/storage/bible/B // Initialised here because we might need it eslewhere
 
 	spawn(0) //We are done giving earthly belongings, now let's move on to spiritual matters
+		var/new_religion = sanitize(stripped_input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please put your ID in your ID slot to prevent errors)", "Name of Religion", chap_religion.name), 1, MAX_NAME_LEN)
+		if(!new_religion)
+			new_religion = chap_religion.name // If nothing was typed
+		new_religion = lowertext(new_religion)
 
+		var/datum/job/J = H.mind.role_alt_title
+
+		for (var/R in typesof(/datum/religion))
+			var/datum/religion/rel = new R
+			var/halt = FALSE
+			for (var/key in rel.keys)
+				to_chat(world, "[key]")
+				if (new_religion == key)
+					rel.misc(H) // We do the misc things related to the religion
+					B = new rel.bible_type
+					B.name = rel.bible_name
+					B.deity_name = rel.deity_name
+					H.put_in_hands(B)
+					if (H.gender == FEMALE)
+						J = rel.female_adept
+					else
+						J = rel.male_adept
+					chap_religion = rel
+					halt = TRUE
+					break // We got our religion ! Abort, abort.
+			if (halt)
+				break
+
+
+
+
+		/*
 		var/new_religion = sanitize(stripped_input(H, "You are the crew's Religious Services Chaplain. What religion do you follow and teach? (Please put your ID in your ID slot to prevent errors)", "Name of Religion", religion_name), 1, MAX_NAME_LEN)
 
 		if(!new_religion)
@@ -440,6 +469,7 @@
 				B = new /obj/item/weapon/storage/bible/booze(H)
 				H.put_in_hands(B)
 				B.name = "The Holy Book of [new_religion]"
+				*/
 
 		//This goes down here due to problems with loading orders that took me 4 hours to identify
 		var/obj/item/weapon/card/id/I = null
@@ -455,13 +485,12 @@
 				P.ownjob = J
 				P.name = text("PDA-[P.owner] ([P.ownjob])")
 		data_core.manifest_modify(H.real_name, J) //Updates manifest
-		feedback_set_details("religion_name","[new_religion]")
+		feedback_set_details("religion_name","[chap_religion.name]")
 
 		//Allow them to change their deity if they believe the deity we gave them sucks
-		var/new_deity = copytext(sanitize(input(H, "Would you like to change your deity? Your deity currently is [deity_name] (Leave empty or unchanged to keep deity name)", "Name of Deity", deity_name)), 1, MAX_NAME_LEN)
-
+		var/new_deity = copytext(sanitize(input(H, "Would you like to change your deity? Your deity currently is [chap_religion.deity_name] (Leave empty or unchanged to keep deity name)", "Name of Deity", chap_religion.deity_name)), 1, MAX_NAME_LEN)
 		if(!length(new_deity))
-			new_deity = deity_name //Just give them what was picked for them already
+			new_deity = chap_religion.deity_name //Just give them what was picked for them already
 		B.deity_name = new_deity
 
 		var/accepted = 0
