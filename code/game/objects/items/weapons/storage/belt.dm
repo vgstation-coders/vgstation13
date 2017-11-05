@@ -379,3 +379,21 @@
 		"/obj/item/weapon/mop",
 		"/obj/item/weapon/storage/bag/trash")
 
+/obj/item/weapon/storage/belt/red_ribbon_arm
+	name = "\improper Red Ribbon Arm"
+	desc = "It almost seems as though it's alive."
+	icon_state = "red_ribbon_arm"
+	item_state = "red_ribbon_arm"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+	storage_slots = 0
+
+/obj/item/weapon/storage/belt/red_ribbon_arm/equipped(mob/living/carbon/human/H, equipped_slot)
+	..()
+	if(istype(H) && H.get_item_by_slot(slot_belt) == src)
+		H.set_hand_amount(H.held_items.len + 1)
+
+/obj/item/weapon/storage/belt/red_ribbon_arm/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	..()
+	if(from_slot == slot_belt && istype(user))
+		user.set_hand_amount(user.held_items.len - 1)

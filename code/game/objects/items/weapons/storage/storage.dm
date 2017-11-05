@@ -47,14 +47,13 @@
 
 		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
 			return
-
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		if(!( M.restrained() ) && !( M.stat ))
 			var/obj/abstract/screen/inventory/OI = over_object
-
+			var/fix_hands = OI.hand_index // Belts and etc. that affect the number of hands causes issues with hand indexes
 			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 1)
-				M.put_in_hand(OI.hand_index, src)
+				M.put_in_hand(fix_hands, src)
 				src.add_fingerprint(usr)
 
 			return
@@ -88,21 +87,24 @@
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)
-	if(!user.incapacitated())
-		if(user.s_active != src)
-			for(var/obj/item/I in src)
-				if(I.on_found(user))
-					return
-	if(user.s_active)
-		user.s_active.hide_from(user)
-	user.client.screen -= src.boxes
-	user.client.screen -= src.closer
-	user.client.screen -= src.contents
-	user.client.screen += src.boxes
-	user.client.screen += src.closer
-	user.client.screen += src.contents
-	user.s_active = src
-	is_seeing |= user
+	if(src.storage_slots > 0)
+		if(!user.incapacitated())
+			if(user.s_active != src)
+				for(var/obj/item/I in src)
+					if(I.on_found(user))
+						return
+		if(user.s_active)
+			user.s_active.hide_from(user)
+		user.client.screen -= src.boxes
+		user.client.screen -= src.closer
+		user.client.screen -= src.contents
+		user.client.screen += src.boxes
+		user.client.screen += src.closer
+		user.client.screen += src.contents
+		user.s_active = src
+		is_seeing |= user
+	else
+		to_chat(user, "The [src] doesn't have storage!")
 	return
 
 /obj/item/weapon/storage/proc/hide_from(mob/user as mob)
@@ -219,9 +221,13 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
-	if(contents.len >= storage_slots)
+	if(contents.len >= storage_slots && storage_slots > 0)
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
+		return 0 //Storage item is full
+	if(contents.len >= storage_slots && storage_slots <= 0)
+		if(!stop_messages)
+			to_chat(usr, "<span class='notice'>\The feel around on the [src], but it doesn't have storage!</span>")
 		return 0 //Storage item is full
 	if(usr && (W.cant_drop > 0))
 		if(!stop_messages)
