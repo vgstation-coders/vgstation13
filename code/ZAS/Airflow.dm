@@ -268,3 +268,10 @@ atom/movable/GotoAirflowDest(n)
 			Stun(round(airflow_speed * zas_settings.Get(/datum/ZAS_Setting/airflow_stun)/2))
 
 	. = ..()
+
+/zone/proc/movables() //TODO: Make airflow movement and stunning more closely-associated so this proc can handle differential checking.
+	var/list/found = list()
+	for(var/turf/simulated/T in contents)
+		for(var/atom/movable/AM in T)
+			found += AM
+	return found

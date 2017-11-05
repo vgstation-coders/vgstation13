@@ -74,6 +74,7 @@ Class Procs:
 /connection_edge/proc/flow(list/blown, differential)
 	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
+
 	for(var/atom/movable/AM in blown)
 		//Check for knocking people over
 		if(ismob(AM) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
@@ -130,8 +131,8 @@ Class Procs:
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		flow(A.contents, differential)
-		flow(B.contents, -differential)
+		flow(A.movables(), differential)
+		flow(B.movables(), -differential)
 
 	if(equiv)
 		if(direct)
@@ -191,7 +192,7 @@ Class Procs:
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
-		flow(A.contents, abs(differential), differential < 0)
+		flow(A.movables(), abs(differential), differential < 0)
 
 	if(equiv)
 		A.air.copy_from(air)
