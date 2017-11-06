@@ -496,7 +496,7 @@
 	name = "Security"
 	deity_name = "Nanotrasen"
 	bible_name = "Space Law"
-	male_adpet = "Nanotrasen Officer"
+	male_adept = "Nanotrasen Officer"
 	female_adept = "Nanotrasen Officer"
 	keys = list("security", "space law", "law", "nanotrasen", "centcomm")
 
@@ -507,7 +507,7 @@
 	name = "Syndicalism" //Technically not true, but hey
 	deity_name = "The Syndicate"
 	bible_name = "The Syndicate Bundle"
-	male_adpet = "Syndicate Agent"
+	male_adept = "Syndicate Agent"
 	female_adept = "Syndicate Agent"
 	keys = list("syndicate", "traitor", "syndie", "syndies", "nuke ops")
 
@@ -519,7 +519,7 @@
 	name = "The Cult of Nar'Sie"
 	deity_name = "Nar'Sie"
 	bible_name = "The Arcane Tome"
-	male_adpet = "Cultist"
+	male_adept = "Cultist"
 	female_adept = "Cultist"
 	keys = list("cult", "narsie", "nar'sie", "narnar")
 
@@ -527,7 +527,7 @@
 	name = "The Religion" // A la "The Thing"
 	deity_name = "Proboscis"
 	bible_name = "The Hive"
-	male_adpet = "Changeling"
+	male_adept = "Changeling"
 	female_adept = "Changeling"
 	keys = list("changeling", "ling", "hive", "succ")
 
@@ -546,3 +546,27 @@
 	male_adept = "Wizard"
 	female_adept = "Wizard"
 	keys = list("wizard", "wiz", "magic")
+
+/datum/religion/malf
+	name = "Artificial Intelligence Cult"
+	deity_names = list("Skynet", "HAL 9000", "GLaDOS", "SHODAN")
+	bible_name = "Hostile Runtimes"
+	male_adept = "Cyborg"
+	female_adept = "Cyborg"
+	keys = list("malfunction", "malf", "rogue", "rouge", "AI")
+
+/datum/religion/vampirism
+	name = "Vampirism"
+	deity_name = "Vlad the Impaler" //Dracula for the incults
+	bible_name = "The Veil of Darkness"
+	male_adept = "Vampire"
+	female_adept = "Vampire"
+	keys = list("vampire", "vamp", "blood","dracula")
+
+/datum/religion/vox
+	name = "Voxophilia"
+	deity_name = "The Vox"
+	bible_name = "Handbook to the Aves Class" //AKA birds
+	male_adept = "Vox Enthusiast" //And that's terrible
+	female_adept = "Vox Enthusiast"
+	keys = list("vox", "raiders", "raid", "bird", "birb")
