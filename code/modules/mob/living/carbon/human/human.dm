@@ -1652,10 +1652,13 @@
 				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
 				OE.grasp_id = i
 				OE.owner = src
-
 				organs_by_name["hand[i]"] = OE
 				grasp_organs.Add(OE)
 				organs.Add(OE)
+	else if(new_amount < held_items.len)
+		grasp_organs.len = (grasp_organs.len - (held_items.len - new_amount))
+		organs.len = (organs.len - (held_items.len - new_amount))
+		organs_by_name.len = (organs_by_name.len - (held_items.len - new_amount))
 	..()
 
 /mob/living/carbon/human/is_fat()

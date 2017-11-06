@@ -593,7 +593,7 @@
 			anomaly_factor = 2
 			apply_material_decorations = 0
 			var/list/possible_spawns=list()
-			possible_spawns += /obj/item/red_ribbon_arm
+			possible_spawns += /obj/item/weapon/storage/belt/red_ribbon_arm
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_TOY)
