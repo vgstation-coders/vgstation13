@@ -150,6 +150,7 @@
 
 
 //Variadic version of adjust_gas_temp(). Takes any number of gas, mole and temperature associations and applies them.
+//This proc is evil. Temperature will not behave how you expect it to. You have been warned.
 /datum/gas_mixture/proc/adjust_multi_temp()
 	ASSERT(!(args.len % 3))
 
@@ -165,11 +166,15 @@
 	if(!giver)
 		return 0
 
-	adjust_multi_temp(\
-		"oxygen", giver.oxygen, giver.temperature,\
-		"nitrogen", giver.nitrogen, giver.temperature,\
-		"plasma", giver.toxins, giver.temperature,\
-		"carbon_dioxide", giver.carbon_dioxide, giver.temperature)
+	var/self_heat_capacity = heat_capacity()
+	var/giver_heat_capacity = giver.heat_capacity()
+
+	temperature = (temperature * self_heat_capacity + giver.temperature * giver_heat_capacity) / (self_heat_capacity + giver_heat_capacity)
+	adjust_multi(\
+		"oxygen", giver.oxygen,\
+		"nitrogen", giver.nitrogen,\
+		"plasma", giver.toxins,\
+		"carbon_dioxide", giver.carbon_dioxide)
 
 	if(giver.trace_gases.len) //This really should use adjust(), but I think it would break things, and I don't care enough to fix a system I'm removing soon anyway.
 		for(var/datum/gas/trace_gas in giver.trace_gases)
