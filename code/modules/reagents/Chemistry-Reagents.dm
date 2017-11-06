@@ -1739,7 +1739,7 @@
 		//We don't need to start up the system because we only want to smoke one tile.
 
 /datum/reagent/iron
-	name = "Iron"
+	name = "Iron powder"
 	id = IRON
 	description = "Pure iron is a metal."
 	reagent_state = SOLID
@@ -1748,7 +1748,7 @@
 	density = 7.874
 
 /datum/reagent/gold
-	name = "Gold"
+	name = "Gold powder"
 	id = GOLD
 	description = "Gold is a dense, soft, shiny metal and the most malleable and ductile metal known."
 	reagent_state = SOLID
@@ -1757,7 +1757,7 @@
 	density = 19.3
 
 /datum/reagent/silver
-	name = "Silver"
+	name = "Silver powder"
 	id = SILVER
 	description = "A soft, white, lustrous transition metal, it has the highest electrical conductivity of any element and the highest thermal conductivity of any metal."
 	reagent_state = SOLID
@@ -1766,7 +1766,7 @@
 	density = 10.49
 
 /datum/reagent/uranium
-	name ="Uranium"
+	name ="Uranium salt"
 	id = URANIUM
 	description = "A silvery-white metallic chemical element in the actinide series, weakly radioactive."
 	reagent_state = SOLID
@@ -1791,7 +1791,7 @@
 			new /obj/effect/decal/cleanable/greenglow(T)
 
 /datum/reagent/phazon
-	name = "Phazon"
+	name = "Phazon salt"
 	id = PHAZON
 	description = "The properties of this rare metal are not well-known."
 	reagent_state = SOLID
@@ -1815,7 +1815,7 @@
 	on_mob_life(M)
 
 /datum/reagent/aluminum
-	name = "Aluminum"
+	name = "Aluminum powder"
 	id = ALUMINUM
 	description = "A silvery white and ductile member of the boron group of chemical elements."
 	reagent_state = SOLID

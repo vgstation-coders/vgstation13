@@ -1,7 +1,7 @@
 
 /obj/machinery/bunsen_burner
 	name = "bunsen burner"
-	desc = "A flat, self-heating device designed for bringing chemical mixtures to boil."
+	desc = "A fuel-consuming device designed for bringing chemical mixtures to boil."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "bunsen0"
 	var/heating = 0		//whether the bunsen is turned on
@@ -35,7 +35,6 @@
 				"o2_cons" = 0.08,
 				"co2_cons" = -0.04,
 				"unsafety" = 10))
-	pixel_y = 15 * PIXEL_MULTIPLIER
 	ghost_read = 0
 
 /obj/machinery/bunsen_burner/New()
@@ -50,24 +49,39 @@
 	processing_objects.Remove(src)
 	..()
 
+/obj/machinery/bunsen_burner/examine(mob/user)
+	..()
+	switch(heating)
+		if(1)
+			to_chat(user, "<span class = 'notice'>\The [src] is on.</span>")
+		if(-1)
+			to_chat(user, "<span class = 'notice'>\The [src]'s fuel port is open.</span>")
+	to_chat(user, "<span class='info'>It contains:</span>")
+	if(reagents && reagents.reagent_list.len)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+	else
+		to_chat(user, "<span class='info'>Nothing.</span>")
+	if(held_container)
+		to_chat(user, "<span class='info'>It is holding a:</span>")
+		held_container.examine(user)
+
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
-		if(held_container)
+		if(heating == -1)
 			for(var/possible_fuel in possible_fuels)
 				if(R.reagents.has_reagent(possible_fuel) && (reagents.has_reagent(possible_fuel) || !reagents.reagent_list.len))
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
 					if(reagent_transfer)
 						to_chat(user, "<span class='notice'>You transfer [reagent_transfer]u of [possible_fuel] from \the [R] to \the [src]</span>")
 						return
-			to_chat(user, "<span class='warning'>You must remove the [held_container] first.</span>")
-			return
 		else
 			if(user.drop_item(W, src))
 				held_container = W
 				to_chat(user, "<span class='notice'>You put the [held_container] onto the [src].</span>")
-				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER)
-				underlays += I
+				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER, "pixel_x" = 4 * PIXEL_MULTIPLIER)
+				overlays += I
 				return 1 // avoid afterattack() being called
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
@@ -79,7 +93,7 @@
 		..()
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container && heating)
+	if(held_container && heating == 1)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
 		if(!G || G.oxygen < 0.1)
@@ -115,13 +129,18 @@
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 
+	if(!heating || heating == -1)
+		processing_objects.Remove(src)
+
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
 
+/obj/machinery/bunsen_burner/attack_ghost()
+	return
 
 /obj/machinery/bunsen_burner/attack_hand(mob/user)
 	if(held_container)
-		underlays = null
+		overlays = null
 		to_chat(user, "<span class='notice'>You remove the [held_container] from the [src].</span>")
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
@@ -140,6 +159,10 @@
 	toggle()
 
 /obj/machinery/bunsen_burner/proc/toggle()
+	if(heating == -1)
+		if(usr)
+			to_chat(usr, "<span class = 'warning'>Close the fuel port first!</span>")
+		return
 	heating = !heating
 	update_icon()
 	if(heating)
@@ -147,5 +170,30 @@
 	else
 		processing_objects.Remove(src)
 
+
 /obj/machinery/bunsen_burner/AltClick()
 	toggle()
+
+/obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
+	set src in view(1)
+	set name = "Toggle Bunsen burner fuelport"
+	set category = "Object"
+
+	if(isjustobserver(usr))
+		return
+	if(!usr.Adjacent(src) || usr.incapacitated())
+		return
+
+	toggle_fuelport(usr)
+
+/obj/machinery/bunsen_burner/proc/toggle_fuelport(mob/user)
+	switch(heating)
+		if(1)
+			to_chat(user, "<span class = 'warning'>Turn \the [src] off first!</span>")
+		if(0)
+			heating = -1
+			to_chat(user, "<span class = 'warning'>You open the fuel port on \the [src].</span>")
+		if(-1)
+			heating = FALSE
+			to_chat(user, "<span class = 'warning'>You close the fuel port on \the [src].</span>")
+>>>>>>> better bunsen burner sprite, more heating/cooling recipes, fridges now actually cool things down.
