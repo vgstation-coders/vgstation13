@@ -90,13 +90,13 @@
 	name = "Buddism"
 	deity_name = "Buddha"
 	bible_name = "The Tripitaka"
-	male_adept = "Guru"
-	female_adept = "Guru"
-	keys = list("hindu", "hinduism", "india")
+	male_adept = "Monk"
+	female_adept = "Monk"
+	keys = list("buddha", "buddhism")
 
 /datum/religion/shintoism
 	name = "Shintoism"
-	deity_name = "Kami" //Polytheist and shit, do I sound like a weeb ?
+	deity_names = list("Izanagi", "Izanami", "Susanoo", "Amaterasu", "Tsukuyomi") //Polytheist and shit, do I sound like a weeb ?
 	bible_name = "Kojiki"
 	male_adept = "Kannushi"
 	female_adept = "Shrine Maiden"
@@ -242,6 +242,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "LGBT Advocate"
 	female_adept = "LGBT Advocate"
+	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
 
 /datum/religion/homosexuality/misc(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
@@ -268,7 +269,7 @@
 	keys = list("Science")
 
 /datum/religion/justice
-	name = "Justice"
+	name = "Tribunal"
 	deity_names = list("Almalexia", "Sotha Sil", "Vivec")
 	bible_name = "The 36 Lessons of Vivec"
 	male_adept = "Curate"
@@ -325,11 +326,11 @@
 
 /datum/religion/zakarum
 	name = "Zakarum"
-	deity_name = "The Marker"
-	bible_name = "Teachings of Unitology"
+	deity_name = "The Light"
+	bible_name = "The Visions of Akarat"
 	male_adept = "Disciple"
 	female_adept = "Disciple"
-	keys = list("unitology", "marker")
+	keys = list("zakarum")
 
 /datum/religion/ianism
 	name = "Ianism"
@@ -365,10 +366,10 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Hitchhiker"
 	female_adept = "Hitchhiker"
-	keys = list("coding", "coder", "coders", "coderbus")
+	keys = list("42")
 
 /datum/religion/spooky
-	name = "The Ultimate Question"
+	name = "Spooky"
 	deity_name = "The Spook" //SPOOK
 	bible_name = "The Spooky Spook"//SPOOK
 	male_adept = "Ghost"
@@ -377,3 +378,171 @@
 
 /datum/religion/spooky/misc(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/pumpkinhead(H), slot_head)
+
+/datum/religion/medbay
+	name = "Medbay"
+	deity_name = "The Chief Medical Officier"
+	bible_name = "The Wild Ride"
+	male_adept = "Doctor"
+	female_adept = "Nurse"
+	keys = list("medbay", "ride", "wild ride", "cryo")
+
+/datum/religion/medbay/misc(var/mob/living/carbon/human/H) //Give them basic medical garb
+	H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
+
+/datum/religion/busta
+	name = "Hardcore"
+	deity_name = "Bustatime"
+	bible_name = "The Hardcores"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Atmospheric Technician"
+	female_adept = "Atmospheric Technician"
+	keys = list("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
+
+/datum/religion/busta/misc(var/mob/living/carbon/human/H)
+	if(!(M_HARDCORE in H.mutations))
+		H.mutations.Add(M_HARDCORE)
+	H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
+
+/datum/religion/self
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "God"
+	female_adept = "Goddess"
+	keys = list("me", "i", "myself", "narcissism", "self importance", "selfishness")
+
+/datum/religion/self/misc(var/mob/living/carbon/human/H)
+	name = "Cult of \the [H]"
+	bible_name = "A God Am I - The Teachings of \the [H]" //Quite literally
+	deity_name = "\The [H]" //Very literally, too
+
+/datum/religion/alcholol
+	name = "Cult of the Beer"
+	deity_name = "Hic"
+	bible_name = "The Drunken Ramblings"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Drunkard"
+	female_adept = "Drunkard"
+	keys = list("alcohol", "booze", "beer", "wine", "ethanol", "c2h6o")
+
+/datum/religion/robutness
+	name = "Robustness"
+	deity_name = "The Robust"
+	bible_name = "The Rules of Robustness"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Robuster"
+	female_adept = "Robuster"
+	keys = list("robust", "robustness", "strength")
+
+/datum/religion/suicide
+	name = "Thanatology" // Guess it works
+	deity_name = "The Grim Reaper"
+	bible_name = "The Sweet Release of Death"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Reaper"
+	female_adept = "Reaper"
+	keys = list("suicide", "death", "succumb")
+
+/datum/religion/communism
+	name = "Communism"
+	deity_name = "Karl Marx"
+	bible_name = "The Communist Manifesto"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Komrade"
+	female_adept = "Komrade"
+	keys = list("communism", "socialism")
+
+/datum/religion/communism/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
+
+/datum/religion/capitalism
+	name = "Capitalism"
+	deity_name = "Adam Smith"
+	bible_name = "The Wealth of Nations"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Stockholder"
+	female_adept = "Stockholder"
+	keys = list("capitalism", "free market", "liberalism", "money")
+
+/datum/religion/capitalism/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/that(H), slot_head)
+
+/datum/religion/america
+	name = "American Exceptionalism"
+	deity_name = "Goerge Washington"
+	bible_name = "The Constitution"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Senator"
+	female_adept = "Senator"
+	keys = list("freedom", "america", "muhrica", "usa")
+
+/datum/religion/america/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/libertyhat(H), slot_head)
+
+/datum/religion/nazism
+	name = "Nazism"
+	deity_name = "Adolf Hitler"
+	bible_name = "Mein Kampf"
+	male_adept = "Feldbischof" //No seriously, that's a thing, look it up
+	female_adept = "Feldbischof"
+	keys = list("fascism", "nazi", "national socialism")
+
+/datum/religion/nazism/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
+
+/datum/religion/security
+	name = "Security"
+	deity_name = "Nanotrasen"
+	bible_name = "Space Law"
+	male_adpet = "Nanotrasen Officer"
+	female_adept = "Nanotrasen Officer"
+	keys = list("security", "space law", "law", "nanotrasen", "centcomm")
+
+/datum/religion/security/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/centhat(H), slot_head)
+
+/datum/religion/syndicate
+	name = "Syndicalism" //Technically not true, but hey
+	deity_name = "The Syndicate"
+	bible_name = "The Syndicate Bundle"
+	male_adpet = "Syndicate Agent"
+	female_adept = "Syndicate Agent"
+	keys = list("syndicate", "traitor", "syndie", "syndies", "nuke ops")
+
+/datum/religion/syndicate/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/syndicatefake(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
+
+/datum/religion/cult
+	name = "The Cult of Nar'Sie"
+	deity_name = "Nar'Sie"
+	bible_name = "The Arcane Tome"
+	male_adpet = "Cultist"
+	female_adept = "Cultist"
+	keys = list("cult", "narsie", "nar'sie", "narnar")
+
+/datum/religion/changeling
+	name = "The Religion" // A la "The Thing"
+	deity_name = "Proboscis"
+	bible_name = "The Hive"
+	male_adpet = "Changeling"
+	female_adept = "Changeling"
+	keys = list("changeling", "ling", "hive", "succ")
+
+/datum/religion/revolution
+	name = "Revolutionism"
+	deity_names = list("Maximilien Robespierre", "Saul Alinsky")
+	bible_name = "Down With Nanotrasen"
+	male_adept = "Revolutionary"
+	female_adept = "Revolutionary"
+	keys = list("revolution", "rev", "revolt")
+
+/datum/religion/wizard
+	name = "Wizardry"
+	deity_name = "The Space Wizard Federation"
+	bible_name = "Spell Book"
+	male_adept = "Wizard"
+	female_adept = "Wizard"
+	keys = list("wizard", "wiz", "magic")

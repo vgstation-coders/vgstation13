@@ -47,7 +47,6 @@
 			var/datum/religion/rel = new R
 			var/halt = FALSE
 			for (var/key in rel.keys)
-				to_chat(world, "[key]")
 				if (new_religion == key)
 					rel.misc(H) // We do the misc things related to the religion
 					B = new rel.bible_type
