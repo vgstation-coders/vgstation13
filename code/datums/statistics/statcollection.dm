@@ -189,17 +189,17 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/max_range = 0
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
-	var/filename_date = time2text(round_start_time, "YYYY.DD.MM")
+	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")
 	var/uniquefilename = time2text(round_start_time, "hhmmss")
 	// Iterate until we have an unused file.
-	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].[extension]"))))
+	while(fexists(file(("[STAT_OUTPUT_DIR]statistics-[filename_date].[uniquefilename].[extension]"))))
 		uniquefilename = "[uniquefilename].dupe"
-	return file("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].[extension]")
+	return file("[STAT_OUTPUT_DIR]statistics-[filename_date].[uniquefilename].[extension]")
 
 // new shiny JSON export
 /datum/stat_collector/proc/Process()
-	doPostRoundChecks()
 	var/statfile = get_valid_file("json")
+	doPostRoundChecks()
 
 	to_chat(world, "Writing statistics to file")
 	var/start_time = world.realtime
