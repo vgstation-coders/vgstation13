@@ -79,7 +79,7 @@
 	if(istype(M, /mob/living/silicon/robot))
 		borgs_at_roundend++
 	if(M.z == map.zCentcomm)
-		escaped = 1 // not all survivors escape, and not all rounds end with the shuttle
+		s.escaped = 1 // not all survivors escape, and not all rounds end with the shuttle
 
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
