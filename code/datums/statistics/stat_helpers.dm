@@ -1,5 +1,8 @@
 // functions related to handling/collecting data, and not writing data specifically
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+// so I can't get timestamp info so unfortunately I can't do anything like ISO standards
+// at least I can keep the format consistent though
+#define STAT_TIMESTAMP_FORMAT "YYYY-MM-DD hh:mm:ss"
 
 /datum/stat_collector/proc/get_research_score()
 	var/obj/machinery/r_n_d/server/server = null
@@ -26,7 +29,7 @@
 	e.heavy_impact_range = hi_range
 	e.light_impact_range = li_range
 	e.max_range = mx_range
-	stat_collection.explosions += e
+	explosions.Add(e)
 
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
 	if(istype(M, /mob/living)) return 0
@@ -56,7 +59,7 @@
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
 			d.realname = M.mind.name
-	stat_collection.deaths += d
+	deaths.Add(d)
 
 /datum/stat_collector/proc/add_survivor_stat(var/mob/living/M)
 	if(istype(M, /mob/living)) return 0
@@ -73,20 +76,20 @@
 	s.damagevalues["BRAIN"] = M.brainloss
 
 	if(istype(M, /mob/living/silicon/robot))
-		stat_collection.borgs_at_roundend++
+		borgs_at_roundend++
 
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
 			s.assigned_role = M.mind.assigned_role
 			if(M.mind.assigned_role in command_positions)
-				stat_collection.heads_at_roundend++
+				heads_at_roundend++
 		if(M.mind.special_role && M.mind.special_role != "")
 			s.special_role = M.mind.special_role
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
 			s.realname = M.mind.name
-	stat_collection.survivors += s
+	survivors.Add(s)
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
 	var/was_traitor = 1
@@ -97,11 +100,11 @@
 		var/datum/stat/uplink_badass_bundle_stat/BAD = new
 		var/obj/item/weapon/storage/box/B = resulting_item
 		for(var/obj/O in B.contents)
-			BAD.contains += O.type
+			BAD.contains.Add(O.type)
 		BAD.purchaser_key = ckey(user.mind.key)
 		BAD.purchaser_name = STRIP_NEWLINE(user.mind.name)
 		BAD.purchaser_is_traitor = was_traitor
-		badass_bundles += BAD
+		badass_bundles.Add(BAD)
 	else
 		var/datum/stat/uplink_purchase_stat/UP = new
 		if(istype(bundle, /datum/uplink_item/badass/random))
@@ -112,18 +115,27 @@
 		UP.purchaser_key = ckey(user.mind.key)
 		UP.purchaser_name = STRIP_NEWLINE(user.mind.name)
 		UP.purchaser_is_traitor = was_traitor
-		uplink_purchases += UP
+		uplink_purchases.Add(UP)
 
 /datum/stat/population_stat/New(pop as num)
-	time = time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")
+	time = time2text(world.realtime, STAT_TIMESTAMP_FORMAT)
 	popcount = pop
 
 /datum/stat_collector/proc/doPostRoundChecks()
+	round_start_time = time2text(round_start_time, STAT_TIMESTAMP_FORMAT)
+	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)
+	mapname = map.nameLong
+	mastermode = master_mode // this is stored as a string in game
+	if(istype(ticker.mode, /datum/game_mode/mixed))
+		var/datum/game_mode/mixed/mixy = ticker.mode
+		for(var/datum/game_mode/GM in mixy.modes)
+			mixed_gamemodes.Add(GM.name)
+
 	for(var/datum/mind/M in ticker.minds)
-		if(M.active && istype(M.current, /mob/living) && !M.current.isDead())
+		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
 			if(M.special_role == "Cultist")
-				stat_collection.cult_surviving_cultists++
+				cult_surviving_cultists++
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")
@@ -133,10 +145,12 @@
 	var/playercount = 0
 	for(var/mob/M in player_list)
 		if(M.client)
-			playercount += 1
-	stat_collection.population_polls += (new /datum/stat/population_stat(playercount))
+			playercount++
+	stat_collection.population_polls.Add(new /datum/stat/population_stat(playercount))
 
 /proc/population_poll_loop()
 	while(1)
 		population_poll()
 		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine
+
+#undef STAT_TIMESTAMP_FORMAT

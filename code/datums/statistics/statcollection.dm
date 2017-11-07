@@ -20,7 +20,35 @@
 #define STAT_OUTPUT_VERSION "1.2"
 #define STAT_OUTPUT_DIR "data/statfiles/"
 
+var/list/datum_donotcopy = list("tag", "type", "parent_type", "vars", "gcDestroyed", "being_sent_to_past", "disposed")
+
+proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy)
+	var/list/L = list()
+	for(var/I in D.vars)
+		if(I in do_not_copy)
+			continue
+		L.Add(I)
+		if(istype(D.vars[I], /list))
+			var/list/item = D.vars[I]
+			L[I] = item.Copy()
+		else
+			L[I] = D.vars[I]
+	return L
+// converts a datum (including atoms!) to a JSON object
+// do_not_copy is a list of vars to not include in the JSON output
+proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
+	ASSERT(istype(D))
+
+	var/list/L = datum2list(D)
+	for(var/I in L)
+		if(istype(L[I], /datum))
+			L[I] = datum2list(L[I], do_not_copy)
+		else
+			L[I] = L[I]
+	return json_encode(L)
+
 /datum/stat_collector
+	var/const/data_revision = STAT_OUTPUT_VERSION
 	// UNUSED
 	// var/enabled = 1
 	var/list/deaths = list()
@@ -39,6 +67,7 @@
 	var/nuked = 0
 	var/borgs_at_roundend = 0
 	var/heads_at_roundend = 0
+
 
 	// GAMEMODE-SPECIFIC STATS START HERE
 	// cult stuff
@@ -72,9 +101,13 @@
 	var/revsquad_won = 0
 	var/list/revsquad_items = list()
 
-	var/gamemode = "UNSET"
-	var/mixed_gamemodes = null
+
+	// THESE MUST BE SET IN POSTROUNDCHECKS OR SOMEWHERE ELSE BEFORE THAT IS CALLED
 	var/round_start_time = null
+	var/round_end_time = null
+	var/mapname = null
+	var/mastermode = null
+	var/list/mixed_gamemodes = list()
 
 /datum/stat/population_stat
 	var/time
@@ -124,7 +157,7 @@
 	var/purchaser_is_traitor = 1
 
 /datum/stat/uplink_badass_bundle_stat
-	var/obj/contains = list()
+	var/list/contains = list()
 	var/purchaser_key = null
 	var/purchaser_name = null
 	var/purchaser_is_traitor = 1
@@ -148,16 +181,17 @@
 
 // new shiny JSON export
 /datum/stat_collector/proc/Process()
+	doPostRoundChecks()
 	var/statfile = get_valid_file("json")
 
 	to_chat(world, "Writing statistics to file")
 	var/start_time = world.realtime
 
-	var/jsonout = json_encode(src)
+	var/jsonout = datum2json(src)
 	statfile << jsonout
 	world.log << "Statistics written to file in [(start_time - world.realtime)/10] seconds." // I think that's right?
 	stats_server_alert_new_file()
 	spawn(10 SECONDS)
-		to_chat(world, "Statistics for this round available <a href='stats.ss13.moe/match/latest'>here!</a>") // TODO style this so it isnt lost in the post-round chatlog
+		to_chat(world, "<span class='info center'>Statistics for this round available at http://stats.ss13.moe/match/latest</span>")
 
 // TODO write all living mobs to DB
