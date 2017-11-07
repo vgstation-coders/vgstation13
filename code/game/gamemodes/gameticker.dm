@@ -195,7 +195,6 @@ var/datum/controller/gameticker/ticker
 				if(istype(obj, /obj/effect/landmark/spacepod/random))
 					qdel(obj)
 
-		stat_collection.deaths = list() // Get rid of the corpses that spawn on startup.
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 

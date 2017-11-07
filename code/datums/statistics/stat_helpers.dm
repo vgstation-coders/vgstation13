@@ -32,7 +32,8 @@
 	explosions.Add(e)
 
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
-	if(istype(M, /mob/living)) return 0
+	if(!istype(M, /mob/living)) return 0
+	if(M.iscorpse) return 0 // only ever 1 if they are a corpse landmark spawned mob
 	if(ticker.current_state != 3)
 		return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
@@ -62,7 +63,7 @@
 	deaths.Add(d)
 
 /datum/stat_collector/proc/add_survivor_stat(var/mob/living/M)
-	if(istype(M, /mob/living)) return 0
+	if(!istype(M, /mob/living)) return 0
 
 	var/datum/stat/survivor/s = new
 	s.mob_typepath = M.type
@@ -77,6 +78,8 @@
 
 	if(istype(M, /mob/living/silicon/robot))
 		borgs_at_roundend++
+	if(M.z == map.zCentcomm)
+		escaped = 1 // not all survivors escape, and not all rounds end with the shuttle
 
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
