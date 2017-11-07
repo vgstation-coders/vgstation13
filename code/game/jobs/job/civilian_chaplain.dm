@@ -52,6 +52,7 @@
 					B.name = rel.bible_name
 					B.deity_name = rel.deity_name
 					H.put_in_hands(B)
+					rel.holy_book = B
 					J = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
 					chap_religion = rel
 					choice = TRUE
@@ -67,6 +68,7 @@
 			B.name = chap_religion.bible_name
 			B.deity_name = chap_religion.deity_name
 			H.put_in_hands(B)
+			chap_religion.holy_book = B
 
 		//This goes down here due to problems with loading orders that took me 4 hours to identify
 		var/obj/item/weapon/card/id/I = null

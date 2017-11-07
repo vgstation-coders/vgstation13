@@ -8,6 +8,8 @@
 	var/female_adept = "Chaplain"
 	var/bible_type = /obj/item/weapon/storage/bible
 
+	var/obj/item/weapon/storage/bible/holy_book
+
 	var/list/bible_names = list()
 	var/list/deity_names = list()
 
@@ -18,6 +20,9 @@
 		bible_name = pick(bible_names)
 	if (deity_names.len)
 		deity_name = pick(deity_names)
+	holy_book = new bible_type
+	holy_book.deity_name = deity_name
+	holy_book.name = bible_name
 
 /datum/religion/proc/misc(var/mob/living/carbon/human/H, var/obj/item/weapon/storage/bible/B)
 	return TRUE // Nothing to see here, but redefined in some other religions !
@@ -286,7 +291,7 @@
 
 /datum/religion/deadra
 	name = "Cult of the Deadreas"
-	deity_names = list("Azura", "Boethiah", "Sheogorath", "Sanguine", "Hircine", "Meridia", "Hermaeus Mora", "Nocturnal")
+	deity_names = list("Azura", "Boethiah", "Sheogorath", "Sanguine", "Hircine", "Meridia", "Hermaeus Mora", "Nocturnal", "Oghma Infinium")
 	bible_names = list("The Blessings of Sheogorath", "Boethiah's Pillow Book", "Invocation of Azura")
 	male_adept = "Daedra Worshipper"
 	female_adept = "Daedra Worshipper"
