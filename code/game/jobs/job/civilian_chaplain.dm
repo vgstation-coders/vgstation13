@@ -65,6 +65,7 @@
 			chap_religion.bible_name = "The Holy Book of [new_religion]"
 			B = new chap_religion.bible_type
 			B.name = chap_religion.bible_name
+			B.deity_name = chap_religion.deity_name
 			H.put_in_hands(B)
 
 		//This goes down here due to problems with loading orders that took me 4 hours to identify

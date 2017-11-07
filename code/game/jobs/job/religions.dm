@@ -287,7 +287,7 @@
 /datum/religion/deadra
 	name = "Cult of the Deadreas"
 	deity_names = list("Azura", "Boethiah", "Sheogorath", "Sanguine", "Hircine", "Meridia", "Hermaeus Mora", "Nocturnal")
-	bible_name = list("The Blessings of Sheogorath", "Boethiah's Pillow Book", "Invocation of Azura")
+	bible_names = list("The Blessings of Sheogorath", "Boethiah's Pillow Book", "Invocation of Azura")
 	male_adept = "Daedra Worshipper"
 	female_adept = "Daedra Worshipper"
 	keys = list("daedra")
@@ -547,13 +547,20 @@
 	female_adept = "Wizard"
 	keys = list("wizard", "wiz", "magic")
 
-/datum/religion/malf
+/datum/religion/wizard/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/wizard(H), slot_head)
+
+/datum/religion/malfunctioning
 	name = "Artificial Intelligence Cult"
 	deity_names = list("Skynet", "HAL 9000", "GLaDOS", "SHODAN")
 	bible_name = "Hostile Runtimes"
 	male_adept = "Cyborg"
 	female_adept = "Cyborg"
 	keys = list("malfunction", "malf", "rogue", "rouge", "AI")
+
+/datum/religion/malfunctioning/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/cardborg(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/cardborg(H), slot_wear_suit)
 
 /datum/religion/vampirism
 	name = "Vampirism"
@@ -563,6 +570,9 @@
 	female_adept = "Vampire"
 	keys = list("vampire", "vamp", "blood","dracula")
 
+/datum/religion/vampirism/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
+
 /datum/religion/vox
 	name = "Voxophilia"
 	deity_name = "The Vox"
@@ -570,3 +580,80 @@
 	male_adept = "Vox Enthusiast" //And that's terrible
 	female_adept = "Vox Enthusiast"
 	keys = list("vox", "raiders", "raid", "bird", "birb")
+
+/datum/religion/bleb
+	name = "Blob Worship"
+	deity_name = "Blob Overmind"
+	bible_name = "A Guide To Biohazard Alerts"
+	male_adept = "Blob Core"
+	female_adept = "Blob Core"
+	keys = list("blob", "bleb", "biohazard")
+
+/datum/religion/clown
+	name = "Clownism"
+	deity_name = "Honkmother"
+	bible_name =  "Honkmothers Coloring Book"
+	male_adept = "Co-Clown"
+	female_adept = "Co-Clown"
+	keys = list("honk", "clown", "honkmother")
+
+/datum/religion/clown/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
+
+/datum/religion/mime
+	name = "..."
+	deity_name = "Silence"
+	bible_name =  "..."
+	male_adept = "..."
+	female_adept = "..."
+	keys = list("silence", "mime", "quiet", "...")
+
+/datum/religion/mime/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
+
+/datum/religion/ancap
+	name = "Anarcho-Capitalism"
+	deity_name = "Murray Rothbard"
+	bible_name = "Bitcoin Wallet"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Bitcoin Miner" //Worst part coming up with job name
+	female_adept = "Bitcoin Miner"
+	keys = list("silence", "mime", "quiet", "...")
+
+/datum/religion/ancap/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
+
+/datum/religion/samurai
+	name = "Bushido" // The way of the warrior
+	deity_name = "The Way of the Warrior"
+	bible_name = "Kojiki"//Japan's oldest book, the origin "muh honor" and "muh katana"
+	male_adept = "Samurai"
+	female_adept = "Samurai"
+	keys = list("samurai", "honor", "bushido", "weaboo")
+
+/datum/religion/samurai/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/sakura_kimono(H), slot_wear_suit)
+
+/datum/religion/clockworkcult
+	name = "Clockwork Cult"
+	deity_name = "Ratvar"
+	bible_name = "Clockwork slab"
+	male_adept = "Servant of Ratvar"
+	female_adept = "Servant of Ratvar"
+	keys = list("ratvar", "clockwork", "ratvarism")
+
+/datum/religion/clockworkcult/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/clockwork_hood(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/clockwork_robes(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/shoes/clockwork_boots(H), slot_shoes)
+
+/datum/religion/dune
+	name = "Zensunni" // t. wiki
+	deity_name = "Shai-Hulud"
+	bible_name = "Manual of Muad'Dib"
+	male_adept = "Muad'Dib"
+	female_adept = "Muad'Dib"
+	keys = list("dune", "spice", "sandworms", "sandworm", "muad dib", "muad'dib", "arrakis", "shai hulud", "shai-hulud")
+
+/datum/religion/dune/misc(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/under/stilsuit(H), slot_w_uniform)
