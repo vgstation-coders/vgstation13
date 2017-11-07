@@ -20,9 +20,6 @@
 		bible_name = pick(bible_names)
 	if (deity_names.len)
 		deity_name = pick(deity_names)
-	holy_book = new bible_type
-	holy_book.deity_name = deity_name
-	holy_book.name = bible_name
 
 /datum/religion/proc/misc(var/mob/living/carbon/human/H, var/obj/item/weapon/storage/bible/B)
 	return TRUE // Nothing to see here, but redefined in some other religions !
