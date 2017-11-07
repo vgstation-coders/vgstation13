@@ -618,7 +618,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Bitcoin Miner" //Worst part coming up with job name
 	female_adept = "Bitcoin Miner"
-	keys = list("silence", "mime", "quiet", "...")
+	keys = list("ancap", "ancapistan", "NAP")
 
 /datum/religion/ancap/misc(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
