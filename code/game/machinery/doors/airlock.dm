@@ -1299,8 +1299,7 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
-		//attack_ai(P)
-		open(1)
+		density ? open(TRUE) : close(TRUE)
 		return 1
 	return 0
 
