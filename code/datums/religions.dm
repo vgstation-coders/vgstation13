@@ -474,7 +474,7 @@
 
 /datum/religion/america
 	name = "American Exceptionalism"
-	deity_name = "Georges Washington"
+	deity_name = "George Washington"
 	bible_name = "The Constitution"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Senator"
