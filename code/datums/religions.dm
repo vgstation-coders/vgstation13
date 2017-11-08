@@ -21,7 +21,8 @@
 	if (deity_names.len)
 		deity_name = pick(deity_names)
 
-/datum/religion/proc/misc(var/mob/living/carbon/human/H, var/obj/item/weapon/storage/bible/B)
+// Give the chaplain the basic gear, as well as a few misc effects.
+/datum/religion/proc/equip_chaplain(var/mob/living/carbon/human/H)
 	return TRUE // Nothing to see here, but redefined in some other religions !
 
 // The list of all religions spacemen have designed, so far.
@@ -33,7 +34,7 @@
 	female_adept = "Bishop"
 	keys = list("catholic", "catholicism", "roman catholicism")
 
-/datum/religion/catholic/misc(var/mob/living/carbon/human/H)
+/datum/religion/catholic/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/mitre(H), slot_head)
 
 /datum/religion/theism
@@ -153,7 +154,7 @@
 	female_adept = "Militant Atheist"
 	keys = list("atheism", "none")
 
-/datum/religion/atheism/misc(var/mob/living/carbon/human/H)
+/datum/religion/atheism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/fedora(H), slot_head)
 
 /datum/religion/evolution
@@ -203,7 +204,7 @@
 	female_adept = "Pontifex"
 	keys = list("latin", "rome", "roma", "roman")
 
-/datum/religion/latin/misc(var/mob/living/carbon/human/H)
+/datum/religion/latin/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/helmet/roman/legionaire(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/under/roman(H), slot_w_uniform)
 
@@ -246,7 +247,7 @@
 	female_adept = "LGBT Advocate"
 	keys = list("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
 
-/datum/religion/homosexuality/misc(var/mob/living/carbon/human/H)
+/datum/religion/homosexuality/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
 
 /datum/religion/retard
@@ -258,7 +259,7 @@
 	female_adept = "Retard"
 	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag")
 
-/datum/religion/retard/misc(var/mob/living/carbon/human/H)
+/datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
 
 /datum/religion/science
@@ -378,7 +379,7 @@
 	female_adept = "Ghost"
 	keys = list("spook", "spooky", "boo", "ghost", "halloween", "2spooky")
 
-/datum/religion/spooky/misc(var/mob/living/carbon/human/H)
+/datum/religion/spooky/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/pumpkinhead(H), slot_head)
 
 /datum/religion/medbay
@@ -389,7 +390,7 @@
 	female_adept = "Nurse"
 	keys = list("medbay", "ride", "wild ride", "cryo")
 
-/datum/religion/medbay/misc(var/mob/living/carbon/human/H) //Give them basic medical garb
+/datum/religion/medbay/equip_chaplain(var/mob/living/carbon/human/H) //Give them basic medical garb
 	H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
 	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
@@ -403,7 +404,7 @@
 	female_adept = "Atmospheric Technician"
 	keys = list("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
 
-/datum/religion/busta/misc(var/mob/living/carbon/human/H)
+/datum/religion/busta/equip_chaplain(var/mob/living/carbon/human/H)
 	if(!(M_HARDCORE in H.mutations))
 		H.mutations.Add(M_HARDCORE)
 	H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
@@ -414,7 +415,7 @@
 	female_adept = "Goddess"
 	keys = list("me", "i", "myself", "narcissism", "self importance", "selfishness")
 
-/datum/religion/self/misc(var/mob/living/carbon/human/H)
+/datum/religion/self/equip_chaplain(var/mob/living/carbon/human/H)
 	name = "Cult of \the [H]"
 	bible_name = "A God Am I - The Teachings of \the [H]" //Quite literally
 	deity_name = "\The [H]" //Very literally, too
@@ -455,7 +456,7 @@
 	female_adept = "Komrade"
 	keys = list("communism", "socialism")
 
-/datum/religion/communism/misc(var/mob/living/carbon/human/H)
+/datum/religion/communism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
 
@@ -468,19 +469,19 @@
 	female_adept = "Stockholder"
 	keys = list("capitalism", "free market", "liberalism", "money")
 
-/datum/religion/capitalism/misc(var/mob/living/carbon/human/H)
+/datum/religion/capitalism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/that(H), slot_head)
 
 /datum/religion/america
 	name = "American Exceptionalism"
-	deity_name = "Goerge Washington"
+	deity_name = "Georges Washington"
 	bible_name = "The Constitution"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Senator"
 	female_adept = "Senator"
 	keys = list("freedom", "america", "muhrica", "usa")
 
-/datum/religion/america/misc(var/mob/living/carbon/human/H)
+/datum/religion/america/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/libertyhat(H), slot_head)
 
 /datum/religion/nazism
@@ -491,7 +492,7 @@
 	female_adept = "Feldbischof"
 	keys = list("fascism", "nazi", "national socialism")
 
-/datum/religion/nazism/misc(var/mob/living/carbon/human/H)
+/datum/religion/nazism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
 
 /datum/religion/security
@@ -502,7 +503,7 @@
 	female_adept = "Nanotrasen Officer"
 	keys = list("security", "space law", "law", "nanotrasen", "centcomm")
 
-/datum/religion/security/misc(var/mob/living/carbon/human/H)
+/datum/religion/security/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/centhat(H), slot_head)
 
 /datum/religion/syndicate
@@ -513,7 +514,7 @@
 	female_adept = "Syndicate Agent"
 	keys = list("syndicate", "traitor", "syndie", "syndies", "nuke ops")
 
-/datum/religion/syndicate/misc(var/mob/living/carbon/human/H)
+/datum/religion/syndicate/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/syndicatefake(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 
@@ -549,7 +550,7 @@
 	female_adept = "Wizard"
 	keys = list("wizard", "wiz", "magic")
 
-/datum/religion/wizard/misc(var/mob/living/carbon/human/H)
+/datum/religion/wizard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/wizard(H), slot_head)
 
 /datum/religion/malfunctioning
@@ -560,7 +561,7 @@
 	female_adept = "Cyborg"
 	keys = list("malfunction", "malf", "rogue", "rouge", "AI")
 
-/datum/religion/malfunctioning/misc(var/mob/living/carbon/human/H)
+/datum/religion/malfunctioning/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/cardborg(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/cardborg(H), slot_wear_suit)
 
@@ -572,7 +573,7 @@
 	female_adept = "Vampire"
 	keys = list("vampire", "vamp", "blood","dracula")
 
-/datum/religion/vampirism/misc(var/mob/living/carbon/human/H)
+/datum/religion/vampirism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
 
 /datum/religion/vox
@@ -599,7 +600,7 @@
 	female_adept = "Co-Clown"
 	keys = list("honk", "clown", "honkmother")
 
-/datum/religion/clown/misc(var/mob/living/carbon/human/H)
+/datum/religion/clown/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
 
 /datum/religion/mime
@@ -610,7 +611,7 @@
 	female_adept = "..."
 	keys = list("silence", "mime", "quiet", "...")
 
-/datum/religion/mime/misc(var/mob/living/carbon/human/H)
+/datum/religion/mime/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
 
 /datum/religion/ancap
@@ -622,7 +623,7 @@
 	female_adept = "Bitcoin Miner"
 	keys = list("ancap", "ancapistan", "NAP")
 
-/datum/religion/ancap/misc(var/mob/living/carbon/human/H)
+/datum/religion/ancap/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
 
 /datum/religion/samurai
@@ -633,7 +634,7 @@
 	female_adept = "Samurai"
 	keys = list("samurai", "honor", "bushido", "weaboo")
 
-/datum/religion/samurai/misc(var/mob/living/carbon/human/H)
+/datum/religion/samurai/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/sakura_kimono(H), slot_wear_suit)
 
 /datum/religion/clockworkcult
@@ -644,7 +645,7 @@
 	female_adept = "Servant of Ratvar"
 	keys = list("ratvar", "clockwork", "ratvarism")
 
-/datum/religion/clockworkcult/misc(var/mob/living/carbon/human/H)
+/datum/religion/clockworkcult/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/clockwork_hood(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/clockwork_robes(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/shoes/clockwork_boots(H), slot_shoes)
@@ -657,5 +658,5 @@
 	female_adept = "Muad'Dib"
 	keys = list("dune", "spice", "sandworms", "sandworm", "muad dib", "muad'dib", "arrakis", "shai hulud", "shai-hulud")
 
-/datum/religion/dune/misc(var/mob/living/carbon/human/H)
+/datum/religion/dune/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/stilsuit(H), slot_w_uniform)

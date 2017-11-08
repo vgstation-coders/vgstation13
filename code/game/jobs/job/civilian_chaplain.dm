@@ -47,7 +47,7 @@
 			var/datum/religion/rel = new R
 			for (var/key in rel.keys)
 				if (lowertext(new_religion) == key)
-					rel.misc(H) // We do the misc things related to the religion
+					rel.equip_chaplain(H) // We do the misc things related to the religion
 					B = new rel.bible_type
 					B.name = rel.bible_name
 					B.deity_name = rel.deity_name
