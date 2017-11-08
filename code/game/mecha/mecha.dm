@@ -34,7 +34,7 @@
 	var/obj/item/weapon/cell/cell
 	var/state = STATE_BOLTSHIDDEN
 	var/list/log = new
-	var/last_message = 0
+	var/last_message = 0 // Used in occupant_message()
 	var/add_req_access = 1
 	var/maint_access = 1
 	var/dna	//dna-locking the mech
@@ -297,14 +297,12 @@
 		to_chat(user, "You climb out from [src]")
 		return 0
 	if(connected_port)
-		if(world.time - last_message > 20)
-			src.occupant_message("Unable to move while connected to the air system port")
-			last_message = world.time
+		occupant_message("Unable to move while connected to the air system port.", TRUE)
 		return 0
 	if(throwing)
 		return 0
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+		occupant_message("<font color='red'>Maintenance protocols in effect.</font>", TRUE)
 		return
 	return domove(direction)
 
@@ -1631,11 +1629,20 @@
 /////// Messages and Log ///////
 ////////////////////////////////
 
-/obj/mecha/proc/occupant_message(message as text)
-	if(message)
-		if(src.occupant && src.occupant.client)
-			to_chat(src.occupant, "[bicon(src)] [message]")
-	return
+#define OCCUPANT_MESSAGE_INTERVAL 0.5 SECONDS
+
+/obj/mecha/proc/occupant_message(var/message, var/prevent_spam = FALSE)
+	if(!message)
+		return
+	if(!occupant || !occupant.client)
+		return
+	if(prevent_spam)
+		if(world.time - last_message <= OCCUPANT_MESSAGE_INTERVAL)
+			return
+	to_chat(occupant, "[bicon(src)] [message]")
+	last_message = world.time
+
+#undef OCCUPANT_MESSAGE_INTERVAL
 
 /obj/mecha/proc/log_message(message as text,red=null)
 	log.len++
