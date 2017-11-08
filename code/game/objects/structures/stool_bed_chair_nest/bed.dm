@@ -253,6 +253,22 @@
 	down_state = "borgbed_down"
 	roller_type = /obj/item/roller/borg
 
+//An advanced roller bed that allows you to do surgery on it 100% of the time in place of the 75% chance of the normal one.
+/obj/item/roller/adv
+	name = "mobile operating table"
+	desc = "A collapsed mobile operating table that can be carried around."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "adv_folded"
+	bed_type = /obj/structure/bed/roller/adv
+
+/obj/structure/bed/roller/adv
+	name = "mobile operating table"
+	desc = "A new meaning to saving people in the hall. It's much more stable than a regular roller bed."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "adv_down"
+	up_state ="adv_up"
+	down_state = "adv_down"
+	roller_type = /obj/item/roller/adv
 
 /datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE
