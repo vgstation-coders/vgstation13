@@ -764,6 +764,34 @@
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
 	result_amount = 2.5
 
+//Surgery tools from chemicals because why not? Requires a vial to make them and consumes it as a part of making the tool.
+//DO NOT COPY PASTE THESE WITHOUT SOME KIND OF CONTAINER/HOLDER CHECK BECAUSE qdel WILL DELETE ANY REAGENT CONTAINER WITHOUT IT. IE PLAYERS
+/datum/chemical_reaction/fixoveinmake
+	name = "FixOVein"
+	id = "fixovein"
+	result = null
+	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
+
+/datum/chemical_reaction/fixoveinmake/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/FixOVein(location)
+	qdel(holder.my_atom)
+
+/datum/chemical_reaction/bonegelmake
+	name = "Bone Gel"
+	id = "bonegel"
+	result = null
+	required_reagents = list(MILK = 10, CRYOXADONE = 10) //milk is good for the bones
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial
+
+/datum/chemical_reaction/bonegelmake/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/bonegel(location)
+	qdel(holder.my_atom)
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 //Foam and foam precursor
