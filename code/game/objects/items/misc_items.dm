@@ -56,3 +56,17 @@
 	..()
 	if(from_slot == slot_belt && istype(user))
 		user.set_hand_amount(user.held_items.len - 1)
+
+
+/obj/item/folded_bag
+	name = "folded plastic bag"
+	desc = "A neatly folded-up plastic bag, making it easier to store."
+	icon_state = "folded_bag"
+	w_class = W_CLASS_TINY
+
+/obj/item/folded_bag/attack_self(mob/user)
+	to_chat(user, "<span class = 'notice'>You unfold \the [src] into a plastic bag.</span>")
+	var/bag = new/obj/item/weapon/storage/bag/plasticbag
+	user.u_equip(src)
+	user.put_in_hands(bag)
+	qdel(src)
