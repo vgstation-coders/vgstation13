@@ -11,19 +11,19 @@ type Runtimes = HashMap<String, RuntimeData>;
 struct RuntimeData {
 	pub details: String,
 	pub counter: usize,
-	pub kind: RuntimeKind
+	pub kind: RuntimeKind,
 }
 
 enum RuntimeKind {
 	RuntimeError,
 	InfiniteLoop,
-	RecursionLimit
+	RecursionLimit,
 }
 
 enum State {
 	Runtime(String),
 	Skip(usize),
-	Scanning
+	Scanning,
 }
 
 impl std::fmt::Display for RuntimeData {
@@ -34,24 +34,30 @@ impl std::fmt::Display for RuntimeData {
 	}
 }
 
-fn insert_runtime(runtimes: &mut Runtimes, identifier: String, kind: RuntimeKind) {
-	match runtimes.entry(identifier) {
-		Entry::Vacant(entry) => {
-			entry.insert(RuntimeData {
-				details: String::new(),
-				counter: 1,
-				kind: kind
-			});
+fn insert_runtime(runtimes: &mut Runtimes, identifier: &str, kind: RuntimeKind) {
+	let mut do_insert = false;
+	match runtimes.get_mut(identifier) {
+		Some(runtime) => {
+			runtime.counter += 1;
 		}
-		Entry::Occupied(mut entry) => {
-			let data = entry.get_mut();
-			data.counter += 1;
+		None => {
+			do_insert = true;
 		}
-	};
+	}
+	if do_insert {
+		let new_entry = RuntimeData {
+			details: String::new(),
+			counter: 1,
+			kind: kind,
+		};
+		runtimes.insert(identifier.to_owned(), new_entry);
+	}
 }
 
 fn line_kind(line: &str) -> LineKind {
-	if line.find("Infinite loop suspected--switching proc to background.").is_some() {
+	if line.find("Infinite loop suspected--switching proc to background.")
+		.is_some()
+	{
 		return LineKind::InfiniteLoopHeader;
 	}
 	if line.starts_with("proc name") {
@@ -71,14 +77,14 @@ enum LineKind {
 	InfiniteLoop,
 	Runtime,
 	Details,
-	Junk
+	Junk,
 }
 
 fn parse_from_file(path: &str) -> Runtimes {
 	let input_file = File::open(path).expect("Error opening file.");
 	let reader = BufReader::new(input_file);
 	let lines = reader.lines().map(std::result::Result::unwrap);
-	
+
 	let mut runtimes = Runtimes::new();
 	let mut current_state = State::Scanning;
 
@@ -97,7 +103,7 @@ fn parse_from_file(path: &str) -> Runtimes {
 			LineKind::InfiniteLoop => {
 				if let State::Scanning = current_state {
 					current_state = State::Runtime(line.clone());
-					insert_runtime(&mut runtimes, line, RuntimeKind::InfiniteLoop);
+					insert_runtime(&mut runtimes, &line, RuntimeKind::InfiniteLoop);
 				}
 			}
 			LineKind::Details => {
@@ -111,20 +117,18 @@ fn parse_from_file(path: &str) -> Runtimes {
 				}
 			}
 			LineKind::Runtime => {
-				let runtime_identifier = line[22..].to_owned();
-				current_state = State::Runtime(runtime_identifier.clone());
+				let runtime_identifier = &line[22..];
+				current_state = State::Runtime(runtime_identifier.to_owned());
 				insert_runtime(&mut runtimes, runtime_identifier, RuntimeKind::RuntimeError);
 			}
-			LineKind::Junk => ()
+			LineKind::Junk => (),
 		}
 	}
 	runtimes
 }
 
 fn total_runtimes(runtimes: &Runtimes) -> usize {
-	runtimes.values()
-		.map(|data| data.counter)
-		.sum()
+	runtimes.values().map(|data| data.counter).sum()
 }
 
 fn total_unique_runtimes(runtimes: &Runtimes) -> usize {
@@ -144,16 +148,20 @@ fn is_infinite_loop(runtime: &(&String, &RuntimeData)) -> bool {
 
 fn write_to_file<P: AsRef<std::path::Path>>(runtimes: &Runtimes, file_path: P) {
 	let mut output_file = File::create(file_path).expect("Error creating output file.");
-	writeln!(output_file, 
-"Total runtimes: {}. Total unique_runtimes: {}.
+	writeln!(
+		output_file,
+		"Total runtimes: {}. Total unique_runtimes: {}.
 --------------------------------------
 Runtime errors:",
-		total_runtimes(runtimes), total_unique_runtimes(runtimes)).unwrap();
+		total_runtimes(runtimes),
+		total_unique_runtimes(runtimes)
+	).unwrap();
 	for (ident, _) in runtimes.iter().filter(is_runtime_error) {
 		writeln!(output_file, "{}", ident).unwrap();
 	}
-	writeln!(output_file,
-"--------------------------------------
+	writeln!(
+		output_file,
+		"--------------------------------------
 Infinite loops:"
 	).unwrap();
 	for (ident, _) in runtimes.iter().filter(is_infinite_loop) {
