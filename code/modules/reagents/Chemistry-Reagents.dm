@@ -1001,7 +1001,6 @@
 	description = "A colorless, odorless gas."
 	reagent_state = GAS
 	color = "#808080" //rgb: 128, 128, 128
-	custom_metabolism = 0.01
 	density = 1.429
 	specheatcap = 0.911
 
@@ -1018,7 +1017,6 @@
 	id = COPPER
 	description = "A highly ductile metal."
 	color = "#6E3B08" //rgb: 110, 59, 8
-	custom_metabolism = 0.01
 	specheatcap = 0.385
 	density = 8.96
 
@@ -1028,7 +1026,6 @@
 	description = "A colorless, odorless, tasteless gas."
 	reagent_state = GAS
 	color = "#808080" //rgb: 128, 128, 128
-	custom_metabolism = 0.01
 	density = 1.251
 	specheatcap = 1.040
 
@@ -1047,7 +1044,6 @@
 	description = "A colorless, odorless, nonmetallic, tasteless, highly combustible diatomic gas."
 	reagent_state = GAS
 	color = "#808080" //rgb: 128, 128, 128
-	custom_metabolism = 0.01
 	density = 0.08988
 	specheatcap = 13.83
 
@@ -1057,7 +1053,6 @@
 	description = "A soft, low-melting solid that can easily be cut with a knife. Reacts violently with water."
 	reagent_state = SOLID
 	color = "#A0A0A0" //rgb: 160, 160, 160
-	custom_metabolism = 0.01
 	specheatcap = 0.75
 	density = 0.89
 
@@ -1090,7 +1085,6 @@
 	description = "A chemical element with a pungent smell."
 	reagent_state = SOLID
 	color = "#BF8C00" //rgb: 191, 140, 0
-	custom_metabolism = 0.01
 	specheatcap = 0.73
 	density = 1.96
 
@@ -1100,7 +1094,6 @@
 	description = "A chemical element, the builing block of life."
 	reagent_state = SOLID
 	color = "#1C1300" //rgb: 30, 20, 0
-	custom_metabolism = 0.01
 	specheatcap = 0.71
 	density = 2.26
 
@@ -1179,7 +1172,6 @@
 	description = "A chemical element, readily reacts with water."
 	reagent_state = SOLID
 	color = "#808080" //rgb: 128, 128, 128
-	custom_metabolism = 0.01
 	specheatcap = 1.23
 	density = 0.968
 
@@ -1189,7 +1181,6 @@
 	description = "A chemical element, the backbone of biological energy carriers."
 	reagent_state = SOLID
 	color = "#832828" //rgb: 131, 40, 40
-	custom_metabolism = 0.01
 	density = 1.823
 	specheatcap = 0.769
 
@@ -1471,7 +1462,6 @@
 	description = "Glycerol is a simple polyol compound. Glycerol is sweet-tasting and of low toxicity."
 	reagent_state = LIQUID
 	color = "#808080" //rgb: 128, 128, 128
-	custom_metabolism = 0.01
 	density = 1.26
 	specheatcap = 2.43
 
@@ -1481,7 +1471,6 @@
 	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
 	reagent_state = LIQUID
 	color = "#808080" //rgb: 128, 128, 128
-	custom_metabolism = 0.01
 	density = 1.6
 	specheatcap = 4.98
 
