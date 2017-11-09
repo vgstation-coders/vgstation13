@@ -577,7 +577,8 @@
 		return
 	// Now make the cardboard
 	to_chat(user, "<span class='notice'>You fold \the [src] flat.</span>")
-	new src.foldable(get_turf(src),foldable_amount)
+	var/folded = new src.foldable(get_turf(src),foldable_amount)
+	transfer_fingerprints_to(folded)
 	qdel(src)
 //BubbleWrap END
 /obj/item/weapon/storage/proc/can_see_contents()

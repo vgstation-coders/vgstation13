@@ -68,5 +68,6 @@
 	to_chat(user, "<span class = 'notice'>You unfold \the [src] into a plastic bag.</span>")
 	var/bag = new/obj/item/weapon/storage/bag/plasticbag
 	user.u_equip(src)
+	transfer_fingerprints_to(bag)
 	user.put_in_hands(bag)
 	qdel(src)
