@@ -122,13 +122,13 @@ fn parse_from_file(path: &str) -> Runtimes {
 }
 
 fn total_runtimes(runtimes: &Runtimes) -> usize {
-	runtimes.values()
-		.map(|data| data.counter)
-		.sum()
+	runtimes.iter()
+		.fold(0, |count, (_ident, data)| count + data.counter)
 }
 
 fn total_unique_runtimes(runtimes: &Runtimes) -> usize {
-	runtimes.len()
+	runtimes.iter()
+		.count()
 }
 
 fn is_runtime_error(runtime: &(&String, &RuntimeData)) -> bool {
