@@ -4,12 +4,12 @@
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "eggs"
 	w_class = 2
-	var/fish_type = null			//Holds the name of the fish that the egg is for
+	var/fish_type 			//Holds the name of the fish that the egg is for
 
 /obj/item/fish_eggs/New()
 	..()
 
-var/global/list/fish_eggs_list = list("dud" = /obj/item/fish_eggs,
+var/list/fish_eggs_list = list("dud" = /obj/item/fish_eggs,
 									"goldfish" = /obj/item/fish_eggs/goldfish,
 									"clownfish" = /obj/item/fish_eggs/clownfish,
 									"shark" = /obj/item/fish_eggs/shark,

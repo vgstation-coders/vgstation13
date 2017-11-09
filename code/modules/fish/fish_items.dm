@@ -1,6 +1,6 @@
 
 
-var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
+var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 									"clownfish" = /obj/item/weapon/bananapeel/clownfish,
 									"shark" = /obj/item/weapon/fish/shark,
 									//"baby space carp" = /obj/item/weapon/fish/babycarp,
@@ -39,8 +39,8 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 	throw_speed = 3
 	throw_range = 7
 
-	suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
-		to_chat(viewers(user), "<span class='warning'>[user] places the [src.name] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
+	/obj/item/weapon/fishtools/fish_net/suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
+		to_chat(viewers(user), "<span class='warning'>[user] places the [src] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
 		return(OXYLOSS)
 
 /obj/item/weapon/fishtools/fish_food
@@ -65,8 +65,8 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 	throw_range = 7
 	attack_verb = list("scrubbed", "brushed", "scraped")
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='warning'>[user] is vigorously scrubbing \himself raw with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	/obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
+		to_chat(viewers(user), "<span class='warning'>[user] is vigorously scrubbing \himself raw with the [src]! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS|FIRELOSS)
 
 //////////////////////////////////////////////
@@ -80,7 +80,7 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 	icon_state = "shrimp_raw"
 	filling_color = "#FF1C1C"
 
-	New()
+/obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
 		..()
 		desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
 		reagents.add_reagent("NUTRIMENT", 1)
@@ -93,7 +93,7 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 	icon_state = "feederfish"
 	filling_color = "#FF1C1C"
 
-	New()
+	/obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
 		..()
 		reagents.add_reagent("NUTRIMENT", 1)
 		src.bitesize = 1
@@ -117,8 +117,8 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 	icon_state = "glofish"
 
 /obj/item/weapon/fish/glofish/New()
-		..()
-		set_light(2,1,"#99FF66")
+	..()
+	set_light(2,1,"#99FF66")
 
 /obj/item/weapon/fish/electric_eel
 	name = "electric eel"
@@ -167,7 +167,7 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 
 /obj/item/weapon/fish/catfish/attackby(var/obj/item/O, var/mob/user as mob)
 	if(O.sharpness_flags & SHARP_BLADE)
-		to_chat(user, "You carefully clean and gut \the [src.name].")
+		to_chat(user, "You carefully clean and gut \the [src].")
 		new /obj/item/weapon/reagent_containers/food/snacks/catfishmeat(get_turf(src))
 		new /obj/item/weapon/reagent_containers/food/snacks/catfishmeat(get_turf(src))
 		qdel(src)
@@ -186,7 +186,7 @@ var/global/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfi
 
 /obj/item/weapon/fish/salmon/attackby(var/obj/item/O, var/mob/user as mob)
 	if(O.sharpness_flags & SHARP_BLADE)
-		to_chat(user, "You carefully clean and gut \the [src.name].")
+		to_chat(user, "You carefully clean and gut \the [src].")
 		new /obj/item/weapon/reagent_containers/food/snacks/salmonmeat(get_turf(src))
 		new /obj/item/weapon/reagent_containers/food/snacks/salmonmeat(get_turf(src))
 		qdel(src)

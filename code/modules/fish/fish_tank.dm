@@ -16,9 +16,9 @@
 	var/tank_type = ""			// Type of aquarium, used for icon updating
 	var/water_capacity = 0		// Number of units the tank holds (varies with tank type)
 	var/water_level = 0			// Number of units currently in the tank (new tanks start empty)
-	var/light_switch = 0		// 0 = off, 1 = on (off by default)
+	var/light_switch = FALSE		// 0 = off, 1 = on (off by default)
 	var/filth_level = 0.0		// How dirty the tank is (max 10)
-	var/lid_switch = 0			// 0 = open, 1 = closed (open by default)
+	var/lid_switch = FALSE			// 0 = open, 1 = closed (open by default)
 	var/max_fish = 0			// How many fish the tank can support (varies with tank type, 1 fish per 50 units sounds reasonable)
 	var/food_level = 0			// Amount of fishfood floating in the tank (max 10)
 	var/fish_count = 0			// Number of fish in the tank
@@ -87,22 +87,6 @@
 	shard_count = 3
 
 
-/*	/obj/machinery/fishtank/wall/New(loc)
-
-	..(loc)
-//	flags |= ON_BORDER
-
-/obj/machinery/fishtank/wall/Uncross(atom/movable/O as mob|obj, target as turf)
-
-	return 1
-
-/obj/machinery/fishtank/wall/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	return 0
-
-*/
 
 //////////////////////////////
 //		VERBS & PROCS		//
@@ -125,7 +109,10 @@
 	toggle_light(usr)
 
 /obj/machinery/fishtank/proc/toggle_light(var/mob/living/user)
-	light_switch = !light_switch
+	if(!user.incapacitated() && user.Adjacent(src))
+		return
+	else
+		light_switch = !light_switch
 	if(light_switch)
 		set_light(2,2,"#a0a080")
 	else
@@ -172,23 +159,21 @@
 		overlays += "over_leak_[leaking]"				//Green if we aren't leaking, light blue and slow blink if minor link, dark blue and rapid flashing for major leak
 
 	//Update water overlay
-	if(water_level == 0) return							//Skip the rest of this if there is no water in the aquarium
+	if(water_level == 0)
+		return							//Skip the rest of this if there is no water in the aquarium
 	var/water_type = "_clean"							//Default to clean water
-	if(filth_level > 5)	water_type = "_dirty"			//Show dirty water above filth_level 5 (breeding threshold)
+	if(filth_level > 5)
+		water_type = "_dirty"			//Show dirty water above filth_level 5 (breeding threshold)
 	if(water_level > (water_capacity * 0.85))			//Show full if the water_level is over 85% of water_capacity
 		overlays += "over_[tank_type]_full[water_type]"
 	else if(water_level > (water_capacity * 0.35))		//Show half-full if the water_level is over 35% of water_capacity
 		overlays += "over_[tank_type]_half[water_type]"
 
-	return
 
 //////////////////////////////
 //		PROCESS PROC		//
 //////////////////////////////
 
-//Stops atmos from passing wall tanks, since they are effectively full-windows.
-///obj/machinery/fishtank/wall/CanAtmosPass(var/turf/T) paradise code yo
-	return 0
 
 /obj/machinery/fishtank/process()
 	//Start by counting fish in the tank
@@ -357,7 +342,7 @@
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
 	if(!fish_count)									//Can't catch non-existant fish!
-		to_chat(usr, "There are no fish in \the [src] to catch!")
+		to_chat(user, "There are no fish in \the [src] to catch!")
 		return
 
 	var/caught_fish
@@ -523,23 +508,24 @@
 
 
 /obj/machinery/fishtank/attack_alien(mob/living/user as mob)
-	if(islarva(user)) return
+	if(islarva(user))
+		return
 	attack_generic(user, 15)
 
 
 /obj/machinery/fishtank/attack_hand(mob/user as mob)
 
-	if(usr.a_intent == I_HURT)
+	if(user.a_intent == I_HURT)
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
-		usr.visible_message("<span class='danger'>[usr.name] bangs against the [src.name]!</span>", \
-							"<span class='danger'>You bang against the [src.name]!</span>", \
+		user.visible_message("<span class='danger'>[user.name] bangs against the [src]!</span>", \
+							"<span class='danger'>You bang against the [src]!</span>", \
 							"You hear a banging sound.")
 	else
 		playsound(src.loc, 'sound/effects/glassknock.ogg', 80, 1)
-		usr.visible_message("[usr.name] taps on the [src.name].", \
-							"You tap on the [src.name].", \
+		user.visible_message("[user] taps on the [src].", \
+							"You tap on the [src].", \
 							"You hear a knocking sound.")
-	return
+
 
 /obj/machinery/fishtank/proc/hit(var/damage, var/sound_effect = 1)
 	cur_health = max(0, cur_health - damage)
@@ -561,47 +547,44 @@
 
 /obj/machinery/fishtank/attackby(var/obj/item/O, var/mob/user as mob)
 	//Welders repair damaged tanks on help intent, damage on all others
-	if(istype(O, /obj/item/weapon/weldingtool))
+	if(iswelder(O))
 		var/obj/item/weapon/weldingtool/W = O
 		if(user.a_intent == I_HELP)
 			if(W.isOn())
 				if(cur_health < max_health)
-					to_chat(usr, "You repair some of the cracks on \the [src].")
+					to_chat(user, "You repair some of the cracks on \the [src].")
 					cur_health += 20
 					check_health()
 				else
-					to_chat(usr, "There is no damage to fix!")
-			else
-				if(cur_health < max_health)
-					to_chat(usr, "[W.name] must on to repair this damage.")
+					to_chat(user, "There is no damage to fix!")
+			else if(cur_health < max_health)
+				to_chat(user, "[W.name] must on to repair this damage.")
 		else
 		//	user.changeNext_move(CLICK_CD_MELEE)
 			hit(W.force)
-		return
+		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			if(lid_switch)
-				to_chat(usr, "Open the lid on \the [src] first!")
-				return
+				to_chat(user, "Open the lid on \the [src] first!")
+				return TRUE
 			var/obj/item/weapon/reagent_containers/glass/C = O
 			//Containers with any reagents will get dumped in
 			if(C.reagents.total_volume)
 				var/water_value = 0
-				water_value += C.reagents.get_reagent_amount("water")				//Water is full value
-				water_value += C.reagents.get_reagent_amount("holywater") *1.1		//Holywater is (somehow) better. Who said religion had to make sense?
-				//water_value += C.reagents.get_reagent_amount("tonic") * 0.25		//Tonic water is 25% value
-				//water_value += C.reagents.get_reagent_amount("sodawater") * 0.50	//Sodawater is 50% value
-				//water_value += C.reagents.get_reagent_amount("fishwater") * 0.75	//Fishwater is 75% value, to account for the fish poo
-				water_value += C.reagents.get_reagent_amount("ice") * 0.80			//Ice is 80% value
+				water_value += C.reagents.get_reagent_amount(WATER)				//Water is full value
+				water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1		//Holywater is (somehow) better. Who said religion had to make sense?
+
+				water_value += C.reagents.get_reagent_amount(ICE) * 0.80			//Ice is 80% value
 				var/message = ""
 				if(!water_value)													//The container has no water value, clear everything in it
 					message = "The filtration process removes everything, leaving the water level unchanged."
 					C.reagents.clear_reagents()
 				else
 					if(water_level == water_capacity)
-						to_chat(usr, "[src] is already full!")
-						return
+						to_chat(user, "\the [src] is already full!")
+						return TRUE
 					else
 						message = "The filtration process purifies the water, raising the water level."
 						water_level += water_value
@@ -611,15 +594,15 @@
 							message += " You overfilled \the [src] and some water runs down the side, wasted."
 						C.reagents.clear_reagents()
 				check_water_level()
-				user.visible_message("[user.name] pours the contents of [C.name] into \the [src].", "[message]")
-				return
+				user.visible_message("[user] pours the contents of \the [C] into \the [src].", "[message]")
+				return TRUE
 			//Empty containers will scoop out water, filling the container as much as possible from the water_level
-			else
+			/*else
 				if(water_level == 0)
-					to_chat(usr, "[src] is empty!")
+					to_chat(user, "\the [src] is empty!")
 				else
 					if(water_level >= C.volume)										//Enough to fill the container completely
-						C.reagents.add_reagent("water", C.volume)
+						C.reagents.add_reagent(WATER, C.volume)
 						water_level -= C.volume
 						user.visible_message("[user.name] scoops out some water from \the [src].", "You completely fill [C.name] from \the [src].")
 					else															//Fill the container as much as possible with the water_level
@@ -627,27 +610,27 @@
 						water_level = 0
 						user.visible_message("[user.name] scoops out some water from \the [src].", "You fill [C.name] with the last of the water in \the [src].")
 					check_water_level()
-			return
+			return TRUE*/
 	//Wrenches can deconstruct empty tanks, but not tanks with any water. Kills any fish left inside and destroys any unharvested eggs in the process
-	if(istype(O, /obj/item/weapon/wrench))
-		if(water_level == 0)
-			to_chat(usr, "<span class='notice'>Now disassembling [src].</span>")
+	if(iswrench(O))
+		if (water_level == 0)
+			to_chat(user, "<span class='notice'>Now disassembling \the [src].</span>")
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 			if(do_after(user,50, target = src))
 				destroy(1)
 		else
-			to_chat(usr, "[src] must be empty before you disassemble it!")
+			to_chat(user, "[src] must be empty before you disassemble it!")
 		return
 	//Fish eggs
 	else if(istype(O, /obj/item/fish_eggs))
 		var/obj/item/fish_eggs/egg = O
 		//Don't add eggs if there is no water (they kinda need that to live)
 		if(water_level == 0)
-			to_chat(usr, "[src] has no water; [egg.name] won't hatch without water!")
+			to_chat(user, "[src] has no water; [egg.name] won't hatch without water!")
 		else
 			//Don't add eggs if the tank already has the max number of fish
 			if(fish_count >= max_fish)
-				to_chat(usr, "[src] can't hold any more fish.")
+				to_chat(user, "[src] can't hold any more fish.")
 			else
 				add_fish(egg.fish_type)
 				qdel(egg)
@@ -663,11 +646,11 @@
 					user.visible_message("[user.name] feeds the fish in \the [src]. The fish look excited!", "You feed the fish in \the [src]. They look excited!")
 				food_level += 10
 			else
-				to_chat(usr, "[src] already has plenty of food in it. You decide to not add more.")
+				to_chat(user, "[src] already has plenty of food in it. You decide to not add more.")
 		else
-			to_chat(usr, "[src] doesn't have any water in it. You should fill it with water first.")
+			to_chat(user, "[src] doesn't have any water in it. You should fill it with water first.")
 		check_food_level()
-		return
+		return TRUE
 	//Fish egg scoop
 	else if(istype(O, /obj/item/weapon/fishtools/fish_egg_scoop))
 		if(egg_count)
@@ -675,22 +658,22 @@
 			harvest_eggs(user)
 		else
 			user.visible_message("[user.name] fails to harvest any fish eggs from \the [src].", "There are no fish eggs in \the [src] to scoop out.")
-		return
+		return TRUE
 	//Fish net
 	if(istype(O, /obj/item/weapon/fishtools/fish_net))
 		harvest_fish(user)
-		return
+		return TRUE
 	//Tank brush
 	if(istype(O, /obj/item/weapon/fishtools/fish_tank_brush))
 		if(filth_level == 0)
-			to_chat(usr, "[src] is already spotless!")
+			to_chat(user, "[src] is already spotless!")
 		else
 			filth_level = 0
 			user.visible_message("[user.name] scrubs the inside of \the [src], cleaning the filth.", "You scrub the inside of \the [src], cleaning the filth.")
 	else if(O && O.force)
 		user.visible_message("<span class='danger'>\The [src] has been attacked by [user.name] with \the [O]!</span>")
 		hit(O.force)
-	return
+	return TRUE
 
 /* tank construction */
 
@@ -698,7 +681,7 @@
 
 
 /obj/structure/displaycase_frame/attackby(var/obj/item/weapon/F as obj, mob/user as mob) // FISH BOWL
-	if(iswelder(F))
+	if (iswelder(F))
 		to_chat(user, "You use the machine frame as a vice and shape the glass with the welder into a fish bowl")
 		getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
 		new /obj/machinery/fishtank/bowl(get_turf(src))
