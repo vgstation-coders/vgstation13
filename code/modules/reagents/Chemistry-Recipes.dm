@@ -2205,6 +2205,7 @@
 	result = HOT_RAMEN
 	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
 	result_amount = 3
+	required_temp = 100+T0C
 
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
