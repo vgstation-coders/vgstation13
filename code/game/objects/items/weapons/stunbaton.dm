@@ -210,9 +210,7 @@
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
 	if(prob(50))
 		return ..()
-	if(!istype(hit_atom, /mob/living))
-		return
-	if(!status)
+	if(!isliving(hit_atom) || !status)
 		return
 	var/client/foundclient = directory[ckey(fingerprintslast)]
 	var/mob/foundmob = foundclient.mob
