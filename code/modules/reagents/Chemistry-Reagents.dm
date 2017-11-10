@@ -524,7 +524,7 @@
 	color = "#009CA8" //rgb: 0, 156, 168
 	overdose_am = REAGENTS_OVERDOSE
 	density = 0.941
-	specheatcap = 1.925
+	specheatcap = 4 //We industrial now
 
 /datum/reagent/lube/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -3996,7 +3996,7 @@
 /datum/reagent/toxicwaste
 	name = "Toxic Waste"
 	id = TOXICWASTE
-	description = "Yum!"
+	description = "A type of sludge created by heating space lubricant to extreme temperatures."
 	reagent_state = LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
