@@ -29,7 +29,7 @@
 
 /obj/item/device/camera_bug/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
 	if(!proximity_flag)
-		to_chat(user, "<span class='warning'>You're too far away.</span>")
+		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
 		return 0
 	var/atom/movable/AM = A
 	if(isatommovable(AM))
@@ -84,7 +84,8 @@
 		user.put_in_hands(src)
 	else
 		forceMove(get_turf(src))
-	visible_message(message)
+	if(message)
+		visible_message(message)
 	if(catastrophic)
 		spawn(0.5 SECONDS)
 			explosion(loc, 0, prob(15), 2, 0)
