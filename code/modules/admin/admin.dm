@@ -1309,6 +1309,11 @@ var/global/floorIsLava = 0
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
 		T.ChangeTurf(chosen)
+	else if(ispath(chosen, /area))
+		var/area/A = locate(chosen)
+		var/turf/T = get_turf(usr.loc)
+
+		T.set_area(A)
 	else
 		new chosen(usr.loc)
 
