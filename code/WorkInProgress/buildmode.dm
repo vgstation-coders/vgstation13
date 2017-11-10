@@ -532,17 +532,7 @@ obj/effect/bmode/buildholder/New()
 										if(areaAction == MASS_DELETE)
 											T.ChangeTurf(get_base_turf(T.z))
 								else
-									if(ispath(holder.buildmode.objholder, /turf))
-										if(areaAction == SELECTIVE_FILL)
-											if(strict)
-												if(T.type != chosen)
-													continue
-											else
-												if(!istype(T, chosen))
-													continue
-
-										T.ChangeTurf(holder.buildmode.objholder)
-									else if(ispath(holder.buildmode.objholder, /area) || istype(holder.buildmode.copycat, /area))
+									if(ispath(holder.buildmode.objholder, /area) || istype(holder.buildmode.copycat, /area))
 										//In case of a selective fill, make sure the turf fits into the criteria before changing it
 										if(areaAction == SELECTIVE_FILL)
 											if(strict)
@@ -559,6 +549,16 @@ obj/effect/bmode/buildholder/New()
 											A = locate(holder.buildmode.objholder)
 
 										T.set_area(A)
+									else if(ispath(holder.buildmode.objholder, /turf))
+										if(areaAction == SELECTIVE_FILL)
+											if(strict)
+												if(T.type != chosen)
+													continue
+											else
+												if(!istype(T, chosen))
+													continue
+
+										T.ChangeTurf(holder.buildmode.objholder)
 									else
 										if(areaAction == SELECTIVE_FILL)
 											for(var/atom/thing in T.contents)
