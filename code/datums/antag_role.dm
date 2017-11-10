@@ -10,7 +10,7 @@
 #define ROLE_ADDITIVE  4 // Antag can be added on top of another antag.
 #define ROLE_GOOD      8 // Role is not actually an antag. (Used for GetAllBadMinds() etc)
 
-/antag_role
+/datum/role
 	//////////////////////////////
 	// "Static" vars
 	//////////////////////////////
@@ -65,7 +65,7 @@
 	// Objectives
 	var/list/objectives=list()
 
-/antag_role/New(var/datum/mind/M=null, var/antag_role/parent=null, var/faction/fac=null)
+/datum/role/New(var/datum/mind/M=null, var/datum/role/parent=null, var/faction/fac=null)
 	if(M)
 		if(!istype(M))
 			WARNING("M is [M.type]!")
@@ -88,21 +88,21 @@
 		plural_name="[name]s"
 
 // Remove
-/antag_role/proc/Drop()
+/datum/role/proc/Drop()
 	if(!antag) return
-	var/antag_role/parent = ticker.antag_types[id]
+	var/datum/role/parent = ticker.antag_types[id]
 	parent.minds -= antag
 	ticker.mode.remove_player_role_association(antag,id)
 	del(src)
 
 // Scaling, should fuck with min/max players.
 // Return 1 on success, 0 on failure.
-/antag_role/proc/calculateRoleNumbers()
+/datum/role/proc/calculateRoleNumbers()
 	return 1
 
 // General sanity checks before assigning antag.
 // Return 1 on success, 0 on failure.
-/antag_role/proc/CanBeAssigned(var/datum/mind/M)
+/datum/role/proc/CanBeAssigned(var/datum/mind/M)
 	if(protected_jobs.len>0)
 		if(M.assigned_role in protected_jobs)
 			return 0
@@ -115,7 +115,7 @@
 
 // General sanity checks before assigning host.
 // Return 1 on success, 0 on failure.
-/antag_role/proc/CanBeHost(var/datum/mind/M)
+/datum/role/proc/CanBeHost(var/datum/mind/M)
 	if(protected_jobs.len>0)
 		if(M.assigned_role in protected_jobs)
 			return 0
@@ -127,7 +127,7 @@
 	return 1
 
 // Return 1 on success, 0 on failure.
-/antag_role/proc/OnPreSetup()
+/datum/role/proc/OnPreSetup()
 	if(special_role)
 		antag.special_role=special_role
 	if(disallow_job)
@@ -136,20 +136,20 @@
 	return 1
 
 // Return 1 on success, 0 on failure.
-/antag_role/proc/OnPostSetup()
+/datum/role/proc/OnPostSetup()
 	ForgeObjectives()
 	Greet(1)
 	return 1
 
-/antag_role/proc/process()
+/datum/role/proc/process()
 	return
 
 // Create objectives here.
-/antag_role/proc/ForgeObjectives()
+/datum/role/proc/ForgeObjectives()
 	return
 
 // Utility that does all the common stuff.
-/antag_role/proc/AppendObjective(var/objective_type,var/duplicates=0,var/text=null)
+/datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0,var/text=null)
 	if(!duplicates && locate(objective_type) in objectives)
 		return 0
 	var/datum/objective/O
@@ -163,38 +163,38 @@
 		return 1
 	return 0
 
-/antag_role/proc/Greet(var/you_are=1)
+/datum/role/proc/Greet(var/you_are=1)
 	var/obj_count = 1
 	for(var/datum/objective/objective in objectives)
 		to_chat(antag, "<B>Objective #[obj_count++]</B>: [objective.explanation_text]")
 	return
 
-/antag_role/proc/PreMindTransfer(var/datum/mind/M)
+/datum/role/proc/PreMindTransfer(var/datum/mind/M)
 	return
 
-/antag_role/proc/PostMindTransfer(var/datum/mind/M)
+/datum/role/proc/PostMindTransfer(var/datum/mind/M)
 	return
 
 // Dump a table for Check Antags. GLOBAL
-/antag_role/proc/CheckAntags()
+/datum/role/proc/CheckAntags()
 	// HOW DOES EVERYONE MISS FUCKING COLSPAN
 	// AM I THE ONLY ONE WHO REMEMBERS XHTML?
 	var/dat = "<br /><table cellspacing=5><tr><td colspan=\"3\"><B>[plural_name]</B></td></tr>"
 	for(var/datum/mind/mind in minds)
 		var/mob/M=mind.current
-		//var/antag_role/R=mind.antag_roles[id]
+		//var/datum/role/R=mind.antag_roles[id]
 		dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 						<td><A href='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
 	dat += "</table>"
 	return dat
 
-/antag_role/proc/DeclareAll()
+/datum/role/proc/DeclareAll()
 	for(var/datum/mind/mind in minds)
-		var/antag_role/R=mind.antag_roles[id]
+		var/datum/role/R=mind.antag_roles[id]
 		R.Declare()
 
-/antag_role/proc/Declare()
+/datum/role/proc/Declare()
 	var/win = 1
 
 	var/text = "<br><br>[antag.key] was [antag.name] ("
@@ -252,7 +252,7 @@
 	return html
 
 // Called from the global instance, NOT the one in /datum/mind!
-/antag_role/proc/EditMemory(var/datum/mind/M)
+/datum/role/proc/EditMemory(var/datum/mind/M)
 	var/datum/role_controls/RC = new
 	if (!M.GetRole(id))
 		RC.controls["Enabled:"] = "<a href='?src=\ref[M];add_role=[id]'>No</a>"
@@ -261,7 +261,7 @@
 	return RC
 
 // DO NOT OVERRIDE, does formatting.
-/antag_role/proc/GetEditMemoryMenu(var/datum/mind/M)
+/datum/role/proc/GetEditMemoryMenu(var/datum/mind/M)
 	var/datum/role_controls/RC = EditMemory(M)
 	return {"
 <fieldset>
@@ -272,7 +272,7 @@
 
 
 // DO NOT OVERRIDE.
-/antag_role/Topic(href, href_list)
+/datum/role/Topic(href, href_list)
 	if(!check_rights(R_ADMIN)) return 1
 
 	if(!href_list["mind"])
@@ -284,16 +284,16 @@
 		return
 
 	if("auto_objectives" in href_list)
-		var/antag_role/R = M.GetRole(href_list["auto_objectives"])
+		var/datum/role/R = M.GetRole(href_list["auto_objectives"])
 		R.ForgeObjectives()
 		to_chat(usr, "<span class='info'>The objectives for [M.key] have been generated. You can edit them. Remember to announce their objectives.</span>")
 		return
 
 // USE THIS INSTEAD (global)
-/antag_role/proc/RoleTopic(href, href_list, var/datum/mind/M)
+/datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M)
 	return
 
-/antag_role/proc/MemorizeObjectives()
+/datum/role/proc/MemorizeObjectives()
 	var/text="<b>[name] Objectives:</b><ul>"
 	for(var/obj_count = 1,obj_count <= objectives.len,obj_count++)
 		var/datum/objective/O = objectives[obj_count]
@@ -301,7 +301,7 @@
 	to_chat(antag.current, text)
 	antag.memory += "[text]<BR>"
 
-/antag_role/group/MemorizeObjectives()
+/datum/role/group/MemorizeObjectives()
 	var/text="<b>[name] Group Objectives:</b><ul>"
 	for(var/obj_count = 1,obj_count <= faction.objectives.len,obj_count++)
 		var/datum/group_objective/O = faction.objectives[obj_count]
@@ -309,7 +309,7 @@
 	to_chat(antag.current, text)
 	antag.memory += "[text]<BR>"
 
-/antag_role/proc/GetMemoryHeader()
+/datum/role/proc/GetMemoryHeader()
 	if (id in ticker.mode.available_roles)
 		return uppertext(name)
 	else
