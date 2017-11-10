@@ -1,4 +1,4 @@
-// This file lists all religions, as well as the prototype for a religion, and a proc to design your own if you want to.
+// This file lists all religions, as well as the prototype for a religion
 /datum/religion
 	// Following tradition, the default is Space Jesus (this is here to avoid people getting an empty relgion)
 	var/name = "Christianity"
