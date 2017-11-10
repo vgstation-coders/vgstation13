@@ -364,6 +364,7 @@
 			return
 		var/mob/living/carbon/M = user
 		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)

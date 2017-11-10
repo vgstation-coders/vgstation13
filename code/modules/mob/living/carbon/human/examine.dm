@@ -231,11 +231,12 @@
 
 	msg += "</span>"
 
-	if(has_brain() && stat != DEAD)
-		if(!key)
-			msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
-		else if(!client)
-			msg += "[t_He] [t_has] a vacant, braindead stare...\n"
+	if(show_client_status_on_examine || isAdminGhost(user))
+		if(has_brain() && stat != DEAD)
+			if(!key)
+				msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
+			else if(!client)
+				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
 
 	var/list/wound_flavor_text = list()
 	var/list/is_destroyed = list()

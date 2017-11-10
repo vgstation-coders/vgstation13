@@ -1517,6 +1517,7 @@
 						<span id="rfreq">[format_frequency(radio.frequency)]</span>
 						<a href='?src=\ref[src];rfreq=2'>+</a>
 						<a href='?src=\ref[src];rfreq=10'>+</a><br>
+						Subspace transmission: <a href='?src=\ref[src];subtoggle=1'><span id="substate">[radio.subspace_transmission?"Enabled":"Disabled"]</span></a><br>
 						</div>
 						</div>
 						<div class='wr'>
@@ -1708,6 +1709,12 @@
 			new_frequency = sanitize_frequency(new_frequency)
 		radio.set_frequency(new_frequency)
 		send_byjax(src.occupant,"exosuit.browser","rfreq","[format_frequency(radio.frequency)]")
+		return
+	if (href_list["subtoggle"])
+		if(usr != src.occupant)
+			return
+		radio.subspace_transmission = !radio.subspace_transmission
+		send_byjax(src.occupant,"exosuit.browser","substate",(radio.subspace_transmission?"Enabled":"Disabled"))
 		return
 	if(href_list["port_disconnect"])
 		if(usr != src.occupant)
