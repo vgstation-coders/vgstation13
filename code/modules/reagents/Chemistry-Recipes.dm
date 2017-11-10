@@ -18,7 +18,7 @@
 	var/list/secondary_results = list() //Additional reagents produced by the reaction
 	var/is_cold_recipe = 0
 	var/required_temp = 0
-	var/react_discretely = 0 //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
+	var/react_discretely = FALSE //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
 	var/reaction_temp_cost = 0 //How much to lower temperature of the result chemical after the reaction
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
 
@@ -241,9 +241,9 @@
 	id = TOXICWASTE
 	result = TOXICWASTE
 	required_reagents = list(LUBE = 1)
-	result_amount = 1
+	result_amount = 0.2
 	required_temp = 3500
-	react_discretely = 1
+	react_discretely = TRUE
 	reaction_temp_cost = 3500
 
 /datum/chemical_reaction/degrease
