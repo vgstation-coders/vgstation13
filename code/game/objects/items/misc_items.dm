@@ -66,7 +66,7 @@
 
 /obj/item/folded_bag/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>You unfold \the [src].</span>")
-	var/bag = new/obj/item/weapon/storage/bag/plasticbag(get_turf(user))
+	var/bag = new/obj/item/weapon/storage/bag/plasticbag(user.loc)
 	user.u_equip(src)
 	transfer_fingerprints_to(bag)
 	user.put_in_hands(bag)
