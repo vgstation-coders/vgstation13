@@ -51,7 +51,7 @@
 
 /datum/design/console_screen
 	name = "Console Screen"
-	desc = "Used in the construction of computers and other devices with a interactive console."
+	desc = "Used in the construction of computers and other devices with an interactive console."
 	id = "console_screen"
 	req_tech = list(Tc_MATERIALS = 1)
 	build_type = PROTOLATHE | AUTOLATHE
