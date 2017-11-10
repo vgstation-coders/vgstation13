@@ -21,6 +21,8 @@
 			return global.sent_spiders_to_station;
 		if("exclude")
 			return global.exclude;
+		if("_all_globals")
+			return global._all_globals;
 		if("asset_cache")
 			return global.asset_cache;
 		if("error_last_seen")
@@ -467,6 +469,8 @@
 			return global.golem_names;
 		if("borer_names")
 			return global.borer_names;
+		if("hologram_names")
+			return global.hologram_names;
 		if("autoborg_silly_names")
 			return global.autoborg_silly_names;
 		if("panicfile")
@@ -525,6 +529,8 @@
 			return global.backbaglist;
 		if("hit_appends")
 			return global.hit_appends;
+		if("epilepsy_appends")
+			return global.epilepsy_appends;
 		if("table_recipes")
 			return global.table_recipes;
 		if("med_hud_users")
@@ -553,6 +559,12 @@
 			return global.number_tens;
 		if("number_units")
 			return global.number_units;
+		if("quote")
+			return global.quote;
+		if("get_matching_types_cache")
+			return global.get_matching_types_cache;
+		if("get_vars_from_type_cache")
+			return global.get_vars_from_type_cache;
 		if("existing_typesof_cache")
 			return global.existing_typesof_cache;
 		if("common_tools")
@@ -1033,6 +1045,8 @@
 			return global.rnwords;
 		if("rune_list")
 			return global.rune_list;
+		if("halloween_spawns")
+			return global.halloween_spawns;
 		if("snow_recipes")
 			return global.snow_recipes;
 		if("Holiday")
@@ -1117,6 +1131,8 @@
 			return global.ai_emotions;
 		if("status_display_images")
 			return global.status_display_images;
+		if("dispenser_presets")
+			return global.dispenser_presets;
 		if("num_vending_terminals")
 			return global.num_vending_terminals;
 		if("floorbot_targets")
@@ -1281,6 +1297,8 @@
 			return global.all_docking_ports;
 		if("ladders")
 			return global.ladders;
+		if("one_way_windows")
+			return global.one_way_windows;
 		if("cargo_shuttle")
 			return global.cargo_shuttle;
 		if("escape_shuttle")
@@ -1291,6 +1309,14 @@
 			return global.arrival_shuttle;
 		if("transport_shuttle")
 			return global.transport_shuttle;
+		if("ert_shuttle")
+			return global.ert_shuttle;
+		if("deathsquad_shuttle")
+			return global.deathsquad_shuttle;
+		if("elite_syndie_shuttle")
+			return global.elite_syndie_shuttle;
+		if("strike_team_shuttle")
+			return global.strike_team_shuttle;
 		if("admin_shuttle")
 			return global.admin_shuttle;
 		if("research_shuttle")
@@ -1313,6 +1339,8 @@
 			return global.voxresearch_shuttle;
 		if("response_team_members")
 			return global.response_team_members;
+		if("distributed_ert_suits")
+			return global.distributed_ert_suits;
 		if("sent_strike_teams")
 			return global.sent_strike_teams;
 		if("icons_to_ignore_at_floor_init")
@@ -1635,6 +1663,8 @@
 			return global.all_species;
 		if("whitelisted_species")
 			return global.whitelisted_species;
+		if("has_died_as_golem")
+			return global.has_died_as_golem;
 		if("unconscious_overlays")
 			return global.unconscious_overlays;
 		if("oxyloss_overlays")
@@ -1749,6 +1779,10 @@
 			return global.LOGGED_SPLASH_REAGENTS;
 		if("pillIcon2Name")
 			return global.pillIcon2Name;
+		if("juice_items")
+			return global.juice_items;
+		if("bomb_like_items")
+			return global.bomb_like_items;
 		if("special_fruits")
 			return global.special_fruits;
 		if("valid_random_food_types")
@@ -1781,6 +1815,8 @@
 			return global.spells;
 		if("falltempoverlays")
 			return global.falltempoverlays;
+		if("doppelgangers")
+			return global.doppelgangers;
 		if("centcomm_store")
 			return global.centcomm_store;
 		if("GPS_list")
@@ -1857,7 +1893,7 @@
 			return global.sc_safecode4;
 		if("sc_safecode5")
 			return global.sc_safecode5;
-
+		
 /proc/writeglobal(which, newval)
 	switch(which)
 		if("map")
@@ -1880,6 +1916,8 @@
 			global.sent_spiders_to_station=newval
 		if("exclude")
 			global.exclude=newval
+		if("_all_globals")
+			global._all_globals=newval
 		if("asset_cache")
 			global.asset_cache=newval
 		if("error_last_seen")
@@ -2326,6 +2364,8 @@
 			global.golem_names=newval
 		if("borer_names")
 			global.borer_names=newval
+		if("hologram_names")
+			global.hologram_names=newval
 		if("autoborg_silly_names")
 			global.autoborg_silly_names=newval
 		if("panicfile")
@@ -2384,6 +2424,8 @@
 			global.backbaglist=newval
 		if("hit_appends")
 			global.hit_appends=newval
+		if("epilepsy_appends")
+			global.epilepsy_appends=newval
 		if("table_recipes")
 			global.table_recipes=newval
 		if("med_hud_users")
@@ -2412,6 +2454,12 @@
 			global.number_tens=newval
 		if("number_units")
 			global.number_units=newval
+		if("quote")
+			global.quote=newval
+		if("get_matching_types_cache")
+			global.get_matching_types_cache=newval
+		if("get_vars_from_type_cache")
+			global.get_vars_from_type_cache=newval
 		if("existing_typesof_cache")
 			global.existing_typesof_cache=newval
 		if("common_tools")
@@ -2892,6 +2940,8 @@
 			global.rnwords=newval
 		if("rune_list")
 			global.rune_list=newval
+		if("halloween_spawns")
+			global.halloween_spawns=newval
 		if("snow_recipes")
 			global.snow_recipes=newval
 		if("Holiday")
@@ -2976,6 +3026,8 @@
 			global.ai_emotions=newval
 		if("status_display_images")
 			global.status_display_images=newval
+		if("dispenser_presets")
+			global.dispenser_presets=newval
 		if("num_vending_terminals")
 			global.num_vending_terminals=newval
 		if("floorbot_targets")
@@ -3140,6 +3192,8 @@
 			global.all_docking_ports=newval
 		if("ladders")
 			global.ladders=newval
+		if("one_way_windows")
+			global.one_way_windows=newval
 		if("cargo_shuttle")
 			global.cargo_shuttle=newval
 		if("escape_shuttle")
@@ -3150,6 +3204,14 @@
 			global.arrival_shuttle=newval
 		if("transport_shuttle")
 			global.transport_shuttle=newval
+		if("ert_shuttle")
+			global.ert_shuttle=newval
+		if("deathsquad_shuttle")
+			global.deathsquad_shuttle=newval
+		if("elite_syndie_shuttle")
+			global.elite_syndie_shuttle=newval
+		if("strike_team_shuttle")
+			global.strike_team_shuttle=newval
 		if("admin_shuttle")
 			global.admin_shuttle=newval
 		if("research_shuttle")
@@ -3172,6 +3234,8 @@
 			global.voxresearch_shuttle=newval
 		if("response_team_members")
 			global.response_team_members=newval
+		if("distributed_ert_suits")
+			global.distributed_ert_suits=newval
 		if("sent_strike_teams")
 			global.sent_strike_teams=newval
 		if("icons_to_ignore_at_floor_init")
@@ -3494,6 +3558,8 @@
 			global.all_species=newval
 		if("whitelisted_species")
 			global.whitelisted_species=newval
+		if("has_died_as_golem")
+			global.has_died_as_golem=newval
 		if("unconscious_overlays")
 			global.unconscious_overlays=newval
 		if("oxyloss_overlays")
@@ -3608,6 +3674,10 @@
 			global.LOGGED_SPLASH_REAGENTS=newval
 		if("pillIcon2Name")
 			global.pillIcon2Name=newval
+		if("juice_items")
+			global.juice_items=newval
+		if("bomb_like_items")
+			global.bomb_like_items=newval
 		if("special_fruits")
 			global.special_fruits=newval
 		if("valid_random_food_types")
@@ -3640,6 +3710,8 @@
 			global.spells=newval
 		if("falltempoverlays")
 			global.falltempoverlays=newval
+		if("doppelgangers")
+			global.doppelgangers=newval
 		if("centcomm_store")
 			global.centcomm_store=newval
 		if("GPS_list")
@@ -3716,5 +3788,5 @@
 			global.sc_safecode4=newval
 		if("sc_safecode5")
 			global.sc_safecode5=newval
-
-/var/list/_all_globals=list("map","masterdatumPool","pooledvariables","prox_sensor_ignored_types","ability_verbs","sent_aliens_to_station","account_hack_attempted","spacevines_spawned","sent_spiders_to_station","exclude","asset_cache","error_last_seen","error_cooldown","html_interfaces","all_lighting_corners","LIGHTING_CORNER_DIAGONAL","validartifactprojectiles","cargo_telepads","chatResources","bicon_cache","dview_mob","meteor_wave_delay","meteors_in_wave","meteor_wave_active","max_meteor_size","chosen_dir","create_mob_html","create_object_html","create_turf_html","any","asset_cache_populated","total_runtimes","total_runtimes_skipped","error_cache","dummy_lighting_corner","security_level","iconCache","round_end_info","deadmins","lockedvars","nevervars","type_instances","data_core","plmaster","slmaster","account_DBs","global_map","universe","paper_tag_whitelist","paper_blacklist","skipupdate","eventchance","event","hadevent","blobevent","starticon","midicon","endicon","diary","diaryofmeanpeople","admin_diary","href_logfile","station_name","game_version","changelog_hash","game_year","going","master_mode","secret_force_mode","host","aliens_allowed","ooc_allowed","looc_allowed","dooc_allowed","traitor_scaling","dna_ident","abandon_allowed","enter_allowed","guests_allowed","shuttle_frozen","shuttle_left","tinted_weldhelh","jobMax","bombers","admin_log","lastsignalers","lawchanges","shuttles","reg_dna","CELLRATE","CHARGELEVEL","WORLD_X_OFFSET","WORLD_Y_OFFSET","shuttle_z","airtunnel_start","airtunnel_stop","airtunnel_bottom","monkeystart","wizardstart","newplayer_start","latejoin","assistant_latejoin","prisonwarp","holdingfacility","xeno_spawn","endgame_safespawns","endgame_exits","tdome1","tdome2","tdomeobserve","tdomeadmin","prisonsecuritywarp","prisonwarped","blobstart","ninjastart","cardinal","diagonal","alldirs","universal_cult_chat","start_state","config","combatlog","IClog","OOClog","adminlog","suspend_alert","Debug","Debug2","debugobj","mods","wavesecret","gravity_is_on","shuttlecoming","join_motd","forceblob","polarstar","nanomanager","sqladdress","sqlport","sqldb","sqllogin","sqlpass","sqlfdbkdb","sqlfdbklogin","sqlfdbkpass","sqllogging","forumsqladdress","forumsqlport","forumsqldb","forumsqllogin","forumsqlpass","forum_activated_group","forum_authenticated_group","fileaccess_timer","custom_event_msg","dbcon","dbcon_old","recall_time_limit","score","trash_items","decals","on_login","on_ban","on_unban","plugins","space_gas","announcement_intercom","sortedAreas","bomberman_mode","bomberman_hurt","bomberman_destroy","volunteer_gladiators","ready_gladiators","never_gladiators","achievements","end_icons","arena_leaderboard","arena_rounds","arena_top_score","endgame_info_logged","explosion_newmethod","snake_station_highscores","snake_best_players","minesweeper_station_highscores","minesweeper_best_players","nanocoins_rates","nanocoins_lastchange","speciesinit","minimapinit","stat_collection","hardcore_mode","mineral_turfs","static_list","grayscale","adminblob_icon","adminblob_size","adminblob_beat","holoMiniMaps","centcommMiniMaps","extraMiniMaps","holomap_markers","holomaps_initialized","tachycardics","bradycardics","heartstopper","cheartstopper","disable_scrubbers","disable_vents","Space_Tile","MAX_EXPLOSION_RANGE","BODY_PARTS","BODY_COVER_VALUE_LIST","NOIRMATRIX","bad_changing_colour_ckeys","global_mutations","scarySounds","RESTRICTED_CAMERA_NETWORKS","default_colour_matrix","ai_names","wizard_first","wizard_second","ninja_titles","ninja_names","commando_names","first_names_male","first_names_female","last_names","clown_names","verbs","adjectives","vox_name_syllables","golem_names","borer_names","autoborg_silly_names","panicfile","failed_db_connections","failed_old_db_connections","desire_ranks","cmp_field","cmp_dist_origin","DummyCache","genders","clients","admins","directory","mixed_modes","player_list","mob_list","living_mob_list","dead_mob_list","observers","areas","chemical_reactions_list","chemical_reagents_list","landmarks_list","surgery_steps","mechas_list","poster_designs","underwear_m","underwear_f","backbaglist","hit_appends","table_recipes","med_hud_users","sec_hud_users","escape_list","church_name","command_name","religion_name","syndicate_name","syndicate_code_phrase","syndicate_code_response","watt_suffixes","number_digits","number_tens","number_units","existing_typesof_cache","common_tools","WALLITEMS","sortInstance","hooks","ventcrawl_machinery","catcher","parallax_on_clients","parallax_initialized","space_color","parallax_icon","unstackable_pipes","heat_pipes","bent_dirs","pipeID2State","nlist","straight_pipes","bent_pipes","manifold_pipes","garbageCollector","soft_dels","emergency_shuttle","Failsafe","Master","MC_restart_clear","MC_restart_timeout","MC_restart_count","CURRENT_TICKLIMIT","SSair","tick_multiplier","SSdisease","active_diseases","SSemergency_shuttle","SSevent","events","SSfast_machinery","fast_machines","SSgarbage","SShtml_ui","html_machines","SSinactivity","SSlighting","lighting_update_lights","lighting_update_corners","lighting_update_overlays","SSmachinery","machines","SSmob","SSnano","SSobj","processing_objects","SSpipenet","atmos_machines","pipe_networks","on_pipenet_tick","SSpower","power_machines","powernets","cable_list","SSsun","SSsupply_shuttle","SSticker","SSvote","SSassets","SSfinish","SSgenetics","SSjob","SSmap","SSminimap","SSmore_init","SSrust","SScreate_ticker","SSxenoarch","randomize_laws","base_law_type","mommi_base_law_type","diseases","map_elements","modules","sun","all_supply_groups","uplink_items","archive_diseases","advance_cures","list_symptoms","dictionary_symptoms","animal_butchering_products","revdata","same_wires","wireColours","PDA_Manifest","vox_sounds","vox_wordlen","outbreak_level_words","spawned_surprises","max_secret_rooms","del_profiling","gdel_profiling","ghdel_profiling","current_centcomm_order_id","all_radios","radiochannels","radiochannelsreverse","CENT_FREQS","radio_controller","pointers","nextDecTalkDelay","lastDecTalkUse","freqtospan","freqtoname","ghostimg","resethearers","smoothable_unsims","shatter_sound","explosion_sound","small_explosion_sound","spark_sound","rustle_sound","punch_sound","clown_sound","swing_hit_sound","hiss_sound","page_sound","mechstep_sound","gib_sound","mommicomment_sound","polaroid_sound","male_scream_sound","female_scream_sound","male_cough_sound","female_cough_sound","lightning_sound","soulstone_sound","fracture_sound","machete_hit_sound","machete_throw_sound","machete_throw_hit_sound","supply_shuttle","space_area","ignored_keys","moved_landmarks","transparent_icons","teleportlocs","ghostteleportlocs","adminbusteleportlocs","centcom_areas","the_station_areas","dna_activity_bounds","assigned_gene_blocks","assigned_blocks","dna_genes","good_blocks","bad_blocks","skin_styles_female_list","hair_styles_list","hair_styles_male_list","hair_styles_female_list","facial_hair_styles_list","facial_hair_styles_male_list","facial_hair_styles_female_list","noir_master","ticker","potential_theft_objectives","BLINDBLOCK","DEAFBLOCK","HULKBLOCK","TELEBLOCK","FIREBLOCK","XRAYBLOCK","CLUMSYBLOCK","FAKEBLOCK","COUGHBLOCK","GLASSESBLOCK","EPILEPSYBLOCK","TWITCHBLOCK","NERVOUSBLOCK","MONKEYBLOCK","BLOCKADD","DIFFMUT","HEADACHEBLOCK","NOBREATHBLOCK","REMOTEVIEWBLOCK","REGENERATEBLOCK","INCREASERUNBLOCK","REMOTETALKBLOCK","MORPHBLOCK","COLDBLOCK","HALLUCINATIONBLOCK","NOPRINTSBLOCK","SHOCKIMMUNITYBLOCK","SMALLSIZEBLOCK","LISPBLOCK","MUTEBLOCK","RADBLOCK","FATBLOCK","CHAVBLOCK","SWEDEBLOCK","SCRAMBLEBLOCK","TOXICFARTBLOCK","STRONGBLOCK","HORNSBLOCK","SMILEBLOCK","ELVISBLOCK","SOBERBLOCK","PSYRESISTBLOCK","FARSIGHTBLOCK","CHAMELEONBLOCK","CRYOBLOCK","EATBLOCK","JUMPBLOCK","MELTBLOCK","EMPATHBLOCK","SUPERFARTBLOCK","IMMOLATEBLOCK","POLYMORPHBLOCK","LOUDBLOCK","WHISPERBLOCK","DIZZYBLOCK","SANSBLOCK","NOIRBLOCK","blobs","blob_cores","blob_nodes","blob_resources","blob_overminds","blob_looks_admin","blob_looks_player","possible_changeling_IDs","hivemind_bank","powers","powerinstances","narsie_behaviour","narsie_cometh","narsie_list","mr_clean_targets","cultwords","runedec","engwords","rnwords","rune_list","snow_recipes","Holiday","blob_candidates","mixed_allowed","bomb_set","nukedisk","hsboxspawn","hrefs","banned_sandbox_types","all_jobs","job_master","assistant_occupations","command_positions","engineering_positions","medical_positions","science_positions","civilian_positions","cargo_positions","security_positions","nonhuman_positions","misc_positions","whitelist","alien_whitelist","firealarms","cryo_health_indicator","doppler_arrays","flashers","holosigns","igniters","multitool_var_whitelist","mass_drivers","navbeacons","news_network","allCasters","req_console_assistance","req_console_supplies","req_console_information","allConsoles","station_holomaps","status_displays","ai_emotions","status_display_images","num_vending_terminals","floorbot_targets","mulebot_count","camera_names","camera_messages","tv_monitors","shuttle_calls","prison_shuttle_moving_to_station","prison_shuttle_moving_to_prison","prison_shuttle_at_station","prison_shuttle_can_send","prison_shuttle_time","prison_shuttle_timeleft","specops_shuttle_moving_to_station","specops_shuttle_moving_to_centcom","specops_shuttle_at_station","specops_shuttle_can_send","specops_shuttle_time","specops_shuttle_timeleft","syndicate_elite_shuttle_moving_to_station","syndicate_elite_shuttle_moving_to_mothership","syndicate_elite_shuttle_at_station","syndicate_elite_shuttle_can_send","syndicate_elite_shuttle_time","syndicate_elite_shuttle_timeleft","taxi_computers","all_doors","alert_overlays_global","poddoors","recentmessages","message_delay","telecomms_list","word_to_uristrune_table","uristrune_cache","explosion_shake_message_cooldown","explosion_turfs","explosion_in_progress","blood_overlays","reagents_to_log","BUMP_TELEPORTERS","portal_cache","splatter_cache","blood_list","fluidtrack_cache","beacons","all_graffitis","living_balloons","deskbell_default_frequencies","deskbell_freq_cargo","deskbell_freq_hop","deskbell_freq_medbay","deskbell_freq_brig","deskbell_freq_rnd","camera_bugs","pda_app_menus","chatrooms","PDAs","available_paintings","cable_recipes","metal_recipes","plasteel_recipes","wood_recipes","cardboard_recipes","leather_recipes","sandstone_recipes","diamond_recipes","uranium_recipes","plasma_recipes","plastic_recipes","gold_recipes","phazon_recipes","silver_recipes","clown_recipes","charcoal_recipes","lightfloor_colors","moneytypes","cached_icons","tracking_implants","bottle_colour_choices","hidden_doors","all_docking_ports","ladders","cargo_shuttle","escape_shuttle","mining_shuttle","arrival_shuttle","transport_shuttle","admin_shuttle","research_shuttle","salvage_shuttle","security_shuttle","syndicate_shuttle","taxi_a","taxi_b","trade_shuttle","vox_shuttle","voxresearch_shuttle","response_team_members","sent_strike_teams","icons_to_ignore_at_floor_init","plating_icons","wood_icons","w_overlays","_flatIcons","directional","exception","directional_turfs","BSACooldown","floorIsLava","admin_shuttle_location","alien_ship_location","investigations","admin_ranks","admin_verbs_default","admin_verbs_admin","admin_verbs_ban","admin_verbs_sounds","admin_verbs_fun","admin_verbs_spawn","admin_verbs_server","admin_verbs_debug","admin_verbs_possess","admin_verbs_permissions","admin_verbs_rejuv","admin_verbs_polling","admin_verbs_hideable","admin_verbs_mod","appearanceban_runonce","appearance_keylist","jobban_runonce","jobban_keylist","oocban_keylist","admin_datums","CMinutes","Banlist","Banlistjob","adminhelp_ignored_words","checked_for_inactives","inactive_keys","blood_virus_spreading_disabled","camera_range_display_status","intercom_range_display_status","prevent_airgroup_regroup","say_disabled","movement_disabled","movement_disabled_exception","forbidden_varedit_object_types","PROFILING_VERBS","vox_tick","assembly_short_name_to_type","comparison_circuit_operations","math_circuit_operations_list","automation_types","gas_labels","existing_away_missions","awaydestinations","away_mission_subtypes","gateways","maploader","_preloader","map_dimension_cache","swapmaps_iconcache","swapmaps_mode","swapmaps_compiled_maxx","swapmaps_compiled_maxy","swapmaps_compiled_maxz","swapmaps_initialized","swapmaps_loaded","swapmaps_byname","bombermangear","arenas","arena_spawnpoints","person_animation_viewers","item_animation_viewers","preferences_datums","special_roles","antag_roles","nonantag_roles","role_wiki","opposite_dirs","holomap_chips","holomap_cache","has_been_shade","current_date_string","num_financial_terminals","num_financial_database","num_vending_machines","num_pda_terminals","num_merch_computers","station_account","department_accounts","next_account_number","centcomm_account_db","vendor_account","all_money_accounts","setup_economy","weighted_randomevent_locations","weighted_mundaneevent_locations","station_departments","current_pos_id","pos_sales","wages_enabled","roundstart_enable_wages","event_last_fired","allEvents","potentialRandomEvents","eventTimeLower","eventTimeUpper","scheduledEvent","vox_kills","vox_sent","raiders","thing_storm_types","watchdog","non_fakeattack_weapons","deepFriedEverything","deepFriedNutriment","foodNesting","recursiveFood","ingredientLimit","wizard_cards_rare","wizard_cards_normal","adv_camera","crewmonitor","vote","plant_controller","seed_types","gene_tag_masks","library_catalog","library_section_names","liquid_delay","puddles","global_playlists","loopModeNames","media_receivers","media_transmitters","migration_controller_mysql","migration_controller_sqlite","valid_abandoned_crate_types","material_list","initial_materials","name_to_mineral","mining_surprises","slot_equipment_priority","intents","boo_phrases","boo_phrases_drugs","boo_phrases_silicon","virtualhearers","movable_hearers","mob_hearers","stationary_hearers","coldwarning_light","coldwarning_hard","department_radio_keys","language_keys","all_languages","all_species","whitelisted_species","unconscious_overlays","oxyloss_overlays","brutefireloss_overlays","organ_damage_overlays","damage_icon_parts","cover_protection_value_list","ai_list","announcing_vox","vox_digits","vox_tens","vox_units","cameranet","paiController","borer_chem_types_head","borer_chem_types_chest","borer_chem_types_arm","borer_chem_types_leg","borer_unlock_types_head","borer_unlock_types_chest","borer_unlock_types_arm","borer_unlock_types_leg","animal_count","wizard_snakes","nest_locations","bad_gremlin_items","crate_mimic_disguises","item_mimic_disguises","protected_objects","spider_queens","photocollector_list","prism_list","mirror_list","paper_folding_results","paperwork","paperwork_library","battery_charge","battery_charging","battery_online","alllights","powernets_broke","smes_list","solars_list","rad_collectors","field_gen_list","bullet_master","impact_master","available_staff_transforms","beam_master","existing_dungeons","dungeon_area","existing_vaults","disposalpipeID2State","paint_variants","chifir_doesnt_remove","tonio_doesnt_remove","LOGGED_SPLASH_REAGENTS","pillIcon2Name","special_fruits","valid_random_food_types","cockroach_egg_amount","charcoal_doesnt_remove","message_servers","blackbox","rnd_machines","design_list","tech_list","hidden_tech","responsive_carriers","finds_as_strings","authenticators","maint_all_access","spells","falltempoverlays","centcomm_store","GPS_list","SPS_list","telesci_warnings","ANTIGENS","disease2_list","virusDB","compatible_mobs","buildmodeholders","newscaster_standard_feeds","announced_news_types","allfaxes","alldepartments","atmos_controllers","ul_FastRoot","sharing_lookup_table","assigned","created","merged","invalid_zone","air_blocked","zone_blocked","blocked","mark","zas_settings","contamination_overlay","accessable_z_levels","shop_prices","circuitboards","circuitboard_prices","clothing","clothing_prices","hive_pylons","sc_safecode1","sc_safecode2","sc_safecode3","sc_safecode4","sc_safecode5")
+		
+/var/list/_all_globals=list("map","masterdatumPool","pooledvariables","prox_sensor_ignored_types","ability_verbs","sent_aliens_to_station","account_hack_attempted","spacevines_spawned","sent_spiders_to_station","exclude","_all_globals","asset_cache","error_last_seen","error_cooldown","html_interfaces","all_lighting_corners","LIGHTING_CORNER_DIAGONAL","validartifactprojectiles","cargo_telepads","chatResources","bicon_cache","dview_mob","meteor_wave_delay","meteors_in_wave","meteor_wave_active","max_meteor_size","chosen_dir","create_mob_html","create_object_html","create_turf_html","any","asset_cache_populated","total_runtimes","total_runtimes_skipped","error_cache","dummy_lighting_corner","security_level","iconCache","round_end_info","deadmins","lockedvars","nevervars","type_instances","data_core","plmaster","slmaster","account_DBs","global_map","universe","paper_tag_whitelist","paper_blacklist","skipupdate","eventchance","event","hadevent","blobevent","starticon","midicon","endicon","diary","diaryofmeanpeople","admin_diary","href_logfile","station_name","game_version","changelog_hash","game_year","going","master_mode","secret_force_mode","host","aliens_allowed","ooc_allowed","looc_allowed","dooc_allowed","traitor_scaling","dna_ident","abandon_allowed","enter_allowed","guests_allowed","shuttle_frozen","shuttle_left","tinted_weldhelh","jobMax","bombers","admin_log","lastsignalers","lawchanges","shuttles","reg_dna","CELLRATE","CHARGELEVEL","WORLD_X_OFFSET","WORLD_Y_OFFSET","shuttle_z","airtunnel_start","airtunnel_stop","airtunnel_bottom","monkeystart","wizardstart","newplayer_start","latejoin","assistant_latejoin","prisonwarp","holdingfacility","xeno_spawn","endgame_safespawns","endgame_exits","tdome1","tdome2","tdomeobserve","tdomeadmin","prisonsecuritywarp","prisonwarped","blobstart","ninjastart","cardinal","diagonal","alldirs","universal_cult_chat","start_state","config","combatlog","IClog","OOClog","adminlog","suspend_alert","Debug","Debug2","debugobj","mods","wavesecret","gravity_is_on","shuttlecoming","join_motd","forceblob","polarstar","nanomanager","sqladdress","sqlport","sqldb","sqllogin","sqlpass","sqlfdbkdb","sqlfdbklogin","sqlfdbkpass","sqllogging","forumsqladdress","forumsqlport","forumsqldb","forumsqllogin","forumsqlpass","forum_activated_group","forum_authenticated_group","fileaccess_timer","custom_event_msg","dbcon","dbcon_old","recall_time_limit","score","trash_items","decals","on_login","on_ban","on_unban","plugins","space_gas","announcement_intercom","sortedAreas","bomberman_mode","bomberman_hurt","bomberman_destroy","volunteer_gladiators","ready_gladiators","never_gladiators","achievements","end_icons","arena_leaderboard","arena_rounds","arena_top_score","endgame_info_logged","explosion_newmethod","snake_station_highscores","snake_best_players","minesweeper_station_highscores","minesweeper_best_players","nanocoins_rates","nanocoins_lastchange","speciesinit","minimapinit","stat_collection","hardcore_mode","mineral_turfs","static_list","grayscale","adminblob_icon","adminblob_size","adminblob_beat","holoMiniMaps","centcommMiniMaps","extraMiniMaps","holomap_markers","holomaps_initialized","tachycardics","bradycardics","heartstopper","cheartstopper","disable_scrubbers","disable_vents","Space_Tile","MAX_EXPLOSION_RANGE","BODY_PARTS","BODY_COVER_VALUE_LIST","NOIRMATRIX","bad_changing_colour_ckeys","global_mutations","scarySounds","RESTRICTED_CAMERA_NETWORKS","default_colour_matrix","ai_names","wizard_first","wizard_second","ninja_titles","ninja_names","commando_names","first_names_male","first_names_female","last_names","clown_names","verbs","adjectives","vox_name_syllables","golem_names","borer_names","hologram_names","autoborg_silly_names","panicfile","failed_db_connections","failed_old_db_connections","desire_ranks","cmp_field","cmp_dist_origin","DummyCache","genders","clients","admins","directory","mixed_modes","player_list","mob_list","living_mob_list","dead_mob_list","observers","areas","chemical_reactions_list","chemical_reagents_list","landmarks_list","surgery_steps","mechas_list","poster_designs","underwear_m","underwear_f","backbaglist","hit_appends","epilepsy_appends","table_recipes","med_hud_users","sec_hud_users","escape_list","church_name","command_name","religion_name","syndicate_name","syndicate_code_phrase","syndicate_code_response","watt_suffixes","number_digits","number_tens","number_units","quote","get_matching_types_cache","get_vars_from_type_cache","existing_typesof_cache","common_tools","WALLITEMS","sortInstance","hooks","ventcrawl_machinery","catcher","parallax_on_clients","parallax_initialized","space_color","parallax_icon","unstackable_pipes","heat_pipes","bent_dirs","pipeID2State","nlist","straight_pipes","bent_pipes","manifold_pipes","garbageCollector","soft_dels","emergency_shuttle","Failsafe","Master","MC_restart_clear","MC_restart_timeout","MC_restart_count","CURRENT_TICKLIMIT","SSair","tick_multiplier","SSdisease","active_diseases","SSemergency_shuttle","SSevent","events","SSfast_machinery","fast_machines","SSgarbage","SShtml_ui","html_machines","SSinactivity","SSlighting","lighting_update_lights","lighting_update_corners","lighting_update_overlays","SSmachinery","machines","SSmob","SSnano","SSobj","processing_objects","SSpipenet","atmos_machines","pipe_networks","on_pipenet_tick","SSpower","power_machines","powernets","cable_list","SSsun","SSsupply_shuttle","SSticker","SSvote","SSassets","SSfinish","SSgenetics","SSjob","SSmap","SSminimap","SSmore_init","SSrust","SScreate_ticker","SSxenoarch","randomize_laws","base_law_type","mommi_base_law_type","diseases","map_elements","modules","sun","all_supply_groups","uplink_items","archive_diseases","advance_cures","list_symptoms","dictionary_symptoms","animal_butchering_products","revdata","same_wires","wireColours","PDA_Manifest","vox_sounds","vox_wordlen","outbreak_level_words","spawned_surprises","max_secret_rooms","del_profiling","gdel_profiling","ghdel_profiling","current_centcomm_order_id","all_radios","radiochannels","radiochannelsreverse","CENT_FREQS","radio_controller","pointers","nextDecTalkDelay","lastDecTalkUse","freqtospan","freqtoname","ghostimg","resethearers","smoothable_unsims","shatter_sound","explosion_sound","small_explosion_sound","spark_sound","rustle_sound","punch_sound","clown_sound","swing_hit_sound","hiss_sound","page_sound","mechstep_sound","gib_sound","mommicomment_sound","polaroid_sound","male_scream_sound","female_scream_sound","male_cough_sound","female_cough_sound","lightning_sound","soulstone_sound","fracture_sound","machete_hit_sound","machete_throw_sound","machete_throw_hit_sound","supply_shuttle","space_area","ignored_keys","moved_landmarks","transparent_icons","teleportlocs","ghostteleportlocs","adminbusteleportlocs","centcom_areas","the_station_areas","dna_activity_bounds","assigned_gene_blocks","assigned_blocks","dna_genes","good_blocks","bad_blocks","skin_styles_female_list","hair_styles_list","hair_styles_male_list","hair_styles_female_list","facial_hair_styles_list","facial_hair_styles_male_list","facial_hair_styles_female_list","noir_master","ticker","potential_theft_objectives","BLINDBLOCK","DEAFBLOCK","HULKBLOCK","TELEBLOCK","FIREBLOCK","XRAYBLOCK","CLUMSYBLOCK","FAKEBLOCK","COUGHBLOCK","GLASSESBLOCK","EPILEPSYBLOCK","TWITCHBLOCK","NERVOUSBLOCK","MONKEYBLOCK","BLOCKADD","DIFFMUT","HEADACHEBLOCK","NOBREATHBLOCK","REMOTEVIEWBLOCK","REGENERATEBLOCK","INCREASERUNBLOCK","REMOTETALKBLOCK","MORPHBLOCK","COLDBLOCK","HALLUCINATIONBLOCK","NOPRINTSBLOCK","SHOCKIMMUNITYBLOCK","SMALLSIZEBLOCK","LISPBLOCK","MUTEBLOCK","RADBLOCK","FATBLOCK","CHAVBLOCK","SWEDEBLOCK","SCRAMBLEBLOCK","TOXICFARTBLOCK","STRONGBLOCK","HORNSBLOCK","SMILEBLOCK","ELVISBLOCK","SOBERBLOCK","PSYRESISTBLOCK","FARSIGHTBLOCK","CHAMELEONBLOCK","CRYOBLOCK","EATBLOCK","JUMPBLOCK","MELTBLOCK","EMPATHBLOCK","SUPERFARTBLOCK","IMMOLATEBLOCK","POLYMORPHBLOCK","LOUDBLOCK","WHISPERBLOCK","DIZZYBLOCK","SANSBLOCK","NOIRBLOCK","blobs","blob_cores","blob_nodes","blob_resources","blob_overminds","blob_looks_admin","blob_looks_player","possible_changeling_IDs","hivemind_bank","powers","powerinstances","narsie_behaviour","narsie_cometh","narsie_list","mr_clean_targets","cultwords","runedec","engwords","rnwords","rune_list","halloween_spawns","snow_recipes","Holiday","blob_candidates","mixed_allowed","bomb_set","nukedisk","hsboxspawn","hrefs","banned_sandbox_types","all_jobs","job_master","assistant_occupations","command_positions","engineering_positions","medical_positions","science_positions","civilian_positions","cargo_positions","security_positions","nonhuman_positions","misc_positions","whitelist","alien_whitelist","firealarms","cryo_health_indicator","doppler_arrays","flashers","holosigns","igniters","multitool_var_whitelist","mass_drivers","navbeacons","news_network","allCasters","req_console_assistance","req_console_supplies","req_console_information","allConsoles","station_holomaps","status_displays","ai_emotions","status_display_images","dispenser_presets","num_vending_terminals","floorbot_targets","mulebot_count","camera_names","camera_messages","tv_monitors","shuttle_calls","prison_shuttle_moving_to_station","prison_shuttle_moving_to_prison","prison_shuttle_at_station","prison_shuttle_can_send","prison_shuttle_time","prison_shuttle_timeleft","specops_shuttle_moving_to_station","specops_shuttle_moving_to_centcom","specops_shuttle_at_station","specops_shuttle_can_send","specops_shuttle_time","specops_shuttle_timeleft","syndicate_elite_shuttle_moving_to_station","syndicate_elite_shuttle_moving_to_mothership","syndicate_elite_shuttle_at_station","syndicate_elite_shuttle_can_send","syndicate_elite_shuttle_time","syndicate_elite_shuttle_timeleft","taxi_computers","all_doors","alert_overlays_global","poddoors","recentmessages","message_delay","telecomms_list","word_to_uristrune_table","uristrune_cache","explosion_shake_message_cooldown","explosion_turfs","explosion_in_progress","blood_overlays","reagents_to_log","BUMP_TELEPORTERS","portal_cache","splatter_cache","blood_list","fluidtrack_cache","beacons","all_graffitis","living_balloons","deskbell_default_frequencies","deskbell_freq_cargo","deskbell_freq_hop","deskbell_freq_medbay","deskbell_freq_brig","deskbell_freq_rnd","camera_bugs","pda_app_menus","chatrooms","PDAs","available_paintings","cable_recipes","metal_recipes","plasteel_recipes","wood_recipes","cardboard_recipes","leather_recipes","sandstone_recipes","diamond_recipes","uranium_recipes","plasma_recipes","plastic_recipes","gold_recipes","phazon_recipes","silver_recipes","clown_recipes","charcoal_recipes","lightfloor_colors","moneytypes","cached_icons","tracking_implants","bottle_colour_choices","hidden_doors","all_docking_ports","ladders","one_way_windows","cargo_shuttle","escape_shuttle","mining_shuttle","arrival_shuttle","transport_shuttle","ert_shuttle","deathsquad_shuttle","elite_syndie_shuttle","strike_team_shuttle","admin_shuttle","research_shuttle","salvage_shuttle","security_shuttle","syndicate_shuttle","taxi_a","taxi_b","trade_shuttle","vox_shuttle","voxresearch_shuttle","response_team_members","distributed_ert_suits","sent_strike_teams","icons_to_ignore_at_floor_init","plating_icons","wood_icons","w_overlays","_flatIcons","directional","exception","directional_turfs","BSACooldown","floorIsLava","admin_shuttle_location","alien_ship_location","investigations","admin_ranks","admin_verbs_default","admin_verbs_admin","admin_verbs_ban","admin_verbs_sounds","admin_verbs_fun","admin_verbs_spawn","admin_verbs_server","admin_verbs_debug","admin_verbs_possess","admin_verbs_permissions","admin_verbs_rejuv","admin_verbs_polling","admin_verbs_hideable","admin_verbs_mod","appearanceban_runonce","appearance_keylist","jobban_runonce","jobban_keylist","oocban_keylist","admin_datums","CMinutes","Banlist","Banlistjob","adminhelp_ignored_words","checked_for_inactives","inactive_keys","blood_virus_spreading_disabled","camera_range_display_status","intercom_range_display_status","prevent_airgroup_regroup","say_disabled","movement_disabled","movement_disabled_exception","forbidden_varedit_object_types","PROFILING_VERBS","vox_tick","assembly_short_name_to_type","comparison_circuit_operations","math_circuit_operations_list","automation_types","gas_labels","existing_away_missions","awaydestinations","away_mission_subtypes","gateways","maploader","_preloader","map_dimension_cache","swapmaps_iconcache","swapmaps_mode","swapmaps_compiled_maxx","swapmaps_compiled_maxy","swapmaps_compiled_maxz","swapmaps_initialized","swapmaps_loaded","swapmaps_byname","bombermangear","arenas","arena_spawnpoints","person_animation_viewers","item_animation_viewers","preferences_datums","special_roles","antag_roles","nonantag_roles","role_wiki","opposite_dirs","holomap_chips","holomap_cache","has_been_shade","current_date_string","num_financial_terminals","num_financial_database","num_vending_machines","num_pda_terminals","num_merch_computers","station_account","department_accounts","next_account_number","centcomm_account_db","vendor_account","all_money_accounts","setup_economy","weighted_randomevent_locations","weighted_mundaneevent_locations","station_departments","current_pos_id","pos_sales","wages_enabled","roundstart_enable_wages","event_last_fired","allEvents","potentialRandomEvents","eventTimeLower","eventTimeUpper","scheduledEvent","vox_kills","vox_sent","raiders","thing_storm_types","watchdog","non_fakeattack_weapons","deepFriedEverything","deepFriedNutriment","foodNesting","recursiveFood","ingredientLimit","wizard_cards_rare","wizard_cards_normal","adv_camera","crewmonitor","vote","plant_controller","seed_types","gene_tag_masks","library_catalog","library_section_names","liquid_delay","puddles","global_playlists","loopModeNames","media_receivers","media_transmitters","migration_controller_mysql","migration_controller_sqlite","valid_abandoned_crate_types","material_list","initial_materials","name_to_mineral","mining_surprises","slot_equipment_priority","intents","boo_phrases","boo_phrases_drugs","boo_phrases_silicon","virtualhearers","movable_hearers","mob_hearers","stationary_hearers","coldwarning_light","coldwarning_hard","department_radio_keys","language_keys","all_languages","all_species","whitelisted_species","has_died_as_golem","unconscious_overlays","oxyloss_overlays","brutefireloss_overlays","organ_damage_overlays","damage_icon_parts","cover_protection_value_list","ai_list","announcing_vox","vox_digits","vox_tens","vox_units","cameranet","paiController","borer_chem_types_head","borer_chem_types_chest","borer_chem_types_arm","borer_chem_types_leg","borer_unlock_types_head","borer_unlock_types_chest","borer_unlock_types_arm","borer_unlock_types_leg","animal_count","wizard_snakes","nest_locations","bad_gremlin_items","crate_mimic_disguises","item_mimic_disguises","protected_objects","spider_queens","photocollector_list","prism_list","mirror_list","paper_folding_results","paperwork","paperwork_library","battery_charge","battery_charging","battery_online","alllights","powernets_broke","smes_list","solars_list","rad_collectors","field_gen_list","bullet_master","impact_master","available_staff_transforms","beam_master","existing_dungeons","dungeon_area","existing_vaults","disposalpipeID2State","paint_variants","chifir_doesnt_remove","tonio_doesnt_remove","LOGGED_SPLASH_REAGENTS","pillIcon2Name","juice_items","bomb_like_items","special_fruits","valid_random_food_types","cockroach_egg_amount","charcoal_doesnt_remove","message_servers","blackbox","rnd_machines","design_list","tech_list","hidden_tech","responsive_carriers","finds_as_strings","authenticators","maint_all_access","spells","falltempoverlays","doppelgangers","centcomm_store","GPS_list","SPS_list","telesci_warnings","ANTIGENS","disease2_list","virusDB","compatible_mobs","buildmodeholders","newscaster_standard_feeds","announced_news_types","allfaxes","alldepartments","atmos_controllers","ul_FastRoot","sharing_lookup_table","assigned","created","merged","invalid_zone","air_blocked","zone_blocked","blocked","mark","zas_settings","contamination_overlay","accessable_z_levels","shop_prices","circuitboards","circuitboard_prices","clothing","clothing_prices","hive_pylons","sc_safecode1","sc_safecode2","sc_safecode3","sc_safecode4","sc_safecode5")
