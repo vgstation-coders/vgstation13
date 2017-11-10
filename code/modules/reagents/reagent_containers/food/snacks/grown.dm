@@ -58,7 +58,7 @@ var/list/special_fruits = list()
 					var/rtotal = reagent_data[1]
 					if(reagent_data.len > 1 && potency > 0)
 						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid, max(1, round(rtotal*coeff, 0.1)))
+					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
 
 			if(seed.teleporting)
 				name = "blue-space [name]"

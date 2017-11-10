@@ -1161,7 +1161,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana)
 	plant_icon = "banana"
 	harvest_repeat = 1
-	chems = list(BANANA = list(1,10))
+	chems = list(BANANA = list(1,10), POTASSIUM = list(0.1,30))
 
 	lifespan = 50
 	maturation = 6
