@@ -472,13 +472,9 @@
 /mob/proc/get_brain_worms()
 	var/list/borers_in_mob = list()
 	for(var/I in contents)
-		if(istype(I,/mob/living/simple_animal/borer))
-			var/mob/living/simple_animal/borer/B = I
-			borers_in_mob.Add(B)
-	if(borers_in_mob.len)
-		return borers_in_mob
-	else
-		return 0
+		if(isborer(I))
+			borers_in_mob.Add(I)
+	return borers_in_mob
 
 /mob/living/carbon/is_muzzled()
 	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))
