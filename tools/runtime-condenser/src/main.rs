@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
-use std::collections::hash_map::{HashMap, Entry};
+use std::collections::HashMap;
 
 const INPUT_FILE: &str = "input.txt";
 const OUTPUT_FILE: &str = "output.txt";
@@ -14,16 +14,11 @@ struct RuntimeData {
 	pub kind: RuntimeKind,
 }
 
+#[derive(Hash, Eq, PartialEq, Copy, Clone, Debug)]
 enum RuntimeKind {
 	RuntimeError,
 	InfiniteLoop,
-	RecursionLimit,
-}
-
-enum State {
-	Runtime(String),
-	Skip(usize),
-	Scanning,
+	//RecursionLimit,
 }
 
 impl std::fmt::Display for RuntimeData {
@@ -34,40 +29,15 @@ impl std::fmt::Display for RuntimeData {
 	}
 }
 
-fn insert_runtime(runtimes: &mut Runtimes, identifier: &str, kind: RuntimeKind) {
-	let mut do_insert = false;
-	match runtimes.get_mut(identifier) {
-		Some(runtime) => {
-			runtime.counter += 1;
-		}
-		None => {
-			do_insert = true;
-		}
-	}
-	if do_insert {
-		let new_entry = RuntimeData {
-			details: String::new(),
-			counter: 1,
-			kind: kind,
-		};
-		runtimes.insert(identifier.to_owned(), new_entry);
-	}
-}
-
 fn line_kind(line: &str) -> LineKind {
-	if line.find("Infinite loop suspected--switching proc to background.")
-		.is_some()
-	{
-		return LineKind::InfiniteLoopHeader;
-	}
-	if line.starts_with("proc name") {
+	if line.starts_with("proc name: ") {
 		return LineKind::InfiniteLoop;
 	}
-	if line.find("Runtime in ").is_some() {
-		return LineKind::Runtime;
+	if line == "Infinite loop suspected--switching proc to background." {
+		return LineKind::InfiniteLoopHeader;
 	}
-	if line.starts_with("  ") {
-		return LineKind::Details;
+	if line.len() > 22 && line[9..].starts_with("] Runtime in ") {
+		return LineKind::Runtime;
 	}
 	LineKind::Junk
 }
@@ -76,55 +46,88 @@ enum LineKind {
 	InfiniteLoopHeader,
 	InfiniteLoop,
 	Runtime,
-	Details,
 	Junk,
 }
 
 fn parse_from_file(path: &str) -> Runtimes {
 	let input_file = File::open(path).expect("Error opening file.");
 	let reader = BufReader::new(input_file);
-	let lines = reader.lines().map(std::result::Result::unwrap);
+	let mut lines = reader.lines().map(std::result::Result::unwrap);
 
 	let mut runtimes = Runtimes::new();
-	let mut current_state = State::Scanning;
 
-	for line in lines {
-		if let State::Skip(mut count) = current_state {
-			count = count - 1;
-			if count < 1 {
-				current_state = State::Scanning
-			}
-			continue;
-		}
-		match line_kind(&line) {
-			LineKind::InfiniteLoopHeader => {
-				current_state = State::Skip(1);
-			}
-			LineKind::InfiniteLoop => {
-				if let State::Scanning = current_state {
-					current_state = State::Runtime(line.clone());
-					insert_runtime(&mut runtimes, &line, RuntimeKind::InfiniteLoop);
-				}
-			}
-			LineKind::Details => {
-				if let State::Runtime(ref ident) = current_state {
-					let data = runtimes.get_mut(ident).unwrap();
-					if data.counter != 1 {
-						continue;
-					}
-					data.details.push_str(&line);
-					data.details.push('\n');
-				}
-			}
-			LineKind::Runtime => {
-				let runtime_identifier = &line[22..];
-				current_state = State::Runtime(runtime_identifier.to_owned());
-				insert_runtime(&mut runtimes, runtime_identifier, RuntimeKind::RuntimeError);
-			}
-			LineKind::Junk => (),
+	while let Some(mut line) = lines.next() {
+		while let Some(newline) = parse_line(&mut lines, &mut runtimes, &line) {
+			line = newline;
 		}
 	}
 	runtimes
+}
+
+fn parse_line(
+	mut lines: &mut Iterator<Item = String>,
+	mut runtimes: &mut Runtimes,
+	currentline: &str,
+) -> Option<String> {
+	match line_kind(currentline) {
+		LineKind::InfiniteLoopHeader => {
+			// Skip NEXT line since the header is two lines long.
+   // Next line that will be read by main loop will be the infinite loop itself.
+			lines.next();
+			None
+		}
+		LineKind::InfiniteLoop => parse_runtime(
+			&mut lines,
+			&mut runtimes,
+			currentline,
+			RuntimeKind::InfiniteLoop,
+		),
+		LineKind::Runtime => parse_runtime(
+			&mut lines,
+			&mut runtimes,
+			&currentline[22..],
+			RuntimeKind::RuntimeError,
+		),
+		LineKind::Junk => None,
+	}
+}
+
+fn parse_runtime(
+	lines: &mut Iterator<Item = String>,
+	runtimes: &mut Runtimes,
+	key: &str,
+	kind: RuntimeKind,
+) -> Option<String> {
+	if runtimes.contains_key(key) {
+		let runtime = runtimes.get_mut(key).unwrap();
+		runtime.counter += 1;
+		// Skip lines starting with two spaces since those are the trace and other details.
+		while let Some(line) = lines.next() {
+			if !line.starts_with("  ") {
+				return Some(line);
+			}
+		}
+		None
+	} else {
+		let mut details = String::new();
+		let mut outstring = None;
+		while let Some(line) = lines.next() {
+			if !line.starts_with("  ") {
+				outstring = Some(line);
+				break;
+			}
+			details.push_str(&line);
+			details.push('\n');
+		}
+		let new_entry = RuntimeData {
+			details: String::new(),
+			counter: 1,
+			kind: kind,
+		};
+		runtimes.insert(key.to_owned(), new_entry);
+		runtimes.get_mut(key).unwrap();
+		outstring
+	}
 }
 
 fn total_runtimes(runtimes: &Runtimes) -> usize {
