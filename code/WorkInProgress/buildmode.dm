@@ -97,6 +97,7 @@
 				to_chat(usr, "<span class='notice'>Left Mouse Button on turf/obj          = Place objects</span>")
 				to_chat(usr, "<span class='notice'>Right Mouse Button                     = Delete objects</span>")
 				to_chat(usr, "<span class='notice'>Middle Mouse Button                    = Copy atom</span>")
+				to_chat(usr, "<span class='notice'>Middle Mouse Button twice on a turf    = Area editing mode</span>")
 				to_chat(usr, "")
 				to_chat(usr, "<span class='notice'>Ctrl+Shift+Left Mouse Button           = Sets bottom left corner for fill mode</span>")
 				to_chat(usr, "<span class='notice'>Ctrl+Shift+Right Mouse Button           = Sets top right corner for fill mode</span>")
@@ -295,17 +296,7 @@ obj/effect/bmode/buildholder/New()
 								if(areaAction == MASS_DELETE)
 									T.ChangeTurf(get_base_turf(T.z))
 						else
-							if(ispath(whatfill, /turf))
-								if(areaAction == SELECTIVE_FILL)
-									if(strict)
-										if(T.type != chosen)
-											continue
-									else
-										if(!istype(T, chosen))
-											continue
-
-								T.ChangeTurf(whatfill)
-							else if(ispath(whatfill, /area))
+							if(ispath(whatfill, /area) || istype(holder.buildmode.copycat, /area))
 								//In case of a selective fill, make sure the turf fits into the criteria before changing it
 								if(areaAction == SELECTIVE_FILL)
 									if(strict)
@@ -315,8 +306,23 @@ obj/effect/bmode/buildholder/New()
 										if(!istype(T, chosen))
 											continue
 
-								var/area/A = locate(whatfill)
+								var/area/A
+								if(istype(holder.buildmode.copycat, /area))
+									A = holder.buildmode.copycat
+								else
+									A = locate(whatfill)
+
 								T.set_area(A)
+							else if(ispath(whatfill, /turf))
+								if(areaAction == SELECTIVE_FILL)
+									if(strict)
+										if(T.type != chosen)
+											continue
+									else
+										if(!istype(T, chosen))
+											continue
+
+								T.ChangeTurf(whatfill)
 							else
 								if(areaAction == SELECTIVE_FILL)
 									for(var/atom/thing in T.contents)
@@ -644,7 +650,7 @@ obj/effect/bmode/buildholder/New()
 						if(isturf(object))
 							//Middle mouse buttoning a turf twice will enter area editing mode for its area. Use the build-adv function to modify the area
 							if(holder.buildmode.copycat == object)
-								to_chat(usr, "<span class='info'>Modifying area of [object] ([formatJumpTo(object)]). Use the build-adv function to add tiles.</span>")
+								to_chat(usr, "<span class='info'>Modifying area of [object] ([formatJumpTo(object)]). Use the build-adv function to add tiles. Middle-click anywhere outside of the area to stop.</span>")
 								var/area/A = get_area(object)
 								holder.buildmode.copycat = A
 								holder.buildmode.area_overlay.loc = A
