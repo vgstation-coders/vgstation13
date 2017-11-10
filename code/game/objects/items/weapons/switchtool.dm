@@ -430,9 +430,9 @@
 	stored_modules = list(
 						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
 						"/obj/item/weapon/circular_saw/plasmasaw:circular saw" = null,
-						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
+						"/obj/item/weapon/surgicaldrill/diamond:surgical drill" = null,
 						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
-						"/obj/item/weapon/hemostat:hemostat" = null,
+						"/obj/item/weapon/hemostat/pico:hemostat" = null,
 						"/obj/item/weapon/retractor/manager:retractor" = null,
 						"/obj/item/weapon/bonesetter/bone_mender:bonesetter" = null
 						)
