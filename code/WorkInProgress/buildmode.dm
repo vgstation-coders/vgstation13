@@ -21,6 +21,7 @@
 			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
 				for(var/BM in M.client.buildmode_objs)
 					returnToPool(BM)
+				M.client.buildmode_objs = list()
 		else
 			log_admin("[key_name(usr)] has entered build mode.")
 			M.client.buildmode = 1

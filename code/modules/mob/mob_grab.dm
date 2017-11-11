@@ -278,7 +278,7 @@
 		assailant = null
 	if(hud)
 		returnToPool(hud)
-	hud = null
+		hud = null
 	..()
 
 /mob/proc/grab_check(mob/victim)

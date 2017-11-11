@@ -57,6 +57,7 @@
 		node.disconnect(src)
 		if(network)
 			returnToPool(network)
+			network = null
 	node = null
 	..()
 
@@ -103,6 +104,7 @@
 	if(reference==node)
 		if(network)
 			returnToPool(network)
+			network = null
 		node = null
 	return ..()
 

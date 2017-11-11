@@ -198,5 +198,6 @@
 				sleep(2)
 
 			returnToPool(D)
+			Sprays.Remove(D)
 
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)

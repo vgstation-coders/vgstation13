@@ -237,6 +237,7 @@ var/global/datum/controller/radio/radio_controller
 		start_point = get_turf(source)
 		if(!start_point)
 			returnToPool(signal)
+			signal = null
 			return 0
 
 	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
@@ -285,6 +286,7 @@ var/global/datum/controller/radio/radio_controller
 
 
 	returnToPool(signal)
+	signal = null
 
 /datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
 	if(!filter) // FIXME

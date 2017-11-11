@@ -100,14 +100,17 @@ obj/machinery/atmospherics/trinary/Destroy()
 		node1.disconnect(src)
 		if(network1)
 			returnToPool(network1)
+			network1 = null
 	if(node2)
 		node2.disconnect(src)
 		if(network2)
 			returnToPool(network2)
+			network2 = null
 	if(node3)
 		node3.disconnect(src)
 		if(network3)
 			returnToPool(network3)
+			network3 = null
 
 	node1 = null
 	node2 = null

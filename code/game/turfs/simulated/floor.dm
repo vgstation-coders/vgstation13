@@ -365,6 +365,7 @@ turf/simulated/floor/update_icon()
 	if(floor_tile)
 		//qdel(floor_tile)
 		returnToPool(floor_tile)
+		floor_tile = null
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
@@ -388,7 +389,7 @@ turf/simulated/floor/update_icon()
 	set_light(0)
 	if(floor_tile)
 		returnToPool(floor_tile)
-	floor_tile = null
+		floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/plasteel))
 			floor_tile = T
@@ -418,7 +419,7 @@ turf/simulated/floor/update_icon()
 	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
-	floor_tile = null
+		floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/light))
 			floor_tile = T
@@ -440,7 +441,7 @@ turf/simulated/floor/update_icon()
 	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
-	floor_tile = null
+		floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/grass))
 			floor_tile = T
@@ -461,7 +462,7 @@ turf/simulated/floor/update_icon()
 	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
-	floor_tile = null
+		floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/wood))
 			floor_tile = T
@@ -482,7 +483,7 @@ turf/simulated/floor/update_icon()
 	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
-	floor_tile = null
+		floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/carpet))
 			floor_tile = T
@@ -573,10 +574,10 @@ turf/simulated/floor/update_icon()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					if(floor_tile)
+					if(floor_tile && floor_tile.type != T.type)
 						returnToPool(floor_tile)
-					floor_tile = null
-					floor_tile = getFromPool(T.type, null)
+						floor_tile = null
+						floor_tile = getFromPool(T.type, null)
 					material = floor_tile.material
 					intact = 1
 					plane = TURF_PLANE

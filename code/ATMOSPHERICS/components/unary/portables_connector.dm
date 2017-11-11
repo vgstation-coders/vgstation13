@@ -38,6 +38,7 @@
 		node.disconnect(src)
 		if(network)
 			returnToPool(network)
+			network = null
 
 	node = null
 

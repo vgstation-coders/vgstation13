@@ -73,6 +73,7 @@
 
 	if(materials)
 		returnToPool(materials)
+		materials = null
 
 	if(on_moved)
 		on_moved.holder = null
@@ -104,6 +105,7 @@
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
 				returnToPool(VH)
+				VH = null
 
 	..()
 
@@ -699,6 +701,7 @@
 	for(var/mob/virtualhearer/VH in virtualhearers)
 		if(VH.attached == src)
 			returnToPool(VH)
+			VH = null
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)

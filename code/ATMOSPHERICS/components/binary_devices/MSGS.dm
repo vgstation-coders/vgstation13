@@ -246,7 +246,7 @@
 		if(on)
 			overlays += image(icon = icon, icon_state = "i")
 
-/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user) 
+/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return
@@ -269,10 +269,12 @@
 			node1.disconnect(src)
 			if(network1)
 				returnToPool(network1)
+				network1 = null
 		if(node2)
 			node2.disconnect(src)
 			if(network2)
 				returnToPool(network2)
+				network2 = null
 
 		node1 = null
 		node2 = null
