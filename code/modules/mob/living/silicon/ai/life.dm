@@ -133,12 +133,12 @@
 					to_chat(src, "Power port upload access confirmed. Loading control program into APC power port software.")
 				if (4)
 					to_chat(src, "Transfer complete. Forcing APC to execute program.")
-					sleep(50)
+					sleep(5 SECONDS)
 					if(!aiRestorePowerRoutine)
 						theAPC = null
 						return // Checking for premature changes.
 					to_chat(src, "Receiving control information from APC.")
-					sleep(2)
+					sleep(0.2 SECONDS)
 					if(!aiRestorePowerRoutine)
 						theAPC = null
 						return // Checking for premature changes.
@@ -147,7 +147,6 @@
 					aiRestorePowerRoutine = 3
 					to_chat(src, "Here are your current laws:")
 					show_laws()
-			spawn(5 SECONDS)
 			theAPC = null
 
 /mob/living/silicon/ai/Life()
