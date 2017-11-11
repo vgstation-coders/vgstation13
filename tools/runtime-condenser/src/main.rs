@@ -1,8 +1,11 @@
 extern crate clap;
 #[macro_use]
+extern crate lazy_static;
+#[macro_use]
 extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
+extern crate regex;
 
 use std::cmp::Ordering;
 use std::collections::HashMap;
@@ -16,18 +19,11 @@ const DEFAULT_OUTPUT_FILE: &str = "output.txt";
 
 type Runtimes = HashMap<String, RuntimeData>;
 
-#[derive(Serialize, Eq, PartialEq)]
+#[derive(Serialize, Eq, PartialEq, Debug)]
 struct RuntimeData {
 	pub details: String,
 	pub counter: usize,
 	pub kind: RuntimeKind,
-}
-
-#[derive(Hash, Eq, PartialEq, Copy, Clone, Debug, Serialize)]
-enum RuntimeKind {
-	RuntimeError,
-	InfiniteLoop,
-	//RecursionLimit,
 }
 
 impl std::fmt::Display for RuntimeData {
@@ -38,12 +34,19 @@ impl std::fmt::Display for RuntimeData {
 	}
 }
 
+#[derive(Hash, Eq, PartialEq, Copy, Clone, Debug, Serialize)]
+enum RuntimeKind {
+	RuntimeError,
+	InfiniteLoop,
+	RecursionLimit,
+}
+
 fn line_kind(line: &str) -> LineKind {
-	if line.starts_with("proc name: ") {
+	if line == "Infinite loop suspected--switching proc to background." {
 		return LineKind::InfiniteLoop;
 	}
-	if line == "Infinite loop suspected--switching proc to background." {
-		return LineKind::InfiniteLoopHeader;
+	if line == "runtime error: Maximum recursion level reached (perhaps there is an infinite loop)" {
+		return LineKind::RecursionLimit;
 	}
 	if line.len() > 22 && line[9..].starts_with("] Runtime in ") {
 		return LineKind::Runtime;
@@ -55,8 +58,8 @@ fn line_kind(line: &str) -> LineKind {
 }
 
 enum LineKind {
-	InfiniteLoopHeader,
 	InfiniteLoop,
+	RecursionLimit,
 	Runtime,
 	Skipped,
 	Junk,
@@ -66,8 +69,12 @@ fn parse_from_file<W: Read>(file: W, mut runtimes: &mut Runtimes) {
 	let reader = BufReader::new(file);
 	let mut lines = reader.lines().map(std::result::Result::unwrap);
 
+	// Manually iterate so we maintain control over the iterator
+	// and can pass it down mid-loop.
+	// A regular for loop borrows it mutably until the loop is done.
 	while let Some(mut line) = lines.next() {
 		while let Some(newline) = parse_line(&mut lines, &mut runtimes, &line) {
+			// If the parsing ate the next line and gave it back we do that one instead.
 			line = newline;
 		}
 	}
@@ -79,18 +86,20 @@ fn parse_line(
 	currentline: &str,
 ) -> Option<String> {
 	match line_kind(currentline) {
-		LineKind::InfiniteLoopHeader => {
-			// Skip NEXT line since the header is two lines long.
-   // Next line that will be read by main loop will be the infinite loop itself.
+		LineKind::InfiniteLoop => {
+			// Skip next 1 line so we arrive at the "proc name:"
 			lines.next();
-			None
+			if let Some(line) = lines.next() {
+				parse_runtime(&mut lines, &mut runtimes, &line[11..], RuntimeKind::InfiniteLoop)
+			} else { None }
 		}
-		LineKind::InfiniteLoop => parse_runtime(
-			&mut lines,
-			&mut runtimes,
-			&currentline[11..],
-			RuntimeKind::InfiniteLoop,
-		),
+		LineKind::RecursionLimit => {
+			// Skip next 1 line so we arrive at the "proc name:"
+			lines.next();
+			if let Some(line) = lines.next() {
+				parse_runtime(&mut lines, &mut runtimes, &line[11..], RuntimeKind::RecursionLimit)
+			} else { None }
+		}
 		LineKind::Runtime => parse_runtime(
 			&mut lines,
 			&mut runtimes,
@@ -165,15 +174,15 @@ fn total_unique_runtimes(runtimes: &Runtimes) -> usize {
 }
 
 fn is_runtime_error(runtime: &(&String, &RuntimeData)) -> bool {
-	if RuntimeKind::RuntimeError == runtime.1.kind {
-		true
-	} else {
-		false
-	}
+	RuntimeKind::RuntimeError == runtime.1.kind
 }
 
 fn is_infinite_loop(runtime: &(&String, &RuntimeData)) -> bool {
-	!is_runtime_error(runtime)
+	RuntimeKind::InfiniteLoop == runtime.1.kind
+}
+
+fn is_recursion_limit(runtime: &(&String, &RuntimeData)) -> bool {
+	RuntimeKind::RecursionLimit == runtime.1.kind
 }
 
 // Small struct to make sorting easier.
@@ -199,7 +208,7 @@ impl<'a> Ord for KeyRuntimePair<'a> {
 fn write_to_file<W: Write>(runtimes: &Runtimes, mut file: W) -> std::io::Result<()> {
 	writeln!(
 		file,
-		"Total runtimes: {}. Total unique_runtimes: {}.
+		"Total errors: {}. Total unique errors: {}.
 --------------------------------------
 Runtime errors:",
 		total_runtimes(runtimes),
@@ -220,8 +229,7 @@ Runtime errors:",
 	writeln!(
 		file,
 		"--------------------------------------
-Infinite loops:"
-	)?;
+Infinite loops:")?;
 
 	let mut all_infinite_loops = runtimes.iter()
 	                                     .filter(is_infinite_loop)
@@ -232,6 +240,22 @@ Infinite loops:"
 	for KeyRuntimePair(ident, runtime) in all_infinite_loops.into_iter().rev() {
 		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
 	}
+
+	writeln!(
+		file,
+		"--------------------------------------
+Recursion limits reached:")?;
+
+	let mut all_recursion_limits = runtimes.iter()
+	                                       .filter(is_recursion_limit)
+	                                       .map(|(a, b)| KeyRuntimePair(a, b))
+	                                       .collect::<Vec<KeyRuntimePair>>();
+	all_recursion_limits.sort_unstable();
+
+	for KeyRuntimePair(ident, runtime) in all_recursion_limits.into_iter().rev() {
+		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
+	}
+
 	Ok(())
 }
 
