@@ -52,7 +52,6 @@
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
-					client.screen.Remove(AM)
 			else
 				qdel(AM)
 		client.screen = list()

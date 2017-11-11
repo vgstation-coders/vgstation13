@@ -354,7 +354,6 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 			//TODO: copy all virus data from drips to new splatter?
 			for(var/obj/effect/decal/cleanable/blood/drip/drop in drips)
 				returnToPool(drop)
-			drips.Cut()
 		else
 			decal_type = /obj/effect/decal/cleanable/blood/drip
 
