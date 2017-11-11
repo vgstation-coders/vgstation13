@@ -177,7 +177,7 @@ Thus, the two variables affect pump operation are set in New():
 	src.updateUsrDialog()
 
 /obj/machinery/atmospherics/binary/pump/AltClick(mob/user)
-	if(allowed)
+	if(allowed(user))
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(user)].")
 		update_icon()
