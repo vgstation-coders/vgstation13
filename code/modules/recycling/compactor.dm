@@ -45,6 +45,9 @@
 /obj/machinery/disposal/compactor/handle_trunk()
 	return
 
+/obj/machinery/disposal/compactor/can_load_crates()
+	return FALSE
+
 /obj/machinery/disposal/compactor/update_icon()
 	icon_state = "compactor_[stat & NOPOWER ? "off" : "on"]"
 
