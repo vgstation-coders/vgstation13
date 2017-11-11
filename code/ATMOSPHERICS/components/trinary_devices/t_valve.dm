@@ -78,10 +78,8 @@
 
 	if(network1)
 		returnToPool(network1)
-		network1 = null
 	if(network3)
 		returnToPool(network3)
-		network3 = null
 	build_network()
 
 	if(network1&&network2)
@@ -204,7 +202,7 @@
 			id_tag = newid
 			initialize()
 		return MT_UPDATE
-
+		
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")

@@ -64,11 +64,9 @@
 	if(network1)
 		if(network1)
 			returnToPool(network1)
-			network1 = null
 	if(network2)
 		if(network1)
 			returnToPool(network2)
-			network2 = null
 
 	build_network()
 

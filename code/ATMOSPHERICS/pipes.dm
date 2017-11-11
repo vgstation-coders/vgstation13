@@ -99,7 +99,6 @@
 /obj/machinery/atmospherics/pipe/Destroy()
 	if(parent)
 		returnToPool(parent)
-		parent = null
 	for(var/obj/machinery/meter/M in src.loc)
 		if(M.target == src)
 			new /obj/item/pipe_meter(src.loc)
@@ -356,13 +355,11 @@
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node2 = null
 
 	update_icon()
@@ -558,19 +555,16 @@
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node2 = null
 
 	if(reference == node3)
 		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node3 = null
 
 	update_icon()
@@ -779,25 +773,21 @@
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node2 = null
 
 	if(reference == node3)
 		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node3 = null
 
 	if(reference == node4)
 		if(istype(node4, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		node4 = null
 
 	update_icon()
@@ -1011,7 +1001,6 @@
 	if(reference == other_node)
 		if(istype(other_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		other_node = null
 
 	else
@@ -1019,7 +1008,6 @@
 			if(reference == layer_nodes[pipelayer])
 				if(istype(layer_nodes[pipelayer], /obj/machinery/atmospherics/pipe) && !isnull(parent))
 					returnToPool(parent)
-					parent = null
 				layer_nodes[pipelayer] = null
 
 	update_icon()
@@ -1221,12 +1209,10 @@
 	if(reference == mid_node)
 		if(istype(mid_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		mid_node = null
 	if(reference == layer_node)
 		if(istype(layer_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
-			parent = null
 		layer_node = null
 
 	..()

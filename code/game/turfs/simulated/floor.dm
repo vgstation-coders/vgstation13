@@ -368,7 +368,6 @@ turf/simulated/floor/update_icon()
 		floor_tile = null
 	icon_plating = "plating"
 	set_light(0)
-	floor_tile = null
 	intact = 0
 	broken = 0
 	burnt = 0

@@ -130,12 +130,10 @@
 			node1.disconnect(src)
 			if(network1)
 				returnToPool(network1)
-				network1 = null
 		if(node2)
 			node2.disconnect(src)
 			if(network2)
 				returnToPool(network2)
-				network2 = null
 
 		node1 = null
 		node2 = null

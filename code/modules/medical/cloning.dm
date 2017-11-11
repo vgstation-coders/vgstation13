@@ -88,7 +88,7 @@
 /obj/item/weapon/disk/data/Destroy()
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
-	labels = null
+	labels.Cut()
 	..()
 
 /obj/item/weapon/disk/data/proc/Initialize()

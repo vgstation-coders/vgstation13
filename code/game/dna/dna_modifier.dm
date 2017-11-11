@@ -407,7 +407,7 @@
 	connected = null
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
-		label = null
+	labels.Cut()
 	buffers.Cut()
 	if(disk)
 		qdel(disk)
