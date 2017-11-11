@@ -370,6 +370,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				var/is_cold_recipe = C.is_cold_recipe
 				var/meets_temp_requirement = 0
 
+				if(C.react_discretely)
+					multipliers += 1 //Only once
+
 				for(var/B in C.required_reagents)
 					if(!has_reagent(B, C.required_reagents[B]))
 						break
@@ -413,6 +416,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							preserved_data = get_data(B)
 						remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
+					chem_temp -= C.reaction_temp_cost
+
 					var/created_volume = C.result_amount*multiplier
 					if(C.result)
 						feedback_add_details("chemical_reaction","[C.result][created_volume]")
@@ -446,6 +451,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
 
 					C.on_reaction(src, created_volume)
+					if(C.react_discretely)
+						break //We want to exit without continuing the loop.
 					reaction_occured = 1
 					break
 
