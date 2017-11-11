@@ -13,9 +13,16 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 use clap::{App, Arg};
+use regex::Regex;
 
 const DEFAULT_INPUT_FILE: &str = "input.txt";
 const DEFAULT_OUTPUT_FILE: &str = "output.txt";
+
+lazy_static! {
+	static ref STACK_FORMATTING_REGEX: Regex = {
+		Regex::new(r"^(?:\.\.\.|(?:.+? \(.+?\): )?.+\(\))$").unwrap()
+	};
+}
 
 type Runtimes = HashMap<String, RuntimeData>;
 
@@ -39,6 +46,12 @@ enum RuntimeKind {
 	RuntimeError,
 	InfiniteLoop,
 	RecursionLimit,
+}
+
+impl RuntimeKind {
+	pub fn has_poor_formatting(&self) -> bool {
+		*self == RuntimeKind::InfiniteLoop || *self == RuntimeKind::RecursionLimit
+	}
 }
 
 fn line_kind(line: &str) -> LineKind {
@@ -70,7 +83,7 @@ fn parse_from_file<W: Read>(file: W, mut runtimes: &mut Runtimes) {
 	let mut lines = reader.lines().map(std::result::Result::unwrap);
 
 	// Manually iterate so we maintain control over the iterator
-	// and can pass it down mid-loop.
+	//   and can pass it down mid-loop.
 	// A regular for loop borrows it mutably until the loop is done.
 	while let Some(mut line) = lines.next() {
 		while let Some(newline) = parse_line(&mut lines, &mut runtimes, &line) {
@@ -137,11 +150,18 @@ fn parse_runtime(
 		let runtime = runtimes.get_mut(key).unwrap();
 		runtime.counter += 1;
 		// Skip lines starting with two spaces since those are the trace and other details.
+		// Skipping these here is faster than letting the main loop do it
+		//   as the main loop has to do multiple equality checks,
+		//   but here it's just checking two spaces.
 		for line in lines {
 			if !line.starts_with("  ") {
 				return Some(line);
 			}
 		}
+		// We don't have to handle poorly-formatted errors (infinite loops, recursion) here:
+		//   the trace gets treated as junk and ignored.
+		// Theoretically it would be an improvement but infinite loops and stack overflows
+		//   are too rare to care about.
 		None
 	} else {
 		let mut details = String::new();
@@ -153,6 +173,13 @@ fn parse_runtime(
 			}
 			details.push_str(&line);
 			details.push('\n');
+		}
+		if kind.has_poor_formatting() {
+			// RIGHT we have to handle the stack trace with special behavior
+			//   because we can't intercept infinite loops/stack overflows in /world/Error,
+			//   meaning they're still too poorly formatted to parse like we do with runtimes.
+			// Thanks, Lummox.
+
 		}
 		let new_entry = RuntimeData {
 			details: details,
