@@ -1,29 +1,33 @@
+extern crate clap;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde;
+extern crate serde_json;
+
+use std::cmp::Ordering;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
-use std::collections::hash_map::{HashMap, Entry};
+use clap::{App, Arg};
 
-const INPUT_FILE: &str = "input.txt";
-const OUTPUT_FILE: &str = "output.txt";
+const DEFAULT_INPUT_FILE: &str = "input.txt";
+const DEFAULT_OUTPUT_FILE: &str = "output.txt";
 
 type Runtimes = HashMap<String, RuntimeData>;
 
+#[derive(Serialize, Eq, PartialEq)]
 struct RuntimeData {
 	pub details: String,
 	pub counter: usize,
 	pub kind: RuntimeKind,
 }
 
+#[derive(Hash, Eq, PartialEq, Copy, Clone, Debug, Serialize)]
 enum RuntimeKind {
 	RuntimeError,
 	InfiniteLoop,
-	RecursionLimit,
-}
-
-enum State {
-	Runtime(String),
-	Skip(usize),
-	Scanning,
+	//RecursionLimit,
 }
 
 impl std::fmt::Display for RuntimeData {
@@ -34,40 +38,18 @@ impl std::fmt::Display for RuntimeData {
 	}
 }
 
-fn insert_runtime(runtimes: &mut Runtimes, identifier: &str, kind: RuntimeKind) {
-	let mut do_insert = false;
-	match runtimes.get_mut(identifier) {
-		Some(runtime) => {
-			runtime.counter += 1;
-		}
-		None => {
-			do_insert = true;
-		}
-	}
-	if do_insert {
-		let new_entry = RuntimeData {
-			details: String::new(),
-			counter: 1,
-			kind: kind,
-		};
-		runtimes.insert(identifier.to_owned(), new_entry);
-	}
-}
-
 fn line_kind(line: &str) -> LineKind {
-	if line.find("Infinite loop suspected--switching proc to background.")
-		.is_some()
-	{
-		return LineKind::InfiniteLoopHeader;
-	}
-	if line.starts_with("proc name") {
+	if line.starts_with("proc name: ") {
 		return LineKind::InfiniteLoop;
 	}
-	if line.find("Runtime in ").is_some() {
+	if line == "Infinite loop suspected--switching proc to background." {
+		return LineKind::InfiniteLoopHeader;
+	}
+	if line.len() > 22 && line[9..].starts_with("] Runtime in ") {
 		return LineKind::Runtime;
 	}
-	if line.starts_with("  ") {
-		return LineKind::Details;
+	if line.len() > 22 && line[9..].starts_with("] Skipped ") {
+		return LineKind::Skipped;
 	}
 	LineKind::Junk
 }
@@ -76,55 +58,102 @@ enum LineKind {
 	InfiniteLoopHeader,
 	InfiniteLoop,
 	Runtime,
-	Details,
+	Skipped,
 	Junk,
 }
 
-fn parse_from_file(path: &str) -> Runtimes {
-	let input_file = File::open(path).expect("Error opening file.");
-	let reader = BufReader::new(input_file);
-	let lines = reader.lines().map(std::result::Result::unwrap);
+fn parse_from_file<W: Read>(file: W, mut runtimes: &mut Runtimes) {
+	let reader = BufReader::new(file);
+	let mut lines = reader.lines().map(std::result::Result::unwrap);
 
-	let mut runtimes = Runtimes::new();
-	let mut current_state = State::Scanning;
-
-	for line in lines {
-		if let State::Skip(mut count) = current_state {
-			count = count - 1;
-			if count < 1 {
-				current_state = State::Scanning
-			}
-			continue;
-		}
-		match line_kind(&line) {
-			LineKind::InfiniteLoopHeader => {
-				current_state = State::Skip(1);
-			}
-			LineKind::InfiniteLoop => {
-				if let State::Scanning = current_state {
-					current_state = State::Runtime(line.clone());
-					insert_runtime(&mut runtimes, &line, RuntimeKind::InfiniteLoop);
-				}
-			}
-			LineKind::Details => {
-				if let State::Runtime(ref ident) = current_state {
-					let data = runtimes.get_mut(ident).unwrap();
-					if data.counter != 1 {
-						continue;
-					}
-					data.details.push_str(&line);
-					data.details.push('\n');
-				}
-			}
-			LineKind::Runtime => {
-				let runtime_identifier = &line[22..];
-				current_state = State::Runtime(runtime_identifier.to_owned());
-				insert_runtime(&mut runtimes, runtime_identifier, RuntimeKind::RuntimeError);
-			}
-			LineKind::Junk => (),
+	while let Some(mut line) = lines.next() {
+		while let Some(newline) = parse_line(&mut lines, &mut runtimes, &line) {
+			line = newline;
 		}
 	}
-	runtimes
+}
+
+fn parse_line(
+	mut lines: &mut Iterator<Item = String>,
+	mut runtimes: &mut Runtimes,
+	currentline: &str,
+) -> Option<String> {
+	match line_kind(currentline) {
+		LineKind::InfiniteLoopHeader => {
+			// Skip NEXT line since the header is two lines long.
+   // Next line that will be read by main loop will be the infinite loop itself.
+			lines.next();
+			None
+		}
+		LineKind::InfiniteLoop => parse_runtime(
+			&mut lines,
+			&mut runtimes,
+			&currentline[11..],
+			RuntimeKind::InfiniteLoop,
+		),
+		LineKind::Runtime => parse_runtime(
+			&mut lines,
+			&mut runtimes,
+			&currentline[22..],
+			RuntimeKind::RuntimeError,
+		),
+		LineKind::Skipped => {
+			// Read amount of runtimes skipped
+			let countstart = &currentline[19..];
+			let endindex = countstart.char_indices().take_while(|&(_, c)| c.is_digit(10)).last().unwrap().0;
+			let count = countstart[..endindex+1].parse::<usize>().unwrap();
+
+			// Now to get the key.
+			let key = &countstart[endindex+14..];
+
+			if let Some(mut runtime) = runtimes.get_mut(key) {
+				runtime.counter += count;
+			} else {
+				println!("Found skip, but we have no runtime with said key. If this is an older log file: ignore this. {}", key);
+			}
+
+			None
+		},
+		LineKind::Junk => None,
+	}
+}
+
+fn parse_runtime(
+	lines: &mut Iterator<Item = String>,
+	runtimes: &mut Runtimes,
+	key: &str,
+	kind: RuntimeKind,
+) -> Option<String> {
+	if runtimes.contains_key(key) {
+		let runtime = runtimes.get_mut(key).unwrap();
+		runtime.counter += 1;
+		// Skip lines starting with two spaces since those are the trace and other details.
+		for line in lines {
+			if !line.starts_with("  ") {
+				return Some(line);
+			}
+		}
+		None
+	} else {
+		let mut details = String::new();
+		let mut outstring = None;
+		for line in lines {
+			if !line.starts_with("  ") {
+				outstring = Some(line);
+				break;
+			}
+			details.push_str(&line);
+			details.push('\n');
+		}
+		let new_entry = RuntimeData {
+			details: details,
+			counter: 1,
+			kind: kind,
+		};
+		runtimes.insert(key.to_owned(), new_entry);
+		runtimes.get_mut(key).unwrap();
+		outstring
+	}
 }
 
 fn total_runtimes(runtimes: &Runtimes) -> usize {
@@ -136,44 +165,113 @@ fn total_unique_runtimes(runtimes: &Runtimes) -> usize {
 }
 
 fn is_runtime_error(runtime: &(&String, &RuntimeData)) -> bool {
-	if let RuntimeKind::RuntimeError = runtime.1.kind {
-		return true;
+	if RuntimeKind::RuntimeError == runtime.1.kind {
+		true
+	} else {
+		false
 	}
-	false
 }
 
 fn is_infinite_loop(runtime: &(&String, &RuntimeData)) -> bool {
 	!is_runtime_error(runtime)
 }
 
-fn write_to_file<P: AsRef<std::path::Path>>(runtimes: &Runtimes, file_path: P) {
-	let mut output_file = File::create(file_path).expect("Error creating output file.");
+// Small struct to make sorting easier.
+#[derive(Eq, PartialEq)]
+struct KeyRuntimePair<'a>(&'a str, &'a RuntimeData);
+
+impl<'a> PartialOrd for KeyRuntimePair<'a> {
+	fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+		Some(self.cmp(other))
+	}
+}
+
+impl<'a> Ord for KeyRuntimePair<'a> {
+	fn cmp(&self, other: &Self) -> Ordering {
+		match self.1.counter.cmp(&other.1.counter) {
+			// Same count, compare keys to alphabetically sort those instead.
+			Ordering::Equal => self.0.cmp(other.0).reverse(),
+			x => x
+		}
+	}
+}
+
+fn write_to_file<W: Write>(runtimes: &Runtimes, mut file: W) -> std::io::Result<()> {
 	writeln!(
-		output_file,
+		file,
 		"Total runtimes: {}. Total unique_runtimes: {}.
 --------------------------------------
 Runtime errors:",
 		total_runtimes(runtimes),
 		total_unique_runtimes(runtimes)
-	).unwrap();
-	for (ident, _) in runtimes.iter().filter(is_runtime_error) {
-		writeln!(output_file, "{}", ident).unwrap();
+	)?;
+	let highest_count = runtimes.values().map(|r| r.counter).max().unwrap_or(0);
+	let width = format!("{}", highest_count).len();
+
+	let mut all_runtimes = runtimes.iter()
+	                               .filter(is_runtime_error)
+	                               .map(|(a, b)| KeyRuntimePair(a, b))
+	                               .collect::<Vec<KeyRuntimePair>>();
+	all_runtimes.sort_unstable();
+
+	for KeyRuntimePair(ident, runtime) in all_runtimes.into_iter().rev() {
+		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
 	}
 	writeln!(
-		output_file,
+		file,
 		"--------------------------------------
 Infinite loops:"
-	).unwrap();
-	for (ident, _) in runtimes.iter().filter(is_infinite_loop) {
-		writeln!(output_file, "{}", ident).unwrap();
+	)?;
+
+	let mut all_infinite_loops = runtimes.iter()
+	                                     .filter(is_infinite_loop)
+	                                     .map(|(a, b)| KeyRuntimePair(a, b))
+	                                     .collect::<Vec<KeyRuntimePair>>();
+	all_infinite_loops.sort_unstable();
+
+	for KeyRuntimePair(ident, runtime) in all_infinite_loops.into_iter().rev() {
+		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
 	}
-	writeln!(output_file, "--------------------------------------").unwrap();
-	for (ident, data) in runtimes {
-		writeln!(output_file, "{}\n{}", ident, data).unwrap();
-	}
+	Ok(())
 }
 
 fn main() {
-	let runtimes = parse_from_file(INPUT_FILE);
-	write_to_file(&runtimes, OUTPUT_FILE);
+	let matches = App::new("/vg/station 13 Runtime Condenser")
+	                  .version("0.1")
+	                  .author("/vg/station 13 Developers")
+	                  .about("Compresses and filters runtime errors output by Dream Daemon, showing a more readable summary.")
+	                  .arg(Arg::with_name("json")
+	                       .long("json")
+	                       .short("j")
+	                       .help("Output in JSON."))
+	                  .arg(Arg::with_name("input")
+	                       .long("input")
+	                       .short("i")
+	                       .help("Specifies the input file to read from.")
+	                       .default_value(DEFAULT_INPUT_FILE)
+	                       .takes_value(true)
+	                       .multiple(true))
+	                  .arg(Arg::with_name("output")
+	                       .long("output")
+	                       .short("o")
+	                       .help("Specifies the output file to write to.")
+	                       .default_value(DEFAULT_OUTPUT_FILE)
+	                       .takes_value(true))
+	                  .get_matches();
+
+	let json = matches.is_present("json");
+	let input = matches.values_of("input").unwrap();
+	let output = matches.value_of("output").unwrap();
+
+	let mut runtimes = Runtimes::new();
+	for filename in input {
+		let input_file = File::open(filename).expect("Error opening input file.");
+		parse_from_file(input_file, &mut runtimes);
+	}
+	let mut output_file = File::create(output).expect("Error creating output file.");
+	if json {
+		output_file.write_all(serde_json::to_string(&runtimes).expect("Unable to format output as JSON").as_bytes())
+	} else {
+		write_to_file(&runtimes, output_file)
+	}.expect("Error outputting to file.");
 }
