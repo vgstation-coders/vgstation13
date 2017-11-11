@@ -158,6 +158,7 @@
 	..()
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 
 /*
  * Bombsuit closet
