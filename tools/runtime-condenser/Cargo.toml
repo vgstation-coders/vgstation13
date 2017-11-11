@@ -1,6 +1,16 @@
 [package]
+authors = [
+	"Damian <damian@autistici.org>",
+	"PJB3005 <pieterjan.briers@gmail.com>"
+]
 name = "runtime-condenser"
 version = "0.1.0"
-authors = ["Damian <damian@autistici.org>"]
+publish = false
 
 [dependencies]
+clap = "2.27.1"
+lazy_static = "0.2.9"
+serde = "1.0.19"
+serde_derive = "1.0.19"
+serde_json = "1.0.6"
+
