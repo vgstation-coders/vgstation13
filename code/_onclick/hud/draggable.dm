@@ -28,12 +28,10 @@
 
 /obj/abstract/screen/fuckbyond/Destroy()
 	..()
-	returnToPool(draggable)
 	draggable = null
 
 /obj/abstract/screen/fuckbyond/MouseUp()
 	returnToPool(draggable)
-	draggable = null
 ///////////////////////////////////////////////
 
 
