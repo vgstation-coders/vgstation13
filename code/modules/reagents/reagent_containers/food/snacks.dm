@@ -226,6 +226,16 @@
 			H.visible_message("<span class='warning'>\The [src] falls through \the [eater] and onto the ground, completely untouched.</span>",\
 			"<span class='notice'>As [user] attempts to feed you \the [src], \he falls through your body and onto the ground, completely untouched.</span>")
 			return
+		if(H.mutations.Find(M_VEGAN))
+			if(food_flags & (FOOD_MEAT | FOOD_ANIMAL))
+			//if(prob(66))
+				H.visible_message("<span class='warning'>[H] winces at the taste of \the [src], finding it absolutely disgusting.</span>",\
+				"<span class='warning'>\The [src] is disgusting! Your vegan digestive system rejects \him.</span>")
+
+				if(H.lastpuke) //If already puking, add some toxins
+					H.adjustToxLoss(5)
+				else
+					H.vomit()
 
 	return 1
 

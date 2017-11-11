@@ -69,3 +69,46 @@
 
 	OnSay(var/mob/M, var/datum/speech/speech)
 		speech.message_classes.Add("sans") // SPEECH 2.0!!!1
+
+/datum/dna/gene/disability/veganism
+	name = "Veganism"
+	desc = "Causes the digestive system to completely reject all animal products, from meat to dairy."
+	activation_message = "You feel vegan."
+	deactivation_message = "You're back on top of the food chain."
+
+	mutation = M_VEGAN
+
+	var/static/list/bad_reagents = list(
+	HONEY,
+	//Milk-based products
+	MILK,
+	VIRUSFOOD,
+	CREAM,
+	CAFE_LATTE,
+	MILKSHAKE,
+	//Blood-based products (human blood is off-limit too)
+	BLOOD,
+	DEMONSBLOOD,
+	RED_MEAD,
+	DEVILSKISS,
+	MEDCOFFEE,
+	)
+
+/datum/dna/gene/disability/veganism/New()
+	..()
+	block = VEGANBLOCK
+
+/datum/dna/gene/disability/veganism/OnMobLife(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+
+	if(prob(10))
+		for(var/R in bad_reagents)
+			if(H.reagents.has_reagent(R))
+				to_chat(H, "<span class='warning'>Your body rejects the [reagent_name(R)]!</span>")
+
+				if(H.lastpuke) //If already puking, add some toxins
+					H.adjustToxLoss(5)
+				else
+					H.vomit()
+				break

@@ -440,6 +440,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
 #define M_FARSIGHT	212		// Increases mob's view range by 2
 #define M_NOIR		213		// aww yis detective noir
+#define M_VEGAN		214
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\

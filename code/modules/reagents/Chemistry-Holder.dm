@@ -780,6 +780,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 ///////////////////////////////////////////////////////////////////////////////////
 
 
+/proc/reagent_name(id)
+	var/datum/reagent/D = chemical_reagents_list[id]
+	if(D)
+		return D.name
+
 /*
  * Convenience proc to create a reagents holder for an atom
  * max_vol is maximum volume of holder

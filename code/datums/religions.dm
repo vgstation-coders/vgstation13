@@ -660,3 +660,16 @@
 
 /datum/religion/dune/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/stilsuit(H), slot_w_uniform)
+
+/datum/religion/vegan
+	name = "Veganism"
+
+	bible_name = "Mercy For Animals"
+	male_adept = "Animal Rights Activist"
+	female_adept = "Animal Rights Activist"
+	keys = list("vegan","vegetarian","veganism","vegetarianism", "animals", "animal rights")
+
+/datum/religion/vegan/equip_chaplain(var/mob/living/carbon/human/H)
+	//Add veganism disability
+	H.dna.SetSEState(VEGANBLOCK, 1)
+	domutcheck(H, null, MUTCHK_FORCED)
