@@ -460,6 +460,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
 		new_character.disabilities |= NEARSIGHTED
 
+	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
+		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
+
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
@@ -479,6 +482,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.sdisabilities |= MUTE
 
 	new_character.dna.UpdateSE()
+	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	new_character.key = key		//Manually transfer the key to log them in
 

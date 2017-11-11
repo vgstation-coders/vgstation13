@@ -636,6 +636,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_DEAF,       "Deaf")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_BLIND,      "Blind")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_MUTE,       "Mute")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_VEGAN,      "Vegan")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 

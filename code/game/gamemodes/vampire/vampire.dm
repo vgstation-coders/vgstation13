@@ -271,6 +271,8 @@
 		//Forcefully remove veganism since it breaks you
 		vampire_mob.dna.SetSEState(VEGANBLOCK, 0)
 		domutcheck(vampire_mob, null, MUTCHK_FORCED)
+		//Just in case
+		vampire_mob.mutations.Remove(M_VEGAN)
 
 /datum/game_mode/proc/greet_vampire(var/datum/mind/vampire, var/you_are=1)
 	var/dat
