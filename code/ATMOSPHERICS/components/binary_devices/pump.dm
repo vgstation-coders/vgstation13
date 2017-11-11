@@ -176,6 +176,14 @@ Thus, the two variables affect pump operation are set in New():
 	src.update_icon()
 	src.updateUsrDialog()
 
+/obj/machinery/atmospherics/binary/pump/AltClick(mob/user)
+	if(allowed)
+		on = !on
+		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(user)].")
+		update_icon()
+	else
+		..()
+
 /obj/machinery/atmospherics/binary/pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
 	if("set_id" in href_list)
 		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
@@ -183,7 +191,7 @@ Thus, the two variables affect pump operation are set in New():
 			id_tag = newid
 			initialize()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")
