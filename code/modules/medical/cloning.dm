@@ -476,8 +476,9 @@
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 
+	var/_occupant = occupant // occupant is null after go_out()
 	if(go_out(over_location))
-		visible_message("[usr] removes [occupant.name] from \the [src].")
+		visible_message("[usr] removes \the [_occupant] from \the [src].")
 		add_fingerprint(usr)
 
 /obj/machinery/cloning/clonepod/proc/malfunction()
