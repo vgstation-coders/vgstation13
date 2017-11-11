@@ -29,6 +29,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/toggled = 1 	// Is it toggled on
 	var/on = 1
 	var/delay = 10 // how many process() ticks to delay per heat
+	var/emptime = 0 //How much longer are we receiving interference?
 	var/heating_power = 40000 // how much heat to transfer to the environment
 	var/long_range_link = 0	// Can you link it across Z levels or on the otherside of the map? (Relay & Hub)
 	var/hide = 0				// Is it a hidden machine?
@@ -215,19 +216,32 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	// Update the icon
 	update_icon()
 
+	if(emptime > 0)
+		stat |= EMPED
+		update_power_and_icon()
+		emptime -= 1
+	else
+		stat &= ~EMPED
+		update_power_and_icon()
+
 	if(traffic > 0)
 		traffic -= netspeed
 
 /obj/machinery/telecomms/emp_act(severity)
 	if(prob(100/severity))
 		if(!(stat & EMPED))
-			stat |= EMPED
-			update_power_and_icon()
-			var/duration = (300 * 10)/severity
-			spawn(rand(duration - 20, duration + 20)) // Takes a long time for the machines to reboot.
-				stat &= ~EMPED
-				update_power_and_icon()
+			emptime = rand(300/severity-2, 300/severity+2)
 	..()
+
+/obj/machinery/telecomms/proc/boost_signal()
+	if(emptime)
+		emptime = 0
+		update_power_and_icon()
+		heating_power *= 2
+		spawn(3000)
+			heating_power = initial(heating_power)
+		return 1
+	return 0
 
 /obj/machinery/telecomms/proc/checkheat()
 	// Checks heat from the environment and applies any integrity damage
