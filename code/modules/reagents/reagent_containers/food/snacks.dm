@@ -233,7 +233,7 @@
 				"<span class='warning'>\The [src] is disgusting! Your vegan digestive system rejects \him.</span>")
 
 				if(H.lastpuke) //If already puking, add some toxins
-					H.adjustToxLoss(5)
+					H.adjustToxLoss(2.5)
 				else
 					H.vomit()
 

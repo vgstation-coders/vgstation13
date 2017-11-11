@@ -86,7 +86,7 @@
 	CREAM,
 	CAFE_LATTE,
 	MILKSHAKE,
-	//Blood-based products (human blood is off-limit too)
+	//Blood-based products
 	BLOOD,
 	DEMONSBLOOD,
 	RED_MEAD,
@@ -108,7 +108,7 @@
 				to_chat(H, "<span class='warning'>Your body rejects the [reagent_name(R)]!</span>")
 
 				if(H.lastpuke) //If already puking, add some toxins
-					H.adjustToxLoss(5)
+					H.adjustToxLoss(2.5)
 				else
 					H.vomit()
 				break
