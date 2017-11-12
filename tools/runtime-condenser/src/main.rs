@@ -79,7 +79,7 @@ enum LineKind {
     Junk,
 }
 
-fn parse_from_file<W: Read>(file: W, mut runtimes: &mut Runtimes) {
+fn parse_from_file<W: Read>(file: W, runtimes: &mut Runtimes) {
     let reader = BufReader::new(file);
     let mut lines = reader.lines().map(std::result::Result::unwrap);
 
@@ -87,15 +87,15 @@ fn parse_from_file<W: Read>(file: W, mut runtimes: &mut Runtimes) {
     //   and can pass it down mid-loop.
     // A regular for loop borrows it mutably until the loop is done.
     while let Some(mut line) = lines.next() {
-        while let Some(newline) = parse_line(&mut lines, &mut runtimes, &line) {
+        while let Some(newline) = parse_line(&mut lines, runtimes, &line) {
             // If the parsing ate the next line and gave it back we do that one instead.
             line = newline;
         }
     }
 }
 
-fn parse_line<L: Iterator<Item = String>>(mut lines: &mut L,
-                                          mut runtimes: &mut Runtimes,
+fn parse_line<L: Iterator<Item = String>>(lines: &mut L,
+                                          runtimes: &mut Runtimes,
                                           currentline: &str)
                                           -> Option<String> {
     match line_kind(currentline) {
@@ -103,8 +103,8 @@ fn parse_line<L: Iterator<Item = String>>(mut lines: &mut L,
             // Skip next 1 line so we arrive at the "proc name:"
             lines.next();
             if let Some(line) = lines.next() {
-                parse_runtime(&mut lines,
-                              &mut runtimes,
+                parse_runtime(lines,
+                              runtimes,
                               &line[11..],
                               RuntimeKind::InfiniteLoop)
             } else {
@@ -115,8 +115,8 @@ fn parse_line<L: Iterator<Item = String>>(mut lines: &mut L,
             // Skip next 1 line so we arrive at the "proc name:"
             lines.next();
             if let Some(line) = lines.next() {
-                parse_runtime(&mut lines,
-                              &mut runtimes,
+                parse_runtime(lines,
+                              runtimes,
                               &line[11..],
                               RuntimeKind::RecursionLimit)
             } else {
@@ -124,8 +124,8 @@ fn parse_line<L: Iterator<Item = String>>(mut lines: &mut L,
             }
         }
         LineKind::Runtime => {
-            parse_runtime(&mut lines,
-                          &mut runtimes,
+            parse_runtime(lines,
+                          runtimes,
                           &currentline[22..],
                           RuntimeKind::RuntimeError)
         }
@@ -216,7 +216,6 @@ fn parse_runtime<L: Iterator<Item = String>>(lines: &mut L,
             kind: kind,
         };
         runtimes.insert(key.to_owned(), new_entry);
-        runtimes.get_mut(key).unwrap();
         outstring
     }
 }
