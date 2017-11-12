@@ -78,7 +78,7 @@
 
 	mutation = M_VEGAN
 
-	var/static/list/bad_reagents = list(
+	var/global/static/list/nonvegan_reagents = list(
 	HONEY,
 	//Milk-based products
 	MILK,
@@ -103,7 +103,7 @@
 		return
 
 	if(prob(10))
-		for(var/R in bad_reagents)
+		for(var/R in nonvegan_reagents)
 			if(H.reagents.has_reagent(R))
 				to_chat(H, "<span class='warning'>Your body rejects the [reagent_name(R)]!</span>")
 
