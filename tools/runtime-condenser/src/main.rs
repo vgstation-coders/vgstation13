@@ -248,7 +248,7 @@ impl<'a> Ord for KeyRuntimePair<'a> {
     }
 }
 
-fn write_to_file<W: Write>(runtimes: &Runtimes, file: &mut W) -> std::io::Result<()> {
+fn write_to_file<W: Write>(runtimes: &Runtimes, file: &mut W, verbose: bool) -> std::io::Result<()> {
     writeln!(file,
              "Total errors: {}. Total unique errors: {}.
 --------------------------------------
@@ -307,6 +307,19 @@ Recursion limits reached:")?;
                  width = width)?;
     }
 
+    if verbose {
+        writeln!(file,
+                "--------------------------------------
+Full log:")?;
+        for (ident, runtime) in runtimes.iter() {
+            writeln!(file,
+                    "x{} {}\n{}",
+                    runtime.counter,
+                    ident,
+                    runtime.details,)?;
+        }
+    }
+    
     Ok(())
 }
 
@@ -320,6 +333,10 @@ fn main() {
             .long("json")
             .short("j")
             .help("Output in JSON."))
+        .arg(Arg::with_name("verbose")
+            .long("verbose")
+            .short("-v")
+            .help("Output full details and call traces (JSON mode always does this)"))
         .arg(Arg::with_name("input")
             .long("input")
             .short("i")
@@ -336,6 +353,7 @@ fn main() {
         .get_matches();
 
     let json = matches.is_present("json");
+    let verbose = matches.is_present("verbose");
     let input = matches.values_of("input").unwrap();
     let output = matches.value_of("output").unwrap();
 
@@ -349,8 +367,8 @@ fn main() {
             output_file.write_all(serde_json::to_string(&runtimes)
                 .expect("Unable to format output as JSON")
                 .as_bytes())
-        } else {
-            write_to_file(&runtimes, &mut output_file)
-        }
+    } else {
+        write_to_file(&runtimes, &mut output_file, verbose)
+    }
         .expect("Error outputting to file.");
 }
