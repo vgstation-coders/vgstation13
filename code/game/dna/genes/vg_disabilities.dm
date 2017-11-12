@@ -86,12 +86,17 @@
 	CREAM,
 	CAFE_LATTE,
 	MILKSHAKE,
+	OFFCOLORCHEESE,
+	CHEESYGLOOP, //this one doesn't leave your body naturally, but you'll vomit it out eventually
 	//Blood-based products
 	BLOOD,
 	DEMONSBLOOD,
 	RED_MEAD,
 	DEVILSKISS,
 	MEDCOFFEE,
+	//Misc
+	HORSEMEAT,
+	BONEMARROW,
 	)
 
 /datum/dna/gene/disability/veganism/New()
