@@ -152,7 +152,7 @@
 
 /datum/design/diamond_surgicaldrill
 	name = "Diamond Surgical Drill"
-	desc = "Yours is the drill that will pierce the tiny heavens!""
+	desc = "Yours is the drill that will pierce the tiny heavens!"
 	id = "diamond_surgicaldrill"
 	req_tech = list(Tc_MATERIALS = 6, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
 	build_type = PROTOLATHE
