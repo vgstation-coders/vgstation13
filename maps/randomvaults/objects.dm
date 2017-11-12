@@ -250,6 +250,25 @@
 /area/vault/rattlemebones
 	jammed = 2
 
+/area/vault/zathura
+	var/obj/effect/narration/narrator
+
+/area/vault/zathura/New()
+	..()
+
+	//Create an invisible narrator object in nullspace to play a sound to everybody who enters the area
+	//The narrator object keeps track of players who have already heard the sound before, and doesn't play it to them
+	narrator = new /obj/effect/narration/mystery_sound(null)
+
+/area/vault/zathura/Entered(atom/movable/AM, atom/OldLoc)
+	..()
+
+	if(isliving(AM))
+		narrator.Crossed(AM)
+
+/obj/effect/narration/mystery_sound
+	play_sound = 'sound/effects/wildwasteland.ogg'
+
 
 /area/vault/beach_party
 
