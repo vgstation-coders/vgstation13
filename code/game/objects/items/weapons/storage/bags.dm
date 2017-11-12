@@ -67,6 +67,7 @@
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
+	foldable = /obj/item/folded_bag
 
 obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
@@ -91,6 +92,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
+
 
 // -----------------------------
 //        Mining Satchel
