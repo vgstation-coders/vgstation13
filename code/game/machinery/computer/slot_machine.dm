@@ -258,7 +258,7 @@
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)
 	if(!message || !z)
 		return
-	var/datum/speech/speech = radio.create_speech(message, frequency=1459, transmitter=radio)
+	var/datum/speech/speech = radio.create_speech(message, frequency=COMMON_FREQ, transmitter=radio)
 	speech.name = capitalize(name)
 	speech.job = "Money Snatcher"
 	speech.as_name = "Slot machine #[id]"
