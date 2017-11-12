@@ -672,4 +672,4 @@
 /datum/religion/vegan/equip_chaplain(var/mob/living/carbon/human/H)
 	//Add veganism disability
 	H.dna.SetSEState(VEGANBLOCK, 1)
-	domutcheck(H, null, MUTCHK_FORCED)
+	domutcheck(H, null, 1)
