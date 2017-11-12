@@ -128,7 +128,7 @@ fn parse_line<L: Iterator<Item = String>>(
 			// Now to get the key.
 			let key = &countstart[endindex+14..];
 
-			if let Some(mut runtime) = runtimes.get_mut(key) {
+			if let Some(runtime) = runtimes.get_mut(key) {
 				runtime.counter += count;
 			} else {
 				println!("Found skip, but we have no runtime with said key. If this is an older log file: ignore this. {}", key);
