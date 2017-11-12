@@ -288,7 +288,7 @@ fn write_to_file<W: Write>(
     all_infinite_loops.sort_unstable();
     all_recursion_limits.sort_unstable();
 
-    for KeyRuntimePair(ident, runtime) in all_runtimes.into_iter().rev() {
+    for &KeyRuntimePair(ident, runtime) in all_runtimes.iter().rev() {
         writeln!(
             file,
             "x{:<width$} {}",
@@ -303,7 +303,7 @@ fn write_to_file<W: Write>(
 Infinite loops:"
     )?;
 
-    for KeyRuntimePair(ident, runtime) in all_infinite_loops.into_iter().rev() {
+    for &KeyRuntimePair(ident, runtime) in all_infinite_loops.iter().rev() {
         writeln!(
             file,
             "x{:<width$} {}",
@@ -319,7 +319,7 @@ Infinite loops:"
 Recursion limits reached:"
     )?;
 
-    for KeyRuntimePair(ident, runtime) in all_recursion_limits.into_iter().rev() {
+    for &KeyRuntimePair(ident, runtime) in all_recursion_limits.iter().rev() {
         writeln!(
             file,
             "x{:<width$} {}",
@@ -335,7 +335,13 @@ Recursion limits reached:"
             "--------------------------------------
 Full log:"
         )?;
-        for (ident, runtime) in runtimes.iter() {
+        for &KeyRuntimePair(ident, runtime) in
+            all_runtimes
+                .iter()
+                .rev()
+                .chain(all_infinite_loops.iter().rev())
+                .chain(all_recursion_limits.iter().rev())
+        {
             writeln!(file,
                     "x{} {}\n{}",
                     runtime.counter,
