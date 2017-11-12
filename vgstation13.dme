@@ -215,6 +215,7 @@
 #include "code\datums\plugin.dm"
 #include "code\datums\recipe.dm"
 #include "code\datums\recruiter.dm"
+#include "code\datums\religions.dm"
 #include "code\datums\shuttle.dm"
 #include "code\datums\sun.dm"
 #include "code\datums\supplypacks.dm"
