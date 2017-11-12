@@ -248,7 +248,7 @@ impl<'a> Ord for KeyRuntimePair<'a> {
     }
 }
 
-fn write_to_file<W: Write>(runtimes: &Runtimes, mut file: W) -> std::io::Result<()> {
+fn write_to_file<W: Write>(runtimes: &Runtimes, file: &mut W) -> std::io::Result<()> {
     writeln!(file,
              "Total errors: {}. Total unique errors: {}.
 --------------------------------------
@@ -350,7 +350,7 @@ fn main() {
                 .expect("Unable to format output as JSON")
                 .as_bytes())
         } else {
-            write_to_file(&runtimes, output_file)
+            write_to_file(&runtimes, &mut output_file)
         }
         .expect("Error outputting to file.");
 }
