@@ -59,7 +59,8 @@ fn line_kind(line: &str) -> LineKind {
         return LineKind::InfiniteLoop;
     }
     if line ==
-       "runtime error: Maximum recursion level reached (perhaps there is an infinite loop)" {
+        "runtime error: Maximum recursion level reached (perhaps there is an infinite loop)"
+    {
         return LineKind::RecursionLimit;
     }
     if line.len() > 22 && line[9..].starts_with("] Runtime in ") {
@@ -94,19 +95,17 @@ fn parse_from_file<W: Read>(file: W, runtimes: &mut Runtimes) {
     }
 }
 
-fn parse_line<L: Iterator<Item = String>>(lines: &mut L,
-                                          runtimes: &mut Runtimes,
-                                          currentline: &str)
-                                          -> Option<String> {
+fn parse_line<L: Iterator<Item = String>>(
+    lines: &mut L,
+    runtimes: &mut Runtimes,
+    currentline: &str,
+) -> Option<String> {
     match line_kind(currentline) {
         LineKind::InfiniteLoop => {
             // Skip next 1 line so we arrive at the "proc name:"
             lines.next();
             if let Some(line) = lines.next() {
-                parse_runtime(lines,
-                              runtimes,
-                              &line[11..],
-                              RuntimeKind::InfiniteLoop)
+                parse_runtime(lines, runtimes, &line[11..], RuntimeKind::InfiniteLoop)
             } else {
                 None
             }
@@ -115,25 +114,28 @@ fn parse_line<L: Iterator<Item = String>>(lines: &mut L,
             // Skip next 1 line so we arrive at the "proc name:"
             lines.next();
             if let Some(line) = lines.next() {
-                parse_runtime(lines,
-                              runtimes,
-                              &line[11..],
-                              RuntimeKind::RecursionLimit)
+                parse_runtime(lines, runtimes, &line[11..], RuntimeKind::RecursionLimit)
             } else {
                 None
             }
         }
         LineKind::Runtime => {
-            parse_runtime(lines,
-                          runtimes,
-                          &currentline[22..],
-                          RuntimeKind::RuntimeError)
+            parse_runtime(
+                lines,
+                runtimes,
+                &currentline[22..],
+                RuntimeKind::RuntimeError,
+            )
         }
         LineKind::Skipped => {
             // Read amount of runtimes skipped
             let countstart = &currentline[19..];
-            let endindex =
-                countstart.char_indices().take_while(|&(_, c)| c.is_digit(10)).last().unwrap().0;
+            let endindex = countstart
+                .char_indices()
+                .take_while(|&(_, c)| c.is_digit(10))
+                .last()
+                .unwrap()
+                .0;
             let count = countstart[..endindex + 1].parse::<usize>().unwrap();
 
             // Now to get the key.
@@ -142,9 +144,11 @@ fn parse_line<L: Iterator<Item = String>>(lines: &mut L,
             if let Some(runtime) = runtimes.get_mut(key) {
                 runtime.counter += count;
             } else {
-                println!("Found skip, but we have no runtime with said key. If this is an older \
+                println!(
+                    "Found skip, but we have no runtime with said key. If this is an older \
                           log file: ignore this. {}",
-                         key);
+                    key
+                );
             }
 
             None
@@ -153,11 +157,12 @@ fn parse_line<L: Iterator<Item = String>>(lines: &mut L,
     }
 }
 
-fn parse_runtime<L: Iterator<Item = String>>(lines: &mut L,
-                                             runtimes: &mut Runtimes,
-                                             key: &str,
-                                             kind: RuntimeKind)
-                                             -> Option<String> {
+fn parse_runtime<L: Iterator<Item = String>>(
+    lines: &mut L,
+    runtimes: &mut Runtimes,
+    key: &str,
+    kind: RuntimeKind,
+) -> Option<String> {
     if runtimes.contains_key(key) {
         let runtime = runtimes.get_mut(key).unwrap();
         runtime.counter += 1;
@@ -188,7 +193,8 @@ fn parse_runtime<L: Iterator<Item = String>>(lines: &mut L,
         }
         // TODO: Maybe merge this with the above loop?
         if kind.has_poor_formatting() && outstring.is_some() &&
-           STACK_FORMATTING_REGEX.is_match(outstring.as_ref().unwrap()) {
+            STACK_FORMATTING_REGEX.is_match(outstring.as_ref().unwrap())
+        {
             // RIGHT we have to handle the stack trace with special behavior
             //   because we can't intercept infinite loops/stack overflows in /world/Error,
             //   meaning they're still too poorly formatted to parse easily like a runtime.
@@ -248,14 +254,20 @@ impl<'a> Ord for KeyRuntimePair<'a> {
     }
 }
 
-fn write_to_file<W: Write>(runtimes: &Runtimes, file: &mut W, verbose: bool) -> std::io::Result<()> {
-    writeln!(file,
-             "Total errors: {}. Total unique errors: {}.
+fn write_to_file<W: Write>(
+    runtimes: &Runtimes,
+    file: &mut W,
+    verbose: bool,
+) -> std::io::Result<()> {
+    writeln!(
+        file,
+        "Total errors: {}. Total unique errors: {}.
 --------------------------------------
 \
               Runtime errors:",
-             total_runtimes(runtimes),
-             total_unique_runtimes(runtimes))?;
+        total_runtimes(runtimes),
+        total_unique_runtimes(runtimes)
+    )?;
     let highest_count = runtimes.values().map(|r| r.counter).max().unwrap_or(0);
     let width = format!("{}", highest_count).len();
 
@@ -277,40 +289,52 @@ fn write_to_file<W: Write>(runtimes: &Runtimes, file: &mut W, verbose: bool) -> 
     all_recursion_limits.sort_unstable();
 
     for KeyRuntimePair(ident, runtime) in all_runtimes.into_iter().rev() {
-        writeln!(file,
-                 "x{:<width$} {}",
-                 runtime.counter,
-                 ident,
-                 width = width)?;
+        writeln!(
+            file,
+            "x{:<width$} {}",
+            runtime.counter,
+            ident,
+            width = width
+        )?;
     }
-    writeln!(file,
-             "--------------------------------------
-Infinite loops:")?;
+    writeln!(
+        file,
+        "--------------------------------------
+Infinite loops:"
+    )?;
 
     for KeyRuntimePair(ident, runtime) in all_infinite_loops.into_iter().rev() {
-        writeln!(file,
-                 "x{:<width$} {}",
-                 runtime.counter,
-                 ident,
-                 width = width)?;
+        writeln!(
+            file,
+            "x{:<width$} {}",
+            runtime.counter,
+            ident,
+            width = width
+        )?;
     }
 
-    writeln!(file,
-             "--------------------------------------
-Recursion limits reached:")?;
+    writeln!(
+        file,
+        "--------------------------------------
+Recursion limits reached:"
+    )?;
 
     for KeyRuntimePair(ident, runtime) in all_recursion_limits.into_iter().rev() {
-        writeln!(file,
-                 "x{:<width$} {}",
-                 runtime.counter,
-                 ident,
-                 width = width)?;
+        writeln!(
+            file,
+            "x{:<width$} {}",
+            runtime.counter,
+            ident,
+            width = width
+        )?;
     }
 
     if verbose {
-        writeln!(file,
-                "--------------------------------------
-Full log:")?;
+        writeln!(
+            file,
+            "--------------------------------------
+Full log:"
+        )?;
         for (ident, runtime) in runtimes.iter() {
             writeln!(file,
                     "x{} {}\n{}",
@@ -319,7 +343,7 @@ Full log:")?;
                     runtime.details,)?;
         }
     }
-    
+
     Ok(())
 }
 
@@ -327,29 +351,33 @@ fn main() {
     let matches = App::new("/vg/station 13 Runtime Condenser")
         .version("0.1")
         .author("/vg/station 13 Developers")
-        .about("Compresses and filters runtime errors output by Dream Daemon, showing a more \
-                readable summary.")
-        .arg(Arg::with_name("json")
-            .long("json")
-            .short("j")
-            .help("Output in JSON."))
-        .arg(Arg::with_name("verbose")
-            .long("verbose")
-            .short("-v")
-            .help("Output full details and call traces (JSON mode always does this)"))
-        .arg(Arg::with_name("input")
-            .long("input")
-            .short("i")
-            .help("Specifies the input file to read from.")
-            .default_value(DEFAULT_INPUT_FILE)
-            .takes_value(true)
-            .multiple(true))
-        .arg(Arg::with_name("output")
-            .long("output")
-            .short("o")
-            .help("Specifies the output file to write to.")
-            .default_value(DEFAULT_OUTPUT_FILE)
-            .takes_value(true))
+        .about(
+            "Compresses and filters runtime errors output by Dream Daemon, showing a more \
+                readable summary.",
+        )
+        .arg(Arg::with_name("json").long("json").short("j").help(
+            "Output in JSON.",
+        ))
+        .arg(Arg::with_name("verbose").long("verbose").short("-v").help(
+            "Output full details and call traces (JSON mode always does this)",
+        ))
+        .arg(
+            Arg::with_name("input")
+                .long("input")
+                .short("i")
+                .help("Specifies the input file to read from.")
+                .default_value(DEFAULT_INPUT_FILE)
+                .takes_value(true)
+                .multiple(true),
+        )
+        .arg(
+            Arg::with_name("output")
+                .long("output")
+                .short("o")
+                .help("Specifies the output file to write to.")
+                .default_value(DEFAULT_OUTPUT_FILE)
+                .takes_value(true),
+        )
         .get_matches();
 
     let json = matches.is_present("json");
@@ -364,11 +392,12 @@ fn main() {
     }
     let mut output_file = File::create(output).expect("Error creating output file.");
     if json {
-            output_file.write_all(serde_json::to_string(&runtimes)
+        output_file.write_all(
+            serde_json::to_string(&runtimes)
                 .expect("Unable to format output as JSON")
-                .as_bytes())
+                .as_bytes(),
+        )
     } else {
         write_to_file(&runtimes, &mut output_file, verbose)
-    }
-        .expect("Error outputting to file.");
+    }.expect("Error outputting to file.");
 }
