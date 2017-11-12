@@ -325,7 +325,7 @@ var/list/one_way_windows
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			overlays -= oneway_overlay
 			return
-
+    /* One-way windows have serious performance issues - N3X
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
 			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
@@ -350,6 +350,7 @@ var/list/one_way_windows
 		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
 		overlays += oneway_overlay
 		return
+	*/
 
 
 	if(istype(W, /obj/item/stack/light_w))
