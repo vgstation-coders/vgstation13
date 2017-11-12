@@ -20,7 +20,7 @@ const DEFAULT_OUTPUT_FILE: &str = "output.txt";
 
 lazy_static! {
 	static ref STACK_FORMATTING_REGEX: Regex = {
-		Regex::new(r"^(?:\.\.\.|(?:.+? \(.+?\): )?.+\(\))$").unwrap()
+		Regex::new(r"^(?:\.\.\.|(?:.+? \(.+?\): )?.+\(.*?\))$").unwrap()
 	};
 }
 
@@ -93,8 +93,8 @@ fn parse_from_file<W: Read>(file: W, mut runtimes: &mut Runtimes) {
 	}
 }
 
-fn parse_line(
-	mut lines: &mut Iterator<Item = String>,
+fn parse_line<L: Iterator<Item = String>>(
+	mut lines: &mut L,
 	mut runtimes: &mut Runtimes,
 	currentline: &str,
 ) -> Option<String> {
@@ -140,8 +140,8 @@ fn parse_line(
 	}
 }
 
-fn parse_runtime(
-	lines: &mut Iterator<Item = String>,
+fn parse_runtime<L: Iterator<Item = String>>(
+	lines: &mut L,
 	runtimes: &mut Runtimes,
 	key: &str,
 	kind: RuntimeKind,
@@ -161,12 +161,12 @@ fn parse_runtime(
 		// We don't have to handle poorly-formatted errors (infinite loops, recursion) here:
 		//   the trace gets treated as junk and ignored.
 		// Theoretically it would be an improvement but infinite loops and stack overflows
-		//   are too rare to care about.
+		//   are too rare to care about for me to bother optimizing it.
 		None
 	} else {
 		let mut details = String::new();
 		let mut outstring = None;
-		for line in lines {
+		for line in lines.by_ref() {
 			if !line.starts_with("  ") {
 				outstring = Some(line);
 				break;
@@ -174,12 +174,28 @@ fn parse_runtime(
 			details.push_str(&line);
 			details.push('\n');
 		}
-		if kind.has_poor_formatting() {
+		// TODO: Maybe merge this with the above loop?
+		if kind.has_poor_formatting() && outstring.is_some() && STACK_FORMATTING_REGEX.is_match(outstring.as_ref().unwrap()) {
 			// RIGHT we have to handle the stack trace with special behavior
 			//   because we can't intercept infinite loops/stack overflows in /world/Error,
-			//   meaning they're still too poorly formatted to parse like we do with runtimes.
+			//   meaning they're still too poorly formatted to parse easily like a runtime.
 			// Thanks, Lummox.
+			details.push_str(outstring.as_ref().unwrap());
+			details.push('\n');
+			// We read the first line and a trace maxes out at 20 lines so
+			//   take a MAX of 19 lines.
+			for line in lines.by_ref().take(19) {
+				// The [ is the start of a regular runtime.
+				// Other infinite loops or recursion limits can't match against the stack regex.
+				// This should prevent us missing other runtimes due to erroneous stack parsing at the very least.
+				if line.starts_with('[') || !STACK_FORMATTING_REGEX.is_match(&line) {
+					outstring = Some(line);
+					break;
+				}
 
+				details.push_str(&line);
+				details.push('\n');
+			}
 		}
 		let new_entry = RuntimeData {
 			details: details,
@@ -198,18 +214,6 @@ fn total_runtimes(runtimes: &Runtimes) -> usize {
 
 fn total_unique_runtimes(runtimes: &Runtimes) -> usize {
 	runtimes.len()
-}
-
-fn is_runtime_error(runtime: &(&String, &RuntimeData)) -> bool {
-	RuntimeKind::RuntimeError == runtime.1.kind
-}
-
-fn is_infinite_loop(runtime: &(&String, &RuntimeData)) -> bool {
-	RuntimeKind::InfiniteLoop == runtime.1.kind
-}
-
-fn is_recursion_limit(runtime: &(&String, &RuntimeData)) -> bool {
-	RuntimeKind::RecursionLimit == runtime.1.kind
 }
 
 // Small struct to make sorting easier.
@@ -244,11 +248,22 @@ Runtime errors:",
 	let highest_count = runtimes.values().map(|r| r.counter).max().unwrap_or(0);
 	let width = format!("{}", highest_count).len();
 
-	let mut all_runtimes = runtimes.iter()
-	                               .filter(is_runtime_error)
-	                               .map(|(a, b)| KeyRuntimePair(a, b))
-	                               .collect::<Vec<KeyRuntimePair>>();
+	// Runtimes are the most common so we pre-allocate the vector for them.
+	let mut all_runtimes = Vec::with_capacity(total_unique_runtimes(runtimes));
+	let mut all_infinite_loops = Vec::new();
+	let mut all_recursion_limits = Vec::new();
+
+	for pair in runtimes.iter().map(|(a, b)| KeyRuntimePair(a, b)) {
+		match pair.1.kind {
+			RuntimeKind::RuntimeError => all_runtimes.push(pair),
+			RuntimeKind::InfiniteLoop => all_infinite_loops.push(pair),
+			RuntimeKind::RecursionLimit => all_recursion_limits.push(pair),
+		}
+	}
+
 	all_runtimes.sort_unstable();
+	all_infinite_loops.sort_unstable();
+	all_recursion_limits.sort_unstable();
 
 	for KeyRuntimePair(ident, runtime) in all_runtimes.into_iter().rev() {
 		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
@@ -258,12 +273,6 @@ Runtime errors:",
 		"--------------------------------------
 Infinite loops:")?;
 
-	let mut all_infinite_loops = runtimes.iter()
-	                                     .filter(is_infinite_loop)
-	                                     .map(|(a, b)| KeyRuntimePair(a, b))
-	                                     .collect::<Vec<KeyRuntimePair>>();
-	all_infinite_loops.sort_unstable();
-
 	for KeyRuntimePair(ident, runtime) in all_infinite_loops.into_iter().rev() {
 		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
 	}
@@ -272,12 +281,6 @@ Infinite loops:")?;
 		file,
 		"--------------------------------------
 Recursion limits reached:")?;
-
-	let mut all_recursion_limits = runtimes.iter()
-	                                       .filter(is_recursion_limit)
-	                                       .map(|(a, b)| KeyRuntimePair(a, b))
-	                                       .collect::<Vec<KeyRuntimePair>>();
-	all_recursion_limits.sort_unstable();
 
 	for KeyRuntimePair(ident, runtime) in all_recursion_limits.into_iter().rev() {
 		writeln!(file, "x{:<width$} {}", runtime.counter, ident, width=width)?;
