@@ -213,6 +213,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical
 	name = "plasmaman medical suit"
 	icon_state = "plasmamanMedical_suit"
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical
 	name = "plasmaman medical helmet"
