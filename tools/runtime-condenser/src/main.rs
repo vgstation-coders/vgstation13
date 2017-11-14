@@ -16,7 +16,6 @@ use clap::{App, Arg};
 use regex::Regex;
 
 const DEFAULT_INPUT_FILE: &str = "input.txt";
-const DEFAULT_OUTPUT_FILE: &str = "output.txt";
 
 lazy_static! {
 	static ref STACK_FORMATTING_REGEX: Regex = {
@@ -80,7 +79,8 @@ enum LineKind {
     Junk,
 }
 
-fn parse_from_file<W: Read>(file: W, runtimes: &mut Runtimes) {
+
+fn parse_from_file<R: Read>(file: R, runtimes: &mut Runtimes) {
     let reader = BufReader::new(file);
     let mut lines = reader.lines().map(std::result::Result::unwrap);
 
@@ -144,7 +144,7 @@ fn parse_line<L: Iterator<Item = String>>(
             if let Some(runtime) = runtimes.get_mut(key) {
                 runtime.counter += count;
             } else {
-                println!(
+                eprintln!(
                     "Found skip, but we have no runtime with said key. If this is an older \
                           log file: ignore this. {}",
                     key
@@ -254,7 +254,7 @@ impl<'a> Ord for KeyRuntimePair<'a> {
     }
 }
 
-fn write_to_file<W: Write>(
+fn write_runtimes<W: Write>(
     runtimes: &Runtimes,
     file: &mut W,
     verbose: bool,
@@ -381,7 +381,6 @@ fn main() {
                 .long("output")
                 .short("o")
                 .help("Specifies the output file to write to.")
-                .default_value(DEFAULT_OUTPUT_FILE)
                 .takes_value(true),
         )
         .get_matches();
@@ -389,21 +388,24 @@ fn main() {
     let json = matches.is_present("json");
     let verbose = matches.is_present("verbose");
     let input = matches.values_of("input").unwrap();
-    let output = matches.value_of("output").unwrap();
+    let output = matches.value_of("output");
 
     let mut runtimes = Runtimes::new();
     for filename in input {
         let input_file = File::open(filename).expect("Error opening input file.");
         parse_from_file(input_file, &mut runtimes);
     }
-    let mut output_file = File::create(output).expect("Error creating output file.");
+    let mut output_writer: Box<Write> = match output {
+        Some(file_name) => Box::new(File::create(file_name).expect("Error creating output file.")),
+        None => Box::new(std::io::stdout())
+    };
     if json {
-        output_file.write_all(
+        output_writer.write_all(
             serde_json::to_string(&runtimes)
                 .expect("Unable to format output as JSON")
                 .as_bytes(),
         )
     } else {
-        write_to_file(&runtimes, &mut output_file, verbose)
+        write_runtimes(&runtimes, &mut output_writer, verbose)
     }.expect("Error outputting to file.");
 }
