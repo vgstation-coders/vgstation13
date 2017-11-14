@@ -396,8 +396,10 @@ fn main() {
         parse_from_file(input_file, &mut runtimes);
     }
     let mut output_writer: Box<Write> = match output {
-        Some(file_name) => Box::new(File::create(file_name).expect("Error creating output file.")),
-        None => Box::new(std::io::stdout())
+        Some(file_name) => Box::new(File::create(file_name).expect(
+            "Error creating output file.",
+        )),
+        None => Box::new(std::io::stdout()),
     };
     if json {
         output_writer.write_all(
