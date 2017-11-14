@@ -79,10 +79,24 @@ enum LineKind {
     Junk,
 }
 
+fn ignore_invalid_utf8(result: &std::io::Result<String>) -> bool {
+    match *result {
+        Ok(_) => true,
+        Err(ref error) => {
+            if let std::io::ErrorKind::InvalidData = error.kind() {
+                eprintln!("Invalid UTF-8 input, skipping. {}", error);
+                return false;
+            }
+            true
+        }
+    }
+}
 
 fn parse_from_file<R: Read>(file: R, runtimes: &mut Runtimes) {
     let reader = BufReader::new(file);
-    let mut lines = reader.lines().map(std::result::Result::unwrap);
+    let mut lines = reader.lines().filter(ignore_invalid_utf8).map(
+        std::result::Result::unwrap,
+    );
 
     // Manually iterate so we maintain control over the iterator
     //   and can pass it down mid-loop.
@@ -353,6 +367,23 @@ Full log:"
     Ok(())
 }
 
+fn do_output<W: Write>(
+    output_writer: &mut W,
+    runtimes: &mut Runtimes,
+    verbose: bool,
+    json: bool,
+) -> std::io::Result<()> {
+    if json {
+        output_writer.write_all(
+            serde_json::to_string(&runtimes)
+                .expect("Unable to format output as JSON")
+                .as_bytes(),
+        )
+    } else {
+        write_runtimes(runtimes, output_writer, verbose)
+    }
+}
+
 fn main() {
     let matches = App::new("/vg/station 13 Runtime Condenser")
         .version("0.1")
@@ -395,19 +426,16 @@ fn main() {
         let input_file = File::open(filename).expect("Error opening input file.");
         parse_from_file(input_file, &mut runtimes);
     }
-    let mut output_writer: Box<Write> = match output {
-        Some(file_name) => Box::new(File::create(file_name).expect(
-            "Error creating output file.",
-        )),
-        None => Box::new(std::io::stdout()),
-    };
-    if json {
-        output_writer.write_all(
-            serde_json::to_string(&runtimes)
-                .expect("Unable to format output as JSON")
-                .as_bytes(),
-        )
-    } else {
-        write_runtimes(&runtimes, &mut output_writer, verbose)
+
+    match output {
+        Some(file_name) => {
+            do_output(
+                &mut File::create(file_name).expect("Error creating file"),
+                &mut runtimes,
+                verbose,
+                json,
+            )
+        }
+        None => do_output(&mut std::io::stdout(), &mut runtimes, verbose, json),
     }.expect("Error outputting to file.");
 }
