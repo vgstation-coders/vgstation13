@@ -1,10 +1,12 @@
-
+#define BUNSEN_ON 1
+#define BUNSEN_OFF 0
+#define BUNSEN_OPEN -1
 /obj/machinery/bunsen_burner
 	name = "bunsen burner"
 	desc = "A fuel-consuming device designed for bringing chemical mixtures to boil."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "bunsen0"
-	var/heating = 0		//whether the bunsen is turned on
+	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	var/list/possible_fuels = list(
 		PLASMA = list(
@@ -52,9 +54,9 @@
 /obj/machinery/bunsen_burner/examine(mob/user)
 	..()
 	switch(heating)
-		if(1)
+		if(BUNSEN_ON)
 			to_chat(user, "<span class = 'notice'>\The [src] is on.</span>")
-		if(-1)
+		if(BUNSEN_OPEN)
 			to_chat(user, "<span class = 'notice'>\The [src]'s fuel port is open.</span>")
 	to_chat(user, "<span class='info'>It contains:</span>")
 	if(reagents && reagents.reagent_list.len)
@@ -69,7 +71,7 @@
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
-		if(heating == -1)
+		if(heating == BUNSEN_OPEN)
 			for(var/possible_fuel in possible_fuels)
 				if(R.reagents.has_reagent(possible_fuel) && (reagents.has_reagent(possible_fuel) || !reagents.reagent_list.len))
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
@@ -93,7 +95,7 @@
 		..()
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container && heating == 1)
+	if(held_container && heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
 		if(!G || G.oxygen < 0.1)
@@ -129,7 +131,7 @@
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of fuel.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 
-	if(!heating || heating == -1)
+	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
 
 /obj/machinery/bunsen_burner/update_icon()
@@ -159,13 +161,13 @@
 	toggle()
 
 /obj/machinery/bunsen_burner/proc/toggle()
-	if(heating == -1)
+	if(heating == BUNSEN_OPEN)
 		if(usr)
 			to_chat(usr, "<span class = 'warning'>Close the fuel port first!</span>")
 		return
 	heating = !heating
 	update_icon()
-	if(heating)
+	if(heating == BUNSEN_ON)
 		processing_objects.Add(src)
 	else
 		processing_objects.Remove(src)
@@ -188,12 +190,21 @@
 
 /obj/machinery/bunsen_burner/proc/toggle_fuelport(mob/user)
 	switch(heating)
-		if(1)
+		if(BUNSEN_ON)
 			to_chat(user, "<span class = 'warning'>Turn \the [src] off first!</span>")
-		if(0)
-			heating = -1
+			return
+		if(BUNSEN_OFF)
+			heating = BUNSEN_OPEN
 			to_chat(user, "<span class = 'warning'>You open the fuel port on \the [src].</span>")
-		if(-1)
-			heating = FALSE
+		if(BUNSEN_OPEN)
+			heating = BUNSEN_OFF
 			to_chat(user, "<span class = 'warning'>You close the fuel port on \the [src].</span>")
+<<<<<<< HEAD
 >>>>>>> better bunsen burner sprite, more heating/cooling recipes, fridges now actually cool things down.
+=======
+
+
+#undef BUNSEN_OPEN
+#undef BUNSEN_OFF
+#undef BUNSEN_ON
+>>>>>>> Defines for the bunsen burner
