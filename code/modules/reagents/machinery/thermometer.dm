@@ -47,6 +47,14 @@
 		var/obj/machinery/bunsen_burner/B = target
 		if(B.held_container)
 			target = B.held_container
+	if(istype(target, /obj/machinery/chemheater))
+		var/obj/machinery/chemheater/H = target
+		if(H.held_container)
+			target = H.held_container
+	if(istype(target, /obj/machinery/chemcooler))
+		var/obj/machinery/chemcooler/C = target
+		if(C.held_container)
+			target = C.held_container
 
 	if(!target.reagents)
 		return

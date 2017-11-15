@@ -464,6 +464,26 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/capacitor" = 4,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
+/obj/item/weapon/circuitboard/chemheater
+	name = "Circuit Board (Directed Laser Heater)"
+	desc = "A circuit board used to run a container heating device."
+	build_path = "/obj/machinery/chemheater"
+	board_type = MACHINE
+	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
+	req_components = list (
+							"/obj/item/weapon/stock_parts/micro_laser" = 1,
+							"/obj/item/weapon/stock_parts/capacitor" = 1)
+
+/obj/item/weapon/circuitboard/chemcooler
+	name = "Circuit Board (Cryonic Wave Projector)"
+	desc = "A circuit board used to run a container cooling device."
+	build_path = "/obj/machinery/chemcooler"
+	board_type = MACHINE
+	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
+	req_components = list (
+							"/obj/item/weapon/stock_parts/scanning_module" = 1,
+							"/obj/item/weapon/stock_parts/capacitor" = 1)
+
 /obj/item/weapon/circuitboard/chem_dispenser
 	name = "Circuit Board (Chemistry Dispenser)"
 	desc = "A circuit board used to run a reagent dispensing machine."

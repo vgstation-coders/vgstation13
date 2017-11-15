@@ -361,7 +361,7 @@
 
 //Temperatures of things (Kelvin)
 #define TEMPERATURE_HOTMETAL 300
-#define TEMPERATURE_LASER ARBITRARILY_LARGE_NUMBER //Lasers technically have no upper limit
+#define TEMPERATURE_LASER ARBITRARILY_PLANCK_NUMBER //Lasers technically have no upper limit
 #define TEMPERATURE_FLAME 700
 #define TEMPERATURE_WELDER 3480
 #define TEMPERATURE_PLASMA 4500
