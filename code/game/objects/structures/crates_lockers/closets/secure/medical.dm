@@ -229,4 +229,6 @@
 		new /obj/item/clothing/head/helmet/space/paramedic(src)
 		new /obj/item/clothing/shoes/magboots/para(src)
 		new /obj/item/clothing/accessory/storage/webbing/paramed(src)
+		new /obj/item/weapon/storage/firstaid/internalbleed(src)
+		new /obj/item/weapon/storage/firstaid/internalbleed(src)
 		return
