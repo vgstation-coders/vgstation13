@@ -799,6 +799,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		"total_volume",
 		"maximum_volume",
 		"my_atom",
+		"chem_temp",
 		"gcDestroyed")
 
 	reset_vars_after_duration(resettable_vars, duration, TRUE)

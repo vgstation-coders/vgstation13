@@ -71,7 +71,7 @@
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
-		if(heating == BUNSEN_OPEN)
+		if(heating == BUNSEN_OPEN && R.is_open_container())
 			for(var/possible_fuel in possible_fuels)
 				if(R.reagents.has_reagent(possible_fuel) && (reagents.has_reagent(possible_fuel) || !reagents.reagent_list.len))
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
@@ -79,11 +79,13 @@
 						to_chat(user, "<span class='notice'>You transfer [reagent_transfer]u of [possible_fuel] from \the [R] to \the [src]</span>")
 						return
 		else
-			if(user.drop_item(W, src))
+			if(!held_container && user.drop_item(W, src))
 				held_container = W
-				to_chat(user, "<span class='notice'>You put the [held_container] onto the [src].</span>")
-				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER, "pixel_x" = 4 * PIXEL_MULTIPLIER)
+				to_chat(user, "<span class='notice'>You put \the [held_container] onto \the [src].</span>")
+				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
+				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER, "pixel_y" = src.pixel_y, "pixel_x" = src.pixel_x)
 				overlays += I
+				overlays += I2
 				return 1 // avoid afterattack() being called
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
@@ -143,7 +145,7 @@
 /obj/machinery/bunsen_burner/attack_hand(mob/user)
 	if(held_container)
 		overlays = null
-		to_chat(user, "<span class='notice'>You remove the [held_container] from the [src].</span>")
+		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
@@ -199,12 +201,8 @@
 		if(BUNSEN_OPEN)
 			heating = BUNSEN_OFF
 			to_chat(user, "<span class = 'warning'>You close the fuel port on \the [src].</span>")
-<<<<<<< HEAD
->>>>>>> better bunsen burner sprite, more heating/cooling recipes, fridges now actually cool things down.
-=======
 
 
 #undef BUNSEN_OPEN
 #undef BUNSEN_OFF
 #undef BUNSEN_ON
->>>>>>> Defines for the bunsen burner
