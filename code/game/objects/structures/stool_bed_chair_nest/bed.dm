@@ -148,6 +148,8 @@
 	desc = "A collapsed roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/lokiamis.dmi', "right_hand" = 'icons/mob/in-hand/right/lokiamis.dmi')
+	item_state = "folded"
 	var/bed_type = /obj/structure/bed/roller
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
 
