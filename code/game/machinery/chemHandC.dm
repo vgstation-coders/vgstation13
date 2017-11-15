@@ -3,7 +3,7 @@
 
 /obj/machinery/chemheater
 	name = "directed laser heater"
-	desc = "A small stage where a container can be placed to heat it's contents with a laser."
+	desc = "A platform with an integrated laser that uses high-energy photons to heat a subject through atomic vibrations. In a practical sense, it has no upper limit to how much thermal energy can be induced this way, as it is capable of reaching temperatures which could rapidly destroy any laboratory-approved container."
 	icon = 'icons/obj/chemHandC.dmi'
 	icon_state = "heater"
 	icon_state_open = "heater_open"
@@ -135,7 +135,7 @@
 
 /obj/machinery/chemcooler
 	name = "cryonic wave projector"
-	desc = "A small stage where a container can be placed to cool it's contents with a wave projector."
+	desc = "Ever want to see a microwave work in reverse? Well this machine is basically that. This machine could technically keep removing energy forever until it reaches absolute zero. Breaking physics and physicists since 2314 to current year and counting."
 	icon = 'icons/obj/chemHandC.dmi'
 	icon_state = "cooler"
 	icon_state_open = "cooler_open"
