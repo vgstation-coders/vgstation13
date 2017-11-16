@@ -12,8 +12,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	maxHealth = 60
 	health = 60
 	pass_flags = PASSTABLE
-	var/keeper=0 // 0 = No, 1 = Yes (Disables speech and common radio.)
-	var/picked = 0
+	var/keeper = TRUE // FALSE = No, TRUE = Yes (Disables speech and common radio.)Enforce silence.
+	var/picked = FALSE
 	var/subtype="keeper"
 	var/obj/abstract/screen/inv_tool = null
 	var/prefix = "Mobile MMI"
@@ -25,19 +25,17 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	mob_bump_flag = ROBOT
 	mob_swap_flags = ALLMOBS
-	mob_push_flags = 0
+	mob_push_flags = FALSE
 
 	var/obj/item/tool_state = null
 	var/obj/item/head_state = null
 
 	modtype = "robot" // Not sure what this is, but might be cool to have seperate loadouts for MoMMIs (e.g. paintjobs and tools)
 	//Cyborgs will sync their laws with their AI by default, but we may want MoMMIs to be mute independents at some point, kinda like the Keepers in Ass Effect.
-	lawupdate = 1
+	lawupdate = FALSE
 
 	speed = 0
 
-/mob/living/carbon/can_use_hands()
-	return 1
 
 /mob/living/silicon/robot/mommi/generate_static_overlay()
 	if(!istype(static_overlays,/list))
@@ -69,17 +67,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!istype(laws,/datum/ai_laws/keeper))
 		connected_ai = select_active_ai_with_fewest_borgs()
 	else
-		// Enforce silence.
-		keeper=1
-		connected_ai = null // Enforce no AI parent
-		scrambledcodes = 1 // Hide from console because people are fucking idiots
+		UnlinkSelf()
 
 	if(connected_ai)
 		connected_ai.connected_robots += src
 		lawsync()
-		lawupdate = 1
+		lawupdate = TRUE
 	else
-		lawupdate = 0
+		lawupdate = FALSE
 
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
@@ -118,7 +113,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		if("No")
 			choose_icon()
 			return
-	picked = 1
+	picked = TRUE
 
 /mob/living/silicon/robot/mommi/pick_module()
 
@@ -172,7 +167,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			mind.transfer_to(nmmi.brainmob)
 		mmi = null
 		nmmi.icon = 'icons/obj/assemblies.dmi'
-		nmmi.invisibility = 0
+		nmmi.invisibility = FALSE
 	..()
 
 /mob/living/silicon/robot/mommi/remove_screen_objs()
@@ -196,14 +191,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/emag_act(mob/user as mob)
 	if(user == src && emagged != 1)//Dont shitpost inside the game, thats just going too far
 		to_chat(user, "<span class='warning'>Nanotrasen Patented Anti-Emancipation Override initiated.</span>")
-		return 1
+		return TRUE
 	if(..())
-		return 1
+		return TRUE
 	remove_static_overlays()
 	updateicon()
 
 	// Check to see if we're emagged.  If so, we disable KEEPER.
-	keeper = 0
+	keeper = FALSE
 
 /mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
@@ -305,7 +300,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
-		return 0
+		return FALSE
 
 	else
 		user.do_attack_animation(src, W)
