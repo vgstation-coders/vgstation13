@@ -267,6 +267,12 @@
 	if(!istype(vampire_mob))
 		return
 	vampire_mob.make_vampire()
+	if(vampire_mob.dna)
+		//Forcefully remove veganism since it breaks you
+		vampire_mob.dna.SetSEState(VEGANBLOCK, 0)
+		domutcheck(vampire_mob, null, MUTCHK_FORCED)
+		//Just in case
+		vampire_mob.mutations.Remove(M_VEGAN)
 
 /datum/game_mode/proc/greet_vampire(var/datum/mind/vampire, var/you_are=1)
 	var/dat
@@ -385,6 +391,10 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	while(do_mob(src, H, 50))
 		if(!mind.vampire || !(mind in ticker.mode.vampires))
 			to_chat(src, "<span class='warning'>Your fangs have disappeared!</span>")
+			src.mind.vampire.draining = null
+			return 0
+		if(src.mutations.Find(M_VEGAN))
+			to_chat(src, "<span class='warning'>Being a vegan, the mere thought of drinking blood disgusts you. You stop immediately.</span>")
 			src.mind.vampire.draining = null
 			return 0
 		if(H.species.anatomy_flags & NO_BLOOD)
