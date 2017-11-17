@@ -10,6 +10,16 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+	//Used for bizarre/odd/reference vaults, entering them causes the wild wasteland sound to play
+	var/mysterious = FALSE
+
+/area/vault/New()
+	..()
+
+	if(mysterious)
+		//Create a narrator object to play a sound to everybody who enters the area
+		narrator = new /obj/effect/narration/mystery_sound(null)
+
 /area/vault/holomapAlwaysDraw()
 	return 0
 
@@ -251,20 +261,10 @@
 	jammed = 2
 
 /area/vault/zathura
-	var/obj/effect/narration/narrator
 
-/area/vault/zathura/New()
-	..()
-
-	//Create an invisible narrator object in nullspace to play a sound to everybody who enters the area
-	//The narrator object keeps track of players who have already heard the sound before, and doesn't play it to them
-	narrator = new /obj/effect/narration/mystery_sound(null)
-
-/area/vault/zathura/Entered(atom/movable/AM, atom/OldLoc)
-	..()
-
-	if(isliving(AM))
-		narrator.Crossed(AM)
+/area/vault/zathura/surroundings
+	dynamic_lighting = FALSE
+	mysterious = TRUE
 
 /obj/effect/narration/mystery_sound
 	play_sound = 'sound/effects/wildwasteland.ogg'
