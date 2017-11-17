@@ -349,10 +349,11 @@
 			C.update_icon()
 
 	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
+		if(img)
+			to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
+			return
+
 		if(user.drop_item(P, src))
-			if(img)
-				to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
-				return
 			img = P
 			to_chat(user, "<span class='notice'>You attach the photo to the piece of paper.</span>")
 	else if(P.is_hot())
