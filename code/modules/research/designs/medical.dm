@@ -130,6 +130,16 @@
 	category = "Medical"
 	build_path = /obj/item/weapon/bonesetter/bone_mender
 
+/datum/design/pico_grasper
+	name = "Precision Grasper"
+	desc = "A thin rod with pico manipulators embedded in it allowing for fast and precise extraction."
+	id = "pico_grasper"
+	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 80)
+	category = "Medical"
+	build_path = /obj/item/weapon/hemostat/pico
+
 /datum/design/plasmasaw
 	name = "Plasma Saw"
 	desc = "Perfect for cutting through ice."
@@ -139,6 +149,16 @@
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 500)
 	category = "Medical"
 	build_path = /obj/item/weapon/circular_saw/plasmasaw
+
+/datum/design/diamond_surgicaldrill
+	name = "Diamond Surgical Drill"
+	desc = "Yours is the drill that will pierce the tiny heavens!"
+	id = "diamond_surgicaldrill"
+	req_tech = list(Tc_MATERIALS = 6, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_DIAMOND = 800)
+	category = "Medical"
+	build_path = /obj/item/weapon/surgicaldrill/diamond
 
 /datum/design/health_hud
 	name = "Health Scanner HUD"

@@ -46,6 +46,14 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "pinches")
 
+/obj/item/weapon/hemostat/pico //Removes implanted things with 100% success as well.
+	name = "precision grasper"
+	desc = "A thin rod with pico manipulators embedded in it allowing for fast and precise extraction."
+	icon_state = "pico_grasper"
+	item_state = "pico_grasper"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
+	surgery_speed = 0.5
+
 
 /obj/item/weapon/hemostat/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -122,6 +130,14 @@
 	w_class = W_CLASS_MEDIUM
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("drills")
+
+/obj/item/weapon/surgicaldrill/diamond
+	name = "diamond surgical drill"
+	desc = "Yours is the drill that will pierce the tiny heavens!"
+	icon_state = "diamond_drill"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
+	surgery_speed = 0.1 //It's near instant like the mining one.
+
 
 /obj/item/weapon/surgicaldrill/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
