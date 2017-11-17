@@ -6,14 +6,16 @@ extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 extern crate regex;
+extern crate rayon_hash;
+extern crate rayon;
 
 use std::cmp::Ordering;
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
-use std::io::BufReader;
+use std::io::{BufReader, BufWriter};
 use clap::{App, Arg};
 use regex::Regex;
+use rayon::prelude::*;
 
 const DEFAULT_INPUT_FILE: &str = "input.txt";
 
@@ -23,7 +25,20 @@ lazy_static! {
 	};
 }
 
-type Runtimes = HashMap<String, RuntimeData>;
+type Runtimes = rayon_hash::HashMap<String, RuntimeData>;
+
+struct SerializableRuntimes<'a> {
+    map: &'a Runtimes,
+}
+
+impl<'a> serde::Serialize for SerializableRuntimes<'a> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.collect_map(self.map)
+    }
+}
 
 #[derive(Serialize, Eq, PartialEq, Debug)]
 struct RuntimeData {
@@ -92,7 +107,8 @@ fn ignore_invalid_utf8(result: &std::io::Result<String>) -> bool {
     }
 }
 
-fn parse_from_file<R: Read>(file: R, runtimes: &mut Runtimes) {
+fn parse_from_file<R: Read>(file: R) -> Runtimes {
+    let mut runtimes = Runtimes::default();
     let reader = BufReader::new(file);
     let mut lines = reader.lines().filter(ignore_invalid_utf8).map(
         std::result::Result::unwrap,
@@ -102,11 +118,12 @@ fn parse_from_file<R: Read>(file: R, runtimes: &mut Runtimes) {
     //   and can pass it down mid-loop.
     // A regular for loop borrows it mutably until the loop is done.
     while let Some(mut line) = lines.next() {
-        while let Some(newline) = parse_line(&mut lines, runtimes, &line) {
+        while let Some(newline) = parse_line(&mut lines, &mut runtimes, &line) {
             // If the parsing ate the next line and gave it back we do that one instead.
             line = newline;
         }
     }
+    runtimes
 }
 
 fn parse_line<L: Iterator<Item = String>>(
@@ -375,7 +392,7 @@ fn do_output<W: Write>(
 ) -> std::io::Result<()> {
     if json {
         output_writer.write_all(
-            serde_json::to_string(&runtimes)
+            serde_json::to_string(&SerializableRuntimes { map: runtimes })
                 .expect("Unable to format output as JSON")
                 .as_bytes(),
         )
@@ -418,24 +435,37 @@ fn main() {
 
     let json = matches.is_present("json");
     let verbose = matches.is_present("verbose");
-    let input = matches.values_of("input").unwrap();
+    let input: Vec<&str> = matches.values_of("input").unwrap().collect();
     let output = matches.value_of("output");
 
-    let mut runtimes = Runtimes::new();
-    for filename in input {
-        let input_file = File::open(filename).expect("Error opening input file.");
-        parse_from_file(input_file, &mut runtimes);
-    }
+    let mut final_runtimes = Runtimes::default();
 
+    let partials: Vec<Runtimes> = input
+        .par_iter()
+        .map(|filename| {
+            let input_file = File::open(filename).expect("Error opening input file.");
+            parse_from_file(input_file)
+        })
+        .collect();
+
+    for hashmap in partials {
+        for (ident, runtime) in hashmap {
+            if final_runtimes.contains_key(&ident) {
+                let final_runtime = final_runtimes.get_mut(&ident).unwrap();
+                final_runtime.counter += runtime.counter;
+            } else {
+                let _ = final_runtimes.insert(ident, runtime);
+            }
+        }
+    }
+    
+    let stdout = std::io::stdout();
     match output {
         Some(file_name) => {
-            do_output(
-                &mut File::create(file_name).expect("Error creating file"),
-                &mut runtimes,
-                verbose,
-                json,
-            )
+            let mut buffered_out =
+                BufWriter::new(File::create(file_name).expect("Error creating file"));
+            do_output(&mut buffered_out, &mut final_runtimes, verbose, json)
         }
-        None => do_output(&mut std::io::stdout(), &mut runtimes, verbose, json),
+        None => do_output(&mut stdout.lock(), &mut final_runtimes, verbose, json),
     }.expect("Error outputting to file.");
 }
