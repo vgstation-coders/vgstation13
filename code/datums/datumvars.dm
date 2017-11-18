@@ -533,7 +533,7 @@ body
 		var/original_name = "[D]"
 		var/edited_variable = href_list["varnamechange"]
 		var/new_value = variable_set(src, D, edited_variable)
-		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [html_encode(new_value)]", 1)
 		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["varnamemass"] && href_list["datummass"])
 		if(!check_rights(R_VAREDIT))
