@@ -201,7 +201,7 @@ var/list/forbidden_varedit_object_types = list(
 			edited_datum.vars[edited_variable] = new_value
 
 		if(logging)
-			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [new_value]")
+			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
 
 	return new_value
 
