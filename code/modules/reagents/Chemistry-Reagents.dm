@@ -1826,7 +1826,7 @@
 	on_mob_life(M)
 
 /datum/reagent/aluminum
-	name = "Aluminum powder"
+	name = "Aluminum"
 	id = ALUMINUM
 	description = "A silvery white and ductile member of the boron group of chemical elements."
 	reagent_state = SOLID
