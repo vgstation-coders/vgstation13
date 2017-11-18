@@ -857,8 +857,8 @@
 	color = "#60A584" //rgb: 96, 165, 132
 	custom_metabolism = 0.5
 	overdose_am = REAGENTS_OVERDOSE
-	density = 5.22833
-	specheatcap = 0.62001
+	density = 5.23
+	specheatcap = 0.62
 
 /datum/reagent/space_drugs/on_mob_life(var/mob/living/M)
 
@@ -1374,8 +1374,8 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
-	density = 1.98133
-	specheatcap = 1.3869
+	density = 1.98
+	specheatcap = 1.39
 
 /datum/reagent/pacid/on_mob_life(var/mob/living/M)
 
@@ -1589,8 +1589,8 @@
 	description = "Thermite produces an aluminothermic reaction known as a thermite reaction. Can be used to melt walls."
 	reagent_state = SOLID
 	color = "#673910" //rgb: 103, 57, 16
-	density = 3.905
-	specheatcap = 0.369775
+	density = 3.91
+	specheatcap = 0.37
 
 /datum/reagent/thermite/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -1624,8 +1624,8 @@
 	description = "Might cause unpredictable mutations. Keep away from children."
 	reagent_state = LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
-	density = 3.34567
-	specheatcap = 96.8632
+	density = 3.35
+	specheatcap = 96.86
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2403,8 +2403,8 @@
 	custom_metabolism = 0.01
 	overdose_am = REAGENTS_OVERDOSE
 	pain_resistance = 40
-	density = 1.04167
-	specheatcap = 18.5294
+	density = 1.04
+	specheatcap = 18.53
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 
@@ -2452,8 +2452,8 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
-	density = 3.24516
-	specheatcap = 52.2038
+	density = 3.25
+	specheatcap = 52.20
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 
@@ -3543,8 +3543,8 @@
 	description = "A salt made of sodium chloride. Commonly used to season food."
 	reagent_state = SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	density = 2.091
-	specheatcap = 1.6482
+	density = 2.09
+	specheatcap = 1.65
 
 /datum/reagent/sodiumchloride/on_mob_life(var/mob/living/M)
 
@@ -4716,8 +4716,8 @@
 	nutriment_factor = 0 //So alcohol can fill you up! If they want to.
 	color = "#404030" //RGB: 64, 64, 48
 	custom_metabolism = FOOD_METABOLISM
-	density = 0.7893
-	specheatcap = 2.460
+	density = 0.79
+	specheatcap = 2.46
 	var/dizzy_adj = 3
 	var/slurr_adj = 3
 	var/confused_adj = 2

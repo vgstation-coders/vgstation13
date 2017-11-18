@@ -2229,6 +2229,7 @@
 	required_reagents = list(WATER = 1)
 	is_cold_recipe = 1
 	result_amount = 1
+	quiet = 1
 	required_temp = T0C
 
 /datum/chemical_reaction/ice_to_water
@@ -2238,6 +2239,7 @@
 	required_reagents = list(ICE = 1)
 	required_temp = T20C+5
 	result_amount = 1
+	quiet = 1
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 

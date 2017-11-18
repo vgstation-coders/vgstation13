@@ -536,7 +536,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, reagtemp = 300)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = 300)
 	if(!my_atom)
 		return 0
 	if(!isnum(amount))
