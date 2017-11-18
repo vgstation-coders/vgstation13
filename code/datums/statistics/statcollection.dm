@@ -156,7 +156,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/assigned_role = null
 	var/key = null
 	var/realname = null
-	var/head_role = null
 	var/escaped = 0
 	var/list/damagevalues = list(
 		"BRUTE" = 0,
