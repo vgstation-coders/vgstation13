@@ -21,6 +21,7 @@
 	var/react_discretely = FALSE //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
 	var/reaction_temp_cost = 0 //How much to lower temperature of the result chemical after the reaction
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
+	var/quiet = 0
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -2204,6 +2205,7 @@
 	result = HOT_RAMEN
 	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
 	result_amount = 3
+	required_temp = 100+T0C
 
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
@@ -2219,6 +2221,25 @@
 	required_reagents = list(WATER = 10)
 	required_catalysts = list(FROSTOIL = 5)
 	result_amount = 11
+
+/datum/chemical_reaction/ice2
+	name = "Frozen water"
+	id = ICE
+	result = ICE
+	required_reagents = list(WATER = 1)
+	is_cold_recipe = 1
+	result_amount = 1
+	quiet = 1
+	required_temp = T0C
+
+/datum/chemical_reaction/ice_to_water
+	name = "Melted ice"
+	id = WATER
+	result = WATER
+	required_reagents = list(ICE = 1)
+	required_temp = T20C+5
+	result_amount = 1
+	quiet = 1
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 

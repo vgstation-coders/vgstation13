@@ -342,7 +342,7 @@
 	icon_state = "coffee"
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
 	..()
-	reagents.add_reagent(ICE, 30)
+	reagents.add_reagent(ICE, 30, reagtemp = T0C)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -385,7 +385,7 @@
 			desc = "Cold in a can. Er, bottle."
 			icon_state += "_cold"
 			reagents.add_reagent(FROSTOIL, 10)
-			reagents.add_reagent(ICE, 10)
+			reagents.add_reagent(ICE, 10, reagtemp = T0C)
 		if(3)
 			name = "Groans Soda: Zero Calories"
 			desc = "Zero Point Calories. That's right, we fit even MORE nutriment in this thing."
@@ -450,7 +450,7 @@
 		if(3)
 			name = "Grifeo: Crystallic"
 			reagents.add_reagent(SUGAR, 20)
-			reagents.add_reagent(ICE, 20)
+			reagents.add_reagent(ICE, 20, reagtemp = T0C)
 			reagents.add_reagent(SPACE_DRUGS, 20)
 		if(4)
 			name = "Grifeo: Rich"

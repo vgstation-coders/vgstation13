@@ -3228,7 +3228,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(ICE, 2)
+	reagents.add_reagent(ICE, 2, reagtemp = T0C)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/notasandwich
@@ -3361,7 +3361,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(SUGAR,6)
-	reagents.add_reagent(ICE,2)
+	reagents.add_reagent(ICE,2, reagtemp = T0C)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup
@@ -3373,7 +3373,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(SUGAR,8)
-	reagents.add_reagent(ICE,2)
+	reagents.add_reagent(ICE,2, reagtemp = T0C)
 	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/cereal
@@ -4031,7 +4031,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(SUGAR, 10)
-	reagents.add_reagent(ICE, 10)
+	reagents.add_reagent(ICE, 10, reagtemp = T0C)
 	reagents.add_reagent("melonjuice", 5)
 	bitesize = 3
 
@@ -4045,7 +4045,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(SUGAR, 5)
-	reagents.add_reagent(ICE, 5)
+	reagents.add_reagent(ICE, 5, reagtemp = T0C)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
@@ -4059,7 +4059,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(SUGAR, 5)
-	reagents.add_reagent(ICE, 5)
+	reagents.add_reagent(ICE, 5, reagtemp = T0C)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad
