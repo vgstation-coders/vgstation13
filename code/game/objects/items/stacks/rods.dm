@@ -115,7 +115,6 @@
 		return
 	else //End click drag construction, create grille
 		returnToPool(active)
-		active = null
 
 	if(!istype(user.loc, /turf))
 		return 0

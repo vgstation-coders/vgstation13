@@ -36,7 +36,6 @@
 		return
 	else //End click drag construction, create grille
 		returnToPool(active)
-		active = null
 
 /obj/item/stack/tile/plasteel/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
