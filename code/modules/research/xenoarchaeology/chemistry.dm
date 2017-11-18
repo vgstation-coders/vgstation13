@@ -14,6 +14,8 @@ datum/reagent/lithiumsodiumtungstate
 	description = "A reducing agent for geological compounds."
 	reagent_state = LIQUID
 	color = "#C0C0C0"  // rgb: 192, 192, 192, darker silver
+	density = 3.29
+	specheatcap = 3.99
 
 datum/reagent/ground_rock
 	name = "Ground Rock"
@@ -28,6 +30,8 @@ datum/reagent/density_separated_sample
 	description = "A watery paste used in chemical analysis, there are some chunks floating in it."
 	reagent_state = LIQUID
 	color = "#DEB887"   //rgb: 222, 184, 135, light brown
+	density = 3.79
+	specheatcap = 3.99
 
 datum/reagent/analysis_sample
 	name = "Analysis liquid"
@@ -35,6 +39,8 @@ datum/reagent/analysis_sample
 	description = "A watery paste used in chemical analysis."
 	reagent_state = LIQUID
 	color = "#F5FFFA"   //rgb: 245, 255, 250, almost white
+	density = 4.74
+	specheatcap = 3.99
 
 datum/reagent/chemical_waste
 	name = "Chemical Waste"
