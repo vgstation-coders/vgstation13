@@ -313,7 +313,7 @@
 	drug_deactivation_messages=list("You feel normal again.")
 
 	mutation=M_TK
-	activation_prob=15
+	activation_prob=100 //Redundant but hey it's worth a shot
 
 	New()
 		block=TELEBLOCK
