@@ -9,7 +9,7 @@
 	icon_state_open = "heater_open"
 	density = 1
 	anchored = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	use_power = 1
 	idle_power_usage = 25
 	active_power_usage = 5000
@@ -20,8 +20,8 @@
 	var/onstage = null
 
 	var/obj/item/weapon/reagent_containers/held_container
-	var/heating = 0
-	var/had_item = 0
+	var/heating = FALSE
+	var/had_item = FALSE
 
 /obj/machinery/chemheater/New()
 	. = ..()
@@ -33,7 +33,6 @@
 	)
 	RefreshParts()
 	overlays += image(icon = icon, icon_state = "t[laser_kind]_laser") //Adds the side laser
-	update_icon()
 
 /obj/machinery/chemheater/RefreshParts()
 	var/T = 0
@@ -54,14 +53,17 @@
 
 /obj/machinery/chemheater/power_change()
 	if( powered() )
-		icon_state = initial(icon_state)
 		stat &= ~NOPOWER
+		icon_state = "[initial(icon_state)]"
 	else
 		spawn(rand(0, 15))
-			src.icon_state = "[initial(icon_state)]_off"
 			stat |= NOPOWER
+			icon_state = "[initial(icon_state)]_off"
+	update_icon()
 
 /obj/machinery/chemheater/process()
+	if(stat & (BROKEN|NOPOWER))
+		return
 	if(held_container && heating)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 
@@ -79,21 +81,21 @@
 			to_chat(user, "<span class='notice'>\The [src] already has \a [held_container] on it.</span>")
 			return 1
 	else
-		..()
+		return ..()
 
 /obj/machinery/chemheater/attack_ghost()
 	return
 
-/obj/machinery/chemheater/attack_hand()
+/obj/machinery/chemheater/attack_hand(mob/user)
 	if(held_container)
 		overlays -= onstage
-		to_chat(usr, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
+		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
 		held_container.forceMove(src.loc)
-		held_container.attack_hand(usr)
+		held_container.attack_hand(user)
 		held_container = null
-		had_item = 1
+		had_item = TRUE
 	toggle()
-	had_item = 0
+	had_item = FALSE
 
 /obj/machinery/chemheater/verb/toggle()
 	set src in view(1)
@@ -123,13 +125,25 @@
 		if(!had_item)
 			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to heat right now.</span>")
 
-/obj/machinery/chemheater/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER) && usr.dexterity_check()))
+/obj/machinery/chemheater/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER) && user.dexterity_check()))
 		toggle()
 		return
 	return ..()
 
+/*
+//Unused desired temp setting. Maybe useful in the future? Not likely since who doesn't want their coffee as hot as the sun?
+/obj/machinery/chemheater/verb/settemp(mob/user as mob)
+	set src in view(1)
+	set name = "Set temperature"
+	set category = "Object"
 
+	var/set_temp = input("Input desired temperature (20 to [TEMPERATURE_LASER] Celsius).", "Set Temperature") as num
+	if(set_temp>[TEMPERATURE_LASER] || set_temp<20)
+		to_chat(user, "<span class='notice'>Invalid temperature.</span>")
+		return
+	max_temperature = set_temp+273.15
+*/
 
 //Cooler
 
@@ -141,19 +155,19 @@
 	icon_state_open = "cooler_open"
 	density = 1
 	anchored = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	use_power = 1
 	idle_power_usage = 25
 	active_power_usage = 5000
 
-	var/max_temperature = 1 //You can make stuff REALLY cold
-	var/thermal_energy_transfer = -3000 //And really fast
+	var/max_temperature = 0 //You can make stuff REALLY cold
+	var/thermal_energy_transfer = -3000
 	var/scanner_kind = 0
 	var/onstage = null
 
 	var/obj/item/weapon/reagent_containers/held_container
-	var/cooling = 0
-	var/had_item = 0
+	var/cooling = FALSE
+	var/had_item = FALSE
 
 /obj/machinery/chemcooler/New()
 	. = ..()
@@ -165,7 +179,6 @@
 	)
 	RefreshParts()
 	overlays += image(icon = icon, icon_state = "t[scanner_kind]_scanner") //Adds the side scanner
-	update_icon()
 
 /obj/machinery/chemcooler/RefreshParts()
 	var/T = 0
@@ -186,14 +199,17 @@
 
 /obj/machinery/chemcooler/power_change()
 	if( powered() )
-		icon_state = initial(icon_state)
 		stat &= ~NOPOWER
+		icon_state = "[initial(icon_state)]"
 	else
 		spawn(rand(0, 15))
-			src.icon_state = "[initial(icon_state)]_off"
 			stat |= NOPOWER
+			icon_state = "[initial(icon_state)]_off"
+	update_icon()
 
 /obj/machinery/chemcooler/process()
+	if(stat & (BROKEN|NOPOWER))
+		return
 	if(held_container && cooling)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 
@@ -211,21 +227,21 @@
 			to_chat(user, "<span class='notice'>\The [src] already has \a [held_container] on it.</span>")
 			return 1
 	else
-		..()
+		return ..()
 
 /obj/machinery/chemcooler/attack_ghost()
 	return
 
-/obj/machinery/chemcooler/attack_hand()
+/obj/machinery/chemcooler/attack_hand(mob/user)
 	if(held_container)
 		overlays -= onstage
-		to_chat(usr, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
+		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
 		held_container.forceMove(src.loc)
-		held_container.attack_hand(usr)
+		held_container.attack_hand(user)
 		held_container = null
-		had_item = 1
+		had_item = TRUE
 	toggle()
-	had_item = 0
+	had_item = FALSE
 
 /obj/machinery/chemcooler/verb/toggle()
 	set src in view(1)
@@ -255,10 +271,22 @@
 		if(!had_item)
 			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to cool right now.</span>")
 
-/obj/machinery/chemcooler/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER) && usr.dexterity_check()))
+/obj/machinery/chemcooler/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER) && user.dexterity_check()))
 		toggle()
 		return
 	return ..()
 
+/*
+//Unused desired temp setting. Maybe useful in the future? Not likely since who doesn't want their ice to be absolute zero?
+/obj/machinery/chemcooler/verb/settemp(mob/user as mob)
+	set src in view(1)
+	set name = "Set temperature"
+	set category = "Object"
 
+	var/set_temp = input("Input desired temperature (20 to -273 Celsius).", "Set Temperature") as num
+	if(set_temp>20 || set_temp<-273.15)
+		to_chat(user, "<span class='notice'>Invalid temperature.</span>")
+		return
+	max_temperature = set_temp+273.15
+*/
