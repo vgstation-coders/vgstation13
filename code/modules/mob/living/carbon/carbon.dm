@@ -225,12 +225,12 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			if(M.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED))
+			if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
 				M.visible_message( \
 					"<span class='notice'>[M] pats [src]'s head.</span>", \
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
-			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
+			else if((M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED)))
 				var/shock_damage = 5
 				var/shock_time = 0
 				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
@@ -274,8 +274,8 @@
 
 					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					M.visible_message( \
-						"<span class='notice'>[M] shakes hands with [src].</span>", \
-						"<span class='notice'>You shake hands with [src].</span>", \
+						"<span class='notice'>[M] shakes [ismartian(src) ? "tentacles" : "hands"] with [src].</span>", \
+						"<span class='notice'>You shake [ismartian(src) ? "tentacles" : "hands"] with [src].</span>", \
 						)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)

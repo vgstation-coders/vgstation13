@@ -69,8 +69,9 @@
 
 /mob/living/carbon/martian/eyecheck()
 	var/obj/item/clothing/head/headwear = src.head
-
-	var/protection = headwear.eyeprot
+	var/protection
+	if(headwear)
+		protection = headwear.eyeprot
 
 	return Clamp(protection, -2, 2)
 
@@ -95,6 +96,31 @@
 		stat = CONSCIOUS
 	else
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
+
+
+/mob/living/carbon/martian/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
+	flash_eyes(visual = 1)
+
+	switch(severity)
+		if(1.0)
+			adjustBruteLoss(100)
+			adjustFireLoss(100)
+			if(prob(50))
+				gib()
+				return
+		if(2.0)
+			adjustBruteLoss(60)
+			adjustFireLoss(60)
+		if(3.0)
+			adjustBruteLoss(30)
+
+	apply_effect(severity*4, WEAKEN)
+
+
+	updatehealth()
 
 /mob/living/carbon/martian/Login()
 	..()
