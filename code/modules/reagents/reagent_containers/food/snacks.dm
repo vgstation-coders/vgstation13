@@ -5047,3 +5047,188 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	if(is_type_in_list(W, bomb_like_items))
 		return TRUE
 	return ..(W)
+
+
+// fishtank stuff
+
+/obj/item/weapon/reagent_containers/food/snacks/salmonmeat
+	name = "raw salmon"
+	desc = "A fillet of raw salmon"
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "fishfillet"
+	filling_color = "#FFDEFE"
+
+/obj/item/weapon/reagent_containers/food/snacks/salmonmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/salmonsteak
+	name = "Salmon steak"
+	desc = "A piece of freshly-grilled salmon meat."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "salmonsteak"
+	trash = /obj/item/trash/plate
+	filling_color = "#7A3D11"
+
+
+/obj/item/weapon/reagent_containers/food/snacks/salmonsteak/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 7)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/catfishmeat
+	name = "raw catfish"
+	desc = "A fillet of raw catfish"
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "fishfillet"
+	filling_color = "#FFDEFE"
+
+
+/obj/item/weapon/reagent_containers/food/snacks/catfishmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/fried_shrimp
+	name = "fried shrimp"
+	desc = "Just one of the many things you can do with shrimp!"
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "shrimp_fried"
+
+/obj/item/weapon/reagent_containers/food/snacks/fried_shrimp/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp
+	name = "boiled shrimp"
+	desc = "Just one of the many things you can do with shrimp!"
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "shrimp_cooked"
+/obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+	name = "Ebi Sushi"
+	desc = "A simple sushi consisting of cooked shrimp and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Ebi"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+	name = "Ikura Sushi"
+	desc = "A simple sushi consisting of salmon roe."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Ikura"
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+	name = "Sake Sushi"
+	desc = "A simple sushi consisting of raw salmon and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Sake"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Sake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon
+	name = "Smoked Salmon Sushi"
+	desc = "A simple sushi consisting of cooked salmon and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_SmokedSalmon"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+	name = "Tamago Sushi"
+	desc = "A simple sushi consisting of egg and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Tamago"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+	name = "Inari Sushi"
+	desc = "A piece of fried tofu stuffed with rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Inari"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Inari/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago  																																			/*Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands. */
+	name = "Masago Sushi"
+	desc = "A simple sushi consisting of goldfish roe."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Masago"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Masago/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+	name = "Tobiko Sushi"
+	desc = "A simple sushi consisting of shark roe."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Masago"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg
+	name = "Tobiko and Egg Sushi"
+	desc = "A sushi consisting of shark roe and an egg."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_TobikoEgg"
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+	name = "Tai Sushi"
+	desc = "A simple sushi consisting of catfish and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Tai"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Tai/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi // i have seen the face of god and it was weeping
+	name = "Unagi Sushi"
+	desc = "A simple sushi consisting of eel and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_Hokki"
+
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 3

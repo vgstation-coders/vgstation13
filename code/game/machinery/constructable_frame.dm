@@ -210,7 +210,7 @@
 											break
 								to_chat(user, desc)
 
-								if(P && P.loc != src && !istype(P, /obj/item/stack/cable_coil))
+								if(P && P.loc != src &&( !istype(P, /obj/item/stack/cable_coil) || !istype(P, /obj/item/stack/sheet/glass/glass)))
 									to_chat(user, "<span class='warning'>You cannot add that component to the machine!</span>")
 
 /obj/machinery/constructable_frame/machine_frame/proc/set_build_state(var/state)
@@ -239,7 +239,7 @@ to destroy them and players will be able to make replacements.
 	icon = 'icons/obj/module.dmi'
 	icon_state = "blank_mod"
 	//var/datum/circuits/local_fuses = null
-	var/list/allowed_boards = list("autolathe"=/obj/item/weapon/circuitboard/autolathe,"intercom"=/obj/item/weapon/intercom_electronics,"air alarm"=/obj/item/weapon/circuitboard/air_alarm,"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,"airlock"=/obj/item/weapon/circuitboard/airlock,"APC"=/obj/item/weapon/circuitboard/power_control,"vendomat"=/obj/item/weapon/circuitboard/vendomat,"microwave"=/obj/item/weapon/circuitboard/microwave,"station map"=/obj/item/weapon/circuitboard/station_map,"cell charger"=/obj/item/weapon/circuitboard/cell_charger)
+	var/list/allowed_boards = list("autolathe"=/obj/item/weapon/circuitboard/autolathe,"intercom"=/obj/item/weapon/intercom_electronics,"air alarm"=/obj/item/weapon/circuitboard/air_alarm,"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,"airlock"=/obj/item/weapon/circuitboard/airlock,"APC"=/obj/item/weapon/circuitboard/power_control,"vendomat"=/obj/item/weapon/circuitboard/vendomat,"microwave"=/obj/item/weapon/circuitboard/microwave,"station map"=/obj/item/weapon/circuitboard/station_map,"cell charger"=/obj/item/weapon/circuitboard/cell_charger,"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -1264,3 +1264,24 @@ obj/item/weapon/circuitboard/rdserver
 						"/obj/item/weapon/stock_parts/matter_bin" = 1,
 						"/obj/item/weapon/stock_parts/scanning_module" = 1,
 						"/obj/item/weapon/stock_parts/micro_laser" = 1)
+
+/*
+ * Fishtanks
+*/
+
+
+/obj/item/weapon/circuitboard/fishtank
+	name = "Circuit Board (Fishtank Filter)"
+	build_path = "/obj/machinery/fishtank/tank"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=1"
+	req_components = list (
+							"/obj/item/stack/sheet/glass/glass" = 5)
+
+/obj/item/weapon/circuitboard/fishwall
+	name = "Circuit Board (Large Fishtank Filter)"
+	build_path = "/obj/machinery/fishtank/wall"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=1"
+	req_components = list (
+	"/obj/item/stack/sheet/glass/glass" = 10)
