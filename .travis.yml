@@ -9,13 +9,14 @@ env:
   - BYOND_MAJOR="511"
   - BYOND_MINOR="1363"
   - ALL_MAPS="tgstation metaclub defficiency packedstation test_box test_tiny"
+  - RUST_BACKTRACE="1"
+  - RUST_TEST_THREADS=1
 
 cache:
   directories:
   - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
   - $HOME/.cache/pip
   - $TRAVIS_BUILD_DIR/libvg/target
-  - $TRAVIS_BUILD_DIR/tools/runtime-condenser/target
   - $HOME/.cargo
 
 addons:
@@ -39,10 +40,7 @@ script:
 - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
 - cd libvg
 # --jobs 1 to prevent threading problems with the BYOND crate.
-- RUST_TEST_THREADS=1 cargo test --jobs 1 --verbose
-- cd -
-- cd tools/runtime-condenser
-- cargo test
+- cargo test --jobs 1 --verbose
 - cd -
 - echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M
 
