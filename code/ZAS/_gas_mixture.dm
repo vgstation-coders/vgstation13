@@ -133,10 +133,7 @@
 		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
 		temperature = (temp * giver_heat_capacity + temperature * self_heat_capacity) / combined_heat_capacity
 
-	adjust_gas(gasid, moles, FALSE)
-
-	if(update)
-		update_values()
+	adjust_gas(gasid, moles, update)
 
 
 //Variadic version of adjust_gas(). Takes any number of gas and mole pairs and applies them.
