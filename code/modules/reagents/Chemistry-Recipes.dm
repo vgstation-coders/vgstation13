@@ -3005,5 +3005,14 @@
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
 
+/datum/chemical_reaction/active_charcoal
+	name = "Activated Charcoal"
+	id = CHARCOAL
+	result = CHARCOAL
+	required_reagents = list(CARBON = 1, SACID = 2)
+	required_temp = T0C + 450
+	result_amount = 1
+
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
