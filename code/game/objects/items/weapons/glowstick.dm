@@ -13,7 +13,7 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/glowstick/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is breaking open the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
+	user.visible_message("<span class='danger'>[user] is breaking open \the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
 	return (TOXLOSS)
 
 
@@ -61,11 +61,11 @@
 	color = rgb(255, 255, 255) //for coloring the accessory
 
 /obj/item/clothing/accessory/glowstick/attack_self(mob/user)
-	to_chat(user, "<span class='notice'>You crack the [src] and it lights up.")
+	to_chat(user, "<span class='notice'>You crack \the [src] and it lights up.")
 	set_light(2, l_color = color)
 
 /obj/item/clothing/accessory/glowstick/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is breaking open the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
+	user.visible_message("<span class='danger'>[user] is breaking open \the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
 	return (TOXLOSS)
 
 
@@ -83,6 +83,7 @@
 	user.callOnFace["\ref[src]"] = "colorchange"
 
 /obj/item/clothing/accessory/glowstick/phazon/dropped(mob/user)
+	..()
 	user.callOnFace -= "\ref[src]"
 
 /obj/item/clothing/accessory/glowstick/phazon/attack_self()
@@ -102,6 +103,6 @@
 	if(attached_to)
 		attached_to.set_light(2, l_color = currentcolor)
 
-/obj/item/clothing/accessory/glowstick/phazon/on_removed(mob/user as mob)
+/obj/item/clothing/accessory/glowstick/phazon/on_removed(mob/user)
 	attached_to.set_light(0)
 	..()

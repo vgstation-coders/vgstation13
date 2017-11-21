@@ -39,9 +39,9 @@
 	build_path = /obj/item/device/core_sampler
 
 /datum/design/phazon_glowstick
-	name = "Phazon Glowstick
+	name = "Phazon Glowstick"
 	desc = "A glowstick filled with phazon material that will change colors upon agitation. It has a string on it so you can wear it."
-	id = phazon_glowstick
+	id = "phazon_glowstick"
 	req_tech = list(Tc_MATERIALS = 6, Tc_ANOMALY = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_GLASS=1000, MAT_PHAZON=20)
