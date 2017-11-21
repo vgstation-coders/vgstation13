@@ -52,7 +52,7 @@
 	else
 		A.attack_stump(src, params)
 
-	if(src.lying && !isUnconscious() && check_crawl_ability() && istype(A, /turf/simulated))
+	if(src.lying && !isUnconscious() && check_crawl_ability() && istype(A, /turf/simulated) && !pulledby && !locked_to)
 		Move(A, get_dir(src,A))
 
 /atom/proc/attack_hand(mob/user as mob, params)
