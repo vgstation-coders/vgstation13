@@ -274,8 +274,8 @@
 
 					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					M.visible_message( \
-						"<span class='notice'>[M] shakes [ismartian(src) ? "tentacles" : "hands"] with [src].</span>", \
-						"<span class='notice'>You shake [ismartian(src) ? "tentacles" : "hands"] with [src].</span>", \
+						"<span class='notice'>[M] shakes [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
+						"<span class='notice'>You shake [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
 						)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)

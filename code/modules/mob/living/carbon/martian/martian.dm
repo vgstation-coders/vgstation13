@@ -31,6 +31,11 @@
 
 	unslippable = TRUE
 	size = SIZE_BIG
+	status_flags = CANPUSH
+	mob_bump_flag = HUMAN
+	mob_push_flags = ALLMOBS
+	mob_swap_flags = ALLMOBS
+
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"

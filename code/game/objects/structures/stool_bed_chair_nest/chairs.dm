@@ -518,7 +518,7 @@
 /obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
 		if(is_locking(lock_type))

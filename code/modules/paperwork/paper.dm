@@ -243,7 +243,7 @@
 		return
 
 	if(href_list["picture"])
-		if(!ishuman(usr))
+		if(!ishigherbeing(usr))
 			return
 		var/mob/living/carbon/human/H = usr
 		H.put_in_hands(img)

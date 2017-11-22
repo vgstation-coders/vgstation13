@@ -379,7 +379,7 @@
 
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if (!ishuman(usr))
+	if (!ishigherbeing(usr))
 		return
 /*
 	if (usr.abiotic())

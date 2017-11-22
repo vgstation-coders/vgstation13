@@ -134,7 +134,7 @@
 		return //Validate mob status
 	if(!isturf(user.loc) || !isturf(over_location) || !Adjacent(user) || !user.Adjacent(over_location))
 		return //Validate location, and distance to location and object
-	if(!ishuman(user) && !isrobot(user))
+	if(!ishigherbeing(user) && !isrobot(user))
 		return //Validate mob type
 	unstack(user, params, over_location)
 
@@ -149,7 +149,7 @@
 			return
 		if(user.incapacitated() || user.lying) //make sure they can interact with it
 			return
-		if(!ishuman(user) && !isrobot(user)) //check mob type
+		if(!ishigherbeing(user) && !isrobot(user)) //check mob type
 			return
 		if(!user.can_MouseDrop(src, user)) //make sure it's adjacent and whatnot
 			return

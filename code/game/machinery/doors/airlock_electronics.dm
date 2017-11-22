@@ -37,7 +37,7 @@
 				to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
 
 /obj/item/weapon/circuitboard/airlock/attack_self(mob/user as mob)
-	if (!ishuman(user) && !isrobot(user))
+	if (!ishigherbeing(user) && !isrobot(user))
 		return ..()
 
 	// Can't manipulate it when broken (e.g. emagged)
@@ -90,7 +90,7 @@
 /obj/item/weapon/circuitboard/airlock/Topic(href, href_list)
 	if(..())
 		return 1 //Its not as though this does ANYTHING
-	if(!Adjacent(usr) || usr.incapacitated() || (!ishuman(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
+	if(!Adjacent(usr) || usr.incapacitated() || (!ishigherbeing(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
 		return
 	if(href_list["close"])
 		usr << browse(null, "window=airlock")

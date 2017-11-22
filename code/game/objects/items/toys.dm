@@ -713,7 +713,7 @@
 		if(user.client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class = 'warning'>You cannot speak in IC (muted).</span>")
 			return
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		to_chat(user, "<span class = 'warning'>You don't know how to use this!</span>")
 		return
 	if(user:miming || user.silent)

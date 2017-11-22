@@ -100,6 +100,6 @@
 		return
 	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
 		return
-	if(!ishuman(user) && !isrobot(user))
+	if(!ishigherbeing(user) && !isrobot(user))
 		return
 	attackby(O,user)
