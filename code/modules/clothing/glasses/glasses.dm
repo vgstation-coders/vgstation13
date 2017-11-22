@@ -21,7 +21,7 @@
 	desc = "nothing."
 	icon_state = "purple"
 	item_state = "glasses"
-	origin_tech = Tc_MATERIALS + "=1;" + Tc_ANOMALY + "=1"
+	origin_tech = Tc_MATERIALS + "=1"
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"

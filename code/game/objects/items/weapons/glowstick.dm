@@ -13,7 +13,9 @@
 	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/glowstick/suicide_act(mob/user)
-	user.visible_message("<span class='danger'>[user] is breaking open \the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
+	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
+	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
+	qdel(src)
 	return (TOXLOSS)
 
 
@@ -53,26 +55,40 @@
 #undef GLOW_RED
 #undef GLOW_BLUE
 
-/obj/item/clothing/accessory/glowstick //Maybe later convert the rest over
+/obj/item/clothing/accessory/glowstick //Maybe convert the rest over later
 	name = "glowstick"
 	desc = "A glowstick filled with luminescent liquid. It has a string on it so you can wear it."
 	icon_state = "glowstick"
 	_color = "glowstick" //for setting accessory states
 	color = rgb(255, 255, 255) //for coloring the accessory
+	var/cracked
 
 /obj/item/clothing/accessory/glowstick/attack_self(mob/user)
-	to_chat(user, "<span class='notice'>You crack \the [src] and it lights up.")
-	set_light(2, l_color = color)
+	if(!cracked)
+		cracked = TRUE
+		to_chat(user, "<span class='notice'>You crack \the [src] and it lights up.")
+		set_light(2, l_color = color)
+
+/obj/item/clothing/accessory/glowstick/on_attached(obj/item/clothing/C)
+	..()
+	if(attached_to)
+		attached_to.set_light(2, l_color = color)
+
+/obj/item/clothing/accessory/glowstick/on_removed(mob/user)
+	attached_to.set_light(0)
+	..()
 
 /obj/item/clothing/accessory/glowstick/suicide_act(mob/user)
-	user.visible_message("<span class='danger'>[user] is breaking open \the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
+	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
+	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
+	qdel(src)
 	return (TOXLOSS)
 
 
 /obj/item/clothing/accessory/glowstick/phazon
 	name = "phazon glowstick"
 	desc = "A glowstick filled with phazon material that will change colors upon agitation. It has a string on it so you can wear it."
-	var/currentcolor
+	origin_tech = Tc_MATERIALS + "=6;" + Tc_ANOMALY + "=2"
 
 /obj/item/clothing/accessory/glowstick/phazon/New()
 	..()
@@ -93,16 +109,6 @@
 	var/r = rand(0, 255)
 	var/g = rand(0, 255)
 	var/b = rand(0, 255)
-	currentcolor = rgb(r, g, b)
-	set_light(2, l_color = currentcolor)
-	color = currentcolor
+	color = rgb(r, g, b)
+	set_light(2, l_color = color)
 	update_icon()
-
-/obj/item/clothing/accessory/glowstick/phazon/on_attached(obj/item/clothing/C)
-	..()
-	if(attached_to)
-		attached_to.set_light(2, l_color = currentcolor)
-
-/obj/item/clothing/accessory/glowstick/phazon/on_removed(mob/user)
-	attached_to.set_light(0)
-	..()

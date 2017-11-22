@@ -2,7 +2,7 @@
 	name = "Science Goggles"
 	desc = "You expect those glasses to protect you from science-related hazards. Maybe you shouldn't."
 	id = "scienceglasses"
-	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 2)
+	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 700, MAT_GLASS = 2000)
 	category = "Anomaly"
@@ -12,7 +12,7 @@
 	name = "Depth Analysis Scanner"
 	desc = "Used to check spatial depth and density of rock outcroppings."
 	id = "depth_scanner"
-	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 2)
+	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 1000, MAT_GLASS = 2000)
 	category = "Anomaly"
@@ -22,7 +22,7 @@
 	name = "Measuring Tape"
 	desc = "A coiled metallic tape used to check dimensions and lengths."
 	id = "measuring_tape"
-	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 2)
+	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 3000, MAT_GLASS = 500)
 	category = "Anomaly"
@@ -32,7 +32,7 @@
 	name = "Core Sampler"
 	desc = "Used to extract geological core samples."
 	id = "core_sampler"
-	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 2)
+	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 1)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 4000, MAT_GLASS = 700)
 	category = "Anomaly"
