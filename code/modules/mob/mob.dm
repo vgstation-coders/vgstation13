@@ -412,11 +412,11 @@
 // message is output to anyone who can see, e.g. "The [src] does something!"
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 
-/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
+/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = world.view)
 	if(world.time>resethearers)
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(location))
+	for(var/mob/virtualhearer/hearer in viewers(range, location))
 		var/mob/M
 		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/holo = hearer.attached
