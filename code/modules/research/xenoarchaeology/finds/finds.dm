@@ -408,47 +408,55 @@
 			item_type = "gun"
 		if(ARCHAEO_GUN)
 			//revolver
-			anomaly_factor = 2
-			var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile(src.loc)
-			new_item = new_gun
-			new_item.icon_state = "gun[rand(1,4)]"
-			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
-			new_item.item_state = new_item.icon_state
-			new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-			additional_desc = "Looks like an antique projectile weapon, you're not sure if it will fire or not."
-			if(prob(10)) // 10% chance to be a smart gun
-				new_item.can_take_pai = TRUE
-				additional_desc += " There seems to be some sort of slot in the handle."
+			if(prob(99) || polarstar == 2)
+				anomaly_factor = 2
+				var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile(src.loc)
+				new_item = new_gun
+				new_item.icon_state = "gun[rand(1,4)]"
+				new_item.icon = 'icons/obj/xenoarchaeology.dmi'
+				new_item.item_state = new_item.icon_state
+				new_item.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
+				additional_desc = "Looks like an antique projectile weapon, you're not sure if it will fire or not."
+				if(prob(10)) // 10% chance to be a smart gun
+					new_item.can_take_pai = TRUE
+					additional_desc += " There seems to be some sort of slot in the handle."
 
-			//let's get some ammunition in this gun : weighted to pick available ammo
-			new_gun.caliber = pick(50;list("357" = 1),
-								   10;list("75" = 1),
-								   30;list("38" = 1),
-								   10;list("12mm" = 1))
+				//let's get some ammunition in this gun : weighted to pick available ammo
+				new_gun.caliber = pick(50;list("357" = 1),
+									   10;list("75" = 1),
+									   30;list("38" = 1),
+									   10;list("12mm" = 1))
 
-			//33% chance to fill it with a random amount of bullets
-			new_gun.max_shells = rand(1,12)
-			if(prob(33))
-				var/num_bullets = rand(1,new_gun.max_shells)
-				if(num_bullets < new_gun.loaded.len)
-					new_gun.loaded.len = 0
-					for(var/i = 1, i <= num_bullets, i++)
-						var/A = text2path(new_gun.ammo_type)
-						new_gun.loaded += new A(new_gun)
+				//33% chance to fill it with a random amount of bullets
+				new_gun.max_shells = rand(1,12)
+				if(prob(33))
+					var/num_bullets = rand(1,new_gun.max_shells)
+					if(num_bullets < new_gun.loaded.len)
+						new_gun.loaded.len = 0
+						for(var/i = 1, i <= num_bullets, i++)
+							var/A = text2path(new_gun.ammo_type)
+							new_gun.loaded += new A(new_gun)
+					else
+						for(var/obj/item/I in new_gun)
+							if(new_gun.loaded.len > num_bullets)
+								if(I in new_gun.loaded)
+									new_gun.loaded.Remove(I)
+									I.forceMove(null)
+							else
+								break
 				else
 					for(var/obj/item/I in new_gun)
-						if(new_gun.loaded.len > num_bullets)
-							if(I in new_gun.loaded)
-								new_gun.loaded.Remove(I)
-								I.forceMove(null)
-						else
-							break
+						if(I in new_gun.loaded)
+							new_gun.loaded.Remove(I)
+							I.forceMove(null)
 			else
-				for(var/obj/item/I in new_gun)
-					if(I in new_gun.loaded)
-						new_gun.loaded.Remove(I)
-						I.forceMove(null)
-
+				switch(polarstar)
+					if(0)
+						new /obj/item/weapon/gun/energy/polarstar(src.loc)
+						polarstar = 1
+					if(1)
+						new /obj/item/device/modkit/spur_parts(src.loc)
+						polarstar = 2
 			item_type = "gun"
 		if(ARCHAEO_UNKNOWN)
 			//completely unknown alien device
