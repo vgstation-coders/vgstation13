@@ -89,7 +89,7 @@
 					"You have won tickets to the newest romantic comedy 16 RULES OF LOVE!", \
 					"You have won tickets to the newest thriller THE CULT OF THE SLEEPING ONE!")
 				if(8)
-					sender = "Sponsored Content from " + pick("*buzzFeed", "ViralBluespace", "Clickvox", "Honk Daily")
+					sender = "Sponsored Content from " + pick("*buzzFeed", "ViralBluespace", "Clickvox", "Daily Honk")
 					message = pick("This Assistant Died and Not a Word Was Said, Here’s Why", \
 					"Five SME Setups That Will Make You Say, \"I Can't Believe That Works!\" (Number Four Will Shock You)", \
 					"Is Your HoP A Traitor?... He Is, If He Does These Five Things. Click And Find Out!", \
