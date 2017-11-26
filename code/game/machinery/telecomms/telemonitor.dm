@@ -101,7 +101,7 @@
 
 			if("boost")
 				if(SelectedMachine.boost_signal())
-					temp = "<b>- SUCESS: \[[SelectedMachine]\] SIGNAL AMPLIFIED -</b>"
+					temp = "<b>- SUCCESS: \[[SelectedMachine]\] SIGNAL AMPLIFIED -</b>"
 				else
 					temp = "<font color = #D70B00>- FAILED: NO LOCAL INTERFERENCE DETECTED -</font color>"
 
