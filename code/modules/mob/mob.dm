@@ -376,7 +376,7 @@
 // blind_drugged_message (optional) is shown to blind hallucinating people
 // ignore_self (optional) won't show the message to the mob sending the message
 
-/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0)
+/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0, var/range = world.view)
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
@@ -392,7 +392,7 @@
 	if(!ignore_self)
 		show_message( msg, 1, msg2, 2)
 
-	..(message, blind_message, drugged_message, blind_drugged_message)
+	..(message, blind_message, drugged_message, blind_drugged_message, range)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(see_invisible < A.invisibility || src == A)
