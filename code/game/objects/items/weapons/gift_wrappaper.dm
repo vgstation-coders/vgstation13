@@ -313,3 +313,14 @@
 /obj/structure/strange_present/attack_hand(mob/user as mob)
 	to_chat(user, "<span class='warning'>[src] is too tightly bound to open without wirecutters!</span>")
 	return
+
+///Loot crate///
+/obj/item/weapon/winter_gift/cloth/dorkcube
+	name = "dork cube"
+	desc = "Don't forget to shout the magic phrase when you open it!"
+
+/obj/item/weapon/winter_gift/cloth/dorkcube/attack_self(mob/user)
+	user.say("Loot get!")
+	playsound(get_turf(src), 'sound/misc/achievement.ogg', 30, 1)
+	user.gib()
+	qdel(src)

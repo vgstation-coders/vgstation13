@@ -82,6 +82,11 @@
 	typepath = /obj/item/weapon/beach_ball
 	cost = 50
 
+/datum/storeitem/dorkcube
+	name = "Dork Cube"
+	desc = "A single month subscription to Dork Cube!"
+	typepath = /obj/item/weapon/winter_gift/cloth/dorkcube
+	cost = 30
 /////////////////////////////
 // Clothing
 /////////////////////////////
