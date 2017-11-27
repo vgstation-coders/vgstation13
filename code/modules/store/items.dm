@@ -83,9 +83,9 @@
 	cost = 50
 
 /datum/storeitem/dorkcube
-	name = "Dork Cube"
-	desc = "A single month subscription to Dork Cube!"
-	typepath = /obj/item/weapon/winter_gift/cloth/dorkcube
+	name = "Loot Box"
+	desc = "A single month subscription to Loot Box!"
+	typepath = /obj/item/weapon/winter_gift/dorkcube
 	cost = 30
 /////////////////////////////
 // Clothing
