@@ -318,6 +318,9 @@
 /obj/item/weapon/winter_gift/cloth/dorkcube
 	name = "dork cube"
 	desc = "Don't forget to shout the magic phrase when you open it!"
+	icon = 'icons/obj/storage/smallboxes.dmi'
+	icon_state = "box_ERT"
+	item_state = "syringe_kit"
 
 /obj/item/weapon/winter_gift/cloth/dorkcube/attack_self(mob/user)
 	user.say("Loot get!")
