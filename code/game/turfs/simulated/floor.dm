@@ -573,11 +573,12 @@ turf/simulated/floor/update_icon()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					if(floor_tile && floor_tile.type != T.type)
-						returnToPool(floor_tile)
-						floor_tile = null
-						floor_tile = getFromPool(T.type, null)
-					material = floor_tile.material
+					if(floor_tile)
+						if(floor_tile.type != T.type)
+							returnToPool(floor_tile)
+							floor_tile = null
+							floor_tile = getFromPool(T.type, null)
+						material = floor_tile.material
 					intact = 1
 					plane = TURF_PLANE
 					if(istype(T,/obj/item/stack/tile/light))
