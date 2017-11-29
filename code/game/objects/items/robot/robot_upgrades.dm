@@ -18,11 +18,11 @@
 	w_type=RECYK_ELECTRONIC
 
 
-/obj/item/borg/upgrade/proc/locate_component(var/obj/C, var/mob/living/silicon/robot/R, var/mob/living/user)
+/obj/item/borg/upgrade/proc/locate_component(var/obj/item/C, var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(!C || !R || !user)
 		return FAILED_TO_ADD
 
-	var/obj/I = locate(C) in R.module
+	var/obj/item/I = locate(C) in R.module
 	if(!I)
 		I = locate(C) in R.module.contents
 	if(!I)
