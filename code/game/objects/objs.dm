@@ -252,7 +252,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		if(_using && _using.len)
 			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
-				if (!M || !M.client || M.machine != src)
+				if (!M || !M.client)
 					_using.Remove(M)
 					continue
 
@@ -263,7 +263,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 						src.attack_ai(M)
 
 					// check for TK users
-					if(M.mutations && M.mutations.len)
+					else if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
