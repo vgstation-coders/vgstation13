@@ -256,6 +256,8 @@
 
 /area/vault/research
 
+/area/vault/satelite
+
 /area/vault/spy_sat
 	name = "\improper Donk Co. Comm-sniffer satellite C-VI"
 
@@ -667,23 +669,26 @@
 
 	active_power_usage = 500
 	density = 1
-	var/last_check
+	var/powered
 
 /obj/machinery/power/magtape_deck/New()
 	..()
 	connect_to_network()
 
-	last_check = world.time
-
-/obj/machinery/power/magtape_deck/power_change()
-	if(get_powernet() && avail(active_power_usage))
-		stat &= ~NOPOWER
+/obj/machinery/power/magtape_deck/process()
+	if(stat & BROKEN)
+		return
+	if(avail(active_power_usage))
+		powered = 1
 	else
-		stat |= NOPOWER
-	update_icon()
+		powered = 0
 
-	if(stat & NOPOWER)
-		return 0
+	if(powered && stat & NOPOWER)
+		stat &= ~NOPOWER
+		update_icon()
+	else if (!powered && !(stat & NOPOWER))
+		stat |= NOPOWER
+		update_icon()
 
 /obj/machinery/power/magtape_deck/update_icon()
 	if(stat & (BROKEN|NOPOWER))
@@ -697,12 +702,12 @@
 
 /obj/machinery/power/magtape_deck/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(1)
 			qdel(src)
-		if(2.0)
+		if(2)
 			if (prob(50))
 				set_broken()
-		if(3.0)
+		if(3)
 			if (prob(25))
 				set_broken()
 
@@ -715,15 +720,6 @@
 /obj/machinery/power/magtape_deck/blob_act()
 	if (prob(75))
 		set_broken()
-
-/obj/machinery/power/magtape_deck/process()
-	if(stat & BROKEN)
-		return
-
-	if(world.time > last_check + 10 SECONDS)
-		last_check = world.time
-		if(!power_change())
-			return
 
 
 /obj/machinery/power/magtape_deck/syndicate
@@ -756,7 +752,7 @@
 				triggered = TRUE
 				say("Codephrase accepted. Welcome, Agent. Releasing gathered information and current co-ordinates of home base.")
 				new /obj/item/weapon/disk/tech_disk/random(get_turf(src))
-				new /obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment
+				new /obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment(get_turf(src))
 
 /obj/machinery/power/magtape_deck/syndicate/attack_hand(mob/user)
 	if(stat & (BROKEN|NOPOWER))
@@ -769,11 +765,9 @@
 		return
 	..()
 
-/obj/item/weapon/disk/tech_disk/random
-
 /obj/item/weapon/disk/tech_disk/random/New()
 	..()
-	var/possible_research = pick(typesof(/datum/tech) - /datum/tech)
+	var/possible_research = pick(subtypesof(/datum/tech))
 	stored = new possible_research
 	stored.level = rand(1,stored.max_level)
 
@@ -790,8 +784,8 @@
 /obj/machinery/door/poddoor/preopen/satellite_deployment
 	id_tag = "spacetime"
 
-/obj/machinery/access_button/satellite_deployment
-	command = "spacetime"
+/obj/machinery/door_control/satellite_deployment
+	id_tag = "spacetime"
 
 /obj/item/weapon/paper/satellite_deployment/no_smoking
 	name = "Note to all would-be smokers"
@@ -860,8 +854,10 @@
 	room_remaining -= sulph_to_add
 	reagents.add_reagent(NUTRIMENT, room_remaining)
 
-/obj/item/weapon/reagent_containers/spray/chemsprayer/lube
-
 /obj/item/weapon/reagent_containers/spray/chemsprayer/lube/New()
 	..()
 	reagents.add_reagent(LUBE, rand(50,volume))
+
+/obj/effect/decal/cleanable/blood/stattrack //Not the same as tracks. Less nonsense required, for aesthetic purposes only
+	icon_state = "tracks"
+	random_icon_states = null

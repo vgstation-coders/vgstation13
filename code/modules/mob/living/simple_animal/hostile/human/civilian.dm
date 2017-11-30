@@ -44,7 +44,7 @@
 	icon_state = "janitor"
 
 	corpse = /obj/effect/landmark/corpse/janitor/chempack
-	items_to_drop = list(/obj/item/weapon/gun/projectile/pistol, /obj/item/weapon/reagent_containers/spray/chemsprayer/lube)
+	items_to_drop = list(/obj/item/weapon/gun/projectile/pistol)
 
 	speak = list("Clean up on aisle 3","You're getting the floor dirty!","Watch your step!")
 	speak_chance = 15
@@ -57,66 +57,34 @@
 	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
 	casingtype = /obj/item/ammo_casing/c9mm
 	ranged_cooldown_cap = 15
-	var/bullets_remaining = 8
+	needs_to_reload = TRUE
+	bullets_remaining = 8
+	drop_on_reload = /obj/item/ammo_storage/magazine/mc9mm/empty
+	var/obj/item/weapon/reagent_containers/spray/chemsprayer/CS
 
 	visible_items = list('icons/mob/in-hand/right/items_righthand.dmi' = "chemsprayer", 'icons/mob/in-hand/left/items_lefthand.dmi' = "gun")
+
+/mob/living/simple_animal/hostile/humanoid/janitor/New()
+	..()
+	CS = new /obj/item/weapon/reagent_containers/spray/chemsprayer/lube(src)
+	CS.reagents.add_reagent(LUBE, 600)
 
 /mob/living/simple_animal/hostile/humanoid/janitor/Aggro()
 	..()
 	say(pick("Time to take out the trash!","Hope you wiped your feet before you came in.","It's time to take you to the cleaners."))
 
 /mob/living/simple_animal/hostile/humanoid/janitor/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(prob(30))
+	if(prob(30) && CS.reagents.has_reagent(LUBE))
 		visible_message("<span class = 'warning'>\The [src] lets loose a blast of lubricant from their chemical sprayer!</span>")
 		playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
-		//Copypasted from the chem-sprayer make_puff()
-		var/Sprays[3]
-
-		for (var/i = 1, i <= 3, i++)
-			if (src.reagents.total_volume < 1)
-				break
-
-			var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), "#009CA8", 50)
-			D.reagents.add_reagent(LUBE, rand(15,50))
-			Sprays[i] = D
-
-		// Move the puffs towards the target
-		var/direction = get_dir(src, target)
-		var/turf/T = get_turf(target)
-		var/turf/T1 = get_step(T, turn(direction, 90))
-		var/turf/T2 = get_step(T, turn(direction, -90))
-		var/list/the_targets = list(T, T1, T2)
-
-		for (var/i = 1, i <= Sprays.len, i++)
-			spawn()
-				var/obj/effect/decal/chemical_puff/D = Sprays[i]
-				if (!D)
-					continue
-
-				// Spreads the sprays a little bit
-				var/turf/my_target = pick(the_targets)
-				the_targets -= my_target
-
-				for (var/j = 1, j <= rand(6, 8), j++)
-					step_towards(D, my_target)
-					D.react(iteration_delay = 0)
-					sleep(2)
-
-				returnToPool(D)
+		CS.make_puff(target, user)
 	else
-		if(bullets_remaining)
-			bullets_remaining--
-			..()
-		else
-			if(canmove)
-				visible_message("<span class = 'warning'>\The [src] stops to reload!</span>")
-				playsound(user, 'sound/weapons/magdrop_1.ogg', 100, 1)
-				new /obj/item/ammo_storage/magazine/mc9mm/empty(get_turf(src))
-				canmove = FALSE
-				spawn(rand(30,60))
-					visible_message("<span class = 'warning'>\The [src] reloads!</span>")
-					canmove = TRUE
-					bullets_remaining = initial(bullets_remaining)
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/janitor/Die()
+	CS.forceMove(loc)
+	CS = null
+	..()
 
 
 /mob/living/simple_animal/hostile/humanoid/pilot
@@ -137,21 +105,8 @@
 	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
 	casingtype = /obj/item/ammo_casing/a357
 	ranged_cooldown_cap = 15
-	var/bullets_remaining = 7
+	needs_to_reload = TRUE
+	bullets_remaining = 7
+	drop_on_reload = /obj/item/ammo_storage/speedloader/a357/empty
 
 	visible_items = list('icons/mob/in-hand/right/items_righthand.dmi' = "gun")
-
-/mob/living/simple_animal/hostile/humanoid/pilot/Shoot(var/atom/target, var/atom/start, var/mob/user)
-	if(bullets_remaining)
-		bullets_remaining--
-		..()
-	else
-		if(canmove)
-			visible_message("<span class = 'warning'>\The [src] stops to reload!</span>")
-			playsound(user, 'sound/weapons/magdrop_1.ogg', 100, 1)
-			canmove = FALSE
-			spawn(rand(30,60))
-				new /obj/item/ammo_storage/speedloader/a357/empty(get_turf(src))
-				visible_message("<span class = 'warning'>\The [src] reloads!</span>")
-				canmove = TRUE
-				bullets_remaining = initial(bullets_remaining)
