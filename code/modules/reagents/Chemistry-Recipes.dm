@@ -3005,5 +3005,13 @@
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
 
+
+/datum/chemical_reaction/potassiumcarbonate
+	name = "Potassium Carbonate"
+	id = POTASSIUMCARBONATE
+	result = POTASSIUMCARBONATE
+	required_reagents = list(POTASSIUM = 2, CARBON = 1, OXYGEN = 3)
+	result_amount = 1
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
