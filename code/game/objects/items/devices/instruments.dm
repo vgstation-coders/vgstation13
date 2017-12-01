@@ -28,6 +28,9 @@
 		return 1
 	interact(user)
 
+/obj/item/device/instrument/drum/drum_makeshift/bongos/attack_self(mob/user as mob)
+	interact(user)
+
 /obj/item/device/instrument/interact(mob/user as mob)
 	if(!user)
 		return
@@ -136,3 +139,54 @@
 	throw_speed = 3
 	throw_range = 15
 	hitsound = 'sound/items/bikehorn.ogg'
+
+
+/obj/item/device/instrument/drum
+	name = "drum"
+	desc = "Are you ready to be the king of the Rhumba beat?"
+	icon_state = "drum"
+	item_state = "drum"
+	force = 10
+	attack_verb = list("drums", "beats", "smashes")
+	instrumentId = "drum"
+	flags = TWOHANDABLE | MUSTTWOHAND
+	hitsound = 'sound/items/drumhit.ogg'
+
+/obj/item/device/instrument/drum/drum_makeshift
+	name = "makeshift drum"
+	desc = "A crudely built drum that is, in essence, a wooden bowl with a leather sheet stretched taut over its surface. Despite its primitive design, you can extract a rather wide range of pitches and notes from this pile of trash"
+	icon_state = "drum_makeshift"
+	item_state = "drum_makeshift"
+	w_class = W_CLASS_TINY
+	force = 5
+	flags = TWOHANDABLE
+	instrumentId = "drum"
+	var/decondrop = 1 //determines how many parts to drop if deconstructed
+
+/obj/item/device/instrument/drum/drum_makeshift/bongos
+	name = "bongos"
+	desc = "Simple makeshift set of double drums that can be played by anyone with a pair of hands."
+	icon_state = "drum_bongo"
+	item_state = "drum_bongo"
+	w_class = W_CLASS_LARGE
+	flags = TWOHANDABLE | MUSTTWOHAND
+	instrumentId = "drum"
+	hitsound = 'sound/items/drumhit.ogg'
+	decondrop = 2 //determines how many parts to drop if deconstructed
+
+/obj/item/device/instrument/drum/drum_makeshift/attackby(obj/item/I,mob/user,params)
+	if(iswirecutter(I)) //wirecutters disassembles drums and bongos and gives you proper drops based on [decondrop] defined above
+		var/woodbowl = /obj/item/trash/bowl
+		var/leathersheet =  /obj/item/stack/sheet/leather
+		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		visible_message("<span class='notice'>[user] cuts the leather face off the drum with [I]. </span>")
+		for (var/i = 1 to decondrop)
+			new woodbowl(get_turf(src))
+			new leathersheet(get_turf(src))
+		qdel(src)
+	if (istype(I,/obj/item/device/instrument/drum/drum_makeshift)) //adding a drum to a drum makes bongos.
+		var/bongos = /obj/item/device/instrument/drum/drum_makeshift/bongos
+		visible_message("<span class='notice'>[user] combines the two drums to create a set of bongos.</span>")
+		new bongos(get_turf(src))
+		qdel(src)
+		qdel(I)

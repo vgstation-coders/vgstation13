@@ -1084,7 +1084,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano/random,
-					/obj/item/device/instrument/bikehorn)
+					/obj/item/device/instrument/bikehorn,
+					/obj/item/device/instrument/drum)
 	name = "Random instrument"
 	cost = 50
 	containertype = /obj/structure/closet/crate
@@ -1103,7 +1104,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano/minimoog,
 					/obj/structure/piano,
-					/obj/item/device/instrument/bikehorn)
+					/obj/item/device/instrument/bikehorn,
+					/obj/item/device/instrument/drum)
 	name = "Big band instrument collection"
 	cost = 500
 	containertype = /obj/structure/largecrate
