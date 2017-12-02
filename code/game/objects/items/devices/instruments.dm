@@ -176,17 +176,14 @@
 
 /obj/item/device/instrument/drum/drum_makeshift/attackby(obj/item/I,mob/user,params)
 	if(iswirecutter(I)) //wirecutters disassembles drums and bongos and gives you proper drops based on [decondrop] defined above
-		var/woodbowl = /obj/item/trash/bowl
-		var/leathersheet =  /obj/item/stack/sheet/leather
 		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		visible_message("<span class='notice'>[user] cuts the leather face off the drum with [I]. </span>")
+		visible_message("<span class='notice'>[user] cuts the leather face off \the [src] with \the [I]. </span>")
 		for (var/i = 1 to decondrop)
-			new woodbowl(get_turf(src))
-			new leathersheet(get_turf(src))
+			new /obj/item/trash/bowl(get_turf(src))
+			new /obj/item/stack/sheet/leather(get_turf(src))
 		qdel(src)
 	if (istype(I,/obj/item/device/instrument/drum/drum_makeshift)) //adding a drum to a drum makes bongos.
-		var/bongos = /obj/item/device/instrument/drum/drum_makeshift/bongos
 		visible_message("<span class='notice'>[user] combines the two drums to create a set of bongos.</span>")
-		new bongos(get_turf(src))
+		new /obj/item/device/instrument/drum/drum_makeshift/bongos(get_turf(src))
 		qdel(src)
 		qdel(I)
