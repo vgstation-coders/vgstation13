@@ -1945,6 +1945,20 @@
 /obj/mecha/acidable()
 	return 0
 
+/obj/mecha/beam_connect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+
+/obj/mecha/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+/obj/mecha/apply_beam_damage(var/obj/effect/beam/B)
+	// Actually apply damage
+	take_damage(B.get_damage(), "emitter laser")
+
+
 //////////////////////////////////////////
 ////////  Mecha global iterators  ////////
 //////////////////////////////////////////
