@@ -4568,6 +4568,7 @@
 					wages_enabled = 0
 					message_admins("<span class='notice'>[key_name_admin(usr)] has disabled wages!")
 		return
+
 	if(href_list["econ_panel"])
 		var/choice = href_list["econ_panel"]
 		EconomyPanel(choice, href_list)
@@ -4583,3 +4584,219 @@
 			error_viewer.show_to(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
 		else
 			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])
+
+	// ----- Religion and stuff
+	if (href_list["religions"])
+		#define MAX_MSG_LENGTH 200
+		#define NUMBER_MAX_REL 4
+		if (href_list["display"])
+			updateRelWindow()
+
+		switch (href_list["religions"])
+			if ("global_subtle_pm")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!R || !istype(R, /datum/religion))
+					return FALSE
+
+				var/deity = sanitize(stripped_input(usr, "Which deity adresses this group of believers?", "Deity Name", R.deity_name), 1, MAX_NAME_LEN)
+				var/message = sanitize(stripped_input(usr, "Which message do you want to send?", "Message", ""), 1, MAX_MSG_LENGTH)
+				for (var/datum/mind/M in R.adepts)
+					to_chat(M.current, "You hear [deity] speak to you... <i>[message]</i>")
+
+
+			if ("new") // --- Busing in a new rel ---
+				// This is copypasted from chaplain code, with adaptations
+
+				if (ticker.religions.len > NUMBER_MAX_REL)
+					to_chat(usr, "<span class='warning'>Maximum number of religions reached.</span>")
+					return FALSE // Just in case a href exploit allows someone to create a gazillion religions with no purpose.
+
+				var/new_religion = sanitize(stripped_input(usr, "Enter the key to the new religion (leave empty to abort)", "New religion", "Adminbus"), 0, MAX_NAME_LEN)
+
+				if (!new_religion)
+					return FALSE
+
+				var/datum/religion/rel_added
+
+				var/choice = FALSE
+				for (var/R in typesof(/datum/religion))
+					rel_added = new R
+					for (var/key in rel_added.keys)
+						if (key == new_religion)
+							rel_added.holy_book = new rel_added.bible_type
+							rel_added.holy_book.my_rel = rel_added
+							break // Religion found - time to abort
+					if (choice)
+						break
+
+				if (!choice) // No religion found
+					rel_added = new /datum/religion
+					rel_added.name = "[new_religion]"
+					rel_added.deity_name = "[new_religion]"
+					rel_added.bible_name = "The Holy Book of [new_religion]"
+					rel_added.holy_book = new rel_added.bible_type
+					rel_added.holy_book.my_rel = rel_added
+					rel_added.holy_book = new rel_added.bible_type
+
+				var/new_deity = copytext(sanitize(input(usr, "Would you like to change the deity? The deity currently is [rel_added.deity_name] (Leave empty or unchanged to keep deity name)", "Name of Deity", rel_added.deity_name)), 1, MAX_NAME_LEN)
+				if(length(new_deity))
+					rel_added.deity_name = new_deity
+
+				// Bible chosing - without preview this time
+				var/book_style = input(usr, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[rel_added.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
+																				   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+
+				switch(book_style)
+					if("Koran")
+						rel_added.holy_book.icon_state = "koran"
+						rel_added.holy_book.item_state = "koran"
+					if("Scrapbook")
+						rel_added.holy_book.icon_state = "scrapbook"
+						rel_added.holy_book.item_state = "scrapbook"
+					if("Creeper")
+						rel_added.holy_book.icon_state = "creeper"
+						rel_added.holy_book.item_state = "syringe_kit"
+					if("White Bible")
+						rel_added.holy_book.icon_state = "white"
+						rel_added.holy_book.item_state = "syringe_kit"
+					if("Holy Light")
+						rel_added.holy_book.icon_state = "holylight"
+						rel_added.holy_book.item_state = "syringe_kit"
+					if("Athiest")
+						rel_added.holy_book.icon_state = "athiest"
+						rel_added.holy_book.item_state = "syringe_kit"
+					if("Tome")
+						rel_added.holy_book.icon_state = "tome"
+						rel_added.holy_book.item_state = "syringe_kit"
+					if("The King in Yellow")
+						rel_added.holy_book.icon_state = "kingyellow"
+						rel_added.holy_book.item_state = "kingyellow"
+					if("Ithaqua")
+						rel_added.holy_book.icon_state = "ithaqua"
+						rel_added.holy_book.item_state = "ithaqua"
+					if("Scientology")
+						rel_added.holy_book.icon_state = "scientology"
+						rel_added.holy_book.item_state = "scientology"
+					if("the bible melts")
+						rel_added.holy_book.icon_state = "melted"
+						rel_added.holy_book.item_state = "melted"
+					if("Unaussprechlichen Kulten")
+						rel_added.holy_book.icon_state = "kulten"
+						rel_added.holy_book.item_state = "kulten"
+					if("Necronomicon")
+						rel_added.holy_book.icon_state = "necronomicon"
+						rel_added.holy_book.item_state = "necronomicon"
+					if("Book of Shadows")
+						rel_added.holy_book.icon_state = "shadows"
+						rel_added.holy_book.item_state = "shadows"
+					if("Torah")
+						rel_added.holy_book.icon_state = "torah"
+						rel_added.holy_book.item_state = "torah"
+					if("Burning")
+						rel_added.holy_book.icon_state = "burning"
+						rel_added.holy_book.item_state = "syringe_kit"
+					if("Honk")
+						rel_added.holy_book.icon_state = "honkbook"
+						rel_added.holy_book.item_state = "honkbook"
+					if("Ianism")
+						rel_added.holy_book.icon_state = "ianism"
+						rel_added.holy_book.item_state = "ianism"
+					if("The Guide")
+						rel_added.holy_book.icon_state = "guide"
+						rel_added.holy_book.item_state = "guide"
+					if("Slab")
+						rel_added.holy_book.icon_state = "slab"
+						rel_added.holy_book.item_state = "slab"
+						rel_added.holy_book.desc = "A bizarre, ticking device... That looks broken."
+					else
+						//If christian bible, revert to default
+						rel_added.holy_book.icon_state = "bible"
+						rel_added.holy_book.item_state = "bible"
+
+				var/msg = "[usr] created a religion: [rel_added.name]."
+				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+				log_adminwarn(msg)
+
+				ticker.religions += rel_added
+				updateRelWindow()
+			if ("delete")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!R || !istype(R, /datum/religion))
+					return FALSE
+
+				if (R.adepts.len)
+					to_chat(usr, "<span class='warning'>You can't delete a religion which has adepts.</span>")
+					return FALSE
+
+				var/msg = "[usr] deleted a religion: [R.name]."
+				ticker.religions -= R
+				qdel(R.holy_book)
+				qdel(R)
+				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+				log_adminwarn(msg)
+				updateRelWindow()
+
+			if ("activate")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!R || !istype(R, /datum/religion))
+					return FALSE
+
+				if (R.adepts.len)
+					to_chat(usr, "<span class='warning'>The religion already has adepts!</span>")
+					return FALSE
+
+				if (alert("Do you wish to activate this religion? You will have to pick a player as its guide. Make sure the player is aware your plans!", "Activating a religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as mob in world // THERE HAS TO BE A BETTER WAY TO DO THAT
+
+				if (!preacher.mind)
+					to_chat(usr, "<span class='warning'>This mob has no mind.</span>")
+					return FALSE
+
+				if (preacher.mind.faith)
+					to_chat(usr, "<span class='warning'>This person already follows a religion.</span>")
+					return FALSE
+
+				R.activate(preacher)
+				var/msg = "[usr] activated religion [R.name], with preacher \the [preacher]."
+				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+				log_adminwarn(msg)
+				updateRelWindow()
+
+/datum/admins/proc/updateRelWindow()
+	var/text = "<h3>Religions in game</h3>"
+	// --- Displaying of all religions ---
+	for (var/datum/religion/R in ticker.religions)
+		text += "<b>Name:</b> [R.name] <br/>"
+		text += "<b>Deity name:</b> [R.deity_name]<br/>"
+		if (!R.adepts.len) // Religion not activated yet
+			text += "No adepts yet. "
+			text += "(<A HREF='?_src_=holder;religions=delete&rel=\ref[R]'>Delete</A>) "
+			text += "(<A HREF='?_src_=holder;religions=activate&rel=\ref[R]'>Activate</A>) <br/>"
+			text += "<br/>"
+		else
+			text += "<b>Leader:</b> \the [R.religiousLeader.current] (<A HREF='?_src_=vars;Vars=\ref[R.religiousLeader.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[R.religiousLeader.current]'>JMP</A>) \
+					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A>)<br/>"
+			text += "<b>Adepts:</b> <ul>"
+			for (var/datum/mind/M in R.adepts)
+				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]'>JMP</A>) \
+					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>)</li>"
+				text +="</ul>"
+				text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
+				text += "<br/>"
+			text += "</ul>"
+	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
+	usr << browse(text, "window=admin2;size=300x370")

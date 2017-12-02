@@ -49,7 +49,7 @@
 /obj/effect/landmark/sc_bible_spawner/New()
 	var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible/booze(src.loc)
 	B.name = "The Holy book of the Geometer"
-	B.deity_name = "Narsie"
+	B.my_rel = new /datum/religion/cult
 	B.icon_state = "melted"
 	B.item_state = "melted"
 	new /obj/item/weapon/paper/sc_safehint_paper_bible(B)

@@ -318,7 +318,7 @@
 						B.icon_state = ticker.Bible_icon_state
 						B.item_state = ticker.Bible_item_state
 						B.name = ticker.Bible_name
-						B.deity_name = ticker.Bible_deity_name
+						B.my_rel.deity_name = ticker.Bible_deity_name
 
 					bibledelay = 1
 					spawn(60)

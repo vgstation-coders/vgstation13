@@ -6,9 +6,13 @@
 	var/bible_name = "The Holy Bible"
 	var/male_adept = "Chaplain"
 	var/female_adept = "Chaplain"
-	var/bible_type = /obj/item/weapon/storage/bible
+	var/convert_method = "splashing them with holy water, holding a bible in hand."
 
+	var/bible_type = /obj/item/weapon/storage/bible
 	var/obj/item/weapon/storage/bible/holy_book
+
+	var/datum/mind/religiousLeader
+	var/list/datum/mind/adepts = list()
 
 	var/list/bible_names = list()
 	var/list/deity_names = list()
@@ -24,6 +28,80 @@
 // Give the chaplain the basic gear, as well as a few misc effects.
 /datum/religion/proc/equip_chaplain(var/mob/living/carbon/human/H)
 	return TRUE // Nothing to see here, but redefined in some other religions !
+
+/* ---- RELIGIOUS CONVERSION ----
+ * convertAct() -> convertCeremony() -> convertCheck() -> convert()
+ * Redefine 'convertCeremony' to play out your snowflake ceremony/interactions in your religion datum.
+ * In a saner language, convertCeremony() and convertCheck() would be private methods. Those are UNSAFE procs. Call convertAct() instead.
+ */
+
+/* ConvertAct() : here we check if eveything is in place for the conversion, and provide feedback if needed. Sanity for the preacher or the target belongs to the verb in the bible.
+ * - preacher : the guy doing the converting
+ * - subject : the guy being converted
+ * - B : the bible using for the conversion
+ */
+/datum/religion/proc/convertAct(var/mob/living/preacher, var/mob/living/subject, var/obj/item/weapon/storage/bible/B)
+	if (B.my_rel != src) // BLASPHEMY
+		to_chat(preacher, "<span class='warning'>You are a heathen to this God. You feel [B.my_rel.deity_name]'s wrath strike you for this blasphemy.</span>")
+		preacher.fire_stacks += 5
+		preacher.IgniteMob()
+		preacher.emote("scream",,, 1)
+		return FALSE
+	if (preacher != religiousLeader.current)
+		to_chat(preacher, "<span class='warning'>You fail to muster enough mental strength to begin the conversion. Only the Spiritual Guide of [name] can perfom this.</span>")
+		return FALSE
+	if (subject.mind.faith == src)
+		to_chat(preacher, "<span class='warning'>You and your target follow the same faith.</span>")
+		return FALSE
+	else
+		return convertCeremony(preacher, subject)
+
+/* ConvertCeremony() : the RP ceremony to convert the newfound person.
+ Here we check if we have the tools to convert and play out the little interactions. */
+
+ // This is the default ceremony, for Christianity/Space Jesus
+/datum/religion/proc/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_beaker = preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers)
+	var/obj/item/weapon/reagent_containers/B = preacher.held_items[held_beaker]
+	if (!held_beaker || B.reagents.get_master_reagent_name() != "Holy Water")
+		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
+		return FALSE
+	subject.visible_message("\the [preacher] attemps to convert the [subject] to [name].")
+	if(!convertCheck(subject))
+		subject.visible_message("\The [subject] refuses conversion.")
+		return FALSE
+
+	// Everything is ok : begin the conversion
+	splash_sub(B.reagents, subject, 5, preacher)
+	subject.visible_message("\The [subject] is blessed by \the [preacher] and embraces [name]. Praise [deity_name]!")
+	convert(subject, preacher)
+	return TRUE
+
+// Here we check if the subject is willing
+/datum/religion/proc/convertCheck(var/mob/living/subject)
+	var/choice = input(subject, "Do you wish to become a follower of [name]?","Religious converting") in list("Yes", "No")
+	return (choice == "Yes" ? TRUE : FALSE)
+
+// Here is the proc to welcome a new soul in our religion.
+/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)
+	subject.mind.faith = src
+	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
+	src.adepts += subject.mind
+	if (!preacher)
+		var/msg = "\The [subject] has been converted to [name] without a preacher."
+		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+		log_adminwarn(msg)
+	else
+		var/msg = "\The [subject] has been converted to [name] by \The [preacher]."
+		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+		log_adminwarn(msg)
+
+/datum/religion/proc/activate(var/mob/living/preacher)
+	src.equip_chaplain(preacher) // We do the misc things related to the religion
+	preacher.put_in_hands(holy_book)
+	src.religiousLeader = preacher.mind
+	to_chat(preacher, "A great, intense revelation go through your spirit. You are know the religious leader of [name]. Convert people by [convert_method]")
+	src.convert(preacher, null)
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/catholic

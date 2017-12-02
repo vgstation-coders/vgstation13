@@ -473,7 +473,7 @@
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
 		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
 			var/obj/item/weapon/storage/bible/bible = W
-			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.deity_name] to bring this poor soul back from the brink.</span>")
+			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
@@ -482,7 +482,7 @@
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
 					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -500,7 +500,7 @@
 							holy_modifier += 1
 
 					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")

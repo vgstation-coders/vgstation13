@@ -45,6 +45,7 @@
 	var/role_alt_title
 
 	var/datum/job/assigned_job
+	var/datum/religion/faith
 
 	var/list/kills=list()
 	var/list/datum/objective/objectives = list()
@@ -117,6 +118,10 @@
 		for(var/datum/objective/objective in objectives)
 			output += "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 			obj_count++
+
+	if (faith) // This way they can get their religion changed
+		output += "<b>Religion:</b> [faith.name] <br/> \
+				   <b>Leader:</b> [faith.religiousLeader] <br/>"
 
 	recipient << browse(output,"window=memory")
 
