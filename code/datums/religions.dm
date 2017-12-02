@@ -62,8 +62,11 @@
  // This is the default ceremony, for Christianity/Space Jesus
 /datum/religion/proc/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/held_beaker = preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers)
+	if (!held_beaker)
+		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
+		return FALSE
 	var/obj/item/weapon/reagent_containers/B = preacher.held_items[held_beaker]
-	if (!held_beaker || B.reagents.get_master_reagent_name() != "Holy Water")
+	if (B.reagents.get_master_reagent_name() != "Holy Water")
 		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
 		return FALSE
 	subject.visible_message("\the [preacher] attemps to convert the [subject] to [name].")
@@ -80,7 +83,7 @@
 // Here we check if the subject is willing
 /datum/religion/proc/convertCheck(var/mob/living/subject)
 	var/choice = input(subject, "Do you wish to become a follower of [name]?","Religious converting") in list("Yes", "No")
-	return (choice == "Yes" ? TRUE : FALSE)
+	return choice == "Yes"
 
 // Here is the proc to welcome a new soul in our religion.
 /datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)

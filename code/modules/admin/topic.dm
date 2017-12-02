@@ -4602,7 +4602,7 @@
 				if (!R || !istype(R, /datum/religion))
 					return FALSE
 
-				var/deity = sanitize(stripped_input(usr, "Which deity adresses this group of believers?", "Deity Name", R.deity_name), 1, MAX_NAME_LEN)
+				var/deity = sanitize(stripped_input(usr, "Which deity addresses this group of believers?", "Deity Name", R.deity_name), 1, MAX_NAME_LEN)
 				var/message = sanitize(stripped_input(usr, "Which message do you want to send?", "Message", ""), 1, MAX_MSG_LENGTH)
 				for (var/datum/mind/M in R.adepts)
 					to_chat(M.current, "You hear [deity] speak to you... <i>[message]</i>")
@@ -4760,7 +4760,20 @@
 				if (alert("Do you wish to activate this religion? You will have to pick a player as its guide. Make sure the player is aware your plans!", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
 
-				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as mob in world // THERE HAS TO BE A BETTER WAY TO DO THAT
+				var/list/mob/moblist = clients
+
+				for (var/mob/M in moblist)
+					if (M.isDead())
+						moblist -= M
+
+				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as mob
+
+				if (alert("Do you want to make [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				if (!preacher)
+					to_chat(world, "<span class='warning'No mob selected.</span>")
+					return FALSE
 
 				if (!preacher.mind)
 					to_chat(usr, "<span class='warning'>This mob has no mind.</span>")
