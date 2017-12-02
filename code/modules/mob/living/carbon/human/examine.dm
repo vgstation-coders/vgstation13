@@ -212,7 +212,7 @@
 			spawn(15)
 				if(user && distance <= 1 && (!istype(user) || !user.isUnconscious()))
 					if(pulse == PULSE_NONE || (status_flags & FAKEDEATH))
-						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[src.client ? "" : " and [t_his] soul has departed"]...</span>")
+						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[mind ? "" : " and [t_his] soul has departed"]...</span>")
 					else
 						to_chat(user, "<span class='deadsay'>[t_He] has a pulse!</span>")
 
