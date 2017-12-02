@@ -4760,13 +4760,13 @@
 				if (alert("Do you wish to activate this religion? You will have to pick a player as its guide. Make sure the player is aware your plans!", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
 
-				var/list/mob/moblist = clients
+				var/list/mob/moblist = list()
 
-				for (var/mob/M in moblist)
-					if (M.isDead())
-						moblist -= M
+				for (var/client/c in clients)
+					if (!c.mob.isDead())
+						moblist += c.mob
 
-				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as mob
+				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as mob in moblist
 
 				if (alert("Do you want to make [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
