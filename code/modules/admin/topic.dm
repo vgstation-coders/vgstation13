@@ -4626,21 +4626,26 @@
 				for (var/R in typesof(/datum/religion))
 					rel_added = new R
 					for (var/key in rel_added.keys)
-						if (key == new_religion)
+						to_chat(world, "[key]")
+						if (lowertext(new_religion) == key)
+							to_chat(world, "Rel found !")
 							rel_added.holy_book = new rel_added.bible_type
+							rel_added.holy_book.name = rel_added.bible_name
 							rel_added.holy_book.my_rel = rel_added
+							choice = TRUE
 							break // Religion found - time to abort
 					if (choice)
 						break
 
 				if (!choice) // No religion found
+					to_chat(world, "No rel found !")
 					rel_added = new /datum/religion
 					rel_added.name = "[new_religion]"
 					rel_added.deity_name = "[new_religion]"
 					rel_added.bible_name = "The Holy Book of [new_religion]"
 					rel_added.holy_book = new rel_added.bible_type
+					rel_added.holy_book.name = rel_added.bible_name
 					rel_added.holy_book.my_rel = rel_added
-					rel_added.holy_book = new rel_added.bible_type
 
 				var/new_deity = copytext(sanitize(input(usr, "Would you like to change the deity? The deity currently is [rel_added.deity_name] (Leave empty or unchanged to keep deity name)", "Name of Deity", rel_added.deity_name)), 1, MAX_NAME_LEN)
 				if(length(new_deity))
@@ -4766,7 +4771,7 @@
 					if (!c.mob.isDead())
 						moblist += c.mob
 
-				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as mob in moblist
+				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
 
 				if (alert("Do you want to make [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
