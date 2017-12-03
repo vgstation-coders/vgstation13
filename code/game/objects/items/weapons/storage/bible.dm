@@ -65,7 +65,7 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if(!isChaplain(user) && !isReligiousLeader(user)) //The user is not a Chaplain, nor the leader of this religon. BLASPHEMY !
+	if (!user.mind || (!isChaplain(user) && !isReligiousLeader(user))) //The user is not a Chaplain, nor the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(isvampire(user)) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
@@ -162,7 +162,7 @@
 	if(!proximity_flag)
 		return
 	user.delayNextAttack(5)
-	if(user.mind && (user.mind.assigned_role == "Chaplain" || user.mind.faith.religiousLeader == user.mind)) //Make sure we still are a Chaplain, just in case - or a religious leader of our religion
+	if(user.mind  && (isChaplain() || isReligiousLeader())) //Make sure we still are a Chaplain, just in case - or a religious leader of our religion
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
 			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
 			"<span class='notice'>You bless \the [A].</span>")
@@ -187,7 +187,7 @@
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>")
 
 /obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
-	return (user.mind && user.mind == src.my_rel.religiousLeader)
+	return (user.mind == src.my_rel.religiousLeader)
 
 /obj/item/weapon/storage/bible/proc/isChaplain(var/mob/living/user)
-	return (user.mind && user.mind.assigned_role == "Chaplain")
+	return (user.mind.assigned_role == "Chaplain")

@@ -4626,9 +4626,7 @@
 				for (var/R in typesof(/datum/religion))
 					rel_added = new R
 					for (var/key in rel_added.keys)
-						to_chat(world, "[key]")
 						if (lowertext(new_religion) == key)
-							to_chat(world, "Rel found !")
 							rel_added.holy_book = new rel_added.bible_type
 							rel_added.holy_book.name = rel_added.bible_name
 							rel_added.holy_book.my_rel = rel_added
@@ -4638,7 +4636,6 @@
 						break
 
 				if (!choice) // No religion found
-					to_chat(world, "No rel found !")
 					rel_added = new /datum/religion
 					rel_added.name = "[new_religion]"
 					rel_added.deity_name = "[new_religion]"
