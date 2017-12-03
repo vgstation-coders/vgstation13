@@ -433,6 +433,7 @@
 	if(H) // Somehow, someone managed to flush a window which broke mid-transit and caused the disposal to go in an infinite loop trying to expel null, hopefully this fixes it
 		if(H.destinationTag)
 			playsound(src, 'sound/misc/yougotmail.wav', 50, 0, 0)
+			visible_message("<span class='notice'><font size=4><i>You've got mail!</i></font></span>")
 		H.active = 0 // Stop disposalholder's move() processing so we don't call the trunk's expel() too
 		for(var/atom/movable/AM in H)
 			target = get_offset_target_turf(src.loc, rand(5)-rand(5), rand(5)-rand(5))
