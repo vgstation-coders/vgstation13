@@ -10,7 +10,7 @@
 	1 - halfblock
 	2 - fullblock
 */
-/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0)
+/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0, var/armor_penetration = 0)
 	var/armor = getarmor(def_zone, attack_flag)
 	var/absorb = 0
 
@@ -18,6 +18,11 @@
 		absorb += 1
 	if(prob(armor * modifier))
 		absorb += 1
+
+	if(prob(armor_penetration))
+		absorb -= 1
+	if(prob(armor_penetration))
+		absorb -= 1
 
 	if(absorb >= 2)
 		if(!quiet)
@@ -34,7 +39,6 @@
 				show_message("<span class='warning'>Your armor softens the blow!</span>")
 		return 1
 	return 0
-
 
 /mob/living/proc/getarmor(var/def_zone, var/type)
 	return 0
@@ -56,7 +60,7 @@
 			src.visible_message("<span class='warning'>[src] triggers their deadman's switch!</span>")
 			signaler.signal()
 
-	var/absorb = run_armor_check(def_zone, P.flag)
+	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 2)
 		P.on_hit(src,2)
 		return 2
@@ -95,7 +99,7 @@
 				zone_normal_name = "right leg"
 			else
 				zone_normal_name = zone
-		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened hit to your [zone_normal_name].")
+		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = throwforce*(speed/5)*sharpness)
 		if(armor < 2)
 			apply_damage(O.throwforce*(speed/5), dtype, zone, armor, O.is_sharp(), O)
 

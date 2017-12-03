@@ -328,6 +328,7 @@
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "hecate"
 	damage = 101//you're going to crit, lad
+	armor_penetration = 75
 	kill_count = 255//oh boy, we're crossing through the entire Z level!
 	stun = 5
 	weaken = 5
