@@ -4809,9 +4809,7 @@
 			for (var/datum/mind/M in R.adepts)
 				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]'>JMP</A>) \
 					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>)</li>"
-				text +="</ul>"
-				text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
-				text += "<br/>"
-			text += "</ul>"
+			text +="</ul>"
+			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
 	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
 	usr << browse(text, "window=admin2;size=300x370")
