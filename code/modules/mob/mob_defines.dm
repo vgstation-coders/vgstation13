@@ -44,6 +44,10 @@
 	var/obj/abstract/screen/m_glasses = null
 	var/obj/abstract/screen/m_glassesbg = null
 
+
+
+
+
 	//spells hud icons - this interacts with add_spell and remove_spell
 	var/list/obj/abstract/screen/movable/spell_master/spell_masters = null
 
@@ -305,3 +309,10 @@
 	radar_blips = list()
 	active_genes = list()
 	attack_log = list()
+
+/mob/proc/getScreenObjs()
+	var/list/screen_vars = list()
+	for(var/varname in vars)
+		if(istype(vars[varname], /obj/abstract/screen))
+			screen_vars += vars[varname]
+	return screen_vars

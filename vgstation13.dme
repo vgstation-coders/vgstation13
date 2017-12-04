@@ -1391,7 +1391,6 @@
 #include "code\modules\mining\abandoned_crates\vg.dm"
 #include "code\modules\mining\surprises\tg.dm"
 #include "code\modules\mining\surprises\vg.dm"
-#include "code\modules\mob\abilities.dm"
 #include "code\modules\mob\death.dm"
 #include "code\modules\mob\delays.dm"
 #include "code\modules\mob\emote.dm"

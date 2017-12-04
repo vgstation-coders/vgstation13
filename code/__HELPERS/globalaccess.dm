@@ -9,8 +9,8 @@
 			return global.pooledvariables;
 		if("prox_sensor_ignored_types")
 			return global.prox_sensor_ignored_types;
-		if("ability_verbs")
-			return global.ability_verbs;
+	//	if("ability_verbs")
+	//		return global.ability_verbs;
 		if("sent_aliens_to_station")
 			return global.sent_aliens_to_station;
 		if("account_hack_attempted")
@@ -1904,8 +1904,8 @@
 			global.pooledvariables=newval
 		if("prox_sensor_ignored_types")
 			global.prox_sensor_ignored_types=newval
-		if("ability_verbs")
-			global.ability_verbs=newval
+	//	if("ability_verbs")
+	//		global.ability_verbs=newval
 		if("sent_aliens_to_station")
 			global.sent_aliens_to_station=newval
 		if("account_hack_attempted")
