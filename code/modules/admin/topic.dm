@@ -4599,19 +4599,27 @@
 
 				var/datum/religion/R = locate(href_list["rel"])
 
-				if (!R || !istype(R, /datum/religion))
+				if (!istype(R, /datum/religion))
 					return FALSE
 
 				var/deity = sanitize(stripped_input(usr, "Which deity addresses this group of believers?", "Deity Name", R.deity_name), 1, MAX_NAME_LEN)
 				var/message = sanitize(stripped_input(usr, "Which message do you want to send?", "Message", ""), 1, MAX_MSG_LENGTH)
+
+				if (!deity || !message)
+					to_chat(usr, "<span class='warning'>Error: no deity or message selected.</span>")
+
 				for (var/datum/mind/M in R.adepts)
-					to_chat(M.current, "You hear [deity] speak to you... <i>[message]</i>")
+					to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
+
+				var/msg = "[usr] sent message [message] to [R.name]'s adepts as [deity]"
+				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+				log_adminwarn(msg)
 
 
 			if ("new") // --- Busing in a new rel ---
 				// This is copypasted from chaplain code, with adaptations
 
-				if (ticker.religions.len > NUMBER_MAX_REL)
+				if (ticker.religions.len >= NUMBER_MAX_REL)
 					to_chat(usr, "<span class='warning'>Maximum number of religions reached.</span>")
 					return FALSE // Just in case a href exploit allows someone to create a gazillion religions with no purpose.
 
@@ -4731,7 +4739,7 @@
 
 				var/datum/religion/R = locate(href_list["rel"])
 
-				if (!R || !istype(R, /datum/religion))
+				if (!istype(R, /datum/religion))
 					return FALSE
 
 				if (R.adepts.len)
@@ -4752,7 +4760,7 @@
 
 				var/datum/religion/R = locate(href_list["rel"])
 
-				if (!R || !istype(R, /datum/religion))
+				if (!istype(R, /datum/religion))
 					return FALSE
 
 				if (R.adepts.len)
@@ -4774,7 +4782,7 @@
 					return FALSE
 
 				if (!preacher)
-					to_chat(world, "<span class='warning'No mob selected.</span>")
+					to_chat(world, "<span class='warning'>No mob selected.</span>")
 					return FALSE
 
 				if (!preacher.mind)
@@ -4791,6 +4799,21 @@
 				log_adminwarn(msg)
 				updateRelWindow()
 
+			if ("renounce")
+				if (!href_list["mob"])
+					return FALSE
+
+				var/mob/living/M = locate(href_list["mob"])
+
+				if (!isliving(M) || !M.mind.faith)
+					return FALSE
+
+				if (M.mind.faith.religiousLeader == M && alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				M.mind.faith.renounce(M)
+
+
 /datum/admins/proc/updateRelWindow()
 	var/text = "<h3>Religions in game</h3>"
 	// --- Displaying of all religions ---
@@ -4804,10 +4827,10 @@
 			text += "<br/>"
 		else
 			text += "<b>Leader:</b> \the [R.religiousLeader.current] (<A HREF='?_src_=vars;Vars=\ref[R.religiousLeader.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[R.religiousLeader.current]'>JMP</A>) \
-					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A>)<br/>"
+					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A><A HREF='?_src_=holder'>SM</A>)<br/>"
 			text += "<b>Adepts:</b> <ul>"
 			for (var/datum/mind/M in R.adepts)
-				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]'>JMP</A>) \
+				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]&;religions=renounce&mob=\ref[M.current]'>JMP</A>) \
 					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>)</li>"
 			text +="</ul>"
 			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"

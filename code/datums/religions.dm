@@ -69,7 +69,7 @@
 	if (B.reagents.get_master_reagent_name() != "Holy Water")
 		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
 		return FALSE
-	subject.visible_message("\the [preacher] attemps to convert the [subject] to [name].")
+	subject.visible_message("\The [preacher] attemps to convert the [subject] to [name].")
 	if(!convertCheck(subject))
 		subject.visible_message("\The [subject] refuses conversion.")
 		return FALSE
@@ -89,7 +89,7 @@
 /datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)
 	subject.mind.faith = src
 	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
-	src.adepts += subject.mind
+	adepts += subject.mind
 	if (!preacher)
 		var/msg = "\The [subject] has been converted to [name] without a preacher."
 		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
@@ -100,11 +100,16 @@
 		log_adminwarn(msg)
 
 /datum/religion/proc/activate(var/mob/living/preacher)
-	src.equip_chaplain(preacher) // We do the misc things related to the religion
+	equip_chaplain(preacher) // We do the misc things related to the religion
 	preacher.put_in_hands(holy_book)
-	src.religiousLeader = preacher.mind
-	to_chat(preacher, "A great, intense revelation go through your spirit. You are know the religious leader of [name]. Convert people by [convert_method]")
-	src.convert(preacher, null)
+	religiousLeader = preacher.mind
+	to_chat(preacher, "A great, intense revelation go through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
+	convert(preacher, null)
+
+/datum/religion/proc/renounce(var/mob/living/subject)
+	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
+	adepts -= subject.mind
+	subject.mind.faith = null
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/catholic

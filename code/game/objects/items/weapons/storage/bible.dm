@@ -1,3 +1,6 @@
+#define isChaplain(user) (user.mind && user.mind == src.my_rel.religiousLeader)
+#define isReligiousLeader(user) (user.mind && user.mind == src.my_rel.religiousLeader)
+
 /obj/item/weapon/storage/bible
 	name = "bible"
 	desc = "Apply to head repeatedly."
@@ -26,13 +29,13 @@
 /obj/item/weapon/storage/bible/verb/convert(mob/living/target as mob in view(1))
 	set name = "Convert"
 	set category = "Object"
-	if (usr.isUnconscious() || usr.incapacitated() || usr.lying || usr.locked_to || !ishigherbeing(usr) || usr.isDead()) // Sanity
+	if (usr.isUnconscious() || usr.incapacitated() || usr.lying || usr.locked_to || !ishigherbeing(usr)) // Sanity
 		return FALSE
 	if (!usr.mind.faith)
-		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.")
+		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
 		return FALSE
-	if (target.isUnconscious() || target.incapacitated() || target.lying || target.locked_to || !ishigherbeing(target) || target.isDead() || !target.mind) // Sanity
-		to_chat(usr, "<span class='warning'> \The [target] does not seem receptive to conversion.")
+	if (target.isUnconscious() || target.incapacitated() || target.lying || target.locked_to || !ishigherbeing(target) || !target.mind) // Sanity
+		to_chat(usr, "<span class='warning'> \The [target] does not seem receptive to conversion.</span>")
 	else
 		usr.mind.faith.convertAct(usr, target, src) // usr = preacher ; target = subject
 		return TRUE
@@ -65,7 +68,7 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if (!user.mind || (!isChaplain(user) && !isReligiousLeader(user))) //The user is not a Chaplain, nor the leader of this religon. BLASPHEMY !
+	if (!isChaplain(user) && !isReligiousLeader(user)) //The user is not a Chaplain, nor the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(isvampire(user)) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
@@ -162,7 +165,7 @@
 	if(!proximity_flag)
 		return
 	user.delayNextAttack(5)
-	if(user.mind  && (isChaplain() || isReligiousLeader())) //Make sure we still are a Chaplain, just in case - or a religious leader of our religion
+	if(isChaplain(user) || isReligiousLeader(user)) //Make sure we still are a Chaplain, just in case - or a religious leader of our religion
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
 			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
 			"<span class='notice'>You bless \the [A].</span>")
@@ -176,7 +179,7 @@
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
-	if(isChaplain() || isReligiousLeader()) //We are the Chaplain, yes we are
+	if(isChaplain(user) || isReligiousLeader(user)) //We are the Chaplain, yes we are
 		to_chat(user, "<span class ='notice'>You feel [my_rel.deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
@@ -185,9 +188,3 @@
 			H.mind.vampire.smitecounter += 10
 		if(iscult(H)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>")
-
-/obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
-	return (user.mind == src.my_rel.religiousLeader)
-
-/obj/item/weapon/storage/bible/proc/isChaplain(var/mob/living/user)
-	return (user.mind.assigned_role == "Chaplain")
