@@ -390,7 +390,7 @@
 			to_chat(user, "System unlocked.")
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		if(user.drop_item(W))
-			playsound(get_turf(src), 'sound/machines/juicer.ogg', 30, 1)
+			playsound(get_turf(src), 'sound/machines/juicerfast.ogg', 30, 1)
 			to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
 			biomass += BIOMASS_CHUNK
 			qdel(W)
@@ -526,13 +526,13 @@
 	if(!busy)
 		busy = TRUE
 		if(!issilicon(usr) && !usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER|BROKEN)))
-			for(var/obj/item/weapon/reagent_containers/food/snacks/meat in range(1, src))
+			for(var/obj/item/weapon/reagent_containers/food/snacks/meat/meat in range(1, src))
 				biomass += BIOMASS_CHUNK
 				qdel(meat)
 				visible_message = TRUE // Prevent chatspam when multiple meat are near
 
 			if(visible_message)
-				playsound(get_turf(src), 'sound/machines/juicerfast.ogg', 30, 1)
+				playsound(get_turf(src), 'sound/machines/juicer.ogg', 30, 1)
 				visible_message("<span class = 'notice'>[src] sucks in and processes the nearby biomass.</span>")
 		busy = FALSE
 
