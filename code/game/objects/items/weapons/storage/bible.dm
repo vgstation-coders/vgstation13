@@ -1,5 +1,4 @@
-#define isChaplain(user) (user.mind && user.mind == src.my_rel.religiousLeader)
-#define isReligiousLeader(user) (user.mind && user.mind == src.my_rel.religiousLeader)
+#define isChaplain(user) (user.mind && user.mind.assigned_role == "Chaplain")
 
 /obj/item/weapon/storage/bible
 	name = "bible"
@@ -13,6 +12,7 @@
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
+	actions_types = list(/datum/action/item_action/convert)
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
@@ -25,20 +25,6 @@
 		user.IgniteMob()
 		user.emote("scream",,, 1)
 		return FIRELOSS //Set ablaze and burned to crisps
-
-/obj/item/weapon/storage/bible/verb/convert(mob/living/target as mob in view(1))
-	set name = "Convert"
-	set category = "Object"
-	if (usr.isUnconscious() || usr.incapacitated() || usr.lying || usr.locked_to || !ishigherbeing(usr)) // Sanity
-		return FALSE
-	if (!usr.mind.faith)
-		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
-		return FALSE
-	if (target.isUnconscious() || target.incapacitated() || target.lying || target.locked_to || !ishigherbeing(target) || !target.mind) // Sanity
-		to_chat(usr, "<span class='warning'> \The [target] does not seem receptive to conversion.</span>")
-	else
-		usr.mind.faith.convertAct(usr, target, src) // usr = preacher ; target = subject
-		return TRUE
 
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
@@ -56,7 +42,6 @@
 
 //What happens when you slap things with the Bible in general
 /obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
-
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
@@ -188,3 +173,37 @@
 			H.mind.vampire.smitecounter += 10
 		if(iscult(H)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>")
+
+/obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
+	return (user.mind && user.mind == src.my_rel.religiousLeader)
+
+// Action : convert people
+
+/datum/action/item_action/convert
+	name = "Convert people"
+
+/datum/action/item_action/convert/Trigger()
+	var/obj/item/weapon/storage/bible/B = target
+
+	if (owner.isUnconscious() || owner.incapacitated() || owner.lying || owner.locked_to || !ishigherbeing(owner)) // Sanity
+		return FALSE
+	if (!owner.mind.faith)
+		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
+		return FALSE
+
+	var/list/mob/living/moblist = range(1, owner)
+	moblist -= owner
+
+	var/mob/living/subject = input(owner, "Who do you wish to convert?", "Religious converting") as null|mob in moblist
+
+	if (!subject)
+		to_chat(owner, "<span class='warning'>No target selected.</span>")
+		return FALSE
+
+	if (subject.isUnconscious() || subject.incapacitated() || subject.lying || subject.locked_to || !ishigherbeing(subject) || !subject.mind) // Sanity
+		to_chat(owner, "<span class='warning'> \The [subject] does not seem receptive to conversion.</span>")
+	else
+		owner.mind.faith.convertAct(owner, subject, B) // usr = preacher ; target = subject
+		return TRUE
+
+

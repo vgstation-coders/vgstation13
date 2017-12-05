@@ -91,11 +91,11 @@
 	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
 	adepts += subject.mind
 	if (!preacher)
-		var/msg = "\The [subject] has been converted to [name] without a preacher."
+		var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
 		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 		log_adminwarn(msg)
 	else
-		var/msg = "\The [subject] has been converted to [name] by \The [preacher]."
+		var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
 		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 		log_adminwarn(msg)
 

@@ -4611,9 +4611,9 @@
 				for (var/datum/mind/M in R.adepts)
 					to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
 
-				var/msg = "[usr] sent message [message] to [R.name]'s adepts as [deity]"
+				var/msg = "[key_name(usr)] sent message [message] to [R.name]'s adepts as [deity]"
 				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
-				log_adminwarn(msg)
+				message_admins(msg)
 
 
 			if ("new") // --- Busing in a new rel ---
@@ -4727,9 +4727,9 @@
 						rel_added.holy_book.icon_state = "bible"
 						rel_added.holy_book.item_state = "bible"
 
-				var/msg = "[usr] created a religion: [rel_added.name]."
+				var/msg = "[key_name(usr)] created a religion: [rel_added.name]."
 				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
-				log_adminwarn(msg)
+				message_admins(msg)
 
 				ticker.religions += rel_added
 				updateRelWindow()
@@ -4746,12 +4746,12 @@
 					to_chat(usr, "<span class='warning'>You can't delete a religion which has adepts.</span>")
 					return FALSE
 
-				var/msg = "[usr] deleted a religion: [R.name]."
+				var/msg = "[key_name(usr)] deleted a religion: [R.name]."
 				ticker.religions -= R
 				qdel(R.holy_book)
 				qdel(R)
 				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
-				log_adminwarn(msg)
+				message_admins(msg)
 				updateRelWindow()
 
 			if ("activate")
@@ -4794,9 +4794,9 @@
 					return FALSE
 
 				R.activate(preacher)
-				var/msg = "[usr] activated religion [R.name], with preacher \the [preacher]."
+				var/msg = "[key_name(usr)] activated religion [R.name], with preacher \the [key_name(preacher)]."
 				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
-				log_adminwarn(msg)
+				message_admins(msg)
 				updateRelWindow()
 
 			if ("renounce")
@@ -4813,6 +4813,10 @@
 
 				M.mind.faith.renounce(M)
 
+				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
+				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+				message_admins(msg)
+
 
 /datum/admins/proc/updateRelWindow()
 	var/text = "<h3>Religions in game</h3>"
@@ -4827,11 +4831,11 @@
 			text += "<br/>"
 		else
 			text += "<b>Leader:</b> \the [R.religiousLeader.current] (<A HREF='?_src_=vars;Vars=\ref[R.religiousLeader.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[R.religiousLeader.current]'>JMP</A>) \
-					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A><A HREF='?_src_=holder'>SM</A>)<br/>"
+					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A>)<br/>"
 			text += "<b>Adepts:</b> <ul>"
 			for (var/datum/mind/M in R.adepts)
 				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]&;religions=renounce&mob=\ref[M.current]'>JMP</A>) \
-					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>)</li>"
+					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>) (<A HREF='?_src_=holder;religions=renounce&mob=\ref[M.current]'>Deconvert</A>)</li>"
 			text +="</ul>"
 			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
 	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
