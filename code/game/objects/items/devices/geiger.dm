@@ -2,9 +2,9 @@
 
 /obj/item/device/geiger_counter
 	name = "geiger counter"
-	desc = "a device about the size of a briefcase, used for detecting and measuring ambient radiation."
+	desc = "A device used for detecting and measuring ambient radiation."
 	icon_state = "geiger_counter"
-	w_class = W_CLASS_LARGE
+	w_class = W_CLASS_SMALL
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=4"
 	var/on = 0
 	var/last_call = 0

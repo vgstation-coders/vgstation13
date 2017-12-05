@@ -36,8 +36,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/targetMoveKey
-
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
@@ -89,20 +87,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		reagents.remove_any(reagents.maximum_volume-newvol) //If we have more than our new max, remove equally until we reach new max
 	reagents.maximum_volume = newvol
 
-/obj/machinery/chem_master/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -133,10 +117,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return
 
 		src.beaker = B
-		if(user.type == /mob/living/silicon/robot)
-			var/mob/living/silicon/robot/R = user
-			R.uneq_active()
-			targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
 		to_chat(user, "<span class='notice'>You add the beaker into \the [src]!</span>")
 
@@ -160,6 +140,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		to_chat(user, "<span class='notice'>You add the pill bottle into \the [src]'s dispenser slot!</span>")
 
 		src.updateUsrDialog()
+		return 1
+
+	else if(istype(B, /obj/item/weapon/reagent_containers/pill))
+		var/name = reject_bad_text(input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)") as null|text)
+		if(name)
+			B.name = "[name] pill"
+		B.icon_state = "pill"+pillsprite
 		return 1
 
 /obj/machinery/chem_master/Topic(href, href_list)
@@ -195,9 +182,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					var/A = G.name
 					var/B = G.data["blood_type"]
 					var/C = G.data["blood_DNA"]
-					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 				else
-					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			else
 				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
 			//usr << browse(dat, "window=chem_master;size=575x400")
@@ -409,9 +396,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		beaker.forceMove(src.loc)
 		beaker.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
 		beaker.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-			borgbeak.return_to_modules()
 		beaker = null
 		reagents.clear_reagents()
 		update_icon()
@@ -484,7 +468,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(?)</A>
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name];density=[G.density];specheatcap=[G.specheatcap]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -522,7 +506,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(?)</A>
+						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name];density=[N.density];specheatcap=[N.specheatcap]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>

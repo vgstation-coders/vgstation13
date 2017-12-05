@@ -10,6 +10,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sharpness = 0 //not a binary - rough guide is 0.8 cutting, 1 cutting well, 1.2 specifically sharp (knives, etc) 1.5 really sharp (scalpels, e-weapons)
 	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
+	var/source_temperature = 0
 	var/price = 0
 
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
@@ -202,8 +203,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/is_sharp()
 	return sharpness
 
-/obj/proc/is_hot()
-	return heat_production
+/obj/proc/is_hot() //This returns the temperature of the object if possible
+	return source_temperature
+
+/obj/proc/thermal_energy_transfer()
+	if(is_hot())
+		return heat_production
+	return 0
 
 /obj/proc/process()
 	set waitfor = FALSE
@@ -246,7 +252,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		if(_using && _using.len)
 			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
-				if (!M || !M.client || M.machine != src)
+				if (!M || !M.client)
 					_using.Remove(M)
 					continue
 
@@ -257,7 +263,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 						src.attack_ai(M)
 
 					// check for TK users
-					if(M.mutations && M.mutations.len)
+					else if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
@@ -596,7 +602,7 @@ a {
 					sleep(i)
 		return 1
 
-/obj/make_invisible(var/source_define, var/time)
+/obj/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(..() || !source_define)
 		return
 	alpha = 1

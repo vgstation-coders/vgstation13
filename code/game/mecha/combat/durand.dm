@@ -26,12 +26,9 @@
 
 /obj/mecha/combat/durand/relaymove(mob/user,direction)
 	if(defence)
-		if(world.time - last_message > 20)
-			src.occupant_message("<font color='red'>Unable to move while in defence mode</font>")
-			last_message = world.time
+		occupant_message("<font color='red'>Unable to move while in defence mode</font>", TRUE)
 		return 0
 	. = ..()
-	return
 
 /obj/mecha/combat/durand/verb/defence_mode()
 	set category = "Exosuit Interface"

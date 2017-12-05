@@ -26,12 +26,20 @@ var/list/forbidden_varedit_object_types = list(
 			to_chat(usr, "You don't have a saved appearance!")
 			return
 		else
-			if(logging)
-				log_admin("[key_name(usr)] modified [edited_datum]'s appearance to [C.holder.marked_appearance]")
-
 			var/atom/A = edited_datum
-			A.appearance = C.holder.marked_appearance.appearance
-			to_chat(usr, "Changed [edited_datum]'s appearance to [C.holder.marked_appearance]")
+			if(value_override == "initial")
+				if(logging)
+					log_admin("[key_name(usr)] reset [edited_datum]'s appearance")
+
+				A.appearance = initial(A.appearance)
+				to_chat(usr, "Reset [edited_datum]'s appearance")
+
+			else
+				if(logging)
+					log_admin("[key_name(usr)] modified [edited_datum]'s appearance to [C.holder.marked_appearance]")
+
+				A.appearance = C.holder.marked_appearance.appearance
+				to_chat(usr, "Changed [edited_datum]'s appearance to [C.holder.marked_appearance]")
 			return
 
 	#define V_MARKED_DATUM "marked_datum"
@@ -59,7 +67,7 @@ var/list/forbidden_varedit_object_types = list(
 
 		old_value = edited_datum.vars[edited_variable]
 
-	if(!new_value)
+	if(isnull(new_value))
 		if(autoselect_var_type)
 			if(isnull(old_value))
 				to_chat(usr, "Unable to determine variable type.")
@@ -92,7 +100,7 @@ var/list/forbidden_varedit_object_types = list(
 				new_value = C.modify_matrix_menu(old_value) //Use a custom interface for matrix editing
 
 
-	if(!new_value) //If a custom interface hasn't already set the value
+	if(isnull(new_value)) //If a custom interface hasn't already set the value
 		//Build the choices list
 		var/list/choices = list(\
 		"text" = V_TEXT,
@@ -186,13 +194,14 @@ var/list/forbidden_varedit_object_types = list(
 				to_chat(user, "Unknown type: [selected_type]")
 
 	if(edited_datum && edited_variable)
+		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
+		//variable_edited() can block the edit in case there's special behavior for a variable (for example, updating lights after they're changed)
+			new_value = edited_datum.vars[edited_variable]
+		else
+			edited_datum.vars[edited_variable] = new_value
+
 		if(logging)
-			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [new_value]")
-
-		if(edited_datum.variable_edited(edited_variable, old_value, new_value))
-			new_value = old_value //Return the old value if the variable_edited proc blocked the edit
-
-		edited_datum.vars[edited_variable] = new_value
+			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
 
 	return new_value
 

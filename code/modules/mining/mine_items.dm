@@ -254,6 +254,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
 	heat_production = 3800
+	source_temperature = TEMPERATURE_PLASMA
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
@@ -262,9 +263,6 @@ proc/move_mining_shuttle()
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
-
-/obj/item/weapon/pickaxe/plasmacutter/is_hot()
-	return 1
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"

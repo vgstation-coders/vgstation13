@@ -8,8 +8,6 @@
 	var/list/cans = new/list() //These are the empty containers.
 	var/obj/item/weapon/reagent_containers/beaker = null // This is the active container
 
-	var/targetMoveKey
-
 /obj/structure/centrifuge/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It contains [cans.len] empty containers[beaker ? " and an active container!" : "."]</span>")
@@ -34,28 +32,11 @@
 				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You insert an active container.</span>")
 					src.beaker =  W
-					if(user.type == /mob/living/silicon/robot)
-						var/mob/living/silicon/robot/R = user
-						R.uneq_active()
-						targetMoveKey =  R.on_moved.Add(src, "user_moved")
 			else
 				to_chat(user, "<span class='warning'>There is already an active container.</span>")
 		return
 	else
 		..()
-/obj/structure/centrifuge/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
 
 /obj/structure/centrifuge/attack_hand(mob/user as mob)
 	add_fingerprint(user)
@@ -106,8 +87,5 @@
 /obj/structure/centrifuge/proc/detach()
 	if(beaker)
 		beaker.forceMove(src.loc)
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-			borgbeak.return_to_modules()
 		beaker = null
 		return

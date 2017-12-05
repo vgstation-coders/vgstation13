@@ -110,6 +110,11 @@
 		H.update_inv_by_slot(slot_flags)
 	update_verbs()
 
+/obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)
+	for(var/obj/item/clothing/accessory/A in accessories)
+		if(A.accessory_exclusion == exclusion)
+			return A
+
 /obj/item/clothing/verb/removeaccessory()
 	set name = "Remove Accessory"
 	set category = "Object"
@@ -325,6 +330,8 @@ BLIND     // can't see anything
 
 	var/bonus_knockout = 0 //Knockout chance is multiplied by (1 + bonus_knockout) and is capped at 1/2. 0 = 1/12 chance, 1 = 1/6 chance, 2 = 1/4 chance, 3 = 1/3 chance, etc.
 	var/damage_added = 0 //Added to unarmed damage, doesn't affect knockout chance
+	var/sharpness_added = 0 //Works like weapon sharpness for unarmed attacks, affects bleeding and limb severing.
+	var/hitsound_added = "punch"	//The sound that plays for an unarmed attack while wearing these gloves.
 
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
@@ -345,7 +352,16 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/get_damage_added()
 	return damage_added
 
+/obj/item/clothing/gloves/proc/get_sharpness_added()
+	return sharpness_added
+
+/obj/item/clothing/gloves/proc/get_hitsound_added()
+	return hitsound_added
+
 /obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
+/obj/item/clothing/gloves/proc/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)	//Called when the mob wearing the gloves successfully throws either something or nothing.
 	return
 
 //Head
@@ -406,9 +422,9 @@ BLIND     // can't see anything
 		usr.update_inv_wear_mask()
 
 /obj/item/clothing/mask/New()
-	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
 		actions_types = null
+	..()
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()
@@ -623,5 +639,3 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
-
-

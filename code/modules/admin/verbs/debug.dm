@@ -1210,7 +1210,18 @@ client/proc/check_convertables()
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area)
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
+
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
+
+		object = copytext(object, 1, variables_start)
+
+
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1224,12 +1235,16 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen()
+	holder.marked_datum = new chosen
 
-	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum.</span>")
-
+	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
 	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+	if(varchanges.len)
+		_preloader = new(varchanges, chosen)
+		//_preloaded calls load() automatically on atom/New(). However, this proc can also create datums, which don't do that - call load() manually
+		_preloader.load(holder.marked_datum)
 
 /client/proc/vv_marked_datum()
 	set category	= "Debug"
@@ -1288,3 +1303,40 @@ client/proc/check_convertables()
 	feedback_add_details("admin_verb","ESP")
 	return
 
+/client/proc/start_line_profiling()
+	set category = "Profile"
+	set name = "Start line profiling"
+	set desc = "Starts tracking line by line profiling for code lines that support it"
+
+	PROFILE_START
+
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
+	feedback_add_details("admin_verb","Start line profiling")
+	log_admin("[key_name(src)] started line by line profiling.")
+
+/client/proc/stop_line_profiling()
+	set category = "Profile"
+	set name = "Stop line profiling"
+	set desc = "Stops tracking line by line profiling for code lines that support it"
+
+	PROFILE_STOP
+
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
+	feedback_add_details("admin_verb","Stop line profiling")
+	log_admin("[key_name(src)] stopped line by line profiling.")
+
+/client/proc/show_line_profiling()
+	set category = "Profile"
+	set name = "Show line profiling"
+	set desc = "Shows tracked profiling info from code lines that support it"
+
+	var/sortlist = list(
+		"Avg time"		=	/proc/cmp_profile_avg_time_dsc,
+		"Total Time"	=	/proc/cmp_profile_time_dsc,
+		"Call Count"	=	/proc/cmp_profile_count_dsc
+	)
+	var/sort = input(src, "Sort type?", "Sort Type", "Avg time") as null|anything in sortlist
+	if (!sort)
+		return
+	sort = sortlist[sort]
+	profile_show(src, sort)

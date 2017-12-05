@@ -308,6 +308,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-civ-engineer"
 	item_state = "vox-pressure-engineer"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 
@@ -440,6 +441,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
+	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
@@ -450,6 +452,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox cmo pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
+	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 	name = "vox cmo pressure helmet"

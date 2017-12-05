@@ -54,8 +54,8 @@
 
 
 /obj/item/weapon/implanter/traitor
-	name = "implanter-greytide"
-	desc = "Greytide Stationwide."
+	name = "greytide conversion kit"
+	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."
 
 /obj/item/weapon/implanter/traitor/New()
 	src.imp = new /obj/item/weapon/implant/traitor(src)

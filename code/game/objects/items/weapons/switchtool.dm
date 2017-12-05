@@ -31,9 +31,11 @@
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istype(target, /obj/item/weapon/storage)) //we place automatically
 		return
-	if(deployed && proximity_flag)
-		target.attackby(deployed, user)
-		deployed.afterattack(target, user, proximity_flag, click_parameters)
+	if(deployed)
+		if(!deployed.preattack(target, user))
+			if(proximity_flag)
+				target.attackby(deployed, user)
+			deployed.afterattack(target, user, proximity_flag, click_parameters)
 		if(deployed.loc != src)
 			for(var/module in stored_modules)
 				if(stored_modules[module] == deployed)
@@ -428,9 +430,58 @@
 	stored_modules = list(
 						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
 						"/obj/item/weapon/circular_saw/plasmasaw:circular saw" = null,
-						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
+						"/obj/item/weapon/surgicaldrill/diamond:surgical drill" = null,
 						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
-						"/obj/item/weapon/hemostat:hemostat" = null,
+						"/obj/item/weapon/hemostat/pico:hemostat" = null,
 						"/obj/item/weapon/retractor/manager:retractor" = null,
 						"/obj/item/weapon/bonesetter/bone_mender:bonesetter" = null
 						)
+
+/obj/item/weapon/switchtool/engineering
+	name = "\improper Engineering switchtool"
+	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
+	stored_modules = list(
+		"/obj/item/weapon/crowbar:crowbar" = null,
+		"/obj/item/weapon/screwdriver:screwdriver" = null,
+		"/obj/item/weapon/weldingtool/hugetank:welding tool" = null,
+		"/obj/item/weapon/wirecutters:wirecutters" = null,
+		"/obj/item/weapon/wrench:wrench" = null,
+		"/obj/item/device/multitool:multitool" = null,
+		"/obj/item/stack/cable_coil/persistent:cable" = null,
+		"/obj/item/device/t_scanner:T-ray scanner" = null,
+		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
+		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
+		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
+		)
+
+/obj/item/weapon/switchtool/engineering/deploy(var/module)
+	if(!..())
+		return FALSE
+	if(istype(deployed, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/W = deployed
+		W.welding = 1
+		W.status = 1
+	if(istype(deployed, /obj/item/device/t_scanner))
+		var/obj/item/device/t_scanner/T = deployed
+		T.attack_self()
+
+/obj/item/weapon/switchtool/engineering/undeploy()
+	if(istype(deployed, /obj/item/device/t_scanner))
+		var/obj/item/device/t_scanner/T = deployed
+		T.attack_self()
+	..()
+
+/obj/item/weapon/switchtool/engineering/mech
+	stored_modules = list(
+		"/obj/item/weapon/crowbar:crowbar" = null,
+		"/obj/item/weapon/screwdriver:screwdriver" = null,
+		"/obj/item/weapon/weldingtool/hugetank/mech:welding tool" = null,
+		"/obj/item/weapon/wirecutters:wirecutters" = null,
+		"/obj/item/weapon/wrench:wrench" = null,
+		"/obj/item/device/multitool:multitool" = null,
+		"/obj/item/stack/cable_coil/persistent:cable" = null,
+		"/obj/item/device/t_scanner:T-ray scanner" = null,
+		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
+		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
+		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
+		)

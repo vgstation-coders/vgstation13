@@ -117,17 +117,26 @@
 			SP.charge_counter = SP.charge_max
 
 /obj/item/potion/invisibility
-	name = "potion of invisibility"
-	desc = "Become completely invisible for one minute."
-	icon_state = "mass_orb"
+	name = "potion of minor invisibility"
+	desc = "Become completely invisible for five minutes."
+	icon_state = "blue_largebottle"
+	var/time = 5 MINUTES
+	var/include_clothes = FALSE
 
 /obj/item/potion/invisibility/imbibe_effect(mob/user)
-	user.make_invisible(INVISIBLEPOTION, 1 MINUTES)
+	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
 	if(isatommovable(target))
 		var/atom/movable/AM = target
-		AM.make_invisible(INVISIBLEPOTION, 1 MINUTES)
+		AM.make_invisible(INVISIBLEPOTION, time)
+
+/obj/item/potion/invisibility/major
+	name = "potion of major invisibility"
+	desc = "Become completely invisible, along with all your clothing and possessions, for one minute."
+	icon_state = "mass_orb"
+	time = 1 MINUTES
+	include_clothes = TRUE
 
 /obj/item/potion/stoneskin
 	name = "potion of stone skin"
@@ -206,13 +215,7 @@
 		playsound(T, 'sound/effects/phasein.ogg', 50, 1)
 	user.visible_message("<span class='danger'>\The [user] transforms into \a [new_mob]!</span>", "<span class='notice'>You transform into \a [new_mob].</span>")
 	spawn(5 MINUTES)
-		var/mob/top_level = new_mob
-		if(top_level.transmogged_to)
-			while(top_level.transmogged_to)
-				top_level = top_level.transmogged_to
-		var/turf/T2 = get_turf(top_level)
-		while(top_level)
-			top_level = top_level.transmogrify()
+		var/turf/T2 = get_turf(new_mob.completely_untransmogrify())
 		if(T2)
 			playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
 

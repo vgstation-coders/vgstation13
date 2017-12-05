@@ -255,6 +255,17 @@
 	icon = 'icons/misc/beach2.dmi'
 	icon_state = "sandwater"
 
+/turf/simulated/floor/beach/coastline/north
+	icon_state = "sandwater_north"
+
+/turf/simulated/floor/beach/coastline/east
+	icon = 'icons/misc/beach3.dmi'
+	icon_state = "sandwater_east"
+
+/turf/simulated/floor/beach/coastline/west
+	icon = 'icons/misc/beach3.dmi'
+	icon_state = "sandwater_west"
+
 /turf/simulated/floor/beach/water
 	name = "Water"
 	icon_state = "water"

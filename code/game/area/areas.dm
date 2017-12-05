@@ -15,6 +15,9 @@ var/area/space_area
 	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
+
+	var/obj/effect/narration/narrator = null
+
 	flags = 0
 
 /area/New()
@@ -102,9 +105,9 @@ var/area/space_area
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
 				if(state == 1)
-					C.network.Remove("Power Alarms")
+					C.network.Remove(CAMERANET_POWERALARMS)
 				else
-					C.network.Add("Power Alarms")
+					C.network.Add(CAMERANET_POWERALARMS)
 			for (var/mob/living/silicon/aiPlayer in player_list)
 				if(aiPlayer.z == source.z)
 					if (state == 1)
@@ -151,7 +154,7 @@ var/area/space_area
 			//updateicon()
 			for(var/obj/machinery/camera/C in src)
 				cameras += C
-				C.network.Add("Atmosphere Alarms")
+				C.network.Add(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.triggerAlarm("Atmosphere", src, cameras, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -162,7 +165,7 @@ var/area/space_area
 		// Dropping from danger level 2.
 		else if (atmosalm == 2)
 			for(var/obj/machinery/camera/C in src)
-				C.network.Remove("Atmosphere Alarms")
+				C.network.Remove(CAMERANET_ATMOSALARMS)
 			for(var/mob/living/silicon/aiPlayer in player_list)
 				aiPlayer.cancelAlarm("Atmosphere", src, src)
 			for(var/obj/machinery/computer/station_alert/a in machines)
@@ -240,7 +243,7 @@ var/area/space_area
 		var/list/cameras = list()
 		for (var/obj/machinery/camera/C in src)
 			cameras.Add(C)
-			C.network.Add("Fire Alarms")
+			C.network.Add(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.triggerAlarm("Fire", src, cameras, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -257,7 +260,7 @@ var/area/space_area
 		mouse_opacity = 0
 		updateicon()
 		for (var/obj/machinery/camera/C in src)
-			C.network.Remove("Fire Alarms")
+			C.network.Remove(CAMERANET_FIREALARMS)
 		for (var/mob/living/silicon/ai/aiPlayer in player_list)
 			aiPlayer.cancelAlarm("Fire", src, src)
 		for (var/obj/machinery/computer/station_alert/a in machines)
@@ -418,7 +421,7 @@ var/area/space_area
 
 	var/mob/M = Obj
 
-	if(M && istype(M))
+	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
 		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
 			M.client.ambience_playing = 1
@@ -456,6 +459,9 @@ var/area/space_area
 			spawn(600) // Ewww - this is very very bad.
 				if(M && M.client)
 					M.client.ambience_playing = 0
+
+		if(narrator)
+			narrator.Crossed(M)
 
 	if(turret_protected)
 		if(isliving(Obj))
@@ -559,7 +565,7 @@ var/area/space_area
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(old_area,src)
 
-var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
+var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
 var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 

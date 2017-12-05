@@ -152,7 +152,7 @@ var/global/floorIsLava = 0
 				body += "<A href='?src=\ref[src];changehands=\ref[M]'>Change amount of hands (current: [M.held_items.len])</A> | "
 
 			// DNA2 - Admin Hax
-			if(iscarbon(M) && !isbrain(M) && !isalien(M))
+			if(ishuman(M) || ismonkey(M))
 				body += "<br><br>"
 				body += "<b>DNA Blocks:</b><br><table border='0'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
 				var/bname
@@ -849,6 +849,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
+			<A href='?src=\ref[src];secretsfun=halloween'>Awaken the damned for some spooky shenanigans</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))
@@ -1273,11 +1274,21 @@ var/global/floorIsLava = 0
 */
 /datum/admins/proc/spawn_atom(var/object as text)
 	set category = "Debug"
-	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes"
+	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes, include any variable changes at the end like so: {name=\"Test\";amount=50}"
 	set name = "Spawn"
 
 	if(!check_rights(R_SPAWN))
 		return
+
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
+
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
+
+		object = copytext(object, 1, variables_start)
 
 	var/list/matches = get_matching_types(object, /atom)
 
@@ -1292,9 +1303,17 @@ var/global/floorIsLava = 0
 		if(!chosen)
 			return
 
+	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
+	_preloader = new(varchanges, chosen)
+
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
 		T.ChangeTurf(chosen)
+	else if(ispath(chosen, /area))
+		var/area/A = locate(chosen)
+		var/turf/T = get_turf(usr.loc)
+
+		T.set_area(A)
 	else
 		new chosen(usr.loc)
 

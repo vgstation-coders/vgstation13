@@ -1034,8 +1034,12 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
 	else
 		if(!check_observer(O))
-			to_chat(O, "<span class='warning'>You are not eligable.</span>")
+			to_chat(O, "<span class='warning'>You are not eligible.</span>")
 			return
+		if(O.key in has_died_as_golem)
+			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
+				to_chat(O, "<span class='warning'>You have died as a golem too recently. You must wait longer before you can become a golem again.</span>")
+				return
 		ghosts.Add(O)
 		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
 
@@ -1150,7 +1154,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/process()
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
-	if (environment.toxins > MOLES_PLASMA_VISIBLE)//plasma exposure causes the egg to hatch
+	if ((environment.toxins / environment.volume * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)//plasma exposure causes the egg to hatch
 		src.Hatch()
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/attackby(obj/item/weapon/W as obj, mob/user as mob)

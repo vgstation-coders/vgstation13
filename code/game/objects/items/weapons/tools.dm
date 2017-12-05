@@ -224,6 +224,7 @@
 	sharpness = 0.8
 	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
 	heat_production = 3800
+	source_temperature = TEMPERATURE_WELDER
 
 	//Cost to make in the autolathe
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
@@ -238,6 +239,7 @@
 	var/status = 1 		//Whether the welder is secured or unsecured (able to attach rods to it to make a flamethrower)
 	var/max_fuel = 20 	//The max amount of fuel the welder can hold
 	var/start_fueled = 1 //Explicit, should the welder start with fuel in it ?
+	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
@@ -330,7 +332,7 @@
 		if(M.is_holding_item(src))
 			location = get_turf(M)
 	if (istype(location, /turf))
-		location.hotspot_expose(700, 5,surfaces=istype(loc,/turf))
+		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
 
 
 /obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
@@ -352,7 +354,7 @@
 		remove_fuel(1)
 		var/turf/location = get_turf(user)
 		if (istype(location, /turf))
-			location.hotspot_expose(700, 50, 1,surfaces=1)
+			location.hotspot_expose(source_temperature, 50, 1,surfaces=1)
 			if(isliving(O))
 				var/mob/living/L = O
 				L.IgniteMob()
@@ -388,7 +390,7 @@
 
 /obj/item/weapon/weldingtool/is_hot()
 	if(isOn())
-		return heat_production
+		return source_temperature
 	return 0
 
 
@@ -471,7 +473,7 @@
 		if(E.welding_proof)
 			user.simple_message("<span class='notice'>Your eyelenses darken to accommodate for the welder's glow.</span>")
 			return
-		if(safety < 2)
+		if(safety < 2 && eye_damaging)
 			switch(safety)
 				if(1)
 					user.simple_message("<span class='warning'>Your eyes sting a little.</span>",\
@@ -545,6 +547,10 @@
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
+
+/obj/item/weapon/weldingtool/hugetank/mech
+	name = "welding tool"
+	eye_damaging = FALSE
 
 /obj/item/weapon/weldingtool/gatling
 	name = "gatling welder"

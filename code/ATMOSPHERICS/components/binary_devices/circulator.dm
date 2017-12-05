@@ -28,9 +28,11 @@
 	density = 1
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
+	flags = OPENCONTAINER
 
 /obj/machinery/atmospherics/binary/circulator/New()
 	. = ..()
+	create_reagents(25)
 
 /obj/machinery/atmospherics/binary/circulator/Destroy()
 	. = ..()
@@ -58,8 +60,8 @@
 		volume_capacity_used = min((last_pressure_delta * air1.volume / 3) / (input_starting_pressure * air1.volume), 1)	//How much of the gas in the input air volume is consumed.
 
 		//Calculate energy generated from kinetic turbine.
+		//Most of the below are constants. Instead, think of it as 0.051702*air1.volume*min(pressure difference, starting pressure)
 		stored_energy += 1 / ADIABATIC_EXPONENT * min(last_pressure_delta * air1.volume, input_starting_pressure * air1.volume) * (1 - volume_ratio ** ADIABATIC_EXPONENT) * kinetic_efficiency
-
 
 		//Actually transfer the gas.
 		removed = air1.remove(recent_moles_transferred)
@@ -84,6 +86,11 @@
 
 /obj/machinery/atmospherics/binary/circulator/process()
 	. = ..()
+
+	if(!reagents.is_empty() && reagents.chem_temp < 4500 && stored_energy > 50)
+		var/dissipate_heat = stored_energy/5
+		reagents.heating(dissipate_heat,4500)
+		stored_energy -= dissipate_heat
 
 	if(last_worldtime_transfer < world.time - 50)
 		recent_moles_transferred = 0

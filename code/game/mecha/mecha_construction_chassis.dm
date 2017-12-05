@@ -175,3 +175,23 @@
 	spawn()
 		qdel (src)
 	return
+
+//        CLARKE         //
+/datum/construction/mecha_chassis/clarke
+	steps = list(list(Co_KEY=/obj/item/mecha_parts/part/clarke_torso),//1
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_head),//2
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_left_arm),//3
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_right_arm),//4
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_left_tread),//5
+					 list(Co_KEY=/obj/item/mecha_parts/part/clarke_right_tread)//6
+					)
+
+/datum/construction/mecha_chassis/clarke/spawn_result(mob/user as mob)
+	var/obj/item/mecha_parts/chassis/const_holder = holder
+	const_holder.construct = new /datum/construction/reversible/mecha/clarke(const_holder)
+	const_holder.icon = 'icons/mecha/mech_construction.dmi'
+	const_holder.icon_state = "clarke0"
+	const_holder.density = 1
+	spawn()
+		qdel (src)
+	return

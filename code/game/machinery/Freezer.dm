@@ -85,9 +85,10 @@
 		verbs += rotate_verbs
 		if(node)
 			node.disconnect(src)
+			node = null
+		if(network)
 			qdel(network)
 			network = null
-			node = null
 		
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)
@@ -253,12 +254,14 @@
 		if (node)
 			node.initialize()
 			node.build_network()
-		verbs += rotate_verbs
 	else
-		node.disconnect(src)
-		qdel(network)
-		network = null
-		node = null
+		verbs += rotate_verbs
+		if(node)
+			node.disconnect(src)
+			node = null
+		if(network)
+			qdel(network)
+			network = null
 		
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)

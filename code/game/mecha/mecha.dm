@@ -34,13 +34,14 @@
 	var/obj/item/weapon/cell/cell
 	var/state = STATE_BOLTSHIDDEN
 	var/list/log = new
-	var/last_message = 0
+	var/last_message = 0 // Used in occupant_message()
 	var/add_req_access = 1
 	var/maint_access = 1
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
 	var/lights = 0
 	var/lights_power = 6
+	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
 
 	//inner atmos
 	var/use_internal_tank = 0
@@ -81,7 +82,8 @@
 						/obj/item/mecha_parts,
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack)
+						/obj/item/device/radio/electropack,
+						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
 	..()
@@ -295,14 +297,12 @@
 		to_chat(user, "You climb out from [src]")
 		return 0
 	if(connected_port)
-		if(world.time - last_message > 20)
-			src.occupant_message("Unable to move while connected to the air system port")
-			last_message = world.time
+		occupant_message("Unable to move while connected to the air system port.", TRUE)
 		return 0
 	if(throwing)
 		return 0
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+		occupant_message("<font color='red'>Maintenance protocols in effect.</font>", TRUE)
 		return
 	return domove(direction)
 
@@ -319,13 +319,20 @@
 		return 0
 	var/move_result = 0
 	startMechWalking()
+	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
 		move_result = mechturn(direction)
+		stepped = FALSE
 	else
 		move_result	= mechstep(direction)
 	if(move_result)
+		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+			if(stepped)
+				ME.on_mech_step()
+			else
+				ME.on_mech_turn()
 		can_move = 0
 		use_power(step_energy_drain)
 		if(istype(src.loc, /turf/space))
@@ -756,11 +763,14 @@
 /obj/mecha/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 
-	if(istype(W, /obj/item/device/mmi) || istype(W, /obj/item/device/mmi/posibrain))
-		if(mmi_move_inside(W,user))
-			to_chat(user, "[src]-MMI interface initialized successfuly")
+	if(istype(W, /obj/item/device/mmi))
+		var/device_name = "MMI"
+		if(istype(W, /obj/item/device/mmi/posibrain))
+			device_name = "positronic"
+		if(mmi_move_inside(W, user))
+			to_chat(user, "[src]-[device_name] interface initialized successfully")
 		else
-			to_chat(user, "[src]-MMI interface initialization failed.")
+			to_chat(user, "[src]-[device_name] interface initialization failed.")
 		return
 
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
@@ -1174,7 +1184,7 @@
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
-	visible_message("<span class='notice'>[usr] starts to insert an MMI into [src.name]</span>")
+	visible_message("<span class='notice'>\The [user] starts to insert \the [mmi_as_oc] into \the [src].</span>")
 
 	if(enter_after(40,user))
 		if(!occupant)
@@ -1182,7 +1192,7 @@
 		else
 			to_chat(user, "Occupant detected.")
 	else
-		to_chat(user, "You stop inserting the MMI.")
+		to_chat(user, "You stop inserting \the [mmi_as_oc].")
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
@@ -1505,6 +1515,7 @@
 						<span id="rfreq">[format_frequency(radio.frequency)]</span>
 						<a href='?src=\ref[src];rfreq=2'>+</a>
 						<a href='?src=\ref[src];rfreq=10'>+</a><br>
+						Subspace transmission: <a href='?src=\ref[src];subtoggle=1'><span id="substate">[radio.subspace_transmission?"Enabled":"Disabled"]</span></a><br>
 						</div>
 						</div>
 						<div class='wr'>
@@ -1618,11 +1629,20 @@
 /////// Messages and Log ///////
 ////////////////////////////////
 
-/obj/mecha/proc/occupant_message(message as text)
-	if(message)
-		if(src.occupant && src.occupant.client)
-			to_chat(src.occupant, "[bicon(src)] [message]")
-	return
+#define OCCUPANT_MESSAGE_INTERVAL 0.5 SECONDS
+
+/obj/mecha/proc/occupant_message(var/message, var/prevent_spam = FALSE)
+	if(!message)
+		return
+	if(!occupant || !occupant.client)
+		return
+	if(prevent_spam)
+		if(world.time - last_message <= OCCUPANT_MESSAGE_INTERVAL)
+			return
+	to_chat(occupant, "[bicon(src)] [message]")
+	last_message = world.time
+
+#undef OCCUPANT_MESSAGE_INTERVAL
 
 /obj/mecha/proc/log_message(message as text,red=null)
 	log.len++
@@ -1696,6 +1716,12 @@
 			new_frequency = sanitize_frequency(new_frequency)
 		radio.set_frequency(new_frequency)
 		send_byjax(src.occupant,"exosuit.browser","rfreq","[format_frequency(radio.frequency)]")
+		return
+	if (href_list["subtoggle"])
+		if(usr != src.occupant)
+			return
+		radio.subspace_transmission = !radio.subspace_transmission
+		send_byjax(src.occupant,"exosuit.browser","substate",(radio.subspace_transmission?"Enabled":"Disabled"))
 		return
 	if(href_list["port_disconnect"])
 		if(usr != src.occupant)
@@ -1918,6 +1944,20 @@
 
 /obj/mecha/acidable()
 	return 0
+
+/obj/mecha/beam_connect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+
+/obj/mecha/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+/obj/mecha/apply_beam_damage(var/obj/effect/beam/B)
+	// Actually apply damage
+	take_damage(B.get_damage(), "emitter laser")
+
 
 //////////////////////////////////////////
 ////////  Mecha global iterators  ////////

@@ -144,7 +144,7 @@ var/list/distributed_ert_suits = list()
 
 	//Adding Camera Network
 	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = list("ERT")
+	camera.network = list(CAMERANET_ERT)
 	camera.c_tag = real_name
 
 	//Basic Uniform

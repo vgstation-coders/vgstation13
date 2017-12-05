@@ -57,6 +57,11 @@ Data storage vars:
 	var/result
 	var/state = 0
 
+/datum/global_iterator/Destroy()
+	stop()
+	arg_list.Cut()
+	..()
+
 /datum/global_iterator/New(list/arguments=null,autostart=1)
 	delay = delay>0?(delay):1
 	if(forbid_garbage) //prevents garbage collection with tag != null

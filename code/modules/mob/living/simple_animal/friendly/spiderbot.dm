@@ -178,7 +178,7 @@
 	radio = new /obj/item/device/radio/borg(src)
 	camera = new /obj/machinery/camera(src)
 	camera.c_tag = "Spiderbot-[real_name]"
-	camera.network = list("SS13")
+	camera.network = list(CAMERANET_SS13)
 
 	..()
 

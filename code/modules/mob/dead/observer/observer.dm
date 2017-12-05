@@ -395,7 +395,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
 	set name = "Re-enter Corpse"
-	if(!client)
+
+	var/mob/M = get_top_transmogrification()
+	if(!M.client)
 		return
 	if(!(mind && mind.current && can_reenter_corpse))
 		to_chat(src, "<span class='warning'>You have no body.</span>")
@@ -411,6 +413,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(mind && mind.current && mind.current.ajourn)
 		mind.current.ajourn.ajourn = null
 		mind.current.ajourn = null
+	completely_untransmogrify()
 	mind.current.key = key
 	mind.isScrying = 0
 	return 1
@@ -620,42 +623,43 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	var/pressure = environment.return_pressure()
 	var/total_moles = environment.total_moles()
+	var/tiles = environment.return_volume() / CELL_VOLUME
 
 	to_chat(src, "<span class='notice'><B>Results:</B></span>")
 	if(abs(pressure - ONE_ATMOSPHERE) < 10)
-		to_chat(src, "<span class='notice'>Pressure: [round(pressure,0.1)] kPa</span>")
+		to_chat(src, "<span class='notice'>Pressure: [round(pressure, 0.1)] kPa</span>")
 	else
-		to_chat(src, "<span class='warning'>Pressure: [round(pressure,0.1)] kPa</span>")
+		to_chat(src, "<span class='warning'>Pressure: [round(pressure, 0.1)] kPa</span>")
 	if(total_moles)
-		var/o2_concentration = environment.oxygen/total_moles
-		var/n2_concentration = environment.nitrogen/total_moles
-		var/co2_concentration = environment.carbon_dioxide/total_moles
-		var/plasma_concentration = environment.toxins/total_moles
+		var/o2_concentration = environment.oxygen / total_moles
+		var/n2_concentration = environment.nitrogen / total_moles
+		var/co2_concentration = environment.carbon_dioxide / total_moles
+		var/plasma_concentration = environment.toxins / total_moles
 
-		var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
+		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
 		if(abs(n2_concentration - N2STANDARD) < 20)
-			to_chat(src, "<span class='notice'>Nitrogen: [round(n2_concentration*100)]% ([round(environment.nitrogen,0.01)] moles)</span>")
+			to_chat(src, "<span class='notice'>Nitrogen: [round(n2_concentration * 100)]% ([round(environment.nitrogen / tiles, 0.01)] moles)</span>")
 		else
-			to_chat(src, "<span class='warning'>Nitrogen: [round(n2_concentration*100)]% ([round(environment.nitrogen,0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Nitrogen: [round(n2_concentration * 100)]% ([round(environment.nitrogen / tiles, 0.01)] moles)</span>")
 
 		if(abs(o2_concentration - O2STANDARD) < 2)
-			to_chat(src, "<span class='notice'>Oxygen: [round(o2_concentration*100)]% ([round(environment.oxygen,0.01)] moles)</span>")
+			to_chat(src, "<span class='notice'>Oxygen: [round(o2_concentration * 100)]% ([round(environment.oxygen / tiles, 0.01)] moles)</span>")
 		else
-			to_chat(src, "<span class='warning'>Oxygen: [round(o2_concentration*100)]% ([round(environment.oxygen,0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Oxygen: [round(o2_concentration * 100)]% ([round(environment.oxygen / tiles, 0.01)] moles)</span>")
 
 		if(co2_concentration > 0.01)
-			to_chat(src, "<span class='warning'>CO2: [round(co2_concentration*100)]% ([round(environment.carbon_dioxide,0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>CO2: [round(co2_concentration * 100)]% ([round(environment.carbon_dioxide / tiles, 0.01)] moles)</span>")
 		else
-			to_chat(src, "<span class='notice'>CO2: [round(co2_concentration*100)]% ([round(environment.carbon_dioxide,0.01)] moles)</span>")
+			to_chat(src, "<span class='notice'>CO2: [round(co2_concentration * 100)]% ([round(environment.carbon_dioxide / tiles, 0.01)] moles)</span>")
 
 		if(plasma_concentration > 0.01)
-			to_chat(src, "<span class='warning'>Plasma: [round(plasma_concentration*100)]% ([round(environment.toxins,0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Plasma: [round(plasma_concentration * 100)]% ([round(environment.toxins / tiles, 0.01)] moles)</span>")
 
 		if(unknown_concentration > 0.01)
-			to_chat(src, "<span class='warning'>Unknown: [round(unknown_concentration*100)]% ([round(unknown_concentration*total_moles,0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Unknown: [round(unknown_concentration * 100)]% ([round(unknown_concentration * total_moles / tiles, 0.01)] moles)</span>")
 
-		to_chat(src, "<span class='notice'>Temperature: [round(environment.temperature-T0C,0.1)]&deg;C</span>")
-		to_chat(src, "<span class='notice'>Heat Capacity: [round(environment.heat_capacity(),0.1)]</span>")
+		to_chat(src, "<span class='notice'>Temperature: [round(environment.temperature - T0C, 0.1)]&deg;C</span>")
+		to_chat(src, "<span class='notice'>Heat Capacity: [round(environment.heat_capacity(), 0.1)]</span>")
 
 
 /mob/dead/observer/verb/toggle_darkness()
@@ -873,9 +877,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 /mob/dead/observer/Topic(href, href_list)
 	if (href_list["reentercorpse"])
-		if(istype(usr, /mob/dead/observer))
-			var/mob/dead/observer/A = usr
-			A.reenter_corpse()
+		var/mob/dead/observer/A
+		if(ismob(usr))
+			var/mob/M = usr
+			A = M.get_bottom_transmogrification()
+			if(istype(A))
+				A.reenter_corpse()
 
 	//BEGIN TELEPORT HREF CODE
 	if(usr != src)

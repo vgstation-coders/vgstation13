@@ -89,7 +89,7 @@
 		if(reagents.get_reagent_amount(BANANA) <= 5 && max_health < HEALTH_FOR_FREE_MOVEMENT)
 			if(activated)
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
-				if(ishuman(user)) //This shouldn't be needed, but fucks sakes
+				if(ishigherbeing(user)) //This shouldn't be needed, but fucks sakes
 					user.Knockdown(5)
 				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0

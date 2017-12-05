@@ -54,6 +54,7 @@
 	var/injector_cooldown = 300 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	var/obj/machinery/computer/connected
+	var/last_message // Used by go_out()
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -274,21 +275,26 @@
 		if(C)
 			C.update_icon()
 			if(!M.client && M.mind)
-				var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
 				if(ghost)
-					if(ghost.client && ghost.can_reenter_corpse)
-						ghost << 'sound/effects/adminhelp.ogg'
-						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
+					var/mob/ghostmob = ghost.get_top_transmogrification()
+					if(ghostmob)
+						ghostmob << 'sound/effects/adminhelp.ogg'
+						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
 	return
 
+#define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
+
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
 	if (!occupant)
 		return 0
 	if(locked)
-		visible_message("Can't eject occupants while \the [src] is locked.")
+		if(world.time - last_message > DNASCANNER_MESSAGE_INTERVAL)
+			say("Can't eject occupants while \the [src] is locked.")
+			last_message = world.time
 		return 0
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
@@ -308,6 +314,8 @@
 
 	return 1
 
+#undef DNASCANNER_MESSAGE_INTERVAL
+
 /obj/machinery/dna_scannernew/proc/contains_husk()
 	if(occupant && (M_HUSK in occupant.mutations))
 		return 1
@@ -315,11 +323,13 @@
 
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
 	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
-		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-		if(ghost && ghost.client)
-			ghost << 'sound/effects/adminhelp.ogg'
-			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[src];reentercorpse=1'>click here!</a>)</span>")
+		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
@@ -404,6 +414,7 @@
 	connected = null
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
+	labels.Cut()
 	buffers.Cut()
 	if(disk)
 		qdel(disk)
@@ -520,7 +531,7 @@
   *
   * @return nothing
   */
-/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 
 	if(connected)
 		if(user == connected.occupant || user.isUnconscious())
@@ -610,7 +621,7 @@
 				data["beakerVolume"] += R.volume
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm

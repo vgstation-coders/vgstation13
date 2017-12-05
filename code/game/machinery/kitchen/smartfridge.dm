@@ -85,6 +85,7 @@
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
 		returnToPool(piles[key])
+	piles.Cut()
 	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
@@ -262,6 +263,9 @@
 	insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 

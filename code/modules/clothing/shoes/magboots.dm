@@ -91,6 +91,12 @@
 	icon_state = "atmosmagboots0"
 	base_state = "atmosmagboots"
 
+//Paramedic
+/obj/item/clothing/shoes/magboots/para
+	name = "Paramedic magboots"
+	icon_state = "para_magboots0"
+	base_state = "para_magboots"
+
 //Death squad
 /obj/item/clothing/shoes/magboots/deathsquad
 	desc = "Very expensive and advanced magnetic boots, used only by the elite during extravehicular activity to ensure the user remains safely attached to the vehicle."

@@ -51,7 +51,7 @@
 
 	//Adding Camera Network
 	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = list("CREED")
+	camera.network = list(CAMERANET_CREED)
 	camera.c_tag = real_name
 
 	//Basic Uniform

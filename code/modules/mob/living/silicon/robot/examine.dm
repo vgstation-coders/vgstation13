@@ -18,6 +18,9 @@
 	if(module_active)
 		var/obj/item/I = module_active
 		msg += "It's using [I.gender==PLURAL?"some":"a"] [bicon(I)] [I.name] as its active module.\n"
+		if(isgripper(I))
+			var/obj/item/weapon/gripper/G = module_active
+			msg += "Its [G.name] is gripping [G.wrapped.gender==PLURAL?"some":"a"] [bicon(G.wrapped)] [G.wrapped.name].\n"
 
 	if(opened)
 		msg += "<span class='warning'>Its cover is open and the power cell is [cell ? "installed" : "missing"].</span>\n"

@@ -165,7 +165,7 @@
 					update_icon()
 
 		if(SYSTEMISNOTDONE)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 5)
 					to_chat(user, "<span class='warning'>You need more cable for this!</span>")

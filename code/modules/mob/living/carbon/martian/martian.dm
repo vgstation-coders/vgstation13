@@ -25,6 +25,7 @@
 	icon_state = "martian"
 
 	species_type = /mob/living/carbon/martian
+	speak_emote = list("blorbles","burbles")
 
 	held_items = list(null, null, null, null, null, null) //6 hands
 
@@ -34,7 +35,6 @@
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
-
 	maxHealth = 150
 	health = 150
 
@@ -50,7 +50,9 @@
 /mob/living/carbon/martian/New()
 	create_reagents(200)
 	name = pick("martian","scootaloo","squid","rootmarian","phoronitian","sepiida","octopodiforme",\
-	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo")
+	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo","kalamarian")
+	add_language(LANGUAGE_MARTIAN)
+	default_language = all_languages[LANGUAGE_MARTIAN]
 	..()
 
 /mob/living/carbon/martian/Destroy()
@@ -87,43 +89,6 @@
 /mob/living/carbon/martian/has_eyes()
 	return FALSE
 
-/mob/living/carbon/martian/attack_hand(mob/living/M)
-	switch(M.a_intent)
-		if(I_HELP)
-			help_shake_act(M)
-
-		if(I_HURT)
-			M.unarmed_attack_mob(src)
-
-		if(I_GRAB)
-			M.grab_mob(src)
-
-		if(I_DISARM)
-			M.disarm_mob(src)
-
-/mob/living/carbon/martian/attack_alien(mob/living/M)
-	switch(M.a_intent)
-		if (I_HELP)
-			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
-
-		if (I_HURT)
-			return M.unarmed_attack_mob(src)
-
-		if (I_GRAB)
-			return M.grab_mob(src)
-
-		if (I_DISARM)
-			return M.disarm_mob(src)
-
-/mob/living/carbon/martian/attack_slime(mob/living/carbon/slime/M)
-	M.unarmed_attack_mob(src)
-
-/mob/living/carbon/martian/attack_martian(mob/M)
-	return attack_hand(M)
-
-/mob/living/carbon/martian/attack_paw(mob/M)
-	return attack_hand(M)
-
 /mob/living/carbon/martian/updatehealth()
 	if(status_flags & GODMODE)
 		health = maxHealth
@@ -131,16 +96,19 @@
 	else
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
-/mob/living/carbon/martian/Stat()
-	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
-		var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
-		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
-			var/obj/item/weapon/tank/internal = fishbowl.tank
-			stat("Internal Atmosphere Info", internal.name)
-			stat("Tank Pressure", internal.air_contents.return_pressure())
-			stat("Distribution Pressure", internal.distribute_pressure)
-
-
 /mob/living/carbon/martian/Login()
 	..()
 	update_hud()
+
+/mob/living/carbon/martian/Stat()
+	..()
+	if(statpanel("Status"))
+		stat(null, "Intent: [a_intent]")
+		stat(null, "Move Mode: [m_intent]")
+		if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
+			var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
+			if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
+				var/obj/item/weapon/tank/internal = fishbowl.tank
+				stat("Internal Atmosphere Info", internal.name)
+				stat("Tank Pressure", internal.air_contents.return_pressure())
+				stat("Distribution Pressure", internal.distribute_pressure)

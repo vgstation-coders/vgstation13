@@ -86,7 +86,7 @@ var/global/list/atmos_controllers = list()
 		return
 	return ..()
 
-/obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(user.stat && !isobserver(user))
 		return
 
@@ -119,7 +119,7 @@ var/global/list/atmos_controllers = list()
 	data["alarms"]=alarms
 
 	if (!ui) // no ui has been passed, so we'll search for one
-		ui = nanomanager.get_open_ui(user, src, ui_key)
+		ui = nanomanager.get_open_ui(user, src, ui_key, ui, data, force_open)
 
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
@@ -138,11 +138,6 @@ var/global/list/atmos_controllers = list()
 		// Auto update every Master Controller tick
 		if(current)
 			ui.set_auto_update(1)
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
-
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
 	if(!filter)

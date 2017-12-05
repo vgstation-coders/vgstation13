@@ -158,26 +158,27 @@
 
 	forceMove(T)
 
-/obj/item/examine(mob/user)
-	var/size
-	switch(w_class)
-		if(W_CLASS_TINY)
-			size = "tiny"
-		if(W_CLASS_SMALL)
-			size = "small"
-		if(W_CLASS_MEDIUM)
-			size = "normal-sized"
-		if(W_CLASS_LARGE)
-			size = "bulky"
-		if(W_CLASS_HUGE to INFINITY)
-			size = "huge"
+/obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
+	if(!size)
+		switch(w_class)
+			if(W_CLASS_TINY)
+				size = "tiny"
+			if(W_CLASS_SMALL)
+				size = "small"
+			if(W_CLASS_MEDIUM)
+				size = "normal-sized"
+			if(W_CLASS_LARGE)
+				size = "bulky"
+			if(W_CLASS_HUGE to INFINITY)
+				size = "huge"
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	..(user, " [pronoun] a [size] item.")
+	size = " [pronoun] a [size] item."
+	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
@@ -757,6 +758,31 @@
 				return CAN_EQUIP
 		return CANNOT_EQUIP //Unsupported slot
 		//END ALIEN HUMANOID
+
+	else if(ishologram(M))
+		//START HOLOGRAM
+		var/mob/living/simple_animal/hologram/advanced/HM = M
+		switch(slot)
+			if(slot_head)
+				if(HM.head)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_HEAD) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+			if(slot_w_uniform)
+				if(HM.w_uniform)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_ICLOTHING) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+			if(slot_wear_suit)
+				if(HM.wear_suit)
+					return CANNOT_EQUIP
+				if(!(slot_flags & SLOT_OCLOTHING) )
+					return CANNOT_EQUIP
+				return CAN_EQUIP
+		return CANNOT_EQUIP //Unsupported slot
+		//END HOLOGRAM
 
 	else if(isMoMMI(M))
 		//START MOMMI ALSO THIS SO FUCKING SILLY

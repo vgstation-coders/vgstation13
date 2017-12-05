@@ -376,7 +376,7 @@
 // blind_drugged_message (optional) is shown to blind hallucinating people
 // ignore_self (optional) won't show the message to the mob sending the message
 
-/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0)
+/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0, var/range = 7)
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
@@ -392,7 +392,7 @@
 	if(!ignore_self)
 		show_message( msg, 1, msg2, 2)
 
-	..(message, blind_message, drugged_message, blind_drugged_message)
+	..(message, blind_message, drugged_message, blind_drugged_message, range)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(see_invisible < A.invisibility || src == A)
@@ -412,11 +412,11 @@
 // message is output to anyone who can see, e.g. "The [src] does something!"
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 
-/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
+/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
 	if(world.time>resethearers)
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(location))
+	for(var/mob/virtualhearer/hearer in viewers(range, location))
 		var/mob/M
 		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/holo = hearer.attached
@@ -2021,6 +2021,25 @@ mob/proc/on_foot()
 	timestopped = 1
 	return M
 
+/mob/proc/completely_untransmogrify()	//Reverts a mob through all layers of transmogrification, back down to the base mob. Returns this mob.
+	var/mob/top_level = get_top_transmogrification()
+	while(top_level)
+		top_level = top_level.transmogrify()
+		if(top_level)
+			. = top_level
+
+/mob/proc/get_top_transmogrification()	//Returns the mob at the highest level of transmogrification, the one which contains the player.
+	var/mob/M = src
+	while(M.transmogged_to)
+		M = M.transmogged_to
+	return M
+
+/mob/proc/get_bottom_transmogrification()	//Returns the mob at the lowest level of transmogrification, the original mob.
+	var/mob/M = src
+	while(M.transmogged_from)
+		M = M.transmogged_from.contained_mob
+	return M
+
 /spell/aoe_turf/revert_form
 	name = "Revert Form"
 	desc = "Morph back into your previous form."
@@ -2065,7 +2084,7 @@ mob/proc/on_foot()
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
-/mob/make_invisible(var/source_define, var/time)
+/mob/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(..() || !source_define)
 		return
 	alpha = 1	//to cloak immediately instead of on the next Life() tick

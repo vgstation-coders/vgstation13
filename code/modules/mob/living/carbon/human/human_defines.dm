@@ -91,4 +91,6 @@
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
 
+	var/show_client_status_on_examine = TRUE //If false, don't display catatonic/braindead messages to non-admins
+
 	var/become_zombie_after_death = FALSE

@@ -180,6 +180,8 @@ datum/reagent/paint
 	description = "Floor paint is used to color floor tiles."
 	reagent_state = 2
 	color = "#808080"
+	density = 1.808
+	specheatcap = 0.85
 
 	reaction_turf(var/turf/T, var/volume)
 		if(!istype(T) || istype(T, /turf/space))

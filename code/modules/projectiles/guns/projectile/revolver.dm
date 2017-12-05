@@ -249,7 +249,7 @@
 	else
 		icon_state = "colt"
 
-/obj/item/weapon/gun/projectile/colt/attack_self(mob/user, var/callparent = FALSE)
+/obj/item/weapon/gun/projectile/colt/attack_self(mob/user, params, var/callparent = FALSE)
 	if(callparent)
 		return ..(user)
 	if(cocked)
@@ -266,7 +266,7 @@
 		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
 
 /obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user)
-	attack_self(user, TRUE)
+	attack_self(user, callparent = TRUE)
 
 /obj/item/weapon/gun/projectile/colt/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
 	if(cocked)

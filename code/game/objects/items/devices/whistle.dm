@@ -24,12 +24,12 @@
 
 /obj/item/device/hailer/proc/do_your_sound(var/mob/user)
 	if(emagged && insults)
-		playsound(get_turf(src), 'sound/voice/binsult.ogg', 100, 1, vary = 0)
+		playsound(get_turf(user), 'sound/voice/binsult.ogg', 100, 1, vary = 0)
 		insults--
 	else
-		playsound(get_turf(src), 'sound/voice/halt.ogg', 100, 1, vary = 0)
+		playsound(get_turf(user), 'sound/voice/halt.ogg', 100, 1, vary = 0)
 	if(user)
-		var/list/bystanders = get_hearers_in_view(world.view, src)
+		var/list/bystanders = get_hearers_in_view(world.view, user)
 		flick_overlay(image('icons/mob/talk.dmi', user, "hail", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS)
 	nextuse = world.time + cooldown
 
@@ -78,7 +78,7 @@
 		return
 
 	// ~ drawing the images ~ //
-	var/list/bystanders = get_hearers_in_view(world.view, src)
+	var/list/bystanders = get_hearers_in_view(world.view, user)
 	for(var/mob/living/M in suspects)
 		flick_overlay(image('icons/mob/talk.dmi', M, "halt", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS) //One image for each suspect
 
