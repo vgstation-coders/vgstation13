@@ -49,7 +49,7 @@
 	var/list/available_factions = list()
 
 	// Assigned faction.
-	var/faction/faction = null
+	var/datum/faction/faction = null
 
 	var/list/minds = list()
 
@@ -65,7 +65,7 @@
 	// Objectives
 	var/list/objectives=list()
 
-/datum/role/New(var/datum/mind/M=null, var/datum/role/parent=null, var/faction/fac=null)
+/datum/role/New(var/datum/mind/M=null, var/datum/role/parent=null, var/datum/faction/fac=null)
 	if(M)
 		if(!istype(M))
 			WARNING("M is [M.type]!")
@@ -75,8 +75,8 @@
 			parent.minds += M
 
 		// If we don't have this guy in the faction, add him.
-		if(fac && !(M in fac.minds))
-			fac.minds += M
+		if(fac && !(M in fac.members))
+			fac.members += M
 
 		// Notify gamemode that this player has this role, too.
 		ticker.mode.add_player_role_association(M,id)
@@ -297,14 +297,6 @@
 	var/text="<b>[name] Objectives:</b><ul>"
 	for(var/obj_count = 1,obj_count <= objectives.len,obj_count++)
 		var/datum/objective/O = objectives[obj_count]
-		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text]"
-	to_chat(antag.current, text)
-	antag.memory += "[text]<BR>"
-
-/datum/role/group/MemorizeObjectives()
-	var/text="<b>[name] Group Objectives:</b><ul>"
-	for(var/obj_count = 1,obj_count <= faction.objectives.len,obj_count++)
-		var/datum/group_objective/O = faction.objectives[obj_count]
 		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text]"
 	to_chat(antag.current, text)
 	antag.memory += "[text]<BR>"
