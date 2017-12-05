@@ -194,7 +194,7 @@ var/list/forbidden_varedit_object_types = list(
 				to_chat(user, "Unknown type: [selected_type]")
 
 	if(edited_datum && edited_variable)
-		if(edited_datum.variable_edited(edited_variable, old_value, new_value))
+		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
 		//variable_edited() can block the edit in case there's special behavior for a variable (for example, updating lights after they're changed)
 			new_value = edited_datum.vars[edited_variable]
 		else

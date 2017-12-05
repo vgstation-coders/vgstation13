@@ -174,7 +174,10 @@
 					organ_to_damage.Add(I)
 				if(organ_to_damage.len)
 					var/datum/organ/internal/victim = pick(organ_to_damage)
-					victim.take_damage(rand(1,5)*rad_multiplier,silent = 0)
+					if(istype(victim, /datum/organ/internal/brain))
+						adjustBrainLoss(rand(1,4)*major_rad_multiplier)
+					else
+						victim.take_damage(rand(1,5)*rad_multiplier,silent = 0)
 			if(prob(0.5*major_rad_multiplier))
 				//Become uncloneable
 				if(!(M_NOCLONE in mutations))

@@ -21,6 +21,8 @@
 	if(attached_to)
 		attached_to.overlays -= inv_overlay
 	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	if(color)
+		inv_overlay.color = color
 	if(attached_to)
 		attached_to.overlays += inv_overlay
 		if(ishuman(attached_to.loc))
