@@ -108,10 +108,11 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	var/mob/living/carbon/human/MH = M
 	var/obj/item/clothing/cover = MH.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
 	if(cover)
-		for (var/A in cover.armor)
-			if(cover.armor[A] > 5)
-				to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
-				return 1
+		if(!(istype(cover,/obj/item/clothing/head/helmet/space/plasmaman) || istype(cover, /obj/item/clothing/suit/space/plasmaman))) // Purple skeleton suits mysteriously can be operated on through a special chamber? Bluespacemagicidunno
+			for (var/A in cover.armor)
+				if(cover.armor[A] > 10) // Anything tougher than a security jumpsuit
+					to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
+					return 1
 
 	// type path referencing surfaces that could be used
 	var/list/allowed_work_surfaces = list(
