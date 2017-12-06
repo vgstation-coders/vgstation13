@@ -1630,3 +1630,34 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
+
+// For surgeries
+
+
+/proc/find_working_surface_at_mob(mob/living/carbon/human/target, list/possible_surfaces_list)
+	for (var/surface in possible_surfaces_list)
+		world << "Trying to find: [surface]"
+		if (locate(surface, target.loc))
+			var/obj/structure/table/table = surface
+			if(istype(table, /obj/structure/table) && table.flipped)
+				return 0
+			else
+				return possible_surfaces_list[surface]
+
+// Armor limits, if not null, will only find clothing with armor greater than the specified values via a list. Exceptions are clothing that should be ignored if found.
+/proc/get_clothing_obstructing_target_from_user(mob/living/user, mob/living/carbon/human/target, armorlimits = null, list/exceptions = null)
+	if(!istype(target, /mob/living/carbon/human))
+		return FALSE
+	var/obj/item/clothing/cover = target.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
+	if(cover)
+		if(exceptions)
+			for(var/exception in exceptions)
+				if(istype(cover, exception))
+					return FALSE
+		if(armorlimits)
+			for(var/armor in cover.armor)
+				if(cover.armor[armor] > armorlimits[armor])
+					return cover
+		else
+			return cover
+	return FALSE

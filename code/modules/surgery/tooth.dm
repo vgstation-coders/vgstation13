@@ -28,12 +28,10 @@
 /datum/surgery_step/tooth_replace/mend_roots/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..() && target.op_stage.face == 1)
 		var/datum/organ/external/head/h = target.get_organ(target_zone)
-		if(h.disfigured) // Let's fix the face first
-			return 0
-		else
-			return 1
+		if(!h.disfigured) // If the face is busted, might want to fix that before you start fixing teeth
+			return TRUE
 	else
-		return 0
+		return FALSE
 
 /datum/surgery_step/tooth_replace/mend_roots/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts mending the blood vessels and nerves in the empty sockets of [target]'s jaw with \the [tool].", \

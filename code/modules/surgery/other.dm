@@ -214,8 +214,8 @@
 
 	tool.timeofdeath = target.timeofdeath
 	tool.add_data(affected)
-	user.visible_message("<span class='notice'>[user] scans the wounds on [target]'s [affected.display_name].</span>", "<span class='notice'>You scan the wounds on [target]'s [affected.display_name].</span>", "You hear a beep.")
+	user.visible_message("<span class='notice'>\The [user] scans the wounds on [target]'s [affected.display_name].</span>", "<span class='notice'>You scan the wounds on [target]'s [affected.display_name].</span>", "You hear a beep.")
 
 /datum/surgery_step/autopsy/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("<span class='warning'>[user] could not keep a steady hand, failing to scan the wounds on [target]'s [affected.display_name].</span>", "<span class='warning'>You could not keep a steady hand, failing to scan the wounds on [target]'s [affected.display_name].</span>", "You hear a buzz.")
+	user.visible_message("<span class='warning'>\The [user] could not keep a steady hand, failing to scan the wounds on [target]'s [affected.display_name].</span>", "<span class='warning'>You could not keep a steady hand, failing to scan the wounds on [target]'s [affected.display_name].</span>", "You hear a buzz.")

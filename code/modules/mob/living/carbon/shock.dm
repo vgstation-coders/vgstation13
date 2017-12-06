@@ -36,13 +36,8 @@
 				if(organ.status & ORGAN_SPLINTED)
 					pain_level -= 25
 
-	pain_tolerance = pain_level * -1
-
-	if(pain_tolerance < 0)
-		pain_tolerance = 0
-
-	if(pain_level < 0)
-		pain_level = 0
+	pain_tolerance = max(0, pain_level * -1)
+	pain_level = max(0, pain_level)
 
 	return pain_level
 

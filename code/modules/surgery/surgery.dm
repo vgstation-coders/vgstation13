@@ -31,7 +31,7 @@
 		return 1
 	if(!target.feels_pain())
 		return 1
-	if(target.pain_numb || prob(target.pain_tolerance + 5)) // Pain is tolerable?  Pomf wanted this. - N3X | How about painkillers? - Carlen
+	if(target.pain_numb || prob(target.pain_tolerance + UNMEDICATED_PAIN_TOLERANCE)) // Pain is tolerable?  Pomf wanted this. - N3X | How about painkillers? - Carlen
 		return 1
 
 	return 0
@@ -98,42 +98,24 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	if(user == M) // Can't do surgery on yourself (yet)
-		return 0
+		return FALSE
 	if(!istype(M,/mob/living/carbon/human))
-		return 0
+		return FALSE
+	if(!(ishuman(M) && M.lying))
+		return FALSE
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
-		return 0
+		return FALSE
+
+	var/surface_stability = find_working_surface_at_mob(M, ALLOWED_MEDICAL_WORK_SURFACES)
+	if(!surface_stability)
+		return FALSE
 
 	// VOTE! Should surgery even proceed if there's a suit in the way?
-	var/mob/living/carbon/human/MH = M
-	var/obj/item/clothing/cover = MH.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
-	if(cover)
-		if(!(istype(cover,/obj/item/clothing/head/helmet/space/plasmaman) || istype(cover, /obj/item/clothing/suit/space/plasmaman))) // Purple skeleton suits mysteriously can be operated on through a special chamber? Bluespacemagicidunno
-			for (var/A in cover.armor)
-				if(cover.armor[A] > 10) // Anything tougher than a security jumpsuit
-					to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
-					return 1
-
-	// type path referencing surfaces that could be used
-	var/list/allowed_work_surfaces = list(
-		/obj/machinery/optable = 100,
-		/obj/structure/bed/roller/surgery = 100,
-		/obj/structure/bed/roller = 75,
-		/obj/structure/table/reinforced = 70,
-		/obj/structure/table = 66
-		)
-	var/surface_stability = 0
-	if(ishuman(M) && M.lying)
-		for (var/T in allowed_work_surfaces) // Go down the list and attempt to locate a suitable surface.
-			if (locate(T, M.loc))
-				var/obj/structure/table/table = T
-				if(istype(table, /obj/structure/table) && table.flipped) // Check if the table is flipped, if it is a table of course.
-					break
-				else
-					surface_stability = allowed_work_surfaces[T]
-					break
-	if(!surface_stability)
-		return 0
+	if(!CAN_MEDICATE_THROUGH_ARMOR)
+		var/cover = get_clothing_obstructing_target_from_user(user, M, MEDICAL_AID_ARMOR_LIMIT, (CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS ? list(/obj/item/clothing/head/helmet/space/plasmaman, /obj/item/clothing/suit/space/plasmaman) : null))
+		if(cover)
+			to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
+			return TRUE
 
 	var/sleep_fail = 0
 	var/clumsy = 0
@@ -142,7 +124,6 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		clumsy = ((M_CLUMSY in H.mutations) && prob(50))
 	for(var/datum/surgery_step/S in surgery_steps)
 		//check if tool is right or close enough and if this step is possible
-		sleep_fail = 0
 		if(S.tool_quality(tool))
 			var/canuse = S.can_use(user, M, user.zone_sel.selecting, tool)
 			if(canuse == -1)
@@ -169,17 +150,17 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 						if(sleep_fail)
 							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
 							M.emote("scream",,, 1)
-						else if (surface_stability != 100)
+						else if (surface_stability != PERCENT_SUITABLE_MEDICAL_WORKSPACE)
 							to_chat(user, "<span class='warning'>This working surface isn't stable!</span>")
 
 				if(M) //good, we still exist
 					S.doing_surgery -= M
 				else
-					S.doing_surgery.Remove(null) //get rid of that now null reference
-				return	1	  												//don't want to do weapony things after surgery
+					S.doing_surgery.Remove(null)	//get rid of that now null reference
+				return	TRUE	  					//don't want to do weapony things after surgery
 	if (user.a_intent == I_HELP)
-		to_chat(user, "<span class='warning'>You want to help but you can't see any useful way to use [tool] on [M].</span>")
-	return 1
+		to_chat(user, "<span class='warning'>You want to help but you can't see any useful way to use \the [tool] on \the [M].</span>")
+	return TRUE
 
 proc/sort_surgeries()
 	var/gap = surgery_steps.len
