@@ -92,7 +92,7 @@
 	if (istype(tool, /obj/item/stack/medical/bruise_pack))
 		if (istype(tool, /obj/item/stack/medical/bruise_pack/tajaran))
 			tool_name = "the poultice"
-		else if (istype(tool, /obj/item/stack/medical/bruise_pack/bandaid)
+		else if (istype(tool, /obj/item/stack/medical/bruise_pack/bandaid))
 			tool_name = "the bandaid"
 		else
 			tool_name = "a roll of gauze"
