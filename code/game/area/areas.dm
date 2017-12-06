@@ -15,6 +15,9 @@ var/area/space_area
 	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
+
+	var/obj/effect/narration/narrator = null
+
 	flags = 0
 
 /area/New()
@@ -418,7 +421,7 @@ var/area/space_area
 
 	var/mob/M = Obj
 
-	if(M && istype(M))
+	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
 		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
 			M.client.ambience_playing = 1
@@ -456,6 +459,9 @@ var/area/space_area
 			spawn(600) // Ewww - this is very very bad.
 				if(M && M.client)
 					M.client.ambience_playing = 0
+
+		if(narrator)
+			narrator.Crossed(M)
 
 	if(turret_protected)
 		if(isliving(Obj))

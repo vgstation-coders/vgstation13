@@ -68,7 +68,7 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-				src.delayNextMove(10) //no just holding the key for an instant gib
+				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)

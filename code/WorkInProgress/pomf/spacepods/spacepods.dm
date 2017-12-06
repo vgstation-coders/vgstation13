@@ -154,7 +154,7 @@
 				to_chat(H, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 			if(passengers.len)
 				for(var/mob/living/L in passengers)
-					move_passenger_outside(H, get_turf(src))
+					move_passenger_outside(L, get_turf(src))
 					L.ex_act(severity + 1)
 					to_chat(L, "<span class='warning'>You are forcefully thrown from \the [src]!</span>")
 					passengers.Remove(L)

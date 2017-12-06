@@ -73,6 +73,7 @@
 
 	if(materials)
 		returnToPool(materials)
+		materials = null
 
 	if(on_moved)
 		on_moved.holder = null

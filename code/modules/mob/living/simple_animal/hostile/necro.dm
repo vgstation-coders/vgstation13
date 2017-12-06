@@ -643,7 +643,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/Life()
 	..()
-	if(radiation && health < maxHealth)
+	if(!isDead() && radiation && health < maxHealth)
 		health++
 		radiation--
 
@@ -671,11 +671,10 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/Life()
 	..()
-
-
-	if(world.time > last_rad_blast+20 SECONDS)
-		rad_blast()
-	radiation+=5
+	if(!isDead())
+		if(world.time > last_rad_blast+20 SECONDS)
+			rad_blast()
+		radiation+=5
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/proc/rad_blast()
 	if(radiation > RAD_COST)
@@ -688,14 +687,19 @@
 				var/rad_cost = min(radiation, rand(10,20))
 				H.apply_radiation(rad_cost, RAD_EXTERNAL)
 				radiation -= rad_cost
-			for(var/mob/living/simple_animal/hostile/necro/zombie/ghoul/G in can_see)
-				if(G.isDead() && radiation > 100)
-					G.revive()
-					radiation -= 100
-				if(radiation > 25)
-					var/rad_cost = min(radiation, rand(10,20))
-					G.apply_radiation(10, RAD_EXTERNAL)
-					radiation -= rad_cost
+				if(!radiation)
+					break
+			if(radiation > 25)
+				for(var/mob/living/simple_animal/hostile/necro/zombie/ghoul/G in can_see)
+					if(G.isDead() && radiation > 100)
+						G.revive()
+						radiation -= 100
+					if(radiation > 25)
+						var/rad_cost = min(radiation, rand(10,20))
+						G.apply_radiation(10, RAD_EXTERNAL)
+						radiation -= rad_cost
+					if(radiation < 25)
+						break
 			last_rad_blast = world.time
 			spawn(3 SECONDS)
 				set_light(1, 2, "#5dca31")

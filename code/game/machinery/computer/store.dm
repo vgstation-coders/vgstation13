@@ -25,6 +25,7 @@
 			/datum/storeitem/beachball,
 			/datum/storeitem/snap_pops,
 			/datum/storeitem/crayons,
+			///datum/storeitem/dorkcube,
 			),
 		"Clothing" = list(
 			/datum/storeitem/robotnik_labcoat,
