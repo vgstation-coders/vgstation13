@@ -1636,7 +1636,6 @@ Game Mode config tags:
 
 /proc/find_working_surface_at_mob(mob/living/carbon/human/target, list/possible_surfaces_list)
 	for (var/surface in possible_surfaces_list)
-		world << "Trying to find: [surface]"
 		if (locate(surface, target.loc))
 			var/obj/structure/table/table = surface
 			if(istype(table, /obj/structure/table) && table.flipped)
@@ -1660,4 +1659,10 @@ Game Mode config tags:
 					return cover
 		else
 			return cover
+	return FALSE
+
+/proc/can_medicate_through_obstruction(mob/living/user, mob/living/carbon/human/target)
+	var/obj/item/clothing/cover = get_clothing_obstructing_target_from_user(user, target, (!CAN_MEDICATE_THROUGH_ARMOR ? MEDICAL_AID_ARMOR_LIMIT : null ))
+	if(cover && (cover.impossible_to_medicate_through || (!CAN_MEDICATE_THROUGH_ARMOR && !cover.can_medicate_through)))
+		return cover
 	return FALSE

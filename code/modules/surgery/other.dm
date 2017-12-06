@@ -190,7 +190,8 @@
 		/obj/item/weapon/autopsy_scanner = 100
 		)
 
-	max_duration = 10
+	min_duration = 10
+	max_duration = 20
 
 /datum/surgery_step/autopsy/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/S = target.get_organ(target_zone)

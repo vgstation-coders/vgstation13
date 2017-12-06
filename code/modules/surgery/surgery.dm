@@ -111,11 +111,10 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		return FALSE
 
 	// VOTE! Should surgery even proceed if there's a suit in the way?
-	if(!CAN_MEDICATE_THROUGH_ARMOR)
-		var/cover = get_clothing_obstructing_target_from_user(user, M, MEDICAL_AID_ARMOR_LIMIT, (CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS ? list(/obj/item/clothing/head/helmet/space/plasmaman, /obj/item/clothing/suit/space/plasmaman) : null))
-		if(cover)
-			to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
-			return TRUE
+	var/cover = can_medicate_through_obstruction(user, M)
+	if(cover)
+		to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
+		return TRUE
 
 	var/sleep_fail = 0
 	var/clumsy = 0

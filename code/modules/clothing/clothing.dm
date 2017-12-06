@@ -14,6 +14,8 @@
 	var/goliath_reinforce = FALSE
 	var/extinguishingProb = 15
 	var/can_extinguish = FALSE
+	var/can_medicate_through = FALSE // Can you medicate through it even if the clothing is armored?
+	var/impossible_to_medicate_through = FALSE // Regardless of armor, can you not medicate through it?
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)

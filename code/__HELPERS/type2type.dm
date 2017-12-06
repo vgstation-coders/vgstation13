@@ -276,5 +276,5 @@ proc/tg_jointext(list/list, glue = ",")
 		if(LIMB_LEFT_FOOT)	return FOOT_LEFT
 		if(LIMB_RIGHT_FOOT)	return FOOT_RIGHT
 		if(TARGET_MOUTH)	return MOUTH
-		if("eyes")			return EYES
+		if(TARGET_EYES)			return EYES
 		else 				return 0

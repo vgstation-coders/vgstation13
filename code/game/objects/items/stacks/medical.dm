@@ -24,12 +24,10 @@
 	if(istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
-
-		if(!CAN_MEDICATE_THROUGH_ARMOR)
-			var/cover = get_clothing_obstructing_target_from_user(user, H, MEDICAL_AID_ARMOR_LIMIT, (CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS ? list(/obj/item/clothing/head/helmet/space/plasmaman, /obj/item/clothing/suit/space/plasmaman) : null))
-			if(cover)
-				to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [cover]!</span>")
-				return 1
+		var/cover = can_medicate_through_obstruction(user, M)
+		if(cover)
+			to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [cover]!</span>")
+			return 1
 
 		if(affecting.status & ORGAN_ROBOT)
 			to_chat(user, "<span class='warning'>This isn't useful at all on a robotic limb.</span>")

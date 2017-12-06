@@ -12,6 +12,7 @@
 	species_restricted = list("Plasmaman")
 	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
+	can_medicate_through=CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS
 
 	icon_state = "plasmaman_suit"
 	item_state = "plasmaman_suit"
@@ -35,9 +36,11 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list("Plasmaman")
 	eyeprot = 0
+	can_medicate_through=CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS
 
 	icon_state = "plasmaman_helmet0"
 	item_state = "plasmaman_helmet0"
+
 	var/base_state = "plasmaman_helmet"
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
