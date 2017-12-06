@@ -17,6 +17,8 @@
 	var/list/bible_names = list()
 	var/list/deity_names = list()
 
+	var/datum/action/renounce/action_renounce
+
 	var/list/keys = list() // What you need to type to get this particular relgion.
 
 /datum/religion/New() // For religions with several bibles/deities
@@ -24,6 +26,10 @@
 		bible_name = pick(bible_names)
 	if (deity_names.len)
 		deity_name = pick(deity_names)
+	action_renounce = new /datum/action/renounce(src)
+
+/datum/religion/proc/isReligiousLeader(var/mob/living/user)
+	return (user.mind && user.mind == religiousLeader)
 
 // Give the chaplain the basic gear, as well as a few misc effects.
 /datum/religion/proc/equip_chaplain(var/mob/living/carbon/human/H)
@@ -90,15 +96,15 @@
 	subject.mind.faith = src
 	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
 	adepts += subject.mind
+	action_renounce.Grant(subject)
 	if (!preacher)
 		var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
-		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
-		log_adminwarn(msg)
+		message_admins(msg)
 	else
 		var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
-		msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
-		log_adminwarn(msg)
+		message_admins(msg)
 
+// Activivating a religion with admin interventions.
 /datum/religion/proc/activate(var/mob/living/preacher)
 	equip_chaplain(preacher) // We do the misc things related to the religion
 	preacher.put_in_hands(holy_book)
@@ -110,6 +116,28 @@
 	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
 	adepts -= subject.mind
 	subject.mind.faith = null
+
+
+// Action : renounce your faith. For players.
+/datum/action/renounce
+	name = "Renounce faith"
+	desc = "Leave the religion you are currently in."
+	icon_icon = 'icons/obj/clothing/hats.dmi'
+	button_icon_state = "fedora" // :^) Needs a better icon
+
+/datum/action/renounce/Trigger()
+	var/datum/religion/R = target
+	var/mob/living/M = owner
+
+	if (!R) // No religion, may as well be a good time to remove the icon if it's there
+		Remove(M)
+		return FALSE
+
+	if (R.isReligiousLeader(M))
+		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for realease.</span>")
+		return FALSE
+	Remove(owner)
+	R.renounce(owner)
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/catholic

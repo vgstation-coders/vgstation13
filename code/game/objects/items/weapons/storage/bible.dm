@@ -175,12 +175,13 @@
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>")
 
 /obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
-	return (user.mind && user.mind == src.my_rel.religiousLeader)
+	return (user.mind && user.mind == my_rel.religiousLeader)
 
 // Action : convert people
 
 /datum/action/item_action/convert
 	name = "Convert people"
+	desc = "Convert someone next to you."
 
 /datum/action/item_action/convert/Trigger()
 	var/obj/item/weapon/storage/bible/B = target
@@ -205,5 +206,3 @@
 	else
 		owner.mind.faith.convertAct(owner, subject, B) // usr = preacher ; target = subject
 		return TRUE
-
-

@@ -4612,7 +4612,6 @@
 					to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
 
 				var/msg = "[key_name(usr)] sent message [message] to [R.name]'s adepts as [deity]"
-				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 				message_admins(msg)
 
 
@@ -4728,7 +4727,6 @@
 						rel_added.holy_book.item_state = "bible"
 
 				var/msg = "[key_name(usr)] created a religion: [rel_added.name]."
-				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 				message_admins(msg)
 
 				ticker.religions += rel_added
@@ -4750,7 +4748,6 @@
 				ticker.religions -= R
 				qdel(R.holy_book)
 				qdel(R)
-				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 				message_admins(msg)
 				updateRelWindow()
 
@@ -4778,7 +4775,7 @@
 
 				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
 
-				if (alert("Do you want to make [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
+				if (alert("Do you want to make \the [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
 					return FALSE
 
 				if (!preacher)
@@ -4794,8 +4791,7 @@
 					return FALSE
 
 				R.activate(preacher)
-				var/msg = "[key_name(usr)] activated religion [R.name], with preacher \the [key_name(preacher)]."
-				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
+				var/msg = "[key_name(usr)] activated religion [R.name], with preacher [key_name(preacher)]."
 				message_admins(msg)
 				updateRelWindow()
 
@@ -4811,12 +4807,12 @@
 				if (M.mind.faith.religiousLeader == M && alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No") != "Yes")
 					return FALSE
 
-				M.mind.faith.renounce(M)
+				M.mind.faith.renounce(M) // Bypass checks
+				M.mind.faith.action_renounce.Remove(M)
 
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
-				msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 				message_admins(msg)
-
+				updateRelWindow()
 
 /datum/admins/proc/updateRelWindow()
 	var/text = "<h3>Religions in game</h3>"
