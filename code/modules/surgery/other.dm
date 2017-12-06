@@ -183,3 +183,39 @@
 	"<span class='warning'>Your hand slips, applying [trans] units of the solution to the wrong place in [target]'s [affected.display_name] with the [tool]!</span>")
 
 	//no damage or anything, just wastes medicine
+
+//AUTOPSY
+/datum/surgery_step/autopsy
+	allowed_tools = list(
+		/obj/item/weapon/autopsy_scanner = 100
+		)
+
+	max_duration = 10
+
+/datum/surgery_step/autopsy/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/S = target.get_organ(target_zone)
+	if(!S)
+		to_chat(user, "<b>You can't scan this body part.</b>")
+		return 0
+	if(!S.open)
+		to_chat(user, "<b>You have to cut the limb open first!</b>")
+		return 0
+
+	return 1
+
+/datum/surgery_step/autopsy/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/weapon/autopsy_scanner/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(tool.target_name != target.name)
+		tool.target_name = target.name
+		tool.wdata = list()
+		tool.chemtraces = list()
+		tool.timeofdeath = null
+		to_chat(user, "<span class='warning'>A new patient has been registered. Purging data for previous patient.</span>")
+
+	tool.timeofdeath = target.timeofdeath
+	tool.add_data(affected)
+	user.visible_message("<span class='notice'>[user] scans the wounds on [target]'s [affected.display_name].</span>", "<span class='notice'>You scan the wounds on [target]'s [affected.display_name].</span>", "You hear a beep.")
+
+/datum/surgery_step/autopsy/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='warning'>[user] could not keep a steady hand, failing to scan the wounds on [target]'s [affected.display_name].</span>", "<span class='warning'>You could not keep a steady hand, failing to scan the wounds on [target]'s [affected.display_name].</span>", "You hear a buzz.")

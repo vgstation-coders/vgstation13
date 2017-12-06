@@ -188,7 +188,7 @@
 	if(istype(usr,/mob/living/carbon))
 		// place the item in the usr's hand if possible
 		usr.put_in_hands(P)
-
+/* Moved to surgery/other.dm
 /obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return
@@ -218,3 +218,4 @@
 	src.add_data(S)
 
 	return 1
+*/

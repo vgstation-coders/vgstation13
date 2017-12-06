@@ -92,8 +92,10 @@
 	if (istype(tool, /obj/item/stack/medical/bruise_pack))
 		if (istype(tool, /obj/item/stack/medical/bruise_pack/tajaran))
 			tool_name = "the poultice"
-		else
+		else if (istype(tool, /obj/item/stack/medical/bruise_pack/bandaid)
 			tool_name = "the bandaid"
+		else
+			tool_name = "a roll of gauze"
 
 	if (!hasorgans(target))
 		return

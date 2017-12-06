@@ -911,8 +911,6 @@
 	return FALSE
 
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-
-
 	var/mob/living/carbon/human/H = M
 	if(istype(H))
 		var/obj/item/eye_protection = H.get_body_part_coverage(EYES)

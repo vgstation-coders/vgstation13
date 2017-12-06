@@ -99,8 +99,10 @@
 	else
 		if(clumsy_check(user) && prob(50))
 			return eyestab(user,user)
-		else
+		else if(user.a_intent == I_HURT)
 			return eyestab(M, user)
+		else
+			return ..()
 
 /obj/item/weapon/kitchen/utensil/fork/examine(mob/user)
 	..()

@@ -1,5 +1,6 @@
 /mob/living/carbon/var/pain_shock_stage = 0
 /mob/living/carbon/var/pain_level = 0 //Gets overwritten every tick! If you want to add pain "resistance" or constain pain, see update_pain_level()
+/mob/living/carbon/var/pain_tolerance = 0 //The absolute value of pain_level in it's negatives before it is clamped.
 /mob/living/carbon/var/pain_numb = 0 // When this is set, the mob isn't affected by shock or pain, but can't see their health.
 
 // proc to find out in how much pain the mob is at the moment
@@ -34,6 +35,11 @@
 				pain_level += 30
 				if(organ.status & ORGAN_SPLINTED)
 					pain_level -= 25
+
+	pain_tolerance = pain_level * -1
+
+	if(pain_tolerance < 0)
+		pain_tolerance = 0
 
 	if(pain_level < 0)
 		pain_level = 0

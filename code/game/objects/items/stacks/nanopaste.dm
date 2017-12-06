@@ -37,8 +37,7 @@
 				else
 					to_chat(user, "<span class='notice'>Nothing to fix here.</span>")
 		else
-			if(can_operate(H, user))
-				if(do_surgery(H,user,src))
-					return
+			if(do_surgery(H,user,src))  // Attempt surgery
+				return
 			else
 				to_chat(user, "<span class='notice'>Nothing to fix in here.</span>")

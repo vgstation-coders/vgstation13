@@ -42,6 +42,9 @@
 			to_chat(user, "<span class='warning'>This isn't useful at all on a peg limb.</span>")
 			return 1
 
+		if(affecting.open && do_surgery(M,user,src))
+			return 1
+
 		H.UpdateDamageIcon()
 
 	else
@@ -97,11 +100,7 @@
 										"<span class='notice'>You place a bandaid over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
-					return
-			else
-				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, you'll need more than a bandage!</span>")
+			to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, you'll need more than a bandage!</span>")
 
 /obj/item/stack/medical/ointment
 	name = "ointment"
@@ -128,11 +127,7 @@
 										"<span class='notice'>You salve the wounds on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
-					return
-			else
-				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, you'll need more than some ointment!</span>")
+			to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, you'll need more than some ointment!</span>")
 
 /obj/item/stack/medical/bruise_pack/tajaran
 	name = "\improper S'rendarr's Hand leaf"
@@ -188,11 +183,7 @@
 				affecting.heal_damage(rand(heal_brute, heal_brute + 5), 0)
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
-					return
-			else
-				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even bioglue won't do!</span>")
+			to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even bioglue won't do!</span>")
 
 /obj/item/stack/medical/advanced/ointment
 	name = "advanced burn kit"
@@ -221,11 +212,7 @@
 				affecting.heal_damage(0, rand(heal_burn, heal_burn + 5))
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
-					return
-			else
-				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even a regenerative membrane won't do!</span>")
+			to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even a regenerative membrane won't do!</span>")
 
 /obj/item/stack/medical/splint
 	name = "medical splints"

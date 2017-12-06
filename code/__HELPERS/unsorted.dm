@@ -1193,8 +1193,8 @@ var/global/list/common_tools = list(
 	istype(W, /obj/item/weapon/bonesetter)
 	)
 
-//check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M, mob/U)
+//check if mob is lying down on something we can operate him on. !!OBSOLETE!!
+/*/proc/can_operate(mob/living/carbon/M, mob/U)
 	if(U == M)
 		return 0
 	if(ishuman(M) && M.lying)
@@ -1206,7 +1206,7 @@ var/global/list/common_tools = list(
 		if(T && !T.flipped && prob(66))
 			return 1
 	return 0
-
+*/
 /*
 Checks if that loc and dir has a item on the wall
 */

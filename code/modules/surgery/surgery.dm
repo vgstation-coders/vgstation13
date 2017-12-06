@@ -26,14 +26,14 @@
 		if (istype(tool,T))
 			return allowed_tools[T]
 	return 0
-
 /datum/surgery_step/proc/check_anesthesia(var/mob/living/carbon/human/target)
 	if(target.sleeping > 0 || target.stat)
 		return 1
 	if(!target.feels_pain())
 		return 1
-	if(prob(25)) // Pain is tolerable?  Pomf wanted this. - N3X
+	if(target.pain_numb || prob(target.pain_tolerance + 5)) // Pain is tolerable?  Pomf wanted this. - N3X | How about painkillers? - Carlen
 		return 1
+
 	return 0
 
 	// Checks if this step applies to the mutantrace of the user.
@@ -97,10 +97,46 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
 
 proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
+	if(user == M) // Can't do surgery on yourself (yet)
+		return 0
 	if(!istype(M,/mob/living/carbon/human))
 		return 0
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
 		return 0
+	// VOTE! Should surgery even proceed if there's a suit in the way?
+	var/mob/living/carbon/human/MH = M
+	var/datum/organ/external/affecting = MH.get_organ(user.zone_sel.selecting)
+	if(affecting.display_name == LIMB_HEAD)
+		if(MH.head && istype(MH.head,/obj/item/clothing/head/helmet/space))
+			to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [MH.head]!</span>")
+			return 1
+	else
+		if(MH.wear_suit && istype(MH.wear_suit,/obj/item/clothing/suit/space))
+			to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [MH.wear_suit]!</span>")
+			return 1
+
+
+	// type path referencing surfaces that could be used
+	var/list/allowed_work_surfaces = list(
+		/obj/machinery/optable = 100,
+		/obj/structure/bed/roller/surgery = 100,
+		/obj/structure/bed/roller = 75,
+		/obj/structure/table/reinforced = 70,
+		/obj/structure/table = 66
+		)
+	var/surface_stability = 0
+	if(ishuman(M) && M.lying)
+		for (var/T in allowed_work_surfaces) // Go down the list and attempt to locate a suitable surface.
+			if (locate(T, M.loc))
+				var/obj/structure/table/table = T
+				if(istype(table, /obj/structure/table) && table.flipped) // Check if the table is flipped, if it is a table of course.
+					break
+				else
+					surface_stability = allowed_work_surfaces[T]
+					break
+	if(!surface_stability)
+		return 0
+
 	var/sleep_fail = 0
 	var/clumsy = 0
 	if(ishuman(user))
@@ -114,8 +150,6 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 			if(canuse == -1)
 				sleep_fail = 1
 			if(canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
-				if(!can_operate(M, user))
-					return 1
 				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] started by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Started surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 				log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to perform surgery type [S.type] on [M.name] ([M.ckey])</font>")
@@ -123,29 +157,31 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 				S.begin_step(user, M, user.zone_sel.selecting, tool)		//start on it
 				var/selection = user.zone_sel.selecting
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && selection == user.zone_sel.selecting)
+				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(surface_stability) && prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && selection == user.zone_sel.selecting)
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")
 					S.end_step(user, M, user.zone_sel.selecting, tool)		//finish successfully
 				else
 					if ((tool in user.contents) && (user.Adjacent(M)))											//or
-						if(sleep_fail)
-							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
-							M.emote("scream",,, 1)
 						M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] failed by [user.name] ([user.ckey])</font>")
 						user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 						log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")
 						S.fail_step(user, M, user.zone_sel.selecting, tool)		//malpractice~
+						if(sleep_fail)
+							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
+							M.emote("scream",,, 1)
+						else if (surface_stability != 100)
+							to_chat(user, "<span class='warning'>This working surface isn't stable!</span>")
+
 				if(M) //good, we still exist
 					S.doing_surgery -= M
 				else
 					S.doing_surgery.Remove(null) //get rid of that now null reference
 				return	1	  												//don't want to do weapony things after surgery
 	if (user.a_intent == I_HELP)
-		to_chat(user, "<span class='warning'>You can't see any useful way to use [tool] on [M].</span>")
-		return 1
-	return 0
+		to_chat(user, "<span class='warning'>You want to help but you can't see any useful way to use [tool] on [M].</span>")
+	return 1
 
 proc/sort_surgeries()
 	var/gap = surgery_steps.len
