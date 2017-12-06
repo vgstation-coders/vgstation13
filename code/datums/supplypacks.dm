@@ -572,6 +572,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "knight armor crate"
 	group = "Clothing"
 
+/datum/supply_packs/space_suits
+	name = "Space suit"
+	contains = list(/obj/item/clothing/suit/space,
+					/obj/item/clothing/head/helmet/space)
+	cost = 200
+	containertype = /obj/structure/closet/crate
+	containername = "space suit crate"
+	group = "Clothing"
+
 /datum/supply_packs/vox_supply
 	name = "Vox supplies"
 	contains = list(/obj/item/clothing/suit/space/vox/civ,
