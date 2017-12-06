@@ -103,18 +103,15 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		return 0
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
 		return 0
+
 	// VOTE! Should surgery even proceed if there's a suit in the way?
 	var/mob/living/carbon/human/MH = M
-	var/datum/organ/external/affecting = MH.get_organ(user.zone_sel.selecting)
-	if(affecting.display_name == LIMB_HEAD)
-		if(MH.head && istype(MH.head,/obj/item/clothing/head/helmet/space))
-			to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [MH.head]!</span>")
-			return 1
-	else
-		if(MH.wear_suit && istype(MH.wear_suit,/obj/item/clothing/suit/space))
-			to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [MH.wear_suit]!</span>")
-			return 1
-
+	var/obj/item/clothing/cover = MH.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
+	if(cover)
+		for (var/A in cover.armor)
+			if(cover.armor[A] > 5)
+				to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
+				return 1
 
 	// type path referencing surfaces that could be used
 	var/list/allowed_work_surfaces = list(

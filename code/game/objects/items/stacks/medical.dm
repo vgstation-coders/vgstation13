@@ -25,14 +25,12 @@
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.display_name == LIMB_HEAD)
-			if(H.head && istype(H.head,/obj/item/clothing/head/helmet/space))
-				to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [H.head]!</span>")
-				return 1
-		else
-			if(H.wear_suit && istype(H.wear_suit,/obj/item/clothing/suit/space))
-				to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [H.wear_suit]!</span>")
-				return 1
+		var/obj/item/clothing/cover = H.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
+		if(cover)
+			for (var/A in cover.armor)
+				if(cover.armor[A] > 5)
+					to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [cover]!</span>")
+					return 1
 
 		if(affecting.status & ORGAN_ROBOT)
 			to_chat(user, "<span class='warning'>This isn't useful at all on a robotic limb.</span>")

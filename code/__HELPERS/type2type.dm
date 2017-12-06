@@ -262,3 +262,19 @@ proc/tg_jointext(list/list, glue = ",")
 		finalNum = copytext(finalNum, 1, pos) + sep + copytext(finalNum, pos)
 
 	return finalNum
+
+/proc/target_to_mobpart(var/limb)
+	switch(limb)
+		if(LIMB_HEAD)		return HEAD
+		if(LIMB_CHEST)		return UPPER_TORSO
+		if(LIMB_LEFT_ARM)	return ARM_LEFT
+		if(LIMB_RIGHT_ARM)	return ARM_RIGHT
+		if(LIMB_LEFT_HAND)	return HAND_LEFT
+		if(LIMB_RIGHT_HAND)	return HAND_RIGHT
+		if(LIMB_LEFT_LEG)	return LEG_LEFT
+		if(LIMB_RIGHT_LEG)	return LEG_RIGHT
+		if(LIMB_LEFT_FOOT)	return FOOT_LEFT
+		if(LIMB_RIGHT_FOOT)	return FOOT_RIGHT
+		if(TARGET_MOUTH)	return MOUTH
+		if("eyes")			return EYES
+		else 				return 0
