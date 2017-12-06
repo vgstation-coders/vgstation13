@@ -3951,7 +3951,7 @@
 
 	if(href_list["add_player_info"])
 		var/key = href_list["add_player_info"]
-		var/add = input("Add Player Info") as null|text
+		var/add = input("Add Player Info") as null|message
 		if(!add)
 			return
 
