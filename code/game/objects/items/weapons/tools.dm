@@ -137,6 +137,10 @@
 		M = user
 	if(user.a_intent == I_HURT)
 		return eyestab(M,user)
+	if(!CAN_DO_SURGERY_ON_DISARM_GRAB_INTENT && user.a_intent != I_HELP)
+		return eyestab(M,user)
+	if(CAN_DO_SURGERY_ON_DISARM_GRAB_INTENT && user.a_intent == I_HURT)
+		return eyestab(M,user)
 	return ..()
 
 /obj/item/weapon/screwdriver/attackby(var/obj/O)
