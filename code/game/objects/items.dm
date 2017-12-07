@@ -61,6 +61,11 @@
 	var/restraint_apply_time = 3 SECONDS
 	var/restraint_apply_sound = null
 
+	var/_surgery_preflight = FALSE // Modified by procs in surgery.dm to avoid checking for a valid surface if it was already checked with ready_for_surgery()
+	var/_surgery_preflight_M = null // Used to lazily do do_surgery(tool = src) if ready_for_surgery() was used before
+	var/_surgery_preflight_user = null // Ditto
+	var/_surgery_preflight_surface_stability = null // Ditto
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -911,6 +916,8 @@
 	return FALSE
 
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	if(ready_for_surgery(M, user, src)) // Don't stab people in the eyes if it's possible to do surgery
+		return do_surgery(tool = src)
 	var/mob/living/carbon/human/H = M
 	if(istype(H))
 		var/obj/item/eye_protection = H.get_body_part_coverage(EYES)

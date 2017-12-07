@@ -98,7 +98,27 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	if(!(E.status & (ORGAN_ROBOT|ORGAN_PEG))) //Germs on robotic limbs bad
 		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
 
-proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
+// Cancel/clear a pre-flight
+proc/unready_surgery(obj/item/tool)
+	tool._surgery_preflight = FALSE
+	tool._surgery_preflight_M = null
+	tool._surgery_preflight_user = null
+	tool._surgery_preflight_surface_stability = null
+	return TRUE
+
+// Check if the mob is ready for surgery and pre-flight if it is while returning the chance
+proc/ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
+	var/surface_stability = check_if_ready_for_surgery(M, user, tool)
+	if(surface_stability)
+		tool._surgery_preflight = TRUE
+		tool._surgery_preflight_M = M
+		tool._surgery_preflight_user = user
+		tool._surgery_preflight_surface_stability = surface_stability
+		return TRUE
+	return FALSE
+
+// Tentively check if the mob is ready for surgery and return the chance
+proc/check_if_ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	if(user == M) // Can't do surgery on yourself (yet)
 		return FALSE
 	if(!istype(M,/mob/living/carbon/human))
@@ -111,9 +131,26 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	else
 		if(user.a_intent != I_HELP)
 			return FALSE
-	
-	var/surface_stability = find_working_surface_at_mob(M, ALLOWED_MEDICAL_WORK_SURFACES)
-	if(!surface_stability)
+	return find_working_surface_at_mob(M, ALLOWED_MEDICAL_WORK_SURFACES)
+
+proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
+	var/surface_stability = 0
+	if(tool._surgery_preflight)
+		M = tool._surgery_preflight_M
+		user = tool._surgery_preflight_user
+		surface_stability = tool._surgery_preflight_surface_stability
+		unready_surgery(tool)
+	else
+		surface_stability = check_if_ready_for_surgery(M,user,tool)
+		if(!surface_stability)
+			return FALSE
+
+	if(!M || !user || !tool)
+		error("BUG? do_surgery was called without a mob, user, and/or tool. A tool isn't doing a pre-flight correctly? M = [M], user = [user], tool = [tool]")
+		if(M)
+			to_chat(M, "<span class='sinister'>You sense that something tried to hit you, but...something in the world feels like it has broken. You feel the urge to seek the gods.</span>")
+		if(user)
+			to_chat(user, "<span class='sinister'>You try to hit something, but...something in the world feels like it has broken. You feel the urge to seek the gods.</span>")
 		return FALSE
 
 	// VOTE! Should surgery even proceed if there's a suit in the way?
