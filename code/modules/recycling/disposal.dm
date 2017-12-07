@@ -463,6 +463,9 @@
 	else
 		return ..(mover, target, height, air_group)
 
+/obj/machinery/disposal/proc/can_load_crates()
+	return TRUE
+
 /obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
 
 	if(isAI(user))
@@ -479,6 +482,14 @@
 				return
 
 			attackby(dropping, user)
+		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
+			if(do_after(user,src,20))
+				if(dropping.locked_to || user.restrained() || !user.canmove)
+					return
+				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
+				add_fingerprint(user)
+				dropping.forceMove(src)
+				update_icon()
 		return
 
 	//From there, we are working on a mob (as our target, user is supposed to be a mob)
