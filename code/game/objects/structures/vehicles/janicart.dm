@@ -111,7 +111,7 @@
 			tile.clean_blood()
 			for(var/A in tile)
 				if(istype(A, /obj/effect))
-					if(istype(A, /obj/effect/rune) || istype(A, /obj/effect/decal/cleanable) || (istype(A, /obj/effect/overlay) && !istype(A, /obj/effect/overlay/puddle)))
+					if(iscleanaway(A))
 						qdel(A)
 				else if(istype(A, /obj/item))
 					var/obj/item/cleaned_item = A
