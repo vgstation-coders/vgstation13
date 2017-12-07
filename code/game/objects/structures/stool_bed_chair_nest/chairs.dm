@@ -293,12 +293,10 @@
 			return 0
 	if(last_airflow + 5 SECONDS > world.time) //ugly hack: can't scoot during ZAS
 		return 0
-	if(istype(T, /turf/simulated))
-		var/turf/simulated/ST = T
-		if(ST.wet == TURF_WET_LUBE)
-			user.unlock_from(src)
-			ST.Entered(user) //bye bye
-			return 0
+	if(locate(/obj/effect/overlay/puddle) in T)
+		user.unlock_from(src)
+		T.Entered(user) //bye bye
+		return 0
 
 	//forwards, scoot slow
 	if(direction == dir)
