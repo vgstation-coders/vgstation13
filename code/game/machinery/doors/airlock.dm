@@ -1264,15 +1264,11 @@ About the new airlock wires panel:
 
 				L.SetStunned(5)
 				L.SetKnockdown(5)
-				var/obj/effect/stop/S = new()
-				S.forceMove(loc)
-				S.victim = L
-
-				spawn (20)
-					qdel(S)
-					S = null
-
 				L.emote("scream",,, 1)
+				L.canmove = 0
+
+				spawn(2 SECONDS)
+					L.canmove = 1
 
 				if (istype(loc, /turf/simulated))
 					T.add_blood(L)
