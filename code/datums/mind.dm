@@ -125,7 +125,7 @@
 				   <b>Leader:</b> [faith.religiousLeader] <br/>"
 
 		if (faith.religiousLeader == src)
-			output =+ "You can convert people by [faith.convert_method] <br />"
+			output += "You can convert people by [faith.convert_method] <br />"
 	recipient << browse(output,"window=memory")
 
 /datum/mind/proc/edit_memory()
