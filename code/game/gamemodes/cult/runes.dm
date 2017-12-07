@@ -327,7 +327,7 @@
 			summonturfs = list()
 			summoning = 0
 			new /obj/machinery/singularity/narsie/large(src.loc)
-			stat_collection.cult_narsie_summoned = 1
+			stat_collection.cult_narsie_summoned = TRUE
 		return
 
 	currentCountdown--

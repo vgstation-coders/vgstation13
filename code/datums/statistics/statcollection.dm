@@ -52,6 +52,7 @@ proc/datum2list(var/datum/D, var/list/do_not_copy=datum_donotcopy, parent_datum=
 		else
 			L[I] = D.vars[I]
 	return L
+
 // converts a datum (including atoms!) to a JSON object
 // do_not_copy is a list of vars to not include in the JSON output
 proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
@@ -74,15 +75,15 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/list/survivors = list()
 	var/list/uplink_purchases = list()
 	var/list/badass_bundles = list()
+	var/list/antag_objectives = list()
 	var/list/population_polls = list()
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
 	var/crates_ordered = 0
 	var/artifacts_discovered = 0
 	var/narsie_corpses_fed = 0
-	var/escapees = 0
 	var/crewscore = 0
-	var/nuked = 0
+	var/nuked = FALSE
 	var/borgs_at_roundend = 0
 	var/heads_at_roundend = 0
 
@@ -94,7 +95,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/cult_runes_fumbled = 0
 	var/cult_converted = 0
 	var/cult_tomes_created = 0
-	var/cult_narsie_summoned = 0
+	var/cult_narsie_summoned = FALSE
 	var/cult_narsie_corpses_fed = 0
 	var/cult_surviving_cultists = 0
 	var/cult_deconverted = 0
@@ -105,18 +106,18 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/xeno_faces_protected = 0
 
 	// blob
-	var/blob_wins = 0
+	var/blob_wins = FALSE
 	var/blob_spawned_blob_players = 0
 	var/blob_spores_spawned = 0
 	var/blob_res_generated = 0
 
 	// malf
-	var/malf_won = 0
-	var/malf_shunted = 0
+	var/malf_won = FALSE
+	var/malf_shunted = FALSE
 	var/list/malf_modules = list() // TODO change the stats server model for this
 
 	// revsquad
-	var/revsquad_won = 0
+	var/revsquad_won = FALSE
 	var/list/revsquad_items = list()
 
 
@@ -125,6 +126,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/round_end_time = null
 	var/mapname = null
 	var/mastermode = null
+	var/tickermode = null
 	var/list/mixed_gamemodes = list()
 
 /datum/stat/population_stat
@@ -156,7 +158,7 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/assigned_role = null
 	var/key = null
 	var/realname = null
-	var/escaped = 0
+	var/escaped = FALSE
 	var/list/damagevalues = list(
 		"BRUTE" = 0,
 		"FIRE" = 0,
@@ -165,18 +167,28 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 		"CLONE" = 0,
 		"BRAIN" = 0)
 
+/datum/stat/antag_objective
+	var/realname = null
+	var/key = null
+	var/special_role = null
+	var/objective_type = null
+	var/objective_desc = null
+	var/objective_succeeded = FALSE
+	var/target_name = null
+	var/target_role = null
+
 /datum/stat/uplink_purchase_stat
 	var/itemtype = null
 	var/bundle = null
 	var/purchaser_key = null
 	var/purchaser_name = null
-	var/purchaser_is_traitor = 1
+	var/purchaser_is_traitor = TRUE
 
 /datum/stat/uplink_badass_bundle_stat
 	var/list/contains = list()
 	var/purchaser_key = null
 	var/purchaser_name = null
-	var/purchaser_is_traitor = 1
+	var/purchaser_is_traitor = TRUE
 
 /datum/stat/explosion_stat
 	var/epicenter_x = 0
@@ -185,7 +197,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/devastation_range = 0
 	var/heavy_impact_range = 0
 	var/light_impact_range = 0
-	var/max_range = 0
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")

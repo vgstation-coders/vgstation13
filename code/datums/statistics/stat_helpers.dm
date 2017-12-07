@@ -20,7 +20,7 @@
 		tech_level_total += KT.level
 	return tech_level_total
 
-/datum/stat_collector/proc/add_explosion_stat(turf/epicenter, const/dev_range, const/hi_range, const/li_range, mx_range)
+/datum/stat_collector/proc/add_explosion_stat(turf/epicenter, const/dev_range, const/hi_range, const/li_range)
 	var/datum/stat/explosion_stat/e = new
 	e.epicenter_x = epicenter.x
 	e.epicenter_y = epicenter.y
@@ -28,7 +28,6 @@
 	e.devastation_range = dev_range
 	e.heavy_impact_range = hi_range
 	e.light_impact_range = li_range
-	e.max_range = mx_range
 	explosions.Add(e)
 
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
@@ -78,8 +77,11 @@
 
 	if(istype(M, /mob/living/silicon/robot))
 		borgs_at_roundend++
+	// how the scoreboard checked for escape-ness:
+	// if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
+	// luckily this works for us:
 	if(M.z == map.zCentcomm)
-		s.escaped = 1 // not all survivors escape, and not all rounds end with the shuttle
+		s.escaped = TRUE // not all survivors escape, and not all rounds end with the shuttle
 
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
@@ -95,9 +97,9 @@
 	survivors.Add(s)
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
-	var/was_traitor = 1
+	var/was_traitor = TRUE
 	if(user.mind && user.mind.special_role != "traitor")
-		was_traitor = 0
+		was_traitor = FALSE
 
 	if(istype(bundle, /datum/uplink_item/badass/bundle))
 		var/datum/stat/uplink_badass_bundle_stat/BAD = new
@@ -120,6 +122,23 @@
 		UP.purchaser_is_traitor = was_traitor
 		uplink_purchases.Add(UP)
 
+/datum/stat_collector/proc/add_objectives(var/datum/mind/M)
+	if(M.objectives.len)
+		for(var/datum/objective/O in M.objectives)
+			var/datum/stat/antag_objective/AO = new
+			AO.key = ckey(M.key)
+			AO.realname = STRIP_NEWLINE(M.name)
+			AO.special_role = M.special_role
+			AO.objective_type = O.type
+			AO.objective_desc = O.explanation_text
+			AO.objective_succeeded = O.check_completion()
+			if(O.target)
+				AO.target_name = STRIP_NEWLINE(O.target.name)
+				AO.target_role = O.target.assigned_role
+
+			antag_objectives.Add(AO)
+
+
 /datum/stat/population_stat/New(pop as num)
 	time = time2text(world.realtime, STAT_TIMESTAMP_FORMAT)
 	popcount = pop
@@ -129,12 +148,15 @@
 	round_end_time   = time2text(world.realtime,   STAT_TIMESTAMP_FORMAT)
 	mapname = map.nameLong
 	mastermode = master_mode // this is stored as a string in game
+	tickermode = ticker.mode.name
+	nuked = ticker.mode.station_was_nuked
 	if(istype(ticker.mode, /datum/game_mode/mixed))
 		var/datum/game_mode/mixed/mixy = ticker.mode
 		for(var/datum/game_mode/GM in mixy.modes)
 			mixed_gamemodes.Add(GM.name)
 
 	for(var/datum/mind/M in ticker.minds)
+		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
 			if(M.special_role == "Cultist")
