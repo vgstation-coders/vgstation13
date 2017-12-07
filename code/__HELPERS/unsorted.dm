@@ -1193,20 +1193,6 @@ var/global/list/common_tools = list(
 	istype(W, /obj/item/weapon/bonesetter)
 	)
 
-//check if mob is lying down on something we can operate him on. !!OBSOLETE!!
-/*/proc/can_operate(mob/living/carbon/M, mob/U)
-	if(U == M)
-		return 0
-	if(ishuman(M) && M.lying)
-		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
-			return 1
-		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
-			return 1
-		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
-		if(T && !T.flipped && prob(66))
-			return 1
-	return 0
-*/
 /*
 Checks if that loc and dir has a item on the wall
 */
@@ -1638,14 +1624,14 @@ Game Mode config tags:
 	for (var/surface in possible_surfaces_list)
 		if (locate(surface, target.loc))
 			var/obj/structure/table/table = surface
-			if(istype(table, /obj/structure/table) && table.flipped)
+			if(istype(table) && table.flipped)
 				return 0
 			else
 				return possible_surfaces_list[surface]
 
 // Armor limits, if not null, will only find clothing with armor greater than the specified values via a list. Exceptions are clothing that should be ignored if found.
 /proc/get_clothing_obstructing_target_from_user(mob/living/user, mob/living/carbon/human/target, armorlimits = null, list/exceptions = null)
-	if(!istype(target, /mob/living/carbon/human))
+	if(!istype(target))
 		return FALSE
 	var/obj/item/clothing/cover = target.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
 	if(cover)

@@ -2,6 +2,8 @@
 //moved these here from code/defines/obj/weapon.dm
 //please preference put stuff where it's easy to find - C
 
+// Autopsy is part of a surgery. See /code/modules/surgery/other.dm - Dec 6, 2017
+
 /obj/item/weapon/autopsy_scanner
 	name = "autopsy scanner"
 	desc = "Extracts information on wounds."
@@ -188,34 +190,3 @@
 	if(istype(usr,/mob/living/carbon))
 		// place the item in the usr's hand if possible
 		usr.put_in_hands(P)
-/* Moved to surgery/other.dm
-/obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))
-		return
-
-	if(!can_operate(M, user))
-		return
-
-	if(target_name != M.name)
-		target_name = M.name
-		src.wdata = list()
-		src.chemtraces = list()
-		src.timeofdeath = null
-		to_chat(user, "<span class='warning'>A new patient has been registered. Purging data for previous patient.</span>")
-
-	src.timeofdeath = M.timeofdeath
-
-	var/datum/organ/external/S = M.get_organ(user.zone_sel.selecting)
-	if(!S)
-		to_chat(usr, "<b>You can't scan this body part.</b>")
-		return
-	if(!S.open)
-		to_chat(usr, "<b>You have to cut the limb open first!</b>")
-		return
-	for(var/mob/O in viewers(M))
-		O.show_message("<span class='warning'>[user.name] scans the wounds on [M.name]'s [S.display_name] with \the [src.name]</span>", 1)
-
-	src.add_data(S)
-
-	return 1
-*/
