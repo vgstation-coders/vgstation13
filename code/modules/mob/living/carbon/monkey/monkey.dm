@@ -438,3 +438,8 @@
 		"wear_id")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/carbon/monkey/can_wield(obj/item/I)
+	//used for making wield exceptions for 2 handed items
+	if (istype(I,/obj/item/device/instrument/drum/drum_makeshift/bongos))
+		return 1
