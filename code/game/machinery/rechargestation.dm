@@ -264,6 +264,7 @@
 				if(R)
 					if(R.module)
 						R.module.respawn_consumable(R)
+						R.module.fix_modules()
 
 /obj/machinery/recharge_station/verb/move_eject()
 	set category = "Object"
