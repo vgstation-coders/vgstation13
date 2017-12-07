@@ -20,12 +20,14 @@
 	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
 	var/blood_level = 0
 
+
 	//returns how well tool is suited for this step
 /datum/surgery_step/proc/tool_quality(obj/item/tool)
 	for (var/T in allowed_tools)
 		if (istype(tool,T))
 			return allowed_tools[T]
 	return 0
+
 /datum/surgery_step/proc/check_anesthesia(var/mob/living/carbon/human/target)
 	if(target.sleeping > 0 || target.stat)
 		return 1
@@ -116,7 +118,6 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
 		return TRUE
 
-	var/sleep_fail = 0
 	var/clumsy = 0
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
@@ -125,8 +126,6 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		//check if tool is right or close enough and if this step is possible
 		if(S.tool_quality(tool))
 			var/canuse = S.can_use(user, M, user.zone_sel.selecting, tool)
-			if(canuse == -1)
-				sleep_fail = 1
 			if(canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
 				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] started by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Started surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
@@ -134,8 +133,10 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 				S.doing_surgery += M
 				S.begin_step(user, M, user.zone_sel.selecting, tool)		//start on it
 				var/selection = user.zone_sel.selecting
+				var/anesthesia_fail = !S.check_anesthesia(M) // Check if the patient is able to feel pain right now. You should not be able to operate safely when they're awake.
+				var/success_chance = surface_stability * ( (S.tool_quality(tool)/100) / (anesthesia_fail + clumsy + 1) )
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(surface_stability) && prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && selection == user.zone_sel.selecting)
+				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && prob(success_chance) && selection == user.zone_sel.selecting)
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")
@@ -146,7 +147,7 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 						user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 						log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")
 						S.fail_step(user, M, user.zone_sel.selecting, tool)		//malpractice~
-						if(sleep_fail)
+						if(anesthesia_fail)
 							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
 							M.emote("scream",,, 1)
 						else if (surface_stability != PERCENT_SUITABLE_MEDICAL_WORKSPACE)

@@ -22,9 +22,6 @@
 			return 0
 		if (affected.status & ORGAN_PEG)
 			return 0
-		// N3X:  Patient must be sleeping, dead, or unconscious.
-		if(!check_anesthesia(target) && painful)
-			return -1
 		return 1
 
 
