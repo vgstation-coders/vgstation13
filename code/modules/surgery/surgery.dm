@@ -105,9 +105,13 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		return FALSE
 	if(!(ishuman(M) && M.lying))
 		return FALSE
-	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
-		return FALSE
-
+	if(CAN_DO_SURGERY_ON_DISARM_GRAB_INTENT)
+		if(user.a_intent == I_HURT)
+			return FALSE
+	else
+		if(user.a_intent != I_HELP)
+			return FALSE
+	
 	var/surface_stability = find_working_surface_at_mob(M, ALLOWED_MEDICAL_WORK_SURFACES)
 	if(!surface_stability)
 		return FALSE
@@ -158,10 +162,13 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 				else
 					S.doing_surgery.Remove(null)	//get rid of that now null reference
 				return	TRUE	  					//don't want to do weapony things after surgery
-	if (user.a_intent != I_HELP)
-		to_chat(user, "<span class='orange italics'>You refrain yourself</span> <span class='warning'>before noticing you see no useful way to use \the [tool] on \the [M].</span>")
+	if (CAN_DO_SURGERY_ON_DISARM_GRAB_INTENT)
+		if (user.a_intent != I_HELP)
+			to_chat(user, "<span class='orange italics'>You refrain yourself</span> <span class='warning'>before noticing you see no useful way to use \the [tool] on \the [M].</span>")
+		else
+			to_chat(user, "<span class='notice italics'>You want to help</span> <span class='warning'>but you can't see any useful way to use \the [tool] on \the [M].</span>")
 	else
-		to_chat(user, "<span class='notice italics'>You want to help</span> <span class='warning'>but you can't see any useful way to use \the [tool] on \the [M].</span>")
+		to_chat(user, "<span class='warning'>You can't see any useful way to use \the [tool] on \the [M].</span>")
 	return TRUE
 
 proc/sort_surgeries()
