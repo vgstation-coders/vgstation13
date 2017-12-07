@@ -107,16 +107,22 @@
 // Activivating a religion with admin interventions.
 /datum/religion/proc/activate(var/mob/living/preacher)
 	equip_chaplain(preacher) // We do the misc things related to the religion
-	preacher.put_in_hands(holy_book)
-	religiousLeader = preacher.mind
 	to_chat(preacher, "A great, intense revelation go through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
+	if (holy_book)
+		preacher.put_in_hands(holy_book)
+	else
+		holy_book = new bible_type
+		holy_book.my_rel = src
+		chooseBible(src, preacher)
+		holy_book.name = bible_name
+		preacher.put_in_hands(holy_book)
+	religiousLeader = preacher.mind
 	convert(preacher, null)
 
 /datum/religion/proc/renounce(var/mob/living/subject)
 	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
 	adepts -= subject.mind
 	subject.mind.faith = null
-
 
 // Action : renounce your faith. For players.
 /datum/action/renounce
@@ -138,6 +144,85 @@
 		return FALSE
 	Remove(owner)
 	R.renounce(owner)
+
+/proc/chooseBible(var/datum/religion/R, var/mob/user)
+
+	if (!istype(R) || !user)
+		return FALSE
+
+	if (!R.holy_book)
+		return FALSE
+
+	var/book_style = "Bible"
+
+	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
+																		   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+	switch(book_style)
+		if("Koran")
+			R.holy_book.icon_state = "koran"
+			R.holy_book.item_state = "koran"
+		if("Scrapbook")
+			R.holy_book.icon_state = "scrapbook"
+			R.holy_book.item_state = "scrapbook"
+		if("Creeper")
+			R.holy_book.icon_state = "creeper"
+			R.holy_book.item_state = "syringe_kit"
+		if("White Bible")
+			R.holy_book.icon_state = "white"
+			R.holy_book.item_state = "syringe_kit"
+		if("Holy Light")
+			R.holy_book.icon_state = "holylight"
+			R.holy_book.item_state = "syringe_kit"
+		if("Athiest")
+			R.holy_book.icon_state = "athiest"
+			R.holy_book.item_state = "syringe_kit"
+		if("Tome")
+			R.holy_book.icon_state = "tome"
+			R.holy_book.item_state = "syringe_kit"
+		if("The King in Yellow")
+			R.holy_book.icon_state = "kingyellow"
+			R.holy_book.item_state = "kingyellow"
+		if("Ithaqua")
+			R.holy_book.icon_state = "ithaqua"
+			R.holy_book.item_state = "ithaqua"
+		if("Scientology")
+			R.holy_book.icon_state = "scientology"
+			R.holy_book.item_state = "scientology"
+		if("the bible melts")
+			R.holy_book.icon_state = "melted"
+			R.holy_book.item_state = "melted"
+		if("Unaussprechlichen Kulten")
+			R.holy_book.icon_state = "kulten"
+			R.holy_book.item_state = "kulten"
+		if("Necronomicon")
+			R.holy_book.icon_state = "necronomicon"
+			R.holy_book.item_state = "necronomicon"
+		if("Book of Shadows")
+			R.holy_book.icon_state = "shadows"
+			R.holy_book.item_state = "shadows"
+		if("Torah")
+			R.holy_book.icon_state = "torah"
+			R.holy_book.item_state = "torah"
+		if("Burning")
+			R.holy_book.icon_state = "burning"
+			R.holy_book.item_state = "syringe_kit"
+		if("Honk")
+			R.holy_book.icon_state = "honkbook"
+			R.holy_book.item_state = "honkbook"
+		if("Ianism")
+			R.holy_book.icon_state = "ianism"
+			R.holy_book.item_state = "ianism"
+		if("The Guide")
+			R.holy_book.icon_state = "guide"
+			R.holy_book.item_state = "guide"
+		if("Slab")
+			R.holy_book.icon_state = "slab"
+			R.holy_book.item_state = "slab"
+			R.holy_book.desc = "A bizarre, ticking device... That looks broken."
+		else
+			//If christian bible, revert to default
+			R.holy_book.icon_state = "bible"
+			R.holy_book.item_state = "bible"
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/catholic

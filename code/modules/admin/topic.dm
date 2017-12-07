@@ -4656,75 +4656,7 @@
 					rel_added.deity_name = new_deity
 
 				// Bible chosing - without preview this time
-				var/book_style = input(usr, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[rel_added.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																				   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
-
-				switch(book_style)
-					if("Koran")
-						rel_added.holy_book.icon_state = "koran"
-						rel_added.holy_book.item_state = "koran"
-					if("Scrapbook")
-						rel_added.holy_book.icon_state = "scrapbook"
-						rel_added.holy_book.item_state = "scrapbook"
-					if("Creeper")
-						rel_added.holy_book.icon_state = "creeper"
-						rel_added.holy_book.item_state = "syringe_kit"
-					if("White Bible")
-						rel_added.holy_book.icon_state = "white"
-						rel_added.holy_book.item_state = "syringe_kit"
-					if("Holy Light")
-						rel_added.holy_book.icon_state = "holylight"
-						rel_added.holy_book.item_state = "syringe_kit"
-					if("Athiest")
-						rel_added.holy_book.icon_state = "athiest"
-						rel_added.holy_book.item_state = "syringe_kit"
-					if("Tome")
-						rel_added.holy_book.icon_state = "tome"
-						rel_added.holy_book.item_state = "syringe_kit"
-					if("The King in Yellow")
-						rel_added.holy_book.icon_state = "kingyellow"
-						rel_added.holy_book.item_state = "kingyellow"
-					if("Ithaqua")
-						rel_added.holy_book.icon_state = "ithaqua"
-						rel_added.holy_book.item_state = "ithaqua"
-					if("Scientology")
-						rel_added.holy_book.icon_state = "scientology"
-						rel_added.holy_book.item_state = "scientology"
-					if("the bible melts")
-						rel_added.holy_book.icon_state = "melted"
-						rel_added.holy_book.item_state = "melted"
-					if("Unaussprechlichen Kulten")
-						rel_added.holy_book.icon_state = "kulten"
-						rel_added.holy_book.item_state = "kulten"
-					if("Necronomicon")
-						rel_added.holy_book.icon_state = "necronomicon"
-						rel_added.holy_book.item_state = "necronomicon"
-					if("Book of Shadows")
-						rel_added.holy_book.icon_state = "shadows"
-						rel_added.holy_book.item_state = "shadows"
-					if("Torah")
-						rel_added.holy_book.icon_state = "torah"
-						rel_added.holy_book.item_state = "torah"
-					if("Burning")
-						rel_added.holy_book.icon_state = "burning"
-						rel_added.holy_book.item_state = "syringe_kit"
-					if("Honk")
-						rel_added.holy_book.icon_state = "honkbook"
-						rel_added.holy_book.item_state = "honkbook"
-					if("Ianism")
-						rel_added.holy_book.icon_state = "ianism"
-						rel_added.holy_book.item_state = "ianism"
-					if("The Guide")
-						rel_added.holy_book.icon_state = "guide"
-						rel_added.holy_book.item_state = "guide"
-					if("Slab")
-						rel_added.holy_book.icon_state = "slab"
-						rel_added.holy_book.item_state = "slab"
-						rel_added.holy_book.desc = "A bizarre, ticking device... That looks broken."
-					else
-						//If christian bible, revert to default
-						rel_added.holy_book.icon_state = "bible"
-						rel_added.holy_book.item_state = "bible"
+				chooseBible(rel_added, usr)
 
 				var/msg = "[key_name(usr)] created a religion: [rel_added.name]."
 				message_admins(msg)
@@ -4804,18 +4736,20 @@
 				if (!isliving(M) || !M.mind.faith)
 					return FALSE
 
-				if (M.mind.faith.religiousLeader == M && alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No") != "Yes")
-					return FALSE
-
-				M.mind.faith.renounce(M) // Bypass checks
+				if (M.mind.faith.religiousLeader == M.mind)
+					var/choice = alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No")
+					if (choice != "Yes")
+						return FALSE
 				M.mind.faith.action_renounce.Remove(M)
+				M.mind.faith.renounce(M) // Bypass checks
 
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
 				message_admins(msg)
 				updateRelWindow()
 
 /datum/admins/proc/updateRelWindow()
-	var/text = "<h3>Religions in game</h3>"
+	var/text = list()
+	text += "<h3>Religions in game</h3>"
 	// --- Displaying of all religions ---
 	for (var/datum/religion/R in ticker.religions)
 		text += "<b>Name:</b> [R.name] <br/>"
@@ -4835,4 +4769,4 @@
 			text +="</ul>"
 			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
 	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
-	usr << browse(text, "window=admin2;size=300x370")
+	usr << browse(jointext(text, ""), "window=admin2;size=300x370")
