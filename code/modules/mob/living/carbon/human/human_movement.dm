@@ -36,9 +36,12 @@
 			if(!E || (E.status & ORGAN_DESTROYED))
 				. += 4
 			if(E.status & ORGAN_SPLINTED)
-				. += 0.5
+				if(!find_held_item_by_type(/obj/item/weapon/cane))
+					. += 0.5
 			else if(E.status & ORGAN_BROKEN)
-				. += 1.5
+				if(!find_held_item_by_type(/obj/item/weapon/cane))
+					. += 1
+				. += 0.5
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()

@@ -463,6 +463,7 @@ var/global/list/whitelisted_species = list("Human")
 	)
 
 /datum/species/tajaran/New()
+	..()
 	// Combining all the worst shit the world has ever offered.
 
 	// Note: Comes BEFORE other stuff.

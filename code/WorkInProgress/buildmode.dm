@@ -21,6 +21,7 @@
 			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
 				for(var/BM in M.client.buildmode_objs)
 					returnToPool(BM)
+				M.client.buildmode_objs.Cut()
 		else
 			log_admin("[key_name(usr)] has entered build mode.")
 			M.client.buildmode = 1
@@ -658,6 +659,11 @@ obj/effect/bmode/buildholder/New()
 								return
 							else
 								holder.buildmode.copycat = object
+						else
+							//The copycat variable has priority over the objholder variable when deciding a left mouse button action
+							//Middle-clicking turfs sets them to copycat, middle-clicking objects doesn't
+							//Set copycat to null to allow copying objects
+							holder.buildmode.copycat = null
 
 						holder.buildmode.objholder = object.type
 						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")

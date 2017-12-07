@@ -18,8 +18,7 @@
 	var/list/deity_names = list()
 
 	var/datum/action/renounce/action_renounce
-
-	var/list/keys = list() // What you need to type to get this particular relgion.
+	var/list/keys = list("christianity") // What you need to type to get this particular relgion.
 
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)

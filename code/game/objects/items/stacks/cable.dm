@@ -183,6 +183,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 		if(prob(50)) //Fail
 			getFromPool(/obj/item/stack/cable_coil, C.loc, 1)
 			returnToPool(C)
+			return // let's not return the reference to a pooled cable
 
 	return C //What was our last known position?
 
