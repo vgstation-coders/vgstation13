@@ -359,7 +359,7 @@ var/holomaps_initialized = 0
 #define CAN_MEDICATE_THROUGH_ARMOR FALSE // Ditto
 #define MEDICAL_AID_ARMOR_LIMIT list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 10, bio = 10, rad = 10) // Anything tougher than most or all specialized jumpsuits like virologists or security.
 #define PERCENT_SUITABLE_MEDICAL_WORKSPACE 100 // Anything less than a surgery operation table or similar is no good and warns the player
-#define CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS TRUE // Magic I don't know.
+#define CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS FALSE // Magic if you can work through them I don't know.
 #define UNMEDICATED_PAIN_TOLERANCE 5 // Without meds, the probability of doing surgery on a conscious patient
 // type path referencing surfaces that could be used for medical work
 #define ALLOWED_MEDICAL_WORK_SURFACES list(/obj/machinery/optable = 100,/obj/structure/bed/roller/surgery = 100,/obj/structure/bed/roller = 75,/obj/structure/table/reinforced = 70,/obj/structure/table = 66)
