@@ -110,9 +110,9 @@ proc/unready_surgery(obj/item/tool)
 	tool._surgery_preflight_surface_stability = null
 	return TRUE
 
-// Check if the mob is ready for surgery and pre-flight if it is while returning the chance
+// Check if the mob is ready for surgery and pre-flight if it is else return FALSE
 proc/ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
-	var/surface_stability = check_if_ready_for_surgery(M, user, tool)
+	var/surface_stability = check_if_ready_for_surgery(M, user)
 	if(surface_stability)
 		tool._surgery_preflight = TRUE
 		tool._surgery_preflight_M = M
@@ -121,8 +121,8 @@ proc/ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		return TRUE
 	return FALSE
 
-// Tentively check if the mob is ready for surgery and return the chance
-proc/check_if_ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
+// Tentively check if the mob is ready for surgery and return the chance or return FALSE
+proc/check_if_ready_for_surgery(mob/living/M, mob/living/user)
 	if(user == M) // Can't do surgery on yourself (yet)
 		return FALSE
 	if(!istype(M,/mob/living/carbon/human))
@@ -135,8 +135,10 @@ proc/check_if_ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	else
 		if(user.a_intent != I_HELP)
 			return FALSE
-	return find_working_surface_at_mob(M, ALLOWED_MEDICAL_WORK_SURFACES)
+	return find_working_surface_at_mob(M, allowed_medical_work_surfaces)
 
+// Attempt surgery on the mob from the user with a tool. Returns TRUE if it was sucessful or if there is problem with the tool or the mob is too armored. Returns false if the mob isn't ready for surgery or on the wrong intent.
+// AKA, stab people normally up until they are on a table and on the correct intent.
 proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
 	var/surface_stability = 0
 	if(tool._surgery_preflight)
@@ -145,7 +147,7 @@ proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
 		surface_stability = tool._surgery_preflight_surface_stability
 		unready_surgery(tool)
 	else
-		surface_stability = check_if_ready_for_surgery(M,user,tool)
+		surface_stability = check_if_ready_for_surgery(M, user)
 		if(!surface_stability)
 			return FALSE
 
@@ -157,8 +159,7 @@ proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
 			to_chat(user, "<span class='sinister'>You try to hit something, but...something in the world feels like it has broken. You feel the urge to seek the gods.</span>")
 		return FALSE
 
-	// VOTE! Should surgery even proceed if there's a suit in the way?
-	var/cover = can_medicate_through_obstruction(user, M)
+	var/cover = get_surface_medication_obstruction(user, M)
 	if(cover)
 		to_chat(user, "<span class='warning'>You can't use \the [tool] through \the [cover]!</span>")
 		return TRUE

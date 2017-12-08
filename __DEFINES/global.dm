@@ -356,11 +356,27 @@ var/holomaps_initialized = 0
 
 //BRUISEPACKS AND SURGERY
 
-#define CAN_MEDICATE_THROUGH_ARMOR FALSE // Ditto
-#define MEDICAL_AID_ARMOR_LIMIT list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 10, bio = 10, rad = 10) // Anything tougher than most or all specialized jumpsuits like virologists or security.
-#define PERCENT_SUITABLE_MEDICAL_WORKSPACE 100 // Anything less than a surgery operation table or similar is no good and warns the player
-#define CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS FALSE // Magic if you can work through them I don't know.
+#define CAN_MEDICATE_THROUGH_ARMOR FALSE // If you need to remove armored clothing to medicate.
+// If any piece of clothing has greater than the specified it'll prevent medicating through it.
+// Anything tougher than most or all specialized jumpsuits like virologists or security will not be suitable.
+var/list/medical_aid_armor_limit = list(
+	melee = 10,
+	bullet = 10,
+	laser = 10,
+	energy = 10,
+	bomb = 10,
+	bio = 10,
+	rad = 10
+)
+// Type path referencing surfaces that could be used for medical work with their stability from 100 to >0
+var/list/allowed_medical_work_surfaces = list(
+	/obj/machinery/optable = 100,
+	/obj/structure/bed/roller/surgery = 100,
+	/obj/structure/bed/roller = 75,
+	/obj/structure/table/reinforced = 70,
+	/obj/structure/table = 66
+)
+#define PERCENT_SUITABLE_MEDICAL_WORKSPACE 100 // 100 to 0 for surface stability, when should the user be warned about a unsuitable surface?
+#define CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS FALSE // If plasmamen suits are an exception for medicating through armor.
 #define CAN_DO_SURGERY_ON_DISARM_GRAB_INTENT FALSE // Can you do surgery while on DISARM or GRAB?
-#define UNMEDICATED_PAIN_TOLERANCE 5 // Without meds, the probability of doing surgery on a conscious patient
-// type path referencing surfaces that could be used for medical work
-#define ALLOWED_MEDICAL_WORK_SURFACES list(/obj/machinery/optable = 100,/obj/structure/bed/roller/surgery = 100,/obj/structure/bed/roller = 75,/obj/structure/table/reinforced = 70,/obj/structure/table = 66)
+#define UNMEDICATED_PAIN_TOLERANCE 5 // Probability of doing surgery on a conscious patient before adding mob pain tolerance.

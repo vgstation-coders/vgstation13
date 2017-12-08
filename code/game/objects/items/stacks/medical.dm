@@ -24,7 +24,7 @@
 	if(istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
-		var/cover = can_medicate_through_obstruction(user, M)
+		var/cover = get_surface_medication_obstruction(user, M)
 		if(cover)
 			to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [cover]!</span>")
 			return 1

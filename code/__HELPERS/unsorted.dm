@@ -1636,9 +1636,8 @@ Game Mode config tags:
 	var/obj/item/clothing/cover = target.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
 	if(cover)
 		if(exceptions)
-			for(var/exception in exceptions)
-				if(istype(cover, exception))
-					return FALSE
+			if(is_type_in_list(cover, exceptions))
+				return FALSE
 		if(armorlimits)
 			if(does_clothing_exceed_armor_limits(cover, armorlimits))
 				return cover
@@ -1652,13 +1651,13 @@ Game Mode config tags:
 			return TRUE
 	return FALSE
 
-/proc/can_medicate_through_obstruction(mob/living/user, mob/living/carbon/human/target)
+/proc/get_surface_medication_obstruction(mob/living/user, mob/living/carbon/human/target)
 	var/obj/item/clothing/cover = get_clothing_obstructing_target_from_user(user, target)
 	if(cover)
 		if(cover.impossible_to_medicate_through)
 			return cover
 		if(!CAN_MEDICATE_THROUGH_ARMOR)
 			if(!cover.can_medicate_through)
-				if(does_clothing_exceed_armor_limits(cover, MEDICAL_AID_ARMOR_LIMIT))
+				if(does_clothing_exceed_armor_limits(cover, medical_aid_armor_limit))
 					return cover
 	return FALSE
