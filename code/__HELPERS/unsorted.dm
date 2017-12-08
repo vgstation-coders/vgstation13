@@ -1648,7 +1648,13 @@ Game Mode config tags:
 	return FALSE
 
 /proc/can_medicate_through_obstruction(mob/living/user, mob/living/carbon/human/target)
-	var/obj/item/clothing/cover = get_clothing_obstructing_target_from_user(user, target, (!CAN_MEDICATE_THROUGH_ARMOR ? MEDICAL_AID_ARMOR_LIMIT : null ))
-	if(cover && (cover.impossible_to_medicate_through || (!CAN_MEDICATE_THROUGH_ARMOR && !cover.can_medicate_through)))
-		return cover
+	var/obj/item/clothing/cover = get_clothing_obstructing_target_from_user(user, target)
+	if(cover)
+		if(cover.impossible_to_medicate_through)
+			return cover
+		if(!CAN_MEDICATE_THROUGH_ARMOR)
+			if(!cover.can_medicate_through)
+				for(var/armor in cover.armor)
+					if(cover.armor[armor] > MEDICAL_AID_ARMOR_LIMIT[armor])
+						return cover
 	return FALSE
