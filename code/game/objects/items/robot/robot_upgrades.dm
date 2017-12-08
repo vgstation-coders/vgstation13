@@ -84,6 +84,7 @@
 	var/obj/item/weapon/gripper/chemistry/G = locate_component(/obj/item/weapon/gripper/chemistry, R, user)
 	if(!G)
 		return FAILED_TO_ADD
+
 	G.can_hold += list(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
 
 /obj/item/borg/upgrade/reset
@@ -263,6 +264,7 @@
 	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
 	if(!G)
 		return FAILED_TO_ADD
+
 	G.can_hold += list(/obj/item/weapon/reagent_containers/food)
 
 /obj/item/borg/upgrade/magnetic_gripper
@@ -291,4 +293,7 @@
 		return FAILED_TO_ADD
 
 	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
+	if(!G)
+		return FAILED_TO_ADD
+
 	G.can_hold += list(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
