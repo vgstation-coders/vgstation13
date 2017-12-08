@@ -1630,7 +1630,7 @@ Game Mode config tags:
 				return possible_surfaces_list[surface]
 
 // Armor limits, if not null, will only find clothing with armor greater than the specified values via a list. Exceptions are clothing that should be ignored if found.
-/proc/get_clothing_obstructing_target_from_user(mob/living/user, mob/living/carbon/human/target, armorlimits = null, list/exceptions = null)
+/proc/get_clothing_obstructing_target_from_user(mob/living/user, mob/living/carbon/human/target, list/armorlimits = null, list/exceptions = null)
 	if(!istype(target))
 		return FALSE
 	var/obj/item/clothing/cover = target.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
@@ -1640,11 +1640,16 @@ Game Mode config tags:
 				if(istype(cover, exception))
 					return FALSE
 		if(armorlimits)
-			for(var/armor in cover.armor)
-				if(cover.armor[armor] > armorlimits[armor])
-					return cover
+			if(does_clothing_exceed_armor_limits(cover, armorlimits))
+				return cover
 		else
 			return cover
+	return FALSE
+
+/proc/does_clothing_exceed_armor_limits(var/obj/item/clothing/cover, list/armorlimits)
+	for(var/armor in cover.armor)
+		if(cover.armor[armor] > armorlimits[armor])
+			return TRUE
 	return FALSE
 
 /proc/can_medicate_through_obstruction(mob/living/user, mob/living/carbon/human/target)
@@ -1654,7 +1659,6 @@ Game Mode config tags:
 			return cover
 		if(!CAN_MEDICATE_THROUGH_ARMOR)
 			if(!cover.can_medicate_through)
-				for(var/armor in cover.armor)
-					if(cover.armor[armor] > MEDICAL_AID_ARMOR_LIMIT[armor])
-						return cover
+				if(does_clothing_exceed_armor_limits(cover, MEDICAL_AID_ARMOR_LIMIT))
+					return cover
 	return FALSE
