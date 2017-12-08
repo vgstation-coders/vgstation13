@@ -155,3 +155,8 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/skeleton_den
 	file_path = "maps/randomvaults/rattlemebones.dmm"
 
+/datum/map_element/vault/beach_party
+	file_path = "maps/randomvaults/beach_party.dmm"
+
+/datum/map_element/vault/zathura
+	file_path = "maps/randomvaults/house.dmm"

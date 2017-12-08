@@ -66,6 +66,8 @@ var/datum/controller/gameticker/ticker
 		))
 	login_music = fcopy_rsc(oursong)
 
+	send2maindiscord("Server is loaded and in pre-game lobby at [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
+
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
 		pregame_timeleft = world.timeofday + delay_timetotal

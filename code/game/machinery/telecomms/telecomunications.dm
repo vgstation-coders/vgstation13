@@ -250,14 +250,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
-			var/transfer_moles = 0.25 * env.total_moles()
-			var/datum/gas_mixture/removed = env.remove(transfer_moles)
-
-			if(removed)
-				var/heat_capacity = removed.heat_capacity() || 1 // Prevent division by zero
-				removed.temperature += heating_power/heat_capacity
-				L.assume_air(removed)
-				use_power(heating_power / 1000) // This doesn't work?
+			env.add_thermal_energy(heating_power)
+			use_power(heating_power / 1000) // This doesn't work?
 /*
 	The receiver idles and receives messages from subspace-compatible radio equipment;
 	primarily headsets. They then just relay this information to all linked devices,

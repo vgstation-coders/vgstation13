@@ -92,11 +92,14 @@
 
 	update_icon()
 
-/obj/item/toy/cards/attack_self(mob/user as mob)
+/obj/item/toy/cards/attack_self(var/mob/user)
+	if(user.attack_delayer.blocked())
+		return
 	cards = shuffle(cards)
 	playsound(user, 'sound/items/cardshuffle.ogg', 50, 1)
 	user.visible_message("<span class = 'notice'>[user] shuffles the deck.</span>",
 						 "<span class = 'notice'>You shuffle the deck.</span>")
+	user.delayNextAttack(1 SECONDS)
 
 /obj/item/toy/cards/attackby(obj/item/I, mob/living/user)
 	..()

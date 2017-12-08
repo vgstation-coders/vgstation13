@@ -36,8 +36,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/targetMoveKey
-
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
@@ -89,20 +87,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		reagents.remove_any(reagents.maximum_volume-newvol) //If we have more than our new max, remove equally until we reach new max
 	reagents.maximum_volume = newvol
 
-/obj/machinery/chem_master/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -133,10 +117,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return
 
 		src.beaker = B
-		if(user.type == /mob/living/silicon/robot)
-			var/mob/living/silicon/robot/R = user
-			R.uneq_active()
-			targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
 		to_chat(user, "<span class='notice'>You add the beaker into \the [src]!</span>")
 
@@ -416,9 +396,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		beaker.forceMove(src.loc)
 		beaker.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
 		beaker.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-			borgbeak.return_to_modules()
 		beaker = null
 		reagents.clear_reagents()
 		update_icon()

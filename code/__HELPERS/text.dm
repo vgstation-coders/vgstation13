@@ -139,7 +139,7 @@ forLineInText(text)
 
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
-	var/name = input(user, message, title, default)
+	var/name = input(user, message, title, default) as null|text
 	return strip_html_simple(name, max_length)
 
 //Filters out undesirable characters from names
@@ -393,17 +393,21 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
+var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
 /proc/format_watts(var/number)
-	if(number<0)
-		return "-[format_watts(number)]"
-	if(number==0)
+	if (number<0)
+		return "-[format_watts(abs(number))]"
+	if (number==0)
 		return "0 W"
 
+	var/max_watt_suffix = watt_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
+		if (i == max_watt_suffix)
+			break
+
 	return "[format_num(number)] [watt_suffixes[i]]"
 
 //Returns 1 if [text] ends with [suffix]

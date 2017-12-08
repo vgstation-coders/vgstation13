@@ -23,3 +23,40 @@
 		else
 			return FALSE
 	return TRUE
+
+
+//Checks armor, special attackby of object instances, and miss chance
+/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+	if(!I || !user)
+		return FALSE
+	var/target_zone = null
+	if(originator)
+		if(ismob(originator))
+			var/mob/M = originator
+			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
+	else
+		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
+	if(user == src) // Attacking yourself can't miss
+		target_zone = user.zone_sel.selecting
+	if(!target_zone && !src.stat)
+		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
+		return FALSE
+
+	if((user != src) && check_shields(I.force, "the [I.name]"))
+		return FALSE
+
+	user.do_attack_animation(src, I)
+
+	var/datum/organ/external/affecting = get_organ(target_zone)
+	var/armor
+	if(affecting)
+		var/hit_area = affecting.display_name
+		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
+		if(armor >= 2)
+			return TRUE //We still connected
+		if(!I.force)
+			return TRUE
+
+	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+
+	return TRUE

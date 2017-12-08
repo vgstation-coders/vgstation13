@@ -199,12 +199,12 @@ obj/item/proc/get_clamped_volume()
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 
 
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
+	if(istype(M, /mob/living/carbon))
+		var/mob/living/carbon/C = M
 		if(originator)
-			. = H.attacked_by(I, user, def_zone, originator)
+			. = C.attacked_by(I, user, def_zone, originator)
 		else
-			. = H.attacked_by(I, user, def_zone)
+			. = C.attacked_by(I, user, def_zone)
 	else
 		switch(I.damtype)
 			if("brute")

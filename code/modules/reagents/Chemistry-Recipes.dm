@@ -18,7 +18,10 @@
 	var/list/secondary_results = list() //Additional reagents produced by the reaction
 	var/is_cold_recipe = 0
 	var/required_temp = 0
+	var/react_discretely = FALSE //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
+	var/reaction_temp_cost = 0 //How much to lower temperature of the result chemical after the reaction
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
+	var/quiet = 0
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -233,6 +236,23 @@
 	result = LUBE
 	required_reagents = list(WATER = 1, SILICON = 1, OXYGEN = 1)
 	result_amount = 4
+
+/datum/chemical_reaction/sludge
+	name = "Sludge"
+	id = TOXICWASTE
+	result = TOXICWASTE
+	required_reagents = list(LUBE = 1)
+	result_amount = 0.2
+	required_temp = 3500
+	react_discretely = TRUE
+	reaction_temp_cost = 3500
+
+/datum/chemical_reaction/degrease
+	name = "Degrease"
+	id = "degrease"
+	result = null
+	required_reagents = list(TOXICWASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
+	result_amount = 0
 
 /datum/chemical_reaction/pacid
 	name = "Polytrinic acid"
@@ -763,6 +783,34 @@
 	result = COMNANOBOTS
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
 	result_amount = 2.5
+
+//Surgery tools from chemicals because why not? Requires a vial to make them and consumes it as a part of making the tool.
+//DO NOT COPY PASTE THESE WITHOUT SOME KIND OF CONTAINER/HOLDER CHECK BECAUSE qdel WILL DELETE ANY REAGENT CONTAINER WITHOUT IT. IE PLAYERS
+/datum/chemical_reaction/fixoveinmake
+	name = "FixOVein"
+	id = "fixovein"
+	result = null
+	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
+
+/datum/chemical_reaction/fixoveinmake/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/FixOVein(location)
+	qdel(holder.my_atom)
+
+/datum/chemical_reaction/bonegelmake
+	name = "Bone Gel"
+	id = "bonegel"
+	result = null
+	required_reagents = list(MILK = 10, CRYOXADONE = 10) //milk is good for the bones
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial
+
+/datum/chemical_reaction/bonegelmake/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/bonegel(location)
+	qdel(holder.my_atom)
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -2157,6 +2205,7 @@
 	result = HOT_RAMEN
 	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
 	result_amount = 3
+	required_temp = 100+T0C
 
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
@@ -2172,6 +2221,25 @@
 	required_reagents = list(WATER = 10)
 	required_catalysts = list(FROSTOIL = 5)
 	result_amount = 11
+
+/datum/chemical_reaction/ice2
+	name = "Frozen water"
+	id = ICE
+	result = ICE
+	required_reagents = list(WATER = 1)
+	is_cold_recipe = 1
+	result_amount = 1
+	quiet = 1
+	required_temp = T0C
+
+/datum/chemical_reaction/ice_to_water
+	name = "Melted ice"
+	id = WATER
+	result = WATER
+	required_reagents = list(ICE = 1)
+	required_temp = T20C+5
+	result_amount = 1
+	quiet = 1
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
@@ -2935,6 +3003,21 @@
 	id = APETRINE
 	result = APETRINE
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/potassiumcarbonate
+	name = "Potassium Carbonate"
+	id = POTASSIUMCARBONATE
+	result = POTASSIUMCARBONATE
+	required_reagents = list(POTASSIUM = 2, CARBON = 1, OXYGEN = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/active_charcoal
+	name = "Activated Charcoal"
+	id = CHARCOAL
+	result = CHARCOAL
+	required_reagents = list(CARBON = 1, SACID = 2)
+	required_temp = T0C + 450
 	result_amount = 1
 
 #undef ALERT_AMOUNT_ONLY

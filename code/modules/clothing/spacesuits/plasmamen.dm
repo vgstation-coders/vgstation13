@@ -222,6 +222,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical/paramedic
 	name = "plasmaman paramedic suit"
 	icon_state = "plasmaman_Paramedic"
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic
 	name = "plasmaman paramedic helmet"
@@ -240,6 +241,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical/cmo
 	name = "plasmaman chief medical officer suit"
 	icon_state = "plasmaman_CMO"
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical/cmo
 	name = "plasmaman chief medical officer helmet"

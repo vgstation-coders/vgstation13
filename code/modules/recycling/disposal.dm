@@ -135,7 +135,7 @@
 				to_chat(user, "You need more welding fuel to complete this task.")
 				return
 
-	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !istype(user,/mob/living/silicon/robot/mommi) )
+	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
 
 	if(istype(I, /obj/item/weapon/storage/bag/))
@@ -431,6 +431,9 @@
 	var/turf/target
 	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 	if(H) // Somehow, someone managed to flush a window which broke mid-transit and caused the disposal to go in an infinite loop trying to expel null, hopefully this fixes it
+		if(H.destinationTag)
+			playsound(src, 'sound/misc/yougotmail.wav', 50, 0, 0)
+			visible_message("[bicon(src)]<span class='notice'><font size=4><i>You've got mail!</i></font></span>")
 		H.active = 0 // Stop disposalholder's move() processing so we don't call the trunk's expel() too
 		for(var/atom/movable/AM in H)
 			target = get_offset_target_turf(src.loc, rand(5)-rand(5), rand(5)-rand(5))
@@ -460,6 +463,9 @@
 	else
 		return ..(mover, target, height, air_group)
 
+/obj/machinery/disposal/proc/can_load_crates()
+	return TRUE
+
 /obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
 
 	if(isAI(user))
@@ -476,6 +482,14 @@
 				return
 
 			attackby(dropping, user)
+		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
+			if(do_after(user,src,20))
+				if(dropping.locked_to || user.restrained() || !user.canmove)
+					return
+				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
+				add_fingerprint(user)
+				dropping.forceMove(src)
+				update_icon()
 		return
 
 	//From there, we are working on a mob (as our target, user is supposed to be a mob)

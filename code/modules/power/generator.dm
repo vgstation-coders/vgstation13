@@ -283,6 +283,12 @@
 			var/heat = energy_transfer * (1 - thermal_efficiency)
 			last_gen = energy_transfer * thermal_efficiency * 0.05
 
+			//If our circulators are lubed get extra power
+			if(circ1.reagents.get_reagent_amount(LUBE)>=1)
+				last_gen *= 1 + (circ1.volume_capacity_used/16.5) //Up to x3 if flow capacity is 33%
+			if(circ2.reagents.get_reagent_amount(LUBE)>=1)
+				last_gen *= 1 + (circ2.volume_capacity_used/16.5)
+
 			if(air2.temperature > air1.temperature)
 				air2.temperature = air2.temperature - energy_transfer/air2_heat_capacity
 				air1.temperature = air1.temperature + heat/air1_heat_capacity

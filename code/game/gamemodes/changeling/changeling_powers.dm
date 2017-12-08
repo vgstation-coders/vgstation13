@@ -52,6 +52,7 @@
 		return
 	if(!path)
 		returnToPool(verb_holder)
+		verb_holder = null
 		return
 
 	verb_holder.verbs -= path
@@ -197,6 +198,7 @@
 			verb_holder.verbs -= P.verbpath
 
 	returnToPool(verb_holder)
+	verb_holder = null
 
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta

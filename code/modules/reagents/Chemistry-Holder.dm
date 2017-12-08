@@ -369,6 +369,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				var/required_temp = C.required_temp
 				var/is_cold_recipe = C.is_cold_recipe
 				var/meets_temp_requirement = 0
+				var/quiet = C.quiet
+
+				if(C.react_discretely)
+					multipliers += 1 //Only once
 
 				for(var/B in C.required_reagents)
 					if(!has_reagent(B, C.required_reagents[B]))
@@ -413,6 +417,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							preserved_data = get_data(B)
 						remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
+					chem_temp -= C.reaction_temp_cost
+
 					var/created_volume = C.result_amount*multiplier
 					if(C.result)
 						feedback_add_details("chemical_reaction","[C.result][created_volume]")
@@ -424,28 +430,32 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						for(var/S in C.secondary_results)
 							add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
 
-					if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade))
+					if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 						my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
 						//Logging inside chem_grenade.dm, prime()
-					else if	(istype(my_atom, /mob/living/carbon/human))
+					else if	(istype(my_atom, /mob/living/carbon/human) && !quiet)
 						my_atom.visible_message("<span class='notice'>[my_atom] shudders a little.</span>","<span class='notice'>You shudder a little.</span>")
 						//Since the are no fingerprints to be had here, we'll trust the attack logs to log this
 					else
-						my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
+						if(!quiet)
+							my_atom.visible_message("<span class='notice'>[bicon(my_atom)] The solution begins to bubble.</span>")
 						C.log_reaction(src, created_volume)
 
 					if(istype(my_atom, /obj/item/slime_extract))
 						var/obj/item/slime_extract/ME2 = my_atom
 						ME2.Uses--
 						if(ME2.Uses <= 0) // give the notification that the slime core is dead
-							if (!istype(ME2.loc, /obj/item/weapon/grenade/chem_grenade))
+							if (!istype(ME2.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 								ME2.visible_message("<span class='notice'>[bicon(my_atom)] \The [my_atom]'s power is consumed in the reaction.</span>")
 							ME2.name = "used slime extract"
 							ME2.desc = "This extract has been used up."
 
-					playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
+					if(!quiet)
+						playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
 
 					C.on_reaction(src, created_volume)
+					if(C.react_discretely)
+						break //We want to exit without continuing the loop.
 					reaction_occured = 1
 					break
 
@@ -526,7 +536,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, reagtemp = 300)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = 300)
 	if(!my_atom)
 		return 0
 	if(!isnum(amount))
@@ -759,7 +769,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	c = specific heat capacity of the liquid
 	deltaT = change in temperature of the liquid
 	*/
-	if(!total_volume || !reagent_list.len)
+	if(received_temperature == chem_temp || !total_volume || !reagent_list.len)
 		return
 	var/heat_capacity = get_heatcapacity()
 	var/energy = power_transfer
@@ -768,10 +778,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
-		chem_temp = max(chem_temp + temp_change, received_temperature)
+		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
 	handle_reactions()
 ///////////////////////////////////////////////////////////////////////////////////
 
+
+/proc/reagent_name(id)
+	var/datum/reagent/D = chemical_reagents_list[id]
+	if(D)
+		return D.name
 
 /*
  * Convenience proc to create a reagents holder for an atom
@@ -789,6 +804,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		"total_volume",
 		"maximum_volume",
 		"my_atom",
+		"chem_temp",
 		"gcDestroyed")
 
 	reset_vars_after_duration(resettable_vars, duration, TRUE)

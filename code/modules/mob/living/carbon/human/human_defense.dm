@@ -156,10 +156,10 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
-	. = 1
-	if(!I || !user)
-		return 0
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+	if(!..())
+		return
+
 	var/target_zone = null
 	if(originator)
 		if(ismob(originator))
@@ -167,11 +167,8 @@ emp_act
 			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
 	else
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
-	if(user == src) // Attacking yourself can't miss
-		target_zone = user.zone_sel.selecting
-	if(!target_zone && !src.stat)
-		visible_message("<span class='danger'>[user] misses [src] with \the [I]!</span>")
-		return 0
+
+
 	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver) && src.stat == DEAD && user.a_intent == I_HURT)
 		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
 		newmeat.name = src.real_name + newmeat.name
@@ -203,9 +200,6 @@ emp_act
 		return
 	var/hit_area = affecting.display_name
 
-	if((user != src) && check_shields(I.force, "the [I.name]"))
-		return 0
-
 	if(istype(I,/obj/item/weapon/card/emag))
 		if(!(affecting.status & ORGAN_ROBOT))
 			to_chat(user, "<span class='warning'>That limb isn't robotic.</span>")
@@ -217,19 +211,13 @@ emp_act
 			affecting.sabotaged = 1
 		return 0
 
-	user.do_attack_animation(src, I)
+
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")
 	else if(!(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
-
-	var/armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].")
-	if(armor >= 2)
-		return 1 //We still connected
-	if(!I.force)
-		return 1
 
 	//Knocking teeth out!
 	var/knock_teeth = 0
@@ -242,6 +230,8 @@ emp_act
 			knock_teeth = 1
 	else if(user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
 		knock_teeth = 1
+
+	var/armor = run_armor_check(affecting, "melee", quiet = 1)
 	if(knock_teeth) //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
 		if((!armor) && (I.force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
 			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
@@ -249,8 +239,6 @@ emp_act
 				var/chance = min(I.force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
 				if(prob(chance))
 					knock_out_teeth(user)
-
-	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 
 	var/bloody = 0
 	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))

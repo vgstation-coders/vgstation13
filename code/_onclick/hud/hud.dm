@@ -172,6 +172,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 			adding -= IN
 			mymob.client.screen -= IN
 
+		hand_hud_objects -= IN
 		returnToPool(IN)
 
 	if(mymob.client)

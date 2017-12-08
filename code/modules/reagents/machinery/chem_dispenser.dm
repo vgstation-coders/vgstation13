@@ -22,9 +22,6 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/targetMoveKey = null //To prevent borgs from leaving without their beakers.
-
-
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
@@ -72,20 +69,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	//Who even knows what to use the scanning module for
 */
 
-/obj/machinery/chem_dispenser/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER))
 		return
@@ -107,8 +90,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
 		return 0
 	else
-		if(!isMoMMI(R))
-			targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 
 /obj/machinery/chem_dispenser/process()
@@ -245,14 +226,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		detach()
 
 /obj/machinery/chem_dispenser/proc/detach()
-	targetMoveKey=null
-
 	if(container)
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
-		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = container
-			borgbeak.return_to_modules()
 		container = null
 		return 1
 
@@ -290,11 +266,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")
 				return
 
-			src.container =  D
-			if(user.type == /mob/living/silicon/robot)
-				var/mob/living/silicon/robot/R = user
-				R.uneq_active()
-
+			container =  D
 			to_chat(user, "You add \the [D] to the machine!")
 
 			nanomanager.update_uis(src) // update all UIs attached to src
@@ -342,7 +314,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
 	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 	else
 		return 0
@@ -374,7 +345,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
 	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 	else
 		return 0
@@ -404,7 +374,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
 	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 	else
 		return 0

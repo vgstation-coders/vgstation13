@@ -194,13 +194,14 @@ var/list/forbidden_varedit_object_types = list(
 				to_chat(user, "Unknown type: [selected_type]")
 
 	if(edited_datum && edited_variable)
+		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
+		//variable_edited() can block the edit in case there's special behavior for a variable (for example, updating lights after they're changed)
+			new_value = edited_datum.vars[edited_variable]
+		else
+			edited_datum.vars[edited_variable] = new_value
+
 		if(logging)
-			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [new_value]")
-
-		if(edited_datum.variable_edited(edited_variable, old_value, new_value))
-			new_value = old_value //Return the old value if the variable_edited proc blocked the edit
-
-		edited_datum.vars[edited_variable] = new_value
+			log_admin("[key_name(usr)] modified [edited_datum]'s [edited_variable] to [html_encode(new_value)]")
 
 	return new_value
 

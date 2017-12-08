@@ -85,6 +85,7 @@
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
 		returnToPool(piles[key])
+	piles.Cut()
 	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)

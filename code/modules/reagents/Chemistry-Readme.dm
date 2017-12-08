@@ -94,6 +94,10 @@ About the Holder:
 			If you pass it an amount it will additionally check
 			if the amount is matched. This is optional.
 
+		is_empty()
+			Returns 1 if holder has a total_volume of 0 or less.
+			Returns 0 otherwise.
+
 		get_reagent_amount(var/reagent)
 			Returns the amount of the matching reagent inside the
 			holder. Returns 0 if the reagent is missing.

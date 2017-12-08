@@ -381,7 +381,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "")
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -391,7 +391,8 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "[bicon(src)] That's [f_name]" + size)
+	if(show_name)
+		to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
@@ -427,7 +428,28 @@ its easier to just keep the beam vertical.
 			to_chat(user, harm_label_examine[1])
 		else
 			to_chat(user, harm_label_examine[2])
-	return
+
+	var/obj/item/device/camera_bug/bug = locate() in src
+	if(bug)
+		var/this_turf = get_turf(src)
+		var/user_turf = get_turf(user)
+		var/distance = get_dist(this_turf, user_turf)
+		if(Adjacent(user))
+			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
+		else if(isobserver(user) || prob(100 / (distance + 2)))
+			to_chat(user, "There's something hidden in there.")
+
+/atom/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/device/camera_bug/bug = locate(href_list["bug"])
+	if(istype(bug))
+		. = 1
+		if(isAdminGhost(usr))
+			bug.removed(null, null, FALSE)
+		if(ishuman(usr) && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+			bug.removed(usr)
 
 // /atom/proc/MouseDrop_T()
 // 	return

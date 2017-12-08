@@ -197,6 +197,9 @@
 
 	var/find_prob = 0
 
+	if(istype(tool, /obj/item/weapon/hemostat/pico))
+		find_prob +=100
+
 	if (affected.implants.len)
 
 		var/obj/item/obj = affected.implants[1]

@@ -10,7 +10,7 @@
 	1 - halfblock
 	2 - fullblock
 */
-/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1)
+/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0)
 	var/armor = getarmor(def_zone, attack_flag)
 	var/absorb = 0
 
@@ -20,16 +20,18 @@
 		absorb += 1
 
 	if(absorb >= 2)
-		if(absorb_text)
-			show_message("[absorb_text]")
-		else
-			show_message("<span class='warning'>Your armor absorbs the blow!</span>")
+		if(!quiet)
+			if(absorb_text)
+				show_message("[absorb_text]")
+			else
+				show_message("<span class='warning'>Your armor absorbs the blow!</span>")
 		return 2
 	if(absorb == 1)
-		if(absorb_text)
-			show_message("[soften_text]",4)
-		else
-			show_message("<span class='warning'>Your armor softens the blow!</span>")
+		if(!quiet)
+			if(absorb_text)
+				show_message("[soften_text]",4)
+			else
+				show_message("<span class='warning'>Your armor softens the blow!</span>")
 		return 1
 	return 0
 

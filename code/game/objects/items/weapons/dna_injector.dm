@@ -825,6 +825,28 @@
 	block = NERVOUSBLOCK
 	..()
 
+/obj/item/weapon/dnainjector/nofail/veganmut
+	name = "DNA-Injector (Vegan)"
+	desc = "Makes you vegan."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+	//block = 11
+
+/obj/item/weapon/dnainjector/nofail/veganmut/New()
+	block = VEGANBLOCK
+	..()
+
+/obj/item/weapon/dnainjector/nofail/antivegan
+	name = "DNA-Injector (Anti-Vegan)"
+	desc = "Allows you to enjoy meat and animal products again."
+	datatype = DNA2_BUF_SE
+	value = 0x001
+	//block = 11
+
+/obj/item/weapon/dnainjector/nofail/antiblind/New()
+	block = VEGANBLOCK
+	..()
+
 /obj/item/weapon/dnainjector/nofail/blindmut
 	name = "DNA-Injector (Blind)"
 	desc = "Makes you not see anything."

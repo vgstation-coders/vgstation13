@@ -113,7 +113,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/is_open_container()
 	if(cooks_in_reagents)
-		return 1
+		return TRUE
 
 // Interactions ////////////////////////////////////////////////
 
@@ -127,7 +127,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/attack_hand(mob/user)
 	if(isobserver(user))
 		to_chat(user, "Your ghostly hand goes straight through.")
-	else if(issilicon(user))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
 	else if(src.active)
@@ -154,11 +154,11 @@ var/global/ingredientLimit = 10
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
 	else if(..())
-		return 1
+		return TRUE
 	else if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
-	else if(istype(user,/mob/living/silicon))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
@@ -210,17 +210,17 @@ var/global/ingredientLimit = 10
 	if(. == "valid")
 		if(src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != I) && !force_cook))
-			return 0
+		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
+			return FALSE
 
 		if(user.drop_item(I, src))
 			src.ingredient = I
 			spawn() src.cook(.)
 			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
-			return 1
+			return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
-	return 0
+	return FALSE
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
 	var/obj/item/target_food
@@ -242,8 +242,8 @@ var/global/ingredientLimit = 10
 	for (var/i = 1 to numticks)
 		sleep(delayfraction)
 		if (!src.ingredient || !active || get_turf(src.ingredient)!=get_turf(src))
-			return 0
-	return 1
+			return FALSE
+	return TRUE
 
 /obj/machinery/cooking/proc/cook(var/foodType)
 	src.active = 1

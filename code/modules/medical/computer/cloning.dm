@@ -44,7 +44,8 @@
 
 /obj/machinery/computer/cloning/initialize()
 	pod1 = findcloner()
-	pod1.connected = src
+	if(pod1 && !pod1.connected)
+		pod1.connected = src
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -66,7 +67,8 @@
 
 /obj/machinery/computer/cloning/proc/updatemodules()
 	scanner = findscanner()
-	scanner.connected = src
+	if(scanner && !scanner.connected)
+		scanner.connected = src
 
 /obj/machinery/computer/cloning/proc/findscanner()
 	var/obj/machinery/dna_scannernew/scannerf = null

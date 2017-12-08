@@ -58,10 +58,20 @@
 
 /obj/item/borg/upgrade/medical/surgery
 	name = "medical module board"
-	desc = "Used to give a medical cyborg advanced care tools."
+	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
 	icon_state = "cyborg_upgrade"
 	required_module = list(/obj/item/weapon/robot_module/medical)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+
+/obj/item/borg/upgrade/medical/surgery/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/obj/item/weapon/gripper/chemistry/C = locate(/obj/item/weapon/gripper/chemistry) in R.module.modules
+	if(!C)
+		return FAILED_TO_ADD
+
+	C.can_hold += list (/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
 
 /obj/item/borg/upgrade/reset
 	name = "robotic module reset board"
@@ -234,8 +244,32 @@
 								"carpet tiles" = /obj/item/stack/tile/carpet)
 
 /obj/item/borg/upgrade/service
-	name = "service module board"
-	desc = "Used to give a service cyborg cooking tools."
+	name = "service module upgrade board"
+	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle beakers, food and seeds."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg,/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/storage/bag/food/borg)
+	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/plants, /obj/item/weapon/storage/bag/food/borg)
+
+/obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/obj/item/weapon/gripper/service/G = locate(/obj/item/weapon/gripper/service) in R.module.modules
+	if(!G)
+		return FAILED_TO_ADD
+
+	G.can_hold += list (/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food)
+
+/obj/item/borg/upgrade/magnetic_gripper
+	name = "magnetic gripper module board"
+	desc = "Used to give a engineering cyborg a magnetic gripper."
+	icon_state = "cyborg_upgrade2"
+	required_module = list(/obj/item/weapon/robot_module/engineering)
+	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
+
+/obj/item/borg/upgrade/organ_gripper
+	name = "organ gripper module board"
+	desc = "Used to give a medical cyborg a organ gripper."
+	icon_state = "cyborg_upgrade2"
+	required_module = list(/obj/item/weapon/robot_module/medical)
+	modules_to_add = list(/obj/item/weapon/gripper/organ)

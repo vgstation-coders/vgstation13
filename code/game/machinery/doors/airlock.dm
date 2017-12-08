@@ -784,6 +784,7 @@ About the new airlock wires panel:
 							return 0
 						safe = 0
 						investigation_log(I_WIRES, "|| safeties removed via robot interface by [key_name(usr)]")
+						add_attacklogs(usr, null, " disabled door-crush safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 					else
 						to_chat(usr, text("Firmware reports safeties already overriden."))
 
@@ -814,6 +815,8 @@ About the new airlock wires panel:
 							return 0
 						close()
 						investigation_log(I_WIRES, "|| closed via robot interface by [key_name(usr)]")
+						if(!safe)
+							add_attacklogs(usr, null, " forced close [src] at [x] [y] [z] with safeties disabled.", admin_warn = FALSE)
 					else
 						if(isobserver(usr) && !canGhostWrite(usr,src,"opened"))
 							to_chat(usr, "<span class='warning'>Nope.</span>")
@@ -902,7 +905,7 @@ About the new airlock wires panel:
 						to_chat(usr, text("The door is already electrified. You can't re-electrify it while it's already electrified.<br>\n"))
 					else
 						shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
-						usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Electrified the [name] at [x] [y] [z]</font>")
+						add_attacklogs(usr, null, "Electrified the [name] at [x] [y] [z]", admin_warn = FALSE)
 						investigation_log(I_WIRES, "|| electrified via robot interface by [key_name(usr)]")
 						to_chat(usr, "The door is now electrified indefinitely.")
 						if(isobserver(usr) && !canGhostWrite(usr,src,"electrified (permanent)"))
@@ -920,6 +923,7 @@ About the new airlock wires panel:
 							return 0
 						safe = 1
 						investigation_log(I_WIRES, "|| safeties re-enabled via robot interface by [key_name(usr)]")
+						add_attacklogs(usr, null, " enabled safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Firmware reports safeties already in place."))
@@ -956,6 +960,8 @@ About the new airlock wires panel:
 							return 0
 						close()
 						investigation_log(I_WIRES, "|| closed via robot interface by [key_name(usr)]")
+						if(!safe)
+							add_attacklogs(usr, null, " forced close [src] at [x] [y] [z] with safeties disabled.", admin_warn = FALSE)
 
 				if(10)
 					// Bolt lights
@@ -1299,8 +1305,7 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
-		//attack_ai(P)
-		open(1)
+		density ? open(TRUE) : close(TRUE)
 		return 1
 	return 0
 

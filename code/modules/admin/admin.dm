@@ -152,7 +152,7 @@ var/global/floorIsLava = 0
 				body += "<A href='?src=\ref[src];changehands=\ref[M]'>Change amount of hands (current: [M.held_items.len])</A> | "
 
 			// DNA2 - Admin Hax
-			if(iscarbon(M) && !isbrain(M) && !isalien(M))
+			if(ishuman(M) || ismonkey(M))
 				body += "<br><br>"
 				body += "<b>DNA Blocks:</b><br><table border='0'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
 				var/bname
@@ -1309,6 +1309,11 @@ var/global/floorIsLava = 0
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
 		T.ChangeTurf(chosen)
+	else if(ispath(chosen, /area))
+		var/area/A = locate(chosen)
+		var/turf/T = get_turf(usr.loc)
+
+		T.set_area(A)
 	else
 		new chosen(usr.loc)
 

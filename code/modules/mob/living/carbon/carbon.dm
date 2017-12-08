@@ -68,7 +68,7 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-				src.delayNextMove(10) //no just holding the key for an instant gib
+				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
@@ -472,13 +472,9 @@
 /mob/proc/get_brain_worms()
 	var/list/borers_in_mob = list()
 	for(var/I in contents)
-		if(istype(I,/mob/living/simple_animal/borer))
-			var/mob/living/simple_animal/borer/B = I
-			borers_in_mob.Add(B)
-	if(borers_in_mob.len)
-		return borers_in_mob
-	else
-		return 0
+		if(isborer(I))
+			borers_in_mob.Add(I)
+	return borers_in_mob
 
 /mob/living/carbon/is_muzzled()
 	return(istype(get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/muzzle))

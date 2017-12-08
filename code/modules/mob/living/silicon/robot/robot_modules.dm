@@ -65,12 +65,12 @@
 	if(!isMoMMI(R))
 		add_languages(R)
 	AddToProfiler()
-	src.modules += new /obj/item/device/flashlight(src)
-	src.modules += new /obj/item/device/flash(src)
-	src.emag = new /obj/item/toy/sword(src)
-	src.emag.name = "Placeholder Emag Item"
-//		src.jetpack = new /obj/item/toy/sword(src)
-//		src.jetpack.name = "Placeholder Upgrade Item"
+	modules += new /obj/item/device/flashlight(src)
+	modules += new /obj/item/device/flash(src)
+	emag = new /obj/item/toy/sword(src)
+	emag.name = "Placeholder Emag Item"
+//		jetpack = new /obj/item/toy/sword(src)
+//		jetpack.name = "Placeholder Upgrade Item"
 	return
 
 /obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
@@ -95,27 +95,27 @@
 #define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
-	src.modules += new /obj/item/weapon/extinguisher(src)
-	src.modules += new /obj/item/weapon/wrench(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.modules += new /obj/item/device/healthanalyzer(src)
-	src.modules += new /obj/item/weapon/soap/nanotrasen(src)
-	src.modules += new /obj/item/device/taperecorder(src)
-	src.modules += new /obj/item/device/megaphone(src)
-	src.emag = new /obj/item/weapon/melee/energy/sword(src)
+	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
+	modules += new /obj/item/weapon/extinguisher(src)
+	modules += new /obj/item/weapon/wrench(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/device/healthanalyzer(src)
+	modules += new /obj/item/weapon/soap/nanotrasen(src)
+	modules += new /obj/item/device/taperecorder(src)
+	modules += new /obj/item/device/megaphone(src)
+	emag = new /obj/item/weapon/melee/energy/sword(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Disable")
 
 
 	var/obj/item/stack/medical/bruise_pack/B = new /obj/item/stack/medical/bruise_pack(src)
 	B.max_amount = STANDARD_MAX_KIT
 	B.amount = STANDARD_MAX_KIT
-	src.modules += B
+	modules += B
 
 	var/obj/item/stack/medical/ointment/O = new /obj/item/stack/medical/ointment(src)
 	O.max_amount = STANDARD_MAX_KIT
 	O.amount = STANDARD_MAX_KIT
-	src.modules += O
+	modules += O
 
 	fix_modules()
 
@@ -126,12 +126,12 @@
 		/obj/item/stack/medical/ointment,
 	)
 	for (var/T in what)
-		if (!(locate(T) in src.modules))
-			src.modules -= null
+		if (!(locate(T) in modules))
+			modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
 				O.max_amount = STANDARD_MAX_KIT
-			src.modules += O
+			modules += O
 			O.amount = 1
 	return
 
@@ -143,47 +143,47 @@
 #define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
-	
-	src.modules += new /obj/item/device/healthanalyzer(src)
-	src.modules += new /obj/item/weapon/reagent_containers/borghypo(src)
-	src.modules += new /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg(src,src)
-	src.modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
-	src.modules += new /obj/item/weapon/reagent_containers/syringe(src)
-	src.modules += new /obj/item/weapon/storage/bag/chem(src)
-	src.modules += new /obj/item/weapon/extinguisher/mini(src)
-	src.modules += new /obj/item/weapon/scalpel(src)
-	src.modules += new /obj/item/weapon/hemostat(src)
-	src.modules += new /obj/item/weapon/retractor(src)
-	src.modules += new /obj/item/weapon/circular_saw(src)
-	src.modules += new /obj/item/weapon/cautery(src)
-	src.modules += new /obj/item/weapon/bonegel(src)
-	src.modules += new /obj/item/weapon/bonesetter(src)
-	src.modules += new /obj/item/weapon/FixOVein(src)
-	src.modules += new /obj/item/weapon/surgicaldrill(src)
-	src.modules += new /obj/item/weapon/revivalprod(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
-	src.modules += new /obj/item/roller_holder(src)
-	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
+
+	modules += new /obj/item/device/healthanalyzer(src)
+	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
+	modules += new /obj/item/weapon/gripper/chemistry(src)
+	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
+	modules += new /obj/item/weapon/reagent_containers/syringe(src)
+	modules += new /obj/item/weapon/storage/bag/chem(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/scalpel(src)
+	modules += new /obj/item/weapon/hemostat(src)
+	modules += new /obj/item/weapon/retractor(src)
+	modules += new /obj/item/weapon/circular_saw(src)
+	modules += new /obj/item/weapon/cautery(src)
+	modules += new /obj/item/weapon/bonegel(src)
+	modules += new /obj/item/weapon/bonesetter(src)
+	modules += new /obj/item/weapon/FixOVein(src)
+	modules += new /obj/item/weapon/surgicaldrill(src)
+	modules += new /obj/item/weapon/revivalprod(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
+	modules += new /obj/item/roller_holder(src)
+	emag = new /obj/item/weapon/reagent_containers/spray(src)
 	sensor_augs = list("Medical", "Disable")
 
-	src.emag.reagents.add_reagent(PACID, 250)
-	src.emag.name = "Polyacid spray"
+	emag.reagents.add_reagent(PACID, 250)
+	emag.name = "Polyacid spray"
 
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDBORG_MAX_KIT
 	B.amount = MEDBORG_MAX_KIT
-	src.modules += B
+	modules += B
 
 	var/obj/item/stack/medical/advanced/ointment/O = new /obj/item/stack/medical/advanced/ointment(src)
 	O.max_amount = MEDBORG_MAX_KIT
 	O.amount = MEDBORG_MAX_KIT
-	src.modules += O
+	modules += O
 
 	var/obj/item/stack/medical/splint/S = new /obj/item/stack/medical/splint(src)
 	S.max_amount = MEDBORG_MAX_KIT
 	S.amount = MEDBORG_MAX_KIT
-	src.modules += S
+	modules += S
 
 	fix_modules()
 
@@ -194,12 +194,12 @@
 		/obj/item/stack/medical/splint,
 	)
 	for (var/T in what)
-		if (!(locate(T) in src.modules))
-			src.modules -= null
+		if (!(locate(T) in modules))
+			modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
 				O.max_amount = MEDBORG_MAX_KIT
-			src.modules += O
+			modules += O
 			O.amount = 1
 	return
 
@@ -210,33 +210,33 @@
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
-	
-	src.emag = new /obj/item/borg/stun(src)
-	src.modules += new /obj/item/device/rcd/borg/engineering(src)
-	src.modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
-	src.modules += new /obj/item/weapon/extinguisher(src)
-	src.modules += new /obj/item/weapon/extinguisher/foam(src)
-	src.modules += new /obj/item/weapon/weldingtool/largetank(src)
-	src.modules += new /obj/item/weapon/screwdriver(src)
-	src.modules += new /obj/item/weapon/wrench(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.modules += new /obj/item/weapon/wirecutters(src)
-	src.modules += new /obj/item/device/multitool(src)
-	src.modules += new /obj/item/device/t_scanner(src)
-	src.modules += new /obj/item/device/analyzer(src)
-	src.modules += new /obj/item/taperoll/atmos(src)
-	src.modules += new /obj/item/taperoll/engineering(src)
-	src.modules += new /obj/item/device/rcd/tile_painter(src)
-	src.modules += new /obj/item/device/material_synth/robot(src)
-	src.modules += new /obj/item/device/silicate_sprayer(src)
-	src.modules += new /obj/item/device/holomap(src)
-	src.modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
+
+	emag = new /obj/item/borg/stun(src)
+	modules += new /obj/item/device/rcd/borg/engineering(src)
+	modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
+	modules += new /obj/item/weapon/extinguisher(src)
+	modules += new /obj/item/weapon/extinguisher/foam(src)
+	modules += new /obj/item/weapon/weldingtool/largetank(src)
+	modules += new /obj/item/weapon/screwdriver(src)
+	modules += new /obj/item/weapon/wrench(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/wirecutters(src)
+	modules += new /obj/item/device/multitool(src)
+	modules += new /obj/item/device/t_scanner(src)
+	modules += new /obj/item/device/analyzer(src)
+	modules += new /obj/item/taperoll/atmos(src)
+	modules += new /obj/item/taperoll/engineering(src)
+	modules += new /obj/item/device/rcd/tile_painter(src)
+	modules += new /obj/item/device/material_synth/robot(src)
+	modules += new /obj/item/device/silicate_sprayer(src)
+	modules += new /obj/item/device/holomap(src)
+	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	sensor_augs = list("Mesons", "Disable")
 
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
 	W.amount = 50
 	W.max_amount = 50
-	src.modules += W
+	modules += W
 
 	fix_modules()
 
@@ -246,23 +246,23 @@
 		/obj/item/stack/cable_coil
 	)
 	for (var/T in what)
-		if (!(locate(T) in src.modules))
-			src.modules -= null
+		if (!(locate(T) in modules))
+			modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/cable_coil))
 				O.max_amount = 50
-			src.modules += O
+			modules += O
 			O.amount = 1
 	return
 
 /obj/item/weapon/robot_module/engineering/recharge_consumable(var/mob/living/silicon/robot/R)
-	for(var/T in src.modules)
-		if(!(locate(T) in src.modules)) //Remove nulls
-			src.modules -= null
+	for(var/T in modules)
+		if(!(locate(T) in modules)) //Remove nulls
+			modules -= null
 
 	recharge_tick++
 	if(recharge_tick < recharge_time)
-		return 0
+		return FALSE
 	recharge_tick = 0
 	if(R && R.cell)
 		respawn_consumable(R)
@@ -283,39 +283,37 @@
 
 /obj/item/weapon/robot_module/security/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
-	src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
-	src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
-	src.modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
-	src.modules += new /obj/item/taperoll/police(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
+	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
+	modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
+	modules += new /obj/item/weapon/handcuffs/cyborg(src)
+	modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
+	modules += new /obj/item/taperoll/police(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Disable")
 	fix_modules()
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
 
-
 /obj/item/weapon/robot_module/janitor/New()
 	..()
-	src.modules += new /obj/item/weapon/soap/nanotrasen(src)
-	src.modules += new /obj/item/weapon/storage/bag/trash(src)
-	src.modules += new /obj/item/weapon/mop(src)
-	src.modules += new /obj/item/device/lightreplacer/borg(src)
-	src.modules += new /obj/item/weapon/reagent_containers/glass/bucket(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
+	modules += new /obj/item/weapon/soap/nanotrasen(src)
+	modules += new /obj/item/weapon/storage/bag/trash(src)
+	modules += new /obj/item/weapon/mop(src)
+	modules += new /obj/item/device/lightreplacer/borg(src)
+	modules += new /obj/item/weapon/reagent_containers/glass/bucket(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	emag = new /obj/item/weapon/reagent_containers/spray(src)
 
-	src.emag.reagents.add_reagent(LUBE, 250)
-	src.emag.name = "Lube spray"
+	emag.reagents.add_reagent(LUBE, 250)
+	emag.name = "Lube spray"
 	fix_modules()
 
 
 
 /obj/item/weapon/robot_module/butler
 	name = "service robot module"
-
 
 /obj/item/weapon/robot_module/butler/New()
 	languages = list(
@@ -329,34 +327,19 @@
 					LANGUAGE_MONKEY		= 1,
 					)
 	..()
-	src.modules += new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	src.modules += new /obj/item/weapon/reagent_containers/food/condiment/enzyme(src)
-	src.modules += new /obj/item/weapon/pen/robopen(src)
-
-	src.modules += new /obj/item/device/rcd/borg/rsf(src)
-
-	src.modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
-
+	modules += new /obj/item/weapon/gripper/service(src)
+	modules += new /obj/item/weapon/tray/robotray(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/pen/robopen(src)
+	modules += new /obj/item/weapon/dice/borg(src)
+	modules += new /obj/item/device/rcd/borg/rsf(src)
+	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
+	modules += new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg(src)
 	var/obj/item/weapon/lighter/zippo/L = new /obj/item/weapon/lighter/zippo(src)
 	L.lit = 1
 	L.update_brightness()
-	src.modules += L
-
-	src.modules += new /obj/item/weapon/tray/robotray(src)
-
-	src.modules += new /obj/item/weapon/reagent_containers/food/drinks/shaker(src)
-
-	src.modules += new /obj/item/weapon/dice/borg(src)
-
-	src.modules += new /obj/item/weapon/crowbar(src)
-
-	src.emag = new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-
-	var/datum/reagents/R = new/datum/reagents(50)
-	src.emag.reagents = R
-	R.my_atom = src.emag
-	R.add_reagent(BEER2, 50)
-	src.emag.name = "Mickey Finn's Special Brew"
+	modules += L
+	emag = new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked(src)
 	fix_modules()
 
 
@@ -366,25 +349,23 @@
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
-	src.emag = new /obj/item/borg/stun(src)
-	src.modules += new /obj/item/weapon/storage/bag/ore(src)
-	src.modules += new /obj/item/weapon/pickaxe/drill/borg(src)
-	src.modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
-	src.modules += new /obj/item/device/mining_scanner(src)
-	src.modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
-	sensor_augs = list("Mesons", "Disable")
-//		src.modules += new /obj/item/weapon/pickaxe/shovel(src) Uneeded due to buffed drill
-
+	emag = new /obj/item/borg/stun(src)
+	modules += new /obj/item/weapon/storage/bag/ore(src)
+	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
+	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
+	modules += new /obj/item/device/mining_scanner(src)
+	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
 	tag.mode = 1 //For editing the tag list
-	src.modules += tag
-
+	modules += tag
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
 	W.amount = 24
 	W.max_amount = 24
-	src.modules += W
+	modules += W
 
+	sensor_augs = list("Mesons", "Disable")
 	fix_modules()
 
 /obj/item/weapon/robot_module/miner/respawn_consumable(var/mob/living/silicon/robot/R)
@@ -392,12 +373,12 @@
 		/obj/item/stack/package_wrap
 	)
 	for (var/T in what)
-		if (!(locate(T) in src.modules))
-			src.modules -= null
+		if (!(locate(T) in modules))
+			modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/package_wrap))
 				O.max_amount = 24
-			src.modules += O
+			modules += O
 			O.amount = 1
 
 /obj/item/weapon/robot_module/syndicate
@@ -405,10 +386,10 @@
 
 
 /obj/item/weapon/robot_module/syndicate/New()
-	src.modules += new /obj/item/weapon/melee/energy/sword(src)
-	src.modules += new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(src)
-	src.modules += new /obj/item/weapon/card/emag(src)
-	src.modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/melee/energy/sword(src)
+	modules += new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(src)
+	modules += new /obj/item/weapon/card/emag(src)
+	modules += new /obj/item/weapon/crowbar(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
 	fix_modules()
 
@@ -416,14 +397,14 @@
 	name = "combat robot module"
 
 /obj/item/weapon/robot_module/combat/New()
-	src.modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
-	src.modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
-	src.modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
-	src.modules += new /obj/item/borg/combat/shield(src)
-	src.modules += new /obj/item/borg/combat/mobility(src)
-	src.modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?
-	src.modules += new /obj/item/weapon/crowbar(src)
-	src.emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
+	modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
+	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
+	modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
+	modules += new /obj/item/borg/combat/shield(src)
+	modules += new /obj/item/borg/combat/mobility(src)
+	modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?
+	modules += new /obj/item/weapon/crowbar(src)
+	emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
 
 	fix_modules()
@@ -433,13 +414,13 @@
 
 /obj/item/weapon/robot_module/tg17355/New()
 	..()
-	src.modules += new /obj/item/weapon/cookiesynth(src)
-	src.modules += new /obj/item/device/harmalarm(src)
-	src.modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
-	src.modules += new /obj/item/weapon/inflatable_dispenser(src)
-	src.modules += new /obj/item/borg/cyborghug(src)
-	src.modules += new /obj/item/weapon/extinguisher(src)
-	src.emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
+	modules += new /obj/item/weapon/cookiesynth(src)
+	modules += new /obj/item/device/harmalarm(src)
+	modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
+	modules += new /obj/item/weapon/inflatable_dispenser(src)
+	modules += new /obj/item/borg/cyborghug(src)
+	modules += new /obj/item/weapon/extinguisher(src)
+	emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
 	sensor_augs = list("Medical", "Disable")
 	fix_modules()
 

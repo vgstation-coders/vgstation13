@@ -1198,7 +1198,7 @@ var/global/list/common_tools = list(
 	if(U == M)
 		return 0
 	if(ishuman(M) && M.lying)
-		if(locate(/obj/machinery/optable,M.loc))
+		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
 			return 1
 		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
 			return 1

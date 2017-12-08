@@ -1513,7 +1513,7 @@
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
 	for(var/datum/organ/external/O in src.organs)
 		if(O.is_robotic())
-			O &= ~ORGAN_ROBOT
+			O.status &= ~ORGAN_ROBOT
 	update_icons()
 
 // Makes all robot internal organs organic.

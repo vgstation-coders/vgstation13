@@ -54,6 +54,7 @@
 	var/injector_cooldown = 300 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	var/obj/machinery/computer/connected
+	var/last_message // Used by go_out()
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -285,11 +286,15 @@
 			break
 	return
 
+#define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
+
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
 	if (!occupant)
 		return 0
 	if(locked)
-		visible_message("Can't eject occupants while \the [src] is locked.")
+		if(world.time - last_message > DNASCANNER_MESSAGE_INTERVAL)
+			say("Can't eject occupants while \the [src] is locked.")
+			last_message = world.time
 		return 0
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
@@ -308,6 +313,8 @@
 			C.update_icon()
 
 	return 1
+
+#undef DNASCANNER_MESSAGE_INTERVAL
 
 /obj/machinery/dna_scannernew/proc/contains_husk()
 	if(occupant && (M_HUSK in occupant.mutations))
@@ -407,6 +414,7 @@
 	connected = null
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
+	labels.Cut()
 	buffers.Cut()
 	if(disk)
 		qdel(disk)
