@@ -16,9 +16,11 @@
 	var/list/mob/doing_surgery = list() //who's doing this RIGHT NOW
 
 	// evil infection stuff that will make everyone hate me
-	var/can_infect = 0
+	var/can_infect = FALSE
 	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
-	var/blood_level = 0
+	var/blood_level = FALSE
+
+	var/painful = TRUE // If true, it'll check for anesthesia.
 
 
 	//returns how well tool is suited for this step
@@ -29,6 +31,8 @@
 	return 0
 
 /datum/surgery_step/proc/check_anesthesia(var/mob/living/carbon/human/target)
+	if(!painful)
+		return 1
 	if(target.sleeping > 0 || target.stat)
 		return 1
 	if(!target.feels_pain())

@@ -5,7 +5,6 @@
 
 /datum/surgery_step/generic/
 	can_infect = 1
-	var/painful=1
 	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		if (isslime(target))
 			return 0

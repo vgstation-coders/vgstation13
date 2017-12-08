@@ -186,6 +186,7 @@
 
 //AUTOPSY
 /datum/surgery_step/autopsy
+	painful = FALSE
 	allowed_tools = list(
 		/obj/item/weapon/autopsy_scanner = 100
 		)
