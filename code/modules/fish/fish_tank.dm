@@ -98,8 +98,9 @@
 	cur_health = 100
 	shard_count = 3
 
-/obj/machinery/fishtank/wall/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	to_chat(world, "Cross")
+/obj/machinery/fishtank/wall/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0) // Prevents airflow. Copied from windows.
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return TRUE
 	return FALSE
 
 /obj/machinery/fishtank/wall/Uncross(atom/movable/O as mob|obj, target as turf)
@@ -351,42 +352,49 @@
 		new dead_fish(get_turf(user))				//Spawn the appropriate fish_item at the user's feet.
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
-//	var/turf/T = get_turf(src)										//Store the tank's turf for atmos updating after deletion of tank
-	if(!deconstruct)												//Check if we are deconstructing or breaking the tank
-		for(var/i in  shard_count)									//Produce the appropriate number of glass shards
-			new /obj/item/weapon/shard(get_turf(src))
-		if(water_level)												//Spill any water that was left in the tank when it broke
+	to_chat(world, "being destroyed")
+	if(!deconstruct)
+		to_chat(world, "Brutally")												//Check if we are deconstructing or breaking the tank
+		for(var/i in  shard_count)														//Produce the appropriate number of glass shards
+			var/obj/item/weapon/shard/S = new /obj/item/weapon/shard
+			S.forceMove(get_turf(src))
+		if(water_level)
+			to_chat(world, "Spilling_water")											//Spill any water that was left in the tank when it broke
 			spill_water()
-	else															//We are deconstructing, make glass sheets instead of shards
-		var/sheets = shard_count + 1								//Deconstructing it salvages all the glass used to build the tank
-		new /obj/item/stack/sheet/glass(get_turf(src), sheets)		//Produce the appropriate number of glass sheets, in a single stack
-	qdel(src)														//qdel the tank and it's contents
-//	T.air_update_turf(1)											//Update the air for the turf, to avoid permanent atmos sealing with wall tanks
+	else																				//We are deconstructing, make glass sheets instead of shards
+		var/sheets = shard_count + 1													//Deconstructing it salvages all the glass used to build the tank
+		var/obj/item/stack/sheet/glass/stack = new /obj/item/stack/sheet/glass(sheets)	//Produce the appropriate number of glass sheets, in a single stack
+		stack.forceMove(get_turf(src))
+	qdel(src)																			//qdel the tank and it's contents
+
 
 /obj/machinery/fishtank/proc/spill_water()
 	switch(tank_type)
 		if("bowl")										//Fishbowl: Wets it's own tile
 			var/turf/T = get_turf(src)
-			if(!istype(T, /turf/simulated)) return
-//			var/turf/simulated/S = T
-	//		S.MakeSlippery()
+			if(!istype(T, /turf/simulated))
+				return
+			var/turf/simulated/S = T
+			S.wet = TRUE
+
 		if("tank")										//Fishtank: Wets it's own tile and the 4 adjacent tiles (cardinal directions)
 			var/turf/ST = get_turf(src)
-//			if(istype(ST, /turf/simulated))
-//				var/turf/simulated/ST2 = ST
-//				ST2.MakeSlippery()
 			var/list/L = ST.CardinalTurfs()
 			for(var/turf/T in L)
-				if(!istype(T, /turf/simulated)) continue
-//				var/turf/simulated/S = T
-			//	S.MakeSlippery()
-	//	if("wall")							help me god			//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
-		//	for(var/turf/T in spiral_range_turfs(1, src.loc))  weird ass paradise code yo
-		//	if(!istype(T, /turf/simulated)) continue
-		//	var/turf/simulated/S = T
-	//			S.MakeSlippery()
+				if(!istype(T, /turf/simulated))
+					continue
+				var/turf/simulated/S = T
+				S.wet = TRUE
 
-//////////////////////////////		Note from FalseIncarnate:
+		if ("wall")										//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
+			for(var/turf/T in view(src, 1))
+				if(!istype(T, /turf/simulated))
+					continue
+				var/turf/simulated/S = T
+				S.wet = TRUE
+
+
+//////////////////////////////			Note from FalseIncarnate:
 //		EXAMINE PROC		//			This proc is massive, messy, and probably could be handled better.
 //////////////////////////////			Feel free to try cleaning it up if you think of a better way to do it.
 
@@ -494,7 +502,7 @@
 
 
 	//Finally, report the full examine_message constructed from the above reports
-	to_chat(user, "[jointext(examine_message, "<br />")]")
+	to_chat(user, "[jointext(examine_message, "")]")
 	return examine_message
 
 //////////////////////////////
@@ -521,14 +529,13 @@
 							"You hear a knocking sound.")
 
 
-/obj/machinery/fishtank/proc/hit(var/damage, var/sound_effect = 1)
+/obj/machinery/fishtank/proc/hit(var/damage, var/mob/user)
 	cur_health = max(0, cur_health - damage)
-	if(sound_effect)
-		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
 	check_health()
+	user.delayNextAttack(0.3 SECONDS)
 
 /obj/machinery/fishtank/proc/attack_generic(mob/living/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
-	cur_health -= damage
+	cur_health = max(0, cur_health - damage)
 	if(cur_health <= 0)
 		user.visible_message("<span class='danger'>\The [user] smashes through \the [src]!</span>")
 		destroy()
@@ -552,8 +559,7 @@
 			else if(cur_health < max_health)
 				to_chat(user, "[W.name] must on to repair this damage.")
 		else
-		//	user.changeNext_move(CLICK_CD_MELEE)
-			hit(W.force)
+			hit(W.force, user)
 		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
@@ -565,7 +571,7 @@
 			//Containers with any reagents will get dumped in
 			if(C.reagents.total_volume)
 				var/water_value = 0
-				water_value += C.reagents.get_reagent_amount(WATER)				//Water is full value
+				water_value += C.reagents.get_reagent_amount(WATER)					//Water is full value
 				water_value += C.reagents.get_reagent_amount(HOLYWATER) *1.1		//Holywater is (somehow) better. Who said religion had to make sense?
 
 				water_value += C.reagents.get_reagent_amount(ICE) * 0.80			//Ice is 80% value
@@ -589,7 +595,6 @@
 				return TRUE
 			//Empty containers will scoop out water, filling the container as much as possible from the water_level
 			else
-				to_chat(world, "ENTERING THE 'ELSE' BLOCK")
 				if(water_level == 0)
 					to_chat(user, "\the [src] is empty!")
 				else
@@ -665,7 +670,7 @@
 
 	else if(O && O.force)
 		user.visible_message("<span class='danger'>\The [src] has been attacked by [user.name] with \the [O]!</span>")
-		hit(O.force)
+		hit(O.force, user)
 	return TRUE
 
 /* tank construction */
