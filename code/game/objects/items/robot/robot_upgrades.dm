@@ -20,7 +20,7 @@
 
 /obj/item/borg/upgrade/proc/locate_component(var/obj/item/C, var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(!C || !R || !user)
-		return
+		return null
 
 	var/obj/item/I = locate(C) in R.module
 	if(!I)
@@ -29,7 +29,7 @@
 		I = locate(C) in R.module.modules
 	if(!I)
 		to_chat(user, "This cyborg is missing one of the needed components!")
-		return
+		return null
 	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
