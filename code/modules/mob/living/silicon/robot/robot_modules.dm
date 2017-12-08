@@ -152,6 +152,7 @@
 /obj/item/weapon/robot_module/medical/New()
 	..()
 
+	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
@@ -169,7 +170,6 @@
 	modules += new /obj/item/weapon/FixOVein(src)
 	modules += new /obj/item/weapon/surgicaldrill(src)
 	modules += new /obj/item/weapon/revivalprod(src)
-	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/roller_holder(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
@@ -215,6 +215,7 @@
 /obj/item/weapon/robot_module/engineering/New()
 	..()
 
+	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
 	modules += new /obj/item/weapon/extinguisher(src)
@@ -222,7 +223,6 @@
 	modules += new /obj/item/weapon/weldingtool/largetank(src)
 	modules += new /obj/item/weapon/screwdriver(src)
 	modules += new /obj/item/weapon/wrench(src)
-	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/wirecutters(src)
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/t_scanner(src)
