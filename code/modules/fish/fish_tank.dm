@@ -352,14 +352,12 @@
 		new dead_fish(get_turf(user))				//Spawn the appropriate fish_item at the user's feet.
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
-	to_chat(world, "being destroyed")
 	if(!deconstruct)
-		to_chat(world, "Brutally")												//Check if we are deconstructing or breaking the tank
+		to_chat(world, "Brutally")														//Check if we are deconstructing or breaking the tank
 		for(var/i in  shard_count)														//Produce the appropriate number of glass shards
 			var/obj/item/weapon/shard/S = new /obj/item/weapon/shard
 			S.forceMove(get_turf(src))
-		if(water_level)
-			to_chat(world, "Spilling_water")											//Spill any water that was left in the tank when it broke
+		if(water_level)																	//Spill any water that was left in the tank when it broke
 			spill_water()
 	else																				//We are deconstructing, make glass sheets instead of shards
 		var/sheets = shard_count + 1													//Deconstructing it salvages all the glass used to build the tank
