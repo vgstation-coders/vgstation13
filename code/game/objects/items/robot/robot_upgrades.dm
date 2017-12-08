@@ -20,7 +20,7 @@
 
 /obj/item/borg/upgrade/proc/locate_component(var/obj/item/C, var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(!C || !R || !user)
-		return FAILED_TO_ADD
+		return
 
 	var/obj/item/I = locate(C) in R.module
 	if(!I)
@@ -29,7 +29,7 @@
 		I = locate(C) in R.module.modules
 	if(!I)
 		to_chat(user, "This cyborg is missing one of the needed components!")
-		return FAILED_TO_ADD
+		return
 	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -82,6 +82,8 @@
 		return FAILED_TO_ADD
 
 	var/obj/item/weapon/gripper/chemistry/G = locate_component(/obj/item/weapon/gripper/chemistry, R, user)
+	if(!G)
+		return FAILED_TO_ADD
 	G.can_hold += list(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
 
 /obj/item/borg/upgrade/reset
@@ -183,6 +185,8 @@
 
 /obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
+	if(!T)
+		return FAILED_TO_ADD
 
 	if(T.recharge_time <= 2)
 		to_chat(R, "Maximum cooling achieved for this hardpoint!")
@@ -237,7 +241,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/device/material_synth/S = locate(/obj/item/device/material_synth) in R.module.modules
+	var/obj/item/device/material_synth/S = locate_component(/obj/item/device/material_synth, R, user)
 	if(!S)
 		return FAILED_TO_ADD
 
@@ -257,6 +261,8 @@
 		return FAILED_TO_ADD
 
 	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
+	if(!G)
+		return FAILED_TO_ADD
 	G.can_hold += list(/obj/item/weapon/reagent_containers/food)
 
 /obj/item/borg/upgrade/magnetic_gripper
