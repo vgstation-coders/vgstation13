@@ -631,7 +631,7 @@
 		if(!(S && (S.status & ORGAN_ROBOT)) && user.a_intent != I_HELP)
 			return ..()
 		if(S.brute_dam)
-			if(remove_fuel(2))
+			if(remove_fuel(0))
 				S.heal_damage(15,0,0,1)
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 10, 1)
 				if(user != M)
