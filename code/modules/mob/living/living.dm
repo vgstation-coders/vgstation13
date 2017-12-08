@@ -655,13 +655,40 @@ Thanks.
 
 	return
 
-/mob/living/Move(atom/newloc, direct)
+/mob/living/Move(atom/newloc, direct,Dir=0,step_x=0,step_y=0)
 	if (locked_to && locked_to.loc != newloc)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)
 			return 0
 		else
 			return locked_to.Move(newloc, direct)
+
+		if(loc != newloc)
+			if (!(Dir & (Dir - 1))) //Cardinal move
+				. = ..()
+			else //Diagonal move, split it into cardinal moves
+				if (Dir & NORTH)
+					if (Dir & EAST) //Northeast
+						if (step(src, NORTH))
+							. = step(src, EAST)
+						else if (step(src, EAST))
+							. = step(src, NORTH)
+					else if (Dir & WEST) //Northwest
+						if (step(src, NORTH))
+							. = step(src, WEST)
+						else if (step(src, WEST))
+							. = step(src, NORTH)
+				else if (Dir & SOUTH)
+					if (Dir & EAST) //Southeast
+						if (step(src, SOUTH))
+							. = step(src, EAST)
+						else if (step(src, EAST))
+							. = step(src, SOUTH)
+					else if (Dir & WEST) //Southwest
+						if (step(src, SOUTH))
+							. = step(src, WEST)
+						else if (step(src, WEST))
+							. = step(src, SOUTH)
 
 	if (restrained())
 		stop_pulling()
