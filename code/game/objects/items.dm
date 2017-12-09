@@ -65,6 +65,7 @@
 	var/_surgery_preflight_M = null // Used to lazily do do_surgery(tool = src) if ready_for_surgery() was used before
 	var/_surgery_preflight_user = null // Ditto
 	var/_surgery_preflight_surface_stability = null // Ditto
+	var/_surgery_preflight_working_surface = null // Ditto
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)

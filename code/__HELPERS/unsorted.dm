@@ -1617,17 +1617,19 @@ Game Mode config tags:
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
 
-// For surgeries
-
-
-/proc/find_working_surface_at_mob(mob/living/carbon/human/target, list/possible_surfaces_list)
+// Similar to find_working_surface_at_mob() but returns a list containing both the value and the surface. list("value" = value, "working_surface" = working_surface)
+/proc/find_working_surface_at_mob_verbose(mob/living/carbon/human/target, list/possible_surfaces_list)
 	for (var/surface in possible_surfaces_list)
 		if (locate(surface, target.loc))
 			var/obj/structure/table/table = surface
 			if(istype(table) && table.flipped)
-				return 0
+				return list("value" = 0, "working_surface" = null)
 			else
-				return possible_surfaces_list[surface]
+				return list("value" = possible_surfaces_list[surface], "working_surface" = surface)
+
+// Finds if the mob is on a structure, item, etc associated to values before returning the value for the matching item.
+/proc/find_working_surface_at_mob(mob/living/carbon/human/target, list/possible_surfaces_list)
+	return find_working_surface_at_mob(target, possible_surfaces_list)["value"]
 
 // Finds the piece of clothing obstructing the selected targeted limb from the user to the target else returns FALSE.
 // If armorlimits is provided, it checks if any of the armor stats in the clothing will exceed the armorlimits provided to return FALSE.

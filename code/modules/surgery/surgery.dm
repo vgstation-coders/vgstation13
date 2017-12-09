@@ -108,20 +108,22 @@ proc/unready_surgery(obj/item/tool)
 	tool._surgery_preflight_M = null
 	tool._surgery_preflight_user = null
 	tool._surgery_preflight_surface_stability = null
+	tool._surgery_preflight_working_surface = null
 	return TRUE
 
 // Check if the mob is ready for surgery and pre-flight if it is else return FALSE
 proc/ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
-	var/surface_stability = check_if_ready_for_surgery(M, user)
-	if(surface_stability)
+	var/working_surface_information = check_if_ready_for_surgery(M, user)
+	if(working_surface_information["value"])
 		tool._surgery_preflight = TRUE
 		tool._surgery_preflight_M = M
 		tool._surgery_preflight_user = user
-		tool._surgery_preflight_surface_stability = surface_stability
+		tool._surgery_preflight_surface_stability = working_surface_information["value"]
+		tool._surgery_preflight_working_surface = working_surface_information["working_surface"]
 		return TRUE
 	return FALSE
 
-// Tentively check if the mob is ready for surgery and return the chance or return FALSE
+// Tentively check if the mob is ready for surgery and return the chance as list("value" = value, "working_surface" = working_surface) or return FALSE
 proc/check_if_ready_for_surgery(mob/living/M, mob/living/user)
 	if(user == M) // Can't do surgery on yourself (yet)
 		return FALSE
@@ -135,21 +137,28 @@ proc/check_if_ready_for_surgery(mob/living/M, mob/living/user)
 	else
 		if(user.a_intent != I_HELP)
 			return FALSE
-	return find_working_surface_at_mob(M, allowed_medical_work_surfaces)
+	return find_working_surface_at_mob_verbose(M, allowed_medical_work_surfaces)
 
 // Attempt surgery on the mob from the user with a tool. Returns TRUE if it was sucessful or if there is problem with the tool or the mob is too armored. Returns false if the mob isn't ready for surgery or on the wrong intent.
 // AKA, stab people normally up until they are on a table and on the correct intent.
 proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
-	var/surface_stability = 0
+	var/working_surface_information = null
+	var/working_surface_stability = 0
+	var/obj/working_surface = null
+	var/working_surface_start_loc = null
 	if(tool._surgery_preflight)
 		M = tool._surgery_preflight_M
 		user = tool._surgery_preflight_user
-		surface_stability = tool._surgery_preflight_surface_stability
+		working_surface_stability = tool._surgery_preflight_surface_stability
+		working_surface = tool._surgery_preflight_working_surface
+		working_surface_start_loc = working_surface.loc
 		unready_surgery(tool)
 	else
-		surface_stability = check_if_ready_for_surgery(M, user)
-		if(!surface_stability)
+		working_surface_information = check_if_ready_for_surgery(M, user)
+		if(!working_surface_information["value"])
 			return FALSE
+		working_surface_stability = working_surface_information["value"]
+		working_surface = working_surface_information["working_surface"]
 
 	if(!M || !user || !tool)
 		error("BUG? do_surgery was called without a mob, user, and/or tool. A tool isn't doing a pre-flight correctly? M = [M], user = [user], tool = [tool]")
@@ -180,9 +189,15 @@ proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
 				S.begin_step(user, M, user.zone_sel.selecting, tool)		//start on it
 				var/selection = user.zone_sel.selecting
 				var/anesthesia_fail = !S.check_anesthesia(M) // Check if the patient is able to feel pain right now. You should not be able to operate safely when they're awake.
-				var/success_chance = surface_stability * ( (S.tool_quality(tool)/100) / (anesthesia_fail + clumsy + 1) )
+				var/obj/structure/table/table = working_surface
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && prob(success_chance) && selection == user.zone_sel.selecting)
+				if(\
+do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && \
+working_surface_start_loc == working_surface.loc && \
+selection == user.zone_sel.selecting && \
+!(istype(table) && table.flipped) && \
+prob(working_surface_stability * ( (S.tool_quality(tool)/100) / (anesthesia_fail + clumsy + 1) ) ) \
+)
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")
@@ -196,7 +211,7 @@ proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
 						if(anesthesia_fail)
 							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
 							M.emote("scream",,, 1)
-						else if (surface_stability != PERCENT_SUITABLE_MEDICAL_WORKSPACE)
+						else if (working_surface_stability < PERCENT_SUITABLE_MEDICAL_WORKSPACE)
 							to_chat(user, "<span class='warning'>This working surface isn't stable!</span>")
 
 				if(M) //good, we still exist

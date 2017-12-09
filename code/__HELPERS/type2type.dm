@@ -280,4 +280,4 @@ proc/tg_jointext(list/list, glue = ",")
 )
 // Takes a target and converts it to a mobpart bitflag.
 /proc/target_to_mobpart(var/limb)
-	var/mobpart = (target_to_mobpart_list[limb] || 0)
+	return (target_to_mobpart_list[limb] || 0)
