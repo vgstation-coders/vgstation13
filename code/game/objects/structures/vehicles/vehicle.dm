@@ -84,7 +84,7 @@
 	if(empstun < 0)
 		empstun = 0
 
-/obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/user)
+/obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
 	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
@@ -98,43 +98,38 @@
 	else if(istype(W, /obj/item/key))
 		if(!heldkey)
 			if(keytype && mykey == W)
-				if(prob(95) && user.drop_item(W, src))
+				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
+					return
+				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You insert \the [W] to \the [src]'s ignition and turn it.</span>")
 					user.visible_message("<span class='notice'>\The [src]'s engine roars to life!</span>")
 					playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1) // find a better sound later
 					src.heldkey = W
-				else
-					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
+					return
 			else
 				if(keytype)
 					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
 				else
 					to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
-			to_chat(user, "<span class='notice'>\the [src]'s already has \the [heldkey] in it.</span>")
+			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
 	else if(isscrewdriver(W) && !heldkey)
 		var/mob/living/carbon/human/H = user
 		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
+		playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
 		H.adjustBrainLoss(10)
-
-/obj/structure/bed/chair/vehicle/verb/remove_key()
-	set name = "Remove Key"
-	set category = "Object"
-	set src in oview(1)
-
-	if(heldkey && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
-		to_chat(usr, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
-		usr.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
-		playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1) // find a better sound later
-		heldkey.forceMove(get_turf(usr))
-		usr.put_in_hands(heldkey)
-		heldkey = null
 
 /obj/structure/bed/chair/vehicle/attack_hand(mob/user)
 	if(occupant && occupant == user)
 		return ..()
-	if(heldkey)
-		remove_key()
+	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
+		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
+		playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1) // find a better sound later
+		heldkey.forceMove(get_turf(user))
+		user.put_in_hands(heldkey)
+		heldkey = null
 	else
 		..()
 
