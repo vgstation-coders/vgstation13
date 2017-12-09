@@ -664,8 +664,12 @@ turf/simulated/floor/update_icon()
 						spam_flag = 0
 						update_icon()
 
+
+/turf/simulated/proc/is_wet() //Returns null if no puddle, otherwise returns the puddle
+	return locate(/obj/effect/overlay/puddle) in src
+
 /turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER)
-	var/obj/effect/overlay/puddle/P = locate(/obj/effect/overlay/puddle) in src
+	var/obj/effect/overlay/puddle/P = is_wet()
 	if(P)
 		if(slipperiness > P.wet)
 			P.wet = slipperiness
@@ -674,7 +678,7 @@ turf/simulated/floor/update_icon()
 		new /obj/effect/overlay/puddle(src, slipperiness, delay)
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
-	var/obj/effect/overlay/puddle/P = locate(/obj/effect/overlay/puddle) in src
+	var/obj/effect/overlay/puddle/P = is_wet()
 	if(P.wet > slipperiness)
 		return
 	qdel(P)
