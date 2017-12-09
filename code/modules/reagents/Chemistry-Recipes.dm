@@ -247,16 +247,16 @@
 /datum/chemical_reaction/spoly_absorb_water
 	name = "Absorb Water"
 	id = "absorbwater"
-	result = null
+	result = CHEMICAL_WASTE
 	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, WATER = 1)
-	result_amount = 0
+	result_amount = 0.3
 
 /datum/chemical_reaction/spoly_absorb_lube
 	name = "Absorb Lube"
 	id = "absorblube"
-	result = null
+	result = CHEMICAL_WASTE
 	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBE = 1)
-	result_amount = 0
+	result_amount = 0.3
 
 /datum/chemical_reaction/sludge
 	name = "Sludge"
