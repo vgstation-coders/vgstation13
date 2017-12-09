@@ -1619,13 +1619,16 @@ Game Mode config tags:
 
 // Similar to find_working_surface_at_mob() but returns a list containing both the value and the surface. list("value" = value, "working_surface" = working_surface)
 /proc/find_working_surface_at_mob_verbose(mob/living/carbon/human/target, list/possible_surfaces_list)
+	var/located_object = null
 	for (var/surface in possible_surfaces_list)
-		if (locate(surface, target.loc))
-			var/obj/structure/table/table = surface
+		located_object = locate(surface, target.loc)
+		if (located_object)
+			var/obj/structure/table/table = located_object
 			if(istype(table) && table.flipped)
-				return list("value" = 0, "working_surface" = null)
+				break
 			else
-				return list("value" = possible_surfaces_list[surface], "working_surface" = surface)
+				return list("value" = possible_surfaces_list[surface], "working_surface" = located_object)
+	return list("value" = 0, "working_surface" = null)
 
 // Finds if the mob is on a structure, item, etc associated to values before returning the value for the matching item.
 /proc/find_working_surface_at_mob(mob/living/carbon/human/target, list/possible_surfaces_list)

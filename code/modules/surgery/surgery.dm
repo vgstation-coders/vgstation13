@@ -113,7 +113,7 @@ proc/unready_surgery(obj/item/tool)
 
 // Check if the mob is ready for surgery and pre-flight if it is else return FALSE
 proc/ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
-	var/working_surface_information = check_if_ready_for_surgery(M, user)
+	var/list/working_surface_information = check_if_ready_for_surgery(M, user)
 	if(working_surface_information["value"])
 		tool._surgery_preflight = TRUE
 		tool._surgery_preflight_M = M
@@ -123,26 +123,28 @@ proc/ready_for_surgery(mob/living/M, mob/living/user, obj/item/tool)
 		return TRUE
 	return FALSE
 
-// Tentively check if the mob is ready for surgery and return the chance as list("value" = value, "working_surface" = working_surface) or return FALSE
+// Tentively check if the mob is ready for surgery and return the chance as list("value" = value, "working_surface" = working_surface) or return list("value" = 0, "working_surface" = null)
 proc/check_if_ready_for_surgery(mob/living/M, mob/living/user)
+	var/list/result = list("value" = 0, "working_surface" = null)
 	if(user == M) // Can't do surgery on yourself (yet)
-		return FALSE
+		return result
 	if(!istype(M,/mob/living/carbon/human))
-		return FALSE
+		return result
 	if(!(ishuman(M) && M.lying))
-		return FALSE
+		return result
 	if(CAN_DO_SURGERY_ON_DISARM_GRAB_INTENT)
 		if(user.a_intent == I_HURT)
-			return FALSE
+			return result
 	else
 		if(user.a_intent != I_HELP)
-			return FALSE
-	return find_working_surface_at_mob_verbose(M, allowed_medical_work_surfaces)
+			return result
+	result = find_working_surface_at_mob_verbose(M, allowed_medical_work_surfaces)
+	return result
 
 // Attempt surgery on the mob from the user with a tool. Returns TRUE if it was sucessful or if there is problem with the tool or the mob is too armored. Returns false if the mob isn't ready for surgery or on the wrong intent.
 // AKA, stab people normally up until they are on a table and on the correct intent.
 proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
-	var/working_surface_information = null
+	var/list/working_surface_information = null
 	var/working_surface_stability = 0
 	var/obj/working_surface = null
 	var/working_surface_start_loc = null
@@ -159,6 +161,7 @@ proc/do_surgery(mob/living/M = null, mob/living/user = null, obj/item/tool)
 			return FALSE
 		working_surface_stability = working_surface_information["value"]
 		working_surface = working_surface_information["working_surface"]
+		working_surface_start_loc = working_surface.loc
 
 	if(!M || !user || !tool)
 		error("BUG? do_surgery was called without a mob, user, and/or tool. A tool isn't doing a pre-flight correctly? M = [M], user = [user], tool = [tool]")
