@@ -6,6 +6,7 @@
 	var/spawning_id = null
 	var/artifact = TRUE
 	var/artifact_id = null
+	var/units_per_tick = 0.3
 
 /obj/item/weapon/reagent_containers/glass/replenishing/New()
 	..()
@@ -20,4 +21,4 @@
 	..()
 
 /obj/item/weapon/reagent_containers/glass/replenishing/process()
-	reagents.add_reagent(spawning_id, 0.3)
+	reagents.add_reagent(spawning_id, units_per_tick)
