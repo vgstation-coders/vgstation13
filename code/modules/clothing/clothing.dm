@@ -420,6 +420,7 @@ BLIND     // can't see anything
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
+		usr.update_hair()
 
 /obj/item/clothing/mask/New()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
