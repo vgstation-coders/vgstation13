@@ -1629,7 +1629,9 @@ Game Mode config tags:
 			else
 				return possible_surfaces_list[surface]
 
-// Armor limits, if not null, will only find clothing with armor greater than the specified values via a list. Exceptions are clothing that should be ignored if found.
+// Finds the piece of clothing obstructing the selected targeted limb from the user to the target else returns FALSE.
+// If armorlimits is provided, it checks if any of the armor stats in the clothing will exceed the armorlimits provided to return FALSE.
+// If exceptions are provided, it checks if the cover is in the list to return FALSE.
 /proc/get_clothing_obstructing_target_from_user(mob/living/user, mob/living/carbon/human/target, list/armorlimits = null, list/exceptions = null)
 	if(!istype(target))
 		return FALSE
@@ -1645,12 +1647,14 @@ Game Mode config tags:
 			return cover
 	return FALSE
 
-/proc/does_clothing_exceed_armor_limits(var/obj/item/clothing/cover, list/armorlimits)
-	for(var/armor in cover.armor)
+// Takes a cover and checks against the provided list of armor stats and returns TRUE if any of the armor stats in the cover exceeds the ones provided else FALSE
+/proc/does_clothing_exceed_armor_limits(obj/item/clothing/cover, list/armorlimits)
+	for(var/armor in armorlimits)
 		if(cover.armor[armor] > armorlimits[armor])
 			return TRUE
 	return FALSE
 
+// Returns the piece of cover that would obstruct medication from user to target. Otherwise FALSE.
 /proc/get_surface_medication_obstruction(mob/living/user, mob/living/carbon/human/target)
 	var/obj/item/clothing/cover = get_clothing_obstructing_target_from_user(user, target)
 	if(cover)
