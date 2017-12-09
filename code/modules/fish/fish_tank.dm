@@ -114,7 +114,7 @@
 	set name = "Toggle Tank Lid"
 	set category = "Object"
 	set src in view(1)
-	if (usr.incapacitated() || !usr.Adjacent(src))
+	if (usr.incapacitated() || usr.isDead() || !usr.Adjacent(src))
 		return FALSE
 	toggle_lid(usr)
 
@@ -126,15 +126,12 @@
 	set name = "Toggle Tank Light"
 	set category = "Object"
 	set src in view(1)
-	if (usr.incapacitated() || !usr.Adjacent(src))
+	if (usr.incapacitated() || usr.isDead() || !usr.Adjacent(src))
 		return FALSE
 	toggle_light(usr)
 
 /obj/machinery/fishtank/proc/toggle_light(var/mob/living/user)
-	if(!user.incapacitated() && user.Adjacent(src))
-		return
-	else
-		light_switch = !light_switch
+	light_switch = !light_switch
 	if(light_switch)
 		set_light(2,2,"#a0a080")
 	else
@@ -245,6 +242,7 @@
 				remove_water(10)
 			if(MINOR_LEAK)						//At or below 50% health, the tank will lose 1 water_level per cycle (minor leak)
 				add_water(1)
+	update_icon()
 
 //////////////////////////////
 //		SUPPORT PROCS		//
@@ -343,27 +341,25 @@
 
 	var/caught_fish = input("Select a fish to catch.", "Fishing") as null|anything in fish_list		//Select a fish from the tank
 	if(caught_fish)
-		var/dead_fish = null
-		dead_fish = fish_items_list[caught_fish]	//Locate the appropriate fish_item for the caught fish
-		if(!dead_fish)								//No fish_item found, possibly due to typo or not being listed. Do nothing.
+		var/dead_fish = fish_items_list[caught_fish] //Locate the appropriate fish_item for the caught fish
+		if(!dead_fish)								 //No fish_item found, possibly due to typo or not being listed. Do nothing.
 			return
 		kill_fish(caught_fish)						//Kill the caught fish from the tank
 		user.visible_message("[user.name] harvests \a [caught_fish] from \the [src].", "You scoop \a [caught_fish] out of \the [src].")
 		new dead_fish(get_turf(user))				//Spawn the appropriate fish_item at the user's feet.
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
-	if(!deconstruct)
-		to_chat(world, "Brutally")														//Check if we are deconstructing or breaking the tank
-		for(var/i in  shard_count)														//Produce the appropriate number of glass shards
-			var/obj/item/weapon/shard/S = new /obj/item/weapon/shard
-			S.forceMove(get_turf(src))
+	if(!deconstruct)																	//Check if we are deconstructing or breaking the tank
+		for(var/i = 0; i < shard_count; i++)											//Produce the appropriate number of glass shards
+			new /obj/item/weapon/shard(get_turf(src))
 		if(water_level)																	//Spill any water that was left in the tank when it broke
 			spill_water()
 	else																				//We are deconstructing, make glass sheets instead of shards
-		var/sheets = shard_count + 1													//Deconstructing it salvages all the glass used to build the tank
-		var/obj/item/stack/sheet/glass/stack = new /obj/item/stack/sheet/glass(sheets)	//Produce the appropriate number of glass sheets, in a single stack
-		stack.forceMove(get_turf(src))
-	qdel(src)																			//qdel the tank and it's contents
+		var/sheets = shard_count + 1																	//Deconstructing it salvages all the glass used to build the tank
+		new /obj/item/stack/sheet/glass(get_turf(src), sheets)	//Produce the appropriate number of glass sheets, in a single stack
+	for (var/obj/item/weapon/fish/F in fish_list)
+		F.forceMove(get_turf(src))
+	qdel(src)																							//qdel the tank and it's contents
 
 
 /obj/machinery/fishtank/proc/spill_water()
@@ -373,7 +369,7 @@
 			if(!istype(T, /turf/simulated))
 				return
 			var/turf/simulated/S = T
-			S.wet = TRUE
+			S.wet(10 SECONDS, TURF_WET_WATER)
 
 		if("tank")										//Fishtank: Wets it's own tile and the 4 adjacent tiles (cardinal directions)
 			var/turf/ST = get_turf(src)
@@ -382,14 +378,14 @@
 				if(!istype(T, /turf/simulated))
 					continue
 				var/turf/simulated/S = T
-				S.wet = TRUE
+				S.wet(10 SECONDS, TURF_WET_WATER)
 
 		if ("wall")										//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
 			for(var/turf/T in view(src, 1))
 				if(!istype(T, /turf/simulated))
 					continue
 				var/turf/simulated/S = T
-				S.wet = TRUE
+				S.wet(10 SECONDS, TURF_WET_WATER)
 
 
 //////////////////////////////			Note from FalseIncarnate:
@@ -528,9 +524,10 @@
 
 
 /obj/machinery/fishtank/proc/hit(var/damage, var/mob/user)
+	user.delayNextAttack(0.3 SECONDS)
+	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
 	cur_health = max(0, cur_health - damage)
 	check_health()
-	user.delayNextAttack(0.3 SECONDS)
 
 /obj/machinery/fishtank/proc/attack_generic(mob/living/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
 	cur_health = max(0, cur_health - damage)
@@ -672,9 +669,6 @@
 	return TRUE
 
 /* tank construction */
-
-
-
 
 /obj/structure/displaycase_frame/attackby(var/obj/item/weapon/F as obj, mob/user as mob) // FISH BOWL
 	if (iswelder(F))

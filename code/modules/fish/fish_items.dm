@@ -65,9 +65,9 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_range = 7
 	attack_verb = list("scrubbed", "brushed", "scraped")
 
-	/obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='warning'>[user] is vigorously scrubbing \himself raw with the [src]! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS|FIRELOSS)
+/obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='warning'>[user] is vigorously scrubbing \himself raw with the [src]! It looks like \he's trying to commit suicide.</span>")
+	return(BRUTELOSS|FIRELOSS)
 
 //////////////////////////////////////////////
 //				Fish Items					//
@@ -81,10 +81,10 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	filling_color = "#FF1C1C"
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
-		..()
-		desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
-		reagents.add_reagent("NUTRIMENT", 1)
-		src.bitesize = 1
+	..()
+	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
+	reagents.add_reagent("NUTRIMENT", 1)
+	src.bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
@@ -93,10 +93,10 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "feederfish"
 	filling_color = "#FF1C1C"
 
-	/obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
-		..()
-		reagents.add_reagent("NUTRIMENT", 1)
-		src.bitesize = 1
+/obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
+	..()
+	reagents.add_reagent("NUTRIMENT", 1)
+	src.bitesize = 1
 
 /obj/item/weapon/fish
 	name = "fish"
@@ -132,7 +132,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	hitsound = 'sound/weapons/bite.ogg'
 	force = 3
 
-/obj/item/weapon/fish/shark/attackby(var/obj/item/O, var/mob/user as mob)
+/obj/item/weapon/fish/shark/attackby(var/obj/item/O, var/mob/user)
 	if(istype(O, /obj/item/weapon/wirecutters))
 		to_chat(user, "You rip out the teeth of \the [src.name]!")
 		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
@@ -165,7 +165,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	desc = "Apparently, catfish don't purr like you might have expected them to. Such a confusing name!"
 	icon_state = "catfish"
 
-/obj/item/weapon/fish/catfish/attackby(var/obj/item/O, var/mob/user as mob)
+/obj/item/weapon/fish/catfish/attackby(var/obj/item/O, var/mob/user)
 	if(O.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "You carefully clean and gut \the [src].")
 		new /obj/item/weapon/reagent_containers/food/snacks/catfishmeat(get_turf(src))
@@ -184,7 +184,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	desc = "The second-favorite food of Space Bears, right behind crew members."
 	icon_state = "salmon"
 
-/obj/item/weapon/fish/salmon/attackby(var/obj/item/O, var/mob/user as mob)
+/obj/item/weapon/fish/salmon/attackby(var/obj/item/O, var/mob/user)
 	if(O.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "You carefully clean and gut \the [src].")
 		new /obj/item/weapon/reagent_containers/food/snacks/salmonmeat(get_turf(src))
@@ -200,7 +200,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	hitsound = 'sound/weapons/bite.ogg'
 	force = 3*/
 
-/*/obj/item/weapon/fish/babycarp/attackby(var/obj/item/O, var/mob/user as mob)
+/*/obj/item/weapon/fish/babycarp/attackby(var/obj/item/O, var/mob/user)
 	if(is_sharp(O))
 		to_chat(user, "You carefully clean and gut \the [src.name].")
 		new /obj/item/weapon/reagent_containers/food/snacks/carpmeat(get_turf(src)) //just one fillet; this is a baby, afterall.
