@@ -242,7 +242,6 @@
 				remove_water(10)
 			if(MINOR_LEAK)						//At or below 50% health, the tank will lose 1 water_level per cycle (minor leak)
 				add_water(1)
-	update_icon()
 
 //////////////////////////////
 //		SUPPORT PROCS		//
@@ -268,15 +267,19 @@
 
 /obj/machinery/fishtank/proc/remove_water(var/amount)
 	water_level = max(0, water_level - amount)
+	update_icon()
 
 /obj/machinery/fishtank/proc/add_water(var/amount)
 	water_level = min(water_capacity, filth_level + amount)
+	update_icon()
 
 /obj/machinery/fishtank/proc/remove_filth(var/amount)
 	filth_level = max(0, filth_level - amount)
+	update_icon()
 
 /obj/machinery/fishtank/proc/add_filth(var/amount)
 	filth_level = min(MAX_FILTH, filth_level + amount)
+	update_icon()
 
 /obj/machinery/fishtank/proc/remove_food(var/amount)
 	food_level = max(0, food_level - amount)
@@ -349,13 +352,13 @@
 		new dead_fish(get_turf(user))				//Spawn the appropriate fish_item at the user's feet.
 
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
-	if(!deconstruct)																	//Check if we are deconstructing or breaking the tank
-		for(var/i = 0; i < shard_count; i++)											//Produce the appropriate number of glass shards
+	if(!deconstruct)															//Check if we are deconstructing or breaking the tank
+		for(var/i = 0 to shard_count)											//Produce the appropriate number of glass shards
 			new /obj/item/weapon/shard(get_turf(src))
-		if(water_level)																	//Spill any water that was left in the tank when it broke
+		if(water_level)															//Spill any water that was left in the tank when it broke
 			spill_water()
-	else																				//We are deconstructing, make glass sheets instead of shards
-		var/sheets = shard_count + 1																	//Deconstructing it salvages all the glass used to build the tank
+	else														//We are deconstructing, make glass sheets instead of shards
+		var/sheets = shard_count + 1							//Deconstructing it salvages all the glass used to build the tank
 		new /obj/item/stack/sheet/glass(get_turf(src), sheets)	//Produce the appropriate number of glass sheets, in a single stack
 	for (var/obj/item/weapon/fish/F in fish_list)
 		F.forceMove(get_turf(src))
