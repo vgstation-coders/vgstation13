@@ -27,7 +27,7 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock
+	/datum/rcd_schematic/con_airlock/borg
 	)
 
 /obj/item/weapon/rcd_ammo
