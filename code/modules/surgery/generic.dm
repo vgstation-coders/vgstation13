@@ -326,6 +326,10 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] cauterizes the incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 	"<span class='notice'>You cauterize the incision on [target]'s [affected.display_name] with \the [tool].</span>")
+	if((target_zone == LIMB_CHEST && target.op_stage.ribcage) || (target_zone == LIMB_HEAD && affected.open > 2)) // Oh no
+		to_chat(user, "<span class='warning'>You feel like you forgot something.</span>")
+		affected.fracture()
+		target.op_stage.ribcage = 0
 	affected.open = 0
 	affected.germ_level = 0
 	affected.status &= ~ORGAN_BLEEDING
