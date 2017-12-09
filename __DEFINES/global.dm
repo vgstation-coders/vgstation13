@@ -374,7 +374,8 @@ var/list/allowed_medical_work_surfaces = list(
 	/obj/structure/bed/roller/surgery = 100,
 	/obj/structure/bed/roller = 75,
 	/obj/structure/table/reinforced = 70,
-	/obj/structure/table = 66
+	/obj/structure/table/woodentable = 60, // If the normal table was before this, wooden tables would be considered the same as a metal one
+	/obj/structure/table = 65
 )
 #define PERCENT_SUITABLE_MEDICAL_WORKSPACE 100 // 100 to 0 for surface stability, when should the user be warned about a unsuitable surface?
 #define CAN_MEDICATE_THROUGH_PLASMAMEN_SUITS FALSE // If plasmamen suits are an exception for medicating through armor.

@@ -263,18 +263,21 @@ proc/tg_jointext(list/list, glue = ",")
 
 	return finalNum
 
+/var/list/target_to_mobpart_list = list(
+	LIMB_HEAD		 = HEAD
+	LIMB_CHEST		 = UPPER_TORSO
+	LIMB_GROIN		 = LOWER_TORSO
+	LIMB_LEFT_ARM	 = ARM_LEFT
+	LIMB_RIGHT_ARM	 = ARM_RIGHT
+	LIMB_LEFT_HAND	 = HAND_LEFT
+	LIMB_RIGHT_HAND	 = HAND_RIGHT
+	LIMB_LEFT_LEG	 = LEG_LEFT
+	LIMB_RIGHT_LEG	 = LEG_RIGHT
+	LIMB_LEFT_FOOT	 = FOOT_LEFT
+	LIMB_RIGHT_FOOT	 = FOOT_RIGHT
+	TARGET_MOUTH	 = MOUTH
+	TARGET_EYES		 = EYES
+)
+// Takes a target and converts it to a mobpart bitflag.
 /proc/target_to_mobpart(var/limb)
-	switch(limb)
-		if(LIMB_HEAD)		return HEAD
-		if(LIMB_CHEST)		return UPPER_TORSO
-		if(LIMB_LEFT_ARM)	return ARM_LEFT
-		if(LIMB_RIGHT_ARM)	return ARM_RIGHT
-		if(LIMB_LEFT_HAND)	return HAND_LEFT
-		if(LIMB_RIGHT_HAND)	return HAND_RIGHT
-		if(LIMB_LEFT_LEG)	return LEG_LEFT
-		if(LIMB_RIGHT_LEG)	return LEG_RIGHT
-		if(LIMB_LEFT_FOOT)	return FOOT_LEFT
-		if(LIMB_RIGHT_FOOT)	return FOOT_RIGHT
-		if(TARGET_MOUTH)	return MOUTH
-		if(TARGET_EYES)			return EYES
-		else 				return 0
+	var/mobpart = (target_to_mobpart_list[limb] || 0)
