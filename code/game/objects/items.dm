@@ -1202,6 +1202,9 @@ var/global/list/image/blood_overlays = list()
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
+		if(C.handcuffed)
+			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
+			return
 		feedback_add_details("handcuffs", "[name]")
 
 		if(clumsy_check(user) && prob(50))
