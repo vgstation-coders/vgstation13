@@ -8,6 +8,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
