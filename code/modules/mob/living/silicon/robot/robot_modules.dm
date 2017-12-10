@@ -85,10 +85,14 @@
 	return
 
 /obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
-	for(var/obj/item/I in modules)
+	var/mob/living/silicon/robot/owner = loc
+	if(!istype(owner))
+		return
+	var/list/equipped_slots = owner.get_all_slots()
+	for(var/obj/item/I in (modules + emag))
+		if(I in equipped_slots)
+			continue // mouse_opacity must not be 2 for equipped items
 		I.mouse_opacity = 2
-	if(emag)
-		emag.mouse_opacity = 2
 
 /obj/item/weapon/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R)
 	return
