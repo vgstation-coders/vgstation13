@@ -324,7 +324,8 @@
 
 
 /obj/item/weapon/FixOVein
-	name = "FixOVein"
+	name = "fixOvein"
+	desc = "A small tube that contains synthetic vein to repair or replace damaged veins."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "fixovein"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
@@ -334,6 +335,56 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
+
+
+/obj/item/weapon/FixOVein/rapid
+	name = "rapid vein layer"
+	desc = "A canister like tool that has two containers on it that stores synthetic vein or biofoam. There's a small processing port on the side where gauze can be inserted to produce biofoam."
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "fixovein"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
+	item_state = "fixovein"
+	sharpness = null
+	sharpness_flags = null
+	surgery_speed = 0.5
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
+	var/foam = 0
+
+/obj/item/weapon/FixOVein/rapid/examine(mob/user)
+	..()
+	if(foam)
+		to_chat(user, "\The [src] contains [foam] unit[foam > 1 ? "s" : ""] of biofoam.")
+	else
+		to_chat(user, "\The [src] contains [foam] units of biofoam.")
+
+/obj/item/weapon/FixOVein/rapid/attack_self(mob/user)
+	if(foam)
+		if(!sharpness) //The needle is pointy so it's a bit sharp when the injection mode is active.
+			sharpness= 0.5
+			sharpness_flags = SHARP_TIP
+		else
+			sharpness = null
+			sharpness_flags = null
+		to_chat(user, "<span class='notice'>You toggle \the [src]'s tip to [sharpness == 0.5 ? "inject biofoam" : "repair veins"].</span>")
+	else
+		to_chat(user, "<span class='notice'>\The [src] requires biofoam to use the injection tip.</span")
+
+/obj/item/weapon/FixOVein/rapid/attackby(var/obj/item/stack/W, mob/user)
+	if((istype(W, /obj/item/stack/medical)) && (foam < 5))
+		if(istype(W, /obj/item/stack/medical/bruise_pack))
+			foam += 1
+			to_chat(user, "<span class='notice'>You insert a bit of \the [W] into \the [src].</span>")
+			W.use(1)
+			return
+		else if(istype(W, /obj/item/stack/medical/advanced/bruise_pack))
+			foam = 5
+			to_chat(user, "<span class='notice'>You insert a bit of \the [W] into \the [src].</span>")
+			W.use(1)
+		else
+			to_chat(user, "<span class='notice'>You can't see any way to use \the [W] on \the [src].</span>")
+	else
+		to_chat(user, "<span class='warning'>[foam == 5 ? "The [src] is full!" : ""]</span> <span class='notice'>You can't see any way to use \the [W] on \the [src].</span>")
+
 
 /obj/item/weapon/bonesetter
 	name = "bone setter"
