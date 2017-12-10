@@ -149,7 +149,7 @@
 		return FALSE
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if(affected.stage)
-		to_chat(user, "<span class='notice'>You can not put \the [affected.encased] back into place in the already present bonegel. You have to finish mending it.</span>")
+		to_chat(user, "<span class='warning'>You can not put \the [affected.encased] back into place in the already present bone gel. Mend it first.</span>")
 		return FALSE
 	return ..() && affected.open == 3
 

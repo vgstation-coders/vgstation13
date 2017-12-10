@@ -71,7 +71,7 @@
 
 /datum/surgery_step/set_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if (affected.status & ORGAN_BROKEN)
+	if (affected.status & ORGAN_BROKEN || affected.open > 2)
 		user.visible_message("<span class='notice'>[user] sets the bone in [target]'s [affected.display_name] in place with \the [tool].</span>", \
 			"<span class='notice'>You set the bone in [target]'s [affected.display_name] in place with \the [tool].</span>")
 		affected.stage = 2
@@ -196,6 +196,7 @@
 	affected.status &= ~ORGAN_SPLINTED
 	affected.stage = 0
 	affected.perma_injury = 0
+	affected.open = 2 // Since you just pieced together a bone that was previously sawed open so might as well seal it back up.
 	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
 		affected.heal_damage(affected.brute_dam - (affected.min_broken_damage - rand(3,5)) * config.organ_health_multiplier)
 		//Put the limb's brute damage just under the bone breaking threshold, to prevent it from instabreaking again.
