@@ -34,9 +34,10 @@
 							 "floor tiles" = /obj/item/stack/tile/plasteel,
 							 "metal rods" = /obj/item/stack/rods)
 
-/obj/item/device/material_synth/robot/New()
+/obj/item/device/material_synth/robot/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
 	. = ..()
-	can_scan = existing_typesof(/obj/item/stack/sheet) - list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+	if(!istype(src, /obj/item/device/material_synth/robot/mommi))
+		can_scan = existing_typesof(/obj/item/stack/sheet) - list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
