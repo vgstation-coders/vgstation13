@@ -49,7 +49,7 @@
 	var/obj/item/W = get_active_hand()
 
 	var/equipped_slot = get_equipped_module_index(A)
-	if(equipped_slot)
+	if(equipped_slot && W != A)
 		select_module(equipped_slot)
 		return
 
