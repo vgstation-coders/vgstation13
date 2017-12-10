@@ -11,6 +11,11 @@
 /mob/living/silicon/robot/get_all_slots()
 	return list(module_state_1, module_state_2, module_state_3)
 
+// Returns the index of the module slot the `item` is in, or 0
+/mob/living/silicon/robot/proc/get_equipped_module_index(var/item)
+	var/list/equipped_modules = get_all_slots()
+	return equipped_modules.Find(item)
+
 //overridden from parent since they technically have no 'hands'
 /mob/living/silicon/robot/get_equipped_items()
 	return get_all_slots()
