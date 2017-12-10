@@ -178,7 +178,12 @@
 
 /datum/surgery_step/bone_mender/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	return (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN)) && affected.stage <= 5 && affected.status & ORGAN_BROKEN
+	if(affected.open >=2 && affected.stage <= 5) // So you have to be cut open and the stage is valid
+		if(target.species.anatomy_flags & NO_SKIN && affected.status & ORGAN_BROKEN) // If you have no skin and your bone's broke
+			return TRUE // Start the operation
+		if(affected.status & ORGAN_BROKEN || affected.open > 2) // Or if you have broken bones or have been sawed open,
+			return TRUE // Start the operation
+	return  FALSE
 
 /datum/surgery_step/bone_mender/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
