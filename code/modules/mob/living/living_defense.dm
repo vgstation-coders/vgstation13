@@ -39,6 +39,20 @@
 /mob/living/proc/getarmor(var/def_zone, var/type)
 	return 0
 
+/mob/living/proc/getarmorabsorb(var/def_zone, var/type)
+	return 0
+
+/mob/living/proc/run_armor_absorb(var/def_zone = null, var/attack_flag = "melee", var/initial_damage)
+	var/armor = getarmorabsorb(def_zone, attack_flag)
+	var/final_damage = initial_damage
+
+	if(armor)
+		var/damage_multiplier = final_damage/armor
+		if(damage_multiplier < 1)
+			final_damage *= damage_multiplier
+
+	return final_damage
+
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	var/obj/item/weapon/cloaking_device/C = locate((/obj/item/weapon/cloaking_device) in src)
