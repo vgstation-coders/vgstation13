@@ -855,7 +855,7 @@
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = FALSE)
-	if(!user.can_wield())
+	if(!user.can_wield(src))
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
 

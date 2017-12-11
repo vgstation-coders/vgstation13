@@ -57,6 +57,8 @@
 				<center><a href='?src=\ref[src];operation=mainmenu'>\[Main Menu\]</a></center>
 				<br>Current Network: [network]<br>
 				Selected Network Entity: [SelectedMachine.name] ([SelectedMachine.id])<br>
+				Machine Integrity: [SelectedMachine.get_integrity() < 100 ? "<font color = #D70B00><b>[SelectedMachine.get_integrity()]%</b></font color>" : "<b>100%</b>"]<br>
+				[SelectedMachine.stat & EMPED ? "<b>Local Interference Detected:</b><br>[SelectedMachine.emptime] seconds remaining <a href='?src=\ref[src];operation=boost'>\[Boost Signal\]</a><br>" : ""]
 				Linked Entities: <ol>"}
 			for(var/obj/machinery/telecomms/T in SelectedMachine.links)
 				if(!T.hide)
@@ -96,6 +98,12 @@
 
 			if("mainmenu")
 				screen = 0
+
+			if("boost")
+				if(SelectedMachine.boost_signal())
+					temp = "<b>- SUCCESS: \[[SelectedMachine]\] SIGNAL AMPLIFIED -</b>"
+				else
+					temp = "<font color = #D70B00>- FAILED: NO LOCAL INTERFERENCE DETECTED -</font color>"
 
 			if("probe")
 				if(machinelist.len > 0)

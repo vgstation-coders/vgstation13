@@ -1067,6 +1067,15 @@
 	specheatcap = 0.75
 	density = 0.89
 
+/datum/reagent/potassiumcarbonate
+	name = "Potassium Carbonate"
+	id = POTASSIUMCARBONATE
+	description = "A primary component of potash, usually acquired by reducing potassium-rich organics."
+	reagent_state = SOLID
+	color = "#A0A0A0"
+	density = 2.43
+	specheatcap = 0.96
+
 /datum/reagent/mercury
 	name = "Mercury"
 	id = MERCURY

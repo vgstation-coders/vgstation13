@@ -3,20 +3,34 @@
 
 #define FAILED_TO_ADD 1
 
-/obj/item/borg/upgrade/var/vtec_bonus = 0.25
+/obj/item/borg/upgrade/var/vtec_bonus = 0.25 //Define when
 
 /obj/item/borg/upgrade
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "cyborg_upgrade"
-	var/locked = 0
+	var/locked = FALSE
 	var/list/required_module = list()
-	var/add_to_mommis = 0
+	var/add_to_mommis = FALSE
 	var/list/modules_to_add = list()
-	var/multi_upgrades = 0
+	var/multi_upgrades = FALSE
 	w_type=RECYK_ELECTRONIC
 
+
+/obj/item/borg/upgrade/proc/locate_component(var/obj/item/C, var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(!C || !R || !user)
+		return null
+
+	var/obj/item/I = locate(C) in R.module
+	if(!I)
+		I = locate(C) in R.module.contents
+	if(!I)
+		I = locate(C) in R.module.modules
+	if(!I)
+		to_chat(user, "This cyborg is missing one of the needed components!")
+		return null
+	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(!R.module)
@@ -57,7 +71,7 @@
 // Medical Cyborg Stuff
 
 /obj/item/borg/upgrade/medical/surgery
-	name = "medical module board"
+	name = "medical cyborg MK-2 upgrade board"
 	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
 	icon_state = "cyborg_upgrade"
 	required_module = list(/obj/item/weapon/robot_module/medical)
@@ -67,14 +81,14 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gripper/chemistry/C = locate(/obj/item/weapon/gripper/chemistry) in R.module.modules
-	if(!C)
+	var/obj/item/weapon/gripper/chemistry/G = locate_component(/obj/item/weapon/gripper/chemistry, R, user)
+	if(!G)
 		return FAILED_TO_ADD
 
-	C.can_hold += list (/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
+	G.can_hold += list(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
 
 /obj/item/borg/upgrade/reset
-	name = "robotic module reset board"
+	name = "cyborg reset board"
 	desc = "Used to reset a cyborg's module. Destroys any other upgrades applied to the robot."
 	icon_state = "cyborg_upgrade1"
 
@@ -97,7 +111,7 @@
 
 /obj/item/borg/upgrade/rename
 	var/heldname = ""
-	name = "robot rename board"
+	name = "cyborg rename board"
 	desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
 	icon_state = "cyborg_upgrade1"
 
@@ -130,7 +144,7 @@
 		R.module.upgrades -= /obj/item/borg/upgrade/rename
 
 /obj/item/borg/upgrade/restart
-	name = "robot emergency restart module"
+	name = "cyborg emergency restart board"
 	desc = "Used to force a restart of a disabled-but-repaired robot, bringing it back online."
 	icon_state = "cyborg_upgrade1"
 
@@ -138,7 +152,7 @@
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(R.health < 0)
 		to_chat(user, "You have to repair the robot before using this module!")
-		return 0
+		return FALSE
 
 	if(!R.key)
 		for(var/mob/dead/observer/ghost in player_list)
@@ -149,10 +163,10 @@
 	R.resurrect()
 
 /obj/item/borg/upgrade/vtec
-	name = "robotic VTEC Module"
+	name = "cyborg VTEC upgrade board"
 	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
 	icon_state = "cyborg_upgrade2"
-	add_to_mommis = 1
+	add_to_mommis = TRUE
 
 /obj/item/borg/upgrade/vtec/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
@@ -163,23 +177,16 @@
 
 
 /obj/item/borg/upgrade/tasercooler
-	name = "robotic Rapid Taser Cooling Module"
+	name = "security cyborg rapid taser cooling upgrade board"
 	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/security)
-	multi_upgrades = 1
+	multi_upgrades = TRUE
 
 
 /obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-
-
-	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate() in R.module
+	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
 	if(!T)
-		T = locate() in R.module.contents
-	if(!T)
-		T = locate() in R.module.modules
-	if(!T)
-		to_chat(user, "This robot has had its taser removed!")
 		return FAILED_TO_ADD
 
 	if(T.recharge_time <= 2)
@@ -193,12 +200,12 @@
 		T.recharge_time = max(2 , T.recharge_time - 4)
 
 /obj/item/borg/upgrade/jetpack
-	name = "utility robot jetpack"
+	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering,/obj/item/weapon/robot_module/combat)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
-	add_to_mommis = 1
+	add_to_mommis = TRUE
 
 /obj/item/borg/upgrade/jetpack/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -208,13 +215,13 @@
 		R.internals = src
 
 /obj/item/borg/upgrade/syndicate/
-	name = "Illegal Equipment Module"
+	name = "cyborg illegal equipment board"
 	desc = "Unlocks the hidden, deadlier functions of a robot."
 	icon_state = "cyborg_upgrade3"
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
-	if(R.emagged == 1)
+	if(R.emagged == TRUE)
 		return FAILED_TO_ADD
 
 	if(..())
@@ -225,7 +232,7 @@
 	R.SetEmagged(2)
 
 /obj/item/borg/upgrade/engineering/
-	name = "Engineering Equipment Module"
+	name = "engineering cyborg MK-2 upgrade board"
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
@@ -235,7 +242,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/device/material_synth/S = locate(/obj/item/device/material_synth) in R.module.modules
+	var/obj/item/device/material_synth/S = locate_component(/obj/item/device/material_synth, R, user)
 	if(!S)
 		return FAILED_TO_ADD
 
@@ -244,32 +251,49 @@
 								"carpet tiles" = /obj/item/stack/tile/carpet)
 
 /obj/item/borg/upgrade/service
-	name = "service module upgrade board"
-	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle beakers, food and seeds."
+	name = "service cyborg cooking upgrade board"
+	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/plants, /obj/item/weapon/storage/bag/food/borg)
+	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
 
 /obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gripper/service/G = locate(/obj/item/weapon/gripper/service) in R.module.modules
+	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold += list (/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food)
+	G.can_hold += list(/obj/item/weapon/reagent_containers/food)
 
 /obj/item/borg/upgrade/magnetic_gripper
-	name = "magnetic gripper module board"
+	name = "engineering cyborg magnetic gripper upgrade board"
 	desc = "Used to give a engineering cyborg a magnetic gripper."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
 
 /obj/item/borg/upgrade/organ_gripper
-	name = "organ gripper module board"
+	name = "medical cyborg organ gripper upgrade board"
 	desc = "Used to give a medical cyborg a organ gripper."
 	icon_state = "cyborg_upgrade2"
 	required_module = list(/obj/item/weapon/robot_module/medical)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
+
+/obj/item/borg/upgrade/hydro
+	name = "service cyborg H.U.E.Y. upgrade board"
+	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
+	icon_state = "cyborg_upgrade"
+	required_module = list(/obj/item/weapon/robot_module/butler)
+	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants, /obj/item/device/analyzer/plant_analyzer)
+
+/obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
+	if(!G)
+		return FAILED_TO_ADD
+
+	G.can_hold += list(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)

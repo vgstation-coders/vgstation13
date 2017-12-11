@@ -130,6 +130,8 @@
 	else if(href_list["name_disease"])
 		var/norange = (usr.mutations && usr.mutations.len && (M_TK in usr.mutations))
 		var/new_name = stripped_input(usr, "Name the Disease", "New Name", "", MAX_NAME_LEN)
+		if (!new_name)
+			return FALSE
 		if(stat & (NOPOWER|BROKEN))
 			return
 		if(usr.stat || usr.restrained())

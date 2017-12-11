@@ -107,6 +107,9 @@
 	var/list/schematics			= list()
 	var/ready
 
+/datum/rcd_schematic/con_airlock/borg
+	energy_cost					= 30
+
 /datum/rcd_schematic/con_airlock/show(var/mob/living/user, close = 0)
 	if(!close)
 		user.shown_schematics_background = 1
