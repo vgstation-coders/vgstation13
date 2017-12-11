@@ -150,18 +150,6 @@
 			return (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 	return max(5 * world.tick_lag, 1)
 
-// This is designed to only be used occasionally, since procs add overhead.
-/atom/movable/proc/reset_glide_size()
-	glide_size = Ceiling(WORLD_ICON_SIZE / src.get_move_delay() * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
-	//glide_size = WORLD_ICON_SIZE / max(move_delay, world.tick_lag) * world.tick_lag // Updated calc from http://www.byond.com/forum/?post=1573076
-
-/mob/verb/fix_gliding()
-	set category = "OOC"
-	set name = "Fix Movement"
-	set desc = "Fixes jerky movement caused by BYOND being dumb."
-	reset_glide_size()
-
-
 /atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
 	if(!loc || !newLoc)
 		return 0
@@ -417,7 +405,9 @@
 		Obstacle.Bumped(src)
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
+/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	if(glide_size_override)
+		glide_size = glide_size_override
 	var/atom/old_loc = loc
 	loc = destination
 	last_moved = world.time
