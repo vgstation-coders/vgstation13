@@ -352,6 +352,7 @@
 #define HYOSCYAMINE		"hyoscyamine"
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
+#define POTASSIUMCARBONATE "potassium_carbonate"
 
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"

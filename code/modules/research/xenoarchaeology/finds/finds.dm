@@ -609,7 +609,11 @@
 				possible_spawns = existing_typesof(/obj/item/toy)
 				var/new_type = pick(possible_spawns)
 				new_item = new new_type(src.loc)
-
+		if(ARCHAEO_LARGE_CRYSTAL)
+			new_item = new/obj/structure/crystal(loc)
+			apply_material_decorations = FALSE
+			apply_image_decorations = TRUE
+			desc = new_item.desc
 
 	var/decorations = ""
 	if(apply_material_decorations)

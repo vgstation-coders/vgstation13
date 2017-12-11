@@ -34,6 +34,10 @@
 							 "floor tiles" = /obj/item/stack/tile/plasteel,
 							 "metal rods" = /obj/item/stack/rods)
 
+/obj/item/device/material_synth/robot/New()
+	. = ..()
+	can_scan = existing_typesof(/obj/item/stack/sheet) - list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
@@ -150,7 +154,7 @@
 		materials_scanned["[initial(target.name)]"] = target.type
 		to_chat(user, "<span class='notice'>You successfully scan \the [target] into \the [src]'s material banks.</span>")
 		return 1
-	else if(istype(target, /obj/item/stack/sheet)) //We can't scan it, but, only display an error when trying to scan a sheet. Currently only happens with MoMMI matsynths.
+	else if(istype(target, /obj/item/stack/sheet)) //We can't scan it, but, only display an error when trying to scan a sheet.
 		to_chat(user, "<span class='warning'>Your [src.name] does not contain this functionality to scan this type of material.</span>")
 	return ..()
 

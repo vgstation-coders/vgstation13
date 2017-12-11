@@ -655,7 +655,7 @@ Thanks.
 
 	return
 
-/mob/living/Move(atom/newloc, direct)
+/mob/living/Move(atom/newloc, direct,Dir=0,step_x=0,step_y=0)
 	if (locked_to && locked_to.loc != newloc)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)

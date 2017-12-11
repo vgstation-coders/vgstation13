@@ -227,8 +227,10 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			CONTENTS:<br><ul>"}
 		//spawn the stuff, finish generating the manifest while you're at it
 		if(SP.access)
-			A:req_access = list()
-			A:req_access += text2num(SP.access)
+			A:req_access = SP.access
+
+		if(SP.one_access)
+			A:req_one_access = SP.one_access
 
 		var/list/contains
 		if(istype(SP,/datum/supply_packs/randomised))

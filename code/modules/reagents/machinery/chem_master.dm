@@ -171,28 +171,22 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
 		if(href_list["analyze"])
+			var/datum/reagent/reagent = locate(href_list["analyze"])
 			var/dat = list()
-			if(!condi)
-				if(href_list["name"] == "Blood")
-					var/datum/reagent/blood/G
-					for(var/datum/reagent/F in R.reagent_list)
-						if(F.name == href_list["name"])
-							G = F
-							break
-					var/A = G.name
-					var/B = G.data["blood_type"]
-					var/C = G.data["blood_DNA"]
-					dat += "Chemical infos:<BR><BR>Name:<BR>[A]<BR><BR>Description:<BR>Blood Type: [B]<br>DNA: [C]<BR><BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
-				else
-					dat += "Chemical infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR>Density:<BR>[href_list["density"]]<BR><BR>Specific heat capacity:<BR>[href_list["specheatcap"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
+			if(!reagent)
+				dat += "No info. Please contact technical support if you believe this is an error."
 			else
-				dat += "Condiment infos:<BR><BR>Name:<BR>[href_list["name"]]<BR><BR>Description:<BR>[href_list["desc"]]<BR><BR><BR><A href='?src=\ref[src];main=1'>(Back)</A>"
-			//usr << browse(dat, "window=chem_master;size=575x400")
+				dat += "[condi ? "Condiment" : "Chemical"] information:<BR><BR>Name:<BR>[reagent.name]<BR><BR>Description:<BR>[reagent.description]<BR><BR>"
+				if(!condi)
+					if(istype(reagent, /datum/reagent/blood))
+						dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
+					dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
+				dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
+
 			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
-			onclose(usr, "[windowtype]")
 			return 1
 
 		else if(href_list["add"])
@@ -468,7 +462,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name];density=[G.density];specheatcap=[G.specheatcap]'>(?)</A>
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -506,7 +500,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name];density=[N.density];specheatcap=[N.specheatcap]'>(?)</A>
+						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>
