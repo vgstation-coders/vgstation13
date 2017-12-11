@@ -99,7 +99,7 @@
 				zone_normal_name = "right leg"
 			else
 				zone_normal_name = zone
-		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = throwforce*(speed/5)*sharpness)
+		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = O.throwforce*(speed/5)*O.sharpness)
 		if(armor < 2)
 			apply_damage(O.throwforce*(speed/5), dtype, zone, armor, O.is_sharp(), O)
 
