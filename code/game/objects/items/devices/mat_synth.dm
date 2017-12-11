@@ -27,17 +27,16 @@
 	var/list/can_scan = list(/obj/item/stack/sheet)
 	var/matter = 0
 
-/obj/item/device/material_synth/robot //Cyborg version, has less materials but can make rods n shit as well as scan.
+/obj/item/device/material_synth/robot/engiborg //Cyborg version, has less materials but can make rods n shit as well as scan.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 							 "floor tiles" = /obj/item/stack/tile/plasteel,
 							 "metal rods" = /obj/item/stack/rods)
 
-/obj/item/device/material_synth/robot/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
+/obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
 	. = ..()
-	if(!istype(src, /obj/item/device/material_synth/robot/mommi))
-		can_scan = existing_typesof(/obj/item/stack/sheet) - list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+	can_scan = existing_typesof(/obj/item/stack/sheet) - list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
