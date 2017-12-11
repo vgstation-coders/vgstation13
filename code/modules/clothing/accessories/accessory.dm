@@ -322,12 +322,16 @@
 
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
-	desc = "Changes color to black when it absorbs over a certain amount of radiation"
+	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
 	icon_state = "rad_patch"
 	var/rad_absorbed = 0
 	var/rad_threshold = 45
 	var/triggered = FALSE
 	var/event_key
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
+	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
 
 /obj/item/clothing/accessory/rad_patch/proc/check_rads(list/arguments)
 	if(triggered)
