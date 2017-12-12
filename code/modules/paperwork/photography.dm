@@ -369,7 +369,7 @@
 /obj/item/device/camera/proc/camera_get_mobs(turf/the_turf)
 	var/mob_detail
 	for(var/mob/living/carbon/A in the_turf)
-		get_mob_items(mob_detail, the_turf, A)
+		mob_detail = get_mob_items(mob_detail, the_turf, A)
 
 	for(var/mob/living/simple_animal/S in the_turf)
 		if(S.invisibility != 0)
@@ -404,7 +404,7 @@
 			mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
 		else
 			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
-
+	return mob_detail
 
 /obj/item/device/camera/sepia/camera_get_mobs(turf/the_turf)
 	var/mob_detail
