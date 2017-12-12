@@ -57,7 +57,7 @@
 	water_capacity = 50			// Not very big, therefore it can't hold much
 	max_fish = 1				// What a lonely fish
 
-	has_lid = TRUE
+	has_lid = FALSE
 	max_health = 15				// Not very sturdy
 	cur_health = 15
 	shard_count = 0				// No salvageable shards
@@ -402,36 +402,38 @@
 
 	examine_message += "Water level: "
 
-	if(water_level == 0)
-		examine_message += "\The [src] is empty! "
-	else if(water_level < water_capacity * 0.1)
-		examine_message += "\The [src] is nearly empty! "
-	else if(water_level <= water_capacity * 0.25)
-		examine_message += "\The [src] is about one-quarter filled. "
-	else if(water_level <= water_capacity * 0.5)
-		examine_message += "\The [src] is about half filled. "
-	else if(water_level <= water_capacity * 0.75)
-		examine_message += "\The [src] is about three-quarters filled. "
-	else if(water_level < water_capacity)
-		examine_message += "\The [src] is nearly full! "
-	else if(water_level == water_capacity)
-		examine_message += "\The [src] is full! "
+	switch (water_level/water_capacity)
+		if (0)
+			examine_message += "\The [src] is empty! "
+		if (0.001 to 0.1)
+			examine_message += "\The [src] is nearly empty! "
+		if (0.1 to 0.25)
+			examine_message += "\The [src] is about one-quarter filled. "
+		if (0.25 to 0.5)
+			examine_message += "\The [src] is about half filled. "
+		if (0.5 to 0.75)
+			examine_message += "\The [src] is about three-quarters filled. "
+		if (0.75 to 0.99)
+			examine_message += "\The [src] is nearly full! "
+		if (1)
+			examine_message += "\The [src] is full! "
 
 	examine_message += "<br>Cleanliness level: "
 
 	//Approximate filth level
-	if(filth_level == 0)
-		examine_message += "\The [src] is spotless! "
-	else if(filth_level <= 0.25*MAX_FILTH)
-		examine_message += "\The [src] looks like the glass has been smudged. "
-	else if(filth_level <= 0.5*MAX_FILTH)					//This is the breeding threshold
-		examine_message += "\The [src] has some algae growth in it. "
-	else if(filth_level <= 0.75*MAX_FILTH)
-		examine_message += "\The [src] has a lot of algae growth in it. "
-	else if(filth_level < MAX_FILTH)
-		examine_message += "\The [src] is getting hard to see into! Someone should clean it soon! "
-	else if(filth_level >= MAX_FILTH)
-		examine_message += "\The [src] is absolutely disgusting! Someone should clean it NOW! "
+	switch (filth_level/MAX_FILTH)
+		if (0)
+			examine_message += "\The [src] is spotless! "
+		if (0.001 to 0.25)
+			examine_message += "\The [src] looks like the glass has been smudged. "
+		if (0.25 to 0.5)				//This is the breeding threshold
+			examine_message += "\The [src] has some algae growth in it. "
+		if (0.5 to 0.75)
+			examine_message += "\The [src] has a lot of algae growth in it. "
+		if(0.75 to 0.999)
+			examine_message += "\The [src] is getting hard to see into! Someone should clean it soon! "
+		if(1)
+			examine_message += "\The [src] is absolutely disgusting! Someone should clean it NOW! "
 
 	examine_message += "<br>Food level: "
 
@@ -440,14 +442,15 @@
 		if(food_level > 0)						//Don't report a tank that has neither fish nor food in it
 			examine_message += "There's some food in [src], but no fish! "
 	else										//We've got fish, report the food level
-		if(food_level == 0)
-			examine_message += "The fish look very hungry! "
-		else if(food_level < 0.2*MAX_FOOD)
-			examine_message += "The fish are nibbling on the last of their food. "
-		else if(food_level < MAX_FOOD)				//Breeding is possible
-			examine_message += "The fish seem happy! "
-		else if(food_level >= MAX_FOOD)
-			examine_message += "There is a solid layer of fish food at the top. "
+		switch (food_level/MAX_FOOD)
+			if(0)
+				examine_message += "The fish look very hungry! "
+			if(0.001 to 0.2)
+				examine_message += "The fish are nibbling on the last of their food. "
+			if(0.2 to 0.999)				//Breeding is possible
+				examine_message += "The fish seem happy! "
+			if(1)
+				examine_message += "There is a solid layer of fish food at the top. "
 
 	//Report the number of harvestable eggs
 	if(egg_list.len)								//Don't bother if there isn't any eggs
@@ -460,14 +463,12 @@
 		examine_message += "\The [src] doesn't contain any live fish. "
 	else
 		//Build a message reporting the types of fish
-		var/fish_num = fish_list.len
 		var/message = "You spot "
-		while(fish_num > 0)
-			if(fish_list.len > 1 && fish_num == 1)	//If there were at least 2 fish, and this is the last one, add "and" to the message
+		for (var/i = 0 to fish_list.len)
+			if(fish_list.len > 1 && i == 1)	//If there were at least 2 fish, and this is the last one, add "and" to the message
 				message += "and "
-			message += "a [fish_list[fish_num]]"
-			fish_num --
-			if(fish_num > 0)					//There's more fish, add a comma to the message
+			message += "a [fish_list[i]]"
+			if(i < fish_list.len)					//There's more fish, add a comma to the message
 				message +=", "
 		message +="."							//No more fish, end the message with a period
 		//Display the number of fish and previously constructed message
@@ -486,16 +487,18 @@
 	examine_message += "<br>"
 
 	//Report if the tank is leaking/cracked
-	if(water_level > 0)							//Tank has water, so it's actually leaking
-		if(leaking == MINOR_LEAK)
-			examine_message += "\The [src] is leaking."
-		if(leaking == MAJOR_LEAK)
-			examine_message += "\The [src] is leaking profusely!"
-	else										//No water, report the cracks instead
-		if(leaking == MINOR_LEAK)
-			examine_message += "\The [src] is cracked."
-		if(leaking == MAJOR_LEAK)
-			examine_message += "\The [src] is nearly shattered!"
+	if(water_level > 0)
+		switch (leaking)					//Tank has water, so it's actually leaking
+			if(MINOR_LEAK)
+				examine_message += "\The [src] is leaking."
+			if(MAJOR_LEAK)
+				examine_message += "\The [src] is leaking profusely!"
+	else
+		switch (leaking)									//No water, report the cracks instead
+			if(MINOR_LEAK)
+				examine_message += "\The [src] is cracked."
+			if(MAJOR_LEAK)
+				examine_message += "\The [src] is nearly shattered!"
 
 
 	//Finally, report the full examine_message constructed from the above reports
