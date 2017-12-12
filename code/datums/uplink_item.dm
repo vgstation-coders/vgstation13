@@ -384,6 +384,14 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Internal Affairs Agent")
 
+//Journalist
+/datum/uplink_item/jobspecific/bombcamera
+	name = "Explosive Camera"
+	desc = "From a distance it looks like a normal camera, but it has been modified with a low power bomb ray. Anyone who has their picture taken eventually explodes."
+	item = /obj/item/device/camera/syndicate
+	cost = 15
+	job = list("Librarian", "Journalist")
+
 //Nuke Ops Prices
 /datum/uplink_item/nukeprice
 	gamemodes = list("nuclear emergency")

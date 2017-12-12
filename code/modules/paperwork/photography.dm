@@ -123,6 +123,30 @@
 
 	var/panelopen = 0
 
+/obj/item/device/camera/syndicate
+	name = "camera"
+	desc = "A polaroid camera. The aperture has been modified."
+
+// Move down to a better place
+/obj/item/device/camera/syndicate/get_mob_items(var/mob_detail, turf/the_turf, var/mob/living/carbon/A)
+	..()
+	startexplosion(A)
+
+
+/obj/item/device/camera/syndicate/proc/startexplosion(atom/target) // Promise this isn't shitcode
+	var/timer = rand(30 SECONDS, 420 SECONDS)
+
+	spawn(round(timer*0.4))
+		to_chat(target, "Things are getting a bit spooky")
+	spawn(round(timer*0.7))
+		to_chat(target, "It's getting really spooky")
+	spawn(timer-20)
+		to_chat(target, "<span class ='warning'>Oh shit SPOOKED</span>")
+	spawn(timer)
+		explosion(target, -1, 0, 2, 5)
+
+
+
 /obj/item/device/camera/sepia
 	name = "camera"
 	desc = "This one takes pictures in sepia."
@@ -345,24 +369,8 @@
 /obj/item/device/camera/proc/camera_get_mobs(turf/the_turf)
 	var/mob_detail
 	for(var/mob/living/carbon/A in the_turf)
-		if(A.invisibility)
-			continue
-		var/holding = null
-		for(var/obj/item/I in A.held_items)
-			var/item_count = 0
+		get_mob_items(mob_detail, the_turf, A)
 
-			switch(item_count)
-				if(0)
-					holding = "They are holding \a [I]"
-				else
-					holding += " and \a [I]"
-
-			item_count++
-
-		if(!mob_detail)
-			mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
-		else
-			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
 	for(var/mob/living/simple_animal/S in the_turf)
 		if(S.invisibility != 0)
 			continue
@@ -378,6 +386,24 @@
 		else
 			mob_detail += "...wait a minute...isn't that [O] on the photo?"
 	return mob_detail
+
+/obj/item/device/camera/proc/get_mob_items(var/mob_detail, turf/the_turf, var/mob/living/carbon/A)
+	if(A.invisibility)
+		return
+	var/holding = null
+	for(var/obj/item/I in A.held_items)
+		var/item_count = 0
+		switch(item_count)
+			if(0)
+				holding = "They are holding \a [I]"
+			else
+				holding += " and \a [I]"
+		item_count++
+
+		if(!mob_detail)
+			mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
+		else
+			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
 
 
 /obj/item/device/camera/sepia/camera_get_mobs(turf/the_turf)
@@ -448,6 +474,7 @@
 		printpicture(user, temp, mobs, flag)
 	else
 		aipicture(user, temp, mobs, blueprints)
+
 
 /obj/item/device/camera/proc/printpicture(mob/user, icon/temp, mobs, flag) //Normal camera proc for creating photos
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
