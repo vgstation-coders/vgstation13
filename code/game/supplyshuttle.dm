@@ -299,3 +299,10 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			shoppinglist += O
 		else
 			to_chat(user, "<span class='warning'>[O.orderedby] does not have enough funds for this request.</span>")
+
+/datum/controller/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
+	 centcomm_orders.Add(C)
+	 /*TODO -- ADD WAY TO ANNOUNCE TO THE CREW
+	 		IDEA 1: JUST PRINT TO THE STATION COMPUTERS LIKE ANNOUNCEMENTS DO
+	 		IDEA 2: ADD THE QM CONSOLE. QM-ACCESS ONLY, ALLOWS YOU TO SEE THE LAST TRANSACTIONS ON THE SHIP, LAST ORDERS, AND CURRENT CENTCOMM ORDERS.
+	 */

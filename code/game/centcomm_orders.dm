@@ -10,10 +10,6 @@ var/global/current_centcomm_order_id=124901
 	var/name = "CentComm" // Name of the ordering entity. Fluff.
 	var/datum/money_account/acct // account we pay to
 
-	// Amounts centcomm is willing to pay
-	var/credits_min = 0
-	var/credits_max = 0
-
 	// Amount decided upon
 	var/worth = 0
 
@@ -34,12 +30,16 @@ var/global/current_centcomm_order_id=124901
 	if(!O)
 		return 0
 	if(O.type in requested)
+		var/amount = 1
+		if(istype(O, /obj/item/stack))
+			var/obj/item/stack/S = O
+			amount = S.amount
 		if(!(O.type in fulfilled))
 			fulfilled[O.type]=0
 		// Don't claim stuff that other orders may want.
 		if(fulfilled[O.type]==requested[O.type])
 			return 0
-		fulfilled[O.type]=fulfilled[O.type]+1
+		fulfilled[O.type]=fulfilled[O.type]+amount
 		qdel(O)
 		return 1
 
