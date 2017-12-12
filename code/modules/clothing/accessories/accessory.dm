@@ -79,7 +79,7 @@
 	if(accessories.len)
 		. = list()
 		for(var/obj/item/clothing/accessory/accessory in accessories)
-			. += "[bicon(accessory)] \a [accessory]."
+			. += "[bicon(accessory)] \a [accessory]"
 		return " It has [english_list(.)]."
 
 /obj/item/clothing/accessory/pinksquare
@@ -340,10 +340,12 @@
 	var/rads = arguments["rads"]
 	rad_absorbed += rads
 
-	if(!triggered && rad_absorbed > rad_threshold)
+	if(rad_absorbed > rad_threshold)
 		triggered = TRUE
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
+		user.on_irradiate.Remove(event_key)
+		event_key = null
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
@@ -353,8 +355,9 @@
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	user.on_irradiate.Remove(event_key)
-	event_key = null
+	if(event_key)
+		user.on_irradiate.Remove(event_key)
+		event_key = null
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)
