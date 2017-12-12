@@ -381,10 +381,10 @@
 	for(var/mob/dead/observer/O in the_turf)//in case ghosts have been made visible
 		if(O.invisibility != 0)
 			continue
-	if(!mob_detail)
-		mob_detail = "Wait...is that [O] on the photo? "
-	else
-		mob_detail += "...wait a minute...isn't that [O] on the photo?"
+		if(!mob_detail)
+			mob_detail = "Wait...is that [O] on the photo? "
+		else
+			mob_detail += "...wait a minute...isn't that [O] on the photo?"
 	return mob_detail
 
 /obj/item/device/camera/proc/get_mob_items(var/mob_detail, turf/the_turf, var/mob/living/carbon/A)
@@ -400,10 +400,10 @@
 				holding += " and \a [I]"
 		item_count++
 
-		if(!mob_detail)
-			mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
-		else
-			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
+	if(!mob_detail)
+		mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
+	else
+		mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
 	return mob_detail
 
 /obj/item/device/camera/sepia/camera_get_mobs(turf/the_turf)
