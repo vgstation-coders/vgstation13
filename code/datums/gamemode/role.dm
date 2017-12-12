@@ -3,6 +3,36 @@
 * for the traitor panel.
 *
 * By N3X15
+
+
+		###VARS###
+	===Static Vars===
+	@id: String: The unique ID of the role
+	@name: String: The name of the role (Traitor, Changeling)
+	@plural_name: String: The name of a multitude of this role (Traitors, Changelings)
+	@flags: BITFLAGS: Various flags associated with the role. (NEED_HOST means a host is required for the role.)
+	@protection_jobs: list(String): Jobs that can not have this role.
+	@protected_antags: list(String): Antagonists that can not have this role. (Cultists can't be wizards)
+	@protected_host_roles: list(String): Antag IDs that can not be the host of this role (Wizards can have apprentices, but apprentices can't have apprentices)
+	@disallow_job: Boolean: If this role is recruited to at roundstart, the person recruited is not assigned a position on station (Wizard, Nuke Op, Vox Raider)
+	@min_players: int: minimum amount of players that can have this role (4 cultists)
+	@max_players: int: maximum amount of players that can have this role (No more than 5 nuclear operatives)
+	@be_flag: BITFLAG: The flag that's looked for in antag preferences when recruiting for this role (BE_TRAITOR, BE_PAI)
+	@faction: Faction: What faction this role is associated with.
+	@minds: List(mind): The minds associated with this role (Wizards and their apprentices, Nuclear operatives and their commander)
+
+
+	===Local Vars===
+	@antag: mind: UNKNOWN
+	@host: mind: The host, or overall controller of the role (Nuke op commander)
+	@objectives: Objective Holder: Where the objectives associated with the role will go.
+
+		###PROCS###
+	@New(mind/M = null, role/parent=null,faction/F=null):
+		initializes the role. Adds the mind to the parent role, adds the mind to the faction, and informs the gamemode the mind is in a role.
+	@Drop():
+		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
+	@CanBeAssigned
 */
 
 #define ROLE_MIXABLE   1 // Can be used in mixed mode
@@ -63,7 +93,7 @@
 	var/datum/mind/host=null
 
 	// Objectives
-	var/list/objectives=list()
+	var/datum/objective_holder/objectives=new
 
 /datum/role/New(var/datum/mind/M=null, var/datum/role/parent=null, var/datum/faction/fac=null)
 	if(M)
@@ -158,7 +188,7 @@
 	else
 		O = new objective_type(src)
 	if(O.PostAppend())
-		objectives += O
+		objectives.AddObjective(O)
 		antag.objectives += O
 		return 1
 	return 0
