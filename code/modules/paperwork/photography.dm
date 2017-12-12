@@ -381,10 +381,10 @@
 	for(var/mob/dead/observer/O in the_turf)//in case ghosts have been made visible
 		if(O.invisibility != 0)
 			continue
-		if(!mob_detail)
-			mob_detail = "Wait...is that [O] on the photo? "
-		else
-			mob_detail += "...wait a minute...isn't that [O] on the photo?"
+	if(!mob_detail)
+		mob_detail = "Wait...is that [O] on the photo? "
+	else
+		mob_detail += "...wait a minute...isn't that [O] on the photo?"
 	return mob_detail
 
 /obj/item/device/camera/proc/get_mob_items(var/mob_detail, turf/the_turf, var/mob/living/carbon/A)
