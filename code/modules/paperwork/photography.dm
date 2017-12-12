@@ -129,8 +129,8 @@
 
 // Move down to a better place
 /obj/item/device/camera/syndicate/get_mob_items(var/mob_detail, turf/the_turf, var/mob/living/carbon/A)
-	..()
 	startexplosion(A)
+	return ..()
 
 
 /obj/item/device/camera/syndicate/proc/startexplosion(atom/target) // Promise this isn't shitcode
