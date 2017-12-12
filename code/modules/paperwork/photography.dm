@@ -137,11 +137,11 @@
 	var/timer = rand(30 SECONDS, 420 SECONDS)
 
 	spawn(round(timer*0.4))
-		to_chat(target, "Things are getting a bit spooky")
+		to_chat(target, "Things are getting a bit spooky.")
 	spawn(round(timer*0.7))
-		to_chat(target, "It's getting really spooky")
+		to_chat(target, "It's getting really spooky.")
 	spawn(timer-20)
-		to_chat(target, "<span class ='warning'>Oh shit SPOOKED</span>")
+		to_chat(target, "<span class ='warning'>Oh shit SPOOKED!</span>")
 	spawn(timer)
 		explosion(target, -1, 0, 2, 5)
 
