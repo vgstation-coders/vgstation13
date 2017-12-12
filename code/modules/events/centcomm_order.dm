@@ -11,11 +11,11 @@
 
 	//Who is it paying to
 	var/department = pick("Cargo","Medical","Science")
-	var/list/chosen
+	var/list/choices
 	C.acct = department_accounts[department]
 	switch(department)
 		if("Cargo") //Minerals
-			chosen = pick(
+			choices = list(
 				list(
 					"item" = /obj/item/stack/sheet/mineral/diamond,
 					"amount" = rand(5,50),
@@ -48,8 +48,8 @@
 					)
 				)
 
-		if("Medical")
-			chosen = pick(
+		if("Science")
+			choices = list(
 				list(
 					"item" = /obj/item/weapon/gun/energy/gun/nuclear,
 					"amount" = rand(1,5),
@@ -61,8 +61,8 @@
 					"value" = rand(350,1250),
 					)
 				)
-		if("Science")
-			chosen = pick(
+		if("Medical")
+			choices = list(
 				list(
 					"item" = /obj/item/organ/internal/kidneys,
 					"amount" = rand(1,3),
@@ -72,10 +72,11 @@
 					"item" = /obj/item/organ/external/head,
 					"amount" = rand(1,2),
 					"value" = rand(250,750),
+					)
 				)
-			)
 
 
+	var/list/chosen = pick(choices)
 	var/list/product = chosen["item"]
 	product[chosen["item"]] = chosen["amount"]
 	C.requested = product

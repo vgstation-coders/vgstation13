@@ -170,6 +170,7 @@ For vending packs, see vending_packs.dm*/
 	data["show_permissions"] = permissions_screen
 	data["restriction"] = supply_shuttle.restriction
 	data["requisition"] = supply_shuttle.requisition
+	data["centcomm_orders"] = supply_shuttle.centcomm_orders
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
