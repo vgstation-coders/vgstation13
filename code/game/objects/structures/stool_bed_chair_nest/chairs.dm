@@ -218,13 +218,13 @@
 
 	return ..()
 
-/obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
+/obj/structure/bed/chair/comfy/attack_hand(var/mob/user, params, proximity)
 	if(is_locking(lock_type))
 		return ..()
-
-	for (var/obj/item/I in src)
-		user.put_in_hands(I)
-		to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
+	if(proximity)
+		for (var/obj/item/I in src)
+			user.put_in_hands(I)
+			to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
 
 /obj/structure/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
