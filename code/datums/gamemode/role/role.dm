@@ -23,8 +23,8 @@
 
 
 	===Local Vars===
-	@antag: mind: UNKNOWN
-	@host: mind: The host, or overall controller of the role (Nuke op commander)
+	@antag: mind: The actual antag mind.
+	@host: mind: The host, used in such things like cortical borers (Where the antag and host mind can swap at any time)
 	@objectives: Objective Holder: Where the objectives associated with the role will go.
 
 		###PROCS###
@@ -32,7 +32,9 @@
 		initializes the role. Adds the mind to the parent role, adds the mind to the faction, and informs the gamemode the mind is in a role.
 	@Drop():
 		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
-	@CanBeAssigned
+	@CanBeAssigned(Mind)
+		General sanity checks before assigning the person to the role, such as checking if they're part of the protected jobs or antags.
+
 */
 
 #define ROLE_MIXABLE   1 // Can be used in mixed mode
@@ -178,7 +180,6 @@
 /datum/role/proc/ForgeObjectives()
 	return
 
-// Utility that does all the common stuff.
 /datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0,var/text=null)
 	if(!duplicates && locate(objective_type) in objectives)
 		return 0
@@ -189,15 +190,17 @@
 		O = new objective_type(src)
 	if(O.PostAppend())
 		objectives.AddObjective(O)
-		antag.objectives += O
+		antag.objectives.AddObjective(O)
 		return 1
 	return 0
 
 /datum/role/proc/Greet(var/you_are=1)
+	if(you_are) //Getting a bit philosphical, but there we go
+		to_chat(antag, "<B>You are a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 	var/obj_count = 1
-	for(var/datum/objective/objective in objectives)
+	for(var/datum/objective/objective in objectives.GetObjectives())
 		to_chat(antag, "<B>Objective #[obj_count++]</B>: [objective.explanation_text]")
-	return
+
 
 /datum/role/proc/PreMindTransfer(var/datum/mind/M)
 	return
@@ -240,9 +243,9 @@
 		win = 0
 	text += ")"
 
-	if(objectives.len)
+	if(objectives.GetObjectives())
 		var/count = 1
-		for(var/datum/objective/objective in objectives)
+		for(var/datum/objective/objective in objectives.GetObjectives())
 			if(objective.check_completion())
 				text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 				feedback_add_details("[id]_objective","[objective.type]|SUCCESS")
@@ -325,8 +328,9 @@
 
 /datum/role/proc/MemorizeObjectives()
 	var/text="<b>[name] Objectives:</b><ul>"
-	for(var/obj_count = 1,obj_count <= objectives.len,obj_count++)
-		var/datum/objective/O = objectives[obj_count]
+	var/list/current_objectives = objectives.GetObjectives()
+	for(var/obj_count = 1 to current_objectives.len)
+		var/datum/objective/O = current_objectives[obj_count]
 		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text]"
 	to_chat(antag.current, text)
 	antag.memory += "[text]<BR>"
