@@ -88,6 +88,15 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
 			</ul>"}
+		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Mining Base Access'>Grant Emergency Mining Base Access</A></li>
+			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Mining Base Access'>Revoke Emergency Mining Base Access</A></li>
+			</ul>"}
+		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Xenoarchaeology Base Access'>Grant Emergency Xenoarchaeology Base Access</A></li>
+			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Xenoarchaeology Base Access'>Revoke Emergency Xenoarchaeology Base Access</A></li>
+			</ul>"}
+		dat += {"<li><A href='?src=\ref[src];triggerevent=Remove Crew Weapon Restrictions'>Remove Crew Weapon Restrictions</A></li>
+			<li><A href='?src=\ref[src];triggerevent=Re Enable Crew Weapon Restrictions'>Re Enable Crew Weapon Restrictions</A></li>
+			</ul>"}
 		user << browse(dat, "window=keycard_auth;size=500x300")
 	if(screen == 2)
 
@@ -170,7 +179,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 
 /obj/machinery/keycard_auth/proc/trigger_event()
 	switch(event)
-		if("Red alert")
+		if("Red alert") // Xenoarchaeology Base
 			set_security_level(SEC_LEVEL_RED)
 			feedback_inc("alert_keycard_auth_red",1)
 		if("Grant Emergency Maintenance Access")
@@ -179,6 +188,23 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		if("Revoke Emergency Maintenance Access")
 			revoke_maint_all_access()
 			feedback_inc("alert_keycard_auth_maintRevoke",1)
+		if("Grant Emergency Mining Base Access") // emergency mining station access
+			make_mining_all_access()
+			feedback_inc("alert_keycard_auth_miningGrant",1)
+		if("Revoke Emergency Mining Base Access") //removes mining all access
+			revoke_mining_all_access()
+		if("Grant Emergency Xenoarchaeology Base Access") // emergency xenoarch station access
+			make_xenoarch_all_access()
+			feedback_inc("alert_keycard_auth_xenoarchGrant",1)
+		if("Revoke Emergency Xenoarchaeology Base Access") //removes xenoarch all access
+			revoke_xenoarch_all_access()
+			feedback_inc("alert_keycard_auth_xenoarchRevoke",1)
+		if("Remove Crew Weapon Restrictions") // remove armory access
+			make_armory_all_access()
+			feedback_inc("alert_keycard_auth_armoryGrant",1)
+		if("Re Enable Crew Weapon Restrictions") //re ad armory access
+			revoke_armory_all_access()
+			feedback_inc("alert_keycard_auth_armoryRevoke",1)
 		if("Emergency Response Team")
 			var/datum/striketeam/ert/response_team = new()
 			response_team.mission = ert_reason
@@ -201,3 +227,95 @@ var/global/maint_all_access = 0
 	if(maint_all_access && src.check_access_list(list(access_maint_tunnels)))
 		return 1
 	return ..(M)
+
+/obj/machinery/door/airlock/allowed(mob/K)
+	if(maint_all_access && src.check_access_list(list(access_maint_tunnels)))
+		return 1
+	return ..(K)
+
+var/global/mining_all_access = 0
+
+/proc/make_mining_all_access()
+	mining_all_access = 1
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<font color='red'>The mining access requirement has been revoked on the mining station and mining shuttle.</font>")
+
+/proc/revoke_mining_all_access()
+	mining_all_access = 0
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<font color='red'>The mining access requirement has been readded on the mining station and mining shuttle.</font>")
+
+/obj/machinery/door/airlock/allowed(mob/T)
+	if(mining_all_access && src.check_access_list(list(access_mining, access_mint, access_mining_station)))
+		return 1
+	return ..(T)
+
+/obj/machinery/door/window/allowed(mob/F)
+	if(mining_all_access && src.check_access_list(list(access_mining, access_mint, access_mining_station)))
+		return 1
+	return ..(F)
+
+/obj/machinery/computer/shuttle_control/mining/allowed(mob/G)
+	if(mining_all_access && src.check_access_list(list(access_mining, access_mint, access_mining_station)))
+		return 1
+	return ..(G)
+
+var/global/xenoarch_all_access = 0
+
+/proc/make_xenoarch_all_access()
+	xenoarch_all_access = 1
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<font color='red'>The research access requirement has been revoked on the xenoarchaeology station and mining research.</font>")
+
+/proc/revoke_xenoarch_all_access()
+	xenoarch_all_access = 0
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<font color='red'>The research access requirement has been readded on the xenoarchaeology station and research shuttle.</font>")
+
+/obj/machinery/door/airlock/allowed(mob/Q)
+	if(xenoarch_all_access && src.check_access_list(list(access_science, access_rnd)))
+		return 1
+	return ..(Q)
+
+/obj/machinery/door/window/allowed(mob/B)
+	if(xenoarch_all_access && src.check_access_list(list(access_science, access_rnd)))
+		return 1
+	return ..(B)
+
+/obj/machinery/computer/shuttle_control/research/allowed(mob/L)
+	if(xenoarch_all_access && src.check_access_list(list(access_science)))
+		return 1
+	return ..(L)
+
+var/global/armory_all_access = 0
+
+/proc/make_armory_all_access()
+	armory_all_access = 1
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<font color='red'>Crew weapon restrictions disabled. All crewmembers are permitted to use lethal weaponry against threats to the station without repurcussion</font>")
+
+/proc/revoke_armory_all_access()
+	armory_all_access = 0
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<font color='red'>Crew weapon restrictions enabled. Lethal weaponry now requires official permit to be wielded by non-authorized personnel, or will be met with repercussions.</font>")
+
+/obj/machinery/door/airlock/allowed(mob/Z) ///obj/machinery/door/window
+	if(armory_all_access && src.check_access_list(list(access_armory, access_weapons)))
+		return 1
+	return ..(Z)
+
+/obj/machinery/door/window/allowed(mob/C)
+	if(armory_all_access && src.check_access_list(list(access_armory, access_weapons, access_security)))
+		return 1
+	return ..(C)
+
+
+/obj/structure/closet/allowed(mob/X)
+	if(armory_all_access && src.check_access_list(list(access_armory, access_weapons, access_security)))
+		return 1
+	return ..(X)
+
+/obj/item/weapon/storage/lockbox/allowed(mob/V)
+	if(armory_all_access && src.check_access_list(list(access_armory, access_weapons, access_security, access_brig)))
+		return 1
+	return ..(V)
