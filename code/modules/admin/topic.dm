@@ -3319,6 +3319,12 @@
 					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
+			if("pick_event")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ALL")
+				var/choice = input("Which event do you want to trigger?") in subtypesof(/datum/event)+"Cancel"
+				if(choice != "Cancel")
+					new choice
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
