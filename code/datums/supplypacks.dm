@@ -644,7 +644,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "russian clothing crate"
 	group = "Clothing"
 	contraband = 1
-
 //////SECURITY//////
 
 /datum/supply_packs/specialops
