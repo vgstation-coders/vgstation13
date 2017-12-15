@@ -645,15 +645,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Clothing"
 	contraband = 1
 
-/datum/supply_packs/radiation_suit
-	name = "Radiation suit"
-	contains = list(/obj/item/clothing/suit/radiation,
-					/obj/item/clothing/head/radiation,
-					/obj/item/device/geiger_counter)
-	cost = 150
-	containername = "radiation suit crate"
-	group = "Clothing"
-
 //////SECURITY//////
 
 /datum/supply_packs/specialops
@@ -1435,6 +1426,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/closet/crate/engi
 	containername = "inflatable structures crate"
+	group = "Engineering"
+
+/datum/supply_packs/radiation_suit
+	name = "Radiation suit"
+	contains = list(/obj/item/clothing/suit/radiation,
+					/obj/item/clothing/head/radiation,
+					/obj/item/device/geiger_counter)
+	cost = 150
+	containername = "radiation suit crate"
+	access = list(access_engine)
 	group = "Engineering"
 
 //////MEDICAL//////
