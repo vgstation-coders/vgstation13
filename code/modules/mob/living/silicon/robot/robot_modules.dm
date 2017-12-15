@@ -294,6 +294,7 @@
 	modules += new /obj/item/weapon/handcuffs/cyborg(src)
 	modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
 	modules += new /obj/item/taperoll/police(src)
+	modules += new /obj/item/device/hailer(src)
 	emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 
 	sensor_augs = list("Security", "Medical", "Disable")
