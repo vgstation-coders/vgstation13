@@ -1549,3 +1549,8 @@ var/proccalls = 1
 
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
+
+// Used to determine which HUD is in use
+#define HUD_NONE 0
+#define HUD_MEDICAL 1
+#define HUD_SECURITY 2
