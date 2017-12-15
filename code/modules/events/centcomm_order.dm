@@ -77,8 +77,12 @@
 
 
 	var/list/chosen = pick(choices)
-	var/list/product = chosen["item"]
-	product[chosen["item"]] = chosen["amount"]
+	var/item = chosen["item"]
+	var/amount = chosen["amount"]
+	var/value = chosen["value"]
+	var/list/product = list(item)
+	product[item] = amount
 	C.requested = product
-	C.worth = chosen["value"]
+	C.worth = value
+	C.acct_by_string = department
 	supply_shuttle.add_centcomm_order(C)

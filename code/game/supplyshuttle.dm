@@ -31,6 +31,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	var/list/shoppinglist = list()
 	var/list/requestlist = list()
 	var/list/supply_packs = list()
+	var/list/supply_consoles = list()
 	//shuttle movement
 	var/at_station = 0
 	var/movetime = 1200
@@ -40,6 +41,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	var/datum/materials/materials_list
 	var/restriction = 1 //Who can approve orders? 0 = autoapprove; 1 = has access; 2 = has an ID (omits silicons); 3 = actions require PIN
 	var/requisition = 0 //Are orders being paid for by the department? 0 = no; 1 = auto; possible future: allow with pin?
+
 
 /datum/controller/supply_shuttle/New()
 	ordernum = rand(1,9000)
@@ -301,8 +303,23 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			to_chat(user, "<span class='warning'>[O.orderedby] does not have enough funds for this request.</span>")
 
 /datum/controller/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
-	 centcomm_orders.Add(C)
+	centcomm_orders.Add(C)
 	 /*TODO -- ADD WAY TO ANNOUNCE TO THE CREW
 	 		IDEA 1: JUST PRINT TO THE STATION COMPUTERS LIKE ANNOUNCEMENTS DO
 	 		IDEA 2: ADD THE QM CONSOLE. QM-ACCESS ONLY, ALLOWS YOU TO SEE THE LAST TRANSACTIONS ON THE SHIP, LAST ORDERS, AND CURRENT CENTCOMM ORDERS.
+	 		Let's just go with printing out a piece of paper and 'a new order has arrived' at cargo consoles.
 	 */
+	var/name = "External order form - [C.name] order number [C.id]"
+	var/info = {"<h3>Central command supply requisition form</h3<><hr>
+	 			INDEX: #[C.id]<br>
+	 			REQUESTED BY: [C.name]<br>
+	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]
+	 			REQUESTED ITEMS:<br>
+	 			[C.getRequestsByName()]
+	 			WORTH: [C.worth] credits TO [C.acct_by_string]
+	 			"}
+	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
+		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
+		reqform.name = name
+		reqform.info = info
+		reqform.update_icon()

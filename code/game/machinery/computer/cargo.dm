@@ -40,6 +40,15 @@ For vending packs, see vending_packs.dm*/
 
 	light_color = LIGHT_COLOR_BROWN
 
+/obj/machinery/computer/supplycomp/New()
+	..()
+	supply_shuttle.supply_consoles.Add(src)
+
+/obj/machinery/computer/supplycomp/Destroy()
+	supply_shuttle.supply_consoles.Remove(src)
+	..()
+
+
 /obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
 	add_hiddenprint(user)
 	return attack_hand(user)

@@ -9,6 +9,7 @@ var/global/current_centcomm_order_id=124901
 	var/id = 0 // Some bullshit ID we use for fluff.
 	var/name = "CentComm" // Name of the ordering entity. Fluff.
 	var/datum/money_account/acct // account we pay to
+	var/acct_by_string = "unknown"
 
 	// Amount decided upon
 	var/worth = 0
@@ -51,6 +52,17 @@ var/global/current_centcomm_order_id=124901
 
 /datum/centcomm_order/proc/Pay()
 	acct.charge(-worth,null,"Payment for order #[id]",dest_name = name)
+
+/datum/centcomm_order/proc/getRequestsByName()
+	var/manifest = "<ul>"
+	for(var/path in requested)
+		if(!path)
+			continue
+		var/atom/movable/AM = new path()
+		manifest += "<li>[AM.name], amount: [requested[path]]</li>"
+		qdel(AM)//just to make sure they're deleted by the garbage collector
+	manifest += "</ul>"
+	return manifest
 
 /datum/centcomm_order/proc/OnPostUnload()
 	return
