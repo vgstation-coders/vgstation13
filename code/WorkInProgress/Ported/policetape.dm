@@ -118,26 +118,31 @@
 		to_chat(usr, "<span class='notice'>You finish placing [src].</span>")
 		user.visible_message("<span class='warning'>[user] finishes placing [src].</span>") //Now you know who to whack with a stun baton
 
-/obj/item/taperoll/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/taperoll/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
 
 	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))
 		var/turf = get_turf(target)
 
-		if(locate(tape_type) in turf) //Don't you dare stack tape // can be remove for a new feature
-			return
+		if(locate(tape_type) in turf)
+			to_chat(user, "<span class='warning'>There's some tape already!</span>")
+			return 1
 
 		to_chat(user, "<span class='notice'>You start placing [src].</span>")
+		if(!do_mob(user, target, 3 SECONDS))
+			return 1
 
-		if(!do_mob(user, target, 30))
-			return
+		if(locate(tape_type) in turf)
+			to_chat(user, "<span class='warning'>There's some tape already!</span>")
+			return 1
 
 		var/atom/tape = new tape_type(turf)
 		tape.icon_state = "[icon_base]_door"
 		tape.layer = ABOVE_DOOR_LAYER
 
 		to_chat(user, "<span class='notice'>You placed [src].</span>")
+		return 1
 
 /obj/item/tape/Bumped(M as mob)
 	if(src.allowed(M))
