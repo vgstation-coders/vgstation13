@@ -8,6 +8,9 @@
 	if(text)
 		explanation_text = text
 
+/datum/objective/proc/PostAppend()
+	return 1
+
 /datum/objective/proc/IsFulfilled()
 	if(is_void)
 		return FALSE
@@ -21,3 +24,6 @@
 
 /datum/objective_holder/proc/GetObjectives()
 	return objectives
+
+/datum/objective_holder/proc/FindObjective(var/datum/objective/O)
+	return locate(O) in objectives
