@@ -152,8 +152,8 @@ var/list/poddoors = list()
 
 	sleep(10)
 	setDensity(FALSE)
-	setDensity(FALSE)
-	setDensity(FALSE)
+	f1.setDensity(FALSE)
+	f2.setDensity(FALSE)
 
 	update_nearby_tiles()
 
