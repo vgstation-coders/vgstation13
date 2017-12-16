@@ -127,7 +127,7 @@
 					src.transfer_fingerprints_to(C)
 					C.ptype = 6 // 6 = disposal unit
 					C.anchored = 1
-					C.density = 1
+					C.setDensity(TRUE)
 					C.update()
 					qdel(src)
 				return
@@ -955,7 +955,7 @@
 			C.ptype = 10
 	src.transfer_fingerprints_to(C)
 	C.change_dir(dir)
-	C.density = 0
+	C.setDensity(FALSE)
 	C.anchored = 1
 	C.update()
 
@@ -1585,7 +1585,7 @@
 				C.ptype = 7 // 7 =  outlet
 				C.update()
 				C.anchored = 1
-				C.density = 1
+				C.setDensity(TRUE)
 				qdel(src)
 			return
 		else

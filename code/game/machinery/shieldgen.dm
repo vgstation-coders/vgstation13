@@ -21,7 +21,7 @@
 
 /obj/machinery/shield/Destroy()
 	opacity = 0
-	density = 0
+	setDensity(FALSE)
 	update_nearby_tiles()
 	..()
 

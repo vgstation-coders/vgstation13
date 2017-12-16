@@ -274,7 +274,7 @@
 			O.pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
 			O.pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
 			O.anchored = 1
-			O.density = 1
+			O.setDensity(TRUE)
 			O.plane = ABOVE_HUMAN_PLANE
 			O.mouse_opacity = 0
 
@@ -287,7 +287,7 @@
 	O.icon = 'icons/effects/fire.dmi'
 	O.icon_state = "2"
 	O.anchored = 1
-	O.density = 1
+	O.setDensity(TRUE)
 	O.plane = ABOVE_HUMAN_PLANE
 
 	var/cultwall = 0

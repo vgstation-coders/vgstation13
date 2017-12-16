@@ -164,10 +164,10 @@
 	if (user.a_intent == I_HELP && src.allowed(user))
 		if(density == 0)
 			user.visible_message("<span class='notice'>[user] pulls [src] back down.</span>")
-			src.density = 1
+			src.setDensity(TRUE)
 		else
 			user.visible_message("<span class='notice'>[user] lifts [src], allowing passage.</span>")
-			src.density = 0
+			setDensity(FALSE)
 	else
 		if(density == 0) //You can pass through it, moron
 			return

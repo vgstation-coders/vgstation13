@@ -103,10 +103,10 @@ var/list/mass_drivers = list()
 	density = 1
 
 /obj/machinery/mass_driver/bumper/Bumped(M as mob|obj)
-	density = 0
+	setDensity(FALSE)
 	step(M, get_dir(M,src))
 	spawn(1)
-		density = 1
+		setDensity(TRUE)
 	drive()
 	return
 

@@ -109,7 +109,7 @@
 				M.client.perspective = MOB_PERSPECTIVE
 		src.icon_state = src.icon_opened
 		src.opened = 1
-		src.density = 0
+		setDensity(FALSE)
 		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
 	else
 		if(!can_open())

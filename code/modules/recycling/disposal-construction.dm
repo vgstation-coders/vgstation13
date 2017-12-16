@@ -207,9 +207,9 @@
 			anchored = 0
 			if(ispipe)
 				level = 2
-				density = 0
+				setDensity(FALSE)
 			else
-				density = 1
+				setDensity(TRUE)
 			to_chat(user, "You detach the [nicetype] from the underfloor.")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			update()
@@ -227,9 +227,9 @@
 			anchored = 1
 			if(ispipe)
 				level = 1 // We don't want disposal bins to disappear under the floors
-				density = 0
+				setDensity(FALSE)
 			else
-				density = 1 // We don't want disposal bins or outlets to go density 0
+				setDensity(TRUE) // We don't want disposal bins or outlets to go density 0
 			to_chat(user, "You attach the [nicetype] to the underfloor.")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			update()

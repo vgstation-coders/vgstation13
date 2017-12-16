@@ -193,7 +193,7 @@
 				toggle_cover() //Close the cover, too
 
 			door_state = C_CLOSED
-			density = 1
+			setDensity(TRUE)
 
 			for(var/mob/living/L in get_turf(src))
 				add_mob(L)
@@ -207,7 +207,7 @@
 				L.forceMove(get_turf(src))
 
 			door_state = C_OPENED
-			density = 0
+			setDensity(FALSE)
 
 	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 	update_icon()

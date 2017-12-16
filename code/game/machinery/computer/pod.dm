@@ -339,7 +339,7 @@
 			if(D.id_tag == ident_tag)
 				D.icon_state = "tele1"
 				D.ztarget = teleporter_dest
-				D.density = 1
+				D.setDensity(TRUE)
 
 	for(var/obj/machinery/door/poddoor/M in poddoors)
 		if(M.z != src.z)
@@ -368,7 +368,7 @@
 			continue
 		if(D.id_tag == ident_tag)
 			D.icon_state = "tele0"
-			D.density = 0
+			D.setDensity(FALSE)
 
 	return
 

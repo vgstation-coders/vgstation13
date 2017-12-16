@@ -380,7 +380,7 @@
 			G.health = (0.25*initial(G.health))
 			G.broken = 1
 			G.icon_state = "[initial(G.icon_state)]-b"
-			G.density = 0
+			G.setDensity(FALSE)
 			getFromPool(/obj/item/stack/rods, get_turf(G.loc))
 			breakthrough = 1
 

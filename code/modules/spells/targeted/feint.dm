@@ -40,7 +40,7 @@
 	L.invisibility = INVISIBILITY_MAXIMUM
 	L.flags |= INVULNERABLE
 	var/old_density = L.density
-	L.density = 0
+	L.setDensity(FALSE)
 	L.candrop = 0
 	L.alphas["etheral_jaunt"] = 125 //Spoopy mode to know you are jaunting
 	L.handle_alpha()

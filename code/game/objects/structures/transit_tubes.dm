@@ -339,7 +339,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 				current_tube.pod_stopped(src, dir)
 				break
 
-		density = 1
+		setDensity(TRUE)
 
 		// If the pod is no longer in a tube, move in a line until stopped or slowed to a halt.
 		//  /turf/inertial_drift appears to only work on mobs, and re-implementing some of the
@@ -460,7 +460,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		tube_dirs = parse_dirs(icon_state)
 
 		if(copytext(icon_state, 1, 3) == "D-" || findtextEx(icon_state, "Pass"))
-			density = 0
+			setDensity(FALSE)
 
 
 

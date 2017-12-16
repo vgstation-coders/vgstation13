@@ -150,14 +150,14 @@
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
 		sleep(15)
-		src.density = 0
+		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
 		icon_state = "[mineral]0"
-		density = 1
+		setDensity(TRUE)
 		sleep(15)
 		set_opacity(1)
 		src.relativewall()
@@ -264,14 +264,14 @@
 		icon_state = "frwall_open"
 		flick("frwall_opening", src)
 		sleep(15)
-		density = 0
+		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
 	else
 		opening = 1
 		icon_state = "r_wall"
 		flick("frwall_closing", src)
-		density = 1
+		setDensity(TRUE)
 		sleep(15)
 		set_opacity(1)
 		relativewall()

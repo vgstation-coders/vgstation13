@@ -66,7 +66,7 @@
 
 /obj/structure/closet/body_bag/close()
 	if(..())
-		density = 0
+		setDensity(FALSE)
 		return 1
 	return 0
 

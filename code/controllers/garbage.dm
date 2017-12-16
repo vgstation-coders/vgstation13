@@ -163,7 +163,7 @@ world/loop_checks = 0
 /atom/movable/being_sent_to_past()
 	if(..())
 		invisibility = 101
-		density = 0
+		setDensity(FALSE)
 		anchored = 1
 		timestopped = 1
 		flags |= INVULNERABLE | TIMELESS

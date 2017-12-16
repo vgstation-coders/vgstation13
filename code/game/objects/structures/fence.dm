@@ -147,7 +147,7 @@
 			icon_state = "straight_cut2"
 		if(LARGE_HOLE)
 			icon_state = "straight_cut3"
-			density = 0
+			setDensity(FALSE)
 
 /obj/structure/fence/Bumped(atom/user)
 	if(ismob(user))
@@ -222,10 +222,10 @@
 /obj/structure/fence/door/proc/update_door_status()
 	switch(open)
 		if(FALSE)
-			density = 1
+			setDensity(TRUE)
 			icon_state = "door_closed"
 		if(TRUE)
-			density = 0
+			setDensity(FALSE)
 			icon_state = "door_opened"
 
 /obj/structure/fence/door/proc/can_open(mob/user)

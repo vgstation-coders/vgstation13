@@ -29,7 +29,8 @@ var/global/list/ghdel_profiling = list()
 	/////////////////////////////
 	// On Destroy()
 	var/event/on_destroyed
-
+	// When density is changed
+	var/event/on_density_change
 
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
@@ -155,6 +156,9 @@ var/global/list/ghdel_profiling = list()
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
+	if (on_density_change)
+		on_density_change.holder = null
+		on_density_change = null
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	/*if(istype(beams) && beams.len)
@@ -168,6 +172,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
+	on_density_change = new("owner"=src)
 	. = ..()
 	AddToProfiler()
 
@@ -193,6 +198,12 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/Bumped(AM as mob|obj)
 	return
+
+/atom/proc/setDensity(var/density)
+	src.density = density
+	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
+	if(istype(beams, /list) && beams.len)
+		beams.len = 0
 
 /atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
 	return Bumped(W)

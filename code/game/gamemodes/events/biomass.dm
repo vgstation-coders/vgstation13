@@ -63,7 +63,7 @@
 		adjust_health(-30)
 	else
 		icon_state = "stage3"
-		density = 1
+		setDensity(TRUE)
 		energy = 2
 		adjust_health(-30)
 

@@ -56,6 +56,7 @@
 	var/am_connector=0
 	var/targetMoveKey=null // Key for the on_moved listener.
 	var/targetDestroyKey=null // Key for the on_destroyed listener.
+	var/targetDensityKey=null // Key for the on_density_change listener
 	var/targetContactLoc=null // Where we hit the target (used for target_moved)
 
 	var/list/sources = list() // Whoever served in emitting this beam. Used in prisms to prevent infinite loops.
@@ -90,6 +91,28 @@
 		beam_testing("Disconnecting: Target moved.")
 		// Disconnect and re-emit.
 		disconnect()
+
+// Listener for /atom/on_density_change
+/obj/effect/beam/proc/target_density_change(var/list/args)
+	if(master)
+		beam_testing("Child got target_density_change!  Feeding to master.")
+		master.target_density_change(args)
+		return
+
+	var/event/E = args["event"]
+
+	if(!targetDensityKey)
+		E.handlers.Remove("\ref[src]:target_density_change")
+		beam_testing("Uh oh, got a target_density_change when we weren't listening for one.")
+		return
+
+	if(E.holder != target)
+		E.handlers.Remove("\ref[src]:target_density_change")
+		return
+	beam_testing("\ref[src] Disconnecting: \ref[target] Target denisty has changed.")
+	// Disconnect and re-emit.
+	disconnect()
+
 
 // Listener for /atom/on_destroyed
 /obj/effect/beam/proc/target_destroyed(var/list/args)
@@ -154,6 +177,7 @@
 	if(istype(AM))
 		BM.targetMoveKey    = AM.on_moved.Add(BM,    "target_moved")
 	BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
+	BM.targetDensityKey = AM.on_density_change.Add(BM,"target_density_change")
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
 	AM.beam_connect(BM)
@@ -261,12 +285,12 @@
 
 	if(!stepped)
 		// Reset bumped
-		density = 1
+		setDensity(TRUE)
 		bumped=0
 
 		step(src, dir) // Move.
 
-		density = 0
+		setDensity(FALSE)
 		if(bumped)
 			beam_testing("\ref[src] Bumped")
 			//BEAM_DEL(src)

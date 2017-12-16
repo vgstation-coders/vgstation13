@@ -243,7 +243,7 @@ Manual Tracking Direction:"}
 /obj/machinery/power/solar/control/blob_act()
 	if(prob(75))
 		broken()
-		density = 0
+		setDensity(FALSE)
 
 /obj/machinery/power/solar/control/npc_tamper_act(mob/living/L)
 	track = rand(0,TRACK_AUTOMATIC)

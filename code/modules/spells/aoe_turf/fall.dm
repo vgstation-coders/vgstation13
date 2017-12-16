@@ -226,7 +226,7 @@ var/global/list/falltempoverlays = list()
 	var/mob/caster = new
 	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
 	caster.invisibility = 101
-	caster.density = 0
+	caster.setDensity(FALSE)
 	caster.anchored = 1
 	caster.flags = INVULNERABLE
 	caster.add_spell(fall)

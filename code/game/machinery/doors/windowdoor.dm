@@ -33,7 +33,7 @@
 	return
 
 /obj/machinery/door/window/Destroy()
-	density = 0
+	setDensity(FALSE)
 	if (!dismantled)
 		playsound(src, "shatter", 70, 1)
 	..()
@@ -135,7 +135,7 @@
 	sleep(animation_delay)
 
 	explosion_resistance = 0
-	density = 0
+	setDensity(FALSE)
 	if (smartwindow && window_is_opaque)
 		set_opacity(0) //You can see through open windows
 	update_nearby_tiles()
@@ -152,7 +152,7 @@
 	playsound(get_turf(src), soundeffect, 100, 1)
 	icon_state = base_state
 
-	density = 1
+	setDensity(TRUE)
 	explosion_resistance = initial(explosion_resistance)
 	if (smartwindow && window_is_opaque)
 		set_opacity(1)

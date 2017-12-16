@@ -57,7 +57,7 @@
 		//Otherwise, you can cheese this by simply welding it shut, or if the lock is engaged
 		if(!opened)
 			opened = 1
-			density = 0
+			setDensity(FALSE)
 			dump_contents()
 
 		//Now, set our special variables

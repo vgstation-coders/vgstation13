@@ -556,7 +556,7 @@ var/list/one_way_windows
 
 /obj/structure/window/Destroy(var/brokenup = 0)
 
-	density = 0 //Sanity while we do the rest
+	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
 	update_nearby_icons()
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !

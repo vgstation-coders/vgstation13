@@ -124,7 +124,7 @@
 		usr.sight &= ~SEE_MOBS
 		usr.sight &= ~SEE_TURFS
 		usr.sight &= ~SEE_OBJS
-		usr.density = 1
+		usr.setDensity(TRUE)
 		usr.incorporeal_move = INCORPOREAL_DEACTIVATE
 		src.verbs -= /client/proc/planar_shift
 		spawn(300) src.verbs += /client/proc/planar_shift

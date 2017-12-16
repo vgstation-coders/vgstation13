@@ -228,7 +228,7 @@ obj/structure/windoor_assembly/Destroy()
 					if(!src)
 						return
 					var/obj/machinery/door/window/windoor = Create()
-					density = 1 //Shouldn't matter but just incase
+					setDensity(TRUE) //Shouldn't matter but just incase
 					to_chat(user, "<span class='notice'>You finish the windoor!</span>")
 					if(secure == "secure_")
 						secure = "secure"
@@ -239,8 +239,8 @@ obj/structure/windoor_assembly/Destroy()
 						windoor.icon_state = "right[secure]open"
 						windoor.base_state = "right[secure]"
 					windoor.dir = src.dir
-					windoor.density = 0
-
+					windoor.setDensity(FALSE) 
+					
 					windoor.req_access = src.electronics.conf_access
 					windoor.electronics = src.electronics
 					src.electronics.forceMove(windoor)

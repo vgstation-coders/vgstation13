@@ -57,7 +57,7 @@
 
 /obj/effect/alien/resin/proc/healthcheck()
 	if(health <=0)
-		density = 0
+		setDensity(FALSE)
 		qdel(src)
 
 /obj/effect/alien/resin/bullet_act(var/obj/item/projectile/Proj)

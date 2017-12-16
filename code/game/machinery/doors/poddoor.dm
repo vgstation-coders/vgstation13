@@ -69,7 +69,7 @@ var/list/poddoors = list()
 			src.icon_state = openicon
 			src.set_opacity(0)
 			sleep(animation_delay)
-			src.density = 0
+			setDensity(FALSE)
 			src.operating = 0
 			return
 	return
@@ -86,7 +86,7 @@ var/list/poddoors = list()
 	src.set_opacity(0)
 	sleep(animation_delay)
 	layer = open_layer
-	src.density = 0
+	setDensity(FALSE)
 	update_nearby_tiles()
 
 	if(operating == 1) //emag again
@@ -103,7 +103,7 @@ var/list/poddoors = list()
 	layer = closed_layer
 	flick(closingicon, src)
 	src.icon_state = closedicon
-	src.density = 1
+	src.setDensity(TRUE)
 	src.set_opacity(initial(opacity))
 	update_nearby_tiles()
 
@@ -151,9 +151,9 @@ var/list/poddoors = list()
 	f2.SetOpacity(0)
 
 	sleep(10)
-	src.density = 0
-	f1.density = 0
-	f2.density = 0
+	setDensity(FALSE)
+	setDensity(FALSE)
+	setDensity(FALSE)
 
 	update_nearby_tiles()
 
@@ -171,9 +171,9 @@ var/list/poddoors = list()
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
 
-	src.density = 1
-	f1.density = 1
-	f2.density = 1
+	src.setDensity(TRUE)
+	f1.setDensity(TRUE)
+	f2.setDensity(TRUE)
 
 	sleep(10)
 	src.SetOpacity(initial(opacity))
@@ -195,16 +195,16 @@ var/list/poddoors = list()
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
+	setDensity(FALSE)
 	src.sd_SetOpacity(0)
 
-	f1.density = 0
+	f1.setDensity(FALSE)
 	f1.sd_SetOpacity(0)
-	f2.density = 0
+	f2.setDensity(FALSE)
 	f2.sd_SetOpacity(0)
-	f3.density = 0
+	f3.setDensity(FALSE)
 	f3.sd_SetOpacity(0)
-	f4.density = 0
+	f4.setDensity(FALSE)
 	f4.sd_SetOpacity(0)
 
 	update_nearby_tiles()
@@ -222,15 +222,15 @@ var/list/poddoors = list()
 	src.operating = 1
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
-	src.density = 1
+	src.setDensity(TRUE)
 
-	f1.density = 1
+	f1.setDensity(TRUE)
 	f1.sd_SetOpacity(1)
-	f2.density = 1
+	f2.setDensity(TRUE)
 	f2.sd_SetOpacity(1)
-	f3.density = 1
+	f3.setDensity(TRUE)
 	f3.sd_SetOpacity(1)
-	f4.density = 1
+	f4.setDensity(TRUE)
 	f4.sd_SetOpacity(1)
 
 	if (src.visible)
@@ -251,12 +251,12 @@ var/list/poddoors = list()
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
+	src.setDensity(FALSE)
 	src.sd_SetOpacity(0)
 
-	f1.density = 0
+	f1.setDensity(FALSE)
 	f1.sd_SetOpacity(0)
-	f2.density = 0
+	f2.setDensity(FALSE)
 	f2.sd_SetOpacity(0)
 
 	update_nearby_tiles()
@@ -274,11 +274,11 @@ var/list/poddoors = list()
 	src.operating = 1
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
-	src.density = 1
+	src.setDensity(TRUE)
 
-	f1.density = 1
+	f1.setDensity(TRUE)
 	f1.sd_SetOpacity(1)
-	f2.density = 1
+	f2.setDensity(TRUE)
 	f2.sd_SetOpacity(1)
 
 	if (src.visible)
@@ -299,16 +299,16 @@ var/list/poddoors = list()
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
 	sleep(10)
-	src.density = 0
+	setDensity(FALSE)
 	src.sd_SetOpacity(0)
 
-	f1.density = 0
+	f1.setDensity(FALSE)
 	f1.sd_SetOpacity(0)
-	f2.density = 0
+	f2.setDensity(FALSE)
 	f2.sd_SetOpacity(0)
-	f3.density = 0
+	f3.setDensity(FALSE)
 	f3.sd_SetOpacity(0)
-	f4.density = 0
+	f4.setDensity(FALSE)
 	f4.sd_SetOpacity(0)
 
 	update_nearby_tiles()
@@ -326,15 +326,15 @@ var/list/poddoors = list()
 	src.operating = 1
 	flick("pdoorc1", src)
 	src.icon_state = "pdoor1"
-	src.density = 1
+	src.setDensity(TRUE)
 
-	f1.density = 1
+	f1.setDensity(TRUE)
 	f1.sd_SetOpacity(1)
-	f2.density = 1
+	f2.setDensity(TRUE)
 	f2.sd_SetOpacity(1)
-	f3.density = 1
+	f3.setDensity(TRUE)
 	f3.sd_SetOpacity(1)
-	f4.density = 1
+	f4.setDensity(TRUE)
 	f4.sd_SetOpacity(1)
 
 	if (src.visible)

@@ -791,7 +791,7 @@
 
 	invisibility = INVISIBILITY_MAXIMUM
 	flags |= INVULNERABLE
-	density = 0
+	setDensity(FALSE)
 	anchored = 1
 	flags |= TIMELESS
 	if(!ignoreinvert)

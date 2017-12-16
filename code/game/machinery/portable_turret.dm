@@ -341,7 +341,7 @@ Status: []<BR>"},
 
 /obj/machinery/porta_turret/proc/die() // called when the turret dies, ie, health <= 0
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "[lasercolor]destroyed_target_prism"
 	invisibility=0

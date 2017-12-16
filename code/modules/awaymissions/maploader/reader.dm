@@ -397,7 +397,7 @@ var/list/map_dimension_cache = list()
 //simulates the DM multiple turfs on one tile underlaying
 /dmm_suite/proc/add_underlying_turf(var/turf/placed,var/turf/underturf, var/list/turfs_underlays)
 	if(underturf.density)
-		placed.density = 1
+		placed.setDensity(TRUE)
 	if(underturf.opacity)
 		placed.opacity = 1
 	placed.underlays += turfs_underlays

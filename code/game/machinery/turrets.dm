@@ -302,7 +302,7 @@
 
 /obj/machinery/turret/proc/die()
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN
 	src.icon_state = "destroyed_target_prism"
 	if (cover!=null)
