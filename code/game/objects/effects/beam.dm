@@ -20,7 +20,7 @@
 
 #ifdef BEAM_DEBUG
 # warning SOME ASSHOLE FORGOT TO COMMENT BEAM_DEBUG BEFORE COMMITTING
-# define beam_testing(x) testing("(Line: [__LINE__]) [x]")
+# define beam_testing(x) to_chat(world, "(Line: [__LINE__]) [x]")
 #else
 # define beam_testing(x)
 #endif
@@ -129,7 +129,7 @@
 
 
 /obj/effect/beam/proc/get_master()
-//	var/master_ref = "\ref[master]"
+	var/master_ref = "\ref[master]"
 	beam_testing("\ref[src] [master ? "get_master is returning [master_ref]" : "get_master is returning ourselves."]")
 	if(master)
 		return master
