@@ -109,10 +109,10 @@
 				to_chat(user, "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>")
 				return TRUE
 
-			if(mmi.brainmob.mind in ticker.mode.head_revolutionaries)
+			/*if(mmi.brainmob.mind in ticker.mode.head_revolutionaries)
 				to_chat(user, "<span class='warning'>\The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept \the [mmi].</span>")
 				return TRUE
-
+			*/
 			if(jobban_isbanned(mmi.brainmob, "Mobile MMI"))
 				to_chat(user, "<span class='warning'>\The [src] lets out an annoyed buzz and rejects \the [mmi].</span>")
 				return TRUE
@@ -166,7 +166,7 @@
 		if(use_mmi)
 			M.mmi = use_mmi
 			use_mmi.forceMove(M)
-		
+
 		if(!use_mmi)
 			M.key = user.key
 			qdel(user)

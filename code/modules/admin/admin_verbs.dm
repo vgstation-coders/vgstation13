@@ -5,7 +5,7 @@ var/list/admin_verbs_default = list(
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
-	/client/proc/check_antagonists,		/*shows all antags*/
+	///client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
 	/datum/admins/proc/checkCKEY
@@ -95,8 +95,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/drop_bomb,
 	/client/proc/drop_emp,
 	/client/proc/cinematic,
-	/client/proc/one_click_antag,
-	/client/proc/antag_madness,
+	//client/proc/one_click_antag,
+	//client/proc/antag_madness,
 	/datum/admins/proc/toggle_aliens,
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/cmd_admin_add_freeform_ai_law,
@@ -457,7 +457,7 @@ var/list/admin_verbs_mod = list(
 		holder.player_panel_new()
 	feedback_add_details("admin_verb","PPN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-
+/*
 /client/proc/check_antagonists()
 	set name = "Check Antagonists"
 	set category = "Admin"
@@ -466,7 +466,7 @@ var/list/admin_verbs_mod = list(
 		log_admin("[key_name(usr)] checked antagonists.")	//for tsar~
 	feedback_add_details("admin_verb","CHA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-
+*/
 /client/proc/jobbans()
 	set name = "Display Job bans"
 	set category = "Admin"

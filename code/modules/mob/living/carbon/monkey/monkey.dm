@@ -290,12 +290,13 @@
 	if(statpanel("Status"))
 		stat(null, text("Intent: []", a_intent))
 		stat(null, text("Move Mode: []", m_intent))
-		if(client && mind)
+		/*if(client && mind)
 			if (client.statpanel == "Status")
 				if(mind.changeling)
 					stat("Chemical Storage", mind.changeling.chem_charges)
 					stat("Genetic Damage Time", mind.changeling.geneticdamage)
 	return
+	*/
 
 
 /mob/living/carbon/monkey/verb/removeinternal()

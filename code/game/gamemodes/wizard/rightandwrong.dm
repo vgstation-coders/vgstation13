@@ -7,9 +7,9 @@
 	for(var/mob/living/carbon/human/H in player_list)
 		if(H.stat == DEAD || !(H.client))
 			continue
-		if(summon_type && iswizard(H))
+		/*if(summon_type && iswizard(H))
 			continue
-		if(prob(35) && !is_special_character(H))
+		if(prob(35)/* && !is_special_character(H)*/)
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
 			var/datum/objective/survive/survive = new
@@ -21,6 +21,7 @@
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
+		*/
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		if(!summon_type)

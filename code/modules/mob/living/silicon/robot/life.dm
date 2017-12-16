@@ -214,7 +214,7 @@
 		else
 			src.healths.icon_state = "health7"
 
-	if (src.syndicate && src.client)
+	/*if (src.syndicate && src.client)
 		if(ticker.mode.name == "traitor")
 			for(var/datum/mind/tra in ticker.mode.traitors)
 				if(tra.current)
@@ -227,7 +227,7 @@
 			if(!src.mind.special_role)
 				src.mind.special_role = "traitor"
 				ticker.mode.traitors += src.mind
-
+	*/
 	if (src.cells)
 		if (src.cell)
 			var/cellcharge = src.cell.charge/src.cell.maxcharge
@@ -244,7 +244,7 @@
 					src.cells.icon_state = "charge0"
 		else
 			src.cells.icon_state = "charge-empty"
-	
+
 	if(bodytemp) //actually environment temperature but fuck it
 		bodytemp.icon_state = "temp[temp_alert]"
 	if(pressure)
@@ -254,7 +254,7 @@
 //Oxygen indicator exists, but unused
 //	if (oxygen) oxygen.icon_state = "oxy[src.oxygen_alert ? 1 : 0]"
 
-	if (on_fire) 
+	if (on_fire)
 		fire.icon_state = "fire[on_fire ? 1 : 0]"
 
 	if(src.eye_blind || blinded)
@@ -352,33 +352,33 @@
 	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
 	if(localpressure)
 		if(adjusted_pressure >= HAZARD_HIGH_PRESSURE)
-			pressure_alert = 2 
+			pressure_alert = 2
 		else if (localpressure >= WARNING_HIGH_PRESSURE && localpressure < WARNING_HIGH_PRESSURE)
-			pressure_alert = 1 
+			pressure_alert = 1
 		else if (localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
-			pressure_alert = -1 
+			pressure_alert = -1
 		else if (localpressure <= HAZARD_LOW_PRESSURE)
-			pressure_alert = -2 
-		else 
-			pressure_alert = 0 
+			pressure_alert = -2
+		else
+			pressure_alert = 0
 	else //there ain't no air, we're in a vacuum
-		pressure_alert = -2 
-	
+		pressure_alert = -2
+
 // This handles the temp sensor hud element
 /mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
 	var/envirotemp = environment.return_temperature()
 	if(environment)
-		if(envirotemp)	
+		if(envirotemp)
 			if (envirotemp >= 1000 ) //1000 is the heat_level_3 for humans
 				temp_alert = 2
 			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < 1000 )
-				temp_alert = 1 
-			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT) 
-				temp_alert = -1 
+				temp_alert = 1
+			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT)
+				temp_alert = -1
 			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
 				temp_alert = -2
-			else 
-				temp_alert = 0 
+			else
+				temp_alert = 0
 				return 0
 	else //vacuums are cold
 		temp_alert = -2

@@ -72,7 +72,7 @@
 
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
-
+/*
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
@@ -83,7 +83,7 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
-
+*/
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"

@@ -271,13 +271,13 @@
 				else
 					dat += "<tr><td><i>Vox Raider not found!</i></td></tr>"
 			dat += "</table>"
-		if(istype(ticker.mode, /datum/game_mode/heist))
+		/*if(istype(ticker.mode, /datum/game_mode/heist))
 			var/datum/game_mode/heist/mode_ticker = ticker.mode
 			var/objective_count = 1
 			dat += "<br><B>Raider Objectives:</B>"
 			for(var/datum/objective/objective in mode_ticker.raid_objectives)
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
+		*/
 		if(ticker.mode.ert.len > 0)
 			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_ERT]</B></td><td></td><td></td></tr>"
 			for(var/datum/mind/ert in ticker.mode.ert)

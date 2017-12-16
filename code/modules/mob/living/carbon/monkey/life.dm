@@ -41,7 +41,7 @@
 
 
 		//Updates the number of stored chemicals for powers
-		handle_changeling()
+		//handle_changeling()
 
 		//Mutations and radiation
 		handle_mutations_and_radiation()
@@ -755,10 +755,10 @@
 			return
 
 
-/mob/living/carbon/monkey/proc/handle_changeling()
+/*/mob/living/carbon/monkey/proc/handle_changeling()
 	if(mind && mind.changeling)
 		mind.changeling.regenerate()
-
+*/
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()
 	if(..())

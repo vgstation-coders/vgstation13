@@ -157,31 +157,31 @@
 
 //Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
+#define isvampire(H) 1//((H.mind in ticker.mode.vampires) || H.mind.vampire)
 
-#define iscult(H) (H.mind in ticker.mode.cult)
+#define iscult(H) 1//(H.mind in ticker.mode.cult)
 
-#define isculthead(H) (iscult(H)&&(H.mind in ticker.mode.modePlayer))
+#define isculthead(H) 1//(iscult(H)&&(H.mind in ticker.mode.modePlayer))
 
-#define ischangeling(H) (H.mind in ticker.mode.changelings)
+#define ischangeling(H) 1//(H.mind in ticker.mode.changelings)
 
-#define isrev(H) (H.mind in ticker.mode.revolutionaries)
+#define isrev(H) 1//(H.mind in ticker.mode.revolutionaries)
 
-#define isrevhead(H) (H.mind in ticker.mode.head_revolutionaries)
+#define isrevhead(H) 1//(H.mind in ticker.mode.head_revolutionaries)
 
-#define istraitor(H) (H.mind in ticker.mode.traitors)
+#define istraitor(H) 1//(H.mind in ticker.mode.traitors)
 
-#define ismalf(H) (H.mind in ticker.mode.malf_ai)
+#define ismalf(H) 1//(H.mind in ticker.mode.malf_ai)
 
-#define isnukeop(H) (H.mind in ticker.mode.syndicates)
+#define isnukeop(H) 1//(H.mind in ticker.mode.syndicates)
 
-#define iswizard(H) (H.mind in ticker.mode.wizards)
+#define iswizard(H) 1//(H.mind in ticker.mode.wizards)
 
-#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+#define isapprentice(H) 1//(H.mind in ticker.mode.apprentices)
 
-#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
+#define isbadmonkey(H) 1//((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
 
-#define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+#define isdeathsquad(H) 1//(H.mind in ticker.mode.deathsquads)
 
 
 //Macro for AREAS!

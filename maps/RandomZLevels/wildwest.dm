@@ -31,9 +31,9 @@
 		to_chat(user, "You feel a dark stirring inside of the Wish Granter, something you want nothing of. Your instincts are better than any man's.")
 		return
 
-	else if(is_special_character(user))
+	/*else if(is_special_character(user))
 		to_chat(user, "Even to a heart as dark as yours, you know nothing good will come of this.  Something instinctual makes you pull away.")
-
+	*/
 	else if (!insistinga)
 		to_chat(user, "Your first touch makes the Wish Granter stir, listening to you.  Are you really sure you want to do this?")
 		insistinga++
@@ -41,7 +41,7 @@
 	else
 		chargesa--
 		insistinga = 0
-		var/wish = input("You want...","Wish") as null|anything in list("Power","Wealth","Immortality","To Kill","Peace")
+		var/wish = input("You want...","Wish") as null|anything in list("Power","Wealth","Immortality",/*"To Kill",*/"Peace")
 		switch(wish)
 			if("Power")
 				to_chat(user, "<B>Your wish is granted, but at a terrible cost...</B>")
@@ -75,7 +75,7 @@
 				user.verbs += /mob/living/carbon/proc/immortality
 				user.dna.mutantrace = "shadow"
 				user.update_mutantrace()
-			if("To Kill")
+			/*if("To Kill")
 				to_chat(user, "<B>Your wish is granted, but at a terrible cost...</B>")
 				to_chat(user, "The Wish Granter punishes you for your wickedness, claiming your soul and warping your body to match the darkness in your heart.")
 				ticker.mode.traitors += user.mind
@@ -90,6 +90,7 @@
 					obj_count++
 				user.dna.mutantrace = "shadow"
 				user.update_mutantrace()
+			*/
 			if("Peace")
 				to_chat(user, "<B>Whatever alien sentience that the Wish Granter possesses is satisfied with your wish. There is a distant wailing as the last of the Faithless begin to die, then silence.</B>")
 				to_chat(user, "You feel as if you just narrowly avoided a terrible fate...")

@@ -244,10 +244,10 @@
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)
-		if(mind)
+		/*if(mind)
 			if(mind.changeling)
 				stat("Chemical Storage", mind.changeling.chem_charges)
-				stat("Genetic Damage Time", mind.changeling.geneticdamage)
+				stat("Genetic Damage Time", mind.changeling.geneticdamage)*/
 
 		if(istype(loc, /obj/spacepod)) // Spacdpods!
 			var/obj/spacepod/S = loc
@@ -345,8 +345,8 @@
 		return get_id_name("Unknown")
 	if( head && (is_slot_hidden(head.body_parts_covered,HIDEFACE)))
 		return get_id_name("Unknown")	//Likewise for hats
-	if(mind && mind.vampire && (VAMP_SHADOW in mind.vampire.powers) && mind.vampire.ismenacing)
-		return get_id_name("Unknown")
+	//if(mind && mind.vampire && (VAMP_SHADOW in mind.vampire.powers) && mind.vampire.ismenacing)
+	//	return get_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
 	if(id_name && (id_name != face_name))
@@ -1597,8 +1597,8 @@
 	//Need at least two teeth or a beak to bite
 
 	if(check_body_part_coverage(MOUTH))
-		if(!isvampire(src)) //Vampires can bite through masks
-			return 0
+		//if(!isvampire(src)) //Vampires can bite through masks
+		return 0
 
 	if(M_BEAK in mutations)
 		return 1

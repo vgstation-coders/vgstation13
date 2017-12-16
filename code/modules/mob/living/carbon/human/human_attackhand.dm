@@ -3,7 +3,7 @@
 	if(M == src)
 		return //Can't bite yourself
 
-//Vampire code
+/*Vampire code
 	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD && src != M)
 		if(M.mind && isvampire(M) && !M.mind.vampire.draining)
 			if(!M.can_suck(src))
@@ -18,6 +18,7 @@
 			M.handle_bloodsucking(src)
 			return
 //end vampire codes
+*/
 
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)

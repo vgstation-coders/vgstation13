@@ -312,6 +312,7 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
+		/*
 		if(MODE_CHANGELING)
 			if(lingcheck())
 				var/turf/T = get_turf(src)
@@ -330,6 +331,7 @@ var/list/department_radio_keys = list(
 					if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
 				return 1
+		*/
 		if(MODE_ANCIENT)
 			if(isMoMMI(src))
 				return 0 //Noice try, I really do appreciate the effort
@@ -387,10 +389,10 @@ var/list/department_radio_keys = list(
 			whisper(speech.message, speech.language)
 			return NOPASS
 	return 0
-
+/*
 /mob/living/lingcheck()
 	if(mind && mind.changeling && !issilicon(src))
-		return 1
+		return 1*/
 
 /mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
 	if(!mind)

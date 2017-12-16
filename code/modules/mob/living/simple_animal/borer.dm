@@ -139,10 +139,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 
+/*
 /mob/living/simple_animal/borer/Login()
 	..()
 	if(mind)
-		RemoveAllFactionIcons(mind)
+		RemoveAllFactionIcons(mind)*/
 
 /mob/living/simple_animal/borer/Life()
 	if(timestopped)

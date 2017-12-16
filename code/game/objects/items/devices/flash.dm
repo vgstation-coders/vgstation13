@@ -94,13 +94,13 @@
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
-		
+
 		if(Subject.eyecheck() > 0)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else
 			if(Subject.eyecheck() <= 0)
 				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
-			if(user.mind && isrevhead(user)) // alien revhead when?
+			/*if(user.mind && isrevhead(user)) // alien revhead when?
 				if(ishuman(Subject))
 					if(Subject.stat != DEAD)
 						Subject.mind_initialize() // give them a mind datum if they don't have one
@@ -126,6 +126,7 @@
 								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
 					else
 						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
+			*/
 	else if(issilicon(M))
 		var/mob/living/silicon/R = M
 		if(flashfail)
@@ -251,6 +252,7 @@
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
 		item_state = "flashburnt"
-
+/*
 /obj/item/device/flash/revsquad
 	limited_conversions = REVSQUAD_FLASH_USES
+*/

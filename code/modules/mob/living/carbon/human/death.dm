@@ -87,14 +87,14 @@
 		do_release_control(0)
 
 	//Check for heist mode kill count.
-	if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
+	//if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
 		//Check for last assailant's mutantrace.
 		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
 			var/mob/living/carbon/human/V = LAssailant
 			if (V.dna && (V.dna.mutantrace == "vox"))
 				*/ //Not currently feasible due to terrible LAssailant tracking.
 //		to_chat(world, "Vox kills: [vox_kills]")
-		vox_kills++ //Bad vox. Shouldn't be killing humans.
+		//vox_kills++ //Bad vox. Shouldn't be killing humans.
 	if(ishuman(LAssailant))
 		var/mob/living/carbon/human/H=LAssailant
 		if(H.mind)

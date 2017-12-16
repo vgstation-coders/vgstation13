@@ -15,10 +15,10 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(isvampire(H))
+		/*if(isvampire(H))
 			if(!(VAMP_MATURE in H.mind.vampire.powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
-				return
+				return*/
 		if(user.hallucinating())
 			switch(rand(1,100))
 				if(1 to 20)

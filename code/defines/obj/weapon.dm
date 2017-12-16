@@ -630,7 +630,7 @@
 	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
 	if(user)
 		user.update_inv_hands()
-		if(iswizard(user) || isapprentice(user))
+		/*if(iswizard(user) || isapprentice(user))
 			user.flying = wielded ? 1 : 0
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
@@ -642,9 +642,9 @@
 				animate(user)
 				if(user.lying)//aka. if they have just been stunned
 					user.pixel_y -= 6 * PIXEL_MULTIPLIER
-		else
-			if(wielded)
-				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
+		else*/
+		if(wielded)
+			to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
 
 /obj/item/weapon/staff/broom/attackby(var/obj/O, mob/user)
 	if(istype(O, /obj/item/clothing/mask/horsehead))

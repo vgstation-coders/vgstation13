@@ -7,7 +7,7 @@
 		return
 
 	var/client/CLIENT = usr.client
-	if(href_list["makeAntag"])
+	/*if(href_list["makeAntag"])
 		switch(href_list["makeAntag"])
 			if("1")
 				log_admin("[key_name(usr)] has spawned a traitor.")
@@ -49,8 +49,8 @@
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
 					to_chat(usr, "<span class='warning'>Unfortunately, there weren't enough candidates available.</span>")
-
-	else if("announce_laws" in href_list)
+	*/
+	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
 
 		log_admin("[key_name(usr)] has notified [key_name(S)] of a change to their laws.")
@@ -1980,7 +1980,7 @@
 		if(C)
 			C.jumptomob(M)
 
-	else if(href_list["check_antagonist"])
+	/*else if(href_list["check_antagonist"])
 		check_antagonists()
 
 	else if(href_list["cult_nextobj"])
@@ -2027,7 +2027,7 @@
 			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [M.real_name], <span class='sinister'>[input]</span></span>")
 
 		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-
+	*/
 	else if(href_list["adminplayerobservecoodjump"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2093,12 +2093,12 @@
 			else
 				location_description = "([M.loc == T ? "at coordinates " : "in [M.loc] at coordinates "] [T.x], [T.y], [T.z])"
 
-		//Job + antagonist
+		/*Job + antagonist
 		if(M.mind)
 			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <font color='red'><b>[M.mind.special_role]</b></font>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
 		else
 			special_role_description = "Role: <i>Mind datum missing</i> Antagonist: <i>Mind datum missing</i>; Has been rev: <i>Mind datum missing</i>;"
-
+		*/
 		//Health
 		if(isliving(M))
 			var/mob/living/L = M
@@ -2701,7 +2701,7 @@
 				log_admin("[key_name(usr)] created a link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] created a link with central command</span>", 1)
 				link_to_centcomm()
-			if("traitor_all")
+			/*if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
 					return
@@ -2735,7 +2735,7 @@
 					ticker.mode.greet_traitor(A.mind)
 					ticker.mode.finalize_traitor(A.mind)
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
-				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
+				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")*/
 			if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
@@ -3556,8 +3556,8 @@
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
 				usr << browse(dat, "window=manifest;size=440x410")
-			if("check_antagonist")
-				check_antagonists()
+			//if("check_antagonist")
+			//	check_antagonists()
 			if("DNA")
 				var/dat = "<B>Showing DNA from blood.</B><HR>"
 				dat += "<table cellspacing=5><tr><th>Name</th><th>DNA</th><th>Blood Type</th></tr>"

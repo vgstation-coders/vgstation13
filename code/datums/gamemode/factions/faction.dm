@@ -49,12 +49,11 @@
 	var/dat
 	dat += GetObjectivesMenuHeader()
 	dat += {"<BR><FONT size = 2><B>Faction Objectives</B></FONT>"}
-	for(var/datum/objective/O in objective_holder.GetObjectives())
-		dat += {"<BR>[O.explanation_text]<BR>[O.IsFulfilled() ? "Success" : "Failed"]"}
+	dat += objective_holder.GetObjectiveString(check_success = 1)
 
-	/*if(individuals)	NO ROLE DATUMS YET
-		//for(var/datum/role/R in members)
-			Get their character description, and their individual objectives*/
+	if(individuals)
+		for(var/datum/role/R in members)
+			dat += R.ReturnObjectivesString(check_success = 1)
 	return dat
 
 /datum/faction/proc/GetScoreboard()
