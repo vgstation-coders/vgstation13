@@ -4,6 +4,7 @@
 	icon_state = "closed"
 	opacity = 1
 	density = 0
+	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/curtain/open
