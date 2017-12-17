@@ -1351,13 +1351,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
 		)
 	prices = list(
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 40,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 15,
 		)
 
 	pack = /obj/structure/vendomatpack/offlicence
