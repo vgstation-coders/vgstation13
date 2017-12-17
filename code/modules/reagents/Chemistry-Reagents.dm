@@ -540,6 +540,26 @@
 	if(volume >= 1)
 		T.wet(800, TURF_WET_LUBE)
 
+/datum/reagent/sodium_polyacrylate
+	name = "Sodium Polyacrylate"
+	id = SODIUM_POLYACRYLATE
+	description = "A super absorbent polymer that can absorb water based substances."
+	reagent_state = SOLID
+	color = "#FFFFFF"
+	density = 1.22
+	specheatcap = 4.14
+
+/datum/reagent/sodium_polyacrylate/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(T.wet)
+		if(!locate(/obj/effect/decal/cleanable/molten_item) in T)
+			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(T)
+			I.desc = "A bit of gel left over from sodium polyacrylate absorbing liquid."
+		T.dry(TURF_WET_LUBE) //Absorbs water or lube
+
 /datum/reagent/anti_toxin
 	name = "Anti-Toxin (Dylovene)"
 	id = ANTI_TOXIN
