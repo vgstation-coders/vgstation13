@@ -646,9 +646,9 @@
 		return // Space ignores slowdown
 
 	if(feels_pain() && !has_painkillers())
-		var/health_deficiency = (100 - health - halloss)
-		if(health_deficiency >= 40)
-			. += (health_deficiency / 25)
+		var/health_deficiency = (maxHealth - health - halloss)
+		if(health_deficiency >= (maxHealth * 0.4))
+			. += (health_deficiency / (maxHealth * 0.25))
 
 
 /mob/living/carbon/proc/can_mind_interact(var/mob/M)
