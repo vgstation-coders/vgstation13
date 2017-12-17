@@ -1721,6 +1721,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			<dd>Accept this role for this round and all future rounds. You will not be polled again.</dd>
 		</dl>
 	</fieldset>
+	<h2>TO SAVE YOUR SPECIAL ROLE PREFERENCES, PRESS SUBMIT, NOT SAVE SETUP.</h2>
 
 	<table border=\"0\" padding-left = 20px;>
 		<thead>
