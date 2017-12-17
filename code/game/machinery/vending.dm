@@ -1314,11 +1314,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5,
 		)
 	prices = list(
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
 		)
 
 	pack = /obj/structure/vendomatpack/cola
