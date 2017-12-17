@@ -482,3 +482,13 @@
 		"health")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/obj/structure/closet/examine(mob/user)
+	..()
+	if(!opened && isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //Fuck off phantom mask users
+		var/mob/dead/observer/ghost = user
+		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
+			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //Scrying or astral travel, fuck them.
+				return
+		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
+		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
