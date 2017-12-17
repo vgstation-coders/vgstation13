@@ -88,7 +88,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/bot/floorbot,
 					/obj/machinery/bot/floorbot,
 					/obj/machinery/bot/medbot,
-					/obj/machinery/bot/medbot)
+					/obj/machinery/bot/medbot,
+					/obj/item/clothing/accessory/rad_patch,
+					/obj/item/clothing/accessory/rad_patch,
+					/obj/item/clothing/accessory/rad_patch)
 	cost = 40
 	containertype = /obj/structure/closet/crate/internals
 	containername = "emergency crate"
