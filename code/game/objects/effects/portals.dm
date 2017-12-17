@@ -20,9 +20,10 @@
 
 	var/list/exit_beams = list()
 
-/obj/effect/portal/attack_hand(var/mob/user)
-	spawn()
-		src.teleport(user)
+/obj/effect/portal/attack_hand(var/mob/user, params, proximity)
+	if(proximity)
+		spawn()
+			src.teleport(user)
 
 /obj/effect/portal/attackby(obj/item/weapon/O as obj, mob/user as mob)
 	if(O == creator)
