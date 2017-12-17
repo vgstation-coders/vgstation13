@@ -238,6 +238,11 @@
 			else if(!client)
 				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
 
+	// Religions
+	if (user.mind.faith && user.mind.faith.isReligiousLeader(user))
+		if (src.mind.faith == user.mind.faith)
+			msg += "<span class='notice'>You recognise [t_him] as a follower of [user.mind.faith.name].</span><br/>"
+
 	var/list/wound_flavor_text = list()
 	var/list/is_destroyed = list()
 	var/list/is_bleeding = list()
