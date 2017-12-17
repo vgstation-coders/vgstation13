@@ -49,6 +49,16 @@
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/matter_bin
 
+/datum/design/console_screen
+	name = "Console Screen"
+	desc = "Used in the construction of computers and other devices with an interactive console."
+	id = "console_screen"
+	req_tech = list(Tc_MATERIALS = 1)
+	build_type = PROTOLATHE | AUTOLATHE
+	materials = list(MAT_GLASS = 200)
+	category = "Stock Parts"
+	build_path = /obj/item/weapon/stock_parts/console_screen
+
 /datum/design/adv_capacitor
 	name = "Advanced Capacitor"
 	desc = "A stock part used in the construction of various devices."
