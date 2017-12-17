@@ -290,7 +290,7 @@
 
 		if("Supply")
 			module = new /obj/item/weapon/robot_module/miner(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_cargo(radio))
+			radio.insert_key(new/obj/item/device/encryptionkey/headset_mining(radio))
 			if(camera && CAMERANET_ROBOTS in camera.network)
 				camera.network.Add(CAMERANET_MINE)
 			module_sprites["Basic"] = "Miner_old"
