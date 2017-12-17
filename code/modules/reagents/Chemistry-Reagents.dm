@@ -554,7 +554,7 @@
 	if(..())
 		return 1
 
-	if(T.wet)
+	if(T.is_wet())
 		if(!locate(/obj/effect/decal/cleanable/molten_item) in T)
 			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(T)
 			I.desc = "A bit of gel left over from sodium polyacrylate absorbing liquid."
