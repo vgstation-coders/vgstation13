@@ -61,3 +61,55 @@
 	icon = 'icons/turf/space.dmi'
 	icon_state = "bluespacify"
 	layer = LIGHTING_LAYER
+
+/obj/effect/overlay/puddle
+	name = "Puddle"
+	icon = 'icons/effects/water.dmi'
+	icon_state = "wet_floor"
+	anchored = 1
+	var/wet = TURF_WET_LUBE
+	var/lifespan
+	mouse_opacity = 0
+
+/obj/effect/overlay/puddle/New(var/turf/T, var/new_wet, var/new_lifespan)
+	..()
+	wet = new_wet
+	lifespan = world.time + new_lifespan
+	processing_objects.Add(src)
+
+/obj/effect/overlay/puddle/process()
+	if(world.time >= lifespan)
+		qdel(src)
+
+/obj/effect/overlay/puddle/Crossed(atom/movable/AM)
+	if(istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/M = AM
+		switch(src.wet)
+			if(1) //Water
+				if (M.Slip(5, 3))
+					step(M, M.dir)
+					M.visible_message("<span class='warning'>[M] slips on the wet floor!</span>", \
+					"<span class='warning'>You slip on the wet floor!</span>")
+
+			if(2) //Lube
+				M.stop_pulling()
+				step(M, M.dir)
+				spawn(1)
+					step(M, M.dir)
+				spawn(2)
+					step(M, M.dir)
+				spawn(3)
+					step(M, M.dir)
+				spawn(4)
+					step(M, M.dir)
+				M.take_organ_damage(2) // Was 5 -- TLE
+				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
+				"<span class='warning'>You slip on the floor!</span>")
+				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+				M.Knockdown(10)
+
+			if(3) // Ice
+				if(prob(30) && M.Slip(4, 3))
+					step(M, M.dir)
+					M.visible_message("<span class='warning'>[M] slips on the icy floor!</span>", \
+					"<span class='warning'>You slip on the icy floor!</span>")

@@ -1752,7 +1752,7 @@
 	if(..())
 		return 1
 
-	if(T.wet)
+	if(T.is_wet())
 		T.dry(TURF_WET_LUBE) //Cleans water or lube
 		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
 		S.time_to_live = 10 //unusually short smoke

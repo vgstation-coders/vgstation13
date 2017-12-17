@@ -1,7 +1,5 @@
 /turf/simulated
 	name = "station"
-	var/wet = 0
-	var/image/wet_overlay = null
 
 	var/thermite = 0
 	var/can_thermite = 1
@@ -78,36 +76,6 @@
 		//And anything beyond that point will not fire for slimes
 		if(isslime(M)) //Slimes just don't slip, end of story
 			return ..()
-
-		switch(src.wet)
-			if(1) //Water
-				if (M.Slip(5, 3))
-					step(M, M.dir)
-					M.visible_message("<span class='warning'>[M] slips on the wet floor!</span>", \
-					"<span class='warning'>You slip on the wet floor!</span>")
-
-			if(2) //Lube
-				M.stop_pulling()
-				step(M, M.dir)
-				spawn(1)
-					step(M, M.dir)
-				spawn(2)
-					step(M, M.dir)
-				spawn(3)
-					step(M, M.dir)
-				spawn(4)
-					step(M, M.dir)
-				M.take_organ_damage(2) // Was 5 -- TLE
-				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
-				"<span class='warning'>You slip on the floor!</span>")
-				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
-				M.Knockdown(10)
-
-			if(3) // Ice
-				if(prob(30) && M.Slip(4, 3))
-					step(M, M.dir)
-					M.visible_message("<span class='warning'>[M] slips on the icy floor!</span>", \
-					"<span class='warning'>You slip on the icy floor!</span>")
 	..()
 
 //returns 1 if made bloody, returns 0 otherwise

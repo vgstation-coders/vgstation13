@@ -20,7 +20,7 @@
 	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
 	A.clean_blood()
 	for(var/obj/effect/O in A)
-		if(istype(O,/obj/effect/rune) || istype(O,/obj/effect/decal/cleanable) || istype(O,/obj/effect/overlay))
+		if(iscleanaway(A))
 			qdel(O)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -39,7 +39,7 @@
 			reagents.reaction(A,1,10) //I hope you like my polyacid cleaner mix
 			reagents.clear_reagents()
 
-	if(istype(A, /turf/simulated) || istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/overlay) || istype(A, /obj/effect/rune))
+	if(istype(A, /turf/simulated) || iscleanaway(A))
 		if(reagents.total_volume < 1)
 			to_chat(user, "<span class='notice'>Your mop is dry!</span>")
 			return

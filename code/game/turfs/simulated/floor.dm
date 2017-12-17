@@ -17,7 +17,6 @@ var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3
 				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
 var/list/wood_icons = list("wood","wood-broken")
-var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_state = "wet_floor"))
 /turf/simulated/floor
 
 	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
@@ -665,27 +664,25 @@ turf/simulated/floor/update_icon()
 						spam_flag = 0
 						update_icon()
 
+
+/turf/simulated/proc/is_wet() //Returns null if no puddle, otherwise returns the puddle
+	return locate(/obj/effect/overlay/puddle) in src
+
 /turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER)
-	if(wet >= slipperiness)
-		return
-	wet = slipperiness
-	if(wet_overlay)
-		overlays -= wet_overlay
-		wet_overlay = null
-	wet_overlay = w_overlays["wet"]
-	overlays += wet_overlay
-	spawn(delay)
-		if(!istype(src, /turf/simulated)) //Because turfs don't get deleted, they change, adapt, transform, evolve and deform. they are one and they are all.
-			return
-		dry(slipperiness)
+	var/obj/effect/overlay/puddle/P = is_wet()
+	if(P)
+		if(slipperiness > P.wet)
+			P.wet = slipperiness
+			P.lifespan = max(world.time + delay, world.time+P.lifespan)
+	else
+		new /obj/effect/overlay/puddle(src, slipperiness, delay)
 
 /turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
-	if(wet > slipperiness)
+	var/obj/effect/overlay/puddle/P = is_wet()
+	if(P.wet > slipperiness)
 		return
-	wet = TURF_DRY
-	if(wet_overlay)
-		overlays -= wet_overlay
-		wet_overlay = null
+	qdel(P)
+
 
 /turf/simulated/floor/attack_construct(mob/user as mob)
 	if(istype(src,/turf/simulated/floor/carpet))
