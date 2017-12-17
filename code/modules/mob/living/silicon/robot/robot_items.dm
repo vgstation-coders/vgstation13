@@ -276,7 +276,8 @@
 	reagent_list = BEER
 	artifact = FALSE
 	can_be_placed_into = null
-	var/synth_cost = 10 //Around 1666 cell charge for 50u beer
+	units_per_tick = 1
+	var/synth_cost = 30 // 1500 cell charge for 50u beer
 
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/fits_in_iv_drip()
 	return FALSE
@@ -292,6 +293,7 @@
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked
 	name = "mickey finn's special brew"
 	reagent_list = BEER2
+	units_per_tick = 0.3
 	synth_cost = 25 //4165 cell charge for 50u !NotShitterJuice.
 
 //Grippers: Simple cyborg manipulator. Limited use... SLIPPERY SLOPE POWERCREEP
