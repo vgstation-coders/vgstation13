@@ -58,6 +58,9 @@
 	if (subject.mind.faith == src)
 		to_chat(preacher, "<span class='warning'>You and your target follow the same faith.</span>")
 		return FALSE
+	if (subject.mind.faith != src && subject.mind.faith.isReligiousLeader(subject))
+		to_chat(preacher, "<span class='warning'>Your target is already the leader of another religion.</span>")
+		return FALSE
 	else
 		return convertCeremony(preacher, subject)
 
@@ -92,6 +95,10 @@
 
 // Here is the proc to welcome a new soul in our religion.
 /datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)
+	// If he already had one
+	if (subject.mind.faith)
+		subject.mind.faith.renounce(subject) // We remove him from that one
+
 	subject.mind.faith = src
 	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
 	adepts += subject.mind

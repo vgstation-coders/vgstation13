@@ -4702,7 +4702,7 @@
 				var/list/mob/moblist = list()
 
 				for (var/client/c in clients)
-					if (!c.mob.isDead())
+					if (!c.mob.isDead() && !c.mob.mind.faith) // Can't use dead guys, nor people with already a religion
 						moblist += c.mob
 
 				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
