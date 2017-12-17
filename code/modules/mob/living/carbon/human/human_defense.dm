@@ -259,10 +259,10 @@ emp_act
 		switch(hit_area)
 			if(LIMB_HEAD)//Harder to score a stun but if you do it lasts a bit longer
 				if(prob(I.force))
-					apply_effect(20, PARALYZE, armor)
-					visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
-					if(src != user && I.damtype == BRUTE)
-						ticker.mode.remove_revolutionary(mind)
+					if(apply_effect(20, PARALYZE, armor))
+						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
+						if(src != user && I.damtype == BRUTE)
+							ticker.mode.remove_revolutionary(mind)
 
 				if(bloody)//Apply blood
 					if(wear_mask)
