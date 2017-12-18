@@ -35,10 +35,14 @@
 		if(!lying)
 			limbs_to_check = list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG)
 		else
-			limbs_to_check = list(LIMB_LEFT_ARM,LIMB_RIGHT_ARM,LIMB_LEFT_HAND,LIMB_RIGHT_HAND)
+			limbs_to_check = grasp_organs
 			multiplier = 2
 		for(var/organ_name in limbs_to_check)
-			var/datum/organ/external/E = get_organ(organ_name)
+			var/datum/organ/external/E
+			if(istype(organ_name, /datum/organ/external))
+				E = organ_name
+			else
+				E = get_organ(organ_name)
 			if(!E || (E.status & ORGAN_DESTROYED))
 				. += 4*multiplier
 			if(E.status & ORGAN_SPLINTED)
