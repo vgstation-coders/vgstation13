@@ -25,7 +25,7 @@
 	AM.anchored = TRUE
 
 	if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
-		owner.density = TRUE
+		owner.setDensity(TRUE)
 
 	AM.pixel_x += pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y += pixel_y_offset * PIXEL_MULTIPLIER

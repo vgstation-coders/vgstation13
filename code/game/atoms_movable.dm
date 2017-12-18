@@ -805,7 +805,7 @@
 	timestopped = 0
 	if(!init_invuln)
 		flags &= ~INVULNERABLE
-	density = init_density
+	setDensity(init_density)
 	anchored = init_anchored
 	if(!init_timeless)
 		flags &= ~TIMELESS

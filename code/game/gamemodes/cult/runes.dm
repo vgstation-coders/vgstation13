@@ -1049,7 +1049,7 @@
 
 /obj/effect/rune/proc/wall()
 	usr.say("Khari[pick("'","`")]d! Eske'te tannin!")
-	src.density = !src.density
+	setDensity(!density)
 	var/mob/living/user = usr
 	user.take_organ_damage(2, 0)
 	if(src.density)
