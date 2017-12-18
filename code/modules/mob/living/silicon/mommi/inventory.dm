@@ -2,6 +2,10 @@
 //as they handle all relevant stuff like adding it to the player's screen and such
 
 //Returns the thing in our active hand (whatever is in our active module-slot, in this case)
+
+/mob/living/carbon/can_use_hands()
+	return TRUE
+
 /mob/living/silicon/robot/mommi/get_active_hand()
 	return module_active
 
@@ -78,7 +82,7 @@
 /mob/living/silicon/robot/mommi/put_in_active_hand(var/obj/item/W)
 	// If we have anything active, deactivate it.
 	if(!W)
-		return 0
+		return FALSE
 	if(get_active_hand())
 		uneq_active()
 	return put_in_hands(W)
@@ -93,7 +97,7 @@
 /mob/living/silicon/robot/mommi/drop_item_v()		//this is dumb.
 	if(stat == CONSCIOUS && isturf(loc))
 		return drop_item()
-	return 0
+	return FALSE
 
 /mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
 	if(!Target)
@@ -105,7 +109,7 @@
 		if(is_in_modules(to_drop))
 			if((to_drop in contents) && (to_drop in src.module.modules))
 				to_chat(src, "<span class='warning'>This item cannot be dropped.</span>")
-				return 0
+				return FALSE
 		if(client)
 			client.screen -= to_drop
 
@@ -116,8 +120,8 @@
 
 		u_equip(to_drop)
 		update_items()
-		return 1
-	return 0
+		return TRUE
+	return FALSE
 
 
 /*-------TODOOOOOOOOOO--------*/
@@ -178,9 +182,9 @@
 
 /mob/living/silicon/robot/mommi/activated(obj/item/O)
 	if(tool_state == O) // Sight
-		return 1
+		return TRUE
 	else
-		return 0
+		return FALSE
 
 
 //Helper procs for cyborg modules on the UI.
@@ -197,14 +201,14 @@
 
 	if(INV_SLOT_TOOL)
 		if(tool_state)
-			return 1
-	return 0
+			return TRUE
+	return FALSE
 
 //get_selected_module() - Returns the slot number of the currently selected module.  Returns 0 if no modules are selected.
 /mob/living/silicon/robot/mommi/get_selected_module()
 	if(tool_state && module_active == tool_state)
 		return INV_SLOT_TOOL
-	return 0
+	return FALSE
 
 //select_module(module) - Selects the module slot specified by "module"
 /mob/living/silicon/robot/mommi/select_module(var/module)
@@ -258,20 +262,20 @@
 /mob/living/silicon/robot/mommi/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
 	// If the parameters were given incorrectly, return an error
 	if(!slot)
-		return 0
+		return FALSE
 	if(!istype(W))
-		return 0
+		return FALSE
 
 	// If this item does not equip to this slot type, return
 	if( !(W.slot_flags & SLOT_HEAD) )
-		return 0
+		return FALSE
 
 	// If the item is in the MoMMI's claw, handle removing the item from the MoMMI's claw
 	if(W == tool_state)
 		// Don't allow the MoMMI to equip tools to their head. I mean, they cant anyways, but stop them here
 		if(is_in_modules(tool_state))
 			to_chat(src, "<span class='warning'>You cannot equip a module to your head.</span>")
-			return 0
+			return FALSE
 		// Remove the item in the MoMMI's claw from their HuD
 		if (client)
 			client.screen -= tool_state
@@ -303,11 +307,11 @@
 				client.screen += head_state
 		else
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
-			return 0
+			return FALSE
 	// Set the item layer and update the MoMMI's icons
 	W.hud_layerise()
 	update_inv_head()
-	return 1
+	return TRUE
 
 /mob/living/silicon/robot/mommi/attack_ui(slot)
 	var/obj/item/W = tool_state
@@ -318,7 +322,7 @@
 // Quickly equip a hat by pressing "e"
 /mob/living/silicon/robot/mommi/verb/quick_equip()
 	set name = "quick-equip"
-	set hidden = 1
+	set hidden = TRUE
 
 	// Only allow equipping if the tool slot is activated
 	if(!module_selected(INV_SLOT_TOOL))
