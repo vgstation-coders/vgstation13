@@ -234,7 +234,7 @@
 	modules += new /obj/item/taperoll/atmos(src)
 	modules += new /obj/item/taperoll/engineering(src)
 	modules += new /obj/item/device/rcd/tile_painter(src)
-	modules += new /obj/item/device/material_synth/robot(src)
+	modules += new /obj/item/device/material_synth/robot/engiborg(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
@@ -351,7 +351,7 @@
 	modules += new /obj/item/weapon/tray/robotray(src)
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 	modules += new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg(src)
-	
+
 	emag = new /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked(src)
 
 	fix_modules()
@@ -361,13 +361,13 @@
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
-	
+
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/storage/bag/ore(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)
-	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)	
+	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
 	tag.mode = 1 //For editing the tag list
