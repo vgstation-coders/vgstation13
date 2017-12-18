@@ -36,10 +36,15 @@
 	if(iswirecutter(W))
 		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(do_after(user, src, 10))
-			to_chat(user, "<span class='notice'>You cut the shower curtains down.</span>")
+			to_chat(user, "<span class='notice'>You cut the [src] down.</span>")
 			var/obj/item/stack/sheet/mineral/plastic/A = getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src))
 			A.amount = 4
 			qdel(src)
+		return 1
+	if(isscrewdriver(W))
+		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		user.visible_message("[user] [anchored? "unsecures" : "secures"] the [src].", "You [anchored? "unsecure" : "secure"] the curtains.")
+		anchored = !anchored
 		return 1
 	src.attack_hand(user)
 
