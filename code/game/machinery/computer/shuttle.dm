@@ -65,7 +65,7 @@
 	if(!emagged)
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
-		var/choice = FALSE
+		var/choice = "Cancel"
 		if(user)
 			choice = alert(user, "Would you like to launch the shuttle?","Shuttle control", "Launch", "Cancel")
 		else
