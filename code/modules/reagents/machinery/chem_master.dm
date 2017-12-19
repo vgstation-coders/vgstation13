@@ -220,7 +220,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["amount"])
 				amount = text2num(href_list["amount"])
 			else if(href_list["percent"])
-				amount = R.get_reagent_amount(id) * text2num(href_list["percent"]) / 100
+				amount = reagents.get_reagent_amount(id) * text2num(href_list["percent"]) / 100
 			if(isnull(amount) || amount < 0)
 				return
 			if(mode)
@@ -235,7 +235,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["amount"])
 				amount = text2num(href_list["amount"])
 			else if(href_list["percent"])
-				amount = R.total_volume * text2num(href_list["percent"]) / 100
+				amount = reagents.total_volume * text2num(href_list["percent"]) / 100
 			if(isnull(amount) || amount < 0)
 				return
 			if(mode)
