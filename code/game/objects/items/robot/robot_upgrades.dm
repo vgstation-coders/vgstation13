@@ -30,7 +30,6 @@
 	if(!I)
 		to_chat(user, "This cyborg is missing one of the needed components!")
 		return null
-	world.log << I
 	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
