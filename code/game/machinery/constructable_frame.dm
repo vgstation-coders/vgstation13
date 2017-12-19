@@ -1375,6 +1375,15 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/scanning_module = 1,
 						/obj/item/weapon/stock_parts/micro_laser = 1)
 
+/obj/item/weapon/circuitboard/oven
+	name = "circuit board (oven)"
+	desc = "A circuit board for an electric oven."
+	board_type = MACHINE
+	build_path = "/obj/machinery/oven"
+	req_components = list(
+						"/obj/item/weapon/stock_parts/capacitor" = 2,
+						"/obj/item/weapon/stock_parts/micro_laser" = 3,
+						"/obj/item/weapon/stock_parts/console_screen" = 1)
 
 
 /*
