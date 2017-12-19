@@ -298,7 +298,8 @@ to destroy them and players will be able to make replacements.
 	"cell charger"=/obj/item/weapon/circuitboard/cell_charger,
 	"recharger"=/obj/item/weapon/circuitboard/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
-	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
+	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
+	"electric oven"=/obj/item/weapon/circuitboard/oven,)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
