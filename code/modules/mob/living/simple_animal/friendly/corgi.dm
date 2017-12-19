@@ -280,7 +280,7 @@
 			desc = "Probably better than the last captain."
 			valid = 1
 
-		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/collectable/kitty)
+		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/kitty/collectable)
 			name = "Runtime"
 			emote_see = list("coughs up a furball", "stretches")
 			emote_hear = list("purrs")

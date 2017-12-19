@@ -184,6 +184,13 @@
 /obj/item/clothing/head/kitty/cursed
 	canremove = 0
 
+/obj/item/clothing/head/kitty/OnMobLife(var/mob/living/carbon/human/wearer)
+	if(!istype(wearer))
+		return
+	if(wearer.head == src)
+		if(prob(20))
+			wearer.adjustBrainLoss(1)
+
 /obj/item/clothing/head/butt
 	name = "butt"
 	desc = "So many butts, so little time."
