@@ -1380,6 +1380,7 @@ obj/item/weapon/circuitboard/rdserver
 	desc = "A circuit board for an electric oven."
 	board_type = MACHINE
 	build_path = "/obj/machinery/oven"
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
 						"/obj/item/weapon/stock_parts/capacitor" = 2,
 						"/obj/item/weapon/stock_parts/micro_laser" = 3,
