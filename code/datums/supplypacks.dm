@@ -1429,10 +1429,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/radiation_suit
 	name = "Radiation suit"
-	contains = list(/obj/item/clothing/suit/radiation,
-					/obj/item/clothing/head/radiation,
-					/obj/item/device/geiger_counter)
-	cost = 150
+	contains = list()
+	cost = 400
+	containertype = /obj/structure/closet/crate/radiation
 	containername = "radiation suit crate"
 	access = list(access_engine)
 	group = "Engineering"
