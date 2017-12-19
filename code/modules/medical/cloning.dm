@@ -350,9 +350,10 @@
 	return
 
 /obj/machinery/cloning/clonepod/emag(mob/user as mob)
-	if (isnull(occupant))
+	if(isnull(occupant))
 		return
-	to_chat(user, "You force an emergency ejection.")
+	if(user)
+		to_chat(user, "You force an emergency ejection.")
 	locked = FALSE
 	go_out()
 	return

@@ -30,9 +30,11 @@
 /obj/item/weapon/cookiesynth/proc/Emag(mob/user)
 	emagged = !emagged
 	if(emagged)
-		to_chat(user,"<span class='warning'>You short out the [src]'s reagent safety checker!</span>")
+		if(user)
+			to_chat(user,"<span class='warning'>You short out the [src]'s reagent safety checker!</span>")
 	else
-		to_chat(user,"<span class='warning'>You reset the [src]'s reagent safety checker!</span>")
+		if(user)
+			to_chat(user,"<span class='warning'>You reset the [src]'s reagent safety checker!</span>")
 		toxin = 0
 
 /obj/item/weapon/cookiesynth/attack_self(mob/user)

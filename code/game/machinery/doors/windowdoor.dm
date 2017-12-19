@@ -303,8 +303,9 @@
 	return ..()
 
 /obj/machinery/door/window/emag(mob/user)
-	var used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
-	return hackOpen(used_emag, user)
+	if(user)
+		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
+		return hackOpen(used_emag, user)
 
 /obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
 	operating = -1

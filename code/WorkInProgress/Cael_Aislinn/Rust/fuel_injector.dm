@@ -93,7 +93,8 @@
 	if(!emagged)
 		locked = FALSE
 		emagged = TRUE
-		user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
+		if(user)
+			user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
 
 /obj/machinery/power/rust_fuel_injector/attackby(var/obj/item/W, var/mob/user)
 	if(..())

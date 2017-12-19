@@ -435,7 +435,8 @@ var/shuttle_call/shuttle_calls[0]
 /obj/machinery/computer/communications/emag(mob/user as mob)
 	if(!emagged)
 		emagged = 1
-		to_chat(user, "Syndicate routing data uploaded!")
+		if(user)
+			to_chat(user, "Syndicate routing data uploaded!")
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
 		authenticated = 2

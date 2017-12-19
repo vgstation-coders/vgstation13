@@ -200,7 +200,8 @@
 /obj/machinery/computer/library/checkout/emag(mob/user)
 	if(!emagged)
 		src.emagged = 1
-		to_chat(user, "<span class='notice'>You override the library computer's printing restrictions.</span>")
+		if(user)
+			to_chat(user, "<span class='notice'>You override the library computer's printing restrictions.</span>")
 		return 1
 	return
 

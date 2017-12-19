@@ -343,9 +343,10 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/emag(mob/user)
 	if(!emagged)
 		emagged = 1
-		to_chat(user, "You short out the product lock on \the [src]")
+		if(user)
+			to_chat(user, "You short out the product lock on \the [src]")
 		return 1
-	return -1
+	return -1 //Fucking gross
 
 /obj/machinery/vending/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -2573,8 +2574,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/nazivend/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
-		message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE!")
+		if(user)
+			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
+			message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE!")
 		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
 		contraband[/obj/item/clothing/suit/space/rig/nazi] = 3
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
@@ -2654,8 +2656,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sovietvend/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
-		message_admins("[key_name_admin(user)] unlocked a Sovietvend's DANGERMODE!")
+		if(user)
+			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
+			message_admins("[key_name_admin(user)] unlocked a Sovietvend's DANGERMODE!")
 		contraband[/obj/item/clothing/head/helmet/space/rig/soviet] = 3
 		contraband[/obj/item/clothing/suit/space/rig/soviet] = 3
 		contraband[/obj/item/weapon/gun/energy/laser/LaserAK] = 4
