@@ -276,8 +276,7 @@
 	reagent_list = BEER
 	artifact = FALSE
 	can_be_placed_into = null
-	units_per_tick = 1
-	var/synth_cost = 30 // 1500 cell charge for 50u beer
+	var/synth_cost = 10 //Around 1666 cell charge for 50u beer
 
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/fits_in_iv_drip()
 	return FALSE
@@ -293,7 +292,6 @@
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked
 	name = "mickey finn's special brew"
 	reagent_list = BEER2
-	units_per_tick = 0.3
 	synth_cost = 25 //4165 cell charge for 50u !NotShitterJuice.
 
 //Grippers: Simple cyborg manipulator. Limited use... SLIPPERY SLOPE POWERCREEP
@@ -322,7 +320,12 @@
 			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevent self-disassembling.</span>")
 			return FALSE
 	if (!wrapped)
-		if(is_type_in_list(I, can_hold) && !is_type_in_list(I, blacklist))
+		var/grab = FALSE
+		for(var/typepath in can_hold)
+			if(istype(I,typepath))
+				grab = TRUE
+				break
+		if(grab && !is_type_in_list(I, blacklist))
 			if(feedback)
 				to_chat(user, "<span class='notice'>You collect \the [I].</span>")
 			I.loc = src

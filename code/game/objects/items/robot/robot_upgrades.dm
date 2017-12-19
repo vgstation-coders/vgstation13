@@ -30,6 +30,7 @@
 	if(!I)
 		to_chat(user, "This cyborg is missing one of the needed components!")
 		return null
+	world.log << I
 	return I
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -85,7 +86,7 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold += list(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
+	G.can_hold.Add(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
 
 /obj/item/borg/upgrade/reset
 	name = "cyborg reset board"
@@ -265,19 +266,21 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold += list(/obj/item/weapon/reagent_containers/food)
+	G.can_hold.Add(/obj/item/weapon/reagent_containers/food)
 
 /obj/item/borg/upgrade/magnetic_gripper
-	name = "engineering cyborg magnetic gripper upgrade board"
+	name = "engineering cyborg magnetic gripper upgrade"
 	desc = "Used to give a engineering cyborg a magnetic gripper."
-	icon_state = "cyborg_upgrade2"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "gripper"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
 
 /obj/item/borg/upgrade/organ_gripper
-	name = "medical cyborg organ gripper upgrade board"
+	name = "medical cyborg organ gripper upgrade"
 	desc = "Used to give a medical cyborg a organ gripper."
-	icon_state = "cyborg_upgrade2"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "gripper-medical"
 	required_module = list(/obj/item/weapon/robot_module/medical)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
 
@@ -288,7 +291,7 @@
 	required_module = list(/obj/item/weapon/robot_module/butler)
 	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants, /obj/item/device/analyzer/plant_analyzer)
 
-/obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
@@ -296,4 +299,4 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold += list(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
+	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
