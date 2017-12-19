@@ -14,25 +14,35 @@
 	icon_state = "icecream_vat"
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/datum/reagents/to_add
-
+	var/soda
+	var/alcohol
 
 /obj/machinery/cooking/icemachine/New()
 	create_reagents(500)
 	flags |= NOREACT
 	to_add = new/datum/reagents(30)
 	to_add.my_atom = src
-	generate_icecream_reagents()
+	soda = pick(COLA,DR_GIBB,SPACE_UP,SPACEMOUNTAINWIND)
+	alcohol = pick(KAHLUA,VODKA,RUM,GIN)
+	generate_icecream_reagents(51)
+	..()
+
+/obj/machinery/cooking/icemachine/Destroy()
+	qdel(beaker)
+	beaker = null
+	qdel(to_add)
+	to_add = null
 	..()
 
 // Utilities ///////////////////////////////////////////////////
 
-/obj/machinery/cooking/icemachine/proc/generate_icecream_reagents()
-	reagents.add_reagent(pick(COLA,DR_GIBB,SPACE_UP,SPACEMOUNTAINWIND), 51)
-	reagents.add_reagent(pick(KAHLUA,VODKA,RUM,GIN), 51)
-	reagents.add_reagent(CREAM, 51)
-	reagents.add_reagent(WATER, 51)
-	reagents.add_reagent(NUTRIMENT, 51)
-	reagents.add_reagent(SPRINKLES, 51)
+/obj/machinery/cooking/icemachine/proc/generate_icecream_reagents(var/reagent_total)
+	reagents.add_reagent(soda, min(reagent_total-reagents.get_reagent_amount(soda), reagent_total))
+	reagents.add_reagent(alcohol, min(reagent_total-reagents.get_reagent_amount(alcohol), reagent_total))
+	reagents.add_reagent(CREAM, min(reagent_total-reagents.get_reagent_amount(CREAM), reagent_total))
+	reagents.add_reagent(WATER, min(reagent_total-reagents.get_reagent_amount(WATER), reagent_total))
+	reagents.add_reagent(NUTRIMENT, min(reagent_total-reagents.get_reagent_amount(NUTRIMENT), reagent_total))
+	reagents.add_reagent(SPRINKLES, min(reagent_total-reagents.get_reagent_amount(SPRINKLES), reagent_total))
 
 /obj/machinery/cooking/icemachine/proc/generateName(reagentName)
 	. = pick("Mr. ","Mrs. ","Super ","Happy ","Whippy ")
