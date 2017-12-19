@@ -55,12 +55,3 @@
 /spell/targeted/equip_item/horsemask/christmas/New()
 	..()
 	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/horsehead/reindeer)
-
-
-/spell/targeted/equip_item/horsemask/christmas/summon_item(var/new_type)
-	var/obj/item/new_item = new new_type
-	if(istype(new_item, /obj/item/clothing/mask/horsehead/reindeer))
-		var/obj/item/clothing/mask/horsehead/reindeer/magichead = new_item
-		magichead.canremove = 0
-		magichead.voicechange = 1
-	return new_item
