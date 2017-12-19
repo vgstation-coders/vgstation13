@@ -153,6 +153,40 @@ proc/RoundHealth(health)
 			return "health-100"
 	return "0"
 
+/proc/cyborg_health_to_icon_state(var/health)
+	switch(health)
+		if(300 to INFINITY)
+			return "huddiagmax"
+		if(225 to 300)
+			return "huddiaggood"
+		if(175 to 225)
+			return "huddiaghigh"
+		if(125 to 175)
+			return "huddiagmed"
+		if(75 to 125)
+			return "huddiaglow"
+		if(0 to 75)
+			return "huddiagcrit"
+		if(-40 to 0)
+			return "huddiagdead"
+	return "huddiagmax"
+
+/proc/power_cell_charge_to_icon_state(var/charge_ratio)
+	switch(charge_ratio)
+		if(0.95 to INFINITY)
+			return "hudbattmax"
+		if(0.80 to 0.95)
+			return "hudbattgood"
+		if(0.60 to 0.80)
+			return "hudbatthigh"
+		if(0.40 to 0.60)
+			return "hudbattmed"
+		if(0.20 to 0.40)
+			return "hudbattlow"
+		if(0.10 to 0.20)
+			return "hudbattcrit"
+	return "hudbattdead"
+
 /*
 Proc for attack log creation, because really why not
 1 argument is the actor

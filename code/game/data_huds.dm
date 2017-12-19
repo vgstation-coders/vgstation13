@@ -12,15 +12,18 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 		med_hud_users -= src
 	if(src in sec_hud_users)
 		sec_hud_users -= src
+	diagnostic_hud_users -= src
 
-proc/check_HUD_visibility(var/mob/living/target, var/mob/user)
+proc/check_HUD_visibility(var/atom/target, var/mob/user)
 	if(user.see_invisible < target.invisibility)
 		return FALSE
 	if(target.alpha <= 1)
 		return FALSE
-	for(var/i in target.alphas)
-		if(target.alphas[i] <= 1)
-			return FALSE
+	if(ismob(target))
+		var/mob/M = target
+		for(var/i in M.alphas)
+			if(M.alphas[i] <= 1)
+				return FALSE
 	if(iscarbon(target))
 		var/mob/living/carbon/C = target
 		for(var/i in C.body_alphas)
@@ -138,6 +141,58 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else
 						continue
 				C.images += holder
+
+/proc/process_diagnostic_hud(var/mob/M, var/mob/eye)
+	if(!M || !M.client)
+		return
+	diagnostic_hud_users |= M
+
+	var/client/C = M.client
+	var/image/holder
+	var/turf/T = eye ? get_turf(eye) : get_turf(M)
+
+	for(var/mob/living/silicon/robot/borg in range(T))
+		if(!check_HUD_visibility(borg, M))
+			continue
+
+		holder = borg.hud_list[DIAG_HEALTH_HUD]
+		if(holder)
+			C.images += holder
+			if(borg.isDead())
+				holder.icon_state = "huddiagdead"
+			else
+				holder.icon_state = cyborg_health_to_icon_state(borg.health)
+
+		holder = borg.hud_list[DIAG_CELL_HUD]
+		if(holder)
+			C.images += holder
+			var/obj/item/weapon/cell/borg_cell = borg.cell
+			if(!borg_cell)
+				holder.icon_state = "hudnobatt"
+			else
+				var/charge_ratio = borg_cell.charge / borg_cell.maxcharge
+				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
+
+	for(var/obj/mecha/exosuit in range(T))
+		if(!check_HUD_visibility(exosuit, M))
+			continue
+
+		holder = exosuit.hud_list[DIAG_HEALTH_HUD]
+		if(holder)
+			C.images += holder
+			var/integrity_ratio = exosuit.health / initial(exosuit.health)
+			holder.icon_state = mech_integrity_to_icon_state(integrity_ratio)
+		
+		holder = exosuit.hud_list[DIAG_CELL_HUD]
+		if(holder)
+			C.images += holder
+			var/obj/item/weapon/cell/exosuit_cell = exosuit.cell
+			if(!exosuit_cell)
+				holder.icon_state = "hudnobatt"
+			else
+				var/charge_ratio = exosuit_cell.charge / exosuit_cell.maxcharge
+				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
+			
 
 //Unsure of where to put this, but since most of it is HUDs it seemed fitting to go here.
 /mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)

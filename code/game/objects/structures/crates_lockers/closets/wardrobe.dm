@@ -282,6 +282,8 @@
 	new /obj/item/clothing/shoes/black(src)
 	new /obj/item/clothing/gloves/black(src)
 	new /obj/item/clothing/gloves/black(src)
+	new /obj/item/clothing/glasses/hud/diagnostic(src)
+	new /obj/item/clothing/glasses/hud/diagnostic(src)
 	AddToProfiler()
 	return
 

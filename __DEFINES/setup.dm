@@ -864,15 +864,17 @@ SEE_PIXELS	256
 #define RIGHT 2
 
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
-#define HEALTH_HUD          1 // a simple line rounding the mob's number health
-#define STATUS_HUD          2 // alive, dead, diseased, etc.
-#define ID_HUD              3 // the job asigned to your ID
-#define WANTED_HUD          4 // wanted, released, parroled, security status
-#define IMPLOYAL_HUD		5 // loyality implant
-#define IMPCHEM_HUD		    6 // chemical implant
-#define IMPTRACK_HUD		7 // tracking implant
-#define SPECIALROLE_HUD 	8 // AntagHUD image
-#define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
+#define HEALTH_HUD          "health" // a simple line rounding the mob's number health
+#define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define ID_HUD              "id" // the job asigned to your ID
+#define WANTED_HUD          "wanted" // wanted, released, parroled, security status
+#define IMPLOYAL_HUD		"imployal" // loyality implant
+#define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPTRACK_HUD		"imptrack" // tracking implant
+#define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
+#define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
+#define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
+#define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
