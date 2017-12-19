@@ -322,7 +322,12 @@
 			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevent self-disassembling.</span>")
 			return FALSE
 	if (!wrapped)
-		if(is_type_in_list(I, can_hold) && !is_type_in_list(I, blacklist))
+		var/grab = FALSE
+		for(var/typepath in can_hold)
+			if(istype(I,typepath))
+				grab = TRUE
+				break
+		if(grab && !is_type_in_list(I, blacklist))
 			if(feedback)
 				to_chat(user, "<span class='notice'>You collect \the [I].</span>")
 			I.loc = src
