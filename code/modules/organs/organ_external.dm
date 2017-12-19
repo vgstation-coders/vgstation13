@@ -96,10 +96,16 @@
 
 	var/turf/T = get_turf(owner)
 	if(T)
-		var/obj/effect/decal/gib = new gib_type(get_turf(owner))
-		gib.name = "mangled [src.display_name]"
-		gib.desc = "Completely useless now."
-		//step(gib, pick(cardinal)) //move it into random direction
+		var/obj/effect/decal/gib
+
+		//Create two gibs
+		for(var/i = 1 to 2)
+			gib = new gib_type(get_turf(owner))
+			gib.name = "mangled [src.display_name]"
+			gib.desc = "Completely useless now."
+
+		spawn(3)
+			step(gib, pick(alldirs)) //move the last spawned gib in a random direction
 
 		if(is_robotic())
 			T.hotspot_expose(1000,1000,surfaces=1)
@@ -107,7 +113,7 @@
 			playsound(T, 'sound/effects/gib3.ogg', 50, 1)
 
 	var/msg = pick(
-	"\The [owner]'s [display_name] is completely mangled to bits!",\
+	"\The [owner]'s [display_name] is mangled to bits!",\
 	"\The [owner]'s [display_name] [is_robotic() ? "is completely wrecked" : "explodes into gory red paste"]!",\
 	"\The [owner]'s [display_name] [is_robotic() ? "is ripped into loose shreds" : "collapses into a lump of gore"]!")
 
@@ -150,8 +156,8 @@
 					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
 						droplimb(1)
 						return
-				else if(!sharp && brute >= 20) //Massive blunt damage can result in limb explosion
-					if(prob((brute/10)^3)) //20 dmg - 8% chance, 30 dmg - 27%, 40 dmg - 64%, anything higher than ~46 is a guaranteed limbgib
+				else if(!sharp && brute >= 15) //Massive blunt damage can result in limb explosion
+					if(prob((brute/7.5)**3)) //15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
 						explode()
 						return
 				else if(brute > 20 && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
@@ -727,7 +733,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		else
 			//If any organs are attached to this, destroy them
 			for(var/datum/organ/external/O in children)
-				O.droplimb(1)
+				O.droplimb(1, no_explode, spawn_limb, display_message)
 
 		for(var/implant in implants)
 			qdel(implant)
@@ -1417,8 +1423,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return B
 
 /datum/organ/external/head/explode()
-	var/datum/organ/internal/brain/B = eject_brain()
-	B.remove(owner) //generate a brain item
+	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
 
 	.=..()
 
