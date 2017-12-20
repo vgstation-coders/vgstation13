@@ -1043,9 +1043,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			continue
 
 		var/mob/living/carbon/human/M = spawn_player(S.spawnpoint)
+		M.ckey = C.ckey
 		dress_player(M)
 		M.stunned = 3
-		M.ckey = C.ckey
 		gladiators += M
 
 		if(S.player_mob)
