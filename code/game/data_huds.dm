@@ -161,7 +161,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			if(borg.isDead())
 				holder.icon_state = "huddiagdead"
 			else
-				holder.icon_state = cyborg_health_to_icon_state(borg.health)
+				holder.icon_state = cyborg_health_to_icon_state(borg.health / borg.maxHealth)
 
 		holder = borg.hud_list[DIAG_CELL_HUD]
 		if(holder)

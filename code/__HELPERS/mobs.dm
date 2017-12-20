@@ -153,21 +153,21 @@ proc/RoundHealth(health)
 			return "health-100"
 	return "0"
 
-/proc/cyborg_health_to_icon_state(var/health)
-	switch(health)
-		if(300 to INFINITY)
+/proc/cyborg_health_to_icon_state(var/health_ratio)
+	switch(health_ratio)
+		if(1.00 to INFINITY)
 			return "huddiagmax"
-		if(225 to 300)
+		if(0.80 to 1.00)
 			return "huddiaggood"
-		if(175 to 225)
+		if(0.60 to 0.80)
 			return "huddiaghigh"
-		if(125 to 175)
+		if(0.40 to 0.60)
 			return "huddiagmed"
-		if(75 to 125)
+		if(0.20 to 0.40)
 			return "huddiaglow"
-		if(0 to 75)
+		if(0.00 to 0.20)
 			return "huddiagcrit"
-		if(-40 to 0)
+		if(-100.0 to 0.00)
 			return "huddiagdead"
 	return "huddiagmax"
 
