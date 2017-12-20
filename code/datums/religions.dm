@@ -58,7 +58,7 @@
 	if (subject.mind.faith == src)
 		to_chat(preacher, "<span class='warning'>You and your target follow the same faith.</span>")
 		return FALSE
-	if (subject.mind.faith != src && subject.mind.faith.isReligiousLeader(subject))
+	if (istype(subject.mind.faith) && subject.mind.faith.isReligiousLeader(subject))
 		to_chat(preacher, "<span class='warning'>Your target is already the leader of another religion.</span>")
 		return FALSE
 	else
