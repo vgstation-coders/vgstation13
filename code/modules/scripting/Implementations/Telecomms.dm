@@ -236,9 +236,9 @@
 	interpreter.Run()
 
 	// Backwards-apply variables onto signal data
-	/* sanitize EVERYTHING. fucking players can't be trusted with SHIT */
+	/* sanitize (almost) EVERYTHING. fucking players can't be trusted with SHIT */
 
-	signal.data["message"] 	= interpreter.GetCleanVar("$content", signal.data["message"])
+	signal.data["message"] 	= interpreter.GetVar("$content")
 	signal.frequency 		= interpreter.GetCleanVar("$freq", signal.frequency)
 
 	var/setname = interpreter.GetCleanVar("$source", signal.data["name"])
