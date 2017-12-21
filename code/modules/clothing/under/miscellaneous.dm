@@ -720,8 +720,8 @@
 	name = "elf uniform"
 	desc = "A festive suit for a festive elf!"
 	icon_state = "elf"
-	item_state = "elf_s"
-	_color = "elf_s"
+	item_state = "elf"
+	_color = "elf"
 
 /obj/item/clothing/under/elf/stickymagic
 	canremove = 0

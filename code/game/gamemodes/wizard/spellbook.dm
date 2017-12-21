@@ -98,6 +98,7 @@
 
 	if(Holiday == "Christmas")
 		available_spells.Add(/spell/targeted/equip_item/horsemask/christmas)
+		available_spells.Add(/spell/targeted/equip_item/clowncurse/christmas)
 
 
 /obj/item/weapon/spellbook/proc/get_available_spells()

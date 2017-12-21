@@ -455,6 +455,7 @@
 	desc = "Wear this hat, and become one of Santa's little helpers!"
 	icon_state = "elf_hat"
 	item_state = "elf_hat"
+	body_parts_covered = HEAD|EARS
 
 /obj/item/clothing/head/elfhat/stickymagic
 	canremove = 0
