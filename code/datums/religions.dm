@@ -77,7 +77,7 @@
 	if (B.reagents.get_master_reagent_name() != "Holy Water")
 		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
 		return FALSE
-	subject.visible_message("\The [preacher] attemps to convert the [subject] to [name].")
+	subject.visible_message("\The [preacher] attemps to convert \the [subject] to [name].")
 	if(!convertCheck(subject))
 		subject.visible_message("\The [subject] refuses conversion.")
 		return FALSE
@@ -146,7 +146,7 @@
 		return FALSE
 
 	if (R.isReligiousLeader(M))
-		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for realease.</span>")
+		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
 		return FALSE
 	Remove(owner)
 	R.renounce(owner)

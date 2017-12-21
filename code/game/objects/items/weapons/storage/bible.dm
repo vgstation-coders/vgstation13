@@ -186,7 +186,7 @@
 /datum/action/item_action/convert/Trigger()
 	var/obj/item/weapon/storage/bible/B = target
 
-	if (owner.isUnconscious() || owner.incapacitated() || owner.lying || owner.locked_to || !ishigherbeing(owner)) // Sanity
+	if (owner.incapacitated() || owner.lying || owner.locked_to || !ishigherbeing(owner)) // Sanity
 		return FALSE
 	if (!owner.mind.faith)
 		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
@@ -201,7 +201,7 @@
 		to_chat(owner, "<span class='warning'>No target selected.</span>")
 		return FALSE
 
-	if (subject.isUnconscious() || subject.incapacitated() || subject.lying || subject.locked_to || !ishigherbeing(subject) || !subject.mind) // Sanity
+	if (subject.incapacitated() || subject.lying || subject.locked_to || !ishigherbeing(subject) || !subject.mind) // Sanity
 		to_chat(owner, "<span class='warning'> \The [subject] does not seem receptive to conversion.</span>")
 	else
 		owner.mind.faith.convertAct(owner, subject, B) // usr = preacher ; target = subject
