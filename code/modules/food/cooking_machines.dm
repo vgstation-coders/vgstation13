@@ -690,6 +690,10 @@ var/global/ingredientLimit = 10
 	active_power_usage = 5000
 	heat_production = 450
 	source_temperature = T0C+180
+	density = 1
+	anchored = 1
+	use_power = 1
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/obj/item/weapon/reagent_containers/within
 
 /obj/machinery/oven/New()
@@ -746,19 +750,17 @@ var/global/ingredientLimit = 10
 /obj/machinery/oven/proc/toggle(mob/user)
 	if(use_power == 1)
 		icon_state = icon_state_on
-		to_chat(user, "<span class = 'notice'>You turn \the [src] on.</span>")
 		use_power = 2
 		processing_objects.Add(src)
-		return
 	else if(use_power == 2)
 		icon_state = initial(icon_state)
-		to_chat(user, "<span class = 'notice'>You turn \the [src] off.</span>")
 		use_power = 1
 		processing_objects.Remove(src)
-		return
-	else
-		to_chat(user, "<span class = 'warning'>\The [src] doesn't seem to be plugged in!</span>")
+	if(user)
+		to_chat(user, use_power ? "<span class = 'notice'>You turn \the [src] [use_power == 2 ? "on" : "off"].</span>" : "<span class = 'warning'>\The [src] doesn't seem to be plugged in!</span>")
 
 /obj/machinery/oven/process()
+	if(!use_power)
+		toggle()
 	if(within)
 		within.attempt_heating(src)
