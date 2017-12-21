@@ -198,7 +198,7 @@
 /obj/item/clothing/head/fedora/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(!istype(wearer))
 		return
-	if(wearer.head == src)
+	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(1))
 			to_chat(wearer, "<span class=\"warning\">You feel positively euphoric!</span>")
 

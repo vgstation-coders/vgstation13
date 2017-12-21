@@ -189,7 +189,7 @@
 	var/mob/living/carbon/human/H = M
 	if(!istype(H))
 		return
-	if(H.head == src)
+	if(slot == slot_head)
 		to_chat(H, "<span class='sinister'>Something on your head is making you feel a little lightheaded...</span>")
 
 /obj/item/clothing/head/kitty/unequipped(mob/living/carbon/human/user, var/from_slot = null)
@@ -200,7 +200,7 @@
 /obj/item/clothing/head/kitty/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(!istype(wearer))
 		return
-	if(wearer.head == src)
+	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(20))
 			wearer.adjustBrainLoss(1)
 
@@ -260,6 +260,6 @@
 	desc = "Ocelot's signature red beret"
 
 /obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
-	if(wearer.head == src)
+	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
