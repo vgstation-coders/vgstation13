@@ -299,3 +299,19 @@
 		return FAILED_TO_ADD
 
 	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
+
+/obj/item/borg/upgrade/honk
+	name = "service cyborg H.O.N.K. upgrade board"
+	desc = "Used to give a service cyborg fun toys!"
+	icon_state = "cyborg_upgrade2"
+	required_module = list(/obj/item/weapon/robot_module/butler, /obj/item/weapon/robot_module/tg17355)
+	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower)
+
+/obj/item/borg/upgrade/honk/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	if(istype(R.module,/obj/item/weapon/robot_module/tg17355) && R.icon_state == "peaceborg") //Honk!
+		R.icon_state = "clownegg"
+		R.update_icons()
+	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)
