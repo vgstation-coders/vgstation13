@@ -449,3 +449,15 @@
 	icon_state = "antennae"
 	item_state = "antennae"
 	flags = FPRINT
+
+/obj/item/clothing/head/elfhat
+	name = "elf hat"
+	desc = "Wear this hat, and become one of Santa's little helpers!"
+	icon_state = "elf_hat"
+	item_state = "elf_hat"
+	body_parts_covered = HEAD|EARS
+
+	wizard_garb = 1 //being elf cursed wont prevent you casting robed spells if wizard
+
+/obj/item/clothing/head/elfhat/stickymagic
+	canremove = 0

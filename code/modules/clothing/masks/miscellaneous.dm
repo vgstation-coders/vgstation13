@@ -121,6 +121,12 @@
 		canremove = 0		//curses!
 	..()
 
+/obj/item/clothing/mask/horsehead/reindeer //christmas edition
+	name = "reindeer head mask"
+	desc = "A mask made of soft vinyl and latex, representing the head of a reindeer."
+	icon_state = "reindeerhead"
+	item_state = "reindeerhead"
+
 /obj/item/clothing/mask/chapmask
 	name = "venetian mask"
 	desc = "A plain porcelain mask that covers the entire face. Standard attire for particularly unspeakable religions. The eyes are wide shut."
