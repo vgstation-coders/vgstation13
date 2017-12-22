@@ -49,7 +49,7 @@
 		if(iscorgi(L))
 			desc = "If it takes forever, I will wait for you..."
 
-		density = L.density
+		setDensity(L.density)
 
 		//Monsters with animated icons look bad as statues!
 		var/icon/static_icon = icon(L.icon)

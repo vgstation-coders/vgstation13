@@ -64,7 +64,7 @@
 	for(var/obj/abstract/screen/movable/spell_master/SM in L.spell_masters)
 		SM.silence_spells(0)
 	L.flags &= ~INVULNERABLE
-	L.density = old_density
+	L.setDensity(old_density)
 	L.candrop = 1
 	L.alphas -= "etheral_jaunt"
 	L.handle_alpha()

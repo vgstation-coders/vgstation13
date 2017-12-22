@@ -384,7 +384,7 @@ var/list/blob_looks_player = list(//Options available to players
 			B.layer = layer - num
 
 	if(T.Enter(B,src))//Attempt to move into the tile
-		B.density = initial(B.density)
+		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)
 				B.dir = get_dir(loc,T)

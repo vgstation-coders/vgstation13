@@ -93,7 +93,7 @@
 				break
 
 	if (!found)
-		owner.density = initial(owner.density)
+		owner.setDensity(initial(owner.density))
 
 	if (ismob(AM))
 		var/mob/M = AM

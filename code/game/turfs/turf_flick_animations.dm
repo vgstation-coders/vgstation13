@@ -160,7 +160,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "rejuvinate"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/64x64.dmi'
 		c_animation.layer = 5

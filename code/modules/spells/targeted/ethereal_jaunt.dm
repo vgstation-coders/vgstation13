@@ -48,7 +48,7 @@
 	target.invisibility = INVISIBILITY_MAXIMUM
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
-	target.density = 0
+	target.setDensity(FALSE)
 	target.candrop = 0
 	target.alphas["etheral_jaunt"] = 125 //Spoopy mode to know you are jaunting
 	target.handle_alpha()
@@ -77,7 +77,7 @@
 	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(0)
 	target.flags &= ~INVULNERABLE
-	target.density = old_density
+	target.setDensity(old_density)
 	target.candrop = 1
 	target.incorporeal_move = previncorp
 	target.alphas -= "etheral_jaunt"

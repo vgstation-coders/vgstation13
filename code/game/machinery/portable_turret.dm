@@ -346,7 +346,7 @@ Status: []<BR>"},
 	src.icon_state = "[lasercolor]destroyed_target_prism"
 	invisibility=0
 	spark(src, 5, 0)
-	src.density=1
+	src.setDensity(TRUE)
 	qdel(cover) // deletes the cover - no need on keeping it there!
 
 

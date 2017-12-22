@@ -164,7 +164,7 @@ atom/movable/GotoAirflowDest(n)
 
 	var/od = FALSE
 	if(!density)
-		density = TRUE
+		setDensity(TRUE)
 		od = TRUE
 
 	last_airflow = world.time
@@ -176,14 +176,14 @@ atom/movable/GotoAirflowDest(n)
 			if(airflow_speed > 7)
 				if(airflow_time++ >= airflow_speed - 7)
 					if(od)
-						density = FALSE
+						setDensity(FALSE)
 					sleep(tick_multiplier)
 			else
 				if(od)
-					density = FALSE
+					setDensity(FALSE)
 				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
 			if(od)
-				density = TRUE
+				setDensity(TRUE)
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
