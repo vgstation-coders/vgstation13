@@ -21,7 +21,7 @@
 
 /mob/living/silicon/robot/proc/uneq_module(const/obj/item/module)
 	if(!istype(module))
-		return 0
+		return FALSE
 	module.mouse_opacity = 2
 	if(client)
 		client.screen -= module
@@ -32,10 +32,10 @@
 		module.dropped(src)
 		if(isgripper(module))
 			var/obj/item/weapon/gripper/G = module
-			G.drop_item(force_drop = 1)
+			G.drop_item(force_drop = TRUE)
 	if(hud_used)
 		hud_used.update_robot_modules_display()
-	return 1
+	return TRUE
 
 /mob/living/silicon/robot/proc/uneq_active()
 	if(!module_active)
@@ -116,13 +116,13 @@
 
 /mob/living/silicon/robot/proc/activated(obj/item/O)
 	if(module_state_1 == O)
-		return 1
+		return TRUE
 	else if(module_state_2 == O)
-		return 1
+		return TRUE
 	else if(module_state_3 == O)
-		return 1
+		return TRUE
 	else
-		return 0
+		return FALSE
 	updateicon()
 
 //Helper procs for cyborg modules on the UI.
@@ -135,18 +135,18 @@
 //module_active(module) - Checks whether there is a module active in the slot specified by "module".
 /mob/living/silicon/robot/proc/module_active(var/module) //Module is 1-3
 	if(module < 1 || module > 3)
-		return 0
+		return FALSE
 	switch(module)
 		if(1)
 			if(module_state_1)
-				return 1
+				return TRUE
 		if(2)
 			if(module_state_2)
-				return 1
+				return TRUE
 		if(3)
 			if(module_state_3)
-				return 1
-	return 0
+				return TRUE
+	return FALSE
 
 //get_selected_module() - Returns the slot number of the currently selected module.  Returns 0 if no modules are selected.
 /mob/living/silicon/robot/proc/get_selected_module()
@@ -259,18 +259,19 @@
 
 /mob/living/silicon/robot/drop_item_v()//this is still dumb.
 	if(!incapacitated() && isturf(loc))
-		return drop_item(force_drop = 1)
-	return 0
+		return drop_item(force_drop = TRUE)
+	return FALSE
 
-/mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = 0, dontsay = null)
+/mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
 	if(isgripper(module_active))
 		var/obj/item/weapon/gripper/G = module_active
 		return G.drop_item(to_drop, target, force_drop, dontsay)
 	else
-		return 0
+		return FALSE
 
-/mob/living/silicon/robot/drop_from_inventory(var/obj/item/W)//needed for pills, thanks oldcoders.
-	drop_item(force_drop = 1, dontsay = TRUE)
+/mob/living/silicon/robot/drop_from_inventory(var/obj/item/W) //needed for pills, thanks oldcoders.
+	if(!isMoMMI(src))
+		drop_item(force_drop = TRUE, dontsay = TRUE)
 
 #define ROBOT_LOW_POWER 100
 
