@@ -202,7 +202,7 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/setDensity(var/density)
 	src.density = density
 	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
-	if(istype(beams, /list) && beams.len)
+	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 
 /atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
