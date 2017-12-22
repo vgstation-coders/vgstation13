@@ -22,7 +22,7 @@
 	layer = LIGHTBULB_LAYER
 	var/tmp/flickering = 0 //SPOOK
 	var/obj/item/device/flashlight/lantern/lantern = null
-	var/start_with_lantern = 1
+	var/start_with_lantern = /obj/item/device/flashlight/lantern/on
 	var/busy = 0
 
 /obj/structure/hanging_lantern/New()
@@ -30,7 +30,7 @@
 	..()
 
 	if(start_with_lantern)
-		lantern = new /obj/item/device/flashlight/lantern/on(src)
+		lantern = new start_with_lantern(src)
 
 	update()
 
@@ -172,3 +172,6 @@
 
 	icon_state = "hanginglantern-construct"
 	start_with_lantern = 0
+
+/obj/structure/hanging_lantern/dim
+	start_with_lantern = /obj/item/device/flashlight/lantern/on/dim

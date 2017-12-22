@@ -250,14 +250,14 @@ For the main html chat area
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images
 	//It stands that we PROBABLY don't want to output those to the browser output so just handle them here
-	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
+	if (IsInteger(target)) //Passing it to an entire z level
+		for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
+			if(M.z != target)
+				continue
+			to_chat(M, message)
+		return
 
-		if (IsInteger(target)) //Passing it to an entire z level
-			for(var/mob/M in player_list) //List of all mobs with clients, excluding new_player
-				if(M.z != target)
-					continue
-				to_chat(M, message)
-			return
+	if (istype(message, /image) || istype(message, /sound) || istype(target, /savefile) || !(ismob(target) || islist(target) || isclient(target) || istype(target, /datum/log) || target == world))
 
 		target << message
 		if (!isatom(target)) // Really easy to mix these up, and not having to make sure things are mobs makes the code cleaner.

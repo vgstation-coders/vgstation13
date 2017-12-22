@@ -618,6 +618,11 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		for(var/i=1,i<=rand(1,3),i++)
 			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(T,5)
 
+
+/obj/structure/snow_flora/tree/pine/xmas/vg/New()
+	..()
+	icon_state = "spessmastree"
+
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM
 #undef SNOWCOVERING_LITTLE
