@@ -22,7 +22,6 @@
 	var/snowballs = 0
 	var/global/list/snow_layers = list()
 	var/global/list/dirt_layers = list()
-	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/unsimulated/floor/snow/New()
 
