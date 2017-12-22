@@ -50,6 +50,8 @@
 	desc = "A curse that will turn its victim into a miserable christmas elf."
 	abbreviation = "EC"
 
+	hud_state = "wiz_elf"
+
 	invocation = "MAK'N T'YS!"
 
 /spell/targeted/equip_item/clowncurse/christmas/New()

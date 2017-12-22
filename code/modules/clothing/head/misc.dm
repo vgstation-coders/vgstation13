@@ -457,5 +457,7 @@
 	item_state = "elf_hat"
 	body_parts_covered = HEAD|EARS
 
+	wizard_garb = 1 //being elf cursed wont prevent you casting robed spells if wizard
+
 /obj/item/clothing/head/elfhat/stickymagic
 	canremove = 0
