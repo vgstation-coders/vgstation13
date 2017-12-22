@@ -198,7 +198,7 @@ atom/movable/GotoAirflowDest(n)
 		airflow_speed = 0
 		airflow_time = 0
 		if(od)
-			density = FALSE
+			setDensity(FALSE)
 
 /atom/movable/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
