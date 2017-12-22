@@ -48,19 +48,22 @@
 		delayNextAttack(10)
 
 	if(src.can_use_hand())
-		A.attack_hand(src, params)
+		A.attack_hand(src, params, proximity)
 	else
 		A.attack_stump(src, params)
-	return
 
-/atom/proc/attack_hand(mob/user as mob, params)
+	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && istype(A, /turf/simulated) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
+		Move(A, get_dir(src,A))
+		delayNextMove(movement_delay()*3,additive=1)
+
+/atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
 
 //called when we try to click but have no hand
 //good for general purposes
-/atom/proc/attack_stump(mob/user as mob, params)
+/atom/proc/attack_stump(mob/user as mob, params, var/proximity)
 	if(!requires_dexterity(user))
-		attack_hand(user) //if the object doesn't need dexterity, we can use our stump
+		attack_hand(user, params, proximity) //if the object doesn't need dexterity, we can use our stump
 	else
 		to_chat(user, "Your [user.get_index_limb_name(user.active_hand)] is not fine enough for this action.")
 

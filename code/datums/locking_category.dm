@@ -68,7 +68,7 @@
 		if (newer_loc) // Edge (no pun intended) case for map borders.
 			new_loc = newer_loc
 
-	AM.forceMove(new_loc)
+	AM.forceMove(new_loc, 0, 0, owner.glide_size)
 
 // Modifies the atom to undo changes in lock().
 /datum/locking_category/proc/unlock(var/atom/movable/AM)

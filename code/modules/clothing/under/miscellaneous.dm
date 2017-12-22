@@ -715,3 +715,13 @@
 	icon_state = "franksuit"
 	item_state = "franksuit"
 	_color = "franksuit"
+
+/obj/item/clothing/under/elf
+	name = "elf uniform"
+	desc = "A festive suit for a festive elf!"
+	icon_state = "elf"
+	item_state = "elf"
+	_color = "elf"
+
+/obj/item/clothing/under/elf/stickymagic
+	canremove = 0

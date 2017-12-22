@@ -139,7 +139,7 @@ forLineInText(text)
 
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
-	var/name = input(user, message, title, default)
+	var/name = input(user, message, title, default) as null|text
 	return strip_html_simple(name, max_length)
 
 //Filters out undesirable characters from names

@@ -135,9 +135,6 @@
 
 	adjust_gas(gasid, moles, update)
 
-	if(update)
-		update_values()
-
 
 //Variadic version of adjust_gas(). Takes any number of gas and mole pairs and applies them.
 /datum/gas_mixture/proc/adjust_multi()

@@ -30,15 +30,29 @@
 	if(feels_pain() && !has_painkillers())
 		if(pain_shock_stage >= 50)
 			. += 3
-
-		for(var/organ_name in list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG))
-			var/datum/organ/external/E = get_organ(organ_name)
+		var/list/limbs_to_check
+		var/multiplier = 1
+		if(!lying)
+			limbs_to_check = list(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,LIMB_LEFT_LEG,LIMB_RIGHT_LEG)
+		else
+			limbs_to_check = grasp_organs
+			multiplier = 2
+		for(var/organ_name in limbs_to_check)
+			var/datum/organ/external/E
+			if(istype(organ_name, /datum/organ/external))
+				E = organ_name
+			else
+				E = get_organ(organ_name)
 			if(!E || (E.status & ORGAN_DESTROYED))
-				. += 4
+				. += 4*multiplier
 			if(E.status & ORGAN_SPLINTED)
-				. += 0.5
+				if(!find_held_item_by_type(/obj/item/weapon/cane))
+					. += 0.5*multiplier
 			else if(E.status & ORGAN_BROKEN)
-				. += 1.5
+				if(!find_held_item_by_type(/obj/item/weapon/cane))
+					. += 1*multiplier
+				. += 0.5*multiplier
+
 
 /mob/living/carbon/human/movement_tally_multiplier()
 	. = ..()

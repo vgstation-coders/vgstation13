@@ -290,7 +290,7 @@
 
 		if("Supply")
 			module = new /obj/item/weapon/robot_module/miner(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_cargo(radio))
+			radio.insert_key(new/obj/item/device/encryptionkey/headset_mining(radio))
 			if(camera && CAMERANET_ROBOTS in camera.network)
 				camera.network.Add(CAMERANET_MINE)
 			module_sprites["Basic"] = "Miner_old"
@@ -1418,7 +1418,7 @@
 				tile.clean_blood()
 				for(var/A in tile)
 					if(istype(A, /obj/effect))
-						if(istype(A, /obj/effect/rune) || istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/overlay))
+						if(iscleanaway(A))
 							qdel(A)
 					else if(istype(A, /obj/item))
 						var/obj/item/cleaned_item = A

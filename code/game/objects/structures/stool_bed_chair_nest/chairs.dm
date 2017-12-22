@@ -218,13 +218,13 @@
 
 	return ..()
 
-/obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
+/obj/structure/bed/chair/comfy/attack_hand(var/mob/user, params, proximity)
 	if(is_locking(lock_type))
 		return ..()
-
-	for (var/obj/item/I in src)
-		user.put_in_hands(I)
-		to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
+	if(proximity)
+		for (var/obj/item/I in src)
+			user.put_in_hands(I)
+			to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
 
 /obj/structure/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
@@ -293,11 +293,13 @@
 			return 0
 	if(last_airflow + 5 SECONDS > world.time) //ugly hack: can't scoot during ZAS
 		return 0
+
 	if(istype(T, /turf/simulated))
-		var/turf/simulated/ST = T
-		if(ST.wet == TURF_WET_LUBE)
+		var/turf/simulated/TS = T
+		var/obj/effect/overlay/puddle/P = TS.is_wet()
+		if(P && P.wet == TURF_WET_LUBE)
 			user.unlock_from(src)
-			ST.Entered(user) //bye bye
+			T.Entered(user) //bye bye
 			return 0
 
 	//forwards, scoot slow

@@ -63,6 +63,8 @@
 	new /obj/item/device/radio(src)
 	if(prob(5))
 		new /obj/item/airbag(src)
+	if(prob(15))
+		new /obj/item/clothing/accessory/rad_patch(src)
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"
@@ -114,4 +116,3 @@
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/multitool(src)
-	

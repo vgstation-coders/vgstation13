@@ -88,6 +88,8 @@
 			to_chat(user, "That seed is not compatible with our genetics technology.")
 		else
 			user.drop_item(S, src, force_drop = 1)
+			if(S.loc != src) //How did you do that? Gimme that fucking seed pack.
+				S.forceMove(src)
 			loaded_seed = W
 			to_chat(user, "You load [W] into [src].")
 			nanomanager.update_uis(src)

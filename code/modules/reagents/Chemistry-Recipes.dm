@@ -237,6 +237,27 @@
 	required_reagents = list(WATER = 1, SILICON = 1, OXYGEN = 1)
 	result_amount = 4
 
+/datum/chemical_reaction/sodium_polyacrylate
+	name = "Sodium Polyacrylate"
+	id = SODIUM_POLYACRYLATE
+	result = SODIUM_POLYACRYLATE
+	required_reagents = list(CARBON = 3, HYDROGEN = 3, SODIUM = 1, OXYGEN = 2)
+	result_amount = 8
+
+/datum/chemical_reaction/spoly_absorb_water
+	name = "Absorb Water"
+	id = "absorbwater"
+	result = CHEMICAL_WASTE
+	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, WATER = 1)
+	result_amount = 0.3
+
+/datum/chemical_reaction/spoly_absorb_lube
+	name = "Absorb Lube"
+	id = "absorblube"
+	result = CHEMICAL_WASTE
+	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBE = 1)
+	result_amount = 0.3
+
 /datum/chemical_reaction/sludge
 	name = "Sludge"
 	id = TOXICWASTE
@@ -3003,6 +3024,21 @@
 	id = APETRINE
 	result = APETRINE
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/potassiumcarbonate
+	name = "Potassium Carbonate"
+	id = POTASSIUMCARBONATE
+	result = POTASSIUMCARBONATE
+	required_reagents = list(POTASSIUM = 2, CARBON = 1, OXYGEN = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/active_charcoal
+	name = "Activated Charcoal"
+	id = CHARCOAL
+	result = CHARCOAL
+	required_reagents = list(CARBON = 1, SACID = 2)
+	required_temp = T0C + 450
 	result_amount = 1
 
 #undef ALERT_AMOUNT_ONLY

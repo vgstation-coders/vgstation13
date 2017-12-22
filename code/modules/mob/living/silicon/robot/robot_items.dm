@@ -276,7 +276,8 @@
 	reagent_list = BEER
 	artifact = FALSE
 	can_be_placed_into = null
-	var/synth_cost = 10 //Around 1666 cell charge for 50u beer
+	units_per_tick = 1
+	var/synth_cost = 30 // 1500 cell charge for 50u beer
 
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/fits_in_iv_drip()
 	return FALSE
@@ -292,6 +293,7 @@
 /obj/item/weapon/reagent_containers/glass/replenishing/cyborg/hacked
 	name = "mickey finn's special brew"
 	reagent_list = BEER2
+	units_per_tick = 0.3
 	synth_cost = 25 //4165 cell charge for 50u !NotShitterJuice.
 
 //Grippers: Simple cyborg manipulator. Limited use... SLIPPERY SLOPE POWERCREEP
@@ -320,7 +322,12 @@
 			to_chat(R, "<span class='danger'>ERROR. Safety protocols prevent self-disassembling.</span>")
 			return FALSE
 	if (!wrapped)
-		if(is_type_in_list(I, can_hold) && !is_type_in_list(I, blacklist))
+		var/grab = FALSE
+		for(var/typepath in can_hold)
+			if(istype(I,typepath))
+				grab = TRUE
+				break
+		if(grab && !is_type_in_list(I, blacklist))
 			if(feedback)
 				to_chat(user, "<span class='notice'>You collect \the [I].</span>")
 			I.loc = src
@@ -503,7 +510,7 @@
 /obj/item/weapon/gripper/service //Used to handle food, drinks and seeds.
 	name = "service gripper"
 	icon_state = "gripper-old"
-	desc = "A simple grasping tool used to perform tasks in the service sector, such as handling food, drinks, and seeds."
+	desc = "A simple grasping tool used to perform tasks in the service sector, such as handling drinks and... fedoras!"
 
 	can_hold = list(
 		/obj/item/weapon/reagent_containers/food/drinks,
@@ -556,3 +563,43 @@
 		/obj/item/weapon/circuitboard/aiupload,
 		/obj/item/weapon/circuitboard/borgupload
 		)
+
+//Cyborg Instrument Synth. Remember to always play REMOVE KEBAB on malf rounds.
+/obj/item/device/instrument/instrument_synth
+	name = "instrument synthesizer"
+	desc = "An advanced electronic synthesizer that can be used as various instruments."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "soundsynth"
+	item_state = "radio"
+	instrumentId = "piano"
+	instrumentExt = "ogg"
+	var/static/list/insTypes = list("accordion" = "mid", "bikehorn" = "ogg", "glockenspiel" = "mid", "guitar" = "ogg", "harmonica" = "mid", "piano" = "ogg", "recorder" = "mid", "saxophone" = "mid", "trombone" = "mid", "violin" = "mid", "xylophone" = "mid", "drum" = "mid")
+	actions_types = list(/datum/action/item_action/synthswitch, /datum/action/item_action/instrument)
+
+/obj/item/device/instrument/instrument_synth/proc/changeInstrument(name = "piano")
+	song.instrumentDir = name
+	song.instrumentExt = insTypes[name]
+
+/datum/action/item_action/synthswitch
+	name = "Change Synthesizer Instrument"
+	desc = "Change the type of instrument your synthesizer is playing as."
+
+/datum/action/item_action/synthswitch/Trigger()
+	if(istype(target, /obj/item/device/instrument/instrument_synth))
+		var/obj/item/device/instrument/instrument_synth/synth = target
+		var/chosen = input("Choose the type of instrument you want to use", "Instrument Selection", "piano") as null|anything in synth.insTypes
+		if(!synth.insTypes[chosen])
+			return
+		return synth.changeInstrument(chosen)
+	return ..()
+
+/datum/action/item_action/instrument
+	name = "Use Instrument"
+	desc = "Use the instrument specified"
+
+/datum/action/item_action/instrument/Trigger()
+	if(istype(target, /obj/item/device/instrument))
+		var/obj/item/device/instrument/I = target
+		I.interact(usr)
+		return
+	return ..()

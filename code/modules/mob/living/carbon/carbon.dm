@@ -68,7 +68,7 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-				src.delayNextMove(10) //no just holding the key for an instant gib
+				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
@@ -646,9 +646,9 @@
 		return // Space ignores slowdown
 
 	if(feels_pain() && !has_painkillers())
-		var/health_deficiency = (100 - health - halloss)
-		if(health_deficiency >= 40)
-			. += (health_deficiency / 25)
+		var/health_deficiency = (maxHealth - health - halloss)
+		if(health_deficiency >= (maxHealth * 0.4))
+			. += (health_deficiency / (maxHealth * 0.25))
 
 
 /mob/living/carbon/proc/can_mind_interact(var/mob/M)

@@ -47,6 +47,7 @@
 	/spell/noclothes
 	)
 
+
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
 	var/static/list/available_artifacts = list()
 
@@ -95,6 +96,11 @@
 		available_artifacts.Remove(T) //Remove the path from the list
 	//Result is a list full of /datum/spellbook_artifact objects
 
+	if(Holiday == "Christmas")
+		available_spells.Add(/spell/targeted/equip_item/horsemask/christmas)
+		available_spells.Add(/spell/targeted/equip_item/clowncurse/christmas)
+
+
 /obj/item/weapon/spellbook/proc/get_available_spells()
 	return available_spells.Copy()
 
@@ -114,6 +120,7 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
+
 
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
