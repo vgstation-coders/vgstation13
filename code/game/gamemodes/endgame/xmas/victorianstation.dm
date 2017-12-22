@@ -12,14 +12,8 @@
 	name = "Older times"
 	desc = "The clock's ticking backwards!"
 
-	var/space_overlay1 = null
-	var/space_overlay2 = null
-
 
 /datum/universal_state/auldlangsyne/OnEnter()
-	space_overlay1 = image(icon='icons/turf/snowfx.dmi',icon_state="snowlayer1")
-	space_overlay2 = image(icon='icons/turf/snowfx.dmi',icon_state="snowlayer2")
-
 	var/target_zlevel = map.zMainStation
 
 	to_chat(target_zlevel, "<span class='sinister'>There is a certain chill to the air, as bells ring faintly in the distance...</span>")
