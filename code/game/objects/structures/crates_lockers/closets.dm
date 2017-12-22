@@ -178,9 +178,6 @@
 	else
 		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
 	setDensity(TRUE)
-	for(var/obj/effect/beam/B in loc)
-		B.Crossed(src)
-	return 1
 
 /obj/structure/closet/proc/toggle()
 	if(src.opened)

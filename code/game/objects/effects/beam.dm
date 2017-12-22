@@ -113,7 +113,6 @@
 	// Disconnect and re-emit.
 	disconnect()
 
-
 // Listener for /atom/on_destroyed
 /obj/effect/beam/proc/target_destroyed(var/list/args)
 	if(master)
