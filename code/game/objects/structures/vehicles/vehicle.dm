@@ -102,7 +102,7 @@
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
 				if(user.drop_item(W, src))
-					to_chat(user, "<span class='notice'>You insert \the [W] to \the [src]'s ignition and turn it.</span>")
+					to_chat(user, "<span class='notice'>You insert \the [W] into \the [src]'s ignition and turn it.</span>")
 					user.visible_message("<span class='notice'>\The [src]'s engine roars to life!</span>")
 					playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1) // find a better sound later
 					src.heldkey = W
