@@ -15,8 +15,7 @@
 
 /datum/universal_state/auldlangsyne/OnEnter()
 	var/target_zlevel = map.zMainStation
-
-	to_chat(target_zlevel, "<span class='sinister'>There is a certain chill to the air, as bells ring faintly in the distance...</span>")
+	to_chat(map.zLevels[target_zlevel], "<span class='sinister'>There is a certain chill to the air, as bells ring faintly in the distance...</span>")
 	//Snow up the halls
 	for(var/A in typesof(/area/hallway))
 		var/area/to_snow = locate(A)
