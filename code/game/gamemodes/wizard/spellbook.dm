@@ -9,7 +9,6 @@
 	throw_range = 5
 	w_class = W_CLASS_TINY
 	flags = FPRINT
-	var/debug_nb_sorts = 0
 
 	var/list/available_spells = list()
 
@@ -62,8 +61,6 @@
 			available_spells += type_S // We're giving types
 		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
 			available_spells += type_S // We're giving types
-
-	debug_nb_sorts = available_spells.len
 
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T

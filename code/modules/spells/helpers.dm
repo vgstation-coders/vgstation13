@@ -11,37 +11,25 @@
  */
 
 /proc/getAllWizSpells()
-	var/list/spell/spellList = list()
-	for (var/type_S in typesof(/spell))
-		var/spell/S = type_S
-		if (initial(S.user_type) == "wiz")
-			spellList += S
-
-	return spellList
+	getAllSpellsByType("wiz")
 
 /proc/getAllCultSpells()
-	var/list/spell/spellList = list()
-	for (var/type_S in typesof(/spell))
-		var/spell/S = type_S
-		if (initial(S.user_type) == "cult")
-			spellList += S
-
-	return spellList
+	getAllSpellsByType("cult")
 
 /proc/getAllGeneticSpells()
-	var/list/spell/spellList = list()
-	for (var/type_S in typesof(/spell))
-		var/spell/S = type_S
-		if (initial(S.user_type) == "genetic")
-			spellList += S
-
-	return spellList
+ 	getAllSpellsByType("genetic")
 
 /proc/getAllMalfSpells()
+ 	getAllSpellsByType("malf")
+
+/proc/getAllXenoSpells()
+	getAllSpellsByType("xeno")
+
+/proc/getAllSpellsByType(var/type)
 	var/list/spell/spellList = list()
 	for (var/type_S in typesof(/spell))
 		var/spell/S = type_S
-		if (initial(S.user_type) == "malf")
+		if (initial(S.user_type) == type)
 			spellList += S
 
 	return spellList
