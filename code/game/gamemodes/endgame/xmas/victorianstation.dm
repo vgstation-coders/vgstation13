@@ -46,37 +46,53 @@
 				qdel(L)
 			for(var/obj/structure/closet/secure_closet/S in A)
 				switch(S.type)
+					//Captains locker
 					if(/obj/structure/closet/secure_closet/captains)
 						new /obj/item/clothing/suit/wintercoat/captain(S)
+
+					//HoPs attire
 					if(/obj/structure/closet/secure_closet/hop2)
 						new /obj/item/clothing/suit/wintercoat/hop(S)
+
+					//Head of security's ling-hunting gear
 					if(/obj/structure/closet/secure_closet/hos)
 						new /obj/item/clothing/suit/wintercoat/security/hos(S)
+
 					if(/obj/structure/closet/secure_closet/warden)
 						new /obj/item/clothing/suit/wintercoat/security/warden(S)
+
 					if(/obj/structure/closet/secure_closet/security)
 						new /obj/item/clothing/suit/wintercoat/security(S)
+
 					if(/obj/structure/closet/secure_closet/brig)
 						new /obj/item/clothing/suit/wintercoat/prisoner(S)
 						new /obj/item/clothing/suit/wintercoat/prisoner(S)
+
 					if(/obj/structure/closet/secure_closet/scientist)
 						new /obj/item/clothing/suit/wintercoat/science(S)
 						new /obj/item/clothing/suit/wintercoat/science(S)
+
 					if(/obj/structure/closet/secure_closet/RD)
 						new /obj/item/clothing/suit/wintercoat/science(S)
+
 					if(/obj/structure/closet/secure_closet/medical3 || /obj/structure/closet/secure_closet/paramedic)
 						new /obj/item/clothing/suit/wintercoat/medical(S)
 						new /obj/item/clothing/suit/wintercoat/medical(S)
+
 					if(/obj/structure/closet/secure_closet/CMO)
 						new /obj/item/clothing/suit/wintercoat/cmo(S)
+
 					if(/obj/structure/closet/secure_closet/engineering_chief)
 						new /obj/item/clothing/suit/wintercoat/ce(S)
+
 					if(/obj/structure/closet/secure_closet/engineering_personal || /obj/structure/closet/secure_closet/engineering_mechanic)
 						new /obj/item/clothing/suit/wintercoat/engineering(S)
 						new /obj/item/clothing/suit/wintercoat/engineering(S)
+
 					if(/obj/structure/closet/secure_closet/engineering_atmos)
 						new /obj/item/clothing/suit/wintercoat/engineering/atmos(S)
 						new /obj/item/clothing/suit/wintercoat/engineering/atmos(S)
+
 					else
 						if(prob(50))
 							new /obj/item/clothing/suit/wintercoat(S)
