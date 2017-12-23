@@ -1430,6 +1430,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "inflatable structures crate"
 	group = "Engineering"
 
+/datum/supply_packs/radiation_suit
+	name = "Radiation suit"
+	contains = list()
+	cost = 500
+	containertype = /obj/structure/closet/crate/radiation
+	containername = "radiation suit crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
