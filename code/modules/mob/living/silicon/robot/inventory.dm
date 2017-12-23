@@ -270,8 +270,10 @@
 		return FALSE
 
 /mob/living/silicon/robot/drop_from_inventory(var/obj/item/W) //needed for pills, thanks oldcoders.
-	if(!isMoMMI(src))
+	if(isgripper(W.loc))
 		drop_item(force_drop = TRUE, dontsay = TRUE)
+	else
+		..()
 
 #define ROBOT_LOW_POWER 100
 
