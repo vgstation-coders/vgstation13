@@ -1664,13 +1664,14 @@
 	if(!M.dna) //No robots, AIs, aliens, Ians or other mobs should be affected by this.
 		return
 	if((method == TOUCH && prob(33)) || method == INGEST)
-		randmuti(M)
 		if(prob(98))
 			randmutb(M)
 		else
 			randmutg(M)
 		domutcheck(M, null)
-		M.UpdateAppearance()
+		if(M.last_appearance_mutation + 1 SECONDS < world.time)
+			randmuti(M)
+			M.UpdateAppearance()
 
 /datum/reagent/mutagen/on_mob_life(var/mob/living/M)
 	if(!M.dna)
