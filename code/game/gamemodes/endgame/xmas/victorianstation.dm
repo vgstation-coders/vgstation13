@@ -20,18 +20,19 @@
 	//Snow up the halls
 	for(var/A in typesof(/area/hallway))
 		var/area/to_snow = locate(A)
-		if(to_snow)
-			for(var/turf/simulated/floor/F in to_snow)
-				new /obj/structure/snow(F)
-				for(var/cdir in cardinal)
-					var/turf/TT = get_step(F,cdir)
-					if(istype(TT,/turf/simulated/wall))
-						new/obj/machinery/xmas_light(TT,cdir)
-			for(var/obj/machinery/light/L in to_snow)
-				qdel(L)
+		if(!to_snow)
+			continue
+		for(var/turf/simulated/floor/F in to_snow)
+			new /obj/structure/snow(F)
+			for(var/cdir in cardinal)
+				var/turf/TT = get_step(F,cdir)
+				if(istype(TT,/turf/simulated/wall))
+					new/obj/machinery/xmas_light(TT,cdir)
+		for(var/obj/machinery/light/L in to_snow)
+			qdel(L)
 
 	for(var/area/A in areas)
-		if(A.z == target_zlevel)
+		if(!istype(A, /turf/space) && A.z == target_zlevel)
 			for(var/turf/T in A)
 				if(istype(T, /turf/simulated/wall) && !istype(T, /turf/simulated/wall/r_wall))
 					T.ChangeTurf(/turf/simulated/wall/mineral/wood, tell_universe = 0)
@@ -40,8 +41,7 @@
 				C.light(quiet = 1)
 				qdel(F)
 			for(var/obj/machinery/light/L in A)
-				var/turf/T = get_turf(L)
-				var/obj/structure/hanging_lantern/HL = new /obj/structure/hanging_lantern/dim(T)
+				var/obj/structure/hanging_lantern/HL = new /obj/structure/hanging_lantern/dim(L.loc)
 				HL.dir = L.dir
 				HL.update()
 				qdel(L)
@@ -92,15 +92,22 @@
 		for(var/turf/simulated/floor/F in christmas_bar)
 			if(!F.has_dense_content() && istype(F, /turf/simulated/floor/wood))
 				valid.Add(F)
-		new/obj/structure/snow_flora/tree/pine/xmas/vg/(pick(valid))
-
+		if(valid.len)
+			new/obj/structure/snow_flora/tree/pine/xmas/vg/(pick(valid))
 
 	var/area/santadog = locate(/area/crew_quarters/hop)
 	if(santadog)
-		var/mob/catch_the_dog = locate(/mob/living/simple_animal/corgi/Ian) in santadog
-		if(catch_the_dog)
-			new /mob/living/simple_animal/corgi/Ian/santa(get_turf(catch_the_dog))
-			qdel(catch_the_dog)
-
-
-
+		var/mob/living/simple_animal/corgi/corg = locate(/mob/living/simple_animal/corgi/Ian) in santadog
+		if(corg)
+			corg.remove_inventory("head")
+			corg.remove_inventory("back")
+			var/obj/item/I = new/obj/item/clothing/head/christmas/santahat/red
+			corg.place_on_head(I)
+	/*
+	var/mob/living/simple_animal/corgi/corg = locate(/mob/living/simple_animal/corgi/Ian) in world
+	if(corg)
+		corg.remove_inventory("head")
+		corg.remove_inventory("back")
+		var/obj/item/I = new/obj/item/clothing/head/christmas/santahat/red
+		corg.place_on_head(I)
+	*/
