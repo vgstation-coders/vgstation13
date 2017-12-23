@@ -323,8 +323,8 @@
 
 			var/mob/living/carbon/human/H = occupant
 
-			if(istype(H.species, /datum/species/vox))
-				occupant.reagents.add_reagent(NITROGEN, 10)
+			if(istype(H.species, /datum/species/vox) & occupant.reagents.get_reagent_amount(NITROGEN) < 30)
+				occupant.reagents.add_reagent(NITROGEN, 60)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			occupant.adjustOxyLoss(-4)
