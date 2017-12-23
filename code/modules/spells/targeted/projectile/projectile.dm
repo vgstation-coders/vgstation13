@@ -7,6 +7,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 
 /spell/targeted/projectile
 	name = "projectile spell"
+	user_type = "no_user"
 
 	range = 7
 

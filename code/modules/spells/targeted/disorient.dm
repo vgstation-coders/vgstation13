@@ -2,6 +2,7 @@
 	name = "Disorient"
 	desc = "This spell temporarily disorients a target."
 	abbreviation = "SJ"
+	user_type = "wiz"
 
 	school = "transmutation"
 	charge_max = 300

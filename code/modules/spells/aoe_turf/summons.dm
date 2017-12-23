@@ -1,6 +1,7 @@
 /spell/aoe_turf/conjure/summonEdSwarm //test purposes
 	name = "Dispense Wizard Justice"
 	desc = "This spell dispenses wizard justice."
+	user_type = "no_user"
 
 	summon_type = list(/obj/machinery/bot/ed209)
 	summon_amt = 10
@@ -12,6 +13,7 @@
 /spell/aoe_turf/conjure/carp
 	name = "Summon Carp"
 	desc = "This spell conjures a simple carp."
+	user_type = "other"
 
 	school = "conjuration"
 	charge_max = 1200
@@ -27,6 +29,7 @@
 /spell/aoe_turf/conjure/creature
 	name = "Summon Creature Swarm"
 	desc = "This spell tears the fabric of reality, allowing horrific daemons to spill forth"
+	user_type = "other"
 
 	school = "conjuration"
 	charge_max = 1200
@@ -43,6 +46,7 @@
 /spell/aoe_turf/conjure/gingerbreadman
 	name = "Summon Gingerbread man"
 	desc = "What did the Gingerbread Man put on his bed? A cookie sheet!"
+	user_type = "other"
 
 	school = "conjuration"
 	charge_max = 1200

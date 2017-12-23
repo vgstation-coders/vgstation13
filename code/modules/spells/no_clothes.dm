@@ -1,6 +1,7 @@
 /spell/noclothes
 	name = "No Clothes"
 	abbreviation = "NC"
+	user_type = "wiz"
 	desc = "Removes the need of wizard robes to cast powerful spells."
 	charge_max = 0
 	level_max = list(Sp_TOTAL = 0) //Can't upgrade

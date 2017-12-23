@@ -2,6 +2,7 @@
 	name = "Fist"
 	desc = "This spell punches everyone in view."
 	abbreviation = "FS"
+	user_type = "wiz"
 
 	price = Sp_BASE_PRICE/2
 	charge_max = 50

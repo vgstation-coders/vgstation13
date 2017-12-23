@@ -9,44 +9,9 @@
 	throw_range = 5
 	w_class = W_CLASS_TINY
 	flags = FPRINT
+	var/debug_nb_sorts = 0
 
-	var/static/list/available_spells = list(
-	/spell/targeted/projectile/magic_missile,
-	/spell/targeted/projectile/dumbfire/fireball,
-	/spell/targeted/projectile/dumbfire/fireball/firebreath,
-	/spell/lightning,
-	/spell/aoe_turf/ring_of_fire,
-	/spell/aoe_turf/disable_tech,
-	/spell/aoe_turf/smoke,
-	/spell/targeted/genetic/blind,
-	/spell/targeted/disorient,
-	/spell/targeted/mind_transfer,
-	/spell/aoe_turf/conjure/forcewall,
-	/spell/aoe_turf/blink,
-	/spell/area_teleport,
-	/spell/targeted/genetic/mutate,
-	/spell/targeted/ethereal_jaunt,
-	/spell/aoe_turf/fall,
-	/spell/mirror_of_pain,
-	/spell/aoe_turf/knock,
-	/spell/targeted/equip_item/horsemask,
-	/spell/targeted/equip_item/clowncurse,
-	/spell/targeted/equip_item/frenchcurse,
-	/spell/targeted/shoesnatch,
-	/spell/targeted/equip_item/robesummon,
-	/spell/targeted/flesh_to_stone,
-	/spell/targeted/buttbots_revenge,
-	/spell/aoe_turf/conjure/pontiac,
-	/spell/aoe_turf/conjure/arcane_golem,
-	/spell/targeted/bound_object,
-	/spell/aoe_turf/conjure/snakes,
-	/spell/targeted/push,
-	/spell/targeted/feint,
-	/spell/targeted/fist,
-	/spell/aoe_turf/conjure/doppelganger,
-	/spell/noclothes
-	)
-
+	var/list/available_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
 	var/static/list/available_artifacts = list()
@@ -91,15 +56,19 @@
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
 
+	for(var/type_S in getAllWizSpells())
+		var/spell/S = new type_S // Because initial doesn't work with lists
+		if (!S.holiday_required.len)
+			available_spells += type_S // We're giving types
+		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
+			available_spells += type_S // We're giving types
+
+	debug_nb_sorts = available_spells.len
+
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
 		available_artifacts.Remove(T) //Remove the path from the list
 	//Result is a list full of /datum/spellbook_artifact objects
-
-	if(Holiday == "Christmas")
-		available_spells.Add(/spell/targeted/equip_item/horsemask/christmas)
-		available_spells.Add(/spell/targeted/equip_item/clowncurse/christmas)
-
 
 /obj/item/weapon/spellbook/proc/get_available_spells()
 	return available_spells.Copy()

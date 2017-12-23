@@ -2,6 +2,7 @@ spell/targeted/parrotmorph
 	name = "Poly-Morph"
 	desc = "This spell turns the victim into a harmless and near-invincible parrot for a short amount of time."
 	abbreviation = "PM"
+	user_type = "Spellbook"
 
 	school = "evocation"
 	charge_type = Sp_RECHARGE

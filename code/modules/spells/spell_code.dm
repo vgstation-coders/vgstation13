@@ -9,6 +9,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/panel = "Spells"//What panel the proc holder needs to go on.
 
 	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
+	var/user_type = "no_user" // What kind of mob uses this spell
 
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
 
@@ -86,6 +87,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/obj/abstract/screen/spell/connected_button
 	var/currently_channeled = 0
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
+
+	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
 
 ///////////////////////
 ///SETUP AND PROCESS///

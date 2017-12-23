@@ -1,6 +1,7 @@
 /spell/targeted/harvest
 	name = "Harvest"
 	desc = "Back to where I come from, and you're coming with me."
+	user_type = "cult"
 
 	school = "transmutation"
 	charge_max = 200

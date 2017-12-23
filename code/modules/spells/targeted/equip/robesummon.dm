@@ -7,6 +7,7 @@
 	name = "Summon Robes"
 	desc = "A spell which will summon you a new set of robes."
 	abbreviation = "RS"
+	user_type = "wiz"
 
 	school = "evocation"
 	charge_max = 300

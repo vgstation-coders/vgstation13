@@ -136,6 +136,7 @@
 
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
+	user_type = "genetic"
 	desc = "Drops the bodytemperature of another person."
 	panel = "Mutant Powers"
 
@@ -202,6 +203,7 @@
 /spell/targeted/eat
 	name = "Eat"
 	desc = "Eat just about anything!"
+	user_type = "genetic"
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -417,6 +419,7 @@
 	name = "Jump"
 	desc = "Leap great distances!"
 	panel = "Mutant Powers"
+	user_type = "genetic"
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
@@ -539,6 +542,7 @@
 	name = "Polymorph"
 	desc = "Mimic the appearance of others!"
 	panel = "Mutant Powers"
+	user_type = "genetic"
 	charge_max = 1800
 
 	spell_flags = 0
@@ -587,6 +591,7 @@
 	name = "Read Mind"
 	desc = "Read the minds of others for information."
 	panel = "Mutant Powers"
+	user_type = "genetic"
 
 	range = 7
 	max_targets = 1
@@ -701,9 +706,9 @@
 
 	mutation = M_SUPER_FART
 
-	New()
-		..()
-		block = SUPERFARTBLOCK
+/datum/dna/gene/basic/superfart/New()
+	..()
+	block = SUPERFARTBLOCK
 
 // WAS: /datum/bioEffect/strong
 /datum/dna/gene/basic/strong
@@ -715,6 +720,6 @@
 
 	mutation = M_STRONG
 
-	New()
-		..()
-		block=STRONGBLOCK
+/datum/dna/gene/basic/strong/New()
+	..()
+	block=STRONGBLOCK

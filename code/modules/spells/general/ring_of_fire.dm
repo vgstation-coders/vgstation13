@@ -1,6 +1,7 @@
 /spell/aoe_turf/ring_of_fire
 	name = "Ring of Fire"
 	desc = "Summon a stationary ring of flames around your current location for 10 seconds. While the ring is active, you are fully immune to fire and burns."
+	user_type = "wiz"
 	school = "conjuration"
 	charge_max = 300
 	cooldown_min = 100

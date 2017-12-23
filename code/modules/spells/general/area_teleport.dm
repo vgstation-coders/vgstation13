@@ -2,6 +2,7 @@
 	name = "Teleport"
 	desc = "This spell teleports you to a type of area of your selection."
 	abbreviation = "TP"
+	user_type = "wiz"
 
 	school = "abjuration"
 	charge_max = 600

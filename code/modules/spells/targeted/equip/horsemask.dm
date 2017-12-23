@@ -2,6 +2,7 @@
 	name = "Curse of the Horseman"
 	desc = "This spell triggers a curse on a target, causing them to wield an unremovable horse head mask. They will speak like a horse! Any masks they are wearing will be disintegrated. This spell does not require robes."
 	abbreviation = "HH"
+	user_type = "wiz"
 
 	school = "transmutation"
 	charge_type = Sp_RECHARGE
@@ -45,6 +46,7 @@
 	name = "Curse of the Reindeer"
 	desc = "This spell triggers a curse on a target, causing them to wield an unremovable reindeer head mask. They will speak like a horse! Any masks they are wearing will be disintegrated. This spell does not require robes."
 	abbreviation = "RH"
+	holiday_required = list("Christmas")
 
 	invocation = "KN'A RUD'LPH, XMAS 'BTHNK!"
 

@@ -2,6 +2,7 @@
 	name = "Shoe Snatching Charm"
 	desc = "This spell allows you to steal somebody's shoes right off of their feet!"
 	abbreviation = "SS"
+	user_type = "wiz"
 
 	school = "evocation"
 	charge_type = Sp_RECHARGE

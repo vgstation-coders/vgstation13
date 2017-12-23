@@ -5,16 +5,16 @@
 	activation_message = "YOU FEEL LIKE YELLING!"
 	deactivation_message = "You feel like being quiet.."
 
-	New()
-		..()
-		block=LOUDBLOCK
+/datum/dna/gene/disability/speech/loud/New()
+	..()
+	block=LOUDBLOCK
 
-	OnSay(var/mob/M, var/datum/speech/speech)
-		speech.message = replacetext(speech.message,".","!")
-		speech.message = replacetext(speech.message,"?","?!")
-		speech.message = replacetext(speech.message,"!","!!")
+/datum/dna/gene/disability/speech/loud/OnSay(var/mob/M, var/datum/speech/speech)
+	speech.message = replacetext(speech.message,".","!")
+	speech.message = replacetext(speech.message,"?","?!")
+	speech.message = replacetext(speech.message,"!","!!")
 
-		speech.message = uppertext(speech.message)
+	speech.message = uppertext(speech.message)
 
 
 /datum/dna/gene/disability/speech/whisper
@@ -23,19 +23,19 @@
 	activation_message = "<i>Your throat feels sore..</i>"
 	deactivation_message = "You feel fine again."
 
-	New()
-		..()
-		block=WHISPERBLOCK
+/datum/dna/gene/disability/speech/whisper/New()
+	..()
+	block=WHISPERBLOCK
 
-	can_activate(var/mob/M,var/flags)
-		// No loud whispering.
-		if(M_LOUD in M.mutations)
-			return 0
-		return ..(M,flags)
-
-	OnSay(var/mob/M, var/datum/speech/speech)
-		//M.whisper(message)
+/datum/dna/gene/disability/speech/whisper/can_activate(var/mob/M,var/flags)
+	// No loud whispering.
+	if(M_LOUD in M.mutations)
 		return 0
+	return ..(M,flags)
+
+/datum/dna/gene/disability/speech/whisper/OnSay(var/mob/M, var/datum/speech/speech)
+	//M.whisper(message)
+	return 0
 
 
 /datum/dna/gene/disability/dizzy

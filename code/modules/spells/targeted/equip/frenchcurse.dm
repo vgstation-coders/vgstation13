@@ -2,6 +2,7 @@
 	name = "French Curse"
 	desc = "This curse will silence your target for a very long time."
 	abbreviation = "FC"
+	user_type = "wiz"
 
 	school = "evocation"
 	charge_max = 300

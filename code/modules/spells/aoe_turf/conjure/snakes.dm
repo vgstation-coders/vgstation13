@@ -1,6 +1,7 @@
 /spell/aoe_turf/conjure/snakes
 	name = "Become Snakes"
 	desc = "This spell transforms your body into a den of snakes."
+	user_type = "wiz"
 
 	summon_type = list(/mob/living/simple_animal/cat/snek/wizard)
 

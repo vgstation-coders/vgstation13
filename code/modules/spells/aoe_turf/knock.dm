@@ -2,6 +2,7 @@
 	name = "Knock"
 	desc = "This spell opens nearby doors and does not require wizard garb."
 	abbreviation = "KN"
+	user_type = "wiz"
 
 	school = "transmutation"
 	charge_max = 100
