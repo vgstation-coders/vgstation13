@@ -16,6 +16,18 @@
 
 var/list/doppelgangers = list()
 
+// Sanity : don't copy more than one guy
+/spell/aoe_turf/conjure/cast_check(skipcharge = 0,mob/user = usr)
+	var/list/L = view(user, 0)
+	var/list/mob/moblist = list()
+	L -= user
+	for (var/mob/M in L)
+		moblist.Add(M)
+	if (moblist.len)
+		to_chat(user, "<span class='warning'>You do not have the strength to copy more than one person.</span>")
+		return FALSE
+	return ..()
+
 /spell/aoe_turf/conjure/doppelganger/summon_object(var/type, var/location)
 	var/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/D = new type(location)
 	if(ismob(holder))
