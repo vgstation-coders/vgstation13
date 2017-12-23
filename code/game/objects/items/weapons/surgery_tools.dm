@@ -337,8 +337,8 @@
 	var/usage_amount = 10
 
 
-/obj/item/weapon/FixOVein/rapid
-	name = "rapid vein layer"
+/obj/item/weapon/FixOVein/clot
+	name = "capillary laying operation tool" //C.L.O.T.
 	desc = "A canister like tool that has two containers on it that stores synthetic vein or biofoam. There's a small processing port on the side where gauze can be inserted to produce biofoam."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "fixovein"
@@ -350,14 +350,14 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 	var/foam = 0
 
-/obj/item/weapon/FixOVein/rapid/examine(mob/user)
+/obj/item/weapon/FixOVein/clot/examine(mob/user)
 	..()
 	if(foam)
 		to_chat(user, "\The [src] contains [foam] unit[foam > 1 ? "s" : ""] of biofoam.")
 	else
 		to_chat(user, "\The [src] contains [foam] units of biofoam.")
 
-/obj/item/weapon/FixOVein/rapid/attack_self(mob/user)
+/obj/item/weapon/FixOVein/clot/attack_self(mob/user)
 	if(foam)
 		if(!sharpness) //The needle is pointy so it's a bit sharp when the injection mode is active.
 			sharpness= 0.5
@@ -369,7 +369,7 @@
 	else
 		to_chat(user, "<span class='notice'>\The [src] requires biofoam to use the injection tip.</span")
 
-/obj/item/weapon/FixOVein/rapid/attackby(var/obj/item/stack/W, mob/user)
+/obj/item/weapon/FixOVein/clot/attackby(var/obj/item/stack/W, mob/user)
 	if((istype(W, /obj/item/stack/medical)) && (foam < 5))
 		if(istype(W, /obj/item/stack/medical/bruise_pack))
 			foam += 1

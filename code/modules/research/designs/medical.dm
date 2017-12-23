@@ -90,76 +90,6 @@
 	category = "Medical"
 	build_path = /obj/item/weapon/thermometer/electronic
 
-/datum/design/laserscalpel1
-	name = "Laser Scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
-	id = "laserscalpel1"
-	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
-	category = "Medical"
-	build_path = /obj/item/weapon/scalpel/laser
-
-/datum/design/laserscalpel2
-	name = "High Precision Laser Scalpel"
-	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery."
-	id = "laserscalpel2"
-	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 500)
-	category = "Medical"
-	build_path = /obj/item/weapon/scalpel/laser/tier2
-
-/datum/design/incisionmanager
-	name = "Surgical Incision Manager"
-	desc = "A true extension of the surgeon's body, this marvel instantly cuts the organ, clamp any bleeding, and retract the skin, allowing for the immediate commencement of therapeutic steps."
-	id = "incisionmanager"
-	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250, MAT_SILVER = 500)
-	category = "Medical"
-	build_path = /obj/item/weapon/retractor/manager
-
-/datum/design/bonemender
-	name = "Bone Mender"
-	desc = "A favorite among skeletons. It even sounds like a skeleton too."
-	id = "bonemender"
-	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_GOLD = 500, MAT_SILVER = 250)
-	category = "Medical"
-	build_path = /obj/item/weapon/bonesetter/bone_mender
-
-/datum/design/pico_grasper
-	name = "Precision Grasper"
-	desc = "A thin rod with pico manipulators embedded in it allowing for fast and precise extraction."
-	id = "pico_grasper"
-	req_tech = list(Tc_MATERIALS = 4, Tc_ENGINEERING = 3, Tc_BIOTECH = 4)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 80)
-	category = "Medical"
-	build_path = /obj/item/weapon/hemostat/pico
-
-/datum/design/plasmasaw
-	name = "Plasma Saw"
-	desc = "Perfect for cutting through ice."
-	id = "plasmasaw"
-	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5, Tc_PLASMATECH = 3)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 500)
-	category = "Medical"
-	build_path = /obj/item/weapon/circular_saw/plasmasaw
-
-/datum/design/diamond_surgicaldrill
-	name = "Diamond Surgical Drill"
-	desc = "Yours is the drill that will pierce the tiny heavens!"
-	id = "diamond_surgicaldrill"
-	req_tech = list(Tc_MATERIALS = 6, Tc_ENGINEERING = 4, Tc_BIOTECH = 5)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_DIAMOND = 800)
-	category = "Medical"
-	build_path = /obj/item/weapon/surgicaldrill/diamond
-
 /datum/design/health_hud
 	name = "Health Scanner HUD"
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their health status."
@@ -189,16 +119,6 @@
 	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
 	category = "Medical"
 	build_path = /obj/item/device/antibody_scanner
-
-/datum/design/switchtool
-	name = "Surgeon's Switchtool"
-	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
-	id = "switchtool"
-	req_tech = list(Tc_MATERIALS = 5, Tc_BLUESPACE = 3, Tc_BIOTECH = 3)
-	build_type = PROTOLATHE
-	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
-	category = "Medical"
-	build_path = /obj/item/weapon/switchtool/surgery
 
 /datum/design/plasmabeaker
 	name = "Plasma Beaker"

@@ -452,7 +452,7 @@
 
 /datum/surgery_step/generic/injectfoam
 	allowed_tools = list(
-	/obj/item/weapon/FixOVein/rapid = 100,
+	/obj/item/weapon/FixOVein/clot = 100,
 	)
 
 	priority = 0.1 //Tries to inject biofoam before other steps
@@ -475,7 +475,7 @@
 	target.custom_pain("You feel a tiny prick in your [affected.display_name]!",1)
 	..()
 
-/datum/surgery_step/generic/injectfoam/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/weapon/FixOVein/rapid/tool)
+/datum/surgery_step/generic/injectfoam/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/weapon/FixOVein/clot/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/amount = tool.foam
 	user.visible_message("<span class='notice'>[user] injects biofoam into [target]'s [affected.display_name] with \the [tool].</span>", \
