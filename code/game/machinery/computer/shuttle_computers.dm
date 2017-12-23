@@ -502,6 +502,7 @@
 /obj/machinery/computer/shuttle_control/emag(mob/user as mob)
 	..()
 	src.req_access = list()
-	to_chat(usr, "You disable the console's access requirement.")
+	if(user)
+		to_chat(user, "You disable the console's access requirement.")
 
 #undef MAX_SHUTTLE_NAME_LEN

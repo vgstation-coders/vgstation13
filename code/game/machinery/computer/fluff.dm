@@ -21,7 +21,8 @@
 				to_chat(user, "<span class='warning'>The buttons don't seem to do anything.</span>")
 
 /obj/machinery/computer/fluff/emag(mob/user)
-	to_chat(user, "<span class='notice'>You hold the cryptographic sequencer up to the ID scanner. Nothing happens.</span>")
+	if(user)
+		to_chat(user, "<span class='notice'>You hold the cryptographic sequencer up to the ID scanner. Nothing happens.</span>")
 
 ////Shuttle fluffputers
 /obj/machinery/computer/fluff/shuttle_control /*fluff shuttle console 1 */

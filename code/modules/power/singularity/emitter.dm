@@ -245,7 +245,8 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
+		if(user)
+			user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
 		return
 
 /obj/machinery/power/emitter/wrenchAnchor(var/mob/user)

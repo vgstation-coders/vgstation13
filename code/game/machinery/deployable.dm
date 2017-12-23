@@ -81,10 +81,11 @@ for reference:
 	src.icon_state = "barrier[src.locked]"
 
 /obj/machinery/deployable/barrier/emag(mob/user)
-	if (src.emagged == 0)
-		src.emagged = 1
-		src.req_access = 0
-		to_chat(user, "You break the ID authentication lock on the [src].")
+	if(!emagged)
+		emagged = 1
+		req_access = list()
+		if(user)
+			to_chat(user, "You break the ID authentication lock on the [src].")
 		spark(src, 2)
 		desc = "A deployable barrier. Swipe your ID card to lock/unlock it. Seems like it's malfunctioning"
 		return

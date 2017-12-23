@@ -82,7 +82,8 @@
 		spark(src, 5)
 		return 1
 	else
-		to_chat(user, "You fail to hack \the [src]'s controls.")
+		if(user)
+			to_chat(user, "You fail to hack \the [src]'s controls.")
 	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 
 /obj/machinery/shield_gen/wrenchAnchor(var/mob/user)

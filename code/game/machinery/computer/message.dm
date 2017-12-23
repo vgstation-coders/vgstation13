@@ -60,7 +60,8 @@
 			spawn(100*length(src.linkedServer.decryptkey)) UnmagConsole()
 			message = rebootmsg
 		else
-			to_chat(user, "<span class='notice'>A 'no server' error appears on the screen.</span>")
+			if(user)
+				to_chat(user, "<span class='notice'>A 'no server' error appears on the screen.</span>")
 
 /obj/machinery/computer/message_monitor/update_icon()
 	..()

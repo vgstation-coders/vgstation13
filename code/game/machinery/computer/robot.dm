@@ -236,4 +236,5 @@
 /obj/machinery/computer/robotics/emag(mob/user)
 	..()
 	req_access = list()
-	to_chat(user, "You disable the console's access requirement.")
+	if(user)
+		to_chat(user, "You disable the console's access requirement.")

@@ -662,7 +662,8 @@
 	if(!emagged)
 		emagged = 1
 		connected.emagged = 1
-		to_chat(user, "<span class='warning'>You short out the safety features of \the [src], and feel like a MAN!	</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out the safety features of \the [src], and feel like a MAN!	</span>")
 		available_options = list("Thermoregulate" = 50,"Rare" = 500,"Medium" = 600,"Well Done" = 700)
 		update_icon()
 		connected.name = "THE MANCROWAVE"
