@@ -679,19 +679,13 @@
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
-	data = 1 //Used as a tally
+	overdose_tick = 165
 	density = 0.687 //Let's assume it's a compound of cyanide
 	specheatcap = 1.335
 
-/datum/reagent/chefspecial/on_mob_life(var/mob/living/M, var/alien)
-
-	if(..())
-		return 1
-
-	if(data >= 165)
-		M.death(0)
-		M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
-	data++
+/datum/reagent/chefspecial/on_overdose(var/mob/living/M)
+	M.death(0)
+	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
 
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
