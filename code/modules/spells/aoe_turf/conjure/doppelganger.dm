@@ -24,7 +24,6 @@ var/list/doppelgangers = list()
 	for (var/mob/M in L)
 		moblist.Add(M)
 	if (moblist.len)
-		to_chat(user, "<span class='warning'>You do not have the strength to copy more than one person.</span>")
 		return FALSE
 	return ..()
 
