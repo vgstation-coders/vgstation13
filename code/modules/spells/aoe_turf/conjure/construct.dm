@@ -3,7 +3,7 @@
 /spell/aoe_turf/conjure/construct
 	name = "Artificer"
 	desc = "This spell conjures a construct which may be controlled by Shades"
-	user_type = "artifacts"
+	user_type = USER_TYPE_ARTIFACT
 
 	school = "conjuration"
 	charge_max = 600
