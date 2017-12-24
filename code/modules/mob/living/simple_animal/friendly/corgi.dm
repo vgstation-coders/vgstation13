@@ -143,34 +143,7 @@
 		if(!Adjacent(usr) || !(ishuman(usr) || ismonkey(usr) || isrobot(usr) ||  isalienadult(usr)))
 			return
 		var/remove_from = href_list["remove_inv"]
-		switch(remove_from)
-			if("head")
-				if(inventory_head)
-					name = real_name
-					desc = initial(desc)
-					speak = list("YAP", "Woof!", "Bark!", "AUUUUUU")
-					speak_emote = list("barks", "woofs")
-					emote_hear = list("barks", "woofs", "yaps","pants")
-					emote_see = list("shakes its head", "shivers")
-					min_oxy = initial(min_oxy)
-					minbodytemp = initial(minbodytemp)
-					maxbodytemp = initial(maxbodytemp)
-					set_light(0)
-					inventory_head.forceMove(src.loc)
-					inventory_head = null
-					regenerate_icons()
-				else
-					to_chat(usr, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
-					return
-			if("back")
-				if(inventory_back)
-					inventory_back.forceMove(src.loc)
-					inventory_back = null
-					regenerate_icons()
-				else
-					to_chat(usr, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
-					return
-
+		remove_inventory(remove_from,usr)
 		show_inv(usr)
 
 	//Adding things to inventory
@@ -448,6 +421,36 @@
                         dir = i
                         sleep(1)
 
+/mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
+	switch(remove_from)
+		if("head")
+			if(inventory_head)
+				name = real_name
+				desc = initial(desc)
+				speak = list("YAP", "Woof!", "Bark!", "AUUUUUU")
+				speak_emote = list("barks", "woofs")
+				emote_hear = list("barks", "woofs", "yaps","pants")
+				emote_see = list("shakes its head", "shivers")
+				min_oxy = initial(min_oxy)
+				minbodytemp = initial(minbodytemp)
+				maxbodytemp = initial(maxbodytemp)
+				set_light(0)
+				inventory_head.forceMove(src.loc)
+				inventory_head = null
+				regenerate_icons()
+			else
+				if(user)
+					to_chat(user, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
+				return
+		if("back")
+			if(inventory_back)
+				inventory_back.forceMove(src.loc)
+				inventory_back = null
+				regenerate_icons()
+			else
+				if(user)
+					to_chat(user, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
+				return
 
 //IAN! SQUEEEEEEEEE~
 /mob/living/simple_animal/corgi/Ian

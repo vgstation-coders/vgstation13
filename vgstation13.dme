@@ -377,6 +377,7 @@
 #include "code\game\gamemodes\endgame\xmas\lights.dm"
 #include "code\game\gamemodes\endgame\xmas\snow.dm"
 #include "code\game\gamemodes\endgame\xmas\snowman.dm"
+#include "code\game\gamemodes\endgame\xmas\victorianstation.dm"
 #include "code\game\gamemodes\endgame\xmas\xmas.dm"
 #include "code\game\gamemodes\events\biomass.dm"
 #include "code\game\gamemodes\events\black_hole.dm"

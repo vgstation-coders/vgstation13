@@ -1049,6 +1049,8 @@
 			return global.halloween_spawns;
 		if("snow_recipes")
 			return global.snow_recipes;
+		if("snowsound")
+			return global.snowsound;
 		if("Holiday")
 			return global.Holiday;
 		if("blob_candidates")
@@ -2942,6 +2944,8 @@
 			global.halloween_spawns=newval
 		if("snow_recipes")
 			global.snow_recipes=newval
+		if("snowsound")
+			global.snowsound=newval
 		if("Holiday")
 			global.Holiday=newval
 		if("blob_candidates")

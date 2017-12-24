@@ -6,6 +6,9 @@
 
 #define TICK_JIGGLE(X) rand(((X)-((X)*0.1)),((X)+((X)*0.1)))
 
+var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
+
+
 /obj/structure/snow
 	name = "snow"
 	layer = SNOW_LAYER
@@ -32,6 +35,7 @@
 		"snowgrassall2",
 		"snowgrassall3",
 		)
+
 
 /obj/structure/snow/New()
 	..()
@@ -69,6 +73,11 @@
 			snow_amount = SNOWCOVERING_FULL
 			processing_objects.Remove(src)
 	next_update=world.time + TICK_JIGGLE(300) // 30 seconds
+
+/obj/structure/snow/Crossed(mob/user)
+	..()
+	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
+		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /obj/structure/snow/attack_hand(mob/user)
@@ -617,6 +626,11 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 		for(var/i=1,i<=rand(1,3),i++)
 			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(T,5)
+
+
+/obj/structure/snow_flora/tree/pine/xmas/vg/New()
+	..()
+	icon_state = "spessmastree"
 
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM
