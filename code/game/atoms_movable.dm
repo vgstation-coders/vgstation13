@@ -260,6 +260,12 @@
 	INVOKE_EVENT(on_moved,list("loc"=newLoc))
 	return .
 
+/atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
+	var/list/found = ..()
+	for (var/atom/A in locked_atoms)
+		found += A.search_contents_for(path,filter_path)
+	return found
+
 //The reason behind change_dir()
 /atom/movable/proc/update_dir()
 	for(var/atom/movable/AM in locked_atoms)
