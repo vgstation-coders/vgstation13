@@ -10,21 +10,6 @@
  * other : misc (not debug)
  */
 
-/proc/getAllWizSpells()
-	getAllSpellsByType("wiz")
-
-/proc/getAllCultSpells()
-	getAllSpellsByType("cult")
-
-/proc/getAllGeneticSpells()
- 	getAllSpellsByType("genetic")
-
-/proc/getAllMalfSpells()
- 	getAllSpellsByType("malf")
-
-/proc/getAllXenoSpells()
-	getAllSpellsByType("xeno")
-
 /proc/getAllSpellsByType(var/type)
 	var/list/spell/spellList = list()
 	for (var/type_S in typesof(/spell))
@@ -33,3 +18,14 @@
 			spellList += S
 
 	return spellList
+
+/proc/getAllWizSpells()
+	return getAllSpellsByType("wiz")
+/proc/getAllCultSpells()
+	return getAllSpellsByType("cult")
+/proc/getAllGeneticSpells()
+	return getAllSpellsByType("genetic")
+/proc/getAllMalfSpells()
+	return getAllSpellsByType("malf")
+/proc/getAllXenoSpells()
+	return getAllSpellsByType("xeno")
