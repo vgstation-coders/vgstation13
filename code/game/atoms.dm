@@ -259,6 +259,7 @@ var/global/list/ghdel_profiling = list()
  * RETURNS: list of found atoms
  */
 
+
 /atom/proc/search_contents_for(path,list/filter_path=null)
 	var/list/found = list()
 	for(var/atom/A in src)
@@ -272,7 +273,12 @@ var/global/list/ghdel_profiling = list()
 				continue
 		if(A.contents.len)
 			found += A.search_contents_for(path,filter_path)
+	if (istype(src, /atom/movable)) // Vehicules
+		var/atom/movable/AM = src
+		for (var/atom/A in AM.locked_atoms)
+			found += A.search_contents_for(path,filter_path)
 	return found
+
 
 /*
  *	atom/proc/contains_atom_from_list(var/list/L)
