@@ -2,7 +2,7 @@
 	name = "Dimensional Push"
 	desc = "This spell takes the thing you're touching, and pushes it somewhere else."
 	abbreviation = "DP"
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	school = "evocation"
 	charge_max = 300

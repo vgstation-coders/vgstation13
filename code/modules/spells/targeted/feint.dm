@@ -2,7 +2,7 @@
 	name = "Feint"
 	desc = "This spell grants you a magic weapon and causes you to vanish, before reappearing behind the enemy."
 	abbreviation = "FT"
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	school = "transmutation"
 	charge_max = 300

@@ -2,7 +2,7 @@
 	name = "Fireball"
 	abbreviation = "FB"
 	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything, or when it gets close to anyone else."
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 

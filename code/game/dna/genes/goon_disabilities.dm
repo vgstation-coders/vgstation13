@@ -355,7 +355,7 @@
 	name = "Incendiary Mitochondria"
 	desc = "The subject becomes able to convert excess cellular energy into thermal energy."
 	panel = "Mutant Powers"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 
 	charge_type = Sp_RECHARGE
 	charge_max = 600
@@ -399,7 +399,7 @@
 	name = "Dissolve"
 	desc = "Transform yourself into a liquified state."
 	panel = "Mutant Powers"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 
 	charge_type = Sp_CHARGES
 

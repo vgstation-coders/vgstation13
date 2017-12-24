@@ -55,6 +55,7 @@
 #include "code\__DEFINES\mob.dm"
 #include "code\__DEFINES\pai_software.dm"
 #include "code\__DEFINES\spell_flags.dm"
+#include "code\__DEFINES\spell_users.dm"
 #include "code\__DEFINES\turfs.dm"
 #include "code\__HELPERS\_macros.dm"
 #include "code\__HELPERS\angles_dirs.dm"

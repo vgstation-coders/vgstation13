@@ -2,7 +2,7 @@
 	name = "Magic Missile"
 	abbreviation = "MM"
 	desc = "This spell fires several, slow moving, magic projectiles at nearby targets."
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	school = "evocation"
 	charge_max = 150

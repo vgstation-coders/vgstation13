@@ -1,7 +1,7 @@
 /spell/aoe_turf/blink
 	name = "Blink"
 	desc = "This spell randomly teleports you a short distance."
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 	abbreviation = "BL"
 
 	school = "abjuration"

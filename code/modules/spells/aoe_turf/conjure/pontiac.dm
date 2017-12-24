@@ -4,7 +4,7 @@
 	name = "Chariot"
 	desc = "This spell summons a glorious, flaming chariot that can move in space."
 	abbreviation = "WM"
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	charge_type = Sp_CHARGES
 	charge_max = 1

@@ -2,7 +2,7 @@
 	name = "Disintegrate"
 	desc = "This spell instantly kills somebody adjacent to you with the vilest of magick."
 	abbreviation = "DG"
-	user_type = "Spellbook"
+	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
 	charge_max = 600

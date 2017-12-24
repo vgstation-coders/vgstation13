@@ -46,7 +46,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk
 	name = "Hulk Out"
 	panel = "Mutant Powers"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE

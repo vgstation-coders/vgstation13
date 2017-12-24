@@ -2,7 +2,7 @@
 
 /spell/targeted/equip_item
 	name = "equipment spell"
-	user_type = "no_user"
+	user_type = USER_TYPE_NOUSER
 	spell_flags = SELECTABLE
 
 	var/list/equipped_summons = list() //assoc list of text ids and paths to spawn

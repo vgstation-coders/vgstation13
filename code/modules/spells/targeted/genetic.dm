@@ -7,7 +7,7 @@ code\game\\dna\genes\goon_powers.dm
 /spell/targeted/genetic
 	name = "Genetic modifier"
 	desc = "This spell inflicts a set of mutations and disabilities upon the target."
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 
 	var/disabilities = 0 //bits
 	var/list/mutations = list() //mutation strings

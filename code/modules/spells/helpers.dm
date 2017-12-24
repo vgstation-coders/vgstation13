@@ -1,13 +1,14 @@
 /* User_type
 
- * wiz : a classical wizard spell (found in simple spellbook)
- * cult
- * genetic
- * alien
- * Spellbook : found in spellbooks
- * artifacts : used by artifacts
- * no_user :generic/abstract spells
- * other : misc (not debug)
+ * USER_TYPE_WIZARD 	: a classical wizard spell (found in simple spellbook)
+ * USER_TYPE_CULT
+ * USER_TYPE_GENETIC
+ * USER_TYPE_XENOMORPH
+ * USER_TYPE_MALFAI
+ * USER_TYPE_SPELLBOOK 	: found in spellbooks
+ * USER_TYPE_ARTIFACT  	: used by artifacts
+ * USER_TYPE_NOUSER    	: generic/abstract spells
+ * USER_TYPE_OTHER 		: misc (not debug)
  */
 
 /proc/getAllSpellsByType(var/type)
@@ -20,12 +21,12 @@
 	return spellList
 
 /proc/getAllWizSpells()
-	return getAllSpellsByType("wiz")
+	return getAllSpellsByType(USER_TYPE_WIZARD)
 /proc/getAllCultSpells()
-	return getAllSpellsByType("cult")
+	return getAllSpellsByType(USER_TYPE_CULT)
 /proc/getAllGeneticSpells()
-	return getAllSpellsByType("genetic")
+	return getAllSpellsByType(USER_TYPE_GENETIC)
 /proc/getAllMalfSpells()
-	return getAllSpellsByType("malf")
+	return getAllSpellsByType(USER_TYPE_MALFAI)
 /proc/getAllXenoSpells()
-	return getAllSpellsByType("xeno")
+	return getAllSpellsByType(USER_TYPE_XENOMORPH)

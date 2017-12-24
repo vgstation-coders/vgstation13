@@ -2,7 +2,7 @@
 	name = "The Clown Curse"
 	desc = "A curse that will turn its victim into a miserable clown."
 	abbreviation = "CC"
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	school = "evocation"
 	charge_max = 300

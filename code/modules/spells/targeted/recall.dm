@@ -1,7 +1,7 @@
 /spell/targeted/bound_object
 	name = "Bound Object"
 	desc = "This spell allows a wizard to bind an object to themselves, then teleport it to them at will. Middle click the spell icon or use the 'Unbind' spell to select a new object."
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 	abbreviation = "BO"
 
 	school = "abjuration"

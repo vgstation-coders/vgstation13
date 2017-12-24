@@ -1,7 +1,7 @@
 /spell/aoe_turf/conjure/doppelganger
 	name = "Doppelganger"
 	desc = "This spell summons a construct with your appearance."
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	summon_type = list(/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/melee)
 

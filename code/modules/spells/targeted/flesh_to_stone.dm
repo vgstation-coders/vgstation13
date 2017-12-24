@@ -2,7 +2,7 @@
 	name = "Flesh to Stone"
 	desc = "This spell turns a single person into an inert statue for a long period of time."
 	abbreviation = "FS"
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	school = "transmutation"
 	charge_max = 600

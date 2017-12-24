@@ -136,7 +136,7 @@
 
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 	desc = "Drops the bodytemperature of another person."
 	panel = "Mutant Powers"
 
@@ -203,7 +203,7 @@
 /spell/targeted/eat
 	name = "Eat"
 	desc = "Eat just about anything!"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -419,7 +419,7 @@
 	name = "Jump"
 	desc = "Leap great distances!"
 	panel = "Mutant Powers"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
@@ -542,7 +542,7 @@
 	name = "Polymorph"
 	desc = "Mimic the appearance of others!"
 	panel = "Mutant Powers"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 	charge_max = 1800
 
 	spell_flags = 0
@@ -591,7 +591,7 @@
 	name = "Read Mind"
 	desc = "Read the minds of others for information."
 	panel = "Mutant Powers"
-	user_type = "genetic"
+	user_type = USER_TYPE_GENETIC
 
 	range = 7
 	max_targets = 1

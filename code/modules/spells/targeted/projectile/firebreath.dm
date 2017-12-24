@@ -1,7 +1,7 @@
 /spell/targeted/projectile/dumbfire/fireball/firebreath
 	name = "Fire Breath"
 	desc = "This spell allows you to spew a plume of fire."
-	user_type = "wiz"
+	user_type = USER_TYPE_WIZARD
 
 	proj_type = /obj/item/projectile/fire_breath
 
