@@ -92,21 +92,21 @@
 					"<span class='warning'>You slip on the wet floor!</span>")
 
 			if(2) //Lube
-				M.stop_pulling()
-				step(M, M.dir)
-				spawn(1)
+				if(M.Slip(10,3,1))
 					step(M, M.dir)
-				spawn(2)
-					step(M, M.dir)
-				spawn(3)
-					step(M, M.dir)
-				spawn(4)
-					step(M, M.dir)
-				M.take_organ_damage(2) // Was 5 -- TLE
-				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
-				"<span class='warning'>You slip on the floor!</span>")
-				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
-				M.Knockdown(10)
+					spawn(1)
+						step(M, M.dir)
+					spawn(2)
+						step(M, M.dir)
+					spawn(3)
+						step(M, M.dir)
+					spawn(4)
+						step(M, M.dir)
+					M.take_organ_damage(2) // Was 5 -- TLE
+					M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
+					"<span class='warning'>You slip on the floor!</span>")
+					playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+					M.Knockdown(10)
 
 			if(3) // Ice
 				if(prob(30) && M.Slip(4, 3))
