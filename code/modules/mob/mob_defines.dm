@@ -312,7 +312,7 @@
 
 /mob/proc/getScreenObjs()
 	var/list/screen_vars = list()
-	for(var/varname in vars)
-		if(istype(vars[varname], /obj/abstract/screen))
-			screen_vars += vars[varname]
+	for(var/screenobject in vars)
+		if(istype(vars[screenobject], /obj/abstract/screen))
+			screen_vars += vars[screenobject]
 	return screen_vars

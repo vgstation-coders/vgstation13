@@ -14,11 +14,23 @@
 			else if((old_value < 2) && (new_value == 2))//Kill he
 				living_mob_list.Remove(src)
 				dead_mob_list.Add(src)
+/mob/proc/dropBorers()
+	return
 
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
-/mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
+/mob/proc/TestProc()
+	for(var/mob_event_vars in vars)
+		if(istype(vars[mob_event_vars], /event))
+			var/event/tempname = vars[mob_event_vars]
+			world.log << "[tempname]"
+			qdel(vars[mob_event_vars])
+			vars[mob_event_vars] = null
+			world.log << "[vars[mob_event_vars]]"
+
+
+///mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio) //Did this even do anything?
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
 	for(var/datum/mind/mind in heard_by)
@@ -38,15 +50,18 @@
 		mind.current = null
 	if(mind && mind.original == src)
 		mind.original = null
+
 	spellremove(src)
-	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
-		var/mob/living/carbon/Ca = src
-		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
+	dropBorers(1)
+
 	if(client)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
+
 		spell_masters = null
+
 		remove_screen_objs()
+
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
@@ -54,7 +69,9 @@
 					returnToPool(AM)
 			else
 				qdel(AM)
+
 		client.screen = list()
+
 	mob_list.Remove(src)
 	dead_mob_list.Remove(src)
 	living_mob_list.Remove(src)
@@ -66,12 +83,15 @@
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
+
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
 	qdel(on_moved)
 	on_moved = null
+
+
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
@@ -98,38 +118,6 @@
 
 /mob/proc/remove_screen_objs()
 
-/*	//Manually created list, will automate with datums later
-	var/list/screenobjs = list( \
-		hands,\
-		pullin,\
-		visible,\
-		purged,\
-		internals,\
-		oxygen,\
-		i_select,\
-		m_select,\
-		toxin,\
-		fire,\
-		bodytemp,\
-		healths,\
-		throw_icon,\
-		nutrition_icon,\
-		pressure,\
-		damageoverlay,\
-		pain,\
-		item_use_icon,\
-		gun_move_icon,\
-		gun_run_icon,\
-		gun_setting_icon,\
-		m_suitclothes,\
-		m_suitclothesbg,\
-		m_hat,\
-		m_hatbg,\
-		m_glasses,\
-		m_glassesbg,\
-		zone_sel,\
-	)
-*/
 	var/list/screenobjs = getScreenObjs()
 
 	for(var/i = 1, i < screenobjs.len, i++)
