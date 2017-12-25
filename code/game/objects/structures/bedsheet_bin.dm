@@ -133,6 +133,16 @@ LINEN BINS
 	var/list/sheets = list()
 	var/obj/item/hidden = null
 
+/obj/structure/bedsheetbin/Destroy()
+	if(sheets)
+		for(var/sheet in sheets)
+			sheets.Remove(sheet)
+			qdel(sheet)
+	if(hidden)
+		hidden = null
+		qdel(hidden)
+	..()
+
 
 /obj/structure/bedsheetbin/examine(mob/user)
 	..()
@@ -154,6 +164,31 @@ LINEN BINS
 
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
+	if(iswrench(I))
+		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+		return
+	if(iswelder(I))
+		if(anchored)
+			to_chat(user, "<span class='warning'>\The [src] is still secured to whatever surface it is on. Unsecure it first!</span>")
+			return
+		var/obj/item/weapon/weldingtool/W = I
+		if(W.remove_fuel(2,user))
+			to_chat(user, "<span class='notice'>You break \the [src] down into a pile of rods.</span>")
+			new /obj/item/stack/rods(get_turf(src),rand(3,5))
+			if(sheets)
+				for(var/obj/sheet in sheets)
+					sheet.forceMove(loc)
+					sheets.Remove(sheet)
+					amount--
+			while(amount > 0)
+				new /obj/item/weapon/bedsheet(loc)
+				amount--
+			if(hidden)
+				to_chat(user, "<span class='notice'>\The [hidden] falls out of the [src]!</span>")
+				hidden.forceMove(loc)
+				hidden = null
+			qdel(src)
+			return
 	if(istype(I, /obj/item/weapon/bedsheet))
 		if(user.drop_item(I, src))
 			sheets.Add(I)
