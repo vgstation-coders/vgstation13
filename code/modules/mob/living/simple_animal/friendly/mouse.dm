@@ -45,6 +45,10 @@
 	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
 	var/antibodies = 0
 
+/mob/living/simple_animal/mouse/New()
+	..()
+	create_reagents(100)
+
 
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
@@ -77,11 +81,11 @@
 	if(nutrition >= MOUSEFAT && is_fat == 0)
 		is_fat = 1
 		speed = 6
-		meat_amount = initial(meat_amount) + 1
+		meat_amount += 1
 	else if ((nutrition <= MOUSEFAT-25 && is_fat == 1) || (nutrition > MOUSEHUNGRY && is_fat == 0))
 		is_fat = 0
 		speed = initial(speed)
-		meat_amount = initial(meat_amount)
+		meat_amount = size //What it is on living/New(),
 	if(nutrition <= MOUSESTARVE && prob(5) && client)
 		to_chat(src, "<span class = 'warning'>You are starving!</span>")
 		health -= 1

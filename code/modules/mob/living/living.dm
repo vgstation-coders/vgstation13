@@ -1386,6 +1386,9 @@ Thanks.
 		else
 			A.name = "[initial(src.name)] meat"
 			A.animal_name = initial(src.name)
+
+	if(reagents)
+		reagents.trans_to(A,round (reagents.total_volume * (meat_amount/meat_taken), 1))
 	return M
 
 /mob/living/proc/butcher()
@@ -1498,8 +1501,8 @@ Thanks.
 		src.being_butchered = 0
 		return
 
-	src.drop_meat(get_turf(src))
 	src.meat_taken++
+	src.drop_meat(get_turf(src))
 	src.being_butchered = 0
 	if(tool_name)
 		if(!advanced_butchery)
