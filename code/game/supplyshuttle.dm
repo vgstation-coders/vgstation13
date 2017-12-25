@@ -260,10 +260,14 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 
 /datum/controller/supply_shuttle/proc/forbidden_atoms_check(atom/A)
 	var/contents = get_contents_in_object(A)
-
-	if (locate(/mob/living) in contents)
-		. = TRUE
-	else if (locate(/obj/item/weapon/disk/nuclear) in contents)
+	for(var/mob/living/simple_animal/hostile/mimic/M in contents)
+		M.angry = 0
+		M.apply_disguise()
+	for(var/mob/living/M in contents)
+		if(!istype(M, /mob/living/simple_animal/hostile/mimic))
+			. = TRUE
+			break
+	if (locate(/obj/item/weapon/disk/nuclear) in contents)
 		. = TRUE
 	else if (locate(/obj/machinery/nuclearbomb) in contents)
 		. = TRUE
