@@ -19,12 +19,9 @@ var/list/doppelgangers = list()
 // Sanity : don't copy more than one guy
 /spell/aoe_turf/conjure/cast_check(skipcharge = 0,mob/user = usr)
 	var/list/L = view(user, 0)
-	var/list/mob/moblist = list()
 	L -= user
 	for (var/mob/M in L)
-		moblist.Add(M)
-	if (moblist.len)
-		return FALSE
+		return FALSE // If there is even one mob, we ABORT
 	return ..()
 
 /spell/aoe_turf/conjure/doppelganger/summon_object(var/type, var/location)
