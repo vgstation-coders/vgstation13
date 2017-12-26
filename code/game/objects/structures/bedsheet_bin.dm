@@ -134,10 +134,9 @@ LINEN BINS
 	var/obj/item/hidden = null
 
 /obj/structure/bedsheetbin/Destroy()
-	if(sheets)
-		for(var/sheet in sheets)
-			sheets.Remove(sheet)
-			qdel(sheet)
+	for(var/sheet in sheets)
+		qdel(sheet)
+	sheets.Cut()
 	if(hidden)
 		hidden = null
 		qdel(hidden)
@@ -147,11 +146,11 @@ LINEN BINS
 /obj/structure/bedsheetbin/examine(mob/user)
 	..()
 	if(amount == 0)
-		to_chat(user, "<span class='info'>There are no bed sheets in the bin.</span>")
+		to_chat(user, "<span class='info'>There are no bed sheets in \the [src].</span>")
 	else if(amount == 1)
-		to_chat(user, "<span class='info'>There is one bed sheet in the bin.</span>")
+		to_chat(user, "<span class='info'>There is one bed sheet in \the [src].</span>")
 	else
-		to_chat(user, "<span class='info'>There are [amount] bed sheets in the bin.</span>")
+		to_chat(user, "<span class='info'>There are [amount] bed sheets in \the [src].</span>")
 
 
 /obj/structure/bedsheetbin/update_icon()
@@ -175,16 +174,15 @@ LINEN BINS
 		if(W.remove_fuel(2,user))
 			to_chat(user, "<span class='notice'>You break \the [src] down into a pile of rods.</span>")
 			new /obj/item/stack/rods(get_turf(src),rand(3,5))
-			if(sheets)
-				for(var/obj/sheet in sheets)
-					sheet.forceMove(loc)
-					sheets.Remove(sheet)
-					amount--
+			for(var/obj/sheet in sheets)
+				sheet.forceMove(loc)
+				amount--
+			sheets.Cut()
 			while(amount > 0)
 				new /obj/item/weapon/bedsheet(loc)
 				amount--
 			if(hidden)
-				to_chat(user, "<span class='notice'>\The [hidden] falls out of the [src]!</span>")
+				to_chat(user, "<span class='notice'>\The [hidden] falls out of \the [src]!</span>")
 				hidden.forceMove(loc)
 				hidden = null
 			qdel(src)
