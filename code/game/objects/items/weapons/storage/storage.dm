@@ -364,11 +364,8 @@
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
 
-	for(var/mob/M in range(1, get_turf(src)))
-		if (M.s_active == src)
-			if (M.client)
-				M.client.screen -= W
 
+	var/success = 1
 	if(new_location)
 		var/mob/M
 		if(ismob(loc))
@@ -376,7 +373,8 @@
 			W.dropped(M)
 		if(ismob(new_location))
 			M = new_location
-			M.put_in_active_hand(W)
+			if(!M.put_in_active_hand(W))
+				success = 0
 		else
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
@@ -385,6 +383,14 @@
 				W.forceMove(new_location)
 	else
 		W.forceMove(get_turf(src))
+
+	if(!success)
+		return 0
+
+	for(var/mob/M in range(1, get_turf(src)))
+		if (M.s_active == src)
+			if (M.client)
+				M.client.screen -= W
 
 	if(usr)
 		src.orient2hud(usr)
