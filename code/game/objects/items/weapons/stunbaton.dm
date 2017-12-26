@@ -179,7 +179,7 @@
 
 		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
-			self_drugged_message="<span class='userdanger'>\the [user]'s [src] sucks the life right out of you!</span>")
+			self_drugged_message="<span class='userdanger'>\The [user]'s [src] sucks the life right out of you!</span>")
 		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
 		deductcharge(hitcost)
