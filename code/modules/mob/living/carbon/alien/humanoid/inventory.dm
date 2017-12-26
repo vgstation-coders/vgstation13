@@ -82,5 +82,6 @@
 
 /mob/living/carbon/alien/humanoid/put_in_hand_check(var/obj/item/W)
 	if(!has_fine_manipulation && !is_type_in_list(W, can_only_pickup))
+		to_chat(src, "Your claws aren't capable of such fine manipulation.")
 		return 0
 	return 1
