@@ -696,4 +696,3 @@
 			if(src)
 				body_alphas.Remove(source_define)
 				regenerate_icons()
-
