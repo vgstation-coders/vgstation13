@@ -365,7 +365,6 @@
 		F.update_icon(1)
 
 
-	var/success = 1
 	if(new_location)
 		var/mob/M
 		if(ismob(loc))
@@ -374,7 +373,7 @@
 		if(ismob(new_location))
 			M = new_location
 			if(!M.put_in_active_hand(W))
-				success = 0
+				return 0
 		else
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
@@ -383,9 +382,6 @@
 				W.forceMove(new_location)
 	else
 		W.forceMove(get_turf(src))
-
-	if(!success)
-		return 0
 
 	for(var/mob/M in range(1, get_turf(src)))
 		if (M.s_active == src)
