@@ -1,6 +1,7 @@
 /spell/targeted/wrapping_paper
 	name = ""
 	desc = "This spell turns a single person into an inert statue for a long period of time."
+	user_type = USER_TYPE_ARTIFACT
 
 	school = "transmutation"
 	charge_max = 300

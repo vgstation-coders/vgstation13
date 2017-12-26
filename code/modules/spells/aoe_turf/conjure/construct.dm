@@ -3,6 +3,7 @@
 /spell/aoe_turf/conjure/construct
 	name = "Artificer"
 	desc = "This spell conjures a construct which may be controlled by Shades"
+	user_type = USER_TYPE_ARTIFACT
 
 	school = "conjuration"
 	charge_max = 600
@@ -16,6 +17,8 @@
 	hud_state = "artificer"
 
 /spell/aoe_turf/conjure/construct/lesser
+	user_type = USER_TYPE_CULT
+
 	charge_max = 1800
 	summon_type = list(/obj/structure/constructshell/cult)
 	hud_state = "const_shell"
@@ -24,6 +27,7 @@
 /spell/aoe_turf/conjure/floor
 	name = "Floor Construction"
 	desc = "This spell constructs a cult floor"
+	user_type = USER_TYPE_CULT
 
 	charge_max = 20
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
@@ -48,6 +52,7 @@
 /spell/aoe_turf/conjure/wall
 	name = "Lesser Construction"
 	desc = "This spell constructs a cult wall"
+	user_type = USER_TYPE_CULT
 
 	charge_max = 100
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
@@ -72,6 +77,7 @@
 /spell/aoe_turf/conjure/wall/reinforced
 	name = "Greater Construction"
 	desc = "This spell constructs a reinforced metal wall"
+	user_type = USER_TYPE_CULT
 
 	charge_max = 300
 	spell_flags = Z2NOCAST
@@ -86,6 +92,7 @@
 /spell/aoe_turf/conjure/soulstone
 	name = "Summon Soulstone"
 	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space"
+	user_type = USER_TYPE_CULT
 
 	charge_max = 3000
 	spell_flags = 0
@@ -101,6 +108,7 @@
 /spell/aoe_turf/conjure/pylon
 	name = "Red Pylon"
 	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source."
+	user_type = USER_TYPE_CULT
 
 	charge_max = 200
 	spell_flags = CONSTRUCT_CHECK|IGNORESPACE|IGNOREDENSE|NODUPLICATE
@@ -125,6 +133,7 @@
 /spell/aoe_turf/conjure/forcewall/lesser
 	name = "Shield"
 	desc = "Allows you to pull up a shield to protect yourself and allies from incoming threats"
+	user_type = USER_TYPE_CULT
 
 	charge_max = 300
 	spell_flags = 0
