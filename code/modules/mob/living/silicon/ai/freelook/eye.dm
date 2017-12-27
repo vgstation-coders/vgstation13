@@ -101,13 +101,6 @@
 			return
 	..()
 
-/mob/living/DblClick()
-	if(isAI(usr) && usr != src)
-		var/mob/living/silicon/ai/A = usr
-		A.ai_actual_track(src)
-		return
-	..()
-
 // This will move the AIEye. It will also cause lights near the eye to light up, if toggled.
 // This is handled in the proc below this one.
 
