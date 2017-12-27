@@ -179,6 +179,7 @@
 
 #define ismatrix(A) (istype(A, /matrix))
 
+#define ismecha(A) (istype(A, /obj/mecha))
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
