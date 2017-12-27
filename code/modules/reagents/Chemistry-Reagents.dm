@@ -2595,7 +2595,7 @@
 		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.damage > 0)
-				I.damage -= 0.20
+				I.damage = max(0,I.damage-0.2)
 
 /datum/reagent/bicaridine
 	name = "Bicaridine"
