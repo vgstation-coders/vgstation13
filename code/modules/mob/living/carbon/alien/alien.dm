@@ -36,6 +36,7 @@
 	var/fire_alert = 0
 
 	var/heat_protection = 0.5
+	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
