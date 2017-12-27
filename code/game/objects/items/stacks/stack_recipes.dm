@@ -262,5 +262,6 @@ var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Cowboy hat",	/obj/item/clothing/head/cowboy,				4,	time = 70,),
 	new/datum/stack_recipe/leather("Leather gloves",/obj/item/clothing/gloves/botanic_leather,	2,	time = 90,),
 	new/datum/stack_recipe/leather("Leather shoes",	/obj/item/clothing/shoes/leather,			4,	time = 80,),
-
+	new/datum/stack_recipe/leather("Leather Satchel",/obj/item/weapon/storage/backpack/satchel,	12,	time = 130,),
+	new/datum/stack_recipe/leather("Leather wallet",/obj/item/weapon/storage/wallet,			4,	time = 90,),
 	)
