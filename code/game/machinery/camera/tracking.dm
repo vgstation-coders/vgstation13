@@ -110,15 +110,7 @@
 	if(!istype(target))
 		return
 	spawn(0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = target
-			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-				to_chat(src, "Unable to locate an airlock")
-				return
-			if(H.digitalcamo)
-				to_chat(src, "Unable to locate an airlock")
-				return
-		if (!near_camera(target))
+		if(!can_track_atom(target))
 			to_chat(src, "Target is not near any active cameras.")
 			return
 		var/obj/machinery/door/airlock/tobeopened
