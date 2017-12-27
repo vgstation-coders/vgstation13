@@ -1556,3 +1556,8 @@ var/proccalls = 1
 #define HUD_NONE 0
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
+
+//Cyborg components
+#define COMPONENT_BROKEN -1
+#define COMPONENT_MISSING 0
+#define COMPONENT_INSTALLED 1

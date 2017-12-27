@@ -148,10 +148,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			module_sprites["Hover"] = "hovermommi"
 			module_sprites["Prime"] = "mommiprime"
 
-	//Custom_sprite check and entry
-	if (custom_sprite == 1)
-		module_sprites["Custom"] = "[src.ckey]-[modtype]"
-
 	hands.icon_state = lowertext(modtype)
 	feedback_inc("mommi_[lowertext(modtype)]",1)
 	updatename()
