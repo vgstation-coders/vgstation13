@@ -21,6 +21,7 @@
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
+	var/hud_list[2]
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
@@ -86,6 +87,8 @@
 						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
+	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
+	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
 	..()
 	events = new
 	add_radio()
@@ -1957,6 +1960,24 @@
 /obj/mecha/apply_beam_damage(var/obj/effect/beam/B)
 	// Actually apply damage
 	take_damage(B.get_damage(), "emitter laser")
+
+/proc/mech_integrity_to_icon_state(var/integrity_ratio)
+	switch(integrity_ratio)
+		if(1.0 to INFINITY)
+			return "huddiagmax"
+		if(0.85 to 1.0)
+			return "huddiaggood"
+		if(0.70 to 0.85)
+			return "huddiaghigh"
+		if(0.55 to 0.70)
+			return "huddiagmed"
+		if(0.40 to 0.55)
+			return "huddiaglow"
+		if(0.10 to 0.40)
+			return "huddiagcrit"
+		if(0 to 0.10)
+			return "huddiagdead"
+	return "huddiagmax"
 
 
 //////////////////////////////////////////
