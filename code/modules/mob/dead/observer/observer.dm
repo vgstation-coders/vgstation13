@@ -34,7 +34,7 @@
 							//If you died in the game and are a ghsot - this will remain as null.
 							//Note that this is not a reliable way to determine if admins started as observers, since they change mobs a lot.
 	var/has_enabled_antagHUD = 0
-	var/medHUD = 0
+	var/selectedHUD = HUD_NONE // HUD_NONE, HUD_MEDICAL or HUD_SECURITY
 	var/antagHUD = 0
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
@@ -182,8 +182,11 @@ Works together with spawning an observer, noted above.
 				target_list += target
 		if(target_list.len)
 			assess_targets(target_list, src)
-	if(medHUD)
+	regular_hud_updates()
+	if(selectedHUD == HUD_MEDICAL)
 		process_medHUD(src)
+	else if(selectedHUD == HUD_SECURITY)
+		process_sec_hud(src, TRUE)
 
 	if(visible)
 		if(invisibility == 0)
@@ -424,12 +427,25 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set desc = "Toggles Medical HUD allowing you to see how everyone is doing"
 	if(!client)
 		return
-	if(medHUD)
-		medHUD = 0
+	if(selectedHUD == HUD_MEDICAL)
+		selectedHUD = HUD_NONE
 		to_chat(src, "<span class='notice'><B>Medical HUD Disabled</B></span>")
 	else
-		medHUD = 1
+		selectedHUD = HUD_MEDICAL
 		to_chat(src, "<span class='notice'><B>Medical HUD Enabled</B></span>")
+
+/mob/dead/observer/verb/toggle_secHUD()
+	set category = "Ghost"
+	set name = "Toggle SecHUD"
+	
+	if(!client)
+		return
+	if(selectedHUD == HUD_SECURITY)
+		selectedHUD = HUD_NONE
+		to_chat(src, "<span class='notice'><B>Security HUD disabled.</b></span>")
+	else
+		selectedHUD = HUD_SECURITY
+		to_chat(src, "<span class='notice'><B>Security HUD enabled.</b></span>")
 
 /mob/dead/observer/verb/toggle_antagHUD()
 	set category = "Ghost"
