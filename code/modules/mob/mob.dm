@@ -658,7 +658,7 @@ var/list/slot_equipment_priority = list( \
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
 			return S.quick_store(W)
-		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 1)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
+		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
 
 	return 0
