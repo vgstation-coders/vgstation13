@@ -4,9 +4,9 @@
 		if(1,6)
 			return list("x"=0, "y"=0)
 		if(2,5)
-			return list("x"=0, "y"=10)
+			return list("x"=0, "y"=8)
 		if(3,4)
-			return list("x"=0, "y"=16)
+			return list("x"=0, "y"=14)
 
 	return list()
 
@@ -22,11 +22,11 @@
 		if(3)
 			return "CENTER-1:16,SOUTH:5:10"
 		if(4)
-			return "CENTER+1:16,SOUTH:5:10"
+			return "CENTER:16,SOUTH:5:10"
 		if(5)
-			return "CENTER+2:16,SOUTH:5:4"
+			return "CENTER+1:16,SOUTH:5:4"
 		if(6)
-			return "CENTER+3:16,SOUTH:5"
+			return "CENTER+2:16,SOUTH:5"
 		else
 			return ..()
 

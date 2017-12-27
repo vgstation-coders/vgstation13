@@ -187,6 +187,7 @@
 
 	//Handle the gun settings buttons
 	mymob.gun_setting_icon = getFromPool(/obj/abstract/screen/gun/mode)
+	mymob.gun_setting_icon.icon = ui_style
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2

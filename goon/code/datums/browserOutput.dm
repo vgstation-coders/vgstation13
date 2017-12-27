@@ -223,7 +223,7 @@ For the main html chat area
 	var/atom/A = obj
 	var/key = ("[A.icon]" || "\ref[A.icon]")+":[A.icon_state]"
 	if (!bicon_cache[key]) // Doesn't exist, make it.
-		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1)
+		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1, 0)
 		if (!"[A.icon]") // Shitty workaround for a BYOND issue.
 			var/icon/temp = I
 			I = icon()

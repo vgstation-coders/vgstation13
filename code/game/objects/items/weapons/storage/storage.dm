@@ -507,7 +507,7 @@
 	set name = "Empty Contents"
 	set category = "Object"
 
-	if((!ishuman(usr) && (src.loc != usr)) || usr.isUnconscious() || usr.restrained())
+	if((!ishigherbeing(usr) && (src.loc != usr)) || usr.isUnconscious() || usr.restrained())
 		return
 
 	var/turf/T = get_turf(src)

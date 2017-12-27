@@ -99,7 +99,7 @@
 /obj/item/weapon/organ_remover/proc/can_use(var/mob/user)
 	// Something something vox bioelectric fields something nanites.
 	// I'd rather not have shitters picking these up and removing the clown's lungs for giggles.
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		return FALSE
 
 	if(!vox_only)
