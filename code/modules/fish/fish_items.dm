@@ -203,16 +203,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	force = 1
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 
-/obj/item/weapon/fish/proc/check_butcher(var/mob/user) // Can only work on a fish if it's in the user's hand or if it lays on a table
-	if (src in user.held_items)
-		return TRUE
-	if (/obj/structure/table in view(src, 0))
-		return TRUE
-	to_chat(user, "<span class='warning'>You need to work on a stable surface!</span>")
-	return FALSE
-
 /obj/item/weapon/fish/attackby(var/obj/item/O, var/mob/user)
-	check_butcher(user)
 	if(meat_type && O.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "You carefully clean and gut \the [src].")
 		new meat_type(get_turf(src))
