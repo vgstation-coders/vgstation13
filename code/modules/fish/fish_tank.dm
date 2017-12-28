@@ -180,13 +180,22 @@
 		overlays += "over_leak_[leaking]"				//Green if we aren't leaking, light blue and slow blink if minor link, dark blue and rapid flashing for major leak
 
 	if (fish_list.len)
-		switch(tank_type)
-			if ("bowl")
-				overlays += "fish_gif_small"
-			if ("tank")
-				overlays += icon('icons/obj/fish_items.dmi', "fish_gif_medium", FISH_LAYER)
-			if ("wall")
-				overlays += icon('icons/obj/fish_items.dmi', "fish_gif", FISH_LAYER)
+		if("shark" in fish_list) // Smaller fish hide when a shark's town
+			switch(tank_type)
+				if ("bowl")
+					overlays += icon('icons/obj/fish.dmi', "shark_bowl", FISH_LAYER)
+				if ("tank")
+					overlays += icon('icons/obj/fish.dmi', "sharkspin", FISH_LAYER)
+				if ("wall")
+					overlays += icon('icons/obj/fish.dmi', "shrk", FISH_LAYER)
+		else
+			switch(tank_type)
+				if ("bowl")
+					overlays += icon('icons/obj/fish.dmi', "feesh_small", FISH_LAYER)
+				if ("tank")
+					overlays += icon('icons/obj/fish.dmi', "feesh_medium", FISH_LAYER)
+				if ("wall")
+					overlays += icon('icons/obj/fish.dmi', "feesh", FISH_LAYER)
 
 	//Update water overlay
 	if(water_level == 0)
@@ -378,12 +387,10 @@
 			new /obj/item/weapon/shard(get_turf(src))
 		if(water_level)															//Spill any water that was left in the tank when it broke
 			spill_water()
-	else														//We are deconstructing, make glass sheets instead of shards
-		var/sheets = shard_count + 1							//Deconstructing it salvages all the glass used to build the tank
+	else																//We are deconstructing, make glass sheets instead of shards
+		var/sheets = shard_count + 1									//Deconstructing it salvages all the glass used to build the tank
 		new /obj/item/stack/sheet/glass/glass(get_turf(src), sheets)	//Produce the appropriate number of glass sheets, in a single stack (/glass/glass)
-	for (var/obj/item/weapon/fish/F in fish_list)
-		F.forceMove(get_turf(src))
-	qdel(src)																							//qdel the tank and it's contents
+	qdel(src)															//qdel the tank and it's contents
 
 
 /obj/machinery/fishtank/proc/spill_water()
@@ -425,63 +432,65 @@
 
 	switch (water_level/water_capacity)
 		if (0     to 0.001)
-			examine_message += "\The [src] is empty! "
+			examine_message += "<span class='warning'>\The [src] is empty!</span>"
 		if (0.001 to 0.100)
-			examine_message += "\The [src] is nearly empty! "
+			examine_message += "<span class='warning'>\The [src] is nearly empty!</span>"
 		if (0.100 to 0.250)
-			examine_message += "\The [src] is about one-quarter filled. "
+			examine_message += "<span class='notice'>\The [src] is about one-quarter filled.</span>"
 		if (0.250 to 0.500)
-			examine_message += "\The [src] is about half filled. "
+			examine_message += "<span class='notice'>\The [src] is about half filled.</span>"
 		if (0.500 to 0.750)
-			examine_message += "\The [src] is about three-quarters filled. "
+			examine_message += "<span class='notice'>\The [src] is about three-quarters filled.</span>"
 		if (0.750 to 0.999)
-			examine_message += "\The [src] is nearly full! "
+			examine_message += "<span class='notice'>\The [src] is nearly full!</span>"
 		if (0.999 to 1)
-			examine_message += "\The [src] is full! "
+			examine_message += "<span class='notice'>\The [src] is full!</span>"
 
 	examine_message += "<br>Cleanliness level: "
 
 	//Approximate filth level
 	switch (filth_level/MAX_FILTH)
 		if (0     to 0.001)
-			examine_message += "\The [src] is spotless! "
+			examine_message += "<span class='notice'>\The [src] is spotless!</span>"
 		if (0.001 to 0.250)
-			examine_message += "\The [src] looks like the glass has been smudged. "
+			examine_message += "<span class='notice'>\The [src] looks like the glass has been smudged.</span>"
 		if (0.250 to 0.500)				//This is the breeding threshold
-			examine_message += "\The [src] has some algae growth in it. "
+			examine_message += "<span class='warning'>\The [src] has some algae growth in it.</span>"
 		if (0.500 to 0.750)
-			examine_message += "\The [src] has a lot of algae growth in it. "
+			examine_message += "<span class='warning'>\The [src] has a lot of algae growth in it.</span>"
 		if (0.750 to 0.999)
-			examine_message += "\The [src] is getting hard to see into! Someone should clean it soon! "
+			examine_message += "<span class='warning'>\The [src] is getting hard to see into! Someone should clean it soon!</span>"
 		if (0.999 to 1)
-			examine_message += "\The [src] is absolutely disgusting! Someone should clean it NOW! "
+			examine_message += "<span class='warning'>\The [src] is absolutely <b>disgusting</b>! Someone should clean it NOW!</span>"
 
 	examine_message += "<br>Food level: "
 
 	//Approximate food level
 	if(!fish_list.len)								//Check if there are fish in the tank
 		if(food_level > 0)						//Don't report a tank that has neither fish nor food in it
-			examine_message += "There's some food in [src], but no fish! "
+			examine_message += "<span class='notice'>There's some food in [src], but no fish!</span>"
+		else
+			examine_message += "<span class='warning'>There is no food in \the [src].</span>"
 	else										//We've got fish, report the food level
 		switch (food_level/MAX_FOOD)
 			if(0)
-				examine_message += "The fish look very hungry! "
+				examine_message += "<span class='warning'>The fish look very hungry!</span> "
 			if(0.001 to 0.2)
-				examine_message += "The fish are nibbling on the last of their food. "
+				examine_message += "<span class='warning'>The fish are nibbling on the last of their food.</span>"
 			if(0.2 to 0.999)				//Breeding is possible
-				examine_message += "The fish seem happy! "
+				examine_message += "<span class='notice'>The fish seem happy!</span>"
 			if(1)
-				examine_message += "There is a solid layer of fish food at the top. "
+				examine_message += "<span class='notice'>There is a solid layer of fish food at the top.</span>"
 
 	//Report the number of harvestable eggs
 	if(egg_list.len)								//Don't bother if there isn't any eggs
-		examine_message += "<br>There are [egg_list.len] eggs able to be harvested! "
+		examine_message += "<span class='notice'><br>There are [egg_list.len] eggs able to be harvested!</span>"
 
 	examine_message += "<br>"
 
 	//Report the number and types of live fish if there is water in the tank
 	if(!fish_list.len)
-		examine_message += "\The [src] doesn't contain any live fish. "
+		examine_message += "<span class = 'warning'>\The [src] doesn't contain any live fish.</span>"
 	else
 		//Build a message reporting the types of fish
 		var/message = "You spot "
@@ -491,19 +500,19 @@
 			message += "a [fish_list[i]]"
 			if(i < fish_list.len)					//There's more fish, add a comma to the message
 				message +=", "
-		message +="."							//No more fish, end the message with a period
+		message +="."								//No more fish, end the message with a period
 		//Display the number of fish and previously constructed message
-		examine_message += "\The [src] contains [fish_list.len] live fish. [message] "
+		examine_message += "<span class = 'notice'>\The [src] contains [fish_list.len] live fish. [message]</span>"
 
-	examine_message += "<br>"
 
 	//Report lid state for tanks and wall-tanks
 	if(has_lid)									//Only report if the tank actually has a lid
+		examine_message += "<br>"
 		//Report lid state
 		if(lid_switch)
-			examine_message += "The lid is closed. "
+			examine_message += "<span class = 'notice'>The lid is closed.</span>"
 		else
-			examine_message += "The lid is open. "
+			examine_message += "<span class = 'notice'>The lid is open.</span>"
 
 	examine_message += "<br>"
 
@@ -511,15 +520,15 @@
 	if(water_level > 0)
 		switch (leaking)					//Tank has water, so it's actually leaking
 			if(MINOR_LEAK)
-				examine_message += "\The [src] is leaking."
+				examine_message += "<span class = 'warning'>\The [src] is leaking.</span>"
 			if(MAJOR_LEAK)
-				examine_message += "\The [src] is leaking profusely!"
+				examine_message += "<span class = 'warning'>\The [src] is leaking profusely!</span>"
 	else
 		switch (leaking)									//No water, report the cracks instead
 			if(MINOR_LEAK)
-				examine_message += "\The [src] is cracked."
+				examine_message += "<span class = 'warning'>\The [src] is cracked.</span>"
 			if(MAJOR_LEAK)
-				examine_message += "\The [src] is nearly shattered!"
+				examine_message += "<span class = 'warning'>\The [src] is nearly shattered!</span>"
 
 
 	//Finally, report the full examine_message constructed from the above reports
@@ -540,13 +549,13 @@
 
 	if(user.a_intent == I_HURT)
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
-		user.visible_message("<span class='danger'>[user.name] bangs against the [src]!</span>", \
+		user.visible_message("<span class='danger'>\The [user] bangs against the [src]!</span>", \
 							"<span class='danger'>You bang against the [src]!</span>", \
 							"You hear a banging sound.")
 	else
 		playsound(src.loc, 'sound/effects/glassknock.ogg', 80, 1)
-		user.visible_message("[user] taps on the [src].", \
-							"You tap on the [src].", \
+		user.visible_message("\The [user] taps on \the [src].", \
+							"You tap on \the [src].", \
 							"You hear a knocking sound.")
 
 
@@ -569,26 +578,27 @@
 
 /obj/machinery/fishtank/attackby(var/obj/item/O, var/mob/user as mob)
 	//Welders repair damaged tanks on help intent, damage on all others
-	if(iswelder(O))
-		var/obj/item/weapon/weldingtool/W = O
+	if(issilicatesprayer(O))
+		var/obj/item/device/silicate_sprayer/S = O
 		if(user.a_intent == I_HELP)
-			if(W.isOn())
+			if (S.get_amount() > 2)
 				if(cur_health < max_health)
-					to_chat(user, "You repair some of the cracks on \the [src].")
+					to_chat(user, "<span class='notice'>You repair some of the cracks on \the [src].</span>")
 					cur_health += 20
+					S.remove_silicate(2)
 					check_health()
 				else
-					to_chat(user, "There is no damage to fix!")
-			else if(cur_health < max_health)
-				to_chat(user, "[W.name] must on to repair this damage.")
+					to_chat(user, "<span class='warning'>There is no damage to fix!</span>")
+			else if (cur_health < max_health)
+				to_chat(user, "<span class='notice'>You require more silicate to fix the damage on \the [src].</span>")
 		else
-			hit(W.force, user, O)
+			hit(S.force, user, O)
 		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			if(lid_switch)
-				to_chat(user, "Open the lid on \the [src] first!")
+				to_chat(user, "<span class='notice'>Open the lid on \the [src] first!</span>")
 				return TRUE
 			var/obj/item/weapon/reagent_containers/glass/C = O
 			//Containers with any reagents will get dumped in
@@ -600,35 +610,34 @@
 				water_value += C.reagents.get_reagent_amount(ICE) * 0.80			//Ice is 80% value
 				var/message = ""
 				if(!water_value)													//The container has no water value, clear everything in it
-					message = "The filtration process removes everything, leaving the water level unchanged."
+					message = "<span class='warning'>The filtration process removes everything, leaving the water level unchanged.</span>"
 					C.reagents.clear_reagents()
 				else
 					if(water_level == water_capacity)
-						to_chat(user, "\the [src] is already full!")
+						to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
 						return TRUE
 					else
 						message = "The filtration process purifies the water, raising the water level."
 						add_water(water_value)
 						if(water_level == water_capacity)
-							message += " You filled \the [src] to the brim!"
+							message += "You filled \the [src] to the brim!"
 						if(water_level > water_capacity)
-							message += " You overfilled \the [src] and some water runs down the side, wasted."
+							message += "You overfilled \the [src] and some water runs down the side, wasted."
 						C.reagents.clear_reagents()
-				user.visible_message("[user] pours the contents of \the [C] into \the [src].", "[message]")
+				user.visible_message("\The [user] pours the contents of \the [C] into \the [src].", "<span class = 'notice'>[message]</span>")
 				return TRUE
 			//Empty containers will scoop out water, filling the container as much as possible from the water_level
 			else
 				if(water_level == 0)
-					to_chat(user, "\the [src] is empty!")
+					to_chat(user, "<span class='notice'>\The [src] is empty!</span>")
 				else
+					C.reagents.add_reagent("water", water_level)
+					remove_water(C.volume)
 					if(water_level >= C.volume)										//Enough to fill the container completely
-						C.reagents.add_reagent(WATER, C.volume)
-						remove_water(C.volume)
-						user.visible_message("[user.name] scoops out some water from \the [src].", "You completely fill [C.name] from \the [src].")
+						user.visible_message("\The [user] scoops out some water from \the [src].", "<span class = 'notice'>You completely fill [C.name] from \the [src].</span>")
 					else															//Fill the container as much as possible with the water_level
-						C.reagents.add_reagent("water", water_level)
-						water_level = 0
-						user.visible_message("[user.name] scoops out some water from \the [src].", "You fill [C.name] with the last of the water in \the [src].")
+						user.visible_message("\The [user] scoops out some water from \the [src].", "<span class = 'notice'>You fill [C.name] with the last of the water in \the [src].</span>")
+
 			return TRUE
 	//Wrenches can deconstruct empty tanks, but not tanks with any water. Kills any fish left inside and destroys any unharvested eggs in the process
 	if(iswrench(O))
@@ -638,18 +647,18 @@
 			if(do_after(user,50, target = src))
 				destroy(1)
 		else
-			to_chat(user, "\The [src] must be empty before you disassemble it!")
+			to_chat(user, "<span class='warning'>\The [src] must be empty before you disassemble it!</span>")
 		return
 	//Fish eggs
 	else if(istype(O, /obj/item/fish_eggs))
 		var/obj/item/fish_eggs/egg = O
 		//Don't add eggs if there is no water (they kinda need that to live)
 		if(water_level == 0)
-			to_chat(user, "\The [src] has no water; [egg.name] won't hatch without water!")
+			to_chat(user, "<span class='warning'>\The [src] has no water; [egg.name] won't hatch without water!</span>")
 			return FALSE
 		//Don't add eggs if the tank already has the max number of fish
 		if(fish_list.len >= max_fish)
-			to_chat(user, "\The [src] can't hold any more fish.")
+			to_chat(user, "<span class='warning'>\The [src] can't hold any more fish.</span>")
 			return FALSE
 		add_fish(egg.fish_type)
 		qdel(egg)
@@ -658,26 +667,26 @@
 	else if(istype(O, /obj/item/weapon/fishtools/fish_food))
 		//Only add food if there is water and it isn't already full of food
 		if(!water_level)
-			to_chat(user, "\the [src] doesn't have any water in it. You should fill it with water first.")
+			to_chat(user, "<span class='warning'>\The [src] doesn't have any water in it. You should fill it with water first.</span>")
 			return FALSE
 		if(!food_level < MAX_FOOD)
-			to_chat(user, "[src] already has plenty of food in it. You decide to not add more.")
+			to_chat(user, "<span class='notice'>[src] already has plenty of food in it. You decide to not add more.<span>")
 			return FALSE
 
 		if(fish_list.len == 0)
-			user.visible_message("[user.name] shakes some fish food into the empty [src]... How sad.", "You shake some fish food into the empty [src]... If only it had fish.")
+			user.visible_message("\The [user] shakes some fish food into the empty [src]... How sad.", "<span class='notice'>You shake some fish food into the empty [src]... If only it had fish.</span>")
 		else
-			user.visible_message("[user.name] feeds the fish in \the [src]. The fish look excited!", "You feed the fish in \the [src]. They look excited!")
+			user.visible_message("\The [user] feeds the fish in \the [src]. The fish look excited!", "<span class='notice'>You feed the fish in \the [src]. They look excited!</span>")
 		add_food(10)
 
 		return TRUE
 	//Fish egg scoop
 	else if(istype(O, /obj/item/weapon/fishtools/fish_egg_scoop))
 		if(egg_list.len)
-			user.visible_message("[user.name] harvests some fish eggs from \the [src].", "You scoop the fish eggs out of \the [src].")
+			user.visible_message("[user.name] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
 			harvest_eggs(user)
 		else
-			user.visible_message("[user.name] fails to harvest any fish eggs from \the [src].", "There are no fish eggs in \the [src] to scoop out.")
+			user.visible_message("[user.name] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
 		return TRUE
 	//Fish net
 	if(istype(O, /obj/item/weapon/fishtools/fish_net))
@@ -689,10 +698,10 @@
 			to_chat(user, "[src] is already spotless!")
 			return TRUE
 		filth_level = 0
-		user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "You scrub the inside of \the [src], cleaning the filth.")
+		user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
 
 	else if(O && O.force)
-		user.visible_message("<span class='danger'>\The [src] has been attacked by [user.name] with \the [O]!</span>")
+		user.visible_message("<span class='danger'>\The [src] has been attacked by \the [user] with \the [O]!</span>")
 		hit(O.force, user)
 	return TRUE
 
@@ -700,7 +709,7 @@
 
 /obj/structure/displaycase_frame/attackby(var/obj/item/weapon/F as obj, mob/user as mob) // FISH BOWL
 	if (iswelder(F))
-		to_chat(user, "You use the machine frame as a vice and shape the glass with the welder into a fish bowl")
+		to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
 		getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
 		new /obj/machinery/fishtank/bowl(get_turf(src))
 		qdel(src)
