@@ -9,6 +9,10 @@
 #define MINOR_LEAK 1
 #define MAJOR_LEAK 2
 
+// Layers
+#define WATER_LAYER FLOAT_LAYER-1
+#define FISH_LAYER FLOAT_LAYER-5
+
 //////////////////////////////
 //		Fish Tanks!			//
 //////////////////////////////
@@ -158,34 +162,48 @@
 
 /obj/machinery/fishtank/update_icon()
 	overlays.Cut()
-
 	//Update Alert Lights
 	if(has_lid)											//Skip the alert lights for aquariums that don't have lids (fishbowls)
-		if(egg_list.len > 0)								//There is at least 1 egg to harvest
+		if(egg_list.len)								//There is at least 1 egg to harvest
 			overlays += "over_egg"
 		if(lid_switch == TRUE)							//Lid is closed, lid status light is red
 			overlays += "over_lid_1"
 		else											//Lid is open, lid status light is green
 			overlays += "over_lid_0"
-		if(food_level > FOOD_OK)						//Food_level is high and isn't a concern yet
-			overlays += "over_food_0"
-		else if(food_level > BREEDING_THRESHOLD)		//Food_level is starting to get low, but still above the breeding threshold
-			overlays += "over_food_1"
-		else											//Food_level is below breeding threshold, or fully consumed, feed the fish!
-			overlays += "over_food_2"
+		switch (food_level)
+			if (0 to BREEDING_THRESHOLD)				//Food_level is high and isn't a concern yet
+				overlays += "over_food_nofood"
+			if (BREEDING_THRESHOLD to FOOD_OK)			//Food_level is starting to get low, but still above the breeding threshold
+				overlays += "over_food_somefood"
+			if (FOOD_OK to MAX_FOOD)					//Food_level is below breeding threshold, or fully consumed, feed the fish!
+				overlays += "over_food_fullfood"
 		overlays += "over_leak_[leaking]"				//Green if we aren't leaking, light blue and slow blink if minor link, dark blue and rapid flashing for major leak
+
+	if (fish_list.len)
+		switch(tank_type)
+			if ("bowl")
+				overlays += "fish_gif_small"
+			if ("tank")
+				overlays += icon('icons/obj/fish_items.dmi', "fish_gif_medium", FISH_LAYER)
+			if ("wall")
+				overlays += icon('icons/obj/fish_items.dmi', "fish_gif", FISH_LAYER)
 
 	//Update water overlay
 	if(water_level == 0)
 		return							//Skip the rest of this if there is no water in the aquarium
-	var/water_type = "clean"							//Default to clean water
-	if(filth_level > FILTH_THRESHOLD)
-		water_type = "dirty"			//Show dirty water above filth_level 5 (breeding threshold)
-	if(water_level > (water_capacity * 0.85))			//Show full if the water_level is over 85% of water_capacity
-		overlays += "over_[tank_type]_full_[water_type]"
-	else if(water_level > (water_capacity * 0.35))		//Show half-full if the water_level is over 35% of water_capacity
-		overlays += "over_[tank_type]_half_[water_type]"
 
+	var/water_type
+	switch(filth_level)
+		if (0 to FILTH_THRESHOLD)
+			water_type = "clean"
+		if (FILTH_THRESHOLD to MAX_FILTH)
+			water_type = "dirty"
+
+	switch (water_level/water_capacity)
+		if (0.01 to 0.85) // Lest there can be fish in waterless environements
+			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_half_[water_type]", WATER_LAYER)
+		if (0.85 to 1)
+			overlays += icon('icons/obj/fish_items.dmi', "over_[tank_type]_full_[water_type]", WATER_LAYER)
 
 //////////////////////////////
 //		PROCESS PROC		//
@@ -265,6 +283,7 @@
 	if(!light_switch && (glo_light > 0))
 		set_light(2,glo_light,"#99FF66")
 
+
 /obj/machinery/fishtank/proc/remove_water(var/amount)
 	water_level = max(0, water_level - amount)
 	update_icon()
@@ -308,11 +327,13 @@
 		fish_list.Remove(type)						//Kill a fish of the specified type
 	else
 		fish_list.Remove(pick(fish_list))			//Kill a random fish
+	update_icon()
 
 /obj/machinery/fishtank/proc/add_fish(var/type)
 	//Check if we were passed a fish type
 	fish_list.Add("[type]")						//Add a fish of the specified type
 	//Announce the new fish
+	update_icon()
 	visible_message("A new [type] has hatched in \the [src]!")
 
 /obj/machinery/fishtank/proc/select_egg_type()
@@ -359,7 +380,7 @@
 			spill_water()
 	else														//We are deconstructing, make glass sheets instead of shards
 		var/sheets = shard_count + 1							//Deconstructing it salvages all the glass used to build the tank
-		new /obj/item/stack/sheet/glass(get_turf(src), sheets)	//Produce the appropriate number of glass sheets, in a single stack
+		new /obj/item/stack/sheet/glass/glass(get_turf(src), sheets)	//Produce the appropriate number of glass sheets, in a single stack (/glass/glass)
 	for (var/obj/item/weapon/fish/F in fish_list)
 		F.forceMove(get_turf(src))
 	qdel(src)																							//qdel the tank and it's contents
@@ -403,36 +424,36 @@
 	examine_message += "Water level: "
 
 	switch (water_level/water_capacity)
-		if (0)
+		if (0     to 0.001)
 			examine_message += "\The [src] is empty! "
-		if (0.001 to 0.1)
+		if (0.001 to 0.100)
 			examine_message += "\The [src] is nearly empty! "
-		if (0.1 to 0.25)
+		if (0.100 to 0.250)
 			examine_message += "\The [src] is about one-quarter filled. "
-		if (0.25 to 0.5)
+		if (0.250 to 0.500)
 			examine_message += "\The [src] is about half filled. "
-		if (0.5 to 0.75)
+		if (0.500 to 0.750)
 			examine_message += "\The [src] is about three-quarters filled. "
-		if (0.75 to 0.99)
+		if (0.750 to 0.999)
 			examine_message += "\The [src] is nearly full! "
-		if (1)
+		if (0.999 to 1)
 			examine_message += "\The [src] is full! "
 
 	examine_message += "<br>Cleanliness level: "
 
 	//Approximate filth level
 	switch (filth_level/MAX_FILTH)
-		if (0)
+		if (0     to 0.001)
 			examine_message += "\The [src] is spotless! "
-		if (0.001 to 0.25)
+		if (0.001 to 0.250)
 			examine_message += "\The [src] looks like the glass has been smudged. "
-		if (0.25 to 0.5)				//This is the breeding threshold
+		if (0.250 to 0.500)				//This is the breeding threshold
 			examine_message += "\The [src] has some algae growth in it. "
-		if (0.5 to 0.75)
+		if (0.500 to 0.750)
 			examine_message += "\The [src] has a lot of algae growth in it. "
-		if(0.75 to 0.999)
+		if (0.750 to 0.999)
 			examine_message += "\The [src] is getting hard to see into! Someone should clean it soon! "
-		if(1)
+		if (0.999 to 1)
 			examine_message += "\The [src] is absolutely disgusting! Someone should clean it NOW! "
 
 	examine_message += "<br>Food level: "
@@ -529,8 +550,9 @@
 							"You hear a knocking sound.")
 
 
-/obj/machinery/fishtank/proc/hit(var/damage, var/mob/user)
+/obj/machinery/fishtank/proc/hit(var/damage, var/mob/user, var/obj/O)
 	user.delayNextAttack(0.3 SECONDS)
+	user.do_attack_animation(src, O) // Ensuring the legacy lives on :^)
 	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
 	cur_health = max(0, cur_health - damage)
 	check_health()
@@ -560,7 +582,7 @@
 			else if(cur_health < max_health)
 				to_chat(user, "[W.name] must on to repair this damage.")
 		else
-			hit(W.force, user)
+			hit(W.force, user, O)
 		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())

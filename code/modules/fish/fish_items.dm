@@ -110,6 +110,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	force = 1
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 	hitsound = 'sound/effects/snap.ogg'
+	var/meat_type
 
 /obj/item/weapon/fish/glofish
 	name = "glofish"
@@ -164,15 +165,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	name = "catfish"
 	desc = "Apparently, catfish don't purr like you might have expected them to. Such a confusing name!"
 	icon_state = "catfish"
-
-/obj/item/weapon/fish/catfish/attackby(var/obj/item/O, var/mob/user)
-	if(O.sharpness_flags & SHARP_BLADE)
-		to_chat(user, "You carefully clean and gut \the [src].")
-		new /obj/item/weapon/reagent_containers/food/snacks/catfishmeat(get_turf(src))
-		new /obj/item/weapon/reagent_containers/food/snacks/catfishmeat(get_turf(src))
-		qdel(src)
-		return
-	..()
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/catfishmeat
 
 /obj/item/weapon/fish/goldfish
 	name = "goldfish"
@@ -183,15 +176,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	name = "salmon"
 	desc = "The second-favorite food of Space Bears, right behind crew members."
 	icon_state = "salmon"
-
-/obj/item/weapon/fish/salmon/attackby(var/obj/item/O, var/mob/user)
-	if(O.sharpness_flags & SHARP_BLADE)
-		to_chat(user, "You carefully clean and gut \the [src].")
-		new /obj/item/weapon/reagent_containers/food/snacks/salmonmeat(get_turf(src))
-		new /obj/item/weapon/reagent_containers/food/snacks/salmonmeat(get_turf(src))
-		qdel(src)
-		return
-	..()
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/salmonmeat
 
 /*/obj/item/weapon/fish/babycarp
 	name = "baby space carp"
@@ -217,3 +202,21 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throwforce = 1
 	force = 1
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
+
+/obj/item/weapon/fish/proc/check_butcher(var/mob/user) // Can only work on a fish if it's in the user's hand or if it lays on a table
+	if (src in user.held_items)
+		return TRUE
+	if (/obj/structure/table in view(src, 0))
+		return TRUE
+	to_chat(user, "<span class='warning'>You need to work on a stable surface!</span>")
+	return FALSE
+
+/obj/item/weapon/fish/attackby(var/obj/item/O, var/mob/user)
+	check_butcher(user)
+	if(meat_type && O.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "You carefully clean and gut \the [src].")
+		new meat_type(get_turf(src))
+		new meat_type(get_turf(src))
+		qdel(src)
+		return TRUE
+	..()
