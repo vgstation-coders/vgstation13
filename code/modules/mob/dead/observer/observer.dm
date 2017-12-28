@@ -170,11 +170,6 @@ Works together with spawning an observer, noted above.
 	if(!client)
 		return 0
 
-
-	if(client.images.len)
-		for(var/image/hud in client.images)
-			if(findtext(hud.icon_state, "hud", 1, 4))
-				client.images.Remove(hud)
 	regular_hud_updates()
 	if(antagHUD)
 		var/list/target_list = list()
