@@ -170,11 +170,7 @@ Works together with spawning an observer, noted above.
 	if(!client)
 		return 0
 
-
-	if(client.images.len)
-		for(var/image/hud in client.images)
-			if(findtext(hud.icon_state, "hud", 1, 4))
-				client.images.Remove(hud)
+	regular_hud_updates()
 	if(antagHUD)
 		var/list/target_list = list()
 		for(var/mob/living/target in oview(src))
@@ -182,7 +178,6 @@ Works together with spawning an observer, noted above.
 				target_list += target
 		if(target_list.len)
 			assess_targets(target_list, src)
-	regular_hud_updates()
 	if(selectedHUD == HUD_MEDICAL)
 		process_medHUD(src)
 	else if(selectedHUD == HUD_SECURITY)
