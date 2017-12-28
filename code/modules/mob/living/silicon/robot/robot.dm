@@ -80,7 +80,7 @@
 	var/ioncheck[1]
 
 
-/mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0,var/startup_sound='sound/voice/liveagain.ogg')
+/mob/living/silicon/robot/New(loc, var/unfinished = 0, var/startup_sound='sound/voice/liveagain.ogg')
 	if(isMoMMI(src))
 		wires = new /datum/wires/robot/mommi(src)
 	else
@@ -90,28 +90,15 @@
 	updatename("Default")
 	updateicon()
 
-	if(syndie)
-		if(!cell)
-			cell = new /obj/item/weapon/cell(src)
-
-		laws = new /datum/ai_laws/antimov()
-		lawupdate = FALSE
-		scrambledcodes = TRUE
-		cell.maxcharge = 25000
-		cell.charge = 25000
-		module = new /obj/item/weapon/robot_module/syndicate(src)
-		hands.icon_state = "standard"
-		icon_state = "secborg"
-		modtype = "Security"
+	
+	laws = getLawset(src)
+	connected_ai = select_active_ai_with_fewest_borgs()
+	if(connected_ai)
+		connected_ai.connected_robots += src
+		lawsync()
+		lawupdate = TRUE
 	else
-		src.laws = getLawset(src)
-		connected_ai = select_active_ai_with_fewest_borgs()
-		if(connected_ai)
-			connected_ai.connected_robots += src
-			lawsync()
-			lawupdate = TRUE
-		else
-			lawupdate = FALSE
+		lawupdate = FALSE
 
 	station_holomap = new(src)
 
@@ -489,7 +476,7 @@
 	if(!can_diagnose())
 		return null
 
-	var/dat = "<HEAD><TITLE>[src.name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
+	var/dat = "<HEAD><TITLE>[name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
 	for (var/V in components)
 		var/datum/robot_component/C = components[V]
 		dat += "<b>[C.name]</b><br><table><tr><td>Power consumption</td><td>[C.energy_consumption]</td></tr><tr><td>Brute Damage:</td><td>[C.brute_damage]</td></tr><tr><td>Electronics Damage:</td><td>[C.electronics_damage]</td></tr><tr><td>Powered:</td><td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td></tr><tr><td>Toggled:</td><td>[ C.toggled ? "Yes" : "No"]</td></table><br>"
@@ -846,7 +833,7 @@
 					to_chat(user, "You remove \the [I].")
 					if(can_diagnose())
 						to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed [C] removed.</span>")
-					I.forceMove(src.loc)
+					I.forceMove(loc)
 				else
 					var/obj/item/robot_parts/robot_component/I = C.wrapped
 					I.brute_damage = C.brute_damage
@@ -854,7 +841,7 @@
 					to_chat(user, "You remove \the [I].")
 					if(can_diagnose())
 						to_chat(src, "<span class='info' style=\"font-family:Courier\">Functional [I.name] removed.</span>")
-					I.forceMove(src.loc)
+					I.forceMove(loc)
 
 				if(C.installed == COMPONENT_INSTALLED)
 					C.uninstall()
@@ -1044,7 +1031,7 @@
 	if(get_dir(disarmer, src) in(list(4,8)))
 		rotate = pick(1,2)
 
-	add_logs(disarmer, src, "tipped over", admin = (src.ckey && disarmer.ckey) ? TRUE : FALSE)
+	add_logs(disarmer, src, "tipped over", admin = (ckey && disarmer.ckey) ? TRUE : FALSE)
 	do_attack_animation(src, disarmer)
 
 	if(prob(40))
@@ -1078,9 +1065,9 @@
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
-			src.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
-			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [src.name] ([src.ckey])</font>"
-			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([src.ckey])</font>")
+			attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their [cell.name] removed by [user.name] ([user.ckey])</font>"
+			user.attack_log += "\[[time_stamp()]\] <font color='red'>Removed the [cell.name] of [name] ([ckey])</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) removed [src]'s [cell.name] ([ckey])</font>")
 			cell = null
 			cell_component.wrapped = null
 			cell_component.installed = COMPONENT_MISSING
@@ -1100,7 +1087,7 @@
 			if(lying)
 				if(!isDead())
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [src.name]!</span>")
+					visible_message("<span class='notice'>\The [user.name] attempts to pull up \the [name]!</span>")
 					AdjustKnockdown(-3)
 					if(knockdown <= 0)
 						untip()
@@ -1310,7 +1297,7 @@
 				sensor_mode = MED_HUD
 				to_chat(src, "<span class='notice'>Life signs monitor overlay enabled.</span>")
 			if("Light Amplification")
-				src.sensor_mode = NIGHT
+				sensor_mode = NIGHT
 				to_chat(src, "<span class='notice'>Light amplification mode enabled.</span>")
 			if("Mesons")
 				sensor_mode = MESON_VISION
@@ -1379,16 +1366,16 @@
 	return
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
-	if(src.connected_ai)
-		src.connected_ai = null
+	if(connected_ai)
+		connected_ai = null
 	lawupdate = FALSE
 	lockcharge = FALSE
 	canmove = TRUE
 	scrambledcodes = TRUE
 	//Disconnect it's camera so it's not so easily tracked.
-	if(src.camera)
-		src.camera.network = list()
-		cameranet.removeCamera(src.camera)
+	if(camera)
+		camera.network = list()
+		cameranet.removeCamera(camera)
 
 
 /mob/living/silicon/robot/proc/ResetSecurityCodes()
@@ -1401,7 +1388,7 @@
 	if(R)
 		R.UnlinkSelf()
 		to_chat(R, "Buffers flushed and reset. Camera system shutdown.  All systems operational.")
-		src.verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
+		verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
 
 /mob/living/silicon/robot/mode()
 	set name = "Activate Held Object"
@@ -1427,7 +1414,7 @@
 	emagged = new_state
 	if(new_state)
 		if(module)
-			src.module.on_emag()
+			module.on_emag()
 	else
 		if(module)
 			uneq_module(module.emag)
@@ -1498,7 +1485,7 @@
 	return FALSE
 
 /mob/living/silicon/robot/proc/help_shake_act(mob/user)
-	user.visible_message("<span class='notice'>[user.name] pats [src.name] on the head.</span>")
+	user.visible_message("<span class='notice'>[user.name] pats [name] on the head.</span>")
 
 /mob/living/silicon/robot/CheckSlip()
 	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)
@@ -1515,13 +1502,48 @@
 	module.remove_languages(src)
 	module = null
 
-//Debug subtype
+//Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
-	module = new /obj/item/weapon/robot_module/combat(src)
-	radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
+	UnlinkSelf()
+	laws = new /datum/ai_laws/ntmov()
+	cell.maxcharge = 30000
+	cell.charge = 30000
+
+	pick_module(forced_module="combat")
+
+//Syndicate subtype because putting this on new() is fucking retarded.
+/mob/living/silicon/robot/syndie/New()
+	..()
+	UnlinkSelf()
+	laws = new /datum/ai_laws/syndicate_override()
+	cell.maxcharge = 25000
+	cell.charge = 25000
+	
+	pick_module(forced_module="syndicate")
+	modtype = "Combat"
+	icon_state = "rottweiler-combat"
 	base_icon = icon_state
-	icon_state = "droid-combat"
-	overlays -= image(icon = icon, icon_state = "eyes")
+	updateicon()
+
+	radio.insert_key(new/obj/item/device/encryptionkey/syndicate(radio))
+
+//Moving hugborgs to an easy-to-spawn subtype because they're were as retarded as the syndie one.
+/mob/living/silicon/robot/hugborg/New()
+	..()
+	UnlinkSelf()
+	laws = new /datum/ai_laws/asimov()
+	cell.maxcharge = 15000
+	cell.charge = 15000
+
+	pick_module(forced_module="TG17355")
+
+/mob/living/silicon/robot/hugborg/egg/New()
+	icon_state = "peaceborg"
+	base_icon = icon_state
+	updateicon()
+
+/mob/living/silicon/robot/hugborg/ball/New()
+	icon_state = "omoikane"
 	base_icon = icon_state
 	updateicon()

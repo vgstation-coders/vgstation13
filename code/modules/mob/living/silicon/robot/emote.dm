@@ -12,11 +12,11 @@
 
 	switch(act)
 		if ("me")
-			if (src.client)
+			if (client)
 				if(client.prefs.muted & MUTE_IC)
 					to_chat(src, "You cannot send IC messages (muted).")
 					return
-				if (src.client.handle_spam_prevention(message,MUTE_IC))
+				if (client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if (stat)
 				return
@@ -29,7 +29,7 @@
 			return custom_emote(m_type, message)
 
 		if ("salute")
-			if (!src.locked_to)
+			if (!locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -45,7 +45,7 @@
 					message = "<B>[src]</b> salutes."
 			m_type = VISIBLE
 		if ("bow")
-			if (!src.locked_to)
+			if (!locked_to)
 				var/M = null
 				if (param)
 					for (var/mob/A in view(null, null))
@@ -62,18 +62,26 @@
 			m_type = VISIBLE
 
 		if ("clap")
-			if (!src.restrained())
-				message = "<B>[src]</B> claps."
+			if (!isDead() && !flashed && is_component_functioning("actuator") && is_component_functioning("cell"))
+				message = "<B>[src]</B> clangs its modules together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
-			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings."
-				m_type = HEARABLE
+			if (!isDead() && !flashed && is_component_functioning("actuator") && is_component_functioning("cell"))
+				if(module_active)
+					var/obj/item/I = module_active
+					message = "<B>[src]</B> flaps its [I.name] as though they were wings."
+				else
+					message = "<B>[src]</B> flaps its modules as though they were wings."
+				m_type = VISIBLE
 
 		if ("aflap")
-			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings ANGRILY!"
-				m_type = HEARABLE
+			if (!isDead() && !flashed && is_component_functioning("actuator") && is_component_functioning("cell"))
+				if(module_active)
+					var/obj/item/I = module_active
+					message = "<B>[src]</B> flaps its [I.name] ANGRILY!"
+				else
+					message = "<B>[src]</B> flaps its modules ANGRILY!"
+				m_type = VISIBLE
 
 		if ("twitch")
 			message = "<B>[src]</B> twitches violently."
@@ -207,21 +215,12 @@
 			else
 				to_chat(src, "You are not security.")
 
-		/*
-		if ("fart")
-			var/list/robotfarts = list("makes a farting noise","vents excess methane","shakes violently, then vents methane.")
-			var/robofart = pick(robotfarts)
-			message = "<B>[src]</B> [robofart]."
-			m_type = VISIBLE
-
-		*/
-
 		if ("help")
 			to_chat(src, "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt")
 		else
 			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 
-	if ((message && src.stat == 0))
+	if ((message && stat == 0))
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
