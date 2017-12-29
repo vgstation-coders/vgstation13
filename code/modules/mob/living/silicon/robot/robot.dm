@@ -364,8 +364,23 @@
 			module_sprites["Rottweiler"] = "rottweiler-combat"
 			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			speed = -1
+		
+		if("Syndicate")
+			module = new /obj/item/weapon/robot_module/syndicate(src)
+			radio.insert_key(new/obj/item/device/encryptionkey/syndicate(radio))
+			module_sprites["Combat Android"] = "droid-combat"
+			module_sprites["Bladewolf"] = "bladewolf"
+			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
+			module_sprites["Mr. Gutsy"] = "mrgutsy"
+			module_sprites["Marina-CB"] = "marinaCB"
+			module_sprites["#41"] = "servbot-combat"
+			module_sprites["Grizzly"] = "kodiak-combat"
+			module_sprites["Rottweiler"] = "rottweiler-combat"
+			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
+			speed = 0
 
-	hands.icon_state = lowertext(modtype)
+	if(hands)
+		hands.icon_state = lowertext(modtype)
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
@@ -1505,45 +1520,52 @@
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
+
 	UnlinkSelf()
 	laws = new /datum/ai_laws/ntmov()
 	cell.maxcharge = 30000
 	cell.charge = 30000
 
-	pick_module(forced_module="combat")
+	pick_module("Combat")
+	icon_state = "droid-combat"
+	base_icon = icon_state
+	updateicon()
+	updatename()
 
 //Syndicate subtype because putting this on new() is fucking retarded.
 /mob/living/silicon/robot/syndie/New()
 	..()
+
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
 	cell.maxcharge = 25000
 	cell.charge = 25000
 	
-	pick_module(forced_module="syndicate")
-	modtype = "Combat"
+	pick_module("Syndicate")
+	updatename()
 	icon_state = "rottweiler-combat"
 	base_icon = icon_state
 	updateicon()
 
-	radio.insert_key(new/obj/item/device/encryptionkey/syndicate(radio))
 
-//Moving hugborgs to an easy-to-spawn subtype because they're were as retarded as the syndie one.
+//Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg/New()
 	..()
+
 	UnlinkSelf()
 	laws = new /datum/ai_laws/asimov()
 	cell.maxcharge = 15000
 	cell.charge = 15000
 
-	pick_module(forced_module="TG17355")
-
-/mob/living/silicon/robot/hugborg/egg/New()
+	pick_module("TG17355")
+	updatename()
 	icon_state = "peaceborg"
 	base_icon = icon_state
 	updateicon()
 
 /mob/living/silicon/robot/hugborg/ball/New()
+	..()
+
 	icon_state = "omoikane"
 	base_icon = icon_state
 	updateicon()
