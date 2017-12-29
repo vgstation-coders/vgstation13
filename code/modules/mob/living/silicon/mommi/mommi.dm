@@ -149,6 +149,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			module_sprites["RepairBot"] = "repairbot"
 			module_sprites["Hover"] = "hovermommi"
 			module_sprites["Prime"] = "mommiprime"
+			module_sprites["Prime Alt"] = "mommiprime-alt"
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
