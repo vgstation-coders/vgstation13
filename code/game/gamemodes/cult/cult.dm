@@ -254,7 +254,7 @@
 
 	switch(last_objective)
 		if("harvest")
-			explanation = "The Geometer of Blood hungers for his first meal of this never-ending day. Offer him [harvest_target] ubelievers in sacrifice."
+			explanation = "The Geometer of Blood hungers for his first meal of this never-ending day. Offer him [harvest_target] unbelievers in sacrifice."
 		if("hijack")
 			explanation = "Nar-Sie wishes for his troops to start the assault on Centcom immediately. Hijack the escape shuttle and don't let a single unbeliever board it."
 		if("massacre")
