@@ -107,9 +107,6 @@
 		return TRUE
 	return FALSE
 
-/obj/machinery/fishtank/wall/Uncross(atom/movable/O as mob|obj, target as turf)
-	return TRUE
-
 //////////////////////////////
 //		VERBS & PROCS		//
 //////////////////////////////
@@ -321,11 +318,11 @@
 		cur_health = max_health
 	//Leaking status check
 	if(cur_health <= (max_health * 0.25))			//Major leak at or below 25% health (-10 water/cycle)
-		leaking = 2
+		leaking = MAJOR_LEAK
 	else if(cur_health <= (max_health * 0.5))		//Minor leak at or below 50% health (-1 water/cycle)
-		leaking = 1
+		leaking = MINOR_LEAK
 	else											//Not leaking above 50% health
-		leaking = 0
+		leaking = NO_LEAK
 	//Destruction check
 	if(cur_health <= 0)								//The tank is broken, destroy it
 		destroy()
@@ -423,7 +420,7 @@
 //		EXAMINE PROC		//			This proc is massive, messy, and probably could be handled better.
 //////////////////////////////			Feel free to try cleaning it up if you think of a better way to do it.
 
-/obj/machinery/fishtank/examine(mob/user)
+/obj/machinery/fishtank/examine(var/mob/user)
 	..()
 	var/examine_message = list()
 	//Approximate water level
@@ -490,11 +487,11 @@
 
 	//Report the number and types of live fish if there is water in the tank
 	if(!fish_list.len)
-		examine_message += "<span class = 'warning'>\The [src] doesn't contain any live fish.</span>"
+		examine_message += "<span class = 'warning'>\The [src] doesn't contain any live fish. </span>"
 	else
 		//Build a message reporting the types of fish
 		var/message = "You spot "
-		for (var/i = 0 to fish_list.len)
+		for (var/i = 1 to fish_list.len)
 			if(fish_list.len > 1 && i == 1)	//If there were at least 2 fish, and this is the last one, add "and" to the message
 				message += "and "
 			message += "a [fish_list[i]]"
@@ -539,17 +536,17 @@
 //		ATACK PROCS			//
 //////////////////////////////
 
-/obj/machinery/fishtank/attack_alien(mob/living/user as mob)
+/obj/machinery/fishtank/attack_alien(var/mob/living/user)
 	if(islarva(user))
 		return
 	attack_generic(user, 15)
 
 
-/obj/machinery/fishtank/attack_hand(mob/user as mob)
+/obj/machinery/fishtank/attack_hand(var/mob/user)
 
 	if(user.a_intent == I_HURT)
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
-		user.visible_message("<span class='danger'>\The [user] bangs against the [src]!</span>", \
+		user.visible_message("<span class='danger'>\The [user] bangs against \the [src]!</span>", \
 							"<span class='danger'>You bang against the [src]!</span>", \
 							"You hear a banging sound.")
 	else
@@ -566,7 +563,7 @@
 	cur_health = max(0, cur_health - damage)
 	check_health()
 
-/obj/machinery/fishtank/proc/attack_generic(mob/living/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
+/obj/machinery/fishtank/proc/attack_generic(var/mob/living/user, var/damage = 0)	//used by attack_alien, attack_animal, and attack_slime
 	cur_health = max(0, cur_health - damage)
 	if(cur_health <= 0)
 		user.visible_message("<span class='danger'>\The [user] smashes through \the [src]!</span>")
@@ -577,11 +574,11 @@
 		check_health()
 
 /obj/machinery/fishtank/attackby(var/obj/item/O, var/mob/user as mob)
-	//Welders repair damaged tanks on help intent, damage on all others
+	//Silicate sprayers repair damaged tanks on help intent
 	if(issilicatesprayer(O))
 		var/obj/item/device/silicate_sprayer/S = O
 		if(user.a_intent == I_HELP)
-			if (S.get_amount() > 2)
+			if (S.get_amount() >= 2)
 				if(cur_health < max_health)
 					to_chat(user, "<span class='notice'>You repair some of the cracks on \the [src].</span>")
 					cur_health += 20
@@ -591,8 +588,6 @@
 					to_chat(user, "<span class='warning'>There is no damage to fix!</span>")
 			else if (cur_health < max_health)
 				to_chat(user, "<span class='notice'>You require more silicate to fix the damage on \the [src].</span>")
-		else
-			hit(S.force, user, O)
 		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
@@ -669,8 +664,8 @@
 		if(!water_level)
 			to_chat(user, "<span class='warning'>\The [src] doesn't have any water in it. You should fill it with water first.</span>")
 			return FALSE
-		if(!food_level < MAX_FOOD)
-			to_chat(user, "<span class='notice'>[src] already has plenty of food in it. You decide to not add more.<span>")
+		if(food_level >= MAX_FOOD)
+			to_chat(user, "<span class='notice'>\The [src] already has plenty of food in it. You decide to not add more.<span>")
 			return FALSE
 
 		if(fish_list.len == 0)
@@ -707,7 +702,7 @@
 
 /* tank construction */
 
-/obj/structure/displaycase_frame/attackby(var/obj/item/weapon/F as obj, mob/user as mob) // FISH BOWL
+/obj/structure/displaycase_frame/attackby(var/obj/item/weapon/F, var/mob/user) // FISH BOWL
 	if (iswelder(F))
 		to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
 		getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)

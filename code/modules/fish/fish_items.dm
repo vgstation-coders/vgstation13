@@ -24,7 +24,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "egg_scoop"
 	slot_flags = SLOT_BELT
 	throwforce = 0
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 7
 
@@ -35,12 +35,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "net"
 	slot_flags = SLOT_BELT
 	throwforce = 0
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 7
 
 /obj/item/weapon/fishtools/fish_net/suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
-	to_chat(viewers(user), "<span class='warning'>[user] places the [src] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
+	visible_message("<span class='warning'>\The [user] places \the [src] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
 /obj/item/weapon/fishtools/fish_food
@@ -49,7 +49,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "fish_food"
 	throwforce = 1
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 7
 
@@ -60,13 +60,13 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "brush"
 	slot_flags = SLOT_BELT
 	throwforce = 0
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 7
 	attack_verb = list("scrubbed", "brushed", "scraped")
 
 /obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='warning'>[user] is vigorously scrubbing \himself raw with the [src]! It looks like \he's trying to commit suicide.</span>")
+	visible_message("<span class='warning'>\The [user] is vigorously scrubbing \himself raw with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(BRUTELOSS|FIRELOSS)
 
 //////////////////////////////////////////////
@@ -79,12 +79,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "shrimp_raw"
 	filling_color = "#FF1C1C"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
 	..()
 	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
 	reagents.add_reagent("NUTRIMENT", 1)
-	src.bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
@@ -92,11 +92,11 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "feederfish"
 	filling_color = "#FF1C1C"
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
 	..()
 	reagents.add_reagent("NUTRIMENT", 1)
-	src.bitesize = 1
 
 /obj/item/weapon/fish
 	name = "fish"
@@ -104,7 +104,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "fish"
 	throwforce = 1
-	w_class = 2
+	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 7
 	force = 1
@@ -135,7 +135,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/fish/shark/attackby(var/obj/item/O, var/mob/user)
 	if(istype(O, /obj/item/weapon/wirecutters))
-		to_chat(user, "You rip out the teeth of \the [src.name]!")
+		to_chat(user, "You rip out the teeth of \the [src]!")
 		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
 		new /obj/item/stack/teeth/shark(get_turf(src))
 		qdel(src)
