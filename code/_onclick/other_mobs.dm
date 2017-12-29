@@ -52,10 +52,6 @@
 	else
 		A.attack_stump(src, params)
 
-	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && istype(A, /turf/simulated) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		Move(A, get_dir(src,A))
-		delayNextMove(movement_delay()*3,additive=1)
-
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
 
