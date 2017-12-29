@@ -413,7 +413,7 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Grey")
 			M.adjustToxLoss(REM)
-			M.take_organ_damage(0, REM, ignore_inorganics = 1)
+			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
 /datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1155,7 +1155,7 @@
 	if(..())
 		return 1
 
-	M.take_organ_damage(REM, 0, ignore_inorganics = 1)
+	M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -2254,7 +2254,7 @@
 		return 1
 
 	if(prob(33))
-		M.take_organ_damage(REM, 0, ignore_inorganics = 1)
+		M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 	M.adjustOxyLoss(3)
 	if(prob(20))
 		M.emote("gasp")
@@ -2505,7 +2505,7 @@
 	M.radiation = max(M.radiation - 7 * REM, 0)
 	M.adjustToxLoss(-REM)
 	if(prob(15))
-		M.take_organ_damage(1, 0, ignore_inorganics = 1)
+		M.take_organ_damage(1, 0, ignore_inorganics = TRUE)
 
 /datum/reagent/lithotorcrazine
 	name = "Lithotorcrazine"
@@ -3089,7 +3089,7 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 || H.getBruteLoss(ignore_inorganic = 1)>0 || H.getToxLoss()>0 || H.getFireLoss(ignore_inorganic = 1)>0 || H.getCloneLoss()>0)
+					if(H.getOxyLoss()>0 || H.getBruteLoss(ignore_inorganic = TRUE)>0 || H.getToxLoss()>0 || H.getFireLoss(ignore_inorganic = TRUE)>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
 							H.adjustOxyLoss(-5)
 							H.heal_organ_damage(5, 5)

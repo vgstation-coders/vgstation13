@@ -34,7 +34,7 @@
 	return 0
 
 //These procs fetch a cumulative total damage from all organs
-/mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = 0)
+/mob/living/carbon/human/getBruteLoss(var/ignore_inorganic = FALSE)
 	var/amount = 0
 	for(var/datum/organ/external/O in organs)
 		if(ignore_inorganic && !O.is_organic())
@@ -42,7 +42,7 @@
 		amount += O.brute_dam
 	return amount
 
-/mob/living/carbon/human/getFireLoss(var/ignore_inorganic = 0)
+/mob/living/carbon/human/getFireLoss(var/ignore_inorganic = FALSE)
 	var/amount = 0
 	for(var/datum/organ/external/O in organs)
 		if(ignore_inorganic && !O.is_organic())
@@ -174,7 +174,7 @@
 	return parts
 
 //Returns a list of damageable organs
-/mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = 0)
+/mob/living/carbon/human/proc/get_damageable_organs(var/ignore_inorganics = FALSE)
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
 		if(!O.is_existing())
@@ -205,7 +205,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 //Damages ONE external organ, organ gets randomly selected from damagable ones.
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
-/mob/living/carbon/human/take_organ_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/ignore_inorganics = 0)
+/mob/living/carbon/human/take_organ_damage(var/brute, var/burn, var/sharp = 0, var/edge = 0, var/ignore_inorganics = FALSE)
 	var/list/datum/organ/external/parts = get_damageable_organs(ignore_inorganics)
 	if(!parts.len)
 		return
