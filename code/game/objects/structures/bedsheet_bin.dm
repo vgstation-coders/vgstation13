@@ -138,8 +138,8 @@ LINEN BINS
 		qdel(sheet)
 	sheets.Cut()
 	if(hidden)
-		hidden = null
 		qdel(hidden)
+		hidden = null
 	..()
 
 
