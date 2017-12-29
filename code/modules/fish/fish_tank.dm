@@ -683,10 +683,10 @@
 	//Fish egg scoop
 	else if(istype(O, /obj/item/weapon/fishtools/fish_egg_scoop))
 		if(egg_list.len)
-			user.visible_message("[user.name] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
+			user.visible_message("\The [user] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
 			harvest_eggs(user)
 		else
-			user.visible_message("[user.name] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
+			user.visible_message("\The [user] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
 		return TRUE
 	//Fish net
 	if(istype(O, /obj/item/weapon/fishtools/fish_net))
@@ -695,7 +695,7 @@
 	//Tank brush
 	if(istype(O, /obj/item/weapon/fishtools/fish_tank_brush))
 		if(filth_level == 0)
-			to_chat(user, "[src] is already spotless!")
+			to_chat(user, "\The [src] is already spotless!")
 			return TRUE
 		filth_level = 0
 		user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
