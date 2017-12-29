@@ -115,7 +115,7 @@
 	set name = "Toggle Tank Lid"
 	set category = "Object"
 	set src in view(1)
-	if (usr.incapacitated() || usr.isDead() || !usr.Adjacent(src))
+	if (usr.incapacitated() || !usr.Adjacent(src))
 		return FALSE
 	toggle_lid(usr)
 
@@ -127,7 +127,7 @@
 	set name = "Toggle Tank Light"
 	set category = "Object"
 	set src in view(1)
-	if (usr.incapacitated() || usr.isDead() || !usr.Adjacent(src))
+	if (usr.incapacitated() || !usr.Adjacent(src))
 		return FALSE
 	toggle_light(usr)
 
@@ -533,7 +533,7 @@
 	return examine_message
 
 //////////////////////////////
-//		ATACK PROCS			//
+//		ATTACK PROCS			//
 //////////////////////////////
 
 /obj/machinery/fishtank/attack_alien(var/mob/living/user)
