@@ -533,7 +533,7 @@
 	return examine_message
 
 //////////////////////////////
-//		ATACK PROCS			//
+//		ATTACK PROCS			//
 //////////////////////////////
 
 /obj/machinery/fishtank/attack_alien(var/mob/living/user)
