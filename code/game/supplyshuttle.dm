@@ -265,18 +265,17 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 		M.apply_disguise()
 	for(var/mob/living/M in contents)
 		if(!istype(M, /mob/living/simple_animal/hostile/mimic))
-			. = TRUE
-			break
+			return TRUE
+
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)
-		. = TRUE
-	else if (locate(/obj/machinery/nuclearbomb) in contents)
-		. = TRUE
-	else if (locate(/obj/item/beacon) in contents)
-		. = TRUE
-	else if (locate(/obj/effect/portal) in contents)//you crafty fuckers
-		. = TRUE
-	else
-		. = FALSE
+		return TRUE
+	if (locate(/obj/machinery/nuclearbomb) in contents)
+		return TRUE
+	if (locate(/obj/item/beacon) in contents)
+		return TRUE
+	if (locate(/obj/effect/portal) in contents)//you crafty fuckers
+		return TRUE
+	return FALSE
 
 /datum/controller/supply_shuttle/proc/confirm_order(datum/supply_order/O,mob/user,var/position) //position represents where it falls in the request list
 	var/datum/supply_packs/P = O.object
