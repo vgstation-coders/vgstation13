@@ -62,20 +62,20 @@
 			m_type = VISIBLE
 
 		if ("clap")
-			if (!isDead() && !flashed && is_component_functioning("actuator") && is_component_functioning("cell"))
+			if (!isDead())
 				message = "<B>[src]</B> clangs its modules together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
-			if (!isDead() && !flashed && is_component_functioning("actuator") && is_component_functioning("cell"))
+			if (!isDead())
 				if(module_active)
 					var/obj/item/I = module_active
-					message = "<B>[src]</B> flaps its [I.name] as though they were wings."
+					message = "<B>[src]</B> flaps its [I.name]."
 				else
 					message = "<B>[src]</B> flaps its modules as though they were wings."
 				m_type = VISIBLE
 
 		if ("aflap")
-			if (!isDead() && !flashed && is_component_functioning("actuator") && is_component_functioning("cell"))
+			if (!isDead())
 				if(module_active)
 					var/obj/item/I = module_active
 					message = "<B>[src]</B> flaps its [I.name] ANGRILY!"

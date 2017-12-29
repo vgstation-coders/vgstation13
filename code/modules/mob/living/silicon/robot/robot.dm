@@ -233,14 +233,14 @@
 	switch(modtype)
 		if("Standard")
 			module = new /obj/item/weapon/robot_module/standard(src)
-			module_sprites["Basic"] = "robot_old"
-			module_sprites["Android"] = "droid"
 			module_sprites["Default"] = "robot"
-			module_sprites["Marina-SD"] = "marinaSD"
+			module_sprites["Antique"] = "robot_old"
+			module_sprites["Droid"] = "droid"
+			module_sprites["Marina"] = "marinaSD"
 			module_sprites["Sleek"] = "sleekstandard"
 			module_sprites["#11"] = "servbot"
 			module_sprites["Spider"] = "spider-standard"
-			module_sprites["Polar"] = "kodiak-standard"
+			module_sprites["Kodiak - 'Polar'"] = "kodiak-standard"
 			module_sprites["Noble"] = "Noble-STD"
 			module_sprites["R34 - STR4a 'Durin'"] = "durin"
 			speed = 0
@@ -248,16 +248,17 @@
 		if("Service")
 			module = new /obj/item/weapon/robot_module/butler(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_service(radio))
+			module_sprites["Default"] = "Service2"
 			module_sprites["Waitress"] = "Service"
-			module_sprites["Kent"] = "toiletbot"
 			module_sprites["Bro"] = "Brobot"
 			module_sprites["Rich"] = "maximillion"
-			module_sprites["Default"] = "Service2"
-			module_sprites["R2-D2"] = "r2d2"
-			module_sprites["Marina-SV"] = "marinaSV"
+			module_sprites["Hydro"] = "Hydrobot"
+			module_sprites["Droid"] = "toiletbot"
+//			module_sprites["R2-D2"] = "r2d2"
+			module_sprites["Marina"] = "marinaSV"
 			module_sprites["Sleek"] = "sleekservice"
 			module_sprites["#27"] = "servbot-service"
-			module_sprites["Teddy"] = "kodiak-service"
+			module_sprites["Kodiak - 'Teddy'"] = "kodiak-service"
 			module_sprites["Noble"] = "Noble-SRV"
 			module_sprites["R34 - SRV9a 'Llyod'"] = "lloyd"
 			speed = 0
@@ -267,11 +268,11 @@
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_mining(radio))
 			if(camera && CAMERANET_ROBOTS in camera.network)
 				camera.network.Add(CAMERANET_MINE)
-			module_sprites["Basic"] = "Miner_old"
-			module_sprites["Advanced Droid"] = "droid-miner"
+			module_sprites["Default"] = "Miner_old"
 			module_sprites["Treadhead"] = "Miner"
-			module_sprites["Wall-A"] = "wall-a"
-			module_sprites["Marina-MN"] = "marinaMN"
+			module_sprites["Droid"] = "droid-miner"
+//			module_sprites["Wall-A"] = "wall-a"
+			module_sprites["Marina"] = "marinaMN"
 			module_sprites["Sleek"] = "sleekminer"
 			module_sprites["#31"] = "servbot-miner"
 			module_sprites["Kodiak"] = "kodiak-miner"
@@ -284,15 +285,15 @@
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_med(radio))
 			if(camera && CAMERANET_ROBOTS in camera.network)
 				camera.network.Add(CAMERANET_MEDBAY)
-			module_sprites["Basic"] = "Medbot"
+			module_sprites["Default"] = "Medbot"
 			module_sprites["Advanced Droid"] = "droid-medical"
 			module_sprites["Needles"] = "medicalrobot"
-			module_sprites["Standard"] = "surgeon"
-			module_sprites["Marina-MD"] = "marina"
-			module_sprites["Eve"] = "eve"
+			module_sprites["Droid"] = "surgeon"
+			module_sprites["Marina"] = "marina"
+//			module_sprites["Eve"] = "eve"
 			module_sprites["Sleek"] = "sleekmedic"
 			module_sprites["#17"] = "servbot-medi"
-			module_sprites["Arachne"] = "arachne"
+			module_sprites["Kodiak 'Arachne'"] = "arachne"
 			module_sprites["Noble"] = "Noble-MED"
 			module_sprites["R34 - MED6a 'Gibbs'"] = "gibbs"
 			speed = -2
@@ -300,12 +301,12 @@
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
-			module_sprites["Basic"] = "secborg"
-			module_sprites["Sleek"] = "sleeksecurity"
+			module_sprites["Default"] = "secborg"
 			module_sprites["Black Knight"] = "securityrobot"
 			module_sprites["Bloodhound"] = "bloodhound"
-			module_sprites["Securitron"] = "securitron"
-			module_sprites["Marina-SC"] = "marinaSC"
+			module_sprites["Droid - 'Securitron'"] = "securitron"
+			module_sprites["Marina"] = "marinaSC"
+			module_sprites["Sleek"] = "sleeksecurity"
 			module_sprites["#9"] = "servbot-sec"
 			module_sprites["Kodiak"] = "kodiak-sec"
 			module_sprites["Noble"] = "Noble-SEC"
@@ -324,12 +325,12 @@
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_eng(radio))
 			if(camera && CAMERANET_ROBOTS in camera.network)
 				camera.network.Add(CAMERANET_ENGI)
-			module_sprites["Basic"] = "Engineering"
+			module_sprites["Default"] = "Engineering"
 			module_sprites["Antique"] = "engineerrobot"
 			module_sprites["Engiseer"] = "Engiseer"
-			module_sprites["Landmate"] = "landmate"
-			module_sprites["Wall-E"] = "wall-e"
-			module_sprites["Marina-EN"] = "marinaEN"
+			module_sprites["Droid - 'Landmate'"] = "landmate"
+//			module_sprites["Wall-E"] = "wall-e"
+			module_sprites["Marina"] = "marinaEN"
 			module_sprites["Sleek"] = "sleekengineer"
 			module_sprites["#25"] = "servbot-engi"
 			module_sprites["Kodiak"] = "kodiak-eng"
@@ -339,12 +340,12 @@
 
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
-			module_sprites["Basic"] = "JanBot2"
-			module_sprites["Mopbot"]  = "janitorrobot"
-			module_sprites["Mop Gear Rex"] = "mopgearrex"
+			module_sprites["Default"] = "JanBot2"
+			module_sprites["Antique - 'Mopbot'"]  = "janitorrobot"
 			module_sprites["Mechaduster"] = "mechaduster"
 			module_sprites["HAN-D"] = "han-d"
-			module_sprites["Marina-JN"] = "marinaJN"
+			module_sprites["Droid 'Mop Gear Rex'"] = "mopgearrex"
+			module_sprites["Marina"] = "marinaJN"
 			module_sprites["Sleek"] = "sleekjanitor"
 			module_sprites["#29"] = "servbot-jani"
 			module_sprites["Noble"] = "Noble-JAN"
@@ -354,18 +355,25 @@
 		if("Combat")
 			module = new /obj/item/weapon/robot_module/combat(src)
 			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
-			module_sprites["Combat Android"] = "droid-combat"
-			module_sprites["Bladewolf"] = "bladewolf"
-			module_sprites["Bladewolf Mk2"] = "bladewolfmk2"
+//			module_sprites["Bladewolf"] = "bladewolf"
+			module_sprites["Bladewolf MK-2"] = "bladewolfmk2"
 			module_sprites["Mr. Gutsy"] = "mrgutsy"
-			module_sprites["Marina-CB"] = "marinaCB"
+			module_sprites["Droid"] = "droid-combat"
+			module_sprites["Droid - 'Rottweiler'"] = "rottweiler-combat"
+			module_sprites["Marina"] = "marinaCB"
 			module_sprites["#41"] = "servbot-combat"
-			module_sprites["Grizzly"] = "kodiak-combat"
-			module_sprites["Rottweiler"] = "rottweiler-combat"
+			module_sprites["Kodiak - 'Grizzly'"] = "kodiak-combat"
 			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
 			speed = -1
+		
+		if("Syndicate")
+			module = new /obj/item/weapon/robot_module/syndicate(src)
+			radio.insert_key(new/obj/item/device/encryptionkey/syndicate(radio))
+			module_sprites["Droid - 'Rottweiler'"] = "rottweiler-combat"
+			speed = 0
 
-	hands.icon_state = lowertext(modtype)
+	if(hands)
+		hands.icon_state = lowertext(modtype)
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
@@ -1505,45 +1513,51 @@
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
+
 	UnlinkSelf()
 	laws = new /datum/ai_laws/ntmov()
 	cell.maxcharge = 30000
 	cell.charge = 30000
 
-	pick_module(forced_module="combat")
+	pick_module("Combat")
+	updatename()
+	icon_state = "droid-combat"
+	base_icon = icon_state
+	updateicon()
 
 //Syndicate subtype because putting this on new() is fucking retarded.
 /mob/living/silicon/robot/syndie/New()
 	..()
+
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
 	cell.maxcharge = 25000
 	cell.charge = 25000
 	
-	pick_module(forced_module="syndicate")
-	modtype = "Combat"
+	pick_module("Syndicate")
+	updatename()
 	icon_state = "rottweiler-combat"
 	base_icon = icon_state
 	updateicon()
 
-	radio.insert_key(new/obj/item/device/encryptionkey/syndicate(radio))
-
-//Moving hugborgs to an easy-to-spawn subtype because they're were as retarded as the syndie one.
+//Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg/New()
 	..()
+
 	UnlinkSelf()
 	laws = new /datum/ai_laws/asimov()
 	cell.maxcharge = 15000
 	cell.charge = 15000
 
-	pick_module(forced_module="TG17355")
-
-/mob/living/silicon/robot/hugborg/egg/New()
+	pick_module("TG17355")
+	updatename()
 	icon_state = "peaceborg"
 	base_icon = icon_state
 	updateicon()
 
 /mob/living/silicon/robot/hugborg/ball/New()
+	..()
+
 	icon_state = "omoikane"
 	base_icon = icon_state
 	updateicon()
