@@ -451,6 +451,7 @@
 		connected = findScanner()
 		connected.connected = src
 		spawn(250)
+			nanomanager.update_uis(src)
 			src.injector_ready = 1
 		return
 	return
@@ -1063,6 +1064,7 @@
 					I.name += " ([buf.name])"
 					src.injector_ready = 0
 					spawn(connected.injector_cooldown)
+						nanomanager.update_uis(src)
 						src.injector_ready = 1
 			return 1
 
