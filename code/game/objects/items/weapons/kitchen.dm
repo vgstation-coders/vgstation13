@@ -297,7 +297,7 @@
 
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/attack(mob/M, mob/user)
-	if (M.stat != DEAD || user.a_intent != I_HURT || ishuman(M))
+	if (!M.isDead() || user.a_intent != I_HURT || !ishuman(M))
 		..()
 	else
 		var/mob/living/carbon/human/H = M
