@@ -747,7 +747,7 @@ steam.start() -- spawns the effect
 		var/datum/gas_mixture/old_air = T.return_air()
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
-			var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
+			var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() / T.air.volume * CELL_VOLUME )
 			lowertemp.temperature = max( min(lowertemp.temperature-500,lowertemp.temperature / 2) ,0)
 			lowertemp.react()
 			T.assume_air(lowertemp)
