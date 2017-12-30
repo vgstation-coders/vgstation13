@@ -253,8 +253,21 @@
 /area/vault/icecomet
 	jammed = 2
 
+//research facility
 
 /area/vault/research
+	requires_power = 1
+	name = "\improper Medical Research Facility"
+
+/obj/machinery/power/apc/frame/research_vault
+	make_alerts = FALSE
+
+/obj/docking_port/destination/vault/research
+	valid_random_destination = FALSE
+	areaname = "Medicial Research Facility"
+
+/obj/item/weapon/disk/shuttle_coords/vault/research
+	destination = /obj/docking_port/destination/vault/research
 
 /area/vault/satelite
 
