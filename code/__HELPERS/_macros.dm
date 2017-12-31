@@ -179,6 +179,10 @@
 
 #define ismatrix(A) (istype(A, /matrix))
 
+#define isID(A) (istype(A, /obj/item/weapon/card/id))
+
+#define isPDA(A) (istype(A, /obj/item/device/pda))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
