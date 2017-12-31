@@ -531,12 +531,12 @@ var/list/blob_candidates = list()
 	for(var/x = 1 to 4)
 		cl = pick(colors) + cl
 	color = cl
-	set_light(12,12,cl)
+	set_light(12,12)
 
 	var/matrix/M = src.transform
 	if(!istype(M))
 		M = matrix()
-	var/scaleby = rand(1,4)
+	var/scaleby = rand(1,2)
 	M.Scale(scaleby, scaleby)
 
 	animate(src, transform = M, alpha = 0, time = 12)
