@@ -101,6 +101,13 @@
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
 
+/obj/item/clothing/glasses/sunglasses/holo/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them and making them fade away!</span>", "<span class='danger'>You crush \the [src] under your foot, which takes less effort than you realized as they fade from existence.</span>")
+	playsound(get_turf(src), "shatter", 50, 1)
+
+	qdel(src)
+	return SPECIAL_ATTACK_FAILED
+
 /obj/item/clothing/glasses/sunglasses/purple
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in purple."
 	name = "purple sunglasses"

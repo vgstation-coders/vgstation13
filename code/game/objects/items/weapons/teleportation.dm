@@ -67,16 +67,15 @@ Frequency:
 						var/turf/tr = get_turf(W)
 						if (tr.z == sr.z && tr)
 							var/direct = max(abs(tr.x - sr.x), abs(tr.y - sr.y))
-							if (direct < 5)
-								direct = "very strong"
-							else
-								if (direct < 10)
+							switch (direct)
+								if (0 to 5)
+									direct = "very strong"
+								if (5 to 10)
 									direct = "strong"
+								if (10 to 20)
+									direct = "weak"
 								else
-									if (direct < 20)
-										direct = "weak"
-									else
-										direct = "very weak"
+									direct = "very weak"
 							src.temp += "[W.code]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
 				src.temp += "<B>Extranneous Signals:</B><BR>"
@@ -92,15 +91,16 @@ Frequency:
 					var/turf/tr = get_turf(W)
 					if (tr.z == sr.z && tr)
 						var/direct = max(abs(tr.x - sr.x), abs(tr.y - sr.y))
-						if (direct < 20)
-							if (direct < 5)
+						switch (direct)
+							if (0 to 5)
 								direct = "very strong"
+							if (5 to 10)
+								direct = "strong"
+							if (10 to 20)
+								direct = "weak"
 							else
-								if (direct < 10)
-									direct = "strong"
-								else
-									direct = "weak"
-							src.temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
+								direct = "very weak"
+						src.temp += "[W.id]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
 				src.temp += "<B>You are at \[[sr.x-WORLD_X_OFFSET[sr.z]],[sr.y-WORLD_Y_OFFSET[sr.z]],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
 			else

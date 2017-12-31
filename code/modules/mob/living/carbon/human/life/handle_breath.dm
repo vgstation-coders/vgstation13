@@ -24,7 +24,7 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/datum/gas_mixture/breath
 	//HACK NEED CHANGING LATER
-	if(health < config.health_threshold_crit)
+	if(health < config.health_threshold_crit || !L)
 		losebreath++
 	if(losebreath > 0) //Suffocating so do not take a breath
 		losebreath--
@@ -142,8 +142,8 @@
 /mob/living/carbon/human/proc/handle_breath(var/datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 0
-
-	if(!breath || (breath.total_moles() == 0) || suiciding)
+	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+	if(!breath || (breath.total_moles() == 0) || suiciding || !L)
 		if(reagents.has_reagent(INAPROVALINE))
 			return 0
 		if(suiciding)
@@ -163,7 +163,7 @@
 		return 0
 
 	// Lungs now handle processing atmos shit.
-	for(var/datum/organ/internal/lungs/L in internal_organs)
+	if(L)
 		L.handle_breath(breath,src)
 
 	return 1
