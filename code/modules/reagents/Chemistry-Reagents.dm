@@ -727,10 +727,6 @@
 		var/mob/living/carbon/human/human = M
 		if(!isslimeperson(human))
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
-			if(human.getCloneLoss() > 0)
-				var/cdamage = human.getCloneLoss()
-				human.setCloneLoss(0)
-				human.adjustToxLoss(cdamage * 1.5)
 			human.set_species("Evolved Slime")
 			human.regenerate_icons()
 
