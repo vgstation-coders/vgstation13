@@ -478,3 +478,59 @@ var/list/blob_candidates = list()
 
 /obj/item/weapon/meteor_gun/attack_self(mob/user as mob)
 	projectile_type = input(user, "Pick a meteor type.", "Projectile Choice") in typesof(/obj/item/projectile/meteor)
+
+
+/obj/item/projectile/meteor/firework
+	name = "firework"
+	desc = "Oooh! Aaaaah"
+	icon_state = "firework"
+
+/obj/item/projectile/meteor/firework/New()
+	..()
+	var/list/colors = list(
+		list(1, 0, 0, 1),
+		list(0, 1, 0, 1),
+		list(0, 0, 1, 1),
+		list(1, 1, 0, 1),
+		list(0, 1, 1, 1),
+		list(1, 0, 1, 1)
+	)
+	var/list/cl = list(0.1,0.1,0.1,0.1)
+	for(var/x = 1 to 4)
+		cl = pick(colors) + cl
+	color = cl
+
+/obj/item/projectile/meteor/to_bump(atom/A)
+	if(!loc)
+		return
+
+	explosion(get_turf(src),0,0,0)
+	new /obj/effect/overlay/firework_sparkle(get_turf(src))
+	qdel(src)
+
+/obj/effect/overlay/firework_sparkle
+	name = "pretty lights"
+	desc = "Shiny."
+	icon = 'icons/obj/meteor_64x64.dmi'
+	icon_state = "firework_sparkle"
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -16 * PIXEL_MULTIPLIER
+
+/obj/effect/overlay/firework_sparkle/New()
+	..()
+	var/list/colors = list(
+		list(1, 0, 0, 1),
+		list(0, 1, 0, 1),
+		list(0, 0, 1, 1),
+		list(1, 1, 0, 1),
+		list(0, 1, 1, 1),
+		list(1, 0, 1, 1)
+	)
+	var/list/cl = list(0,0,0,0)
+	for(var/x = 1 to 4)
+		cl = pick(colors) + cl
+	color = cl
+
+	animate(src, alpha = 0, time = 6)
+	spawn(6)
+		qdel(src)
