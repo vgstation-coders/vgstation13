@@ -495,12 +495,12 @@ var/list/blob_candidates = list()
 		list(0, 1, 1, 1),
 		list(1, 0, 1, 1)
 	)
-	var/list/cl = list(0.1,0.1,0.1,0.1)
+	var/list/cl = list(0,0,0,0)
 	for(var/x = 1 to 4)
 		cl = pick(colors) + cl
 	color = cl
 
-/obj/item/projectile/meteor/to_bump(atom/A)
+/obj/item/projectile/meteor/firework/to_bump(atom/A)
 	if(!loc)
 		return
 
@@ -515,6 +515,7 @@ var/list/blob_candidates = list()
 	icon_state = "firework_sparkle"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -16 * PIXEL_MULTIPLIER
+	plane = ABOVE_LIGHTING_LAYER
 
 /obj/effect/overlay/firework_sparkle/New()
 	..()
@@ -530,7 +531,14 @@ var/list/blob_candidates = list()
 	for(var/x = 1 to 4)
 		cl = pick(colors) + cl
 	color = cl
+	set_light(12,12,cl)
 
-	animate(src, alpha = 0, time = 6)
-	spawn(6)
+	var/matrix/M = src.transform
+	if(!istype(M))
+		M = matrix()
+	var/scaleby = rand(1,4)
+	M.Scale(scaleby, scaleby)
+
+	animate(src, transform = M, alpha = 0, time = 12)
+	spawn(12)
 		qdel(src)
