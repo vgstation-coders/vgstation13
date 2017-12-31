@@ -334,7 +334,7 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		if(isslimeperson(H))
-			amount = 0
+			amount = min(amount, 0)
 
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
