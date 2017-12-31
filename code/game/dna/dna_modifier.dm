@@ -451,8 +451,7 @@
 		connected = findScanner()
 		connected.connected = src
 		spawn(250)
-			nanomanager.update_uis(src)
-			src.injector_ready = 1
+			setInjectorReady()
 		return
 	return
 
@@ -664,6 +663,10 @@
 
 	src.connected.occupant.radiation += ((src.radiation_intensity*3)+src.radiation_duration*3)
 	src.connected.locked = lock_state
+	nanomanager.update_uis(src)
+
+/obj/machinery/computer/scan_consolenew/proc/setInjectorReady()
+	injector_ready = 1
 	nanomanager.update_uis(src)
 
 /obj/machinery/computer/scan_consolenew/npc_tamper_act(mob/living/L)
@@ -1062,10 +1065,9 @@
 				if(success)
 					I.forceMove(src.loc)
 					I.name += " ([buf.name])"
-					src.injector_ready = 0
+					injector_ready = 0
 					spawn(connected.injector_cooldown)
-						nanomanager.update_uis(src)
-						src.injector_ready = 1
+						setInjectorReady()
 			return 1
 
 		if (bufferOption == "loadDisk")
