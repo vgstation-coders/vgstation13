@@ -254,11 +254,11 @@
 
 	switch(last_objective)
 		if("harvest")
-			explanation = "The Geometer of Blood hungers for his first meal of this never-ending day. Offer him [harvest_target] humans in sacrifice."
+			explanation = "The Geometer of Blood hungers for his first meal of this never-ending day. Offer him [harvest_target] unbelievers in sacrifice."
 		if("hijack")
-			explanation = "Nar-Sie wishes for his troops to start the assault on Centcom immediately. Hijack the escape shuttle and don't let a single non-cultist board it."
+			explanation = "Nar-Sie wishes for his troops to start the assault on Centcom immediately. Hijack the escape shuttle and don't let a single unbeliever board it."
 		if("massacre")
-			explanation = "Nar-Sie wants to watch you as you massacre the remaining humans on the station (until less than [massacre_target] humans are left alive)."
+			explanation = "Nar-Sie wants to watch you as you massacre the remaining unbelievers on the station (until less than [massacre_target] unbelievers are left alive)."
 
 	for(var/datum/mind/cult_mind in cult)
 		to_chat(cult_mind.current, "<B>Objective #[current_objective]</B>: [explanation]")
@@ -621,26 +621,26 @@
 
 				if("harvest")
 					if(harvested > harvest_target)
-						explanation = "Offer [harvest_target] humans for Nar-Sie's first meal of the day. ([harvested] eaten) <font color='green'><B>Success!</B></font>"
+						explanation = "Offer [harvest_target] unbelievers for Nar-Sie's first meal of the day. ([harvested] eaten) <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_harvest|SUCCESS")
 					else
-						explanation = "Offer [harvest_target] humans for Nar-Sie's first meal of the day. ([harvested] eaten) <font color='red'><B>Fail!</B></font>"
+						explanation = "Offer [harvest_target] unbelievers for Nar-Sie's first meal of the day. ([harvested] eaten) <font color='red'><B>Fail!</B></font>"
 						feedback_add_details("cult_objective","cult_harvest|FAIL")
 
 				if("hijack")
 					if(!escaped_shuttle)
-						explanation = "Do not let a single non-cultist board the Escape Shuttle. ([escaped_shuttle] escaped on the shuttle) ([escaped_pod] escaped on pods) <font color='green'><B>Success!</B></font>"
+						explanation = "Do not let a single unbeliever board the Escape Shuttle. ([escaped_shuttle] escaped on the shuttle) ([escaped_pod] escaped on pods) <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_hijack|SUCCESS")
 					else
-						explanation = "Do not let a single non-cultist board the Escape Shuttle. ([escaped_shuttle] escaped on the shuttle) ([escaped_pod] escaped on pods) <font color='red'><B>Fail!</B></font>"
+						explanation = "Do not let a single unbeliever board the Escape Shuttle. ([escaped_shuttle] escaped on the shuttle) ([escaped_pod] escaped on pods) <font color='red'><B>Fail!</B></font>"
 						feedback_add_details("cult_objective","cult_hijack|FAIL")
 
 				if("massacre")
 					if(survivors < massacre_target)
-						explanation = "Massacre the crew until less than [massacre_target] humans are left on the station. ([survivors] humans left alive) <font color='green'><B>Success!</B></font>"
+						explanation = "Massacre the crew until less than [massacre_target] unbelievers are left on the station. ([survivors] unbelievers left alive) <font color='green'><B>Success!</B></font>"
 						feedback_add_details("cult_objective","cult_massacre|SUCCESS")
 					else
-						explanation = "Massacre the crew until less than [massacre_target] humans are left on the station. ([survivors] humans left alive) <font color='red'><B>Fail!</B></font>"
+						explanation = "Massacre the crew until less than [massacre_target] unbelievers are left on the station. ([survivors] unbelievers left alive) <font color='red'><B>Fail!</B></font>"
 						feedback_add_details("cult_objective","cult_massacre|FAIL")
 
 			text += "<br><B>Objective #[obj_count]</B>: [explanation]"
