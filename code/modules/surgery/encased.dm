@@ -146,8 +146,11 @@
 /datum/surgery_step/open_encased/close/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
 	if (!hasorgans(target))
-		return
+		return FALSE
 	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if(affected.stage)
+		to_chat(user, "<span class='warning'>You can not put \the [affected.encased] back into place in the already present bone gel. Mend it first.</span>")
+		return FALSE
 	return ..() && affected.open == 3
 
 /datum/surgery_step/open_encased/close/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

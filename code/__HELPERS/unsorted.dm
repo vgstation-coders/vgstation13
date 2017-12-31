@@ -1193,20 +1193,6 @@ var/global/list/common_tools = list(
 	istype(W, /obj/item/weapon/bonesetter)
 	)
 
-//check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M, mob/U)
-	if(U == M)
-		return 0
-	if(ishuman(M) && M.lying)
-		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
-			return 1
-		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
-			return 1
-		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
-		if(T && !T.flipped && prob(66))
-			return 1
-	return 0
-
 /*
 Checks if that loc and dir has a item on the wall
 */
@@ -1630,3 +1616,57 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
+
+// Similar to find_working_surface_at_mob() but returns a list containing both the value and the surface. list("value" = value, "working_surface" = working_surface)
+/proc/find_working_surface_at_mob_verbose(mob/living/carbon/human/target, list/possible_surfaces_list)
+	var/located_object = null
+	for (var/surface in possible_surfaces_list)
+		located_object = locate(surface, target.loc)
+		if (located_object)
+			var/obj/structure/table/table = located_object
+			if(istype(table) && table.flipped)
+				break
+			else
+				return list("value" = possible_surfaces_list[surface], "working_surface" = located_object)
+	return list("value" = 0, "working_surface" = null)
+
+// Finds if the mob is on a structure, item, etc associated to values before returning the value for the matching item.
+/proc/find_working_surface_at_mob(mob/living/carbon/human/target, list/possible_surfaces_list)
+	return find_working_surface_at_mob(target, possible_surfaces_list)["value"]
+
+// Finds the piece of clothing obstructing the selected targeted limb from the user to the target else returns FALSE.
+// If armorlimits is provided, it checks if any of the armor stats in the clothing will exceed the armorlimits provided to return FALSE.
+// If exceptions are provided, it checks if the cover is in the list to return FALSE.
+/proc/get_clothing_obstructing_target_from_user(mob/living/user, mob/living/carbon/human/target, list/armorlimits = null, list/exceptions = null)
+	if(!istype(target))
+		return FALSE
+	var/obj/item/clothing/cover = target.get_body_part_coverage(target_to_mobpart(user.zone_sel.selecting))
+	if(cover)
+		if(exceptions)
+			if(is_type_in_list(cover, exceptions))
+				return FALSE
+		if(armorlimits)
+			if(does_clothing_exceed_armor_limits(cover, armorlimits))
+				return cover
+		else
+			return cover
+	return FALSE
+
+// Takes a cover and checks against the provided list of armor stats and returns TRUE if any of the armor stats in the cover exceeds the ones provided else FALSE
+/proc/does_clothing_exceed_armor_limits(obj/item/clothing/cover, list/armorlimits)
+	for(var/armor in armorlimits)
+		if(cover.armor[armor] > armorlimits[armor])
+			return TRUE
+	return FALSE
+
+// Returns the piece of cover that would obstruct medication from user to target. Otherwise FALSE.
+/proc/get_surface_medication_obstruction(mob/living/user, mob/living/carbon/human/target)
+	var/obj/item/clothing/cover = get_clothing_obstructing_target_from_user(user, target)
+	if(cover)
+		if(cover.impossible_to_medicate_through)
+			return cover
+		if(!CAN_MEDICATE_THROUGH_ARMOR)
+			if(!cover.can_medicate_through)
+				if(does_clothing_exceed_armor_limits(cover, medical_aid_armor_limit))
+					return cover
+	return FALSE

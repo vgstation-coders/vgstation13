@@ -98,9 +98,8 @@
 				return
 	else
 		if(clumsy_check(user) && prob(50))
-			return eyestab(user,user)
-		else
-			return eyestab(M, user)
+			M = user
+		return eyestab(M, user)
 
 /obj/item/weapon/kitchen/utensil/fork/examine(mob/user)
 	..()

@@ -131,8 +131,6 @@
 /obj/item/weapon/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return ..()
-	if(can_operate(M, user))
-		return ..()
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
 		return ..()
 	if(clumsy_check(user) && prob(50))
@@ -629,24 +627,23 @@
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
-		if(can_operate(M, user))
-			if(do_surgery(M, user, src))
-				return
 		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
-		if (!S)
-			return
-		if(!(S.status & ORGAN_ROBOT) || user.a_intent != I_HELP)
+		if(!(S && (S.status & ORGAN_ROBOT)) && user.a_intent != I_HELP)
 			return ..()
 		if(S.brute_dam)
-			S.heal_damage(15,0,0,1)
-			if(user != M)
-				user.visible_message("<span class='attack'>\The [user] patches some dents on \the [M]'s [S.display_name] with \the [src]</span>",\
-				"<span class='attack'>You patch some dents on \the [M]'s [S.display_name]</span>",\
-				"You hear a welder.")
+			if(remove_fuel(0))
+				S.heal_damage(15,0,0,1)
+				playsound(get_turf(src), 'sound/items/Welder.ogg', 10, 1)
+				if(user != M)
+					user.visible_message("<span class='attack'>\The [user] patches some dents on \the [M]'s [S.display_name] with \the [src]</span>",\
+					"<span class='attack'>You patch some dents on \the [M]'s [S.display_name]</span>",\
+					"You hear a welder.")
+				else
+					user.visible_message("<span class='attack'>\The [user] patches some dents on their [S.display_name] with \the [src]</span>",\
+					"<span class='attack'>You patch some dents on your [S.display_name]</span>",\
+					"You hear a welder.")
 			else
-				user.visible_message("<span class='attack'>\The [user] patches some dents on their [S.display_name] with \the [src]</span>",\
-				"<span class='attack'>You patch some dents on your [S.display_name]</span>",\
-				"You hear a welder.")
+				to_chat(user, "<span class='notice'>You need more welding fuel.</span>")
 		else
 			to_chat(user, "Nothing to fix!")
 	else
