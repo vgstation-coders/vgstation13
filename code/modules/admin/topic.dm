@@ -3583,6 +3583,11 @@
 				feedback_add_details("admin_secrets_fun_used","ODF")
 				message_admins("[key_name_admin(usr)] has sent the station careening through a cloud of gore.", 1)
 				new /datum/event/thing_storm/meaty_gore
+			if("fireworks")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","HNY")
+				message_admins("[key_name_admin(usr)] has sent the station some lovely fireworks!. No that's not a euphamism for meteors. Actual Fireworks for a change.",1)
+				new /datum/event/thing_storm/fireworks
 			if("silent_meteors")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SILM")
