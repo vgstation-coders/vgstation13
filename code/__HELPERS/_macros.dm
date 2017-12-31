@@ -179,6 +179,8 @@
 
 #define ismatrix(A) (istype(A, /matrix))
 
+#define ismecha(A) (istype(A, /obj/mecha))
+
 #define isID(A) (istype(A, /obj/item/weapon/card/id))
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
