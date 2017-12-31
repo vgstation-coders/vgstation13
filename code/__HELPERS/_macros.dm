@@ -185,6 +185,8 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
