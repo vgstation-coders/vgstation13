@@ -37,12 +37,13 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	var/moving = 0
 	var/eta_timeofday
 	var/eta
-	var/datum/materials/materials_list = new
+	var/datum/materials/materials_list
 	var/restriction = 1 //Who can approve orders? 0 = autoapprove; 1 = has access; 2 = has an ID (omits silicons); 3 = actions require PIN
 	var/requisition = 0 //Are orders being paid for by the department? 0 = no; 1 = auto; possible future: allow with pin?
 
 /datum/controller/supply_shuttle/New()
 	ordernum = rand(1,9000)
+	materials_list = new
 
 	//Supply shuttle ticker - handles supply point regenertion and shuttle travelling between centcomm and the station
 /datum/controller/supply_shuttle/proc/process()
@@ -139,9 +140,8 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			var/obj/item/stack/sheet/mineral/plasma/P = MA
 			if(P.redeemed)
 				continue
-			var/datum/material/mat = materials_list.getMaterial(P.sheettype)
+			var/datum/material/mat = materials_list.getMaterial(P.recyck_mat)
 			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
-
 		// Must be in a crate!
 		else if(istype(MA,/obj/structure/closet/crate))
 			cargo_acct.money += credits_per_crate
