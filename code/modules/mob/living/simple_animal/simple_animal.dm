@@ -266,41 +266,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
 
 			if(min_oxy)
-				if(Environment.oxygen < min_oxy)
+				if(Environment.oxygen / Environment.volume * CELL_VOLUME < min_oxy)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
 					oxygen_alert = 0
 
 			if(max_oxy)
-				if(Environment.oxygen > max_oxy)
+				if(Environment.oxygen / Environment.volume * CELL_VOLUME > max_oxy)
 					atmos_suitable = 0
 
 			if(min_tox)
-				if(Environment.toxins < min_tox)
+				if(Environment.toxins / Environment.volume * CELL_VOLUME < min_tox)
 					atmos_suitable = 0
 
 			if(max_tox)
-				if(Environment.toxins > max_tox)
+				if(Environment.toxins / Environment.volume * CELL_VOLUME > max_tox)
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
 					toxins_alert = 0
 
 			if(min_n2)
-				if(Environment.nitrogen < min_n2)
+				if(Environment.nitrogen / Environment.volume * CELL_VOLUME < min_n2)
 					atmos_suitable = 0
 
 			if(max_n2)
-				if(Environment.nitrogen > max_n2)
+				if(Environment.nitrogen / Environment.volume * CELL_VOLUME > max_n2)
 					atmos_suitable = 0
 
 			if(min_co2)
-				if(Environment.carbon_dioxide < min_co2)
+				if(Environment.carbon_dioxide / Environment.volume * CELL_VOLUME < min_co2)
 					atmos_suitable = 0
 
 			if(max_co2)
-				if(Environment.carbon_dioxide > max_co2)
+				if(Environment.carbon_dioxide / Environment.volume * CELL_VOLUME > max_co2)
 					atmos_suitable = 0
 
 	//Atmos effect
