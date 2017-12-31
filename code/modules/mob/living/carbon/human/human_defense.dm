@@ -172,29 +172,6 @@ emp_act
 	else
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
 
-	/*
-	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver) && src.stat == DEAD && user.a_intent == I_HURT)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
-		newmeat.name = src.real_name + newmeat.name
-		newmeat.subjectname = src.real_name
-		newmeat.subjectjob = src.job
-		newmeat.reagents.add_reagent (NUTRIMENT, (src.nutrition / 15) / 3)
-		src.reagents.trans_to (newmeat, round ((src.reagents.total_volume) / 3, 1))
-		src.loc.add_blood(src)
-		--src.meatleft
-		to_chat(user, "<span class='warning'>You hack off a chunk of meat from [src.name]</span>")
-		if(!src.meatleft)
-			src.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>[user]/[user.ckey]</b>"
-			user.attack_log += "\[[time_stamp()]\] Chopped up <b>[src]/[src.ckey]</b> into meat</b>"
-			msg_admin_attack("[user.name] ([user.ckey]) chopped up [src] ([src.ckey]) into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			if(!iscarbon(user))
-				LAssailant = null
-			else
-				LAssailant = user
-			qdel(src)
-			return
-	*/
-
 	var/datum/organ/external/affecting = get_organ(target_zone)
 	if (!affecting)
 		return FALSE
