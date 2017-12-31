@@ -297,9 +297,11 @@
 
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/attack(mob/M, mob/user)
-	if (M.stat != DEAD || user.a_intent != I_HURT || ishuman(M))
+	if (!M.isDead())
 		..()
 	else
+		if (!ishuman(M))
+			return ..()
 		var/mob/living/carbon/human/H = M
 		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
 		newmeat.name = H.real_name + newmeat.name
