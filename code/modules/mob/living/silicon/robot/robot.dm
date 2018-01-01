@@ -39,13 +39,10 @@
 	var/obj/item/weapon/cell/cell = null
 	var/obj/machinery/camera/camera = null
 
-	// Components are basically robot organs.
+// Components are basically robot organs.
 	var/list/components = list()
-
 	var/obj/item/device/mmi/mmi = null
-
 	var/obj/item/device/pda/ai/rbPDA = null
-
 	var/datum/wires/robot/wires = null
 
 	mob_bump_flag = ROBOT
@@ -59,7 +56,6 @@
 	var/list/req_access = list(access_robotics)
 	var/ident = FALSE
 	var/hasbutt = TRUE //Needed for bootyborgs... and buckling too.
-	//var/list/laws = list()
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
 	var/viewalerts = FALSE
 	var/modtype = "Default"
@@ -79,6 +75,8 @@
 	var/lawcheck[1]
 	var/ioncheck[1]
 
+// Used to store the associations between sprite names and sprite index.
+	var/module_sprites[0]
 
 /mob/living/silicon/robot/New(loc, var/unfinished = 0, var/startup_sound='sound/voice/liveagain.ogg')
 	if(isMoMMI(src))
@@ -222,172 +220,29 @@
 		modtype = input("Please, select a module!", "Robot", null, null) as null|anything in modules
 	// END forced modules.
 
+	if(module)
+		return
 	if(!modtype)
 		return
 
-	var/module_sprites[0] //Used to store the associations between sprite names and sprite index.
+	var/module_type = robot_modules[modtype]
+	module = new module_type(src)
 
-	if(module)
-		return
+	if(modtype == "Security")
+		to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
 
-	switch(modtype)
-		if("Standard")
-			module = new /obj/item/weapon/robot_module/standard(src)
-			module_sprites["Default"] = "robot"
-			module_sprites["Antique"] = "robot_old"
-			module_sprites["Droid"] = "droid"
-			module_sprites["Marina"] = "marinaSD"
-			module_sprites["Sleek"] = "sleekstandard"
-			module_sprites["#11"] = "servbot"
-			module_sprites["Spider"] = "spider-standard"
-			module_sprites["Kodiak - 'Polar'"] = "kodiak-standard"
-			module_sprites["Noble"] = "Noble-STD"
-			module_sprites["R34 - STR4a 'Durin'"] = "durin"
-			speed = 0
-
-		if("Service")
-			module = new /obj/item/weapon/robot_module/butler(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_service(radio))
-			module_sprites["Default"] = "Service2"
-			module_sprites["Waitress"] = "Service"
-			module_sprites["Bro"] = "Brobot"
-			module_sprites["Rich"] = "maximillion"
-			module_sprites["Hydro"] = "Hydrobot"
-			module_sprites["Droid"] = "toiletbot"
-//			module_sprites["R2-D2"] = "r2d2"
-			module_sprites["Marina"] = "marinaSV"
-			module_sprites["Sleek"] = "sleekservice"
-			module_sprites["#27"] = "servbot-service"
-			module_sprites["Kodiak - 'Teddy'"] = "kodiak-service"
-			module_sprites["Noble"] = "Noble-SRV"
-			module_sprites["R34 - SRV9a 'Llyod'"] = "lloyd"
-			speed = 0
-
-		if("Supply")
-			module = new /obj/item/weapon/robot_module/miner(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_mining(radio))
-			if(camera && CAMERANET_ROBOTS in camera.network)
-				camera.network.Add(CAMERANET_MINE)
-			module_sprites["Default"] = "Miner_old"
-			module_sprites["Treadhead"] = "Miner"
-			module_sprites["Droid"] = "droid-miner"
-//			module_sprites["Wall-A"] = "wall-a"
-			module_sprites["Marina"] = "marinaMN"
-			module_sprites["Sleek"] = "sleekminer"
-			module_sprites["#31"] = "servbot-miner"
-			module_sprites["Kodiak"] = "kodiak-miner"
-			module_sprites["Noble"] = "Noble-SUP"
-			module_sprites["R34 - MIN2a 'Ishimura'"] = "ishimura"
-			speed = -1
-
-		if("Medical")
-			module = new /obj/item/weapon/robot_module/medical(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_med(radio))
-			if(camera && CAMERANET_ROBOTS in camera.network)
-				camera.network.Add(CAMERANET_MEDBAY)
-			module_sprites["Default"] = "Medbot"
-			module_sprites["Advanced Droid"] = "droid-medical"
-			module_sprites["Needles"] = "medicalrobot"
-			module_sprites["Droid"] = "surgeon"
-			module_sprites["Marina"] = "marina"
-//			module_sprites["Eve"] = "eve"
-			module_sprites["Sleek"] = "sleekmedic"
-			module_sprites["#17"] = "servbot-medi"
-			module_sprites["Kodiak 'Arachne'"] = "arachne"
-			module_sprites["Noble"] = "Noble-MED"
-			module_sprites["R34 - MED6a 'Gibbs'"] = "gibbs"
-			speed = -2
-
-		if("Security")
-			module = new /obj/item/weapon/robot_module/security(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
-			module_sprites["Default"] = "secborg"
-			module_sprites["Black Knight"] = "securityrobot"
-			module_sprites["Bloodhound"] = "bloodhound"
-			module_sprites["Droid - 'Securitron'"] = "securitron"
-			module_sprites["Marina"] = "marinaSC"
-			module_sprites["Sleek"] = "sleeksecurity"
-			module_sprites["#9"] = "servbot-sec"
-			module_sprites["Kodiak"] = "kodiak-sec"
-			module_sprites["Noble"] = "Noble-SEC"
-			module_sprites["R34 - SEC10a 'Woody'"] = "woody"
-			to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
-			speed = 0
-
-		if("TG17355")
-			module = new /obj/item/weapon/robot_module/tg17355(src)
-			module_sprites["Peacekeeper"] = "peaceborg"
-			module_sprites["Omoikane"] = "omoikane"
-			speed = 0
-
-		if("Engineering")
-			module = new /obj/item/weapon/robot_module/engineering(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_eng(radio))
-			if(camera && CAMERANET_ROBOTS in camera.network)
-				camera.network.Add(CAMERANET_ENGI)
-			module_sprites["Default"] = "Engineering"
-			module_sprites["Antique"] = "engineerrobot"
-			module_sprites["Engiseer"] = "Engiseer"
-			module_sprites["Droid - 'Landmate'"] = "landmate"
-//			module_sprites["Wall-E"] = "wall-e"
-			module_sprites["Marina"] = "marinaEN"
-			module_sprites["Sleek"] = "sleekengineer"
-			module_sprites["#25"] = "servbot-engi"
-			module_sprites["Kodiak"] = "kodiak-eng"
-			module_sprites["Noble"] = "Noble-ENG"
-			module_sprites["R34 - ENG7a 'Conagher'"] = "conagher"
-			speed = -2
-
-		if("Janitor")
-			module = new /obj/item/weapon/robot_module/janitor(src)
-			module_sprites["Default"] = "JanBot2"
-			module_sprites["Antique - 'Mopbot'"]  = "janitorrobot"
-			module_sprites["Mechaduster"] = "mechaduster"
-			module_sprites["HAN-D"] = "han-d"
-			module_sprites["Droid 'Mop Gear Rex'"] = "mopgearrex"
-			module_sprites["Marina"] = "marinaJN"
-			module_sprites["Sleek"] = "sleekjanitor"
-			module_sprites["#29"] = "servbot-jani"
-			module_sprites["Noble"] = "Noble-JAN"
-			module_sprites["R34 - CUS3a 'Flynn'"] = "flynn"
-			speed = -1
-
-		if("Combat")
-			module = new /obj/item/weapon/robot_module/combat(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/headset_sec(radio))
-//			module_sprites["Bladewolf"] = "bladewolf"
-			module_sprites["Bladewolf MK-2"] = "bladewolfmk2"
-			module_sprites["Mr. Gutsy"] = "mrgutsy"
-			module_sprites["Droid"] = "droid-combat"
-			module_sprites["Droid - 'Rottweiler'"] = "rottweiler-combat"
-			module_sprites["Marina"] = "marinaCB"
-			module_sprites["#41"] = "servbot-combat"
-			module_sprites["Kodiak - 'Grizzly'"] = "kodiak-combat"
-			module_sprites["R34 - WAR8a 'Chesty'"] = "chesty"
-			speed = -1
-		
-		if("Syndicate")
-			module = new /obj/item/weapon/robot_module/syndicate(src)
-			radio.insert_key(new/obj/item/device/encryptionkey/syndicate(radio))
-			module_sprites["Droid - 'Rottweiler'"] = "rottweiler-combat"
-			speed = 0
-
-	if(hands)
+	if(hands) //To prevent runtimes when spawning borgs using admin fuckery.
 		hands.icon_state = lowertext(modtype)
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
-	if(modtype == "Medical" || modtype == "Security" || modtype == "Combat")
-		status_flags &= ~CANPUSH
-
-	var/picked  = pick(module_sprites)
-	icon_state = module_sprites[picked]
-	base_icon = icon_state
-
-	if(!forced_module)
-		choose_icon(6, module_sprites)
+	choose_icon(6, set_module_sprites(module.sprites)) //Why 6? Don't ask me.
 
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
+
+/mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
+	module_sprites = new_sprites
+	return module_sprites
 
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
 	if(prefix)
@@ -1439,7 +1294,7 @@
 	update_canmove()
 
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
-	if(triesleft == 0 || !module_sprites.len)
+	if(triesleft < 1 || !module_sprites.len)
 		return
 	else
 		triesleft--
@@ -1467,6 +1322,9 @@
 	else
 		to_chat(src, "Your icon has been set. You now require a module reset to change it.")
 
+/mob/living/silicon/robot/proc/help_shake_act(mob/user)
+	user.visible_message("<span class='notice'>[user.name] pats [name] on the head.</span>")
+
 /mob/living/silicon/robot/rejuvenate(animation = FALSE)
 	for(var/C in components)
 		var/datum/robot_component/component = components[C]
@@ -1479,24 +1337,6 @@
 	cell.charge = cell.maxcharge
 	..()
 	updatehealth()
-
-/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip=5)
-	//Engineering borgs have the magic of magnets.
-	if(istype(module, /obj/item/weapon/robot_module/engineering))
-		return FALSE
-	..()
-
-/mob/living/silicon/robot/put_in_inactive_hand(var/obj/item/W)
-	return FALSE
-
-/mob/living/silicon/robot/get_inactive_hand(var/obj/item/W)
-	return FALSE
-
-/mob/living/silicon/robot/proc/help_shake_act(mob/user)
-	user.visible_message("<span class='notice'>[user.name] pats [name] on the head.</span>")
-
-/mob/living/silicon/robot/CheckSlip()
-	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)
 
 //Help with the garbage collection of the module on the robot end
 /mob/living/silicon/robot/proc/remove_module()

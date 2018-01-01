@@ -301,3 +301,9 @@
 
 /mob/living/silicon/robot/put_in_active_hand(var/obj/item/W)
 	return put_in_hands(W)
+
+/mob/living/silicon/robot/put_in_inactive_hand(var/obj/item/W)
+	return FALSE
+
+/mob/living/silicon/robot/get_inactive_hand(var/obj/item/W)
+	return FALSE

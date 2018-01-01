@@ -1,3 +1,12 @@
+/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip=5)
+	//Engineering borgs have the magic of magnets.
+	if(module && module.no_slip)
+		return FALSE
+	..()
+
+/mob/living/silicon/robot/CheckSlip()
+	return ((module && module.no_slip)? -1 : 0)
+
 /mob/living/silicon/robot/Process_Spacemove(var/check_drift = 0)
 	if(module)
 		for(var/obj/item/weapon/tank/jetpack/J in module.modules)

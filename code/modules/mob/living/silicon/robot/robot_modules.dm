@@ -1,3 +1,17 @@
+
+var/global/list/robot_modules = list(
+	"Standard"		= /obj/item/weapon/robot_module/standard,
+	"Service" 		= /obj/item/weapon/robot_module/butler,
+	"Supply" 		= /obj/item/weapon/robot_module/miner,
+	"Medical" 		= /obj/item/weapon/robot_module/medical,
+	"Security" 		= /obj/item/weapon/robot_module/security,
+	"Engineering"	= /obj/item/weapon/robot_module/engineering,
+	"Janitor" 		= /obj/item/weapon/robot_module/janitor,
+	"Combat" 		= /obj/item/weapon/robot_module/combat,
+	"Syndicate"		= /obj/item/weapon/robot_module/syndicate,
+	"TG17355"		= /obj/item/weapon/robot_module/tg17355
+)
+
 /obj/item/weapon/robot_module
 	name = "robot module"
 	icon = 'icons/obj/module.dmi'
@@ -13,13 +27,36 @@
 	var/recharge_tick = 0
 	var/recharge_time = 10 // when to recharge a consumable, only used for engi borgs atm
 	var/list/sensor_augs
-	var/languages
+	var/languages = list(
+		LANGUAGE_GALACTIC_COMMON = TRUE,
+		LANGUAGE_TRADEBAND = TRUE,
+		LANGUAGE_VOX = FALSE,
+		LANGUAGE_ROOTSPEAK = FALSE,
+		LANGUAGE_GREY = FALSE,
+		LANGUAGE_CLATTER = FALSE,
+		LANGUAGE_MONKEY = FALSE,
+		LANGUAGE_UNATHI = FALSE,
+		LANGUAGE_CATBEAST = FALSE,
+		LANGUAGE_SKRELLIAN = FALSE,
+		LANGUAGE_GUTTER = FALSE,
+		LANGUAGE_MONKEY = FALSE,
+		LANGUAGE_MOUSE = FALSE,
+		LANGUAGE_HUMAN = FALSE
+		)
 	var/list/added_languages
 	var/list/upgrades = list()
+	var/networks = list()
+	var/sprites = list()
+	var/can_be_pushed = TRUE
+	var/no_slip = FALSE
+	var/radio_key = null
+
+	// Bookkeeping
 
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = loc
+		RemoveStatusFlags(R)
 		R.remove_module() //Helps remove screen references on robot end
 
 	for(var/obj/A in modules)
@@ -40,7 +77,8 @@
 	return
 
 /obj/item/weapon/robot_module/proc/on_emag()
-	modules += emag
+	if(emag)
+		modules += emag
 	rebuild()
 	..()
 
@@ -51,38 +89,42 @@
 	if(emag)
 		emag.emp_act(severity)
 	..()
-	return
 
-/obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
+/obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R, var/default = TRUE)
 	..()
-
-	languages = list(
-		LANGUAGE_GALACTIC_COMMON = TRUE,
-		LANGUAGE_TRADEBAND = TRUE,
-		LANGUAGE_VOX = FALSE,
-		LANGUAGE_ROOTSPEAK = FALSE,
-		LANGUAGE_GREY = FALSE,
-		LANGUAGE_CLATTER = FALSE,
-		LANGUAGE_MONKEY = FALSE,
-		LANGUAGE_UNATHI = FALSE,
-		LANGUAGE_CATBEAST = FALSE,
-		LANGUAGE_SKRELLIAN = FALSE,
-		LANGUAGE_GUTTER = FALSE,
-		LANGUAGE_MONKEY = FALSE,
-		LANGUAGE_MOUSE = FALSE,
-		LANGUAGE_HUMAN = FALSE
-		)
 	added_languages = list()
 	if(!isMoMMI(R))
 		add_languages(R)
 	AddToProfiler()
+	if(default)
+		AddDefaultModules()
+	AddCameraNetworks(R)
+	AddEncryptionKey(R)
+	ApplyStatusFlags(R)
+
+/obj/item/weapon/robot_module/proc/AddDefaultModules()
 	modules += new /obj/item/device/flashlight(src)
 	modules += new /obj/item/device/flash(src)
-	emag = new /obj/item/toy/sword(src)
-	emag.name = "Placeholder Emag Item"
-//		jetpack = new /obj/item/toy/sword(src)
-//		jetpack.name = "Placeholder Upgrade Item"
-	return
+
+/obj/item/weapon/robot_module/proc/AddCameraNetworks(var/mob/living/silicon/robot/R)
+	if(R.camera && CAMERANET_ROBOTS in R.camera.network)
+		for(var/network in networks)
+			if(!(network in R.camera.network))
+				R.camera.network.Add(network)
+
+/obj/item/weapon/robot_module/proc/AddEncryptionKey(var/mob/living/silicon/robot/R)
+	if(!R.radio)
+		return
+	if(radio_key)
+		R.radio.insert_key(new radio_key(R.radio))
+
+/obj/item/weapon/robot_module/proc/ApplyStatusFlags(var/mob/living/silicon/robot/R)
+	if(!can_be_pushed)
+		R.status_flags &= ~CANPUSH
+
+/obj/item/weapon/robot_module/proc/RemoveStatusFlags(var/mob/living/silicon/robot/R)
+	if(!can_be_pushed)
+		R.status_flags |= CANPUSH
 
 /obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
 	var/mob/living/silicon/robot/owner = loc
@@ -106,6 +148,18 @@
 
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
+	sprites = list(
+		"Default" = "robot",
+		"Antique" = "robot_old",
+		"Droid" = "droid",
+		"Marina" = "marinaSD",
+		"Sleek" = "sleekstandard",
+		"#11" = "servbot",
+		"Spider" = "spider-standard",
+		"Kodiak - 'Polar'" = "kodiak-standard",
+		"Noble" = "Noble-STD",
+		"R34 - STR4a 'Durin'" = "durin"
+		)
 
 #define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
@@ -151,6 +205,21 @@
 
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
+	networks = list(CAMERANET_MEDBAY)
+	radio_key = /obj/item/device/encryptionkey/headset_med
+	can_be_pushed = FALSE
+	sprites = list(
+		"Default" = "Medbot",
+		"Advanced Droid" = "droid-medical",
+		"Needles" = "medicalrobot",
+		"Droid" = "surgeon",
+		"Marina" = "marina",
+		"Sleek" = "sleekmedic",
+		"#17" = "servbot-medi",
+		"Kodiak - 'Arachne'" = "arachne",
+		"Noble" = "Noble-MED",
+		"R34 - MED6a 'Gibbs'" = "gibbs"
+		)
 
 #define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
@@ -215,6 +284,21 @@
 
 /obj/item/weapon/robot_module/engineering
 	name = "engineering robot module"
+	networks = list(CAMERANET_ENGI)
+	radio_key = /obj/item/device/encryptionkey/headset_eng
+	no_slip = TRUE
+	sprites = list(
+		"Default" = "Engineering",
+		"Antique" = "engineerrobot",
+		"Engiseer" = "Engiseer",
+		"Droid - 'Landmate'" = "landmate",
+		"Marina" = "marinaEN",
+		"Sleek" = "sleekengineer",
+		"#25" = "servbot-engi",
+		"Kodiak" = "kodiak-eng",
+		"Noble" = "Noble-ENG",
+		"R34 - ENG7a 'Conagher'" = "conagher"
+		)
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
@@ -288,6 +372,20 @@
 
 /obj/item/weapon/robot_module/security
 	name = "security robot module"
+	radio_key = /obj/item/device/encryptionkey/headset_sec
+	can_be_pushed = FALSE
+	sprites = list(
+		"Default" = "secborg",
+		"Black Knight" = "securityrobot",
+		"Bloodhound" = "bloodhound",
+		"Droid - 'Securitron'" = "securitron",
+		"Marina" = "marinaSC",
+		"Sleek" = "sleeksecurity",
+		"#9" = "servbot-sec",
+		"Kodiak" = "kodiak-sec",
+		"Noble" = "Noble-SEC",
+		"R34 - SEC10a 'Woody'" = "woody"
+		)
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -307,6 +405,18 @@
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
+	sprites = list(
+		"Default" = "JanBot2",
+		"Antique - 'Mopbot'"  = "janitorrobot",
+		"Mechaduster" = "mechaduster",
+		"HAN-D" = "han-d",
+		"Droid - 'Mop Gear Rex'" = "mopgearrex",
+		"Marina" = "marinaJN",
+		"Sleek" = "sleekjanitor",
+		"#29" = "servbot-jani",
+		"Noble" = "Noble-JAN",
+		"R34 - CUS3a 'Flynn'" = "flynn"
+		)
 
 /obj/item/weapon/robot_module/janitor/New()
 	..()
@@ -323,14 +433,23 @@
 
 	fix_modules()
 
-
-
 /obj/item/weapon/robot_module/butler
 	name = "service robot module"
-
-/obj/item/weapon/robot_module/butler/New()
-	..()
-
+	radio_key = /obj/item/device/encryptionkey/headset_service
+	sprites = list(
+		"Default" = "Service2",
+		"Waitress" = "Service",
+		"Bro" = "Brobot",
+		"Rich" = "maximillion",
+		"Hydro" = "Hydrobot",
+		"Droid" = "toiletbot",
+		"Marina" = "marinaSV",
+		"Sleek" = "sleekservice",
+		"#27" = "servbot-service",
+		"Kodiak - 'Teddy'" = "kodiak-service",
+		"Noble" = "Noble-SRV",
+		"R34 - SRV9a 'Llyod'" = "lloyd"
+		)
 	languages = list(
 		LANGUAGE_GALACTIC_COMMON = TRUE,
 		LANGUAGE_UNATHI	= TRUE,
@@ -341,6 +460,9 @@
 		LANGUAGE_GUTTER	= TRUE,
 		LANGUAGE_MONKEY	= TRUE,
 		)
+
+/obj/item/weapon/robot_module/butler/New()
+	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/gripper/service(src)
@@ -359,6 +481,19 @@
 
 /obj/item/weapon/robot_module/miner
 	name = "supply robot module"
+	networks = list(CAMERANET_MINE)
+	radio_key = /obj/item/device/encryptionkey/headset_mining
+	sprites = list(
+		"Default" = "Miner_old",
+		"Treadhead" = "Miner",
+		"Droid" = "droid-miner",
+		"Marina" = "marinaMN",
+		"Sleek" = "sleekminer",
+		"#31" = "servbot-miner",
+		"Kodiak" = "kodiak-miner",
+		"Noble" = "Noble-SUP",
+		"R34 - MIN2a 'Ishimura'" = "ishimura"
+		)
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
@@ -398,6 +533,12 @@
 
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate robot module"
+	networks = list(CAMERANET_NUKE)
+	radio_key = /obj/item/device/encryptionkey/syndicate
+	can_be_pushed = FALSE
+	sprites = list(
+		"Droid - 'Rottweiler'" = "rottweiler-combat"
+		)
 
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
@@ -413,6 +554,18 @@
 
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
+	radio_key = /obj/item/device/encryptionkey/headset_sec
+	can_be_pushed = FALSE
+	sprites = list(
+		"Bladewolf MK-2" = "bladewolfmk2",
+		"Mr. Gutsy" = "mrgutsy",
+		"Droid" = "droid-combat",
+		"Droid - 'Rottweiler'" = "rottweiler-combat",
+		"Marina" = "marinaCB",
+		"#41" = "servbot-combat",
+		"Kodiak - 'Grizzly'" = "kodiak-combat",
+		"R34 - WAR8a 'Chesty'" = "chesty"
+		)
 
 /obj/item/weapon/robot_module/combat/New()
 	..()
@@ -432,6 +585,10 @@
 
 /obj/item/weapon/robot_module/tg17355
 	name = "tg17355 robot module"
+	sprites = list(
+		"Peacekeeper" = "peaceborg",
+		"Omoikane" = "omoikane"
+	)
 
 /obj/item/weapon/robot_module/tg17355/New()
 	..()
@@ -456,7 +613,7 @@
 /obj/item/weapon/robot_module/proc/remove_languages(var/mob/living/silicon/robot/R)
 	for(var/language in added_languages)
 		R.remove_language(language)
-	added_languages.len = 0
+	added_languages.Cut()
 
 #undef STANDARD_MAX_KIT
 #undef MEDBORG_MAX_KIT
