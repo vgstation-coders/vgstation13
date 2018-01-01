@@ -48,7 +48,7 @@
 		var/grabbed = G.affecting
 		if(istype(grabbed, /mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/target = grabbed
-			if(target.stat == 0 && !can_recycle_live)
+			if(target.stat == CONSCIOUS && !can_recycle_live)
 				to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
 				return
 			if(target.abiotic())
@@ -67,7 +67,7 @@
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
 	else if(istype(O, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/target = O
-		if(target.stat == 0 && !can_recycle_live)
+		if(target.stat == CONSCIOUS && !can_recycle_live)
 			to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
 			return
 		if(target.abiotic())
