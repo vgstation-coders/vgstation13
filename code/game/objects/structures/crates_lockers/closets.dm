@@ -101,7 +101,6 @@
 	src.opened = 1
 	setDensity(FALSE)
 	src.dump_contents()
-	INVOKE_EVENT(on_destroyed, list())
 	if(istype(src, /obj/structure/closet/body_bag))
 		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
 	else

@@ -200,6 +200,8 @@ var/global/list/ghdel_profiling = list()
 	return
 
 /atom/proc/setDensity(var/density)
+	if (density == src.density)
+		return FALSE // No need to invoke the event when we're not doing any actual change
 	src.density = density
 	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
