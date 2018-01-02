@@ -318,6 +318,7 @@
 	damage_added = 17
 	sharpness_added = 2
 	hitsound_added = 'sound/weapons/slice.ogg'
+	attack_verb_override = "claws"
 
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE
