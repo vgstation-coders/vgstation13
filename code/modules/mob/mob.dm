@@ -1503,13 +1503,19 @@ var/list/slot_equipment_priority = list( \
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if(isUnconscious() || knockdown || paralysis || resting || !can_stand)
+	else if(isUnconscious() || knockdown || paralysis)
+		stop_pulling()
+		lying = 1
+		canmove = 0
+		drop_hands()
+	else if (resting)
 		stop_pulling()
 		lying = 1
 		canmove = 0
 	else if(stunned)
 //		lying = 0
 		canmove = 0
+		drop_hands()
 	else if(captured)
 		anchored = 1
 		canmove = 0
@@ -1521,7 +1527,6 @@ var/list/slot_equipment_priority = list( \
 	reset_layer() //Handles layer setting in hiding
 	if(lying)
 		density = 0
-		drop_hands()
 	else
 		density = 1
 
