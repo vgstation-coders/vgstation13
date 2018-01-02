@@ -97,6 +97,9 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
 
 proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
+	if (M == user)
+		to_chat(world, "No self-surgery")
+		return 0
 	if(!istype(M,/mob/living/carbon/human))
 		return 0
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
