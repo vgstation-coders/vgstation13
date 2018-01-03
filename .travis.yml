@@ -42,7 +42,7 @@ script:
 # --jobs 1 to prevent threading problems with the BYOND crate.
 - cargo test --jobs 1 --verbose
 - cd -
-- echo ${ALL_MAPS} | travis_wait xargs tools/travis/build.py vgstation13.dme -M
+- echo ${ALL_MAPS} | xargs tools/travis/build.py vgstation13.dme -M
 
 notifications:
   irc:
