@@ -57,6 +57,7 @@ def main():
 # So... Travis kills it.
 # Thanks DM.
 # This repeats messages like travis_wait (which I couldn't get working) does to prevent that.
+@asyncio.coroutine
 def run_compiler(args):
     compiler_process = yield from asyncio.create_subprocess_exec(*args)
     task = ensure_future(print_timeout_guards())
@@ -65,6 +66,7 @@ def run_compiler(args):
     task.cancel()
     return ret
 
+@asyncio.coroutine
 def print_timeout_guards():
     while True:
         yield from asyncio.sleep(5*60)
