@@ -40,7 +40,7 @@ def main():
         exit(1)
 
     loop = asyncio.get_event_loop()
-    code = loop.run_until_complete(run_compiler([compiler] + args))
+    code = loop.run_until_complete(run_compiler([compiler, dme]))
     exit(code)
 
 # DM SOMEHOW manages to go 10 minutes without logging anything nowadays.
