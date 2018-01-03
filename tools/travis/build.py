@@ -7,6 +7,16 @@ import sys
 
 MAP_INCLUDE_RE = re.compile(r"#include \"maps\\[a-zA-Z0-9][a-zA-Z0-9_]*\.dm\"")
 
+ensure_future = None
+
+# ensure_future is new in 3.4.4, previously it was asyncio.async.
+try:
+    ensure_future = asyncio.ensure_future
+except AttributeError:
+    # Can't directly do asyncio.async because async is a keyword now,
+    # and that'd parse error on newer versions.
+    ensure_future = getattr(asyncio, "async")
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -49,7 +59,7 @@ def main():
 # This repeats messages like travis_wait (which I couldn't get working) does to prevent that.
 def run_compiler(args):
     compiler_process = yield from asyncio.create_subprocess_exec(*args)
-    task = asyncio.ensure_future(print_timeout_guards())
+    task = ensure_future(print_timeout_guards())
 
     ret = yield from compiler_process.wait()
     task.cancel()
