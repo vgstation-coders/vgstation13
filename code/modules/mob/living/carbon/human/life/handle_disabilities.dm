@@ -40,7 +40,8 @@
 					"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
 					"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
 					"SOTP IT#", \
-					"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
+					"ho now talking like a milenian piece of shit is too unralistic in the fucking", \
+					"U AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS!!!"))
 				if(2)
 					say(pick("FUS RO DAH", \
 						"fucking 4rries!", \
