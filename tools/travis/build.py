@@ -4,7 +4,6 @@ import asyncio
 import distutils.spawn
 import re
 import sys
-import typing
 
 MAP_INCLUDE_RE = re.compile(r"#include \"maps\\[a-zA-Z0-9][a-zA-Z0-9_]*\.dm\"")
 
@@ -48,18 +47,18 @@ def main():
 # So... Travis kills it.
 # Thanks DM.
 # This repeats messages like travis_wait (which I couldn't get working) does to prevent that.
-async def run_compiler(args) -> int:
-    compiler_process = await asyncio.create_subprocess_exec(*args)
+def run_compiler(args):
+    compiler_process = yield from asyncio.create_subprocess_exec(*args)
     task = asyncio.ensure_future(print_timeout_guards())
 
-    ret = await compiler_process.wait()
+    ret = yield from compiler_process.wait()
     task.cancel()
     return ret
 
-async def print_timeout_guards():
+def print_timeout_guards():
     while True:
         print("Keeping Travis alive. Ignore this!")
-        await asyncio.sleep(120)
+        yield from asyncio.sleep(120)
 
 if __name__ == "__main__":
     main()
