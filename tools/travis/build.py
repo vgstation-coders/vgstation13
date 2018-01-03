@@ -3,7 +3,6 @@ import argparse
 import asyncio
 import distutils.spawn
 import re
-import subprocess
 import sys
 import typing
 
@@ -49,7 +48,7 @@ def main():
 # So... Travis kills it.
 # Thanks DM.
 # This repeats messages like travis_wait (which I couldn't get working) does to prevent that.
-async def run_compiler(args: typing.List[str]) -> int:
+async def run_compiler(args) -> int:
     compiler_process = await asyncio.create_subprocess_exec(*args)
     task = asyncio.ensure_future(print_timeout_guards())
 
