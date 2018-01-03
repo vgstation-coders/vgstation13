@@ -67,8 +67,8 @@ def run_compiler(args):
 
 def print_timeout_guards():
     while True:
+        yield from asyncio.sleep(5*60)
         print("Keeping Travis alive. Ignore this!")
-        yield from asyncio.sleep(120)
 
 if __name__ == "__main__":
     main()
