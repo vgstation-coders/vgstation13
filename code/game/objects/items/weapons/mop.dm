@@ -20,7 +20,7 @@
 	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
 	A.clean_blood()
 	for(var/obj/effect/O in A)
-		if(iscleanaway(A))
+		if(iscleanaway(O))
 			qdel(O)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
