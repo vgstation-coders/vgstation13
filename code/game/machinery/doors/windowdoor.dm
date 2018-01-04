@@ -7,7 +7,7 @@
 	var/health = 100
 	visible = 0.0
 	use_power = 0
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains
 	opacity = 0
@@ -43,7 +43,7 @@
 		animate(src, color="#FFFFFF", time=5)
 	else
 		animate(src, color="#222222", time=5)
-	
+
 	if(density) //window is CLOSED
 		if(window_is_opaque) //Is it dark?
 			set_opacity(0) //Make it light.
@@ -54,7 +54,7 @@
 	else //Window is OPEN!
 		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
 	return opacity
-	
+
 /obj/machinery/door/window/examine(mob/user as mob)
 	..()
 	if(smartwindow)
@@ -110,7 +110,7 @@
 /obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(flags & ON_BORDER) //but it will always be on border tho
+	if(flow_flags & ON_BORDER) //but it will always be on border tho
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -262,15 +262,15 @@
 			to_chat(user, "<span class='notice'>This windoor already has electronics in it.</span>")
 			return 0
 		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")	
+		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		return smartwindow
-	
+
 	//If its a multitool and our windoor is smart, open the menu
 	if(ismultitool(I) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
-		
+
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
 	if(density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
 		var/aforce = I.force

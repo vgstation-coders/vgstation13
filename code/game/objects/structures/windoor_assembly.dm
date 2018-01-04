@@ -58,7 +58,7 @@ obj/structure/windoor_assembly/Destroy()
 /obj/structure/windoor_assembly/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density

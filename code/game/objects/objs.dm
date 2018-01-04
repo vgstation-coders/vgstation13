@@ -450,7 +450,7 @@ a {
 	if(density==0 || can_affix_to_dense_turf)
 		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flow_flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return FALSE // NOPE
 	return TRUE

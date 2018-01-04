@@ -1300,7 +1300,7 @@ Thanks.
 				if(A == src)
 					continue
 				if(A.density)
-					if(A.flags&ON_BORDER)
+					if(A.flow_flags&ON_BORDER)
 						dense = !A.Cross(src, src.loc)
 					else
 						dense = 1
@@ -1352,7 +1352,7 @@ Thanks.
 
 				if (!AM.anchored)
 					var/t = get_dir(src, AM)
-					if(AM.flags & ON_BORDER && !t)
+					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
 					if (istype(AM, /obj/structure/window/full))
 						for(var/obj/structure/window/win in get_step(AM,t))
