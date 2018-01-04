@@ -46,9 +46,7 @@
 			if(neighbor.flow_flags & ON_BORDER && neighbor.dir == get_dir(T0, src))
 				return 1
 			// Check for border blockages
-			to_chat(world, "line 51, neighbor is [neighbor]")
 			if(T0.ClickCross(get_dir(T0,src), border_only = 1) && src.ClickCross(get_dir(src,T0), border_only = 1, target_atom = target))
-				to_chat(world, "line 51 succeeded")
 				return 1
 			continue
 
@@ -62,13 +60,9 @@
 				continue // could not leave T0 in that direction
 
 			var/turf/T1 = get_step(T0,d)
-			to_chat(world, "line 66")
 			if(!T1 || T1.density || !T1.ClickCross(get_dir(T1,T0) | get_dir(T1,src), border_only = 0)) //let's check both directions at once
-				to_chat(world, "line 66 succeeded, neighbor is [neighbor], T1 is [T1.x], [T1.y]")
 				continue // couldn't enter or couldn't leave T1
-			to_chat(world, "line 70")
 			if(!src.ClickCross(get_dir(src,T1), border_only = 1, target_atom = target))
-				to_chat(world, "line 70 succeeded, neighbor is [neighbor], T1 is [T1.x], [T1.y]")
 				continue // could not enter src
 
 			return 1 // we don't care about our own density
@@ -129,22 +123,17 @@
 	The border_only flag allows you to not objects (for source and destination squares)
 */
 /turf/proc/ClickCross(var/target_dir, var/border_only, var/atom/target_atom = null)
-	to_chat(world, "Turf calling ClickCross is at [x],[y]")
 	for(var/obj/O in src)
 		if(O.flow_flags&IMPASSIBLE)
-			to_chat(world, "Impassible detected, aborting.")
 			return 0
 		if( !O.density || O == target_atom || O.throwpass)
 			continue // throwpass is used for anything you can click through
 
 		if( O.flow_flags&ON_BORDER) // windows have throwpass but are on border, check them first
-			to_chat(world, "ON_BORDER detected")
 			if( O.dir & target_dir || O.dir&(O.dir-1) ) // full tile windows are just diagonals mechanically
-				to_chat(world, "dir fail.")
 				return 0
 
 		else if( !border_only ) // dense, not on border, cannot pass over
-			to_chat(world, "dense, not on border, cannot pass over.")
 			return 0
 	return 1
 /*
