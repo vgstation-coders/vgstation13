@@ -45,6 +45,7 @@
 	var/role_alt_title
 
 	var/datum/job/assigned_job
+	var/datum/religion/faith
 
 	var/list/kills=list()
 	var/list/datum/objective/objectives = list()
@@ -118,6 +119,13 @@
 			output += "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 			obj_count++
 
+	// -- Religions --
+	if (faith) // This way they can get their religion changed
+		output += "<b>Religion:</b> [faith.name] <br/> \
+				   <b>Leader:</b> [faith.religiousLeader] <br/>"
+
+		if (faith.religiousLeader == src)
+			output += "You can convert people by [faith.convert_method] <br />"
 	recipient << browse(output,"window=memory")
 
 /datum/mind/proc/edit_memory()
