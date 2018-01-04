@@ -462,7 +462,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag")
+	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damage")
 
 /datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
