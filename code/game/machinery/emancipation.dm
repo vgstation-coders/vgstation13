@@ -34,6 +34,9 @@
 	use_power = 2
 	var/delete = FALSE
 
+	if(isobserver(user)) //Fucking ghosts.
+		return
+
 	if(issilicon(user) && !is_type_in_list(/mob/living/silicon,obj_whitelist)) //YOU FOOL, YOU ARE AN ITEM.
 		to_chat(user, "<span class = 'warning'>You feel your sensors overcharge and dissipate, as you are torn apart at the molecular level.</span>")
 		delete = TRUE
