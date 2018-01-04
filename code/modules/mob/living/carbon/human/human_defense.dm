@@ -8,10 +8,6 @@ emp_act
 
 */
 
-#define WEAK 1
-#define MEDIUM 2
-#define STRONG 3
-
 /mob/living/carbon/human/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	if(wear_suit && istype(wear_suit, /obj/item/clothing/suit/armor/laserproof))
 		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
@@ -328,7 +324,7 @@ emp_act
 	var/f_loss = null
 
 	switch (severity)
-		if (WEAK)
+		if (STRONG)
 			b_loss += 500
 			if (!prob(getarmor(null, "bomb")))
 				gib()
@@ -365,7 +361,7 @@ emp_act
 			if (prob(70) && !shielded)
 				Paralyse(10)
 
-		if(STRONG)
+		if(WEAK)
 			b_loss += 30
 			var/gotarmor = min(100,max(0,getarmor(null, "bomb")))
 
@@ -435,7 +431,7 @@ emp_act
 
 /mob/living/carbon/human/blob_act()
 	if(flags & INVULNERABLE)
-		return FALSE
+		return
 	if(cloneloss < 120)
 		playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 		if(isDead(src))

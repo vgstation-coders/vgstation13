@@ -10,3 +10,9 @@
 #define MOB_HOLOGRAPHIC 16 //holocarps
 #define MOB_SUPERNATURAL 32
 #define MOB_NO_PETRIFY 64 //can't get petrified
+
+// For blob_act
+
+#define WEAK 3
+#define MEDIUM 2
+#define STRONG 1
