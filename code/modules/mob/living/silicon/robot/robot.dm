@@ -222,27 +222,37 @@
 
 	if(module)
 		return
-	if(!modtype)
+	if(!(modtype in robot_modules))
 		return
 
 	var/module_type = robot_modules[modtype]
 	module = new module_type(src)
 
-	if(modtype == "Security")
+	feedback_inc("cyborg_[lowertext(modtype)]",1)
+	updatename()
+
+	if(modtype == ("Security" || "Combat"))
 		to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
 
 	if(hands) //To prevent runtimes when spawning borgs using admin fuckery.
 		hands.icon_state = lowertext(modtype)
-	feedback_inc("cyborg_[lowertext(modtype)]",1)
-	updatename()
 
-	choose_icon(6, set_module_sprites(module.sprites)) //Why 6? Don't ask me.
+	set_module_sprites(module.sprites)
+
+	if(!forced_module)
+		choose_icon(6, module_sprites) //Why 6? Don't ask me.
 
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
 /mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
-	module_sprites = new_sprites
-	return module_sprites
+	if(new_sprites && new_sprites.len)
+		module_sprites = new_sprites.Copy()
+	
+	if(module_sprites.len)
+		var/picked = pick(module_sprites)
+		icon_state = module_sprites[picked]
+		base_icon = icon_state
+		updateicon()
 
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
 	if(prefix)
@@ -1356,11 +1366,13 @@
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/ntmov()
+	if(!cell) //Just to be sure.
+		cell = new /obj/item/weapon/cell(src)
 	cell.maxcharge = 30000
 	cell.charge = 30000
 
 	pick_module("Combat")
-	updatename()
+//	updatename()
 	icon_state = "droid-combat"
 	base_icon = icon_state
 	updateicon()
@@ -1371,14 +1383,16 @@
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
+	if(!cell) //Just to be sure.
+		cell = new /obj/item/weapon/cell(src)
 	cell.maxcharge = 25000
 	cell.charge = 25000
 	
 	pick_module("Syndicate")
-	updatename()
-	icon_state = "rottweiler-combat"
-	base_icon = icon_state
-	updateicon()
+//	updatename()
+//	icon_state = "rottweiler-combat"
+//	base_icon = icon_state
+//	updateicon()
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg/New()

@@ -68,7 +68,7 @@
 
 /datum/robot_component/armour
 	name = "armour plating"
-	energy_consumption = FALSE
+	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/armour
 	max_damage = 60
 
@@ -90,7 +90,7 @@
 /datum/robot_component/radio
 	name = "radio"
 	external_type = /obj/item/robot_parts/robot_component/radio
-	energy_consumption = TRUE
+	energy_consumption = 1
 	max_damage = 40
 
 /datum/robot_component/binary_communication
@@ -102,12 +102,12 @@
 /datum/robot_component/camera
 	name = "camera"
 	external_type = /obj/item/robot_parts/robot_component/camera
-	energy_consumption = TRUE
+	energy_consumption = 1
 	max_damage = 40
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
-	energy_consumption = FALSE
+	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
 	max_damage = 30
 

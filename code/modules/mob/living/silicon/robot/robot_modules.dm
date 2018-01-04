@@ -52,11 +52,14 @@ var/global/list/robot_modules = list(
 	var/radio_key = null
 
 	// Bookkeeping
+	var/list/added_networks = list()
 
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = loc
 		RemoveStatusFlags(R)
+		RemoveCameraNetworks(R)
+		ResetEncryptionKey(R)
 		R.remove_module() //Helps remove screen references on robot end
 
 	for(var/obj/A in modules)
@@ -111,12 +114,23 @@ var/global/list/robot_modules = list(
 		for(var/network in networks)
 			if(!(network in R.camera.network))
 				R.camera.network.Add(network)
+				added_networks.Add(network)
+
+/obj/item/weapon/robot_module/proc/RemoveCameraNetworks(var/mob/living/silicon/robot/R)
+	if(R.camera)
+		R.camera.network.Cut(added_networks)
+		added_networks.Cut()
 
 /obj/item/weapon/robot_module/proc/AddEncryptionKey(var/mob/living/silicon/robot/R)
 	if(!R.radio)
 		return
+	R.radio.insert_key(new radio_key(R.radio))
+
+/obj/item/weapon/robot_module/proc/ResetEncryptionKey(var/mob/living/silicon/robot/R)
+	if(!R.radio)
+		return
 	if(radio_key)
-		R.radio.insert_key(new radio_key(R.radio))
+		R.radio.reset_key()
 
 /obj/item/weapon/robot_module/proc/ApplyStatusFlags(var/mob/living/silicon/robot/R)
 	if(!can_be_pushed)

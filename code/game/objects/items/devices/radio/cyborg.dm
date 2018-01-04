@@ -11,6 +11,10 @@
 	keyslot = key
 	recalculateChannels()
 
+/obj/item/device/radio/borg/proc/reset_key()
+	keyslot = initial(keyslot)
+	recalculateChannels()
+
 /obj/item/device/radio/borg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
 	user.set_machine(src)

@@ -98,16 +98,13 @@
 
 	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
 		R.movement_speed_modifier -= vtec_bonus
-
 	qdel(R.module)
+
 	if(R.hands)
-		R.hands.icon_state = "nomod"
-	R.icon_state = "robot"
-	R.base_icon = "robot"
-	R.camera.network.Remove(list(CAMERANET_ENGI,CAMERANET_MEDBAY,CAMERANET_MINE))
+		R.hands.icon_state = initial(R.hands.icon_state)
+
+	R.set_module_sprites(list("Default" = "robot"))
 	R.updatename("Default")
-	R.status_flags |= CANPUSH
-	R.updateicon()
 
 /obj/item/borg/upgrade/rename
 	var/heldname = ""

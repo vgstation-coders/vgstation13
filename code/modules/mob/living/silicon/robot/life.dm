@@ -1,6 +1,4 @@
 /mob/living/silicon/robot/Life()
-	set invisibility = FALSE
-
 	if(timestopped)
 		return FALSE //under effects of time magick
 	if(monkeyizing)
@@ -31,7 +29,7 @@
 
 /mob/living/silicon/robot/proc/clamp_values()
 	SetParalysis(min(paralysis, 30))
-	sleeping = FALSE
+	sleeping = 0
 	adjustBruteLoss(0)
 	adjustToxLoss(0)
 	adjustOxyLoss(0)
