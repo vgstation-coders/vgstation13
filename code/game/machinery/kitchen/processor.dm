@@ -152,7 +152,7 @@
 					target.canmove = 0
 					target.icon = null
 					target.invisibility = 101
-					target.density = 0
+					target.setDensity(FALSE)
 					var/throwzone = list()
 					for(var/turf/T in orange(loc,4))
 						throwzone += T

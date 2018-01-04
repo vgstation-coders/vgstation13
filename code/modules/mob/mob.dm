@@ -1520,10 +1520,10 @@ var/list/slot_equipment_priority = list( \
 
 	reset_layer() //Handles layer setting in hiding
 	if(lying)
-		density = 0
+		setDensity(FALSE)
 		drop_hands()
 	else
-		density = 1
+		setDensity(TRUE)
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.

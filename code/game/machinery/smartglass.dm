@@ -11,7 +11,7 @@
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "access_control_standby"
 	anchored = 0
-	density = 0
+	density = FALSE
 	use_power = 1
 	idle_power_usage = 1
 	active_power_usage = 50

@@ -105,7 +105,7 @@
 
 /obj/structure/window/barricade/Destroy()
 
-	density = 0 //Sanity while we do the rest
+	setDensity(FALSE) //Sanity while we do the rest
 	getFromPool(materialtype, loc, sheetamount)
 
 	..()

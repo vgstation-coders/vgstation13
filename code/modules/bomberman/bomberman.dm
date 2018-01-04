@@ -374,7 +374,7 @@ obj/structure/bomberflame/Destroy()
 			var/obj/structure/grille/grille = obstacle
 			grille.broken = 1
 			grille.icon_state = "[initial(grille.icon_state)]-b"
-			grille.density = 0
+			grille.setDensity(FALSE)
 			if(prob(35))
 				var/turf/T = grille.loc
 				T.spawn_powerup()
@@ -536,10 +536,10 @@ obj/structure/bomberflame/Destroy()
 
 /obj/structure/powerup/Bumped(M as mob|obj)	//kick bomb
 	if (istype(M, /mob/living) || istype(M, /obj/mecha) || istype(M, /obj/structure/bed/chair/) || istype(M, /obj/structure/bomberflame))
-		density = 0
+		setDensity(FALSE)
 		step(M, get_dir(M,src))
 		spawn(1)	//to prevent an infinite loop when a player with no BBD is trying to walk over a tile with at least two power-ups.
-			density = 1
+			setDensity(TRUE)
 	var/obj/item/weapon/bomberman/dispenser = locate() in M
 	if (dispenser)
 		apply_power(dispenser)

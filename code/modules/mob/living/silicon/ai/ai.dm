@@ -89,7 +89,7 @@ var/list/ai_list = list()
 	name = real_name
 	anchored = 1
 	canmove = 0
-	density = 1
+	setDensity(TRUE)
 	loc = loc
 
 	radio = new /obj/item/device/radio/borg/ai(src)

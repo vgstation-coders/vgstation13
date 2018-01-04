@@ -150,7 +150,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
-			density = 1
+			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
@@ -515,7 +515,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	dead_mob_list += src
 	icon_state = icon_dead
 	stat = DEAD
-	density = 0
+	setDensity(FALSE)
 
 	animal_count[src.type]--
 	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
