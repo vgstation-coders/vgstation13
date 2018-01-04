@@ -290,7 +290,7 @@ obj/item/projectile/kinetic/New()
 	bumped = 1
 
 	if(A)
-		density = 0
+		setDensity(FALSE)
 		invisibility = 101
 		kill_count = 0
 		if(isliving(A))

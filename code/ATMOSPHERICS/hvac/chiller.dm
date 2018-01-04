@@ -93,7 +93,7 @@
 	var/turf/simulated/L = loc
 	if(istype(L))
 		var/datum/gas_mixture/env = L.return_air()
-		var/transfer_moles = 0.25 * env.total_moles()
+		var/transfer_moles = 0.25 * env.total_moles() / env.volume * CELL_VOLUME
 		var/datum/gas_mixture/removed = env.remove(transfer_moles)
 		if(removed)
 			if(removed.temperature > (set_temperature + T0C))

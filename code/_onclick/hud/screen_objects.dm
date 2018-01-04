@@ -407,7 +407,7 @@
 		if("Track With Camera")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				var/target_name = input(AI, "Choose who you want to track", "Tracking") as null|anything in AI.trackable_mobs()
+				var/target_name = input(AI, "Choose what you want to track", "Tracking") as null|anything in AI.trackable_atoms()
 				AI.ai_camera_track(target_name)
 
 		if("Toggle Camera Light")

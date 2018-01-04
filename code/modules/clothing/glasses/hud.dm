@@ -55,6 +55,9 @@
 	icon_state = "diagnostichud"
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 
+/obj/item/clothing/glasses/hud/diagnostic/prescription
+	prescription = TRUE
+
 /obj/item/clothing/glasses/hud/diagnostic/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
 		process_diagnostic_hud(M)

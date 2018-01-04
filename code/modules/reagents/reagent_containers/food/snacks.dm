@@ -361,10 +361,10 @@
 			else
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
-			bitecount += 0.25
 			N.nutrition += 5
-			if(bitecount >= ANIMALBITECOUNT)
-				qdel(src)
+			reagents.trans_to(N, 0.25)
+			bitecount+= 0.25
+			after_consume(M,src.reagents)
 
 /obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
 	..()

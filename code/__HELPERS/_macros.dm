@@ -179,6 +179,14 @@
 
 #define ismatrix(A) (istype(A, /matrix))
 
+#define ismecha(A) (istype(A, /obj/mecha))
+
+#define isID(A) (istype(A, /obj/item/weapon/card/id))
+
+#define isPDA(A) (istype(A, /obj/item/device/pda))
+
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
