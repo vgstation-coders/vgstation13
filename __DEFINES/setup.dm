@@ -199,7 +199,7 @@ var/MAX_EXPLOSION_RANGE = 14
 //airflow flags!
 
 #define ON_BORDER 1   // item has priority to check when entering or leaving
-#define IMPASSIBLE 2  // item will make things auto_fail on prox checks through it
+#define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
 
 
 //sharpness flags

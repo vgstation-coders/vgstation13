@@ -124,7 +124,7 @@
 */
 /turf/proc/ClickCross(var/target_dir, var/border_only, var/atom/target_atom = null)
 	for(var/obj/O in src)
-		if(O.flow_flags&IMPASSIBLE)
+		if(O.flow_flags&IMPASSABLE)
 			return 0
 		if( !O.density || O == target_atom || O.throwpass)
 			continue // throwpass is used for anything you can click through
