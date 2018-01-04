@@ -443,4 +443,4 @@ emp_act
 			var/dam_zone = pick(organs_by_name)
 			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
 			apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
-	return TRUE
+	return
