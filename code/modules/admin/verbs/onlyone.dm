@@ -92,14 +92,14 @@
 /datum/only_one/highlander/check_eligibility(var/mob/M)
 	if(!..())
 		return 0
-	if(is_special_character(M))
-		return 0
+	//if(is_special_character(M))
+	//	return 0
 	return 1
 
 /datum/only_one/highlander/convert_mob(var/mob/M)
 	var/mob/living/carbon/human/H = ..(M)
 
-	ticker.mode.traitors += H.mind
+	//ticker.mode.traitors += H.mind
 	H.mind.special_role = HIGHLANDER // NEEDED FOR CHEAT CHECKS!
 
 	H.mutations.Add(M_HULK) //all highlanders are permahulks
@@ -157,7 +157,7 @@
 	return H
 
 
-//MAGIC MISSILE
+/*MAGIC MISSILE
 /datum/only_one/wizardwars
 	name = "Wizard Wars"
 
@@ -224,3 +224,4 @@
 		if(M.mind)
 			M.mind.nospells = 0
 		to_chat(M, "<span class='warning'>Invincibility period over. Let the battle begin!</span>")
+*/

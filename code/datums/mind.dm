@@ -48,16 +48,12 @@
 	var/datum/religion/faith
 
 	var/list/kills=list()
-	var/list/datum/objective/objectives = list()
+	var/list/datum/objective_holder/objectives = list()
 	var/list/datum/objective/special_verbs = list()
+	var/list/antag_roles = list()
 
-	var/has_been_rev = 0//Tracks if this mind has been a rev or not
 
 	var/datum/faction/faction 			//associated faction
-	var/datum/changeling/changeling		//changeling holder
-	var/datum/vampire/vampire			//vampire holder
-
-	var/rev_cooldown = 0
 
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
@@ -83,11 +79,6 @@
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
 	if(current)					//remove ourself from our old body's mind variable
-		if(changeling)
-			current.remove_changeling_powers()
-			current.verbs -= /datum/changeling/proc/EvolutionMenu
-		if(vampire)
-			current.remove_vampire_powers()
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
@@ -97,10 +88,6 @@
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
 
-	if(changeling)
-		new_character.make_changeling()
-	if(vampire)
-		new_character.make_vampire()
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
 
@@ -156,8 +143,8 @@
 	)
 	var/text = ""
 
-	if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
-		/** REVOLUTION ***/
+	/*if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
+		* REVOLUTION **
 		text = "revolution"
 		if (ticker.mode.config_tag=="revolution")
 			text = uppertext(text)
@@ -189,7 +176,7 @@
 			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=\ref[src];revolution=headrev'>headrev</a>|<a href='?src=\ref[src];revolution=rev'>rev</a>"
 		sections["revolution"] = text
 
-		/** CULT ***/
+		* CULT **
 		text = "cult"
 		if (ticker.mode.config_tag=="cult")
 			text = uppertext(text)
@@ -202,15 +189,15 @@
 
 			text += {"head|officer|<a href='?src=\ref[src];cult=clear'>employee</a>|<b>CULTIST</b>
 				<br>Give <a href='?src=\ref[src];cult=tome'>tome</a>|<a href='?src=\ref[src];cult=amulet'>amulet</a>."}
-/*
+
 			if (objectives.len==0)
 				text += "<br>Objectives are empty! Set to sacrifice and <a href='?src=\ref[src];cult=escape'>escape</a> or <a href='?src=\ref[src];cult=summon'>summon</a>."
-*/
+
 		else
 			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=\ref[src];cult=cultist'>cultist</a>"
 		sections["cult"] = text
 
-		/** WIZARD ***/
+		* WIZARD **
 		text = "wizard"
 		if (ticker.mode.config_tag=="wizard")
 			text = uppertext(text)
@@ -225,7 +212,7 @@
 			text += "<a href='?src=\ref[src];wizard=wizard'>yes</a>|<b>NO</b>"
 		sections["wizard"] = text
 
-		/** WIZARD'S APPRENTICES ***/
+		* WIZARD'S APPRENTICES **
 		text = "apprentice"
 		if (ticker.mode.config_tag=="wizard")
 			text = uppertext(text)
@@ -240,7 +227,7 @@
 			text += "<a href='?src=\ref[src];apprentice=apprentice'>yes</a>|<b>NO</b>"
 		sections["apprentice"] = text
 
-		/** CHANGELING ***/
+		* CHANGELING **
 		text = "changeling"
 		if (ticker.mode.config_tag=="changeling" || ticker.mode.config_tag=="traitorchan")
 			text = uppertext(text)
@@ -260,7 +247,7 @@
 //				text += "<br>All the changelings are dead! Restart in [round((changeling.TIME_TO_GET_REVIVED-(world.time-changeling.changelingdeathtime))/10)] seconds."
 		sections["changeling"] = text
 
-		/** VAMPIRE ***/
+		* VAMPIRE **
 		text = "vampire"
 		if (ticker.mode.config_tag=="vampire")
 			text = uppertext(text)
@@ -271,7 +258,7 @@
 				text += "<br>Objectives are empty! <a href='?src=\ref[src];vampire=autoobjectives'>Randomize!</a>"
 		else
 			text += "<a href='?src=\ref[src];vampire=vampire'>yes</a>|<b>NO</b>"
-		/** ENTHRALLED ***/
+		* ENTHRALLED **
 		text += "<br><i><b>enthralled</b></i>: "
 		if(src in ticker.mode.enthralled)
 			text += "<b><font color='#FF0000'>YES</font></b>|no"
@@ -279,7 +266,7 @@
 			text += "yes|<b>NO</b>"
 		sections["vampire"] = text
 
-		/** NUCLEAR ***/
+		* NUCLEAR **
 		text = "nuclear"
 		if (ticker.mode.config_tag=="nuclear")
 			text = uppertext(text)
@@ -299,7 +286,7 @@
 			text += "<a href='?src=\ref[src];nuclear=nuclear'>operative</a>|<b>NANOTRASEN</b>"
 		sections["nuclear"] = text
 
-	/** TRAITOR ***/
+	* TRAITOR **
 	text = "traitor"
 	if (ticker.mode.config_tag=="traitor" || ticker.mode.config_tag=="traitorchan")
 		text = uppertext(text)
@@ -312,7 +299,7 @@
 		text += "<a href='?src=\ref[src];traitor=traitor'>traitor</a>|<b>LOYAL</b>"
 	sections["traitor"] = text
 
-	/** MONKEY ***/
+	* MONKEY **
 	if (istype(current, /mob/living/carbon))
 		text = "monkey"
 		if (ticker.mode.config_tag=="monkey")
@@ -336,7 +323,8 @@
 		sections["monkey"] = text
 
 
-	/** SILICON ***/
+
+	* SILICON **
 
 	if (istype(current, /mob/living/silicon))
 		text = "silicon"
@@ -391,7 +379,7 @@
 			text += "<a href='?src=\ref[src];common=takeuplink'>Take uplink</a><br><a href='?src=\ref[src];common=crystals'>[crystals] telecrystals</a><br>"
 		out += text
 
-	/** ERT ***/
+	* ERT **
 	if (istype(current, /mob/living/carbon))
 		text = "Emergency Response Team"
 		text = "<i><b>[text]</b></i>: "
@@ -401,7 +389,7 @@
 			text += "<a href='?src=\ref[src];resteam=resteam'>yes</a>|<b>NO</b>"
 		sections["resteam"] = text
 
-	/** DEATHSQUAD ***/
+	 DEATHSQUAD
 	if (istype(current, /mob/living/carbon))
 		text = "Death Squad"
 		text = "<i><b>[text]</b></i>: "
@@ -411,7 +399,7 @@
 			text += "<a href='?src=\ref[src];dsquad=dsquad'>yes</a>|<b>NO</b>"
 		sections["dsquad"] = text
 
-	/** ELITE SYNDICATE SQUAD ***/
+	 ELITE SYNDICATE SQUAD
 	if (istype(current, /mob/living/carbon))
 		text = "Elite Syndicate Squad"
 		text = "<i><b>[text]</b></i>: "
@@ -421,7 +409,7 @@
 			text += "<a href='?src=\ref[src];elite=elite'>yes</a>|<b>NO</b>"
 		sections["elite"] = text
 
-	/** CUSTOM STRIKE TEAM ***/
+	* CUSTOM STRIKE TEAM */
 	if (istype(current, /mob/living/carbon))
 		text = "Custom Team"
 		text = "<i><b>[text]</b></i>: "
@@ -450,14 +438,14 @@
 	else
 		var/obj_count = 1
 		for(var/datum/objective/objective in objectives)
-			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=\ref[src];obj_edit=\ref[objective]'>Edit</a> <a href='?src=\ref[src];obj_delete=\ref[objective]'>Delete</a> <a href='?src=\ref[src];obj_completed=\ref[objective]'><font color=[objective.completed ? "green" : "red"]>Toggle Completion</font></a><br>"
+			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=\ref[src];obj_edit=\ref[objective]'>Edit</a> <a href='?src=\ref[src];obj_delete=\ref[objective]'>Delete</a> <a href='?src=\ref[src];obj_completed=\ref[objective]'><font color=[objective.IsFulfilled() ? "green" : "red"]>Toggle Completion</font></a><br>"
 			obj_count++
 
 	out += {"<a href='?src=\ref[src];obj_add=1'>Add objective</a><br><br>
 		<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"}
 	usr << browse(out, "window=edit_memory[src]")
 
-/datum/mind/Topic(href, href_list)
+/*/datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
 		return
 
@@ -1172,6 +1160,7 @@
 
 
 	edit_memory()
+*/
 /*
 proc/clear_memory(var/silent = 1)
 	var/datum/game_mode/current_mode = ticker.mode
@@ -1208,7 +1197,7 @@ proc/clear_memory(var/silent = 1)
 	special_role = null
 
 */
-
+/*
 /datum/mind/proc/find_syndicate_uplink()
 	var/uplink = null
 
@@ -1363,7 +1352,7 @@ proc/clear_memory(var/silent = 1)
 	var/fail = 0
 //	fail |= !ticker.mode.equip_traitor(current, 1)
 	fail |= !ticker.mode.equip_revolutionary(current)
-
+*/
 
 // check whether this mind's mob has been brigged for the given duration
 // have to call this periodically for the duration to work properly
@@ -1393,7 +1382,7 @@ proc/clear_memory(var/silent = 1)
 		brigged_since = world.time
 
 	return (duration <= world.time - brigged_since)
-
+/*
 /datum/mind/proc/make_traitor()
 	if (!(src in ticker.mode.traitors))
 		ticker.mode.traitors += src
@@ -1414,7 +1403,7 @@ proc/clear_memory(var/silent = 1)
 		return TRUE
 
 	return FALSE
-
+*/
 //Initialisation procs
 /mob/proc/mind_initialize() // vgedit: /mob instead of /mob/living
 	if(mind)

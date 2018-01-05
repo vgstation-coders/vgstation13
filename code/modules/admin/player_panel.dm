@@ -3,19 +3,19 @@
 
 /mob/living/player_panel_job()
 	return "Living"
-	
+
 /mob/living/carbon/player_panel_job()
 	return "Carbon-Based"
-	
+
 /mob/living/carbon/human/player_panel_job()
 	return job
 
 /mob/living/carbon/slime/player_panel_job()
 	return "Slime"
-	
+
 /mob/living/carbon/monkey/player_panel_job()
 	return "Monkey"
-	
+
 /mob/living/carbon/monkey/diona/player_panel_job()
 	return "Diona Nymph"
 
@@ -24,40 +24,40 @@
 
 /mob/living/carbon/alien/larva/player_panel_job()
 	return "Alien Larva"
-	
+
 /mob/living/simple_animal/player_panel_job()
 	return "Animal"
-	
+
 /mob/living/simple_animal/borer/player_panel_job()
 	return "Borer"
-	
+
 /mob/living/simple_animal/corgi/player_panel_job()
 	return "Corgi"
-	
+
 /mob/living/simple_animal/construct/player_panel_job()
 	return "Construct"
-	
+
 /mob/living/silicon/player_panel_job()
 	return "Silicon"
-	
+
 /mob/living/silicon/robot/player_panel_job()
 	return "Cyborg"
-	
+
 /mob/living/silicon/robot/mommi/player_panel_job()
 	return "Mobile-MMI"
-	
+
 /mob/living/silicon/ai/player_panel_job()
 	return "AI"
-	
+
 /mob/living/silicon/pai/player_panel_job()
 	return "pAI"
-	
+
 /mob/dead/observer/player_panel_job()
 	return "Ghost"
-	
+
 /mob/new_player/player_panel_job()
 	return "New Player"
-	
+
 /datum/admins/proc/player_panel_new()//The new one
 	if (!usr.client.holder)
 		return
@@ -286,7 +286,7 @@
 			var/color = "#e6e6e6"
 			if(i%2 == 0)
 				color = "#f2f2f2"
-			var/is_antagonist = is_special_character(M)
+			//var/is_antagonist = is_special_character(M)
 
 			var/M_job = M.player_panel_job()
 
@@ -315,7 +315,7 @@
 					<td align='center' bgcolor='[color]'>
 						<span id='notice_span[i]'></span>
 						<a id='link[i]'
-						onmouseover='expand("item[i]","[M_job]","[M_name]","[M_rname]","--unused--","[M_key]","[M.lastKnownIP]",[is_antagonist],"\ref[M]")'
+						onmouseover='expand("item[i]","[M_job]","[M_name]","[M_rname]","--unused--","[M_key]","[M.lastKnownIP]","\ref[M]")'
 						>
 						<b id='search[i]'>[M_name] - [M_rname] - [M_key] ([M_job])</b>
 						</a>
@@ -392,14 +392,14 @@
 		<td align=center><A HREF='?src=\ref[src];adminplayeropts=\ref[M]'>X</A></td>
 		<td align=center><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 		"}
-		switch(is_special_character(M))
+		/*switch(is_special_character(M))
 			if(0)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
 			if(1)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red>Traitor?</font></A></td>"}
 			if(2)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red><b>Traitor?</b></font></A></td>"}
-
+		*/
 	dat += "</table></body></html>"
 
 	usr << browse(dat, "window=players;size=640x480")
