@@ -230,7 +230,4 @@ obj/item/proc/get_clamped_volume()
 	I.add_fingerprint(user)
 
 	if(hitsound)
-		if(.) //If the attack is successful
-			playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)
-
-	return
+		playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)
