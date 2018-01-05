@@ -3,9 +3,9 @@
 	desc = "Liberator of luggage. Larcenist of belongings."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "emancipation_grill"
-	density = 0
-	anchored = 1
-	use_power = 1
+	density = FALSE
+	anchored = TRUE
+	use_power = TRUE
 	idle_power_usage = 75
 	active_power_usage = 750
 	flow_flags = IMPASSABLE
@@ -26,34 +26,34 @@
 	else
 		icon_state = "[initial(icon_state)]_on"
 
-/obj/machinery/emancipation_grill/proc/emancipate(atom/movable/user)
-	if(!user)
+/obj/machinery/emancipation_grill/proc/emancipate(atom/movable/victim)
+	if(!victim)
 		return
 	if(stat & (BROKEN|NOPOWER))
 		return
 	use_power = 2
 	var/delete = FALSE
 
-	if(isobserver(user)) //Fucking ghosts.
+	if(isobserver(victim)) //Fucking ghosts.
 		return
 
-	if(issilicon(user) && !is_type_in_list(/mob/living/silicon,obj_whitelist)) //YOU FOOL, YOU ARE AN ITEM.
-		to_chat(user, "<span class = 'warning'>You feel your sensors overcharge and dissipate, as you are torn apart at the molecular level.</span>")
+	if(issilicon(victim) && !is_type_in_list(/mob/living/silicon,obj_whitelist)) //YOU FOOL, YOU ARE AN ITEM.
+		to_chat(victim, "<span class = 'warning'>You feel your sensors overcharge and dissipate, as you are torn apart at the molecular level.</span>")
 		delete = TRUE
 
-	if(isobj(user)) //Let's only vaporize objects
+	if(isobj(victim)) //Let's only vaporize objects
 		if(obj_blacklist.len)
-			if(is_type_in_list(user, obj_blacklist))
+			if(is_type_in_list(victim, obj_blacklist))
 				delete = TRUE
 		else if(obj_whitelist.len)
-			if(!is_type_in_list(user, obj_whitelist))
+			if(!is_type_in_list(victim, obj_whitelist))
 				delete = TRUE
 
 	if(delete == TRUE)
-		qdel(user)
+		qdel(victim)
 		return
 
-	for(var/atom/movable/I in get_contents_in_object(user)) //If it does, see if its contents can get past
+	for(var/atom/movable/I in get_contents_in_object(victim)) //If it does, see if its contents can get past
 		emancipate(I)
 
 /obj/machinery/emancipation_grill/Crossed(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
