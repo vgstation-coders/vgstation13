@@ -116,9 +116,9 @@
 					user << "<span class='warning'>You can't let go of \the [P]!</span>"
 					return
 
-				if(P:brainmob.mind)
+				/*if(P:brainmob.mind)
 					ticker.mode.remove_cultist(P:brainmob.mind, 1)
-					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)
+					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)*/
 
 				if (!brain)
 					if (user.drop_item(P, src))

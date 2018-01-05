@@ -27,3 +27,16 @@
 
 /datum/objective_holder/proc/FindObjective(var/datum/objective/O)
 	return locate(O) in objectives
+
+/datum/objective_holder/proc/GetObjectiveString(var/check_success = 0)
+	var/dat = ""
+	if(objectives.len == 0)
+		dat += "EMPTY<br>"
+	else
+		var/obj_count = 1
+		for(var/datum/objective/O in objectives)
+			dat += {"<BR><B>Objective #[obj_count++]</b>: [O.explanation_text]"}
+			if(check_success)
+				dat += {"<BR>[O.IsFulfilled() ? "Success" : "Failed"]"}
+
+	return dat

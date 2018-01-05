@@ -23,9 +23,9 @@
 		to_chat(user, "<span class='sinister'>You feel a dark stirring inside of \the [src], something you want nothing of! Your instincts are better than any man's.</span>")
 		return
 
-	else if(is_special_character(user))
+	/*else if(is_special_character(user))
 		to_chat(user, "<span class='sinister'>Even to a heart as dark as yours, you know nothing good will come out of messing with \the [src]! Something instinctual pulls you away.</span>")
-
+	*/
 	else if (!insisting)
 		user.visible_message("<span class='sinister'>[user] touches [src] delicately, causing it to stir.</span>", "<span class='sinister'>Your first touch makes [src] stir, listening to you. Are you still sure about this ?</span>")
 		insisting++
@@ -66,7 +66,7 @@
 
 			user.update_mutations()
 
-			ticker.mode.traitors += user.mind
+			//ticker.mode.traitors += user.mind
 			user.mind.special_role = "Avatar of \the [src]" //Custom naming ahoy !
 
 			var/datum/objective/silence/silence = new

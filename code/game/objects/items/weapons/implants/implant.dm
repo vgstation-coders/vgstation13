@@ -284,6 +284,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/loyalty/implanted(mob/M)
 	if(!iscarbon(M))
 		return 0
+	/*
 	var/mob/living/carbon/H = M
 	if(H.mind in ticker.mode.head_revolutionaries)
 		H.visible_message("[H] seems to resist the implant!", "You feel the corporate tendrils of Nanotrasen try to invade your mind!")
@@ -291,8 +292,9 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	else if(H.mind in ticker.mode:revolutionaries)
 		ticker.mode:remove_revolutionary(H.mind)
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
+	*/
 	return 1
-
+/*
 /obj/item/weapon/implant/traitor
 	name = "Greytide Implant"
 	desc = "Greytide Station wide"
@@ -354,6 +356,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	ticker.mode.update_traitor_icons_added(user.mind)
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+*/
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin"
 	desc = "Removes all stuns and knockdowns."

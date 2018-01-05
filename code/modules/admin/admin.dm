@@ -1206,7 +1206,7 @@ var/global/floorIsLava = 0
 	feedback_add_details("admin_verb","UP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
-
+/*
 /proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
 	if(!ticker || !ticker.mode)
 		return 0
@@ -1252,7 +1252,7 @@ var/global/floorIsLava = 0
 		return 1
 
 	return 0
-
+*/
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)

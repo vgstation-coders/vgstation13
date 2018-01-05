@@ -191,6 +191,7 @@
 		statfile << "POPCOUNT|[PS.time]|[PS.popcount]"
 
 /datum/stat_collector/proc/antagCheck(statfile)
+	/*
 	for(var/datum/mind/Mind in ticker.minds)
 		for(var/datum/objective/objective in Mind.objectives)
 			if(objective.explanation_text == "Free Objective")
@@ -199,7 +200,7 @@
 				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.target]|[objective.target.assigned_role]|[objective.target.name]|[objective.check_completion()]|[objective.explanation_text]")
 			else
 				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.check_completion()]|[objective.explanation_text]")
-
+	*/
 
 // This guy writes the first line(s) of the stat file! Woo!
 /datum/stat_collector/proc/Write_Header(statfile)

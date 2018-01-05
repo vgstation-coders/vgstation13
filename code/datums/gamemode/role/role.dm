@@ -83,6 +83,8 @@
 	// Assigned faction.
 	var/datum/faction/faction = null
 
+	var/datum/role/parent = null
+
 	var/list/minds = list()
 
 	//////////////////////////////
@@ -97,27 +99,33 @@
 	// Objectives
 	var/datum/objective_holder/objectives=new
 
-/datum/role/New(var/datum/mind/M=null, var/datum/role/parent=null, var/datum/faction/fac=null)
+/datum/role/New(var/datum/mind/M=null, var/datum/role/par=null, var/datum/faction/fac=null)
+	// Link faction.
+	faction=fac
+
+	parent = par
 	if(M)
-		if(!istype(M))
-			WARNING("M is [M.type]!")
-
-		// If we don't have this guy in the parent, add him.
-		if(!(M in parent.minds))
-			parent.minds += M
-
-		// If we don't have this guy in the faction, add him.
-		if(fac && !(M in fac.members))
-			fac.members += M
-
-		// Notify gamemode that this player has this role, too.
-		ticker.mode.add_player_role_association(M,id)
-
-		// Link faction.
-		faction=fac
+		AssignToRole(M)
 
 	if(!plural_name)
 		plural_name="[name]s"
+
+/datum/role/proc/AssignToRole(var/datum/mind/M)
+	if(!istype(M))
+		WARNING("M is [M.type]!")
+	if(!CanBeAssigned(M))
+		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
+
+	// If we don't have this guy in the parent, add him.
+	if(!(M in parent.minds))
+		parent.minds += M
+
+	// If we don't have this guy in the faction, add him.
+	if(faction && !(M in faction.members))
+		faction.members += M
+
+	// Notify gamemode that this player has this role, too.
+	ticker.mode.add_player_role_association(M,id)
 
 // Remove
 /datum/role/proc/Drop()
@@ -194,6 +202,10 @@
 		return 1
 	return 0
 
+/datum/role/proc/ReturnObjectivesString(var/check_success = 0)
+	return objectives.GetObjectiveString(check_success)
+
+
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
 		to_chat(antag, "<B>You are a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
@@ -246,12 +258,10 @@
 	if(objectives.GetObjectives())
 		var/count = 1
 		for(var/datum/objective/objective in objectives.GetObjectives())
-			if(objective.check_completion())
-				text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
-				feedback_add_details("[id]_objective","[objective.type]|SUCCESS")
-			else
-				text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='red'>Fail.</font>"
-				feedback_add_details("[id]_objective","[objective.type]|FAIL")
+			var/successful = objective.IsFulfilled()
+			text += "<br><B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			feedback_add_details("[id]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
+			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			count++
 

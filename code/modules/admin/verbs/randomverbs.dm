@@ -521,7 +521,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	//Two variables to properly announce later on.
 	var/admin = key_name_admin(src)
 	var/player_key = G_found.key
-
+	/*
 	//Now for special roles and equipment.
 	switch(new_character.mind.special_role)
 		if("traitor")
@@ -553,7 +553,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 				//Add aliens.
 				else
 					job_master.EquipRank(new_character, new_character.mind.assigned_role, 1)//Or we simply equip them.
-
+	*/
 	//Announces the character on all the systems, based on the record.
 	if(!issilicon(new_character))//If they are not a cyborg/AI.
 		if(!record_found&&new_character.mind.assigned_role!="MODE")//If there are no records for them. If they have a record, this info is already in there. MODE people are not announced anyway.

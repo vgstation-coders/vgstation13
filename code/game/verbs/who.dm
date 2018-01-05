@@ -59,12 +59,13 @@
 					dead++
 			else
 				living++
-		if(is_special_character(C.mob))
+		/*if(is_special_character(C.mob))
 			entry += " - <b><span class='red'>Antagonist</span></b>"
 			if(!(C.mob.isDead()))
 				living_antags++
 			else
 				dead_antags++
+		*/
 		entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
 		Lines += entry
 

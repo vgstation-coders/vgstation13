@@ -255,7 +255,7 @@
 	to_chat(H, "<span class='notice'><b>Consciousness slowly creeps over you as your body regenerates.</b><br><i>So this is what cloning feels like?</i></span>")
 
 	// -- Mode/mind specific stuff goes here
-
+	/*
 	if(isrev(H) || isrevhead(H))
 		ticker.mode.update_all_rev_icons() //So the icon actually appears
 	if(isnukeop(H))
@@ -276,7 +276,7 @@
 			H.add_spell(spell_to_add)
 
 	// -- End mode specific stuff
-
+	*/
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
 	randmutb(H) // sometimes the clones come out wrong.

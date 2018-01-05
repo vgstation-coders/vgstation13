@@ -198,7 +198,7 @@
 	new /obj/item/weapon/conversion_kit(src)
 	new /obj/item/ammo_storage/box/a357(src)
 	return
-
+/*
 /obj/item/weapon/storage/box/syndie_kit/greytide
 	name = "box (GT)"
 
@@ -206,7 +206,7 @@
 		..()
 		var/obj/item/weapon/implanter/O = new(src)
 		O.imp = new /obj/item/weapon/implant/traitor(O)
-		O.update()
+		O.update()*/
 
 /obj/item/weapon/storage/box/syndie_kit/boolets
 	name = "Shotgun shells"

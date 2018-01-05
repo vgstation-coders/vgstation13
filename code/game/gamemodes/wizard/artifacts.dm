@@ -61,7 +61,7 @@
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
-
+/*
 #define APPRENTICE_PRICE Sp_BASE_PRICE
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -69,6 +69,7 @@
 	abbreviation = "CT"
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
 	price = APPRENTICE_PRICE
+*/
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
