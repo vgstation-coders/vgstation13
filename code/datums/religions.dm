@@ -734,7 +734,7 @@
 /datum/religion/changeling
 	name = "The Religion" // A la "The Thing"
 	deity_name = "The Hive"
-	bible_name = "Probicis"
+	bible_name = "Proboscis"
 	male_adept = "Changeling"
 	female_adept = "Changeling"
 	keys = list("changeling", "ling", "hive", "succ")
