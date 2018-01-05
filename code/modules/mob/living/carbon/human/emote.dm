@@ -700,11 +700,7 @@
 						if(do_after(usr,usr,30))
 							visible_message("<span class = 'warning'><b>[name]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>","<span class = 'warning'>You hear a [pick("tremendous","gigantic","colossal")] fart.</span>")
 							playsound(location, 'sound/effects/superfart.ogg', 50, 0)
-							for(var/mob/living/V in view(src,aoe_range))
-								if (isborer(V))
-									var/mob/living/simple_animal/borer/B = V
-									if (B.host == usr)
-										continue
+							for(var/mob/living/V in oviewers(aoe_range, get_turf(src)))
 								if(!airborne_can_reach(location,get_turf(V),aoe_range))
 									continue
 								shake_camera(V,10,5)
