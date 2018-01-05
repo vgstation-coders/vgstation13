@@ -42,7 +42,7 @@
 	name = "Mobile Operating Table"
 	desc = "A collapsed mobile operating table that can be carried around."
 	id = "surgery_rollerbed"
-	build_type = PROTOLATHE | MECHFAB
+	build_type = MECHFAB
 	build_path = /obj/item/roller/surgery
 	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 2)
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
