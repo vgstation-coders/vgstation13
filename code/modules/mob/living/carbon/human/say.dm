@@ -23,7 +23,7 @@
 
 /mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
 	if(wear_mask && istype(wear_mask))
-		if(!(copytext(speech.message, 1, 2) == "*" || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")))
+		if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
 			wear_mask.treat_mask_speech(speech)
 
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
@@ -68,8 +68,8 @@
 				return "Unknown"
 		else
 			return real_name
-	if(mind && mind.changeling && mind.changeling.mimicing)
-		return mind.changeling.mimicing
+	/*if(mind && mind.changeling && mind.changeling.mimicing)
+		return mind.changeling.mimicing*/
 	if(GetSpecialVoice())
 		return GetSpecialVoice()
 	return real_name

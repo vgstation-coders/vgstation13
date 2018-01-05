@@ -230,7 +230,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 					search_pda = FALSE
 
-		for (var/datum/mind/themind in ticker.minds)
+		/*for (var/datum/mind/themind in ticker.minds)
 			if (themind)
 				var/found = 0
 				for (var/datum/objective/objective in themind.objectives)
@@ -244,7 +244,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					to_chat(themind.current, "<span class='notice'>Your current objectives:</span>")
 					for(var/datum/objective/objective in themind.objectives)
 						to_chat(themind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-						obj_count++
+						obj_count++*/
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()

@@ -298,8 +298,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
 
-
-
 /obj/item/weapon/implant/traitor
 	name = "Greytide Implant"
 	desc = "Greytide Station wide"
@@ -365,6 +363,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	ticker.mode.update_traitor_icons_added(user.mind)
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+*/
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin"
 	desc = "Removes all stuns and knockdowns."

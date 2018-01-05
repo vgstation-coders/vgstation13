@@ -204,23 +204,25 @@
 		else
 			healths.icon_state = "health7"
 
-	if(syndicate && client)
+			src.healths.icon_state = "health7"
+
+	/*if (src.syndicate && src.client)
 		if(ticker.mode.name == "traitor")
 			for(var/datum/mind/tra in ticker.mode.traitors)
 				if(tra.current)
 					var/I = image('icons/mob/mob.dmi', loc = tra.current, icon_state = "traitor")
-					client.images += I
-		if(connected_ai)
-			connected_ai.connected_robots -= src
-			connected_ai = null
-		if(mind)
-			if(!mind.special_role)
-				mind.special_role = "traitor"
-				ticker.mode.traitors += mind
-
-	if(cells)
-		if(cell)
-			var/cellcharge = cell.charge/cell.maxcharge
+					src.client.images += I
+		if(src.connected_ai)
+			src.connected_ai.connected_robots -= src
+			src.connected_ai = null
+		if(src.mind)
+			if(!src.mind.special_role)
+				src.mind.special_role = "traitor"
+				ticker.mode.traitors += src.mind
+	*/
+	if (src.cells)
+		if (src.cell)
+			var/cellcharge = src.cell.charge/src.cell.maxcharge
 			switch(cellcharge)
 				if(0.75 to INFINITY)
 					cells.icon_state = "charge4"
