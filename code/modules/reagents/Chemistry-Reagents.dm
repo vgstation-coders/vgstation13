@@ -364,6 +364,7 @@
 				return 0
 	return 1
 
+/*
 /datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
 
 	if(..())
@@ -372,6 +373,7 @@
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
+*/
 
 //Data must contain virus type
 /datum/reagent/vaccine
@@ -915,7 +917,7 @@
 
 	if(volume >= 1)
 		O.bless()
-
+/*
 /datum/reagent/holywater/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -943,6 +945,7 @@
 			ticker.mode.remove_thrall(H.mind)
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
@@ -991,7 +994,7 @@
 					if(H.acidable())
 						H.take_organ_damage(min(15, volume * 2))
 						H.mind.vampire.smitecounter += 5
-
+*/
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 
 	if(..())

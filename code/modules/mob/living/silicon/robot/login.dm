@@ -2,7 +2,8 @@
 	..()
 	regenerate_icons()
 	show_laws(0)
-	if(module)
-		module.UpdateModuleHolder(src)
+	/* ROLE DATUMS FIXME
 	if(mind)
 		ticker.mode.remove_revolutionary(mind)
+	return
+	*/
