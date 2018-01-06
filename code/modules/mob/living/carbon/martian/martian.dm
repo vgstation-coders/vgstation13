@@ -31,7 +31,7 @@
 
 	unslippable = TRUE
 	size = SIZE_BIG
-	status_flags = CANPUSH
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	mob_bump_flag = HUMAN
 	mob_push_flags = ALLMOBS
 	mob_swap_flags = ALLMOBS
