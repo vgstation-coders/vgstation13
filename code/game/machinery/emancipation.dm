@@ -5,7 +5,7 @@
 	icon_state = "emancipation_grill"
 	density = FALSE
 	anchored = TRUE
-	use_power = TRUE
+	use_power = 1
 	idle_power_usage = 75
 	active_power_usage = 750
 	flow_flags = IMPASSABLE
@@ -31,7 +31,7 @@
 		return
 	if(stat & (BROKEN|NOPOWER))
 		return
-	use_power = 2
+	use_power(active_power_usage, power_channel)
 	var/delete = FALSE
 
 	if(isobserver(victim)) //Fucking ghosts.
