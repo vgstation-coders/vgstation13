@@ -156,7 +156,7 @@
 	if(!C.incapacitated())
 		if(src.up)
 			src.up = !src.up
-			eyeprot = 2
+			eyeprot = 3
 			body_parts_covered |= EYES
 			icon_state = initial(icon_state)
 			to_chat(C, "You flip the [src] down to protect your eyes.")
