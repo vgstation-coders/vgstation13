@@ -516,7 +516,8 @@
 	if(!..())
 		if(!connected)
 			connected = findScanner() //lets get that machine
-			connected.connected = src
+			if(connected)
+				connected.connected = src
 		ui_interact(user)
 
 /obj/machinery/computer/scan_consolenew/AltClick()
