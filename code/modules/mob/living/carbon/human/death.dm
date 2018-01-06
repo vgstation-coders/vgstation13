@@ -132,7 +132,8 @@
 	update_hair(0)
 
 	mutations.Add(SKELETON)
-	status_flags |= DISFIGURED
+	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
+	head_organ.disfigure("burn")
 	update_body(0)
 	update_mutantrace()
 	return
@@ -147,7 +148,8 @@
 	update_hair(0)
 
 	mutations.Add(M_HUSK)
-	status_flags |= DISFIGURED	//Makes them unknown without fucking up other stuff like admintools
+	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
+	head_organ.disfigure("brute")
 	update_body(0)
 	update_mutantrace()
 	vessel.remove_reagent(BLOOD,vessel.get_reagent_amount(BLOOD))
