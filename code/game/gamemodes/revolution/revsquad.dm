@@ -61,18 +61,18 @@
 	if(master_mode=="secret" && secret_force_mode=="secret")
 		if(head_revolutionaries.len==0 || head_check.len <= minimum_heads)
 			log_admin("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
-			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
+			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check.len]")
 			message_admins("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 			message_admins("Number of headrevs: [head_revolutionaries.len] Heads of Staff: [get_assigned_head_roles()]")
 			return 0
 
-	else if (head_revolutionaries.len==0 || head_check <= 0)
+	else if (head_revolutionaries.len==0 || head_check.len <= 0)
 		log_admin("Failed to set-up a secret-forced round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		message_admins("Failed to set-up a secret-forced round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		return 0
 
-	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
-	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
+	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check.len] heads of staff.")
+	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check.len] heads of staff.")
 	return 1
 
 /datum/game_mode/revsquad/post_setup()
