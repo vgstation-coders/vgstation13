@@ -141,14 +141,12 @@
 	signal.data["message"] = "ACTIVATE"
 	radio_connection.post_signal(src, signal)
 
-	var/time = time2text(world.realtime,"hh:mm:ss")
-	var/turf/T = get_turf(src)
 	if(usr)
 		var/mob/user = usr
 		if(user)
-			lastsignalers.Add("[time] <B>:</B> [user.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+			investigation_log(I_WIRES, "used as signaler by [key_name(user)] - [format_frequency(frequency)]/[code]")
 		else
-			lastsignalers.Add("[time] <B>:</B> (<span class='danger'>NO USER FOUND</span>) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+			investigation_log(I_WIRES, "used as signaler by UNKNOWN - [format_frequency(frequency)]/[code]")
 	return
 /*
 	for(var/obj/item/device/assembly/signaler/S in world)
