@@ -305,9 +305,9 @@
 /obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location)
 	var/obj/item/clothing/mask/cigarette/C = W
 	if(!istype(C))
-		return // what
+		return ..() // what
 	reagents.trans_to(C, (reagents.total_volume/contents.len))
-	..()
+	. = ..()
 
 /obj/item/weapon/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M, /mob))
@@ -447,7 +447,7 @@
 	return
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location)
-	..()
+	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
 		if(istype(src.loc,/mob/living/carbon))
@@ -568,4 +568,4 @@
 	if(istype(G))
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
-	..()
+	. = ..()

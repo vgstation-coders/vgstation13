@@ -320,7 +320,7 @@
 		update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location)
-	..()
+	. = ..()
 	update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/antag
