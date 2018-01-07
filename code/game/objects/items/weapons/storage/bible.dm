@@ -1,3 +1,5 @@
+#define isChaplain(user) (user.mind && user.mind.assigned_role == "Chaplain")
+
 /obj/item/weapon/storage/bible
 	name = "bible"
 	desc = "Apply to head repeatedly."
@@ -9,7 +11,8 @@
 	flags = FPRINT
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
 	var/mob/affecting = null
-	var/deity_name = "Christ"
+	var/datum/religion/my_rel = new /datum/religion
+	actions_types = list(/datum/action/item_action/convert)
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
@@ -40,11 +43,6 @@
 //What happens when you slap things with the Bible in general
 /obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
 
-	var/chaplain = 0 //Are we the Chaplain ? Used for simplification
-	if(user.mind && (user.mind.assigned_role == "Chaplain"))
-		chaplain = 1 //Indeed we are
-
-
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
@@ -55,16 +53,16 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if(!chaplain) //The user is not a Chaplain. BLASPHEMY !
+	if (!isChaplain(user) && !isReligiousLeader(user)) //The user is not a Chaplain, nor the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(isvampire(user)) //Vampire trying to use it
-			to_chat(user, "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
+			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
 			user.emote("scream",,, 1)
 			M.mind.vampire.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
 		else if(iscult(user)) //Cultist trying to use it
-			to_chat(user, "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
+			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
 			user.emote("scream",,, 1)
@@ -95,7 +93,7 @@
 
 	if(M.stat == DEAD) //Our target is dead. RIP in peace
 		user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s lifeless body with \the [src].</span>",
-		"<span class='warning'>You bless [M]'s lifeless body with \the [src], trying to conjure [deity_name]'s mercy on them.</span>")
+		"<span class='warning'>You bless [M]'s lifeless body with \the [src], trying to conjure [my_rel.deity_name]'s mercy on them.</span>")
 		playsound(get_turf(src), "punch", 25, 1, -1)
 
 		//TODO : Way to bring people back from death if they are your followers
@@ -103,29 +101,29 @@
 
 	//Our target is alive, prepare the blessing
 	user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
-	"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [deity_name], bless thee!</span>")
+	"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], bless thee!</span>")
 	playsound(get_turf(src), "punch", 25, 1, -1)
 
-	if(ishuman(M)) //Only humans can be vampires or cultists
+	if(ishuman(M)) //Only humans can be vampires or cultists. isChaplain() checks are here to ensure only the proper chaplain has the gameplay-related interactions.
 		var/mob/living/carbon/human/H = M
-		if(H.mind && isvampire(H) && !(VAMP_MATURE in H.mind.vampire.powers)) //The user is a "young" Vampire, fuck up his vampiric powers and hurt his head
-			to_chat(H, "<span class='warning'>[deity_name]'s power nullifies your own!</span>")
+		if(H.mind && isvampire(H) && !(VAMP_MATURE in H.mind.vampire.powers) && isChaplain(user)) //The user is a "young" Vampire, fuck up his vampiric powers and hurt his head
+			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(H.mind.vampire.nullified < 5) //Don't actually reduce their debuff if it's over 5
 				H.mind.vampire.nullified = max(5, H.mind.vampire.nullified + 2)
 			H.mind.vampire.smitecounter += 10 //Better get out of here quickly before the problem shows. Ten hits and you are literal toast
 			return 1 //Don't heal the mob
 
-		if(H.mind && iscult(H)) //The user is a Cultist. We are thus deconverting him
+		if(H.mind && iscult(H) && isChaplain(user)) //The user is a Cultist. We are thus deconverting him
 			if(prob(20))
 				to_chat(H, "<span class='notice'>The power of [my_rel.deity_name] suddenly clears your mind of heresy. Your allegiance to Nar'Sie wanes!</span>")
 				to_chat(user, "<span class='notice'>You see [H]'s eyes become clear. Nar'Sie no longer controls his mind, [my_rel.deity_name] saved \him!</span>")
 				add_attacklogs(user, H, "de-converted from the Cult of Nar'Sie!")
 				ticker.mode.remove_cultist(H.mind)
 			else //We aren't deconverting him this time, give the Cultist a fair warning
-				to_chat(H, "<span class='warning'>The power of [deity_name] is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
+				to_chat(H, "<span class='warning'>The power of [my_rel.deity_name] is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
 			return 1 //Don't heal the mob
 
-		if(H.mind && H.mind.special_role == "VampThrall")
+		if(H.mind && H.mind.special_role == "VampThrall" && isChaplain(user))
 			ticker.mode.remove_thrall(H.mind)
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
@@ -137,7 +135,7 @@
 /obj/item/weapon/storage/bible/proc/bless_mob(mob/living/carbon/human/user, mob/living/carbon/human/H)
 	var/datum/organ/internal/brain/sponge = H.internal_organs_by_name["brain"]
 	if(sponge && sponge.damage >= 60) //Massive brain damage
-		to_chat(user, "<span class='warning'>[H] responds to \the [src]'s blessing with drooling and an empty stare. [deity_name]'s teachings appear to be lost on this poor soul.</span>")
+		to_chat(user, "<span class='warning'>[H] responds to \the [src]'s blessing with drooling and an empty stare. [my_rel.deity_name]'s teachings appear to be lost on this poor soul.</span>")
 		return //Brainfart
 	//TODO: Put code for followers right here
 	if(prob(20)) //1/5 chance of adding some brain damage. You can't just heal people for free
@@ -153,7 +151,7 @@
 	if(!proximity_flag)
 		return
 	user.delayNextAttack(5)
-	if(user.mind && (user.mind.assigned_role == "Chaplain")) //Make sure we still are a Chaplain, just in case
+	if(isChaplain(user) || isReligiousLeader(user)) //Make sure we still are a Chaplain, just in case - or a religious leader of our religion
 		if(A.reagents && A.reagents.has_reagent(WATER)) //Blesses all the water in the holder
 			user.visible_message("<span class='notice'>[user] blesses \the [A].</span>",
 			"<span class='notice'>You bless \the [A].</span>")
@@ -167,12 +165,45 @@
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
-	if(user.mind && user.mind.assigned_role == "Chaplain") //We are the Chaplain, yes we are
-		to_chat(user, "<span class ='notice'>You feel [deity_name]'s holy presence as you pick up \the [src].</span>")
+	if(isChaplain(user) || isReligiousLeader(user)) //We are the Chaplain, yes we are
+		to_chat(user, "<span class ='notice'>You feel [my_rel.deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
 		if(isvampire(H) && (!(VAMP_UNDYING in H.mind.vampire.powers))) //We are a Vampire, we aren't very smart
-			to_chat(H, "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
+			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			H.mind.vampire.smitecounter += 10
 		if(iscult(H)) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
-			to_chat(H, "<span class ='danger'>[deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>")
+			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar'Sie protects you from its influence!</span>")
+
+/obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
+	return (user.mind && user.mind == my_rel.religiousLeader)
+
+// Action : convert people
+
+/datum/action/item_action/convert
+	name = "Convert people"
+	desc = "Convert someone next to you."
+
+/datum/action/item_action/convert/Trigger()
+	var/obj/item/weapon/storage/bible/B = target
+
+	if (owner.incapacitated() || owner.lying || owner.locked_to || !ishigherbeing(owner)) // Sanity
+		return FALSE
+	if (!owner.mind.faith)
+		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
+		return FALSE
+
+	var/list/mob/living/moblist = range(1, owner)
+	moblist -= owner
+
+	var/mob/living/subject = input(owner, "Who do you wish to convert?", "Religious converting") as null|mob in moblist
+
+	if (!subject)
+		to_chat(owner, "<span class='warning'>No target selected.</span>")
+		return FALSE
+
+	if (subject.incapacitated() || subject.lying || subject.locked_to || !ishigherbeing(subject) || !subject.mind) // Sanity
+		to_chat(owner, "<span class='warning'> \The [subject] does not seem receptive to conversion.</span>")
+	else
+		owner.mind.faith.convertAct(owner, subject, B) // usr = preacher ; target = subject
+		return TRUE

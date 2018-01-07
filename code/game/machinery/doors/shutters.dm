@@ -26,7 +26,7 @@
 			flick("shutterc0", src)
 			icon_state = "shutter0"
 			sleep(animation_delay)
-			density = 0
+			setDensity(FALSE)
 			set_opacity(0)
 			operating = 0
 
@@ -41,7 +41,7 @@
 	icon_state = "shutter0"
 	playsound(src.loc, sound_open, 100, 1)
 	sleep(animation_delay)
-	density = 0
+	setDensity(FALSE)
 	set_opacity(0)
 	update_nearby_tiles()
 

@@ -452,13 +452,13 @@ var/global/list/item_mimic_disguises = list(
 	overlays += mouth_overlay
 	visible_message("<span class='danger'>\The [src] comes to life!</span>")
 	name = "[initial(copied_object.name)] mimic"
-	density = 1
+	setDensity(TRUE)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/calm_down()
 	..(change_icon = 0)
 	overlays -= mouth_overlay
 	visible_message("<span class='notice'>\The [src] falls to the ground, lifeless.</span>")
-	density = 0
+	setDensity(FALSE)
 
 	//Disguise as something else for bonus stealth points
 	environment_disguise()

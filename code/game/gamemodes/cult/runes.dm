@@ -17,7 +17,7 @@
 		return
 	c_animation = new /atom/movable/overlay(src.loc)
 	c_animation.name = "cultification"
-	c_animation.density = 0
+	c_animation.setDensity(FALSE)
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
 	c_animation.plane = EFFECTS_PLANE
@@ -1050,7 +1050,7 @@
 
 /obj/effect/rune/proc/wall()
 	usr.say("Khari[pick("'","`")]d! Eske'te tannin!")
-	src.density = !src.density
+	setDensity(!density)
 	var/mob/living/user = usr
 	user.take_organ_damage(2, 0)
 	if(src.density)
