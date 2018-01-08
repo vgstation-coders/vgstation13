@@ -195,8 +195,6 @@
 
 	if(glide_size_override > 0)
 		set_glide_size(glide_size_override)
-	else
-		set_glide_size(get_glide_size())
 
 	var/atom/oldloc = loc
 	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))

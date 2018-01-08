@@ -345,6 +345,7 @@
 
 		mob.delayNextMove(move_delay)
 		mob.last_move_intent = world.time + 10
+		mob.set_glide_size(mob.get_glide_size()) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in src
@@ -427,6 +428,8 @@
 ///Allows mobs to run though walls
 /client/proc/Process_Incorpmove(direct)
 	var/turf/mobloc = get_turf(mob)
+
+	mob.set_glide_size(mob.get_glide_size()) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
 	switch(mob.incorporeal_move)
 		if(INCORPOREAL_GHOST)

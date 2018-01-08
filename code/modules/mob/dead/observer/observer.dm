@@ -435,7 +435,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/verb/toggle_secHUD()
 	set category = "Ghost"
 	set name = "Toggle SecHUD"
-	
+
 	if(!client)
 		return
 	if(selectedHUD == HUD_SECURITY)
@@ -980,6 +980,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	speed = text2num(copytext(speed,1,4))/100
 	movespeed = 1/speed
+
+/mob/dead/observer/get_move_delay()
+	return world.tick_lag*(3+movespeed)
 
 /datum/locking_category/observer
 
