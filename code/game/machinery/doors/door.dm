@@ -262,7 +262,7 @@ var/list/all_doors = list()
 	if (makes_noise)
 		playsound(get_turf(src), soundeffect, soundpitch, 1)
 
-	density = 1
+	setDensity(TRUE)
 	door_animate("closing")
 	sleep(animation_delay)
 	update_icon()
@@ -309,7 +309,7 @@ var/list/all_doors = list()
 /obj/machinery/door/cultify()
 	if(invisibility != INVISIBILITY_MAXIMUM)
 		invisibility = INVISIBILITY_MAXIMUM
-		density = 0
+		setDensity(FALSE)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
 

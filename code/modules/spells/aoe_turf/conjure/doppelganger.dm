@@ -30,6 +30,7 @@ var/list/doppelgangers = list()
 	if(ismob(holder))
 		doppelgangers[D] = holder
 	D.appearance = holder.appearance
+	D.alpha = OPAQUE // No more invisible doppels
 
 /spell/aoe_turf/conjure/doppelganger/on_holder_death(mob/user)
 	if(!user)

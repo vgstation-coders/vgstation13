@@ -774,7 +774,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	var/heat_capacity = get_heatcapacity()
 	var/energy = power_transfer
 	var/mass = get_overall_mass()
-	var/temp_change = energy / (mass * heat_capacity)
+	var/temp_change = (energy / (mass * heat_capacity))* HEAT_TRANSFER_MULTIPLIER
 	if(power_transfer > 0)
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else

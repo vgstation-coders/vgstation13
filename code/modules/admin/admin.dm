@@ -704,6 +704,7 @@ var/global/floorIsLava = 0
 	else
 		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
 	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
+	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
 
 	usr << browse(dat, "window=admin2;size=280x370")
 	return
@@ -778,6 +779,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
 			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
+			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
 			<A href='?src=\ref[src];secretsfun=blobstorm'>Spawn a blob conglomerate</A><BR>

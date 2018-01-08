@@ -88,13 +88,6 @@
 /turf/proc/initialize()
 	return
 
-/turf/DblClick()
-	if(istype(usr, /mob/living/silicon/ai))
-		return move_camera_by_click()
-	if(usr.stat || usr.restrained() || usr.lying)
-		return ..()
-	return ..()
-
 /turf/ex_act(severity)
 	return 0
 

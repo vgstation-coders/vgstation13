@@ -30,7 +30,7 @@
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
 		take_contents()
 	else
-		density = 0
+		setDensity(FALSE)
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
@@ -99,9 +99,8 @@
 
 	src.icon_state = src.icon_opened
 	src.opened = 1
-	src.density = 0
+	setDensity(FALSE)
 	src.dump_contents()
-	INVOKE_EVENT(on_destroyed, list())
 	if(istype(src, /obj/structure/closet/body_bag))
 		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
 	else
@@ -177,10 +176,7 @@
 		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
 	else
 		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
-	density = 1
-	for(var/obj/effect/beam/B in loc)
-		B.Crossed(src)
-	return 1
+	setDensity(TRUE)
 
 /obj/structure/closet/proc/toggle()
 	if(src.opened)

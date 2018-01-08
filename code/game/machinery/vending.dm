@@ -1759,7 +1759,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/flash = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,
 		/obj/item/weapon/storage/box/evidence = 6,
-		/obj/item/weapon/legcuffs/bolas = 2,
+		/obj/item/weapon/legcuffs/bolas = 8,
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses = 2,

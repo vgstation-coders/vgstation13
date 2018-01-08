@@ -168,7 +168,7 @@
 
 		src.destroyed = 1
 		playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
-		src.density = 0
+		setDensity(FALSE)
 		update_icon()
 		investigation_log(I_ATMOS, "was destoyed by excessive damage.")
 

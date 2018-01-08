@@ -101,7 +101,7 @@
 				src.blinded = 1
 				src.stat = 2
 
-			src.density = !( src.lying )
+			src.setDensity(!(src.lying))
 
 			if ((src.sdisabilities & 1))
 				src.blinded = 1

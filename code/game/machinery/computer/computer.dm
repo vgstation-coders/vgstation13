@@ -74,7 +74,7 @@
 		for(var/x in verbs)
 			verbs -= x
 		set_broken()
-		density = 0
+		setDensity(FALSE)
 
 /obj/machinery/computer/update_icon()
 	..()

@@ -64,7 +64,7 @@
 /obj/structure/table/proc/destroy()
 	if(parts)
 		new parts(loc)
-	density = 0
+	setDensity(FALSE)
 	qdel(src)
 
 /obj/structure/table/proc/can_disassemble()
@@ -706,7 +706,7 @@
 /obj/structure/rack/proc/destroy(var/dropParts = TRUE)
 	if(parts && dropParts)
 		new parts(loc)
-	density = 0
+	setDensity(FALSE)
 	qdel(src)
 
 /obj/structure/rack/proc/can_disassemble()

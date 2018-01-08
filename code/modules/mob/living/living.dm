@@ -334,7 +334,7 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		if(isslimeperson(H))
-			amount = 0
+			amount = min(amount, 0)
 
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
@@ -478,7 +478,7 @@
 	src.updatehealth()
 
 // damage ONE external organ, organ gets randomly selected from damaged ones.
-/mob/living/proc/take_organ_damage(var/brute, var/burn)
+/mob/living/proc/take_organ_damage(var/brute, var/burn, var/ignore_inorganics = FALSE)
 	if(status_flags & GODMODE)
 		return 0	//godmode
 	if(flags & INVULNERABLE)
@@ -1386,6 +1386,9 @@ Thanks.
 		else
 			A.name = "[initial(src.name)] meat"
 			A.animal_name = initial(src.name)
+
+	if(reagents)
+		reagents.trans_to(A,round (reagents.total_volume * (meat_amount/meat_taken), 1))
 	return M
 
 /mob/living/proc/butcher()
@@ -1498,8 +1501,8 @@ Thanks.
 		src.being_butchered = 0
 		return
 
-	src.drop_meat(get_turf(src))
 	src.meat_taken++
+	src.drop_meat(get_turf(src))
 	src.being_butchered = 0
 	if(tool_name)
 		if(!advanced_butchery)

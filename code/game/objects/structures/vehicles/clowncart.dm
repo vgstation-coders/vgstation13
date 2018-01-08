@@ -296,7 +296,7 @@
 			to_chat(user, "<span class='notice'>You have to honk to be able to ride [src].</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/die()
-	density = 0
+	setDensity(FALSE)
 	visible_message("<span class='warning'>[nick] explodes in a puff of pure potassium!</span>")
 	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 75, 1)
 	explosion(src.loc, -1, 0, 3, 7, 10)

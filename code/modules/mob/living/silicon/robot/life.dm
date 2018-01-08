@@ -112,7 +112,7 @@
 		ear_damage -= 0.05
 		ear_damage = max(ear_damage, 0)
 
-	density = !(lying)
+	src.setDensity(!(src.lying))
 
 	if((sdisabilities & BLIND))
 		blinded = TRUE
