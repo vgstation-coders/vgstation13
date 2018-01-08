@@ -84,10 +84,6 @@
 	else
 		icon_state = icon_opened
 
-/obj/structure/closet/body_bag/relaymove(mob/user as mob)
-	if(user.stat || !isturf(src.loc))
-		return
-
 //Cryobag (statis bag) below, not currently functional it seems
 
 /obj/item/bodybag/cryobag
