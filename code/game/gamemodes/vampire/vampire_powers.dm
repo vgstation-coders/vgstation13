@@ -76,7 +76,7 @@
 	victims -= mind.current
 	if(!victims.len)
 		return
-	var/mob/living/carbon/T 
+	var/mob/living/carbon/T
 	T = victims[1]
 	if (victims.len > 1)
 		T = input(src, "Victim?") as null|anything in victims
@@ -525,6 +525,7 @@
 		return
 
 	if(M.current.vampire_power(30, 0))
+		M.current.remove_vampire_blood(30)
 		M.current.verbs -= /client/proc/vampire_jaunt
 		new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		ethereal_jaunt(M.current, duration, "batify", "debatify", 0)
@@ -584,6 +585,7 @@
 			var/turf/T = get_turf(M.current)
 			T.turf_animation('icons/effects/effects.dmi',"shadowstep")
 			usr.forceMove(picked)
+		M.current.remove_vampire_blood(20)
 		M.current.verbs -= /client/proc/vampire_shadowstep
 		sleep(20 SECONDS)
 		if(M && M.current)
