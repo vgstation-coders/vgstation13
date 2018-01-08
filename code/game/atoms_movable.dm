@@ -143,27 +143,31 @@
 	..()
 
 /atom/movable/proc/get_move_delay()
-	// Copied from Move().
-	if(ismob(src))
-		var/mob/M = src
-		if(M.client)
-			return (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 	return max(5 * world.tick_lag, 1)
 
-/atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
-	if(!loc || !newLoc)
-		return 0
-	//set up glide sizes before the move
-	//ensure this is a step, not a jump
+/mob/get_move_delay()
+	if(client)
+		return world.tick_lag*(3+(client.move_delayer.next_allowed - world.time))
+	return ..()
 
-	//. = ..(NewLoc,Dir,step_x,step_y)
+/atom/movable/proc/get_glide_size()
+	return Ceiling(WORLD_ICON_SIZE / get_move_delay() * world.tick_lag) - 1
+
+/atom/movable/proc/set_glide_size(glide_size_override = 0)
+	if(src.name == "TEST") to_chat(world, "We're [src], setting glide size. Old: [glide_size]. New: Ceil([WORLD_ICON_SIZE]/[get_move_delay()]*[world.tick_lag])-1 = [Ceiling(WORLD_ICON_SIZE / get_move_delay() * world.tick_lag) - 1]. Override: [glide_size_override]")
+	glide_size = glide_size_override
+
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if(!loc || !NewLoc)
+		return 0
+
 	if(current_tethers && current_tethers.len)
 		for(var/datum/tether/master_slave/T in current_tethers)
 			if(T.effective_slave == src)
 				if(get_exact_dist(T.effective_master, src) > T.tether_distance)
 					T.break_tether()
 					break
-				if(get_exact_dist(T.effective_master, newLoc) > T.tether_distance)
+				if(get_exact_dist(T.effective_master, NewLoc) > T.tether_distance)
 					change_dir(Dir)
 					return 0
 		for(var/datum/tether/equal/restrictive/R in current_tethers)
@@ -175,33 +179,34 @@
 			if(get_exact_dist(AM, src) > R.tether_distance)
 				R.break_tether()
 				break
-			if(get_exact_dist(AM, newLoc) > R.tether_distance)
+			if(get_exact_dist(AM, NewLoc) > R.tether_distance)
 				change_dir(Dir)
 				return 0
 	if(timestopped)
 		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
 			return 0
-	var/move_delay = max(5 * world.tick_lag, 1)
-	if(ismob(src))
-		var/mob/M = src
-		if(M.client)
-			move_delay = (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 
 	var/can_pull_tether = 0
 	if(tether)
-		if(tether.attempt_to_follow(src,newLoc))
+		if(tether.attempt_to_follow(src,NewLoc))
 			can_pull_tether = 1
 		else
 			return 0
-	glide_size = Ceiling(WORLD_ICON_SIZE / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
+
+	if(glide_size_override > 0)
+		set_glide_size(glide_size_override)
+	else
+		set_glide_size(get_glide_size())
+
 	var/atom/oldloc = loc
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == newLoc))
+	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
 		. = ..()
 
 		update_dir()
 		return
 
-	if(loc != newLoc)
+	//We always split up movements into cardinals for issues with diagonal movements.
+	if(loc != NewLoc)
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
 		else //Diagonal move, split it into cardinal moves
@@ -237,7 +242,7 @@
 
 	update_dir()
 
-	if(!loc || (loc == oldloc && oldloc != newLoc))
+	if(!loc || (loc == oldloc && oldloc != NewLoc))
 		last_move = 0
 		return
 
@@ -250,15 +255,14 @@
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
-	last_move = (Dir || get_dir(oldloc, newLoc)) //If direction isn't specified, calculate it ourselves
+	last_move = (Dir || get_dir(oldloc, NewLoc)) //If direction isn't specified, calculate it ourselves
 	set_inertia(last_move)
 
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=newLoc))
-	return .
+	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
 
 /atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
 	var/list/found = ..()

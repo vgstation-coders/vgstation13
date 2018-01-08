@@ -421,7 +421,7 @@ Frequency:
 	return
 
 
-/mob/living/silicon/hivebot/Move(a, b, flag)
+/mob/living/silicon/hivebot/Move()
 
 	if (src.buckled)
 		return

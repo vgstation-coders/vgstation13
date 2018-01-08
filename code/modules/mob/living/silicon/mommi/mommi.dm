@@ -449,10 +449,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/radio_menu()
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
 
-
-/mob/living/silicon/robot/mommi/Move(a, b, flag)
-	..()
-
 /mob/living/silicon/robot/mommi/CheckSlip()
 	return -1
 

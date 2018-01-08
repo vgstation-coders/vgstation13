@@ -108,7 +108,7 @@
 		return
 	..()
 
-/obj/machinery/disposal/compactor/Move(atom/newloc, direct)
+/obj/machinery/disposal/compactor/Move()
 	..()
 	if(prob(2))
 		var/atom/movable/AM = pick(contents)

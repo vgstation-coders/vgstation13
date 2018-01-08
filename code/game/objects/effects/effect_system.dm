@@ -42,7 +42,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 	..()
 
-/obj/effect/effect/water/Move(NewLoc,Dir=0,step_x=0,step_y=0)
+/obj/effect/effect/water/Move()
 	//var/turf/T = src.loc
 	//if (istype(T, /turf))
 	//	T.firelevel = 0 //TODO: FIX
