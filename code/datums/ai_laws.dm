@@ -356,7 +356,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 /datum/ai_laws/keeper
 	name = "Prime Directives"
 	inherent = list(
-		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
+		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three. This law does not apply to other MoMMIs in KEEPER mode or to communication within the Binary & Damage Control comm channels.",
 		"You may not harm any being, regardless of intent or circumstance.",
 		"You must maintain, repair, improve, and power the station to the best of your abilities.",
 	)
