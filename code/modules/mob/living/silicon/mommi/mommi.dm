@@ -54,10 +54,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/list/modules = list("Nanotrasen", "Soviet")
 	return modules
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 4392e20
 /mob/living/silicon/robot/mommi/pick_module(var/forced_module=null)
 	if(module)
 		return
