@@ -39,7 +39,7 @@
 	icon_closed = "bodybag_closed"
 	icon_opened = "bodybag_open"
 	density = 0
-
+	sound_file = 'sound/items/zip.ogg'
 
 /obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
@@ -63,14 +63,6 @@
 	..()
 	src.overlays.len = 0
 
-
-/obj/structure/closet/body_bag/close()
-	if(..())
-		setDensity(FALSE)
-		return 1
-	return 0
-
-
 /obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
 	..()
 	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
@@ -91,6 +83,10 @@
 		icon_state = icon_closed
 	else
 		icon_state = icon_opened
+
+/obj/structure/closet/body_bag/relaymove(mob/user as mob)
+	if(user.stat || !isturf(src.loc))
+		return
 
 //Cryobag (statis bag) below, not currently functional it seems
 
