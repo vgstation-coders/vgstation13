@@ -981,9 +981,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	speed = text2num(copytext(speed,1,4))/100
 	movespeed = 1/speed
 
-/mob/dead/observer/get_move_delay()
-	return world.tick_lag*(3+movespeed)
-
 /datum/locking_category/observer
 
 /mob/dead/observer/deafmute/say(var/message)	//A ghost without access to ghostchat. An IC ghost, if you will.

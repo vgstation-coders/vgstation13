@@ -142,19 +142,8 @@
 
 	..()
 
-/atom/movable/proc/get_move_delay()
-	return max(5 * world.tick_lag, 1)
-
-/mob/get_move_delay()
-	if(client)
-		return world.tick_lag*(3+(client.move_delayer.next_allowed - world.time))
-	return ..()
-
-/atom/movable/proc/get_glide_size()
-	return Ceiling(WORLD_ICON_SIZE / get_move_delay() * world.tick_lag) - 1
-
+//TODO move this somewhere else
 /atom/movable/proc/set_glide_size(glide_size_override = 0)
-	if(src.name == "TEST") to_chat(world, "We're [src], setting glide size. Old: [glide_size]. New: Ceil([WORLD_ICON_SIZE]/[get_move_delay()]*[world.tick_lag])-1 = [Ceiling(WORLD_ICON_SIZE / get_move_delay() * world.tick_lag) - 1]. Override: [glide_size_override]")
 	glide_size = glide_size_override
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -569,7 +558,7 @@
 					. = 0
 					break
 
-				src.Move(step, dy)
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
@@ -583,7 +572,7 @@
 					. = 0
 					break
 
-				src.Move(step, dx)
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
@@ -605,7 +594,7 @@
 					. = 0
 					break
 
-				src.Move(step, dx)
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
@@ -619,7 +608,7 @@
 					. = 0
 					break
 
-				src.Move(step, dy)
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
@@ -759,12 +748,13 @@
 		inertia_dir  = 0
 		return
 
-	sleep(5)
+	sleep(INERTIA_MOVEDELAY)
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
 			return //inertia_dir = last_move
 
+		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
 		step(src, inertia_dir)
 
 /atom/movable/proc/reset_inertia()

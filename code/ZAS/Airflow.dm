@@ -134,7 +134,7 @@ atom/movable/GotoAirflowDest(n)
 /atom/movable/var/tmp/airflow_time = 0
 /atom/movable/var/tmp/last_airflow = 0
 
-/atom/movable/proc/GotoAirflowDest(n)
+/atom/movable/proc/GotoAirflowDest(n) //TODO GLIDESIZE HERE
 	if(!airflow_dest || pulledby)
 		return
 	if(world.time < last_airflow + zas_settings.Get(/datum/ZAS_Setting/airflow_delay))

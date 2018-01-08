@@ -42,6 +42,7 @@
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
 
+#define SS_WAIT_FAST_MACHINERY 0.7 SECONDS //TODO move the rest of these to defines
 
 #define SS_DISPLAY_GARBAGE        -100
 #define SS_DISPLAY_AIR            -90

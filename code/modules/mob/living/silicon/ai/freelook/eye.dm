@@ -10,6 +10,7 @@
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
+	glide_size = WORLD_ICON_SIZE //AI eyes are hyperspeed, who knows
 	flags = HEAR_ALWAYS | TIMELESS
 
 // Use this when setting the aiEye's location.
