@@ -141,13 +141,11 @@
 	signal.data["message"] = "ACTIVATE"
 	radio_connection.post_signal(src, signal)
 
-	if(usr)
-		var/mob/user = usr
-		if(user)
-			investigation_log(I_WIRES, "used as signaler by [key_name(user)] - [format_frequency(frequency)]/[code]")
-		else
-			investigation_log(I_WIRES, "used as signaler by UNKNOWN - [format_frequency(frequency)]/[code]")
-	return
+	if(istype(loc, /obj/item/device/assembly_holder))
+		investigation_log(I_WIRES, "used as signaler in \a [loc]. Last touched by: [fingerprintslast], Last user processed: [key_name(usr)] - [format_frequency(frequency)]/[code]")
+	else
+		investigation_log(I_WIRES, "used as signaler. Last touched by: [fingerprintslast], Last user processed: [key_name(usr)] - [format_frequency(frequency)]/[code]")
+
 /*
 	for(var/obj/item/device/assembly/signaler/S in world)
 		if(!S)

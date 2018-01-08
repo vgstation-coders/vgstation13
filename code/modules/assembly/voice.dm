@@ -38,6 +38,9 @@
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else
 				pulse(0)
+				var/mob/living/speaker = speech.speaker
+				investigation_log(I_WIRES, "activated by the keyword \"[recorded]\", said by [key_name(speaker)]")
+
 
 /obj/item/device/assembly/voice/attackby(obj/item/W, mob/user)
 	if(ismultitool(W))
