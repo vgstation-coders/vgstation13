@@ -71,7 +71,7 @@
 				if(M.default_language)
 					Robot.default_language = M.default_language
 			if("mommi")
-				new_mob = new /mob/living/silicon/robot/mommi(M.loc)
+				new_mob = new /mob/living/silicon/robot/mommi/nt(M.loc)
 				new_mob.setGender(M.gender)
 				new_mob.invisibility = 0
 				new_mob.job = "MoMMI"

@@ -250,7 +250,7 @@
 	for(var/t in organs)
 		qdel(t)
 
-	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi(get_turf(src))
+	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src))
 	. = O
 	// MoMMIs produced by Robotize get an automatic power cell
 	O.cell = new(O)

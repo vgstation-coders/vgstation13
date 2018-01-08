@@ -309,6 +309,5 @@
 		return FAILED_TO_ADD
 
 	if(istype(R.module,/obj/item/weapon/robot_module/tg17355) && R.icon_state == "peaceborg") //Honk!
-		R.icon_state = "clownegg"
-		R.update_icons()
+		R.set_module_sprites(list("Laughkeeper" = "clownegg"))
 	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)
