@@ -1,19 +1,42 @@
+var/global/list/mommi_modules = list(
+	"Nanotrasen"		= /obj/item/weapon/robot_module/mommi/nt,
+	"Soviet" 	= /obj/item/weapon/robot_module/mommi/soviet
+	)
+
 /obj/item/weapon/robot_module/mommi
 	name = "mobile mmi robot module"
-
+	languages = list(
+		LANGUAGE_GALACTIC_COMMON = FALSE,
+		LANGUAGE_TRADEBAND = FALSE,
+		LANGUAGE_VOX = FALSE,
+		LANGUAGE_ROOTSPEAK = FALSE,
+		LANGUAGE_GREY = FALSE,
+		LANGUAGE_CLATTER = FALSE,
+		LANGUAGE_MONKEY = FALSE,
+		LANGUAGE_UNATHI = FALSE,
+		LANGUAGE_CATBEAST = FALSE,
+		LANGUAGE_SKRELLIAN = FALSE,
+		LANGUAGE_GUTTER = FALSE,
+		LANGUAGE_MONKEY = FALSE,
+		LANGUAGE_MOUSE = FALSE,
+		LANGUAGE_HUMAN = FALSE,
+		LANGUAGE_GOLEM = FALSE,
+		LANGUAGE_SLIME = FALSE
+		)
+	no_slip = TRUE
+	sprites = list(
+		"Basic" = "mommi",
+		"Keeper" = "keeper",
+		"Replicator" = "replicator",
+		"RepairBot" = "repairbot",
+		"Hover" = "hovermommi",
+		"Prime" = "mommiprime",
+		"Prime Alt" = "mommiprime-alt"
+		)
 
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
 
-	languages = list(	LANGUAGE_GALACTIC_COMMON = 0, LANGUAGE_TRADEBAND = 0, LANGUAGE_VOX = 0,
-						LANGUAGE_ROOTSPEAK = 0, LANGUAGE_GREY = 0, LANGUAGE_CLATTER = 0,
-						LANGUAGE_MONKEY = 0, LANGUAGE_UNATHI = 0, LANGUAGE_CATBEAST = 0,
-						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
-						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0, LANGUAGE_GOLEM = 0, LANGUAGE_SLIME = 0)
-	add_languages(R)
-	src.emag = new /obj/item/borg/stun(src)
-	//src.modules += new /obj/item/weapon/rcd/borg(src)     // Too OP
-	//src.modules += new /obj/item/device/flashlight(src)   // Broken
 	src.modules += new /obj/item/weapon/weldingtool/largetank(src)
 	src.modules += new /obj/item/weapon/screwdriver(src)
 	src.modules += new /obj/item/weapon/wrench(src)
@@ -22,7 +45,7 @@
 	src.modules += new /obj/item/device/multitool(src)
 	src.modules += new /obj/item/device/t_scanner(src)
 	src.modules += new /obj/item/device/analyzer(src)
-	src.modules += new /obj/item/weapon/extinguisher(src) // Aurx sed so
+	src.modules += new /obj/item/weapon/extinguisher(src)
 	src.modules += new /obj/item/weapon/extinguisher/foam(src)
 	src.modules += new /obj/item/device/rcd/rpd(src)
 	src.modules += new /obj/item/device/rcd/tile_painter(src)
@@ -31,26 +54,38 @@
 	src.modules += new /obj/item/device/holomap(src)
 	src.modules += new /obj/item/device/station_map(src)
 	src.modules += new /obj/item/device/silicate_sprayer(src)
-	sensor_augs = list("Mesons", "Disable")
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
 	W.amount = 50
-	W.max_amount = 50 // Override MAXCOIL
+	W.max_amount = 50 //Override MAXCOIL
 	src.modules += W
+	src.emag = new /obj/item/borg/stun(src)
+
+	sensor_augs = list("Mesons", "Disable")
+
 	fix_modules()
 
 /obj/item/weapon/robot_module/mommi/respawn_consumable(var/mob/living/silicon/robot/R)
-	var/list/what = list (
-		// /obj/item/stack/sheet/metal/cyborg,
-		// /obj/item/stack/sheet/glass/glass,
-		/obj/item/stack/cable_coil,
-		// /obj/item/stack/sheet/glass/rglass/cyborg,
-	)
-	for (var/T in what)
-		if (!(locate(T) in src.modules))
+	var/list/what = list (/obj/item/stack/cable_coil)
+	for(var/T in what)
+		if(!(locate(T) in src.modules))
 			src.modules -= null
 			var/O = new T(src)
 			if(istype(O,/obj/item/stack/cable_coil))
 				O:max_amount = 50
 			src.modules += O
 			O:amount = 1
-	return
+
+//Nanotrasen's MoMMI
+/obj/item/weapon/robot_module/mommi/nt
+	name = "nanotrasen mobile mmi robot module"
+	networks = list(CAMERANET_ENGI)
+	radio_key = /obj/item/device/encryptionkey/headset_eng
+
+//Derelict MoMMI
+/obj/item/weapon/robot_module/mommi/soviet
+	name = "russian remont robot module"
+
+/obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R)
+	..()
+
+	src.modules += new /obj/item/device/rcd/borg(src) //Powercreep, YEAH!

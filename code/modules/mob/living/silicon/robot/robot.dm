@@ -78,19 +78,18 @@
 // Used to store the associations between sprite names and sprite index.
 	var/module_sprites[0]
 
-/mob/living/silicon/robot/New(loc, var/unfinished = 0, var/startup_sound='sound/voice/liveagain.ogg')
-	if(isMoMMI(src))
-		wires = new /datum/wires/robot/mommi(src)
-	else
-		wires = new(src)
-
+/mob/living/silicon/robot/New(loc, var/unfinished = FALSE, var/startup_sound='sound/voice/liveagain.ogg', var/cell_type = "/obj/item/weapon/cell")
 	ident = rand(1, 999)
 	updatename("Default")
 	updateicon()
 
-	
 	laws = getLawset(src)
-	connected_ai = select_active_ai_with_fewest_borgs()
+
+	if(isMoMMI(src))
+		wires = new /datum/wires/robot/mommi(src)
+	else
+		wires = new(src)
+		connected_ai = select_active_ai_with_fewest_borgs()
 	if(connected_ai)
 		connected_ai.connected_robots += src
 		lawsync()
@@ -116,7 +115,7 @@
 		C.wrapped = new C.external_type
 
 	if(!cell)
-		cell = new /obj/item/weapon/cell(src)
+		cell = new cell_type(src)
 		cell.maxcharge = 7500
 		cell.charge = 7500
 
@@ -131,24 +130,14 @@
 		cell_component.installed = COMPONENT_INSTALLED
 
 	playsound(loc, startup_sound, 75, 1)
-	// This should just grab from a list of all languages.
+
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	add_language(LANGUAGE_TRADEBAND)
-	add_language(LANGUAGE_VOX, 0)
-	add_language(LANGUAGE_HUMAN, 0)
-	add_language(LANGUAGE_ROOTSPEAK, 0)
-	add_language(LANGUAGE_GREY, 0)
-	add_language(LANGUAGE_CLATTER, 0)
-	add_language(LANGUAGE_MONKEY, 0)
-	add_language(LANGUAGE_UNATHI, 0)
-	add_language(LANGUAGE_CATBEAST, 0)
-	add_language(LANGUAGE_SKRELLIAN, 0)
-	add_language(LANGUAGE_GUTTER, 0)
-	add_language(LANGUAGE_MONKEY, 0)
-	add_language(LANGUAGE_MOUSE, 0)
-	add_language(LANGUAGE_GOLEM, 0)
-	add_language(LANGUAGE_SLIME, 0)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+	for(var/L in all_languages)
+		var/datum/language/lang = all_languages[L]
+		if(~lang.flags & RESTRICTED && !(lang in languages))
+			add_language(lang, FALSE)
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
@@ -257,11 +246,11 @@
 /mob/living/silicon/robot/proc/updatename(var/prefix as text)
 	if(prefix)
 		modtype = prefix
-	if(istype(mmi, /obj/item/device/mmi/posibrain))
-		braintype = "Android"
+	if(!mmi)
+		braintype = "Robot"
 	else
-		if(!mmi)
-			braintype = "Robot"
+		if(istype(mmi, /obj/item/device/mmi/posibrain))
+			braintype = "Android"
 		else
 			braintype = "Cyborg"
 
@@ -1366,16 +1355,11 @@
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/ntmov()
-	if(!cell) //Just to be sure.
-		cell = new /obj/item/weapon/cell(src)
 	cell.maxcharge = 30000
 	cell.charge = 30000
 
 	pick_module("Combat")
-//	updatename()
-	icon_state = "droid-combat"
-	base_icon = icon_state
-	updateicon()
+	set_module_sprites(list("Droid" = "droid-combat"))
 
 //Syndicate subtype because putting this on new() is fucking retarded.
 /mob/living/silicon/robot/syndie/New()
@@ -1383,16 +1367,10 @@
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
-	if(!cell) //Just to be sure.
-		cell = new /obj/item/weapon/cell(src)
 	cell.maxcharge = 25000
 	cell.charge = 25000
 	
 	pick_module("Syndicate")
-//	updatename()
-//	icon_state = "rottweiler-combat"
-//	base_icon = icon_state
-//	updateicon()
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg/New()
@@ -1404,14 +1382,9 @@
 	cell.charge = 15000
 
 	pick_module("TG17355")
-	updatename()
-	icon_state = "peaceborg"
-	base_icon = icon_state
-	updateicon()
+	set_module_sprites(list("Peacekeeper" = "peaceborg"))
 
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()
 
-	icon_state = "omoikane"
-	base_icon = icon_state
-	updateicon()
+	set_module_sprites(list("Omoikane" = "omoikane"))

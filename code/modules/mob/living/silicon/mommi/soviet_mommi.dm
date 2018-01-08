@@ -6,11 +6,16 @@
 
 // Fuck individualism
 /mob/living/silicon/robot/mommi/soviet/updatename(var/oldprefix as text)
-  var/changed_name = ""
-  changed_name = "[prefix] [num2text(ident)]"
-  real_name = changed_name
+  real_name = "[prefix] [num2text(ident)]"
   name = real_name
 
 // Ditto
 /mob/living/silicon/robot/mommi/soviet/Namepick()
-  return 0
+  return FALSE
+
+// I SAID FUCK INDIVIDUALISM
+/mob/living/silicon/robot/mommi/soviet/New(cell_type="/obj/item/weapon/cell/potato")
+  ..()
+  pick_module("Soviet")
+  add_static_overlays()
+  UnlinkSelf()

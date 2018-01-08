@@ -30,18 +30,6 @@ var/global/list/robot_modules = list(
 	var/languages = list(
 		LANGUAGE_GALACTIC_COMMON = TRUE,
 		LANGUAGE_TRADEBAND = TRUE,
-		LANGUAGE_VOX = FALSE,
-		LANGUAGE_ROOTSPEAK = FALSE,
-		LANGUAGE_GREY = FALSE,
-		LANGUAGE_CLATTER = FALSE,
-		LANGUAGE_MONKEY = FALSE,
-		LANGUAGE_UNATHI = FALSE,
-		LANGUAGE_CATBEAST = FALSE,
-		LANGUAGE_SKRELLIAN = FALSE,
-		LANGUAGE_GUTTER = FALSE,
-		LANGUAGE_MONKEY = FALSE,
-		LANGUAGE_MOUSE = FALSE,
-		LANGUAGE_HUMAN = FALSE
 		)
 	var/list/added_languages
 	var/list/upgrades = list()
@@ -96,8 +84,7 @@ var/global/list/robot_modules = list(
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R, var/default = TRUE)
 	..()
 	added_languages = list()
-	if(!isMoMMI(R))
-		add_languages(R)
+	add_languages(R)
 	AddToProfiler()
 	if(default)
 		AddDefaultModules()
