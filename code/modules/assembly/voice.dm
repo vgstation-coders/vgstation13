@@ -27,6 +27,8 @@
 		recorded = speech.message
 		listening = 0
 		say("Activation message is '[html_encode(speech.message)]'.")
+		var/mob/living/user = speech.speaker
+		investigation_log(I_WIRES, "activation message set to \"[recorded]\" by [key_name(user)]")
 	else
 		if(!recorded || findtext(speech.message, recorded))
 			var/mob/living/L = speech.speaker
