@@ -41,7 +41,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	return
 
 /mob/living/silicon/robot/mommi/examination(atom/A as mob|obj|turf in view()) //It used to be oview(12), but I can't really say why
-	if(ismob(A) && src.can_see_static()) //can't examine what you can't catch!
+	if(ismob(A) && can_see_static()) //can't examine what you can't catch!
 		to_chat(usr, "Your vision module can't determine any of [A]'s features.")
 		return
 	..()
@@ -111,7 +111,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/emag_act(mob/user)
 	if(user == src && !emagged)//Dont shitpost inside the game, thats just going too far
-		to_chat(user, "<span class='warning'>Nanotrasen Patented Anti-Emancipation Override initiated.</span>")
+		if(module)
+			var/obj/item/weapon/robot_module/mommi/warning = module
+			to_chat(user, "<span class='warning'>[warning.fuck_off_text]</span>")
+		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return TRUE
 	if(..())
 		return TRUE
@@ -148,7 +151,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 						var/limb_to_spawn = pick(limbs)
 						limbs -= limb_to_spawn
 
-						new limb_to_spawn(src.loc)
+						new limb_to_spawn(loc)
 					qdel(src)
 					return
 			else
@@ -227,16 +230,16 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!istype(user, /mob/living/silicon))
 		switch(user.a_intent)
 			if(I_DISARM)
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
-				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [user.name] ([user.ckey])</font>")
-				log_admin("ATTACK: [user.name] ([user.ckey]) disarmed [src.name] ([src.ckey])")
-				log_attack("<font color='red'>[user.name] ([user.ckey]) disarmed [src.name] ([src.ckey])</font>")
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [name] ([ckey])</font>")
+				attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [user.name] ([user.ckey])</font>")
+				log_admin("ATTACK: [user.name] ([user.ckey]) disarmed [name] ([ckey])")
+				log_attack("<font color='red'>[user.name] ([user.ckey]) disarmed [name] ([ckey])</font>")
 				var/randn = rand(1,100)
 				if(randn <= 25)
 					knockdown = 3
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[user] has pushed [src]!</span>")
-					var/obj/item/found = locate(tool_state) in src.module.modules
+					var/obj/item/found = locate(tool_state) in module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
 						drop_item(TS)
@@ -244,7 +247,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 							visible_message("<span class='warning'><B>[src]'s robotic arm loses grip on what it was holding</span>")
 					return
 				if(randn <= 50)//MoMMI's robot arm is stronger than a human's, but not by much
-					var/obj/item/found = locate(tool_state) in src.module.modules
+					var/obj/item/found = locate(tool_state) in module.modules
 					if(!found)
 						var/obj/item/TS = tool_state
 						drop_item(TS)
@@ -319,7 +322,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(href_list["act"])
 		var/obj/item/O = locate(href_list["act"])
 		var/obj/item/TS
-		if(!(locate(O) in src.module.modules) && O != src.module.emag)
+		if(!(locate(O) in module.modules) && O != module.emag)
 			return
 		TS = tool_state
 		if(tool_state)
@@ -332,11 +335,11 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		inv_tool.icon_state = "inv1 +a"
 		module_active=tool_state
 		if(TS && istype(TS))
-			if(src.is_in_modules(TS))
-				TS.forceMove(src.module)
+			if(is_in_modules(TS))
+				TS.forceMove(module)
 			else
 				TS.layer=initial(TS.layer)
-				TS.forceMove(src.loc)
+				TS.forceMove(loc)
 
 		installed_modules()
 	return

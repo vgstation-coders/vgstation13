@@ -33,6 +33,7 @@ var/global/list/mommi_modules = list(
 		"Prime" = "mommiprime",
 		"Prime Alt" = "mommiprime-alt"
 		)
+	var/fuck_off_text = "Anti-Emancipation Override initiated."
 
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
@@ -80,10 +81,12 @@ var/global/list/mommi_modules = list(
 	name = "nanotrasen mobile mmi robot module"
 	networks = list(CAMERANET_ENGI)
 	radio_key = /obj/item/device/encryptionkey/headset_eng
+	fuck_off_text = "Nanotrasen Patented Anti-Emancipation Override initiated."
 
 //Derelict MoMMI
 /obj/item/weapon/robot_module/mommi/soviet
 	name = "russian remont robot module"
+	fuck_off_text = "Начато отмену анти-индивидуализма Советского Союза."
 
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R)
 	..()
