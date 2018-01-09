@@ -17,7 +17,7 @@
 	var/checkwin_counter = 0
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
-	var/minimum_heads = 2
+	var/minimum_heads = 3
 	var/list/possible_items = list(/obj/item/weapon/card/emag,
 								   /obj/item/clothing/gloves/yellow,
 								   /obj/item/weapon/gun/projectile/automatic,
@@ -40,10 +40,10 @@
 
 	var/list/datum/mind/possible_revs = get_players_for_role(ROLE_REV)
 
-	var/head_check = 0
+	var/list/head_check = list()
 	for(var/mob/new_player/player in player_list)
-		if(player.mind.assigned_role in command_positions)
-			head_check++
+		if(player.mind.assigned_role in command_positions && !(player in head_check))
+			head_check += player
 
 	for(var/datum/mind/player in possible_revs)
 		for(var/job in restricted_jobs)//Removing heads and such from the list
@@ -59,20 +59,20 @@
 
 	// If an admin forces this mode, we set the minimum head count to 1, otherwise check minimum heads
 	if(master_mode=="secret" && secret_force_mode=="secret")
-		if(head_revolutionaries.len==0 || head_check < minimum_heads)
+		if(head_revolutionaries.len==0 || head_check.len <= minimum_heads)
 			log_admin("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
-			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
+			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check.len]")
 			message_admins("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 			message_admins("Number of headrevs: [head_revolutionaries.len] Heads of Staff: [get_assigned_head_roles()]")
 			return 0
 
-	else if (head_revolutionaries.len==0 || head_check < 1)
+	else if (head_revolutionaries.len==0 || head_check.len <= 0)
 		log_admin("Failed to set-up a secret-forced round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		message_admins("Failed to set-up a secret-forced round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 		return 0
 
-	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
-	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check] heads of staff.")
+	log_admin("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check.len] heads of staff.")
+	message_admins("Starting a round of revsquad with [head_revolutionaries.len] revolutionaries and [head_check.len] heads of staff.")
 	return 1
 
 /datum/game_mode/revsquad/post_setup()
