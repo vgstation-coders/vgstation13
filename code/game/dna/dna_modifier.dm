@@ -412,9 +412,10 @@
 	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/scan_consolenew/Destroy()
-	if(connected.connected == src)
-		connected.connected = null
-	connected = null
+	if(connected)
+		if(connected.connected == src)
+			connected.connected = null
+		connected = null
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
 	labels.Cut()
@@ -515,7 +516,8 @@
 	if(!..())
 		if(!connected)
 			connected = findScanner() //lets get that machine
-			connected.connected = src
+			if(connected)
+				connected.connected = src
 		ui_interact(user)
 
 /obj/machinery/computer/scan_consolenew/AltClick()
