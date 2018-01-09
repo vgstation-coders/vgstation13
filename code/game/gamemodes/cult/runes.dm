@@ -534,7 +534,7 @@
 		"<span class='warning'>Life? I'm alive? I live, again!.</span>", \
 		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
 		body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
-		"<span class='sinister'>You are engulfed by pain as your blood boils, tearing you apart.</span>", \
+		"<span class='sinister'>You are engulfed in pain as your blood boils, tearing you apart.</span>", \
 		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
 		body_to_sacrifice.gib()
 	if(cult_round)
