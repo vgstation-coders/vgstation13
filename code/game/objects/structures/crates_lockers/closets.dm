@@ -101,7 +101,7 @@
 	src.opened = 1
 	setDensity(FALSE)
 	src.dump_contents()
-	playsound(get_turf(src), sound_file, 15, 1, -3)
+	playsound(src, sound_file, 15, 1, -3)
 	return 1
 
 
@@ -172,7 +172,7 @@
 	src.icon_state = src.icon_closed
 	src.opened = 0
 	setDensity(initial(density))
-	playsound(get_turf(src), sound_file, 15, 1, -3)
+	playsound(src, sound_file, 15, 1, -3)
 	return 1
 
 /obj/structure/closet/proc/toggle()
