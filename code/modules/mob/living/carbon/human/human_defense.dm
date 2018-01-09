@@ -263,6 +263,7 @@ emp_act
 						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
 						if(src != user && I.damtype == BRUTE)
 							ticker.mode.remove_revolutionary(mind)
+							add_attacklogs(user, src, "de-converted from Revolutionary!")
 
 				if(bloody)//Apply blood
 					if(wear_mask)
