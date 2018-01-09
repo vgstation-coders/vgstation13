@@ -1411,7 +1411,7 @@
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
 
 
-/mob/living/silicon/robot/Move(a, b, flag)
+/mob/living/silicon/robot/Move()
 
 	. = ..()
 

@@ -220,7 +220,7 @@
 		stat(null, "Total Overminds: [blob_cores.len]")
 	return
 
-/mob/camera/blob/Move(var/NewLoc, var/Dir = 0)
+/mob/camera/blob/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/obj/effect/blob/B = locate() in range("3x3", NewLoc)
 	if(B)
 		forceEnter(B.loc)

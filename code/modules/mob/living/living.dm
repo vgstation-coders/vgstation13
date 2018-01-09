@@ -655,13 +655,13 @@ Thanks.
 
 	return
 
-/mob/living/Move(atom/newloc, direct,Dir=0,step_x=0,step_y=0)
-	if (locked_to && locked_to.loc != newloc)
+/mob/living/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if (locked_to && locked_to.loc != NewLoc)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)
 			return 0
 		else
-			return locked_to.Move(newloc, direct)
+			return locked_to.Move(NewLoc, Dir)
 
 	if (restrained())
 		stop_pulling()
@@ -717,7 +717,7 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							pulling.Move(T, get_dir(pulling, T))
+							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 
@@ -762,7 +762,7 @@ Thanks.
 													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
-							pulling.Move(T, get_dir(pulling, T))
+							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 				else
 					stop_pulling()
 	else
@@ -777,14 +777,14 @@ Thanks.
 			M.UpdateFeed(src)
 
 	if(T != loc)
-		handle_hookchain(direct)
+		handle_hookchain(Dir)
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc
 			if(!(M in view(src)))
 				NotTargeted(G)
-		for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
+		for(var/obj/item/weapon/gun/G in src) //Handle the gunner losing sight of their target/s
 			if(G.target)
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
@@ -1309,7 +1309,7 @@ Thanks.
 			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
 				var/turf/oldloc = loc
 				forceMove(tmob.loc)
-				tmob.forceMove(oldloc)
+				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
 				now_pushing = 0
 				for(var/mob/living/carbon/slime/slime in view(1,tmob))
 					if(slime.Victim == tmob)

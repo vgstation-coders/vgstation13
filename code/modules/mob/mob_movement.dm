@@ -345,6 +345,7 @@
 
 		mob.delayNextMove(move_delay)
 		mob.last_move_intent = world.time + 10
+		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in src
@@ -426,14 +427,17 @@
 ///Called by client/Move()
 ///Allows mobs to run though walls
 /client/proc/Process_Incorpmove(direct)
-	var/turf/mobloc = get_turf(mob)
-
 	switch(mob.incorporeal_move)
 		if(INCORPOREAL_GHOST)
 			if(isobserver(mob)) //Typecast time
 				var/mob/dead/observer/observer = mob
 				if(observer.locked_to) //Ghosts can move at any time to unlock themselves (in theory from following a mob)
 					observer.manual_stop_follow(observer.locked_to)
+			var/movedelay = GHOST_MOVEDELAY
+			if(isobserver(mob))
+				var/mob/dead/observer/observer = mob
+				movedelay = observer.movespeed
+			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/T = get_step(mob, direct)
 			var/area/A = get_area(T)
 			if(A && A.anti_ethereal && !isAdminGhost(mob))
@@ -444,52 +448,10 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
-			if(isobserver(mob))
-				var/mob/dead/observer/observer = mob
-				mob.delayNextMove(observer.movespeed)
-			else
-				mob.delayNextMove(1)
-		if(INCORPOREAL_NINJA)
-			if(prob(50))
-				var/locx
-				var/locy
-				switch(direct)
-					if(NORTH)
-						locx = mobloc.x
-						locy = (mobloc.y+2)
-						if(locy>world.maxy)
-							return
-					if(SOUTH)
-						locx = mobloc.x
-						locy = (mobloc.y-2)
-						if(locy<1)
-							return
-					if(EAST)
-						locy = mobloc.y
-						locx = (mobloc.x+2)
-						if(locx>world.maxx)
-							return
-					if(WEST)
-						locy = mobloc.y
-						locx = (mobloc.x-2)
-						if(locx<1)
-							return
-					else
-						return
-				mob.forceMove(locate(locx,locy,mobloc.z))
-				spawn(0)
-					var/limit = 2//For only two trailing shadows.
-					for(var/turf/T in getline(mobloc, mob.loc))
-						anim(T,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
-						limit--
-						if(limit<=0)
-							break
-			else
-				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
-				mob.forceEnter(get_step(mob, direct))
-			mob.dir = direct
-			mob.delayNextMove(1)
+			mob.delayNextMove(movedelay)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
+			var/movedelay = ETHEREAL_MOVEDELAY
+			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.turf_flags & NOJAUNT))
 				mob.forceEnter(newLoc)
@@ -497,7 +459,7 @@
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
 			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
-			mob.delayNextMove(2)
+			mob.delayNextMove(movedelay)
 			return 1
 	// Crossed is always a bit iffy
 	for(var/obj/S in mob.loc)

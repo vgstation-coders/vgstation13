@@ -391,7 +391,7 @@ var/list/all_doors = list()
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)
 
-/obj/machinery/door/Move(new_loc, new_dir)
+/obj/machinery/door/Move()
 	update_nearby_tiles()
 	. = ..()
 	if(width > 1)

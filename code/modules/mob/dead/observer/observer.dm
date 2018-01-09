@@ -435,7 +435,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/verb/toggle_secHUD()
 	set category = "Ghost"
 	set name = "Toggle SecHUD"
-	
+
 	if(!client)
 		return
 	if(selectedHUD == HUD_SECURITY)

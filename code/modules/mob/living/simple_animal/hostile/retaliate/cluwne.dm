@@ -303,8 +303,8 @@
 	msg = "<B>[src]</B> [msg]"
 	return ..(msg)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	. = ..(NewLoc, Dir, step_x, step_y)
+/mob/living/simple_animal/hostile/retaliate/cluwne/Move()
+	. = ..()
 
 	if(.)
 		if(m_intent == "run")

@@ -242,6 +242,7 @@
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
 					step(A,movedir)
 					items_moved++
 			if(items_moved >= max_moved)
