@@ -128,6 +128,7 @@
 
 	dir = newdirection
 	update_nearby_conveyors() //Try to resmooth with nearby diagonals
+	updateConfig()
 
 /obj/machinery/conveyor/proc/copy_radio_from_neighbors()
 	var/obj/machinery/conveyor_switch/lever = locate() in orange(src,1)
@@ -319,7 +320,6 @@
 	if("setdir" in href_list)
 		operating=0
 		update_dir(text2num(href_list["setdir"]))
-		updateConfig()
 		return MT_UPDATE
 	if("reverse" in href_list)
 		operating=0
