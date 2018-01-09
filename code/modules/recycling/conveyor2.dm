@@ -129,6 +129,7 @@
 	dir = newdirection
 	update_nearby_conveyors() //Try to resmooth with nearby diagonals
 	updateConfig()
+	setmove()
 
 /obj/machinery/conveyor/proc/copy_radio_from_neighbors()
 	var/obj/machinery/conveyor_switch/lever = locate() in orange(src,1)
