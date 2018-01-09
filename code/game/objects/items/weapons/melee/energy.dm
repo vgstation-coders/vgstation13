@@ -133,7 +133,8 @@
 	..()
 	if(istype(W, /obj/item/weapon/melee/energy/sword))
 		to_chat(user, "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>")
-		new /obj/item/weapon/dualsaber(user.loc)
+		var/obj/item/weapon/dualsaber/saber = new /obj/item/weapon/dualsaber(user.loc)
+		saber.colorset = W._color + src._color
 		qdel(W)
 		W = null
 		qdel(src)
