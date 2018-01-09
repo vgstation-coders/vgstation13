@@ -160,6 +160,7 @@
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
+					B.set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(B, movementdirection))
 						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
 						break
@@ -249,6 +250,7 @@
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
 				for(var/i in list(1,1,1,1,2,2,3,3,3))
+					B.set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(B, movementdirection))
 						B.change_dir(turn(movementdirection, 180)) //don't turn around when hitting a wall
 						break
