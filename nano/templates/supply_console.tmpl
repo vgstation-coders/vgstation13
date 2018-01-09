@@ -1,5 +1,5 @@
-<!-- 
-Title: Supply Console UI 
+<!--
+Title: Supply Console UI
 Used In File(s): \code\game\supplyshuttle.dm
 -->
 
@@ -108,6 +108,27 @@ Used In File(s): \code\game\supplyshuttle.dm
 				{{empty}}
 					No confirmed orders.
 				{{/for}}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="item">
+	<div class="itemLabel">
+		Centcomm Requests
+	</div>
+	<div class="itemContentWide">
+		<div class="statusDisplay">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
+				<u><b>Requests</b></u>
+				<br>
+				{{for data.centcomm_orders}}
+					<div class="line">
+						{{:value.id}} - {{:value.requested}} for {{:value.name}}: worth {{:value.worth}}
+					</div>
+				{{empty}}
+					No active requests.
+				{{/for}}
+				<br><br>
 			</div>
 		</div>
 	</div>

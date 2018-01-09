@@ -40,7 +40,7 @@ var/global/current_centcomm_order_id=124901
 		// Don't claim stuff that other orders may want.
 		if(fulfilled[O.type]==requested[O.type])
 			return 0
-		fulfilled[O.type]=fulfilled[O.type]+amount
+		fulfilled[O.type]+=amount
 		qdel(O)
 		return 1
 
