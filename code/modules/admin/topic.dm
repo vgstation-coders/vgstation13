@@ -3325,6 +3325,7 @@
 				var/choice = input("Which event do you want to trigger?") in subtypesof(/datum/event)+"Cancel"
 				if(choice != "Cancel")
 					new choice
+					message_admins("[key_name_admin(usr)] spawned a custom event of type [choice].")
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
