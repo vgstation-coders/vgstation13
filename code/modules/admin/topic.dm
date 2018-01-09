@@ -2346,6 +2346,19 @@
 		else
 			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
 
+	else if(href_list["DealBrainDam"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+		var/mob/living/M = locate(href_list["DealBrainDam"])
+		if(!isliving(M))
+			to_chat(usr, "<span class = 'warning'>\The [M] is not of type /mob/living.</span>")
+			return
+		var/choice = input("How much brain damage would you like to deal to the subject?", "Instant Lobotomy", 1) as null|num
+		if(choice)
+			log_admin("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			message_admins("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			M.adjustBrainLoss(choice)
+
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
 			return
