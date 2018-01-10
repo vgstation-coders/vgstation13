@@ -1067,7 +1067,6 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 
 	if(pulling)
-		to_chat(world, "stop pulling called. pulling was [pulling], puller was [pulling.pulledby]")
 		pulling.pulledby = null
 		pulling = null
 		update_pull_icon()
