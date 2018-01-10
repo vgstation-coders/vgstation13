@@ -430,7 +430,7 @@
 	if(butchery)
 		msg += "<span class='warning'>[butchery]</span>\n"
 
-	if(hasHUD(user,"security"))
+	if(user.hasHUD(HUD_SECURITY))
 		var/perpname = "wot"
 		var/criminal = "None"
 
@@ -455,7 +455,7 @@
 <span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>  <a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"}
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
-	if(hasHUD(user,"medical"))
+	if(user.hasHUD(HUD_MEDICAL))
 		var/perpname = "wot"
 		var/medical = "None"
 
@@ -486,36 +486,6 @@
 	to_chat(user, msg)
 	if(istype(user))
 		user.heard(src)
-
-//Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.
-/proc/hasHUD(mob/M as mob, hudtype)
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
-		switch(hudtype)
-			if("security")
-				return istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud)
-			if("medical")
-				return istype(H.glasses, /obj/item/clothing/glasses/hud/health)
-			else
-				return 0
-	else if(istype(M, /mob/living/silicon/robot))
-		var/mob/living/silicon/robot/R = M
-		switch(hudtype)
-			if("security")
-				return R.sensor_mode == 1
-			if("medical")
-				return R.sensor_mode == 2
-			else
-				return 0
-	else if(istype(M, /mob/living/silicon/pai))
-		var/mob/living/silicon/pai/P = M
-		switch(hudtype)
-			if("security")
-				return P.secHUD
-			if("medical")
-				return P.medHUD
-	else
-		return 0
 
 #undef Jitter_Medium
 #undef Jitter_High
