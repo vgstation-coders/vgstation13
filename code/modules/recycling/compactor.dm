@@ -108,7 +108,7 @@
 		return
 	..()
 
-/obj/machinery/disposal/compactor/Move()
+/obj/machinery/disposal/compactor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(prob(2))
 		var/atom/movable/AM = pick(contents)

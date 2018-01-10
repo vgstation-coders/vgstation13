@@ -146,7 +146,7 @@
 /atom/movable/proc/set_glide_size(glide_size_override = 0)
 	glide_size = glide_size_override
 
-/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
 		return 0
 

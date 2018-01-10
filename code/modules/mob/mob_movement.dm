@@ -393,7 +393,7 @@
 			mob.Facing()
 
 ///Process_Grab()
-///Called by client/Move()
+///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///Checks to see if you are being grabbed and if so attemps to break it
 /client/proc/Process_Grab()
 	if(locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
@@ -424,7 +424,7 @@
 
 
 ///Process_Incorpmove
-///Called by client/Move()
+///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///Allows mobs to run though walls
 /client/proc/Process_Incorpmove(direct)
 	switch(mob.incorporeal_move)
@@ -470,7 +470,7 @@
 
 
 ///Process_Spacemove
-///Called by /client/Move()
+///Called by /client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///For moving in space
 ///Return 1 for movement 0 for none
 /mob/Process_Spacemove(var/check_drift = 0,var/ignore_slip = 0)

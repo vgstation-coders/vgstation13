@@ -165,7 +165,7 @@
 	//No food, trash, walls or anything - just modify our pixel_x and pixel_y
 	animate(src, pixel_x = rand(-20,20) * PIXEL_MULTIPLIER, pixel_y = rand(-20,20) * PIXEL_MULTIPLIER, (flying ? 5 : 15) , 1) //This animation takes 1.5 seconds, or 0.5 if flying
 
-/mob/living/simple_animal/cockroach/Move()
+/mob/living/simple_animal/cockroach/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 
 	if(!flying)

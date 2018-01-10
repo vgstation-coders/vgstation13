@@ -138,7 +138,7 @@
 
 		nutrition = max(0, nutrition - STANDCOST)
 
-/mob/living/simple_animal/mouse/Move()
+/mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/multiplier = 1
 	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement

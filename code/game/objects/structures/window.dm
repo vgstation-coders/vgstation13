@@ -573,7 +573,7 @@ var/list/one_way_windows
 	if(reinforced)
 		new /obj/item/stack/rods(loc, sheetamount)
 
-/obj/structure/window/Move()
+/obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
 	update_nearby_tiles()
 	..()
