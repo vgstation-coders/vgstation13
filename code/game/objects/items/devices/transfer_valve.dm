@@ -179,10 +179,8 @@
 /obj/item/device/transfer_valve/proc/toggle_valve(var/whodunnit)
 	if(valve_open==0 && (tank_one && tank_two))
 		valve_open = 1
-		var/turf/bombturf = get_turf(src)
-		var/area/A = get_area(bombturf)
 
-		var/log_str = "Tank transfer valve opened in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a>, "
+		var/log_str = "Tank transfer valve opened in [formatJumpTo(get_turf(src))], "
 		if(attached_device && attacher && whodunnit == attached_device)
 			log_str += "opened by \a [attached_device] attached by [key_name(attacher)]. "
 		else if(isliving(whodunnit))
