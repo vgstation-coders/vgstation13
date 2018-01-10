@@ -100,10 +100,11 @@
 /datum/gamemode/proc/add_player_role_association(var/datum/mind/M, var/role_id)
 	if (role_id in available_roles)
 		var/datum/role/R = available_roles[role_id]
-		R += M
-		M.antag_roles += available_roles[role_id]
+		R.minds += M
+		M.antag_roles += role_id
 
 /datum/gamemode/proc/remove_player_role_association(var/datum/mind/M, var/role_id)
 	if (role_id in M.antag_roles)
 		var/datum/role/R = antag_roles[role_id]
 		R.minds -= M
+		M.antag_roles -= roles_id
