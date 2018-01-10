@@ -340,7 +340,8 @@ For vending packs, see vending_packs.dm*/
 	else if (href_list["screen"])
 		if(!check_restriction(usr))
 			return
-		screen = text2num(href_list["screen"])
+		if(text2num(href_list["screen"]) == SCR_MAIN || text2num(href_list["screen"]) == SCR_CENTCOM)
+			screen = text2num(href_list["screen"])
 		return 1
 	else if (href_list["close"])
 		if(usr.machine == src)
