@@ -43,7 +43,7 @@
 	var/lights = 0
 	var/lights_power = 6
 	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
-	var/lock_dir = 0
+	var/lock_dir = FALSE
 	//inner atmos
 	var/use_internal_tank = 0
 	var/internal_tank_valve = ONE_ATMOSPHERE
@@ -1274,7 +1274,6 @@
 	if(usr != src.occupant)
 		return
 	lock_dir = !lock_dir
-	return
 
 /obj/mecha/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
