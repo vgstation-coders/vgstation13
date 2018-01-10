@@ -736,12 +736,12 @@
 
 /obj/machinery/power/magtape_deck/syndicate/proc/generate_codephrase()
 	triggered = 0
-	codephrase = pick(adjectives)
-	var/offset = rand(1,5)
-	for(var/i = 1;i < length(codephrase)+1; i++)
-		var/char_value = (text2ascii(codephrase,i)|0x20) - 96
-		var/new_char = ascii2text(((char_value+offset)%25)+96)
-		encrypted_codephrase += new_char
+	codephrase = pick(adjectives) //Picks a word, long or short
+	var/offset = rand(1,5) //Picks the offset
+	for(var/i = 1;i < length(codephrase)+1; i++) //Goes through each character
+		var/char_value = (text2ascii(codephrase,i)|0x20) - 96 //Find the value of the character at that point, between a and z respectively (Converts to lower case)
+		var/new_char = ascii2text(((char_value+offset)%25)+96) //Adds the offset to the value, then converts it back to a character
+		encrypted_codephrase += new_char //Then adds it to the codephrase
 
 /obj/machinery/power/magtape_deck/syndicate/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(stat & (BROKEN|NOPOWER))

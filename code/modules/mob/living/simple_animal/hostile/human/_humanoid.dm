@@ -68,20 +68,21 @@
 	return
 
 /mob/living/simple_animal/hostile/humanoid/Shoot()
-	if(needs_to_reload)
-		if(bullets_remaining > 0)
-			bullets_remaining--
-			..()
-		else
-			if(canmove)
-				visible_message("<span class = 'warning'>\The [src] stops to reload!</span>")
-				playsound(src, reload_sound, 100, 1)
-				if(drop_on_reload)
-					new drop_on_reload(get_turf(src))
-				canmove = FALSE
-				spawn(rand(initial(bullets_remaining)/2 SECONDS,initial(bullets_remaining)*2 SECONDS))
-					visible_message("<span class = 'warning'>\The [src] reloads!</span>")
-					canmove = TRUE
-					bullets_remaining = initial(bullets_remaining)
-	else
+	if(!needs_to_reload)
 		..()
+		return
+	if(bullets_remaining > 0)
+		bullets_remaining--
+		..()
+		return
+	if(canmove)
+		visible_message("<span class = 'warning'>\The [src] stops to reload!</span>")
+		playsound(src, reload_sound, 100, 1)
+		if(drop_on_reload)
+			new drop_on_reload(src.loc)
+		canmove = FALSE
+		spawn(rand(initial(bullets_remaining)/2 SECONDS,initial(bullets_remaining)*2 SECONDS))
+			visible_message("<span class = 'warning'>\The [src] reloads!</span>")
+			canmove = TRUE
+			bullets_remaining = initial(bullets_remaining)
+	..()
