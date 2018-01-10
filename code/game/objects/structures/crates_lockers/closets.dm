@@ -19,6 +19,7 @@
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.
 	var/breakout_time = 2 //2 minutes by default
+	var/sound_file = 'sound/machines/click.ogg'
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
@@ -96,16 +97,13 @@
 	if(!src.can_open())
 		return 0
 
-
 	src.icon_state = src.icon_opened
 	src.opened = 1
 	setDensity(FALSE)
 	src.dump_contents()
-	if(istype(src, /obj/structure/closet/body_bag))
-		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
-	else
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+	playsound(src, sound_file, 15, 1, -3)
 	return 1
+
 
 /obj/structure/closet/proc/insert(var/atom/movable/AM)
 
@@ -138,6 +136,7 @@
 		return 0
 
 	take_contents()
+
 	/* /vg/: Delete if there's no code in here we need.
 	var/itemcount = 0
 
@@ -172,11 +171,9 @@
 	*/
 	src.icon_state = src.icon_closed
 	src.opened = 0
-	if(istype(src, /obj/structure/closet/body_bag))
-		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
-	else
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
-	setDensity(TRUE)
+	setDensity(initial(density))
+	playsound(src, sound_file, 15, 1, -3)
+	return 1
 
 /obj/structure/closet/proc/toggle()
 	if(src.opened)
