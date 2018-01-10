@@ -117,6 +117,7 @@
 			if(prob(20))
 				to_chat(H, "<span class='notice'>The power of [my_rel.deity_name] suddenly clears your mind of heresy. Your allegiance to Nar'Sie wanes!</span>")
 				to_chat(user, "<span class='notice'>You see [H]'s eyes become clear. Nar'Sie no longer controls his mind, [my_rel.deity_name] saved \him!</span>")
+				add_attacklogs(user, H, "de-converted from the Cult of Nar'Sie!")
 				ticker.mode.remove_cultist(H.mind)
 			else //We aren't deconverting him this time, give the Cultist a fair warning
 				to_chat(H, "<span class='warning'>The power of [my_rel.deity_name] is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
