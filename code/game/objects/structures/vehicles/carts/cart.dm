@@ -33,7 +33,7 @@
 			to_chat(user, "\The [src] already has a cart connected to it!", "red")
 			return
 
-/obj/machinery/cart/Move()
+/obj/machinery/cart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = src.loc
 	..()
 	if (src.loc == oldloc)

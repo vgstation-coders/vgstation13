@@ -133,7 +133,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	return
 
 
-/obj/structure/particle_accelerator/Move()
+/obj/structure/particle_accelerator/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(master && master.active)
 		master.toggle_power()

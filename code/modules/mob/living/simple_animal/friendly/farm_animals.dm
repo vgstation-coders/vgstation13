@@ -66,7 +66,7 @@
 		..()
 		src.visible_message("<span class='warning'>[src] gets an evil-looking gleam in \his eye.</span>")
 
-/mob/living/simple_animal/hostile/retaliate/goat/Move()
+/mob/living/simple_animal/hostile/retaliate/goat/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(!stat)
 		if(locate(/obj/effect/plantsegment) in loc)

@@ -214,7 +214,7 @@
 	else
 		to_chat(user, "<span class='warning'>The 'check battery' light is blinking.</span>")
 
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/Move()
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(internal_battery)
 		internal_battery.use(2) //Example use: 100 charge to get from the cargo desk to medbay side entrance

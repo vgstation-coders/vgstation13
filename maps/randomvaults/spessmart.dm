@@ -674,7 +674,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	robogibs(get_turf(src))
 	qdel(src)
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Move()
+/mob/living/simple_animal/hostile/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(alert_on_movement && !canmove)
 		Retaliate()
 
