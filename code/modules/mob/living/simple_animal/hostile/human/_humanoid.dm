@@ -40,6 +40,7 @@
 	var/bullets_remaining = 0
 	var/reload_sound = 'sound/weapons/magdrop_1.ogg'
 	var/drop_on_reload = null
+	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /mob/living/simple_animal/hostile/humanoid/New()
 	..()
@@ -48,6 +49,9 @@
 		var/image/new_img = image(I, icon_state = visible_items[I], layer = MOB_LAYER)
 		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
+
+/mob/living/simple_animal/hostile/humanoid/getarmor(var/def_zone, var/type)
+	return armor[type]
 
 /mob/living/simple_animal/hostile/humanoid/Die()
 	..()

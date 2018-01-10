@@ -21,7 +21,7 @@
 	projectilesound = 'sound/weapons/gatling_fire.ogg'
 	casingtype = /obj/item/ammo_casing_gatling
 	ranged_cooldown_cap = 15
-
+	armor = list(melee = 25, bullet = 55, laser = 60,energy = 25, bomb = 0, bio = 0, rad = 0)
 	visible_items = list('icons/mob/in-hand/right/guns_experimental.dmi' = "minigun1", 'icons/mob/in-hand/left/food.dmi' = "pie")
 
 /mob/living/simple_animal/hostile/humanoid/chef/Aggro()
@@ -61,6 +61,7 @@
 	bullets_remaining = 8
 	drop_on_reload = /obj/item/ammo_storage/magazine/mc9mm/empty
 	var/obj/item/weapon/reagent_containers/spray/chemsprayer/CS
+	armor = list(melee = 15, bullet = 35, laser = 45,energy = 35, bomb = 0, bio = 100, rad = 0)
 
 	visible_items = list('icons/mob/in-hand/right/items_righthand.dmi' = "chemsprayer", 'icons/mob/in-hand/left/items_lefthand.dmi' = "gun")
 
@@ -108,5 +109,5 @@
 	needs_to_reload = TRUE
 	bullets_remaining = 7
 	drop_on_reload = /obj/item/ammo_storage/speedloader/a357/empty
-
+	armor = list(melee = 10, bullet = 20, laser = 25,energy = 15, bomb = 0, bio = 0, rad = 0)
 	visible_items = list('icons/mob/in-hand/right/items_righthand.dmi' = "gun")
