@@ -6,6 +6,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 */
 /mob/living/silicon/robot/mommi
 	name = "Mobile MMI"
+	desc = "It's like a crab, but it has a utility tool on one arm and a crude metal claw on the other.  That, and you doubt it'd survive in an ocean for very long."
 	real_name = "Mobile MMI"
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "mommi"
@@ -13,8 +14,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	health = 60
 	pass_flags = PASSTABLE
 	var/keeper= TRUE // FALSE = No, TRUE = Yes (Disables speech and common radio.)
-	var/picked = FALSE
-	var/subtype="keeper"
+	var/picked_icon = FALSE
 	var/obj/abstract/screen/inv_tool = null
 	var/prefix = "Mobile MMI"
 	var/damage_control_network = "Damage Control"
@@ -47,14 +47,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	..()
 
 
-/mob/living/silicon/robot/mommi/New(loc, startup_sound='sound/misc/interference.ogg', var/cell_type="/obj/item/weapon/cell")
-	..()	
+/mob/living/silicon/robot/mommi/New(loc, startup_sound = 'sound/misc/interference.ogg', var/cell_type = "/obj/item/weapon/cell")
+	..()
 
 /proc/getAvailableMoMMIModules()
 	var/list/modules = list("Nanotrasen", "Soviet")
 	return modules
 
-/mob/living/silicon/robot/mommi/pick_module(var/forced_module=null)
+/mob/living/silicon/robot/mommi/pick_module(var/forced_module = null)
 	if(module)
 		return
 	var/list/modules = getAvailableMoMMIModules()
@@ -83,7 +83,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	set_module_sprites(module.sprites)
 
-	choose_icon(6,module_sprites)
+	choose_icon()
 
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
@@ -113,7 +113,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(user == src && !emagged)//Dont shitpost inside the game, thats just going too far
 		if(module)
 			var/obj/item/weapon/robot_module/mommi/warning = module
-			to_chat(user, "<span class='warning'>[warning.fuck_off_text]</span>")
+			to_chat(user, "<span class='warning'>[warning.ae_type] anti-emancipation override initiated.</span>")
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return TRUE
 	if(..())
@@ -125,7 +125,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(keeper)
 		keeper = FALSE
 
-/mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
 		var/obj/item/stack/cable_coil/coil = W
 		adjustFireLoss(-30)
@@ -261,15 +261,20 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				help_shake_act(user)
 				return
 
+/mob/living/silicon/robot/mommi/choose_icon()
+	if(..())
+		picked_icon = TRUE
+
 /mob/living/silicon/robot/mommi/installed_modules()
 	if(weapon_lock)
 		to_chat(src, "<span class='warning'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
 		return
-
 	if(!module)
 		pick_module()
 		return
-	if(!picked)
+	if(!picked_icon)
+		if(!module_sprites)
+			set_module_sprites(module.sprites)
 		choose_icon()
 		return
 	var/dat = "<HEAD><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"

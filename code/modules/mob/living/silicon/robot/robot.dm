@@ -51,6 +51,7 @@
 
 	var/opened = FALSE
 	var/emagged = FALSE
+	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
 	var/locked = TRUE
 	var/list/req_access = list(access_robotics)
@@ -229,7 +230,7 @@
 	set_module_sprites(module.sprites)
 
 	if(!forced_module)
-		choose_icon(6, module_sprites) //Why 6? Don't ask me.
+		choose_icon()
 
 	SetEmagged(emagged) // Update emag status and give/take emag modules away
 
@@ -992,12 +993,17 @@
 			return FALSE
 	return TRUE
 
-/mob/living/silicon/robot/proc/updateicon()
-
-	overlays.len = 0
+/mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
+	overlays.Cut()
 	if(!stat && cell != null)
-		var/image/eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
-		eyes.plane = LIGHTING_PLANE
+		var/image/eyes = image(icon,"eyes-[icon_state][isMoMMI(src) && emagged?"-emagged":""]", ABOVE_LIGHTING_LAYER)
+		if(plane == HIDING_MOB_PLANE) // Hiding MoMMIs
+			overlay_plane = FLOAT_PLANE
+			overlay_layer = FLOAT_LAYER
+		if(!emagged)
+			eyes.plane = overlay_plane
+		else
+			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
 		overlays += eyes
 
 	if(opened)
@@ -1018,7 +1024,6 @@
 			icon_state = "[base_icon]-roll"
 		else
 			icon_state = base_icon
-		return
 
 //Call when target overlay should be added/removed
 /mob/living/silicon/robot/update_targeted()
@@ -1274,7 +1279,7 @@
 
 /mob/living/silicon/robot/proc/SetEmagged(var/new_state)
 	emagged = new_state
-	if(new_state)
+	if(new_state || illegal_weapons)
 		if(module)
 			module.on_emag()
 	else
@@ -1292,9 +1297,9 @@
 	lockcharge = state
 	update_canmove()
 
-/mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
+/mob/living/silicon/robot/proc/choose_icon(var/triesleft = 1)
 	if(triesleft < 1 || !module_sprites.len)
-		return
+		return FALSE
 	else
 		triesleft--
 
@@ -1304,7 +1309,7 @@
 		icon_state = module_sprites[icontype]
 	else
 		triesleft++
-		return
+		return FALSE
 
 
 	overlays -= image(icon = icon, icon_state = "eyes")
@@ -1314,12 +1319,13 @@
 	if(triesleft >= 1)
 		var/choice = input("Look at your icon - is this what you want?") in list("Yes","No")
 		if(choice=="No")
-			choose_icon(triesleft, module_sprites)
+			choose_icon(triesleft)
 		else
 			triesleft = 0
-			return
+			return FALSE
 	else
 		to_chat(src, "Your icon has been set. You now require a module reset to change it.")
+		return TRUE
 
 /mob/living/silicon/robot/proc/help_shake_act(mob/user)
 	user.visible_message("<span class='notice'>[user.name] pats [name] on the head.</span>")

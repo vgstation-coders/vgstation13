@@ -10,7 +10,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
 	if(isMoMMI(M))
-		return mommi_base_law_type
+		return (new mommi_base_law_type)
 	if(!base_law_type)
 		base_law_type = pick(
 		40;/datum/ai_laws/asimov,

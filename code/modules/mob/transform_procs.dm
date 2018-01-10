@@ -242,8 +242,8 @@
 		drop_from_inventory(W)
 	dropBorers()
 	regenerate_icons()
-	monkeyizing = 1
-	canmove = 0
+	monkeyizing = TRUE
+	canmove = FALSE
 	icon = null
 	invisibility = 101
 	delayNextAttack(50)

@@ -217,8 +217,7 @@
 	icon_state = "cyborg_upgrade3"
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-
-	if(R.emagged == TRUE)
+	if(R.illegal_weapons == TRUE)
 		return FAILED_TO_ADD
 
 	if(..())
@@ -226,7 +225,8 @@
 
 	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.type]).")
 
-	R.SetEmagged(2)
+	R.illegal_weapons = TRUE
+	R.SetEmagged()
 
 /obj/item/borg/upgrade/engineering/
 	name = "engineering cyborg MK-2 upgrade board"
