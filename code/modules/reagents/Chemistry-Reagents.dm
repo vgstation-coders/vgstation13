@@ -575,12 +575,26 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	holder.remove_reagent_by_type(/datum/reagent/chloralhydrate, 5 * REM)
-	holder.remove_reagent_by_type(/datum/reagent/zombiepowder, 0.5*REM)
-
-	//All same REM, so cheaper to junk them all in together.
-	holder.remove_reagents_by_type(list(/datum/reagent/plasma, /datum/reagent/sacid, /datum/reagent/cyanide, /datum/reagent/carpotoxin), REM)
-	holder.remove_reagents_by_type(list(/datum/reagent/toxin, /datum/reagent/stoxin, /datum/reagent/amatoxin, /datum/reagent/mindbreaker), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(STOXIN, VALERENIC_ACID)))
+		holder.remove_reagents(list(STOXIN, VALERENIC_ACID), 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.remove_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
+		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.remove_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.remove_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.remove_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.remove_reagent(MINDBREAKER, 2 * REM)
 	M.hallucination = max(0, M.hallucination - 5 * REM)
 	M.adjustToxLoss(-2 * REM)
 
