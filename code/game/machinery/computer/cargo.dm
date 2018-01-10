@@ -25,6 +25,9 @@ For vending packs, see vending_packs.dm*/
 	acc_info["account"] = account
 	return acc_info
 
+#define SCR_MAIN 1
+#define SCR_CENTCOM 2
+
 /obj/machinery/computer/supplycomp
 	name = "Supply shuttle console"
 	icon = 'icons/obj/computer.dmi'
@@ -37,7 +40,7 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
-
+	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
 
 /obj/machinery/computer/supplycomp/New()
@@ -180,6 +183,7 @@ For vending packs, see vending_packs.dm*/
 	data["restriction"] = supply_shuttle.restriction
 	data["requisition"] = supply_shuttle.requisition
 	data["centcomm_orders"] = supply_shuttle.centcomm_orders
+	data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -332,6 +336,11 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		supply_shuttle.requisition = text2num(href_list["requisition_status"])
+		return 1
+	else if (href_list["screen"])
+		if(!check_restriction(usr))
+			return
+		screen = text2num(href_list["screen"])
 		return 1
 	else if (href_list["close"])
 		if(usr.machine == src)
@@ -535,3 +544,6 @@ For vending packs, see vending_packs.dm*/
 		return 1
 
 	add_fingerprint(usr)
+
+#undef SCR_MAIN
+#undef SCR_CENTCOM
