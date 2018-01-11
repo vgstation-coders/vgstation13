@@ -431,52 +431,31 @@
 		msg += "<span class='warning'>[butchery]</span>\n"
 
 	if(user.hasHUD(HUD_SECURITY))
-		var/perpname = "wot"
+		var/perpname = get_id_name("wot")
 		var/criminal = "None"
 
-		if(wear_id)
-			var/obj/item/weapon/card/id/I = wear_id.GetID()
-			if(I)
-				perpname = I.registered_name
-			else
-				perpname = name
-		else
-			perpname = name
-
-		if(perpname)
-			for (var/datum/data/record/E in data_core.general)
-				if(E.fields["name"] == perpname)
-					for (var/datum/data/record/R in data_core.security)
-						if(R.fields["id"] == E.fields["id"])
-							criminal = R.fields["criminal"]
-
+		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
+		if(sec_record)
+			criminal = sec_record.fields["criminal"]
 
 			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>  <a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"}
+<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>"}
+			if(!isjustobserver(user))
+				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
 	if(user.hasHUD(HUD_MEDICAL))
-		var/perpname = "wot"
+		var/perpname = get_id_name("wot")
 		var/medical = "None"
 
-		if(wear_id)
-			if(istype(wear_id,/obj/item/weapon/card/id))
-				perpname = wear_id:registered_name
-			else if(istype(wear_id,/obj/item/device/pda))
-				var/obj/item/device/pda/tempPda = wear_id
-				perpname = tempPda.owner
-		else
-			perpname = src.name
-
-		for (var/datum/data/record/E in data_core.general)
-			if (E.fields["name"] == perpname)
-				for (var/datum/data/record/R in data_core.general)
-					if (R.fields["id"] == E.fields["id"])
-						medical = R.fields["p_stat"]
-
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+		if(gen_record)
+			medical = gen_record.fields["p_stat"]
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
-			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"}
+			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a>"}
+		if(!isjustobserver(user))
+			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"
