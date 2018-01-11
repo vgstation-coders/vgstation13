@@ -37,16 +37,17 @@ Here it is: Buttbot.
 /obj/machinery/bot/buttbot/proc/speak(var/message)
 	if((!src.on) || (!message))
 		return
-	for(var/mob/O in hearers(src, null))
-		O.show_message("<b>[src]</b> beeps, '[message]'")
+	for(var/mob/O in hearers(world.view, src))
+		to_chat(O, "<b>[src]</b> beeps, \"[message]\"")
 	return
 
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
-	if(prob(buttchance) && !findtext(speech.message,"butt"))
+	var/message = speech.message // need to save this here before sleeping: the speech datum may be destroyed in the meantime
+	if(prob(buttchance) && !findtext(message,"butt"))
 		sleep(rand(1,3))
-		var/list/split_phrase = splittext(speech.message," ") // Split it up into words.
+		var/list/split_phrase = splittext(message," ") // Split it up into words.
 
 		var/list/prepared_words = split_phrase.Copy()
 		var/i = rand(1,3)
@@ -60,7 +61,7 @@ Here it is: Buttbot.
 
 			split_phrase[index] = "butt"
 
-		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		speak(jointext(split_phrase," ")) // No longer need to sanitize, speech is automatically html_encoded at render-time.
 
 
 
