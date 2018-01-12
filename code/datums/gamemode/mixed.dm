@@ -3,7 +3,7 @@
 
 
 /datum/gamemode/mixed/SetupFactions()
-	factions_allowed = list(typesof(/datum/faction) - /datum/faction)
+	factions_allowed = list(subtypesof(/datum/faction))
 
 
 /datum/gamemode/mixed/traitorchan
