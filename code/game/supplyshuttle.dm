@@ -303,8 +303,6 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 
 /datum/controller/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
-	for(var/I in centcomm_orders)
-		to_chat(world, "[I]")
 	var/name = "External order form - [C.name] order number [C.id]"
 	var/info = {"<h3>Central command supply requisition form</h3<><hr>
 	 			INDEX: #[C.id]<br>
