@@ -4049,7 +4049,7 @@
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
-	specheatcap = rand(25,250)/10
+	specheatcap = rand(25,2500)/100
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
 
