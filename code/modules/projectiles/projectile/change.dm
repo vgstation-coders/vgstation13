@@ -3,7 +3,7 @@
 	icon_state = "ice_1"
 	damage = 0
 	damage_type = BURN
-	nodamage = 1
+	nodamage = TRUE
 	flag = "energy"
 	var/changetype=null
 	fire_sound = 'sound/weapons/radgun.ogg'
