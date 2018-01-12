@@ -311,38 +311,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				else if(prob(15))
 					B = getFromPool(/obj/structure/boulder, src)
 
-				var/mineral/has_minerals = mineral
 				if(B)
 					GetDrilled(0)
 				else
 					GetDrilled(1)
-
-				if(!B && !has_minerals)
-					var/I = rand(1,500)
-					if(I == 1)
-						switch(polarstar)
-							if(0)
-								new/obj/item/weapon/gun/energy/polarstar(src)
-								polarstar = 1
-								visible_message("<span class='notice'>A gun was buried within!</span>")
-							if(1)
-								new/obj/item/device/modkit/spur_parts(src)
-								visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
-								polarstar = 2
 				return
-
-			if(finds && finds.len)
-				var/I = rand(1,100)
-				if(I == 1)
-					switch(polarstar)
-						if(0)
-							new/obj/item/weapon/gun/energy/polarstar(src)
-							polarstar = 1
-							visible_message("<span class='notice'>A gun was buried within!</span>")
-						if(1)
-							new/obj/item/device/modkit/spur_parts(src)
-							visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
-							polarstar = 2
 
 			excavation_level += P.excavation_amount
 
