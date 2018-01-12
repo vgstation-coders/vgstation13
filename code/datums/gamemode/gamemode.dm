@@ -6,7 +6,7 @@
 	@factions_allowed: List(object): what factions will the gamemode start with, or attempt to start with
 	@minimum_player_count: Integer: Minimum required players to start the gamemode
 	@admin_override: Overrides certain checks such as the one above to force-start a gamemode
-	@available_roles: List of all roles the ticker can draft players into (?)
+	@available_roles: List of all roles the ticker can draft players into
 */
 
 
@@ -72,7 +72,7 @@
 	return dat
 
 /datum/gamemode/proc/TearDown()
-	//No idea what this is supposed to do - it probably the datumised version of "error setting up secret." -- t. Shifty
+	// This is where the game mode is shut down and cleaned up.
 
 /datum/gamemode/proc/GetScoreboard()
 	var/dat =""

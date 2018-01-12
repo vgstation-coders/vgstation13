@@ -1399,7 +1399,9 @@ proc/clear_memory(var/silent = 1)
 
 // --
 /datum/mind/proc/GetRole(var/role_id)
-	return (role_id in antag_roles)
+	if (role_id in antag_roles)
+		return antag_roles[role_id]
+	return FALSE
 
 //Initialisation procs
 /mob/proc/mind_initialize() // vgedit: /mob instead of /mob/living
