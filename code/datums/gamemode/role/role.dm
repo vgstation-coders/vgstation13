@@ -129,7 +129,8 @@
 
 // Remove
 /datum/role/proc/Drop()
-	if(!antag) return
+	if(!antag)
+		return
 	var/datum/role/parent = ticker.antag_types[id]
 	parent.minds -= antag
 	ticker.mode.remove_player_role_association(antag,id)
@@ -316,8 +317,8 @@
 
 // DO NOT OVERRIDE.
 /datum/role/Topic(href, href_list)
-	if(!check_rights(R_ADMIN)) return 1
-
+	if(!check_rights(R_ADMIN))
+		return 1
 	if(!href_list["mind"])
 		to_chat(usr, "<span class='warning'>BUG: mind variable not specified in Topic([href])!</span>")
 		return
