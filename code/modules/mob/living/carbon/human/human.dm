@@ -952,7 +952,7 @@
 		O.heal_damage(1000,1000,1,1)
 
 	var/datum/organ/external/head/h = organs_by_name[LIMB_HEAD]
-	h.disfigured = 0
+	h.disfigured = FALSE
 
 	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)

@@ -1392,7 +1392,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 130
 	min_broken_damage = 40
 	body_part = HEAD
-	var/disfigured = 0
+	var/disfigured = FALSE
 	vital = 1
 	encased = "skull"
 
@@ -1473,7 +1473,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.visible_message("<span class='warning'>[owner]'s face disfigures.</span>",
 		                      "<span class='danger'>Your face becomes an unrecognizable, mangled mess!</span>")
 
-	disfigured = 1
+	disfigured = TRUE
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS
