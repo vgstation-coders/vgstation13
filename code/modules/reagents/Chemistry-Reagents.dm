@@ -1959,7 +1959,7 @@
 
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
-				H.adjustToxLoss(rand(0.5, 1))
+				H.adjustToxLoss(rand(5, 10)/10)
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -4049,7 +4049,7 @@
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
-	specheatcap = rand(0.25,25)
+	specheatcap = rand(25,2500)/100
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
 

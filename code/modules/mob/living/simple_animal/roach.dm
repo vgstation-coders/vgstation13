@@ -122,7 +122,7 @@
 				//And yeah, roaches can lay eggs on their own eggs. This is kinda intended
 
 				if(F && F.reagents)
-					F.reagents.add_reagent(TOXIN, rand(0.2,0.6)) //Add some toxin to the food
+					F.reagents.add_reagent(TOXIN, rand(2,6)/10) //Add some toxin to the food
 					lay_eggs()
 
 		return //Don't do anything after that
