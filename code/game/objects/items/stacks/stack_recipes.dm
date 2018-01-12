@@ -255,7 +255,10 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 /datum/stack_recipe/leather/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
 	if(istype(S, /obj/item/stack/sheet/leather))
 		var/obj/item/stack/sheet/leather/L = S
-		R.name = "[L.source_string ? "[L.source_string] leather " : ""][R.name]"
+		if(findtext(lowertext(R.name), "leather"))
+			R.name = "[L.source_string ? "[L.source_string]" : ""] [R.name]"
+		else
+			R.name = "[L.source_string ? "[L.source_string] leather " : ""] [R.name]"
 
 var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/bullwhip,					10,	time = 100,),

@@ -14,7 +14,7 @@
 	name = "human skin"
 	desc = "The by-product of human farming."
 	singular_name = "human skin piece"
-	icon_state = "sheet-hide"
+	icon_state = "sheet-human"
 	source_string = "human"
 	origin_tech = ""
 
