@@ -132,7 +132,12 @@ Used In File(s): \code\game\supplyshuttle.dm
 					<br>
 					{{for data.centcomm_orders}}
 						<div class="line">
-							{{:value.id}} - {{:value.requested}} for {{:value.name}}: worth {{:value.worth}}
+							#{{:value.id}}<br>
+							Requested:<br>
+								{{:value.requested}}<br>
+							Fulfilled:<br>
+							 	{{:value.fulfilled}}<br>
+							for {{:value.name}}: worth {{:value.worth}} to {{:value.to}}<br>
 						</div>
 					{{empty}}
 						No active requests.

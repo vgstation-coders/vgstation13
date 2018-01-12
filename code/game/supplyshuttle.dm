@@ -165,19 +165,18 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 					qdel(A)
 					continue
 
-				SellObjToOrders(A,0)
+				SellObjToOrders(A,1)
 
-				// Delete it. (Fixes github #473)
 				if(A)
 					qdel(A)
 		else
-			SellObjToOrders(MA,1)
+			SellObjToOrders(MA,0)
 
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
 				O.Pay()
-				centcomm_orders -= O
+				centcomm_orders.Remove(O)
 //		to_chat(world, "deleting [MA]/[MA.type] it was [!MA.anchored ? "not ": ""] anchored")
 		qdel(MA)
 
@@ -304,18 +303,15 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 
 /datum/controller/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
-	 /*TODO -- ADD WAY TO ANNOUNCE TO THE CREW
-	 		IDEA 1: JUST PRINT TO THE STATION COMPUTERS LIKE ANNOUNCEMENTS DO
-	 		IDEA 2: ADD THE QM CONSOLE. QM-ACCESS ONLY, ALLOWS YOU TO SEE THE LAST TRANSACTIONS ON THE SHIP, LAST ORDERS, AND CURRENT CENTCOMM ORDERS.
-	 		Let's just go with printing out a piece of paper and 'a new order has arrived' at cargo consoles.
-	 */
+	for(var/I in centcomm_orders)
+		to_chat(world, "[I]")
 	var/name = "External order form - [C.name] order number [C.id]"
 	var/info = {"<h3>Central command supply requisition form</h3<><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
-	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]
+	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]<br>
 	 			REQUESTED ITEMS:<br>
-	 			[C.getRequestsByName()]
+	 			[C.getRequestsByName(1)]
 	 			WORTH: [C.worth] credits TO [C.acct_by_string]
 	 			"}
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
@@ -323,3 +319,4 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 		reqform.name = name
 		reqform.info = info
 		reqform.update_icon()
+		S.say("New central command request available")

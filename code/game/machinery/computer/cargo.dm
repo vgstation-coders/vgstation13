@@ -175,6 +175,12 @@ For vending packs, see vending_packs.dm*/
 		if(SO)
 			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
 	data["orders"] = orders_list
+
+	var/centcomm_list[0]
+	for(var/datum/centcomm_order/O in supply_shuttle.centcomm_orders)
+		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
+	data["centcomm_orders"] = centcomm_list
+
 	data["money"] = current_acct.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = supply_shuttle.moving
@@ -182,7 +188,7 @@ For vending packs, see vending_packs.dm*/
 	data["show_permissions"] = permissions_screen
 	data["restriction"] = supply_shuttle.restriction
 	data["requisition"] = supply_shuttle.requisition
-	data["centcomm_orders"] = supply_shuttle.centcomm_orders
+
 	data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)

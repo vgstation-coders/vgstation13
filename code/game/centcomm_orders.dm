@@ -53,15 +53,38 @@ var/global/current_centcomm_order_id=124901
 /datum/centcomm_order/proc/Pay()
 	acct.charge(-worth,null,"Payment for order #[id]",dest_name = name)
 
-/datum/centcomm_order/proc/getRequestsByName()
-	var/manifest = "<ul>"
+/datum/centcomm_order/proc/getRequestsByName(var/html_format = 0)
+	var/manifest = ""
+	if(html_format)
+		manifest = "<ul>"
 	for(var/path in requested)
 		if(!path)
 			continue
 		var/atom/movable/AM = new path()
-		manifest += "<li>[AM.name], amount: [requested[path]]</li>"
+		if(html_format)
+			manifest += "<li>[AM.name], amount: [requested[path]]</li>"
+		else
+			manifest += "[AM.name], amount: [requested[path]]"
 		qdel(AM)//just to make sure they're deleted by the garbage collector
-	manifest += "</ul>"
+	if(html_format)
+		manifest += "</ul>"
+	return manifest
+
+/datum/centcomm_order/proc/getFulfilledByName(var/html_format = 0)
+	var/manifest = ""
+	if(html_format)
+		manifest = "<ul>"
+	for(var/path in fulfilled)
+		if(!path)
+			continue
+		var/atom/movable/AM = new path()
+		if(html_format)
+			manifest += "<li>[AM.name], amount: [fulfilled[path]]</li>"
+		else
+			manifest += "[AM.name], amount: [fulfilled[path]]"
+		qdel(AM)//just to make sure they're deleted by the garbage collector
+	if(html_format)
+		manifest += "</ul>"
 	return manifest
 
 /datum/centcomm_order/proc/OnPostUnload()

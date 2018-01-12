@@ -13,6 +13,7 @@
 	var/department = pick("Cargo","Medical","Science","Civilian")
 	var/list/choices
 	C.acct = department_accounts[department]
+	C.acct_by_string = department
 	switch(department)
 		if("Cargo") //Minerals
 			choices = list(
@@ -68,11 +69,6 @@
 					"amount" = rand(1,3),
 					"value" = rand(300,900),
 					),
-				list(
-					"item" = /obj/item/organ/external/head,
-					"amount" = rand(1,2),
-					"value" = rand(250,750),
-					)
 				)
 		if("Civilian") //FOOD
 			choices = list(
