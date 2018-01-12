@@ -50,7 +50,7 @@
 	var/list/kills=list()
 	var/list/datum/objective_holder/objectives = list()
 	var/list/datum/objective/special_verbs = list()
-	var/list/antag_roles = list()
+	var/list/antag_roles = list()		// All the antag roles we have.
 
 
 	var/datum/faction/faction 			//associated faction
@@ -1404,6 +1404,13 @@ proc/clear_memory(var/silent = 1)
 
 	return FALSE
 */
+
+// --
+/datum/mind/proc/GetRole(var/role_id)
+	if (role_id in antag_roles)
+		return antag_roles[role_id]
+	return FALSE
+
 //Initialisation procs
 /mob/proc/mind_initialize() // vgedit: /mob instead of /mob/living
 	if(mind)
