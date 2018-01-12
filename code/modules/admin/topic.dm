@@ -3656,11 +3656,6 @@
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
 				usr << browse(dat, "window=bombers")
-			if("list_signalers")
-				var/dat = "<B>Showing last [length(lastsignalers)] signalers.</B><HR>"
-				for(var/sig in lastsignalers)
-					dat += "[sig]<BR>"
-				usr << browse(dat, "window=lastsignalers;size=800x500")
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)

@@ -745,7 +745,6 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_signalers'>Show last [length(lastsignalers)] signalers</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
