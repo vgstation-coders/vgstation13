@@ -222,7 +222,7 @@
 /mob/proc/MoMMIfy(round_start = FALSE)
 	Premorph()
 
-	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src))
+	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi(get_turf(src))
 	. = O
 
 	if(!O.cell) // MoMMIs' New() is suposed to give them a battery but JUST TO BE SURE.
