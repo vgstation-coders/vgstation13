@@ -2850,7 +2850,7 @@
 					head_organ.disfigured = FALSE
 					if(H.get_face_name() != "Unknown")
 						H.visible_message("<span class='notice'>[H]'s face shifts and knits itself back into shape!</span>","<span class='notice'>You feel your face shifting and repairing itself!</span>")
-					else if(!(H.stat == UNCONSCIOUS || H.sleeping > 0))
+					else if(!H.isUnconscious())
 						to_chat(H,"<span class='notice'>You feel your face shifting and repairing itself!</span>")
 
 	data++
