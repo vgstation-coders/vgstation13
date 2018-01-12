@@ -6,7 +6,7 @@ var/datum/controller/gameticker/ticker
 	var/current_state = GAME_STATE_PREGAME
 
 	var/hide_mode = 0
-	var/datum/game_mode/mode = null
+	var/datum/gamemode/mode = null
 	var/event_time = null
 	var/event = 0
 
@@ -35,6 +35,8 @@ var/datum/controller/gameticker/ticker
 	var/delay_end = 0	//if set to nonzero, the round will not restart on it's own
 
 	var/triai = 0//Global holder for Triumvirate
+
+	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1)
 
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null

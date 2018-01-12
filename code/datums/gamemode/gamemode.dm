@@ -6,6 +6,7 @@
 	@factions_allowed: List(object): what factions will the gamemode start with, or attempt to start with
 	@minimum_player_count: Integer: Minimum required players to start the gamemode
 	@admin_override: Overrides certain checks such as the one above to force-start a gamemode
+	@available_roles: List of all roles the ticker can draft players into
 */
 
 
@@ -15,6 +16,7 @@
 	var/list/factions_allowed = list()
 	var/minimum_player_count
 	var/admin_override //Overrides checks such as minimum_player_count to
+	var/list/datum/role/available_roles = list()
 
 /datum/gamemode/New()
 	Setup()
@@ -70,7 +72,7 @@
 	return dat
 
 /datum/gamemode/proc/TearDown()
-	//No idea what this is supposed to do
+	// This is where the game mode is shut down and cleaned up.
 
 /datum/gamemode/proc/GetScoreboard()
 	var/dat =""
@@ -94,3 +96,15 @@
 			players.Add(P)
 
 	return players
+
+/datum/gamemode/proc/add_player_role_association(var/datum/mind/M, var/role_id)
+	if (role_id in available_roles)
+		var/datum/role/R = available_roles[role_id]
+		R.minds += M
+		M.antag_roles += role_id
+
+/datum/gamemode/proc/remove_player_role_association(var/datum/mind/M, var/role_id)
+	if (role_id in M.antag_roles)
+		var/datum/role/R = antag_roles[role_id]
+		R.minds -= M
+		M.antag_roles -= roles_id
