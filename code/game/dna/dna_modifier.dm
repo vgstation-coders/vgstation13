@@ -505,13 +505,6 @@
 	else
 		use_power = 1
 
-/obj/machinery/computer/scan_consolenew/attack_paw(user as mob)
-	ui_interact(user)
-
-/obj/machinery/computer/scan_consolenew/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	ui_interact(user)
-
 /obj/machinery/computer/scan_consolenew/attack_hand(user as mob)
 	if(!..())
 		if(!connected)
@@ -538,12 +531,11 @@
   * @return nothing
   */
 /obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-
-	if(connected)
-		if(user == connected.occupant || user.isUnconscious())
-			return
-	else
+	if(!connected)
 		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
+		return
+	
+	if(user == connected.occupant)
 		return
 
 	// this is the data which will be sent to the ui
