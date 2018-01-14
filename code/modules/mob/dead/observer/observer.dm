@@ -377,13 +377,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	..()
 	if(statpanel("Status"))
 		stat(null, "Station Time: [worldtime2text()]")
-		if(ticker)
+		/*if(ticker)
 			if(ticker.mode)
 //				to_chat(world, "DEBUG: ticker not null")
 				if(ticker.mode.name == "AI malfunction")
 //					to_chat(world, "DEBUG: malf mode ticker test")
 					if(ticker.mode:malf_mode_declared)
-						stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+						stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")*/
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
@@ -477,7 +477,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/list/L = list()
 	var/holyblock = 0
 
-	if((usr.invisibility == 0) || (ticker && ticker.mode && (ticker.mode.name == "cult") && (usr.mind in ticker.mode.cult)))
+	if((usr.invisibility == 0) || usr.mind.GetRole(CULT_NARSIE))
 		for(var/turf/T in get_area_turfs(thearea.type))
 			if(!T.holy)
 				L+=T
@@ -523,7 +523,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to follow it.</span>")
 			return
-		if(targetloc && targetloc.holy && ((!invisibility) || (mind in ticker.mode.cult)))
+		if(targetloc && targetloc.holy && (!invisibility || mind.GetRole(CULT_NARSIE)))
 			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 			return
 		if(target != src)
@@ -565,7 +565,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to jump to it.</span>")
 				return
-			if(targetloc && targetloc.holy && ((src.invisibility == 0) || (src.mind in ticker.mode.cult)))
+			if(targetloc && targetloc.holy && ((src.invisibility == 0) || (mind.GetRole(CULT_NARSIE))))
 				to_chat(usr, "<span class='warning'>The mob that you are trying to follow is standing on holy grounds, you cannot reach him!</span>")
 				return
 			var/mob/M = dest[target] //Destination mob
@@ -731,10 +731,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return 0 //something is terribly wrong
 
 	var/ghosts_can_write
-	if(ticker.mode.name == "cult")
+	/*if(ticker.mode.name == "cult")
 		var/datum/game_mode/cult/C = ticker.mode
 		if(C.cult.len > config.cult_ghostwriter_req_cultists)
-			ghosts_can_write = 1
+			ghosts_can_write = 1*/
 
 	if(!ghosts_can_write)
 		to_chat(src, "<span class='warning'>The veil is not thin enough for you to do that.</span>")

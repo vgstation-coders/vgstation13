@@ -1537,15 +1537,18 @@ Game Mode config tags:
 /proc/find_active_mode(var/mode_ctag)
 	var/found_mode = null
 	if(ticker && ticker.mode)
-		if(ticker.mode.config_tag == mode_ctag)
+		if(ticker.mode.name == mode_ctag)
 			found_mode = ticker.mode
-		else if(ticker.mode.name == "mixed")
-			var/datum/game_mode/mixed/mixed_mode = ticker.mode
-			for(var/datum/game_mode/GM in mixed_mode.modes)
-				if(GM.config_tag == mode_ctag)
-					found_mode = GM
-					break
 	return found_mode
+
+/proc/find_active_faction(var/faction_name)
+	var/found_faction = null
+	if(ticker && ticker.factions.len)
+		for(var/datum/faction/F in ticker.factions)
+			if(faction_name in F.ID)
+				found_faction = F
+				break
+	return found_faction
 
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()

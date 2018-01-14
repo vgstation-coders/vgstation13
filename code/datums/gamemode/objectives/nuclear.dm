@@ -3,6 +3,6 @@
 
 /datum/objective/nuclear/IsFulfilled()
 	..()
-	if(ticker.mode.explosion_in_progress || ticker.mode.station_was_nuked)
+	if(ticker.explosion_in_progress || ticker.station_was_nuked)
 		return TRUE
 	return FALSE

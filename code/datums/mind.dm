@@ -68,6 +68,7 @@
 	var/list/heard_before = list()
 
 	var/nospells = 0 //Can't cast spells.
+	var/hasbeensacrificed = FALSE
 
 
 /datum/mind/New(var/key)
@@ -117,7 +118,7 @@
 	out += {"Mind currently owned by key: [key] [active?"(synced)":"(not synced)"]<br>
 		Assigned role: [assigned_role]. <a href='?src=\ref[src];role_edit=1'>Edit</a><br>
 		Factions and special roles:<br>"}
-	var/list/sections = list(
+	/*var/list/sections = list(
 		"revolution",
 		"cult",
 		"wizard",
@@ -133,7 +134,7 @@
 		"elite",
 		"custom",
 	)
-	var/text = ""
+	var/text = ""*/
 
 	/*if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
 		* REVOLUTION **
@@ -401,7 +402,7 @@
 			text += "<a href='?src=\ref[src];elite=elite'>yes</a>|<b>NO</b>"
 		sections["elite"] = text
 
-	* CUSTOM STRIKE TEAM */
+	* CUSTOM STRIKE TEAM
 	if (istype(current, /mob/living/carbon))
 		text = "Custom Team"
 		text = "<i><b>[text]</b></i>: "
@@ -435,7 +436,7 @@
 
 	out += {"<a href='?src=\ref[src];obj_add=1'>Add objective</a><br><br>
 		<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"}
-	usr << browse(out, "window=edit_memory[src]")
+	usr << browse(out, "window=edit_memory[src]")*/
 
 /*/datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
@@ -1524,3 +1525,8 @@ proc/clear_memory(var/silent = 1)
 	if(G && G.client && G.can_reenter_corpse)
 		return TRUE
 	return FALSE
+
+/proc/get_faction_from_mind(var/datum/mind/mind)
+	if(!mind)
+		return 0
+	return mind.faction

@@ -183,22 +183,22 @@
 
 /datum/configuration/New()
 	. = ..()
-	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
+	var/list/L = typesof(/datum/gamemode) - /datum/gamemode
 
 	for (var/T in L)
 		// I wish I didn't have to instance the game modes in order to look up
 		// their information, but it is the only way (at least that I know of).
-		var/datum/game_mode/M = new T()
+		var/datum/gamemode/M = new T()
 
-		if (M.config_tag)
-			if (!(M.config_tag in modes)) // Ensure each mode is added only once.
-				diary << "Adding game mode [M.name] ([M.config_tag]) to configuration."
-				src.modes += M.config_tag
-				src.mode_names[M.config_tag] = M.name
-				src.probabilities[M.config_tag] = M.probability
+		if (M.name)
+			if (!(M.name in modes)) // Ensure each mode is added only once.
+				diary << "Adding game mode [M.name] to configuration."
+				src.modes += M.name
+				src.mode_names[M.name] = M.name
+				src.probabilities[M.name] = M.probability
 
 				if (M.votable)
-					votable_modes += M.config_tag
+					votable_modes += M.name
 		qdel(M)
 
 	votable_modes += "secret"
@@ -305,7 +305,7 @@
 
 				if ("log_pda")
 					config.log_pda = 1
-				
+
 				if ("log_rc")
 					config.log_rc = 1
 
@@ -724,25 +724,25 @@
 /datum/configuration/proc/pick_mode(mode_name)
 	// I wish I didn't have to instance the game modes in order to look up
 	// their information, but it is the only way (at least that I know of).
-	for (var/T in (typesof(/datum/game_mode) - /datum/game_mode))
-		var/datum/game_mode/M = new T()
-		if (M.config_tag && M.config_tag == mode_name)
+	for (var/T in subtypesof(/datum/gamemode))
+		var/datum/gamemode/M = new T()
+		if (M.name && M.name == mode_name)
 			return M
 		del(M)
-	return new /datum/game_mode/extended()
+	return new /datum/gamemode/extended()
 
 /datum/configuration/proc/get_runnable_modes()
-	var/list/datum/game_mode/runnable_modes = new
-	for (var/T in (typesof(/datum/game_mode) - /datum/game_mode))
-		var/datum/game_mode/M = new T()
+	var/list/datum/gamemode/runnable_modes = new
+	for (var/T in subtypesof(/datum/gamemode))
+		var/datum/gamemode/M = new T()
 //		to_chat(world, "DEBUG: [T], tag=[M.config_tag], prob=[probabilities[M.config_tag]]")
-		if (!(M.config_tag in modes))
+		if (!(M.name in modes))
 			del(M)
 			continue
-		if (probabilities[M.config_tag]<=0)
+		if (probabilities[M.name]<=0)
 			del(M)
 			continue
 		if (M.can_start())
-			runnable_modes[M] = probabilities[M.config_tag]
+			runnable_modes[M] = probabilities[M.name]
 //			to_chat(world, "DEBUG: runnable_mode\[[runnable_modes.len]\] = [M.config_tag]")
 	return runnable_modes

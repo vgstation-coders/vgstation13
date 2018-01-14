@@ -127,6 +127,18 @@
 	// Notify gamemode that this player has this role, too.
 	ticker.mode.add_player_role_association(M,id)
 
+/datum/role/proc/RemoveFromRole(var/datum/mind/M)
+	if(!istype(M))
+		WARNING("M is [M.type]!")
+
+	if(M in parent.minds)
+		parent.minds -= M
+
+	if(faction && M in faction.members)
+		faction.members -= M
+
+	ticker.mode.remove_player_role_association(M,id)
+
 // Remove
 /datum/role/proc/Drop()
 	if(!antag)
@@ -173,7 +185,6 @@
 		antag.special_role=special_role
 	if(disallow_job)
 		antag.assigned_role="MODE"
-		ticker.mode.modePlayer += antag
 	return 1
 
 // Return 1 on success, 0 on failure.
@@ -314,6 +325,8 @@
 </fieldset>
 "}
 
+/datum/role/proc/GetScoreboard()
+	//If you've gotten here to find what the hell this proc is for, you've hit a dead end. We don't know either.
 
 // DO NOT OVERRIDE.
 /datum/role/Topic(href, href_list)

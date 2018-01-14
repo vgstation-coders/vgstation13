@@ -692,7 +692,7 @@
 	ui_interact(user)
 
 /obj/machinery/power/apc/proc/get_malf_status(mob/user)
-	if (ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
+	if (istype(user, /mob/living/silicon/ai))
 		if (src.malfai == (user:parent ? user:parent : user))
 			if (src.occupant == user)
 				return 3 // 3 = User is shunted in this APC
@@ -909,9 +909,9 @@
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
-					if (ticker.mode.config_tag == "malfunction")
+					/*if (ticker.mode.config_tag == "malfunction")
 						if (STATION_Z == z)
-							ticker.mode:apcs++
+							ticker.mode:apcs++*/
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
@@ -939,11 +939,11 @@
 
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
-
+	/*
 	if(malfai)
 		if (ticker.mode.config_tag == "malfunction")
 			if (STATION_Z == z)
-				operating ? ticker.mode:apcs++ : ticker.mode:apcs--
+				operating ? ticker.mode:apcs++ : ticker.mode:apcs--*/
 
 	src.update()
 	update_icon()
@@ -990,9 +990,10 @@
 		src.occupant.parent.cancel_camera()
 		qdel(src.occupant)
 		src.occupant = null
+		var/datum/faction/malf = find_active_faction(MALF)
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 			for(var/obj/item/weapon/pinpointer/point in world)
-				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
+				for(var/datum/mind/AI_mind in malf.members)
 					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
 					if(A.stat != DEAD)
 						point.target = A //The pinpointer tracks the AI back into its core.
@@ -1272,14 +1273,14 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 			cell.blob_act()
 
 /obj/machinery/power/apc/proc/set_broken()
-	if(malfai && operating)
+	/*if(malfai && operating)
 		if (ticker.mode.config_tag == "malfunction")
 			if (STATION_Z == z)
-				ticker.mode:apcs--
+				ticker.mode:apcs--*/
 	stat |= BROKEN
 	operating = 0
-	if(occupant)
-		malfvacate(1)
+	/*if(occupant)
+		malfvacate(1)*/
 	update_icon()
 	update()
 
@@ -1300,10 +1301,9 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(areaMaster.areaapc == src)
 		areaMaster.remove_apc(src)
 		if(malfai && operating)
-			if (ticker.mode.config_tag == "malfunction")
-				if (STATION_Z == z)
-					var/datum/game_mode/malfunction/M = ticker.mode
-					M.apcs--
+			var/datum/faction/malf/M = find_active_faction(MALF)
+			if (M && STATION_Z == z)
+				M.apcs--
 		areaMaster.power_light = 0
 		areaMaster.power_equip = 0
 		areaMaster.power_environ = 0

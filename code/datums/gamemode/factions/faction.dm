@@ -4,6 +4,7 @@
 		objective syncing, communication, etc.
 
 	@name: String: Name of the faction
+	@ID: List(String): Identifying strings for shorthand finding this faction.
 	@desc: String: Description of the faction, their intentions, how they do things, etc. Something for lorewriters to use.
 	@restricted_species: list(String): Only species on this list can be part of this faction
 		(Vox Raiders, Skellington Pirates, Bewildering Basfellians, etc.)
@@ -18,6 +19,7 @@
 
 /datum/faction
 	var/name = "unknown faction"
+	var/list/ID = list("unknown")
 	var/desc = "This faction is bound to do something nefarious"
 	var/list/restricted_species = list()
 	var/list/members = list()
@@ -32,18 +34,18 @@
 /datum/faction/proc/can_setup()
 	return TRUE
 
+
+//For when you want your faction to have specific objectives (Vampire, suck blood. Cult, sacrifice the head of personnel's dog, etc.)
 /datum/faction/proc/forgeObjectives()
 
 
-/*
-	appendObjective proc
-		Basically adds an objective to the objective holder, and
-			TODO LATER
-				Tells the faction of this new objective
-*/
+
 /datum/faction/proc/appendObjective(var/datum/objective/O)
 	ASSERT(O)
 	objective_holder.AddObjective(O)
+
+/datum/faction/proc/GetObjectives()
+	return objective_holder.GetObjectives()
 
 /datum/faction/proc/CheckAllObjectives(var/individuals = FALSE)
 	var/dat
@@ -58,10 +60,10 @@
 
 /datum/faction/proc/GetScoreboard()
 	var/list/score_results = list()
-	/*for(var/datum/role/R in members) 	NO ROLE DATUMS YET
+	for(var/datum/role/R in members)
 		var/results = R.GetScoreboard()
 		if(results)
-			score_results.Add(results)*/
+			score_results.Add(results)
 
 	return score_results
 
@@ -70,6 +72,7 @@
 
 /datum/faction/syndicate
 	name = "The Syndicate"
+	ID = SYNDICATE
 	desc = "A coalition of companies that actively work against Nanotrasen's intentions. Seen as Freedom fighters by some, Rebels and Malcontents by others."
 
 
@@ -80,15 +83,18 @@
 
 /datum/faction/syndicate/traitor
 	name = "Traitors to NT"
+	ID = TRAITOR
 	desc = "Operatives of the syndicate, implanted into the crew in one way or another."
 
 /datum/faction/syndicate/nuke_op
 	name = "Syndicate nuclear operatives"
+	ID = NUKE_OP
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 
 /datum/faction/changeling
 	name = "Changeling Hivemind"
+	ID = CHANGELING
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 
@@ -100,6 +106,7 @@
 
 /datum/faction/wizard
 	name = "Wizard Federation"
+	ID = WIZARD
 	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
 	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
 	This has led to them being identified as enemies of humanity, and should be treated as such."
@@ -109,19 +116,11 @@
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
-/datum/faction/cult
-	name = "Cult of Nar-Sie"
-	desc = "A group of shady blood-obsessed individuals whose souls are devoted to Nar-Sie, the Geometer of Blood.\
-	From his teachings, they were granted the ability to perform blood magic rituals allowing them to fight and grow their ranks, and given the goal of pushing his agenda.\
-	Nar-Sie's ultimate goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 
-/datum/faction/cult/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "cult-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
-	return header
 
 /datum/faction/vampire
 	name = "Space Vampires"
+	ID = VAMPIRE
 	desc = "Beings cursed to wander the galaxy to satiate their lust for blood, \
 	usually pointed towards NT station by the syndicate in exchange for causing chaos and completing objectives for them.\
 	Vampirism is still not fully understood, but those afflicted can quickly become a force to be reckoned with if allowed to indulge."

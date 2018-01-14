@@ -36,7 +36,7 @@
 	new_syndicate_commando.mind_initialize()
 	new_syndicate_commando.mind.assigned_role = "MODE"
 	new_syndicate_commando.mind.special_role = "Syndicate Commando"
-	ticker.mode.elite_syndie |= new_syndicate_commando.mind
+	ticker.mode.add_player_role_association(new_syndicate_commando.mind, SYNDIESQUAD)
 	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
 	return new_syndicate_commando
 

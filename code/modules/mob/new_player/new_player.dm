@@ -358,7 +358,7 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-	ticker.mode.latespawn(character)
+	//ticker.mode.latespawn(character)
 
 	if(character.mind.assigned_role != "Cyborg")
 		data_core.manifest_inject(character)

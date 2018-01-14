@@ -342,6 +342,6 @@ var/list/sent_strike_teams = list()
 	if(!(new_commando.mind in ticker.minds))
 		ticker.minds += new_commando.mind//Adds them to regular mind list.
 
-	ticker.mode.custom_team |= new_commando.mind
+	ticker.mode.add_player_role_association(new_commando.mind, CUSTOMSQUAD)
 
 	return new_commando

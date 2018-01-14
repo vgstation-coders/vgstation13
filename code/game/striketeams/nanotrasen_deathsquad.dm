@@ -30,7 +30,7 @@
 	new_commando.mind_initialize()
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Death Commando"
-	ticker.mode.deathsquad |= new_commando.mind
+	ticker.mode.add_player_role_association(new_commando.mind, DEATHSQUAD)
 	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando

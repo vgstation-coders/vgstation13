@@ -289,18 +289,6 @@
 	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
 
-	//Necromancer stuff
-	var/ref = "\ref[user.mind]"
-	var/list/necromancers
-	if(!(user.mind in ticker.mode.necromancer))
-		ticker.mode:necromancer[ref] = list()
-	necromancers = ticker.mode:necromancer[ref]
-	necromancers.Add(shadeMob.mind)
-	ticker.mode:necromancer[ref] = necromancers
-	ticker.mode.update_necro_icons_added(user.mind)
-	ticker.mode.update_necro_icons_added(shadeMob.mind)
-	ticker.mode.risen.Add(shadeMob.mind)
-
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
 	var/turf/T2 = null
@@ -327,13 +315,13 @@
 				return
 
 			var/mob/living/T = target
-
+			/*
 			if(istype(ticker.mode, /datum/game_mode/cult))
 				var/datum/game_mode/cult/mode_ticker = ticker.mode
 				if(T.mind && (mode_ticker.sacrifice_target == T.mind))
 					to_chat(U, "<span class='warning'>The soul stone is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 					return
-
+			*/
 			capture_soul(T,U)
 
 		if("SHADE")
@@ -362,17 +350,10 @@
 			var/mob/living/simple_animal/construct/Z
 			if(A)
 				var/construct_class = alert(U, "Please choose which type of construct you wish to create.",,"Juggernaut","Wraith","Artificer")
-				ticker.mode.update_necro_icons_removed(A.mind)
 				switch(construct_class)
 					if("Juggernaut")
 						Z = new /mob/living/simple_animal/construct/armoured (get_turf(T.loc))
 						Z.key = A.key
-						if(iscultist(U))
-							if(ticker.mode.name == "cult")
-								ticker.mode:add_cultist(Z.mind)
-							else
-								ticker.mode.cult+=Z.mind
-							ticker.mode.update_cult_icons_added(Z.mind)
 						qdel(T)
 						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls appart.</B>")
 						to_chat(Z, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
@@ -382,12 +363,6 @@
 					if("Wraith")
 						Z = new /mob/living/simple_animal/construct/wraith (get_turf(T.loc))
 						Z.key = A.key
-						if(iscultist(U))
-							if(ticker.mode.name == "cult")
-								ticker.mode:add_cultist(Z.mind)
-							else
-								ticker.mode.cult+=Z.mind
-							ticker.mode.update_cult_icons_added(Z.mind)
 						qdel(T)
 						to_chat(Z, "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls for a few seconds. Use it both for surprise attacks and strategic retreats.</B>")
 						to_chat(Z, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
@@ -397,32 +372,19 @@
 					if("Artificer")
 						Z = new /mob/living/simple_animal/construct/builder (get_turf(T.loc))
 						Z.key = A.key
-						if(iscultist(U))
-							if(ticker.mode.name == "cult")
-								ticker.mode:add_cultist(Z.mind)
-							else
-								ticker.mode.cult+=Z.mind
-							ticker.mode.update_cult_icons_added(Z.mind)
 						qdel(T)
 						to_chat(Z, "<B>You are an Artificer. You are incredibly weak and fragile, but you can heal both yourself and other constructs (by clicking on yourself/them). You can build (and deconstruct) new walls and floors, or replace existing ones by clicking on them, as well as place pylons that act as light source (these block paths but can be easily broken),</B><I>and most important of all you can produce the tools to create new constructs</I><B> (remember to periodically produce new soulstones for your master, and place empty shells in your hideout or when asked.).</B>")
 						to_chat(Z, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
 						Z.cancel_camera()
 						deleteafter = 1
-				if(Z && Z.mind && !iscultist(Z))
-					var/ref = "\ref[U.mind]"
-					var/list/necromancers
-					if(!(U.mind in ticker.mode.necromancer))
-						ticker.mode:necromancer[ref] = list()
-					necromancers = ticker.mode:necromancer[ref]
-					necromancers.Add(Z.mind)
-					ticker.mode:necromancer[ref] = necromancers
-					ticker.mode.update_necro_icons_added(U.mind)
-					ticker.mode.update_necro_icons_added(Z.mind)
-					ticker.mode.risen.Add(Z.mind)
+				if(iscultist(U))
+					var/datum/gamemode/cult/cult_round = find_active_mode("cult")
+					if(cult_round)
+						cult_round.add_player_role_association(Z.mind, "cultist")
+
 				name = "Soul Stone Shard"
 			else
 				to_chat(U, "<span class='warning'><b>Creation failed!</b>: The soul stone is empty! Go kill someone!</span>")
-	ticker.mode.update_all_necro_icons()
 	if(deleteafter)
 		for(var/atom/A in src)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 			qdel(A)

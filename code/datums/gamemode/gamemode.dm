@@ -7,6 +7,8 @@
 	@minimum_player_count: Integer: Minimum required players to start the gamemode
 	@admin_override: Overrides certain checks such as the one above to force-start a gamemode
 	@available_roles: List of all roles the ticker can draft players into
+	@probability: How likely it is to roll this gamemode
+	@votable: If this mode can be voted for
 */
 
 
@@ -17,10 +19,15 @@
 	var/minimum_player_count
 	var/admin_override //Overrides checks such as minimum_player_count to
 	var/list/datum/role/available_roles = list()
+	var/probability = 50
+	var/votable = TRUE
 
 /datum/gamemode/New()
 	Setup()
 
+/datum/gamemode/proc/can_start()
+	if(minimum_player_count < get_player_count())
+		return 0
 
 //For when you need to set factions and factions_allowed not on compile
 /datum/gamemode/proc/SetupFactions()
@@ -107,4 +114,12 @@
 	if (role_id in M.antag_roles)
 		var/datum/role/R = antag_roles[role_id]
 		R.minds -= M
-		M.antag_roles -= roles_id
+		M.antag_roles -= role_id
+
+
+/datum/gamemode/proc/process()
+	return
+
+/datum/gamemode/proc/check_finished()
+
+/datum/gamemode/proc/declare_completion()

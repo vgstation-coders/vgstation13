@@ -183,6 +183,8 @@
 
 #define isdeathsquad(H) 1//(H.mind in ticker.mode.deathsquads)
 
+#define iscultist(H) 1
+
 
 //Macro for AREAS!
 

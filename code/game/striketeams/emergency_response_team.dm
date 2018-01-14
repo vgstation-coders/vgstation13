@@ -127,7 +127,7 @@ var/list/distributed_ert_suits = list()
 	if(!(M.mind in ticker.minds))
 		ticker.minds += M.mind//Adds them to regular mind list.
 
-	ticker.mode.ert |= M.mind
+	ticker.mode.add_player_role_association(M.mind, ERT)
 	M.equip_response_team(leader_selected)
 
 	if(spawner)
@@ -165,7 +165,7 @@ var/list/distributed_ert_suits = list()
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
 
 	if(leader_selected)
-		equip_to_slot_or_del(new /obj/item/weapon/card/shuttle_pass/ERT(src), slot_in_backpack)
+		equip_to_slot_or_del(new /obj/item/weapon/card/shuttle_pass/ert(src), slot_in_backpack)
 
 	var/obj/item/weapon/card/id/W = new(src)
 	W.assignment = "Emergency Responder[leader_selected ? " Leader" : ""]"

@@ -94,7 +94,7 @@
 /obj/item/weapon/card/shuttle_pass/Destroy()
 	destination = null
 
-/obj/item/weapon/card/shuttle_pass/ERT
+/obj/item/weapon/card/shuttle_pass/ert
 	name = "\improper ERT shuttle pass"
 	destination = /obj/docking_port/destination/transport/station
 	allowed_shuttle = /datum/shuttle/transport
