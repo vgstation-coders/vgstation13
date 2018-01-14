@@ -10,3 +10,8 @@
 #define MOB_HOLOGRAPHIC 16 //holocarps
 #define MOB_SUPERNATURAL 32
 #define MOB_NO_PETRIFY 64 //can't get petrified
+
+#define BACKPACK 2
+#define SATCHEL_NORM 3
+#define SATCHEL_ALT 4
+#define MESSENGER_BAG 5
