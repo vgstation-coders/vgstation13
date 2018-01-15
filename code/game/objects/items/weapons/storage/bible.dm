@@ -196,7 +196,7 @@
 	var/list/mob/moblist_t = range(1, owner)
 	moblist_t -= owner
 	var/list/mob/moblist = list()
-	for (var/mob/carbon/human/H in moblist)
+	for (var/mob/living/carbon/human/H in moblist)
 		moblist += H
 
 	var/mob/living/subject = input(owner, "Who do you wish to convert?", "Religious converting") as null|mob in moblist
