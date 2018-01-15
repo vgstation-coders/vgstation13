@@ -35,7 +35,7 @@
 	qdel(src)
 
 
-/mob/proc/monkeyize(var/ignore_primitive = FALSE)
+/mob/proc/monkeyize(var/ignore_primitive = TRUE)
 	if(ismonkey(src))
 		return
 	Premorph()
@@ -49,7 +49,7 @@
 		animation.master = null
 		qdel(animation)
 	var/mob/living/carbon/monkey/Mo
-	if(ignore_primitive || !ishuman(src) || isgrue(src))
+	if(ignore_primitive)
 		Mo = new /mob/living/carbon/monkey(loc)
 	else
 		var/mob/living/carbon/human/H = src
@@ -75,6 +75,12 @@
 	Mo.delayNextAttack(0)
 	Postmorph(Mo)
 	return Mo
+
+/mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
+	..()
+
+/mob/living/carbon/human/grue/monkeyize(ignore_primitive = TRUE)
+	..()
 
 /mob/proc/Cluwneize()
 	Premorph()
