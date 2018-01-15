@@ -150,6 +150,7 @@
 	mastermode = master_mode // this is stored as a string in game
 	tickermode = ticker.mode.name
 	nuked = ticker.mode.station_was_nuked
+	tech_total = get_research_score()
 	if(istype(ticker.mode, /datum/game_mode/mixed))
 		var/datum/game_mode/mixed/mixy = ticker.mode
 		for(var/datum/game_mode/GM in mixy.modes)
