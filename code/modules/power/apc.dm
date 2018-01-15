@@ -976,7 +976,7 @@
 		for(var/obj/item/weapon/pinpointer/point in world)
 			point.target = src //the pinpointer will detect the shunted AI
 
-	stat_collection.malf.did_shunt = 1
+	stat_collection.malf_shunted = TRUE
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)

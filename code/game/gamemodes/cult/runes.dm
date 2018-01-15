@@ -158,7 +158,7 @@
 	else
 		new /obj/item/weapon/tome(usr.loc)
 	qdel(src)
-	stat_collection.cult.tomes_created++
+	stat_collection.cult_tomes_created++
 	return
 
 /////////////////////////////////////////THIRD RUNE
@@ -200,7 +200,7 @@
 			M.add_language(LANGUAGE_CULT)
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			add_attacklogs(usr, M, "converted to the Cult of Nar'Sie!")
-			stat_collection.cult.converted++
+			stat_collection.cult_converted++
 			if(M.client)
 				spawn(600)
 					if(M && !M.client)
@@ -327,7 +327,7 @@
 			summonturfs = list()
 			summoning = 0
 			new /obj/machinery/singularity/narsie/large(src.loc)
-			stat_collection.cult.narsie_summoned = 1
+			stat_collection.cult_narsie_summoned = TRUE
 		return
 
 	currentCountdown--
