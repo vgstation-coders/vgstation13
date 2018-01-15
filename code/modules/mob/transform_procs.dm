@@ -49,7 +49,7 @@
 		animation.master = null
 		qdel(animation)
 	var/mob/living/carbon/monkey/Mo
-	if(ignore_primitive || !ishuman(src))
+	if(ignore_primitive || !ishuman(src) || isgrue(src))
 		Mo = new /mob/living/carbon/monkey(loc)
 	else
 		var/mob/living/carbon/human/H = src
