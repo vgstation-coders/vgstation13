@@ -352,3 +352,17 @@ var/list/extraMiniMaps = list()
 var/list/holomap_markers = list()
 
 var/holomaps_initialized = 0
+
+//Staff of change
+#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
+#define SOC_MONKEY "Primate"
+#define SOC_MARTIAN "Martian"
+#define SOC_CYBORG "Robot"
+#define SOC_MOMMI "MoMMI"
+#define SOC_SLIME "Slime"
+#define SOC_XENO "Xenomorph"
+#define SOC_HUMAN "Human"
+#define SOC_CATBEAST "Furry"
+#define SOC_FRANKENSTEIN "Frankenstein"
+
+var/available_staff_transforms=list(SOC_MONKEY,SOC_MARTIAN,SOC_CYBORG,SOC_SLIME,SOC_XENO,SOC_HUMAN,SOC_CATBEAST,SOC_FRANKENSTEIN)

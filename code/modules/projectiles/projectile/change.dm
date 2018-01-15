@@ -27,21 +27,23 @@
 		var/randomize = type == null? pick(available_staff_transforms):type
 
 		switch(randomize)
-			if("monkey")
+			if(SOC_MONKEY)
 				new_mob = M.monkeyize()
-			if("robot")
+			if(SOC_MARTIAN)
+				new_mob = M.Martianize()
+			if(SOC_CYBORG)
 				new_mob = M.Robotize()
-			if("mommi")
+			if(SOC_MOMMI) //It really makes you think.
 				new_mob = M.MoMMIfy()
-			if("slime")
+			if(SOC_SLIME)
 				new_mob = M.slimeize()
-			if("xeno")
+			if(SOC_XENO)
 				new_mob = M.Alienize()
-			if("human")
+			if(SOC_HUMAN)
 				new_mob = M.Humanize()
-			if("furry")
+			if(SOC_CATBEAST)
 				new_mob = M.Humanize("Tajaran")
-			if("frankenstein")
+			if(SOC_FRANKENSTEIN)
 				new_mob = M.Frankensteinize()
 			else
 				return
