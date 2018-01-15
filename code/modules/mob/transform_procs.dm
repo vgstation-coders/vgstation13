@@ -79,9 +79,6 @@
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
 	..()
 
-/mob/living/carbon/human/grue/monkeyize(ignore_primitive = TRUE)
-	..()
-
 /mob/proc/Cluwneize()
 	Premorph()
 	var/mob/living/simple_animal/hostile/retaliate/cluwne/new_mob = new (get_turf(src))
