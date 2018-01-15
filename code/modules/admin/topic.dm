@@ -4621,7 +4621,8 @@
 					to_chat(usr, "<span class='warning'>Error: no deity or message selected.</span>")
 
 				for (var/datum/mind/M in R.adepts)
-					to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
+					if (M.current)
+						to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
 
 				var/msg = "[key_name(usr)] sent message [message] to [R.name]'s adepts as [deity]"
 				message_admins(msg)

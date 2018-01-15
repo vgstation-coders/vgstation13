@@ -193,8 +193,10 @@
 		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
 		return FALSE
 
-	var/list/mob/living/moblist = range(1, owner)
+	var/list/mob/moblist = range(1, owner)
 	moblist -= owner
+	for (var/mob/dead/observer/O in moblist)
+		moblist -= O
 
 	var/mob/living/subject = input(owner, "Who do you wish to convert?", "Religious converting") as null|mob in moblist
 
