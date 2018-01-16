@@ -86,7 +86,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/nuked = FALSE
 	var/borgs_at_roundend = 0
 	var/heads_at_roundend = 0
-	var/tech_total = 0
 
 
 	// GAMEMODE-SPECIFIC STATS START HERE
@@ -129,6 +128,8 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/mastermode = null
 	var/tickermode = null
 	var/list/mixed_gamemodes = list()
+	var/tech_total = 0
+	var/stationname = null
 
 /datum/stat/population_stat
 	var/time
