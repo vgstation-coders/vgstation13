@@ -180,11 +180,12 @@
 	name = "energy cutlass"
 	desc = "Arrrr matey."
 	icon_state = "cutlass0"
+	active_state = "cutlass1"
 	base_state = "cutlass"
 
 /obj/item/weapon/melee/energy/sword/pirate/New()
 	..()
-	_color = null
+	_color = "red"
 	update_icon()
 
 /obj/item/weapon/melee/energy/hfmachete
