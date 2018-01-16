@@ -33,6 +33,13 @@
 	processing_objects.Remove(src)
 	..()
 
+/obj/item/weapon/holder/supermatter_act(atom/source)
+	if(stored_mob)
+		stored_mob.supermatter_act(source, SUPERMATTER_DUST)
+		qdel(stored_mob) //better safe than sorry, sorry mice.
+	qdel(src)
+	return TRUE
+
 /obj/item/weapon/holder/process()
 	if(!loc)
 		return returnToPool(src)
@@ -65,7 +72,7 @@
 	if(stored_mob)
 		stored_mob.bite_act(user)
 
-//
+//Nymph holder
 
 /obj/item/weapon/holder/diona
 	name = "diona nymph"
@@ -106,6 +113,7 @@
 /obj/item/weapon/holder/animal/mouse
 	name = "mouse holder"
 	desc = "This one has icon states!"
+	slot_flags = SLOT_HEAD
 	item_state = "mouse" //Credit to Hubblenaut for sprites! https://github.com/Baystation12/Baystation12/pull/9416
 
 /obj/item/weapon/holder/animal/mouse/New(loc, mob/M)
@@ -148,7 +156,7 @@
 	desc = "Runtime error"
 	item_state = "cat1"
 
-	update_itemstate_on_twohand = 1
+	update_itemstate_on_twohand = TRUE
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime
@@ -157,7 +165,7 @@
 
 /obj/item/weapon/holder/animal/slime/proc/unfreeze()
 	var/mob/living/simple_animal/slime/S = stored_mob
-	S.canmove = 1
+	S.canmove = TRUE
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
 	returnToPool(src)
 
