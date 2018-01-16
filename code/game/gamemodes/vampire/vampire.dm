@@ -311,6 +311,8 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(!mind.vampire)
 		mind.vampire = new /datum/vampire(gender)
 		mind.vampire.owner = src
+		mind.vampire.bloodtotal = STARTING_BLOOD
+		mind.vampire.bloodusable = STARTING_BLOOD
 	callOnLife += list("\ref[mind.vampire]" = "OnLife")
 	verbs += /client/proc/vampire_rejuvinate
 	verbs += /client/proc/vampire_hypnotise
