@@ -7,7 +7,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mob_holders.dmi', "right_hand" = 'icons/mob/in-hand/right/mob_holders.dmi')
 
 	var/mob/stored_mob
-	var/update_itemstate_on_twohand = 0 //If there are different item states for holding this with one and two hands, this must be 1
+	var/update_itemstate_on_twohand = FALSE //If there are different item states for holding this with one and two hands, this must be 1
 	var/const/itemstate_twohand_suffix = "_2hand" //The item state
 
 /obj/item/weapon/holder/New(loc, mob/M)
@@ -22,7 +22,7 @@
 	//Hopefully this will stop the icon from remaining on human mobs.
 	if(istype(loc,/mob/living))
 		var/mob/living/A = src.loc
-		A.drop_item(src, force_drop = 1)
+		A.drop_item(src, force_drop = TRUE)
 		A.update_icons()
 
 	for(var/mob/M in contents)
@@ -132,7 +132,7 @@
 	desc = "Icon states yay!"
 	item_state = "corgi"
 
-	update_itemstate_on_twohand = 1
+	update_itemstate_on_twohand = TRUE
 
 //CARP
 
@@ -140,7 +140,7 @@
 	name = "carp holder"
 	item_state = "carp"
 
-	update_itemstate_on_twohand = 1
+	update_itemstate_on_twohand = TRUE
 
 //COWS
 
