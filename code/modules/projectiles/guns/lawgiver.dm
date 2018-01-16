@@ -164,6 +164,7 @@
 	return 0
 
 /obj/item/weapon/gun/lawgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
+	set waitfor = FALSE // The lawgiver should speak AFTER the user
 	if(speech.speaker == loc && !speech.frequency && dna_profile)
 		var/mob/living/carbon/human/H = loc
 		if(dna_profile == H.dna.unique_enzymes)
