@@ -76,7 +76,7 @@
 	victims -= mind.current
 	if(!victims.len)
 		return
-	var/mob/living/carbon/T 
+	var/mob/living/carbon/T
 	T = victims[1]
 	if (victims.len > 1)
 		T = input(src, "Victim?") as null|anything in victims
@@ -105,7 +105,7 @@
 		//M.vampire.bloodusable -= 10
 		to_chat(M.current, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
 		spawn(1)
-			if(M.vampire.bloodtotal >= 200)
+			if(VAMP_HEAL in M.vampire.powers)
 				for(var/i = 0; i < 5; i++)
 					M.current.adjustBruteLoss(-2)
 					M.current.adjustOxyLoss(-5)
@@ -484,12 +484,12 @@
 
 /client/proc/vampire_bats()
 	set category = "Vampire"
-	set name = "Summon Bats (75)"
-	set desc = "You summon a pair of space bats who attack nearby targets until they or their target is dead."
+	set name = "Summon Bats (50)"
+	set desc = "You summon a trio of space bats who attack nearby targets until they or their target is dead."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
-	if(M.current.vampire_power(75, 0))
+	if(M.current.vampire_power(50, 0))
 		var/list/turf/locs = new
 		var/number = 0
 		for(var/direction in alldirs) //looking for bat spawns
@@ -509,7 +509,7 @@
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
-		M.current.remove_vampire_blood(75)
+		M.current.remove_vampire_blood(50)
 		M.current.verbs -= /client/proc/vampire_bats
 		sleep(1200)
 		if(M && M.current) // Because our vampire can be completely destroyed after the sleep ends, who knows
@@ -517,14 +517,15 @@
 
 /client/proc/vampire_jaunt()
 	set category = "Vampire"
-	set name = "Bat Form (30)"
+	set name = "Bat Form (20)"
 	set desc = "You become ethereal and can travel through walls for a short time, while leaving a scary bat behind."
 	var/duration = 5 SECONDS
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
 
-	if(M.current.vampire_power(30, 0))
+	if(M.current.vampire_power(20, 0))
+		M.current.remove_vampire_blood(20)
 		M.current.verbs -= /client/proc/vampire_jaunt
 		new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		ethereal_jaunt(M.current, duration, "batify", "debatify", 0)
@@ -536,7 +537,7 @@
 // Less smoke spam.
 /client/proc/vampire_shadowstep()
 	set category = "Vampire"
-	set name = "Shadowstep (20)"
+	set name = "Shadowstep (10)"
 	set desc = "Vanish into the shadows."
 
 	var/datum/mind/M = usr.mind
@@ -550,7 +551,7 @@
 	// Maximum lighting_lumcount.
 	var/max_lum = 1
 
-	if(M.current.vampire_power(20, 0))
+	if(M.current.vampire_power(10, 0))
 		if (M.current.locked_to)
 			M.current.unlock_from()
 		spawn(0)
@@ -584,6 +585,7 @@
 			var/turf/T = get_turf(M.current)
 			T.turf_animation('icons/effects/effects.dmi',"shadowstep")
 			usr.forceMove(picked)
+		M.current.remove_vampire_blood(10)
 		M.current.verbs -= /client/proc/vampire_shadowstep
 		sleep(20 SECONDS)
 		if(M && M.current)

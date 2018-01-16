@@ -977,13 +977,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    10
-#define VAMP_SLAVE    11
-#define VAMP_BLINK    12
-#define VAMP_MATURE   13
-#define VAMP_SHADOW   14
-#define VAMP_CHARISMA 15
-#define VAMP_UNDYING  16
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1

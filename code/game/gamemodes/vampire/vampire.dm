@@ -338,6 +338,8 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 				verbs += /client/proc/vampire_bats
 			if(VAMP_SCREAM)
 				verbs += /client/proc/vampire_screech
+			if(VAMP_HEAL)
+				continue
 			if(VAMP_JAUNT)
 				verbs += /client/proc/vampire_jaunt
 			if(VAMP_BLINK)
@@ -455,8 +457,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(vamp.bloodtotal >= 200)
 		vamp.powers |= VAMP_BATS
 		vamp.powers |= VAMP_SCREAM
-		// Commented out until we can figured out a way to stop this from spamming.
-//		to_chat(src, "<span class='notice'>Your rejuvination abilities have improved and will now heal you over time when used.</span>")
+		vamp.powers |= VAMP_HEAL
 
 	// TIER 3.5 (/vg/)
 	if(vamp.bloodtotal >= 250)
@@ -508,13 +509,18 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 					to_chat(src, "[msg]")
 					verbs += /client/proc/vampire_cloak
 				if(VAMP_BATS)
-					msg = "<span class='notice'>You have gained the Summon Bats ability."
+					msg = "<span class='notice'>You have gained the Summon Bats ability which allows you to summon a trio of angry space bats.</span>"
 					to_chat(src, "[msg]")
 					verbs += /client/proc/vampire_bats // work in progress
 				if(VAMP_SCREAM)
 					msg = "<span class='notice'>You have gained the Chiroptean Screech ability which stuns anything with ears in a large radius and shatters glass in the process.</span>"
 					to_chat(src, "[msg]")
 					verbs += /client/proc/vampire_screech
+				if(VAMP_HEAL)
+					msg = "<span class=notice'>Your rejuvination abilities have improved and will now heal you over time when used.</span>"
+					to_chat(src, "[msg]")
+					src.mind.store_memory("<font size = 1>[msg]</font>")
+					//no verb
 				if(VAMP_JAUNT)
 					msg = "<span class='notice'>You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path.</span>"
 					to_chat(src, "[msg]")
@@ -668,7 +674,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(prob(35))
 			to_chat(src, "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>")
 
-	if(!((VAMP_MATURE in mind.vampire.powers)) && get_area(src) == /area/chapel) //stay out of the chapel unless you want to turn into a pile of ashes
+	if(!(VAMP_MATURE in mind.vampire.powers) && get_area(src) == /area/chapel) //stay out of the chapel unless you want to turn into a pile of ashes
 		mind.vampire.nullified = max(5, mind.vampire.nullified + 2)
 		if(prob(35))
 			to_chat(src, "<span class='sinister'>You feel yourself growing weaker.</span>")
