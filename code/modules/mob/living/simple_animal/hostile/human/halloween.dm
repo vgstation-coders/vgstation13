@@ -277,7 +277,7 @@
 /mob/living/simple_animal/hostile/blood_splot/adjustBruteLoss()
 	return
 
-/mob/living/simple_animal/hostile/blood_splot/Move()
+/mob/living/simple_animal/hostile/blood_splot/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/turf/T = get_turf(src)
 	var/blood_found
@@ -444,7 +444,7 @@
 		icon_living = "syphoner"
 		icon_state = "syphoner"
 
-/mob/living/simple_animal/hostile/syphoner/Move()
+/mob/living/simple_animal/hostile/syphoner/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(prob(30))
 		if(istype(src.loc, /turf/simulated/floor))

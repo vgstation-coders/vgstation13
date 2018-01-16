@@ -31,6 +31,7 @@
 /spell/aoe_turf/knock/harvester
 	name = "Disintegrate Doors"
 	desc = "No door shall stop you."
+	user_type = USER_TYPE_CULT
 
 	spell_flags = CONSTRUCT_CHECK
 

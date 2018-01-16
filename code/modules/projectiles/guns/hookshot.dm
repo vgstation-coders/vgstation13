@@ -372,7 +372,7 @@
 		else if(A == extremity_B)
 			return extremity_A.attempt_to_follow(src, A.loc)
 
-/obj/effect/overlay/chain/Move(newLoc,Dir=0,step_x=0,step_y=0)//for when someone pulls a part the chain.
+/obj/effect/overlay/chain/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)//for when someone pulls a part the chain.
 	var/turf/T = loc
 	if(..())
 		var/obj/effect/overlay/chain/CA = extremity_A

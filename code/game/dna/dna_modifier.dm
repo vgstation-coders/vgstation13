@@ -412,9 +412,10 @@
 	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/scan_consolenew/Destroy()
-	if(connected.connected == src)
-		connected.connected = null
-	connected = null
+	if(connected)
+		if(connected.connected == src)
+			connected.connected = null
+		connected = null
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
 	labels.Cut()
@@ -504,18 +505,12 @@
 	else
 		use_power = 1
 
-/obj/machinery/computer/scan_consolenew/attack_paw(user as mob)
-	ui_interact(user)
-
-/obj/machinery/computer/scan_consolenew/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	ui_interact(user)
-
 /obj/machinery/computer/scan_consolenew/attack_hand(user as mob)
 	if(!..())
 		if(!connected)
 			connected = findScanner() //lets get that machine
-			connected.connected = src
+			if(connected)
+				connected.connected = src
 		ui_interact(user)
 
 /obj/machinery/computer/scan_consolenew/AltClick()
@@ -536,12 +531,11 @@
   * @return nothing
   */
 /obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-
-	if(connected)
-		if(user == connected.occupant || user.isUnconscious())
-			return
-	else
+	if(!connected)
 		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
+		return
+	
+	if(user == connected.occupant)
 		return
 
 	// this is the data which will be sent to the ui

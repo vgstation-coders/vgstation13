@@ -642,7 +642,7 @@
 /obj/machinery/singularity/acidable()
 	return 0
 
-/obj/machinery/singularity/Move(newLoc, movedir)
+/obj/machinery/singularity/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(timestopped)
 		return 0
-	return forceMove(get_step(src,movedir))
+	return forceMove(get_step(src,Dir))

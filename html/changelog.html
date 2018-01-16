@@ -29,7 +29,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		<div class="header">
 			<h1>/vg/station - A Space Station 13 Server</h1>
 			<p>
-				<b>Forum | <a href="http://baystation12.net/wiki/">Wiki</a> | <a href="https://github.com/d3athrow/vgstation13">Source</a></b>
+				<b>Forum | <a href="http://ss13.moe/wiki/index.php/Main_Page">Wiki</a> | <a href="https://github.com/vgstation-coders/vgstation13">Source</a></b>
 			</p>
 			<p>
 				<b>Visit our IRC channel:</b><a href="irc://irc.rizon.net/vgstation">#vgstation on irc.rizon.net</a>
@@ -85,6 +85,65 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 
 		-->
 		<div class="commit sansserif">
+
+			<h2 class="date">2018.01.16</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">NT default and Robocop core boards can be printed using the circuit imprinter.</li>
+			</ul>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Removes the blood cost from Hypnosis for vampires.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Vampire blood costs were adjusted. Bat Form and Shadowstep now actually spend blood and cost 20 and 10 usable blood respectively. Summon Bats costs 50 usable blood.</li>
+				<li class="rscadd">Improved vamp rejuvenate now has a message telling you about the effect.</li>
+			</ul>
+
+			<h2 class="date">2018.01.12</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now lock direction in a mech</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Chemical effects that cause disfigurement (acid, mainly) and undo disfigurement (rezadone) should work again.</li>
+				<li class="rscadd">Added messages to a few disfigurement/un-disfigurement events.</li>
+			</ul>
+			<h3 class="author">Unknown-as-Captain updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cat ears give slow brain damage over time.</li>
+			</ul>
+
+			<h2 class="date">2018.01.09</h2>
+			<h3 class="author">Cisrox updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds unique color combinations for dual e-swords. The colors of the e-swords forming the dual e-sword determines this.</li>
+				<li class="rscdel">Deleted dualesword1 sprite that was serving as a placeholder, it has been replaced by the new colors.</li>
+			</ul>
+			<h3 class="author">EdXbtkOEwGw updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Properly implemented glide_size on a lot of things. This means, for example, dragging a corpse won't make it look like it's teleporting everywhere, ghosts won't rollerskate in the air after haunting a slow person, plus smooth conveyor belts, smooth space inertia, and other things. If you still notice old no-glidesize behavior of stuff teleporting around, make a bug report.</li>
+			</ul>
+
+			<h2 class="date">2018.01.08</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Defficiency: Fixed up some misplaced atmos pipes in medbay, the bar backroom, and cargo maint.</li>
+				<li class="bugfix">Bagelstation: The kitchen's mail was being sent to the janitor's closet.</li>
+			</ul>
+			<h3 class="author">Sooose updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Increased slime tiles generated from green slime reaction to 20.</li>
+				<li class="tweak">Increased max slime tile stack size to 60.</li>
+			</ul>
+
+			<h2 class="date">2018.01.06</h2>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fix eye protection being lowered when toggling the welding goggles back on.</li>
+			</ul>
 
 			<h2 class="date">2018.01.04</h2>
 			<h3 class="author">Pathid updated:</h3>
@@ -1375,63 +1434,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<ul class="changes bgimages16">
 				<li class="rscadd">Ports the ability to transform your null rod in other holy weapons.</li>
 				<li class="rscadd">Adds the holy avenger, cult blade, saint katana, nullbox and divine brass spear as holy weapons</li>
-			</ul>
-
-			<h2 class="date">2017.08.09</h2>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">the 5 AI core sprites previously added by @jknpj are now available for use to AI players</li>
-			</ul>
-
-			<h2 class="date">2017.08.08</h2>
-			<h3 class="author">CptWad updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Metastation shuttles now are unfucked</li>
-				<li class="bugfix">bagelstation wiring unfucked. Also added missing firelocks to an entire department that apparently nobody reported for some reason</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">holobadges can now properly be emagged</li>
-			</ul>
-
-			<h2 class="date">2017.08.07</h2>
-			<h3 class="author">CodenameB updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Flavor text re-enabled. Now, changelings and genetics can copy flavor text. Flavor text will not be visible if anything would cause your face to be unrecognizable.</li>
-			</ul>
-			<h3 class="author">gbasood updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes human medHUDs not being able to detect newstyle viruses (disease2) that pAIs used to be able to detect, seems to have been an oversight</li>
-				<li class="bugfix">Fixes observers with the medHUD enabled being able to see if a person has old-style diseases (disease) instead of just new-style. I had no idea this even existed.</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes holo switchtool item attack animation</li>
-				<li class="rscadd">Fixes cyborg hypospray's attack log showing "datum/reagent" instead of the actual reagent.</li>
-				<li class="imageadd">Adds five new AI core screens</li>
-				<li class="bugfix">Fixes cyborgs keeping the default "robot" icon as non standard module by canceling the icon selection</li>
-			</ul>
-
-			<h2 class="date">2017.08.04</h2>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes rogue action buttons and the effect of a certain pair of fairy wings staying after you insert the item inside storages.</li>
-			</ul>
-
-			<h2 class="date">2017.08.03</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Now differentiating between bees that want to kill because they're angry due to people being asses to them, and bees that want to kill because they're high on toxics. The former will no longer attack other bees, which should help reduce the bee message spam greatly.</li>
-				<li class="rscadd">Bee mobs now update their names, roaming bees are labelled homeless, killing ones angry or crazy.</li>
-			</ul>
-			<h3 class="author">ghost updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds overdose proc to chems</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Ports messenger bag's west sprite fix from bay</li>
-				<li class="bugfix">Fixes phantom mask users being able to see silicon laws using examine</li>
 			</ul>
 		</div>
 		<!--

@@ -595,6 +595,7 @@ a {
 			else
 				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
 				for(var/i in list(2,2,3,3))
+					set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(src, movementdirection))
 						change_dir(turn(movementdirection, 180)) //stop, but don't turn around when hitting a wall
 						break

@@ -128,6 +128,8 @@
 
 	dir = newdirection
 	update_nearby_conveyors() //Try to resmooth with nearby diagonals
+	updateConfig()
+	setmove()
 
 /obj/machinery/conveyor/proc/copy_radio_from_neighbors()
 	var/obj/machinery/conveyor_switch/lever = locate() in orange(src,1)
@@ -242,6 +244,7 @@
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
 					step(A,movedir)
 					items_moved++
 			if(items_moved >= max_moved)
@@ -318,7 +321,6 @@
 	if("setdir" in href_list)
 		operating=0
 		update_dir(text2num(href_list["setdir"]))
-		updateConfig()
 		return MT_UPDATE
 	if("reverse" in href_list)
 		operating=0

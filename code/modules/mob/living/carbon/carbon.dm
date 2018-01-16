@@ -19,7 +19,7 @@
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
 
-/mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
+/mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 
 	if(.)

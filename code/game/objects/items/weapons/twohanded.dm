@@ -107,6 +107,7 @@
 	icon_state = "dualsaber0"
 	name = "double-bladed energy sword"
 	desc = "Handle with care."
+	var/colorset = ""
 	force = 3
 	throwforce = 5.0
 	throw_speed = 1
@@ -115,11 +116,12 @@
 	flags = FPRINT | TWOHANDABLE
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 
 /obj/item/weapon/dualsaber/update_wield(mob/user)
 	..()
-	icon_state = "dualsaber[wielded ? 1 : 0]"
-	item_state = "dualsaber[wielded ? 1 : 0]"
+	icon_state = "dualsaber[wielded ? colorset : 0]"
+	item_state = "dualsaber[wielded ? colorset : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
 	sharpness_flags = wielded ? SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD : 0
@@ -146,6 +148,13 @@
 		return 1
 	else
 		return 0
+
+/obj/item/weapon/dualsaber/New()
+	..()
+	if(!colorset)
+		colorset = pick("redred","blueblue","greengreen","purplepurple")
+	update_icon()
+
 /*
  * Banana Bunch
  */

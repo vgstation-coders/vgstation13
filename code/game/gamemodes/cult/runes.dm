@@ -158,7 +158,7 @@
 	else
 		new /obj/item/weapon/tome(usr.loc)
 	qdel(src)
-	stat_collection.cult.tomes_created++
+	stat_collection.cult_tomes_created++
 	return
 
 /////////////////////////////////////////THIRD RUNE
@@ -199,7 +199,8 @@
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 			M.add_language(LANGUAGE_CULT)
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
-			stat_collection.cult.converted++
+			add_attacklogs(usr, M, "converted to the Cult of Nar'Sie!")
+			stat_collection.cult_converted++
 			if(M.client)
 				spawn(600)
 					if(M && !M.client)
@@ -326,7 +327,7 @@
 			summonturfs = list()
 			summoning = 0
 			new /obj/machinery/singularity/narsie/large(src.loc)
-			stat_collection.cult.narsie_summoned = 1
+			stat_collection.cult_narsie_summoned = TRUE
 		return
 
 	currentCountdown--
@@ -534,7 +535,7 @@
 		"<span class='warning'>Life? I'm alive? I live, again!.</span>", \
 		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
 		body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
-		"<span class='sinister'>You are ingulfed by pain as your blood boils, tearing you apart.</span>", \
+		"<span class='sinister'>You are engulfed in pain as your blood boils, tearing you apart.</span>", \
 		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
 		body_to_sacrifice.gib()
 	if(cult_round)

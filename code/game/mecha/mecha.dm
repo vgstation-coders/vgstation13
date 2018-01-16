@@ -43,7 +43,7 @@
 	var/lights = 0
 	var/lights_power = 6
 	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
-
+	var/lock_dir = FALSE
 	//inner atmos
 	var/use_internal_tank = 0
 	var/internal_tank_valve = ONE_ATMOSPHERE
@@ -288,7 +288,7 @@
 ////////  Movement procs  ////////
 //////////////////////////////////
 
-/obj/mecha/Move()
+/obj/mecha/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 	if(.)
 		events.fireEvent("onMove",get_turf(src))
@@ -325,7 +325,7 @@
 	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
-	else if(src.dir!=direction)
+	else if(src.dir!=direction && !lock_dir)
 		move_result = mechturn(direction)
 		stepped = FALSE
 	else
@@ -358,13 +358,18 @@
 	return 1
 
 /obj/mecha/proc/mechstep(direction)
+	var/current_dir = dir
+	set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step(src,direction)
+	if(lock_dir)
+		dir = current_dir
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
 
 
 /obj/mecha/proc/mechsteprand()
+	set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
@@ -1260,6 +1265,15 @@
 	src.go_out()
 	add_fingerprint(usr)
 	return
+
+/obj/mecha/verb/lock_direction()
+	set name = "Lock direction"
+	set category = "Exosuit Interface"
+	set src = usr.loc
+	set popup_menu = 0
+	if(usr != src.occupant)
+		return
+	lock_dir = !lock_dir
 
 /obj/mecha/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())

@@ -103,7 +103,7 @@
 		return
 	..()
 
-/obj/structure/bed/chair/vehicle/janicart/Move()
+/obj/structure/bed/chair/vehicle/janicart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(upgraded)
 		var/turf/tile = loc

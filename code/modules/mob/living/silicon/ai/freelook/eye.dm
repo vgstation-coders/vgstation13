@@ -10,6 +10,7 @@
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
+	glide_size = WORLD_ICON_SIZE //AI eyes are hyperspeed, who knows
 	flags = HEAR_ALWAYS | TIMELESS
 
 // Use this when setting the aiEye's location.
@@ -35,7 +36,7 @@
 			var/obj/machinery/hologram/holopad/H = ai.current
 			H.move_hologram()
 
-/mob/camera/aiEye/Move()
+/mob/camera/aiEye/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
 /mob/camera/aiEye/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A) //proc for eye seeing visible messages from atom A, only possible with the high_res camera module

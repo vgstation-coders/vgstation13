@@ -2346,6 +2346,19 @@
 		else
 			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
 
+	else if(href_list["DealBrainDam"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+		var/mob/living/M = locate(href_list["DealBrainDam"])
+		if(!isliving(M))
+			to_chat(usr, "<span class = 'warning'>\The [M] is not of type /mob/living.</span>")
+			return
+		var/choice = input("How much brain damage would you like to deal to the subject?", "Instant Lobotomy", 1) as null|num
+		if(choice)
+			log_admin("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			message_admins("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			M.adjustBrainLoss(choice)
+
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -3326,6 +3339,13 @@
 					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
+			if("pick_event")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ALL")
+				var/choice = input("Which event do you want to trigger?") in subtypesof(/datum/event)+"Cancel"
+				if(choice != "Cancel")
+					new choice
+					message_admins("[key_name_admin(usr)] spawned a custom event of type [choice].")
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
@@ -3643,11 +3663,6 @@
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
 				usr << browse(dat, "window=bombers")
-			if("list_signalers")
-				var/dat = "<B>Showing last [length(lastsignalers)] signalers.</B><HR>"
-				for(var/sig in lastsignalers)
-					dat += "[sig]<BR>"
-				usr << browse(dat, "window=lastsignalers;size=800x500")
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)
@@ -4621,7 +4636,8 @@
 					to_chat(usr, "<span class='warning'>Error: no deity or message selected.</span>")
 
 				for (var/datum/mind/M in R.adepts)
-					to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
+					if (M.current)
+						to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
 
 				var/msg = "[key_name(usr)] sent message [message] to [R.name]'s adepts as [deity]"
 				message_admins(msg)

@@ -454,11 +454,11 @@
 
 				if(M.acidable())
 					if(prob(15) && volume >= 30)
-						var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-						if(affecting)
-							if(affecting.take_damage(25, 0))
+						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+						if(head_organ)
+							if(head_organ.take_damage(25, 0))
 								H.UpdateDamageIcon(1)
-							H.status_flags |= DISFIGURED
+							head_organ.disfigure("burn")
 							H.emote("scream", , , 1)
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
@@ -955,14 +955,14 @@
 
 					if(H.acidable())
 						if(prob(15) && volume >= 30)
-							var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-							if(affecting)
+							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+							if(head_organ)
 								if(!(VAMP_MATURE in H.mind.vampire.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
 									H.mind.vampire.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
-									if(affecting.take_damage(30, 0))
+									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
-									H.status_flags |= DISFIGURED
+									head_organ.disfigure("burn")
 									H.emote("scream",,, 1)
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
@@ -1358,11 +1358,11 @@
 				var/mob/living/carbon/human/H = M
 				if(H.species.name == "Grey")
 					return //Greys lurve dem some sacid
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting)
-					if(affecting.take_damage(25, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ)
+					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
-					H.status_flags |= DISFIGURED
+					head_organ.disfigure("burn")
 					H.emote("scream", , , 1)
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
@@ -1437,8 +1437,8 @@
 				return
 
 			if(H.acidable())
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting.take_damage(15, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
 				H.emote("scream", , , 1)
 
@@ -1460,11 +1460,11 @@
 		if(M.acidable()) //I think someone doesn't know what this does
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting.take_damage(15, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
 				H.emote("scream", , , 1)
-				H.status_flags |= DISFIGURED
+				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
 
@@ -1959,7 +1959,7 @@
 
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
-				H.adjustToxLoss(rand(0.5, 1))
+				H.adjustToxLoss(rand(5, 10)/10)
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2843,7 +2843,15 @@
 		if(15 to 35)
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
-			M.status_flags &= ~DISFIGURED
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.disfigured)
+					head_organ.disfigured = FALSE
+					if(H.get_face_name() != "Unknown")
+						H.visible_message("<span class='notice'>[H]'s face shifts and knits itself back into shape!</span>","<span class='notice'>You feel your face shifting and repairing itself!</span>")
+					else if(!H.isUnconscious())
+						to_chat(H,"<span class='notice'>You feel your face shifting and repairing itself!</span>")
 
 	data++
 
@@ -4049,7 +4057,7 @@
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
-	specheatcap = rand(0.25,25)
+	specheatcap = rand(25,2500)/100
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
 

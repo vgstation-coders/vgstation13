@@ -427,15 +427,15 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	if(selectedHUD == HUD_MEDICAL)
 		selectedHUD = HUD_NONE
-		to_chat(src, "<span class='notice'><B>Medical HUD Disabled</B></span>")
+		to_chat(src, "<span class='notice'><B>Medical HUD disabled.</B></span>")
 	else
 		selectedHUD = HUD_MEDICAL
-		to_chat(src, "<span class='notice'><B>Medical HUD Enabled</B></span>")
+		to_chat(src, "<span class='notice'><B>Medical HUD enabled.</B></span>")
 
 /mob/dead/observer/verb/toggle_secHUD()
 	set category = "Ghost"
 	set name = "Toggle SecHUD"
-	
+
 	if(!client)
 		return
 	if(selectedHUD == HUD_SECURITY)

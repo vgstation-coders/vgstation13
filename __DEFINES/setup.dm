@@ -561,7 +561,6 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANPUSH		8
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
-#define DISFIGURED	16384	//I'll probably move this elsewhere if I ever get wround to writing a bitflag mob-damage system
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
@@ -978,13 +977,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    10
-#define VAMP_SLAVE    11
-#define VAMP_BLINK    12
-#define VAMP_MATURE   13
-#define VAMP_SHADOW   14
-#define VAMP_CHARISMA 15
-#define VAMP_UNDYING  16
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
@@ -1326,8 +1326,9 @@ var/proccalls = 1
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
-#define INCORPOREAL_NINJA		2
-#define INCORPOREAL_ETHEREAL	3
+#define INCORPOREAL_ETHEREAL	2
+#define GHOST_MOVEDELAY 1
+#define ETHEREAL_MOVEDELAY 2
 
 
 //MALFUNCTION FLAGS
@@ -1561,3 +1562,12 @@ var/proccalls = 1
 #define COMPONENT_BROKEN -1
 #define COMPONENT_MISSING 0
 #define COMPONENT_INSTALLED 1
+
+//Glidesize
+#define INERTIA_MOVEDELAY 5
+#define FRACTIONAL_GLIDESIZES 1
+#ifdef FRACTIONAL_GLIDESIZES
+#define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))
+#else
+#define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
+#endif

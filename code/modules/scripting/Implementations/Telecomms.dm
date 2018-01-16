@@ -293,8 +293,7 @@
 
 		connection.post_signal(S, signal)
 
-		var/time = time2text(world.realtime,"hh:mm:ss")
-		lastsignalers.Add("[time] <B>:</B> [S.id] sent a signal command, which was triggered by NTSL.<B>:</B> [format_frequency(freq)]/[code]")
+		S.investigation_log(I_WIRES, "NTSL-triggered signaler activated by [S.id] - [format_frequency(frequency)]/[code]")
 
 
 /datum/signal/proc/tcombroadcast(var/message, var/freq, var/source, var/job)

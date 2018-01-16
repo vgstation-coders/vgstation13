@@ -455,7 +455,7 @@
 				to_chat(M, "<FONT size = 3>[cult_mind.current] looks like they just reverted to their old faith!</FONT>")
 		if(log)
 			log_admin("[cult_mind.current] ([ckey(cult_mind.current.key)] has been deconverted from the cult")
-			stat_collection.cult.deconverted++
+			stat_collection.cult_deconverted++
 
 /datum/game_mode/proc/update_all_cult_icons()
 	spawn(0)

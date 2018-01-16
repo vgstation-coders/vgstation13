@@ -127,10 +127,10 @@
 	prob_slip = round(prob_slip)
 	return(prob_slip)
 
-/mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
+/mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/old_z = src.z
 
-	. = ..(NewLoc, Dir, step_x, step_y)
+	. = ..()
 
 	/*if(status_flags & FAKEDEATH)
 		return 0*/
