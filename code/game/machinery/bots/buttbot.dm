@@ -20,6 +20,7 @@ Here it is: Buttbot.
 	maxhealth = 25
 	var/buttchance = 80 //Like an 80% chance of it working. It's just a butt with an arm in it.
 	var/sincelastfart = 0
+	var/times_talked = 0
 	flags = HEAR
 
 /obj/machinery/bot/buttbot/attack_hand(mob/living/user as mob)
@@ -39,6 +40,9 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
+	times_talked++
+	if(prob(5*times_talked))
+		explode()
 	return
 
 
