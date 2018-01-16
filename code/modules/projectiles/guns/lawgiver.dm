@@ -527,6 +527,12 @@
 		has_played_alert = 0
 		return 1
 
+/obj/item/weapon/gun/lawgiver/say(var/message)
+	..(message, class = "siliconsay")
+
+/obj/item/weapon/gun/lawgiver/say_quote(var/message)
+	return "reports, [message]"
+
 /obj/item/weapon/gun/lawgiver/demolition
 	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. This model is equipped to handle firing high-explosive rounds."
 
