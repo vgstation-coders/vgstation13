@@ -553,7 +553,6 @@
 		user.visible_message("\The [user] taps on \the [src].", \
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
-		cur_health = max(0, cur_health - 2) // Wall tanks shouldn't be unbreakable by hand
 
 	user.delayNextAttack(0.3 SECONDS)
 
