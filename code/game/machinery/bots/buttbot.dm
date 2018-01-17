@@ -26,10 +26,7 @@ Here it is: Buttbot.
 	. = ..()
 	if (.)
 		return
-	if(sincelastfart + 5 < world.timeofday)
-		speak("butt")
-		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
-		sincelastfart = world.timeofday
+	fart()
 
 
 
@@ -41,6 +38,12 @@ Here it is: Buttbot.
 		O.show_message("<b>[src]</b> beeps, '[message]'")
 	return
 
+
+/obj/machinery/bot/buttbot/proc/fart()
+	if(sincelastfart + 5 < world.timeofday)
+		speak("butt")
+		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
+		sincelastfart = world.timeofday
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
@@ -61,6 +64,7 @@ Here it is: Buttbot.
 			split_phrase[index] = "butt"
 
 		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		fart()
 
 
 
