@@ -13,6 +13,10 @@
 #define WATER_LAYER FLOAT_LAYER-1
 #define FISH_LAYER FLOAT_LAYER-5
 
+#define FISH_BOWL "bowl"
+#define FISH_TANK "tank"
+#define FISH_WALL "wall"
+
 //////////////////////////////
 //		Fish Tanks!			//
 //////////////////////////////
@@ -179,19 +183,19 @@
 	if (fish_list.len)
 		if("shark" in fish_list) // Smaller fish hide when a shark's town
 			switch(tank_type)
-				if ("bowl")
+				if (FISH_BOWL)
 					overlays += icon('icons/obj/fish.dmi', "shark_bowl", FISH_LAYER)
-				if ("tank")
+				if (FISH_TANK)
 					overlays += icon('icons/obj/fish.dmi', "sharkspin", FISH_LAYER)
-				if ("wall")
+				if (FISH_WALL)
 					overlays += icon('icons/obj/fish.dmi', "shrk", FISH_LAYER)
 		else
 			switch(tank_type)
-				if ("bowl")
+				if (FISH_BOWL)
 					overlays += icon('icons/obj/fish.dmi', "feesh_small", FISH_LAYER)
-				if ("tank")
+				if (FISH_TANK)
 					overlays += icon('icons/obj/fish.dmi', "feesh_medium", FISH_LAYER)
-				if ("wall")
+				if (FISH_WALL)
 					overlays += icon('icons/obj/fish.dmi', "feesh", FISH_LAYER)
 
 	//Update water overlay
@@ -392,27 +396,21 @@
 
 /obj/machinery/fishtank/proc/spill_water()
 	switch(tank_type)
-		if("bowl")										//Fishbowl: Wets it's own tile
+		if(FISH_BOWL)										//Fishbowl: Wets it's own tile
 			var/turf/T = get_turf(src)
 			if(!istype(T, /turf/simulated))
 				return
 			var/turf/simulated/S = T
 			S.wet(10 SECONDS, TURF_WET_WATER)
 
-		if("tank")										//Fishtank: Wets it's own tile and the 4 adjacent tiles (cardinal directions)
+		if(FISH_TANK)										//Fishtank: Wets it's own tile and the 4 adjacent tiles (cardinal directions)
 			var/turf/ST = get_turf(src)
 			var/list/L = ST.CardinalTurfs()
-			for(var/turf/T in L)
-				if(!istype(T, /turf/simulated))
-					continue
-				var/turf/simulated/S = T
+			for(var/turf/simulated/S in L)
 				S.wet(10 SECONDS, TURF_WET_WATER)
 
-		if ("wall")										//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
-			for(var/turf/T in view(src, 1))
-				if(!istype(T, /turf/simulated))
-					continue
-				var/turf/simulated/S = T
+		if (FISH_WALL)										//Wall-tank: Wets it's own tile and the surrounding 8 tiles (3x3 square)
+			for(var/turf/simulated/S in view(src, 1))
 				S.wet(10 SECONDS, TURF_WET_WATER)
 
 
@@ -529,8 +527,7 @@
 
 
 	//Finally, report the full examine_message constructed from the above reports
-	to_chat(user, "[jointext(examine_message, "")]")
-	return examine_message
+	to_chat(user, jointext(examine_message, ""))
 
 //////////////////////////////
 //		ATTACK PROCS			//
@@ -544,13 +541,12 @@
 
 /obj/machinery/fishtank/attack_hand(var/mob/user)
 
+	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
 	if(user.a_intent == I_HURT)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
 		user.visible_message("<span class='danger'>\The [user] bangs against \the [src]!</span>", \
 							"<span class='danger'>You bang against the [src]!</span>", \
 							"You hear a banging sound.")
 	else
-		playsound(src.loc, 'sound/effects/glassknock.ogg', 80, 1)
 		user.visible_message("\The [user] taps on \the [src].", \
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
@@ -558,7 +554,7 @@
 
 /obj/machinery/fishtank/proc/hit(var/damage, var/mob/user, var/obj/O)
 	user.delayNextAttack(0.3 SECONDS)
-	user.do_attack_animation(src, O) // Ensuring the legacy lives on :^)
+	user.do_attack_animation(src, O)
 	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
 	cur_health = max(0, cur_health - damage)
 	check_health()
@@ -626,7 +622,7 @@
 				if(water_level == 0)
 					to_chat(user, "<span class='notice'>\The [src] is empty!</span>")
 				else
-					C.reagents.add_reagent("water", water_level)
+					C.reagents.add_reagent(WATER, water_level)
 					remove_water(C.volume)
 					if(water_level >= C.volume)										//Enough to fill the container completely
 						user.visible_message("\The [user] scoops out some water from \the [src].", "<span class = 'notice'>You completely fill [C.name] from \the [src].</span>")
@@ -643,7 +639,7 @@
 				destroy(1)
 		else
 			to_chat(user, "<span class='warning'>\The [src] must be empty before you disassemble it!</span>")
-		return
+		return TRUE
 	//Fish eggs
 	else if(istype(O, /obj/item/fish_eggs))
 		var/obj/item/fish_eggs/egg = O
@@ -694,6 +690,7 @@
 			return TRUE
 		filth_level = 0
 		user.visible_message("\The [user] scrubs the inside of \the [src], cleaning the filth.", "<span class='notice'>You scrub the inside of \the [src], cleaning the filth.</span>")
+		return TRUE
 
 	else if(O && O.force)
 		user.visible_message("<span class='danger'>\The [src] has been attacked by \the [user] with \the [O]!</span>")
@@ -708,4 +705,5 @@
 		getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
 		new /obj/machinery/fishtank/bowl(get_turf(src))
 		qdel(src)
+		return TRUE
 
