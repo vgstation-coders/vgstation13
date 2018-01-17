@@ -162,7 +162,7 @@
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 	w_class = W_CLASS_SMALL
-	storage_slots = 6
+	storage_slots = 7
 	icon_type = "crayon"
 	can_only_hold = list(
 		"/obj/item/toy/crayon"
@@ -181,6 +181,7 @@
 	new /obj/item/toy/crayon/green(src)
 	new /obj/item/toy/crayon/blue(src)
 	new /obj/item/toy/crayon/purple(src)
+	new /obj/item/toy/crayon/black(src)
 	update_icon()
 
 /obj/item/weapon/storage/fancy/crayons/update_icon()
