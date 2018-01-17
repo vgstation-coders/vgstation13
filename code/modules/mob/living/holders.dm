@@ -95,13 +95,14 @@
 	..()
 	if(M)
 		appearance = M.appearance
-		w_class = Clamp((M.size - 1) * 3, 1, 5)
-		//SIZE	| W_CLASS
-		//	1	|	1
-		//	2	|	3
-		//	3	|	5
-		//	4	|	5
-		//	5	|	5
+		w_class = Clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
+		//	SIZE		|	W_CLASS
+
+		//	SIZE_TINY	|	W_CLASS_TINY
+		//	SIZE_SMALL	|	W_CLASS_MEDIUM
+		//	SIZE_NORMAL	|	W_CLASS_HUGE
+		//	SIZE_BIG	|	W_CLASS_HUGE
+		//	SIZE_HUGE	|	W_CLASS_HUGE
 
 		throw_range = 6 - w_class
 
