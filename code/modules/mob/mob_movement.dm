@@ -245,7 +245,7 @@
 		var/obj/O = mob.orient_object
 		O.dir = direct
 
-/client/Move(loc,dir)
+/client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(move_delayer.next_allowed > world.time)
 		return 0
 
@@ -255,25 +255,25 @@
 		return
 
 	if(mob.control_object)
-		Move_object(dir)
+		Move_object(Dir)
 
 	if(mob.orient_object)
-		Dir_object(dir)
+		Dir_object(Dir)
 		return
 
 	if(mob.incorporeal_move)
-		Process_Incorpmove(dir)
+		Process_Incorpmove(Dir)
 		return
 
 	if(mob.stat == DEAD)
 		return
 
 	if(isAI(mob))
-		return AIMove(loc,dir,mob)
+		return AIMove(NewLoc,Dir,mob)
 
 	if(ispAI(mob))
 		var/mob/living/silicon/pai/P = mob
-		P.relaymove(dir)
+		P.relaymove(Dir)
 		return
 
 	if(mob.monkeyizing)
@@ -283,7 +283,7 @@
 		return
 
 	if(mob.locked_to) //if we're locked_to to something, tell it we moved.
-		return mob.locked_to.relaymove(mob, dir)
+		return mob.locked_to.relaymove(mob, Dir)
 
 	if(!mob.canmove)
 		return
@@ -308,7 +308,7 @@
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
-		return O.relaymove(mob, dir)
+		return O.relaymove(mob, Dir)
 
 	if(isturf(mob.loc))
 		if(mob.restrained()) //Why being pulled while cuffed prevents you from moving
@@ -345,6 +345,7 @@
 
 		mob.delayNextMove(move_delay)
 		mob.last_move_intent = world.time + 10
+		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in src
@@ -385,14 +386,14 @@
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
-			step(mob, dir)
+			step(mob, Dir)
 			mob.last_movement=world.time
 
 		if(mob.dir != old_dir)
 			mob.Facing()
 
 ///Process_Grab()
-///Called by client/Move()
+///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///Checks to see if you are being grabbed and if so attemps to break it
 /client/proc/Process_Grab()
 	if(locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
@@ -423,17 +424,20 @@
 
 
 ///Process_Incorpmove
-///Called by client/Move()
+///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///Allows mobs to run though walls
 /client/proc/Process_Incorpmove(direct)
-	var/turf/mobloc = get_turf(mob)
-
 	switch(mob.incorporeal_move)
 		if(INCORPOREAL_GHOST)
 			if(isobserver(mob)) //Typecast time
 				var/mob/dead/observer/observer = mob
 				if(observer.locked_to) //Ghosts can move at any time to unlock themselves (in theory from following a mob)
 					observer.manual_stop_follow(observer.locked_to)
+			var/movedelay = GHOST_MOVEDELAY
+			if(isobserver(mob))
+				var/mob/dead/observer/observer = mob
+				movedelay = observer.movespeed
+			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/T = get_step(mob, direct)
 			var/area/A = get_area(T)
 			if(A && A.anti_ethereal && !isAdminGhost(mob))
@@ -444,52 +448,10 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
-			if(isobserver(mob))
-				var/mob/dead/observer/observer = mob
-				mob.delayNextMove(observer.movespeed)
-			else
-				mob.delayNextMove(1)
-		if(INCORPOREAL_NINJA)
-			if(prob(50))
-				var/locx
-				var/locy
-				switch(direct)
-					if(NORTH)
-						locx = mobloc.x
-						locy = (mobloc.y+2)
-						if(locy>world.maxy)
-							return
-					if(SOUTH)
-						locx = mobloc.x
-						locy = (mobloc.y-2)
-						if(locy<1)
-							return
-					if(EAST)
-						locy = mobloc.y
-						locx = (mobloc.x+2)
-						if(locx>world.maxx)
-							return
-					if(WEST)
-						locy = mobloc.y
-						locx = (mobloc.x-2)
-						if(locx<1)
-							return
-					else
-						return
-				mob.forceMove(locate(locx,locy,mobloc.z))
-				spawn(0)
-					var/limit = 2//For only two trailing shadows.
-					for(var/turf/T in getline(mobloc, mob.loc))
-						anim(T,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
-						limit--
-						if(limit<=0)
-							break
-			else
-				anim(mobloc,mob,'icons/mob/mob.dmi',,"shadow",,mob.dir)
-				mob.forceEnter(get_step(mob, direct))
-			mob.dir = direct
-			mob.delayNextMove(1)
+			mob.delayNextMove(movedelay)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
+			var/movedelay = ETHEREAL_MOVEDELAY
+			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.turf_flags & NOJAUNT))
 				mob.forceEnter(newLoc)
@@ -497,7 +459,7 @@
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
 			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
-			mob.delayNextMove(2)
+			mob.delayNextMove(movedelay)
 			return 1
 	// Crossed is always a bit iffy
 	for(var/obj/S in mob.loc)
@@ -508,7 +470,7 @@
 
 
 ///Process_Spacemove
-///Called by /client/Move()
+///Called by /client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///For moving in space
 ///Return 1 for movement 0 for none
 /mob/Process_Spacemove(var/check_drift = 0,var/ignore_slip = 0)

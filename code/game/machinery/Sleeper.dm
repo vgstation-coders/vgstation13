@@ -329,7 +329,7 @@
 
 
 /obj/machinery/sleeper/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
+	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The sleeper is unoccupied!</span>")
@@ -662,7 +662,8 @@
 	if(!emagged)
 		emagged = 1
 		connected.emagged = 1
-		to_chat(user, "<span class='warning'>You short out the safety features of \the [src], and feel like a MAN!	</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out the safety features of \the [src], and feel like a MAN!	</span>")
 		available_options = list("Thermoregulate" = 50,"Rare" = 500,"Medium" = 600,"Well Done" = 700)
 		update_icon()
 		connected.name = "THE MANCROWAVE"

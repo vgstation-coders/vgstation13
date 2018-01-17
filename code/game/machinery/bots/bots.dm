@@ -54,14 +54,16 @@
 	if (src.health <= 0)
 		src.explode()
 
-/obj/machinery/bot/proc/Emag(mob/user as mob)
+/obj/machinery/bot/proc/Emag(mob/user)
 	if(locked)
 		locked = 0
 		emagged = 1
-		to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
 	if(!locked && open)
 		emagged = 2
-		to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
 /obj/machinery/bot/npc_tamper_act(mob/living/L)
 	if(on)

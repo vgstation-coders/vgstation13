@@ -6,13 +6,18 @@
 	var/bible_name = "The Holy Bible"
 	var/male_adept = "Chaplain"
 	var/female_adept = "Chaplain"
-	var/bible_type = /obj/item/weapon/storage/bible
+	var/convert_method = "splashing them with holy water, holding a bible in hand."
 
+	var/bible_type = /obj/item/weapon/storage/bible
 	var/obj/item/weapon/storage/bible/holy_book
+
+	var/datum/mind/religiousLeader
+	var/list/datum/mind/adepts = list()
 
 	var/list/bible_names = list()
 	var/list/deity_names = list()
 
+	var/datum/action/renounce/action_renounce
 	var/list/keys = list("christianity") // What you need to type to get this particular relgion.
 
 /datum/religion/New() // For religions with several bibles/deities
@@ -20,10 +25,210 @@
 		bible_name = pick(bible_names)
 	if (deity_names.len)
 		deity_name = pick(deity_names)
+	action_renounce = new /datum/action/renounce(src)
+
+/datum/religion/proc/isReligiousLeader(var/mob/living/user)
+	return (user.mind && user.mind == religiousLeader)
 
 // Give the chaplain the basic gear, as well as a few misc effects.
 /datum/religion/proc/equip_chaplain(var/mob/living/carbon/human/H)
 	return TRUE // Nothing to see here, but redefined in some other religions !
+
+/* ---- RELIGIOUS CONVERSION ----
+ * convertAct() -> convertCeremony() -> convertCheck() -> convert()
+ * Redefine 'convertCeremony' to play out your snowflake ceremony/interactions in your religion datum.
+ * In a saner language, convertCeremony() and convertCheck() would be private methods. Those are UNSAFE procs. Call convertAct() instead.
+ */
+
+/* ConvertAct() : here we check if eveything is in place for the conversion, and provide feedback if needed. Sanity for the preacher or the target belongs to the verb in the bible.
+ * - preacher : the guy doing the converting
+ * - subject : the guy being converted
+ * - B : the bible using for the conversion
+ */
+/datum/religion/proc/convertAct(var/mob/living/preacher, var/mob/living/subject, var/obj/item/weapon/storage/bible/B)
+	if (B.my_rel != src) // BLASPHEMY
+		to_chat(preacher, "<span class='warning'>You are a heathen to this God. You feel [B.my_rel.deity_name]'s wrath strike you for this blasphemy.</span>")
+		preacher.fire_stacks += 5
+		preacher.IgniteMob()
+		preacher.emote("scream",,, 1)
+		return FALSE
+	if (preacher != religiousLeader.current)
+		to_chat(preacher, "<span class='warning'>You fail to muster enough mental strength to begin the conversion. Only the Spiritual Guide of [name] can perfom this.</span>")
+		return FALSE
+	if (subject.mind.faith == src)
+		to_chat(preacher, "<span class='warning'>You and your target follow the same faith.</span>")
+		return FALSE
+	if (istype(subject.mind.faith) && subject.mind.faith.isReligiousLeader(subject))
+		to_chat(preacher, "<span class='warning'>Your target is already the leader of another religion.</span>")
+		return FALSE
+	else
+		return convertCeremony(preacher, subject)
+
+/* ConvertCeremony() : the RP ceremony to convert the newfound person.
+ Here we check if we have the tools to convert and play out the little interactions. */
+
+ // This is the default ceremony, for Christianity/Space Jesus
+/datum/religion/proc/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_beaker = preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers)
+	if (!held_beaker)
+		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
+		return FALSE
+	var/obj/item/weapon/reagent_containers/B = preacher.held_items[held_beaker]
+	if (B.reagents.get_master_reagent_name() != "Holy Water")
+		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
+		return FALSE
+	subject.visible_message("\The [preacher] attemps to convert \the [subject] to [name].")
+	if(!convertCheck(subject))
+		subject.visible_message("\The [subject] refuses conversion.")
+		return FALSE
+
+	// Everything is ok : begin the conversion
+	splash_sub(B.reagents, subject, 5, preacher)
+	subject.visible_message("\The [subject] is blessed by \the [preacher] and embraces [name]. Praise [deity_name]!")
+	convert(subject, preacher)
+	return TRUE
+
+// Here we check if the subject is willing
+/datum/religion/proc/convertCheck(var/mob/living/subject)
+	var/choice = input(subject, "Do you wish to become a follower of [name]?","Religious converting") in list("Yes", "No")
+	return choice == "Yes"
+
+// Here is the proc to welcome a new soul in our religion.
+/datum/religion/proc/convert(var/mob/living/subject, var/mob/living/preacher)
+	// If he already had one
+	if (subject.mind.faith)
+		subject.mind.faith.renounce(subject) // We remove him from that one
+
+	subject.mind.faith = src
+	to_chat(subject, "You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].")
+	adepts += subject.mind
+	action_renounce.Grant(subject)
+	if (!preacher)
+		var/msg = "\The [key_name(subject)] has been converted to [name] without a preacher."
+		message_admins(msg)
+	else
+		var/msg = "[key_name(subject)] has been converted to [name] by \The [key_name(preacher)]."
+		message_admins(msg)
+
+// Activivating a religion with admin interventions.
+/datum/religion/proc/activate(var/mob/living/preacher)
+	equip_chaplain(preacher) // We do the misc things related to the religion
+	to_chat(preacher, "A great, intense revelation go through your spirit. You are now the religious leader of [name]. Convert people by [convert_method]")
+	if (holy_book)
+		preacher.put_in_hands(holy_book)
+	else
+		holy_book = new bible_type
+		holy_book.my_rel = src
+		chooseBible(src, preacher)
+		holy_book.name = bible_name
+		preacher.put_in_hands(holy_book)
+	religiousLeader = preacher.mind
+	convert(preacher, null)
+
+/datum/religion/proc/renounce(var/mob/living/subject)
+	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
+	adepts -= subject.mind
+	subject.mind.faith = null
+
+// Action : renounce your faith. For players.
+/datum/action/renounce
+	name = "Renounce faith"
+	desc = "Leave the religion you are currently in."
+	icon_icon = 'icons/obj/clothing/hats.dmi'
+	button_icon_state = "fedora" // :^) Needs a better icon
+
+/datum/action/renounce/Trigger()
+	var/datum/religion/R = target
+	var/mob/living/M = owner
+
+	if (!R) // No religion, may as well be a good time to remove the icon if it's there
+		Remove(M)
+		return FALSE
+
+	if (R.isReligiousLeader(M))
+		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
+		return FALSE
+	Remove(owner)
+	R.renounce(owner)
+
+/proc/chooseBible(var/datum/religion/R, var/mob/user)
+
+	if (!istype(R) || !user)
+		return FALSE
+
+	if (!R.holy_book)
+		return FALSE
+
+	var/book_style = "Bible"
+
+	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
+																		   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+	switch(book_style)
+		if("Koran")
+			R.holy_book.icon_state = "koran"
+			R.holy_book.item_state = "koran"
+		if("Scrapbook")
+			R.holy_book.icon_state = "scrapbook"
+			R.holy_book.item_state = "scrapbook"
+		if("Creeper")
+			R.holy_book.icon_state = "creeper"
+			R.holy_book.item_state = "syringe_kit"
+		if("White Bible")
+			R.holy_book.icon_state = "white"
+			R.holy_book.item_state = "syringe_kit"
+		if("Holy Light")
+			R.holy_book.icon_state = "holylight"
+			R.holy_book.item_state = "syringe_kit"
+		if("Athiest")
+			R.holy_book.icon_state = "athiest"
+			R.holy_book.item_state = "syringe_kit"
+		if("Tome")
+			R.holy_book.icon_state = "tome"
+			R.holy_book.item_state = "syringe_kit"
+		if("The King in Yellow")
+			R.holy_book.icon_state = "kingyellow"
+			R.holy_book.item_state = "kingyellow"
+		if("Ithaqua")
+			R.holy_book.icon_state = "ithaqua"
+			R.holy_book.item_state = "ithaqua"
+		if("Scientology")
+			R.holy_book.icon_state = "scientology"
+			R.holy_book.item_state = "scientology"
+		if("the bible melts")
+			R.holy_book.icon_state = "melted"
+			R.holy_book.item_state = "melted"
+		if("Unaussprechlichen Kulten")
+			R.holy_book.icon_state = "kulten"
+			R.holy_book.item_state = "kulten"
+		if("Necronomicon")
+			R.holy_book.icon_state = "necronomicon"
+			R.holy_book.item_state = "necronomicon"
+		if("Book of Shadows")
+			R.holy_book.icon_state = "shadows"
+			R.holy_book.item_state = "shadows"
+		if("Torah")
+			R.holy_book.icon_state = "torah"
+			R.holy_book.item_state = "torah"
+		if("Burning")
+			R.holy_book.icon_state = "burning"
+			R.holy_book.item_state = "syringe_kit"
+		if("Honk")
+			R.holy_book.icon_state = "honkbook"
+			R.holy_book.item_state = "honkbook"
+		if("Ianism")
+			R.holy_book.icon_state = "ianism"
+			R.holy_book.item_state = "ianism"
+		if("The Guide")
+			R.holy_book.icon_state = "guide"
+			R.holy_book.item_state = "guide"
+		if("Slab")
+			R.holy_book.icon_state = "slab"
+			R.holy_book.item_state = "slab"
+			R.holy_book.desc = "A bizarre, ticking device... That looks broken."
+		else
+			//If christian bible, revert to default
+			R.holy_book.icon_state = "bible"
+			R.holy_book.item_state = "bible"
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/catholic
@@ -257,7 +462,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag")
+	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
 
 /datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
@@ -528,8 +733,8 @@
 
 /datum/religion/changeling
 	name = "The Religion" // A la "The Thing"
-	deity_name = "Proboscis"
-	bible_name = "The Hive"
+	deity_name = "The Hive"
+	bible_name = "Proboscis"
 	male_adept = "Changeling"
 	female_adept = "Changeling"
 	keys = list("changeling", "ling", "hive", "succ")

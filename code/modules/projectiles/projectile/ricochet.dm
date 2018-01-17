@@ -219,7 +219,7 @@
 	playsound(impact, 'sound/weapons/pierce.ogg', 30, 1)
 
 	spawn()
-		density = 0
+		setDensity(FALSE)
 		invisibility = 101
 		returnToPool(src)
 		OnDeath()

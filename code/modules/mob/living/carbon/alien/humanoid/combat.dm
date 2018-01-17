@@ -57,4 +57,4 @@
 	if(iscarbon(target) && !isslime(target))
 		if(damage > 25)
 			visible_message("<span class='danger'>[src] has wounded [target]!</span>")
-			target.apply_effect(rand(0.5,3), WEAKEN, armor)
+			target.apply_effect(rand(5,30)/10, WEAKEN, armor)

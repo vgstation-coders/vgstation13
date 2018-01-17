@@ -11,6 +11,9 @@
 /mob/living/carbon/alien/humanoid/queen/movement_tally_multiplier()
 	. = ..()
 	. *= 5 // Queens are slow as fuck
+	
+/mob/living/carbon/alien/humanoid/queen/feels_pain()
+	return FALSE // Queens are slow enough as they are
 
 /mob/living/carbon/alien/humanoid/queen/New()
 	create_reagents(100)

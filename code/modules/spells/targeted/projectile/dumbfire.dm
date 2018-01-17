@@ -1,6 +1,6 @@
 /spell/targeted/projectile/dumbfire
 	name = "dumbfire spell"
-
+	user_type = USER_TYPE_NOUSER
 	var/dumbfire = 1
 
 /spell/targeted/projectile/dumbfire/choose_targets(mob/user = usr)

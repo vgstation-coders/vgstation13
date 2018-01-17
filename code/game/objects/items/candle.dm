@@ -27,10 +27,11 @@
 	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 
-/obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>")
+/obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
 	if(!src.lit)
 		src.lit = 1
-		visible_message(flavor_text)
+		if(!quiet)
+			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
 		processing_objects.Add(src)
 
@@ -40,7 +41,7 @@
 	wax--
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.oxygen < 5)
+	if(env.oxygen / env.volume * CELL_VOLUME < 5)
 		src.lit = 0
 		set_light(0)
 		processing_objects.Remove(src)

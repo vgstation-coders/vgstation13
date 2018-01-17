@@ -21,6 +21,7 @@
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
+	var/hud_list[2]
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
@@ -42,7 +43,7 @@
 	var/lights = 0
 	var/lights_power = 6
 	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
-
+	var/lock_dir = FALSE
 	//inner atmos
 	var/use_internal_tank = 0
 	var/internal_tank_valve = ONE_ATMOSPHERE
@@ -86,6 +87,8 @@
 						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
+	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
+	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
 	..()
 	events = new
 	add_radio()
@@ -285,7 +288,7 @@
 ////////  Movement procs  ////////
 //////////////////////////////////
 
-/obj/mecha/Move()
+/obj/mecha/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 	if(.)
 		events.fireEvent("onMove",get_turf(src))
@@ -322,7 +325,7 @@
 	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
-	else if(src.dir!=direction)
+	else if(src.dir!=direction && !lock_dir)
 		move_result = mechturn(direction)
 		stepped = FALSE
 	else
@@ -355,13 +358,18 @@
 	return 1
 
 /obj/mecha/proc/mechstep(direction)
+	var/current_dir = dir
+	set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step(src,direction)
+	if(lock_dir)
+		dir = current_dir
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
 	return result
 
 
 /obj/mecha/proc/mechsteprand()
+	set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
@@ -380,7 +388,7 @@
 			G.health = (0.25*initial(G.health))
 			G.broken = 1
 			G.icon_state = "[initial(G.icon_state)]-b"
-			G.density = 0
+			G.setDensity(FALSE)
 			getFromPool(/obj/item/stack/rods, get_turf(G.loc))
 			breakthrough = 1
 
@@ -1258,6 +1266,15 @@
 	add_fingerprint(usr)
 	return
 
+/obj/mecha/verb/lock_direction()
+	set name = "Lock direction"
+	set category = "Exosuit Interface"
+	set src = usr.loc
+	set popup_menu = 0
+	if(usr != src.occupant)
+		return
+	lock_dir = !lock_dir
+
 /obj/mecha/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
 		return
@@ -1957,6 +1974,24 @@
 /obj/mecha/apply_beam_damage(var/obj/effect/beam/B)
 	// Actually apply damage
 	take_damage(B.get_damage(), "emitter laser")
+
+/proc/mech_integrity_to_icon_state(var/integrity_ratio)
+	switch(integrity_ratio)
+		if(1.0 to INFINITY)
+			return "huddiagmax"
+		if(0.85 to 1.0)
+			return "huddiaggood"
+		if(0.70 to 0.85)
+			return "huddiaghigh"
+		if(0.55 to 0.70)
+			return "huddiagmed"
+		if(0.40 to 0.55)
+			return "huddiaglow"
+		if(0.10 to 0.40)
+			return "huddiagcrit"
+		if(0 to 0.10)
+			return "huddiagdead"
+	return "huddiagmax"
 
 
 //////////////////////////////////////////

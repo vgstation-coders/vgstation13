@@ -379,7 +379,7 @@
 
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if (!ishuman(usr))
+	if (!ishigherbeing(usr))
 		return
 /*
 	if (usr.abiotic())
@@ -460,11 +460,11 @@
 			return stop()
 		return
 
-/obj/spacepod/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	var/oldloc = src.loc
+/obj/spacepod/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	var/oldloc = loc
 	. = ..()
-	if(dir && (oldloc != NewLoc))
-		src.loc.Entered(src, oldloc)
+	if(Dir && (oldloc != NewLoc))
+		loc.Entered(src, oldloc)
 
 /obj/spacepod/Process_Spacemove(var/check_drift = 0, mob/user)
 	var/dense_object = 0

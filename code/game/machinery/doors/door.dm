@@ -262,7 +262,7 @@ var/list/all_doors = list()
 	if (makes_noise)
 		playsound(get_turf(src), soundeffect, soundpitch, 1)
 
-	density = 1
+	setDensity(TRUE)
 	door_animate("closing")
 	sleep(animation_delay)
 	update_icon()
@@ -309,7 +309,7 @@ var/list/all_doors = list()
 /obj/machinery/door/cultify()
 	if(invisibility != INVISIBILITY_MAXIMUM)
 		invisibility = INVISIBILITY_MAXIMUM
-		density = 0
+		setDensity(FALSE)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
 
@@ -391,7 +391,7 @@ var/list/all_doors = list()
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)
 
-/obj/machinery/door/Move(new_loc, new_dir)
+/obj/machinery/door/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	update_nearby_tiles()
 	. = ..()
 	if(width > 1)

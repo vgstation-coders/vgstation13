@@ -155,7 +155,7 @@
 /obj/structure/displaycase/proc/healthcheck()
 	if (src.health <= 0)
 		if (!( src.destroyed ))
-			src.density = 0
+			setDensity(FALSE)
 			src.destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
 			playsound(get_turf(src), "shatter", 70, 1)

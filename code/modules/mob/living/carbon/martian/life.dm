@@ -93,7 +93,7 @@
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(istype(loc, /turf/))
-				var/breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+				var/breath_moles = environment.total_moles()/environment.volume*CELL_VOLUME*BREATH_PERCENTAGE
 				breath = loc.remove_air(breath_moles)
 
 				var/block = 0
@@ -515,3 +515,18 @@ mob/living/carbon/martian/proc/handle_regular_status_updates()
 				reset_view(null)
 
 	return 1
+
+/mob/living/carbon/martian/undergoing_hypothermia()
+	if((status_flags & GODMODE) || (flags & INVULNERABLE) || istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
+		return NO_HYPOTHERMIA
+
+	switch(bodytemperature)
+		if(295 to 300)
+			return MILD_HYPOTHERMIA // awake and shivering
+		if(280 to 295)
+			return MODERATE_HYPOTHERMIA // drowsy and not shivering
+		if(260 to 280)
+			return SEVERE_HYPOTHERMIA // unconcious, not shivering
+		if(-T0C to 260)
+			return PROFOUND_HYPOTHERMIA // no vital signs
+	return NO_HYPOTHERMIA

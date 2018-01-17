@@ -1,6 +1,7 @@
 /spell/rune_write
 	name = "Scribe a Rune"
 	desc = "Let's you instantly manifest a working rune."
+	user_type = USER_TYPE_CULT
 
 	school = "evocation"
 	charge_max = 100

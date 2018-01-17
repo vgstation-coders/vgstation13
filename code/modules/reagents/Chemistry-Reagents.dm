@@ -413,7 +413,7 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Grey")
 			M.adjustToxLoss(REM)
-			M.take_organ_damage(0, REM)
+			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
 /datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -454,11 +454,11 @@
 
 				if(M.acidable())
 					if(prob(15) && volume >= 30)
-						var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-						if(affecting)
-							if(affecting.take_damage(25, 0))
+						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+						if(head_organ)
+							if(head_organ.take_damage(25, 0))
 								H.UpdateDamageIcon(1)
-							H.status_flags |= DISFIGURED
+							head_organ.disfigure("burn")
 							H.emote("scream", , , 1)
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
@@ -679,19 +679,13 @@
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
-	data = 1 //Used as a tally
+	overdose_tick = 165
 	density = 0.687 //Let's assume it's a compound of cyanide
 	specheatcap = 1.335
 
-/datum/reagent/chefspecial/on_mob_life(var/mob/living/M, var/alien)
-
-	if(..())
-		return 1
-
-	if(data >= 165)
-		M.death(0)
-		M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
-	data++
+/datum/reagent/chefspecial/on_overdose(var/mob/living/M)
+	M.death(0)
+	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
 
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
@@ -929,7 +923,7 @@
 		if(isvampire(H))
 			if(!(VAMP_MATURE in H.mind.vampire.powers))
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
-				H.take_organ_damage(0, 5) //FIRE
+				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				H.mind.vampire.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
@@ -961,14 +955,14 @@
 
 					if(H.acidable())
 						if(prob(15) && volume >= 30)
-							var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-							if(affecting)
+							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+							if(head_organ)
 								if(!(VAMP_MATURE in H.mind.vampire.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
 									H.mind.vampire.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
-									if(affecting.take_damage(30, 0))
+									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
-									H.status_flags |= DISFIGURED
+									head_organ.disfigure("burn")
 									H.emote("scream",,, 1)
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
@@ -1161,7 +1155,7 @@
 	if(..())
 		return 1
 
-	M.take_organ_damage(REM, 0)
+	M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1364,11 +1358,11 @@
 				var/mob/living/carbon/human/H = M
 				if(H.species.name == "Grey")
 					return //Greys lurve dem some sacid
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting)
-					if(affecting.take_damage(25, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ)
+					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
-					H.status_flags |= DISFIGURED
+					head_organ.disfigure("burn")
 					H.emote("scream", , , 1)
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
@@ -1443,8 +1437,8 @@
 				return
 
 			if(H.acidable())
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting.take_damage(15, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
 				H.emote("scream", , , 1)
 
@@ -1466,11 +1460,11 @@
 		if(M.acidable()) //I think someone doesn't know what this does
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting.take_damage(15, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
 				H.emote("scream", , , 1)
-				H.status_flags |= DISFIGURED
+				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
 
@@ -1664,13 +1658,14 @@
 	if(!M.dna) //No robots, AIs, aliens, Ians or other mobs should be affected by this.
 		return
 	if((method == TOUCH && prob(33)) || method == INGEST)
-		randmuti(M)
 		if(prob(98))
 			randmutb(M)
 		else
 			randmutg(M)
 		domutcheck(M, null)
-		M.UpdateAppearance()
+		if(M.last_appearance_mutation + 1 SECONDS < world.time)
+			randmuti(M)
+			M.UpdateAppearance()
 
 /datum/reagent/mutagen/on_mob_life(var/mob/living/M)
 	if(!M.dna)
@@ -1964,7 +1959,7 @@
 
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
-				H.adjustToxLoss(rand(0.5, 1))
+				H.adjustToxLoss(rand(5, 10)/10)
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2259,7 +2254,7 @@
 		return 1
 
 	if(prob(33))
-		M.take_organ_damage(REM, 0)
+		M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 	M.adjustOxyLoss(3)
 	if(prob(20))
 		M.emote("gasp")
@@ -2510,7 +2505,7 @@
 	M.radiation = max(M.radiation - 7 * REM, 0)
 	M.adjustToxLoss(-REM)
 	if(prob(15))
-		M.take_organ_damage(1, 0)
+		M.take_organ_damage(1, 0, ignore_inorganics = TRUE)
 
 /datum/reagent/lithotorcrazine
 	name = "Lithotorcrazine"
@@ -2600,7 +2595,7 @@
 		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.damage > 0)
-				I.damage -= 0.20
+				I.damage = max(0,I.damage-0.2)
 
 /datum/reagent/bicaridine
 	name = "Bicaridine"
@@ -2848,7 +2843,15 @@
 		if(15 to 35)
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
-			M.status_flags &= ~DISFIGURED
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.disfigured)
+					head_organ.disfigured = FALSE
+					if(H.get_face_name() != "Unknown")
+						H.visible_message("<span class='notice'>[H]'s face shifts and knits itself back into shape!</span>","<span class='notice'>You feel your face shifting and repairing itself!</span>")
+					else if(!H.isUnconscious())
+						to_chat(H,"<span class='notice'>You feel your face shifting and repairing itself!</span>")
 
 	data++
 
@@ -3094,7 +3097,7 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
+					if(H.getOxyLoss()>0 || H.getBruteLoss(ignore_inorganic = TRUE)>0 || H.getToxLoss()>0 || H.getFireLoss(ignore_inorganic = TRUE)>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
 							H.adjustOxyLoss(-5)
 							H.heal_organ_damage(5, 5)
@@ -4054,7 +4057,7 @@
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
-	specheatcap = rand(0.25,25)
+	specheatcap = rand(25,2500)/100
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
 

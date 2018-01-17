@@ -304,13 +304,17 @@
 
 	//forwards, scoot slow
 	if(direction == dir)
+		var/scootdelay = user.movement_delay()*6
+		set_glide_size(DELAY2GLIDESIZE(scootdelay))
 		step(src, direction)
-		user.delayNextMove(user.movement_delay()*6)
+		user.delayNextMove(scootdelay)
 	//backwards, scoot fast
 	else if(direction == turn(dir, 180))
+		var/scootdelay = user.movement_delay()*3
+		set_glide_size(DELAY2GLIDESIZE(scootdelay))
 		step(src, direction)
 		change_dir(turn(direction, 180)) //face away from where we're going
-		user.delayNextMove(user.movement_delay()*3)
+		user.delayNextMove(scootdelay)
 	//sideways, swivel to face
 	else
 		change_dir(direction)
@@ -520,7 +524,7 @@
 /obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
 		if(is_locking(lock_type))

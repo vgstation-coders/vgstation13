@@ -393,7 +393,7 @@
 	else if(target != user && !user.incapacitated())
 		if(target.anchored)
 			return
-		if(!ishuman(user) && !ismonkey(user))
+		if(!ishigherbeing(user) && !ismonkey(user))
 			return
 		visible_message("<span class='warning'>[usr] drags [target.name] onto the photocopier!</span>")
 	target.forceMove(get_turf(src))

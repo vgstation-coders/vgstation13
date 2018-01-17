@@ -32,7 +32,7 @@
 
 /obj/item/key/lightcycle/attack_self(mob/user)
 	..()
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		to_chat(user, "\The [src] refuses to break. You don't think you could fit on a light cycle anyway.")
 		return
 	if(cycle_active)

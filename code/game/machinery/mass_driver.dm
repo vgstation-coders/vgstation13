@@ -91,9 +91,10 @@ var/list/mass_drivers = list()
 /obj/machinery/mass_driver/emag(mob/user)
 	if(!emagged)
 		emagged = 1
-		to_chat(user, "You hack the Mass Driver, radically increasing the force at which it'll throw things. Better not stand in its way.")
+		if(user)
+			to_chat(user, "You hack the Mass Driver, radically increasing the force at which it'll throw things. Better not stand in its way.")
 		return 1
-	return -1
+	return -1 //GROSS
 
 ////////////////MASS BUMPER///////////////////
 
@@ -103,10 +104,10 @@ var/list/mass_drivers = list()
 	density = 1
 
 /obj/machinery/mass_driver/bumper/Bumped(M as mob|obj)
-	density = 0
+	setDensity(FALSE)
 	step(M, get_dir(M,src))
 	spawn(1)
-		density = 1
+		setDensity(TRUE)
 	drive()
 	return
 

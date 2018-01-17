@@ -13,7 +13,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/grinded = 0
 	var/minimum_monkeys = 3 //How many do we need to grind?
-	var/can_recycle_live = 0 //Can we recycle a live monkey?
+	var/can_recycle_live = FALSE //Can we recycle a live monkey?
 
 /obj/machinery/monkey_recycler/New()
 	. = ..()
@@ -38,7 +38,7 @@
 			lasercount += SP.rating
 	minimum_monkeys = 4 - (manipcount/2) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
 	if(lasercount == 3)
-		can_recycle_live = 1
+		can_recycle_live = TRUE
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (..())
@@ -48,10 +48,12 @@
 		var/grabbed = G.affecting
 		if(istype(grabbed, /mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/target = grabbed
-			if(target.stat == 0 || can_recycle_live)
+			if(target.stat == CONSCIOUS && !can_recycle_live)
 				to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
+				return
 			if(target.abiotic())
 				to_chat(user, "<span class='warning'>The monkey may not have abiotic items on.</span>")
+				return
 			else
 				user.drop_item(G, force_drop = 1)
 				qdel(target)
@@ -65,10 +67,12 @@
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
 	else if(istype(O, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/target = O
-		if(target.stat == 0)
+		if(target.stat == CONSCIOUS && !can_recycle_live)
 			to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
+			return
 		if(target.abiotic())
 			to_chat(user, "<span class='warning'>The monkey may not have abiotic items on.</span>")
+			return
 		else
 			qdel(target)
 			to_chat(user, "<span class='notice'>You stuff the monkey in the machine.</span>")
@@ -100,6 +104,6 @@
 		return
 	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
 		return
-	if(!ishuman(user) && !isrobot(user))
+	if(!ishigherbeing(user) && !isrobot(user))
 		return
 	attackby(O,user)

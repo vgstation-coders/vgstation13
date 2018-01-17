@@ -84,7 +84,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	can_delete_areas = list(AREA_BLUEPRINTS, AREA_STATION)
 
 /obj/item/blueprints/attack_self(mob/living/M)
-	if (!ishuman(M) && !issilicon(M))
+	if (!ishigherbeing(M) && !issilicon(M))
 		to_chat(M, "This stack of blue paper means nothing to you.")//monkeys cannot into projecting
 
 		return

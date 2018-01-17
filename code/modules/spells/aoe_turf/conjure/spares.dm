@@ -1,7 +1,7 @@
 /spell/aoe_turf/conjure/spares
 	name = "Summon Spares"
 	desc = "this spell summons spare IDs in the nearby vicinity."
-
+	user_type = USER_TYPE_SPELLBOOK
 	summon_type = list(/obj/item/weapon/card/id/captains_spare)
 	summon_amt = 5
 

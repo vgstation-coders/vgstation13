@@ -94,7 +94,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/choose_icon()
-	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")
+	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Prime Alt", "Scout")
 	if(!icontype)
 		return
 	switch(icontype)
@@ -108,6 +108,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			subtype = "hovermommi"
 		if("Prime")
 			subtype = "mommiprime"
+		if("Prime Alt")
+			subtype = "mommiprime-alt"
 		if("Scout")
 			subtype = "scout"
 		else
@@ -147,6 +149,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			module_sprites["RepairBot"] = "repairbot"
 			module_sprites["Hover"] = "hovermommi"
 			module_sprites["Prime"] = "mommiprime"
+			module_sprites["Prime Alt"] = "mommiprime-alt"
 
 	//Custom_sprite check and entry
 	if (custom_sprite == 1)
@@ -445,10 +448,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/radio_menu()
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
-
-
-/mob/living/silicon/robot/mommi/Move(a, b, flag)
-	..()
 
 /mob/living/silicon/robot/mommi/CheckSlip()
 	return -1

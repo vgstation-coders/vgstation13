@@ -392,7 +392,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			spark(src)
 			//if(!user.mutations & M_RESIST_COLD)
 			if (prob(75))
-				electrocute_mob(user, get_area(src), src, rand(0.7,1.0))
+				electrocute_mob(user, get_area(src), src, rand(7,10)/10)
 
 /*
  * Returns whether this light has power

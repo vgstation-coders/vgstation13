@@ -561,7 +561,6 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANPUSH		8
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
-#define DISFIGURED	16384	//I'll probably move this elsewhere if I ever get wround to writing a bitflag mob-damage system
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
@@ -864,15 +863,17 @@ SEE_PIXELS	256
 #define RIGHT 2
 
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
-#define HEALTH_HUD          1 // a simple line rounding the mob's number health
-#define STATUS_HUD          2 // alive, dead, diseased, etc.
-#define ID_HUD              3 // the job asigned to your ID
-#define WANTED_HUD          4 // wanted, released, parroled, security status
-#define IMPLOYAL_HUD		5 // loyality implant
-#define IMPCHEM_HUD		    6 // chemical implant
-#define IMPTRACK_HUD		7 // tracking implant
-#define SPECIALROLE_HUD 	8 // AntagHUD image
-#define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
+#define HEALTH_HUD          "health" // a simple line rounding the mob's number health
+#define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define ID_HUD              "id" // the job asigned to your ID
+#define WANTED_HUD          "wanted" // wanted, released, parroled, security status
+#define IMPLOYAL_HUD		"imployal" // loyality implant
+#define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPTRACK_HUD		"imptrack" // tracking implant
+#define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
+#define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
+#define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
+#define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -976,13 +977,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    10
-#define VAMP_SLAVE    11
-#define VAMP_BLINK    12
-#define VAMP_MATURE   13
-#define VAMP_SHADOW   14
-#define VAMP_CHARISMA 15
-#define VAMP_UNDYING  16
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
@@ -1324,8 +1326,9 @@ var/proccalls = 1
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
-#define INCORPOREAL_NINJA		2
-#define INCORPOREAL_ETHEREAL	3
+#define INCORPOREAL_ETHEREAL	2
+#define GHOST_MOVEDELAY 1
+#define ETHEREAL_MOVEDELAY 2
 
 
 //MALFUNCTION FLAGS
@@ -1549,3 +1552,17 @@ var/proccalls = 1
 
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
+
+// Used to determine which HUD is in use
+#define HUD_NONE 0
+#define HUD_MEDICAL 1
+#define HUD_SECURITY 2
+
+#define INERTIA_MOVEDELAY 5
+
+#define FRACTIONAL_GLIDESIZES 1
+#ifdef FRACTIONAL_GLIDESIZES
+#define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))
+#else
+#define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
+#endif

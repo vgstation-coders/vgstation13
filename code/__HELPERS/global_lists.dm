@@ -38,6 +38,7 @@ var/list/epilepsy_appends = list("-HRNK", "-HURGH", "-ABLRGH", "-GLORF", "-BLARG
 var/global/list/table_recipes = list() //list of all table craft recipes
 var/global/list/med_hud_users = list() //list of all entities using a medical HUD.
 var/global/list/sec_hud_users = list() //list of all entities using a security HUD.
+var/list/diagnostic_hud_users = list() // list of all entities using a diagnostic HUD.
 
 //////////////////////////
 /////Initial Building/////

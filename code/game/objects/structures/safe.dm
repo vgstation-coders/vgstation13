@@ -89,7 +89,7 @@ FLOOR SAFES
 
 
 /obj/structure/safe/Topic(href, href_list)
-	if(!ishuman(usr))
+	if(!ishigherbeing(usr))
 		return
 	var/mob/living/carbon/human/user = usr
 

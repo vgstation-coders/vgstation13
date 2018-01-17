@@ -2,13 +2,13 @@
 	name = "Fist"
 	desc = "This spell punches everyone in view."
 	abbreviation = "FS"
+	user_type = USER_TYPE_WIZARD
 
-	price = Sp_BASE_PRICE/2
 	charge_max = 50
 	cooldown_min = 10
 	invocation = "I CAST FIST"
 	invocation_type = SpI_SHOUT
-	max_targets = 0
+	max_targets = 3
 
 	compatible_mobs = list(/mob/living)
 

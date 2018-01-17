@@ -141,7 +141,7 @@
 	return
 
 /obj/machinery/bodyscanner/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
+	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The scanner is unoccupied!</span>")

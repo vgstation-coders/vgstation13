@@ -323,8 +323,8 @@
 
 			var/mob/living/carbon/human/H = occupant
 
-			if(istype(H.species, /datum/species/vox))
-				occupant.reagents.add_reagent(NITROGEN, 10)
+			if(istype(H.species, /datum/species/vox) & occupant.reagents.get_reagent_amount(NITROGEN) < 30)
+				occupant.reagents.add_reagent(NITROGEN, 60)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			occupant.adjustOxyLoss(-4)
@@ -350,9 +350,10 @@
 	return
 
 /obj/machinery/cloning/clonepod/emag(mob/user as mob)
-	if (isnull(occupant))
+	if(isnull(occupant))
 		return
-	to_chat(user, "You force an emergency ejection.")
+	if(user)
+		to_chat(user, "You force an emergency ejection.")
 	locked = FALSE
 	go_out()
 	return
@@ -452,7 +453,7 @@
 	return TRUE
 
 /obj/machinery/cloning/clonepod/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!occupant || occupant == usr || (!ishuman(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
+	if(!occupant || occupant == usr || (!ishigherbeing(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
 		return
 	if(!istype(over_location) || over_location.density)
 		return

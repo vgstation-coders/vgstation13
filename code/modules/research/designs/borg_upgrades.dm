@@ -127,3 +127,13 @@
 	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_PLASTIC=2500)
 	build_path = /obj/item/borg/upgrade/hydro
 	category = "Robotic_Upgrade_Modules"
+
+/datum/design/borg_service_upgrade_honk
+	name = "Service cyborg H.O.N.K. upgrade"
+	desc = "Used to give a service cyborg fun toys!"
+	id = "borg_service_module_honk"
+	req_tech = list(Tc_NANOTRASEN = 1, Tc_MATERIALS = 3, Tc_BIOTECH = 3)
+	build_type = MECHFAB
+	materials = list(MAT_CARDBOARD=5000, MAT_CLOWN=5000)
+	build_path = /obj/item/borg/upgrade/honk
+	category = "Robotic_Upgrade_Modules"

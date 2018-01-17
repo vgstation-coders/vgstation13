@@ -82,7 +82,17 @@
 		qdel(src)
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
-	if(istype(AM, /mob/living/carbon))
+	//Check what can slip
+	if(isliving(AM))
+		var/mob/living/M = AM
+		if(!M.on_foot()) //Checks lying, flying and locked.to
+			return ..()
+
+
+	if(isslime(AM)) //Slimes just don't slip, end of story. Hard to slip when you're a living puddle.
+		return ..()
+
+	if(iscarbon(AM))
 		var/mob/living/carbon/M = AM
 		switch(src.wet)
 			if(1) //Water
@@ -92,7 +102,6 @@
 					"<span class='warning'>You slip on the wet floor!</span>")
 
 			if(2) //Lube
-				M.stop_pulling()
 				step(M, M.dir)
 				spawn(1)
 					step(M, M.dir)

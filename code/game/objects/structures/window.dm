@@ -556,7 +556,7 @@ var/list/one_way_windows
 
 /obj/structure/window/Destroy(var/brokenup = 0)
 
-	density = 0 //Sanity while we do the rest
+	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
 	update_nearby_icons()
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
@@ -573,7 +573,7 @@ var/list/one_way_windows
 	if(reinforced)
 		new /obj/item/stack/rods(loc, sheetamount)
 
-/obj/structure/window/Move()
+/obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
 	update_nearby_tiles()
 	..()
@@ -610,7 +610,7 @@ var/list/one_way_windows
 		for(var/obj/structure/window/W in get_step(T,direction))
 			W.update_icon()
 
-/obj/structure/window/forceMove(var/atom/A)
+/obj/structure/window/forceMove()
 	var/turf/T = loc
 	..()
 	update_nearby_icons(T)

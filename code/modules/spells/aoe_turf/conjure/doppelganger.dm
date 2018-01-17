@@ -1,6 +1,7 @@
 /spell/aoe_turf/conjure/doppelganger
 	name = "Doppelganger"
 	desc = "This spell summons a construct with your appearance."
+	user_type = USER_TYPE_WIZARD
 
 	summon_type = list(/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/melee)
 
@@ -16,11 +17,20 @@
 
 var/list/doppelgangers = list()
 
+// Sanity : don't copy more than one guy
+/spell/aoe_turf/conjure/doppelganger/cast_check(skipcharge = 0,mob/user = usr)
+	var/list/L = view(user, 0)
+	L -= user
+	for (var/mob/M in L)
+		return FALSE // If there is even one mob, we ABORT
+	return ..()
+
 /spell/aoe_turf/conjure/doppelganger/summon_object(var/type, var/location)
 	var/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/D = new type(location)
 	if(ismob(holder))
 		doppelgangers[D] = holder
 	D.appearance = holder.appearance
+	D.alpha = OPAQUE // No more invisible doppels
 
 /spell/aoe_turf/conjure/doppelganger/on_holder_death(mob/user)
 	if(!user)

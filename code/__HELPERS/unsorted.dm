@@ -747,6 +747,70 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		progbar.loc = null
 	return 1
 
+// Creates a progress bar locked on `target` and returns it
+/proc/create_progress_bar_on(var/atom/target)
+	var/image/progress_bar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+	progress_bar.pixel_z = WORLD_ICON_SIZE
+	progress_bar.plane = HUD_PLANE
+	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
+	progress_bar.appearance_flags = RESET_COLOR
+	return progress_bar
+
+/proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
+	if(user && user.client)
+		user.client.images -= progress_bar
+	if(progress_bar)
+		progress_bar.loc = null
+
+/proc/stop_progress_bar(var/mob/user, var/image/progress_bar)
+	progress_bar.icon_state = "prog_bar_stopped"
+	spawn(0.2 SECONDS)
+		remove_progress_bar(user, progress_bar)
+
+
+/proc/do_after_many(var/mob/user, var/list/targets, var/delay, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
+	if(!user || numticks == 0 || !targets || !targets.len)
+		return 0
+
+	var/delay_fraction = round(delay / numticks)
+	if(istype(user.loc, /obj/mecha))
+		use_user_turf = TRUE
+	var/initial_user_location = use_user_turf ? get_turf(user) : user.loc
+	var/holding = user.get_active_hand()
+	var/list/initial_target_locations = list()
+	for(var/atom/target in targets)
+		initial_target_locations[target] = target.loc
+
+	if(user.client && user.client.prefs.progress_bars)
+		for(var/target in targets)
+			if(!targets[target])
+				var/image/new_progress_bar = create_progress_bar_on(target)
+				targets[target] = new_progress_bar
+				user.client.images += new_progress_bar
+	for(var/i = 1 to numticks)
+		for(var/target in targets)
+			var/image/target_progress_bar = targets[target]
+			target_progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+		sleep(delay_fraction)
+		var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
+		for(var/atom/target in targets)
+			var/initial_target_location = initial_target_locations[target]
+			if(!user || user.isStunned() || user_loc_to_check != initial_user_location || !target || target.loc != initial_target_location)
+				for(var/target_ in targets)
+					var/image/target_progress_bar = targets[target_]
+					stop_progress_bar(user, target_progress_bar)
+				return FALSE
+		if(needhand && !user.do_after_hand_check(holding))
+			for(var/target_ in targets)
+				var/image/target_progress_bar = targets[target_]
+				stop_progress_bar(user, target_progress_bar)
+			return FALSE
+	for(var/target in targets)
+		var/image/target_progress_bar = targets[target]
+		remove_progress_bar(user, target_progress_bar)
+
+	return TRUE
+
 /proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || isnull(user))
 		return 0

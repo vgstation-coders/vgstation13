@@ -39,7 +39,7 @@
 	icon_closed = "bodybag_closed"
 	icon_opened = "bodybag_open"
 	density = 0
-
+	sound_file = 'sound/items/zip.ogg'
 
 /obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
@@ -62,14 +62,6 @@
 /obj/structure/closet/body_bag/remove_label()
 	..()
 	src.overlays.len = 0
-
-
-/obj/structure/closet/body_bag/close()
-	if(..())
-		density = 0
-		return 1
-	return 0
-
 
 /obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
 	..()

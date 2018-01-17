@@ -58,7 +58,7 @@
 
 //Checks for specific types in a list
 /proc/is_type_in_list(datum/A, list/L)
-	if(!L.len || !A)
+	if(!L || !L.len || !A)
 		return 0
 
 	if(L[L[1]] != MAX_VALUE) //Is this already a generated typecache

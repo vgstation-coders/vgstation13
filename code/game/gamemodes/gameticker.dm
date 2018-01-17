@@ -20,10 +20,11 @@ var/datum/controller/gameticker/ticker
 
 	var/list/datum/mind/minds = list()//The people in the game. Used for objective tracking.
 
-	var/Bible_icon_state	// icon_state the chaplain has chosen for his bible
-	var/Bible_item_state	// item_state the chaplain has chosen for his bible
+	var/Bible_icon_state	// icon_state the OFFICIAL chaplain has chosen for his bible
+	var/Bible_item_state	// item_state the OFFICIAL chaplain has chosen for his bible
 	var/Bible_name			// name of the bible
 	var/Bible_deity_name = "Space Jesus"
+	var/list/datum/religion/religions = list() // Religion(s) in the game
 
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
 
@@ -66,7 +67,7 @@ var/datum/controller/gameticker/ticker
 		))
 	login_music = fcopy_rsc(oursong)
 
-	send2maindiscord("Server is loaded and in pre-game lobby at [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
 
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
@@ -194,7 +195,6 @@ var/datum/controller/gameticker/ticker
 				if(istype(obj, /obj/effect/landmark/spacepod/random))
 					qdel(obj)
 
-		stat_collection.death_stats = list() // Get rid of the corpses that spawn on startup.
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 

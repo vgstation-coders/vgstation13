@@ -162,6 +162,7 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	melt_temperature = MELTPOINT_STEEL
+	hitsound = 'sound/weapons/bladeslice.ogg'
 
 /obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \

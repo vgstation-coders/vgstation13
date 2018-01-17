@@ -200,7 +200,8 @@
 /obj/machinery/computer/library/checkout/emag(mob/user)
 	if(!emagged)
 		src.emagged = 1
-		to_chat(user, "<span class='notice'>You override the library computer's printing restrictions.</span>")
+		if(user)
+			to_chat(user, "<span class='notice'>You override the library computer's printing restrictions.</span>")
 		return 1
 	return
 
@@ -318,7 +319,7 @@
 						B.icon_state = ticker.Bible_icon_state
 						B.item_state = ticker.Bible_item_state
 						B.name = ticker.Bible_name
-						B.deity_name = ticker.Bible_deity_name
+						B.my_rel.deity_name = ticker.Bible_deity_name
 
 					bibledelay = 1
 					spawn(60)

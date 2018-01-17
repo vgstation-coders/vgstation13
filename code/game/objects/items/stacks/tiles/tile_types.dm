@@ -155,7 +155,7 @@ obj/item/stack/tile/slime
 	throw_range = 20
 	flags = FPRINT
 	siemens_coefficient = 1
-	max_amount = 30
+	max_amount = 60
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(ishuman(L))

@@ -302,7 +302,7 @@
 
 /obj/machinery/turret/proc/die()
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN
 	src.icon_state = "destroyed_target_prism"
 	if (cover!=null)
@@ -346,11 +346,12 @@
 
 /obj/machinery/turretid/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>You short out the turret controls' access analysis module.</span>")
 		emagged = 1
 		locked = 0
-		if(user.machine==src)
-			src.attack_hand(user)
+		if(user)
+			to_chat(user, "<span class='warning'>You short out the turret controls' access analysis module.</span>")
+			if(user.machine==src)
+				src.attack_hand(user)
 		return 1
 	return
 

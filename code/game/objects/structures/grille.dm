@@ -32,12 +32,12 @@
 	if(health <= (0.25*initial(health)) && !broken) //Modular, 1/4th of original health. Do make sure the grille isn't broken !
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
-		density = 0 //Not blocking anything anymore
+		setDensity(FALSE) //Not blocking anything anymore
 		new /obj/item/stack/rods(get_turf(src)) //One rod set
 	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
-		density = 1
+		setDensity(TRUE)
 	if(health <= 0) //Dead
 		new /obj/item/stack/rods(get_turf(src)) //Drop the second set of rods
 		qdel(src)
