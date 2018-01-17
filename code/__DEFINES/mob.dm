@@ -13,9 +13,9 @@
 
 // For blob_act
 
-#define WEAK 3
-#define MEDIUM 2
-#define STRONG 1
+#define BLOB_ACT_WEAK 3
+#define BLOB_ACT_MEDIUM 2
+#define BLOB_ACT_STRONG 1
 #define BACKPACK 2
 #define SATCHEL_NORM 3
 #define SATCHEL_ALT 4

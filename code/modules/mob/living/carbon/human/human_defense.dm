@@ -325,7 +325,7 @@ emp_act
 	var/f_loss = null
 
 	switch (severity)
-		if (STRONG)
+		if (BLOB_ACT_STRONG)
 			b_loss += 500
 			if (!prob(getarmor(null, "bomb")))
 				gib()
@@ -337,7 +337,7 @@ emp_act
 //				var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
 				//user.throw_at(target, 200, 4)
 
-		if (MEDIUM)
+		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
 				gib()
 				return
@@ -362,7 +362,7 @@ emp_act
 			if (prob(70) && !shielded)
 				Paralyse(10)
 
-		if(WEAK)
+		if(BLOB_ACT_WEAK)
 			b_loss += 30
 			var/gotarmor = min(100,max(0,getarmor(null, "bomb")))
 
