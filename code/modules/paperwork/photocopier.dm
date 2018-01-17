@@ -453,7 +453,7 @@
 		if(AM == src)
 			continue
 		if(AM.density)
-			if(AM.flags&ON_BORDER)
+			if(AM.flow_flags&ON_BORDER)
 				if(!AM.Cross(user, src.loc))
 					return 1
 			else
