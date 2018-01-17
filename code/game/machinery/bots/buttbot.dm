@@ -28,16 +28,12 @@ Here it is: Buttbot.
 		return
 	fart()
 
-
-
-
 /obj/machinery/bot/buttbot/proc/speak(var/message)
 	if((!src.on) || (!message))
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
 	return
-
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(sincelastfart + 5 < world.timeofday)
