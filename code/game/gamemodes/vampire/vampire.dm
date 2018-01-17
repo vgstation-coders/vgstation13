@@ -571,11 +571,13 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 						var/image/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "vampire")
 						I.plane = VAMP_ANTAG_HUD_PLANE
 						t_mind.current.client.images += I
-				if(t_mind.current)
-					if(t_mind.current.client)
-						var/image/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
-						I.plane = VAMP_ANTAG_HUD_PLANE
-						t_mind.current.client.images += I
+						var/image/I2 = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "vampthrall")
+						I2.plane = VAMP_ANTAG_HUD_PLANE
+						t_mind.current.client.images += I2
+						for (var/datum/mind/t_mind_other in (thralls[headref] - t_mind)) // Adding a thrall icon to all other thralls we have.
+							if(t_mind_other.current && t_mind_other.current.client)
+								var/image/I3 = image('icons/mob/mob.dmi', loc = t_mind_other.current, icon_state = "vampthrall")
+								t_mind.current.client.images += I3
 
 /datum/game_mode/proc/update_vampire_icons_removed(datum/mind/vampire_mind)
 	for(var/headref in thralls)
