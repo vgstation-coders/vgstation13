@@ -91,6 +91,10 @@ LINEN BINS
 	icon_state = "sheetclown"
 	_color = "clown"
 
+/obj/item/weapon/bedsheet/black
+	icon_state = "sheetblack"
+	_color = "black"
+
 /obj/item/weapon/bedsheet/captain
 	icon_state = "sheetcaptain"
 	_color = "captain"
@@ -122,6 +126,8 @@ LINEN BINS
 /obj/item/weapon/bedsheet/brown/cargo
 	_color = "cargo"		//exists for washing machines, is not different from brown bedsheet in any way
 
+/obj/item/weapon/bedsheet/black
+	_color = "black"
 
 /obj/structure/bedsheetbin
 	name = "linen bin"
