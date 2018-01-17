@@ -296,6 +296,31 @@
 		L.Knockdown(5)
 	return ..()
 
+
+/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/attack(mob/M, mob/user)
+	if (!M.isDead())
+		..()
+	else
+		if (!ishuman(M))
+			return ..()
+		var/mob/living/carbon/human/H = M
+
+		H.drop_meat(H.loc)
+		--H.meatleft
+		H.loc.add_blood(src)
+
+		to_chat(user, "<span class='warning'>You hack off a chunk of meat from \the [H].</span>")
+		if(!H.meatleft)
+			H.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>\the [key_name(M)]</b>"
+			user.attack_log += "\[[time_stamp()]\] Chopped up <b>\the [key_name(H)]</b> into meat</b>"
+			msg_admin_attack("\The [key_name(user)] chopped up \the [key_name(H)] into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			if(!iscarbon(user))
+				H.LAssailant = null
+			else
+				H.LAssailant = user
+			qdel(H)
+		return TRUE
+
 /*
  * Rolling Pins
  */
