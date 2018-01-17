@@ -303,14 +303,11 @@
 		if (!ishuman(M))
 			return ..()
 		var/mob/living/carbon/human/H = M
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(get_turf(src.loc))
-		newmeat.name = H.real_name + newmeat.name
-		newmeat.subjectname = H.real_name
-		newmeat.subjectjob = H.job
-		newmeat.reagents.add_reagent (NUTRIMENT, (H.nutrition / 15) / 3)
-		H.reagents.trans_to (newmeat, round ((H.reagents.total_volume) / 3, 1))
-		H.loc.add_blood(src)
+
+		H.drop_meat(H.loc)
 		--H.meatleft
+		H.loc.add_blood(src)
+
 		to_chat(user, "<span class='warning'>You hack off a chunk of meat from \the [H].</span>")
 		if(!H.meatleft)
 			H.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>\the [key_name(M)]</b>"
