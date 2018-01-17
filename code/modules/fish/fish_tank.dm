@@ -541,7 +541,7 @@
 
 /obj/machinery/fishtank/attack_hand(var/mob/user)
 
-	if (isobserver(user))
+	if (!Adjacent(user) || user.incapacitated())
 		return FALSE
 
 	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
