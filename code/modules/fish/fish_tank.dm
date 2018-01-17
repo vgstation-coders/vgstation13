@@ -541,6 +541,9 @@
 
 /obj/machinery/fishtank/attack_hand(var/mob/user)
 
+	if (!Adjacent(user) || user.incapacitated())
+		return FALSE
+
 	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
 	if(user.a_intent == I_HURT)
 		user.visible_message("<span class='danger'>\The [user] bangs against \the [src]!</span>", \
@@ -550,6 +553,8 @@
 		user.visible_message("\The [user] taps on \the [src].", \
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
+
+	user.delayNextAttack(0.3 SECONDS)
 
 
 /obj/machinery/fishtank/proc/hit(var/damage, var/mob/user, var/obj/O)
