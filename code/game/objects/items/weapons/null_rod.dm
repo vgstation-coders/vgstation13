@@ -239,7 +239,7 @@
 		visible_message("<span class='notice'>\The [name] calms down.</span>")
 
 /obj/item/weapon/nullrod/sword/chaos/Destroy()
-	for(var/mob/living/simple_animal/shade/S in contents)
+	for(var/mob/living/simple_animal/shade/sword/S in contents)
 		to_chat(S, "You were destroyed!")
 		qdel(S)
 	if(recruiter)
