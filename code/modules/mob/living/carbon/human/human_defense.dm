@@ -46,6 +46,24 @@ emp_act
 		organnum++
 	return (armorval/max(organnum, 1))
 
+/mob/living/carbon/human/getarmorabsorb(var/def_zone, var/type)
+	var/armorval = 0
+	var/organnum = 0
+
+	if(def_zone)
+		if(isorgan(def_zone))
+			return checkarmorabsorb(def_zone, type)
+		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		return checkarmorabsorb(affecting, type)
+		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
+
+	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
+	for(var/datum/organ/external/organ in organs)
+		armorval += checkarmorabsorb(organ, type)
+		organnum++
+	return (armorval/max(organnum, 1))
+
+
 /mob/living/carbon/human/proc/get_siemens_coefficient_organ(var/datum/organ/external/def_zone)
 	if(!def_zone)
 		return 1.0
@@ -75,6 +93,19 @@ emp_act
 		var/obj/mecha/M = loc
 		protection += M.rad_protection
 	return protection
+
+/mob/living/carbon/human/proc/checkarmorabsorb(var/datum/organ/external/def_zone, var/type)
+	if(!type)
+		return 0
+	var/protection = 0
+	var/list/body_parts = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
+	for(var/bp in body_parts)
+		if(istype(bp, /obj/item/clothing))
+			var/obj/item/clothing/C = bp
+			if(C.body_parts_covered & def_zone.body_part)
+				protection += C.armor_absorb[type]
+	return protection
+
 
 /mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
 	if(!body_part_flags)
