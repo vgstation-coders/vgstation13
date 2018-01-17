@@ -173,7 +173,7 @@
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You accidentally cut yourself with the [src].</span>")
-		user.take_organ_damage(20)
+		user.take_organ_damage(2 * force)
 		return
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
