@@ -132,6 +132,6 @@
 
 /mob/living/simple_animal/shade/sword/Die()
 	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
-		/obj/item/weapon/nullrod/sword/chaos/C = loc
+		var/obj/item/weapon/nullrod/sword/chaos/C = loc
 		C.possessed = FALSE
 	..()
