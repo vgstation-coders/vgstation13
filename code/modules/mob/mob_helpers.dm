@@ -542,3 +542,4 @@ proc/is_blind(A)
 			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
 	return FALSE
+

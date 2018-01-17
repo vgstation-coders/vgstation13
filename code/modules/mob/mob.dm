@@ -14,11 +14,23 @@
 			else if((old_value < 2) && (new_value == 2))//Kill he
 				living_mob_list.Remove(src)
 				dead_mob_list.Add(src)
+/mob/proc/dropBorers()
+	return
 
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
-/mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
+/mob/proc/TestProc()
+	for(var/mob_event_vars in vars)
+		if(istype(vars[mob_event_vars], /event))
+			var/event/tempname = vars[mob_event_vars]
+			world.log << "[tempname]"
+			qdel(vars[mob_event_vars])
+			vars[mob_event_vars] = null
+			world.log << "[vars[mob_event_vars]]"
+
+
+///mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio) //Did this even do anything?
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
 	for(var/datum/mind/mind in heard_by)
@@ -38,15 +50,18 @@
 		mind.current = null
 	if(mind && mind.original == src)
 		mind.original = null
+
 	spellremove(src)
-	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
-		var/mob/living/carbon/Ca = src
-		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
+	dropBorers(1)
+
 	if(client)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
+
 		spell_masters = null
+
 		remove_screen_objs()
+
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
@@ -54,7 +69,9 @@
 					returnToPool(AM)
 			else
 				qdel(AM)
+
 		client.screen = list()
+
 	mob_list.Remove(src)
 	dead_mob_list.Remove(src)
 	living_mob_list.Remove(src)
@@ -66,12 +83,15 @@
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
+
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
 	qdel(on_moved)
 	on_moved = null
+
+
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
@@ -97,146 +117,16 @@
 	return PROJREACT_MOBS
 
 /mob/proc/remove_screen_objs()
-	if(hands)
-		returnToPool(hands)
-		if(client)
-			client.screen -= hands
-		hands = null
-	if(pullin)
-		returnToPool(pullin)
-		if(client)
-			client.screen -= pullin
-		pullin = null
-	if(visible)
-		returnToPool(visible)
-		if(client)
-			client.screen -= visible
-		visible = null
-	if(purged)
-		returnToPool(purged)
-		if(client)
-			client.screen -= purged
-		purged = null
-	if(internals)
-		returnToPool(internals)
-		if(client)
-			client.screen -= internals
-		internals = null
-	if(oxygen)
-		returnToPool(oxygen)
-		if(client)
-			client.screen -= oxygen
-		oxygen = null
-	if(i_select)
-		returnToPool(i_select)
-		if(client)
-			client.screen -= i_select
-		i_select = null
-	if(m_select)
-		returnToPool(m_select)
-		if(client)
-			client.screen -= m_select
-		m_select = null
-	if(toxin)
-		returnToPool(toxin)
-		if(client)
-			client.screen -= toxin
-		toxin = null
-	if(fire)
-		returnToPool(fire)
-		if(client)
-			client.screen -= fire
-		fire = null
-	if(bodytemp)
-		returnToPool(bodytemp)
-		if(client)
-			client.screen -= bodytemp
-		bodytemp = null
-	if(healths)
-		returnToPool(healths)
-		if(client)
-			client.screen -= healths
-		healths = null
-	if(throw_icon)
-		returnToPool(throw_icon)
-		if(client)
-			client.screen -= throw_icon
-		throw_icon = null
-	if(nutrition_icon)
-		returnToPool(nutrition_icon)
-		if(client)
-			client.screen -= nutrition_icon
-		nutrition_icon = null
-	if(pressure)
-		returnToPool(pressure)
-		if(client)
-			client.screen -= pressure
-		pressure = null
-	if(damageoverlay)
-		returnToPool(damageoverlay)
-		if(client)
-			client.screen -= damageoverlay
-		damageoverlay = null
-	if(pain)
-		returnToPool(pain)
-		if(client)
-			client.screen -= pain
-		pain = null
-	if(item_use_icon)
-		returnToPool(item_use_icon)
-		if(client)
-			client.screen -= item_use_icon
-		item_use_icon = null
-	if(gun_move_icon)
-		returnToPool(gun_move_icon)
-		if(client)
-			client.screen -= gun_move_icon
-		gun_move_icon = null
-	if(gun_run_icon)
-		returnToPool(gun_run_icon)
-		if(client)
-			client.screen -= gun_run_icon
-		gun_run_icon = null
-	if(gun_setting_icon)
-		returnToPool(gun_setting_icon)
-		if(client)
-			client.screen -= gun_setting_icon
-		gun_setting_icon = null
-	if(m_suitclothes)
-		returnToPool(m_suitclothes)
-		if(client)
-			client.screen -= m_suitclothes
-		m_suitclothes = null
-	if(m_suitclothesbg)
-		returnToPool(m_suitclothesbg)
-		if(client)
-			client.screen -= m_suitclothesbg
-		m_suitclothesbg = null
-	if(m_hat)
-		returnToPool(m_hat)
-		if(client)
-			client.screen -= m_hat
-		m_hat = null
-	if(m_hatbg)
-		returnToPool(m_hatbg)
-		if(client)
-			client.screen -= m_hatbg
-		m_hatbg = null
-	if(m_glasses)
-		returnToPool(m_glasses)
-		if(client)
-			client.screen -= m_glasses
-		m_glasses = null
-	if(m_glassesbg)
-		returnToPool(m_glassesbg)
-		if(client)
-			client.screen -= m_glassesbg
-		m_glasses = null
-	if(zone_sel)
-		returnToPool(zone_sel)
-		if(client)
-			client.screen -= zone_sel
-		zone_sel = null
+
+	var/list/screenobjs = getScreenObjs()
+
+	for(var/i = 1, i < screenobjs.len, i++)
+		if(screenobjs[i])
+			returnToPool(screenobjs[i])
+			if(client)
+				client.screen -= screenobjs[i]
+			screenobjs[i] = null
+
 
 /mob/proc/cultify()
 	return

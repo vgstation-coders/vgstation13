@@ -73,7 +73,7 @@
 		getFromPool(/mob/virtualhearer, src)
 
 	//Clear ability list and update from mob.
-	client.verbs -= ability_verbs
+	//client.verbs -= ability_verbs
 
 	if(abilities)
 		client.verbs |= abilities

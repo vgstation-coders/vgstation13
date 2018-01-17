@@ -529,7 +529,7 @@
 					continue
 				affected.implants += I
 
-/mob/living/carbon/proc/dropBorers(var/gibbed = null)
+/mob/living/carbon/dropBorers(var/gibbed = null) //defined on the mob level
 	var/list/borer_list = get_brain_worms()
 	for(var/mob/living/simple_animal/borer/B in borer_list)
 		B.detach()
