@@ -129,3 +129,9 @@
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
+
+/mob/living/simple_animal/shade/sword/Die()
+	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
+		/obj/item/weapon/nullrod/sword/chaos/C = loc
+		C.possessed = FALSE
+	..()
