@@ -11,11 +11,6 @@
 #define MOB_SUPERNATURAL 32
 #define MOB_NO_PETRIFY 64 //can't get petrified
 
-// For blob_act
-
-#define BLOB_ACT_WEAK 3
-#define BLOB_ACT_MEDIUM 2
-#define BLOB_ACT_STRONG 1
 #define BACKPACK 2
 #define SATCHEL_NORM 3
 #define SATCHEL_ALT 4
