@@ -129,11 +129,21 @@
 /datum/butchering_product/skin/cat
 	result = /obj/item/stack/sheet/animalhide/cat
 
+/datum/butchering_product/skin/cat/lots
+	amount = 3
+
 /datum/butchering_product/skin/corgi
 	result = /obj/item/stack/sheet/animalhide/corgi
 
 /datum/butchering_product/skin/lizard
 	result = /obj/item/stack/sheet/animalhide/lizard
+
+/datum/butchering_product/skin/lizard/lots
+	amount = 3
+
+/datum/butchering_product/skin/human
+	result = /obj/item/stack/sheet/animalhide/human
+	amount = 3
 
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
@@ -232,11 +242,11 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/frog				= list(/datum/butchering_product/frog_leg),
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 
-	/mob/living/carbon/human							= list(TEETH_HUMAN),
-	/mob/living/carbon/human/unathi						= list(TEETH_LOTS),
+	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
+	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),
 	/mob/living/carbon/human/skrell						= list(TEETH_LOTS),
 	/mob/living/carbon/human/skellington				= list(TEETH_HUMAN),
-	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN),
+	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN, /datum/butchering_product/skin/cat/lots),
 	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),
 
 )
