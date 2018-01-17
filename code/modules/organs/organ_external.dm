@@ -301,7 +301,7 @@
 	var/datum/species/species = src.species || owner.species
 
 	//First check whether we can widen an existing wound
-	if(wounds.len > 0 && prob(max(50 + owner.number_wounds * 10, 100)))
+	if(wounds.len > 0 && prob(50 + owner.number_wounds * 10))
 		if((type == CUT || type == BRUISE) && damage >= 5)
 			var/datum/wound/W = pick(wounds)
 			if(W.amount == 1 && W.started_healing())
