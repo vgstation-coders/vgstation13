@@ -541,6 +541,9 @@
 
 /obj/machinery/fishtank/attack_hand(var/mob/user)
 
+	if (isobserver(user))
+		return FALSE
+
 	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
 	if(user.a_intent == I_HURT)
 		user.visible_message("<span class='danger'>\The [user] bangs against \the [src]!</span>", \
@@ -550,6 +553,9 @@
 		user.visible_message("\The [user] taps on \the [src].", \
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
+		cur_health = max(0, cur_health - 2) // Wall tanks shouldn't be unbreakable by hand
+
+	user.delayNextAttack(0.3 SECONDS)
 
 
 /obj/machinery/fishtank/proc/hit(var/damage, var/mob/user, var/obj/O)
