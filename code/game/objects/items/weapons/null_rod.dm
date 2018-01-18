@@ -235,7 +235,7 @@
 	w_class = W_CLASS_LARGE
 	attack_verb = list("bashes", "smashes", "pulverizes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	
+
 // Chaos blade, a ghost role talking sword
 /obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"
@@ -256,20 +256,19 @@
 	to_chat(user, "You attempt to wake the spirit of the blade...")
 
 	awaken()
-	
+
 
 /obj/item/weapon/nullrod/sword/chaos/proc/awaken()
 	if(awakening)
 		return
 	awakening = TRUE
 	icon_state = "[initial(icon_state)]_a"
-	item_state = icon_state
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = name
 		recruiter.role = ROLE_BORER //Uses the borer pref because preferences are scary and i don't want to touch them.
 		recruiter.jobban_roles = list("pAI")
-	
+
 	// Role set to Yes or Always
 	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
 	// Role set to No or Never
@@ -312,7 +311,6 @@
 	else
 		awakening = FALSE
 		icon_state = initial(icon_state)
-		item_state = icon_state
 		visible_message("<span class='notice'>\The [name] calms down.</span>")
 
 /obj/item/weapon/nullrod/sword/chaos/Destroy()

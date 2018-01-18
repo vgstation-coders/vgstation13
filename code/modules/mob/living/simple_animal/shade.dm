@@ -134,4 +134,5 @@
 	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
 		var/obj/item/weapon/nullrod/sword/chaos/C = loc
 		C.possessed = FALSE
+		C.icon_state = initial(icon_state)
 	..()
