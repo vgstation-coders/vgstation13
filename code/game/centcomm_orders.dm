@@ -77,11 +77,11 @@ var/global/current_centcomm_order_id=124901
 	for(var/path in fulfilled)
 		if(!path)
 			continue
-		var/atom/movable/AM = new path()
+		var/atom/movable/AM = path
 		if(html_format)
-			manifest += "<li>[AM.name], amount: [fulfilled[path]]</li>"
+			manifest += "<li>[initial(AM.name)], amount: [fulfilled[path]]</li>"
 		else
-			manifest += "[AM.name], amount: [fulfilled[path]]"
+			manifest += "[initial(AM.name)], amount: [fulfilled[path]]"
 		qdel(AM)//just to make sure they're deleted by the garbage collector
 	if(html_format)
 		manifest += "</ul>"
