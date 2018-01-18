@@ -4,25 +4,24 @@
 
 	name = "manual valve"
 	desc = "A pipe valve."
-	var/open = 0
 	var/openDuringInit = 0
 
 /obj/machinery/atmospherics/binary/valve/open
-	open = 1
+	on = 1
 	icon_state = "hvalve1"
 
 /obj/machinery/atmospherics/binary/valve/update_icon(var/adjacent_procd,var/animation)
 	if(animation)
-		flick("hvalve[src.open][!src.open]",src)
+		flick("hvalve[src.on][!src.on]",src)
 	else
-		icon_state = "hvalve[open]"
+		icon_state = "hvalve[on]"
 	..()
 
 
 /obj/machinery/atmospherics/binary/valve/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	..()
 
-	if(open)
+	if(on)
 		if(reference == node1)
 			if(node2)
 				return node2.network_expand(new_network, src)
@@ -35,10 +34,10 @@
 /obj/machinery/atmospherics/binary/valve/proc/open()
 
 
-	if(open)
+	if(on)
 		return 0
 
-	open = 1
+	on = 1
 	update_icon()
 
 	if(network1&&network2)
@@ -52,13 +51,21 @@
 
 	return 1
 
+/obj/machinery/atmospherics/binary/valve/toggle_power(mob/user)
+	if(allowed(user))
+		if(on)
+			close()
+		else
+			open()
+	//Valves require special toggle procs because they need to reconstruct networks.
+
 /obj/machinery/atmospherics/binary/valve/proc/close()
 
 
-	if(!open)
+	if(!on)
 		return 0
 
-	open = 0
+	on = 0
 	update_icon()
 
 	if(network1)
@@ -88,12 +95,12 @@
 	src.add_fingerprint(usr)
 	update_icon(0,1)
 	sleep(10)
-	if (src.open)
+	if (src.on)
 		src.close()
 	else
 		src.open()
 
-	investigation_log(I_ATMOS,"was [open ? "opened" : "closed"] by [key_name(usr)]")
+	investigation_log(I_ATMOS,"was [on ? "opened" : "closed"] by [key_name(usr)]")
 
 /obj/machinery/atmospherics/binary/valve/investigation_log(var/subject, var/message)
 	activity_log += ..()
@@ -189,37 +196,37 @@
 	var/state_changed=0
 	switch(signal.data["command"])
 		if("valve_open")
-			if(!open)
+			if(!on)
 				open()
 				state_changed=1
 
 		if("valve_close")
-			if(open)
+			if(on)
 				close()
 				state_changed=1
 
 		if("valve_set")
 			if(signal.data["state"])
-				if(!open)
+				if(!on)
 					open()
 					state_changed=1
 			else
-				if(open)
+				if(on)
 					close()
 					state_changed=1
 
 		if("valve_toggle")
-			if(open)
+			if(on)
 				close()
 			else
 				open()
 			state_changed=1
 	if(state_changed)
-		investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by a signal")
+		investigation_log(I_ATMOS,"was [(on ? "opened" : "closed")] by a signal")
 
 /obj/machinery/atmospherics/binary/valve/npc_tamper_act(mob/living/L)
-	if(open)
+	if(on)
 		close()
 	else
 		open()
-	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(L)]")
+	investigation_log(I_ATMOS,"was [(on ? "opened" : "closed")] by [key_name(L)]")

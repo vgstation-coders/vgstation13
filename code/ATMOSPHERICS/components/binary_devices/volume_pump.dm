@@ -21,7 +21,6 @@ Thus, the two variables affect pump operation are set in New():
 	name = "Volumetric gas pump"
 	desc = "A volumetric pump"
 
-	var/on = 0
 	var/transfer_rate = MAX_TRANSFER_RATE
 
 	var/frequency = 0
@@ -164,14 +163,6 @@ Thus, the two variables affect pump operation are set in New():
 	usr.set_machine(src)
 	src.update_icon()
 	src.updateUsrDialog()
-
-/obj/machinery/atmospherics/binary/volume_pump/AltClick(mob/user)
-	if(allowed(user))
-		on = !on
-		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(user)].")
-		update_icon()
-	else
-		..()
 
 /obj/machinery/atmospherics/binary/volume_pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
 	if("set_id" in href_list)
