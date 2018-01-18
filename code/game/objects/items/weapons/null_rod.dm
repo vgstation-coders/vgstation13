@@ -141,123 +141,11 @@
 	icon_state = "cultblade"
 	item_state = "cultblade"
 
-/obj/item/weapon/nullrod/sword/armblade //Changeling religion
-	name = "exalted arm blade"
-	desc = "A holy blade made of flesh, bone and faith."
-	icon_state = "armblade"
-	item_state = "armblade"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	hitsound = "sound/weapons/bloodyslice.ogg"
-	cant_drop = TRUE
-
-/obj/item/weapon/nullrod/sword/armblade/dropped()
-	var/obj/item/weapon/nullrod/N = new /obj/item/weapon/nullrod(get_turf(loc))
-	visible_message("<span class='notice'>\The [name] loses its divine powers and changes back into \a [N.name]</span>")
-	qdel(src)
-
 /obj/item/weapon/nullrod/sword/katana //*tips fedora*
 	name = "saint katana"
 	desc = "This weapon can cut clean through plasteel because its blade was folded over a thousand times, making it vastly superior to any other holy weapon."
 	icon_state = "katana"
 	item_state = "katana"
-
-/obj/item/weapon/nullrod/sword/chaos
-	name = "chaos blade"
-	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes. "
-	icon_state = "talking_sword"
-	item_state = "talking_sword"
-	var/datum/recruiter/recruiter = null
-	var/possessed = FALSE
-	var/awakening = FALSE
-	var/last_ping_time = 0
-	var/ping_cooldown = 5 SECONDS
-	reskin_selectable = FALSE //Adminbus only.
-
-/obj/item/weapon/nullrod/sword/chaos/attack_self(mob/living/user)
-	if(possessed)
-		return
-
-	to_chat(user, "You attempt to wake the spirit of the blade...")
-
-	awaken()
-	
-
-/obj/item/weapon/nullrod/sword/chaos/proc/awaken()
-	if(awakening)
-		return
-	awakening = TRUE
-	icon_state = "[initial(icon_state)]_a"
-	item_state = icon_state
-	if(!recruiter)
-		recruiter = new(src)
-		recruiter.display_name = name
-		recruiter.role = ROLE_BORER //Uses the borer pref because preferences are scary and i don't want to touch them.
-		recruiter.jobban_roles = list("pAI")
-	
-	// Role set to Yes or Always
-	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
-	// Role set to No or Never
-	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
-
-	recruiter.recruited.Add(src, "recruiter_recruited")
-
-	recruiter.request_player()
-
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
-
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] is is awakening. ([controls])</span>")
-
-
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
-		possessed = TRUE
-		qdel(recruiter)
-		recruiter = null
-		awakening = FALSE
-		visible_message("<span class='notice'>\The [name] awakens!</span>")
-		var/mob/living/simple_animal/shade/sword/S = new(src)
-		S.real_name = name
-		S.name = name
-		S.ckey = O.ckey
-		S.status_flags |= GODMODE
-		var/input = copytext(sanitize(input(S, "Pick a name","Name") as null|text), TRUE, MAX_MESSAGE_LEN)
-
-		if(src && input)
-			name = input
-			S.real_name = input
-			S.name = input
-	else
-		awakening = FALSE
-		icon_state = initial(icon_state)
-		item_state = icon_state
-		visible_message("<span class='notice'>\The [name] calms down.</span>")
-
-/obj/item/weapon/nullrod/sword/chaos/Destroy()
-	for(var/mob/living/simple_animal/shade/sword/S in contents)
-		to_chat(S, "You were destroyed!")
-		qdel(S)
-	if(recruiter)
-		qdel(recruiter)
-		recruiter = null
-	..()
-
-/obj/item/weapon/nullrod/sword/chaos/attack_ghost(var/mob/dead/observer/O)
-	if(possessed)
-		return
-	if(last_ping_time + ping_cooldown <= world.time)
-		visible_message("<span class='notice'>\The [name] shakes vigorously!</span>")
-		last_ping_time = world.time
-		awaken()
-	else
-		to_chat(O, "\The [name]'s divine power is low. Try again in a few moments.")
-
 
 /obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
 	name = "nullbox"
@@ -347,3 +235,101 @@
 	w_class = W_CLASS_LARGE
 	attack_verb = list("bashes", "smashes", "pulverizes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	
+	// Chaos blade, a ghost role talking sword
+	/obj/item/weapon/nullrod/sword/chaos
+	name = "chaos blade"
+	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes. "
+	icon_state = "talking_sword"
+	item_state = "talking_sword"
+	var/datum/recruiter/recruiter = null
+	var/possessed = FALSE
+	var/awakening = FALSE
+	var/last_ping_time = 0
+	var/ping_cooldown = 5 SECONDS
+	reskin_selectable = FALSE //No fun allowed.
+
+/obj/item/weapon/nullrod/sword/chaos/attack_self(mob/living/user)
+	if(possessed)
+		return
+
+	to_chat(user, "You attempt to wake the spirit of the blade...")
+
+	awaken()
+	
+
+/obj/item/weapon/nullrod/sword/chaos/proc/awaken()
+	if(awakening)
+		return
+	awakening = TRUE
+	icon_state = "[initial(icon_state)]_a"
+	item_state = icon_state
+	if(!recruiter)
+		recruiter = new(src)
+		recruiter.display_name = name
+		recruiter.role = ROLE_BORER //Uses the borer pref because preferences are scary and i don't want to touch them.
+		recruiter.jobban_roles = list("pAI")
+	
+	// Role set to Yes or Always
+	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+	// Role set to No or Never
+	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+
+	recruiter.recruited.Add(src, "recruiter_recruited")
+
+	recruiter.request_player()
+
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	to_chat(O, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
+
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	to_chat(O, "<span class='recruit'>\The [src] is is awakening. ([controls])</span>")
+
+
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	if(O)
+		possessed = TRUE
+		qdel(recruiter)
+		recruiter = null
+		awakening = FALSE
+		visible_message("<span class='notice'>\The [name] awakens!</span>")
+		var/mob/living/simple_animal/shade/sword/S = new(src)
+		S.real_name = name
+		S.name = name
+		S.ckey = O.ckey
+		S.status_flags |= GODMODE
+		var/input = copytext(sanitize(input(S, "Pick a name","Name") as null|text), TRUE, MAX_MESSAGE_LEN)
+
+		if(src && input)
+			name = input
+			S.real_name = input
+			S.name = input
+	else
+		awakening = FALSE
+		icon_state = initial(icon_state)
+		item_state = icon_state
+		visible_message("<span class='notice'>\The [name] calms down.</span>")
+
+/obj/item/weapon/nullrod/sword/chaos/Destroy()
+	for(var/mob/living/simple_animal/shade/sword/S in contents)
+		to_chat(S, "You were destroyed!")
+		qdel(S)
+	if(recruiter)
+		qdel(recruiter)
+		recruiter = null
+	..()
+
+/obj/item/weapon/nullrod/sword/chaos/attack_ghost(var/mob/dead/observer/O)
+	if(possessed)
+		return
+	if(last_ping_time + ping_cooldown <= world.time)
+		visible_message("<span class='notice'>\The [name] shakes vigorously!</span>")
+		last_ping_time = world.time
+		awaken()
+	else
+		to_chat(O, "\The [name]'s divine power is low. Try again in a few moments.")
