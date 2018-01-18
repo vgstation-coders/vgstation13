@@ -308,7 +308,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	dirtySE=1
 	if(!defer)
 		UpdateSE()
-	to_chat(world, "SetSEBlock([block],[value],[defer]): [value] -> [GetSEValue(block)]")
+	//testing("SetSEBlock([block],[value],[defer]): [value] -> [GetSEValue(block)]")
 
 // Get a DNA SE block's raw value.
 /datum/dna/proc/GetSEValue(var/block)

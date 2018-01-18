@@ -94,20 +94,20 @@
 				//testing("[M] - Failed to activate [gene.name] (can_activate fail).")
 				return 0
 
-			//to_chat(world, "[gene.name] activated!")
+			//testing("[gene.name] activated!")
 			gene.activate(M,connected,flags)
 			if(M)
 				M.active_genes |= gene.type
 				M.update_icon = 1
 		// If Gene is NOT active:
 		else
-			//to_chat(world, "[gene.name] deactivated!")
+			//testing("[gene.name] deactivated!")
 			var/tempflag = flags
 			if(ishuman(M))
 				tempflag |= (((ishuman(M) && M:species) && gene.block in M:species:default_blocks) ? 4 : 0)
 			gene.deactivate(M,connected,tempflag)
 			if(M)
-				//to_chat(world, "Removing [gene.name]([gene.type]) from activegenes")
+				//testing("Removing [gene.name]([gene.type]) from activegenes")
 				if(!(tempflag & GENE_NATURAL))
 					M.active_genes.Remove(gene.type)
 					//testing("[M] [act ? "" : "un"]successfully removed [gene.type] from active_genes")
