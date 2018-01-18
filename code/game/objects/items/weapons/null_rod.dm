@@ -171,6 +171,7 @@
 	var/awakening = FALSE
 	var/last_ping_time = 0
 	var/ping_cooldown = 5 SECONDS
+	reskin_selectable = FALSE //Adminbus only.
 
 /obj/item/weapon/nullrod/sword/chaos/attack_self(mob/living/user)
 	if(possessed)
