@@ -2095,5 +2095,8 @@ mob/proc/on_foot()
 				alpha = initial(alpha)
 				alphas.Remove(source_define)
 
+/mob/proc/is_dead()
+	return stat == DEAD
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

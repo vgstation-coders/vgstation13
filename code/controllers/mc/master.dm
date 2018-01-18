@@ -68,7 +68,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	return QDEL_HINT_HARDDEL_NOW
 */
 
-/datum/controller/master/proc/Shutdown()
+/datum/controller/master/Shutdown()
 	processing = FALSE
 	for(var/datum/subsystem/ss in subsystems)
 		ss.Shutdown()
@@ -93,7 +93,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	return 1
 
 
-/datum/controller/master/proc/Recover()
+/datum/controller/master/Recover()
 	var/msg = "## DEBUG: [time2text(world.timeofday)] MC restarted. Reports:\n"
 	for (var/varname in Master.vars)
 		switch (varname)
@@ -481,7 +481,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 
 
-/datum/controller/master/proc/stat_entry()
+/datum/controller/master/stat_entry()
 	if(!statclick)
 		statclick = new/obj/effect/statclick/debug("Initializing...", src)
 
