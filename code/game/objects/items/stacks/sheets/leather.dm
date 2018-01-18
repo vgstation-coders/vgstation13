@@ -12,7 +12,7 @@
 
 /obj/item/stack/sheet/animalhide/human
 	name = "human skin"
-	desc = "The by-product of human farming."
+	desc = "The by-product of humanoid farming."
 	singular_name = "human skin piece"
 	icon_state = "sheet-human"
 	source_string = "human"
