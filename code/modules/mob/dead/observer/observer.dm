@@ -343,7 +343,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	next_poltergeist=0
 
 /* WHY
-/mob/dead/observer/Move(NewLoc, direct)
+/mob/dead/observer/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	dir = direct
 	if(NewLoc)
 		loc = NewLoc

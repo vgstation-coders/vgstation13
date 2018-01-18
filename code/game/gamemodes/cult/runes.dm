@@ -1159,7 +1159,7 @@
 		if(iscultist(C) && !C.stat)
 			users+=C
 	if(users.len>=2)
-		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - user)
+		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in ((cultists - users) - user)
 		if(!cultist)
 			return fizzle()
 		if (cultist == user) //just to be sure.

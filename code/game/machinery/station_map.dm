@@ -37,7 +37,7 @@ var/list/station_holomaps = list()
 	holomap_datum = new()
 	original_zLevel = loc.z
 	station_holomaps += src
-	flags |= ON_BORDER
+	flow_flags |= ON_BORDER
 	component_parts = 0
 	if(ticker && holomaps_initialized)
 		initialize()
