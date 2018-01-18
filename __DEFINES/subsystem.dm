@@ -4,6 +4,7 @@
 #define SS_INIT_TICKER_SPAWN       999
 #define SS_INIT_DBCORE			   900
 #define SS_INIT_SSdbcore	       800
+#define SS_INIT_OS				   27
 #define SS_INIT_RUST               26
 #define SS_INIT_PLANT              25.5
 #define SS_INIT_SUPPLY_SHUTTLE     25
@@ -41,6 +42,7 @@
 #define SS_PRIORITY_VOTE           110
 #define SS_PRIORITY_FAST_OBJECTS   105
 #define SS_PRIORITY_OBJECTS        100
+#define SS_PRIORITY_OS			   99
 #define SS_PRIORITY_POWER          95
 #define SS_PRIORITY_MACHINERY      90
 #define SS_PRIORITY_ENGINES		   89
