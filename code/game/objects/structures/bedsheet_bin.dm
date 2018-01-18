@@ -126,9 +126,6 @@ LINEN BINS
 /obj/item/weapon/bedsheet/brown/cargo
 	_color = "cargo"		//exists for washing machines, is not different from brown bedsheet in any way
 
-/obj/item/weapon/bedsheet/black
-	_color = "black"
-
 /obj/structure/bedsheetbin
 	name = "linen bin"
 	desc = "A linen bin. It looks rather cosy."
