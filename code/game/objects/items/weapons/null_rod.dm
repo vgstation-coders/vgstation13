@@ -150,10 +150,10 @@
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	cant_drop = TRUE
 
-/obj/item/weapon/nullrod/armblade/dropped()
-	var/obj/item/weapon/nullrod/N = new /obj/item/weapon/nullrod
+/obj/item/weapon/nullrod/sword/armblade/dropped()
+	var/obj/item/weapon/nullrod/N = new /obj/item/weapon/nullrod(get_turf(loc))
+	visible_message("<span class='notice'>\The [name] loses its divine powers and changes back into \a [N.name]</span>")
 	qdel(src)
-	visible_message("<span class='notice'>\The [name] loses [ticker.Bible_deity_name]'s power and changes back into \a [N.name]</span>")
 
 /obj/item/weapon/nullrod/sword/katana //*tips fedora*
 	name = "saint katana"
@@ -163,7 +163,7 @@
 
 /obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"
-	desc = "When the chapel falls into chaos, it's nice to have a friend by your side."
+	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes. "
 	icon_state = "talking_sword"
 	item_state = "talking_sword"
 	var/datum/recruiter/recruiter = null
@@ -190,12 +190,12 @@
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = name
-		recruiter.role = ROLE_BORER
-		recruiter.jobban_roles = list("pAI") //WHY THE FUCK NOT?
+		recruiter.role = ROLE_BORER //Uses the borer pref because preferences are scary and i don't want to touch them.
+		recruiter.jobban_roles = list("pAI")
 	
-	// A player has their role set to Yes or Always
+	// Role set to Yes or Always
 	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
-	// ", but No or Never
+	// Role set to No or Never
 	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
 
 	recruiter.recruited.Add(src, "recruiter_recruited")
