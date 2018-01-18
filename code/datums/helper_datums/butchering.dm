@@ -158,7 +158,7 @@
 			A.name = H.species.name ? "[lowertext(H.species.name)] skin" : A.name
 			A.source_string = H.species.name ? lowertext(H.species.name) : A.source_string
 		else
-			if(H.mind && H.mind.assigned_role) //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
+			if(H.mind && H.mind.assigned_role && H.mind.assigned_role != "MODE") //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
 				A.name = "[lowertext(H.mind.assigned_role)] skin"
 				A.source_string = lowertext(H.mind.assigned_role)
 
