@@ -6,10 +6,10 @@
 
 /mob/proc/Premorph(var/delete_items = FALSE)
 	if(monkeyizing)
-		return
+		return FALSE
 	monkeyizing = TRUE
 	canmove = FALSE
-	delayNextAttack(50)
+	delayNextAttack(5 SECONDS)
 
 	for(var/obj/item/W in src)
 		if(istype(W, /obj/item/weapon/implant))
@@ -19,10 +19,11 @@
 			qdel(W)
 		else
 			drop_from_inventory(W)
+	return TRUE
 
 /mob/living/carbon/Premorph(delete_items = FALSE)
 	dropBorers()
-	..(delete_items)
+	..()
 
 /mob/proc/Postmorph(var/mob/new_mob = null)
 	if(!new_mob)
@@ -36,9 +37,10 @@
 
 
 /mob/proc/monkeyize(var/ignore_primitive = TRUE)
-	if(ismonkey(src))
+	if(ismonkey(src)) //What's the point
 		return
-	Premorph()
+	if(!Premorph())
+		return
 	if(isturf(loc)) // no need to do animations if we're inside something
 		var/atom/movable/overlay/animation = new(loc)
 		animation.icon_state = "blank"
@@ -80,7 +82,8 @@
 	..()
 
 /mob/proc/Cluwneize()
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/simple_animal/hostile/retaliate/cluwne/new_mob = new (get_turf(src))
 	new_mob.setGender(gender)
 	new_mob.name = pick(clown_names)
@@ -99,7 +102,8 @@
 	return ..()
 
 /mob/proc/AIize(var/spawn_here = FALSE, var/del_mob = TRUE)
-	Premorph()
+	if(!Premorph())
+		return
 	if(client)
 		src << sound(null, repeat = FALSE, wait = FALSE, volume = 85, channel = CHANNEL_LOBBY)// stop the jams for AIs
 	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
@@ -149,7 +153,8 @@
 		qdel(src)
 
 /mob/proc/Robotize(var/delete_items = FALSE, var/skipnaming=FALSE)
-	Premorph(delete_items)
+	if(!Premorph(delete_items))
+		return
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(src))
 	. = O
 	if(mind)		//TODO
@@ -175,7 +180,8 @@
 	return O
 
 /mob/proc/MoMMIfy(round_start = FALSE)
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi(get_turf(src))
 	. = O
 	if(!O.cell) // MoMMIs' New() is suposed to give them a battery but JUST TO BE SURE.
@@ -205,7 +211,8 @@
 
 /mob/proc/Alienize(var/alien_caste = null)
 	var/list/valid_alien_caste = list("Larva", "Hunter", "Sentinel", "Drone", "Queen", "Empress")
-	Premorph()
+	if(!Premorph())
+		return
 	if(!alien_caste || !(alien_caste in valid_alien_caste))
 		alien_caste = pick("Larva", "Hunter", "Sentinel", "Drone")
 	var/mob/living/carbon/alien/new_xeno
@@ -227,7 +234,8 @@
 	return new_xeno
 
 /mob/proc/slimeize(var/adult = FALSE, var/reproduce = FALSE)
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/carbon/slime/new_slime
 	if(reproduce)
 		var/number = pick(14;2,3,4)	//reproduce (has a small chance of producing 3 or 4 offspring)
@@ -248,20 +256,23 @@
 	return new_slime
 
 /mob/proc/corgize()
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/simple_animal/corgi/new_corgi = new /mob/living/simple_animal/corgi(get_turf(src))
 	Postmorph(new_corgi)
 	to_chat(new_corgi, "<B>You are now a Corgi. Yap Yap!</B>")
 	return new_corgi
 
 /mob/proc/Martianize()
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/carbon/martian/new_aunt = new /mob/living/carbon/martian(get_turf(src))
 	Postmorph(new_aunt)
 	return new_aunt
 
 /mob/proc/Humanize(var/new_species = null)
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(loc, delay_ready_dna=TRUE)
 	if((gender == MALE) || (gender == FEMALE)) //If the transformed mob is MALE or FEMALE
 		new_human.setGender(gender) //The new human will inherit its gender
@@ -282,7 +293,8 @@
 	return new_human
 
 /mob/proc/Frankensteinize()
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/living/carbon/human/frankenstein/new_frank = new /mob/living/carbon/human/frankenstein(loc, delay_ready_dna=TRUE)
 	if((gender == MALE) || (gender == FEMALE)) //If the transformed mob is MALE or FEMALE
 		new_frank.setGender(gender) //The new human will inherit its gender
@@ -298,7 +310,8 @@
 	if(!safe_animal(mobpath))
 		to_chat(usr, "<span class='warning'>Sorry but this mob type is currently unavailable.</span>")
 		return
-	Premorph()
+	if(!Premorph())
+		return
 	var/mob/new_mob = new mobpath(get_turf(src))
 	Postmorph(new_mob)
 	to_chat(new_mob, "You feel more... animalistic")
