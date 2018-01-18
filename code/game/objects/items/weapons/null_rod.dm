@@ -236,8 +236,8 @@
 	attack_verb = list("bashes", "smashes", "pulverizes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	
-	// Chaos blade, a ghost role talking sword
-	/obj/item/weapon/nullrod/sword/chaos
+// Chaos blade, a ghost role talking sword
+/obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"
 	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes. "
 	icon_state = "talking_sword"
