@@ -213,6 +213,10 @@
 
 	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 		R.internals = src
+		if(isMoMMI(R))
+			for(var/X in carbondioxide.actions)
+				var/datum/action/A = X
+				A.Grant(R)
 
 /obj/item/borg/upgrade/syndicate/
 	name = "cyborg illegal equipment board"

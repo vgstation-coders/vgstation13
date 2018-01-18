@@ -599,10 +599,12 @@
 
 /obj/item/weapon/storage/Destroy()
 	close_all()
-	returnToPool(boxes)
-	returnToPool(closer)
-	boxes = null
-	closer = null
+	if(boxes)
+		returnToPool(boxes)
+		boxes = null
+	if(closer)
+		returnToPool(closer)
+		closer = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)
 	contents = null

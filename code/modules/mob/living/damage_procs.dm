@@ -13,7 +13,7 @@
 		return 0
 
 	var/damage_done = damage/(blocked+1)
-
+	damage_done = run_armor_absorb(def_zone, damagetype, damage_done)
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage_done)

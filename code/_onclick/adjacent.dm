@@ -43,7 +43,7 @@
 		// Non diagonal case
 		if(T0.x == x || T0.y == y)
 			// Window snowflake code
-			if(neighbor.flags & ON_BORDER && neighbor.dir == get_dir(T0, src))
+			if(neighbor.flow_flags & ON_BORDER && neighbor.dir == get_dir(T0, src))
 				return 1
 			// Check for border blockages
 			if(T0.ClickCross(get_dir(T0,src), border_only = 1) && src.ClickCross(get_dir(src,T0), border_only = 1, target_atom = target))
@@ -56,13 +56,12 @@
 		var/d2 = in_dir&12			 // eg. west	  (1+8)&12 (0000 1100) = 8 (0000 1000)
 
 		for(var/d in list(d1,d2))
-			if(!T0.ClickCross(d, border_only = 1) && !(neighbor.flags & ON_BORDER && neighbor.dir == d))
+			if(!T0.ClickCross(d, border_only = 1) && !(neighbor.flow_flags & ON_BORDER && neighbor.dir == d))
 				continue // could not leave T0 in that direction
 
 			var/turf/T1 = get_step(T0,d)
 			if(!T1 || T1.density || !T1.ClickCross(get_dir(T1,T0) | get_dir(T1,src), border_only = 0)) //let's check both directions at once
 				continue // couldn't enter or couldn't leave T1
-
 			if(!src.ClickCross(get_dir(src,T1), border_only = 1, target_atom = target))
 				continue // could not enter src
 
@@ -110,7 +109,7 @@
 	var/list/disable_throwpass = list()
 
 	for(var/obj/machinery/door/D in (loc.contents - src))
-		if(D.flags & ON_BORDER)
+		if(D.flow_flags & ON_BORDER)
 			D.throwpass = 1
 			disable_throwpass += D
 	.=..()
@@ -125,10 +124,12 @@
 */
 /turf/proc/ClickCross(var/target_dir, var/border_only, var/atom/target_atom = null)
 	for(var/obj/O in src)
+		if(O.flow_flags&IMPASSABLE)
+			return 0
 		if( !O.density || O == target_atom || O.throwpass)
 			continue // throwpass is used for anything you can click through
 
-		if( O.flags&ON_BORDER) // windows have throwpass but are on border, check them first
+		if( O.flow_flags&ON_BORDER) // windows have throwpass but are on border, check them first
 			if( O.dir & target_dir || O.dir&(O.dir-1) ) // full tile windows are just diagonals mechanically
 				return 0
 

@@ -10,3 +10,9 @@
 #define TRANSPARENT 0
 #define SEMI_TRANSPARENT 128
 #define OPAQUE 255
+
+// For atom.blob_act()
+
+#define BLOB_ACT_WEAK 3
+#define BLOB_ACT_MEDIUM 2
+#define BLOB_ACT_STRONG 1
