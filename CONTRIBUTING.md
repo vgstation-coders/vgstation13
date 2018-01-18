@@ -22,3 +22,4 @@ It is also suggested that you hop into irc.rizon.net #vgstation to discuss your 
 # Other considerations
 
 * If you're working with PNG and/or DMI files, you might want to check out and install the `pre-commit` git hook found [here](tools/git-hooks). This will automatically run `optipng` (if you have it) on your added/modified files, shaving off some bytes here and there.
+ 
