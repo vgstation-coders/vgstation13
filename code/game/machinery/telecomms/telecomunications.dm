@@ -48,13 +48,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		return
 	var/send_count = 0
 
-	signal.data["slow"] += rand(0, round((100-get_integrity()))) // apply some lag based on integrity TODO: delet this
-
-	// Apply some lag based on traffic rates
-	var/netlag = round(traffic / 50)
-	if(netlag > signal.data["slow"])
-		signal.data["slow"] = netlag
-
 // Loop through all linked machines and send the signal or copy.
 	for(var/obj/machinery/telecomms/machine in links)
 		if(!machine.loc)
@@ -88,7 +81,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				"compression" = signal.data["compression"],
 				"message" = signal.data["message"],
 				"radio" = signal.data["radio"],
-				"slow" = signal.data["slow"],
 				"traffic" = signal.data["traffic"],
 				"type" = signal.data["type"],
 				"server" = signal.data["server"],
@@ -504,16 +496,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			if(send_to_processor)
 				return
 			// failed to send to a processor, relay information anyway
-			signal.data["slow"] += rand(1, 5) // slow the signal down only slightly
 			src.receive_information(signal, src)
 
 		// Try sending it!
 		var/list/try_send = list("/obj/machinery/telecomms/server", "/obj/machinery/telecomms/hub", "/obj/machinery/telecomms/broadcaster", "/obj/machinery/telecomms/bus")
-		var/i = 0
 		for(var/send in try_send)
-			if(i)
-				signal.data["slow"] += rand(0, 1) // slow the signal down only slightly
-			i++
 			var/can_send = relay_information(signal, send)
 			if(can_send)
 				break
@@ -569,7 +556,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		if(istype(machine_from, /obj/machinery/telecomms/bus))
 			relay_direct_information(signal, machine_from) // send the signal back to the machine
 		else // no bus detected - send the signal to servers instead
-			signal.data["slow"] += rand(5, 10) // slow the signal down
 			relay_information(signal, "/obj/machinery/telecomms/server")
 
 
