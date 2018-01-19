@@ -24,9 +24,11 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/constructable_frame/proc/update_desc()
-	var/D
+	var/D = list()
+	if(circuit)
+		D += "A metal frame mounting \a [circuit].\n"
 	if(req_components)
-		D = "Requires "
+		D += "Requires "
 		var/first = 1
 		for(var/I in req_components)
 			if(req_components[I] > 0)
@@ -35,7 +37,7 @@
 		if(first) // nothing needs to be added, then
 			D += "nothing"
 		D += "."
-	desc = D
+	desc = jointext(D, "")
 
 /obj/machinery/constructable_frame/proc/get_req_components_amt()
 	var/amt = 0
