@@ -617,7 +617,7 @@
 			desc = new_item.desc
 		if(ARCHAEO_CHAOS)
 			//Chaos blade
-			item_type = "sword"
+			item_type = "blade"
 			apply_prefix = TRUE
 			new_item = new /obj/item/weapon/nullrod/sword/chaos(src.loc)
 			apply_material_decorations = FALSE
