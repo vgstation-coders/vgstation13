@@ -15,8 +15,6 @@
 	var/activity_log = ""
 	layer = BINARY_PIPE_LAYER
 
-	var/on = 0 //Every binary device except the circulator can be turned on and off.
-
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
 
@@ -48,19 +46,6 @@
 /obj/machinery/atmospherics/binary/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2)
 	..(adjacent_procd,node_list)
-
-/obj/machinery/atmospherics/binary/proc/toggle_power(mob/user)
-	if(allowed(user))
-		on = !on
-		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(user)].")
-		update_icon()
-		return 1
-	else
-		return 0
-
-/obj/machinery/atmospherics/binary/AltClick(mob/user)
-	if(!toggle_power(user)) //There are some subtypes which we do not wish to allow alt clicking (MSGS, DP Vent Pump, Circulator)
-		..()
 
 /obj/machinery/atmospherics/binary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir

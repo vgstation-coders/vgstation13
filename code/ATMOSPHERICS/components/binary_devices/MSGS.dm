@@ -15,6 +15,7 @@
 	var/max_pressure = 10000
 
 	var/target_pressure = 4500	//Output pressure.
+	var/on = 0								//Are we taking in gas?
 
 	var/datum/gas_mixture/air				//Internal tank.
 
@@ -212,9 +213,6 @@
 	. = ..()
 	update_icon()
 
-/obj/machinery/atmospherics/binary/msgs/toggle_power(mob/user)
-	return 0 //Does not toggle with alt click
-
 /obj/machinery/atmospherics/binary/msgs/update_icon()
 	. = ..()
 
@@ -249,7 +247,7 @@
 		if(on)
 			overlays += image(icon = icon, icon_state = "i")
 
-/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user) 
 	. = ..()
 	if(!.)
 		return
