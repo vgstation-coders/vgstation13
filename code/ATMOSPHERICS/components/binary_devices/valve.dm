@@ -214,7 +214,11 @@
 		investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by a signal")
 
 /obj/machinery/atmospherics/binary/valve/npc_tamper_act(mob/living/L)
-	toggle_status()
+	if(open)
+		close()
+	else
+		open()
+	investigation_log(I_ATMOS,"was [(open ? "opened" : "closed")] by [key_name(L)]")
 
 /obj/machinery/atmospherics/binary/valve/toggle_status(var/mob/user)
 	if(!allowed(user))
