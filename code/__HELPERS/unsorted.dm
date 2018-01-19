@@ -1534,7 +1534,7 @@ Game Mode config tags:
 "raginmages""
 */
 
-/proc/find_active_mode(var/mode_ctag)
+/proc/find_active_mode(var/mode_ctag) //This should never be used
 	var/found_mode = null
 	if(ticker && ticker.mode)
 		if(ticker.mode.name == mode_ctag)

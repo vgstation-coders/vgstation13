@@ -11,6 +11,7 @@
 	Nar-Sie's ultimate goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 	deity_name = "Geometer of Blood"
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
+	var/list/startwords = list("blood","join","self","hell")
 	var/list/bloody_floors = list()
 	var/narsie_condition_cleared
 
@@ -30,10 +31,9 @@
 
 /datum/faction/cult/narsie/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
 	if (!word)
-		var/datum/gamemode/cult/cult = find_active_mode("Cult")
-		if(cult.startwords.len > 0)
-			word=pick(cult.startwords)
-			cult.startwords -= word
+		if(startwords.len > 0)
+			word=pick(startwords)
+			startwords -= word
 	if(!cultwords["travel"])
 		runerandom()
 	if (!word)
