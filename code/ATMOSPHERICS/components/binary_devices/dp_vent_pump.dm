@@ -10,6 +10,7 @@
 
 	level = 1
 
+	var/on = 0
 	var/pump_direction = 1 //0 = siphoning, 1 = releasing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
@@ -151,9 +152,6 @@
 	..()
 	if(frequency)
 		set_frequency(frequency)
-
-/obj/machinery/atmospherics/binary/dp_vent_pump/toggle_power(mob/user)
-	return 0 //Does not toggle with alt click
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/receive_signal(datum/signal/signal)
 

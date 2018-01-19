@@ -9,6 +9,7 @@
 	name = "Passive gate"
 	desc = "A one-way air valve that does not require power"
 
+	var/on = 0
 	var/target_pressure = ONE_ATMOSPHERE
 
 	var/frequency = 0
