@@ -57,10 +57,6 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			return
 		recentmessages.Add(signal_message)
 
-		// This may be causing some performance issues. - N3X
-		if(signal.data["slow"] > 0)
-			sleep(signal.data["slow"]) // simulate the network lag if necessary
-
 		signal.data["level"] |= listening_level
 
 	   /** #### - Normal Broadcast - #### **/
@@ -158,9 +154,6 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/datum/signal/original = signal.data["original"]
 		if(original)
 			original.data["done"] = 1
-
-		if(signal.data["slow"] > 0)
-			sleep(signal.data["slow"]) // simulate the network lag if necessary
 
 		/* ###### Broadcast a message using signal.data ###### */
 
@@ -608,7 +601,6 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	// --- Finally, tag the actual signal with the appropriate values ---
 	signal.data = list(
-		"slow" = 0, // how much to sleep() before broadcasting - simulates net lag
 		"message" = "TEST",
 		"compression" = rand(45, 50), // If the signal is compressed, compress our message too.
 		"traffic" = 0, // dictates the total traffic sum that the signal went through
