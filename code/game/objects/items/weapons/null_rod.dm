@@ -287,7 +287,7 @@
 /obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] is is awakening. ([controls])</span>")
+	to_chat(O, "<span class='recruit'>\The [src] is awakening. ([controls])</span>")
 
 
 /obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
@@ -304,7 +304,7 @@
 		S.ckey = O.ckey
 		S.status_flags |= GODMODE //Make sure they can NEVER EVER leave the blade.
 		to_chat(S, "<span class='info'>You open your eyes and find yourself in a strange, unknown location with no recollection of your past.</span>")
-		to_chat(S, "<span class='info'>Despiste being a sword, you have the ability to speak and an abnormal desire for slicing and killing evil beings.</span>")
+		to_chat(S, "<span class='info'>Despite being a sword, you have the ability to speak, as well as an abnormal desire for slicing and killing evil beings.</span>")
 		to_chat(S, "<span class='info'>Unable to do anything by yourself, you need a wielder. Find someone with a strong will and become their strength so you may finally satiate your desires.</span>")
 		var/input = copytext(sanitize(input(S, "What should i call myself?","Name") as null|text), TRUE, MAX_MESSAGE_LEN)
 
