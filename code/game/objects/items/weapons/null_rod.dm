@@ -236,12 +236,14 @@
 	attack_verb = list("bashes", "smashes", "pulverizes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 
-// Chaos blade, a ghost role talking sword
+// The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
 /obj/item/weapon/nullrod/sword/chaos
 	name = "chaos blade"
-	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes. "
+	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes."
 	icon_state = "talking_sword"
 	item_state = "talking_sword"
+	sharpness_flags = SHARP_TIP |SHARP_BLADE
+	sharpness = 1.5
 	var/datum/recruiter/recruiter = null
 	var/possessed = FALSE
 	var/awakening = FALSE
@@ -253,8 +255,6 @@
 	if(possessed)
 		return
 
-	to_chat(user, "You attempt to wake the spirit of the blade...")
-
 	awaken()
 
 
@@ -263,11 +263,12 @@
 		return
 	awakening = TRUE
 	icon_state = "[initial(icon_state)]_a"
+	visible_message("<span class='notice'>\The [name] shakes vigorously!</span>")
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = name
 		recruiter.role = ROLE_BORER //Uses the borer pref because preferences are scary and i don't want to touch them.
-		recruiter.jobban_roles = list("pAI")
+		recruiter.jobban_roles = list("pAI") // pAI/Borers share the same jobban check so here we go too.
 
 	// Role set to Yes or Always
 	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
@@ -301,8 +302,11 @@
 		S.real_name = name
 		S.name = name
 		S.ckey = O.ckey
-		S.status_flags |= GODMODE
-		var/input = copytext(sanitize(input(S, "Pick a name","Name") as null|text), TRUE, MAX_MESSAGE_LEN)
+		S.status_flags |= GODMODE //Make sure they can NEVER EVER leave the blade.
+		to_chat(S, "<span class='info'>You open your eyes and find yourself in a strange, unknown location with no recollection of your past.</span>")
+		to_chat(S, "<span class='info'>Despiste being a sword, you have the ability to speak and an abnormal desire for slicing and killing evil beings.</span>")
+		to_chat(S, "<span class='info'>Unable to do anything by yourself, you need a wielder. Find someone with a strong will and become their strength so you may finally satiate your desires.</span>")
+		var/input = copytext(sanitize(input(S, "What should i call myself?","Name") as null|text), TRUE, MAX_MESSAGE_LEN)
 
 		if(src && input)
 			name = input
@@ -326,8 +330,10 @@
 	if(possessed)
 		return
 	if(last_ping_time + ping_cooldown <= world.time)
-		visible_message("<span class='notice'>\The [name] shakes vigorously!</span>")
 		last_ping_time = world.time
 		awaken()
 	else
-		to_chat(O, "\The [name]'s divine power is low. Try again in a few moments.")
+		to_chat(O, "\The [name]'s power is low. Try again in a few moments.")
+
+/obj/item/weapon/nullrod/sword/chaos/IsShield()
+	return TRUE
