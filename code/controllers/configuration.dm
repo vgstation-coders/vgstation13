@@ -183,7 +183,7 @@
 
 /datum/configuration/New()
 	. = ..()
-	var/list/L = typesof(/datum/gamemode) - /datum/gamemode
+	var/list/L = subtypesof(/datum/gamemode)
 
 	for (var/T in L)
 		// I wish I didn't have to instance the game modes in order to look up

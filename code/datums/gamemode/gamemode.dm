@@ -26,8 +26,9 @@
 	Setup()
 
 /datum/gamemode/proc/can_start()
-	if(minimum_player_count < get_player_count())
+	if(minimum_player_count && minimum_player_count < get_player_count())
 		return 0
+	return 1
 
 //For when you need to set factions and factions_allowed not on compile
 /datum/gamemode/proc/SetupFactions()
@@ -35,6 +36,7 @@
 /datum/gamemode/proc/Setup()
 	if(minimum_player_count < get_player_count())
 		TearDown()
+		return 0
 	SetupFactions()
 	CreateFactions()
 
@@ -46,7 +48,7 @@
 			factions += Fac
 			factions_allowed -= Fac
 		else
-			message_admins("Unable to start [Fac.name]")
+			message_admins("Unable to start [Fac.name] in [name]")
 			qdel(Fac)
 	for(var/datum/faction/F in factions)
 		F.onPostSetup()
@@ -66,9 +68,28 @@
 
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
-			if(!P.client /*|| Other bullshit*/)
-				return
+			if(!P.client || !P.mind)
+				continue
+			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
+				continue
+
+
 			//TODO PREFERENCE FUCKERY AND ROLE CHECKING -- NO ROLE DATUMS AS OF THIS TIME
+
+
+/datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
+
+/datum/gamemode/proc/PostSetup()
+	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
+		display_roundstart_logout_report()
+
+	feedback_set_details("round_start","[time2text(world.realtime)]")
+	if(ticker && ticker.mode)
+		feedback_set_details("game_mode","[ticker.mode]")
+	if(revdata)
+		feedback_set_details("revision","[revdata.revision]")
+	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
+	return 1
 
 /datum/gamemode/proc/CheckObjectives(var/individuals = FALSE)
 	var/dat = ""

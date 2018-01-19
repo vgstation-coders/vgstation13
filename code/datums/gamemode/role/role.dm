@@ -99,13 +99,16 @@
 	// Objectives
 	var/datum/objective_holder/objectives=new
 
-/datum/role/New(var/datum/mind/M=null, var/datum/role/par=null, var/datum/faction/fac=null)
+/datum/role/New(var/datum/mind/M=null, var/datum/role/par=null, var/datum/faction/fac=null, var/new_id)
 	// Link faction.
 	faction=fac
 
 	parent = par
 	if(M)
 		AssignToRole(M)
+
+	if(new_id)
+		id = new_id
 
 	if(!plural_name)
 		plural_name="[name]s"

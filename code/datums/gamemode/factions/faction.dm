@@ -20,6 +20,7 @@
 /datum/faction
 	var/name = "unknown faction"
 	var/list/ID = list("unknown")
+	var/required_pref = ""
 	var/desc = "This faction is bound to do something nefarious"
 	var/list/restricted_species = list()
 	var/list/members = list()
@@ -73,6 +74,7 @@
 /datum/faction/syndicate
 	name = "The Syndicate"
 	ID = SYNDICATE
+	required_pref = ROLE_TRAITOR
 	desc = "A coalition of companies that actively work against Nanotrasen's intentions. Seen as Freedom fighters by some, Rebels and Malcontents by others."
 
 
@@ -89,12 +91,14 @@
 /datum/faction/syndicate/nuke_op
 	name = "Syndicate nuclear operatives"
 	ID = NUKE_OP
+	required_pref = ROLE_OPERATIVE
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 
 /datum/faction/changeling
 	name = "Changeling Hivemind"
 	ID = CHANGELING
+	required_pref = ROLE_CHANGELING
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 
@@ -107,6 +111,7 @@
 /datum/faction/wizard
 	name = "Wizard Federation"
 	ID = WIZARD
+	required_pref = ROLE_WIZARD
 	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
 	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
 	This has led to them being identified as enemies of humanity, and should be treated as such."
@@ -121,6 +126,7 @@
 /datum/faction/vampire
 	name = "Space Vampires"
 	ID = VAMPIRE
+	required_pref = ROLE_VAMPIRE
 	desc = "Beings cursed to wander the galaxy to satiate their lust for blood, \
 	usually pointed towards NT station by the syndicate in exchange for causing chaos and completing objectives for them.\
 	Vampirism is still not fully understood, but those afflicted can quickly become a force to be reckoned with if allowed to indulge."
@@ -132,6 +138,7 @@
 
 /datum/faction/revolution
 	name = "Revolutionaries"
+	required_pref = ROLE_REV
 	desc = "Viva!"
 
 /datum/faction/revolution/GetObjectivesMenuHeader()
