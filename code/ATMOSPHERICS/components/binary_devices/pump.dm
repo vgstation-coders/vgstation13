@@ -20,7 +20,6 @@ Thus, the two variables affect pump operation are set in New():
 
 	name = "Gas pump"
 	desc = "A pump."
-	var/on = 0
 	var/target_pressure = ONE_ATMOSPHERE
 
 	var/frequency = 0
@@ -166,8 +165,7 @@ Thus, the two variables affect pump operation are set in New():
 	if(..())
 		return
 	if(href_list["power"])
-		on = !on
-		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)].")
+		toggle_status()
 	if(href_list["set_press"])
 		var/new_pressure = input(usr,"Enter new output pressure (0-[MAX_PRESSURE]kPa)","Pressure control",src.target_pressure) as num
 		src.target_pressure = max(0, min(MAX_PRESSURE, new_pressure))
