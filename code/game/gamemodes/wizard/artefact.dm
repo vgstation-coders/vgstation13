@@ -157,16 +157,15 @@
 	if(activating)
 		to_chat(user, "<span class = 'warning'>\The [src] hums with energy as it begins to glow brighter.</span>")
 		return
-	/*if(iswizard(user) || isapprentice(user))
+	if(iswizard(user) || isapprentice(user))
 		to_chat(user, "<span class = 'notice'>You prime the glow-stone, it will transform in [prime_time/10] seconds.</span>")
 		activate()
-		return*
-	else*/
+		return
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
 		failure()
 		return
-	else if(prob(65))
+	if(prob(65))
 		to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
 		activate()
 	else

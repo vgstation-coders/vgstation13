@@ -315,13 +315,10 @@
 				return
 
 			var/mob/living/T = target
-			/*
-			if(istype(ticker.mode, /datum/game_mode/cult))
-				var/datum/game_mode/cult/mode_ticker = ticker.mode
-				if(T.mind && (mode_ticker.sacrifice_target == T.mind))
+			for(var/datum/faction/cult/C in ticker.factions)
+				if(C.is_sacrifice_target(T.mind))
 					to_chat(U, "<span class='warning'>The soul stone is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 					return
-			*/
 			capture_soul(T,U)
 
 		if("SHADE")

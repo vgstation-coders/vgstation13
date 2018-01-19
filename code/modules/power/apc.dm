@@ -939,11 +939,11 @@
 
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
-	/*
 	if(malfai)
-		if (ticker.mode.config_tag == "malfunction")
+		var/datum/faction/malf/F = find_active_faction(MALF)
+		if (F)
 			if (STATION_Z == z)
-				operating ? ticker.mode:apcs++ : ticker.mode:apcs--*/
+				operating ? F.apcs++ : F.apcs--
 
 	src.update()
 	update_icon()
@@ -1273,14 +1273,14 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 			cell.blob_act()
 
 /obj/machinery/power/apc/proc/set_broken()
-	/*if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				ticker.mode:apcs--*/
+	if(malfai && operating)
+		var/datum/faction/malf/M = find_active_faction(MALF)
+		if(M && STATION_Z == z)
+			M.apcs--
 	stat |= BROKEN
 	operating = 0
-	/*if(occupant)
-		malfvacate(1)*/
+	if(occupant)
+		malfvacate(1)
 	update_icon()
 	update()
 
