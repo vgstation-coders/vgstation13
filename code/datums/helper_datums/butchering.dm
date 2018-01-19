@@ -145,6 +145,23 @@
 	result = /obj/item/stack/sheet/animalhide/human
 	amount = 3
 
+/datum/butchering_product/skin/human/spawn_result(location, mob/parent)
+	if(!amount)
+		return
+
+	if(ishuman(parent))
+		var/mob/living/carbon/human/H = parent
+
+		var/obj/item/stack/sheet/animalhide/A = new result(location)
+
+		if(!isjusthuman(H) && H.species) //Grey skin, unathi skin, etc.
+			A.name = H.species.name ? "[lowertext(H.species.name)] skin" : A.name
+			A.source_string = H.species.name ? lowertext(H.species.name) : A.source_string
+		else
+			if(H.mind && H.mind.assigned_role && H.mind.assigned_role != "MODE") //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
+				A.name = "[lowertext(H.mind.assigned_role)] skin"
+				A.source_string = lowertext(H.mind.assigned_role)
+
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
 
