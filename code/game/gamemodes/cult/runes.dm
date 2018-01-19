@@ -669,9 +669,9 @@
 		D.real_name = "[pick(first_names_male)] [pick(last_names)]"
 	D.status_flags &= ~GODMODE
 
-	var/datum/gamemode/cult/cult_round = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
 	if(cult_round)
-		cult_round.add_player_role_association(D.mind, CULTIST)
+		cult_round.HandleRecruitedMind(D.mind)
 	/*else
 		ticker.mode.cult += D.mind*/
 

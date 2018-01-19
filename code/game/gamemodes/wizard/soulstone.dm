@@ -378,9 +378,9 @@
 						Z.cancel_camera()
 						deleteafter = 1
 				if(iscultist(U))
-					var/datum/gamemode/cult/cult_round = find_active_mode("cult")
+					var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
 					if(cult_round)
-						cult_round.add_player_role_association(Z.mind, "cultist")
+						cult_round.HandleRecruitedMind(Z.mind)
 
 				name = "Soul Stone Shard"
 			else

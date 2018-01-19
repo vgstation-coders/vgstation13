@@ -127,9 +127,6 @@
 	if(faction && !(M in faction.members))
 		faction.members += M
 
-	// Notify gamemode that this player has this role, too.
-	ticker.mode.add_player_role_association(M,id)
-
 /datum/role/proc/RemoveFromRole(var/datum/mind/M)
 	if(!istype(M))
 		WARNING("M is [M.type]!")
@@ -140,15 +137,12 @@
 	if(faction && M in faction.members)
 		faction.members -= M
 
-	ticker.mode.remove_player_role_association(M,id)
-
 // Remove
 /datum/role/proc/Drop()
 	if(!antag)
 		return
 	var/datum/role/parent = ticker.antag_types[id]
 	parent.minds -= antag
-	ticker.mode.remove_player_role_association(antag,id)
 	del(src)
 
 // Scaling, should fuck with min/max players.

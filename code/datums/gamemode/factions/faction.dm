@@ -6,6 +6,8 @@
 	@name: String: Name of the faction
 	@ID: List(String): Identifying strings for shorthand finding this faction.
 	@desc: String: Description of the faction, their intentions, how they do things, etc. Something for lorewriters to use.
+	@initial_role: String(DEFINE): On initial setup via gamemode or faction creation, set the new minds role ID to this. HEADCULTIST for example
+	@late_role: String(DEFINE): On later recruitment, set the new minds role ID to this. TRAITOR for example
 	@restricted_species: list(String): Only species on this list can be part of this faction
 		(Vox Raiders, Skellington Pirates, Bewildering Basfellians, etc.)
 	@members: List(Reference): Who is a member of this faction
@@ -20,8 +22,10 @@
 /datum/faction
 	var/name = "unknown faction"
 	var/list/ID = list("unknown")
-	var/required_pref = ""
 	var/desc = "This faction is bound to do something nefarious"
+	var/initial_role
+	var/late_role
+	var/required_pref = ""
 	var/list/restricted_species = list()
 	var/list/members = list()
 	var/max_roles = 0
@@ -38,6 +42,11 @@
 
 //For when you want your faction to have specific objectives (Vampire, suck blood. Cult, sacrifice the head of personnel's dog, etc.)
 /datum/faction/proc/forgeObjectives()
+
+/datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
+	new /datum/role
+
+/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
 
 
 
@@ -145,3 +154,20 @@
 	var/icon/logo = icon('icons/mob/mob.dmi', "rev-logo")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
+
+/datum/faction/strike_team
+	name = "Strike Team 6"
+	required_pref = ROLE_STRIKE
+	ID = CUSTOMSQUAD
+
+/datum/faction/strike_team/ert
+	name = "Emergency Response Team"
+	ID = ERT
+
+/datum/faction/strike_team/deathsquad
+	name = "Nanotransen Deathsquad"
+	ID = DEATHSQUAD
+
+/datum/faction/strike_team/syndiesquad
+	name = "Syndicate Deep-strike squad"
+	ID = SYNDIESQUAD

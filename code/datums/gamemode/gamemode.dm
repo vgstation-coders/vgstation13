@@ -43,16 +43,19 @@
 /datum/gamemode/proc/CreateFactions()
 	var/pc = get_player_count() //right proc?
 	for(var/datum/faction/Fac in factions_allowed)
-		new Fac
-		if(Fac.can_setup(pc))
-			factions += Fac
-			factions_allowed -= Fac
-		else
-			message_admins("Unable to start [Fac.name] in [name]")
-			qdel(Fac)
+		CreateFaction(Fac, pc)
 	for(var/datum/faction/F in factions)
 		F.onPostSetup()
 	PopulateFactions()
+
+/datum/gamemode/proc/CreateFaction(var/datum/faction/Fac, var/population)
+	new Fac
+	if(Fac.can_setup(population))
+		factions += Fac
+		factions_allowed -= Fac
+	else
+		message_admins("Unable to start [Fac.name] in [name]")
+		qdel(Fac)
 
 /*
 	Get list of available players
@@ -68,13 +71,13 @@
 
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
+			if(F.max_roles && F.members.len >= F.max_roles)
+				break
 			if(!P.client || !P.mind)
 				continue
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
 				continue
-
-
-			//TODO PREFERENCE FUCKERY AND ROLE CHECKING -- NO ROLE DATUMS AS OF THIS TIME
+			F.HandleNewMind(P.mind)
 
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
@@ -124,18 +127,6 @@
 			players.Add(P)
 
 	return players
-
-/datum/gamemode/proc/add_player_role_association(var/datum/mind/M, var/role_id)
-	if (role_id in available_roles)
-		var/datum/role/R = available_roles[role_id]
-		R.minds += M
-		M.antag_roles += role_id
-
-/datum/gamemode/proc/remove_player_role_association(var/datum/mind/M, var/role_id)
-	if (role_id in M.antag_roles)
-		var/datum/role/R = antag_roles[role_id]
-		R.minds -= M
-		M.antag_roles -= role_id
 
 
 /datum/gamemode/proc/process()
