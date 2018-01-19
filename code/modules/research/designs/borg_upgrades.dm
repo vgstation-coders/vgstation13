@@ -102,7 +102,7 @@
 	name = "Medical cyborg organ gripper upgrade"
 	desc = "Used to give a medical cyborg a organ gripper."
 	id = "borg_organ_gripper_board"
-	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_ANOMALY = 3)
+	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_MATERIALS = 6)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/organ_gripper
 	category = "Robotic_Upgrade_Modules"
@@ -112,7 +112,7 @@
 	name = "Service cyborg cooking upgrade"
 	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
 	id = "borg_service_module"
-	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2, Tc_ANOMALY = 2)
+	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2, Tc_MATERIALS = 6)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_GOLD=2500)
 	build_path = /obj/item/borg/upgrade/service
@@ -122,7 +122,7 @@
 	name = "Service cyborg H.U.E.Y. upgrade"
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds, weed killers, sprayers and glass containers."
 	id = "borg_service_module_hydro"
-	req_tech = list(Tc_BIOTECH = 4, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 2, Tc_ANOMALY = 2)
+	req_tech = list(Tc_BIOTECH = 4, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=45000, MAT_GLASS=8000, MAT_PLASTIC=2500)
 	build_path = /obj/item/borg/upgrade/hydro
