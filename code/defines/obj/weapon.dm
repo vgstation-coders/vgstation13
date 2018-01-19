@@ -438,7 +438,7 @@
 				if(user.drop_item(I, src))
 					var/turf/bombturf = get_turf(src)
 					var/area/A = get_area(bombturf)
-					var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
+					var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=[REF(user)]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
 					message_admins(log_str)
 					log_game(log_str)
 					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
@@ -467,7 +467,7 @@
 				IED.assembled = 3
 				var/turf/bombturf = get_turf(src)
 				var/area/A = get_area(bombturf)
-				var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[AM]'>?</A> has triggered an IED-rigged [name] at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
+				var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=[REF(AM)]'>?</A> has triggered an IED-rigged [name] at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
 				message_admins(log_str)
 				log_game(log_str)
 				spawn(IED.det_time)

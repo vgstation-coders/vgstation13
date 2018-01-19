@@ -50,22 +50,22 @@
 		dat += "<b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
 
 		dat += "1 Minute - $10 - "
-		dat += "<A href='?src=\ref[src];pay1m=1'>Pay</a><BR>"
+		dat += "<A href='?src=[REF(src)];pay1m=1'>Pay</a><BR>"
 
 		dat += "2 Minutes - $19 - "
-		dat += "<A href='?src=\ref[src];pay2m=1'>Pay</a><BR>"
+		dat += "<A href='?src=[REF(src)];pay2m=1'>Pay</a><BR>"
 
 		dat += "5 Minutes - $45 - "
-		dat += "<A href='?src=\ref[src];pay5m=1'>Pay</a><BR>"
+		dat += "<A href='?src=[REF(src)];pay5m=1'>Pay</a><BR>"
 
 		dat += "10 Minutes - $85 - "
-		dat += "<A href='?src=\ref[src];pay10m=1'>Pay</a><BR>"
+		dat += "<A href='?src=[REF(src)];pay10m=1'>Pay</a><BR>"
 
 		dat += "BEST VALUE FOR MONEY<BR>"
 		dat += "1 Hour - $500 - "
-		dat += "<A href='?src=\ref[src];pay1h=1'>Pay</a><BR>"
+		dat += "<A href='?src=[REF(src)];pay1h=1'>Pay</a><BR>"
 
-		var/datum/browser/popup = new(toucher, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
+		var/datum/browser/popup = new(toucher, "[REF(src)]", "[my_artifact.artifact_id]", 575, 400, src)
 		popup.set_content(dat)
 		popup.open()
 

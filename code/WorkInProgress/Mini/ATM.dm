@@ -144,7 +144,7 @@ log transactions
 		var/dat = {"<h1>Nanotrasen Automatic Teller Machine</h1>
 			For all your monetary needs!<br>
 			<i>This terminal is</i> [machine_id]. <i>Report this code when contacting Nanotrasen IT Support</i><br/>
-			Card: <a href='?src=\ref[src];choice=insert_card'>[scan ? scan.name : "------"]</a><br><br><hr>"}
+			Card: <a href='?src=[REF(src)];choice=insert_card'>[scan ? scan.name : "------"]</a><br><br><hr>"}
 
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
@@ -154,20 +154,20 @@ log transactions
 					dat += "Select a new security level for this account:<br><hr>"
 					var/text = "Zero - Either the account number or card is required to access this account. Vendor transactions will pay from your bank account if your virtual wallet has insufficient funds."
 					if(authenticated_account.security_level != 0)
-						text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=0'>[text]</a>"
+						text = "<A href='?src=[REF(src)];choice=change_security_level;new_security_level=0'>[text]</a>"
 					dat += "[text]<hr>"
 					text = "One - An account number and pin must be manually entered to access this account and process transactions."
 					if(authenticated_account.security_level != 1)
-						text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=1'>[text]</a>"
+						text = "<A href='?src=[REF(src)];choice=change_security_level;new_security_level=1'>[text]</a>"
 					dat += "[text]<hr>"
 					text = "Two - In addition to account number and pin, a card is required to access this account and process transactions."
 					if(authenticated_account.security_level != 2)
-						text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=2'>[text]</a>"
+						text = "<A href='?src=[REF(src)];choice=change_security_level;new_security_level=2'>[text]</a>"
 					dat += {"[text]<hr><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>"}
+						<A href='?src=[REF(src)];choice=view_screen;view_screen=0'>Back</a>"}
 				if(VIEW_TRANSACTION_LOGS)
 					dat += {"<b>Transaction logs</b><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>
+						<A href='?src=[REF(src)];choice=view_screen;view_screen=0'>Back</a>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
@@ -189,9 +189,9 @@ log transactions
 					dat += "</table>"
 				if(TRANSFER_FUNDS)
 					dat += {"<b>Bank Account balance:</b> $[authenticated_account.money]<br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a><br><br>
-						<form name='transfer' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+						<A href='?src=[REF(src)];choice=view_screen;view_screen=0'>Back</a><br><br>
+						<form name='transfer' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='choice' value='transfer'>
 						Target account number: <input type='text' name='target_acc_number' value='' style='width:200px; background-color:white;'><br>
 						Funds to transfer: <input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><br>
@@ -201,8 +201,8 @@ log transactions
 				else
 					dat += {"Welcome, <b>[authenticated_account.owner_name].</b><br/>
 						<b>Account balance:</b> $[authenticated_account.money]
-						<form name='withdrawal' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+						<form name='withdrawal' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='choice' value='withdrawal'>
 						<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw funds'><br>
 						</form><hr>
@@ -210,13 +210,13 @@ log transactions
 					if(scan)
 						dat += {"
 							<b>Virtual Wallet balance:</b> $[scan.virtual_wallet.money]<br>
-							<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
-							<input type='hidden' name='src' value='\ref[src]'>
+							<form name='withdraw_to_wallet' action='?src=[REF(src)]' method='get'>
+							<input type='hidden' name='src' value='[REF(src)]'>
 							<input type='hidden' name='choice' value='withdraw_to_wallet'>
 							<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw to virtual wallet'><br>
 							</form>
-							<form name='deposit_from_wallet' action='?src=\ref[src]' method='get'>
-							<input type='hidden' name='src' value='\ref[src]'>
+							<form name='deposit_from_wallet' action='?src=[REF(src)]' method='get'>
+							<input type='hidden' name='src' value='[REF(src)]'>
 							<input type='hidden' name='choice' value='deposit_from_wallet'>
 							<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
 							</form><hr>
@@ -226,15 +226,15 @@ log transactions
 							<i>Insert an ID card to perform fund transfers to/from it.</i><br>
 							"}
 					dat += {"
-						<A href='?src=\ref[src];choice=view_screen;view_screen=1'>Change account security level</a><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
-						<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
-						<A href='?src=\ref[src];choice=logout'>Logout</a><br>
+						<A href='?src=[REF(src)];choice=view_screen;view_screen=1'>Change account security level</a><br>
+						<A href='?src=[REF(src)];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
+						<A href='?src=[REF(src)];choice=view_screen;view_screen=3'>View transaction log</a><br>
+						<A href='?src=[REF(src)];choice=balance_statement'>Print balance statement</a><br>
+						<A href='?src=[REF(src)];choice=logout'>Logout</a><br>
 						"}
 		else if(linked_db)
-			dat += {"<form name='atm_auth' action='?src=\ref[src]' method='get'>
-				<input type='hidden' name='src' value='\ref[src]'>
+			dat += {"<form name='atm_auth' action='?src=[REF(src)]' method='get'>
+				<input type='hidden' name='src' value='[REF(src)]'>
 				<input type='hidden' name='choice' value='attempt_auth'>
 				<b>Account:</b> <input type='text' id='account_num' name='account_num' style='width:250px; background-color:white;'><br>
 				<b>PIN:</b> <input type='text' id='account_pin' name='account_pin' style='width:250px; background-color:white;'><br>

@@ -33,15 +33,15 @@
 	..()
 
 /obj/item/device/assembly_frame/proc/get_assembly_href(var/obj/item/device/assembly/A)
-	var/txt_buttons = "<a href='?src=\ref[src];eject=1;assembly=\ref[A]'>\[X\]</a><a href='?src=\ref[src];pulse=1;assembly=\ref[A]'>\[P\]</a><a href='?src=\ref[src];reorder=1;assembly=\ref[A]'>\[M\]</a>"
+	var/txt_buttons = "<a href='?src=[REF(src)];eject=1;assembly=[REF(A)]'>\[X\]</a><a href='?src=[REF(src)];pulse=1;assembly=[REF(A)]'>\[P\]</a><a href='?src=[REF(src)];reorder=1;assembly=[REF(A)]'>\[M\]</a>"
 
 	var/txt_assembly_number = "([assemblies.Find(A)])"
 
-	var/txt_assembly = "<a href='?src=\ref[src];interact=1;assembly=\ref[A]'><b>[A]</b></a>"
+	var/txt_assembly = "<a href='?src=[REF(src)];interact=1;assembly=[REF(A)]'><b>[A]</b></a>"
 
 	var/txt_connections
 	if(!connections.Find(A))
-		txt_connections = "<small>(<a href='?src=\ref[src];connect=1;assembly=\ref[A]'>connect</a>)</small>"
+		txt_connections = "<small>(<a href='?src=[REF(src)];connect=1;assembly=[REF(A)]'>connect</a>)</small>"
 	else
 		txt_connections = "<small> [A.connection_text]: "
 
@@ -49,16 +49,16 @@
 
 		if(list_of_connections.len)
 			for(var/obj/item/device/assembly/C in list_of_connections)
-				txt_connections += "[assemblies.Find(C)]-<a href='?src=\ref[src];disconnect=1;assembly=\ref[A];disconnect_which=\ref[C]'><b>[C.short_name][C.labeled]</b></a>, "
+				txt_connections += "[assemblies.Find(C)]-<a href='?src=[REF(src)];disconnect=1;assembly=[REF(A)];disconnect_which=[REF(C)]'><b>[C.short_name][C.labeled]</b></a>, "
 
-			txt_connections += "<a href='?src=\ref[src];connect=1;assembly=\ref[A]'><b>add more</b></a></small>"
+			txt_connections += "<a href='?src=[REF(src)];connect=1;assembly=[REF(A)]'><b>add more</b></a></small>"
 
 	return "[txt_buttons] [txt_assembly_number] [txt_assembly] [txt_connections]"
 
 ///////
 
 /obj/item/device/assembly_frame/attack_self(mob/user)
-	var/dat = "<h4>AdCo. Assembly Frame MK II <small>\[<a href='?src=\ref[src];help=1'>?</a>\] \[<a href='?src=\ref[src];lock=1'>[lock_ejection ? "UNLOCK" : "LOCK"]</a>\] \[<a href='?src=\ref[src];export=1'>EXPORT</a>\]</small></h4><br>"
+	var/dat = "<h4>AdCo. Assembly Frame MK II <small>\[<a href='?src=[REF(src)];help=1'>?</a>\] \[<a href='?src=[REF(src)];lock=1'>[lock_ejection ? "UNLOCK" : "LOCK"]</a>\] \[<a href='?src=[REF(src)];export=1'>EXPORT</a>\]</small></h4><br>"
 
 	if(!assemblies.len)
 		dat += "<p>No assemblies found!</p>"
@@ -81,11 +81,11 @@
 			//Clicking on (connect) or "add more" allows you to select an assembly to connect to
 			//Clicking on any assembly after "sending signals to" will remove the connection
 
-	var/datum/browser/popup = new(user, "\ref[src]", "[src]", 500, 300, src)
+	var/datum/browser/popup = new(user, "[REF(src)]", "[src]", 500, 300, src)
 	popup.set_content(dat)
 	popup.open()
 
-	onclose(user, "\ref[src]")
+	onclose(user, "[REF(src)]")
 
 	return
 

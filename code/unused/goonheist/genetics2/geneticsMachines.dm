@@ -99,14 +99,14 @@ var/list/genetics_computers = list()
 	botbutton_html = "<p><small>"
 	if (scanner && scanner.occupant)
 		basicinfo += {"<b>Scanner Occupant:</b> [scanner.occupant.name]"}
-		botbutton_html += {"<a href='?src=\ref[src];menu=potential'>Potential</a>  "}
-		botbutton_html += {"<a href='?src=\ref[src];menu=mutations'>Mutations</a>  "}
+		botbutton_html += {"<a href='?src=[REF(src)];menu=potential'>Potential</a>  "}
+		botbutton_html += {"<a href='?src=[REF(src)];menu=mutations'>Mutations</a>  "}
 		if (istype(scanner.occupant,/mob/living/carbon/human/))
-			botbutton_html += {"<a href='?src=\ref[src];menu=appearance'>Change Appearance</a>  "}
+			botbutton_html += {"<a href='?src=[REF(src)];menu=appearance'>Change Appearance</a>  "}
 	else
 		basicinfo += {"<b>Scanner Occupant:</b> None"}
 	botbutton_html += "<br>"
-	botbutton_html += {"<a href='?src=\ref[src];menu=research'>Research Menu</a>  "}
+	botbutton_html += {"<a href='?src=[REF(src)];menu=research'>Research Menu</a>  "}
 
 	if (genResearch.isResearched(/datum/geneticsResearchEntry/checker))
 		botbutton_html += {"<img alt="Analyser Cooldown" src="eqAnalyser.png" style="border-style: none">: [max(0,round((src.equipment[2] - world.time) / 10))] "}
@@ -121,7 +121,7 @@ var/list/genetics_computers = list()
 
 	botbutton_html += "<br>[basicinfo]"
 
-	//botbutton_html += {"<a href='?src=\ref[src];menu=saveload'>Save / Load</a>  "}
+	//botbutton_html += {"<a href='?src=[REF(src)];menu=saveload'>Save / Load</a>  "}
 	botbutton_html += "</small></p>"
 
 	var/html = {"<html><head><title>GeneTek</title>
@@ -143,8 +143,8 @@ var/list/genetics_computers = list()
 				<tr><td style="vertical-align: middle; height: 20%;">[topbotbutton_html]</td></tr>
 				<tr><td valign="middle"><div style="overflow:auto;width:517px; height:240px; padding:0px 0px 0px 0px; margin:0px 0 0px 0;margin:0 auto;">[info_html]</div></td></tr>
 				</tbody></table></td></tr>
-				<tr><td valign="middle" align="middle"><a href='?src=\ref[src];print=1'><img alt="" src="gprint.png" style="border-style: none"></a><br>
-				<a href='?src=\ref[src];printlabel=1'><small>Label: [src.printlabel ? "[src.printlabel]" : "No Label"]</small></a></td>
+				<tr><td valign="middle" align="middle"><a href='?src=[REF(src)];print=1'><img alt="" src="gprint.png" style="border-style: none"></a><br>
+				<a href='?src=[REF(src)];printlabel=1'><small>Label: [src.printlabel ? "[src.printlabel]" : "No Label"]</small></a></td>
 				<td style="vertical-align: middle; height: 40px;">[botbutton_html]</td></tr>
 				</tbody></table>
 				<span></span></body></html>
@@ -233,9 +233,9 @@ var/list/genetics_computers = list()
 
 		info_html = {"<p><b>[genResearch.researchedMutations[E.id] >= 1 ? E.name : "Unknown Mutation"]</b>"}
 		if(src.equipment_available("precision_emitter",E))
-			info_html += " <a href='?src=\ref[src];Prademitter=\ref[E]'><small>(Scramble)</small></a>"
+			info_html += " <a href='?src=[REF(src)];Prademitter=[REF(E)]'><small>(Scramble)</small></a>"
 		if(src.equipment_available("reclaimer",E))
-			info_html += " <a href='?src=\ref[src];reclaimer=\ref[E]'><small>(Reclaim)</small></a>"
+			info_html += " <a href='?src=[REF(src)];reclaimer=[REF(E)]'><small>(Reclaim)</small></a>"
 		info_html += "</p><br>"
 
 		info_html += src.ui_build_mutation_research(E)
@@ -245,9 +245,9 @@ var/list/genetics_computers = list()
 		info_html += "[build[1]]<br>[build[2]]<br>[build[3]]</p><br>"
 
 		if(E.dnaBlocks.sequenceCorrect())
-			info_html += "<p>Sequence Stable. <a href='?src=\ref[src];activatepool=\ref[E]'>Activate?</a></p>"
+			info_html += "<p>Sequence Stable. <a href='?src=[REF(src)];activatepool=[REF(E)]'>Activate?</a></p>"
 		else if (src.equipment_available("analyser"))
-			info_html += "<p><a href='?src=\ref[src];checkstability=\ref[E]'>Check Sequence Stability</a></p>"
+			info_html += "<p><a href='?src=[REF(src)];checkstability=[REF(E)]'>Check Sequence Stability</a></p>"
 
 	else if(href_list["sample_viewpool"])
 
@@ -282,7 +282,7 @@ var/list/genetics_computers = list()
 			info_html = {"<p><b>[genResearch.researchedMutations[globalInstance.id] >= 1 ? globalInstance.name : "Unknown Mutation"]</b><br>
 			[genResearch.researchedMutations[globalInstance.id] >= 1  ? globalInstance.desc : "Research on a non-active instance of this gene is required."]</p>"}
 			if (src.equipment_available("injector",E))
-				info_html += " <a href='?src=\ref[src];make_injector=\ref[E]'><small>(Create Injector)</small></a>"
+				info_html += " <a href='?src=[REF(src)];make_injector=[REF(E)]'><small>(Create Injector)</small></a>"
 
 			info_html += "<p> Sequence : <br>"
 			var/list/build = src.ui_build_sequence(E,"active")
@@ -312,7 +312,7 @@ var/list/genetics_computers = list()
 		I.genes += "[E.id]"
 
 		spawn(0)
-			to_chat(usr, link("byond:)//?src=\ref[src];vieweffect=\ref[E]")
+			to_chat(usr, link("byond:)//?src=[REF(src)];vieweffect=[REF(E)]")
 
 
 	else if(href_list["checkstability"])
@@ -338,7 +338,7 @@ var/list/genetics_computers = list()
 
 		src.equipment_cooldown("analyser")
 
-		to_chat(usr, link("byond:)//?src=\ref[src];viewpool=\ref[E]")
+		to_chat(usr, link("byond:)//?src=[REF(src)];viewpool=[REF(E)]")
 
 
 	else if(href_list["rademitter"])
@@ -361,7 +361,7 @@ var/list/genetics_computers = list()
 
 		to_chat(usr, "<B>SCANNER:</B> Genes successfully scrambled.")
 
-		to_chat(usr, link("byond:)//?src=\ref[src];menu=potential")
+		to_chat(usr, link("byond:)//?src=[REF(src)];menu=potential")
 
 
 	else if(href_list["Prademitter"])
@@ -386,7 +386,7 @@ var/list/genetics_computers = list()
 		src.equipment_cooldown("precision_emitter")
 
 		to_chat(usr, "<b>SCANNER ALERT:</b> Gene successfully scrambled.")
-		to_chat(usr, link("byond:)//?src=\ref[src];menu=potential")
+		to_chat(usr, link("byond:)//?src=[REF(src)];menu=potential")
 
 
 	else if(href_list["reclaimer"])
@@ -413,7 +413,7 @@ var/list/genetics_computers = list()
 
 		src.equipment_cooldown("reclaimer")
 		src.currently_browsing = null
-		to_chat(usr, link("byond:)//?src=\ref[src];menu=potential")
+		to_chat(usr, link("byond:)//?src=[REF(src)];menu=potential")
 
 
 	else if(href_list["print"])
@@ -470,7 +470,7 @@ var/list/genetics_computers = list()
 					bp.bpp2 = temp_holder
 				else
 					bp.bpp2 = input
-		to_chat(usr, link("byond:)//?src=\ref[src];viewpool=\ref[E]") //OH MAN LOOK AT THIS CRAP. FUCK BYOND. (This refreshes the page)
+		to_chat(usr, link("byond:)//?src=[REF(src)];viewpool=[REF(E)]") //OH MAN LOOK AT THIS CRAP. FUCK BYOND. (This refreshes the page)
 
 		return
 
@@ -544,7 +544,7 @@ var/list/genetics_computers = list()
 					bp.marker = "blue"
 				if("blue")
 					bp.marker = "green"
-		to_chat(usr, link("byond:)//?src=\ref[src];viewpool=\ref[E]") // i hear ya buddy =(
+		to_chat(usr, link("byond:)//?src=[REF(src)];viewpool=[REF(E)]") // i hear ya buddy =(
 
 		return
 
@@ -555,7 +555,7 @@ var/list/genetics_computers = list()
 		var/datum/bioEffect/E = locate(href_list["activatepool"])
 		if (bioEffect_sanity_check(E)) return
 		scanner.occupant.bioHolder.ActivatePoolEffect(E)
-		to_chat(usr, link("byond:)//?src=\ref[src];menu=mutations") //send them to the mutations page.
+		to_chat(usr, link("byond:)//?src=[REF(src)];menu=mutations") //send them to the mutations page.
 
 		return
 
@@ -567,7 +567,7 @@ var/list/genetics_computers = list()
 		info_html = {"
 		<p>[E.name]<br><br>
 		[E.desc]</p><br><br>
-		<a href='?src=\ref[src];research=\ref[E]'>Research now</a>"}
+		<a href='?src=[REF(src)];research=[REF(E)]'>Research now</a>"}
 
 	else if(href_list["researchmut"])
 		var/datum/bioEffect/E = locate(href_list["researchmut"])
@@ -578,7 +578,7 @@ var/list/genetics_computers = list()
 			to_chat(usr, "<b>SCANNER ERROR: Unable to begin research.</b>")
 		else
 			to_chat(usr, "<b>SCANNER:</b> Research initiated successfully.")
-		to_chat(usr, link("byond:)//?src=\ref[src];viewpool=\ref[E]")
+		to_chat(usr, link("byond:)//?src=[REF(src)];viewpool=[REF(E)]")
 
 		return
 
@@ -593,7 +593,7 @@ var/list/genetics_computers = list()
 		else
 			to_chat(usr, "<b>SCANNER:</b> Research initiated successfully.")
 
-		to_chat(usr, link("byond:)//?src=\ref[src];sample_viewpool=\ref[E];sample_to_viewpool=\ref[sample]")
+		to_chat(usr, link("byond:)//?src=[REF(src)];sample_viewpool=[REF(E)];sample_to_viewpool=[REF(sample)]")
 
 		return
 
@@ -604,7 +604,7 @@ var/list/genetics_computers = list()
 		topbotbutton_html = ""
 		if(genResearch.addResearch(E))
 			to_chat(usr, "<b>SCANNER:</b> Research initiated successfully.")
-			to_chat(usr, link("byond:)//?src=\ref[src];menu=resopen")
+			to_chat(usr, link("byond:)//?src=[REF(src)];menu=resopen")
 
 		else
 			to_chat(usr, "<span class='warning'><b>SCANNER ERROR:</b> Unable to begin research.</span>")
@@ -623,7 +623,7 @@ var/list/genetics_computers = list()
 		var/datum/computer/file/genetics_scan/sample = locate(href_list["delete_sample"])
 		if (sample_sanity_check(sample)) return
 
-		info_html = "<p><a href='?src=\ref[src];menu=dna_samples'>[sample.subject_name] DNA sample deleted.</a></p>"
+		info_html = "<p><a href='?src=[REF(src)];menu=dna_samples'>[sample.subject_name] DNA sample deleted.</a></p>"
 
 		genResearch.dna_samples -= sample
 		qdel(sample)
@@ -635,7 +635,7 @@ var/list/genetics_computers = list()
 		if (!istype(R,/datum/geneticsResearchEntry/))
 			return
 		src.tracked_research = R
-		to_chat(usr, link("byond:)//?src=\ref[src];menu=resrunning")
+		to_chat(usr, link("byond:)//?src=[REF(src)];menu=resrunning")
 
 		return
 
@@ -651,7 +651,7 @@ var/list/genetics_computers = list()
 				info_html = "<p><b>Occupant</b>: [src.scanner.occupant ? "[src.scanner.occupant.name]" : "None"]</p><br>"
 				info_html += "<p>Showing potential mutations</p><br>"
 				if(src.equipment_available("emitter"))
-					info_html += "<a href='?src=\ref[src];rademitter=1'>Scramble DNA</a>"
+					info_html += "<a href='?src=[REF(src)];rademitter=1'>Scramble DNA</a>"
 
 			if("sample_potential")
 				topbotbutton_html = ""
@@ -662,7 +662,7 @@ var/list/genetics_computers = list()
 				topbotbutton_html = ui_build_clickable_genes("sample_pool",sample)
 
 				info_html = "<p><b>Sample</b>: [sample.subject_name] <small>([sample.subject_uID])</small></p><br>"
-				info_html += "<p>Showing potential mutations <small><a href='?src=\ref[src];menu=dna_samples'>(Back)</a></small></p><br>"
+				info_html += "<p>Showing potential mutations <small><a href='?src=[REF(src)];menu=dna_samples'>(Back)</a></small></p><br>"
 
 			if("mutations")
 				topbotbutton_html = ""
@@ -682,11 +682,11 @@ var/list/genetics_computers = list()
 				</p>"}
 				info_html = {"<br>
 
-				<a href='?src=\ref[src];menu=buymats'>Purchase Additional Materials</a><br>
-				<a href='?src=\ref[src];menu=resopen'>Available Research</a><br>
-				<a href='?src=\ref[src];menu=resrunning'>Research in Progress</a><br>
-				<a href='?src=\ref[src];menu=resfin'>Finished Research</a><br>
-				<a href='?src=\ref[src];menu=dna_samples'>View DNA Samples</a><br>
+				<a href='?src=[REF(src)];menu=buymats'>Purchase Additional Materials</a><br>
+				<a href='?src=[REF(src)];menu=resopen'>Available Research</a><br>
+				<a href='?src=[REF(src)];menu=resrunning'>Research in Progress</a><br>
+				<a href='?src=[REF(src)];menu=resfin'>Finished Research</a><br>
+				<a href='?src=[REF(src)];menu=dna_samples'>View DNA Samples</a><br>
 				"}
 
 			if("resopen")
@@ -712,15 +712,15 @@ var/list/genetics_computers = list()
 						if (research_time)
 							research_time = round(research_time / 10)
 
-						info_html += "<a href='?src=\ref[src];viewopenres=\ref[C]'>• [C.name] (Cost: [research_cost] * Time: [research_time] sec)</a><br>"
+						info_html += "<a href='?src=[REF(src)];viewopenres=[REF(C)]'>ï¿½ [C.name] (Cost: [research_cost] * Time: [research_time] sec)</a><br>"
 
 			if("resrunning")
 				topbotbutton_html = "<p><b>Research in Progress</b></p>"
 				info_html = "<p>"
 				for(var/datum/geneticsResearchEntry/R in genResearch.currentResearch)
-					info_html += "• [R.name] - [round((R.finishTime - world.time) / 10)] seconds left."
+					info_html += "ï¿½ [R.name] - [round((R.finishTime - world.time) / 10)] seconds left."
 					if (R != src.tracked_research)
-						info_html += " <small><a href='?src=\ref[src];track_research=\ref[R]'>(Track)</a></small>"
+						info_html += " <small><a href='?src=[REF(src)];track_research=[REF(R)]'>(Track)</a></small>"
 					info_html += "<br>"
 				info_html += "</p>"
 
@@ -752,7 +752,7 @@ var/list/genetics_computers = list()
 
 					for(var/datum/geneticsResearchEntry/C in tierList)
 						if(C.isResearched == 0 || C.isResearched == -1) continue
-						info_html += "• [C.name]<br>"
+						info_html += "ï¿½ [C.name]<br>"
 				info_html += "</p>"
 
 			if("dna_samples")
@@ -765,7 +765,7 @@ var/list/genetics_computers = list()
 
 				info_html = "<p>"
 				for(var/datum/computer/file/genetics_scan/sample in genResearch.dna_samples)
-					info_html += "* <a href='?src=\ref[src];menu=sample_potential;sample_to_view_potential=\ref[sample]'>[sample.subject_name]</a> <small>([sample.subject_uID]) <a href='?src=\ref[src];delete_sample=\ref[sample]'>(Delete)</a></small><br>"
+					info_html += "* <a href='?src=[REF(src)];menu=sample_potential;sample_to_view_potential=[REF(sample)]'>[sample.subject_name]</a> <small>([sample.subject_uID]) <a href='?src=[REF(src)];delete_sample=[REF(sample)]'>(Delete)</a></small><br>"
 				info_html += "</p>"
 
 			if("appearance")
@@ -786,7 +786,7 @@ var/list/genetics_computers = list()
 
 			if("saveload")
 				topbotbutton_html = ""
-				//info_html = "<p>Temporary : </p><a href='?src=\ref[src];copyself=1'>Copy Occupant to Self</a>" Disabled due to shitlords
+				//info_html = "<p>Temporary : </p><a href='?src=[REF(src)];copyself=1'>Copy Occupant to Self</a>" Disabled due to shitlords
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -865,9 +865,9 @@ var/list/genetics_computers = list()
 					info_html += "<p>Genetic structure unknown. Research currently impossible.</p>"
 				else
 					if (sample)
-						info_html += "<p><a href='?src=\ref[src];researchmut_sample=\ref[E];sample_to_research=\ref[sample]'>Research required.</a> Material: [research_cost]/[genResearch.researchMaterial]</p>"
+						info_html += "<p><a href='?src=[REF(src)];researchmut_sample=[REF(E)];sample_to_research=[REF(sample)]'>Research required.</a> Material: [research_cost]/[genResearch.researchMaterial]</p>"
 					else
-						info_html += "<p><a href='?src=\ref[src];researchmut=\ref[E]'>Research required.</a> Material: [research_cost]/[genResearch.researchMaterial]</p>"
+						info_html += "<p><a href='?src=[REF(src)];researchmut=[REF(E)]'>Research required.</a> Material: [research_cost]/[genResearch.researchMaterial]</p>"
 			else
 				info_html += "<p>Manual Research required.</p>"
 		if(-1)
@@ -897,9 +897,9 @@ var/list/genetics_computers = list()
 			for(var/i=0, i < E.dnaBlocks.blockListCurr.len, i++)
 				var/blockEnd = (((i+1) % 4) == 0 ? 1 : 0)
 				var/datum/basepair/bp = E.dnaBlocks.blockListCurr[i+1]
-				top += {"<a href='?src=\ref[src];setseq=\ref[E];setseq1=[i+1]'><img alt="" src="bp[bp.bpp1].png" style="border-style: none"></a>  [blockEnd ? {"<img alt="" src="bpSpacer.png">"} : ""]"}
-				mid += {"<a href='?src=\ref[src];marker=\ref[E];themark=[i+1]'><img alt="" src="bpsep-[bp.marker].png" border=0></a>  [blockEnd ? {"<img alt="" src="bpSpacer.png" style="border-style: none">"} : ""]"}
-				bot += {"<a href='?src=\ref[src];setseq=\ref[E];setseq2=[i+1]'><img alt="" src="bp[bp.bpp2].png" style="border-style: none"></a>  [blockEnd ? {"<img alt="" src="bpSpacer.png">"} : ""]"}
+				top += {"<a href='?src=[REF(src)];setseq=[REF(E)];setseq1=[i+1]'><img alt="" src="bp[bp.bpp1].png" style="border-style: none"></a>  [blockEnd ? {"<img alt="" src="bpSpacer.png">"} : ""]"}
+				mid += {"<a href='?src=[REF(src)];marker=[REF(E)];themark=[i+1]'><img alt="" src="bpsep-[bp.marker].png" border=0></a>  [blockEnd ? {"<img alt="" src="bpSpacer.png" style="border-style: none">"} : ""]"}
+				bot += {"<a href='?src=[REF(src)];setseq=[REF(E)];setseq2=[i+1]'><img alt="" src="bp[bp.bpp2].png" style="border-style: none"></a>  [blockEnd ? {"<img alt="" src="bpSpacer.png">"} : ""]"}
 		if("sample_pool")
 			for(var/i=0, i < E.dnaBlocks.blockListCurr.len, i++)
 				var/blockEnd = (((i+1) % 4) == 0 ? 1 : 0)
@@ -941,7 +941,7 @@ var/list/genetics_computers = list()
 						gene_icon_status = "dnabuttUnk.png"
 					if (-1)
 						gene_icon_status = "dnabuttRes.png"
-				build += {"<a href='?src=\ref[src];sample_viewpool=\ref[E];sample_to_viewpool=\ref[sample]'>"}
+				build += {"<a href='?src=[REF(src)];sample_viewpool=[REF(E)];sample_to_viewpool=[REF(sample)]'>"}
 				build += {"<img style="border: [E == src.currently_browsing ? "solid 1px #00FFFF" : "dotted 1px #88C425"]" src=[gene_icon_status] alt="[genResearch.researchedMutations[E.id] >= 1  ? E.name : "???"]" width="43" height="39"></a>"}
 		if("pool")
 			for(var/datum/bioEffect/E in scanner.occupant.bioHolder.effectPool)
@@ -951,7 +951,7 @@ var/list/genetics_computers = list()
 						gene_icon_status = "dnabuttUnk.png"
 					if (-1)
 						gene_icon_status = "dnabuttRes.png"
-				build += {"<a href='?src=\ref[src];viewpool=\ref[E]'>"}
+				build += {"<a href='?src=[REF(src)];viewpool=[REF(E)]'>"}
 				build += {"<img style="border: [E == src.currently_browsing ? "solid 1px #00FFFF" : "dotted 1px #88C425"]" src=[gene_icon_status] alt="[genResearch.researchedMutations[E.id] >= 1  ? E.name : "???"]" width="43" height="39"></a>"}
 
 		if("active")
@@ -959,7 +959,7 @@ var/list/genetics_computers = list()
 				if (E.isHidden > 0)
 					continue
 				gene_icon_status = "dnabuttAct.png"
-				build += {"<a href='?src=\ref[src];vieweffect=\ref[E]'>"}
+				build += {"<a href='?src=[REF(src)];vieweffect=[REF(E)]'>"}
 				build += {"<img style="border: [E == src.currently_browsing ? "solid 1px #00FFFF" : "dotted 1px #88C425"]" src=[gene_icon_status] alt="[E.name]" width="43" height="39"></a>"}
 
 	return build

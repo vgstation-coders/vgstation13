@@ -935,20 +935,20 @@ var/list/slot_equipment_priority = list( \
 	var/dat = ""
 	dat += "<B><HR><FONT size=3>[name]</FONT></B>"
 	dat += "<BR><HR>"
-	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+	dat += "<BR><B>Mask:</B> <A href='?src=[REF(src)];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 
 	for(var/i = 1 to held_items.len) //Hands
 		var/obj/item/I = held_items[i]
-		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
+		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=[REF(src)];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+	dat += "<BR><B>Back:</B> <A href='?src=[REF(src)];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 
 	dat += "<BR>"
 
 	dat += {"
-	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
+	<BR><A href='?src=[REF(user)];mach_close=mob[REF(src)]'>Close</A>
 	<BR>"}
-	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 325, 500)
+	var/datum/browser/popup = new(user, "mob[REF(src)]", "[src]", 325, 500)
 	popup.set_content(dat)
 	popup.open()
 	return
@@ -1178,11 +1178,11 @@ var/list/slot_equipment_priority = list( \
 		return
 	var/msg = strip_html(flavor_text)
 	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
-		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
+		return "<font color='#ffa000'><b><a href='?src=[REF(src)];show_flavor_text=1'>Show flavor text</a></b></font>"
 	if(length(msg) <= 32)
 		return "<font color='#ffa000'><b>[msg]</b></font>"
 	else
-		return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];show_flavor_text=1'>More</a></b></font>"
+		return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=[REF(src)];show_flavor_text=1'>More</a></b></font>"
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"

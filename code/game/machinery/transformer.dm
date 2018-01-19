@@ -161,16 +161,16 @@
 		<ul>
 			<li>
 				<b>Next Borg's Module:</b>
-				<a href="?src=\ref[src];act=force_class">[isnull(force_borg_module)?"Not Forced":force_borg_module]</a>
+				<a href="?src=[REF(src)];act=force_class">[isnull(force_borg_module)?"Not Forced":force_borg_module]</a>
 			</li>
 			<li>
 				<b>Borg Names:</b>
-				<a class="link[name_type==NAMETYPE_NORMAL ? "On" : "Off"]" href="?src=\ref[src];act=names;nametype=[NAMETYPE_NORMAL]">Default</a>
-				<a class="link[name_type==NAMETYPE_SILLY ? "On" : "Off"]" href="?src=\ref[src];act=names;nametype=[NAMETYPE_SILLY]">Silly (OBVIOUS)</a>
+				<a class="link[name_type==NAMETYPE_NORMAL ? "On" : "Off"]" href="?src=[REF(src)];act=names;nametype=[NAMETYPE_NORMAL]">Default</a>
+				<a class="link[name_type==NAMETYPE_SILLY ? "On" : "Off"]" href="?src=[REF(src)];act=names;nametype=[NAMETYPE_SILLY]">Silly (OBVIOUS)</a>
 			</li>
 			<li>
 				<b>Permit Name Picking:</b>
-				<a href="?src=\ref[src];act=enable_namepick">[enable_namepick ? "On":"Off"]</a>
+				<a href="?src=[REF(src)];act=enable_namepick">[enable_namepick ? "On":"Off"]</a>
 			</li>
 		</ul>
 	"}

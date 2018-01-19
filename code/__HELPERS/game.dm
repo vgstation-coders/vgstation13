@@ -1,8 +1,8 @@
 /proc/dopage(src,target)
 	var/href_list
 	var/href
-	href_list = params2list("src=\ref[src]&[target]=1")
-	href = "src=\ref[src];[target]=1"
+	href_list = params2list("src=[REF(src)]&[target]=1")
+	href = "src=[REF(src)];[target]=1"
 	src:temphtml = null
 	src:Topic(href, href_list)
 	return null

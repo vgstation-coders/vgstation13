@@ -139,7 +139,7 @@
 		var/temp = ""
 		for(var/cell in cells)
 			var/mob/living/carbon/occupant = cells[cell]
-			temp += "<br />\[Occupant: [occupant ? "[occupant] (Health: [occupant.health]%)" : "none"]\]<br />|<a href='?src=\ref[src];subdue[cell]=1'>Subdue</a>|<a href='?src=\ref[src];eject[cell]=1'>Eject</a>|"
+			temp += "<br />\[Occupant: [occupant ? "[occupant] (Health: [occupant.health]%)" : "none"]\]<br />|<a href='?src=[REF(src)];subdue[cell]=1'>Subdue</a>|<a href='?src=[REF(src)];eject[cell]=1'>Eject</a>|"
 		return "[output] [temp]"
 	return
 

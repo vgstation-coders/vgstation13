@@ -88,7 +88,7 @@
 	user.set_machine(src)
 
 	var/data[0]
-	data["src"] = "\ref[src]"
+	data["src"] = "[REF(src)]"
 	data["pda_name"] = pda_device ? pda_device.name : "-----"
 	data["pda_owner"] = pda_device && pda_device.owner ? pda_device.owner : "Unknown"
 	data["has_pda_device"] = !!pda_device

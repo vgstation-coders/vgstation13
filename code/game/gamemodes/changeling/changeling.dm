@@ -302,7 +302,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		if(show_message)
 			to_chat(current, "<B><font color='red'>Your powers are awoken. A flash of memory returns to us...we are a changeling!</font></B>")
 			var/wikiroute = role_wiki[ROLE_CHANGELING]
-			to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+			to_chat(current, "<span class='info'><a HREF='?src=[REF(current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		if(generate_objectives)
 			ticker.mode.forge_changeling_objectives(src)
 			var/obj_count = 1

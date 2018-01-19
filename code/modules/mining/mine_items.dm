@@ -126,7 +126,7 @@ proc/move_mining_shuttle()
 	if(..(user))
 		return
 	src.add_fingerprint(usr)
-	var/dat = "<center>Mining shuttle:<br> <b><A href='?src=\ref[src];move=[1]'>Send</A></b></center>"
+	var/dat = "<center>Mining shuttle:<br> <b><A href='?src=[REF(src)];move=[1]'>Send</A></b></center>"
 	user << browse("[dat]", "window=miningshuttle;size=200x100")
 
 /obj/machinery/computer/mining_shuttle/Topic(href, href_list)
@@ -699,7 +699,7 @@ proc/move_mining_shuttle()
 
 			if(M.stat == DEAD)
 
-				M.faction = "lazarus \ref[user]"
+				M.faction = "lazarus [REF(user)]"
 				M.revive(refreshbutcher = refreshes_drops)
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M

@@ -550,7 +550,7 @@
 	var/mob/M = loc
 	if(!istype(M) || M.incapacitated())
 		return
-	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
+	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=[REF(M)];listitems=[REF(hold)]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
 
 /obj/item/clothing/suit/sakura_kimono
 	name = "sakura kimono"

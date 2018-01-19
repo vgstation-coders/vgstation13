@@ -27,7 +27,7 @@
 	return 0
 
 /datum/automation/get_sensor_data/GetText()
-	return "<a href=\"?src=\ref[src];set_field=1\">[fmtString(field)]</a> from sensor <a href=\"?src=\ref[src];set_sensor=1\">[fmtString(sensor)]</a>"
+	return "<a href=\"?src=[REF(src)];set_field=1\">[fmtString(field)]</a> from sensor <a href=\"?src=[REF(src)];set_sensor=1\">[fmtString(sensor)]</a>"
 
 /datum/automation/get_sensor_data/Topic(href,href_list)
 	. = ..()

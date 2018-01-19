@@ -303,7 +303,7 @@
 	return {"
 	<b>Main</b>
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 	</ul>"}
 

@@ -320,16 +320,16 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 						words[w] = w
 		notedat = {"
 					<br><b>Word translation notes</b> <br>
-					[words[1]] is <a href='byond://?src=\ref[src];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=\ref[src];number=1;action=clear'>Clear</A><BR>
-					[words[2]] is <A href='byond://?src=\ref[src];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=\ref[src];number=2;action=clear'>Clear</A><BR>
-					[words[3]] is <a href='byond://?src=\ref[src];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=\ref[src];number=3;action=clear'>Clear</A><BR>
-					[words[4]] is <a href='byond://?src=\ref[src];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=\ref[src];number=4;action=clear'>Clear</A><BR>
-					[words[5]] is <a href='byond://?src=\ref[src];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=\ref[src];number=5;action=clear'>Clear</A><BR>
-					[words[6]] is <a href='byond://?src=\ref[src];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=\ref[src];number=6;action=clear'>Clear</A><BR>
-					[words[7]] is <a href='byond://?src=\ref[src];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=\ref[src];number=7;action=clear'>Clear</A><BR>
-					[words[8]] is <a href='byond://?src=\ref[src];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=\ref[src];number=8;action=clear'>Clear</A><BR>
-					[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
-					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
+					[words[1]] is <a href='byond://?src=[REF(src)];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=[REF(src)];number=1;action=clear'>Clear</A><BR>
+					[words[2]] is <A href='byond://?src=[REF(src)];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=[REF(src)];number=2;action=clear'>Clear</A><BR>
+					[words[3]] is <a href='byond://?src=[REF(src)];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=[REF(src)];number=3;action=clear'>Clear</A><BR>
+					[words[4]] is <a href='byond://?src=[REF(src)];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=[REF(src)];number=4;action=clear'>Clear</A><BR>
+					[words[5]] is <a href='byond://?src=[REF(src)];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=[REF(src)];number=5;action=clear'>Clear</A><BR>
+					[words[6]] is <a href='byond://?src=[REF(src)];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=[REF(src)];number=6;action=clear'>Clear</A><BR>
+					[words[7]] is <a href='byond://?src=[REF(src)];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=[REF(src)];number=7;action=clear'>Clear</A><BR>
+					[words[8]] is <a href='byond://?src=[REF(src)];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=[REF(src)];number=8;action=clear'>Clear</A><BR>
+					[words[9]] is <a href='byond://?src=[REF(src)];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=[REF(src)];number=9;action=clear'>Clear</A><BR>
+					[words[10]] is <a href='byond://?src=[REF(src)];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=[REF(src)];number=10;action=clear'>Clear</A><BR>
 					"}
 		usr << browse("[notedat]", "window=notes")
 //		call(/obj/item/weapon/tome/proc/edit_notes)()
@@ -342,16 +342,16 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	to_chat(world, "its been called! [usr]")
 	notedat = {"
 	<br><b>Word translation notes</b> <br>
-		[words[1]] is <a href='byond://?src=\ref[src];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=\ref[src];number=1;action=clear'>Clear</A><BR>
-		[words[2]] is <A href='byond://?src=\ref[src];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=\ref[src];number=2;action=clear'>Clear</A><BR>
-		[words[3]] is <a href='byond://?src=\ref[src];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=\ref[src];number=3;action=clear'>Clear</A><BR>
-		[words[4]] is <a href='byond://?src=\ref[src];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=\ref[src];number=4;action=clear'>Clear</A><BR>
-		[words[5]] is <a href='byond://?src=\ref[src];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=\ref[src];number=5;action=clear'>Clear</A><BR>
-		[words[6]] is <a href='byond://?src=\ref[src];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=\ref[src];number=6;action=clear'>Clear</A><BR>
-		[words[7]] is <a href='byond://?src=\ref[src];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=\ref[src];number=7;action=clear'>Clear</A><BR>
-		[words[8]] is <a href='byond://?src=\ref[src];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=\ref[src];number=8;action=clear'>Clear</A><BR>
-		[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
-		[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
+		[words[1]] is <a href='byond://?src=[REF(src)];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=[REF(src)];number=1;action=clear'>Clear</A><BR>
+		[words[2]] is <A href='byond://?src=[REF(src)];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=[REF(src)];number=2;action=clear'>Clear</A><BR>
+		[words[3]] is <a href='byond://?src=[REF(src)];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=[REF(src)];number=3;action=clear'>Clear</A><BR>
+		[words[4]] is <a href='byond://?src=[REF(src)];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=[REF(src)];number=4;action=clear'>Clear</A><BR>
+		[words[5]] is <a href='byond://?src=[REF(src)];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=[REF(src)];number=5;action=clear'>Clear</A><BR>
+		[words[6]] is <a href='byond://?src=[REF(src)];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=[REF(src)];number=6;action=clear'>Clear</A><BR>
+		[words[7]] is <a href='byond://?src=[REF(src)];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=[REF(src)];number=7;action=clear'>Clear</A><BR>
+		[words[8]] is <a href='byond://?src=[REF(src)];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=[REF(src)];number=8;action=clear'>Clear</A><BR>
+		[words[9]] is <a href='byond://?src=[REF(src)];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=[REF(src)];number=9;action=clear'>Clear</A><BR>
+		[words[10]] is <a href='byond://?src=[REF(src)];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=[REF(src)];number=10;action=clear'>Clear</A><BR>
 				"}
 	to_chat(usr, "whatev")
 	usr << browse(null, "window=tank")
@@ -417,16 +417,16 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 						return
 					notedat = {"
 				<br><b>Word translation notes</b> <br>
-				[words[1]] is <a href='byond://?src=\ref[src];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=\ref[src];number=1;action=clear'>Clear</A><BR>
-				[words[2]] is <A href='byond://?src=\ref[src];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=\ref[src];number=2;action=clear'>Clear</A><BR>
-				[words[3]] is <a href='byond://?src=\ref[src];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=\ref[src];number=3;action=clear'>Clear</A><BR>
-				[words[4]] is <a href='byond://?src=\ref[src];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=\ref[src];number=4;action=clear'>Clear</A><BR>
-				[words[5]] is <a href='byond://?src=\ref[src];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=\ref[src];number=5;action=clear'>Clear</A><BR>
-				[words[6]] is <a href='byond://?src=\ref[src];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=\ref[src];number=6;action=clear'>Clear</A><BR>
-				[words[7]] is <a href='byond://?src=\ref[src];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=\ref[src];number=7;action=clear'>Clear</A><BR>
-				[words[8]] is <a href='byond://?src=\ref[src];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=\ref[src];number=8;action=clear'>Clear</A><BR>
-				[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
-				[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
+				[words[1]] is <a href='byond://?src=[REF(src)];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=[REF(src)];number=1;action=clear'>Clear</A><BR>
+				[words[2]] is <A href='byond://?src=[REF(src)];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=[REF(src)];number=2;action=clear'>Clear</A><BR>
+				[words[3]] is <a href='byond://?src=[REF(src)];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=[REF(src)];number=3;action=clear'>Clear</A><BR>
+				[words[4]] is <a href='byond://?src=[REF(src)];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=[REF(src)];number=4;action=clear'>Clear</A><BR>
+				[words[5]] is <a href='byond://?src=[REF(src)];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=[REF(src)];number=5;action=clear'>Clear</A><BR>
+				[words[6]] is <a href='byond://?src=[REF(src)];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=[REF(src)];number=6;action=clear'>Clear</A><BR>
+				[words[7]] is <a href='byond://?src=[REF(src)];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=[REF(src)];number=7;action=clear'>Clear</A><BR>
+				[words[8]] is <a href='byond://?src=[REF(src)];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=[REF(src)];number=8;action=clear'>Clear</A><BR>
+				[words[9]] is <a href='byond://?src=[REF(src)];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=[REF(src)];number=9;action=clear'>Clear</A><BR>
+				[words[10]] is <a href='byond://?src=[REF(src)];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=[REF(src)];number=10;action=clear'>Clear</A><BR>
 				"}
 //						call(/obj/item/weapon/tome/proc/edit_notes)()
 					user << browse("[notedat]", "window=notes")

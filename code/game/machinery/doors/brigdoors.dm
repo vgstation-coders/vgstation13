@@ -148,21 +148,21 @@
 		dat += {"<HR>Timer System:</hr>
 			<b>Door [src.id_tag] controls</b><br/>"}
 		if (src.timing)
-			dat += "<a href='?src=\ref[src];timing=0'>Stop Timer and open door</a><br/>"
+			dat += "<a href='?src=[REF(src)];timing=0'>Stop Timer and open door</a><br/>"
 		else
-			dat += "<a href='?src=\ref[src];timing=1'>Activate Timer and close door</a><br/>"
+			dat += "<a href='?src=[REF(src)];timing=1'>Activate Timer and close door</a><br/>"
 
 
 		dat += {"Time Left: [(minute ? text("[minute]:") : null)][second] <br/>
-			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
+			<a href='?src=[REF(src)];tp=-60'>-</a> <a href='?src=[REF(src)];tp=-1'>-</a> <a href='?src=[REF(src)];tp=1'>+</a> <A href='?src=[REF(src)];tp=60'>+</a><br/>"}
 		for(var/obj/machinery/flasher/F in targets)
 			if(F.last_flash && (F.last_flash + 150) > world.time)
-				dat += "<br/><A href='?src=\ref[src];fc=1'>Flash Charging</A>"
+				dat += "<br/><A href='?src=[REF(src)];fc=1'>Flash Charging</A>"
 			else
-				dat += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"
+				dat += "<br/><A href='?src=[REF(src)];fc=1'>Activate Flash</A>"
 
 
-		dat += {"<br/><br/><a href='?src=\ref[user];mach_close=computer'>Close</a>
+		dat += {"<br/><br/><a href='?src=[REF(user)];mach_close=computer'>Close</a>
 			</TT></BODY></HTML>"}
 		user << browse(dat, "window=computer;size=400x500")
 		onclose(user, "computer")

@@ -225,7 +225,7 @@ obj/machinery/airlock_sensor/airlock_exterior
 obj/machinery/airlock_sensor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return {"
 		<ul>
-			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[0]">Reset</a>)</li>
+			<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[0]">Reset</a>)</li>
 			[format_tag("ID Tag","id_tag")]
 			[format_tag("Master ID Tag","master_tag")]
 		</ul>"}
@@ -365,7 +365,7 @@ obj/machinery/access_button/airlock_exterior
 obj/machinery/access_button/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return {"
 		<ul>
-			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[0]">Reset</a>)</li>
+			<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[0]">Reset</a>)</li>
 			[format_tag("Master ID Tag","master_tag")]
 			[format_tag("Command","command")]
 		</ul>"}

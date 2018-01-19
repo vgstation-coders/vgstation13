@@ -250,5 +250,5 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		if(B && !(B in emitted_beams))
 			// Ideally, I'd like to keep this warning to make Pomf bug Lummox,
 			// but the spam would just piss everyone off.
-			//testing("BUG: Beam \ref[B] is still around after getting deleted!")
+			//testing("BUG: Beam [REF(B)] is still around after getting deleted!")
 			qdel(B)

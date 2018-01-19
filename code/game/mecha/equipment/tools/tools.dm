@@ -486,7 +486,7 @@
 /obj/item/mecha_parts/mecha_equipment/jetpack/get_equip_info()
 	if(!chassis)
 		return
-	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] \[<a href=\"?src=\ref[src];toggle=1\">Toggle</a>\]"
+	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] \[<a href=\"?src=[REF(src)];toggle=1\">Toggle</a>\]"
 
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/Topic(href,href_list)
@@ -572,9 +572,9 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/get_equip_info()
 	if(device)
-		return "[..()] \[<a href='?src=\ref[src];RPDmenu=0'>Open piping interface</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to construction mode</a>\]"
+		return "[..()] \[<a href='?src=[REF(src)];RPDmenu=0'>Open piping interface</a>\]\[<a href='?src=[REF(src)];swap=0'>Switch to construction mode</a>\]"
 	else
-		return "[..()] \[<a href='?src=\ref[src];RCDmenu=0'>Open construction menu</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
+		return "[..()] \[<a href='?src=[REF(src)];RCDmenu=0'>Open construction menu</a>\]\[<a href='?src=[REF(src)];swap=0'>Switch to piping mode</a>\]"
 
 
 
@@ -680,20 +680,20 @@
 					return
 				locked = target
 				occupant_message("Locked on [target]")
-				send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+				send_byjax(chassis.occupant,"exosuit.browser","[REF(src)]",src.get_equip_info())
 				return
 			else if(target!=locked)
 				if(locked in view(chassis))
 					locked.throw_at(target, 14, 1.5)
 					locked = null
-					send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+					send_byjax(chassis.occupant,"exosuit.browser","[REF(src)]",src.get_equip_info())
 					set_ready_state(0)
 					chassis.use_power(energy_drain)
 					do_after_cooldown()
 				else
 					locked = null
 					occupant_message("Lock on [locked] disengaged.")
-					send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+					send_byjax(chassis.occupant,"exosuit.browser","[REF(src)]",src.get_equip_info())
 		if(2)
 			if(!action_checks(target))
 				return
@@ -716,14 +716,14 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/get_equip_info()
-	return "[..()] [mode==1?"([locked||"Nothing"])":null] \[<a href='?src=\ref[src];mode=1'>S</a>|<a href='?src=\ref[src];mode=2'>P</a>\]"
+	return "[..()] [mode==1?"([locked||"Nothing"])":null] \[<a href='?src=[REF(src)];mode=1'>S</a>|<a href='?src=[REF(src)];mode=2'>P</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/Topic(href, href_list)
 	if(..())
 		return TRUE
 	if(href_list["mode"])
 		mode = text2num(href_list["mode"])
-		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+		send_byjax(chassis.occupant,"exosuit.browser","[REF(src)]",src.get_equip_info())
 	return
 
 
@@ -890,7 +890,7 @@
 /obj/item/mecha_parts/mecha_equipment/repair_droid/get_equip_info()
 	if(!chassis)
 		return
-	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_repairs=1'>[pr_repair_droid.active()?"Dea":"A"]ctivate</a>"
+	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=[REF(src)];toggle_repairs=1'>[pr_repair_droid.active()?"Dea":"A"]ctivate</a>"
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/Topic(href, href_list)
 	if(..())
@@ -905,7 +905,7 @@
 			log_message("Deactivated.")
 			set_ready_state(1)
 		chassis.overlays += droid_overlay
-		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+		send_byjax(chassis.occupant,"exosuit.browser","[REF(src)]",src.get_equip_info())
 	return
 
 /datum/global_iterator/mecha_repair_droid/process(var/obj/item/mecha_parts/mecha_equipment/repair_droid/RD as obj)
@@ -1016,7 +1016,7 @@
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/get_equip_info()
 	if(!chassis)
 		return
-	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
+	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=[REF(src)];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
 /*	proc/dynusepower(amount)
 	if(!equip_ready) //enabled
@@ -1108,7 +1108,7 @@
 /obj/item/mecha_parts/mecha_equipment/generator/get_equip_info()
 	var/output = ..()
 	if(output)
-		return "[output] \[[fuel]: [round(fuel.amount*fuel.perunit,0.1)] cm<sup>3</sup>\] - <a href='?src=\ref[src];toggle=1'>[pr_mech_generator.active()?"Dea":"A"]ctivate</a>"
+		return "[output] \[[fuel]: [round(fuel.amount*fuel.perunit,0.1)] cm<sup>3</sup>\] - <a href='?src=[REF(src)];toggle=1'>[pr_mech_generator.active()?"Dea":"A"]ctivate</a>"
 	return
 
 /obj/item/mecha_parts/mecha_equipment/generator/action(target)
@@ -1121,7 +1121,7 @@
 			message = "Unit is full."
 		else
 			message = "[result] unit\s of [fuel] successfully loaded."
-			send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
+			send_byjax(chassis.occupant,"exosuit.browser","[REF(src)]",src.get_equip_info())
 		occupant_message(message)
 	return
 
@@ -1344,7 +1344,7 @@
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
-	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
+	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=[REF(src)];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=[REF(src)];refill=0'>activate refilling</a>\]"]"
 
 /datum/global_iterator/mecha_switchtool/process(var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/mech_switchtool)
 	if(!mech_switchtool.chassis || mech_switchtool.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
@@ -1401,7 +1401,7 @@
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()
-	return "[..()] \[<a href='?src=\ref[src];toggle_plating=0'>[plating_active ? "Deactivate" : "Activate"] automatic plating</a>\]\[<a href='?src=\ref[src];toggle_tiling=0'>[tiling_active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
+	return "[..()] \[<a href='?src=[REF(src)];toggle_plating=0'>[plating_active ? "Deactivate" : "Activate"] automatic plating</a>\]\[<a href='?src=[REF(src)];toggle_tiling=0'>[tiling_active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/on_mech_step()
 	var/turf/T = get_turf(src)
@@ -1474,8 +1474,8 @@
 	if(!collector.P)
 		return "[..()] No tank loaded."
 	if(collector.P.air_contents.toxins <= 0)
-		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
-	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
+		return "[..()] ERROR: Tank empty. \[<a href='?src=[REF(src)];eject=0'>eject tank</a>\]"
+	return "[..()] \[<a href='?src=[REF(src)];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=[REF(src)];eject=0'>eject tank</a>\]"
 
 #undef MECHDRILL_SAND_SPEED
 #undef MECHDRILL_ROCK_SPEED

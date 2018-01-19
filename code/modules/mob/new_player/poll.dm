@@ -26,7 +26,7 @@
 		while(select_query.NextRow())
 			pollid = select_query.item[1]
 			pollquestion = select_query.item[2]
-			output += "<tr bgcolor='[ (i % 2 == 1) ? color1 : color2 ]'><td>[!client.holder && client.player_age <= 30 ? "<b>[pollquestion]</b> (<span class='danger'>You cannot vote on this</span>)" : "<a href=\"byond://?src=\ref[src];pollid=[pollid]\"><b>[pollquestion]</b></a>"][config.poll_results_url ? " | <a href=\"byond://?src=\ref[src];pollresult=[pollid]\">Results</a>" : ""]</td></tr>"
+			output += "<tr bgcolor='[ (i % 2 == 1) ? color1 : color2 ]'><td>[!client.holder && client.player_age <= 30 ? "<b>[pollquestion]</b> (<span class='danger'>You cannot vote on this</span>)" : "<a href=\"byond://?src=[REF(src)];pollid=[pollid]\"><b>[pollquestion]</b></a>"][config.poll_results_url ? " | <a href=\"byond://?src=[REF(src)];pollresult=[pollid]\">Results</a>" : ""]</td></tr>"
 			i++
 
 		output += "</table>"
@@ -94,8 +94,8 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
-					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+					output += {"<form name='cardcomp' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='OPTION'>"}
 
@@ -141,16 +141,16 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
-					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+					output += {"<form name='cardcomp' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='TEXT'>
 						<font size='2'>Please provide feedback below. You can use any letters of the English alphabet, numbers and the symbols: . , ! ? : ; -</font><br>
 						<textarea name='replytext' cols='50' rows='14'></textarea>
 						<p><input type='submit' value='Submit'>
 						</form>
-						<form name='cardcomp' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+						<form name='cardcomp' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='TEXT'>
 						<input type='hidden' name='replytext' value='ABSTAIN'>
@@ -184,8 +184,8 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
-					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+					output += {"<form name='cardcomp' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='NUMVAL'>"}
 
@@ -274,8 +274,8 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
-					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
+					output += {"<form name='cardcomp' action='?src=[REF(src)]' method='get'>
+						<input type='hidden' name='src' value='[REF(src)]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='MULTICHOICE'>
 						<input type='hidden' name='maxoptionid' value='[maxoptionid]'>

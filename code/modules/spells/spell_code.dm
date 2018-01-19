@@ -199,13 +199,13 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/channeled_spell(var/list/args)
 	var/event/E = args["event"]
 	if(!currently_channeled)
-		E.handlers.Remove("\ref[src]:channeled_spell")
+		E.handlers.Remove("[REF(src)]:channeled_spell")
 		return 0
 
 	var/atom/A = args["atom"]
 
 	if(E.holder != holder)
-		E.handlers.Remove("\ref[src]:channeled_spell")
+		E.handlers.Remove("[REF(src)]:channeled_spell")
 		return 0
 	var/list/target = list(A)
 	var/mob/user = holder

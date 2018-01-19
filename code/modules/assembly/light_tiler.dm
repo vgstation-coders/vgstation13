@@ -76,20 +76,20 @@
 	dat += {"
 	<tt>[src]</tt><BR><BR>
 	<p>Connected to <b>[connected_floors.len]</b> floors</p>
-	<p><a href='?src=\ref[src];show_connections=1'>Show connected floors for 10 seconds</a> | <a href='?src=\ref[src];toggle_mode=1'>Now [work_mode == MODE_ADDING ? "adding" : "removing"] floors</a> | <a href='?src=\ref[src];delete_all=1'>Remove all connections</a></p>
+	<p><a href='?src=[REF(src)];show_connections=1'>Show connected floors for 10 seconds</a> | <a href='?src=[REF(src)];toggle_mode=1'>Now [work_mode == MODE_ADDING ? "adding" : "removing"] floors</a> | <a href='?src=[REF(src)];delete_all=1'>Remove all connections</a></p>
 	<BR>
 	<p><font color="[rgb(color_r,color_g,color_b)]">Selected color: <b>[color_r] | [color_g] | [color_b]</b></font></p>
-	<p><a href='?src=\ref[src];change_color=1'>Change color</a> | <a href='?src=\ref[src];toggle_set_state=1'>Light floors will be turned <b>[set_state ? "ON" : "OFF"]</b></a></p>
+	<p><a href='?src=[REF(src)];change_color=1'>Change color</a> | <a href='?src=[REF(src)];toggle_set_state=1'>Light floors will be turned <b>[set_state ? "ON" : "OFF"]</b></a></p>
 	<BR>
-	<p><a href='?src=\ref[src];apply=1'>Activate</a></p>
-	<p><a href='?src=\ref[src];refresh=1'>Refresh</a></p>
+	<p><a href='?src=[REF(src)];apply=1'>Activate</a></p>
+	<p><a href='?src=[REF(src)];refresh=1'>Refresh</a></p>
 	"}
 
-	var/datum/browser/popup = new(user, "\ref[src]", "[src]", 500, 300, src)
+	var/datum/browser/popup = new(user, "[REF(src)]", "[src]", 500, 300, src)
 	popup.set_content(dat)
 	popup.open()
 
-	onclose(user, "\ref[src]")
+	onclose(user, "[REF(src)]")
 
 /obj/item/device/assembly/light_tile_control/Topic(href, href_list)
 	if(..())

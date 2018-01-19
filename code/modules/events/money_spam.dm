@@ -123,7 +123,7 @@
 				L = get_holder_of_type(P, /mob/living/silicon)
 
 			if(L && (!filter_app || (filter_app.function == 0)))//the owner will still be able to manually read the spam in his Message log.
-				to_chat(L, "[bicon(P)] <b>Message from [sender] (Unknown), </b>\"[message]\" (<a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)")
+				to_chat(L, "[bicon(P)] <b>Message from [sender] (Unknown), </b>\"[message]\" (<a href='byond://?src=[REF(src)];choice=Message;skiprefresh=1;target=[REF(src)]'>Reply</a>)")
 
 	else if(world.time > time_failed + 1200)
 		//if there's no server active for two minutes, give up

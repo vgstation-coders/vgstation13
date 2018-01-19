@@ -24,7 +24,7 @@
 	return 0
 
 /datum/automation/set_injector_power/GetText()
-	return "Set injector <a href=\"?src=\ref[src];set_injector=1\">[fmtString(injector)]</a> power to <a href=\"?src=\ref[src];toggle_state=1\">[state ? "on" : "off"]</a>."
+	return "Set injector <a href=\"?src=[REF(src)];set_injector=1\">[fmtString(injector)]</a> power to <a href=\"?src=[REF(src)];toggle_state=1\">[state ? "on" : "off"]</a>."
 
 /datum/automation/set_injector_power/Topic(href, href_list)
 	. = ..()
@@ -68,7 +68,7 @@
 	return 0
 
 /datum/automation/set_injector_rate/GetText()
-	return "Set injector <a href=\"?src=\ref[src];set_injector=1\">[fmtString(injector)]</a> transfer rate to <a href=\"?src=\ref[src];set_rate=1\">[rate]</a> L/s."
+	return "Set injector <a href=\"?src=[REF(src)];set_injector=1\">[fmtString(injector)]</a> transfer rate to <a href=\"?src=[REF(src)];set_rate=1\">[rate]</a> L/s."
 
 /datum/automation/set_injector_rate/Topic(href,href_list)
 	. = ..()

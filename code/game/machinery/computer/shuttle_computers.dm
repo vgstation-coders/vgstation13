@@ -144,7 +144,7 @@
 	if(!D)
 		return "ERROR"
 	var/name = capitalize(D.areaname)
-	var/span_s = "<a href='?src=\ref[src];select=\ref[D][bonus_parameters]'>"
+	var/span_s = "<a href='?src=[REF(src)];select=[REF(D)][bonus_parameters]'>"
 	var/span_e = "</a>"
 	if(D == selected_port)
 		span_s += "<font color='blue'>"
@@ -197,7 +197,7 @@
 			dat = "<h2><font color='red'>UNABLE TO FIND [uppertext(shuttle.name)]</font></h2>"
 		else if(!shuttle.linked_port)
 			dat += {"<h2><font color='red'>This shuttle has no docking port specified.</font></h2><br>
-				<a href='?src=\ref[src];link_to_port=1'>Scan for docking ports</a>"}
+				<a href='?src=[REF(src)];link_to_port=1'>Scan for docking ports</a>"}
 		else if(shuttle.moving)
 			dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
 		else
@@ -233,23 +233,23 @@
 					dat += " | <b>ERROR: Unable to read coordinates from disk (unknown encryption key)</b>"
 
 			dat += " |<BR>"
-			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
-			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
+			dat += "<center>[shuttle_name]:<br> <b><A href='?src=[REF(src)];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
+			dat += "<div align=\"right\"><a href='?src=[REF(src)];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
 	else //No shuttle
 		dat = "<h1>NO SHUTTLE LINKED</h1><br>"
-		dat += "<a href='?src=\ref[src];link_to_shuttle=1'>Link to a shuttle</a>"
+		dat += "<a href='?src=[REF(src)];link_to_shuttle=1'>Link to a shuttle</a>"
 
 	if(isAdminGhost(user))
 		dat += "<br><hr><br>"
 		dat += "<b><font color='red'>SPECIAL OPTIONS</font></h1></b>"
 		dat += "<i>These are only available to administrators. Abuse may result in fun.</i><br><br>"
-		dat += "<a href='?src=\ref[src];admin_link_to_shuttle=1'>Link to a shuttle</a><br><i>This allows you to link this computer to any existing shuttle, even if it's normally impossible to do so.</i><br>"
+		dat += "<a href='?src=[REF(src)];admin_link_to_shuttle=1'>Link to a shuttle</a><br><i>This allows you to link this computer to any existing shuttle, even if it's normally impossible to do so.</i><br>"
 		if(shuttle)
-			dat += {"<a href='?src=\ref[src];admin_unlink_shuttle=1'>Unlink current shuttle</a><br><i>Unlink this computer from [shuttle.name]</i><br>
-			<a href='?src=\ref[src];admin_toggle_lockdown=1'>[shuttle.lockdown ? "Lift lockdown" : "Lock down"]</a><br>
-			<a href='?src=\ref[src];admin_toggle_select_all=1'>[allow_selecting_all ? "Select only from ports linked to [shuttle.name]" : "Select from ALL ports"]</a><br>
-			<a href='?src=\ref[src];admin_toggle_silicon_use=1'>[allow_silicons ? "Forbid silicons from using this computer" : "Allow silicons to use this computer"]</a><br>
-			<a href='?src=\ref[src];admin_reset=1'>Reset shuttle</a><br><i>Revert the shuttle's areas to initial state</i><br>"}
+			dat += {"<a href='?src=[REF(src)];admin_unlink_shuttle=1'>Unlink current shuttle</a><br><i>Unlink this computer from [shuttle.name]</i><br>
+			<a href='?src=[REF(src)];admin_toggle_lockdown=1'>[shuttle.lockdown ? "Lift lockdown" : "Lock down"]</a><br>
+			<a href='?src=[REF(src)];admin_toggle_select_all=1'>[allow_selecting_all ? "Select only from ports linked to [shuttle.name]" : "Select from ALL ports"]</a><br>
+			<a href='?src=[REF(src)];admin_toggle_silicon_use=1'>[allow_silicons ? "Forbid silicons from using this computer" : "Allow silicons to use this computer"]</a><br>
+			<a href='?src=[REF(src)];admin_reset=1'>Reset shuttle</a><br><i>Revert the shuttle's areas to initial state</i><br>"}
 
 	user << browse("[dat]", "window=shuttle_control;size=575x450")
 	onclose(user, "shuttle_control")

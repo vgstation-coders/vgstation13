@@ -95,7 +95,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/list/colourmatrix = list()
 
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
-	var/lastcheck=last_beamchecks["\ref[B]"]
+	var/lastcheck=last_beamchecks["[REF(B)]"]
 
 	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage()/2)
 
@@ -103,7 +103,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	health -= damage
 
 	// Update check time.
-	last_beamchecks["\ref[B]"]=world.time
+	last_beamchecks["[REF(B)]"]=world.time
 
 /mob/living/simple_animal/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)

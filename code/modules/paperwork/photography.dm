@@ -521,7 +521,7 @@
 /obj/item/device/camera/proc/injectaialbum(var/icon, var/img, var/info, var/pixel_x, var/pixel_y, var/blueprintsinject) //stores image information to a list similar to that of the datacore
 	var/datum/picture/P = new()
 
-	P.fields["name"] = "\ref[P]"
+	P.fields["name"] = "[REF(P)]"
 	P.fields["icon"] = icon
 	P.fields["img"] = img
 	P.fields["info"] = info

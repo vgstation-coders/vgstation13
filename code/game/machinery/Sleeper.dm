@@ -54,7 +54,7 @@
 		var/dat = list()
 		if(connected.on)
 			dat += "<font color='blue'><B>Performing anaesthesic emergence...</B></font>" //Best I could come up with
-			dat += "<HR><A href='?src=\ref[src];toggle_autoeject=1'>Auto-eject occupant: [connected.auto_eject_after ? "Yes" : "No"]</A><BR>"
+			dat += "<HR><A href='?src=[REF(src)];toggle_autoeject=1'>Auto-eject occupant: [connected.auto_eject_after ? "Yes" : "No"]</A><BR>"
 		else
 			dat += "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 			if (occupant)
@@ -77,15 +77,15 @@
 				dat += text("[]\t-Burn Severity %: []</FONT><BR>", (occupant.getFireLoss() < 60 ? "<font color='blue'>" : "<font color='red'>"), occupant.getFireLoss())
 				var/sleepytime = max(occupant.paralysis, occupant.sleeping)
 				dat += text("<HR>Paralysis Summary %: [] ([] seconds left!)<BR>", sleepytime, round(sleepytime*2))
-				dat += "<a href ='?src=\ref[src];wakeup=1'>Begin Wake-Up Cycle</a><br>"
+				dat += "<a href ='?src=[REF(src)];wakeup=1'>Begin Wake-Up Cycle</a><br>"
 				if(occupant.reagents)
 					for(var/chemical in connected.available_options)
 						dat += "[connected.available_options[chemical]]: [occupant.reagents.get_reagent_amount(chemical)] units<br>"
-				dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh meter readings each second</A><BR>"
+				dat += "<HR><A href='?src=[REF(src)];refresh=1'>Refresh meter readings each second</A><BR>"
 				for(var/chemical in connected.available_options)
 					dat += "Inject [connected.available_options[chemical]]: "
 					for(var/amount in connected.amounts)
-						dat += "<a href ='?src=\ref[src];chemical=[chemical];amount=[amount]'>[amount] units</a> "
+						dat += "<a href ='?src=[REF(src)];chemical=[chemical];amount=[amount]'>[amount] units</a> "
 					dat += "<br>"
 			else
 				dat += "The sleeper is empty."
@@ -717,14 +717,14 @@
 				dat +=  text("[]\t -Core Temperature: []&deg;C </FONT><BR></span>", (C.undergoing_hypothermia() ? "<font color='red'>" : "<font color='blue'>"), C.bodytemperature-T0C)
 			dat += "<HR><b>Cook settings:</b><BR>"
 			for(var/cook_setting in connected.available_options)
-				dat += "<a href ='?src=\ref[src];cook=[cook_setting]'>[cook_setting] - [connected.available_options[cook_setting]/10] seconds</a>"
+				dat += "<a href ='?src=[REF(src)];cook=[cook_setting]'>[cook_setting] - [connected.available_options[cook_setting]/10] seconds</a>"
 				dat += "<br>"
 		else
 			dat += "\The [src] is empty."
-		dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh meter readings each second</A><BR>"
-		dat += "<A href='?src=\ref[src];auto=1'>Turn [connected.automatic ? "off": "on" ] Automatic Thermoregulation.</A><BR>"
-		dat += "[(connected.emagged) ? "<A href='?src=\ref[src];security=1'>Re-enable Security Features.</A><BR>" : ""]"
-		dat += "[(connected.on) ? "<A href='?src=\ref[src];turnoff=1'>\[EMERGENCY STOP\]</A> <i>: cancels the current job.</i><BR>" : ""]"
+		dat += "<HR><A href='?src=[REF(src)];refresh=1'>Refresh meter readings each second</A><BR>"
+		dat += "<A href='?src=[REF(src)];auto=1'>Turn [connected.automatic ? "off": "on" ] Automatic Thermoregulation.</A><BR>"
+		dat += "[(connected.emagged) ? "<A href='?src=[REF(src)];security=1'>Re-enable Security Features.</A><BR>" : ""]"
+		dat += "[(connected.on) ? "<A href='?src=[REF(src)];turnoff=1'>\[EMERGENCY STOP\]</A> <i>: cancels the current job.</i><BR>" : ""]"
 		dat += text("<BR><BR><A href='?src=\ref[];mach_close=sleeper'>Close</A>", user)
 		user << browse(dat, "window=sleeper;size=400x500")
 		onclose(user, "sleeper")

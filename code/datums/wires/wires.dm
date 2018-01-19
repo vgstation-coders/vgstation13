@@ -101,9 +101,9 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			html += " ([GetWireName(wires[colour])])"
 		html += "</td>"
 		html += "<td[row_options2]>"
-		html += "<A href='?src=\ref[src];action=1;cut=[colour]'>[IsColourCut(colour) ? "Mend" :  "Cut"]</A>"
-		html += " <A href='?src=\ref[src];action=1;pulse=[colour]'>Pulse</A>"
-		html += " <A href='?src=\ref[src];action=1;attach=[colour]'>[IsAttached(colour) ? "Detach" : "Attach"] Signaller</A></td></tr>"
+		html += "<A href='?src=[REF(src)];action=1;cut=[colour]'>[IsColourCut(colour) ? "Mend" :  "Cut"]</A>"
+		html += " <A href='?src=[REF(src)];action=1;pulse=[colour]'>Pulse</A>"
+		html += " <A href='?src=[REF(src)];action=1;attach=[colour]'>[IsAttached(colour) ? "Detach" : "Attach"] Signaller</A></td></tr>"
 	html += "</table>"
 	html += "</div>"
 
@@ -143,14 +143,14 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 					var/obj/item/O = Detach(colour)
 					if(O)
 						L.put_in_hands(O)
-						holder.investigation_log(I_WIRES, "|| [O] \ref[O] detached from [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
+						holder.investigation_log(I_WIRES, "|| [O] [REF(O)] detached from [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 
 				// Attach
 				else
 					if(istype(I, /obj/item/device/assembly/signaler))
 						if(L.drop_item(I))
 							Attach(colour, I)
-							holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
+							holder.investigation_log(I_WIRES, "|| [I] [REF(I)] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 					else
 						to_chat(L, "<span class='error'>You need a remote signaller!</span>")
 
@@ -271,7 +271,7 @@ var/const/POWER = 8
 	for(var/colour in signallers)
 		if(S == signallers[colour])
 			PulseColour(colour)
-			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] \ref[S] ([src.type])")
+			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] [REF(S)] ([src.type])")
 			break
 
 

@@ -91,7 +91,7 @@ a.notsmelting {
 	</head>
 	<body>
 		<h1>Mint</h1>
-		<p><b>Current Status:</b> (<a href='?src=\ref[user];mach_close=recyk_furnace'>Close</a>)</p>"}
+		<p><b>Current Status:</b> (<a href='?src=[REF(user)];mach_close=recyk_furnace'>Close</a>)</p>"}
 
 
 	if (!input)
@@ -115,7 +115,7 @@ a.notsmelting {
 				<td class="clmName">[ore_info.processed_name]</td>
 				<td>[materials.storage[ore_id]]</td>
 				<td>
-					<a href="?src=\ref[src];choose=[ore_id]" "}
+					<a href="?src=[REF(src)];choose=[ore_id]" "}
 			if (chosen==ore_id)
 				html += "class=\"smelting\">Selected"
 			else
@@ -135,16 +135,16 @@ a.notsmelting {
 	html += {"
 		<p>
 			\[
-				<A href='?src=\ref[src];chooseAmt=-10'>-10</A>
-				<A href='?src=\ref[src];chooseAmt=-5'>-5</A>
-				<A href='?src=\ref[src];chooseAmt=-1'>-1</A>
-				<A href='?src=\ref[src];chooseAmt=1'>+1</A>
-				<A href='?src=\ref[src];chooseAmt=5'>+5</A>
-				<A href='?src=\ref[src];chooseAmt=10'>+10</A>
+				<A href='?src=[REF(src)];chooseAmt=-10'>-10</A>
+				<A href='?src=[REF(src)];chooseAmt=-5'>-5</A>
+				<A href='?src=[REF(src)];chooseAmt=-1'>-1</A>
+				<A href='?src=[REF(src)];chooseAmt=1'>+1</A>
+				<A href='?src=[REF(src)];chooseAmt=5'>+5</A>
+				<A href='?src=[REF(src)];chooseAmt=10'>+10</A>
 			\]
 		</p>
 		<p>In total, this machine produced <font color='green'><b>[newCoins]</b></font> coins.</p>
-		<p><A href="?src=\ref[src];makeCoins=[1]">Make coins</A></p>
+		<p><A href="?src=[REF(src)];makeCoins=[1]">Make coins</A></p>
 	</body>
 </html>
 	"}

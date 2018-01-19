@@ -65,17 +65,17 @@
 
 		dat += "[inserted_battery] inserted, anomaly ID: [inserted_battery.battery_effect.artifact_id ? inserted_battery.battery_effect.artifact_id : "NA"]<BR>"
 		dat += "<b>Total Power:</b> [inserted_battery.stored_charge]/[inserted_battery.capacity]<BR><BR>"
-		dat += "<b>Timed activation:</b> <A href='?src=\ref[src];neg_changetime_max=-100'>--</a> <A href='?src=\ref[src];neg_changetime=-10'>-</a> [time >= 1000 ? "[time/10]" : time >= 100 ? " [time/10]" : "  [time/10]" ] <A href='?src=\ref[src];changetime=10'>+</a> <A href='?src=\ref[src];changetime_max=100'>++</a><BR>"
+		dat += "<b>Timed activation:</b> <A href='?src=[REF(src)];neg_changetime_max=-100'>--</a> <A href='?src=[REF(src)];neg_changetime=-10'>-</a> [time >= 1000 ? "[time/10]" : time >= 100 ? " [time/10]" : "  [time/10]" ] <A href='?src=[REF(src)];changetime=10'>+</a> <A href='?src=[REF(src)];changetime_max=100'>++</a><BR>"
 		if(cooldown)
 			dat += "<font color=red>Cooldown in progress.</font><BR>"
 			dat += "<br>"
 		else if(!activated)
-			dat += "<A href='?src=\ref[src];startup=1'>Start</a><BR>"
-			dat += "<A href='?src=\ref[src];startup=1;starttimer=1'>Start in timed mode</a><BR>"
+			dat += "<A href='?src=[REF(src)];startup=1'>Start</a><BR>"
+			dat += "<A href='?src=[REF(src)];startup=1;starttimer=1'>Start in timed mode</a><BR>"
 		else
-			dat += "<a href='?src=\ref[src];shutdown=1'>Shutdown emission</a><br>"
+			dat += "<a href='?src=[REF(src)];shutdown=1'>Shutdown emission</a><br>"
 			dat += "<br>"
-		dat += "<A href='?src=\ref[src];ejectbattery=1'>Eject battery</a><BR>"
+		dat += "<A href='?src=[REF(src)];ejectbattery=1'>Eject battery</a><BR>"
 	else
 		dat += "Please insert battery<br>"
 
@@ -88,7 +88,7 @@
 		dat += "<br>"
 
 	dat += "<hr>"
-	dat += "<a href='?src=\ref[src]'>Refresh</a> <a href='?src=\ref[src];close=1'>Close</a>"
+	dat += "<a href='?src=[REF(src)]'>Refresh</a> <a href='?src=[REF(src)];close=1'>Close</a>"
 
 	user << browse(dat, "window=anodevice;size=400x500")
 	onclose(user, "anodevice")

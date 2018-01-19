@@ -121,12 +121,12 @@
 // Apply connect damage
 /mob/living/beam_connect(var/obj/effect/beam/B)
 	..()
-	last_beamchecks["\ref[B]"]=world.time
+	last_beamchecks["[REF(B)]"]=world.time
 
 /mob/living/beam_disconnect(var/obj/effect/beam/B)
 	..()
 	apply_beam_damage(B)
-	last_beamchecks.Remove("\ref[B]") // RIP
+	last_beamchecks.Remove("[REF(B)]") // RIP
 
 /mob/living/handle_beams()
 	if(flags & INVULNERABLE)
@@ -168,7 +168,7 @@
 		dust()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
-	var/lastcheck=last_beamchecks["\ref[B]"]
+	var/lastcheck=last_beamchecks["[REF(B)]"]
 
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
@@ -178,7 +178,7 @@
 	apply_damage(damage, B.damage_type, B.def_zone)
 
 	// Update check time.
-	last_beamchecks["\ref[B]"]=world.time
+	last_beamchecks["[REF(B)]"]=world.time
 
 /mob/living/verb/succumb()
 	set hidden = 1

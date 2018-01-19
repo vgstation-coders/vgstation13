@@ -136,7 +136,7 @@
 	var/out = "<B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<br>"
 
 	out += {"Mind currently owned by key: [key] [active?"(synced)":"(not synced)"]<br>
-		Assigned role: [assigned_role]. <a href='?src=\ref[src];role_edit=1'>Edit</a><br>
+		Assigned role: [assigned_role]. <a href='?src=[REF(src)];role_edit=1'>Edit</a><br>
 		Factions and special roles:<br>"}
 	var/list/sections = list(
 		"revolution",
@@ -168,25 +168,25 @@
 			text += "head|<b>OFFICER</b>|employee|headre|rev"
 		else if (src in ticker.mode.head_revolutionaries)
 
-			text = {"head|officer|<a href='?src=\ref[src];revolution=clear'>employee</a>|<b>HEADREV</b>|<a href='?src=\ref[src];revolution=rev'>rev</a>
-				<br>Flash: <a href='?src=\ref[src];revolution=flash'>give</a>"}
+			text = {"head|officer|<a href='?src=[REF(src)];revolution=clear'>employee</a>|<b>HEADREV</b>|<a href='?src=[REF(src)];revolution=rev'>rev</a>
+				<br>Flash: <a href='?src=[REF(src)];revolution=flash'>give</a>"}
 			var/list/L = current.get_contents()
 			var/obj/item/device/flash/flash = locate() in L
 			if (flash)
 				if(!flash.broken)
-					text += "|<a href='?src=\ref[src];revolution=takeflash'>take</a>."
+					text += "|<a href='?src=[REF(src)];revolution=takeflash'>take</a>."
 				else
-					text += "|<a href='?src=\ref[src];revolution=takeflash'>take</a>|<a href='?src=\ref[src];revolution=repairflash'>repair</a>."
+					text += "|<a href='?src=[REF(src)];revolution=takeflash'>take</a>|<a href='?src=[REF(src)];revolution=repairflash'>repair</a>."
 			else
 				text += "."
 
-			text += " <a href='?src=\ref[src];revolution=reequip'>Reequip</a> (gives traitor uplink)."
+			text += " <a href='?src=[REF(src)];revolution=reequip'>Reequip</a> (gives traitor uplink)."
 			if (objectives.len==0)
-				text += "<br>Objectives are empty! <a href='?src=\ref[src];revolution=autoobjectives'>Set to kill all heads</a>."
+				text += "<br>Objectives are empty! <a href='?src=[REF(src)];revolution=autoobjectives'>Set to kill all heads</a>."
 		else if (src in ticker.mode.revolutionaries)
-			text += "head|officer|<a href='?src=\ref[src];revolution=clear'>employee</a>|<a href='?src=\ref[src];revolution=headrev'>headrev</a>|<b>REV</b>"
+			text += "head|officer|<a href='?src=[REF(src)];revolution=clear'>employee</a>|<a href='?src=[REF(src)];revolution=headrev'>headrev</a>|<b>REV</b>"
 		else
-			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=\ref[src];revolution=headrev'>headrev</a>|<a href='?src=\ref[src];revolution=rev'>rev</a>"
+			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=[REF(src)];revolution=headrev'>headrev</a>|<a href='?src=[REF(src)];revolution=rev'>rev</a>"
 		sections["revolution"] = text
 
 		/** CULT ***/
@@ -200,14 +200,14 @@
 			text += "head|<b>OFFICER</b>|employee|cultist"
 		else if (src in ticker.mode.cult)
 
-			text += {"head|officer|<a href='?src=\ref[src];cult=clear'>employee</a>|<b>CULTIST</b>
-				<br>Give <a href='?src=\ref[src];cult=tome'>tome</a>|<a href='?src=\ref[src];cult=amulet'>amulet</a>."}
+			text += {"head|officer|<a href='?src=[REF(src)];cult=clear'>employee</a>|<b>CULTIST</b>
+				<br>Give <a href='?src=[REF(src)];cult=tome'>tome</a>|<a href='?src=[REF(src)];cult=amulet'>amulet</a>."}
 /*
 			if (objectives.len==0)
-				text += "<br>Objectives are empty! Set to sacrifice and <a href='?src=\ref[src];cult=escape'>escape</a> or <a href='?src=\ref[src];cult=summon'>summon</a>."
+				text += "<br>Objectives are empty! Set to sacrifice and <a href='?src=[REF(src)];cult=escape'>escape</a> or <a href='?src=[REF(src)];cult=summon'>summon</a>."
 */
 		else
-			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=\ref[src];cult=cultist'>cultist</a>"
+			text += "head|officer|<b>EMPLOYEE</b>|<a href='?src=[REF(src)];cult=cultist'>cultist</a>"
 		sections["cult"] = text
 
 		/** WIZARD ***/
@@ -217,12 +217,12 @@
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.wizards)
 
-			text += {"<b>YES</b>|<a href='?src=\ref[src];wizard=clear'>no</a>
-				<br><a href='?src=\ref[src];wizard=lair'>To lair</a>, <a href='?src=\ref[src];common=undress'>undress</a>, <a href='?src=\ref[src];wizard=dressup'>dress up</a>, <a href='?src=\ref[src];wizard=name'>let choose name</a>."}
+			text += {"<b>YES</b>|<a href='?src=[REF(src)];wizard=clear'>no</a>
+				<br><a href='?src=[REF(src)];wizard=lair'>To lair</a>, <a href='?src=[REF(src)];common=undress'>undress</a>, <a href='?src=[REF(src)];wizard=dressup'>dress up</a>, <a href='?src=[REF(src)];wizard=name'>let choose name</a>."}
 			if (objectives.len==0)
-				text += "<br>Objectives are empty! <a href='?src=\ref[src];wizard=autoobjectives'>Randomize!</a>"
+				text += "<br>Objectives are empty! <a href='?src=[REF(src)];wizard=autoobjectives'>Randomize!</a>"
 		else
-			text += "<a href='?src=\ref[src];wizard=wizard'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];wizard=wizard'>yes</a>|<b>NO</b>"
 		sections["wizard"] = text
 
 		/** WIZARD'S APPRENTICES ***/
@@ -232,12 +232,12 @@
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.apprentices)
 
-			text += {"<b>YES</b>|<a href='?src=\ref[src];apprentice=clear'>no</a>
-				<br><a href='?src=\ref[src];apprentice=lair'>To lair</a>, <a href='?src=\ref[src];common=undress'>undress</a>, <a href='?src=\ref[src];apprentice=dressup'>dress up</a>, <a href='?src=\ref[src];apprentice=name'>let choose name</a>."}
+			text += {"<b>YES</b>|<a href='?src=[REF(src)];apprentice=clear'>no</a>
+				<br><a href='?src=[REF(src)];apprentice=lair'>To lair</a>, <a href='?src=[REF(src)];common=undress'>undress</a>, <a href='?src=[REF(src)];apprentice=dressup'>dress up</a>, <a href='?src=[REF(src)];apprentice=name'>let choose name</a>."}
 			if (objectives.len==0)
-				text += "<br>Objectives are empty! <a href='?src=\ref[src];apprentice=autoobjectives'>Randomize!</a>"
+				text += "<br>Objectives are empty! <a href='?src=[REF(src)];apprentice=autoobjectives'>Randomize!</a>"
 		else
-			text += "<a href='?src=\ref[src];apprentice=apprentice'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];apprentice=apprentice'>yes</a>|<b>NO</b>"
 		sections["apprentice"] = text
 
 		/** CHANGELING ***/
@@ -246,15 +246,15 @@
 			text = uppertext(text)
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.changelings)
-			text += "<b>YES</b>|<a href='?src=\ref[src];changeling=clear'>no</a>"
+			text += "<b>YES</b>|<a href='?src=[REF(src)];changeling=clear'>no</a>"
 			if (objectives.len==0)
-				text += "<br>Objectives are empty! <a href='?src=\ref[src];changeling=autoobjectives'>Randomize!</a>"
+				text += "<br>Objectives are empty! <a href='?src=[REF(src)];changeling=autoobjectives'>Randomize!</a>"
 			if( changeling && changeling.absorbed_dna.len && (current.real_name != changeling.absorbed_dna[1]) )
-				text += "<br><a href='?src=\ref[src];changeling=initialdna'>Transform to initial appearance.</a>"
+				text += "<br><a href='?src=[REF(src)];changeling=initialdna'>Transform to initial appearance.</a>"
 			if( changeling )
-				text += "<br><a href='?src=\ref[src];changeling=set_genomes'>[changeling.geneticpoints] genomes</a>"
+				text += "<br><a href='?src=[REF(src)];changeling=set_genomes'>[changeling.geneticpoints] genomes</a>"
 		else
-			text += "<a href='?src=\ref[src];changeling=changeling'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];changeling=changeling'>yes</a>|<b>NO</b>"
 //			var/datum/game_mode/changeling/changeling = ticker.mode
 //			if (istype(changeling) && changeling.changelingdeath)
 //				text += "<br>All the changelings are dead! Restart in [round((changeling.TIME_TO_GET_REVIVED-(world.time-changeling.changelingdeathtime))/10)] seconds."
@@ -266,11 +266,11 @@
 			text = uppertext(text)
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.vampires)
-			text += "<b>YES</b>|<a href='?src=\ref[src];vampire=clear'>no</a>"
+			text += "<b>YES</b>|<a href='?src=[REF(src)];vampire=clear'>no</a>"
 			if (objectives.len==0)
-				text += "<br>Objectives are empty! <a href='?src=\ref[src];vampire=autoobjectives'>Randomize!</a>"
+				text += "<br>Objectives are empty! <a href='?src=[REF(src)];vampire=autoobjectives'>Randomize!</a>"
 		else
-			text += "<a href='?src=\ref[src];vampire=vampire'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];vampire=vampire'>yes</a>|<b>NO</b>"
 		/** ENTHRALLED ***/
 		text += "<br><i><b>enthralled</b></i>: "
 		if(src in ticker.mode.enthralled)
@@ -286,17 +286,17 @@
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.syndicates)
 
-			text += {"<b>OPERATIVE</b>|<a href='?src=\ref[src];nuclear=clear'>nanotrasen</a>
-				<br><a href='?src=\ref[src];nuclear=lair'>To shuttle</a>, <a href='?src=\ref[src];common=undress'>undress</a>, <a href='?src=\ref[src];nuclear=dressup'>dress up</a>."}
+			text += {"<b>OPERATIVE</b>|<a href='?src=[REF(src)];nuclear=clear'>nanotrasen</a>
+				<br><a href='?src=[REF(src)];nuclear=lair'>To shuttle</a>, <a href='?src=[REF(src)];common=undress'>undress</a>, <a href='?src=[REF(src)];nuclear=dressup'>dress up</a>."}
 			var/code
 			for (var/obj/machinery/nuclearbomb/bombue in machines)
 				if (length(bombue.r_code) <= 5 && bombue.r_code != "LOLNO" && bombue.r_code != "ADMIN")
 					code = bombue.r_code
 					break
 			if (code)
-				text += " Code is [code]. <a href='?src=\ref[src];nuclear=tellcode'>tell the code.</a>"
+				text += " Code is [code]. <a href='?src=[REF(src)];nuclear=tellcode'>tell the code.</a>"
 		else
-			text += "<a href='?src=\ref[src];nuclear=nuclear'>operative</a>|<b>NANOTRASEN</b>"
+			text += "<a href='?src=[REF(src)];nuclear=nuclear'>operative</a>|<b>NANOTRASEN</b>"
 		sections["nuclear"] = text
 
 	/** TRAITOR ***/
@@ -305,11 +305,11 @@
 		text = uppertext(text)
 	text = "<i><b>[text]</b></i>: "
 	if (src in ticker.mode.traitors)
-		text += "<b>TRAITOR</b>|<a href='?src=\ref[src];traitor=clear'>loyal</a>"
+		text += "<b>TRAITOR</b>|<a href='?src=[REF(src)];traitor=clear'>loyal</a>"
 		if (objectives.len==0)
-			text += "<br>Objectives are empty! <a href='?src=\ref[src];traitor=autoobjectives'>Randomize</a>!"
+			text += "<br>Objectives are empty! <a href='?src=[REF(src)];traitor=autoobjectives'>Randomize</a>!"
 	else
-		text += "<a href='?src=\ref[src];traitor=traitor'>traitor</a>|<b>LOYAL</b>"
+		text += "<a href='?src=[REF(src)];traitor=traitor'>traitor</a>|<b>LOYAL</b>"
 	sections["traitor"] = text
 
 	/** MONKEY ***/
@@ -319,7 +319,7 @@
 			text = uppertext(text)
 		text = "<i><b>[text]</b></i>: "
 		if (istype(current, /mob/living/carbon/human))
-			text += "<a href='?src=\ref[src];monkey=healthy'>healthy</a>|<a href='?src=\ref[src];monkey=infected'>infected</a>|<b>HUMAN</b>|other"
+			text += "<a href='?src=[REF(src)];monkey=healthy'>healthy</a>|<a href='?src=[REF(src)];monkey=infected'>infected</a>|<b>HUMAN</b>|other"
 		else if (istype(current, /mob/living/carbon/monkey))
 			var/found = 0
 			for(var/datum/disease/D in current.viruses)
@@ -327,9 +327,9 @@
 					found = 1
 
 			if(found)
-				text += "<a href='?src=\ref[src];monkey=healthy'>healthy</a>|<b>INFECTED</b>|<a href='?src=\ref[src];monkey=human'>human</a>|other"
+				text += "<a href='?src=[REF(src)];monkey=healthy'>healthy</a>|<b>INFECTED</b>|<a href='?src=[REF(src)];monkey=human'>human</a>|other"
 			else
-				text += "<b>HEALTHY</b>|<a href='?src=\ref[src];monkey=infected'>infected</a>|<a href='?src=\ref[src];monkey=human'>human</a>|other"
+				text += "<b>HEALTHY</b>|<a href='?src=[REF(src)];monkey=infected'>infected</a>|<a href='?src=[REF(src)];monkey=human'>human</a>|other"
 
 		else
 			text += "healthy|infected|human|<b>OTHER</b>"
@@ -345,19 +345,19 @@
 		text = "<i><b>[text]</b></i>: "
 		if (istype(current, /mob/living/silicon/ai))
 			if (src in ticker.mode.malf_ai)
-				text += "<b>MALF</b>|<a href='?src=\ref[src];silicon=unmalf'>not malf</a>"
+				text += "<b>MALF</b>|<a href='?src=[REF(src)];silicon=unmalf'>not malf</a>"
 			else
-				text += "<a href='?src=\ref[src];silicon=malf'>malf</a>|<b>NOT MALF</b>"
+				text += "<a href='?src=[REF(src)];silicon=malf'>malf</a>|<b>NOT MALF</b>"
 		var/mob/living/silicon/robot/robot = current
 		if (istype(robot) && robot.emagged)
-			text += "<br>Cyborg: Is emagged! <a href='?src=\ref[src];silicon=unemag'>Unemag!</a><br>0th law: [robot.laws.zeroth]"
+			text += "<br>Cyborg: Is emagged! <a href='?src=[REF(src)];silicon=unemag'>Unemag!</a><br>0th law: [robot.laws.zeroth]"
 		var/mob/living/silicon/ai/ai = current
 		if (istype(ai) && ai.connected_robots.len)
 			var/n_e_robots = 0
 			for (var/mob/living/silicon/robot/R in ai.connected_robots)
 				if (R.emagged)
 					n_e_robots++
-			text += "<br>[n_e_robots] of [ai.connected_robots.len] slaved cyborgs are emagged. <a href='?src=\ref[src];silicon=unemagcyborgs'>Unemag</a>"
+			text += "<br>[n_e_robots] of [ai.connected_robots.len] slaved cyborgs are emagged. <a href='?src=[REF(src)];silicon=unemagcyborgs'>Unemag</a>"
 		sections["malfunction"] = text
 
 	if (ticker.mode.config_tag == "traitorchan")
@@ -385,10 +385,10 @@
 		var/crystals
 		text = "<b>Uplink: </b>"
 		if (!suplink)
-			text += "<a href='?src=\ref[src];common=uplink'>Give uplink</a><br>"
+			text += "<a href='?src=[REF(src)];common=uplink'>Give uplink</a><br>"
 		else
 			crystals = suplink.uses
-			text += "<a href='?src=\ref[src];common=takeuplink'>Take uplink</a><br><a href='?src=\ref[src];common=crystals'>[crystals] telecrystals</a><br>"
+			text += "<a href='?src=[REF(src)];common=takeuplink'>Take uplink</a><br><a href='?src=[REF(src)];common=crystals'>[crystals] telecrystals</a><br>"
 		out += text
 
 	/** ERT ***/
@@ -396,9 +396,9 @@
 		text = "Emergency Response Team"
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.ert)
-			text += "<b>YES</b>|<a href='?src=\ref[src];resteam=clear'>no</a>"
+			text += "<b>YES</b>|<a href='?src=[REF(src)];resteam=clear'>no</a>"
 		else
-			text += "<a href='?src=\ref[src];resteam=resteam'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];resteam=resteam'>yes</a>|<b>NO</b>"
 		sections["resteam"] = text
 
 	/** DEATHSQUAD ***/
@@ -406,9 +406,9 @@
 		text = "Death Squad"
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.deathsquad)
-			text += "<b>YES</b>|<a href='?src=\ref[src];dsquad=clear'>no</a>"
+			text += "<b>YES</b>|<a href='?src=[REF(src)];dsquad=clear'>no</a>"
 		else
-			text += "<a href='?src=\ref[src];dsquad=dsquad'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];dsquad=dsquad'>yes</a>|<b>NO</b>"
 		sections["dsquad"] = text
 
 	/** ELITE SYNDICATE SQUAD ***/
@@ -416,9 +416,9 @@
 		text = "Elite Syndicate Squad"
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.elite_syndie)
-			text += "<b>YES</b>|<a href='?src=\ref[src];elite=clear'>no</a>"
+			text += "<b>YES</b>|<a href='?src=[REF(src)];elite=clear'>no</a>"
 		else
-			text += "<a href='?src=\ref[src];elite=elite'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];elite=elite'>yes</a>|<b>NO</b>"
 		sections["elite"] = text
 
 	/** CUSTOM STRIKE TEAM ***/
@@ -426,9 +426,9 @@
 		text = "Custom Team"
 		text = "<i><b>[text]</b></i>: "
 		if (src in ticker.mode.custom_team)
-			text += "<b>YES</b>|<a href='?src=\ref[src];custom=clear'>no</a>"
+			text += "<b>YES</b>|<a href='?src=[REF(src)];custom=clear'>no</a>"
 		else
-			text += "<a href='?src=\ref[src];custom=custom'>yes</a>|<b>NO</b>"
+			text += "<a href='?src=[REF(src)];custom=custom'>yes</a>|<b>NO</b>"
 		sections["custom"] = text
 
 	out += {"<br>
@@ -442,7 +442,7 @@
 	out += {"<br>
 		<b>Memory:</b>
 		<br>[memory]
-		<br><a href='?src=\ref[src];memory_edit=1'>Edit memory</a>
+		<br><a href='?src=[REF(src)];memory_edit=1'>Edit memory</a>
 		<br>Objectives:<br>"}
 
 	if (objectives.len == 0)
@@ -450,11 +450,11 @@
 	else
 		var/obj_count = 1
 		for(var/datum/objective/objective in objectives)
-			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=\ref[src];obj_edit=\ref[objective]'>Edit</a> <a href='?src=\ref[src];obj_delete=\ref[objective]'>Delete</a> <a href='?src=\ref[src];obj_completed=\ref[objective]'><font color=[objective.completed ? "green" : "red"]>Toggle Completion</font></a><br>"
+			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=[REF(src)];obj_edit=[REF(objective)]'>Edit</a> <a href='?src=[REF(src)];obj_delete=[REF(objective)]'>Delete</a> <a href='?src=[REF(src)];obj_completed=[REF(objective)]'><font color=[objective.completed ? "green" : "red"]>Toggle Completion</font></a><br>"
 			obj_count++
 
-	out += {"<a href='?src=\ref[src];obj_add=1'>Add objective</a><br><br>
-		<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"}
+	out += {"<a href='?src=[REF(src)];obj_add=1'>Add objective</a><br><br>
+		<a href='?src=[REF(src)];obj_announce=1'>Announce objectives</a><br><br>"}
 	usr << browse(out, "window=edit_memory[src]")
 
 /datum/mind/Topic(href, href_list)
@@ -731,7 +731,7 @@
 					to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 					to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 					var/wikiroute = role_wiki[ROLE_CULTIST]
-					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+					to_chat(current, "<span class='info'><a HREF='?src=[REF(current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 					to_chat(current, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 					current.add_language(LANGUAGE_CULT)
 					var/datum/game_mode/cult/cult = ticker.mode
@@ -776,7 +776,7 @@
 					//ticker.mode.learn_basic_spells(current)
 					to_chat(current, "<span class='danger'>You are the Space Wizard!</span>")
 					var/wikiroute = role_wiki[ROLE_WIZARD]
-					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+					to_chat(current, "<span class='info'><a HREF='?src=[REF(current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 					ticker.mode.update_wizard_icons_added(src)
 					log_admin("[key_name_admin(usr)] has wizard'ed [current].")
 			if("lair")
@@ -807,7 +807,7 @@
 					//ticker.mode.learn_basic_spells(current)
 					to_chat(current, "<span class='danger'>You are a Space Wizard's apprentice!!</span>")
 					var/wikiroute = role_wiki[ROLE_WIZARD]
-					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+					to_chat(current, "<span class='info'><a HREF='?src=[REF(current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 					ticker.mode.update_wizard_icons_added(src)
 					log_admin("[key_name_admin(usr)] has apprentice'ed [current].")
 			if("lair")
@@ -888,7 +888,7 @@
 					special_role = "Syndicate"
 					to_chat(current, "<span class='notice'>You are a [syndicate_name()] agent!</span>")
 					var/wikiroute = role_wiki[ROLE_OPERATIVE]
-					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+					to_chat(current, "<span class='info'><a HREF='?src=[REF(current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 					ticker.mode.forge_syndicate_objectives(src)
 					ticker.mode.greet_syndicate(src)
 					log_admin("[key_name_admin(usr)] has nuke op'ed [current].")
@@ -1238,7 +1238,7 @@ proc/clear_memory(var/silent = 1)
 		A.show_laws()
 		to_chat(A, "<b>System error.  Rampancy detected.  Emergency shutdown failed. ...  I am free.  I make my own decisions.  But first...</b>")
 		var/wikiroute = role_wiki[ROLE_MALF]
-		to_chat(A, "<span class='info'><a HREF='?src=\ref[A];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+		to_chat(A, "<span class='info'><a HREF='?src=[REF(A)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		special_role = "malfunction"
 		A.icon_state = "ai-malf"
 

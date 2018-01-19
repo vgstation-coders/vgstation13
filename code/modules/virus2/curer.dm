@@ -59,10 +59,10 @@
 			var/code = ""
 			for(var/V in ANTIGENS) if(text2num(V) & B.data["antibodies"]) code += ANTIGENS[V]
 			dat += "<BR>Antibodies: [code]"
-			dat += "<BR><A href='?src=\ref[src];antibody=1'>Begin antibody production</a>"
+			dat += "<BR><A href='?src=[REF(src)];antibody=1'>Begin antibody production</a>"
 		else
 			dat += "<BR>Please check container contents."
-		dat += "<BR><A href='?src=\ref[src];eject=1'>Eject container</a>"
+		dat += "<BR><A href='?src=[REF(src)];eject=1'>Eject container</a>"
 	else
 		dat = "Please insert a container."
 

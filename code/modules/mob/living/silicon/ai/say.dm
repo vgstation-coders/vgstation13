@@ -14,11 +14,11 @@
 		virt_speaker = src
 	if(speech.speaker != src && M != src)
 		if(M)
-			var/faketrack = "byond://?src=\ref[virt_speaker];track2=\ref[src];track=\ref[M]"
+			var/faketrack = "byond://?src=[REF(virt_speaker)];track2=[REF(src)];track=[REF(M)]"
 			if(speech.speaker.GetTrack())
-				faketrack = "byond://?src=\ref[virt_speaker];track2=\ref[src];faketrack=\ref[M]"
+				faketrack = "byond://?src=[REF(virt_speaker)];track2=[REF(src)];faketrack=[REF(M)]"
 
-			return "<a href='byond://?src=\ref[virt_speaker];open2=\ref[src];open=\ref[M]'>\[OPEN\]</a> <a href='[faketrack]'>"
+			return "<a href='byond://?src=[REF(virt_speaker)];open2=[REF(src)];open=[REF(M)]'>\[OPEN\]</a> <a href='[faketrack]'>"
 	return ""
 
 /mob/living/silicon/ai/render_speaker_track_end(var/datum/speech/speech)
@@ -127,7 +127,7 @@ var/const/VOX_DELAY = 600
 	var/index = 0
 	for(var/word in vox_sounds)
 		index++
-		dat += "<A href='?src=\ref[src];say_word=[word]'>[capitalize(word)]</A>"
+		dat += "<A href='?src=[REF(src)];say_word=[word]'>[capitalize(word)]</A>"
 		if(index != vox_sounds.len)
 			dat += " / "
 

@@ -37,7 +37,7 @@
 		for(var/atom/allthings in T.contents)
 			allthings.change_area(src, new_area)
 
-	new_area.tag = "[new_area.type]/\ref[ME]"
+	new_area.tag = "[new_area.type]/[REF(ME)]"
 	new_area.addSorted()
 
 

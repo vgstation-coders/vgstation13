@@ -96,22 +96,22 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	dat += "CONDITON:<br>"
 
-	dat += "<a href='?src=\ref[src];change_check_this=1'>[check_this]</a>"
+	dat += "<a href='?src=[REF(src)];change_check_this=1'>[check_this]</a>"
 
 	if(istype(check_this))
 		dat += " ([checked_value_1])"
 
-	dat += " is <a href='?src=\ref[src];change_check_type=1'>[check_type]</a> "
+	dat += " is <a href='?src=[REF(src)];change_check_type=1'>[check_type]</a> "
 
-	dat += "<a href='?src=\ref[src];change_check_against=1'>[check_against]</a>"
+	dat += "<a href='?src=[REF(src)];change_check_against=1'>[check_against]</a>"
 
 	if(istype(check_against))
 		dat += " ([checked_value_2])"
 
 	dat += "<BR>"
 
-	dat += "IF <b>TRUE</b>: <a href='?src=\ref[src];change_pulse_if_true=1'>[pulse_if_true ? "pulse [pulse_if_true]" : "do nothing"]</a><BR>"
-	dat += "IF <b>FALSE</b>: <a href='?src=\ref[src];change_pulse_if_false=1'>[pulse_if_false ? "pulse [pulse_if_false]" : "do nothing"]</a><BR><hr>"
+	dat += "IF <b>TRUE</b>: <a href='?src=[REF(src)];change_pulse_if_true=1'>[pulse_if_true ? "pulse [pulse_if_true]" : "do nothing"]</a><BR>"
+	dat += "IF <b>FALSE</b>: <a href='?src=[REF(src)];change_pulse_if_false=1'>[pulse_if_false ? "pulse [pulse_if_false]" : "do nothing"]</a><BR><hr>"
 
 	dat += "Connected devices: "
 

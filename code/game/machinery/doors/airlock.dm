@@ -993,8 +993,8 @@ About the new airlock wires panel:
 			dis_id_tag=id_tag
 		dat += {"
 		<ul>
-			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[0]">Reset</a>)</li>
-			<li><b>ID Tag:</b> <a href="?src=\ref[src];set_id=1">[dis_id_tag]</a></li>
+			<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[0]">Reset</a>)</li>
+			<li><b>ID Tag:</b> <a href="?src=[REF(src)];set_id=1">[dis_id_tag]</a></li>
 		</ul>"}
 
 	return dat

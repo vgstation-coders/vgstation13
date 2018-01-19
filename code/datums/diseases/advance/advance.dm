@@ -167,7 +167,7 @@ var/list/advance_cures = 	list(
 	return generated
 
 /datum/disease/advance/proc/Refresh(var/new_name = 0)
-//	to_chat(world, "[src.name] \ref[src] - REFRESH!")
+//	to_chat(world, "[src.name] [REF(src)] - REFRESH!")
 	var/list/properties = GenerateProperties()
 	AssignProperties(properties)
 
@@ -424,7 +424,7 @@ var/list/advance_cures = 	list(
 
 
 	for(var/datum/disease/D in active_diseases)
-		to_chat(src, "<a href='?_src_=vars;Vars=\ref[D]'>[D.name] - [D.holder]</a>")
+		to_chat(src, "<a href='?_src_=vars;Vars=[REF(D)]'>[D.name] - [D.holder]</a>")
 */
 
 #undef RANDOM_STARTING_LEVEL

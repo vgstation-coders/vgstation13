@@ -518,7 +518,7 @@ steam.start() -- spawns the effect
 		var/where = "[A.name] | [location.x], [location.y]"
 		var/whereLink=formatJumpTo(location,where)
 
-		var/more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
+		var/more = "(<A HREF='?_src_=holder;adminmoreinfo=[REF(M)]'>?</a>)"
 		message_admins("[M][more] produced a toxic fart in ([whereLink])[contained].", 0, 1)
 		log_game("[M][more] produced a toxic fart in ([where])[contained].")
 

@@ -205,13 +205,13 @@
 	if(dat)
 		dat = jointext(dat,"")
 		last_data = dat
-		dat += "<br><br>\[<a href='?src=\ref[src];print=1'>print report</a>\] \[<a href='?src=\ref[src];clear=1'>clear</a>\]"
-		user << browse(dat,"window=plant_analyzer_\ref[src];size=400x500")
+		dat += "<br><br>\[<a href='?src=[REF(src)];print=1'>print report</a>\] \[<a href='?src=[REF(src)];clear=1'>clear</a>\]"
+		user << browse(dat,"window=plant_analyzer_[REF(src)];size=400x500")
 	return
 
 /obj/item/device/analyzer/plant_analyzer/attack_self(mob/user as mob)
 	if(last_data)
-		user << browse(last_data,"window=plant_analyzer_\ref[src];size=400x500")
+		user << browse(last_data,"window=plant_analyzer_[REF(src)];size=400x500")
 	else
 		to_chat(user, "<span class='notice'>[bicon(src)] No plant scan data in memory.</span>")
 	return 0

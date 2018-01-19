@@ -93,7 +93,7 @@
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=[REF(people)];follow=[REF(src)]'>Follow it</a></span>")
 	original = end
 	starting = loc
 	current = loc

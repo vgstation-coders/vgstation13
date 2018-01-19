@@ -158,7 +158,7 @@
 		update_cult_icons_added(cult_mind)
 		cult_mind.special_role = "Cultist"
 		var/wikiroute = role_wiki[ROLE_CULTIST]
-		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=[REF(cult_mind.current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		to_chat(cult_mind.current, "<span class='sinister'>You can now speak and understand the forgotten tongue of Nar-Sie.</span>")
 		cult_mind.current.add_language(LANGUAGE_CULT)
 		//memoize_cult_objectives(cult_mind)

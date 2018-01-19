@@ -25,7 +25,7 @@ var/list/mass_drivers = list()
 		if(M == src)
 			continue
 		else
-			message_admins("Two mass drivers were placed on the same tile. This should not happen.(<A href='?_src_=holder;jumpto=\ref[T]'><b>Jump to</b></A>)")
+			message_admins("Two mass drivers were placed on the same tile. This should not happen.(<A href='?_src_=holder;jumpto=[REF(T)]'><b>Jump to</b></A>)")
 			qdel(src)
 			break
 

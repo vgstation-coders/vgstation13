@@ -51,7 +51,7 @@
 	if(!spawned || !L)
 		return
 
-	spawned.faction = "\ref[L]"
+	spawned.faction = "[REF(L)]"
 
 /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	desc = "It is set to detonate in 5 seconds. It will unleash a pair of hostile visceratorrs that will hack at any nearby targets indiscriminately."
@@ -66,7 +66,7 @@
 		return
 
 	if(!isnukeop(L))//"syndicate" faction mobs don't attack nuke ops by default
-		spawned.faction = "\ref[L]"
+		spawned.faction = "[REF(L)]"
 
 /obj/item/weapon/grenade/spawnergrenade/spesscarp
 	name = "carp delivery grenade"

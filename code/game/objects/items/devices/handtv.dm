@@ -9,7 +9,7 @@ var/global/list/camera_bugs = list()
 
 /obj/item/device/handtv/attack_self(mob/user as mob)
 	if(!network && user.mind)
-		network = "\ref[user.mind]"
+		network = "[REF(user.mind)]"
 	var/list/cameras = list()
 	for(var/obj/item/device/camera_bug/C in camera_bugs)
 		if(C.network == network)

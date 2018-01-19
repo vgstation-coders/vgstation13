@@ -320,8 +320,8 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		<h1>Banning panel</h1>
 		</td>
 		<td width='65%' align='center' bgcolor='#f9f9f9'>
-		<form method='GET' action='?src=\ref[src]'><b>Add custom ban:</b> (ONLY use this if you can't ban through any other method)
-		<input type='hidden' name='src' value='\ref[src]'>
+		<form method='GET' action='?src=[REF(src)]'><b>Add custom ban:</b> (ONLY use this if you can't ban through any other method)
+		<input type='hidden' name='src' value='[REF(src)]'>
 		<table width='100%'><tr>
 		<td><b>Ban type:</b><select name='dbbanaddtype'>
 		<option value=''>--</option>
@@ -351,8 +351,8 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		</td>
 		</tr>
 		</table>
-		<form method='GET' action='?src=\ref[src]'><b>Search:</b>
-		<input type='hidden' name='src' value='\ref[src]'>
+		<form method='GET' action='?src=[REF(src)]'><b>Search:</b>
+		<input type='hidden' name='src' value='[REF(src)]'>
 		<b>Ckey:</b> <input type='text' name='dbsearchckey' value='[playerckey]'>
 		<b>Admin ckey:</b> <input type='text' name='dbsearchadmin' value='[adminckey]'>
 		<input type='submit' value='search'>
@@ -412,7 +412,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 				if("PERMABAN")
 					typedesc = "<font color='red'><b>PERMABAN</b></font>"
 				if("TEMPBAN")
-					typedesc = "<b>TEMPBAN</b><br><font size='2'>([duration] minutes [(unbanned) ? "" : "(<a href=\"byond://?src=\ref[src];dbbanedit=duration;dbbanid=[banid]\">Edit</a>))"]<br>Expires [expiration]</font>"
+					typedesc = "<b>TEMPBAN</b><br><font size='2'>([duration] minutes [(unbanned) ? "" : "(<a href=\"byond://?src=[REF(src)];dbbanedit=duration;dbbanid=[banid]\">Edit</a>))"]<br>Expires [expiration]</font>"
 				if("JOB_PERMABAN")
 					typedesc = "<b>JOBBAN</b><br><font size='2'>([job])"
 				if("JOB_TEMPBAN")
@@ -430,10 +430,10 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 				<td align='center'><b>[ckey]</b></td>
 				<td align='center'>[bantime]</td>
 				<td align='center'><b>[ackey]</b></td>
-				<td align='center'>[(unbanned) ? "" : "<b><a href=\"byond://?src=\ref[src];dbbanedit=unban;dbbanid=[banid]\">Unban</a></b>"]</td>
+				<td align='center'>[(unbanned) ? "" : "<b><a href=\"byond://?src=[REF(src)];dbbanedit=unban;dbbanid=[banid]\">Unban</a></b>"]</td>
 				</tr>
 				<tr bgcolor='[lcolor]'>
-				<td align='center' colspan='5'><b>Reason: [(unbanned) ? "" : "(<a href=\"byond://?src=\ref[src];dbbanedit=reason;dbbanid=[banid]\">Edit</a>)"]</b> <cite>\"[reason]\"</cite></td>
+				<td align='center' colspan='5'><b>Reason: [(unbanned) ? "" : "(<a href=\"byond://?src=[REF(src)];dbbanedit=reason;dbbanid=[banid]\">Edit</a>)"]</b> <cite>\"[reason]\"</cite></td>
 				</tr>"}
 			if(edits)
 
@@ -460,7 +460,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 				<td align='center'><b>[playerckey]</b></td>
 				<td align='center'>Time not stored</td>
 				<td align='center'><b>[admin]</b></td>
-				<td align='center'>"<b><a href=\"byond://?src=\ref[src];stickyunban=[playerckey]\">Unban</a></b>"</td>
+				<td align='center'>"<b><a href=\"byond://?src=[REF(src)];stickyunban=[playerckey]\">Unban</a></b>"</td>
 				</tr>
 				<tr bgcolor='[blcolor]'>
 				<td align='center' colspan='5'><b>Reason: </b> <cite>\"[reason]\"</cite></td>

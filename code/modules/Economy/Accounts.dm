@@ -202,17 +202,17 @@ var/global/list/all_money_accounts = list()
 		var/dat = "<b>Accounts Database</b><br>"
 
 		dat += {"<i>[machine_id]</i><br>
-			Confirm identity: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
+			Confirm identity: <a href='?src=[REF(src)];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
 		if(access_level > 0)
 
-			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
+			dat += {"<a href='?src=[REF(src)];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
 				You may not edit accounts at this terminal, only create and view them.<br>"}
 			if(creating_new_account)
 
 				dat += {"<br>
-					<a href='?src=\ref[src];choice=view_accounts_list;'>Return to accounts list</a>
-					<form name='create_account' action='?src=\ref[src]' method='get'>
-					<input type='hidden' name='src' value='\ref[src]'>
+					<a href='?src=[REF(src)];choice=view_accounts_list;'>Return to accounts list</a>
+					<form name='create_account' action='?src=[REF(src)]' method='get'>
+					<input type='hidden' name='src' value='[REF(src)]'>
 					<input type='hidden' name='choice' value='finalise_create_account'>
 					<b>Holder name:</b> <input type='text' id='holder_name' name='holder_name' style='width:250px; background-color:white;'><br>
 					<b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'> (subtracted from station account.)<br>
@@ -224,7 +224,7 @@ var/global/list/all_money_accounts = list()
 				if(detailed_account_view)
 
 					dat += {"<br>
-						<a href='?src=\ref[src];choice=view_accounts_list;'>Return to accounts list</a><hr>
+						<a href='?src=[REF(src)];choice=view_accounts_list;'>Return to accounts list</a><hr>
 						<b>Account number:</b> #[detailed_account_view.account_number]<br>
 						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
@@ -251,7 +251,7 @@ var/global/list/all_money_accounts = list()
 					dat += "</table>"
 				else
 
-					dat += {"<a href='?src=\ref[src];choice=create_account;'>Create new account</a><br><br>
+					dat += {"<a href='?src=[REF(src)];choice=create_account;'>Create new account</a><br><br>
 						<table border=1 style='width:100%'>"}
 					for(var/i=1, i<=all_money_accounts.len, i++)
 						var/datum/money_account/D = all_money_accounts[i]
@@ -259,7 +259,7 @@ var/global/list/all_money_accounts = list()
 						dat += {"<tr>
 							<td>#[D.account_number]</td>
 							<td>[D.owner_name]</td>
-							<td><a href='?src=\ref[src];choice=view_account_detail;account_index=[i]'>View in detail</a></td>
+							<td><a href='?src=[REF(src)];choice=view_account_detail;account_index=[i]'>View in detail</a></td>
 							</tr>"}
 					dat += "</table>"
 		user << browse(dat,"window=account_db;size=700x650")

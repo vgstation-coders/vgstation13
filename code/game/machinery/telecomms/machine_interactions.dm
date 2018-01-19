@@ -53,7 +53,7 @@
 
 /obj/machinery/telecomms/proc/formatInput(var/label, var/varname, var/input)
 	var/value = vars[varname] ||  "-----"
-	return "<b>[label]:</b> <a href=\"?src=\ref[src];input=[varname]\">[value]</a>"
+	return "<b>[label]:</b> <a href=\"?src=[REF(src)];input=[varname]\">[value]</a>"
 
 /obj/machinery/telecomms/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	// You need a multitool to use this, or be silicon
@@ -69,7 +69,7 @@
 
 	dat = {"
 		<p>[temp]</p>
-		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
+		<p><b>Power Status:</b> <a href='?src=[REF(src)];input=toggle'>[toggled ? "On" : "Off"]</a></p>
 		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
 	"}
 	if(on && toggled)
@@ -90,7 +90,7 @@
 			i++
 			if(T.hide && !src.hide)
 				continue
-			dat += "<li>\ref[T] [T.name] ([T.id])  <a href='?src=\ref[src];unlink=[i]'>\[X\]</a></li>"
+			dat += "<li>[REF(T)] [T.name] ([T.id])  <a href='?src=[REF(src)];unlink=[i]'>\[X\]</a></li>"
 
 		dat += {"</ol>
 			<h2>Filtering Frequencies:</h2>"}
@@ -98,13 +98,13 @@
 		if(length(freq_listening))
 			dat += "<ul>"
 			for(var/x in freq_listening)
-				dat += "<li>[format_frequency(x)] GHz<a href='?src=\ref[src];delete=[x]'>\[X\]</a></li>"
+				dat += "<li>[format_frequency(x)] GHz<a href='?src=[REF(src)];delete=[x]'>\[X\]</a></li>"
 			dat += "</ul>"
 		else
 			dat += "<li>NONE</li>"
 
 
-		dat += {"<p><a href='?src=\ref[src];input=freq'>\[Add Filter\]</a></p>
+		dat += {"<p><a href='?src=[REF(src)];input=freq'>\[Add Filter\]</a></p>
 			<hr />"}
 
 	return dat
@@ -147,7 +147,7 @@
 /*
 // Add an option to the processor to switch processing mode. (COMPRESS -> UNCOMPRESS or UNCOMPRESS -> COMPRESS)
 /obj/machinery/telecomms/processor/Options_Menu()
-	var/dat = "<br>Processing Mode: <A href='?src=\ref[src];process=1'>[process_mode ? "UNCOMPRESS" : "COMPRESS"]</a>"
+	var/dat = "<br>Processing Mode: <A href='?src=[REF(src)];process=1'>[process_mode ? "UNCOMPRESS" : "COMPRESS"]</a>"
 	return dat
 */
 // The topic for Additional Options. Use this for checking href links for your specific option.
@@ -168,10 +168,10 @@
 /obj/machinery/telecomms/relay/Options_Menu()
 	var/dat = ""
 	if(src.z == TELECOMM_Z)
-		dat += "<br>Signal Locked to Station: <A href='?src=\ref[src];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
+		dat += "<br>Signal Locked to Station: <A href='?src=[REF(src)];change_listening=1'>[listening_level == STATION_Z ? "TRUE" : "FALSE"]</a>"
 
-	dat += {"<br>Broadcasting: <A href='?src=\ref[src];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
-		<br>Receiving:    <A href='?src=\ref[src];receive=1'>[receiving ? "YES" : "NO"]</a>"}
+	dat += {"<br>Broadcasting: <A href='?src=[REF(src)];broadcast=1'>[broadcasting ? "YES" : "NO"]</a>
+		<br>Receiving:    <A href='?src=[REF(src)];receive=1'>[receiving ? "YES" : "NO"]</a>"}
 	return dat
 
 /obj/machinery/telecomms/relay/Options_Topic(href, href_list)
@@ -194,7 +194,7 @@
 // BUS
 
 /obj/machinery/telecomms/bus/Options_Menu()
-	var/dat = "<br>Change Signal Frequency: <A href='?src=\ref[src];change_freq=1'>[change_frequency ? "YES ([change_frequency])" : "NO"]</a>"
+	var/dat = "<br>Change Signal Frequency: <A href='?src=[REF(src)];change_freq=1'>[change_frequency ? "YES ([change_frequency])" : "NO"]</a>"
 	return dat
 
 /obj/machinery/telecomms/bus/Options_Topic(href, href_list)
@@ -299,7 +299,7 @@
 		. = 0
 	if(user) // This was a manual unlink, update the status display
 		if(.)
-			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
+			temp = "<font color = #666633>-% Removed [REF(T)] [T.name] from linked entities. %-</font color>"
 		else
 			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
 
@@ -312,7 +312,7 @@
 		if(!(T in src.links))
 			src.links.Add(T)
 
-		temp = "<font color = #666633>-% Successfully linked with \ref[O] [O.name] %-</font color>"
+		temp = "<font color = #666633>-% Successfully linked with [REF(O)] [O.name] %-</font color>"
 		return 1
 	else if (O == src)
 		temp = "<font color = #666633>-% This machine can't be linked with itself %-</font color>"

@@ -25,7 +25,7 @@
 				dat += "<h4>Security Record List</h4>"
 
 				for (var/datum/data/record/R in data_core.general)
-					dat += "<a href='byond://?src=\ref[src];select_rec=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
+					dat += "<a href='byond://?src=[REF(src)];select_rec=[REF(R)]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 
 				dat += "<br>"
 
@@ -33,7 +33,7 @@
 
 				dat += "<h4>Security Record</h4>"
 
-				dat += "<a href='byond://?src=\ref[src];mode=0'>Back</a><br>"
+				dat += "<a href='byond://?src=[REF(src)];mode=0'>Back</a><br>"
 
 				if (istype(src.active1, /datum/data/record) && data_core.general.Find(src.active1))
 					dat += "Name: [src.active1.fields["name"]] ID: [src.active1.fields["id"]]<br>"
@@ -108,14 +108,14 @@
 
 				dat += "<h4>Medical Record List</h4>"
 				for (var/datum/data/record/R in data_core.general)
-					dat += "<a href='byond://?src=\ref[src];select_rec=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
+					dat += "<a href='byond://?src=[REF(src)];select_rec=[REF(R)]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 				dat += "<br>"
 
 			if(1)
 
 				dat += "<h4>Medical Record</h4>"
 
-				dat += "<a href='byond://?src=\ref[src];mode=0'>Back</a><br>"
+				dat += "<a href='byond://?src=[REF(src)];mode=0'>Back</a><br>"
 
 				if (istype(src.active1, /datum/data/record) && data_core.general.Find(src.active1))
 					dat += "Name: [src.active1.fields["name"]] ID: [src.active1.fields["id"]]<br>"

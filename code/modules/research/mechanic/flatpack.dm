@@ -167,7 +167,7 @@
 
 	var/image/flatimage = image(flatpack.icon, icon_state = flatpack.icon_state)
 
-	stacked.Add(list("\ref[flatpack]" = flatimage))
+	stacked.Add(list("[REF(flatpack)]" = flatimage))
 
 	flatimage.pixel_y = stacked.len * FLATPACK_HEIGHT * PIXEL_MULTIPLIER //the height of the icon
 	overlays += flatimage
@@ -182,13 +182,13 @@
 /obj/structure/closet/crate/flatpack/proc/remove_stack(obj/structure/closet/crate/flatpack/flatpack)
 	if(isnull(flatpack))
 		return
-	if(!("\ref[flatpack]" in stacked))
+	if(!("[REF(flatpack)]" in stacked))
 		return
 
-	var/image/oldimage = stacked["\ref[flatpack]"]
+	var/image/oldimage = stacked["[REF(flatpack)]"]
 	overlays.Remove(oldimage)
 
-	stacked.Remove("\ref[flatpack]")
+	stacked.Remove("[REF(flatpack)]")
 
 	update_icon()
 

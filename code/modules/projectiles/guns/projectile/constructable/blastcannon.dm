@@ -168,7 +168,7 @@
 				var/log_str = "Blast wave fired in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[shooterturf.x];Y=[shooterturf.y];Z=[shooterturf.z]'>[R.name]</a> "
 				log_str += "by [shooter.name]([shooter.ckey])"
 
-				log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[shooter]'>?</A>)"
+				log_str += "(<A HREF='?_src_=holder;adminmoreinfo=[REF(shooter)]'>?</A>)"
 
 				message_admins(log_str, 0, 1)
 				log_game(log_str)

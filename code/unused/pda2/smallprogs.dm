@@ -39,17 +39,17 @@
 
 		dat += "<h4>Station Status Display Interlink</h4>"
 
-		dat += "\[ <A HREF='?src=\ref[src];statdisp=blank'>Clear</A> \]<BR>"
-		dat += "\[ <A HREF='?src=\ref[src];statdisp=shuttle'>Shuttle ETA</A> \]<BR>"
-		dat += "\[ <A HREF='?src=\ref[src];statdisp=message'>Message</A> \]"
+		dat += "\[ <A HREF='?src=[REF(src)];statdisp=blank'>Clear</A> \]<BR>"
+		dat += "\[ <A HREF='?src=[REF(src)];statdisp=shuttle'>Shuttle ETA</A> \]<BR>"
+		dat += "\[ <A HREF='?src=[REF(src)];statdisp=message'>Message</A> \]"
 
-		dat += "<ul><li> Line 1: <A HREF='?src=\ref[src];statdisp=setmsg1'>[ message1 ? message1 : "(none)"]</A>"
-		dat += "<li> Line 2: <A HREF='?src=\ref[src];statdisp=setmsg2'>[ message2 ? message2 : "(none)"]</A></ul><br>"
-		dat += "\[ Alert: <A HREF='?src=\ref[src];statdisp=alert;alert=default'>None</A> |"
+		dat += "<ul><li> Line 1: <A HREF='?src=[REF(src)];statdisp=setmsg1'>[ message1 ? message1 : "(none)"]</A>"
+		dat += "<li> Line 2: <A HREF='?src=[REF(src)];statdisp=setmsg2'>[ message2 ? message2 : "(none)"]</A></ul><br>"
+		dat += "\[ Alert: <A HREF='?src=[REF(src)];statdisp=alert;alert=default'>None</A> |"
 
-		dat += " <A HREF='?src=\ref[src];statdisp=alert;alert=redalert'>Red Alert</A> |"
-		dat += " <A HREF='?src=\ref[src];statdisp=alert;alert=lockdown'>Lockdown</A> |"
-		dat += " <A HREF='?src=\ref[src];statdisp=alert;alert=biohazard'>Biohazard</A> \]<BR>"
+		dat += " <A HREF='?src=[REF(src)];statdisp=alert;alert=redalert'>Red Alert</A> |"
+		dat += " <A HREF='?src=[REF(src)];statdisp=alert;alert=lockdown'>Lockdown</A> |"
+		dat += " <A HREF='?src=[REF(src)];statdisp=alert;alert=biohazard'>Biohazard</A> \]<BR>"
 
 		return dat
 
@@ -124,21 +124,21 @@
 
 		dat += "<h4>Remote Signaling System</h4>"
 		dat += {"
-<a href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
+<a href='byond://?src=[REF(src)];send=1'>Send Signal</A><BR>
 
 Frequency:
-<a href='byond://?src=\ref[src];adj_freq=-10'>-</a>
-<a href='byond://?src=\ref[src];adj_freq=-2'>-</a>
+<a href='byond://?src=[REF(src)];adj_freq=-10'>-</a>
+<a href='byond://?src=[REF(src)];adj_freq=-2'>-</a>
 [format_frequency(send_freq)]
-<a href='byond://?src=\ref[src];adj_freq=2'>+</a>
-<a href='byond://?src=\ref[src];adj_freq=10'>+</a><br>
+<a href='byond://?src=[REF(src)];adj_freq=2'>+</a>
+<a href='byond://?src=[REF(src)];adj_freq=10'>+</a><br>
 <br>
 Code:
-<a href='byond://?src=\ref[src];adj_code=-5'>-</a>
-<a href='byond://?src=\ref[src];adj_code=-1'>-</a>
+<a href='byond://?src=[REF(src)];adj_code=-5'>-</a>
+<a href='byond://?src=[REF(src)];adj_code=-1'>-</a>
 [send_code]
-<a href='byond://?src=\ref[src];adj_code=1'>+</a>
-<a href='byond://?src=\ref[src];adj_code=5'>+</a><br>"}
+<a href='byond://?src=[REF(src)];adj_code=1'>+</a>
+<a href='byond://?src=[REF(src)];adj_code=5'>+</a><br>"}
 
 		return dat
 

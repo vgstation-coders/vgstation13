@@ -346,12 +346,12 @@
 /mob/living/silicon/pai/proc/softwareMenu()			// Populate the right menu
 	var/dat = ""
 
-	dat += "<A href='byond://?src=\ref[src];software=refresh'>Refresh</A><br>"
+	dat += "<A href='byond://?src=[REF(src)];software=refresh'>Refresh</A><br>"
 	// Built-in
 
-	dat += {"<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>
-		<A href='byond://?src=\ref[src];software=radio;sub=0'>Radio Configuration</A><br>
-		<A href='byond://?src=\ref[src];software=image'>Screen Display</A><br>"}
+	dat += {"<A href='byond://?src=[REF(src)];software=directives'>Directives</A><br>
+		<A href='byond://?src=[REF(src)];software=radio;sub=0'>Radio Configuration</A><br>
+		<A href='byond://?src=[REF(src)];software=image'>Screen Display</A><br>"}
 	//dat += "Text Messaging <br>"
 	dat += "<br>"
 
@@ -359,46 +359,46 @@
 	dat += "<b>Basic</b> <br>"
 	for(var/s in src.software)
 		if(s == SOFT_CM)
-			dat += "<a href='byond://?src=\ref[src];software=manifest;sub=0'>Crew Manifest</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=manifest;sub=0'>Crew Manifest</a> <br>"
 		if(s == SOFT_DM)
-			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=pdamessage;sub=0'>Digital Messenger</a> <br>"
 		if(s == SOFT_RS)
-			dat += "<a href='byond://?src=\ref[src];software=signaller;sub=0'>Remote Signaller</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=signaller;sub=0'>Remote Signaller</a> <br>"
 		if(s == SOFT_AS)
-			dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Atmospheric Sensor</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=atmosensor;sub=0'>Atmospheric Sensor</a> <br>"
 		if(s == SOFT_FL)
-			dat += "<a href='byond://?src=\ref[src];software=flashlight;sub=0'>Brightness Enhancer</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=flashlight;sub=0'>Brightness Enhancer</a> <br>"
 		if(s == SOFT_RT)
-			dat += "<a href='byond://?src=\ref[src];software=shielding;sub=0'>Redundant Threading</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=shielding;sub=0'>Redundant Threading</a> <br>"
 	dat += "<br>"
 
 	//Standard
 	dat += "<b>Standard</b> <br>"
 	for(var/s in src.software)
 		if(s == SOFT_MS)
-			dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Medical Package</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=medicalsupplement;sub=0'>Medical Package</a> <br>"
 		if(s == SOFT_SS)
-			dat += "<a href='byond://?src=\ref[src];software=securitysupplement;sub=0'>Security Package</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=securitysupplement;sub=0'>Security Package</a> <br>"
 		if(s == SOFT_WJ)
-			dat += "<a href='byond://?src=\ref[src];software=wirejack;sub=0'>Wire Jack</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=wirejack;sub=0'>Wire Jack</a> <br>"
 		if(s == SOFT_UT)
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>�</font>" : "<font color=#FF5555>�</font>"] <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>�</font>" : "<font color=#FF5555>�</font>"] <br>"
 		if(s == SOFT_CS)
-			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
 		if(s == SOFT_FS)
-			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
 	dat += "<br>"
 
 	// Navigation
 	dat += "<b>Navigation</b> <br>"
 	for(var/s in src.software)
 		if(s == SOFT_PS)
-			dat += "<a href='byond://?src=\ref[src];software=pps;sub=0'>pAI Positioning System</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=pps;sub=0'>pAI Positioning System</a> <br>"
 		if(s == SOFT_HM)
-			dat += "<a href='byond://?src=\ref[src];software=holomap;sub=0'>Holomap Viewer</a> <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=holomap;sub=0'>Holomap Viewer</a> <br>"
 	dat += {"<br>
 		<br>
-		<a href='byond://?src=\ref[src];software=buy;sub=0'>Download additional software</a>"}
+		<a href='byond://?src=[REF(src)];software=buy;sub=0'>Download additional software</a>"}
 	return dat
 
 
@@ -413,7 +413,7 @@
 		if(!software.Find(s))
 			var/cost = src.available_software[s]
 			var/displayName = uppertext(s)
-			dat += "<a href='byond://?src=\ref[src];software=buy;sub=1;buy=[s]'>[displayName]</a> ([cost]) <br>"
+			dat += "<a href='byond://?src=[REF(src)];software=buy;sub=1;buy=[s]'>[displayName]</a> ([cost]) <br>"
 		else
 			var/displayName = lowertext(s)
 			dat += "[displayName] (Download Complete) <br>"
@@ -426,7 +426,7 @@
 
 	dat += {"[(src.master) ? "Your master: [src.master] ([src.master_dna])" : "You are bound to no one."]
 		<br><br>
-		<a href='byond://?src=\ref[src];software=directive;getdna=1'>Request carrier DNA sample</a><br>
+		<a href='byond://?src=[REF(src)];software=directive;getdna=1'>Request carrier DNA sample</a><br>
 		<h2>Directives</h2><br>
 		<b>Prime Directive</b><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[src.pai_law0]<br>
@@ -464,20 +464,20 @@
 	dat += "<h3>Remote Signaller</h3><br><br>"
 	dat += {"<B>Frequency/Code</B> for signaler:<BR>
 	Frequency:
-	<A href='byond://?src=\ref[src];software=signaller;freq=-10;'>-</A>
-	<A href='byond://?src=\ref[src];software=signaller;freq=-2'>-</A>
+	<A href='byond://?src=[REF(src)];software=signaller;freq=-10;'>-</A>
+	<A href='byond://?src=[REF(src)];software=signaller;freq=-2'>-</A>
 	[format_frequency(src.sradio.frequency)]
-	<A href='byond://?src=\ref[src];software=signaller;freq=2'>+</A>
-	<A href='byond://?src=\ref[src];software=signaller;freq=10'>+</A><BR>
+	<A href='byond://?src=[REF(src)];software=signaller;freq=2'>+</A>
+	<A href='byond://?src=[REF(src)];software=signaller;freq=10'>+</A><BR>
 
 	Code:
-	<A href='byond://?src=\ref[src];software=signaller;code=-5'>-</A>
-	<A href='byond://?src=\ref[src];software=signaller;code=-1'>-</A>
+	<A href='byond://?src=[REF(src)];software=signaller;code=-5'>-</A>
+	<A href='byond://?src=[REF(src)];software=signaller;code=-1'>-</A>
 	[src.sradio.code]
-	<A href='byond://?src=\ref[src];software=signaller;code=1'>+</A>
-	<A href='byond://?src=\ref[src];software=signaller;code=5'>+</A><BR>
+	<A href='byond://?src=[REF(src)];software=signaller;code=1'>+</A>
+	<A href='byond://?src=[REF(src)];software=signaller;code=5'>+</A><BR>
 
-	<A href='byond://?src=\ref[src];software=signaller;send=1'>Send Signal</A><BR>"}
+	<A href='byond://?src=[REF(src)];software=signaller;send=1'>Send Signal</A><BR>"}
 	return dat
 
 // Crew Manifest
@@ -493,7 +493,7 @@
 /mob/living/silicon/pai/proc/softwareMedicalRecord()
 	var/dat = ""
 	if(src.subscreen == 0)
-		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=2'>Host Bioscan</a><br>"
+		dat += "<a href='byond://?src=[REF(src)];software=medicalsupplement;sub=2'>Host Bioscan</a><br>"
 		dat += "<h3>Medical Records</h3><HR>"
 		if(!isnull(data_core.general))
 			for(var/datum/data/record/R in sortRecord(data_core.general))
@@ -539,7 +539,7 @@
 					 Stage: [D.stage]/[D.max_stages]<br>
 					 Possible Cure: [D.cure]<br>
 					"}
-		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
+		dat += "<a href='byond://?src=[REF(src)];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 	return dat
 
 // Security Records
@@ -573,7 +573,7 @@
 	var/dat = {"<h3>Universal Translator</h3><br>
 				When enabled, this device will automatically convert all spoken and written language into a format that any known recipient can understand.<br><br>
 				The device is currently [ (universal_understand) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
-				<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
+				<a href='byond://?src=[REF(src)];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
 				"}
 	return dat
 
@@ -582,7 +582,7 @@
 	var/dat = {"<h3>Facial Recognition Suite</h3><br>
 				When enabled, this package will scan all viewable faces and compare them against the known criminal database, providing real-time graphical data about any detected persons of interest.<br><br>
 				The package is currently [ (src.secHUD) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
-				<a href='byond://?src=\ref[src];software=securityhud;sub=0;toggle=1'>Toggle Package</a><br>
+				<a href='byond://?src=[REF(src)];software=securityhud;sub=0;toggle=1'>Toggle Package</a><br>
 				"}
 	return dat
 
@@ -616,7 +616,7 @@
 				dat += "OTHER: [round(unknown_level)]%<br>"
 		dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 
-	dat += {"<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>
+	dat += {"<a href='byond://?src=[REF(src)];software=atmosensor;sub=0'>Refresh Reading</a> <br>
 		<br>"}
 	return dat
 
@@ -630,7 +630,7 @@ Target Machine: "}
 	else
 		dat += "<font color=#55FF55>[hacktarget.name]</font> <br>"
 		dat += "... [hackprogress]% complete.<br>"
-		dat += "<a href='byond://?src=\ref[src];software=wirejack;cancel=1;sub=0'>Cancel</a> <br>"
+		dat += "<a href='byond://?src=[REF(src)];software=wirejack;cancel=1;sub=0'>Cancel</a> <br>"
 	return dat
 
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
@@ -669,10 +669,10 @@ Target Machine: "}
 	var/dat = "<h3>Chemical Synthesizer</h3>"
 	if(!charge)
 		dat += {"Available Chemicals:<br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
+		<a href='byond://?src=[REF(src)];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
+		<a href='byond://?src=[REF(src)];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
+		<a href='byond://?src=[REF(src)];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
+		<a href='byond://?src=[REF(src)];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
 	return dat
@@ -681,9 +681,9 @@ Target Machine: "}
 	var/dat = "<h3>Nutrition Synthesizer</h3>"
 	if(!charge)
 		dat += {"Available Culinary Deployments:<br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=donut'>Donut</a> <br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=banana'>Banana</a> <br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=mess'>Burn it!</a> <br>"}
+		<a href='byond://?src=[REF(src)];software=foodsynth;sub=0;food=donut'>Donut</a> <br>
+		<a href='byond://?src=[REF(src)];software=foodsynth;sub=0;food=banana'>Banana</a> <br>
+		<a href='byond://?src=[REF(src)];software=foodsynth;sub=0;food=mess'>Burn it!</a> <br>"}
 	else
 		dat += "Charging... [round(charge*100/15)]% ready.<br><br>Deploying at 100%."
 	return dat
@@ -716,7 +716,7 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/softwareLight()
 	var/dat = "<h3>Brightness Enhancer</h3>"
 	dat += "Backlight enhancement by increased local thermal generation.<br><br>"
-	dat += "Lighting [ (lighted) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=flashlight;sub=0;toggle=1'>Toggle Light</a><br>"
+	dat += "Lighting [ (lighted) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=[REF(src)];software=flashlight;sub=0;toggle=1'>Toggle Light</a><br>"
 	return dat
 
 // Digital Messenger
@@ -724,9 +724,9 @@ Target Machine: "}
 
 
 	var/dat = "<h3>Digital Messenger</h3>"
-	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;toggler=1'>
+	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=[REF(src)];software=pdamessage;toggler=1'>
 	[(pda.toff) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br>
-	<b>Ringer Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;ringer=1'>
+	<b>Ringer Status:</b> <A href='byond://?src=[REF(src)];software=pdamessage;ringer=1'>
 	[(pda.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
 	if(!pda.toff)
@@ -734,7 +734,7 @@ Target Machine: "}
 			if (!P.owner||P.toff||P == src.pda||P.hidden)
 				continue
 
-			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
+			dat += {"<li><a href='byond://?src=[REF(src)];software=pdamessage;target=[REF(P)]'>[P]</a>
 				</li>"}
 	dat += {"</ul>
 		<br><br>
@@ -749,7 +749,7 @@ Target Machine: "}
 	locallist = GPS_list.Copy()
 	var/dat = "<h3>pAI Positioning System</h3>"
 	dat+= "<br>Tag: [ppstag]"
-	dat+= "<br><a href='byond://?src=\ref[src];software=pps;tag=1;sub=0'>Set Tag</a> <br>"
+	dat+= "<br><a href='byond://?src=[REF(src)];software=pps;tag=1;sub=0'>Set Tag</a> <br>"
 	for(var/A in locallist)
 		var/turf/pos = get_turf(A)
 		var/area/area = get_area(A)
@@ -778,6 +778,6 @@ Target Machine: "}
 		holomap_device = new()
 	var/dat = "<h2>Holomap Viewer</h2>"
 	dat+= "Creates a virtual map of the surrounding area.<BR>"
-	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=holomap;switch_target=1;sub=0'>Switch Type</a><BR>"
-	dat+= "<BR><a href='byond://?src=\ref[src];software=holomap;[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
+	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=[REF(src)];software=holomap;switch_target=1;sub=0'>Switch Type</a><BR>"
+	dat+= "<BR><a href='byond://?src=[REF(src)];software=holomap;[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
 	return dat

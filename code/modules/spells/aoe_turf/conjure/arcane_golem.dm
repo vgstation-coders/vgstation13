@@ -55,7 +55,7 @@
 			golems.Remove(AG)
 
 /spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/hostile/arcane_golem/AG, mob/user)
-	AG.faction = "\ref[user]"
+	AG.faction = "[REF(user)]"
 	to_chat(user, "<span class='sinister'>You infuse \the [AG] with your mana and knowledge. If it dies, your arcane abilities will be affected.</span>")
 	src.golems.Add(AG)
 

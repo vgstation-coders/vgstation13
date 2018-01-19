@@ -91,8 +91,8 @@
 			if(!src.master || !src.holder)
 				return
 
-			var/dat = " | <a href='byond://?src=\ref[src];quit=1'>Main Menu</a>"
-			dat += " | <a href='byond://?src=\ref[src.master];refresh=1'>Refresh</a>"
+			var/dat = " | <a href='byond://?src=[REF(src)];quit=1'>Main Menu</a>"
+			dat += " | <a href='byond://?src=[REF(src.master)];refresh=1'>Refresh</a>"
 
 			return dat
 

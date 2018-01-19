@@ -20,7 +20,7 @@
 	return 0
 
 /datum/automation/set_emitter_power/GetText()
-	return "Set emitter <a href=\"?src=\ref[src];set_subject=1\">[fmtString(emitter)]</a> to <a href=\"?src=\ref[src];set_power=1\">[on?"on":"off"]</a>."
+	return "Set emitter <a href=\"?src=[REF(src)];set_subject=1\">[fmtString(emitter)]</a> to <a href=\"?src=[REF(src)];set_power=1\">[on?"on":"off"]</a>."
 
 /datum/automation/set_emitter_power/Topic(href,href_list)
 	. = ..()

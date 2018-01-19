@@ -104,16 +104,16 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		to_chat(client, "<u>Connections: [length(connections)]</u>")
 
 		for(var/connection/C in connections)
-			to_chat(client, "\ref[C] [C.A] --> [C.B] [(C.indirect?"Open":"Closed")]")
+			to_chat(client, "[REF(C)] [C.A] --> [C.B] [(C.indirect?"Open":"Closed")]")
 			current_zone_images += image('icons/misc/debug_connect.dmi', C.A, null, TURF_LAYER)
 			current_zone_images += image('icons/misc/debug_connect.dmi', C.B, null, TURF_LAYER)
 
 		to_chat(client, "Connected Zones:")
 		for(var/zone/zone in connected_zones)
-			to_chat(client, "\ref[zone] [zone] - [connected_zones[zone]] (Connected)")
+			to_chat(client, "[REF(zone)] [zone] - [connected_zones[zone]] (Connected)")
 
 		for(var/zone/zone in closed_connection_zones)
-			to_chat(client, "\ref[zone] [zone] - [closed_connection_zones[zone]] (Unconnected)")
+			to_chat(client, "[REF(zone)] [zone] - [closed_connection_zones[zone]] (Unconnected)")
 
 		for(var/C in connections)
 			if(!istype(C,/connection))

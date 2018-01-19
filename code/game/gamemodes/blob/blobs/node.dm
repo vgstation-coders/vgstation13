@@ -27,7 +27,7 @@
 /obj/effect/blob/node/Destroy()
 	blob_nodes -= src
 	if(!manual_remove && overmind)
-		to_chat(overmind,"<span class='warning'>A node blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
+		to_chat(overmind,"<span class='warning'>A node blob that you had created has been destroyed.</span> <b><a href='?src=[REF(overmind)];blobjump=[REF(loc)]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
 		overmind.update_specialblobs()
 	if(overmind)

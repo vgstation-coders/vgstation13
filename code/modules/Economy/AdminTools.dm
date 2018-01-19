@@ -43,9 +43,9 @@
     if(creating_new_account)
 
         dat += {"
-            <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a>
-            <form name='create_account' action='?src=\ref[src]' method='get'>
-            <input type='hidden' name='src' value='\ref[src]'>
+            <a href='?src=[REF(src)];econ_panel=view_accounts_list;'>Return to accounts list</a>
+            <form name='create_account' action='?src=[REF(src)]' method='get'>
+            <input type='hidden' name='src' value='[REF(src)]'>
             <input type='hidden' name='choice' value='finalise_create_account'>
             <b>Holder name:</b> <input type='text' id='holder_name' name='holder_name' style='width:250px; background-color:white;'><br>
             <b>Initial funds:</b> <input type='text' id='starting_funds' name='starting_funds' style='width:250px; background-color:white;'><br>
@@ -56,11 +56,11 @@
         if(detailed_account_view)
 
             dat += {"
-                <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a><hr>
+                <a href='?src=[REF(src)];econ_panel=view_accounts_list;'>Return to accounts list</a><hr>
                 <b>Account number:</b> #[detailed_account_view.account_number]<br>
                 <b>Account holder:</b> [detailed_account_view.owner_name]<br>
-                <b>Account balance:</b> $[detailed_account_view.money] <a href='?src=\ref[src];econ_panel=edit_balance;account_num=[detailed_account_view.account_number]'>Edit</a><br>
-                <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=\ref[src];econ_panel=edit_wage_payout;account_num=[detailed_account_view.account_number]'>Edit</a><br>
+                <b>Account balance:</b> $[detailed_account_view.money] <a href='?src=[REF(src)];econ_panel=edit_balance;account_num=[detailed_account_view.account_number]'>Edit</a><br>
+                <b>Assigned wage payout:</b> $[detailed_account_view.wage_gain] <a href='?src=[REF(src)];econ_panel=edit_wage_payout;account_num=[detailed_account_view.account_number]'>Edit</a><br>
                 <table border=1 style='width:100%'>
                 <tr>
                 <td><b>Date</b></td>
@@ -83,7 +83,7 @@
             dat += "</table>"
         else
 
-            dat += {"<a href='?src=\ref[src];econ_panel=create_account;'>Create new account</a><br><br>
+            dat += {"<a href='?src=[REF(src)];econ_panel=create_account;'>Create new account</a><br><br>
                 <table border=1 style='width:100%'>"}
             for(var/i=1, i<=all_money_accounts.len, i++)
                 var/datum/money_account/D = all_money_accounts[i]
@@ -92,7 +92,7 @@
                     <td>#[D.account_number]</td>
                     <td>[D.owner_name]</td>
                     <td>$[D.money]</td>
-                    <td><a href='?src=\ref[src];econ_panel=view_account_detail;account_index=[i]'>View in detail</a></td>
+                    <td><a href='?src=[REF(src)];econ_panel=view_account_detail;account_index=[i]'>View in detail</a></td>
                     </tr>"}
             dat += "</table>"
 

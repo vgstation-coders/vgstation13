@@ -30,7 +30,7 @@
 		user.set_machine(src)
 		var/dat = list()
 		if(screen == 0)
-			dat += "<A href='?src=\ref[src];lock=1'>Unlock Console</A>"
+			dat += "<A href='?src=[REF(src)];lock=1'>Unlock Console</A>"
 		else if(screen == 1)
 			dat += "Chemical Implants<BR>"
 			var/turf/Tr = null
@@ -42,9 +42,9 @@
 					continue
 
 				dat += {"[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject:
-					<A href='?src=\ref[src];inject1=\ref[C]'>(<font color=red>(1)</font>)</A>
-					<A href='?src=\ref[src];inject5=\ref[C]'>(<font color=red>(5)</font>)</A>
-					<A href='?src=\ref[src];inject10=\ref[C]'>(<font color=red>(10)</font>)</A><BR>
+					<A href='?src=[REF(src)];inject1=[REF(C)]'>(<font color=red>(1)</font>)</A>
+					<A href='?src=[REF(src)];inject5=[REF(C)]'>(<font color=red>(5)</font>)</A>
+					<A href='?src=[REF(src)];inject10=[REF(C)]'>(<font color=red>(10)</font>)</A><BR>
 					********************************<BR>"}
 			dat += "<HR>Tracking Implants<BR>"
 			for(var/obj/item/weapon/implant/tracking/T in world)
@@ -64,9 +64,9 @@
 					loc_display = pick(teleportlocs)
 
 				dat += {"ID: [T.id] | Location: [loc_display]<BR>
-					<A href='?src=\ref[src];warn=\ref[T]'>(<font color=red><i>Message Holder</i></font>)</A> |<BR>
+					<A href='?src=[REF(src)];warn=[REF(T)]'>(<font color=red><i>Message Holder</i></font>)</A> |<BR>
 					********************************<BR>"}
-			dat += "<HR><A href='?src=\ref[src];lock=1'>Lock Console</A>"
+			dat += "<HR><A href='?src=[REF(src)];lock=1'>Lock Console</A>"
 		dat = jointext(dat,"")
 		var/datum/browser/popup = new(user, "prisoner_implants", "Prisoner Implant Manager System", 400, 500, src)
 		popup.set_content(dat)

@@ -134,7 +134,7 @@
 		if (hard_deleted)
 			delete_profile("[type]", 1)
 		else
-			garbageCollector.dequeue("\ref[src]") // hard deletions have already been handled by the GC queue.
+			garbageCollector.dequeue("[REF(src)]") // hard deletions have already been handled by the GC queue.
 			delete_profile("[type]", 2)
 	else // direct del calls or nulled explicitly.
 		delete_profile("[type]", 0)

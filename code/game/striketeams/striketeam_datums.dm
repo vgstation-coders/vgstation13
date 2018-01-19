@@ -72,7 +72,7 @@ var/list/sent_strike_teams = list()
 		if(!O.client || jobban_isbanned(O, "Strike Team") || O.client.is_afk())
 			continue
 
-		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
+		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=[REF(src)];signup=[REF(O)]'>Apply now!</a>)</span>[bicon(team_logo)]")
 
 	spawn(1 MINUTES)
 		searching = FALSE

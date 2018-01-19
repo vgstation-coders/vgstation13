@@ -65,16 +65,16 @@
 	/*dat += "<b>Fuel depletion announcement:</b> "
 
 	// NOT-AUTOFIXED BY fix_string_idiocy.py
-	dat += {"[announce_fueldepletion == 0 ? 	"Disabled"		: "<a href='?src=\ref[src];announce_fueldepletion=0'>\[Disable\]</a>"]
-		[announce_fueldepletion == 1 ? 	"Announcing"	: "<a href='?src=\ref[src];announce_fueldepletion=1'>\[Announce\]</a>"]
-		[announce_fueldepletion == 2 ? 	"Broadcasting"	: "<a href='?src=\ref[src];announce_fueldepletion=2'>\[Broadcast\]</a>"]<br>
+	dat += {"[announce_fueldepletion == 0 ? 	"Disabled"		: "<a href='?src=[REF(src)];announce_fueldepletion=0'>\[Disable\]</a>"]
+		[announce_fueldepletion == 1 ? 	"Announcing"	: "<a href='?src=[REF(src)];announce_fueldepletion=1'>\[Announce\]</a>"]
+		[announce_fueldepletion == 2 ? 	"Broadcasting"	: "<a href='?src=[REF(src)];announce_fueldepletion=2'>\[Broadcast\]</a>"]<br>
 		<b>Stage progression announcement:</b>
-		[announce_stageprogression == 0 ? 	"Disabled"		: "<a href='?src=\ref[src];announce_stageprogression=0'>\[Disable\]</a>"]
-		[announce_stageprogression == 1 ? 	"Announcing"	: "<a href='?src=\ref[src];announce_stageprogression=1'>\[Announce\]</a>"]
-		[announce_stageprogression == 2 ? 	"Broadcasting"	: "<a href='?src=\ref[src];announce_stageprogression=2'>\[Broadcast\]</a>"]<br>"}*/
+		[announce_stageprogression == 0 ? 	"Disabled"		: "<a href='?src=[REF(src)];announce_stageprogression=0'>\[Disable\]</a>"]
+		[announce_stageprogression == 1 ? 	"Announcing"	: "<a href='?src=[REF(src)];announce_stageprogression=1'>\[Announce\]</a>"]
+		[announce_stageprogression == 2 ? 	"Broadcasting"	: "<a href='?src=[REF(src)];announce_stageprogression=2'>\[Broadcast\]</a>"]<br>"}*/
 	dat += {"
 		<hr>
-		<b>Detected devices</b> <a href='?src=\ref[src];scan=1'>\[Refresh list\]</a>
+		<b>Detected devices</b> <a href='?src=[REF(src)];scan=1'>\[Refresh list\]</a>
 		<table border=1 width='100%'>
 		<tr>
 		<td><b>ID</b></td>
@@ -91,7 +91,7 @@
 		dat += {"<tr>
 			<td>[I.id_tag]</td>"}
 		if(I.cur_assembly)
-			dat += "<td><a href='?src=\ref[I];toggle_injecting=1;update_extern=\ref[src]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
+			dat += "<td><a href='?src=[REF(I)];toggle_injecting=1;update_extern=[REF(src)]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
 		else
 			dat += "<td>None</td>"
 		dat += "<td>[I.fuel_usage * 100]%</td>"
@@ -100,21 +100,21 @@
 		else
 			dat += "<td>NA</td>"
 		if(stage_times.Find(I.id_tag))
-			dat += "<td>[ticks_this_stage]/[stage_times[I.id_tag]]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Modify</td>"
+			dat += "<td>[ticks_this_stage]/[stage_times[I.id_tag]]s <a href='?src=[REF(src)];stage_time=[I.id_tag]'>Modify</td>"
 		else
-			dat += "<td>[ticks_this_stage]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Set</td>"
+			dat += "<td>[ticks_this_stage]s <a href='?src=[REF(src)];stage_time=[I.id_tag]'>Set</td>"
 		if(proceeding_stages.Find(I.id_tag))
-			dat += "<td><a href='?src=\ref[src];set_next_stage=[I.id_tag]'>[proceeding_stages[I.id_tag]]</a></td>"
+			dat += "<td><a href='?src=[REF(src)];set_next_stage=[I.id_tag]'>[proceeding_stages[I.id_tag]]</a></td>"
 		else
-			dat += "<td>None <a href='?src=\ref[src];set_next_stage=[I.id_tag]'>\[modify\]</a></td>"
+			dat += "<td>None <a href='?src=[REF(src)];set_next_stage=[I.id_tag]'>\[modify\]</a></td>"
 
-		dat += {"<td><a href='?src=\ref[src];toggle_stage=[I.id_tag]'>\[[active_stages.Find(I.id_tag) ? "Deactivate stage" : "Activate stage "] \]</a></td>
+		dat += {"<td><a href='?src=[REF(src)];toggle_stage=[I.id_tag]'>\[[active_stages.Find(I.id_tag) ? "Deactivate stage" : "Activate stage "] \]</a></td>
 			</tr>"}
 
 	dat += {"</table>
 		<hr>
-		<A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<A href='?src=\ref[src];close=1'>Close</A><BR>"}
+		<A href='?src=[REF(src)];refresh=1'>Refresh</A>
+		<A href='?src=[REF(src)];close=1'>Close</A><BR>"}
 	user << browse(dat, "window=fuel_control;size=800x400")
 	user.set_machine(src)
 

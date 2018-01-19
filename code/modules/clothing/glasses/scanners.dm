@@ -213,7 +213,7 @@
 		clear()
 
 		if (viewing)
-			viewing.on_logout.Remove("\ref[src]:mob_logout")
+			viewing.on_logout.Remove("[REF(src)]:mob_logout")
 			viewing = null
 
 		if (new_mob)
@@ -225,7 +225,7 @@
 		return
 
 	clear()
-	viewing.on_logout.Remove("\ref[src]:mob_logout")
+	viewing.on_logout.Remove("[REF(src)]:mob_logout")
 	viewing = null
 
 /obj/item/clothing/glasses/scanner/material/proc/get_images(var/turf/T, var/view)

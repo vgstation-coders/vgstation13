@@ -127,34 +127,34 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				dat += text("Which department do you need assistance from?<BR><BR>")
 				for(var/dpt in req_console_assistance)
 					if (dpt != department)
-						dat += text("[dpt] (<A href='?src=\ref[src];write=[ckey(dpt)]'>Message</A> or ")
-						dat += text("<A href='?src=\ref[src];write=[ckey(dpt)];priority=2'>High Priority</A>")
+						dat += text("[dpt] (<A href='?src=[REF(src)];write=[ckey(dpt)]'>Message</A> or ")
+						dat += text("<A href='?src=[REF(src)];write=[ckey(dpt)];priority=2'>High Priority</A>")
 //						if (hackState == 1)
-//							dat += text(" or <A href='?src=\ref[src];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
+//							dat += text(" or <A href='?src=[REF(src)];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
 						dat += text(")<BR>")
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+				dat += text("<BR><A href='?src=[REF(src)];setScreen=0'>Back</A><BR>")
 
 			if(2)	//req. supplies
 				dat += text("Which department do you need supplies from?<BR><BR>")
 				for(var/dpt in req_console_supplies)
 					if (dpt != department)
-						dat += text("[dpt] (<A href='?src=\ref[src];write=[ckey(dpt)]'>Message</A> or ")
-						dat += text("<A href='?src=\ref[src];write=[ckey(dpt)];priority=2'>High Priority</A>")
+						dat += text("[dpt] (<A href='?src=[REF(src)];write=[ckey(dpt)]'>Message</A> or ")
+						dat += text("<A href='?src=[REF(src)];write=[ckey(dpt)];priority=2'>High Priority</A>")
 //						if (hackState == 1)
-//							dat += text(" or <A href='?src=\ref[src];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
+//							dat += text(" or <A href='?src=[REF(src)];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
 						dat += text(")<BR>")
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+				dat += text("<BR><A href='?src=[REF(src)];setScreen=0'>Back</A><BR>")
 
 			if(3)	//relay information
 				dat += text("Which department would you like to send information to?<BR><BR>")
 				for(var/dpt in req_console_information)
 					if (dpt != department)
-						dat += text("[dpt] (<A href='?src=\ref[src];write=[ckey(dpt)]'>Message</A> or ")
-						dat += text("<A href='?src=\ref[src];write=[ckey(dpt)];priority=2'>High Priority</A>")
+						dat += text("[dpt] (<A href='?src=[REF(src)];write=[ckey(dpt)]'>Message</A> or ")
+						dat += text("<A href='?src=[REF(src)];write=[ckey(dpt)];priority=2'>High Priority</A>")
 //						if (hackState == 1)
-//							dat += text(" or <A href='?src=\ref[src];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
+//							dat += text(" or <A href='?src=[REF(src)];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
 						dat += text(")<BR>")
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+				dat += text("<BR><A href='?src=[REF(src)];setScreen=0'>Back</A><BR>")
 			if(5)   //configure panel
 				dat += text("<B>Configure Panel</B><BR><BR>")
 				if(announceAuth)
@@ -163,22 +163,22 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				if (announceAuth)
 					dat += text("Configure department. Set to 0 to release internal locks for deconstruction.<BR><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=0'>No Contact</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=1'>Assistance</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=2'>Supply</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=3'>Anonymous Tip Recipient</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=4'>Assistance + Supply</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=5'>Assistance + Tips</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=6'>Supply + Tips</A><BR>")
-					dat += text("<A href='?src=\ref[src];setDepartment=7'>All</A><BR>")
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=0'>No Contact</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=1'>Assistance</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=2'>Supply</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=3'>Anonymous Tip Recipient</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=4'>Assistance + Supply</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=5'>Assistance + Tips</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=6'>Supply + Tips</A><BR>")
+					dat += text("<A href='?src=[REF(src)];setDepartment=7'>All</A><BR>")
+				dat += text("<BR><A href='?src=[REF(src)];setScreen=0'>Back</A><BR>")
 			if(6)	//sent successfully
 				dat += text("<FONT COLOR='GREEN'>Message sent</FONT><BR><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=0'>Continue</A><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=0'>Continue</A><BR>")
 
 			if(7)	//unsuccessful; not sent
 				dat += text("<FONT COLOR='RED'>An error occurred. </FONT><BR><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=0'>Continue</A><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=0'>Continue</A><BR>")
 
 			if(8)	//view messages
 				for (var/obj/machinery/requests_console/Console in allConsoles)
@@ -190,7 +190,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state = "req_comp0"
 				for(var/msg in messages)
 					dat += text("[msg]<BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=0'>Back to main menu</A><BR>")
 
 			if(9)	//authentication before sending
 				dat += text("<B>Message Authentication</B><BR><BR>")
@@ -198,8 +198,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				dat += text("You may authenticate your message now by scanning your ID or your stamp<BR><BR>")
 				dat += text("Validated by: [msgVerified]<br>");
 				dat += text("Stamped by: [msgStamped]<br>");
-				dat += text("<A href='?src=\ref[src];department=[dpt]'>Send</A><BR>");
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+				dat += text("<A href='?src=[REF(src)];department=[dpt]'>Send</A><BR>");
+				dat += text("<BR><A href='?src=[REF(src)];setScreen=0'>Back</A><BR>")
 
 			if(10)	//send announcement
 				dat += text("<B>Station wide announcement</B><BR><BR>")
@@ -207,10 +207,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					dat += text("<b>Authentication accepted</b><BR><BR>")
 				else
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
-				dat += text("<b>Message: </b>[message] <A href='?src=\ref[src];writeAnnouncement=1'>Write</A><BR><BR>")
+				dat += text("<b>Message: </b>[message] <A href='?src=[REF(src)];writeAnnouncement=1'>Write</A><BR><BR>")
 				if (announceAuth && message)
-					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>");
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+					dat += text("<A href='?src=[REF(src)];sendAnnouncement=1'>Announce</A><BR>");
+				dat += text("<BR><A href='?src=[REF(src)];setScreen=0'>Back</A><BR>")
 
 			else	//main menu
 				screen = 0
@@ -219,18 +219,18 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					dat += text("<FONT COLOR='RED'>There are new messages</FONT><BR>")
 				if (newmessagepriority == 2)
 					dat += text("<FONT COLOR='RED'><B>NEW PRIORITY MESSAGES</B></FONT><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=8'>View Messages</A><BR><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=8'>View Messages</A><BR><BR>")
 
-				dat += text("<A href='?src=\ref[src];setScreen=1'>Request Assistance</A><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=2'>Request Supplies</A><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=3'>Relay Anonymous Information</A><BR><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=5'>Configure Panel</A><BR><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=1'>Request Assistance</A><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=2'>Request Supplies</A><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=3'>Relay Anonymous Information</A><BR><BR>")
+				dat += text("<A href='?src=[REF(src)];setScreen=5'>Configure Panel</A><BR><BR>")
 				if(announcementConsole)
-					dat += text("<A href='?src=\ref[src];setScreen=10'>Send station-wide announcement</A><BR><BR>")
+					dat += text("<A href='?src=[REF(src)];setScreen=10'>Send station-wide announcement</A><BR><BR>")
 				if (silent)
-					dat += text("Speaker <A href='?src=\ref[src];setSilent=0'>OFF</A>")
+					dat += text("Speaker <A href='?src=[REF(src)];setSilent=0'>OFF</A>")
 				else
-					dat += text("Speaker <A href='?src=\ref[src];setSilent=1'>ON</A>")
+					dat += text("Speaker <A href='?src=[REF(src)];setSilent=1'>ON</A>")
 
 		user << browse("[dat]", "window=request_console")
 		onclose(user, "req_console")
@@ -311,7 +311,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
 									say("PRIORITY Alert in [department]")
-								Console.messages += "<B><FONT color='red'>High Priority message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
+								Console.messages += "<B><FONT color='red'>High Priority message from <A href='?src=[REF(Console)];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 
 		//					if("3")		//Not implemanted, but will be 		//Removed as it doesn't look like anybody intends on implimenting it ~Carn
 		//						if(Console.newmessagepriority < 3)
@@ -330,7 +330,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 									say("Message from [department]")
-								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
+								Console.messages += "<B>Message from <A href='?src=[REF(Console)];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
 
 						screen = 6
 						Console.set_light(2)

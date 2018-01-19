@@ -33,7 +33,7 @@
 	if(istype(O))
 		A = O
 
-	var/investigate_text = "<small>[time_stamp()] \ref[A] ([formatJumpTo(T)])</small> || "
+	var/investigate_text = "<small>[time_stamp()] [REF(A)] ([formatJumpTo(T)])</small> || "
 
 	if(result)
 		investigate_text += "[amt]u of [result] have been created"
@@ -50,9 +50,9 @@
 	if(alert_admins)
 		var/admin_text = "[name] reaction [alert_admins == 2 ? "([holder.get_reagent_ids(1)])" : "([amt]u total combined)"] at [formatJumpTo(T)]"
 		if(M)
-			admin_text += " in \a [A] (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>), carried by [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
+			admin_text += " in \a [A] (<A HREF='?_src_=vars;Vars=[REF(A)]'>VV</A>), carried by [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=[REF(M)]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=[REF(M)]'>?</A>)"
 		else
-			admin_text += " in \a [A] (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>), last touched by [(A.fingerprintslast ? A.fingerprintslast : "N/A (Last user processed: [usr.ckey])")]"
+			admin_text += " in \a [A] (<A HREF='?_src_=vars;Vars=[REF(A)]'>VV</A>), last touched by [(A.fingerprintslast ? A.fingerprintslast : "N/A (Last user processed: [usr.ckey])")]"
 		message_admins(admin_text, 0, 1)
 	return investigate_text
 

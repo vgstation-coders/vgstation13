@@ -386,13 +386,13 @@ a { color: white; }
 	</head>
 	<body>
 		<h1>ZAS Configuration</h1>
-		<p><a href="?src=\ref[src];save=1">Save Settings</a> | <a href="?src=\ref[src];load=1">Load Settings</a></p>
+		<p><a href="?src=[REF(src)];save=1">Save Settings</a> | <a href="?src=[REF(src)];load=1">Load Settings</a></p>
 		<p>Please note that changing these settings can and probably will result in death, destruction and mayhem. <b>Change at your own risk.</b></p>
 	<dl>"}
 	for(var/id in src.settings)
 		var/datum/ZAS_Setting/s = src.settings[id]
 
-		dat += {"<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=\ref[src];changevar=[id]'>\[Change\]</A></dt>
+		dat += {"<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=[REF(src)];changevar=[id]'>\[Change\]</A></dt>
 			<dd>[s.desc]</i></dd>"}
 	dat += "</dl></body></html>"
 	user << browse(dat,"window=settings")

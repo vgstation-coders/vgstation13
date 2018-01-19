@@ -149,15 +149,15 @@
 	if (currentShuttleArea)
 		dat += text("<b>Currently building</b><br><br>[currentShuttleName]<br><br>")
 		dat += text("<b>Build the shuttle to your liking.</b><br>This shuttle will be sent to the station in the event of an emergency along with a centcom emergency shuttle.")
-		dat += text("<br><br><br><A href='?src=\ref[src];scrap=1'>Scrap current shuttle</A>")
+		dat += text("<br><br><br><A href='?src=[REF(src)];scrap=1'>Scrap current shuttle</A>")
 	else
 		dat += text("<b>Available ships to build:</b><br><br>")
-		dat += text("<A href='?src=\ref[src];ship=hopper'>Planet hopper</A> - Tiny, Slow, 25000 metal<br>")
-		dat += text("<A href='?src=\ref[src];ship=bus'>Blunder Bus</A> - Small, Decent speed, 60000 metal<br>")
-		dat += text("<A href='?src=\ref[src];ship=dinghy'>Space dinghy</A> - Medium size, Decent speed, 100000 metal<br>")
-		dat += text("<A href='?src=\ref[src];ship=van'>Boxvan MMDLVIr</A> - Medium size, Decent speed, 120000 metal<br>")
-		dat += text("<A href='?src=\ref[src];ship=secvan'>Boxvan MMDLVI - Security eidition</A> - Large, Rather slow, 125000 metal<br>")
-		dat += text("<A href='?src=\ref[src];ship=station4'>Space station 4</A> - Huge, Slow, 250000 metal<br>")
+		dat += text("<A href='?src=[REF(src)];ship=hopper'>Planet hopper</A> - Tiny, Slow, 25000 metal<br>")
+		dat += text("<A href='?src=[REF(src)];ship=bus'>Blunder Bus</A> - Small, Decent speed, 60000 metal<br>")
+		dat += text("<A href='?src=[REF(src)];ship=dinghy'>Space dinghy</A> - Medium size, Decent speed, 100000 metal<br>")
+		dat += text("<A href='?src=[REF(src)];ship=van'>Boxvan MMDLVIr</A> - Medium size, Decent speed, 120000 metal<br>")
+		dat += text("<A href='?src=[REF(src)];ship=secvan'>Boxvan MMDLVI - Security eidition</A> - Large, Rather slow, 125000 metal<br>")
+		dat += text("<A href='?src=[REF(src)];ship=station4'>Space station 4</A> - Huge, Slow, 250000 metal<br>")
 
 	user << browse("[dat]", "window=shipbuilder")
 

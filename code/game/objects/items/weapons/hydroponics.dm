@@ -82,10 +82,10 @@
 
 				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
 					[N] </font>
-					<a href='byond://?src=\ref[src];vend=[O]'>Vend</A>
+					<a href='byond://?src=[REF(src)];vend=[O]'>Vend</A>
 					<br>"}
 
-		dat += {"<br><a href='byond://?src=\ref[src];unload=1'>Unload All</A>
+		dat += {"<br><a href='byond://?src=[REF(src)];unload=1'>Unload All</A>
 			</TT>"}
 	user << browse("<HEAD><TITLE>Seedbag Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=seedbag")
 	onclose(user, "seedbag")

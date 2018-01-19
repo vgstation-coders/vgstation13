@@ -625,7 +625,7 @@ var/global/num_vending_terminals = 1
 		dat += " <b>($[P.price])</b>"
 	if (P.amount > 0)
 		var/idx=GetProductIndex(P)
-		dat += " <a href='byond://?src=\ref[src];vend=[idx];cat=[P.category]'>(Vend)</A>"
+		dat += " <a href='byond://?src=[REF(src)];vend=[idx];cat=[P.category]'>(Vend)</A>"
 	else
 		dat += " <span class='warning'>SOLD OUT</span>"
 	dat += "<br>"
@@ -734,8 +734,8 @@ var/global/num_vending_terminals = 1
 		var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>" //display the name, and added a horizontal rule
 
 		dat += {"<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>
-			<a href='byond://?src=\ref[src];buy=1'>Pay</a> |
-			<a href='byond://?src=\ref[src];cancel_buying=1'>Cancel</a>"}
+			<a href='byond://?src=[REF(src)];buy=1'>Pay</a> |
+			<a href='byond://?src=[REF(src)];cancel_buying=1'>Cancel</a>"}
 		user << browse(dat, "window=vending")
 		onclose(user, "")
 		return
@@ -746,7 +746,7 @@ var/global/num_vending_terminals = 1
 	dat += "<br><b>Select an item: </b><br><br>" //the rest is just general spacing and bolding
 
 	if (premium.len > 0)
-		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
+		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=[REF(src)];remove_coin=1'>Remove</A>)<br><br>"
 
 	if (src.product_records.len == 0)
 		dat += "<font color = 'red'>No products loaded!</font>"
@@ -800,7 +800,7 @@ var/global/num_vending_terminals = 1
 		dat += wires()
 
 		if(product_slogans != "")
-			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a>"
+			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=[REF(src)];togglevoice=[1]'>Toggle</a>"
 
 	user << browse(dat, "window=vending;size=400x[vertical]")
 	onclose(user, "vending")

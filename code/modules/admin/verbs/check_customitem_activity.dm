@@ -22,7 +22,7 @@ var/inactive_keys = "None<br>"
 		dat += {"<hr>
 			This system was implemented on March 1 2013, and the database a few days before that. Root server access is required to add or disable access to specific custom items.<br>"}
 	else
-		dat += "<a href='?src=\ref[src];_src_=holder;populate_inactive_customitems=1'>Populate list (requires an active database connection)</a><br>"
+		dat += "<a href='?src=[REF(src)];_src_=holder;populate_inactive_customitems=1'>Populate list (requires an active database connection)</a><br>"
 
 	usr << browse(dat, "window=inactive_customitems;size=600x480")
 

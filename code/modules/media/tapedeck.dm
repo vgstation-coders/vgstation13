@@ -92,9 +92,9 @@
 		return
 
 	var/t = "<div class=\"navbar\">"
-	t += "<a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
+	t += "<a href=\"?src=[REF(src)];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
 	//if(allowed(user))
-	//	t += " | <a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
+	//	t += " | <a href=\"?src=[REF(src)];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
 	t += "</div>"
 	switch(screen)
 		if(JUKEBOX_SCREEN_MAIN)
@@ -109,8 +109,8 @@
 
 /obj/machinery/media/jukebox/proc/ScreenMain(var/mob/user)
 	var/t = "<h1>[src] Interface</h1>"
-	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
-	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[loopModeNames[loop_mode]]</a><br />"
+	t += "<b>Power:</b> <a href='?src=[REF(src)];power=1'>[playing?"On":"Off"]</a><br />"
+	t += "<b>Play Mode:</b> <a href='?src=[REF(src)];mode=1'>[loopModeNames[loop_mode]]</a><br />"
 	if(playlist == null)
 		t += "\[DOWNLOADING PLAYLIST, PLEASE WAIT\]"
 	else
@@ -118,7 +118,7 @@
 			if(check_reload())
 				t += "<b>Playlist:</b> "
 				for(var/plid in playlists)
-					t += "<a href='?src=\ref[src];playlist=[plid]'>[playlists[plid]]</a>"
+					t += "<a href='?src=[REF(src)];playlist=[plid]'>[playlists[plid]]</a>"
 			else
 				t += "<i>Please wait before changing playlists.</i>"
 		else
@@ -129,9 +129,9 @@
 		// Now here's the cool shit
 		t += {"
 		<b>Playlist Tools:</b>
-			<a href='?src=\ref[src];reload=1'>Reload</a>
-			<a href='?src=\ref[src];add=1'>Add Song</a>
-			<a href='?src=\ref[src];clear=1'>Clear</a>
+			<a href='?src=[REF(src)];reload=1'>Reload</a>
+			<a href='?src=[REF(src)];add=1'>Add Song</a>
+			<a href='?src=[REF(src)];clear=1'>Clear</a>
 		<br />"}
 		//
 		////////////////////////////
@@ -152,12 +152,12 @@
 			<tr>
 				<th>#[i]</th>
 				<td>
-					<A href='?src=\ref[src];song=[i]' class='nobg'>[song.displaytitle()]</A>
+					<A href='?src=[REF(src)];song=[i]' class='nobg'>[song.displaytitle()]</A>
 				</td>
 				<td>[song.album]</td>
 				<td>
-					<A href='?src=\ref[src];queue=[i]'>Q</A>
-					<A href='?src=\ref[src];remove=[i]'>X</A>
+					<A href='?src=[REF(src)];queue=[i]'>Q</A>
+					<A href='?src=[REF(src)];remove=[i]'>X</A>
 				</td>
 			</tr>"}
 		t += "</table>"
@@ -165,8 +165,8 @@
 
 /obj/machinery/media/jukebox/proc/ScreenSettings(var/mob/user)
 	var/dat={"<h1>Settings</h1>
-		<form action="?src=\ref[src]" method="get">
-		<input type="hidden" name="src" value="\ref[src]" />
+		<form action="?src=[REF(src)]" method="get">
+		<input type="hidden" name="src" value="[REF(src)]" />
 		<fieldset>
 			<legend>Access</legend>
 			<p>Permissions required to change song:</p>

@@ -66,12 +66,12 @@
 		linktext = name
 
 	if (istype(back_to))
-		back_to_param = ";viewruntime_backto=\ref[back_to]"
+		back_to_param = ";viewruntime_backto=[REF(back_to)]"
 
 	if (linear)
 		back_to_param += ";viewruntime_linear=1"
 
-	return "<a href='?_src_=holder;viewruntime=\ref[src][back_to_param]'>[linktext]</a>"
+	return "<a href='?_src_=holder;viewruntime=[REF(src)][back_to_param]'>[linktext]</a>"
 
 /datum/error_viewer/error_cache
 	var/list/errors = list()
@@ -171,7 +171,7 @@
 			desc += "<span class='runtime_line'>[html_encode(line)]</span><br>"
 
 	if (usr)
-		usr_ref = "\ref[usr]"
+		usr_ref = "[REF(usr)]"
 		usr_loc = get_turf(usr)
 
 /datum/error_viewer/error_entry/show_to(var/user, var/datum/error_viewer/back_to, var/linear)
@@ -185,7 +185,7 @@
 		html += " <a href='?_src_=holder;adminplayeropts=[usr_ref]'>PP</a>"
 		html += " <a href='?_src_=holder;adminplayerobservefollow=[usr_ref]'>Follow</a>"
 		if (istype(usr_loc))
-			html += "<br><b>usr.loc</b>: <a href='?_src_=vars;Vars=\ref[usr_loc]'>VV</a>"
+			html += "<br><b>usr.loc</b>: <a href='?_src_=vars;Vars=[REF(usr_loc)]'>VV</a>"
 			html += " <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[usr_loc.x];Y=[usr_loc.y];Z=[usr_loc.z]'>JMP</a>"
 
 	browse_to(user, html)

@@ -46,4 +46,4 @@
 					say_testing(src, "/mob/dead/observer/Hear(): CHAT_GHOSTRADIO is disabled, blocking. ([client.prefs.toggles] & [CHAT_GHOSTRADIO]) = [client.prefs.toggles & CHAT_GHOSTRADIO]")
 					return
 
-	to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")
+	to_chat(src, "<a href='?src=[REF(src)];follow=[REF(source)]'>(Follow)</a> [rendered_speech]")

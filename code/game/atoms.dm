@@ -453,7 +453,7 @@ its easier to just keep the beam vertical.
 		var/user_turf = get_turf(user)
 		var/distance = get_dist(this_turf, user_turf)
 		if(Adjacent(user))
-			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
+			to_chat(user, "<a href='?src=[REF(src)];bug=[REF(bug)]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
 

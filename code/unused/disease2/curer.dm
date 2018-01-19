@@ -72,14 +72,14 @@
 		dat = "Virus dish inserted"
 		if(dish.virus2)
 			if(dish.growth >= 100)
-				dat += "<BR><A href='?src=\ref[src];antibody=1'>Begin antibody production</a>"
-				dat += "<BR><A href='?src=\ref[src];virus=1'>Begin virus production</a>"
+				dat += "<BR><A href='?src=[REF(src)];antibody=1'>Begin antibody production</a>"
+				dat += "<BR><A href='?src=[REF(src)];virus=1'>Begin virus production</a>"
 			else
 				dat += "<BR>Insufficent cells to attempt to create cure"
 		else
 			dat += "<BR>Please check dish contents"
 
-		dat += "<BR><A href='?src=\ref[src];eject=1'>Eject disk</a>"
+		dat += "<BR><A href='?src=[REF(src)];eject=1'>Eject disk</a>"
 	else
 		dat = "Please insert dish"
 

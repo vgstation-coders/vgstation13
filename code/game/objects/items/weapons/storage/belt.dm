@@ -337,7 +337,7 @@
 		var/chosen = pick(critters)
 		critters -= chosen
 		var/mob/living/simple_animal/hostile/NM = new chosen(MC)
-		NM.faction = "lazarus \ref[user]"
+		NM.faction = "lazarus [REF(user)]"
 		NM.friends += user
 		MC.contained_mob = NM
 		MC.name = "lazarus capsule - [NM.name]"

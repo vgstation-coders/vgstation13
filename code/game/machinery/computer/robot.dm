@@ -37,13 +37,13 @@
 	user.set_machine(src)
 	var/dat
 	if (src.temp)
-		dat = "<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>"
+		dat = "<TT>[src.temp]</TT><BR><BR><A href='?src=[REF(src)];temp=1'>Clear Screen</A>"
 	else
 		if(screen == 0)
 
 			dat += {"<h3>Cyborg Control Console</h3><BR>
-				<A href='?src=\ref[src];screen=1'>1. Cyborg Status</A><BR>
-				<A href='?src=\ref[src];screen=2'>2. Emergency Full Destruct</A><BR>"}
+				<A href='?src=[REF(src)];screen=1'>1. Cyborg Status</A><BR>
+				<A href='?src=[REF(src)];screen=2'>2. Emergency Full Destruct</A><BR>"}
 		if(screen == 1)
 			for(var/mob/living/silicon/robot/R in mob_list)
 				if(istype(user, /mob/living/silicon/ai))
@@ -77,29 +77,29 @@
 					dat += " Independent from AI |"
 				if (istype(user, /mob/living/silicon))
 					if((user.mind.special_role && user.mind.original == user) && !R.emagged)
-						dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
+						dat += "<A href='?src=[REF(src)];magbot=[REF(R)]'>(<font color=blue><i>Hack</i></font>)</A> "
 
-				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
-					<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
+				dat += {"<A href='?src=[REF(src)];stopbot=[REF(R)]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
+					<A href='?src=[REF(src)];killbot=[REF(R)]'>(<font color=red><i>Destroy</i></font>)</A>
 					<BR>"}
-			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
+			dat += "<A href='?src=[REF(src)];screen=0'>(Return to Main Menu)</A><BR>"
 		if(screen == 2)
 			if(!src.status)
 				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus: Off<BR>
 				\n<BR>
-				\nCountdown: [src.timeleft]/60 <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
+				\nCountdown: [src.timeleft]/60 <A href='?src=[REF(src)];reset=1'>\[Reset\]</A><BR>
 				\n<BR>
-				\n<A href='?src=\ref[src];eject=1'>Start Sequence</A><BR>
+				\n<A href='?src=[REF(src)];eject=1'>Start Sequence</A><BR>
 				\n<BR>
-				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
+				\n<A href='?src=[REF(user)];mach_close=computer'>Close</A>"}
 			else
 				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus: Activated<BR>
 				\n<BR>
 				\nCountdown: [src.timeleft]/60 \[Reset\]<BR>
-				\n<BR>\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
+				\n<BR>\n<A href='?src=[REF(src)];stop=1'>Stop Sequence</A><BR>
 				\n<BR>
-				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
-			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
+				\n<A href='?src=[REF(user)];mach_close=computer'>Close</A>"}
+			dat += "<A href='?src=[REF(src)];screen=0'>(Return to Main Menu)</A><BR>"
 
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
@@ -113,8 +113,8 @@
 
 		if (href_list["eject"])
 			src.temp = {"Destroy Robots?<BR>
-			<BR><B><A href='?src=\ref[src];eject2=1'>\[Swipe ID to initiate destruction sequence\]</A></B><BR>
-			<A href='?src=\ref[src];temp=1'>Cancel</A>"}
+			<BR><B><A href='?src=[REF(src)];eject2=1'>\[Swipe ID to initiate destruction sequence\]</A></B><BR>
+			<A href='?src=[REF(src)];temp=1'>Cancel</A>"}
 
 		else if (href_list["eject2"])
 			var/obj/item/weapon/card/id/I = usr.get_active_hand()
@@ -136,8 +136,8 @@
 		else if (href_list["stop"])
 			src.temp = {"
 			Stop Robot Destruction Sequence?<BR>
-			<BR><A href='?src=\ref[src];stop2=1'>Yes</A><BR>
-			<A href='?src=\ref[src];temp=1'>No</A>"}
+			<BR><A href='?src=[REF(src)];stop2=1'>Yes</A><BR>
+			<A href='?src=[REF(src)];temp=1'>No</A>"}
 
 		else if (href_list["stop2"])
 			src.stop = 1

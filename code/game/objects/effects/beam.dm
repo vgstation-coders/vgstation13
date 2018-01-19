@@ -77,14 +77,14 @@
 	var/event/E = args["event"]
 	if(!targetMoveKey)
 		beam_testing("Uh oh, got a target_moved when we weren't listening for one.")
-		E.handlers.Remove("\ref[src]:target_moved")
+		E.handlers.Remove("[REF(src)]:target_moved")
 		return
 
 	var/turf/T = args["loc"]
 
 	if(E.holder != target)
 		beam_testing("Received erroneous event, killing")
-		E.handlers.Remove("\ref[src]:target_moved")
+		E.handlers.Remove("[REF(src)]:target_moved")
 		return
 	beam_testing("Target now at [T.x],[T.y],[T.z]")
 	if(T != targetContactLoc && T != loc)
@@ -102,14 +102,14 @@
 	var/event/E = args["event"]
 
 	if(!targetDensityKey)
-		E.handlers.Remove("\ref[src]:target_density_change")
+		E.handlers.Remove("[REF(src)]:target_density_change")
 		beam_testing("Uh oh, got a target_density_change when we weren't listening for one.")
 		return
 
 	if(E.holder != target)
-		E.handlers.Remove("\ref[src]:target_density_change")
+		E.handlers.Remove("[REF(src)]:target_density_change")
 		return
-	beam_testing("\ref[src] Disconnecting: \ref[target] Target denisty has changed.")
+	beam_testing("[REF(src)] Disconnecting: [REF(target)] Target denisty has changed.")
 	// Disconnect and re-emit.
 	disconnect()
 
@@ -123,14 +123,14 @@
 	var/event/E = args["event"]
 
 	if(!targetDestroyKey)
-		E.handlers.Remove("\ref[src]:target_destroyed")
+		E.handlers.Remove("[REF(src)]:target_destroyed")
 		beam_testing("Uh oh, got a target_destroyed when we weren't listening for one.")
 		return
 
 	if(E.holder != target)
-		E.handlers.Remove("\ref[src]:target_destroyed")
+		E.handlers.Remove("[REF(src)]:target_destroyed")
 		return
-	beam_testing("\ref[src] Disconnecting: \ref[target] Target destroyed.")
+	beam_testing("[REF(src)] Disconnecting: [REF(target)] Target destroyed.")
 	// Disconnect and re-emit.
 	disconnect()
 
@@ -153,10 +153,10 @@
 /obj/effect/beam/proc/get_master()
 
 	#ifdef BEAM_DEBUG
-	var/master_ref = "\ref[master]"
+	var/master_ref = "[REF(master)]"
 	#endif
 
-	beam_testing("\ref[src] [master ? "get_master is returning [master_ref]" : "get_master is returning ourselves."]")
+	beam_testing("[REF(src)] [master ? "get_master is returning [master_ref]" : "get_master is returning ourselves."]")
 	if(master)
 		return master
 	return src
@@ -174,7 +174,7 @@
 	if(BM.target == AM)
 		return
 	if(BM.target)
-		beam_testing("\ref[BM] - Disconnecting [BM.target]: target changed.")
+		beam_testing("[REF(BM)] - Disconnecting [BM.target]: target changed.")
 		BM.disconnect(0)
 	BM.target=AM
 	if(istype(AM))
@@ -182,7 +182,7 @@
 	BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
 	BM.targetDensityKey = AM.on_density_change.Add(BM,"target_density_change")
 	BM.targetContactLoc = AM.loc
-	beam_testing("\ref[BM] - Connected to [AM]")
+	beam_testing("[REF(BM)] - Connected to [AM]")
 	AM.beam_connect(BM)
 
 
@@ -256,25 +256,25 @@
 	if(_range==-1)
 #ifdef BEAM_DEBUG
 		var/str_sources=jointext(sources,", ") // This will not work as an embedded statement.
-		beam_testing("\ref[src] - emit(), sources=[str_sources]")
+		beam_testing("[REF(src)] - emit(), sources=[str_sources]")
 #endif
 		_range=max_range
 
 	if(next && next.loc)
-		beam_testing("\ref[src] we have next \ref[next]")
+		beam_testing("[REF(src)] we have next [REF(next)]")
 		next.emit(sources,_range-1)
 		return
 
 	if(!loc)
 		//BEAM_DEL(src)
-		beam_testing("\ref[src] no loc")
+		beam_testing("[REF(src)] no loc")
 		src._re_emit = 0
 		qdel(src)
 		return
 
 	if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 		//BEAM_DEL(src)
-		beam_testing("\ref[src] end of world")
+		beam_testing("[REF(src)] end of world")
 		src._re_emit = 0
 		qdel(src)
 		return
@@ -295,7 +295,7 @@
 
 		setDensity(FALSE)
 		if(bumped)
-			beam_testing("\ref[src] Bumped")
+			beam_testing("[REF(src)] Bumped")
 			//BEAM_DEL(src)
 			src._re_emit = 0
 			qdel(src)
@@ -304,7 +304,7 @@
 		stepped=1
 
 		if(_range-- < 1)
-			beam_testing("\ref[src] ran out")
+			beam_testing("[REF(src)] ran out")
 			//BEAM_DEL(src)
 			src._re_emit = 0
 			qdel(src)
@@ -332,7 +332,7 @@
 		return
 	bumped = 1
 	if(A)
-		beam_testing("\ref[get_master()] - Bumped [A]!")
+		beam_testing("[REF(get_master())] - Bumped [A]!")
 		connect_to(A)
 		am_connector=1 // Prevents disconnecting after stepping into target.
 	return 1
@@ -380,7 +380,7 @@
 			PC.beams -= ourselves
 
 	if(!am_connector && !master)
-		beam_testing("\ref[get_master()] - Disconnecting (deleted)")
+		beam_testing("[REF(get_master())] - Disconnecting (deleted)")
 		disconnect(0)
 
 	if(master)

@@ -81,10 +81,10 @@
 /obj/item/device/assembly/read_write/interact(mob/user)
 	var/dat = ""
 
-	dat += "<p><b>READ</b>: <a href='?src=\ref[src];set_read=1'>[READ ? "[READ] ([READ_value])" : "nothing"]</a></p>"
-	dat += "<p><b>WRITE</b>: <a href='?src=\ref[src];set_write=1'>[WRITE ? "[WRITE] ([WRITE_value])" : "nothing"]</a></p><hr>"
-	dat += "<p>Stored value 1 (number): [stored_num] (<a href='?src=\ref[src];set_num_value=1'>change</a>)</p>"
-	dat += "<p>Stored value 2 (text): [stored_txt] (<a href='?src=\ref[src];set_txt_value=1'>change</a>)</p>"
+	dat += "<p><b>READ</b>: <a href='?src=[REF(src)];set_read=1'>[READ ? "[READ] ([READ_value])" : "nothing"]</a></p>"
+	dat += "<p><b>WRITE</b>: <a href='?src=[REF(src)];set_write=1'>[WRITE ? "[WRITE] ([WRITE_value])" : "nothing"]</a></p><hr>"
+	dat += "<p>Stored value 1 (number): [stored_num] (<a href='?src=[REF(src)];set_num_value=1'>change</a>)</p>"
+	dat += "<p>Stored value 2 (text): [stored_txt] (<a href='?src=[REF(src)];set_txt_value=1'>change</a>)</p>"
 
 	var/datum/browser/popup = new(user, "circuit4", "[src]", 500, 300, src)
 	popup.set_content(dat)

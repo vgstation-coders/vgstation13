@@ -97,11 +97,11 @@
 			selected_color = input("Select Colour to change the pipe to", "Custom Pipe Colour", selected_color) as color
 		if (selected_color == "#ffffff")
 			selected_color = "#fffffe"
-		. += "<a class='color [color_name][selected]' href='?src=\ref[master.interface];set_color=[color_name]'>&bull;</a>"
+		. += "<a class='color [color_name][selected]' href='?src=[REF(master.interface)];set_color=[color_name]'>&bull;</a>"
 	var/mass_colour_on = mass_colour ? "On" : "Off"
 	. += {" <br>
 			<h4>Mass Colour:</h4>
-			Mass Colouration: <b><A href='?src=\ref[master.interface];set_mass_colour=1'>[mass_colour_on]</a></b>"}
+			Mass Colouration: <b><A href='?src=[REF(master.interface)];set_mass_colour=1'>[mass_colour_on]</a></b>"}
 
 /datum/rcd_schematic/paint_pipes/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /obj/machinery/atmospherics))
@@ -293,19 +293,19 @@
 	if(layer)
 		. += {"
 		<div class="layer_holder">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer vertical one   [layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer vertical two   [layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer vertical three [layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer vertical four  [layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer vertical five  [layer == 5 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=1"><div class="layer vertical one   [layer == 1 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=2"><div class="layer vertical two   [layer == 2 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=3"><div class="layer vertical three [layer == 3 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=4"><div class="layer vertical four  [layer == 4 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=5"><div class="layer vertical five  [layer == 5 ? "selected" : ""]"></div></a>
 		</div>
 
 		<div class="layer_holder" style="left: 200px;">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer horizontal one   [layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer horizontal two   [layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer horizontal three [layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer horizontal four  [layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer horizontal five  [layer == 5 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=1"><div class="layer horizontal one   [layer == 1 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=2"><div class="layer horizontal two   [layer == 2 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=3"><div class="layer horizontal three [layer == 3 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=4"><div class="layer horizontal four  [layer == 4 ? "selected" : ""]"></div></a>
+			<a class="no_dec" href="?src=[REF(master.interface)];set_layer=5"><div class="layer horizontal five  [layer == 5 ? "selected" : ""]"></div></a>
 		</div>
 	"}
 
@@ -314,7 +314,7 @@
 	if(selected_dir == dir)
 		selected = " class='selected'"
 
-	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_[pipe_id]_[dir].png'/></a>"
+	return "<a href='?src=[REF(master.interface)];set_dir=[dir]'[selected] title='[title]'><img src='RPD_[pipe_id]_[dir].png'/></a>"
 
 /datum/rcd_schematic/pipe/Topic(var/href, var/href_list)
 	if(href_list["set_dir"])
@@ -414,7 +414,7 @@
 	if(selected_dir == dir)
 		selected = " class='selected'"
 
-	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_D_[pipe_id]_[dir].png'/></a>"
+	return "<a href='?src=[REF(master.interface)];set_dir=[dir]'[selected] title='[title]'><img src='RPD_D_[pipe_id]_[dir].png'/></a>"
 
 /datum/rcd_schematic/pipe/disposal/attack(var/atom/A, var/mob/user)
 	to_chat(user, "Building Pipes ...")
@@ -536,7 +536,7 @@ var/global/list/disposalpipeID2State = list(
 	if(selected_dir == dir)
 		selected = " class='selected'"
 
-	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_[pipe_id]_[dir]_[layer].png'/></a>"
+	return "<a href='?src=[REF(master.interface)];set_dir=[dir]'[selected] title='[title]'><img src='RPD_[pipe_id]_[dir]_[layer].png'/></a>"
 
 //DEVICES.
 

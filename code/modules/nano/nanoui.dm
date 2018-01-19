@@ -79,7 +79,7 @@ nanoui is used to open and update nano browser uis
 	user = nuser
 	src_object = nsrc_object
 	ui_key = nui_key
-	window_id = "[ui_key]\ref[src_object]"
+	window_id = "[ui_key][REF(src_object)]"
 	distance_check = !ignore_distance
 	// add the passed template filename as the "main" template, this is required
 	add_template("main", ntemplate_filename)
@@ -401,7 +401,7 @@ nanoui is used to open and update nano browser uis
 	var/list/send_data = get_send_data(initial_data)
 	var/initial_data_json = list2json(send_data)
 
-	var/url_parameters_json = list2json(list("src" = "\ref[src]"))
+	var/url_parameters_json = list2json(list("src" = "[REF(src)]"))
 
 	return {"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -482,7 +482,7 @@ nanoui is used to open and update nano browser uis
 /datum/nanoui/proc/on_close_winset()
 	if(!user)
 		return
-	var/params = "\ref[src]"
+	var/params = "[REF(src)]"
 
 	winset(user, window_id, "on-close=\"nanoclose [params]\"")
 

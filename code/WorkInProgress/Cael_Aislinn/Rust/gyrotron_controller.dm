@@ -77,12 +77,12 @@
 				<td><span style='color: red'>ERROR</span></td>
 			"}
 		else
-			var/mode = (gyro.emitting ? "<a href='?src=\ref[src];deactivate=1;gyro=[gyro_id]'>Emitting</a>" : "<a href='?src=\ref[src];activate=1;gyro=[gyro_id]'>Stand-By</a>")//See how long this is?
+			var/mode = (gyro.emitting ? "<a href='?src=[REF(src)];deactivate=1;gyro=[gyro_id]'>Emitting</a>" : "<a href='?src=[REF(src)];activate=1;gyro=[gyro_id]'>Stand-By</a>")//See how long this is?
 			dat += {"
 				<td>[mode]</td>
-				<td><a href='?src=\ref[src];modifyrate=1;gyro=[gyro_id]'>[gyro.rate]</a></td>
-				<td><a href='?src=\ref[src];modifypower=1;gyro=[gyro_id]'>[gyro.mega_energy]</a></td>
-				<td><a href='?src=\ref[src];modifyfreq=1;gyro=[gyro_id]'>[gyro.frequency]</a></td>
+				<td><a href='?src=[REF(src)];modifyrate=1;gyro=[gyro_id]'>[gyro.rate]</a></td>
+				<td><a href='?src=[REF(src)];modifypower=1;gyro=[gyro_id]'>[gyro.mega_energy]</a></td>
+				<td><a href='?src=[REF(src)];modifyfreq=1;gyro=[gyro_id]'>[gyro.frequency]</a></td>
 			"}
 		dat += "</tr>"
 	dat += "</table>"
@@ -158,12 +158,12 @@
 	. = "Linked gyrotrons:<br><lu>"
 
 	for(var/obj/machinery/rust/gyrotron/G in linked_gyrotrons)
-		. += "<li><b>[G.id_tag]</b> <a href='?src=\ref[src];unlink=[linked_gyrotrons.Find(G)]'>\[X\]</a></li>"
+		. += "<li><b>[G.id_tag]</b> <a href='?src=[REF(src)];unlink=[linked_gyrotrons.Find(G)]'>\[X\]</a></li>"
 	. += "</ul>"
 
 /obj/machinery/computer/rust_gyrotron_controller/linkMenu(var/obj/machinery/rust/gyrotron/O)
 	if(istype(O))
-		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
+		. = "<a href='?src=[REF(src)];link=1'>\[LINK\]</a> "
 
 /obj/machinery/computer/rust_gyrotron_controller/canLink(var/obj/machinery/rust/gyrotron/O, var/list/context)
 	. = (istype(O) && get_dist(src, O) < RUST_GYROTRON_RANGE)

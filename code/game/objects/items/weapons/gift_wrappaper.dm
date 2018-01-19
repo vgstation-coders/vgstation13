@@ -258,7 +258,7 @@
 	var/log_str = "[M.name]([M.ckey]) openned <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[I.x];Y=[I.y];Z=[I.z]'>a black gift</a> and found [I.name] inside[additional_info]."
 
 	if(M)
-		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
+		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=[REF(M)]'>?</A>)"
 
 	message_admins(log_str, 0, 1)
 	log_game(log_str)

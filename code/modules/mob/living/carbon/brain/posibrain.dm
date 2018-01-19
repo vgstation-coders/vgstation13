@@ -45,7 +45,7 @@
 	for(var/mob/dead/observer/O in get_active_candidates(ROLE_POSIBRAIN))
 		if(O.client)
 			if(check_observer(O))
-				to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>")
+				to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. (<a href='?src=[REF(O)];jump=[REF(src)]'>Teleport</a> | <a href='?src=[REF(src)];signup=[REF(O)]'>Retract</a>)</span>")
 				ghost_volunteers += O
 
 /obj/item/device/mmi/posibrain/proc/check_observer(var/mob/dead/observer/O)

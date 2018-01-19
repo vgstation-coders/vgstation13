@@ -116,7 +116,7 @@
 /obj/item/weapon/rcl/proc/holder_moved(var/list/args)
 	var/event/E = args["event"]
 	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:holder_moved")
+		E.handlers.Remove("[REF(src)]:holder_moved")
 		return
 	if(active)
 		trigger(E.holder)

@@ -210,13 +210,13 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 	return 1
 
 /datum/automation/and/GetText()
-	. = "AND (<a href=\"?src=\ref[src];add=1\">Add</a>)"
+	. = "AND (<a href=\"?src=[REF(src)];add=1\">Add</a>)"
 	if(children.len > 0)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children)
 			. += {"<li>
-						\[<a href="?src=\ref[src];reset=\ref[stmt]">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[stmt]">&times;</a>\]
+						\[<a href="?src=[REF(src)];reset=[REF(stmt)]">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(stmt)]">&times;</a>\]
 						[stmt.GetText()]
 					</li>"}
 		. += "</ul>"
@@ -243,13 +243,13 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 	return 0
 
 /datum/automation/or/GetText()
-	. = "OR (<a href=\"?src=\ref[src];add=1\">Add</a>)"
+	. = "OR (<a href=\"?src=[REF(src)];add=1\">Add</a>)"
 	if(children.len>0)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children)
 			. += {"<li>
-						\[<a href="?src=\ref[src];reset=\ref[stmt]">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[stmt]">&times;</a>\]
+						\[<a href="?src=[REF(src)];reset=[REF(stmt)]">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(stmt)]">&times;</a>\]
 						[stmt.GetText()]
 					</li>"}
 		. += "</ul>"
@@ -296,35 +296,35 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 		condition     = unpackChild(json["condition"])
 
 /datum/automation/if_statement/GetText()
-	. = "<b>IF</b> (<a href=\"?src=\ref[src];set_condition=1\">SET</a>):<blockquote>"
+	. = "<b>IF</b> (<a href=\"?src=[REF(src)];set_condition=1\">SET</a>):<blockquote>"
 	if(condition)
 		. += condition.GetText()
 	else
 		. += "<i>Not set</i>"
 
 	. += "</blockquote>"
-	. += "<b>THEN:</b> (<a href=\"?src=\ref[src];add=then\">Add</a>)"
+	. += "<b>THEN:</b> (<a href=\"?src=[REF(src)];add=then\">Add</a>)"
 
 	if(children_then.len)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children_then)
 			. += {"<li>
-						\[<a href="?src=\ref[src];reset=\ref[stmt];context=then">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[stmt];context=then">&times;</a>\]
+						\[<a href="?src=[REF(src)];reset=[REF(stmt)];context=then">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(stmt)];context=then">&times;</a>\]
 						[stmt.GetText()]
 					</li>"}
 		. += "</ul>"
 	else
 		. += "<blockquote><i>(No statements to run)</i></blockquote>"
 
-	. += "<b>ELSE:</b> (<a href=\"?src=\ref[src];add=else\">Add</a>)"
+	. += "<b>ELSE:</b> (<a href=\"?src=[REF(src)];add=else\">Add</a>)"
 
 	if(children_then.len)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children_else)
 			. += {"<li>
-						\[<a href="?src=\ref[src];reset=\ref[stmt];context=else">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[stmt];context=else">&times;</a>\]
+						\[<a href="?src=[REF(src)];reset=[REF(stmt)];context=else">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(stmt)];context=else">&times;</a>\]
 						[stmt.GetText()]
 					</li>"}
 		. += "</ul>"
@@ -487,13 +487,13 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 	var/datum/automation/left  = children[1]
 	var/datum/automation/right = children[2]
 
-	. = "<a href=\"?src=\ref[src];set_field=1\">(Set Left)</a> ("
+	. = "<a href=\"?src=[REF(src)];set_field=1\">(Set Left)</a> ("
 	if(left == null)
 		. += "-----"
 	else
 		. += left.GetText()
 
-	. += ")  is <a href=\"?src=\ref[src];set_comparator=left\">[comparator]</a>: <a href=\"?src=\ref[src];set_field=2\">(Set Right)</a> ("
+	. += ")  is <a href=\"?src=[REF(src)];set_comparator=left\">[comparator]</a>: <a href=\"?src=[REF(src)];set_field=2\">(Set Right)</a> ("
 
 	if(right==null)
 		. += "-----"
@@ -546,7 +546,7 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 	value = text2num(json["value"])
 
 /datum/automation/static_value/GetText()
-	return "<a href=\"?src=\ref[src];set_value=1\">[value]</a>"
+	return "<a href=\"?src=[REF(src)];set_value=1\">[value]</a>"
 
 /datum/automation/static_value/Topic(href,href_list)
 	. = ..()
@@ -576,13 +576,13 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 		. += stmt.Evaluate()
 
 /datum/automation/sum/GetText()
-	. = "SUM (<a href=\"?src=\ref[src];add=1\">Add</a>)"
+	. = "SUM (<a href=\"?src=[REF(src)];add=1\">Add</a>)"
 	if(children.len)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children)
 			. += {"<li>
-						\[<a href="?src=\ref[src];reset=\ref[stmt]">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[stmt]">&times;</a>\]
+						\[<a href="?src=[REF(src)];reset=[REF(stmt)]">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(stmt)]">&times;</a>\]
 						[stmt.GetText()]
 					</li>"}
 		. += "</ul>"
@@ -609,13 +609,13 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 	. /= children.len
 
 /datum/automation/avg/GetText()
-	. = "AVG (<a href=\"?src=\ref[src];add=1\">Add</a>)"
+	. = "AVG (<a href=\"?src=[REF(src)];add=1\">Add</a>)"
 	if(children.len)
 		. += "<ul>"
 		for(var/datum/automation/stmt in children)
 			. += {"<li>
-						\[<a href="?src=\ref[src];reset=\ref[stmt]">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[stmt]">&times;</a>\]
+						\[<a href="?src=[REF(src)];reset=[REF(stmt)]">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(stmt)]">&times;</a>\]
 						[stmt.GetText()]
 					</li>"}
 		. += "</ul>"
@@ -655,13 +655,13 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 	var/datum/automation/left  = children[1]
 	var/datum/automation/right = children[2]
 
-	. = "<a href=\"?src=\ref[src];set_field=1\">(Set Left)</a> ("
+	. = "<a href=\"?src=[REF(src)];set_field=1\">(Set Left)</a> ("
 	if(left == null)
 		. += "-----"
 	else
 		. += left.GetText()
 
-	. += ") [operator]  <a href=\"?src=\ref[src];set_field=2\">(Set Right)</a> ("
+	. += ") [operator]  <a href=\"?src=[REF(src)];set_field=2\">(Set Right)</a> ("
 
 	if(right == null)
 		. += "-----"

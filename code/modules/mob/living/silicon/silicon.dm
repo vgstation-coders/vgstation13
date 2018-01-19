@@ -82,7 +82,7 @@
 				if(alarm_types_show["Camera"])
 					msg += "CAMERA: [alarm_types_show["Power"]] alarms detected. - "
 
-				msg += "<A href=?src=\ref[src];showalerts=1'>\[Show Alerts\]</a>"
+				msg += "<A href=?src=[REF(src)];showalerts=1'>\[Show Alerts\]</a>"
 				to_chat(src, msg)
 
 			if(alarms_to_clear.len < 3)
@@ -107,7 +107,7 @@
 				if(alarm_types_show["Camera"])
 					msg += "CAMERA: [alarm_types_show["Power"]] alarms detected. - "
 
-				msg += "<A href=?src=\ref[src];showalerts=1'>\[Show Alerts\]</a>"
+				msg += "<A href=?src=[REF(src)];showalerts=1'>\[Show Alerts\]</a>"
 				to_chat(src, msg)
 
 
@@ -289,14 +289,14 @@
 	var/dat = "<b><font size = 5>Known Languages</font></b><br/><br/>"
 
 	if(default_language)
-		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
+		dat += "Current default language: [default_language] - <a href='byond://?src=[REF(src)];default_lang=reset'>reset</a><br/><br/>"
 
 	for(var/datum/language/L in languages)
 		var/default_str
 		if(L == default_language)
-			default_str = " - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a>"
+			default_str = " - default - <a href='byond://?src=[REF(src)];default_lang=reset'>reset</a>"
 		else
-			default_str = " - <a href='byond://?src=\ref[src];default_lang=[L]'>set default</a>"
+			default_str = " - <a href='byond://?src=[REF(src)];default_lang=[L]'>set default</a>"
 
 		var/synth = (L in speech_synthesizer_langs)
 		dat += "<b>[L.name] (:[L.key])</b>[synth ? default_str : null]<br/>Speech Synthesizer: <i>[synth ? "YES" : "NOT SUPPORTED"]</i><br/>[L.desc]<br/><br/>"

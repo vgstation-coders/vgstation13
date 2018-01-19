@@ -41,13 +41,13 @@
 			continue
 
 		currently_querying |= O
-		to_chat(O, "<span class='recruit'>Someone is harvesting [display_name]. You have been added to the list of potential ghosts. (<a href='?src=\ref[O];jump=\ref[host]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>")
+		to_chat(O, "<span class='recruit'>Someone is harvesting [display_name]. You have been added to the list of potential ghosts. (<a href='?src=[REF(O)];jump=[REF(host)]'>Teleport</a> | <a href='?src=[REF(src)];signup=[REF(O)]'>Retract</a>)</span>")
 
 	for(var/mob/dead/observer/O in dead_mob_list - active_candidates)
 		if(!check_observer(O))
 			continue
 
-		to_chat(O, "<span class='recruit'>Someone is harvesting [display_name]. (<a href='?src=\ref[O];jump=\ref[host]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign up</a>)</span>")
+		to_chat(O, "<span class='recruit'>Someone is harvesting [display_name]. (<a href='?src=[REF(O)];jump=[REF(host)]'>Teleport</a> | <a href='?src=[REF(src)];signup=[REF(O)]'>Sign up</a>)</span>")
 
 	spawn(600)
 		if(!currently_querying || !currently_querying.len)

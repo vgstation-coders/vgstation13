@@ -379,8 +379,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	<BR>
 	<B>Activated Modules</B>
 	<BR>
-	Sight Mode: <A HREF=?src=\ref[src];vision=0>[sensor_mode ? "[vision_types_list[sensor_mode]]" : "No sight module enabled"]</A><BR>
-	Utility Module: [tool_state ? "<A HREF=?src=\ref[src];mod=\ref[tool_state]>[tool_state]</A>" : "No module selected"]<BR>
+	Sight Mode: <A HREF=?src=[REF(src)];vision=0>[sensor_mode ? "[vision_types_list[sensor_mode]]" : "No sight module enabled"]</A><BR>
+	Utility Module: [tool_state ? "<A HREF=?src=[REF(src)];mod=[REF(tool_state)]>[tool_state]</A>" : "No module selected"]<BR>
 	<BR>
 	<B>Installed Modules</B><BR><BR>"}
 
@@ -391,12 +391,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else if(activated(obj))
 			dat += text("[obj]: <B>Activated</B><BR>")
 		else
-			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
+			dat += text("[obj]: <A HREF=?src=[REF(src)];act=[REF(obj)]>Activate</A><BR>")
 	if (emagged)
 		if(activated(module.emag))
 			dat += text("[module.emag]: <B>Activated</B><BR>")
 		else
-			dat += text("[module.emag]: <A HREF=?src=\ref[src];act=\ref[module.emag]>Activate</A><BR>")
+			dat += text("[module.emag]: <A HREF=?src=[REF(src)];act=[REF(module.emag)]>Activate</A><BR>")
 	src << browse(dat, "window=robotmod&can_close=1")
 	onclose(src,"robotmod") // Register on-close shit, which unsets machinery.
 

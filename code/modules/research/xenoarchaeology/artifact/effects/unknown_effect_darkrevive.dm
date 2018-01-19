@@ -37,7 +37,7 @@
 			if(ghostmob)
 				ghostmob << 'sound/effects/adminhelp.ogg'
 				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to revive your body. Return to it if you want to be resurrected!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=[REF(ghost)];reentercorpse=1'>click here!</a>)</span>")
 				target.visible_message("<span class='warning'>[target] seems to shudder a bit.</span>")
 				return
 		return

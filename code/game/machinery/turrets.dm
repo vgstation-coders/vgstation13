@@ -537,11 +537,11 @@
 	var/dat = {"<html>
 					<head><title>[src] Control</title></head>
 					<body>
-					<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"on":"off"]</a><br>
-					<b>Scan Range: </b><a href='?src=\ref[src];scan_range=-1'>-</a> [scan_range] <a href='?src=\ref[src];scan_range=1'>+</a><br>
+					<b>Power: </b><a href='?src=[REF(src)];power=1'>[on?"on":"off"]</a><br>
+					<b>Scan Range: </b><a href='?src=[REF(src)];scan_range=-1'>-</a> [scan_range] <a href='?src=[REF(src)];scan_range=1'>+</a><br>
 					<b>Scan for: </b>"}
 	for(var/scan in scan_for)
-		dat += "<div style=\"margin-left: 15px;\">[scan] (<a href='?src=\ref[src];scan_for=[scan]'>[scan_for[scan]?"Yes":"No"]</a>)</div>"
+		dat += "<div style=\"margin-left: 15px;\">[scan] (<a href='?src=[REF(src)];scan_for=[scan]'>[scan_for[scan]?"Yes":"No"]</a>)</div>"
 
 	dat += {"<b>Ammo: </b>[max(0, projectiles)]<br>
 				</body>

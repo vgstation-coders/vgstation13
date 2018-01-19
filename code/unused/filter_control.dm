@@ -78,12 +78,12 @@
 		dat += "<font color=red>No Connections Detected!</font><BR>\n Control ID: [control]<BR>\n"
 	if(!stat & BROKEN)
 		for (var/i = 1; i <= gases.len; i++)
-			dat += "[gases[i]]: <A HREF='?src=\ref[src];tg=[1 << (i - 1)]'>[(src.f_mask & 1 << (i - 1)) ? "Siphoning" : "Passing"]</A><BR>\n"
+			dat += "[gases[i]]: <A HREF='?src=[REF(src)];tg=[1 << (i - 1)]'>[(src.f_mask & 1 << (i - 1)) ? "Siphoning" : "Passing"]</A><BR>\n"
 	else
 		dat += "<big><font color='red'>Warning! Severe Internal Memory Corruption!</big><BR>\n<BR>\nConsult a qualified station technician immediately!</font><BR>\n"
 		dat += "<BR>\n<small>Error codes: 0x0000001E 0x0000007B</small><BR>\n"
 
-	dat += "<BR>\n<A href='?src=\ref[src];close=1'>Close</A><BR>\n"
+	dat += "<BR>\n<A href='?src=[REF(src)];close=1'>Close</A><BR>\n"
 	user << browse(dat, "window=filter_control;size=300x225")
 	onclose(user, "filter_control")
 /obj/machinery/filter_control/Topic(href, href_list)

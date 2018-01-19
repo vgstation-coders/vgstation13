@@ -65,7 +65,7 @@
 				living_antags++
 			else
 				dead_antags++
-		entry += " (<A HREF='?_src_=holder;adminmoreinfo=\ref[C.mob]'>?</A>)"
+		entry += " (<A HREF='?_src_=holder;adminmoreinfo=[REF(C.mob)]'>?</A>)"
 		Lines += entry
 
 	for(var/line in sortList(Lines))

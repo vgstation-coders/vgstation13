@@ -91,14 +91,14 @@
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 	dat += {"
-				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
+				Speaker: [listening ? "<A href='byond://?src=[REF(src)];listen=0'>Engaged</A>" : "<A href='byond://?src=[REF(src)];listen=1'>Disengaged</A>"]<BR>
 				Frequency:
-				<A href='byond://?src=\ref[src];freq=-10'>-</A>
-				<A href='byond://?src=\ref[src];freq=-2'>-</A>
+				<A href='byond://?src=[REF(src)];freq=-10'>-</A>
+				<A href='byond://?src=[REF(src)];freq=-2'>-</A>
 				[format_frequency(frequency)]
-				<A href='byond://?src=\ref[src];freq=2'>+</A>
-				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
-				<A href='byond://?src=\ref[src];mode=1'>Toggle Broadcast Mode</A><BR>
+				<A href='byond://?src=[REF(src)];freq=2'>+</A>
+				<A href='byond://?src=[REF(src)];freq=10'>+</A><BR>
+				<A href='byond://?src=[REF(src)];mode=1'>Toggle Broadcast Mode</A><BR>
 				"}
 
 	if(subspace_transmission)//Don't even bother if subspace isn't turned on

@@ -150,9 +150,9 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 		for (var/datum/seed_pile/P in piles)
 			dat += "<tr><td width=300>[P.seed.display_name][P.seed.roundstart ? "":" (#[P.seed.uid])"]</td><td>[P.seed.lifespan]</td><td>[P.seed.endurance]</td><td>[P.seed.maturation]</td>"
 			dat += "<td>[P.seed.production]</td><td>[P.seed.yield]</td><td>[P.seed.potency]</td><td width=180>"
-			dat += "<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=1'>Vend</a>"
-			dat += "<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=5'>5x</a>"
-			dat += "<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=[P.amount]'>All</a>"
+			dat += "<a href='byond://?src=[REF(src)];seed=[P.seed.name];amt=1'>Vend</a>"
+			dat += "<a href='byond://?src=[REF(src)];seed=[P.seed.name];amt=5'>5x</a>"
+			dat += "<a href='byond://?src=[REF(src)];seed=[P.seed.name];amt=[P.amount]'>All</a>"
 			dat += "([P.amount] left)</td><td width=250> "
 			if(P.seed.biolum && P.seed.biolum_colour)
 				dat += "<span title=\"This plant is bioluminescent.\" color=[P.seed.biolum_colour]>LUM </span>"

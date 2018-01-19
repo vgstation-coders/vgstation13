@@ -25,7 +25,7 @@
 	if(newtag)
 		c_tag = newtag
 		if(user.mind)
-			network = "\ref[user.mind]"
+			network = "[REF(user.mind)]"
 
 /obj/item/device/camera_bug/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
 	if(!proximity_flag)

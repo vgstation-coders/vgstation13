@@ -31,15 +31,15 @@
 	return {"
 	<b>Main</b>
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
-		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_out_flag=1">[output&1 ? "Yes" : "No"]</a>
-		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_out_flag=2">[output&2 ? "Yes" : "No"]</a>
-		<li>Monitor Oxygen Concentration: <a href="?src=\ref[src];toggle_out_flag=4">[output&4 ? "Yes" : "No"]</a>
-		<li>Monitor Plasma Concentration: <a href="?src=\ref[src];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
-		<li>Monitor Nitrogen Concentration: <a href="?src=\ref[src];toggle_out_flag=16">[output&16 ? "Yes" : "No"]</a>
-		<li>Monitor Carbon Dioxide Concentration: <a href="?src=\ref[src];toggle_out_flag=32">[output&32 ? "Yes" : "No"]</a>
-		<li>Monitor Nitrous Oxide Concentration: <a href="?src=\ref[src];toggle_out_flag=64">[output&64 ? "Yes" : "No"]</a>
+		<li>Monitor Pressure: <a href="?src=[REF(src)];toggle_out_flag=1">[output&1 ? "Yes" : "No"]</a>
+		<li>Monitor Temperature: <a href="?src=[REF(src)];toggle_out_flag=2">[output&2 ? "Yes" : "No"]</a>
+		<li>Monitor Oxygen Concentration: <a href="?src=[REF(src)];toggle_out_flag=4">[output&4 ? "Yes" : "No"]</a>
+		<li>Monitor Plasma Concentration: <a href="?src=[REF(src)];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
+		<li>Monitor Nitrogen Concentration: <a href="?src=[REF(src)];toggle_out_flag=16">[output&16 ? "Yes" : "No"]</a>
+		<li>Monitor Carbon Dioxide Concentration: <a href="?src=[REF(src)];toggle_out_flag=32">[output&32 ? "Yes" : "No"]</a>
+		<li>Monitor Nitrous Oxide Concentration: <a href="?src=[REF(src)];toggle_out_flag=64">[output&64 ? "Yes" : "No"]</a>
 	</ul>"}
 
 /obj/machinery/air_sensor/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
@@ -252,13 +252,13 @@ font-weight:bold;
 	var/dat= {"
 	<b>Main</b>
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[initial(frequency)]">Reset</a>)</li>
 	</ul>
 	<b>Sensors:</b>
 	<ul>"}
 	for(var/id_tag in sensors)
-		dat += {"<li><a href="?src=\ref[src];edit_sensor=[id_tag]">[sensors[id_tag]]</a></li>"}
-	dat += {"<li><a href="?src=\ref[src];add_sensor=1">\[+\]</a></li></ul>"}
+		dat += {"<li><a href="?src=[REF(src)];edit_sensor=[id_tag]">[sensors[id_tag]]</a></li>"}
+	dat += {"<li><a href="?src=[REF(src)];add_sensor=1">\[+\]</a></li></ul>"}
 	return dat
 
 /obj/machinery/computer/general_air_control/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
@@ -320,7 +320,7 @@ font-weight:bold;
 /obj/machinery/computer/general_air_control/linkMenu(var/obj/O)
 	var/dat=""
 	if((istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter)) && !isLinkedWith(O))
-		dat += " <a href='?src=\ref[src];link=1'>\[New Sensor\]</a> "
+		dat += " <a href='?src=[REF(src)];link=1'>\[New Sensor\]</a> "
 	return dat
 
 /obj/machinery/computer/general_air_control/canLink(var/obj/O, var/list/context)
@@ -361,15 +361,15 @@ font-weight:bold;
 /obj/machinery/computer/general_air_control/large_tank_control/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	var/dat= {"
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("Input","input_tag")]</li>
 		<li>[format_tag("Output","output_tag")]</li>
 	</ul>
 	<b>Sensors:</b>
 	<ul>"}
 	for(var/id_tag in sensors)
-		dat += {"<li><a href="?src=\ref[src];edit_sensor=[id_tag]">[sensors[id_tag]]</a></li>"}
-	dat += {"<li><a href="?src=\ref[src];add_sensor=1">\[+\]</a></li></ul>"}
+		dat += {"<li><a href="?src=[REF(src)];edit_sensor=[id_tag]">[sensors[id_tag]]</a></li>"}
+	dat += {"<li><a href="?src=[REF(src)];add_sensor=1">\[+\]</a></li></ul>"}
 	return dat
 
 
@@ -408,9 +408,9 @@ font-weight:bold;
 /obj/machinery/computer/general_air_control/large_tank_control/linkMenu(var/obj/O)
 	var/dat=""
 	if(canLink(O,list("slot"="input")))
-		dat += " <a href='?src=\ref[src];link=1;slot=input'>\[Link @ Input\]</a> "
+		dat += " <a href='?src=[REF(src)];link=1;slot=input'>\[Link @ Input\]</a> "
 	if(canLink(O,list("slot"="output")))
-		dat += " <a href='?src=\ref[src];link=1;slot=output'>\[Link @ Output\]</a> "
+		dat += " <a href='?src=[REF(src)];link=1;slot=output'>\[Link @ Output\]</a> "
 	return dat
 
 /obj/machinery/computer/general_air_control/large_tank_control/canLink(var/obj/O, var/list/context)
@@ -442,43 +442,43 @@ font-weight:bold;
 			var/volume_rate = input_info["volume_rate"]
 			output += {"
 <fieldset>
-<legend>Input (<A href='?src=\ref[src];in_refresh_status=1'>Refresh</A>)</legend>
+<legend>Input (<A href='?src=[REF(src)];in_refresh_status=1'>Refresh</A>)</legend>
 <table>
 <tr>
 	<th>State:</th>
-	<td><A href='?src=\ref[src];in_toggle_injector=1'>[power?("Injecting"):("On Hold")]</A></td>
+	<td><A href='?src=[REF(src)];in_toggle_injector=1'>[power?("Injecting"):("On Hold")]</A></td>
 </tr>
 <tr>
 	<th>Rate:</th>
-	<td><a href="?src=\ref[src];in_set_rate=1">[volume_rate]</a> L/sec</td>
+	<td><a href="?src=[REF(src)];in_set_rate=1">[volume_rate]</a> L/sec</td>
 </tr>
 </table>
 </fieldset>
 "}
 
 		else
-			output += "<FONT color='red'>ERROR: Can not find input port</FONT> <A href='?src=\ref[src];in_refresh_status=1'>Search</A><BR>"
+			output += "<FONT color='red'>ERROR: Can not find input port</FONT> <A href='?src=[REF(src)];in_refresh_status=1'>Search</A><BR>"
 	if(output_tag)
 		if(output_info)
 			var/power = (output_info["power"])
 			var/output_pressure = output_info["internal"]
 			output += {"
 <fieldset>
-<legend>Output (<A href='?src=\ref[src];out_refresh_status=1'>Refresh</A>)</legend>
+<legend>Output (<A href='?src=[REF(src)];out_refresh_status=1'>Refresh</A>)</legend>
 <table>
 <tr>
 	<th>State:</th>
-	<td><A href='?src=\ref[src];out_toggle_power=1'>[power?("Open"):("On Hold")]</A></td>
+	<td><A href='?src=[REF(src)];out_toggle_power=1'>[power?("Open"):("On Hold")]</A></td>
 </tr>
 <tr>
 	<th>Max Output Pressure:</th>
-	<td><A href='?src=\ref[src];out_set_pressure=1'>[output_pressure]</A> kPa</td>
+	<td><A href='?src=[REF(src)];out_set_pressure=1'>[output_pressure]</A> kPa</td>
 </tr>
 </table>
 </fieldset>
 "}
 		else
-			output += "<FONT color='red'>ERROR: Can not find output port</FONT> <A href='?src=\ref[src];out_refresh_status=1'>Search</A><BR>"
+			output += "<FONT color='red'>ERROR: Can not find output port</FONT> <A href='?src=[REF(src)];out_refresh_status=1'>Search</A><BR>"
 
 	return output
 
@@ -606,7 +606,7 @@ font-weight:bold;
 
 /obj/machinery/computer/general_air_control/fuel_injection/return_text()
 	var/output = ..()
-	output += "<fieldset><legend>Fuel Injection System (<A href='?src=\ref[src];refresh_status=1'>Refresh</A>)</legend>"
+	output += "<fieldset><legend>Fuel Injection System (<A href='?src=[REF(src)];refresh_status=1'>Refresh</A>)</legend>"
 	if(device_info)
 		var/power = device_info["power"]
 		var/volume_rate = device_info["volume_rate"]
@@ -621,7 +621,7 @@ font-weight:bold;
 		</tr>
 		<tr>
 			<th>Automated Fuel Injection:</th>
-			<td><A href='?src=\ref[src];toggle_automation=1'>[automation?"Engaged":"Disengaged"]</A></td>
+			<td><A href='?src=[REF(src)];toggle_automation=1'>[automation?"Engaged":"Disengaged"]</A></td>
 		</tr>"}
 
 		if(automation)
@@ -635,11 +635,11 @@ font-weight:bold;
 			output += {"
 			<tr>
 				<th>Injector:</th>
-				<td><A href='?src=\ref[src];toggle_injector=1'>Toggle Power</A> <A href='?src=\ref[src];injection=1'>Inject (1 Cycle)</A></td>
+				<td><A href='?src=[REF(src)];toggle_injector=1'>Toggle Power</A> <A href='?src=[REF(src)];injection=1'>Inject (1 Cycle)</A></td>
 			</td>"}
 		output += "</table>"
 	else
-		output += {"<p style="color:red"><b>ERROR:</b> Can not find device. <A href='?src=\ref[src];refresh_status=1'>Search</A></p>"}
+		output += {"<p style="color:red"><b>ERROR:</b> Can not find device. <A href='?src=[REF(src)];refresh_status=1'>Search</A></p>"}
 	output += "</fieldset>"
 
 	return output

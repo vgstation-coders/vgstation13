@@ -75,8 +75,8 @@
 				return
 
 		var/t = "<B>Lockdown Control</B><BR>"
-		t += "<A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
-		t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
+		t += "<A href='?src=[REF(src)];refresh=1'>Refresh</A><BR>"
+		t += "<A href='?src=[REF(src)];close=1'>Close</A><BR>"
 		t += "<table border=1>"
 		var/empty = 1
 		for(var/curNetId in connected_doors)
@@ -86,8 +86,8 @@
 			empty = 0
 			t += "<tr>"
 			if(curNetId in displayedNetworks)
-				t += "<td><a href='?src=\ref[src];hide_net=[curNetId]'>\[-\]</a><b> " + curNetId + "<b></td>"
-				t += "<td colspan=\"2\"><b><a href='?src=\ref[src];open_net=[curNetId]'>Open all</a> / <a href='?src=\ref[src];close_net=[curNetId]'>Close all</a></b></td>"
+				t += "<td><a href='?src=[REF(src)];hide_net=[curNetId]'>\[-\]</a><b> " + curNetId + "<b></td>"
+				t += "<td colspan=\"2\"><b><a href='?src=[REF(src)];open_net=[curNetId]'>Open all</a> / <a href='?src=[REF(src)];close_net=[curNetId]'>Close all</a></b></td>"
 				t += "</tr>"
 
 				for(var/obj/machinery/door/poddoor/D in connected_doors[curNetId])
@@ -98,15 +98,15 @@
 						t += "<td>Shutter ([D.density ? "Closed" : "Open"])</td>"
 					else
 						t += "<td>Blast door ([D.density ? "Closed" : "Open"])</td>"
-					t += "<td><b><a href='?src=\ref[D];toggle=1'>Toggle</a></b></td>"
+					t += "<td><b><a href='?src=[REF(D)];toggle=1'>Toggle</a></b></td>"
 					t += "</tr>"
 			else
-				t += "<td><a href='?src=\ref[src];show_net=[curNetId]'>\[+\]</a> <b>" + curNetId + "<b></td>"
+				t += "<td><a href='?src=[REF(src)];show_net=[curNetId]'>\[+\]</a> <b>" + curNetId + "<b></td>"
 		t += "</table>"
 		if(empty)
 			t += "<span class='warning'>No networks connected.<br></span>"
-		t += "<A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
-		t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
+		t += "<A href='?src=[REF(src)];refresh=1'>Refresh</A><BR>"
+		t += "<A href='?src=[REF(src)];close=1'>Close</A><BR>"
 		user << browse(t, "window=lockdown;size=550x600")
 		onclose(user, "lockdown")
 

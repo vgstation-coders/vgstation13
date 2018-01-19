@@ -88,7 +88,7 @@ proc/move_research_shuttle()
 	if(..(user))
 		return
 	src.add_fingerprint(usr)
-	var/dat = "<center>Research shuttle:<br> <b><A href='?src=\ref[src];move=[1]'>Send</A></b></center>"
+	var/dat = "<center>Research shuttle:<br> <b><A href='?src=[REF(src)];move=[1]'>Send</A></b></center>"
 	user << browse("[dat]", "window=researchshuttle;size=200x100")
 
 /obj/machinery/computer/research_shuttle/Topic(href, href_list)

@@ -97,7 +97,7 @@
 		if(cult_round)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in cult_round.bloody_floors))
+				if(!(locate("[REF(T)]") in cult_round.bloody_floors))
 					cult_round.bloody_floors += T
 					cult_round.bloody_floors[T] = T
 					cult_round.blood_check()

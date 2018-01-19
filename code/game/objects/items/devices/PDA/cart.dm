@@ -316,20 +316,20 @@
 			menu = "<h4><img src=pda_signaler.png> Remote Signaling System</h4>"
 
 			menu += {"
-<a href='byond://?src=\ref[src];choice=Send Signal'>Send Signal</A><BR>
+<a href='byond://?src=[REF(src)];choice=Send Signal'>Send Signal</A><BR>
 Frequency:
-<a href='byond://?src=\ref[src];choice=Signal Frequency;sfreq=-10'>-</a>
-<a href='byond://?src=\ref[src];choice=Signal Frequency;sfreq=-2'>-</a>
+<a href='byond://?src=[REF(src)];choice=Signal Frequency;sfreq=-10'>-</a>
+<a href='byond://?src=[REF(src)];choice=Signal Frequency;sfreq=-2'>-</a>
 [format_frequency(radio:frequency)]
-<a href='byond://?src=\ref[src];choice=Signal Frequency;sfreq=2'>+</a>
-<a href='byond://?src=\ref[src];choice=Signal Frequency;sfreq=10'>+</a><br>
+<a href='byond://?src=[REF(src)];choice=Signal Frequency;sfreq=2'>+</a>
+<a href='byond://?src=[REF(src)];choice=Signal Frequency;sfreq=10'>+</a><br>
 <br>
 Code:
-<a href='byond://?src=\ref[src];choice=Signal Code;scode=-5'>-</a>
-<a href='byond://?src=\ref[src];choice=Signal Code;scode=-1'>-</a>
+<a href='byond://?src=[REF(src)];choice=Signal Code;scode=-5'>-</a>
+<a href='byond://?src=[REF(src)];choice=Signal Code;scode=-1'>-</a>
 [radio:code]
-<a href='byond://?src=\ref[src];choice=Signal Code;scode=1'>+</a>
-<a href='byond://?src=\ref[src];choice=Signal Code;scode=5'>+</a><br>"}
+<a href='byond://?src=[REF(src)];choice=Signal Code;scode=1'>+</a>
+<a href='byond://?src=[REF(src)];choice=Signal Code;scode=5'>+</a><br>"}
 		/*if (41) //crew manifest
 
 
@@ -343,15 +343,15 @@ Code:
 		if (42) //status displays
 
 			menu = {"<h4><img src=pda_status.png> Station Status Display Interlink</h4>
-				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=blank'>Clear</A> \]<BR>
-				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=shuttle'>Shuttle ETA</A> \]<BR>
-				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=message'>Message</A> \]
-				<ul><li> Line 1: <A HREF='?src=\ref[src];choice=Status;statdisp=setmsg1'>[ message1 ? message1 : "(none)"]</A>
-				<li> Line 2: <A HREF='?src=\ref[src];choice=Status;statdisp=setmsg2'>[ message2 ? message2 : "(none)"]</A></ul><br>
-				\[ Alert: <A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=default'>None</A> |
-				<A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=redalert'>Red Alert</A> |
-				<A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=lockdown'>Lockdown</A> |
-				<A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=biohazard'>Biohazard</A> \]<BR>"}
+				\[ <A HREF='?src=[REF(src)];choice=Status;statdisp=blank'>Clear</A> \]<BR>
+				\[ <A HREF='?src=[REF(src)];choice=Status;statdisp=shuttle'>Shuttle ETA</A> \]<BR>
+				\[ <A HREF='?src=[REF(src)];choice=Status;statdisp=message'>Message</A> \]
+				<ul><li> Line 1: <A HREF='?src=[REF(src)];choice=Status;statdisp=setmsg1'>[ message1 ? message1 : "(none)"]</A>
+				<li> Line 2: <A HREF='?src=[REF(src)];choice=Status;statdisp=setmsg2'>[ message2 ? message2 : "(none)"]</A></ul><br>
+				\[ Alert: <A HREF='?src=[REF(src)];choice=Status;statdisp=alert;alert=default'>None</A> |
+				<A HREF='?src=[REF(src)];choice=Status;statdisp=alert;alert=redalert'>Red Alert</A> |
+				<A HREF='?src=[REF(src)];choice=Status;statdisp=alert;alert=lockdown'>Lockdown</A> |
+				<A HREF='?src=[REF(src)];choice=Status;statdisp=alert;alert=biohazard'>Biohazard</A> \]<BR>"}
 		if (43) //Muskets' and Rockdtben's power monitor :D
 			menu = "<h4><img src=pda_power.png> Please select a Power Monitoring Computer</h4><BR>No Power Monitoring Computer detected in the vicinity.<BR>"
 			var/powercount = 0
@@ -366,8 +366,8 @@ Code:
 							found = 1
 							menu += "<FONT SIZE=-1>"
 						powercount++
-						menu += "<a href='byond://?src=\ref[src];choice=Power Select;target=[powercount]'> [pMon] </a><BR>"
-						powermonitors += "\ref[pMon]"
+						menu += "<a href='byond://?src=[REF(src)];choice=Power Select;target=[powercount]'> [pMon] </a><BR>"
+						powermonitors += "[REF(pMon)]"
 			if(found)
 				menu += "</FONT>"
 
@@ -415,8 +415,8 @@ Code:
 							found = 1
 							menu += "<FONT SIZE=-1>"
 						alertcount++
-						menu += "<a href='byond://?src=\ref[src];choice=Alert Select;target=[alertcount]'> [aMon] </a><BR>"
-						alertmonitors += "\ref[aMon]"
+						menu += "<a href='byond://?src=[REF(src)];choice=Alert Select;target=[alertcount]'> [aMon] </a><BR>"
+						alertmonitors += "[REF(aMon)]"
 			if(found)
 				menu += "</FONT>"
 
@@ -452,7 +452,7 @@ Code:
 			menu = "<h4><img src=pda_medical.png> Medical Record List</h4>"
 			if(!isnull(data_core.general))
 				for (var/datum/data/record/R in sortRecord(data_core.general))
-					menu += "<a href='byond://?src=\ref[src];choice=Medical Records;target=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
+					menu += "<a href='byond://?src=[REF(src)];choice=Medical Records;target=[REF(R)]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 			menu += "<br>"
 		if(441)
 			menu = "<h4><img src=pda_medical.png> Medical Record</h4>"
@@ -492,7 +492,7 @@ Code:
 			menu = "<h4><img src=pda_cuffs.png> Security Record List</h4>"
 			if(!isnull(data_core.general))
 				for (var/datum/data/record/R in sortRecord(data_core.general))
-					menu += "<a href='byond://?src=\ref[src];choice=Security Records;target=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
+					menu += "<a href='byond://?src=[REF(src)];choice=Security Records;target=[REF(R)]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 
 			menu += "<br>"
 		if(451)
@@ -544,13 +544,13 @@ Code:
 				else
 					for(var/obj/machinery/bot/B in SC.botlist)
 						if (B)
-							menu += "<A href='byond://?src=\ref[SC];op=control;bot=\ref[B]'>[B] at [B.loc.loc]</A><BR>"
+							menu += "<A href='byond://?src=[REF(SC)];op=control;bot=[REF(B)]'>[B] at [B.loc.loc]</A><BR>"
 
-				menu += "<BR><A href='byond://?src=\ref[SC];op=scanbots'><img src=pda_scanner.png> Scan for active bots</A><BR>"
+				menu += "<BR><A href='byond://?src=[REF(SC)];op=scanbots'><img src=pda_scanner.png> Scan for active bots</A><BR>"
 
 			else	// bot selected, control it
 
-				menu += "<B>[SC.active]</B><BR> Status: (<A href='byond://?src=\ref[SC];op=control;bot=\ref[SC.active]'><img src=pda_refresh.png><i>refresh</i></A>)<BR>"
+				menu += "<B>[SC.active]</B><BR> Status: (<A href='byond://?src=[REF(SC)];op=control;bot=[REF(SC.active)]'><img src=pda_refresh.png><i>refresh</i></A>)<BR>"
 
 				if(!SC.botstatus)
 					menu += "Waiting for response...<BR>"
@@ -574,10 +574,10 @@ Code:
 							menu += "Responding to summons"
 
 
-					menu += {"<BR>\[<A href='byond://?src=\ref[SC];op=stop'>Stop Patrol</A>\]
-						\[<A href='byond://?src=\ref[SC];op=go'>Start Patrol</A>\]
-						\[<A href='byond://?src=\ref[SC];op=summon'>Summon Bot</A>\]<BR>
-						<HR><A href='byond://?src=\ref[SC];op=botlist'><img src=pda_back.png>Return to bot list</A>"}
+					menu += {"<BR>\[<A href='byond://?src=[REF(SC)];op=stop'>Stop Patrol</A>\]
+						\[<A href='byond://?src=[REF(SC)];op=go'>Start Patrol</A>\]
+						\[<A href='byond://?src=[REF(SC)];op=summon'>Summon Bot</A>\]<BR>
+						<HR><A href='byond://?src=[REF(SC)];op=botlist'><img src=pda_back.png>Return to bot list</A>"}
 		if (47) //quartermaster order records
 
 			menu = {"<h4><img src=pda_crate.png> Supply Record Interlink</h4>
@@ -610,12 +610,12 @@ Code:
 
 				else
 					for(var/obj/machinery/bot/mulebot/B in QC.botlist)
-						menu += "<A href='byond://?src=\ref[QC];op=control;bot=\ref[B]'>[B] at [get_area(B)]</A><BR>"
-				menu += "<BR><A href='byond://?src=\ref[QC];op=scanbots'><img src=pda_scanner.png> Scan for active bots</A><BR>"
+						menu += "<A href='byond://?src=[REF(QC)];op=control;bot=[REF(B)]'>[B] at [get_area(B)]</A><BR>"
+				menu += "<BR><A href='byond://?src=[REF(QC)];op=scanbots'><img src=pda_scanner.png> Scan for active bots</A><BR>"
 
 			else	// bot selected, control it
 
-				menu += "<B>[QC.active]</B><BR> Status: (<A href='byond://?src=\ref[QC];op=control;bot=\ref[QC.active]'><img src=pda_refresh.png><i>refresh</i></A>)<BR>"
+				menu += "<B>[QC.active]</B><BR> Status: (<A href='byond://?src=[REF(QC)];op=control;bot=[REF(QC.active)]'><img src=pda_refresh.png><i>refresh</i></A>)<BR>"
 
 				if(!QC.botstatus)
 					menu += "Waiting for response...<BR>"
@@ -641,16 +641,16 @@ Code:
 							menu += "Unable to locate destination"
 					var/obj/structure/closet/crate/C = QC.botstatus["load"]
 
-					menu += {"<BR>Current Load: [ !C ? "<i>none</i>" : "[C.name] (<A href='byond://?src=\ref[QC];op=unload'><i>unload</i></A>)" ]<BR>
-						Destination: [!QC.botstatus["dest"] ? "<i>none</i>" : QC.botstatus["dest"] ] (<A href='byond://?src=\ref[QC];op=setdest'><i>set</i></A>)<BR>
+					menu += {"<BR>Current Load: [ !C ? "<i>none</i>" : "[C.name] (<A href='byond://?src=[REF(QC)];op=unload'><i>unload</i></A>)" ]<BR>
+						Destination: [!QC.botstatus["dest"] ? "<i>none</i>" : QC.botstatus["dest"] ] (<A href='byond://?src=[REF(QC)];op=setdest'><i>set</i></A>)<BR>
 						Power: [QC.botstatus["powr"]]%<BR>
 						Home: [!QC.botstatus["home"] ? "<i>none</i>" : QC.botstatus["home"] ]<BR>
-						Auto Return Home: [QC.botstatus["retn"] ? "<B>On</B> <A href='byond://?src=\ref[QC];op=retoff'>Off</A>" : "(<A href='byond://?src=\ref[QC];op=reton'><i>On</i></A>) <B>Off</B>"]<BR>
-						Auto Pickup Crate: [QC.botstatus["pick"] ? "<B>On</B> <A href='byond://?src=\ref[QC];op=pickoff'>Off</A>" : "(<A href='byond://?src=\ref[QC];op=pickon'><i>On</i></A>) <B>Off</B>"]<BR><BR>
-						\[<A href='byond://?src=\ref[QC];op=stop'>Stop</A>\]
-						\[<A href='byond://?src=\ref[QC];op=go'>Proceed</A>\]
-						\[<A href='byond://?src=\ref[QC];op=home'>Return Home</A>\]<BR>
-						<HR><A href='byond://?src=\ref[QC];op=botlist'><img src=pda_back.png>Return to bot list</A>"}
+						Auto Return Home: [QC.botstatus["retn"] ? "<B>On</B> <A href='byond://?src=[REF(QC)];op=retoff'>Off</A>" : "(<A href='byond://?src=[REF(QC)];op=reton'><i>On</i></A>) <B>Off</B>"]<BR>
+						Auto Pickup Crate: [QC.botstatus["pick"] ? "<B>On</B> <A href='byond://?src=[REF(QC)];op=pickoff'>Off</A>" : "(<A href='byond://?src=[REF(QC)];op=pickon'><i>On</i></A>) <B>Off</B>"]<BR><BR>
+						\[<A href='byond://?src=[REF(QC)];op=stop'>Stop</A>\]
+						\[<A href='byond://?src=[REF(QC)];op=go'>Proceed</A>\]
+						\[<A href='byond://?src=[REF(QC)];op=home'>Return Home</A>\]<BR>
+						<HR><A href='byond://?src=[REF(QC)];op=botlist'><img src=pda_back.png>Return to bot list</A>"}
 		if (49) //janitorial locator
 			menu = "<h4><img src=pda_bucket.png> Persistent Custodial Object Locator</h4>"
 
@@ -710,7 +710,7 @@ Code:
 
 			else
 				menu += "ERROR: Unable to determine current location."
-			menu += "<br><br><A href='byond://?src=\ref[src];choice=49'>Refresh GPS Locator</a>"
+			menu += "<br><br><A href='byond://?src=[REF(src)];choice=49'>Refresh GPS Locator</a>"
 
 
 /obj/item/weapon/cartridge/Topic(href, href_list)

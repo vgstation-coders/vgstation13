@@ -47,7 +47,7 @@
 		t += "<B>Artifact Function:</B> [CA.effecttype]<BR>"
 		t += "<B>Artifact Range:</B> [CA.effectmode]<BR><BR>"
 	t += "<hr>"
-	t += "<A href='?src=\ref[src];refresh=1'>Refresh</A> <A href='?src=\ref[src];close=1'>Close</A><BR>"
+	t += "<A href='?src=[REF(src)];refresh=1'>Refresh</A> <A href='?src=[REF(src)];close=1'>Close</A><BR>"
 	user << browse(t, "window=artifact_db;size=500x800")
 	user.machine = src
 

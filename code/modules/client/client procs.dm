@@ -423,7 +423,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 				//testing("Client [src] answered [answer] to [role_id] poll.")
 				prefs.roles[role_id] |= ROLEPREF_POLLED
 		else
-			to_chat(src, "<span style='recruit'>The game is currently looking for [role_id] candidates.  Your current answer is <a href='?src=\ref[prefs]&preference=set_role&role_id=[role_id]'>[get_role_desire_str(role_desired)]</a>.</span>")
+			to_chat(src, "<span style='recruit'>The game is currently looking for [role_id] candidates.  Your current answer is <a href='?src=[REF(prefs)]&preference=set_role&role_id=[role_id]'>[get_role_desire_str(role_desired)]</a>.</span>")
 	return role_desired & ROLEPREF_ENABLE
 
 /client/proc/colour_transition(var/list/colour_to = default_colour_matrix,var/time = 10)	// call this with no parametres to reset to default.

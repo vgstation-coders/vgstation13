@@ -95,12 +95,12 @@
 	colorchange()
 
 /obj/item/clothing/accessory/glowstick/phazon/pickup(mob/user)
-	user.callOnFace |= "\ref[src]"
-	user.callOnFace["\ref[src]"] = "colorchange"
+	user.callOnFace |= "[REF(src)]"
+	user.callOnFace["[REF(src)]"] = "colorchange"
 
 /obj/item/clothing/accessory/glowstick/phazon/dropped(mob/user)
 	..()
-	user.callOnFace -= "\ref[src]"
+	user.callOnFace -= "[REF(src)]"
 
 /obj/item/clothing/accessory/glowstick/phazon/attack_self()
 	colorchange()

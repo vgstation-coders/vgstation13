@@ -105,10 +105,10 @@ var/global/list/taxi_computers = list()
 	else
 		dat = {"[shuttle.current_port ? "Location: [shuttle.current_port.areaname]" : "Location: UNKNOWN"]<br>
 			Ready to move[max(shuttle.last_moved + shuttle.cooldown - world.time, 0) ? " in [max(round((shuttle.last_moved + shuttle.cooldown - world.time) * 0.1), 0)] seconds" : ": now"]<br><br>
-			<a href='?src=\ref[src];med_sili=1'>[shuttle.dock_medical_silicon.areaname]</a><br>
-			<a href='?src=\ref[src];engi_cargo=1'>[shuttle.dock_engineering_cargo.areaname]</a><br>
-			<a href='?src=\ref[src];sec_sci=1'>[shuttle.dock_security_science.areaname]</a><br>
-			[emagged ? "<a href='?src=\ref[src];abandoned=1'>Abandoned Station</a><br>" : ""]"}
+			<a href='?src=[REF(src)];med_sili=1'>[shuttle.dock_medical_silicon.areaname]</a><br>
+			<a href='?src=[REF(src)];engi_cargo=1'>[shuttle.dock_engineering_cargo.areaname]</a><br>
+			<a href='?src=[REF(src)];sec_sci=1'>[shuttle.dock_security_science.areaname]</a><br>
+			[emagged ? "<a href='?src=[REF(src)];abandoned=1'>Abandoned Station</a><br>" : ""]"}
 
 	user << browse(dat, "window=computer;size=575x450")
 	onclose(user, "computer")

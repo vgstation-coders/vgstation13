@@ -29,7 +29,7 @@
 	switch(controller.getState())
 		if(HOSTILE_STANCE_IDLE)
 			var/atom/target = target_holder.GetBestTarget(src, "target_evaluator")
-			//testing("  IDLE STANCE, target=\ref[target]")
+			//testing("  IDLE STANCE, target=[REF(target)]")
 			if(!isnull(target))
 				SendSignal(COMSIG_TARGET, list("target"=target))
 				SendSignal(COMSIG_STATE, list("state"=HOSTILE_STANCE_ATTACK))
@@ -37,7 +37,7 @@
 				SendSignal(COMSIG_MOVE, list("loc" = pick(orange(movement_range, src))))
 		if(HOSTILE_STANCE_ATTACK)
 			var/atom/target = target_holder.GetBestTarget(src, "target_evaluator")
-			//testing("  ATTACK STANCE, target=\ref[target]")
+			//testing("  ATTACK STANCE, target=[REF(target)]")
 			if(!isnull(target))
 				var/turf/T = get_turf(target)
 				container.SendSignalToFirst(/datum/component/ai, COMSIG_ATTACKING, list("target"=target)) // We're telling the attack modules that we have attack intention.  They then individually decide whether to fire.

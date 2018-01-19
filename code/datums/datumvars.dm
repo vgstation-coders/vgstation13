@@ -39,7 +39,7 @@
 		return
 	if(istype(D, /atom))
 		var/atom/A = D
-		title = "[A.name] (\ref[A]) = [A.type]"
+		title = "[A.name] ([REF(A)]) = [A.type]"
 
 		#ifdef VARSICON
 		if (A.icon)
@@ -54,7 +54,7 @@
 			sprite = new /icon(AT.icon, AT.icon_state)
 			usr << browse_rsc(sprite, "view_vars_sprite.png")
 
-	title = "[D] (\ref[D]) = [D.type]"
+	title = "[D] ([REF(D)]) = [D.type]"
 
 	body += {"<body onload='selectTextField(); updateSearch()' onkeyup='updateSearch()'>
 		<div align='center'><table width='100%'><tr><td width='50%'>
@@ -67,27 +67,27 @@
 	if(istype(D,/atom))
 		var/atom/A = D
 		if(isliving(A))
-			body += "<a href='?_src_=vars;rename=\ref[D]'><b>[D]</b></a>"
+			body += "<a href='?_src_=vars;rename=[REF(D)]'><b>[D]</b></a>"
 			if(A.dir)
-				body += "<br><font size='1'><a href='?_src_=vars;rotatedatum=\ref[D];rotatedir=left'><<</a> <a href='?_src_=vars;datumedit=\ref[D];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='?_src_=vars;rotatedatum=\ref[D];rotatedir=right'>>></a></font>"
+				body += "<br><font size='1'><a href='?_src_=vars;rotatedatum=[REF(D)];rotatedir=left'><<</a> <a href='?_src_=vars;datumedit=[REF(D)];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='?_src_=vars;rotatedatum=[REF(D)];rotatedir=right'>>></a></font>"
 			var/mob/living/M = A
-			body += "<br><font size='1'><a href='?_src_=vars;datumedit=\ref[D];varnameedit=ckey'>[M.ckey ? M.ckey : "No ckey"]</a> / <a href='?_src_=vars;datumedit=\ref[D];varnameedit=real_name'>[M.real_name ? M.real_name : "No real name"]</a></font>"
+			body += "<br><font size='1'><a href='?_src_=vars;datumedit=[REF(D)];varnameedit=ckey'>[M.ckey ? M.ckey : "No ckey"]</a> / <a href='?_src_=vars;datumedit=[REF(D)];varnameedit=real_name'>[M.real_name ? M.real_name : "No real name"]</a></font>"
 			body += {"
 			<br><font size='1'>
-			BRUTE:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=brute'>[M.getBruteLoss()]</a>
-			FIRE:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=fire'>[M.getFireLoss()]</a>
-			TOXIN:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=toxin'>[M.getToxLoss()]</a>
-			OXY:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=oxygen'>[M.getOxyLoss()]</a>
-			CLONE:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=clone'>[M.getCloneLoss()]</a>
-			BRAIN:<font size='1'><a href='?_src_=vars;mobToDamage=\ref[D];adjustDamage=brain'>[M.getBrainLoss()]</a>
+			BRUTE:<font size='1'><a href='?_src_=vars;mobToDamage=[REF(D)];adjustDamage=brute'>[M.getBruteLoss()]</a>
+			FIRE:<font size='1'><a href='?_src_=vars;mobToDamage=[REF(D)];adjustDamage=fire'>[M.getFireLoss()]</a>
+			TOXIN:<font size='1'><a href='?_src_=vars;mobToDamage=[REF(D)];adjustDamage=toxin'>[M.getToxLoss()]</a>
+			OXY:<font size='1'><a href='?_src_=vars;mobToDamage=[REF(D)];adjustDamage=oxygen'>[M.getOxyLoss()]</a>
+			CLONE:<font size='1'><a href='?_src_=vars;mobToDamage=[REF(D)];adjustDamage=clone'>[M.getCloneLoss()]</a>
+			BRAIN:<font size='1'><a href='?_src_=vars;mobToDamage=[REF(D)];adjustDamage=brain'>[M.getBrainLoss()]</a>
 			</font>
 
 
 			"}
 		else
-			body += "<a href='?_src_=vars;datumedit=\ref[D];varnameedit=name'><b>[D]</b></a>"
+			body += "<a href='?_src_=vars;datumedit=[REF(D)];varnameedit=name'><b>[D]</b></a>"
 			if(A.dir)
-				body += "<br><font size='1'><a href='?_src_=vars;rotatedatum=\ref[D];rotatedir=left'><<</a> <a href='?_src_=vars;datumedit=\ref[D];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='?_src_=vars;rotatedatum=\ref[D];rotatedir=right'>>></a></font>"
+				body += "<br><font size='1'><a href='?_src_=vars;rotatedatum=[REF(D)];rotatedir=left'><<</a> <a href='?_src_=vars;datumedit=[REF(D)];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='?_src_=vars;rotatedatum=[REF(D)];rotatedir=right'>>></a></font>"
 	else
 		body += "<b>[D]</b>"
 
@@ -111,9 +111,9 @@
 
 	body += {"</div>
 		</div></td>
-		<td width='50%'><div align='center'><a href='?_src_=vars;datumrefresh=\ref[D]'>Refresh</a>"}
+		<td width='50%'><div align='center'><a href='?_src_=vars;datumrefresh=[REF(D)]'>Refresh</a>"}
 	//if(ismob(D))
-	//	body += "<br><a href='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</a></div></td></tr></table></div><hr>"
+	//	body += "<br><a href='?_src_=vars;mob_player_panel=[REF(D)]'>Show player panel</a></div></td></tr></table></div><hr>"
 
 	body += {"	<form>
 				<select name="file" size="1"
@@ -128,58 +128,58 @@
 			"}
 
 
-	body += "<option value='?_src_=vars;mark_object=\ref[D]'>Mark Object</option>"
+	body += "<option value='?_src_=vars;mark_object=[REF(D)]'>Mark Object</option>"
 	if(ismob(D))
-		body += "<option value='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</option>"
+		body += "<option value='?_src_=vars;mob_player_panel=[REF(D)]'>Show player panel</option>"
 
 	if(istype(D,/atom/movable))
-		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
+		body += "<option value='?_src_=vars;teleport_here=[REF(D)]'>Teleport Here</option>"
 
 	if(istype(D,/atom))
-		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
+		body += "<option value='?_src_=vars;teleport_to=[REF(D)]'>Teleport To</option>"
 
 	if (hasvar(D, "transform"))
-		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
+		body += "<option value='?_src_=vars;edit_transform=[REF(D)]'>Edit Transform Matrix</option>"
 
-	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
+	body += "<option value='?_src_=vars;proc_call=[REF(D)]'>Proc call</option>"
 
 	body += "<option value>---</option>"
 
 	if(ismob(D))
 
-		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
-			<option value='?_src_=vars;give_disease=\ref[D]'>Give Disease</option>
-			<option value='?_src_=vars;addcancer=\ref[D]'>Inflict Cancer</option>
-			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
-			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
-			<option value='?_src_=vars;make_skeleton=\ref[D]'>Make 2spooky</option>
-			<option value='?_src_=vars;direct_control=\ref[D]'>Assume Direct Control</option>
-			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
-			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
-			<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>
-			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>"}
+		body += {"<option value='?_src_=vars;give_spell=[REF(D)]'>Give Spell</option>
+			<option value='?_src_=vars;give_disease=[REF(D)]'>Give Disease</option>
+			<option value='?_src_=vars;addcancer=[REF(D)]'>Inflict Cancer</option>
+			<option value='?_src_=vars;godmode=[REF(D)]'>Toggle Godmode</option>
+			<option value='?_src_=vars;build_mode=[REF(D)]'>Toggle Build Mode</option>
+			<option value='?_src_=vars;make_skeleton=[REF(D)]'>Make 2spooky</option>
+			<option value='?_src_=vars;direct_control=[REF(D)]'>Assume Direct Control</option>
+			<option value='?_src_=vars;drop_everything=[REF(D)]'>Drop Everything</option>
+			<option value='?_src_=vars;regenerateicons=[REF(D)]'>Regenerate Icons</option>
+			<option value='?_src_=vars;addlanguage=[REF(D)]'>Add Language</option>
+			<option value='?_src_=vars;remlanguage=[REF(D)]'>Remove Language</option>"}
 		if(ishuman(D))
 
 			body += {"<option value>---</option>
-				<option value='?_src_=vars;setmutantrace=\ref[D]'>Set Mutantrace</option>
-				<option value='?_src_=vars;setspecies=\ref[D]'>Set Species</option>
-				<option value='?_src_=vars;makeai=\ref[D]'>Make AI</option>
-				<option value='?_src_=vars;makerobot=\ref[D]'>Make cyborg</option>
-				<option value='?_src_=vars;makemonkey=\ref[D]'>Make monkey</option>
-				<option value='?_src_=vars;makealien=\ref[D]'>Make alien</option>
-				<option value='?_src_=vars;makeslime=\ref[D]'>Make slime</option>
-				<option value='?_src_=vars;makecluwne=\ref[D]'>Make cluwne</option>"}
+				<option value='?_src_=vars;setmutantrace=[REF(D)]'>Set Mutantrace</option>
+				<option value='?_src_=vars;setspecies=[REF(D)]'>Set Species</option>
+				<option value='?_src_=vars;makeai=[REF(D)]'>Make AI</option>
+				<option value='?_src_=vars;makerobot=[REF(D)]'>Make cyborg</option>
+				<option value='?_src_=vars;makemonkey=[REF(D)]'>Make monkey</option>
+				<option value='?_src_=vars;makealien=[REF(D)]'>Make alien</option>
+				<option value='?_src_=vars;makeslime=[REF(D)]'>Make slime</option>
+				<option value='?_src_=vars;makecluwne=[REF(D)]'>Make cluwne</option>"}
 
 		body += {"<option value>---</option>
-			<option value='?_src_=vars;gib=\ref[D]'>Gib</option>"}
+			<option value='?_src_=vars;gib=[REF(D)]'>Gib</option>"}
 	if(istype(D,/atom))
-		body += "<option value='?_src_=vars;delete=\ref[D]'>Delete</option>"
+		body += "<option value='?_src_=vars;delete=[REF(D)]'>Delete</option>"
 	if(isobj(D))
-		body += "<option value='?_src_=vars;delall=\ref[D]'>Delete all of type</option>"
+		body += "<option value='?_src_=vars;delall=[REF(D)]'>Delete all of type</option>"
 	if(isobj(D) || ismob(D) || isturf(D))
 
-		body += {"<option value='?_src_=vars;explode=\ref[D]'>Trigger explosion</option>
-			<option value='?_src_=vars;emp=\ref[D]'>Trigger EM pulse</option>"}
+		body += {"<option value='?_src_=vars;explode=[REF(D)]'>Trigger explosion</option>
+			<option value='?_src_=vars;emp=[REF(D)]'>Trigger EM pulse</option>"}
 
 	body += {"</select></form>
 		</div></td></tr></table></div><hr>
@@ -355,7 +355,7 @@ function loadPage(list) {
 
 	html += "</html>"
 
-	usr << browse(html, "window=variables\ref[D];size=475x650")
+	usr << browse(html, "window=variables[REF(D)];size=475x650")
 
 /client/proc/debug_variable(name, value, level, var/datum/DA = null)
 	var/html = ""
@@ -364,14 +364,14 @@ function loadPage(list) {
 		html += "<li style='backgroundColor:white'>"
 		if(name == "appearance")
 			html += {"
-			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
-			<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>load</a>) "}
+			(<a href='?_src_=vars;datumsave=[REF(DA)];varnamesave=[name]'>save</a> |
+			<a href='?_src_=vars;datumedit=[REF(DA)];varnameedit=[name]'>load</a>) "}
 		else
 			html += {"
-			(<a href='?_src_=vars;datumedit=\ref[DA];varnameedit=[name]'>E</a>)
-			(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
-			(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
-			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
+			(<a href='?_src_=vars;datumedit=[REF(DA)];varnameedit=[name]'>E</a>)
+			(<a href='?_src_=vars;datumchange=[REF(DA)];varnamechange=[name]'>C</a>)
+			(<a href='?_src_=vars;datummass=[REF(DA)];varnamemass=[name]'>M</a>)
+			(<a href='?_src_=vars;datumsave=[REF(DA)];varnamesave=[name]'>S</a>) "}
 	else
 		html += "<li>"
 
@@ -385,7 +385,7 @@ function loadPage(list) {
 		#ifdef VARSICON
 		var/icon/I = new/icon(value)
 		var/rnd = rand(1,10000)
-		var/rname = "tmp\ref[I][rnd].png"
+		var/rname = "tmp[REF(I)][rnd].png"
 		usr << browse_rsc(I, rname)
 		html += "[name] = (<span class='value'>[value]</span>) <img class=icon src=\"[rname]\">"
 		#else
@@ -397,8 +397,8 @@ function loadPage(list) {
 		var/rnd = rand(1, 10000)
 		var/image/I = value
 
-		src << browse_rsc(I.icon, "tmp\ref[value][rnd].png")
-		html += "[name] = <img src=\"tmp\ref[value][rnd].png\">"
+		src << browse_rsc(I.icon, "tmp[REF(value)][rnd].png")
+		html += "[name] = <img src=\"tmp[REF(value)][rnd].png\">"
 		#else
 		html += "[name] = /image (<span class='value'>[value]</span>)"
 		#endif
@@ -408,11 +408,11 @@ function loadPage(list) {
 
 	else if (istype(value, /datum))
 		var/datum/D = value
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = [D.type]"
+		html += "<a href='?_src_=vars;Vars=[REF(value)]'>[name] [REF(value)]</a> = [D.type]"
 
 	else if (istype(value, /client))
 		var/client/C = value
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = [C] [C.type]"
+		html += "<a href='?_src_=vars;Vars=[REF(value)]'>[name] [REF(value)]</a> = [C] [C.type]"
 //
 	else if (istype(value, /list))
 		var/list/L = value
@@ -451,7 +451,7 @@ function loadPage(list) {
 					idx=(block*4)+i
 					to_chat(bit=1, idx)
 					bv=value & bit
-					html += "<a href='?_src_=vars;togbit=[idx];var=[name];subject=\ref[DA]' title='bit [idx] ([bit])'>[bv?1:0]</a>"
+					html += "<a href='?_src_=vars;togbit=[idx];var=[name];subject=[REF(DA)]' title='bit [idx] ([bit])'>[bv?1:0]</a>"
 				html += "</span>"
 			html += "</div>"
 		*/

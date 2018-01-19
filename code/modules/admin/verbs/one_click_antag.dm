@@ -11,16 +11,16 @@ client/proc/one_click_antag()
 
 
 	var/dat = {"<B>One-click Antagonist</B><br>
-		<a href='?src=\ref[src];makeAntag=1'>Make Traitors</a><br>
-		<a href='?src=\ref[src];makeAntag=2'>Make Changlings</a><br>
-		<a href='?src=\ref[src];makeAntag=3'>Make Revs</a><br>
-		<a href='?src=\ref[src];makeAntag=4'>Make Cult</a><br>
-		<a href='?src=\ref[src];makeAntag=5'>Make Malf AI</a><br>
-		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=9'>Make Aliens (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=10'>Make Deathsquad (Syndicate) (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];makeAntag=1'>Make Traitors</a><br>
+		<a href='?src=[REF(src)];makeAntag=2'>Make Changlings</a><br>
+		<a href='?src=[REF(src)];makeAntag=3'>Make Revs</a><br>
+		<a href='?src=[REF(src)];makeAntag=4'>Make Cult</a><br>
+		<a href='?src=[REF(src)];makeAntag=5'>Make Malf AI</a><br>
+		<a href='?src=[REF(src)];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];makeAntag=9'>Make Aliens (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];makeAntag=10'>Make Deathsquad (Syndicate) (Requires Ghosts)</a><br>
 		"}
 
 	usr << browse(dat, "window=oneclickantag;size=400x400")

@@ -276,9 +276,9 @@
 					var/display_name = initial(O.name)
 					dat += {"<b>Expected result: </b>[display_name]<br>"}
 		dat += {"\
-<A href='?src=\ref[src];action=cook'>Turn on!<BR>\
-<A href='?src=\ref[src];action=dispose'>Eject ingredients!<BR><BR><BR>\
-<A href='?src=\ref[src];action=reagenttoggle'>[reagent_disposal ? "Disable reagent disposal" : "Enable reagent disposal"]<BR>\
+<A href='?src=[REF(src)];action=cook'>Turn on!<BR>\
+<A href='?src=[REF(src)];action=dispose'>Eject ingredients!<BR><BR><BR>\
+<A href='?src=[REF(src)];action=reagenttoggle'>[reagent_disposal ? "Disable reagent disposal" : "Enable reagent disposal"]<BR>\
 "}
 
 	user << browse("<HEAD><TITLE>Microwave Controls</TITLE></HEAD><TT>[dat]</TT>", "window=microwave")

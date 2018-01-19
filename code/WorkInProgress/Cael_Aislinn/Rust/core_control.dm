@@ -31,36 +31,36 @@
 
 	if(cur_viewed_device)
 		dat += {"
-			<a href='?src=\ref[src];goto_scanlist=1'>Back to overview</a><hr>
+			<a href='?src=[REF(src)];goto_scanlist=1'>Back to overview</a><hr>
 			<b>Device tag:</b> [cur_viewed_device.id_tag]<br>
 			<span style='color: [cur_viewed_device.owned_field ? "green" : "red"]'>Device [cur_viewed_device.owned_field ? "activated" : "deactivated"].</span><br>
-			<a href='?src=\ref[src];toggle_active=1'>Bring field [cur_viewed_device.owned_field ? "offline" : "online"]</a><br>
+			<a href='?src=[REF(src)];toggle_active=1'>Bring field [cur_viewed_device.owned_field ? "offline" : "online"]</a><br>
 			<hr>
 
 			<b>Field encumbrance:</b> [cur_viewed_device.owned_field ? 0 : "N/A"]<br>
 			<b>Field power density (W.m<sup>-3</sup>):</b><br>
-			<a href='?src=\ref[src];str=-1000'>----</a>
-			<a href='?src=\ref[src];str=-100'>--- </a>
-			<a href='?src=\ref[src];str=-10'>--  </a>
-			<a href='?src=\ref[src];str=-1'>-   </a>
-			<a href='?src=\ref[src];str=0'>[cur_viewed_device.field_strength]</a>
-			<a href='?src=\ref[src];str=1'>+   </a>
-			<a href='?src=\ref[src];str=10'>++  </a>
-			<a href='?src=\ref[src];str=100'>+++ </a>
-			<a href='?src=\ref[src];str=1000'>++++</a><hr>
+			<a href='?src=[REF(src)];str=-1000'>----</a>
+			<a href='?src=[REF(src)];str=-100'>--- </a>
+			<a href='?src=[REF(src)];str=-10'>--  </a>
+			<a href='?src=[REF(src)];str=-1'>-   </a>
+			<a href='?src=[REF(src)];str=0'>[cur_viewed_device.field_strength]</a>
+			<a href='?src=[REF(src)];str=1'>+   </a>
+			<a href='?src=[REF(src)];str=10'>++  </a>
+			<a href='?src=[REF(src)];str=100'>+++ </a>
+			<a href='?src=[REF(src)];str=1000'>++++</a><hr>
 		"}
 
 		dat += {"
 			<b>Field frequency (MHz):</b><br>
-			<a href='?src=\ref[src];freq=-1000'>----</a>
-			<a href='?src=\ref[src];freq=-100'>--- </a>
-			<a href='?src=\ref[src];freq=-10'>--  </a>
-			<a href='?src=\ref[src];freq=-1'>-   </a>
-			<a href='?src=\ref[src];freq=0'>[cur_viewed_device.field_frequency]</a>
-			<a href='?src=\ref[src];freq=1'>+   </a>
-			<a href='?src=\ref[src];freq=10'>++  </a>
-			<a href='?src=\ref[src];freq=100'>+++ </a>
-			<a href='?src=\ref[src];freq=1000'>++++</a><br>
+			<a href='?src=[REF(src)];freq=-1000'>----</a>
+			<a href='?src=[REF(src)];freq=-100'>--- </a>
+			<a href='?src=[REF(src)];freq=-10'>--  </a>
+			<a href='?src=[REF(src)];freq=-1'>-   </a>
+			<a href='?src=[REF(src)];freq=0'>[cur_viewed_device.field_frequency]</a>
+			<a href='?src=[REF(src)];freq=1'>+   </a>
+			<a href='?src=[REF(src)];freq=10'>++  </a>
+			<a href='?src=[REF(src)];freq=100'>+++ </a>
+			<a href='?src=[REF(src)];freq=1000'>++++</a><br>
 			<hr>
 		"}
 
@@ -99,7 +99,7 @@
 					"}
 				else
 					dat += {"
-						<td><a href=?src=\ref[src];access_device=[connected_devices.Find(C)]'>ACCESS</a></td>
+						<td><a href=?src=[REF(src)];access_device=[connected_devices.Find(C)]'>ACCESS</a></td>
 					"}
 				dat += {"
 					</tr>
@@ -179,12 +179,12 @@
 	. = "Linked R-UST Tokamak cores:<br><lu>"
 
 	for(var/obj/machinery/power/rust_core/C in connected_devices)
-		. += "<li><b>[C.id_tag]</b> <a href='?src=\ref[src];unlink=[connected_devices.Find(C)]'>\[X\]</a></li>"
+		. += "<li><b>[C.id_tag]</b> <a href='?src=[REF(src)];unlink=[connected_devices.Find(C)]'>\[X\]</a></li>"
 	. += "</ul>"
 
 /obj/machinery/computer/rust_core_control/linkMenu(var/obj/machinery/power/rust_core/O)
 	if(istype(O))
-		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
+		. = "<a href='?src=[REF(src)];link=1'>\[LINK\]</a> "
 
 /obj/machinery/computer/rust_core_control/canLink(var/obj/machinery/power/rust_core/O, var/list/context)
 	. = (istype(O) && get_dist(src, O) < scan_range)

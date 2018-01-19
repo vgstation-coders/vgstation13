@@ -343,14 +343,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/linkMenu(var/obj/O)
 	var/dat=""
 	if(canLink(O, list()))
-		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
+		dat += " <a href='?src=[REF(src)];link=1'>\[Link\]</a> "
 	return dat
 
 /obj/proc/format_tag(var/label,var/varname, var/act="set_tag")
 	var/value = vars[varname]
 	if(!value || value=="")
 		value="-----"
-	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
+	return "<b>[label]:</b> <a href=\"?src=[REF(src)];[act]=[varname]\">[value]</a>"
 
 
 /obj/proc/update_multitool_menu(mob/user as mob)
@@ -407,10 +407,10 @@ a {
 			dat += linkMenu(P.buffer)
 
 			if(P.buffer)
-				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
+				dat += "<a href='?src=[REF(src)];flush=1'>\[Flush\]</a>"
 			dat += "</p>"
 		else
-			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=\ref[src];buffer=1'>\[Add Machine\]</a></p>"
+			dat += "<p><b>MULTITOOL BUFFER:</b> <a href='?src=[REF(src)];buffer=1'>\[Add Machine\]</a></p>"
 	dat += "</body></html>"
 	user << browse(dat, "window=mtcomputer")
 	user.set_machine(src)

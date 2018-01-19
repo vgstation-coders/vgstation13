@@ -239,7 +239,7 @@
 							<div id="wrapper"><div id="target"></div>
 							<form id="form" name="form" action="byond://" method="get">
 							<label for="input">&gt;</label><input name="saminput" type="text" id="input" value="" />
-							<input type=\"hidden\" name=\"src\" value=\"\ref[src]\">
+							<input type=\"hidden\" name=\"src\" value=\"[REF(src)]\">
 							</form>
 							</div>
 							</body>

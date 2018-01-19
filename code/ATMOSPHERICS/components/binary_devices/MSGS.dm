@@ -59,7 +59,7 @@
 			<div class="itemLabel">Input: </div>
 			<div class="itemContent">
 				<span id="inputtoggles">
-					<a href="?src=\ref[interface];power=1">Enable</a> <a href="?src=\ref[interface];power=0" class="linkDanger">Disable</a>
+					<a href="?src=[REF(interface)];power=1">Enable</a> <a href="?src=[REF(interface)];power=0" class="linkDanger">Disable</a>
 				</span>
 			</div>
 		</div>
@@ -67,7 +67,7 @@
 		<div class="item">
 			<div class="itemLabel">Output pressure (kPa): </div>
 			<div class="itemContent">
-				<form action="?src=\ref[interface]" method="get"><input type="hidden" name="src" value="\ref[interface]"/>
+				<form action="?src=[REF(interface)]" method="get"><input type="hidden" name="src" value="[REF(interface)]"/>
 					<span id="pressureinput"><input type="textbox" name="set_pressure" value="0"/></span> <input type="submit" name="act" value="Set"/>
 				</form>
 			</div>
@@ -165,9 +165,9 @@
 		interface.updateContent("n2opercent", 0)
 
 	if(on)
-		interface.updateContent("inputtoggles",	{"<a href="?src=\ref[interface];power=1" class="linkOn">Enable</a> <a href="?src=\ref[interface];power=0">Disable</a>"})
+		interface.updateContent("inputtoggles",	{"<a href="?src=[REF(interface)];power=1" class="linkOn">Enable</a> <a href="?src=[REF(interface)];power=0">Disable</a>"})
 	else
-		interface.updateContent("inputtoggles",	{"<a href="?src=\ref[interface];power=1">Enable</a> <a href="?src=\ref[interface];power=0" class="linkDanger">Disable</a>"})
+		interface.updateContent("inputtoggles",	{"<a href="?src=[REF(interface)];power=1">Enable</a> <a href="?src=[REF(interface)];power=0" class="linkDanger">Disable</a>"})
 
 	interface.updateContent("pressureinput", 	{"<input type="textbox" name="set_pressure" value="[target_pressure]"/>"})
 

@@ -33,11 +33,11 @@
 
 	src.updateUsrDialog()
 
-#define add_counter_href(amount) "<a href='?src=\ref[src];add_counter=[amount]'>"
-#define sub_counter_href(amount) "<a href='?src=\ref[src];sub_counter=[amount]'>"
+#define add_counter_href(amount) "<a href='?src=[REF(src)];add_counter=[amount]'>"
+#define sub_counter_href(amount) "<a href='?src=[REF(src)];sub_counter=[amount]'>"
 
-#define add_limit_href(amount) "<a href='?src=\ref[src];add_limit=[amount]'>"
-#define sub_limit_href(amount) "<a href='?src=\ref[src];sub_limit=[amount]'>"
+#define add_limit_href(amount) "<a href='?src=[REF(src)];add_limit=[amount]'>"
+#define sub_limit_href(amount) "<a href='?src=[REF(src)];sub_limit=[amount]'>"
 
 /obj/item/device/assembly/addition/interact(mob/user as mob)
 	var/dat = ""

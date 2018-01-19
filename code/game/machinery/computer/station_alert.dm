@@ -61,7 +61,7 @@
 	usr.set_machine(src)
 
 	var/dat = {"<HEAD><TITLE>Current [general_area_name] Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n
-	<A HREF='?src=\ref[user];mach_close=alerts'>Close</A><br><br>"}
+	<A HREF='?src=[REF(user)];mach_close=alerts'>Close</A><br><br>"}
 	for (var/cat in src.alarms)
 		dat += text("<B>[]</B><BR>\n", cat)
 		var/list/L = src.alarms[cat]

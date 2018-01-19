@@ -112,8 +112,8 @@
 	t += {"Output : [round(lastgen)] W<BR><BR>
 [get_loop_state("Cold",input1_dir,input1)]
 [get_loop_state("Hot",input2_dir,input2)]
-<BR><HR><A href='?src=\ref[src];close=1'>Close</A>
-| <A href='?src=\ref[src];reconnect=1'>Refresh Inputs</A>"}
+<BR><HR><A href='?src=[REF(src)];close=1'>Close</A>
+| <A href='?src=[REF(src)];reconnect=1'>Refresh Inputs</A>"}
 	user << browse(t, "window=teg;size=460x300")
 	onclose(user, "teg")
 	return 1

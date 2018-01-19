@@ -336,26 +336,26 @@
 	var/dat = ""
 
 	if(handcuffed)
-		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=handcuff'>Remove</A>"
+		dat += "<BR><B>Handcuffed:</B> <A href='?src=[REF(src)];item=handcuff'>Remove</A>"
 	else
 		for(var/i = 1 to held_items.len) //Hands
 			var/obj/item/I = held_items[i]
-			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
+			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=[REF(src)];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+	dat += "<BR><B>Back:</B> <A href='?src=[REF(src)];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 
 	dat += "<BR>"
 
-	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+	dat += "<BR><B>Mask:</B> <A href='?src=[REF(src)];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=[REF(src)];internals=1'>(Toggle)</A>"
 
 	dat += {"
 	<BR>
-	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
+	<BR><A href='?src=[REF(user)];mach_close=mob[REF(src)]'>Close</A>
 	"}
 
-	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
+	var/datum/browser/popup = new(user, "mob[REF(src)]", "[src]", 340, 500)
 	popup.set_content(dat)
 	popup.open()
 

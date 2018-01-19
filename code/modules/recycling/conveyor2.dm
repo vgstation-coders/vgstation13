@@ -296,18 +296,18 @@
 	return {"
 	<ul>
 		<li><b>Direction:</b>
-			<a href="?src=\ref[src];setdir=[NORTH]" title="North">[src.in_reverse ? "&darr;" : "&uarr;"]</a>
-			<a href="?src=\ref[src];setdir=[EAST]" title="East">[src.in_reverse ? "&larr;" : "&rarr;"]</a>
-			<a href="?src=\ref[src];setdir=[SOUTH]" title="South">[src.in_reverse ? "&uarr;" : "&darr;"]</a>
-			<a href="?src=\ref[src];setdir=[WEST]" title="West">[src.in_reverse ? "&rarr;" : "&larr;"]</a>
-			<a href="?src=\ref[src];setdir=[NORTHEAST]" title="Northeast">[src.in_reverse ? "&#8601;" : "&#8599;"]</a>
-			<a href="?src=\ref[src];setdir=[NORTHWEST]" title="Northwest">[src.in_reverse ? "&#8598;" : "&#8600;"]</a>
-			<a href="?src=\ref[src];setdir=[SOUTHEAST]" title="Southeast">[src.in_reverse ? "&#8600;" : "&#8598;"]</a>
-			<a href="?src=\ref[src];setdir=[SOUTHWEST]" title="Southwest">[src.in_reverse ? "&#8599;" : "&#8601;"]</a>
-			<a href="?src=\ref[src];reverse" title="Reverse Direction">&#8644;</a>
+			<a href="?src=[REF(src)];setdir=[NORTH]" title="North">[src.in_reverse ? "&darr;" : "&uarr;"]</a>
+			<a href="?src=[REF(src)];setdir=[EAST]" title="East">[src.in_reverse ? "&larr;" : "&rarr;"]</a>
+			<a href="?src=[REF(src)];setdir=[SOUTH]" title="South">[src.in_reverse ? "&uarr;" : "&darr;"]</a>
+			<a href="?src=[REF(src)];setdir=[WEST]" title="West">[src.in_reverse ? "&rarr;" : "&larr;"]</a>
+			<a href="?src=[REF(src)];setdir=[NORTHEAST]" title="Northeast">[src.in_reverse ? "&#8601;" : "&#8599;"]</a>
+			<a href="?src=[REF(src)];setdir=[NORTHWEST]" title="Northwest">[src.in_reverse ? "&#8598;" : "&#8600;"]</a>
+			<a href="?src=[REF(src)];setdir=[SOUTHEAST]" title="Southeast">[src.in_reverse ? "&#8600;" : "&#8598;"]</a>
+			<a href="?src=[REF(src)];setdir=[SOUTHWEST]" title="Southwest">[src.in_reverse ? "&#8599;" : "&#8601;"]</a>
+			<a href="?src=[REF(src)];reverse" title="Reverse Direction">&#8644;</a>
 		</li>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=1367">Reset</a>)</li>
-		<li><b>ID Tag:</b> <a href="?src=\ref[src];set_id=1">[dis_id_tag]</a></li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=1367">Reset</a>)</li>
+		<li><b>ID Tag:</b> <a href="?src=[REF(src)];set_id=1">[dis_id_tag]</a></li>
 
 		<li>To quickly copy configuration: Add a Conveyor or a Conveyor Switch into buffer, activate the Multitool in your hand to enable Cloning Mode, then use it on another Conveyor.</li>
 		<li>To make counter-clockwise corners: Use the Reverse Direction button in this menu. Diagonals will attempt to auto set direction based on connected straight line segments.</li>
@@ -549,12 +549,12 @@
 		dis_id_tag=id_tag
 	return {"
 		<ul>
-			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=1367">Reset</a>)</li>
-			<li><b>ID Tag:</b> <a href="?src=\ref[src];set_id=1">[dis_id_tag]</a></li>
+			<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=1367">Reset</a>)</li>
+			<li><b>ID Tag:</b> <a href="?src=[REF(src)];set_id=1">[dis_id_tag]</a></li>
 			<li><b>Restrict Pulling: </b>
-				[convdir == -1 ? "<b>&larr;</b>" : {"<a href="?src=\ref[src];setconvdir=-1">&larr;</a>"}]
-				[convdir ==  0 ? "<b>No</b>" 	 : {"<a href="?src=\ref[src];setconvdir= 0">No</a>"}]
-				[convdir ==  1 ? "<b>&rarr;</b>" : {"<a href="?src=\ref[src];setconvdir= 1">&rarr;</a>"}]
+				[convdir == -1 ? "<b>&larr;</b>" : {"<a href="?src=[REF(src)];setconvdir=-1">&larr;</a>"}]
+				[convdir ==  0 ? "<b>No</b>" 	 : {"<a href="?src=[REF(src)];setconvdir= 0">No</a>"}]
+				[convdir ==  1 ? "<b>&rarr;</b>" : {"<a href="?src=[REF(src)];setconvdir= 1">&rarr;</a>"}]
 			</li>
 			<li>To quickly copy configuration: Add a Conveyor or a Conveyor Switch into buffer, activate the Multitool in your hand to enable Cloning Mode, then use it on another Conveyor.</li>
 			<li><i>Cloning from a Conveyor Switch will only copy the Frequency and ID Tag, not direction.</i></li>

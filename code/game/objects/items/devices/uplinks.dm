@@ -65,14 +65,14 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 			if(item.cost > 0)
 				cost_text = "([item.cost])"
 			if(item.cost <= uses)
-				dat += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
+				dat += "<A href='byond://?src=[REF(src)];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
 			else
 				dat += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
 			if(item.desc)
 				if(show_description == 2)
-					dat += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
+					dat += "<A href='byond://?src=[REF(src)];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc]</font>"
 				else
-					dat += "<A href='byond://?src=\ref[src];show_desc=2'><font size=2>\[?\]</font></A>"
+					dat += "<A href='byond://?src=[REF(src)];show_desc=2'><font size=2>\[?\]</font></A>"
 			dat += "<BR>"
 
 		// Break up the categories, if it isn't the last.
@@ -88,7 +88,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	var/dat = "<body link='yellow' alink='white' bgcolor='#601414'><font color='white'>"
 	dat += src.generate_menu(user)
 
-	dat += {"<A href='byond://?src=\ref[src];lock=1'>Lock</a>
+	dat += {"<A href='byond://?src=[REF(src)];lock=1'>Lock</a>
 		</font></body>"}
 	user << browse(dat, "window=hidden")
 	onclose(user, "hidden")

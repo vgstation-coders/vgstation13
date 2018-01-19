@@ -442,7 +442,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/trader
 	name = "Trader PDA"
 	desc = "Much good for trade."
-	note = "Congratulations, your station ãplU‰%ZÃ’67ÕEz4Æ¦U¦ŸÉ8¥E1ÀÓÐ‹îöÈ~±šÞ@¡ÐT¥u1B¤Õkñ@iž8÷NJŠó"
+	note = "Congratulations, your station ï¿½plUï¿½%ZÃ’67ï¿½Ez4Æ¦Uï¿½ï¿½ï¿½8ï¿½E1ï¿½ï¿½Ð‹ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½@ï¿½ï¿½Tï¿½u1Bï¿½ï¿½kï¿½@iï¿½8ï¿½NJï¿½ï¿½"
 	icon_state = "pda-trader"
 	default_cartridge = /obj/item/weapon/cartridge/trader
 
@@ -665,43 +665,43 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	<body>
 	<link rel="stylesheet" type="text/css" href="pda.css"/> <!--This stylesheet contains all the PDA icons in base 64!-->
 	"}
-	dat += "<a href='byond://?src=\ref[src];choice=Close'><span class='pda_icon pda_exit'></span> Close</a>"
+	dat += "<a href='byond://?src=[REF(src)];choice=Close'><span class='pda_icon pda_exit'></span> Close</a>"
 	if ((!isnull(cartridge)) && (mode == 0))
-		dat += " | <a href='byond://?src=\ref[src];choice=Eject'><span class='pda_icon pda_eject'></span> Eject [cartridge]</a>"
+		dat += " | <a href='byond://?src=[REF(src)];choice=Eject'><span class='pda_icon pda_eject'></span> Eject [cartridge]</a>"
 	if (mode)
-		dat += " | <a href='byond://?src=\ref[src];choice=Return'><span class='pda_icon pda_menu'></span> Return</a>"
+		dat += " | <a href='byond://?src=[REF(src)];choice=Return'><span class='pda_icon pda_menu'></span> Return</a>"
 
-	dat += {"| <a href='byond://?src=\ref[src];choice=Refresh'><span class='pda_icon pda_refresh'></span> Refresh</a>
+	dat += {"| <a href='byond://?src=[REF(src)];choice=Refresh'><span class='pda_icon pda_refresh'></span> Refresh</a>
 		<br>"}
 	if (!owner)
 
 		dat += {"Warning: No owner information entered.  Please swipe card.<br><br>
-			<a href='byond://?src=\ref[src];choice=Refresh'><span class='pda_icon pda_refresh'></span> Retry</a>"}
+			<a href='byond://?src=[REF(src)];choice=Refresh'><span class='pda_icon pda_refresh'></span> Retry</a>"}
 	else
 		switch (mode)
 			if (0)
 				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.3</h2>
 					Owner: [owner], [ownjob]<br>"}
-				dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
-				dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
+				dat += text("ID: <A href='?src=[REF(src)];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
+				dat += text("<br><A href='?src=[REF(src)];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
 
 
 				dat += {"Station Time: [worldtime2text()]
 					<br><br>
 					<h4>General Functions</h4>
 					<ul>
-					<li><a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_notes'></span> Notekeeper</a></li>
-					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
-					<li><a href='byond://?src=\ref[src];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
+					<li><a href='byond://?src=[REF(src)];choice=1'><span class='pda_icon pda_notes'></span> Notekeeper</a></li>
+					<li><a href='byond://?src=[REF(src)];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
+					<li><a href='byond://?src=[REF(src)];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
 				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</a></li>"
 
-				dat += "<li><a href='byond://?src=\ref[src];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>"
+				dat += "<li><a href='byond://?src=[REF(src)];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>"
 
 				if (cartridge)
 					if (cartridge.access_clown)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><span class='pda_icon pda_honk'></span> Honk Synthesizer</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Honk'><span class='pda_icon pda_honk'></span> Honk Synthesizer</a></li>"
 					if(cartridge.access_status_display)
-						dat += "<li><a href='byond://?src=\ref[src];choice=42'><span class='pda_icon pda_status'></span> Set Status Display</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=42'><span class='pda_icon pda_status'></span> Set Status Display</a></li>"
 
 				dat += "</ul>"
 				dat += {"<h4>Applications</h4>"}
@@ -712,7 +712,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<ul>"}
 					for(var/datum/pda_app/app in applications)
 						if(app.menu)
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
+							dat += {"<li><a href='byond://?src=[REF(src)];choice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 						else
 							dat += {"<li>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</li>"}
 					dat += {"</ul>"}
@@ -721,33 +721,33 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if (cartridge.access_engine || cartridge.access_atmos)
 						dat += {"<h4>Engineering Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=43'><span class='pda_icon pda_power'></span> Power Monitor</a></li>
-							<li><a href='byond://?src=\ref[src];choice=53'><span class='pda_icon pda_alert'></span> Alert Monitor</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=43'><span class='pda_icon pda_power'></span> Power Monitor</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=53'><span class='pda_icon pda_alert'></span> Alert Monitor</a></li>
 							</ul>"}
 
 					if (cartridge.access_mechanic)
 						dat += {"<h4>Mechanic Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Device Analyser'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyser</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=Device Analyser'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyser</a></li>
 							</ul>"}
 
 					if (cartridge.access_medical)
 
 						dat += {"<h4>Medical Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=44'><span class='pda_icon pda_medical'></span> Medical Records</a></li>
-							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=44'><span class='pda_icon pda_medical'></span> Medical Records</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>
 							</ul>"}
 					if (cartridge.access_security)
 
 						dat += {"<h4>Security Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>
-							<li><a href='byond://?src=\ref[src];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>
+							<li><a href='byond://?src=[REF(src)];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
 							"}
 					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
-						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
+						dat += {"<li><a href='byond://?src=[REF(src)];choice=46'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
 							</ul>"}
 					else
 						dat += "</ul>"
@@ -755,8 +755,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 						dat += {"<h4>Quartermaster Functions:</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=47'><span class='pda_icon pda_crate'></span> Supply Records</A></li>
-							<li><a href='byond://?src=\ref[src];choice=48'><span class='pda_icon pda_mule'></span> Delivery Bot Control</A></li>
+							<li><a href='byond://?src=[REF(src)];choice=47'><span class='pda_icon pda_crate'></span> Supply Records</A></li>
+							<li><a href='byond://?src=[REF(src)];choice=48'><span class='pda_icon pda_mule'></span> Delivery Bot Control</A></li>
 							</ul>"}
 
 				dat += {"</ul>
@@ -764,46 +764,46 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<ul>"}
 				if (cartridge)
 					if (cartridge.access_janitor)
-						dat += "<li><a href='byond://?src=\ref[src];choice=49'><span class='pda_icon pda_bucket'></span> Custodial Locator</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=49'><span class='pda_icon pda_bucket'></span> Custodial Locator</a></li>"
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
-						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
 					if (cartridge.access_reagent_scanner)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Reagent Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_REAGENT ? "Disable" : "Enable"] Reagent Scanner</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Reagent Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_REAGENT ? "Disable" : "Enable"] Reagent Scanner</a></li>"
 					if (cartridge.access_engine)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
 					if (cartridge.access_atmos)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
 					if (cartridge.access_remote_door)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
 					if (cartridge.access_trader)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
 					if (cartridge.access_robotics)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
 
-				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
-					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
+				dat += {"<li><a href='byond://?src=[REF(src)];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
+					<li><a href='byond://?src=[REF(src)];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
 					if(pai.loc != src)
 						pai = null
 					else
 
-						dat += {"<li><a href='byond://?src=\ref[src];choice=pai;option=1'>pAI Device Configuration</a></li>
-							<li><a href='byond://?src=\ref[src];choice=pai;option=2'>Eject pAI Device</a></li>"}
+						dat += {"<li><a href='byond://?src=[REF(src)];choice=pai;option=1'>pAI Device Configuration</a></li>
+							<li><a href='byond://?src=[REF(src)];choice=pai;option=2'>Eject pAI Device</a></li>"}
 				dat += "</ul>"
 
 			if (1)
 
 				dat += {"<h4><span class='pda_icon pda_notes'></span> Notekeeper V2.1</h4>
-					<a href='byond://?src=\ref[src];choice=Edit'> Edit</a><br>"}
+					<a href='byond://?src=[REF(src)];choice=Edit'> Edit</a><br>"}
 				dat += note
 
 			if (2)
 
 				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-					<a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
-					<a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
-					<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
-					<a href='byond://?src=\ref[src];choice=21'><span class='pda_icon pda_mail'></span> Messages</a><br>"}
+					<a href='byond://?src=[REF(src)];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
+					<a href='byond://?src=[REF(src)];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
+					<a href='byond://?src=[REF(src)];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
+					<a href='byond://?src=[REF(src)];choice=21'><span class='pda_icon pda_mail'></span> Messages</a><br>"}
 				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					dat += "<b>[cartridge:shock_charges] detonation charges left.</b><HR>"
 				if (istype(cartridge, /obj/item/weapon/cartridge/clown))
@@ -822,15 +822,15 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							continue
 						if(P.hidden)
 							continue
-						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
+						dat += "<li><a href='byond://?src=[REF(src)];choice=Message;target=[REF(P)]'>[P]</a>"
 						if (id && !istype(P,/obj/item/device/pda/ai))
-							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
+							dat += " (<a href='byond://?src=[REF(src)];choice=transferFunds;target=[REF(P)]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
 						if (istype(cartridge, /obj/item/weapon/cartridge/syndicate) && P.detonate)
-							dat += " (<a href='byond://?src=\ref[src];choice=Detonate;target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
+							dat += " (<a href='byond://?src=[REF(src)];choice=Detonate;target=[REF(P)]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
 						if (istype(cartridge, /obj/item/weapon/cartridge/clown))
-							dat += " (<a href='byond://?src=\ref[src];choice=Send Honk;target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
+							dat += " (<a href='byond://?src=[REF(src)];choice=Send Honk;target=[REF(P)]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
 						if (istype(cartridge, /obj/item/weapon/cartridge/mime))
-							dat += " (<a href='byond://?src=\ref[src];choice=Send Silence;target=\ref[P]'>*Send Virus*</a>)"
+							dat += " (<a href='byond://?src=[REF(src)];choice=Send Silence;target=[REF(P)]'>*Send Virus*</a>)"
 						dat += "</li>"
 						count++
 				dat += "</ul>"
@@ -840,7 +840,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if(21)
 
 				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
-					<a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
+					<a href='byond://?src=[REF(src)];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
 					<h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
 				dat += tnote
 				dat += "<br>"
@@ -880,7 +880,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += {"<h4><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</h4>
 					<h4><span class='pda_icon pda_menu'></span> Detected Channels</h4>: <li>"}
 				for(var/datum/chatroom/C in chatrooms)
-					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
+					dat += "<a href='byond://?src=[REF(src)];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
 					if(C.password != "")
 						dat += " <span class='pda_icon pda_locked'></span>"
 					dat += "</li>"
@@ -911,13 +911,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += {"<h4>Ringer Application</h4>"}
 				if(app)
 					dat += {"
-					Status: <a href='byond://?src=\ref[src];choice=toggleDeskRinger'>[app.status ? "On" : "Off"]</a><br>
+					Status: <a href='byond://?src=[REF(src)];choice=toggleDeskRinger'>[app.status ? "On" : "Off"]</a><br>
 					Frequency:
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=-10'>-</a>
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=-2'>-</a>
+						<a href='byond://?src=[REF(src)];choice=ringerFrequency;rfreq=-10'>-</a>
+						<a href='byond://?src=[REF(src)];choice=ringerFrequency;rfreq=-2'>-</a>
 						[format_frequency(app.frequency)]
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=2'>+</a>
-						<a href='byond://?src=\ref[src];choice=ringerFrequency;rfreq=10'>+</a><br>
+						<a href='byond://?src=[REF(src)];choice=ringerFrequency;rfreq=2'>+</a>
+						<a href='byond://?src=[REF(src)];choice=ringerFrequency;rfreq=10'>+</a><br>
 						<br>
 					"}
 
@@ -927,9 +927,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if(app)
 					dat += {"
 					<ul>
-					<li>[(app.function == 2) ? "<b>Block the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=2'>Block the spam.</a>"]</li>
-					<li>[(app.function == 1) ? "<b>Conceal the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=1'>Conceal the spam.</a>"]</li>
-					<li>[(app.function == 0) ? "<b>Do nothing.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=0'>Do nothing.</a>"]</li>
+					<li>[(app.function == 2) ? "<b>Block the spam.</b>" : "<a href='byond://?src=[REF(src)];choice=setFilter;filter=2'>Block the spam.</a>"]</li>
+					<li>[(app.function == 1) ? "<b>Conceal the spam.</b>" : "<a href='byond://?src=[REF(src)];choice=setFilter;filter=1'>Conceal the spam.</a>"]</li>
+					<li>[(app.function == 0) ? "<b>Do nothing.</b>" : "<a href='byond://?src=[REF(src)];choice=setFilter;filter=0'>Do nothing.</a>"]</li>
 					</ul>
 					"}
 
@@ -945,7 +945,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += {"<hr>
 							<h5>Virtual Wallet</h5>
 							Owner: <b>[id.virtual_wallet.owner_name]</b><br>
-							Balance: <b>[id.virtual_wallet.money]</b>$  <u><a href='byond://?src=\ref[src];choice=printCurrency'><span class='pda_icon [app.icon]'></span>Print Currency</a></u>
+							Balance: <b>[id.virtual_wallet.money]</b>$  <u><a href='byond://?src=[REF(src)];choice=printCurrency'><span class='pda_icon [app.icon]'></span>Print Currency</a></u>
 							<h6>Transaction History</h6>
 							On [MM]/[DD]/[game_year]:
 							<ul>
@@ -1053,9 +1053,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"</div>"}
 */
 					dat += {"<h5>Markers</h5>
-					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=x'>X=[app.markx]</a>;
-					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=y'>Y=[app.marky]</a>;
-					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=add'>Add New Marker</a>
+					<a href='byond://?src=[REF(src)];choice=minimapMarker;mMark=x'>X=[app.markx]</a>;
+					<a href='byond://?src=[REF(src)];choice=minimapMarker;mMark=y'>Y=[app.marky]</a>;
+					<a href='byond://?src=[REF(src)];choice=minimapMarker;mMark=add'>Add New Marker</a>
 					"}
 
 					if(!(app.markers.len))
@@ -1063,7 +1063,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					else
 						dat +={"<ul>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<li>[mkr.name] ([mkr.x]/[mkr.y]) <a href='byond://?src=\ref[src];choice=removeMarker;rMark=[mkr.num]'>remove</a></li>"}
+							dat += {"<li>[mkr.name] ([mkr.x]/[mkr.y]) <a href='byond://?src=[REF(src)];choice=removeMarker;rMark=[mkr.num]'>remove</a></li>"}
 						dat += {"</ul>"}
 
 			if (PDA_APP_SNAKEII)
@@ -1072,14 +1072,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
-				dat += {"<h4><span class='pda_icon [app.icon]'></span> Snake II  <a href='byond://?src=\ref[src];choice=snakeVolume;vChange=-1'><b>-</b></a><img src="snake_volume[app.volume].png"/><a href='byond://?src=\ref[src];choice=snakeVolume;vChange=1'><b>+</b></a></h4>"}
+				dat += {"<h4><span class='pda_icon [app.icon]'></span> Snake II  <a href='byond://?src=[REF(src)];choice=snakeVolume;vChange=-1'><b>-</b></a><img src="snake_volume[app.volume].png"/><a href='byond://?src=[REF(src)];choice=snakeVolume;vChange=1'><b>+</b></a></h4>"}
 				if(app)
 					dat += {"<br>
 						<div style="position: relative; left: 0; top: 0;">
 						<img src="snake_background.png" style="position: relative; top: 0; left: 0;"/>
 						"}
 					if(!app.ingame)
-						dat += {"<a href='byond://?src=\ref[src];choice=snakeNewGame'><img src="snake_newgame.png" style="position: absolute; top: 50px; left: 100px;"/></a>"}
+						dat += {"<a href='byond://?src=[REF(src)];choice=snakeNewGame'><img src="snake_newgame.png" style="position: absolute; top: 50px; left: 100px;"/></a>"}
 						dat += {"<img src="snake_highscore.png" style="position: absolute; top: 90px; left: 50px;"/>"}
 						var/list/templist = app.highscores[app.snake_game.level]
 						var/list/winnerlist = snake_station_highscores[app.snake_game.level]
@@ -1099,18 +1099,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							if(x == app.snake_game.level)
 								dat += "<B>[x]</B>, "
 							else
-								dat += "<a href='byond://?src=\ref[src];choice=snakeLevel;sLevel=[x]'>[x]</a>, "
-						dat += "<br>Set labyrinth: [!app.labyrinth ? "<b>None</b>" : "<a href='byond://?src=\ref[src];choice=snakeLabyrinth;lType=0'>None</a>"], "
+								dat += "<a href='byond://?src=[REF(src)];choice=snakeLevel;sLevel=[x]'>[x]</a>, "
+						dat += "<br>Set labyrinth: [!app.labyrinth ? "<b>None</b>" : "<a href='byond://?src=[REF(src)];choice=snakeLabyrinth;lType=0'>None</a>"], "
 						for(var/x=1;x<=7;x++)
 							if(x == app.labyrinth)
 								dat += "<B>[x]</B>, "
 							else
-								dat += "<a href='byond://?src=\ref[src];choice=snakeLabyrinth;lType=[x]'>[x]</a>, "
+								dat += "<a href='byond://?src=[REF(src)];choice=snakeLabyrinth;lType=[x]'>[x]</a>, "
 						dat += "<br>Gyroscope (orient yourself to control): "
 						if(app.snake_game.gyroscope)
-							dat += "<a href='byond://?src=\ref[src];choice=snakeGyro;gSet=0'>ON</a>"
+							dat += "<a href='byond://?src=[REF(src)];choice=snakeGyro;gSet=0'>ON</a>"
 						else
-							dat +="<a href='byond://?src=\ref[src];choice=snakeGyro;gSet=1'>OFF</a>"
+							dat +="<a href='byond://?src=[REF(src)];choice=snakeGyro;gSet=1'>OFF</a>"
 					else
 						if(app.labyrinth)
 							dat += {"<img src="snake_maze[app.labyrinth].png" style="position: absolute; top: 0px; left: 0px;"/>"}
@@ -1197,14 +1197,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						if(!app.snake_game.head.flicking)
 							dat += {"<img src="[head_dir].png" style="position: absolute; top: [(app.snake_game.head.y * 16 * -1) + 152]px; left: [app.snake_game.head.x * 16 - 16]px;"/>"}
 						if(app.paused)
-							dat += {"<a href='byond://?src=\ref[src];choice=snakeUnPause'><img src="snake_pause.png" style="position: absolute; top: 50px; left: 128px;"/></a>"}
+							dat += {"<a href='byond://?src=[REF(src)];choice=snakeUnPause'><img src="snake_pause.png" style="position: absolute; top: 50px; left: 128px;"/></a>"}
 					dat += {"</div>"}
 
 					dat += {"<h5>Controls</h5>
-						<a href='byond://?src=\ref[src];choice=snakeUp'><img src="pda_snake_arrow_north.png"></a>
-						<br><a href='byond://?src=\ref[src];choice=snakeLeft'><img src="pda_snake_arrow_west.png"></a>
-						<a href='byond://?src=\ref[src];choice=snakeRight'><img src="pda_snake_arrow_east.png"></a>
-						<br><a href='byond://?src=\ref[src];choice=snakeDown'><img src="pda_snake_arrow_south.png"></a>
+						<a href='byond://?src=[REF(src)];choice=snakeUp'><img src="pda_snake_arrow_north.png"></a>
+						<br><a href='byond://?src=[REF(src)];choice=snakeLeft'><img src="pda_snake_arrow_west.png"></a>
+						<a href='byond://?src=[REF(src)];choice=snakeRight'><img src="pda_snake_arrow_east.png"></a>
+						<br><a href='byond://?src=[REF(src)];choice=snakeDown'><img src="pda_snake_arrow_south.png"></a>
 						"}
 
 			if (PDA_APP_MINESWEEPER)
@@ -1221,7 +1221,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						"}
 					if(!app.ingame)
 						for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-							dat += {"<a href='byond://?src=\ref[src];choice=mineNewGame;mTile=\ref[T]'><img src="minesweeper_tile_full.png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
+							dat += {"<a href='byond://?src=[REF(src)];choice=mineNewGame;mTile=[REF(T)]'><img src="minesweeper_tile_full.png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
 					else
 						for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
 							var/mine_icon = ""
@@ -1250,13 +1250,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 									mine_icon = "minesweeper_tile_full"
 							if(T.selected && !app.minesweeper_game.gameover)
 								mine_icon += "_selected"
-							dat += {"<a href='byond://?src=\ref[src];choice=mineDig;mTile=\ref[T]'><img src="[mine_icon].png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
-						dat += {"<a href='byond://?src=\ref[src];choice=mineFlag'><img src="minesweeper_flag.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 16px;"/></a>"}
-						dat += {"<a href='byond://?src=\ref[src];choice=mineQuestion'><img src="minesweeper_question.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 48px;"/></a>"}
-					dat += {"<a href='byond://?src=\ref[src];choice=mineSettings'><img src="minesweeper_settings.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 96px;"/></a>"}
+							dat += {"<a href='byond://?src=[REF(src)];choice=mineDig;mTile=[REF(T)]'><img src="[mine_icon].png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
+						dat += {"<a href='byond://?src=[REF(src)];choice=mineFlag'><img src="minesweeper_flag.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 16px;"/></a>"}
+						dat += {"<a href='byond://?src=[REF(src)];choice=mineQuestion'><img src="minesweeper_question.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 48px;"/></a>"}
+					dat += {"<a href='byond://?src=[REF(src)];choice=mineSettings'><img src="minesweeper_settings.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 96px;"/></a>"}
 
 					dat += {"<img src="minesweeper_frame_smiley.png" style="position: absolute; top: -33px; left: [(app.minesweeper_game.columns * 8)+3]px;"/></a>"}
-					dat += {"<a href='byond://?src=\ref[src];choice=mineReset'><img src="minesweeper_smiley_[app.minesweeper_game.face].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 8)+4]px;"/></a>"}
+					dat += {"<a href='byond://?src=[REF(src)];choice=mineReset'><img src="minesweeper_smiley_[app.minesweeper_game.face].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 8)+4]px;"/></a>"}
 
 					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: 21px;"/>"}
 					var/mine_counter = app.minesweeper_game.initial_mines
@@ -1309,9 +1309,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						"}
 					switch(app.game_state)
 						if(0)	//First Statup
-							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="pda_snake_arrow_west.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="pda_snake_arrow_east.png"></a>"}
+							dat += {"<br><a href='byond://?src=[REF(src)];choice=eggPrev'><img src="pda_snake_arrow_west.png"></a><a href='byond://?src=[REF(src)];choice=eggNext'><img src="pda_snake_arrow_east.png"></a>"}
 
-							dat += {"<a href='byond://?src=\ref[src];choice=eggChose'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
+							dat += {"<a href='byond://?src=[REF(src)];choice=eggChose'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
 							dat += {"</div>"}
 						if(1)	//Hatching
 							var/eggstate = 0
@@ -1323,7 +1323,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								eggstate = 1
 							dat += {"<img src="spesspets_egg[eggstate].png" style="position: absolute; top: 32px; left: 32px;"/>"}
 							if(eggstate >= 2)
-								dat += {"<a href='byond://?src=\ref[src];choice=eggHatch'><img src="spesspets_hatch.png" style="position: absolute; top: 64px; left: 0px;"/></a>"}
+								dat += {"<a href='byond://?src=[REF(src)];choice=eggHatch'><img src="spesspets_hatch.png" style="position: absolute; top: 64px; left: 0px;"/></a>"}
 
 						if(2)	//Normal
 							if(app.ishungry)
@@ -1339,22 +1339,22 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								if(app.issleeping)
 									dat += {"<img src="spesspets_sleep.png" style="position: absolute; top: 0px; left: 32px;"/>"}
 								else
-									dat += {"<a href='byond://?src=\ref[src];choice=eggTalk'><img src="spesspets_talk.png" style="position: absolute; top: 96px; left: 0px;"/></a>"}
-									dat += {"<a href='byond://?src=\ref[src];choice=eggWalk'><img src="spesspets_walk.png" style="position: absolute; top: 96px; left: 32px;"/></a>"}
+									dat += {"<a href='byond://?src=[REF(src)];choice=eggTalk'><img src="spesspets_talk.png" style="position: absolute; top: 96px; left: 0px;"/></a>"}
+									dat += {"<a href='byond://?src=[REF(src)];choice=eggWalk'><img src="spesspets_walk.png" style="position: absolute; top: 96px; left: 32px;"/></a>"}
 									if(app.ishungry)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggFeed'><img src="spesspets_feed.png" style="position: absolute; top: 96px; left: 64px;"/></a>"}
+										dat += {"<a href='byond://?src=[REF(src)];choice=eggFeed'><img src="spesspets_feed.png" style="position: absolute; top: 96px; left: 64px;"/></a>"}
 									if(app.isdirty)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggClean'><img src="spesspets_clean.png" style="position: absolute; top: 96px; left: 96px;"/></a>"}
+										dat += {"<a href='byond://?src=[REF(src)];choice=eggClean'><img src="spesspets_clean.png" style="position: absolute; top: 96px; left: 96px;"/></a>"}
 									if(app.ishurt)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggHeal'><img src="spesspets_heal.png" style="position: absolute; top: 112px; left: 0px;"/></a>"}
-									dat += {"<a href='byond://?src=\ref[src];choice=eggFight'><img src="spesspets_fight.png" style="position: absolute; top: 112px; left: 32px;"/></a>"}
-									dat += {"<a href='byond://?src=\ref[src];choice=eggVisit'><img src="spesspets_visit.png" style="position: absolute; top: 112px; left: 64px;"/></a>"}
+										dat += {"<a href='byond://?src=[REF(src)];choice=eggHeal'><img src="spesspets_heal.png" style="position: absolute; top: 112px; left: 0px;"/></a>"}
+									dat += {"<a href='byond://?src=[REF(src)];choice=eggFight'><img src="spesspets_fight.png" style="position: absolute; top: 112px; left: 32px;"/></a>"}
+									dat += {"<a href='byond://?src=[REF(src)];choice=eggVisit'><img src="spesspets_visit.png" style="position: absolute; top: 112px; left: 64px;"/></a>"}
 									if(app.level >= 16)
-										dat += {"<a href='byond://?src=\ref[src];choice=eggWork'><img src="spesspets_work.png" style="position: absolute; top: 112px; left: 96px;"/></a>"}
+										dat += {"<a href='byond://?src=[REF(src)];choice=eggWork'><img src="spesspets_work.png" style="position: absolute; top: 112px; left: 96px;"/></a>"}
 							if(app.total_coins)
-								dat += {"<a href='byond://?src=\ref[src];choice=eggRate'><img src="spesspets_rate.png" style="position: absolute; top: 96px; left: 128px;"/></a>"}
+								dat += {"<a href='byond://?src=[REF(src)];choice=eggRate'><img src="spesspets_rate.png" style="position: absolute; top: 96px; left: 128px;"/></a>"}
 							if(app.total_coins)
-								dat += {"<a href='byond://?src=\ref[src];choice=eggCash'><img src="spesspets_cash.png" style="position: absolute; top: 112px; left: 128px;"/></a>"}
+								dat += {"<a href='byond://?src=[REF(src)];choice=eggCash'><img src="spesspets_cash.png" style="position: absolute; top: 112px; left: 128px;"/></a>"}
 
 							dat += {"</div>"}
 						if(3)	//Dead
@@ -2117,7 +2117,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
 		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
-		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
+		P.tnote += "<i><b>&larr; From <a href='byond://?src=[REF(P)];choice=Message;target=[REF(src)]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
@@ -2146,8 +2146,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			L = get_holder_of_type(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
-		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
+			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=[REF(P)];choice=Message;skiprefresh=1;target=[REF(src)]'>Reply</a>)", 2)
+		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=[REF(src)];choice=Message;skiprefresh=1;target=[REF(P)]'>[P]</a> has been sent.</span>")
 		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")

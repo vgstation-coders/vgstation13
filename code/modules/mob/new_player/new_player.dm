@@ -24,19 +24,19 @@
 /mob/new_player/proc/new_player_panel_proc()
 	var/output = "<div align='center'>"
 
-	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
+	output += {"<p><a href='byond://?src=[REF(src)];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 		if(!ready)
-			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
+			output += "<p><a href='byond://?src=[REF(src)];ready=1'>Declare Ready</A></p>"
 		else
-			output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
+			output += "<p><b>You are ready</b> (<a href='byond://?src=[REF(src)];ready=2'>Cancel</A>)</p>"
 
 	else
 		ready = 0 // prevent setup character issues
-		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>
-			<p><a href='byond://?src=\ref[src];late_join=1'>Join Game!</A></p>"}
+		output += {"<a href='byond://?src=[REF(src)];manifest=1'>View the Crew Manifest</A><br>
+			<p><a href='byond://?src=[REF(src)];late_join=1'>Join Game!</A></p>"}
 
-	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
+	output += "<p><a href='byond://?src=[REF(src)];observe=1'>Observe</A></p>"
 	if(!IsGuestKey(src.key))
 		establish_db_connection()
 
@@ -52,9 +52,9 @@
 				break
 
 			if(newpoll)
-				output += "<p><b><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A> (NEW!)</b></p>"
+				output += "<p><b><a href='byond://?src=[REF(src)];showpoll=1'>Show Player Polls</A> (NEW!)</b></p>"
 			else
-				output += "<p><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A></p>"
+				output += "<p><a href='byond://?src=[REF(src)];showpoll=1'>Show Player Polls</A></p>"
 
 	output += "</div>"
 
@@ -407,7 +407,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
-			dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
+			dat += "<a href='byond://?src=[REF(src)];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
 
 	dat += "</center>"
 	src << browse(dat, "window=latechoices;size=300x640;can_close=1")

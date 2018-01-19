@@ -172,7 +172,7 @@
 	<SPAN CLASS='big bold center red'>You are now a traitor!</SPAN>
 	"})
 	var/wikiroute = role_wiki[ROLE_TRAITOR]
-	to_chat(traitor.current, "<span class='info'><a HREF='?src=\ref[traitor.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+	to_chat(traitor.current, "<span class='info'><a HREF='?src=[REF(traitor.current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 	var/obj_count = 1
 
@@ -364,7 +364,7 @@
 		traitor_mob.mind.store_memory("<b>Potential Collaborator</b>: [M.real_name]")
 
 /datum/game_mode/proc/update_traitor_icons_added(datum/mind/traitor_mind)
-	var/ref = "\ref[traitor_mind]"
+	var/ref = "[REF(traitor_mind)]"
 	if(ref in implanter)
 		if(traitor_mind.current)
 			if(traitor_mind.current.client)
@@ -416,7 +416,7 @@
 
 /datum/game_mode/proc/remove_traitor_mind(datum/mind/traitor_mind, datum/mind/head)
 	//var/list/removal
-	var/ref = "\ref[head]"
+	var/ref = "[REF(head)]"
 	if(ref in implanter)
 		implanter[ref] -= traitor_mind
 	implanted -= traitor_mind

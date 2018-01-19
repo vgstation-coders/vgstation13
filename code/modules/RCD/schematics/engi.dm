@@ -151,9 +151,9 @@
 	. = "<p>"
 	. += {"
 
-		<form action="?src=\ref[master.interface]" method="get">
-			<input type="hidden" name="src" value="\ref[master.interface]"/>
-			[istype(D) ? "<input type=\"hidden\" name = \"target\" value=\"\ref[D]\"/>" : ""]
+		<form action="?src=[REF(master.interface)]" method="get">
+			<input type="hidden" name="src" value="[REF(master.interface)]"/>
+			[istype(D) ? "<input type=\"hidden\" name = \"target\" value=\"[REF(D)]\"/>" : ""]
 			<input type="text" name="new_name" value="[istype(D) ? D.name : selected_name]"/>
 			<input type="submit" name="act" value="Save Name"/>
 		</form><br/>
@@ -180,9 +180,9 @@
 
 
 
-		<form action="?src=\ref[master.interface]" method="get" id="accessList" style="display:inline-block;font-size:100%">
-			<input type="hidden" name="src" value="\ref[master.interface]"/>
-			[istype(D) ? "<input type=\"hidden\" name = \"target\" value=\"\ref[D]\"/>" : ""]
+		<form action="?src=[REF(master.interface)]" method="get" id="accessList" style="display:inline-block;font-size:100%">
+			<input type="hidden" name="src" value="[REF(master.interface)]"/>
+			[istype(D) ? "<input type=\"hidden\" name = \"target\" value=\"[REF(D)]\"/>" : ""]
 			<input type="submit" value="Save Access Settings"/><br/><br/>
 
 

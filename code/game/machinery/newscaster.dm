@@ -245,14 +245,14 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat += {"Welcome to Newscasting Unit #[src.unit_no].<BR> Interface & News networks Operational.
 					<BR><FONT SIZE=1>property of Nanotrasen Inc</FONT>"}
 				if(news_network.wanted_issue)
-					dat+= "<HR><A href='?src=\ref[src];view_wanted=1'>Read Wanted Issue</A>"
+					dat+= "<HR><A href='?src=[REF(src)];view_wanted=1'>Read Wanted Issue</A>"
 
-				dat += {"<HR><BR><A href='?src=\ref[src];create_channel=1'>Create Feed Channel</A>
-					<BR><A href='?src=\ref[src];view=1'>View Feed Channels</A>
-					<BR><A href='?src=\ref[src];create_feed_story=1'>Submit new Feed story</A>
-					<BR><A href='?src=\ref[src];menu_paper=1'>Print newspaper</A>
-					<BR><A href='?src=\ref[src];refresh=1'>Re-scan User</A>
-					<BR><BR><A href='?src=\ref[M];mach_close=newscaster_main'>Exit</A>"}
+				dat += {"<HR><BR><A href='?src=[REF(src)];create_channel=1'>Create Feed Channel</A>
+					<BR><A href='?src=[REF(src)];view=1'>View Feed Channels</A>
+					<BR><A href='?src=[REF(src)];create_feed_story=1'>Submit new Feed story</A>
+					<BR><A href='?src=[REF(src)];menu_paper=1'>Print newspaper</A>
+					<BR><A href='?src=[REF(src)];refresh=1'>Re-scan User</A>
+					<BR><BR><A href='?src=[REF(M)];mach_close=newscaster_main'>Exit</A>"}
 				if(src.securityCaster)
 					var/wanted_already = 0
 					if(news_network.wanted_issue)
@@ -260,9 +260,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 					dat += {"<HR><B>Feed Security functions:</B><BR>
-						<BR><A href='?src=\ref[src];menu_wanted=1'>[(wanted_already) ? ("Manage") : ("Publish")] \"Wanted\" Issue</A>
-						<BR><A href='?src=\ref[src];menu_censor_story=1'>Censor Feed Stories</A>
-						<BR><A href='?src=\ref[src];menu_censor_channel=1'>Mark Feed Channel with Nanotrasen D-Notice</A>"}
+						<BR><A href='?src=[REF(src)];menu_wanted=1'>[(wanted_already) ? ("Manage") : ("Publish")] \"Wanted\" Issue</A>
+						<BR><A href='?src=[REF(src)];menu_censor_story=1'>Censor Feed Stories</A>
+						<BR><A href='?src=[REF(src)];menu_censor_channel=1'>Mark Feed Channel with Nanotrasen D-Notice</A>"}
 				dat+="<BR><HR>The newscaster recognises you as: <FONT COLOR='green'>[src.scanned_user]</FONT>"
 			if(NEWSCASTER_CHANNEL_LIST)
 				dat+= "Station Feed Channels<HR>"
@@ -271,9 +271,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
 						if(CHANNEL.is_admin_channel)
-							dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen '><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
+							dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen '><A href='?src=[REF(src)];show_channel=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 						else
-							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
+							dat+="<B><A href='?src=[REF(src)];show_channel=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
 					/*for(var/datum/feed_channel/CHANNEL in src.channel_list)
 						dat+="<B>[CHANNEL.channel_name]: </B> <BR><FONT SIZE=1>\[created by: <FONT COLOR='maroon'>[CHANNEL.author]</FONT>\]</FONT><BR><BR>"
 						if( isemptylist(CHANNEL.messages) )
@@ -283,38 +283,38 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 								dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"*/
 
 
-				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
+				dat += {"<BR><HR><A href='?src=[REF(src)];refresh=1'>Refresh</A>
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
 			if(NEWSCASTER_NEW_CHANNEL)
 
 				dat += {"Creating new Feed Channel...
-					<HR><B><A href='?src=\ref[src];set_channel_name=1'>Channel Name</A>:</B> [src.channel_name]<BR>
+					<HR><B><A href='?src=[REF(src)];set_channel_name=1'>Channel Name</A>:</B> [src.channel_name]<BR>
 					<B>Channel Author:</B> <FONT COLOR='green'>[src.scanned_user]</FONT><BR>
-					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(src.c_locked) ? ("NO") : ("YES")]<BR><BR>
-					<BR><A href='?src=\ref[src];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
+					<B><A href='?src=[REF(src)];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(src.c_locked) ? ("NO") : ("YES")]<BR><BR>
+					<BR><A href='?src=[REF(src)];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
 			if(NEWSCASTER_NEW_MESSAGE)
 
 				dat += {"Creating new Feed Message...
-					<HR><B><A href='?src=\ref[src];set_channel_receiving=1'>Receiving Channel</A>:</B> [src.channel_name]<BR>
+					<HR><B><A href='?src=[REF(src)];set_channel_receiving=1'>Receiving Channel</A>:</B> [src.channel_name]<BR>
 					<B>Message Author:</B> <FONT COLOR='green'>[src.scanned_user]</FONT><BR>
-					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [src.msg] <BR>"}
+					<B><A href='?src=[REF(src)];set_new_message=1'>Message Body</A>:</B> [src.msg] <BR>"}
 
 				/*if(isAI(user))
-					dat +="<B><A href='?src=\ref[src];upload_photo=1'>Upload Photo</A>:</B>  [(src.photo ? "Photo Uploaded" : "No Photo")]<BR>"
+					dat +="<B><A href='?src=[REF(src)];upload_photo=1'>Upload Photo</A>:</B>  [(src.photo ? "Photo Uploaded" : "No Photo")]<BR>"
 				else
-					dat +="<B><A href='?src=\ref[src];set_attachment=1'>Attach Photo</A>:</B>  [(src.photo ? "Photo Attached" : "No Photo")]<BR>"
+					dat +="<B><A href='?src=[REF(src)];set_attachment=1'>Attach Photo</A>:</B>  [(src.photo ? "Photo Attached" : "No Photo")]<BR>"
 				*/
 				dat += AttachPhotoButton(user)
 
-				dat += "<BR><A href='?src=\ref[src];submit_new_message=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"
+				dat += "<BR><A href='?src=[REF(src)];submit_new_message=1'>Submit</A><BR><BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"
 			if(NEWSCASTER_NEW_MESSAGE_SUCCESS)
 
 				dat += {"Feed story successfully submitted to [src.channel_name].<BR><BR>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
 			if(NEWSCASTER_NEW_CHANNEL_SUCCESS)
 
 				dat += {"Feed Channel [src.channel_name] created successfully.<BR><BR>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
 			if(NEWSCASTER_NEW_MESSAGE_ERROR)
 				dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed story to Network.</B></FONT><HR><BR>"
 				if(src.channel_name=="")
@@ -324,7 +324,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(src.msg == "" || src.msg == "\[REDACTED\]")
 					dat+="<FONT COLOR='maroon'>�Invalid message body.</FONT><BR>"
 
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A><BR>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A><BR>"
 			if(NEWSCASTER_NEW_CHANNEL_ERROR)
 				dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed Channel to Network.</B></FONT><HR><BR>"
 				//var/list/existing_channels = list()            //Let's get dem existing channels - OBSOLETE
@@ -348,7 +348,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT COLOR='maroon'>�Channel name already in use.</FONT><BR>"
 				if(src.scanned_user=="Unknown")
 					dat+="<FONT COLOR='maroon'>�Channel author unverified.</FONT><BR>"
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_CHANNEL]'>Return</A><BR>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_NEW_CHANNEL]'>Return</A><BR>"
 			if(NEWSCASTER_PRINT_NEWSPAPER)
 				var/total_num=length(news_network.network_channels)
 				var/active_num=total_num
@@ -361,8 +361,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 				dat += {"Network currently serves a total of [total_num] Feed channels, [active_num] of which are active, and a total of [message_num] Feed Stories.
 					<BR><BR><B>Liquid Paper remaining:</B> [(src.paper_remaining) *100 ] cm^3
-					<BR><BR><A href='?src=\ref[src];print_paper=[0]'>Print Paper</A>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"}
+					<BR><BR><A href='?src=[REF(src)];print_paper=[0]'>Print Paper</A>
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"}
 			if(NEWSCASTER_VIEW_CHANNEL)
 				dat+="<B>[src.viewing_channel.channel_name]: </B><FONT SIZE=1>\[created by: <FONT COLOR='maroon'>[src.viewing_channel.author]</FONT>\]</FONT><HR>"
 				if(src.viewing_channel.censored)
@@ -379,11 +379,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							dat+="-[MESSAGE.body] <BR>"
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '180'></a><BR><BR>"
+								dat+="<a href='?src=[REF(src)];show_photo_info=[REF(MESSAGE)]'><img src='tmp_photo[i].png' width = '180'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
-				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CHANNEL_LIST]'>Back</A>"}
+				dat += {"<BR><HR><A href='?src=[REF(src)];refresh=1'>Refresh</A>
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_CHANNEL_LIST]'>Back</A>"}
 			if(NEWSCASTER_CENSORSHIP_MENU)
 
 				dat += {"<B>Nanotrasen Feed Censorship Tool</B><BR>
@@ -394,8 +394,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<I>No feed channels found active...</I><BR>"
 				else
 					for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-						dat+="<A href='?src=\ref[src];pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"
+						dat+="<A href='?src=[REF(src)];pick_censor_channel=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"
 			if(NEWSCASTER_D_NOTICE_MENU)
 
 				dat += {"<B>Nanotrasen D-Notice Handler</B><HR>
@@ -406,25 +406,25 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<I>No feed channels found active...</I><BR>"
 				else
 					for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-						dat+="<A href='?src=\ref[src];pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+						dat+="<A href='?src=[REF(src)];pick_d_notice=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
 
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Back</A>"
 			if(NEWSCASTER_CENSORSHIP_CHANNEL)
 
 				dat += {"<B>[src.viewing_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.viewing_channel.author]</FONT> \]</FONT><BR>
-					<FONT SIZE=2><A href='?src=\ref[src];censor_channel_author=\ref[src.viewing_channel]'>[(src.viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
+					<FONT SIZE=2><A href='?src=[REF(src)];censor_channel_author=[REF(src.viewing_channel)]'>[(src.viewing_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>"}
 				if( isemptylist(src.viewing_channel.messages) )
 					dat+="<I>No feed messages found in channel...</I><BR>"
 				else
 					for(var/datum/feed_message/MESSAGE in src.viewing_channel.messages)
 
 						dat += {"-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
-							<FONT SIZE=2><A href='?src=\ref[src];censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
+							<FONT SIZE=2><A href='?src=[REF(src)];censor_channel_story_body=[REF(MESSAGE)]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=[REF(src)];censor_channel_story_author=[REF(MESSAGE)]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"}
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_CENSORSHIP_MENU]'>Back</A>"
 			if(NEWSCASTER_D_NOTICE_CHANNEL)
 
 				dat += {"<B>[src.viewing_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.viewing_channel.author]</FONT> \]</FONT><BR>
-					Channel messages listed below. If you deem them dangerous to the station, you can <A href='?src=\ref[src];toggle_d_notice=\ref[src.viewing_channel]'>Bestow a D-Notice upon the channel</A>.<HR>"}
+					Channel messages listed below. If you deem them dangerous to the station, you can <A href='?src=[REF(src)];toggle_d_notice=[REF(src.viewing_channel)]'>Bestow a D-Notice upon the channel</A>.<HR>"}
 				if(src.viewing_channel.censored)
 
 					dat += {"<FONT COLOR='red'><B>ATTENTION: </B></FONT>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<BR>
@@ -436,7 +436,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						for(var/datum/feed_message/MESSAGE in src.viewing_channel.messages)
 							dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
 				dat+="<B>Wanted Issue Handler:</B>"
 				var/wanted_already = 0
@@ -449,21 +449,21 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT SIZE=2><BR><I>A wanted issue is already in Feed Circulation. You can edit or cancel it below.</FONT></I>"
 
 				dat += {"<HR>
-					<A href='?src=\ref[src];set_wanted_name=1'>Criminal Name</A>: [src.channel_name] <BR>
-					<A href='?src=\ref[src];set_wanted_desc=1'>Description</A>: [src.msg] <BR>"}
+					<A href='?src=[REF(src)];set_wanted_name=1'>Criminal Name</A>: [src.channel_name] <BR>
+					<A href='?src=[REF(src)];set_wanted_desc=1'>Description</A>: [src.msg] <BR>"}
 				dat += AttachPhotoButton(user)
 				if(wanted_already)
 					dat+="<B>Wanted Issue created by:</B><FONT COLOR='green'> [news_network.wanted_issue.backup_author]</FONT><BR>"
 				else
 					dat+="<B>Wanted Issue will be created under prosecutor:</B><FONT COLOR='green'> [src.scanned_user]</FONT><BR>"
-				dat+="<BR><A href='?src=\ref[src];submit_wanted=[end_param]'>[(wanted_already) ? ("Edit Issue") : ("Submit")]</A>"
+				dat+="<BR><A href='?src=[REF(src)];submit_wanted=[end_param]'>[(wanted_already) ? ("Edit Issue") : ("Submit")]</A>"
 				if(wanted_already)
-					dat+="<BR><A href='?src=\ref[src];cancel_wanted=1'>Take down Issue</A>"
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"
+					dat+="<BR><A href='?src=[REF(src)];cancel_wanted=1'>Take down Issue</A>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"
 			if(NEWSCASTER_WANTED_SUCCESS)
 
 				dat += {"<FONT COLOR='green'>Wanted issue for [src.channel_name] is now in Network Circulation.</FONT><BR><BR>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
 			if(NEWSCASTER_WANTED_ERROR)
 				dat+="<B><FONT COLOR='maroon'>ERROR: Wanted Issue rejected by Network.</B></FONT><HR><BR>"
 				if(src.channel_name=="" || src.channel_name == "\[REDACTED\]")
@@ -472,11 +472,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT COLOR='maroon'>�Issue author unverified.</FONT><BR>"
 				if(src.msg == "" || src.msg == "\[REDACTED\]")
 					dat+="<FONT COLOR='maroon'>�Invalid description.</FONT><BR>"
-				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"
+				dat+="<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"
 			if(NEWSCASTER_WANTED_DELETED)
 
 				dat += {"<B>Wanted Issue successfully deleted from Circulation</B><BR>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
 			if(NEWSCASTER_WANTED_SHOW)
 
 				dat += {"<B><FONT COLOR ='maroon'>-- STATIONWIDE WANTED ISSUE --</B></FONT><BR><FONT SIZE=2>\[Submitted by: <FONT COLOR='green'>[news_network.wanted_issue.backup_author]</FONT>\]</FONT><HR>
@@ -488,19 +488,19 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<BR><img src='tmp_photow.png' width = '180'>"
 				else
 					dat+="None"
-				dat+="<BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A><BR>"
+				dat+="<BR><BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Back</A><BR>"
 			if(NEWSCASTER_WANTED_EDIT)
 
 				dat += {"<FONT COLOR='green'>Wanted issue for [src.channel_name] successfully edited.</FONT><BR><BR>
-					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
+					<BR><A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A><BR>"}
 			if(NEWSCASTER_PRINT_NEWSPAPER_SUCCESS)
 
 				dat += {"<FONT COLOR='green'>Printing successfull. Please receive your newspaper from the bottom of the machine.</FONT><BR><BR>
-					<A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A>"}
+					<A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A>"}
 			if(NEWSCASTER_PRINT_NEWSPAPER_ERROR)
 
 				dat += {"<FONT COLOR='maroon'>Unable to print newspaper. Insufficient paper. Please notify maintenance personnell to refill machine storage.</FONT><BR><BR>
-					<A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Return</A>"}
+					<A href='?src=[REF(src)];setScreen=[NEWSCASTER_MENU]'>Return</A>"}
 			else
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
@@ -1014,7 +1014,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else
 			name = "Eject Photo"
 
-	return "<B><A href='?src=\ref[src];[href]'>[name]</A></B><BR>"
+	return "<B><A href='?src=[REF(src)];[href]'>[name]</A></B><BR>"
 
 //########################################################################################################################
 //###################################### NEWSPAPER! ######################################################################
@@ -1080,7 +1080,7 @@ obj/item/weapon/newspaper/attack_self(mob/user as mob)
 					dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[src.scribble]\"</I>"
-				dat+= "<HR><DIV STYLE='float:right;'><A href='?src=\ref[src];next_page=1'>Next Page</A></DIV> <div style='float:left;'><A href='?src=\ref[usr];mach_close=newspaper_main'>Done reading</A></DIV>"
+				dat+= "<HR><DIV STYLE='float:right;'><A href='?src=[REF(src)];next_page=1'>Next Page</A></DIV> <div style='float:left;'><A href='?src=[REF(usr)];mach_close=newspaper_main'>Done reading</A></DIV>"
 			if(NEWSPAPER_CONTENT_PAGE) // X channel pages inbetween.
 				for(var/datum/feed_channel/NP in src.news_content)
 					src.pages++ //Let's get it right again.
@@ -1104,7 +1104,7 @@ obj/item/weapon/newspaper/attack_self(mob/user as mob)
 						dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[src.scribble]\"</I>"
-				dat+= "<BR><HR><DIV STYLE='float:left;'><A href='?src=\ref[src];prev_page=1'>Previous Page</A></DIV> <DIV STYLE='float:right;'><A href='?src=\ref[src];next_page=1'>Next Page</A></DIV>"
+				dat+= "<BR><HR><DIV STYLE='float:left;'><A href='?src=[REF(src)];prev_page=1'>Previous Page</A></DIV> <DIV STYLE='float:right;'><A href='?src=[REF(src)];next_page=1'>Next Page</A></DIV>"
 			if(NEWSPAPER_LAST_PAGE) //Last page
 				for(var/datum/feed_channel/NP in src.news_content)
 					src.pages++
@@ -1123,7 +1123,7 @@ obj/item/weapon/newspaper/attack_self(mob/user as mob)
 					dat+="<I>Apart from some uninteresting Classified ads, there's nothing on this page...</I>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[src.scribble]\"</I>"
-				dat+= "<HR><DIV STYLE='float:left;'><A href='?src=\ref[src];prev_page=1'>Previous Page</A></DIV>"
+				dat+= "<HR><DIV STYLE='float:left;'><A href='?src=[REF(src)];prev_page=1'>Previous Page</A></DIV>"
 			else
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 

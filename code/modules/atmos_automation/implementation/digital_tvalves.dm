@@ -20,7 +20,7 @@
     return 0
 
 /datum/automation/set_tvalve_state/GetText()
-    return "Set digital T-valve <a href=\"?src=\ref[src];set_subject=1\">[fmtString(valve)]</a> to <a href=\"?src=\ref[src];set_state=1\">[state?"go to the side":"go straight"]</a>."
+    return "Set digital T-valve <a href=\"?src=[REF(src)];set_subject=1\">[fmtString(valve)]</a> to <a href=\"?src=[REF(src)];set_state=1\">[state?"go to the side":"go straight"]</a>."
 
 /datum/automation/set_tvalve_state/Topic(href,href_list)
     if(href_list["set_state"])

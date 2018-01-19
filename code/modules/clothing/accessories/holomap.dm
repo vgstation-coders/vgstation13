@@ -96,7 +96,7 @@ var/list/holomap_cache = list()
 	deactivate_holomap()
 
 	for(var/cacheIcon in holomap_cache)
-		if(findtext(cacheIcon, "\ref[src]"))
+		if(findtext(cacheIcon, "[REF(src)]"))
 			holomap_cache -= cacheIcon
 	..()
 
@@ -172,12 +172,12 @@ var/list/holomap_cache = list()
 	var/holomap_bgmap
 
 	if(T.z == map.zCentcomm)
-		holomap_bgmap = "background_\ref[src]_[map.zCentcomm]"
+		holomap_bgmap = "background_[REF(src)]_[map.zCentcomm]"
 
 		if(!(holomap_bgmap in holomap_cache))
 			holomap_cache[holomap_bgmap] = image(centcommMiniMaps["[holomap_filter]"])
 	else
-		holomap_bgmap = "background_\ref[src]_[T.z]"
+		holomap_bgmap = "background_[REF(src)]_[T.z]"
 
 		if(!(holomap_bgmap in holomap_cache))
 			holomap_cache[holomap_bgmap] = image(holoMiniMaps[T.z])
@@ -245,7 +245,7 @@ var/list/holomap_cache = list()
 
 		if(mob_indicator != HOLOMAP_ERROR)
 
-			var/holomap_marker = "marker_\ref[src]_\ref[HC]_[HC.marker_prefix]_[mob_indicator]"
+			var/holomap_marker = "marker_[REF(src)]_[REF(HC)]_[HC.marker_prefix]_[mob_indicator]"
 
 			if(!(holomap_marker in holomap_cache))
 				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[HC.marker_prefix][mob_indicator]")
@@ -276,7 +276,7 @@ var/list/holomap_cache = list()
 	var/turf/T = get_turf(src)
 	for(var/obj/mecha/combat/marauder/maraud in mechas_list)
 		if(!istype(maraud,/obj/mecha/combat/marauder/series) && !istype(maraud,/obj/mecha/combat/marauder/mauler) && (T.z == maraud.z))//ignore custom-built and syndicate ones
-			var/holomap_marker = "marker_\ref[src]_\ref[maraud]_[maraud.occupant ? 1 : 0]"
+			var/holomap_marker = "marker_[REF(src)]_[REF(maraud)]_[maraud.occupant ? 1 : 0]"
 
 			if(!(holomap_marker in holomap_cache))
 				var/pref = "mar"
@@ -301,7 +301,7 @@ var/list/holomap_cache = list()
 	var/turf/T = get_turf(src)
 	for(var/obj/mecha/combat/marauder/mauler/maul in mechas_list)
 		if(T.z == maul.z)
-			var/holomap_marker = "marker_\ref[src]_\ref[maul]_[maul.occupant ? 1 : 0]"
+			var/holomap_marker = "marker_[REF(src)]_[REF(maul)]_[maul.occupant ? 1 : 0]"
 
 			if(!(holomap_marker in holomap_cache))
 				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"mau[maul.occupant ? 1 : 0]")
@@ -323,7 +323,7 @@ var/list/holomap_cache = list()
 	var/turf/T = get_turf(src)
 	if(T.z == map.zMainStation)
 		var/image/bgmap
-		var/holomap_bgmap = "background_\ref[src]_[T.z]_areas"
+		var/holomap_bgmap = "background_[REF(src)]_[T.z]_areas"
 		if(!(holomap_bgmap in holomap_cache))
 			holomap_cache[holomap_bgmap] = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[map.zMainStation]"])
 

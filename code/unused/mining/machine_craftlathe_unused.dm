@@ -70,7 +70,7 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 		if (CI == selected)
 			dat += text("[CI.name] ([CI.amount])<br>")
 		else
-			dat += text("<A href='?src=\ref[src];select=[i]'>[CI.name]</a> ([CI.amount])<br>")
+			dat += text("<A href='?src=[REF(src)];select=[i]'>[CI.name]</a> ([CI.amount])<br>")
 
 	dat += text("</td><td valign='top'>")
 
@@ -85,16 +85,16 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 		for (j = 1; j <= 3; j++)
 			k = i * 3 + j
 			if (current_recipe[k])
-				dat += text("	<td><A href='?src=\ref[src];remove=[k]'>[current_recipe[k]]</a></td>")
+				dat += text("	<td><A href='?src=[REF(src)];remove=[k]'>[current_recipe[k]]</a></td>")
 			else
-				dat += text("	<td><A href='?src=\ref[src];add=[k]'>----</a></td>")
+				dat += text("	<td><A href='?src=[REF(src)];add=[k]'>----</a></td>")
 		dat += text("	</tr>")
 	dat += text("	</table>")
 
 	dat += text("<br><br>")
 	dat += text("<b>Will make: </b>")
 	if (make)
-		dat += text("<A href='?src=\ref[src];make=[1]'>[make.name]</a>")
+		dat += text("<A href='?src=[REF(src)];make=[1]'>[make.name]</a>")
 	else
 		dat += text("nothing useful")
 

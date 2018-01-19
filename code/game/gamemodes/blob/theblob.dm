@@ -125,7 +125,7 @@ var/list/blob_looks
 		for(var/obj/effect/blob/core/C in range(loc,4))
 			if((C != src) && C.overmind && (C.overmind.blob_warning <= world.time))
 				C.overmind.blob_warning = world.time + (10 SECONDS)
-				to_chat(C.overmind,"<span class='danger'>A blob died near your core!</span> <b><a href='?src=\ref[C.overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
+				to_chat(C.overmind,"<span class='danger'>A blob died near your core!</span> <b><a href='?src=[REF(C.overmind)];blobjump=[REF(loc)]'>(JUMP)</a></b>")
 
 	overmind = null
 	..()
@@ -143,7 +143,7 @@ var/list/blob_looks
 
 /obj/effect/blob/beam_connect(var/obj/effect/beam/B)
 	..()
-	last_beamchecks["\ref[B]"]=world.time+1
+	last_beamchecks["[REF(B)]"]=world.time+1
 	apply_beam_damage(B) // Contact damage for larger beams (deals 1/10th second of damage)
 	if(!custom_process && !(src in processing_objects))
 		processing_objects.Add(src)
@@ -152,7 +152,7 @@ var/list/blob_looks
 /obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
 	..()
 	apply_beam_damage(B)
-	last_beamchecks.Remove("\ref[B]") // RIP
+	last_beamchecks.Remove("[REF(B)]") // RIP
 	update_health()
 	update_icon()
 	if(beams.len == 0)
@@ -160,7 +160,7 @@ var/list/blob_looks
 			processing_objects.Remove(src)
 
 /obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
-	var/lastcheck=last_beamchecks["\ref[B]"]
+	var/lastcheck=last_beamchecks["[REF(B)]"]
 
 	// Standard damage formula / 2
 	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage() / 2)
@@ -169,7 +169,7 @@ var/list/blob_looks
 	health -= damage
 
 	// Update check time.
-	last_beamchecks["\ref[B]"]=world.time
+	last_beamchecks["[REF(B)]"]=world.time
 
 /obj/effect/blob/handle_beams()
 	// New beam damage code (per-tick)

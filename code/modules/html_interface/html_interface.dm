@@ -138,20 +138,20 @@ mob/verb/test()
 	register_asset("html_interface_icons.css",	'html_interface_icons.css')
 
 /datum/html_interface/proc/createWindow(datum/html_interface_client/hclient)
-	winclone(hclient.client, "window", "browser_\ref[src]")
+	winclone(hclient.client, "window", "browser_[REF(src)]")
 
 	var/list/params = list(
 		"size"        = "[width]x[height]",
 		"statusbar"   = "false",
-		"on-close"    = "byond://?src=\ref[src]&html_interface_action=onclose"
+		"on-close"    = "byond://?src=[REF(src)]&html_interface_action=onclose"
 	)
 
 	if (hclient.client.hi_last_pos)
 		params["pos"] = "[hclient.client.hi_last_pos]"
 
-	winset(hclient.client, "browser_\ref[src]", list2params(params))
+	winset(hclient.client, "browser_[REF(src)]", list2params(params))
 
-	winset(hclient.client, "browser_\ref[src].browser", list2params(list("parent" = "browser_\ref[src]", "type" = "browser", "pos" = "0,0", "size" = "[width]x[height]", "anchor1" = "0,0", "anchor2" = "100,100", "use-title" = "true", "auto-format" = "false")))
+	winset(hclient.client, "browser_[REF(src)].browser", list2params(list("parent" = "browser_[REF(src)]", "type" = "browser", "pos" = "0,0", "size" = "[width]x[height]", "anchor1" = "0,0", "anchor2" = "100,100", "use-title" = "true", "auto-format" = "false")))
 
 	sendAssets(hclient.client)
 	
@@ -184,7 +184,7 @@ mob/verb/test()
 
 		if (istype(hclient))
 			if (hclient.is_loaded)
-				hclient.client << output(list2params(list(jscript)), "browser_\ref[src].browser:eval")
+				hclient.client << output(list2params(list(jscript)), "browser_[REF(src)].browser:eval")
 	else
 		for (var/client in src.clients) if(src.clients[client]) src.executeJavaScript(jscript, src.clients[client])
 
@@ -196,7 +196,7 @@ mob/verb/test()
 
 		if (istype(hclient))
 			if (hclient.is_loaded)
-				hclient.client << output(list2params(arguments), "browser_\ref[src].browser:[func]")
+				hclient.client << output(list2params(arguments), "browser_[REF(src)].browser:[func]")
 	else
 		for (var/client in src.clients) if (src.clients[client]) src.callJavaScript(func, arguments, src.clients[client])
 
@@ -230,20 +230,20 @@ mob/verb/test()
 		// /client/proc/send_resources() executes this per client to avoid the bug, but by using it here files may be deleted just as the HTML is loaded,
 		// causing file not found errors.
 //		src.sendResources(hclient.client)
-		if(oldwindow && winexists(hclient.client, "browser_\ref[oldwindow]"))
-			//winshow(hclient.client, "browser_\ref[oldwindow]", FALSE)
+		if(oldwindow && winexists(hclient.client, "browser_[REF(oldwindow)]"))
+			//winshow(hclient.client, "browser_[REF(oldwindow)]", FALSE)
 			oldwindow.hide(hclient)
 
-		if (winexists(hclient.client, "browser_\ref[src]"))
+		if (winexists(hclient.client, "browser_[REF(src)]"))
 			src._renderTitle(hclient, TRUE)
 			src._renderLayout(hclient)
-			if(winget(hclient.client, "browser_\ref[src]", "is-visible") == "false")
-				winshow(hclient.client, "browser_\ref[src]", TRUE)
+			if(winget(hclient.client, "browser_[REF(src)]", "is-visible") == "false")
+				winshow(hclient.client, "browser_[REF(src)]", TRUE)
 		else
 			src.createWindow(hclient)
 			hclient.is_loaded = FALSE
-			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "\ref[src]"), "</head>", "[head]</head>"), "browser_\ref[src].browser")
-			winshow(hclient.client, "browser_\ref[src]", TRUE)
+			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "[REF(src)]"), "</head>", "[head]</head>"), "browser_[REF(src)].browser")
+			winshow(hclient.client, "browser_[REF(src)]", TRUE)
 
 		while (hclient.client && hclient.active && !hclient.is_loaded) sleep(2)
 
@@ -257,10 +257,10 @@ mob/verb/test()
 			if (!src.clients.len)
 				src.clients = null
 
-		hclient.client.hi_last_pos = winget(hclient.client, "browser_\ref[src]" ,"pos")
+		hclient.client.hi_last_pos = winget(hclient.client, "browser_[REF(src)]" ,"pos")
 
-		winshow(hclient.client, "browser_\ref[src]", FALSE)
-		winset(hclient.client, "browser_\ref[src]", "parent=none")
+		winshow(hclient.client, "browser_[REF(src)]", FALSE)
+		winset(hclient.client, "browser_[REF(src)]", "parent=none")
 
 		if (hascall(src.ref, "hiOnHide"))
 			call(src.ref, "hiOnHide")(hclient)
@@ -346,7 +346,7 @@ mob/verb/test()
 
 			src.specificRenderTitle(hclient)
 
-			hclient.client << output(list2params(list(title)), "browser_\ref[src].browser:setTitle")
+			hclient.client << output(list2params(list(title)), "browser_[REF(src)].browser:setTitle")
 
 /datum/html_interface/proc/_renderLayout(datum/html_interface_client/hclient, ignore_loaded = FALSE)
 	if (hclient && (ignore_loaded || hclient.is_loaded))
@@ -356,7 +356,7 @@ mob/verb/test()
 		if (html != hclient.layout)
 			hclient.layout = html
 
-			hclient.client << output(list2params(list(html)), "browser_\ref[src].browser:updateLayout")
+			hclient.client << output(list2params(list(html)), "browser_[REF(src)].browser:updateLayout")
 
 			for (var/id in src.content_elements) src._renderContent(id, hclient, ignore_loaded = ignore_loaded)
 
@@ -368,7 +368,7 @@ mob/verb/test()
 		if (ignore_cache || !(id in hclient.content_elements) || html != hclient.content_elements[id])
 			hclient.content_elements[id] = html
 
-			hclient.client << output(list2params(list(id, html)), "browser_\ref[src].browser:updateContent")
+			hclient.client << output(list2params(list(id, html)), "browser_[REF(src)].browser:updateContent")
 
 /datum/html_interface/Topic(href, href_list[])
 	var/datum/html_interface_client/hclient = getClient(usr.client)

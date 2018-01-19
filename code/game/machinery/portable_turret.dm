@@ -109,7 +109,7 @@
 Status: []<BR>
 Behaviour controls are [src.locked ? "locked" : "unlocked"]"},
 
-"<A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A>" )
+"<A href='?src=[REF(src)];power=1'>[src.on ? "On" : "Off"]</A>" )
 
 		if(!src.locked)
 			dat += text({"<BR>
@@ -119,11 +119,11 @@ Neutralize Identified Criminals: []<BR>
 Neutralize All Non-Security and Non-Command Personnel: []<BR>
 Neutralize All Unidentified Life Signs: []<BR>"},
 
-"<A href='?src=\ref[src];operation=authweapon'>[src.auth_weapons ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=checkrecords'>[src.check_records ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=shootcrooks'>[src.criminals ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=shootall'>[stun_all ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=checkxenos'>[check_anomalies ? "Yes" : "No"]</A>" )
+"<A href='?src=[REF(src)];operation=authweapon'>[src.auth_weapons ? "Yes" : "No"]</A>",
+"<A href='?src=[REF(src)];operation=checkrecords'>[src.check_records ? "Yes" : "No"]</A>",
+"<A href='?src=[REF(src)];operation=shootcrooks'>[src.criminals ? "Yes" : "No"]</A>",
+"<A href='?src=[REF(src)];operation=shootall'>[stun_all ? "Yes" : "No"]</A>",
+"<A href='?src=[REF(src)];operation=checkxenos'>[check_anomalies ? "Yes" : "No"]</A>" )
 	else
 		if(istype(user,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = user
@@ -135,7 +135,7 @@ Neutralize All Unidentified Life Signs: []<BR>"},
 <TT><B>Automatic Portable Turret Installation</B></TT><BR><BR>
 Status: []<BR>"},
 
-"<A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A>" )
+"<A href='?src=[REF(src)];power=1'>[src.on ? "On" : "Off"]</A>" )
 
 
 	user << browse("<HEAD><TITLE>Automatic Portable Turret Installation</TITLE></HEAD>[dat]", "window=autosec")

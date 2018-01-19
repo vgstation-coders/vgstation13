@@ -387,7 +387,7 @@
 				imagedesc = "Uncropped"
 			if(MINIICONS_OFF)
 				imagedesc = "Off"
-		dat += "<span class='imageToggleButton'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
+		dat += "<span class='imageToggleButton'><TT>Images: <a href='byond://?src=[REF(src)];display_miniicons=1;'>[imagedesc]</A></TT></span>"
 
 		dat += "<TT><b>Select an item:</b></TT>"
 
@@ -415,20 +415,20 @@
 					dat += "<td class='fridgeIcon [display_miniicons == MINIICONS_UNCROPPED ? "" : "cropped"]'>[P.mini_icon]</td>"
 				dat += "<td class='pileName'><TT>"
 				dat += "<FONT color = 'blue'><B>[sanitize(P.name)]</B>: [P.amount] </font>"
-				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
+				dat += "<a href='byond://?src=[REF(src)];pile=[escaped_name];amount=1'>Vend</A> "
 				if(P.amount > 5)
-					dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=5'>x5</A>)"
+					dat += "(<a href='byond://?src=[REF(src)];pile=[escaped_name];amount=5'>x5</A>)"
 					if(P.amount > 10)
-						dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=10'>x10</A>)"
+						dat += "(<a href='byond://?src=[REF(src)];pile=[escaped_name];amount=10'>x10</A>)"
 						if(P.amount > 25)
-							dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=25'>x25</A>)"
+							dat += "(<a href='byond://?src=[REF(src)];pile=[escaped_name];amount=25'>x25</A>)"
 				if(P.amount > 1)
-					dat += "(<a href='?src=\ref[src];pile=[escaped_name];amount=[P.amount]'>All</A>)"
+					dat += "(<a href='?src=[REF(src)];pile=[escaped_name];amount=[P.amount]'>All</A>)"
 				dat += "</TT></td>"
 
 				dat += "<td class='shelfButton'><TT>"
-				dat += P.shelf > 1 ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=up'>&#8743;</A>" : "&nbsp"
-				dat += P.shelf < MAX_SHELVES ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=down'>&#8744;</A>" : "&nbsp"
+				dat += P.shelf > 1 ? "<a href='?src=[REF(src)];pile=[escaped_name];shelf=up'>&#8743;</A>" : "&nbsp"
+				dat += P.shelf < MAX_SHELVES ? "<a href='?src=[REF(src)];pile=[escaped_name];shelf=down'>&#8744;</A>" : "&nbsp"
 				dat += "</TT></td>"
 
 				dat += "</tr>"

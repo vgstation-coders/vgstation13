@@ -237,22 +237,22 @@ var/global/mulebot_count = 0
 		dat += "Power level: [cell ? cell.percent() : 0]%<BR>"
 
 		if(locked && !ai)
-			dat += "<HR>Controls are locked <A href='byond://?src=\ref[src];op=unlock'><I>(unlock)</I></A>"
+			dat += "<HR>Controls are locked <A href='byond://?src=[REF(src)];op=unlock'><I>(unlock)</I></A>"
 		else
-			dat += "<HR>Controls are unlocked <A href='byond://?src=\ref[src];op=lock'><I>(lock)</I></A><BR><BR>"
+			dat += "<HR>Controls are unlocked <A href='byond://?src=[REF(src)];op=lock'><I>(lock)</I></A><BR><BR>"
 
-			dat += "<A href='byond://?src=\ref[src];op=power'>Toggle Power</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=stop'>Stop</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=go'>Proceed</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=home'>Return to Home</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=destination'>Set Destination</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=setid'>Set Bot ID</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=sethome'>Set Home</A><BR>"
-			dat += "<A href='byond://?src=\ref[src];op=autoret'>Toggle Auto Return Home</A> ([auto_return ? "On":"Off"])<BR>"
-			dat += "<A href='byond://?src=\ref[src];op=autopick'>Toggle Auto Pickup Crate</A> ([auto_pickup ? "On":"Off"])<BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=power'>Toggle Power</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=stop'>Stop</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=go'>Proceed</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=home'>Return to Home</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=destination'>Set Destination</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=setid'>Set Bot ID</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=sethome'>Set Home</A><BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=autoret'>Toggle Auto Return Home</A> ([auto_return ? "On":"Off"])<BR>"
+			dat += "<A href='byond://?src=[REF(src)];op=autopick'>Toggle Auto Pickup Crate</A> ([auto_pickup ? "On":"Off"])<BR>"
 
 			if(load)
-				dat += "<A href='byond://?src=\ref[src];op=unload'>Unload Now</A><BR>"
+				dat += "<A href='byond://?src=[REF(src)];op=unload'>Unload Now</A><BR>"
 			dat += "<HR>The maintenance hatch is closed.<BR>"
 
 	else
@@ -260,9 +260,9 @@ var/global/mulebot_count = 0
 			dat += "The maintenance hatch is open.<BR><BR>"
 			dat += "Power cell: "
 			if(cell)
-				dat += "<A href='byond://?src=\ref[src];op=cellremove'>Installed</A><BR>"
+				dat += "<A href='byond://?src=[REF(src)];op=cellremove'>Installed</A><BR>"
 			else
-				dat += "<A href='byond://?src=\ref[src];op=cellinsert'>Removed</A><BR>"
+				dat += "<A href='byond://?src=[REF(src)];op=cellinsert'>Removed</A><BR>"
 
 			dat += wires()
 		else

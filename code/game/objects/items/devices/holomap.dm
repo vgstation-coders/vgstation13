@@ -22,7 +22,7 @@
 	//delayer = null
 
 	if (viewing)
-		viewing.mob.on_logout.Remove("\ref[src]:mob_logout")
+		viewing.mob.on_logout.Remove("[REF(src)]:mob_logout")
 
 /obj/item/device/holomap/examine(var/mob/M)
 	..()
@@ -34,7 +34,7 @@
 		viewing.images -= showing
 		showing.Cut()
 		to_chat(user, "You turn off \the [src].")
-		viewing.mob.on_logout.Remove("\ref[src]:mob_logout")
+		viewing.mob.on_logout.Remove("[REF(src)]:mob_logout")
 		viewing = null
 		return
 
@@ -52,7 +52,7 @@
 		viewing.images -= showing
 		viewing = null
 
-	M.on_logout.Remove("\ref[src]:mob_logout")
+	M.on_logout.Remove("[REF(src)]:mob_logout")
 
 	visible_message("\The [src] turns off.")
 	showing.Cut()

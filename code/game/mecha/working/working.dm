@@ -23,7 +23,7 @@
 	output += "<b>[src.name] Tools:</b><div style=\"margin-left: 15px;\">"
 	if(equipment.len)
 		for(var/obj/item/mecha_parts/mecha_equipment/MT in equipment)
-			output += "[selected==MT?"<b>":"<a href='?src=\ref[src];select_equip=\ref[MT]'>"][MT.get_equip_info()][selected==MT?"</b>":"</a>"]<br>"
+			output += "[selected==MT?"<b>":"<a href='?src=[REF(src)];select_equip=[REF(MT)]'>"][MT.get_equip_info()][selected==MT?"</b>":"</a>"]<br>"
 	else
 		output += "None"
 	output += "</div>"
@@ -55,7 +55,7 @@
 	output += "<b>Cargo Compartment Contents:</b><div style=\"margin-left: 15px;\">"
 	if(src.cargo.len)
 		for(var/obj/O in src.cargo)
-			output += "<a href='?src=\ref[src];drop_from_cargo=\ref[O]'>Unload</a> : [O]<br>"
+			output += "<a href='?src=[REF(src)];drop_from_cargo=[REF(O)]'>Unload</a> : [O]<br>"
 	else
 		output += "Nothing"
 	output += "</div>"

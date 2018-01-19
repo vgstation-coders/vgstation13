@@ -88,18 +88,18 @@
 		var/dat = ""
 		if(!beaker)
 			dat = "Please insert sample into the isolator.<BR>"
-			dat += "<A href='?src=\ref[src];close=1'>Close</A>"
+			dat += "<A href='?src=[REF(src)];close=1'>Close</A>"
 		else if(isolating)
 			dat = "Isolating"
 		else
 			var/datum/reagents/R = beaker:reagents
-			dat += "<A href='?src=\ref[src];eject=1'>Eject</A><BR><BR>"
+			dat += "<A href='?src=[REF(src)];eject=1'>Eject</A><BR><BR>"
 			if(!R.total_volume)
 				dat += "[beaker] is empty."
 			else
 				dat += "Contained reagents:<BR>"
 				for(var/datum/reagent/blood/G in R.reagent_list)
-					dat += "    [G.name]: <A href='?src=\ref[src];isolate=[G.id]'>Isolate</a>"
+					dat += "    [G.name]: <A href='?src=[REF(src)];isolate=[G.id]'>Isolate</a>"
 		user << browse("<TITLE>Pathogenic Isolator</TITLE>Isolator menu:<BR><BR>[dat]", "window=isolator;size=575x400")
 		onclose(user, "isolator")
 		return

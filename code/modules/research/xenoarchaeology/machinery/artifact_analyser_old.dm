@@ -77,14 +77,14 @@
 		dat += "<B>Artifact Range:</B> [aeffect2] ([accuE2]%)<BR><BR>"
 		dat += "<HR><BR>"
 		dat += "Artifact ID is determined from unique energy emission signatures.<br>"
-		dat += "<A href='?src=\ref[src];analyse=1'>Analyse Artifact (Scan number #[scan_num+1])</a><BR>"
-		dat += "<A href='?src=\ref[src];upload=1'>Upload/update artifact scan</a><BR>"
-		dat += "<A href='?src=\ref[src];print=1'>Print Page</a><BR>"
+		dat += "<A href='?src=[REF(src)];analyse=1'>Analyse Artifact (Scan number #[scan_num+1])</a><BR>"
+		dat += "<A href='?src=[REF(src)];upload=1'>Upload/update artifact scan</a><BR>"
+		dat += "<A href='?src=[REF(src)];print=1'>Print Page</a><BR>"
 	else
 		dat += "<B>Please wait. Analysis in progress.</B><BR>"
 		dat += "<HR><BR>"
 	//
-	dat += "<A href='?src=\ref[src];close=1'>Close<BR>"
+	dat += "<A href='?src=[REF(src)];close=1'>Close<BR>"
 	user << browse(dat, "window=artanalyser;size=450x500")
 	onclose(user, "artanalyser")
 

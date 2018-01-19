@@ -88,7 +88,7 @@ mob
 		Output_Fullsize_Icon()
 			set name = "4. Output Fullsize Icon"
 			var/icon/I = getFlatIcon(src)
-			to_chat(src, {"<img class="icon" src="\ref[fcopy_rsc(I)]" style="width: [I.Width()]px; height: [I.Height()]px;">"})
+			to_chat(src, {"<img class="icon" src="[REF(fcopy_rsc(I))]" style="width: [I.Width()]px; height: [I.Height()]px;">"})
 			to_chat(src, "-----------------------------------------")
 
 		Label_Icon()
@@ -100,7 +100,7 @@ mob
 			// Copy the file to the rsc manually
 			I = fcopy_rsc(I)
 			// Update the label to show it
-			winset(src,"imageLabel","image='\ref[I]'");
+			winset(src,"imageLabel","image='[REF(I)]'");
 
 		Add_Overlay()
 			set name = "6. Add Overlay"
