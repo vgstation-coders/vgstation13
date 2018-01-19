@@ -63,7 +63,7 @@
 
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
-	name = "botanist's leather gloves"
+	name = "botany gloves"
 	icon_state = "leather"
 	item_state = "leather"
 	permeability_coefficient = 0.9

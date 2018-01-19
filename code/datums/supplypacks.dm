@@ -1752,6 +1752,51 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 
+/datum/supply_packs/aquaculture // fish n shit
+	name = "Aquaculture supply"
+	contains = list(/obj/item/weapon/fishtools/fish_egg_scoop,
+					/obj/item/weapon/fishtools/fish_net,
+					/obj/item/weapon/fishtools/fish_food,
+					/obj/item/weapon/fishtools/fish_tank_brush,
+					/obj/item/fish_eggs/catfish,
+					/obj/item/fish_eggs/catfish,
+					/obj/item/fish_eggs/salmon,
+					/obj/item/fish_eggs/salmon,
+					/obj/item/fish_eggs/shrimp,
+					/obj/item/fish_eggs/shrimp,
+					/obj/item/weapon/circuitboard/fishtank,
+					/obj/item/weapon/circuitboard/fishtank,
+					/obj/item/weapon/circuitboard/fishtank,
+					)
+	cost = 30
+	containertype = /obj/structure/closet/crate/hydroponics
+	containername = "aquaculture crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/exoticfish // weird fish eggs n shit
+	name = "Exotic fish"
+	contains = list(/obj/item/fish_eggs/goldfish,
+					/obj/item/fish_eggs/goldfish,
+					/obj/item/fish_eggs/clownfish,
+					/obj/item/fish_eggs/clownfish,
+					/obj/item/fish_eggs/feederfish,
+					/obj/item/fish_eggs/feederfish,
+					/obj/item/fish_eggs/electric_eel,
+					/obj/item/fish_eggs/electric_eel,
+					/obj/item/fish_eggs/shark,
+					/obj/item/fish_eggs/shark,
+					/obj/item/fish_eggs/glofish,
+					/obj/item/fish_eggs/glofish,
+					/obj/item/weapon/circuitboard/fishwall,
+					/obj/item/weapon/circuitboard/fishwall,
+					)
+	cost = 40
+	containertype = /obj/structure/closet/crate/hydroponics
+	containername = "exotic fish crate"
+	group = "Hydroponics"
+
+
+
 //farm animals - useless and annoying, but potentially a good source of food
 /datum/supply_packs/cow
 	name = "Cow"

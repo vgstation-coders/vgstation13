@@ -20,7 +20,7 @@
 /obj/structure/window/full/New(loc)
 
 	..(loc)
-	flags |= ON_BORDER
+	flow_flags |= ON_BORDER
 
 /obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
 

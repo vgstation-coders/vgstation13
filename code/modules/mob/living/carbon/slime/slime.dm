@@ -509,11 +509,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			if(step_to(D, Step_1))
 				check_1 = 1
 				for(var/obj/border_obstacle in Step_1)
-					if(border_obstacle.flags & ON_BORDER)
+					if(border_obstacle.flow_flags & ON_BORDER)
 						if(!border_obstacle.Uncross(D, A))
 							check_1 = 0
 				for(var/obj/border_obstacle in get_turf(A))
-					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
+					if((border_obstacle.flow_flags & ON_BORDER) && (src != border_obstacle))
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
@@ -522,11 +522,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 				check_2 = 1
 
 				for(var/obj/border_obstacle in Step_2)
-					if(border_obstacle.flags & ON_BORDER)
+					if(border_obstacle.flow_flags & ON_BORDER)
 						if(!border_obstacle.Uncross(D, A))
 							check_2 = 0
 				for(var/obj/border_obstacle in get_turf(A))
-					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
+					if((border_obstacle.flow_flags & ON_BORDER) && (src != border_obstacle))
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_2 = 0
 			if(check_1 || check_2)
@@ -539,13 +539,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 			//Now, check objects to block exit that are on the border
 			for(var/obj/border_obstacle in src.loc)
-				if(border_obstacle.flags & ON_BORDER)
+				if(border_obstacle.flow_flags & ON_BORDER)
 					if(!border_obstacle.Uncross(D, A))
 						ok = 0
 
 			//Next, check objects to block entry that are on the border
 			for(var/obj/border_obstacle in get_turf(A))
-				if((border_obstacle.flags & ON_BORDER) && (A != border_obstacle))
+				if((border_obstacle.flow_flags & ON_BORDER) && (A != border_obstacle))
 					if(!border_obstacle.Cross(D, D.loc, 1, 0))
 						ok = 0
 
