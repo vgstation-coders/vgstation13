@@ -23,7 +23,7 @@
 	return tech_level_total
 
 /datum/stat_collector/proc/add_explosion_stat(turf/epicenter, const/dev_range, const/hi_range, const/li_range)
-	if(ticker.current_state != GAME_STATE_PLAYING) return
+	if(ticker.current_state != TICKERSTATE_PLAYING) return
 
 	var/datum/stat/explosion_stat/e = new
 	e.epicenter_x = epicenter.x
@@ -37,8 +37,8 @@
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
 	if(!istype(M, /mob/living)) return 0
 	if(M.iscorpse) return 0 // only ever 1 if they are a corpse landmark spawned mob
-	if(ticker.current_state != GAME_STATE_PLAYING)
-		return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
+	if(ticker.current_state != TICKERSTATE_PLAYING)
+		return 0 // We don't care about pre-round or post-round deaths. 3 is TICKERSTATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
 	d.death_x = M.x
@@ -102,7 +102,7 @@
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
 	var/was_traitor = TRUE
-	if(ticker.current_state != GAME_STATE_PLAYING) return
+	if(ticker.current_state != TICKERSTATE_PLAYING) return
 
 	if(user.mind && user.mind.special_role != "traitor")
 		was_traitor = FALSE
@@ -146,7 +146,7 @@
 
 
 /datum/stat/population_stat/New(pop as num)
-	if(ticker.current_state != GAME_STATE_PLAYING) return
+	if(ticker.current_state != TICKERSTATE_PLAYING) return
 
 	time = time2text(world.realtime, STAT_TIMESTAMP_FORMAT)
 	popcount = pop
