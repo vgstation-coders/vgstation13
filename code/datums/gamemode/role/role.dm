@@ -83,8 +83,6 @@
 	// Assigned faction.
 	var/datum/faction/faction = null
 
-	var/datum/role/parent = null
-
 	var/list/minds = list()
 
 	//////////////////////////////
@@ -99,11 +97,10 @@
 	// Objectives
 	var/datum/objective_holder/objectives=new
 
-/datum/role/New(var/datum/mind/M=null, var/datum/role/par=null, var/datum/faction/fac=null, var/new_id)
+/datum/role/New(var/datum/mind/M=null, var/datum/faction/fac=null, var/new_id)
 	// Link faction.
 	faction=fac
 
-	parent = par
 	if(M)
 		AssignToRole(M)
 
@@ -119,24 +116,21 @@
 	if(!CanBeAssigned(M))
 		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
 
-	// If we don't have this guy in the parent, add him.
-	if(!(M in parent.minds))
-		parent.minds += M
-
 	// If we don't have this guy in the faction, add him.
 	if(faction && !(M in faction.members))
 		faction.members += M
+
+	M.antag_roles[id] = src
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M)
 	if(!istype(M))
 		WARNING("M is [M.type]!")
 
-	if(M in parent.minds)
-		parent.minds -= M
-
 	if(faction && M in faction.members)
 		faction.members -= M
 
+	M.antag_roles[id] = null
+	del(src)
 // Remove
 /datum/role/proc/Drop()
 	if(!antag)
@@ -357,7 +351,4 @@
 	antag.memory += "[text]<BR>"
 
 /datum/role/proc/GetMemoryHeader()
-	if (id in ticker.mode.available_roles)
-		return uppertext(name)
-	else
-		return name
+	return name

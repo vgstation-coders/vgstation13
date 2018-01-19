@@ -12,6 +12,7 @@
 		(Vox Raiders, Skellington Pirates, Bewildering Basfellians, etc.)
 	@members: List(Reference): Who is a member of this faction
 	@max_roles: Integer: How many members this faction is limited to. Set to 0 for no limit
+	@accept_latejoiners: Boolean: Whether or not this faction accepts newspawn latejoiners
 	@objectives: objectives datum: What are the goals of this faction?
 
 	//TODO LATER
@@ -29,6 +30,7 @@
 	var/list/restricted_species = list()
 	var/list/members = list()
 	var/max_roles = 0
+	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
 
 /datum/faction/proc/onPostSetup()
@@ -44,10 +46,10 @@
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	new /datum/role
+	new /datum/role(M, src, initial_role)
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
-
+	new /datum/role(M, src, late_role)
 
 
 /datum/faction/proc/appendObjective(var/datum/objective/O)
@@ -96,6 +98,11 @@
 	name = "Traitors to NT"
 	ID = TRAITOR
 	desc = "Operatives of the syndicate, implanted into the crew in one way or another."
+
+/datum/faction/syndicate/traitor/auto
+	name = "Deep cover operatives"
+	desc = "Anyone could be a deep cover operative. It could be you, it could be me, it could even be that guy!"
+	accept_latejoiners = TRUE
 
 /datum/faction/syndicate/nuke_op
 	name = "Syndicate nuclear operatives"

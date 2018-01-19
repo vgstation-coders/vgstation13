@@ -26,6 +26,11 @@
 			return TRUE
 	return FALSE
 
+/datum/faction/cult/HandleNewMind(var/datum/mind/M)
+	..()
+	if(M.current)
+		grant_runeword(M.current)
+
 /datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
 	return
 

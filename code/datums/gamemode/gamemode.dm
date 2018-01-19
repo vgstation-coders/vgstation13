@@ -18,7 +18,6 @@
 	var/list/factions_allowed = list()
 	var/minimum_player_count
 	var/admin_override //Overrides checks such as minimum_player_count to
-	var/list/datum/role/available_roles = list()
 	var/probability = 50
 	var/votable = TRUE
 
@@ -81,6 +80,13 @@
 
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
+	var/list/possible_factions = list()
+	for(var/datum/faction/F in factions)
+		if(F.accept_latejoiners)
+			possible_factions.Add(F)
+	if(possible_factions)
+		var/datum/faction/F = pick(possible_factions)
+		F.HandleRecruitedMind(mob.mind)
 
 /datum/gamemode/proc/PostSetup()
 	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
