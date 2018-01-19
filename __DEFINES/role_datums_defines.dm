@@ -18,4 +18,8 @@
 // Role IDs
 
 #define CULTIST "cultist"
+#define HEADCULTIST "head cultist"
+#define HEADREV "Head Revolutionary"
+#define WIZAPP "Wizards Apprentice"
+#define MADMONKEY "Monkey Madness"
 //Changeling, nuke op, traitor, wizard, vampire, rev, all the same as above

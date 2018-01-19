@@ -868,8 +868,10 @@
 	var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
 	var/datum/rune_controller/R = ticker.rune_controller
 	for(var/atom/A in loc)
-		if(iscultist(A))
-			continue
+		if(ismob(A))
+			var/mob/M = A
+			if(iscultist(M))
+				continue
 		var/satisfaction = 0
 //Humans and Animals
 		if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal))//carbon mobs and simple animals
