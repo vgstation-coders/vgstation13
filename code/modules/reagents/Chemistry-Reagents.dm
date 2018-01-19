@@ -5537,7 +5537,7 @@
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk
-	name = "Banana Mama"
+	name = "Banana Honk"
 	id = BANANAHONK
 	description = "A drink from Clown Heaven."
 	nutriment_factor = FOOD_METABOLISM
