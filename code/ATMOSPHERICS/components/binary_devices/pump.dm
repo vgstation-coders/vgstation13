@@ -20,7 +20,6 @@ Thus, the two variables affect pump operation are set in New():
 
 	name = "Gas pump"
 	desc = "A pump."
-	var/on = 0
 	var/target_pressure = ONE_ATMOSPHERE
 
 	var/frequency = 0
@@ -183,7 +182,7 @@ Thus, the two variables affect pump operation are set in New():
 			id_tag = newid
 			initialize()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")

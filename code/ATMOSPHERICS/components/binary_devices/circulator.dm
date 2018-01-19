@@ -166,3 +166,6 @@
 		return
 
 	src.dir = turn(src.dir, -90)
+
+/obj/machinery/atmospherics/binary/circulator/toggle_power(mob/user)
+	return 0 //Does not toggle with alt click
