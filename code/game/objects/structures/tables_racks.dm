@@ -348,7 +348,7 @@
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -514,7 +514,7 @@
 	if(dir != NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
-	flags |= ON_BORDER
+	flow_flags |= ON_BORDER
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
@@ -530,7 +530,7 @@
 
 	reset_plane_and_layer()
 	flipped = 0
-	flags &= ~ON_BORDER
+	flow_flags &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T && T.flipped && T.dir == src.dir)

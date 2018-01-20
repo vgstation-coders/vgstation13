@@ -133,6 +133,9 @@
 		say("ERROR: DNA PROFILE DOES NOT MATCH.")
 		return
 	say("UNAUTHORIZED ACCESS DETECTED.")
+	var/datum/organ/external/active_hand = user.get_active_hand_organ()
+	if(active_hand)
+		active_hand.explode()
 	explosion(user, -1, 0, 2)
 	qdel(src)
 

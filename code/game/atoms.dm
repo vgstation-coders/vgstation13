@@ -8,6 +8,7 @@ var/global/list/ghdel_profiling = list()
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
 
 	var/flags = FPRINT
+	var/flow_flags = 0
 	var/list/fingerprints
 	var/list/fingerprintshidden
 	var/fingerprintslast = null

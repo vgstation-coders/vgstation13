@@ -521,5 +521,4 @@
 		stat_collection.crewscore = score["crewscore"]
 
 	src << browse(dat, "window=roundstats;size=1000x600")
-	stat_collection.Process()
 	return

@@ -245,7 +245,7 @@
 		var/obj/O = mob.orient_object
 		O.dir = direct
 
-/client/Move(loc,dir)
+/client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(move_delayer.next_allowed > world.time)
 		return 0
 
@@ -255,25 +255,25 @@
 		return
 
 	if(mob.control_object)
-		Move_object(dir)
+		Move_object(Dir)
 
 	if(mob.orient_object)
-		Dir_object(dir)
+		Dir_object(Dir)
 		return
 
 	if(mob.incorporeal_move)
-		Process_Incorpmove(dir)
+		Process_Incorpmove(Dir)
 		return
 
 	if(mob.stat == DEAD)
 		return
 
 	if(isAI(mob))
-		return AIMove(loc,dir,mob)
+		return AIMove(NewLoc,Dir,mob)
 
 	if(ispAI(mob))
 		var/mob/living/silicon/pai/P = mob
-		P.relaymove(dir)
+		P.relaymove(Dir)
 		return
 
 	if(mob.monkeyizing)
@@ -283,7 +283,7 @@
 		return
 
 	if(mob.locked_to) //if we're locked_to to something, tell it we moved.
-		return mob.locked_to.relaymove(mob, dir)
+		return mob.locked_to.relaymove(mob, Dir)
 
 	if(!mob.canmove)
 		return
@@ -308,7 +308,7 @@
 
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
-		return O.relaymove(mob, dir)
+		return O.relaymove(mob, Dir)
 
 	if(isturf(mob.loc))
 		if(mob.restrained()) //Why being pulled while cuffed prevents you from moving
@@ -386,7 +386,7 @@
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
-			step(mob, dir)
+			step(mob, Dir)
 			mob.last_movement=world.time
 
 		if(mob.dir != old_dir)

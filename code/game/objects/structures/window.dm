@@ -40,7 +40,7 @@ var/list/one_way_windows
 /obj/structure/window/New(loc)
 
 	..(loc)
-	flags |= ON_BORDER
+	flow_flags |= ON_BORDER
 	ini_dir = dir
 
 	update_nearby_tiles()
@@ -179,7 +179,7 @@ var/list/one_way_windows
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density

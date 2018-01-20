@@ -31,11 +31,12 @@
 	else
 		. += CYBORG_NO_CELL_SLOWDOWN
 
-/mob/living/silicon/robot/Move(atom/newloc)
+/mob/living/silicon/robot/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(..())
-		if(istype(newloc, /turf/unsimulated/floor/asteroid) && istype(module, /obj/item/weapon/robot_module/miner))
+		if(istype(NewLoc, /turf/unsimulated/floor/asteroid) && istype(module, /obj/item/weapon/robot_module/miner))
 			var/obj/item/weapon/storage/bag/ore/ore_bag = locate(/obj/item/weapon/storage/bag/ore) in get_all_slots() //find it in our modules
 			if(ore_bag)
+				var/atom/newloc = NewLoc //NewLoc isn't actually typecast
 				for(var/obj/item/weapon/ore/ore in newloc.contents)
-					ore_bag.preattack(newloc, src, 1) //collects everything
+					ore_bag.preattack(NewLoc, src, 1) //collects everything
 					break

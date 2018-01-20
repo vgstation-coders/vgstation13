@@ -11,7 +11,7 @@
 	desc = "A low-power device that generates power based on how quickly someone walks."
 	icon_state = "treadmill"
 	density = 1
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | EMAGGABLE
 	anchored = 1
 	use_power = 0
@@ -86,7 +86,7 @@
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if((flags & ON_BORDER) && (mover.dir == dir))
+	if((flow_flags & ON_BORDER) && (mover.dir == dir))
 		powerwalk(mover)
 		return !density
 	return 1
