@@ -78,7 +78,7 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()    
-	if(ismob(holder)
+	if(ismob(holder))
 		holder.del_reagent(POTASSIUM)
 		holder.del_reagent(WATER)
 	else
