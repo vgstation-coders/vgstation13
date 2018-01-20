@@ -130,7 +130,7 @@
 
 /mob/living/simple_animal/shade/sword/attempt_suicide(forced = FALSE, suicide_set = TRUE)
 	if(!forced)
-		var/confirm = alert("Are you sure you want to seal your ego? This action cannot be undone and your personality will be lost forever.", "Confirm Suicide", "Yes", "No")
+		var/confirm = alert("Are you sure you want to seal your ego? This action cannot be undone and your current knowledge will be lost forever.", "Confirm Suicide", "Yes", "No")
 
 		if(!confirm == "Yes")
 			return
@@ -144,12 +144,12 @@
 	if(suicide_set)
 		suiciding = TRUE
 
-	visible_message("<span class='danger'>[src] aura is fading! It looks like \he's trying to commit suicide.</span>")
+	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
 	Die()
 
 /mob/living/simple_animal/shade/sword/Die()
 	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
 		var/obj/item/weapon/nullrod/sword/chaos/C = loc
 		C.possessed = FALSE
-		C.icon_state = initial(icon_state)
+		C.icon_state = C.initial(icon_state)
 	..()
