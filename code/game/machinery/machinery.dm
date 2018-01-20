@@ -748,3 +748,6 @@ Class Procs:
 			scan.forceMove(get_turf(src))
 			visible_message("<span class='notice'>\A [scan] pops out of \the [src]!</span>")
 			scan = null
+
+/obj/machinery/proc/is_operational()
+	return !(stat & (NOPOWER|BROKEN|MAINT))
