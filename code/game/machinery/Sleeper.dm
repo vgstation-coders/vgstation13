@@ -51,7 +51,7 @@
 	var/mob/living/occupant = connected.occupant
 	var/dat = list()
 	if(connected.on)
-		dat += "<font color='blue'><B>Performing anaesthesic emergence...</B></font>" //Best I could come up with
+		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
 		dat += "<HR><A href='?src=\ref[src];toggle_autoeject=1'>Auto-eject occupant: [connected.auto_eject_after ? "Yes" : "No"]</A><BR>"
 	else
 		dat += "<b>Occupant statistics:</b><BR>"
@@ -59,34 +59,34 @@
 			var/occupant_status = "???"
 			switch(occupant.stat)
 				if(CONSCIOUS)
-					occupant_status = "<span class='good'>conscious</span>"
+					occupant_status = "conscious"
 				if(UNCONSCIOUS)
 					occupant_status = "<span class='average'>unconscious</span>"
 				if(DEAD)
-					occupant_status = "<span class='bad'>*dead*</span>"
-			dat += "<span class='[occupant.health > 50 ? "good" : "bad"]'>\tHealth %: [occupant.health] ([occupant_status])</span><br>"
+					occupant_status = "<span class='average'>*dead*</span>"
+			dat += "\tHealth: <span class='[occupant.health > 50 ? "" : "average"]'>[round(occupant.health, 0.1)]</span> ([occupant_status])<br>"
 			if(iscarbon(occupant))
 				var/mob/living/carbon/C = occupant
-				dat += "<span class='[C.pulse == PULSE_NONE || C.pulse == PULSE_THREADY ? "bad" : "average"]'>\t-Pulse, bpm: [C.get_pulse(GETPULSE_TOOL)]</span><br>"
+				dat += "<span class='[C.pulse == PULSE_NONE || C.pulse >= PULSE_2FAST ? "average" : ""]'>\t-Pulse, bpm: [C.get_pulse(GETPULSE_TOOL)]</span><br>"
 			var/bruteloss = occupant.getBruteLoss()
-			dat += "<span class='[bruteloss < 60 ? "good" : "bad"]'>\t-Brute damage %: [bruteloss]</span><br>"
+			dat += "<span class='[bruteloss < 60 ? "" : "average"]'>\t-Brute damage: [round(bruteloss, 0.1)]</span><br>"
 			var/oxyloss = occupant.getOxyLoss()
-			dat += "<span class='[oxyloss < 60 ? "good" : "bad"]'>\t-Respiratory damage %: [oxyloss]</span><br>"
+			dat += "<span class='[oxyloss < 60 ? "" : "average"]'>\t-Respiratory damage: [round(oxyloss, 0.1)]</span><br>"
 			var/toxloss = occupant.getToxLoss()
-			dat += "<span class='[toxloss < 60 ? "good" : "bad"]'>\t-Toxin content %: [toxloss]</span><br>"
+			dat += "<span class='[toxloss < 60 ? "" : "average"]'>\t-Toxin content: [round(toxloss, 0.1)]</span><br>"
 			var/fireloss = occupant.getFireLoss()
-			dat += "<span class='[fireloss < 60 ? "good" : "bad"]'>\t-Burn severity %: [fireloss]</span><br>"
+			dat += "<span class='[fireloss < 60 ? "" : "average"]'>\t-Burn severity: [round(fireloss, 0.1)]</span><br>"
 			
 			var/sleepytime = max(occupant.paralysis, occupant.sleeping)
-			dat += "<hr>Paralysis summary %: [sleepytime] ([round(sleepytime * 2)] seconds left!)<br>"
+			dat += "<hr>Paralysis summary: [sleepytime] ([round(sleepytime * 2)] seconds left!)<br>"
 			dat += "<a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
 			if(occupant.reagents)
 				for(var/chemical in connected.available_options)
-					dat += "[connected.available_options[chemical]]: [occupant.reagents.get_reagent_amount(chemical)] units <span class='floatRight>'"
+					dat += "<span style='float: left'>[connected.available_options[chemical]]: [round(occupant.reagents.get_reagent_amount(chemical), 0.1)] units</span><span style='float: right'>"
 					for(var/amount in connected.amounts)
-						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'>[amount]u</a>"
+						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'>Inject [amount]u</a>"
 					dat += "</span><br>"
-			dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh meter readings each second</A><BR>"
+			dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
 		else
 			dat += "The sleeper is empty."
 	dat = jointext(dat,"")
