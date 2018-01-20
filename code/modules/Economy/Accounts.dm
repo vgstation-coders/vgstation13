@@ -275,7 +275,7 @@ var/global/list/all_money_accounts = list()
 	. = ..()
 	if(.)
 		return
-	if(istype(O, /obj/item/weapon/card/id))
+	if(isID(O))
 		var/obj/item/weapon/card/id/idcard = O
 		if(access_level == 3)
 			return attack_hand(user)
