@@ -599,17 +599,48 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	for (var/datum/reagent/R in reagent_list)
 		if (R.id == reagent)
-			if(!R.on_removal(amount))
-				return 0 //handled and reagent says fuck no
-			R.volume -= amount
-			update_total()
-			if(!safety)//So it does not handle reactions when it need not to
-				handle_reactions()
-			if(my_atom)
-				my_atom.on_reagent_change()
-			return 0
-
+			return remove_that_reagent(R, amount, safety)
 	return 1
+
+/datum/reagents/proc/remove_reagents(var/list/reagent_list, var/amount, var/safety)
+	if(!isnum(amount))
+		return 1
+
+	for(var/id in reagent_list)
+		if(has_reagent(id, amount))
+			remove_reagent(id, amount, safety)
+	return 1
+
+/datum/reagents/proc/remove_reagent_by_type(var/reagent_type, var/amount, var/safety)
+	if(!isnum(amount))
+		return 1
+
+	var/datum/reagent/R = get_reagent_by_type(type, amount)
+	if(R)
+		remove_that_reagent(R, amount, safety)
+
+/datum/reagents/proc/remove_reagents_by_type(var/list/reagent_types, var/amount, var/safety)
+	if(!isnum(amount))
+		return 1
+
+	for(var/datum/reagent/R in reagent_list)
+		if(is_type_in_list(R, reagent_types))
+			remove_that_reagent(R, amount, safety)
+
+/datum/reagents/proc/remove_that_reagent(var/datum/reagent/R, var/amount, var/safety)
+	if(!isnum(amount))
+		return 1
+
+	if(!R.on_removal(amount))
+		return 0 //handled and reagent says fuck no
+	R.volume -= amount
+	update_total()
+	if(!safety)//So it does not handle reactions when it need not to
+		handle_reactions()
+	if(my_atom)
+		my_atom.on_reagent_change()
+	return 0
+
 
 /**************************************
  *  RETURNS A BOOL NOW, USE get_reagent IF YOU NEED TO GET ONE.
@@ -620,6 +651,17 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(reagent in amount_cache)
 		return amount_cache[reagent] >= max(0,amount)
 	return 0
+
+/datum/reagents/proc/has_reagent_type(var/reagent_type, var/amount = -1, var/strict = 0)
+	if(!ispath(reagent_type,/datum/reagent))
+		return 0
+
+	for(var/datum/reagent/R in reagent_list)
+		if(strict && !R.type == reagent_type)
+			continue
+		if(!istype(R,reagent_type))
+			continue
+		return R.volume >= max(0,amount)
 
 /datum/reagents/proc/has_any_reagents(var/list/input_reagents, var/amount = -1)		//returns true if any of the input reagents are found
 	. = FALSE
@@ -644,6 +686,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				if(R.volume >= amount)
 					return R
 			return 0
+	return 0
+
+/datum/reagents/proc/get_reagent_by_type(var/reagent_type, var/amount = -1, var/strict)
+	if(!ispath(reagent_type,/datum/reagent))
+		return 0
+
+	for(var/datum/reagent/R in reagent_list)
+		if(strict && R.type != reagent_type)
+			continue
+		if(!istype(R, reagent_type))
+			continue
+		return R
 	return 0
 
 /datum/reagents/proc/get_reagent_amount(var/reagent)

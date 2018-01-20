@@ -173,8 +173,8 @@
 	name = "\improper Engine Gas Storage"
 	icon_state = "engine_storage"
 
-/area/vault/ejectedengine/monitering
-	name = "Engine Monitering"
+/area/vault/ejectedengine/monitoring
+	name = "Engine Monitoring"
 	icon_state = "engiaux"
 
 /area/vault/ejectedengine/burnroom

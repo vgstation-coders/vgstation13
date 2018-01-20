@@ -451,8 +451,7 @@
 			ticker.mode.cult -= cult_mind
 
 		if(show_message)
-			for(var/mob/M in viewers(cult_mind.current))
-				to_chat(M, "<FONT size = 3>[cult_mind.current] looks like they just reverted to their old faith!</FONT>")
+			cult_mind.current.visible_message("<span class='big danger'>It looks like [cult_mind.current] just reverted to their old faith!</span>")
 		if(log)
 			log_admin("[cult_mind.current] ([ckey(cult_mind.current.key)] has been deconverted from the cult")
 			stat_collection.cult_deconverted++
