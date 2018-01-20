@@ -165,7 +165,7 @@
 	overlays.Cut()
 	//Update Alert Lights
 	if(has_lid)											//Skip the alert lights for aquariums that don't have lids (fishbowls)
-		if(egg_list.len)								//There is at least 1 egg to
+		if(egg_list.len)								//There is at least 1 egg to harvest
 			overlays += "over_egg"
 		if(lid_switch == TRUE)							//Lid is closed, lid status light is red
 			overlays += "over_lid_1"
@@ -359,7 +359,7 @@
 		return
 
 	for(var/i = 1 to egg_list.len)						//Loop until you've harvested all the eggs
-		var/obj/item/fish_eggs/egg = egg_list[i]	//Select an egg at random
+		var/obj/item/fish_eggs/egg = egg_list[i]	//Go through the eggs
 		new egg(get_turf(user))						//Spawn the egg at the user's feet
 
 	egg_list = list()								//Destroy any excess eggs, clearing the egg_list
