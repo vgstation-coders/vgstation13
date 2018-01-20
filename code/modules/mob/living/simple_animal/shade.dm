@@ -139,7 +139,7 @@
 			to_chat(src, "<span class='warning'>You can't perform the sealing ritual in this state!</span>")
 			return
 
-		log_attack("<font color='red'>[key_name(src)] has sealed itself via the suicide verb.</font>")
+		log_attack("<span class='danger'>[key_name(src)] has sealed itself via the suicide verb.</span>")
 
 	if(suicide_set)
 		suiciding = TRUE
