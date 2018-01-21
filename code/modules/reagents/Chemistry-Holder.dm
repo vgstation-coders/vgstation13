@@ -478,7 +478,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = A
 		if (R.id == reagent)
 			R.reagent_deleted()
-			R.on_removal()
 			reagent_list -= A
 			R.holder = null
 			total_dirty=1
