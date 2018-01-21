@@ -798,6 +798,7 @@
 				connected.occupant.bodytemperature = (T0C + 37)
 				connected.occupant.sleeping = 0
 				connected.occupant.paralysis = 0
+				connected.occupant.clear_reagents()
 				connected.go_out()
 			if("Rare")
 				qdel(connected.occupant)
