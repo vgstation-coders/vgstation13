@@ -426,8 +426,8 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smes
 	name = "Circuit Board (SMES)"
-	desc = "A circuit board used to run a gas freezer."
-	build_path = "/obj/machinery/power/battery/smes"
+	desc = "A circuit board used to run a giant battery."
+	build_path = "/obj/machinery/power/battery/smes/pristine"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(

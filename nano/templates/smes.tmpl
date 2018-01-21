@@ -11,6 +11,7 @@
 </div>
 
 <h3>Input Management</h3>
+{{if data.hasInput}}
 <div class="item">
 	<div class="itemLabel">
 		Charge Mode:
@@ -40,8 +41,16 @@
 		</div>
 	</div>
 </div>
+{{else}}
+<div class="item">
+	<div class="itemContent">
+		<span class='bad'>No input terminal detected!</span>
+	</div>
+</div>
+{{/if}}
 
 <h3>Output Management</h3>
+{{if data.hasOutput}}
 <div class="item">
 	<div class="itemLabel">
 		Output Status:
@@ -77,3 +86,10 @@
 		</div>
 	</div>
 </div>
+{{else}}
+<div class="item">
+	<div class="itemContent">
+		<span class="bad">No output power cable connected!</span>
+	</div>
+</div>
+{{/if}}
