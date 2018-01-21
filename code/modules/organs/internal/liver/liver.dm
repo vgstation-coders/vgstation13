@@ -18,6 +18,7 @@
 
 /datum/organ/internal/liver/process()
 	..()
+	owner.reagents.clear_reagents()
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(1))
 			owner << "<span class='warning'>Your skin itches.</span>"
