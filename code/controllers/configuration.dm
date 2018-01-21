@@ -188,18 +188,16 @@
 	for (var/T in L)
 		// I wish I didn't have to instance the game modes in order to look up
 		// their information, but it is the only way (at least that I know of).
-		var/datum/gamemode/M = new T()
+		var/datum/gamemode/M = T
 
-		if (M.name)
-			if (!(M.name in modes)) // Ensure each mode is added only once.
-				diary << "Adding game mode [M.name] to configuration."
-				src.modes += M.name
-				src.mode_names[M.name] = M.name
-				src.probabilities[M.name] = M.probability
+		if (initial(M.name))
+			if (!(initial(M.name) in modes)) // Ensure each mode is added only once.
+				src.modes += initial(M.name)
+				src.mode_names[initial(M.name)] = initial(M.name)
+				src.probabilities[initial(M.name)] = initial(M.probability)
 
-				if (M.votable)
-					votable_modes += M.name
-		qdel(M)
+				if (initial(M.votable))
+					votable_modes += initial(M.name)
 
 	votable_modes += "secret"
 
@@ -735,7 +733,7 @@
 	var/list/datum/gamemode/runnable_modes = new
 	for (var/T in subtypesof(/datum/gamemode))
 		var/datum/gamemode/M = new T()
-//		to_chat(world, "DEBUG: [T], tag=[M.config_tag], prob=[probabilities[M.config_tag]]")
+//		log_startup_progress("DEBUG: [T], tag=[M.name], prob=[probabilities[M.name]]")
 		if (!(M.name in modes))
 			del(M)
 			continue
@@ -744,5 +742,5 @@
 			continue
 		if (M.can_start())
 			runnable_modes[M] = probabilities[M.name]
-//			to_chat(world, "DEBUG: runnable_mode\[[runnable_modes.len]\] = [M.config_tag]")
+//			log_startup_progress("DEBUG: runnable_mode\[[runnable_modes.len]\] = [M.name]")
 	return runnable_modes

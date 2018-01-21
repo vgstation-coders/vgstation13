@@ -21,8 +21,6 @@
 	var/probability = 50
 	var/votable = TRUE
 
-/datum/gamemode/New()
-	Setup()
 
 /datum/gamemode/proc/can_start()
 	if(minimum_player_count && minimum_player_count < get_player_count())
@@ -33,28 +31,26 @@
 /datum/gamemode/proc/SetupFactions()
 
 /datum/gamemode/proc/Setup()
-	if(minimum_player_count < get_player_count())
+	if(minimum_player_count && minimum_player_count < get_player_count())
 		TearDown()
 		return 0
 	SetupFactions()
 	CreateFactions()
+	return 1
 
 /datum/gamemode/proc/CreateFactions()
 	var/pc = get_player_count() //right proc?
-	for(var/datum/faction/Fac in factions_allowed)
+	for(var/Fac in factions_allowed)
 		CreateFaction(Fac, pc)
-	for(var/datum/faction/F in factions)
-		F.onPostSetup()
 	PopulateFactions()
 
-/datum/gamemode/proc/CreateFaction(var/datum/faction/Fac, var/population)
-	new Fac
-	if(Fac.can_setup(population))
-		factions += Fac
-		factions_allowed -= Fac
+/datum/gamemode/proc/CreateFaction(var/Fac, var/population)
+	var/datum/faction/F = new Fac
+	if(F.can_setup(population))
+		factions += F
+		factions_allowed -= F
 	else
-		message_admins("Unable to start [Fac.name] in [name]")
-		qdel(Fac)
+		qdel(F)
 
 /*
 	Get list of available players
@@ -84,7 +80,7 @@
 	for(var/datum/faction/F in factions)
 		if(F.accept_latejoiners)
 			possible_factions.Add(F)
-	if(possible_factions)
+	if(possible_factions.len)
 		var/datum/faction/F = pick(possible_factions)
 		F.HandleRecruitedMind(mob.mind)
 
@@ -98,6 +94,9 @@
 	if(revdata)
 		feedback_set_details("revision","[revdata.revision]")
 	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
+
+	for(var/datum/faction/F in factions)
+		F.OnPostSetup()
 	return 1
 
 /datum/gamemode/proc/CheckObjectives(var/individuals = FALSE)

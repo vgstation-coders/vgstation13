@@ -32,10 +32,14 @@
 	var/max_roles = 0
 	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
+	var/datum/role/roletype = /datum/role
 
-/datum/faction/proc/onPostSetup()
+/datum/faction/proc/OnPostSetup()
 	objective_holder = new
 	forgeObjectives()
+	for(var/datum/mind/M in members)
+		var/datum/role/R = M.GetRole(initial_role)
+		R.OnPostSetup()
 
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
 /datum/faction/proc/can_setup()
@@ -46,10 +50,10 @@
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	new /datum/role(M, src, initial_role)
+	new roletype(M, src, initial_role)
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
-	new /datum/role(M, src, late_role)
+	new roletype(M, src, late_role)
 
 
 /datum/faction/proc/appendObjective(var/datum/objective/O)
@@ -97,6 +101,8 @@
 /datum/faction/syndicate/traitor
 	name = "Traitors to NT"
 	ID = TRAITOR
+	initial_role = TRAITOR
+	late_role = TRAITOR
 	desc = "Operatives of the syndicate, implanted into the crew in one way or another."
 
 /datum/faction/syndicate/traitor/auto
@@ -108,12 +114,16 @@
 	name = "Syndicate nuclear operatives"
 	ID = NUKE_OP
 	required_pref = ROLE_OPERATIVE
+	initial_role = NUKE_OP
+	late_role = NUKE_OP
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 
 /datum/faction/changeling
 	name = "Changeling Hivemind"
 	ID = CHANGELING
+	initial_role = CHANGELING
+	late_role = CHANGELING
 	required_pref = ROLE_CHANGELING
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
@@ -127,10 +137,33 @@
 /datum/faction/wizard
 	name = "Wizard Federation"
 	ID = WIZARD
+	initial_role = WIZARD
+	late_role = WIZARD
 	required_pref = ROLE_WIZARD
 	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
 	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
 	This has led to them being identified as enemies of humanity, and should be treated as such."
+	roletype = /datum/role/wizard
+
+/datum/faction/wizard/HandleNewMind(var/datum/mind/M)
+	..()
+	M.special_role = "Wizard"
+	M.original = M.current
+
+/datum/faction/wizard/OnPostSetup()
+	..()
+	if(wizardstart.len == 0)
+		for(var/datum/mind/wizard in members)
+			to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
+		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		return 0 //Critical failure.
+
+	for(var/datum/mind/wwizard in members)
+		wwizard.current.forceMove(pick(wizardstart))
+		equip_wizard(wwizard.current)
+		name_wizard(wwizard.current)
+
 
 /datum/faction/wizard/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
@@ -142,6 +175,8 @@
 /datum/faction/vampire
 	name = "Space Vampires"
 	ID = VAMPIRE
+	initial_role = VAMPIRE
+	late_role = VAMPIRE
 	required_pref = ROLE_VAMPIRE
 	desc = "Beings cursed to wander the galaxy to satiate their lust for blood, \
 	usually pointed towards NT station by the syndicate in exchange for causing chaos and completing objectives for them.\
@@ -154,7 +189,10 @@
 
 /datum/faction/revolution
 	name = "Revolutionaries"
+	ID = REV
 	required_pref = ROLE_REV
+	initial_role = REV
+	late_role = REV
 	desc = "Viva!"
 
 /datum/faction/revolution/GetObjectivesMenuHeader()

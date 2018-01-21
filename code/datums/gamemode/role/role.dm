@@ -97,15 +97,17 @@
 	// Objectives
 	var/datum/objective_holder/objectives=new
 
-/datum/role/New(var/datum/mind/M=null, var/datum/faction/fac=null, var/new_id)
+/datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+	if(!M)
+		del(src)
+		return
 	// Link faction.
 	faction=fac
 
-	if(M)
-		AssignToRole(M)
-
 	if(new_id)
 		id = new_id
+
+	AssignToRole(M)
 
 	if(!plural_name)
 		plural_name="[name]s"
@@ -120,7 +122,11 @@
 	if(faction && !(M in faction.members))
 		faction.members += M
 
+	antag = M
+	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
+
+	OnPreSetup()
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M)
 	if(!istype(M))
@@ -196,12 +202,11 @@
 		return 0
 	var/datum/objective/O
 	if(text)
-		O = new objective_type(src,text)
+		O = new objective_type(text)
 	else
-		O = new objective_type(src)
+		O = new objective_type()
 	if(O.PostAppend())
 		objectives.AddObjective(O)
-		antag.objectives.AddObjective(O)
 		return 1
 	return 0
 
@@ -211,10 +216,10 @@
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
-		to_chat(antag, "<B>You are a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
+		to_chat(antag.current, "<B>You are a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 	var/obj_count = 1
 	for(var/datum/objective/objective in objectives.GetObjectives())
-		to_chat(antag, "<B>Objective #[obj_count++]</B>: [objective.explanation_text]")
+		to_chat(antag.current, "<B>Objective #[obj_count++]</B>: [objective.explanation_text]")
 
 
 /datum/role/proc/PreMindTransfer(var/datum/mind/M)
@@ -352,3 +357,24 @@
 
 /datum/role/proc/GetMemoryHeader()
 	return name
+
+/datum/role/wizard
+	name = "wizard"
+	special_role = "Wizard"
+	disallow_job = TRUE
+
+/datum/role/wizard/ForgeObjectives()
+	switch(rand(1,100))
+		if(1 to 30)
+			AppendObjective(/datum/objective/target/assassinate)
+			AppendObjective(/datum/objective/escape, 1)
+		if(31 to 60)
+			AppendObjective(/datum/objective/target/steal)
+			AppendObjective(/datum/objective/escape, 1)
+		if(61 to 100)
+			AppendObjective(/datum/objective/target/assassinate)
+			AppendObjective(/datum/objective/target/steal)
+			AppendObjective(/datum/objective/survive, 1)
+		else
+			AppendObjective(/datum/objective/hijack)
+	return

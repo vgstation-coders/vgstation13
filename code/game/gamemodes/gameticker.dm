@@ -136,6 +136,8 @@ var/datum/controller/gameticker/ticker
 			src.mode = new mtype
 	else
 		src.mode = config.pick_mode(master_mode)
+	//log_startup_progress("gameticker.mode is [src.mode.name].")
+	src.mode = new mode.type
 	if (!src.mode.can_start())
 		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.minimum_player_count] players needed. Reverting to pre-game lobby.")
 		del(mode)
@@ -144,8 +146,7 @@ var/datum/controller/gameticker/ticker
 		return 0
 
 	//Configure mode and assign player to special mode stuff
-	job_master.DivideOccupations() //Distribute jobs
-	var/can_continue = src.mode.can_start()//Setup special modes
+	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
 		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
@@ -162,7 +163,7 @@ var/datum/controller/gameticker/ticker
 		modes = sortList(modes)
 		to_chat(world, "<B>The current game mode is - Secret!</B>")
 		to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
-
+	job_master.DivideOccupations() //Distribute jobs
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
