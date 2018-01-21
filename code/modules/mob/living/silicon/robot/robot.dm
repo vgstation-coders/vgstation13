@@ -1594,3 +1594,14 @@
 			client.screen -= A
 	module.remove_languages(src)
 	module = null
+
+/mob/living/silicon/robot/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			return sensor_mode == 2
+		if(HUD_SECURITY)
+			return sensor_mode == 1
+	return FALSE
+
+/mob/living/silicon/robot/identification_string()
+	return "[name] ([modtype] [braintype])"

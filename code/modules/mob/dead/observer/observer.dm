@@ -1000,3 +1000,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if (source_turf in view(src))
 			rendered_speech = "<B>[rendered_speech]</B>"
 			to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")
+
+/mob/dead/observer/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			return selectedHUD == HUD_MEDICAL
+		if(HUD_SECURITY)
+			return selectedHUD == HUD_SECURITY
+	return
