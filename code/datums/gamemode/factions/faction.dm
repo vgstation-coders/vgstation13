@@ -95,7 +95,7 @@
 
 /datum/faction/syndicate/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "synd-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Syndicate</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Syndicate</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
 /datum/faction/syndicate/traitor
@@ -131,7 +131,7 @@
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/mob/mob.dmi', "changelogoa")
 	var/icon/logo_right = icon('icons/mob/mob.dmi', "changelogob")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo_left)]'> <FONT size = 2><B>Changelings Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]'> <FONT size = 2><B>Changelings Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]'>"}
 	return header
 
 /datum/faction/wizard
@@ -167,7 +167,7 @@
 
 /datum/faction/wizard/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
 
@@ -184,7 +184,7 @@
 
 /datum/faction/vampire/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "vampire-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Vampiric wanderers</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Vampiric wanderers</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
 /datum/faction/revolution
@@ -197,7 +197,7 @@
 
 /datum/faction/revolution/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "rev-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
 /datum/faction/strike_team

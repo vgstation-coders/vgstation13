@@ -217,9 +217,8 @@
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
 		to_chat(antag.current, "<B>You are a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
-	var/obj_count = 1
-	for(var/datum/objective/objective in objectives.GetObjectives())
-		to_chat(antag.current, "<B>Objective #[obj_count++]</B>: [objective.explanation_text]")
+	to_chat(antag.current, "[ReturnObjectivesString()]")
+	antag.store_memory("[ReturnObjectivesString()]")
 
 
 /datum/role/proc/PreMindTransfer(var/datum/mind/M)
