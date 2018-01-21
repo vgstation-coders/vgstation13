@@ -320,6 +320,7 @@
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
+	return C
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	locking_init()
