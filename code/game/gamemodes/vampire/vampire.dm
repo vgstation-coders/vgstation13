@@ -11,7 +11,7 @@
 	protected_jobs = list()
 	required_players = 1
 	required_players_secret = 10
-	required_enemies = 1
+	required_enemies = 2
 	recommended_enemies = 4
 
 	uplink_welcome = "Syndicate Uplink Console:"
