@@ -8,7 +8,7 @@ var/list/datum/map_element/map_elements = list()
 	var/type_abbreviation //Very short string that determines the map element's type (whether it's an away mission, a small vault, or something else)
 
 	var/file_path = "maps/randomvaults/new.dmm"
-	var/load_at_once = FALSE //If true, lag reduction methods will not be applied when this is loaded, freezing atmos and mob simulations until the map element is loaded.
+	var/load_at_once = TRUE //If true, lag reduction methods will not be applied when this is loaded, freezing atmos and mob simulations until the map element is loaded.
 
 	var/turf/location //Lower left turf of the map element
 
