@@ -1,7 +1,7 @@
 /obj/item/organ/internal/brain
 	name = "brain"
 	health = 400 //They need to live awhile longer than other organs.
-	desc = "A piece of juicy meat found in a person's head."
+	desc = "wow what a big brain the owner of this must have been a coder for https://github.com/vgstation-coders/vgstation13"
 	icon_state = "brain2"
 	flags = 0
 	force = 1.0
