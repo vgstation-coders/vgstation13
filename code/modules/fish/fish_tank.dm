@@ -229,7 +229,7 @@
 			add_filth(2)							//Dead fish raise the filth level quite a bit, reflect this
 
 	//Check filth_level
-	if(filth_level == 10 && fish_list.len > 0)			//This tank is nasty and possibly unsuitable for fish if any are in it
+	if(filth_level == MAX_FILTH && fish_list.len > 0)			//This tank is nasty and possibly unsuitable for fish if any are in it
 		if(prob(30))								//Chance for a fish to die each cycle while the tank is this nasty
 			kill_fish()								//Kill a random fish, don't raise filth level since we're at cap already
 
@@ -237,15 +237,14 @@
 	if(fish_list.len >=2 && egg_list.len < max_fish)		//Need at least 2 fish to breed, but won't breed if there are as many eggs as max_fish
 		if(food_level > 2 && filth_level <=5)		//Breeding is going to use extra food, and the filth_level shouldn't be too high
 			if(prob(((fish_list.len - 2) * 5)+10))		//Chances increase with each additional fish, 10% base + 5% per additional fish
-				egg_list.len++						//A new set of eggs were laid, increase egg_list.len
 				egg_list.Add(select_egg_type())		//Add the new egg to the egg_list for storage
 				remove_food(2)						//Remove extra food for the breeding process
 
 	//Handle standard food and filth adjustments
 	var/ate_food = FALSE
 	if(food_level > 0 && prob(50))					//Chance for the fish to eat some food
-		if(food_level >= (fish_list.len * 0.1))		//If there is at least enough food to go around, feed all the fish
-			remove_food(fish_list.len * 0.1)
+		if(food_level >= (fish_list.len * 0.01))		//If there is at least enough food to go around, feed all the fish
+			remove_food(fish_list.len * 0.01)
 		else										//Use up the last of the food
 			food_level = 0
 		ate_food = TRUE
@@ -285,7 +284,7 @@
 			if("feederfish")						//Feeder fish have a small chance of sacrificing themselves to produce some food
 				if(fish_list.len < 2)					//Don't sacrifice the last fish, there's nothing to eat it
 					continue
-				if(food_level <= 5 && prob(25))
+				if(food_level <= FOOD_OK && prob(25))
 					kill_fish("feederfish")			//Kill the fish to reflect it's sacrifice, but don't increase the filth_level
 					add_food(1)					//The corpse became food for the other fish, ecology at it's finest
 			if("glofish")
@@ -299,7 +298,7 @@
 	update_icon()
 
 /obj/machinery/fishtank/proc/add_water(var/amount)
-	water_level = min(water_capacity, filth_level + amount)
+	water_level = min(water_capacity, water_level + amount)
 	update_icon()
 
 /obj/machinery/fishtank/proc/remove_filth(var/amount)
@@ -312,9 +311,11 @@
 
 /obj/machinery/fishtank/proc/remove_food(var/amount)
 	food_level = max(0, food_level - amount)
+	update_icon()
 
 /obj/machinery/fishtank/proc/add_food(var/amount)
 	food_level = min(MAX_FOOD, food_level + amount)
+	update_icon()
 
 /obj/machinery/fishtank/proc/check_health()
 	//Max value check
@@ -350,23 +351,18 @@
 	var/fish = pick(fish_list)						//Select a fish from the fish in the tank
 	if(prob(25))									//25% chance to be a dud (blank) egg
 		fish = "dud"
-	var/obj/item/fish_eggs/egg_path	= null			//Create empty variable to receive the egg_path
-	egg_path = fish_eggs_list[fish]					//Locate the corresponding path from fish_eggs_list that matches the fish
-	if(!egg_path)									//The fish wasn't located in the fish_eggs_list, potentially due to a typo, so return a dud egg
-		return /obj/item/fish_eggs
-	else											//The fish was located in the fish_eggs_list, so return the proper egg
-		return egg_path
+	var/obj/item/fish_eggs/egg_path	= fish_eggs_list[fish]					//Locate the corresponding path from fish_eggs_list that matches the fish
+	return egg_path									//The fish was located in the fish_eggs_list, so return the proper egg
 
 /obj/machinery/fishtank/proc/harvest_eggs(var/mob/user)
 	if(!egg_list.len)									//Can't harvest non-existant eggs
 		return
 
-	for(var/i in egg_list.len)						//Loop until you've harvested all the eggs
-		var/obj/item/fish_eggs/egg = pick(egg_list)	//Select an egg at random
-		egg = new egg(get_turf(user))				//Spawn the egg at the user's feet
-		egg_list.Remove(egg)						//Remove the egg from the egg_list
+	for(var/i = 1 to egg_list.len)						//Loop until you've harvested all the eggs
+		var/obj/item/fish_eggs/egg = egg_list[i]	//Go through the eggs
+		new egg(get_turf(user))						//Spawn the egg at the user's feet
 
-	egg_list.Cut()									//Destroy any excess eggs, clearing the egg_list
+	egg_list = list()								//Destroy any excess eggs, clearing the egg_list
 
 /obj/machinery/fishtank/proc/harvest_fish(var/mob/user)
 	if(!fish_list.len)									//Can't catch non-existant fish!
@@ -490,7 +486,7 @@
 		//Build a message reporting the types of fish
 		var/message = "You spot "
 		for (var/i = 1 to fish_list.len)
-			if(fish_list.len > 1 && i == 1)	//If there were at least 2 fish, and this is the last one, add "and" to the message
+			if(fish_list.len > 1 && i == fish_list.len)	//If there were at least 2 fish, and this is the last one, add "and" to the message
 				message += "and "
 			message += "a [fish_list[i]]"
 			if(i < fish_list.len)					//There's more fish, add a comma to the message
@@ -656,6 +652,10 @@
 		if(fish_list.len >= max_fish)
 			to_chat(user, "<span class='warning'>\The [src] can't hold any more fish.</span>")
 			return FALSE
+		if (egg.fish_type == "dud") // Fugging duds
+			to_chat(user, "<span class='warning'>The eggs didn't hatch. They were duds!</span>")
+			qdel(egg)
+			return FALSE
 		add_fish(egg.fish_type)
 		qdel(egg)
 		return TRUE
@@ -673,7 +673,7 @@
 			user.visible_message("\The [user] shakes some fish food into the empty [src]... How sad.", "<span class='notice'>You shake some fish food into the empty [src]... If only it had fish.</span>")
 		else
 			user.visible_message("\The [user] feeds the fish in \the [src]. The fish look excited!", "<span class='notice'>You feed the fish in \the [src]. They look excited!</span>")
-		add_food(10)
+		add_food(MAX_FOOD)
 
 		return TRUE
 	//Fish egg scoop

@@ -4,7 +4,7 @@
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "eggs"
 	w_class = W_CLASS_SMALL
-	var/fish_type 			//Holds the name of the fish that the egg is for
+	var/fish_type = "dud"			//Holds the name of the fish that the egg is for
 
 /obj/item/fish_eggs/New()
 	..()
