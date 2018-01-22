@@ -649,7 +649,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contraband = 1
 
 /datum/supply_packs/contacts
-	name = "Contact Lenses"
+	name = "Contact lenses"
 	contains = list(/obj/item/clothing/glasses/contacts/polarized,
 					/obj/item/clothing/glasses/contacts/polarized,
 					/obj/item/clothing/glasses/contacts,

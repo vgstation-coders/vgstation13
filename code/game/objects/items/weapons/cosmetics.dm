@@ -493,7 +493,7 @@
 		shatter()
 
 /obj/item/weapon/nanitecontacts
-	name = "Nanite Contacts"
+	name = "nanite contacts"
 	desc = "Deploys nanobots to your eyes to change their color."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "nanite_contact"
@@ -516,7 +516,7 @@
 	contact_color.Blend(rgb(color_r, color_g, color_b), ICON_ADD)
 	overlays += contact_color
 
-/obj/item/weapon/nanitecontacts/attack_self(mob/user as mob)
+/obj/item/weapon/nanitecontacts/attack_self(mob/user)
 	var/new_color = input(user, "Choose the contact's color:", "Color Select") as color|null
 	if(new_color)
 		color_r = hex2num(copytext(new_color, 2, 4))
@@ -524,29 +524,28 @@
 		color_b = hex2num(copytext(new_color, 6, 8))
 	update_icon()
 
-/obj/item/weapon/nanitecontacts/attack(mob/M as mob, mob/user as mob)
-	if(!istype(M, /mob))
+/obj/item/weapon/nanitecontacts/attack(mob/M, mob/user)
+	if(!istype(M))
 		return
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/area = user.zone_sel.selecting
-		var/area_string = "eyes"
 		if(area == "eyes")
 			var/obj/item/clothing/cover = H.get_body_part_coverage(EYES)
 			if(cover)
 				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] eyes through that [cover.name]!</span>")
 				return
 		if(H == user)
-			user.visible_message("<span class='notice'>[user] colors their [area_string] with \the [src].</span>", \
-								 "<span class='notice'>You color your [area_string] with \the [src].</span>")
+			user.visible_message("<span class='notice'>[user] colors their eyes with \the [src].</span>", \
+								 "<span class='notice'>You color your eyes with \the [src].</span>")
 			color_eyes(H)
 		else
-			user.visible_message("<span class='warning'>[user] begins to color \the [H]'s [area_string] with \the [src].</span>", \
-								 "<span class='notice'>You begin to color \the [H]'s [area_string] with \the [src].</span>")
+			user.visible_message("<span class='warning'>[user] begins to color \the [H]'s eyes with \the [src].</span>", \
+								 "<span class='notice'>You begin to color \the [H]'s eyes with \the [src].</span>")
 			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
-				user.visible_message("<span class='notice'>[user] colors [H]'s [area_string] with \the [src].</span>", \
-									 "<span class='notice'>You color [H]'s [area_string] with \the [src].</span>")
+				user.visible_message("<span class='notice'>[user] colors [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You color [H]'s eyes with \the [src].</span>")
 				color_eyes(H)
 	else
 		to_chat(user, "<span class='notice'>\The [M]'s eyes don't fit in the contacts!</span>")
