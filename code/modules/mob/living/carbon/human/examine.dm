@@ -439,9 +439,9 @@
 			criminal = sec_record.fields["criminal"]
 
 			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>"}
+<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
 			if(!isjustobserver(user))
-				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
+				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]\n</a>\n"
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
 	if(user.hasHUD(HUD_MEDICAL))
@@ -453,7 +453,7 @@
 			medical = gen_record.fields["p_stat"]
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
-			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a>"}
+			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
 		if(!isjustobserver(user))
 			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 
