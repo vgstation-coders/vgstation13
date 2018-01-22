@@ -5,6 +5,10 @@
 #define SMESLEVELCHARGING	2
 #define SMESLEVELONLINE		3
 
+#define BATTERY_NO_CHARGE		0
+#define BATTERY_MANUAL_CHARGE	1
+#define BATTERY_AUTO_CHARGE		2
+
 var/global/list/battery_charge = 	list(
 										image('icons/obj/power.dmi', "smes-og1"),
 										image('icons/obj/power.dmi', "smes-og2"),
@@ -51,10 +55,11 @@ var/global/list/battery_online =	list(
 
 	var/output = 50000
 	var/lastout = 0
+	var/loadcharge = 0
 	var/loaddemand = 0
 	var/capacity = 5e6 //Max stored charge
 	var/charge = 1e6 //Stored charge
-	var/charging = 0 //Are we currently taking charge in?
+	var/charging = BATTERY_NO_CHARGE //Are we currently taking charge in?
 	var/chargemode = 0 //Are we set to charge or not? Not the same as charging
 	var/chargecount = 0 //How long we've spent since not charging
 	var/chargelevel = 50000
@@ -81,9 +86,9 @@ var/global/list/battery_online =	list(
 			capcount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	capacity = initial(capacity) + capcount*5e5
-	max_input = initial(max_input) + lasercount*25000
-	max_output = initial(max_output) + lasercount*25000
+	capacity = initial(capacity) + capcount*125e4
+	max_input = initial(max_input) + lasercount*50000
+	max_output = initial(max_output) + lasercount*50000
 
 /obj/machinery/power/battery/process()
 	if(stat & (BROKEN | FORCEDISABLE | EMPED))
@@ -102,12 +107,12 @@ var/global/list/battery_online =	list(
 	var/excess = surplus()
 
 	if (charging)
-		if (excess >= chargelevel) // If there's power available, try to charge
-			var/load = min((capacity - charge) / SMESRATE, chargelevel) // Charge at set rate, limited to spare capacity
-
-			charge += load * SMESRATE // Increase the charge
-
-			add_load(load) // Add the load to the terminal side network
+		// Manual charge mode is the 'old' mode, when batteries only charge when available power is higher than set charge level
+		// Auto charge mode lets batteries take any amount of available power, limited by charge level
+		if((chargemode == BATTERY_MANUAL_CHARGE && excess >= chargelevel)||(chargemode == BATTERY_AUTO_CHARGE && excess > 0)) // If there's power available, try to charge
+			loadcharge = min((capacity - charge) / SMESRATE, excess, chargelevel) // Charge at set rate, limited to spare capacity
+			charge += loadcharge * SMESRATE // Increase the charge
+			add_load(loadcharge) // Add the load to the terminal side network
 
 		else
 			charging = FALSE
@@ -119,7 +124,7 @@ var/global/list/battery_online =	list(
 				charging = TRUE
 				chargecount = 0
 
-			if (excess > chargelevel)
+			if ((chargemode == BATTERY_MANUAL_CHARGE && excess >= chargelevel) || (chargemode == BATTERY_AUTO_CHARGE && excess > 0))
 				chargecount++
 			else
 				chargecount = 0
@@ -192,6 +197,7 @@ var/global/list/battery_online =	list(
 	data["storedCapacity"] = round(100.0*charge/capacity, 0.1)
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
+	data["chargeLoad"] = round(loadcharge)
 	data["chargeLevel"] = chargelevel
 	data["chargeMax"] = max_input
 	data["outputOnline"] = online
@@ -234,9 +240,14 @@ var/global/list/battery_online =	list(
 		return 0 // Do not update ui
 
 	if( href_list["cmode"] )
-		chargemode = !chargemode
-		if(!chargemode)
-			charging = 0
+		switch( href_list["cmode"])
+			if("auto")
+				chargemode = BATTERY_AUTO_CHARGE
+			if("manual")
+				chargemode = BATTERY_MANUAL_CHARGE
+			if("off")
+				chargemode = BATTERY_NO_CHARGE
+				charging = 0
 		update_icon()
 
 	else if( href_list["online"] )

@@ -17,7 +17,9 @@
 		Charge Mode:
 	</div>
 	<div class="itemContent">
-		{{:helper.link('Auto', 'refresh', {'cmode' : 1}, data.chargeMode ? 'selected' : null)}}{{:helper.link('Off', 'close', {'cmode' : 1}, data.chargeMode ? null : 'selected')}}
+		{{:helper.link('Auto', 'refresh', {'cmode' : 'auto'}, data.chargeMode == 2 ? 'selected' : null)}}
+		{{:helper.link('Manual', 'refresh', {'cmode' : 'manual'}, data.chargeMode == 1 ? 'selected' : null)}}
+		{{:helper.link('Off', 'close', {'cmode' : 'off'}, data.chargeMode ? null : 'selected')}}
 		&nbsp;
 		{{if data.charging}}
 			[<span class='good'>Charging</span>]
@@ -41,6 +43,17 @@
 		</div>
 	</div>
 </div>
+<div class="item">
+	<div class="itemLabel">
+		Input Charge:
+	</div>
+	<div class="itemContent">
+		{{if data.chargeLoad > 0}}
+			<span class='good'>+{{:data.chargeLoad}} W</span>
+		{{else}}
+			<span class='average'>0 W</span>
+		{{/if}}
+	</div>
 {{else}}
 <div class="item">
 	<div class="itemContent">
