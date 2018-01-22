@@ -78,4 +78,4 @@
 	modules += new /obj/item/device/rcd/borg(src)
 	modules += new /obj/item/device/lightreplacer/borg(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
-	modules += new /obj/item/weapon/storage/bag/ore/cyborg(src)
+	modules += new /obj/item/weapon/storage/bag/ore/auto(src)

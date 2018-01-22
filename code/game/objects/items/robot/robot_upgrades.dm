@@ -3,8 +3,6 @@
 
 #define FAILED_TO_ADD 1
 
-/obj/item/borg/upgrade/var/vtec_bonus = 0.25 //Define when
-
 /obj/item/borg/upgrade
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
@@ -97,7 +95,7 @@
 		return FAILED_TO_ADD
 
 	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
-		R.movement_speed_modifier -= vtec_bonus
+		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
 	qdel(R.module)
 
 	if(R.hands)
@@ -170,7 +168,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	R.movement_speed_modifier += vtec_bonus
+	R.movement_speed_modifier += SILICON_VTEC_SPEED_BONUS
 
 
 /obj/item/borg/upgrade/tasercooler

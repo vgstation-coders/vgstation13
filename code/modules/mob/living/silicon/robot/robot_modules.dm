@@ -494,7 +494,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/storage/bag/ore/cyborg(src)
+	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)

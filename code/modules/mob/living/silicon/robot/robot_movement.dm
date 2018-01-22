@@ -25,19 +25,9 @@
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
 			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
 		if(cell.charge <= 0)
-			. += SILICON_NO_CHARGE_SLOWDOWN
+			. *= SILICON_NO_CHARGE_SLOWDOWN
 		else
 			if(module)
 				. *= module.speed_modifier
 	else
-		. += SILICON_NO_CELL_SLOWDOWN
-
-//mob/living/silicon/robot/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-//	if(..())
-//		if(istype(NewLoc, /turf/unsimulated/floor/asteroid) && istype(module, /obj/item/weapon/robot_module/miner))
-//			var/obj/item/weapon/storage/bag/ore/ore_bag = locate(/obj/item/weapon/storage/bag/ore) in get_all_slots() //find it in our modules
-//			if(ore_bag)
-//				var/atom/newloc = NewLoc //NewLoc isn't actually typecast
-//				for(var/obj/item/weapon/ore/ore in newloc.contents)
-//					ore_bag.preattack(NewLoc, src, TRUE) //collects everything
-//					break
+		. *= SILICON_NO_CELL_SLOWDOWN
