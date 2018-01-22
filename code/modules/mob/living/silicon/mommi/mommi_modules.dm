@@ -1,7 +1,3 @@
-var/global/list/mommi_modules = list(
-	"Nanotrasen"= /obj/item/weapon/robot_module/mommi/nt,
-	"Soviet" 	= /obj/item/weapon/robot_module/mommi/soviet
-	)
 
 /obj/item/weapon/robot_module/mommi
 	name = "mobile mmi robot module"
@@ -68,11 +64,13 @@ var/global/list/mommi_modules = list(
 		"RepairBot" = "repairbot",
 		"Hover" = "hovermommi"
 		)
+	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 
 //Derelict MoMMI
 /obj/item/weapon/robot_module/mommi/soviet
 	name = "russian remont robot module"
 	ae_type = "Начато отмену"
+	speed_modifier = MOMMI_SOVIET_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R)
 	..()
@@ -80,4 +78,4 @@ var/global/list/mommi_modules = list(
 	modules += new /obj/item/device/rcd/borg(src)
 	modules += new /obj/item/device/lightreplacer/borg(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
-	modules += new /obj/item/weapon/storage/bag/ore(src)
+	modules += new /obj/item/weapon/storage/bag/ore/cyborg(src)

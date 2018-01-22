@@ -1,16 +1,5 @@
-
-var/global/list/robot_modules = list(
-	"Standard"		= /obj/item/weapon/robot_module/standard,
-	"Service" 		= /obj/item/weapon/robot_module/butler,
-	"Supply" 		= /obj/item/weapon/robot_module/miner,
-	"Medical" 		= /obj/item/weapon/robot_module/medical,
-	"Security" 		= /obj/item/weapon/robot_module/security,
-	"Engineering"	= /obj/item/weapon/robot_module/engineering,
-	"Janitor" 		= /obj/item/weapon/robot_module/janitor,
-	"Combat" 		= /obj/item/weapon/robot_module/combat,
-	"Syndicate"		= /obj/item/weapon/robot_module/syndicate,
-	"TG17355"		= /obj/item/weapon/robot_module/tg17355
-)
+#define STANDARD_MAX_KIT 15
+#define MEDBORG_MAX_KIT 10
 
 /obj/item/weapon/robot_module
 	name = "robot module"
@@ -38,6 +27,7 @@ var/global/list/robot_modules = list(
 	var/can_be_pushed = TRUE
 	var/no_slip = FALSE
 	var/radio_key = null
+	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER
 
 	// Bookkeeping
 	var/list/added_networks = list()
@@ -162,7 +152,6 @@ var/global/list/robot_modules = list(
 		"R34 - STR4a 'Durin'" = "durin"
 		)
 
-#define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
 
@@ -221,8 +210,8 @@ var/global/list/robot_modules = list(
 		"Noble" = "Noble-MED",
 		"R34 - MED6a 'Gibbs'" = "gibbs"
 		)
+	speed_modifier = CYBORG_MEDICAL_SPEED_MODIFIER
 
-#define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
 
@@ -300,6 +289,7 @@ var/global/list/robot_modules = list(
 		"Noble" = "Noble-ENG",
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
+	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
@@ -387,6 +377,7 @@ var/global/list/robot_modules = list(
 		"Noble" = "Noble-SEC",
 		"R34 - SEC10a 'Woody'" = "woody"
 		)
+	speed_modifier = CYBORG_SECURITY_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -418,6 +409,7 @@ var/global/list/robot_modules = list(
 		"Noble" = "Noble-JAN",
 		"R34 - CUS3a 'Flynn'" = "flynn"
 		)
+	speed_modifier = CYBORG_JANITOR_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/janitor/New()
 	..()
@@ -461,6 +453,7 @@ var/global/list/robot_modules = list(
 		LANGUAGE_GUTTER	= TRUE,
 		LANGUAGE_MONKEY	= TRUE,
 		)
+	speed_modifier = CYBORG_SERVICE_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/butler/New()
 	..()
@@ -495,12 +488,13 @@ var/global/list/robot_modules = list(
 		"Noble" = "Noble-SUP",
 		"R34 - MIN2a 'Ishimura'" = "ishimura"
 		)
+	speed_modifier = CYBORG_SUPPLY_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/storage/bag/ore(src)
+	modules += new /obj/item/weapon/storage/bag/ore/cyborg(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)
@@ -540,6 +534,7 @@ var/global/list/robot_modules = list(
 	sprites = list(
 		"Droid - 'Rottweiler'" = "rottweiler-combat"
 		)
+	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
@@ -567,6 +562,7 @@ var/global/list/robot_modules = list(
 		"Kodiak - 'Grizzly'" = "kodiak-combat",
 		"R34 - WAR8a 'Chesty'" = "chesty"
 		)
+	speed_modifier = CYBORG_COMBAT_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/combat/New()
 	..()
@@ -590,6 +586,7 @@ var/global/list/robot_modules = list(
 		"Peacekeeper" = "peaceborg",
 		"Omoikane" = "omoikane"
 	)
+	speed_modifier = CYBORG_TG17355_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/tg17355/New()
 	..()

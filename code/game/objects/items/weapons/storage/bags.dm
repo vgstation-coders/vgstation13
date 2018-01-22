@@ -111,6 +111,92 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	can_only_hold = list("/obj/item/weapon/ore")
 
 
+/obj/item/weapon/storage/bag/ore/cyborg
+	name = "automatic ore collector"
+	actions_types = list(/datum/action/item_action/toggle_auto_collect, /datum/action/item_action/toggle_auto_filling)
+	var/collecting = FALSE
+	var/filling = FALSE
+	var/event_key = null
+	var/event_key_2 = null
+
+/datum/action/item_action/toggle_auto_collect
+	name = "Toggle Auto Collect"
+
+/datum/action/item_action/toggle_auto_collect/Trigger()
+	var/obj/item/weapon/storage/bag/ore/cyborg/T = target
+	var/mob/user = usr
+
+	if(!usr)
+		if(!ismob(T.loc))
+			return
+		user = T.loc
+	if(!istype(T))
+		return
+
+	T.collecting = !T.collecting
+	to_chat(user, "You turn the auto collecting [T.collecting? "on":"off"].")
+	if(!T.collecting)
+		T.event_key = user.on_moved.Add(T, "mob_moved")
+	else
+		T.event_key = null
+
+/obj/item/weapon/storage/bag/ore/cyborg/proc/auto_collect()
+	var/atom/collect_loc = get_turf(loc)
+	for(var/obj/item/weapon/ore/ore in collect_loc.contents)
+		preattack(collect_loc, src, TRUE) //collects everything
+		break
+
+/datum/action/item_action/toggle_auto_filling
+	name = "Toggle Auto Box Filling"
+
+/datum/action/item_action/toggle_auto_filling/Trigger()
+	var/obj/item/weapon/storage/bag/ore/cyborg/T = target
+	var/mob/user = usr
+
+	if(!usr)
+		if(!ismob(T.loc))
+			return
+		user = T.loc
+	if(!istype(T))
+		return
+
+	T.filling = !T.filling
+	to_chat(user, "You turn the auto filling [T.filling? "on":"off"].")
+	if(!T.filling)
+		T.event_key_2 = user.on_moved.Add(T, "mob_moved")
+	else
+		T.event_key_2 = null
+
+/obj/item/weapon/storage/bag/ore/cyborg/proc/auto_fill(var/mob/holder)
+	var/turf/T=get_turf(src)
+	var/obj/structure/ore_box/box = null
+	for(var/obj/structure/ore_box/B in range(1, holder))
+		box = B
+		break
+	for(var/obj/item/weapon/ore/ore in contents)
+		if(ore.material && box)
+			remove_from_storage(ore,T) //This will remove the item.
+			box.materials.addAmount(ore.material, 1)
+			qdel(ore)
+
+/obj/item/weapon/storage/bag/ore/cyborg/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(isrobot(holder))
+		var/mob/living/silicon/robot/S = holder
+		if(locate(src) in S.get_all_slots())
+			if(collecting)
+				auto_collect()
+			if(filling)
+				auto_fill(holder)
+
+	if(iscarbon(holder))
+		var/mob/living/carbon/C = holder
+		if(C.is_holding_item(src))
+			if(collecting)
+				auto_collect()
+			if(filling)
+				auto_fill(holder)
+
+
 // -----------------------------
 //          Plant bag
 // -----------------------------

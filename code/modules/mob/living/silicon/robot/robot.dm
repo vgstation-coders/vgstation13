@@ -70,7 +70,7 @@
 	var/weaponlock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
-	var/speed = 0 //Cause sec borgs gotta go fast //No they dont!
+	var/speed = DEFAULT_CYBORG_SPEED
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
 	var/lawcheck[1]
@@ -1355,6 +1355,17 @@
 	module.remove_languages(src)
 	module = null
 
+/mob/living/silicon/robot/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			return sensor_mode == 2
+		if(HUD_SECURITY)
+			return sensor_mode == 1
+	return FALSE
+
+/mob/living/silicon/robot/identification_string()
+	return "[name] ([modtype] [braintype])"
+
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
@@ -1394,13 +1405,3 @@
 	..()
 
 	set_module_sprites(list("Omoikane" = "omoikane"))
-/mob/living/silicon/robot/hasHUD(var/hud_kind)
-	switch(hud_kind)
-		if(HUD_MEDICAL)
-			return sensor_mode == 2
-		if(HUD_SECURITY)
-			return sensor_mode == 1
-	return FALSE
-
-/mob/living/silicon/robot/identification_string()
-	return "[name] ([modtype] [braintype])"
