@@ -148,7 +148,7 @@
 /datum/butchering_product/skin/human/spawn_result(location, mob/parent)
 	if(!amount)
 		return
-
+	amount--
 	if(ishuman(parent))
 		var/mob/living/carbon/human/H = parent
 
@@ -161,6 +161,8 @@
 			if(H.mind && H.mind.assigned_role && H.mind.assigned_role != "MODE") //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
 				A.name = "[lowertext(H.mind.assigned_role)] skin"
 				A.source_string = lowertext(H.mind.assigned_role)
+
+
 
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
