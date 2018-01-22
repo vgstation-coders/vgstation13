@@ -62,6 +62,11 @@ obj/item/proc/get_clamped_volume()
 	if (can_operate(M, user))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,I))
 			return 1
+
+	if (user.is_pacified())
+		to_chat(user, "<span class='notice'>[pick("Like...violence...what is it even good for","Nah, you don't feel like doing that.","What did \the [M] even do to you? Chill out.")]</span>")
+		return 0
+
 	//if (istype(M,/mob/living/carbon/brain))
 	//	messagesource = M:container
 	/////////////////////////

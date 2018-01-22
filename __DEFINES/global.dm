@@ -320,6 +320,8 @@ var/nanocoins_lastchange = 0
 var/speciesinit = 0
 var/minimapinit = 0
 
+var/bees_species = list()
+
 var/datum/stat_collector/stat_collection = new
 
 //Hardcore mode
@@ -352,3 +354,5 @@ var/list/extraMiniMaps = list()
 var/list/holomap_markers = list()
 
 var/holomaps_initialized = 0
+
+

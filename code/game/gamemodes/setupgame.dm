@@ -230,6 +230,11 @@ var/VEGANBLOCK = 0
 			if(species.default_blocks.len)
 				all_species[name]=species
 
+	//hi-jacking this proc for bee species
+	for(var/x in typesof(/datum/bee_species))
+		var/datum/bee_species/species = new x
+		bees_species[species.common_name] = species
+
 	speciesinit = 1
 
 

@@ -2095,5 +2095,10 @@ mob/proc/on_foot()
 				alpha = initial(alpha)
 				alphas.Remove(source_define)
 
+/mob/proc/is_pacified()
+	if (reagents.has_reagent(CHILLWAX))
+		return 1
+	return 0
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
