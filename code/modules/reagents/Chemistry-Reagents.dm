@@ -2910,6 +2910,9 @@
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
+/datum/reagent/zombiepowder/reagent_deleted()
+	return on_removal(volume)
+
 //Hotfix for Fakedeath never ending.
 /datum/reagent/zombiepowder/on_removal(var/amount)
 	if(!..(amount))

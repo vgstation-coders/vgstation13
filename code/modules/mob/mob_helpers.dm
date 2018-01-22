@@ -542,3 +542,12 @@ proc/is_blind(A)
 			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
 	return FALSE
+
+// Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()
+// Returns whether the mob can see the specified HUD
+/mob/proc/hasHUD(var/hud_kind)
+	return FALSE
+
+// Returns a string that provides identification data for this mob
+/mob/proc/identification_string()
+	return name
