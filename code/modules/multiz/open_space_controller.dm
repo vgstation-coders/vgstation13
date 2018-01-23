@@ -11,7 +11,7 @@
 	init_order    = SS_INIT_OS //27. Must be before map (20)
 	priority      = SS_PRIORITY_OS //Between power and objects, 99
 	wait          = 1 SECONDS //originally world.tick_lag
-	//No display order, we have no interesting info
+	display_order = SS_DISPLAY_OSC
 	var/list/turfs_to_process = list()		// List of turfs queued for update.
 	var/list/turfs_to_process_old = null	// List of turfs currently being updated.
 	var/tmp/last_object //Polaris has this. Almost certainly used because their processing datums have automatic crash logging.
@@ -34,6 +34,10 @@
 /*/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
 	. = ..()
 	OS_controller = src*/
+
+/datum/subsystem/open_space/stat_entry(msg)
+	msg += "OS: [turfs_to_process.len]"
+	..(msg)
 
 /datum/subsystem/open_space/fire(resumed = FALSE)
 	// We use a different list so any additions to the update lists during a delay from scheck()
@@ -117,8 +121,22 @@
 
 // Just as New() we probably should hook Destroy() If we can think of something more efficient, lets hear it.
 /obj/Destroy()
-	if(OS_controller.initialized && !invisibility && isturf(loc))
+	if(OS_controller && OS_controller.initialized && !invisibility && isturf(loc))
 		var/turf/T = GetAbove(src)
 		if(isopenspace(T))
 			OS_controller.add_turf(T, 1)
 	. = ..() // Important that this be at the bottom, or we will have been moved to nullspace.
+
+// Debug verbs.
+/client/proc/update_all_open_spaces()
+	set category = "Debug"
+	set name = "Update open spaces"
+	set desc = "On multi-z maps, force all open space turfs to update_icon"
+
+	if (!holder)
+		return
+
+	for(var/turf/simulated/open/O in world)
+		O.update_icon()
+
+	message_admins("Admin [key_name_admin(usr)] forced open spaces to update.")

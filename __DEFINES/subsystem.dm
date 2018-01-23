@@ -57,3 +57,4 @@
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0
 #define SS_DISPLAY_SUN             10
+#define SS_DISPLAY_OSC			   20
