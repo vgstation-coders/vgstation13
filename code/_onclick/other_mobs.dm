@@ -53,9 +53,10 @@
 		A.attack_stump(src, params)
 
 	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		var/crawldelay = movement_delay()*3
-		Move(A, get_dir(src,A), glide_size_override = crawldelay)
-		delayNextMove(crawldelay,additive=1)
+		if (do_after(src, A, 1 SECONDS))
+			var/crawldelay = movement_delay()*3
+			Move(A, get_dir(src,A), glide_size_override = crawldelay)
+			delayNextMove(crawldelay,additive=1)
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
