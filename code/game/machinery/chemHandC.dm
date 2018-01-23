@@ -250,7 +250,8 @@
 
 	if(!held_container && cooling) //For when you take the beaker off but left the heater on
 		cooling = !cooling
-		overlays -= image(icon = icon, icon_state = "t[scanner_kind]_wave")
+		overlays -= image(icon = icon, icon_state = "t[scanner_kind]_waveFront")
+		underlays -= image(icon = icon, icon_state = "t[scanner_kind]_waveBack")
 		processing_objects.Remove(src)
 		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
 		update_icon()
@@ -258,11 +259,13 @@
 	else if(held_container)
 		cooling = !cooling
 		if(cooling)
-			overlays += image(icon = icon, icon_state = "t[scanner_kind]_wave")
+			overlays += image(icon = icon, icon_state = "t[scanner_kind]_waveFront")
+			underlays += image(icon = icon, icon_state = "t[scanner_kind]_waveBack")
 			processing_objects.Add(src)
 			to_chat(usr, "<span class='notice'>You turn on \the [src].</span>")
 		else
-			overlays -= image(icon = icon, icon_state = "t[scanner_kind]_wave")
+			overlays -= image(icon = icon, icon_state = "t[scanner_kind]_waveFront")
+			underlays -= image(icon = icon, icon_state = "t[scanner_kind]_waveBack")
 			processing_objects.Remove(src)
 			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
 		update_icon()
