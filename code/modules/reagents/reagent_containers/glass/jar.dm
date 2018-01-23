@@ -50,7 +50,6 @@
 		var/image/contained_within = image("icon"=held_item)
 		var/matrix/M = matrix()
 		M.Scale(0.4, 0.4)
-		M.Translate(rand(1,3))
 		contained_within.transform = M
 		underlays += contained_within
 
