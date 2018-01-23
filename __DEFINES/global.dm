@@ -365,4 +365,24 @@ var/holomaps_initialized = 0
 #define SOC_CATBEAST "Furry"
 #define SOC_FRANKENSTEIN "Frankenstein"
 
-var/available_staff_transforms=list(SOC_MONKEY,SOC_MARTIAN,SOC_CYBORG,SOC_SLIME,SOC_XENO,SOC_HUMAN,SOC_CATBEAST,SOC_FRANKENSTEIN)
+var/list/available_staff_transforms = list(
+	SOC_MONKEY,SOC_MARTIAN,
+	SOC_CYBORG,
+	SOC_SLIME,
+	SOC_XENO,
+	SOC_HUMAN,
+	SOC_CATBEAST,
+	SOC_FRANKENSTEIN
+	)
+
+//Broken mob list
+var/list/blacklisted_mobs = list(
+		/mob/living/simple_animal/space_worm, // Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
+		/mob/living/simple_animal/hostile/humanoid, // JUST DON'T DO IT, OK?
+		/mob/living/simple_animal/hostile/retaliate/cockatrice, // I'm just copying this from transmog.
+		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
+		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
+		/mob/living/slime_pile, // They are dead.
+		/mob/living/adamantine_dust // Ditto
+		)

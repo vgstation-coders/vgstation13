@@ -317,30 +317,4 @@
 	to_chat(new_mob, "You feel more... animalistic")
 	return new_mob
 
-/* Certain mob types have problems and should not be allowed to be controlled by players.
- *
- * This proc is here to force coders to manually place their mob in this list, hopefully tested.
- * This also gives a place to explain -why- players shouldnt be turn into certain mobs and hopefully someone can fix them.
- */
-/mob/proc/safe_animal(var/MP)
-	var/list/broken_dudes = list(
-		/mob/living/simple_animal/space_worm, // Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
-		/mob/living/simple_animal/hostile/humanoid, // JUST DON'T DO IT, OK?
-		/mob/living/simple_animal/hostile/retaliate/cockatrice, // I'm just copying this from transmog.
-		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
-		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
-		/mob/living/slime_pile, // They are dead.
-		/mob/living/adamantine_dust // Ditto
-		)
-
-	if(!MP)
-		return FALSE	//Sanity, this should never happen.
- 	//Bad mobs! - Remember to add a comment explaining what's wrong with the mob
-	if(is_type_in_list(MP, broken_dudes))
-		return FALSE
-
-	//Not in here? Must be untested, but WHO CARES!
-	return TRUE
-
 #undef MONKEY_ANIM_TIME
