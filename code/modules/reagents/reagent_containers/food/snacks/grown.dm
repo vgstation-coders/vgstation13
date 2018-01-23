@@ -329,7 +329,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
-	desc = "Boil 'em! Mash 'em! Stick 'em in a stew!"
+	desc = "The space Irish starved to death after their potato crops died. Sadly they were unable to fish for space carp due to it being the queens space. Bringing this up to any space IRA member will drive them insane with anger."
 	icon_state = "potato"
 	potency = 25
 	filling_color = "#E6E8DA"
