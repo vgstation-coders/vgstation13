@@ -114,7 +114,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 /obj/item/weapon/storage/bag/ore/auto
 	name = "automatic ore loader"
 	desc = "A mining satchel with a built-in inserter used to automatically move ore over short distances."
-	icon_state = "tech satchel"
+	icon_state = "tech_satchel"
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
 	var/event_key = null
