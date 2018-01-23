@@ -104,9 +104,10 @@
 				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You insert \the [W] into \the [src]'s ignition and turn it.</span>")
 					user.visible_message("<span class='notice'>\The [src]'s engine roars to life!</span>")
-					playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1) // find a better sound later
 					src.heldkey = W
 					return
+				else //In case the key is unable to leave the user's hand. IE glue.
+					to_chat(user, "<span class='notice'>You fail to put \the [W] into \the [src]'s ignition and turn it.</span>")
 			else
 				if(keytype)
 					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
@@ -126,7 +127,6 @@
 	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
 		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
 		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
-		playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1) // find a better sound later
 		heldkey.forceMove(get_turf(user))
 		user.put_in_hands(heldkey)
 		heldkey = null
