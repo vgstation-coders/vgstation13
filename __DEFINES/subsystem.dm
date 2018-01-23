@@ -89,6 +89,7 @@
 #define SS_DISPLAY_SUN             10
 #define SS_DISPLAY_DBCORE		   15
 #define SS_DISPLAY_DAYNIGHT		   20
+#define SS_DISPLAY_OSC			   21
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

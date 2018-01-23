@@ -13,6 +13,11 @@
 	movementJammed = 1
 	base_turf = /turf/unsimulated/floor/asteroid/air
 
+/datum/zLevel/sky
+	name = "above ground level"
+	movementJammed = 1
+	base_turf = /turf/simulated/open
+
 /datum/map/active
 	nameShort = "test_multiz"
 	nameLong = "Multi-Floor Test Station"
@@ -24,7 +29,8 @@
 	zLevels = list(
 		/datum/zLevel/centcomm,
 		/datum/zLevel/subterranean,
-		/datum/zLevel/surface
+		/datum/zLevel/surface,
+		/datum/zLevel/sky
 		)
 
 ////////////////////////////////////////////////////////////////

@@ -142,8 +142,8 @@
 	if(!area.has_gravity) //Polaris uses a proc, has_gravity(), for this
 		return
 
-	if(throwing)
-		return
+	/*if(throwing)  This was causing odd behavior where things wouldn't stop.
+		return*/
 
 	if(can_fall())
 		// We spawn here to let the current move operation complete before we start falling. fall() is normally called from

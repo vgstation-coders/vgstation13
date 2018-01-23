@@ -59,7 +59,7 @@
 
 	target_ladder.visible_message("<span class='notice'>You hear something coming [direction] \the [src]</span>")
 
-	if(do_after(M, climb_time, src))
+	if(do_after(M, src, climb_time))
 		climbLadder(M, target_ladder)
 
 /obj/structure/ladder/attack_ghost(var/mob/M)
