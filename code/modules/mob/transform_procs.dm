@@ -23,7 +23,7 @@
 
 /mob/living/carbon/Premorph(delete_items = FALSE)
 	dropBorers()
-	..()
+	return ..()
 
 /mob/proc/Postmorph(var/mob/new_mob = null)
 	if(!new_mob)
@@ -305,7 +305,7 @@
 	return new_frank
 
 /mob/proc/Animalize()
-	var/list/mobtypes = typesof(/mob/living/simple_animal)
+	var/list/mobtypes = existing_typesof(/mob/living/simple_animal)
 	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
 	if(!safe_animal(mobpath))
 		to_chat(usr, "<span class='warning'>Sorry but this mob type is currently unavailable.</span>")
