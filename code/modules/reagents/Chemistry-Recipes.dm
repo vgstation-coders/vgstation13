@@ -3041,5 +3041,12 @@
 	required_temp = T0C + 450
 	result_amount = 1
 
+/datum/chemical_reaction/saline
+	name = "Saline"
+	id = SALINE
+	result = SALINE
+	required_reagents = list(SODIUMCHLORIDE = 3, WATER = 5, AMMONIA = 1)
+	result_amount = 1
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

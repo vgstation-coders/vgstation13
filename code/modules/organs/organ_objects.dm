@@ -59,6 +59,11 @@
 	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
 		return
 
+	if(istype(loc,/obj/item/weapon/reagent_containers/glass/jar))
+		var/obj/item/weapon/reagent_containers/glass/jar/J = loc
+		if(J.safe_holder())
+			return
+
 	if(fresh && prob(40))
 		fresh--
 		var/datum/reagent/blood = reagents.reagent_list[BLOOD]

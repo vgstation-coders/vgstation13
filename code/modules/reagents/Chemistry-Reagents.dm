@@ -8,17 +8,23 @@
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
 
-//The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
-//so that it can continue working when the reagent is deleted while the proc is still active.
+/*	The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
+	so that it can continue working when the reagent is deleted while the proc is still active.
 
-//Always call parent on reaction_mob, reaction_obj, reaction_turf, on_mob_life and Destroy() so that the sanities can be handled
-//Failure to do so will lead to serious problems
+	Always call parent on reaction_mob, reaction_obj, reaction_turf, on_mob_life and Destroy() so that the sanities can be handled
+	Failure to do so will lead to serious problems
 
-//Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
+	Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
 
-//Not sure what to have your density and SHC as? Use the components of the reagent
-//density = (for(components of recipe) total_mass += component density* component volume)/volume of result
-//SHC = (for(components of recipe) total_SHC *= component SHC)
+	Not sure what to have your density and SHC as? No IRL equivalent you can google? Use the components of the reagent
+		density = (for(components of recipe) total_mass += component density* component volume)/volume of result. E.G
+			6 SALINE = 3 SODIUMCHLORIDE, 5 WATER, 1 AMMONIA
+				density = ((1 + (2.09*3) + (1*5) + (0.51*1))/6) = 2.22 (rounded to 2dp)
+
+		SHC = (for(components of recipe) total_SHC *= component SHC)
+
+
+*/
 
 /datum/reagent
 	var/name = "Reagent"
@@ -6338,3 +6344,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
+
+/datum/reagent/saline
+	name = "Saline"
+	id = SALINE
+	description = "A solution composed of salt, water, and ammonia. Used in pickling and preservation"
+	reagent_state = LIQUID
+	color = "#DEF7F5" //rgb: 192, 227, 233
+	alpha = 64
+	density = 2.22
+	specheatcap = 23.727
