@@ -73,6 +73,7 @@
 	..()
 	if(held_item)
 		to_chat(user, "<span class = 'info'>It has \a [held_item] floating within.</span>")
+		to_chat(user, "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[held_item]'>Take a closer look.</a></span>")
 
 
 /obj/item/weapon/reagent_containers/glass/jar/on_reagent_change()
@@ -112,3 +113,17 @@
 
 
 	reagents.reaction(held_item)
+
+/obj/item/weapon/reagent_containers/glass/jar/throw_impact(atom/hit_atom, var/speed, mob/user)
+	..()
+	if(hit_atom)
+		src.visible_message("<span  class='warning'>The [src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		reagents.reaction(loc, TOUCH)
+		if(hit_atom != get_turf(src))
+			reagents.reaction(hit_atom, TOUCH)
+		if(held_item)
+			held_item.forceMove(loc)
+			held_item = null
+		getFromPool(/obj/item/weapon/shard, loc)
+		qdel(src)
