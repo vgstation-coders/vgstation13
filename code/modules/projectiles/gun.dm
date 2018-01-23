@@ -93,7 +93,7 @@
 	if(istype(target, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
 		return//Shouldnt flag take care of this?
 
-	if (user.is_pacified(2,A,src))
+	if (user.is_pacified(VIOLENCE_GUN,A,src))
 		return
 
 	if(user && user.client && user.client.gun_mode && !(A in target))

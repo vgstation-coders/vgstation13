@@ -21,7 +21,7 @@
 	..()
 	var/mob/living/L = holder
 	for(var/mob/living/target in targets)
-		if (L.is_pacified(1,target))
+		if (L.is_pacified(VIOLENCE_DEFAULT,target))
 			return
 		if(ishuman(target) || ismonkey(target))
 			var/mob/living/carbon/C = target

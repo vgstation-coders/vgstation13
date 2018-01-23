@@ -2095,12 +2095,12 @@ mob/proc/on_foot()
 				alpha = initial(alpha)
 				alphas.Remove(source_define)
 
-/mob/proc/is_pacified(var/message = 0,var/target,var/weapon)
+/mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if (reagents.has_reagent(CHILLWAX))
 		switch (message)
-			if (1)//unarmed, melee weapon, spell
+			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
 				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
-			if (2)//gun, projectile weapon
+			if (VIOLENCE_GUN)//gun, projectile weapon
 				to_chat(src, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [weapon] at \the [target].","Peace, my [gender == FEMALE ? "girl" : "man"]...")]</span>")
 		return 1
 	return 0

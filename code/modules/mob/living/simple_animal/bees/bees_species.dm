@@ -1,5 +1,23 @@
+//Beekeeping 3.5 by Deity Link
 
-//////////////////////////////////////NORMAL BEES////////////////////////////////////////////////
+//SPECIES DATUM
+
+//BUG DATUM
+
+//QUEEN BUG DATUM
+
+//QUEEN BUG PACKET
+
+//BUG CORPSES
+
+//TYPES FOR CASUAL SPAWNS
+
+//the framework will be expanded later for bugs other than bees, ones that don't have queens, hives...
+
+//////////////////////////////////////
+//           NORMAL BEES            //
+//////////////////////////////////////
+
 /datum/bee_species
 	var/name = "apis mellifera"
 	var/common_name = BEESPECIES_NORMAL
@@ -47,7 +65,10 @@
 	var/maxbodytemp = 360
 	var/corpse = /obj/effect/decal/cleanable/bee
 
-//////////////////////////////////////////VOX BEES//////////////////////////////////////////////
+//////////////////////////////////////
+//             VOX BEES             //
+//////////////////////////////////////
+
 /datum/bee_species/chill
 	name = "apis chiliverax"
 	common_name = BEESPECIES_VOX
@@ -73,6 +94,7 @@
 	maxbodytemp = 400
 	corpse = /obj/effect/decal/cleanable/bee/chill
 
+/////////////////BUG DATUM
 /datum/bee/chill
 	corpse = /obj/effect/decal/cleanable/bee/chill
 
@@ -80,6 +102,7 @@
 	..()
 	species = bees_species[BEESPECIES_VOX]
 
+/////////////////QUEEN BUG DATUM
 /datum/bee/queen_bee/chill
 	corpse = /obj/effect/decal/cleanable/bee/queen_bee/chill
 
@@ -87,7 +110,7 @@
 	..()
 	species = bees_species[BEESPECIES_VOX]
 
-
+/////////////////QUEEN BUG PACKET
 /obj/item/queen_bee/chill
 	name = "chill bug queen packet"
 	desc = "Place her into an apiary so she can get busy. This species is particularly non-violent. Produces wax with calming properties."
@@ -100,6 +123,7 @@
 	..()
 	species = bees_species[BEESPECIES_VOX]
 
+/////////////////BUG CORPSES
 /obj/effect/decal/cleanable/bee/chill
 	name = "dead chill bug"
 	desc = "This one stung for the last time."
@@ -109,6 +133,7 @@
 	name = "dead chill bug queen"
 	icon_state = "chill_queen_bee_dead"
 
+/////////////////TYPES FOR CASUAL SPAWNS
 /mob/living/simple_animal/bee/adminSpawned_chill/New(loc, var/obj/machinery/apiary/new_home)
 	..()
 	var/datum/bee/chill/B = new()

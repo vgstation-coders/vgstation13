@@ -103,9 +103,11 @@
 			for (var/i = 1 to 5)
 				var/datum/bee/BEE = pick(caught_bees)
 				caught_bees.Remove(BEE)
-				BEE.state = BEE_OUT_FOR_ENEMIES
+				if (current_species.angery)
+					BEE.state = BEE_OUT_FOR_ENEMIES
 				B.addBee(BEE)
-			B.state = BEE_OUT_FOR_ENEMIES
+			if (current_species.angery)
+				B.state = BEE_OUT_FOR_ENEMIES
 			B.target = M
 
 
@@ -114,9 +116,11 @@
 		while(caught_bees.len > 0)
 			var/datum/bee/BEE = pick(caught_bees)
 			caught_bees.Remove(BEE)
-			BEE.state = BEE_OUT_FOR_ENEMIES
+			if (current_species.angery)
+				BEE.state = BEE_OUT_FOR_ENEMIES
 			B.addBee(BEE)
-		B.state = BEE_OUT_FOR_ENEMIES
+		if (current_species.angery)
+			B.state = BEE_OUT_FOR_ENEMIES
 		B.target = M
 		current_species = null
 	else

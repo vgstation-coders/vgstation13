@@ -126,7 +126,7 @@
 /mob/living/simple_animal/bee/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if (istype(O,/obj/item/weapon/bee_net)) return
-	if (user.is_pacified(1,src)) return
+	if (user.is_pacified(VIOLENCE_DEFAULT,src)) return
 	if(O.force)
 		var/damage = O.force
 		if (O.damtype == HALLOSS)

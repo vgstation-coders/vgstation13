@@ -63,8 +63,7 @@ obj/item/proc/get_clamped_volume()
 		if (do_surgery(M,user,I))
 			return 1
 
-	if (user.is_pacified())
-		to_chat(user, "<span class='notice'>[pick("Like...violence...what is it even good for","Nah, you don't feel like doing that.","What did \the [M] even do to you? Chill out.")]</span>")
+	if (user.is_pacified(VIOLENCE_DEFAULT,M))
 		return 0
 
 	//if (istype(M,/mob/living/carbon/brain))
