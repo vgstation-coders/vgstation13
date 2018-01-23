@@ -89,8 +89,7 @@
 	return 1
 
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
-	if(is_pacified())
-		to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
+	if(is_pacified(1,target))
 		return
 
 	var/damage = get_unarmed_damage(target)

@@ -379,6 +379,8 @@
 			return global.speciesinit;
 		if("minimapinit")
 			return global.minimapinit;
+		if("bees_species")
+			return global.bees_species;
 		if("stat_collection")
 			return global.stat_collection;
 		if("hardcore_mode")

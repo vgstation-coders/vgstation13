@@ -1265,7 +1265,7 @@
 	density = 1.59
 	specheatcap = 1.244
 
-/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/honey/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!holder)
@@ -1299,14 +1299,17 @@
 	quality = 1
 	specheatcap = 1.244
 
-/datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		H.druggy = max(H.druggy, 15)
+		H.druggy = max(H.druggy, 5)
 		H.Dizzy(2)
 		if(prob(10))
 			H.emote(pick("stare", "giggle"))
+		if(prob(5))
+			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
 		if(prob(2))
+			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
 			H.sleeping += 1
 		..()
 

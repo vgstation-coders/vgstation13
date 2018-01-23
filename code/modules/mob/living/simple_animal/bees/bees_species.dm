@@ -108,3 +108,16 @@
 /obj/effect/decal/cleanable/bee/queen_bee/chill
 	name = "dead chill bug queen"
 	icon_state = "chill_queen_bee_dead"
+
+/mob/living/simple_animal/bee/adminSpawned_chill/New(loc, var/obj/machinery/apiary/new_home)
+	..()
+	var/datum/bee/chill/B = new()
+	addBee(B)
+	update_icon()
+
+/mob/living/simple_animal/bee/adminSpawnedQueen_chill/New(loc, var/obj/machinery/apiary/new_home)
+	..()
+	var/datum/bee/queen_bee/chill/B = new()
+	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
+	addBee(B)
+	update_icon()

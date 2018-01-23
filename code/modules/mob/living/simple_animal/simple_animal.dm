@@ -475,8 +475,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			else
 				butcher()
 				return 1
-	else if (user.is_pacified())
-		to_chat(user, "<span class='notice'>[pick("Like...violence...what is it even good for","Nah, you don't feel like doing that.","What did \the [src] even do to you? Chill out.")]</span>")
+	else if (user.is_pacified(1,src))
 		return
 	else
 		user.delayNextAttack(8)

@@ -171,7 +171,7 @@
 		else
 			to_chat(user, "<span class='notice'>You begin to dislodge the apiary from the tray.</span>")
 
-		if(species.angery && (queen_bees_inside || worker_bees_inside))
+		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			user.visible_message("<span class='danger'>The [species.common_name] don't like that.</span>")
 			angry_swarm(user)
 
@@ -203,21 +203,14 @@
 	else if(istype(O, /obj/item/weapon/bee_net))
 		var/obj/item/weapon/bee_net/N = O
 		if(N.caught_bees.len)
-			var transferred = 0
 			for (var/datum/bee/B in N.caught_bees)
 				if (!species || !(queen_bees_inside || worker_bees_inside))
 					species = B.species
 				if (species == B.species)
 					enterHive(B)
 					N.caught_bees.Remove(B)
-					transferred = 1
-				else
-					transferred = 2
-			switch (transferred)
-				if (1)
-					to_chat(user, "<span class='notice'>You empty the [species.common_name] into the apiary.</span>")
-				if (2)
-					to_chat(user, "<span class='warning'>Some of the bees couldn't fit inside the apiary because they belong to a different species.</span>")
+			N.current_species = null
+			to_chat(user, "<span class='notice'>You empty the [species.common_name] into the apiary.</span>")
 		else
 			to_chat(user, "<span class='notice'>There are no more bees in the net.</span>")
 	else
@@ -361,6 +354,8 @@
 
 		if(!queen_bees_inside && !worker_bees_inside)//if the apiary is empty, let's not waste time processing it
 			return
+		else if (!species)//preventing runtimes caused by casual varedits
+			species = bees_species[BEESPECIES_NORMAL]
 
 		//HANDLE BEEZEEZ
 		if(beezeez)
@@ -369,7 +364,6 @@
 
 			if(toxic > 0)
 				toxic--
-
 
 		//HANDLE NUTRILEVEL
 		nutrilevel -= worker_bees_inside / 20 + queen_bees_inside /5 + bees_outside_hive.len / 10 //Bees doing work need more nutrients

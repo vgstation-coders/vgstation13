@@ -17,6 +17,7 @@
 //When a bee leaves the hive, it takes on the hive's damage and toxic values
 /datum/bee/New(var/obj/machinery/apiary/spawner = null)
 	..()
+	species = bees_species[BEESPECIES_NORMAL]
 	if (spawner)
 		home = spawner
 		damage = spawner.damage

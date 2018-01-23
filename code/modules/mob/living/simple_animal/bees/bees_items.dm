@@ -24,21 +24,22 @@
 	species = bees_species[BEESPECIES_NORMAL]
 
 /obj/item/weapon/bee_net
-	name = "bee net"
-	desc = "For catching rogue bees."
+	name = "bug net"
+	desc = "For catching insects."
 	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "bee_net"
 	item_state = "bee_net"
 	w_class = W_CLASS_MEDIUM
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/beekeeping.dmi', "right_hand" = 'icons/mob/in-hand/right/beekeeping.dmi')
 	var/list/caught_bees = list()
+	var/datum/bee_species/current_species = null
 
 /obj/item/weapon/bee_net/examine(mob/user)
 	..()
 	if(caught_bees.len > 0)
-		to_chat(user, "<span class='info'>There's [caught_bees.len] caught bee\s in it!</span>")
+		to_chat(user, "<span class='info'>There's [caught_bees.len] caught [current_species.common_name]\s in it!</span>")
 	else
-		to_chat(user, "<span class='info'>It has no bees in it.</span>")
+		to_chat(user, "<span class='info'>It has no bugs in it.</span>")
 
 /obj/item/weapon/bee_net/afterattack(var/atom/A, var/mob/user, var/proximity_flag, var/click_parameters)
 	if(!proximity_flag)
@@ -48,6 +49,13 @@
 	var/turf/T = get_turf(A)
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
+		if (current_species)
+			if (current_species != B.bee_species)
+				to_chat(user, "<span class='warning'>You gotta empty \the [src] of [current_species.common_name] before you can catch [B.bee_species.common_name] with it!</span>")
+				return
+		else
+			current_species = B.bee_species
+
 		caught = 1
 		if(B.calmed > 0 || (B.state != BEE_OUT_FOR_ENEMIES))
 			if (!B.bee_species.angery || prob(max(0,100-B.bees.len*5)))
@@ -58,17 +66,20 @@
 						B.home.bees_outside_hive.Remove(BEES)
 				qdel(B)
 				B = null
-				user.visible_message("<span class='notice'>[user] nets some bees.</span>","<span class='notice'>You net up some of the bees.</span>")
+				user.visible_message("<span class='notice'>[user] nets some [B.bee_species.common_name].</span>","<span class='notice'>You net up some of the [B.bee_species.common_name].</span>")
 			else
-				user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
+				user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name], they don't seem to like it.</span>","<span class='warning'>You swing at some [B.bee_species.common_name], they don't seem to like it.</span>")
 				B.state = BEE_OUT_FOR_ENEMIES
 				B.target = user
 		else
-			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>The bees are too angry to let themselves get caught.</span>")
+			user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name], they don't seem to like it.</span>","<span class='warning'>The [B.bee_species.common_name] are too angry to let themselves get caught.</span>")
 			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = user
 	if(!caught)
-		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
+		to_chat(user, "<span class='warning'>There are no bugs in front of you!</span>")
+
+	if (!caught_bees.len)
+		current_species = null
 
 /obj/item/weapon/bee_net/attack_self(mob/user as mob)
 	empty_bees()
@@ -82,7 +93,10 @@
 		M = usr
 
 	if (caught_bees.len > 0)
-		to_chat(M, "<span class='warning'>You empty \the [src]! The bees are furious!</span>")
+		if (current_species.angery)
+			to_chat(M, "<span class='warning'>You empty \the [src]. The [current_species.common_name] are furious!</span>")
+		else
+			to_chat(M, "<span class='notice'>You empty \the [src].</span>")
 		//release a few swarms
 		while(caught_bees.len > 5)
 			var/mob/living/simple_animal/bee/B = new(get_turf(src))
@@ -104,6 +118,7 @@
 			B.addBee(BEE)
 		B.state = BEE_OUT_FOR_ENEMIES
 		B.target = M
+		current_species = null
 	else
 		to_chat(M, "<span class='warning'>There are no bees inside the net!</span>")
 
@@ -147,6 +162,28 @@
 	reagents.add_reagent(NUTRIMENT, 0.5)
 	reagents.add_reagent(SUGAR, 2)
 	bitesize = 2
+
+	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
+	I.color = mix_color_from_reagents(reagents.reagent_list)
+	icon_state = "honeycomb-base"
+	overlays += I
+
+/obj/item/weapon/reagent_containers/food/snacks/honeycomb/chill
+	name = "honeycomb"
+	icon_state = "honeycomb"
+
+/obj/item/weapon/reagent_containers/food/snacks/honeycomb/chill/New()
+	. = ..()
+	reagents.clear_reagents()
+	reagents.add_reagent(CHILLWAX,10)
+	reagents.add_reagent(NUTRIMENT, 0.5)
+	reagents.add_reagent(SUGAR, 2)
+	bitesize = 2
+
+	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
+	I.color = mix_color_from_reagents(reagents.reagent_list)
+	icon_state = "chill_honeycomb-base"
+	overlays += I
 
 /obj/item/weapon/book/manual/hydroponics_beekeeping
 	name = "The Ins and Outs of Apiculture - A Precise Art"

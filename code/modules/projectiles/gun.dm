@@ -93,8 +93,7 @@
 	if(istype(target, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
 		return//Shouldnt flag take care of this?
 
-	if (user.is_pacified())
-		to_chat(user, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [src] at \the [A].","Peace, my [user.gender == FEMALE ? "girl" : "man"]...")]</span>")
+	if (user.is_pacified(2,A,src))
 		return
 
 	if(user && user.client && user.client.gun_mode && !(A in target))

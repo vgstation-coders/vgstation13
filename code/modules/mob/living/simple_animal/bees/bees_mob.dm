@@ -126,9 +126,7 @@
 /mob/living/simple_animal/bee/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if (istype(O,/obj/item/weapon/bee_net)) return
-	if (user.is_pacified())
-		to_chat(user, "<span class='notice'>[pick("Like...violence...what is it even good for","Nah, you don't feel like doing that.","What did \the [src] even do to you? Chill out.")]</span>")
-		return
+	if (user.is_pacified(1,src)) return
 	if(O.force)
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
