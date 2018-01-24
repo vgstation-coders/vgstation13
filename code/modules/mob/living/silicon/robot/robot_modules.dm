@@ -1,36 +1,43 @@
-#define STANDARD_MAX_KIT 15
-#define MEDBORG_MAX_KIT 10
-
 /obj/item/weapon/robot_module
 	name = "robot module"
-	icon = 'icons/obj/module.dmi'
-	//icon_state = "std_module"
 	w_class = W_CLASS_GIANT
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
 
+	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER
+	var/can_be_pushed = TRUE
+	var/no_slip = FALSE
+
+	var/list/sprites = list()
+
+	//Modules
 	var/list/modules = list()
+	var/list/upgrades = list()
 	var/obj/item/emag = null
 	var/obj/item/borg/upgrade/jetpack = null
-	var/recharge_tick = 0
-	var/recharge_time = 10 // when to recharge a consumable, only used for engi borgs atm
+
+	//HUD
 	var/list/sensor_augs
-	var/languages = list(
+
+	//Languages
+	var/list/languages = list(
 		LANGUAGE_GALACTIC_COMMON = TRUE,
 		LANGUAGE_TRADEBAND = TRUE,
 		)
-	var/list/added_languages
-	var/list/upgrades = list()
-	var/networks = list()
-	var/sprites = list()
-	var/can_be_pushed = TRUE
-	var/no_slip = FALSE
-	var/radio_key = null
-	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER
+	var/list/added_languages //Bookkeeping
 
-	// Bookkeeping
-	var/list/added_networks = list()
+	//Radio
+	var/radio_key = null
+
+	//Camera
+	var/list/networks = list()
+	var/list/added_networks = list() //Bookkeeping
+
+	//Respawnables
+	var/recharge_tick = 0
+	var/list/respawnables
+	var/respawnables_max_amount = 0
 
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
@@ -53,9 +60,6 @@
 		qdel(upgrades)
 	upgrades = null
 	..()
-
-/obj/item/weapon/robot_module/proc/recharge_consumable()
-	return
 
 /obj/item/weapon/robot_module/proc/on_emag()
 	if(emag)
@@ -128,7 +132,15 @@
 		I.mouse_opacity = 2
 
 /obj/item/weapon/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R)
-	return
+	if(respawnables.len)
+		for(var/T in respawnables)
+			if(!(locate(T) in modules))
+				modules -= null
+				var/obj/item/stack/O = new T(src)
+				if(istype(O,T))
+					O.max_amount = respawnables_max_amount
+				modules += O
+				O.amount = 1
 
 /obj/item/weapon/robot_module/proc/rebuild()//Rebuilds the list so it's possible to add/remove items from the module
 	var/list/temp_list = modules
@@ -137,6 +149,17 @@
 		if(O)
 			modules += O
 
+/obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
+	for(var/language in languages)
+		if(R.add_language(language, languages[language]))
+			added_languages |= language
+
+/obj/item/weapon/robot_module/proc/remove_languages(var/mob/living/silicon/robot/R)
+	for(var/language in added_languages)
+		R.remove_language(language)
+	added_languages.Cut()
+
+//Modules
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
 	sprites = list(
@@ -151,6 +174,11 @@
 		"Noble" = "Noble-STD",
 		"R34 - STR4a 'Durin'" = "durin"
 		)
+	respawnables = list (
+		/obj/item/stack/medical/bruise_pack,
+		/obj/item/stack/medical/ointment,
+		)
+	respawnables_max_amount = STANDARD_MAX_KIT
 
 /obj/item/weapon/robot_module/standard/New()
 	..()
@@ -177,22 +205,6 @@
 
 	fix_modules()
 
-/obj/item/weapon/robot_module/standard/respawn_consumable(var/mob/living/silicon/robot/R)
-	// Replenish ointment and bandages
-	var/list/what = list (
-		/obj/item/stack/medical/bruise_pack,
-		/obj/item/stack/medical/ointment,
-	)
-	for (var/T in what)
-		if (!(locate(T) in modules))
-			modules -= null
-			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = STANDARD_MAX_KIT
-			modules += O
-			O.amount = 1
-	return
-
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
 	networks = list(CAMERANET_MEDBAY)
@@ -211,6 +223,12 @@
 		"R34 - MED6a 'Gibbs'" = "gibbs"
 		)
 	speed_modifier = CYBORG_MEDICAL_SPEED_MODIFIER
+	respawnables = list (
+		/obj/item/stack/medical/advanced/bruise_pack,
+		/obj/item/stack/medical/advanced/ointment,
+		/obj/item/stack/medical/splint
+		)
+	respawnables_max_amount = MEDICAL_MAX_KIT
 
 /obj/item/weapon/robot_module/medical/New()
 	..()
@@ -236,16 +254,16 @@
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/roller_holder(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
-	B.max_amount = MEDBORG_MAX_KIT
-	B.amount = MEDBORG_MAX_KIT
+	B.max_amount = MEDICAL_MAX_KIT
+	B.amount = MEDICAL_MAX_KIT
 	modules += B
 	var/obj/item/stack/medical/advanced/ointment/O = new /obj/item/stack/medical/advanced/ointment(src)
-	O.max_amount = MEDBORG_MAX_KIT
-	O.amount = MEDBORG_MAX_KIT
+	O.max_amount = MEDICAL_MAX_KIT
+	O.amount = MEDICAL_MAX_KIT
 	modules += O
 	var/obj/item/stack/medical/splint/S = new /obj/item/stack/medical/splint(src)
-	S.max_amount = MEDBORG_MAX_KIT
-	S.amount = MEDBORG_MAX_KIT
+	S.max_amount = MEDICAL_MAX_KIT
+	S.amount = MEDICAL_MAX_KIT
 	modules += S
 	emag = new /obj/item/weapon/reagent_containers/spray(src)
 	emag.reagents.add_reagent(PACID, 250)
@@ -254,23 +272,6 @@
 	sensor_augs = list("Medical", "Disable")
 
 	fix_modules()
-
-/obj/item/weapon/robot_module/medical/respawn_consumable(var/mob/living/silicon/robot/R)
-	var/list/what = list (
-		/obj/item/stack/medical/advanced/bruise_pack,
-		/obj/item/stack/medical/advanced/ointment,
-		/obj/item/stack/medical/splint,
-	)
-	for (var/T in what)
-		if (!(locate(T) in modules))
-			modules -= null
-			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = MEDBORG_MAX_KIT
-			modules += O
-			O.amount = 1
-	return
-
 
 /obj/item/weapon/robot_module/engineering
 	name = "engineering robot module"
@@ -290,6 +291,8 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
+	respawnables = list (/obj/item/stack/cable_coil)
+	respawnables_max_amount = ENGINEERING_MAX_COIL
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
@@ -315,52 +318,14 @@
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/device/geiger_counter(src)
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
-	W.amount = 50
-	W.max_amount = 50
+	W.amount = ENGINEERING_MAX_COIL
+	W.max_amount = ENGINEERING_MAX_COIL
 	modules += W
 	emag = new /obj/item/borg/stun(src)
 
 	sensor_augs = list("Mesons", "Disable")
 
 	fix_modules()
-
-
-/obj/item/weapon/robot_module/engineering/respawn_consumable(var/mob/living/silicon/robot/R)
-	var/list/what = list (
-		/obj/item/stack/cable_coil
-	)
-	for (var/T in what)
-		if (!(locate(T) in modules))
-			modules -= null
-			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/cable_coil))
-				O.max_amount = 50
-			modules += O
-			O.amount = 1
-	return
-
-/obj/item/weapon/robot_module/engineering/recharge_consumable(var/mob/living/silicon/robot/R)
-	for(var/T in modules)
-		if(!(locate(T) in modules)) //Remove nulls
-			modules -= null
-
-	recharge_tick++
-	if(recharge_tick < recharge_time)
-		return FALSE
-	recharge_tick = 0
-	if(R && R.cell)
-		respawn_consumable(R)
-		var/list/um = R.contents|R.module.modules
-		// ^ makes sinle list of active (R.contents) and inactive modules (R.module.modules)
-		for(var/obj/item/stack/O in um)
-			// Engineering
-			if(istype(O,/obj/item/stack/cable_coil))
-				if(O.amount < 50)
-					O.amount += 1
-					R.cell.use(50) 		//Take power from the borg...
-				if(O.amount > 50)
-					O.amount = 50
-
 
 /obj/item/weapon/robot_module/security
 	name = "security robot module"
@@ -466,6 +431,7 @@
 	modules += new /obj/item/weapon/pen/robopen(src)
 	modules += new /obj/item/weapon/dice/borg(src)
 	modules += new /obj/item/device/rcd/borg/rsf(src)
+	modules += new /obj/item/device/rcd/tile_painter(src)
 	modules += new /obj/item/weapon/lighter/zippo(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/weapon/tray/robotray(src)
@@ -492,6 +458,8 @@
 		"R34 - MIN2a 'Ishimura'" = "ishimura"
 		)
 	speed_modifier = CYBORG_SUPPLY_SPEED_MODIFIER
+	respawnables = list (/obj/item/stack/package_wrap)
+	respawnables_max_amount = SUPPLY_MAX_WRAP
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
@@ -503,33 +471,18 @@
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
+	modules += new /obj/item/device/gps/cyborg(src) 
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
-	modules += new /obj/item/device/gps/cyborg(src)
-	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
-	tag.mode = 1 //For editing the tag list
-	modules += tag
+	modules += new /obj/item/device/destTagger/cyborg(src)
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
-	W.amount = 24
-	W.max_amount = 24
+	W.amount = SUPPLY_MAX_WRAP
+	W.max_amount = SUPPLY_MAX_WRAP
 	modules += W
 	emag = new /obj/item/borg/stun(src)
 
 	sensor_augs = list("Mesons", "Disable")
 
 	fix_modules()
-
-/obj/item/weapon/robot_module/miner/respawn_consumable(var/mob/living/silicon/robot/R)
-	var/list/what = list (
-		/obj/item/stack/package_wrap
-	)
-	for (var/T in what)
-		if (!(locate(T) in modules))
-			modules -= null
-			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/package_wrap))
-				O.max_amount = 24
-			modules += O
-			O.amount = 1
 
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate robot module"
@@ -607,16 +560,3 @@
 	sensor_augs = list("Medical", "Disable")
 
 	fix_modules()
-
-/obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
-	for(var/language in languages)
-		if(R.add_language(language, languages[language]))
-			added_languages |= language
-
-/obj/item/weapon/robot_module/proc/remove_languages(var/mob/living/silicon/robot/R)
-	for(var/language in added_languages)
-		R.remove_language(language)
-	added_languages.Cut()
-
-#undef STANDARD_MAX_KIT
-#undef MEDBORG_MAX_KIT

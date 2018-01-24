@@ -285,7 +285,7 @@
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
-	icon_state = "cyborg_upgrade"
+	icon_state = "mainboard"
 	required_module = list(/obj/item/weapon/robot_module/butler)
 	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants, /obj/item/device/analyzer/plant_analyzer)
 
@@ -302,7 +302,7 @@
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
 	desc = "Used to give a service cyborg fun toys!"
-	icon_state = "cyborg_upgrade2"
+	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/butler, /obj/item/weapon/robot_module/tg17355)
 	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
 

@@ -18,8 +18,6 @@
 		use_power()
 		process_killswitch()
 		process_locks()
-		if(module)
-			module.recharge_consumable(src)
 	update_canmove()
 	handle_fire()
 	handle_beams()

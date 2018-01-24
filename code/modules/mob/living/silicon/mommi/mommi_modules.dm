@@ -3,9 +3,9 @@
 	name = "mobile mmi robot module"
 	languages = list()
 	no_slip = TRUE
-	sprites = list(
-		"Basic" = "mommi"
-		)
+	sprites = list("Basic" = "mommi")
+	respawnables = list (/obj/item/stack/cable_coil)
+	respawnables_max_amount = MOMMI_MAX_COIL
 	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
 
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
@@ -28,26 +28,16 @@
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
+	modules += new /obj/item/device/geiger_counter(src)
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
-	W.amount = 50
-	W.max_amount = 50 //Override MAXCOIL
+	W.amount = MOMMI_MAX_COIL
+	W.max_amount = MOMMI_MAX_COIL
 	modules += W
 	emag = new /obj/item/borg/stun(src)
 
 	sensor_augs = list("Mesons", "Disable")
 
 	fix_modules()
-
-/obj/item/weapon/robot_module/mommi/respawn_consumable(var/mob/living/silicon/robot/R)
-	var/list/what = list (/obj/item/stack/cable_coil)
-	for(var/T in what)
-		if(!(locate(T) in modules))
-			modules -= null
-			var/O = new T(src)
-			if(istype(O,/obj/item/stack/cable_coil))
-				O:max_amount = 50
-			modules += O
-			O:amount = 1
 
 //Nanotrasen's MoMMI
 /obj/item/weapon/robot_module/mommi/nt

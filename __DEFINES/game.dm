@@ -25,7 +25,14 @@
 
 #define FIREAXE_SLOWDOWN 1.4
 
-// Cyborgs & MoMMI
+// Cyborgs & MoMMI defines
+
+#define MEDICAL_MAX_KIT 10
+#define STANDARD_MAX_KIT 15
+#define SUPPLY_MAX_WRAP 24
+#define ENGINEERING_MAX_COIL 50
+#define MOMMI_MAX_COIL 50
+
 #define DEFAULT_CYBORG_SPEED 0
 
 #define SILICON_NO_CHARGE_SLOWDOWN 1.4
