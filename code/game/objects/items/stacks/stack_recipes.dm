@@ -12,7 +12,8 @@
 	var/one_per_turf = 0
 	var/on_floor = 0
 	var/start_unanchored = 0
-	New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0)
+	var/list/other_reqs = list()
+	New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list())
 		src.title = title
 		src.result_type = result_type
 		src.req_amount = req_amount
@@ -22,6 +23,7 @@
 		src.one_per_turf = one_per_turf
 		src.on_floor = on_floor
 		src.start_unanchored = start_unanchored
+		src.other_reqs = other_reqs
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
 	if(one_per_turf && locate(result_type) in T)
@@ -226,6 +228,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50									),
 	new/datum/stack_recipe("trophy mount",		/obj/item/mounted/frame/trophy_mount,	2,		time = 15									),
 	new/datum/stack_recipe("throne",			/obj/structure/bed/chair/wood/throne,	40,		time = 100,	one_per_turf = 1,	on_floor = 1),
+	new/datum/stack_recipe("chest",				/obj/structure/closet/crate/chest,		10,		time = 50,	one_per_turf = 1,	on_floor = 1, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
 	)
 
 /* =========================================================================
