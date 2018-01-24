@@ -33,11 +33,11 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
+	speak("butt")
 	return
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(sincelastfart + 5 < world.timeofday)
-		speak("butt")
 		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
 
@@ -59,7 +59,7 @@ Here it is: Buttbot.
 
 			split_phrase[index] = "butt"
 
-		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		speak(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
 		fart()
 
 
