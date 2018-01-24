@@ -26,6 +26,7 @@ Here it is: Buttbot.
 	. = ..()
 	if (.)
 		return
+	speak("butt")
 	fart()
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
@@ -33,7 +34,6 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
-	speak("butt")
 	return
 
 /obj/machinery/bot/buttbot/proc/fart()
