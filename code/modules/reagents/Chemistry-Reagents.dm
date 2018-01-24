@@ -3335,7 +3335,10 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.sleeping++
+			M.confused++
+			M.drowsyness++
+			if(volume >= 10)
+				M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
