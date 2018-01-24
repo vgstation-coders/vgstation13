@@ -65,8 +65,8 @@
 					if (B.home)
 						B.home.bees_outside_hive.Remove(BEES)
 				qdel(B)
-				B = null
 				user.visible_message("<span class='notice'>[user] nets some [B.bee_species.common_name].</span>","<span class='notice'>You net up some of the [B.bee_species.common_name].</span>")
+				B = null
 			else
 				user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name], they don't seem to like it.</span>","<span class='warning'>You swing at some [B.bee_species.common_name], they don't seem to like it.</span>")
 				B.state = BEE_OUT_FOR_ENEMIES
@@ -108,7 +108,7 @@
 				B.addBee(BEE)
 			if (current_species.angery)
 				B.state = BEE_OUT_FOR_ENEMIES
-			B.target = M
+				B.target = M
 
 
 		//what's left over
@@ -121,7 +121,7 @@
 			B.addBee(BEE)
 		if (current_species.angery)
 			B.state = BEE_OUT_FOR_ENEMIES
-		B.target = M
+			B.target = M
 		current_species = null
 	else
 		to_chat(M, "<span class='warning'>There are no bees inside the net!</span>")

@@ -121,6 +121,9 @@
 
 /obj/item/queen_bee/chill/New()
 	..()
+	initialize()
+
+/obj/item/queen_bee/chill/initialize()
 	species = bees_species[BEESPECIES_VOX]
 
 /////////////////BUG CORPSES
@@ -136,12 +139,18 @@
 /////////////////TYPES FOR CASUAL SPAWNS
 /mob/living/simple_animal/bee/adminSpawned_chill/New(loc, var/obj/machinery/apiary/new_home)
 	..()
+	initialize()
+
+/mob/living/simple_animal/bee/adminSpawned_chill/initialize()
 	var/datum/bee/chill/B = new()
 	addBee(B)
 	update_icon()
 
 /mob/living/simple_animal/bee/adminSpawnedQueen_chill/New(loc, var/obj/machinery/apiary/new_home)
 	..()
+	initialize()
+
+/mob/living/simple_animal/bee/adminSpawnedQueen_chill/initialize()
 	var/datum/bee/queen_bee/chill/B = new()
 	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
 	addBee(B)
