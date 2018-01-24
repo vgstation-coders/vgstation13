@@ -498,12 +498,13 @@
 
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
-	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
+	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
+	modules += new /obj/item/device/gps/cyborg(src)
 	var/obj/item/device/destTagger/tag = new /obj/item/device/destTagger(src)
 	tag.mode = 1 //For editing the tag list
 	modules += tag
