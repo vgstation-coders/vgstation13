@@ -32,7 +32,6 @@
 		/obj/item/weapon/stock_parts/capacitor
 	)
 	RefreshParts()
-	overlays += image(icon = icon, icon_state = "t[laser_kind]_laser") //Adds the side laser
 
 /obj/machinery/chemheater/RefreshParts()
 	var/T = 0
@@ -90,8 +89,7 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		held_container.forceMove(src.loc)
-		held_container.attack_hand(user)
+		user.put_in_hand(held_container)
 		held_container = null
 		had_item = TRUE
 	toggle()
@@ -178,7 +176,6 @@
 		/obj/item/weapon/stock_parts/capacitor
 	)
 	RefreshParts()
-	overlays += image(icon = icon, icon_state = "t[scanner_kind]_scanner") //Adds the side scanner
 
 /obj/machinery/chemcooler/RefreshParts()
 	var/T = 0
@@ -236,8 +233,7 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		held_container.forceMove(src.loc)
-		held_container.attack_hand(user)
+		user.put_in_hand(held_container)
 		held_container = null
 		had_item = TRUE
 	toggle()

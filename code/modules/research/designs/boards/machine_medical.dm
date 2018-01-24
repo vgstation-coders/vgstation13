@@ -108,7 +108,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = "/obj/machinery/chemheater"
+	build_path = /obj/item/weapon/circuitboard/chemheater
 
 /datum/design/chemcooler
 	name = "Circuit Design (Cryonic Wave Projector)"
@@ -118,7 +118,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = "/obj/machinery/chemcooler"
+	build_path = /obj/item/weapon/circuitboard/chemcooler
 
 //VIROLOGY
 
