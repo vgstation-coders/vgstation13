@@ -357,7 +357,7 @@ datum/emergency_shuttle/proc/process()
 
 		if(1)
 
-			if(timeleft == 5)
+			if(timeleft == 6 || timeleft == 5)
 				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
 			if(timeleft == 2 || timeleft == 1)
