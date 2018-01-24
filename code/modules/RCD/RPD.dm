@@ -152,5 +152,5 @@
 		return
 	return ..()
 
-/obj/item/device/rcd/rpd/admin/delay(var/amount)
+/obj/item/device/rcd/rpd/admin/delay(var/mob/user, var/atom/target, var/amount)
 	return TRUE
