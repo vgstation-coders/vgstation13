@@ -23,7 +23,7 @@
 
 	to_chat(user, "Destroying Pipe...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, AM, 5))
+	if(!master.delay(user, AM, 0.5 SECONDS))
 		return 1
 
 	if(!AM)
@@ -153,7 +153,7 @@
 
 	to_chat(user, "Building gas sensor...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -170,7 +170,7 @@
 
 	to_chat(user, "Building pipe meter...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -376,7 +376,7 @@
 	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
 	var/thisdir = selected_dir
-	if(!do_after(user, A, 20))
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -419,7 +419,7 @@
 /datum/rcd_schematic/pipe/disposal/attack(var/atom/A, var/mob/user)
 	to_chat(user, "Building Pipes ...")
 	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	if(!master.delay(user, A, 2 SECONDS))
 		return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
