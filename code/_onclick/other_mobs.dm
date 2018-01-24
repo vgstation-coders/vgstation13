@@ -55,9 +55,8 @@
 	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
 		var/delay = round(1 + base_movement_tally()/5) * 1 SECONDS
 		if (do_after(src, A, delay))
-			var/crawldelay = movement_delay()*3
 			Move(A, get_dir(src,A), glide_size_override = delay) // So that we're still smooth
-			delayNextMove(crawldelay,additive=1)
+			delayNextMove(delay, additive=1)
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
