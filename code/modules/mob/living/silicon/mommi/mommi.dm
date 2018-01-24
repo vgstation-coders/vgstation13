@@ -8,7 +8,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	name = "Mobile MMI"
 	desc = "It's like a crab, but it has a utility tool on one arm and a crude metal claw on the other.  That, and you doubt it'd survive in an ocean for very long."
 	real_name = "Mobile MMI"
-	icon = 'icons/mob/robots.dmi'
+	icon = 'icons/mob/mommi.dmi'
 	icon_state = "mommi"
 	maxHealth = 60
 	health = 60
