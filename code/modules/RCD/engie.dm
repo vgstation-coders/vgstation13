@@ -37,7 +37,6 @@
 /obj/item/device/rcd/matter/engineering/pre_loaded/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
 		visible_message("\The [src] disappears into nothing.")
-		user.drop_item(src, force_drop = TRUE)
 		qdel(src)
 		return
 	return ..()
