@@ -264,12 +264,12 @@
 	handle_special_interactions()
 
 	//Handle water leakage from damage
-	if(leaking && leaking)
+	if(leaking)
 		switch(leaking)							//Can't leak water if there is no water in the tank
 			if(MAJOR_LEAK)							//At or below 25% health, the tank will lose 10 water_level per cycle (major leak)
 				remove_water(10)
 			if(MINOR_LEAK)						//At or below 50% health, the tank will lose 1 water_level per cycle (minor leak)
-				add_water(1)
+				remove_water(1)
 
 //////////////////////////////
 //		SUPPORT PROCS		//
