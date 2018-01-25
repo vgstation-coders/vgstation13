@@ -109,22 +109,7 @@
 	H.update_mutations()
 	H.update_body()
 
-	/* This never worked.
-	var/datum/objective/steal/steal_objective = new
-	steal_objective.owner = H.mind
-	steal_objective.set_target("nuclear authentication disk")
-	H.mind.objectives += steal_objective
-	*/
-
-	var/datum/objective/hijack/hijack_objective = new
-	hijack_objective.owner = H.mind
-	H.mind.objectives += hijack_objective
-
 	to_chat(H, "<B>You are a highlander!</B>")
-	var/obj_count = 1
-	for(var/datum/objective/OBJ in H.mind.objectives)
-		to_chat(H, "<B>Objective #[obj_count++]</B>: [OBJ.explanation_text]")
-
 	for (var/obj/item/I in H)
 		if (istype(I, /obj/item/weapon/implant))
 			continue

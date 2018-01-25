@@ -47,7 +47,6 @@
 	var/datum/job/assigned_job
 
 	var/list/kills=list()
-	var/list/datum/objective_holder/objectives = list()
 	var/list/datum/objective/special_verbs = list()
 	var/list/antag_roles = list()		// All the antag roles we have.
 
@@ -98,13 +97,9 @@
 	var/output = "<B>[current.real_name]'s Memory</B><HR>"
 	output += memory
 
-	if(objectives.len>0)
-		output += "<HR><B>Objectives:</B>"
-
-		var/obj_count = 1
-		for(var/datum/objective/objective in objectives)
-			output += "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
-			obj_count++
+	if(antag_roles.len)
+		for(var/datum/role/R in antag_roles)
+			output += R.GetMemory()
 
 	recipient << browse(output,"window=memory")
 
