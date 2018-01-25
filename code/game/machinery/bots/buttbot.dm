@@ -26,7 +26,12 @@ Here it is: Buttbot.
 	. = ..()
 	if (.)
 		return
-	fart()
+	if(can_fart())
+		speak("butt")
+		fart()
+
+/obj/machinery/bot/buttbot/proc/can_fart()
+	return (sincelastfart + 5 < world.timeofday)
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
 	if((!src.on) || (!message))
@@ -36,16 +41,17 @@ Here it is: Buttbot.
 	return
 
 /obj/machinery/bot/buttbot/proc/fart()
-	if(sincelastfart + 5 < world.timeofday)
-		speak("butt")
+	if(can_fart())
 		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
-	if(prob(buttchance) && !findtext(speech.message,"butt"))
+	var/message = speech.message
+	var/language = speech.language
+	if(prob(buttchance) && !findtext(message,"butt"))
 		sleep(rand(1,3))
-		var/list/split_phrase = splittext(speech.message," ") // Split it up into words.
+		var/list/split_phrase = splittext(message," ") // Split it up into words.
 
 		var/list/prepared_words = split_phrase.Copy()
 		var/i = rand(1,3)
@@ -59,7 +65,7 @@ Here it is: Buttbot.
 
 			split_phrase[index] = "butt"
 
-		say(jointext(split_phrase," "), speech.language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
+		say(jointext(split_phrase," "), language) // No longer need to sanitize, speech is automatically html_encoded at render-time.
 		fart()
 
 
