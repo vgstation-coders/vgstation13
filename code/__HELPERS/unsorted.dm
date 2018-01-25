@@ -1550,6 +1550,17 @@ Game Mode config tags:
 				break
 	return found_faction
 
+/proc/find_active_faction_by_member(var/datum/role/R)
+	var/found_faction = null
+	if(R.GetFaction())
+		return R.GetFaction()
+	if(ticker && ticker.factions.len)
+		for(var/datum/faction/F in ticker.factions)
+			if(R in F.members)
+				found_faction = F
+				break
+	return found_faction
+
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()
 	for(var/mob/M in mobs)

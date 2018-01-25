@@ -1,9 +1,6 @@
 /**
 * Used in Mixed Mode, also simplifies equipping antags for other gamemodes and
 * for the traitor panel.
-*
-* By N3X15
-
 
 		###VARS###
 	===Static Vars===
@@ -17,12 +14,8 @@
 	@disallow_job: Boolean: If this role is recruited to at roundstart, the person recruited is not assigned a position on station (Wizard, Nuke Op, Vox Raider)
 	@min_players: int: minimum amount of players that can have this role (4 cultists)
 	@max_players: int: maximum amount of players that can have this role (No more than 5 nuclear operatives)
-	@be_flag: BITFLAG: The flag that's looked for in antag preferences when recruiting for this role (BE_TRAITOR, BE_PAI)
 	@faction: Faction: What faction this role is associated with.
 	@minds: List(mind): The minds associated with this role (Wizards and their apprentices, Nuclear operatives and their commander)
-
-
-	===Local Vars===
 	@antag: mind: The actual antag mind.
 	@host: mind: The host, used in such things like cortical borers (Where the antag and host mind can swap at any time)
 	@objectives: Objective Holder: Where the objectives associated with the role will go.
@@ -75,11 +68,6 @@
 	var/min_players=0
 	var/max_players=0
 
-	var/be_flag = BE_TRAITOR
-
-	// List of factions possible to be assigned to. (IDs)
-	var/list/available_factions = list()
-
 	// Assigned faction.
 	var/datum/faction/faction = null
 
@@ -118,10 +106,6 @@
 	if(!CanBeAssigned(M))
 		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
 
-	// If we don't have this guy in the faction, add him.
-	if(faction && !(M in faction.members))
-		faction.members += M
-
 	antag = M
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
@@ -141,8 +125,8 @@
 /datum/role/proc/Drop()
 	if(!antag)
 		return
-	var/datum/role/parent = ticker.antag_types[id]
-	parent.minds -= antag
+	if(src in faction.members)
+		faction.members.Remove(src)
 	del(src)
 
 // Scaling, should fuck with min/max players.
@@ -206,13 +190,16 @@
 	else
 		O = new objective_type()
 	if(O.PostAppend())
-		objectives.AddObjective(O)
+		objectives.AddObjective(O, antag)
 		return 1
 	return 0
 
 /datum/role/proc/ReturnObjectivesString(var/check_success = 0)
-	return objectives.GetObjectiveString(check_success)
-
+	var/dat = ""
+	var/datum/mind/N = antag
+	dat += "<tr><td><br>[N] - [N.name]</td></tr>"
+	dat += objectives.GetObjectiveString(check_success)
+	return dat
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
@@ -227,24 +214,8 @@
 /datum/role/proc/PostMindTransfer(var/datum/mind/M)
 	return
 
-// Dump a table for Check Antags. GLOBAL
-/datum/role/proc/CheckAntags()
-	// HOW DOES EVERYONE MISS FUCKING COLSPAN
-	// AM I THE ONLY ONE WHO REMEMBERS XHTML?
-	var/dat = "<br /><table cellspacing=5><tr><td colspan=\"3\"><B>[plural_name]</B></td></tr>"
-	for(var/datum/mind/mind in minds)
-		var/mob/M=mind.current
-		//var/datum/role/R=mind.antag_roles[id]
-		dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A href='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-	dat += "</table>"
-	return dat
-
-/datum/role/proc/DeclareAll()
-	for(var/datum/mind/mind in minds)
-		var/datum/role/R=mind.antag_roles[id]
-		R.Declare()
+/datum/role/proc/GetFaction()
+	return faction
 
 /datum/role/proc/Declare()
 	var/win = 1
@@ -280,6 +251,11 @@
 		feedback_add_details("[id]_success","FAIL")
 
 	to_chat(world, text)
+
+/datum/role/proc/GetMemory()
+	var/text = "<br/><B>A [name] of the [faction.GetObjectivesMenuHeader()]</B>"
+	text += ReturnObjectivesString()
+	return text
 
 /datum/role_controls
 	var/list/controls[0] // Associative, Label = html

@@ -1,6 +1,6 @@
 /*
 	Faction Datums
-		Used for keeping a collection of people under one banner, making for easier
+		Used for keeping a collection of people (In this case ROLES) under one banner, making for easier
 		objective syncing, communication, etc.
 
 	@name: String: Name of the faction
@@ -8,9 +8,10 @@
 	@desc: String: Description of the faction, their intentions, how they do things, etc. Something for lorewriters to use.
 	@initial_role: String(DEFINE): On initial setup via gamemode or faction creation, set the new minds role ID to this. HEADCULTIST for example
 	@late_role: String(DEFINE): On later recruitment, set the new minds role ID to this. TRAITOR for example
+	@required_pref: String(DEFINE): What preference is required to be recruited to this faction.
 	@restricted_species: list(String): Only species on this list can be part of this faction
 		(Vox Raiders, Skellington Pirates, Bewildering Basfellians, etc.)
-	@members: List(Reference): Who is a member of this faction
+	@members: List(Reference): Who is a member of this faction - ROLES, NOT MINDS
 	@max_roles: Integer: How many members this faction is limited to. Set to 0 for no limit
 	@accept_latejoiners: Boolean: Whether or not this faction accepts newspawn latejoiners
 	@objectives: objectives datum: What are the goals of this faction?
@@ -37,8 +38,7 @@
 /datum/faction/proc/OnPostSetup()
 	objective_holder = new
 	forgeObjectives()
-	for(var/datum/mind/M in members)
-		var/datum/role/R = M.GetRole(initial_role)
+	for(var/datum/role/R in members)
 		R.OnPostSetup()
 
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
@@ -50,11 +50,12 @@
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	new roletype(M, src, initial_role)
+	var/datum/R = new roletype(M, src, initial_role)
+	members.Add(R)
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
-	new roletype(M, src, late_role)
-
+	var/datum/R = new roletype(M, src, late_role)
+	members.Add(R)
 
 /datum/faction/proc/appendObjective(var/datum/objective/O)
 	ASSERT(O)
@@ -71,6 +72,7 @@
 
 	if(individuals)
 		for(var/datum/role/R in members)
+			dat += "[R.antag.name]"
 			dat += R.ReturnObjectivesString(check_success = 1)
 	return dat
 
@@ -85,6 +87,20 @@
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 
+/datum/faction/proc/DeclareAll()
+	for(var/datum/role/R in members)
+		R.Declare()
+
+/datum/faction/proc/CheckAntags()
+	var/dat = "<br /><table cellspacing=5>"
+	for(var/datum/role/R in members)
+		var/mob/M=R.antag
+		dat += {"	<tr><td colspan=\"3\"><B>[R.plural_name]</B></td></tr>"
+					<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+					<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
+					<td><A href='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+	dat += "</table>"
+	return dat
 
 /datum/faction/syndicate
 	name = "The Syndicate"
@@ -153,16 +169,16 @@
 /datum/faction/wizard/OnPostSetup()
 	..()
 	if(wizardstart.len == 0)
-		for(var/datum/mind/wizard in members)
-			to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
+		for(var/datum/role/wizard in members)
+			to_chat(wizard.antag.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
 		return 0 //Critical failure.
 
-	for(var/datum/mind/wwizard in members)
-		wwizard.current.forceMove(pick(wizardstart))
-		equip_wizard(wwizard.current)
-		name_wizard(wwizard.current)
+	for(var/datum/role/wwizard in members)
+		wwizard.antag.current.forceMove(pick(wizardstart))
+		equip_wizard(wwizard.antag.current)
+		name_wizard(wwizard.antag.current)
 
 
 /datum/faction/wizard/GetObjectivesMenuHeader()

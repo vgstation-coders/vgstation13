@@ -396,11 +396,11 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		if (!istype(user.loc,/turf))
 			to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 			return
-
-		var/datum/role/cult = user.mind.GetRole(CULTIST)
+		var/datum/role/r = user.mind.GetRole(CULT_NARSIE)
+		var/datum/faction/cult = find_active_faction_by_member(r)
 		var/cultists = 1
 		if(cult)
-			cultists = cult.minds.len
+			cultists = cult.members.len
 		if (rune_list.len >= 26+runedec+4*cultists) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
 			alert("The cloth of reality can't take that much of a strain. Remove some runes first!")
 			return

@@ -23,7 +23,8 @@
 				dat += "<tr><td><br><B>[F.GetObjectivesMenuHeader()]</B></td>"
 				if(F.members.len)
 					dat += "<br><tr><td><B>Members</B></td><td></td></tr>"
-					for(var/datum/mind/N in F.members)
+					for(var/datum/role/R in F.members)
+						var/datum/mind/N = R.antag
 						dat += "<tr><td><br>[N] - [N.name]</td></tr>"
 						var/mob/M = N.current
 						if(M)
@@ -31,6 +32,8 @@
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 				else
 					dat += "<br><tr><td><B>Unpopulated</B></td><td></td></tr>"
+				dat += {"<BR><FONT size = 2><B>Faction Objectives</B></FONT>"}
+				dat += F.CheckAllObjectives(TRUE)
 /*
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}

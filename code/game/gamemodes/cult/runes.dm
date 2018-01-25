@@ -174,8 +174,7 @@
 /////////////////////////////////////////THIRD RUNE
 
 /obj/effect/rune/proc/convert()
-	var/datum/faction/cult/cult = get_faction_from_mind(usr.mind)
-	var/datum/role/cultists = usr.mind.GetRole(CULTIST)
+	var/datum/faction/cult/cult = find_active_faction_by_member(usr.mind.GetRole(CULT_NARSIE))
 	for(var/mob/living/carbon/M in src.loc)
 		if(iscultist(M))
 			to_chat(usr, "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>")
@@ -201,7 +200,7 @@
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
-			cultists.AssignToRole(M.mind)
+			cult.HandleRecruitedMind(M.mind)
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
@@ -262,7 +261,8 @@
 			to_chat(M, "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>")
 		return
 
-	var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
+	var/mob/cultist = pick(active_cultists)
+	var/datum/faction/cult/cult_round = find_active_faction_by_member(cultist.mind.GetRole(CULT_NARSIE))
 
 	if(cult_round.eldergod)
 		// Sanity checks
@@ -330,7 +330,8 @@
 			for(var/mob/M in active_cultists)
 				// Only chant when Nar-Sie spawns
 				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
-			var/datum/faction/cult/succesful_cultists = find_active_faction(CULT_NARSIE)
+			var/mob/cultist = pick(active_cultists)
+			var/datum/faction/cult/succesful_cultists = find_active_faction_by_member(cultist.mind.GetRole(CULT_NARSIE))
 			succesful_cultists.eldergod = 0
 			summonturfs = list()
 			summoning = 0
@@ -473,7 +474,7 @@
 	var/mob/living/carbon/human/corpse_to_raise
 	var/mob/living/carbon/human/body_to_sacrifice
 
-	var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult/cult_round = find_active_faction_by_member(usr.mind.GetRole(CULT_NARSIE))
 
 	var/is_sacrifice_target = 0
 	for(var/mob/living/carbon/human/M in src.loc)
@@ -487,7 +488,7 @@
 				break
 	if(!corpse_to_raise)
 		if (ticker.rune_controller.revive_counter)
-			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [ticker.rune_controller] of ours to the mortal plane.</span>")
+			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [ticker.rune_controller.revive_counter] of ours to the mortal plane.</span>")
 		if(is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>")
 		return fizzle()
@@ -669,7 +670,7 @@
 		D.real_name = "[pick(first_names_male)] [pick(last_names)]"
 	D.status_flags &= ~GODMODE
 
-	var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult/cult_round = find_active_faction_by_member(usr.mind.GetRole(CULT_NARSIE))
 	if(cult_round)
 		cult_round.HandleRecruitedMind(D.mind)
 	/*else
@@ -830,10 +831,10 @@
 		user.say("[input]")
 	else
 		user.whisper("[input]")
-	var/datum/faction/cult = find_active_faction(CULT_NARSIE)
-	for(var/datum/mind/H in cult.members)
-		if (H.current)
-			to_chat(H.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[input]</span></B></span>")//changed from red to purple - Deity Link
+	var/datum/faction/cult = find_active_faction_by_member(user.mind.GetRole(CULT_NARSIE))
+	for(var/datum/role/R in cult.members)
+		if (R.antag.current)
+			to_chat(R.antag.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[input]</span></B></span>")//changed from red to purple - Deity Link
 
 
 	for(var/mob/dead/observer/O in player_list)
@@ -865,7 +866,7 @@
 		to_chat(usr, "<span class='warning'>The presence of a null rod is perturbing the ritual.</span>")
 		return
 
-	var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult/cult_round = find_active_faction_by_member(usr.mind.GetRole(CULT_NARSIE))
 	var/datum/rune_controller/R = ticker.rune_controller
 	for(var/atom/A in loc)
 		if(ismob(A))
@@ -1051,7 +1052,7 @@
 /obj/effect/rune/proc/freedom()
 	var/mob/living/user = usr
 	var/list/mob/living/carbon/cultists = new
-	var/datum/faction/cult = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult = find_active_faction_by_member(user.mind.GetRole(CULT_NARSIE))
 	for(var/datum/mind/H in cult.members)
 		if (istype(H.current,/mob/living/carbon))
 			cultists+=H.current
@@ -1139,7 +1140,7 @@
 /obj/effect/rune/proc/cultsummon()
 	var/mob/living/user = usr
 	var/list/mob/living/carbon/cultists = new
-	var/datum/faction/cult = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult = find_active_faction_by_member(user.mind.GetRole(CULT_NARSIE))
 	for(var/datum/mind/H in cult.members)
 		if (istype(H.current,/mob/living/carbon))
 			cultists+=H.current
@@ -1338,7 +1339,7 @@
 			var/mob/living/carbon/human/P = user
 			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr].</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
-			var/datum/faction/cult/narsie/mode_ticker = find_active_faction(CULT_NARSIE)
+			var/datum/faction/cult/narsie/mode_ticker = find_active_faction_by_member(user.mind.GetRole(CULT_NARSIE))
 			if(isplasmaman(P))
 				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
 				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
@@ -1367,10 +1368,10 @@
 		for(var/mob/living/M in src.loc)
 			if(iscultist(M))
 				if(ishuman(M))
-					var/mob/living/carbon/human/P = user
+					var/mob/living/carbon/human/P = M
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
-					var/datum/faction/cult/narsie/mode_ticker = find_active_faction(CULT_NARSIE)
+					var/datum/faction/cult/narsie/mode_ticker = find_active_faction_by_member(M.mind.GetRole(CULT_NARSIE))
 					if(isplasmaman(P))
 						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
 						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)

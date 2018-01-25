@@ -133,9 +133,10 @@
 		"dsquad",
 		"elite",
 		"custom",
-	)
-	var/text = ""*/
-
+	)*/
+	if(antag_roles.len)
+		for(var/datum/role/R in antag_roles)
+			out += R.GetMemory()
 	/*if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
 		* REVOLUTION **
 		text = "revolution"
@@ -433,10 +434,10 @@
 		for(var/datum/objective/objective in objectives)
 			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=\ref[src];obj_edit=\ref[objective]'>Edit</a> <a href='?src=\ref[src];obj_delete=\ref[objective]'>Delete</a> <a href='?src=\ref[src];obj_completed=\ref[objective]'><font color=[objective.IsFulfilled() ? "green" : "red"]>Toggle Completion</font></a><br>"
 			obj_count++
-
+	*/
 	out += {"<a href='?src=\ref[src];obj_add=1'>Add objective</a><br><br>
 		<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"}
-	usr << browse(out, "window=edit_memory[src]")*/
+	usr << browse(out, "window=edit_memory[src]")
 
 /*/datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
