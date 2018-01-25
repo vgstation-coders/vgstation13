@@ -17,12 +17,24 @@
 				if(1)
 					dat += "ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
 		dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
-		if(ticker.mode.syndicates.len)
-			dat += "<br><table cellspacing=5><tr><td><B>Syndicates</B></td><td></td></tr>"
-			for(var/datum/mind/N in ticker.mode.syndicates)
-				var/mob/M = N.current
-				if(M)
-
+		if(ticker.mode.factions.len)
+			dat += "<br><table cellspacing=5><tr><td><B>Factions</B></td><td></td></tr>"
+			for(var/datum/faction/F in ticker.mode.factions)
+				dat += "<tr><td><br><B>[F.GetObjectivesMenuHeader()]</B></td>"
+				if(F.members.len)
+					dat += "<br><tr><td><B>Members</B></td><td></td></tr>"
+					for(var/datum/role/R in F.members)
+						var/datum/mind/N = R.antag
+						dat += "<tr><td><br>[N] - [N.name]</td></tr>"
+						var/mob/M = N.current
+						if(M)
+							dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+				else
+					dat += "<br><tr><td><B>Unpopulated</B></td><td></td></tr>"
+				dat += {"<BR><FONT size = 2><B>Faction Objectives</B></FONT>"}
+				dat += F.CheckAllObjectives(TRUE)
+/*
 					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
 						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
 				else
@@ -349,7 +361,7 @@
 			var/objective_count = 1
 			for(var/datum/objective/objective in team.objectives)
 				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
+*/
 		dat += "</body></html>"
 		usr << browse(dat, "window=roundstatus;size=440x500")
 	else

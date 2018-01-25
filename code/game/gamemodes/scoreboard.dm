@@ -1,15 +1,16 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
+	for(var/datum/faction/F in ticker.factions)
+		completions += F.GetObjectivesMenuHeader()
+		completions += F.GetScoreboard()
 
-	completions += mode.completion_text
-
-	//Calls auto_declare_completion_* for all modes
-	for(var/handler in typesof(/datum/game_mode/proc))
+	/*//Calls auto_declare_completion_* for all modes
+	for(var/handler in typesof(/datum/gamemode/proc))
 		if(findtext("[handler]","auto_declare_completion_"))
-			completions += "[call(mode, handler)()]"
+			completions += "[call(mode, handler)()]"*/
 
-	completions += "<br>[ert_declare_completion()]"
-	completions += "<br>[deathsquad_declare_completion()]"
+	//completions += "<br>[ert_declare_completion()]"
+	//completions += "<br>[deathsquad_declare_completion()]"
 
 	if(bomberman_mode)
 		completions += "<br>[bomberman_declare_completion()]"
@@ -214,7 +215,7 @@
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
 	var/plaguepoints = score["disease"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
-	//Mode Specific
+	/*//Mode Specific
 	if(ticker.mode.config_tag == "nuclear")
 		if(score["disc"])
 			score["crewscore"] += 500
@@ -233,7 +234,7 @@
 			score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
-		score["crewscore"] -= comdeadpts
+		score["crewscore"] -= comdeadpts*/
 
 	//Good Things
 	//score["crewscore"] += shipping
@@ -440,7 +441,7 @@
 	<B>Times a Clown was Abused:</B> [score["clownabuse"]]<BR>
 	<B>Number of Explosions This Shift:</B> [score["explosions"]]<BR>
 	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>
-	<B>Total money trasferred:</B> [score["totaltransfer"]]<BR>"}
+	<B>Total money transferred:</B> [score["totaltransfer"]]<BR>"}
 
 	//Vault and away mission specific scoreboard elements
 	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)

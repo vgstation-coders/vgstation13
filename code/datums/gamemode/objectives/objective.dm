@@ -18,9 +18,11 @@
 /datum/objective_holder
 	var/list/datum/objective/objectives = list()
 
-/datum/objective_holder/proc/AddObjective(var/datum/objective/O)
+/datum/objective_holder/proc/AddObjective(var/datum/objective/O, var/datum/mind/M)
 	ASSERT(!objectives.Find(O))
 	objectives.Add(O)
+	if(M)
+		O.owner = M
 
 /datum/objective_holder/proc/GetObjectives()
 	return objectives

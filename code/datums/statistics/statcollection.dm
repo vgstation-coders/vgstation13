@@ -208,14 +208,10 @@
 	var/end_timestamp = time2text(world.realtime, "YYYY.MM.DD.hh.mm.ss")
 	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[start_timestamp]|[end_timestamp]"
 	statfile << "MASTERMODE|[master_mode]" // sekrit, or whatever else was decided as the 'actual' mode on round start.
-	if(istype(ticker.mode, /datum/game_mode/mixed))
-		var/datum/game_mode/mixed/mixy = ticker.mode
-		var/T = "GAMEMODE"
-		for(var/datum/game_mode/GM in mixy.modes)
-			T += "|[GM.name]"
-		statfile << T
-	else
-		statfile << "GAMEMODE|[ticker.mode.name]"
+	var/T = "GAMEMODE"
+	for(var/datum/faction/GM in ticker.factions)
+		T += "|[GM.name]"
+	statfile << T
 
 /datum/stat_collector/proc/Write_Footer(statfile)
 	statfile << "WRITE_COMPLETE" // because I'd like to know if a write was interrupted and therefore invalid

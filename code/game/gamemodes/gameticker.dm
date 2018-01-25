@@ -33,12 +33,15 @@ var/datum/controller/gameticker/ticker
 	var/list/syndicate_coalition = list() // list of traitor-compatible factions
 	var/list/factions = list()			  // list of all factions
 	var/list/availablefactions = list()	  // list of factions with openings
+	var/datum/rune_controller/rune_controller
 
 	var/pregame_timeleft = 0
 
 	var/delay_end = 0	//if set to nonzero, the round will not restart on it's own
 
 	var/triai = 0//Global holder for Triumvirate
+	var/explosion_in_progress
+	var/station_was_nuked
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1)
 
@@ -114,7 +117,7 @@ var/datum/controller/gameticker/ticker
 	//Create and announce mode
 	if(master_mode=="secret")
 		src.hide_mode = 1
-	var/list/datum/game_mode/runnable_modes
+	var/list/datum/gamemode/runnable_modes
 	if((master_mode=="random") || (master_mode=="secret"))
 		runnable_modes = config.get_runnable_modes()
 		if (runnable_modes.len==0)
@@ -122,7 +125,7 @@ var/datum/controller/gameticker/ticker
 			to_chat(world, "<B>Unable to choose playable game mode.</B> Reverting to pre-game lobby.")
 			return 0
 		if(secret_force_mode != "secret")
-			var/datum/game_mode/M = config.pick_mode(secret_force_mode)
+			var/datum/gamemode/M = config.pick_mode(secret_force_mode)
 			if(M.can_start())
 				src.mode = config.pick_mode(secret_force_mode)
 		job_master.ResetOccupations()
@@ -133,16 +136,17 @@ var/datum/controller/gameticker/ticker
 			src.mode = new mtype
 	else
 		src.mode = config.pick_mode(master_mode)
+	//log_startup_progress("gameticker.mode is [src.mode.name].")
+	src.mode = new mode.type
 	if (!src.mode.can_start())
-		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby.")
+		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.minimum_player_count] players needed. Reverting to pre-game lobby.")
 		del(mode)
 		current_state = GAME_STATE_PREGAME
 		job_master.ResetOccupations()
 		return 0
 
 	//Configure mode and assign player to special mode stuff
-	job_master.DivideOccupations() //Distribute jobs
-	var/can_continue = src.mode.pre_setup()//Setup special modes
+	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
 		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
@@ -154,14 +158,12 @@ var/datum/controller/gameticker/ticker
 
 	if(hide_mode)
 		var/list/modes = new
-		for (var/datum/game_mode/M in runnable_modes)
+		for (var/datum/gamemode/M in runnable_modes)
 			modes+=M.name
 		modes = sortList(modes)
 		to_chat(world, "<B>The current game mode is - Secret!</B>")
 		to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
-	else
-		src.mode.announce()
-
+	job_master.DivideOccupations() //Distribute jobs
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
@@ -173,7 +175,7 @@ var/datum/controller/gameticker/ticker
 	setup_economy()
 
 	spawn(0)//Forking here so we dont have to wait for this to finish
-		mode.post_setup()
+		mode.PostSetup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
 			//Deleting Startpoints but we need the ai point to AI-ize people later
@@ -216,7 +218,7 @@ var/datum/controller/gameticker/ticker
 				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
-		mode.Clean_Antags()
+		//mode.Clean_Antags()
 
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
@@ -394,7 +396,7 @@ var/datum/controller/gameticker/ticker
 		force_round_end=1
 
 	var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1) || force_round_end
-	if(!mode.explosion_in_progress && mode_finished)
+	if(!explosion_in_progress && mode_finished)
 		current_state = GAME_STATE_FINISHED
 
 		spawn
@@ -418,7 +420,7 @@ var/datum/controller/gameticker/ticker
 
 
 		spawn(50)
-			if (mode.station_was_nuked)
+			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B></span>")
@@ -542,6 +544,7 @@ var/datum/controller/gameticker/ticker
 
 	return 1
 
+/*
 /datum/controller/gameticker/proc/ert_declare_completion()
 	var/text = ""
 	if( ticker.mode.ert.len )
@@ -605,7 +608,7 @@ var/datum/controller/gameticker/ticker
 		text += "<BR><HR>"
 
 	return text
-
+*/
 /datum/controller/gameticker/proc/bomberman_declare_completion()
 	var/icon/bomberhead = icon('icons/obj/clothing/hats.dmi', "bomberman")
 	end_icons += bomberhead
@@ -702,6 +705,20 @@ var/datum/controller/gameticker/ticker
 		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
 
 	return text
+
+/datum/controller/gameticker/proc/get_all_heads()
+	var/list/heads = list()
+	for(var/mob/player in mob_list)
+		if(player.mind && (player.mind.assigned_role in command_positions))
+			heads += player.mind
+	return heads
+
+/datum/controller/gameticker/proc/get_assigned_head_roles()
+	var/list/roles = list()
+	for(var/mob/player in mob_list)
+		if(player.mind && (player.mind.assigned_role in command_positions))
+			roles += player.mind.assigned_role
+	return roles
 
 
 /world/proc/has_round_started()

@@ -438,7 +438,8 @@
 			if(A && A.anti_ethereal && !isAdminGhost(mob))
 				to_chat(mob, "<span class='sinister'>A dark forcefield prevents you from entering the area.</span>")
 			else
-				if((T && T.holy) && isobserver(mob) && ((mob.invisibility == 0) || (ticker.mode && (mob.mind in ticker.mode.cult))))
+				var/datum/faction/cult = find_active_faction(CULT)
+				if((T && T.holy) && isobserver(mob) && ((mob.invisibility == 0) || mob.mind in cult.members))
 					to_chat(mob, "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>")
 				else
 					mob.forceEnter(get_step(mob, direct))
@@ -574,7 +575,7 @@
 			. += MOB_RUN_TALLY+config.run_speed
 		if("walk")
 			. += MOB_WALK_TALLY+config.walk_speed
-	
+
 	var/obj/item/weapon/grab/Findgrab = locate() in src
 	if(Findgrab)
 		. += 7

@@ -7,6 +7,8 @@
 	@minimum_player_count: Integer: Minimum required players to start the gamemode
 	@admin_override: Overrides certain checks such as the one above to force-start a gamemode
 	@available_roles: List of all roles the ticker can draft players into
+	@probability: How likely it is to roll this gamemode
+	@votable: If this mode can be voted for
 */
 
 
@@ -16,34 +18,39 @@
 	var/list/factions_allowed = list()
 	var/minimum_player_count
 	var/admin_override //Overrides checks such as minimum_player_count to
-	var/list/datum/role/available_roles = list()
+	var/probability = 50
+	var/votable = TRUE
 
-/datum/gamemode/New()
-	Setup()
 
+/datum/gamemode/proc/can_start()
+	if(minimum_player_count && minimum_player_count < get_player_count())
+		return 0
+	return 1
 
 //For when you need to set factions and factions_allowed not on compile
 /datum/gamemode/proc/SetupFactions()
 
 /datum/gamemode/proc/Setup()
-	if(minimum_player_count < get_player_count())
+	if(minimum_player_count && minimum_player_count < get_player_count())
 		TearDown()
+		return 0
 	SetupFactions()
 	CreateFactions()
+	return 1
 
 /datum/gamemode/proc/CreateFactions()
 	var/pc = get_player_count() //right proc?
-	for(var/datum/faction/Fac in factions_allowed)
-		new Fac
-		if(Fac.can_setup(pc))
-			factions += Fac
-			factions_allowed -= Fac
-		else
-			message_admins("Unable to start [Fac.name]")
-			qdel(Fac)
-	for(var/datum/faction/F in factions)
-		F.onPostSetup()
+	for(var/Fac in factions_allowed)
+		CreateFaction(Fac, pc)
 	PopulateFactions()
+
+/datum/gamemode/proc/CreateFaction(var/Fac, var/population)
+	var/datum/faction/F = new Fac
+	if(F.can_setup(population))
+		factions += F
+		factions_allowed -= F
+	else
+		qdel(F)
 
 /*
 	Get list of available players
@@ -59,9 +66,38 @@
 
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
-			if(!P.client /*|| Other bullshit*/)
-				return
-			//TODO PREFERENCE FUCKERY AND ROLE CHECKING -- NO ROLE DATUMS AS OF THIS TIME
+			if(F.max_roles && F.members.len >= F.max_roles)
+				break
+			if(!P.client || !P.mind)
+				continue
+			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
+				continue
+			F.HandleNewMind(P.mind)
+
+
+/datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
+	var/list/possible_factions = list()
+	for(var/datum/faction/F in factions)
+		if(F.accept_latejoiners)
+			possible_factions.Add(F)
+	if(possible_factions.len)
+		var/datum/faction/F = pick(possible_factions)
+		F.HandleRecruitedMind(mob.mind)
+
+/datum/gamemode/proc/PostSetup()
+	spawn (ROUNDSTART_LOGOUT_REPORT_TIME)
+		display_roundstart_logout_report()
+
+	feedback_set_details("round_start","[time2text(world.realtime)]")
+	if(ticker && ticker.mode)
+		feedback_set_details("game_mode","[ticker.mode]")
+	if(revdata)
+		feedback_set_details("revision","[revdata.revision]")
+	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
+
+	for(var/datum/faction/F in factions)
+		F.OnPostSetup()
+	return 1
 
 /datum/gamemode/proc/CheckObjectives(var/individuals = FALSE)
 	var/dat = ""
@@ -97,14 +133,10 @@
 
 	return players
 
-/datum/gamemode/proc/add_player_role_association(var/datum/mind/M, var/role_id)
-	if (role_id in available_roles)
-		var/datum/role/R = available_roles[role_id]
-		R.minds += M
-		M.antag_roles += role_id
 
-/datum/gamemode/proc/remove_player_role_association(var/datum/mind/M, var/role_id)
-	if (role_id in M.antag_roles)
-		var/datum/role/R = antag_roles[role_id]
-		R.minds -= M
-		M.antag_roles -= roles_id
+/datum/gamemode/proc/process()
+	return
+
+/datum/gamemode/proc/check_finished()
+
+/datum/gamemode/proc/declare_completion()

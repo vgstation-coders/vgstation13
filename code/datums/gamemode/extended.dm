@@ -2,4 +2,4 @@
 	name = "Extended"
 
 /datum/gamemode/extended/Setup()
-	return
+	return 1

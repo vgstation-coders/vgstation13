@@ -908,7 +908,7 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
 		//Strike Team
-		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+		if(jobban_isbanned(M, ROLE_STRIKE) || isbanned_dept)
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
@@ -1315,9 +1315,6 @@
 	else if(href_list["c_mode"])
 		if(!check_rights(R_ADMIN))
 			return
-
-		if(ticker && ticker.mode)
-			return alert(usr, "The game has already started.", null, null, null, null)
 		var/dat = {"<B>What mode do you wish to play?</B><HR>"}
 		for(var/mode in config.modes)
 			dat += {"<A href='?src=\ref[src];c_mode2=[mode]'>[config.mode_names[mode]]</A><br>"}
@@ -1980,9 +1977,9 @@
 		if(C)
 			C.jumptomob(M)
 
-	/*else if(href_list["check_antagonist"])
+	else if(href_list["check_antagonist"])
 		check_antagonists()
-
+	/*
 	else if(href_list["cult_nextobj"])
 		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
 			return
