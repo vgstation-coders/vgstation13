@@ -1,6 +1,10 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_disabilities()
+	if(disabilities & ASTHMA)
+		if(prob(50))
+			asthma_attack()
+
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
 			seizure(10, 1000)
@@ -28,7 +32,7 @@
 
 			animate(src, pixel_x = (pixel_x + x_offset_change), pixel_y = (pixel_y + y_offset_change), time = 1)
 			animate(pixel_x = (pixel_x - x_offset_change), pixel_y = (pixel_y - y_offset_change), time = 1)
-
+			
 	if(getBrainLoss() >= 60 && stat != DEAD)
 		if(prob(3))
 			switch(pick(1,2,3)) //All of those REALLY ought to be variable lists, but that would be too smart I guess
@@ -102,7 +106,3 @@
 				if(canmove)
 					to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
 					Knockdown(3)
-
-	if(disabilities & ASTHMA)
-		if(prob(50))
-			asthma_attack()

@@ -861,7 +861,7 @@
 	value = 0x001
 
 /obj/item/weapon/dnainjector/nofail/antiblind/New()
-	block = BLINDBLOCK
+	block = VEGANBLOCK
 	..()
 
 /obj/item/weapon/dnainjector/nofail/blindmut

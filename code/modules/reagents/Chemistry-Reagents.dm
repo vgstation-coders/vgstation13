@@ -6354,12 +6354,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 	if(..())
 		return 1
+		
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(M_ASTHMA in H.mutations)
-			H.adjustOxyLoss(1)
-			if(prob(10))
-				H.emote("wheezes!")
+			H.adjustOxyLoss(2)
+			if(prob(30))
+				H.emote("gasp")
 
 /datum/reagent/albuterol
 	name = "Albuterol"
