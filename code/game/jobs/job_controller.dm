@@ -492,7 +492,7 @@ var/global/datum/controller/occupations/job_master
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
-	if(H.disabilities & DISABILITY_FLAG_ASTHMA)
+	if(H.disabilities & ASTHMA)
 		H.equip_to_slot_or_del(new /obj/item/device/inhaler(H), slot_in_backpack)
 		
 	return 1
