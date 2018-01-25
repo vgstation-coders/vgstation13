@@ -193,31 +193,35 @@
 #define issilent(A) (A.silent || (ishuman(A) && (A:miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
-#define isvampire(H) 1//((H.mind in ticker.mode.vampires) || H.mind.vampire)
+#define isvampire(H) H.mind && H.mind.GetRole(VAMPIRE)
 
-#define iscult(H) 1//(H.mind in ticker.mode.cult)
+#define iscult(H) H.mind && (iscultist(H) || isculthead(H) || faction == "cult")
 
-#define isculthead(H) 1//(iscult(H)&&(H.mind in ticker.mode.modePlayer))
+#define iscultist(H) H.mind && H.mind.GetRole(CULTIST)
 
-#define ischangeling(H) 1//(H.mind in ticker.mode.changelings)
+#define isculthead(H) H.mind && H.mind && H.mind.GetRole(HEADCULTIST)
 
-#define isrev(H) 1//(H.mind in ticker.mode.revolutionaries)
+#define ischangeling(H) H.mind && H.mind.GetRole(CHANGELING)
 
-#define isrevhead(H) 1//(H.mind in ticker.mode.head_revolutionaries)
+#define isrev(H) H.mind && (H.mind.GetRole(REV) || isrevhead(H))
 
-#define istraitor(H) 1//(H.mind in ticker.mode.traitors)
+#define isrevhead(H) H.mind && H.mind.GetRole(HEADREV)
 
-#define ismalf(H) 1//(H.mind in ticker.mode.malf_ai)
+#define istraitor(H) H.mind && H.mind.GetRole(TRAITOR)
 
-#define isnukeop(H) 1//(H.mind in ticker.mode.syndicates)
+#define ismalf(H) H.mind && H.mind.GetRole(MALF)
 
-#define iswizard(H) 1//(H.mind in ticker.mode.wizards)
+#define isnukeop(H) H.mind && H.mind.GetRole(NUKE_OP)
 
-#define isapprentice(H) 1//(H.mind in ticker.mode.apprentices)
+#define iswizard(H) H.mind && H.mind.GetRole(WIZARD)
 
-#define isbadmonkey(H) 1//((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
+#define isapprentice(H) H.mind && H.mind.GetRole(WIZAPP)
 
-#define isdeathsquad(H) 1//(H.mind in ticker.mode.deathsquads)
+#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
+
+#define isdeathsquad(H) H.mind && H.mind.GetRole(DEATHSQUAD)
+
+
 
 
 //Macro for AREAS!

@@ -64,7 +64,7 @@
 	OverlayAndAmbientSet()
 
 	// Disable Nar-Sie.
-	ticker.mode.eldergod=0
+	//ticker.mode.eldergod=0
 	// TODO: If Nar-Sie is present, have it say "Well fuck this" and leave, for shits and giggles.
 
 	ticker.StartThematic("endgame")

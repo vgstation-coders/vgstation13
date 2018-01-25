@@ -8,4 +8,8 @@
 
 
 /datum/gamemode/traitor/da/SetupFactions()
-	factions_allowed = typesof(/datum/faction/syndicate/traitor) - /datum/faction/syndicate/traitor
+	factions_allowed = subtypesof(/datum/faction/syndicate/traitor)
+
+/datum/gamemode/autotraitor
+	name = "Autotraitor"
+	factions_allowed=  list(/datum/faction/syndicate/traitor/auto)

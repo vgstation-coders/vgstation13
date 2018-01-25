@@ -282,8 +282,8 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	src.safety = 1
 	src.icon_state = "nuclearbomb3"
 	playsound(src,'sound/machines/Alarm.ogg',100,0,5)
-	if (ticker && ticker.mode)
-		ticker.mode.explosion_in_progress = 1
+	if (ticker)
+		ticker.explosion_in_progress = 1
 	sleep(100)
 
 	enter_allowed = 0
@@ -301,22 +301,12 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 		off_station = 2
 
 	if(ticker)
-		if(ticker.mode && ticker.mode.name == "nuclear emergency")
-			var/datum/game_mode/nuclear/GM = ticker.mode
-			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
-			if(syndie_location)
-				GM.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
-			GM.nuke_off_station = off_station
 		ticker.station_explosion_cinematic(off_station,null)
 		if(ticker.mode)
-			ticker.mode.explosion_in_progress = 0
-			if(ticker.mode.name == "nuclear emergency")
-				var/datum/game_mode/nuclear/GM = ticker.mode
-				GM.nukes_left --
-			else
-				to_chat(world, "<B>The station was destroyed by the nuclear blast!</B>")
+			ticker.explosion_in_progress = 0
+			to_chat(world, "<B>The station was destroyed by the nuclear blast!</B>")
 
-			ticker.mode.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
+			ticker.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
 															//kinda shit but I couldn't  get permission to do what I wanted to do.
 			stat_collection.nuked++
 
