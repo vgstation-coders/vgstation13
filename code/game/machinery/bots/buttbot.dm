@@ -31,9 +31,7 @@ Here it is: Buttbot.
 		fart()
 
 /obj/machinery/bot/buttbot/proc/can_fart()
-	if(sincelastfart + 5 < world.timeofday)
-		return TRUE
-	return FALSE
+	return (sincelastfart + 5 < world.timeofday)
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
 	if((!src.on) || (!message))
