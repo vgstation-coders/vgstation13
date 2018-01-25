@@ -465,12 +465,12 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define COUGHING		4
 #define TOURETTES		8
 #define NERVOUS			16
+#define ASTHMA		32
 
 //sdisabilities
 #define BLIND			1
 #define MUTE			2
 #define DEAF			4
-#define ASTHMA		8
 
 //mob/var/stat things
 #define CONSCIOUS	0

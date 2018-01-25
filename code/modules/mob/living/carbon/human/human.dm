@@ -1402,6 +1402,7 @@
 	Jitter(jitter_duration)
 
 /mob/living/carbon/human/proc/asthma_attack()
+	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations))
 		forcesay("-")
 		visible_message("<span class='danger'>\The [src] begins wheezing and grabbing at their throat!</span>", \
 									"<span class='warning'>You begin wheezing and grabbing at your throat!</span>")
