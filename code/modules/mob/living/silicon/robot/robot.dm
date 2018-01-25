@@ -12,6 +12,7 @@
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
+	var/image/eyes = null
 	var/pressure_alert = FALSE
 	var/temp_alert = FALSE
 
@@ -272,7 +273,7 @@
 
 /mob/living/silicon/robot/verb/Namepick()
 	set category = "Robot Commands"
-	if(namepick_uses <= 0)
+	if(!namepick_uses)
 		to_chat(src, "<span class='warning'>You cannot choose your name any more.<span>")
 		return FALSE
 	namepick_uses--
@@ -996,31 +997,22 @@
 /mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
 	overlays.Cut()
 	if(!stat && cell != null)
-		var/image/eyes = image(icon,"eyes-[icon_state][isMoMMI(src) && emagged?"-emagged":""]", ABOVE_LIGHTING_LAYER)
-		if(plane == HIDING_MOB_PLANE) // Hiding MoMMIs
-			overlay_plane = FLOAT_PLANE
-			overlay_layer = FLOAT_LAYER
-		if(!emagged)
-			eyes.plane = overlay_plane
-		else
-			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
+		eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
 		overlays += eyes
 
 	if(opened)
 		if(wiresexposed)
-			overlays += image(icon = icon, icon_state = "ov-openpanel +w")
+			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[icon_state]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
 		else if(cell)
-			overlays += image(icon = icon, icon_state = "ov-openpanel +c")
+			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[icon_state]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
 		else
-			overlays += image(icon = icon, icon_state = "ov-openpanel -c")
+			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[icon_state]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
 
-	// WHY THE FUCK DOES IT HAVE A SHIELD, ARE YOU STUPID
-	if(module_active && istype(module_active,/obj/item/borg/combat/shield))
+	if(module_active && istype(module_active,/obj/item/borg/combat/shield) && check_icon(icon, "[icon_state]-shield"))
 		overlays += image(icon = icon, icon_state = "[icon_state]-shield")
 
 	if(base_icon)
-		// no no no no
-		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
+		if(module_active && istype(module_active,/obj/item/borg/combat/mobility) && check_icon(icon, "[icon_state]-roll"))
 			icon_state = "[base_icon]-roll"
 		else
 			icon_state = base_icon
@@ -1290,10 +1282,9 @@
 	update_icons()
 
 
-/mob/living/silicon/robot/proc/SetLockdown(var/state = 1)
-	// They stay locked down if their wire is cut.
-	if(wires.LockedCut())
-		state = 1
+/mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE)
+	if(wires.LockedCut()) // They stay locked down if their wire is cut.
+		state = TRUE
 	lockcharge = state
 	update_canmove()
 
@@ -1347,7 +1338,7 @@
 /mob/living/silicon/robot/proc/remove_module()
 	uneq_all()
 	if(hud_used)
-		shown_robot_modules = 0
+		shown_robot_modules = FALSE
 		hud_used.update_robot_modules_display()
 	if(client)
 		for(var/obj/A in module.upgrades)
@@ -1400,6 +1391,13 @@
 
 	pick_module("TG17355")
 	set_module_sprites(list("Peacekeeper" = "peaceborg"))
+
+/mob/living/silicon/robot/hugborg/clown/New()
+	..()
+
+	var/obj/item/borg/upgrade/honk/upgrade = new /obj/item/borg/upgrade/honk(src)
+	upgrade.attempt_action(src, src, TRUE)
+	upgrade = null
 
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()

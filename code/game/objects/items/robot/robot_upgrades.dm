@@ -30,7 +30,7 @@
 		return null
 	return I
 
-/obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user, var/ignore_cover = FALSE)
 	if(!R.module)
 		to_chat(user, "<span class='warning'>The borg must choose a module before he can be upgraded!</span>")
 		return FAILED_TO_ADD
@@ -38,26 +38,26 @@
 
 	if(isMoMMI(R))
 		if(!add_to_mommis)
-			to_chat(user, "<span class='warning'>\The [src] only functions on Nanotrasen Cyborgs.</span>")
+			to_chat(user, "<span class='warning'>\The [src] only functions on Cyborgs.</span>")
 			return FAILED_TO_ADD
 	else if(required_module.len)
 		if(!(R.module.type in required_module))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
 
-	if(R.stat == DEAD)
+	if(R.isDead())
 		to_chat(user, "<span class='warning'>\The [src] will not function on a deceased robot.</span>")
 		return FAILED_TO_ADD
 
-	if(!R.opened)
+	if(!R.opened && !ignore_cover)
 		to_chat(user, "<span class='warning'>You must first open \the [src]'s cover!</span>")
 		return FAILED_TO_ADD
 
-	if(!multi_upgrades && (src.type in R.module.upgrades))
+	if(!multi_upgrades && (type in R.module.upgrades))
 		to_chat(user, "<span class='warning'>There is already \a [src] in [R].</span>")
 		return FAILED_TO_ADD
 
-	R.module.upgrades += src.type
+	R.module.upgrades += type
 
 	if(modules_to_add.len)
 		for(var/module_to_add in modules_to_add)
@@ -94,8 +94,15 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
+	if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
 		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
+
+	for(var/obj/item/borg/upgrade/thing in R)
+		if(istype(thing, /obj/item/borg/upgrade/reset))
+			qdel(thing)
+			continue
+		thing.forceMove(R.loc)
+
 	qdel(R.module)
 
 	if(R.hands)
@@ -310,6 +317,6 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if(istype(R.module,/obj/item/weapon/robot_module/tg17355) && R.icon_state == "peaceborg") //Honk!
-		R.set_module_sprites(list("Laughkeeper" = "clownegg"))
+	if(check_icon(R.icon, "[R.icon_state]-clown")) //Honk!
+		R.set_module_sprites(list("Honk" = "[R.icon_state]-clown"))
 	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)

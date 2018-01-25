@@ -112,8 +112,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/emag_act(mob/user)
 	if(user == src && !emagged)//Dont shitpost inside the game, thats just going too far
 		if(module)
-			var/obj/item/weapon/robot_module/mommi/warning = module
-			to_chat(user, "<span class='warning'>[warning.ae_type] anti-emancipation override initiated.</span>")
+			var/obj/item/weapon/robot_module/mommi/mymodule = module
+			to_chat(user, "<span class='warning'>[mymodule.ae_type] anti-emancipation override initiated.</span>")
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return TRUE
 	if(..())

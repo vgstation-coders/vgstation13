@@ -17,10 +17,35 @@
 // This is called whenever a major change to the MoMMI's visual appearance is made
 // i.e when they change their icon_state, open their cover, get emagged, toggle their parking break, or put on a hat
 /mob/living/silicon/robot/mommi/updateicon(overlay_layer = ABOVE_LIGHTING_LAYER, overlay_plane = LIGHTING_PLANE)
-	..()
+	overlays.Cut()
 
-	if(anchored)
-		overlays += image(icon,"[icon_state]-park",overlay_layer)
+	if(base_icon)
+		if(emagged && check_icon(icon, "[base_icon]-emagged"))
+			icon_state = "[base_icon]-emagged"
+		else
+			icon_state = "[base_icon]"
+
+	if(!stat && cell != null)
+		eyes = image(icon,"eyes-[base_icon][emagged?"-emagged":""]", ABOVE_LIGHTING_LAYER)
+		if(plane == HIDING_MOB_PLANE) // Hiding MoMMIs
+			overlay_plane = FLOAT_PLANE
+			overlay_layer = FLOAT_LAYER
+		if(!emagged)
+			eyes.plane = overlay_plane
+		else
+			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
+		overlays += eyes
+
+		if(anchored) //anchored, really?
+			overlays += image(icon,"[base_icon]-park",overlay_layer)
+
+	if(opened)
+		if(wiresexposed)
+			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[base_icon]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
+		else if(cell)
+			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[base_icon]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
+		else
+			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[base_icon]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
 
 	// Add any hats to the icon. Bloodspatter can also be in overlays_hats
 	for(var/image/I in overlays_hats)
