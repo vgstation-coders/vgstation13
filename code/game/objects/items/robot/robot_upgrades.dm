@@ -317,6 +317,6 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if(check_icon(R.icon, "[R.icon_state]-clown")) //Honk!
-		R.set_module_sprites(list("Honk" = "[R.icon_state]-clown"))
+	if(check_icon(R.icon, "[R.base_icon]-clown")) //Honk!
+		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
 	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)
