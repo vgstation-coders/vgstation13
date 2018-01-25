@@ -70,6 +70,7 @@ var/DIZZYBLOCK = 0
 var/SANSBLOCK = 0
 var/NOIRBLOCK = 0
 var/VEGANBLOCK = 0
+var/ASTHMABLOCK = 0
 
 
 /proc/getAssignedBlock(var/name,var/list/blocksLeft, var/activity_bounds=DNA_DEFAULT_BOUNDS, var/good=0)
@@ -178,6 +179,7 @@ var/VEGANBLOCK = 0
 	SANSBLOCK      = getAssignedBlock("SANS",       numsToAssign)
 	NOIRBLOCK      = getAssignedBlock("NOIR",       numsToAssign)
 	VEGANBLOCK     = getAssignedBlock("VEGAN",      numsToAssign)
+	ASTHMABLOCK     = getAssignedBlock("ASTHMA",      numsToAssign)
 
 	//
 	// Static Blocks

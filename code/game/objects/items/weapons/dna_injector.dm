@@ -842,9 +842,26 @@
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 11
+	
+/obj/item/weapon/dnainjector/nofail/asthmamut
+	name = "DNA-Injector (Asthma)"
+	desc = "Makes you asthmatic."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+	//block = 11
+
+/obj/item/weapon/dnainjector/nofail/asthmamut/New()
+	block = ASTHMABLOCK
+	..()
+
+/obj/item/weapon/dnainjector/nofail/antiasthma
+	name = "DNA-Injector (Anti-Asthma)"
+	desc = "Allows you to breathe normally again."
+	datatype = DNA2_BUF_SE
+	value = 0x001
 
 /obj/item/weapon/dnainjector/nofail/antiblind/New()
-	block = VEGANBLOCK
+	block = BLINDBLOCK
 	..()
 
 /obj/item/weapon/dnainjector/nofail/blindmut

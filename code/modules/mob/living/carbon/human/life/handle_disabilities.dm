@@ -102,3 +102,7 @@
 				if(canmove)
 					to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
 					Knockdown(3)
+
+	if(disabilities & ASTHMA)
+		if(prob(50))
+			asthma_attack()

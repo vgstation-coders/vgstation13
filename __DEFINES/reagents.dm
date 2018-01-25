@@ -327,6 +327,8 @@
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
 #define PINTPOINTER		"pintpointer"
+#define MUCUS	"mucus"
+#define ALBUTEROL		"albuterol"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

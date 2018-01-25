@@ -3040,6 +3040,13 @@
 	required_reagents = list(CARBON = 1, SACID = 2)
 	required_temp = T0C + 450
 	result_amount = 1
+	
+/datum/chemical_reaction/albuterol
+	name = "Albuterol"
+	id = ALBUTEROL
+	result = ALBUTEROL
+	required_reagents = list(HYPERZINE = 1, INAPROVALINE = 1)
+	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

@@ -6341,3 +6341,39 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
+		
+/datum/reagent/mucus
+	name = "Mucus"
+	id = MUCUS
+	description = "A slippery aqueous secretion produced by, and covering, mucous membranes.  Problematic for Asthmatics."
+	reagent_state = LIQUID
+	color = "#13BC5E"
+	custom_metabolism = 0.01
+	
+/datum/reagent/mucus/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(M_ASTHMA in H.mutations)
+			H.adjustOxyLoss(1)
+			if(prob(10))
+				H.emote("wheezes!")
+
+/datum/reagent/albuterol
+	name = "Albuterol"
+	id = ALBUTEROL
+	description = "A bronchodilator that relaxes muscles in the airways and increases air flow to the lungs."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	overdose_am = REAGENTS_OVERDOSE
+	
+/datum/reagent/albuterol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(holder.has_reagent(MUCUS))
+		holder.remove_reagent(MUCUS, 10)
+
+	
