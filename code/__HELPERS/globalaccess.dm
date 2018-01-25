@@ -239,8 +239,6 @@
 			return global.alldirs;
 		if("universal_cult_chat")
 			return global.universal_cult_chat;
-		if("start_state")
-			return global.start_state;
 		if("config")
 			return global.config;
 		if("combatlog")
@@ -1047,8 +1045,6 @@
 			return global.Holiday;
 		if("blob_candidates")
 			return global.blob_candidates;
-		if("mixed_allowed")
-			return global.mixed_allowed;
 		if("bomb_set")
 			return global.bomb_set;
 		if("nukedisk")
@@ -2118,8 +2114,6 @@
 			global.alldirs=newval
 		if("universal_cult_chat")
 			global.universal_cult_chat=newval
-		if("start_state")
-			global.start_state=newval
 		if("config")
 			global.config=newval
 		if("combatlog")
@@ -2926,8 +2920,6 @@
 			global.Holiday=newval
 		if("blob_candidates")
 			global.blob_candidates=newval
-		if("mixed_allowed")
-			global.mixed_allowed=newval
 		if("bomb_set")
 			global.bomb_set=newval
 		if("nukedisk")

@@ -15,17 +15,6 @@
 		creator = Owner
 		if(Controller)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
-		var/ref = "\ref[Owner.mind]"
-		var/list/necromancers
-		if(!(Owner.mind in ticker.mode.necromancer))
-			ticker.mode:necromancer[ref] = list()
-		necromancers = ticker.mode:necromancer[ref]
-		necromancers.Add(Controller)
-		ticker.mode:necromancer[ref] = necromancers
-		ticker.mode.update_necro_icons_added(Owner.mind)
-		ticker.mode.update_necro_icons_added(Controller)
-		ticker.mode.update_all_necro_icons()
-		ticker.mode.risen.Add(Controller)
 
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"

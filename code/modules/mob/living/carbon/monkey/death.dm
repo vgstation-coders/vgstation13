@@ -38,7 +38,7 @@
 
 	update_canmove()
 	update_icons()
-	if(ticker.mode)
-		ticker.mode.check_win()
+	/*if(ticker.mode) WHY
+		ticker.mode.check_win()*/
 
 	return ..(gibbed)

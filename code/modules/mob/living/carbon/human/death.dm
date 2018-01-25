@@ -43,9 +43,10 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
-	if(mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
-		ticker.mode.update_cult_icons_removed(mind)
-		ticker.mode.cult -= mind
+	if(mind && species && (species.name == "Manifested"))
+		var/datum/role/cult = mind.GetRole(CULTIST)
+		if(cult)//manifested ghosts are removed from the cult once their bodies are destroyed
+			cult.RemoveFromRole(mind)
 
 	if(species)
 		qdel(species)
@@ -113,7 +114,7 @@
 	if(ticker && ticker.mode)
 //		world.log << "k"
 		sql_report_death(src)
-		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
+		//ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
 	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
 		spawn(30 SECONDS)

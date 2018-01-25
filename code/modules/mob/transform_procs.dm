@@ -142,9 +142,10 @@
 	to_chat(O, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
 	to_chat(O, "To use something, simply click on it.")
 	to_chat(O, {"Use say ":b to speak to your cyborgs through binary."})
-	if (!(ticker && ticker.mode && (O.mind in ticker.mode.malf_ai)))
-		O.show_laws()
-		to_chat(O, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
+	O.show_laws()
+	to_chat(O, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
+
+	//O.verbs += /mob/living/silicon/ai/proc/ai_call_shuttle
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"

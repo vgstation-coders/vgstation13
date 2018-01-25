@@ -1,3 +1,11 @@
+var/global/list/mixed_allowed = list(
+	"autotraitor",
+	"changeling",
+	"cult",
+	"vampire",
+	"wizard",
+	)
+
 /datum/gamemode/mixed
 	name = "Mixed"
 

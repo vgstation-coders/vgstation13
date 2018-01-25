@@ -3,6 +3,10 @@
 	var/target_amount = 0	//If they are focused on a particular number. Steal objectives have their own counter.
 	var/list/bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader")
 
+/datum/objective/target/New(var/text)
+	..()
+	find_target()
+
 /datum/objective/target/proc/find_target()
 	var/list/possible_targets = list()
 	for(var/datum/mind/possible_target in ticker.minds)

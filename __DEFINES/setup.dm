@@ -844,6 +844,7 @@ SEE_PIXELS	256
 #define ROLE_PLANT      "Dionaea"
 #define ROLE_POSIBRAIN  "posibrain"
 #define ROLE_REV        "revolutionary"
+#define ROLE_STRIKE     "Strike Team"
 #define ROLE_TRAITOR    "traitor"
 #define ROLE_VAMPIRE    "vampire"
 #define ROLE_VOXRAIDER  "vox raider"

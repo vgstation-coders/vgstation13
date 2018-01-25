@@ -459,7 +459,7 @@ var/list/admin_verbs_mod = list(
 		holder.player_panel_new()
 	feedback_add_details("admin_verb","PPN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-/*
+
 /client/proc/check_antagonists()
 	set name = "Check Antagonists"
 	set category = "Admin"
@@ -468,7 +468,7 @@ var/list/admin_verbs_mod = list(
 		log_admin("[key_name(usr)] checked antagonists.")	//for tsar~
 	feedback_add_details("admin_verb","CHA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-*/
+
 /client/proc/jobbans()
 	set name = "Display Job bans"
 	set category = "Admin"
