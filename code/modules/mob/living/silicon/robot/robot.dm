@@ -1297,13 +1297,13 @@
 	lockcharge = state
 	update_canmove()
 
-/mob/living/silicon/robot/proc/choose_icon(var/triesleft = 1)
-	if(triesleft < 1 || !module_sprites.len)
+/mob/living/silicon/robot/proc/choose_icon(var/triesleft = 3)
+	if(!triesleft || !module_sprites.len)
 		return FALSE
 	else
 		triesleft--
 
-	var/icontype = input("Select an icon! [triesleft>0 ? "You have [triesleft] more chances." : "This is your last try."]", "Robot", null, null) as null|anything in module_sprites
+	var/icontype = input("Select an icon! [triesleft ? "You have [triesleft] more chances." : "This is your last try."]", "Robot", null, null) as null|anything in module_sprites
 
 	if(icontype)
 		icon_state = module_sprites[icontype]
@@ -1316,7 +1316,7 @@
 	base_icon = icon_state
 	updateicon()
 
-	if(triesleft >= 1)
+	if(triesleft)
 		var/choice = input("Look at your icon - is this what you want?") in list("Yes","No")
 		if(choice=="No")
 			choose_icon(triesleft)
