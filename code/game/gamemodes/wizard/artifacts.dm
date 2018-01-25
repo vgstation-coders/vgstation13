@@ -106,9 +106,10 @@
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
 
+/* WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/summon_guns/can_buy()
 	//Can't summon guns during ragin' mages
-	return !ticker.mode.rage
+	return !ticker.mode.rage*/
 
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
@@ -122,9 +123,10 @@
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
 
+/* WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/summon_magic/can_buy()
 	//Can't summon magic during ragin' mages
-	return !ticker.mode.rage
+	return !ticker.mode.rage*/
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()

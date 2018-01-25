@@ -69,6 +69,7 @@
 	var/list/heard_before = list()
 
 	var/nospells = 0 //Can't cast spells.
+	var/hasbeensacrificed = FALSE
 
 
 /datum/mind/New(var/key)
@@ -125,7 +126,7 @@
 	out += {"Mind currently owned by key: [key] [active?"(synced)":"(not synced)"]<br>
 		Assigned role: [assigned_role]. <a href='?src=\ref[src];role_edit=1'>Edit</a><br>
 		Factions and special roles:<br>"}
-	var/list/sections = list(
+	/*var/list/sections = list(
 		"revolution",
 		"cult",
 		"wizard",
@@ -140,9 +141,10 @@
 		"dsquad",
 		"elite",
 		"custom",
-	)
-	var/text = ""
-
+	)*/
+	if(antag_roles.len)
+		for(var/datum/role/R in antag_roles)
+			out += R.GetMemory()
 	/*if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
 		* REVOLUTION **
 		text = "revolution"
@@ -409,7 +411,7 @@
 			text += "<a href='?src=\ref[src];elite=elite'>yes</a>|<b>NO</b>"
 		sections["elite"] = text
 
-	* CUSTOM STRIKE TEAM */
+	* CUSTOM STRIKE TEAM
 	if (istype(current, /mob/living/carbon))
 		text = "Custom Team"
 		text = "<i><b>[text]</b></i>: "
@@ -440,7 +442,7 @@
 		for(var/datum/objective/objective in objectives)
 			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=\ref[src];obj_edit=\ref[objective]'>Edit</a> <a href='?src=\ref[src];obj_delete=\ref[objective]'>Delete</a> <a href='?src=\ref[src];obj_completed=\ref[objective]'><font color=[objective.IsFulfilled() ? "green" : "red"]>Toggle Completion</font></a><br>"
 			obj_count++
-
+	*/
 	out += {"<a href='?src=\ref[src];obj_add=1'>Add objective</a><br><br>
 		<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"}
 	usr << browse(out, "window=edit_memory[src]")

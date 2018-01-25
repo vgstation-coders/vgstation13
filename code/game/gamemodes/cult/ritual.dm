@@ -103,7 +103,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		to_chat(user, "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>.[rune_name ? " From [pick("your intuition, you are pretty sure that","deep memories, you determine that","the rune's energies, you deduct that","Nar-Sie's murmurs, you know that")] this is \a <b>[rune_name]</b> rune." : ""]")
 
 
-/obj/effect/rune/attackby(I as obj, user as mob)
+/obj/effect/rune/attackby(obj/I, mob/user)
 	if(istype(I, /obj/item/weapon/tome) && iscultist(user))
 		to_chat(user, "You retrace your steps, carefully undoing the lines of the rune.")
 		qdel(src)
@@ -396,11 +396,12 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		if (!istype(user.loc,/turf))
 			to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 			return
-
-
-
-
-		if (rune_list.len >= 26+runedec+4*ticker.mode.cult.len) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
+		var/datum/role/r = user.mind.GetRole(CULT_NARSIE)
+		var/datum/faction/cult = find_active_faction_by_member(r)
+		var/cultists = 1
+		if(cult)
+			cultists = cult.members.len
+		if (rune_list.len >= 26+runedec+4*cultists) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
 			alert("The cloth of reality can't take that much of a strain. Remove some runes first!")
 			return
 		else
