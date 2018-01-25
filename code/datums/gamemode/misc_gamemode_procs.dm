@@ -121,3 +121,68 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 
 		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
 	return
+
+/proc/equip_highlander(var/mob/living/highlander_mob)
+	var/static/list/plasmaman_items = list(
+		/obj/item/clothing/suit/space/plasmaman,
+		/obj/item/clothing/head/helmet/space/plasmaman,
+		/obj/item/weapon/tank/plasma/plasmaman,
+		/obj/item/clothing/mask/breath)
+
+	var/static/list/vox_items = list(
+		/obj/item/weapon/tank/nitrogen,
+		/obj/item/clothing/mask/breath/vox)
+
+	var/mob/living/carbon/human/highlander_human
+
+	if(issilicon(highlander_mob))
+		var/mob/living/silicon/S = highlander_mob
+		var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(S.loc, delay_ready_dna = TRUE)
+		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
+		var/datum/preferences/A = new()	//Randomize appearance for the human
+		A.randomize_appearance_for(new_human)
+		new_human.generate_name()
+		new_human.languages |= S.languages
+		if(S.default_language)
+			new_human.default_language = S.default_language
+		if(S.mind)
+			S.mind.transfer_to(new_human)
+		else
+			new_human.key = S.key
+		qdel(S)
+		highlander_human = new_human
+	else
+		highlander_human = highlander_mob
+
+	highlander_human.mutations.Add(M_HULK) //all highlanders are permahulks
+	highlander_human.set_species("Human", force_organs=TRUE) // No Dionae
+	highlander_human.a_intent = I_HURT
+
+	highlander_human.update_mutations()
+	highlander_human.update_body()
+
+	for (var/obj/item/I in highlander_human)
+		if (istype(I, /obj/item/weapon/implant))
+			continue
+		if(isplasmaman(highlander_human) && is_type_in_list(I, plasmaman_items)) //Plasmamen don't lose their plasma gear since they need it to live.
+			continue
+		else if(isvox(highlander_human) && is_type_in_list(I, vox_items)) //Vox don't lose their N2 gear since they need it to live.
+			continue
+		qdel(I)
+
+	highlander_human.equip_to_slot_or_del(new /obj/item/clothing/under/kilt(highlander_human), slot_w_uniform)
+	highlander_human.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(highlander_human), slot_ears)
+	if(!isplasmaman(highlander_human)) //Plasmamen don't get a beret since they need their helmet to not burn to death.
+		highlander_human.equip_to_slot_or_del(new /obj/item/clothing/head/beret(highlander_human), slot_head)
+	highlander_human.put_in_hands(new /obj/item/weapon/claymore(highlander_human))
+	highlander_human.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(highlander_human), slot_shoes)
+	highlander_human.equip_to_slot_or_del(new /obj/item/weapon/pinpointer(highlander_human), slot_l_store)
+
+	var/obj/item/weapon/card/id/new_id = new(highlander_human)
+	new_id.name = "[highlander_human.real_name]'s ID Card"
+	new_id.icon_state = "centcom"
+	new_id.access = get_all_accesses()
+	new_id.access += get_all_centcom_access()
+	new_id.assignment = "Highlander"
+	new_id.registered_name = highlander_human.real_name
+	highlander_human.equip_to_slot_or_del(new_id, slot_wear_id)

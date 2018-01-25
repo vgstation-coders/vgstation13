@@ -64,6 +64,9 @@
 				user.mutations.Add(HEAL)
 			*/
 
+			var/datum/role/wish_granter_avatar/new_role = new(user.mind, null, WISHGRANTERAVATAR)
+			new_role.OnPostSetup()
+
 			user.update_mutations()
 
 			to_chat(user, "<span class='sinister'>You have a very bad feeling about this!</span>")
