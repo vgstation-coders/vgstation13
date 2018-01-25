@@ -51,4 +51,4 @@
 /datum/faction/cult/machine
 	name = "Cult of Ratvar"
 	desc = "When engineers go just too far."
-	deity_name = "The exiled one"
+	deity_name = "The Exiled One"
