@@ -91,6 +91,8 @@
 		return
 	// Link faction.
 	faction=fac
+	if(!faction)
+		ticker.mode.orphaned_roles += src
 
 	if(new_id)
 		id = new_id
@@ -127,6 +129,8 @@
 		return
 	if(src in faction.members)
 		faction.members.Remove(src)
+	if(!faction)
+		ticker.mode.orphaned_roles -= src
 	del(src)
 
 // Scaling, should fuck with min/max players.
@@ -200,6 +204,13 @@
 	dat += "<tr><td><br>[N] - [N.name]</td></tr>"
 	dat += objectives.GetObjectiveString(check_success)
 	return dat
+
+/datum/role/proc/AdminPanelEntry()
+	var/mob/M = antag.current
+	return {"<a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == DEAD ? " <b><font color=red>(DEAD)</font></b>" : ""]
+			<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
+			<a href='?_src_=holder;traitor=\ref[M]'>TP</a>"}
+
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go

@@ -9,6 +9,7 @@
 	@available_roles: List of all roles the ticker can draft players into
 	@probability: How likely it is to roll this gamemode
 	@votable: If this mode can be voted for
+	@orphaned_roles: List of faction-less roles currently in the gamemode
 */
 
 
@@ -20,6 +21,7 @@
 	var/admin_override //Overrides checks such as minimum_player_count to
 	var/probability = 50
 	var/votable = TRUE
+	var/orphaned_roles = list()
 
 
 /datum/gamemode/proc/can_start()

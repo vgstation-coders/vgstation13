@@ -65,14 +65,12 @@
 	return objective_holder.GetObjectives()
 
 /datum/faction/proc/CheckAllObjectives(var/individuals = FALSE)
-	var/dat
-	dat += GetObjectivesMenuHeader()
-	dat += {"<BR><FONT size = 2><B>Faction Objectives</B></FONT>"}
+	var/dat = list()
 	dat += objective_holder.GetObjectiveString(check_success = 1)
 
 	if(individuals)
 		for(var/datum/role/R in members)
-			dat += "[R.antag.name]"
+			dat += R.antag.name
 			dat += R.ReturnObjectivesString(check_success = 1)
 	return dat
 
@@ -91,15 +89,17 @@
 	for(var/datum/role/R in members)
 		R.Declare()
 
-/datum/faction/proc/CheckAntags()
-	var/dat = "<br /><table cellspacing=5>"
-	for(var/datum/role/R in members)
-		var/mob/M=R.antag
-		dat += {"	<tr><td colspan=\"3\"><B>[R.plural_name]</B></td></tr>"
-					<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-					<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-					<td><A href='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-	dat += "</table>"
+/datum/faction/proc/AdminPanelEntry()
+	var/dat = list()
+	dat += GetObjectivesMenuHeader()
+	dat += "<h2>Members</h2><br>"
+	if(!members.len)
+		dat += "<b>Unpopulated</b>"
+	else
+		for(var/datum/role/R in members)
+			dat += R.AdminPanelEntry()
+	dat += "<h2>Faction objectives</h2>"
+	dat += CheckAllObjectives(TRUE)
 	return dat
 
 /datum/faction/syndicate
