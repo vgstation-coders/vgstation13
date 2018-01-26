@@ -124,7 +124,6 @@
 	activation_message = "You feel short of breath."
 	deactivation_message = "You can breathe normally again."
 	disability= ASTHMA
-	sdisability= ASTHMA
 	
 	mutation = M_ASTHMA
 	

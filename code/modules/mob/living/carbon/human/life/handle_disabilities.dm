@@ -2,7 +2,7 @@
 
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(disabilities & ASTHMA)
-		if(prob(1))
+		if(prob(0.2))
 			asthma_attack()
 
 	if(disabilities & EPILEPSY)
