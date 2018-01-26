@@ -2910,6 +2910,9 @@
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
+/datum/reagent/zombiepowder/reagent_deleted()
+	return on_removal(volume)
+
 //Hotfix for Fakedeath never ending.
 /datum/reagent/zombiepowder/on_removal(var/amount)
 	if(!..(amount))
@@ -3332,7 +3335,10 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.sleeping++
+			M.confused++
+			M.drowsyness++
+			if(volume >= 10)
+				M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)

@@ -15,7 +15,6 @@
 	var/max_pressure = 10000
 
 	var/target_pressure = 4500	//Output pressure.
-	var/on = 0								//Are we taking in gas?
 
 	var/datum/gas_mixture/air				//Internal tank.
 
@@ -298,6 +297,9 @@
 		return
 
 	src.dir = turn(src.dir, -90)
+
+/obj/machinery/atmospherics/binary/msgs/toggle_status(var/mob/user)
+	return FALSE
 
 #undef MSGS_ON
 #undef MSGS_INPUT

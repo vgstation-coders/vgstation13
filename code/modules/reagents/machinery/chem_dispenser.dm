@@ -216,8 +216,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				B = null
 				return
 		var/space = R.maximum_volume - R.total_volume
-
-		R.add_reagent(reagent, min(amount, energy * 10, space))
+		var/reagent_temperature = dispensable_reagents[reagent] ? dispensable_reagents[reagent] : T0C+20
+		R.add_reagent(reagent, min(amount, energy * 10, space), reagtemp = reagent_temperature)
 		energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 
 /obj/machinery/chem_dispenser/kick_act(mob/living/H)
@@ -323,7 +323,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/soda_dispenser/
 	name = "Soda Dispenser"
 	icon_state = "soda_dispenser"
-	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE, TONIC)
+	dispensable_reagents = list(SPACEMOUNTAINWIND, SODAWATER, LEMON_LIME, DR_GIBB, COLA, ICE = T0C, TONIC)
 /obj/machinery/chem_dispenser/soda_dispenser/New()
 	. = ..()
 	component_parts = newlist(
@@ -352,7 +352,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
 	icon_state = "booze_dispenser"
-	dispensable_reagents = list(BEER, WHISKEY, TEQUILA, VODKA, VERMOUTH, RUM, COGNAC, WINE, KAHLUA, ALE, ICE, WATER, GIN, SODAWATER, COLA, CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC)
+	dispensable_reagents = list(BEER, WHISKEY, TEQUILA, VODKA, VERMOUTH, RUM, COGNAC, WINE, KAHLUA, ALE, ICE = T0C, WATER, GIN, SODAWATER, COLA, CREAM,TOMATOJUICE,ORANGEJUICE,LIMEJUICE,TONIC)
 /obj/machinery/chem_dispenser/booze_dispenser/New()
 	. = ..()
 	component_parts = newlist(

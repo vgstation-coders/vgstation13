@@ -33,6 +33,10 @@
 	update_lock(AM)
 	AM.change_dir(owner.dir, owner)
 
+/datum/locking_category/proc/update_locks()
+	for(var/atom/A in locked)
+		update_lock(A)
+
 // Updates the position for AM.
 /datum/locking_category/proc/update_lock(var/atom/movable/AM)
 	var/new_loc = owner.loc

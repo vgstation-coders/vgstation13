@@ -159,7 +159,7 @@
 	id = "pray_scanner"
 	req_tech = list(Tc_ENGINEERING = 3, Tc_MAGNETS = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
+	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	build_path = /obj/item/device/t_scanner/advanced
 	category = "Engineering"
 
