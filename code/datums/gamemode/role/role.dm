@@ -203,7 +203,7 @@
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
-		to_chat(antag.current, "<B>You are a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
+		to_chat(antag.current, "<B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 	to_chat(antag.current, "[ReturnObjectivesString()]")
 	antag.store_memory("[ReturnObjectivesString()]")
 
@@ -353,3 +353,23 @@
 		else
 			AppendObjective(/datum/objective/hijack)
 	return
+
+/datum/role/wish_granter_avatar
+	name = "avatar of the Wish Granter"
+	special_role = "avatar of the Wish Granter"
+
+/datum/role/wish_granter_avatar/ForgeObjectives()
+	AppendObjective(/datum/objective/silence)
+
+/datum/role/highlander
+	name = "highlander"
+	special_role = "highlander"
+
+/datum/role/highlander/ForgeObjectives()
+	AppendObjective(/datum/objective/hijack)
+
+/datum/role/highlander/OnPostSetup()
+	. = ..()
+	if(!.)
+		return
+	equip_highlander(antag.current)
