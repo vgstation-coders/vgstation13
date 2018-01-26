@@ -49,7 +49,7 @@
 
 /datum/faction/cult/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<a href='?src=\ref[src];cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
+	dat += "<a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
 
 /datum/faction/cult/machine
