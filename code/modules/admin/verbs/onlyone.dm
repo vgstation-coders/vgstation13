@@ -97,9 +97,9 @@
 	return 1
 
 /datum/only_one/highlander/convert_mob(var/mob/M)
-	var/mob/living/carbon/human/H = ..(M)
+	var/mob/living/carbon/human/H = ..()
 
-	var/datum/role/highlander/new_role = new(M.mind, null, HIGHLANDER)
+	var/datum/role/highlander/new_role = new(H.mind, null, HIGHLANDER)
 	new_role.OnPostSetup()
 	return H
 

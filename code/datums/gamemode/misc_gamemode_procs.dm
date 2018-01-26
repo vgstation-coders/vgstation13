@@ -122,7 +122,7 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
 	return
 
-/proc/equip_highlander(var/mob/living/highlander_mob)
+/proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
 	var/static/list/plasmaman_items = list(
 		/obj/item/clothing/suit/space/plasmaman,
 		/obj/item/clothing/head/helmet/space/plasmaman,
@@ -132,27 +132,6 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	var/static/list/vox_items = list(
 		/obj/item/weapon/tank/nitrogen,
 		/obj/item/clothing/mask/breath/vox)
-
-	var/mob/living/carbon/human/highlander_human
-
-	if(issilicon(highlander_mob))
-		var/mob/living/silicon/S = highlander_mob
-		var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(S.loc, delay_ready_dna = TRUE)
-		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
-		var/datum/preferences/A = new()	//Randomize appearance for the human
-		A.randomize_appearance_for(new_human)
-		new_human.generate_name()
-		new_human.languages |= S.languages
-		if(S.default_language)
-			new_human.default_language = S.default_language
-		if(S.mind)
-			S.mind.transfer_to(new_human)
-		else
-			new_human.key = S.key
-		qdel(S)
-		highlander_human = new_human
-	else
-		highlander_human = highlander_mob
 
 	highlander_human.mutations.Add(M_HULK) //all highlanders are permahulks
 	highlander_human.set_species("Human", force_organs=TRUE) // No Dionae
