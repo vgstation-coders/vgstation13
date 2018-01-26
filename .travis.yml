@@ -7,7 +7,7 @@ sudo: false
 env:
   global:
   - BYOND_MAJOR="512"
-  - BYOND_MINOR="1403"
+  - BYOND_MINOR="1405"
   - ALL_MAPS="tgstation metaclub defficiency packedstation test_box test_tiny"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
