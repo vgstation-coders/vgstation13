@@ -22,4 +22,6 @@
 #define HEADREV "Head Revolutionary"
 #define WIZAPP "Wizards Apprentice"
 #define MADMONKEY "Monkey Madness"
+#define WISHGRANTERAVATAR "avatar of the Wish Granter"
+#define HIGHLANDER "highlander"
 //Changeling, nuke op, traitor, wizard, vampire, rev, all the same as above
