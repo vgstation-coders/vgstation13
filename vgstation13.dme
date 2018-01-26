@@ -256,6 +256,7 @@
 #include "code\datums\gamemode\cult.dm"
 #include "code\datums\gamemode\extended.dm"
 #include "code\datums\gamemode\gamemode.dm"
+#include "code\datums\gamemode\malf.dm"
 #include "code\datums\gamemode\misc_gamemode_procs.dm"
 #include "code\datums\gamemode\mixed.dm"
 #include "code\datums\gamemode\nuke.dm"

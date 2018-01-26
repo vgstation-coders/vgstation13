@@ -896,6 +896,7 @@
 
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/malfai = usr
+		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
 		if(get_malf_status(malfai)==1)
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
@@ -909,9 +910,8 @@
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
-					/*if (ticker.mode.config_tag == "malfunction")
-						if (STATION_Z == z)
-							ticker.mode:apcs++*/
+					if(M)
+						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else

@@ -95,6 +95,12 @@
 			dat += R.AdminPanelEntry()
 	return dat
 
+/datum/faction/proc/process()
+	return
+
+/datum/faction/proc/check_win()
+	return
+
 /datum/faction/syndicate
 	name = "The Syndicate"
 	ID = SYNDICATE

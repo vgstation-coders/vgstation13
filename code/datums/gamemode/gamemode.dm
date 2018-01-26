@@ -23,6 +23,10 @@
 	var/votable = TRUE
 	var/list/orphaned_roles = list()
 
+	//'Oh dear we accidentally destroyed the station/universe' variables
+	var/station_was_nuked
+	var/explosion_in_progress
+
 
 /datum/gamemode/proc/can_start()
 	if(minimum_player_count && minimum_player_count < get_player_count())
@@ -129,9 +133,13 @@
 
 
 /datum/gamemode/proc/process()
-	return
+	for(var/datum/faction/F in factions)
+		F.process()
 
 /datum/gamemode/proc/check_finished()
+	for(var/datum/faction/F in factions)
+		if(F.check_win())
+			return 1
 
 /datum/gamemode/proc/declare_completion()
 
