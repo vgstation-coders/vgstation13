@@ -2912,6 +2912,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
 		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
+		/obj/item/fish_eggs/seadevil,
 		)
 
 	for(var/random_items = 1 to premium.len - 4)

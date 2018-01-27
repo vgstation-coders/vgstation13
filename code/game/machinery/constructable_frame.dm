@@ -1287,3 +1287,11 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=1"
 	req_components = list (
 	"/obj/item/stack/sheet/glass/glass" = 10)
+
+/obj/item/weapon/circuitboard/conduction_plate
+	name = "Circuit Board (Conduction Plate)"
+	build_path = "/obj/machinery/power/conduction_plate"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/capacitor" = 1)
