@@ -9,6 +9,7 @@
 	@available_roles: List of all roles the ticker can draft players into
 	@probability: How likely it is to roll this gamemode
 	@votable: If this mode can be voted for
+	@orphaned_roles: List of faction-less roles currently in the gamemode
 */
 
 
@@ -20,6 +21,7 @@
 	var/admin_override //Overrides checks such as minimum_player_count to
 	var/probability = 50
 	var/votable = TRUE
+	var/list/orphaned_roles = list()
 
 
 /datum/gamemode/proc/can_start()
@@ -99,14 +101,6 @@
 		F.OnPostSetup()
 	return 1
 
-/datum/gamemode/proc/CheckObjectives(var/individuals = FALSE)
-	var/dat = ""
-	for(var/datum/faction/F in factions)
-		dat += F.GetObjectivesMenuHeader()
-		dat += F.CheckAllObjectives(individuals)
-		dat += "\n\n"
-	return dat
-
 /datum/gamemode/proc/TearDown()
 	// This is where the game mode is shut down and cleaned up.
 
@@ -140,3 +134,18 @@
 /datum/gamemode/proc/check_finished()
 
 /datum/gamemode/proc/declare_completion()
+
+/datum/gamemode/proc/AdminPanelEntry()
+	var/list/dat = list("<h2>Factions</h2><br>")
+	if(factions.len)
+		for(var/datum/faction/F in factions)
+			dat += F.AdminPanelEntry()
+	else
+		dat += "No faction is currently active."
+	dat += "<br><h2>Roles</h2><br>"
+	if(orphaned_roles.len)
+		for(var/datum/role/R in orphaned_roles)
+			dat += R.AdminPanelEntry()
+	else
+		dat += "No orphaned role is currently active."
+	return dat
