@@ -89,9 +89,7 @@
 	var/datum/objective_holder/objectives=new
 
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
-	if(!M)
-		del(src)
-		return
+	to_chat(world, "role created, [M], [fac], [new_id], [name]")
 	// Link faction.
 	faction=fac
 	if(!faction)
@@ -100,16 +98,22 @@
 	if(new_id)
 		id = new_id
 
-	AssignToRole(M)
+	if(M && !AssignToRole(M))
+		Drop()
+		return 0
 
 	if(!plural_name)
 		plural_name="[name]s"
 
+	return 1
+
 /datum/role/proc/AssignToRole(var/datum/mind/M)
 	if(!istype(M))
-		WARNING("M is [M.type]!")
+		log_startup_progress("M is [M.type]!")
+		return 0
 	if(!CanBeAssigned(M))
-		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		log_startup_progress("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		return 0
 
 	antag = M
 	M.antag_roles.Add(id)
@@ -117,23 +121,20 @@
 
 	OnPreSetup()
 
-/datum/role/proc/RemoveFromRole(var/datum/mind/M)
-	if(!istype(M))
-		WARNING("M is [M.type]!")
-
-	if(faction && M in faction.members)
-		faction.members -= M
-
+/datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
 	M.antag_roles[id] = null
-	del(src)
-// Remove
+	antag = null
+
+// Destroy this role
 /datum/role/proc/Drop()
-	if(!antag)
-		return
-	if(src in faction.members)
+	if(faction && src in faction.members)
 		faction.members.Remove(src)
+
 	if(!faction)
 		ticker.mode.orphaned_roles -= src
+
+	if(antag)
+		RemoveFromRole(antag)
 	del(src)
 
 // Scaling, should fuck with min/max players.

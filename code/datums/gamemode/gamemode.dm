@@ -41,14 +41,14 @@
 		TearDown()
 		return 0
 	SetupFactions()
-	CreateFactions()
-	return 1
+	return CreateFactions()
+
 
 /datum/gamemode/proc/CreateFactions()
 	var/pc = get_player_count() //right proc?
 	for(var/Fac in factions_allowed)
 		CreateFaction(Fac, pc)
-	PopulateFactions()
+	return PopulateFactions()
 
 /datum/gamemode/proc/CreateFaction(var/Fac, var/population)
 	var/datum/faction/F = new Fac
@@ -72,14 +72,20 @@
 
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
+			to_chat(world, "Evaluating [P]")
 			if(F.max_roles && F.members.len >= F.max_roles)
+				to_chat(world, "Max roles")
 				break
 			if(!P.client || !P.mind)
+				to_chat(world, "No client or mind")
 				continue
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
+				to_chat(world, "Does not desire the role, or is jobbanned")
 				continue
-			F.HandleNewMind(P.mind)
-
+			if(!F.HandleNewMind(P.mind))
+				log_startup_progress("[P.mind] failed [F] HandleNewMind!")
+				return 0
+	return 1
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
 	var/list/possible_factions = list()
