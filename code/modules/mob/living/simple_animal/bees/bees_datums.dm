@@ -45,12 +45,16 @@
 /datum/bee/proc/Die()
 	if (mob)
 		new corpse(get_turf(mob))
+	qdel(src)
+
+/datum/bee/Destroy()
+	if (mob)
 		mob.bees.Remove(src)
 		mob = null
 	if (home)
 		home.bees_outside_hive -= src
 		home = null
-	qdel(src)
+	..()
 
 //QUEEN BEE
 /datum/bee/queen_bee

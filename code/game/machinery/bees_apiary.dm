@@ -70,31 +70,34 @@
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
+	var/species_name = "bees"//people would expect an apiary to contain bees by default I guess.
+	if (species)
+		species_name = species.common_name
 	if(!worker_bees_inside && !queen_bees_inside)
-		to_chat(user, "<span class='info'>There doesn't seem to be any [species.common_name] in it.</span>")
+		to_chat(user, "<span class='info'>There doesn't seem to be any [species_name] in it.</span>")
 	else
 		if(worker_bees_inside < 10)
-			to_chat(user, "<span class='info'>You can hear a few [species.common_name] buzzing inside.</span>")
+			to_chat(user, "<span class='info'>You can hear a few [species_name] buzzing inside.</span>")
 		else if(worker_bees_inside > 35)
-			to_chat(user, "<span class='danger'>The [species.common_name] are over-crowded!</span>")
+			to_chat(user, "<span class='danger'>The [species_name] are over-crowded!</span>")
 		else
 			to_chat(user, "<span class='info'>You hear a loud buzzing from the inside.</span>")
 
 		if(nutrilevel < 0)
-			to_chat(user, "<span class='danger'>The [species.common_name] inside appear to be starving.</span>")
+			to_chat(user, "<span class='danger'>The [species_name] inside appear to be starving.</span>")
 		else if(nutrilevel < 10)
-			to_chat(user, "<span class='warning'>The [species.common_name] inside appear to be low on food reserves.</span>")
+			to_chat(user, "<span class='warning'>The [species_name] inside appear to be low on food reserves.</span>")
 
 		if(beezeez > 0)
-			to_chat(user, "<span class='info'>The [species.common_name] are collecting the beezeez pellets.</span>")
+			to_chat(user, "<span class='info'>The [species_name] are collecting the beezeez pellets.</span>")
 
 		if(toxic > 5)
 			if (toxic < 33)
-				to_chat(user, "<span class='warning'>The [species.common_name] look a bit on edge, their diet might be toxic.</span>")
+				to_chat(user, "<span class='warning'>The [species_name] look a bit on edge, their diet might be toxic.</span>")
 			else if (toxic < 50)
-				to_chat(user, "<span class='warning'>The [species.common_name] are starting to act violent, the hive's toxicity is rising.</span>")
+				to_chat(user, "<span class='warning'>The [species_name] are starting to act violent, the hive's toxicity is rising.</span>")
 			else
-				to_chat(user, "<span class='danger'>The [species.common_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
+				to_chat(user, "<span class='danger'>The [species_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
 	switch(reagents.total_volume)
 		if(30 to 60)
@@ -194,9 +197,6 @@
 
 			if (queen_bees_inside || worker_bees_inside)
 				empty_beehive()
-
-			for (var/datum/bee/B in bees_outside_hive)
-				B.home = null
 
 			qdel(src)
 
@@ -399,7 +399,8 @@
 		else if (nutrilevel <= 0 && bees_outside_hive.len > 1)
 			for (var/i = 1 to max(1,round(bees_outside_hive.len/3)))
 				var/datum/bee/B = locate() in bees_outside_hive
-				B.homeCall()
+				if (istype(B))
+					B.homeCall()
 
 
 		//HANDLE TOXICITY
@@ -503,9 +504,6 @@
 
 		if (queen_bees_inside || worker_bees_inside)
 			empty_beehive()
-
-		for (var/datum/bee/B in bees_outside_hive)
-			B.home = null
 
 		harvest_honeycombs()
 

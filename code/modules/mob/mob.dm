@@ -2096,7 +2096,7 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
-	if (reagents.has_reagent(CHILLWAX))
+	if (reagents && reagents.has_reagent(CHILLWAX))
 		switch (message)
 			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
 				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")

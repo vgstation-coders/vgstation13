@@ -95,10 +95,18 @@
 
 
 /mob/living/simple_animal/bee/Destroy()
-	..()
 	if(home)
 		for (var/datum/bee/B in bees)
 			home.bees_outside_hive -= B
+		home = null
+	destination = null
+	target = null
+	target_plant = null
+	for (var/datum/bee/B in bees)
+		bees.Remove(B)
+	for (var/obj/machinery/portable_atmospherics/hydroponics/H in visited_plants)
+		visited_plants.Remove(H)
+	..()
 
 /mob/living/simple_animal/bee/Die()
 	returnToPool(src)
