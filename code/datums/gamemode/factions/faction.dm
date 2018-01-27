@@ -64,17 +64,8 @@
 /datum/faction/proc/GetObjectives()
 	return objective_holder.GetObjectives()
 
-/datum/faction/proc/CheckAllObjectives(var/individuals = FALSE)
-	var/dat
-	dat += GetObjectivesMenuHeader()
-	dat += {"<BR><FONT size = 2><B>Faction Objectives</B></FONT>"}
-	dat += objective_holder.GetObjectiveString(check_success = 1)
-
-	if(individuals)
-		for(var/datum/role/R in members)
-			dat += "[R.antag.name]"
-			dat += R.ReturnObjectivesString(check_success = 1)
-	return dat
+/datum/faction/proc/CheckObjectives()
+	return objective_holder.GetObjectiveString(check_success = TRUE)
 
 /datum/faction/proc/GetScoreboard()
 	var/list/score_results = list()
@@ -91,15 +82,17 @@
 	for(var/datum/role/R in members)
 		R.Declare()
 
-/datum/faction/proc/CheckAntags()
-	var/dat = "<br /><table cellspacing=5>"
-	for(var/datum/role/R in members)
-		var/mob/M=R.antag
-		dat += {"	<tr><td colspan=\"3\"><B>[R.plural_name]</B></td></tr>"
-					<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-					<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-					<td><A href='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-	dat += "</table>"
+/datum/faction/proc/AdminPanelEntry()
+	var/dat = list()
+	dat += GetObjectivesMenuHeader()
+	dat += "<h2>Faction objectives</h2>"
+	dat += CheckObjectives()
+	dat += "<h2>Members</h2><br>"
+	if(!members.len)
+		dat += "<b>Unpopulated</b>"
+	else
+		for(var/datum/role/R in members)
+			dat += R.AdminPanelEntry()
 	return dat
 
 /datum/faction/syndicate
@@ -134,6 +127,27 @@
 	late_role = NUKE_OP
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
+
+/datum/faction/syndicate/nuke_op/AdminPanelEntry()
+	var/list/dat = ..()
+	dat += "<br><h2>Nuclear disk</h2>"
+	if(!nukedisk)
+		dat += "There's no nuke disk. Panic?<br>"
+	else if(isnull(nukedisk.loc))
+		dat += "The nuke disk is in nullspace. Panic."
+	else
+		dat += "[nukedisk.name]"
+		var/atom/disk_loc = nukedisk.loc
+		while(!istype(disk_loc, /turf))
+			if(istype(disk_loc, /mob))
+				var/mob/M = disk_loc
+				dat += "carried by <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a> "
+			if(istype(disk_loc, /obj))
+				var/obj/O = disk_loc
+				dat += "in \a [O.name] "
+			disk_loc = disk_loc.loc
+		dat += "in [disk_loc.loc] at ([disk_loc.x], [disk_loc.y], [disk_loc.z]) [formatJumpTo(nukedisk, "Jump")]"
+	return dat
 
 /datum/faction/changeling
 	name = "Changeling Hivemind"
@@ -186,6 +200,23 @@
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
+/datum/faction/wizard/AdminPanelEntry()
+	var/list/dat = ..()
+	dat += "<h2>Wizard's apprentices</h2><br>To be implemented."
+
+	// TODO: FIXME: probably don't need this
+	/*
+		for(var/datum/mind/apprentice in ticker.mode.apprentices)
+			var/mob/M = apprentice.current
+			if(M)
+
+				dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+					<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
+					<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+			else
+				dat += "<tr><td><i>Apprentice not found!</i></td></tr>"
+		dat += "</table>"*/
+	return dat
 
 
 /datum/faction/vampire

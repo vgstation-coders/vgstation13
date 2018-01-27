@@ -47,6 +47,10 @@
 	to_chat(cult_mob, "<span class='sinister'>You remember one thing from the dark teachings of your master... [wordexp]</span>")
 	cult_mob.mind.store_memory("<B>You remember that</B> [wordexp]", 0, 0)
 
+/datum/faction/cult/AdminPanelEntry()
+	var/list/dat = ..()
+	dat += "<a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
+	return dat
 
 /datum/faction/cult/machine
 	name = "Cult of Ratvar"
