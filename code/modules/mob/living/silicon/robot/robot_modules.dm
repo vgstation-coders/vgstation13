@@ -19,6 +19,7 @@
 
 	//HUD
 	var/list/sensor_augs
+	var/module_holder = "nomod"
 
 	//Languages
 	var/list/languages = list(
@@ -45,6 +46,7 @@
 		RemoveStatusFlags(R)
 		RemoveCameraNetworks(R)
 		ResetEncryptionKey(R)
+		UpdateModuleHolder(R, TRUE)
 		R.remove_module() //Helps remove screen references on robot end
 
 	for(var/obj/A in modules)
@@ -82,6 +84,7 @@
 	AddToProfiler()
 	if(default)
 		AddDefaultModules()
+	UpdateModuleHolder(R)
 	AddCameraNetworks(R)
 	AddEncryptionKey(R)
 	ApplyStatusFlags(R)
@@ -89,6 +92,14 @@
 /obj/item/weapon/robot_module/proc/AddDefaultModules()
 	modules += new /obj/item/device/flashlight(src)
 	modules += new /obj/item/device/flash(src)
+
+/obj/item/weapon/robot_module/proc/UpdateModuleHolder(var/mob/living/silicon/robot/R, var/reset = FALSE)
+	if(R.hands) //To prevent runtimes when spawning borgs with forced module and no client.
+		if(reset)
+			R.hands.icon_state = initial(R.hands.icon_state)
+		else
+			if(module_holder)
+				R.hands.icon_state = module_holder
 
 /obj/item/weapon/robot_module/proc/AddCameraNetworks(var/mob/living/silicon/robot/R)
 	if(R.camera && CAMERANET_ROBOTS in R.camera.network)
@@ -163,6 +174,7 @@
 //Modules
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
+	module_holder = "standard"
 	sprites = list(
 		"Default" = "robot",
 		"Antique" = "robot_old",
@@ -208,6 +220,7 @@
 
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
+	module_holder = "medical"
 	networks = list(CAMERANET_MEDBAY)
 	radio_key = /obj/item/device/encryptionkey/headset_med
 	can_be_pushed = FALSE
@@ -276,6 +289,7 @@
 
 /obj/item/weapon/robot_module/engineering
 	name = "engineering robot module"
+	module_holder = "engineer"
 	networks = list(CAMERANET_ENGI)
 	radio_key = /obj/item/device/encryptionkey/headset_eng
 	no_slip = TRUE
@@ -330,6 +344,7 @@
 
 /obj/item/weapon/robot_module/security
 	name = "security robot module"
+	module_holder = "security"
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	can_be_pushed = FALSE
 	sprites = list(
@@ -364,6 +379,7 @@
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
+	module_holder = "janitor"
 	sprites = list(
 		"Default" = "janbot",
 		"Mechaduster" = "mechaduster",
@@ -396,6 +412,7 @@
 
 /obj/item/weapon/robot_module/butler
 	name = "service robot module"
+	module_holder = "service"
 	radio_key = /obj/item/device/encryptionkey/headset_service
 	sprites = list(
 		"Default - 'Butler'" = "servbot_m",
@@ -445,6 +462,7 @@
 
 /obj/item/weapon/robot_module/miner
 	name = "supply robot module"
+	module_holder = "miner"
 	networks = list(CAMERANET_MINE)
 	radio_key = /obj/item/device/encryptionkey/headset_mining
 	sprites = list(
@@ -487,6 +505,7 @@
 
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate robot module"
+	module_holder = "malf"
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	can_be_pushed = FALSE
@@ -509,6 +528,7 @@
 
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
+	module_holder = "malf"
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	can_be_pushed = FALSE
 	sprites = list(
@@ -541,6 +561,7 @@
 
 /obj/item/weapon/robot_module/tg17355
 	name = "tg17355 robot module"
+	module_holder = "brobot"
 	sprites = list(
 		"Peacekeeper" = "peaceborg",
 		"Omoikane" = "omoikane"

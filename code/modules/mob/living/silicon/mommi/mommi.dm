@@ -51,7 +51,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/New(loc, startup_sound = 'sound/misc/interference.ogg', var/cell_type = "/obj/item/weapon/cell")
 	..()
-	UnlinkSelf()
 
 /proc/getAvailableMoMMIModules()
 	var/list/modules = list("Nanotrasen", "Soviet")
@@ -80,9 +79,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
-
-	if(hands) //To prevent runtimes when spawning MoMMIs using admin fuckery.
-		hands.icon_state = lowertext(modtype)
 
 	set_module_sprites(module.sprites)
 

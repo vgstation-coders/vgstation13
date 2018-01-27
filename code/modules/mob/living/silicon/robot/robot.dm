@@ -229,11 +229,8 @@
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
-	if(modtype == ("Security" || "Combat"))
+	if(modtype == ("Security" || "Combat" || "Syndicate"))
 		to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
-
-	if(hands) //To prevent runtimes when spawning borgs using admin fuckery.
-		hands.icon_state = lowertext(modtype)
 
 	set_module_sprites(module.sprites)
 

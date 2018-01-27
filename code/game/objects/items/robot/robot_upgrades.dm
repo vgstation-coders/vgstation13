@@ -105,9 +105,6 @@
 
 	qdel(R.module)
 
-	if(R.hands)
-		R.hands.icon_state = initial(R.hands.icon_state)
-
 	R.set_module_sprites(list("Default" = "robot"))
 	R.updatename("Default")
 
