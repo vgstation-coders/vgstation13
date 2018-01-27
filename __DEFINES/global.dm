@@ -14,7 +14,7 @@ var/global/list/deadmins = list()
 var/list/lockedvars = list("vars", "client", "holder")
 
 //List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y")
+var/list/nevervars = list("step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
