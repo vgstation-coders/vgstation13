@@ -72,18 +72,14 @@
 
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
-			to_chat(world, "Evaluating [P]")
 			if(F.max_roles && F.members.len >= F.max_roles)
-				to_chat(world, "Max roles")
 				break
 			if(!P.client || !P.mind)
-				to_chat(world, "No client or mind")
 				continue
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
-				to_chat(world, "Does not desire the role, or is jobbanned")
 				continue
 			if(!F.HandleNewMind(P.mind))
-				log_startup_progress("[P.mind] failed [F] HandleNewMind!")
+				WARNING("[P.mind] failed [F] HandleNewMind!")
 				return 0
 	return 1
 

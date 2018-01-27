@@ -50,11 +50,11 @@
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	var/datum/role/R = new roletype(M, src, initial_role)
-	if(!R)
-		log_startup_progress("Role killed itself or was otherwise missing!")
+	var/newRole = new roletype(M, src, initial_role)
+	if(!newRole)
+		WARNING("Role killed itself or was otherwise missing!")
 		return 0
-	members.Add(R)
+	members.Add(newRole)
 	return 1
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)

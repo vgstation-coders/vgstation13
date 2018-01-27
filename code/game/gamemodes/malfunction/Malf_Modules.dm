@@ -498,7 +498,7 @@ rcd light flash thingy on matter drain
 		return 1
 
 
-spell/aoe_turf/ai_win/cast(var/list/targets, mob/user)
+/spell/aoe_turf/ai_win/cast(var/list/targets, mob/user)
 	to_chat(user, "<span class='danger'>Detonation signal sent!</span>")
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
 	if(!M)

@@ -89,7 +89,6 @@
 	var/datum/objective_holder/objectives=new
 
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
-	to_chat(world, "role created, [M], [fac], [new_id], [name]")
 	// Link faction.
 	faction=fac
 	if(!faction)
@@ -109,10 +108,10 @@
 
 /datum/role/proc/AssignToRole(var/datum/mind/M)
 	if(!istype(M))
-		log_startup_progress("M is [M.type]!")
+		WARNING("M is [M.type]!")
 		return 0
 	if(!CanBeAssigned(M))
-		log_startup_progress("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
 		return 0
 
 	antag = M
@@ -120,6 +119,7 @@
 	M.antag_roles[id] = src
 
 	OnPreSetup()
+	return 1
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
 	M.antag_roles[id] = null
