@@ -82,8 +82,8 @@
 
 //Photography
 	var/obj/item/device/camera/silicon/aicamera = null
-	var/toner = 0
-	var/tonermax = 40
+	var/toner = CYBORG_STARTING_TONER
+	var/tonermax = CYBORG_MAX_TONER
 
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE, var/startup_sound='sound/voice/liveagain.ogg', var/cell_type = "/obj/item/weapon/cell")
 	ident = rand(1, 999)
@@ -91,6 +91,7 @@
 	updateicon()
 
 	laws = getLawset(src)
+	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
 
 	if(isMoMMI(src))
 		wires = new /datum/wires/robot/mommi(src)
@@ -107,15 +108,13 @@
 	station_holomap = new(src)
 
 	radio = new /obj/item/device/radio/borg(src)
-	if(!scrambledcodes && !camera)
+	if(!camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
-		camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
+		if(!scrambledcodes)
+			camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
-
-	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
-	toner = 40
 
 	initialize_components()
 	// Create all the robot parts.
@@ -534,7 +533,6 @@
 		C = O
 	L[A.name] = list(A, (C) ? C : O, list(alarmsource))
 	queueAlarm(text("--- [class] alarm detected in [A.name]!"), class)
-//	if(viewalerts) robot_alerts()
 	return TRUE
 
 
@@ -822,7 +820,7 @@
 		if(toner >= tonermax)
 			to_chat(user, "The toner level of [src] is at it's highest level possible")
 		else
-			toner = 40
+			toner = CYBORG_MAX_TONER
 			user.drop_item()
 			qdel(W)
 			to_chat(user, "You fill the toner level of [src] to it's max capacity")

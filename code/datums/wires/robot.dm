@@ -83,27 +83,8 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 				R.camera.deactivate(usr, 0) // Kick anyone watching the Cyborg's camera, doesn't display you disconnecting the camera.
 				R.visible_message("[R]'s camera lense focuses loudly.")
 				to_chat(R, "Your camera lense focuses loudly.")
-				var/numberer = 1  // Send images the Cyborg has taken to the AI's album upon sync.
-				for(var/datum/picture/z in R.aicamera.aipictures)
-					if(!R.connected_ai.aicamera.aipictures.len)
-						var/datum/picture/p = new/datum/picture()
-						p = z
-						p.fields["name"] = "Uploaded Image [numberer] (synced from [R.name])"
-						R.connected_ai.aicamera.aipictures += p
-						numberer++
-						continue
-					for(var/datum/picture/t in R.connected_ai.aicamera.aipictures) //Hopefully to prevent someone spamming images to silicons, by spamming this wire
-						if((z.fields["pixel_y"] != t.fields["pixel_y"]) && (z.fields["pixel_x"] != t.fields["pixel_x"])) //~2.26 out of 1000 chance this will stop something it shouldn't
-							var/datum/picture/p = new/datum/picture()
-							p = z
-							p.fields["name"] = "Uploaded Image [numberer] (synced from [R.name])"
-							R.connected_ai.aicamera.aipictures += p
-						else
-							continue
-					numberer++
-				if(R.aicamera.aipictures.len)
-					to_chat(R, "<span class='notice'>Locally saved images synced with AI. Images were retained in local database in case of loss of connection with the AI.</span>")
- 
+				if(R.aicamera)
+					R.aicamera.sync(R)
 
 		if(BORG_WIRE_LOCKED_DOWN)
 			R.SetLockdown(!R.lockcharge) // Toggle

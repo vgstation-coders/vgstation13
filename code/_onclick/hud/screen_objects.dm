@@ -461,10 +461,10 @@
 		if("View Images")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.aicamera.viewpictures()
+				AI.aicamera.viewpictures(AI)
 			else if(isrobot(usr))
 				var/mob/living/silicon/robot/R = usr
-				R.aicamera.viewpictures()
+				R.aicamera.viewpictures(R)
 
 		if("Configure Radio")
 			if(isAI(usr))

@@ -28,7 +28,7 @@
 
 	contents -= module
 	if(module)
-		module.forceMove(module)
+		module.forceMove(src.module)
 		module.dropped(src)
 		if(isgripper(module))
 			var/obj/item/weapon/gripper/G = module

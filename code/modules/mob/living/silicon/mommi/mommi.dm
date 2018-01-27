@@ -13,6 +13,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	maxHealth = 60
 	health = 60
 	pass_flags = PASSTABLE
+
+	scrambledcodes = TRUE //Don't appear on the SS13/ROBOTS cameranet.
 	var/keeper= TRUE // FALSE = No, TRUE = Yes (Disables speech and common radio.)
 	var/picked_icon = FALSE
 	var/obj/abstract/screen/inv_tool = null
@@ -49,6 +51,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/New(loc, startup_sound = 'sound/misc/interference.ogg', var/cell_type = "/obj/item/weapon/cell")
 	..()
+	UnlinkSelf()
 
 /proc/getAvailableMoMMIModules()
 	var/list/modules = list("Nanotrasen", "Soviet")

@@ -31,7 +31,7 @@
 	//var/parent_channel
 	var/backup_body =""
 	var/backup_author =""
-	var/is_admin_message = 0
+	var/is_admin_message = FALSE
 
 	var/icon/img = null
 	var/icon/backup_img
@@ -40,13 +40,11 @@
 /datum/feed_channel
 	var/channel_name=""
 	var/list/datum/feed_message/messages = list()
-	//var/message_count = 0
-	var/locked=0
-	var/author=""
-	var/backup_author=""
-	var/censored=0
-	var/is_admin_channel=0
-	//var/page = null //For newspapers
+	var/locked = FALSE
+	var/author = ""
+	var/backup_author = ""
+	var/censored = FALSE
+	var/is_admin_channel = FALSE
 
 /datum/feed_message/proc/clear()
 	author = ""
@@ -80,17 +78,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "newscaster_normal"
 	var/buildstage = 1 // 1 = complete, 0 = unscrewed
+	ghost_write = 1 // Allow ghosts to send Topic()s.
+	custom_aghost_alerts = 1 // We handle our own logging.
 
-	// Allow ghosts to send Topic()s.
-	ghost_write = 1
-	custom_aghost_alerts=1 // We handle our own logging.
-
-	//var/isbroken = 0  //1 if someone banged it with something heavy
-	//var/ispowered = 1 //starts powered, changes with power_change()
-	//OBSOLETE: the stat var already has BROKEN and NOPOWER flags, let's use these instead.
-	//var/list/datum/feed_channel/channel_list = list() //This list will contain the names of the feed channels. Each name will refer to a data region where the messages of the feed channels are stored.
-	//OBSOLETE: We're now using a global news network
-	var/screen = 0                  //Or maybe I'll make it into a list within a list afterwards... whichever I prefer, go fuck yourselves :3
+	var/screen = 0                  
+		//Or maybe I'll make it into a list within a list afterwards... whichever I prefer, go fuck yourselves :3
 		// 0 = welcome screen - main menu
 		// 1 = view feed channels
 		// 2 = create feed channel
@@ -103,35 +95,33 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		// 9 = viewing channel feeds
 		// 10 = censor feed story
 		// 11 = censor feed channel
-		//Holy shit this is outdated, made this when I was still starting newscasters :3
-	var/paper_remaining = 15 // There is no point to setting it to 0 here if you're setting it to 15 in New() ?????????
-	var/securityCaster = 0
-		// 0 = Caster cannot be used to issue wanted posters
-		// 1 = the opposite
+
+	var/paper_remaining = 15
+	var/securityCaster = FALSE
+		// FALSE = Caster cannot be used to issue wanted posters
+		// TRUE = the opposite
+
 	var/unit_no = 0 //Each newscaster has a unit number
-	//var/datum/feed_message/wanted //We're gonna use a feed_message to store data of the wanted person because fields are similar
-	//var/wanted_issue = 0          //OBSOLETE
-		// 0 = there's no WANTED issued, we don't need a special icon_state
-		// 1 = Guess what.
 	var/alert_delay = 500
-	var/alert = 0
-		// 0 = there hasn't been a news/wanted update in the last alert_delay
-		// 1 = there has
+	var/alert = FALSE
+		// FALSE = there hasn't been a news/wanted update in the last alert_delay
+		// TRUE = there has
+
 	var/scanned_user = "Unknown" //Will contain the name of the person who currently uses the newscaster
 	var/mob/masterController = null // Mob with control over the newscaster.
-	var/msg = "";                //Feed message
+	var/msg = ""; //Feed message
 	var/photo = null
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
-	var/c_locked=0;        //Will our new channel be locked to public submissions?
-	var/hitstaken = 0      //Death at 3 hits from an item with force>=15
+	var/c_locked = FALSE; //Will our new channel be locked to public submissions?
+	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
-	luminosity = 0
-	anchored = 1
+	luminosity = FALSE
+	anchored = TRUE
 
 
-/obj/machinery/newscaster/security_unit                   //Security unit
+/obj/machinery/newscaster/security_unit //Security unit
 	name = "Security Newscaster"
-	securityCaster = 1
+	securityCaster = TRUE
 
 /obj/machinery/newscaster/New(var/loc, var/ndir, var/building = 1)
 	buildstage = building
@@ -157,11 +147,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if((stat & NOPOWER) || (stat & BROKEN))
 		icon_state = "newscaster_off"
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
-			overlays.len = 0
+			overlays.Cut()
 			overlays += image(icon, "crack3")
 		return
 
-	overlays.len = 0 //reset overlays
+	overlays.Cut() //reset overlays
 
 	if(news_network.wanted_issue) //wanted icon state, there can be no overlays on it as it's a priority message
 		icon_state = "newscaster_wanted"
@@ -254,9 +244,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<BR><A href='?src=\ref[src];refresh=1'>Re-scan User</A>
 					<BR><BR><A href='?src=\ref[M];mach_close=newscaster_main'>Exit</A>"}
 				if(securityCaster)
-					var/wanted_already = 0
+					var/wanted_already = FALSE
 					if(news_network.wanted_issue)
-						wanted_already = 1
+						wanted_already = TRUE
 
 
 					dat += {"<HR><B>Feed Security functions:</B><BR>
@@ -274,14 +264,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen '><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 						else
 							dat+="<B><A href='?src=\ref[src];show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
-					/*for(var/datum/feed_channel/CHANNEL in channel_list)
-						dat+="<B>[CHANNEL.channel_name]: </B> <BR><FONT SIZE=1>\[created by: <FONT COLOR='maroon'>[CHANNEL.author]</FONT>\]</FONT><BR><BR>"
-						if( isemptylist(CHANNEL.messages) )
-							dat+="<I>No feed messages found in channel...</I><BR><BR>"
-						else
-							for(var/datum/feed_message/MESSAGE in CHANNEL.messages)
-								dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"*/
-
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Back</A>"}
@@ -299,11 +281,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<B>Message Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
 					<B><A href='?src=\ref[src];set_new_message=1'>Message Body</A>:</B> [msg] <BR>"}
 
-				/*if(isAI(user))
-					dat +="<B><A href='?src=\ref[src];upload_photo=1'>Upload Photo</A>:</B>  [(photo ? "Photo Uploaded" : "No Photo")]<BR>"
-				else
-					dat +="<B><A href='?src=\ref[src];set_attachment=1'>Attach Photo</A>:</B>  [(photo ? "Photo Attached" : "No Photo")]<BR>"
-				*/
 				dat += AttachPhotoButton(user)
 
 				dat += "<BR><A href='?src=\ref[src];submit_new_message=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"
@@ -327,10 +304,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_MESSAGE]'>Return</A><BR>"
 			if(NEWSCASTER_NEW_CHANNEL_ERROR)
 				dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed Channel to Network.</B></FONT><HR><BR>"
-				//var/list/existing_channels = list()            //Let's get dem existing channels - OBSOLETE
 				var/list/existing_authors = list()
 				for(var/datum/feed_channel/FC in news_network.network_channels)
-					//existing_channels += FC.channel_name       //OBSOLETE
 					if(FC.author == "\[REDACTED\]")
 						existing_authors += FC.backup_author
 					else
@@ -339,10 +314,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT COLOR='maroon'>�There already exists a Feed channel under your name.</FONT><BR>"
 				if(channel_name=="" || channel_name == "\[REDACTED\]")
 					dat+="<FONT COLOR='maroon'>�Invalid channel name.</FONT><BR>"
-				var/check = 0
+				var/check = FALSE
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == channel_name)
-						check = 1
+						check = TRUE
 						break
 				if(check)
 					dat+="<FONT COLOR='maroon'>�Channel name already in use.</FONT><BR>"
@@ -350,9 +325,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					dat+="<FONT COLOR='maroon'>�Channel author unverified.</FONT><BR>"
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_NEW_CHANNEL]'>Return</A><BR>"
 			if(NEWSCASTER_PRINT_NEWSPAPER)
-				var/total_num=length(news_network.network_channels)
-				var/active_num=total_num
-				var/message_num=0
+				var/total_num = length(news_network.network_channels)
+				var/active_num = total_num
+				var/message_num = 0
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(!FC.censored)
 						message_num += length(FC.messages)    //Dont forget, datum/feed_channel's var messages is a list of datum/feed_message
@@ -439,10 +414,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_D_NOTICE_MENU]'>Back</A>"
 			if(NEWSCASTER_WANTED)
 				dat+="<B>Wanted Issue Handler:</B>"
-				var/wanted_already = 0
+				var/wanted_already = FALSE
 				var/end_param = 1
 				if(news_network.wanted_issue)
-					wanted_already = 1
+					wanted_already = TRUE
 					end_param = 2
 
 				if(wanted_already)
@@ -508,14 +483,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		M << browse(dat, "window=newscaster_main;size=400x600")
 		onclose(M, "newscaster_main")
 
-	/*if(isbroken) //debugging shit
-		return
-	hitstaken++
-	if(hitstaken==3)
-		isbroken = 1
-	update_icon()*/
-
-
 /obj/machinery/newscaster/Topic(href, href_list)
 	if(..())
 		return
@@ -532,7 +499,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			while (findtext(channel_name," ") == 1)
 				channel_name = copytext(channel_name,2,length(channel_name)+1)
 			updateUsrDialog()
-			//update_icon()
 
 		else if(href_list["set_channel_lock"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"locked a channel"))
@@ -540,24 +506,21 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				return
 			c_locked = !c_locked
 			updateUsrDialog()
-			//update_icon()
 
 		else if(href_list["submit_new_channel"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"created a new channel"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			//var/list/existing_channels = list() //OBSOLETE
 			var/list/existing_authors = list()
 			for(var/datum/feed_channel/FC in news_network.network_channels)
-				//existing_channels += FC.channel_name
 				if(FC.author == "\[REDACTED\]")
 					existing_authors += FC.backup_author
 				else
 					existing_authors  +=FC.author
-			var/check = 0
+			var/check = FALSE
 			for(var/datum/feed_channel/FC in news_network.network_channels)
 				if(FC.channel_name == channel_name)
-					check = 1
+					check = TRUE
 					break
 			if(channel_name == "" || channel_name == "\[REDACTED\]" || scanned_user == "Unknown" || check || (scanned_user in existing_authors) )
 				screen=NEWSCASTER_NEW_CHANNEL_ERROR
@@ -569,18 +532,15 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					newChannel.author = scanned_user
 					newChannel.locked = c_locked
 					feedback_inc("newscaster_channels",1)
-					/*for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)    //Let's add the new channel in all casters.
-						NEWSCASTER.channel_list += newChannel*/                     //Now that it is sane, get it into the list. -OBSOLETE
 					news_network.network_channels += newChannel                        //Adding channel to the global network
 					screen = NEWSCASTER_MENU
 			updateUsrDialog()
-			//update_icon()
 
 		else if(href_list["set_channel_receiving"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"tried to set the receiving channel"))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			//var/list/datum/feed_channel/available_channels = list()
+
 			var/list/available_channels = list()
 			for(var/datum/feed_channel/F in news_network.network_channels)
 				if( (!F.locked || F.author == scanned_user) && !F.censored)
@@ -625,13 +585,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				else
 					targetcam = R.aicamera
 			else
-				to_chat(usr, "You cannot interface with silicon photo uploading")
+				to_chat(usr, "<span class='warning'>You cannot interface with the silicon photo uploading network.</span>")
 				return
 
 			var/list/nametemp = list()
 			var/find
 
-			if(targetcam.aipictures.len == 0)
+			if(!targetcam.aipictures.len)
 				to_chat(usr, "<span class='danger'>No images saved<span>")
 				return
 			for(var/datum/picture/t in targetcam.aipictures)
@@ -723,9 +683,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(isobserver(usr) && !canGhostWrite(usr,src,""))
 				to_chat(usr, "<span class='warning'>You can't do that.</span>")
 				return
-			var/already_wanted = 0
+			var/already_wanted = FALSE
 			if(news_network.wanted_issue)
-				already_wanted = 1
+				already_wanted = TRUE
 
 			if(already_wanted)
 				channel_name = news_network.wanted_issue.author
@@ -990,7 +950,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 
 /obj/machinery/newscaster/attack_paw(mob/user as mob)
-	to_chat(user, "<font color='blue'>The newscaster controls are far too complicated for your tiny brain!</font>")
+	to_chat(user, "<span class='notice'>The newscaster controls are far too complicated for your tiny brain!</span>")
 	return
 
 /obj/machinery/newscaster/proc/AttachPhoto(mob/user as mob)
@@ -1050,7 +1010,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	pressure_resistance = 1
 	attack_verb = list("baps", "smacks", "whaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
+	fire_fuel = TRUE
 
 	var/screen = 0
 	var/pages = 0
@@ -1060,13 +1020,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scribble=""
 	var/scribble_page = null
 
-/*obj/item/weapon/newspaper/attack_hand(mob/user as mob)
-	..()
-	to_chat(world, "derp")*/
-
-obj/item/weapon/newspaper/attack_self(mob/user as mob)
+/obj/item/weapon/newspaper/attack_self(mob/user as mob)
 	if(ishuman(user))
-		//var/mob/living/carbon/human/human_user = user
 		var/dat
 		pages = 0
 		switch(screen)
@@ -1235,10 +1190,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		scanned_user = "Nanotrasen Officer #[rand(0,9)][rand(0,9)][rand(0,9)]"
 	else if (isobserver(user))
 		scanned_user = "Space-Time Anomaly #[rand(0,9)][rand(0,9)][rand(0,9)]"
-//	if(masterController && masterController.client && get_dist(masterController,src)<=1)
-//		to_chat(masterController, "<span class='warning'>You were booted from \the [src] by [scanned_user].</span>")
 	masterController = user
-//	to_chat(masterController, "[bicon(src)] <span class='notice'>Welcome back, [scanned_user]!</span>")
 
 /obj/machinery/newscaster/proc/print_paper()
 	feedback_inc("newscaster_newspapers_printed",1)
@@ -1251,18 +1203,14 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	paper_remaining--
 	return
 
-//Removed for now so these aren't even checked every tick. Left this here in-case Agouri needs it later.
-///obj/machinery/newscaster/process()       //Was thinking of doing the icon update through process, but multiple iterations per second does not
-//	return                                  //bode well with a newscaster network of 10+ machines. Let's just return it, as it's added in the machines list.
-
 /obj/machinery/newscaster/proc/newsAlert(channel)   //This isn't Agouri's work, for it is ugly and vile.
 	var/turf/T = get_turf(src)                      //Who the fuck uses spawn(600) anyway, jesus christ
 	if(channel)
 		say("Breaking news from [channel]!")
-		alert = 1
+		alert = TRUE
 		update_icon()
 		spawn(300)
-			alert = 0
+			alert = FALSE
 			update_icon()
 		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 75, 1)
 	else

@@ -26,6 +26,9 @@
 #define FIREAXE_SLOWDOWN 1.4
 
 // Cyborgs & MoMMI defines
+#define CYBORG_STARTING_TONER 40
+#define CYBORG_MAX_TONER 100
+#define CYBORG_PHOTO_COST 20
 
 #define MEDICAL_MAX_KIT 10
 #define STANDARD_MAX_KIT 15
