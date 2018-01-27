@@ -103,9 +103,11 @@
 	target = null
 	target_plant = null
 	for (var/datum/bee/B in bees)
-		bees.Remove(B)
+		qdel(B)//it'll get removed from the bees list in the datum's Destroy() proc.
+	bees.len = 0
 	for (var/obj/machinery/portable_atmospherics/hydroponics/H in visited_plants)
 		visited_plants.Remove(H)
+	visited_plants.len = 0
 	..()
 
 /mob/living/simple_animal/bee/Die()
