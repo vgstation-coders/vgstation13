@@ -1617,6 +1617,8 @@ Game Mode config tags:
 	return found_faction
 
 /proc/find_active_faction_by_member(var/datum/role/R)
+	if(!R)
+		return null
 	var/found_faction = null
 	if(R.GetFaction())
 		return R.GetFaction()

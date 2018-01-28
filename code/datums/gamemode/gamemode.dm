@@ -23,6 +23,10 @@
 	var/votable = TRUE
 	var/list/orphaned_roles = list()
 
+	//'Oh dear we accidentally destroyed the station/universe' variables
+	var/station_was_nuked
+	var/explosion_in_progress
+
 
 /datum/gamemode/proc/can_start()
 	if(minimum_player_count && minimum_player_count < get_player_count())
@@ -37,14 +41,14 @@
 		TearDown()
 		return 0
 	SetupFactions()
-	CreateFactions()
-	return 1
+	return CreateFactions()
+
 
 /datum/gamemode/proc/CreateFactions()
 	var/pc = get_player_count() //right proc?
 	for(var/Fac in factions_allowed)
 		CreateFaction(Fac, pc)
-	PopulateFactions()
+	return PopulateFactions()
 
 /datum/gamemode/proc/CreateFaction(var/Fac, var/population)
 	var/datum/faction/F = new Fac
@@ -74,8 +78,10 @@
 				continue
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
 				continue
-			F.HandleNewMind(P.mind)
-
+			if(!F.HandleNewMind(P.mind))
+				WARNING("[P.mind] failed [F] HandleNewMind!")
+				return 0
+	return 1
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
 	var/list/possible_factions = list()
@@ -129,9 +135,13 @@
 
 
 /datum/gamemode/proc/process()
-	return
+	for(var/datum/faction/F in factions)
+		F.process()
 
 /datum/gamemode/proc/check_finished()
+	for(var/datum/faction/F in factions)
+		if(F.check_win())
+			return 1
 
 /datum/gamemode/proc/declare_completion()
 
