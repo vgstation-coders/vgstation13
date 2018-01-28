@@ -761,5 +761,5 @@ var/list/hive_pylons = list()
 //Rewards
 /obj/item/weapon/cloakingcloak/hive
 	name = "alien cloak"
-	desc = "Very light and soft to the tough, it's hard to believe that you would find something so delicate inside the Hive."
+	desc = "Soft to the tough."
 

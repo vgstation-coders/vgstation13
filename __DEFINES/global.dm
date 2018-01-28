@@ -14,7 +14,7 @@ var/global/list/deadmins = list()
 var/list/lockedvars = list("vars", "client", "holder")
 
 //List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y")
+var/list/nevervars = list("step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -320,6 +320,8 @@ var/nanocoins_lastchange = 0
 var/speciesinit = 0
 var/minimapinit = 0
 
+var/bees_species = list()
+
 var/datum/stat_collector/stat_collection = new
 
 //Hardcore mode
@@ -386,3 +388,4 @@ var/list/blacklisted_mobs = list(
 		/mob/living/slime_pile, // They are dead.
 		/mob/living/adamantine_dust // Ditto
 		)
+

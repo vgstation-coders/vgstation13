@@ -174,7 +174,6 @@ var/MAX_EXPLOSION_RANGE = 14
 //Item flags!
 #define PROXMOVE	1	// Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
 #define FPRINT		2	// takes a fingerprint
-#define ON_BORDER	4	// item has priority to check when entering or leaving
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
@@ -196,6 +195,11 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define ALL ~0
 #define NONE 0
+
+//airflow flags!
+
+#define ON_BORDER 1   // item has priority to check when entering or leaving
+#define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
 
 
 //sharpness flags
@@ -977,13 +981,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    10
-#define VAMP_SLAVE    11
-#define VAMP_BLINK    12
-#define VAMP_MATURE   13
-#define VAMP_SHADOW   14
-#define VAMP_CHARISMA 15
-#define VAMP_UNDYING  16
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
@@ -1551,6 +1556,14 @@ var/proccalls = 1
 
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
+
+#define BEESPECIES_NORMAL	"bees"
+#define BEESPECIES_VOX		"chill bugs"
+
+//mob/proc/is_pacified()
+#define VIOLENCE_SILENT		0
+#define VIOLENCE_DEFAULT	1
+#define VIOLENCE_GUN		2
 
 // Used to determine which HUD is in use
 #define HUD_NONE 0

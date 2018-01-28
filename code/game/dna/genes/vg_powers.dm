@@ -24,6 +24,14 @@ Obviously, requires DNA2.
 
 	spelltype = /spell/targeted/genetic/hulk
 
+/datum/dna/gene/basic/grant_spell/hulk/deactivate(var/mob/M, var/connected, var/flags)
+	M.mutations.Remove(M_HULK)
+	M.update_mutations()
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.update_body()
+	return ..()
+
 /datum/dna/gene/basic/grant_spell/hulk/New()
 	..()
 	block = HULKBLOCK

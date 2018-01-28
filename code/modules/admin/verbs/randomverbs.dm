@@ -15,6 +15,16 @@
 	message_admins("[key_name_admin(usr)] made [key_name_admin(M)] drop everything!", 1)
 	feedback_add_details("admin_verb","DEVR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/manage_religions()
+	set category = "Admin"
+	set name = "Manage Religions"
+	if(!holder)
+		to_chat(src, "Only administrators may use this command.")
+		return
+
+	holder.updateRelWindow()
+
+
 /client/proc/cmd_admin_prison(mob/M as mob in mob_list)
 	set category = "Admin"
 	set name = "Prison"

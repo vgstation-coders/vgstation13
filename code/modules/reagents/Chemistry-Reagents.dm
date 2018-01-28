@@ -575,26 +575,26 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_reagent("toxin"))
-		holder.remove_reagent("toxin", 2 * REM)
-	if(holder.has_reagent("stoxin"))
-		holder.remove_reagent("stoxin", 2 * REM)
-	if(holder.has_reagent("plasma"))
-		holder.remove_reagent("plasma", REM)
-	if(holder.has_reagent("sacid"))
-		holder.remove_reagent("sacid", REM)
-	if(holder.has_reagent("cyanide"))
-		holder.remove_reagent("cyanide", REM)
-	if(holder.has_reagent("amatoxin"))
-		holder.remove_reagent("amatoxin", 2 * REM)
-	if(holder.has_reagent("chloralhydrate"))
-		holder.remove_reagent("chloralhydrate", 5 * REM)
-	if(holder.has_reagent("carpotoxin"))
-		holder.remove_reagent("carpotoxin", REM)
-	if(holder.has_reagent("zombiepowder"))
-		holder.remove_reagent("zombiepowder", 0.5 * REM)
-	if(holder.has_reagent("mindbreaker"))
-		holder.remove_reagent("mindbreaker", 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(STOXIN, VALERENIC_ACID)))
+		holder.remove_reagents(list(STOXIN, VALERENIC_ACID), 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.remove_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
+		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.remove_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.remove_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.remove_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.remove_reagent(MINDBREAKER, 2 * REM)
 	M.hallucination = max(0, M.hallucination - 5 * REM)
 	M.adjustToxLoss(-2 * REM)
 
@@ -1265,13 +1265,12 @@
 	density = 1.59
 	specheatcap = 1.244
 
-/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/honey/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!holder)
 			return
 		H.nutrition += nutriment_factor
-		holder.remove_reagent(src.id, 0.4)
 		if(H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(quality, 0)
 		if(H.getFireLoss() && prob(50))
@@ -1279,7 +1278,6 @@
 		if(H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-quality)
 		..()
-		return
 
 /datum/reagent/honey/royal_jelly
 	name = "Royal Jelly"
@@ -1289,6 +1287,31 @@
 	alpha = 220
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	quality = 3
+
+/datum/reagent/honey/chillwax
+	name = "Chill Wax"
+	id = CHILLWAX
+	description = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+	color = "#4C78C1"
+	alpha = 250
+	nutriment_factor = 10 * REAGENTS_METABOLISM
+	density = 1.59
+	quality = 1
+	specheatcap = 1.244
+
+/datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.druggy = max(H.druggy, 5)
+		H.Dizzy(2)
+		if(prob(10))
+			H.emote(pick("stare", "giggle"))
+		if(prob(5))
+			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
+		if(prob(2))
+			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
+			H.sleeping += 1
+		..()
 
 /datum/reagent/sacid
 	name = "Sulphuric acid"
@@ -2910,6 +2933,9 @@
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
+/datum/reagent/zombiepowder/reagent_deleted()
+	return on_removal(volume)
+
 //Hotfix for Fakedeath never ending.
 /datum/reagent/zombiepowder/on_removal(var/amount)
 	if(!..(amount))
@@ -3332,7 +3358,10 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.sleeping++
+			M.confused++
+			M.drowsyness++
+			if(volume >= 10)
+				M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
@@ -5537,7 +5566,7 @@
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk
-	name = "Banana Mama"
+	name = "Banana Honk"
 	id = BANANAHONK
 	description = "A drink from Clown Heaven."
 	nutriment_factor = FOOD_METABOLISM

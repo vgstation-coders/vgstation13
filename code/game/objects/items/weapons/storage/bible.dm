@@ -125,8 +125,8 @@
 
 		if(H.mind && H.mind.special_role == "VampThrall" && isChaplain(user))
 			ticker.mode.remove_thrall(H.mind)
-			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+			H.visible_message("<span class='big danger'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+			"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			return 1 //That's it, game over
 
 		bless_mob(user, H) //Let's outsource the healing code, because we can
@@ -193,7 +193,9 @@
 		to_chat(usr, "<span class='warning'> You do not have a religion to convert people to.</span>")
 		return FALSE
 
-	var/list/mob/living/moblist = range(1, owner)
+	var/list/mob/moblist = list()
+	for (var/mob/living/carbon/human/H in range(1, owner))
+		moblist += H
 	moblist -= owner
 
 	var/mob/living/subject = input(owner, "Who do you wish to convert?", "Religious converting") as null|mob in moblist

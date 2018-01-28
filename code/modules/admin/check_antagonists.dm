@@ -3,7 +3,7 @@
 		var/dat = "<html><head><title>Round Status</title></head><body><h1><B>Round Status</B></h1>"
 
 		dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
-			Round Duration: <B>[round(world.time / 36000)]:[add_zero(world.time / 600 % 60, 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
+			Round Duration: <B>[round(world.time / 36000)]:[add_zero("[world.time / 600 % 60]", 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
 			<A HREF='?src=\ref[src];emergency_shuttle_panel=1'><B>Emergency Shuttle Panel</B></A><BR>"}
 
 		dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"

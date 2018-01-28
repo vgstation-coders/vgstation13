@@ -18,7 +18,7 @@
 var/list/doppelgangers = list()
 
 // Sanity : don't copy more than one guy
-/spell/aoe_turf/conjure/cast_check(skipcharge = 0,mob/user = usr)
+/spell/aoe_turf/conjure/doppelganger/cast_check(skipcharge = 0,mob/user = usr)
 	var/list/L = view(user, 0)
 	L -= user
 	for (var/mob/M in L)

@@ -475,6 +475,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			else
 				butcher()
 				return 1
+	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
+		return
 	else
 		user.delayNextAttack(8)
 		if(O.force)

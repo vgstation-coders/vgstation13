@@ -65,6 +65,15 @@
 		to_chat(usr, "Mass-editing is not supported for objects of type [base_path]")
 		return
 
+	//Safety measures copied from modifyvariables.dm
+	if(!usr.client.can_edit_var(var_name))
+		return
+	switch(var_name)
+		if("bound_width", "bound_height", "bound_x", "bound_y")
+			if(new_value % world.icon_size) //bound_width/height must be a multiple of 32, otherwise movement breaks - BYOND issue
+				to_chat(usr, "[var_name] can only be a multiple of [world.icon_size]!")
+				return
+
 	//BYOND's internal optimisation makes this work better than cycling through every atom
 	#define is_valid_atom(atom) (atom.type == base_path || (include_subtypes && istype(atom, base_path)))
 	if(ispath(base_path, /turf))

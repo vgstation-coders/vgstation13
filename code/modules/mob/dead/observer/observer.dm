@@ -343,7 +343,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	next_poltergeist=0
 
 /* WHY
-/mob/dead/observer/Move(NewLoc, direct)
+/mob/dead/observer/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	dir = direct
 	if(NewLoc)
 		loc = NewLoc
@@ -391,7 +391,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
 				if (timeleft)
-					stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+					var/acronym = emergency_shuttle.location == 1 ? "ETD" : "ETA"
+					stat(null, "[acronym]-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
@@ -427,10 +428,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	if(selectedHUD == HUD_MEDICAL)
 		selectedHUD = HUD_NONE
-		to_chat(src, "<span class='notice'><B>Medical HUD Disabled</B></span>")
+		to_chat(src, "<span class='notice'><B>Medical HUD disabled.</B></span>")
 	else
 		selectedHUD = HUD_MEDICAL
-		to_chat(src, "<span class='notice'><B>Medical HUD Enabled</B></span>")
+		to_chat(src, "<span class='notice'><B>Medical HUD enabled.</B></span>")
 
 /mob/dead/observer/verb/toggle_secHUD()
 	set category = "Ghost"
@@ -999,3 +1000,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if (source_turf in view(src))
 			rendered_speech = "<B>[rendered_speech]</B>"
 			to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")
+
+/mob/dead/observer/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			return selectedHUD == HUD_MEDICAL
+		if(HUD_SECURITY)
+			return selectedHUD == HUD_SECURITY
+	return

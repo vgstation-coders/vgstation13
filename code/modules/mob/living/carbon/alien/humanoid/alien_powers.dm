@@ -290,7 +290,7 @@ a
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	. = ..()
 	if(!.) //Returning 1 if we failed to cast
-		stat_collection.xeno.eggs_laid++
+		stat_collection.xeno_eggs_laid++
 
 ///////////////////////////////////
 ////////// DRONE BROS /////////////

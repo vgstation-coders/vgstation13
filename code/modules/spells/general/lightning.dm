@@ -103,6 +103,8 @@
 /spell/lightning/cast(var/list/targets, mob/user)
 	var/mob/living/L = targets[1]
 	if(istype(L))
+		if (user.is_pacified(VIOLENCE_DEFAULT,L))
+			return
 		zapzap--
 		if(zapzap)
 			to_chat(user, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")

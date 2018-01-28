@@ -56,7 +56,7 @@
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user)
 	if(on)
-		to_chat(user, "You have to turn off the \[src]!")
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 
@@ -229,13 +229,13 @@
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user)
 	if(on)
-		to_chat(user, "You have to turn off the \[src]!")
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(on)
-		to_chat(user, "You have to turn off the \[src]!")
+		to_chat(user, "You have to turn off \the [src]!")
 		return
 	return ..()
 

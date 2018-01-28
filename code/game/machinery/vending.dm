@@ -88,6 +88,7 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 
 	var/account_first_linked = 0
+	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
 	new /obj/structure/cult/forge(loc)
@@ -179,8 +180,16 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='warning'>You need to anchor the vending machine before you can refill it.</span>")
 			return
 		if(!pack)
+			if(is_being_filled)
+				to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
+				return
+			if(P.in_use)
+				to_chat(user, "<span class='warning'>\The [P] is already in use!</span>")
+				return
+			is_being_filled = TRUE
+			P.in_use = TRUE
 			to_chat(user, "<span class='notice'>You start filling the vending machine with the recharge pack's materials.</span>")
-			if(do_after(user,src,30))
+			if(do_after_many(user, list(src, P), 3 SECONDS))
 				var/obj/machinery/vending/newmachine = new P.targetvendomat(loc)
 				to_chat(user, "<span class='notice'>[bicon(newmachine)] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -204,16 +213,31 @@ var/global/num_vending_terminals = 1
 				component_parts = 0
 				qdel(coinbox)
 				qdel(src)
+			else
+				is_being_filled = FALSE
+				P.in_use = FALSE
 		else
 			if(istype(P,pack))
+				if(is_being_filled)
+					to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
+					return
+				if(P.in_use)
+					to_chat(user, "<span class='warning'>\The [P] is already in use!</span>")
+					return
+				is_being_filled = TRUE
+				P.in_use = TRUE
 				to_chat(user, "<span class='notice'>You start refilling the vending machine with the recharge pack's materials.</span>")
-				if(do_after(user, src, 30))
+				if(do_after_many(user, list(src, P), 3 SECONDS))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					if(check_for_custom_vendor())
 						custom_refill(P, user)
 					else
 						normal_refill(P, user)
+				else
+					P.in_use = FALSE // Only update this if `do_after_many` failed, as P gets deleted
+				is_being_filled = FALSE
+
 			else
 				to_chat(user, "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>")
 
@@ -2432,6 +2456,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/soft/purple = 10,
 		/obj/item/clothing/head/soft/red = 10,
 		/obj/item/clothing/head/soft/yellow = 10,
+		/obj/item/clothing/head/soft/black = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/head/bearpelt = 5,
