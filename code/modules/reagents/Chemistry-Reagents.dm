@@ -575,26 +575,26 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_reagent("toxin"))
-		holder.remove_reagent("toxin", 2 * REM)
-	if(holder.has_reagent("stoxin"))
-		holder.remove_reagent("stoxin", 2 * REM)
-	if(holder.has_reagent("plasma"))
-		holder.remove_reagent("plasma", REM)
-	if(holder.has_reagent("sacid"))
-		holder.remove_reagent("sacid", REM)
-	if(holder.has_reagent("cyanide"))
-		holder.remove_reagent("cyanide", REM)
-	if(holder.has_reagent("amatoxin"))
-		holder.remove_reagent("amatoxin", 2 * REM)
-	if(holder.has_reagent("chloralhydrate"))
-		holder.remove_reagent("chloralhydrate", 5 * REM)
-	if(holder.has_reagent("carpotoxin"))
-		holder.remove_reagent("carpotoxin", REM)
-	if(holder.has_reagent("zombiepowder"))
-		holder.remove_reagent("zombiepowder", 0.5 * REM)
-	if(holder.has_reagent("mindbreaker"))
-		holder.remove_reagent("mindbreaker", 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(STOXIN, VALERENIC_ACID)))
+		holder.remove_reagents(list(STOXIN, VALERENIC_ACID), 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.remove_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
+		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.remove_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.remove_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.remove_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.remove_reagent(MINDBREAKER, 2 * REM)
 	M.hallucination = max(0, M.hallucination - 5 * REM)
 	M.adjustToxLoss(-2 * REM)
 
@@ -2910,6 +2910,9 @@
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
+/datum/reagent/zombiepowder/reagent_deleted()
+	return on_removal(volume)
+
 //Hotfix for Fakedeath never ending.
 /datum/reagent/zombiepowder/on_removal(var/amount)
 	if(!..(amount))
@@ -3332,7 +3335,10 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.sleeping++
+			M.confused++
+			M.drowsyness++
+			if(volume >= 10)
+				M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
@@ -5537,7 +5543,7 @@
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk
-	name = "Banana Mama"
+	name = "Banana Honk"
 	id = BANANAHONK
 	description = "A drink from Clown Heaven."
 	nutriment_factor = FOOD_METABOLISM

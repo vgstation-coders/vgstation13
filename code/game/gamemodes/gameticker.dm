@@ -438,6 +438,8 @@ var/datum/controller/gameticker/ticker
 				else
 					blackbox.save_all_data_to_sql()
 
+			stat_collection.Process()
+
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
 				if(config.map_voting)

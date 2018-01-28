@@ -333,3 +333,11 @@
 
 /mob/living/silicon/pai/teleport_to(var/atom/A)
 	card.forceMove(get_turf(A))
+
+/mob/living/silicon/pai/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			return medHUD
+		if(HUD_SECURITY)
+			return secHUD
+	return FALSE
