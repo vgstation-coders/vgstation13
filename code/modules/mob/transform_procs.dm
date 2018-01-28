@@ -9,6 +9,7 @@
 		return FALSE
 	monkeyizing = TRUE
 	canmove = FALSE
+	invisibility = 101
 	delayNextAttack(5 SECONDS)
 
 	for(var/obj/item/W in src)
