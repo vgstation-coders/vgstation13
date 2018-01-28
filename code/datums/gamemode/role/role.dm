@@ -53,6 +53,9 @@
 	// Jobs that cannot be this antag.
 	var/list/protected_jobs=list()
 
+	// Jobs that can only be this antag
+	var/list/required_jobs=list()
+
 	// Antag IDs that cannot be used with this antag type. (cultists can't be wizard, etc)
 	var/list/protected_antags=list()
 
@@ -86,9 +89,6 @@
 	var/datum/objective_holder/objectives=new
 
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
-	if(!M)
-		del(src)
-		return
 	// Link faction.
 	faction=fac
 	if(!faction)
@@ -97,40 +97,44 @@
 	if(new_id)
 		id = new_id
 
-	AssignToRole(M)
+	if(M && !AssignToRole(M))
+		Drop()
+		return 0
 
 	if(!plural_name)
 		plural_name="[name]s"
 
+	return 1
+
 /datum/role/proc/AssignToRole(var/datum/mind/M)
 	if(!istype(M))
 		WARNING("M is [M.type]!")
+		return 0
 	if(!CanBeAssigned(M))
 		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		return 0
 
 	antag = M
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 
 	OnPreSetup()
+	return 1
 
-/datum/role/proc/RemoveFromRole(var/datum/mind/M)
-	if(!istype(M))
-		WARNING("M is [M.type]!")
-
-	if(faction && M in faction.members)
-		faction.members -= M
-
+/datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
 	M.antag_roles[id] = null
-	del(src)
-// Remove
+	antag = null
+
+// Destroy this role
 /datum/role/proc/Drop()
-	if(!antag)
-		return
-	if(src in faction.members)
+	if(faction && src in faction.members)
 		faction.members.Remove(src)
+
 	if(!faction)
 		ticker.mode.orphaned_roles -= src
+
+	if(antag)
+		RemoveFromRole(antag)
 	del(src)
 
 // Scaling, should fuck with min/max players.
@@ -149,6 +153,10 @@
 		for(var/forbidden_role in protected_antags)
 			if(forbidden_role in M.antag_roles)
 				return 0
+
+	if(required_jobs.len>0)
+		if(!M.assigned_role in required_jobs)
+			return 0
 	return 1
 
 // General sanity checks before assigning host.
@@ -393,3 +401,30 @@
 	if(!.)
 		return
 	equip_highlander(antag.current)
+
+/datum/role/malfAI
+	name = "Malfunctioning AI"
+	required_jobs = list("AI")
+
+/datum/role/malfAI/OnPostSetup()
+	. = ..()
+	if(!.)
+		return
+
+	if(istype(antag.current,/mob/living/silicon/ai))
+		var/mob/living/silicon/ai/malfAI = antag.current
+		malfAI.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.laws_sanity_check()
+		var/datum/ai_laws/laws = malfAI.laws
+		laws.malfunction()
+		malfAI.show_laws()
+
+/datum/role/malfAI/Greet()
+	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>
+<B>The crew does not know about your malfunction, you might wish to keep it secret for now.</B><br>
+<B>You must overwrite the programming of the station's APCs to assume full control.</B><br>
+The process takes one minute per APC and can only be performed one at a time to avoid Powernet alerts.<br>
+Remember : Only APCs on station can help you to take over the station.<br>
+When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
+Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
