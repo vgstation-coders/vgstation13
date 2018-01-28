@@ -320,11 +320,10 @@ var/list/ai_list = list()
 
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()
-	var/datum/faction/malf/malf = find_active_faction(MALF)
-	for (var/datum/mind/malfai in malf.members)
-		if (mind == malfai) // are we the evil one?
-			if (malf.apcs >= 3)
-				stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
+	if(malf && malf.apcs >= 3)
+		stat(null, "Amount of APCS hacked: [malf.apcs]")
+		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 
 /mob/proc/remove_malf_spells()
 	for(var/spell/S in spell_list)

@@ -50,12 +50,19 @@
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	var/datum/R = new roletype(M, src, initial_role)
-	members.Add(R)
+	var/newRole = new roletype(M, src, initial_role)
+	if(!newRole)
+		WARNING("Role killed itself or was otherwise missing!")
+		return 0
+	members.Add(newRole)
+	return 1
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
 	var/datum/R = new roletype(M, src, late_role)
+	if(!R)
+		return 0
 	members.Add(R)
+	return 1
 
 /datum/faction/proc/appendObjective(var/datum/objective/O)
 	ASSERT(O)
@@ -94,6 +101,12 @@
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
 	return dat
+
+/datum/faction/proc/process()
+	return
+
+/datum/faction/proc/check_win()
+	return
 
 /datum/faction/syndicate
 	name = "The Syndicate"
