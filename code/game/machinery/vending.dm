@@ -2914,6 +2914,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		)
 
+	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+
 	for(var/random_items = 1 to premium.len - 4)
 		premium.Remove(pick(premium))
 	src.initialize()
