@@ -550,11 +550,11 @@
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
 
-	user.delayNextAttack(0.5 SECONDS)
+	user.delayNextAttack(0.8 SECONDS)
 
 
 /obj/machinery/fishtank/proc/hit(var/obj/O, var/mob/user)
-	user.delayNextAttack(0.5 SECONDS)
+	user.delayNextAttack(0.8 SECONDS)
 	user.do_attack_animation(src, O)
 	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
 	cur_health = max(0, cur_health - O.force)
