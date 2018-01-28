@@ -263,12 +263,12 @@
 	handle_special_interactions()
 
 	//Handle water leakage from damage
-	if(leaking && leaking)
+	if(leaking)
 		switch(leaking)							//Can't leak water if there is no water in the tank
 			if(MAJOR_LEAK)							//At or below 25% health, the tank will lose 10 water_level per cycle (major leak)
 				remove_water(10)
 			if(MINOR_LEAK)						//At or below 50% health, the tank will lose 1 water_level per cycle (minor leak)
-				add_water(1)
+				remove_water(1)
 
 //////////////////////////////
 //		SUPPORT PROCS		//
@@ -550,14 +550,14 @@
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
 
-	user.delayNextAttack(0.3 SECONDS)
+	user.delayNextAttack(0.8 SECONDS)
 
 
-/obj/machinery/fishtank/proc/hit(var/damage, var/mob/user, var/obj/O)
-	user.delayNextAttack(0.3 SECONDS)
+/obj/machinery/fishtank/proc/hit(var/obj/O, var/mob/user)
+	user.delayNextAttack(0.8 SECONDS)
 	user.do_attack_animation(src, O)
-	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 80, 1)
-	cur_health = max(0, cur_health - damage)
+	playsound(src, 'sound/effects/glassknock.ogg', 80, 1)
+	cur_health = max(0, cur_health - O.force)
 	check_health()
 
 /obj/machinery/fishtank/proc/attack_generic(var/mob/living/user, var/damage = 0)	//used by attack_alien, attack_animal, and attack_slime
@@ -699,7 +699,7 @@
 
 	else if(O && O.force)
 		user.visible_message("<span class='danger'>\The [src] has been attacked by \the [user] with \the [O]!</span>")
-		hit(O.force, user)
+		hit(O, user)
 	return TRUE
 
 /* tank construction */

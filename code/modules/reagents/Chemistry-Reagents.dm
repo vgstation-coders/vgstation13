@@ -1265,13 +1265,12 @@
 	density = 1.59
 	specheatcap = 1.244
 
-/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/honey/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!holder)
 			return
 		H.nutrition += nutriment_factor
-		holder.remove_reagent(src.id, 0.4)
 		if(H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(quality, 0)
 		if(H.getFireLoss() && prob(50))
@@ -1279,7 +1278,6 @@
 		if(H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-quality)
 		..()
-		return
 
 /datum/reagent/honey/royal_jelly
 	name = "Royal Jelly"
@@ -1289,6 +1287,31 @@
 	alpha = 220
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	quality = 3
+
+/datum/reagent/honey/chillwax
+	name = "Chill Wax"
+	id = CHILLWAX
+	description = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+	color = "#4C78C1"
+	alpha = 250
+	nutriment_factor = 10 * REAGENTS_METABOLISM
+	density = 1.59
+	quality = 1
+	specheatcap = 1.244
+
+/datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.druggy = max(H.druggy, 5)
+		H.Dizzy(2)
+		if(prob(10))
+			H.emote(pick("stare", "giggle"))
+		if(prob(5))
+			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
+		if(prob(2))
+			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
+			H.sleeping += 1
+		..()
 
 /datum/reagent/sacid
 	name = "Sulphuric acid"
@@ -3335,7 +3358,10 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.sleeping++
+			M.confused++
+			M.drowsyness++
+			if(volume >= 10)
+				M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
