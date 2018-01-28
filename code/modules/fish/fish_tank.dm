@@ -550,7 +550,7 @@
 							"You tap on \the [src].", \
 							"You hear a knocking sound.")
 
-	user.delayNextAttack(0.3 SECONDS)
+	user.delayNextAttack(0.5 SECONDS)
 
 
 /obj/machinery/fishtank/proc/hit(var/obj/O, var/mob/user)
