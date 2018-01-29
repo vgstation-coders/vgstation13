@@ -71,6 +71,9 @@
 		pollid = query_get_id.item[1]
 	if(polltype == "TEXT")
 		return
+
+	log_admin("[usr.key]/([usr.name]) is creating poll ID [pollid] \"[question]\"")
+
 	var/add_option = 1
 	while(add_option)
 		var/option = input("Write your option","Option") as message
