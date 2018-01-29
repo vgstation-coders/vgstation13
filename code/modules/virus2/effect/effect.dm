@@ -979,6 +979,31 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	var/obj/item/spawned_organ = new organ_type(get_turf(mob))
 	mob.visible_message("<span class='warning'>\A [spawned_organ.name] is extruded from \the [mob]'s body and falls to the ground!</span>","<span class='warning'>\A [spawned_organ.name] is extruded from your body and falls to the ground!</span>")
 
+/datum/disease2/effect/multiarm
+	name = "Polymelia Syndrome"
+	stage = 3
+	max_multiplier = 3
+	var/activated = FALSE
+
+/datum/disease2/effect/multiarm/activate(var/mob/living/carbon/mob)
+	if(activated)
+		return
+	var/hand_amount = round(multiplier)
+	mob.visible_message("<span class='warning'>With a spray of blood, [hand_amount > 1 ? "[hand_amount] more arms sprout" : "a new arm sprouts"]   from \the [mob]!</span>","<span class='notice'>[hand_amount] more arms burst forth from your back!</span>")
+	mob.set_hand_amount(mob.held_items.len + hand_amount)
+	blood_splatter(mob.loc,mob,TRUE)
+	activated = TRUE
+
+/datum/disease2/effect/multiarm/deactivate(var/mob/living/carbon/mob)
+	if(!activated)
+		return
+	var/hand_amount = round(multiplier)
+	mob.visible_message("<span class='notice'>The arms sticking out of \the [mob]'s back shrivel up and fall off!</span>", "<span class='warning'>Your new arms begin to die off, as the virus can no longer support them.</span>")
+	mob.set_hand_amount(mob.held_items.len - hand_amount)
+	for(var/i = 0; i < hand_amount;i++)
+		new /obj/item/organ/external/l_arm(mob, mob.loc)
+	..()
+
 
 ////////////////////////STAGE 4/////////////////////////////////
 
