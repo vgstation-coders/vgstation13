@@ -12,7 +12,7 @@
 	force = 0
 	var/cooldown = 0
 	
-/obj/item/device/inhaler/attack_self(mob/user as mob)
+/obj/item/device/inhaler/attack_self(mob/user)
 	if(cooldown < world.time - 8  && ishuman(user))
 		var/mob/living/carbon/human/H = user
 		playsound(user, 'sound/effects/spray2.ogg', 20, 1)
