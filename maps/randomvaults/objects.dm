@@ -266,6 +266,9 @@
 	dynamic_lighting = FALSE
 	mysterious = TRUE
 
+/area/vault/ironchef
+	name = "Kitchen Coliseum" //Not improper
+
 /obj/effect/narration/mystery_sound
 	play_sound = 'sound/effects/wildwasteland.ogg'
 
@@ -649,3 +652,41 @@
 
 		CO.face_atom(AM)
 		CO.visible_message("<span class='notice'>\The [CO] looks at \the [AM] and hisses angrily!</span>")
+
+//Iron Chef
+
+/obj/item/weapon/disk/shuttle_coords/vault/ironchef
+	destination = /obj/docking_port/destination/vault/ironchef
+
+/obj/docking_port/destination/vault/ironchef
+	areaname = "Kitchen Coliseum"
+
+/obj/item/clothing/gloves/ironchefgauntlets
+	name = "Iron Chef gauntlets"
+	desc = "Awarded to one whose confection achieves perfection, to one whose cuisine reigns supreme, to one whose foodstuff is the goodstuff."
+	icon_state = "powerfist"
+	siemens_coefficient = 0
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	pressure_resistance = 200 * ONE_ATMOSPHERE
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor
+	name = "essence of pure flavor"
+	desc = "This will really knock any dish up a notch. Bam!"
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor/New()
+	..()
+	reagents.add_reagent(MINDBREAKER, 25)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/radium/New()
+	..()
+	reagents.add_reagent(RADIUM, 25)
+
+/obj/machinery/microwave/upgraded
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra,\
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
