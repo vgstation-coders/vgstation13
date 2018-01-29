@@ -890,6 +890,9 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/New()
 	..()
+	if(rand(1))
+		name = "steamed ham"
+		desc = "It's a regional dialect."
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
