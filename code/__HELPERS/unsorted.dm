@@ -1694,3 +1694,50 @@ Game Mode config tags:
 	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
+
+/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor, mob/living/user)
+	if(!O)
+		return FALSE
+	var/min_seeds = 1
+	var/max_seeds = 2
+	var/seedloc = O.loc
+	var/datum/seed/new_seed_type
+
+	if(extractor)
+		seedloc = get_turf(extractor)
+		min_seeds = extractor.min_seeds
+		max_seeds = extractor.max_seeds
+	if(user)
+		user.drop_item(O, force_drop = TRUE)
+	
+	if(istype(O, /obj/item/weapon/grown))
+		var/obj/item/weapon/grown/F = O
+		if(F.plantname)
+			new_seed_type = plant_controller.seeds[F.plantname]
+	else 
+		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
+			if(F.plantname)
+				new_seed_type = plant_controller.seeds[F.plantname]
+		else 
+			var/obj/item/F = O
+			if(F.nonplant_seed_type)
+				var/t_amount = 0
+				var/t_max = rand(1,4)
+				while(t_amount < t_max)
+					new F.nonplant_seed_type(seedloc)
+					t_amount++
+				qdel(F)
+				return TRUE
+
+	if(new_seed_type)
+		var/produce = rand(min_seeds,max_seeds)
+		for(var/i = 0;i<=produce;i++)
+			var/obj/item/seeds/seeds = new(seedloc)
+			seeds.seed_type = new_seed_type.name
+			seeds.update_seed()
+	else
+		return FALSE
+
+	qdel(O)
+	return TRUE
