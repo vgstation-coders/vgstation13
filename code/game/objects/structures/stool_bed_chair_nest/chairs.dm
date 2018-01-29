@@ -23,7 +23,7 @@
 	update_icon()
 
 /obj/structure/bed/chair/unlock_atom(var/atom/movable/AM)
-	..()
+	. = ..()
 	update_icon()
 
 /obj/structure/bed/chair/update_icon()
