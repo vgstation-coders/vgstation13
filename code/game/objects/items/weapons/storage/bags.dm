@@ -142,10 +142,16 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		return
 
 	if(P.contents)
+		var/played = FALSE
 		for(var/obj/item/I in P.contents)
-			seedify(I)
-		playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
-		P.update_icon()
+			if(seedify(I) && !played)
+				playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
+				played = TRUE
+		P.orient2hud(usr)
+		if(usr)
+			P.orient2hud(usr)
+			if(usr.s_active)
+				usr.s_active.show_to(usr)
 
 // -----------------------------
 //          Food bag

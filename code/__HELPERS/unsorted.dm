@@ -1698,6 +1698,7 @@ Game Mode config tags:
 /proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor, mob/living/user)
 	if(!O)
 		return FALSE
+
 	var/min_seeds = 1
 	var/max_seeds = 2
 	var/seedloc = O.loc
@@ -1707,6 +1708,9 @@ Game Mode config tags:
 		seedloc = get_turf(extractor)
 		min_seeds = extractor.min_seeds
 		max_seeds = extractor.max_seeds
+
+	var/produce = rand(min_seeds,max_seeds)
+
 	if(user)
 		user.drop_item(O, force_drop = TRUE)
 	
@@ -1722,20 +1726,18 @@ Game Mode config tags:
 		else 
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
-				var/t_amount = 0
-				var/t_max = rand(1,4)
-				while(t_amount < t_max)
+				while(min_seeds < produce)
 					new F.nonplant_seed_type(seedloc)
-					t_amount++
+					min_seeds++
 				qdel(F)
 				return TRUE
 
 	if(new_seed_type)
-		var/produce = rand(min_seeds,max_seeds)
-		for(var/i = 0;i<=produce;i++)
+		while(min_seeds < produce)
 			var/obj/item/seeds/seeds = new(seedloc)
 			seeds.seed_type = new_seed_type.name
 			seeds.update_seed()
+			min_seeds++
 	else
 		return FALSE
 
