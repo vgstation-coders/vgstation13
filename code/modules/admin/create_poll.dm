@@ -69,6 +69,10 @@
 		return
 	if(query_get_id.NextRow())
 		pollid = query_get_id.item[1]
+
+	log_admin("[key_name(src)] created the poll with id [pollid].")
+	message_admins("<span class='notice'>[key_name_admin(src)] created the poll with id [pollid].</span>")
+
 	var/add_option = 1
 	if(polltype == "TEXT")
 		add_option = 0
@@ -119,5 +123,3 @@
 				add_option = 1
 			if("Finish")
 				add_option = 0
-		log_admin("[key_name(src)] created the poll with id [pollid].")
-		message_admins("<span class='notice'>[key_name_admin(src)] created the poll with id [pollid].</span>")
