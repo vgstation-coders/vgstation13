@@ -65,6 +65,14 @@
 			if(player.assigned_role == job)
 				possible_vampires -= player
 
+		var/mob/potential_vamp = player.current
+		var/client/C = potential_vamp.client
+		var/datum/preferences/vamp_prefs = C.prefs
+		var/datum/species/potential_species = all_species[vamp_prefs.species]
+		if(potential_species.anatomy_flags & NO_BLOOD) // can't succ blood if you ain't got blood
+			possible_vampires -= player
+//			message_admins("[player.key] was prohibited fom being a roundstart vampire because he is a [vamp_prefs.species]!")
+
 	vampire_amount = min(recommended_enemies, max(required_enemies,round(num_players() / 10))) //1 + round(num_players() / 10)
 
 	if(possible_vampires.len>0)
