@@ -37,6 +37,8 @@ var/list/ai_list = list()
 	var/obj/item/device/station_map/station_holomap = null
 	var/custom_sprite = 0 //For our custom sprites
 	var/obj/item/device/camera/ai_camera/aicamera = null
+	var/busy = FALSE //Toggle Floor Bolt busy var.
+
 //Hud stuff
 
 	//MALFUNCTION
