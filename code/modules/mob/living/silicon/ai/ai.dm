@@ -150,13 +150,15 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Toggle Floor Bolts"
 
-	if(!isturf(loc) || busy)
+	if(stat || aiRestorePowerRoutine || !isturf(loc) || busy)
 		return
 	busy = TRUE
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	if(do_after(src, src, 30))
 		anchored = !anchored
 		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
+		busy = FALSE
+	else
 		busy = FALSE
 
 /mob/living/silicon/ai/verb/radio_interact()
