@@ -945,7 +945,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define NO_SPLASH 4
 #define NO_INJECT 8
 #define NO_CRYO 16
-#define NO_HUNGER 4096
+#define NO_HUNGER 32
 
 
 // from bay station
