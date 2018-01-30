@@ -169,10 +169,6 @@
 	fuel = rand(300, 500) // Sorry for changing this so much but I keep under-estimating how long X number of ticks last in seconds.
 	..()
 
-/obj/item/device/flashlight/flare/Destroy()
-	. = ..()
-	processing_objects -= src
-
 /obj/item/device/flashlight/flare/examine(mob/user)
 	..()
 	if(on)
