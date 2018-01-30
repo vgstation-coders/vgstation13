@@ -1726,14 +1726,14 @@ Game Mode config tags:
 		else 
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
-				while(min_seeds < produce)
+				while(min_seeds <= produce)
 					new F.nonplant_seed_type(seedloc)
 					min_seeds++
 				qdel(F)
 				return TRUE
 
 	if(new_seed_type)
-		while(min_seeds < produce)
+		while(min_seeds <= produce)
 			var/obj/item/seeds/seeds = new(seedloc)
 			seeds.seed_type = new_seed_type.name
 			seeds.update_seed()
