@@ -62,6 +62,7 @@ var/const/HOLOPAD_MODE = 0
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
+	user.cameraFollow = null // Stops tracking
 	if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
 	else if(!holo)//If there is no hologram, possibly make one.
