@@ -224,10 +224,10 @@
 				M.drop_from_inventory(src)
 			src.forceMove(get_turf(H))
 		if(istype(H.head,/obj/item/clothing/head/helmet))
-			H.visible_message("<span class='warning'>\The [src] bounces off of the biosuit.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+			H.visible_message("<span class='warning'>\The [src] smashes into then slides off of the biosuit helmet, and falls to the floor below you.</span>", "<span class='notice'>\The [src] slides off of the biosuit helmet and falls to the floor below you.</span>")
 			return
 		else
-			H.visible_message("<span class='warning'>\The [src] slips through a hole within the putrid jaw.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+			H.visible_message("<span class='warning'>\The [src] falls out of the putrid jaw and tumbles down onto the floor, gross. </span>", "<span class='notice'>\The [src] falls out of the putrid jaw and onto the ground below you.</span>")
 		return
 		if((H.species.chem_flags & NO_EAT) && !(src.food_flags & FOOD_SKELETON_FRIENDLY))
 			if(ismob(loc))
