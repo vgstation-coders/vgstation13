@@ -111,10 +111,10 @@
 /obj/item/weapon/robot_module/standard/New()
 	..()
 
-	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
-	modules += new /obj/item/weapon/extinguisher(src)
-	modules += new /obj/item/weapon/wrench(src)
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
+	modules += new /obj/item/weapon/wrench(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/device/taperecorder(src)
@@ -157,13 +157,13 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 	modules += new /obj/item/weapon/reagent_containers/syringe(src)
 	modules += new /obj/item/weapon/storage/bag/chem(src)
-	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/scalpel(src)
 	modules += new /obj/item/weapon/hemostat(src)
 	modules += new /obj/item/weapon/retractor(src)
@@ -312,6 +312,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/weapon/storage/bag/trash(src)
 	modules += new /obj/item/weapon/mop(src)
@@ -343,6 +344,7 @@
 		)
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/gripper/service(src)
 	modules += new /obj/item/weapon/pen/robopen(src)
 	modules += new /obj/item/weapon/dice/borg(src)
@@ -364,6 +366,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/storage/bag/ore(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
@@ -436,12 +439,12 @@
 /obj/item/weapon/robot_module/tg17355/New()
 	..()
 
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/cookiesynth(src)
 	modules += new /obj/item/device/harmalarm(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 	modules += new /obj/item/borg/cyborghug(src)
-	modules += new /obj/item/weapon/extinguisher(src)
 	emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
 
 	sensor_augs = list("Medical", "Disable")
