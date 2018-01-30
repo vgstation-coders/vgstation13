@@ -212,11 +212,6 @@
 	Light(user)
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
-	if(user)
-		if(!isturf(user.loc))
-			to_chat(user, "You cannot light the flare while in this [user.loc].")//To prevent some lighting anomalities.
-
-			return 0
 	on = 1
 	src.force = on_damage
 	src.damtype = "fire"
