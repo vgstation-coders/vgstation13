@@ -15,6 +15,7 @@
 	var/add_to_mommis = FALSE
 	var/list/modules_to_add = list()
 	var/multi_upgrades = FALSE
+	var/salvageable = TRUE
 	w_type=RECYK_ELECTRONIC
 
 
@@ -66,7 +67,13 @@
 			R.module.modules += new module_to_add(R.module)
 
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to [R].</span>")
-	user.drop_item(src, R)
+
+	if(salvageable)
+		user.drop_item(src, R)
+	else
+		user.drop_item(src)
+		qdel(src)
+
 
 // Medical Cyborg Stuff
 
@@ -91,6 +98,7 @@
 	name = "cyborg reset board"
 	desc = "Used to reset a cyborg's module. Destroys any other upgrades applied to the robot."
 	icon_state = "cyborg_upgrade1"
+	salvageable = FALSE
 
 /obj/item/borg/upgrade/reset/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -98,6 +106,9 @@
 
 	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
 		R.movement_speed_modifier -= vtec_bonus
+
+	for(var/obj/item/borg/upgrade/thing in R)
+		thing.forceMove(R.loc)
 
 	qdel(R.module)
 	if(R.hands)
