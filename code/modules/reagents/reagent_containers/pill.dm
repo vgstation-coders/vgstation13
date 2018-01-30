@@ -42,6 +42,14 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species.chem_flags & NO_EAT)
 			src.forceMove(get_turf(H))
+			if(istype(H.species,/datum/species/plasmaman))
+				if(istype(H.head,/obj/item/clothing/head/helmet))
+					H.visible_message("<span class='warning'>\The [src] bounces off of the biosuit.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+				return 0
+			else
+				H.visible_message("<span class='warning'>\The [src] slips through a hole within the putrid jaw.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+			return 0
+		else
 			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
 			return 0
 	injest(M)
@@ -90,7 +98,7 @@
 /obj/item/weapon/reagent_containers/pill/creatine/New()
 	..()
 	reagents.add_reagent(CREATINE, 50)
-	
+
 /obj/item/weapon/reagent_containers/pill/laststand
 	name = "Creatine \"Last Stand\" suicide pill"
 	desc = "For when you really want to spend your last moments punching things to death."
