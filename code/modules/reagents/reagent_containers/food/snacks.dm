@@ -218,6 +218,17 @@
 
 	if(ishuman(eater))
 		var/mob/living/carbon/human/H = eater
+		if((H.species.chem_flags & NO_EAT) && (istype(H.species,/datum/species/plasmaman)))
+			if(ismob(loc))
+				var/mob/M = loc
+				M.drop_from_inventory(src)
+			src.forceMove(get_turf(H))
+		if(istype(H.head,/obj/item/clothing/head/helmet))
+			H.visible_message("<span class='warning'>\The [src] bounces off of the biosuit.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+			return
+		else
+			H.visible_message("<span class='warning'>\The [src] slips through a hole within the putrid jaw.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+		return
 		if((H.species.chem_flags & NO_EAT) && !(src.food_flags & FOOD_SKELETON_FRIENDLY))
 			if(ismob(loc))
 				var/mob/M = loc
