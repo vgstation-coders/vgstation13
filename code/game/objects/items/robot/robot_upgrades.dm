@@ -99,6 +99,12 @@
 	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
 		R.movement_speed_modifier -= vtec_bonus
 
+	for(var/obj/item/borg/upgrade/thing in R)
+		if(istype(thing, /obj/item/borg/upgrade/reset))
+			qdel(thing)
+			continue
+		thing.forceMove(R.loc)
+
 	qdel(R.module)
 	if(R.hands)
 		R.hands.icon_state = "nomod"
