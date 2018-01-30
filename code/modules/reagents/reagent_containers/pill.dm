@@ -44,10 +44,10 @@
 			src.forceMove(get_turf(H))
 			if(istype(H.species,/datum/species/plasmaman))
 				if(istype(H.head,/obj/item/clothing/head/helmet))
-					H.visible_message("<span class='warning'>\The [src] bounces off of the biosuit.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+					H.visible_message("<span class='warning'>\The [src] slides off of the biosuit helmet, and falls to the floor.</span>", "<span class='notice'>\The [src] bounces off of the biosuit helmet, and falls to the floor</span>")
 				return 0
 			else
-				H.visible_message("<span class='warning'>\The [src] slips through a hole within the putrid jaw.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
+				H.visible_message("<span class='warning'>\The [src] slips through a hole within the putrid jaw and falls to the floor.</span>", "<span class='notice'>You watch as \the [src] falls to the ground below you.</span>")
 			return 0
 		else
 			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
