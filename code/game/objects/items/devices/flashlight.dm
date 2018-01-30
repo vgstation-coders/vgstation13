@@ -159,7 +159,8 @@
 	sound_off = ""
 	var/fuel = 0
 	var/on_damage = 7
-	var/produce_heat = 1500
+	heat_production = 1500
+	source_temperature = TEMPERATURE_FLAME
 	var/H_color = ""
 
 	light_color = LIGHT_COLOR_FLARE
@@ -168,10 +169,19 @@
 	fuel = rand(300, 500) // Sorry for changing this so much but I keep under-estimating how long X number of ticks last in seconds.
 	..()
 
+/obj/item/device/flashlight/flare/examine(mob/user)
+	..()
+	if(on)
+		to_chat(user, "<span class='info'>The flare is lit.</span>")
+	else if(fuel)
+		to_chat(user, "<span class='info'>The flare is ready to be used.</span>")
+	else
+		to_chat(user, "<span class='info'>The flare has been expended.</span>")
+
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
 	if(pos)
-		pos.hotspot_expose(produce_heat, 5,surfaces=istype(loc,/turf))
+		pos.hotspot_expose(heat_production, 5,surfaces=istype(loc,/turf))
 	fuel = max(fuel - 1, 0)
 	if(!fuel || !on)
 		turn_off()
@@ -202,11 +212,6 @@
 	Light(user)
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
-	if(user)
-		if(!isturf(user.loc))
-			to_chat(user, "You cannot turn the light on while in this [user.loc].")//To prevent some lighting anomalities.
-
-			return 0
 	on = 1
 	src.force = on_damage
 	src.damtype = "fire"
@@ -215,6 +220,11 @@
 		update_brightness(user)
 	else
 		update_brightness()
+
+/obj/item/device/flashlight/flare/is_hot()
+	if(on)
+		return source_temperature
+	return 0
 
 /obj/item/device/flashlight/flare/ever_bright/New()
 	. = ..()

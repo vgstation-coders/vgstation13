@@ -62,6 +62,7 @@ var/const/HOLOPAD_MODE = 0
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
+	user.cameraFollow = null // Stops tracking
 	if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
 	else if(!holo)//If there is no hologram, possibly make one.
@@ -98,6 +99,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	master.show_message( message, 1, blind_message, 2) //otherwise it's being picked up by the holopad itself
 
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
+	ray = new(T)
 	holo = new(T)//Spawn a blank effect at the location.
 	holo.icon = A.holo_icon
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
@@ -107,11 +109,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	A.current = src
 	master = A//AI is the master.
 	use_power = 2//Active power usage.
+	move_hologram()
 	return 1
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
 	qdel(holo)//Get rid of hologram.
+	qdel(ray)
 	holo = null
+	ray = null
 	if(master.current == src)
 		master.current = null
 	master = null//Null the master, since no-one is using it now.
@@ -119,6 +124,10 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
 	return 1
+
+/obj/machinery/hologram/holopad/emp_act()
+	if(holo)
+		clear_holo()
 
 /obj/machinery/hologram/holopad/process()
 	if(holo)//If there is a hologram.
@@ -140,9 +149,32 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/holopad/proc/move_hologram()
 	if(holo)
-		step_to(holo, master.eyeobj) // So it turns.
-		holo.forceMove(get_turf(master.eyeobj))
-
+		if (get_dist(master.eyeobj, src) <= holo_range)
+			var/turf/T = holo.loc
+			var/turf/dest = get_turf(master.eyeobj)
+			step_to(holo, master.eyeobj) // So it turns.
+			holo.forceMove(dest)
+			var/disty = holo.y - ray.y
+			var/distx = holo.x - ray.x
+			var/newangle
+			if(!disty)
+				if(distx >= 0)
+					newangle = 90
+				else
+					newangle = 270
+			else
+				newangle = arctan(distx/disty)
+				if(disty < 0)
+					newangle += 180
+				else if(distx < 0)
+					newangle += 360
+			var/matrix/M = matrix()
+			if (get_dist(T,dest) <= 1)
+				animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
+			else
+				ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+		else
+			clear_holo()
 	return 1
 
 /*
@@ -158,12 +190,25 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	..()
 	set_light(2)
 
+/obj/effect/overlay/holoray
+	name = "holoray"
+	icon = 'icons/effects/96x96.dmi'
+	icon_state = "holoray"
+	layer = FLY_LAYER
+	plane = LYING_MOB_PLANE
+	anchored = 1
+	mouse_opacity = 0
+	pixel_x = -32
+	pixel_y = -32
+	alpha = 100
+
 /obj/machinery/hologram
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
 	var/obj/effect/overlay/hologram/holo//The projection itself. If there is one, the instrument is on, off otherwise.
+	var/obj/effect/overlay/holoray/ray//The link between the projection and the projector.
 
 /obj/machinery/hologram/power_change()
 	if (powered())
@@ -186,7 +231,6 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 
 /obj/machinery/hologram/blob_act()
 	qdel(src)
-	return
 
 /obj/machinery/hologram/Destroy()
 	if(holo)

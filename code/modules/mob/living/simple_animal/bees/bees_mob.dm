@@ -553,9 +553,13 @@
 					walk_to(src,move_to)
 
 				if(src.loc == target_turf)
-					for(var/datum/bee/B in bees)
-						home.enterHive(B)
-					qdel(src)
+					if (!home.species || bee_species == home.species)
+						for(var/datum/bee/B in bees)
+							home.enterHive(B)
+						qdel(src)
+					else
+						home = null
+						state = BEE_ROAMING
 			else
 				state = BEE_ROAMING
 

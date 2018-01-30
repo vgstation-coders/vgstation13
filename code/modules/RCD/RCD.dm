@@ -240,6 +240,10 @@
 	else
 		interface.updateContent("schematic_options", " ")
 
+// Called by schematics to delay their actions
+/obj/item/device/rcd/proc/delay(var/mob/user, var/atom/target, var/amount)
+	return do_after(user, target, amount)
+
 /obj/item/device/rcd/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
 	var/modifiers = params2list(params)
 	if (modifiers["ctrl"])

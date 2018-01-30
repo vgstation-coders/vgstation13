@@ -2,13 +2,13 @@
 #define INCUBATOR_MAX_SIZE 100
 
 /obj/machinery/disease2/incubator
-	name = "Pathogenic incubator"
-	density = 1
-	anchored = 1
+	name = "pathogenic incubator"
+	density = TRUE
+	anchored = TRUE
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "incubator"
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	var/obj/item/weapon/virusdish/dish
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
@@ -52,44 +52,44 @@
 	growthrate = initial(growthrate) + lasercount
 
 /obj/machinery/disease2/incubator/attackby(var/obj/B as obj, var/mob/user as mob)
-	..()
+	. = ..()
+	if(.)
+		return
+	if(!is_operational())
+		return FALSE
 	if(istype(B, /obj/item/weapon/reagent_containers/glass) || istype(B,/obj/item/weapon/reagent_containers/syringe))
-
-		if(src.beaker)
-			if(istype(beaker,/obj/item/weapon/reagent_containers/syringe))
-				to_chat(user, "A syringe is already loaded into the machine.")
-			else
-				to_chat(user, "A beaker is already loaded into the machine.")
-			return
+		if(beaker)
+			to_chat(user, "\A [beaker] is already loaded into the machine.")
+			return FALSE
 
 		if(user.drop_item(B, src))
-			src.beaker =  B
-
-			if(istype(B,/obj/item/weapon/reagent_containers/syringe))
-				to_chat(user, "You add the syringe to the machine!")
-				src.updateUsrDialog()
-			else
-				to_chat(user, "You add the beaker to the machine!")
-				src.updateUsrDialog()
+			beaker =  B
+			to_chat(user, "You add \the [B] to \the [src]!")
+			updateUsrDialog()
+			return TRUE
 	else
 		if(istype(B,/obj/item/weapon/virusdish))
-			if(src.dish)
+			if(dish)
 				to_chat(user, "A dish is already loaded into the machine.")
-				return
+				return FALSE
 
 			if(user.drop_item(B, src))
-				src.dish =  B
+				dish =  B
+				to_chat(user, "You add the dish to \the [src]!")
+				updateUsrDialog()
+				return TRUE
 
-				if(istype(B,/obj/item/weapon/virusdish))
-					to_chat(user, "You add the dish to the machine!")
-					src.updateUsrDialog()
 
 /obj/machinery/disease2/incubator/Topic(href, href_list)
 	if(..())
 		return 1
 
-	if(usr)
-		usr.set_machine(src)
+	if(href_list["close"])
+		usr << browse(null, "\ref[src]")
+		usr.unset_machine()
+		return 1
+
+	usr.set_machine(src)
 
 	if (href_list["ejectchem"])
 		if(beaker)
@@ -133,7 +133,8 @@
 	src.updateUsrDialog()
 
 /obj/machinery/disease2/incubator/attack_hand(mob/user as mob)
-	if(stat & BROKEN)
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	var/dat = list()
@@ -164,10 +165,9 @@
 			dat += "<BR>"
 	dat += "<br><hr><A href='?src=\ref[src];flush=1'>Flush system</a><BR>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "dish_incubator", "Pathogenic Incubator", 575, 400, src)
+	var/datum/browser/popup = new(user, "\ref[src]", "Pathogenic Incubator", 575, 400, src)
 	popup.set_content(dat)
 	popup.open()
-	onclose(user, "dish_incubator")
 
 /obj/machinery/disease2/incubator/process()
 	if(on)
