@@ -316,15 +316,20 @@
 
 ///Loot crate///
 /obj/item/weapon/winter_gift/dorkcube
-	name = "loot box"
-	desc = "Don't forget to shout the magic phrase when you open it! It has a tag on it: Made by GIBLOOTPLS."
+	name = "lootbox"
+	desc = "Don't forget to shout the magic phrase when you open it! Made by Dorkcube."
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "lootbox_purple"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	item_state = "lootbox_purple"
 
+/obj/item/weapon/winter_gift/dorkcube/New()
+	..()
+	reagents.add_reagent(BLOOD, 10)
+
 /obj/item/weapon/winter_gift/dorkcube/attack_self(mob/user)
 	user.say("Loot get!")
 	playsound(get_turf(src), 'sound/misc/achievement.ogg', 30, 1)
-	user.gib()
+	splash_sub(reagents, user, -1, user)
+	gibs(loc)
 	qdel(src)
