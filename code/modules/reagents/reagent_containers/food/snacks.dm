@@ -218,13 +218,13 @@
 
 	if(ishuman(eater))
 		var/mob/living/carbon/human/H = eater
-		if((H.species.chem_flags & NO_EAT) && (istype(H.species,/datum/species/plasmaman)))
+		if((H.species.chem_flags & NO_EAT) && (isplasmaman(H)))
 			if(ismob(loc))
 				var/mob/M = loc
 				M.drop_from_inventory(src)
 			src.forceMove(get_turf(H))
-		if(istype(H.head,/obj/item/clothing/head/helmet))
-			H.visible_message("<span class='warning'>\The [src] smashes into then slides off of the biosuit helmet, and falls to the floor below you.</span>", "<span class='notice'>\The [src] slides off of the biosuit helmet and falls to the floor below you.</span>")
+		if(istype(H.get_item_by_slot(slot_head),/obj/item/clothing/head/helmet))
+			H.visible_message("<span class='warning'>\The [src] smashes into then slides off of the sealed helmet, and falls to the floor below you.</span>", "<span class='notice'>\The [src] slides off of the sealed helmet and falls to the floor below you.</span>")
 			return
 		else
 			H.visible_message("<span class='warning'>\The [src] falls out of the putrid jaw and tumbles down onto the floor, gross. </span>", "<span class='notice'>\The [src] falls out of the putrid jaw and onto the ground below you.</span>")
