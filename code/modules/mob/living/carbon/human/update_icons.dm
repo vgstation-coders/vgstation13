@@ -914,7 +914,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_wear_suit(var/update_icons=1)
 	overlays -= obj_overlays[SUIT_LAYER]
-	if( wear_suit && istype(wear_suit, /obj/item/clothing/suit) && wear_suit.is_visible())	//TODO check this
+	if( wear_suit && wear_suit.is_visible())	//TODO check this
 		wear_suit.screen_loc = ui_oclothing	//TODO
 		var/obj/abstract/Overlays/O = obj_overlays[SUIT_LAYER]
 		O.overlays.len = 0
