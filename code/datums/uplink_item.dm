@@ -464,6 +464,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
 
+/datum/uplink_item/dangerous/butterfly
+	name = "Butterfly Knife"
+	desc = "A butterfly knife containing a deadly viscerator. It can be flipped to conceal the blade and deploy a stored viscerator. The viscerator will self destruct after 20 seconds but the knife will renew it's storage every 25 seconds automatically."
+	item = /obj/item/weapon/butterflyknife/viscerator
+	cost = 7
+
 /datum/uplink_item/dangerous/gatling
 	name = "Gatling Gun"
 	desc = "A huge minigun. Makes up for its lack of mobility and discretion with sheer firepower. Has 200 bullets."

@@ -78,3 +78,33 @@
 	flick("flying_skull_bite", src)
 
 	..()
+
+
+/mob/living/simple_animal/hostile/viscerator/butterfly
+	icon = 'icons/obj/butterfly.dmi'
+	icon_state = "knifefly"
+	icon_living = "knifefly"
+	health = 25
+	maxHealth = 25
+	melee_damage_lower = 22
+	melee_damage_upper = 28
+	var/autodie = FALSE //So you can spawn the butterfly by other means and have it not selfdestruct.
+
+/mob/living/simple_animal/hostile/viscerator/butterfly/Life()
+	..()
+	if(autodie && life_tick > 10)
+		Die()
+
+/mob/living/simple_animal/hostile/viscerator/butterfly/magic
+	name = "crystal butterfly"
+	desc = "A magic crystal butterfly with razor sharp wings. This butterfly isn't too friendly."
+	icon_state = "crystal_butterfly"
+	icon_living = "crystal_butterfly"
+	melee_damage_lower = 20
+	melee_damage_upper = 25
+
+/mob/living/simple_animal/hostile/viscerator/butterfly/magic/AttackingTarget()
+	if(istype(target, /mob/living/carbon))
+		var/mob/living/carbon/M = target
+		M.adjustCloneLoss(rand(5,10)) //scp-553 LORE.
+	..()
