@@ -12,3 +12,6 @@
   ..()
   pick_module("Soviet")
   add_static_overlays()  //I SAID FUCK INDIVIDUALISM
+  var/obj/item/borg/upgrade/mommi/upgrade = new /obj/item/borg/upgrade/mommi(src)
+  upgrade.attempt_action(src, src, TRUE)
+  upgrade = null

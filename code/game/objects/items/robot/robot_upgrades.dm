@@ -317,3 +317,23 @@
 	if(check_icon(R.icon, "[R.base_icon]-clown")) //Honk!
 		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
 	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)
+
+/obj/item/borg/upgrade/mommi
+	name = "remont robot MK-2 upgrade board"
+	desc = "Adds several tools and materials for the remont robot to use."
+	add_to_mommis = TRUE
+	required_module = list(/obj/item/weapon/robot_module/mommi/soviet, /obj/item/weapon/robot_module/mommi/nt) //MoMMIs can't get a reset module so adding this to NT MoMMI is impossible unless you get one through traders/bus.
+	modules_to_add = list(/obj/item/weapon/solder, /obj/item/weapon/reagent_containers/glass/fuelcan, /obj/item/weapon/rcl)
+
+/obj/item/borg/upgrade/mommi/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/obj/item/weapon/wrench/W = locate_component(/obj/item/weapon/wrench, R, user)
+
+	if(!W)
+		return FAILED_TO_ADD
+	
+	qdel(W)
+	R.module.modules -= W
+	R.module.modules += new /obj/item/weapon/wrench/socket(src)
