@@ -96,12 +96,6 @@
 	if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
 		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
 
-	for(var/obj/item/borg/upgrade/thing in R)
-		if(istype(thing, /obj/item/borg/upgrade/reset))
-			qdel(thing)
-			continue
-		thing.forceMove(R.loc)
-
 	qdel(R.module)
 
 	R.set_module_sprites(list("Default" = "robot"))
