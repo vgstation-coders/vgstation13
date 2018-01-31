@@ -989,7 +989,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	if(activated)
 		return
 	var/hand_amount = round(multiplier)
-	mob.visible_message("<span class='warning'>With a spray of blood, [hand_amount > 1 ? "[hand_amount] more arms sprout" : "a new arm sprouts"]   from \the [mob]!</span>","<span class='notice'>[hand_amount] more arms burst forth from your back!</span>")
+	mob.visible_message("<span class='warning'>[mob.take_blood(null, rand(4,12)) ? "With a spray of blood, " : ""][hand_amount > 1 ? "[hand_amount] more arms sprout" : "a new arm sprouts"] from \the [mob]!</span>","<span class='notice'>[hand_amount] more arms burst forth from your back!</span>")
 	mob.set_hand_amount(mob.held_items.len + hand_amount)
 	blood_splatter(mob.loc,mob,TRUE)
 	activated = TRUE
@@ -1000,8 +1000,18 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	var/hand_amount = round(multiplier)
 	mob.visible_message("<span class='notice'>The arms sticking out of \the [mob]'s back shrivel up and fall off!</span>", "<span class='warning'>Your new arms begin to die off, as the virus can no longer support them.</span>")
 	mob.set_hand_amount(mob.held_items.len - hand_amount)
-	for(var/i = 0; i < hand_amount;i++)
-		new /obj/item/organ/external/l_arm(mob, mob.loc)
+	for(var/i = 1 to hand_amount)
+		var/r_or_l = pick("right","left")
+		var/obj/item/organ/external/E
+		var/obj/item/organ/external/EE
+		if(r_or_l == "right")
+			E = new /obj/item/organ/external/r_arm(mob.loc, mob)
+			EE = new /obj/item/organ/external/r_hand(mob.loc, mob)
+		else
+			E = new /obj/item/organ/external/l_arm(mob.loc, mob)
+			EE = new /obj/item/organ/external/l_hand(mob.loc, mob)
+		E.add_child(EE)
+		E.throw_at(get_step(src,pick(alldirs)), rand(1,4), rand(1,3))
 	..()
 
 
