@@ -173,6 +173,7 @@
 				return
 		if (src.amount < R.req_amount*multiplier)
 			return
+		var/list/stacks_to_consume = list()
 		if(R.other_reqs.len)
 			for(var/i=1 to R.other_reqs.len)
 				var/looking_for = R.other_reqs[i]
@@ -180,15 +181,16 @@
 				var/found = FALSE
 				if(ispath(looking_for, /obj/item/stack))
 					req_amount = R.other_reqs[looking_for]
-					if(ispath(usr.get_inactive_hand(), looking_for))
-						found = TRUE
-						if(req_amount)
-							var/obj/item/stack/S = usr.get_inactive_hand()
-							if(S.amount < req_amount)
-								found = FALSE
-							else
-								S.use(req_amount)
-							continue
+				if(ispath(usr.get_inactive_hand(), looking_for))
+					found = TRUE
+					if(req_amount) //It's of a stack/sheet subtype
+						var/obj/item/stack/S = usr.get_inactive_hand()
+						if(S.amount < req_amount)
+							found = FALSE
+						else
+							stacks_to_consume.Add(S)
+							stacks_to_consume[S] = req_amount
+						continue
 				for(var/obj/I in range(get_turf(src),1))
 					if(ispath(looking_for, I))
 						found = TRUE
@@ -197,7 +199,8 @@
 							if(S.amount < req_amount)
 								found = FALSE
 							else
-								S.use(req_amount)
+								stacks_to_consume.Add(S)
+								stacks_to_consume[S] = req_amount
 				if(!found)
 					return
 		var/atom/O
@@ -220,7 +223,8 @@
 		//	//new_item.add_to_stacks(usr)
 
 		src.use(R.req_amount*multiplier)
-
+		for(var/obj/item/stack/sheet/S in stacks_to_consume)
+			S.use(stacks_to_consume[S])
 		if (src.amount<=0)
 			var/oldsrc = src
 			//src = null //dont kill proc after del()
