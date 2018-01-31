@@ -44,7 +44,7 @@
 			src.forceMove(get_turf(H))
 			if(isplasmaman(H))
 				if(H.is_wearing_item(/obj/item/clothing/head/helmet,slot_head))
-					H.visible_message("<span class='warning'>\The [src] slides off of the sealed helmet, and falls to the floor.</span>", "<span class='notice'>\The [src] bounces off of the sealed helmet, and falls to the floor</span>")
+					H.visible_message("<span class='warning'>\The [src] slides off of the sealed helmet, and falls to the floor.</span>", "<span class='notice'>\The [src] bounces off of the sealed helmet, and falls to the floor.</span>")
 				else
 					H.visible_message("<span class='warning'>\The [src] slips through a hole within the putrid jaw and falls to the floor.</span>", "<span class='notice'>\The [src] slips through the putrid jaw and falls to the ground.</span>")
 			else
