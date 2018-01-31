@@ -642,6 +642,11 @@
 		return
 	ChangeTurf(get_base_turf(src.z))
 
+/turf/proc/clockify()
+	if(istype(src, get_underlying_turf()))
+		return
+	ChangeTurf(get_base_turf(src.z))
+
 /turf/projectile_check()
 	return PROJREACT_WALLS
 

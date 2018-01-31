@@ -303,3 +303,8 @@
 
 /obj/structure/grille/invulnerable/attackby()
 	return
+
+/obj/structure/grille/clockwork
+	name = "cog grille"
+	desc = "A strangely-shaped grille."
+	icon_state = "grilleclockwork"

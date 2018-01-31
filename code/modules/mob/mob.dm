@@ -241,6 +241,9 @@
 /mob/proc/cultify()
 	return
 
+/mob/proc/clockify()
+	return
+
 /mob/New()
 	. = ..()
 	mob_list += src

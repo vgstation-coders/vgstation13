@@ -703,6 +703,13 @@ turf/simulated/floor/update_icon()
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 	return
 
+///turf/simulated/floor/clockify()
+//	if(icon_state != "clockwork")
+//		name = "clockwork floor"
+//		desc = "Tightly-pressed brass tiles. They emit minute vibration."
+//		icon_state = "clockwork"
+//		turf_animation('icons/effects/effects.dmi',"clock_floor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
+
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster
 	if(floor_tile)

@@ -685,6 +685,12 @@ var/list/one_way_windows
 	health = 30
 	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
 
+/obj/structure/window/reinforced/clockwork
+	name = "brass window"
+	desc = "A paper-thin pane of translucent yet reinforced brass."
+	icon_state = "clockworkwindow"
+	sheettype = /obj/item/stack/sheet/glass/rglass //placeholder
+
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(

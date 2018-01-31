@@ -149,6 +149,14 @@
 /turf/simulated/floor/engine/cult/cultify()
 	return
 
+/turf/simulated/floor/engine/clockwork
+	name = "clockwork floor"
+	desc = "Tightly-pressed brass tiles. They emit minute vibration."
+	icon_state = "clockwork"
+
+//turf/simulated/floor/engine/clockwork/clockify()
+//	return
+
 /turf/simulated/floor/engine/airless
 	oxygen = 0.01
 	nitrogen = 0.01
