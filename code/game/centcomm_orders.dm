@@ -60,12 +60,11 @@ var/global/current_centcomm_order_id=124901
 	for(var/path in requested)
 		if(!path)
 			continue
-		var/atom/movable/AM = new path()
+		var/atom/movable/AM = path
 		if(html_format)
-			manifest += "<li>[AM.name], amount: [requested[path]]</li>"
+			manifest += "<li>[initial(AM.name)], amount: [requested[path]]</li>"
 		else
-			manifest += "[AM.name], amount: [requested[path]]"
-		qdel(AM)//just to make sure they're deleted by the garbage collector
+			manifest += "[initial(AM.name)], amount: [requested[path]]"
 	if(html_format)
 		manifest += "</ul>"
 	return manifest
@@ -82,7 +81,6 @@ var/global/current_centcomm_order_id=124901
 			manifest += "<li>[initial(AM.name)], amount: [fulfilled[path]]</li>"
 		else
 			manifest += "[initial(AM.name)], amount: [fulfilled[path]]"
-		qdel(AM)//just to make sure they're deleted by the garbage collector
 	if(html_format)
 		manifest += "</ul>"
 	return manifest
