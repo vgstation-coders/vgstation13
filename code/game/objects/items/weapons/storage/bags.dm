@@ -137,8 +137,14 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /datum/action/item_action/dissolve_contents/Trigger()
 	var/obj/item/weapon/storage/bag/plants/portactor/P = target
+	var/mob/user = usr
 
-	if(!istype(P))
+	if(!usr)
+		if(!ismob(P.loc))
+			return
+		user = P.loc
+
+	if(!istype(P) || !user)
 		return
 
 	if(P.contents)
@@ -147,11 +153,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 			if(seedify(I) && !played)
 				playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
 				played = TRUE
-		P.orient2hud(usr)
-		if(usr)
-			P.orient2hud(usr)
-			if(usr.s_active)
-				usr.s_active.show_to(usr)
+		P.orient2hud(user)
+		if(user.s_active)
+			user.s_active.show_to(user)
 
 // -----------------------------
 //          Food bag

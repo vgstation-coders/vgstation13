@@ -1695,9 +1695,9 @@ Game Mode config tags:
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
 
-/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor, mob/living/user)
+/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor = null, mob/living/user = null)
 	if(!O)
-		return FALSE
+		CRASH("Something called seedify() without anything to make seeds of.")
 
 	var/min_seeds = 1
 	var/max_seeds = 2
