@@ -186,7 +186,7 @@
 								healths.icon_state = "health6"
 
         if(nutrition_icon)
-        	if(species.chem_flags && NO_HUNGER)
+        	if(species.chem_flags & NO_HUNGER)
         		nutrition_icon.icon_state = "nutrition1"
         	else
         		switch(nutrition)
