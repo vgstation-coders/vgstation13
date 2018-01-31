@@ -21,6 +21,7 @@
 /obj/item/weapon/reagent_containers/glass/jar/Destroy()
 	qdel(held_item)
 	held_item = null
+	processing_objects.Remove(src)
 	..()
 
 /obj/item/weapon/reagent_containers/glass/jar/update_icon()
@@ -47,7 +48,7 @@
 		overlays += filling
 
 	if(held_item)
-		var/image/contained_within = image("icon"=held_item)
+		var/mutable_appearance/contained_within = image("icon"=held_item)
 		var/matrix/M = matrix()
 		M.Scale(0.4, 0.4)
 		contained_within.transform = M
@@ -60,7 +61,7 @@
 			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src]</span>")
 			held_item = I
 			update_icon()
-			return
+
 
 /obj/item/weapon/reagent_containers/glass/jar/attack_self(mob/user)
 	if(held_item)
