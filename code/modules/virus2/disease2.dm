@@ -94,10 +94,7 @@ var/global/list/disease2_list = list()
 
 	if(mob.stat == 2)
 		return
-	if(stage <= 1 && clicks == 0) 	// with a certain chance, the mob may become immune to the disease before it starts properly
-		if(prob(5))
-			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigens2string(antigen)].")
-			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
+
 /*
 	if(mob.radiation > 50)
 		if(prob(1))
