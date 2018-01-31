@@ -94,7 +94,7 @@
 			//title+= " ([R.req_amount] [src.singular_name]\s)"
 			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
 			if(R.other_reqs.len)
-				for(var/ii=1;ii<=R.other_reqs.len,ii++)
+				for(var/ii=1 to R.other_reqs.len)
 					can_build = 0
 					var/obj/looking_for = R.other_reqs[ii]
 					var/req_amount
@@ -173,7 +173,33 @@
 				return
 		if (src.amount < R.req_amount*multiplier)
 			return
-
+		if(R.other_reqs.len)
+			for(var/i=1 to R.other_reqs.len)
+				var/looking_for = R.other_reqs[i]
+				var/req_amount
+				var/found = FALSE
+				if(ispath(looking_for, /obj/item/stack))
+					req_amount = R.other_reqs[looking_for]
+					if(ispath(usr.get_inactive_hand(), looking_for))
+						found = TRUE
+						if(req_amount)
+							var/obj/item/stack/S = usr.get_inactive_hand()
+							if(S.amount < req_amount)
+								found = FALSE
+							else
+								S.use(req_amount)
+							continue
+				for(var/obj/I in range(get_turf(src),1))
+					if(ispath(looking_for, I))
+						found = TRUE
+						if(req_amount) //It's of a stack/sheet subtype
+							var/obj/item/stack/S = I
+							if(S.amount < req_amount)
+								found = FALSE
+							else
+								S.use(req_amount)
+				if(!found)
+					return
 		var/atom/O
 		if(ispath(R.result_type, /obj/item/stack))
 			O = drop_stack(R.result_type, usr.loc, (R.max_res_amount>1 ? R.res_amount*multiplier : 1), usr)
@@ -194,22 +220,7 @@
 		//	//new_item.add_to_stacks(usr)
 
 		src.use(R.req_amount*multiplier)
-		if(R.other_reqs.len)
-			for(var/i=1;i<=R.other_reqs.len,i++)
-				var/looking_for = R.other_reqs[i]
-				var/req_amount
-				if(ispath(looking_for, /obj/item/stack))
-					req_amount = R.other_reqs[looking_for]
-					if(ispath(usr.get_inactive_hand(), looking_for))
-						if(req_amount)
-							var/obj/item/stack/S = usr.get_inactive_hand()
-							S.use(req_amount)
-							continue
-					for(var/obj/I in range(get_turf(src),1))
-						if(ispath(looking_for, I))
-							if(req_amount) //It's of a stack/sheet subtype
-								var/obj/item/stack/S = I
-								S.use(req_amount)
+
 		if (src.amount<=0)
 			var/oldsrc = src
 			//src = null //dont kill proc after del()
