@@ -9,7 +9,6 @@
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
 	icon = 'icons/obj/module.dmi'
-	icon_state = "cyborg_upgrade"
 	var/locked = FALSE
 	var/list/required_module = list()
 	var/add_to_mommis = FALSE
