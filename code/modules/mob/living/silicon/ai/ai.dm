@@ -37,6 +37,8 @@ var/list/ai_list = list()
 	var/obj/item/device/station_map/station_holomap = null
 	var/custom_sprite = 0 //For our custom sprites
 	var/obj/item/device/camera/ai_camera/aicamera = null
+	var/busy = FALSE //Toggle Floor Bolt busy var.
+
 //Hud stuff
 
 	//MALFUNCTION
@@ -143,6 +145,19 @@ var/list/ai_list = list()
 	ai_list += src
 	..()
 	return
+
+/mob/living/silicon/ai/verb/toggle_anchor()
+	set category = "AI Commands"
+	set name = "Toggle Floor Bolts"
+
+	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
+		return
+	busy = TRUE
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(do_after(src, src, 30))
+		anchored = !anchored
+		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
+	busy = FALSE
 
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
