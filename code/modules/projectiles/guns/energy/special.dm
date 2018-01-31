@@ -60,9 +60,6 @@
 /obj/item/weapon/gun/energy/decloner/isHandgun()
 	return TRUE
 
-var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry","frankenstein")
-#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
-
 /obj/item/weapon/gun/energy/staff
 	name = "staff of change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself"

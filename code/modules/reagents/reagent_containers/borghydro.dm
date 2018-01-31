@@ -109,7 +109,7 @@
 /obj/item/weapon/reagent_containers/borghypo/upgraded
 	name = "upgraded cyborg hypospray"
 	desc = "An upgraded hypospray with more potent chemicals and a larger storage capacity."
-	reagent_ids = list(DOCTORSDELIGHT, DEXALINP, SPACEACILLIN, "charcoal")
+	reagent_ids = list(DOCTORSDELIGHT, DEXALINP, SPACEACILLIN, CHARCOAL)
 	volume = 50
 	recharge_time = 3 // time it takes for shots to recharge (in seconds)
 

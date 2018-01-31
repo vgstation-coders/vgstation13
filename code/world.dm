@@ -103,6 +103,10 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
+	for(var/x in typesof(/datum/bee_species))
+		var/datum/bee_species/species = new x
+		bees_species[species.common_name] = species
+
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()

@@ -138,6 +138,7 @@
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
 #define ROYALJELLY			"royaljelly"
+#define CHILLWAX			"chillwax"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
