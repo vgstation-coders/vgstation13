@@ -238,7 +238,7 @@
 	return ishuman(user)
 
 /obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
-	user.become_zombie_after_death = TRUE
+	user.become_zombie_after_death = TRUE+1
 
 /obj/item/potion/zombie/impact_atom(atom/target)
 	var/mob/M = get_last_player_touched()

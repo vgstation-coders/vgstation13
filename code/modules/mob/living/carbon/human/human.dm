@@ -490,7 +490,7 @@
 		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*Arrest*", "Incarcerated", "Parolled", "Released")
 		if(!setcriminal || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_SECURITY))
 			return
-		sec_record.fields["criminal"] = setcriminal	
+		sec_record.fields["criminal"] = setcriminal
 	else if (href_list["secrecord"])
 		if(!usr.hasHUD(HUD_SECURITY))
 			return
@@ -1750,8 +1750,8 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, mind)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? mind : null))
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src
