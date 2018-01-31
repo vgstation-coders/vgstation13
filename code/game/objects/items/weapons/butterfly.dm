@@ -22,6 +22,20 @@
 	var/open = FALSE
 	var/bug = null
 	var/knifetype = "plain"
+	var/counting
+
+/obj/item/weapon/butterflyknife/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/butterflyknife/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/weapon/butterflyknife/process()
+	if(counting)
+		if(world.time - counting >= 250)
+			rearm()
 
 /obj/item/weapon/butterflyknife/attack_self(var/mob/living/L = null)
 	if(!open)
@@ -31,28 +45,29 @@
 		fold()
 		to_chat(L, "You flip \the [src] closed.")
 		if(bug)
-			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/hostile/viscerator/butterfly/X = new bug
-			X.forceMove(T)
+			var/mob/living/simple_animal/hostile/viscerator/butterfly/X = new bug(get_turf(src))
 			X.autodie = TRUE
-			if(L && istype(L))
+			if(istype(L))
 				handle_faction(X,L)
 			bug = null
-			spawn(250) //The butterfly lives for about 20 seconds and it recharges in 25 seconds.
-				if(!bug)
-					bug = initial(bug)
-					to_chat(L, "<span class='notice'>\The [src] hums.</span>")
+			counting = world.time
 	playsound(get_turf(src),'sound/items/zippo_open.ogg', 50, 1)
 
 /obj/item/weapon/butterflyknife/preattack(var/mob/living/target, mob/user) //"Putting away" a butterfly early.
-	if(istype(target, /mob/living/simple_animal/hostile/viscerator/butterfly))
+	if((istype(target, /mob/living/simple_animal/hostile/viscerator/butterfly)) && (knifetype != "plain"))
 		qdel(target)
-		bug = initial(bug)
+		rearm()
 		to_chat(user, "You catch \the [target] and store it back into \the [src].")
 		if(open)
 			unfold()
 		else
 			fold()
+
+/obj/item/weapon/butterflyknife/proc/rearm(mob/user)
+	counting = null
+	bug = initial(bug)
+	playsound(src, 'sound/items/healthanalyzer.ogg', 10, 1)
+	to_chat(user, "<span class='notice'>\The [src] hums.</span>")
 
 /obj/item/weapon/butterflyknife/proc/unfold()
 	open = TRUE
@@ -79,7 +94,7 @@
 /obj/item/weapon/butterflyknife/proc/handle_faction(var/mob/living/spawned, var/mob/living/L)
 	if(!spawned || !L)
 		return
-	if(!isnukeop(L))
+	if(!isnukeop(L) || !iswizard(L)) //If you're an op(syndicate) or wizard your faction already matches the faction of the respective viscerator.
 		spawned.faction = "\ref[L]"
 
 

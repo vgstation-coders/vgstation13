@@ -43,7 +43,7 @@
 /mob/living/simple_animal/hostile/viscerator/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
 		var/mob/mob_target = the_target
-		if(isnukeop(mob_target) && faction == "syndicate")
+		if((isnukeop(mob_target) && faction == "syndicate") || (iswizard(mob_target) && faction == "wizard"))
 			return 0
 	return ..(the_target)
 
@@ -102,6 +102,7 @@
 	icon_living = "crystal_butterfly"
 	melee_damage_lower = 20
 	melee_damage_upper = 25
+	faction = "wizard"
 
 /mob/living/simple_animal/hostile/viscerator/butterfly/magic/AttackingTarget()
 	if(istype(target, /mob/living/carbon))
