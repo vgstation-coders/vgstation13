@@ -87,8 +87,7 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		held_container.forceMove(src.loc)
-		held_container.attack_hand(user)
+		user.put_in_hands(held_container)
 		held_container = null
 		had_item = TRUE
 	toggle()
@@ -228,8 +227,7 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		held_container.forceMove(src.loc)
-		held_container.attack_hand(user)
+		user.put_in_hands(held_container)
 		held_container = null
 		had_item = TRUE
 	toggle()
