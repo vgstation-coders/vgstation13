@@ -48,7 +48,6 @@
 
 	overlays = null
 	overlays += image(icon = icon, icon_state = "t[laser_kind]_laser")
-	update_icon()
 
 /obj/machinery/chemheater/power_change()
 	if( powered() )
@@ -58,7 +57,6 @@
 		spawn(rand(0, 15))
 			stat |= NOPOWER
 			icon_state = "[initial(icon_state)]_off"
-	update_icon()
 
 /obj/machinery/chemheater/process()
 	if(stat & (BROKEN|NOPOWER))
@@ -89,7 +87,8 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		user.put_in_hand(held_container)
+		held_container.forceMove(src.loc)
+		held_container.attack_hand(user)
 		held_container = null
 		had_item = TRUE
 	toggle()
@@ -105,7 +104,6 @@
 		overlays -= image(icon = icon, icon_state = "t[laser_kind]_beam")
 		processing_objects.Remove(src)
 		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		update_icon()
 		return
 	else if(held_container)
 		heating = !heating
@@ -117,7 +115,6 @@
 			overlays -= image(icon = icon, icon_state = "t[laser_kind]_beam")
 			processing_objects.Remove(src)
 			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		update_icon()
 		return
 	else
 		if(!had_item)
@@ -192,7 +189,6 @@
 
 	overlays = null
 	overlays += image(icon = icon, icon_state = "t[scanner_kind]_scanner")
-	update_icon()
 
 /obj/machinery/chemcooler/power_change()
 	if( powered() )
@@ -202,7 +198,6 @@
 		spawn(rand(0, 15))
 			stat |= NOPOWER
 			icon_state = "[initial(icon_state)]_off"
-	update_icon()
 
 /obj/machinery/chemcooler/process()
 	if(stat & (BROKEN|NOPOWER))
@@ -233,7 +228,8 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		user.put_in_hand(held_container)
+		held_container.forceMove(src.loc)
+		held_container.attack_hand(user)
 		held_container = null
 		had_item = TRUE
 	toggle()
@@ -250,7 +246,6 @@
 		underlays -= image(icon = icon, icon_state = "t[scanner_kind]_waveBack")
 		processing_objects.Remove(src)
 		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		update_icon()
 		return
 	else if(held_container)
 		cooling = !cooling
@@ -264,7 +259,6 @@
 			underlays -= image(icon = icon, icon_state = "t[scanner_kind]_waveBack")
 			processing_objects.Remove(src)
 			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		update_icon()
 		return
 	else
 		if(!had_item)
