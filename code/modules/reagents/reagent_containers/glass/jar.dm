@@ -93,7 +93,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/jar/proc/safe_holder()
-	return reagents.has_any_reagents(list(SALINE, CLONEXADONE), volume)
+	return reagents.has_any_reagents(list(SALINE, CLONEXADONE), volume/2)
 
 /obj/item/weapon/reagent_containers/glass/jar/process()
 	if(!held_item)
@@ -103,15 +103,6 @@
 		held_item = null
 		update_icon()
 		return
-
-	if(istype(held_item, /obj/item/organ/internal))
-		if(reagents.has_reagent(CLONEXADONE, volume/2)) //Half submersed in clonexadone
-			var/obj/item/organ/internal/I = held_item
-			if(I.health < initial(I.health))
-				I.health = min(I.health+rand(1,3), initial(I.health))
-				reagents.remove_reagent(CLONEXADONE, rand(1,3))
-				update_icon()
-
 
 	reagents.reaction(held_item)
 

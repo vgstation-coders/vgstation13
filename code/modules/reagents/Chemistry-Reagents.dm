@@ -2626,6 +2626,22 @@
 			if(I.damage > 0)
 				I.damage = max(0,I.damage-0.2)
 
+
+/datum/reagent/peridaxon/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/organ/internal))
+		var/obj/item/organ/internal/I = O
+		if(I.health < initial(I.health))
+			I.health = min(I.health+rand(1,3), initial(I.health))
+		if(I.organ_data)
+			var/datum/organ/internal/OD = I.organ_data
+			if(OD.damage > 0)
+				OD.damage = max(0, OD.damage-0.4)
+
+
 /datum/reagent/bicaridine
 	name = "Bicaridine"
 	id = BICARIDINE
