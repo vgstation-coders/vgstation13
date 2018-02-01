@@ -10,7 +10,7 @@
 	for(var/mob/M in view(range, container.holder))
 		if(is_type_in_list(M, exclude_types))
 			continue
-		if(M.stat)
+		if(M.isUnconscious())
 			continue
 		if((M in B.enemies) || (M.faction && M.faction in B.enemy_factions) || (M.type in B.enemy_types))
 			o += M
