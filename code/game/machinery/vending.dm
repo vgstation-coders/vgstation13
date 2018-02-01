@@ -2127,7 +2127,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
-		/obj/item/vaporizer = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2911,6 +2910,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
 		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
+		/obj/item/vaporizer,
 		)
 
 /obj/machinery/vending/trader/New()
