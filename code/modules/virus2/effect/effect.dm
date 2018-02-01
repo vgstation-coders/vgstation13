@@ -1085,7 +1085,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 /datum/disease2/effect/zombie/activate(var/mob/living/carbon/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/h = mob
-		h.become_zombie_after_death = TRUE
+		h.become_zombie_after_death = 1
 
 
 /datum/disease2/effect/voxpox
