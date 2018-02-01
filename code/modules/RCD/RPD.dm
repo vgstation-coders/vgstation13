@@ -106,7 +106,7 @@
 		var/datum/rcd_schematic/C = find_schematic(href_list["schematic"])
 
 		if (!istype(C))
-			return 1
+			return TRUE
 
 		switch (href_list["act"])
 			if ("select")
@@ -124,19 +124,19 @@
 				var/index = favorites.Find(C)
 				if (href_list["order"] == "up")
 					if (index == favorites.len)
-						return 1
+						return TRUE
 
 					favorites.Swap(index, index + 1)
 
 				else
 					if (index == 1)
-						return 1
+						return TRUE
 
 					favorites.Swap(index, index - 1)
 
 				rebuild_favs()
 
-		return 1
+		return TRUE
 
 	// The href didn't get handled by us so we pass it down to the selected schematic.
 	if (selected)

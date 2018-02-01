@@ -691,6 +691,9 @@ var/list/one_way_windows
 	icon_state = "clockworkwindow"
 	sheettype = /obj/item/stack/sheet/glass/rglass //placeholder
 
+/obj/structure/window/reinforced/clockwork/clockify()
+	return
+
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
@@ -698,6 +701,13 @@ var/list/one_way_windows
 		"d_state")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/obj/structure/window/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		new /obj/structure/window/reinforced/clockwork(loc)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_window", sleeptime = 10)
+		qdel(src)
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

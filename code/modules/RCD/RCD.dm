@@ -354,3 +354,38 @@
 /obj/item/device/rcd/mech/attack_self(var/mob/living/user)
 	if(!selected || user.shown_schematics_background || !selected.show(user))
 		user.hud_used.toggle_show_schematics_display(schematics["Construction"], 0, src)
+
+/obj/item/device/rcd/replicafab
+	name = "replicant fabricator"
+	desc = "A handheld clockwork device used to rapidly construct or deconstruct things. Requires metal to function."
+	icon_state = "replica_fabricator"
+
+	var/metal_amt = 50
+	var/max_metal = 50
+
+	schematics = list(
+		/datum/rcd_schematic/decon,
+		/datum/rcd_schematic/clock_convert,
+		/datum/rcd_schematic/clock_door,
+		/datum/rcd_schematic/con_floors/clockwork,
+		/datum/rcd_schematic/con_walls/clockwork
+		
+	)
+
+/obj/item/device/rcd/replicafab/attackby(var/obj/item/W, var/mob/user)
+	if(istype(W, /obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/metal/M = W
+		var/amount = min(max_metal - metal_amt, M.amount)
+		metal_amt += amount
+		M.use(amount)
+
+		to_chat(user, "<span class='notice'>You insert [amount] sheets of metal into \the [src].</span>")
+		return TRUE
+
+	. = ..()
+
+/obj/item/device/rcd/replicafab/get_energy(var/mob/user)
+	return metal_amt
+
+/obj/item/device/rcd/replicafab/use_energy(var/amount, var/mob/user)
+	metal_amt -= amount

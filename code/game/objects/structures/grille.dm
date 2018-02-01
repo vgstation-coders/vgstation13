@@ -26,6 +26,14 @@
 	returnToPool(src)
 	..()
 
+/obj/structure/grille/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		new /obj/structure/grille/clockwork(loc)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_grille", sleeptime = 10)
+		qdel(src)
+	..()
+
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
 		playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
@@ -308,3 +316,6 @@
 	name = "cog grille"
 	desc = "A strangely-shaped grille."
 	icon_state = "grilleclockwork"
+
+/obj/structure/grille/clockwork/clockify()
+	return

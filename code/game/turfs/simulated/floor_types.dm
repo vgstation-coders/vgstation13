@@ -151,11 +151,11 @@
 
 /turf/simulated/floor/engine/clockwork
 	name = "clockwork floor"
-	desc = "Tightly-pressed brass tiles. They emit minute vibration."
+	desc = "It's filled with rotating and moving clockwork components."
 	icon_state = "clockwork"
 
-//turf/simulated/floor/engine/clockwork/clockify()
-//	return
+/turf/simulated/floor/engine/clockwork/clockify()
+	return
 
 /turf/simulated/floor/engine/airless
 	oxygen = 0.01

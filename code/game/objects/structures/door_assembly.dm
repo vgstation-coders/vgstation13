@@ -19,6 +19,15 @@
 	..()
 	update_state()
 
+/obj/structure/door_assembly/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		new /obj/structure/door_assembly/clockwork(loc)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
+		qdel(src)
+	..()
+	
+
 /obj/structure/door_assembly/door_assembly_com
 	base_icon_state = "com"
 	base_name = "Command Airlock"
@@ -108,6 +117,15 @@
 	base_name = "Vault"
 	airlock_type = "/vault"
 	glass = -1
+
+/obj/structure/door_assembly/clockwork
+	base_name = "clockwork airlock"
+	base_icon_state = "clockwork"
+	airlock_type = "/clockwork"
+	glass = -1
+
+/obj/structure/door_assembly/clockwork/clockify()
+	return
 
 /obj/structure/door_assembly/multi_tile/
 	icon = 'icons/obj/doors/door_assembly2x1.dmi'

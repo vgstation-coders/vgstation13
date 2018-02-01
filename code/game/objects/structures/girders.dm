@@ -12,6 +12,14 @@
 	material = /obj/item/stack/sheet/wood
 	construction_length = 20
 
+/obj/structure/girder/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		new /obj/structure/girder/clockwork(loc)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
+		qdel(src)
+	..()
+
 /obj/structure/girder/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGIRDER))
 		return 1
@@ -466,6 +474,9 @@
 	name = "clockwork girder"
 	icon_state = "clockwork"
 	material = /obj/item/stack/sheet/metal
+
+/obj/structure/girder/clockwork/clockify()
+	return
 
 /obj/structure/girder/clockwork/update_icon()
 	if(anchored)

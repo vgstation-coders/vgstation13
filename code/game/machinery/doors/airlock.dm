@@ -333,6 +333,20 @@
 	emag_cost = 2 // in MJ
 	animation_delay = 14
 
+/obj/machinery/door/airlock/clockwork
+	name = "clockwork airlock"
+	icon = 'icons/obj/doors/door_clockwork.dmi'
+	assembly_type = /obj/structure/door_assembly/clockwork
+
+	aiControlDisabled = 1
+	hackProof = TRUE
+	soundeffect = 'sound/effects/stonedoor_openclose.ogg'
+	use_power = FALSE //It's magic ain't gonna explain shit
+	machine_flags = SCREWTOGGLE
+
+/obj/machinery/door/airlock/clockwork/clockify()
+	return
+
 /*
 About the new airlock wires panel:
 *	An airlock wire dialog can be accessed by the normal way or by using wirecutters or a multitool on the door while the wire-panel is open. This would show the following wires, which you can either wirecut/mend or send a multitool pulse through. There are 9 wires.

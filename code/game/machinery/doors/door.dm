@@ -313,6 +313,13 @@ var/list/all_doors = list()
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
 
+/obj/machinery/door/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		new /obj/machinery/door/airlock/clockwork(loc)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_door", sleeptime = 10)
+		qdel(src)
+
 /obj/machinery/door/Destroy()
 	update_nearby_tiles()
 	all_doors -= src

@@ -352,9 +352,9 @@
 	turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 	return
 
-//turf/simulated/wall/clockify()
-//	ChangeTurf(/turf/simulated/wall/clock)
-//	turf_animation('icons/effects/effects.dmi',"clock_wall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
+/turf/simulated/wall/clockify()
+	ChangeTurf(/turf/simulated/wall/clockwork)
+	turf_animation('icons/effects/effects.dmi',"clock_wall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 
 /turf/simulated/wall/attack_construct(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/construct/builder))
