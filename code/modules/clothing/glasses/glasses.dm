@@ -321,6 +321,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
 	prescription = 1
+	body_parts_covered &= ~EYES
 
 /obj/item/clothing/glasses/contacts/polarized
 	name = "polarized contact lenses"
@@ -329,3 +330,4 @@
 	darkness_view = -1
 	prescription = 1
 	eyeprot = 1
+	body_parts_covered &= ~EYES

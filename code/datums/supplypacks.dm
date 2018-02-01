@@ -650,8 +650,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/contacts
 	name = "Contact lenses"
-	contains = list(/obj/item/clothing/glasses/contacts/polarized,
-					/obj/item/clothing/glasses/contacts/polarized,
+	contains = list(/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
 					/obj/item/clothing/glasses/contacts,
 					/obj/item/clothing/glasses/contacts,
 					/obj/item/weapon/nanitecontacts,

@@ -512,9 +512,9 @@
 
 /obj/item/weapon/nanitecontacts/update_icon()
 	overlays.len = 0
-	var/icon/contact_color = new/icon("icon" = 'icons/obj/items.dmi', "icon_state" = "contacts_overlay")
-	contact_color.Blend(rgb(color_r, color_g, color_b), ICON_ADD)
-	overlays += contact_color
+	var/image/I = image(icon = 'icons/obj/items.dmi', icon_state = "contacts_overlay")
+	I.color = rgb(color_r, color_g, color_b)
+	overlays += I
 
 /obj/item/weapon/nanitecontacts/attack_self(mob/user)
 	var/new_color = input(user, "Choose the contact's color:", "Color Select") as color|null
