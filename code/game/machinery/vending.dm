@@ -2426,6 +2426,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
 		/obj/item/clothing/head/wizard/magician = 3,
 		/obj/item/clothing/suit/sakura_kimono = 3,
+		/obj/item/clothing/gloves/white = 3,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
