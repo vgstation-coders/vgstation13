@@ -370,7 +370,7 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
-		if(MODE_WHISPER)
+		if(MODE_WHISPER, SPEECH_MODE_FINAL)
 			return NOPASS
 		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
 			return ITALICS | REDUCE_RANGE //most cases
