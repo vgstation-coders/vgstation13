@@ -94,6 +94,14 @@
 		update_nearby_tiles()
 		ini_dir = dir
 
+/obj/structure/window/full/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		var/obj/structure/window/full/reinforced/clockwork/C = new /obj/structure/window/full/reinforced/clockwork(loc)
+		C.dir = dir
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_window", sleeptime = 10)
+		qdel(src)
+
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -130,6 +138,16 @@
 	penetration_dampening = 7
 
 /obj/structure/window/full/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	return
+
+/obj/structure/window/full/reinforced/clockwork
+	name = "brass window"
+	desc = "A paper-thin pane of translucent yet reinforced brass."
+	icon_state = "clockworkwindow0"
+	base_state = "clockworkwindow"
+	sheettype = /obj/item/stack/sheet/glass/rglass //placeholder
+
+/obj/structure/window/full/reinforced/clockwork/clockify()
 	return
 
 /obj/structure/window/full/reinforced/tinted

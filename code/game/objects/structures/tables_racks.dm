@@ -34,6 +34,13 @@
 /obj/structure/table/cultify()
 	new /obj/structure/table/woodentable(loc) //See New() for qdel
 
+/obj/structure/table/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		new /obj/structure/table/reinforced/clockwork(loc)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
+		qdel(src)
+
 /obj/structure/table/New()
 	..()
 	for(var/obj/structure/table/T in src.loc)
@@ -581,6 +588,7 @@
 	icon_state = "reinftable"
 	parts = /obj/item/weapon/table_parts/reinforced
 	var/status = 2
+	var/optable = TRUE
 
 /obj/structure/table/reinforced/can_disassemble()
 	return status != 2
@@ -592,7 +600,7 @@
 		return ..()
 
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
-	if(istype(W,/obj/item/weapon/stock_parts/scanning_module))
+	if(istype(W,/obj/item/weapon/stock_parts/scanning_module) && optable)
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
@@ -614,7 +622,7 @@
 			return ..()
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
-				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
+				to_chat(user, "<span class='notice'>Now weakening \the [name].</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
 					if(!src || !WT.isOn())
@@ -622,16 +630,30 @@
 					to_chat(user, "<span class='notice'>Table weakened.</span>")
 					src.status = 1
 			else
-				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
+				to_chat(user, "<span class='notice'>Now strengthening \the [name].</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
 					if(!src || !WT.isOn())
 						return
-					to_chat(user, "<span class='notice'>Table strengthened.</span>")
+					to_chat(user, "<span class='notice'>[name] strengthened.</span>")
 					src.status = 2
 			return
 		return
 	return ..()
+
+/obj/structure/table/reinforced/clockwork
+	name = "brass table"
+	desc = "A solid, slightly beveled brass table."
+	icon_state = "clock_table"
+	parts = /obj/structure/table_frame/clockwork
+	optable = FALSE // fuck that
+	canSmoothWith = list(/obj/structure/table/reinforced/clockwork)
+
+/obj/structure/table/reinforced/clockwork/flip(direction)
+	return FALSE
+
+/obj/structure/table/reinforced/clockwork/clockify()
+	return
 
 /*
  * Glass

@@ -137,6 +137,9 @@ var/global/list/alert_overlays_global = list()
 		A.all_doors.Remove(src)
 	. = ..()
 
+/obj/machinery/door/firedoor/clockify()
+	return
+
 /obj/machinery/door/firedoor/proc/is_fulltile()
 	return 1
 

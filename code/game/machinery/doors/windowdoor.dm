@@ -371,6 +371,14 @@
 			AE.one_access = 1
 	AE.forceMove(loc)
 
+/obj/machinery/door/window/clockify()
+	if(invisibility != INVISIBILITY_MAXIMUM)
+		invisibility = INVISIBILITY_MAXIMUM
+		var/obj/machinery/door/window/clockwork/C = new /obj/machinery/door/window/clockwork(loc)
+		C.dir = dir
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
+		qdel(src)
+
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"
 	icon = 'icons/obj/doors/windoor.dmi'
@@ -387,6 +395,20 @@
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA
+
+/obj/machinery/door/window/clockwork
+	name = "brass windoor"
+	desc = "A thin door with translucent brass paneling."
+	icon_state = "clockwork"
+	base_state = "clockwork"
+
+/obj/machinery/door/window/clockwork/make_assembly(mob/user as mob)
+	var/obj/structure/windoor_assembly/clockwork/WA = new /obj/structure/windoor_assembly/clockwork(loc)
+	set_assembly(user, WA)
+	return WA
+
+/obj/machinery/door/window/clockwork/clockify()
+	return
 
 /obj/machinery/door/window/plasma
 	name = "Plasma Window Door"

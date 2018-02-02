@@ -705,7 +705,8 @@ var/list/one_way_windows
 /obj/structure/window/clockify()
 	if(invisibility != INVISIBILITY_MAXIMUM)
 		invisibility = INVISIBILITY_MAXIMUM
-		new /obj/structure/window/reinforced/clockwork(loc)
+		var/obj/structure/window/reinforced/clockwork/C = new /obj/structure/window/reinforced/clockwork(loc)
+		C.dir = dir
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_window", sleeptime = 10)
 		qdel(src)
 

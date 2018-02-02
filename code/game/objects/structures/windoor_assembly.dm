@@ -32,6 +32,16 @@
 	name = "Plasma Windoor Assembly"
 	plasma = 1
 
+/obj/structure/windoor_assembly/clockwork
+	name = "brass windoor assembly"
+	icon_state = "clockworkopen"
+
+/obj/structure/windoor_assembly/clockwork/Create()
+	return new /obj/structure/windoor_assembly/clockwork(loc)
+
+/obj/structure/windoor_assembly/clockwork/update_icon()
+	icon_state = initial(icon_state)
+
 /obj/structure/windoor_assembly/New(dir=NORTH)
 	..()
 	src.ini_dir = src.dir
