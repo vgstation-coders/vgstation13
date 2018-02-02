@@ -1836,11 +1836,17 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 					//TODO: ORGAN REMOVAL UPDATE.
 					var/turf/T = get_turf(src)
-					if(istype(src,/obj/item/organ/external/head/posi))
-						var/obj/item/device/mmi/posibrain/B = new(T)
-						B.transfer_identity(brainmob)
+					if(isatom(organ_data.removed_type))
+						var/obj/I = organ_data.removed_type
+						if(istype(organ_data.removed_type, /obj/item/device/mmi/posibrain))
+							var/obj/item/device/mmi/posibrain/B = organ_data.removed_type
+							B.transfer_identity(brainmob)
+						else if(istype(organ_data.removed_type, /obj/item/organ/internal/brain))
+							var/obj/item/organ/internal/brain/B = organ_data.removed_type
+							B.transfer_identity(brainmob)
+						I.forceMove(T)
 					else
-						var/obj/item/organ/internal/brain/B = new(T)
+						var/obj/item/organ/internal/brain/B = new organ_data.removed_type(T)
 						B.transfer_identity(brainmob)
 
 					if(borer)

@@ -41,9 +41,10 @@
 	. = ..()
 	for(var/i = contents.len; i>0; i--)
 		if(istype(contents[i],/obj/item/weapon/paper))
-			toppaper = W
+			toppaper = contents[i]
 			update_icon()
 			return
 	//If we looped through everything and there's still no paper
 	toppaper = null
 	update_icon()
+	return .

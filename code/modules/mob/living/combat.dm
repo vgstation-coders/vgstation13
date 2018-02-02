@@ -1,6 +1,10 @@
 /mob/living/proc/grab_mob(mob/living/target)
 	if(grab_check(target))
 		return
+
+	if (is_pacified(VIOLENCE_DEFAULT,target))
+		return
+
 	if(target.locked_to)
 		to_chat(src, "<span class='notice'>You cannot grab \the [target], \he is buckled in!</span>")
 		return
@@ -89,6 +93,9 @@
 	return 1
 
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
+	if(is_pacified(VIOLENCE_DEFAULT,target))
+		return
+
 	var/damage = get_unarmed_damage(target)
 
 	if(!damage)

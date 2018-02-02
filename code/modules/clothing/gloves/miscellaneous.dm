@@ -334,3 +334,4 @@
 		P1.owner = user
 		P2.owner = user
 		P1.teleport(user)
+

@@ -202,17 +202,17 @@ var/list/department_radio_keys = list(
 		returnToPool(speech)
 		return
 
-
-
-	if(radio_return & ITALICS)
-		speech.message_classes.Add("italics")
 	if(radio_return & REDUCE_RANGE)
 		message_range = 1
 	if(copytext(text, length(text)) == "!")
 		message_range++
 
-
-	send_speech(speech, message_range, bubble_type)
+	if(radio_return & ITALICS)
+		speech.message_classes.Add("italics")
+		send_speech(speech, message_range, bubble_type)
+		speech.message_classes.Remove("italics") //Wow, this is really hacky, but not as bad as creating a separate speech object with one differing var.
+	else
+		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
@@ -262,10 +262,10 @@ var/list/department_radio_keys = list(
 		listening_nonmobs -= M
 		M.Hear(speech, rendered)
 
+	send_speech_bubble(speech.message, bubble_type, listeners)
+
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)
-
-	send_speech_bubble(speech.message, bubble_type, listeners)
 
 /mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
@@ -370,9 +370,9 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
-		if(MODE_WHISPER)
+		if(MODE_WHISPER, SPEECH_MODE_FINAL)
 			return NOPASS
-		if(MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
+		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
 			return ITALICS | REDUCE_RANGE //most cases
 		if("robot")
 			return REDUCE_RANGE

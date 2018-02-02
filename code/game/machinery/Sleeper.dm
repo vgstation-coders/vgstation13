@@ -39,62 +39,60 @@
 /obj/machinery/sleep_console/update_icon()
 	icon_state = "sleeperconsole[stat & NOPOWER ? "-p" : null][orient == "LEFT" ? null : "-r"]"
 
-/obj/machinery/sleep_console/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
-/obj/machinery/sleep_console/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
-
-/obj/machinery/sleep_console/attack_hand(mob/user as mob)
-	if(..())
+/obj/machinery/sleep_console/attack_hand(var/mob/user)
+	. = ..()
+	if(.)
 		return
-	if (src.connected)
-		var/mob/living/occupant = src.connected.occupant
-		var/dat = list()
-		if(connected.on)
-			dat += "<font color='blue'><B>Performing anaesthesic emergence...</B></font>" //Best I could come up with
-			dat += "<HR><A href='?src=[REF(src)];toggle_autoeject=1'>Auto-eject occupant: [connected.auto_eject_after ? "Yes" : "No"]</A><BR>"
-		else
-			dat += "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
-			if (occupant)
-				var/t1
-				switch(occupant.stat)
-					if(0)
-						t1 = "Conscious"
-					if(1)
-						t1 = "<font color='blue'>Unconscious</font>"
-					if(2)
-						t1 = "<font color='red'>*dead*</font>"
-					else
-				dat += text("[]\tHealth %: [] ([])</FONT><BR>", (occupant.health > 50 ? "<font color='blue'>" : "<font color='red'>"), occupant.health, t1)
-				if(iscarbon(occupant))
-					var/mob/living/carbon/C = occupant
-					dat += text("[]\t-Pulse, bpm: []</FONT><BR>", (C.pulse == PULSE_NONE || C.pulse == PULSE_THREADY ? "<font color='red'>" : "<font color='blue'>"), C.get_pulse(GETPULSE_TOOL))
-				dat += text("[]\t-Brute Damage %: []</FONT><BR>", (occupant.getBruteLoss() < 60 ? "<font color='blue'>" : "<font color='red'>"), occupant.getBruteLoss())
-				dat += text("[]\t-Respiratory Damage %: []</FONT><BR>", (occupant.getOxyLoss() < 60 ? "<font color='blue'>" : "<font color='red'>"), occupant.getOxyLoss())
-				dat += text("[]\t-Toxin Content %: []</FONT><BR>", (occupant.getToxLoss() < 60 ? "<font color='blue'>" : "<font color='red'>"), occupant.getToxLoss())
-				dat += text("[]\t-Burn Severity %: []</FONT><BR>", (occupant.getFireLoss() < 60 ? "<font color='blue'>" : "<font color='red'>"), occupant.getFireLoss())
-				var/sleepytime = max(occupant.paralysis, occupant.sleeping)
-				dat += text("<HR>Paralysis Summary %: [] ([] seconds left!)<BR>", sleepytime, round(sleepytime*2))
-				dat += "<a href ='?src=[REF(src)];wakeup=1'>Begin Wake-Up Cycle</a><br>"
-				if(occupant.reagents)
-					for(var/chemical in connected.available_options)
-						dat += "[connected.available_options[chemical]]: [occupant.reagents.get_reagent_amount(chemical)] units<br>"
-				dat += "<HR><A href='?src=[REF(src)];refresh=1'>Refresh meter readings each second</A><BR>"
-				for(var/chemical in connected.available_options)
-					dat += "Inject [connected.available_options[chemical]]: "
-					for(var/amount in connected.amounts)
-						dat += "<a href ='?src=[REF(src)];chemical=[chemical];amount=[amount]'>[amount] units</a> "
-					dat += "<br>"
-			else
-				dat += "The sleeper is empty."
-			dat += text("<BR><BR><A href='?src=\ref[];mach_close=sleeper'>Close</A>", user)
-		dat = jointext(dat,"")
-		user << browse(dat, "window=sleeper;size=400x500")
-		onclose(user, "sleeper")
-	return
+	interact(user)
 
+/obj/machinery/sleep_console/interact(var/mob/user)
+	if(!connected)
+		return
+	var/mob/living/occupant = connected.occupant
+	var/dat = list()
+	if(connected.on)
+		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
+		dat += "<HR><A href='?src=[REF(src)];toggle_autoeject=1'>Auto-eject occupant: [connected.auto_eject_after ? "Yes" : "No"]</A><BR>"
+	else
+		dat += "<b>Occupant statistics:</b><BR>"
+		if (occupant)
+			var/occupant_status = "???"
+			switch(occupant.stat)
+				if(CONSCIOUS)
+					occupant_status = "conscious"
+				if(UNCONSCIOUS)
+					occupant_status = "<span class='average'>unconscious</span>"
+				if(DEAD)
+					occupant_status = "<span class='average'>*dead*</span>"
+			dat += "\tHealth: <span class='[occupant.health > 50 ? "" : "average"]'>[round(occupant.health, 0.1)]</span> ([occupant_status])<br>"
+			if(iscarbon(occupant))
+				var/mob/living/carbon/C = occupant
+				dat += "<span class='[C.pulse == PULSE_NONE || C.pulse >= PULSE_2FAST ? "average" : ""]'>\t-Pulse, bpm: [C.get_pulse(GETPULSE_TOOL)]</span><br>"
+			var/bruteloss = occupant.getBruteLoss()
+			dat += "<span class='[bruteloss < 60 ? "" : "average"]'>\t-Brute damage: [round(bruteloss, 0.1)]</span><br>"
+			var/oxyloss = occupant.getOxyLoss()
+			dat += "<span class='[oxyloss < 60 ? "" : "average"]'>\t-Respiratory damage: [round(oxyloss, 0.1)]</span><br>"
+			var/toxloss = occupant.getToxLoss()
+			dat += "<span class='[toxloss < 60 ? "" : "average"]'>\t-Toxin content: [round(toxloss, 0.1)]</span><br>"
+			var/fireloss = occupant.getFireLoss()
+			dat += "<span class='[fireloss < 60 ? "" : "average"]'>\t-Burn severity: [round(fireloss, 0.1)]</span><br>"
+
+			var/sleepytime = max(occupant.paralysis, occupant.sleeping)
+			dat += "<hr>Paralysis summary: [sleepytime] ([round(sleepytime * 2)] seconds left!)<br>"
+			dat += "<a href='?src=[REF(src)];wakeup=1'>Begin wake-up cycle</a><br>"
+			if(occupant.reagents)
+				for(var/chemical in connected.available_options)
+					dat += "<span style='float: left'>[connected.available_options[chemical]]: [round(occupant.reagents.get_reagent_amount(chemical), 0.1)] units</span><span style='float: right'>"
+					for(var/amount in connected.amounts)
+						dat += " <a href='?src=[REF(src)];chemical=[chemical];amount=[amount]'>Inject [amount]u</a>"
+					dat += "</span><br>"
+			dat += "<HR><A href='?src=[REF(src)];refresh=1'>Refresh</A><BR>"
+		else
+			dat += "The sleeper is empty."
+	dat = jointext(dat,"")
+	var/datum/browser/popup = new(user, "[REF(src)]", name, 400, 500)
+	popup.set_content(dat)
+	popup.open()
 /obj/machinery/sleep_console/Topic(href, href_list)
 	if(..())
 		return 1
@@ -693,43 +691,39 @@
 		qdel(connected)
 		connected = null
 
-
-/obj/machinery/sleep_console/mancrowave_console/attack_hand(mob/user as mob)
-	if(..())
-		return 1
-	if (src.connected)
-		var/mob/living/occupant = src.connected.occupant
-		var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
-		if (occupant)
-			var/t1
-			switch(occupant.stat)
-				if(0)
-					t1 = "Conscious"
-				if(1)
-					t1 = "<font color='blue'>Unconscious</font>"
-				if(2)
-					t1 = "<font color='red'>*dead*</font>"
-				else
-			dat += text("[]\tHealth %: [] ([])</FONT><BR>", (occupant.health > 50 ? "<font color='blue'>" : "<font color='red'>"), occupant.health, t1)
-			if(iscarbon(occupant))
-				var/mob/living/carbon/C = occupant
-				dat += text("[]\t-Pulse, bpm: []</FONT><BR>", (C.pulse == PULSE_NONE || C.pulse == PULSE_2SLOW || C.pulse == PULSE_THREADY ? "<font color='red'>" : "<font color='blue'>"), C.get_pulse(GETPULSE_TOOL))
-				dat +=  text("[]\t -Core Temperature: []&deg;C </FONT><BR></span>", (C.undergoing_hypothermia() ? "<font color='red'>" : "<font color='blue'>"), C.bodytemperature-T0C)
-			dat += "<HR><b>Cook settings:</b><BR>"
-			for(var/cook_setting in connected.available_options)
-				dat += "<a href ='?src=[REF(src)];cook=[cook_setting]'>[cook_setting] - [connected.available_options[cook_setting]/10] seconds</a>"
-				dat += "<br>"
-		else
-			dat += "\The [src] is empty."
-		dat += "<HR><A href='?src=[REF(src)];refresh=1'>Refresh meter readings each second</A><BR>"
-		dat += "<A href='?src=[REF(src)];auto=1'>Turn [connected.automatic ? "off": "on" ] Automatic Thermoregulation.</A><BR>"
-		dat += "[(connected.emagged) ? "<A href='?src=[REF(src)];security=1'>Re-enable Security Features.</A><BR>" : ""]"
-		dat += "[(connected.on) ? "<A href='?src=[REF(src)];turnoff=1'>\[EMERGENCY STOP\]</A> <i>: cancels the current job.</i><BR>" : ""]"
-		dat += text("<BR><BR><A href='?src=\ref[];mach_close=sleeper'>Close</A>", user)
-		user << browse(dat, "window=sleeper;size=400x500")
-		onclose(user, "sleeper")
-
-	return
+/obj/machinery/sleep_console/mancrowave_console/interact(var/mob/user)
+	if (!connected)
+		return
+	var/mob/living/occupant = src.connected.occupant
+	var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
+	if (occupant)
+		var/t1
+		switch(occupant.stat)
+			if(0)
+				t1 = "Conscious"
+			if(1)
+				t1 = "<font color='blue'>Unconscious</font>"
+			if(2)
+				t1 = "<font color='red'>*dead*</font>"
+			else
+		dat += text("[]\tHealth %: [] ([])</FONT><BR>", (occupant.health > 50 ? "<font color='blue'>" : "<font color='red'>"), occupant.health, t1)
+		if(iscarbon(occupant))
+			var/mob/living/carbon/C = occupant
+			dat += text("[]\t-Pulse, bpm: []</FONT><BR>", (C.pulse == PULSE_NONE || C.pulse == PULSE_2SLOW || C.pulse == PULSE_THREADY ? "<font color='red'>" : "<font color='blue'>"), C.get_pulse(GETPULSE_TOOL))
+			dat +=  text("[]\t -Core Temperature: []&deg;C </FONT><BR></span>", (C.undergoing_hypothermia() ? "<font color='red'>" : "<font color='blue'>"), C.bodytemperature-T0C)
+		dat += "<HR><b>Cook settings:</b><BR>"
+		for(var/cook_setting in connected.available_options)
+			dat += "<a href ='?src=[REF(src)];cook=[cook_setting]'>[cook_setting] - [connected.available_options[cook_setting]/10] seconds</a>"
+			dat += "<br>"
+	else
+		dat += "\The [src] is empty."
+	dat += "<HR><A href='?src=[REF(src)];refresh=1'>Refresh meter readings each second</A><BR>"
+	dat += "<A href='?src=[REF(src)];auto=1'>Turn [connected.automatic ? "off": "on" ] Automatic Thermoregulation.</A><BR>"
+	dat += "[(connected.emagged) ? "<A href='?src=[REF(src)];security=1'>Re-enable Security Features.</A><BR>" : ""]"
+	dat += "[(connected.on) ? "<A href='?src=[REF(src)];turnoff=1'>\[EMERGENCY STOP\]</A> <i>: cancels the current job.</i><BR>" : ""]"
+	dat += "<BR><BR><A href='?src=[REF(user)];mach_close=[REF(src)]'>Close</A>"
+	user << browse(dat, "window=[REF(src)];size=400x500")
+	onclose(user, "[REF(src)]")
 
 
 /obj/machinery/sleep_console/mancrowave_console/Topic(href, href_list)

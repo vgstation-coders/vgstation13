@@ -1790,7 +1790,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
 	premium = list(
-		/obj/item/clothing/head/helmet/siren = 2
+		/obj/item/clothing/head/helmet/siren = 2,
+		/obj/item/clothing/head/helmet/police = 2,
+		/obj/item/clothing/under/police = 2,
 		)
 	vouched = list(
 		/obj/item/ammo_storage/magazine/m380auto = 10,
@@ -2880,7 +2882,7 @@ var/global/num_vending_terminals = 1
 		"Profits."
 	)
 	product_ads = list(
-		"When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
+		"When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma: should you tell your partner?"
 	)
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
@@ -2895,9 +2897,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/pda/trader = 100,
 		/obj/item/weapon/capsule = 10
 		)
-
-/obj/machinery/vending/trader/New()
-	..()
 
 	accepted_coins = list(/obj/item/weapon/coin/trader)
 
@@ -2914,9 +2913,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		)
 
-	for(var/random_items = 1 to premium.len - 4)
+/obj/machinery/vending/trader/New()
+
+	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+
+	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
-	src.initialize()
+	..()
 
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"

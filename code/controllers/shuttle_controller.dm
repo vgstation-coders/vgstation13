@@ -35,6 +35,8 @@ datum/emergency_shuttle
 
 	var/voting_cache = 0
 
+	var/warmup_sound = 0
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
@@ -310,6 +312,10 @@ datum/emergency_shuttle/proc/process()
 		timeleft = 0
 	if(timeleft < 0)		// Sanity
 		timeleft = 0
+
+	if(timeleft > 6)
+		warmup_sound = 0
+
 	switch(location)
 		if(0)
 
@@ -356,8 +362,8 @@ datum/emergency_shuttle/proc/process()
 				return 1
 
 		if(1)
-
-			if(timeleft == 5)
+			if(timeleft <= 6 && !warmup_sound)
+				warmup_sound = 1
 				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
 			if(timeleft == 2 || timeleft == 1)

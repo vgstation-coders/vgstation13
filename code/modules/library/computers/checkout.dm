@@ -177,12 +177,13 @@
 			var/manualcount = 1
 			var/obj/item/weapon/book/manual/M = null
 
-			for(var/manual_type in (typesof(/obj/item/weapon/book/manual) - forbidden))
-				M = new manual_type()
-				dat += "<tr><td><A href='?src=[REF(src)];manual=[manualcount]'>[M.title]</A></td></tr>"
+			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
+				if (!(manual_type in forbidden))
+					M = new manual_type()
+					dat += "<tr><td><A href='?src=[REF(src)];manual=[manualcount]'>[M.title]</A></td></tr>"
+					qdel(M)
+					M = null
 				manualcount++
-				qdel(M)
-				M = null
 			dat += "</table>"
 			dat += "<BR><A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"
 

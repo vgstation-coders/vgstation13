@@ -62,6 +62,10 @@ obj/item/proc/get_clamped_volume()
 	if (can_operate(M, user))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,I))
 			return 1
+
+	if (user.is_pacified(VIOLENCE_DEFAULT,M))
+		return 0
+
 	//if (istype(M,/mob/living/carbon/brain))
 	//	messagesource = M:container
 	/////////////////////////
