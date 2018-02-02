@@ -473,7 +473,7 @@
 /obj/structure/girder/clockwork
 	name = "clockwork girder"
 	icon_state = "clockwork"
-	material = /obj/item/stack/sheet/metal
+	material = /obj/item/stack/sheet/brass
 
 /obj/structure/girder/clockwork/clockify()
 	return

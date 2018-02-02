@@ -23,8 +23,9 @@
 
 /obj/structure/table_frame/clockwork
 	name = "brass table frame"
-	desc = "Four pieces of brass. It's slightly warm to the touch."
-	icon_state = "sheet-brass"
+	desc = "Parts of a brass table. It's slightly warm to the touch."
+	icon_state = "brass_tableparts"
+	starting_materials = list(MAT_BRASS = 3750)
 
 /obj/structure/table_frame/clockwork/clockify()
 	return

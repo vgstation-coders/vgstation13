@@ -689,10 +689,14 @@ var/list/one_way_windows
 	name = "brass window"
 	desc = "A paper-thin pane of translucent yet reinforced brass."
 	icon_state = "clockworkwindow"
-	sheettype = /obj/item/stack/sheet/glass/rglass //placeholder
+	sheettype = /obj/item/stack/sheet/brass
+	canSmoothWith = null
 
 /obj/structure/window/reinforced/clockwork/clockify()
 	return
+
+/obj/structure/window/reinforced/clockwork/spawnBrokenPieces()
+	new sheettype(loc, sheetamount)
 
 /obj/structure/window/send_to_past(var/duration)
 	..()

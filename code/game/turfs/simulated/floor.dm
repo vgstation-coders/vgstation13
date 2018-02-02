@@ -109,6 +109,8 @@ turf/simulated/floor/update_icon()
 	else if(is_plating())
 		if(!broken && !burnt)
 			icon_state = icon_plating //Because asteroids are 'platings' too.
+	else if(is_clockwork())
+		icon_state = "clockwork"
 	else if(is_slime_floor())
 		icon_state = "tile-slime"
 	else if(is_light_floor())
@@ -228,32 +230,27 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/is_plasteel_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/plasteel))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_light_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/light))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_grass_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/grass))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_wood_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/wood))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_carpet_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/carpet))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_arcade_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/arcade))
@@ -263,8 +260,7 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/is_slime_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/slime))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_plating()
 	if(!floor_tile)
@@ -275,6 +271,11 @@ turf/simulated/floor/update_icon()
 	if(istype(floor_tile,/obj/item/stack/tile/mineral))
 		return 1
 	return 0
+
+/turf/simulated/floor/is_clockwork()
+	if(istype(floor_tile,/turf/simulated/floor/engine/clockwork))
+		return TRUE
+	return FALSE
 
 /turf/simulated/floor/proc/break_tile()
 	if(istype(src,/turf/simulated/floor/engine))
@@ -299,6 +300,8 @@ turf/simulated/floor/update_icon()
 	else if(is_grass_floor())
 		src.icon_state = "sand[pick("1","2","3")]"
 		broken = 1
+	else if(is_clockwork())
+		return //it's fucking magic
 	else if(is_slime_floor())
 		spawn(rand(2,10))
 			make_plating()
@@ -321,6 +324,8 @@ turf/simulated/floor/update_icon()
 		return
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
+	if(is_clockwork())
+		return // it's fucking magic
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1

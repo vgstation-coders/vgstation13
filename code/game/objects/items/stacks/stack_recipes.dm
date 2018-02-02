@@ -250,6 +250,20 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 	)
 
 /* ========================================================================
+							BRASS RECIPES
+======================================================================== */
+
+var/list/datum/stack_recipe/brass_recipes = list (
+	new/datum/stack_recipe("brass floor tile", /obj/item/stack/tile/brass, 1, 4, 60),
+	new/datum/stack_recipe("brass table", , 1, time = 5, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("brass window", /obj/structure/window/reinforced/clockwork, time = 15, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("full brass window", /obj/structure/window/full/reinforced/clockwork, 4, time = 30, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("brass windoor", /obj/structure/windoor_assembly/clockwork, 2, time = 30, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("clockwork girder", /obj/structure/girder/clockwork, 2, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("clockwork airlock", /obj/structure/door_assembly/clockwork, 5, time = 50, one_per_turf = 1, on_floor = 1)
+	)
+
+/* ========================================================================
 							LEATHER RECIPES
 ======================================================================== */
 /datum/stack_recipe/leather/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)

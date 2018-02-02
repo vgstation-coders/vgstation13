@@ -153,6 +153,7 @@
 	name = "clockwork floor"
 	desc = "It's filled with rotating and moving clockwork components."
 	icon_state = "clockwork"
+	floor_tile = /obj/item/stack/tile/brass
 
 /turf/simulated/floor/engine/clockwork/clockify()
 	return

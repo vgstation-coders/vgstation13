@@ -37,6 +37,7 @@
 	desc = "A huge chunk of warm metal. The clanging of machinery emanates from within."
 	icon_state = "clockwork"
 	walltype = "clockwork"
+	mineral = "brass"
 	dismantle_type = /turf/simulated/floor/engine/clockwork
 	girder_type = /obj/structure/girder/clockwork
 

@@ -161,3 +161,16 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes
 		return ..()
+
+/obj/item/stack/sheet/brass
+	name = "brass"
+	desc = "Large sheets made out of brass."
+	singular_name = "brass sheet"
+	icon_state = "sheet-brass"
+	sheettype = "clockwork"
+	origin_tech = Tc_ANOMALY + "=1"
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_METAL)
+
+/obj/item/stack/sheet/brass/New(var/loc, var/amount=null)
+		recipes = brass_recipes
+		return ..()

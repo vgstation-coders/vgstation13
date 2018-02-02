@@ -395,3 +395,9 @@
 	icon_state = ""
 	mineral = "sandstone"
 //------------wtf?------------end
+
+/obj/structure/falsewall/clockwork
+	name = "clockwork wall"
+	desc = "A huge chunk of cold metal. You can't hear anything coming from this one."
+	icon_state = ""
+	mineral = "brass"

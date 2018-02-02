@@ -22,6 +22,9 @@ var/list/poddoors = list()
 	var/closingicon = "pdoorc1"
 	var/openingicon = "pdoorc0"
 
+/obj/machinery/door/poddoor/clockify()
+	return
+
 /obj/machinery/door/poddoor/preopen
 	icon_state = "pdoor0"
 	density = 0

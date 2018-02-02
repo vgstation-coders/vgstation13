@@ -163,3 +163,9 @@ obj/item/stack/tile/slime
 		if(isslimeperson(H))
 			return -1
 	return current_slowdown+5
+
+/obj/item/stack/tile/brass
+	name = "brass floor tile"
+	singular_name = "brass floor tile"
+	desc = "A brass floor tile. It vibrates slightly."
+	icon_state = "tile_brass"
