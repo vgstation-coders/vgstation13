@@ -11,7 +11,7 @@ var/global/list/disease2_list = list()
 	var/list/datum/disease2/effect/effects = list()
 	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
 	var/max_stage = 4
-	var/patient_zero = FALSE // Bypasses the roll for natural antibodies
+	var/patient_zero = FALSE // Bypasses the roll for natural antibodies if true
 
 	var/log = ""
 	var/logged_virusfood=0
