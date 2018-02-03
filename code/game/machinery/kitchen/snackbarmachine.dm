@@ -6,6 +6,22 @@
 	chem_board = /obj/item/weapon/circuitboard/snackbar_machine
 	windowtype = "snackbar_machine"
 
+	var/max_snack_size = 10
+
+/obj/machinery/chem_master/RefreshParts()
+	var/scancount = 0
+	var/lasercount = 0
+	var/manipcount = 0
+
+	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+			scancount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating
+	// max_snack_size = (2 * manipcount) + (2 * scancount) + (2 * lasercount) // Arbitrary buff to snack making
+
 /obj/machinery/chem_master/snackbar_machine/Topic(href, href_list)
 
 	if(href_list["close"])
@@ -14,7 +30,7 @@
 		return 1
 
 	if(href_list["createpill"] || href_list["createpill_multiple"] || href_list["ejectp"] || href_list["change_pill"])
-		return //No href exploits, fuck off
+		return
 
 	if(..())
 		return 1
@@ -23,6 +39,7 @@
 
 	if(beaker && href_list["createbar"])
 		var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
+		reagents = buffer
 		reagents.trans_to(SB, 10)
 		src.updateUsrDialog()
 		return 1
@@ -37,39 +54,85 @@
 	user.set_machine(src)
 
 	var/dat = list()
-	if(!beaker)
-		dat += "Please insert a beaker.<BR>"
-	else
+	// Beaker
+	if(beaker)
 		var/datum/reagents/R = beaker.reagents
-		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
-		if(!R.total_volume)
-			dat += "Beaker is empty."
-		else
-			dat += "Add to buffer:<BR>"
-			for(var/datum/reagent/G in R.reagent_list)
-				dat += {"[G.name] , [G.volume] Units -
-					<A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(Analyze)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=1'>(1)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=5'>(5)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=10'>(10)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=[G.volume]'>(All)</A>
-					<A href='?src=\ref[src];addcustom=[G.id]'>(Custom)</A><BR>"}
+		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker.</A><BR>"
 
-		dat += "<HR>Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A><BR>"
-		if(reagents.total_volume)
-			for(var/datum/reagent/N in reagents.reagent_list)
-				dat += {"[N.name] , [N.volume] Units -
-					<A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(Analyze)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=1'>(1)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=5'>(5)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=10'>(10)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=[N.volume]'>(All)</A>
-					<A href='?src=\ref[src];removecustom=[N.id]'>(Custom)</A><BR>"}
-			dat += "<A href='?src=\ref[src];createbar=1'>Create snack bar (10 units max)</A>"
+		if(R.total_volume)
+			// Beaker buttons
+			dat += {"
+				<table>
+					<td class="column1">
+						Add to Snack Buffer: <A href='?src=\ref[src];beaker_addall=1;amount=[R.total_volume]'>All</A>
+					</td>
+				</table>
+			"}
+
+			// Beaker reagents
+			dat += "<table>"
+			for(var/datum/reagent/G in R.reagent_list)
+				dat += "<tr>"
+				dat += {"
+					<td class="column1">
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];beaker_add=[G.id];amount=1'>1u</A>
+						<A href='?src=\ref[src];beaker_add=[G.id];amount=5'>5u</A>
+						<A href='?src=\ref[src];beaker_add=[G.id];amount=10'>10u</A>
+						<A href='?src=\ref[src];beaker_addcustom=[G.id]'>Custom</A>
+						<A href='?src=\ref[src];beaker_add=[G.id];amount=[G.volume]'>All</A>
+					</td>
+				"}
+				dat += "</tr>"
+			dat += "</table>"
 		else
-			dat += "Buffer is empty.<BR>"
+			dat += "Beaker is empty."
+	else
+		dat += "No beaker inserted."
+
+	// Buffer - Like normal chem masters, except retains without a beaker.
+	// Makes pills. Can flush or move to internal storage
+	dat += "<HR>"
+	dat += "<b>&ltInternal Snack Buffer&gt</b> <BR>"
+
+	var/b_mode_text
+	if(buffer_mode == 1)
+		b_mode_text = "Storage"
+	if(buffer_mode == 2)
+		b_mode_text = "CONSUME"
+	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[b_mode_text]</A> <BR>"
+
+	if(buffer.total_volume)
+		dat += "<table>"
+		for(var/datum/reagent/G in buffer.reagent_list)
+			dat += "<tr>"
+			dat += {"
+					<td class="column1">
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
+					</td>
+					<td class="column2">
+						<A href='?src=\ref[src];buffer_add=[G.id];amount=1'>1u</A>
+						<A href='?src=\ref[src];buffer_add=[G.id];amount=5'>5u</A>
+						<A href='?src=\ref[src];buffer_add=[G.id];amount=10'>10u</A>
+						<A href='?src=\ref[src];buffer_addcustom=[G.id]'>Custom</A>
+						<A href='?src=\ref[src];buffer_add=[G.id];amount=[G.volume]'>All</A>
+					</td>
+					"}
+			dat += "</tr>"
+		dat += "</table>"
+	else
+		dat += "No snacks in buffer."
+
+	// Snack creation
+	dat += "<BR>"
+	dat += "<A href='?src=\ref[src];createsnack=1'>Create delicious snack (10 units max)</A><BR>"
+
+	// Make the window
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 575, 400, src)
+	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 475, 500, src)
+	popup.add_stylesheet("chemmaster", 'html/browser/chem_master.css')
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "[windowtype]")
