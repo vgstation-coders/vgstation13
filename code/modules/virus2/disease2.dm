@@ -33,7 +33,7 @@ var/global/list/disease2_list = list()
 	e.chance = rand(1, e.max_chance)
 	return e
 
-/datum/disease2/disease/proc/makerandom(var/greater = FALSE, patient_zero)
+/datum/disease2/disease/proc/makerandom(var/greater = FALSE, var/pz)
 	log_debug("Randomizing virus [uniqueID] with greater=[greater]")
 	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
@@ -50,6 +50,7 @@ var/global/list/disease2_list = list()
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
 	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
+	patient_zero = pz
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
