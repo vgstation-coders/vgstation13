@@ -529,7 +529,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	usr << browse(dat, "window=powers;size=900x480")
 
 
-/datum/role/changeling/Topic(href, href_list)
+/datum/role/changeling/RoleTopic(href, href_list)
 	..()
 	if(!ismob(usr))
 		return
