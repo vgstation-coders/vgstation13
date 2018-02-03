@@ -1375,6 +1375,7 @@ Thanks.
 		M = new meat_type(location, src)
 	else
 		M = new meat_type(location)
+	meat_taken++
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
@@ -1501,7 +1502,6 @@ Thanks.
 		src.being_butchered = 0
 		return
 
-	src.meat_taken++
 	src.drop_meat(get_turf(src))
 	src.being_butchered = 0
 	if(tool_name)
