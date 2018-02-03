@@ -67,6 +67,10 @@
 	h_style = "Bald"
 	..(new_loc, "Golem")
 
+/mob/living/carbon/human/clockwork/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Clockwork Golem")
+
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Grue")

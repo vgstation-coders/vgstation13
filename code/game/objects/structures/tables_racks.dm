@@ -645,7 +645,7 @@
 	name = "brass table"
 	desc = "A solid, slightly beveled brass table."
 	icon_state = "clock_table"
-	parts = /obj/structure/table_frame/clockwork
+	parts = /obj/item/weapon/table_parts/clockwork
 	optable = FALSE // fuck that
 	canSmoothWith = list(/obj/structure/table/reinforced/clockwork)
 

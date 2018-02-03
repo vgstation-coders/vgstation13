@@ -400,4 +400,28 @@
 	name = "clockwork wall"
 	desc = "A huge chunk of cold metal. You can't hear anything coming from this one."
 	icon_state = ""
-	mineral = "brass"
+	mineral = "clockwork"
+	canSmoothWith = null
+
+/obj/structure/falserwall/attack_hand(mob/user as mob)
+	if(opening)
+		return
+
+	if(density)
+		opening = TRUE
+		// Open wall
+		icon_state = "frwall_open"
+		flick("frwall_opening", src)
+		sleep(15)
+		setDensity(FALSE)
+		set_opacity(0)
+		opening = FALSE
+	else
+		opening = 1
+		icon_state = "r_wall"
+		flick("frwall_closing", src)
+		setDensity(TRUE)
+		sleep(15)
+		set_opacity(1)
+		relativewall()
+		opening = 0

@@ -21,19 +21,19 @@
 	siemens_coefficient = 1
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 
-/obj/structure/table_frame/clockwork
+/obj/item/weapon/table_parts/clockwork
 	name = "brass table frame"
 	desc = "Parts of a brass table. It's slightly warm to the touch."
 	icon_state = "brass_tableparts"
 	starting_materials = list(MAT_BRASS = 3750)
 
-/obj/structure/table_frame/clockwork/clockify()
+/obj/item/weapon/table_parts/clockwork/clockify()
 	return
 
 /obj/item/weapon/table_parts/clockify()
 	if(invisibility != INVISIBILITY_MAXIMUM)
 		invisibility = INVISIBILITY_MAXIMUM
-		new /obj/structure/table_frame/clockwork(loc)
+		new /obj/item/weapon/table_parts/clockwork(loc)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
 		qdel(src)
 	

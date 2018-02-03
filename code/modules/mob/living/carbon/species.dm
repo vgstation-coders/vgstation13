@@ -869,6 +869,7 @@ var/global/list/whitelisted_species = list("Human")
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
 		)
+	var/dust_type = /mob/living/golem_dust/adamantine
 
 /datum/species/golem/makeName()
 	return capitalize(pick(golem_names))
@@ -884,7 +885,7 @@ var/list/has_died_as_golem = list()
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
-	var/mob/living/adamantine_dust/A = new(H.loc)
+	var/mob/living/golem_dust/A = new dust_type(H.loc)
 	if(golemmind)
 		has_died_as_golem.Add(H.mind.key = world.time)
 		A.mind = golemmind
@@ -897,18 +898,18 @@ var/list/has_died_as_golem = list()
 	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
-	return 0
+	return FALSE
 
-/mob/living/adamantine_dust //serves as the corpse of adamantine golems
+/mob/living/golem_dust/adamantine //serves as the corpse of adamantine golems
 	name = "adamantine dust"
 	desc = "The remains of an adamantine golem."
 	stat = DEAD
 	icon = 'icons/mob/human_races/r_golem.dmi'
 	icon_state = "golem_dust"
-	density = 0
+	density = FALSE
 	meat_type = /obj/item/weapon/ore/diamond
 
-/mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
+/mob/living/golem_dust/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/slime_extract/adamantine))
 		var/obj/item/slime_extract/adamantine/A = I
 		if(A.Uses)
@@ -938,10 +939,35 @@ var/list/has_died_as_golem = list()
 					dustmind.current = G
 					mind = null
 					G.key = key
-					to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
+					to_chat(G, "You are an [G.name]. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
 					qdel(src)
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
+
+/datum/species/golem/clockwork
+	name = "Clockwork Golem"
+	icobase = 'icons/mob/human_races/r_cgolem.dmi'
+	deform = 'icons/mob/human_races/r_def_cgolem.dmi'
+	meat_type = /obj/item/stack/sheet/brass
+	attack_verb = "smashes"
+
+	primitive = null
+
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | NO_STRUCTURE
+
+	uniform_icons = 'icons/mob/uniform.dmi'
+
+	blood_color = "#B5A642"
+	flesh_color = "#B5A642"
+
+	dust_type = /mob/living/golem_dust/clockwork
+
+/mob/living/golem_dust/clockwork //serves as the corpse of adamantine golems
+	name = "clockwork remains"
+	desc = "The remains of an clockwork golem."
+	icon = 'icons/mob/human_races/r_cgolem.dmi'
+	icon_state = "clockgolem_dead"
+	meat_type = /obj/item/stack/sheet/brass
 
 /datum/species/grue
 	name = "Grue"
