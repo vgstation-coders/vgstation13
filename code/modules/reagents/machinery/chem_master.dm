@@ -3,6 +3,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
 "round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
 
+#define BEAKER 1
+#define STORAGE 2
+#define BUFFER 3
+#define FLUSH 4
+#define MAXMODES 5 // When it flips back to 1
+
 
 /obj/machinery/chem_master
 	name = "\improper Chem Master"
@@ -203,11 +209,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		dat += "<b>&ltInternal Chemical Storage&gt</b> <BR>"
 
 		var/s_mode_text
-		if(storage_mode == 1)
+		if(storage_mode == BEAKER)
 			s_mode_text = "Beaker"
-		if(storage_mode == 2)
+		if(storage_mode == BUFFER)
 			s_mode_text = "Buffer"
-		if(storage_mode == 3)
+		if(storage_mode == FLUSH)
 			s_mode_text = "FLUSH"
 		dat += "Mode: <A href='?src=\ref[src];togglestorage=1'>[s_mode_text]</A> <BR>"
 
@@ -238,9 +244,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	dat += "<b>&ltInternal Chemical Buffer&gt</b> <BR>"
 
 	var/b_mode_text
-	if(buffer_mode == 1)
+	if(buffer_mode == BEAKER)
+		b_mode_text = "Beaker"
+	if(buffer_mode == STORAGE)
 		b_mode_text = "Storage"
-	if(buffer_mode == 2)
+	if(buffer_mode == FLUSH)
 		b_mode_text = "FLUSH"
 	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[b_mode_text]</A> <BR>"
 
@@ -267,8 +275,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	// Pill creation
 	dat += "<BR>"
-	dat += "<A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>"
-	dat += "<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>"
+	if(!condi)
+		dat += "<A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>"
+		dat += "<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>"
 	dat += "<A href='?src=\ref[src];createbottle=1'>Create single bottle ([max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
 	dat += "<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
 
@@ -356,12 +365,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(isnull(amount) || amount < 0)
 				return
 
-			if(storage_mode == 1)
+			if(storage_mode == BEAKER && beaker)
 				storage.trans_to(beaker, amount)
-			if(storage_mode == 2)
+			if(storage_mode == BUFFER && buffer)
 				reagents = buffer
 				storage.trans_to(src, amount)
-			if(storage_mode == 3)
+			if(storage_mode == FLUSH)
 				storage.remove_all(amount)
 			src.updateUsrDialog()
 			return 1
@@ -375,12 +384,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(isnull(amount) || amount < 0)
 				return
 
-			if(storage_mode == 1)
+			if(storage_mode == BEAKER && beaker)
 				storage.trans_id_to(beaker, id, amount)
-			if(storage_mode == 2)
+			if(storage_mode == BUFFER && buffer)
 				reagents = buffer
 				storage.trans_id_to(src, id, amount)
-			if(storage_mode == 3)
+			if(storage_mode == FLUSH)
 				storage.remove_reagent(id, amount)
 			src.updateUsrDialog()
 			return 1
@@ -397,8 +406,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 		if(href_list["togglestorage"])
 			storage_mode += 1
-			if(storage_mode == 4)
+			if(storage_mode == MAXMODES)
 				storage_mode = 1
+			if(storage_mode == STORAGE)
+				src.Topic(null, list("togglestorage" = 1))
+			
 			src.updateUsrDialog()
 			return 1
 
@@ -412,14 +424,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(isnull(amount) || amount < 0)
 			return
 
-		if(buffer_mode == 1)
-			if(clear_reagents)
-				if(beaker)
-					buffer.trans_to(beaker, amount)
-			else
-				reagents = storage
-				buffer.trans_to(src, amount)
-		if(buffer_mode == 2)
+		if(buffer_mode == BEAKER && beaker)
+			buffer.trans_to(beaker, amount)
+		if(buffer_mode == STORAGE && storage)
+			reagents = storage
+			buffer.trans_to(src, amount)
+		if(buffer_mode == FLUSH)
 			buffer.remove_all(amount)
 		src.updateUsrDialog()
 		return 1
@@ -433,14 +443,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(isnull(amount) || amount < 0)
 			return
 
-		if(buffer_mode == 1)
-			if(clear_reagents)
+		if(buffer_mode == STORAGE) 	// If it's trying to move to storage but we don't have one because we clear reagents
+			if(clear_reagents) 		// Transfer to the beaker instead.
 				if(beaker)
 					buffer.trans_id_to(beaker, id, amount)
 			else
 				reagents = storage
 				buffer.trans_id_to(src, id, amount)
-		if(buffer_mode == 2)
+		if(buffer_mode == FLUSH)
 			buffer.remove_reagent(id, amount)
 		src.updateUsrDialog()
 		return 1
@@ -457,8 +467,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	if(href_list["togglebuffer"])
 		buffer_mode += 1
-		if(buffer_mode == 3)
+		if(buffer_mode == MAXMODES)
 			buffer_mode = 1
+		if((clear_reagents && buffer_mode == STORAGE) || buffer_mode == BUFFER)
+			src.Topic(null, list("togglebuffer" = 1))
 		src.updateUsrDialog()
 		return 1
 
@@ -555,6 +567,35 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return num
 	else
 		return 0
+
+// Pill sprites
+/obj/machinery/chem_master/proc/generate_pill_icon_cache()
+	pill_icon_cache = list()
+	for(var/i = 1 to MAX_PILL_SPRITE)
+		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
+
+// Sprite updating
+/obj/machinery/chem_master/update_icon()
+
+	overlays.len = 0
+
+	if(beaker)
+		beaker.pixel_x = -9 * PIXEL_MULTIPLIER//Move it far to the left
+		beaker.pixel_y = 5 * PIXEL_MULTIPLIER//Move it up
+		beaker.update_icon() //Forcefully update the beaker
+		overlays += beaker //Set it as an overlay
+
+	if(reagents.total_volume && !(stat & (BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
+		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
+		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
+		overlays += overlay
+
+	var/image/mixer_prongs = image('icons/obj/chemical.dmi', src, "mixer_prongs")
+	overlays += mixer_prongs //Add prongs on top of all of this
+
+/obj/machinery/chem_master/on_reagent_change()
+	update_icon()
+
 // Chem master 4000
 /obj/machinery/chem_master/chem_master_4000
 	name = "\improper Chemical Manipulator"
@@ -569,10 +610,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	windowtype = "condi_master"
 	condi = 1
 
-// Pill sprites
-/obj/machinery/chem_master/proc/generate_pill_icon_cache()
-	pill_icon_cache = list()
-	for(var/i = 1 to MAX_PILL_SPRITE)
-		pill_icon_cache += bicon(icon('icons/obj/chemical.dmi', "pill" + num2text(i)))
-
 #undef MAX_PILL_SPRITE
+
+#undef BEAKER 
+#undef STORAGE 
+#undef BUFFER 
+#undef FLUSH 
+#undef MAXMODES
