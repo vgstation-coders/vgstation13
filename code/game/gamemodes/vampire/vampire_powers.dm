@@ -76,7 +76,7 @@
 	victims -= mind.current
 	if(!victims.len)
 		return
-	var/mob/living/carbon/T 
+	var/mob/living/carbon/T
 	T = victims[1]
 	if (victims.len > 1)
 		T = input(src, "Victim?") as null|anything in victims
