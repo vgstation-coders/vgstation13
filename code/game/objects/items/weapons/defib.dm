@@ -140,15 +140,24 @@
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
-		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations || !target.has_brain() || target.suiciding == 1)
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
+		if(!head || head.status & ORGAN_DESTROYED)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
+			return
+		if(M_NOCLONE in target.mutations)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
+			return
+		if(!target.has_brain())
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brain waves detected.</span>")
+			return
+		if(target.suiciding)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe nerve damage detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
 		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here
-			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.w_uniform && istype(target.w_uniform,/obj/item/clothing/under) && prob(50))
-			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
@@ -162,7 +171,7 @@
 					to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
 					return
 			//we couldn't find a suitable ghost.
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Unable to diagnose reason - body suitable for operation.</span>")
 			return
 		if(prob(25))
 			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
