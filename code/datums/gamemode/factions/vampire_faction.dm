@@ -15,8 +15,3 @@
 /datum/faction/vampire/can_setup()
 	// TODO : check if the number of players > 10, if we have at least 2 players with vamp enabled.
 	return TRUE
-
-// There is no shared objective between vampires.
-/datum/faction/vampire/forgeObjectives()
-	for (var/datum/role/vampire/vamp in members)
-		vamp.ForgeObjectives()

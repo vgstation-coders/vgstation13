@@ -344,11 +344,11 @@
 	return
 
 /datum/role/proc/MemorizeObjectives()
-	var/text="<b>[name] Objectives:</b><ul>"
+	var/text="<b>[name] objectives:</b><ul>"
 	var/list/current_objectives = objectives.GetObjectives()
 	for(var/obj_count = 1 to current_objectives.len)
 		var/datum/objective/O = current_objectives[obj_count]
-		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text]"
+		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text] <br/>"
 	to_chat(antag.current, text)
 	antag.memory += "[text]<BR>"
 

@@ -56,12 +56,14 @@
 
 	if(!chaplain) //The user is not a Chaplain. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
-		/*if(isvampire(user)) //Vampire trying to use it
+		var/datum/role/vampire/V = isvampire(user)
+		if(V) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
 			user.emote("scream",,, 1)
-			M.mind.vampire.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
+			V.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
+		/*
 		else if(iscult(user)) //Cultist trying to use it
 			to_chat(user, "<span class='danger'>[deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5

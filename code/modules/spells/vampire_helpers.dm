@@ -52,6 +52,7 @@
 			return 1
 		//Chaplains are resistant to vampire powers
 		if(mind && mind.assigned_role == "Chaplain")
+			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			return 0
 		return 1
 
