@@ -21,6 +21,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/list/emote_hear = list()	//Hearable emotes
 	var/list/emote_see = list()		//Unlike speak_emote, the list of things in this variable only show by themselves with no spoken text. IE: Ian barks, Ian yaps
 
+	var/speak_override = FALSE
+
 	var/turns_per_move = 1
 	var/turns_since_move = 0
 
@@ -742,6 +744,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(spaced)
 		walk(src,0)
 	return !spaced
+
+/mob/living/simple_animal/say()
+	if(speak_override == TRUE)
+		return ..(pick(speak))
+	else
+		return ..()
 
 
 /datum/locking_category/simple_animal
