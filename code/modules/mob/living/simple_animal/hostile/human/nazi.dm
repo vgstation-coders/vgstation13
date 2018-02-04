@@ -369,6 +369,6 @@
 	say("Eva, auf wiedersehen!")
 	ranged = 0
 	sleep(10)
-	explosion(loc,1,2,3)
 	new/obj/item/weapon/gun/gatling(loc)
 	qdel(src)
+	explosion(loc,1,2,3)
