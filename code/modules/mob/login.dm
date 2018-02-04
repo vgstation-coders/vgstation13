@@ -55,6 +55,7 @@
 	hud_used = new /datum/hud(src)
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
+	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
 
 	regular_hud_updates()
 
@@ -63,7 +64,7 @@
 
 	delayNextMove(0)
 
-	change_sight(adding = SEE_SELF)
+	change_sight(adding = (SEE_SELF|SEE_BLACKNESS))
 
 	..()
 
