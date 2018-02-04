@@ -14,6 +14,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	health = 60
 	pass_flags = PASSTABLE
 
+	startup_sound = 'sound/misc/interference.ogg'
+	cell_type = "/obj/item/weapon/cell"
+
 	scrambledcodes = TRUE //Don't appear on the SS13/ROBOTS cameranet.
 	var/keeper= TRUE // FALSE = No, TRUE = Yes (Disables speech and common radio.)
 	var/picked_icon = FALSE
@@ -46,10 +49,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(ismob(A) && can_see_static()) //can't examine what you can't catch!
 		to_chat(usr, "Your vision module can't determine any of [A]'s features.")
 		return
-	..()
-
-
-/mob/living/silicon/robot/mommi/New(loc, startup_sound = 'sound/misc/interference.ogg', var/cell_type = "/obj/item/weapon/cell")
 	..()
 
 /proc/getAvailableMoMMIModules()

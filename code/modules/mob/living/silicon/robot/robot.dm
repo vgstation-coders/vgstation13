@@ -13,13 +13,18 @@
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
 	var/image/eyes = null
+
+	//New() stuff
+	var/startup_sound = 'sound/voice/liveagain.ogg'
+	var/cell_type = /obj/item/weapon/cell
+
+	// Alerts
 	var/pressure_alert = FALSE
 	var/temp_alert = FALSE
 
 	var/obj/item/device/station_map/station_holomap = null
 
-//Hud stuff
-
+	//Hud stuff
 	var/obj/abstract/screen/cells = null
 	var/obj/abstract/screen/inv1 = null
 	var/obj/abstract/screen/inv2 = null
@@ -29,7 +34,7 @@
 	var/shown_robot_modules = FALSE
 	var/obj/abstract/screen/robot_modules_background
 
-//3 Modules can be activated at any one time.
+	//3 Modules can be activated at any one time.
 	var/obj/item/weapon/robot_module/module = null
 	var/module_active = null
 	var/module_state_1 = null
@@ -40,7 +45,7 @@
 	var/obj/item/weapon/cell/cell = null
 	var/obj/machinery/camera/camera = null
 
-// Components are basically robot organs.
+	// Components are basically robot organs.
 	var/list/components = list()
 	var/obj/item/device/mmi/mmi = null
 	var/obj/item/device/pda/ai/rbPDA = null
@@ -85,7 +90,7 @@
 	var/toner = CYBORG_STARTING_TONER
 	var/tonermax = CYBORG_MAX_TONER
 
-/mob/living/silicon/robot/New(loc, var/unfinished = FALSE, var/startup_sound='sound/voice/liveagain.ogg', var/cell_type = "/obj/item/weapon/cell")
+/mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
 	updatename("Default")
 	updateicon()
@@ -138,7 +143,7 @@
 		cell_component.wrapped = cell
 		cell_component.installed = COMPONENT_INSTALLED
 
-	playsound(loc, startup_sound, 75, 1)
+	playsound(get_turf(src), startup_sound, 75, 1)
 
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	add_language(LANGUAGE_TRADEBAND)

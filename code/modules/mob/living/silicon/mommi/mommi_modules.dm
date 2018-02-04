@@ -60,6 +60,9 @@
 	name = "russian remont robot module"
 	ae_type = "Начато отмену"
 	speed_modifier = MOMMI_SOVIET_SPEED_MODIFIER
+	sprites = list(
+		"RuskieBot" = "ruskiebot"
+		)
 
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R)
 	..()

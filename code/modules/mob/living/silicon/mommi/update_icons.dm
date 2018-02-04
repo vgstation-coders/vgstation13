@@ -62,6 +62,8 @@
 				I.pixel_y = -7 * PIXEL_MULTIPLIER
 			if("repairbot")
 				I.pixel_y = -14 * PIXEL_MULTIPLIER
+			if("ruskiebot")
+				I.pixel_y = -14 * PIXEL_MULTIPLIER
 			if("replicator")
 				I.pixel_y = -10 * PIXEL_MULTIPLIER
 			if("mommiprime")
