@@ -10,7 +10,7 @@
 	name = "vampire"
 	special_role = "vampire"
 	disallow_job = FALSE
-	protected_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
+	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 
 
 	// -- Vampire mechanics --
