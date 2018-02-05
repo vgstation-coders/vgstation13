@@ -480,11 +480,10 @@
 
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
-	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
+	modules += new /obj/item/weapon/storage/bag/ore(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
-	modules += new /obj/item/device/gps/cyborg(src) 
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	modules += new /obj/item/device/destTagger/cyborg(src)
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
