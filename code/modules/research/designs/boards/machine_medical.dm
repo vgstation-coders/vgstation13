@@ -50,6 +50,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/chemmaster3000
 
+/datum/design/chemical_manipulator
+	name = "Circuit Design (Chemical Manipulator)"
+	desc = "Allows for the cosntruction of circuit boards used to build Chemical Manipulators."
+	id="chemicalmanipulator"
+	req_tech = list ("engineering" = 3, "biotech" = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/chemical_manipulator
+
 /datum/design/clonepod
 	name = "Circuit Design (Clone Pod)"
 	desc = "Allows for the construction of circuit boards used to build a Cloning Pod."
