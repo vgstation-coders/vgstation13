@@ -273,6 +273,21 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	else
 		dat += "No reagents in buffer."
 
+	// Pill sprite selection
+	if(!condi)
+		dat += "<HR>"
+		dat += "<div class='pillIconsContainer'>"
+		for(var/i = 1 to MAX_PILL_SPRITE)
+			dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
+						<div class="pillIcon">
+							[pill_icon_cache[i]]
+						</div>
+					</a>"}
+			if (i%10 == 0)
+				dat +="<br>"
+		dat += "</div>"
+	
+	
 	// Pill creation
 	dat += "<BR>"
 	if(!condi)
@@ -410,7 +425,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				storage_mode = 1
 			if(storage_mode == STORAGE)
 				src.Topic(null, list("togglestorage" = 1))
-			
+
 			src.updateUsrDialog()
 			return 1
 
@@ -442,11 +457,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			amount = text2num(href_list["amount"])
 		if(isnull(amount) || amount < 0)
 			return
-
+		
+		if(buffer_mode == BEAKER)
+			buffer.trans_id_to(beaker, id, amount)
 		if(buffer_mode == STORAGE) 	// If it's trying to move to storage but we don't have one because we clear reagents
 			if(clear_reagents) 		// Transfer to the beaker instead.
-				if(beaker)
-					buffer.trans_id_to(beaker, id, amount)
+				return
 			else
 				reagents = storage
 				buffer.trans_id_to(src, id, amount)
@@ -555,7 +571,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		investigation_log(I_CHEMS, logged_message)
 		src.updateUsrDialog()
 		return 1
-
+	
+	if(href_list["pill_sprite"])
+		pillsprite = href_list["pill_sprite"]
+		src.updateUsrDialog()
+		return 1
+	
 /obj/machinery/chem_master/proc/isgoodnumber(var/num)
 	if(isnum(num))
 		if(num > 200)
@@ -612,8 +633,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 #undef MAX_PILL_SPRITE
 
-#undef BEAKER 
-#undef STORAGE 
-#undef BUFFER 
-#undef FLUSH 
+#undef BEAKER
+#undef STORAGE
+#undef BUFFER
+#undef FLUSH
 #undef MAXMODES
