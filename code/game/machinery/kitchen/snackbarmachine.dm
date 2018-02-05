@@ -37,10 +37,9 @@
 
 	usr.set_machine(src)
 
-	if(beaker && href_list["createbar"])
+	if(href_list["createsnack"])
 		var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
-		reagents = buffer
-		reagents.trans_to(SB, 10)
+		buffer.trans_to(SB, 10)
 		src.updateUsrDialog()
 		return 1
 
