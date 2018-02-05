@@ -746,7 +746,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return !spaced
 
 /mob/living/simple_animal/say()
-	if(speak_override == TRUE)
+	if(speak_override)
 		return ..(pick(speak))
 	else
 		return ..()
