@@ -147,10 +147,10 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
 			return
 		if(!target.has_brain())
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brain waves detected.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No nervous system detected.</span>")
 			return
 		if(target.suiciding)
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe nerve damage detected.</span>") // They suicided so they fried their brain. Space Magic.
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
 		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
@@ -171,7 +171,7 @@
 					to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
 					return
 			//we couldn't find a suitable ghost.
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Unable to diagnose reason - body suitable for operation.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brain waves detected..</span>")
 			return
 		if(prob(25))
 			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
