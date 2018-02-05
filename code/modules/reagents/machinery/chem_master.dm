@@ -617,11 +617,32 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()
 
+// Other
+/obj/machinery/chem_master/blob_act()
+	if(prob(50))
+		qdel(src)
+
+/obj/machinery/chem_master/blob_act()
+	if(prob(50))
+		qdel(src)
+
+/obj/machinery/chem_master/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if(prob(50))
+				qdel(src)
+				return
+
 // Chem master 4000
 /obj/machinery/chem_master/chem_master_4000
 	name = "\improper Chemical Manipulator"
 	icon_state = "mixer"
 	clear_reagents = 0
+
+/obj/machinery/chem_master/chemical_manipulator/update_icon()
 
 // Condimaster
 /obj/machinery/chem_master/condimaster
