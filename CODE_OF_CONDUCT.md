@@ -1,4 +1,4 @@
-######Code Of Conduct: Short and Sweet Edition
+###### Code Of Conduct: Short and Sweet Edition
 
 Our community has origins on /vg/ on a well known Korean photoplank.
 As such, the tone of language here may be more crass than you are used to.
