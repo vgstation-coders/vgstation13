@@ -503,6 +503,18 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/micro_laser" = 2,
 							"/obj/item/weapon/stock_parts/console_screen" = 2)
 
+/obj/item/weapon/circuitboard/chemical_manipulator
+	name = "Circuit Board (Chemical Manipulator)"
+	desc = "A circuit board used to run an advanced reagent pill and bottle making machine."
+	build_path = "/obj/machinery/chem_master/chemical_manipulator"
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
+	req_components = list (
+							"/obj/item/weapon/stock_parts/manipulator" = 1,
+							"/obj/item/weapon/stock_parts/scanning_module" = 2,
+							"/obj/item/weapon/stock_parts/micro_laser" = 2,
+							"/obj/item/weapon/stock_parts/console_screen" = 2)
+
 /obj/item/weapon/circuitboard/condimaster
 	name = "Circuit Board (CondiMaster)"
 	desc = "A circuit board used to run a condiment bottle making machine."
