@@ -8,20 +8,6 @@
 
 	var/max_snack_size = 10
 
-/obj/machinery/chem_master/RefreshParts()
-	var/scancount = 0
-	var/lasercount = 0
-	var/manipcount = 0
-
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
-			manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
-			scancount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
-			lasercount += SP.rating
-	// max_snack_size = (2 * manipcount) + (2 * scancount) + (2 * lasercount) // Arbitrary buff to snack making
-
 /obj/machinery/chem_master/snackbar_machine/Topic(href, href_list)
 
 	if(href_list["close"])
