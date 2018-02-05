@@ -22,7 +22,7 @@
 	var/event/on_explode
 	var/event/on_projectile
 
-/obj/machinery/artifact/New(location, find_id)
+/obj/machinery/artifact/New(location, find_id, generate_effect = 1)
 	..()
 	if(find_id)
 		artifact_id = find_id
@@ -35,24 +35,25 @@
 	on_projectile = new(owner = src)
 	//event arguement list format (user, "context", item)
 
-	//setup primary effect - these are the main ones (mixed)
-	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-	primary_effect = new effecttype(src, 1) //pass the 1 so that the effect knows to generate a trigger
-	primary_effect.artifact_id = "[artifact_id]a"
-	spawn(1)	//delay logging so if admin tools override/other fuckery occurs the logs still end up correct
-		src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
+	if(generate_effect)
+		//setup primary effect
+		var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
+		primary_effect = new effecttype(src, 1) //pass the 1 so that the effect knows to generate a trigger
+		primary_effect.artifact_id = "[artifact_id]a"
+		spawn(1)	//delay logging so if admin tools override/other fuckery occurs the logs still end up correct
+			src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [primary_effect.artifact_id]: [primary_effect] || range: [primary_effect.effectrange] || charge time: [primary_effect.chargelevelmax] || trigger: [primary_effect.trigger].")
 
-	//75% chance to have a secondary effect
-	if(prob(75))
-		effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-		secondary_effect = new effecttype(src, 1)
-		secondary_effect.artifact_id = "[artifact_id]b"
-		spawn(1)
-			if(secondary_effect)	//incase admin tools or something deleted the secondary
-				src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
-				if(prob(75) && secondary_effect.effect != EFFECT_TOUCH)
-					src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
-					secondary_effect.ToggleActivate(2)
+		//75% chance to have a secondary effect
+		if(prob(75))
+			effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
+			secondary_effect = new effecttype(src, 1)
+			secondary_effect.artifact_id = "[artifact_id]b"
+			spawn(1)
+				if(secondary_effect)	//incase admin tools or something deleted the secondary
+					src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
+					if(prob(75) && secondary_effect.effect != EFFECT_TOUCH)
+						src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
+						secondary_effect.ToggleActivate(2)
 
 	icon_num = rand(0,11)
 	icon_state = "ano[icon_num]0"

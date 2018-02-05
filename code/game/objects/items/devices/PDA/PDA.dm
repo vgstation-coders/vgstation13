@@ -1990,9 +1990,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		id = null
 
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
-
-
-	var/t = input(U, "Please enter message", name, null) as text
+	var/t = input(U, "Please enter message", "Message to [P]", null) as text|null
 	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 	if (!t || !istype(P))
 		return
@@ -2069,12 +2067,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 		if(L)
 			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
-
+		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
 		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
 		P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
-		to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
+		to_chat(U, "[bicon(src)] <span class='notice'>ERROR: Messaging server is not responding.</span>")
 
 
 /obj/item/device/pda/verb/verb_remove_id()

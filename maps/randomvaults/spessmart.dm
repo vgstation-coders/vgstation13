@@ -76,6 +76,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 200,
 /obj/item/weapon/solder = 10,
+/obj/item/supermatter_shielding = 1000,
 
 
 //weapons

@@ -190,3 +190,20 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive
+	name = "alien tissue"
+	desc = "A long piece of rough, black tissue."
+	icon_state = "hivemeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/New()
+	..()
+
+	reagents.add_reagent(CARBON, 5)
+	reagents.add_reagent(pick(IRON, GOLD, SILVER, URANIUM), rand(0,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/New()
+	..()
+
+	reagents.add_reagent(OXYGEN, rand(1,5))
+	reagents.add_reagent(ETHANOL, rand(1,5))

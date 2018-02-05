@@ -91,6 +91,12 @@
 				playsound(location,sound,60,1)
 	return
 
+/datum/teleport/proc/isValidTurf(turf/T)
+	if(istype(T, /turf/unsimulated/wall/supermatter))
+		return FALSE //Don't teleport into supermatter turfs
+
+	return TRUE
+
 	//do the monkey dance
 /datum/teleport/proc/doTeleport()
 
@@ -100,7 +106,12 @@
 	var/area/destarea = get_area(destination)
 	if(precision)
 		var/list/posturfs = circlerangeturfs(destination,precision)
-		destturf = safepick(posturfs)
+		if(!posturfs || !posturfs.len)
+			return 0
+
+		do
+			destturf = pick_n_take(posturfs)
+		while(!isValidTurf(destturf) && posturfs.len)
 	else
 		destturf = get_turf(destination)
 

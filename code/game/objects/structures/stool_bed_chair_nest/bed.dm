@@ -171,7 +171,9 @@
 
 		qdel(src)
 
-/obj/structure/bed/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/roller_holder))
+		manual_unbuckle(user)
 	if(iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		getFromPool(sheet_type, get_turf(src), 2)
@@ -180,6 +182,36 @@
 
 	. = ..()
 
+/obj/structure/bed/roller/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W,/obj/item/roller_holder))
+		var/obj/item/roller_holder/RH = W
+		if(!RH.held)
+			to_chat(user, "<span class='notice'>You collect the roller bed.</span>")
+			src.forceMove(RH)
+			RH.held = src
+
+/obj/item/roller_holder
+	name = "roller bed rack"
+	desc = "A rack for carrying a collapsed roller bed."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "folded"
+	var/obj/structure/bed/roller/held
+
+/obj/item/roller_holder/New()
+	..()
+	held = new(src)
+
+/obj/item/roller_holder/attack_self(mob/user as mob)
+
+	if(!held)
+		to_chat(user, "<span class='notice'>The rack is empty.</span>")
+		return
+
+	to_chat(user, "<span class='notice'>You deploy the roller bed.</span>")
+	held.add_fingerprint(user)
+	held.forceMove(get_turf(src))
+	held = null
 
 /datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE

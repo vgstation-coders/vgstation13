@@ -42,6 +42,7 @@
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	M.do_attack_animation(src, M)
 
 	for(var/datum/disease/D in M.viruses)
 		if(D.spread == "Bite")
@@ -105,6 +106,7 @@
 
 	playsound(loc, "punch", 30, 1, -1)
 	visible_message("<span class='danger'>[M] [attack_verb] \the [src]!</span>", "<span class='userdanger'>[M] [attack_verb] you!</span>")
+	M.do_attack_animation(src, M)
 
 	if(M.size != size) //The bigger the kicker, the more damage
 		damage = max(damage + (rand(1,5) * (1 + M.size - size)), 0)

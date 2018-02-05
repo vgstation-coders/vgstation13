@@ -165,3 +165,11 @@
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
+
+/obj/item/device/radio/intercom/medbay
+	name = "station intercom (Medbay)"
+	frequency = 1485
+
+/obj/item/device/radio/intercom/medbay/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0

@@ -184,6 +184,7 @@
 	prefs.last_ip = address				//these are gonna be used for banning
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	prefs.client = src
+	prefs.initialize_preferences(client_login = 1)
 
 	. = ..()	//calls mob.Login()
 	chatOutput.start()

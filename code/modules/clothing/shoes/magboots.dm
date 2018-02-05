@@ -20,7 +20,7 @@
 	if(magpulse && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
-		user.visible_message("<span class='danger'>\The [user] slowly raises his foot above the lying [victim.name], preparing to stomp on \him.</span>")
+		user.visible_message("<span class='danger'>\The [user] slowly raises \his foot above the lying [victim.name], preparing to stomp on \him.</span>")
 		toggle()
 
 		if(do_after(user, src, 3 SECONDS))

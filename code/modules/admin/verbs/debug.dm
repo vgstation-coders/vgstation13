@@ -990,7 +990,7 @@ Pressure: [env.return_pressure()]"}
 			M.equip_to_slot_or_del(W, slot_wear_id)
 
 		if("emergency response team")
-			M.equip_strike_team()
+			M.equip_response_team()
 
 		if("special ops officer")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/combat(M), slot_w_uniform)

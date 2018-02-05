@@ -6,7 +6,8 @@
 	light_color = LIGHT_COLOR_ORANGE
 	var/list/connected_devices = list()
 	var/scan_range = 25
-
+	circuit = /obj/item/weapon/circuitboard/rust_core_control
+	
 	//currently viewed
 	var/obj/machinery/power/rust_core/cur_viewed_device
 

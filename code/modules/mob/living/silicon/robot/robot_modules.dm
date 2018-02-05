@@ -162,6 +162,7 @@
 	src.modules += new /obj/item/weapon/revivalprod(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
 	src.modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
+	src.modules += new /obj/item/roller_holder(src)
 	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
 	sensor_augs = list("Medical", "Disable")
 

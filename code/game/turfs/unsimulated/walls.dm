@@ -71,3 +71,16 @@ turf/unsimulated/wall/splashscreen
 /turf/unsimulated/wall/cult/cultify()
 	return
 
+/turf/unsimulated/wall/evil
+	name = "alien wall"
+	desc = "You feel a sense of dread from just looking at this wall. Its surface seems to be constantly moving, as if it were breathing."
+	icon_state = "evilwall_1"
+	opacity = 1
+	density = 1
+	canSmoothWith = null
+
+/turf/unsimulated/wall/evil/New()
+	..()
+
+	if(prob(80))
+		icon_state = "evilwall_[rand(1,8)]"

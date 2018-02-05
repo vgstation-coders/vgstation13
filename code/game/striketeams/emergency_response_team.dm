@@ -1,211 +1,63 @@
-//STRIKE TEAMS
-//Thanks to Kilakk for the admin-button portion of this code.
+//ERT
 
 var/list/response_team_members = list()
-var/global/send_emergency_team = 0 // Used for automagic response teams
-                                   // 'admin_emergency_team' for admin-spawned response teams
-var/ert_base_chance = 10 // Default base chance. Will be incremented by increment ERT chance.
-var/can_call_ert
 
-/client/proc/response_team()
-	set name = "Dispatch Emergency Response Team"
-	set category = "Special Verbs"
-	set desc = "Send an emergency response team to the station"
+/datum/striketeam/ert
+	striketeam_name = "Emergency Response Team"
+	faction_name = "Nanotrasen"
+	mission = "Ensure the station's return to working order, or organize its evacuation if judged necessary."
+	team_size = 6
+	min_size_for_leader = 0//set to 0 so there's always a designated team leader or to -1 so there is no leader.
+	spawns_name = "ERT"
+	can_customize = TRUE
+	logo = "ert-logo"
 
-	if(!holder)
-		to_chat(usr, "<span class='warning'>Only administrators may use this command.</span>")
-		return
-	if(!ticker)
-		to_chat(usr, "<span class='warning'>The game hasn't started yet!</span>")
-		return
-	if(ticker.current_state == 1)
-		to_chat(usr, "<span class='warning'>The round hasn't started yet!</span>")
-		return
-	if(send_emergency_team)
-		to_chat(usr, "<span class='warning'>Central Command has already dispatched an emergency response team!</span>")
-		return
-	if(alert("Do you want to dispatch an Emergency Response Team?",,"Yes","No") != "Yes")
-		return
-	if(get_security_level() != "red") // Allow admins to reconsider if the alert level isn't Red
-		switch(alert("The station is not in red alert. Do you still want to dispatch a response team?",,"Yes","No"))
-			if("No")
-				return
-	var/ert_reason = stripped_input(usr, "Please give a reason for calling the ERT.", "ERT Reason")
-	if(send_emergency_team)
-		to_chat(usr, "<span class='warning'>Looks like somebody beat you to it!</span>")
-		return
+/datum/striketeam/ert/failure()
+	command_alert(/datum/command_alert/ert_fail)
 
-	message_admins("[key_name_admin(usr)] is dispatching an Emergency Response Team. Reason given: [ert_reason]")
-	log_admin("[key_name(usr)] used Dispatch Response Team. Reason given is: [ert_reason]")
-	trigger_armed_response_team(1,ert_reason)
-
-
-client/verb/JoinResponseTeam()
-	set category = "OOC"
-
-	if(istype(usr,/mob/dead/observer) || istype(usr,/mob/new_player))
-		if(!send_emergency_team)
-			to_chat(usr, "No emergency response team is currently being sent.")
-			return
-		if(jobban_isbanned(usr, "Syndicate") || jobban_isbanned(usr, "Emergency Response Team") || jobban_isbanned(usr, "Security Officer"))
-			to_chat(usr, "<font color=red><b>You are jobbanned from the emergency reponse team!")
-			return
-
-		if(response_team_members.len > 5)
-			to_chat(usr, "The emergency response team is already full!")
-
-
-		for (var/obj/effect/landmark/L in landmarks_list) if (L.name == "ERT")
-			L.name = null//Reserving the place.
-			var/new_name = copytext(sanitize(input(usr, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
-			if(!new_name)//Somebody changed his mind, place is available again.
-				L.name = "ERT"
-				return
-			var/leader_selected = isemptylist(response_team_members)
-			var/mob/living/carbon/human/new_commando = create_response_team(L.loc, leader_selected, new_name)
-			qdel(L)
-			L = null
-			message_admins("[key_name(usr)] has joined the Emergency Response Team.")
-			new_commando.mind.key = usr.key
-			new_commando.key = usr.key
-
-			to_chat(new_commando, "<span class='notice'>You are [!leader_selected?"a member":"the <B>LEADER</B>"] of an Emergency Response Team, a type of military division, under CentComm's service. There is a code red alert on [station_name()], you are tasked to go and fix the problem.</span>")
-			to_chat(new_commando, "<b>You should first gear up and discuss a plan with your team. More members may be joining, don't move out before you're ready.")
-			if(!leader_selected)
-				to_chat(new_commando, "<b>As member of the Emergency Response Team, you answer only to your leader and CentComm officials.</b>")
-			else
-				to_chat(new_commando, "<b>As leader of the Emergency Response Team, you answer only to CentComm, and have authority to override the Captain where it is necessary to achieve your mission goals. It is recommended that you attempt to cooperate with the captain where possible, however.")
-			if(ticker.mode.ert_reason)
-				to_chat(new_commando, "<b>The communication from the station indicated that the reason you were called is '[ticker.mode.ert_reason]'.")
-
-			ticker.mode.ert += new_commando.mind
-			return
-
-	else
-		to_chat(usr, "You need to be an observer or new player to use this.")
-
-// returns a number of dead players in %
-proc/percentage_dead()
-	var/total = 0
-	var/deadcount = 0
-	for(var/mob/living/carbon/human/H in mob_list)
-		if(H.client) // Monkeys and mice don't have a client, amirite?
-			if(H.stat == 2)
-				deadcount++
-			total++
-
-	if(total == 0)
-		return 0
-	else
-		return round(100 * deadcount / total)
-
-// counts the number of antagonists in %
-proc/percentage_antagonists()
-	var/total = 0
-	var/antagonists = 0
-	for(var/mob/living/carbon/human/H in mob_list)
-		if(is_special_character(H) >= 1)
-			antagonists++
-		total++
-
-	if(total == 0)
-		return 0
-	else
-		return round(100 * antagonists / total)
-
-// Increments the ERT chance automatically, so that the later it is in the round,
-// the more likely an ERT is to be able to be called.
-proc/increment_ert_chance()
-	while(send_emergency_team == 0) // There is no ERT at the time.
-		if(get_security_level() == "green")
-			ert_base_chance += 1
-		if(get_security_level() == "blue")
-			ert_base_chance += 2
-		if(get_security_level() == "red")
-			ert_base_chance += 3
-		if(get_security_level() == "delta")
-			ert_base_chance += 10           // Need those big guns
-		sleep(600 * 3) // Minute * Number of Minutes
-
-
-proc/trigger_armed_response_team(var/force = 0, var/reason)
-	if(!can_call_ert && !force)
-		return
-	if(send_emergency_team)
-		return
-
-	var/send_team_chance = ert_base_chance // Is incremented by increment_ert_chance.
-	send_team_chance += 2*percentage_dead() // the more people are dead, the higher the chance
-	send_team_chance += percentage_antagonists() // the more antagonists, the higher the chance
-	send_team_chance = min(send_team_chance, 100)
-
-	if(force)
-		send_team_chance = 100
-
-	// there's only a certain chance a team will be sent
-	if(!prob(send_team_chance))
-		command_alert(/datum/command_alert/ert_fail)
-		can_call_ert = 0 // Only one call per round, ladies.
-		return
-
+/datum/striketeam/ert/extras()
 	command_alert(/datum/command_alert/ert_success)
-	if(reason)
-		ticker.mode.ert_reason = reason
-	for(var/mob/M in player_list)
-		if(istype(M, /mob/dead/observer))
-			to_chat(M, "<span class='interface big'><span class='bold'>An Emergency Response Team has been called! Consider joining up:</span> \
-				(Verbs -> OOC -> JoinResponseTeam, or <a href='?src=\ref[M];joinresponseteam=1'>click here.</a>)</span>")
 
+/datum/striketeam/ert/greet_commando(var/mob/living/carbon/human/H)
+	if(H.key == leader_key)
+		to_chat(H, "<span class='notice'>You are [H.real_name], the Commander of the Emergency Response Team, in the service of Nanotrasen.</span>")
+	else
+		to_chat(H, "<span class='notice'>You are [H.real_name], an Emergency Responder, in the service of Nanotrasen.</span>")
+	to_chat(H, "<span class='notice'>Your mission is: <span class='danger'>[mission]</span></span>")
 
-	can_call_ert = 0 // Only one call per round, gentleman.
-	send_emergency_team = 1
-
-	spawn(600 * 5)
-		send_emergency_team = 0 // Can no longer join the ERT.
-
-	var/nuke_code
-	for(var/obj/machinery/nuclearbomb/nuke in machines)
-		nuke_code = nuke.r_code
-	var/obj/item/weapon/paper/P = new
-	P.info = "Your orders, Commander, are to use all means necessary to return the station to a survivable condition.<br>To this end, you have been provided with the best tools we can give in the three areas of Medicine, Engineering, and Security. The nuclear authorization code is: <b>[ nuke_code ? nuke_code : "No Nuke Found, Request Another!"]</b>. Be warned, if you detonate this without good reason, we will hold you to account for damages. Memorise this code, and then burn this message."
-	P.name = "Emergency Nuclear Code, and ERT Orders"
-	for (var/obj/effect/landmark/A in landmarks_list)
-		if (A.name == "nukecode")
-			P.forceMove(A.loc)
-			qdel(A)
-			A = null
-			continue
-
-/client/proc/create_response_team(obj/spawn_location, leader_selected = 0, commando_name)
-
-
-//	to_chat(usr, "<span class='warning'>ERT has been temporarily disabled. Talk to a coder.</span>")
-	//return
-
-	var/mob/living/carbon/human/M = new(null)
+/datum/striketeam/ert/create_commando(obj/spawn_location, leader_selected = 0, key = "")
+	var/mob/living/carbon/human/M = new(spawn_location.loc)
 	response_team_members |= M
 
-	//todo: god damn this.
-	//make it a panel, like in character creation
-	var/new_facial = input("Please select facial hair color.", "Character Generation") as color
+	var/mob/user = null
+	for(var/mob/MO in player_list)
+		if(MO.key == key)
+			user = MO
+
+	to_chat(user, "<span class='notice'>Congratulations, you've been selected to be part of an ERT. You can customize your character, but don't take too long, time is of the essence!</span>")
+
+	var/commando_name = copytext(sanitize(input(user, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
+
+	//todo: make it a panel, like in character creation
+	var/new_facial = input(user, "Please select facial hair color.", "Character Generation") as color
 	if(new_facial)
 		M.r_facial = hex2num(copytext(new_facial, 2, 4))
 		M.g_facial = hex2num(copytext(new_facial, 4, 6))
 		M.b_facial = hex2num(copytext(new_facial, 6, 8))
 
-	var/new_hair = input("Please select hair color.", "Character Generation") as color
+	var/new_hair = input(user, "Please select hair color.", "Character Generation") as color
 	if(new_facial)
 		M.r_hair = hex2num(copytext(new_hair, 2, 4))
 		M.g_hair = hex2num(copytext(new_hair, 4, 6))
 		M.b_hair = hex2num(copytext(new_hair, 6, 8))
 
-	var/new_eyes = input("Please select eye color.", "Character Generation") as color
+	var/new_eyes = input(user, "Please select eye color.", "Character Generation") as color
 	if(new_eyes)
 		M.r_eyes = hex2num(copytext(new_eyes, 2, 4))
 		M.g_eyes = hex2num(copytext(new_eyes, 4, 6))
 		M.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
+	var/new_tone = input(user, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
 
 	if (!new_tone)
 		new_tone = 35
@@ -223,22 +75,23 @@ proc/trigger_armed_response_team(var/force = 0, var/reason)
 		qdel(H) // delete the hair after it's all done
 		H = null
 
-//	var/new_style = input("Please select hair style", "Character Generation")  as null|anything in hairs
-//hair
-	var/new_hstyle = input(usr, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
+	//hair
+	var/new_hstyle = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
 	if(new_hstyle)
 		M.h_style = new_hstyle
 
 	// facial hair
-	var/new_fstyle = input(usr, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
+	var/new_fstyle = input(user, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
 	if(new_fstyle)
 		M.f_style = new_fstyle
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
+
+	var/new_gender = alert(user, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
 		if(new_gender == "Male")
 			M.setGender(MALE)
 		else
 			M.setGender(FEMALE)
+
 	//M.rebuild_appearance()
 	M.update_hair()
 	M.update_body()
@@ -258,13 +111,11 @@ proc/trigger_armed_response_team(var/force = 0, var/reason)
 	M.mind.special_role = "Response Team"
 	if(!(M.mind in ticker.minds))
 		ticker.minds += M.mind//Adds them to regular mind list.
-	M.forceMove(spawn_location)
-	M.equip_strike_team(leader_selected)
+	M.forceMove(spawn_location.loc)
+	M.equip_response_team(leader_selected)
 	return M
 
-/mob/living/carbon/human/proc/equip_strike_team(leader_selected = 0)
-
-
+/mob/living/carbon/human/proc/equip_response_team(leader_selected = 0)
 	//Special radio setup
 	equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(src), slot_ears)
 
@@ -312,9 +163,3 @@ proc/trigger_armed_response_team(var/force = 0, var/reason)
 	L.part = affected
 
 	return 1
-
-//debug verb (That is horribly coded, LEAVE THIS OFF UNLESS PRIVATELY TESTING. Seriously.
-/*client/verb/ResponseTeam()
-	set category = "Admin"
-	if(!send_emergency_team)
-		send_emergency_team = 1*/

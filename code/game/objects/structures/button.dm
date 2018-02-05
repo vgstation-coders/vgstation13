@@ -5,6 +5,8 @@
 
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "launcherbtt"
+	var/base_state = "launcherbtt"
+	var/activated_state = "launcheract"
 
 	var/activate_id = "1" //icon_state of the /obj/effect/hidden_door that you want to be activate
 	var/global_search = 1 //If 1, search for all hidden doors in the world. Otherwise, only search for those in current area
@@ -14,6 +16,12 @@
 
 	var/one_time = 0 //If this button can only be used once
 	var/used = 0
+
+/obj/structure/button/hive
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "hivebutton"
+	base_state = "hivebutton"
+	activated_state = "hivebuttonact"
 
 /obj/structure/button/New()
 	..()
@@ -46,6 +54,10 @@
 				used = 1
 
 	state = !state
+	if(state)
+		icon_state = activated_state
+	else
+		icon_state = base_state
 
 /obj/structure/button/proc/is_valid_door(obj/effect/hidden_door/D)
 	return (D.icon_state == activate_id && (D.z == z))
@@ -55,6 +67,8 @@ var/list/hidden_doors = list()
 /obj/effect/hidden_door
 	name = "hidden door"
 	icon = 'icons/effects/triggers.dmi'
+
+	layer = FLY_LAYER
 
 	var/inverted = 0 //If 1, the door starts opened and closes on switch
 	var/list/door_appearance = list()

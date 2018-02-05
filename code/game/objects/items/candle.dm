@@ -37,6 +37,14 @@
 	if(!lit)
 		return
 	wax--
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/env = T.return_air()
+	if(env.oxygen < 5)
+		src.lit = 0
+		set_light(0)
+		processing_objects.Remove(src)
+		update_icon()
+		return
 	if(!wax)
 		new/obj/item/trash/candle(src.loc)
 		if(istype(src.loc, /mob))
@@ -44,8 +52,7 @@
 		qdel(src)
 		return
 	update_icon()
-	if(istype(loc, /turf)) //Start a fire if possible
-		var/turf/T = loc
+	if(istype(T)) //Start a fire if possible
 		T.hotspot_expose(700, 5, surfaces = 0)
 
 /obj/item/candle/attack_self(mob/user as mob)

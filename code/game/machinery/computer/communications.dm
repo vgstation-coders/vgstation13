@@ -180,13 +180,18 @@ var/shuttle_call/shuttle_calls[0]
 				to_chat(usr, "<span class='notice'>\The [src.name] cannot establish a bluespace connection.</span>")
 				return
 
-			if(sent_strike_team)
+			if(sentStrikeTeams(TEAM_DEATHSQUAD))
 				to_chat(usr, "<span class='warning'>PKI AUTH ERROR: SERVER REPORTS BLACKLISTED COMMUNICATION KEY PLEASE CONTACT SERVICE TECHNICIAN</span>")
 				return
 
-			if(world.time < 6000)
-				to_chat(usr, "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>")
+			if(sentStrikeTeams(TEAM_ERT))
+				to_chat(usr, "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>")
 				return
+
+			//if(world.time < 6000)
+			//	to_chat(usr, "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>")
+			//	return
+
 			if(emergency_shuttle.online)
 				to_chat(usr, "The emergency shuttle is already on its way.")
 				return
@@ -195,9 +200,6 @@ var/shuttle_call/shuttle_calls[0]
 				return
 			if(authenticated != 2 || issilicon(usr))
 				to_chat(usr, "<span class='warning'>\The [src.name]'s screen flashes, \"Access Denied\".</span>")
-				return
-			if(send_emergency_team)
-				to_chat(usr, "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>")
 				return
 
 			var/response = alert(usr,"Are you sure you want to request a response team?", "ERT Request", "Yes", "No")
@@ -209,7 +211,9 @@ var/shuttle_call/shuttle_calls[0]
 				return
 			if(!Adjacent(usr) || usr.incapacitated())
 				return
-			trigger_armed_response_team(1,ert_reason)
+			var/datum/striketeam/ert/response_team = new()
+			response_team.mission = ert_reason
+			response_team.trigger_strike()
 			log_game("[key_name(usr)] has called an ERT with reason: [ert_reason]")
 			message_admins("[key_name_admin(usr)] has called an ERT with reason: [ert_reason]")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -393,7 +397,7 @@ var/shuttle_call/shuttle_calls[0]
 		list("id"=SEC_LEVEL_BLUE,  "name"="Blue"),
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
-	data["ert_sent"] = send_emergency_team
+	data["ert_sent"] = sentStrikeTeams(TEAM_ERT)
 
 	var/msg_data[0]
 	for(var/i=1;i<=src.messagetext.len;i++)
@@ -488,9 +492,10 @@ var/shuttle_call/shuttle_calls[0]
 	if(!map.linked_to_centcomm)
 		to_chat(usr, "<span class='danger'>Error: No connection can be made to central command .</span>")
 		return
-	if(sent_strike_team == 1)
-		to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
-		return
+
+	//if(sent_strike_team == 1)
+	//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
+	//	return
 
 	if(world.time < 6000) // Ten minute grace period to let the game get going without lolmetagaming. -- TLE
 		to_chat(user, "The emergency shuttle is refueling. Please wait another [round((6000-world.time)/600)] minute\s before trying again.")
@@ -539,9 +544,9 @@ var/shuttle_call/shuttle_calls[0]
 			to_chat(user, "Centcom does not currently have a shuttle available in your sector. Please try again later.")
 			return
 
-		if(sent_strike_team == 1)
-			to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
-			return
+		//if(sent_strike_team == 1)
+		//	to_chat(user, "Centcom will not allow the shuttle to be called. Consider all contracts terminated.")
+		//	return
 
 		if(world.time < 54000) // 30 minute grace period to let the game get going
 			to_chat(user, "The shuttle is refueling. Please wait another [round((54000-world.time)/600)] minutes before trying again.")//may need to change "/600"
@@ -600,6 +605,22 @@ var/shuttle_call/shuttle_calls[0]
 
 	frequency.post_signal(src, status_signal)
 
+/obj/machinery/computer/communications/npc_tamper_act(mob/living/user)
+	if(!authenticated)
+		if(prob(20)) //20% chance to log in
+			authenticated = TRUE
+
+	else //Already logged in
+		if(prob(50)) //50% chance to log off
+			authenticated = FALSE
+		else if(isgremlin(user)) //make a hilarious public message
+			var/mob/living/simple_animal/hostile/gremlin/G = user
+			var/result = G.generate_markov_chain()
+
+			if(result)
+				captain_announce(result)
+				log_say("[key_name(usr)] ([formatJumpTo(get_turf(G))]) has made a captain announcement: [result]")
+				message_admins("[key_name_admin(G)] has made a captain announcement.", 1)
 
 /obj/machinery/computer/communications/Destroy()
 
@@ -615,7 +636,7 @@ var/shuttle_call/shuttle_calls[0]
 		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf))
 			return ..()
 
-	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || sent_strike_team)
+	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
 	emergency_shuttle.incall(2)
@@ -640,7 +661,7 @@ var/shuttle_call/shuttle_calls[0]
 		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf))
 			return ..()
 
-	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction" || sent_strike_team)
+	if(ticker.mode.name == "revolution" || ticker.mode.name == "AI malfunction")
 		return ..()
 
 	emergency_shuttle.incall(2)

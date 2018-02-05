@@ -96,38 +96,40 @@
 	healthcheck()
 	..()
 
-/obj/effect/alien/resin/attack_hand()
-	usr.delayNextAttack(10)
-	if (M_HULK in usr.mutations)
-		to_chat(usr, "<span class='notice'>You easily destroy the [name].</span>")
+/obj/effect/alien/resin/attack_hand(mob/living/user)
+	user.delayNextAttack(10)
+	user.do_attack_animation(src, user)
+	if (M_HULK in user.mutations)
+		to_chat(user, "<span class='notice'>You easily destroy the [name].</span>")
 		for(var/mob/O in oviewers(src))
-			O.show_message("<span class='warning'>[usr] destroys the [name]!</span>", 1)
+			O.show_message("<span class='warning'>[user] destroys the [name]!</span>", 1)
 		health = 0
 	else
-		to_chat(usr, "<span class='notice'>You claw at the [name].</span>")
+		to_chat(user, "<span class='notice'>You claw at the [name].</span>")
 		for(var/mob/O in oviewers(src))
-			O.show_message("<span class='warning'>[usr] claws at the [name]!</span>", 1)
+			O.show_message("<span class='warning'>[user] claws at the [name]!</span>", 1)
 		health -= rand(5,10)
 	healthcheck()
 
 /obj/effect/alien/resin/attack_paw()
 	return attack_hand()
 
-/obj/effect/alien/resin/attack_alien()
-	if (islarva(usr))//Safety check for larva. /N
+/obj/effect/alien/resin/attack_alien(mob/living/user)
+	if (islarva(user))//Safety check for larva. /N
 		return
-	to_chat(usr, "<span class='good'>You claw at the [name].</span>")
+	user.do_attack_animation(src, user)
+	to_chat(user, "<span class='good'>You claw at the [name].</span>")
 	for(var/mob/O in oviewers(src))
-		O.show_message("<span class='warning'>[usr] claws at the resin!</span>", 1)
+		O.show_message("<span class='warning'>[user] claws at the resin!</span>", 1)
 	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
 	health -= rand(40, 60)
 	if(health <= 0)
-		to_chat(usr, "<span class='good'>You slice the [name] to pieces.</span>")
+		to_chat(user, "<span class='good'>You slice the [name] to pieces.</span>")
 		for(var/mob/O in oviewers(src))
-			O.show_message("<span class='warning'>[usr] slices the [name] apart!</span>", 1)
+			O.show_message("<span class='warning'>[user] slices the [name] apart!</span>", 1)
 	healthcheck()
 
-/obj/effect/alien/resin/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/effect/alien/resin/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	/*if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if(isalien(user)&&(ishuman(G.affecting)||ismonkey(G.affecting)))
@@ -149,6 +151,7 @@
 				to_chat(user, "<span class='warning'>This wall is already occupied.</span>")
 		return */
 	user.delayNextAttack(10)
+	user.do_attack_animation(src, W)
 	var/aforce = W.force
 	health = max(0, health - aforce)
 	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)

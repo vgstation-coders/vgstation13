@@ -168,11 +168,11 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 				if(1)
 					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT</span>"
 				if(2)
-					dat += "<span title=\"This plant's fruit is excesively soft and juicy.\">SLIP </span>"
+					dat += "<span title=\"This plant's fruit is excessively soft and juicy.\">SLIP </span>"
 			if(P.seed.immutable > 0)
 				dat += "<span title=\"This plant does not possess genetics that are alterable.\">NOMUT </span>"
 			if(P.seed.parasite)
-				dat += "<span title=\"This plant is capable of parisitizing and gaining sustenance from tray weeds.\">PARA </span>"
+				dat += "<span title=\"This plant is capable of parasitizing and gaining sustenance from tray weeds.\">PARA </span>"
 			if(P.seed.hematophage)
 				dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
 			if(P.seed.alter_temp)

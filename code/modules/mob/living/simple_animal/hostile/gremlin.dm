@@ -13,6 +13,7 @@ var/list/bad_gremlin_items = list()
 	icon_living = "gremlin"
 	icon_dead = "gremlin_dead"
 
+	flags = HEAR_ALWAYS
 	health = 18
 	maxHealth = 18
 	size = SIZE_TINY
@@ -35,6 +36,10 @@ var/list/bad_gremlin_items = list()
 	//If you're going to make gremlins slower, increase this value - otherwise gremlins will abandon their targets too early
 	var/max_time_chasing_target = 2
 
+	//Last 20 heard messages are remembered by gremlins, and will be used to generate messages for comms console tampering, etc...
+	var/list/hear_memory = list()
+	var/const/max_hear_memory = 20
+
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
 	if(istype(target, /obj))
 		var/obj/M = target
@@ -43,6 +48,25 @@ var/list/bad_gremlin_items = list()
 
 		if(prob(50)) //50% chance to move to the next machine
 			LoseTarget()
+
+/mob/living/simple_animal/hostile/gremlin/Hear(datum/speech/speech, rendered_speech="")
+	if(speech.message)
+		hear_memory.Insert(1, speech.message)
+		if(hear_memory.len > max_hear_memory)
+			hear_memory.Cut(hear_memory.len)
+
+	return ..()
+
+/mob/living/simple_animal/hostile/gremlin/proc/generate_markov_input()
+	var/result = ""
+
+	for(var/memory in hear_memory)
+		result += memory + " "
+
+	return result
+
+/mob/living/simple_animal/hostile/gremlin/proc/generate_markov_chain()
+	return markov_chain(generate_markov_input(), rand(2,5), rand(100,700)) //The numbers are chosen arbitarily
 
 /mob/living/simple_animal/hostile/gremlin/proc/tamper(obj/M)
 	switch(M.npc_tamper_act(src))
@@ -76,11 +100,15 @@ var/list/bad_gremlin_items = list()
 		return FALSE
 	if(is_type_in_list(new_target, unwanted_objects))
 		return FALSE
-	if(istype(new_target, /obj/machinery/door/firedoor))
-		var/obj/machinery/door/firedoor/F = new_target
-		//Only tamper with firelocks that are closed, opening them!
-		if(!F.density)
+	if(istype(new_target, /obj/machinery))
+		var/obj/machinery/M = new_target
+		if(M.stat) //Unpowered or broken
 			return FALSE
+		else if(istype(new_target, /obj/machinery/door/firedoor))
+			var/obj/machinery/door/firedoor/F = new_target
+			//Only tamper with firelocks that are closed, opening them!
+			if(!F.density)
+				return FALSE
 
 	return ..()
 

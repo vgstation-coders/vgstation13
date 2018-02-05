@@ -100,13 +100,12 @@
 	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
-
+//someone who isn't me should really refactor this so it isnt instantiating all the masks in the game on startup
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
+	for(var/Type in existing_typesof(/obj/item/clothing/mask) - /obj/item/clothing/mask - typesof(/obj/item/clothing/mask/gas/voice))
 		clothing_choices += new Type
-	return
-	
+
 /obj/item/clothing/mask/gas/voice/attackby(obj/item/I, mob/user)
 	..()
 	if(!istype(I, /obj/item/clothing/mask) || istype(I, src.type))
@@ -120,16 +119,16 @@
 		to_chat(user, "<span class='notice'>[M.name]'s pattern absorbed by \the [src].</span>")
 		return 1
 	return 0
-	
+
 /datum/action/item_action/change_appearance_mask
 	name = "Change Mask Appearance"
-	
+
 /datum/action/item_action/change_appearance_mask/Trigger()
 	var/obj/item/clothing/mask/gas/voice/T = target
 	if(!istype(T))
 		return
 	T.change()
-	
+
 /obj/item/clothing/mask/gas/voice/proc/change()
 
 	var/obj/item/clothing/mask/A
@@ -153,7 +152,14 @@
 /obj/item/clothing/mask/gas/voice/attack_self(mob/user)
 	vchange = !vchange
 	to_chat(user, "<span class='notice'>The voice changer is now [vchange ? "on" : "off"]!</span>")
-		
+
+/obj/item/clothing/mask/gas/voice/detective
+	name = "fake moustache"
+	desc = "Warning: moustache is fake."
+	icon_state = "fake-moustache"
+	w_class = W_CLASS_TINY
+	actions_types = list(/datum/action/item_action/toggle_voicechanger)
+
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"
 	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."

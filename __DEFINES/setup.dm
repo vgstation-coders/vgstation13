@@ -1586,3 +1586,8 @@ var/proccalls = 1
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
 #define NPC_TAMPER_ACT_NOMSG  2 //Don't produce a visible message
+
+//Changing the order of these needlessly will break functionality of the client holding lists
+#define NO_ANIMATION 0
+#define ITEM_ANIMATION 1
+#define PERSON_ANIMATION 2

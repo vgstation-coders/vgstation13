@@ -298,3 +298,21 @@
 /obj/item/weapon/reagent_containers/pill/nanobot/New()
 	..()
 	reagents.add_reagent(NANOBOTS, 1)
+
+/obj/item/weapon/reagent_containers/pill/hyronalin
+	name = "hyronalin pill"
+	desc = "Radiation poisoning treatment."
+	icon_state = "pill14" //green round plain
+
+/obj/item/weapon/reagent_containers/pill/hyronalin/New()
+	..()
+	reagents.add_reagent(HYRONALIN, 20)
+
+/obj/item/weapon/reagent_containers/pill/arithrazine
+	name = "arithrazine pill"
+	desc = "Extreme radiation sickness treatment."
+	icon_state = "pill6"
+
+/obj/item/weapon/reagent_containers/pill/arithrazine/New()
+	..()
+	reagents.add_reagent(ARITHRAZINE, 10)

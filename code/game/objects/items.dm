@@ -926,6 +926,7 @@
 		var/datum/organ/internal/eyes/eyes = H.internal_organs_by_name["eyes"]
 
 		if(M != user)
+			user.do_attack_animation(M, src)
 			for(var/mob/O in (viewers(M) - user - M))
 				O.show_message("<span class='danger'>[user] stabs [M] in the eye with \the [src].</span>", 1)
 			to_chat(M, "<span class='userdanger'>[user] stabs you in the eye with \the [src]!</span>")

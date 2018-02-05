@@ -43,10 +43,11 @@
 
 	return 1
 
-/obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(!istype(W))
 		return
 
+	user.do_attack_animation(src, W)
 	//Calculate damage
 	var/aforce = W.force
 	if(W.damtype == BRUTE || W.damtype == BURN)

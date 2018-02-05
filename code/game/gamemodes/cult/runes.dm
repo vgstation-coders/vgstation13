@@ -1423,6 +1423,12 @@
 								M = null
 								to_chat(C, "<B>You are now an Artificer. You are incredibly weak and fragile, but you are able to construct new floors and walls, to break some walls apart, to repair allied constructs (by clicking on them), </B><I>and most important of all create new constructs</I><B> (Use your Artificer spell to summon a new construct shell and Summon Soulstone to create a new soulstone).</B>")
 								ticker.mode.update_cult_icons_added(C.mind)
+								for(var/spell/S in C.spell_list)
+									if(S.charge_type & Sp_RECHARGE)
+										if(S.charge_counter == S.charge_max) //Spell is fully charged - let the proc handle everything
+											S.take_charge()
+										else //Spell is on cooldown and already recharging - there's no need to call S.process(), just reset charges to 0
+											S.charge_counter = 0
 				qdel(src)
 				return
 			else

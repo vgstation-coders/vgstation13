@@ -176,7 +176,7 @@
 			dat	+= "<br>It is carnivorous and poses a significant threat to living things around it."
 
 	if(grown_seed.parasite)
-		dat += "<br>It is capable of parisitizing and gaining sustenance from tray weeds."
+		dat += "<br>It is capable of parasitizing and gaining sustenance from tray weeds."
 
 	if(grown_seed.alter_temp)
 		dat += "<br>It will gradually alter the local room temperature to match it's ideal habitat."
@@ -197,7 +197,7 @@
 		if(1)
 			dat += "<br>Its fruit is soft-skinned and abudantly juicy."
 		if(2)
-			dat	+= "<br>Its fruit is excesively soft and juicy."
+			dat	+= "<br>Its fruit is excessively soft and juicy."
 
 	if(grown_seed.biolum)
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."

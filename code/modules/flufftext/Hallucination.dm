@@ -383,8 +383,9 @@ proc/check_panel(mob/M)
 
 	var/health = 100
 
-/obj/effect/fake_attacker/attackby(var/obj/item/weapon/P as obj, mob/user as mob)
+/obj/effect/fake_attacker/attackby(var/obj/item/weapon/P as obj, mob/living/user as mob)
 	step_away(src,my_target,2)
+	user.do_attack_animation(src, P)
 	for(var/mob/M in oviewers(world.view,my_target))
 		to_chat(M, "<span class='danger'>[my_target] flails around wildly.</span>")
 	my_target.show_message("<span class='danger'>[src] has been attacked by [my_target] </span>", 1) //Lazy.

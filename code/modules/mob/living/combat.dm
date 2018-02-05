@@ -39,6 +39,9 @@
 
 		. = TRUE
 
+/mob/living/proc/can_be_grabbed(mob/living/grabber)
+	return TRUE
+
 /mob/living/proc/break_pulls(mob/living/target)
 	if(target.pulling)
 		visible_message("<span class='danger'>[src] has broken [target]'s grip on [target.pulling]!</span>")
@@ -96,6 +99,7 @@
 		playsound(loc, attack_sound, 25, 1, -1)
 
 	visible_message(get_attack_message(target, attack_verb))
+	do_attack_animation(target, src)
 
 	var/damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 	target.unarmed_attacked(src, damage, damage_type, zone)

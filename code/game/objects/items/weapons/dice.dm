@@ -142,9 +142,9 @@
 /obj/item/weapon/dice/d20/cursed/diceroll(mob/user as mob, thrown)
 	..()
 	if(deactivated == 0) //If the dice has power then something will happen
-		message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled a [result]")
-		log_game("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled a [result]")
 		if(istype(user,/mob/living/carbon/human)) //check that a humanoid is rolling the dice; Xenomorphs / Sillicons need not apply.
+			message_admins("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled a [result]")
+			log_game("[key_name(user)] has [thrown? "used" : "thrown"] a cursed dice and rolled a [result]")
 			var/mob/living/carbon/human/h = user
 			switch(result)
 				if(1)

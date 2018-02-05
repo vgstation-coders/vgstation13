@@ -57,6 +57,9 @@
 			activated = 0
 		else
 			activated = 1
+			isolated = 1
+			spawn(20 SECONDS)
+				isolated = 0
 
 		if(reveal_toggle == 1 && holder)
 			if(istype(holder, /obj/machinery/artifact))
@@ -126,7 +129,7 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	var/atom/toplevelholder = get_holder_at_turf_level(holder)
 	toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] expells energy which is blocked by the containment field!</span>")
 	isolated = 1
-	spawn(10 SECONDS)
+	spawn(20 SECONDS)
 		isolated = 0
 
 /datum/artifact_effect/proc/IsPrimary()

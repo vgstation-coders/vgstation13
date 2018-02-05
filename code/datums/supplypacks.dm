@@ -1514,7 +1514,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Medical"
 
 /datum/supply_packs/bloodbot
-	name = "Blood Donation Drive Crate"
+	name = "Blood donation drive"
 	contains = list(/obj/machinery/bot/bloodbot,
 					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
 					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
@@ -1522,6 +1522,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje)
 	cost = 1000
 	containertype = /obj/structure/largecrate
+	containername = "blood donation drive crate"
 	group = "Medical"
 
 /datum/supply_packs/wheelchair

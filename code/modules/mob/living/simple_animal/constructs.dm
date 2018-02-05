@@ -124,6 +124,7 @@
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
+		user.do_attack_animation(src, O)
 		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")

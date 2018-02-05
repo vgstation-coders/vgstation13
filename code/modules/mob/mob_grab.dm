@@ -18,12 +18,19 @@
 	item_state = "nothing"
 	w_class = W_CLASS_HUGE
 
+/obj/item/weapon/grab/attack_icon()
+	if(affecting)
+		return affecting
+	..()
 
-/obj/item/weapon/grab/New(atom/loc, mob/victim)
+/obj/item/weapon/grab/New(atom/loc, mob/living/victim)
 	..()
 	assailant = loc
 	affecting = victim
 
+	if(!victim.can_be_grabbed(assailant))
+		returnToPool(src)
+		return
 	if(affecting && affecting.anchored)
 		returnToPool(src)
 		return

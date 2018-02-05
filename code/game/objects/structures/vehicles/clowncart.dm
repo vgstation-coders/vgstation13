@@ -260,7 +260,7 @@
 		unlock_atom(user)
 		return
 	if(empstun > 0)
-		if(user)
+		if(user && can_warn())
 			to_chat(user, "<span class='warning'>[src]'s banana essence battery has been shorted out.</span>")
 		return
 	if(reagents.total_volume <= 0 && max_health < HEALTH_FOR_FREE_MOVEMENT) //No fuel
@@ -292,7 +292,8 @@
 				new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
 				reagents.remove_reagent(BANANA,BANANA_FOR_TRAITOR_PEEL)
 	else
-		to_chat(user, "<span class='notice'>You have to honk to be able to ride [src].</span>")
+		if(can_warn())
+			to_chat(user, "<span class='notice'>You have to honk to be able to ride [src].</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/die()
 	density = 0

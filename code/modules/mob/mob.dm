@@ -953,6 +953,8 @@ var/list/slot_equipment_priority = list( \
 
 	if (ismob(AM))
 		var/mob/M = AM
+		if(M.pull_damage()) //Pulling someone who's messed up will mess them up a lot further, inform the user.
+			to_chat(usr,"<span class='warning'>Pulling \the [M] in their current condition would probably be a bad idea.</span>")
 		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
@@ -1292,22 +1294,24 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
-	if (href_list["joinresponseteam"])
-		if(usr.client)
-			var/client/C = usr.client
-			C.JoinResponseTeam()
+	//if (href_list["joinresponseteam"])
+	//	if(usr.client)
+	//		var/client/C = usr.client
+	//		C.JoinResponseTeam()
 
 /mob/proc/pull_damage()
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		if(H.health - H.halloss <= config.health_threshold_softcrit)
-			for(var/name in H.organs_by_name)
-				var/datum/organ/external/e = H.organs_by_name[name]
-				if(H.lying)
-					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
-						return 1
-						break
-		return 0
+		var/turf/TH = H.loc	
+		if (TH.has_gravity())
+			if(H.health - H.halloss <= config.health_threshold_softcrit)
+				for(var/name in H.organs_by_name)
+					var/datum/organ/external/e = H.organs_by_name[name]
+					if(H.lying)
+						if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
+							return 1
+							break
+			return 0
 
 /mob/MouseDrop(mob/M as mob)
 	..()
@@ -1742,6 +1746,21 @@ mob/proc/on_foot()
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
 	return
 
+/mob/supermatter_act(atom/source, severity)
+	var/contents = get_contents_in_object(src)
+
+	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
+	if(SS)
+		SS.supermatter_act(source)
+	else
+
+		if(severity == SUPERMATTER_DUST)
+			dust()
+			return 1
+		else
+			qdel(src)
+			return 1
+
 /mob/proc/remove_jitter()
 	if(jitteriness)
 		jitteriness = 0
@@ -1909,6 +1928,9 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/mob/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

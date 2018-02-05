@@ -150,7 +150,7 @@ For the main html chat area
 	deets["clientData"]["ckey"] = owner.ckey
 	deets["clientData"]["ip"] = owner.address
 	deets["clientData"]["compid"] = owner.computer_id
-	var/data = json_encode(deets)
+	var/data = list2json(deets)
 	ehjax_send(data = data)
 
 //Called by client, sent data to investigate (cookie history so far)
@@ -159,7 +159,7 @@ For the main html chat area
 		return
 
 	if(cookie != "none")
-		var/list/connData = json_decode(cookie)
+		var/list/connData = json2list(cookie)
 		if (connData && islist(connData) && connData.len > 0 && connData["connData"])
 			src.connectionHistory = connData["connData"] //lol fuck
 			var/list/found = new()

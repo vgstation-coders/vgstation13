@@ -173,6 +173,7 @@ var/list/camera_names=list()
 		return
 	status = 0
 	update_icon()
+	user.do_attack_animation(src, user)
 	visible_message("<span class='warning'>\The [user] slashes at [src]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
 	add_hiddenprint(user)

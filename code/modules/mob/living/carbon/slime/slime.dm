@@ -390,6 +390,7 @@
 
 		else
 
+			M.do_attack_animation(src, M)
 			var/damage = rand(1, 9)
 
 			attacked += 10
@@ -432,6 +433,7 @@
 			M.grab_mob(src)
 
 		if (I_DISARM)
+			M.do_attack_animation(src, M)
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 			var/damage = 5
 			attacked += 10
