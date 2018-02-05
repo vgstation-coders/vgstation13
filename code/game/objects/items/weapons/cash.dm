@@ -149,6 +149,7 @@ var/global/list/moneytypes = list(
 	for(var/i = 1 to rand(3,10))
 		var/typepath = pick(types)
 		new typepath(src)
+	..()
 
 /proc/dispense_cash(var/amount, var/loc)
 	for(var/cashtype in moneytypes)

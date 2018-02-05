@@ -376,12 +376,16 @@
 	..()
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted))
@@ -401,7 +405,7 @@
 
 	icon_state = icon_opened
 	src.opened = 1
-	src.density = 0
+	setDensity(FALSE)
 	return 1
 
 /obj/structure/closet/crate/close()
@@ -415,7 +419,7 @@
 
 	icon_state = icon_closed
 	src.opened = 0
-	src.density = 1
+	src.setDensity(TRUE)
 	return 1
 
 /obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)

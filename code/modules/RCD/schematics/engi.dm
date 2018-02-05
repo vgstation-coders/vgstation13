@@ -15,7 +15,7 @@
 		to_chat(user, "Deconstructing \the [T]...")
 		playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
-		if(do_after(user, T, 40))
+		if(master.delay(user, T, 4 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -26,7 +26,7 @@
 	else if(istype(A, /turf/simulated/floor))
 		var/turf/simulated/floor/T = A
 		to_chat(user, "Deconstructing \the [T]...")
-		if(do_after(user, T, 50))
+		if(master.delay(user, T, 5 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -38,7 +38,7 @@
 	else if(istype(A, /obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/D = A
 		to_chat(user, "Deconstructing \the [D]...")
-		if(do_after(user, D, 50))
+		if(master.delay(user, D, 5 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -82,7 +82,7 @@
 	var/turf/simulated/floor/T = A
 	to_chat(user, "Building wall")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(do_after(user, A, 20))
+	if(master.delay(user, A, 2 SECONDS))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 
@@ -106,6 +106,9 @@
 
 	var/list/schematics			= list()
 	var/ready
+
+/datum/rcd_schematic/con_airlock/borg
+	energy_cost					= 30
 
 /datum/rcd_schematic/con_airlock/show(var/mob/living/user, close = 0)
 	if(!close)
@@ -338,7 +341,7 @@
 
 	to_chat(user, "Building airlock...")
 
-	if(!do_after(user, A, 50))
+	if(!master.delay(user, A, 5 SECONDS))
 		return 1
 
 	if(master.get_energy(user) < energy_cost)

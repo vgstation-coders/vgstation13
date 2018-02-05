@@ -62,10 +62,12 @@ obj/item/proc/get_clamped_volume()
 	if (can_operate(M, user))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,I))
 			return 1
+
+	if (user.is_pacified(VIOLENCE_DEFAULT,M))
+		return 0
+
 	//if (istype(M,/mob/living/carbon/brain))
 	//	messagesource = M:container
-	if (hitsound)
-		playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)
 	/////////////////////////
 	if(originator)
 		if(ismob(originator))
@@ -227,6 +229,9 @@ obj/item/proc/get_clamped_volume()
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
+		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
-	return .
+
+	if(hitsound)
+		playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)

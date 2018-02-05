@@ -82,6 +82,44 @@
 	else
 		take_damage(damage, 0, 1, used_weapon = "EMP")
 
+/datum/organ/external/proc/get_health()
+	return (burn_dam + brute_dam)
+
+/datum/organ/external/proc/explode()
+	if(is_peg())
+		return droplimb(1)
+
+	var/gib_type = /obj/effect/decal/cleanable/blood/gibs/core
+
+	if(is_robotic())
+		gib_type = /obj/effect/decal/cleanable/blood/gibs/robot
+
+	var/turf/T = get_turf(owner)
+	if(T)
+		var/obj/effect/decal/gib
+
+		//Create two gibs
+		for(var/i = 1 to 2)
+			gib = new gib_type(get_turf(owner))
+			gib.name = "mangled [src.display_name]"
+			gib.desc = "Completely useless now."
+
+		spawn(3)
+			step(gib, pick(alldirs)) //move the last spawned gib in a random direction
+
+		if(is_robotic())
+			T.hotspot_expose(1000,1000,surfaces=1)
+		else
+			playsound(T, 'sound/effects/gib3.ogg', 50, 1)
+
+	var/msg = pick(
+	"\The [owner]'s [display_name] is mangled to bits!",\
+	"\The [owner]'s [display_name] [is_robotic() ? "is completely wrecked" : "explodes into gory red paste"]!",\
+	"\The [owner]'s [display_name] [is_robotic() ? "is ripped into loose shreds" : "collapses into a lump of gore"]!")
+
+	owner.visible_message("<span class='danger'>[msg]</span>")
+	droplimb(1, spawn_limb = 0, display_message = FALSE)
+
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	if((brute <= 0) && (burn <= 0))
 		return 0
@@ -105,7 +143,7 @@
 		var/threshold_multiplier = 1
 		if(isslimeperson(owner))
 			threshold_multiplier = 0
-		if(config.limbs_can_break && brute_dam + burn_dam >= max_damage * config.organ_health_multiplier * threshold_multiplier)
+		if(config.limbs_can_break && get_health() >= max_damage * config.organ_health_multiplier * threshold_multiplier)
 			if(isslimeperson(owner))
 				var/chance_multiplier = 1
 				if(istype(src, /datum/organ/external/head))
@@ -113,9 +151,19 @@
 				if(prob(brute * sharp * chance_multiplier))
 					droplimb(1)
 					return
-			else if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
-				droplimb(1)
-				return
+			else
+				if(sharp || is_peg())
+					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
+						droplimb(1)
+						return
+				else if(!sharp && brute > 15) //Massive blunt damage can result in limb explosion
+					if(prob((brute/7.5)**3)) //15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
+						explode()
+						return
+				else if(brute > 20 && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
+					droplimb(1)
+					return
+
 		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
 			if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 				droplimb(1)
@@ -253,7 +301,7 @@
 	var/datum/species/species = src.species || owner.species
 
 	//First check whether we can widen an existing wound
-	if(wounds.len > 0 && prob(max(50 + owner.number_wounds * 10, 100)))
+	if(wounds.len > 0 && prob(50 + owner.number_wounds * 10))
 		if((type == CUT || type == BRUISE) && damage >= 5)
 			var/datum/wound/W = pick(wounds)
 			if(W.amount == 1 && W.started_healing())
@@ -685,7 +733,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		else
 			//If any organs are attached to this, destroy them
 			for(var/datum/organ/external/O in children)
-				O.droplimb(1)
+				O.droplimb(1, no_explode, spawn_limb, display_message)
 
 		for(var/implant in implants)
 			qdel(implant)
@@ -1344,7 +1392,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 130
 	min_broken_damage = 40
 	body_part = HEAD
-	var/disfigured = 0
+	var/disfigured = FALSE
 	vital = 1
 	encased = "skull"
 
@@ -1355,17 +1403,29 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(!current_organ)
 		current_organ = new /obj/item/organ/external/head(owner.loc, owner)
 		owner.decapitated = current_organ
-	var/datum/organ/internal/brain/B = owner.internal_organs_by_name["brain"]
+	var/datum/organ/internal/brain/B = eject_brain()
 	var/obj/item/organ/external/head/H = current_organ
 	if(B)
 		H.organ_data = B
 		B.organ_holder = current_organ
 		B.owner_dna = H.owner_dna
-	owner.internal_organs_by_name["brain"] = null
-	owner.internal_organs_by_name -= "brain"
-	owner.internal_organs -= B
-	internal_organs -= B
+
 	return current_organ
+
+/datum/organ/external/head/proc/eject_brain()
+	var/datum/organ/internal/brain/B = owner.internal_organs_by_name["brain"]
+
+	if(B)
+		owner.internal_organs_by_name.Remove("brain")
+		owner.internal_organs.Remove(B)
+		src.internal_organs.Remove(B)
+
+	return B
+
+/datum/organ/external/head/explode()
+	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
+
+	.=..()
 
 /datum/organ/external/head/get_icon()
 	if(!owner)
@@ -1413,7 +1473,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.visible_message("<span class='warning'>[owner]'s face disfigures.</span>",
 		                      "<span class='danger'>Your face becomes an unrecognizable, mangled mess!</span>")
 
-	disfigured = 1
+	disfigured = TRUE
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS
@@ -1776,11 +1836,17 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 					//TODO: ORGAN REMOVAL UPDATE.
 					var/turf/T = get_turf(src)
-					if(istype(src,/obj/item/organ/external/head/posi))
-						var/obj/item/device/mmi/posibrain/B = new(T)
-						B.transfer_identity(brainmob)
+					if(isatom(organ_data.removed_type))
+						var/obj/I = organ_data.removed_type
+						if(istype(organ_data.removed_type, /obj/item/device/mmi/posibrain))
+							var/obj/item/device/mmi/posibrain/B = organ_data.removed_type
+							B.transfer_identity(brainmob)
+						else if(istype(organ_data.removed_type, /obj/item/organ/internal/brain))
+							var/obj/item/organ/internal/brain/B = organ_data.removed_type
+							B.transfer_identity(brainmob)
+						I.forceMove(T)
 					else
-						var/obj/item/organ/internal/brain/B = new(T)
+						var/obj/item/organ/internal/brain/B = new organ_data.removed_type(T)
 						B.transfer_identity(brainmob)
 
 					if(borer)

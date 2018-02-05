@@ -27,8 +27,22 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock
+	/datum/rcd_schematic/con_airlock/borg
 	)
+
+/obj/item/device/rcd/matter/engineering/pre_loaded/admin
+	name = "experimental Rapid-Construction-Device (RCD)"
+	max_matter = INFINITY
+
+/obj/item/device/rcd/matter/engineering/pre_loaded/admin/afterattack(var/atom/A, var/mob/user)
+	if(!user.check_rights(R_ADMIN))
+		visible_message("\The [src] disappears into nothing.")
+		qdel(src)
+		return
+	return ..()
+
+/obj/item/device/rcd/matter/engineering/pre_loaded/admin/delay(var/mob/user, var/atom/target, var/amount)
+	return TRUE
 
 /obj/item/weapon/rcd_ammo
 	name = "compressed matter cartridge"

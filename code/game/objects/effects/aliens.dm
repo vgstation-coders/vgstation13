@@ -57,7 +57,7 @@
 
 /obj/effect/alien/resin/proc/healthcheck()
 	if(health <=0)
-		density = 0
+		setDensity(FALSE)
 		qdel(src)
 
 /obj/effect/alien/resin/bullet_act(var/obj/item/projectile/Proj)
@@ -388,7 +388,6 @@
 	if(istype(target,/atom/movable))
 		var/atom/movable/locker = target
 		locker.lock_atom(src, /datum/locking_category/acid)
-		glide_size = locker.glide_size
 
 	if(isturf(target)) // Turf take twice as long to take down.
 		target_strength = 8

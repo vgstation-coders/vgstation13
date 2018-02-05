@@ -715,3 +715,20 @@
 	icon_state = "franksuit"
 	item_state = "franksuit"
 	_color = "franksuit"
+
+/obj/item/clothing/under/elf
+	name = "elf uniform"
+	desc = "A festive suit for a festive elf!"
+	icon_state = "elf"
+	item_state = "elf"
+	_color = "elf"
+
+/obj/item/clothing/under/elf/stickymagic
+	canremove = 0
+
+/obj/item/clothing/under/police
+	name = "police uniform"
+	desc = "A policeman's lot is not a happy one."
+	icon_state = "britpolice"
+	item_state = "britpolice"
+	_color = "britpolice"

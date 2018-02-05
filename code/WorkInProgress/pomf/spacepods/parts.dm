@@ -78,7 +78,7 @@
 	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")
 		anchored = !anchored
-		density = anchored
+		setDensity(anchored)
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 
 /obj/item/pod_parts/pod_frame/verb/rotate()

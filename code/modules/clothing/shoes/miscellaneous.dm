@@ -143,6 +143,16 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/clothing/shoes/clown_shoes/elf
+	desc = "Jolly shoes for a jolly little elf!"
+	name = "elf shoes"
+	icon_state = "elf_shoes"
+	item_state = "elf_shoes"
+	_color = "elf_shoes"
+
+/obj/item/clothing/shoes/clown_shoes/elf/stickymagic
+	canremove = 0
+
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
 /obj/item/clothing/shoes/clown_shoes/advanced

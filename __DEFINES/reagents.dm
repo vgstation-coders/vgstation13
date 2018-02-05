@@ -8,6 +8,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
@@ -136,6 +137,7 @@
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
 #define ROYALJELLY			"royaljelly"
+#define CHILLWAX			"chillwax"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
@@ -352,6 +354,7 @@
 #define HYOSCYAMINE		"hyoscyamine"
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
+#define POTASSIUMCARBONATE "potassium_carbonate"
 
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
@@ -365,6 +368,7 @@
 #define TEMPERATURE_FLAME 700
 #define TEMPERATURE_WELDER 3480
 #define TEMPERATURE_PLASMA 4500
+#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
 
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism

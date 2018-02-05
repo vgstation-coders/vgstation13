@@ -25,6 +25,9 @@ For vending packs, see vending_packs.dm*/
 	acc_info["account"] = account
 	return acc_info
 
+#define SCR_MAIN 1
+#define SCR_CENTCOM 2
+
 /obj/machinery/computer/supplycomp
 	name = "Supply shuttle console"
 	icon = 'icons/obj/computer.dmi'
@@ -37,8 +40,17 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
-
+	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
+
+/obj/machinery/computer/supplycomp/New()
+	..()
+	supply_shuttle.supply_consoles.Add(src)
+
+/obj/machinery/computer/supplycomp/Destroy()
+	supply_shuttle.supply_consoles.Remove(src)
+	..()
+
 
 /obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
 	add_hiddenprint(user)
@@ -163,6 +175,12 @@ For vending packs, see vending_packs.dm*/
 		if(SO)
 			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
 	data["orders"] = orders_list
+
+	var/centcomm_list[0]
+	for(var/datum/centcomm_order/O in supply_shuttle.centcomm_orders)
+		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
+	data["centcomm_orders"] = centcomm_list
+
 	data["money"] = current_acct.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = supply_shuttle.moving
@@ -171,6 +189,8 @@ For vending packs, see vending_packs.dm*/
 	data["restriction"] = supply_shuttle.restriction
 	data["requisition"] = supply_shuttle.requisition
 
+	data["screen"] = screen
+
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "supply_console.tmpl", name, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -178,7 +198,6 @@ For vending packs, see vending_packs.dm*/
 		ui.open()
 
 /obj/machinery/computer/supplycomp/Topic(href, href_list)
-
 	if(!supply_shuttle)
 		world.log << "## ERROR: Eek. The supply_shuttle controller datum is missing somehow."
 		return
@@ -198,6 +217,7 @@ For vending packs, see vending_packs.dm*/
 			permissions_screen = TRUE
 		else
 			permissions_screen = FALSE
+		return 1
 	//Calling the shuttle
 	else if(href_list["send"])
 		if(!map.linked_to_centcomm)
@@ -216,7 +236,7 @@ For vending packs, see vending_packs.dm*/
 			supply_shuttle.buy()
 			supply_shuttle.eta_timeofday = (world.timeofday + supply_shuttle.movetime) % 864000
 			post_signal("supply")
-
+		return 1
 	else if (href_list["doorder"])
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
@@ -286,7 +306,7 @@ For vending packs, see vending_packs.dm*/
 
 			if(!supply_shuttle.restriction) //If set to 0 restriction, auto-approve
 				supply_shuttle.confirm_order(O,usr,supply_shuttle.requestlist.len)
-
+		return 1
 	else if(href_list["confirmorder"])
 		//Find the correct supply_order datum
 		if(!check_restriction(usr))
@@ -299,6 +319,7 @@ For vending packs, see vending_packs.dm*/
 				O = SO
 				supply_shuttle.confirm_order(O,usr,i)
 				break
+		return 1
 	else if (href_list["rreq"])
 		if(!check_restriction(usr))
 			return
@@ -308,27 +329,33 @@ For vending packs, see vending_packs.dm*/
 			if(SO.ordernum == ordernum)
 				supply_shuttle.requestlist.Cut(i,i+1)
 				break
-
+		return 1
 	else if (href_list["last_viewed_group"])
 		last_viewed_group = href_list["last_viewed_group"]
-
+		return 1
 	else if (href_list["access_restriction"])
 		if(!check_restriction(usr))
 			return
 		supply_shuttle.restriction = text2num(href_list["access_restriction"])
-
+		return 1
 	else if (href_list["requisition_status"])
 		if(!check_restriction(usr))
 			return
 		supply_shuttle.requisition = text2num(href_list["requisition_status"])
-
+		return 1
+	else if (href_list["screen"])
+		if(!check_restriction(usr))
+			return
+		var/result = text2num(href_list["screen"])
+		if(result == SCR_MAIN || result == SCR_CENTCOM)
+			screen = result
+		return 1
 	else if (href_list["close"])
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
 
 	add_fingerprint(usr)
-	updateUsrDialog()
 
 /obj/machinery/computer/supplycomp/proc/post_signal(var/command)
 
@@ -421,7 +448,7 @@ For vending packs, see vending_packs.dm*/
 
 /obj/machinery/computer/ordercomp/Topic(href, href_list)
 	if(..())
-		return
+		return 1
 
 	if( isturf(loc) && (in_range(src, usr) || istype(usr, /mob/living/silicon)) )
 		usr.set_machine(src)
@@ -507,10 +534,10 @@ For vending packs, see vending_packs.dm*/
 
 			if(!supply_shuttle.restriction) //Restriction = 0, auto order
 				supply_shuttle.confirm_order(O,usr,supply_shuttle.requestlist.len) //Position: last
-
+		return 1
 	else if (href_list["last_viewed_group"])
 		last_viewed_group = href_list["last_viewed_group"]
-
+		return 1
 	else if (href_list["rreq"])
 		var/ordernum = text2num(href_list["rreq"])
 		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
@@ -518,11 +545,13 @@ For vending packs, see vending_packs.dm*/
 			if(SO.ordernum == ordernum)
 				supply_shuttle.requestlist.Cut(i,i+1)
 				break
-
+		return 1
 	else if (href_list["close"])
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
 
 	add_fingerprint(usr)
-	updateUsrDialog()
+
+#undef SCR_MAIN
+#undef SCR_CENTCOM

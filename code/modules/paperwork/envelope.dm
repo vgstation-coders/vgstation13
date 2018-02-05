@@ -31,6 +31,8 @@
 
 /obj/item/weapon/paper/envelope/attackby(obj/item/weapon/P, mob/user)
 	. = ..()
+	if(.)
+		return
 	if(open)
 		if(!is_type_in_list(P, not_allowed))
 			insert_item(user, P)

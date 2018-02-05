@@ -510,8 +510,10 @@
 		target.internal_organs_by_name[O.organ_tag] = O.organ_data
 		O.organ_data.status |= ORGAN_CUT_AWAY
 		O.replaced(target)
-
-	qdel(O)
+	var/datum/organ/internal/I = target.internal_organs_by_name[O.organ_tag]
+	I.removed_type = O
+	O.stabilized = TRUE
+	O.loc = null
 	O = null
 
 /datum/surgery_step/internal/replace_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

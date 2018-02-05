@@ -285,7 +285,8 @@
 	if(emagged)
 		return //No spamming
 	emagged = 1
-	visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
+	if(user)
+		visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
 	visible_message("<span class='warning'>Warning: Power surge detected. Automatic shutoff and derezing protocols have been corrupted. Please contact Nanotrasen maintenance and cease all operation immediately.</span>")
 	log_game("[key_name(usr)] emagged the Holodeck Control Computer")
 	src.updateUsrDialog()

@@ -218,13 +218,13 @@
 
 	return ..()
 
-/obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
+/obj/structure/bed/chair/comfy/attack_hand(var/mob/user, params, proximity)
 	if(is_locking(lock_type))
 		return ..()
-
-	for (var/obj/item/I in src)
-		user.put_in_hands(I)
-		to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
+	if(proximity)
+		for (var/obj/item/I in src)
+			user.put_in_hands(I)
+			to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
 
 /obj/structure/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
@@ -293,22 +293,28 @@
 			return 0
 	if(last_airflow + 5 SECONDS > world.time) //ugly hack: can't scoot during ZAS
 		return 0
+
 	if(istype(T, /turf/simulated))
-		var/turf/simulated/ST = T
-		if(ST.wet == TURF_WET_LUBE)
+		var/turf/simulated/TS = T
+		var/obj/effect/overlay/puddle/P = TS.is_wet()
+		if(P && P.wet == TURF_WET_LUBE)
 			user.unlock_from(src)
-			ST.Entered(user) //bye bye
+			T.Entered(user) //bye bye
 			return 0
 
 	//forwards, scoot slow
 	if(direction == dir)
+		var/scootdelay = user.movement_delay()*6
+		set_glide_size(DELAY2GLIDESIZE(scootdelay))
 		step(src, direction)
-		user.delayNextMove(user.movement_delay()*6)
+		user.delayNextMove(scootdelay)
 	//backwards, scoot fast
 	else if(direction == turn(dir, 180))
+		var/scootdelay = user.movement_delay()*3
+		set_glide_size(DELAY2GLIDESIZE(scootdelay))
 		step(src, direction)
 		change_dir(turn(direction, 180)) //face away from where we're going
-		user.delayNextMove(user.movement_delay()*3)
+		user.delayNextMove(scootdelay)
 	//sideways, swivel to face
 	else
 		change_dir(direction)
@@ -518,7 +524,7 @@
 /obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
 		if(is_locking(lock_type))

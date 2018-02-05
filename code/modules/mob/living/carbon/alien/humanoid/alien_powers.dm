@@ -21,6 +21,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/conjure/alienweeds
 	name = "Plant Weeds"
 	desc = "Plants some alien weeds"
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_weeds"
 	override_base = "alien"
@@ -51,6 +52,7 @@ Doesn't work on other aliens/AI.*/
 /spell/targeted/alienwhisper
 	name = "Whisper"
 	desc = "Whisper to someone"
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_whisper"
 	override_base = "alien"
@@ -98,6 +100,7 @@ Doesn't work on other aliens/AI.*/
 /spell/targeted/alientransferplasma
 	name = "Transfer Plasma"
 	desc = "Transfer your plasma to another alien"
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_transfer"
 	override_base = "alien"
@@ -127,6 +130,7 @@ Doesn't work on other aliens/AI.*/
 /spell/targeted/projectile/alienneurotoxin
 	name = "Spit Neurotoxin"
 	desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_neurotoxin"
 	override_base = "alien"
@@ -179,6 +183,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/conjure/choice/alienresin
 	name = "Secrete Resin"
 	desc = "Secrete tough malleable resin."
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_resin"
 	override_base = "alien"
@@ -194,6 +199,7 @@ Doesn't work on other aliens/AI.*/
 /spell/alienacid
 	name = "Corrosive Acid"
 	desc = "Drench an object in acid, destroying it over time."
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_acid"
 	override_base = "alien"
@@ -246,6 +252,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"
 	desc = "Empties the contents of your stomach."
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_regurgitate"
 	override_base = "alien"
@@ -266,6 +273,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/conjure/alienegg
 	name = "Lay Egg"
 	desc = "Lay an egg to produce huggers to impregnate prey with."
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_egg"
 	override_base = "alien"
@@ -282,7 +290,7 @@ a
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	. = ..()
 	if(!.) //Returning 1 if we failed to cast
-		stat_collection.xeno.eggs_laid++
+		stat_collection.xeno_eggs_laid++
 
 ///////////////////////////////////
 ////////// DRONE BROS /////////////
@@ -292,6 +300,7 @@ a
 /spell/aoe_turf/evolve
 	name = "Evolve"
 	panel = "Alien"
+	user_type = USER_TYPE_XENOMORPH
 	hud_state = "alien_evolve"
 	override_base = "alien"
 
@@ -337,6 +346,7 @@ a
 
 /spell/aoe_turf/evolve/larva
 	desc = "Evolve into a fully grown Alien."
+	user_type = USER_TYPE_XENOMORPH
 	insufficient_holder_msg = "<span class='alien'>You are not fully grown yet.</span>"
 
 	holder_var_type = "growth"
@@ -385,6 +395,7 @@ a
 /spell/aoe_turf/alien_hide
 	name = "Hide"
 	desc = "Allows you to hide beneath tables or items laid on the ground. Toggle."
+	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_hide"
 	override_base = "alien"

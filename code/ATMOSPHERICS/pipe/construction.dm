@@ -322,7 +322,13 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	//src.pipe_dir = get_pipe_dir()
 	return
 
-/obj/item/pipe/Move()
+/obj/item/pipe/AltClick(var/mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		..()
+		return
+	rotate()
+
+/obj/item/pipe/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if ((pipe_type in bent_pipes) \
 		&& (src.dir in cardinal))

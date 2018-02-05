@@ -334,7 +334,7 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		if(isslimeperson(H))
-			amount = 0
+			amount = min(amount, 0)
 
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
@@ -478,7 +478,7 @@
 	src.updatehealth()
 
 // damage ONE external organ, organ gets randomly selected from damaged ones.
-/mob/living/proc/take_organ_damage(var/brute, var/burn)
+/mob/living/proc/take_organ_damage(var/brute, var/burn, var/ignore_inorganics = FALSE)
 	if(status_flags & GODMODE)
 		return 0	//godmode
 	if(flags & INVULNERABLE)
@@ -655,13 +655,13 @@ Thanks.
 
 	return
 
-/mob/living/Move(atom/newloc, direct)
-	if (locked_to && locked_to.loc != newloc)
+/mob/living/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if (locked_to && locked_to.loc != NewLoc)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)
 			return 0
 		else
-			return locked_to.Move(newloc, direct)
+			return locked_to.Move(NewLoc, Dir)
 
 	if (restrained())
 		stop_pulling()
@@ -717,7 +717,7 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							pulling.Move(T, get_dir(pulling, T))
+							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 
@@ -762,7 +762,7 @@ Thanks.
 													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
-							pulling.Move(T, get_dir(pulling, T))
+							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 				else
 					stop_pulling()
 	else
@@ -777,14 +777,14 @@ Thanks.
 			M.UpdateFeed(src)
 
 	if(T != loc)
-		handle_hookchain(direct)
+		handle_hookchain(Dir)
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc
 			if(!(M in view(src)))
 				NotTargeted(G)
-		for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
+		for(var/obj/item/weapon/gun/G in src) //Handle the gunner losing sight of their target/s
 			if(G.target)
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
@@ -1300,7 +1300,7 @@ Thanks.
 				if(A == src)
 					continue
 				if(A.density)
-					if(A.flags&ON_BORDER)
+					if(A.flow_flags&ON_BORDER)
 						dense = !A.Cross(src, src.loc)
 					else
 						dense = 1
@@ -1309,7 +1309,7 @@ Thanks.
 			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
 				var/turf/oldloc = loc
 				forceMove(tmob.loc)
-				tmob.forceMove(oldloc)
+				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
 				now_pushing = 0
 				for(var/mob/living/carbon/slime/slime in view(1,tmob))
 					if(slime.Victim == tmob)
@@ -1352,7 +1352,7 @@ Thanks.
 
 				if (!AM.anchored)
 					var/t = get_dir(src, AM)
-					if(AM.flags & ON_BORDER && !t)
+					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
 					if (istype(AM, /obj/structure/window/full))
 						for(var/obj/structure/window/win in get_step(AM,t))
@@ -1375,6 +1375,7 @@ Thanks.
 		M = new meat_type(location, src)
 	else
 		M = new meat_type(location)
+	meat_taken++
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
@@ -1386,6 +1387,9 @@ Thanks.
 		else
 			A.name = "[initial(src.name)] meat"
 			A.animal_name = initial(src.name)
+
+	if(reagents)
+		reagents.trans_to(A,round (reagents.total_volume * (meat_amount/meat_taken), 1))
 	return M
 
 /mob/living/proc/butcher()
@@ -1499,7 +1503,6 @@ Thanks.
 		return
 
 	src.drop_meat(get_turf(src))
-	src.meat_taken++
 	src.being_butchered = 0
 	if(tool_name)
 		if(!advanced_butchery)

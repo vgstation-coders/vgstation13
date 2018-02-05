@@ -38,7 +38,7 @@
 	update_nearby_tiles()
 
 obj/structure/windoor_assembly/Destroy()
-	density = 0
+	setDensity(FALSE)
 	update_nearby_tiles()
 	..()
 
@@ -58,7 +58,7 @@ obj/structure/windoor_assembly/Destroy()
 /obj/structure/windoor_assembly/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -228,7 +228,7 @@ obj/structure/windoor_assembly/Destroy()
 					if(!src)
 						return
 					var/obj/machinery/door/window/windoor = Create()
-					density = 1 //Shouldn't matter but just incase
+					setDensity(TRUE) //Shouldn't matter but just incase
 					to_chat(user, "<span class='notice'>You finish the windoor!</span>")
 					if(secure == "secure_")
 						secure = "secure"
@@ -239,8 +239,8 @@ obj/structure/windoor_assembly/Destroy()
 						windoor.icon_state = "right[secure]open"
 						windoor.base_state = "right[secure]"
 					windoor.dir = src.dir
-					windoor.density = 0
-
+					windoor.setDensity(FALSE) 
+					
 					windoor.req_access = src.electronics.conf_access
 					windoor.electronics = src.electronics
 					src.electronics.forceMove(windoor)

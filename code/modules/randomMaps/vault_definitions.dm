@@ -169,3 +169,6 @@ var/list/existing_vaults = list()
 
 /datum/map_element/dungeon/satellite_deployment
 	file_path = "maps/randomvaults/dungeons/satellite_deployment.dmm"
+
+/datum/map_element/vault/ironchef
+	file_path = "maps/randomvaults/ironchef.dmm"

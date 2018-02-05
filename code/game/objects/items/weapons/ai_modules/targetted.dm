@@ -41,6 +41,8 @@
 /obj/item/weapon/aiModule/targetted/attack_self(var/mob/user as mob)
 	..()
 	var/targName = stripped_input(usr, "Please enter the name of the person to [action].", "Who?", user.name)
+	if (!targName)
+		return FALSE
 	targetName = targName
 	updateLaw()
 

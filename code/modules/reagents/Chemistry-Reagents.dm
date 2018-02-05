@@ -413,7 +413,7 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Grey")
 			M.adjustToxLoss(REM)
-			M.take_organ_damage(0, REM)
+			M.take_organ_damage(0, REM, ignore_inorganics = TRUE)
 
 /datum/reagent/water/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -454,11 +454,11 @@
 
 				if(M.acidable())
 					if(prob(15) && volume >= 30)
-						var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-						if(affecting)
-							if(affecting.take_damage(25, 0))
+						var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+						if(head_organ)
+							if(head_organ.take_damage(25, 0))
 								H.UpdateDamageIcon(1)
-							H.status_flags |= DISFIGURED
+							head_organ.disfigure("burn")
 							H.emote("scream", , , 1)
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
@@ -540,6 +540,26 @@
 	if(volume >= 1)
 		T.wet(800, TURF_WET_LUBE)
 
+/datum/reagent/sodium_polyacrylate
+	name = "Sodium Polyacrylate"
+	id = SODIUM_POLYACRYLATE
+	description = "A super absorbent polymer that can absorb water based substances."
+	reagent_state = SOLID
+	color = "#FFFFFF"
+	density = 1.22
+	specheatcap = 4.14
+
+/datum/reagent/sodium_polyacrylate/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(T.is_wet())
+		if(!locate(/obj/effect/decal/cleanable/molten_item) in T)
+			var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(T)
+			I.desc = "A bit of gel left over from sodium polyacrylate absorbing liquid."
+		T.dry(TURF_WET_LUBE) //Absorbs water or lube
+
 /datum/reagent/anti_toxin
 	name = "Anti-Toxin (Dylovene)"
 	id = ANTI_TOXIN
@@ -555,26 +575,26 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_reagent("toxin"))
-		holder.remove_reagent("toxin", 2 * REM)
-	if(holder.has_reagent("stoxin"))
-		holder.remove_reagent("stoxin", 2 * REM)
-	if(holder.has_reagent("plasma"))
-		holder.remove_reagent("plasma", REM)
-	if(holder.has_reagent("sacid"))
-		holder.remove_reagent("sacid", REM)
-	if(holder.has_reagent("cyanide"))
-		holder.remove_reagent("cyanide", REM)
-	if(holder.has_reagent("amatoxin"))
-		holder.remove_reagent("amatoxin", 2 * REM)
-	if(holder.has_reagent("chloralhydrate"))
-		holder.remove_reagent("chloralhydrate", 5 * REM)
-	if(holder.has_reagent("carpotoxin"))
-		holder.remove_reagent("carpotoxin", REM)
-	if(holder.has_reagent("zombiepowder"))
-		holder.remove_reagent("zombiepowder", 0.5 * REM)
-	if(holder.has_reagent("mindbreaker"))
-		holder.remove_reagent("mindbreaker", 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(STOXIN, VALERENIC_ACID)))
+		holder.remove_reagents(list(STOXIN, VALERENIC_ACID), 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.remove_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
+		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.remove_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.remove_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.remove_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.remove_reagent(MINDBREAKER, 2 * REM)
 	M.hallucination = max(0, M.hallucination - 5 * REM)
 	M.adjustToxLoss(-2 * REM)
 
@@ -659,19 +679,13 @@
 	reagent_state = LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
-	data = 1 //Used as a tally
+	overdose_tick = 165
 	density = 0.687 //Let's assume it's a compound of cyanide
 	specheatcap = 1.335
 
-/datum/reagent/chefspecial/on_mob_life(var/mob/living/M, var/alien)
-
-	if(..())
-		return 1
-
-	if(data >= 165)
-		M.death(0)
-		M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
-	data++
+/datum/reagent/chefspecial/on_overdose(var/mob/living/M)
+	M.death(0)
+	M.attack_log += "\[[time_stamp()]\]<font color='red'>Died a quick and painless death by <font color='green'>Chef Excellence's Special Sauce</font>.</font>"
 
 /datum/reagent/minttoxin
 	name = "Mint Toxin"
@@ -909,7 +923,7 @@
 		if(isvampire(H))
 			if(!(VAMP_MATURE in H.mind.vampire.powers))
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
-				H.take_organ_damage(0, 5) //FIRE
+				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				H.mind.vampire.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
@@ -941,14 +955,14 @@
 
 					if(H.acidable())
 						if(prob(15) && volume >= 30)
-							var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-							if(affecting)
+							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+							if(head_organ)
 								if(!(VAMP_MATURE in H.mind.vampire.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
 									H.mind.vampire.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
-									if(affecting.take_damage(30, 0))
+									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
-									H.status_flags |= DISFIGURED
+									head_organ.disfigure("burn")
 									H.emote("scream",,, 1)
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
@@ -1067,6 +1081,15 @@
 	specheatcap = 0.75
 	density = 0.89
 
+/datum/reagent/potassiumcarbonate
+	name = "Potassium Carbonate"
+	id = POTASSIUMCARBONATE
+	description = "A primary component of potash, usually acquired by reducing potassium-rich organics."
+	reagent_state = SOLID
+	color = "#A0A0A0"
+	density = 2.43
+	specheatcap = 0.96
+
 /datum/reagent/mercury
 	name = "Mercury"
 	id = MERCURY
@@ -1132,7 +1155,7 @@
 	if(..())
 		return 1
 
-	M.take_organ_damage(REM, 0)
+	M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -1242,13 +1265,12 @@
 	density = 1.59
 	specheatcap = 1.244
 
-/datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/honey/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!holder)
 			return
 		H.nutrition += nutriment_factor
-		holder.remove_reagent(src.id, 0.4)
 		if(H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(quality, 0)
 		if(H.getFireLoss() && prob(50))
@@ -1256,7 +1278,6 @@
 		if(H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-quality)
 		..()
-		return
 
 /datum/reagent/honey/royal_jelly
 	name = "Royal Jelly"
@@ -1266,6 +1287,31 @@
 	alpha = 220
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	quality = 3
+
+/datum/reagent/honey/chillwax
+	name = "Chill Wax"
+	id = CHILLWAX
+	description = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+	color = "#4C78C1"
+	alpha = 250
+	nutriment_factor = 10 * REAGENTS_METABOLISM
+	density = 1.59
+	quality = 1
+	specheatcap = 1.244
+
+/datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.druggy = max(H.druggy, 5)
+		H.Dizzy(2)
+		if(prob(10))
+			H.emote(pick("stare", "giggle"))
+		if(prob(5))
+			to_chat(H, "<span class='notice'>[pick("You feel at peace with the world.","Everyone is nice, everything is awesome.","You feel high and ecstatic.")]</span>")
+		if(prob(2))
+			to_chat(H, "<span class='notice'>You doze off for a second.</span>")
+			H.sleeping += 1
+		..()
 
 /datum/reagent/sacid
 	name = "Sulphuric acid"
@@ -1335,11 +1381,11 @@
 				var/mob/living/carbon/human/H = M
 				if(H.species.name == "Grey")
 					return //Greys lurve dem some sacid
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting)
-					if(affecting.take_damage(25, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ)
+					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
-					H.status_flags |= DISFIGURED
+					head_organ.disfigure("burn")
 					H.emote("scream", , , 1)
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
@@ -1414,8 +1460,8 @@
 				return
 
 			if(H.acidable())
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting.take_damage(15, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
 				H.emote("scream", , , 1)
 
@@ -1437,11 +1483,11 @@
 		if(M.acidable()) //I think someone doesn't know what this does
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-				if(affecting.take_damage(15, 0))
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
 				H.emote("scream", , , 1)
-				H.status_flags |= DISFIGURED
+				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
 
@@ -1635,13 +1681,14 @@
 	if(!M.dna) //No robots, AIs, aliens, Ians or other mobs should be affected by this.
 		return
 	if((method == TOUCH && prob(33)) || method == INGEST)
-		randmuti(M)
 		if(prob(98))
 			randmutb(M)
 		else
 			randmutg(M)
 		domutcheck(M, null)
-		M.UpdateAppearance()
+		if(M.last_appearance_mutation + 1 SECONDS < world.time)
+			randmuti(M)
+			M.UpdateAppearance()
 
 /datum/reagent/mutagen/on_mob_life(var/mob/living/M)
 	if(!M.dna)
@@ -1743,7 +1790,7 @@
 	if(..())
 		return 1
 
-	if(T.wet)
+	if(T.is_wet())
 		T.dry(TURF_WET_LUBE) //Cleans water or lube
 		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
 		S.time_to_live = 10 //unusually short smoke
@@ -1935,7 +1982,7 @@
 
 		for(var/mob/living/carbon/human/H in T)
 			if(isslimeperson(H))
-				H.adjustToxLoss(rand(0.5, 1))
+				H.adjustToxLoss(rand(5, 10)/10)
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -2230,7 +2277,7 @@
 		return 1
 
 	if(prob(33))
-		M.take_organ_damage(REM, 0)
+		M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 	M.adjustOxyLoss(3)
 	if(prob(20))
 		M.emote("gasp")
@@ -2481,7 +2528,7 @@
 	M.radiation = max(M.radiation - 7 * REM, 0)
 	M.adjustToxLoss(-REM)
 	if(prob(15))
-		M.take_organ_damage(1, 0)
+		M.take_organ_damage(1, 0, ignore_inorganics = TRUE)
 
 /datum/reagent/lithotorcrazine
 	name = "Lithotorcrazine"
@@ -2571,7 +2618,7 @@
 		var/datum/organ/external/chest/C = H.get_organ(LIMB_CHEST)
 		for(var/datum/organ/internal/I in C.internal_organs)
 			if(I.damage > 0)
-				I.damage -= 0.20
+				I.damage = max(0,I.damage-0.2)
 
 /datum/reagent/bicaridine
 	name = "Bicaridine"
@@ -2819,7 +2866,15 @@
 		if(15 to 35)
 			M.adjustCloneLoss(-2)
 			M.heal_organ_damage(2, 1)
-			M.status_flags &= ~DISFIGURED
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.disfigured)
+					head_organ.disfigured = FALSE
+					if(H.get_face_name() != "Unknown")
+						H.visible_message("<span class='notice'>[H]'s face shifts and knits itself back into shape!</span>","<span class='notice'>You feel your face shifting and repairing itself!</span>")
+					else if(!H.isUnconscious())
+						to_chat(H,"<span class='notice'>You feel your face shifting and repairing itself!</span>")
 
 	data++
 
@@ -2877,6 +2932,9 @@
 	M.Knockdown(10)
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
+
+/datum/reagent/zombiepowder/reagent_deleted()
+	return on_removal(volume)
 
 //Hotfix for Fakedeath never ending.
 /datum/reagent/zombiepowder/on_removal(var/amount)
@@ -3065,7 +3123,7 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
+					if(H.getOxyLoss()>0 || H.getBruteLoss(ignore_inorganic = TRUE)>0 || H.getToxLoss()>0 || H.getFireLoss(ignore_inorganic = TRUE)>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
 							H.adjustOxyLoss(-5)
 							H.heal_organ_damage(5, 5)
@@ -3300,7 +3358,10 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.sleeping++
+			M.confused++
+			M.drowsyness++
+			if(volume >= 10)
+				M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
@@ -4025,7 +4086,7 @@
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
-	specheatcap = rand(0.25,25)
+	specheatcap = rand(25,2500)/100
 
 /datum/reagent/discount/on_mob_life(var/mob/living/M)
 
@@ -5505,7 +5566,7 @@
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk
-	name = "Banana Mama"
+	name = "Banana Honk"
 	id = BANANAHONK
 	description = "A drink from Clown Heaven."
 	nutriment_factor = FOOD_METABOLISM

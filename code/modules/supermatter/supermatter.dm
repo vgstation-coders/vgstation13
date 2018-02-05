@@ -231,14 +231,11 @@
 	var/datum/gas_mixture/env = L.return_air()
 
 	//Remove gas from surrounding area
-	var/datum/gas_mixture/removed = env.remove(gasefficency * env.total_moles)
+	var/datum/gas_mixture/removed = env.remove_volume(gasefficency * CELL_VOLUME)
 
 	if(!removed || !removed.total_moles)
 		damage += max((power-1600)/10, 0)
 		power = min(power, 1600)
-		return 1
-
-	if (!removed)
 		return 1
 
 	damage_archived = damage

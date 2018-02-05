@@ -129,14 +129,13 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")
 					S.end_step(user, M, user.zone_sel.selecting, tool)		//finish successfully
 				else
-					if ((tool in user.contents) && (user.Adjacent(M)))											//or
-						if(sleep_fail)
-							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
-							M.emote("scream",,, 1)
-						M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] failed by [user.name] ([user.ckey])</font>")
-						user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
-						log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")
-						S.fail_step(user, M, user.zone_sel.selecting, tool)		//malpractice~
+					if(sleep_fail)
+						to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
+						M.emote("scream",,, 1)
+					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] failed by [user.name] ([user.ckey])</font>")
+					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
+					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")
+					S.fail_step(user, M, user.zone_sel.selecting, tool)		//malpractice~
 				if(M) //good, we still exist
 					S.doing_surgery -= M
 				else

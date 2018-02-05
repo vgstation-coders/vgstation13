@@ -19,7 +19,7 @@
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
 
-/mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
+/mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 
 	if(.)
@@ -68,7 +68,7 @@
 					if(M.client)
 						M.show_message(text("<span class='warning'><B>[user] attacks [src]'s stomach wall with the [I.name]!</span>"), 2)
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
-				src.delayNextMove(10) //no just holding the key for an instant gib
+				user.delayNextMove(10) //no just holding the key for an instant gib
 
 /mob/living/carbon/gib()
 	dropBorers(1)
@@ -225,12 +225,12 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			if(M.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED))
+			if(M.zone_sel.selecting == "head" && !(!S || S.status & ORGAN_DESTROYED))
 				M.visible_message( \
 					"<span class='notice'>[M] pats [src]'s head.</span>", \
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
-			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
+			else if((M.zone_sel.selecting == "l_hand" && !(!S || S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(!S || S.status & ORGAN_DESTROYED)))
 				var/shock_damage = 5
 				var/shock_time = 0
 				var/obj/item/clothing/gloves/U = M.get_item_by_slot(slot_gloves)
@@ -274,8 +274,8 @@
 
 					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					M.visible_message( \
-						"<span class='notice'>[M] shakes hands with [src].</span>", \
-						"<span class='notice'>You shake hands with [src].</span>", \
+						"<span class='notice'>[M] shakes [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
+						"<span class='notice'>You shake [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
 						)
 			else
 				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -646,9 +646,9 @@
 		return // Space ignores slowdown
 
 	if(feels_pain() && !has_painkillers())
-		var/health_deficiency = (100 - health - halloss)
-		if(health_deficiency >= 40)
-			. += (health_deficiency / 25)
+		var/health_deficiency = (maxHealth - health - halloss)
+		if(health_deficiency >= (maxHealth * 0.4))
+			. += (health_deficiency / (maxHealth * 0.25))
 
 
 /mob/living/carbon/proc/can_mind_interact(var/mob/M)
@@ -696,4 +696,3 @@
 			if(src)
 				body_alphas.Remove(source_define)
 				regenerate_icons()
-

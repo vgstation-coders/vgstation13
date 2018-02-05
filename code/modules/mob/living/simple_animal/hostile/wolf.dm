@@ -344,7 +344,7 @@
 				to_chat(user, "<span class='info'>It seems to be going somewhere.</span>")
 			if(ALPHASTAY)
 				to_chat(user, "<span class='info'>It seems to be sitting down, waiting patiently.</span>")
-/mob/living/simple_animal/hostile/wolf/Move()
+/mob/living/simple_animal/hostile/wolf/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	nutrition -= MOVECOST
 

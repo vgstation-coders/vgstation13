@@ -16,6 +16,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
+		update_action_buttons()
 		update_items()
 	if (src.stat != DEAD) //still using power
 		use_power()
@@ -120,7 +121,7 @@
 		src.ear_damage -= 0.05
 		src.ear_damage = max(src.ear_damage, 0)
 
-	src.density = !( src.lying )
+	src.setDensity(!(src.lying))
 
 	if ((src.sdisabilities & BLIND))
 		src.blinded = 1
@@ -276,11 +277,11 @@
 				mmi = null
 			gib()
 
-			
+
 /mob/living/silicon/robot/mommi/handle_pressure_damage(datum/gas_mixture/environment)
 	..()
-	
+
 /mob/living/silicon/robot/mommi/handle_heat_damage(datum/gas_mixture/environment)
 	..()
-			
+
 #undef MOMMI_LOW_POWER

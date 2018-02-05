@@ -199,7 +199,8 @@ Status: []<BR>"},
 
 /obj/machinery/porta_turret/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>You short out [src]'s threat assessment circuits.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out [src]'s threat assessment circuits.</span>")
 		if(anchored) //this is like this because the turret itself is invisible when retracted, so the cover displays the message instead
 			cover.visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
 		else //But when unsecured the cover is gone, so it shows the message itself
@@ -207,7 +208,7 @@ Status: []<BR>"},
 		if(istype(installed, /obj/item/weapon/gun/energy/tag/red) || istype(installed, /obj/item/weapon/gun/energy/tag/red))
 			installed.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
-		req_access = null
+		req_access = list()
 		on = 0 // turns off the turret temporarily
 		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
 		if(anchored) //Can't turn on if not secure
@@ -341,12 +342,12 @@ Status: []<BR>"},
 
 /obj/machinery/porta_turret/proc/die() // called when the turret dies, ie, health <= 0
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "[lasercolor]destroyed_target_prism"
 	invisibility=0
 	spark(src, 5, 0)
-	src.density=1
+	src.setDensity(TRUE)
 	qdel(cover) // deletes the cover - no need on keeping it there!
 
 

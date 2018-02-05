@@ -14,7 +14,7 @@ var/global/list/deadmins = list()
 var/list/lockedvars = list("vars", "client", "holder")
 
 //List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y")
+var/list/nevervars = list("step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
 var/global/list/type_instances[0]
@@ -93,7 +93,6 @@ var/tinted_weldhelh = 1
 var/list/jobMax = list()
 var/list/bombers = list(  )
 var/list/admin_log = list (  )
-var/list/lastsignalers = list(	)	//keeps last 100 signals here in format: "[src] used \ref[src] @ location [src.loc]: [freq]/[code]"
 var/list/lawchanges = list(  ) //Stores who uploaded laws to which silicon-based lifeform, and what the law was
 var/list/shuttles = list(  )
 var/list/reg_dna = list(  )
@@ -321,6 +320,8 @@ var/nanocoins_lastchange = 0
 var/speciesinit = 0
 var/minimapinit = 0
 
+var/bees_species = list()
+
 var/datum/stat_collector/stat_collection = new
 
 //Hardcore mode
@@ -353,3 +354,38 @@ var/list/extraMiniMaps = list()
 var/list/holomap_markers = list()
 
 var/holomaps_initialized = 0
+
+//Staff of change
+#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
+#define SOC_MONKEY "Primate"
+#define SOC_MARTIAN "Martian"
+#define SOC_CYBORG "Robot"
+#define SOC_MOMMI "MoMMI"
+#define SOC_SLIME "Slime"
+#define SOC_XENO "Xenomorph"
+#define SOC_HUMAN "Human"
+#define SOC_CATBEAST "Furry"
+#define SOC_FRANKENSTEIN "Frankenstein"
+
+var/list/available_staff_transforms = list(
+	SOC_MONKEY,SOC_MARTIAN,
+	SOC_CYBORG,
+	SOC_SLIME,
+	SOC_XENO,
+	SOC_HUMAN,
+	SOC_CATBEAST,
+	SOC_FRANKENSTEIN
+	)
+
+//Broken mob list
+var/list/blacklisted_mobs = list(
+		/mob/living/simple_animal/space_worm, // Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
+		/mob/living/simple_animal/hostile/humanoid, // JUST DON'T DO IT, OK?
+		/mob/living/simple_animal/hostile/retaliate/cockatrice, // I'm just copying this from transmog.
+		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
+		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
+		/mob/living/slime_pile, // They are dead.
+		/mob/living/adamantine_dust // Ditto
+		)
+

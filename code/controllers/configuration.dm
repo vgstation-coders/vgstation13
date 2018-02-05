@@ -180,6 +180,9 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
+	
+	// Weighted Votes
+	var/weighted_votes = 0
 
 /datum/configuration/New()
 	. = ..()
@@ -574,6 +577,8 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
+				if("weighted_votes")
+					weighted_votes = TRUE
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"

@@ -63,7 +63,7 @@
 
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
-	name = "botanist's leather gloves"
+	name = "botany gloves"
 	icon_state = "leather"
 	item_state = "leather"
 	permeability_coefficient = 0.9
@@ -318,6 +318,7 @@
 	damage_added = 17
 	sharpness_added = 2
 	hitsound_added = 'sound/weapons/slice.ogg'
+	attack_verb_override = "claws"
 
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE
@@ -333,3 +334,4 @@
 		P1.owner = user
 		P2.owner = user
 		P1.teleport(user)
+

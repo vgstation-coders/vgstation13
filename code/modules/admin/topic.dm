@@ -2346,6 +2346,19 @@
 		else
 			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
 
+	else if(href_list["DealBrainDam"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+		var/mob/living/M = locate(href_list["DealBrainDam"])
+		if(!isliving(M))
+			to_chat(usr, "<span class = 'warning'>\The [M] is not of type /mob/living.</span>")
+			return
+		var/choice = input("How much brain damage would you like to deal to the subject?", "Instant Lobotomy", 1) as null|num
+		if(choice)
+			log_admin("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			message_admins("[key_name(M)] was dealt [choice] amount of brain damage by [src.owner]")
+			M.adjustBrainLoss(choice)
+
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -3310,6 +3323,13 @@
 				if(choice != "Cancel")
 					SetUniversalState(/datum/universal_state/halloween, 1, 1)
 					message_admins("[key_name_admin(usr)] has pressed the halloween fun button. Truly [key_name_admin(usr)] is the spookiest.")
+			if("christmas_vic")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","XMS")
+				var/choice = input("Are you sure you want to do time-related shenanigans and send the station back to the victorian era?") in list("What's the worst that could happen?", "Cancel")
+				if(choice != "Cancel")
+					SetUniversalState(/datum/universal_state/auldlangsyne, 1, 1)
+					message_admins("[key_name_admin(usr)] has pressed the \"Other\" Christmas button. Go ahead and ask him why the station's got wood.")
 			if("mobswarm")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MS")
@@ -3319,6 +3339,13 @@
 					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
+			if("pick_event")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ALL")
+				var/choice = input("Which event do you want to trigger?") in subtypesof(/datum/event)+"Cancel"
+				if(choice != "Cancel")
+					new choice
+					message_admins("[key_name_admin(usr)] spawned a custom event of type [choice].")
 			if("spawnadminbus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AB")
@@ -3576,6 +3603,11 @@
 				feedback_add_details("admin_secrets_fun_used","ODF")
 				message_admins("[key_name_admin(usr)] has sent the station careening through a cloud of gore.", 1)
 				new /datum/event/thing_storm/meaty_gore
+			if("fireworks")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","HNY")
+				message_admins("[key_name_admin(usr)] has sent the station some lovely fireworks!. No that's not a euphamism for meteors. Actual Fireworks for a change.",1)
+				new /datum/event/thing_storm/fireworks
 			if("silent_meteors")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SILM")
@@ -3631,11 +3663,6 @@
 				for(var/l in bombers)
 					dat += text("[l]<BR>")
 				usr << browse(dat, "window=bombers")
-			if("list_signalers")
-				var/dat = "<B>Showing last [length(lastsignalers)] signalers.</B><HR>"
-				for(var/sig in lastsignalers)
-					dat += "[sig]<BR>"
-				usr << browse(dat, "window=lastsignalers;size=800x500")
 			if("list_lawchanges")
 				var/dat = "<B>Showing last [length(lawchanges)] law changes.</B><HR>"
 				for(var/sig in lawchanges)
@@ -3951,7 +3978,7 @@
 
 	if(href_list["add_player_info"])
 		var/key = href_list["add_player_info"]
-		var/add = input("Add Player Info") as null|text
+		var/add = input("Add Player Info") as null|message
 		if(!add)
 			return
 
@@ -4568,6 +4595,7 @@
 					wages_enabled = 0
 					message_admins("<span class='notice'>[key_name_admin(usr)] has disabled wages!")
 		return
+
 	if(href_list["econ_panel"])
 		var/choice = href_list["econ_panel"]
 		EconomyPanel(choice, href_list)
@@ -4583,3 +4611,190 @@
 			error_viewer.show_to(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
 		else
 			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])
+
+	// ----- Religion and stuff
+	if (href_list["religions"])
+		#define MAX_MSG_LENGTH 200
+		#define NUMBER_MAX_REL 4
+		if (href_list["display"])
+			updateRelWindow()
+
+		switch (href_list["religions"])
+			if ("global_subtle_pm")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!istype(R, /datum/religion))
+					return FALSE
+
+				var/deity = sanitize(stripped_input(usr, "Which deity addresses this group of believers?", "Deity Name", R.deity_name), 1, MAX_NAME_LEN)
+				var/message = sanitize(stripped_input(usr, "Which message do you want to send?", "Message", ""), 1, MAX_MSG_LENGTH)
+
+				if (!deity || !message)
+					to_chat(usr, "<span class='warning'>Error: no deity or message selected.</span>")
+
+				for (var/datum/mind/M in R.adepts)
+					if (M.current)
+						to_chat(M.current, "You hear [deity]'s voice in your head... <i>[message]</i>")
+
+				var/msg = "[key_name(usr)] sent message [message] to [R.name]'s adepts as [deity]"
+				message_admins(msg)
+
+
+			if ("new") // --- Busing in a new rel ---
+				// This is copypasted from chaplain code, with adaptations
+
+				if (ticker.religions.len >= NUMBER_MAX_REL)
+					to_chat(usr, "<span class='warning'>Maximum number of religions reached.</span>")
+					return FALSE // Just in case a href exploit allows someone to create a gazillion religions with no purpose.
+
+				var/new_religion = sanitize(stripped_input(usr, "Enter the key to the new religion (leave empty to abort)", "New religion", "Adminbus"), 0, MAX_NAME_LEN)
+
+				if (!new_religion)
+					return FALSE
+
+				var/datum/religion/rel_added
+
+				var/choice = FALSE
+				for (var/R in typesof(/datum/religion))
+					rel_added = new R
+					for (var/key in rel_added.keys)
+						if (lowertext(new_religion) == key)
+							rel_added.holy_book = new rel_added.bible_type
+							rel_added.holy_book.name = rel_added.bible_name
+							rel_added.holy_book.my_rel = rel_added
+							choice = TRUE
+							break // Religion found - time to abort
+					if (choice)
+						break
+
+				if (!choice) // No religion found
+					rel_added = new /datum/religion
+					rel_added.name = "[new_religion]"
+					rel_added.deity_name = "[new_religion]"
+					rel_added.bible_name = "The Holy Book of [new_religion]"
+					rel_added.holy_book = new rel_added.bible_type
+					rel_added.holy_book.name = rel_added.bible_name
+					rel_added.holy_book.my_rel = rel_added
+
+				var/new_deity = copytext(sanitize(input(usr, "Would you like to change the deity? The deity currently is [rel_added.deity_name] (Leave empty or unchanged to keep deity name)", "Name of Deity", rel_added.deity_name)), 1, MAX_NAME_LEN)
+				if(length(new_deity))
+					rel_added.deity_name = new_deity
+
+				// Bible chosing - without preview this time
+				chooseBible(rel_added, usr)
+
+				var/msg = "[key_name(usr)] created a religion: [rel_added.name]."
+				message_admins(msg)
+
+				ticker.religions += rel_added
+				updateRelWindow()
+			if ("delete")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!istype(R, /datum/religion))
+					return FALSE
+
+				if (R.adepts.len)
+					to_chat(usr, "<span class='warning'>You can't delete a religion which has adepts.</span>")
+					return FALSE
+
+				var/msg = "[key_name(usr)] deleted a religion: [R.name]."
+				ticker.religions -= R
+				qdel(R.holy_book)
+				qdel(R)
+				message_admins(msg)
+				updateRelWindow()
+
+			if ("activate")
+				if (!href_list["rel"])
+					return FALSE
+
+				var/datum/religion/R = locate(href_list["rel"])
+
+				if (!istype(R, /datum/religion))
+					return FALSE
+
+				if (R.adepts.len)
+					to_chat(usr, "<span class='warning'>The religion already has adepts!</span>")
+					return FALSE
+
+				if (alert("Do you wish to activate this religion? You will have to pick a player as its guide. Make sure the player is aware your plans!", "Activating a religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				var/list/mob/moblist = list()
+
+				for (var/client/c in clients)
+					if (!c.mob.isDead() && !c.mob.mind.faith) // Can't use dead guys, nor people with already a religion
+						moblist += c.mob
+
+				var/mob/living/carbon/human/preacher = input(usr, "Who should be the leader of this new religion?", "Activating a religion") as null|anything in moblist
+
+				if (alert("Do you want to make \the [preacher] the leader of [R.name] ?", "Activating a religion", "Yes", "No") != "Yes")
+					return FALSE
+
+				if (!preacher)
+					to_chat(world, "<span class='warning'>No mob selected.</span>")
+					return FALSE
+
+				if (!preacher.mind)
+					to_chat(usr, "<span class='warning'>This mob has no mind.</span>")
+					return FALSE
+
+				if (preacher.mind.faith)
+					to_chat(usr, "<span class='warning'>This person already follows a religion.</span>")
+					return FALSE
+
+				R.activate(preacher)
+				var/msg = "[key_name(usr)] activated religion [R.name], with preacher [key_name(preacher)]."
+				message_admins(msg)
+				updateRelWindow()
+
+			if ("renounce")
+				if (!href_list["mob"])
+					return FALSE
+
+				var/mob/living/M = locate(href_list["mob"])
+
+				if (!isliving(M) || !M.mind.faith)
+					return FALSE
+
+				if (M.mind.faith.religiousLeader == M.mind)
+					var/choice = alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No")
+					if (choice != "Yes")
+						return FALSE
+				M.mind.faith.action_renounce.Remove(M)
+				M.mind.faith.renounce(M) // Bypass checks
+
+				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
+				message_admins(msg)
+				updateRelWindow()
+
+/datum/admins/proc/updateRelWindow()
+	var/text = list()
+	text += "<h3>Religions in game</h3>"
+	// --- Displaying of all religions ---
+	for (var/datum/religion/R in ticker.religions)
+		text += "<b>Name:</b> [R.name] <br/>"
+		text += "<b>Deity name:</b> [R.deity_name]<br/>"
+		if (!R.adepts.len) // Religion not activated yet
+			text += "No adepts yet. "
+			text += "(<A HREF='?_src_=holder;religions=delete&rel=\ref[R]'>Delete</A>) "
+			text += "(<A HREF='?_src_=holder;religions=activate&rel=\ref[R]'>Activate</A>) <br/>"
+			text += "<br/>"
+		else
+			text += "<b>Leader:</b> \the [R.religiousLeader.current] (<A HREF='?_src_=vars;Vars=\ref[R.religiousLeader.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[R.religiousLeader.current]'>JMP</A>) \
+					 (<A HREF='?_src_=holder;subtlemessage=\ref[R.religiousLeader.current]'>SM</A>)<br/>"
+			text += "<b>Adepts:</b> <ul>"
+			for (var/datum/mind/M in R.adepts)
+				text += "<li>[M.name] (<A HREF='?_src_=vars;Vars=\ref[M.current]'>VV</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M.current]&;religions=renounce&mob=\ref[M.current]'>JMP</A>) \
+					 	  (<A HREF='?_src_=holder;subtlemessage=\ref[M.current]'>SM</A>) (<A HREF='?_src_=holder;religions=renounce&mob=\ref[M.current]'>Deconvert</A>)</li>"
+			text +="</ul>"
+			text += "<A HREF='?src=\ref[src];religions=global_subtle_pm&rel=\ref[R]'>Subtle PM all believers</a> <br/>"
+	text += "<A HREF='?src=\ref[src];religions=new'>Bus in a new religion</a> <br/>"
+	usr << browse(jointext(text, ""), "window=admin2;size=300x370")

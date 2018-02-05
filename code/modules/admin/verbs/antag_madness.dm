@@ -37,10 +37,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 	var/list/input_list = list("RANDOM")
 	input_list += role_list
-	input_list += "CANCEL"
-	var/procedure = input("Choose antag type.", "Antag Madness") in input_list
+	var/procedure = input("Choose antag type.", "Antag Madness") as null|anything in input_list
 
-	if(procedure == "CANCEL")
+	if(!procedure)
 		return
 
 	else if(procedure == "RANDOM")
@@ -497,7 +496,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal, slot_shoes)
 				M.equip_to_slot_or_del(new/obj/item/clothing/head/wizard, slot_head)
 				M.equip_to_slot_or_del(new/obj/item/clothing/suit/wizrobe, slot_wear_suit)
-				M.put_in_hand(new/obj/item/weapon/staff)
+				M.put_in_hands(new/obj/item/weapon/staff)
 
 				M.r_eyes = 102
 				M.g_eyes = 51
@@ -551,11 +550,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			to_chat(M, "You will find a list of available spells in your spell book. It has many more spells than normal spellbooks.")
 			to_chat(M, "In your pockets you will find a teleport scroll.It has twice as many uses as normal teleport scrolls.")
 
-			M.regenerate_icons()
-
 			ticker.mode.update_all_wizard_icons()
 
 			M.equip_to_slot_or_del(pack, slot_in_backpack)
+			M.regenerate_icons()
 			to_chat(M, "Your previous belongings have been stored in your backpack.")
 			return 1
 

@@ -88,6 +88,7 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 
 	var/account_first_linked = 0
+	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
 	new /obj/structure/cult/forge(loc)
@@ -179,8 +180,16 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='warning'>You need to anchor the vending machine before you can refill it.</span>")
 			return
 		if(!pack)
+			if(is_being_filled)
+				to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
+				return
+			if(P.in_use)
+				to_chat(user, "<span class='warning'>\The [P] is already in use!</span>")
+				return
+			is_being_filled = TRUE
+			P.in_use = TRUE
 			to_chat(user, "<span class='notice'>You start filling the vending machine with the recharge pack's materials.</span>")
-			if(do_after(user,src,30))
+			if(do_after_many(user, list(src, P), 3 SECONDS))
 				var/obj/machinery/vending/newmachine = new P.targetvendomat(loc)
 				to_chat(user, "<span class='notice'>[bicon(newmachine)] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
@@ -204,16 +213,31 @@ var/global/num_vending_terminals = 1
 				component_parts = 0
 				qdel(coinbox)
 				qdel(src)
+			else
+				is_being_filled = FALSE
+				P.in_use = FALSE
 		else
 			if(istype(P,pack))
+				if(is_being_filled)
+					to_chat(user, "<span class='warning'>\The [src] is already in use!</span>")
+					return
+				if(P.in_use)
+					to_chat(user, "<span class='warning'>\The [P] is already in use!</span>")
+					return
+				is_being_filled = TRUE
+				P.in_use = TRUE
 				to_chat(user, "<span class='notice'>You start refilling the vending machine with the recharge pack's materials.</span>")
-				if(do_after(user, src, 30))
+				if(do_after_many(user, list(src, P), 3 SECONDS))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 					if(check_for_custom_vendor())
 						custom_refill(P, user)
 					else
 						normal_refill(P, user)
+				else
+					P.in_use = FALSE // Only update this if `do_after_many` failed, as P gets deleted
+				is_being_filled = FALSE
+
 			else
 				to_chat(user, "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>")
 
@@ -343,9 +367,10 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/emag(mob/user)
 	if(!emagged)
 		emagged = 1
-		to_chat(user, "You short out the product lock on \the [src]")
+		if(user)
+			to_chat(user, "You short out the product lock on \the [src]")
 		return 1
-	return -1
+	return -1 //Fucking gross
 
 /obj/machinery/vending/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -1314,11 +1339,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5,
 		)
 	prices = list(
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up = 10,
 		)
 
 	pack = /obj/structure/vendomatpack/cola
@@ -1351,13 +1376,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/greyshitvodka = 2,
 		)
 	prices = list(
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 40,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 50,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 50,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/blebweiser = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bluespaceribbon = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/codeone = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/orchardtides = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sleimiken = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/strongebow = 15,
 		)
 
 	pack = /obj/structure/vendomatpack/offlicence
@@ -1758,14 +1783,16 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/flash = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,
 		/obj/item/weapon/storage/box/evidence = 6,
-		/obj/item/weapon/legcuffs/bolas = 2,
+		/obj/item/weapon/legcuffs/bolas = 8,
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
 	premium = list(
-		/obj/item/clothing/head/helmet/siren = 2
+		/obj/item/clothing/head/helmet/siren = 2,
+		/obj/item/clothing/head/helmet/police = 2,
+		/obj/item/clothing/under/police = 2,
 		)
 	vouched = list(
 		/obj/item/ammo_storage/magazine/m380auto = 10,
@@ -2431,6 +2458,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/soft/purple = 10,
 		/obj/item/clothing/head/soft/red = 10,
 		/obj/item/clothing/head/soft/yellow = 10,
+		/obj/item/clothing/head/soft/black = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/head/bearpelt = 5,
@@ -2573,8 +2601,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/nazivend/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
-		message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE!")
+		if(user)
+			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
+			message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE!")
 		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
 		contraband[/obj/item/clothing/suit/space/rig/nazi] = 3
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
@@ -2654,8 +2683,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sovietvend/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
-		message_admins("[key_name_admin(user)] unlocked a Sovietvend's DANGERMODE!")
+		if(user)
+			to_chat(user, "<span class='warning'>As you slide the card into the machine, you hear something unlocking inside. The machine emits an evil glow.</span>")
+			message_admins("[key_name_admin(user)] unlocked a Sovietvend's DANGERMODE!")
 		contraband[/obj/item/clothing/head/helmet/space/rig/soviet] = 3
 		contraband[/obj/item/clothing/suit/space/rig/soviet] = 3
 		contraband[/obj/item/weapon/gun/energy/laser/LaserAK] = 4
@@ -2852,7 +2882,7 @@ var/global/num_vending_terminals = 1
 		"Profits."
 	)
 	product_ads = list(
-		"When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
+		"When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma: should you tell your partner?"
 	)
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
@@ -2867,9 +2897,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/pda/trader = 100,
 		/obj/item/weapon/capsule = 10
 		)
-
-/obj/machinery/vending/trader/New()
-	..()
 
 	accepted_coins = list(/obj/item/weapon/coin/trader)
 
@@ -2886,9 +2913,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		)
 
-	for(var/random_items = 1 to premium.len - 4)
+/obj/machinery/vending/trader/New()
+
+	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+
+	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
-	src.initialize()
+	..()
 
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"

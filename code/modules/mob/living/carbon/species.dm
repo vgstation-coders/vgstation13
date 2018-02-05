@@ -463,6 +463,7 @@ var/global/list/whitelisted_species = list("Human")
 	)
 
 /datum/species/tajaran/New()
+	..()
 	// Combining all the worst shit the world has ever offered.
 
 	// Note: Comes BEFORE other stuff.
@@ -958,6 +959,8 @@ var/list/has_died_as_golem = list()
 	move_speed_multiplier = 2
 	has_mutant_race = 0
 
+	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
+
 	spells = list(/spell/swallow_light,/spell/shatter_lights)
 
 	has_organ = list(
@@ -988,6 +991,8 @@ var/list/has_died_as_golem = list()
 	move_speed_multiplier = 2
 
 	blood_color = "#7FFF00"
+
+	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
 
 /datum/species/slime
 	name = "Slime"

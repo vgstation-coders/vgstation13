@@ -252,7 +252,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		if(_using && _using.len)
 			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
-				if (!M || !M.client || M.machine != src)
+				if (!M || !M.client)
 					_using.Remove(M)
 					continue
 
@@ -263,7 +263,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 						src.attack_ai(M)
 
 					// check for TK users
-					if(M.mutations && M.mutations.len)
+					else if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
@@ -450,7 +450,7 @@ a {
 	if(density==0 || can_affix_to_dense_turf)
 		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flow_flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return FALSE // NOPE
 	return TRUE
@@ -595,6 +595,7 @@ a {
 			else
 				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
 				for(var/i in list(2,2,3,3))
+					set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(src, movementdirection))
 						change_dir(turn(movementdirection, 180)) //stop, but don't turn around when hitting a wall
 						break

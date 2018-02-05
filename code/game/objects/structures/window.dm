@@ -40,7 +40,7 @@ var/list/one_way_windows
 /obj/structure/window/New(loc)
 
 	..(loc)
-	flags |= ON_BORDER
+	flow_flags |= ON_BORDER
 	ini_dir = dir
 
 	update_nearby_tiles()
@@ -179,7 +179,7 @@ var/list/one_way_windows
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -556,7 +556,7 @@ var/list/one_way_windows
 
 /obj/structure/window/Destroy(var/brokenup = 0)
 
-	density = 0 //Sanity while we do the rest
+	setDensity(FALSE) //Sanity while we do the rest
 	update_nearby_tiles()
 	update_nearby_icons()
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
@@ -573,7 +573,7 @@ var/list/one_way_windows
 	if(reinforced)
 		new /obj/item/stack/rods(loc, sheetamount)
 
-/obj/structure/window/Move()
+/obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
 	update_nearby_tiles()
 	..()
@@ -610,7 +610,7 @@ var/list/one_way_windows
 		for(var/obj/structure/window/W in get_step(T,direction))
 			W.update_icon()
 
-/obj/structure/window/forceMove(var/atom/A)
+/obj/structure/window/forceMove()
 	var/turf/T = loc
 	..()
 	update_nearby_icons(T)

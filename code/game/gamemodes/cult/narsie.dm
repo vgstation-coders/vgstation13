@@ -181,7 +181,7 @@ var/global/list/narsie_list = list()
 	T.icon = 'icons/turf/walls.dmi'
 	T.icon_state = "cult-narsie"
 	T.opacity = 0
-	T.density = 0
+	T.setDensity(FALSE)
 	luminosity = 1
 
 /obj/machinery/singularity/narsie/large/consume(const/atom/A) //Has its own consume proc because it doesn't need energy and I don't want BoHs to explode it. --NEO
@@ -195,7 +195,7 @@ var/global/list/narsie_list = list()
 				return 0
 
 			M.cultify()
-			stat_collection.cult.narsie_corpses_fed++
+			stat_collection.cult_narsie_corpses_fed++
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))

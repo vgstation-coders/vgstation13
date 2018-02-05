@@ -21,6 +21,8 @@
 	if(attached_to)
 		attached_to.overlays -= inv_overlay
 	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
+	if(color)
+		inv_overlay.color = color
 	if(attached_to)
 		attached_to.overlays += inv_overlay
 		if(ishuman(attached_to.loc))
@@ -317,3 +319,54 @@
 		source_vest = null
 	qdel(src)
 
+
+/obj/item/clothing/accessory/rad_patch
+	name = "radiation detection patch"
+	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
+	icon_state = "rad_patch"
+	var/rad_absorbed = 0
+	var/rad_threshold = 45
+	var/triggered = FALSE
+	var/event_key
+	autoignition_temperature = AUTOIGNITION_PAPER
+	fire_fuel = 1
+	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+
+/obj/item/clothing/accessory/rad_patch/proc/check_rads(list/arguments)
+	if(triggered)
+		return
+	var/mob/user = arguments["user"]
+	var/rads = arguments["rads"]
+	rad_absorbed += rads
+
+	if(rad_absorbed > rad_threshold)
+		triggered = TRUE
+		update_icon()
+		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
+		user.on_irradiate.Remove(event_key)
+		event_key = null
+
+/obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
+	..()
+	if(ismob(C.loc) && !triggered)
+		var/mob/user = C.loc
+		event_key = user.on_irradiate.Add(src, "check_rads")
+
+/obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
+	..()
+	if(event_key)
+		user.on_irradiate.Remove(event_key)
+		event_key = null
+
+/obj/item/clothing/accessory/rad_patch/examine(mob/user)
+	..(user)
+	if(triggered)
+		to_chat(user, "<span class = 'warning'>It is a deep dark color!</span>")
+
+/obj/item/clothing/accessory/rad_patch/update_icon()
+	if(triggered)
+		icon_state = "patch_1"
+	else
+		icon_state = "patch_0"
+	..()

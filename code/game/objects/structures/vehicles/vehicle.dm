@@ -34,11 +34,12 @@
 	var/ethereal = 0
 
 	var/keytype = null
+	var/obj/item/key/heldkey
 	var/obj/item/key/mykey
 
 	var/vin=null
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
-	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
+	var/movement_delay = 1 //Speed of the vehicle decreases as this value increases. Do NOT set to 0 holy shit.
 
 	var/obj/machinery/cart/next_cart = null
 	var/can_have_carts = TRUE
@@ -83,8 +84,8 @@
 	if(empstun < 0)
 		empstun = 0
 
-/obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/weldingtool))
+/obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
+	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -95,16 +96,51 @@
 			to_chat(user, "Need more welding fuel!")
 			return
 	else if(istype(W, /obj/item/key))
-		if(keytype)
-			to_chat(user, "Hold \the [W] in one of your hands while you drive \the [src].")
+		if(!heldkey)
+			if(keytype && mykey == W)
+				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
+					return
+				if(user.drop_item(W, src))
+					to_chat(user, "<span class='notice'>You insert \the [W] into \the [src]'s ignition and turn it.</span>")
+					user.visible_message("<span class='notice'>\The [src]'s engine roars to life!</span>")
+					src.heldkey = W
+					return
+				else //In case the key is unable to leave the user's hand. IE glue.
+					to_chat(user, "<span class='notice'>You fail to put \the [W] into \the [src]'s ignition and turn it.</span>")
+			else
+				if(keytype)
+					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
+				else
+					to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
-			to_chat(user, "You don't need a key.")
+			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
+	else if(isscrewdriver(W) && !heldkey)
+		var/mob/living/carbon/human/H = user
+		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
+		playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+		H.adjustBrainLoss(10)
+
+/obj/structure/bed/chair/vehicle/attack_hand(mob/user)
+	if(occupant && occupant == user)
+		return ..()
+	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
+		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
+		heldkey.forceMove(get_turf(user))
+		user.put_in_hands(heldkey)
+		heldkey = null
+	else
+		..()
 
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
 	if(mykey)
-		return user.is_holding_item(mykey)
+		if(heldkey)
+			return 1
+		else
+			return user.is_holding_item(mykey)
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated())
@@ -139,8 +175,10 @@
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
+	var/movedelay = getMovementDelay()
+	set_glide_size(DELAY2GLIDESIZE(movedelay))
 	step(src, direction)
-	delayNextMove(getMovementDelay())
+	delayNextMove(movedelay)
 
 	if(T != loc)
 		user.handle_hookchain(direction)
@@ -340,7 +378,7 @@
 
 	update_mob()
 
-/obj/structure/bed/chair/vehicle/Move()
+/obj/structure/bed/chair/vehicle/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/oldloc = loc
 	..()
 	if (loc == oldloc)

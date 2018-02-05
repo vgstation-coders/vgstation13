@@ -15,7 +15,6 @@
 	var/max_pressure = 10000
 
 	var/target_pressure = 4500	//Output pressure.
-	var/on = 0								//Are we taking in gas?
 
 	var/datum/gas_mixture/air				//Internal tank.
 
@@ -109,22 +108,23 @@
 				network2.update = 1
 
 	//Input handling. Literally pump code again with the target pressure being the max pressure of the MSGS
-	var/input_starting_pressure = air1.return_pressure()
+	if(on)
+		var/input_starting_pressure = air1.return_pressure()
 
-	if((max_pressure - input_starting_pressure) > 0.01)
-		//No need to output gas if target is already reached!
+		if((max_pressure - input_starting_pressure) > 0.01)
+			//No need to output gas if target is already reached!
 
-		//Calculate necessary moles to transfer using PV=nRT
-		if((air1.total_moles() > 0) && (air1.temperature > 0))
-			var/pressure_delta = max_pressure - input_starting_pressure
-			var/transfer_moles = pressure_delta * air.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
+			//Calculate necessary moles to transfer using PV=nRT
+			if((air1.total_moles() > 0) && (air1.temperature > 0))
+				var/pressure_delta = max_pressure - input_starting_pressure
+				var/transfer_moles = pressure_delta * air.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
 
-			//Actually transfer the gas
-			var/datum/gas_mixture/removed = air1.remove(transfer_moles)
-			air.merge(removed)
+				//Actually transfer the gas
+				var/datum/gas_mixture/removed = air1.remove(transfer_moles)
+				air.merge(removed)
 
-			if(network1)
-				network1.update = 1
+				if(network1)
+					network1.update = 1
 
 	updateUsrDialog()
 	update_icon()
@@ -297,6 +297,9 @@
 		return
 
 	src.dir = turn(src.dir, -90)
+
+/obj/machinery/atmospherics/binary/msgs/toggle_status(var/mob/user)
+	return FALSE
 
 #undef MSGS_ON
 #undef MSGS_INPUT

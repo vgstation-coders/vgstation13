@@ -116,7 +116,8 @@ proc/move_research_shuttle()
 		else
 			to_chat(usr, "<span class='notice'>Shuttle is already moving.</span>")
 
-/obj/machinery/computer/research_shuttle/emag(mob/user as mob)
+/obj/machinery/computer/research_shuttle/emag(mob/user)
 	..()
 	src.req_access = list()
-	to_chat(usr, "You disable the console's access requirement.")
+	if(user)
+		to_chat(usr, "You disable the console's access requirement.")

@@ -230,7 +230,7 @@
 			var/datum/gas_mixture/env = L.return_air()
 			if(env.temperature != MAX_TEMP + T0C)
 
-				var/transfer_moles = 0.25 * env.total_moles()
+				var/transfer_moles = 0.25 * env.total_moles() / env.volume * CELL_VOLUME
 
 				var/datum/gas_mixture/removed = env.remove(transfer_moles)
 

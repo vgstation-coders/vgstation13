@@ -235,5 +235,6 @@
 	if(!emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
+		if(user)
+			to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
 		return 1

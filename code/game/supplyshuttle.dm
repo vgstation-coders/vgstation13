@@ -31,18 +31,21 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	var/list/shoppinglist = list()
 	var/list/requestlist = list()
 	var/list/supply_packs = list()
+	var/list/supply_consoles = list()
 	//shuttle movement
 	var/at_station = 0
 	var/movetime = 1200
 	var/moving = 0
 	var/eta_timeofday
 	var/eta
-	var/datum/materials/materials_list = new
+	var/datum/materials/materials_list
 	var/restriction = 1 //Who can approve orders? 0 = autoapprove; 1 = has access; 2 = has an ID (omits silicons); 3 = actions require PIN
 	var/requisition = 0 //Are orders being paid for by the department? 0 = no; 1 = auto; possible future: allow with pin?
 
+
 /datum/controller/supply_shuttle/New()
 	ordernum = rand(1,9000)
+	materials_list = new
 
 	//Supply shuttle ticker - handles supply point regenertion and shuttle travelling between centcomm and the station
 /datum/controller/supply_shuttle/proc/process()
@@ -139,9 +142,8 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			var/obj/item/stack/sheet/mineral/plasma/P = MA
 			if(P.redeemed)
 				continue
-			var/datum/material/mat = materials_list.getMaterial(P.sheettype)
+			var/datum/material/mat = materials_list.getMaterial(P.recyck_mat)
 			cargo_acct.money += (mat.value * 2) * P.amount // Central Command pays double for plasma they receive that hasn't been redeemed already.
-
 		// Must be in a crate!
 		else if(istype(MA,/obj/structure/closet/crate))
 			cargo_acct.money += credits_per_crate
@@ -163,19 +165,18 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 					qdel(A)
 					continue
 
-				SellObjToOrders(A,0)
+				SellObjToOrders(A,1)
 
-				// Delete it. (Fixes github #473)
 				if(A)
 					qdel(A)
 		else
-			SellObjToOrders(MA,1)
+			SellObjToOrders(MA,0)
 
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
 				O.Pay()
-				centcomm_orders -= O
+				centcomm_orders.Remove(O)
 //		to_chat(world, "deleting [MA]/[MA.type] it was [!MA.anchored ? "not ": ""] anchored")
 		qdel(MA)
 
@@ -227,8 +228,10 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			CONTENTS:<br><ul>"}
 		//spawn the stuff, finish generating the manifest while you're at it
 		if(SP.access)
-			A:req_access = list()
-			A:req_access += text2num(SP.access)
+			A:req_access = SP.access
+
+		if(SP.one_access)
+			A:req_one_access = SP.one_access
 
 		var/list/contains
 		if(istype(SP,/datum/supply_packs/randomised))
@@ -258,19 +261,22 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 
 /datum/controller/supply_shuttle/proc/forbidden_atoms_check(atom/A)
 	var/contents = get_contents_in_object(A)
+	for(var/mob/living/simple_animal/hostile/mimic/M in contents)
+		M.angry = 0
+		M.apply_disguise()
+	for(var/mob/living/M in contents)
+		if(!istype(M, /mob/living/simple_animal/hostile/mimic))
+			return TRUE
 
-	if (locate(/mob/living) in contents)
-		. = TRUE
-	else if (locate(/obj/item/weapon/disk/nuclear) in contents)
-		. = TRUE
-	else if (locate(/obj/machinery/nuclearbomb) in contents)
-		. = TRUE
-	else if (locate(/obj/item/beacon) in contents)
-		. = TRUE
-	else if (locate(/obj/effect/portal) in contents)//you crafty fuckers
-		. = TRUE
-	else
-		. = FALSE
+	if (locate(/obj/item/weapon/disk/nuclear) in contents)
+		return TRUE
+	if (locate(/obj/machinery/nuclearbomb) in contents)
+		return TRUE
+	if (locate(/obj/item/beacon) in contents)
+		return TRUE
+	if (locate(/obj/effect/portal) in contents)//you crafty fuckers
+		return TRUE
+	return FALSE
 
 /datum/controller/supply_shuttle/proc/confirm_order(datum/supply_order/O,mob/user,var/position) //position represents where it falls in the request list
 	var/datum/supply_packs/P = O.object
@@ -294,3 +300,21 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			shoppinglist += O
 		else
 			to_chat(user, "<span class='warning'>[O.orderedby] does not have enough funds for this request.</span>")
+
+/datum/controller/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
+	centcomm_orders.Add(C)
+	var/name = "External order form - [C.name] order number [C.id]"
+	var/info = {"<h3>Central command supply requisition form</h3<><hr>
+	 			INDEX: #[C.id]<br>
+	 			REQUESTED BY: [C.name]<br>
+	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]<br>
+	 			REQUESTED ITEMS:<br>
+	 			[C.getRequestsByName(1)]
+	 			WORTH: [C.worth] credits TO [C.acct_by_string]
+	 			"}
+	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
+		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
+		reqform.name = name
+		reqform.info = info
+		reqform.update_icon()
+		S.say("New central command request available")

@@ -66,6 +66,8 @@
 				I.pixel_y = -10 * PIXEL_MULTIPLIER
 			if("mommiprime")
 				I.pixel_y = -7 * PIXEL_MULTIPLIER
+			if("mommiprime-alt")
+				I.pixel_y = -12 * PIXEL_MULTIPLIER
 			if("scout")
 				I.pixel_y = -15 * PIXEL_MULTIPLIER
 		// Add the adjusted hat to our overlays

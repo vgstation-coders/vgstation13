@@ -7,7 +7,7 @@
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
 
-	if(a_intent == "hurt" && A.loc != src)
+	if(!is_pacified() && a_intent == "hurt" && A.loc != src)
 		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 		switch(attack_type) //Special attacks - kicks, bites
 			if(ATTACK_KICK)
@@ -48,19 +48,24 @@
 		delayNextAttack(10)
 
 	if(src.can_use_hand())
-		A.attack_hand(src, params)
+		A.attack_hand(src, params, proximity)
 	else
 		A.attack_stump(src, params)
-	return
 
-/atom/proc/attack_hand(mob/user as mob, params)
+	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
+		var/delay = round(1 + base_movement_tally()/5) * 1 SECONDS
+		if (do_after(src, A, delay))
+			Move(A, get_dir(src,A), glide_size_override = delay) // So that we're still smooth
+			delayNextMove(delay, additive=1)
+
+/atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
 
 //called when we try to click but have no hand
 //good for general purposes
-/atom/proc/attack_stump(mob/user as mob, params)
+/atom/proc/attack_stump(mob/user as mob, params, var/proximity)
 	if(!requires_dexterity(user))
-		attack_hand(user) //if the object doesn't need dexterity, we can use our stump
+		attack_hand(user, params, proximity) //if the object doesn't need dexterity, we can use our stump
 	else
 		to_chat(user, "Your [user.get_index_limb_name(user.active_hand)] is not fine enough for this action.")
 

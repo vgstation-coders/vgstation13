@@ -45,6 +45,9 @@
 /obj/machinery/disposal/compactor/handle_trunk()
 	return
 
+/obj/machinery/disposal/compactor/can_load_crates()
+	return FALSE
+
 /obj/machinery/disposal/compactor/update_icon()
 	icon_state = "compactor_[stat & NOPOWER ? "off" : "on"]"
 
@@ -105,7 +108,7 @@
 		return
 	..()
 
-/obj/machinery/disposal/compactor/Move(atom/newloc, direct)
+/obj/machinery/disposal/compactor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(prob(2))
 		var/atom/movable/AM = pick(contents)

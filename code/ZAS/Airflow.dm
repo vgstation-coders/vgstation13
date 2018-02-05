@@ -134,7 +134,7 @@ atom/movable/GotoAirflowDest(n)
 /atom/movable/var/tmp/airflow_time = 0
 /atom/movable/var/tmp/last_airflow = 0
 
-/atom/movable/proc/GotoAirflowDest(n)
+/atom/movable/proc/GotoAirflowDest(n) //TODO GLIDESIZE HERE
 	if(!airflow_dest || pulledby)
 		return
 	if(world.time < last_airflow + zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
@@ -164,7 +164,7 @@ atom/movable/GotoAirflowDest(n)
 
 	var/od = FALSE
 	if(!density)
-		density = TRUE
+		setDensity(TRUE)
 		od = TRUE
 
 	last_airflow = world.time
@@ -173,23 +173,26 @@ atom/movable/GotoAirflowDest(n)
 		while(airflow_speed > 0 && Process_Spacemove(1))
 			airflow_speed = min(airflow_speed,15)
 			airflow_speed -= zas_settings.Get(/datum/ZAS_Setting/airflow_speed_decay)
+			var/sleep_time
 			if(airflow_speed > 7)
 				if(airflow_time++ >= airflow_speed - 7)
 					if(od)
-						density = FALSE
-					sleep(tick_multiplier)
+						setDensity(FALSE)
+					sleep_time = tick_multiplier
 			else
 				if(od)
-					density = FALSE
-				sleep(max(1,10-(airflow_speed+3)) * tick_multiplier)
+					setDensity(FALSE)
+				sleep_time = max(1,10-(airflow_speed+3)) * tick_multiplier
+			sleep(sleep_time)
 			if(od)
-				density = TRUE
+				setDensity(TRUE)
 			if ((!( src.airflow_dest ) || src.loc == src.airflow_dest))
 				airflow_dest = locate(Clamp(x + xo, 1, world.maxx), Clamp(y + yo, 1, world.maxy), z)
 			if ((src.x == 1 || src.x == world.maxx || src.y == 1 || src.y == world.maxy))
 				break
 			if(!isturf(loc))
 				break
+			set_glide_size(DELAY2GLIDESIZE(sleep_time))
 			step_towards(src, src.airflow_dest)
 			var/mob/M = src
 			if(istype(M) && M.client)
@@ -198,7 +201,7 @@ atom/movable/GotoAirflowDest(n)
 		airflow_speed = 0
 		airflow_time = 0
 		if(od)
-			density = FALSE
+			setDensity(FALSE)
 
 /atom/movable/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)

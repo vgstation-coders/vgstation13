@@ -39,6 +39,7 @@
 	var/cant_drop_msg = " sticks to your hand!"
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
@@ -207,7 +208,8 @@
 	if (istype(loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
 		var/obj/item/weapon/storage/S = loc
-		S.remove_from_storage(src, user)
+		if(!S.remove_from_storage(src, user))
+			return
 
 	throwing = FALSE
 	if (loc == user)
@@ -235,16 +237,6 @@
 	return TRUE
 
 /obj/item/attack_paw(mob/user as mob)
-
-	if(isalien(user)) // -- TLE
-		var/mob/living/carbon/alien/A = user
-
-		if(!A.has_fine_manipulation || w_class >= W_CLASS_LARGE)
-			if(src in A.contents) // To stop Aliens having items stuck in their pockets
-				A.drop_from_inventory(src)
-			to_chat(user, "Your claws aren't capable of such fine manipulation.")
-			return
-
 	if (istype(loc, /obj/item/weapon/storage))
 		for(var/mob/M in range(1, loc))
 			if (M.s_active == loc)
@@ -855,7 +847,7 @@
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = FALSE)
-	if(!user.can_wield())
+	if(!user.can_wield(src))
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
 
@@ -1202,6 +1194,9 @@ var/global/list/image/blood_overlays = list()
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
+		if(C.handcuffed)
+			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
+			return
 		feedback_add_details("handcuffs", "[name]")
 
 		if(clumsy_check(user) && prob(50))

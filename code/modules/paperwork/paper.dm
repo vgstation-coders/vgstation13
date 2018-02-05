@@ -243,7 +243,7 @@
 		return
 
 	if(href_list["picture"])
-		if(!ishuman(usr))
+		if(!ishigherbeing(usr))
 			return
 		var/mob/living/carbon/human/H = usr
 		H.put_in_hands(img)
@@ -358,7 +358,7 @@
 			to_chat(user, "<span class='notice'>You attach the photo to the piece of paper.</span>")
 	else if(P.is_hot())
 		src.ashify_item(user)
-		return //no fingerprints, paper is gone
+		return 1 //no fingerprints, paper is gone
 	add_fingerprint(user)
 	return ..()
 

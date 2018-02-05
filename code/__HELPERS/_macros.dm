@@ -175,7 +175,17 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune))
+
 #define ismatrix(A) (istype(A, /matrix))
+
+#define ismecha(A) (istype(A, /obj/mecha))
+
+#define isID(A) (istype(A, /obj/item/weapon/card/id))
+
+#define isPDA(A) (istype(A, /obj/item/device/pda))
+
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
 //Macros for antags
 
@@ -258,4 +268,4 @@ proc/get_space_area()
 
 #define subtypesof(A) (typesof(A) - A)
 
-#define LIBVG(function, arguments...) call("./libvg.[world.system_type == "UNIX" ? "so" : "dll"]", function)(arguments)
+#define LIBVG(function, arguments...) call("./libvg.[world.system_type == UNIX ? "so" : "dll"]", function)(arguments)

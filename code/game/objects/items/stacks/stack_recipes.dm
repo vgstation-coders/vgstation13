@@ -252,6 +252,21 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 /* ========================================================================
 							LEATHER RECIPES
 ======================================================================== */
+/datum/stack_recipe/leather/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+	if(istype(S, /obj/item/stack/sheet/leather))
+		var/obj/item/stack/sheet/leather/L = S
+		if(findtext(lowertext(R.name), "leather"))
+			R.name = "[L.source_string ? "[L.source_string]" : ""] [R.name]"
+		else
+			R.name = "[L.source_string ? "[L.source_string] leather " : ""] [R.name]"
+
 var/list/datum/stack_recipe/leather_recipes = list (
-	new/datum/stack_recipe("Bullwhip",	/obj/item/weapon/bullwhip,	10,	time = 100,),
+	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/bullwhip,					10,	time = 100,),
+	new/datum/stack_recipe/leather("Cowboy hat",	/obj/item/clothing/head/cowboy,				4,	time = 70,),
+	new/datum/stack_recipe/leather("Leather gloves",/obj/item/clothing/gloves/botanic_leather,	2,	time = 90,),
+	new/datum/stack_recipe/leather("Leather shoes",	/obj/item/clothing/shoes/leather,			4,	time = 80,),
+	new/datum/stack_recipe/leather("Leather satchel",/obj/item/weapon/storage/backpack/satchel,	12,	time = 130,),
+	new/datum/stack_recipe/leather("Leather wallet",/obj/item/weapon/storage/wallet,			4,	time = 90,),
+	new/datum/stack_recipe/leather("Leather helmet",/obj/item/clothing/head/leather,			3,	time = 90,on_floor = 1),
+	new/datum/stack_recipe/leather("Leather armor",/obj/item/clothing/suit/leather,				6,	time = 90,on_floor = 1),
 	)

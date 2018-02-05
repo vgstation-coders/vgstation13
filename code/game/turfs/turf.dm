@@ -88,13 +88,6 @@
 /turf/proc/initialize()
 	return
 
-/turf/DblClick()
-	if(istype(usr, /mob/living/silicon/ai))
-		return move_camera_by_click()
-	if(usr.stat || usr.restrained() || usr.lying)
-		return ..()
-	return ..()
-
 /turf/ex_act(severity)
 	return 0
 
@@ -134,7 +127,7 @@
 	var/list/large_dense = list()
 	//Next, check objects to block entry that are on the border
 	for(var/atom/movable/border_obstacle in src)
-		if(border_obstacle.flags&ON_BORDER)
+		if(border_obstacle.flow_flags&ON_BORDER)
 			/*if(ismob(mover) && mover:client)
 				world << "<span class='danger'>ENTER</span>Target(border): checking Cross of [border_obstacle]"*/
 			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)

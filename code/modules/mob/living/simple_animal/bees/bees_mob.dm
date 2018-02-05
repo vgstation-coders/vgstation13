@@ -11,78 +11,11 @@
 
 /*
 
-> bee datums
 > bee corpses
 > bee mob
 > bee presets
 
 */
-//////////////////////BEE DATUMS///////////////////////////////////////
-
-/datum/bee
-	var/mob/living/simple_animal/bee/mob = null
-	var/obj/machinery/apiary/home = null
-	var/damage = 1//the brute damage dealt by a sting. Set when leaving the hive (spawning).
-	var/toxic = 0//the extra toxic damage dealt by a sting. Set when leaving the hive (spawning).
-	var/health = 10
-	var/maxHealth = 10
-	var/list/pollens = list()//flowers (seed_datums) that were pollinated by that bee
-	var/state = BEE_ROAMING
-	var/fatigue = 0//increases after a successful pollination or when searching for flowers in vain
-	var/bored = 0//increases when searching for enemies in vain
-	var/corpse = /obj/effect/decal/cleanable/bee
-	var/toxins = 0
-
-//When a bee leaves the hive, it takes on the hive's damage and toxic values
-/datum/bee/New(var/obj/machinery/apiary/spawner = null)
-	..()
-	if (spawner)
-		home = spawner
-		damage = spawner.damage
-		toxic = spawner.toxic
-
-//call to make bees go look out for plants
-/datum/bee/proc/goPollinate()
-	state = BEE_OUT_FOR_PLANTS
-	mob.updateState = 1
-
-//call to make bees go look out for kills. angry bees are red-eyed.
-/datum/bee/proc/angerAt(var/mob/M = null)
-	if (state == BEE_SWARM)
-		return
-	state = BEE_OUT_FOR_ENEMIES
-	mob.target = M
-	mob.updateState = 1
-
-//call to make bees go home. Hive-less bees never calm down
-/datum/bee/proc/homeCall()
-	if (home)
-		state = BEE_HEADING_HOME
-		mob.updateState = 1
-
-/datum/bee/proc/Die()
-	if (mob)
-		new corpse(get_turf(mob))
-		mob.bees.Remove(src)
-		mob = null
-	if (home)
-		home.bees_outside_hive -= src
-		home = null
-	qdel(src)
-
-/datum/bee/queen_bee
-	health = 15
-	maxHealth = 15
-	corpse = /obj/effect/decal/cleanable/bee/queen_bee
-	var/colonizing = 0
-
-
-/datum/bee/queen_bee/proc/setHome(var/obj/machinery/apiary/A)
-	state = BEE_SWARM
-	colonizing = 1
-	mob.destination = A
-	mob.updateState = 1
-
 
 //////////////////////BEE CORPSES///////////////////////////////////////
 
@@ -132,6 +65,7 @@
 	var/pollinating = 0
 	var/obj/machinery/portable_atmospherics/hydroponics/target_plant = null
 	var/list/visited_plants = list()
+	var/datum/bee_species/bee_species = null
 	pass_flags = PASSTABLE
 	turns_per_move = 6
 	density = 0
@@ -161,10 +95,18 @@
 
 
 /mob/living/simple_animal/bee/Destroy()
-	..()
 	if(home)
 		for (var/datum/bee/B in bees)
 			home.bees_outside_hive -= B
+		home = null
+	destination = null
+	target = null
+	target_plant = null
+	for (var/datum/bee/B in bees)
+		qdel(B)//it'll get removed from the bees list in the datum's Destroy() proc.
+	bees.len = 0
+	visited_plants.len = 0
+	..()
 
 /mob/living/simple_animal/bee/Die()
 	returnToPool(src)
@@ -192,6 +134,7 @@
 /mob/living/simple_animal/bee/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if (istype(O,/obj/item/weapon/bee_net)) return
+	if (user.is_pacified(VIOLENCE_DEFAULT,src)) return
 	if(O.force)
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
@@ -272,6 +215,18 @@
 	bees.Add(B)
 	B.mob = src
 	home = B.home
+	if (!bee_species)
+		bee_species = B.species
+		min_oxy = bee_species.min_oxy
+		max_oxy = bee_species.max_oxy
+		min_tox = bee_species.min_tox
+		max_tox = bee_species.max_tox
+		min_co2 = bee_species.min_co2
+		max_co2 = bee_species.max_co2
+		min_n2 = bee_species.min_n2
+		max_n2 = bee_species.max_n2
+		minbodytemp = bee_species.minbodytemp
+		maxbodytemp = bee_species.maxbodytemp
 	updateDamage()
 
 /mob/living/simple_animal/bee/proc/updateDamage()
@@ -288,6 +243,9 @@
 	update_icon()
 
 /mob/living/simple_animal/bee/proc/panic_attack(mob/damagesource)
+	if (!bee_species.angery)
+		return
+
 	for(var/mob/living/simple_animal/bee/B in range(src,3))
 		if (B.state == BEE_SWARM || calmed > 0)
 			return
@@ -318,7 +276,7 @@
 
 	if(stat != DEAD)
 		//SUFFERING FROM HIGH TOXICITY
-		if (((current_poison_damage - bees.len)/bees.len*100) > 50)
+		if (((current_poison_damage - bees.len)/bees.len*100) > bee_species.toxic_threshold_death)
 			if (prob((((current_poison_damage - bees.len)/bees.len*100)-50)*2))
 				adjustBruteLoss(3)
 			if (bees.len <= 0)
@@ -551,7 +509,7 @@
 			else
 				var/list/nearbyPlants = list()
 				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))
-					if (!H.dead && H.seed)
+					if (!H.dead && H.seed && !H.closed_system)
 						nearbyPlants += H
 				nearbyPlants.Remove(visited_plants)
 				if (nearbyPlants.len > 0)
@@ -595,9 +553,13 @@
 					walk_to(src,move_to)
 
 				if(src.loc == target_turf)
-					for(var/datum/bee/B in bees)
-						home.enterHive(B)
-					qdel(src)
+					if (!home.species || bee_species == home.species)
+						for(var/datum/bee/B in bees)
+							home.enterHive(B)
+						qdel(src)
+					else
+						home = null
+						state = BEE_ROAMING
 			else
 				state = BEE_ROAMING
 
@@ -619,22 +581,28 @@
 	if(bees.len <= 0)
 		return
 
+	var common = "bees"
+	icon_state = ""
+	if (bee_species)
+		icon_state += bee_species.prefix
+		common = bee_species.common_name
+
 	var/queen = 0
 	for (var/D in bees)
 		if (istype(D,/datum/bee/queen_bee))
 			queen = 1
 	if (bees.len >= 15)
-		icon_state = "bees-swarm"
+		icon_state += "bees-swarm"
 	else
-		icon_state = "bees[min(bees.len-queen,10)]"
+		icon_state += "bees[min(bees.len-queen,10)]"
 
 
 	if (state == BEE_OUT_FOR_ENEMIES)
 		icon_state += "-feral"
 		if (queen)
-			overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state="queen_bee-feral")
+			overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state="[bee_species.prefix]queen_bee-feral")
 	else if (queen)
-		overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state="queen_bee")
+		overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state="[bee_species.prefix]queen_bee")
 
 
 	animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 10, easing = SINE_EASING)
@@ -657,11 +625,11 @@
 		name = "[prefix]bee"
 		for (var/D in bees)
 			if (istype(D,/datum/bee/queen_bee))
-				name = "[prefix] queen bee"
+				name = "[prefix] queen [common]"
 
 	else
 		gender = PLURAL
-		name = "swarm of [prefix]bees"
+		name = "swarm of [prefix][common]"
 
 
 ////////////////////////////BEE PRESETS/////////////////////////////////////

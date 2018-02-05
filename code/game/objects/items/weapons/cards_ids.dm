@@ -215,11 +215,13 @@
 		user.show_message("The DNA hash on the card is [dna_hash].",1)
 		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
 
-/obj/item/weapon/card/id/attack_self(mob/user as mob)
-	user.visible_message("[user] shows you: [bicon(src)] [src.name]: assignment: [src.assignment]",\
-		"You flash your ID card: [bicon(src)] [src.name]: assignment: [src.assignment]")
-	src.add_fingerprint(user)
-	return
+/obj/item/weapon/card/id/attack_self(var/mob/user)
+	if(user.attack_delayer.blocked())
+		return
+	user.visible_message("[user] shows you: [bicon(src)] [name]: assignment: [assignment]",\
+		"You flash your ID card: [bicon(src)] [name]: assignment: [assignment]")
+	user.delayNextAttack(1 SECONDS)
+	add_fingerprint(user)
 
 /obj/item/weapon/card/id/GetAccess()
 	return (access | base_access)

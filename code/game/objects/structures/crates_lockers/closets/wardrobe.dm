@@ -282,6 +282,11 @@
 	new /obj/item/clothing/shoes/black(src)
 	new /obj/item/clothing/gloves/black(src)
 	new /obj/item/clothing/gloves/black(src)
+	if(prob(50))
+		new /obj/item/clothing/glasses/hud/diagnostic(src)
+	else
+		new /obj/item/clothing/glasses/hud/diagnostic/prescription(src)
+	new /obj/item/clothing/glasses/hud/diagnostic(src)
 	AddToProfiler()
 	return
 

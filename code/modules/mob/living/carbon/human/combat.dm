@@ -102,6 +102,11 @@
 		return src.mutations.Find(mutation)
 
 /mob/living/carbon/human/get_unarmed_verb()
+	if(istype(gloves))
+		var/obj/item/clothing/gloves/G = gloves
+		if(G.attack_verb_override)
+			return G.attack_verb_override
+
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 	return S.attack_verb
 

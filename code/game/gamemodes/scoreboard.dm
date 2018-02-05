@@ -518,9 +518,7 @@
 		round_end_info = dat
 		log_game(dat)
 
-		stat_collection.escapees = score["escapees"]
 		stat_collection.crewscore = score["crewscore"]
-		stat_collection.Process()
 
 	src << browse(dat, "window=roundstats;size=1000x600")
 	return

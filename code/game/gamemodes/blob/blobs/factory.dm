@@ -36,7 +36,7 @@
 	else
 		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 
-	stat_collection.blobblob.spores_spawned++
+	stat_collection.blob_spores_spawned++
 
 	return 1
 

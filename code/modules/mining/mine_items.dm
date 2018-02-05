@@ -175,6 +175,10 @@ proc/move_mining_shuttle()
 	on = 1
 	update_brightness()
 
+/obj/item/device/flashlight/lantern/on/dim
+	name = "dim lantern"
+	light_power = 0.6
+
 /*****************************Pickaxe********************************/
 
 //Dig constants defined in setup.dm

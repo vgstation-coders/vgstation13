@@ -166,3 +166,6 @@
 		return
 
 	src.dir = turn(src.dir, -90)
+
+/obj/machinery/atmospherics/binary/circulator/toggle_status(var/mob/user)
+	return FALSE

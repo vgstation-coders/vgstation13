@@ -144,11 +144,12 @@ var/global/list/all_money_accounts = list()
 	var/source_terminal = ""
 
 /obj/machinery/account_database
-	name = "Accounts database"
+	name = "accounts database"
 	desc = "Holds transaction logs, account data and all kinds of other financial records."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "account_db"
-	density = 1
+	density = TRUE
+	anchored = TRUE
 	req_one_access = list(access_hop, access_captain)
 	var/receipt_num
 	var/machine_id = ""
@@ -158,6 +159,7 @@ var/global/list/all_money_accounts = list()
 	var/creating_new_account = 0
 	var/activated = 1
 
+	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 	ghost_read=0
 	ghost_write=0
 
@@ -198,6 +200,9 @@ var/global/list/all_money_accounts = list()
 	..()
 
 /obj/machinery/account_database/attack_hand(mob/user as mob)
+	. = ..()
+	if(.)
+		return
 	if(ishuman(user) && !user.stat && get_dist(src,user) <= 1)
 		var/dat = "<b>Accounts Database</b><br>"
 
@@ -266,14 +271,14 @@ var/global/list/all_money_accounts = list()
 	else
 		user << browse(null,"window=account_db")
 
-/obj/machinery/account_database/attackby(O as obj, user as mob)//TODO:SANITY
-	if(istype(O, /obj/item/weapon/card))
+/obj/machinery/account_database/attackby(var/obj/O, var/mob/user)
+	. = ..()
+	if(.)
+		return
+	if(isID(O))
 		var/obj/item/weapon/card/id/idcard = O
 		if(access_level == 3)
 			return attack_hand(user)
-		if(istype(idcard, /obj/item/weapon/card/emag))
-			emag(user)
-			return
 		if(!held_card)
 			if(usr.drop_item(O, src))
 				held_card = idcard
@@ -282,8 +287,6 @@ var/global/list/all_money_accounts = list()
 					access_level = 2
 				else if(access_hop in idcard.access || access_captain in idcard.access)
 					access_level = 1
-	else
-		..()
 
 /obj/machinery/account_database/emag(mob/user)
 	if(emagged)

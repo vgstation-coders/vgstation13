@@ -24,7 +24,7 @@
 
 //have all strange rocks be cleared away using welders for now
 /obj/item/weapon/strangerock
-	name = "\improper Strange rock"
+	name = "strange rock"
 	desc = "Seems to have some unusal strata evident throughout it."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "strange"
@@ -104,17 +104,17 @@
 	var/additional_desc = ""
 	var/obj/item/weapon/new_item
 	var/source_material = ""
-	var/apply_material_decorations = 1
-	var/apply_image_decorations = 0
+	var/apply_material_decorations = TRUE
+	var/apply_image_decorations = FALSE
 	var/material_descriptor = ""
-	var/apply_prefix = 1
+	var/apply_prefix = TRUE
 	if(prob(40))
 		material_descriptor = pick("rusted ","dusty ","archaic ","fragile ")
 	source_material = pick("cordite","quadrinium","steel","titanium","aluminium","ferritic-alloy","plasteel","duranium")
 
-	var/talkative = 0
+	var/talkative = FALSE
 	if(prob(5))
-		talkative = 1
+		talkative = TRUE
 
 	//for all items here:
 	//icon_state
@@ -126,7 +126,7 @@
 			new_item = new glass_type(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "bowl"
-			apply_image_decorations = 1
+			apply_image_decorations = TRUE
 			anomaly_factor = 0
 			if(prob(20))
 				additional_desc = "There appear to be [pick("dark","faintly glowing","pungent","bright")] [pick("red","purple","green","blue")] stains inside."
@@ -136,7 +136,7 @@
 			new_item = new glass_type(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "urn"
-			apply_image_decorations = 1
+			apply_image_decorations = TRUE
 			anomaly_factor = 0
 			if(prob(20))
 				additional_desc = "It [pick("whispers faintly","makes a quiet roaring sound","whistles softly","thrums quietly","throbs")] if you put it to your ear."
@@ -162,7 +162,7 @@
 			item_type = "instrument"
 			icon_state = "instrument"
 			if(prob(30))
-				apply_image_decorations = 1
+				apply_image_decorations = TRUE
 				additional_desc = "[pick("You're not sure how anyone could have played this",\
 				"You wonder how many mouths the creator had",\
 				"You wonder what it sounds like",\
@@ -183,9 +183,9 @@
 				chance += 10
 
 			item_type = new_item.name
-			apply_prefix = 0
-			apply_material_decorations = 0
-			apply_image_decorations = 1
+			apply_prefix = FALSE
+			apply_material_decorations = FALSE
+			apply_image_decorations = TRUE
 			anomaly_factor = 0
 		if(ARCHAEO_HANDCUFFS)
 			item_type = "handcuffs"
@@ -193,7 +193,7 @@
 			additional_desc = "[pick("They appear to be for securing two things together","Looks kinky","Doesn't seem like a children's toy")]."
 		if(ARCHAEO_BEARTRAP)
 			item_type = "[pick("wicked","evil","byzantine","dangerous")] looking [pick("device","contraption","thing","trap")]"
-			apply_prefix = 0
+			apply_prefix = FALSE
 			new_item = new /obj/item/weapon/legcuffs/beartrap(src.loc)
 			additional_desc = "[pick("It looks like it could take a limb off",\
 			"Could be some kind of animal trap",\
@@ -203,14 +203,14 @@
 			new_item = new /obj/item/weapon/lighter/random(src.loc)
 			additional_desc = "There is a tiny device attached."
 			if(prob(30))
-				apply_image_decorations = 1
+				apply_image_decorations = TRUE
 		if(ARCHAEO_BOX)
 			item_type = "box"
 			new_item = new /obj/item/weapon/storage/box(src.loc)
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.icon_state = "box"
 			if(prob(30))
-				apply_image_decorations = 1
+				apply_image_decorations = TRUE
 		if(ARCHAEO_GASTANK)
 			item_type = "[pick("cylinder","tank","chamber")]"
 			if(prob(25))
@@ -233,7 +233,7 @@
 			"You wonder what it was used for",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains on it")]."
 		if(ARCHAEO_METAL)
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/stack/sheet/metal
 			possible_spawns += /obj/item/stack/sheet/plasteel
@@ -260,9 +260,9 @@
 				new_item = new /obj/item/weapon/pen/sleepypen(src.loc)
 				anomaly_factor = 2
 			if(prob(30))
-				apply_image_decorations = 1
+				apply_image_decorations = TRUE
 		if(ARCHAEO_CRYSTAL)
-			apply_prefix = 0
+			apply_prefix = FALSE
 			anomaly_factor = 3
 			if(prob(25))
 				item_type = "smooth green crystal"
@@ -278,31 +278,31 @@
 				icon_state = "smoothrock"
 			additional_desc = pick("It shines faintly as it catches the light.","It appears to have a faint inner glow.","It seems to draw you inward as you look it at.","Something twinkles faintly as you look at it.","It's mesmerizing to behold.")
 
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			if(prob(10))
-				apply_image_decorations = 1
+				apply_image_decorations = TRUE
 		if(ARCHAEO_CULTBLADE)
 			//cultblade
-			apply_prefix = 0
+			apply_prefix = FALSE
 			new_item = new /obj/item/weapon/melee/cultblade/nocult(src.loc)
-			apply_material_decorations = 0
-			apply_image_decorations = 0
+			apply_material_decorations = FALSE
+			apply_image_decorations = FALSE
 			anomaly_factor = 2
 		if(ARCHAEO_TELEBEACON)
 			new_item = new /obj/item/beacon(src.loc)
-			talkative = 0
+			talkative = FALSE
 			anomaly_factor = 3
 			new_item.icon_state = "unknown[rand(1,4)]"
 			new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 			new_item.desc = ""
 		if(ARCHAEO_CLAYMORE) //weapons
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns=list(/obj/item/weapon/claymore, /obj/item/weapon/melee/morningstar, /obj/item/weapon/spear/wooden)
 
 			var/new_type = pick(possible_spawns)
 
 			new_item = new new_type(src.loc)
-			apply_prefix = 0
+			apply_prefix = FALSE
 
 			if(istype(new_item, /obj/item/weapon/claymore))
 				new_item.force = pick(50;10,40;20,10;40)
@@ -317,7 +317,7 @@
 			item_type = new_item.name
 		if(ARCHAEO_CULTROBES)
 			//arcane clothing
-			apply_prefix = 0
+			apply_prefix = FALSE
 			anomaly_factor = 2
 			var/list/possible_spawns = list(/obj/item/clothing/head/culthood,
 			/obj/item/clothing/head/magus,
@@ -329,34 +329,34 @@
 		if(ARCHAEO_SOULSTONE)
 			//soulstone
 			anomaly_factor = 4
-			apply_prefix = 0
+			apply_prefix = FALSE
 			new_item = new /obj/item/device/soulstone(src.loc)
 			item_type = new_item.name
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 		if(ARCHAEO_SHARD)
 			if(prob(50))
 				new_item = getFromPool(/obj/item/weapon/shard, loc)
 			else
 				new_item = getFromPool(/obj/item/weapon/shard/plasma, loc)
 
-			apply_prefix = 0
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_prefix = FALSE
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 		if(ARCHAEO_RODS)
-			apply_prefix = 0
+			apply_prefix = FALSE
 			new_item = new /obj/item/stack/rods(src.loc)
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 		if(ARCHAEO_STOCKPARTS)
 			var/list/possible_spawns = existing_typesof(/obj/item/weapon/stock_parts)
 
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 			item_type = new_item.name
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			anomaly_factor = 2
 		if(ARCHAEO_KATANA)
-			apply_prefix = 0
+			apply_prefix = FALSE
 			new_item = new /obj/item/weapon/katana(src.loc)
 			new_item.force = pick(50;10,40;20,10;40)
 			switch(new_item.force)
@@ -397,7 +397,7 @@
 				//10% chance to have an unchargeable cell
 				//15% chance to gain a random amount of starting energy, otherwise start with an empty cell
 				if(prob(5))
-					new_gun.power_supply.rigged = 1
+					new_gun.power_supply.rigged = TRUE
 				if(prob(10))
 					new_gun.power_supply.maxcharge = 0
 				if(prob(15))
@@ -456,7 +456,7 @@
 			if(prob(50))
 				new_item = new /obj/item/weapon/glow_orb(loc)
 			if(prob(50))
-				apply_image_decorations = 0
+				apply_image_decorations = FALSE
 		if(ARCHAEO_FOSSIL)
 			//fossil bone/skull
 			//new_item = new /obj/item/weapon/fossil/base(src.loc)
@@ -467,31 +467,31 @@
 			var/spawn_type = pickweight(candidates)
 			new_item = new spawn_type(src.loc)
 
-			apply_prefix = 0
+			apply_prefix = FALSE
 			additional_desc = "A fossilised part of an alien, long dead."
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 		if(ARCHAEO_SHELL)
 			//fossil shell
 			new_item = new /obj/item/weapon/fossil/shell(src.loc)
-			apply_prefix = 0
+			apply_prefix = FALSE
 			additional_desc = "A fossilised, pre-Stygian alien crustacean."
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 			if(prob(10))
-				apply_image_decorations = 1
+				apply_image_decorations = TRUE
 		if(ARCHAEO_PLANT)
 			//fossil plant
 			new_item = new /obj/item/weapon/fossil/plant(src.loc)
 			item_type = new_item.name
 			additional_desc = "A fossilised shred of alien plant matter."
-			apply_image_decorations = 0
-			apply_material_decorations = 0
-			apply_prefix = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
+			apply_prefix = FALSE
 		if(ARCHAEO_REMAINS_HUMANOID)
 			//humanoid remains
 			anomaly_factor = 2
-			apply_prefix = 0
+			apply_prefix = FALSE
 			item_type = "humanoid [pick("remains","skeleton")]"
 			icon = 'icons/effects/blood.dmi'
 			icon_state = "remains"
@@ -502,12 +502,12 @@
 			"The bones are scored by numerous burns and partially melted.",\
 			"The are battered and broken, in some cases less than splinters are left.",\
 			"The mouth is wide open in a death rictus, the victim would appear to have died screaming.")
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 		if(ARCHAEO_REMAINS_ROBOT)
 			//robot remains
 			anomaly_factor = 2
-			apply_prefix = 0
+			apply_prefix = FALSE
 			item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
 			icon = 'icons/effects/blood.dmi'
 			icon_state = "remainsrobot"
@@ -518,12 +518,12 @@
 			"The chassis is scored by numerous burns and partially melted.",\
 			"The chassis is battered and broken, in some cases only chunks of metal are left.",\
 			"A pile of wires and crap metal that looks vaguely robotic.")
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 		if(ARCHAEO_REMAINS_XENO)
 			//xenos remains
 			anomaly_factor = 2
-			apply_prefix = 0
+			apply_prefix = FALSE
 			item_type = "alien [pick("remains","skeleton")]"
 			icon = 'icons/effects/blood.dmi'
 			icon_state = "remainsxeno"
@@ -535,12 +535,12 @@
 			"The are battered and broken, in some cases less than splinters are left.",\
 			"This creature would have been twisted and monstrous when it was alive.",\
 			"It doesn't look human.")
-			apply_image_decorations = 0
-			apply_material_decorations = 0
+			apply_image_decorations = FALSE
+			apply_material_decorations = FALSE
 		if(ARCHAEO_MASK)
 			//masks
 			anomaly_factor = 4
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns = list()
 			possible_spawns += /obj/item/clothing/mask/morphing
 			possible_spawns += /obj/item/clothing/mask/morphing/amorphous
@@ -550,7 +550,7 @@
 		if(ARCHAEO_DICE)
 			//dice
 			anomaly_factor = 4
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/weapon/dice/d20/cursed
 			var/new_type = pick(possible_spawns)
@@ -558,7 +558,7 @@
 		if(ARCHAEO_SPACESUIT)
 			//space suit
 			anomaly_factor = 2
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/clothing/suit/space/ancient
 			possible_spawns += /obj/item/clothing/head/helmet/space/ancient
@@ -566,14 +566,14 @@
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_LANCE)
 			//lance
-			anomaly_factor = 0
-			apply_material_decorations = 1
-			apply_image_decorations = 1
+			anomaly_factor = FALSE
+			apply_material_decorations = TRUE
+			apply_image_decorations = TRUE
 			new_item = new /obj/item/weapon/melee/lance(src.loc)
 		if(ARCHAEO_ROULETTE)
 			//roulette revolver
 			anomaly_factor = 2
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/weapon/gun/projectile/roulette_revolver
 			var/new_type = pick(possible_spawns)
@@ -581,8 +581,9 @@
 		if(ARCHAEO_ROBOT)
 			//ancient robots?
 			anomaly_factor = 2
-			apply_material_decorations = 0
-			apply_image_decorations = 0
+			apply_prefix = FALSE
+			apply_material_decorations = FALSE
+			apply_image_decorations = FALSE
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/device/mmi/posibrain/strangeball
 			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
@@ -591,15 +592,15 @@
 		if(ARCHAEO_SASH)
 			//red ribbon arm
 			anomaly_factor = 2
-			apply_material_decorations = 0
+			apply_material_decorations = FALSE
 			var/list/possible_spawns=list()
 			possible_spawns += /obj/item/red_ribbon_arm
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_TOY)
-			apply_material_decorations = 1
-			apply_image_decorations = 0
-			apply_prefix = 1
+			apply_material_decorations = TRUE
+			apply_image_decorations = FALSE
+			apply_prefix = TRUE
 			if(prob(50))
 				anomaly_factor = 0
 				new_item = new /obj/item/weapon/bikehorn/rubberducky/quantum(loc)
@@ -609,7 +610,19 @@
 				possible_spawns = existing_typesof(/obj/item/toy)
 				var/new_type = pick(possible_spawns)
 				new_item = new new_type(src.loc)
-
+		if(ARCHAEO_LARGE_CRYSTAL)
+			new_item = new/obj/structure/crystal(loc)
+			apply_material_decorations = FALSE
+			apply_image_decorations = TRUE
+			desc = new_item.desc
+		if(ARCHAEO_CHAOS)
+			//Chaos blade
+			item_type = "blade"
+			apply_prefix = TRUE
+			new_item = new /obj/item/weapon/nullrod/sword/chaos(src.loc)
+			apply_material_decorations = FALSE
+			apply_image_decorations = FALSE
+			anomaly_factor = 4
 
 	var/decorations = ""
 	if(apply_material_decorations)
@@ -655,7 +668,7 @@
 		desc += engravings
 
 	if(apply_prefix)
-		name = "[pick("Strange","Ancient","Alien","")] [item_type]"
+		name = "[pick("strange","ancient","alien","")] [item_type]"
 	else
 		name = item_type
 
@@ -671,10 +684,10 @@
 		new_item.desc = src.desc
 
 		if(talkative && istype(new_item,/obj/item/weapon))
-			new_item.listening_to_players = 1
+			new_item.listening_to_players = TRUE
 			new_item.heard_words = list()
 			if(prob(25))
-				new_item.speaking_to_players = 1
+				new_item.speaking_to_players = TRUE
 				processing_objects.Add(new_item)
 
 		if(!findtext(new_item.origin_tech, Tc_ANOMALY))
@@ -690,9 +703,9 @@
 		origin_tech = Tc_ANOMALY+"=[anomaly_factor]"
 
 		if(talkative)
-			listening_to_players = 1
+			listening_to_players = TRUE
 			if(prob(25))
 				if(!heard_words)
 					heard_words = list()
-				speaking_to_players = 1
+				speaking_to_players = TRUE
 				processing_objects.Add(src)

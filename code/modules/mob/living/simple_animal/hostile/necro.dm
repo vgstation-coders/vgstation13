@@ -473,7 +473,7 @@
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
 		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
 			var/obj/item/weapon/storage/bible/bible = W
-			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.deity_name] to bring this poor soul back from the brink.</span>")
+			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
@@ -482,7 +482,7 @@
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
 					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -500,7 +500,7 @@
 							holy_modifier += 1
 
 					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -643,7 +643,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/Life()
 	..()
-	if(radiation && health < maxHealth)
+	if(!isDead() && radiation && health < maxHealth)
 		health++
 		radiation--
 
@@ -671,11 +671,10 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/Life()
 	..()
-
-
-	if(world.time > last_rad_blast+20 SECONDS)
-		rad_blast()
-	radiation+=5
+	if(!isDead())
+		if(world.time > last_rad_blast+20 SECONDS)
+			rad_blast()
+		radiation+=5
 
 /mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one/proc/rad_blast()
 	if(radiation > RAD_COST)
@@ -688,14 +687,19 @@
 				var/rad_cost = min(radiation, rand(10,20))
 				H.apply_radiation(rad_cost, RAD_EXTERNAL)
 				radiation -= rad_cost
-			for(var/mob/living/simple_animal/hostile/necro/zombie/ghoul/G in can_see)
-				if(G.isDead() && radiation > 100)
-					G.revive()
-					radiation -= 100
-				if(radiation > 25)
-					var/rad_cost = min(radiation, rand(10,20))
-					G.apply_radiation(10, RAD_EXTERNAL)
-					radiation -= rad_cost
+				if(!radiation)
+					break
+			if(radiation > 25)
+				for(var/mob/living/simple_animal/hostile/necro/zombie/ghoul/G in can_see)
+					if(G.isDead() && radiation > 100)
+						G.revive()
+						radiation -= 100
+					if(radiation > 25)
+						var/rad_cost = min(radiation, rand(10,20))
+						G.apply_radiation(10, RAD_EXTERNAL)
+						radiation -= rad_cost
+					if(radiation < 25)
+						break
 			last_rad_blast = world.time
 			spawn(3 SECONDS)
 				set_light(1, 2, "#5dca31")

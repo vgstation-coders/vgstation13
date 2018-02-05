@@ -40,7 +40,7 @@
 
 			var/sender
 			var/message
-			switch(pick(1, 2, 3, 4, 5, 6, 7))
+			switch(pick(1, 2, 3, 4, 5, 6, 7, 8))
 				if(1)
 					sender = pick("MaxBet", "MaxBet Online Casino", "There is no better time to register", "I'm excited for you to join us")
 					message = pick("Triple deposits are waiting for you at MaxBet Online when you register to play with us.", \
@@ -88,6 +88,15 @@
 					"You have won tickets to the newest crime drama DETECTIVE MYSTERY IN THE CLAMITY CAPER!", \
 					"You have won tickets to the newest romantic comedy 16 RULES OF LOVE!", \
 					"You have won tickets to the newest thriller THE CULT OF THE SLEEPING ONE!")
+				if(8)
+					sender = "Sponsored Content from " + pick("*buzzFeed", "ViralBluespace", "Clickvox", "Daily Honk")
+					message = pick("This Assistant Died and Not a Word Was Said, Here’s Why", \
+					"Five SME Setups That Will Make You Say, \"I Can't Believe That Works!\" (Number Four Will Shock You)", \
+					"Is Your HoP A Traitor?... He Is, If He Does These Five Things. Click And Find Out!", \
+					"These Scientists TRIPLED An Assistant's IQ - The Results Will Break Your Heart", \
+					"Throw Away Your Slim-Belt! What This One Woman Did With a Plastic Bag Will Shock You!", \
+					"Two Close Friends Went Exploring A Derelict Station. What They Found Is Chilling.", \
+					"She Gave A Homeless Assistant A Free Meal, What Happened Next Is Incredible")
 
 			useMS.send_pda_message("[P.owner]", sender, message)
 

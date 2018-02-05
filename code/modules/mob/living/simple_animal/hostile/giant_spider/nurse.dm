@@ -152,8 +152,10 @@
 										if(istype(M, /mob/living/simple_animal/hostile/giant_spider))
 											continue
 										large_cocoon = 1
-										fed++
-										src.visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
+										if(M.getCloneLoss() < 125)
+											fed++
+											src.visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
+											M.adjustCloneLoss(30 * size)
 										M.forceMove(C)
 										C.pixel_x = M.pixel_x
 										C.pixel_y = M.pixel_y

@@ -103,7 +103,7 @@
 		return
 	..()
 
-/obj/structure/bed/chair/vehicle/janicart/Move()
+/obj/structure/bed/chair/vehicle/janicart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(upgraded)
 		var/turf/tile = loc
@@ -111,7 +111,7 @@
 			tile.clean_blood()
 			for(var/A in tile)
 				if(istype(A, /obj/effect))
-					if(istype(A, /obj/effect/rune) || istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/overlay))
+					if(iscleanaway(A))
 						qdel(A)
 				else if(istype(A, /obj/item))
 					var/obj/item/cleaned_item = A
