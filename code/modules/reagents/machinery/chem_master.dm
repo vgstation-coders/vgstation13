@@ -3,11 +3,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 "oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
 "round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
 
-#define BEAKER 1
-#define STORAGE 2
-#define BUFFER 3
-#define FLUSH 4
-#define MAXMODES 5 // When it flips back to 1
+#define BEAKER "Beaker"
+#define STORAGE "Storage"
+#define BUFFER "Buffer"
+#define FLUSH "FLUSH"
 
 
 /obj/machinery/chem_master
@@ -40,8 +39,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/datum/reagents/storage
 	var/datum/reagents/buffer
 
-	var/storage_mode = 1 // Where the reagents go, beaker, buffer, flush
-	var/buffer_mode = 1 // Storage, flush
+	var/storage_mode = BEAKER // Where the reagents go, beaker, buffer, flush
+	var/buffer_mode = BEAKER // Storage, flush
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
@@ -208,14 +207,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		dat += "<HR>"
 		dat += "<b>&ltInternal Chemical Storage&gt</b> <BR>"
 
-		var/s_mode_text
-		if(storage_mode == BEAKER)
-			s_mode_text = "Beaker"
-		if(storage_mode == BUFFER)
-			s_mode_text = "Buffer"
-		if(storage_mode == FLUSH)
-			s_mode_text = "FLUSH"
-		dat += "Mode: <A href='?src=\ref[src];togglestorage=1'>[s_mode_text]</A> <BR>"
+		dat += "Mode: <A href='?src=\ref[src];togglestorage=1'>[storage_mode]</A> <BR>"
 
 		if(storage.total_volume)
 			dat += "<table>"
@@ -243,14 +235,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	dat += "<HR>"
 	dat += "<b>&ltInternal Chemical Buffer&gt</b> <BR>"
 
-	var/b_mode_text
-	if(buffer_mode == BEAKER)
-		b_mode_text = "Beaker"
-	if(buffer_mode == STORAGE)
-		b_mode_text = "Storage"
-	if(buffer_mode == FLUSH)
-		b_mode_text = "FLUSH"
-	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[b_mode_text]</A> <BR>"
+	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[buffer_mode]</A> <BR>"
 
 	if(buffer.total_volume)
 		dat += "<table>"
@@ -286,8 +271,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if (i%10 == 0)
 				dat +="<br>"
 		dat += "</div>"
-	
-	
+
+
 	// Pill creation
 	dat += "<BR>"
 	if(!condi)
@@ -420,12 +405,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			return 1
 
 		if(href_list["togglestorage"])
-			storage_mode += 1
-			if(storage_mode == MAXMODES)
-				storage_mode = 1
-			if(storage_mode == STORAGE)
-				src.Topic(null, list("togglestorage" = 1))
-
+			switch(storage_mode)
+				if(BEAKER)	
+					storage_mode = BUFFER
+				if(BUFFER)	
+					storage_mode = FLUSH
+				if(FLUSH)	
+					storage_mode = BEAKER
 			src.updateUsrDialog()
 			return 1
 
@@ -457,7 +443,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			amount = text2num(href_list["amount"])
 		if(isnull(amount) || amount < 0)
 			return
-		
+
 		if(buffer_mode == BEAKER)
 			buffer.trans_id_to(beaker, id, amount)
 		if(buffer_mode == STORAGE) 	// If it's trying to move to storage but we don't have one because we clear reagents
@@ -482,11 +468,15 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return 1
 
 	if(href_list["togglebuffer"])
-		buffer_mode += 1
-		if(buffer_mode == MAXMODES)
-			buffer_mode = 1
-		if((clear_reagents && buffer_mode == STORAGE) || buffer_mode == BUFFER)
-			src.Topic(null, list("togglebuffer" = 1))
+		switch(buffer_mode)
+			if(BEAKER)
+				buffer_mode = STORAGE
+				if(clear_reagents)
+					buffer_mode = FLUSH
+			if(STORAGE)	
+				buffer_mode = FLUSH
+			if(FLUSH)	
+				buffer_mode = BEAKER
 		src.updateUsrDialog()
 		return 1
 
@@ -571,12 +561,12 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		investigation_log(I_CHEMS, logged_message)
 		src.updateUsrDialog()
 		return 1
-	
+
 	if(href_list["pill_sprite"])
 		pillsprite = href_list["pill_sprite"]
 		src.updateUsrDialog()
 		return 1
-	
+
 /obj/machinery/chem_master/proc/isgoodnumber(var/num)
 	if(isnum(num))
 		if(num > 200)
@@ -637,9 +627,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				return
 
 // Chem master 4000
-/obj/machinery/chem_master/chem_master_4000
+/obj/machinery/chem_master/chemical_manipulator
 	name = "\improper Chemical Manipulator"
-	icon_state = "mixer"
+	icon_state = "manipulator"
+	/obj/item/weapon/circuitboard/chemical_manipulator
 	clear_reagents = 0
 
 /obj/machinery/chem_master/chemical_manipulator/update_icon()
@@ -658,4 +649,3 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 #undef STORAGE
 #undef BUFFER
 #undef FLUSH
-#undef MAXMODES
