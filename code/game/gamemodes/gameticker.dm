@@ -29,10 +29,6 @@ var/datum/controller/gameticker/ticker
 
 	var/hardcore_mode = 0	//If set to nonzero, hardcore mode is enabled (current hardcore mode features: damage from hunger)
 							//Use the hardcore_mode_on macro - if(hardcore_mode_on) to_chat(user,"You're hardcore!")
-
-	var/list/syndicate_coalition = list() // list of traitor-compatible factions
-	var/list/factions = list()			  // list of all factions
-	var/list/availablefactions = list()	  // list of factions with openings
 	var/datum/rune_controller/rune_controller
 
 	var/pregame_timeleft = 0
@@ -458,12 +454,6 @@ var/datum/controller/gameticker/ticker
 				delay_end = 2
 
 	return 1
-
-/datum/controller/gameticker/proc/getfactionbyname(var/name)
-	for(var/datum/faction/F in factions)
-		if(F.name == name)
-			return F
-
 
 /datum/controller/gameticker/proc/init_PDAgames_leaderboard()
 	init_snake_leaderboard()

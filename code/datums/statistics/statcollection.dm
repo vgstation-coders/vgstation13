@@ -209,7 +209,7 @@
 	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[start_timestamp]|[end_timestamp]"
 	statfile << "MASTERMODE|[master_mode]" // sekrit, or whatever else was decided as the 'actual' mode on round start.
 	var/T = "GAMEMODE"
-	for(var/datum/faction/GM in ticker.factions)
+	for(var/datum/faction/GM in ticker.mode.factions)
 		T += "|[GM.name]"
 	statfile << T
 
