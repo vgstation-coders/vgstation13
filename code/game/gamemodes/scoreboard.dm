@@ -1,6 +1,6 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
-	for(var/datum/faction/F in ticker.factions)
+	for(var/datum/faction/F in ticker.mode.factions)
 		completions += F.GetObjectivesMenuHeader()
 		completions += F.GetScoreboard()
 
