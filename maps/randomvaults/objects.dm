@@ -672,7 +672,6 @@
 
 	active_power_usage = 500
 	density = 1
-	var/powered
 
 /obj/machinery/power/magtape_deck/New()
 	..()
@@ -681,9 +680,9 @@
 /obj/machinery/power/magtape_deck/process()
 	if(stat & BROKEN)
 		return
-	if(avail(active_power_usage))
-		powered = 1
-	else
+	var/powered = 1
+
+	if(surplus() < active_power_usage)
 		powered = 0
 
 	if(powered && stat & NOPOWER)
@@ -692,6 +691,13 @@
 	else if (!powered && !(stat & NOPOWER))
 		stat |= NOPOWER
 		update_icon()
+
+
+/obj/machinery/power/battery/magtape_deck/surplus()
+	if(terminal)
+		return terminal.surplus()
+	return 0
+
 
 /obj/machinery/power/magtape_deck/update_icon()
 	if(stat & (BROKEN|NOPOWER))
