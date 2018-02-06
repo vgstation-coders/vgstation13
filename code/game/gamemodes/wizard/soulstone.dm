@@ -315,7 +315,7 @@
 				return
 
 			var/mob/living/T = target
-			for(var/datum/faction/cult/C in ticker.factions)
+			for(var/datum/faction/cult/C in ticker.mode.factions)
 				if(C.is_sacrifice_target(T.mind))
 					to_chat(U, "<span class='warning'>The soul stone is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 					return

@@ -1609,8 +1609,8 @@ Game Mode config tags:
 
 /proc/find_active_faction(var/faction_name)
 	var/found_faction = null
-	if(ticker && ticker.factions.len)
-		for(var/datum/faction/F in ticker.factions)
+	if(ticker && ticker.mode && ticker.mode.factions.len)
+		for(var/datum/faction/F in ticker.mode.factions)
 			if(faction_name in F.ID)
 				found_faction = F
 				break
@@ -1622,8 +1622,8 @@ Game Mode config tags:
 	var/found_faction = null
 	if(R.GetFaction())
 		return R.GetFaction()
-	if(ticker && ticker.factions.len)
-		for(var/datum/faction/F in ticker.factions)
+	if(ticker && ticker.mode && ticker.mode.factions.len)
+		for(var/datum/faction/F in ticker.mode.factions)
 			if(R in F.members)
 				found_faction = F
 				break
