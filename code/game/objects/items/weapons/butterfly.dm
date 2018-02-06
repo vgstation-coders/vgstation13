@@ -67,7 +67,7 @@
 	counting = null
 	bug = initial(bug)
 	playsound(src, 'sound/items/healthanalyzer.ogg', 10, 1)
-	to_chat(user, "<span class='notice'>\The [src] hums.</span>")
+	to_chat(user, "<span class='notice'>\The [src] beeps.</span>")
 
 /obj/item/weapon/butterflyknife/proc/unfold()
 	open = TRUE
