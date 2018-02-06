@@ -148,11 +148,6 @@ var/list/SPS_list = list()
 	icon_state = "gps-m"
 	base_tag = "MIN"
 
-/obj/item/device/gps/cyborg
-	desc = "A mining cyborg internal positioning system. Used as a recovery beacon for damaged silicons, or a collaboration tool for mining teams."
-	icon_state = "gps-b"
-	base_tag = "BORG"
-
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
 	desc = "A secure channel SPS. It announces the position of the wearer if killed or stripped off."
