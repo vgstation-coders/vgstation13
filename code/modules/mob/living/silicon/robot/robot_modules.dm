@@ -228,6 +228,7 @@
 		"Default" = "medbot",
 		"Needles" = "needles",
 		"Surgeon" = "surgeon",
+		"EVE" = "eve",
 		"Droid" = "droid-medical",
 		"Marina" = "marina",
 		"Sleek" = "sleekmedic",
@@ -297,6 +298,7 @@
 		"Default" = "engibot",
 		"Engiseer" = "engiseer",
 		"Landmate" = "landmate",
+		"Wall-E" = "wall-e",
 		"Droid" = "droid-engineer",
 		"Marina" = "marinaEN",
 		"Sleek" = "sleekengineer",
@@ -463,6 +465,7 @@
 	sprites = list(
 		"Default" = "minerbot",
 		"Treadhead" = "Miner",
+		"Wall-A" = "wall-a",
 		"Droid" = "droid-miner",
 		"Marina" = "marinaMN",
 		"Sleek" = "sleekminer",
@@ -525,6 +528,7 @@
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	can_be_pushed = FALSE
 	sprites = list(
+		"Bladewolf" = "bladewolf",
 		"Bladewolf MK-2" = "bladewolfmk2",
 		"Mr. Gutsy" = "mrgutsy",
 		"Droid" = "droid-combat",
