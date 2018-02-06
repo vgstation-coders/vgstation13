@@ -161,5 +161,14 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/zathura
 	file_path = "maps/randomvaults/house.dmm"
 
+/datum/map_element/vault/spy_sat
+	file_path = "maps/randomvaults/spy_satellite.dmm"
+
+/datum/map_element/vault/spy_sat/pre_load()
+	load_dungeon(/datum/map_element/dungeon/satellite_deployment)
+
+/datum/map_element/dungeon/satellite_deployment
+	file_path = "maps/randomvaults/dungeons/satellite_deployment.dmm"
+
 /datum/map_element/vault/ironchef
 	file_path = "maps/randomvaults/ironchef.dmm"
