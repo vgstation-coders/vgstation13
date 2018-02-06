@@ -318,27 +318,30 @@
 /datum/role/proc/GetScoreboard()
 	//If you've gotten here to find what the hell this proc is for, you've hit a dead end. We don't know either.
 
-// DO NOT OVERRIDE.
+// DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
-	if(!check_rights(R_ADMIN))
-		return 1
 	if(!href_list["mind"])
 		to_chat(usr, "<span class='warning'>BUG: mind variable not specified in Topic([href])!</span>")
-		return
+		return 1
 
 	var/datum/mind/M = locate(href_list["mind"])
 	if(!M)
 		return
 
-	if("auto_objectives" in href_list)
+	RoleTopic(href, href_list, M, check_rights(R_ADMIN))
+
+// USE THIS INSTEAD (global)
+/datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	if(admin_auth && !check_rights(R_ADMIN))
+		message_admins("<span class='warning'>Something fucky is going on. [usr] has admin_auth 1 on their RoleTopic, but failed actual check_rights(R_ADMIN)!</span>")
+		return 1
+
+	if("auto_objectives" in href_list && admin_auth)
 		var/datum/role/R = M.GetRole(href_list["auto_objectives"])
 		R.ForgeObjectives()
 		to_chat(usr, "<span class='info'>The objectives for [M.key] have been generated. You can edit them. Remember to announce their objectives.</span>")
 		return
 
-// USE THIS INSTEAD (global)
-/datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M)
-	return
 
 /datum/role/proc/MemorizeObjectives()
 	var/text="<b>[name] Objectives:</b><ul>"
