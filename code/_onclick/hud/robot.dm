@@ -64,6 +64,26 @@
 
 //End of module select
 
+//Photography stuff
+
+	using = getFromPool(/obj/abstract/screen)
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "take_picture"
+	using.name = "Take Image"
+	using.dir = SOUTHWEST
+	using.screen_loc = ui_borg_camera
+	using.layer = HUD_BASE_LAYER
+	src.adding += using
+
+	using = getFromPool(/obj/abstract/screen)
+	using.icon = 'icons/mob/screen_ai.dmi'
+	using.icon_state = "view_images"
+	using.name = "View Images"
+	using.dir = SOUTHWEST
+	using.screen_loc = ui_borg_album
+	using.layer = HUD_BASE_LAYER
+	src.adding += using
+
 //Intent
 	using = getFromPool(/obj/abstract/screen)
 	using.name = "act_intent"

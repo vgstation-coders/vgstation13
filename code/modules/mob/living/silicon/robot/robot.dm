@@ -84,6 +84,10 @@
 	var/lawcheck[1]
 	var/ioncheck[1]
 
+//Photography
+	var/obj/item/device/camera/silicon/aicamera = null
+	var/toner = CYBORG_STARTING_TONER
+	var/tonermax = CYBORG_MAX_TONER
 
 /mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0,var/startup_sound='sound/voice/liveagain.ogg')
 	if(isMoMMI(src))
@@ -121,6 +125,7 @@
 	station_holomap = new(src)
 
 	radio = new /obj/item/device/radio/borg(src)
+	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
@@ -1016,7 +1021,14 @@
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
-
+	else if(istype(W, /obj/item/device/toner))
+		if(toner >= tonermax)
+			to_chat(user, "The toner level of [src] is at it's highest level possible")
+		else
+			toner = CYBORG_MAX_TONER
+			user.drop_item()
+			qdel(W)
+			to_chat(user, "You fill the toner level of [src] to it's max capacity")
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
 		if (U.attempt_action(src,user))

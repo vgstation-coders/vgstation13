@@ -39,12 +39,10 @@
 		return
 	face_atom(A) // change direction to face what you clicked on
 
-	/*
-	cyborg restrained() currently does nothing
-	if(restrained())
-		RestrainedClickOn(A)
+	if(aicamera.in_camera_mode) //Cyborg picture taking
+		aicamera.camera_mode_off()
+		aicamera.captureimage(A, usr)
 		return
-	*/
 
 	var/obj/item/W = get_active_hand()
 
