@@ -36,7 +36,7 @@ var/list/ai_list = list()
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/item/device/station_map/station_holomap = null
 	var/custom_sprite = FALSE //For our custom sprites
-	var/obj/item/device/camera/silicon/aicamera = null
+	var/obj/item/device/camera/ai_camera/aicamera = null
 //Hud stuff
 
 	//MALFUNCTION
@@ -114,7 +114,7 @@ var/list/ai_list = list()
 	station_holomap = new(src)
 
 	aiMulti = new(src)
-	aicamera = new/obj/item/device/camera/silicon/ai_camera(src)
+	aicamera = new/obj/item/device/camera/ai_camera(src)
 	if(istype(loc, /turf))
 		verbs.Add(/mob/living/silicon/ai/proc/ai_network_change, \
 		/mob/living/silicon/ai/proc/ai_statuschange, \

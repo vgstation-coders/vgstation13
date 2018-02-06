@@ -35,8 +35,6 @@
 #define ui_alien_head "WEST+3:[12*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//aliens
 #define ui_alien_oclothing "WEST+4:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//aliens
 
-#define ui_borg_album "CENTER-5:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//borgs
-#define ui_borg_camera "CENTER-4:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//borgs
 #define ui_borg_sight "CENTER-3:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//borgs
 #define ui_inv1 "CENTER-2:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"			//borgs
 #define ui_inv2 "CENTER-1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"			//borgs
