@@ -82,12 +82,7 @@
 	dat += "<HR>"
 	dat += "<b>&ltInternal Snack Buffer&gt</b> <BR>"
 
-	var/b_mode_text
-	if(buffer_mode == 1)
-		b_mode_text = "Storage"
-	if(buffer_mode == 2)
-		b_mode_text = "CONSUME"
-	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[b_mode_text]</A> <BR>"
+	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[buffer_mode]</A> <BR>"
 
 	if(buffer.total_volume)
 		dat += "<table>"
