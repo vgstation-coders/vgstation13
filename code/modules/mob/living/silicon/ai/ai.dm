@@ -101,7 +101,7 @@ var/list/ai_list = list()
 
 	proc_holder_list = new()
 
-	//Determine the AI's lawset 
+	//Determine the AI's lawset
 	if(L && istype(L,/datum/ai_laws))
 		src.laws = L
 	else
