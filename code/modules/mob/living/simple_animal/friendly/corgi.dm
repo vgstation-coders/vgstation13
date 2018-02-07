@@ -17,6 +17,8 @@
 	speak_chance = 1
 	turns_per_move = 10
 
+	speak_override = TRUE
+
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
 	holder_type = /obj/item/weapon/holder/animal/corgi
 
