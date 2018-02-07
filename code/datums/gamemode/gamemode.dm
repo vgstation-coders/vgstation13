@@ -104,11 +104,9 @@
 	for(var/mob/new_player/P in available_players)
 		if(!P.client || !P.mind)
 			available_players.Remove(P)
-			to_chat(world, "[P] had no mind or client.")
 			continue
 		if(!P.client.desires_role(initial(R.required_pref)) || jobban_isbanned(P, initial(R.required_pref)))
 			available_players.Remove(P)
-			to_chat(world, "with required_pref being [initial(R.required_pref)], [P] was either job_banned ([jobban_isbanned(P, initial(R.required_pref))]) or did not desire the role ([!P.client.desires_role(initial(R.required_pref))])")
 			continue
 	for(var/i = 0 to num)
 		if(!available_players.len)
@@ -154,7 +152,6 @@
 	for(var/datum/faction/F in factions)
 		F.OnPostSetup()
 	for(var/datum/role/R in orphaned_roles)
-		to_chat(world, "Calling Role OnPostSetup in gamemode.dm line 158")
 		R.OnPostSetup()
 	return 1
 
