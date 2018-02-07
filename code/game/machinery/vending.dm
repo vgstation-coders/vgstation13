@@ -370,7 +370,7 @@ var/global/num_vending_terminals = 1
 		extended_inventory = 1
 		scan_id = 0
 		return 1
-	return -1 //Fucking gross
+	return 0 //Fucking gross
 
 /obj/machinery/vending/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -483,9 +483,12 @@ var/global/num_vending_terminals = 1
 			add_item(W)
 			src.updateUsrDialog()
 	else if(istype(W, /obj/item/weapon/card/emag))
-		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
-		emag()
+		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
+		if (emag())
+			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
+		else
+			to_chat(user, "<span class='info'>Nothing happens.</span>")
 				
 	else if(istype(W, /obj/item/weapon/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
