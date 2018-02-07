@@ -1,5 +1,7 @@
 /datum/role/changeling
 	name = "Changeling"
+	id = CHANGELING
+	required_pref = ROLE_CHANGELING
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	var/list/absorbed_dna = list()
 	var/list/absorbed_species = list()
@@ -16,8 +18,6 @@
 	var/purchasedpowers = list()
 	var/mimicing = ""
 
-
-
 /datum/role/changeling/OnPostSetup()
 	. = ..()
 	antag.current.make_changeling()
@@ -32,6 +32,17 @@
 		changelingID = "[honorific] [changelingID]"
 	else
 		changelingID = "[honorific] [rand(1,999)]"
+
+/datum/role/changeling/Greet(var/you_are=1)
+	if (you_are)
+		to_chat(antag.current, "<B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
+	to_chat(antag.current, "<span class='danger'>Use say \":g message\" to communicate with your fellow changelings. Remember: you get all of their absorbed DNA if you absorb them.</span>")
+	if (antag.current.mind && antag.current.mind.assigned_role == "Clown")
+		to_chat(antag.current, "You have evolved beyond your clownish nature, allowing you to wield weapons without harming yourself.")
+		antag.current.mutations.Remove(M_CLUMSY)
+	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
+	to_chat(antag.current, "[ReturnObjectivesString()]")
+	antag.store_memory("[ReturnObjectivesString()]")
 
 /datum/role/changeling/proc/regenerate()
 	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
@@ -345,7 +356,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 					if(!ownsthis)
 					{
-						body += "<a href='?src=\ref[src];P="+power+"'>Evolve</a>"
+						body += "<a href='?src=\ref[src];P="+power+";mind=\ref[antag];'>Evolve</a>"
 					}
 
 
@@ -529,13 +540,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	usr << browse(dat, "window=powers;size=900x480")
 
 
-/datum/role/changeling/RoleTopic(href, href_list)
+/datum/role/changeling/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	..()
-	if(!ismob(usr))
-		return
-
 	if(href_list["P"])
-		var/datum/mind/M = usr.mind
 		if(!istype(M))
 			return
 		purchasePower(M, href_list["P"])
@@ -547,6 +554,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/role/changeling/proc/purchasePower(var/datum/mind/M, var/Pname, var/remake_verbs = 1)
 	if(!M || !M.GetRole(CHANGELING))
+		to_chat(M.current, "Either you have no mind, or you're not a changeling!")
 		return
 
 	var/datum/power/changeling/Thepower = Pname

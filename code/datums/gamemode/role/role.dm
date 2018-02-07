@@ -68,6 +68,9 @@
 	// If set, sets special_role to this
 	var/special_role=null
 
+	// The required preference for this role
+	var/required_pref = ""
+
 	// If set, assigned role is set to MODE to prevent job assignment.
 	var/disallow_job=0
 
@@ -133,8 +136,8 @@
 	if(faction && src in faction.members)
 		faction.members.Remove(src)
 
-	if(!faction)
-		ticker.mode.orphaned_roles -= src
+	if(!faction && src in ticker.mode.orphaned_roles)
+		ticker.mode.orphaned_roles.Remove(src)
 
 	if(antag)
 		RemoveFromRole(antag)

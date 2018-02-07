@@ -40,6 +40,7 @@
 	objective_holder = new
 	forgeObjectives()
 	for(var/datum/role/R in members)
+		to_chat(world, "Calling Role OnPostSetup at line 43")
 		R.OnPostSetup()
 
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
