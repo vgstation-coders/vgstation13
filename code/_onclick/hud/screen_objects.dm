@@ -453,10 +453,10 @@
 		if("Take Image")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.aicamera.toggle_camera_mode()
+				AI.aicamera.toggle_camera_mode(AI)
 			else if(isrobot(usr))
 				var/mob/living/silicon/robot/R = usr
-				R.aicamera.toggle_camera_mode()
+				R.aicamera.toggle_camera_mode(R)
 
 		if("View Images")
 			if(isAI(usr))

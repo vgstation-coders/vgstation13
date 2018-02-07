@@ -40,8 +40,8 @@
 	face_atom(A) // change direction to face what you clicked on
 
 	if(aicamera.in_camera_mode) //Cyborg picture taking
-		aicamera.camera_mode_off()
-		aicamera.captureimage(A, usr)
+		aicamera.toggle_camera_mode(src)
+		aicamera.captureimage(A, src)
 		return
 
 	var/obj/item/W = get_active_hand()

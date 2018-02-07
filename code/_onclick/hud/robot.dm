@@ -1,6 +1,5 @@
 /datum/hud/proc/robot_hud()
 
-
 	src.adding = list()
 	src.other = list()
 
@@ -64,26 +63,6 @@
 
 //End of module select
 
-//Photography stuff
-
-	using = getFromPool(/obj/abstract/screen)
-	using.icon = 'icons/mob/screen_ai.dmi'
-	using.icon_state = "take_picture"
-	using.name = "Take Image"
-	using.dir = SOUTHWEST
-	using.screen_loc = ui_borg_camera
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
-
-	using = getFromPool(/obj/abstract/screen)
-	using.icon = 'icons/mob/screen_ai.dmi'
-	using.icon_state = "view_images"
-	using.name = "View Images"
-	using.dir = SOUTHWEST
-	using.screen_loc = ui_borg_album
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
-
 //Intent
 	using = getFromPool(/obj/abstract/screen)
 	using.name = "act_intent"
@@ -145,6 +124,20 @@
 	mymob.pressure.name = "environment pressure"
 	mymob.pressure.screen_loc = ui_borg_pressure
 
+//Photography stuff
+
+	mymob.camera_icon = getFromPool(/obj/abstract/screen)
+	mymob.camera_icon.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.camera_icon.icon_state = "camera"
+	mymob.camera_icon.name = "Take Image"
+	mymob.camera_icon.screen_loc = ui_borg_camera
+
+	mymob.album_icon = getFromPool(/obj/abstract/screen)
+	mymob.album_icon.icon = 'icons/mob/screen1_robot.dmi'
+	mymob.album_icon.icon_state = "album"
+	mymob.album_icon.name = "View Images"
+	mymob.album_icon.screen_loc = ui_borg_album
+
  //unused, go home
 	mymob.oxygen = getFromPool(/obj/abstract/screen)
 	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
@@ -191,7 +184,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.fire, mymob.pressure, mymob.bodytemp, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen)
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.fire, mymob.pressure, mymob.bodytemp, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon, mymob.camera_icon, mymob.album_icon) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen)
 	mymob.client.screen += src.adding + src.other
 
 	return

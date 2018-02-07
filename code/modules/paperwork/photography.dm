@@ -620,19 +620,13 @@
 	if(istype(eye, /obj/machinery/camera))
 		return afterattack(target, user) //Allow taking photos when looking through cameras
 
-/obj/item/device/camera/silicon/proc/toggle_camera_mode()
-	if(in_camera_mode)
-		camera_mode_off()
-	else
-		camera_mode_on()
-
-/obj/item/device/camera/silicon/proc/camera_mode_off()
-	in_camera_mode = FALSE
-	to_chat(usr, "<B>Camera Mode deactivated</B>")
-
-/obj/item/device/camera/silicon/proc/camera_mode_on()
-	in_camera_mode = TRUE
-	to_chat(usr, "<B>Camera Mode activated</B>")
+/obj/item/device/camera/silicon/proc/toggle_camera_mode(var/mob/living/silicon/S = null)
+	if(!S)
+		return
+	in_camera_mode = !in_camera_mode
+	to_chat(S, "<B>Camera Mode [in_camera_mode ? "activated":"deactivated"]</B>")
+	if(S.camera_icon)
+		S.camera_icon.icon_state = "camera[in_camera_mode ? "1":""]"
 
 /obj/item/device/camera/silicon/robot_camera/proc/borgprint()
 	var/list/nametemp = list()
@@ -666,6 +660,7 @@
 	p.pixel_y = rand(-10, 10)
 	C.toner -= CYBORG_PHOTO_COST
 	visible_message("[C.name] spits out a photograph from a narrow slot on it's chassis.")
+	playsound(loc, "polaroid", 75, 1, -3)
 	to_chat(C, "You print a photograph.")
 
 /obj/item/device/camera/silicon/proc/sync(var/mob/living/silicon/robot/R)
