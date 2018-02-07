@@ -482,6 +482,15 @@ var/global/num_vending_terminals = 1
 		if(user.drop_item(W, src))
 			add_item(W)
 			src.updateUsrDialog()
+	else if(istype(W, /obj/item/weapon/card/emag))
+		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
+		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
+		if (extended_inventory && !scan_id)
+			to_chat(user, "<span class='info'>Nothing happens.</span>")
+		else
+			extended_inventory = 1
+			scan_id = 0
+			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
 	else if(istype(W, /obj/item/weapon/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
