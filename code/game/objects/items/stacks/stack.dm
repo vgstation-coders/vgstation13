@@ -93,7 +93,33 @@
 				title+= "[R.title]"
 			//title+= " ([R.req_amount] [src.singular_name]\s)"
 			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
-
+			if(R.other_reqs.len)
+				for(var/ii=1 to R.other_reqs.len)
+					can_build = 0
+					var/obj/looking_for = R.other_reqs[ii]
+					var/req_amount
+					if(ispath(looking_for, /obj/item/stack))
+						var/obj/item/stack/S = new looking_for
+						req_amount = R.other_reqs[looking_for]
+						title +=  ", [req_amount] [CORRECT_STACK_NAME(S)]"
+					else
+						title += ", [initial(looking_for.name)] required in vicinity"
+					if(ispath(user.get_inactive_hand(), looking_for))
+						if(req_amount)
+							var/obj/item/stack/S = user.get_inactive_hand()
+							if(S.amount > req_amount)
+								can_build = 1
+					if(!can_build)
+						for(var/obj/I in range(get_turf(src),1))
+							if(ispath(looking_for, I))
+								if(req_amount) //It's of a stack/sheet subtype
+									var/obj/item/stack/S = I
+									if(S.amount > req_amount)
+										can_build = 1
+								else
+									can_build = 1
+							if(can_build)
+								break
 			if (can_build)
 				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
 			else
@@ -147,7 +173,36 @@
 				return
 		if (src.amount < R.req_amount*multiplier)
 			return
-
+		var/list/stacks_to_consume = list()
+		if(R.other_reqs.len)
+			for(var/i=1 to R.other_reqs.len)
+				var/looking_for = R.other_reqs[i]
+				var/req_amount
+				var/found = FALSE
+				if(ispath(looking_for, /obj/item/stack))
+					req_amount = R.other_reqs[looking_for]
+				if(ispath(usr.get_inactive_hand(), looking_for))
+					found = TRUE
+					if(req_amount) //It's of a stack/sheet subtype
+						var/obj/item/stack/S = usr.get_inactive_hand()
+						if(S.amount < req_amount)
+							found = FALSE
+						else
+							stacks_to_consume.Add(S)
+							stacks_to_consume[S] = req_amount
+						continue
+				for(var/obj/I in range(get_turf(src),1))
+					if(ispath(looking_for, I))
+						found = TRUE
+						if(req_amount) //It's of a stack/sheet subtype
+							var/obj/item/stack/S = I
+							if(S.amount < req_amount)
+								found = FALSE
+							else
+								stacks_to_consume.Add(S)
+								stacks_to_consume[S] = req_amount
+				if(!found)
+					return
 		var/atom/O
 		if(ispath(R.result_type, /obj/item/stack))
 			O = drop_stack(R.result_type, usr.loc, (R.max_res_amount>1 ? R.res_amount*multiplier : 1), usr)
@@ -168,6 +223,8 @@
 		//	//new_item.add_to_stacks(usr)
 
 		src.use(R.req_amount*multiplier)
+		for(var/obj/item/stack/sheet/S in stacks_to_consume)
+			S.use(stacks_to_consume[S])
 		if (src.amount<=0)
 			var/oldsrc = src
 			//src = null //dont kill proc after del()
