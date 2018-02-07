@@ -3,13 +3,7 @@
 
 /mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
 
-	if(!src.mind)
-		return 0
-	if(!ishuman(src))
-		to_chat(src, "<span class='warning'>You are in too weak of a form to do this!</span>")
-		return 0
-
-	var/datum/role/vampire/vampire = mind.GetRole(VAMPIRE)
+	var/datum/role/vampire/vampire = isvampire(src)
 
 	if(!vampire)
 		world.log << "[src] has vampire spells but isn't a vampire."

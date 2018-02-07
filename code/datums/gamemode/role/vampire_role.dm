@@ -25,7 +25,7 @@
 	var/blood_usable = 0
 	var/blood_total = 0
 
-	var/static/list/spell/roundstart_spells = list(/spell/targeted/hypnotise)
+	var/static/list/spell/roundstart_spells = list(/spell/targeted/hypnotise, /spell/rejuvenate)
 
 /datum/role/vampire/Greet(var/you_are = TRUE)
 	var/dat
@@ -37,7 +37,8 @@
 	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
-	MemorizeObjectives()
+/datum/role/vampire/OnPostSetup()
+	. = ..()
 	update_vamp_hud(antag.current)
 
 	for(var/type_S in roundstart_spells)
@@ -53,8 +54,13 @@
 			. += T.AdminPanelEntry()
 		. += "</ul>"
 
+// -- Not sure if this is meant to work like that.
+// I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
-	// -- To complete
+	. = ..() // Who he was, his objectives...
+	. += "Total blood collected: <b>[blood_total]</b>"
+	for (var/datum/role/thrall/T in thralls)
+		. += T.GetScoreboard()
 
 /datum/role/vampire/ForgeObjectives()
 	// -- Vampires objectives : acquire blood, assassinate.

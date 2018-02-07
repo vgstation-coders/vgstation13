@@ -8,16 +8,17 @@
 
 	charge_type = Sp_RECHARGE
 	charge_max = 5 MINUTES
-	invocation = ""
-	invocation_type = SpI_SHOUT
+	invocation_type = SpI_NONE
 	range = 1
 	max_targets = 1
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | NEEDSHUMAN
 	cooldown_min = 5 MINUTES
 	selection_type = "range"
 
 	amt_paralysis = 20
 	amt_stuttering = 50
+
+	hud_state = ""
 
 	var/blood_cost = 10
 
@@ -26,7 +27,7 @@
 		return FALSE
 	return ..()
 
-/spell/targeted/hypnotise/is_valid_target(var/target, mob/user, list/options)
+/spell/targeted/hypnotise/is_valid_target(var/target, var/mob/user, var/list/options)
 	if (!ismob(target))
 		return FALSE
 
@@ -36,7 +37,7 @@
 		return FALSE
 	return ..()
 
-/spell/targeted/hypnotise/cast(var/list/targets, mob/user)
+/spell/targeted/hypnotise/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
 		return FALSE
 

@@ -3,10 +3,10 @@
 	if(M == src)
 		return //Can't bite yourself
 
-//Vampire code
+	//Vampire code
 	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD && src != M)
-		if(M.mind && isvampire(M))
-			var/datum/role/vampire/V = M.mind.GetRole(VAMPIRE)
+		var/datum/role/vampire/V = isvampire(M)
+		if(V)
 			if (V.draining)
 				return 0
 			if(!V.can_suck(src))
@@ -23,8 +23,7 @@
 			src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 			V.handle_bloodsucking(src)
 			return
-//end vampire codes
-
+	//end vampire code
 
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)

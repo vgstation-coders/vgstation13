@@ -187,6 +187,7 @@
 /datum/role/proc/OnPostSetup()
 	ForgeObjectives()
 	Greet(1)
+	MemorizeObjectives()
 	return 1
 
 /datum/role/proc/process()
