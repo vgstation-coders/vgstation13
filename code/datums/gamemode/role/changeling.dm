@@ -44,6 +44,15 @@
 	to_chat(antag.current, "[ReturnObjectivesString()]")
 	antag.store_memory("[ReturnObjectivesString()]")
 
+/datum/role/changeling/ForgeObjectives()
+	AppendObjective(/datum/objective/absorb)
+	AppendObjective(/datum/objective/target/assassinate)
+	AppendObjective(/datum/objective/target/steal)
+	if(prob(50))
+		AppendObjective(/datum/objective/escape)
+	else
+		AppendObjective(/datum/objective/hijack)
+
 /datum/role/changeling/proc/regenerate()
 	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	geneticdamage = max(0, geneticdamage-1)
