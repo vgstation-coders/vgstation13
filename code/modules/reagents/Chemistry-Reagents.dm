@@ -850,7 +850,7 @@
 
 	if(volume >= 1)
 		O.bless()
-/*
+
 /datum/reagent/holywater/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
@@ -858,6 +858,7 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
+		/*
 		if(iscult(H))
 			if(prob(10)) //1/10 chance of removing cultist status, so 50 units on average to uncult (half a holy water bottle)
 				ticker.mode.remove_cultist(H.mind)
@@ -865,17 +866,20 @@
 				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			else //Warn the Cultist that it is fucking him up
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
+			*/
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		if(isvampire(H))
-			if(!(VAMP_MATURE in H.mind.vampire.powers))
+		var/datum/role/vampire/V = isvampire(H)
+		if(V)
+			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE
-				H.mind.vampire.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
+				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
-				H.mind.vampire.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		if(H.mind && H.mind.special_role == "VampThrall")
-			ticker.mode.remove_thrall(H.mind)
+				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
+		var/datum/role/thrall/T = isthrall(H)
+		if(T)
+			T.Drop()
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 
@@ -888,8 +892,9 @@
 	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(isvampire(H))
-			if(!(VAMP_UNDYING in H.mind.vampire.powers))
+		var/datum/role/vampire/V = isvampire(H)
+		if(V)
+			if(!(VAMP_UNDYING in V.powers))
 				if(method == TOUCH)
 
 					if(H.wear_mask)
@@ -904,30 +909,30 @@
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 							if(affecting)
-								if(!(VAMP_MATURE in H.mind.vampire.powers))
+								if(!(VAMP_MATURE in V.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
-									H.mind.vampire.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
+									V.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
 									if(affecting.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									H.status_flags |= DISFIGURED
 									H.emote("scream",,, 1)
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
-									H.mind.vampire.smitecounter += 12 //Ditto above
+									V.smitecounter += 12 //Ditto above
 
 						else
-							if(!(VAMP_MATURE in H.mind.vampire.powers))
+							if(!(VAMP_MATURE in V.powers))
 								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
 								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-								H.mind.vampire.smitecounter += volume * 2
+								V.smitecounter += volume * 2
 							else
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
-								H.mind.vampire.smitecounter += volume * 0.4
+								V.smitecounter += volume * 0.4
 				else
 					if(H.acidable())
 						H.take_organ_damage(min(15, volume * 2))
-						H.mind.vampire.smitecounter += 5
-*/
+						V.smitecounter += 5
+
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 
 	if(..())

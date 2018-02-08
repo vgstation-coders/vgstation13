@@ -157,7 +157,9 @@
 
 //Macros for antags
 
-#define isvampire(H) H.mind && H.mind.GetRole(VAMPIRE)
+#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
+
+#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
 #define iscult(H) H.mind && (iscultist(H) || isculthead(H) || faction == "cult")
 
