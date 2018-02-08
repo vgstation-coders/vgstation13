@@ -136,7 +136,7 @@
 	if(faction && src in faction.members)
 		faction.members.Remove(src)
 
-	if(!faction && src in ticker.mode.orphaned_roles)
+	if(!faction)
 		ticker.mode.orphaned_roles.Remove(src)
 
 	if(antag)

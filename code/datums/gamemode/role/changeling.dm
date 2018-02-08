@@ -67,7 +67,7 @@
 
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
 
-var/list/powers = typesof(/datum/power/changeling) - /datum/power/changeling	//needed for the badmin verb for now
+var/list/powers = subtypesof(/datum/power/changeling)
 var/list/powerinstances = list()
 var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega")
 
@@ -281,8 +281,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	set category = "Changeling"
 	set desc = "Level up!"
 
-	if(!usr || !usr.mind || !usr.mind.GetRole(CHANGELING))
+	if(!usr || !usr.mind)
 		return
+
 	src = usr.mind.GetRole(CHANGELING)
 
 	if(!powerinstances.len)

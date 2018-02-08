@@ -7,7 +7,7 @@
 	explanation_text = "Absorb [genomes_to_absorb] genomes."
 
 /datum/objective/absorb/IsFulfilled()
-	..()
+	. = ..()
 	if(owner)
 		var/datum/role/changeling/C = owner.GetRole(CHANGELING)
 		if(C && C.absorbedcount >= genomes_to_absorb)
